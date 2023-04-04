@@ -2,64 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEAB6D5E89
-	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319556D5E8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 13:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbjDDLEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 07:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S234353AbjDDLFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 07:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234538AbjDDLEY (ORCPT
+        with ESMTP id S234714AbjDDLEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 07:04:24 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A7604C00;
-        Tue,  4 Apr 2023 04:02:04 -0700 (PDT)
-Received: from loongson.cn (unknown [192.168.200.1])
-        by gateway (Coremail) with SMTP id _____8Dxldh2AyxkVGUWAA--.39556S3;
-        Tue, 04 Apr 2023 19:01:10 +0800 (CST)
-Received: from [0.0.0.0] (unknown [192.168.200.1])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx+711Ayxk_SwVAA--.19499S3;
-        Tue, 04 Apr 2023 19:01:09 +0800 (CST)
-To:     yangtiezhu@loongson.cn
-References: <1680254153-14582-4-git-send-email-yangtiezhu@loongson.cn>
-Subject: Re: [PATCH 3/3] module: Ignore L0 and rename is_arm_mapping_symbol()
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, mcgrof@kernel.org
-From:   Youling Tang <tangyouling@loongson.cn>
-Message-ID: <16869b48-28f0-28e4-bafb-cb1fa7f69660@loongson.cn>
-Date:   Tue, 4 Apr 2023 19:01:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 4 Apr 2023 07:04:32 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF5665B2;
+        Tue,  4 Apr 2023 04:02:19 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso33540296pjb.2;
+        Tue, 04 Apr 2023 04:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680606110;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iLXYG9UIvfeWF+Q8/NtPlVhVUhnvAmqVeS4iKYz0Uz0=;
+        b=pz0HO8RZWzyNSUJ2QkwzWsTUwKeHQ55RS+lRq18OK3hROKy/duTTo2Oi55gEbRHlWZ
+         LeA8q8SYJ762pHWz1s8JKvo2UVKhpNcDNiUdtVCV0m/7BTvzV476wIZ/Fu0qFNzhfcqn
+         TvY12MFnOJRFLvy1gsbhy6Twb591LymsHKkfb1p7gb7WhEvUOqI0zELpRK21td7cJNNP
+         2Ktbemkvjdy8LyVK28EqY50DcqGz5bVUqc72iEyjHRW1gKtXSTIA8jC6HlqlXk7HN9Nl
+         S1c7edAdzs6VJRtxSEMTX2pbFNLWtReP/aKiWI7kR6HI6MozBvDQ1+dnnbjKBC7qqcs7
+         3Ysg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680606110;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iLXYG9UIvfeWF+Q8/NtPlVhVUhnvAmqVeS4iKYz0Uz0=;
+        b=XJcnAa93/eb7/VTQJ8JtyiXXPad1E4TQ8EadZmIfLbxjgktMkw1aVp5LGVV4lgoz5b
+         4SaU4Uh6oSYpag1Bny1+4ZHC3/UDajAo3PIzUIq7t0bTyYlqUSWuc25fV61r0WfyKTir
+         A9V2d+LGbkc9oZrQE0vbpWNKGSuzhjh+dwhAWeLq6FVJxODSbfnLldIBBH6Rnf7pdnVv
+         6KcU8VNoMorPSH65CLFWJZZYyHxr+6SxPmIcnr9t+BrQehp5boZHVR0JfQv/kj3pEnlC
+         GZoEDykBYoHa+XxmlSTTsqrTfKYz2Di98Djh4vbiyTA0mrxZAQrjQUQ1GOuo1OHuz+uf
+         hN0g==
+X-Gm-Message-State: AAQBX9fjaf/Gjrp82m+u6PtYc2+hKKn+ANJMD+ANEkLBc19/qNdHVq9m
+        kqgAeT+kZgCHaFbSiiBD69HVY774lkceX50hbl8=
+X-Google-Smtp-Source: AKy350aHxr3M+JgML644wS5Lz136pHJq5126aDOS+wBR0DZFjTtNeaBbyx5mm3eGDkvMk3XFrvyn/2mgzWXsWibaDTs=
+X-Received: by 2002:a17:902:76c3:b0:19f:3cc1:e3cc with SMTP id
+ j3-20020a17090276c300b0019f3cc1e3ccmr828639plt.3.1680606110250; Tue, 04 Apr
+ 2023 04:01:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1680254153-14582-4-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Cx+711Ayxk_SwVAA--.19499S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUgq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK0I
-        I2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0
-        Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84
-        ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc80
-        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY2
-        0_WwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG
-        8wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
-        DU0xZFpf9x0zRVWlkUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAEm4hYXLNP6pcCj5Av35sRG6kCOF0H3+a7VfTtFfGduMgcXJhA@mail.gmail.com>
+ <20230403224517.GA3472913@bhelgaas>
+In-Reply-To: <20230403224517.GA3472913@bhelgaas>
+From:   Xinghui Li <korantwork@gmail.com>
+Date:   Tue, 4 Apr 2023 19:02:59 +0800
+Message-ID: <CAEm4hYXNUdm_wdK580xsZBUWTycJFsEhjFJ+d57U_QYu6RFWxg@mail.gmail.com>
+Subject: Re: [PATCH v4] PCI: vmd: Add the module param to adjust MSI mode
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LGTM.
-
-Tested-by: Youling Tang <tangyouling@loongson.cn> # for LoongArch
-
+On Tue, Apr 4, 2023 at 6:45=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> w=
+rote:
+>
+> > In the patch I send in last email, We speculate that the VMD
+> > Controller aggregate interrupts,
+> > making the PCIe port less stressed and improving iops. In this
+> > case(lots of 4k random IO), if we enable the VMD MSI
+> > remapping, we found the interrupts from VMD Controller's MSI are less
+> > and the IOPS is much higher.
+>
+> Great, that's useful information about why users would want to use
+> this parameter.
+>
+> Obviously the other half is to mention the reasons why they may not be
+> able to use it.  If "msi_remap=3Doff" were *always* safe and desirable,
+> we would just do that unconditionally and there would be no point in a
+> parameter.
+>
+> > > > I place the "vmd_config_msi_remap_param" that is VMD MSI-X's mode
+> > > > param configuring helper front
+> > > > "vmd_enable_domain". So, It will not change the logic disabling
+> > > > remapping from ee81ee84f873, such as
+> > > > "Currently MSI remapping must be enabled in guest passthrough mode"=
+.
+> > > > So, if the user config the wrong type, it will not work, and they c=
+an
+> > > > find it by dmesg.
+> > >
+> > > That's kind of a problem.  I'm not in favor of something failing and
+> > > the user having to debug it via dmesg.  That causes user frustration
+> > > and problem reports.
+> >
+> > What about adding a sysfs node for it in VMD PCI bus dir, which allows
+> > users to catch VMD's MSI current working mode?
+>
+> No, a sysfs node is not the answer to this.  If we *can* avoid a
+> non-working situation, we should avoid it.  If users see a non-working
+> situation, they will rightly complain, and somebody will have to debug
+> it.  We don't want that.
+emm~
+I privately suppose: In the traditional way without module parameters,
+this problem also exists. If the user disables remapping in guest os, the V=
+MD
+driver will force it to remapping mode.
+What about I add the additional description in MODULE_PARM_DESC and comment=
+?
+As for some devices not support disable remapping,  What about changing
+the param to disabae_bypass=3D0/1?
+And make it clear in the description:
+this parameter will only affect the disabling of bypass mode on
+devices that support it.
+>
+> My point is that apparently guest passthrough mode is relevant and
+> maybe it should be part of the commit log about how this parameter
+> should be used.
+You are right~
+I will add some clarification on how to configure VMD MSI in the guest.
+>
+> Bjorn
