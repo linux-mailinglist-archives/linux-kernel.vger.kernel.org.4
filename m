@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF07D6D7A89
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA0C6D7A90
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237730AbjDELAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+        id S237557AbjDELBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237270AbjDELAC (ORCPT
+        with ESMTP id S237270AbjDELB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:00:02 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377B1268B;
-        Wed,  5 Apr 2023 04:00:01 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso36832566pjb.3;
-        Wed, 05 Apr 2023 04:00:01 -0700 (PDT)
+        Wed, 5 Apr 2023 07:01:27 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A3C46B2;
+        Wed,  5 Apr 2023 04:01:25 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso36866841pjb.2;
+        Wed, 05 Apr 2023 04:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680692400;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OojazA+NEPlPaQEBfrRO3Y9bvHlzHo90rsLDWc44zhU=;
-        b=gEPIYm5yvUCf3OtwTE65Lg4DylDh4HROmjCcuiI2jIKdXSPnrOzwEhxZhmGGQO1lk6
-         v1Kl5RcwbETR/TgKAt2+6KnRR8YA/aFjFxjum/H7zJ5UJ7IQqZIOhHsl3vg9Az7jQWXL
-         wAcOLHsXBXfRox39Zy2K0iqQ1t2KpvqmkdVsZG0RJd8Csq8jQUnMbazCdquRk+arQ6rd
-         W5TVB6tqsWDNyHgmChSzIWXJqsoHH3/jOiYPbpbWCVmvwgzvaRt/QKhtdOYgmdfKvIC/
-         u2HamOzBBTZSCWvJXeR6qvhe7/wTOpfs/+2pyAtVnXp9rt5Hy3vZ0/fnngboLwTJ5G/Y
-         1QJQ==
+        d=gmail.com; s=20210112; t=1680692485;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iJGAMvCER1Maz71WC4+d0+uJtDiWgp7hdUA5ioSAboA=;
+        b=hEwXkknLt4/QXa+iW0HAL1xHl2WxZgLYRd25Wix9ug2M31GthLBb2gQ6B1KHAgXFRk
+         Hh56NWJFg7+Ht4moggFzSw48UXB8Sk/EUlNXy3uuEjfN3DVjZL0pVD+8lW7VP91OxaLE
+         61bF6FVt4o7Lhk88ghkElEEb7JR5ZiCEV3Ij681bdG2GeGtONm1VNGG+6R5zvKPW6+Gb
+         Bck/Qui9VdXuYTqFW9edEpdO35H9mHE1rAS8wbKxe/PmbsBhwdlHt6Kk0T3+3uuwiRdq
+         lmfbu6GhcYExWgxYgtFlDtBOVC5pTlLRWAYTf3t/iwF8FUi5Jk+5cxvW89+5FeG2KmE2
+         fhPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680692400;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OojazA+NEPlPaQEBfrRO3Y9bvHlzHo90rsLDWc44zhU=;
-        b=hWVrDOYNLDke0Mp2QEha6cMShsl6QYv5sJ0s0PuV4bCZX0hMvWSKeyVdGIQMPchRTG
-         F9MQQXh98G0oN/W+yQPl5S5wbcjw2DpVwtMYgpkLCXI853loqTCg5cAA+5n+pm5mgwzJ
-         XokBSvQxjyQ3/1lVAD46D6HmdtjGMHnsBW2IUsYlyD+Cu6J+JVkaZPXUAMvsLhmUzPol
-         QkjqQOe+G6YjyiyE7YohFUfbQAhPiet2CZPjx7f3ET5LAnUKE1JyseWX+7FtQmGQqLbc
-         1hr4byDWYFrf/kBHUhv82+oQAHtwkxvTvGRSxSqnqGTYyyG9iI8pUjgjEUZSW5FMoRER
-         bPyg==
-X-Gm-Message-State: AAQBX9dkvP+Sl2pHkJxW4Erc3br1nWk1aPpzzwVzM88UXdDn3b+RTBy8
-        YYxkX2CrqnnZoiIQp7o1l84=
-X-Google-Smtp-Source: AKy350atiBozRrjibuqOuCSSysHRFHkCGXIxnG+BvHuVCfMCfKHER/3UF1by++/bTUr3UVTIvZfIWA==
-X-Received: by 2002:a05:6a20:65a2:b0:da:7d8a:2cc9 with SMTP id p34-20020a056a2065a200b000da7d8a2cc9mr4264584pzh.24.1680692400450;
-        Wed, 05 Apr 2023 04:00:00 -0700 (PDT)
-Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa785cf000000b0062d9ced3db3sm9859959pfn.23.2023.04.05.03.59.58
+        d=1e100.net; s=20210112; t=1680692485;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iJGAMvCER1Maz71WC4+d0+uJtDiWgp7hdUA5ioSAboA=;
+        b=tBizntVRLlLVmZTe6Mr3P1wwgXuKR3Z1pSN9H6WyBXRjvUgOBXKW0fYRgQAJRJKM/g
+         GhgTZViMhXR7h3EOJS7PEk0VH+58h5TUs9Im+rnnKaL7XuBZPqHkOYBGXtnvXTmoKaiI
+         yAehwvBC+fyGiDtkz1gZwSiiPE2TLy/aqdSXNUcC8sqCCrP4wIiayklmkTlTtc1YtuGw
+         Cd5hZIYCDXR1UwVk3E9E30KwAdeFvemvPF/cVFq+sblwwXL00BKna3nWex9NKUCmvEXY
+         riOv5qdOA4/lqbOz8X15jgJW+RqFSSSeNM9OV5qCKihD7wvzJ/QVTsO69lCsUQHvQWdE
+         S9vw==
+X-Gm-Message-State: AAQBX9fpTl3aWz4b0CNvFI0THOX04s9WFG/UMphy2zpvHvdXM0MYzIbw
+        Q6DYtZhOd39LiWKPtsP/NTA=
+X-Google-Smtp-Source: AKy350YwlKoCBpiBymdY26Utiux0aRqLnTsThq8o6n5gNgRGHnQlVHaic+BuLQMT7CE0kVxzyTniAQ==
+X-Received: by 2002:a17:90b:1b09:b0:237:f925:f63 with SMTP id nu9-20020a17090b1b0900b00237f9250f63mr6383415pjb.13.1680692484650;
+        Wed, 05 Apr 2023 04:01:24 -0700 (PDT)
+Received: from lunar.aeonazure.com ([182.2.143.216])
+        by smtp.gmail.com with ESMTPSA id f11-20020a17090274cb00b001a065d3bb0esm9831373plt.211.2023.04.05.04.01.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 04:00:00 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 19:59:55 +0900
-From:   "Dae R. Jeong" <threeearcat@gmail.com>
-To:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: kernel BUG in pfkey_send_acquire
-Message-ID: <ZC1Uqy8CqRTcXNoY@dragonet>
+        Wed, 05 Apr 2023 04:01:24 -0700 (PDT)
+From:   Shaun Tancheff <shaun.tancheff@gmail.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc:     Shaun Tancheff <shaun.tancheff@hpe.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] memcg-v1: Enable setting memory min, low, high
+Date:   Wed,  5 Apr 2023 18:01:07 +0700
+Message-Id: <20230405110107.127156-1-shaun.tancheff@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -69,91 +73,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Shaun Tancheff <shaun.tancheff@hpe.com>
 
-We observed an issue "kernel BUG in pfkey_send_acquire".
+For users that are unable to update to memcg-v2 this
+provides a method where memcg-v1 can more effectively
+apply enough memory pressure to effectively throttle
+filesystem I/O or otherwise minimize being memcg oom
+killed at the expense of reduced performance.
 
-We inform you that we observed this issue a few months ago, so we are
-not sure that this issue still occurs in the kernel. And we also
-didn't find a reproducer for the crash. We will inform you if we have
-any update on this crash.
+This patch extends the memcg-v1 legacy sysfs entries
+with:
+    limit_in_bytes.min, limit_in_bytes.low and
+    limit_in_bytes.high
+Since old software will need to be updated to take
+advantage of the new files a secondary method
+of setting min, low and high based on a percentage
+of the limit is also provided. The percentages
+are determined by module parameters.
 
-Detailed crash information is attached below.
+The available module parameters can be set at
+kernel boot time, for example:
+   memcontrol.memcg_min=10
+   memcontrol.memcg_low=30
+   memcontrol.memcg_high=80
 
-Best regards,
-Dae R. Jeong
+Would set min to 10%, low to 30% and high to 80% of
+the value written to:
+  /sys/fs/cgroup/memory/<grp>/memory.limit_in_bytes
 
------
-- Kernel commit:
-92f20ff72066d
+Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
+---
+v0: Initial hard coded limits by percent.
+v1: Added sysfs access and module parameters for percent values to enable
+v2: Fix 32-bit, remove need for missing __udivdi3
+ mm/memcontrol.c | 83 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 82 insertions(+), 1 deletion(-)
 
-- Crash report:
-skbuff: skb_over_panic: text:ffffffff8e5ddc75 len:736 put:72 head:ffff888159d0c000 data:ffff888159d0c000 tail:0x2e0 end:0x2c0 dev:<NULL>
-------------[ cut here ]------------
-kernel BUG at net/core/skbuff.c:113!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 20026 Comm: syz-executor.0 Not tainted 5.19.0-rc3-32288-g0f3b08299494 #3
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-RIP: 0010:skb_panic+0x277/0x280 net/core/skbuff.c:113
-Code: c0 48 c7 c5 c0 69 c7 91 48 0f 45 e8 44 89 e3 45 89 fa 48 c7 c7 40 69 c7 91 31 c0 55 53 41 52 41 53 e8 0c ed 77 03 48 83 c4 20 <0f> 0b 0f 1f 80 00 00 00 00 55 41 57 41 56 41 55 41 54 53 48 83 ec
-RSP: 0000:ffffc90009596de8 EFLAGS: 00010286
-RAX: 0000000000000088 RBX: 00000000000002c0 RCX: 777473599dfff200
-RDX: ffffc900129fb000 RSI: 000000000000ff2d RDI: 000000000000ff2e
-RBP: ffffffff91c769c0 R08: ffffffff816927a4 R09: ffffed10477867e9
-R10: ffffed10477867e9 R11: 0000000000000000 R12: 00000000000002c0
-R13: ffff88814b5cd050 R14: dffffc0000000000 R15: 00000000000002e0
-FS:  00007f102dcfc700(0000) GS:ffff88823bc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055a592ebe008 CR3: 0000000024133000 CR4: 0000000000350ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- skb_over_panic+0x25/0x30 net/core/skbuff.c:118
- skb_put+0x2f7/0x3b0 net/core/skbuff.c:2015
- dump_esp_combs net/key/af_key.c:3006 [inline]
- pfkey_send_acquire+0x2aa5/0x4b00 net/key/af_key.c:3227
- km_query+0x18e/0x380 net/xfrm/xfrm_state.c:2247
- xfrm_state_find+0x5459/0x8180 net/xfrm/xfrm_state.c:1165
- xfrm_tmpl_resolve_one net/xfrm/xfrm_policy.c:2393 [inline]
- xfrm_tmpl_resolve net/xfrm/xfrm_policy.c:2438 [inline]
- xfrm_resolve_and_create_bundle+0x945/0x48c0 net/xfrm/xfrm_policy.c:2728
- xfrm_lookup_with_ifid+0x3cc/0x35b0 net/xfrm/xfrm_policy.c:3062
- xfrm_lookup net/xfrm/xfrm_policy.c:3191 [inline]
- xfrm_lookup_route+0x38/0x2d0 net/xfrm/xfrm_policy.c:3202
- udp_sendmsg+0x30f2/0x4e00 net/ipv4/udp.c:1220
- sock_sendmsg_nosec net/socket.c:693 [inline]
- sock_sendmsg net/socket.c:713 [inline]
- ____sys_sendmsg+0xaba/0x1010 net/socket.c:2471
- ___sys_sendmsg net/socket.c:2525 [inline]
- __sys_sendmmsg+0x406/0x850 net/socket.c:2611
- __do_sys_sendmmsg net/socket.c:2640 [inline]
- __se_sys_sendmmsg net/socket.c:2637 [inline]
- __x64_sys_sendmmsg+0x12c/0x190 net/socket.c:2637
- do_syscall_x64 arch/x86/entry/common.c:51 [inline]
- do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x47268d
-Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f102dcfbbe8 EFLAGS: 00000246 ORIG_RAX: 0000000000000133
-RAX: ffffffffffffffda RBX: 000000000057d4a0 RCX: 000000000047268d
-RDX: 0400000000000354 RSI: 0000000020000180 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 000002873dedf99c R11: 0000000000000246 R12: 000000000057d4a8
-R13: 000000000057d4ac R14: 00007ffcaa189060 R15: 00007f102dcfbd80
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:skb_panic+0x277/0x280 net/core/skbuff.c:113
-Code: c0 48 c7 c5 c0 69 c7 91 48 0f 45 e8 44 89 e3 45 89 fa 48 c7 c7 40 69 c7 91 31 c0 55 53 41 52 41 53 e8 0c ed 77 03 48 83 c4 20 <0f> 0b 0f 1f 80 00 00 00 00 55 41 57 41 56 41 55 41 54 53 48 83 ec
-RSP: 0000:ffffc90009596de8 EFLAGS: 00010286
-RAX: 0000000000000088 RBX: 00000000000002c0 RCX: 777473599dfff200
-RDX: ffffc900129fb000 RSI: 000000000000ff2d RDI: 000000000000ff2e
-RBP: ffffffff91c769c0 R08: ffffffff816927a4 R09: ffffed10477867e9
-R10: ffffed10477867e9 R11: 0000000000000000 R12: 00000000000002c0
-R13: ffff88814b5cd050 R14: dffffc0000000000 R15: 00000000000002e0
-FS:  00007f102dcfc700(0000) GS:ffff88823bc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fffd209df78 CR3: 0000000024133000 CR4: 0000000000350ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 2eee092f8f11..3cf8386f4f45 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -73,6 +73,18 @@
+ 
+ #include <trace/events/vmscan.h>
+ 
++static unsigned int memcg_v1_min_default_percent;
++module_param_named(memcg_min, memcg_v1_min_default_percent, uint, 0600);
++MODULE_PARM_DESC(memcg_min, "memcg v1 min default percent");
++
++static unsigned int memcg_v1_low_default_percent;
++module_param_named(memcg_low, memcg_v1_low_default_percent, uint, 0600);
++MODULE_PARM_DESC(memcg_low, "memcg v1 low default percent");
++
++static unsigned int memcg_v1_high_default_percent;
++module_param_named(memcg_high, memcg_v1_high_default_percent, uint, 0600);
++MODULE_PARM_DESC(memcg_high, "memcg v1 high default percent");
++
+ struct cgroup_subsys memory_cgrp_subsys __read_mostly;
+ EXPORT_SYMBOL(memory_cgrp_subsys);
+ 
+@@ -205,6 +217,7 @@ enum res_type {
+ 	_MEMSWAP,
+ 	_KMEM,
+ 	_TCP,
++	_MEM_V1,
+ };
+ 
+ #define MEMFILE_PRIVATE(x, val)	((x) << 16 | (val))
+@@ -3676,6 +3689,9 @@ enum {
+ 	RES_MAX_USAGE,
+ 	RES_FAILCNT,
+ 	RES_SOFT_LIMIT,
++	RES_LIMIT_MIN,
++	RES_LIMIT_LOW,
++	RES_LIMIT_HIGH,
+ };
+ 
+ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+@@ -3686,6 +3702,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+ 
+ 	switch (MEMFILE_TYPE(cft->private)) {
+ 	case _MEM:
++	case _MEM_V1:
+ 		counter = &memcg->memory;
+ 		break;
+ 	case _MEMSWAP:
+@@ -3716,6 +3733,12 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+ 		return counter->failcnt;
+ 	case RES_SOFT_LIMIT:
+ 		return (u64)memcg->soft_limit * PAGE_SIZE;
++	case RES_LIMIT_MIN:
++		return (u64)READ_ONCE(memcg->memory.min);
++	case RES_LIMIT_LOW:
++		return (u64)READ_ONCE(memcg->memory.low);
++	case RES_LIMIT_HIGH:
++		return (u64)READ_ONCE(memcg->memory.high);
+ 	default:
+ 		BUG();
+ 	}
+@@ -3815,6 +3838,34 @@ static int memcg_update_tcp_max(struct mem_cgroup *memcg, unsigned long max)
+ 	return ret;
+ }
+ 
++static inline void mem_cgroup_v1_set_defaults(struct mem_cgroup *memcg,
++					      unsigned long nr_pages)
++{
++	unsigned long min, low, high;
++
++	if (mem_cgroup_is_root(memcg) || PAGE_COUNTER_MAX == nr_pages)
++		return;
++
++	min = READ_ONCE(memcg->memory.min);
++	low = READ_ONCE(memcg->memory.low);
++	if (min || low)
++		return;
++
++	if (!min && memcg_v1_min_default_percent) {
++		min = (nr_pages * memcg_v1_min_default_percent) / 100;
++		page_counter_set_min(&memcg->memory, min);
++	}
++	if (!low && memcg_v1_low_default_percent) {
++		low = (nr_pages * memcg_v1_low_default_percent) / 100;
++		page_counter_set_low(&memcg->memory, low);
++	}
++	high = READ_ONCE(memcg->memory.high);
++	if (high == PAGE_COUNTER_MAX && memcg_v1_high_default_percent) {
++		high = (nr_pages * memcg_v1_high_default_percent) / 100;
++		page_counter_set_high(&memcg->memory, high);
++	}
++}
++
+ /*
+  * The user of this function is...
+  * RES_LIMIT.
+@@ -3838,6 +3889,11 @@ static ssize_t mem_cgroup_write(struct kernfs_open_file *of,
+ 			break;
+ 		}
+ 		switch (MEMFILE_TYPE(of_cft(of)->private)) {
++		case _MEM_V1:
++			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
++			if (!ret)
++				mem_cgroup_v1_set_defaults(memcg, nr_pages);
++			break;
+ 		case _MEM:
+ 			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
+ 			break;
+@@ -4986,6 +5042,13 @@ static int mem_cgroup_slab_show(struct seq_file *m, void *p)
+ }
+ #endif
+ 
++static ssize_t memory_min_write(struct kernfs_open_file *of,
++				char *buf, size_t nbytes, loff_t off);
++static ssize_t memory_low_write(struct kernfs_open_file *of,
++				char *buf, size_t nbytes, loff_t off);
++static ssize_t memory_high_write(struct kernfs_open_file *of,
++				 char *buf, size_t nbytes, loff_t off);
++
+ static struct cftype mem_cgroup_legacy_files[] = {
+ 	{
+ 		.name = "usage_in_bytes",
+@@ -5000,10 +5063,28 @@ static struct cftype mem_cgroup_legacy_files[] = {
+ 	},
+ 	{
+ 		.name = "limit_in_bytes",
+-		.private = MEMFILE_PRIVATE(_MEM, RES_LIMIT),
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT),
+ 		.write = mem_cgroup_write,
+ 		.read_u64 = mem_cgroup_read_u64,
+ 	},
++	{
++		.name = "limit_in_bytes.min",
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_MIN),
++		.write = memory_min_write,
++		.read_u64 = mem_cgroup_read_u64,
++	},
++	{
++		.name = "limit_in_bytes.low",
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_LOW),
++		.write = memory_low_write,
++		.read_u64 = mem_cgroup_read_u64,
++	},
++	{
++		.name = "limit_in_bytes.high",
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_HIGH),
++		.write = memory_high_write,
++		.read_u64 = mem_cgroup_read_u64,
++	},
+ 	{
+ 		.name = "soft_limit_in_bytes",
+ 		.private = MEMFILE_PRIVATE(_MEM, RES_SOFT_LIMIT),
+-- 
+2.34.1
+
