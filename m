@@ -2,73 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B53B36D7D33
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564596D7D3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238143AbjDENAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
+        id S238138AbjDENCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbjDENAV (ORCPT
+        with ESMTP id S238116AbjDENCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:00:21 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D590E7A;
-        Wed,  5 Apr 2023 05:59:50 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id l27so36132459wrb.2;
-        Wed, 05 Apr 2023 05:59:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680699588;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P+lFikK3obDdMqg0chj0hTBtt1Yk9zWNE6RL9/rX25o=;
-        b=ofFCzv0WVsdGvOqBwiS5Rr8FjUOUbmdrUIdtHTh1TVCnT6wuILRemS1iKE9s1clhQm
-         bm26tDlVKIOxx6UK66xbrtP+HVDwvWavWIcbg7Kejtvsr9PYIPUUXmmRU6ikMZylNeDb
-         8hXTf6WvUkC0K1D8qPiXHFQ2H1c36gKxYnZOb1Pgaus6q1tVQsSGI2kNYF6TQ312ljc2
-         V9p9YxeQcBIAtsY5OHyLCQOVxj+SlgzA0wNZDsiydBcpJkFGSduodJw7S+MtUnKf5fyL
-         lYakJk/gH8pRLunUDJOsI3ia7+zVgJeIbEVKSzgwh6m2aYgn4asNe4CRHMzEaKZsAi3E
-         OoJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680699588;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P+lFikK3obDdMqg0chj0hTBtt1Yk9zWNE6RL9/rX25o=;
-        b=yR9rXl2Hl38taGwAUw0Lim3jr8eZuHw2WalgqT6Law0AAPl9uF0T6e71Sep97g92TV
-         bhOGA4KtynXauZ8s6qs0HvAX6aOS8mTBUADR1QV0x8cLSha83VxhYgbJ+xbBpWYK7LYv
-         0MJyU6lpskkIVtaj5+AT5cEozGOHwk/Gggpb/LqeceTVO+e9ZInIJcEBkorYMKEQglfr
-         14m0zMQz4t1byVE0kbEmD9l7weVmtVQ25uOwJG6TKWtTvl37P+bU2r8uivBtY5JbF4CL
-         r3SsMMQtjjQjKPCDj60jb9Ru9sNMAlSjWi4DBAIADkDqjZlGH8CndaK9qSD3O14t63jn
-         V7Qg==
-X-Gm-Message-State: AAQBX9cUvccN2i9EOa70Iv/DbMlDW0aUARSj6oHlRDYVI+1Zu0gYRHe2
-        UDWJhU8sBwOBjAipbFAOLdc=
-X-Google-Smtp-Source: AKy350Ykf16wMuYLtSCFeblMA7nc8uf+LMlAQDEHh3tnjF/2dMp+UMsQpWUo0z1ILblbFD6peqfPXA==
-X-Received: by 2002:adf:ebcd:0:b0:2e9:bb2f:ce03 with SMTP id v13-20020adfebcd000000b002e9bb2fce03mr3926718wrn.0.1680699588253;
-        Wed, 05 Apr 2023 05:59:48 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i12-20020a5d55cc000000b002c3f81c51b6sm14979643wrw.90.2023.04.05.05.59.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 05:59:47 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 14:59:46 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     ye.xingchen@zte.com.cn
-Cc:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc/tegra: =?utf-8?Q?flowctrl?=
- =?utf-8?B?OiBVc2XCoGRldm1fcGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNl?=
- =?utf-8?B?KCk=?=
-Message-ID: <ZC1wwgi7bR3vluH2@orome>
-References: <202302151718036138529@zte.com.cn>
+        Wed, 5 Apr 2023 09:02:12 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E2661BF
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680699701; x=1712235701;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nEsDOT4c3s2sCRVB0meEsVGfQxGhxGRSvgonugKmZ48=;
+  b=etjRcuSQ7vPyfDDR/a09yj7998uWgc6GbJrWaRXWO58opMGJsheff18A
+   HKCUGnjAb+ejxmbYGPbISRVQz5hqv1ORzhIby6NN15DZiK02hg6Ug2ReW
+   EW6czdLUa2hJLwPoFIIs8/UirfBRh9kmm9VaaCHvMaJPWvaQj/mdtu1e+
+   jH6+2qR+hikpsVvLb9e6TnExNFT1pf9d0EVKJ0+DCjuRZSesQ4JmQ5UYX
+   p+jdIv2YfybioWJ6zv8kZILGdPlnAZe3vaZ3jz4e/+C1lKeD7E4R6BYcm
+   1V6mo2jGOwgvg/WcIm3V1s2o5dhGsMu6WHC61eqqdRty03XKFwHajnOMT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="339935782"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="339935782"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 06:00:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="664030958"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="664030958"
+Received: from kyunghyu-mobl2.amr.corp.intel.com (HELO [10.209.6.69]) ([10.209.6.69])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 06:00:46 -0700
+Message-ID: <e46777d3-adea-90a2-afc4-35f9d7cef50c@intel.com>
+Date:   Wed, 5 Apr 2023 06:00:46 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9NQSCQPV1mPcQv/x"
-Content-Disposition: inline
-In-Reply-To: <202302151718036138529@zte.com.cn>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <cover.1680628986.git.thomas.lendacky@amd.com>
+ <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
+ <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
+ <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
+ <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name>
+ <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
+ <20230404202445.6qkl7hz67qgievqz@box.shutemov.name>
+ <CAMj1kXFrm74+zNcSpHJ1kw38PTMOFk1cTx_EAoGFHaG1fYzRTQ@mail.gmail.com>
+ <20230404210153.tll2mojlglx4rfsa@box.shutemov.name>
+ <CAMj1kXGvcg-E84h1T_vPi7qxPWxEXBpyuB79KOL+ON7v5YAgJg@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAMj1kXGvcg-E84h1T_vPi7qxPWxEXBpyuB79KOL+ON7v5YAgJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,46 +90,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/5/23 00:46, Ard Biesheuvel wrote:
+> Once the firmware stops exposing this protocol (and ceases to accept
+> memory on the OS's behalf), we can phase it out from the kernel as
+> well.
 
---9NQSCQPV1mPcQv/x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is a part of the story that I have doubts about.
 
-On Wed, Feb 15, 2023 at 05:18:03PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
->=20
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/soc/tegra/flowctrl.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+How and when do you think this phase-out would happen, realistically?
 
-Applied, thanks.
+The firmware will need the unaccepted memory protocol support as long as
+there are guests around that need it, right?
 
-Thierry
+People like to keep running old kernels for a _long_ time.  Doesn't that
+mean _some_ firmware will need to keep doing this dance for a long time?
 
---9NQSCQPV1mPcQv/x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQtcMIACgkQ3SOs138+
-s6FdZxAAq83d9aSFrwQ1hjhzejAAqPC3EFGTNz0bCAHMfSOleIemQ3t3whZoXpeH
-IovPl9sGkfzGS7mRFXNAVrBFNUnoXgOnJUikT3em4RGlkA5xMwJJFllhy9A1zo+G
-NbLbcXL7KxCW0FRYDYIlVJvyumXbdKyqNkoUU6hz7oIJoA2Up46WeT7tUmJxSKaq
-WXFvV6tZP3Zg5fCNzrRFpkfS6vEac+J1lJ6ZOA3ylDXskVyis+14X0VkaenXlUA/
-szvZIm4rRQkhoFjJCWztZ+eQiEUQQLNvpG9BlBy2DMxz98Fcc8TZvbhju7NppQ7F
-hEbD/supkD7U07kJpkra2vqVLo9lj5j0CrxSD5WAM3J0FRGx/t0e1oe4JU5LGxtp
-AD/IqW2BjXsEVJP7lE/ZAtleAHK9+vyawbNgZNJytBDCrtaTEM+AxXii4PcvEhhh
-cnyqju0eCihQJ7YOLeRMZuGF0x4iMZT8l8FQ+e61hst4W70P0osYjsbr4jQA/x83
-Zpb2grHA/OW74hji2twJuCN2fYwPqapx5NKC89gFKghLWg5Q/xiTxz3TcFjKE+bw
-pceaV6btuksO9pUYhCmv6EDm1yVagPDa9dXxIJHwrw4QzOUG+1oT20v7GhEup2PL
-SkdG8jz7Hvs7ULzEk2fxr2k7d7voH5riuTBFGL6gn8G411e2UHo=
-=1ZZs
------END PGP SIGNATURE-----
-
---9NQSCQPV1mPcQv/x--
+As long as there is firmware out there in the wild that people want to
+run new kernels on, the support needs to stay in mainline.  It can't be
+dropped.
