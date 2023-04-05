@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75F36D89C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648206D89C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbjDEVsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S229725AbjDEVsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjDEVsi (ORCPT
+        with ESMTP id S233431AbjDEVsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:48:38 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0357DAA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:48:23 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-947a47eb908so61186466b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:48:23 -0700 (PDT)
+        Wed, 5 Apr 2023 17:48:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A327A95
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:48:28 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-947f54f67acso7582266b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680731302; x=1683323302;
+        d=gmail.com; s=20210112; t=1680731308; x=1683323308;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MCqBVJ5FUAqz6et7gCXC65lddEZjuyWxiqbGgbtDS3g=;
-        b=OddqGCVQ9nguKkoLetqbQq9AWu6vI93zintV3cneVBEclDnwlebshfdw2KJ1RnFS4Y
-         2sXG/aRTSQ+Hq92MJ4CXM10zB7bau3pkNmAyMclQ4nfhjk4/C1z4XXzhEilgRYy/Pnf0
-         D/8ocAm7myGvsbgbrQLrRYcyHeVXQOVbKyHBv5TrAOmdXxzN3XvHI1VGmPjO2zo/Mstm
-         X4+6x2ogjas8UYmc/Czy7rOzfp3AXz0BqwWcK+cr8IKLPWPOWQT6qWJe18M/+aEQaIVM
-         aVwH18TW2wFqarg7LplLeFXE0ptgWP1EN1XD5MHnlx/7MKcjiTt4MWsfxXlCzb7TIVxR
-         k4Sg==
+        bh=wb89At04Bi8wiMaKMj24IvEwgTW885oVxHw3HIZ4Q3w=;
+        b=Bw6jtK5qklfy9o5CDcreSbZVT5HtivXxGQm+0wZ8DiE2RXDKk5W6xzuicOPKOnqBBL
+         SRCLjTy1jl1NpzK8c0/ldtJAUnQ9iCwz5G66mKPFN/KPxnuri6vV+lam6cHaYFYFNgiK
+         2p1nW36YI654ZRvK2x4dJUU2z/tOPF8V5f+ZdxtKrqdR72aS0NlmpKo5hhitBmCB0r0j
+         njaQIsS2i/0uEI+0fGyF33J6cOsSQfVzSBUl8wWxADCdwKPpTwJU5BiAzN3TwUk09/Mp
+         +/tMyuF0B88HwXwBBQR/I/9JjCczmcQnwZJH4OIBjbQFvuKyVTl3CBcBIYTz+JC69oHb
+         rArQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680731302; x=1683323302;
+        d=1e100.net; s=20210112; t=1680731308; x=1683323308;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MCqBVJ5FUAqz6et7gCXC65lddEZjuyWxiqbGgbtDS3g=;
-        b=hTmiGT4iaY4uENI1VVMbvMO7QZuRbPhj/+YmFBfcRYhidXM8bzs7mHPro4yuaWfIvj
-         ef2sAEGrUYHnKIgXHiPthSa/a3dIONFStLDiq9LCUFa+SljVxRlvUAvGIKUKKJshARxv
-         Bzo6ccoJuQTST2cZNoYO+9DsfNd58c1R2YkTepyxl2pwkWjQ/3RKDL0AJc6Wy2bnbThV
-         sUJrWJrSoTSsjhF99bFolO7Nteh5U7k+dgIF1eyY6utGTmErjuJf/8HDURehfptt5iN2
-         bPPugdbBgAKeya7H1e6JIWhPNE+58KChsPUGbWV7WYQXrlDOaGxrTPlYVb5ILWzjW6cO
-         GL1A==
-X-Gm-Message-State: AAQBX9cxcWQf8HpjTFqJa6ZvBwV8bwgCby5eNv95JfnL6CwZZ6E8GAnC
-        IMo0bDwCDWqLcf0JISCQyo9CS7KgVn4=
-X-Google-Smtp-Source: AKy350ZiqXN0VUogUx+7XtQuAAa4tmYb5kYNfV+HwIMGR9f8ezTep7UPNCtho/PsZ1Fr7C/0+5je3g==
-X-Received: by 2002:a05:6402:27cc:b0:4bb:afe3:e0a with SMTP id c12-20020a05640227cc00b004bbafe30e0amr4846026ede.3.1680731302114;
-        Wed, 05 Apr 2023 14:48:22 -0700 (PDT)
+        bh=wb89At04Bi8wiMaKMj24IvEwgTW885oVxHw3HIZ4Q3w=;
+        b=nT/qbuWa9+BmZqpwt78cFOi+2EBScCDHVed0U6uGWVWfMlR3V0JFm287CH+DpkmAll
+         OzquG12oXtqvoZYob9VGjXi4xBf4LsqT8CGMAx1YwBW7rI2yPNz/nXylEUa8neGBBaQ7
+         boDqgmyR70jIHNbecxSklCEHDKEB+U/1XL2OvEcCGYyctG7ahza90ybXG1SsdwEeb1MO
+         /N4bVbXyMy7eoizSIEnuNermO7xmSagX6rQmmbKvZuWyoxsDo4L+idrQoaCHpodmkjB3
+         vXPEk3KPtJHG9BfGwMe+EY68TbXxm6n7iO4ff49InAwli2/x0MvkTJUXvcjV4nmd/lPJ
+         aUAw==
+X-Gm-Message-State: AAQBX9f6j+Xa8R+hM65VRZn3zyovOH/qj6n1DSebMIgl/E1IHonYMcTU
+        zEtW6cbkGwiisJm8HDy5y18=
+X-Google-Smtp-Source: AKy350bJ561AvTuxSKMXRcqLa+FNL2FUuCCD2f3n8tmaWku8oXRbzr3vL1FXz3q2fgEDAmzf85PLmw==
+X-Received: by 2002:a17:906:2093:b0:933:2e79:4632 with SMTP id 19-20020a170906209300b009332e794632mr3098433ejq.1.1680731308443;
+        Wed, 05 Apr 2023 14:48:28 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id n19-20020a509353000000b004c09527d62dsm7867721eda.30.2023.04.05.14.48.21
+        by smtp.gmail.com with ESMTPSA id y1-20020a170906518100b008c76facbbf7sm7984053ejk.171.2023.04.05.14.48.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 14:48:21 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 23:48:20 +0200
+        Wed, 05 Apr 2023 14:48:27 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 23:48:26 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/5] staging: rtl8192e: Remove unused local variable irq_line
-Message-ID: <6ec702e12cb30501fc81693a71a96b238bf09ea0.1680729716.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 5/5] staging: rtl8192e: Remove unused variable RF_Type
+Message-ID: <bb038a5ffe3208f385543d9e7b360bd7f2f05d0f.1680729716.git.philipp.g.hortmann@gmail.com>
 References: <cover.1680729715.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,29 +70,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused local variable irq_line.
+Remove unused variable RF_Type.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_pci.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/staging/rtl8192e/rtllib.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-index 0bc3e013001e..1c3ccd2aabc3 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-@@ -33,11 +33,9 @@ bool rtl92e_check_adapter(struct pci_dev *pdev, struct net_device *dev)
- 	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
- 	u16 device_id;
- 	u8  revision_id;
--	u16 irq_line;
+diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
+index 7d83a4c322cf..ae7c6a5804ee 100644
+--- a/drivers/staging/rtl8192e/rtllib.h
++++ b/drivers/staging/rtl8192e/rtllib.h
+@@ -1390,7 +1390,6 @@ struct rtllib_device {
+ 	size_t assocreq_ies_len, assocresp_ies_len;
  
- 	device_id = pdev->device;
- 	revision_id = pdev->revision;
--	pci_read_config_word(pdev, 0x3C, &irq_line);
+ 	bool	bForcedBgMode;
+-	u8 RF_Type;
  
- 	priv->card_8192 = NIC_8192E;
- 
+ 	u8 hwsec_active;
+ 	bool is_silent_reset;
 -- 
 2.40.0
 
