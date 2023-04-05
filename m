@@ -2,218 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414CD6D714B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B4B6D7153
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbjDEAbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 20:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S236659AbjDEAdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 20:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236628AbjDEAbm (ORCPT
+        with ESMTP id S235609AbjDEAdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 20:31:42 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E488F44A8
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:31:40 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id c2-20020a62f842000000b0062d93664ad5so11398005pfm.19
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 17:31:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680654700;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=QhmadyCW7rZ0IkiRTP5OSx3MvkvEXJ8KKkSyEhLJ39I=;
-        b=TjPY9E34iEfwYFaF5STVJtPZRBXPRvz5M/6M3FOVwwDlCAT+skmp6E4KUcFo2kC5Hu
-         ESlOwxOIJZ+AwqvwQMPhdUdsgqIyevhBDskiSNXbSRDq/u1OBDUHF6ASpnEVfLI4N3+N
-         pHZRQJML+PNb7zf4uLE3Q7dpvrJJYAfzFfa0QbKcQx6BrNCCXnXsQm/JsLHzbGASSxRe
-         wZYOH2Zm4q+zVn3QI2GB+hjjaI8H45hFSc8jwNf3wvSzgMQM/Yjwxk5ES7/yWGqsfCP1
-         Nn7QeImq972HTDSQRx33gpzp+2JpUGTNBSATvuEScKz5/xred2TKdLfPNPILCI5OkQ4X
-         v+4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680654700;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QhmadyCW7rZ0IkiRTP5OSx3MvkvEXJ8KKkSyEhLJ39I=;
-        b=2wQNFRj952acAbPSj2c7TO42BlWD8lvlK4V6mrBKBiKuFK5LlvOvvrVT5Fqs7zhKuL
-         MASweP0dY8xdl4FCJlqT+inAISKU51aMo8BmG1zV+dsqf4ABS1Xa/Yi1PNtpq6BRXCrj
-         yaa/p3qKSAO+B7/mD8cjy6pDi9NPtaFw8WiN1xEYiMrzfkX4klmWpvSWu1DHSJ2ztwBV
-         SkPqUVUspng7m7EVwSJMqVnjXSntMbpfW8mToZC2m55QfLuNGP3yA8RxvdszFvK7yrWe
-         OjggTWNntpyAwl5HMbkJ9XKjm7DrpzyafPvEPXuC/LEFAlYyhIBn3z29ckirW2i/CzSV
-         k6EA==
-X-Gm-Message-State: AAQBX9fvME6+0W0y7zfHQ7JFXi4rzjQDnfl8jKxVO3Qsjgu8IDbNxtpG
-        lQg7Tanhkg6vP1UtHBh/9oOz2TMjUqY=
-X-Google-Smtp-Source: AKy350ZRhkvVvcfVPJZNFICm5BlfTqckFjlCgk5lnKdeEMpLC+LvRw7dm4CTlKyK0lwXS/mzLak/k+CCUD8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:46c1:b0:23f:a851:4f04 with SMTP id
- jx1-20020a17090b46c100b0023fa8514f04mr1644915pjb.3.1680654700461; Tue, 04 Apr
- 2023 17:31:40 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  4 Apr 2023 17:31:33 -0700
-In-Reply-To: <20230405003133.419177-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230405003133.419177-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230405003133.419177-3-seanjc@google.com>
-Subject: [PATCH 2/2] KVM: x86/mmu: Move filling of Hyper-V's TLB range struct
- into Hyper-V code
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 20:33:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C982040FB;
+        Tue,  4 Apr 2023 17:33:42 -0700 (PDT)
+Received: from [192.168.2.153] (109-252-119-170.nat.spd-mgts.ru [109.252.119.170])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 28F00660315A;
+        Wed,  5 Apr 2023 01:33:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680654820;
+        bh=via3dJkBW0Q8Yv2lNNPhM1xz+EXuwPR73o7cexB8slY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aDnntxld9l5U1838pxs7NIC4zlfcPtaKCwF2NGov7MOFh4qL466qI5WvAOWi6K/p+
+         ZkhfEgrvEKpMEAEWNeA7+GiBxa7JYxR6fyecM+semPnPuQACmYxaGCmugo9Vqkyj3n
+         TQAGZC8fpSAaeF3FJbLOWfw3N1n5vgRXhihKtWuKAGqn5BtzqJ0qQUiTihANTbojgg
+         DHjAQGEVYOV2cTUTTPSllrvfZEYWoAokSc+lIt5KXU7UGGB6hiyPdXEn5ssBoxrSVS
+         RQ8UUiSIQrVm2QmeQgmDwrKAXz4J2Gt2o2A//CeZjkd23tpyvvZJfu3pHQ/4RTUZZw
+         nnt2kzHwFxcGA==
+Message-ID: <91788325-5050-9cf8-9246-5496d9db4df3@collabora.com>
+Date:   Wed, 5 Apr 2023 03:33:22 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 5/7] Revert "drm: Assert held reservation lock for
+ dma-buf mmapping"
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel@collabora.com
+References: <20230402164826.752842-1-dmitry.osipenko@collabora.com>
+ <20230402164826.752842-6-dmitry.osipenko@collabora.com>
+ <7854897f-67f8-e82c-3edf-e8ef923d2474@amd.com>
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <7854897f-67f8-e82c-3edf-e8ef923d2474@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refactor Hyper-V's range-based TLB flushing API to take a gfn+nr_pages
-pair instead of a struct, and bury said struct in Hyper-V specific code.
+On 4/3/23 18:17, Christian König wrote:
+> Am 02.04.23 um 18:48 schrieb Dmitry Osipenko:
+>> Don't assert held dma-buf reservation lock on memory mapping of exported
+>> buffer.
+>>
+>> We're going to change dma-buf mmap() locking policy such that exporters
+>> will have to handle the lock. The previous locking policy caused deadlock
+>> problem for DRM drivers in a case of self-imported dma-bufs, it's solved
+>> by moving the lock down to exporters.
+> 
+> I only checked the TTM code path and think that at least that one should
+> work fine.
+> 
+>> Fixes: 39ce25291871 ("drm: Assert held reservation lock for dma-buf
+>> mmapping")
+> 
+> This here is not really a "fix" for the previous patch. We just found
+> that we didn't like the behavior and so reverted the original patch.
+> 
+> A "Reverts..." comment in the commit message would be more appropriate I
+> think.
 
-Passing along two params generates much better code for the common case
-where KVM is _not_ running on Hyper-V, as forwarding the flush on to
-Hyper-V's hv_flush_remote_tlbs_range() from kvm_flush_remote_tlbs_range()
-becomes a tail call.
+Ack, will drop the fixes tag in v2. Thank you and Emil for the review.
 
-Cc: David Matlack <dmatlack@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm_host.h |  9 ++-------
- arch/x86/kvm/kvm_onhyperv.c     | 24 ++++++++++++++++++++----
- arch/x86/kvm/kvm_onhyperv.h     |  2 +-
- arch/x86/kvm/mmu/mmu.c          |  8 ++------
- 4 files changed, 25 insertions(+), 18 deletions(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index ec22101410ee..09eb37853cb1 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -482,11 +482,6 @@ struct kvm_mmu {
- 	u64 pdptrs[4]; /* pae */
- };
- 
--struct kvm_tlb_range {
--	u64 start_gfn;
--	u64 pages;
--};
--
- enum pmc_type {
- 	KVM_PMC_GP = 0,
- 	KVM_PMC_FIXED,
-@@ -1589,8 +1584,8 @@ struct kvm_x86_ops {
- 	void (*flush_tlb_all)(struct kvm_vcpu *vcpu);
- 	void (*flush_tlb_current)(struct kvm_vcpu *vcpu);
- 	int  (*flush_remote_tlbs)(struct kvm *kvm);
--	int  (*flush_remote_tlbs_range)(struct kvm *kvm,
--					struct kvm_tlb_range *range);
-+	int  (*flush_remote_tlbs_range)(struct kvm *kvm, gfn_t gfn,
-+					gfn_t nr_pages);
- 
- 	/*
- 	 * Flush any TLB entries associated with the given GVA.
-diff --git a/arch/x86/kvm/kvm_onhyperv.c b/arch/x86/kvm/kvm_onhyperv.c
-index 2e2d08da8a3f..ded0bd688c65 100644
---- a/arch/x86/kvm/kvm_onhyperv.c
-+++ b/arch/x86/kvm/kvm_onhyperv.c
-@@ -10,17 +10,22 @@
- #include "hyperv.h"
- #include "kvm_onhyperv.h"
- 
-+struct kvm_hv_tlb_range {
-+	u64 start_gfn;
-+	u64 pages;
-+};
-+
- static int kvm_fill_hv_flush_list_func(struct hv_guest_mapping_flush_list *flush,
- 		void *data)
- {
--	struct kvm_tlb_range *range = data;
-+	struct kvm_hv_tlb_range *range = data;
- 
- 	return hyperv_fill_flush_guest_mapping_list(flush, range->start_gfn,
- 			range->pages);
- }
- 
- static inline int hv_remote_flush_root_tdp(hpa_t root_tdp,
--					   struct kvm_tlb_range *range)
-+					   struct kvm_hv_tlb_range *range)
- {
- 	if (range)
- 		return hyperv_flush_guest_mapping_range(root_tdp,
-@@ -29,7 +34,8 @@ static inline int hv_remote_flush_root_tdp(hpa_t root_tdp,
- 		return hyperv_flush_guest_mapping(root_tdp);
- }
- 
--int hv_flush_remote_tlbs_range(struct kvm *kvm, struct kvm_tlb_range *range)
-+static int __hv_flush_remote_tlbs_range(struct kvm *kvm,
-+					struct kvm_hv_tlb_range *range)
- {
- 	struct kvm_arch *kvm_arch = &kvm->arch;
- 	struct kvm_vcpu *vcpu;
-@@ -85,11 +91,21 @@ int hv_flush_remote_tlbs_range(struct kvm *kvm, struct kvm_tlb_range *range)
- 	spin_unlock(&kvm_arch->hv_root_tdp_lock);
- 	return ret;
- }
-+
-+int hv_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, gfn_t nr_pages)
-+{
-+	struct kvm_hv_tlb_range range = {
-+		.start_gfn = start_gfn,
-+		.pages = nr_pages,
-+	};
-+
-+	return __hv_flush_remote_tlbs_range(kvm, &range);
-+}
- EXPORT_SYMBOL_GPL(hv_flush_remote_tlbs_range);
- 
- int hv_flush_remote_tlbs(struct kvm *kvm)
- {
--	return hv_flush_remote_tlbs_range(kvm, NULL);
-+	return __hv_flush_remote_tlbs_range(kvm, NULL);
- }
- EXPORT_SYMBOL_GPL(hv_flush_remote_tlbs);
- 
-diff --git a/arch/x86/kvm/kvm_onhyperv.h b/arch/x86/kvm/kvm_onhyperv.h
-index 55d7fcb84cc1..ff127d313242 100644
---- a/arch/x86/kvm/kvm_onhyperv.h
-+++ b/arch/x86/kvm/kvm_onhyperv.h
-@@ -7,7 +7,7 @@
- #define __ARCH_X86_KVM_KVM_ONHYPERV_H__
- 
- #if IS_ENABLED(CONFIG_HYPERV)
--int hv_flush_remote_tlbs_range(struct kvm *kvm, struct kvm_tlb_range *range);
-+int hv_flush_remote_tlbs_range(struct kvm *kvm, gfn_t gfn, gfn_t nr_pages);
- int hv_flush_remote_tlbs(struct kvm *kvm);
- void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp);
- #else /* !CONFIG_HYPERV */
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 7654be48ff69..a7adbac0855c 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -278,15 +278,11 @@ static inline bool kvm_available_flush_remote_tlbs_range(void)
- void kvm_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn,
- 				 gfn_t nr_pages)
- {
--	struct kvm_tlb_range range;
- 	int ret = -EOPNOTSUPP;
- 
--	range.start_gfn = start_gfn;
--	range.pages = nr_pages;
--
- 	if (kvm_x86_ops.flush_remote_tlbs_range)
--		ret = static_call(kvm_x86_flush_remote_tlbs_range)(kvm, &range);
--
-+		ret = static_call(kvm_x86_flush_remote_tlbs_range)(kvm, start_gfn,
-+								   nr_pages);
- 	if (ret)
- 		kvm_flush_remote_tlbs(kvm);
- }
 -- 
-2.40.0.348.gf938b09366-goog
+Best regards,
+Dmitry
 
