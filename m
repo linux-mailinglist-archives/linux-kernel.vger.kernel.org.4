@@ -2,103 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD3E6D87F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F506D8800
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbjDEUMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S234332AbjDEUOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234377AbjDEUMg (ORCPT
+        with ESMTP id S234271AbjDEUOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:12:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4987A87;
-        Wed,  5 Apr 2023 13:12:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Apr 2023 16:14:41 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F801BCB;
+        Wed,  5 Apr 2023 13:14:28 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A40F762952;
-        Wed,  5 Apr 2023 20:11:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAFAC433EF;
-        Wed,  5 Apr 2023 20:11:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680725509;
-        bh=RtwX6KJxYQmKc5eE6Ge2DG54ynisAFNybPH8hjW2Myw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dHKfeTPAenu64KkcwFR/WKz+RNZhtj4dMwwpBM3wvHCNU/ZTyHF9/pkW9hknVc0cZ
-         w7fp/t1tuFEZE/K5DTqgSzyGrz1qcWh7zusMfq4giOpy8g4OyLvojp9PCs9I6WB4rK
-         clFPb/fo8eu8ihkbsVTM4o62kBSyBDbIXU0jPgtBXm9exOFcJgVYeiMbQUYkfN6EK9
-         XV0ezMaCDooYBPeJf/A5iyTsnCn5G67bVixFgikYhvxBzUA3VpHE5+iVnBVoFC2sqe
-         xqiRjZGTB6oUN9IMzacEfdZ6ZznSh88QQVnCkDLmIu9+eOrCekx5YQQmw2U3RHRDgl
-         zr5da0P/R5hug==
-Date:   Wed, 5 Apr 2023 15:11:47 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rich Felker <dalias@libc.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Anatolij Gustschin <agust@denx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [PATCH v8 5/7] PCI: Allow pci_bus_for_each_resource() to take
- less arguments
-Message-ID: <20230405201147.GA3637852@bhelgaas>
+        (Authenticated sender: dwlsalmeida)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 63E7866030CD;
+        Wed,  5 Apr 2023 21:14:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680725667;
+        bh=v2OezC2eOoKmX+pqSD+mVfxyCEzS9XKNpWmxKSDdPnk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UxbfPa4nKsc8IT7K38/+QZoKPGeSO33cym7VJPvwXMLJQboCJdKGYeCZzoLvFwAB/
+         Ki6KVuioJ81Dx4HoZP3E3r58c0104VG2zms2QHsqQ+6ppYY7goIkEPYBm7imu83IAH
+         XZ/NL5wgA4dYxI/ejlOHCYPVLfNTI3YrsGJ75P4+XWheHkXj0RlU/35JzebHLwt8W1
+         MTfh/hjZtqF/0309g6IxmMCFa4nvfJQMUajl6hgqvZTfPblL6SHGlu+pQhoqWCkyxM
+         PF5yTCJH6up83YRVaBapmI2eZC3OLe15ZvxsPJXWJ3EW3Mjs6JZfPCwQvBTtDMdeuF
+         iqI37j9a5CUOA==
+From:   Daniel Almeida <daniel.almeida@collabora.com>
+To:     wedsonaf@gmail.com, ojeda@kernel.org
+Cc:     Daniel Almeida <daniel.almeida@collabora.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v2 0/2] rust: virtio: add virtio support
+Date:   Wed,  5 Apr 2023 17:14:14 -0300
+Message-Id: <20230405201416.395840-1-daniel.almeida@collabora.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC1glzw4F9F8zCK+@smile.fi.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 02:50:47PM +0300, Andy Shevchenko wrote:
-> On Thu, Mar 30, 2023 at 07:24:32PM +0300, Andy Shevchenko wrote:
-> > Refactor pci_bus_for_each_resource() in the same way as it's done in
-> > pci_dev_for_each_resource() case. This will allow to hide iterator
-> > inside the loop, where it's not used otherwise.
-> > 
-> > No functional changes intended.
-> 
-> Bjorn, this has wrong author in your tree:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=resource&id=46dbad19a59e0dd8f1e7065e5281345797fbb365
+This used to be a single patch, but I split it into two with the
+addition of struct Scatterlist.
 
-I botched it, sorry, should be fixed now.
+Again a bit new with Rust submissions. I was told by Gary Guo to
+rebase on top of rust-next, but it seems *very* behind?
 
-Bjorn
+The first patch does not build on its own due to a dead_code warning.
+It is hard to not have dead code when one is adding infrastructure to be
+used by others at a later opportunity. Let me know if you would like to
+see the patches squashed into one to fix this.
+
+As suggested by Bjorn, I added a small virtio-entropy based sample.
+It is a very bare-bones clone of virtio-rng.c that only sends a
+single request.
+
+Changes from v1:
+
+- Addressed review comments by Miguel and Bjorn.
+- Added a scatterlist abstraction
+- Added a virtio-rng based sample
+
+Daniel Almeida (2):
+  rust: add scatterlist support
+  rust: virtio: add virtio support
+
+ rust/bindings/bindings_helper.h |   3 +
+ rust/helpers.c                  |  25 +++
+ rust/kernel/lib.rs              |   3 +
+ rust/kernel/scatterlist.rs      |  40 +++++
+ rust/kernel/virtio.rs           | 261 ++++++++++++++++++++++++++++++++
+ rust/kernel/virtio/virtqueue.rs | 126 +++++++++++++++
+ samples/rust/Kconfig            |  10 ++
+ samples/rust/Makefile           |   1 +
+ samples/rust/rust_virtio.rs     | 195 ++++++++++++++++++++++++
+ 9 files changed, 664 insertions(+)
+ create mode 100644 rust/kernel/scatterlist.rs
+ create mode 100644 rust/kernel/virtio.rs
+ create mode 100644 rust/kernel/virtio/virtqueue.rs
+ create mode 100644 samples/rust/rust_virtio.rs
+
+-- 
+2.40.0
+
