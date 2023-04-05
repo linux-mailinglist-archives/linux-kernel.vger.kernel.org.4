@@ -2,140 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8666D7898
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B456D789E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237349AbjDEJkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S237113AbjDEJly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237241AbjDEJkp (ORCPT
+        with ESMTP id S237240AbjDEJlw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:40:45 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F13E45;
-        Wed,  5 Apr 2023 02:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680687645; x=1712223645;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=j2wLczm2nFwPGcSlgIhpmPN4wo/22EWlYYEkPAuG1Rw=;
-  b=CA7oKOayTqedHe+F6KHDRMyImZFcYd/xpcweZuzysu5AQbVr5O/iCw2n
-   pmkpXsrjrVlApBzveT1MKlAV2Kihjy/6qXEZOeGDlvsfQGr5N2LqViJid
-   DxDJaL01ah3Bqw5T1NXXjiXrioSfiErmrSiA/V7/BPhiA6kRsqg1bi8Xu
-   ERs1Z1xAcNLT5PScNCVyNFB27XN/8MPC6ie+RXwQqb6FOyeHhPxI6Db49
-   x7p9fRIaamXHJfrJXGkv9BpP3oPzTHSjWByNMGG91sLGZAyJNY4SCl3u6
-   s/FzSKl+7LE0sW7bXE34LwCg4LurI2vtsJDazdIb8CYHXB70t8jwpeeLK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326444996"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="326444996"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 02:40:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="830300798"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="830300798"
-Received: from mike-ilbpg1.png.intel.com ([10.88.227.76])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Apr 2023 02:40:37 -0700
-From:   Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>,
-        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        hock.leong.kweh@intel.com
-Subject: [PATCH net 1/1] net: stmmac: check fwnode for phy device before scanning for phy
-Date:   Wed,  5 Apr 2023 17:39:45 +0800
-Message-Id: <20230405093945.3549491-1-michael.wei.hong.sit@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 5 Apr 2023 05:41:52 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECFC1701;
+        Wed,  5 Apr 2023 02:41:47 -0700 (PDT)
+Received: from frapeml500002.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ps03454rbz6J76F;
+        Wed,  5 Apr 2023 17:39:44 +0800 (CST)
+Received: from [10.81.203.211] (10.81.203.211) by
+ frapeml500002.china.huawei.com (7.182.85.205) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 5 Apr 2023 11:41:43 +0200
+Message-ID: <539e9035-2673-a51b-c40c-5e5b5e79056c@huawei.com>
+Date:   Wed, 5 Apr 2023 11:41:42 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.8 required=5.0 tests=AC_FROM_MANY_DOTS,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 6.1 000/179] 6.1.23-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kelsey Steele <kelseysteele@linux.microsoft.com>
+CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <decui@microsoft.com>,
+        <linux-hyperv@vger.kernel.org>, <iommu@lists.linux.dev>,
+        <robin.murphy@arm.com>, <dexuan.linux@gmail.com>,
+        <tyler.hicks@microsoft.com>
+References: <20230404183150.381314754@linuxfoundation.org>
+ <20230405003549.GA21326@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <2023040503-perkiness-nutty-f8f4@gregkh>
+From:   Petr Tesarik <petr.tesarik.ext@huawei.com>
+In-Reply-To: <2023040503-perkiness-nutty-f8f4@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.203.211]
+X-ClientProxiedBy: frapeml100003.china.huawei.com (7.182.85.60) To
+ frapeml500002.china.huawei.com (7.182.85.205)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some DT devices already have phy device configured in the DT/ACPI.
-Current implementation scans for a phy unconditionally even though
-there is a phy listed in the DT/ACPI and already attached.
+On 4/5/2023 11:30 AM, Greg Kroah-Hartman wrote:
+> On Tue, Apr 04, 2023 at 05:35:49PM -0700, Kelsey Steele wrote:
+>> On Tue, Apr 04, 2023 at 08:32:15PM +0200, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 6.1.23 release.
+>>> There are 179 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>>
+>>> Responses should be made by Thu, 06 Apr 2023 18:31:13 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>
+>> Hi Greg, 
+>>
+>> 6.1.23-rc2 is failing to boot on x86 WSL. A bisect leads to commit
+>> c2f05366b687 ("swiotlb: fix slot alignment checks") being the problem
+>> and reverting this patch puts everything back in a working state.
+>>
+>> There's a report from Dexuan who also encountered this error on a Linux
+>> VM on Hyper-V:
+>>
+>> https://lore.kernel.org/all/CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com/
+>>
+>> Adding a chunk of my log below which shows errors occuring from the hv_strvsc driver.
+> 
+> Is this also a problem on 6.2-rc1, and Linus's tree?
 
-We should check the fwnode if there is any phy device listed in
-fwnode and decide whether to scan for a phy to attach to.y
+Yes, unfortunately.
 
-Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Fixes: fe2cfbc96803 ("net: stmmac: check if MAC needs to attach to a PHY")
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index d41a5f92aee7..7ca9be7bec06 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1134,22 +1134,26 @@ static void stmmac_check_pcs_mode(struct stmmac_priv *priv)
- static int stmmac_init_phy(struct net_device *dev)
- {
- 	struct stmmac_priv *priv = netdev_priv(dev);
-+	struct fwnode_handle *phy_fwnode;
- 	struct fwnode_handle *fwnode;
--	bool phy_needed;
- 	int ret;
- 
-+	if (!phylink_expects_phy(priv->phylink))
-+		return 0;
-+
- 	fwnode = of_fwnode_handle(priv->plat->phylink_node);
- 	if (!fwnode)
- 		fwnode = dev_fwnode(priv->device);
- 
- 	if (fwnode)
--		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
-+		phy_fwnode = fwnode_get_phy_node(fwnode);
-+	else
-+		phy_fwnode = NULL;
- 
--	phy_needed = phylink_expects_phy(priv->phylink);
- 	/* Some DT bindings do not set-up the PHY handle. Let's try to
- 	 * manually parse it
- 	 */
--	if (!fwnode || phy_needed || ret) {
-+	if (!phy_fwnode || IS_ERR(phy_fwnode)) {
- 		int addr = priv->plat->phy_addr;
- 		struct phy_device *phydev;
- 
-@@ -1165,6 +1169,9 @@ static int stmmac_init_phy(struct net_device *dev)
- 		}
- 
- 		ret = phylink_connect_phy(priv->phylink, phydev);
-+	} else {
-+		fwnode_handle_put(phy_fwnode);
-+		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
- 	}
- 
- 	if (!priv->plat->pmt) {
--- 
-2.34.1
+Petr T
 
