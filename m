@@ -2,194 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5E36D736F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813B26D7375
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbjDEEjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 00:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S236896AbjDEEkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 00:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjDEEjC (ORCPT
+        with ESMTP id S236714AbjDEEkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 00:39:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361411BF3
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 21:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680669541; x=1712205541;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9bMDjRGfzXCDA7BbJrSjcrzsfp7jqg9bJr9wllyDlxU=;
-  b=JK3u2+UamFIUGaFRQsS1CAkciZxFXH3jNETTpbaTLVAuOL/nGLJVLrz2
-   e/AqwSFB+96fTb/SpT0TcbxVgM3mCMHNehGeuGjfcg7btvUOCZ7cxnSf4
-   xb9tq7sA2ofWu6xqIGgkxrZ+VfoTn2uZZve3OFtndz5xcoGBr2f+8KsSo
-   pPINkhXvluBbEne249jA2EQGj11A419aaCVcBvFVZ9S5EU2IBGlS8ty3O
-   caog2w+A/S79ApG7y5we3ramsyyQTymeAWOK9utcqNNhEo/P5D9j1kNoN
-   o0fYd2GMKYFvXWFjnmSBeilkELvb6SNWxEyl4+k832rJrA1BomEC8ATeJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405140768"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="405140768"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 21:39:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="797762247"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="797762247"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 04 Apr 2023 21:38:59 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjuvC-000QJ8-0p;
-        Wed, 05 Apr 2023 04:38:58 +0000
-Date:   Wed, 05 Apr 2023 12:38:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:srcu-cf.2023.04.04a] BUILD SUCCESS
- cefc0a599b19d8dd0e26d0b2e43311bae7530ca1
-Message-ID: <642cfb59.RaLsUAmargoxh3lH%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 5 Apr 2023 00:40:39 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50732127
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 21:40:37 -0700 (PDT)
+Received: from meshulam.tesarici.cz (unknown [213.235.133.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 6D8B41476CB;
+        Wed,  5 Apr 2023 06:40:25 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1680669629; bh=mghipZ7KjYeZ0FTGp7Tk3ekEFHhrukqRx9uoxJv7lJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n50aFp0ah0fQMPX/2Sf2WckMc09pbxAOz+P3m6LKnYxwdBq4381+4sVswaKJyA/j7
+         +4b+C/OJJXdKWyZYy0d4f3jO9P/eTWjtOppiVYH/HPOmrx551zsjyKSz8mmALo0daL
+         2+wjF6EKMPj3FvZ2/fStmwXiGayjo5pi1j1hjZ7lC9qpxJghFf9hCBseR0KKsplmUk
+         zkzc+S1FZ4owdLbGYzPBH7uGIMSmZqrKQCDvWn5fi2kmdyk9M1NuEbckVJkuEsn0EL
+         5ST9lOSqLzklpEYV2G9txpH+gY7oveKHdaKca6ThPqvlY1bADcwqks9SqbLqSCAFJp
+         E/aQsaT8YQPdg==
+Date:   Wed, 5 Apr 2023 06:40:19 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Dexuan-Linux Cui <dexuan.linux@gmail.com>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Jianxiong Gao <jxgao@google.com>,
+        David Stevens <stevensd@chromium.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Subject: Re: [PATCH v1 2/2] swiotlb: Fix slot alignment checks
+Message-ID: <20230405064019.6258ebb3@meshulam.tesarici.cz>
+In-Reply-To: <CO1PR21MB13320305E02BA121623213DABF939@CO1PR21MB1332.namprd21.prod.outlook.com>
+References: <cover.1679382779.git.petr.tesarik.ext@huawei.com>
+        <c90887e4d75344abe219cc5e12f7c6dab980cfce.1679382779.git.petr.tesarik.ext@huawei.com>
+        <CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com>
+        <CO1PR21MB13320305E02BA121623213DABF939@CO1PR21MB1332.namprd21.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git srcu-cf.2023.04.04a
-branch HEAD: cefc0a599b19d8dd0e26d0b2e43311bae7530ca1  srcu: Fix long lines in srcu_funnel_gp_start()
+Hi Dexuan,
 
-elapsed time: 731m
+On Tue, 4 Apr 2023 20:11:18 +0000
+Dexuan Cui <decui@microsoft.com> wrote:
 
-configs tested: 114
-configs skipped: 4
+> > From: Dexuan-Linux Cui <dexuan.linux@gmail.com>
+> > Sent: Tuesday, April 4, 2023 12:55 PM
+> >=20
+> > On Tue, Mar 21, 2023 at 1:37=E2=80=AFAM Petr Tesarik
+> > <petrtesarik@huaweicloud.com> wrote:
+> > ...
+> >=20
+> > Hi Petr, this patch has gone into the mainline:
+> > 0eee5ae10256 ("swiotlb: fix slot alignment checks")
+> >=20
+> > Somehow it breaks Linux VMs on Hyper-V: a regular VM with
+> > swiotlb=3Dforce or a confidential VM (which uses swiotlb) fails to boot.
+> > If I revert this patch, everything works fine. =20
+>=20
+> The log is pasted below. Looks like the SCSI driver hv_storvsc fails to
+> detect the disk capacity:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The first thing I can imagine is that there are in fact no (free) slots
+in the SWIOTLB which match the alignment constraints, so the map
+operation fails. However, this would result in a "swiotlb buffer is
+full" message in the log, and I can see no such message in the log
+excerpt you have posted.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r001-20230403   gcc  
-alpha        buildonly-randconfig-r005-20230403   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230403   gcc  
-alpha                randconfig-r015-20230403   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r006-20230403   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r006-20230403   gcc  
-arc                  randconfig-r034-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r001-20230403   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230403   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r036-20230403   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r012-20230403   gcc  
-hexagon              randconfig-r041-20230403   clang
-hexagon              randconfig-r045-20230403   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                 randconfig-a012-20230403   gcc  
-i386                          randconfig-a012   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                 randconfig-a014-20230403   gcc  
-i386                          randconfig-a014   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                 randconfig-a016-20230403   gcc  
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r004-20230403   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r011-20230403   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r021-20230403   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r002-20230403   gcc  
-m68k         buildonly-randconfig-r006-20230403   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r016-20230403   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r004-20230403   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230403   gcc  
-openrisc                         alldefconfig   gcc  
-openrisc     buildonly-randconfig-r003-20230403   gcc  
-openrisc             randconfig-r022-20230403   gcc  
-parisc       buildonly-randconfig-r005-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r035-20230403   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r032-20230403   clang
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230403   gcc  
-sh                               allmodconfig   gcc  
-sh                               j2_defconfig   gcc  
-sh                           se7705_defconfig   gcc  
-sh                   sh7724_generic_defconfig   gcc  
-sparc        buildonly-randconfig-r004-20230403   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r005-20230403   gcc  
-sparc64              randconfig-r024-20230403   gcc  
-sparc64              randconfig-r025-20230403   gcc  
-sparc64              randconfig-r026-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230403   clang
-x86_64               randconfig-a002-20230403   clang
-x86_64               randconfig-a003-20230403   clang
-x86_64               randconfig-a004-20230403   clang
-x86_64               randconfig-a005-20230403   clang
-x86_64               randconfig-a006-20230403   clang
-x86_64               randconfig-a011-20230403   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64               randconfig-a013-20230403   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64               randconfig-a015-20230403   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64               randconfig-r013-20230403   gcc  
-x86_64               randconfig-r031-20230403   clang
-x86_64               randconfig-r033-20230403   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r003-20230403   gcc  
-xtensa               randconfig-r023-20230403   gcc  
+Please, can you check if there are any "swiotlb" messages preceding the
+first error message?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Petr T
