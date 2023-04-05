@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238A16D7E50
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0A16D7E29
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237560AbjDEOBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
+        id S238085AbjDEN4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238199AbjDEOAq (ORCPT
+        with ESMTP id S237197AbjDEN4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:00:46 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDBD1BDD;
-        Wed,  5 Apr 2023 07:00:44 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 942f2422d11c465e; Wed, 5 Apr 2023 16:00:43 +0200
-Received: from kreacher.localnet (unknown [213.134.163.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 5 Apr 2023 09:56:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07500F3;
+        Wed,  5 Apr 2023 06:56:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 8BB6E1B4EA5B;
-        Wed,  5 Apr 2023 16:00:42 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FD7563D94;
+        Wed,  5 Apr 2023 13:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 096A4C433EF;
+        Wed,  5 Apr 2023 13:56:41 +0000 (UTC)
+Date:   Wed, 5 Apr 2023 09:56:39 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>,
-        Kees Cook <kees@outflux.net>
-Subject: [PATCH 28/32] ACPICA: acpi_madt_oem_data: Fix flexible array member definition
-Date:   Wed, 05 Apr 2023 15:56:06 +0200
-Message-ID: <2094939.KlZ2vcFHjT@kreacher>
-In-Reply-To: <4845957.31r3eYUQgx@kreacher>
-References: <4845957.31r3eYUQgx@kreacher>
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH] tracing: Free error logs of tracing instances
+Message-ID: <20230405095639.32e3476a@gandalf.local.home>
+In-Reply-To: <f871aa71-9c2e-6a31-151c-2e4cae70a0b2@alu.unizg.hr>
+References: <20230404194504.5790b95f@gandalf.local.home>
+        <5d6332fc-a64a-5e1a-33e0-a7f1e31b2f90@alu.unizg.hr>
+        <f871aa71-9c2e-6a31-151c-2e4cae70a0b2@alu.unizg.hr>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.219
-X-CLIENT-HOSTNAME: 213.134.163.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhgvvghssehouhht
- fhhluhigrdhnvght
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <kees@outflux.net>
+On Wed, 5 Apr 2023 12:47:08 +0200
+Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr> wrote:
 
-ACPICA commit e7f6d8c1b7f79eb4b9b07f1bc09c549a2acbd6e8
-
-Use ACPI_FLEX_ARRAY() helper to define flexible array member alone in a
-struct. Fixes issue #812.
-
-No binary changes appear in the .text nor .data sections.
-
-Link: https://github.com/acpica/acpica/commit/e7f6d8c1
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/acpi/actbl2.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
-index a51fd4090d27..0029336775a9 100644
---- a/include/acpi/actbl2.h
-+++ b/include/acpi/actbl2.h
-@@ -1274,7 +1274,7 @@ enum acpi_madt_rintc_version {
- /* 80: OEM data */
- 
- struct acpi_madt_oem_data {
--	u8 oem_data[0];
-+	ACPI_FLEX_ARRAY(u8, oem_data);
- };
- 
- /*
--- 
-2.35.3
+> >> Cc: stable@vger.kernel.org
+> >> Fixes: 2f754e771b1a6 ("tracing: Have the error logs show up in the proper instances")
 
 
+> > 
+> > Please add
+> > 
+> > Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
 
+Thanks!
 
+> 
+> If it mattered, I could proceed bisect on the other device (we'd get Fixes:
+> line, but the bug is already patched).
 
+I'm pretty sure the above commit listed in the Fixes tag is the culprit.
+Feel free to test before and after to confirm.
+
+-- Steve
