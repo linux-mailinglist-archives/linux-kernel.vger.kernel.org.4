@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C2D6D85D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B2A6D85DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbjDESSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
+        id S233773AbjDESTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDESSr (ORCPT
+        with ESMTP id S230012AbjDESTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:18:47 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B3065BB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:18:45 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id fi11so19779825edb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 11:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680718724;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LbPoISbRHHbgx/EIizLjiaK4a2+6FCKivzxh5KJKvX4=;
-        b=Lj/8r+Ls2RV3REtyjYQ+5sXQz9P56r8nQJkhObC/47JPCQx0EWgDyYzOeRCjWWRTNi
-         rrqhKJ9TBOzhCub4MpOmg82OmGMtxMlnS0XQVt9AL74yYaiE0APwebn6yLDP4F6w2RNe
-         sXZDJzQTcGYyPBBb4JOtGiWRpIA7uRLJkEMcAv16YSCpz9IBLexYdy0TLZuG0E2JzA6T
-         1Os0NyBJzDGwF7XkdiNYEw7fXWkZz8qpVNZlseeLA3a49xYpHiRPA5KtDyTFMM4Dzran
-         XPtHEjtooP/RAyzrPQCs7mwts6pgAAV5TExop2m0g3jNW8XraeI8y79OaU2s53/rT/6F
-         yx5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680718724;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LbPoISbRHHbgx/EIizLjiaK4a2+6FCKivzxh5KJKvX4=;
-        b=hbK4KK7npHNcRUPQAMTIH6P/eCHV5ZhQyZBh+f6Ul9muGMhLAXIiAuI7aAZO1CccxV
-         y65KHSjeoHtg7jjSoSrLeG6DPx0fP/JQOovyeVYbK1DVvAECKmglrghv25e3RXWytmIk
-         4xDjRAIOh1M3VxKp1MXqjlHd+Z62jhPUzRtu1mWaiySNwY3ALhX3x8VXSlSiZBqrX9k0
-         vfX2q/Ju1/SMbfW8K0UXTl/W7TEC7vk9k50FMiUZrI1iCotdYcJIoaKlhioxS2K2/Ijr
-         p9gbxGzxkcUU2eHWDAD276xbNRK0vq5v5h+XpG69p9iM/IllMNjv6fxv+vpiEWMPWhjP
-         F9mg==
-X-Gm-Message-State: AAQBX9d3wX/8wPE9fzYtrwI4tBJx8jYQHzWndAbmlkKjnf4TidQ8EliV
-        tbqoODVlZZJhYlowzg8nbHnqbMM3yA==
-X-Google-Smtp-Source: AKy350YCNMvymqNqKy5WInMMa5oFPLUY5LNygeL9fColk5yKXlmxQMUOFvy+jvvLnBmzhOQoqImERQ==
-X-Received: by 2002:a17:906:3d71:b0:8b1:820a:7b60 with SMTP id r17-20020a1709063d7100b008b1820a7b60mr3383770ejf.6.1680718724381;
-        Wed, 05 Apr 2023 11:18:44 -0700 (PDT)
-Received: from koolguy (dslb-002-205-192-117.002.205.pools.vodafone-ip.de. [2.205.192.117])
-        by smtp.gmail.com with ESMTPSA id v13-20020a170906b00d00b009373f1b5c4esm7641255ejy.161.2023.04.05.11.18.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 11:18:43 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 20:18:41 +0200
-From:   Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: octeon: remove typedef declaration for
- cvmx_fau_op_size
-Message-ID: <20230405181841.GA6820@koolguy>
+        Wed, 5 Apr 2023 14:19:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD36E9F;
+        Wed,  5 Apr 2023 11:19:43 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 18:19:36 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680718780;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rMui9Fr9c1VBh2UjQht4/dyIn0riU7J1nVklvg3Cw5A=;
+        b=xVTZ/4X/7P00O6yJ7TC4HgOkya7axkeIWGgvbznKaxdiKoreF/Twf43eEGc+cTKkwmoBUP
+        WhPXXV4Ovxi2KBwFC/09IEHRnrJZLdVua/Jl+D7CXbZmpUyXQj2mqZL0uVBUDC2G19XM6m
+        zWZHX3Nsw1Mns1ITjLUB4O6/Z34XzEzmPVNM9i9JJGZapi5/x/X4QhI3ncO5WYmVEqkmUe
+        0+7FlwyPjt7XeFn2KBpTspFjT/jrdcMm58TZMnwpFGYk/k4emrgnP551oeCbyL4c93uuYh
+        NK1mdY90a7RbJYTPE7cg1ZKd1iBoXEX1TjP61nKCZa0Wfqfb+mkKoPHgZyA5Yw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680718780;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rMui9Fr9c1VBh2UjQht4/dyIn0riU7J1nVklvg3Cw5A=;
+        b=eJ9EPoM12Ws4wQYukXXGEfpZPNnwWBTth1oS/MoA06YhPuGv9xnKu7iN1deOrIkKmkzFYK
+        /lXjmkVOHl5WjHBQ==
+From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Add Xeon Emerald Rapids to list of CPUs that
+ support PPIN
+Cc:     Tony Luck <tony.luck@intel.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230404212124.428118-1-tony.luck@intel.com>
+References: <20230404212124.428118-1-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <168071877680.404.6240417347613164470.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix checkpatch.pl warning: do not add new typedefs in
-drivers/staging/octeon/octeon-stubs.h:216
+The following commit has been merged into the x86/cpu branch of tip:
 
-Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
+Commit-ID:     36168bc061b4368ad19e82b06a6463c95d3bb9a7
+Gitweb:        https://git.kernel.org/tip/36168bc061b4368ad19e82b06a6463c95d3bb9a7
+Author:        Tony Luck <tony.luck@intel.com>
+AuthorDate:    Tue, 04 Apr 2023 14:21:24 -07:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Wed, 05 Apr 2023 20:01:52 +02:00
+
+x86/cpu: Add Xeon Emerald Rapids to list of CPUs that support PPIN
+
+This should be the last addition to this table. Future CPUs will
+enumerate PPIN support using CPUID.
+
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230404212124.428118-1-tony.luck@intel.com
 ---
- drivers/staging/octeon/octeon-stubs.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 3e7b92cd2e35..9f269626b862 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -213,12 +213,12 @@ enum cvmx_fau_op_size {
- 	CVMX_FAU_OP_SIZE_64 = 3
- };
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 8cd4126..80710a6 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -121,6 +121,7 @@ static const struct x86_cpu_id ppin_cpuids[] = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X, &ppin_info[X86_VENDOR_INTEL]),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D, &ppin_info[X86_VENDOR_INTEL]),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, &ppin_info[X86_VENDOR_INTEL]),
++	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, &ppin_info[X86_VENDOR_INTEL]),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL, &ppin_info[X86_VENDOR_INTEL]),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM, &ppin_info[X86_VENDOR_INTEL]),
  
--typedef enum {
-+enum cvmx_spi_mode {
- 	CVMX_SPI_MODE_UNKNOWN = 0,
- 	CVMX_SPI_MODE_TX_HALFPLEX = 1,
- 	CVMX_SPI_MODE_RX_HALFPLEX = 2,
- 	CVMX_SPI_MODE_DUPLEX = 3
--} cvmx_spi_mode_t;
-+};
- 
- typedef enum {
- 	CVMX_HELPER_INTERFACE_MODE_DISABLED,
-@@ -1362,7 +1362,7 @@ static inline struct cvmx_wqe *cvmx_pow_work_request_sync(cvmx_pow_wait_t wait)
- }
- 
- static inline int cvmx_spi_restart_interface(int interface,
--					cvmx_spi_mode_t mode, int timeout)
-+					enum cvmx_spi_mode mode, int timeout)
- {
- 	return 0;
- }
--- 
-2.25.1
-
