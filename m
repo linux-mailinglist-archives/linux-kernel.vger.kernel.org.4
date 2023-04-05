@@ -2,79 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7043C6D775D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86BB6D7761
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237196AbjDEIw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
+        id S237164AbjDEIyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237458AbjDEIwt (ORCPT
+        with ESMTP id S236840AbjDEIyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:52:49 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9977E422E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:52:48 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id c2-20020a6bcc02000000b0075c4c68b5d3so17453572iog.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 01:52:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680684768; x=1683276768;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fgv8LX1m6yE10SJc77E8GCboqg+CgsCzqQTgSByACsM=;
-        b=scdRcFZ2x+K0ormMuTcduvF+alRUqiDDlIa13JxkJmGZonQBxOpOQ9oItkjzJXo08+
-         vjajx6EP2xxPvww91dteeafi0Y6IiLf6++xfBAU1fWs/xYSpGvPt3FYeZaiw7mBWeVBm
-         uXD2Hgabzk/SsKB/jkncNEmII9hJyHVscmZgWg9we3yCohepHSeF4zYRIRgF1un2ONa6
-         t7bktih40lFaOdiMRrgOi8/tMa/gEj+lgsqbpm88Tf3xFNcX0u8/IIc+O0PqmIoKwzW/
-         6n6ZM5hxUjdCaMWU6sbkJhPJlR9m8FVJpOSSeSYF03fWb1lLRheveT+ZsGfXvB2Wn+4x
-         7Ibw==
-X-Gm-Message-State: AAQBX9d/vSr2zV6DrgKbSKoPEg2LVUkGPT43Kkr7r0pIJmT8DRGcyL3d
-        nlkeBNg/3g3F6pbRBIQNAVdOe53bQDkCIurCiUDBvU9dVlZK
-X-Google-Smtp-Source: AKy350aDy+SJnARuW8p3OFw/aBEmHTM3p6MWOiqFBSJ9ycko5efa2tb6tJT2WLIrGg0FIGDjK/kW+sbgVvLjKpelYbgHBb7cABdR
+        Wed, 5 Apr 2023 04:54:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E81F3;
+        Wed,  5 Apr 2023 01:54:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680684859; x=1712220859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V+zTDzqniCNLAugrQ5YEmCW1Vqzv6gfhvHx8dIPWqRw=;
+  b=fbr3EXKOj6Mb75mmsTXTMZLfjnSTZEHQQi35NsT4vv0JUk9ZOOp83XWj
+   5QGjalk5CBqnuj83TOUIQE+F9sMM8M34zzCM6kGF/wFS/vm41IsVUDiqf
+   syVT6xTUmAVOuoMufABa2lINPKl937O102q1XJQFKldaahqkGkHqckfd6
+   5Xr5PYKNMqYyHHADcPna7MB+CHI4y6GcoxsFi8IKDHqdn1HxJ2G7lBuyu
+   FKUyUbz8plUUXE3IOTNWmV97eY5IwKh/4z+vK0+loUNhzc8dROuyQUDZM
+   fbyXxhvdn9qOD0StokUnj6h5IIAGFAdD1FVGpfGWyhkdKrJ1ADv8VgLD2
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344980579"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="344980579"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:54:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="860898214"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="860898214"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 05 Apr 2023 01:54:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pjyuF-00Cl4B-28;
+        Wed, 05 Apr 2023 11:54:15 +0300
+Date:   Wed, 5 Apr 2023 11:54:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 5/5] iio: addac: stx104: Use
+ regmap_read_poll_timeout() for conversion poll
+Message-ID: <ZC03N4lTqJQWClz4@smile.fi.intel.com>
+References: <cover.1680564468.git.william.gray@linaro.org>
+ <f7fa811a002d0572c63b5a5ab7a478a5383ff840.1680564468.git.william.gray@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:85ae:0:b0:3a7:e46f:2a32 with SMTP id
- d43-20020a0285ae000000b003a7e46f2a32mr2922800jai.6.1680684767986; Wed, 05 Apr
- 2023 01:52:47 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 01:52:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000934dff05f892ea11@google.com>
-Subject: [syzbot] Monthly udf report
-From:   syzbot <syzbot+list5f419159526a7a05336e@syzkaller.appspotmail.com>
-To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f7fa811a002d0572c63b5a5ab7a478a5383ff840.1680564468.git.william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello udf maintainers/developers,
+On Tue, Apr 04, 2023 at 10:12:02AM -0400, William Breathitt Gray wrote:
+> ADC sample captures take a certain amount of time to complete after
+> initiated; this conversion time range can be anywhere from 5 uSec to
+> 53.68 Seconds depending on the configuration of the Analog Input Frame
+> Timer register. When the conversion is in progress, the ADC Status
+> register CNV bit is high. Utilize regmap_read_poll_timeout() to poll
+> until the ADC conversion is completed (or timeout if more than 53.68
+> Seconds passes).
 
-This is a 30-day syzbot report for the udf subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/udf
+...
 
-During the period, 2 new issues were detected and 0 were fixed.
-In total, 16 issues are still open and 16 have been fixed so far.
+>  		/* trigger ADC sample capture by writing to the 8-bit
 
-Some of the still happening issues:
+Perhaps fix the style here while at it?
 
-Crashes Repro Title
-328     Yes   WARNING in udf_truncate_extents
-              https://syzkaller.appspot.com/bug?extid=43fc5ba6dcb33e3261ca
-29      Yes   KASAN: use-after-free Read in crc_itu_t
-              https://syzkaller.appspot.com/bug?extid=d8fc21bfa138a5ae916d
-28      Yes   KASAN: use-after-free Write in udf_close_lvid
-              https://syzkaller.appspot.com/bug?extid=60864ed35b1073540d57
-3       No    WARNING in udf_new_block
-              https://syzkaller.appspot.com/bug?extid=cc717c6c5fee9ed6e41d
+		/*
+		 * Trigger ADC sample capture by writing to the 8-bit
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>  		 * Software Strobe Register and wait for completion
+> +		 * Range is 5 uSec to 53.68 Seconds in steps of 25 nanoseconds.
+
+seconds (in SI the small letter is for the unit(s) of seconds).
+
+Same for the commit message.
+
+> +		 * The actual Analog Input Frame Timer time interval is calculated as:
+> +		 * ai_time_frame_ns = ( AIFT + 1 ) * ( 25 nSec ).
+
+nSec --> nanosecond
+
+> +		 * Where 0 <= AIFT <= 2147483648.
+>  		 */
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
