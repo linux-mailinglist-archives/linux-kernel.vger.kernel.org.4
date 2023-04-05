@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BF56D77D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06156D77D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237408AbjDEJKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
+        id S237054AbjDEJKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237269AbjDEJKs (ORCPT
+        with ESMTP id S231742AbjDEJKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:10:48 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C4B30F8;
-        Wed,  5 Apr 2023 02:10:44 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id q16so45705811lfe.10;
-        Wed, 05 Apr 2023 02:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680685843;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=m5eGS81xIRzLVimyFVJHz1me2KIfa7Aw0JDi4lE6yBw=;
-        b=TbCR88LIwsj+xunQFMt8mYgULUxfDkMgKE704G9q8TE7up5QaiL3uV0TuVe7A1EAme
-         l1C4HfppATuridvxmMYvFEcdU6dlgjOFjL+VtQEFN3b+m+tTpIAe7/25wPFSzhlFvIyQ
-         Sjeu9j2PjeDpsYI97wiDXx9nEtCNeUDBJclyEfPei+so20voQiqeOTlYC4ZvJmakq9dM
-         PYY2LVGSZNw0fL/F4xgf9RINzkRqwkGFHhIMkM9SOWMXHm1gPVY3O+90P+sM2hOS6vBd
-         8c7xZATz8lSKLxJwFuxFiwfFbfA6Sj/7nX4xQ3+VEBK5DyeDsfEOWNCbz1dyEPvvgQm5
-         eDnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680685843;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m5eGS81xIRzLVimyFVJHz1me2KIfa7Aw0JDi4lE6yBw=;
-        b=6boarZeUNvA+2Mv5i9WZszZ3In1QoOeYwIl5NRNOphIyy+BkIWfHACohiOVB1193oo
-         VZI4HW3nxloA2KarrKwrA0fb1lFBWVmrBam1wReWDB/51oC0oZbRzOypPG68//Ymh4v2
-         0JhVDK2DvSfAiRQ3waoBU83h7RJr6HOOulcl3Q/4RJsyYP/1bNYoMdagqgSVesN9re+J
-         tJQmbHvlKImkzGpTvugOeKEAIvbnmQeAy6mvjmG9z6pjwMaDu7e17igRuGFFG7jlckWG
-         J17NBzuYeogDBU1t8+48ym73SMhSd9M8rascQdvZa/zNdc5BOjjr9jh2UOok3lPE2YGw
-         Doow==
-X-Gm-Message-State: AAQBX9ecy4mVzsXhtikZuThWI6RMixavdz7w5b/AcYFPlX7aemVU0Hzg
-        kihGeowOynr0VOVrwZt4T1E=
-X-Google-Smtp-Source: AKy350b4K3jar6nPjP8Wefj/hXUqqcReTrTgL118VOV452uc4quiQbvnwrzxkzB+7r26cGDjjB2FyA==
-X-Received: by 2002:ac2:4294:0:b0:4e8:44a5:6018 with SMTP id m20-20020ac24294000000b004e844a56018mr1371310lfh.44.1680685842747;
-        Wed, 05 Apr 2023 02:10:42 -0700 (PDT)
-Received: from pc636 (host-90-233-209-177.mobileonline.telia.com. [90.233.209.177])
-        by smtp.gmail.com with ESMTPSA id l14-20020ac2554e000000b004e811e3554dsm2756772lfk.185.2023.04.05.02.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 02:10:42 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 5 Apr 2023 11:10:39 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        RCU <rcu@vger.kernel.org>, quic_neeraju@quicinc.com,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH 1/1] rcu/kvfree: Add debug check of GP ready for ptrs in
- a list
-Message-ID: <ZC07DxeqllxP2Zpv@pc636>
-References: <20230404141300.908202-1-urezki@gmail.com>
- <f92cb016-b978-40ab-b025-bf2410b0537d@paulmck-laptop>
+        Wed, 5 Apr 2023 05:10:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D890;
+        Wed,  5 Apr 2023 02:10:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47E2062304;
+        Wed,  5 Apr 2023 09:10:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76596C4339B;
+        Wed,  5 Apr 2023 09:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680685831;
+        bh=l5sX60iJEeJFjkbQM2H90cOtD2sNI6yhbFlyNek5as0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c5fuoR7XGt0dvomYiWEBhKEeQHabvQDQU0uohPQ8wFj7RAAMz7Kf7zfxFZenfhOPg
+         EvqSHrYHA6arxtZ4LB0UbDNC3NHqX4MmWaRk47c2VlMzpMHxViHsg2Lux+BbOxI7hf
+         vXiwPAhdUq9Nu0lgAJNUaONcN/t+t/YniXbMiMv8w9Ee1tvvYO19gj5C+3wNjOZxoA
+         T4m3hJzzhS62QMTtk0PhovTRE4jMirivKLYnq1EmGo/k1S5NGp0KGxDy3jyxj4mEru
+         JPtxyV6LbCtmHNZqIETkgY4f0gLlHexjY+VYIpsURrsZHBUk6cPu5hAKtKO1gKYGA4
+         wEqcBKzXbXaPA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pjzAT-0001xl-G8; Wed, 05 Apr 2023 11:11:01 +0200
+Date:   Wed, 5 Apr 2023 11:11:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <ZC07JU/F46L9Z9y2@hovoldconsulting.com>
+References: <cover.1680162377.git.quic_varada@quicinc.com>
+ <c46b542b112b59002ab965be1d3fcae8c372d545.1680162377.git.quic_varada@quicinc.com>
+ <CAA8EJpo_ckJtYV4aU613X5L6+wj-1i9vZkud5p72PLdCSnj5ng@mail.gmail.com>
+ <20230331092710.GB19162@varda-linux.qualcomm.com>
+ <ZCaznloORtzgioOP@hovoldconsulting.com>
+ <20230405085831.GA26156@varda-linux.qualcomm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f92cb016-b978-40ab-b025-bf2410b0537d@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230405085831.GA26156@varda-linux.qualcomm.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 05:00:13PM -0700, Paul E. McKenney wrote:
-> On Tue, Apr 04, 2023 at 04:13:00PM +0200, Uladzislau Rezki (Sony) wrote:
-> > Triiger a warning if a grace period is not passed yet for
-> > objects queued on a linked list via rcu_head structures.
-> > 
-> > Once detached, take a full snapsot of GP sequnces to check
-> > later that a grace period is passed and it is safe to free
-> > all pointers.
-> > 
-> > Based on latest 'dev' branch.
-> > 
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> 
-> Very good, thank you!
-> 
-> I queued the patch wordsmithed as shown below for review and further
-> testing.  Please check for any errors.
-> 
-> How should we go about testing this code?  The way that it would get
-> exercised in production would be during an out-of-memory event, correct?
-> 
-Either by flooding kfree_rcu() calls by many threads or simulate a
-low memory condition. I applied i high pressure using 1 000 000 frees
-by 64 kthreads on 64 CPUs system.
+On Wed, Apr 05, 2023 at 02:28:32PM +0530, Varadarajan Narayanan wrote:
+> On Fri, Mar 31, 2023 at 12:19:10PM +0200, Johan Hovold wrote:
 
-IMHO, we have two GP checks, one for bulk and another one for list
-and it looks like enough at least from my point of view.
+> > > > > +               ssphy_0: phy@7d000 {
+> > > >
+> > > > Nit: usually the label usb_0_qmpphy
+> > > >
+> > > > > +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
+> > > > > +                       reg = <0x0007d000 0xa00>;
+> > > > > +                       #phy-cells = <0>;
+> > > > > +
+> > > > > +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
+> > > > > +                                <&xo_board_clk>,
+> > > > > +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > > > > +                                <&gcc GCC_USB0_PIPE_CLK>;
+> > > > > +                       clock-names = "aux",
+> > > > > +                                     "ref",
+> > > > > +                                     "com_aux",
+> >
+> > This is not the right name for this clock so you need to update the
+> > binding first.
+> >
+> > Please be more careful.
+> 
+> Thanks for your feedback. Have posted v6 with the above corrections.
 
---
-Uladzislau Rezki
+Thanks for the heads up. But for future submission, please try to
+remember to add people that have provided feedback on CC when posting
+new revisions.
+
+Johan
