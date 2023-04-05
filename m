@@ -2,85 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3836D73C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092DF6D73B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236827AbjDEFcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 01:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S236735AbjDEF3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 01:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDEFcA (ORCPT
+        with ESMTP id S236449AbjDEF3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 01:32:00 -0400
-X-Greylist: delayed 337 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 22:31:55 PDT
-Received: from scadrial.mjdsystems.ca (scadrial.mjdsystems.ca [192.99.73.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1F74224;
-        Tue,  4 Apr 2023 22:31:55 -0700 (PDT)
-Received: from cwmtaff.localnet (107-190-58-99.cpe.teksavvy.com [107.190.58.99])
-        by scadrial.mjdsystems.ca (Postfix) with ESMTPSA id 93FD789917E4;
-        Wed,  5 Apr 2023 01:26:17 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed; d=mjdsystems.ca;
-        s=202010; t=1680672377;
-        bh=omZ1DvLLEcKZSl6Ky5Bzl01ptknCiOUywQxqAjHSKto=;
-        h=From:To:Subject:Date:From;
-        b=TxjEQS1nca75C4+zuQ03eBJ2NiEJBI47IiQewhqDnBvSM3T6j9HXdjLpFLhkE1K9l
-         U6ehG+0zbOQ1SJCtrIjpSWmylun+tNu7p4FI7Qz6Hd+K4Gd20I1SEXy83mYTlRhmtP
-         sFSfK+zFvnweHppE0YJb7bHEArdL42ieKCfT8uqneLPb2FYyEXGYcvkwl7X0q0kw1p
-         ACrCf1XSRd/VCnmRUW8YbvFbHYN2H2z1pMcb6A5A0T1oKyPPpJdzQiDoosf/jZuyiy
-         qR1F5hyrJQ4Cl7c52jZcQ97OzzHM6QvlZSomkEbR3xUoWTx0Vp/0owCKaF5MZbSxlM
-         ghoSJvkig7bj0uwKYA7tB6F7/qAH/XlI9+9TCgXURwbWqjNt9KSG+hVJEAyZhB8kJC
-         e4Igsywrfupx1UZB8+RC+A1tD5PGQNdGD4p6Mu8HaydfUe4Ia17p9qCgXwFXo0SpXg
-         7F0YqntSYmJEtsJAebYVoI1rzYR8UX7pNFkTWo26hkX7BvqGcOcZ0WGGhTusCjCP1U
-         3ra+zjbd3Ik9qSjruKk13Dy+1fVPTkDl/lkFN+HgWJ/iWPUCwuDvEwcN52zgl9epj3
-         m0/vzEjDSeKUGo8WPIhaut+SbqLt3ngQ1z7Mnl81jsRAoqQ/prY8ityLnBvl+v2Igl
-         nZITJJU08ip9k/VxZ2n9nRCo=
-From:   Matthew Dawson <matthew@mjdsystems.ca>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] r8152: Advertise support for software timestamping
-Date:   Wed, 05 Apr 2023 01:26:17 -0400
-Message-ID: <3218086.lGaqSPkdTl@cwmtaff>
+        Wed, 5 Apr 2023 01:29:39 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3F840D9;
+        Tue,  4 Apr 2023 22:29:38 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id cu4so25525226qvb.3;
+        Tue, 04 Apr 2023 22:29:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680672577;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qrEFfBgPkHs4+wQNyjy49qgOcULrJ/GwlKe55w6yLFY=;
+        b=l+JAVHEH3PqYb2Z7mPeN4/PYPKgMOnmXbWkpbBEWuFk3AJSIFWvArLURa/c2HSj64z
+         SuDXdPoMqfGmQienM42zHkpQjCG8hkHEWUC3Py2Ge6+L2wFLpedEz8+l2DyiwZ1nhORi
+         Ri2EBaJoiIJN2lZX66JTycR0yQBBn3+fvLIkF6MrfiWuno06zvAhwwfbJD+Eu24rwStM
+         I731j2yN381Mes9KJgaIbvmmI7rHh1vNdDvdBWwiwcbKabOc5l6N+Ao39Mx2vzxcJCCn
+         DBVRY7LAlA7pul03Sxj29ioYoWLB0YVCip7WaMF3kdCIIlAzr3TFscBVspe7XrnCjx47
+         0b7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680672577;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qrEFfBgPkHs4+wQNyjy49qgOcULrJ/GwlKe55w6yLFY=;
+        b=cLWPj7G5h+VCnEbPtraMUM0KWKkxjP8NoPzwvnywaV4neIUZ9HoUSijB7BwjRgQs2X
+         UOtKXjZnoq6S4UGlJ5P2bpnh1UMC7JAg4O7J/ZOib96wKBJBnCMzGbW1jKAMG6CHvgy9
+         +7hvnv21ldrdI5QJToJtnmCMo/8W165Y6PuPAFd5kh1vfwJSGSelZ/a7nTvgTPTWDbX/
+         44m/lMcraFZ1rI57ZOpSRn9WPbAJhyWztMvJSeJ96YrGKS/+2/sUor9yj8RRbhNY2apE
+         PKhgaBwij+mREXFW8EGo1WadTv0pqS7Kbz87LnQ8VM+UQtUeGFs6WstdOtFwRxOsC1VB
+         n++w==
+X-Gm-Message-State: AAQBX9e5KgbwHyUzSfUkZW7e1iMGI/h2jTFMI2z6u7VQR8wqDyYXAo+D
+        cElRS8YlbWglLgXFsR8+uvE=
+X-Google-Smtp-Source: AKy350Y5UeZlI9AHDXAW48fO7UR457CeiAbhHzHf222t8O5nD1WKlwD9scbjbd8a36C2up7QCY3NCQ==
+X-Received: by 2002:a05:6214:2588:b0:579:5dbc:ab8c with SMTP id fq8-20020a056214258800b005795dbcab8cmr7385618qvb.30.1680672577445;
+        Tue, 04 Apr 2023 22:29:37 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id f12-20020ad4558c000000b005e16003edc9sm3881454qvx.104.2023.04.04.22.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 22:29:37 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH v2 0/3] regulator: da9063: disable unused voltage monitors
+Date:   Wed, 05 Apr 2023 07:29:06 +0200
+Message-Id: <20230403-da9063-disable-unused-v2-0-2f1bd2a2434a@skidata.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACIHLWQC/zWNywqDMBBFf0WybiRPa7rqf5QuJjpqwMQy0VIQ/
+ 72x0NXlcDmcnWWkgJndqp0RvkMOSyqgLhXrJkgj8tAXZkooLYzQvAcnmjIhg5+Rb2nL2HNpW92
+ gGozVjhXXQ0buCVI3nXaEvCKdx4twCJ9f8PEsPNAS+ToRwj+jxFVqqYyzba2FM1ZYLrn3QOD0f
+ YwQ5rpbIjuOL48Tyhq9AAAA
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steve Twiss <stwiss.opensource@diasemi.com>
+Cc:     DLG-Adam.Thomson.Opensource@dm.renesas.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since this drivers initial merge, the necessary support for software
-based timestamping has been available.  Advertise support for this
-feature enables the linuxptp project to work with it.
+Hi!
 
-Signed-off-by: Matthew Dawson <matthew@mjdsystems.ca>
-Tested-by: Mostafa Ayesh <mostafaayesh@outlook.com>
+Follow-up for my last patch regarding the disabling of unrequired
+voltage monitors. We use the PWR_OK functionality, which asserts GP_FB2
+if every monitored voltage is in range. This patch should provide the
+possibility to deactivate a voltage monitor from the DT if the regulator
+might be disabled during run time. For this purpose, the regulator
+notification support is used:
+https://lore.kernel.org/all/cover.1622628333.git.matti.vaittinen@fi.rohmeurope.com/
+
+v1: https://lore.kernel.org/all/20220713124958.3094505-1-bbara93@gmail.com/
+
+v2:
+- reworked solution, based on Adam Thomson's feedback
+
 ---
- drivers/net/usb/r8152.c | 1 +
- 1 file changed, 1 insertion(+)
+Benjamin Bara (3):
+      regulator: da9063: add voltage monitoring registers
+      regulator: da9063: implement basic XVP setter
+      dt-bindings: mfd: dlg,da9063: document XVP
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index decb5ba56a259..44f64fd765a7d 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9132,6 +9132,7 @@ static const struct ethtool_ops ops = {
- 	.set_ringparam = rtl8152_set_ringparam,
- 	.get_pauseparam = rtl8152_get_pauseparam,
- 	.set_pauseparam = rtl8152_set_pauseparam,
-+	.get_ts_info = ethtool_op_get_ts_info,
- };
- 
- static int rtl8152_ioctl(struct net_device *netdev, struct ifreq *rq, int 
-cmd)
+ .../devicetree/bindings/mfd/dlg,da9063.yaml        |  16 ++-
+ drivers/regulator/da9063-regulator.c               | 129 ++++++++++++++++-----
+ include/linux/mfd/da9063/registers.h               |  23 ++++
+ 3 files changed, 138 insertions(+), 30 deletions(-)
+---
+base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
+change-id: 20230403-da9063-disable-unused-15836e2f4539
+
+Best regards,
 -- 
-2.39.2
-
-
-
+Benjamin Bara <benjamin.bara@skidata.com>
 
