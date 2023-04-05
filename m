@@ -2,147 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB446D8712
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:41:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C3D6D873F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjDETlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
+        id S232902AbjDETsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbjDETlC (ORCPT
+        with ESMTP id S233658AbjDETsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:41:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EA17DA1;
-        Wed,  5 Apr 2023 12:40:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2F4763FBA;
-        Wed,  5 Apr 2023 19:39:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CB0C433D2;
-        Wed,  5 Apr 2023 19:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680723579;
-        bh=cTudTj8Oo2+RcHiqiFkI4xEdSskDU+0x8+gt+YiMa1U=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=dUpRuEo2D1mabWQvXzJqRWoZmOJcNZXwbeYAHRTDQUFia1LQ30DnL5MVT17wgqc4b
-         o8XcIvg3F/UEE3btoojmu9yMT55Lip4MsZL85VnqYoh4RfpvbfVRFkeiXjVvfCvZyF
-         ZRjMzvkNIKhTuCLBdbGWr4kAB7xyKfDDvSgeMqLun2r+wa9wOD8t9o1jJnfi7Nacan
-         7yBa5x2r2+g3RVFcXkLRODsvzRN3FLM9CAFP3wT6XmO0g0GEWURTruNS4KtF1AQ8dq
-         Z8rLoFoek5rfhF3xQqU4XR2g1YegMQGsOhNsoULUA0hJeQJcSHZDLuHreD3EKfDV1u
-         nDz0i1UhjSPuA==
-Message-ID: <4088bcbba60790adebccde35270c792c.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Wed, 5 Apr 2023 15:48:06 -0400
+Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312A47ABF;
+        Wed,  5 Apr 2023 12:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1680724076;
+        bh=uvCYyEGQDMEh3nNClT8Hga8mQeF+OmdlmraiBFgDXwU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=EmPRZD7lTmI0KRdhMqEtqIpAmXjGbqLOJFGG2oLcil2BfClRiBCtZ2/OqEJ4GAKRJ
+         K2Ju1v4v09wV88dKOPkjk2yjVkzxKX1FZnXunh9y/Kx7KAI8I0YtzSB0dJKtUyv0kp
+         NiVAAKe2I/z6oKsjKTQW5xds/s9iIRkmFKTQFygQ=
+Received: from [192.168.31.3] ([106.92.97.36])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id A0F89268; Thu, 06 Apr 2023 03:40:15 +0800
+X-QQ-mid: xmsmtpt1680723615tojklei61
+Message-ID: <tencent_1A9532B54AD0FB644D7A28B39C5FF9B34506@qq.com>
+X-QQ-XMAILINFO: OGZxhFXqN7PJYgHb/+yPhJvUZ7Fjni4pQEIxnLJDYjMNtYPrLQrnLv1BmcljkG
+         XLqhGOisDeEGCV/yhIPD0LdG36pBtKzmVeOr80JpLyCwGj+g7ZUMSrdIa1VOMPKLj4d05wTyA+sl
+         hSCUWhO6i6tRKXw+217cnoMWH4cd9SBy+0S7DMETA0zJZZKtBAf7Lwvz+hILnxfFba/ImUCIS8Nv
+         +A224EeGxIE/AETMDRUVKEnhRhddoifnJteCOSNTjxyarveHqmafRbJpTwNb8A2eOxlu3BK02OIU
+         0ZOiTJ8w86SqRO1jWhO+cr7MRH4uSSYHyttYguP8eBX1hV5wTaXWLomcwj49Q06XgU4yzZdYAXat
+         BogicRHWjJqeb4xh8gKFwcu2E9QLCfXJGNH48ky9P/YWricjyHyPqTInSuYX3DNmp/RbTLdQHvcz
+         NBb+tQSrSardXjJDHmtOKR9hzWtoH32VX6C8acmpT9I3NhsHaakuQOOz5LkKmcCW5DVHKkAVyYYd
+         ZGqpckCMsZXXSrsvwE0J4QdpGCrZw8BG12mKGwaXrffw8nsaInvjW7xd0IhzO3JE1Xs0/HbG/Ds0
+         8rIn7tG/bPsg65HrBCk/gLRtnCpbzYs9K4rsmkGOS7ZPV/lau4+AgybUUf599sWBkjwSDl9ghy0q
+         5IhcF0hHtwJFxwLlRevJyAto02QwEM5bmKo0Tp8mgzLSvdW3lC6MNnnisibWU37bAB2KJt457s1M
+         8cx/yx8QZ5wBjp+aW0IteFuuplcmzEpzwsa3VGaCxM0ch2PAl4GGzksIku3JeTtEIGxM4cmzlw5h
+         FqqmQGTGTVA/sbEQWYGl6bxtj2rH+gbUDAqvryzD3G9fkhTx3n5lr1Ib++H3npOnb4S0l22cZIiN
+         ZsMFLd8h9ZucP+uVZQtDsYbq2U81M1MsgMoJFwi61NLjFJgmQDWdYKMR5VRDoN5XI/oADsftLabQ
+         e2tS7kh0qYH0ftt8nUldUPzUk0iYyhg2y+WWS9775BSbHQp+6Q19vp3AFcsrFJ6SgeVj1WYgJvJz
+         4JEOJHGq0XHVmQDify
+X-OQ-MSGID: <5944fa67-335c-9ee0-6227-ccf521be0d31@foxmail.com>
+Date:   Thu, 6 Apr 2023 03:40:15 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230329075104.165176-1-mmyangfl@gmail.com>
-References: <20230329075104.165176-1-mmyangfl@gmail.com>
-Subject: Re: [PATCH v2 0/4] clk: hisilicon: Migrate devm APIs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     David Yang <mmyangfl@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org
-To:     David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
-Date:   Wed, 05 Apr 2023 12:39:35 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [RESEND PATCH v2] eventfd: use
+ wait_event_interruptible_locked_irq() helper
+To:     Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Eric Biggers <ebiggers@google.com>, Christoph Hellwig <hch@lst.de>,
+        Dylan Yudaken <dylany@fb.com>,
+        David Woodhouse <dwmw@amazon.co.uk>, Fu Wei <wefu@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michal Nazarewicz <m.nazarewicz@samsung.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <tencent_16F9553E8354D950D704214D6EA407315F0A@qq.com>
+ <43fd324c-585c-d85b-230c-5b086e1aaa2c@kernel.dk>
+From:   Wen Yang <wenyang.linux@foxmail.com>
+In-Reply-To: <43fd324c-585c-d85b-230c-5b086e1aaa2c@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting David Yang (2023-03-29 00:50:49)
-> Migrate devm APIs for HiSilicon clock drivers and remove redundant codes.
->=20
-> This series is a partial improvement of [1]
->=20
 
-Run checkpatch.pl=20
+在 2023/4/6 03:26, Jens Axboe 写道:
+> On 4/5/23 1:20 PM, wenyang.linux@foxmail.com wrote:
+>> From: Wen Yang <wenyang.linux@foxmail.com>
+>>
+>> wait_event_interruptible_locked_irq was introduced by commit 22c43c81a51e
+>> ("wait_event_interruptible_locked() interface"), but older code such as
+>> eventfd_{write,read} still uses the open code implementation.
+>> Inspired by commit 8120a8aadb20
+>> ("fs/timerfd.c: make use of wait_event_interruptible_locked_irq()"), this
+>> patch replaces the open code implementation with a single macro call.
+>>
+>> No functional change intended.
+> Looks pretty reasonable to me. How did you test it?
+>
+Thanks.
 
-WARNING: Macros with flow control statements should be avoided
-#591: FILE: drivers/clk/hisilicon/clk.c:146:
-+#define hisi_clk_register_fn(fn, type, stmt) \
-+int fn(struct device *dev, const struct type *clks, \
-+       int num, struct hisi_clock_data *data) \
-+{ \
-+       void __iomem *base =3D data->base; \
-+       int i; \
-+\
-+       for (i =3D 0; i < num; i++) { \
-+               const struct type *p_clk =3D &clks[i]; \
-+               struct clk_hw *clk =3D stmt; \
-+\
-+               if (IS_ERR(clk)) { \
-+                       pr_err("%s: failed to register clock %s\n", \
-+                              __func__, p_clk->name); \
-+                       return PTR_ERR(clk); \
-+               } \
-+\
-+               if (p_clk->alias) \
-+                       clk_hw_register_clkdev(clk, p_clk->alias, NULL); \
-+\
-+               data->clk_data->hws[p_clk->id] =3D clk; \
-+       } \
-+\
-+       return 0; \
-+} \
-+EXPORT_SYMBOL_GPL(fn);
+We have verified it in some local testing environments, and the 
+intel-lab-lkp has also tested it more than a month, as follows:
 
-WARNING: macros should not use a trailing semicolon
-#591: FILE: drivers/clk/hisilicon/clk.c:146:
-+#define hisi_clk_register_fn(fn, type, stmt) \
-+int fn(struct device *dev, const struct type *clks, \
-+       int num, struct hisi_clock_data *data) \
-+{ \
-+       void __iomem *base =3D data->base; \
-+       int i; \
-+\
-+       for (i =3D 0; i < num; i++) { \
-+               const struct type *p_clk =3D &clks[i]; \
-+               struct clk_hw *clk =3D stmt; \
-+\
-+               if (IS_ERR(clk)) { \
-+                       pr_err("%s: failed to register clock %s\n", \
-+                              __func__, p_clk->name); \
-+                       return PTR_ERR(clk); \
-+               } \
-+\
-+               if (p_clk->alias) \
-+                       clk_hw_register_clkdev(clk, p_clk->alias, NULL); \
-+\
-+               data->clk_data->hws[p_clk->id] =3D clk; \
-+       } \
-+\
-+       return 0; \
-+} \
-+EXPORT_SYMBOL_GPL(fn);
+https://github.com/intel-lab-lkp/linux/tree/wenyang-linux-foxmail-com/eventfd-use-wait_event_interruptible_locked_irq-helper/20230217-023039
 
-total: 0 errors, 2 warnings, 1019 lines checked
-in patch 'clk: hisilicon: Migrate devm APIs' (8d960cbef61a)
-WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cur=
-e the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-#627: FILE: drivers/clk/hisilicon/clk-hi6220.c:291:
-+MODULE_LICENSE("GPL v2");
+--
 
-WARNING: DT compatible string "hisilicon,hip04-clock" appears un-documented=
- -- check ./Documentation/devicetree/bindings/
-#661: FILE: drivers/clk/hisilicon/clk-hip04.c:33:
-+       { .compatible =3D "hisilicon,hip04-clock",
+Best wishes,
 
-WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cur=
-e the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-#842: FILE: drivers/clk/hisilicon/clk-hix5hd2.c:337:
-+MODULE_LICENSE("GPL v2");
+Wen
 
-total: 0 errors, 3 warnings, 779 lines checked
-in patch 'clk: hisilicon: Convert to platform driver' (2681347c2636)
-WARNING: Prefer "GPL" over "GPL v2" - see commit bf7fbeeae6db ("module: Cur=
-e the MODULE_LICENSE "GPL" vs. "GPL v2" bogosity")
-#1044: FILE: drivers/clk/hisilicon/clk-hi3670.c:935:
-+MODULE_LICENSE("GPL v2");
 
-total: 0 errors, 1 warnings, 1481 lines checked
