@@ -2,102 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1936D72C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 05:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512DE6D72C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 05:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236714AbjDEDu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 23:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S236740AbjDEDxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 23:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236000AbjDEDuz (ORCPT
+        with ESMTP id S235732AbjDEDxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 23:50:55 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599E12691;
-        Tue,  4 Apr 2023 20:50:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VfNxCDL_1680666644;
-Received: from 30.240.113.3(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VfNxCDL_1680666644)
-          by smtp.aliyun-inc.com;
-          Wed, 05 Apr 2023 11:50:47 +0800
-Message-ID: <9cb06879-d743-e3b2-b8e3-23962b458202@linux.alibaba.com>
-Date:   Wed, 5 Apr 2023 11:50:40 +0800
+        Tue, 4 Apr 2023 23:53:03 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00D9107;
+        Tue,  4 Apr 2023 20:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680666782; x=1712202782;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Xs2d4Ol2QjDYLWkGXWWGdLuKQ8sE/oI2HYq0eZOM2ck=;
+  b=abboD3Jx7g5gpdFaZa/DwZWMBhBhfO2RHjbui4vX1WYhg3oW4wOcWLjB
+   gI/wt+vrBCSAUL+dfpqF16Ru/OfT7n84imeja8b3bfc0FF5/UcTkHIqAD
+   jIgQ2kD9LUlzCkIMQ/lAw7oIKPVH3cGrq9m7hcEXUHzk7kJkvnD4hhhOU
+   GgV8yXBBSoAplmbxVxtFzae6vF5o1/Z7ki42gDQm8QNjmPVOVzkwXuxPK
+   oOnHxHPf+/md30bxM+cMAJZEpHknl3GVyf/bC05tOCG16ttBrKVXIJ5pV
+   pWb3yeq5H6y3Gi2PddpgJE7xNTxSzJdQ1wAEAYVKAaoAHacbxenkZ5rU1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344076070"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="344076070"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 20:53:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="775892795"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="775892795"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Apr 2023 20:52:57 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjuCe-000QHa-2f;
+        Wed, 05 Apr 2023 03:52:56 +0000
+Date:   Wed, 5 Apr 2023 11:52:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Shaun Tancheff <shaun.tancheff@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Shaun Tancheff <shaun.tancheff@hpe.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] memcg-v1: Enable setting memory min, low, high
+Message-ID: <202304051118.jpLmhRPu-lkp@intel.com>
+References: <20230404205013.31520-1-shaun.tancheff@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 18/32] perf/alibaba_uncore: Assign parents for
- event_source device
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org
-Cc:     linuxarm@huawei.com, Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>, Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-19-Jonathan.Cameron@huawei.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20230404134225.13408-19-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404205013.31520-1-shaun.tancheff@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Shaun,
 
+kernel test robot noticed the following build errors:
 
-On 2023/4/4 PM9:42, Jonathan Cameron wrote:
-> Currently the PMU device appears directly under /sys/devices/
-> Only root busses should appear there, so instead assign the pmu->dev
-> parent to be the platform device.
-> 
-> Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-> Cc: Shuai Xue <xueshuai@linux.alibaba.com>
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  drivers/perf/alibaba_uncore_drw_pmu.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
-> index a7689fecb49d..0d129acf3f84 100644
-> --- a/drivers/perf/alibaba_uncore_drw_pmu.c
-> +++ b/drivers/perf/alibaba_uncore_drw_pmu.c
-> @@ -683,6 +683,7 @@ static int ali_drw_pmu_probe(struct platform_device *pdev)
->  
->  	drw_pmu->pmu = (struct pmu) {
->  		.module		= THIS_MODULE,
-> +		.parent		= &pdev->dev,
->  		.task_ctx_nr	= perf_invalid_context,
->  		.event_init	= ali_drw_pmu_event_init,
->  		.add		= ali_drw_pmu_add,
+[auto build test ERROR on v6.3-rc5]
+[also build test ERROR on linus/master]
+[cannot apply to akpm-mm/mm-everything next-20230404]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Shaun-Tancheff/memcg-v1-Enable-setting-memory-min-low-high/20230405-045143
+patch link:    https://lore.kernel.org/r/20230404205013.31520-1-shaun.tancheff%40gmail.com
+patch subject: [PATCH] memcg-v1: Enable setting memory min, low, high
+config: m68k-randconfig-r023-20230403 (https://download.01.org/0day-ci/archive/20230405/202304051118.jpLmhRPu-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/180e4266c809a61c2711599c6462bd719efed76c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Shaun-Tancheff/memcg-v1-Enable-setting-memory-min-low-high/20230405-045143
+        git checkout 180e4266c809a61c2711599c6462bd719efed76c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304051118.jpLmhRPu-lkp@intel.com/
 
-Thank you.
+All errors (new ones prefixed by >>):
 
-Best Regards,
-Shuai
+   m68k-linux-ld: m68k-linux-ld: DWARF error: could not find abbrev number 99017497
+   mm/memcontrol.o: in function `mem_cgroup_write':
+>> memcontrol.c:(.text+0x4548): undefined reference to `__udivdi3'
+>> m68k-linux-ld: memcontrol.c:(.text+0x45b4): undefined reference to `__udivdi3'
+   m68k-linux-ld: memcontrol.c:(.text+0x45ec): undefined reference to `__udivdi3'
+>> m68k-linux-ld: mm/memcontrol.o:(.debug_addr+0x1fc): undefined reference to `__udivdi3'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
