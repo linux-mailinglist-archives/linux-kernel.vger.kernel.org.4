@@ -2,160 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124F66D7A4F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC1D6D7A59
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237664AbjDEKtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S237428AbjDEKus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237868AbjDEKsw (ORCPT
+        with ESMTP id S229605AbjDEKur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:48:52 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6ED59F9
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:48:41 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id q14so36825653ljm.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 03:48:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680691719;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bi/GSYXJQcjk80svXbFmJoU1UjMsZTTC+SEAdd/i1LY=;
-        b=lDpNpPU/sZW7bLLj1ZFbDpJv3+R4eMawwRJDLZepNw+5/VjEdqU8RnqMBVDC15Zq9u
-         7ywUet+vVNobAme2sa20rI9m6/cmDh9ARkNdz4XNIQ0Zk8MAHQYOZTl3cyW3t/OyHgps
-         pe7ZmzWf3I2hc1O4NJ6Pqm/gx9xIax/PJdz2qygTcEcgAyEYcjrFsYLSsyHEYzMq7Rau
-         YfP9aCvLDG7cW4DLuvNv97cf3JkbkEjRhPYKOCIh8P9Cn/ROzRDkPDVQGiwS7m+MKIlK
-         gola5j+WtHTVjF6rzp+1QowTmp33xA16jOPfRY1p+tZY00g13Y2XVkm3D9VgnXZPt0Ua
-         cTpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680691719;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bi/GSYXJQcjk80svXbFmJoU1UjMsZTTC+SEAdd/i1LY=;
-        b=U/8EEzRaYUdkRVSoy5w6owbehWdLhXYH9D6AxibCX1jZUcoCOC07on0HwaWHCjtFwh
-         9RRnODTl5awDlTKSTzjIKAtLP9rp0qzxPPCKFFDZHWubM6a918m+5QlxxAQdcUZz19Dl
-         FsOiBtZXuG9dDIq6TGdKSA0SFAW4qUOBaRVTHwVlGyRLbiBKbTUEK+ZRSCtx4P4vECZi
-         vuJionz+HcthYR9oymYzXtba/PLNJbbtmN2b0v1CtLxaPPt4P5CO3HWoIq5JZxi+wklM
-         mx/ugVDuXCK1X68LioxQfLCSQ/abFAKTYTT1SgBJ7LcpFzvpdBJaHhetoQ1kWmL68m8D
-         W8Pg==
-X-Gm-Message-State: AAQBX9du3SThUlt/x4MbO24zZBUoy2KfnNy6zLTOhZ7CvJILSRUe41d/
-        N21sg+LMhYbxmZvo0jWlbiKuGA==
-X-Google-Smtp-Source: AKy350ZMRdnQObxilpjq6GOTSLysPb9bFoKL8iloPCsSsaRF+IrOlGanRhaTfGfGw2e4hTkf+B5Aew==
-X-Received: by 2002:a2e:998c:0:b0:2a6:146:b121 with SMTP id w12-20020a2e998c000000b002a60146b121mr1737704lji.7.1680691719188;
-        Wed, 05 Apr 2023 03:48:39 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id u4-20020a2e9b04000000b00295a3a64816sm2777299lji.2.2023.04.05.03.48.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 03:48:38 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 05 Apr 2023 12:48:35 +0200
-Subject: [PATCH v2 2/2] irqchip: irq-qcom-mpm: Support passing a slice of
- SRAM as reg space
+        Wed, 5 Apr 2023 06:50:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05DB84C19;
+        Wed,  5 Apr 2023 03:50:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 470D31684;
+        Wed,  5 Apr 2023 03:51:29 -0700 (PDT)
+Received: from [10.57.20.121] (unknown [10.57.20.121])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BCB13F73F;
+        Wed,  5 Apr 2023 03:50:42 -0700 (PDT)
+Message-ID: <96a920d4-8614-65ce-1c81-2b72a3ff9036@arm.com>
+Date:   Wed, 5 Apr 2023 11:50:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/3] sched/tp: Add new tracepoint to track uclamp set from
+ user-space
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, delyank@fb.com, qyousef@google.com
+References: <20230322151843.14390-1-lukasz.luba@arm.com>
+ <20230322151843.14390-2-lukasz.luba@arm.com>
+ <20230403134606.amdxfmr5fb544xnv@airbuntu>
+ <bdaebc90-ca39-1301-c7ba-e367f8406d09@arm.com>
+ <20230404171720.ntktoqixkj5f77ag@airbuntu>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230404171720.ntktoqixkj5f77ag@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230328-topic-msgram_mpm-v2-2-e24a48e57f0d@linaro.org>
-References: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
-In-Reply-To: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680691715; l=2707;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=xu+OxnOnfyyQMV5yk+DxmYZEKxx2j9CzQ4gEX4sggZE=;
- b=b5jBE4w42Kljvzt3wJ/kG4dpvf/EjVnoTaczlavfH3f0MIArqyLKYL45E1WPEzxoOJTZuEwwAJer
- dDrQD0elDtxV/bMNIElqW15WfoMD5c5TQnZ20Lr0cQgZhZ1JU6fF
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MPM hardware is accessible to us from the ARM CPUs through a shared
-memory region (RPM MSG RAM) that's also concurrently accessed by other
-kinds of cores on the system (like modem, ADSP etc.). Modeling this
-relation in a (somewhat) sane manner in the device tree basically
-requires us to either present the MPM as a child of said memory region
-(which makes little sense, as a mapped memory carveout is not a bus),
-define nodes which bleed their register spaces into one another, or
-passing their slice of the MSG RAM through some kind of a property.
 
-Go with the third option and add a way to map a region passed through
-the "qcom,rpm-msg-ram" property as our register space.
 
-The current way of using 'reg' is preserved for ABI reasons.
+On 4/4/23 18:17, Qais Yousef wrote:
+> On 04/03/23 17:47, Lukasz Luba wrote:
+>> Hi Qais,
+>>
+>> On 4/3/23 14:46, Qais Yousef wrote:
+>>> Hi Lukasz!
+>>>
+>>> On 03/22/23 15:18, Lukasz Luba wrote:
+>>>> The user-space can set uclamp value for a given task. It impacts task
+>>>> placement decisions made by the scheduler. This is very useful information
+>>>> and helps to understand the system behavior or track improvements in
+>>>> middleware and applications which start using uclamp mechanisms and report
+>>>> better performance in tests.
+>>>
+>>> We do have uclamp trace events in sched_tp, why are they not sufficient?
+>>>
+>>> 	https://github.com/qais-yousef/sched_tp/blob/main/sched_events.h#L233
+>>>
+>>> Do you really want to know the exact time the value has changed?
+>>
+>> Yes, that's why these new are triggered instantly after userspace wanted
+>> to set the new uclamp values. We are going to have a few different
+>> uclamp implementations: one in mainline and X in Android vendor kernels.
+> 
+> This is not true. As you can see everyone tries to push fixes for issues they
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/irqchip/irq-qcom-mpm.c | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+Could you clarify which part is not true?
+1. We have X vendor hook implementations how uclamp is interpreted + one
+    upstream
+2. we are going to have such situation for a while (till we don't meet
+    requirements in mainline uclamp, so the hooks can be removed and
+    we would have the same mechanism under the hood that we understand)
+3. the user-space sets uclamp value via syscall
 
-diff --git a/drivers/irqchip/irq-qcom-mpm.c b/drivers/irqchip/irq-qcom-mpm.c
-index d30614661eea..ee5f39a4a42a 100644
---- a/drivers/irqchip/irq-qcom-mpm.c
-+++ b/drivers/irqchip/irq-qcom-mpm.c
-@@ -14,6 +14,7 @@
- #include <linux/mailbox_client.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_address.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-@@ -322,8 +323,10 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
- 	struct device *dev = &pdev->dev;
- 	struct irq_domain *parent_domain;
- 	struct generic_pm_domain *genpd;
-+	struct device_node *msgram_np;
- 	struct qcom_mpm_priv *priv;
- 	unsigned int pin_cnt;
-+	struct resource res;
- 	int i, irq;
- 	int ret;
- 
-@@ -374,9 +377,21 @@ static int qcom_mpm_init(struct device_node *np, struct device_node *parent)
- 
- 	raw_spin_lock_init(&priv->lock);
- 
--	priv->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(priv->base))
--		return PTR_ERR(priv->base);
-+	/* If we have a handle to an RPM message ram partition, use it. */
-+	msgram_np = of_parse_phandle(np, "qcom,rpm-msg-ram", 0);
-+	if (msgram_np) {
-+		ret = of_address_to_resource(msgram_np, 0, &res);
-+		/* Don't use devm_ioremap_resource, as we're accessing a shared region. */
-+		priv->base = devm_ioremap(dev, res.start, resource_size(&res));
-+		of_node_put(msgram_np);
-+		if (IS_ERR(priv->base))
-+			return PTR_ERR(priv->base);
-+	} else {
-+		/* Otherwise, fall back to simple MMIO. */
-+		priv->base = devm_platform_ioremap_resource(pdev, 0);
-+		if (IS_ERR(priv->base))
-+			return PTR_ERR(priv->base);
-+	}
- 
- 	for (i = 0; i < priv->reg_stride; i++) {
- 		qcom_mpm_write(priv, MPM_REG_ENABLE, i, 0);
 
--- 
-2.40.0
+> find, but this not happening fast enough and they get forced to carry out of
+> tree stuff at the end. Out of tree stuff for the broken bits that is.
+> 
+>> The goal is to have only one... We will have to experiment to find
+> 
+> This statement gives a very strong message to everyone out here. And I'd like
+> to stress strongly that this is NOT true. Broken bits, yes. But essential bits
+> that works are used the same.
 
+Could you elaborate this?
+
+This is how I view the solution with uclamp, but I'm afraid we have
+different views:
+Uclamp is part of the control algorithms in a closed feedback loop. The
+apps want to use (as stated in the latest kernel doc) uclamp in order
+get desired performance (e.g. no frame drops) in an environment, which:
+1. can change with a CPUs configuration that the app was installed
+    (single app from a repo want to run efficient on various devices;
+     those devices create different environment, from the beginning)
+2. the thermal conditions can change in run-time, so the capacity of
+    the platform might change (even to a point that some CPUs is out)
+3. has access to a dedicated accelerators, which can handle some of
+    heavy computations from the CPUs (e.g. those with neural networks)
+4. drivers and devices have different capabilities e.g. in terms of
+    fast DVFS change, which can be and issue in this case
+
+When the uclamp algorithm, which interprets the individual tasks' values
+and runqueue value, can be different, then this is a different solution.
+In such situation every platform might have different solution.
+
+We are going to focus on mainline uclamp development. We want to know
+if the frequency cannot be changed due to some slow HW or a huge traffic
+in the system of various tasks/runqueues wanted to change the freq, or
+just wrong setting in the schedutil filter. We are also interested in
+measuring the 'delay' from the uclamp new request till the HW getting
+it actually. All of this would shape the solutions 'quality'.
+
+I don't know if vendors justify their vendor hook uclamp implementation
+as a fix for 'broken bits' or a 'value-added'.
+
+> 
+> We can do a better job and fix things faster upstream. I am committed to
+> sorting all these stuff out anyway.
+> 
+>> the behavior of those algorithms and understand the differences. Since
+>> uclamp is part of this 'control-chain' of CPU frequency and also
+>> task placement - it would be really tricky to figure our everything.
+>> The analysis on traces are crucial for this.
+> 
+> I think the existing uclamp trace event is enough to be honest. But up to the
+> maintainer if they want to add this new specific one. The two tps seem a bit of
+> a clutter to me. With kprobes and bpf a lot can be done on the fly if you want
+> to reverse engineer some stuff.
+> 
+>>
+>>>
+>>> Would it make sense to introduce a generic sched_setscheduler tracepoint
+>>> instead? Although this might not be necessary as I think we can use
+>>> register_kprobe() to register a callback and create a new event without any
+>>> additional tracepoint. sched_setscheduler() is not inlined so should be easy to
+>>> hook into and create events, no?
+>>
+>> This looks very complex and we already have our LISA tool with the
+> 
+> It's not. Here's a PoC that only does a trace_printk(), it's simple. You don't
+> need to do it in a module even, see below.
+> 
+> 	https://github.com/qais-yousef/sched_tp/compare/main...kprobe-poc
+> 
+> It did highlight that sugov_should_update_freq() ends up actually being inlined
+> though :(. It should work for sched_setscheduler(). You'd want to use
+> register_kprobe() instead for that.
+
+Issues with that approach:
+- as you said, it won't work with inline functions, so in this patch set
+   example it would work 'partially' ;)
+- uses trace_printk() which is not aligned method to our tool and AFAIK
+   Perfetto
+- would create mix of mechanisms that would push the complexity for
+   our analysis tool, which we don't want. This is the complexity
+   that I had in mind from SW engineering perspective.
+   Maintainability and understanding of the mechanics across teams
+   or even companies is not for free. Then explaining someone in
+   different company that this approach won't work if the compiler
+   inlined a function, so they have to rewrite the code and use
+   the other approach (with tracepoint in the code) doesn't sound
+   good.
+
+> 
+>> module to change the tracepoints into trace events and build them.
+>> I wanted to be aligned with that design, which might look a bit
+>> old-fashion but is simple IMO.
+> 
+> trace-cmd, bpf and I believe perf, all can do the same; and they support
+> kprobes not just tracepoints.
+> 
+> And they all boil down to the same underlying mechanism
+> 
+> 	https://www.kernel.org/doc/html/v6.1/trace/kprobetrace.html
+> 
+> No need to re-invent a new wheel ;-)
+
+I don't understand why you are calling this 're-invent a new wheel',
+when I said this is aligned with our SW design for trace analysis.
+BTW, the LISA tool is open source and anyone can use it for free [1].
+I'm not developing another framework for tracepoints here, I just use
+this approach.
+
+I agree, there is a few ways of doing this. The worse thing would
+be for a us to use a mix (and mess) a few of them. As you know,
+our tool takes the path with one of them: tracepoints explicitly
+visible to everyone in the kernel code, so you can point engineers
+into it. I know, you can basically trace almost any function dynamically
+which creates huge potential space. The big space of opportunity isn't
+good when you want to solve the problem and share the knowledge
+to others how to follow. Look at the example of tracepoints which
+are used for deriving the task wake-up latency. It's easier for
+engineers to see that in the code with the tracepoints, what parts
+are important. Where and why the flow is going, which is a nice
+example how the vast code space can been reduced.
+
+> 
+>> The 'sched_setscheduler tracepoint' might be a too big for this
+>> purpose.
+> 
+> Sorry I am usually supportive for more tracepoints, but I feel skeptical this
+> time. That said, I really don't mind if the maintainers are okay with it. So
+> while I'm not convinced, but I don't have any objection either.
+
+I hope I would convince you with those examples, so you would be less
+skeptical.
+
+Cheers,
+Lukasz
+
+[1] 
+https://lisa-linux-integrated-system-analysis.readthedocs.io/en/latest/setup.html
