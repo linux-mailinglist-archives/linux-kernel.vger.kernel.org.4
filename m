@@ -2,113 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADE66D7E6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2996D6D7DEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237833AbjDEODN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S238330AbjDENni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjDEOCI (ORCPT
+        with ESMTP id S237259AbjDENnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:02:08 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6046A60;
-        Wed,  5 Apr 2023 07:01:12 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 0a9710086bac5137; Wed, 5 Apr 2023 16:01:09 +0200
-Received: from kreacher.localnet (unknown [213.134.163.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 2172C1B4EA4C;
-        Wed,  5 Apr 2023 16:01:09 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 13/32] ACPICA: Avoid undefined behavior: applying zero offset to null pointer
-Date:   Wed, 05 Apr 2023 15:42:43 +0200
-Message-ID: <2580576.Lt9SDvczpP@kreacher>
-In-Reply-To: <4845957.31r3eYUQgx@kreacher>
-References: <4845957.31r3eYUQgx@kreacher>
+        Wed, 5 Apr 2023 09:43:31 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125354C19
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:43:30 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id l27so36276784wrb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 06:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680702208;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=91zpGfc1a4L74i5yjY800PRBiUccdNyLDZUTPZtClIM=;
+        b=fYuMeQ/jyRYzCPZSwSv+LxC+ky2mQ+a8Vsojki1W1EUk4o0Qxf8UehggIl0LPruQHk
+         bDlJCGe46tinBLb34DAlpGqlxlSfq13oD44hc6tZyJ6oEUEjWE/mGYQs+6VLF46BlfT8
+         leZEKJvqcO7ENOVpHQhg+U2Rwv6B+gvs55IV9+JX8AFsp1F0k6p6XBNFhREXxum7WJkQ
+         hDjJ+50b3KA9ni2WKyD2hRaeeGs7MOxrJbCJZu8QMZw7fvwDjr2T8YbpzVeSRh6jB4M1
+         xLpT2KXx2MZc+tU1Cg6VklfnUd42yPAlVKJJNAhFZFH6sTpjz2XwsyGLXd+NN8Y+I37D
+         QUtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680702208;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=91zpGfc1a4L74i5yjY800PRBiUccdNyLDZUTPZtClIM=;
+        b=cZFH2XtfMK+D87Ldj49kip2csZQxQJTph83Vl1vZYQMKngM0aofFTH3TBpfHUsRUfJ
+         C1KI+3tjcSHaKcEMFakv89+qldgah/8r3Oy7V5bx4nrtbzWUBVrLFyJY9pRvrl0K1DOm
+         txgzPrAgLkP+93KU/t27pqXKySoyA803bxss8eM81u9iefyEplDeITNuKXTeSEJUhZfe
+         Yy/IHIehKY6eQcFfJAalUJu/RnkaVvPQ0s6gNwu9zZH8rH4vPR+DspiUH5+XX6Hl4lVG
+         fZeRIEAxY8amJqs/N4mSK9giIStG1b01NUrFM5UaKGk0codXdcmHYHLD3EZsdnUSL3Du
+         +hgA==
+X-Gm-Message-State: AAQBX9eTJ+lA3dBMMDAPoJ+VmaASq7yV6STd7ALBbpgd1qzvwda/8Oo6
+        fEbAn6qj5WoD9cFUkmU2rVYEhh+Fw78uvOH61bmfAg==
+X-Google-Smtp-Source: AKy350ZaLcMHG+5zgfFflSVokVyqata0DNKN7cBymBE0f4C4IzGeqoPndhBChYUnv8Dyl5UEhEkAps+0WiJAzKlYhwo=
+X-Received: by 2002:a5d:4572:0:b0:2ce:ad09:4d47 with SMTP id
+ a18-20020a5d4572000000b002cead094d47mr1176570wrc.4.1680702208456; Wed, 05 Apr
+ 2023 06:43:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20230401154725.1059563-1-bhupesh.sharma@linaro.org>
+ <20230401154725.1059563-2-bhupesh.sharma@linaro.org> <1403741d-ef51-a9c5-821f-358c8f470dab@linaro.org>
+In-Reply-To: <1403741d-ef51-a9c5-821f-358c8f470dab@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Wed, 5 Apr 2023 19:13:17 +0530
+Message-ID: <CAH=2NtykGGcYHUTTzHMA7ft3eKAbGtrO4tN4dnLdg5cjE-N9Gw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: phy: qcom,qmp-usb: Fix phy subnode
+ for SM6115 & QCM2290 USB3 PHY
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.219
-X-CLIENT-HOSTNAME: 213.134.163.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepleduvdfhudehvddukeetffdtffejkedttefgveeftdeuvedvleelgeeiteelueelnecuffhomhgrihhnpegrshgrnhdrshhopdhgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        WEIRD_PORT autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tamir Duberstein <tamird@google.com>
+On Wed, 5 Apr 2023 at 15:11, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 01/04/2023 17:47, Bhupesh Sharma wrote:
+> > The USB3 SS (QMP) PHY found on Qualcomm SM6115 & QCM2290 SoCs is
+> > similar to sm8150 QMP PHY in the sense that the phy subnode supports
+> > 6 regs, namely TX lane 1, RX lane 1, PCS, TX lane 2, RX lane 2 and
+> > PCS_MISC.
+> >
+> > Update the dt-bindings document to reflect the same.
+>
+>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Bhupesh,
+>
+> Can you use scripts/get_maintainers.pl to get the Cc addresses instead
+> of writing them manually or inventing?
 
-ACPICA commit 770653e3ba67c30a629ca7d12e352d83c2541b1e
+Sure Krzysztof, will do.
 
-Before this change we see the following UBSAN stack trace in Fuchsia:
-
-  #0    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
-  #1.2  0x000020d0f660777f in ubsan_get_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:41 <libclang_rt.asan.so>+0x3d77f
-  #1.1  0x000020d0f660777f in maybe_print_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:51 <libclang_rt.asan.so>+0x3d77f
-  #1    0x000020d0f660777f in ~scoped_report() compiler-rt/lib/ubsan/ubsan_diag.cpp:387 <libclang_rt.asan.so>+0x3d77f
-  #2    0x000020d0f660b96d in handlepointer_overflow_impl() compiler-rt/lib/ubsan/ubsan_handlers.cpp:809 <libclang_rt.asan.so>+0x4196d
-  #3    0x000020d0f660b50d in compiler-rt/lib/ubsan/ubsan_handlers.cpp:815 <libclang_rt.asan.so>+0x4150d
-  #4    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
-  #5    0x000021e4213e2369 in acpi_ds_call_control_method(struct acpi_thread_state*, struct acpi_walk_state*, union acpi_parse_object*) ../../third_party/acpica/source/components/dispatcher/dsmethod.c:605 <platform-bus-x86.so>+0x262369
-  #6    0x000021e421437fac in acpi_ps_parse_aml(struct acpi_walk_state*) ../../third_party/acpica/source/components/parser/psparse.c:550 <platform-bus-x86.so>+0x2b7fac
-  #7    0x000021e4214464d2 in acpi_ps_execute_method(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/parser/psxface.c:244 <platform-bus-x86.so>+0x2c64d2
-  #8    0x000021e4213aa052 in acpi_ns_evaluate(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/namespace/nseval.c:250 <platform-bus-x86.so>+0x22a052
-  #9    0x000021e421413dd8 in acpi_ns_init_one_device(acpi_handle, u32, void*, void**) ../../third_party/acpica/source/components/namespace/nsinit.c:735 <platform-bus-x86.so>+0x293dd8
-  #10   0x000021e421429e98 in acpi_ns_walk_namespace(acpi_object_type, acpi_handle, u32, u32, acpi_walk_callback, acpi_walk_callback, void*, void**) ../../third_party/acpica/source/components/namespace/nswalk.c:298 <platform-bus-x86.so>+0x2a9e98
-  #11   0x000021e4214131ac in acpi_ns_initialize_devices(u32) ../../third_party/acpica/source/components/namespace/nsinit.c:268 <platform-bus-x86.so>+0x2931ac
-  #12   0x000021e42147c40d in acpi_initialize_objects(u32) ../../third_party/acpica/source/components/utilities/utxfinit.c:304 <platform-bus-x86.so>+0x2fc40d
-  #13   0x000021e42126d603 in acpi::acpi_impl::initialize_acpi(acpi::acpi_impl*) ../../src/devices/board/lib/acpi/acpi-impl.cc:224 <platform-bus-x86.so>+0xed603
-
-Add a simple check that avoids incrementing a pointer by zero, but
-otherwise behaves as before. Note that our findings are against ACPICA
-20221020, but the same code exists on master.
-
-Link: https://github.com/acpica/acpica/commit/770653e3
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/dswstate.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/acpi/acpica/dswstate.c b/drivers/acpi/acpica/dswstate.c
-index 95af370a7dce..d3841ded3a81 100644
---- a/drivers/acpi/acpica/dswstate.c
-+++ b/drivers/acpi/acpica/dswstate.c
-@@ -576,9 +576,14 @@ acpi_ds_init_aml_walk(struct acpi_walk_state *walk_state,
- 	ACPI_FUNCTION_TRACE(ds_init_aml_walk);
- 
- 	walk_state->parser_state.aml =
--	    walk_state->parser_state.aml_start = aml_start;
--	walk_state->parser_state.aml_end =
--	    walk_state->parser_state.pkg_end = aml_start + aml_length;
-+	    walk_state->parser_state.aml_start =
-+	    walk_state->parser_state.aml_end =
-+	    walk_state->parser_state.pkg_end = aml_start;
-+	/* Avoid undefined behavior: applying zero offset to null pointer */
-+	if (aml_length != 0) {
-+		walk_state->parser_state.aml_end += aml_length;
-+		walk_state->parser_state.pkg_end += aml_length;
-+	}
- 
- 	/* The next_op of the next_walk will be the beginning of the method */
- 
--- 
-2.35.3
-
-
-
-
-
+Thanks,
+Bhupesh
