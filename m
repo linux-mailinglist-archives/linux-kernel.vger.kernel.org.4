@@ -2,150 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A556D8937
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4016D8939
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233326AbjDEVGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S233393AbjDEVHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjDEVGR (ORCPT
+        with ESMTP id S232369AbjDEVHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:06:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6745B65A0;
-        Wed,  5 Apr 2023 14:06:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4E0963CF8;
-        Wed,  5 Apr 2023 21:06:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04EDFC433EF;
-        Wed,  5 Apr 2023 21:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680728775;
-        bh=R71QHKkeUfH8VYzRdCdAeQ6B2BQkF7BrfCwK1Xovuwo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=d8bWqodR70r6m+e7Zu9a800cEEUnjBsaw3dijXkqKvp7K97SMthAI4HrP63SuFNY9
-         9I9RB3l3Jd32V4DfJdFskhNcalupz6weZkbLCZU/+LPYtE+Jz5IkW1ZjNdBT5LViRv
-         15/NH0M45k3ZnDMVcNTtXK3aP/QrW9LrHDKDLdgAOY0y6ZC6Z2yuCEsJjOzuVTvH0/
-         B4elU0ltk5e+D/1KeoN6xmVOzwKf0GIIzualjtyPPWMPFZXCegtTHmr+qgfSGpJewY
-         vD4p6com0bWhX5yWkD/j0UP7L6E7y//sFnHMbQ19EW3dlk/pyBHvYx+RMw7hH1yF1J
-         CAsQzqO8gL/LA==
-Date:   Wed, 5 Apr 2023 16:06:13 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Alexander Schmidt <alexs@linux.ibm.com>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net/mlx5: stop waiting for PCI link if reset is required
-Message-ID: <20230405210613.GA3638573@bhelgaas>
+        Wed, 5 Apr 2023 17:07:00 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C866A40
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:06:41 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id bs13so12345749qkb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680728800;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a+ZUuxUTAoz+nMDIAxIHUE5qjUM6hZWQNbOQhvaBX2U=;
+        b=AMc5NfOv9v82VkAhSjELS62GmJAkVTv0TZzmy5ESKhhkUZDNV1UObOVZUMf2s6dcCF
+         CkOH9uNo43qUywbMIC10XNHgnEoAlcNf7hftTx/hIMD6DMvfNlZkDsv2U2et6aK9lLEM
+         2Fp/1xI217OUM+aRkwMoo+A1y0bbryzVvp+OnZkmU3uQm5Lsb13zpsrR3v8YV4sjnBxX
+         17Hko7f2OdYzpV1dGyq7MddKtrmNYLkytndMB2qsMzIo3QKxyrXl8z+3jmwvlaV7feRU
+         EhoK1F7BwmeEK/UptkPosCpIA/G0/BMpPnb/9UKcn8vuRXv13kXstOBvNBrUbli2LzEE
+         pn7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680728800;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+ZUuxUTAoz+nMDIAxIHUE5qjUM6hZWQNbOQhvaBX2U=;
+        b=ktnXXtrJyCIe3+7nBmobLZiI7iKarJV7cSkU/n5NKMKH7G7sIwR6dHLOHlHDSNwXfs
+         H4/JhIWZwgCFzH16VVq/4xNpkwLi4GyavSZ/pQoe8YG6xqRq/PfqTzoHpoP0om9ZJ6Me
+         mFtBeS8Ervk7GijmXr4CFy+Ro20rtqH1Nm1aCgfJX+N5DD1ssfdJCa263UxqHoQ8ZIqQ
+         61d80l66fvuphtGOUWKTvdNM2iIX3g1B2J9XDcRCmzzkls86umb8VdwUhmd1DhJSoGZY
+         g41Eul6YDwO4bn7GfIoDsvS3YoZmKG9y0sZ5ySYQyHo6oDZqwA8ddXa/PiNyjvXtRzB0
+         f/sA==
+X-Gm-Message-State: AAQBX9cK9X/2eaMYMn/TqNMptuKmvpvznkORQXaQEi+JyTVnsCGVhSwP
+        q8A+XRfHs9IxIwA41Gm0ndSuLOdn8bUi1fS0YwU=
+X-Google-Smtp-Source: AKy350Y+FJ8UP/LVHQH/0pr9Bcjrh8XGWHRoqAmTPH/LnVb9kyTDUN/ERSJ610ZLCQu48gz8SKO6IeMLHYOrITBTq3o=
+X-Received: by 2002:a05:620a:460c:b0:743:6092:91b4 with SMTP id
+ br12-20020a05620a460c00b00743609291b4mr1724480qkb.14.1680728800570; Wed, 05
+ Apr 2023 14:06:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a25455eac6a02eeb9710d9204dfe0b91938f61a1.camel@linux.ibm.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6200:90f:b0:4e1:8b89:5a19 with HTTP; Wed, 5 Apr 2023
+ 14:06:40 -0700 (PDT)
+Reply-To: ch4781.r@proton.me
+From:   Bill Chantal <256345894h@gmail.com>
+Date:   Wed, 5 Apr 2023 21:06:40 +0000
+Message-ID: <CA+wecYtK3DwtavO9XY7ow+fh5nVh0-U0+26j-Z9XijGt2u+1Mw@mail.gmail.com>
+Subject: SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,
+        HK_SCAM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,UNDISC_MONEY,UPPERCASE_50_75 autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:734 listed in]
+        [list.dnswl.org]
+        *  0.6 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [256345894h[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.8 UPPERCASE_50_75 message body is 50-75% uppercase
+        *  2.0 HK_SCAM No description available.
+        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 05:27:35PM +0200, Niklas Schnelle wrote:
-> On Mon, 2023-04-03 at 21:21 +0300, Leon Romanovsky wrote:
-> > On Mon, Apr 03, 2023 at 09:56:56AM +0200, Niklas Schnelle wrote:
-> > > after an error on the PCI link, the driver does not need to wait
-> > > for the link to become functional again as a reset is required. Stop
-> > > the wait loop in this case to accelerate the recovery flow.
-> > > 
-> > > Co-developed-by: Alexander Schmidt <alexs@linux.ibm.com>
-> > > Signed-off-by: Alexander Schmidt <alexs@linux.ibm.com>
-> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > ---
-> > >  drivers/net/ethernet/mellanox/mlx5/core/health.c | 12 ++++++++++--
-> > >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> > > index f9438d4e43ca..81ca44e0705a 100644
-> > > --- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> > > +++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-> > > @@ -325,6 +325,8 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
-> > >  	while (sensor_pci_not_working(dev)) {
-> > 
-> > According to the comment in sensor_pci_not_working(), this loop is
-> > supposed to wait till PCI will be ready again. Otherwise, already in
-> > first iteration, we will bail out with pci_channel_offline() error.
-> 
-> Well yes. The problem is that this works for intermittent errors
-> including when the card resets itself which seems to be the use case in
-> mlx5_fw_reset_complete_reload() and mlx5_devlink_reload_fw_activate().
-> If there is a PCI error that requires a link reset though we see some
-> problems though it does work after running into the timeout.
-> 
-> As I understand it and as implemented at least on s390,
-> pci_channel_io_frozen is only set for fatal errors that require a reset
-> while non fatal errors will have pci_channel_io_normal (see also
-> Documentation/PCI/pcieaer-howto.rst)
+SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
 
-Yes, I think that's true, see handle_error_source().
+Your compensation fund of 6 million dollars is ready for payment
+contact me for more details.
 
-> thus I think pci_channel_offline()
-> should only be true if a reset is required or there is a permanent
-> error.
-
-Yes, I think pci_channel_offline() will only be true when a fatal
-error has been reported via AER or DPC (or a hotplug driver says the
-device has been removed).  The driver resetting the device should not
-cause such a fatal error.
-
-> Furthermore in the pci_channel_io_frozen state the PCI function
-> may be isolated and the reads will not reach the endpoint, this is the
-> case at least on s390.  Thus for errors requiring a reset the loop
-> without pci_channel_offline() will run until the reset is performed or
-> the timeout is reached. In the mlx5_health_try_recover() case during
-> error recovery we will then indeed always loop until timeout, because
-> the loop blocks mlx5_pci_err_detected() from returning thus blocking
-> the reset (see Documentation/PCI/pci-error-recovery.rst). Adding Bjorn,
-> maybe he can confirm or correct my assumptions here.
-
-> > >  		if (time_after(jiffies, end))
-> > >  			return -ETIMEDOUT;
-> > > +		if (pci_channel_offline(dev->pdev))
-> > > +			return -EIO;
-> > >  		msleep(100);
-> > >  	}
-> > >  	return 0;
-> > > @@ -332,10 +334,16 @@ int mlx5_health_wait_pci_up(struct mlx5_core_dev *dev)
-> > >  
-> > >  static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
-> > >  {
-> > > +	int rc;
-> > > +
-> > >  	mlx5_core_warn(dev, "handling bad device here\n");
-> > >  	mlx5_handle_bad_state(dev);
-> > > -	if (mlx5_health_wait_pci_up(dev)) {
-> > > -		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
-> > > +	rc = mlx5_health_wait_pci_up(dev);
-> > > +	if (rc) {
-> > > +		if (rc == -ETIMEDOUT)
-> > > +			mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
-> > > +		else
-> > > +			mlx5_core_err(dev, "health recovery flow aborted, PCI channel offline\n");
-> > >  		return -EIO;
-> > >  	}
-> > >  	mlx5_core_err(dev, "starting health recovery flow\n");
-> > > 
-> > > base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
-> > > -- 
-> > > 2.37.2
-> > > 
-> 
+Thanks
