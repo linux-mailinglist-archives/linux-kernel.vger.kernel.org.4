@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4016D8939
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0C76D893C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjDEVHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
+        id S233910AbjDEVHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbjDEVHA (ORCPT
+        with ESMTP id S233485AbjDEVHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:07:00 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C866A40
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:06:41 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id bs13so12345749qkb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680728800;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a+ZUuxUTAoz+nMDIAxIHUE5qjUM6hZWQNbOQhvaBX2U=;
-        b=AMc5NfOv9v82VkAhSjELS62GmJAkVTv0TZzmy5ESKhhkUZDNV1UObOVZUMf2s6dcCF
-         CkOH9uNo43qUywbMIC10XNHgnEoAlcNf7hftTx/hIMD6DMvfNlZkDsv2U2et6aK9lLEM
-         2Fp/1xI217OUM+aRkwMoo+A1y0bbryzVvp+OnZkmU3uQm5Lsb13zpsrR3v8YV4sjnBxX
-         17Hko7f2OdYzpV1dGyq7MddKtrmNYLkytndMB2qsMzIo3QKxyrXl8z+3jmwvlaV7feRU
-         EhoK1F7BwmeEK/UptkPosCpIA/G0/BMpPnb/9UKcn8vuRXv13kXstOBvNBrUbli2LzEE
-         pn7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680728800;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a+ZUuxUTAoz+nMDIAxIHUE5qjUM6hZWQNbOQhvaBX2U=;
-        b=ktnXXtrJyCIe3+7nBmobLZiI7iKarJV7cSkU/n5NKMKH7G7sIwR6dHLOHlHDSNwXfs
-         H4/JhIWZwgCFzH16VVq/4xNpkwLi4GyavSZ/pQoe8YG6xqRq/PfqTzoHpoP0om9ZJ6Me
-         mFtBeS8Ervk7GijmXr4CFy+Ro20rtqH1Nm1aCgfJX+N5DD1ssfdJCa263UxqHoQ8ZIqQ
-         61d80l66fvuphtGOUWKTvdNM2iIX3g1B2J9XDcRCmzzkls86umb8VdwUhmd1DhJSoGZY
-         g41Eul6YDwO4bn7GfIoDsvS3YoZmKG9y0sZ5ySYQyHo6oDZqwA8ddXa/PiNyjvXtRzB0
-         f/sA==
-X-Gm-Message-State: AAQBX9cK9X/2eaMYMn/TqNMptuKmvpvznkORQXaQEi+JyTVnsCGVhSwP
-        q8A+XRfHs9IxIwA41Gm0ndSuLOdn8bUi1fS0YwU=
-X-Google-Smtp-Source: AKy350Y+FJ8UP/LVHQH/0pr9Bcjrh8XGWHRoqAmTPH/LnVb9kyTDUN/ERSJ610ZLCQu48gz8SKO6IeMLHYOrITBTq3o=
-X-Received: by 2002:a05:620a:460c:b0:743:6092:91b4 with SMTP id
- br12-20020a05620a460c00b00743609291b4mr1724480qkb.14.1680728800570; Wed, 05
- Apr 2023 14:06:40 -0700 (PDT)
+        Wed, 5 Apr 2023 17:07:04 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC5FB6A47
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:06:55 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 21:06:46 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680728813; x=1680988013;
+        bh=vuvbMSg3XgGBVCOc1uYn3lg/ER9MH4uDgroxzs+1l8E=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=HgxHNdKWBNVinVaxjMslfvKpcrbRvwG6Qgj/Kdzkgr3D1lO/PcwOm8I4VKBmjA+mL
+         PCbM/1pl6emJRynHM1aSO9Fe7H9I8R0VrIRfhhgSlhj1yV87OdoihW3+IqzzufmDpy
+         NNaQUZvBdYf6iU9ZFSff+r2K6XAtA60LESVxUxVwSqvRq5pRiicxilGXQhsiLr6+TO
+         N7pWKTjBRzBbmMfnX5ySwJFqsH2D8e1dzmRl1HIpNhbTR8qUUEYNorblrle9xI27yX
+         oC4NliS72Hlx287Umvkeud/Jr7p1rQGhZEgOrGCsHFoJIuo7Pmy30xbwx/owwEkqKP
+         0Cr/0EIFqPyvA==
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH v6 00/15] Rust pin-init API for pinned initialization of structs
+Message-ID: <96b35c6c-6fd1-465d-fb46-aa48c73ae465@protonmail.com>
+In-Reply-To: <ZC3h3q+56gM8pKOX@boqun-archlinux>
+References: <20230405193445.745024-1-y86-dev@protonmail.com> <ZC3h3q+56gM8pKOX@boqun-archlinux>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Received: by 2002:a05:6200:90f:b0:4e1:8b89:5a19 with HTTP; Wed, 5 Apr 2023
- 14:06:40 -0700 (PDT)
-Reply-To: ch4781.r@proton.me
-From:   Bill Chantal <256345894h@gmail.com>
-Date:   Wed, 5 Apr 2023 21:06:40 +0000
-Message-ID: <CA+wecYtK3DwtavO9XY7ow+fh5nVh0-U0+26j-Z9XijGt2u+1Mw@mail.gmail.com>
-Subject: SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,
-        HK_SCAM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_MONEY,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:734 listed in]
-        [list.dnswl.org]
-        *  0.6 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [256345894h[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.8 UPPERCASE_50_75 message body is 50-75% uppercase
-        *  2.0 HK_SCAM No description available.
-        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
+On 05.04.23 23:02, Boqun Feng wrote:
+> On Wed, Apr 05, 2023 at 07:35:30PM +0000, Benno Lossin wrote:
+>> Changelog:
+>> v5 -> v6:
+>> - Change `pinned_drop` macro to allow `mut self` in the signature.
+>> - Change statement fragment to tt fragemnt in `pinned_drop` to prevent
+>>    parsing errors.
+>> - Move evaluation of the value in `stack_pin_init!`/`stack_try_pin_init!=
+`
+>>    to the beginning.
+>
+> Could you elaborate why? To make sure the $val evaluation happens
+> unconditionally?
 
-Your compensation fund of 6 million dollars is ready for payment
-contact me for more details.
+This is done to allow `stack_pin_init!(let value =3D value);` i.e. naming
+the variable the same as the expression that is evaluated.
 
-Thanks
+--
+Cheers,
+Benno
+
+>> - Move setting uninitialized flag in front of dropping the value in
+>>    `StackInit::init`.
+>> - Remove `Unpin` requirement on `zeroed()`.
+>> - Add note about `Pointee` to the `Zeroable` impl on raw pointers.
+>>
+>
+> Regards,
+> Boqun
+
