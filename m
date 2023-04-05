@@ -2,152 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949B06D81EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9176D81EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238698AbjDEPam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S238501AbjDEPa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbjDEPae (ORCPT
+        with ESMTP id S238568AbjDEPal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:30:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F0A171C;
-        Wed,  5 Apr 2023 08:30:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E16062683;
-        Wed,  5 Apr 2023 15:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10492C433EF;
-        Wed,  5 Apr 2023 15:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680708629;
-        bh=J70rkXpf+7f+HnbEFbLXATI7qyexO1zYvkS1Bdg/1F0=;
+        Wed, 5 Apr 2023 11:30:41 -0400
+Received: from valentin-vidic.from.hr (valentin-vidic.from.hr [IPv6:2001:470:1f0b:3b7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F96F5251;
+        Wed,  5 Apr 2023 08:30:38 -0700 (PDT)
+X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
+Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
+        id B2DA3297E1; Wed,  5 Apr 2023 17:30:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=valentin-vidic.from.hr; s=2020; t=1680708631;
+        bh=r5XRUYKahCaALtmf0y8l5u58U9M52WuvSYB8cnVeaGY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DDDWSOhT3kzc6lyxKUkTZFHCre0Ns6mUD+tB0tYkihTyztKFBxFtlqLJgNlqV6gDJ
-         qOMn9cGcV2+X0j6MlVJ03OOlDG+iLFwczbgBMjKBnYXU3Uv1i+fKRu6DmyI+/Yxz9s
-         8RIYINIVbaW5Ng69aX9lf+qB9UGL5ceLrxTFZhunq9mNHirMxY/K/QuA+f80rD0wKb
-         JMvvvuIlG960ADqVTyftwbW3/yYOaQoBWamDuRiajNw4GVkTWzvDKE916QV5M6/Vyx
-         dSj2MT9L0akAXnsn064NQlVRrb7cTPo9nsPXGcn+gKTkQqpKLw8UxruRkitnwP1EFN
-         7rgx5JkERclEQ==
-Date:   Wed, 5 Apr 2023 16:30:21 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Weili Qian <qianweili@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Len Brown <lenb@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH V4 19/23] RISC-V: Add ACPI initialization in setup_arch()
-Message-ID: <20230405-exclusion-swivel-b350fe541ba2@spud>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-20-sunilvl@ventanamicro.com>
- <20230404-escalator-fridge-daf9aaffad12@spud>
- <ZC2PuiY5Xscz305H@sunil-laptop>
+        b=kpSBJQZDMNFSfUp0iuSjiYe3wVqsp4eyfgX3Rit0OHu5iWbg+JRv5dOtbsAlu2jhy
+         Rml+Qm2VPCkxxb+MF6o1D7ZzYTRM4Axa6BDobl4pHAyyxgF+ZrZ6Dt8JDkrflwKMC+
+         AuZZ7lFIW9C2AJJr1M85w2b4ipSJxC5inaTber4+xO0xQR7zsuDgO+0MNHQDzcyTkm
+         oXevpf6mTqWara1X72yzKPPoIzVwRuSNhHj1lF7M1NwAsZORYjQL7Y05vVu8ZTT4Ut
+         qqEvn8q+pr0Zx8te3iKDo8v2aduPF2tY8CanqWl/sbeBVuPQg+EpVpdkJtXNCcG1qJ
+         AGtSdh5r5L5MFJQF6Ow6hposZQlDI2iJCmnohXfSVqn0FRb+3wMiMZe7b7s0RqLpF6
+         EY1Q05j9QvsNEJVF+P3to2A3Ro8eJudRD5hdsDppSZ3ywjsNAZoYGexaE8wYkPofRn
+         1p4+jE+i4U6PQAKctlaW6EmvcxMvmp9czuGLLGi90TGuZdNR5UxJ0ugQeMxvNwznGE
+         FxhykonvAJXBvmTSfdGIJ+SPrFKm+4H9VWY+J/XOHD0c6iHHcPnqzKDcAxBtER91Sj
+         JlBKuky8CuFt5iq1kCUIdEDtlotnwbAFz0QUWa0RBSATVWrxaRIX/0HgF5UNYkOC2F
+         nsyF258bc1PLuRYmE/YfqU7A=
+Date:   Wed, 5 Apr 2023 17:30:31 +0200
+From:   Valentin =?utf-8?B?VmlkacSH?= <vvidic@valentin-vidic.from.hr>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Micah Morton <mortonm@chromium.org>,
+        =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Vivek Goyal <vgoyal@redhat.com>
+Subject: Re: [PATCH] security, lsm: security_old_inode_init_security() Handle
+ multi LSM registration
+Message-ID: <ZC2UF7FfJ1XDEu67@valentin-vidic.from.hr>
+References: <20230401214151.1243189-1-vvidic@valentin-vidic.from.hr>
+ <CAHC9VhT6VXwybScqsnYHHtbHNPoWMVQJzQ7VAccm2MWZEz+5Dw@mail.gmail.com>
+ <ZCnff6gUjU89zfAb@valentin-vidic.from.hr>
+ <CAHC9VhTCafjmo7k=qGnOMDm4s4UHL9g=o5KgRfg9_xwWCzUhcw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="GEzl862YP+iNbgsb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZC2PuiY5Xscz305H@sunil-laptop>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAHC9VhTCafjmo7k=qGnOMDm4s4UHL9g=o5KgRfg9_xwWCzUhcw@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 03, 2023 at 03:28:11PM -0400, Paul Moore wrote:
+> I think backporting it to the stable kernels would be okay, but I'd
+> prefer to let it get some more testing in linux-next first if that's
+> okay with you.  Since we are currently at v6.3-rc5 and this patch is
+> scheduled to go up to Linus during the next merge window, it might
+> make the most sense to give this two more weeks in -next, let it land
+> in Linus' tree, and they ask the stable team for a backport ("Option
+> 2" in the stable kernel docs):
+> 
+> https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> 
+> Thoughts?
 
---GEzl862YP+iNbgsb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No problem for me, as long as it gets included in the LTS at some point :)
 
-On Wed, Apr 05, 2023 at 08:41:54PM +0530, Sunil V L wrote:
-> On Tue, Apr 04, 2023 at 10:38:56PM +0100, Conor Dooley wrote:
-> > On Tue, Apr 04, 2023 at 11:50:33PM +0530, Sunil V L wrote:
-> > > Initialize the ACPI core for RISC-V during boot.
-> > >=20
-> > > ACPI tables and interpreter are initialized based on
-> > > the information passed from the firmware and the value of
-> > > the kernel parameter 'acpi'.
-> > >=20
-> > > With ACPI support added for RISC-V, the kernel parameter 'acpi'
-> > > is also supported on RISC-V. Hence, update the documentation.
-> > >=20
-> > > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> >=20
-> > > +	/* Parse the ACPI tables for possible boot-time configuration */
-> > > +	acpi_boot_table_init();
-> > > +	if (acpi_disabled) {
-> > > +		if (IS_ENABLED(CONFIG_BUILTIN_DTB)) {
-> > > +			unflatten_and_copy_device_tree();
-> > > +		} else {
-> > > +			if (early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa))))
-> > > +				unflatten_device_tree();
-> > > +			else
-> > > +				pr_err("No DTB found in kernel mappings\n");
-> > > +		}
-> > > +	} else {
-> > > +		early_init_dt_verify(__va(XIP_FIXUP(dtb_early_pa)));
-> >=20
-> > I'm probably forgetting something, but this seems very non-obvious to
-> > me:
-> > Why are you running early_init_dt_verify() when ACPI is enabled?
-> > I think that one deserves a comment so that next time someone looks at
-> > this (that doesn't live in ACPI land) they've know exactly why this is
-> > like it is.
-> >=20
-> > Doubly so since this is likely to change with some of Alex's bits moving
-> > the dtb back into the fixmap.
-> >=20
-> Good question. The kernel creates a tiny DTB even when the FW didn't
-> pass the FDT (ACPI systems). Please see update_fdt().
-
-Can you add a comment about this either on-location or in the commit
-message please?
-I think this counts as non-obvious behaviour. At least to me it does!
-
-Cheers,
-Conor.
-
-
---GEzl862YP+iNbgsb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC2UDQAKCRB4tDGHoIJi
-0kR4AP0Q5hwJRNOPqj+g2K45l6UmniFmC4M8n4KXYsXGPCyozAEAm42AMmnUhTsZ
-Hnl2sWV10azclkpiXjVwwJJY0TUWNws=
-=6Cjf
------END PGP SIGNATURE-----
-
---GEzl862YP+iNbgsb--
+-- 
+Valentin
