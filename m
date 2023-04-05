@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61E96D7320
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653876D731E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbjDEEHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 00:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
+        id S236814AbjDEEH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 00:07:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236898AbjDEEG4 (ORCPT
+        with ESMTP id S236895AbjDEEG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Apr 2023 00:06:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057C63C32;
-        Tue,  4 Apr 2023 21:06:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9D14C03;
+        Tue,  4 Apr 2023 21:06:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F8463978;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F34D63AF7;
+        Wed,  5 Apr 2023 04:06:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590C6C433D2;
         Wed,  5 Apr 2023 04:06:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5756FC4339E;
-        Wed,  5 Apr 2023 04:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1680667592;
-        bh=sNA4A5/xKx0W9W6Lq1bQvUn8Rezdt89XpeseR2IV4Nc=;
+        bh=/Un7JqBtWo2FT9GwLVZdmUNePFLV0jlbIbQ4UMKQb7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D3r9iwlj8n0dPE9RGV5R+U+YmJ2IMHc7ikzKiPefza0bvI2lY1JNZZvu+DtA5BNFz
-         wyY7sqTA9NcSCF56H1odxa/ePyLDXp+T54k3enzRExeOz/EILPRvb7WK+2u6G91ZpJ
-         TRgXB9xGTYj/kkflpE+mF4zx2oh3hPhjnpj1E82e61v0T64jTw1SRGdCcs22D957mz
-         00aVslhgJmyyHi0BIB4peHGWpTIC8Tuy45ohTA5weXVrE/k2fD/aTdIV7cdDwR0gla
-         pRN8wbKnPQtxx1Caea8VhhIoS9ydMo4rvOnom8wCEmIBoAek1U27tFBPtadKYjjgo+
-         vZpve3mNvB8Lw==
+        b=Dkvrqnxk4vT/U+nWFB8TR2B4omT9s43tDa8zHkS9pklMeHfnKSblMmsvWOSZYhK0/
+         Em1PM/LbT24CkVHwM/CtWy5/XEWTfXq6b4sC9yNlpkYOaO9fx6shvD5UQcPpZKvsTr
+         sNM7SkrtBzlXdzADPUFw6zC4JisWh+cCI5WHeseIBUzOQghbPyGjXgjjs/OkGyOjyx
+         fGohL9rLn+/NCXorIhG7OvFTZlEZ17yJzLAQ+LFxzi8CtmYOirD96GfTTS72rbHdAt
+         8znwuEUHC5VfoWP0dhiD/axQ9BDFaQGZGr7LASmYl08WCxpZ+MwqPnJSzanDTlHKwv
+         3OaXsTOaIMYHA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     krzysztof.kozlowski+dt@linaro.org, kw@linux.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lpieralisi@kernel.org, robh@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_srichara@quicinc.com, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, konrad.dybcio@linaro.org
-Subject: Re: (subset) [PATCH v5 00/19] Qcom PCIe cleanups and improvements
-Date:   Tue,  4 Apr 2023 21:09:03 -0700
-Message-Id: <168066774422.443656.18294133309436698061.b4-ty@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: defconfig: remove duplicate TYPEC_UCSI & QCOM_PMIC_GLINK
+Date:   Tue,  4 Apr 2023 21:09:04 -0700
+Message-Id: <168066774416.443656.3687181037189179360.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230316081117.14288-1-manivannan.sadhasivam@linaro.org>
-References: <20230316081117.14288-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230324-topic-sm8450-upstream-defconfig-fixup-v1-1-2d75cc9b3c3d@linaro.org>
+References: <20230324-topic-sm8450-upstream-defconfig-fixup-v1-1-2d75cc9b3c3d@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,26 +56,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 13:40:58 +0530, Manivannan Sadhasivam wrote:
-> This series brings in several code cleanups and improvements to the
-> Qualcomm PCIe controller drivers (RC and EP). The cleanup part mostly
-> cleans up the bitfield definitions and transitions to bulk APIs for clocks,
-> and resets. The improvement part adds the debugfs entries to track link
-> transition counts in RC driver.
+On Fri, 24 Mar 2023 10:37:54 +0100, Neil Armstrong wrote:
+> Both configs were already applied by 2 separate changes,
+> fix this to avoid:
+> arch/arm64/configs/defconfig:989:warning: override: reassigning to symbol TYPEC_UCSI
+> arch/arm64/configs/defconfig:1232:warning: override: reassigning to symbol QCOM_PMIC_GLINK
 > 
-> Testing
-> -------
 > 
-> [...]
 
 Applied, thanks!
 
-[16/19] arm64: dts: qcom: sdm845: Add "mhi" region to the PCIe nodes
-        commit: b8e0ed06d1a569694c8976c3563bbd0aae728e1d
-[17/19] arm64: dts: qcom: sm8250: Add "mhi" region to the PCIe nodes
-        commit: 89210342406b91954c514d171baeabb91f85f0a5
-[18/19] arm64: dts: qcom: sc8280xp: Add "mhi" region to the PCIe nodes
-        commit: de7d3d2f9ddef9a3305decccdd3b95b09fd2bd46
+[1/1] arm64: defconfig: remove duplicate TYPEC_UCSI & QCOM_PMIC_GLINK
+      commit: 7b4c00e9cc36e24e60d9907e6c3161791b11695c
 
 Best regards,
 -- 
