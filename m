@@ -2,923 +2,735 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2B66D8498
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5886D8490
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjDERLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S231346AbjDERKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjDERLi (ORCPT
+        with ESMTP id S230100AbjDERKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:11:38 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CA959D6;
-        Wed,  5 Apr 2023 10:11:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PREgojalqZzsF4XJYoXJTTxd7S+PjCx+gm+WRYvFclbWZnf0fLOE1iR8u6XgjClMdsY/7A7fL7GkGMLuGp0cFpvdKq4JErDeaaYJyk+wz4m0Gb38GJn+iv30HzUSAUQxDsFkLixTLocC5QqxIcVLfRPyV0K3JdezudjGrLngdUStOpIyzLZJDAxxT3yj6+8csK5Up79x/1QYN7eewNBKh4t/TndsH1VOiBxq/VfM7cqT1R4O3u2+C4O73gxRmRdwQkK7Uuon2Fu9EScafSjk0yvrLF5HMtVcYnQ5I/5ikd/VQHhhnsw/FZyPaOEo6EvuEddTgsYg87AqXPybYBv7Eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jMyeXgDjZRvHunUb11S5/cZgCFSxqDsQ6mQHsaXyFOg=;
- b=HsD+Xv/PJuT8k9T+TrusCm9vl/mbrGbrP0cl4KnmCT0cGRkWFJxwb/pJOe9AUUxInnZsRrRVSsqSbjhxgcSAqJPGRmVlqnvj7xOgjjHX3PS6d2nFve1KoouOpSK4eOSDr+F+sH766sGZYKHOAo5rEpbXUPirRplIOnisnwWcpAhPiDBzp6b69eG7dY1uLTL+/VaLc0ry5Td1CljdT+I9duCt3VIUyVfbyYbg7t6LHQ7nDm8r0s2j7fqv8buc6N8r/d3dGdCez2dyrh41JqCdwt7cj1GKrp+8yTqdhhKRLgOGgOVVIw84FZHRSwlYaPT9IgLH9ifaERILOFZYUiBfUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jMyeXgDjZRvHunUb11S5/cZgCFSxqDsQ6mQHsaXyFOg=;
- b=0et4ZAroWBIf7yFyt1XH0udiXxRfcvFjeO40CaOJ+hmxIok6odfU2c8HtVy5JBYnE4v3XQU+mMaEw8quIODNT1nVerJM1M/bC0L8v43F85vfc5uRK/Lt4LM+OGEHsB9Slvn/LpUYP/v2COlf04zQHd6NifQHf30kQOh3tKo+q3Q=
-Received: from BN0PR04CA0071.namprd04.prod.outlook.com (2603:10b6:408:ea::16)
- by CH0PR12MB5284.namprd12.prod.outlook.com (2603:10b6:610:d7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Wed, 5 Apr
- 2023 17:11:22 +0000
-Received: from BN8NAM11FT082.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ea:cafe::e6) by BN0PR04CA0071.outlook.office365.com
- (2603:10b6:408:ea::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.37 via Frontend
- Transport; Wed, 5 Apr 2023 17:11:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT082.mail.protection.outlook.com (10.13.176.94) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6277.30 via Frontend Transport; Wed, 5 Apr 2023 17:11:22 +0000
-Received: from BLR5CG134614W.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 5 Apr
- 2023 12:11:14 -0500
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-To:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>
-CC:     <ravi.bangoria@amd.com>, <sandipan.das@amd.com>,
-        <ananth.narayan@amd.com>, <gautham.shenoy@amd.com>,
-        <eranian@google.com>, <puwen@hygon.cn>
-Subject: [RFC PATCH v2 4/4] perf: Add option for --per-cache aggregation
-Date:   Wed, 5 Apr 2023 22:39:06 +0530
-Message-ID: <20230405170906.2510-5-kprateek.nayak@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230405170906.2510-1-kprateek.nayak@amd.com>
-References: <20230405170906.2510-1-kprateek.nayak@amd.com>
+        Wed, 5 Apr 2023 13:10:15 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CBEE41
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:10:10 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9333b408ee7so3664666b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 10:10:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1680714609;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Hb0s11wzWUtncbdbj1+tJGRJTpj0TLkIHZg2ChvIYvU=;
+        b=AIepK3u1s3NY52wFU0VpMZvX2NKO+NsK4/OuLn3pWaxT/kbRpMn2pPm2RDRoAs9H1Q
+         r78d6VKmoz/o52L5nGumO00t5txi23tC0S6+HCYSVU5Qg3B+PD5siZRuIEpkSZ2BPmZ6
+         G2s2mC3moD8U//YHMlyb8n+RQcerj0M/2FLys=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680714609;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hb0s11wzWUtncbdbj1+tJGRJTpj0TLkIHZg2ChvIYvU=;
+        b=CpIoTZZm1pdxGgzt6q/wEbTozT2ylMqlCyLfIYSf6YvrwNUwQLq9W0/W9HBfQ92J41
+         Y/2JGEJz0WcToeErahWT58pvCxkvtjHMCr2v3N78Vp3SC8dyhLEm64fA4izGoofEmpfu
+         dI3l7NxeGZWJJt3wqmzoP/6xV6QSsul3Q4KxrLSlx3NNBUze0tysaKOAia4V4hfXfU3T
+         MxQgprjKpCkMYQKQGt+NYy0iNYlLaaYU4WpsNc3rJio1PCsyRFqQz/IfFzAzJUIY3SiV
+         IU3gDpCBCQRlVcETydFR6g5XEyyubYbyIQ8K7qkrxbKBYRQ1H6r3fQPS2sKYXHQ7qdgc
+         /u+w==
+X-Gm-Message-State: AAQBX9fzYQwMUuurTvLPifUhNr88AX9n31kPqJn078tziG303RgXydij
+        EtfsLoSSADk0xnVQIBy/lpFvqA==
+X-Google-Smtp-Source: AKy350ZCiVwHTUx+2dgaPIvaAFhh9EdAw+52UQeR48M9LnuKBPf1LtMAP5BhHlf7cEoZUQl4Bkru1Q==
+X-Received: by 2002:a05:6402:2811:b0:502:465:28e1 with SMTP id h17-20020a056402281100b00502046528e1mr3106022ede.0.1680714608441;
+        Wed, 05 Apr 2023 10:10:08 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id tq24-20020a170907c51800b00947abb70c93sm7264820ejc.112.2023.04.05.10.10.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 10:10:07 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 19:10:05 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH RFC 02/18] rust: drm: Add Device and Driver abstractions
+Message-ID: <ZC2rbZzho2YMi5cq@phenom.ffwll.local>
+Mail-Followup-To: Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-2-917ff5bc80a8@asahilina.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT082:EE_|CH0PR12MB5284:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4cd8b0b2-787d-4111-451c-08db35f8c7c7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ECLWbqguFPfDXaCiJYY4uNW1lJl2iY5xN4waHKlD8mdHK/QUlKAKMLuaQC0EnOrhbMWAnwzX0l7maXzw54BfGYxg3ZVm+V22rFahiIijG3l3YiPW2UyiIDxSjrzfOkovrVeKdR05EJL3thph0t17rydKRQ+aZu/kB9Yh5Dj4OG2ZBG6EHtTHodxIqNrJusTGXqRGYldroIIcfkdQLJ5ugRJrz8cJ29HfFlUXfKS7FxZNOfdb46h7q0qljfuqOeDRf2RYQoiEwMS/1z/jqKtmJ6kAf2/n6sSMpoCPlMrqHZnL0pxfeqwWb2jJmJSuk6kddlow6As7H8cSiWXHp4syrz2tjloiV3t/7UeJU7CBGuT7HZLXL9fUwQFgorE1JFTIzwf9zIL8nKvxibPRJ+KSiHzxXu0h419Khnw5Xo3rNEo1Pauqb0PWBvHA0tBBpCcnPTNw3l4EIbXPSHM+TKe5dBv9iGGq+OgugCl0zXtmhnbeIFplHZdU2sNnk68LakSlwzg09zbObjdd/CUR/7ujCbmURDNNyHy49LvqSRCpPRPQueQili9U9G78AYJ2zsAZl1TA3GKC3UDZPVdKO/WfnItxTOubl50GPdEOGeWIiD8dNQXa8Nfm515zdJaTTk0bkRHpnXjXptxrzFmSYc/M7iIJaWLqIYccqY+PQPLXX9+4Ysil8iAMo4Bk+CgmedLdyOhXbfbn7V3mVXFSKyD6vLkkup3/ALf92vut51BVzQ9Lkr/tgZ/ghOoDbCrHYTek
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(40480700001)(40460700003)(8676002)(4326008)(478600001)(36860700001)(41300700001)(70206006)(7416002)(316002)(81166007)(356005)(30864003)(8936002)(54906003)(5660300002)(70586007)(82740400003)(110136005)(107886003)(83380400001)(16526019)(426003)(186003)(7696005)(2616005)(6666004)(47076005)(26005)(1076003)(336012)(86362001)(36756003)(2906002)(82310400005)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 17:11:22.2475
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cd8b0b2-787d-4111-451c-08db35f8c7c7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT082.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5284
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307-rust-drm-v1-2-917ff5bc80a8@asahilina.net>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Processors based on chiplet architecture, such as AMD EPYC and Hygon do
-not expose the chiplet details in the sysfs CPU topology information.
-However, this information can be derived from the per CPU cache level
-information from the sysfs.
+On Tue, Mar 07, 2023 at 11:25:27PM +0900, Asahi Lina wrote:
+> Add the initial abstractions for DRM drivers and devices. These go
+> together in one commit since they are fairly tightly coupled types.
+> 
+> A few things have been stubbed out, to be implemented as further bits of
+> the DRM subsystem are introduced.
+> 
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
 
-perf stat has already supported aggregation based on topology
-information using core ID, socket ID, etc. It'll be useful to aggregate
-based on the cache topology to detect problems like imbalance and
-cache-to-cache sharing at various cache levels.
+Ok so this is fairly fundamental lifetime fun and might be fairly
+orthogonal to most of the things you actually want to do with a drm driver
+(like implement gem or whatever). So separate mail.
 
-This patch adds support for "--per-cache" option for aggregation at a
-particular cache level. Also update the docs and related test. The
-output will be like:
+So upfront short intro. There's 3 different lifetimes involved in building
+a drm driver:
 
-  $ sudo ./perf stat --per-cache=L3 -a -e ls_dmnd_fills_from_sys.ext_cache_remote -- sleep 5
+- struct drm_driver. It's refcounted because it's fundamentally an uapi
+  interface thing, and all the various uapi interfaces that build on top
+  of this (drm_file, dma_buf, ...) need to hold references on it. It's
+  supposed to survive for as long as userspace needs it or the underlying
+  driver is bound, whichever is longer.
 
-   Performance counter stats for 'system wide':
+- struct device. Refcounted and good for dmesg printing, nothing else.
+  Yes, because ...
 
-  S0-D0-L3-ID0             16              7,022      ls_dmnd_fills_from_sys.ext_cache_remote
-  S0-D0-L3-ID1             16                994      ls_dmnd_fills_from_sys.ext_cache_remote
-  S0-D0-L3-ID2             16                297      ls_dmnd_fills_from_sys.ext_cache_remote
-  S0-D0-L3-ID3             16              2,852      ls_dmnd_fills_from_sys.ext_cache_remote
-  S0-D0-L3-ID4             16              7,764      ls_dmnd_fills_from_sys.ext_cache_remote
-  S0-D0-L3-ID5             16              1,779      ls_dmnd_fills_from_sys.ext_cache_remote
-  S0-D0-L3-ID6             16              2,747      ls_dmnd_fills_from_sys.ext_cache_remote
-  S0-D0-L3-ID7             16              6,665      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID8             16                799      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID9             16                846      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID10            16              3,048      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID11            16              1,015      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID12            16                432      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID13            16                837      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID14            16                348      ls_dmnd_fills_from_sys.ext_cache_remote
-  S1-D1-L3-ID15            16              1,175      ls_dmnd_fills_from_sys.ext_cache_remote
+- ... the actual hardware resource, in many places also represented by struct
+  device. Not refcounted, instead it's limited by hotunplug or more
+  precisiely, how long your driver is bound to the struct device. You
+  could make a case that in C this is represented by the bus specific type
+  (e.g. platform_device), and the bus-specific hooks delineate the
+  lifetime (for platform devices that's that's from ->probe to ->remove).
+  Since there's no C type for this I'll call this hwdevice.
 
-Also support perf stat record and perf stat report with the ability to
-specify a different cache level to aggregate data at when running perf
-stat report.
+I think for rust it would be good if we model a bit more precisely in
+rust. It might be possible to use the bus-specific types as the hwdevice,
+but that's not entirely right either because each bus device is both
+representing the hwdevice and the refcounted struct device.
 
-Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
----
-o v1->v2
-  - Fix cache level parsing logic. Previously, giving "--per-cache=2" was
-    considered valid but that was not the intention. Only parse strings
-    of form LX or lX where x is the cache level and can range from 1 to
-    MAX_CACHE_LVL.
----
- tools/lib/perf/include/perf/cpumap.h          |   5 +
- tools/lib/perf/include/perf/event.h           |   3 +-
- tools/perf/Documentation/perf-stat.txt        |  16 ++
- tools/perf/builtin-stat.c                     | 155 +++++++++++++++++-
- .../tests/shell/lib/perf_json_output_lint.py  |   4 +-
- tools/perf/tests/shell/stat+csv_output.sh     |  14 ++
- tools/perf/tests/shell/stat+json_output.sh    |  13 ++
- tools/perf/util/cpumap.c                      |  97 +++++++++++
- tools/perf/util/cpumap.h                      |  17 ++
- tools/perf/util/event.c                       |   7 +-
- tools/perf/util/stat-display.c                |  17 ++
- tools/perf/util/stat-shadow.c                 |   1 +
- tools/perf/util/stat.h                        |   2 +
- tools/perf/util/synthetic-events.c            |   1 +
- 14 files changed, 345 insertions(+), 7 deletions(-)
+Now onto lifetimes, or at least how this is usually handled.
 
-diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
-index 3f43f770cdac..8724dde79342 100644
---- a/tools/lib/perf/include/perf/cpumap.h
-+++ b/tools/lib/perf/include/perf/cpumap.h
-@@ -11,6 +11,11 @@ struct perf_cpu {
- 	int cpu;
- };
- 
-+struct perf_cache {
-+	int cache_lvl;
-+	int cache;
-+};
-+
- struct perf_cpu_map;
- 
- LIBPERF_API struct perf_cpu_map *perf_cpu_map__dummy_new(void);
-diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
-index ad47d7b31046..f3ceb2f96593 100644
---- a/tools/lib/perf/include/perf/event.h
-+++ b/tools/lib/perf/include/perf/event.h
-@@ -378,7 +378,8 @@ enum {
- 	PERF_STAT_CONFIG_TERM__AGGR_MODE	= 0,
- 	PERF_STAT_CONFIG_TERM__INTERVAL		= 1,
- 	PERF_STAT_CONFIG_TERM__SCALE		= 2,
--	PERF_STAT_CONFIG_TERM__MAX		= 3,
-+	PERF_STAT_CONFIG_TERM__AGGR_LEVEL	= 3,
-+	PERF_STAT_CONFIG_TERM__MAX		= 4,
- };
- 
- struct perf_record_stat_config_entry {
-diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
-index 18abdc1dce05..ad7894f5c02b 100644
---- a/tools/perf/Documentation/perf-stat.txt
-+++ b/tools/perf/Documentation/perf-stat.txt
-@@ -308,6 +308,14 @@ use --per-die in addition to -a. (system-wide).  The output includes the
- die number and the number of online processors on that die. This is
- useful to gauge the amount of aggregation.
- 
-+--per-cache::
-+Aggregate counts per cache instance for system-wide mode measurements.  By
-+default, the aggregation happens for the cache level at the highest index
-+in the system. To specify a particular level, mention the cache level
-+alongside the option in the format [Ll][1-9][0-9]*. For example:
-+"--per-cache=l3", "--per-cache=L3", and "--per-cache=3" will aggregate
-+the information at the boundary of the level 3 cache in the system.
-+
- --per-core::
- Aggregate counts per physical processor for system-wide mode measurements.  This
- is a useful mode to detect imbalance between physical cores.  To enable this mode,
-@@ -379,6 +387,14 @@ Aggregate counts per processor socket for system-wide mode measurements.
- --per-die::
- Aggregate counts per processor die for system-wide mode measurements.
- 
-+--per-cache::
-+Aggregate counts per cache instance for system-wide mode measurements.  By
-+default, the aggregation happens for the cache level at the highest index
-+in the system. To specify a particular level, mention the cache level
-+alongside the option in the format [Ll][1-9][0-9]*. For example:
-+"--per-cache=l3", "--per-cache=L3", and "--per-cache=3" will aggregate
-+the information at the boundary of the level 3 cache in the system.
-+
- --per-core::
- Aggregate counts per physical processor for system-wide mode measurements.
- 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index fa7c40956d0f..e728bf2d5aed 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -203,6 +203,7 @@ struct perf_stat {
- 	struct perf_cpu_map	*cpus;
- 	struct perf_thread_map *threads;
- 	enum aggr_mode		 aggr_mode;
-+	u32			 aggr_level;
- };
- 
- static struct perf_stat		perf_stat;
-@@ -210,8 +211,9 @@ static struct perf_stat		perf_stat;
- 
- static volatile sig_atomic_t done = 0;
- 
--static struct perf_stat_config stat_config = {
-+struct perf_stat_config stat_config = {
- 	.aggr_mode		= AGGR_GLOBAL,
-+	.aggr_level		= MAX_CACHE_LVL + 1,
- 	.scale			= true,
- 	.unit_width		= 4, /* strlen("unit") */
- 	.run_count		= 1,
-@@ -1160,6 +1162,54 @@ static int parse_hybrid_type(const struct option *opt,
- 	return 0;
- }
- 
-+static int parse_cache_level(const struct option *opt, const char *str,
-+		 int unset __maybe_unused)
-+{
-+	int level;
-+	u32 *aggr_mode = (u32 *)opt->value;
-+	u32 *aggr_level = (u32 *)opt->data;
-+
-+	/*
-+	 * If no string is specified, aggregate based on the topology of
-+	 * Last Level Cache (LLC). Since the LLC level can change from
-+	 * architecture to architecture, set level greater than
-+	 * MAX_CACHE_LVL which will be interpreted as LLC.
-+	 */
-+	if (str == NULL) {
-+		level = MAX_CACHE_LVL + 1;
-+		goto out;
-+	}
-+
-+	/*
-+	 * The format to specify cache level is LX or lX where X is the
-+	 * cache level.
-+	 */
-+	if (strlen(str) != 2 || (str[0] != 'l' && str[0] != 'L')) {
-+		pr_err("Cache level must be of form L[1-%d], or l[1-%d]\n",
-+		       MAX_CACHE_LVL,
-+		       MAX_CACHE_LVL);
-+		return -EINVAL;
-+	}
-+
-+	level = atoi(&str[1]);
-+	if (level < 1) {
-+		pr_err("Cache level must be of form L[1-%d], or l[1-%d]\n",
-+		       MAX_CACHE_LVL,
-+		       MAX_CACHE_LVL);
-+		return -EINVAL;
-+	}
-+
-+	if (level > MAX_CACHE_LVL) {
-+		pr_err("perf only supports max cache level of %d.\n"
-+		       "Consider increasing MAX_CACHE_LVL\n", MAX_CACHE_LVL);
-+		return -EINVAL;
-+	}
-+out:
-+	*aggr_mode = AGGR_CACHE;
-+	*aggr_level = level;
-+	return 0;
-+}
-+
- static struct option stat_options[] = {
- 	OPT_BOOLEAN('T', "transaction", &transaction_run,
- 		    "hardware transaction statistics"),
-@@ -1237,6 +1287,9 @@ static struct option stat_options[] = {
- 		     "aggregate counts per processor socket", AGGR_SOCKET),
- 	OPT_SET_UINT(0, "per-die", &stat_config.aggr_mode,
- 		     "aggregate counts per processor die", AGGR_DIE),
-+	OPT_CALLBACK_OPTARG(0, "per-cache", &stat_config.aggr_mode, &stat_config.aggr_level,
-+			    "cache level", "aggregate count at this cache level (Default: LLC)",
-+			    parse_cache_level),
- 	OPT_SET_UINT(0, "per-core", &stat_config.aggr_mode,
- 		     "aggregate counts per physical processor core", AGGR_CORE),
- 	OPT_SET_UINT(0, "per-thread", &stat_config.aggr_mode,
-@@ -1298,6 +1351,7 @@ static struct option stat_options[] = {
- 
- static const char *const aggr_mode__string[] = {
- 	[AGGR_CORE] = "core",
-+	[AGGR_CACHE] = "cache",
- 	[AGGR_DIE] = "die",
- 	[AGGR_GLOBAL] = "global",
- 	[AGGR_NODE] = "node",
-@@ -1319,6 +1373,12 @@ static struct aggr_cpu_id perf_stat__get_die(struct perf_stat_config *config __m
- 	return aggr_cpu_id__die(cpu, /*data=*/NULL);
- }
- 
-+static struct aggr_cpu_id perf_stat__get_cache_id(struct perf_stat_config *config __maybe_unused,
-+						 struct perf_cpu cpu)
-+{
-+	return aggr_cpu_id__cache(cpu, /*data=*/NULL);
-+}
-+
- static struct aggr_cpu_id perf_stat__get_core(struct perf_stat_config *config __maybe_unused,
- 					      struct perf_cpu cpu)
- {
-@@ -1371,6 +1431,12 @@ static struct aggr_cpu_id perf_stat__get_die_cached(struct perf_stat_config *con
- 	return perf_stat__get_aggr(config, perf_stat__get_die, cpu);
- }
- 
-+static struct aggr_cpu_id perf_stat__get_cache_id_cached(struct perf_stat_config *config,
-+							struct perf_cpu cpu)
-+{
-+	return perf_stat__get_aggr(config, perf_stat__get_cache_id, cpu);
-+}
-+
- static struct aggr_cpu_id perf_stat__get_core_cached(struct perf_stat_config *config,
- 						     struct perf_cpu cpu)
- {
-@@ -1402,6 +1468,8 @@ static aggr_cpu_id_get_t aggr_mode__get_aggr(enum aggr_mode aggr_mode)
- 		return aggr_cpu_id__socket;
- 	case AGGR_DIE:
- 		return aggr_cpu_id__die;
-+	case AGGR_CACHE:
-+		return aggr_cpu_id__cache;
- 	case AGGR_CORE:
- 		return aggr_cpu_id__core;
- 	case AGGR_NODE:
-@@ -1425,6 +1493,8 @@ static aggr_get_id_t aggr_mode__get_id(enum aggr_mode aggr_mode)
- 		return perf_stat__get_socket_cached;
- 	case AGGR_DIE:
- 		return perf_stat__get_die_cached;
-+	case AGGR_CACHE:
-+		return perf_stat__get_cache_id_cached;
- 	case AGGR_CORE:
- 		return perf_stat__get_core_cached;
- 	case AGGR_NODE:
-@@ -1537,6 +1607,72 @@ static struct aggr_cpu_id perf_env__get_die_aggr_by_cpu(struct perf_cpu cpu, voi
- 	return id;
- }
- 
-+static int perf_env__get_cache_id_for_cpu(struct perf_cpu cpu, struct perf_env *env,
-+					  u32 cache_level, struct perf_cache *cache)
-+{
-+	int i;
-+	int caches_cnt = env->caches_cnt;
-+	struct cpu_cache_level *caches = env->caches;
-+
-+	if (!caches_cnt)
-+		return -1;
-+
-+	for (i = caches_cnt - 1; i > -1; --i) {
-+		struct perf_cpu_map *cpu_map;
-+		int map_contains_cpu;
-+
-+		/*
-+		 * If user has not specified a level, find the fist level with
-+		 * the cpu in the map. Since building the map is expensive, do
-+		 * this only if levels match.
-+		 */
-+		if (cache_level <= MAX_CACHE_LVL && caches[i].level != cache_level)
-+			continue;
-+
-+		cpu_map = perf_cpu_map__new(caches[i].map);
-+		map_contains_cpu = perf_cpu_map__idx(cpu_map, cpu);
-+		perf_cpu_map__put(cpu_map);
-+
-+		if (map_contains_cpu != -1) {
-+			cache->cache = caches[i].id;
-+			cache->cache_lvl = caches[i].level;
-+			return 0;
-+		}
-+	}
-+
-+	return -1;
-+}
-+
-+static struct aggr_cpu_id perf_env__get_cache_aggr_by_cpu(struct perf_cpu cpu,
-+							  void *data)
-+{
-+	struct perf_env *env = data;
-+	struct aggr_cpu_id id = aggr_cpu_id__empty();
-+
-+	if (cpu.cpu != -1) {
-+		int ret;
-+		u32 cache_level;
-+		struct perf_cache cache = {
-+			.cache		= -1,
-+			.cache_lvl	= -1,
-+		};
-+
-+		cache_level = (perf_stat.aggr_level) ?: stat_config.aggr_level;
-+
-+		id.socket = env->cpu[cpu.cpu].socket_id;
-+		id.die = env->cpu[cpu.cpu].die_id;
-+
-+		ret = perf_env__get_cache_id_for_cpu(cpu, env, cache_level, &cache);
-+		if (ret)
-+			return id;
-+
-+		id.cache_lvl = cache.cache_lvl;
-+		id.cache = cache.cache;
-+	}
-+
-+	return id;
-+}
-+
- static struct aggr_cpu_id perf_env__get_core_aggr_by_cpu(struct perf_cpu cpu, void *data)
- {
- 	struct perf_env *env = data;
-@@ -1605,6 +1741,12 @@ static struct aggr_cpu_id perf_stat__get_die_file(struct perf_stat_config *confi
- 	return perf_env__get_die_aggr_by_cpu(cpu, &perf_stat.session->header.env);
- }
- 
-+static struct aggr_cpu_id perf_stat__get_cache_file(struct perf_stat_config *config __maybe_unused,
-+						      struct perf_cpu cpu)
-+{
-+	return perf_env__get_cache_aggr_by_cpu(cpu, &perf_stat.session->header.env);
-+}
-+
- static struct aggr_cpu_id perf_stat__get_core_file(struct perf_stat_config *config __maybe_unused,
- 						   struct perf_cpu cpu)
- {
-@@ -1636,6 +1778,8 @@ static aggr_cpu_id_get_t aggr_mode__get_aggr_file(enum aggr_mode aggr_mode)
- 		return perf_env__get_socket_aggr_by_cpu;
- 	case AGGR_DIE:
- 		return perf_env__get_die_aggr_by_cpu;
-+	case AGGR_CACHE:
-+		return perf_env__get_cache_aggr_by_cpu;
- 	case AGGR_CORE:
- 		return perf_env__get_core_aggr_by_cpu;
- 	case AGGR_NODE:
-@@ -1659,6 +1803,8 @@ static aggr_get_id_t aggr_mode__get_id_file(enum aggr_mode aggr_mode)
- 		return perf_stat__get_socket_file;
- 	case AGGR_DIE:
- 		return perf_stat__get_die_file;
-+	case AGGR_CACHE:
-+		return perf_stat__get_cache_file;
- 	case AGGR_CORE:
- 		return perf_stat__get_core_file;
- 	case AGGR_NODE:
-@@ -2207,7 +2353,8 @@ static struct perf_stat perf_stat = {
- 		.stat		= perf_event__process_stat_event,
- 		.stat_round	= process_stat_round_event,
- 	},
--	.aggr_mode = AGGR_UNSET,
-+	.aggr_mode	= AGGR_UNSET,
-+	.aggr_level	= 0,
- };
- 
- static int __cmd_report(int argc, const char **argv)
-@@ -2219,6 +2366,10 @@ static int __cmd_report(int argc, const char **argv)
- 		     "aggregate counts per processor socket", AGGR_SOCKET),
- 	OPT_SET_UINT(0, "per-die", &perf_stat.aggr_mode,
- 		     "aggregate counts per processor die", AGGR_DIE),
-+	OPT_CALLBACK_OPTARG(0, "per-cache", &perf_stat.aggr_mode, &perf_stat.aggr_level,
-+			    "cache level",
-+			    "aggregate count at this cache level (Default: LLC)",
-+			    parse_cache_level),
- 	OPT_SET_UINT(0, "per-core", &perf_stat.aggr_mode,
- 		     "aggregate counts per physical processor core", AGGR_CORE),
- 	OPT_SET_UINT(0, "per-node", &perf_stat.aggr_mode,
-diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-index 97598d14e532..62489766b93c 100644
---- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
-+++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-@@ -14,6 +14,7 @@ ap.add_argument('--system-wide', action='store_true')
- ap.add_argument('--event', action='store_true')
- ap.add_argument('--per-core', action='store_true')
- ap.add_argument('--per-thread', action='store_true')
-+ap.add_argument('--per-cache', action='store_true')
- ap.add_argument('--per-die', action='store_true')
- ap.add_argument('--per-node', action='store_true')
- ap.add_argument('--per-socket', action='store_true')
-@@ -46,6 +47,7 @@ def check_json_output(expected_items):
-       'counter-value': lambda x: is_counter_value(x),
-       'cgroup': lambda x: True,
-       'cpu': lambda x: isint(x),
-+      'cache': lambda x: True,
-       'die': lambda x: True,
-       'event': lambda x: True,
-       'event-runtime': lambda x: isfloat(x),
-@@ -82,7 +84,7 @@ try:
-     expected_items = 7
-   elif args.interval or args.per_thread or args.system_wide_no_aggr:
-     expected_items = 8
--  elif args.per_core or args.per_socket or args.per_node or args.per_die:
-+  elif args.per_core or args.per_socket or args.per_node or args.per_die or args.per_cache_instance:
-     expected_items = 9
-   else:
-     # If no option is specified, don't check the number of items.
-diff --git a/tools/perf/tests/shell/stat+csv_output.sh b/tools/perf/tests/shell/stat+csv_output.sh
-index 324fc9e6edd7..6cdf2fd386d5 100755
---- a/tools/perf/tests/shell/stat+csv_output.sh
-+++ b/tools/perf/tests/shell/stat+csv_output.sh
-@@ -26,6 +26,7 @@ function commachecker()
- 	;; "--per-socket")	exp=8
- 	;; "--per-node")	exp=8
- 	;; "--per-die")		exp=8
-+	;; "--per-cache")	exp=8
- 	esac
- 
- 	while read line
-@@ -123,6 +124,18 @@ check_per_thread()
- 	echo "[Success]"
- }
- 
-+check_per_cache_instance()
-+{
-+	echo -n "Checking CSV output: per cache instance "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoid and not root"
-+		return
-+	fi
-+	perf stat -x$csv_sep --per-cache -a true 2>&1 | commachecker --per-cache
-+	echo "[Success]"
-+}
-+
- check_per_die()
- {
- 	echo -n "Checking CSV output: per die "
-@@ -197,6 +210,7 @@ if [ $skip_test -ne 1 ]
- then
- 	check_system_wide_no_aggr
- 	check_per_core
-+	check_per_cache_instance
- 	check_per_die
- 	check_per_socket
- else
-diff --git a/tools/perf/tests/shell/stat+json_output.sh b/tools/perf/tests/shell/stat+json_output.sh
-index 2c4212c641ed..d79a6e0d4042 100755
---- a/tools/perf/tests/shell/stat+json_output.sh
-+++ b/tools/perf/tests/shell/stat+json_output.sh
-@@ -100,6 +100,18 @@ check_per_thread()
- 	echo "[Success]"
- }
- 
-+check_per_cache_instance()
-+{
-+	echo -n "Checking json output: per cache_instance "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] paranoia and not root"
-+		return
-+	fi
-+	perf stat -j --per-cache -a true 2>&1 | $PYTHON $pythonchecker --per-cache
-+	echo "[Success]"
-+}
-+
- check_per_die()
- {
- 	echo -n "Checking json output: per die "
-@@ -174,6 +186,7 @@ if [ $skip_test -ne 1 ]
- then
- 	check_system_wide_no_aggr
- 	check_per_core
-+	check_per_cache_instance
- 	check_per_die
- 	check_per_socket
- else
-diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-index 5e564974fba4..5d62f21c6adc 100644
---- a/tools/perf/util/cpumap.c
-+++ b/tools/perf/util/cpumap.c
-@@ -3,6 +3,8 @@
- #include "cpumap.h"
- #include "debug.h"
- #include "event.h"
-+#include "header.h"
-+#include "stat.h"
- #include <assert.h>
- #include <dirent.h>
- #include <stdio.h>
-@@ -227,6 +229,10 @@ static int aggr_cpu_id__cmp(const void *a_pointer, const void *b_pointer)
- 		return a->socket - b->socket;
- 	else if (a->die != b->die)
- 		return a->die - b->die;
-+	else if (a->cache_lvl != b->cache_lvl)
-+		return a->cache_lvl - b->cache_lvl;
-+	else if (a->cache != b->cache)
-+		return a->cache - b->cache;
- 	else if (a->core != b->core)
- 		return a->core - b->core;
- 	else
-@@ -310,6 +316,91 @@ struct aggr_cpu_id aggr_cpu_id__die(struct perf_cpu cpu, void *data)
- 	return id;
- }
- 
-+extern struct perf_stat_config stat_config;
-+
-+int cpu__get_cache_details(struct perf_cpu cpu, struct perf_cache *cache)
-+{
-+	int ret = 0;
-+	struct cpu_cache_level caches[MAX_CACHE_LVL];
-+	u32 cache_level = stat_config.aggr_level;
-+	u32 i = 0, caches_cnt = 0;
-+
-+	cache->cache_lvl = -1;
-+	cache->cache = -1;
-+
-+	ret = build_caches_for_cpu(cpu.cpu, caches, &caches_cnt);
-+	if (ret) {
-+		/*
-+		 * If caches_cnt is not 0, cpu_cache_level data
-+		 * was allocated when building the topology.
-+		 * Free the allocated data before returning.
-+		 */
-+		if (caches_cnt)
-+			goto free_caches;
-+
-+		return ret;
-+	}
-+
-+	if (!caches_cnt)
-+		return -1;
-+
-+	/*
-+	 * Save the data for the highest level if no
-+	 * level was specified by the user.
-+	 */
-+	if (cache_level > MAX_CACHE_LVL) {
-+		int max_level_index = 0;
-+
-+		for (i = 1; i < caches_cnt; ++i) {
-+			if (caches[i].level > caches[max_level_index].level)
-+				max_level_index = i;
-+		}
-+
-+		cache->cache_lvl = caches[max_level_index].level;
-+		cache->cache = caches[max_level_index].id;
-+
-+		i = 0; // Reset i to 0 to free entire caches[]
-+		goto free_caches;
-+	}
-+
-+	for (i = 0; i < caches_cnt; ++i) {
-+		if (caches[i].level == cache_level) {
-+			cache->cache_lvl = cache_level;
-+			cache->cache = caches[i].id;
-+		}
-+
-+		cpu_cache_level__free(&caches[i]);
-+	}
-+
-+free_caches:
-+	/*
-+	 * Free all the allocated cpu_cache_level data.
-+	 */
-+	while (i < caches_cnt)
-+		cpu_cache_level__free(&caches[i++]);
-+
-+	return ret;
-+}
-+
-+struct aggr_cpu_id aggr_cpu_id__cache(struct perf_cpu cpu, void *data)
-+{
-+	int ret;
-+	struct aggr_cpu_id id;
-+	struct perf_cache cache;
-+
-+	id = aggr_cpu_id__die(cpu, data);
-+	if (aggr_cpu_id__is_empty(&id))
-+		return id;
-+
-+	ret = cpu__get_cache_details(cpu, &cache);
-+	if (ret)
-+		return id;
-+
-+	id.cache_lvl = cache.cache_lvl;
-+	id.cache = cache.cache;
-+	return id;
-+}
-+
- int cpu__get_core_id(struct perf_cpu cpu)
- {
- 	int value, ret = cpu__get_topology_int(cpu.cpu, "core_id", &value);
-@@ -684,6 +775,8 @@ bool aggr_cpu_id__equal(const struct aggr_cpu_id *a, const struct aggr_cpu_id *b
- 		a->node == b->node &&
- 		a->socket == b->socket &&
- 		a->die == b->die &&
-+		a->cache_lvl == b->cache_lvl &&
-+		a->cache == b->cache &&
- 		a->core == b->core &&
- 		a->cpu.cpu == b->cpu.cpu;
- }
-@@ -694,6 +787,8 @@ bool aggr_cpu_id__is_empty(const struct aggr_cpu_id *a)
- 		a->node == -1 &&
- 		a->socket == -1 &&
- 		a->die == -1 &&
-+		a->cache_lvl == -1 &&
-+		a->cache == -1 &&
- 		a->core == -1 &&
- 		a->cpu.cpu == -1;
- }
-@@ -705,6 +800,8 @@ struct aggr_cpu_id aggr_cpu_id__empty(void)
- 		.node = -1,
- 		.socket = -1,
- 		.die = -1,
-+		.cache_lvl = -1,
-+		.cache = -1,
- 		.core = -1,
- 		.cpu = (struct perf_cpu){ .cpu = -1 },
- 	};
-diff --git a/tools/perf/util/cpumap.h b/tools/perf/util/cpumap.h
-index c2f5824a3a22..d319c260ea09 100644
---- a/tools/perf/util/cpumap.h
-+++ b/tools/perf/util/cpumap.h
-@@ -20,6 +20,10 @@ struct aggr_cpu_id {
- 	int socket;
- 	/** The die id as read from /sys/devices/system/cpu/cpuX/topology/die_id. */
- 	int die;
-+	/** The cache level as read from /sys/devices/system/cpu/cpuX/cache/indexY/level */
-+	int cache_lvl;
-+	/** The cache instance ID as read from /sys/devices/system/cpu/cpuX/cache/indexY/id */
-+	int cache;
- 	/** The core id as read from /sys/devices/system/cpu/cpuX/topology/core_id. */
- 	int core;
- 	/** CPU aggregation, note there is one CPU for each SMT thread. */
-@@ -76,6 +80,12 @@ int cpu__get_socket_id(struct perf_cpu cpu);
-  * /sys/devices/system/cpu/cpuX/topology/die_id for the given CPU.
-  */
- int cpu__get_die_id(struct perf_cpu cpu);
-+/**
-+ * cpu__get_cache_id - Returns 0 if successful in populating the
-+ * cache level and cache id as read from
-+ * /sys/devices/system/cpu/cpuX/cache/indexY/{id, level} for the given CPU.
-+ */
-+int cpu__get_cache_details(struct perf_cpu cpu, struct perf_cache *cache);
- /**
-  * cpu__get_core_id - Returns the core id as read from
-  * /sys/devices/system/cpu/cpuX/topology/core_id for the given CPU.
-@@ -116,6 +126,13 @@ struct aggr_cpu_id aggr_cpu_id__socket(struct perf_cpu cpu, void *data);
-  * aggr_cpu_id_get_t.
-  */
- struct aggr_cpu_id aggr_cpu_id__die(struct perf_cpu cpu, void *data);
-+/**
-+ * aggr_cpu_id__cache - Create an aggr_cpu_id with cache instache ID, cache
-+ * level, die and socket populated with the cache instache ID, cache level,
-+ * die and socket for cpu. The function signature is compatible with
-+ * aggr_cpu_id_get_t.
-+ */
-+struct aggr_cpu_id aggr_cpu_id__cache(struct perf_cpu cpu, void *data);
- /**
-  * aggr_cpu_id__core - Create an aggr_cpu_id with the core, die and socket
-  * populated with the core, die and socket for cpu. The function signature is
-diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
-index 1fa14598b916..faf0df3c5b95 100644
---- a/tools/perf/util/event.c
-+++ b/tools/perf/util/event.c
-@@ -135,9 +135,10 @@ void perf_event__read_stat_config(struct perf_stat_config *config,
- 			config->__val = event->data[i].val;	\
- 			break;
- 
--		CASE(AGGR_MODE, aggr_mode)
--		CASE(SCALE,     scale)
--		CASE(INTERVAL,  interval)
-+		CASE(AGGR_MODE,  aggr_mode)
-+		CASE(SCALE,      scale)
-+		CASE(INTERVAL,   interval)
-+		CASE(AGGR_LEVEL, aggr_level)
- #undef CASE
- 		default:
- 			pr_warning("unknown stat config term %" PRI_lu64 "\n",
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 1b5cb20efd23..82ec668bc3ba 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -36,6 +36,7 @@
- 
- static int aggr_header_lens[] = {
- 	[AGGR_CORE] 	= 18,
-+	[AGGR_CACHE]	= 22,
- 	[AGGR_DIE] 	= 12,
- 	[AGGR_SOCKET] 	= 6,
- 	[AGGR_NODE] 	= 6,
-@@ -46,6 +47,7 @@ static int aggr_header_lens[] = {
- 
- static const char *aggr_header_csv[] = {
- 	[AGGR_CORE] 	= 	"core,cpus,",
-+	[AGGR_CACHE]	= 	"cache,cpus,",
- 	[AGGR_DIE] 	= 	"die,cpus,",
- 	[AGGR_SOCKET] 	= 	"socket,cpus,",
- 	[AGGR_NONE] 	= 	"cpu,",
-@@ -56,6 +58,7 @@ static const char *aggr_header_csv[] = {
- 
- static const char *aggr_header_std[] = {
- 	[AGGR_CORE] 	= 	"core",
-+	[AGGR_CACHE] 	= 	"cache",
- 	[AGGR_DIE] 	= 	"die",
- 	[AGGR_SOCKET] 	= 	"socket",
- 	[AGGR_NONE] 	= 	"cpu",
-@@ -193,6 +196,10 @@ static void print_aggr_id_std(struct perf_stat_config *config,
- 	case AGGR_CORE:
- 		snprintf(buf, sizeof(buf), "S%d-D%d-C%d", id.socket, id.die, id.core);
- 		break;
-+	case AGGR_CACHE:
-+		snprintf(buf, sizeof(buf), "S%d-D%d-L%d-ID%d",
-+			 id.socket, id.die, id.cache_lvl, id.cache);
-+		break;
- 	case AGGR_DIE:
- 		snprintf(buf, sizeof(buf), "S%d-D%d", id.socket, id.die);
- 		break;
-@@ -239,6 +246,10 @@ static void print_aggr_id_csv(struct perf_stat_config *config,
- 		fprintf(output, "S%d-D%d-C%d%s%d%s",
- 			id.socket, id.die, id.core, sep, nr, sep);
- 		break;
-+	case AGGR_CACHE:
-+		fprintf(config->output, "S%d-D%d-L%d-ID%d%s%d%s",
-+			id.socket, id.die, id.cache_lvl, id.cache, sep, nr, sep);
-+		break;
- 	case AGGR_DIE:
- 		fprintf(output, "S%d-D%d%s%d%s",
- 			id.socket, id.die, sep, nr, sep);
-@@ -284,6 +295,10 @@ static void print_aggr_id_json(struct perf_stat_config *config,
- 		fprintf(output, "\"core\" : \"S%d-D%d-C%d\", \"aggregate-number\" : %d, ",
- 			id.socket, id.die, id.core, nr);
- 		break;
-+	case AGGR_CACHE:
-+		fprintf(output, "\"cache\" : \"S%d-D%d-L%d-ID%d\", \"aggregate-number\" : %d, ",
-+			id.socket, id.die, id.cache_lvl, id.cache, nr);
-+		break;
- 	case AGGR_DIE:
- 		fprintf(output, "\"die\" : \"S%d-D%d\", \"aggregate-number\" : %d, ",
- 			id.socket, id.die, nr);
-@@ -1126,6 +1141,7 @@ static void print_header_interval_std(struct perf_stat_config *config,
- 	case AGGR_NODE:
- 	case AGGR_SOCKET:
- 	case AGGR_DIE:
-+	case AGGR_CACHE:
- 	case AGGR_CORE:
- 		fprintf(output, "#%*s %-*s cpus",
- 			INTERVAL_LEN - 1, "time",
-@@ -1422,6 +1438,7 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
- 
- 	switch (config->aggr_mode) {
- 	case AGGR_CORE:
-+	case AGGR_CACHE:
- 	case AGGR_DIE:
- 	case AGGR_SOCKET:
- 	case AGGR_NODE:
-diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
-index 806b32156459..f080905a3ece 100644
---- a/tools/perf/util/stat-shadow.c
-+++ b/tools/perf/util/stat-shadow.c
-@@ -20,6 +20,7 @@
-  * AGGR_GLOBAL: Use CPU 0
-  * AGGR_SOCKET: Use first CPU of socket
-  * AGGR_DIE: Use first CPU of die
-+ * AGGR_CACHE: Use first CPU of cache level instance
-  * AGGR_CORE: Use first CPU of core
-  * AGGR_NONE: Use matching CPU
-  * AGGR_THREAD: Not supported?
-diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
-index bf1794ebc916..848b3b3f5819 100644
---- a/tools/perf/util/stat.h
-+++ b/tools/perf/util/stat.h
-@@ -74,6 +74,7 @@ enum aggr_mode {
- 	AGGR_GLOBAL,
- 	AGGR_SOCKET,
- 	AGGR_DIE,
-+	AGGR_CACHE,
- 	AGGR_CORE,
- 	AGGR_THREAD,
- 	AGGR_UNSET,
-@@ -139,6 +140,7 @@ typedef struct aggr_cpu_id (*aggr_get_id_t)(struct perf_stat_config *config, str
- 
- struct perf_stat_config {
- 	enum aggr_mode		 aggr_mode;
-+	u32			 aggr_level;
- 	bool			 scale;
- 	bool			 no_inherit;
- 	bool			 identifier;
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index 9ab9308ee80c..2fe648be1e7d 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -1373,6 +1373,7 @@ int perf_event__synthesize_stat_config(struct perf_tool *tool,
- 	ADD(AGGR_MODE,	config->aggr_mode)
- 	ADD(INTERVAL,	config->interval)
- 	ADD(SCALE,	config->scale)
-+	ADD(AGGR_LEVEL,	config->aggr_level)
- 
- 	WARN_ONCE(i != PERF_STAT_CONFIG_TERM__MAX,
- 		  "stat config terms unbalanced\n");
+- struct device should be obvious, the important part really is that the
+  rust wrappers should not allow anything to be done with that which is
+  tied to the hwdevice lifetime. Which is almost everything you want to do
+  with a struct (platform_)device (aside from pure sw stuff like dmesg
+  printing).
+
+- the hwdevice is _not_ refcounted. I think in rust this maps to borrow
+  semantics, to make sure that the reference only stays valid during a
+  driver callback. The driver core/bus driver ensure that all the various
+  callbacks (pm_ops, platform_driver, ...) finish before the ->remove
+  callback starts.
+
+- usually the the link from hwdevice to drm_device is done with a
+  refcounted drm_device stored with dev_set_drvdata. For rust it'd be nice
+  if that's the Driver and fully typesafe and automatically cleaned up.
+
+- which brings us to how hwdevice cleanup works in C: That's done with all
+  the devm_ helpers for practically anything you might want to set up for
+  hw access: mappings, interrupts, .... Note that there's also
+  devm_*malloc functions, when drivers use them that's almost always a bug
+  because generally allocations should stick around with the drm_device
+  and not go down with the non-refcounted hwdevice lifetime.
+
+  For added fun the bus/driver core also uses devm_ to mange things tied
+  to the refcounted struct device, which works because devm_ nests and
+  ->probe opens up a new devm_ bucket which is torn down at ->remove time.
+  But luckily drivers should never deal with that, so for them (on the C
+  side at least) devm_ is the right lifetime model for things tied to the
+  hwdevice lifetime.
+
+  For rust this means that we really should try to tie all the hw related
+  things into devm or equivalent, and make both sure it's automatically
+  cleaned up at that point, but also no later (because if you clean up hw
+  stuff after ->remove you have a driver bug).
+
+- Similarly on the drm_device side we have drmm_. You can have some
+  refcounted things within the lifetime of drm_device (like dma_buf), but
+  if things the driver creates survive past the point of drm_device, then
+  probably something went really wrong. Either a leak or you'll blow up in
+  the C code.
+
+  So again for rust I think we should try to model this, and make sure
+  (with borrow semantics and avoiding full refcounting like the plague in
+  driver code) that driver structs and other sw things can't outlive the
+  drm_device, but also don't hold it alive unduly.
+
+- Since the point of a drm_device is to drive hardware, you need to be
+  able to safely dereference the drm_device->dev pointer and know whether
+  it's still a hwdevice (i.e. useful) or just a struct device because the
+  hw is gone. That's done with drm_dev_enter/exit and making sure that
+  ->remove calls drm_dev_unplug as the very first thing, before it starts
+  tearing down hw resources like mappings, interrupts, ...
+
+  On the C side we entirely rely on review for this, and it just doesn't
+  work. Unless exhaustively tested, hotunplug just dies, and I think for
+  more complex drivers this is something where Rust type enforcement could
+  really shine: We'd need to make sure that a driver can only get at the
+  hwtype where it's safe (bus/driver core callbacks or drm_dev_enter/exit
+  as a mutex-guard thing). Furthermore we need to ensure that that
+  drm_dev_unplug really is the first thing done in ->remove (and by
+  symmetry drm_dev_register the last thing probe does). I think a neat way
+  would be if ->probe would return a container of things that implement a
+  Uapi trait, which has register and unplug functions, and then the rust
+  glue calls that.
+
+  More aggressively would be to outright not implement ->remove for rust
+  drivers and entirely rely on the devm stack of cleanup actions. This
+  would still need a type trick to ensure that drm_dev_register is the
+  very last thing that's called (to make sure the matching drm_dev_unplug
+  is the first thing).
+
+- Despite that we have refcounted pointers going both ways from
+  drm_device<->device there's no loop, because the device->drm_device
+  reference is dropped with hwdevice lifetime (through devm if you're
+  using devm_drm_dev_alloc in a C driver), which breaks the loop. Note
+  that the drm_device->device refcount/pointer stays until the very end of
+  drm_device (need that for dmesg printing), but outside of
+  drm_dev_enter/exit it's really just a temption for bugs.
+
+- I think ideally drivers themselves should not even try to refcount
+  drm_device or device, but instead have all it all tied directly. The
+  exceptions really are only for when you have separate, free-standing
+  uapi objects (like dma_buf or dma_fence or drm_file), and in those cases
+  the combo of C code + rust glue should ensure that the refcounting is
+  done right. If a rust driver has any additional refcounting need for
+  these structs then I think we've screwed up the data lifetime model.
+
+Apologies for the wall of text. I hope I didn't forget anything crucial,
+I've been pondering this for a few weeks now :-)
+
+Imo this doesn't need to be fixed before we merge asahi, but it is
+something that I think really should fix because despite years of effort
+and all the auto-cleanup infrastructure like devm_ and drmm_ C drivers are
+still buggy by default, there's no clear understanding outside of a select
+few about the problems ("devm_kmalloc considered harmful" is some actual
+talk title), and I think this is something where Rust typing and borrow
+checker really could substantially improve the state of the art.
+
+And yes for a soc driver that's all fairly irrelevant, because it's
+physically not possible to remove a device, but for most drm drivers it is
+absolutely possible to burn them with a hotunplug (hotunplug of device
+pass-through to a vm if you can't physically hotunplug the device itself),
+so this isn't academic at all.
+
+I'll try and type up the separate mail about semantics of gem drivers and
+all that stuff tomorrow.
+
+Cheers, Daniel
+
+> ---
+>  rust/bindings/bindings_helper.h |   3 +
+>  rust/kernel/drm/device.rs       |  76 +++++++++
+>  rust/kernel/drm/drv.rs          | 339 ++++++++++++++++++++++++++++++++++++++++
+>  rust/kernel/drm/mod.rs          |   2 +
+>  4 files changed, 420 insertions(+)
+> 
+> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+> index 2687bef1676f..2a999138c4ae 100644
+> --- a/rust/bindings/bindings_helper.h
+> +++ b/rust/bindings/bindings_helper.h
+> @@ -6,10 +6,13 @@
+>   * Sorted alphabetically.
+>   */
+>  
+> +#include <drm/drm_device.h>
+> +#include <drm/drm_drv.h>
+>  #include <drm/drm_ioctl.h>
+>  #include <linux/delay.h>
+>  #include <linux/device.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/fs.h>
+>  #include <linux/ioctl.h>
+>  #include <linux/io-pgtable.h>
+>  #include <linux/ktime.h>
+> diff --git a/rust/kernel/drm/device.rs b/rust/kernel/drm/device.rs
+> new file mode 100644
+> index 000000000000..6007f941137a
+> --- /dev/null
+> +++ b/rust/kernel/drm/device.rs
+> @@ -0,0 +1,76 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +
+> +//! DRM device.
+> +//!
+> +//! C header: [`include/linux/drm/drm_device.h`](../../../../include/linux/drm/drm_device.h)
+> +
+> +use crate::{bindings, device, drm, types::ForeignOwnable};
+> +use core::marker::PhantomData;
+> +
+> +/// Represents a reference to a DRM device. The device is reference-counted and is guaranteed to
+> +/// not be dropped while this object is alive.
+> +pub struct Device<T: drm::drv::Driver> {
+> +    // Type invariant: ptr must be a valid and initialized drm_device,
+> +    // and this value must either own a reference to it or the caller
+> +    // must ensure that it is never dropped if the reference is borrowed.
+> +    pub(super) ptr: *mut bindings::drm_device,
+> +    _p: PhantomData<T>,
+> +}
+> +
+> +impl<T: drm::drv::Driver> Device<T> {
+> +    // Not intended to be called externally, except via declare_drm_ioctls!()
+> +    #[doc(hidden)]
+> +    pub unsafe fn from_raw(raw: *mut bindings::drm_device) -> Device<T> {
+> +        Device {
+> +            ptr: raw,
+> +            _p: PhantomData,
+> +        }
+> +    }
+> +
+> +    #[allow(dead_code)]
+> +    pub(crate) fn raw(&self) -> *const bindings::drm_device {
+> +        self.ptr
+> +    }
+> +
+> +    pub(crate) fn raw_mut(&mut self) -> *mut bindings::drm_device {
+> +        self.ptr
+> +    }
+> +
+> +    /// Returns a borrowed reference to the user data associated with this Device.
+> +    pub fn data(&self) -> <T::Data as ForeignOwnable>::Borrowed<'_> {
+> +        unsafe { T::Data::borrow((*self.ptr).dev_private) }
+> +    }
+> +}
+> +
+> +impl<T: drm::drv::Driver> Drop for Device<T> {
+> +    fn drop(&mut self) {
+> +        // SAFETY: By the type invariants, we know that `self` owns a reference, so it is safe to
+> +        // relinquish it now.
+> +        unsafe { bindings::drm_dev_put(self.ptr) };
+> +    }
+> +}
+> +
+> +impl<T: drm::drv::Driver> Clone for Device<T> {
+> +    fn clone(&self) -> Self {
+> +        // SAFETY: We get a new reference and then create a new owning object from the raw pointer
+> +        unsafe {
+> +            bindings::drm_dev_get(self.ptr);
+> +            Device::from_raw(self.ptr)
+> +        }
+> +    }
+> +}
+> +
+> +// SAFETY: `Device` only holds a pointer to a C device, which is safe to be used from any thread.
+> +unsafe impl<T: drm::drv::Driver> Send for Device<T> {}
+> +
+> +// SAFETY: `Device` only holds a pointer to a C device, references to which are safe to be used
+> +// from any thread.
+> +unsafe impl<T: drm::drv::Driver> Sync for Device<T> {}
+> +
+> +// Make drm::Device work for dev_info!() and friends
+> +unsafe impl<T: drm::drv::Driver> device::RawDevice for Device<T> {
+> +    fn raw_device(&self) -> *mut bindings::device {
+> +        // SAFETY: ptr must be valid per the type invariant
+> +        unsafe { (*self.ptr).dev }
+> +    }
+> +}
+> diff --git a/rust/kernel/drm/drv.rs b/rust/kernel/drm/drv.rs
+> new file mode 100644
+> index 000000000000..29a465515dc9
+> --- /dev/null
+> +++ b/rust/kernel/drm/drv.rs
+> @@ -0,0 +1,339 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+> +
+> +//! DRM driver core.
+> +//!
+> +//! C header: [`include/linux/drm/drm_drv.h`](../../../../include/linux/drm/drm_drv.h)
+> +
+> +use crate::{
+> +    bindings, device, drm,
+> +    error::code::*,
+> +    error::from_kernel_err_ptr,
+> +    error::{Error, Result},
+> +    prelude::*,
+> +    private::Sealed,
+> +    str::CStr,
+> +    types::ForeignOwnable,
+> +    ThisModule,
+> +};
+> +use core::{
+> +    marker::{PhantomData, PhantomPinned},
+> +    pin::Pin,
+> +};
+> +use macros::vtable;
+> +
+> +/// Driver use the GEM memory manager. This should be set for all modern drivers.
+> +pub const FEAT_GEM: u32 = bindings::drm_driver_feature_DRIVER_GEM;
+> +/// Driver supports mode setting interfaces (KMS).
+> +pub const FEAT_MODESET: u32 = bindings::drm_driver_feature_DRIVER_MODESET;
+> +/// Driver supports dedicated render nodes.
+> +pub const FEAT_RENDER: u32 = bindings::drm_driver_feature_DRIVER_RENDER;
+> +/// Driver supports the full atomic modesetting userspace API.
+> +///
+> +/// Drivers which only use atomic internally, but do not support the full userspace API (e.g. not
+> +/// all properties converted to atomic, or multi-plane updates are not guaranteed to be tear-free)
+> +/// should not set this flag.
+> +pub const FEAT_ATOMIC: u32 = bindings::drm_driver_feature_DRIVER_ATOMIC;
+> +/// Driver supports DRM sync objects for explicit synchronization of command submission.
+> +pub const FEAT_SYNCOBJ: u32 = bindings::drm_driver_feature_DRIVER_SYNCOBJ;
+> +/// Driver supports the timeline flavor of DRM sync objects for explicit synchronization of command
+> +/// submission.
+> +pub const FEAT_SYNCOBJ_TIMELINE: u32 = bindings::drm_driver_feature_DRIVER_SYNCOBJ_TIMELINE;
+> +
+> +/// Information data for a DRM Driver.
+> +pub struct DriverInfo {
+> +    /// Driver major version.
+> +    pub major: i32,
+> +    /// Driver minor version.
+> +    pub minor: i32,
+> +    /// Driver patchlevel version.
+> +    pub patchlevel: i32,
+> +    /// Driver name.
+> +    pub name: &'static CStr,
+> +    /// Driver description.
+> +    pub desc: &'static CStr,
+> +    /// Driver date.
+> +    pub date: &'static CStr,
+> +}
+> +
+> +/// Internal memory management operation set, normally created by memory managers (e.g. GEM).
+> +///
+> +/// See `kernel::drm::gem` and `kernel::drm::gem::shmem`.
+> +pub struct AllocOps {
+> +    pub(crate) gem_create_object: Option<
+> +        unsafe extern "C" fn(
+> +            dev: *mut bindings::drm_device,
+> +            size: usize,
+> +        ) -> *mut bindings::drm_gem_object,
+> +    >,
+> +    pub(crate) prime_handle_to_fd: Option<
+> +        unsafe extern "C" fn(
+> +            dev: *mut bindings::drm_device,
+> +            file_priv: *mut bindings::drm_file,
+> +            handle: u32,
+> +            flags: u32,
+> +            prime_fd: *mut core::ffi::c_int,
+> +        ) -> core::ffi::c_int,
+> +    >,
+> +    pub(crate) prime_fd_to_handle: Option<
+> +        unsafe extern "C" fn(
+> +            dev: *mut bindings::drm_device,
+> +            file_priv: *mut bindings::drm_file,
+> +            prime_fd: core::ffi::c_int,
+> +            handle: *mut u32,
+> +        ) -> core::ffi::c_int,
+> +    >,
+> +    pub(crate) gem_prime_import: Option<
+> +        unsafe extern "C" fn(
+> +            dev: *mut bindings::drm_device,
+> +            dma_buf: *mut bindings::dma_buf,
+> +        ) -> *mut bindings::drm_gem_object,
+> +    >,
+> +    pub(crate) gem_prime_import_sg_table: Option<
+> +        unsafe extern "C" fn(
+> +            dev: *mut bindings::drm_device,
+> +            attach: *mut bindings::dma_buf_attachment,
+> +            sgt: *mut bindings::sg_table,
+> +        ) -> *mut bindings::drm_gem_object,
+> +    >,
+> +    pub(crate) gem_prime_mmap: Option<
+> +        unsafe extern "C" fn(
+> +            obj: *mut bindings::drm_gem_object,
+> +            vma: *mut bindings::vm_area_struct,
+> +        ) -> core::ffi::c_int,
+> +    >,
+> +    pub(crate) dumb_create: Option<
+> +        unsafe extern "C" fn(
+> +            file_priv: *mut bindings::drm_file,
+> +            dev: *mut bindings::drm_device,
+> +            args: *mut bindings::drm_mode_create_dumb,
+> +        ) -> core::ffi::c_int,
+> +    >,
+> +    pub(crate) dumb_map_offset: Option<
+> +        unsafe extern "C" fn(
+> +            file_priv: *mut bindings::drm_file,
+> +            dev: *mut bindings::drm_device,
+> +            handle: u32,
+> +            offset: *mut u64,
+> +        ) -> core::ffi::c_int,
+> +    >,
+> +    pub(crate) dumb_destroy: Option<
+> +        unsafe extern "C" fn(
+> +            file_priv: *mut bindings::drm_file,
+> +            dev: *mut bindings::drm_device,
+> +            handle: u32,
+> +        ) -> core::ffi::c_int,
+> +    >,
+> +}
+> +
+> +/// Trait for memory manager implementations. Implemented internally.
+> +pub trait AllocImpl: Sealed {
+> +    /// The C callback operations for this memory manager.
+> +    const ALLOC_OPS: AllocOps;
+> +}
+> +
+> +/// A DRM driver implementation.
+> +#[vtable]
+> +pub trait Driver {
+> +    /// Context data associated with the DRM driver
+> +    ///
+> +    /// Determines the type of the context data passed to each of the methods of the trait.
+> +    type Data: ForeignOwnable + Sync + Send;
+> +
+> +    /// The type used to manage memory for this driver.
+> +    ///
+> +    /// Should be either `drm::gem::Object<T>` or `drm::gem::shmem::Object<T>`.
+> +    type Object: AllocImpl;
+> +
+> +    /// Driver metadata
+> +    const INFO: DriverInfo;
+> +
+> +    /// Feature flags
+> +    const FEATURES: u32;
+> +
+> +    /// IOCTL list. See `kernel::drm::ioctl::declare_drm_ioctls!{}`.
+> +    const IOCTLS: &'static [drm::ioctl::DrmIoctlDescriptor];
+> +}
+> +
+> +/// A registration of a DRM device
+> +///
+> +/// # Invariants:
+> +///
+> +/// drm is always a valid pointer to an allocated drm_device
+> +pub struct Registration<T: Driver> {
+> +    drm: drm::device::Device<T>,
+> +    registered: bool,
+> +    fops: bindings::file_operations,
+> +    vtable: Pin<Box<bindings::drm_driver>>,
+> +    _p: PhantomData<T>,
+> +    _pin: PhantomPinned,
+> +}
+> +
+> +#[cfg(CONFIG_DRM_LEGACY)]
+> +macro_rules! drm_legacy_fields {
+> +    ( $($field:ident: $val:expr),* $(,)? ) => {
+> +        bindings::drm_driver {
+> +            $( $field: $val ),*,
+> +            firstopen: None,
+> +            preclose: None,
+> +            dma_ioctl: None,
+> +            dma_quiescent: None,
+> +            context_dtor: None,
+> +            irq_handler: None,
+> +            irq_preinstall: None,
+> +            irq_postinstall: None,
+> +            irq_uninstall: None,
+> +            get_vblank_counter: None,
+> +            enable_vblank: None,
+> +            disable_vblank: None,
+> +            dev_priv_size: 0,
+> +        }
+> +    }
+> +}
+> +
+> +#[cfg(not(CONFIG_DRM_LEGACY))]
+> +macro_rules! drm_legacy_fields {
+> +    ( $($field:ident: $val:expr),* $(,)? ) => {
+> +        bindings::drm_driver {
+> +            $( $field: $val ),*
+> +        }
+> +    }
+> +}
+> +
+> +/// Registers a DRM device with the rest of the kernel.
+> +///
+> +/// It automatically picks up THIS_MODULE.
+> +#[allow(clippy::crate_in_macro_def)]
+> +#[macro_export]
+> +macro_rules! drm_device_register {
+> +    ($reg:expr, $data:expr, $flags:expr $(,)?) => {{
+> +        $crate::drm::drv::Registration::register($reg, $data, $flags, &crate::THIS_MODULE)
+> +    }};
+> +}
+> +
+> +impl<T: Driver> Registration<T> {
+> +    const VTABLE: bindings::drm_driver = drm_legacy_fields! {
+> +        load: None,
+> +        open: None, // TODO: File abstraction
+> +        postclose: None, // TODO: File abstraction
+> +        lastclose: None,
+> +        unload: None,
+> +        release: None,
+> +        master_set: None,
+> +        master_drop: None,
+> +        debugfs_init: None,
+> +        gem_create_object: T::Object::ALLOC_OPS.gem_create_object,
+> +        prime_handle_to_fd: T::Object::ALLOC_OPS.prime_handle_to_fd,
+> +        prime_fd_to_handle: T::Object::ALLOC_OPS.prime_fd_to_handle,
+> +        gem_prime_import: T::Object::ALLOC_OPS.gem_prime_import,
+> +        gem_prime_import_sg_table: T::Object::ALLOC_OPS.gem_prime_import_sg_table,
+> +        gem_prime_mmap: T::Object::ALLOC_OPS.gem_prime_mmap,
+> +        dumb_create: T::Object::ALLOC_OPS.dumb_create,
+> +        dumb_map_offset: T::Object::ALLOC_OPS.dumb_map_offset,
+> +        dumb_destroy: T::Object::ALLOC_OPS.dumb_destroy,
+> +
+> +        major: T::INFO.major,
+> +        minor: T::INFO.minor,
+> +        patchlevel: T::INFO.patchlevel,
+> +        name: T::INFO.name.as_char_ptr() as *mut _,
+> +        desc: T::INFO.desc.as_char_ptr() as *mut _,
+> +        date: T::INFO.date.as_char_ptr() as *mut _,
+> +
+> +        driver_features: T::FEATURES,
+> +        ioctls: T::IOCTLS.as_ptr(),
+> +        num_ioctls: T::IOCTLS.len() as i32,
+> +        fops: core::ptr::null_mut(),
+> +    };
+> +
+> +    /// Creates a new [`Registration`] but does not register it yet.
+> +    ///
+> +    /// It is allowed to move.
+> +    pub fn new(parent: &dyn device::RawDevice) -> Result<Self> {
+> +        let vtable = Pin::new(Box::try_new(Self::VTABLE)?);
+> +        let raw_drm = unsafe { bindings::drm_dev_alloc(&*vtable, parent.raw_device()) };
+> +        let raw_drm = from_kernel_err_ptr(raw_drm)?;
+> +
+> +        // The reference count is one, and now we take ownership of that reference as a
+> +        // drm::device::Device.
+> +        let drm = unsafe { drm::device::Device::from_raw(raw_drm) };
+> +
+> +        Ok(Self {
+> +            drm,
+> +            registered: false,
+> +            vtable,
+> +            fops: Default::default(), // TODO: GEM abstraction
+> +            _pin: PhantomPinned,
+> +            _p: PhantomData,
+> +        })
+> +    }
+> +
+> +    /// Registers a DRM device with the rest of the kernel.
+> +    ///
+> +    /// Users are encouraged to use the [`drm_device_register!()`] macro because it automatically
+> +    /// picks up the current module.
+> +    pub fn register(
+> +        self: Pin<&mut Self>,
+> +        data: T::Data,
+> +        flags: usize,
+> +        module: &'static ThisModule,
+> +    ) -> Result {
+> +        if self.registered {
+> +            // Already registered.
+> +            return Err(EINVAL);
+> +        }
+> +
+> +        // SAFETY: We never move out of `this`.
+> +        let this = unsafe { self.get_unchecked_mut() };
+> +        let data_pointer = <T::Data as ForeignOwnable>::into_foreign(data);
+> +        // SAFETY: `drm` is valid per the type invariant
+> +        unsafe {
+> +            (*this.drm.raw_mut()).dev_private = data_pointer as *mut _;
+> +        }
+> +
+> +        this.fops.owner = module.0;
+> +        this.vtable.fops = &this.fops;
+> +
+> +        // SAFETY: The device is now initialized and ready to be registered.
+> +        let ret = unsafe { bindings::drm_dev_register(this.drm.raw_mut(), flags as u64) };
+> +        if ret < 0 {
+> +            // SAFETY: `data_pointer` was returned by `into_foreign` above.
+> +            unsafe { T::Data::from_foreign(data_pointer) };
+> +            return Err(Error::from_kernel_errno(ret));
+> +        }
+> +
+> +        this.registered = true;
+> +        Ok(())
+> +    }
+> +
+> +    /// Returns a reference to the `Device` instance for this registration.
+> +    pub fn device(&self) -> &drm::device::Device<T> {
+> +        &self.drm
+> +    }
+> +}
+> +
+> +// SAFETY: `Registration` doesn't offer any methods or access to fields when shared between threads
+> +// or CPUs, so it is safe to share it.
+> +unsafe impl<T: Driver> Sync for Registration<T> {}
+> +
+> +// SAFETY: Registration with and unregistration from the drm subsystem can happen from any thread.
+> +// Additionally, `T::Data` (which is dropped during unregistration) is `Send`, so it is ok to move
+> +// `Registration` to different threads.
+> +#[allow(clippy::non_send_fields_in_send_ty)]
+> +unsafe impl<T: Driver> Send for Registration<T> {}
+> +
+> +impl<T: Driver> Drop for Registration<T> {
+> +    /// Removes the registration from the kernel if it has completed successfully before.
+> +    fn drop(&mut self) {
+> +        if self.registered {
+> +            // Get a pointer to the data stored in device before destroying it.
+> +            // SAFETY: `drm` is valid per the type invariant
+> +            let data_pointer = unsafe { (*self.drm.raw_mut()).dev_private };
+> +
+> +            // SAFETY: Since `registered` is true, `self.drm` is both valid and registered.
+> +            unsafe { bindings::drm_dev_unregister(self.drm.raw_mut()) };
+> +
+> +            // Free data as well.
+> +            // SAFETY: `data_pointer` was returned by `into_foreign` during registration.
+> +            unsafe { <T::Data as ForeignOwnable>::from_foreign(data_pointer) };
+> +        }
+> +    }
+> +}
+> diff --git a/rust/kernel/drm/mod.rs b/rust/kernel/drm/mod.rs
+> index 9ec6d7cbcaf3..69376b3c6db9 100644
+> --- a/rust/kernel/drm/mod.rs
+> +++ b/rust/kernel/drm/mod.rs
+> @@ -2,4 +2,6 @@
+>  
+>  //! DRM subsystem abstractions.
+>  
+> +pub mod device;
+> +pub mod drv;
+>  pub mod ioctl;
+> 
+> -- 
+> 2.35.1
+> 
+
 -- 
-2.34.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
