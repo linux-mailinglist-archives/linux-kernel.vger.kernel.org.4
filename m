@@ -2,94 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C673B6D7CDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B8B6D7CDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbjDEMnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
+        id S237745AbjDEMnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237141AbjDEMnB (ORCPT
+        with ESMTP id S238077AbjDEMnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:43:01 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C3811A;
-        Wed,  5 Apr 2023 05:43:00 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id cu4so26052689qvb.3;
-        Wed, 05 Apr 2023 05:43:00 -0700 (PDT)
+        Wed, 5 Apr 2023 08:43:17 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903644ECF;
+        Wed,  5 Apr 2023 05:43:10 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id o12so13698764ilh.13;
+        Wed, 05 Apr 2023 05:43:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680698579; x=1683290579;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20210112; t=1680698590;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MTAFf4OGc3JS+3A1a6rqMFwtwcsbwdl9NJcd4nNwT+s=;
-        b=M7Rcawu2mcuUHH+1YQYc0Qtrca+1bdFMX7VnNA+zmum1wzpEtjkRRW0HBzcsE/1NJ+
-         CwY2X4dISP4ImlL4OwVfU5RNqKji+a+eP65Xww9FptlwQQS4H79GsT9p3nMqTGG9gImR
-         1KMaFzGnB/mEXDgHKHfdRBZsx8zVUBresVaf24VlKvT51nQbJyWG55I/xWXKEfDWfLKC
-         31eutXqXaYOGD9abGXVpqplMXNz5jm1FMUtXw6Hp+TUMl4ddqg7msjfr2xuyqLQagf7K
-         IuJ7njMBRZC2RggxQPFUXE2X9UtevTvsKTNfPfq8gHhWADol4jDYmYCOZ6RV39VkLafg
-         De5Q==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pQjqcgA8pKRrYMvSnqAcMg2RbvE4YH+9TK7WI5xgN9Q=;
+        b=DLL+2/u4lHOs75TGVoSWQd2gzSVo0xBKfIopyAt4y/w0yA1iZLVAK2YZbN5Q+it1/p
+         wD8PjvK07K8xcG7WdNyCJVfHX/I3kwCtZbiJ9FhsoUb/Eqv7pIgra7b1xmRND3F7BNW+
+         VhIyaYkxNO4LywYXJb8YikwrecJR+UTmSa0Y1T39u3QeZTEyJ6Kq8e/+wXJ4v+lZPNgp
+         K5bg7SLoPI1eodFLHoFwhgMXJ1jaQBFrr0K52LOZPAusqhdIcgOAeY+x+mqF1xsfHXBH
+         lcR7sPbdl16TogvsGZcwZodDJKx8vjWSyBj3BS0mkzJsPlwXLT3EGd7+PQcOVR5lFOqs
+         X6cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680698579; x=1683290579;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20210112; t=1680698590;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MTAFf4OGc3JS+3A1a6rqMFwtwcsbwdl9NJcd4nNwT+s=;
-        b=gJFPGmHV0OkuJIFJ4P1VhDjuJFvKfoKseQhXS5U8u6OhtTXYmW+3GFBx6LosAfID7C
-         1ukXZJ15tY2vS8/4F1rHZIJMyQfpi1eslbxTwE/iwUfvKNpDv37TVS5Wh+JUl1HT34Iu
-         /3sZfYYFkQ219Esyk8ylf9UtVTKOISvP7ESuaInIOsi/WYnXypTGkWz04n0rjOk8PT/h
-         JSO4jm8HT+h/PjDcDfNAIHHdjozAIKNUN0nUq/ckJ7pMMs4hFpvCVBZcBPVOVd4UKoXJ
-         Bpx6jEz7D3AD0EGgBlCeGTGAu5pUuyi0fuzV5Tim0ghrvfvYTN8fRBPzOIxj2OPNtBOm
-         Up0A==
-X-Gm-Message-State: AAQBX9c6sdE2sK8bKh4M78xiKWb6SuZ+Gf8znO9PECXI6oRjKv44qOUv
-        SRbsJDR+ZiF3w+LvwoH0S4A=
-X-Google-Smtp-Source: AKy350b0BlbXUr9SfFNX2w2ky6/yZz/Q7/m4ca6EQjDQy3eBX2nJgNUvI1TvFwjjn1xi+voc9a6xXQ==
-X-Received: by 2002:a05:6214:40c:b0:5e0:63ec:5d7b with SMTP id z12-20020a056214040c00b005e063ec5d7bmr10271651qvx.28.1680698579301;
-        Wed, 05 Apr 2023 05:42:59 -0700 (PDT)
-Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id j3-20020ad453a3000000b005dd8b9345edsm4145230qvv.133.2023.04.05.05.42.55
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pQjqcgA8pKRrYMvSnqAcMg2RbvE4YH+9TK7WI5xgN9Q=;
+        b=EPCuwmrplwVNxnfrpMipXiVrKZru8B6poPr3c6r3IxZEFclkkkzAR+bo4pEllwneIl
+         +ssOUdJa83OKbL++4qOpdiSPGtdoO5JAOX0DTzi7Z87m/srMavyTQsDIjzS+05g16bDQ
+         y0p4EPoNRx0MQ31WyzXMldxML3OGm/A9nsLfnZZvE3KSNXqqZshT8SICA43lyBBndV/B
+         A+USAzavveD4nn1b98cY0aXh2RcaelJE8IBiMm9DtWcF/k5tR66RbCL9adWDai7YtR09
+         b557VfgxDFG+A9O7YGjDlLqV5rrZBAZAbEEmQT5+9/AXuYCEU7eAZUEJwJNi8bYKhD6R
+         Y83Q==
+X-Gm-Message-State: AAQBX9eG+zms6XtumIdgpMjpVdADzzEP3lr4/ulS9ayJbAcv5YVvkEis
+        C67WxpFVtpvECU7buLls4b/L4rrGk3k=
+X-Google-Smtp-Source: AKy350b4bFo114zw33Qvq6jEGNIX5pUZD4DOWQONROMBCIInZeS1OK3VpSnWIhYuzckRVfkAIX5WEQ==
+X-Received: by 2002:a92:c84e:0:b0:311:137e:83c6 with SMTP id b14-20020a92c84e000000b00311137e83c6mr4178516ilq.22.1680698589793;
+        Wed, 05 Apr 2023 05:43:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w17-20020a927b11000000b00325e09725c9sm3803809ilc.81.2023.04.05.05.43.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 05:42:58 -0700 (PDT)
-Message-ID: <03ed8642-e521-f079-05b8-de9ffa97237a@gmail.com>
-Date:   Wed, 5 Apr 2023 05:42:53 -0700
+        Wed, 05 Apr 2023 05:43:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dc4cbe03-e782-b659-8fdb-9f4519ce8fa0@roeck-us.net>
+Date:   Wed, 5 Apr 2023 05:43:06 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 00/12] Rework PHY reset handling
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/4] mfd: intel-m10-bmc: Move m10bmc_sys_read() away from
+ header
 Content-Language: en-US
-To:     Marco Felsch <m.felsch@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        linux-fpga@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
+ <20230405080152.6732-4-ilpo.jarvinen@linux.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230405080152.6732-4-ilpo.jarvinen@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,92 +84,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
-
-On 4/5/2023 2:26 AM, Marco Felsch wrote:
-> The current phy reset handling is broken in a way that it needs
-> pre-running firmware to setup the phy initially. Since the very first
-> step is to readout the PHYID1/2 registers before doing anything else.
+On 4/5/23 01:01, Ilpo Järvinen wrote:
+> Move m10bmc_sys_read() out from the header to prepare it for adding
+> more code into the function which would make it too large to be a
+> static inline any more.
 > 
-> The whole dection logic will fall apart if the pre-running firmware
-> don't setup the phy accordingly or the kernel boot resets GPIOs states
-> or disables clocks. In such cases the PHYID1/2 read access will fail and
-> so the whole detection will fail.
-
-PHY reset is a bit too broad and should need some clarifications between:
-
-- external reset to the PHY whereby a hardware pin on the PHY IC may be used
-
-- internal reset to the PHY whereby we call into the PHY driver 
-soft_reset function to have the PHY software reset itself
-
-You are changing the way the former happens, not the latter, at least 
-not changing the latter intentionally if at all.
-
-This is important because your cover letter will be in the merge commit 
-in the networking tree.
-
-Will do a more thorough review on a patch by patch basis. Thanks.
-
+> While at it, replace the vague wording in function comment with more
+> precise statements.
 > 
-> I fixed this via this series, the fix will include a new kernel API
-> called phy_device_atomic_register() which will do all necessary things
-> and return a 'struct phy_device' on success. So setting up a phy and the
-> phy state machine is more convenient.
-> 
-> I tested the series on a i.MX8MP-EVK and a custom board which have a
-> TJA1102 dual-port ethernet phy. Other testers are welcome :)
-> 
-> Regards,
->    Marco
-> 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
-> Marco Felsch (12):
->        net: phy: refactor phy_device_create function
->        net: phy: refactor get_phy_device function
->        net: phy: add phy_device_set_miits helper
->        net: phy: unify get_phy_device and phy_device_create parameter list
->        net: phy: add phy_id_broken support
->        net: phy: add phy_device_atomic_register helper
->        net: mdio: make use of phy_device_atomic_register helper
->        net: phy: add possibility to specify mdio device parent
->        net: phy: nxp-tja11xx: make use of phy_device_atomic_register()
->        of: mdio: remove now unused of_mdiobus_phy_device_register()
->        net: mdiobus: remove now unused fwnode helpers
->        net: phy: add default gpio assert/deassert delay
-> 
->   Documentation/firmware-guide/acpi/dsd/phy.rst     |   2 +-
->   MAINTAINERS                                       |   1 -
->   drivers/net/ethernet/adi/adin1110.c               |   6 +-
->   drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c       |   8 +-
->   drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c |  11 +-
->   drivers/net/ethernet/socionext/netsec.c           |   7 +-
->   drivers/net/mdio/Kconfig                          |   7 -
->   drivers/net/mdio/Makefile                         |   1 -
->   drivers/net/mdio/acpi_mdio.c                      |  20 +-
->   drivers/net/mdio/fwnode_mdio.c                    | 183 ------------
->   drivers/net/mdio/mdio-xgene.c                     |   6 +-
->   drivers/net/mdio/of_mdio.c                        |  23 +-
->   drivers/net/phy/bcm-phy-ptp.c                     |   2 +-
->   drivers/net/phy/dp83640.c                         |   2 +-
->   drivers/net/phy/fixed_phy.c                       |   6 +-
->   drivers/net/phy/mdio_bus.c                        |   7 +-
->   drivers/net/phy/micrel.c                          |   2 +-
->   drivers/net/phy/mscc/mscc_ptp.c                   |   2 +-
->   drivers/net/phy/nxp-c45-tja11xx.c                 |   2 +-
->   drivers/net/phy/nxp-tja11xx.c                     |  47 ++-
->   drivers/net/phy/phy_device.c                      | 348 +++++++++++++++++++---
->   drivers/net/phy/sfp.c                             |   7 +-
->   include/linux/fwnode_mdio.h                       |  35 ---
->   include/linux/of_mdio.h                           |   8 -
->   include/linux/phy.h                               |  46 ++-
->   25 files changed, 442 insertions(+), 347 deletions(-)
-> ---
-> base-commit: 054fbf7ff8143d35ca7d3bb5414bb44ee1574194
-> change-id: 20230405-net-next-topic-net-phy-reset-4f79ff7df4a0
-> 
-> Best regards,
+>   drivers/hwmon/intel-m10-bmc-hwmon.c |  1 +
 
--- 
-Florian
+For hwmon:
+
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+
+>   drivers/mfd/intel-m10-bmc-core.c    | 14 ++++++++++++++
+>   include/linux/mfd/intel-m10-bmc.h   | 17 +----------------
+>   3 files changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
+> index 2f0323c14bab..92900ce7986b 100644
+> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
+> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
+> @@ -794,3 +794,4 @@ MODULE_DEVICE_TABLE(platform, intel_m10bmc_hwmon_ids);
+>   MODULE_AUTHOR("Intel Corporation");
+>   MODULE_DESCRIPTION("Intel MAX 10 BMC hardware monitor");
+>   MODULE_LICENSE("GPL");
+> +MODULE_IMPORT_NS(INTEL_M10_BMC_CORE);
+> diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
+> index 879d98b9b14d..4a1bfe135293 100644
+> --- a/drivers/mfd/intel-m10-bmc-core.c
+> +++ b/drivers/mfd/intel-m10-bmc-core.c
+> @@ -12,6 +12,20 @@
+>   #include <linux/mfd/intel-m10-bmc.h>
+>   #include <linux/module.h>
+>   
+> +/*
+> + * This function helps to simplify the accessing of the system registers.
+> + *
+> + * The base of the system registers is configured through the struct
+> + * csr_map.
+> + */
+> +int m10bmc_sys_read(struct intel_m10bmc *m10bmc, unsigned int offset, unsigned int *val)
+> +{
+> +	const struct m10bmc_csr_map *csr_map = m10bmc->info->csr_map;
+> +
+> +	return m10bmc_raw_read(m10bmc, csr_map->base + offset, val);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(m10bmc_sys_read, INTEL_M10_BMC_CORE);
+> +
+>   int m10bmc_sys_update_bits(struct intel_m10bmc *m10bmc, unsigned int offset,
+>   			   unsigned int msk, unsigned int val)
+>   {
+> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> index 5418f7279ed0..252644fa61be 100644
+> --- a/include/linux/mfd/intel-m10-bmc.h
+> +++ b/include/linux/mfd/intel-m10-bmc.h
+> @@ -267,22 +267,7 @@ m10bmc_raw_read(struct intel_m10bmc *m10bmc, unsigned int addr,
+>   	return ret;
+>   }
+>   
+> -/*
+> - * The base of the system registers could be configured by HW developers, and
+> - * in HW SPEC, the base is not added to the addresses of the system registers.
+> - *
+> - * This function helps to simplify the accessing of the system registers. And if
+> - * the base is reconfigured in HW, SW developers could simply change the
+> - * csr_map's base accordingly.
+> - */
+> -static inline int m10bmc_sys_read(struct intel_m10bmc *m10bmc, unsigned int offset,
+> -				  unsigned int *val)
+> -{
+> -	const struct m10bmc_csr_map *csr_map = m10bmc->info->csr_map;
+> -
+> -	return m10bmc_raw_read(m10bmc, csr_map->base + offset, val);
+> -}
+> -
+> +int m10bmc_sys_read(struct intel_m10bmc *m10bmc, unsigned int offset, unsigned int *val);
+>   int m10bmc_sys_update_bits(struct intel_m10bmc *m10bmc, unsigned int offset,
+>   			   unsigned int msk, unsigned int val);
+>   
+
