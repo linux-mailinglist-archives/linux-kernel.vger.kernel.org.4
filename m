@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB92C6D7688
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BE06D7689
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237441AbjDEILs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S237470AbjDEILv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237484AbjDEILc (ORCPT
+        with ESMTP id S237485AbjDEILc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Apr 2023 04:11:32 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276F4170C
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:11:12 -0700 (PDT)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 848CC20008;
-        Wed,  5 Apr 2023 08:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680682271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SfRGdxft8F35ztQWK4epGjEigWPayw4mqeBU8IdnBGI=;
-        b=X/x32SlkhxwuTHk8p+a5b8QDcWwv/ae/wWcpEo2P+gJHkOfcQ7QOOo3P3VgNpWPWT1tLJh
-        rGuTsrcZvtZxaUeOczjL1uBLlAxGfptiYAbLTdGC2g6Y8KG6yEOVISX1PqbAaOXYb3pQxR
-        uWTw9Tz+DY/VWjAscXFmlcvW4JjzW+llMCpxtLm3lBGTJ/eEW5M2eEx91fWGr36yI3lnjf
-        6e2Sn472lfGTlS9oRNrpzOqcmshXv576tllXOjZ7HHmYDCQoYUezGGWnFFnHtkPDh7Lzfh
-        9rSD7JkXB98yyA2QD8YBnE6Ntk5MpcK9BO1t8ZOzes76hv7+pS4ZcxKnyPOlkQ==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Marek Vasut <marex@denx.de>,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH v2 2/2] drm: bridge: ldb: add support for using channel 1 only
-Date:   Wed,  5 Apr 2023 10:10:57 +0200
-Message-Id: <20230405081058.2347130-2-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230405081058.2347130-1-luca.ceresoli@bootlin.com>
-References: <20230405081058.2347130-1-luca.ceresoli@bootlin.com>
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DC2149D8;
+        Wed,  5 Apr 2023 01:11:14 -0700 (PDT)
+Received: from [192.168.2.41] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EDD69210DECB;
+        Wed,  5 Apr 2023 01:10:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EDD69210DECB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680682261;
+        bh=dOEo2EG+hg+F81Lh9lwEURZ0dL7IZCs7WplCBPaibvo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YC8cjMJ20KxMNhpu8rYiufuNP1UOoAx+dj565ZmzCfHdtTygT+Tx/FCmslVgL76R4
+         /uTKCk2TSXlGpvDPp/mb36P1ZniAUsgYM5srfr+ZsKiQ0I7Mf7hMuiLZ8uuQ1F6M8q
+         bcxqRa5cWCqV/eThGBPjjg96SP7QR9wsD2CVeGH8=
+Message-ID: <35f6b321-1668-2b62-cb47-3f3760be2e1d@linux.microsoft.com>
+Date:   Wed, 5 Apr 2023 10:10:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 0/8] Support ACPI PSP on Hyper-V
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kalra, Ashish" <ashish.kalra@amd.com>,
+        linux-crypto@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
+ <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
+ <1d25221c-eaab-0f97-83aa-8b4fbe3a53ed@linux.microsoft.com>
+ <20230322181541.GEZBtFzRAMcH9BAzUe@fat_crate.local>
+ <ecf005b1-ddb9-da4c-4526-28df4806426c@linux.microsoft.com>
+ <20230323152342.GFZBxu/m3u6aFUDY/7@fat_crate.local>
+ <105d019c-2249-5dfd-e032-95944ea6dc8c@linux.microsoft.com>
+ <20230323163450.GGZBx/qpnclFnMaf7e@fat_crate.local>
+ <c8458bfa-0985-f6a5-52a3-ef96c7669fe6@linux.microsoft.com>
+ <20230402154425.GCZCmi2eiKYO2yYhNs@fat_crate.local> <877cutsczn.ffs@tglx>
+Content-Language: en-US
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <877cutsczn.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,210 +68,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LDB driver currently checks whether dual mode is used, otherwise it
-assumes only channel 0 is in use. Add support for using only channel 1. In
-device tree terms, this means linking port 2 only.
+On 4/3/2023 8:20 AM, Thomas Gleixner wrote:
+> On Sun, Apr 02 2023 at 17:44, Borislav Petkov wrote:
+>> On Fri, Mar 24, 2023 at 06:10:09PM +0100, Jeremi Piotrowski wrote:
+>>> Since the AMD PSP is a privileged device, there is a desire to not have to trust the
+>>> ACPI stack,
+>>
+>> And yet you do:
+>>
+>> +	err = acpi_parse_aspt(&res[0], &pdata);
+>> +	if (err)
+>> +		return err;
+>>
+>> You don't trust the ACPI stack, and yet you're parsing an ACPI table?!?!
+>> You have to make up your mind here.
 
-Doing this cleanly requires changing the logic of the probe functions from
-this:
+I gave you background on why Microsoft system designers like to use the ASPT on
+*physical hardware* in our datacenters. It is because it allows them to setup a
+highly privileged system component through an isolated ACPI table, without
+needing to depend on the *rest of the ACPI stack* (other ACPI tables and/or the
+ACPI interpreter). The same reason they use IVRS for AMD IOMMU.
 
- 1. use of_graph_get_remote_node() on port 1 to find the panel
- 2. use drm_of_lvds_get_dual_link_pixel_order() to detect dual mode
+I thought it might be good to write this down, as this shows that the ASPT is a
+hardware interface that has *some* value. I don't think further discussion on
+this point helps us make forward progress.
 
-to this:
+We're trying to adhere to a specification for a physical device when modeling
+that same device in a virtual environment. Yes, this requires parsing an ACPI
+table.
 
- 1. use of_graph_get_remote_node() twice to find remote ports
- 2. reuse the result of the above to know whether each channel is enabled
-    and to find the panel
- 3. if (both channels as enabled)
-        use drm_of_lvds_get_dual_link_pixel_order() to detect dual mode
+>> 
+>> Btw, you still haven't answered my question about doing:
+>>
+>> 	devm_request_irq(dev, 9, ..)
+>>
+>> where 9 is the default ACPI interrupt.
+>>
+>> You can have some silly table tell you what to map or you can simply map
+>> IRQ 9 and be done with it. In this second case you can *really* not
+>> trust ACPI because you know which IRQ it is.
+> 
 
-Also add a dev_dbg() to log the detected mode and log an error in case no
-panel was found (no channel enabled).
+So I originally thought I answered when i said "because we're trying to not
+deviate from the hardware specification for the PSP". Interrupt configuration
+is part of that specification.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Marek Vasut <marex@denx.de>
+But when I think about what you're suggesting, I can interpret it two ways:
 
----
+1. Configure the PSP to raise the vector corresponding to ACPI IRQ 9.
+This might work and would look similar to the first version I posted.
+I'd fetch 'struct irq_cfg' for acpi_sci_irq, write the corresponding
+APIC-ID/vector into the PSP, enable PSP interrupt generation and then
+probe the "ccp" driver so that it can call "devm_request_irq(9)".
+I assume this would also require registering an irq affinity notifier,
+much like drivers/iommu/amd/init.c did before commit d1adcfbb520c.
 
-Changes in v2 (suggested by Marek):
- - cosmetic: avoid pointless newline after 'reg =' and 'reg |='
- - use "dual-link" naming as elsewhere in the kernel
- - add missing trailing \n on dev_err_probe()
- - Add Marek's review tag
----
- drivers/gpu/drm/bridge/fsl-ldb.c | 101 ++++++++++++++++++-------------
- 1 file changed, 59 insertions(+), 42 deletions(-)
+2. Deviate from the hardware specification.
+From reading acpi code (not at all an expert on this), that "9" does not
+look like a static value to me, so it requires either:
+a) passing a GSI number in an ACPI table
+b) defining it as being the same interrupt as the SCI, which comes from
+   the FADT table.
+c) using the GPE mechanism of the ACPI SCI interrupt.
 
-diff --git a/drivers/gpu/drm/bridge/fsl-ldb.c b/drivers/gpu/drm/bridge/fsl-ldb.c
-index bb13a9143edd..c20dba247735 100644
---- a/drivers/gpu/drm/bridge/fsl-ldb.c
-+++ b/drivers/gpu/drm/bridge/fsl-ldb.c
-@@ -84,10 +84,16 @@ struct fsl_ldb {
- 	struct drm_bridge *panel_bridge;
- 	struct clk *clk;
- 	struct regmap *regmap;
--	bool lvds_dual_link;
- 	const struct fsl_ldb_devdata *devdata;
-+	bool ch0_enabled;
-+	bool ch1_enabled;
- };
- 
-+static bool fsl_ldb_is_dual(const struct fsl_ldb *fsl_ldb)
-+{
-+	return (fsl_ldb->ch0_enabled && fsl_ldb->ch1_enabled);
-+}
-+
- static inline struct fsl_ldb *to_fsl_ldb(struct drm_bridge *bridge)
- {
- 	return container_of(bridge, struct fsl_ldb, bridge);
-@@ -95,7 +101,7 @@ static inline struct fsl_ldb *to_fsl_ldb(struct drm_bridge *bridge)
- 
- static unsigned long fsl_ldb_link_frequency(struct fsl_ldb *fsl_ldb, int clock)
- {
--	if (fsl_ldb->lvds_dual_link)
-+	if (fsl_ldb_is_dual(fsl_ldb))
- 		return clock * 3500;
- 	else
- 		return clock * 7000;
-@@ -177,28 +183,21 @@ static void fsl_ldb_atomic_enable(struct drm_bridge *bridge,
- 	clk_prepare_enable(fsl_ldb->clk);
- 
- 	/* Program LDB_CTRL */
--	reg = LDB_CTRL_CH0_ENABLE;
-+	reg =	(fsl_ldb->ch0_enabled ? LDB_CTRL_CH0_ENABLE : 0) |
-+		(fsl_ldb->ch1_enabled ? LDB_CTRL_CH1_ENABLE : 0) |
-+		(fsl_ldb_is_dual(fsl_ldb) ? LDB_CTRL_SPLIT_MODE : 0);
- 
--	if (fsl_ldb->lvds_dual_link)
--		reg |= LDB_CTRL_CH1_ENABLE | LDB_CTRL_SPLIT_MODE;
-+	if (lvds_format_24bpp)
-+		reg |=	(fsl_ldb->ch0_enabled ? LDB_CTRL_CH0_DATA_WIDTH : 0) |
-+			(fsl_ldb->ch1_enabled ? LDB_CTRL_CH1_DATA_WIDTH : 0);
- 
--	if (lvds_format_24bpp) {
--		reg |= LDB_CTRL_CH0_DATA_WIDTH;
--		if (fsl_ldb->lvds_dual_link)
--			reg |= LDB_CTRL_CH1_DATA_WIDTH;
--	}
-+	if (lvds_format_jeida)
-+		reg |=	(fsl_ldb->ch0_enabled ? LDB_CTRL_CH0_BIT_MAPPING : 0) |
-+			(fsl_ldb->ch1_enabled ? LDB_CTRL_CH1_BIT_MAPPING : 0);
- 
--	if (lvds_format_jeida) {
--		reg |= LDB_CTRL_CH0_BIT_MAPPING;
--		if (fsl_ldb->lvds_dual_link)
--			reg |= LDB_CTRL_CH1_BIT_MAPPING;
--	}
--
--	if (mode->flags & DRM_MODE_FLAG_PVSYNC) {
--		reg |= LDB_CTRL_DI0_VSYNC_POLARITY;
--		if (fsl_ldb->lvds_dual_link)
--			reg |= LDB_CTRL_DI1_VSYNC_POLARITY;
--	}
-+	if (mode->flags & DRM_MODE_FLAG_PVSYNC)
-+		reg |=	(fsl_ldb->ch0_enabled ? LDB_CTRL_DI0_VSYNC_POLARITY : 0) |
-+			(fsl_ldb->ch1_enabled ? LDB_CTRL_DI1_VSYNC_POLARITY : 0);
- 
- 	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->ldb_ctrl, reg);
- 
-@@ -210,9 +209,8 @@ static void fsl_ldb_atomic_enable(struct drm_bridge *bridge,
- 	/* Wait for VBG to stabilize. */
- 	usleep_range(15, 20);
- 
--	reg |= LVDS_CTRL_CH0_EN;
--	if (fsl_ldb->lvds_dual_link)
--		reg |= LVDS_CTRL_CH1_EN;
-+	reg |=	(fsl_ldb->ch0_enabled ? LVDS_CTRL_CH0_EN : 0) |
-+		(fsl_ldb->ch1_enabled ? LVDS_CTRL_CH1_EN : 0);
- 
- 	regmap_write(fsl_ldb->regmap, fsl_ldb->devdata->lvds_ctrl, reg);
- }
-@@ -265,7 +263,7 @@ fsl_ldb_mode_valid(struct drm_bridge *bridge,
- {
- 	struct fsl_ldb *fsl_ldb = to_fsl_ldb(bridge);
- 
--	if (mode->clock > (fsl_ldb->lvds_dual_link ? 160000 : 80000))
-+	if (mode->clock > (fsl_ldb_is_dual(fsl_ldb) ? 160000 : 80000))
- 		return MODE_CLOCK_HIGH;
- 
- 	return MODE_OK;
-@@ -286,7 +284,7 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct device_node *panel_node;
--	struct device_node *port1, *port2;
-+	struct device_node *remote1, *remote2;
- 	struct drm_panel *panel;
- 	struct fsl_ldb *fsl_ldb;
- 	int dual_link;
-@@ -311,10 +309,23 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- 	if (IS_ERR(fsl_ldb->regmap))
- 		return PTR_ERR(fsl_ldb->regmap);
- 
--	/* Locate the panel DT node. */
--	panel_node = of_graph_get_remote_node(dev->of_node, 1, 0);
--	if (!panel_node)
--		return -ENXIO;
-+	/* Locate the remote ports and the panel node */
-+	remote1 = of_graph_get_remote_node(dev->of_node, 1, 0);
-+	remote2 = of_graph_get_remote_node(dev->of_node, 2, 0);
-+	fsl_ldb->ch0_enabled = (remote1 != NULL);
-+	fsl_ldb->ch1_enabled = (remote2 != NULL);
-+	panel_node = of_node_get(remote1 ? remote1 : remote2);
-+	of_node_put(remote1);
-+	of_node_put(remote2);
-+
-+	if (!fsl_ldb->ch0_enabled && !fsl_ldb->ch1_enabled) {
-+		of_node_put(panel_node);
-+		return dev_err_probe(dev, -ENXIO, "No panel node found");
-+	}
-+
-+	dev_dbg(dev, "Using %s\n",
-+		fsl_ldb_is_dual(fsl_ldb) ? "dual-link mode" :
-+		fsl_ldb->ch0_enabled ? "channel 0" : "channel 1");
- 
- 	panel = of_drm_find_panel(panel_node);
- 	of_node_put(panel_node);
-@@ -325,20 +336,26 @@ static int fsl_ldb_probe(struct platform_device *pdev)
- 	if (IS_ERR(fsl_ldb->panel_bridge))
- 		return PTR_ERR(fsl_ldb->panel_bridge);
- 
--	/* Determine whether this is dual-link configuration */
--	port1 = of_graph_get_port_by_id(dev->of_node, 1);
--	port2 = of_graph_get_port_by_id(dev->of_node, 2);
--	dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
--	of_node_put(port1);
--	of_node_put(port2);
- 
--	if (dual_link == DRM_LVDS_DUAL_LINK_EVEN_ODD_PIXELS) {
--		dev_err(dev, "LVDS channel pixel swap not supported.\n");
--		return -EINVAL;
--	}
-+	if (fsl_ldb_is_dual(fsl_ldb)) {
-+		struct device_node *port1, *port2;
- 
--	if (dual_link == DRM_LVDS_DUAL_LINK_ODD_EVEN_PIXELS)
--		fsl_ldb->lvds_dual_link = true;
-+		port1 = of_graph_get_port_by_id(dev->of_node, 1);
-+		port2 = of_graph_get_port_by_id(dev->of_node, 2);
-+		dual_link = drm_of_lvds_get_dual_link_pixel_order(port1, port2);
-+		of_node_put(port1);
-+		of_node_put(port2);
-+
-+		if (dual_link < 0)
-+			return dev_err_probe(dev, dual_link,
-+					     "Error getting dual link configuration\n");
-+
-+		/* Only DRM_LVDS_DUAL_LINK_ODD_EVEN_PIXELS is supported */
-+		if (dual_link == DRM_LVDS_DUAL_LINK_EVEN_ODD_PIXELS) {
-+			dev_err(dev, "LVDS channel pixel swap not supported.\n");
-+			return -EINVAL;
-+		}
-+	}
- 
- 	platform_set_drvdata(pdev, fsl_ldb);
- 
--- 
-2.34.1
+So I'd need to define a third way for the PSP to interrupt the OS, one that
+would only be supported on Hyper-V. Work with our hypervisor and/or virtual
+firmware teams to make sure that the PSP model supports generating the interrupt
+in this way. Work with the Windows team to make Windows support it
+(the same virtual hardware model/virtual firmware is used regardless of the OS).
 
+I have no objection to doing "1." if it works. I don't see it as a big win over
+using an irq_domain.
+
+I don't think "2." is a reasonable thing to ask. We do regularly make suggestions
+to hypervisor/firmware teams on how to make things better supported in Linux
+without requiring hacks. But modelling a piece of hardware in a custom way to avoid
+following hardware specs is questionable.
+
+I also think that soon, when other people deploy more SEV-SNP hardware in their
+datacenters, they will also want to rely on the ASPT for the reasons listed at the
+top of the email, so we'll be adding support for it anyway.
+
+Which way do you suggest we go Boris? I'm not attached to the code at all but I am
+attached to adhering to hardware specifications. I can try to do "1." or stick with
+the irq_domain approach that i posted.
+
+Thanks,
+Jeremi
