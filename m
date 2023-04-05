@@ -2,278 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B426D7891
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8666D7898
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237291AbjDEJjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S237349AbjDEJkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237250AbjDEJje (ORCPT
+        with ESMTP id S237241AbjDEJkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:39:34 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3476B4C25;
-        Wed,  5 Apr 2023 02:39:31 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id bl22so12215261oib.11;
-        Wed, 05 Apr 2023 02:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680687570;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4wIC1CpZVOaE4w0vpqchy3vQi+52X2p+A7NNpUhaHjs=;
-        b=f9pIAWwvJ1/ZkSjsLBZOYKNN/SvlUJHhIWEYf5hHOmqMKyYatIzDxQ3wF8pmu91t9V
-         KufMBg9Ia2jbxgfRuwcybi2grHwm718EOdRg+4uuSCv6RKoVflaU/Y1VW/N1BVFKV3IJ
-         5X3x7yBuNkEc99R9L/xY8zpvpx8AZ7b5d0yHJ6pob4J2MAck2mefPm/EfWR62r8Y2LeJ
-         enNQ6K0TAW9V/BZIgAfqfdkKNTTxamM4rUi96e3ugY9/wcX3JNNqM7p3LogtCz8FeQQg
-         J5/FrQJXXf21MNKcExwuTMz3E16S3BAzdnZlAMryofKJ6GAY6k1K7dMVUAy6D1uBc3we
-         kZXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680687570;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4wIC1CpZVOaE4w0vpqchy3vQi+52X2p+A7NNpUhaHjs=;
-        b=V8kZhMuZnc7/KxirIZ/HyQo23EFwusrc9xauD7SZJYYeyn9nzkUA9uHdP9hZ25yAkO
-         wSXj9AMJFAZwMcrNgKOrWzo3QVjTn5q/F/yDmgOodQ3rQYJ5hGeZz0Ak/MgVHGO5NCtK
-         Vjzk9D/xbS1jDYFllSeJ2WcCibIxnHyjlTHsNIhvSjRZq4zg1/KcHgng/VuHwPmpkuf7
-         M1WRGLhURV7Hi4fo9nZhEhZE8yq5FEGliP2z0XYgUznPXUJ/MGgnTDd1GuvFTObabfw0
-         jPOIW46uRjeUiHGPJEnf1XsTHmVq/ccErP1ClALc7gRaHxjzM5PJ+SdOBC4apZkmctKw
-         nj0w==
-X-Gm-Message-State: AAQBX9fieMDT0jH+hJGTuMq56M6tHama3Btj/FJ4L+Kzm70yqQ4y89lt
-        Lgfhgp0mcM9HkyZgNV4PFIs=
-X-Google-Smtp-Source: AKy350YqOjXrLkIwek0UaobV9xTERoDvJ14GktHnbC9wXPlhyohk7kyGIyCXP1MGYDBJyDpo2659HQ==
-X-Received: by 2002:aca:1206:0:b0:386:ed63:c511 with SMTP id 6-20020aca1206000000b00386ed63c511mr2416172ois.24.1680687570365;
-        Wed, 05 Apr 2023 02:39:30 -0700 (PDT)
-Received: from [127.0.0.1] ([187.19.238.117])
-        by smtp.gmail.com with ESMTPSA id p188-20020acaf1c5000000b0038b2f07dd50sm3348114oih.7.2023.04.05.02.39.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 02:39:28 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 06:39:22 -0300
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-To:     Jiri Olsa <olsajiri@gmail.com>, Ian Rogers <irogers@google.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Rob Herring <robh@kernel.org>, Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] perf pmu: Make parser reentrant
-User-Agent: K-9 Mail for Android
-In-Reply-To: <ZC0iXid4NraoXSCU@krava>
-References: <20230404133630.1985739-1-irogers@google.com> <ZC0iXid4NraoXSCU@krava>
-Message-ID: <A34997A8-302E-4577-82B0-F53AD954BC0A@gmail.com>
+        Wed, 5 Apr 2023 05:40:45 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F13E45;
+        Wed,  5 Apr 2023 02:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680687645; x=1712223645;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=j2wLczm2nFwPGcSlgIhpmPN4wo/22EWlYYEkPAuG1Rw=;
+  b=CA7oKOayTqedHe+F6KHDRMyImZFcYd/xpcweZuzysu5AQbVr5O/iCw2n
+   pmkpXsrjrVlApBzveT1MKlAV2Kihjy/6qXEZOeGDlvsfQGr5N2LqViJid
+   DxDJaL01ah3Bqw5T1NXXjiXrioSfiErmrSiA/V7/BPhiA6kRsqg1bi8Xu
+   ERs1Z1xAcNLT5PScNCVyNFB27XN/8MPC6ie+RXwQqb6FOyeHhPxI6Db49
+   x7p9fRIaamXHJfrJXGkv9BpP3oPzTHSjWByNMGG91sLGZAyJNY4SCl3u6
+   s/FzSKl+7LE0sW7bXE34LwCg4LurI2vtsJDazdIb8CYHXB70t8jwpeeLK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326444996"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="326444996"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 02:40:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="830300798"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="830300798"
+Received: from mike-ilbpg1.png.intel.com ([10.88.227.76])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Apr 2023 02:40:37 -0700
+From:   Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>,
+        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        hock.leong.kweh@intel.com
+Subject: [PATCH net 1/1] net: stmmac: check fwnode for phy device before scanning for phy
+Date:   Wed,  5 Apr 2023 17:39:45 +0800
+Message-Id: <20230405093945.3549491-1-michael.wei.hong.sit@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=2.8 required=5.0 tests=AC_FROM_MANY_DOTS,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some DT devices already have phy device configured in the DT/ACPI.
+Current implementation scans for a phy unconditionally even though
+there is a phy listed in the DT/ACPI and already attached.
 
+We should check the fwnode if there is any phy device listed in
+fwnode and decide whether to scan for a phy to attach to.y
 
-On April 5, 2023 4:25:18 AM GMT-03:00, Jiri Olsa <olsajiri@gmail=2Ecom> wr=
-ote:
->On Tue, Apr 04, 2023 at 06:36:30AM -0700, Ian Rogers wrote:
->> By default bison uses global state for compatibility with yacc=2E Make
->> the parser reentrant so that it may be used in asynchronous and
->> multithreaded situations=2E
->>=20
->> Signed-off-by: Ian Rogers <irogers@google=2Ecom>
->
->hum I can't apply this version on Arnaldo's perf/core:
+Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Fixes: fe2cfbc96803 ("net: stmmac: check if MAC needs to attach to a PHY")
+Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-Try on tmp=2Eperf-tools-next
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index d41a5f92aee7..7ca9be7bec06 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -1134,22 +1134,26 @@ static void stmmac_check_pcs_mode(struct stmmac_priv *priv)
+ static int stmmac_init_phy(struct net_device *dev)
+ {
+ 	struct stmmac_priv *priv = netdev_priv(dev);
++	struct fwnode_handle *phy_fwnode;
+ 	struct fwnode_handle *fwnode;
+-	bool phy_needed;
+ 	int ret;
+ 
++	if (!phylink_expects_phy(priv->phylink))
++		return 0;
++
+ 	fwnode = of_fwnode_handle(priv->plat->phylink_node);
+ 	if (!fwnode)
+ 		fwnode = dev_fwnode(priv->device);
+ 
+ 	if (fwnode)
+-		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
++		phy_fwnode = fwnode_get_phy_node(fwnode);
++	else
++		phy_fwnode = NULL;
+ 
+-	phy_needed = phylink_expects_phy(priv->phylink);
+ 	/* Some DT bindings do not set-up the PHY handle. Let's try to
+ 	 * manually parse it
+ 	 */
+-	if (!fwnode || phy_needed || ret) {
++	if (!phy_fwnode || IS_ERR(phy_fwnode)) {
+ 		int addr = priv->plat->phy_addr;
+ 		struct phy_device *phydev;
+ 
+@@ -1165,6 +1169,9 @@ static int stmmac_init_phy(struct net_device *dev)
+ 		}
+ 
+ 		ret = phylink_connect_phy(priv->phylink, phydev);
++	} else {
++		fwnode_handle_put(phy_fwnode);
++		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
+ 	}
+ 
+ 	if (!priv->plat->pmt) {
+-- 
+2.34.1
 
->
->patching file tools/perf/util/pmu=2Ec
->Hunk #2 succeeded at 59 with fuzz 1=2E
->Hunk #3 FAILED at 80=2E
->Hunk #4 FAILED at 90=2E
->2 out of 4 hunks FAILED -- saving rejects to file tools/perf/util/pmu=2Ec=
-=2Erej
->patching file tools/perf/util/pmu=2Eh
->patching file tools/perf/util/pmu=2El
->patching file tools/perf/util/pmu=2Ey
->
->jirka
->
->
->> ---
->>  tools/perf/util/pmu=2Ec | 24 ++++++++++++++++++------
->>  tools/perf/util/pmu=2Eh |  2 +-
->>  tools/perf/util/pmu=2El | 17 ++++++++++++-----
->>  tools/perf/util/pmu=2Ey |  5 ++++-
->>  4 files changed, 35 insertions(+), 13 deletions(-)
->>=20
->> diff --git a/tools/perf/util/pmu=2Ec b/tools/perf/util/pmu=2Ec
->> index 78a407b42ad1=2E=2Ef603cdabf797 100644
->> --- a/tools/perf/util/pmu=2Ec
->> +++ b/tools/perf/util/pmu=2Ec
->> @@ -24,6 +24,8 @@
->>  #include "evsel=2Eh"
->>  #include "pmu=2Eh"
->>  #include "pmus=2Eh"
->> +#include "pmu-bison=2Eh"
->> +#include "pmu-flex=2Eh"
->>  #include "parse-events=2Eh"
->>  #include "print-events=2Eh"
->>  #include "header=2Eh"
->> @@ -57,9 +59,6 @@ struct perf_pmu_format {
->>  	struct list_head list;
->>  };
->> =20
->> -int perf_pmu_parse(struct list_head *list, char *name);
->> -extern FILE *perf_pmu_in;
->> -
->>  static bool hybrid_scanned;
->> =20
->>  static struct perf_pmu *perf_pmu__find2(int dirfd, const char *name);
->> @@ -81,6 +80,8 @@ int perf_pmu__format_parse(int dirfd, struct list_hea=
-d *head)
->>  	while (!ret && (evt_ent =3D readdir(format_dir))) {
->>  		char *name =3D evt_ent->d_name;
->>  		int fd;
->> +		void *scanner;
->> +		FILE *file;
->> =20
->>  		if (!strcmp(name, "=2E") || !strcmp(name, "=2E=2E"))
->>  			continue;
->> @@ -91,9 +92,20 @@ int perf_pmu__format_parse(int dirfd, struct list_he=
-ad *head)
->>  		if (fd < 0)
->>  			break;
->> =20
->> -		perf_pmu_in =3D fdopen(fd, "r");
->> -		ret =3D perf_pmu_parse(head, name);
->> -		fclose(perf_pmu_in);
->> +		file =3D fdopen(fd, "r");
->> +		if (!file)
->> +			break;
->> +
->> +		ret =3D perf_pmu_lex_init(&scanner);
->> +		if (ret) {
->> +			fclose(file);
->> +			break;
->> +		}
->> +
->> +		perf_pmu_set_in(file, scanner);
->> +		ret =3D perf_pmu_parse(head, name, scanner);
->> +		perf_pmu_lex_destroy(scanner);
->> +		fclose(file);
->>  	}
->> =20
->>  	closedir(format_dir);
->> diff --git a/tools/perf/util/pmu=2Eh b/tools/perf/util/pmu=2Eh
->> index 32c3a75bca0e=2E=2Ed53618c65c92 100644
->> --- a/tools/perf/util/pmu=2Eh
->> +++ b/tools/perf/util/pmu=2Eh
->> @@ -206,7 +206,7 @@ int perf_pmu__check_alias(struct perf_pmu *pmu, str=
-uct list_head *head_terms,
->>  			  struct perf_pmu_info *info);
->>  struct list_head *perf_pmu__alias(struct perf_pmu *pmu,
->>  				  struct list_head *head_terms);
->> -void perf_pmu_error(struct list_head *list, char *name, char const *ms=
-g);
->> +void perf_pmu_error(struct list_head *list, char *name, void *scanner,=
- char const *msg);
->> =20
->>  int perf_pmu__new_format(struct list_head *list, char *name,
->>  			 int config, unsigned long *bits);
->> diff --git a/tools/perf/util/pmu=2El b/tools/perf/util/pmu=2El
->> index 58b4926cfaca=2E=2E67b247be693b 100644
->> --- a/tools/perf/util/pmu=2El
->> +++ b/tools/perf/util/pmu=2El
->> @@ -1,4 +1,6 @@
->>  %option prefix=3D"perf_pmu_"
->> +%option reentrant
->> +%option bison-bridge
->> =20
->>  %{
->>  #include <stdlib=2Eh>
->> @@ -6,16 +8,21 @@
->>  #include "pmu=2Eh"
->>  #include "pmu-bison=2Eh"
->> =20
->> -static int value(int base)
->> +char *perf_pmu_get_text(yyscan_t yyscanner);
->> +YYSTYPE *perf_pmu_get_lval(yyscan_t yyscanner);
->> +
->> +static int value(yyscan_t scanner, int base)
->>  {
->> +	YYSTYPE *yylval =3D perf_pmu_get_lval(scanner);
->> +	char *text =3D perf_pmu_get_text(scanner);
->>  	long num;
->> =20
->>  	errno =3D 0;
->> -	num =3D strtoul(perf_pmu_text, NULL, base);
->> +	num =3D strtoul(text, NULL, base);
->>  	if (errno)
->>  		return PP_ERROR;
->> =20
->> -	perf_pmu_lval=2Enum =3D num;
->> +	yylval->num =3D num;
->>  	return PP_VALUE;
->>  }
->> =20
->> @@ -25,7 +32,7 @@ num_dec         [0-9]+
->> =20
->>  %%
->> =20
->> -{num_dec}	{ return value(10); }
->> +{num_dec}	{ return value(yyscanner, 10); }
->>  config		{ return PP_CONFIG; }
->>  -		{ return '-'; }
->>  :		{ return ':'; }
->> @@ -35,7 +42,7 @@ config		{ return PP_CONFIG; }
->> =20
->>  %%
->> =20
->> -int perf_pmu_wrap(void)
->> +int perf_pmu_wrap(void *scanner __maybe_unused)
->>  {
->>  	return 1;
->>  }
->> diff --git a/tools/perf/util/pmu=2Ey b/tools/perf/util/pmu=2Ey
->> index e675d79a0274=2E=2Edff4e892ac4d 100644
->> --- a/tools/perf/util/pmu=2Ey
->> +++ b/tools/perf/util/pmu=2Ey
->> @@ -1,6 +1,8 @@
->> -
->> +%define api=2Epure full
->>  %parse-param {struct list_head *format}
->>  %parse-param {char *name}
->> +%parse-param {void *scanner}
->> +%lex-param {void* scanner}
->> =20
->>  %{
->> =20
->> @@ -78,6 +80,7 @@ PP_VALUE
->> =20
->>  void perf_pmu_error(struct list_head *list __maybe_unused,
->>  		    char *name __maybe_unused,
->> +		    void *scanner __maybe_unused,
->>  		    char const *msg __maybe_unused)
->>  {
->>  }
->> --=20
->> 2=2E40=2E0=2E348=2Egf938b09366-goog
->>=20
