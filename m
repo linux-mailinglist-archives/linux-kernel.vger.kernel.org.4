@@ -2,91 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC566D768E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB296D7697
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237355AbjDEINE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
+        id S237410AbjDEIOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237298AbjDEINB (ORCPT
+        with ESMTP id S237329AbjDEION (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:13:01 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E071BEA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:12:44 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id j4-20020a6b5504000000b00758646159fbso21783003iob.20
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 01:12:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680682363; x=1683274363;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RRpr/2enZpSN+Pqs5p0qwijporxRiSMR0agGaaar/U=;
-        b=mKdB61kvvzZDpz19fCRdosNZP33xijBbtyDHuYgYuopsOHZnIdvd+k5FzYK6OjD8DI
-         7e985xyhkClp3MMggS2Kuc3xJfsP9U4IHZdC/dw2UH5cLYDry4Hyj3wHjgW5KjdajDYs
-         tvGhDI4tBkkvmKHOK8lLAfV3qNhkDzv7tCEEe5LE0QWIZ0OAxse9CVrjGzARaFb/hDXA
-         a/bQ8vz7S/xSlZbBNfhfLIQNhjVkjQaid2K+Qyn0AajsAOB9LZb2EaUsYIz4oSI5X4wA
-         YRU12bbN1j6wEk9xmmW50MQJpXNz5Lc/IVMFwFqsBS+RDPR20vNothoHas3DPDROMRTX
-         IA5g==
-X-Gm-Message-State: AAQBX9c+2MYid23NwDnfgFKi/QQSCaMMupiSQecpxa8yP91MGaQG0V47
-        Aoj9B6tYvwNRXtTiuu9y6urVr7rWc3Mdd9oSQTV/jSHixng8
-X-Google-Smtp-Source: AKy350ZyVVhmfk37CIGtaHVEI8ebtCHBWRXU7IGTuYY1ef3zGWS13ZFf/61/y86g7vr0rwkMISqHAld/pmURWrbxbO0dO3eRblY8
+        Wed, 5 Apr 2023 04:14:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80E0F5;
+        Wed,  5 Apr 2023 01:14:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42B2D6245E;
+        Wed,  5 Apr 2023 08:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CFBFC4339E;
+        Wed,  5 Apr 2023 08:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680682451;
+        bh=1nSglfItAuDI4ol4In4nVcuiP9G4IB0lSOQfSgEOfCY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=L2Yi2n4zcZcm4bQPPU9sZ242yVQyuXbhGtQaan735qEWwqiZ3wEPVMZQsqABQgPEE
+         h4Kuprkm89+5gPA24oQ2/9I6eV+LxhDUM2DUcXKpKVy5YXk7ArZN8NAuzjgl5VARRM
+         wcer0NjYmQr4y7zJeSmHLlI0s9iLgrNG/AiSJm3oCm76Psb/7/jWEHFAIoE64Br1Ir
+         lkpXFbN/G+Wp+8QoAUqC4V96V88RgLk80ykpJndM/K6uzZYw3/LwclwTFJxRWBOlFP
+         4KsAIdE+vLwRKmB/mycLYLgwJ26PzfrOT1aGIFg+RaabKatVZcAOnvHIPkiwmY5GQd
+         GpKW41dSctb4g==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5002e950e23so208382a12.1;
+        Wed, 05 Apr 2023 01:14:11 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fg1rVS6/naNV0sH8O/Ni+I5Xv9506cLvgUbwJQxll5ytn6PMv6
+        VfjrAv2SbrwVtgzET/Bm+jLWhzU2iE6FuAJSDDQ=
+X-Google-Smtp-Source: AKy350aZNiqLEErKnpGDDjTYf9nmSTpBW2y8eaHbCzbBzYF6e/OECEGTKWU0mUgFMSf3y0GLmz5oA6Fxo7YXcJdc8Xk=
+X-Received: by 2002:a50:9509:0:b0:4ab:49b9:686d with SMTP id
+ u9-20020a509509000000b004ab49b9686dmr691501eda.1.1680682449803; Wed, 05 Apr
+ 2023 01:14:09 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8881:0:b0:753:2ab8:aff7 with SMTP id
- d1-20020a5d8881000000b007532ab8aff7mr3011620ioo.1.1680682363776; Wed, 05 Apr
- 2023 01:12:43 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 01:12:43 -0700
-In-Reply-To: <000000000000ea3c3105ef377a12@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000045f34305f8925bd3@google.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ntfs_listxattr
-From:   syzbot <syzbot+9fcea5ef6dc4dc72d334@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com, dvyukov@google.com,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        zengheng4@huawei.com
+References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
+ <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn> <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
+ <dfd6a1cb-25be-cc11-4134-b2e92e353c00@loongson.cn> <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
+In-Reply-To: <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 5 Apr 2023 16:13:57 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H54MWEXgqPqv+23vQxQU455iMnwON37uiByyci9cgh5Hg@mail.gmail.com>
+Message-ID: <CAAhV-H54MWEXgqPqv+23vQxQU455iMnwON37uiByyci9cgh5Hg@mail.gmail.com>
+Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
+ relocate kernel
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-ntfs: fix panic about slab-out-of-bounds caused by ntfs_listxattr()
+Hi, Ard,
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+What is the status of this patch now?
 
-#syz fix: exact-commit-title
+Huacai
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
-
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=9fcea5ef6dc4dc72d334
-
----
-[1] I expect the commit to be present in:
-
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
+On Wed, Mar 1, 2023 at 8:06=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org> =
+wrote:
+>
+> Hi, Youling,
+>
+> On Wed, Mar 1, 2023 at 6:08=E2=80=AFPM Youling Tang <tangyouling@loongson=
+.cn> wrote:
+> >
+> > Hi, Huacai
+> >
+> > On 03/01/2023 05:30 PM, Huacai Chen wrote:
+> > > Hi, Youling,
+> > >
+> > > On Wed, Mar 1, 2023 at 5:21=E2=80=AFPM Youling Tang <tangyouling@loon=
+gson.cn> wrote:
+> > >>
+> > >> Hi, Huacai
+> > >>
+> > >> On 03/01/2023 04:55 PM, Huacai Chen wrote:
+> > >>> Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintr=
+oduce
+> > >>> efi_relocate_kernel() to relocate the core kernel.
+> > >>
+> > >> If we strongly rely on the PIE feature after the modification, we ne=
+ed
+> > >> to modify it as follows,
+> > > There is no strong rely, efi_relocate_kernel() can also handle the
+> > > non-PIE kernel.
+> >
+> > IMHO, if EFI_KIMG_PREFERRED_ADDRESS is no longer defined as
+> > `PHYSADDR(VMLINUX_LOAD_ADDRESS)` (physical link address), we need to
+> > relocate through the RELOCATABLE function, so it is recommended to
+> > select RELOCATABLE if EFI_STUB is enabled
+> We can select RELOCATABLE when we modify EFI_KIMG_PREFERRED_ADDRESS.
+> Before that I prefer to give a chance to build a non-PIE kernel.
+>
+> Huacai
+> >
+> > Youling.
+> > >
+> > > Huacai
+> > >>
+> > >> --- a/arch/loongarch/Kconfig
+> > >> +++ b/arch/loongarch/Kconfig
+> > >> @@ -137,6 +137,7 @@ config LOONGARCH
+> > >>          select PCI_MSI_ARCH_FALLBACKS
+> > >>          select PCI_QUIRKS
+> > >>          select PERF_USE_VMALLOC
+> > >> +       select RELOCATABLE
+> > >>          select RTC_LIB
+> > >>          select SMP
+> > >>          select SPARSE_IRQ
+> > >>
+> > >> or:
+> > >>
+> > >> --- a/arch/loongarch/Kconfig
+> > >> +++ b/arch/loongarch/Kconfig
+> > >> @@ -360,6 +360,7 @@ config EFI_STUB
+> > >>          default y
+> > >>          depends on EFI
+> > >>          select EFI_GENERIC_STUB
+> > >> +       select RELOCATABLE
+> > >>          help
+> > >>
+> > >> Youling.
+> > >>
+> > >>>
+> > >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > >>> ---
+> > >>>  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++---------=
+----
+> > >>>  1 file changed, 7 insertions(+), 17 deletions(-)
+> > >>>
+> > >>> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/driver=
+s/firmware/efi/libstub/loongarch-stub.c
+> > >>> index eee7ed43cdfb..72c71ae201f0 100644
+> > >>> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
+> > >>> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
+> > >>> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long =
+*image_addr,
+> > >>>                                efi_loaded_image_t *image,
+> > >>>                                efi_handle_t image_handle)
+> > >>>  {
+> > >>> -     int nr_pages =3D round_up(kernel_asize, EFI_ALLOC_ALIGN) / EF=
+I_PAGE_SIZE;
+> > >>> -     efi_physical_addr_t kernel_addr =3D EFI_KIMG_PREFERRED_ADDRES=
+S;
+> > >>>       efi_status_t status;
+> > >>> +     unsigned long kernel_addr =3D 0;
+> > >>>
+> > >>> -     /*
+> > >>> -      * Allocate space for the kernel image at the preferred offse=
+t. This is
+> > >>> -      * the only location in memory from where we can execute the =
+image, so
+> > >>> -      * no point in falling back to another allocation.
+> > >>> -      */
+> > >>> -     status =3D efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
+> > >>> -                          EFI_LOADER_DATA, nr_pages, &kernel_addr)=
+;
+> > >>> -     if (status !=3D EFI_SUCCESS)
+> > >>> -             return status;
+> > >>> -
+> > >>> -     *image_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
+> > >>> -     *image_size =3D kernel_asize;
+> > >>> +     kernel_addr =3D (unsigned long)&kernel_offset - kernel_offset=
+;
+> > >>> +
+> > >>> +     status =3D efi_relocate_kernel(&kernel_addr, kernel_fsize, ke=
+rnel_asize,
+> > >>> +                  EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_ali=
+gn(), 0x0);
+> > >>>
+> > >>> -     memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
+> > >>> -            (void *)&kernel_offset - kernel_offset,
+> > >>> -            kernel_fsize);
+> > >>> +     *image_addr =3D kernel_addr;
+> > >>> +     *image_size =3D kernel_asize;
+> > >>>
+> > >>>       return status;
+> > >>>  }
+> > >>>
+> > >>
+> >
+> >
