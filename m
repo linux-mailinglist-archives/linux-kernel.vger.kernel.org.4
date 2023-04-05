@@ -2,191 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2C66D85E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35556D85E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjDESXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
+        id S233977AbjDESYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233306AbjDESXl (ORCPT
+        with ESMTP id S233306AbjDESYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:23:41 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5EB525D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:23:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AsE7ddGjCESrXmWDs0TubItMzn+wTVlTE/WCLAapZN9PEXwVcuPzpexHXbTiqkAUZ/9qJPFtq2hobET1pZrctklGjnEWAuV+cgFTDToHBVmkBYt7U3tUyrC9XjCGBXgcxOJxLl6OiNUlbLpptGkyGrKpFYr4zeiVkka26fAnvLRnPwe5r1TMUf1aawaLLdaji3Em7f6t+U6R4ZBQ5L5aK7qLnqp8Uc48D6Xc4N70kJsd/ktgDOHqMzuSunatl2bSzZvk+j/ICbJgzsIdQGPToFEPR7ivvLdKQ8srDrRvfqjdySv9oylv+4U3XFFGJn3q7BCAPB/UmP27FNExzSw6tQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XyV4Oo8W9PFipzAyIxXlJomh9ZdUsww7SX35J7vs0os=;
- b=ntHx0JtiQJwMldoxx3kpJpAuWHnW+8DVPtdTRg5A/cW4Y/pIdrHiYluGrI045ZfCdUENyZ7Jn6+rcpWmkL/9U0uQBorw+ruFz0YORdNx9BxfeYGCFAL2jpz3exfQBD8ESpY0/vPd4b/FNB+K6/zoVUVaYQdJeXy13X6dYWx2tYtrB5PENWBT7zHI8Fn7lG6c5EavzBzDc8oN5O+WwZAQ+sizXTFNoifty0jKRrNfwQhqHjC2Zj2aWMmgiicJi0RH7hDxyZssaO1w1d6sTeBdCspX1XhwxtFJJGjlXPRIr6tLmIm8mPvRajm1/2RdyL4lT8pCeHvZhBo7U+PaeC91fQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XyV4Oo8W9PFipzAyIxXlJomh9ZdUsww7SX35J7vs0os=;
- b=V5OLEMLUbfbh87O35VuQhcaYG7fZISRvJbvpc97qZ057XyTpd92yZyx3IK4+WIJVmDiXbqduJydIM2SMoGfaZcA3RA5yRFHTftoc2G3OVMtqFwJhbHaz63RxL4AYiBq2rSSUYJ1Xl7N8awXMllKRVOX0jb4uLuHXrW1CLXgGTFI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- PH7PR12MB7428.namprd12.prod.outlook.com (2603:10b6:510:203::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.33; Wed, 5 Apr 2023 18:23:36 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6254.033; Wed, 5 Apr 2023
- 18:23:36 +0000
-Message-ID: <9bce7374-ef67-75d0-4040-870ba131819e@amd.com>
-Date:   Wed, 5 Apr 2023 14:23:32 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-CA
-To:     Asahi Lina <lina@asahilina.net>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-References: <20230406-scheduler-uaf-2-v1-1-972531cf0a81@asahilina.net>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-Subject: Re: [PATCH] drm/scheduler: Fix UAF race in
- drm_sched_entity_push_job()
-In-Reply-To: <20230406-scheduler-uaf-2-v1-1-972531cf0a81@asahilina.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0471.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d6::22) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Wed, 5 Apr 2023 14:24:02 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8701E6A6B;
+        Wed,  5 Apr 2023 11:24:00 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id c17-20020a4aa4d1000000b005418821052aso11003oom.6;
+        Wed, 05 Apr 2023 11:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680719039;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MJJt5ZmLdmo6nA2ruRkOyJYK88J9AtGXuib+DBnV/oA=;
+        b=P7Bb+8RT7KU4UzfZkFET2IFOp9hBT+o3Uk2zFF+uRu76XQbRQ/Sm1ndijsR3VJuE0g
+         8iEL8wM6cgIEM71gfylJaujZfQKAVkVNe+dIQvaaPtsVGBx2ruhgIiSDnXzDaKvQILcI
+         8W8nQXbXiEhXJxzqHa9OQ63tdPRiOEubb7w14hViW5p4T11/WW3nnQ7nsCYa8SLidHMj
+         BI28zm5MwhvzPr4XjGQLeHi7VDSTNHBSFjLmXtSlrDtJL6I4Z/nOctJ0Rv0Ee8GnXPap
+         atm0HkUa14BVWDEN9JDUBeeJixynE3LQzbk4mITdkY9BnIE4+5vULdYP8xMxQbxPOmf+
+         9tCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680719039;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MJJt5ZmLdmo6nA2ruRkOyJYK88J9AtGXuib+DBnV/oA=;
+        b=LURJ9ZdGnJ5yvJOLhgUnc8rcmbzfs2gTwIwtmHRPridonc1pEHfE1n8LhgpEKW2MqF
+         pghajTBvIZcOay+15YlwrQJCSKEZYcpA/ZEbY1HXyQxqP7RPS05A7rvJev1ykKoWORK1
+         m22roCWv8GhKn0wvbFlTWDaaBPCFLpERVBz/A9uifOa70zdFzufHEZanMKcP+/w221Ku
+         GM3M/breontNb2LJKZkq1rUW7K3sV8AgZE0ItkqNClAJyhvmpIpx5SJ/L5M6WjuzpQda
+         zET7WMECe/dk9ChhpUNwGV1b9iCaofHmaD4PJyCxWsOfVVxuMV2Ml+FiCo+5p9ML8GvG
+         L8wg==
+X-Gm-Message-State: AAQBX9dkRPh63lAlrQDiJ6bZSNNMY99DupuQTniCWD2xEHh2Z+skhJrc
+        pHwBgiznzMzcnL7FcsLAMHPjQA1GWj0=
+X-Google-Smtp-Source: AKy350aSmjHUdkgQEa8IbniOopA8vMgCr5Kz2tSuUlmEfeFvdo3tWWPv2KiEWTZHsbyGG0v8wKyuZQ==
+X-Received: by 2002:a4a:4f03:0:b0:53b:51b6:3b43 with SMTP id c3-20020a4a4f03000000b0053b51b63b43mr3133411oob.9.1680719039577;
+        Wed, 05 Apr 2023 11:23:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i185-20020aca3bc2000000b003848dbe505fsm6605353oia.57.2023.04.05.11.23.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 11:23:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 5 Apr 2023 11:23:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/177] 6.1.23-rc3 review
+Message-ID: <d5f456e9-bcfa-42bc-be3c-56ae454990f6@roeck-us.net>
+References: <20230405100302.540890806@linuxfoundation.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|PH7PR12MB7428:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d05666d-3ee6-40fd-a9e1-08db3602deb0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yPVkLt8eNuw4Rx2t4P4WydFB6biFgLCVOeEGvhTwhIWcS2Gsh8ykjiuc9LhfnOOYBnfBZr5MGNUbhKvqrWC/+KB2kqx1GOrzo/Hcrup1YBMQTHQ+3V+EBRFu6lBaESjQ4xlDsJL35tsLeGdB4VeiPyBmzBfTrvoW1g5x2LlM9Af3KaoBLL5Yx7Ebz66HdGzfucrFXOEvexRNK0dyBSIYQPBClXSi7+MK911v9zE7EEmLIKt5Jo+DdmTmRRkizgFSfKKYegttLbKgXXuWK3z+fdE2cB8vTNaE6oUVU2fu9JfwpCx5cy9IyJrGkp3bkoOUT+GtVA8LhMIpj30MCQkqcGef78topaCEWTxvDmiMEn7uHH8b7zwP2fTAW6rlrqTkE4KTYWehDJYBd5Xx+xp9dCOLBpPYwt+bC8xLu0G+RcS9+ZoTD99TXgpttknL6BK67aqY5pDa4mLUaq8oqJzxLI6zQtwNL6tLUrpY4H4gE96tOKFDK5CoR/JtYNUfAvOMyG7WoKt82zq31nEfBc7k6cqdBbqG/DslSAm2Ja4kJm7RFAFh8LW9gmbEz5Qev1h2GohWsuaWq7n8xys3gRHtjrgg0n2s694/gkXEWaYWMsueYRV1QM5iiZTF4Q1cIWwzg3X8EFNIEOO9gmqEo6YJaw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(366004)(136003)(451199021)(31696002)(86362001)(8676002)(36756003)(6486002)(66946007)(66556008)(66476007)(41300700001)(4326008)(6666004)(110136005)(316002)(186003)(6506007)(44832011)(5660300002)(8936002)(38100700002)(2906002)(53546011)(478600001)(6512007)(2616005)(26005)(83380400001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SDFvMFJUNjFZRFFQWjI4SkNkYi9rdkUyYWpCdENJRUFHVU5WUVV1Tndic2Jp?=
- =?utf-8?B?cllnREE0My9QSDQxNXpvd0l1RFFkMFRvdnpEKzUwblRJbEFiSlJGOFpjSTBY?=
- =?utf-8?B?QkY3SVArckppamJlQTFIM1VCeEVXYXRZOGx4RG91ZUVTcHdkWkxFTDRzR2gy?=
- =?utf-8?B?a2huZDU2WFJPTkM1YllYRTVTaWp3SXM1Y0ZPYTkzVWx1NVJpM0tCMGNEYWFa?=
- =?utf-8?B?TlFpOFlJd2NtVEJRUGYyaThtTUtwRGxUL0RhVzlxWlduMTZWcU81Z2VJajNr?=
- =?utf-8?B?Q1NyU1RJSlRLU0pwL3pET0h4dzJtczJmQXk1bmZXbXVDbmFSMDBpNGFCcDdG?=
- =?utf-8?B?L2JvR3JCNmVkZldMM0Rtckx2T2JaWExEeHk2czVBdVJnaVVVWVQ0Nk82N3RV?=
- =?utf-8?B?dkV6YU5jOVJRVU9mVHBoVGJlbjdzRFlwdklFSHI1NmhQaUNPKzR6aWFzcDB2?=
- =?utf-8?B?L3pGR3R3V3dmaTFmVklRN1loa3R4aTF6Qm04aFhScVFpUjdMdGRIbjZMRUdl?=
- =?utf-8?B?eGdWdFVzaVdPOFV1OEdDTE9sbE9hSHdFYWtZcFNrWVZWTndQdjk2dUxGMEUw?=
- =?utf-8?B?cWJ6c0RLZlNDSmlVa1I5eVZzN2l2K0ZwQXRBaDN6eEdGUWtQMzhwcWFXWjhj?=
- =?utf-8?B?ZTBxN0psZGZCQUxtSGJHT0hrRml6ZENldlFFQUlZamhoYkw1OUN4TGhnMW1R?=
- =?utf-8?B?VzhRalAyTXByaTdyS3VhZzZDZ3RLQW1XbUJOb003V1ZwYm5xUlJvQlRveTdE?=
- =?utf-8?B?aTBXMFk2T3czOEpKbWdXRUloaWxGQURkaTBsWjc3WE9tSlp3UTVod25VaVZ1?=
- =?utf-8?B?dzd4Nkc0UnVoN0VCN2lKcmJKQ2hVdWlGc3oyeWZyTFJDY3oxUy9VZm9RRnhM?=
- =?utf-8?B?eTlxdWJsaXRETmtQa09aVzdMZWFYeUJDWTlOTDJsUzJHWDdGWmtRUklRQTlK?=
- =?utf-8?B?K1VUaXNhVzhsektEMElJd2Fvbm84aDY1WmlDK2s2QWJTMEs4VGRBVVEyL0x0?=
- =?utf-8?B?U0dESzR6T1BsUC9ZZExtRVN2QkNHOTA0Nnp4c3NQZXlDTWhISmlLbzVVUnNX?=
- =?utf-8?B?dzkzQ2tsS3hGTEJMMUZWSTVYOUEwMVlKYnVBWDJrelBZcUh5Q0lOQm5YNGZu?=
- =?utf-8?B?cUFRUzVaWXVLaEp2OVpoNVVYOXhVeW94VmwwUmRMdnhwbEZMTGRhVEVGRnVH?=
- =?utf-8?B?NmYvL0ZndmFzbmowUm1ybFZiRHcxNHJzcGxXMzRFY3dwYW5WY1lmaTN2SXlh?=
- =?utf-8?B?NFVuaUkzTlQvaEdxUGZvUTFMNU9uRGNkcjQrWEg2bXVKTWNWeDNNaStHbVRx?=
- =?utf-8?B?d0ZoME9tRjFYbEtNRU55UVU4NTlWUnY0YUFGWnE2MDZOOG5kSmdkZGpjMWR2?=
- =?utf-8?B?MjRNZG9ZN3lPc3oyWm1LTVlRRXNsa0xRQnAyaGplWDVwSGpQd1NsOVpwQlFk?=
- =?utf-8?B?TFBjR2x1UTcvNnVhMDdwaTZZUERjV1JYT0FpZldRcG5OeWpZcDZDaFhDZkVu?=
- =?utf-8?B?VGNNMVZGcWlQeWpFTGZXeEk5QTlXbGRTcFljQlEzWlpYSHpYMFFWc3VscWdn?=
- =?utf-8?B?azRSUkxHU0owTm1MM0Y1T2pVQUV4VU1oYUwvdlphRUhOY3o3RW1pZHl5QXh5?=
- =?utf-8?B?ekF4ZlZWRWxndyswWGVwQTVKS2xBS0s4aC92TjZYbU5RWjhXcVFNSGlXZE42?=
- =?utf-8?B?ckw3anQvaFY4aFBqY2RVdHI5YTJVUWk2NHRjU2Jlc1R2S3I4dkp2a2Frc3Mx?=
- =?utf-8?B?WitpYmVFbUtFU1JDaE1uUmxHbnVENG9kNnVzVWZnQTVmeGtRbkhVOWtEMDlM?=
- =?utf-8?B?YitTZlJBdXp1R0QvMDRkYzlyVDEvZER5eDRwcjRvaXZla2ZxeU04eGE4UEVm?=
- =?utf-8?B?K1RnODJ2clRMUzQ2a0hTMDVwaGF3cDdaKzIrUjcvdW51cHQ0Qng3RWhrL2xG?=
- =?utf-8?B?d2tRZ3hNRUROQ0gydWNMbFJIWlVVQWtwcWZxWnU0blg3aG5sbnZrUzNGc0Vn?=
- =?utf-8?B?TDFmczVtZTlWTWoyMDVWeE1CclNSTDN2cFIwbGF1ZTMwS2g1M0VJdDVNRnhD?=
- =?utf-8?B?dG5Sd2VBaHUvV0thVSszZS9Yc1JPcW9OR0pJTW5NcnhaL0YwaHRuckJXdnNl?=
- =?utf-8?Q?7S7GwBnZMtNWsuGX6CXtxaXrH?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d05666d-3ee6-40fd-a9e1-08db3602deb0
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 18:23:35.8434
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6Y0CHZ1M+7gPmBEXTi1zqkCgrDVxwDompNMC6Leg9C+ECACFB9QOq8OzFCPTDhwv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7428
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405100302.540890806@linuxfoundation.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-05 12:37, Asahi Lina wrote:
-> After a job is pushed into the queue, it is owned by the scheduler core
-> and may be freed at any time, so we can't write nor read the submit
-> timestamp after that point.
+On Wed, Apr 05, 2023 at 12:03:38PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.23 release.
+> There are 177 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Fixes oopses observed with the drm/asahi driver, found with kASAN.
-> 
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> ---
-
-That's a good fix! Thanks for fixing this. I'll push
-this through drm-misc-next and drm-misc-fixes, if there
-are no objections.
-
-Reviewed-by: Luben Tuikov <luben.tuikov@amd.com>
-
-Regards,
-Luben
-
->  drivers/gpu/drm/scheduler/sched_entity.c | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
-> index 15d04a0ec623..e0a8890a62e2 100644
-> --- a/drivers/gpu/drm/scheduler/sched_entity.c
-> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
-> @@ -507,12 +507,19 @@ void drm_sched_entity_push_job(struct drm_sched_job *sched_job)
->  {
->  	struct drm_sched_entity *entity = sched_job->entity;
->  	bool first;
-> +	ktime_t submit_ts;
->  
->  	trace_drm_sched_job(sched_job, entity);
->  	atomic_inc(entity->rq->sched->score);
->  	WRITE_ONCE(entity->last_user, current->group_leader);
-> +
-> +	/*
-> +	 * After the sched_job is pushed into the entity queue, it may be
-> +	 * completed and freed up at any time. We can no longer access it.
-> +	 * Make sure to set the submit_ts first, to avoid a race.
-> +	 */
-> +	sched_job->submit_ts = submit_ts = ktime_get();
->  	first = spsc_queue_push(&entity->job_queue, &sched_job->queue_node);
-> -	sched_job->submit_ts = ktime_get();
->  
->  	/* first job wakes up scheduler */
->  	if (first) {
-> @@ -529,7 +536,7 @@ void drm_sched_entity_push_job(struct drm_sched_job *sched_job)
->  		spin_unlock(&entity->rq_lock);
->  
->  		if (drm_sched_policy == DRM_SCHED_POLICY_FIFO)
-> -			drm_sched_rq_update_fifo(entity, sched_job->submit_ts);
-> +			drm_sched_rq_update_fifo(entity, submit_ts);
->  
->  		drm_sched_wakeup(entity->rq->sched);
->  	}
-> 
-> ---
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-> change-id: 20230406-scheduler-uaf-2-44cf8faed245
-> 
-> Thank you,
-> ~~ Lina
+> Responses should be made by Fri, 07 Apr 2023 10:02:26 +0000.
+> Anything received after that time might be too late.
 > 
 
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 519 pass: 519 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
