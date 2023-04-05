@@ -2,172 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC026D803B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D236D803F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238377AbjDEPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S238410AbjDEPBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjDEPBc (ORCPT
+        with ESMTP id S229879AbjDEPBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:01:32 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A274203;
-        Wed,  5 Apr 2023 08:01:31 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 63922320031A;
-        Wed,  5 Apr 2023 11:01:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 05 Apr 2023 11:01:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1680706889; x=1680793289; bh=QJ
-        L8kruNqpnU3ciJpzabnkEsxgv2FytG75yCcU3W/5A=; b=ori40a6yjrumQN+QpS
-        twsnnpOyY0XZFZgXzcV323I2xrb8tq+3ugZ2Hwgla4DGgKg5+72bzAbHlT07lYDg
-        8ECtCtD71CYbPx1qZf+w8U1Dtxn97KAi7xH7MbkzvYNc12B3RvdrQP9kmiAbcHpz
-        0EsJFcqZ8/RKkkCmRX/BX3uN4NU7+ApS0Ms+o0zf/sLMhUgx1p+bZcJ/oeWOeCGi
-        MQxi4RdgoTd9ga4THNuTJs11y+QhgmuBdpkW5gMjdJnMG6tH+HPPgQKMZTUbqZ/S
-        /1itP5hj9z4QXL18vPukLm3VSUWpPMZWAw9xoBnSpClf0/cZ/P5FOGieNk9UkoxX
-        nWAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680706889; x=1680793289; bh=QJL8kruNqpnU3
-        ciJpzabnkEsxgv2FytG75yCcU3W/5A=; b=nnn8TVnC++0k4aTM9GXIQp5yL6N9e
-        CJyMbl6Ea4MJLJkhiQJk96wJqU7u2QsGUFgeiq3YFIxtvy77dV+AsKqsFr0qbLrH
-        aewSDtJu+7Yro2kDsL5RziJMh+btTMwxBK2S+awpQtmBDeKrKPiHVfmgBFX0JNRl
-        UC+lThGaMAzAqCN/TYYfcVqbkgLCnk+J2CRNGyk8UExZNewCH2tzkkR5j75/8hYC
-        07d+kok9epFSTrxV5btmKLIXmH4fYJkymjsT/AOVs4nf1NvkIC30l6TjAUBX1oBO
-        oxn0U6gwxiGycGlnc9A8ad8bc0k7wiiS09M9cez99tpDwRM1Hmp7zdnLg==
-X-ME-Sender: <xms:SI0tZJnhpS047e-aQCA53jeB_NuS6Uma_EFn0nN5TUojShodAHD6eQ>
-    <xme:SI0tZE2gUmdK0is8xJiUTO1itJRp4KSYtjM5Drgt2vynJhoGDtNZN6dQcWwrokcap
-    xLxG4p1LgobiMvFqiE>
-X-ME-Received: <xmr:SI0tZPrGj7573KcBg8vrSuljcTRhwgy-Xb9RoIaS1BhqEZSNvttBIcvA7YlP2nqECFN0ab5WdYcFfeMN-P1Je6G3jxEVLFs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgkeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
-    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:SI0tZJnAV880vctHO3cTZBt1T2h7PBKrm1mVdCArS8GwuLI7Xaq96w>
-    <xmx:SI0tZH07tpY1p5lcqBUrE9NIYA01hzsqzvm4ybLp0ncxc8xmEXvi2Q>
-    <xmx:SI0tZIs-LKOubOo0350bqkn99Zf6takSCvy_FljGRjSy40mDBDFN4w>
-    <xmx:SI0tZFm80BbguG3rPX46x3lJYv7veP-pnO0Yx074npAn_g6Prby3Zg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Apr 2023 11:01:27 -0400 (EDT)
-Date:   Wed, 5 Apr 2023 17:01:26 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Rob Herring <robh@kernel.org>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH 7/7] dt-bindings: display: add panel-timing property to
- sitronix,st7789v
-Message-ID: <d3d3cnpoeiozaqvbgy4e767omkjqi5vywj6jkxcl6pzgwu654k@kebuuk6irse4>
-References: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
- <20230314115644.3775169-8-gerald.loacker@wolfvision.net>
- <20230316215735.GA3940832-robh@kernel.org>
- <dd26836f-d54c-65d1-0acc-8a09745bb066@wolfvision.net>
- <20230329091636.mu6ml3gvw5mvkhm4@penduick>
- <d5a31f75-eb93-0ff2-cd5b-19cdec58e103@wolfvision.net>
- <20230330145811.asot2cvux4ebbeqy@penduick>
- <5f1f90e2-eee8-d941-e4b0-7f2411a9d415@wolfvision.net>
- <20230404160419.xlnlxq7sbsqopfwo@houat>
- <2c3fa5ee-78a9-8359-01fc-3137f3cb1b9b@wolfvision.net>
+        Wed, 5 Apr 2023 11:01:46 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3B04C31
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:01:42 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id j11so46989956lfg.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:01:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680706900;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=InCAPoKb7nXqVzt45DrhtDsezJaeGfAT3p2E+j2WBiQ=;
+        b=a04wPNLyVNBH0DDZmfY14/ypEXwgCxdYLy6h73WscSpl9iN1YZ7Pnoh7dT97r9tj8B
+         HzxuhESN6U8bwe6UqFdOCF9ty8NNRyJ0ddhl6VllJTxq7Sf/BKKC2VztWlgPgFuCsQQA
+         toY9fSHT9fiFTQwLekA7QcWk4WIbVKUZih8Qm2LRWopmXWdNFPqwhGjDcRPgIzXQ1Lzl
+         IoTsRk5mP9p9AETRHWyre1FD1PAWy352wed15V+STbcsQJK0Qgs4/2RguwitzRX/B1Kc
+         GKgKaZt8tklpRIhCoDX4X8VaeaE1Hl5jE7GVwQxzyngRSZQMRpMPGMDfYolx4RXkLgac
+         LQKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680706900;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=InCAPoKb7nXqVzt45DrhtDsezJaeGfAT3p2E+j2WBiQ=;
+        b=GgLpMU64Bsl0bXvLxhUnG4k6RXbObfgchTZNFp6R3XuN/ntqqgM5r9nB0E4nIzL8vj
+         gxKBocVg/GjB14Hb1UPBv7RyHn83kPsss6A4Xrm+2MdL541cbwac4cm/QSmB4hPsVF1s
+         5o/vvKwsv4YTmUrJASXRI/sTiD9adTWy9nrK6lOb6lMS7U6bEDoZVsrwCDdp59TrrssM
+         HmYtEZiQfHsBqNDfIWx/gPLkLxYsesxHpru9PWLTnNrtjO+odL4AjTBdhIqQxu8Q2Ok7
+         QwC0EPEfdCrEDIa9nFk7aeQgMKJ4rRW+o+QisK3aE8mXRDAS/BM3OiN3aBG8/cfgG2IP
+         B8Zw==
+X-Gm-Message-State: AAQBX9c7b2dftwIaH2rWT7S43ph+7eC19sFzaCWdjYQOuvCxWA4/IdES
+        Mj6zoCAdhULTTFqLo9k1vxNOnQ==
+X-Google-Smtp-Source: AKy350ZnUnp+ndTfSd3cBb7U2tFRydWFJHUuvzlhA0x8eAdms8NerYv4BtqzyEp7Fbln7MKkIhEzFA==
+X-Received: by 2002:ac2:596b:0:b0:4e9:609c:e901 with SMTP id h11-20020ac2596b000000b004e9609ce901mr1629436lfp.21.1680706900447;
+        Wed, 05 Apr 2023 08:01:40 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id 16-20020ac25690000000b004e84896253asm2833994lfr.251.2023.04.05.08.01.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 08:01:39 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/2] Introduce RPM Master stats
+Date:   Wed, 05 Apr 2023 17:01:34 +0200
+Message-Id: <20230405-topic-master_stats-v1-0-1b1fa2739953@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uqdnhsc2u25qcidy"
-Content-Disposition: inline
-In-Reply-To: <2c3fa5ee-78a9-8359-01fc-3137f3cb1b9b@wolfvision.net>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE6NLWQC/x2NQQqDQAwAvyI5N7Cu9mC/UkrJrrEG7CrJthTEv
+ zd4nIFhdjBWYYNbs4PyV0zW4tBeGsgzlRejjM4QQ+xCH65Y100yvskq69MqVcNEMbQ00DR0I3i
+ YyBiTUsmzp+WzLC435Ul+5+n+OI4/aRZrdXkAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680706899; l=1192;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=14q4AT8u/IwWpTVamu6McL0Que9EQK9+tnHVqVGCza4=;
+ b=V9FO4W9wrnVv7FQTMDwPWeUJn+ZMGby6qW6rhJdnqp9sVBnwJwJ8yMERt2zOd3n04sT5txwnQoMc
+ DnMorEupDnl3teN0hfy+QII6hDx0rfQAAk4Xg5/V21YqLb03mmss
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The RPM MSG ram includes per-subsystem low-power mode entry/exit/
+residence/etc. statistics which are very useful for trying to debug
+what I'd call "SoC insomnia", or IOW the plaftorm refusing to drop
+the voltage rails to a minimum and gate the non-critical clocks.
 
---uqdnhsc2u25qcidy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds a very short and simple driver to query that data
+and expose it through debugfs.
 
-On Tue, Apr 04, 2023 at 06:26:25PM +0200, Michael Riesch wrote:
-> >>>> A different question is the partial mode, for which (IIUC) you sugge=
-st
-> >>>> the overscan feature. As I have never heard of this before, it would=
- be
-> >>>> very nice if you could point me to some examples. Where would the
-> >>>> effective resolution be set in this case?
-> >>>
-> >>> So, back when CRT were a thing the edges of the tube were masked by t=
-he
-> >>> plastic case. HDMI inherited from that and that's why you still have
-> >>> some UI on some devices (like consoles) to setup the active area of t=
-he
-> >>> display.
-> >>>
-> >>> The underlying issue is exactly what you describe: the active area is
-> >>> larger than what the plastic case allows to see. I don't think anyone
-> >>> ever had the usecase you have, but it would be the right solution to =
-me
-> >>> to solve essentially the same issue the same way we do on other output
-> >>> types.
-> >>
-> >> OK, we'll look into the overscan feature. But still the information
-> >> about the active area should come from the driver, right?
-> >=20
-> > No, the userspace is in charge there.
->=20
-> I'd prefer not to have the hardware description in user space. But we
-> can continue this discussing once our v2 is out.
+The base used for writing this driver is:
+https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.9.14.r1/drivers/soc/qcom/rpm_master_stat.c
 
-I'm not sure if it's worth doing something if you don't agree with it :)
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      dt-bindings: soc: qcom: Add RPM Master stats
+      soc: qcom: Introduce RPM master stats driver
 
-At the end of the day, "the hardware" is a matter of semantics, and you
-would argue that it's only the (user) visible part of the display, and I
-would argue that it's the whole panel and we would both be somewhat
-right.
+ .../bindings/soc/qcom/rpm-master-stats.yaml        |  53 +++++++
+ drivers/soc/qcom/Kconfig                           |  11 ++
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/rpm_master_stats.c                | 160 +++++++++++++++++++++
+ 4 files changed, 225 insertions(+)
+---
+base-commit: 8417c8f5007bf4567ccffda850a3157c7d905f67
+change-id: 20230405-topic-master_stats-ba201a9af93d
 
-The thing is: having the margins definition allows the userspace to be
-aware that there's overscan to deal with, and for example setup the
-scaler to properly display whatever you put in there.
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-If you just report a weird mode that doesn't match any kind of standard,
-well, you could still do that, but you would need to tell the compositor
-which mode you would need to scale down from.
-
-In both case the userspace is involved. One is generic, the other isn't
-and probably requires some extra development.
-
-Maxime
-
---uqdnhsc2u25qcidy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZC2NRgAKCRDj7w1vZxhR
-xUKjAP0bosIXR0c4/QGmXsVFAriJBRNXL74WtMDPDn1tfpDQaAD+N1650T66iI7O
-gnDqW/1Wwe83g8aBarlnGNN9YWcSNw0=
-=hGRX
------END PGP SIGNATURE-----
-
---uqdnhsc2u25qcidy--
