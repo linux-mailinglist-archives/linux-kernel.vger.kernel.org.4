@@ -2,50 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371EC6D85AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7C66D85AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233986AbjDESHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S234100AbjDESH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233953AbjDESHb (ORCPT
+        with ESMTP id S234052AbjDESHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:07:31 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64BE7683
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:07:10 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E2C281EC0104;
-        Wed,  5 Apr 2023 20:06:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680718013;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=IruhkEGZZCoFzKGgFnTGC1NJqEOuwMvRvEbYMgFxXUc=;
-        b=eHH+9g929JkpCyAzbzKst67IZsNmNd2C26rlAtkQ8eniAIWhIuj158xXsqIjso7oQolSeh
-        3+nnsnsI12CiKDcLjy5ZY65XKBKt0FDvxfXqdc+PWOs7aMf1zdo7D2O+r/2WURNyA59vea
-        0tOugR2zfWSfGVlRuU/5H8Eh+fOjHB0=
-Date:   Wed, 5 Apr 2023 20:06:48 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/amd_nb: Check for invalid SMN reads
-Message-ID: <20230405180648.GEZC24uJ+GSMZxczaW@fat_crate.local>
-References: <20230403164244.471141-1-yazen.ghannam@amd.com>
- <20230403193245.GCZCsp3RjNZFSE5f9s@fat_crate.local>
- <abc57738-6ab9-50e6-6c05-5059299d19d1@amd.com>
- <20230403203623.GDZCs4x5yVReaPVOaS@fat_crate.local>
- <a8826972-376a-5af6-8e61-d74520e355df@amd.com>
+        Wed, 5 Apr 2023 14:07:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2202F7A97;
+        Wed,  5 Apr 2023 11:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=xSgARidbSrbR51sAvFluXb6jWPhaQNLco18yBBJHCVc=; b=jAtjuZ4xXNLvq/2JGDp6JgMaoj
+        gAIoMFyE/X0Luo1gp4xQwfMCbfXXYJqs9KJFpC/JPosJaOSEEGBfP7XCFxnSlrdvWabT+1URapyAY
+        Ge81vkvk+tffke1MO4pzti1k1kK2frr3IYnRnvhpdWoSdKsUxxe0KJ0oi+/O0MyVJ6wuuC6Wl9G5a
+        48O9+qRBJqfsCZyUdsRw8vhrs5DpF6Rp2YgmO8mPl9yHp+2/NjNlQFUTxCMEe8Girj0WbIskqD2N3
+        98desdq3Sy/t+WLE1UIxIjbP2WCF8vURjMybpg2N0OsD/gvefWtJkoIy3s6uWUv4iIvYgNVyVKon4
+        B8VONlNg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pk7XN-00GcaF-Hs; Wed, 05 Apr 2023 18:07:13 +0000
+Date:   Wed, 5 Apr 2023 19:07:13 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Simon Horman <horms@kernel.org>
+Cc:     Sean Anderson <seanga2@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH net-next] net: sunhme: move asm includes to below linux
+ includes
+Message-ID: <ZC240XCeYCaSCu0X@casper.infradead.org>
+References: <20230405-sunhme-includes-fix-v1-1-bf17cc5de20d@kernel.org>
+ <082e6ff7-6799-fa80-81e2-6f8092f8bb51@gmail.com>
+ <ZC23vf6tNKU1FgRP@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a8826972-376a-5af6-8e61-d74520e355df@amd.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZC23vf6tNKU1FgRP@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,21 +60,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 05:36:40PM -0400, Yazen Ghannam wrote:
-> Yes, that's fine. Should I send another revision?
+On Wed, Apr 05, 2023 at 08:02:37PM +0200, Simon Horman wrote:
+> On Wed, Apr 05, 2023 at 01:34:11PM -0400, Sean Anderson wrote:
+> > On 4/5/23 13:29, Simon Horman wrote:
+> > > A recent rearrangement of includes has lead to a problem on m68k
+> > > as flagged by the kernel test robot.
+> > > 
+> > > Resolve this by moving the block asm includes to below linux includes.
+> > > A side effect i that non-Sparc asm includes are now immediately
+> > > before Sparc asm includes, which seems nice.
+> > > 
+> > > Using sparse v0.6.4 I was able to reproduce this problem as follows
+> > > using the config provided by the kernel test robot:
+> > > 
+> > > $ wget https://download.01.org/0day-ci/archive/20230404/202304041748.0sQc4K4l-lkp@intel.com/config
+> > > $ cp config .config
+> > > $ make ARCH=m68k oldconfig
+> > > $ make ARCH=m68k C=2 M=drivers/net/ethernet/sun
+> > >     CC [M]  drivers/net/ethernet/sun/sunhme.o
+> > >   In file included from drivers/net/ethernet/sun/sunhme.c:19:
+> > >   ./arch/m68k/include/asm/irq.h:78:11: error: expected ‘;’ before ‘void’
+> > >      78 | asmlinkage void do_IRQ(int irq, struct pt_regs *regs);
+> > >         |           ^~~~~
+> > >         |           ;
+> > >   ./arch/m68k/include/asm/irq.h:78:40: warning: ‘struct pt_regs’ declared inside parameter list will not be visible outside of this definition or declaration
+> > >      78 | asmlinkage void do_IRQ(int irq, struct pt_regs *regs);
+> > >         |                                        ^~~~~~~
+> > 
+> > This seems like a problem with the header. m68k's asm/irq.h should include linux/interrupt.h before its declarations.
+> 
+> Hi Sean,
+> 
+> I do see your point. But TBH I'm unsure which way to go on this one.
+> Geert, do you have any input?
 
-On a second thought, I think we should do what you said in the write
-function too. Because the write can fail too. So if it can, we need to
-handle that potential error too.
-
-Care to send a new version which does this check in the read and in the
-write function? Basically what you had initially but with the write side
-check added too to amd_smn_write.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+We always include linux/* headers before asm/*.  The "sorting" of
+headers in this way was inappropriate.
