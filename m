@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731296D83D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CEF6D83DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbjDEQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
+        id S229699AbjDEQjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjDEQiO (ORCPT
+        with ESMTP id S229712AbjDEQjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:38:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743AA4C31;
-        Wed,  5 Apr 2023 09:38:13 -0700 (PDT)
+        Wed, 5 Apr 2023 12:39:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27702135
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:39:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6FDA629BE;
-        Wed,  5 Apr 2023 16:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FCB3C43443;
-        Wed,  5 Apr 2023 16:38:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9C9A628FD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:39:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C7DC433D2;
+        Wed,  5 Apr 2023 16:39:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680712692;
-        bh=syKhDH18sc1NcY1/ySSVPv2qM6XNI1spR3GACAOsNJ0=;
+        s=k20201202; t=1680712752;
+        bh=ZU4IDuI+UD+VYcqVNYCPsCR1gEEXwDspotTAU5Z68mQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eBNtu1Pr52mhp899qkiRAQ3jV6O5ZfF7agoRgDSfE2Kov/aUqK7ByJkK10TOdw+0X
-         3WCXsxvRS43Z9Lyz2xY9BnQKKVTRIKzEr0FgrLu2MU8LYBrhazoPa55y5z8bI5WkR+
-         YwSQAMOiAhxm282qCVUe1Y1cNJvZQhpBqkqcEYC/swER81ncPq3WNN1br3XCS9klTf
-         T4F1g/Cab+mZbp1h5rPIys/HbGY0wqQ8feM7ryyu5WBcX0QZsD1r3NV6ay0UWmai08
-         psHGP5jshPyXILDcFR39tHCWgW05oHtBCZvCvRF4cKAun42UDKb6omKeU7L/Mo6QwE
-         IH0DbsmV6DXog==
-Date:   Wed, 5 Apr 2023 17:38:07 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     William Qiu <william.qiu@starfivetech.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
-Subject: Re: [RESEND v6 1/2] dt-bindings: soc: starfive: Add StarFive syscon
- doc
-Message-ID: <20230405-bullseye-handsaw-5c2e4dab772f@spud>
-References: <20230315055813.94740-1-william.qiu@starfivetech.com>
- <20230315055813.94740-2-william.qiu@starfivetech.com>
- <850bc37e-c6d1-2381-a851-965a4cbee8a0@linaro.org>
- <e38efd81-9c79-553b-7556-7aff30f6ec50@starfivetech.com>
- <f25cc55e-3405-4b17-fb45-5ae5eb36a404@linaro.org>
- <d0b1d44e-6d6e-536c-046e-be6a53f1d240@starfivetech.com>
+        b=gcwei0ZIHgrfb/bgNI3r8QtveRqgaFJPGCR4450FAHyW0oijbi4holZ76FOdmjCQO
+         OjTzfveG9WC2EzBNZdL0DobrlUqs0Jn5wcJXMEPSElL9pXT/kd00NjrciQUAUnGfiA
+         E33/nzdxauL4B6coAh87deRZTOf49q0Qj5/1N5bgz/FN/d1NwnT7ugiccACbXM0fkN
+         g6DwZyCUoL04fDx4epb3GwXzfHr7lA2KI0xEAkhaR1EMXlepjUDpQTLJvFk9QUc+4e
+         XlpDyOe+m3axxa8vMIqdnN9shZlT6yO27ciVaIrUtCdZ7xfk/f9gV8D5ndt6jL7DeW
+         LF4ANjVXpBPBA==
+Date:   Wed, 5 Apr 2023 17:39:06 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        martin.botka1@gmail.com, Shengyu Qu <wiagn233@outlook.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 3/3] regulator: axp20x: Add support for AXP313a
+ variant
+Message-ID: <20230405163906.GT8371@google.com>
+References: <20230401001850.4988-1-andre.przywara@arm.com>
+ <20230401001850.4988-4-andre.przywara@arm.com>
+ <20230405142103.GL8371@google.com>
+ <f1d7526b-7f51-462d-8192-0a05828bfc4f@sirena.org.uk>
+ <20230405153651.GS8371@google.com>
+ <e86dd4a9-540a-461f-a78a-5acb480e98b9@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="l1+mDrVx6go5Y/WQ"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d0b1d44e-6d6e-536c-046e-be6a53f1d240@starfivetech.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e86dd4a9-540a-461f-a78a-5acb480e98b9@sirena.org.uk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,54 +66,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 05 Apr 2023, Mark Brown wrote:
 
---l1+mDrVx6go5Y/WQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Apr 05, 2023 at 04:36:51PM +0100, Lee Jones wrote:
+> > On Wed, 05 Apr 2023, Mark Brown wrote:
+>
+> > > I'm waiting for the MFD.
+>
+> > To do what?  #deadlock
+>
+> Whatever it is you need to do to be happy with and apply the shared bit
+> of the series.  We're somehow on v10 here for what seems like it should
+> be a very simple change, I've not followed the ins and outs of how that
+> happened.
 
-On Mon, Mar 20, 2023 at 03:32:14PM +0800, William Qiu wrote:
+From an MFD perspective, reviews happened followed by an approval in v9.
 
-> >>> Does not look like you tested the bindings. Please run `make
-> >>> dt_binding_check` (see
-> >>> Documentation/devicetree/bindings/writing-schema.rst for instructions=
-).
-> >>>
-> >>> ... or your PLL clock controller was not tested.
-> >>>
-> >>> Best regards,
-> >>> Krzysztof
-> >>>
-> >> Hi Krzysztof,
-> >>=20
-> >> I've already done`make dt_binding_check`, and get no error. So maybe P=
-LL clock controller
-> >> was not tested which I didn't add in this patch series. And PLL clock =
-controller belongs
-> >> to Xingyu Wu, I would tell him.
-> >=20
-> > What's confusing you do not allow here clock controller.
+I can't do anything without an Ack from you or some indication that you
+want me to apply the first 2 patches and share an IB.
 
-> I'll add it then.
-
-What's the plan here William?
-Can you sort something out with Xingyu Wu so that the dt-binding is
-added in a complete manner?
-In the meantime, gonna drop this series as "Changes Requested" from
-patchwork.
-
-Cheers,
-Conor.
-
---l1+mDrVx6go5Y/WQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC2j7wAKCRB4tDGHoIJi
-0k+4AQCdBamxHmK76N715U1XwXpOgMU26jEqAcw7pKiI/4fH4gD9GXFxFJgrDOfu
-irkLH3kj2KloYVZ/9eNvQHp19BK9NQ4=
-=bLQ4
------END PGP SIGNATURE-----
-
---l1+mDrVx6go5Y/WQ--
+--
+Lee Jones [李琼斯]
