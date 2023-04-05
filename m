@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98106D8299
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 950EB6D829A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239065AbjDEPvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S239121AbjDEPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238779AbjDEPvF (ORCPT
+        with ESMTP id S238762AbjDEPvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:51:05 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879A86582
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:50:58 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id g17so47269012lfv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:50:58 -0700 (PDT)
+        Wed, 5 Apr 2023 11:51:07 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3276199
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:50:59 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id h25so47252826lfv.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680709856;
+        d=linaro.org; s=google; t=1680709858;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2V+//3qTRfFc+qesLfjECY8KgEgnYIKHLOTmqMjRH5c=;
-        b=yOIQlCoGLLRMd0MCmdFYsvIBSkIOKodtOVe2CbnKWndNGqtHaM4S7t24GhUWQBJef9
-         g4gmZFojqthXo9Yw4mX7M2+lzZ8YqZaYEpRWek+3NgYHdlQ/KSo3VSIzX5sYyxMph9TN
-         71DPSEJkhOveg3FyVvTd3Hragn+y7+s68NhoATER1LBnEyE4vX2yOFo3bFELC9bxV34K
-         vBY3PlynFCr/G1zhAi15IaoJvGHDHznRwDRSkD+w4wJry3ppDCu5ts/CJDHET086o4d8
-         2/IM5CDwAI6qFcmpzNP/iud01hwLER0LqbKmHioESDkF6ZBkow0evvmZLvPfdUEG9ZoW
-         a7WQ==
+        bh=VoZW/t2NItn4c5+IARY96OyebrrhmrilS2i/y95RELk=;
+        b=S1xQ05RpN0xuL2zhRUG3HJrXGOw12SWrnx2XMG+rj9mmgum/mk+AXF8na+i9idRvzw
+         x5faXylMxXxzKRsx8QbQUxmE3HqBb/Omi2TwQgJoXvJxxYrLO9qQiwYBoC87gG4VEKXg
+         /Xxhakdq8A2BjmmScoMjvxvxYIm093kW+A9g2iyg+mCvP800DVvWyBYKXMs34ZS00uui
+         WSryiWKIk8Am9+o0coX8SbtcjHc9m7Rx9Hqf330y7zZwUnVaqcTtUCBIi0QSH178e6Uh
+         UNMuh5JxTKyAMgRmFFN+vG/3vA3Hjiap9TVpL7JbO3XE+q6lDjX0VceGJCl8SakAGJdZ
+         ipTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680709856;
+        d=1e100.net; s=20210112; t=1680709858;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2V+//3qTRfFc+qesLfjECY8KgEgnYIKHLOTmqMjRH5c=;
-        b=vEMJ+JYqOMw9uzsX3T2h5h083kaFIgG4lQCHViB9jk8c+zobeB5AfYUWIg84SXobaG
-         DASjNPLwXeQcOp1oRPBJIoyv/vW5qrg1f8dyjevske9AQjxzGeQhQ4OAIkIuH3M+dm9S
-         pGZjU+pOQzef6iRbt5X5jXoW0vyzu/RP5kGRPOn5u65+eP/sf9U1PGKkiokRzvFFJFnj
-         4NOnChQdPdCaivlSqU3otdeJA1wW1kwRxM2xIWtc+EvAL6byhOFFO2K1z50mcL/QwaPU
-         yr1k/E6zfwVR8rN6LQQDUig4MYAs0BIgMmLoVn0oDqIGZbs8tDDht9PRF/ofZq3QMN1y
-         oB4g==
-X-Gm-Message-State: AAQBX9cFZbJ1EBuvnlSffOaK0BWx3s7y3jI75SR+3qgGLHgfl8onCpm1
-        hVT2fqa0adkxoJTcMvCIoB1NVA==
-X-Google-Smtp-Source: AKy350YvUrKb1ng1AX2KabnQcR5gCfWOoQV5dLrPuM7el0H9QJYKsgv51Pu86Iba2vbavkl5loVMjQ==
-X-Received: by 2002:ac2:55a4:0:b0:4e2:337d:65d3 with SMTP id y4-20020ac255a4000000b004e2337d65d3mr1632694lfg.40.1680709856665;
-        Wed, 05 Apr 2023 08:50:56 -0700 (PDT)
+        bh=VoZW/t2NItn4c5+IARY96OyebrrhmrilS2i/y95RELk=;
+        b=iBQJWB6LGANwiaTACuddsR1IaySCqfvn8hgtRk59mOfT5x2cipuOalXm6OrTilyqEJ
+         awQ+12qx5TVmhppXvLgiVMsKFfd7DaQ/dR+TaDQpmD+R647ljrNMTkBr75mJ3Fk0nx3s
+         iue80/7jmTpq4KYX1v5yqx47RkdrJbL5HySG6dGfhhraVzMNNDM8PAEzDB4FsHLN38l0
+         ST9l/WC71agZqCPbYDpNZVhnKokZPFmzRyBdzClIb425HAgkxSAMn/3qfLCse/wEVSkA
+         BrBVV7UKkUNCP+1ZYngYZGhGd1zTjyDQ5okKk1mmUZYcu83UZvfsBNG+9AcU1tZuVGMH
+         AdtA==
+X-Gm-Message-State: AAQBX9fLF5xRxUTbOLJc6zYKCTPvMS2qsjedCm5IKRMb+MQhhu442YUD
+        oK9MHegnhwXSqsQPquQj4H7kQg==
+X-Google-Smtp-Source: AKy350Y1Bw7EutpOHVvL5IBL1dJieZOl38J+eRPSAGtQCQ4OlkiZWaXHwu2RwepGMJ0EyA8eFdTwZQ==
+X-Received: by 2002:ac2:5ed9:0:b0:4e0:fe29:9313 with SMTP id d25-20020ac25ed9000000b004e0fe299313mr1820725lfq.15.1680709857935;
+        Wed, 05 Apr 2023 08:50:57 -0700 (PDT)
 Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id o28-20020ac2495c000000b004eb2db994e7sm2869344lfi.239.2023.04.05.08.50.55
+        by smtp.gmail.com with ESMTPSA id o28-20020ac2495c000000b004eb2db994e7sm2869344lfi.239.2023.04.05.08.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 08:50:56 -0700 (PDT)
+        Wed, 05 Apr 2023 08:50:57 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 05 Apr 2023 17:50:30 +0200
-Subject: [PATCH v2 1/5] dt-bindings: firmware: document Qualcomm QCM2290
- SCM
+Date:   Wed, 05 Apr 2023 17:50:31 +0200
+Subject: [PATCH v2 2/5] dt-bindings: arm: qcom: Add QRB2210/QCM2290 and RB1
+ board
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230403-topic-rb1_qcm-v2-1-dae06f8830dc@linaro.org>
+Message-Id: <20230403-topic-rb1_qcm-v2-2-dae06f8830dc@linaro.org>
 References: <20230403-topic-rb1_qcm-v2-0-dae06f8830dc@linaro.org>
 In-Reply-To: <20230403-topic-rb1_qcm-v2-0-dae06f8830dc@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -71,14 +71,13 @@ Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
         Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680709854; l=1346;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680709854; l=1143;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6P3gasE9HThpbkJ1H0jL6BprGLBwZW+LMCHOpIgamGE=;
- b=yLE4K4siLVQtQF1Yk5ZlF/2gvKl7bnU6LOupzvdjI8M7IFmvt65md1dVf7F7tMYUsqKrf6gge9FN
- nrrK5sQtANxJuX3SE+7PeFt92TZwrNUa9K993o7PiYPgekhSqZNm
+ bh=e/aVB5KX0++ON0sWAeEBxlEotAP8vaegj0zHbRUzB44=;
+ b=GCaSsMsrKx9f3J6VX+j3xO8cxs2hMPCN0xXx9TKY4GezxSoDUXGB0cJdON4CPF2B63ClQaq8i+Cl
+ F+Y/O6jrDVoDSKmjheRZI8HYNjKCrjRiv7TAMJIu5zCZGpMlrAal
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -90,43 +89,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible for Qualcomm QCM2290 SCM and add it to the core clock
-users list.
+Document QRB210, a QRB version of QCM2290.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Document QTI Robotics RB1 as a QRB2210 device.
+
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/arm/qcom.yaml | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-index 543feb3b6c58..35540f292bfd 100644
---- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-+++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-@@ -40,6 +40,7 @@ properties:
-           - qcom,scm-msm8994
-           - qcom,scm-msm8996
-           - qcom,scm-msm8998
-+          - qcom,scm-qcm2290
-           - qcom,scm-qdu1000
-           - qcom,scm-sa8775p
-           - qcom,scm-sc7180
-@@ -109,6 +110,7 @@ allOf:
-               - qcom,scm-msm8960
-               - qcom,scm-msm8974
-               - qcom,scm-msm8976
-+              - qcom,scm-qcm2290
-               - qcom,scm-sm6375
-     then:
-       required:
-@@ -127,6 +129,7 @@ allOf:
-               - qcom,scm-apq8064
-               - qcom,scm-msm8660
-               - qcom,scm-msm8960
-+              - qcom,scm-qcm2290
-               - qcom,scm-sm6375
-     then:
-       properties:
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 05badce5fedc..236ea55aee96 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -47,6 +47,8 @@ description: |
+         msm8996
+         msm8998
+         qcs404
++        qcm2290
++        qrb2210
+         qdu1000
+         qru1000
+         sa8155p
+@@ -353,6 +355,13 @@ properties:
+           - const: swir,wp8548
+           - const: qcom,mdm9615
+ 
++      - description: Qualcomm Technologies, Inc. Robotics RB1
++        items:
++          - enum:
++              - qcom,qrb2210-rb1
++          - const: qcom,qrb2210
++          - const: qcom,qcm2290
++
+       - description: Qualcomm Technologies, Inc. Distributed Unit 1000 platform
+         items:
+           - enum:
 
 -- 
 2.40.0
