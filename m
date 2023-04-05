@@ -2,88 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C336D71F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 03:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B596C6D71F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 03:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbjDEBWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 21:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S236594AbjDEB35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 21:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbjDEBWI (ORCPT
+        with ESMTP id S236398AbjDEB34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 21:22:08 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD83E2720
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 18:22:07 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l7so32408288pjg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 18:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1680657727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PMZrmMwRVjfayGfEKZ5/Wh+uf7NTWdPEZjK/ywMGWbw=;
-        b=lnRyzmMUBzt+VBlN5/kcDBg8RroinuDrfbciKMwqQwLIuaHTHlEBACCxutv53kRs7O
-         0piT5yMXkTblwA/V126tw4KL6d48qex0ewc7RX3hPtyi9o2vTfWuIWCffSFX0z9veXw5
-         2lGvowhgkxo3OaOyjZSS9sOG24Les0MeYsQrM0YX1PFFx9Tp48ShY+oYbhSqTsDAaih9
-         VctYuChx8qvwghczBGyKMXQJ3D8Sc776C0ntWEhTQvx+9xUY3CNiWdfZChayMDUGrTVb
-         OFA0gamskvvneAMDWv7T1aEkpvjh3hxw45CJRjMjU1hiuZD09JC3Yk9A6XuInOPBm1an
-         +c/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680657727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PMZrmMwRVjfayGfEKZ5/Wh+uf7NTWdPEZjK/ywMGWbw=;
-        b=bx+sM0i5Aq+RLFkQW+aEDgDab6WcjSAl7NThukTRM3emuS8Ub3XTF/4fryzbsHXUGB
-         x3evs9k1/7nYmXnmZHrxP1DNdTQtUj5NnS+nWU+GMlnVtAoRU5QSHC55LPD92WKDwaab
-         pqsLzjD8mqaQau3KEIsIvB4eNhImO0rwQF/2tYQ87CJLDBwOTFZGouMmu/nEBKTmvhBw
-         KBQ4sp7X5qMSZDmXhAKrLdDjLvCh/kA/427Jm3iAEYxOsztqp1ojLV+Ht9lu53fkndF0
-         9RH02PsQTiVKkcimZIKpvqZUEfSZ5xzEpn++Mu6gmgQzRzuTQ6kh4Wrphy2mLHUsZsPB
-         9j5g==
-X-Gm-Message-State: AAQBX9d+gUSgNmrq+c2DZs2U0iodwkMluqexB+sjmn7mOqp/1k8Q9Lgt
-        ME7H2ZEP6kgnsfdcDuRcMvhWNA==
-X-Google-Smtp-Source: AKy350YFg5M4Wfdwi60nxK/2w+Z902ux2yIkzfxHjSBUhr16zkDivckeO7pjVqcGWM0F3n4oJT8JHA==
-X-Received: by 2002:a05:6a20:1bc6:b0:bf:4563:e647 with SMTP id cv6-20020a056a201bc600b000bf4563e647mr3276440pzb.40.1680657727161;
-        Tue, 04 Apr 2023 18:22:07 -0700 (PDT)
-Received: from [10.16.161.199] (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id r26-20020a62e41a000000b006281273f1f5sm9340798pfh.8.2023.04.04.18.22.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 18:22:06 -0700 (PDT)
-Message-ID: <ad0217de-3db8-e3f9-3824-62b36dc7d2ee@igel.co.jp>
-Date:   Wed, 5 Apr 2023 10:22:02 +0900
+        Tue, 4 Apr 2023 21:29:56 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4677F30E2
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 18:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680658195; x=1712194195;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NBW2fgUz9anzHPn80OpQJ6ALlq6FUo8B7NGe+OQ3gy8=;
+  b=l2iV741Hy6QB2jfHtamcw6/EGvhLGGL94xZ9r78X6QK4OwnG6J56OevK
+   ZbYFTd2xLu0aHlhyDul0uYeHlviS+htlvW+6exyWM2LpUGrpRcPt6pWHv
+   CzByfBKF3fiUAb2NCZOhSvb28HeT+6Gr6OaO0zL7i8M6zVB4yI7QkX07L
+   gIMSAjVyX5bNyQUZJm3D6omFY6uWKfojDg3NAnvQan+5Tb4SsDHaVLkqa
+   ES48XOzAfWEXaY6sMl0R5fdWxTopafFUftzXmN3i+LGsO1CQ81aTer7L1
+   Xu5bPZjfaf4WXcahusWuIdP+B8/VsqYH03ThOiCgorIB3r6zcACeL0hQI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="330945308"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="330945308"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 18:29:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="719149554"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="719149554"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 04 Apr 2023 18:29:53 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjryC-000QBG-15;
+        Wed, 05 Apr 2023 01:29:52 +0000
+Date:   Wed, 5 Apr 2023 09:29:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning:
+ "THREAD_SHIFT" is not defined, evaluates to 0
+Message-ID: <202304050954.yskLdczH-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [EXT] [RFC PATCH 0/4] PCI: endpoint: Introduce a virtio-net EP
- function
-Content-Language: en-US
-To:     Frank Li <frank.li@nxp.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jon Mason <jdmason@kudzu.us>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Takanari Hayama <taki@igel.co.jp>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-References: <20230203100418.2981144-1-mie@igel.co.jp>
- <HE1PR0401MB2331EAFF5684D60EC565433688D79@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <CANXvt5qjDDEK0NB=BWh00-HGU-p+sC=8TyP-oPdccnZxKxZt9w@mail.gmail.com>
- <HE1PR0401MB2331A8D5C791C34D9C39A62688DB9@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <796eb893-f7e2-846c-e75f-9a5774089b8e@igel.co.jp>
- <AM6PR04MB483881DFA2C35F02011FE74D88899@AM6PR04MB4838.eurprd04.prod.outlook.com>
-From:   Shunsuke Mie <mie@igel.co.jp>
-In-Reply-To: <AM6PR04MB483881DFA2C35F02011FE74D88899@AM6PR04MB4838.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,17 +64,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Masahiro,
 
-On 2023/03/30 1:46, Frank Li wrote:
->> On 2023/02/08 1:02, Frank Li wrote:
-> Did you have chance to improve this?
+FYI, the error/warning still remains.
 
-Yes. I'm working on it.I'd like to submit new one in this week.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   76f598ba7d8e2bfb4855b5298caedd5af0c374a8
+commit: 80b6093b55e31c2c40ff082fb32523d4e852954f kbuild: add -Wundef to KBUILD_CPPFLAGS for W=1 builds
+date:   4 months ago
+config: powerpc-buildonly-randconfig-r003-20230405 (https://download.01.org/0day-ci/archive/20230405/202304050954.yskLdczH-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=80b6093b55e31c2c40ff082fb32523d4e852954f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 80b6093b55e31c2c40ff082fb32523d4e852954f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/ arch/powerpc/kvm/ virt/
 
-> Best regards
-> Frank Li
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304050954.yskLdczH-lkp@intel.com/
 
-Best,
+All warnings (new ones prefixed by >>):
 
-Shunsuke,
+   In file included from arch/powerpc/kvm/bookehv_interrupts.S:26:
+>> arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning: "THREAD_SHIFT" is not defined, evaluates to 0 [-Wundef]
+      20 | #if (THREAD_SHIFT < 15)
+         |      ^~~~~~~~~~~~
 
+
+vim +/THREAD_SHIFT +20 arch/powerpc/kvm/../kernel/head_booke.h
+
+1a4b739bbb4f88 Christophe Leroy 2019-04-30  10  
+63dafe5728e735 Becky Bruce      2006-01-14  11  /*
+63dafe5728e735 Becky Bruce      2006-01-14  12   * Macros used for common Book-e exception handling
+63dafe5728e735 Becky Bruce      2006-01-14  13   */
+63dafe5728e735 Becky Bruce      2006-01-14  14  
+63dafe5728e735 Becky Bruce      2006-01-14  15  #define SET_IVOR(vector_number, vector_label)		\
+63dafe5728e735 Becky Bruce      2006-01-14  16  		li	r26,vector_label@l; 		\
+63dafe5728e735 Becky Bruce      2006-01-14  17  		mtspr	SPRN_IVOR##vector_number,r26;	\
+63dafe5728e735 Becky Bruce      2006-01-14  18  		sync
+63dafe5728e735 Becky Bruce      2006-01-14  19  
+e12401222f749c Yuri Tikhonov    2009-01-29 @20  #if (THREAD_SHIFT < 15)
+e12401222f749c Yuri Tikhonov    2009-01-29  21  #define ALLOC_STACK_FRAME(reg, val)			\
+e12401222f749c Yuri Tikhonov    2009-01-29  22  	addi reg,reg,val
+e12401222f749c Yuri Tikhonov    2009-01-29  23  #else
+e12401222f749c Yuri Tikhonov    2009-01-29  24  #define ALLOC_STACK_FRAME(reg, val)			\
+e12401222f749c Yuri Tikhonov    2009-01-29  25  	addis	reg,reg,val@ha;				\
+e12401222f749c Yuri Tikhonov    2009-01-29  26  	addi	reg,reg,val@l
+e12401222f749c Yuri Tikhonov    2009-01-29  27  #endif
+e12401222f749c Yuri Tikhonov    2009-01-29  28  
+
+:::::: The code at line 20 was first introduced by commit
+:::::: e12401222f749c37277a313d631dc024bbfd3b00 powerpc/44x: Support for 256KB PAGE_SIZE
+
+:::::: TO: Yuri Tikhonov <yur@emcraft.com>
+:::::: CC: Josh Boyer <jwboyer@linux.vnet.ibm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
