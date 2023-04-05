@@ -2,509 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB25C6D787E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B426D7891
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237105AbjDEJgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S237291AbjDEJjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbjDEJgO (ORCPT
+        with ESMTP id S237250AbjDEJje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:36:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 037E15241;
-        Wed,  5 Apr 2023 02:35:44 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDC771684;
-        Wed,  5 Apr 2023 02:35:33 -0700 (PDT)
-Received: from [10.57.53.173] (unknown [10.57.53.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 676A43F73F;
-        Wed,  5 Apr 2023 02:34:47 -0700 (PDT)
-Message-ID: <9991256d-37e8-5fc8-5ed9-82a6a1b40dff@arm.com>
-Date:   Wed, 5 Apr 2023 10:34:45 +0100
+        Wed, 5 Apr 2023 05:39:34 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3476B4C25;
+        Wed,  5 Apr 2023 02:39:31 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id bl22so12215261oib.11;
+        Wed, 05 Apr 2023 02:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680687570;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4wIC1CpZVOaE4w0vpqchy3vQi+52X2p+A7NNpUhaHjs=;
+        b=f9pIAWwvJ1/ZkSjsLBZOYKNN/SvlUJHhIWEYf5hHOmqMKyYatIzDxQ3wF8pmu91t9V
+         KufMBg9Ia2jbxgfRuwcybi2grHwm718EOdRg+4uuSCv6RKoVflaU/Y1VW/N1BVFKV3IJ
+         5X3x7yBuNkEc99R9L/xY8zpvpx8AZ7b5d0yHJ6pob4J2MAck2mefPm/EfWR62r8Y2LeJ
+         enNQ6K0TAW9V/BZIgAfqfdkKNTTxamM4rUi96e3ugY9/wcX3JNNqM7p3LogtCz8FeQQg
+         J5/FrQJXXf21MNKcExwuTMz3E16S3BAzdnZlAMryofKJ6GAY6k1K7dMVUAy6D1uBc3we
+         kZXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680687570;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4wIC1CpZVOaE4w0vpqchy3vQi+52X2p+A7NNpUhaHjs=;
+        b=V8kZhMuZnc7/KxirIZ/HyQo23EFwusrc9xauD7SZJYYeyn9nzkUA9uHdP9hZ25yAkO
+         wSXj9AMJFAZwMcrNgKOrWzo3QVjTn5q/F/yDmgOodQ3rQYJ5hGeZz0Ak/MgVHGO5NCtK
+         Vjzk9D/xbS1jDYFllSeJ2WcCibIxnHyjlTHsNIhvSjRZq4zg1/KcHgng/VuHwPmpkuf7
+         M1WRGLhURV7Hi4fo9nZhEhZE8yq5FEGliP2z0XYgUznPXUJ/MGgnTDd1GuvFTObabfw0
+         jPOIW46uRjeUiHGPJEnf1XsTHmVq/ccErP1ClALc7gRaHxjzM5PJ+SdOBC4apZkmctKw
+         nj0w==
+X-Gm-Message-State: AAQBX9fieMDT0jH+hJGTuMq56M6tHama3Btj/FJ4L+Kzm70yqQ4y89lt
+        Lgfhgp0mcM9HkyZgNV4PFIs=
+X-Google-Smtp-Source: AKy350YqOjXrLkIwek0UaobV9xTERoDvJ14GktHnbC9wXPlhyohk7kyGIyCXP1MGYDBJyDpo2659HQ==
+X-Received: by 2002:aca:1206:0:b0:386:ed63:c511 with SMTP id 6-20020aca1206000000b00386ed63c511mr2416172ois.24.1680687570365;
+        Wed, 05 Apr 2023 02:39:30 -0700 (PDT)
+Received: from [127.0.0.1] ([187.19.238.117])
+        by smtp.gmail.com with ESMTPSA id p188-20020acaf1c5000000b0038b2f07dd50sm3348114oih.7.2023.04.05.02.39.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 02:39:28 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 06:39:22 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Jiri Olsa <olsajiri@gmail.com>, Ian Rogers <irogers@google.com>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Rob Herring <robh@kernel.org>, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] perf pmu: Make parser reentrant
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ZC0iXid4NraoXSCU@krava>
+References: <20230404133630.1985739-1-irogers@google.com> <ZC0iXid4NraoXSCU@krava>
+Message-ID: <A34997A8-302E-4577-82B0-F53AD954BC0A@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH] perf: arm_cspmu: Separate Arm and vendor module
-To:     Besar Wicaksono <bwicaksono@nvidia.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Vikram Sethi <vsethi@nvidia.com>,
-        Richard Wiley <rwiley@nvidia.com>,
-        Eric Funsten <efunsten@nvidia.com>
-References: <20230403163905.20354-1-bwicaksono@nvidia.com>
- <3f8147b6-3362-c35b-3605-45e63cb2ddc6@arm.com>
- <SJ0PR12MB56763839F03B0D9FC90B1742A0939@SJ0PR12MB5676.namprd12.prod.outlook.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <SJ0PR12MB56763839F03B0D9FC90B1742A0939@SJ0PR12MB5676.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 23:14, Besar Wicaksono wrote:
-> Hi Suzuki,
-> 
->> -----Original Message-----
->> From: Suzuki K Poulose <suzuki.poulose@arm.com>
->> Sent: Tuesday, April 4, 2023 5:09 AM
->> To: Besar Wicaksono <bwicaksono@nvidia.com>; catalin.marinas@arm.com;
->> will@kernel.org; mark.rutland@arm.com
->> Cc: linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->> linux-tegra@vger.kernel.org; Thierry Reding <treding@nvidia.com>;
->> Jonathan Hunter <jonathanh@nvidia.com>; Vikram Sethi
->> <vsethi@nvidia.com>; Richard Wiley <rwiley@nvidia.com>; Eric Funsten
->> <efunsten@nvidia.com>
->> Subject: Re: [PATCH] perf: arm_cspmu: Separate Arm and vendor module
->>
->> External email: Use caution opening links or attachments
->>
->>
->> Hi Besar
->>
->>
->> On 03/04/2023 17:39, Besar Wicaksono wrote:
->>> Arm Coresight PMU driver consists of main standard code and vendor
->>> backend code. Both are currently built as a single module.
->>> This patch adds vendor registration API to separate the two to
->>> keep things modular. Vendor module shall register to the main
->>> module on loading and trigger device reprobe.
->>
->> Thanks for working on this.
->>
->>>
->>> Signed-off-by: Besar Wicaksono <bwicaksono@nvidia.com>
->>> ---
->>>    drivers/perf/arm_cspmu/Makefile       |   3 +-
->>>    drivers/perf/arm_cspmu/arm_cspmu.c    | 113
->> +++++++++++++++++++++-----
->>>    drivers/perf/arm_cspmu/arm_cspmu.h    |  10 ++-
->>>    drivers/perf/arm_cspmu/nvidia_cspmu.c |  24 +++++-
->>>    drivers/perf/arm_cspmu/nvidia_cspmu.h |  17 ----
->>>    5 files changed, 124 insertions(+), 43 deletions(-)
->>>    delete mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.h
->>>
->>> diff --git a/drivers/perf/arm_cspmu/Makefile
->> b/drivers/perf/arm_cspmu/Makefile
->>> index fedb17df982d..2514ad34aaf0 100644
->>> --- a/drivers/perf/arm_cspmu/Makefile
->>> +++ b/drivers/perf/arm_cspmu/Makefile
->>> @@ -2,5 +2,4 @@
->>>    #
->>>    # SPDX-License-Identifier: GPL-2.0
->>>
->>> -obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) +=
->> arm_cspmu_module.o
->>> -arm_cspmu_module-y := arm_cspmu.o nvidia_cspmu.o
->>> +obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) +=
->> arm_cspmu.o nvidia_cspmu.o
->>
->> Now that we have a mechanism to add the NVIDIA CSPMU driver, please
->> could we make it a separate Kconfig ?
-> 
-> Sure, I will add one for Nvidia backend.
-> 
->>
->>> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c
->> b/drivers/perf/arm_cspmu/arm_cspmu.c
->>> index e31302ab7e37..6dbcd46d9fdf 100644
->>> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
->>> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
->>> @@ -16,7 +16,7 @@
->>>     * The user should refer to the vendor technical documentation to get
->> details
->>>     * about the supported events.
->>>     *
->>> - * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved.
->>> + * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved.
->>>     *
->>>     */
->>>
->>> @@ -25,13 +25,13 @@
->>>    #include <linux/ctype.h>
->>>    #include <linux/interrupt.h>
->>>    #include <linux/io-64-nonatomic-lo-hi.h>
->>> +#include <linux/list.h>
->>>    #include <linux/module.h>
->>>    #include <linux/perf_event.h>
->>>    #include <linux/platform_device.h>
->>>    #include <acpi/processor.h>
->>>
->>>    #include "arm_cspmu.h"
->>> -#include "nvidia_cspmu.h"
->>>
->>>    #define PMUNAME "arm_cspmu"
->>>    #define DRVNAME "arm-cs-arch-pmu"
->>> @@ -117,11 +117,14 @@
->>>     */
->>>    #define HILOHI_MAX_POLL     1000
->>>
->>> -/* JEDEC-assigned JEP106 identification code */
->>> -#define ARM_CSPMU_IMPL_ID_NVIDIA             0x36B
->>> -
->>>    static unsigned long arm_cspmu_cpuhp_state;
->>>
->>> +/* List of Coresight PMU instances in the system. */
->>> +static LIST_HEAD(cspmus);
->>> +
->>> +/* List of registered vendor backends. */
->>> +static LIST_HEAD(cspmu_impls);
->>> +
->>>    /*
->>>     * In CoreSight PMU architecture, all of the MMIO registers are 32-bit
->> except
->>>     * counter register. The counter register can be implemented as 32-bit or
->> 64-bit
->>> @@ -380,26 +383,94 @@ static struct attribute_group
->> arm_cspmu_cpumask_attr_group = {
->>>    };
->>>
->>>    struct impl_match {
->>> -     u32 pmiidr;
->>> -     u32 mask;
->>> +     struct list_head next;
->>> +     u32 pmiidr_impl;
->>
->> Do we need something more flexible here ? i.e.,
->>
->> u32 pmiidr_val;
->> u32 pmiidr_mask;
->>
->> So that, a single backend could support multiple/reduced
->> set of devices.
->>
-> 
-> I was thinking that vendor backend does further filtering.
-> But yes, it doesn't hurt to have the mask back.
-> 
->>
->>>        int (*impl_init_ops)(struct arm_cspmu *cspmu); >   };
->>>
->>> -static const struct impl_match impl_match[] = {
->>> -     {
->>> -       .pmiidr = ARM_CSPMU_IMPL_ID_NVIDIA,
->>> -       .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
->>> -       .impl_init_ops = nv_cspmu_init_ops
->>> -     },
->>> -     {}
->>> -};
->>> +static struct impl_match *arm_cspmu_get_impl_match(u32 pmiidr_impl)
->>> +{
->>> +     struct impl_match *impl_match;
->>> +
->>> +     list_for_each_entry(impl_match, &cspmu_impls, next) {
->>> +             if (impl_match->pmiidr_impl == pmiidr_impl)
->>
->> And this could be:
->>          ((pmiidr_impl & impl_match->pmiidr_mask) == match->pmiidr_val)
->>> +                     return impl_match;
->>> +     }
->>> +
->>> +     return NULL;
->>> +}
->>> +
->>> +static int arm_cspmu_device_reprobe(u32 pmiidr_impl)
->>> +{
->>> +     int ret;
->>> +     struct arm_cspmu *cspmu, *temp;
->>> +
->>> +     /* Reprobe all arm_cspmu devices associated with implementer id. */
->>> +     list_for_each_entry_safe(cspmu, temp, &cspmus, next) {
->>> +             const u32 impl_id =
->> FIELD_GET(ARM_CSPMU_PMIIDR_IMPLEMENTER,
->>> +                                     cspmu->impl.pmiidr);
->>> +
->>> +             if (pmiidr_impl == impl_id) {
->>> +                     ret = device_reprobe(cspmu->dev);
->>> +                     if (ret) {
->>> +                             dev_err(cspmu->dev, "Failed reprobe %s\n",
->>> +                                     cspmu->name);
->>> +                             return ret;
->>> +                     }
->>
->>                          break here  ?
-> 
-> No, we need to continue the iteration to make sure we reprobe all devices
-> with matching backend.
-> 
->>
->>> +             }
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +int arm_cspmu_impl_register(u32 pmiidr_impl,
->>> +     int (*impl_init_ops)(struct arm_cspmu *cspmu))
->>> +{
->>> +     struct impl_match *impl;
->>> +
->>> +     if (arm_cspmu_get_impl_match(pmiidr_impl)) {
->>> +             pr_err("ARM CSPMU implementer: 0x%x is already registered\n",
->>> +                     pmiidr_impl);
->>> +             return -EEXIST;
->>> +     }
->>> +
->>> +     impl = kzalloc(sizeof(struct impl_match), GFP_KERNEL);
->>> +
->>> +     list_add(&impl->next, &cspmu_impls);
->>
->> Don't we need a lock protect this one ?
-> 
-> Thanks for pointing this out, I will add the lock.
-> 
->>
->>> +
->>> +     impl->pmiidr_impl = pmiidr_impl;
->>> +     impl->impl_init_ops = impl_init_ops;
->>
->> Would be good to do these steps before we actually add it to the
->> list. Anyways, the lock is still needed to prevent races.
->>
->>> +
->>> +     return arm_cspmu_device_reprobe(pmiidr_impl);
->>> +}
->>> +EXPORT_SYMBOL_GPL(arm_cspmu_impl_register);
->>> +
->>> +void arm_cspmu_impl_unregister(u32 pmiidr_impl)
->>> +{
->>> +     struct impl_match *impl;
->>> +
->>> +     impl = arm_cspmu_get_impl_match(pmiidr_impl);
->>> +     if (!impl) {
->>> +             pr_err("Unable to find ARM CSPMU implementer: 0x%x\n",
->>> +                     pmiidr_impl);
->>> +             return;
->>> +     }
->>> +
->>> +     list_del(&impl->next);
->>> +     kfree(impl);
->>> +
->>> +     if (arm_cspmu_device_reprobe(pmiidr_impl))
->>> +             pr_err("ARM CSPMU failed reprobe implementer: 0x%x\n",
->>> +                     pmiidr_impl);
->>
->> Is this for falling back to the generic driver ?
-> 
-> Yes, correct. I will add a comment to clarify.
-> 
->>
->>> +}
->>> +EXPORT_SYMBOL_GPL(arm_cspmu_impl_unregister);
->>>
->>>    static int arm_cspmu_init_impl_ops(struct arm_cspmu *cspmu)
->>>    {
->>>        int ret;
->>>        struct acpi_apmt_node *apmt_node = cspmu->apmt_node;
->>>        struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
->>> -     const struct impl_match *match = impl_match;
->>> +     const struct impl_match *match;
->>>
->>>        /*
->>>         * Get PMU implementer and product id from APMT node.
->>> @@ -411,10 +482,11 @@ static int arm_cspmu_init_impl_ops(struct
->> arm_cspmu *cspmu)
->>>                                       readl(cspmu->base0 + PMIIDR);
->>>
->>>        /* Find implementer specific attribute ops. */
->>> -     for (; match->pmiidr; match++) {
->>> -             const u32 mask = match->mask;
->>> +     list_for_each_entry(match, &cspmu_impls, next) {
->>> +             const u32 impl_id =
->> FIELD_GET(ARM_CSPMU_PMIIDR_IMPLEMENTER,
->>> +                                             cspmu->impl.pmiidr);
->>>
->>> -             if ((match->pmiidr & mask) == (cspmu->impl.pmiidr & mask)) {
->>> +             if (match->pmiidr_impl == impl_id) {
->>
->> match = arm_cspmu_get_impl_match(); ?
-> 
-> I missed this, thanks for pointing this out.
-> 
->>
->>>                        ret = match->impl_init_ops(cspmu);
->>>                        if (ret)
->>>                                return ret;
->>> @@ -924,6 +996,8 @@ static struct arm_cspmu *arm_cspmu_alloc(struct
->> platform_device *pdev)
->>>        if (!cspmu)
->>>                return NULL;
->>>
->>> +     list_add(&cspmu->next, &cspmus);
->>> +
->>>        cspmu->dev = dev;
->>>        cspmu->apmt_node = apmt_node;
->>>
->>> @@ -1214,6 +1288,7 @@ static int arm_cspmu_device_remove(struct
->> platform_device *pdev)
->>>
->>>        perf_pmu_unregister(&cspmu->pmu);
->>>        cpuhp_state_remove_instance(arm_cspmu_cpuhp_state, &cspmu-
->>> cpuhp_node);
->>> +     list_del(&cspmu->next);
->>>
->>>        return 0;
->>>    }
->>> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h
->> b/drivers/perf/arm_cspmu/arm_cspmu.h
->>> index 51323b175a4a..64c3b565f1b1 100644
->>> --- a/drivers/perf/arm_cspmu/arm_cspmu.h
->>> +++ b/drivers/perf/arm_cspmu/arm_cspmu.h
->>> @@ -1,7 +1,7 @@
->>>    /* SPDX-License-Identifier: GPL-2.0
->>>     *
->>>     * ARM CoreSight Architecture PMU driver.
->>> - * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved.
->>> + * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved.
->>>     *
->>>     */
->>>
->>> @@ -116,6 +116,7 @@ struct arm_cspmu_impl {
->>>
->>>    /* Coresight PMU descriptor. */
->>>    struct arm_cspmu {
->>> +     struct list_head next;
->>>        struct pmu pmu;
->>>        struct device *dev;
->>>        struct acpi_apmt_node *apmt_node;
->>> @@ -148,4 +149,11 @@ ssize_t arm_cspmu_sysfs_format_show(struct
->> device *dev,
->>>                                    struct device_attribute *attr,
->>>                                    char *buf);
->>>
->>> +/* Register vendor backend. */
->>> +int arm_cspmu_impl_register(u32 pmiidr_impl,
->>> +     int (*impl_init_ops)(struct arm_cspmu *cspmu));
->>
->> May be pack it in the structure ?
-> 
-> Sure, will do.
 
 
-Another point we must do is to add the corresponding backend driver
-as the "pmu->module" to prevent it from being unloaded when an event
-is running.
+On April 5, 2023 4:25:18 AM GMT-03:00, Jiri Olsa <olsajiri@gmail=2Ecom> wr=
+ote:
+>On Tue, Apr 04, 2023 at 06:36:30AM -0700, Ian Rogers wrote:
+>> By default bison uses global state for compatibility with yacc=2E Make
+>> the parser reentrant so that it may be used in asynchronous and
+>> multithreaded situations=2E
+>>=20
+>> Signed-off-by: Ian Rogers <irogers@google=2Ecom>
+>
+>hum I can't apply this version on Arnaldo's perf/core:
 
-Suzuki
+Try on tmp=2Eperf-tools-next
 
-
-> 
-> Thanks,
-> Besar
-> 
->>
->>
->> Suzuki
->>
->>> +
->>> +/* Unregister vendor backend. */
->>> +void arm_cspmu_impl_unregister(u32 pmiidr_impl);
->>> +
->>>    #endif /* __ARM_CSPMU_H__ */
->>> diff --git a/drivers/perf/arm_cspmu/nvidia_cspmu.c
->> b/drivers/perf/arm_cspmu/nvidia_cspmu.c
->>> index 72ef80caa3c8..d7083fed135d 100644
->>> --- a/drivers/perf/arm_cspmu/nvidia_cspmu.c
->>> +++ b/drivers/perf/arm_cspmu/nvidia_cspmu.c
->>> @@ -1,6 +1,6 @@
->>>    // SPDX-License-Identifier: GPL-2.0
->>>    /*
->>> - * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved.
->>> + * Copyright (c) 2022-2023, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved.
->>>     *
->>>     */
->>>
->>> @@ -8,7 +8,10 @@
->>>
->>>    #include <linux/topology.h>
->>>
->>> -#include "nvidia_cspmu.h"
->>> +#include "arm_cspmu.h"
->>> +
->>> +/* JEDEC-assigned JEP106 identification code */
->>> +#define ARM_CSPMU_IMPL_ID_NVIDIA     0x36B
->>>
->>>    #define NV_PCIE_PORT_COUNT           10ULL
->>>    #define NV_PCIE_FILTER_ID_MASK
->> GENMASK_ULL(NV_PCIE_PORT_COUNT - 1, 0)
->>> @@ -351,7 +354,7 @@ static char *nv_cspmu_format_name(const struct
->> arm_cspmu *cspmu,
->>>        return name;
->>>    }
->>>
->>> -int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
->>> +static int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
->>>    {
->>>        u32 prodid;
->>>        struct nv_cspmu_ctx *ctx;
->>> @@ -395,6 +398,19 @@ int nv_cspmu_init_ops(struct arm_cspmu *cspmu)
->>>
->>>        return 0;
->>>    }
->>> -EXPORT_SYMBOL_GPL(nv_cspmu_init_ops);
->>> +
->>> +static int __init nvidia_cspmu_init(void)
->>> +{
->>> +     return arm_cspmu_impl_register(ARM_CSPMU_IMPL_ID_NVIDIA,
->>> +             nv_cspmu_init_ops);
->>> +}
->>> +
->>> +static void __exit nvidia_cspmu_exit(void)
->>> +{
->>> +     arm_cspmu_impl_unregister(ARM_CSPMU_IMPL_ID_NVIDIA);
->>> +}
->>> +
->>> +module_init(nvidia_cspmu_init);
->>> +module_exit(nvidia_cspmu_exit);
->>>
->>>    MODULE_LICENSE("GPL v2");
->>> diff --git a/drivers/perf/arm_cspmu/nvidia_cspmu.h
->> b/drivers/perf/arm_cspmu/nvidia_cspmu.h
->>> deleted file mode 100644
->>> index 71e18f0dc50b..000000000000
->>> --- a/drivers/perf/arm_cspmu/nvidia_cspmu.h
->>> +++ /dev/null
->>> @@ -1,17 +0,0 @@
->>> -/* SPDX-License-Identifier: GPL-2.0
->>> - *
->>> - * Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights
->> reserved.
->>> - *
->>> - */
->>> -
->>> -/* Support for NVIDIA specific attributes. */
->>> -
->>> -#ifndef __NVIDIA_CSPMU_H__
->>> -#define __NVIDIA_CSPMU_H__
->>> -
->>> -#include "arm_cspmu.h"
->>> -
->>> -/* Allocate NVIDIA descriptor. */
->>> -int nv_cspmu_init_ops(struct arm_cspmu *cspmu);
->>> -
->>> -#endif /* __NVIDIA_CSPMU_H__ */
->>>
->>> base-commit: 73f2c2a7e1d2b31fdd5faa6dfa151c437a6c0a5a
->>> prerequisite-patch-id: fb691dc01d87597bcbaa4d352073304287c20f73
-> 
-
+>
+>patching file tools/perf/util/pmu=2Ec
+>Hunk #2 succeeded at 59 with fuzz 1=2E
+>Hunk #3 FAILED at 80=2E
+>Hunk #4 FAILED at 90=2E
+>2 out of 4 hunks FAILED -- saving rejects to file tools/perf/util/pmu=2Ec=
+=2Erej
+>patching file tools/perf/util/pmu=2Eh
+>patching file tools/perf/util/pmu=2El
+>patching file tools/perf/util/pmu=2Ey
+>
+>jirka
+>
+>
+>> ---
+>>  tools/perf/util/pmu=2Ec | 24 ++++++++++++++++++------
+>>  tools/perf/util/pmu=2Eh |  2 +-
+>>  tools/perf/util/pmu=2El | 17 ++++++++++++-----
+>>  tools/perf/util/pmu=2Ey |  5 ++++-
+>>  4 files changed, 35 insertions(+), 13 deletions(-)
+>>=20
+>> diff --git a/tools/perf/util/pmu=2Ec b/tools/perf/util/pmu=2Ec
+>> index 78a407b42ad1=2E=2Ef603cdabf797 100644
+>> --- a/tools/perf/util/pmu=2Ec
+>> +++ b/tools/perf/util/pmu=2Ec
+>> @@ -24,6 +24,8 @@
+>>  #include "evsel=2Eh"
+>>  #include "pmu=2Eh"
+>>  #include "pmus=2Eh"
+>> +#include "pmu-bison=2Eh"
+>> +#include "pmu-flex=2Eh"
+>>  #include "parse-events=2Eh"
+>>  #include "print-events=2Eh"
+>>  #include "header=2Eh"
+>> @@ -57,9 +59,6 @@ struct perf_pmu_format {
+>>  	struct list_head list;
+>>  };
+>> =20
+>> -int perf_pmu_parse(struct list_head *list, char *name);
+>> -extern FILE *perf_pmu_in;
+>> -
+>>  static bool hybrid_scanned;
+>> =20
+>>  static struct perf_pmu *perf_pmu__find2(int dirfd, const char *name);
+>> @@ -81,6 +80,8 @@ int perf_pmu__format_parse(int dirfd, struct list_hea=
+d *head)
+>>  	while (!ret && (evt_ent =3D readdir(format_dir))) {
+>>  		char *name =3D evt_ent->d_name;
+>>  		int fd;
+>> +		void *scanner;
+>> +		FILE *file;
+>> =20
+>>  		if (!strcmp(name, "=2E") || !strcmp(name, "=2E=2E"))
+>>  			continue;
+>> @@ -91,9 +92,20 @@ int perf_pmu__format_parse(int dirfd, struct list_he=
+ad *head)
+>>  		if (fd < 0)
+>>  			break;
+>> =20
+>> -		perf_pmu_in =3D fdopen(fd, "r");
+>> -		ret =3D perf_pmu_parse(head, name);
+>> -		fclose(perf_pmu_in);
+>> +		file =3D fdopen(fd, "r");
+>> +		if (!file)
+>> +			break;
+>> +
+>> +		ret =3D perf_pmu_lex_init(&scanner);
+>> +		if (ret) {
+>> +			fclose(file);
+>> +			break;
+>> +		}
+>> +
+>> +		perf_pmu_set_in(file, scanner);
+>> +		ret =3D perf_pmu_parse(head, name, scanner);
+>> +		perf_pmu_lex_destroy(scanner);
+>> +		fclose(file);
+>>  	}
+>> =20
+>>  	closedir(format_dir);
+>> diff --git a/tools/perf/util/pmu=2Eh b/tools/perf/util/pmu=2Eh
+>> index 32c3a75bca0e=2E=2Ed53618c65c92 100644
+>> --- a/tools/perf/util/pmu=2Eh
+>> +++ b/tools/perf/util/pmu=2Eh
+>> @@ -206,7 +206,7 @@ int perf_pmu__check_alias(struct perf_pmu *pmu, str=
+uct list_head *head_terms,
+>>  			  struct perf_pmu_info *info);
+>>  struct list_head *perf_pmu__alias(struct perf_pmu *pmu,
+>>  				  struct list_head *head_terms);
+>> -void perf_pmu_error(struct list_head *list, char *name, char const *ms=
+g);
+>> +void perf_pmu_error(struct list_head *list, char *name, void *scanner,=
+ char const *msg);
+>> =20
+>>  int perf_pmu__new_format(struct list_head *list, char *name,
+>>  			 int config, unsigned long *bits);
+>> diff --git a/tools/perf/util/pmu=2El b/tools/perf/util/pmu=2El
+>> index 58b4926cfaca=2E=2E67b247be693b 100644
+>> --- a/tools/perf/util/pmu=2El
+>> +++ b/tools/perf/util/pmu=2El
+>> @@ -1,4 +1,6 @@
+>>  %option prefix=3D"perf_pmu_"
+>> +%option reentrant
+>> +%option bison-bridge
+>> =20
+>>  %{
+>>  #include <stdlib=2Eh>
+>> @@ -6,16 +8,21 @@
+>>  #include "pmu=2Eh"
+>>  #include "pmu-bison=2Eh"
+>> =20
+>> -static int value(int base)
+>> +char *perf_pmu_get_text(yyscan_t yyscanner);
+>> +YYSTYPE *perf_pmu_get_lval(yyscan_t yyscanner);
+>> +
+>> +static int value(yyscan_t scanner, int base)
+>>  {
+>> +	YYSTYPE *yylval =3D perf_pmu_get_lval(scanner);
+>> +	char *text =3D perf_pmu_get_text(scanner);
+>>  	long num;
+>> =20
+>>  	errno =3D 0;
+>> -	num =3D strtoul(perf_pmu_text, NULL, base);
+>> +	num =3D strtoul(text, NULL, base);
+>>  	if (errno)
+>>  		return PP_ERROR;
+>> =20
+>> -	perf_pmu_lval=2Enum =3D num;
+>> +	yylval->num =3D num;
+>>  	return PP_VALUE;
+>>  }
+>> =20
+>> @@ -25,7 +32,7 @@ num_dec         [0-9]+
+>> =20
+>>  %%
+>> =20
+>> -{num_dec}	{ return value(10); }
+>> +{num_dec}	{ return value(yyscanner, 10); }
+>>  config		{ return PP_CONFIG; }
+>>  -		{ return '-'; }
+>>  :		{ return ':'; }
+>> @@ -35,7 +42,7 @@ config		{ return PP_CONFIG; }
+>> =20
+>>  %%
+>> =20
+>> -int perf_pmu_wrap(void)
+>> +int perf_pmu_wrap(void *scanner __maybe_unused)
+>>  {
+>>  	return 1;
+>>  }
+>> diff --git a/tools/perf/util/pmu=2Ey b/tools/perf/util/pmu=2Ey
+>> index e675d79a0274=2E=2Edff4e892ac4d 100644
+>> --- a/tools/perf/util/pmu=2Ey
+>> +++ b/tools/perf/util/pmu=2Ey
+>> @@ -1,6 +1,8 @@
+>> -
+>> +%define api=2Epure full
+>>  %parse-param {struct list_head *format}
+>>  %parse-param {char *name}
+>> +%parse-param {void *scanner}
+>> +%lex-param {void* scanner}
+>> =20
+>>  %{
+>> =20
+>> @@ -78,6 +80,7 @@ PP_VALUE
+>> =20
+>>  void perf_pmu_error(struct list_head *list __maybe_unused,
+>>  		    char *name __maybe_unused,
+>> +		    void *scanner __maybe_unused,
+>>  		    char const *msg __maybe_unused)
+>>  {
+>>  }
+>> --=20
+>> 2=2E40=2E0=2E348=2Egf938b09366-goog
+>>=20
