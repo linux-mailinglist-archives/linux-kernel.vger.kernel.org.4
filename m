@@ -2,165 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DD96D70E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 01:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C9F6D710B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbjDDXrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 19:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S236660AbjDEAAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 20:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236625AbjDDXrJ (ORCPT
+        with ESMTP id S235302AbjDEAAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 19:47:09 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938B53C3F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 16:47:08 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-93071f06a9fso6333666b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 16:47:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680652027;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vi8MTES466++qI3K8H2RA5xq0z5Rl84WyOaFw5DuASg=;
-        b=If2bQ4PP42IMPaWPi/mxpS5uD6z8AbVQFXkkogns9TNyuIiTffcA5kdXIUSlty2ruA
-         rgjxNGKOv1BufEIWhTD9lu0c4K7mbT4yKTlNFkff+F42czJEauhWZY6XNFIGiNjhQGGi
-         wyphX7FpCilXQmTlQXOrHfAEZBurxOp8njL4j8MlQWFZfGqvlUkg+F1zYaJOC/+nb5Pm
-         dq1esF1Dqz+Fpvnkx4FwAirFKJoN4xNv4NwZ+1tfRJWFBd8Or9qU3CKgrDUU0sPaDtY6
-         0t1e9LwZ0ZXNWN9lWxopo8+RD7NR4rw/k5+aglNEJvKLnm4KjJ8YtgtcKQaKPOHxNSaU
-         At6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680652027;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vi8MTES466++qI3K8H2RA5xq0z5Rl84WyOaFw5DuASg=;
-        b=2NI0Hz3b2WG7EmPYqkKD4ApeA96dUdWnPpgs5kC77MYq71OubMudnruBZVbvnoccWu
-         +SVlsjHjwWAjup5rVVT73EaCg5uE6RBliMfJPp1jW5V/lrgJtf7yxmC2dEi6ishrLaOO
-         kUSXuRBrIPO36vM4klj4vE23L4wHkNPlGRk8UFILJzxuReJLV1rYV21wbTShtvJEDxLs
-         6JMppl2Drizx7KYrae3aE4C6LeH9pxHa6Py1XUEFOtrqy+9SpjUssqA0D9G4I4nWM/OQ
-         j1vDjmnUvswM4cA6JP2ivkVmFYK63iSg6xEX1DeJ5JrSQBA8y6OxxaFzZQqNILCk5HMP
-         gd8w==
-X-Gm-Message-State: AAQBX9fzFFw1abZPwkCOwswT5NteiIrI21VkHLdITN5lP7pSsZNU+CiB
-        1QJO0/eYg6NQT7Bx6uXWfq4pBKwcWrJV2OF/MHUKRA==
-X-Google-Smtp-Source: AKy350amp5Q0CsMRA0vsSv+2EQyk24jR2b8+hCJYdKxg84vsQgd8qYOXeaFgiz9iTyZrvy0BpEcL+UO1UUrppWOUht0=
-X-Received: by 2002:a50:aac1:0:b0:502:1d1c:7d37 with SMTP id
- r1-20020a50aac1000000b005021d1c7d37mr140133edc.8.1680652026905; Tue, 04 Apr
- 2023 16:47:06 -0700 (PDT)
+        Tue, 4 Apr 2023 20:00:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B00421E;
+        Tue,  4 Apr 2023 17:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F02776220D;
+        Wed,  5 Apr 2023 00:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AF55C4339B;
+        Wed,  5 Apr 2023 00:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680652814;
+        bh=yx7REri00Y2sl3gyrssI0xdF1WIY6vCQEt4sdApMSpo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DE3YTRK+0cmnp72T0eaFhLdh55G6dFBhDTGfX+MLsagdkaL0ZLZwmVlMKRXcFt/KW
+         V1EF5fo/MJ15LWVZb2zEGCdCOTb9eX0bxEIAuWIifvn3Y6hLijdOC1Tj25BKjPDzNC
+         5FMD6SrDVyo+9YuYYUCxEWQIGaU8fFBJguUNCKC7jchlEf/LpHiEzLkHS+Jsx0VXoH
+         m4y4eBq3ouTzsjRnkhxqyMNkRssEiCPGWPIN7+2LDR5ZMPv72wxxQTfvMo8RLwM/H/
+         mPrEnKv0Owx0hhVCQPygmpTMjlazC7wxxYPP8rF6i1BZXetP6hAd++TAypkuEyUB6o
+         qKrSLDMaXWE0Q==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id E70FC15404B4; Tue,  4 Apr 2023 17:00:13 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 17:00:13 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     RCU <rcu@vger.kernel.org>, quic_neeraju@quicinc.com,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH 1/1] rcu/kvfree: Add debug check of GP ready for ptrs in
+ a list
+Message-ID: <f92cb016-b978-40ab-b025-bf2410b0537d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230404141300.908202-1-urezki@gmail.com>
 MIME-Version: 1.0
-References: <20230404001353.468224-1-yosryahmed@google.com>
- <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
- <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com>
- <20230404145830.b34afedb427921de2f0e2426@linux-foundation.org>
- <CAJD7tkZCmkttJo+6XGROo+pmfQ+ppQp6=qukwvAGSeSBEGF+nQ@mail.gmail.com>
- <20230404152816.cec6d41bfb9de4680ae8c787@linux-foundation.org> <20230404153124.b0fa5074cf9fc3b9925e8000@linux-foundation.org>
-In-Reply-To: <20230404153124.b0fa5074cf9fc3b9925e8000@linux-foundation.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 4 Apr 2023 16:46:30 -0700
-Message-ID: <CAJD7tkYFZGJqZ278stOWDyW3HgMP8iyAZu8hSG+bV-p9YoVxig@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] Ignore non-LRU-based reclaim in memcg reclaim
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404141300.908202-1-urezki@gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 3:31=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Tue, 4 Apr 2023 15:28:16 -0700 Andrew Morton <akpm@linux-foundation.or=
-g> wrote:
->
-> > On Tue, 4 Apr 2023 15:00:57 -0700 Yosry Ahmed <yosryahmed@google.com> w=
-rote:
-> >
-> > > ...
-> > >
-> > > > >
-> > > > > Without refactoring the code that adds reclaim_state->reclaimed t=
-o
-> > > > > scan_control->nr_reclaimed into a helper (flush_reclaim_state()),=
- the
-> > > > > change would need to be done in two places instead of one, and I
-> > > > > wouldn't know where to put the huge comment.
-> > > >
-> > > > Well, all depends on how desirable it it that we backport.  If "not
-> > > > desirable" then leave things as-is.  If at least "possibly desirabl=
-e"
-> > > > then a simple patch with the two changes and no elaborate comment w=
-ill
-> > > > suit.
-> > > >
-> > >
-> > > I would rather leave the current series as-is with an elaborate
-> > > comment. I can send a separate single patch as a backport to stable i=
-f
-> > > this is something that we usually do (though I am not sure how to
-> > > format such patch).
-> >
-> > -stable maintainers prefer to take something which has already been
-> > accepted by Linus.
-> >
-> > The series could be as simple as
-> >
-> > simple-two-liner.patch
-> > revert-simple-two-liner.patch
-> > this-series-as-is.patch
-> >
-> > simple-two-liner.patch goes into 6.3-rcX and -stable.  The other
-> > patches into 6.4-rc1.
->
-> But the key question remains: how desirable is a backport?
->
-> Looking at the changelogs I'm not seeing a clear statement of the
-> impact upon real-world users' real-world workloads.  (This is a hint).
-> So I am unable to judge.
->
-> Please share your thoughts on this.
+On Tue, Apr 04, 2023 at 04:13:00PM +0200, Uladzislau Rezki (Sony) wrote:
+> Triiger a warning if a grace period is not passed yet for
+> objects queued on a linked list via rcu_head structures.
+> 
+> Once detached, take a full snapsot of GP sequnces to check
+> later that a grace period is passed and it is safe to free
+> all pointers.
+> 
+> Based on latest 'dev' branch.
+> 
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-I think it's nice to have but not really important. It occasionally
-causes writes to memory.reclaim to report false positives and *might*
-cause unnecessary retrying when charging memory, but probably too rare
-to be a practical problem.
+Very good, thank you!
 
-Personally, I intend to backport to our kernel at Google because it's
-a simple enough fix and we have occasionally seen test flakiness
-without it.
+I queued the patch wordsmithed as shown below for review and further
+testing.  Please check for any errors.
 
-I have a reworked version of the series that only has 2 patches:
-- simple-two-liner-patch (actually 5 lines)
-- one patch including all refactoring squashed (introducing
-flush_reclaim_state() with the huge comment, introducing
-mm_account_reclaimed_pages(), and moving set_task_reclaim_state()
-around).
+How should we go about testing this code?  The way that it would get
+exercised in production would be during an out-of-memory event, correct?
 
-Let me know if you want me to send it as v5, or leave the current v4
-if you think backporting is not generally important.
+							Thanx, Paul
 
->
+------------------------------------------------------------------------
+
+commit 900093e6ea97d9ff5be2dee062f93a72437ca3a5
+Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Date:   Tue Apr 4 16:13:00 2023 +0200
+
+    rcu/kvfree: Add debug check for GP complete for kfree_rcu_cpu list
+    
+    Under low-memory conditions, kvfree_rcu() will use each object's
+    rcu_head structure to queue objects in a singly linked list headed by
+    the kfree_rcu_cpu structure's ->head field.  This list is passed to
+    call_rcu() as a unit, but there is no indication of which grace period
+    this list needs to wait for.  This in turn prevents adding debug checks
+    in the kfree_rcu_work() as was done for the two page-of-pointers channels
+    in the kfree_rcu_cpu structure.
+    
+    This commit therefore adds a ->head_free_gp_snap field to the
+    kfree_rcu_cpu_work structure to record this grace-period number.  It also
+    adds a WARN_ON_ONCE() to kfree_rcu_monitor() that checks to make sure
+    that the required grace period has in fact elapsed.
+    
+    Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 4838a55da34f..35be35f8236b 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2802,6 +2802,7 @@ struct kvfree_rcu_bulk_data {
+ struct kfree_rcu_cpu_work {
+ 	struct rcu_work rcu_work;
+ 	struct rcu_head *head_free;
++	struct rcu_gp_oldstate head_free_gp_snap;
+ 	struct list_head bulk_head_free[FREE_N_CHANNELS];
+ 	struct kfree_rcu_cpu *krcp;
+ };
+@@ -3007,6 +3008,7 @@ static void kfree_rcu_work(struct work_struct *work)
+ 	struct rcu_head *head;
+ 	struct kfree_rcu_cpu *krcp;
+ 	struct kfree_rcu_cpu_work *krwp;
++	struct rcu_gp_oldstate head_gp_snap;
+ 	int i;
+ 
+ 	krwp = container_of(to_rcu_work(work),
+@@ -3021,6 +3023,7 @@ static void kfree_rcu_work(struct work_struct *work)
+ 	// Channel 3.
+ 	head = krwp->head_free;
+ 	krwp->head_free = NULL;
++	head_gp_snap = krwp->head_free_gp_snap;
+ 	raw_spin_unlock_irqrestore(&krcp->lock, flags);
+ 
+ 	// Handle the first two channels.
+@@ -3037,7 +3040,8 @@ static void kfree_rcu_work(struct work_struct *work)
+ 	 * queued on a linked list through their rcu_head structures.
+ 	 * This list is named "Channel 3".
+ 	 */
+-	kvfree_rcu_list(head);
++	if (head && !WARN_ON_ONCE(!poll_state_synchronize_rcu_full(&head_gp_snap)))
++		kvfree_rcu_list(head);
+ }
+ 
+ static bool
+@@ -3169,6 +3173,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
+ 			// objects queued on the linked list.
+ 			if (!krwp->head_free) {
+ 				krwp->head_free = krcp->head;
++				get_state_synchronize_rcu_full(&krwp->head_free_gp_snap);
+ 				atomic_set(&krcp->head_count, 0);
+ 				WRITE_ONCE(krcp->head, NULL);
+ 			}
