@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07036D7615
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6C66D7621
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237182AbjDEIAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S237259AbjDEICX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbjDEIAv (ORCPT
+        with ESMTP id S236881AbjDEICS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:00:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D1230E2;
-        Wed,  5 Apr 2023 01:00:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D0B2320600;
-        Wed,  5 Apr 2023 08:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680681648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NF83qlVzxv5rP31TK87fQBjgypo+iPk8Tgc/ff/LzS0=;
-        b=nWYAwbTopJSeJ+HfSY6AkXfF6hH7nbJMp50CUAQdErLnNegkaTgEgfo0Xtcp3Y0Zy6IYqu
-        XsFYsercb9dhTAcnh9CiJLDMkcLllZsaGQ8D5uWxucNnpWOTOwS2i2ciWfvyLP63x+kb7Z
-        f8bb2+A7sVt9W5n2EwOktFXUdweSbwk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85D4013A10;
-        Wed,  5 Apr 2023 08:00:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ai37H7AqLWQjMwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 05 Apr 2023 08:00:48 +0000
-Date:   Wed, 5 Apr 2023 10:00:47 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v3 6/8] workingset: memcg: sleep when flushing stats in
- workingset_refault()
-Message-ID: <20230405080047.5omnatjbwz46f3y5@blackpad>
-References: <20230330191801.1967435-1-yosryahmed@google.com>
- <20230330191801.1967435-7-yosryahmed@google.com>
- <20230404165305.ffs7uscqpndnfytn@blackpad>
- <CAJD7tkb-0rXL9V2TX-Ax-3OkwJPYx_GaOT4D=VCA60riit+dOw@mail.gmail.com>
+        Wed, 5 Apr 2023 04:02:18 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BCB30ED;
+        Wed,  5 Apr 2023 01:02:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680681734; x=1712217734;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Hjp80/410tmJHmpO6rGQObwfiLzMo70h6PwRGNv+znI=;
+  b=dcDuqcflk8dxNJIB2EeoV4LYYUlEukO25gI5CXxaXwX2hcUoe7CWlOM4
+   kV8hcKbyUnX9yGFWnqiQi9BGGA7Io0JkLPfitRVC0cjMfosd5yFNjutBE
+   N48wSjSbaeNgvSLLcG6JQoyG1jnZtg6nRo9gBm2kwpOfz6rcEFWIJrXx9
+   C7hI5gmErVwU38jN52vlEH+UTYLr/8OWxKuDBi806pr55DsHnzJZrNz6A
+   bPFO5/almOaknut/42dvayoxpgtA4Lw0lp2VAix5cbsSZumiKYaiHrfTF
+   5/CHXUd5+9ShdxMmb3SMBzinQFkR0WGNayx/Arup9ubK33CS998D4fkwS
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="428680206"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="428680206"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:02:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="775959618"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="775959618"
+Received: from wtedesch-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.53.134])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:01:59 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        linux-fpga@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 0/4] Manage register access to control delay during sec update
+Date:   Wed,  5 Apr 2023 11:01:48 +0300
+Message-Id: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xkpos56pi67t66c5"
-Content-Disposition: inline
-In-Reply-To: <CAJD7tkb-0rXL9V2TX-Ax-3OkwJPYx_GaOT4D=VCA60riit+dOw@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,33 +65,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Manage handshake register access on Max 10 FPGA cards that have a major
+slowdown on reading handshake registers during secure update prepare and
+write phases. The problem does not occur with PMCI-based cards.
 
---xkpos56pi67t66c5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ilpo Järvinen (4):
+  mfd: intel-m10-bmc: Move core symbols to own namespace
+  mfd: intel-m10-bmc: Create m10bmc_sys_update_bits()
+  mfd: intel-m10-bmc: Move m10bmc_sys_read() away from header
+  mfd: intel-m10-bmc: Manage access to MAX 10 fw handshake registers
 
-On Tue, Apr 04, 2023 at 11:09:02AM -0700, Yosry Ahmed <yosryahmed@google.com> wrote:
-> IIUC there are multiple places where we can sleep in this path, we can
-> sleep waiting for a page to be read from disk, we can sleep during
-> allocating the page to read into, and IIUC the allocations on the
-> fault path can even run into reclaim, going into the vmscan code. So
-> there are precedents, but I am not sure if that's enough argument.
+ drivers/fpga/intel-m10-bmc-sec-update.c | 47 ++++++++------
+ drivers/hwmon/intel-m10-bmc-hwmon.c     |  1 +
+ drivers/mfd/intel-m10-bmc-core.c        | 84 ++++++++++++++++++++++++-
+ drivers/mfd/intel-m10-bmc-pmci.c        |  5 ++
+ drivers/mfd/intel-m10-bmc-spi.c         | 15 +++++
+ include/linux/mfd/intel-m10-bmc.h       | 42 +++++++++----
+ 6 files changed, 161 insertions(+), 33 deletions(-)
 
-I expect it'd depend on the proportion of the slow/fast paths.
-OK, let's see how it turns out in wider population.
+-- 
+2.30.2
 
-Thanks,
-Michal
-
---xkpos56pi67t66c5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZC0qqwAKCRAkDQmsBEOq
-uQd1AP9da0usdZXtaqKldZWC3hNIo/w+tYQarhExM3TWXX+KGQEAvck6zPYNvKdu
-uhY4KtMQkxSOomI7xDc/A08Ae98OjA8=
-=ErRC
------END PGP SIGNATURE-----
-
---xkpos56pi67t66c5--
