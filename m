@@ -2,126 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F322D6D751F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267C36D7529
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236889AbjDEHSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 03:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S236534AbjDEHTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 03:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjDEHSn (ORCPT
+        with ESMTP id S236956AbjDEHTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 03:18:43 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6797826BA;
-        Wed,  5 Apr 2023 00:18:41 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 4E8DA300097AE;
-        Wed,  5 Apr 2023 09:18:39 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 43BA6E24E3; Wed,  5 Apr 2023 09:18:39 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 09:18:39 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 6/7] PCI: pciehp: Rely on `link_active_reporting'
-Message-ID: <20230405071839.GA27005@wunner.de>
-References: <alpine.DEB.2.21.2304042200040.37565@angie.orcam.me.uk>
- <alpine.DEB.2.21.2304042243250.37565@angie.orcam.me.uk>
+        Wed, 5 Apr 2023 03:19:46 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE58421A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 00:19:44 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id e9so21075067ljq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 00:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680679182;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZshzFn8jWB8lrxkc4qZocf/HOvuVXKzPMiCe+g5jLeo=;
+        b=Ua3QOD+krfpvembHTU4smJG5WBZs2zvxIGyNt1F5E0OxUMD8K3sztCzQarvgWYGeFw
+         jfvFnRGbNj+b5l4es+RlJRJsRYsnGVd18V8XNB0alKyYIOGYPyKUV+Y+u4LaJ6b0EKpS
+         sBVKkiDZUFNqUSYTImaWyS34c2Mz+UkFIQh27+88yRQWILTObQr8Hi67pEqjxNi9WjQt
+         loA78gVH5/NxTU9ewtvI0EzhAt/WAyzLEGA51ReFuvLc8D2PRSpJeDGraH/CqbxTcwRn
+         LFZZCWaHHYzDHjNJSe4tKKZ2rkzl9ppLzLjBRxrI3KPIefhvgw+z4bfkxAMkYCDyGYl5
+         lULA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680679182;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZshzFn8jWB8lrxkc4qZocf/HOvuVXKzPMiCe+g5jLeo=;
+        b=nuLtwvLPUoGNrJuZ1mnd3PZxhodkJkM/11vVeCyhuEAhYH1n8FYWWq4Rd9XZ1MQ0Y4
+         C2CTW5+I+w1Imhm5i3AlezbompXHIcEWminzpCxjT9YwaiEDtW19VTHyqqRiVMqrv2M+
+         fR18nUt/cW8Q/hjFnmOMbUoDIY8kemQIqwTEs25DToYWkDh9htx8npEEFL32qyM8TrEG
+         YGicBxKaNQjRk7kEy386Fs1h79R0dnwWwKp0kNywbWwZso2r7ZXfATCgflYjWthWrIab
+         bMruq7lrerfArw0oh+ghKQYOOeAt/XJfr7/8sKFEwnq1JDvAH1Mw6vXg7gT3BnniQHVN
+         IYfQ==
+X-Gm-Message-State: AAQBX9cjNrDnRX2xoYnCLFFpNFTwUzEFHYuqYj9vX/p/jg0+lQsKmz6I
+        q/S8z5oXfzJBTgCEhPApe1wMOg==
+X-Google-Smtp-Source: AKy350YyvleS3cF2DdUqDRB8E+oRTkx1Y+HP8l8nylibcy6LctmOXNdF3KYsQp8NMGePYlGtGuX2rg==
+X-Received: by 2002:a2e:9788:0:b0:29f:e144:6c6c with SMTP id y8-20020a2e9788000000b0029fe1446c6cmr1396594lji.30.1680679182298;
+        Wed, 05 Apr 2023 00:19:42 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id p8-20020a2e9a88000000b0029e84187ce2sm2707553lji.139.2023.04.05.00.19.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 00:19:41 -0700 (PDT)
+Message-ID: <514ed648-2d5e-c18d-e5ff-828f6b9a8345@linaro.org>
+Date:   Wed, 5 Apr 2023 09:19:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2304042243250.37565@angie.orcam.me.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/3] venus: fix EOS handling in decoder stop command
+Content-Language: en-US
+To:     Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Viswanath Boma <quic_vboma@quicinc.com>
+References: <1680589032-26046-1-git-send-email-quic_dikshita@quicinc.com>
+ <1680589032-26046-4-git-send-email-quic_dikshita@quicinc.com>
+ <93b78f82-d2db-fc1d-4bad-732f7a1b33de@linaro.org>
+ <62cc41a2-ff48-40b9-eb89-69e352e6f6e9@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <62cc41a2-ff48-40b9-eb89-69e352e6f6e9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 10:56:21PM +0100, Maciej W. Rozycki wrote:
-> Use `link_active_reporting' to determine whether Data Link Layer Link 
-> Active Reporting is available rather than re-retrieving the capability.
+
+
+On 5.04.2023 08:41, Dikshita Agarwal wrote:
 > 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-
-I provided a Reviewed-by for this patch back in February:
-
-https://lore.kernel.org/linux-pci/20230213135327.GA29595@wunner.de/
-
-Please always include collected tags when reposting your patches.
-
-I also noted back then that this patch does not depend on the preceding
-patches in the series.  So please move it to the front of the series
-so that it can be picked up despite the other patches still being
-under discussion.  That way you reduce the size of any future reposts
-of the series and make life easier both for yourself and reviewers.
-
-Thanks,
-
-Lukas
-
-> ---
-> NB this has been compile-tested only with PPC64LE and x86-64
-> configurations.
+> On 4/4/2023 11:54 PM, Konrad Dybcio wrote:
+>>
+>> On 4.04.2023 08:17, Dikshita Agarwal wrote:
+>>> Use firmware version based check to assign correct
+>>> device address for EOS buffer to fix the EOS handling
+>>> with different firmware version.
+>>>
+>>> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+>>> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+>>> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+>>> Tested-by: Nathan Hebert <nhebert@chromium.org>
+>>> ---
+>> Does it only concern fw 1.0.xx?
+>>
+>> Konrad
 > 
-> No change from v6.
+> that's right.
 > 
-> New change in v6.
-> ---
->  drivers/pci/hotplug/pciehp_hpc.c |    7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+> changes were made in later firmware (newer than 1.0.87) to
 > 
-> linux-pcie-link-active-reporting-hpc.diff
-> Index: linux-macro/drivers/pci/hotplug/pciehp_hpc.c
-> ===================================================================
-> --- linux-macro.orig/drivers/pci/hotplug/pciehp_hpc.c
-> +++ linux-macro/drivers/pci/hotplug/pciehp_hpc.c
-> @@ -984,7 +984,7 @@ static inline int pcie_hotplug_depth(str
->  struct controller *pcie_init(struct pcie_device *dev)
->  {
->  	struct controller *ctrl;
-> -	u32 slot_cap, slot_cap2, link_cap;
-> +	u32 slot_cap, slot_cap2;
->  	u8 poweron;
->  	struct pci_dev *pdev = dev->port;
->  	struct pci_bus *subordinate = pdev->subordinate;
-> @@ -1030,9 +1030,6 @@ struct controller *pcie_init(struct pcie
->  	if (dmi_first_match(inband_presence_disabled_dmi_table))
->  		ctrl->inband_presence_disabled = 1;
->  
-> -	/* Check if Data Link Layer Link Active Reporting is implemented */
-> -	pcie_capability_read_dword(pdev, PCI_EXP_LNKCAP, &link_cap);
-> -
->  	/* Clear all remaining event bits in Slot Status register. */
->  	pcie_capability_write_word(pdev, PCI_EXP_SLTSTA,
->  		PCI_EXP_SLTSTA_ABP | PCI_EXP_SLTSTA_PFD |
-> @@ -1051,7 +1048,7 @@ struct controller *pcie_init(struct pcie
->  		FLAG(slot_cap, PCI_EXP_SLTCAP_EIP),
->  		FLAG(slot_cap, PCI_EXP_SLTCAP_NCCS),
->  		FLAG(slot_cap2, PCI_EXP_SLTCAP2_IBPD),
-> -		FLAG(link_cap, PCI_EXP_LNKCAP_DLLLARC),
-> +		FLAG(pdev->link_active_reporting, true),
->  		pdev->broken_cmd_compl ? " (with Cmd Compl erratum)" : "");
->  
->  	/*
+> make the behavior generic across all supported SOCs.
+> 
+> Thanks,
+OK
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> 
+> Dikshita
+> 
+>>>   drivers/media/platform/qcom/venus/vdec.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+>>> index f0394b9..c59b34f 100644
+>>> --- a/drivers/media/platform/qcom/venus/vdec.c
+>>> +++ b/drivers/media/platform/qcom/venus/vdec.c
+>>> @@ -545,7 +545,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+>>>             fdata.buffer_type = HFI_BUFFER_INPUT;
+>>>           fdata.flags |= HFI_BUFFERFLAG_EOS;
+>>> -        if (IS_V6(inst->core))
+>>> +        if (IS_V6(inst->core) && is_fw_rev_or_older(inst->core, 1, 0, 87))
+>>>               fdata.device_addr = 0;
+>>>           else
+>>>               fdata.device_addr = 0xdeadb000;
