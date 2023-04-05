@@ -2,207 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5272C6D8185
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE296D818F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238696AbjDEPSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S238785AbjDEPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238683AbjDEPSN (ORCPT
+        with ESMTP id S237845AbjDEPTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:18:13 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD555B95;
-        Wed,  5 Apr 2023 08:17:35 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id CFB322B06725;
-        Wed,  5 Apr 2023 11:17:25 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 05 Apr 2023 11:17:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1680707845; x=1680715045; bh=4g
-        3Y3WtpEmHJBlHmaZSfRkusN6Gsi4T8SDJHzgHkAHw=; b=L4vZO5QE1gCVJJlu2o
-        r6vojScB4+ZzvhrGxAnCgZw8q3iEvd5m35SZkx+KC1V9nR1oJrFdkv+ey7bHZjCL
-        h7ZEBk9Gmy/3C1A/1qdft9MpePUYhTf2LMdsCjgEXC/wq8oDjffPfKya8bL0vOhv
-        zM4glmn3aahZ0fd/tWPeXFJVlzfG49xJGig3f3S4nIf2yKej0KUqRbtf9U4HO7U4
-        Fca3KFRY0boUta2nyK/ZvwIoPXjc0uR7jRie7ubda+6o8LFTmR3EQPKCjDxKPY69
-        q+rnuCjeiU34JIwElnik7ZIFhfh2uCaJ5k3L+G6Ma8lMgJQI3qmYO86jMfQxx5Ci
-        VdNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680707845; x=1680715045; bh=4g3Y3WtpEmHJB
-        lHmaZSfRkusN6Gsi4T8SDJHzgHkAHw=; b=VEkZsmfrmM6qqrbSYR67T7b6tnqGF
-        AvhJD3Y4WLLq1tU2AX/t6uAgHsNHwJpXvwtS4GnhhmEJ7XPVKNwRq+9WMhmmzML+
-        RG6DEdWr2hNUhcl8o0yOuq3CX2GqoiuaH9MsBOokOxVfwovgwExj8beYgt4/HxuA
-        a96LoWlzOcRy23htu+pg7NjQwIET42Hppt8MLtacCrxmqqy1yW4bPHimBOxOQWfJ
-        wAwezgR/QID/T8H8Ty1cHIhdRLrfE64Z96wSdoJclrB780/8YTOOdsPEANPT/KF4
-        SSABADpffcDQPX+mkREx6UEIjxMxopVCUSw91MvdZ2vn4nW1L5oPr6aSQ==
-X-ME-Sender: <xms:BJEtZAuMkk6wnab4QseDQgMYaxs-ZoalWk6ba9JDW-N_MwUR-r-0_g>
-    <xme:BJEtZNeeUQqDS514Kh75x4vjSF_5nb0vlfH8K6OmRPlsGhffGSlMHsAhdX_0tWg6m
-    1rxuj_wVXQehW37VVk>
-X-ME-Received: <xmr:BJEtZLwjCpHui3RPPt2Zh-h4Q5a1KUTc9johjdZpp-INV-i7TjtqsffumjLDSjqJRIBhpUDe69m60CBw6P-vuyAbTZVw17w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
-    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:BJEtZDOLnxucnvKx3FD6J-fSLSIdKT1u6WKBdKX_FeKFrkbQnefb_g>
-    <xmx:BJEtZA_bReMUs9Hnw0kWbI8p_MC65dZMSzDb9-uV0n2-sq5SiGHLpg>
-    <xmx:BJEtZLVbSPxoi4qvWklXjQcQFOKJSC341u3oT8-2Qg5yq0Cm5T0yJQ>
-    <xmx:BZEtZFFxxiKux8gHULwGp3q2GhoxRfghXYlW4d0UO9AUrD_vtD7rQM5gvGo>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Apr 2023 11:17:22 -0400 (EDT)
-Date:   Wed, 5 Apr 2023 17:17:21 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
-Message-ID: <erm4iq3mygnrr4h2gd5cag3sfuovv47ibdqsbmxcfabngvnwy4@z63ksvj55zuu>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
- <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
+        Wed, 5 Apr 2023 11:19:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C916A76
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680707855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0Khj7fGp65bIkZuQFK2A/k7JCX9p+b8UVeQzdSnDwvw=;
+        b=DVnCmIcRWXrMV9MBzK0MMQeD4+r3n+DlnJx04od//yaJVg+85yWOZxPocaz2imeB8IMHVF
+        7L9dxzik7nj6ARj+B4Ht7c///ajqbKfYhkVZ9anqZmQYad9GRlIatPsKnKLNEhZbsyu957
+        0CNhza/NOygyrkyxSZxyKKObEP5VGg0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-512-94Xb2Uf9PQ-IQc_apac_7Q-1; Wed, 05 Apr 2023 11:17:34 -0400
+X-MC-Unique: 94Xb2Uf9PQ-IQc_apac_7Q-1
+Received: by mail-wm1-f69.google.com with SMTP id h22-20020a05600c351600b003ef739416c3so12511347wmq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:17:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680707853;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Khj7fGp65bIkZuQFK2A/k7JCX9p+b8UVeQzdSnDwvw=;
+        b=SMbGYtCTmM43Ay1vgJBnUIAwdGe7BDoJ6/E3SmCQp/IMveX09ReltpRhyS+vw81/sL
+         f/edM6C0RG06azo4d3xnCy/SRENeOPewj1XGTt6QY2xnH1yO9aURG8e4rteJNa0a4++M
+         WQ4oVb/eDhbQT1huXbyHMbaRkYNbatRLDQyxGLjhnAbmPhNaJ0STSdOIhP0MakJNdC3o
+         ViSRouHbhdw2eLyRQJ24ye6nGnwrBrMfEo1/IOKaP5O3fyw/zrXz8TuFpCh92R1uJS7s
+         ZwtXz9iP48JdMQuh7U+jPMR6olMhVUaCQ8YLhY9PYHgS88Z2Qg5/HJ+Y11wQqDwHr4Ua
+         QO9g==
+X-Gm-Message-State: AAQBX9fPPJuQAiRVUbnRs/PVf4tbqHRI8r5LmXpjswvFRktsApF3mweV
+        X6rhT6ykPG5a9u4C5B34rst2TZb4jU3s287RnSQnZRk8CDt+Nr9hxn+yY+c0+1nz3LyXC1UQ5rb
+        RndiB4Z74Rage4AZ+uQCo1OJG
+X-Received: by 2002:a05:600c:21cb:b0:3e1:f8af:8772 with SMTP id x11-20020a05600c21cb00b003e1f8af8772mr5063740wmj.9.1680707853189;
+        Wed, 05 Apr 2023 08:17:33 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bocAt4RSTmZaoEeHyJOCYXfUktWpTPaw9Y+yH03cnlXYDn9H9wtt0G+cONkQNJJY+ej69ctA==
+X-Received: by 2002:a05:600c:21cb:b0:3e1:f8af:8772 with SMTP id x11-20020a05600c21cb00b003e1f8af8772mr5063726wmj.9.1680707852818;
+        Wed, 05 Apr 2023 08:17:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
+        by smtp.gmail.com with ESMTPSA id e38-20020a5d5966000000b002d78a96cf5fsm15373262wri.70.2023.04.05.08.17.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 08:17:32 -0700 (PDT)
+Message-ID: <c4c3ddb7-66fe-08e3-e59a-352f8aec6c6f@redhat.com>
+Date:   Wed, 5 Apr 2023 17:17:31 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l2rp74o6ajwb6i7x"
-Content-Disposition: inline
-In-Reply-To: <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1 1/2] mm/userfaultfd: fix uffd-wp handling for THP
+ migration entries
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        stable@vger.kernel.org
+References: <20230405142535.493854-1-david@redhat.com>
+ <20230405142535.493854-2-david@redhat.com> <ZC2P7Z7S87myvSst@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZC2P7Z7S87myvSst@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05.04.23 17:12, Peter Xu wrote:
+> On Wed, Apr 05, 2023 at 04:25:34PM +0200, David Hildenbrand wrote:
+>> Looks like what we fixed for hugetlb in commit 44f86392bdd1 ("mm/hugetlb:
+>> fix uffd-wp handling for migration entries in hugetlb_change_protection()")
+>> similarly applies to THP.
+>>
+>> Setting/clearing uffd-wp on THP migration entries is not implemented
+>> properly. Further, while removing migration PMDs considers the uffd-wp
+>> bit, inserting migration PMDs does not consider the uffd-wp bit.
+>>
+>> We have to set/clear independently of the migration entry type in
+>> change_huge_pmd() and properly copy the uffd-wp bit in
+>> set_pmd_migration_entry().
+>>
+>> Verified using a simple reproducer that triggers migration of a THP, that
+>> the set_pmd_migration_entry() no longer loses the uffd-wp bit.
+>>
+>> Fixes: f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+> 
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> 
+> Thanks, one trivial nitpick:
+> 
+>> ---
+>>   mm/huge_memory.c | 14 ++++++++++++--
+>>   1 file changed, 12 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index 032fb0ef9cd1..bdda4f426d58 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -1838,10 +1838,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>>   	if (is_swap_pmd(*pmd)) {
+>>   		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+>>   		struct page *page = pfn_swap_entry_to_page(entry);
+>> +		pmd_t newpmd;
+>>   
+>>   		VM_BUG_ON(!is_pmd_migration_entry(*pmd));
+>>   		if (is_writable_migration_entry(entry)) {
+>> -			pmd_t newpmd;
+>>   			/*
+>>   			 * A protection check is difficult so
+>>   			 * just be safe and disable write
+>> @@ -1855,8 +1855,16 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>>   				newpmd = pmd_swp_mksoft_dirty(newpmd);
+>>   			if (pmd_swp_uffd_wp(*pmd))
+>>   				newpmd = pmd_swp_mkuffd_wp(newpmd);
+>> -			set_pmd_at(mm, addr, pmd, newpmd);
+>> +		} else {
+>> +			newpmd = *pmd;
+>>   		}
+>> +
+>> +		if (uffd_wp)
+>> +			newpmd = pmd_swp_mkuffd_wp(newpmd);
+>> +		else if (uffd_wp_resolve)
+>> +			newpmd = pmd_swp_clear_uffd_wp(newpmd);
+>> +		if (!pmd_same(*pmd, newpmd))
+>> +			set_pmd_at(mm, addr, pmd, newpmd);
+>>   		goto unlock;
+>>   	}
+>>   #endif
+>> @@ -3251,6 +3259,8 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>>   	pmdswp = swp_entry_to_pmd(entry);
+>>   	if (pmd_soft_dirty(pmdval))
+>>   		pmdswp = pmd_swp_mksoft_dirty(pmdswp);
+>> +	if (pmd_swp_uffd_wp(*pvmw->pmd))
+>> +		pmdswp = pmd_swp_mkuffd_wp(pmdswp);
+> 
+> I think it's fine to use *pmd, but maybe still better to use pmdval?  I
+> worry pmdp_invalidate()) can be something else in the future that may
+> affect the bit.
 
---l2rp74o6ajwb6i7x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wondering how I ended up with that, I realized that it's actually
+wrong and might have worked by chance for my reproducer on x86.
 
-Hi Mark,
+That should make it work:
 
-On Tue, Apr 04, 2023 at 04:26:18PM +0100, Mark Brown wrote:
-> On Tue, Apr 04, 2023 at 12:11:33PM +0200, Maxime Ripard wrote:
-> > The tlv320aic32x4 clkin clock implements a mux with a set_parent hook,
-> > but doesn't provide a determine_rate implementation.
->=20
-> > This is a bit odd, since set_parent() is there to, as its name implies,
-> > change the parent of a clock. However, the most likely candidate to
-> > trigger that parent change is a call to clk_set_rate(), with
-> > determine_rate() figuring out which parent is the best suited for a
-> > given rate.
->=20
-> > The other trigger would be a call to clk_set_parent(), but it's far less
-> > used, and it doesn't look like there's any obvious user for that clock.
->=20
-> It could be configured from device tree as well couldn't it?
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index f977c965fdad..fffc953fa6ea 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3257,7 +3257,7 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+         pmdswp = swp_entry_to_pmd(entry);
+         if (pmd_soft_dirty(pmdval))
+                 pmdswp = pmd_swp_mksoft_dirty(pmdswp);
+-       if (pmd_swp_uffd_wp(*pvmw->pmd))
++       if (pmd_uffd_wp(pmdval))
+                 pmdswp = pmd_swp_mkuffd_wp(pmdswp);
+         set_pmd_at(mm, address, pvmw->pmd, pmdswp);
+         page_remove_rmap(page, vma, true);
 
-Yep, indeed.
 
-> > So, the set_parent hook is effectively unused, possibly because of an
-> > oversight. However, it could also be an explicit decision by the
-> > original author to avoid any reparenting but through an explicit call to
-> > clk_set_parent().
->=20
-> Historically clk_set_rate() wouldn't reparent IIRC.
->=20
-> > The latter case would be equivalent to setting the flag
-> > CLK_SET_RATE_NO_REPARENT, together with setting our determine_rate hook
-> > to __clk_mux_determine_rate(). Indeed, if no determine_rate
-> > implementation is provided, clk_round_rate() (through
-> > clk_core_round_rate_nolock()) will call itself on the parent if
-> > CLK_SET_RATE_PARENT is set, and will not change the clock rate
-> > otherwise. __clk_mux_determine_rate() has the exact same behavior when
-> > CLK_SET_RATE_NO_REPARENT is set.
->=20
-> > And if it was an oversight, then we are at least explicit about our
-> > behavior now and it can be further refined down the line.
->=20
-> To be honest it's surprising that we'd have to manually specify this, I
-> would expect to be able to reparent.  I suspect it'd be better to go the
-> other way here and allow reparenting.
+-- 
+Thanks,
 
-Yeah, I think I'd prefer to allow reparenting too, but as can be seen
-=66rom the other reviewers in that thread, it seems like we have a very
-split community here, so that doesn't sound very realistic without some
-major pushback :)
+David / dhildenb
 
-Maxime
-
---l2rp74o6ajwb6i7x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZC2RAQAKCRDj7w1vZxhR
-xRegAPwLq9rAf2gXBh+S5NNzglDB7jF/equjD6dhO2iJfkonFgD+OuUuIkBhvEAH
-dy14syHvUOJJRm7L8hscnDwFHJrXQA0=
-=mQrD
------END PGP SIGNATURE-----
-
---l2rp74o6ajwb6i7x--
