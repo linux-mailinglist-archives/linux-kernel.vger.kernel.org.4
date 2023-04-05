@@ -2,112 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84456D8488
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39B56D8485
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjDERHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S229911AbjDERHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjDERHb (ORCPT
+        with ESMTP id S229699AbjDERHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:07:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD172C6
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680714400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+jGMyE/H4z0XX1rbokRrj+UlMMC2RKbOMB2U8991WxU=;
-        b=gsytrA3zaQKWI+6qf3PBSvOUnP+vnIwl4te0xeaJtSZDGQfDTLA0vefCZTxyq8qG2ytsZ+
-        4jngw6fo7dFaaAmdP0LEVPIHvobNQcLQCcaCxDCYrABBrMW4Goju02PrSUUJTI6SZw2wVV
-        UwEzCzx8z1lvF0BA2uEzDc0UxCOizZI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-170-8PHMBuSfO-Kg5xmuAxR2Yg-1; Wed, 05 Apr 2023 13:06:39 -0400
-X-MC-Unique: 8PHMBuSfO-Kg5xmuAxR2Yg-1
-Received: by mail-wm1-f69.google.com with SMTP id k25-20020a05600c1c9900b003ef79f2c207so11868658wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 10:06:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680714398;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+jGMyE/H4z0XX1rbokRrj+UlMMC2RKbOMB2U8991WxU=;
-        b=OwwFOS1npMtTtsHhLy8qf5O4rwfi8baKcyHzqQa+14+rchB95OjblAK0DFuwwaQ32H
-         itVI1ySkj8laYjFxSqysHWjldHbu9mrztKKCiCtMEzzwoyrodb9MwLWaulPExq5BTFMh
-         5gs8PffOGU8afoeyQWMfQc/vo19fiqJQT9jozbkYb891wmdSENX9kG83BS8IqL/KhMiG
-         wLvllIyCDIFRn3H8SJd150R8lEpO5O4ZfRO+NUSWkj7bhdvuuoggkmEUML4VK4JXcyQU
-         YVXgA34qGIIRmtwZ7AgJjvgUfNPHeQHZipX6mApIE7tceHZIfi2bkfdb65ZvfukOKjva
-         GIXw==
-X-Gm-Message-State: AAQBX9cioujPENiE0drNFNCC7FI53nIsm+MB72ZjhJby/joEBDW/0ILV
-        LQqntZMScAOJ/Pwq/3IEeRKHgCtC/s4QxYer6CviRbs8RFQ2gukiXs1SjXhib9J2phTLbiUpKFN
-        EfL4Gnm5N+hnYvCkV2+A1hdls
-X-Received: by 2002:a05:600c:3644:b0:3eb:42fa:39d5 with SMTP id y4-20020a05600c364400b003eb42fa39d5mr5247556wmq.29.1680714398418;
-        Wed, 05 Apr 2023 10:06:38 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zc3yUUSM0QMVb09Y7+zHVijaxSRVwUv8quFIs59ptAnEOpLeN1hskZOZ5fkbJtamSWNoF0vQ==
-X-Received: by 2002:a05:600c:3644:b0:3eb:42fa:39d5 with SMTP id y4-20020a05600c364400b003eb42fa39d5mr5247534wmq.29.1680714398050;
-        Wed, 05 Apr 2023 10:06:38 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
-        by smtp.gmail.com with ESMTPSA id k4-20020a5d4284000000b002cefcac0c62sm15631552wrq.9.2023.04.05.10.06.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 10:06:37 -0700 (PDT)
-Message-ID: <d6f6f4a5-2b6d-d3d6-0806-8c41ac5dcdf0@redhat.com>
-Date:   Wed, 5 Apr 2023 19:06:35 +0200
+        Wed, 5 Apr 2023 13:07:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898ACE9
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:07:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EAB662A9A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 17:07:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B829C433D2;
+        Wed,  5 Apr 2023 17:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680714426;
+        bh=9BXhb3Nj4kbsbN9M7Hz+URDo5so/VRfyJroXLt9UzsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SBJnDGwCYW3xO9ZXYYONK2M6uotlQauSjkY2twPGsdgjyVjfjdCqtyvphWcMhYyPi
+         9lWq9Tcx6Qyh6z79Xi9MZg9ENn9SWa32dZb605UKsyJR9+zOKCPXfSBKEO8OB7qwso
+         qjPpxly3wcq+XZ8sGhkyNUdhS8E8TeGGiXZGBz4VSSSzr5Ve11osF3WOHgjjMdetEu
+         2wfhcOUQPfjVo2RDdflf6k0RCV6ftrLEuOYhKaIhQCf2PsU5vzr6GGV5TPB+Y4v2sQ
+         XEvDBzpsdvDmGwkfqX8+mHq23iC8vqrLLqJe+L0Vj2M54Iut8IHJKt9V77Bmw0NbLv
+         LZoINms9fFKFA==
+Date:   Wed, 5 Apr 2023 18:07:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        martin.botka1@gmail.com, Shengyu Qu <wiagn233@outlook.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 3/3] regulator: axp20x: Add support for AXP313a
+ variant
+Message-ID: <185fbb80-7fa3-4c88-9f96-92894370a3aa@sirena.org.uk>
+References: <20230401001850.4988-1-andre.przywara@arm.com>
+ <20230401001850.4988-4-andre.przywara@arm.com>
+ <20230405142103.GL8371@google.com>
+ <f1d7526b-7f51-462d-8192-0a05828bfc4f@sirena.org.uk>
+ <20230405153651.GS8371@google.com>
+ <e86dd4a9-540a-461f-a78a-5acb480e98b9@sirena.org.uk>
+ <20230405163906.GT8371@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 2/6] module: move finished_loading()
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-References: <20230405022702.753323-1-mcgrof@kernel.org>
- <20230405022702.753323-3-mcgrof@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230405022702.753323-3-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9ffiu+KLSaUpGaMI"
+Content-Disposition: inline
+In-Reply-To: <20230405163906.GT8371@google.com>
+X-Cookie: 1 bulls, 3 cows.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.04.23 04:26, Luis Chamberlain wrote:
-> This has no functional change, just moves a routine earlier
-> as we'll make use of it next.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
 
-I'd simply squash into #3, as that's short enough that the move doesn't 
-add significant noise. Anyhow:
+--9ffiu+KLSaUpGaMI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+On Wed, Apr 05, 2023 at 05:39:06PM +0100, Lee Jones wrote:
+> On Wed, 05 Apr 2023, Mark Brown wrote:
 
--- 
-Thanks,
+> > Whatever it is you need to do to be happy with and apply the shared bit
+> > of the series.  We're somehow on v10 here for what seems like it should
+> > be a very simple change, I've not followed the ins and outs of how that
+> > happened.
 
-David / dhildenb
+> From an MFD perspective, reviews happened followed by an approval in v9.
 
+> I can't do anything without an Ack from you or some indication that you
+> want me to apply the first 2 patches and share an IB.
+
+Yes, please apply and share a branch like you usually do.
+
+--9ffiu+KLSaUpGaMI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtqrQACgkQJNaLcl1U
+h9CFMwf/ZEXZnXzyQYsWnglJ8ZOmvX/KrARIdAWEWLWB1a2YfKeWcDKxVW/J8NAf
+4NWo8PHVP7Nfma1sHCaLIp2JSF62xA/ZxjemyOamcEg3dwOOfO1DxYs3ZE2T1T8t
+57Jl8Nu2f+hlqLR0xbeYuMruLLgROYHCfAa6cIN8CTVCEhTEB6ksDq7PP5Bt+Bqn
+6Td8vFIB404zt5XORr4Y0/2b1ZGp6fydkNqI+kwi904fz8RZb7P3Mgc/h1+wy/rq
+7Vd3SMUS0vyWLMnRiOubw9plr4D70P4RsBQLabEH/AbxHo5haqCDdacRwmt0vUYS
+bWqgBPj3TVQij8Ng35ZSGD/TtJ0O1Q==
+=nzqD
+-----END PGP SIGNATURE-----
+
+--9ffiu+KLSaUpGaMI--
