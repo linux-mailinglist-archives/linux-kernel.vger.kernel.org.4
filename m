@@ -2,80 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274A26D8AAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A9E6D8AB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbjDEWdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 18:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S232512AbjDEWgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232642AbjDEWcp (ORCPT
+        with ESMTP id S229590AbjDEWg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:32:45 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11911721
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:32:28 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id kp6-20020a170903280600b001a2945a7fdeso10778557plb.18
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680733948;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Gu2QsUrLzhWAeLzNTmiDWMuuwgGUJt5zdF3ZUZTfDtU=;
-        b=Ic1+NmDLa5hMPtGVT8+HebQhOzm+kEy+BqEiLEtn+OlCuFrgeenhk8Ei5IhgHP7PFO
-         eeER4W3YVU7OjGoXtDaRa2v00Q4mA4BRjRKbY+moqn9fUzpd9J3fOLNMEsAQwxZSmFAN
-         zEtXNk6jlku/4N0COH2zXWsx/euB+01q00epSAu0jyzLc2/sltspKE3bB6roHqVjtGqg
-         VzMHDk3si+DA6W8KXKy+W0gYsfEYxlU1JEAsppztBzx/e3ztJAFLGXUIzmY9i5iBOdlz
-         /2zB9ElbSyQs7GT/ZG774asZvNwjHOtnCVfMMPNi5dyMxANZV96RmdxXXumeB8Gon07o
-         jqsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680733948;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gu2QsUrLzhWAeLzNTmiDWMuuwgGUJt5zdF3ZUZTfDtU=;
-        b=xiwsSc2JL3t0lnvWPtl+8w/d9BdmilMEe/bOc8NA2EmYYUR+XB/JwmsmuDqMlIKHlg
-         PxP3hb3qHencG9M+xRoKpD1XFAQAsrZKzAG/fSjA/0Grp3ungT1I/XAXLN9O9bDJWG/A
-         BwcUwdnUx5WgWpoBda3DW5toZTvFZZtMkHBR0T/0rx+CjBv9ud4cHSIOQzNa8xajHEf+
-         kPvBdyV48eWOGqjH2sf35E+kklfKXGiCS+vbHEsm6zPaFsewgLqNVOnjmXmg3bU8tcQI
-         zOwhOSj59Z1yc+WHscdB7zevthvsuPGyv0dDNRPv/NIufch/5asvlT0QFiX5FTHn8ifh
-         18mw==
-X-Gm-Message-State: AAQBX9ccJPq0j0Q5v97iJS0V3dPa0H5KIimd3uaBCQwv832JQPmYqO+X
-        DsWfFuY0JFyAOhhPOdRBzryTeH0hdPY+Co2Dew==
-X-Google-Smtp-Source: AKy350bu8kP+l7JHrBlhgnLqNucEG6rtKm9issrnydB2heDAMrKaEZaVtTKV56Xmq1ks6MtG/TvZQI0fxIJ6Cse1xA==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6a00:2313:b0:593:fcfb:208b with
- SMTP id h19-20020a056a00231300b00593fcfb208bmr4149900pfh.3.1680733947764;
- Wed, 05 Apr 2023 15:32:27 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 22:32:26 +0000
-In-Reply-To: <20230404082507.sbyfahwc4gdupmya@box.shutemov.name> (kirill@shutemov.name)
-Mime-Version: 1.0
-Message-ID: <diqzfs9e0xl1.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
-        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
-        joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Wed, 5 Apr 2023 18:36:29 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB02CBA;
+        Wed,  5 Apr 2023 15:36:25 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsKH8663kz4x1N;
+        Thu,  6 Apr 2023 08:36:20 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680734181;
+        bh=kchzhiTNfDkeFdUBWqlrk86s+qL8CAqBJRXd7j5JM/Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lHT9MV5r/eDZVYIApFFUNSZUnggLNrE2CC80v4GRpl6yI8O4onviz9ypqzGPyVdYj
+         608DMDNra9H2aj1z/aX4QVA5IpaYa7OrHJC5ws/i/+YKk2OtFczN0RXoFtkqd2b5sU
+         B8Nm+MD5FInuqMjQn2KGXTbR5uwxZSeasSixabwxJkkZ7KBIFbQCq/FmMU/mkkxzqV
+         Vu85xFG7HfAq0ptvYjHBuA7NhNFk54RSnhk5ITkY07L2iIojtEbB3S8wHdP6T9qlSK
+         eEkAmwZ+eIemTuCoD/3bHeoT/gq4104rIf9lXhLir45jgVJIfgFgle7Yb6wyOvkJ1B
+         FR5lzz8ExTs5A==
+Date:   Thu, 6 Apr 2023 08:36:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Ziwei Dai <ziwei.dai@unisoc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the rcu tree
+Message-ID: <20230406083619.65dee33a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ff+NGDCp+vSVwV89XzoV=yL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,92 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/ff+NGDCp+vSVwV89XzoV=yL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for reviewing these patches!
+Hi all,
 
-"Kirill A. Shutemov" <kirill@shutemov.name> writes:
+In commit
 
-> On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
+  acdc79917d65 ("rcu/kvfree: Avoid freeing new kfree_rcu() memory after old=
+ grace period")
 
->> ...
+Fixes tag
 
->> +static int restrictedmem_create_on_user_mount(int mount_fd)
->> +{
->> +	int ret;
->> +	struct fd f;
->> +	struct vfsmount *mnt;
->> +
->> +	f = fdget_raw(mount_fd);
->> +	if (!f.file)
->> +		return -EBADF;
->> +
->> +	ret = -EINVAL;
->> +	if (!is_mount_root(f.file))
->> +		goto out;
->> +
->> +	mnt = f.file->f_path.mnt;
->> +	if (!is_shmem_mount(mnt))
->> +		goto out;
->> +
->> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+  Fixes: 0392bebebf26 ("rcu/kvfree: Avoid freeing new kfree_rcu() memory af=
+ter old grace period")
 
-> Why MAY_EXEC?
+has these problem(s):
 
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
 
-Christian pointed out that this check does not make sense, I'll be
-removing the entire check in the next revision.
+Maybe you meant:
 
->> +	if (ret)
->> +		goto out;
->> +
->> +	ret = mnt_want_write(mnt);
->> +	if (unlikely(ret))
->> +		goto out;
->> +
->> +	ret = restrictedmem_create(mnt);
->> +
->> +	mnt_drop_write(mnt);
->> +out:
->> +	fdput(f);
->> +
->> +	return ret;
->> +}
+Fixes: 0392bebebf26 ("rcu: Add multiple in-flight batches of kfree_rcu() wo=
+rk")
 
-> We need review from fs folks. Look mostly sensible, but I have no
-> experience in fs.
+--=20
+Cheers,
+Stephen Rothwell
 
->> +
->> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
->> +{
->> +	if (flags & ~RMFD_USERMNT)
->> +		return -EINVAL;
->> +
->> +	if (flags == RMFD_USERMNT) {
->> +		if (mount_fd < 0)
->> +			return -EINVAL;
->> +
->> +		return restrictedmem_create_on_user_mount(mount_fd);
->> +	} else {
->> +		return restrictedmem_create(NULL);
->> +	}
+--Sig_/ff+NGDCp+vSVwV89XzoV=yL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> Maybe restructure with single restrictedmem_create() call?
+-----BEGIN PGP SIGNATURE-----
 
-> 	struct vfsmount *mnt = NULL;
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQt9+MACgkQAVBC80lX
+0Gwh8Af7BDl+3OJJaUzP7xRY1sKO9EiHDKzsKcmrgkRJPxzMm8D5tYjuzkPGoA06
+CMrlLqEF158raMQKai7l5Wt9LDm+Ts1xkhJo8PfQ/sYZ1Fu7vG0JzuN8FUNWnJzb
+BsTrG1q2RPDGW8c+JlML4vi8fA3ZyFl3x/vb7As1aJMKWHp7HCTfVFaBYzWCUkEQ
+4PhTJMemGfm7UdQcCtsxEE3cQPOA/HS+vvD1L3cCBwQsAwpLqJ5ceGn7GIR209xq
+aGjPhCrikDn8uUUUiB8Imz0jBfc9TR/GTKhYamsx4AsJLJ7tPu3B+z02yeA3ZNQW
+LnJpQPtCPvaFLy7grV3QvaoV3PPUuA==
+=spye
+-----END PGP SIGNATURE-----
 
-> 	if (flags == RMFD_USERMNT) {
-> 		...
-> 		mnt = ...();
-> 	}
-
-> 	return restrictedmem_create(mnt);
-
-Will do so in the next revision.
-
->> +}
->> +
->>   int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
->>   		       struct restrictedmem_notifier *notifier, bool exclusive)
->>   {
->> --
->> 2.40.0.348.gf938b09366-goog
+--Sig_/ff+NGDCp+vSVwV89XzoV=yL--
