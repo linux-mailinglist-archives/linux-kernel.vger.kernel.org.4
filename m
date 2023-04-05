@@ -2,141 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86216D7846
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916F16D7847
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237740AbjDEJ35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
+        id S237603AbjDEJ37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237538AbjDEJ3f (ORCPT
+        with ESMTP id S237669AbjDEJ3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:29:35 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158135B9C;
-        Wed,  5 Apr 2023 02:29:00 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r11so139504622edd.5;
-        Wed, 05 Apr 2023 02:29:00 -0700 (PDT)
+        Wed, 5 Apr 2023 05:29:36 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1581985
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:29:02 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id j18-20020a05600c1c1200b003ee5157346cso23317661wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680686936;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VBpy8sWwJTgWGLvReKzXSppeMMMH/k1pHf1dgNFGfSc=;
-        b=ioBNji+RxxxGGQ36bVeyUwYahfusubuoh5Nwpq0S6lk+P1tK3t617l85xXHF1RH0E0
-         OGxhS5anmVXjcVjpR+cbMmDWNfn4bIBMxP+oldipb595Nm4MKsIiMhXp2ZiYKDkndoSp
-         Ip0puBLq2gl8EIc5OPqJfRLUr1eeu6Dp2CS1jPMDYXAbJ5VSj+oa/5eC1+QsHEh7XbIG
-         xLx6LP3veiE7hqgzSPqs2IgixTI7cdW2YUmY3BZSoDwC4d//d1vznOdaiwKh1KwmZOWm
-         wjt7g9JbyuUknwjyUUyhh5+p47Pnizp9TtWBp2UEfkhNqXSxT2868Yxo175m3wJ1KHoE
-         h98w==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680686939;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5Kvyw5dfxPzoo5ahaTvmbkIzP92SGsSe2Eci+KOZOgQ=;
+        b=wF1lWf2eN0nUHCgOcCLxBDuhW1WkQrs+62puD9WNVvY7Mo5D8pOZ2TSkvQCKKu167b
+         D78Tc6I4UMR+qRZjENNm8ZR63xBDJ+9INVtOyo4CZP3h7ac498k/2p3iMoBEK3GscOAy
+         MbjgEqn4YM0vHTtG3S1Ejkf6lOVdHZ7NgRt05J+IKT9DmaGVG8zk1HxqXRCaT5bBvQ2d
+         b0ih3yx8sTfwHtEX4FncfqTCvdwAWmwRJYrTAr7tM4OR55XoP30oTy2YGWIQN3kPszTA
+         aH7q20+uxSFTB4onIndCPhYM6upwYP6t8ESJL5xAtE63OOtYmm5r8CiJIU6V+ojKYOYU
+         FgeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680686936;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VBpy8sWwJTgWGLvReKzXSppeMMMH/k1pHf1dgNFGfSc=;
-        b=SHWyKgsDncwSdPlNUQjq2UlOrZr62JAm4gvLf4Uglf5KxeGmUU16EbrbO9M+SuB9/y
-         98IcWyYBKUVVuIBAGhmF0DFVkoFxlaQ2N6HMZAADk6RykWkc1G+HZTtylXX0+dXnGNk0
-         n6dOg7876kOO+duSceYMDPEMzGpDDODNzVuIyHcvN4awczj3PwJyCBNdgjqscTwMITn5
-         Pa6YfMMyBPcfVtYI1bt3BYKzXkNgbMzCFlP69rC2oRkFhPgEWxCz1uVj5EQUBQOkSegF
-         q1ODoUbEIEno3ZPebwi12BUZ6IMOz3Zt4rAb8pwZKQcjSDe5GaHJ4EciG5N6Jq66NCss
-         NbxA==
-X-Gm-Message-State: AAQBX9cIIhIprIQrNw/t47z72bV2aMbVh4cLOS0P4ZBgEsdtz3HCJZ+O
-        dwNZC1Z5T3ALJ6C6OHiuiH0=
-X-Google-Smtp-Source: AKy350YUNRcjDWMLp0qTEat7nfaXpF/+sohcF9dQ+5CXzGSGZoXIEtlOhulbBix6Li3JgyJN/QV8Ig==
-X-Received: by 2002:a17:906:6894:b0:944:18ef:c970 with SMTP id n20-20020a170906689400b0094418efc970mr2515964ejr.32.1680686936010;
-        Wed, 05 Apr 2023 02:28:56 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id qp25-20020a170907207900b009342fe44911sm7031978ejb.123.2023.04.05.02.28.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 02:28:55 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 11:28:53 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Subject: Re: [RESEND PATCH v4 03/21] staging: media: tegra-video: fix
- .vidioc_enum_fmt_vid_cap to return all formats
-Message-ID: <ZC0_VX5VDOkSVhn6@orome>
-References: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
- <20230309144320.2937553-4-luca.ceresoli@bootlin.com>
- <85268d69-3d3b-2c0f-ba26-073f09052362@xs4all.nl>
- <20230404161251.272cc78b@booty>
- <20230405023048.GD9915@pendragon.ideasonboard.com>
- <20230405103134.2ae10766@booty>
- <dddd76a7-f882-f1dd-0781-fcc1f9b4e060@xs4all.nl>
+        d=1e100.net; s=20210112; t=1680686939;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Kvyw5dfxPzoo5ahaTvmbkIzP92SGsSe2Eci+KOZOgQ=;
+        b=IxJHLHmclADUcCRObjDtxwvrDwopxORrNCmA6bcxfdek0vGN/DEqx1QwWXtSPHhwps
+         +dKrFQeTwCuoYfM3082IwfA7vD6P8Z1JqJ16W6Upmfs5va1Ad70uUMcdBDHEiEQ0Id1+
+         pghVW47Cu1i5SjLZQ1x+0h77ASLy5HP2fHhPKcs3f+xAB+whkxvCd9llI+Dc5AHl2Zsr
+         H1TmbEm5eUd+Dhymq37IvlBrnpdPAjcQGBEGRp3YTry5Rp73xXt0TcqSgVtycNRkJ+bb
+         26UvLrZ44ZZ/C4jAgWRmVt4hzj5VtZBttUk2b/VU5J2omI/9XBl04FC5+Qn7fbiKQ0/T
+         gKiw==
+X-Gm-Message-State: AAQBX9csL3qulK/D2oLD4o+EM5Twbd6zqGW0T0UmjTXW6bWY19q5B76f
+        rhtvoGWYzn4COGlCAHflhOnN6g==
+X-Google-Smtp-Source: AKy350aDTMdjfvThV2Vky13AG+hkacl/fNweYYwzs5gGLiaI7bwyGGJPmWR2lBZvoBxleaHAB1fyzw==
+X-Received: by 2002:a05:600c:3644:b0:3eb:42fa:39d5 with SMTP id y4-20020a05600c364400b003eb42fa39d5mr4113162wmq.29.1680686939585;
+        Wed, 05 Apr 2023 02:28:59 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id t12-20020a7bc3cc000000b003ee42696acesm1581457wmj.16.2023.04.05.02.28.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 02:28:59 -0700 (PDT)
+Message-ID: <61c93793-1586-bba0-0f9d-f028d5d636b9@baylibre.com>
+Date:   Wed, 5 Apr 2023 11:28:58 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="05p1aaOYNTitphbN"
-Content-Disposition: inline
-In-Reply-To: <dddd76a7-f882-f1dd-0781-fcc1f9b4e060@xs4all.nl>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH RESEND 2/2] pwm: mtk-disp: Configure double buffering
+ before reading in .get_state()
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, thierry.reding@gmail.com
+Cc:     u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
+        weiqing.kong@mediatek.com, jitao.shi@mediatek.com,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, wenst@chromium.org,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>
+References: <20230403133054.319070-1-angelogioacchino.delregno@collabora.com>
+ <20230403133054.319070-3-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230403133054.319070-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/04/2023 15:30, AngeloGioacchino Del Regno wrote:
+> The DISP_PWM controller's default behavior is to always use register
+> double buffering: all reads/writes are then performed on shadow
+> registers instead of working registers and this becomes an issue
+> in case our chosen configuration in Linux is different from the
+> default (or from the one that was pre-applied by the bootloader).
+> 
+> An example of broken behavior is when the controller is configured
+> to use shadow registers, but this driver wants to configure it
+> otherwise: what happens is that the .get_state() callback is called
+> right after registering the pwmchip and checks whether the PWM is
+> enabled by reading the DISP_PWM_EN register;
+> At this point, if shadow registers are enabled but their content
+> was not committed before booting Linux, we are *not* reading the
+> current PWM enablement status, leading to the kernel knowing that
+> the hardware is actually enabled when, in reality, it's not.
+> 
+> The aforementioned issue emerged since this driver was fixed with
+> commit 0b5ef3429d8f ("pwm: mtk-disp: Fix the parameters calculated
+> by the enabled flag of disp_pwm") making it to read the enablement
+> status from the right register.
+> 
+> Configure the controller in the .get_state() callback to avoid
+> this desync issue and get the backlight properly working again.
+> 
+> Fixes: 3f2b16734914 ("pwm: mtk-disp: Implement atomic API .get_state()")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>   drivers/pwm/pwm-mtk-disp.c | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
+> index 82b430d881a2..fe9593f968ee 100644
+> --- a/drivers/pwm/pwm-mtk-disp.c
+> +++ b/drivers/pwm/pwm-mtk-disp.c
+> @@ -196,6 +196,16 @@ static int mtk_disp_pwm_get_state(struct pwm_chip *chip,
+>   		return err;
+>   	}
+>   
+> +	/*
+> +	 * Apply DISP_PWM_DEBUG settings to choose whether to enable or disable
+> +	 * registers double buffer and manual commit to working register before
+> +	 * performing any read/write operation
+> +	 */
+> +	if (mdp->data->bls_debug)
+> +		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
+> +					 mdp->data->bls_debug_mask,
+> +					 mdp->data->bls_debug_mask);
+> +
+>   	rate = clk_get_rate(mdp->clk_main);
+>   	con0 = readl(mdp->base + mdp->data->con0);
+>   	con1 = readl(mdp->base + mdp->data->con1);
 
---05p1aaOYNTitphbN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi,
 
-On Wed, Apr 05, 2023 at 10:50:37AM +0200, Hans Verkuil wrote:
-[...]
-> Note that this driver will stay in staging since it still fails when I try to
-> capture from two sensors at the same time: syncpoint errors start appearing
-> in that case. I think there are locking issues. I think I have someone to take
-> a look at that, but first I want your series to get merged.
+Same test.
+Looks fine.
 
-Mikko (added) is familiar with syncpoints, so he may be able to help
-with. Can you provide steps to reproduce these issues? That may make
-it easier for us to help figure this out.
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Tested-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Unfortunately I don't have any device with an actual sensor on it, so
-I can only test with the test pattern generator, but syncpoint errors
-sound like they would happen with either setup.
-
-Thierry
-
---05p1aaOYNTitphbN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQtP1UACgkQ3SOs138+
-s6FNpw//dPYUajgCSBJRv0WcnavPtJ3hVlgqhl2wBA4rqtD1NNMJEWkZsI/IUwFu
-Lq/UJQuk/brWu8OplLlMaLWm5lngUBMM+t7qHepjdX5GFGKRB684Q106smQw071R
-FZ/UqPxLxi9jjWtfAukVZfTjaMxrHt2iSKzz/mc1Lfs2TItZVG0pEEzC3XQdUxks
-xn/2wtvoxYBWtDUY132MRYCvS5t26sP8iiZX4Xlm7QYFkQtpwkUi2BmLDS+pPJ08
-QulGePJQHZT95TMrSFCcBmuIxJSPYVUlkzG35IxtkVc93NV6TuVHqW3dRg34+jtN
-Cj9d5mFQ2fPNrNiHGCT7OTTKI8kVy3nZS+yXydHYIQ1NkAOfFzKSHxwd+XA419SY
-emZIhrXy/5VxsNpygDOkkiiP+0VfXKhlGVar0mJhOSKbmbiQwP1T0eQDpeFi7TCF
-WW8KFHJqGQgsfSL8pxxqbrwxY2zv5kLllHkyEfU/xSNgvjL3u1qfLnvy8HviuxGX
-fmwk/pOaR0+wenBd89SY8tNyz9Nc3DwrfQ70mPclhfG0WrsenmSgzmlk2hWNha7V
-I2T44bFe95lkDhDFU60gnlKL8jpPeICyIVJ3RXPpXN099f8JzjNI3GqfgUwIfaKA
-Whu5bJHeUZ+EPc0lrH0kkbjY8w2oTyC9W6tF87eqa8M7kujVdgE=
-=GclZ
------END PGP SIGNATURE-----
-
---05p1aaOYNTitphbN--
+Regards,
+Alex
