@@ -2,209 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C636D7A38
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C19D6D7A43
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237855AbjDEKrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S237683AbjDEKsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbjDEKrT (ORCPT
+        with ESMTP id S236955AbjDEKsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:47:19 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4625254;
-        Wed,  5 Apr 2023 03:47:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A6EDD604F0;
-        Wed,  5 Apr 2023 12:47:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680691632; bh=hl//JDs8oq/nFxtyl7Fq4HFZ8Dr8YwBH1A6IHePegpc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=StbPfXMQOa28PhM8mfR0ME6qhsOvy8QMZRN7TuL7mUskbgoDvFKcmZHg6GGg8qgkR
-         dNqMyIjsKNSZPBhMxbJvzBpEbYMlu0Uykqmh52DgZOBkWokwlSWsp/BpCWk+FZrbHH
-         +97so/zBN8tKSxMvSfNGO0vfe44cixjfL1phmw9BCpSaLGw/6mM9hgDXSO7R7n+qBy
-         bHpjU2JyGscV4qMFiH5PSUVZNlDewCpMRF+HJdvsctDDlLwDdWgVcq+TVQ2BdufYYY
-         I3eYGzbWROuLoV5oGxuVi+dS976YaWCbAAZ07anzsvjTUlNd/dPc4jmaMY71yN4rST
-         oc7mofrpMtKTg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0qOeGV9IwPxq; Wed,  5 Apr 2023 12:47:09 +0200 (CEST)
-Received: from [10.0.1.5] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id CAF59604EF;
-        Wed,  5 Apr 2023 12:47:08 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680691629; bh=hl//JDs8oq/nFxtyl7Fq4HFZ8Dr8YwBH1A6IHePegpc=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=BD3o07zr31fwFUHKIAj09rN8O2tBI1duCjOmrbyBmT5qBHsLQhFwF0QFKirt/WMKf
-         85F2c9dfPAkSqvgySttS171CXy6jIRia/Eeiy6PfxvI1FL7GShrfrueXGm9Vwy1hlB
-         CUtBTwel/SzyxrNfr5Ra5UkdHPEMIT1G7X/V+CDewFf401P41ffca4N71od1tvzGrc
-         0dAYzeOTXg7n2ObapyRY53npaC78kz/D8p/e5U19iQR/TTRjJq0CnPfh4GHppWZyr4
-         t9wbeys/K8HgNsrsZWsKG3jC0R1D0BQS7e7OQgsyYJVVJJKkz2mDn/cxzMwj0X9MMe
-         bYVGs7ILjfjxw==
-Message-ID: <f871aa71-9c2e-6a31-151c-2e4cae70a0b2@alu.unizg.hr>
-Date:   Wed, 5 Apr 2023 12:47:08 +0200
+        Wed, 5 Apr 2023 06:48:13 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7F74EED;
+        Wed,  5 Apr 2023 03:48:11 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Ps1Wh1tT8z6J749;
+        Wed,  5 Apr 2023 18:46:08 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 5 Apr
+ 2023 11:48:07 +0100
+Date:   Wed, 5 Apr 2023 11:48:05 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
+        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <will@kernel.org>, <linuxarm@huawei.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v4 3/5] cxl/pci: Find and register CXL PMU devices
+Message-ID: <20230405114805.000014ef@Huawei.com>
+In-Reply-To: <642c77ad5f0d_21a8294fe@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230330164556.31533-1-Jonathan.Cameron@huawei.com>
+        <20230330164556.31533-4-Jonathan.Cameron@huawei.com>
+        <642c77ad5f0d_21a8294fe@dwillia2-xfh.jf.intel.com.notmuch>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] tracing: Free error logs of tracing instances
-Content-Language: en-US, hr
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Eric Biggers <ebiggers@kernel.org>
-References: <20230404194504.5790b95f@gandalf.local.home>
- <5d6332fc-a64a-5e1a-33e0-a7f1e31b2f90@alu.unizg.hr>
-In-Reply-To: <5d6332fc-a64a-5e1a-33e0-a7f1e31b2f90@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5.4.2023. 5:57, Mirsad Goran Todorovac wrote:
-> On 05. 04. 2023. 01:45, Steven Rostedt wrote:
->> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->>
->> When a tracing instance is removed, the error messages that hold errors
->> that occurred in the instance needs to be freed. The following reports a
->> memory leak:
->>
->>   # cd /sys/kernel/tracing
->>   # mkdir instances/foo
->>   # echo 'hist:keys=x' > instances/foo/events/sched/sched_switch/trigger
->>   # cat instances/foo/error_log
->>   [  117.404795] hist:sched:sched_switch: error: Couldn't find field
->>     Command: hist:keys=x
->>                        ^
->>   # rmdir instances/foo
->>
->> Then check for memory leaks:
->>
->>   # echo scan > /sys/kernel/debug/kmemleak
->>   # cat /sys/kernel/debug/kmemleak
->> unreferenced object 0xffff88810d8ec700 (size 192):
->>    comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
->>    hex dump (first 32 bytes):
->>      60 dd 68 61 81 88 ff ff 60 dd 68 61 81 88 ff ff  `.ha....`.ha....
->>      a0 30 8c 83 ff ff ff ff 26 00 0a 00 00 00 00 00  .0......&.......
->>    backtrace:
->>      [<00000000dae26536>] kmalloc_trace+0x2a/0xa0
->>      [<00000000b2938940>] tracing_log_err+0x277/0x2e0
->>      [<000000004a0e1b07>] parse_atom+0x966/0xb40
->>      [<0000000023b24337>] parse_expr+0x5f3/0xdb0
->>      [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
->>      [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
->>      [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
->>      [<000000002cadc509>] vfs_write+0x162/0x670
->>      [<0000000059c3b9be>] ksys_write+0xca/0x170
->>      [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
->>      [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
->> unreferenced object 0xffff888170c35a00 (size 32):
->>    comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
->>    hex dump (first 32 bytes):
->>      0a 20 20 43 6f 6d 6d 61 6e 64 3a 20 68 69 73 74  .  Command: hist
->>      3a 6b 65 79 73 3d 78 0a 00 00 00 00 00 00 00 00  :keys=x.........
->>    backtrace:
->>      [<000000006a747de5>] __kmalloc+0x4d/0x160
->>      [<000000000039df5f>] tracing_log_err+0x29b/0x2e0
->>      [<000000004a0e1b07>] parse_atom+0x966/0xb40
->>      [<0000000023b24337>] parse_expr+0x5f3/0xdb0
->>      [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
->>      [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
->>      [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
->>      [<000000002cadc509>] vfs_write+0x162/0x670
->>      [<0000000059c3b9be>] ksys_write+0xca/0x170
->>      [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
->>      [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
->>
->> The problem is that the error log needs to be freed when the instance is
->> removed.
->>
->> Link: https://lore.kernel.org/lkml/76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr/
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 2f754e771b1a6 ("tracing: Have the error logs show up in the proper instances")
->> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->> ---
->>   kernel/trace/trace.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
->> index 8ae51f1dea8e..352a804b016d 100644
->> --- a/kernel/trace/trace.c
->> +++ b/kernel/trace/trace.c
->> @@ -9516,6 +9516,7 @@ static int __remove_instance(struct trace_array *tr)
->>   	tracefs_remove(tr->dir);
->>   	free_percpu(tr->last_func_repeats);
->>   	free_trace_buffers(tr);
->> +	clear_tracing_err_log(tr);
->>   
->>   	for (i = 0; i < tr->nr_topts; i++) {
->>   		kfree(tr->topts[i].topts);
+On Tue, 4 Apr 2023 12:17:01 -0700
+Dan Williams <dan.j.williams@intel.com> wrote:
+
+> Jonathan Cameron wrote:
+> > CXL PMU devices can be found from entries in the Register
+> > Locator DVSEC.
+> > 
+> > In order to register the minimum number of IRQ vectors necessary
+> > to support all CPMUs found, separate the registration into two
+> > steps.  First find the devices, and query the IRQs used and then
+> > register the devices. Between these two steps, request the
+> > IRQ vectors necessary and enable bus master support.  
 > 
-> Hello,
+> It's not clear why this patch is talking about irq vectors and bus
+> mastering when there is no irq query/setup logic in this patch?
 > 
-> Apparently, this fixed the issue (leak) with the same config, kernel commit and
-> HW.
+
+> > Future IRQ users for CXL type 3 devices (e.g. DOEs) will need to
+> > follow a similar pattern the number of vectors necessary is known
+> > before any parts of the driver stack rely on their availability.  
 > 
-> Please add
+> With the new pci_msix_alloc_irq_at() it's not clear that this 2 step
+> approach is required, right?
+
+Stale description. Will drop all that garbage.
+
 > 
-> Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+> > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > ---
+> > v4:
+> > - No change.
+> > ---
+> >  drivers/cxl/core/Makefile |  1 +
+> >  drivers/cxl/core/core.h   |  1 +
+> >  drivers/cxl/core/cpmu.c   | 72 +++++++++++++++++++++++++++++++++++++++  
 > 
-> at your convenience.
+> A quibble with the naming, I prefer:
 > 
-> The bisect was obviously misleading, but not intentionally. This is the first time
-> my bisect was wrong (out of five or six), so I will thoroughly investigate the fault,
-> for - needless to say - quality binary search bisect is essential to hunt down bug.
-I found the culprit.
+> drivers/cxl/core/pmu.c
+> 
+> ...since "cxl" is in the directory path. Also, usages of cpmu
+> already have a cxl in their symbol names, so just s/cpmu/pmu/ throught.
+> The usage of CPMU_ for register macros would seem be more clear, or at
+> least more consistent, as CXL_PMU_ like the other register offset
+> definitions in cxlpci.h.
 
-I have naively classified build 6.1.0-ftrace-06910-g90b12f423d3c as "good",
-giving me a false negative.
+Makes sense. I'll leave the register defs as
+CPMU_XXX to keep them compact but use the pmu naming for pretty much everything else.
 
-It turned out that it takes at least two attempts on
-
-# echo scan > /sys/kernel/debug/kmemleak
-
-to display the "ftracetest" leak in the
-
-# cat /sys/kernel/debug/kmemleak
-
-output. First try again showed no leaks. The log shows "looks good". I don't
-remember what I did on Jan/26th, but it was obviously not good enough.
-
-Mea culpa.
-
-The leak is present already in the v5.9.0, which is earliest which I can boot
-with the default kmod v30+20220630-3ubuntu1 and default ZSTD kernel compression.
-
-If it mattered, I could proceed bisect on the other device (we'd get Fixes:
-line, but the bug is already patched).
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
-
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
+> 
+> >  drivers/cxl/core/port.c   |  2 ++
+> >  drivers/cxl/core/regs.c   | 16 +++++++++
+> >  drivers/cxl/cpmu.h        | 56 ++++++++++++++++++++++++++++++  
+> 
+> drivers/cxl/pmu.h
+> 
+> >  drivers/cxl/cxl.h         | 14 ++++++++
+> >  drivers/cxl/cxlpci.h      |  1 +
+> >  drivers/cxl/pci.c         | 25 +++++++++++++-
+> >  9 files changed, 187 insertions(+), 1 deletion(-)  
+> 
+> Other than those minor issues above, this looks good to me, with those
+> fixed up.
+> 
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Thanks,
 
