@@ -2,233 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2B46D7F3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33CD6D7F40
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238253AbjDEOWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:22:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S238084AbjDEOWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238265AbjDEOW0 (ORCPT
+        with ESMTP id S238081AbjDEOWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:22:26 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651805FFC
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:21:57 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-4fd1f2a0f82so60290a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 07:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680704513; x=1683296513;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0hEm3Bu1ajK6bUPoSCMbJz7g4+4dYw9soC8zApe4hMc=;
-        b=dpunbt78Nu2bqL1/MCP1Yrvt88iEad8oMRiJF84xlTSiCngaKtk5FA3RBCcFzIOsOt
-         kgwObyB+ED+hE6Et0bKNge+WJMib2ruloC80JurL5XZQySHnCnIA1r4RRQrkxWk4kT7m
-         nMs2nmS1mHd/Ruhd8U1HtKNlbUAe6jhQh1GtU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680704513; x=1683296513;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0hEm3Bu1ajK6bUPoSCMbJz7g4+4dYw9soC8zApe4hMc=;
-        b=U7e7KzjFl1T7ZyDmnwNqASDr2V5PykIqmH79tePZRxtRvNw8z8JzRai4UOMuZFUTJi
-         Fd+e2uSgnHRC0hdWZbvuzf1+E9zlOLV90aKtev0tzSgtcQT3bU4X5Y3WXeg8OLriqT99
-         +rz1Uk4tVzL1H9D/AmPpt6PbfWnyJUJGWLbJ0187ykosSYL0QCOxhOj0bBHsEI6gO9fa
-         9IQHQcGO/t+rFsHGSXb8xVzW7RDu9FkVPv7/FbVOIkW8muScZ38gfg68oESv+3Ms0nLf
-         RJ6ODKezxZTBqUTbZUGWzhYOTFEmBseTxQFeJ9Fnl/cACH+Yg/UNxEWpPCIEqmcy+J+R
-         HhvQ==
-X-Gm-Message-State: AAQBX9dCO0MqJDEU+v8YL1NOb+eVwzo6tpnchfoVVQWjnxOhs880wS/A
-        7NP47rgia2ztDhSIn9JhjRK1OA==
-X-Google-Smtp-Source: AKy350bxxApiu6QlBT7LFjNT5HOmCcGl6WDZP6khnW7b0dJcrSCSEyjhjNy22KbR8irHrR8fUaM/Aw==
-X-Received: by 2002:a17:906:2093:b0:933:2e79:4632 with SMTP id 19-20020a170906209300b009332e794632mr2053178ejq.1.1680704513565;
-        Wed, 05 Apr 2023 07:21:53 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id r6-20020a1709064d0600b0093034e71b94sm7467929eju.65.2023.04.05.07.21.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 07:21:53 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 16:21:50 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Message-ID: <ZC2D/pQsNgaoSzzh@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <ZC16Q8MhHEcutX1b@phenom.ffwll.local>
- <20502c4c-c987-3117-119a-2fd38ae5f607@amd.com>
+        Wed, 5 Apr 2023 10:22:30 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77734DE
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1680704514;
+        bh=j3/CDZKSSeu31sGWKE+raZe1FkwQqT8iyOSOlMavLnM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=M4gWRhe4OdWUx40IWvtGec2SDV4OqDt3eVsq18T+jaT9AfnlhGox1Ku2BfMt6KtFb
+         jL3e009WMrtqxRuxTPDlmpMOOKT4Y7f0ODTG6xpal9YRUkFWzwDmGCOp5rKygg8HMy
+         8PWRoBUtZw3zxc5DgBBp+eTwEKxpUZ/s/4vxTbMLn4YiUBjV1YSQ32c/tCRQxp9FRJ
+         U8SkY+QTjIGcdx17Q7eLLnTnoyKn8fJRwAbYF9lRTrfKhqoVdZ4I0pfbECbfo2rIGr
+         WbbmxJRg25x+NVbp/ugRmqNrxAv5OGTThKw7XgWD6poYs8MXBe1rLLsyfRKLALUShX
+         R6vAZMlwk0AAw==
+Received: from [IPV6:2605:8d80:5a1:347b:3c02:376a:5850:94da] (unknown [IPv6:2605:8d80:5a1:347b:3c02:376a:5850:94da])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4Ps6Jf13nbztnm;
+        Wed,  5 Apr 2023 10:21:54 -0400 (EDT)
+Message-ID: <57d9f3b5-182a-21ed-528c-7a1ec7dad4ca@efficios.com>
+Date:   Wed, 5 Apr 2023 10:21:52 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20502c4c-c987-3117-119a-2fd38ae5f607@amd.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] sched: Fix performance regression introduced by
+ mm_cid (v2)
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
+References: <20230405121535.3891327-1-mathieu.desnoyers@efficios.com>
+ <20230405125755.GB351571@hirez.programming.kicks-ass.net>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230405125755.GB351571@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 04:14:11PM +0200, Christian König wrote:
-> Am 05.04.23 um 15:40 schrieb Daniel Vetter:
-> > On Tue, Mar 07, 2023 at 11:25:35PM +0900, Asahi Lina wrote:
-> > > Some hardware may require more complex resource utilization accounting
-> > > than the simple job count supported by drm_sched internally. Add a
-> > > can_run_job callback to allow drivers to implement more logic before
-> > > deciding whether to run a GPU job.
-> > > 
-> > > Signed-off-by: Asahi Lina <lina@asahilina.net>
-> > Ok scheduler rules, or trying to summarize the entire discussion:
-> > 
-> > dma_fence rules are very tricky. The two main chapters in the docs are
-> > 
-> > https://dri.freedesktop.org/docs/drm/driver-api/dma-buf.html?highlight=dma_buf#dma-fence-cross-driver-contract
-> > https://dri.freedesktop.org/docs/drm/driver-api/dma-buf.html?highlight=dma_buf#indefinite-dma-fences
-> > 
-> > Unforutunately I don't think it's possible to check this at compile time,
-> > thus far all we can do is validate at runtime. I've posted two patches for
-> > this:
-> > 
-> > https://lore.kernel.org/dri-devel/20201023122216.2373294-17-daniel.vetter@ffwll.ch/
-> > https://lore.kernel.org/dri-devel/20201023122216.2373294-20-daniel.vetter@ffwll.ch/
-> > 
-> > Unfortunately most drivers are buggy and get this completely wrong, so
-> > realistically we'd need to make this a per-driver opt-out and annotate all
-> > current drivers. Well except amdgpu is correct by now I think (they'd
-> > still need to test that).
+On 2023-04-05 08:57, Peter Zijlstra wrote:
+> On Wed, Apr 05, 2023 at 08:15:35AM -0400, Mathieu Desnoyers wrote:
+>> +/*
+>> + * Migration from src cpu. Called from set_task_cpu(). There are no guarantees
+>> + * that the rq lock is held.
+>> + */
+>> +void sched_mm_cid_migrate_from(struct task_struct *t)
+>> +{
+>> +	int src_cid, *src_pcpu_cid, last_mm_cid;
+>> +	struct mm_struct *mm = t->mm;
+>> +	struct rq *src_rq;
+>> +	struct task_struct *src_task;
+>> +
+>> +	if (!mm)
+>> +		return;
+>> +
+>> +	last_mm_cid = t->last_mm_cid;
+>> +	/*
+>> +	 * If the migrated task has no last cid, or if the current
+>> +	 * task on src rq uses the cid, it means the destination cpu
+>> +	 * does not have to reallocate its cid to keep the cid allocation
+>> +	 * compact.
+>> +	 */
+>> +	if (last_mm_cid == -1)
+>> +		return;
+>> +
+>> +	src_rq = task_rq(t);
+>> +	src_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu_of(src_rq));
+>> +	src_cid = READ_ONCE(*src_pcpu_cid);
+>> +
+>> +	if (!mm_cid_is_valid(src_cid) || last_mm_cid != src_cid)
+>> +		return;
+>> +
+>> +	/*
+>> +	 * If we observe an active task using the mm on this rq, it means we
+>> +	 * are not the last task to be migrated from this cpu for this mm, so
+>> +	 * there is no need to clear the src_cid.
+>> +	 */
+>> +	rcu_read_lock();
+>> +	src_task = rcu_dereference(src_rq->curr);
 > 
-> There is still one potential memory allocation in the run_job callback in
-> amdgpu which I wasn't able to fix yet.
+> Continuing our discussion from IRC; your concern was if we need a
+> barrier near RCU_INIT_POINTER() in __schedule(). Now, typically such a
+> site would use rcu_assign_pointer() and be a store-release, which is
+> ommitted in this case.
 > 
-> But that one is purely academic and could potentially be trivially replaced
-> with using GFP_ATOMIC if we ever have to.
+> Specifically as commit 5311a98fef7d argues, there's at least one barrier
+> in between most fields being set and this assignment.
+> 
+> On top of that, the below only has the ->mm dependent load, and task->mm
+> is fairly constant. The obvious exception being kthread_use_mm().
+> 
+>> +	if (src_task->mm_cid_active && src_task->mm == mm) {
+>> +		rcu_read_unlock();
+>> +		t->last_mm_cid = -1;
+>> +		return;
+>> +	}
+>> +	rcu_read_unlock();
+> 
+> So if we get here, then rq->curr->mm was observed to not match t->mm.
+> However, nothing stops the rq from switching to a task that does match
+> right here.
+> 
+>> +
+>> +	/*
+>> +	 * If the source cpu cid is set, and matches the last cid of the
+>> +	 * migrated task, clear the source cpu cid to keep cid allocation
+>> +	 * compact to cover the case where this task is the last task using
+>> +	 * this mm on the source cpu. If there happens to be other tasks left
+>> +	 * on the source cpu using this mm, the next task using this mm will
+>> +	 * reallocate its cid on context switch.
+>> +	 *
+>> +	 * We cannot keep ownership of concurrency ID without runqueue
+>> +	 * lock held when it is not used by a current task, because it
+>> +	 * would lead to allocation of more concurrency ids than there
+>> +	 * are possible cpus in the system. The last_mm_cid is used as
+>> +	 * a hint to conditionally unset the dst cpu cid, keeping
+>> +	 * allocated concurrency ids compact.
+>> +	 */
+>> +	if (cmpxchg(src_pcpu_cid, src_cid, mm_cid_set_lazy_put(src_cid)) != src_cid)
+>> +		return;
+> 
+> So we set LAZY, and because that switch above will not observe this
+> flag, we must check again:
+> 
+> And if there has indeed been a switch; that CPU will have gone through
+> at least one smp_mb() (there's one at the start of __schedule()), so
+> either way, it will see the LAZY or we will see the update or both.
+> 
+>> +
+>> +	/*
+>> +	 * If we observe an active task using the mm on this rq after setting the lazy-put
+>> +	 * flag, this task will be responsible for transitioning from lazy-put
+>> +	 * flag set to MM_CID_UNSET.
+>> +	 */
+>> +	rcu_read_lock();
+>> +	src_task = rcu_dereference(src_rq->curr);
+>> +	if (src_task->mm_cid_active && src_task->mm == mm) {
+>> +		rcu_read_unlock();
+>> +		/*
+>> +		 * We observed an active task for this mm, clearing the destination
+>> +		 * cpu mm_cid is not relevant for compactness.
+>> +		 */
+>> +		t->last_mm_cid = -1;
+>> +		return;
+>> +	}
+>> +	rcu_read_unlock();
+> 
+> It is still unused, so wipe it.
+> 
+>> +
+>> +	if (cmpxchg(src_pcpu_cid, mm_cid_set_lazy_put(src_cid), MM_CID_UNSET) != mm_cid_set_lazy_put(src_cid))
+>> +		return;
+>> +	__mm_cid_put(mm, src_cid);
+>> +}
+> 
+> Did I miss any races?
 
-I think the modeset in the tdr code was more scary, and I'm not sure you
-really managed to get rid of absolutely everything in there yet.
--Daniel
+I think your analysis is correct. The full barrier I thought was missing between
+store to rq->curr and load of per-mm/cpu cid is indeed in context_switch() in the
+next->mm != NULL case:
 
-> 
-> Christian.
-> 
-> >   And Rob Clark is working on patches to fix up
-> > msm.
-> > 
-> > I think best here is if you work together with Rob to make sure these
-> > annotations are mandatory for any rust drivers (I don't want new buggy
-> > drivers at least). Would also be great to improve the kerneldoc for all
-> > the driver hooks to explain these restrictions and link to the relevant
-> > kerneldocs (there's also one for the dma_fence signalling annotations
-> > which might be worth linking too).
-> > 
-> > I don't see any way to make this explicit in rust types, it's really only
-> > something runtime tests (using lockdep) can catch. Somewhat disappointing.
-> > 
-> > For the other things discussed here:
-> > 
-> > - Option<Dma_Fence> as the return value for ->prepare_job makes sense to
-> >    me.
-> > 
-> > - I don't see any way a driver can use ->can_run_job without breaking the
-> >    above rules, that really doesn't sound like a good idea to me.
-> > 
-> > Cheers, Daniel
-> > 
-> > > ---
-> > >   drivers/gpu/drm/scheduler/sched_main.c | 10 ++++++++++
-> > >   include/drm/gpu_scheduler.h            |  8 ++++++++
-> > >   2 files changed, 18 insertions(+)
-> > > 
-> > > diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-> > > index 4e6ad6e122bc..5c0add2c7546 100644
-> > > --- a/drivers/gpu/drm/scheduler/sched_main.c
-> > > +++ b/drivers/gpu/drm/scheduler/sched_main.c
-> > > @@ -1001,6 +1001,16 @@ static int drm_sched_main(void *param)
-> > >   		if (!entity)
-> > >   			continue;
-> > > +		if (sched->ops->can_run_job) {
-> > > +			sched_job = to_drm_sched_job(spsc_queue_peek(&entity->job_queue));
-> > > +			if (!sched_job) {
-> > > +				complete_all(&entity->entity_idle);
-> > > +				continue;
-> > > +			}
-> > > +			if (!sched->ops->can_run_job(sched_job))
-> > > +				continue;
-> > > +		}
-> > > +
-> > >   		sched_job = drm_sched_entity_pop_job(entity);
-> > >   		if (!sched_job) {
-> > > diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-> > > index 9db9e5e504ee..bd89ea9507b9 100644
-> > > --- a/include/drm/gpu_scheduler.h
-> > > +++ b/include/drm/gpu_scheduler.h
-> > > @@ -396,6 +396,14 @@ struct drm_sched_backend_ops {
-> > >   	struct dma_fence *(*prepare_job)(struct drm_sched_job *sched_job,
-> > >   					 struct drm_sched_entity *s_entity);
-> > > +	/**
-> > > +	 * @can_run_job: Called before job execution to check whether the
-> > > +	 * hardware is free enough to run the job.  This can be used to
-> > > +	 * implement more complex hardware resource policies than the
-> > > +	 * hw_submission limit.
-> > > +	 */
-> > > +	bool (*can_run_job)(struct drm_sched_job *sched_job);
-> > > +
-> > >   	/**
-> > >            * @run_job: Called to execute the job once all of the dependencies
-> > >            * have been resolved.  This may be called multiple times, if
-> > > 
-> > > -- 
-> > > 2.35.1
-> > > 
-> 
+                 membarrier_switch_mm(rq, prev->active_mm, next->mm);
+                 /*
+                  * sys_membarrier() requires an smp_mb() between setting
+                  * rq->curr / membarrier_switch_mm() and returning to userspace.
+                  *
+                  * The below provides this either through switch_mm(), or in
+                  * case 'prev->active_mm == next->mm' through
+                  * finish_task_switch()'s mmdrop().
+                  */
+                 switch_mm_irqs_off(prev->active_mm, next->mm, next);
+                 lru_gen_use_mm(next->mm);
+
+                 if (!prev->mm) {                        // from kernel
+                         /* will mmdrop() in finish_task_switch(). */
+                         rq->prev_mm = prev->active_mm;
+                         prev->active_mm = NULL;
+                 }
+
+And in case you would happen to wonder how wrote that big comment about
+the barrier, it happens to be me from 2018. :-)
+
+So that barrier takes care of ordering store to rq->curr before load
+of per-mm/cpu cid.
+
+And as you said, the barrier at the beginning of __schedule() takes care
+of ordering the load of per-mm/cpu cid of the previous context switch with
+respect to the next context switch store to rq->curr.
+
+The only other thing I am concerned about is a concurrent update to
+t->mm_cid_active of the src rq current task happening concurrently with
+sched_mm_cid_migrate_from() migrating a task from that src rq. It is set
+to 0 on the current task by sched_mm_cid_exit_signals() and
+sched_mm_cid_before_execve(), and set to 1 by sched_mm_cid_after_execve().
+
+In both cases where it is set to 0, there is also a mm_cid_put() which
+releases the cid (same effect as what we aim to do in migrate-from). But
+I think we need additional barriers here, e.g. clearing t->mm_cid_active
+should be done before calling mm_cid_put(t), so a concurrent migrate-from
+does not set a lazy-flag that will never be handled. We should also add
+a barrier between mm_cid_get() and setting t->mm_cid_active to 1 in
+sched_mm_cid_after_execve.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
