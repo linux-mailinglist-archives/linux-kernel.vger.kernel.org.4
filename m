@@ -2,145 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246196D82BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C56626D82BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238918AbjDEPzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S239027AbjDEPzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238791AbjDEPzj (ORCPT
+        with ESMTP id S238153AbjDEPzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:55:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467ADC0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680710091;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vp3w4ancoxCL4bBUeQO/Nr+Lv6anEYF8uurUtTzkQO0=;
-        b=D1SD/LFI/xktYCHzgJmeRXgkhrOxW6lB9GWaAhcQpdIMX7TDECoEYsGc71nwYj1bDvY5u7
-        iqle/KRZRb7Lt0NyRPgQoULjMl2TQCENTnYlZ86D4WjrzcjADVo9CEi16BElR9FIbYLMFD
-        dtZPozeXslyN37kWkBXovycUFfWIp+U=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-359-ZM3c5hhPPuaEz2D70lTdGA-1; Wed, 05 Apr 2023 11:54:50 -0400
-X-MC-Unique: ZM3c5hhPPuaEz2D70lTdGA-1
-Received: by mail-wr1-f69.google.com with SMTP id m4-20020adfa3c4000000b002e75158e632so1857142wrb.17
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:54:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680710089;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vp3w4ancoxCL4bBUeQO/Nr+Lv6anEYF8uurUtTzkQO0=;
-        b=O8RtgG0p5TGCQnA7jv+21aRpPLoCxgtIT99VTq4qeelQSItgZfAmsdJYM5jmyUZ1j2
-         RlbZZEWOZuQ34jXrZKwK+g0M7bNfOqbmOenD+iDfhfwg4bkeBdkZDkARkoQ9Ou6P/9Gp
-         6Fi0wSglsJhFstc1S3/Ib5mdSV1B3Mb0ur9N2QU1GBG4FrCNEJ8b+m2Pe01gN4ZXQWLD
-         Zdl9VjEY4Nr0RdRfyFg5g9PVrQA6FAmMR65vzLDRxpal0nSHw9Uc6lop9tuq4BYDiDxj
-         omkdBYs3QJYTBm+dS9BdBqovAtOVV8iYAXJRWcRAhNCCCPm+jBO3g98/smVKtUYVa6SV
-         5Nww==
-X-Gm-Message-State: AAQBX9fa19LzWXJkmTw0/8E+okbOy5fkD6eaS/wOJEIqcUHXTPjRaE1B
-        HU441I2wgshvLmLEhPy5h962/65OvLAhEscHSF49+t/9t+pmRiztU6fmL+s/4oj3Shvj1S/wCAl
-        Il+O+NymUJIiAInqSqJwubdLp
-X-Received: by 2002:adf:e0c3:0:b0:2cf:e747:b0d4 with SMTP id m3-20020adfe0c3000000b002cfe747b0d4mr4423521wri.40.1680710088969;
-        Wed, 05 Apr 2023 08:54:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bvV4mM6l4icTruP+qcXPPdpwTQeXltyFNrRrLmVB/ZGcHH+qjmdVbXXVCHqfw84CwFj+T03A==
-X-Received: by 2002:adf:e0c3:0:b0:2cf:e747:b0d4 with SMTP id m3-20020adfe0c3000000b002cfe747b0d4mr4423506wri.40.1680710088611;
-        Wed, 05 Apr 2023 08:54:48 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
-        by smtp.gmail.com with ESMTPSA id c1-20020adfef41000000b002d322b9a7f5sm15323873wrp.88.2023.04.05.08.54.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 08:54:48 -0700 (PDT)
-Message-ID: <19dad66f-4ec8-358c-df7f-35481f855c81@redhat.com>
-Date:   Wed, 5 Apr 2023 17:54:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] mm/khugepaged: Check again on anon uffd-wp during
- isolation
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        Wed, 5 Apr 2023 11:55:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66853271C
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:55:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 017C763F21
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EAD5C433D2;
+        Wed,  5 Apr 2023 15:55:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680710149;
+        bh=YYDw0RuzTK3iw0hXHKgSXbk0yvOIgNiO+TT8XJvU7GY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fdPH2fhPJz3vAlXSaoPyW4UTbkLVVi0H+IHUaXTmwThxRofluxBVBnt6znjjFPdyw
+         BAeI/YwpID3g6RgSFB8OU3ex7XFGFhMb3rg2Moohn1ycWtnnMpXBmiNnNEtjrYPfW/
+         qZSFrcxzHMndvVpivUYnhcJS/j8T2togNsRgifYybAuAHt8xYHnBRWzL5JpeU3PMlM
+         BEixxAdul0D9ZDJekcLRatv7T1mJAsA2vjAyybts0YyvK4m6rW/Aql8VlxPtJWUcy7
+         5As/QtByH5ioBC7dfARZ0RSwE46tftdu92jN7Sj3vFV1n9UHQq/N+q1TOxTcI40rvf
+         CgWKsB5ICqjLA==
+Date:   Wed, 5 Apr 2023 08:55:47 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        linux-stable <stable@vger.kernel.org>
-References: <20230405155120.3608140-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230405155120.3608140-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] f2fs: fix to trigger a checkpoint in the end of
+ foreground garbage collection
+Message-ID: <ZC2aA+i5+HpdJ6M2@google.com>
+References: <20230324071028.336982-1-chao@kernel.org>
+ <ZCyZGgf4RSEjyHTF@google.com>
+ <a4e49177-3959-eb2b-996c-5d07b7390495@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a4e49177-3959-eb2b-996c-5d07b7390495@kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.04.23 17:51, Peter Xu wrote:
-> Khugepaged collapse an anonymous thp in two rounds of scans.  The 2nd round
-> done in __collapse_huge_page_isolate() after hpage_collapse_scan_pmd(),
-> during which all the locks will be released temporarily. It means the
-> pgtable can change during this phase before 2nd round starts.
+On 04/05, Chao Yu wrote:
+> On 2023/4/5 5:39, Jaegeuk Kim wrote:
+> > Can we do like this?
+> > 
+> >  From 9a58f0e59364241aa31b555cfe793d278e39b0dc Mon Sep 17 00:00:00 2001
+> > From: Jaegeuk Kim <jaegeuk@kernel.org>
+> > Date: Tue, 4 Apr 2023 14:36:00 -0700
+> > Subject: [PATCH] f2fs: do checkpoint when there's not enough free sections
+> > 
+> > We didn't do checkpoint in FG_GC case, which may cause losing to reclaim prefree
+> > sctions in time.
+> > 
+> > Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc")
+> > Signed-off-by: Chao Yu <chao@kernel.org>
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > ---
+> >   fs/f2fs/gc.c | 24 +++++++++++-------------
+> >   1 file changed, 11 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> > index 56c53dbe05c9..f1d0dd9c5a6c 100644
+> > --- a/fs/f2fs/gc.c
+> > +++ b/fs/f2fs/gc.c
+> > @@ -1806,6 +1806,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> >   	};
+> >   	unsigned int skipped_round = 0, round = 0;
+> >   	unsigned int upper_secs;
+> > +	bool stop_gc = false;
+> >   	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+> >   				gc_control->nr_free_secs,
+> > @@ -1876,19 +1877,15 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> >   				(gc_type == FG_GC) ? sec_freed : 0, 0)) {
+> >   		if (gc_type == FG_GC && sec_freed < gc_control->nr_free_secs)
+> >   			goto go_gc_more;
+> > -		goto stop;
+> > -	}
+> > -
+> > -	/* FG_GC stops GC by skip_count */
+> > -	if (gc_type == FG_GC) {
+> > +		stop_gc = true;
 > 
-> It's logically possible some ptes got wr-protected during this phase, and
-> we can errornously collapse a thp without noticing some ptes are
-> wr-protected by userfault.  e1e267c7928f wanted to avoid it but it only did
-> that for the 1st phase, not the 2nd phase.
+> I guess below condition is for emergency recycle of prefree segments during
+> foreground GC, in order to avoid exhausting free sections due to to many
+> metadata allocation during CP.
 > 
-> Since __collapse_huge_page_isolate() happens after a round of small page
-> swapins, we don't need to worry on any !present ptes - if it existed
-> khugepaged will already bail out.  So we only need to check present ptes
-> with uffd-wp bit set there.
+> 	if (free_sections(sbi) <= upper_secs + NR_GC_CHECKPOINT_SECS &&
+> 				prefree_segments(sbi)) {
 > 
-> This is something I found only but never had a reproducer, I thought it was
-> one caused a bug in Muhammad's recent pagemap new ioctl work, but it turns
-> out it's not the cause of that but an userspace bug.  However this seems to
-> still be a real bug even with a very small race window, still worth to have
-> it fixed and copy stable.
+> But for common case, free_sections() is close to reserved_segments(), and
+> upper_secs + NR_GC_CHECKPOINT_SECS value may be far smaller than free_sections(),
+> so checkpoint may not be trggered as expected, IIUC.
 > 
-> Cc: linux-stable <stable@vger.kernel.org>
-> Fixes: e1e267c7928f ("khugepaged: skip collapse if uffd-wp detected")
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   mm/khugepaged.c | 4 ++++
->   1 file changed, 4 insertions(+)
+> So it's fine to just trigger CP in the end of foreground garbage collection?
+
+My major concern is to avoid unnecessary checkpointing given multiple FG_GC
+requests were pending in parallel. And, I don't want to add so many combination
+which gives so many corner cases, and feel f2fs_gc() needs to call checkpoint
+automatically in the worst case scenario only.
+
+By the way, do we just need to call checkpoint here including FG_GC as well?
+
+1832
+1833         if (gc_type == BG_GC && has_not_enough_free_secs(sbi, 0, 0)) {
+1834                 /*
+1835                  * For example, if there are many prefree_segments below given
+1836                  * threshold, we can make them free by checkpoint. Then, we
+1837                  * secure free segments which doesn't need fggc any more.
+1838                  */
+1839                 if (prefree_segments(sbi)) {
+1840                         ret = f2fs_write_checkpoint(sbi, &cpc);
+1841                         if (ret)
+1842                                 goto stop;
+1843                 }
+1844                 if (has_not_enough_free_secs(sbi, 0, 0))
+1845                         gc_type = FG_GC;
+1846         }
+
 > 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index a19aa140fd52..42ac93b4bd87 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -575,6 +575,10 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
->   			result = SCAN_PTE_NON_PRESENT;
->   			goto out;
->   		}
-> +		if (pte_uffd_wp(pteval)) {
-> +			result = SCAN_PTE_UFFD_WP;
-> +			goto out;
-> +		}
->   		page = vm_normal_page(vma, address, pteval);
->   		if (unlikely(!page) || unlikely(is_zone_device_page(page))) {
->   			result = SCAN_PAGE_NULL;
+> One other concern is for those path as below:
+> - disable_checkpoint
+> - ioc_gc
+> - ioc_gc_range
+> - ioc_resize
+> ...
 
-Yes, I agree that would be a small race where it could happen.
+I think the upper caller should decide to call checkpoint, if they want to
+reclaim the prefree likewise f2fs_disable_checkpoint.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+> 
+> We've passed gc_type as FG_GC, but the demand here is to migrate block in time,
+> rather than dirtying blocks, and callers don't expect checkpoint in f2fs_gc(),
+> instead the callers will do the checkpoit as it needs.
+> 
+> That means it's better to decouple FG_GC and write_checkpoint behavior, so I
+> added another parameter .reclaim_space to just let f2fs_balance_fs() to trigger
+> checkpoit in the end of f2fs_gc().
 
--- 
-Thanks,
-
-David / dhildenb
-
+> 
+> Thanks,
+> 
+> > +	} else if (gc_type == FG_GC) {
+> > +		/* FG_GC stops GC by skip_count */
+> >   		if (sbi->skipped_gc_rwsem)
+> >   			skipped_round++;
+> >   		round++;
+> >   		if (skipped_round > MAX_SKIP_GC_COUNT &&
+> > -				skipped_round * 2 >= round) {
+> > -			ret = f2fs_write_checkpoint(sbi, &cpc);
+> > -			goto stop;
+> > -		}
+> > +				skipped_round * 2 >= round)
+> > +			stop_gc = true;
+> >   	}
+> >   	__get_secs_required(sbi, NULL, &upper_secs, NULL);
+> > @@ -1901,12 +1898,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+> >   				prefree_segments(sbi)) {
+> >   		ret = f2fs_write_checkpoint(sbi, &cpc);
+> >   		if (ret)
+> > -			goto stop;
+> > +			stop_gc = true;
+> >   	}
+> >   go_gc_more:
+> > -	segno = NULL_SEGNO;
+> > -	goto gc_more;
+> > -
+> > +	if (!stop_gc) {
+> > +		segno = NULL_SEGNO;
+> > +		goto gc_more;
+> > +	}
+> >   stop:
+> >   	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
+> >   	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = gc_control->victim_segno;
