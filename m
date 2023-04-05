@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7ED56D7460
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 08:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DF26D7461
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 08:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237058AbjDEG0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 02:26:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S237068AbjDEG1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 02:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjDEG0E (ORCPT
+        with ESMTP id S229760AbjDEG1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 02:26:04 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C32F2D50
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 23:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680675963; x=1712211963;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=t1RosdTg3HRvxEE40p8KNBUdCIX8QzrymSmEnjVG5+U=;
-  b=j34uMPwoG67OwCG4tWpcag7KNC+MJ5++OanVhDSh9+IHQOX6Gy1DpgQo
-   30cLj3amhzuKWuFXtqaVdAesUVSChAzNbGZTlvStnakKm8UNIsiYyQLOx
-   1g3CK03ygTIv7EF0p2f1l1I55mA3PCUXrqp/zsSSz36CZ+uOMbthRP0AS
-   2lifFktZhXzelhJSivEauk9RB+v0lRXlCXARBtI1bkwffDJOrvzBgiKnu
-   VjdHmQpRH3AXJcY5Z48tkssXPKpW255YS2PFyx2mJE17lN6jwgFtGu0Kl
-   8wEblXEgYq+Lw1OZNhx4In9ObWNi9mXUCvJo+gWpN59Vig2uWD2OShVRt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326416954"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="326416954"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 23:26:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="1016366265"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="1016366265"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Apr 2023 23:26:01 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjwam-000QMQ-0s;
-        Wed, 05 Apr 2023 06:26:00 +0000
-Date:   Wed, 5 Apr 2023 14:25:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Joey Gouly <joey.gouly@arm.com>
-Subject: mdwe_test.c:166:19: warning: variable 'p2' set but not used
-Message-ID: <202304051408.2PaUqA4m-lkp@intel.com>
+        Wed, 5 Apr 2023 02:27:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC80D2D50
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 23:27:04 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id j11so45218901lfg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 23:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680676023;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qbguUgawsCe7zb1mn9asSInaSJEAc8njZ7HzZ+tIgaU=;
+        b=A84l4DGr8WUS7zCXfRe+7AX9NAoe7RomnQXWIBSKDtkqXOerCknSecq1aQALAVCJNU
+         86Ja0pQca0GPYeuVLgI9EZ//VUmtuvhQXeuFyx/xMnQHXZ2RPBxBpm3xE9I9VAxhAc4v
+         1+2HEblYRyf1ur/44DiQ+eXL2Z055J11xZ6f7ZKKkcR68AxPfGNXt35YyZb6y+qeKIP/
+         7a5tptEsoXnb/0Ix27GIE4yAdh1KsiC7NRsntrtvxCsNp4Cr8WOraz4uO2JOtCaYrI+X
+         Lf56NLp1ipQeOB81vMdswtko8PumyF5K+4FvHfKllIVcq370iWaUcRUJO+dHAJlU/unq
+         id1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680676023;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qbguUgawsCe7zb1mn9asSInaSJEAc8njZ7HzZ+tIgaU=;
+        b=xHpdEauFqfs281krv/eASuljxs8xxxiWZqORVk4Q/z4HWvrd+CeuVhTBpr+1qt/eHJ
+         UmFHdP9xJYDrLXWrOxAmc+cpx8MpOWD7GChBJTtggSxRv3RqZCwyIPMHtCz+D5xCwFp6
+         diGgpaHGJKDeZoHOclVvH+3mRUlF9ADl1LOd8G/j/l2AmzPoS2KB9nQHDHFjv4oeqY89
+         K5ZRzHVhBoCFxkVPHhlgymvE1vEBcebKdRZu4WkqDaKhWmlffmX9FRoF/zc20lutKZwO
+         0P7uVH6hY0dm18gHH8tGL6twyAsqaLSBoeJTR85Z244EPUkyA8o71F+Lf1pmGWR0LfFH
+         bhiw==
+X-Gm-Message-State: AAQBX9dD8eEeujZyRxzOzdIItkUgGiV3J3ckGs0OuDDVf4OpEjmqfEul
+        Ak3OLKjKMluXImRq57zV1TVx1RqOPjDlquVlRdA=
+X-Google-Smtp-Source: AKy350YJmCPryn03SV+cEWg2nQOaJViWzu/BH0gzZ+w7PZpo7ajhkK4wUPVSrjyFPcm884/MFQmmOA==
+X-Received: by 2002:ac2:5e81:0:b0:4e8:44e3:f3da with SMTP id b1-20020ac25e81000000b004e844e3f3damr1328726lfq.39.1680676023040;
+        Tue, 04 Apr 2023 23:27:03 -0700 (PDT)
+Received: from rayden (h-46-59-78-111.A175.priv.bahnhof.se. [46.59.78.111])
+        by smtp.gmail.com with ESMTPSA id b9-20020ac25629000000b004d783b0d310sm2679356lff.307.2023.04.04.23.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 23:27:02 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 08:27:01 +0200
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     op-tee@lists.trustedfirmware.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>
+Subject: [GIT PULL] OP-TEE load for v6.4
+Message-ID: <20230405062701.GA3391925@rayden>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,30 +68,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   76f598ba7d8e2bfb4855b5298caedd5af0c374a8
-commit: 4cf1fe34fd18b752ae2403927277715d4444f331 kselftest: vm: add tests for memory-deny-write-execute
-date:   9 weeks ago
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cf1fe34fd18b752ae2403927277715d4444f331
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4cf1fe34fd18b752ae2403927277715d4444f331
-        make O=/tmp/kselftest headers
-        make O=/tmp/kselftest -C tools/testing/selftests
+Hello arm-soc maintainers,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304051408.2PaUqA4m-lkp@intel.com/
+Please pull this patch to enable loading of OP-TEE by the kernel.
 
-All warnings (new ones prefixed by >>):
+This feature is by default disabled and should probably always be so since
+it requires a quite specific security model to be secure.
 
-   mdwe_test.c: In function 'mdwe_mmap_FIXED':
->> mdwe_test.c:166:19: warning: variable 'p2' set but not used [-Wunused-but-set-variable]
-     166 |         void *p, *p2;
-         |                   ^~
+Thanks,
+Jens
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+
+  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/jens.wiklander/linux-tee.git tags/optee-load-for-v6.4
+
+for you to fetch changes up to f3040daab8104ac68e2b241bc93288f63b88a3c7:
+
+  tee: optee: Add SMC for loading OP-TEE image (2023-04-03 08:57:49 +0200)
+
+----------------------------------------------------------------
+Add SMC for OP-TEE image loading
+
+Adds an SMC call for loading OP-TEE by the kernel.
+
+----------------------------------------------------------------
+Jeffrey Kardatzke (1):
+      tee: optee: Add SMC for loading OP-TEE image
+
+ Documentation/staging/tee.rst |  53 ++++++++++++++++
+ drivers/tee/optee/Kconfig     |  17 ++++++
+ drivers/tee/optee/optee_msg.h |  12 ++++
+ drivers/tee/optee/optee_smc.h |  24 ++++++++
+ drivers/tee/optee/smc_abi.c   | 137 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 243 insertions(+)
