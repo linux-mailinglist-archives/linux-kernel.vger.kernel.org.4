@@ -2,214 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748F46D715F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74ECA6D7163
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbjDEAfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 20:35:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
+        id S236484AbjDEAiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 20:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbjDEAfv (ORCPT
+        with ESMTP id S234892AbjDEAiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 20:35:51 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68BF340FB;
-        Tue,  4 Apr 2023 17:35:50 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1131)
-        id 47FBF210DEA2; Tue,  4 Apr 2023 17:35:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 47FBF210DEA2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1680654949;
-        bh=Lm837P1CWGU8gkD+0NV2QWBXE5Jg3ngDlIEqKcG2dP0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bm+VFJUTZ9EP37yQqCXwxrbvAIZkC7cLHJlx+azokqRk0E1LbMTvMiGWyVnjYGv5L
-         QVCO0+0iouZxRAkyN/RA4tKcR0ejiuxJ77Y2lDJK6j2SuGnLJveu3JG6ngEH/KD57A
-         CvkVQmNtE6VWGJO/SBE8g62bCiQAXfNZO3AyDsYI=
-Date:   Tue, 4 Apr 2023 17:35:49 -0700
-From:   Kelsey Steele <kelseysteele@linux.microsoft.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        decui@microsoft.com, petrtesarik@huaweicloud.com,
-        linux-hyperv@vger.kernel.org, iommu@lists.linux.dev,
-        robin.murphy@arm.com, dexuan.linux@gmail.com,
-        tyler.hicks@microsoft.com
-Subject: Re: [PATCH 6.1 000/179] 6.1.23-rc2 review
-Message-ID: <20230405003549.GA21326@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20230404183150.381314754@linuxfoundation.org>
+        Tue, 4 Apr 2023 20:38:20 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8666D1705
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:38:19 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id EDAD93200A78;
+        Tue,  4 Apr 2023 20:38:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 04 Apr 2023 20:38:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:content-type:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1680655098; x=1680741498; bh=ej
+        zhtkUjzuEOBfr+jkw68scBu5KVz3rG4G/vQRTMeww=; b=VrHN7PaOMJ/lYHLRBV
+        JLadOyWW2FWqqZR3LmQCOIw34A9FM2Omrk/7VOVGOx4uXtefv9yCPdaL2wHAsclP
+        UGKyYs5j7Uakggiw5qPaMxrs6zBQDtWU/3l7bBXfxWqtp6FsUMr3wBqlMmMRxBJd
+        5swd1rMVnwY4EkPk//l9BO+nvWGe9WnZ8L7eN0rdRgQiDP1aeKWKTEEFnzOJN/bq
+        85o0VX7kbkUkOsWKYKQp05hB1GdyWMRNdTptdqtrUSCGr56RkYHVBWeeQMRSK7lf
+        4JmfqfiXIAvXy12arIDoFSsFpcdl2ks5CCJh0JKHnl1z4iYaMWTsgCehZlUF+lFj
+        4YvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680655098; x=1680741498; bh=ejzhtkUjzuEOBfr+jkw68scBu5KVz3rG4G/
+        vQRTMeww=; b=isrBH6eFfRH4sgMtk+URn+vOWJWB9zZ77RVq67miD5qIdyUG4tq
+        iNurQ9hCw8RUaZQM8zvyvrIOitXCXa+7EqfAwUI7yNs4Xu7IXyFvFviglmCTx6bJ
+        ccURZXKRrNkDGHFe90U4eF1l7DtC4Qe4xYQlr/YI0fHeL2h+SuNzMCzCyPs6kI0D
+        03fgXKcN+EFwPIrM+tdipadSGnfK5SDtLxYtyANpdB/2aXA/umIPlIEviUNh9Q6N
+        B8+EFJJ9giSXwginI9IWbY8UnEsmmNqYlBZz4X0eDOkLBGNxPomCF24KcAC/WT89
+        yiyQ+86R9u/ZGjlxNAKQNln3Gtmm+WD/tKQ==
+X-ME-Sender: <xms:-sIsZKiBzJ5oyOvqRTLRZmfa2MR8og29o3r3RXHWXTvha7SO4v_dcg>
+    <xme:-sIsZLBAZtjnqWX0O_HvDdF1p1EGOFX1OqD_P_zcnCPskcqhJRHx4cdSarf7LTp1o
+    IaIZlW0PNTPBdPT4fw>
+X-ME-Received: <xmr:-sIsZCEDSDvNz1p0hoM3Rx2NiPCEEFeAweeeInqxLGhEPZqE9qSkcb3rWpNY3AgGyoAqUJkugBRUCDtRoNyOIpYC-9PskgHGZhxwaco>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejtddgfeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkgggtugesthdtredttd
+    dtvdenucfhrhhomheplfhoshhhucfvrhhiphhlvghtthcuoehjohhshhesjhhoshhhthhr
+    ihhplhgvthhtrdhorhhgqeenucggtffrrghtthgvrhhnpeelleeggedtjeejfeeuvddufe
+    eggfektdefkeehveeuvedvvdfhgeffgfdvgfffkeenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehjohhshhesjhhoshhhthhrihhplhgvthhtrd
+    horhhg
+X-ME-Proxy: <xmx:-sIsZDRnyLWv7Zizdpml_SLHjGduEOaxCrLegjV9QyvOwnIWJpw-aA>
+    <xmx:-sIsZHxtQOs5XlWcneMe994a_bhKg5Ikmq5wWM42143aQzwQLN-s3A>
+    <xmx:-sIsZB6iAgRh776lQWq9ZwmqIGP0kQoPKv3wdIWFce-4IewwJx09Iw>
+    <xmx:-sIsZFYDTHkcGF_cX4UGe93B4PAPx8tz91BMjE7bjIFld0zM4l-KDQ>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 20:38:16 -0400 (EDT)
+Date:   Wed, 5 Apr 2023 09:38:14 +0900
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] prctl: Add PR_GET_AUXV to copy auxv to userspace
+Message-ID: <e2236beddcef21cd4868849df990debd38c1ae3a.1680654963.git.josh@joshtriplett.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404183150.381314754@linuxfoundation.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 08:32:15PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.23 release.
-> There are 179 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 06 Apr 2023 18:31:13 +0000.
-> Anything received after that time might be too late.
-> 
+If a library wants to get information from auxv (for instance,
+AT_HWCAP/AT_HWCAP2), it has a few options, none of them perfectly
+reliable or ideal:
 
-Hi Greg, 
+- Be main or the pre-main startup code, and grub through the stack above
+  main. Doesn't work for a library.
+- Call libc getauxval. Not ideal for libraries that are trying to be
+  libc-independent and/or don't otherwise require anything from other
+  libraries.
+- Open and read /proc/self/auxv. Doesn't work for libraries that may run
+  in arbitrarily constrained environments that may not have /proc
+  mounted (e.g. libraries that might be used by an init program or a
+  container setup tool).
+- Assume you're on the main thread and still on the original stack, and
+  try to walk the stack upwards, hoping to find auxv. Extremely bad
+  idea.
+- Ask the caller to pass auxv in for you. Not ideal for a user-friendly
+  library, and then your caller may have the same problem.
 
-6.1.23-rc2 is failing to boot on x86 WSL. A bisect leads to commit
-c2f05366b687 ("swiotlb: fix slot alignment checks") being the problem
-and reverting this patch puts everything back in a working state.
+Add a prctl that copies current->mm->saved_auxv to a userspace buffer.
 
-There's a report from Dexuan who also encountered this error on a Linux
-VM on Hyper-V:
+Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+---
 
-https://lore.kernel.org/all/CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com/
+v2:
+- Fix W=1 warning about min type mismatch
+v3:
+- Change argument type to size_t. (Left the return value as int to match
+  all the other helpers in the file.)
 
-Adding a chunk of my log below which shows errors occuring from the hv_strvsc driver.
+I've built, booted, and tested this.
 
-+cc Dexuan, Petr, Tyler, Hyper-V list, swiotlb list and maintainers
+man-pages snippet:
 
--Kelsey
+.\" prctl PR_GET_AUXV
+.TP
+.BR PR_GET_AUXV " (since Linux 6.x)"
+Get the auxilliary vector (auxv) into the buffer pointed to by
+.IR "(void\~*) arg2" ,
+whose length is given by \fIarg3\fP.
+If the buffer is not long enough for the full auxilliary vector,
+the copy will be truncated.
+Return (as the function result)
+the full length of the auxilliary vector.
+\fIarg4\fP and \fIarg5\fP must be 0.
 
+Will send a patch for man-pages once merged.
 
+ include/uapi/linux/prctl.h |  2 ++
+ kernel/sys.c               | 15 +++++++++++++++
+ 2 files changed, 17 insertions(+)
 
-[    1.796960] scsi 0:0:0:0: Direct-Access
-PQ: 0 ANSI: 0
-[    1.798026] sd 0:0:0:0: Attached scsi generic sg0 type 0
-[    1.799408] sd 0:0:0:0: [sda] Sector size 0 reported, assuming 512.
-[    1.800296] sd 0:0:0:0: [sda] 1 512-byte logical blocks: (512 B/512
-B)
-[    1.801029] sd 0:0:0:0: [sda] 0-byte physical blocks
-[    1.804195] sd 0:0:0:0: [sda] Write Protect is on
-[    1.804820] sd 0:0:0:0: [sda] Mode Sense: 0f 00 80 00
-[    1.806353] scsi 0:1:1:0: Direct-Access
-PQ: 0 ANSI: 0
-[    1.806711] sd 0:0:0:0: [sda] Asking for cache data failed
-[    1.807534] sd 0:1:1:0: Attached scsi generic sg9 type 0
-[    1.808063] sd 0:0:0:0: [sda] Assuming drive cache: write through
-[    1.809789] sd 0:1:1:0: [sdj] Test Unit Ready failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.810476] sd 0:0:0:0: [sda] Sector size 0 reported, assuming 512.
-[    1.810988] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#520
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.812072] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#521
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.812943] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#522
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.812966] scsi 0:4:0:0: Direct-Access
-PQ: 0 ANSI: 0
-[    1.813001] sd 0:1:1:0: [sdj] Read Capacity(10) failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.813097] scsi 0:4:0:0: Attached scsi generic sg10 type 0
-[    1.815128] sd 0:4:0:0: [sdk] Test Unit Ready failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.815790] scsi 0:6:0:0: Direct-Access
-PQ: 0 ANSI: 0
-[    1.815949] sd 0:6:0:0: Attached scsi generic sg11 type 0
-[    1.816072] sd 0:0:0:0: [sda] Write Protect is off
-[    1.816075] sd 0:0:0:0: [sda] Mode Sense: 00 00 00 00
-[    1.816466] sd 0:1:1:0: [sdj] Sense not available.
-[    1.816515] sd 0:1:1:0: [sdj] 0 512-byte logical blocks: (0 B/0 B)
-[    1.816517] sd 0:1:1:0: [sdj] 0-byte physical blocks
-[    1.816974] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#155
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.817056] sd 0:1:1:0: [sdj] Write Protect is off
-[    1.817058] sd 0:1:1:0: [sdj] Mode Sense: 00 00 00 00
-[    1.817756] sd 0:6:0:0: [sdl] Test Unit Ready failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.818109] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#67
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.820136] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#68
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.821920] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#69
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.822789] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#156
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.823115] sd 0:1:1:0: [sdj] Asking for cache data failed
-[    1.823367] sd 0:6:0:0: [sdl] Read Capacity(10) failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.823373] sd 0:6:0:0: [sdl] Sense not available.
-[    1.823376] sd 0:6:0:0: [sdl] 0 512-byte logical blocks: (0 B/0 B)
-[    1.823377] sd 0:6:0:0: [sdl] 0-byte physical blocks
-[    1.825457] sd 0:0:0:0: [sda] Attached SCSI disk
-[    1.825632] sd 0:6:0:0: [sdl] Write Protect is off
-[    1.825636] sd 0:6:0:0: [sdl] Mode Sense: 00 00 00 00
-[    1.825934] sd 0:1:1:0: [sdj] Assuming drive cache: write through
-[    1.825970] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#157
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.826005] sd 0:6:0:0: [sdl] Asking for cache data failed
-[    1.826007] sd 0:6:0:0: [sdl] Assuming drive cache: write through
-[    1.826092] sd 0:4:0:0: [sdk] Read Capacity(10) failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.826141] sd 0:1:1:0: [sdj] Attached SCSI disk
-[    1.826649] sd 0:6:0:0: [sdl] Attached SCSI disk
-[    1.845293] sd 0:4:0:0: [sdk] Sense not available.
-[    1.846327] sd 0:4:0:0: [sdk] 0 512-byte logical blocks: (0 B/0 B)
-[    1.847370] sd 0:4:0:0: [sdk] 0-byte physical blocks
-[    1.854709] sd 0:4:0:0: [sdk] Write Protect is off
-[    1.855569] sd 0:4:0:0: [sdk] Mode Sense: 00 00 00 00
-[    1.858191] sd 0:4:0:0: [sdk] Asking for cache data failed
-[    1.858876] sd 0:4:0:0: [sdk] Assuming drive cache: write through
-[    1.860270] sd 0:4:0:0: [sdk] Attached SCSI disk
-[    1.965050] scsi 0:0:0:0: Direct-Access
-PQ: 0 ANSI: 0
-[    1.966030] sd 0:0:0:0: Attached scsi generic sg0 type 0
-[    1.966347] sd 0:0:0:0: [sda] Sector size 0 reported, assuming 512.
-[    1.967120] sd 0:0:0:0: [sda] 1 512-byte logical blocks: (512 B/512
-B)
-[    1.967175] scsi 0:0:0:1: Direct-Access     Msft     Virtual Disk
-1.0  PQ: 0 ANSI: 5
-[    1.967644] sd 0:0:0:0: [sda] 0-byte physical blocks
-[    1.968899] scsi 0:0:0:1: scsi_get_vpd_buf: VPD page 0x00 result 12 >
-4 bytes
-[    1.969160] sd 0:0:0:0: [sda] Write Protect is on
-[    1.970184] sd 0:0:0:0: [sda] Mode Sense: 0f 00 80 00
-[    1.970797] sd 0:0:0:0: [sda] Asking for cache data failed
-[    1.971230] sd 0:0:0:0: [sda] Assuming drive cache: write through
-[    1.972270] sd 0:0:0:1: Attached scsi generic sg12 type 0
-[    1.972511] sd 0:0:0:1: [sdm] 8388616 512-byte logical blocks: (4.29
-GB/4.00 GiB)
-[    1.972763] sd 0:0:0:0: [sda] 744728 512-byte logical blocks: (381
-MB/364 MiB)
-[    1.973379] sd 0:0:0:1: [sdm] 4096-byte physical blocks
-[    1.973749] sd 0:0:0:1: [sdm] Write Protect is off
-[    1.974745] sda: detected capacity change from 1 to 744728
-[    1.974776] sd 0:0:0:1: [sdm] Mode Sense: 00 00 00 00
-[    1.974781] scsi 0:2:1:0: Direct-Access
-PQ: 0 ANSI: 0
-[    1.974925] sd 0:2:1:0: Attached scsi generic sg13 type 0
-[    1.977046] sd 0:2:1:0: [sdn] Test Unit Ready failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.978129] sd 0:0:0:0: [sda] Attached SCSI disk
-[    1.979617] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#30
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.979972] sd 0:0:0:1: [sdm] No Caching mode page found
-[    1.981154] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#31
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.981172] sd 0:0:0:1: [sdm] Assuming drive cache: write through
-[    1.982140] EXT4-fs (sda): VFS: Can't find ext4 filesystem
-[    1.982953] scsi 0:7:0:0: Direct-Access
-PQ: 0 ANSI: 0
-[    1.982957] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#32
-cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
-[    1.983085] sd 0:2:1:0: [sdn] Read Capacity(10) failed: Result:
-hostbyte=0x01 driverbyte=DRIVER_OK
-[    1.983088] sd 0:2:1:0: [sdn] Sense not availThe connection with the
-virtual machine or container was closed.
-
-
-
-
+diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+index 1312a137f7fb..b2b24eaf2427 100644
+--- a/include/uapi/linux/prctl.h
++++ b/include/uapi/linux/prctl.h
+@@ -290,4 +290,6 @@ struct prctl_mm_map {
+ #define PR_SET_VMA		0x53564d41
+ # define PR_SET_VMA_ANON_NAME		0
+ 
++#define PR_GET_AUXV		0x41555856
++
+ #endif /* _LINUX_PRCTL_H */
+diff --git a/kernel/sys.c b/kernel/sys.c
+index 495cd87d9bf4..f031edb8bc47 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -2377,6 +2377,16 @@ static inline int prctl_get_mdwe(unsigned long arg2, unsigned long arg3,
+ 		PR_MDWE_REFUSE_EXEC_GAIN : 0;
+ }
+ 
++static int prctl_get_auxv(void __user *addr, size_t len)
++{
++	struct mm_struct *mm = current->mm;
++	size_t size = min_t(size_t, sizeof(mm->saved_auxv), len);
++
++	if (size && copy_to_user(addr, mm->saved_auxv, size))
++		return -EFAULT;
++	return sizeof(mm->saved_auxv);
++}
++
+ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 		unsigned long, arg4, unsigned long, arg5)
+ {
+@@ -2661,6 +2671,11 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 	case PR_SET_VMA:
+ 		error = prctl_set_vma(arg2, arg3, arg4, arg5);
+ 		break;
++	case PR_GET_AUXV:
++		if (arg4 || arg5)
++			return -EINVAL;
++		error = prctl_get_auxv((void __user *)arg2, arg3);
++		break;
+ 	default:
+ 		error = -EINVAL;
+ 		break;
+-- 
+2.40.0
 
