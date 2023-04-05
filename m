@@ -2,112 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2086D8218
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F876D831C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238779AbjDEPhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S233533AbjDEQKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbjDEPhj (ORCPT
+        with ESMTP id S232321AbjDEQKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:37:39 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6761990;
-        Wed,  5 Apr 2023 08:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1680709058; x=1712245058;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=QSFaPQEqFWauuwq5wK1tuBUPV8rypqU+umcss/29/Qo=;
-  b=BSVurwVHjPYmzJ1VUMxJr7R+HZIyyI52nz/01pVGHpmVoS2i9Kxn50PH
-   +iAf4cy3/rLdqhOZenkGFKWPe6ax4ofbQ/iVEqpxHiwQAL4n3gC5YxLoQ
-   Q8+FcIPd8DQDEKE14TVibTyl9khtvC3pBNaEqu15Y800Ew2Nb5SMfSb4t
-   4=;
-X-IronPort-AV: E=Sophos;i="5.98,321,1673913600"; 
-   d="scan'208";a="326412703"
-Subject: Re: [PATCH] drm/msm: Check for the GPU IOMMU during bind
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 15:37:37 +0000
-Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-d47337e0.us-west-2.amazon.com (Postfix) with ESMTPS id 83D7F60AEF;
-        Wed,  5 Apr 2023 15:37:35 +0000 (UTC)
-Received: from EX19D047UWB002.ant.amazon.com (10.13.138.34) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 5 Apr 2023 15:37:35 +0000
-Received: from amazon.com (10.88.210.141) by EX19D047UWB002.ant.amazon.com
- (10.13.138.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26; Wed, 5 Apr 2023
- 15:37:33 +0000
-Date:   Wed, 5 Apr 2023 09:37:31 -0600
-From:   Jordan Crouse <jorcrous@amazon.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <freedreno@lists.freedesktop.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, "Sean Paul" <sean@poorly.run>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Message-ID: <20230405153731.7pd2qygz2psowkeh@amazon.com>
-Mail-Followup-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230309222049.4180579-1-jorcrous@amazon.com>
- <e08cad22-09fe-1c65-a329-802b116e7503@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <e08cad22-09fe-1c65-a329-802b116e7503@linaro.org>
-X-Originating-IP: [10.88.210.141]
-X-ClientProxiedBy: EX19D035UWA003.ant.amazon.com (10.13.139.86) To
- EX19D047UWB002.ant.amazon.com (10.13.138.34)
-X-Spam-Status: No, score=-10.0 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        Wed, 5 Apr 2023 12:10:02 -0400
+X-Greylist: delayed 1809 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 09:09:53 PDT
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633AB10D8;
+        Wed,  5 Apr 2023 09:09:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=HXWZ4XUXK8vGxYsn5UqljiIqwaTfxIUTeJ93pQO8yv0=;
+        b=IIIgPy78rqr8S+tn6NsY2EvtjiKg+QIru842BL9PVeqTXvixeia2k4BeueSquX1gll0Q9MZpdk88P
+         9wkbyAQ1mY0IZkGHObVLjCDxKyE7uOzpGdB2pSKRCDOYCFGvVovxZWcN4ArP442YbUpgfeVmiZgjn6
+         B20s8KSfb8FdJPDiJH0tKbq49wMSRWpt80EPNpGf+X4KkLabY1WBNdnxVskiRdlaCt6DnsmmRuDGsf
+         +Bsn+BZ4Oi5m29jHnE0Tb4cZ5ePwG0kTPm6mPj6COz5OP4QkkVKWh5Yt+k2ftvJ7LpLGJpfhcER6pZ
+         58bgnFiOYPt+OvgZ2Ma8q0cwx1dtlNw==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.17.2.1477, Stamp: 3], Multi: [Enabled, t: (0.000012,0.013713)], BW: [Enabled, t: (0.000025,0.000001)], RTDA: [Enabled, t: (0.090298), Hit: No, Details: v2.49.0; Id: 15.4d9lk.1gt9153nq.b2hs; mclb], total: 0(700)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([78.37.166.219])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Wed, 5 Apr 2023 18:39:18 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     netdev@vger.kernel.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, linux@armlinux.org.uk,
+        andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-kernel@vger.kernel.org, system@metrotek.ru,
+        stable@vger.kernel.org
+Subject: [PATCH net] net: sfp: initialize sfp->i2c_block_size at sfp allocation
+Date:   Wed,  5 Apr 2023 18:39:00 +0300
+Message-Id: <20230405153900.747-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 01:05:36AM +0200, Dmitry Baryshkov wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> 
-> 
-> 
-> On 10/03/2023 00:20, Jordan Crouse wrote:
-> > While booting with amd,imageon on a headless target the GPU probe was
-> > failing with -ENOSPC in get_pages() from msm_gem.c.
-> > 
-> > Investigation showed that the driver was using the default 16MB VRAM
-> > carveout because msm_use_mmu() was returning false since headless devices
-> > use a dummy parent device. Avoid this by extending the existing is_a2xx
-> > priv member to check the GPU IOMMU state on all platforms and use that
-> > check in msm_use_mmu().
-> 
-> I wonder if we can fix this by setting 'dummy_dev'->of_node to adreno's
-> of_node. Did you check that possibility?
+sfp->i2c_block_size is initialized at SFP module insertion in
+sfp_sm_mod_probe(). Because of that, if SFP module was not inserted
+since boot, ethtool -m leads to zero-length I2C read attempt.
 
-I said I would check and then never looped back around. This will stick
-on my todo list for now and I'll check on the next cycle. If anybody
-else wants to jump in the meantime then please go for it.
+  # ethtool -m xge0
+  i2c i2c-3: adapter quirk: no zero length (addr 0x0050, size 0, read)
+  Cannot get Module EEPROM data: Operation not supported
 
-Jordan
+If SFP module was plugged then removed at least once,
+sfp->i2c_block_size will be initialized and ethtool -m will fail with
+different error
+
+  # ethtool -m xge0
+  Cannot get Module EEPROM data: Remote I/O error
+
+Fix this by initializing sfp->i2_block_size at struct sfp allocation
+stage so ethtool -m with SFP module removed will fail the same way, i.e.
+-EREMOTEIO, in both cases and without errors from I2C adapter.
+
+Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Fixes: 0d035bed2a4a ("net: sfp: VSOL V2801F / CarlitoxxPro CPGOS03-0490 v2.0 workaround")
+Cc: stable@vger.kernel.org
+---
+ drivers/net/phy/sfp.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 40c9a64c5e30..5663a184644d 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -212,6 +212,12 @@ static const enum gpiod_flags gpio_flags[] = {
+ #define SFP_PHY_ADDR		22
+ #define SFP_PHY_ADDR_ROLLBALL	17
+ 
++/* SFP_EEPROM_BLOCK_SIZE is the size of data chunk to read the EEPROM
++ * at a time. Some SFP modules and also some Linux I2C drivers do not like
++ * reads longer than 16 bytes.
++ */
++#define SFP_EEPROM_BLOCK_SIZE	16
++
+ struct sff_data {
+ 	unsigned int gpios;
+ 	bool (*module_supported)(const struct sfp_eeprom_id *id);
+@@ -1928,11 +1934,7 @@ static int sfp_sm_mod_probe(struct sfp *sfp, bool report)
+ 	u8 check;
+ 	int ret;
+ 
+-	/* Some SFP modules and also some Linux I2C drivers do not like reads
+-	 * longer than 16 bytes, so read the EEPROM in chunks of 16 bytes at
+-	 * a time.
+-	 */
+-	sfp->i2c_block_size = 16;
++	sfp->i2c_block_size = SFP_EEPROM_BLOCK_SIZE;
+ 
+ 	ret = sfp_read(sfp, false, 0, &id.base, sizeof(id.base));
+ 	if (ret < 0) {
+@@ -2615,6 +2617,7 @@ static struct sfp *sfp_alloc(struct device *dev)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	sfp->dev = dev;
++	sfp->i2c_block_size = SFP_EEPROM_BLOCK_SIZE;
+ 
+ 	mutex_init(&sfp->sm_mutex);
+ 	mutex_init(&sfp->st_mutex);
+-- 
+2.39.2
+
+
