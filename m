@@ -2,255 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350A16D7EF3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF2D36D7F00
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237960AbjDEOPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S238341AbjDEOQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238339AbjDEOPK (ORCPT
+        with ESMTP id S230012AbjDEOQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:15:10 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291A959D8;
-        Wed,  5 Apr 2023 07:14:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QCYn8g0b2AbMx/0C9yU/Ph43xr3JKznmlVtn7Nz+ZNKe4bTjcLLDnFsZsx5D/QClPhDytVFzb7lIxAr/PPrWb7iIMWJSQ3y2C4X4cfJX8rD/IgaHNfnown+hkG4ngWd+irEO+SWftr2DWLcjAlCk0Lzv26rGvgz0+f8AntmTLudDtgbRvebxh+a7IEzcM6WRQWMWWm3U61PO8iaTt72jDX4k7x4FC8MfnosSzDoDj35ZplR+D/JuUaMjiFBEVksSI4BUu+jaLnEO2FDzRFkbH4vc0gyQ6t2ftorlCtwZIb84Ryo3yuDfcBpVp6sw6ukrbRsMfnzRuCA8cYh6brcV3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=INSvVes12oim6c/N1vy4SGbvRUSVDv11ZE30GMkAWOU=;
- b=JYw58WLAPVuBnZTFBd90ca6YTC57rjZnFljAWsuG9npYKc1n4MmWVSm9nj8OWD7KrPdNWaJ1v7XR+6aHGpztamJCAELYz0uBzrdgvk73g5BpgeF9wQMQtcbY8ZkWRqod2PAn2cdFHlhwp+fOpg4mvW5ZNN/vftvJhhNeHIN5uqxoKTsslz8JDDdED5RbSY7DNCRha6Pbv7gIFr8hki2N+qb4Rj08BxwXV0z8Tc0IU7zeIw+kTYHBrrUuKIQVvv5ZhePq1NvjjLECy5QZ3VlpVNQ/bt6BhuEHe7yCtsB0gFPvqb83lPGI+QnY+43xJsLDSgUzKokMw0Q/VAtZk2vXwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=INSvVes12oim6c/N1vy4SGbvRUSVDv11ZE30GMkAWOU=;
- b=Nk7Ueb4/JPB4x07LgQOR1uo6L/oD9SzncQel9iYVAshSVdFh9bda1l926rUI9gh3glreBscpL4F0iekrrgyAfz4dNmZXyEbTiA39fBD+P3Y9XSx3JIbc8PVKomGV9ARXNqu9Z1hk/ZqOlxNgAEedHY8GVTwrIkb/aHfP8F9d7Wg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DS7PR12MB8250.namprd12.prod.outlook.com (2603:10b6:8:db::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Wed, 5 Apr
- 2023 14:14:19 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6254.035; Wed, 5 Apr 2023
- 14:14:19 +0000
-Message-ID: <20502c4c-c987-3117-119a-2fd38ae5f607@amd.com>
-Date:   Wed, 5 Apr 2023 16:14:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
-Content-Language: en-US
-To:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
- <ZC16Q8MhHEcutX1b@phenom.ffwll.local>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <ZC16Q8MhHEcutX1b@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0185.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9f::18) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 5 Apr 2023 10:16:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286F36191;
+        Wed,  5 Apr 2023 07:16:11 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335AqQ2g001183;
+        Wed, 5 Apr 2023 14:15:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MrSFEYpQ3I7RkRnipX62YSTkvysw3V2fzJtTEJ8l0QQ=;
+ b=JNJ3PPd9/80o3vj8Jlrz1/3/bpaWZ0DdvwsKW5QksGh8LbEffZBRQfeCjqInwxOElJxl
+ yx6N6ubO1L5KXXI7jnqdvCCgbTGrrjyyEIH7JqUEACCPBJByts7nD0W/cUoZaum5Kyca
+ RHytjLseTPwAKVIHogL1mEOoZQtnSnbh0HJzU9/k0/ceHvIsYsCZLYb0biQPJsMHaf3Y
+ ND8XW0K03e360JrAi7g3sF6JB4ynureMdCXm6rwSoieoN1hTO7RAl8x6sJ/k6TpapCD1
+ bmCoGHd3sDg49x+d5bRws6W85Bn+w7/hIKQjKZjz3v9NOEc4s+7X5vkhIesTTWmAxeR3 zg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prppujqv3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 14:15:19 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 335EFIvw021453
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Apr 2023 14:15:18 GMT
+Received: from [10.216.10.176] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 5 Apr 2023
+ 07:15:11 -0700
+Message-ID: <c18db964-1af7-7bbf-0d0f-cbb037f7500a@quicinc.com>
+Date:   Wed, 5 Apr 2023 19:45:07 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|DS7PR12MB8250:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8893a67c-cc2a-48ae-24ee-08db35e00bd1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XhIcQy0YBAxRM6hrAWIZTRgtPXS/EbsbxjQM5yetl2NuyS629JB1WnEOwstmkZc1QI+06zwWQiCyWzgLc3ZpVwFFYHctD8vc2sSGXAxTKO+6ZQhaRIT10YJ9MGH49Hh1aGrKPaJkysggvNZ5fZflZwRfCHq0C37XJ6ltRGUDgotRo9wMTRb1O2nOEw0DcRxHllX8jVeLilDVdl3cSkkRK8JA9oc0fbmMHlWy+VTEqTduW9UbF7y19cJWg6PBo1cmcChV40M4LfT33pztpBZ3/1irn6WXM8jXbVks40926UyAtRd3dkbwvL+GZg9Y3eGgnRM60KnCygy8Q5SUvxCzefTESD/1s8Zea3k/9/zk/Vhjwb/37tazK0IYUnA7qFpjKyTKT5zCrLKt0P7xIsVwehTBY7fBCdBeVjfFGfOen8oqK0cLQYTXbQ5kD5XYV7CZejKfY6CpbbwTHpW0xUv6HMAoGJ9gsiMQv/9ZHMrpii6QStYqsHei7tTTGiIVy9GEJ32LixCXiM7pvRRRfW6JunGvsu7XD+HBcZG5drCLLLTd3i0Q0mp7d2KUwBEkZC+tweFNPfAOL7f8le48HwlBMMpmhRp+n4VoHogBzoo25RTDZ8SlvH4T9/T/47EYRkCq9Kh5nuyGw13wc/A+ubd6ygp/BUMV5Vjv+asO0qQ9I7KF1M0Bdja5W9WZX81mBdJP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(346002)(376002)(396003)(136003)(451199021)(31686004)(2906002)(86362001)(5660300002)(38100700002)(66946007)(7416002)(478600001)(66476007)(66556008)(8936002)(110136005)(41300700001)(186003)(316002)(36756003)(8676002)(31696002)(6512007)(6506007)(83380400001)(921005)(966005)(6486002)(2616005)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Vnh5c0RVM3dBQVZVSi84aEh5ZlZYNHhSNmIyMUh0SVpyaCtiN3ZCMzNrOG90?=
- =?utf-8?B?Q0ZiWnEwU3VORlZQaGVoL2hya1dkMzZWTmRPSzZuNUxwU2M5MHhvRXU5YkYr?=
- =?utf-8?B?R29sdzFuNmMwUkh5ZXRzcXBsd05BTDJwQ1JqSGR5MCtMYnkzRUdnM0NaM01s?=
- =?utf-8?B?NHV0aytza1VUeUFncUNyRll1YnpFMm5SSTQ1WmpaUW5pWnhCNDFEWFFIMVFz?=
- =?utf-8?B?dTdXdHRtUnp2Z2J1REFoVllRNjQzZENKekpwM2x5M3hhQlA1d3pMdmcyOENM?=
- =?utf-8?B?dTQ4M0I0MHk4U3lwMVAzWlJZQ3RMdXgvdGd5NE43dEVzQ1I2UGpSRElvNDkv?=
- =?utf-8?B?ZUpQWEk0TXBiYlZPWlBSTFR2STZiRzZ6MFA2VlJtSUZyVXpFbFVPM0NGT3hn?=
- =?utf-8?B?LzBISXRJd25CUG5GWTFab3JGR0hKdFY3bDJSV29NUjlmMEcxOXpSWEYzdnlP?=
- =?utf-8?B?bGpsbXljYjJTQkpZbmhBMzl3OHc0TFlTMGpaK1ovVG9LbWF3d0M1Rlc4MWQw?=
- =?utf-8?B?TFlVWkdINGYrY1BKKzhzZmVZWkxHUzlsQVhCRHJPVldsangwbFZ5ai9iVWZG?=
- =?utf-8?B?Z0V4N3lwd043RHVVY1hOZHMrT05Wc0Y1L2NOMHUwMkoxRE5JZThnT24wVkpW?=
- =?utf-8?B?YjY1MUE3aVpGUzZVNGlPOUxhbXoyWGQ0MUR0OUE5K0lXbXlzQnFacGloOEkz?=
- =?utf-8?B?QTA1U1h4TmVlYlF4RTlERUc2elpWL0YvZkhYTC83RkRVR045aTB3a00zUXFw?=
- =?utf-8?B?UVFnalJjTm02Q2hzbFBCSHF2ZkxNZzExSTU0NjljZzIva2lRUFpyVmNNRk1B?=
- =?utf-8?B?UjFNSzNNR1ZCRHFPUVZpL1F6RGQzN1dUZlJvb0pSaTJnNE16SVo5Z0RZV3JQ?=
- =?utf-8?B?WW1SLzJvZFk3QVdLekNyK3NJTlQ5R0ppVGNyN0dTbWhKaFVFY1NCeXF6RTlt?=
- =?utf-8?B?NXVNRWdwbEFKbzIrQXgwc0xWUk5mZDdqRXQ1T1JVRU01ZFpuVlhIUTNZS0lp?=
- =?utf-8?B?ZTlXNkF6eFBUOWNWdXZnUUxHNEpBTU9ERVlXVzhUVG1ubk5JWVlHYWVrMTNL?=
- =?utf-8?B?dlZROUVlUXhiRDd4N3R3UHVub0tGekQ0Uk5GZ1d0VFlkbUVzTm1WZUN4dFhr?=
- =?utf-8?B?OXMrM2lZNERHT0pRbFFleUJ1QWdkcnd4TlAzaXRIUDUrdmk2aG5jRFNaajJN?=
- =?utf-8?B?T2RHeU1vVWxjcFZ4MlV1WGVHRjVPVXI1eXhkT3ArWlhkMytxdnp5bGpFVFhS?=
- =?utf-8?B?SUNURU93ZHBLNXRPMDh2SzhOcHZ3cy9NclF2ck8wTWVKbUtPc3pQR3pycXVB?=
- =?utf-8?B?andxRnZRNEdzWmc2MFJ3QUhnbnZkZG91WWUyVm93T2tZYU5vS3Nxb0lNc1lF?=
- =?utf-8?B?QmNHbGsxV2ZsaU9OMGlEQ3l6UUNXakF6ajFhK21OWUZrNTdkS0h4alJ4VlFl?=
- =?utf-8?B?T2ViS0VrMHNhdDhmM3U1djNkeUh4OXFaaktTVHR3UXNmeFlLVGV1WU00TW9N?=
- =?utf-8?B?dXdHc2xBcmk4ZmRNcFExUlVoUWZkTnhUUTIvTkhLdzJHU2dqQ0tJZWdGczBy?=
- =?utf-8?B?dkx3V0NRL1ZGRXh0VW9ueTdtVFlpTEJMNTg4YitsbkpNb2VzWmRDZjNOUEtk?=
- =?utf-8?B?bndOMWFILzExSVZ3RkhuRG5vck5aT3hEUDA1VEIyYmtyNDJnRkgvMzkzVjho?=
- =?utf-8?B?b0RZRHZTRFJSVTI5aHdkSGp3MlRDOVZpVVlFVllSUUZWdTRoV0hOemdwSG1V?=
- =?utf-8?B?UEdVZWZWb2R6Z1Avd2N1WStOVmtoZDN2OXV4M3AyVE1NUnRFSEZiSFlOR0NB?=
- =?utf-8?B?Y20zYWkrQ0MxaDBlTXAzYm1leTJoSDZSNWw3LzRHTTc4L1J5M056ZDVNYWFR?=
- =?utf-8?B?eTJ0V29YclpKN2xsRUwybW9aWEJlYncrTW11ZXU0K1plKzZWUDRjbldnak0x?=
- =?utf-8?B?bExnTFl1RXFZYVVHT3hnR1NvMVhlak5JakRSTzBRZWM3c2NyVHpFUXlKNTdQ?=
- =?utf-8?B?SUxaNkZyY2NJVDFVcU5OQTZLSElTOUg3b0RwV0QvV0FFUjZremJwNFVCODZK?=
- =?utf-8?B?SGpwamhMWXI5N3VHWWVzNWlxd2JkWDAwaEk3NnVJeFJ6aXo5Rmg1ekU4UlM5?=
- =?utf-8?B?eFc2aFRBTXpJTFlLbFFBdTR4UlBhV3JCczBONlMzZ0doRkU1eGM0UTlwc2Qy?=
- =?utf-8?Q?QsJIb08Aqlbtd+x/hmwWfVdKRsDZUbtuE+1kWrHDFTg1?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8893a67c-cc2a-48ae-24ee-08db35e00bd1
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 14:14:19.1971
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WuN51GNP278rC9aU/qcPvn+vuwJYq8yjL0qcuqZaxbfZEoKE1zZFsPCMOsDQ4VMI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8250
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 1/8] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230405125759.4201-2-quic_kriskura@quicinc.com>
+ <63bfaa1e-c627-bfe1-0bef-d001dae41014@linaro.org>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <63bfaa1e-c627-bfe1-0bef-d001dae41014@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ir2MPhxUq0opjT1mMCSD3k47hQQL_Ykq
+X-Proofpoint-ORIG-GUID: ir2MPhxUq0opjT1mMCSD3k47hQQL_Ykq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-05_09,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1011 malwarescore=0 suspectscore=0
+ adultscore=0 mlxlogscore=601 phishscore=0 bulkscore=0 priorityscore=1501
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304050129
+X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 05.04.23 um 15:40 schrieb Daniel Vetter:
-> On Tue, Mar 07, 2023 at 11:25:35PM +0900, Asahi Lina wrote:
->> Some hardware may require more complex resource utilization accounting
->> than the simple job count supported by drm_sched internally. Add a
->> can_run_job callback to allow drivers to implement more logic before
->> deciding whether to run a GPU job.
+
+
+On 4/5/2023 7:31 PM, Krzysztof Kozlowski wrote:
+> On 05/04/2023 14:57, Krishna Kurapati wrote:
+>> Add bindings to indicate properties required to support multiport
+>> on Snps Dwc3 controller.
 >>
->> Signed-off-by: Asahi Lina <lina@asahilina.net>
-> Ok scheduler rules, or trying to summarize the entire discussion:
->
-> dma_fence rules are very tricky. The two main chapters in the docs are
->
-> https://dri.freedesktop.org/docs/drm/driver-api/dma-buf.html?highlight=dma_buf#dma-fence-cross-driver-contract
-> https://dri.freedesktop.org/docs/drm/driver-api/dma-buf.html?highlight=dma_buf#indefinite-dma-fences
->
-> Unforutunately I don't think it's possible to check this at compile time,
-> thus far all we can do is validate at runtime. I've posted two patches for
-> this:
->
-> https://lore.kernel.org/dri-devel/20201023122216.2373294-17-daniel.vetter@ffwll.ch/
-> https://lore.kernel.org/dri-devel/20201023122216.2373294-20-daniel.vetter@ffwll.ch/
->
-> Unfortunately most drivers are buggy and get this completely wrong, so
-> realistically we'd need to make this a per-driver opt-out and annotate all
-> current drivers. Well except amdgpu is correct by now I think (they'd
-> still need to test that).
-
-There is still one potential memory allocation in the run_job callback 
-in amdgpu which I wasn't able to fix yet.
-
-But that one is purely academic and could potentially be trivially 
-replaced with using GFP_ATOMIC if we ever have to.
-
-Christian.
-
->   And Rob Clark is working on patches to fix up
-> msm.
->
-> I think best here is if you work together with Rob to make sure these
-> annotations are mandatory for any rust drivers (I don't want new buggy
-> drivers at least). Would also be great to improve the kerneldoc for all
-> the driver hooks to explain these restrictions and link to the relevant
-> kerneldocs (there's also one for the dma_fence signalling annotations
-> which might be worth linking too).
->
-> I don't see any way to make this explicit in rust types, it's really only
-> something runtime tests (using lockdep) can catch. Somewhat disappointing.
->
-> For the other things discussed here:
->
-> - Option<Dma_Fence> as the return value for ->prepare_job makes sense to
->    me.
->
-> - I don't see any way a driver can use ->can_run_job without breaking the
->    above rules, that really doesn't sound like a good idea to me.
->
-> Cheers, Daniel
->
+>> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 >> ---
->>   drivers/gpu/drm/scheduler/sched_main.c | 10 ++++++++++
->>   include/drm/gpu_scheduler.h            |  8 ++++++++
->>   2 files changed, 18 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
->> index 4e6ad6e122bc..5c0add2c7546 100644
->> --- a/drivers/gpu/drm/scheduler/sched_main.c
->> +++ b/drivers/gpu/drm/scheduler/sched_main.c
->> @@ -1001,6 +1001,16 @@ static int drm_sched_main(void *param)
->>   		if (!entity)
->>   			continue;
->>   
->> +		if (sched->ops->can_run_job) {
->> +			sched_job = to_drm_sched_job(spsc_queue_peek(&entity->job_queue));
->> +			if (!sched_job) {
->> +				complete_all(&entity->entity_idle);
->> +				continue;
->> +			}
->> +			if (!sched->ops->can_run_job(sched_job))
->> +				continue;
->> +		}
->> +
->>   		sched_job = drm_sched_entity_pop_job(entity);
->>   
->>   		if (!sched_job) {
->> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
->> index 9db9e5e504ee..bd89ea9507b9 100644
->> --- a/include/drm/gpu_scheduler.h
->> +++ b/include/drm/gpu_scheduler.h
->> @@ -396,6 +396,14 @@ struct drm_sched_backend_ops {
->>   	struct dma_fence *(*prepare_job)(struct drm_sched_job *sched_job,
->>   					 struct drm_sched_entity *s_entity);
->>   
->> +	/**
->> +	 * @can_run_job: Called before job execution to check whether the
->> +	 * hardware is free enough to run the job.  This can be used to
->> +	 * implement more complex hardware resource policies than the
->> +	 * hw_submission limit.
->> +	 */
->> +	bool (*can_run_job)(struct drm_sched_job *sched_job);
->> +
->>   	/**
->>            * @run_job: Called to execute the job once all of the dependencies
->>            * have been resolved.  This may be called multiple times, if
->>
->> -- 
->> 2.35.1
->>
+>> Link to v5: https://lore.kernel.org/all/20230310163420.7582-2-quic_kriskura@quicinc.com/
+> 
+> You did not test it at v4 and you got report for this. Your changelog in
+> commit msg does not mention fixing it.
+> 
+> It looks like you did not test it for the second time (or sixth time).
+> 
+> Best regards,
+> Krzysztof
+> 
+Hi Krzysztof,
 
+   I did do a dt_binding_check and I got the following result:
+
+kriskura@hu-kriskura-hyd:/local/mnt/workspace/krishna/skales2/skales/kernel$ 
+make DT_CHECKER_FLAGS=-m dt_binding_check 
+DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+   HOSTCC  scripts/basic/fixdep
+   HOSTCC  scripts/dtc/dtc.o
+   HOSTCC  scripts/dtc/flattree.o
+   HOSTCC  scripts/dtc/fstree.o
+   HOSTCC  scripts/dtc/data.o
+   HOSTCC  scripts/dtc/livetree.o
+   HOSTCC  scripts/dtc/treesource.o
+   HOSTCC  scripts/dtc/srcpos.o
+   HOSTCC  scripts/dtc/checks.o
+   HOSTCC  scripts/dtc/util.o
+   LEX     scripts/dtc/dtc-lexer.lex.c
+   YACC    scripts/dtc/dtc-parser.tab.[ch]
+   HOSTCC  scripts/dtc/dtc-lexer.lex.o
+   HOSTCC  scripts/dtc/dtc-parser.tab.o
+   HOSTLD  scripts/dtc/dtc
+   LINT    Documentation/devicetree/bindings
+invalid config: unknown option "max-spaces-inside-empty" for rule "brackets"
+xargs: /usr/bin/yamllint: exited with status 255; aborting
+   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+/local/mnt/workspace/krishna/skales2/skales/kernel/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: 
+ignoring, error in schema: properties: qcom,pre-emphasis-duration-bp
+/local/mnt/workspace/krishna/skales2/skales/kernel/Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml: 
+ignoring, error in schema: properties: gpio-controller
+/local/mnt/workspace/krishna/skales2/skales/kernel/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml: 
+ignoring, error in schema: patternProperties: ^thermistor@: properties: 
+adi,excitation-current-nanoamp
+/local/mnt/workspace/krishna/skales2/skales/kernel/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml: 
+ignoring, error in schema: patternProperties: ^channel@([0-9a-f])$: 
+properties: adi,excitation-current-0-nanoamp
+   DTEX    Documentation/devicetree/bindings/usb/snps,dwc3.example.dts
+   DTC_CHK Documentation/devicetree/bindings/usb/snps,dwc3.example.dtb
+
+
+I can try upgrading the dt-schema and try again.
+
+Regards,
+Krishna,
