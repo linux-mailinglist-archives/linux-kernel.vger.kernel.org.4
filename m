@@ -2,122 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2F96D7259
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 04:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656B56D7261
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 04:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236706AbjDECW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 22:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S236734AbjDECYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 22:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236683AbjDECWZ (ORCPT
+        with ESMTP id S235182AbjDECYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 22:22:25 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38143C03
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 19:22:24 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id g7-20020a056602242700b00758e7dbd0dbso21817314iob.16
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 19:22:24 -0700 (PDT)
+        Tue, 4 Apr 2023 22:24:08 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90B246B4
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 19:24:03 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id w4so33080003plg.9
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 19:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680661443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gE096tbbtegWsFsNSRWQe6szhT/Ie2gS6GnCnw+q6nk=;
+        b=lhVtRJy2kAsB1GaC5KfK+0pirxSB6oDFSixG0x3X1FfItOSi0+ukF3YXzpuQYCbPQA
+         y0scIOfAr07Xvbt0AxIdbtbIzn5/YVCCiGSPljzw7Cx4kBWnjz6GlFl5jYG7UmtJfIet
+         roub5J7g8iw2CYtKESulYuOy4tJAUdU9w0xS4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680661344; x=1683253344;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPlfqNJb0MuOXniXGOJCymczVPdMXSLBi1uLs3OhJHM=;
-        b=nvttsPvluxvhpVYgHwpk+EnHR6KKABjM1XJCF6q9oBXJhWd3W5h1nSIKLiVUuFZ8I1
-         /+rYcVsKIEK8FPsDcCGalAaKCr0xsEjbfZM0fyGS6wZad+BoeNBSobcekCP0f3LQ1IK3
-         ostS8auGbNtRqP68S/fSTHCMTmTIZgt2uEuyP7FVhG5KEHvBrVSyXV3wdiWZpzgWN9Hc
-         OPIR3wo1oRHy9qQnsZp0TQSnKmShhCHY/+LSsEiDSZRuChaQm6sauue5uf5yCOcfqOtj
-         xgMW8QX+K0vJR1krsArDQusZrxfCsOoz30/dNQb5oIs8Qg8YPXb11tl39jMZFp4m43es
-         N0VA==
-X-Gm-Message-State: AAQBX9fXi2nkISC5U/VYDwoUiYdP1V+hAmhdsLgr3bJU70vsNo0szaQN
-        EItWa6UUDMvW2SaEcpWNDQXRu8LcHHMLMQ+CW9f1+K8V15gN
-X-Google-Smtp-Source: AKy350aN6RhvA2Pl9+qSEJuf/hNX0guh2EfiqAZuaEAPKxAPoMK0OUQQqndff6qcBySEZFYFHTY1rcll3M86FikcqN546AnfSfE4
+        d=1e100.net; s=20210112; t=1680661443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gE096tbbtegWsFsNSRWQe6szhT/Ie2gS6GnCnw+q6nk=;
+        b=X/roi3Qwc7QJD9ytmcrBfY+5wAicV3BqlYGoj8FM/XWjDUxECDy3DqT8mw+sVcpnNF
+         z5EnwycBxqo/St2HGOsQtG2FhPIvVs1Fz9RukvjXCF6Cq46PVOny5cfeOLGs5Oh2DGgc
+         lJI4OS1T3vVGCJgQNfQJhnJQZaeuYOvI+GRdgllVq+DHbaG0xgdxnTGTTChBpzK3K6aq
+         rLrVDx9Lu4vJKDcfATOO53v6ZnVLJmuFAlB0oQrLTAZ52vsk6TCxagPY0md/v1WZJK9C
+         ot+Wo8e12/6+hyVW7CUVKGwjkbes4zYp1eHnE9jDrb2LkngsH9j+ehP0dK7lQ1dpdlfQ
+         /dWg==
+X-Gm-Message-State: AAQBX9cKnyHhtBkFJrq9bGJ6cpqUCTlmKSjOMtFi5En1/FV47+HmoUyP
+        hCd/lQzFdjMHRQXv3WYwGz7Vaw==
+X-Google-Smtp-Source: AKy350bszIXwKxf3DRMbVNx2JAkaypaKo50esXSu/LfCtTSKytiwFU5u7bEWiULWHWpfRU3fEA0r1Q==
+X-Received: by 2002:a17:90b:4d8c:b0:23d:31c3:c9a4 with SMTP id oj12-20020a17090b4d8c00b0023d31c3c9a4mr5050686pjb.26.1680661443098;
+        Tue, 04 Apr 2023 19:24:03 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d17-20020a17090ad3d100b0023cfa3f7c9fsm238204pjw.10.2023.04.04.19.24.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 19:24:02 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] ubsan: Tighten UBSAN_BOUNDS on GCC
+Date:   Tue,  4 Apr 2023 19:23:59 -0700
+Message-Id: <20230405022356.gonna.338-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3708:b0:3ec:46d4:e15 with SMTP id
- k8-20020a056638370800b003ec46d40e15mr788946jav.3.1680661344032; Tue, 04 Apr
- 2023 19:22:24 -0700 (PDT)
-Date:   Tue, 04 Apr 2023 19:22:24 -0700
-In-Reply-To: <20230405015423.732-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000661f3105f88d76ad@google.com>
-Subject: Re: [syzbot] [kernfs?] WARNING in kernfs_remove_by_name_ns (3)
-From:   syzbot <syzbot+93cbdd0ab421adc5275d@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5095; h=from:subject:message-id; bh=DBjfeXxQtW9VJ4aQuL4Gd8SY0x0mddkkuOVfELeFHFY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkLNu/MDRN9xOaI1ECqP5sHrBCWmfraRQppPeauIpP LfAoNyuJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZCzbvwAKCRCJcvTf3G3AJiRGD/ 9GCblVh+rJ+X9fKxstnSMt5g50rvZ8boQ9jGquDwwRBPpjQBUmfUEu7Hbdr8ebTYfs3Dqk2oeyzBZ3 nlk1pUUOquhlYmykziGexGPPkOC2d5vRxsfJYKIeHG4w10GDvipj/gG83VRAQZUt0xKoQs6WCLNsbp M657SX1rxhqGi6u6ewxDxE23rf8uOvmmn0cOCYKcufAdufamxphOSQHvfsFmxIM6NXV9bVQFtyn6Cr WiOaMa6SvP8PRdD5fv7YGXSzmDbhU1l/ru1LNWK+xGa36s4SJHVeu5Iv3UBZXwk+9LA3VfvHoaIMsv 8w2sPe6V//sMG8q8churBvO4ZBO3zqMpgYxzCAHVOyv4opKptJnqlY9j4la8Osn7xfi+XPtC0uzltU hgkJm9CFbgyoaC7gplFIbQycJVvtPRLgSo7smzZ1cQchP4C+H2nTNzUCQ/Q7Uo9pIe/OZ9bZrprAi5 JfIHyfpyahzjJIeWzvnv6NafzVSFc2C/sIy759irKviiy9U6CCyO0nEdjuvVEXm/Tg1OnoB6iKssAY fhTFHVqPI63ZT9s8fTPdUu+oPAp7NKHCHyF67cJce8rlegUDGSPfJ2lnLXB2wEwc5xWhpWvYjfdkin qGoEv5YkJbVTSezSB4kC/iitqSE69L/P07s28/VlpWLRSsSXL13FyjMeFF8w==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
+leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
+match Clang's stricter behavior.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in kernfs_remove_by_name_ns
+Cc: Marco Elver <elver@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Tom Rix <trix@redhat.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: improve help text (nathan)
+v1: https://lore.kernel.org/lkml/20230302225444.never.053-kees@kernel.org/
+---
+ lib/Kconfig.ubsan      | 56 +++++++++++++++++++++++-------------------
+ scripts/Makefile.ubsan |  2 +-
+ 2 files changed, 32 insertions(+), 26 deletions(-)
 
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffebd636f0f R14: 00007f02791c2300 R15: 0000000000022000
- </TASK>
-kobject_add_internal failed for qgroups (error: -12 parent: 395ef67a-297e-477c-816d-cd80a5b93e5d)
-------------[ cut here ]------------
-kernfs: can not remove 'enabled', no directory
-WARNING: CPU: 0 PID: 5606 at fs/kernfs/dir.c:1649 kernfs_remove_by_name_ns+0xf8/0x150 fs/kernfs/dir.c:1648
-Modules linked in:
-CPU: 0 PID: 5606 Comm: syz-executor.0 Not tainted 6.3.0-rc5-syzkaller-00022-g76f598ba7d8e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
-RIP: 0010:kernfs_remove_by_name_ns+0xf8/0x150 fs/kernfs/dir.c:1648
-Code: ff 03 48 89 df e8 d8 ef ff ff 48 89 df e8 70 94 ff ff 31 db eb 27 e8 f7 84 72 ff 48 c7 c7 80 97 f9 8a 4c 89 e6 e8 58 9c 3a ff <0f> 0b bb fe ff ff ff eb 12 e8 da 84 72 ff bb fe ff ff ff 4c 89 f7
-RSP: 0018:ffffc900052e7b00 EFLAGS: 00010246
-RAX: 52e2f0e0665e4a00 RBX: ffffffff8d44b9a0 RCX: ffff888023018000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: dffffc0000000000 R08: ffffffff81527c82 R09: fffff52000a5ced9
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffffffff8b2a3960
-R13: 0000000000000000 R14: ffffffff8b2a3900 R15: 0000000000000000
-FS:  00007f02791c2700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fbb3bcd1d94 CR3: 000000002a4f4000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kernfs_remove_by_name include/linux/kernfs.h:618 [inline]
- remove_files fs/sysfs/group.c:28 [inline]
- sysfs_remove_group+0xfe/0x2a0 fs/sysfs/group.c:288
- sysfs_remove_groups+0x54/0xa0 fs/sysfs/group.c:312
- __kobject_del+0x84/0x310 lib/kobject.c:587
- kobject_del+0x45/0x60 lib/kobject.c:619
- btrfs_sysfs_del_qgroups+0x1cd/0x230 fs/btrfs/sysfs.c:2258
- btrfs_sysfs_add_qgroups+0x392/0x3c0 fs/btrfs/sysfs.c:2297
- btrfs_quota_enable+0x235/0x1f40 fs/btrfs/qgroup.c:991
- btrfs_ioctl_quota_ctl+0x141/0x180 fs/btrfs/ioctl.c:3682
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xf1/0x160 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f027848c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f02791c2168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f02785abf80 RCX: 00007f027848c0f9
-RDX: 0000000020000000 RSI: 00000000c0109428 RDI: 0000000000000004
-RBP: 00007f02791c21d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffebd636f0f R14: 00007f02791c2300 R15: 0000000000022000
- </TASK>
+diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+index fd15230a703b..65d8bbcba438 100644
+--- a/lib/Kconfig.ubsan
++++ b/lib/Kconfig.ubsan
+@@ -27,16 +27,29 @@ config UBSAN_TRAP
+ 	  the system. For some system builders this is an acceptable
+ 	  trade-off.
+ 
+-config CC_HAS_UBSAN_BOUNDS
+-	def_bool $(cc-option,-fsanitize=bounds)
++config CC_HAS_UBSAN_BOUNDS_STRICT
++	def_bool $(cc-option,-fsanitize=bounds-strict)
++	help
++	  The -fsanitize=bounds-strict option is only available on GCC,
++	  but uses the more strict handling of arrays that includes knowledge
++	  of flexible arrays, which is comparable to Clang's regular
++	  -fsanitize=bounds.
+ 
+ config CC_HAS_UBSAN_ARRAY_BOUNDS
+ 	def_bool $(cc-option,-fsanitize=array-bounds)
++	help
++	  Under Clang, the -fsanitize=bounds option is actually composed
++	  of two more specific options, -fsanitize=array-bounds and
++	  -fsanitize=local-bounds. However, -fsanitize=local-bounds can
++	  only be used when trap mode is enabled. (See also the help for
++	  CONFIG_LOCAL_BOUNDS.) Explicitly check for -fsanitize=array-bounds
++	  so that we can build up the options needed for UBSAN_BOUNDS
++	  with or without UBSAN_TRAP.
+ 
+ config UBSAN_BOUNDS
+ 	bool "Perform array index bounds checking"
+ 	default UBSAN
+-	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS
++	depends on CC_HAS_UBSAN_ARRAY_BOUNDS || CC_HAS_UBSAN_BOUNDS_STRICT
+ 	help
+ 	  This option enables detection of directly indexed out of bounds
+ 	  array accesses, where the array size is known at compile time.
+@@ -44,33 +57,26 @@ config UBSAN_BOUNDS
+ 	  to the {str,mem}*cpy() family of functions (that is addressed
+ 	  by CONFIG_FORTIFY_SOURCE).
+ 
+-config UBSAN_ONLY_BOUNDS
+-	def_bool CC_HAS_UBSAN_BOUNDS && !CC_HAS_UBSAN_ARRAY_BOUNDS
+-	depends on UBSAN_BOUNDS
++config UBSAN_BOUNDS_STRICT
++	def_bool UBSAN_BOUNDS && CC_HAS_UBSAN_BOUNDS_STRICT
+ 	help
+-	  This is a weird case: Clang's -fsanitize=bounds includes
+-	  -fsanitize=local-bounds, but it's trapping-only, so for
+-	  Clang, we must use -fsanitize=array-bounds when we want
+-	  traditional array bounds checking enabled. For GCC, we
+-	  want -fsanitize=bounds.
++	  GCC's bounds sanitizer. This option is used to select the
++	  correct options in Makefile.ubsan.
+ 
+ config UBSAN_ARRAY_BOUNDS
+-	def_bool CC_HAS_UBSAN_ARRAY_BOUNDS
+-	depends on UBSAN_BOUNDS
++	def_bool UBSAN_BOUNDS && CC_HAS_UBSAN_ARRAY_BOUNDS
++	help
++	  Clang's array bounds sanitizer. This option is used to select
++	  the correct options in Makefile.ubsan.
+ 
+ config UBSAN_LOCAL_BOUNDS
+-	bool "Perform array local bounds checking"
+-	depends on UBSAN_TRAP
+-	depends on $(cc-option,-fsanitize=local-bounds)
+-	help
+-	  This option enables -fsanitize=local-bounds which traps when an
+-	  exception/error is detected. Therefore, it may only be enabled
+-	  with CONFIG_UBSAN_TRAP.
+-
+-	  Enabling this option detects errors due to accesses through a
+-	  pointer that is derived from an object of a statically-known size,
+-	  where an added offset (which may not be known statically) is
+-	  out-of-bounds.
++	def_bool UBSAN_ARRAY_BOUNDS && UBSAN_TRAP
++	help
++	  This option enables Clang's -fsanitize=local-bounds which traps
++	  when an access through a pointer that is derived from an object
++	  of a statically-known size, where an added offset (which may not
++	  be known statically) is out-of-bounds. Since this option is
++	  trap-only, it depends on CONFIG_UBSAN_TRAP.
+ 
+ config UBSAN_SHIFT
+ 	bool "Perform checking for bit-shift overflows"
+diff --git a/scripts/Makefile.ubsan b/scripts/Makefile.ubsan
+index 7099c603ff0a..4749865c1b2c 100644
+--- a/scripts/Makefile.ubsan
++++ b/scripts/Makefile.ubsan
+@@ -2,7 +2,7 @@
+ 
+ # Enable available and selected UBSAN features.
+ ubsan-cflags-$(CONFIG_UBSAN_ALIGNMENT)		+= -fsanitize=alignment
+-ubsan-cflags-$(CONFIG_UBSAN_ONLY_BOUNDS)	+= -fsanitize=bounds
++ubsan-cflags-$(CONFIG_UBSAN_BOUNDS_STRICT)	+= -fsanitize=bounds-strict
+ ubsan-cflags-$(CONFIG_UBSAN_ARRAY_BOUNDS)	+= -fsanitize=array-bounds
+ ubsan-cflags-$(CONFIG_UBSAN_LOCAL_BOUNDS)	+= -fsanitize=local-bounds
+ ubsan-cflags-$(CONFIG_UBSAN_SHIFT)		+= -fsanitize=shift
+-- 
+2.34.1
 
-
-Tested on:
-
-commit:         76f598ba Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=114c8ba3c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d9a438ce47536f0c
-dashboard link: https://syzkaller.appspot.com/bug?extid=93cbdd0ab421adc5275d
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
