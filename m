@@ -2,98 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5A06D8AC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB466D8AD0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjDEWw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 18:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S229379AbjDEWyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjDEWw5 (ORCPT
+        with ESMTP id S229461AbjDEWyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:52:57 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213F626BA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:52:56 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id w5-20020a253005000000b00aedd4305ff2so37295623ybw.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:52:56 -0700 (PDT)
+        Wed, 5 Apr 2023 18:54:22 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07522115
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:54:21 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d17so37684151wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680735175; x=1683327175;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=69zSbXgaOWhyBbwPsZXjgkehhybiF17AZPRncmEXrvk=;
-        b=rWIaZBr+k212Xdy78XkYIfWPJPTphyVHiW3AdxXktpl9dSrRH6B5uAnNmV5KE18Idf
-         2UcZL+pXPrpLw0s8wPC79c2mq1OQztT4OC+7jPoqC3RYRI1Zmfut2bCFKjNNS5u1UhGX
-         ckUQGl02PzTNXfWfMchaIWwiYKx741CW6nfeMU3FFoitOcMoo0srWDDV17BEKo6C2iIr
-         HeLPNqqOIII0Vhv4R9Fr8d+PXyrspnznW4GH4BuerC3/5wEB3M1ni2BcW4RrK0Pqp+ve
-         rtIVzUxPX3g42EihJBM8pJQ0Yxb/0Re2Keqr/7rW3MuaMgeizXiBDoD+Y2iYVv4qzYcB
-         ILJg==
+        d=google.com; s=20210112; t=1680735260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7o5GgVU7z5k3433DlqPupRo8Cvgy27yFx7WOeby8kIE=;
+        b=tGCNt1AXOcis7NJe2FaI4KQysuzeG7Yjjz5iUS2EdPJMcKs1jBqnfTMK2uswTiTENd
+         vpHFc5MVXJpfR+OYiNatBxNAotq5WQrvQSeoBle/KsgFZBXYb4CSwV++MlL1kz0s3Rgx
+         RYpSVN/PW3iJ5NHiQ55/pfUxNJxWS3EvsLe5IcWeoe++qvCV4+N3SPLQ+2BXy3jZveyv
+         21ui/pifk1k749C841IqQWaKvc2Gs+yb7UvD+by/BoOR5jDEK5GmyhZi1iUwOpJqSWag
+         QIzPmI7JQtJ78Vzlo9CuXFKlZZvcL9u3s+hqnNpoH0nee9aN+An7cVrlDbC/A6jme0UH
+         Y36A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680735175; x=1683327175;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=69zSbXgaOWhyBbwPsZXjgkehhybiF17AZPRncmEXrvk=;
-        b=oXaXtXBtYUezHxmol/bjGlL/S9zT00noGsg2xuIuzZf+YhO6nMlrLFYfD1o1dCzyAV
-         dZGFJGmFUjJmCZjF2EXnk0AcHA0Uh7vxQQET+Z8zJq9BCr4rMN2j2c2hvBda0uswOTQ4
-         bZfSDDmXfpZezCTBm7CYM1IsVp532Z8wu86uKcniqfhTg/crrZRfSraecYX1XVcWnYLC
-         dlU+39lPycjHhkMVcErZCHOd4eX0wzK4BNzjg2NyWnBFvBkFOU9AIMH2njsLt0ZC4yqq
-         RP7yugNvmhRYMsLPUizh1QSDiY7SlOmFaxD5uX3xM876rSgUrL5kSmgjgpIRMRHEoRHh
-         Tvvg==
-X-Gm-Message-State: AAQBX9ep1HFD5sSWeDY7QZ5d8KnAFPrI0FV1po4DOZndSkh3IR3pXubA
-        Lrr+FVbpBk9OIme+Dtp+OCqt5Xun
-X-Google-Smtp-Source: AKy350buJh+ylgSt7G7Xu4/rIoDoHTOcOvT2CLgYmRVOTWHChDbW1t/UgEsVxywLGsvIg5pTvjU4odL3
-X-Received: from gnomeregan.cam.corp.google.com ([2620:15c:93:4:8b:282:cd47:a9e0])
- (user=brho job=sendgmr) by 2002:a81:ae1e:0:b0:54c:bdc:ef18 with SMTP id
- m30-20020a81ae1e000000b0054c0bdcef18mr288403ywh.5.1680735175389; Wed, 05 Apr
- 2023 15:52:55 -0700 (PDT)
-Date:   Wed,  5 Apr 2023 18:52:46 -0400
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230405225246.1327344-1-brho@google.com>
-Subject: bpf: ensure all memory is initialized in bpf_get_current_comm
-From:   Barret Rhoden <brho@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20210112; t=1680735260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7o5GgVU7z5k3433DlqPupRo8Cvgy27yFx7WOeby8kIE=;
+        b=NckW0YPrKTJ+rivxOuJ1QZkFL5vEoK8k+CL10xWxT1tJPuq2I/RJlFNrU2OIhW7iWl
+         JeW23QV1JHsee48Iu2EmEIWxvtwcoLWoiP0wf/hVRhYV8xc6uSRhKHkHG7H1nBs9eb2J
+         XrhmRk6URg9gNYoclYAodGNairfQNX/Sa9lL31Hv2d0Ljcp6wlSikTzaodlQw6Pbdt2C
+         8XXJ5y/96XgAExOrEs2ZSRF7ZyXjHkjYqAIIKfeui52p24QbdfsgoFs5W868ty2d8zAz
+         N9qPd+HoNhUv0deqnKaY2UmCuj+RIBBkIy2QYaXhYpVW06Ld38fWqgdItUyq2RzbTXR1
+         n4Eg==
+X-Gm-Message-State: AAQBX9ewWArfAHVzUVDWJo3BaagVeihB9pLAf2gIcjBgvPdLNIigEbK9
+        fFMsI+gz9XQlWdy/DiBgb+umm4fEsl+xkoDfYewpTw==
+X-Google-Smtp-Source: AKy350ZscqY3b6tBXXMKfuK1PwbdL4HHEBURc1ZrigEfSsLmvFqehpps13I7djWA6Vy64QiFDOkG+u1sznJD+zhudeE=
+X-Received: by 2002:adf:fdc9:0:b0:2e5:18d6:8648 with SMTP id
+ i9-20020adffdc9000000b002e518d68648mr1596741wrs.6.1680735260070; Wed, 05 Apr
+ 2023 15:54:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230330224348.1006691-1-davidai@google.com> <20230330224348.1006691-2-davidai@google.com>
+ <20230405081449.GX4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230405081449.GX4253@hirez.programming.kicks-ass.net>
+From:   David Dai <davidai@google.com>
+Date:   Wed, 5 Apr 2023 15:54:08 -0700
+Message-ID: <CABN1KCLjXpxNak90iowd0iiz9SD8-5n+6S3kEoCKO9NantyXxg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/6] sched/fair: Add util_guest for tasks
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Saravana Kannan <saravanak@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BPF helpers that take an ARG_PTR_TO_UNINIT_MEM must ensure that all of
-the memory is set, including beyond the end of the string.
+On Wed, Apr 5, 2023 at 1:14=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
 
-Signed-off-by: Barret Rhoden <brho@google.com>
----
- kernel/bpf/helpers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Peter,
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 5b278a38ae58..adffb2f87e44 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -257,7 +257,7 @@ BPF_CALL_2(bpf_get_current_comm, char *, buf, u32, size)
- 		goto err_clear;
- 
- 	/* Verifier guarantees that size > 0 */
--	strscpy(buf, task->comm, size);
-+	strscpy_pad(buf, task->comm, size);
- 	return 0;
- err_clear:
- 	memset(buf, 0, size);
--- 
-2.40.0.348.gf938b09366-goog
+Appreciate your time,
 
+> On Thu, Mar 30, 2023 at 03:43:36PM -0700, David Dai wrote:
+> > @@ -499,6 +509,7 @@ struct sched_avg {
+> >       unsigned long                   load_avg;
+> >       unsigned long                   runnable_avg;
+> >       unsigned long                   util_avg;
+> > +     unsigned long                   util_guest;
+> >       struct util_est                 util_est;
+> >  } ____cacheline_aligned;
+> >
+>
+> Yeah, no... you'll have to make room first.
+>
+
+I=E2=80=99m not sure what you mean. Do you mean making room by reducing
+another member in the same struct? If so, which member would be a good
+fit to shorten? Or do you mean something else entirely?
+
+Thanks,
+David
+
+> struct sched_avg {
+>         /* typedef u64 -> __u64 */ long long unsigned int     last_update=
+_time;          /*     0     8 */
+>         /* typedef u64 -> __u64 */ long long unsigned int     load_sum;  =
+                /*     8     8 */
+>         /* typedef u64 -> __u64 */ long long unsigned int     runnable_su=
+m;              /*    16     8 */
+>         /* typedef u32 -> __u32 */ unsigned int               util_sum;  =
+                /*    24     4 */
+>         /* typedef u32 -> __u32 */ unsigned int               period_cont=
+rib;            /*    28     4 */
+>         long unsigned int          load_avg;                             =
+                /*    32     8 */
+>         long unsigned int          runnable_avg;                         =
+                /*    40     8 */
+>         long unsigned int          util_avg;                             =
+                /*    48     8 */
+>         struct util_est {
+>                 unsigned int       enqueued;                             =
+                /*    56     4 */
+>                 unsigned int       ewma;                                 =
+                /*    60     4 */
+>         } __attribute__((__aligned__(8)))util_est __attribute__((__aligne=
+d__(8))); /*    56     8 */
+>
+>         /* size: 64, cachelines: 1, members: 9 */
+>         /* forced alignments: 1 */
+> } __attribute__((__aligned__(64)));
+>
+>
