@@ -2,48 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEC26D7E4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EBE6D7E30
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238240AbjDEOA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S229966AbjDEN5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238151AbjDEOAp (ORCPT
+        with ESMTP id S238136AbjDEN5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:00:45 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4E04C19;
-        Wed,  5 Apr 2023 07:00:43 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 1a7314477c9562e1; Wed, 5 Apr 2023 16:00:41 +0200
-Received: from kreacher.localnet (unknown [213.134.163.219])
+        Wed, 5 Apr 2023 09:57:13 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3745FC8;
+        Wed,  5 Apr 2023 06:57:09 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id E3CF01B4EA57;
-        Wed,  5 Apr 2023 16:00:40 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>,
-        Kees Cook <kees@outflux.net>
-Subject: [PATCH 29/32] ACPICA: acpi_resource_irq: Replace 1-element arrays with flexible array
-Date:   Wed, 05 Apr 2023 15:56:59 +0200
-Message-ID: <2105135.bB369e8A3T@kreacher>
-In-Reply-To: <4845957.31r3eYUQgx@kreacher>
-References: <4845957.31r3eYUQgx@kreacher>
+        by mail.3ffe.de (Postfix) with ESMTPSA id 3FC54254;
+        Wed,  5 Apr 2023 15:57:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1680703025;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RWMKgUasvY7/ukIcrTxVdr1TVXErPO1KhzaokcDzqyI=;
+        b=onzov+H2UG9qQV1AhON4idtUM1DOyzv/FPa85whMlfX6g8Wt+5vmEWJgbBNK2hWyJHTk/T
+        KT6uRUFKG+E4ud1aqCGrqxWDB8mVRzl4q6OuykS+Ir6+qdAt7H1j/SShzB0zwqOIZ8yKet
+        JlnR/A4YLPU7ruUMWVngb4Y0qlrpaYqMhWr9uR+Wo8BxMnqJkg7np5XcQBVXvQtGx+VMGi
+        7qNjigCtoZhQWGih/2iup13KEo49bOstWYQ9lUP51Hgk7L1DhVR2IXSDahlvMmMf4lx9qr
+        SHqTktCcs3BuTkVHyA2Gql/eklTYomiM/k2G0jeuE/1J6f9OYM6PlvJ+2YQ0cw==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.219
-X-CLIENT-HOSTNAME: 213.134.163.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhgvvghssehouhht
- fhhluhigrdhnvght
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+Date:   Wed, 05 Apr 2023 15:57:05 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] gpio: ds4520: Add ADI DS4520 Regulator Support
+In-Reply-To: <CACRpkdZJA0DyzgLxm9HFeHO03rqNUff=avuV=VrGuJkkOg6wNQ@mail.gmail.com>
+References: <20230327130010.8342-1-okan.sahin@analog.com>
+ <20230327130010.8342-3-okan.sahin@analog.com>
+ <CACRpkda5G5b+At5s1WFudpQBQ6LDQxhE3fZj7eBhkZ=thvnQhg@mail.gmail.com>
+ <MN2PR03MB51682210CADA6E33FB99052CE7939@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <CACRpkdZJA0DyzgLxm9HFeHO03rqNUff=avuV=VrGuJkkOg6wNQ@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <25e1fda4b6df2d10444d7eca3cd0e387@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,77 +65,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <kees@outflux.net>
+Am 2023-04-05 15:20, schrieb Linus Walleij:
+> On Tue, Apr 4, 2023 at 4:36 PM Sahin, Okan <Okan.Sahin@analog.com> 
+> wrote:
+> 
+>> >The driver is pretty straight-forward, but I think this can use the generic
+>> >GPIO_REGMAP helpers in drivers/gpio/gpio-regmap.c check other drivers selecting
+>> >this helper library for inspiration.
+> (..)
+>> Thank you for your contribution. Should I add select GPIO_REGMAP into 
+>> Kconfig?
+> 
+> Yes but that is not all, you also need to make use of the library 
+> helpers
+> provided in include/linux/gpio/regmap.h.
+> 
+> Find examples of other drivers doing this by e.g.:
+> git grep gpio_regmap_register
+> 
+> drivers/gpio/gpio-sl28cpld.c:   return
+> PTR_ERR_OR_ZERO(devm_gpio_regmap_register(&pdev->dev, &config));
+> drivers/gpio/gpio-tn48m.c:      return
+> PTR_ERR_OR_ZERO(devm_gpio_regmap_register(&pdev->dev, &config));
+> drivers/pinctrl/bcm/pinctrl-bcm63xx.c:  return
+> PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &grc));
+> 
+> ^Look what these are doing
 
-ACPICA commit bfdd3446e7caf795c85c70326c137023942972c5
+This driver is doing two register writes/reads for setting the
+direction, that's something which isn't supported in GPIO_REGMAP.
+OTOH I'm not sure the driver is doing it correctly, because it also
+seems to switch the pullup resisters together with the direction.
+I'm not sure that is correct. So there might be just one register
+involved after all and the GPIO_REGMAP should work again.
 
-Similar to "Replace one-element array with flexible-array", replace the
-1-element array with a proper flexible array member as defined by C99.
+Also, according to the datasheet this has some nv memory (to set the
+initial state of the GPIOs [?]). So it should really be a multi-function
+device. I'm not sure if this has to be considered right from the
+beginning or if the device support can start with GPIO only and later
+be transitioned to a full featured MFD (probably with nvmem support).
 
-This allows the code to operate without tripping compile-time and run-
-time bounds checkers (e.g. via __builtin_object_size(), -fsanitize=bounds,
-and/or -fstrict-flex-arrays=3). Note that the spec requires there be at
-least one interrupt, so use a union to keep space allocated for this.
-
-The only binary change in .text and .data sections is some rearrangement
-by the compiler of acpi_dm_address_common(), but appears to be harmless.
-
-Link: https://github.com/acpica/acpica/commit/bfdd3446
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/amlresrc.h |  5 ++++-
- include/acpi/acrestyp.h        | 10 ++++++++--
- 2 files changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/acpi/acpica/amlresrc.h b/drivers/acpi/acpica/amlresrc.h
-index 48df447ef5bb..4e88f9fc2a28 100644
---- a/drivers/acpi/acpica/amlresrc.h
-+++ b/drivers/acpi/acpica/amlresrc.h
-@@ -261,7 +261,10 @@ struct aml_resource_address16 {
- struct aml_resource_extended_irq {
- 	AML_RESOURCE_LARGE_HEADER_COMMON u8 flags;
- 	u8 interrupt_count;
--	u32 interrupts[1];
-+	union {
-+		u32 interrupt;
-+		 ACPI_FLEX_ARRAY(u32, interrupts);
-+	};
- 	/* res_source_index, res_source optional fields follow */
- };
- 
-diff --git a/include/acpi/acrestyp.h b/include/acpi/acrestyp.h
-index 4c3b7b393f82..b84cd316217f 100644
---- a/include/acpi/acrestyp.h
-+++ b/include/acpi/acrestyp.h
-@@ -142,7 +142,10 @@ struct acpi_resource_irq {
- 	u8 shareable;
- 	u8 wake_capable;
- 	u8 interrupt_count;
--	u8 interrupts[1];
-+	union {
-+		u8 interrupt;
-+		 ACPI_FLEX_ARRAY(u8, interrupts);
-+	};
- };
- 
- struct acpi_resource_dma {
-@@ -335,7 +338,10 @@ struct acpi_resource_extended_irq {
- 	u8 wake_capable;
- 	u8 interrupt_count;
- 	struct acpi_resource_source resource_source;
--	u32 interrupts[1];
-+	union {
-+		u32 interrupt;
-+		 ACPI_FLEX_ARRAY(u32, interrupts);
-+	};
- };
- 
- struct acpi_resource_generic_register {
--- 
-2.35.3
-
-
-
-
-
+-michael
