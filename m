@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 232CF6D8288
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBAA6D8295
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239096AbjDEPta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S238985AbjDEPvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239045AbjDEPtZ (ORCPT
+        with ESMTP id S239108AbjDEPvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:49:25 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B256F4C20
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:49:01 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id r29so36643704wra.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:49:01 -0700 (PDT)
+        Wed, 5 Apr 2023 11:51:03 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EC172B3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:50:57 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id br6so47219306lfb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680709729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bEilYgmHZ7l/bQLzCewoCvoPGpsrJtc/Cg02p3y6vwY=;
-        b=Ii4Yh1EZdQ+aZCFlOdXALbTzJ1og9QLtlkYzPUC/jenIpbvCTAT0yz5svZia5Dsl1w
-         mGkKFXAUN0KzkkryuKYnwJ6p3L6Z+qsljm01JFxeE7zmIjwX5cLHYn8zBvpgLlFuMuav
-         8jxkSKuZH9BAdTMcA2X8UUu0G6oYMk6Lr12Ae6qn/IPyDpTnSfY2TxlOw/mYokArg6+w
-         dnZdHco7kHmKFs4gJLTE/AG1qnsUKkgXLocGdcrsfiP1S/xSx/bLc4Ymz6gVsdzsjpg+
-         eVaWKpeTl0R2tu3cAhkiEmGWlV62XMGm2jA++kxMNn/QtnvyzDPFk0IzPFn8j0T74gki
-         kTFw==
+        d=linaro.org; s=google; t=1680709855;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=va5MRDxVuFu6eUzgi939YwiVuVG9aH1QEsbzq9XOm98=;
+        b=n75UKJQoNNNzYwLEHLfZ5sbeTrveWKjTakws0xmWE2JuXDLmX5n8AghdMT9pIIVAEP
+         r6wZrcRE5NDid+LCzcqu4P6NibJiUhOHVFbnHLxyXQwFGj39ANiv4RRvkAwqT4Kdsf4F
+         2H2F5fxALi54LdtZQBUhuzRCRzL8hB9LrExixhaHOhoU52w3x0iOxwaTTFDjudTAb+fG
+         aHSffNbV09Yxiak032f1pq8kj7v2AfPvRDrZ391WtWVqM0JYkCdgMl7I6Oiz+9VPmiTr
+         4bwT2jTrEEBXYfqTSgvoSzGfD00y7iGLrlyxBsTHX1EVcAl4gZzhebMcx1AMOo92Ze9B
+         QvMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680709729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bEilYgmHZ7l/bQLzCewoCvoPGpsrJtc/Cg02p3y6vwY=;
-        b=uaWiYV3J230z5ZejoAVvh5p5F2gsWMi7qAL/Wk2ldHdjYuXZPzDzBev97OvKEYPGuU
-         wfZry9acOG3Xfz6mL5MrVcbpuLbI+rMqnAd1dFcjRh2qiHbI/+0MTfVNwOwbwVHWBbx/
-         4AUGbem0gY+77WOgndC8F8QEHNz73p3wpcM0inbay7TjCkRSPL8s44g5yM7ILzIgOGqj
-         LaX5dT3tZqsQviBV+ze3I7U+jLTDkdu5/RrtHqWmrpJnubB4YATYUt6+/h/l6TgZKSyp
-         +r4fHPij5CXHrQ6Lt9H57DIouhWrG//zc5IGqm7m1cG4KVoKQr0ctHG0vS1ttRudECQO
-         75ug==
-X-Gm-Message-State: AAQBX9cakYZXYcmMbzykWJIdzRwC/xCMMHaUwJktndkxryy6Anx+7n9S
-        0S2yB39QS21cy0qySy4i82DBPQ==
-X-Google-Smtp-Source: AKy350a/4RpDuNaKeLXizakCjVT0nJJ/3/P77NUAVFXOsWcY6UUfArIEbAgLCUIHrv9hqeDQ0bOQAw==
-X-Received: by 2002:adf:d0ce:0:b0:2ce:ab0a:81fe with SMTP id z14-20020adfd0ce000000b002ceab0a81femr3890449wrh.62.1680709728645;
-        Wed, 05 Apr 2023 08:48:48 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id y16-20020adfe6d0000000b002df7c38dc3esm15375973wrm.87.2023.04.05.08.48.47
+        d=1e100.net; s=20210112; t=1680709855;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=va5MRDxVuFu6eUzgi939YwiVuVG9aH1QEsbzq9XOm98=;
+        b=B8RW3VJ8TSGEyunMVOZuy8ukqKQMCjh3Qj+ds5tQM7odQAUNNE4uSgc0eNhoYnGJfm
+         krYn/2ETHYMny/rObKdI0KONbNYLEC/V7L3aMW1a/3If45m5rXkKK3MnPdboB66WycFU
+         co08bzWEwd/gxtNvjMCbvMsfEjzQC3NRWC9ZlcaNdogIfvv5b6DekcJVCBmhOLAc2IrO
+         uF0ZtMT5kQa7o8ESUp+9QaEcDdm9Fjx1EdVJ8apd/KJ1ZppodXMoXFTjh0qOIaWC54xZ
+         +ihgIk6D3oINxavDybc8AWexQUzq7iHRm4m22U9LByAQTR6Lg1ZwXzEj7v6TyCRnSD3k
+         bEKA==
+X-Gm-Message-State: AAQBX9dzLM+eWJGLx5Ybatfu++gu2bvDWTOk82b9V7IbFRZ+36qpqwJ0
+        WpBuXkEZgyrBW570a7adUsCHsA==
+X-Google-Smtp-Source: AKy350Yj9SAzmkKn0xk8l8lX+Eo7ub1/dwwsT3hbSPTwD4FZmTXC1t5jq0YHdU9K+bCjQ2gWUz9XyQ==
+X-Received: by 2002:a19:700b:0:b0:4e9:74a8:134c with SMTP id h11-20020a19700b000000b004e974a8134cmr1404797lfc.43.1680709855419;
+        Wed, 05 Apr 2023 08:50:55 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id o28-20020ac2495c000000b004eb2db994e7sm2869344lfi.239.2023.04.05.08.50.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 08:48:48 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 17:48:47 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Marc Zyngier <maz@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH V4 15/23] irqchip/riscv-intc: Add ACPI support
-Message-ID: <qxftlofleo2bpyqa5lyshiluc5cd37u4hljn4bh7noxv7g5pno@ldvh6gkyrlzu>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-16-sunilvl@ventanamicro.com>
+        Wed, 05 Apr 2023 08:50:55 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/5] RB1 + QCM2290 support
+Date:   Wed, 05 Apr 2023 17:50:29 +0200
+Message-Id: <20230403-topic-rb1_qcm-v2-0-dae06f8830dc@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404182037.863533-16-sunilvl@ventanamicro.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMWYLWQC/3WNQQ6CMBBFr2JmbU0pBKor72GImakVJsEWp0g0h
+ Ltb2bt8L/n/LZC8sE9w2i0gfubEMWQw+x24HkPnFd8yg9Gm1JUu1RRHdkqouD7dQzUWrTU1lRX
+ VkDeEySsSDK7Pq/AahixH8Xd+b5FLm7nnNEX5bM25+Nl/93OhtHJoqyPVhlA354EDSjxE6aBd1
+ /ULKzpIS8AAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>
+Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680709854; l=2336;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=RJldwKTK4D0B/0AUI1O8Eofso4ljGxQhg+FQT9W7K3U=;
+ b=mtFqbfhln8ap48BvCWZY1W4VHaDMlAqpLNxlbgcifpdCewMorsYyRYQQkNBiQBQjNblIAYnVSnz/
+ lTWKyYteDQn5Wif4d2trphpVv+F+hDed/0kWWwIPmr9LKnVtYbrf
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -92,139 +90,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 11:50:29PM +0530, Sunil V L wrote:
-> Add support for initializing the RISC-V INTC driver on ACPI
-> platforms.
-> 
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  drivers/irqchip/irq-riscv-intc.c | 74 ++++++++++++++++++++++++++------
->  1 file changed, 61 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-> index f229e3e66387..6b476fa356c0 100644
-> --- a/drivers/irqchip/irq-riscv-intc.c
-> +++ b/drivers/irqchip/irq-riscv-intc.c
-> @@ -6,6 +6,7 @@
->   */
->  
->  #define pr_fmt(fmt) "riscv-intc: " fmt
-> +#include <linux/acpi.h>
->  #include <linux/atomic.h>
->  #include <linux/bits.h>
->  #include <linux/cpu.h>
-> @@ -112,6 +113,30 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
->  	return intc_domain->fwnode;
->  }
->  
-> +static int __init riscv_intc_init_common(struct fwnode_handle *fn)
-> +{
-> +	int rc;
-> +
-> +	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
-> +					       &riscv_intc_domain_ops, NULL);
-> +	if (!intc_domain) {
-> +		pr_err("unable to add IRQ domain\n");
-> +		return -ENXIO;
-> +	}
-> +
-> +	rc = set_handle_irq(&riscv_intc_irq);
-> +	if (rc) {
-> +		pr_err("failed to set irq handler\n");
-> +		return rc;
-> +	}
-> +
-> +	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> +
-> +	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> +
-> +	return 0;
-> +}
-> +
->  static int __init riscv_intc_init(struct device_node *node,
->  				  struct device_node *parent)
->  {
-> @@ -133,24 +158,47 @@ static int __init riscv_intc_init(struct device_node *node,
->  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
->  		return 0;
->  
-> -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
-> -					    &riscv_intc_domain_ops, NULL);
-> -	if (!intc_domain) {
-> -		pr_err("unable to add IRQ domain\n");
-> -		return -ENXIO;
-> -	}
-> -
-> -	rc = set_handle_irq(&riscv_intc_irq);
-> +	rc = riscv_intc_init_common(of_node_to_fwnode(node));
->  	if (rc) {
-> -		pr_err("failed to set irq handler\n");
-> +		pr_err("failed to initialize INTC\n");
+v1 -> v2:
+- Fix missing newline in pm2250.dtsi
+- Use an enum in [2/5] to allow for more QRB2210 boards
+- Squash the dt patches into one per SoC, PMIC and board
+- pick up rb on [1/5]
 
-The ACPI version doesn't output this error when riscv_intc_init_common()
-fails. It should probably be consistent. Either removing it here, if the
-errors output within riscv_intc_init_common() are sufficient, or adding
-it to the ACPI version.
+v1: https://lore.kernel.org/r/20230403-topic-rb1_qcm-v1-0-ca849b62ba07@linaro.org
 
->  		return rc;
->  	}
->  
-> -	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> -
-> -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> -
->  	return 0;
->  }
->  
->  IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
-> +
-> +#ifdef CONFIG_ACPI
-> +
-> +static int __init riscv_intc_acpi_init(union acpi_subtable_headers *header,
-> +				       const unsigned long end)
-> +{
-> +	int rc;
-> +	struct fwnode_handle *fn;
-> +	struct acpi_madt_rintc *rintc;
-> +
-> +	rintc = (struct acpi_madt_rintc *)header;
-> +
-> +	/*
-> +	 * The ACPI MADT will have one INTC for each CPU (or HART)
-> +	 * so riscv_intc_acpi_init() function will be called once
-> +	 * for each INTC. We only do INTC initialization
-> +	 * for the INTC belonging to the boot CPU (or boot HART).
-> +	 */
-> +	if (riscv_hartid_to_cpuid(rintc->hart_id) != smp_processor_id())
-> +		return 0;
-> +
-> +	fn = irq_domain_alloc_named_fwnode("RISCV-INTC");
-> +	if (!fn) {
-> +		pr_err("unable to allocate INTC FW node\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	rc = riscv_intc_init_common(fn);
-> +	return rc;
+This series brings basic support for the Qualcomm Robotics RB1 board,
+including but not limited to:
 
-nit: If we don't add the error message here, then rc can be removed and we
-can just do
+- TSENS-connected thermal management
+- USB2
+- eMMC (uSD depends requires regulators to work, will be sent separately)
+- the necessary plumbing for *DSP + Wi-Fi (that also needs regulators)
+- buttons
 
-  return riscv_intc_init_common(fn);
+A compatible in the SCM C driver is not added on purpose, as:
+1. it's not neccessary before we figure out disabling rpmcc, the dt
+   part is in regardless (the clock it consumes is always-on today)
+2. a point to get rid of SoC-specific compatibles in there was raised
 
-And, if we remove the error above, then we reduce the return there too.
+See also:
+https://www.thundercomm.com/product/qualcomm-robotics-rb1-platform/
+https://www.qualcomm.com/products/internet-of-things/industrial/industrial-automation/qualcomm-robotics-rb1-platform
 
-> +}
-> +
-> +IRQCHIP_ACPI_DECLARE(riscv_intc, ACPI_MADT_TYPE_RINTC, NULL,
-> +		     ACPI_MADT_RINTC_VERSION_V1, riscv_intc_acpi_init);
-> +#endif
-> -- 
-> 2.34.1
-> 
+Dependencies:
+- https://lore.kernel.org/linux-arm-msm/20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org/
+- https://lore.kernel.org/linux-arm-msm/20230315183231.3562580-1-konrad.dybcio@linaro.org/
+- https://lore.kernel.org/linux-arm-msm/20230323173019.3706069-1-dianders@chromium.org/
 
-Thanks,
-drew
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (5):
+      dt-bindings: firmware: document Qualcomm QCM2290 SCM
+      dt-bindings: arm: qcom: Add QRB2210/QCM2290 and RB1 board
+      arm64: dts: qcom: Add initial QCM2290 device tree
+      arm64: dts: qcom: Add initial PM2250 device tree
+      arm64: dts: qcom: Add initial QTI RB1 device tree
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    9 +
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |    3 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/pm2250.dtsi               |   63 +
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi              | 1561 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/qrb2210-rb1.dts           |  112 ++
+ 6 files changed, 1749 insertions(+)
+---
+base-commit: 8417c8f5007bf4567ccffda850a3157c7d905f67
+change-id: 20230403-topic-rb1_qcm-78a8826b34b6
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
