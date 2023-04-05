@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056656D876A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4096D8772
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbjDETxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S233501AbjDETzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDETxw (ORCPT
+        with ESMTP id S233855AbjDETzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:53:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10C18F;
-        Wed,  5 Apr 2023 12:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xfugB8gwxIrdC2R107Iwf3RGbPJjSDOcowvFi/5tZ98=; b=RQLyy2B2a56aLhk92w1zockLYu
-        GyxtlcJv3uVkzVuUAbS+vCfQAByO61u7M3A1OPrBog1K7cUo2unN2+IR18kVFW97eBVtrxu6XXJX/
-        wafQIo6qPTFiithrwoY3bfzt/wxMPxkLE+Mo9B/tHJ/QuLXN9WsqxXQU94wawQvs2+OmKXFu0eSg8
-        tdTc+xbXAue/v07k/Ctw5B3ctOuWZ7G+pkHjz/FpgoMyVKuL/951PBtsipQ+36I0uMAUwH0IYKihE
-        PBio4xNYHmMDQPU7AiJUKS1W/VYoSP2mqzTOp+RckMuOuXKpd+tSf9MLnaF6hFLQ8Vhb2wwZu77pq
-        +ZM5SYhg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pk9BM-00Ghqu-7z; Wed, 05 Apr 2023 19:52:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A2292300194;
-        Wed,  5 Apr 2023 21:52:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 886E2200B42A8; Wed,  5 Apr 2023 21:52:26 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 21:52:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
-        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
-        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
-        ardb@kernel.org, juerg.haefliger@canonical.com,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        tony@atomide.com, linus.walleij@linaro.org,
-        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
-        alougovs@redhat.com
-Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to CPUs in kernel mode
-Message-ID: <20230405195226.GB365912@hirez.programming.kicks-ass.net>
-References: <20230404134224.137038-1-ypodemsk@redhat.com>
- <20230404134224.137038-4-ypodemsk@redhat.com>
- <ZC1Q7uX4rNLg3vEg@lothringen>
- <ZC1XD/sEJY+zRujE@lothringen>
- <ZC3P3Ds/BIcpRNGr@tpad>
+        Wed, 5 Apr 2023 15:55:00 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D52818F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:54:59 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-75d1e0ff8ecso1521139f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 12:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680724498; x=1683316498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VQhohcoSfZ+TXrTocJ4dFpG6ihZhTRmLCl7ysvHMbVU=;
+        b=FhKhafVmcp7gRPH9mLZ6WMv1WP6cwFfcSTpdwK1fJgcTI7MMQ2QM2IA9Dg60YmBtmh
+         oP7SIiv5orRC+LEgE6uEWQrjd30KMJj2TFfuOhMbnh0FpPtNwyV7LSVHj4/QGPP4FHC1
+         XM1wc7q1S5aJaN0A/e+ZOHgIecq4UhvgtlPpCXSPBTunwhXxW7qQh391dlff3lWI6upj
+         vqgDpTNl3QbmlNJ51Hlt/LLkJYKNOJ1OhdXbGIHV9IvSS2tR/bK4YSs26/T8LHY8XZR6
+         1hdaUFQZN+dDV/gqj+3Eoz/y29mQw3sxvVyaJFwzgMxoJYjk1QJUCF94oWvs8UHzpWHh
+         FcfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680724498; x=1683316498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQhohcoSfZ+TXrTocJ4dFpG6ihZhTRmLCl7ysvHMbVU=;
+        b=gEoaIq7w49xsI2XXKDVhrwRJOFEAnhJo0Ile8PmGDJdgJ79bys0xUT39wcbqQjrMcd
+         tmQA1TnwtsZlw7RTgZ2wADdFQHgRSUii0hcSp0bfRuI0HNkW6SUt+2ZcNhS9Lf8tJmrV
+         yaj3KIcO4ENEP6RdfDfzCAuI1m1haax4+YTCTmywtwk1ANjC9ZK+Wnc9dBWVZIN++3k1
+         nrxG1LGPxm+n5LBpbmmsp0iK/KyMonCwn60zwvPBoaNnSsk7GQiDUDkmrFiaJjxMPWd6
+         KAJdA/B/1m/JZGUTCP2bdRuVtRftc9pUkkJeEIh6WHqUW9+y6nQ+foczXsFUqyzwuGrz
+         kxfA==
+X-Gm-Message-State: AAQBX9c+x78kgHebW/u2H59pw4xdmlKqu/wozV672dPpHUEm1eMGP2TI
+        pR9zMZNjGhP9fpWPbMjYAutXww==
+X-Google-Smtp-Source: AKy350YUu/y57XeMmrwciQfeApPTgA/J9vVl+orfxC6zXtuDbf6ys2L0P8ouilkvuX4zyCz+OzcdCA==
+X-Received: by 2002:a05:6e02:bee:b0:319:5431:5d5b with SMTP id d14-20020a056e020bee00b0031954315d5bmr1537610ilu.1.1680724498566;
+        Wed, 05 Apr 2023 12:54:58 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id z3-20020a029383000000b004062e2fdf23sm4140975jah.74.2023.04.05.12.54.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 12:54:58 -0700 (PDT)
+Message-ID: <f539e49e-d831-2ab1-6344-f37f909895ea@kernel.dk>
+Date:   Wed, 5 Apr 2023 13:54:56 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC3P3Ds/BIcpRNGr@tpad>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RESEND PATCH v2] eventfd: use
+ wait_event_interruptible_locked_irq() helper
+Content-Language: en-US
+To:     Wen Yang <wenyang.linux@foxmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Eric Biggers <ebiggers@google.com>, Christoph Hellwig <hch@lst.de>,
+        Dylan Yudaken <dylany@fb.com>,
+        David Woodhouse <dwmw@amazon.co.uk>, Fu Wei <wefu@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michal Nazarewicz <m.nazarewicz@samsung.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+References: <tencent_16F9553E8354D950D704214D6EA407315F0A@qq.com>
+ <43fd324c-585c-d85b-230c-5b086e1aaa2c@kernel.dk>
+ <tencent_1A9532B54AD0FB644D7A28B39C5FF9B34506@qq.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <tencent_1A9532B54AD0FB644D7A28B39C5FF9B34506@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,30 +84,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 04:45:32PM -0300, Marcelo Tosatti wrote:
-> On Wed, Apr 05, 2023 at 01:10:07PM +0200, Frederic Weisbecker wrote:
-> > On Wed, Apr 05, 2023 at 12:44:04PM +0200, Frederic Weisbecker wrote:
-> > > On Tue, Apr 04, 2023 at 04:42:24PM +0300, Yair Podemsky wrote:
-> > > > +	int state = atomic_read(&ct->state);
-> > > > +	/* will return true only for cpus in kernel space */
-> > > > +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
-> > > > +}
-> > > 
-> > > Also note that this doesn't stricly prevent userspace from being interrupted.
-> > > You may well observe the CPU in kernel but it may receive the IPI later after
-> > > switching to userspace.
-> > > 
-> > > We could arrange for avoiding that with marking ct->state with a pending work bit
-> > > to flush upon user entry/exit but that's a bit more overhead so I first need to
-> > > know about your expectations here, ie: can you tolerate such an occasional
-> > > interruption or not?
-> > 
-> > Bah, actually what can we do to prevent from that racy IPI? Not much I fear...
+On 4/5/23 1:40 PM, Wen Yang wrote:
 > 
-> Use a different mechanism other than an IPI to ensure in progress
-> __get_free_pages_fast() has finished execution.
+> 在 2023/4/6 03:26, Jens Axboe 写道:
+>> On 4/5/23 1:20 PM, wenyang.linux@foxmail.com wrote:
+>>> From: Wen Yang <wenyang.linux@foxmail.com>
+>>>
+>>> wait_event_interruptible_locked_irq was introduced by commit 22c43c81a51e
+>>> ("wait_event_interruptible_locked() interface"), but older code such as
+>>> eventfd_{write,read} still uses the open code implementation.
+>>> Inspired by commit 8120a8aadb20
+>>> ("fs/timerfd.c: make use of wait_event_interruptible_locked_irq()"), this
+>>> patch replaces the open code implementation with a single macro call.
+>>>
+>>> No functional change intended.
+>> Looks pretty reasonable to me. How did you test it?
+>>
+> Thanks.
 > 
-> Isnt this codepath slow path enough that it can use
-> synchronize_rcu_expedited?
+> We have verified it in some local testing environments, and the intel-lab-lkp has also tested it more than a month, as follows:
+> 
+> https://github.com/intel-lab-lkp/linux/tree/wenyang-linux-foxmail-com/eventfd-use-wait_event_interruptible_locked_irq-helper/20230217-023039
 
-To actually hit this path you're doing something really dodgy.
+Nice, you can add my:
+
+Reviewed-by: Jens Axboe <axboe@kernel.dk>
+
+to it as well. Adding Christian as well, as I guess this should go
+through his/al/vfs tree.
+
+-- 
+Jens Axboe
+
+
