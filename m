@@ -2,253 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76326D82A3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815DE6D82A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbjDEPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
+        id S239116AbjDEPwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239135AbjDEPvL (ORCPT
+        with ESMTP id S239150AbjDEPwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:51:11 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE65619AC
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:51:03 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id d7so2235483lfj.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680709862;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xTfPf29tnwbydeddtxy3rMEnXluAPIWBZ5CTrs3xI8k=;
-        b=sRvVNCsDZ0ZlhWStZ6R8OwsxOo5wOvM6EVbi/fYmhpMgf6y/5RbHqTjt/FlWs3G6cS
-         IAibunnr7ILmsrM6EFVcV2fGLABauuDMk4jc3wrBqgicM59Q/5i6A73k+vYCb2KovdTR
-         L9bW2x0NBA2NSEh+xEyj4xcwfmRuXCBg/FNj40Oio01C8KJ0i6pzD2Zd/AuJbu7wDiAV
-         gE9/RVtZbHxrRBJu25B+bGjH2e04oj3c6t/mLl0jF7hgsaeYKg3euxEfU9JxzZlJEESg
-         nEiRP5UT/9fxYd08j8TdvHIHYy+eA/ExCbNSECEqgv6NYi/EBKEkppWg4dYcCteogTCw
-         DfSQ==
+        Wed, 5 Apr 2023 11:52:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAA86182
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680709875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zwcds+UtbfQIbiuF3/Xn2nxiwljEp+1pjIA6S8P9CNE=;
+        b=JIjze3aRO+x1WK50rC2z1wTducNGlS6MdNGP7eXHqkg1Yv9KweoqtsA/FBbedcS9P9JDSY
+        uvxbs1OJKBA+NSJjM1DCZQ6bLd7SjT/n1Omhl74TeRg+sJrFKnPYJ8DAstJgFNEXQvBLWW
+        6CrAH2Tw0wCZrC7+8K9li19M5pmJ7PM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-313-MQknS5hnMESyFm9554DKyQ-1; Wed, 05 Apr 2023 11:51:13 -0400
+X-MC-Unique: MQknS5hnMESyFm9554DKyQ-1
+Received: by mail-wr1-f71.google.com with SMTP id d5-20020adfa345000000b002d716fc080fso4555055wrb.22
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:51:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680709862;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xTfPf29tnwbydeddtxy3rMEnXluAPIWBZ5CTrs3xI8k=;
-        b=a0Vg+SYHFJ0hjoxCrTHTmFu+xJqoSNhJAVDf6W5BAhpM6Xif23lKK+DxWUEU6uoG+F
-         cNQ90jjIOcosqXWlMmvpnzIKFMmhdXFnl5rQAqjb9URKOnP6NAwh4yHdXBTeVqjPqxxw
-         vQMZZYCmkyLsHqGUYNI6nnqq2NxWh07d8kIJGleannoxbzBpRMx1owLy+S8Ug9eaYDRY
-         iDSYGSs+gDXhomNpr13DvtgtQKRMW1KqSypoGp1SzP2M77+c/u0MKkK4Gtoc9j+YIjCy
-         MYZUIOkY9W9L4Rzity0RrGSuV+gHwgXaoDq9GTIPB+Osflmo0EC5lWwJ99kU4Xd4ozHn
-         uDAw==
-X-Gm-Message-State: AAQBX9eeWDVAVceLaHayCAaBl30qDNM/hIlXPk3uCL1UpZ9cBQJ6yEOh
-        9bXyIfToVl64HtcKitFPQlw7radZrGOENOvCgKg=
-X-Google-Smtp-Source: AKy350a7YodObssGQkTdiZ/Au3AWVlkhKV4kmKrtL+Xd9siQb4SnjapbtevtCgjO65JivXWTg+IQCg==
-X-Received: by 2002:ac2:5d46:0:b0:4ea:e296:fe9e with SMTP id w6-20020ac25d46000000b004eae296fe9emr1647369lfd.9.1680709862348;
-        Wed, 05 Apr 2023 08:51:02 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id o28-20020ac2495c000000b004eb2db994e7sm2869344lfi.239.2023.04.05.08.51.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 08:51:02 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 05 Apr 2023 17:50:34 +0200
-Subject: [PATCH v2 5/5] arm64: dts: qcom: Add initial QTI RB1 device tree
+        d=1e100.net; s=20210112; t=1680709871;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zwcds+UtbfQIbiuF3/Xn2nxiwljEp+1pjIA6S8P9CNE=;
+        b=IWpBrrN0Nz8Pc6tJut4EMBiuxsgLHF5fFQr5ONU7E+v/dPe2ER6L3wN0u/OyLGVik9
+         y7Weno4gaUexjdRbo1uTg5lyd/B/f3/Cbjh4GwNFYhdqvOSNYrkh8Ee3W2smA5HdFTxg
+         Y2StDI6L6chsKeZ0e4AkCf+EoRCPS4QzIowcFKhLqYxmvaC+ibPuYdgppNeIf2Sovlf+
+         f6Io7mtk4Q+wy6S7+rTxEkGlNlGCCCyJE4lndTLvnxDSzeVCy50eZLUogbQqO4+UFr90
+         rrg9kOB7+2Glh2ufGEmLbKX8zPRPgWR3aVuAWDJPedTwNP9GfgXKLJEES5zaCSZ8Jxyg
+         ksDA==
+X-Gm-Message-State: AAQBX9eAZI/8UOnRD7c6a/VvIDLk5oJKdS2zU5THXesI/J6gDMImU/sz
+        7iGe21v3tRTGjsx+OsiQmKXZ+53wPa9s0G1pK/gi6JdEfevHW6bqv5HxQulUhLPovUJToWDyxae
+        V6zVZRHL2vPpsG5yzxlJGNSWQ
+X-Received: by 2002:a5d:460c:0:b0:2cf:feac:1ba4 with SMTP id t12-20020a5d460c000000b002cffeac1ba4mr4489144wrq.52.1680709871734;
+        Wed, 05 Apr 2023 08:51:11 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Z0Kdl7KzMunNzgacqXrtbvhCmqrBwFwQ712057u2CU5aKnkMXlHhzmgE+1a984DLcJhQUu6w==
+X-Received: by 2002:a5d:460c:0:b0:2cf:feac:1ba4 with SMTP id t12-20020a5d460c000000b002cffeac1ba4mr4489129wrq.52.1680709871360;
+        Wed, 05 Apr 2023 08:51:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
+        by smtp.gmail.com with ESMTPSA id x9-20020a5d4449000000b002e40d124460sm15350496wrr.97.2023.04.05.08.51.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 08:51:10 -0700 (PDT)
+Message-ID: <062cd239-179b-d146-8f5d-735e672b3237@redhat.com>
+Date:   Wed, 5 Apr 2023 17:51:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1 1/2] mm/userfaultfd: fix uffd-wp handling for THP
+ migration entries
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        stable@vger.kernel.org
+References: <20230405142535.493854-1-david@redhat.com>
+ <20230405142535.493854-2-david@redhat.com> <ZC2P7Z7S87myvSst@x1n>
+ <c4c3ddb7-66fe-08e3-e59a-352f8aec6c6f@redhat.com> <ZC2XF8qLXNOqIqGw@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZC2XF8qLXNOqIqGw@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230403-topic-rb1_qcm-v2-5-dae06f8830dc@linaro.org>
-References: <20230403-topic-rb1_qcm-v2-0-dae06f8830dc@linaro.org>
-In-Reply-To: <20230403-topic-rb1_qcm-v2-0-dae06f8830dc@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680709854; l=3548;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=rcgGXCqBpdi+rXuFSqHjCoOhi1FGiWNalz4gX3uEVPQ=;
- b=XTOsV6pxALvtz+ctQD4JVaAehGJXVPUF3+zvh8TOJ+T75Gy635wEghnJnN7ldIWBcipQaB2KkA2M
- kZrzxcpxCsaxG0RZ25o1LGSlNsMwpB1/W+XWQmAyFozwSW5Ao6gH
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an initial device tree for the QTI RB1 development board, based on
-the QRB2210 (QCM2290 derivative) SoC. This device tree targets the SoM
-revision 4, a.k.a. the Mass Production SKU.
+On 05.04.23 17:43, Peter Xu wrote:
+> On Wed, Apr 05, 2023 at 05:17:31PM +0200, David Hildenbrand wrote:
+>> On 05.04.23 17:12, Peter Xu wrote:
+>>> On Wed, Apr 05, 2023 at 04:25:34PM +0200, David Hildenbrand wrote:
+>>>> Looks like what we fixed for hugetlb in commit 44f86392bdd1 ("mm/hugetlb:
+>>>> fix uffd-wp handling for migration entries in hugetlb_change_protection()")
+>>>> similarly applies to THP.
+>>>>
+>>>> Setting/clearing uffd-wp on THP migration entries is not implemented
+>>>> properly. Further, while removing migration PMDs considers the uffd-wp
+>>>> bit, inserting migration PMDs does not consider the uffd-wp bit.
+>>>>
+>>>> We have to set/clear independently of the migration entry type in
+>>>> change_huge_pmd() and properly copy the uffd-wp bit in
+>>>> set_pmd_migration_entry().
+>>>>
+>>>> Verified using a simple reproducer that triggers migration of a THP, that
+>>>> the set_pmd_migration_entry() no longer loses the uffd-wp bit.
+>>>>
+>>>> Fixes: f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration")
+>>>> Cc: stable@vger.kernel.org
+>>>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>>>
+>>> Reviewed-by: Peter Xu <peterx@redhat.com>
+>>>
+>>> Thanks, one trivial nitpick:
+>>>
+>>>> ---
+>>>>    mm/huge_memory.c | 14 ++++++++++++--
+>>>>    1 file changed, 12 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>>>> index 032fb0ef9cd1..bdda4f426d58 100644
+>>>> --- a/mm/huge_memory.c
+>>>> +++ b/mm/huge_memory.c
+>>>> @@ -1838,10 +1838,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>>>>    	if (is_swap_pmd(*pmd)) {
+>>>>    		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+>>>>    		struct page *page = pfn_swap_entry_to_page(entry);
+>>>> +		pmd_t newpmd;
+>>>>    		VM_BUG_ON(!is_pmd_migration_entry(*pmd));
+>>>>    		if (is_writable_migration_entry(entry)) {
+>>>> -			pmd_t newpmd;
+>>>>    			/*
+>>>>    			 * A protection check is difficult so
+>>>>    			 * just be safe and disable write
+>>>> @@ -1855,8 +1855,16 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+>>>>    				newpmd = pmd_swp_mksoft_dirty(newpmd);
+>>>>    			if (pmd_swp_uffd_wp(*pmd))
+>>>>    				newpmd = pmd_swp_mkuffd_wp(newpmd);
+>>>> -			set_pmd_at(mm, addr, pmd, newpmd);
+>>>> +		} else {
+>>>> +			newpmd = *pmd;
+>>>>    		}
+>>>> +
+>>>> +		if (uffd_wp)
+>>>> +			newpmd = pmd_swp_mkuffd_wp(newpmd);
+>>>> +		else if (uffd_wp_resolve)
+>>>> +			newpmd = pmd_swp_clear_uffd_wp(newpmd);
+>>>> +		if (!pmd_same(*pmd, newpmd))
+>>>> +			set_pmd_at(mm, addr, pmd, newpmd);
+>>>>    		goto unlock;
+>>>>    	}
+>>>>    #endif
+>>>> @@ -3251,6 +3259,8 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>>>>    	pmdswp = swp_entry_to_pmd(entry);
+>>>>    	if (pmd_soft_dirty(pmdval))
+>>>>    		pmdswp = pmd_swp_mksoft_dirty(pmdswp);
+>>>> +	if (pmd_swp_uffd_wp(*pvmw->pmd))
+>>>> +		pmdswp = pmd_swp_mkuffd_wp(pmdswp);
+>>>
+>>> I think it's fine to use *pmd, but maybe still better to use pmdval?  I
+>>> worry pmdp_invalidate()) can be something else in the future that may
+>>> affect the bit.
+>>
+>> Wondering how I ended up with that, I realized that it's actually
+>> wrong and might have worked by chance for my reproducer on x86.
+>>
+>> That should make it work:
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index f977c965fdad..fffc953fa6ea 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -3257,7 +3257,7 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>>          pmdswp = swp_entry_to_pmd(entry);
+>>          if (pmd_soft_dirty(pmdval))
+>>                  pmdswp = pmd_swp_mksoft_dirty(pmdswp);
+>> -       if (pmd_swp_uffd_wp(*pvmw->pmd))
+>> +       if (pmd_uffd_wp(pmdval))
+>>                  pmdswp = pmd_swp_mkuffd_wp(pmdswp);
+>>          set_pmd_at(mm, address, pvmw->pmd, pmdswp);
+>>          page_remove_rmap(page, vma, true);
+> 
+> I guess pmd_swp_uffd_wp() just reads the _USER bit 2 which is also set for
+> a present pte, but then it sets swp uffd-wp always even if it was not set.
+> 
 
-To get a successful boot, run:
+Yes. I modified the reproducer to migrate without uffd-wp first and we 
+suddenly gain a uffd-wp bit.
 
-cat arch/arm64/boot/Image.gz arch/arm64/boot/dts/qcom/qrb2210-rb1.dtb >\
-.Image.gz-dtb
+> Yes the change must be squashed in to be correct, with that, my R-b keeps.
 
-mkbootimg \
---kernel .Image.gz-dtb \
---ramdisk some_initrd \
---output rb1-boot.img \
---pagesize 4096 \
---base 0x8000 \
---cmdline 'some cmdline'
-
-fastboot boot rb1-boot.img
-
-There's no dtbo or other craziness to worry about.
-For the best dev experience, you can erase boot and use fastboot boot
-everytime, so that the bootloader doesn't mess with you.
-
-If you have a SoM revision 3 or older (there should be a sticker on it
-with text like -r00, where r is the revision), you will need to apply
-this additional diff:
-
-aliases {
--   serial0 = &uart0;
-+   serial0 = &uart4;
-
-/* UART connected to the Micro-USB port via a FTDI chip */
--   &uart0 {
-+   &uart4 {
-
-That should however only concern preproduction boards.
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb2210-rb1.dts | 112 +++++++++++++++++++++++++++++++
- 1 file changed, 112 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/qrb2210-rb1.dts b/arch/arm64/boot/dts/qcom/qrb2210-rb1.dts
-new file mode 100644
-index 000000000000..ef3616093289
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/qrb2210-rb1.dts
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (c) 2023, Linaro Ltd
-+ */
-+
-+/dts-v1/;
-+
-+#include "qcm2290.dtsi"
-+#include "pm2250.dtsi"
-+
-+/ {
-+	model = "Qualcomm Technologies, Inc. Robotics RB1";
-+	compatible = "qcom,qrb2210-rb1", "qcom,qrb2210", "qcom,qcm2290";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		sdhc1 = &sdhc_1;
-+		sdhc2 = &sdhc_2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		label = "gpio-keys";
-+
-+		pinctrl-0 = <&key_volp_n>;
-+		pinctrl-names = "default";
-+
-+		key-volume-up {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&tlmm 96 GPIO_ACTIVE_LOW>;
-+			debounce-interval = <15>;
-+			linux,can-disable;
-+			wakeup-source;
-+		};
-+	};
-+};
-+
-+&pm2250_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+	status = "okay";
-+};
-+
-+&qupv3_id_0 {
-+	status = "okay";
-+};
-+
-+&sdhc_1 {
-+	pinctrl-0 = <&sdc1_state_on>;
-+	pinctrl-1 = <&sdc1_state_off>;
-+	pinctrl-names = "default", "sleep";
-+	non-removable;
-+	supports-cqe;
-+	no-sdio;
-+	no-sd;
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 88 GPIO_ACTIVE_LOW>;
-+	pinctrl-0 = <&sdc2_state_on &sd_det_in_on>;
-+	pinctrl-1 = <&sdc2_state_off &sd_det_in_off>;
-+	pinctrl-names = "default", "sleep";
-+	no-sdio;
-+	no-mmc;
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	sd_det_in_on: sd-det-in-on-state {
-+		pins = "gpio88";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	sd_det_in_off: sd-det-in-off-state {
-+		pins = "gpio88";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	key_volp_n: key-volp-n-state {
-+		pins = "gpio96";
-+		function = "gpio";
-+		bias-pull-up;
-+		output-disable;
-+	};
-+};
-+
-+/* UART connected to the Micro-USB port via a FTDI chip */
-+&uart0 {
-+	compatible = "qcom,geni-debug-uart";
-+	status = "okay";
-+};
-+
-+&usb {
-+	status = "okay";
-+};
-+
-+&usb_hsphy {
-+	status = "okay";
-+};
-+
-+&xo_board {
-+	clock-frequency = <38400000>;
-+};
+Thanks, I will resend later.
 
 -- 
-2.40.0
+Thanks,
+
+David / dhildenb
 
