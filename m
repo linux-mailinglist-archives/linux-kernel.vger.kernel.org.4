@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF4C6D7FED
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AC46D7FF4
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238439AbjDEOqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S238604AbjDEOra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238441AbjDEOqP (ORCPT
+        with ESMTP id S238426AbjDEOr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:46:15 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350526A5E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:46:06 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id t16-20020a62d150000000b006261da7aeceso2914709pfl.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 07:46:06 -0700 (PDT)
+        Wed, 5 Apr 2023 10:47:28 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0056659EC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:47:23 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id y184so26803430oiy.8
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 07:47:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680705965;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c6YY5jnViebwbumm1LW1T58xP0On/rSmtcbnUTLfSdE=;
-        b=Trr60HX8MAkEttY63RXr5W+jQ16bxIGh359BVTk7fl87mPLOfVOu5knVFkRxzmk581
-         AysEpjSZpoGHtg1qwOM1XFBt6Ws2kmXJ8fsiR67ae18WNRHjmYpKMrPuerUSXimeH+LN
-         s4maVelCLw8+F1nulzUwsrXFjrG9dc+mT9hQCRibP12IGFDF1u8Iv2xCTwCl9FmxssMv
-         g16GlE+LLksnDQhwVfAzOltENagchhWixqToCI0nUh12rX8kqHZAEMWLLDWz87ZV4A5E
-         +ybakDO396XjJ80i34jvABoSYgOpKovThTJZz54SZdfhVfapYGr3yeS0kcKdhklkarpU
-         BX0Q==
+        d=linaro.org; s=google; t=1680706043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6AwQvzuA6Qp8K0j8ecwWgIY3AigiwirmRRkxPYgXRI=;
+        b=RwjDEPijLGXCa1yTOksX+85ZtjH6zfq61HX8UxK9ONjNwvz5+3sTVyY6zdxn/O8ZQW
+         l2wLQgwsDcZ1H3Cw9ngGUgIg1UHiwPnJ//M54fTZIQeSsBWJzehpbJvrFadPsnBq22NP
+         tqYe6ny+qcKLwMMQh4U17j31RckwaIxyXZhN9EKWi3mAEQzKGLz4U4EXjh6tNgbga1X7
+         EGLqAhwue3spWFeO3tvpNyx0ZbyTo6bi3A0kE9AuDjBXSLiZx8FXGp2TAEeD0lZaDVI8
+         yB8EwGU091BlaxK1hOEGWb7MfPbB+b41+4ct74xuZUs3mmPj6jGhEDHY7NosYMspjEBa
+         H7DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680705965;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c6YY5jnViebwbumm1LW1T58xP0On/rSmtcbnUTLfSdE=;
-        b=iqsnDSRjxX7vx4ZnJGWxLBL8lkHE5sz1nFty7uez5EW0RC9i6059AUEkn0yYYN89PL
-         Q7S6fv3GIRB3u/LVj4NaBTnQybdeUT3PFL7ajrUULTQUYnzShg9fJt1DEzOyGmi/syu8
-         b7aG8vtvMvUdJ2PW86zVlDr7FwfLZqbV6N+iIewqqQbQ8K1IchadF6CqLm93esQsGbr3
-         zolZjMfD0UIQf72Cm2+8pIV7GLOuv/ZhPvdmpm8hcTH60gZeiqEBeYAB4pFCOhfUFWuX
-         u2OLU2fsC8SQJ+GrGqN1R++A5Zsl3gJcsxJ8vd4D3EKp3xji0SJ4KAbLt4uXPoV8g5Ua
-         kPWA==
-X-Gm-Message-State: AAQBX9e3yc9B4m0U38vUHpxcaLHnWaxCXNBvM7r2+Kfqfw3Kmh2U7egD
-        /Ggp/S9k7rLjHPORlrGAmKGSAbRlj8E=
-X-Google-Smtp-Source: AKy350bQEwhX+NYiI1DKV3FtjSzSQTH/+F6Ma0gFo7OUDRlzgln7kU7Z2k4t9XdrTO+SiON2FdGwJ4Ikzsw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:e507:b0:23f:76a1:61fb with SMTP id
- t7-20020a17090ae50700b0023f76a161fbmr2397877pjy.6.1680705965728; Wed, 05 Apr
- 2023 07:46:05 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 07:46:04 -0700
-In-Reply-To: <20230405101350.259000-1-gehao@kylinos.cn>
-Mime-Version: 1.0
-References: <20230405101350.259000-1-gehao@kylinos.cn>
-Message-ID: <ZC2JrJwKM3KrgNgm@google.com>
-Subject: Re: [RESEND PATCH] kvm/selftests: Close opened file descriptor in stable_tsc_check_supported()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Hao Ge <gehao@kylinos.cn>
-Cc:     pbonzini@redhat.com, shuah@kernel.org, dmatlack@google.com,
-        coltonlewis@google.com, vipinsh@google.com, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gehao618@163.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680706043;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6AwQvzuA6Qp8K0j8ecwWgIY3AigiwirmRRkxPYgXRI=;
+        b=IFx9OJ6M93r7Wzrxc/qZUXafLB/kaus9XHlDjq0rpgYX0warntM7TlNJAG3QAHNDhn
+         rP+wdtQ6wE5xm/qD5KsWR8j9jwBiof7eK/dxecCGI3MeS0tXgvJ1hVWHWtZG9z1j9wxB
+         fQ54GSsThYUQ91dPQ9yML5z6wkwZZiITqadlnlAeYc0tU5AKQlHm+brc2ziwAGGER2H+
+         pAYINN1dwasPPNoRrFSH7UMTfcsOBBxfkLgw0Z+N9YyByjTGliaB62ljUHnnhbYhA/nX
+         WSJnySpbOVPoDdhzt5HsnloDhitEmjYwTimLFe1uagRAAlu3eMQdXExAvmyG3R+qKt6E
+         vS1A==
+X-Gm-Message-State: AAQBX9c1dTSYaa/bcokmcSPnvibrrVzP70Y4b1PAHug3RIxhah30EC8v
+        QeEb7cGU/fuQ6xuQSyzKnZvhPw==
+X-Google-Smtp-Source: AKy350a5zlZ0NfDm0JP3xKXWSvEkhSEMQGkFGmxLlt4aAPR4WIqNsg4iqgBh8TMPciCp6UzlpqjtVQ==
+X-Received: by 2002:a05:6808:1804:b0:386:fb78:a4cb with SMTP id bh4-20020a056808180400b00386fb78a4cbmr3960056oib.43.1680706042500;
+        Wed, 05 Apr 2023 07:47:22 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id o184-20020acabec1000000b003646062e83bsm6406041oif.29.2023.04.05.07.47.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 07:47:21 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 10:47:18 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, techsupport@winsystems.com,
+        stable@vger.kernel.org,
+        Paul Demetrotion <pdemetrotion@winsystems.com>
+Subject: Re: [RESEND] gpio: ws16c48: Fix off-by-one error in WS16C48 resource
+ region extent
+Message-ID: <ZC2J9ru1VN5fmeXZ@fedora>
+References: <20230228081724.94786-1-william.gray@linaro.org>
+ <CAMRc=MfD3=ifo9EJf=5_HZKLXnbASi=ehYm=Zs4WQA+YxfffQw@mail.gmail.com>
+ <ZAXfZbywWOo2pg4L@fedora>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7yTnGSIEnzs98TqB"
+Content-Disposition: inline
+In-Reply-To: <ZAXfZbywWOo2pg4L@fedora>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is not a RESEND, it is a new version.  From Documentation/process/submitting-patches.rst:
 
-  Don't add "RESEND" when you are submitting a modified version of your
-  patch or patch series - "RESEND" only applies to resubmission of a
-  patch or patch series which have not been modified in any way from the
-  previous submission.
+--7yTnGSIEnzs98TqB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And the "in any way" really does mean in _any_ way.  E.g. if a patch is rebased,
-the version needs to be bumped.  RESEND should only ever be used when sending
-literally the same patch/email file, e.g. if something went awry in the delivery
-of the email, or you forgot to Cc the right people, tec.
+On Mon, Mar 06, 2023 at 07:41:09AM -0500, William Breathitt Gray wrote:
+> On Mon, Mar 06, 2023 at 10:23:30AM +0100, Bartosz Golaszewski wrote:
+> > On Thu, Mar 2, 2023 at 11:30=E2=80=AFPM William Breathitt Gray
+> > <william.gray@linaro.org> wrote:
+> > >
+> > > The WinSystems WS16C48 I/O address region spans offsets 0x0 through 0=
+xA,
+> > > which is a total of 11 bytes. Fix the WS16C48_EXTENT define to the
+> > > correct value of 11 so that access to necessary device registers is
+> > > properly requested in the ws16c48_probe() callback by the
+> > > devm_request_region() function call.
+> > >
+> > > Fixes: 2c05a0f29f41 ("gpio: ws16c48: Implement and utilize register s=
+tructures")
+> > > Cc: stable@vger.kernel.org
+> > > Cc: Paul Demetrotion <pdemetrotion@winsystems.com>
+> > > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+> > > ---
+> >=20
+> > Why did you need to resend this? Anything changed?
+> >=20
+> > Bart
+>=20
+> No changes in code, just added the stable@ver.kernel.org Cc tag.
+>=20
+> William Breathitt Gray
 
-On Wed, Apr 05, 2023, Hao Ge wrote:
-> Close the "current_clocksource" file descriptor before
+Hi Bart,
 
-Wrap closer to ~75 chars, wrapping at ~55 is too aggressive.
+Would you take this fix through the gpio tree?
 
-> returning or exiting from stable_tsc_check_supported()
-> in vmx_nested_tsc_scaling_test
+William Breathitt Gray
 
+--7yTnGSIEnzs98TqB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Vipin provided his Reviewed-by, that should have been captured here.  Please read
-through Documentation/process/submitting-patches.rst, guidance on "using" the
-various tags is also provided there.  And if you have time, pretty much all of
-Documentation/process/ is worth reading.
+-----BEGIN PGP SIGNATURE-----
 
-No need to send a new version, all of this is easy to fixup when applying.
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZC2J9gAKCRC1SFbKvhIj
+K9tzAQDQyEfw93RTfPmQ34tV0L79xQlQXgHqg+joxkMTlU+8gQD/UIaBvRjVTxwA
+rRFt8lGY+iFzGtHkUsRGaIbrQGP+WQ0=
+=bqhB
+-----END PGP SIGNATURE-----
+
+--7yTnGSIEnzs98TqB--
