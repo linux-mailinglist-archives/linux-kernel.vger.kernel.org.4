@@ -2,125 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04AE6D8520
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120F76D852D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbjDERou convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 13:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S233704AbjDERqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDERoo (ORCPT
+        with ESMTP id S230163AbjDERqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:44:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762523C0B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:44:43 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1pk7BT-0001xp-H9; Wed, 05 Apr 2023 19:44:35 +0200
-Message-ID: <c952a63a2c0c7377e1e15b1d06c1a941f3456d60.camel@pengutronix.de>
-Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Luben Tuikov <luben.tuikov@amd.com>,
-        Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        Dave Airlie <airlied@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        andrey.grodzovsky@amd.com,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Date:   Wed, 05 Apr 2023 19:44:34 +0200
-In-Reply-To: <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
-References: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
-         <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
-         <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 5 Apr 2023 13:46:12 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963E840C4;
+        Wed,  5 Apr 2023 10:46:11 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pk7Ct-0000Me-9O; Wed, 05 Apr 2023 19:46:03 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Heiko Stuebner <heiko@sntech.de>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: (subset) [PATCH v2 0/2] Add PWM fan support to Rock 5B board
+Date:   Wed,  5 Apr 2023 19:45:57 +0200
+Message-Id: <168071663557.3186456.17606522894011578076.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230404173807.490520-1-cristian.ciocaltea@collabora.com>
+References: <20230404173807.490520-1-cristian.ciocaltea@collabora.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luben,
+On Tue, 4 Apr 2023 20:38:05 +0300, Cristian Ciocaltea wrote:
+> This patch series enables support for the PWM controlled heat sink fan
+> on the Rock 5B SBC and, additionally, converts the hwmon PWM fan bindings
+> to DT schema format.
+> 
+> Changes in v2:
+>  - Updated PATCH 1/2 according to Rob's review
+>  - Added Reviewed-by from Christopher to PATCH 2/2
+>  - v1: https://lore.kernel.org/lkml/20230403105052.426135-1-cristian.ciocaltea@collabora.com/
+> 
+> [...]
 
-Am Dienstag, dem 04.04.2023 um 00:31 -0400 schrieb Luben Tuikov:
-> On 2023-03-28 04:54, Lucas Stach wrote:
-> > Hi Danilo,
-> > 
-> > Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
-> > > Hi all,
-> > > 
-> > > Commit df622729ddbf ("drm/scheduler: track GPU active time per entity") 
-> > > tries to track the accumulated time that a job was active on the GPU 
-> > > writing it to the entity through which the job was deployed to the 
-> > > scheduler originally. This is done within drm_sched_get_cleanup_job() 
-> > > which fetches a job from the schedulers pending_list.
-> > > 
-> > > Doing this can result in a race condition where the entity is already 
-> > > freed, but the entity's newly added elapsed_ns field is still accessed 
-> > > once the job is fetched from the pending_list.
-> > > 
-> > > After drm_sched_entity_destroy() being called it should be safe to free 
-> > > the structure that embeds the entity. However, a job originally handed 
-> > > over to the scheduler by this entity might still reside in the 
-> > > schedulers pending_list for cleanup after drm_sched_entity_destroy() 
-> > > already being called and the entity being freed. Hence, we can run into 
-> > > a UAF.
-> > > 
-> > Sorry about that, I clearly didn't properly consider this case.
-> > 
-> > > In my case it happened that a job, as explained above, was just picked 
-> > > from the schedulers pending_list after the entity was freed due to the 
-> > > client application exiting. Meanwhile this freed up memory was already 
-> > > allocated for a subsequent client applications job structure again. 
-> > > Hence, the new jobs memory got corrupted. Luckily, I was able to 
-> > > reproduce the same corruption over and over again by just using 
-> > > deqp-runner to run a specific set of VK test cases in parallel.
-> > > 
-> > > Fixing this issue doesn't seem to be very straightforward though (unless 
-> > > I miss something), which is why I'm writing this mail instead of sending 
-> > > a fix directly.
-> > > 
-> > > Spontaneously, I see three options to fix it:
-> > > 
-> > > 1. Rather than embedding the entity into driver specific structures 
-> > > (e.g. tied to file_priv) we could allocate the entity separately and 
-> > > reference count it, such that it's only freed up once all jobs that were 
-> > > deployed through this entity are fetched from the schedulers pending list.
-> > > 
-> > My vote is on this or something in similar vain for the long term. I
-> > have some hope to be able to add a GPU scheduling algorithm with a bit
-> > more fairness than the current one sometime in the future, which
-> > requires execution time tracking on the entities.
-> 
-> Danilo,
-> 
-> Using kref is preferable, i.e. option 1 above.
-> 
-> Lucas, can you shed some light on,
-> 
-> 1. In what way the current FIFO scheduling is unfair, and
-> 2. shed some details on this "scheduling algorithm with a bit
-> more fairness than the current one"? 
+Applied, thanks!
 
-I don't have a specific implementation in mind yet. However the current
-FIFO algorithm can be very unfair if you have a sparse workload compete
-with one that generates a lot of jobs without any throttling aside from
-the entity queue length. By tracking the actual GPU time consumed by
-the entities we could implement something with a bit more fairness like
-deficit round robin (don't pin me on the specific algorithm, as I
-haven't given it much thought yet).
+[2/2] arm64: dts: rockchip: rk3588-rock-5b: Add pwm-fan
+      commit: f36bb17653e4b9e26bbdb1224027d20614e77636
 
-Regards,
-Lucas
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
