@@ -2,207 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FBE6D76DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B6E6D76E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbjDEI2p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:28:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S237493AbjDEI31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237165AbjDEI2o (ORCPT
+        with ESMTP id S236959AbjDEI3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:28:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984281FF9;
-        Wed,  5 Apr 2023 01:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680683322; x=1712219322;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wrn29fWEWUh9DQE7oDLC0JoUgdEFYGWX1tgF9OvmiyE=;
-  b=PXFb75YqxwFOJl+S6VpMXd/JGFHr4Tz7k73GqaeJPqSllwMdpOLI6lWN
-   lX8IOp/4JY/YEw9RmqGoH6SAL2LjzWz5SCKyV+/1Wo/0bo49d9eigFJ6p
-   Z8QXd7DaSuL4YCcS79tvX5JPBW70kZPyAiqQRkM4x9yVV+An+6R5ONSYn
-   s4xxyYgHxLc2pUpAhqWNW1pOAO/0+DBslbDrEMNv/sCeH0jwd2W84c+rx
-   VhsXyIrrdPQlUgoWbCTG8jxzZ6NwzlaoTt1Qav+Zcs0HsJLrKBUIeX2HQ
-   5E1n2iKl7rxH2Ap1NvhwZyZHhkpgkqWFUTER4izh2NK6Ipuv+lALr/z/g
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344113403"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="344113403"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:28:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="751192534"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="751192534"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Apr 2023 01:28:32 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pjyVH-00CkZe-2G;
-        Wed, 05 Apr 2023 11:28:27 +0300
-Date:   Wed, 5 Apr 2023 11:28:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
- users
-Message-ID: <ZC0xK4YJrKga7akk@smile.fi.intel.com>
-References: <20230330162434.35055-1-andriy.shevchenko@linux.intel.com>
- <20230404161101.GA3554747@bhelgaas>
+        Wed, 5 Apr 2023 04:29:24 -0400
+Received: from mail-ed1-x562.google.com (mail-ed1-x562.google.com [IPv6:2a00:1450:4864:20::562])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7963A8F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:29:22 -0700 (PDT)
+Received: by mail-ed1-x562.google.com with SMTP id r11so139153304edd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 01:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1680683361;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
+        b=fap3neKkM4RZlmbaswN8wfO5OfaFYwyq7u3U9SC/yss7GFyBfcLf3QWly2JYJYQYya
+         EwGZTWN5O/gi1o2EIiEB/gn9gXStcw1wG1aHC4S3bYSORuxU85r79O0lSkfUePklYSr0
+         N/VTtD8Mtu4te5BqaDTL9zHEsvM1O2mLPwnSo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680683361;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dubmJZzj9ewK7VdPsSH0OrrerYhQltiRGNAZ5sYhsdE=;
+        b=W3F6ys/JQhlgaCa6z5gTRj+k0IcZWm4A5NzUZazNSukkaX5GvaNP6ZIPAb2IFJMgbx
+         k2gtBlhXYAMkLLEXFbTs2H3V7I2sEKIZo9FsEvb6AdUwsU2NYTarmPKMfVNCxXJAnjW4
+         SUkhQ3ahPMQ8OEc9hdWxe3lrldCm4U7/xziXZn4nfQTcKJ4l28j5x3bJpYD9GBAsOTc2
+         rV4NJz/bd0JnTdbkMPkT2qBeafO95AFjRM1dnBsldkIN/Ed9ZDz9vtu46fvVJF5PJJVJ
+         l5gzFP57P4WE7dYlcLTisYCe5hIvGdib20wWMnOXDy3qsOCvyKOIYnJ0UmwPC2zvTgnZ
+         c8gg==
+X-Gm-Message-State: AAQBX9dECraFUXNm9dzGWJK2nmv1yODB+YqH+iIf+8H2YgFl+EFTw1L7
+        hA5s/1IGcwutNc5Ppi5oNqj363FE+z06EqC5/YgMdApdKkDw
+X-Google-Smtp-Source: AKy350Z4cm+MiMZg4tJ4XDYwi4+Uu9E47u1H18ZU8iKT15a3z615sLf7uPFlUQi/STJR3hpPLB6Dq/IGJ4+T
+X-Received: by 2002:a17:906:e204:b0:947:5acb:920c with SMTP id gf4-20020a170906e20400b009475acb920cmr1932253ejb.34.1680683360731;
+        Wed, 05 Apr 2023 01:29:20 -0700 (PDT)
+Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
+        by smtp-relay.gmail.com with ESMTPS id i25-20020a17090685d900b00944010e0472sm3723264ejy.236.2023.04.05.01.29.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 01:29:20 -0700 (PDT)
+X-Relaying-Domain: dectris.com
+From:   Kal Conley <kal.conley@dectris.com>
+To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Weqaar Janjua <weqaar.janjua@gmail.com>
+Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests: xsk: Disable IPv6 on VETH1
+Date:   Wed,  5 Apr 2023 10:29:04 +0200
+Message-Id: <20230405082905.6303-1-kal.conley@dectris.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404161101.GA3554747@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 11:11:01AM -0500, Bjorn Helgaas wrote:
-> On Thu, Mar 30, 2023 at 07:24:27PM +0300, Andy Shevchenko wrote:
-> > Provide two new helper macros to iterate over PCI device resources and
-> > convert users.
-> > 
-> > Looking at it, refactor existing pci_bus_for_each_resource() and convert
-> > users accordingly.
-> > 
-> > Note, the amount of lines grew due to the documentation update.
-> > 
-> > Changelog v8:
-> > - fixed issue with pci_bus_for_each_resource() macro (LKP)
-> > - due to above added a new patch to document how it works
-> > - moved the last patch to be #2 (Philippe)
-> > - added tags (Philippe)
-> > 
-> > Changelog v7:
-> > - made both macros to share same name (Bjorn)
-> 
-> I didn't actually request the same name for both; I would have had no
-> idea how to even do that :)
-> 
-> v6 had:
-> 
->   pci_dev_for_each_resource_p(dev, res)
->   pci_dev_for_each_resource(dev, res, i)
-> 
-> and I suggested:
-> 
->   pci_dev_for_each_resource(dev, res)
->   pci_dev_for_each_resource_idx(dev, res, i)
-> 
-> because that pattern is used elsewhere.
+This change fixes flakiness in the BIDIRECTIONAL test:
 
-Ah, sorry I misinterpreted your suggestion (I thought that at the end of
-the day you wanted the macro to be less intrusive, so we change less code,
-that's why I interpreted it the way described in the Changelog).
+    # [is_pkt_valid] expected length [60], got length [90]
+    not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
 
-> But you figured out how to do
-> it, and having one name is even better, so thanks for that extra work!
+When IPv6 is enabled, the interface will periodically send MLDv1 and
+MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
+since it uses VETH0 for RX.
 
-You are welcome!
+For other tests, this was not a problem since they only receive on VETH1
+and IPv6 was already disabled on VETH0.
 
-> > - split out the pci_resource_n() conversion (Bjorn)
-> > 
-> > Changelog v6:
-> > - dropped unused variable in PPC code (LKP)
-> > 
-> > Changelog v5:
-> > - renamed loop variable to minimize the clash (Keith)
-> > - addressed smatch warning (Dan)
-> > - addressed 0-day bot findings (LKP)
-> > 
-> > Changelog v4:
-> > - rebased on top of v6.3-rc1
-> > - added tag (Krzysztof)
-> > 
-> > Changelog v3:
-> > - rebased on top of v2 by Mika, see above
-> > - added tag to pcmcia patch (Dominik)
-> > 
-> > Changelog v2:
-> > - refactor to have two macros
-> > - refactor existing pci_bus_for_each_resource() in the same way and
-> >   convert users
-> > 
-> > Andy Shevchenko (6):
-> >   kernel.h: Split out COUNT_ARGS() and CONCATENATE()
-> >   PCI: Introduce pci_resource_n()
-> >   PCI: Document pci_bus_for_each_resource() to avoid confusion
-> >   PCI: Allow pci_bus_for_each_resource() to take less arguments
-> >   EISA: Convert to use less arguments in pci_bus_for_each_resource()
-> >   pcmcia: Convert to use less arguments in pci_bus_for_each_resource()
+Fixes: a89052572ebb ("selftests/bpf: Xsk selftests framework")
+Signed-off-by: Kal Conley <kal.conley@dectris.com>
+---
+ tools/testing/selftests/bpf/test_xsk.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-...
-
-> Applied 2-7 to pci/resource for v6.4, thanks, I really like this!
-
-Btw, can you actually drop patch 7, please?
-After I have updated the documentation I have realised that why the first
-chunk is invalid. It needs mode careful check and rework.
-
-> I omitted
-> 
->   [1/7] kernel.h: Split out COUNT_ARGS() and CONCATENATE()"
-> 
-> only because it's not essential to this series and has only a trivial
-> one-line impact on include/linux/pci.h.
-
-I'm not sure I understood what exactly "essentiality" means to you, but
-I included that because it makes the split which can be used later by
-others and not including kernel.h in the header is the objective I want
-to achieve. Without this patch the achievement is going to be deferred.
-Yet, this, as you have noticed, allows to compile and use the macros in
-the rest of the patches.
-
-P.S. Thank you for the review and application of the rest!
-
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index b077cf58f825..377fb157a57c 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -116,6 +116,7 @@ setup_vethPairs() {
+ 	ip link add ${VETH0} numtxqueues 4 numrxqueues 4 type veth peer name ${VETH1} numtxqueues 4 numrxqueues 4
+ 	if [ -f /proc/net/if_inet6 ]; then
+ 		echo 1 > /proc/sys/net/ipv6/conf/${VETH0}/disable_ipv6
++		echo 1 > /proc/sys/net/ipv6/conf/${VETH1}/disable_ipv6
+ 	fi
+ 	if [[ $verbose -eq 1 ]]; then
+ 	        echo "setting up ${VETH1}"
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2
 
