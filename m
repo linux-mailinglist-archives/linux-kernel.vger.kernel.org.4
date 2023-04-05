@@ -2,233 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DC56D7B1D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E44C6D7B22
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237894AbjDELVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S237740AbjDELWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237871AbjDELVn (ORCPT
+        with ESMTP id S237467AbjDELWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:21:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C876C2D4B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 04:21:40 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jzi@pengutronix.de>)
-        id 1pk1Ce-0004S2-00; Wed, 05 Apr 2023 13:21:24 +0200
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <jzi@pengutronix.de>)
-        id 1pk1Cc-0098SJ-2v; Wed, 05 Apr 2023 13:21:22 +0200
-Received: from jzi by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <jzi@pengutronix.de>)
-        id 1pk1Cb-005Gtt-BZ; Wed, 05 Apr 2023 13:21:21 +0200
-From:   Johannes Zink <j.zink@pengutronix.de>
-To:     vkoul@kernel.org, kishon@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jun.li@nxp.com,
-        haibo.chen@nxp.com, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     j.zink@pengutronix.de
-Subject: [PATCH 2/2] phy: fsl-imx8mp-usb: add support for phy tuning
-Date:   Wed,  5 Apr 2023 13:21:18 +0200
-Message-Id: <20230405112118.1256151-3-j.zink@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230405112118.1256151-1-j.zink@pengutronix.de>
-References: <20230405112118.1256151-1-j.zink@pengutronix.de>
+        Wed, 5 Apr 2023 07:22:11 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24034200
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 04:21:59 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 335BLYhx109697;
+        Wed, 5 Apr 2023 06:21:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680693694;
+        bh=ZYZtDM+EnT6iQgi0D6tsE86c+r8ALNuoRvgk8Gg2Le8=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=JIK7zvW2PMmaukF3hUSd+4q4zZ/tEv0Doj+5JdUdJGKH2DS8M5hXfRqawESTBZ+Pp
+         8abdy2sqZghwua/PdapfWnD6awLzw+rLQ6Mtsy+pfmZSRNLsgjR4gEJ8lo15cW1fsu
+         YbteWTU6zGoWbAOMSbEru5Q6YkhFNE1P0kc0VLAs=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 335BLX1R082210
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 5 Apr 2023 06:21:34 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 5
+ Apr 2023 06:21:33 -0500
+Received: from DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c]) by
+ DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c%18]) with mapi id
+ 15.01.2507.016; Wed, 5 Apr 2023 06:21:33 -0500
+From:   "Ding, Shenghao" <shenghao-ding@ti.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Amadeusz Slawinski <amadeuszx.slawinski@linux.intel.com>
+CC:     "Lu, Kevin" <kevin-lu@ti.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
+        "Navada Kanyana, Mukund" <navada@ti.com>,
+        "Shenghao Ding" <13916275206@139.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>
+Subject: RE: [EXTERNAL] Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
+Thread-Topic: [EXTERNAL] Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
+Thread-Index: AQHZYv5dO/gdHn+1qke4qmD6peEJfK8UJ1NQgAGI0ACABulGsA==
+Date:   Wed, 5 Apr 2023 11:21:33 +0000
+Message-ID: <bbae9e35f2bf4cbcbc78f852041e4b2e@ti.com>
+References: <20230329100107.8181-1-13916275206@139.com>
+ <8d0d0478-1e45-ea52-f1b7-910b747d6282@linux.intel.com>
+ <7a0cfa60e2a244168edd49c3d2f6a2bd@ti.com>
+ <458d7c2f-bcee-9ec3-e955-9661a06a3349@wanadoo.fr>
+In-Reply-To: <458d7c2f-bcee-9ec3-e955-9661a06a3349@wanadoo.fr>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.250.160.107]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: jzi@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
-
-Add USB PHY parameter tuning for USB certifications.
-
-Reviewed-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Li Jun <jun.li@nxp.com>
-[j.zink: ported to v6.3-rc1 from NXP downstream repo + cleanups]
-Signed-off-by: Johannes Zink <j.zink@pengutronix.de>
----
- drivers/phy/freescale/phy-fsl-imx8mq-usb.c | 124 +++++++++++++++++++++
- 1 file changed, 124 insertions(+)
-
-diff --git a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-index a29b4a6f7c24..ee1975aaab7e 100644
---- a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-+++ b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-@@ -27,17 +27,137 @@
- #define PHY_CTRL2_TXENABLEN0		BIT(8)
- #define PHY_CTRL2_OTG_DISABLE		BIT(9)
- 
-+#define PHY_CTRL3			0xc
-+#define PHY_CTRL3_COMPDISTUNE_MASK	GENMASK(2, 0)
-+#define PHY_CTRL3_TXPREEMP_TUNE_MASK	GENMASK(16, 15)
-+#define PHY_CTRL3_TXRISE_TUNE_MASK	GENMASK(21, 20)
-+#define PHY_CTRL3_TXVREF_TUNE_MASK	GENMASK(25, 22)
-+#define PHY_CTRL3_TX_VBOOST_LEVEL_MASK	GENMASK(31, 29)
-+
-+#define PHY_CTRL4			0x10
-+#define PHY_CTRL4_PCS_TX_DEEMPH_3P5DB_MASK	GENMASK(20, 15)
-+
-+#define PHY_CTRL5			0x14
-+#define PHY_CTRL5_DMPWD_OVERRIDE_SEL	BIT(23)
-+#define PHY_CTRL5_DMPWD_OVERRIDE	BIT(22)
-+#define PHY_CTRL5_DPPWD_OVERRIDE_SEL	BIT(21)
-+#define PHY_CTRL5_DPPWD_OVERRIDE	BIT(20)
-+#define PHY_CTRL5_PCS_TX_SWING_FULL_MASK	GENMASK(6, 0)
-+
- #define PHY_CTRL6			0x18
- #define PHY_CTRL6_ALT_CLK_EN		BIT(1)
- #define PHY_CTRL6_ALT_CLK_SEL		BIT(0)
- 
-+#define PHY_TUNE_DEFAULT		0xffffffff
-+
- struct imx8mq_usb_phy {
- 	struct phy *phy;
- 	struct clk *clk;
- 	void __iomem *base;
- 	struct regulator *vbus;
-+	u32 pcs_tx_swing_full;
-+	u32 pcs_tx_deemph_3p5db;
-+	u32 tx_vref_tune;
-+	u32 tx_rise_tune;
-+	u32 tx_preemp_amp_tune;
-+	u32 tx_vboost_level;
-+	u32 comp_dis_tune;
- };
- 
-+static void imx8m_get_phy_tuning_data(struct imx8mq_usb_phy *imx_phy)
-+{
-+	struct device *dev = imx_phy->phy->dev.parent;
-+
-+	if (device_property_read_u32(dev, "fsl,phy-tx-vref-tune",
-+				     &imx_phy->tx_vref_tune))
-+		imx_phy->tx_vref_tune = PHY_TUNE_DEFAULT;
-+
-+	if (device_property_read_u32(dev, "fsl,phy-tx-rise-tune",
-+				     &imx_phy->tx_rise_tune))
-+		imx_phy->tx_rise_tune = PHY_TUNE_DEFAULT;
-+
-+	if (device_property_read_u32(dev, "fsl,phy-tx-preemp-amp-tune",
-+				     &imx_phy->tx_preemp_amp_tune))
-+		imx_phy->tx_preemp_amp_tune = PHY_TUNE_DEFAULT;
-+
-+	if (device_property_read_u32(dev, "fsl,phy-tx-vboost-level",
-+				     &imx_phy->tx_vboost_level))
-+		imx_phy->tx_vboost_level = PHY_TUNE_DEFAULT;
-+
-+	if (device_property_read_u32(dev, "fsl,phy-comp-dis-tune",
-+				     &imx_phy->comp_dis_tune))
-+		imx_phy->comp_dis_tune = PHY_TUNE_DEFAULT;
-+
-+	if (device_property_read_u32(dev, "fsl,pcs-tx-deemph-3p5db",
-+				     &imx_phy->pcs_tx_deemph_3p5db))
-+		imx_phy->pcs_tx_deemph_3p5db = PHY_TUNE_DEFAULT;
-+
-+	if (device_property_read_u32(dev, "fsl,phy-pcs-tx-swing-full",
-+				     &imx_phy->pcs_tx_swing_full))
-+		imx_phy->pcs_tx_swing_full = PHY_TUNE_DEFAULT;
-+}
-+
-+static void imx8m_phy_tune(struct imx8mq_usb_phy *imx_phy)
-+{
-+	u32 value;
-+
-+	/* PHY tuning */
-+	if (imx_phy->pcs_tx_deemph_3p5db != PHY_TUNE_DEFAULT) {
-+		value = readl(imx_phy->base + PHY_CTRL4);
-+		value &= ~PHY_CTRL4_PCS_TX_DEEMPH_3P5DB_MASK;
-+		value |= FIELD_PREP(PHY_CTRL4_PCS_TX_DEEMPH_3P5DB_MASK,
-+				   imx_phy->pcs_tx_deemph_3p5db);
-+		writel(value, imx_phy->base + PHY_CTRL4);
-+	}
-+
-+	if (imx_phy->pcs_tx_swing_full != PHY_TUNE_DEFAULT) {
-+		value = readl(imx_phy->base + PHY_CTRL5);
-+		value |= FIELD_PREP(PHY_CTRL5_PCS_TX_SWING_FULL_MASK,
-+				   imx_phy->pcs_tx_swing_full);
-+		writel(value, imx_phy->base + PHY_CTRL5);
-+	}
-+
-+	if ((imx_phy->tx_vref_tune & imx_phy->tx_rise_tune &
-+	     imx_phy->tx_preemp_amp_tune & imx_phy->comp_dis_tune &
-+	     imx_phy->tx_vboost_level) == PHY_TUNE_DEFAULT)
-+		/* If all are the default values, no need update. */
-+		return;
-+
-+	value = readl(imx_phy->base + PHY_CTRL3);
-+
-+	if (imx_phy->tx_vref_tune != PHY_TUNE_DEFAULT) {
-+		value &= ~PHY_CTRL3_TXVREF_TUNE_MASK;
-+		value |= FIELD_PREP(PHY_CTRL3_TXVREF_TUNE_MASK,
-+				   imx_phy->tx_vref_tune);
-+	}
-+
-+	if (imx_phy->tx_rise_tune != PHY_TUNE_DEFAULT) {
-+		value &= ~PHY_CTRL3_TXRISE_TUNE_MASK;
-+		value |= FIELD_PREP(PHY_CTRL3_TXRISE_TUNE_MASK,
-+				    imx_phy->tx_rise_tune);
-+	}
-+
-+	if (imx_phy->tx_preemp_amp_tune != PHY_TUNE_DEFAULT) {
-+		value &= ~PHY_CTRL3_TXPREEMP_TUNE_MASK;
-+		value |= FIELD_PREP(PHY_CTRL3_TXPREEMP_TUNE_MASK,
-+				imx_phy->tx_preemp_amp_tune);
-+	}
-+
-+	if (imx_phy->comp_dis_tune != PHY_TUNE_DEFAULT) {
-+		value &= ~PHY_CTRL3_COMPDISTUNE_MASK;
-+		value |= FIELD_PREP(PHY_CTRL3_COMPDISTUNE_MASK,
-+				    imx_phy->comp_dis_tune);
-+	}
-+
-+	if (imx_phy->tx_vboost_level != PHY_TUNE_DEFAULT) {
-+		value &= ~PHY_CTRL3_TX_VBOOST_LEVEL_MASK;
-+		value |= FIELD_PREP(PHY_CTRL3_TX_VBOOST_LEVEL_MASK,
-+				    imx_phy->tx_vboost_level);
-+	}
-+
-+	writel(value, imx_phy->base + PHY_CTRL3);
-+}
-+
- static int imx8mq_usb_phy_init(struct phy *phy)
- {
- 	struct imx8mq_usb_phy *imx_phy = phy_get_drvdata(phy);
-@@ -99,6 +219,8 @@ static int imx8mp_usb_phy_init(struct phy *phy)
- 	value &= ~(PHY_CTRL1_RESET | PHY_CTRL1_ATERESET);
- 	writel(value, imx_phy->base + PHY_CTRL1);
- 
-+	imx8m_phy_tune(imx_phy);
-+
- 	return 0;
- }
- 
-@@ -182,6 +304,8 @@ static int imx8mq_usb_phy_probe(struct platform_device *pdev)
- 
- 	phy_set_drvdata(imx_phy->phy, imx_phy);
- 
-+	imx8m_get_phy_tuning_data(imx_phy);
-+
- 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
- 
- 	return PTR_ERR_OR_ZERO(phy_provider);
--- 
-2.39.2
-
+SGkgQm90aA0KSSB3cm90ZSBhIHRlc3QgY29kZSB0byB2ZXJpZnkgdGhlIGJlMzJfdG9fY3B1ICYg
+YmUzMl90b19jcHVwLA0Kc3RhdGljIGludCBfX2luaXQgbGttX2luaXQodm9pZCkNCnsNCgljaGFy
+IHRlc3RfYnVmW109ezB4MTIsIDB4MzQsIDB4YWIsIDB4YmMsIDB4NTYsIDB4NzgsIDB4ZWZ9Ow0K
+CXVuc2lnbmVkIGludCAqaywgcCwgcTsNCglpbnQgaTsNCg0KCXByaW50aygiSGVsbG8sIFNoYW5n
+aGFpIVxuIik7DQoNCglmb3IgKGkgPSAwOyBpIDwgNDsgaSArKykgew0KCQlrID0gKHVuc2lnbmVk
+IGludCAqKSZ0ZXN0X2J1ZltpXTsNCgkJcCA9IGJlMzJfdG9fY3B1cCgoX19iZTMyICopayk7DQoJ
+CXEgPSBiZTMyX3RvX2NwdSh0ZXN0X2J1ZltpXSk7DQoJCXByaW50aygiJWQ6ICprID0gMHglMDh4
+IHAgPSAweCUwOHggcSA9IDB4JTA4eCAlbGRcbiIsDQoJCQlpLCAqaywgcCwgcSwgc2l6ZW9mKHVu
+c2lnbmVkIGludCkpOw0KCX0NCglyZXR1cm4gMDsNCn0NClRoZSBvdXRwdXQgaXM6DQpbIDkxMDku
+NzIyNTQ4XSBIZWxsbywgU2hhbmdoYWkhDQpbIDkxMDkuNzI2Mjg3XSAwOiAqayA9IDB4YmNhYjM0
+MTIgcCA9IDB4MTIzNGFiYmMgcSA9IDB4MTIwMDAwMDAgNA0KWyA5MTA5LjcyNzY2NV0gMTogKmsg
+PSAweDU2YmNhYjM0IHAgPSAweDM0YWJiYzU2IHEgPSAweDM0MDAwMDAwIDQNClsgOTEwOS43Mjg1
+NTNdIDI6ICprID0gMHg3ODU2YmNhYiBwID0gMHhhYmJjNTY3OCBxID0gMHhhYmZmZmZmZiA0DQpb
+IDkxMDkuNzI5MzA4XSAzOiAqayA9IDB4ZWY3ODU2YmMgcCA9IDB4YmM1Njc4ZWYgcSA9IDB4YmNm
+ZmZmZmYgNA0KQXBwYXJlbnRseSwgYmUzMl90b19jcHVwJ3Mgb3V0cHV0IGlzIHdoYXQgSSBleHBl
+Y3RlZC4NCkxvb2tpbmcgZm9yd2FyZCB0byB5b3VyIGNvbW1lbnRzLiBUaGFua3MuDQoNCkJSDQpT
+aGVuZ2hhbyBEaW5nDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogQ2hyaXN0b3Bo
+ZSBKQUlMTEVUIDxjaHJpc3RvcGhlLmphaWxsZXRAd2FuYWRvby5mcj4gDQpTZW50OiBTYXR1cmRh
+eSwgQXByaWwgMSwgMjAyMyA0OjQxIEFNDQpUbzogRGluZywgU2hlbmdoYW8gPHNoZW5naGFvLWRp
+bmdAdGkuY29tPjsgQW1hZGV1c3ogU2xhd2luc2tpIDxhbWFkZXVzenguc2xhd2luc2tpQGxpbnV4
+LmludGVsLmNvbT47IFNoZW5naGFvIERpbmcgPDEzOTE2Mjc1MjA2QDEzOS5jb20+OyBicm9vbmll
+QGtlcm5lbC5vcmc7IGxnaXJkd29vZEBnbWFpbC5jb207IHBlcmV4QHBlcmV4LmN6OyBwaWVycmUt
+bG91aXMuYm9zc2FydEBsaW51eC5pbnRlbC5jb20NCkNjOiBMdSwgS2V2aW4gPGtldmluLWx1QHRp
+LmNvbT47IGFsc2EtZGV2ZWxAYWxzYS1wcm9qZWN0Lm9yZzsgbGludXgta2VybmVsQHZnZXIua2Vy
+bmVsLm9yZzsgWHUsIEJhb2p1biA8eDEwNzcwMTJAdGkuY29tPjsgR3VwdGEsIFBlZXl1c2ggPHBl
+ZXl1c2hAdGkuY29tPjsgTmF2YWRhIEthbnlhbmEsIE11a3VuZCA8bmF2YWRhQHRpLmNvbT4NClN1
+YmplY3Q6IFtFWFRFUk5BTF0gUmU6IFtQQVRDSCB2MTBdIEFTb0M6IHRhczI3ODE6IEFkZCB0YXMy
+NzgxIGRyaXZlcg0KDQpMZSAzMS8wMy8yMDIzIMOgIDA0OjE5LCBEaW5nLCBTaGVuZ2hhbyBhIMOp
+Y3JpdMKgOg0KPiBIaSBBbWFkZXVzeiBTxYJhd2nFhHNraQ0KPiBUaGFua3MgZm9yIHlvdXIgY29t
+bWVudC4NCj4gQW5zd2VyIGlubGluZS4NCj4gDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0t
+DQo+IEZyb206IEFtYWRldXN6IFPFgmF3acWEc2tpIDxhbWFkZXVzenguc2xhd2luc2tpQGxpbnV4
+LmludGVsLmNvbT4NCj4gU2VudDogVGh1cnNkYXksIE1hcmNoIDMwLCAyMDIzIDc6NTQgUE0NCj4g
+VG86IFNoZW5naGFvIERpbmcgPDEzOTE2Mjc1MjA2QDEzOS5jb20+OyBicm9vbmllQGtlcm5lbC5v
+cmc7IA0KPiBsZ2lyZHdvb2RAZ21haWwuY29tOyBwZXJleEBwZXJleC5jejsgDQo+IHBpZXJyZS1s
+b3Vpcy5ib3NzYXJ0QGxpbnV4LmludGVsLmNvbQ0KPiBDYzogTHUsIEtldmluIDxrZXZpbi1sdUB0
+aS5jb20+OyBEaW5nLCBTaGVuZ2hhbyANCj4gPHNoZW5naGFvLWRpbmdAdGkuY29tPjsgYWxzYS1k
+ZXZlbEBhbHNhLXByb2plY3Qub3JnOyANCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsg
+WHUsIEJhb2p1biA8eDEwNzcwMTJAdGkuY29tPjsgR3VwdGEsIA0KPiBQZWV5dXNoIDxwZWV5dXNo
+QHRpLmNvbT47IE5hdmFkYSBLYW55YW5hLCBNdWt1bmQgPG5hdmFkYUB0aS5jb20+DQo+IFN1Ympl
+Y3Q6IFtFWFRFUk5BTF0gUmU6IFtQQVRDSCB2MTBdIEFTb0M6IHRhczI3ODE6IEFkZCB0YXMyNzgx
+IGRyaXZlcg0KPiANCj4gT24gMy8yOS8yMDIzIDEyOjAxIFBNLCBTaGVuZ2hhbyBEaW5nIHdyb3Rl
+Og0KPj4gQ3JlYXRlIHRhczI3ODEgZHJpdmVyLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFNoZW5n
+aGFvIERpbmcgPDEzOTE2Mjc1MjA2QDEzOS5jb20+DQo+Pg0KPj4gLS0tDQo+PiBDaGFuZ2VzIGlu
+IHYxMDoNCj4+ICAgIC0gdXNpbmcgYmUxNl90b19jcHUgYW5kIGJlMzJfdG9fY3B1IGluc3RlYWQg
+b2YgU01TX0hUT05TIGFuZCBTTVNfSFRPTkwNCj4+ICAgIC0gb3B0aW1pemUgYW5kIHJlZHVjZSB0
+aGUgYm91bmRhcnkgY2hlY2tzDQo+PiAgICAtIEFkZCBjb21tZW50cyBvbiBzb21lIGttZW1kdXAg
+aW5zdGVhZCBvZiBremFsbG9jK21lbWNweQ0KPj4gICAgQ2hhbmdlcyB0byBiZSBjb21taXR0ZWQ6
+DQo+PiAJbW9kaWZpZWQ6ICAgc291bmQvc29jL2NvZGVjcy9LY29uZmlnDQo+PiAJbW9kaWZpZWQ6
+ICAgc291bmQvc29jL2NvZGVjcy9NYWtlZmlsZQ0KPj4gCW5ldyBmaWxlOiAgIHNvdW5kL3NvYy9j
+b2RlY3MvdGFzMjc4MS1kc3AuYw0KPj4gCW5ldyBmaWxlOiAgIHNvdW5kL3NvYy9jb2RlY3MvdGFz
+Mjc4MS1kc3AuaA0KPj4gCW5ldyBmaWxlOiAgIHNvdW5kL3NvYy9jb2RlY3MvdGFzMjc4MS1pMmMu
+Yw0KPj4gCW5ldyBmaWxlOiAgIHNvdW5kL3NvYy9jb2RlY3MvdGFzMjc4MS5oDQo+PiAtLS0NCj4g
+DQo+IC4uLg0KPiANCj4+ICsNCj4+ICtzdGF0aWMgaW50IGZ3X3BhcnNlX2Jsb2NrX2RhdGFfa2Vy
+bmVsKHN0cnVjdCB0YXNkZXZpY2VfZncgKnRhc19mbXcsDQo+PiArCXN0cnVjdCB0YXNkZXZfYmxr
+ICpibG9jaywgY29uc3Qgc3RydWN0IGZpcm13YXJlICpmbXcsIGludCBvZmZzZXQpIHsNCj4+ICsJ
+Y29uc3QgdW5zaWduZWQgY2hhciAqZGF0YSA9IGZtdy0+ZGF0YTsNCj4+ICsNCj4+ICsJaWYgKG9m
+ZnNldCArIDE2ID4gZm13LT5zaXplKSB7DQo+PiArCQlkZXZfZXJyKHRhc19mbXctPmRldiwgIiVz
+OiBGaWxlIFNpemUgZXJyb3JcbiIsIF9fZnVuY19fKTsNCj4+ICsJCW9mZnNldCA9IC1FSU5WQUw7
+DQo+PiArCQlnb3RvIG91dDsNCj4+ICsJfQ0KPj4gKwlibG9jay0+dHlwZSA9IGJlMzJfdG9fY3B1
+cCgoX19iZTMyICopJmRhdGFbb2Zmc2V0XSk7DQo+IA0KPiBXb3VsZG4ndCBqdXN0IGJlMzJfdG9f
+Y3B1KGRhdGFbb2Zmc2V0XSkgd29yayBpbnN0ZWFkIG9mIGJlMzJfdG9fY3B1cD8NCj4gU2FtZSBp
+biBvdGhlciBjYXNlcy4NCj4gW0RJTkddIGRhdGFbXSBpcyBhIGNoYXIgYXJyYXksIHRoZSBjb2Rl
+IHdpbGwgY29udmVydCBkYXRhW29mZnNldF0sIA0KPiBkYXRhW29mZnNldCArIDFdLCBkYXRhW29m
+ZnNldCArIDJdIGFuZCBkYXRhW29mZnNldCArIDNdIGludG8gaG9zdCBpbnN0ZWFkIG9mIGRhdGFb
+b2Zmc2V0XSBvbmx5Lg0KPiANCg0KTm90IHN1cmUgdG8gZm9sbG93IHlvdS4NCklzbid0IGl0IHRo
+ZSBwdXJwb3NlIG9mIGJlMzJfdG9fY3B1KCkgdG8gdGFrZSBhIDMyIGJpdHMgd29yZCwgaW4gb3Ro
+ZXIgd29yZHMgNCB4IDggYml0cyBjaGFyLCBhbmQgc3dhcCB3aGF0IGlmIG5lZWRlZCAobGl0dGxl
+IGVuZGlhbiBhcmNoKT8NCg0KSXQgZW5kcyB0byBfX3N3YWIzMigpIChbMV0gZm9yIHRoZSAiY29u
+c3RhbnQiIGltcGxlbWVudGF0aW9uKQ0KDQoNCmJlMzJfdG9fY3B1cCgmcCkgZW5kcyB0byBfX3N3
+YWIzMigqcCksIHdoaWNoIHJlYWxseSBsb29rcyB0byB0aGUgc2FtZSBhcyBiZTMyX3RvX2NwdShw
+KS4NCg0KQ2FuIHlvdSBlbGFib3JhdGUgbW9yZT8NCg0KQ0oNCg0KDQpbMV06IA0KaHR0cHM6Ly9l
+bGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjYuMy1yYzMvc291cmNlL2luY2x1ZGUvdWFwaS9saW51
+eC9zd2FiLmgjTDE4DQoNCg==
