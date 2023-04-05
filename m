@@ -2,90 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43E46D7832
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82536D783C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237178AbjDEJ2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
+        id S237717AbjDEJ3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237482AbjDEJ2Q (ORCPT
+        with ESMTP id S237654AbjDEJ24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:28:16 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5459D0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:27:55 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l12so35480581wrm.10
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680686873;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nbxb6pOBobAspVURmZV5qw9xso4MEJwnKnyDKhuf9Zk=;
-        b=OOAgHuCVOjJ1ff7sJbGp70M1TYsellJraMNNqALPTmQetFjYslPpiJGgMjg+i0Q1uS
-         p2+UYnPbfi9udTNtUOZ1jUPDQS5kAR8sd5NrtSNm4GROMvpU3KxwMDb6zY7HadyoKZOs
-         wlhWIyJoyqdmbeTXsjpsZxsjjxZjekgcVYAKGJ9qIZxDmUHTSpFscdwrCnBAS4qTTlUJ
-         VGDcM+EW/dXt6zhL9ZhnH3lxniF8zlidAFd0DBk4lx046s7iVdcfNkhg0JIy6FKd6n0O
-         wbVcBtv68/8QtEOlOGJaI19Yd0Bgs25xqhO2SN8TM/AhbQUVkZE96EFgn4hEbD0fi9Uh
-         7GZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680686873;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nbxb6pOBobAspVURmZV5qw9xso4MEJwnKnyDKhuf9Zk=;
-        b=G+KX02GBYv6EFjR/6D4kA3eifBCFPQwGtN2ah3FoF3sUZXDEh/Gqwp77Mn9CoRHJbV
-         xvggR7Qop3RAhTc+s3CXLQpabBITLWIroDoO/eDdOIr5Ps9AaJwRB3eC6tpybVhWbPi3
-         o88aEXnHNMkkYz97MlxSw05+SDSLOiwsRnD5h02WvkK2pjGUvyiw9sXmQTuvnghvopaH
-         bmF3SXwQpF45SHA5UgEfzxtV62Tr7cJr+25froV7zgpNgK3AAZBp+2MtGJFbYY/DwCYr
-         a6tGf5tBNpDe4wgsy0JnjPctlzDZsE1qUCYO/4+N/2J7EQM1ybc6DSbfgIKMcy4c9y6e
-         3AuQ==
-X-Gm-Message-State: AAQBX9egvfCK0pkqw+0auaCnIodqpKj9/ARBXaSrR1zqC4OSEySQfBwZ
-        stibbYu85d7VaZC5dKS84L5w8g==
-X-Google-Smtp-Source: AKy350ZTLUZ8C5oWQIqlnzLbcauR0nQz5678A9ppDmkWQi4Z5mSQP5i3id5jdUI4YRVmSOACLzI+Aw==
-X-Received: by 2002:a5d:5262:0:b0:2ce:a30d:f764 with SMTP id l2-20020a5d5262000000b002cea30df764mr3274578wrc.21.1680686873617;
-        Wed, 05 Apr 2023 02:27:53 -0700 (PDT)
-Received: from localhost ([2a01:e0a:55f:21e0:9e19:4376:dea6:dbfa])
-        by smtp.gmail.com with ESMTPSA id ay8-20020a05600c1e0800b003edddae1068sm1606494wmb.9.2023.04.05.02.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 02:27:53 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 11:27:53 +0200
-From:   Julien Stephan <jstephan@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DRM DRIVERS FOR MEDIATEK" 
-        <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH 2/2] phy: mtk-mipi-csi: add driver for CSI phy
-Message-ID: <ucoak3m7tlroscd2txdsbx5kr67sjvp342msva6rz5xwedub4q@xjb5kfdigxf5>
-References: <20230403071929.360911-1-jstephan@baylibre.com>
- <20230403071929.360911-3-jstephan@baylibre.com>
- <6c9c74ee-b9ed-815f-dd92-37eb4c8f802a@linaro.org>
+        Wed, 5 Apr 2023 05:28:56 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03560468F;
+        Wed,  5 Apr 2023 02:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680686901; x=1712222901;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aLX6+vqdQNVvF14fetM/8YAe4WRk9gZuo75cuAymbAw=;
+  b=oq9jDHdOhWb8mK+/V9qQKPUdImnRpJIk2QVm1YqYX8ctCH1VxbIsn5GI
+   aA30Th3OLiaNOinXEJUqeSiJ0AbQDPGyBGvVQPx82UCXKi7BVYlSQWZ2t
+   u7z1ZSuF+C45QSLQ67FmmQ+kGmX3lC0tklEmMwQzWxGc4EE4AR5jSxYqX
+   L8e2PbCvGsHjgFPtouhWk4PcfmgPnd9PAbTLsDLW7wXHi/sc0/WTS+0lp
+   ij7pM666MtkDuJktA3LvOKAy82enej5+8kKYyKQldn+2JwZ6ciEycDtqF
+   E/8JYmlSl3H9S+4SE5hBYN+gyprHMhzVyDjocslnyjQicsKcxmao0h+cc
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,319,1673938800"; 
+   d="asc'?scan'208";a="219516254"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Apr 2023 02:28:20 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 5 Apr 2023 02:28:19 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 5 Apr 2023 02:28:17 -0700
+Date:   Wed, 5 Apr 2023 10:28:03 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Anup Patel <anup@brainfault.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <bjorn@kernel.org>
+Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
+Message-ID: <20230405-icon-arrogance-62bf7d627a5d@wendy>
+References: <20230403093310.2271142-1-apatel@ventanamicro.com>
+ <20230403093310.2271142-7-apatel@ventanamicro.com>
+ <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
+ <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
+ <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
+ <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
+ <20230404-5cfffb017198773dc3e81dab@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6/ymYoyceqNd1+G4"
 Content-Disposition: inline
-In-Reply-To: <6c9c74ee-b9ed-815f-dd92-37eb4c8f802a@linaro.org>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+In-Reply-To: <20230404-5cfffb017198773dc3e81dab@wendy>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,81 +76,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 11:51:50AM +0200, Krzysztof Kozlowski wrote:
-> On 03/04/2023 09:19, Julien Stephan wrote:
-> > From: Phi-bang Nguyen <pnguyen@baylibre.com>
-> >
-> > This is a new driver that supports the MIPI CSI CD-PHY for mediatek
-> > mt8365 soc
-> >
-> > Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
-> > Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
-> > [Julien Stephan: use regmap]
-> > [Julien Stephan: use GENMASK]
-> > Co-developed-by: Julien Stephan <jstephan@baylibre.com>
-> > Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> > ---
-> >  .../bindings/phy/mediatek,csi-phy.yaml        |   9 +-
-> >  MAINTAINERS                                   |   1 +
-> >  drivers/phy/mediatek/Kconfig                  |   8 +
-> >  drivers/phy/mediatek/Makefile                 |   2 +
-> >  .../phy/mediatek/phy-mtk-mipi-csi-rx-reg.h    | 435 ++++++++++++++++++
-> >  drivers/phy/mediatek/phy-mtk-mipi-csi.c       | 392 ++++++++++++++++
-> >  6 files changed, 845 insertions(+), 2 deletions(-)
-> >  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-rx-reg.h
-> >  create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi.c
-> >
-> > diff --git a/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml b/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
-> > index c026e43f35fd..ad4ba1d93a68 100644
-> > --- a/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
-> > +++ b/Documentation/devicetree/bindings/phy/mediatek,csi-phy.yaml
->
-> NAK, bindings are always separate patches. It also does not make any
-> sense - you just added it.
->
-:( I messed up my rebase -i. This need to be moved and squashed with the
-previous patch. I will fix it in v2. Thank you for reporting it
+--6/ymYoyceqNd1+G4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > @@ -33,9 +33,14 @@ additionalProperties: false
-> >
-> >  examples:
-> >    - |
-> > -    phy@10011800 {
-> > +    soc {
-> > +      #address-cells = <2>;
-> > +      #size-cells = <2>;
-> > +
-> > +      phy@11c10000 {
-> >          compatible = "mediatek,mt8365-mipi-csi";
-> > -        reg = <0 0x10011800 0 0x60>;
-> > +        reg = <0 0x11c10000 0 0x4000>;
-> >          #phy-cells = <1>;
-> > +      };
-> >      };
->
->
->
-> k_mipi_dphy_of_match[] = {
-> > +	{.compatible = "mediatek,mt8365-mipi-csi"},
-> > +	{},
-> > +};
-> > +MODULE_DEVICE_TABLE(of, mtk_mipi_dphy_of_match);
-> > +
-> > +static struct platform_driver mipi_dphy_pdrv = {
-> > +	.probe = mtk_mipi_dphy_probe,
-> > +	.remove = mtk_mipi_dphy_remove,
-> > +	.driver	= {
-> > +		.name	= "mtk-mipi-csi",
-> > +		.of_match_table = of_match_ptr(mtk_mipi_dphy_of_match),
->
-> Drop of_match_ptr(). You should see W=1 warnings when compile testing.
->
-I do not not see any warnings when trying to compile with W=1. Am I
-missing something? I will drop it in v2 anyway
+On Tue, Apr 04, 2023 at 12:58:41PM +0100, Conor Dooley wrote:
+> On Tue, Apr 04, 2023 at 01:52:43PM +0200, Andrew Jones wrote:
+> > On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
+>=20
+> > > It's probably best if neither depend on each other, since they're
+> > > independent, but otherwise the order doesn't matter. It'd be nice to =
+call
+> > > the order out in the cover letter to give patchwork a chance at autom=
+atic
+> > > build testing, though. To call it out, I believe adding
+> > >=20
+> > > Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
+> > >=20
+> > > to the cover letter should work.
+> >=20
+> > I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
+> > interface to enable/disable SBI extensions"[1] and it needs to be
+> > in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
+> > KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
+> > patch out with Based-on.
+> >=20
+> > [1]: 20230331174542.2067560-2-apatel@ventanamicro.com
+>=20
+> I've been waiting for a review on that for a while.. It's been 3
+> weeks, so just gonna merge it and see what breaks!
 
-Best
-Julien
->
-> Best regards,
-> Krzysztof
->
+I did in fact break some stuff, but the output was no worse than if the
+dependencies had not been specified...
+I've fixed it (I think!) and told it to ignore the old state, so it'll
+re-run against the stuff it missed.
+
+Cheers,
+Conor.
+
+--6/ymYoyceqNd1+G4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC0/IwAKCRB4tDGHoIJi
+0llzAQD7CVUsawsm7wpvaamyFV3X2C65V7xha05w4L4rhlmyWAEAr3QHqpnSd9Pd
+JL27yJCJfcvHvC6TY2wuWqeH5ArIAAk=
+=jbmg
+-----END PGP SIGNATURE-----
+
+--6/ymYoyceqNd1+G4--
