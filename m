@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAF46D7456
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 08:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7ED56D7460
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 08:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237040AbjDEGVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 02:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S237058AbjDEG0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 02:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjDEGVM (ORCPT
+        with ESMTP id S229760AbjDEG0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 02:21:12 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AF330CD
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 23:21:11 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id h8so138469030ede.8
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 23:21:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680675670;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=37wf5RuLXYQ2GF/JRvIi9hQZK8An5GQBqnLDA1j+haw=;
-        b=NumasAbWAKnmvMrSOJctJghuhJaRwvPkeizYxdCkdyRjm8/UkfMrY3yywTdQE85sy0
-         TOfYdAUAOnnzQE1S/anBa/0mYZHBim803Mor0NGBPr+bSdFIxrhU1uN/sGFwAsWFXte/
-         lxJ8g3QDZsi6escu8A6epb9CWNAFQOtuefMiqV69XTZ2reQIc+B0fDmSi8lhEZQ/GFAQ
-         apwd+VdgerRvgFZ6oIHPfhOv8TX3QB/g8NQyixrxsV+mGqIQsW7vfZ6azhzNMVsdmYFP
-         xFXzL7egGz+bdOvzcneanXhNdHSi/G1GsRGVUK7byUze6lWiMDvYOqJt1meDe4+SCC6y
-         h6fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680675670;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=37wf5RuLXYQ2GF/JRvIi9hQZK8An5GQBqnLDA1j+haw=;
-        b=tIYDJX5gO5JPK+pzIuIbq0QyAA+L7EVxrNLBPsC7YmJixa36Xkuw8SUVY641ZApmiz
-         a85fFQDFBquxUuDE/JCcm/bK4Kjk2pl+JAPRoa+o6El/9d0QjKVqI3JagDDW1g7k13FY
-         CCcNr/HVJXEptocyezbXdo2uRv/7RXFwtmFy6MbJJZ/wcCBzRsiSavPvCEYW3EZO1900
-         zVy72gScobD3Zyl7V4jhUJH6KMv9BGyJNfls0Lm2UKMphzwiTamr6BV5bu7StCUWvsnn
-         oPe9QWohmjuQ6Jm9Ub1wSns11IitZZB0q1tglGvz3ZvEJ3Gn21ugAFNvhKtwvdECkL8L
-         4kvA==
-X-Gm-Message-State: AAQBX9efM4bxSpKLuSMNPXY/sNIqfrDvYyonr0KkkhjzK7lD+iNducHD
-        JBfK45Pu7Kl7FMIvK9vdsH3zsA==
-X-Google-Smtp-Source: AKy350blz5Rm2OmsxD9Rv+jPxdM4Rj5Ckdz2clZmFC7ODXVH6ArfnHQfModIJlXQ4wWbSg8kJuWgQQ==
-X-Received: by 2002:a17:906:144d:b0:93f:fbe:ed17 with SMTP id q13-20020a170906144d00b0093f0fbeed17mr1771352ejc.62.1680675669740;
-        Tue, 04 Apr 2023 23:21:09 -0700 (PDT)
-Received: from 1.. ([79.115.63.91])
-        by smtp.gmail.com with ESMTPSA id h13-20020a1709063c0d00b008b176df2899sm6928978ejg.160.2023.04.04.23.21.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 23:21:09 -0700 (PDT)
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-To:     tkuw584924@gmail.com, Takahiro.Kuwano@infineon.com,
-        pratyush@kernel.org, michael@walle.cc
-Cc:     bacem.daassi@infineon.com, miquel.raynal@bootlin.com,
-        richard@nod.at, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v2] mtd: spi-nor: Allow post_sfdp hook to return errors
-Date:   Wed,  5 Apr 2023 09:21:06 +0300
-Message-Id: <20230405062106.49594-1-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 5 Apr 2023 02:26:04 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C32F2D50
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 23:26:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680675963; x=1712211963;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=t1RosdTg3HRvxEE40p8KNBUdCIX8QzrymSmEnjVG5+U=;
+  b=j34uMPwoG67OwCG4tWpcag7KNC+MJ5++OanVhDSh9+IHQOX6Gy1DpgQo
+   30cLj3amhzuKWuFXtqaVdAesUVSChAzNbGZTlvStnakKm8UNIsiYyQLOx
+   1g3CK03ygTIv7EF0p2f1l1I55mA3PCUXrqp/zsSSz36CZ+uOMbthRP0AS
+   2lifFktZhXzelhJSivEauk9RB+v0lRXlCXARBtI1bkwffDJOrvzBgiKnu
+   VjdHmQpRH3AXJcY5Z48tkssXPKpW255YS2PFyx2mJE17lN6jwgFtGu0Kl
+   8wEblXEgYq+Lw1OZNhx4In9ObWNi9mXUCvJo+gWpN59Vig2uWD2OShVRt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326416954"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="326416954"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 23:26:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="1016366265"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="1016366265"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 04 Apr 2023 23:26:01 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pjwam-000QMQ-0s;
+        Wed, 05 Apr 2023 06:26:00 +0000
+Date:   Wed, 5 Apr 2023 14:25:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Joey Gouly <joey.gouly@arm.com>
+Subject: mdwe_test.c:166:19: warning: variable 'p2' set but not used
+Message-ID: <202304051408.2PaUqA4m-lkp@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5149; i=tudor.ambarus@linaro.org; h=from:subject; bh=uLRlHwXswDm0+Iz8gfhM2OM4oGR74A/r+jko5VVtKzg=; b=owEBbQGS/pANAwAKAUtVT0eljRTpAcsmYgBkLRNSnovp0DP6aXX4UdzLh/Q6ZXe0JaFXCkjXN Db/P89QTZuJATMEAAEKAB0WIQQdQirKzw7IbV4d/t9LVU9HpY0U6QUCZC0TUgAKCRBLVU9HpY0U 6WorB/4gL/5EPF9KC2mPpvKO6UcSifXGxeWLsSCUym51JOIP9TRGFc+1COrd7YZ/kMemjye/G5e f/PVnK7+w2kBj2h521hDyVCLaW6Q87yCYe9xEjxzR3z/TuwiDtDPlnk0HMeBEZpa0jW4GFm1SOc iGJFk1dSg/zoGbe78hlHFOW+OqlO3lpI8yuuQPvvhO2LnZ2AGt0GNYDEPb27k3vztWipvuVJlIA rxUwXXt47pGyOR8VIJxhEME7MIpfsUrzryDh3hkomvKqq6qsbmgLFPsxryncdnzPaYlke+BeTCH coVy97aofnBwHlCObG4kHWSSvvil7sGjQD2g4W7xodCvZHeK
-X-Developer-Key: i=tudor.ambarus@linaro.org; a=openpgp; fpr=280B06FD4CAAD2980C46DDDF4DB1B079AD29CF3D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,156 +63,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Multi die flashes like s25hl02gt need to determine the page_size at
-run-time by querying a configuration register for each die. Since the
-number of dice is determined in an optional SFDP table, SCCR MC, the
-page size configuration must be done in the post_sfdp hook. Allow
-post_sfdp to return errors, as reading the configuration register might
-return errors.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   76f598ba7d8e2bfb4855b5298caedd5af0c374a8
+commit: 4cf1fe34fd18b752ae2403927277715d4444f331 kselftest: vm: add tests for memory-deny-write-execute
+date:   9 weeks ago
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cf1fe34fd18b752ae2403927277715d4444f331
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4cf1fe34fd18b752ae2403927277715d4444f331
+        make O=/tmp/kselftest headers
+        make O=/tmp/kselftest -C tools/testing/selftests
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
-v2: Fix own mistake in spi_nor_post_sfdp_fixups, do not exclude the info
-post_sfdp call when the manufacturer post_sfdp is defined.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304051408.2PaUqA4m-lkp@intel.com/
 
- drivers/mtd/spi-nor/core.h      |  2 +-
- drivers/mtd/spi-nor/micron-st.c |  4 +++-
- drivers/mtd/spi-nor/sfdp.c      | 17 ++++++++++++-----
- drivers/mtd/spi-nor/spansion.c  | 12 +++++++++---
- 4 files changed, 25 insertions(+), 10 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 8cfa82ed06c7..a9e5e091547d 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -426,7 +426,7 @@ struct spi_nor_fixups {
- 	int (*post_bfpt)(struct spi_nor *nor,
- 			 const struct sfdp_parameter_header *bfpt_header,
- 			 const struct sfdp_bfpt *bfpt);
--	void (*post_sfdp)(struct spi_nor *nor);
-+	int (*post_sfdp)(struct spi_nor *nor);
- 	void (*late_init)(struct spi_nor *nor);
- };
- 
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index a6f080112a51..4b919756a205 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -131,7 +131,7 @@ static void mt35xu512aba_default_init(struct spi_nor *nor)
- 	nor->params->octal_dtr_enable = micron_st_nor_octal_dtr_enable;
- }
- 
--static void mt35xu512aba_post_sfdp_fixup(struct spi_nor *nor)
-+static int mt35xu512aba_post_sfdp_fixup(struct spi_nor *nor)
- {
- 	/* Set the Fast Read settings. */
- 	nor->params->hwcaps.mask |= SNOR_HWCAPS_READ_8_8_8_DTR;
-@@ -149,6 +149,8 @@ static void mt35xu512aba_post_sfdp_fixup(struct spi_nor *nor)
- 	 * disable it.
- 	 */
- 	nor->params->quad_enable = NULL;
-+
-+	return 0;
- }
- 
- static const struct spi_nor_fixups mt35xu512aba_fixups = {
-diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-index 69e47c9778a2..e184b67f3c9f 100644
---- a/drivers/mtd/spi-nor/sfdp.c
-+++ b/drivers/mtd/spi-nor/sfdp.c
-@@ -1260,14 +1260,21 @@ static int spi_nor_parse_sccr(struct spi_nor *nor,
-  * Used to tweak various flash parameters when information provided by the SFDP
-  * tables are wrong.
-  */
--static void spi_nor_post_sfdp_fixups(struct spi_nor *nor)
-+static int spi_nor_post_sfdp_fixups(struct spi_nor *nor)
- {
-+	int ret;
-+
- 	if (nor->manufacturer && nor->manufacturer->fixups &&
--	    nor->manufacturer->fixups->post_sfdp)
--		nor->manufacturer->fixups->post_sfdp(nor);
-+	    nor->manufacturer->fixups->post_sfdp) {
-+		ret = nor->manufacturer->fixups->post_sfdp(nor);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (nor->info->fixups && nor->info->fixups->post_sfdp)
--		nor->info->fixups->post_sfdp(nor);
-+		return nor->info->fixups->post_sfdp(nor);
-+
-+	return 0;
- }
- 
- /**
-@@ -1477,7 +1484,7 @@ int spi_nor_parse_sfdp(struct spi_nor *nor)
- 		}
- 	}
- 
--	spi_nor_post_sfdp_fixups(nor);
-+	err = spi_nor_post_sfdp_fixups(nor);
- exit:
- 	kfree(param_headers);
- 	return err;
-diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
-index c937f0ac61de..519fdad79a19 100644
---- a/drivers/mtd/spi-nor/spansion.c
-+++ b/drivers/mtd/spi-nor/spansion.c
-@@ -370,7 +370,7 @@ s25fs256t_post_bfpt_fixup(struct spi_nor *nor,
- 	return cypress_nor_get_page_size(nor);
- }
- 
--static void s25fs256t_post_sfdp_fixup(struct spi_nor *nor)
-+static int s25fs256t_post_sfdp_fixup(struct spi_nor *nor)
- {
- 	struct spi_nor_flash_parameter *params = nor->params;
- 
-@@ -379,6 +379,8 @@ static void s25fs256t_post_sfdp_fixup(struct spi_nor *nor)
- 	spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP_1_1_4],
- 				SPINOR_OP_PP_1_1_4_4B,
- 				SNOR_PROTO_1_1_4);
-+
-+	return 0;
- }
- 
- static void s25fs256t_late_init(struct spi_nor *nor)
-@@ -409,7 +411,7 @@ s25hx_t_post_bfpt_fixup(struct spi_nor *nor,
- 	return cypress_nor_get_page_size(nor);
- }
- 
--static void s25hx_t_post_sfdp_fixup(struct spi_nor *nor)
-+static int s25hx_t_post_sfdp_fixup(struct spi_nor *nor)
- {
- 	struct spi_nor_erase_type *erase_type =
- 					nor->params->erase_map.erase_type;
-@@ -431,6 +433,8 @@ static void s25hx_t_post_sfdp_fixup(struct spi_nor *nor)
- 			break;
- 		}
- 	}
-+
-+	return 0;
- }
- 
- static void s25hx_t_late_init(struct spi_nor *nor)
-@@ -463,7 +467,7 @@ static int cypress_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
- 			cypress_nor_octal_dtr_dis(nor);
- }
- 
--static void s28hx_t_post_sfdp_fixup(struct spi_nor *nor)
-+static int s28hx_t_post_sfdp_fixup(struct spi_nor *nor)
- {
- 	/*
- 	 * On older versions of the flash the xSPI Profile 1.0 table has the
-@@ -489,6 +493,8 @@ static void s28hx_t_post_sfdp_fixup(struct spi_nor *nor)
- 	 * actual value for that is 4.
- 	 */
- 	nor->params->rdsr_addr_nbytes = 4;
-+
-+	return 0;
- }
- 
- static int s28hx_t_post_bfpt_fixup(struct spi_nor *nor,
+   mdwe_test.c: In function 'mdwe_mmap_FIXED':
+>> mdwe_test.c:166:19: warning: variable 'p2' set but not used [-Wunused-but-set-variable]
+     166 |         void *p, *p2;
+         |                   ^~
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
