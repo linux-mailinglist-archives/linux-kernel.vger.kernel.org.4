@@ -2,68 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C941C6D8925
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B416D892D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjDEU63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
+        id S232447AbjDEVBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjDEU61 (ORCPT
+        with ESMTP id S229969AbjDEVBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:58:27 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3CD40C4;
-        Wed,  5 Apr 2023 13:58:26 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id iw3so35589433plb.6;
-        Wed, 05 Apr 2023 13:58:26 -0700 (PDT)
+        Wed, 5 Apr 2023 17:01:40 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827375583
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:01:36 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so38576520pjz.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:01:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680728306;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3KJ3KXGfgJ4sZPfoaU/5WSm7YH1plpzja1cFXFVy8AQ=;
-        b=Ox2POTwE6E8YfRjtE83SQvzsttCEDutLPrnoq/iyXi40fkEB8rLTPmhThCDh3+XY5L
-         3vDYVbAU623ZwlR7qt+veiwxSfk1IXV01x7NTWk/se66jKmAh/ule0YUfUBUalWhakNY
-         FUEyznRnuPts/VUim3SVVk7uAndY3x8k8I02x0LSnFY3g2iAwkVslP9m2NSjsGrCXAUP
-         wA2kKFDvA6WIaKiTJgYN0uoYi9L3tELolNrghfGvloC9F0+AH7DvynJk9T2st1SVGFGO
-         U0DJcd1nW3PFivJ509LzSVfJ+jPPVY41HzN4jzKWNxIgsf1nBUzJONyHNhJme8hWc9VD
-         Ijvw==
+        d=google.com; s=20210112; t=1680728496;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fHFlMisxaJ0plZrJeiWQsYMJJxbUcOQBZpoj9lXl62o=;
+        b=o68UQJlSeR/2dP30d3/3CG29eQi7NJUexGjKnFCJlBRne7MBh/pnOLR6z5hr0IcBKF
+         rGtNS+VfkApuHBT4LOZszkfDA5ur0hx2XsTYBVaUo9Mpo8zstckblRhZIrIFyUAyNKeC
+         bImEOJVQiHH/0xwOgCdHD3FzLTUkJUOUg8YxvZjMvIvVZvTfDl/MO8+nVHCZ6Hjl/s9/
+         nBOkPddImEOqiBfKtLNmE4rQkxJtcAAr2zemszvWQQ2l4d4CdHEk5hq0cYT/tIfQAHNQ
+         PalbkNTzzkjmk+8KnlFVIxi2D0sXhuYRAxUUR3QGgi5uBzGsU5s1ufo++LrWQ+Aq5Ks9
+         PXBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680728306;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3KJ3KXGfgJ4sZPfoaU/5WSm7YH1plpzja1cFXFVy8AQ=;
-        b=XtvSF0tRl+0jpX80Sr87OMKJT90TAiQDxLICKGAas5GQKdXxT7AQW22JDkP/hGpPLo
-         GsYrvNeqyISf6R4R0sovaTPDn55n/WKV7nBi9DWX0RGKPYfjXR15ABQ9ZEALhOvRzOGt
-         FV6yWIhyh5EGyKuSEzcosJn9souOke66knn79Wal1MTUoEUs/Vd3mf+O00TD+8CssebL
-         IKKz6QGMH3jJTbdfwXYVpLGtVpq0y1LEF1/ZGxRWF5SdF1kxsVsyTDJq7eQ9MDiKZeDS
-         40+NGKvo5qaCZ5L+6l1/p6A7iRZ6CiaRZ3j3FbVAot8E/M+4BuXBBPPSg/pLYbnMjtXa
-         CAXQ==
-X-Gm-Message-State: AAQBX9fT2BBzFdOoGz5zkoKLZcNtnW/GDm9P6gTU9Y7fvFHWFkQvFhCs
-        jBNezEr/CTaO2BpBar/ag38=
-X-Google-Smtp-Source: AKy350aFUDEYE/VwNdXenQbCHuZrtNSCabv8bc99zIl5dBsqrPyqPEiiTzSv5hPYdSGT3mhKIJVmPg==
-X-Received: by 2002:a17:90b:1c83:b0:240:3dc7:4939 with SMTP id oo3-20020a17090b1c8300b002403dc74939mr8839876pjb.27.1680728306098;
-        Wed, 05 Apr 2023 13:58:26 -0700 (PDT)
-Received: from pavilion.. ([2402:e280:218d:82:616c:b78a:a01f:5113])
-        by smtp.gmail.com with ESMTPSA id b3-20020a655783000000b0050b026c444fsm9490025pgr.62.2023.04.05.13.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 13:58:25 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@nxp.com
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saalim Quadri <danascape@gmail.com>
-Subject: [PATCH] ASoC: dt-bindings: wm8711: Convert to dtschema
-Date:   Thu,  6 Apr 2023 02:28:20 +0530
-Message-Id: <20230405205820.6836-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20210112; t=1680728496;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fHFlMisxaJ0plZrJeiWQsYMJJxbUcOQBZpoj9lXl62o=;
+        b=KaHUWMWzcEMcUqGL8+jUKaWCjB4hW6QO3Qn+yrJHpZ6ALHp6skLtphFaIW6jNb7y11
+         qgqyiiNKBiuF7T6ATyxC6o1iWD3vHTOqmQJk3m+XfcB9gtyyD4cj7zJAF8ao3x4tgOQi
+         aMZkKc54TAVOFnSScljl5cHFb0WZLlxrs/69W1jeayWOKsOeMm44ix2QzlByvlk4XL0N
+         BH6yuS+o2qcUEG5gitRfW/n1Caj6XfKQWOnlLc+3cU/TDxYwpujhr58lQu9nwq57KbO1
+         VGnv0kbwG9oG915Op1Ai9fbOuED+6ig406TB0gtTRDscdetD8BTmdEwhMrw2vb6oAJuX
+         2SRw==
+X-Gm-Message-State: AAQBX9e1OVZHEfrLxO9QbUJWRaqOtQpWBX670iLvDsr6TiXoD5qsSFfW
+        2UdRrHZVxNmn50l6ECCNcUqkWQxknJp8Wyhrl2FpVw==
+X-Google-Smtp-Source: AKy350aHiztqd9S0M+CMjOQXju2vYq2NssFDb70LAGMoQGKeCoDHJhiRNivzaqFcE6TN33nMAdUuT1+/TPOGcn3A86M=
+X-Received: by 2002:a17:902:a40a:b0:1a0:535b:22d9 with SMTP id
+ p10-20020a170902a40a00b001a0535b22d9mr3252431plq.10.1680728495555; Wed, 05
+ Apr 2023 14:01:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230330224348.1006691-1-davidai@google.com> <ZCx97IKjsBibjdGc@linux.dev>
+ <86sfdfv0e1.wl-maz@kernel.org>
+In-Reply-To: <86sfdfv0e1.wl-maz@kernel.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 5 Apr 2023 14:00:59 -0700
+Message-ID: <CAGETcx90SiaztPO21GsHSr18XUTHoLWt3Jv+y=EW5yfjJgzJHw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     David Dai <davidai@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,86 +98,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the WM8711 audio CODEC bindings to DT schema
+On Tue, Apr 4, 2023 at 1:49=E2=80=AFPM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Tue, 04 Apr 2023 20:43:40 +0100,
+> Oliver Upton <oliver.upton@linux.dev> wrote:
+> >
+> > Folks,
+> >
+> > On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> >
+> > <snip>
+> >
+> > > PCMark
+> > > Higher is better
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > > | Test Case (score) | Baseline |  Hypercall | %delta |  MMIO | %delta=
+ |
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > > | Weighted Total    |     6136 |       7274 |   +19% |  6867 |   +12%=
+ |
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > > | Web Browsing      |     5558 |       6273 |   +13% |  6035 |    +9%=
+ |
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > > | Video Editing     |     4921 |       5221 |    +6% |  5167 |    +5%=
+ |
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > > | Writing           |     6864 |       8825 |   +29% |  8529 |   +24%=
+ |
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > > | Photo Editing     |     7983 |      11593 |   +45% | 10812 |   +35%=
+ |
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > > | Data Manipulation |     5814 |       6081 |    +5% |  5327 |    -8%=
+ |
+> > > +-------------------+----------+------------+--------+-------+-------=
+-+
+> > >
+> > > PCMark Performance/mAh
+> > > Higher is better
+> > > +-----------+----------+-----------+--------+------+--------+
+> > > |           | Baseline | Hypercall | %delta | MMIO | %delta |
+> > > +-----------+----------+-----------+--------+------+--------+
+> > > | Score/mAh |       79 |        88 |   +11% |   83 |    +7% |
+> > > +-----------+----------+-----------+--------+------+--------+
+> > >
+> > > Roblox
+> > > Higher is better
+> > > +-----+----------+------------+--------+-------+--------+
+> > > |     | Baseline |  Hypercall | %delta |  MMIO | %delta |
+> > > +-----+----------+------------+--------+-------+--------+
+> > > | FPS |    18.25 |      28.66 |   +57% | 24.06 |   +32% |
+> > > +-----+----------+------------+--------+-------+--------+
+> > >
+> > > Roblox Frames/mAh
+> > > Higher is better
+> > > +------------+----------+------------+--------+--------+--------+
+> > > |            | Baseline |  Hypercall | %delta |   MMIO | %delta |
+> > > +------------+----------+------------+--------+--------+--------+
+> > > | Frames/mAh |    91.25 |     114.64 |   +26% | 103.11 |   +13% |
+> > > +------------+----------+------------+--------+--------+--------+
+> >
+> > </snip>
+> >
+> > > Next steps:
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > We are continuing to look into communication mechanisms other than
+> > > hypercalls that are just as/more efficient and avoid switching into t=
+he VMM
+> > > userspace. Any inputs in this regard are greatly appreciated.
 
-Signed-off-by: Saalim Quadri <danascape@gmail.com>
----
- .../devicetree/bindings/sound/wlf,wm8711.yaml | 40 +++++++++++++++++++
- .../devicetree/bindings/sound/wm8711.txt      | 18 ---------
- 2 files changed, 40 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8711.yaml
- delete mode 100644 Documentation/devicetree/bindings/sound/wm8711.txt
+Hi Oliver and Marc,
 
-diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8711.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8711.yaml
-new file mode 100644
-index 000000000000..ecaac2818b44
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/wlf,wm8711.yaml
-@@ -0,0 +1,40 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/wlf,wm8711.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: WM8711 audio CODEC
-+
-+maintainers:
-+  - patches@opensource.cirrus.com
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: wlf,wm8711
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        codec@1a {
-+            compatible = "wlf,wm8711";
-+            reg = <0x1a>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/sound/wm8711.txt b/Documentation/devicetree/bindings/sound/wm8711.txt
-deleted file mode 100644
-index c30a1387c4bf..000000000000
---- a/Documentation/devicetree/bindings/sound/wm8711.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--WM8711 audio CODEC
--
--This device supports both I2C and SPI (configured with pin strapping
--on the board).
--
--Required properties:
--
--  - compatible : "wlf,wm8711"
--
--  - reg : the I2C address of the device for I2C, the chip select
--          number for SPI.
--
--Example:
--
--wm8711: codec@1a {
--	compatible = "wlf,wm8711";
--	reg = <0x1a>;
--};
--- 
-2.34.1
+Replying to both of you in this one email.
 
+> >
+> > We're highly unlikely to entertain such an interface in KVM.
+> >
+> > The entire feature is dependent on pinning vCPUs to physical cores, for=
+ which
+> > userspace is in the driver's seat. That is a well established and docum=
+ented
+> > policy which can be seen in the way we handle heterogeneous systems and
+> > vPMU.
+> >
+> > Additionally, this bloats the KVM PV ABI with highly VMM-dependent inte=
+rfaces
+> > that I would not expect to benefit the typical user of KVM.
+> >
+> > Based on the data above, it would appear that the userspace implementat=
+ion is
+> > in the same neighborhood as a KVM-based implementation, which only furt=
+her
+> > weakens the case for moving this into the kernel.
+
+Oliver,
+
+Sorry if the tables/data aren't presented in an intuitive way, but
+MMIO vs hypercall is definitely not in the same neighborhood. The
+hypercall method often gives close to 2x the improvement that the MMIO
+method gives. For example:
+
+- Roblox FPS: MMIO improves it by 32% vs hypercall improves it by 57%.
+- Frames/mAh: MMIO improves it by 13% vs hypercall improves it by 26%.
+- PC Mark Data manipulation: MMIO makes it worse by 8% vs hypercall
+improves it by 5%
+
+Hypercall does better for other cases too, just not as good. For example,
+- PC Mark Photo editing: Going from MMIO to hypercall gives a 10% improveme=
+nt.
+
+These are all pretty non-trivial, at least in the mobile world. Heck,
+whole teams would spend months for 2% improvement in battery :)
+
+> >
+> > I certainly can appreciate the motivation for the series, but this feat=
+ure
+> > should be in userspace as some form of a virtual device.
+>
+> +1 on all of the above.
+
+Marc and Oliver,
+
+We are not tied to hypercalls. We want to do the right thing here, but
+MMIO going all the way to userspace definitely doesn't cut it as is.
+This is where we need some guidance. See more below.
+
+> The one thing I'd like to understand that the comment seems to imply
+> that there is a significant difference in overhead between a hypercall
+> and an MMIO. In my experience, both are pretty similar in cost for a
+> handling location (both in userspace or both in the kernel).
+
+I think the main difference really is that in our hypercall vs MMIO
+comparison the hypercall is handled in the kernel vs MMIO goes all the
+way to userspace. I agree with you that the difference probably won't
+be significant if both of them go to the same "depth" in the privilege
+levels.
+
+> MMIO
+> handling is a tiny bit more expensive due to a guaranteed TLB miss
+> followed by a walk of the in-kernel device ranges, but that's all. It
+> should hardly register.
+>
+> And if you really want some super-low latency, low overhead
+> signalling, maybe an exception is the wrong tool for the job. Shared
+> memory communication could be more appropriate.
+
+Yeah, that's one of our next steps. Ideally, we want to use shared
+memory for the host to guest information flow. It's a 32-bit value
+representing the current frequency that the host can update whenever
+the host CPU frequency changes and the guest can read whenever it
+needs it.
+
+For guest to host information flow, we'll need a kick from guest to
+host because we need to take action on the host side when threads
+migrate between vCPUs and cause a significant change in vCPU util.
+Again it can be just a shared memory and some kick. This is what we
+are currently trying to figure out how to do.
+
+If there are APIs to do this, can you point us to those please? We'd
+also want the shared memory to be accessible by the VMM (so, shared
+between guest kernel, host kernel and VMM).
+
+Are the above next steps sane? Or is that a no-go? The main thing we
+want to cut out is the need for having to switch to userspace for
+every single interaction because, as is, it leaves a lot on the table.
+
+Also, thanks for all the feedback. Glad to receive it.
+
+-Saravana
