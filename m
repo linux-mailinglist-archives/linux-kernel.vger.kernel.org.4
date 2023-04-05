@@ -2,112 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BA66D8683
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24166D8685
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbjDETGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S234129AbjDETGZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 15:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDETGL (ORCPT
+        with ESMTP id S233900AbjDETGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:06:11 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA4D558E;
-        Wed,  5 Apr 2023 12:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=AAWJccQcWH6bVfGLn6jfJ5NweGGEWRAynxMYiwMVGXU=; b=R0W84hYPsUylEtIxFK88U1rk5h
-        KTNwBNeNeULfjCOYwN5R5VbJ0+Fyti9LpHL7L+rNAFlg5Gz8l6TQn5JpKN8tennO+B50F89Nlf2zG
-        pzgsEpgOkRGjYejJkYPsGoLGS5w5RrCDCSHl1rGjwpBWs5LyqOPva0aDM8ROqRlgWst0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pk8SA-009YGD-Cu; Wed, 05 Apr 2023 21:05:54 +0200
-Date:   Wed, 5 Apr 2023 21:05:54 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCHv2 1/2] net: ethernet: stmmac: dwmac-rk: rework optional
- clock handling
-Message-ID: <b92600f9-0ea8-433e-b992-6a3007766fbf@lunn.ch>
-References: <20230405161043.46190-1-sebastian.reichel@collabora.com>
- <20230405161043.46190-2-sebastian.reichel@collabora.com>
+        Wed, 5 Apr 2023 15:06:21 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BEF7680;
+        Wed,  5 Apr 2023 12:06:17 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-93071f06a94so78127766b.3;
+        Wed, 05 Apr 2023 12:06:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680721575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UqPE+VsezJu1sT8pjVClWCXUPjj5biVgYCKxxXHmRWg=;
+        b=fctSuF2xZC+3AM3O5Yp0NtQcfg/79M9j+VYdz8H85TjmBgjv+ESzxiF45hJjz+0pGA
+         aTS7KdZ7xIOE8ShdR6GNh/XBrA5WQQUtPz3HKInyctbnVIO+LzPt/W8X2tWieR5cSTdO
+         CVH2yvzCi7/BXWt0BCbz9nyemXrr6NU0EjtZ1qUpTTzs9t23OvOQOc72jLFRi1mxuDdO
+         2DuuYil2vKa6PGaKPUIJsEbQfmGq09IS2YaVBThmdTvkcWIcw4dJ84kFEu3IhoBiPYH2
+         UzlntgrZnY/UKryQwunqr6eZpDxjbMrLGpE1ly0qgvX5k73Hch3OYd8WTFl6Z6gcLWKV
+         Vibw==
+X-Gm-Message-State: AAQBX9e03KmlycgXNi8PpjsMZKzxlh9nLoX502CX6uCiIHsl5+43wcRM
+        J47HvQAUYjCt+O7gOPsbjykQ7YyTw2Qfz7jVHF4=
+X-Google-Smtp-Source: AKy350Y80I6880YLrHP7PPgcAVKjvTCVhNk/vd5i7fl3nIU0ixeZoDUWpo2wJthv7JKqw0ZTFdpaZVmgaWyMxaK8U7w=
+X-Received: by 2002:a50:9984:0:b0:4fb:f19:87f with SMTP id m4-20020a509984000000b004fb0f19087fmr1678246edb.3.1680721575410;
+ Wed, 05 Apr 2023 12:06:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405161043.46190-2-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
+ <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org> <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
+ <CAJZ5v0iNbA0rt3QyaFA7ved19yK8-nabyJi7yCfbnVKQaMPCmA@mail.gmail.com> <c230ab3a-9cc3-e989-1e49-7d38be471a5c@linaro.org>
+In-Reply-To: <c230ab3a-9cc3-e989-1e49-7d38be471a5c@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 5 Apr 2023 21:06:04 +0200
+Message-ID: <CAJZ5v0i95D_duiEnBiTgCSGTJ9_q7VYmb9y8O6yuPQ7Yp=BD3Q@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal for v6.4-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yang Li <yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 06:10:42PM +0200, Sebastian Reichel wrote:
-> The clock requesting code is quite repetitive. Fix this by requesting
-> the clocks in a loop. Also use devm_clk_get_optional instead of
-> devm_clk_get, since the old code effectively handles them as optional
-> clocks. This removes error messages about missing clocks for platforms
-> not using them and correct -EPROBE_DEFER handling.
-> 
-> The new code also tries to get "clk_mac_ref" and "clk_mac_refout" when
-> the PHY is not configured as PHY_INTERFACE_MODE_RMII to keep the code
-> simple. This is possible since we use devm_clk_get_optional() for the
-> clock lookup anyways.
-> 
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> Fixes: 7ad269ea1a2b7 ("GMAC: add driver for Rockchip RK3288 SoCs integrated GMAC")
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 63 ++++++-------------
->  1 file changed, 20 insertions(+), 43 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-> index 4b8fd11563e4..6fdad0f10d6f 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-> @@ -1475,54 +1475,31 @@ static int rk_gmac_clk_init(struct plat_stmmacenet_data *plat)
->  {
->  	struct rk_priv_data *bsp_priv = plat->bsp_priv;
->  	struct device *dev = &bsp_priv->pdev->dev;
-> -	int ret;
-> +	int i, ret;
-> +	struct {
-> +		struct clk **ptr;
-> +		const char *name;
-> +	} clocks[] = {
-> +		{ &bsp_priv->mac_clk_rx, "mac_clk_rx" },
-> +		{ &bsp_priv->mac_clk_tx, "mac_clk_tx" },
-> +		{ &bsp_priv->aclk_mac, "aclk_mac" },
-> +		{ &bsp_priv->pclk_mac, "pclk_mac" },
-> +		{ &bsp_priv->clk_mac, "stmmaceth" },
-> +		{ &bsp_priv->clk_mac_ref, "clk_mac_ref" },
-> +		{ &bsp_priv->clk_mac_refout, "clk_mac_refout" },
-> +		{ &bsp_priv->clk_mac_speed, "clk_mac_speed" },
-> +	};
+On Wed, Apr 5, 2023 at 9:03 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 05/04/2023 20:48, Rafael J. Wysocki wrote:
+> > On Wed, Apr 5, 2023 at 8:39 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>
+> >> On Wed, Apr 5, 2023 at 8:32 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >>>
+> >>>
+> >>> Hi Rafael,
+> >>>
+> >>> just a gentle reminder
+> >>
+> >> This is in my linux-next branch, I'll merge it into thermal tomorrow.
+> >>
+> >>>   because more material will come in the next days
+> >>
+> >> So why can't it wait?
+> >
+> > BTW, I get a merge conflict in
+> > drivers/thermal/mediatek/auxadc_thermal.c on an attempt to merge
+> > thermal/linux-next into my linux-next branch.
+>
+> Ah?
+>
+> I did an update and rebased thermal/linux-next on top of
+> linux-pm/thermal without conflict
+>
+> Is it possible you have a change in a different branch conflicting with it ?
 
-> +	for (i=0; i < ARRAY_SIZE(clocks); i++) {
-> +		*clocks[i].ptr = devm_clk_get_optional(dev, clocks[i].name);
-> +		if (IS_ERR(*clocks[i].ptr))
-> +			return dev_err_probe(dev, PTR_ERR(*clocks[i].ptr),
-> +					     "cannot get clock %s\n",
-> +					     clocks[i].name);
->  	}
+It is not impossible, but quite unlikely.
 
-Could devm_clk_bulk_get_optional() be used?
-
-      Andrew
+I'll see what's going on tomorrow.
