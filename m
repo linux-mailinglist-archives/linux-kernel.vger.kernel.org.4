@@ -2,61 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431156D881E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7DC6D882A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjDEUXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S233501AbjDEUYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjDEUXV (ORCPT
+        with ESMTP id S230033AbjDEUYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:23:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF18349D6
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jTyEKh3ikb2Y8N6HrOFo1BDcfkQEm1X8lIi0hGITVng=; b=XTupqCO+XwlbIgTKxvumTFGBhV
-        MJqn1OAnoaBGTSgj/ecXpNI5rsgMiCpyDPjAoPmysJbiXlBnsAukc+1cGSPSO35ACyxM0llBie+tf
-        857X8AQ0vi2K1KQ23uaBYE0DirbsswN1Mw45XqtatYg3YYZKeD/rV6bo+4a77rJfXel1FSCPy/g6S
-        57TWlYt/cSXtczrwmR64DohndY9jStgKd/Ch9vi9wpExBgdvaQvJaHGdVzlQic2QxbEGW6j5PMm5U
-        IvRGmYx7CX4NTaLXABnTs3l8WA5gaTrl6z/iDCan3/s9WpGwGXlUdxzio6fbEuzc7pdRN6/WVZ29E
-        I0HZGqMQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pk9eT-00A4qm-13;
-        Wed, 05 Apr 2023 20:22:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3084B300202;
-        Wed,  5 Apr 2023 22:22:40 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 18EDB27985545; Wed,  5 Apr 2023 22:22:40 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 22:22:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ankur Arora <ankur.a.arora@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
-        willy@infradead.org, mgorman@suse.de, rostedt@goodmis.org,
-        tglx@linutronix.de, vincent.guittot@linaro.org, jon.grimm@amd.com,
-        bharata@amd.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH 8/9] irqentry: define irqentry_exit_allow_resched()
-Message-ID: <20230405202240.GE365912@hirez.programming.kicks-ass.net>
-References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
- <20230403052233.1880567-9-ankur.a.arora@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403052233.1880567-9-ankur.a.arora@oracle.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        Wed, 5 Apr 2023 16:24:44 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944DA4C2D;
+        Wed,  5 Apr 2023 13:24:43 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id DF0B758241E;
+        Wed,  5 Apr 2023 16:24:40 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 05 Apr 2023 16:24:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680726280; x=1680733480; bh=N9
+        C/awAiXRMgnyyYXvPXUEJhSqaGPpbpLGKv/C3S1H0=; b=WYPwr8/VZV6zBYSovW
+        FWa53JW+kTo73xaVm26HaPrq2i7dKIUDM7qfeMtNZC5V8yUXcANudnKjTuwrmFHT
+        Bf6+wk1Vs7FzddiB5Fww3LDuUwLRjpNWpTXNZbaNnMZJpNay9E6WnjCkVe//D8OC
+        a1+OaRb97j78Z7MDUL04PRkhE34VYZWmntrFiaKjV9XTISuY8/fSAtiwJ6olcwuF
+        WA+DDruleUG4eG1RUCTaABOEXRHycG6io1Dvofh5YJy18HBl3YZyi5QFdRH8zPTN
+        An8bgpPoA1hf/uyWLDZlmMkKFg4ebIJRTbAoxcXqWaSb60/SOA4weGBXxXcQ3qJh
+        KdDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680726280; x=1680733480; bh=N9C/awAiXRMgn
+        yyYXvPXUEJhSqaGPpbpLGKv/C3S1H0=; b=awCPWIxoS3smP/8nlGjUXH8x5hhZ5
+        g669z2xjXBokBOPK93ThSmEiaLo1ezXohhrV+h6cMD6CioysuAVRHhq5zZ27Y8dv
+        EZKxg17wtFmUUbQ/FtL8f+qwX+Wf1DDGalFLZmYHLDYsjHsLD+SGwizDU2yoiRnu
+        VZmfzzwzVUmtf0oKnLxjaJ89u1NuxbN0q49Z7aC3Qgn2ji14Wc5AdSYrA43EycyX
+        9/xLz5/UcfjD5Xjk6zvLCSzMcaXk01BUhpqlbpgIdTzbm6rAxecXUoRj3nBrExcK
+        ZWJNYGvWuKZ2AsqsMBW1UFdR9q+Wcg0Rif72eQ7SEwxKwfyCggQbeNp0g==
+X-ME-Sender: <xms:A9ktZN-Ax9W4njI8A8apr9e7Bv-0umsmK6kqSp1lzC3QCYbu0DBMkQ>
+    <xme:A9ktZBtVRLv-mQcPRloMA6pGibN8THQNDcRCyBlRM6MLjSdZwlJ16izT-YWqPdMya
+    dx4JRZk3yhST7-lJcs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgudehtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
+    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:A9ktZLDW0vaw3gVnAnP2EVY99FIImc0hamB7XraCaA329pRxRE3PXA>
+    <xmx:A9ktZBf1ylMnZubYx_bSYiP0AHTIWgTnVyi4sRWZI03guTk75tMdxw>
+    <xmx:A9ktZCPJFCWwsR1Ipw7GUCT5hlUt-wx7Aqn-uWdjsV_pNCO2eZsPEw>
+    <xmx:CNktZAHRdP6s-LYwNXnmW-FmDmhyiU6f90xe3_kv3IFGihfzkUoWng>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 764CFB60099; Wed,  5 Apr 2023 16:24:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <5d964527-92ef-49a8-bbb7-413eb09297a1@app.fastmail.com>
+In-Reply-To: <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
+References: <20230323163354.1454196-1-schnelle@linux.ibm.com>
+ <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
+Date:   Wed, 05 Apr 2023 22:24:15 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "Richard Henderson" <richard.henderson@linaro.org>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+        "Matt Turner" <mattst88@gmail.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        "Rich Felker" <dalias@libc.org>,
+        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
+        "Johannes Berg" <johannes@sipsolutions.net>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v4] Kconfig: introduce HAS_IOPORT option and select it as necessary
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,116 +125,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 10:22:32PM -0700, Ankur Arora wrote:
-> Allow threads marked TIF_ALLOW_RESCHED to be rescheduled in irqexit.
-> 
-> This is only necessary under !preempt_model_preemptible() for which
-> we reuse the same logic as irqentry_exit_code_resched().
-> 
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
->  kernel/entry/common.c |  8 ++++++++
->  kernel/sched/core.c   | 36 +++++++++++++++++++++---------------
->  2 files changed, 29 insertions(+), 15 deletions(-)
-> 
-> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> index be61332c66b5..f1005595ebe7 100644
-> --- a/kernel/entry/common.c
-> +++ b/kernel/entry/common.c
-> @@ -390,6 +390,9 @@ void raw_irqentry_exit_cond_resched(void)
->  			preempt_schedule_irq();
->  	}
->  }
-> +
-> +void irqentry_exit_allow_resched(void) __alias(raw_irqentry_exit_cond_resched);
+On Wed, Apr 5, 2023, at 17:12, Niklas Schnelle wrote:
+> On Thu, 2023-03-23 at 17:33 +0100, Niklas Schnelle wrote:
+>
+> Gentle ping. As far as I can tell this hasn't been picked to any tree
+> sp far but also hasn't seen complains so I'm wondering if I should send
+> a new version of the combined series of this patch plus the added
+> HAS_IOPORT dependencies per subsystem or wait until this is picked up.
 
-Because typing raw_irqentry_exit_cond_resched() was too much effort?
+My bad, I've created an 'asm-generic-io' branch in the asm-generic
+tree now and merged that into the master branch for 6.4.
 
-> +
->  #ifdef CONFIG_PREEMPT_DYNAMIC
->  #if defined(CONFIG_HAVE_PREEMPT_DYNAMIC_CALL)
->  DEFINE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
-> @@ -431,6 +434,11 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
->  		instrumentation_begin();
->  		if (IS_ENABLED(CONFIG_PREEMPTION))
->  			irqentry_exit_cond_resched();
-> +		/*
-> +		 * We care about this clause only in the dynamic !preemptible case.
-> +		 */
-> +		if (unlikely(!preempt_model_preemptible() && resched_allowed()))
-> +			irqentry_exit_allow_resched();
+If anyone wants to merge the later patches for 6.4, feel free to
+pull in
 
-This is wrong, if we have dynamic preemption then we have
-CONFIG_PREEMPTION and we'll have that irqentry_exit_cond_resched() call.
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-io
 
-Basically what you've written above is something like:
+as a stable base.
 
-	static_call(foo); // raw_foo() when A, NOP if !A
-	if (!A)
-		raw_foo();
-
-And yeah, you've got the extra resched_allowed() thing in there, but
-that doesn't make it any better -- this is all quite horrible.
-
-What you really care about is the CONFIG_PREEMPTION=n case, but that you
-don't actually handle.
-
->  		/* Covers both tracing and lockdep */
->  		trace_hardirqs_on();
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 0d18c3969f90..11845a91b691 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-
-> @@ -8597,28 +8599,32 @@ EXPORT_SYMBOL(__cond_resched_rwlock_write);
->   * SC:preempt_schedule
->   * SC:preempt_schedule_notrace
->   * SC:irqentry_exit_cond_resched
-> + * SC:irqentry_exit_allow_resched
->   *
->   *
->   * NONE:
-> - *   cond_resched               <- __cond_resched
-> - *   might_resched              <- RET0
-> - *   preempt_schedule           <- NOP
-> - *   preempt_schedule_notrace   <- NOP
-> - *   irqentry_exit_cond_resched <- NOP
-> + *   cond_resched                <- __cond_resched
-> + *   might_resched               <- RET0
-> + *   preempt_schedule            <- NOP
-> + *   preempt_schedule_notrace    <- NOP
-> + *   irqentry_exit_cond_resched  <- NOP
-> + *   irqentry_exit_allow_resched <- irqentry_exit_allow_resched
->   *
->   * VOLUNTARY:
-> - *   cond_resched               <- __cond_resched
-> - *   might_resched              <- __cond_resched
-> - *   preempt_schedule           <- NOP
-> - *   preempt_schedule_notrace   <- NOP
-> - *   irqentry_exit_cond_resched <- NOP
-> + *   cond_resched                <- __cond_resched
-> + *   might_resched               <- __cond_resched
-> + *   preempt_schedule            <- NOP
-> + *   preempt_schedule_notrace    <- NOP
-> + *   irqentry_exit_cond_resched  <- NOP
-> + *   irqentry_exit_allow_resched <- irqentry_exit_allow_resched
->   *
->   * FULL:
-> - *   cond_resched               <- RET0
-> - *   might_resched              <- RET0
-> - *   preempt_schedule           <- preempt_schedule
-> - *   preempt_schedule_notrace   <- preempt_schedule_notrace
-> - *   irqentry_exit_cond_resched <- irqentry_exit_cond_resched
-> + *   cond_resched                <- RET0
-> + *   might_resched               <- RET0
-> + *   preempt_schedule            <- preempt_schedule
-> + *   preempt_schedule_notrace    <- preempt_schedule_notrace
-> + *   irqentry_exit_cond_resched  <- irqentry_exit_cond_resched
-> + *   irqentry_exit_allow_resched <- NOP
->   */
-
-This ^ is all complete nonsense.. irqentry_exit_allow_resched() is not
-a static call. It's an alias of raw_irqentry_exit_cond_resched which
-circumvents the static call entirely.
-
-
+       Arnd
