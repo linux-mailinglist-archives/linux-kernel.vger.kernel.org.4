@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D156D7963
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC866D7969
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237291AbjDEKQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S230237AbjDEKRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjDEKQI (ORCPT
+        with ESMTP id S235049AbjDEKRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:16:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332C41995
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680689724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=5IwQffGQgbW5+GGPT7GHsPI80Xqx/MpQcxXTIga+7R4=;
-        b=aemr3PVm7UjrydswQclty9q5FiUBostT5AEFOskBxuF3EtftuXzIcVedrc42sUqI7NcIfO
-        pFZAO48goA59ytmfu2xYj+97FX3ZxujxhVhWjDpCy6aRGE6vpfsW6o9DFwcMCEjwIo/pj+
-        N3I4yG4NEJxmjnFvNM/kO6TdyBrdaX0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-454-h9N5vcbAOs2WQe-xnr3Yfg-1; Wed, 05 Apr 2023 06:15:19 -0400
-X-MC-Unique: h9N5vcbAOs2WQe-xnr3Yfg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D560185A790;
-        Wed,  5 Apr 2023 10:15:18 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1665F440D6;
-        Wed,  5 Apr 2023 10:15:16 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-cc:     dhowells@redhat.com, Christoph Hellwig <hch@lst.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iov_iter: Remove last_offset member
+        Wed, 5 Apr 2023 06:17:43 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B84198D;
+        Wed,  5 Apr 2023 03:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680689862; x=1712225862;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=EGf9OnEDe3hrZhNghZlA7uytU/26J3PuuPCSwZuV6VU=;
+  b=Q0qSPoXc9eXYvSEWmBpNiGhrHVJZSAqC15dLlMer+/NBgkovDK0e71VQ
+   gmOQd6z2jmUzFwLTHNLhMNd8Ig3BjhofI722ngCZlRhDlI7Ya7VIbmzu/
+   IgNFX4mKJttcoUNVvwB1jRwZCBbdlrHtfJKkWb+HPQSi3xn5GO8+9wY6d
+   DPyr+sWysBCOTpA5kGVUCcKo+EVkE6gprTd2fGwfxRoGC/w2RjWH9QvHf
+   lDtSUap094gKpRunmWjJSj1VOKDOUn+LmtzhmvZEZikeBCU232kpXIuxI
+   o7sn2DwHQePl/5uxRNFplr5VluxBVsfmo41ygYN9JU7CMFYqVxL+/D0Zp
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344132895"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="344132895"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 03:17:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="810584030"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="810584030"
+Received: from wtedesch-mobl1.ger.corp.intel.com ([10.252.53.134])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 03:17:39 -0700
+Date:   Wed, 5 Apr 2023 13:17:36 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Brenda Streiff <brenda.streiff@ni.com>
+cc:     Gratian Crisan <gratian.crisan@ni.com>,
+        Jason Smith <jason.smith@ni.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH tty-next 2/2] serial: 8250: add driver for NI UARTs
+In-Reply-To: <862a78b5-b89a-0b26-e0f8-f910dd3434ba@ni.com>
+Message-ID: <b5736c6e-6b2d-875e-5a81-8f7b66a19d5f@linux.intel.com>
+References: <20230329154235.615349-1-brenda.streiff@ni.com> <20230329154235.615349-3-brenda.streiff@ni.com> <4687fc63-65ad-c717-70b4-731079be38f7@linux.intel.com> <862a78b5-b89a-0b26-e0f8-f910dd3434ba@ni.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2933617.1680689716.1@warthog.procyon.org.uk>
-Date:   Wed, 05 Apr 2023 11:15:16 +0100
-Message-ID: <2933618.1680689716@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: multipart/mixed; boundary="8323329-906799157-1680689861=:2159"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,44 +66,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Can you add this to the block tree?
+--8323329-906799157-1680689861=:2159
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-David
----
-iov_iter: Remove last_offset member
+On Fri, 31 Mar 2023, Brenda Streiff wrote:
 
-With the removal of ITER_PIPE, the last_offset member of struct iov_iter is
-no longer used, so remove it and un-unionise the remaining member.
+> On 3/31/23 06:46, Ilpo Järvinen wrote:
+> > On Wed, 29 Mar 2023, Brenda Streiff wrote:
+> 
+> > > +	int irq;
+> > > +	int rs232_property = 0;
+> > > +	unsigned int prescaler;
+> > > +	const char *transceiver;
+> > > +	int txfifosz, rxfifosz;
+> > 
+> > Try to follow reverse xmas-tree order.
+> 
+> Is reverse xmas tree also the rule in the tty subsystem? I was aware of
+> it for netdev but I thought that was a netdev-specific rule (since it
+> only shows up in maintainer-netdev.rst and not more broadly)
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: linux-nfs@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-mm@kvack.org
-cc: netdev@vger.kernel.org
----
- include/linux/uio.h |    5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+I'd say that not as strictly as e.g. netdev does so if e.g. due to 
+initialization order it cannot be fully achieved no special trickery is 
+required (in contrast to what you'd get from e.g. netdev telling to put
+them out of line).
 
-diff --git a/include/linux/uio.h b/include/linux/uio.h
-index 74598426edb4..2d8a70cb9b26 100644
---- a/include/linux/uio.h
-+++ b/include/linux/uio.h
-@@ -43,10 +43,7 @@ struct iov_iter {
- 	bool nofault;
- 	bool data_source;
- 	bool user_backed;
--	union {
--		size_t iov_offset;
--		int last_offset;
--	};
-+	size_t iov_offset;
- 	size_t count;
- 	union {
- 		const struct iovec *iov;
+It seems generally useful for declarations, especially when they're as 
+many as in the one I picked up above (I think might be due to less eye 
+movement required when looking for a particular variable by its name).
 
+
+-- 
+ i.
+
+--8323329-906799157-1680689861=:2159--
