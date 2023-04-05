@@ -2,132 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1526D84F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6206D84F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbjDERaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        id S232950AbjDERaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233638AbjDER35 (ORCPT
+        with ESMTP id S232000AbjDERaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:29:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4426A5A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680715731;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GPqtHGUUdaGMWj+r62KgPaCWtTqZFGGxhe2WBH2SAZQ=;
-        b=dKfPiQA6BAAutZCGHfi9HFDycnmnIzn1N6UINI8LZ0W0HZ1W0IPU0l7ZkakqacGgSCkd2o
-        KTqBKi6NXVj1Ie9uDJJ+JuX09aD2Pwe6Z2dMaK7jg/cqsrtKFMSOC1nPfPkMiDe68NsG3V
-        cZHMmszg0r3CT1PtY5moSUj1+SQeTog=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-qymVOFufN7GrAuaKToXmBQ-1; Wed, 05 Apr 2023 13:28:49 -0400
-X-MC-Unique: qymVOFufN7GrAuaKToXmBQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 5 Apr 2023 13:30:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D5B5FCC;
+        Wed,  5 Apr 2023 10:30:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43936381458A;
-        Wed,  5 Apr 2023 17:28:49 +0000 (UTC)
-Received: from llong.com (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0C647C1602A;
-        Wed,  5 Apr 2023 17:28:49 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH] perf/arm-dmc620: Reverse locking order in dmc620_pmu_get_irq()
-Date:   Wed,  5 Apr 2023 13:28:42 -0400
-Message-Id: <20230405172842.2663770-1-longman@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 744E263D8E;
+        Wed,  5 Apr 2023 17:30:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C881BC433D2;
+        Wed,  5 Apr 2023 17:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680715806;
+        bh=MTlSWkTVvQnj8bCbTnc5vIL49pqfkTClsa++NdTazCs=;
+        h=From:Date:Subject:To:Cc:From;
+        b=ra9q1p5bmBMGWpFgB4v4l6pgMweSZ39xkScSBol3GZgeY/cHHHzKh2ngiGKiZuab1
+         Q2tiW81XjCEiSpZywmVvCx2jwPIpbpUdGWetARjxtx7IuNk+2vLW/UgKaeOlHx6HaG
+         bJmpCr+w0cKAwzpIJPCicRYW64MFIlAmzHjtywCJ9CKKQjZvjVNjoJiwWqFSLQ7cDl
+         tzXdjnvs2+3Shtz7WX8kLmFDw3/6tCBkyBzrAUYCvDla9Ny5JCeePSRTr7e62xPpZg
+         PNYRoT4Mzwn333ihQj1Ph2GnSXJUQMI/H7rJcaXmdJVi6o0Wmn7JsSFd7DrylGt2kd
+         fwasqzz7SlSLQ==
+From:   Simon Horman <horms@kernel.org>
+Date:   Wed, 05 Apr 2023 19:29:48 +0200
+Subject: [PATCH net-next] net: sunhme: move asm includes to below linux
+ includes
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-Id: <20230405-sunhme-includes-fix-v1-1-bf17cc5de20d@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAywLWQC/x2NywoCMQxFf2XI2kAdLaK/Ii76SG2gRmmmMjDMv
+ xtcnsM93A2UOpPCbdqg05eV32JwPEyQapAnIWdjmN18cmfnUYfUl1lJbWRSLLxi8T7ma8mX4Ap
+ YGYMSxh4kVWtltGby08m2/6s7CC0otC7w2PcfiPhXhoQAAAA=
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Sean Anderson <seanga2@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-m68k@lists.linux-m68k.org
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following circular locking dependency was reported when running
-cpus online/offline test on an arm64 system.
+A recent rearrangement of includes has lead to a problem on m68k
+as flagged by the kernel test robot.
 
-[   84.195923] Chain exists of:
-                 dmc620_pmu_irqs_lock --> cpu_hotplug_lock --> cpuhp_state-down
+Resolve this by moving the block asm includes to below linux includes.
+A side effect i that non-Sparc asm includes are now immediately
+before Sparc asm includes, which seems nice.
 
-[   84.207305]  Possible unsafe locking scenario:
+Using sparse v0.6.4 I was able to reproduce this problem as follows
+using the config provided by the kernel test robot:
 
-[   84.213212]        CPU0                    CPU1
-[   84.217729]        ----                    ----
-[   84.222247]   lock(cpuhp_state-down);
-[   84.225899]                                lock(cpu_hotplug_lock);
-[   84.232068]                                lock(cpuhp_state-down);
-[   84.238237]   lock(dmc620_pmu_irqs_lock);
-[   84.242236]
-                *** DEADLOCK ***
+$ wget https://download.01.org/0day-ci/archive/20230404/202304041748.0sQc4K4l-lkp@intel.com/config
+$ cp config .config
+$ make ARCH=m68k oldconfig
+$ make ARCH=m68k C=2 M=drivers/net/ethernet/sun
+   CC [M]  drivers/net/ethernet/sun/sunhme.o
+ In file included from drivers/net/ethernet/sun/sunhme.c:19:
+ ./arch/m68k/include/asm/irq.h:78:11: error: expected ‘;’ before ‘void’
+    78 | asmlinkage void do_IRQ(int irq, struct pt_regs *regs);
+       |           ^~~~~
+       |           ;
+ ./arch/m68k/include/asm/irq.h:78:40: warning: ‘struct pt_regs’ declared inside parameter list will not be visible outside of this definition or declaration
+    78 | asmlinkage void do_IRQ(int irq, struct pt_regs *regs);
+       |                                        ^~~~~~~
 
-The problematic locking order seems to be
+Compile tested only.
 
-	lock(dmc620_pmu_irqs_lock) --> lock(cpu_hotplug_lock)
-
-This locking order happens when dmc620_pmu_get_irq() is called from
-dmc620_pmu_device_probe(). Fix this possible deadlock scenario by
-reversing the locking order.
-
-Also export __cpuhp_state_add_instance_cpuslocked() so that it can be
-accessed by kernel modules.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
+Fixes: 1ff4f42aef60 ("net: sunhme: Alphabetize includes")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304041748.0sQc4K4l-lkp@intel.com/
+Signed-off-by: Simon Horman <horms@kernel.org>
 ---
- drivers/perf/arm_dmc620_pmu.c | 4 +++-
- kernel/cpu.c                  | 1 +
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/sun/sunhme.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
-index 54aa4658fb36..78d3bfbe96a6 100644
---- a/drivers/perf/arm_dmc620_pmu.c
-+++ b/drivers/perf/arm_dmc620_pmu.c
-@@ -425,7 +425,7 @@ static struct dmc620_pmu_irq *__dmc620_pmu_get_irq(int irq_num)
- 	if (ret)
- 		goto out_free_irq;
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index ec85aef35bf9..b93613cd1994 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -14,9 +14,6 @@
+  *     argument : macaddr=0x00,0x10,0x20,0x30,0x40,0x50
+  */
  
--	ret = cpuhp_state_add_instance_nocalls(cpuhp_state_num, &irq->node);
-+	ret = cpuhp_state_add_instance_nocalls_cpuslocked(cpuhp_state_num, &irq->node);
- 	if (ret)
- 		goto out_free_irq;
+-#include <asm/byteorder.h>
+-#include <asm/dma.h>
+-#include <asm/irq.h>
+ #include <linux/bitops.h>
+ #include <linux/crc32.h>
+ #include <linux/delay.h>
+@@ -45,6 +42,10 @@
+ #include <linux/types.h>
+ #include <linux/uaccess.h>
  
-@@ -445,9 +445,11 @@ static int dmc620_pmu_get_irq(struct dmc620_pmu *dmc620_pmu, int irq_num)
- {
- 	struct dmc620_pmu_irq *irq;
- 
-+	cpus_read_lock();
- 	mutex_lock(&dmc620_pmu_irqs_lock);
- 	irq = __dmc620_pmu_get_irq(irq_num);
- 	mutex_unlock(&dmc620_pmu_irqs_lock);
-+	cpus_read_unlock();
- 
- 	if (IS_ERR(irq))
- 		return PTR_ERR(irq);
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 6c0a92ca6bb5..05daaef362e6 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -2036,6 +2036,7 @@ int __cpuhp_state_add_instance_cpuslocked(enum cpuhp_state state,
- 	mutex_unlock(&cpuhp_state_mutex);
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(__cpuhp_state_add_instance_cpuslocked);
- 
- int __cpuhp_state_add_instance(enum cpuhp_state state, struct hlist_node *node,
- 			       bool invoke)
--- 
-2.31.1
++#include <asm/byteorder.h>
++#include <asm/dma.h>
++#include <asm/irq.h>
++
+ #ifdef CONFIG_SPARC
+ #include <asm/auxio.h>
+ #include <asm/idprom.h>
 
