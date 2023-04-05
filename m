@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 145EE6D8B05
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE1A6D8B08
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbjDEXR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S233419AbjDEXRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 19:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231906AbjDEXRZ (ORCPT
+        with ESMTP id S229754AbjDEXRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:17:25 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF606A45
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:17:24 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id kq3so35842748plb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 16:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680736644; x=1683328644;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PDzgTcPpeDzPZmNkPQBXcTLrsDlwbvUKWbaA0gDoJUI=;
-        b=FA/i5tIsA2TyBUZl/mohObwLBcCEWph5/toLXCLH/HMFb4nOmn2/ptwjytnLFDVU+b
-         sZkbdyF2aClqiI3rgyqkCVnm8fPFhkzlMVbbsuIlYWVeYr5d6LKdM2pmiiYNqsjitVI2
-         MBXITOhFwfz/IJ6Idq87lmdJk7L2ZgEVE4o6CA0820G/ZBznbBKibQk6Ja3Wfc+DvHsy
-         Hk/OzEmyKBapnFLpBC60jZFv9WZs/jgoRSw2EveGlp0UluJBZStUGW07QJ1G+GrtZXVO
-         ff/RTZoA3z5eSkMSack2kynYDuFcV03lF4mqowCe9FRVuzE0Puq62xpztpf9T0pM075L
-         7YFA==
+        Wed, 5 Apr 2023 19:17:47 -0400
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5524F6EB7;
+        Wed,  5 Apr 2023 16:17:46 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id d17so37724985wrb.11;
+        Wed, 05 Apr 2023 16:17:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680736644; x=1683328644;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PDzgTcPpeDzPZmNkPQBXcTLrsDlwbvUKWbaA0gDoJUI=;
-        b=HPwkbyVFQSsGHL0cOAdL4hBkMLhxgCQSED8ehjoctgcNO7tznF3LiwPgf0MhFjiGBX
-         X1DeyMGo0LDh8gv8qQ/Y3TYvr4NDVpnSNx1EHPKNaBiOWixpPEWRfs+XLZV8dupNH+7o
-         6XFEwjzvvjrx4dU/CBEowG+sl3LBDcSrpmjXfIfYMZx//YNKE/Lqmg9sSr+DTV4sHk3p
-         9dNt3juGE90zQlf8gO4ve+Ca6fy8YucZUIVrKqvClcrt5uBuZqrK8tq9iIcEVRn3Yh20
-         ANDneIWFFxJLpj0Z9nQL/wveaJ/lLTPy1V/X9LGXx5rHW4eIZUJBmrrFq2Qg8AZ2OpVh
-         Z6Jw==
-X-Gm-Message-State: AAQBX9fwAOmhUsCPtgSks69EdQKMD+kVHqEkhhkZtq2iBunEM+rnLKx6
-        POCj2eRVuVtOCaItoyVwrFs=
-X-Google-Smtp-Source: AKy350ZZ3PAoIxgkCqj/uzJqfDtq+TiJc0UUUejDnRB0U97K/u3fpiCAOoJu2oY3ROKMuxwohPnfcg==
-X-Received: by 2002:a17:90b:224f:b0:23c:ffbf:859e with SMTP id hk15-20020a17090b224f00b0023cffbf859emr8417356pjb.35.1680736643704;
-        Wed, 05 Apr 2023 16:17:23 -0700 (PDT)
-Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id c12-20020a17090ab28c00b002340d317f3esm1872087pjr.52.2023.04.05.16.17.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 16:17:23 -0700 (PDT)
-Message-ID: <9c9ca17a-7211-633d-7072-44992ab6852e@gmail.com>
-Date:   Thu, 6 Apr 2023 08:17:19 +0900
+        d=1e100.net; s=20210112; t=1680736664;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n9HAWFNIUkLfI+TykU7qXeNifdIEUrsEUjcWyjUlZwc=;
+        b=xw00ZtoI20CGzLTROO5vxbY3rvxZuhqdCt00ZydzXZlC3LSuu39FrMwFqrLsy0CdpQ
+         RKTSRHFSCQRqLPRInMFJ8FueWWBHr/kUJ4GnYsYl22tyIiBuhl6/ath/ESxX7kpkJxhv
+         gd0J9GPu23LOQRuTZ2Z80pEtX/bE4T3LtnJ51d3JXIhWSS+2v4UDtLeYX/c9e9j5Uzfz
+         WekkHTkMeS9AH5iVVChzntoi0QVmutN9MS192BntyHfXTAXa6XrlLqLu7/d79w9Fdovu
+         SyRlR/vIdMetWo/YbLl869GsZmcMbiV+FLZ21zAbgQosgpV1ap7rTpC/cGr5mBdsYz0q
+         BTxA==
+X-Gm-Message-State: AAQBX9c9FrZNRWaC0oQ1H3hixp/uN9sM1gF9Yqe4TSgpu2Ew++KrZRvs
+        MJrH/F0LOddbW4cuVfjyiVY=
+X-Google-Smtp-Source: AKy350bVIvzj2w2ex7Yv/ifhviZgw1E23pomxV0Tq72c6IruhzIaqthjEEZ7rWySwdm21cy0A8Kqxw==
+X-Received: by 2002:a5d:6b0a:0:b0:2ce:aa62:ff79 with SMTP id v10-20020a5d6b0a000000b002ceaa62ff79mr5343393wrw.40.1680736664654;
+        Wed, 05 Apr 2023 16:17:44 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id e10-20020adfdbca000000b002ceac2ccc4asm25182wrj.23.2023.04.05.16.17.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 16:17:44 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 23:17:41 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>
+Cc:     jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nunodasneves@linux.microsoft.com
+Subject: Re: [PATCH] PCI: hv: Use nested hypercall for retargeting interrupts
+Message-ID: <ZC4BlSo0D1uNliFk@liuwe-devbox-debian-v2>
+References: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation fixes
-To:     Bumwoo Lee <bw365.lee@samsung.com>,
-        'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     'MyungJoo Ham' <myungjoo.ham@samsung.com>,
-        'Chanwoo Choi' <cw00.choi@samsung.com>
-References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
- <CGME20230330101146epcas1p2240da3a618b18cea96735bbd6fe3f322@epcas1p2.samsung.com>
- <ZCVgWX2t1fpGzZX9@smile.fi.intel.com>
- <010e01d9636a$8f23edc0$ad6bc940$@samsung.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Content-Language: en-US
-In-Reply-To: <010e01d9636a$8f23edc0$ad6bc940$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 23. 3. 31. 09:48, Bumwoo Lee wrote:
-> Hi Andy Shevchenko
->> -----Original Message-----
->> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> Sent: Thursday, March 30, 2023 7:12 PM
->> To: Bumwoo Lee <bw365.lee@samsung.com>; linux-kernel@vger.kernel.org
->> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>; Chanwoo Choi
->> <cw00.choi@samsung.com>
->> Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation
->> fixes
->>
->> On Wed, Mar 22, 2023 at 04:39:51PM +0200, Andy Shevchenko wrote:
->>> A few fixes to the documentation and some cleanups against extcon core
->>> module.
->>
->> Anything I should do with the series?
->> Any comments on it?
->>
->> --
->> With Best Regards,
->> Andy Shevchenko
->>
+On Tue, Apr 04, 2023 at 11:35:46AM +0000, Jinank Jain wrote:
+> In case of nested MSHV, retargeting interrupt hypercall should be sent
+> to L0 hypervisor instead of L1 hypervisor.
 > 
-> Looks fine to me.
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+
+While I think this is a sensible change -- how did you discover this?
+Can you provide a bit more information?
+
+> ---
+>  drivers/pci/controller/pci-hyperv.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> Acked-by: Bumwoo Lee <bw365.lee@samsung.com>
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index f33370b75628..2123f632ecf7 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -704,8 +704,14 @@ static void hv_arch_irq_unmask(struct irq_data *data)
+>  		}
+>  	}
+>  
+> -	res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
+> -			      params, NULL);
+> +	if (hv_nested)
+> +		res = hv_do_nested_hypercall(HVCALL_RETARGET_INTERRUPT |
+> +					     (var_size << 17),
+> +					     params, NULL);
+> +	else
+> +		res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT |
+> +				      (var_size << 17),
+> +				      params, NULL);
+>  
+>  exit_unlock:
+>  	spin_unlock_irqrestore(&hbus->retarget_msi_interrupt_lock, flags);
+> -- 
+> 2.34.1
 > 
-> MR. Chanwoo, Would you please take a look at this patch series.
-> 
-
-Actually, Acked tag will be replied by Maintainer or the driver owner.
-If you want to review the mailing list patch, I think that Reviewed-by tag is proper.
-
-Unfortunately, I could not see the any review comment from you even if this patchset
-have the some review contents. Also you didn't review the any patches of extcon before.
-
-I'm always welcome for many reviewers in order to improve the linux kernel.
-But, in this case, I'm not sure that you are reviewing this patchset.
-
-So that I'm sorry that I cannot take your acked-tag. 
-
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
-
