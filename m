@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0915A6D8763
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 056656D876A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbjDETwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S231173AbjDETxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233805AbjDETwO (ORCPT
+        with ESMTP id S229492AbjDETxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:52:14 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7CA7EC3;
-        Wed,  5 Apr 2023 12:51:53 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b20so143897829edd.1;
-        Wed, 05 Apr 2023 12:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1680724311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4jmTZjX1X3FXg9H1sf4UQGBO5sXLFiiXCVY7aW+kHp8=;
-        b=NjVCqpRAnFoEBZ48ogXGEW+4YfZqT5zxR0Pov6GzrC7aEWY7UPRmCspppFii6tQgko
-         cYOhq/2uC1j2CHd96MggprggDrHTyihwzuZMMGMTul1HTJV7B2HMbOrZm0hPA3FOz3It
-         TG7evng49bkGYf8FNi81zODWZpluQgUGSfhjOk05N0/7VyN8ig2i9QW1jji6Dnf9Pm2r
-         JF6UpZ3kl8Qh+b7/6q8+jTlv5iF/RRDT53sSHXfjyheyUbb15YDsZ1UjoXuB7vVSeB+n
-         B0z6T+WdereYMCMdYo2CeAfjRUj4cPYboYfNEb38i3e5yEl0HXIaGAh8k+ghaJ/raM+S
-         RMvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680724311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4jmTZjX1X3FXg9H1sf4UQGBO5sXLFiiXCVY7aW+kHp8=;
-        b=AQGbQ1/AzH06y/+TeJGZpoonLfbhljlUcQaY0aA+J4SOL6ogq2LEI5XMJrNs7qYSHk
-         u9IxUyCl7QGruztf0hJBLMOboTAki77UE/8X/W0WvKjdUuT1YTOoSqr9gvHZ1CrdIS1+
-         KEAE301JXJn0cFHNpynqxfL9Arfo9eUZ3+HVKLUNb4ZAYoZdpTAHpRHNaTtAl1B3QkAO
-         INTyewP3InzyXTuu7112CJis7e0/Jvq60vlVVpCAIh5OnVTrFn0qFl6QJ2GP4ecayldP
-         UrNU4ovVeNIzvsmAJyQ6KHi+B1j9eTJXDuTxncRa0dsntXM1vpjTcwf8F0urNQOnHtgQ
-         Fk1Q==
-X-Gm-Message-State: AAQBX9fTiLXQp8dJSI+U+DCOgBdGBs5h/VtI8WlsUfEm4We+A2P8TDVQ
-        W8+6tvrohjHaVPFG4eGcsaPkBzXKfhH7g2vKOLtLAJsF
-X-Google-Smtp-Source: AKy350aArCCGAkSm5shKTMDLiqTFoeH+3CrxDyIaynshqyzBOjNchcKOmWgN9FetYNJgIBsi/zu28gfNbbIA9eAZ7m8=
-X-Received: by 2002:a17:907:c80b:b0:8f5:2e0e:6def with SMTP id
- ub11-20020a170907c80b00b008f52e0e6defmr3032264ejc.0.1680724311314; Wed, 05
- Apr 2023 12:51:51 -0700 (PDT)
+        Wed, 5 Apr 2023 15:53:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10C18F;
+        Wed,  5 Apr 2023 12:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xfugB8gwxIrdC2R107Iwf3RGbPJjSDOcowvFi/5tZ98=; b=RQLyy2B2a56aLhk92w1zockLYu
+        GyxtlcJv3uVkzVuUAbS+vCfQAByO61u7M3A1OPrBog1K7cUo2unN2+IR18kVFW97eBVtrxu6XXJX/
+        wafQIo6qPTFiithrwoY3bfzt/wxMPxkLE+Mo9B/tHJ/QuLXN9WsqxXQU94wawQvs2+OmKXFu0eSg8
+        tdTc+xbXAue/v07k/Ctw5B3ctOuWZ7G+pkHjz/FpgoMyVKuL/951PBtsipQ+36I0uMAUwH0IYKihE
+        PBio4xNYHmMDQPU7AiJUKS1W/VYoSP2mqzTOp+RckMuOuXKpd+tSf9MLnaF6hFLQ8Vhb2wwZu77pq
+        +ZM5SYhg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pk9BM-00Ghqu-7z; Wed, 05 Apr 2023 19:52:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A2292300194;
+        Wed,  5 Apr 2023 21:52:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 886E2200B42A8; Wed,  5 Apr 2023 21:52:26 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 21:52:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen>
+ <ZC3P3Ds/BIcpRNGr@tpad>
 MIME-Version: 1.0
-References: <20230403202440.276757-1-martin.blumenstingl@googlemail.com>
- <20230403202440.276757-10-martin.blumenstingl@googlemail.com>
- <642c609d.050a0220.46d72.9a10@mx.google.com> <CADcbR4LMY3BF_aNZ-gAWsvYHnRjV=qgWW_qmJhH339L_NgmqUQ@mail.gmail.com>
- <CAFBinCC2fr42FiC_LqqMf2ASDA_vY1d-NJJLHOF6pW1MjFRAzw@mail.gmail.com> <642d8d76.ca0a0220.c2c2e.0f02@mx.google.com>
-In-Reply-To: <642d8d76.ca0a0220.c2c2e.0f02@mx.google.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 5 Apr 2023 21:51:40 +0200
-Message-ID: <CAFBinCAVSQjS9tzmLuN0xeEQacnb69Bh2CYaxqgMxXR1KtFD0g@mail.gmail.com>
-Subject: Re: [PATCH v4 9/9] wifi: rtw88: Add support for the SDIO based
- RTL8821CS chipset
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZC3P3Ds/BIcpRNGr@tpad>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 5:02=E2=80=AFPM Chris Morgan <macroalpha82@gmail.com=
-> wrote:
->
-> On Tue, Apr 04, 2023 at 11:27:49PM +0200, Martin Blumenstingl wrote:
-> > Hello Chris,
-> >
-> > On Tue, Apr 4, 2023 at 8:16=E2=80=AFPM Chris Morgan <macroalpha82@gmail=
-.com> wrote:
-> > >
-> > > Please disregard. I was building against linux main not wireless-next=
-.
-> > > I have tested and it appears to be working well, even suspend works n=
-ow.
-> > Thanks for this update - this is great news!
-> > It's good to hear that suspend is now also working fine for you.
-> >
-> > It would be awesome if I could get a Tested-by for this patch. This
-> > works by replying to the patch with a line that consists of
-> > "Tested-by: your name <your email address>". See [0] for an example.
->
-> Sorry, bad manners on my part.
->
-> Tested-by: Chris Morgan <macromorgan@hotmail.com>
-awesome - thank you! I'll include that in v5
+On Wed, Apr 05, 2023 at 04:45:32PM -0300, Marcelo Tosatti wrote:
+> On Wed, Apr 05, 2023 at 01:10:07PM +0200, Frederic Weisbecker wrote:
+> > On Wed, Apr 05, 2023 at 12:44:04PM +0200, Frederic Weisbecker wrote:
+> > > On Tue, Apr 04, 2023 at 04:42:24PM +0300, Yair Podemsky wrote:
+> > > > +	int state = atomic_read(&ct->state);
+> > > > +	/* will return true only for cpus in kernel space */
+> > > > +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
+> > > > +}
+> > > 
+> > > Also note that this doesn't stricly prevent userspace from being interrupted.
+> > > You may well observe the CPU in kernel but it may receive the IPI later after
+> > > switching to userspace.
+> > > 
+> > > We could arrange for avoiding that with marking ct->state with a pending work bit
+> > > to flush upon user entry/exit but that's a bit more overhead so I first need to
+> > > know about your expectations here, ie: can you tolerate such an occasional
+> > > interruption or not?
+> > 
+> > Bah, actually what can we do to prevent from that racy IPI? Not much I fear...
+> 
+> Use a different mechanism other than an IPI to ensure in progress
+> __get_free_pages_fast() has finished execution.
+> 
+> Isnt this codepath slow path enough that it can use
+> synchronize_rcu_expedited?
+
+To actually hit this path you're doing something really dodgy.
