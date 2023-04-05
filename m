@@ -2,135 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71ED16D84B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC896D84B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjDERPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S231750AbjDERPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbjDERPK (ORCPT
+        with ESMTP id S229748AbjDERPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:15:10 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A1D5FEA;
-        Wed,  5 Apr 2023 10:15:08 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id oe8so26618464qvb.6;
-        Wed, 05 Apr 2023 10:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680714908;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gamUfoyodxPtqgS+QEeMjD5K0L0HZ7BreqQVvBsNAbU=;
-        b=Tgn3bE/RkoAuugsPHfEFEIbp9Xh97c22wBARynaD9+0nsCtchdlZ9ez5matvPzkgt6
-         fe0iQfR/mnQRE6LE1qeiKIaggzBM1lr5oEyD0SmXXUEe0iXFR9E+W0N/tno//4ievGNz
-         QTQN81oQfxogDQobR8mNfMhTOU4pLoyc2M8fUjDSRM/c3m8HHp69QaGPab5qzQ0TI5Eh
-         oRQDgvYRiBFe4mVokxcaUZUHtCUod3Evk5sgz8V5xe9pxCQq8wbkypIQdA5Hx3Pl6ay0
-         avtwCviZQ14zMPNl7wGpyojOnD8sfYBlW6sqeV7Ew8bpGpAmuSxY6dn2D3r0G/K88UV4
-         W7Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680714908;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gamUfoyodxPtqgS+QEeMjD5K0L0HZ7BreqQVvBsNAbU=;
-        b=jpNGZZVWpAfP+e4KuPXDozFJKgtHRTZ4AA7hrb3d3yHcHekjVQ0MGkeRyrVCGk756X
-         0UewrCl8HwXgFN6bPd8gfiP051/4omOVP9Lono21bfjJBRkS4VIjQ05yYw5ZU+JMZAan
-         boEeqVRfJHNVqW0AxakM3etOM/5vH3W2q+rIxrmb/HPy0gv3SRejCV9xhcaamTQIkvny
-         KEvl3pMuR9yJL9Q1JHBYhdaAb2y4T1Az3pzjBfFbDfFqHz/e2ojqy2XjflOa6frS36oG
-         otsEezw1m/nHgRNkPRo+DvvuGz2YVWzUUCAZqYL0tSdSE+TC1UMbxlbnVV5gnYufuEdX
-         N07w==
-X-Gm-Message-State: AAQBX9ckqR/Cyyy46IbjBX/2gIVFFlRmSv35bQF32R6HZrgV8KlNaRWI
-        AgTMLUEpwvqBI0wrbtQsK+Y=
-X-Google-Smtp-Source: AKy350Y+N+2gOHDAcZpIFMRGUeY30FdWItt9poT0Ac3IlRAvy5o1HvuIrCc52f20InyjGC/iF1QHxA==
-X-Received: by 2002:a05:6214:1315:b0:5aa:6130:7c63 with SMTP id pn21-20020a056214131500b005aa61307c63mr12775504qvb.46.1680714907937;
-        Wed, 05 Apr 2023 10:15:07 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id ct9-20020a056214178900b005dd8b934571sm4403209qvb.9.2023.04.05.10.15.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 10:15:07 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 05 Apr 2023 19:14:36 +0200
-Subject: [PATCH v3 3/3] dt-bindings: mfd: dlg,da9063: document voltage
- monitoring
+        Wed, 5 Apr 2023 13:15:06 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08DA1BEF;
+        Wed,  5 Apr 2023 10:15:05 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335GG6GM013112;
+        Wed, 5 Apr 2023 17:15:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=xdPANpjtlbwea8smzHbacqN4g1Ruy2zYgHhQtcKL4jA=;
+ b=JviavfdghGpxFybYoZ5PlrAS6QH2tK6y0r0h+eXId+HQSVyuZwFsAE51ZdMf1ff8IoSY
+ P++/zzbiTHnTDBH9nzhlqIg3PrXzCqG3Ag4Ui7vYjJ+SYDACo3jAydx7qX4BAmris178
+ pSHQRQqmageLgFAvtA+6VddGcD5/HFH4snG+444FBWx9UBBRgbMxO4wf0+V11IoVldbJ
+ fUBcS1Y+CJcWyp+IS+74gxvt0hoNYLjeLOYYde0GmAJIDbwNDfVjwLU3s2pSjWN+I7DV
+ 8BrNIpuZsqc1J5HzEP9DCeb9eWi6kAyGm4xsmky9G580xQpWuJGp80zwxn/Zy53Yj8r8 GA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ps8w7yu2n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 17:15:04 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 335Gk6am002751;
+        Wed, 5 Apr 2023 17:15:03 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ps8w7yu29-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 17:15:03 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 335H1GMO031516;
+        Wed, 5 Apr 2023 17:15:03 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3ppc88d3y0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 17:15:02 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 335HF1hV36307508
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Apr 2023 17:15:01 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 17F085805C;
+        Wed,  5 Apr 2023 17:15:01 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D01B58059;
+        Wed,  5 Apr 2023 17:15:00 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Apr 2023 17:15:00 +0000 (GMT)
+From:   Stefan Berger <stefanb@linux.ibm.com>
+To:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        miklos@szeredi.hu
+Cc:     linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        amir73il@gmail.com, Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after writes
+Date:   Wed,  5 Apr 2023 13:14:49 -0400
+Message-Id: <20230405171449.4064321-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230403-da9063-disable-unused-v3-3-cc4dc698864c@skidata.com>
-References: <20230403-da9063-disable-unused-v3-0-cc4dc698864c@skidata.com>
-In-Reply-To: <20230403-da9063-disable-unused-v3-0-cc4dc698864c@skidata.com>
-To:     Support Opensource <support.opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steve Twiss <stwiss.opensource@diasemi.com>
-Cc:     DLG-Adam.Thomson.Opensource@dm.renesas.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: I-u9B3_Iu8NUUSka9TVqB0TEA3acKn1L
+X-Proofpoint-ORIG-GUID: usiMNPTQycmGVGH7XZb5S6smuMFo-bqs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-05_11,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1011 phishscore=0 spamscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304050154
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+Overlayfs fails to notify IMA / EVM about file content modifications
+and therefore IMA-appraised files may execute even though their file
+signature does not validate against the changed hash of the file
+anymore. To resolve this issue, add a call to integrity_notify_change()
+to the ovl_release() function to notify the integrity subsystem about
+file changes. The set flag triggers the re-evaluation of the file by
+IMA / EVM once the file is accessed again.
 
-Document that the da9063 only provides under- *and* over-voltage
-monitoring in one, and therefore requires both to be configured with the
-same severity and value. Add an example for clarification.
-
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- Documentation/devicetree/bindings/mfd/dlg,da9063.yaml | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ fs/overlayfs/file.c       |  4 ++++
+ include/linux/integrity.h |  6 ++++++
+ security/integrity/iint.c | 13 +++++++++++++
+ 3 files changed, 23 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-index e8e74e91070c..c5a7e10d7d80 100644
---- a/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-+++ b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-@@ -12,6 +12,11 @@ maintainers:
- description: |
-   For device-tree bindings of other sub-modules refer to the binding documents
-   under the respective sub-system directories.
-+  Using regulator-{uv,ov}-{warn,error,protection}-microvolt requires special
-+  handling: First, when GP_FB2 is used, it must be ensured that there is no
-+  moment where all voltage monitors are disabled. Next, as da9063 only supports
-+  UV *and* OV monitoring, both must be set to the same severity and value
-+  (0: disable, 1: enable).
+diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+index 6011f955436b..19b8f4bcc18c 100644
+--- a/fs/overlayfs/file.c
++++ b/fs/overlayfs/file.c
+@@ -13,6 +13,7 @@
+ #include <linux/security.h>
+ #include <linux/mm.h>
+ #include <linux/fs.h>
++#include <linux/integrity.h>
+ #include "overlayfs.h"
  
- properties:
-   compatible:
-@@ -121,11 +126,19 @@ examples:
-             regulator-max-microamp = <2000000>;
-             regulator-boot-on;
-           };
-+          ldo6 {
-+            /* UNUSED */
-+            regulator-name = "LDO_6";
-+            regulator-uv-protection-microvolt = <0>;
-+            regulator-ov-protection-microvolt = <0>;
-+          };
-           ldo11 {
-             regulator-name = "LDO_11";
-             regulator-min-microvolt = <900000>;
--            regulator-max-microvolt = <3600000>;
--            regulator-boot-on;
-+            regulator-max-microvolt = <900000>;
-+            regulator-uv-protection-microvolt = <1>;
-+            regulator-ov-protection-microvolt = <1>;
-+            regulator-always-on;
-           };
-         };
-       };
-
+ struct ovl_aio_req {
+@@ -169,6 +170,9 @@ static int ovl_open(struct inode *inode, struct file *file)
+ 
+ static int ovl_release(struct inode *inode, struct file *file)
+ {
++	if (file->f_flags & O_ACCMODE)
++		integrity_notify_change(inode);
++
+ 	fput(file->private_data);
+ 
+ 	return 0;
+diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+index 2ea0f2f65ab6..cefdeccc1619 100644
+--- a/include/linux/integrity.h
++++ b/include/linux/integrity.h
+@@ -23,6 +23,7 @@ enum integrity_status {
+ #ifdef CONFIG_INTEGRITY
+ extern struct integrity_iint_cache *integrity_inode_get(struct inode *inode);
+ extern void integrity_inode_free(struct inode *inode);
++extern void integrity_notify_change(struct inode *inode);
+ extern void __init integrity_load_keys(void);
+ 
+ #else
+@@ -37,6 +38,11 @@ static inline void integrity_inode_free(struct inode *inode)
+ 	return;
+ }
+ 
++static inline void integrity_notify_change(struct inode *inode)
++{
++	return;
++}
++
+ static inline void integrity_load_keys(void)
+ {
+ }
+diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+index 8638976f7990..70d2d716f3ae 100644
+--- a/security/integrity/iint.c
++++ b/security/integrity/iint.c
+@@ -85,6 +85,19 @@ static void iint_free(struct integrity_iint_cache *iint)
+ 	kmem_cache_free(iint_cache, iint);
+ }
+ 
++void integrity_notify_change(struct inode *inode)
++{
++	struct integrity_iint_cache *iint;
++
++	if (!IS_IMA(inode))
++		return;
++
++	iint = integrity_iint_find(inode);
++	if (iint)
++		set_bit(IMA_CHANGE_XATTR, &iint->atomic_flags);
++}
++EXPORT_SYMBOL_GPL(integrity_notify_change);
++
+ /**
+  * integrity_inode_get - find or allocate an iint associated with an inode
+  * @inode: pointer to the inode
 -- 
 2.34.1
 
