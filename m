@@ -2,162 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41EB26D8A37
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B564B6D8A47
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbjDEWBf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 18:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S233207AbjDEWIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjDEWBa (ORCPT
+        with ESMTP id S231880AbjDEWIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:01:30 -0400
-Received: from mo-csw.securemx.jp (mo-csw1114.securemx.jp [210.130.202.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA9C7692;
-        Wed,  5 Apr 2023 15:01:28 -0700 (PDT)
-Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 335M1KqW016554; Thu, 6 Apr 2023 07:01:20 +0900
-X-Iguazu-Qid: 2wHHmhMsGZCr9m8ktM
-X-Iguazu-QSIG: v=2; s=0; t=1680732080; q=2wHHmhMsGZCr9m8ktM; m=D+oJM7Ity5a/bmmgYqLwb3x3gjKpQvTPm5vlixlaEAA=
-Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
-        by relay.securemx.jp (mx-mr1112) id 335M1Iit029747
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 6 Apr 2023 07:01:19 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MgXMNYRgWxLk1PgTP03IEC4MNw6B0WLkNhF0AHbYAQNP0zyixqOCVZp1lOfTSUxIgOt2BnIEEpxo3qFprDYp+0Rj9KPWgpZS5bVtYJrdWaqZdZOaEPT2Ez9P3a1cjIoJDiZPpIibNCzk8G0A0tyt/2JxUCfWKjNzKkc6GCOoegeaWrBTxQJ/r26g5+eZdIF9MvMfrxXMEyrVvF+P9+wzY/EL+czjLHhf3RgYcby8RQ88OkH0/vR4m7nx0th4m2RAHCZEXn0BShgobIepyKLlT4OSgJ3xZLuqb6a7a/1+KyqG0Qa+dBLJj6PhcdOS4i8wHX2TgQpFo0vJej7+2l4jNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=66/JNg70qwlyJbCmkKUak74pYdAj+7u5PI33seXBdKM=;
- b=Yi3xTdDKZCGt0UFCW5u66OpllVXrG6O04nuo7Tpa9t3hleNuCO+G/8kuBLsF0EIH0V3pUacohXDQkkVZ9KXu4m1iZhCEtk8XQBPdSa3SOnTatWapH1EHQymbjqd2HTdySP5/BVoYqgSEevzOz6RVMoS1fnxaIpCOkRkwT6cmooL8HeIcA7e1XsuAfM+fUQeF90lBKT4Ifee5OGFBSLX+b2dJLPkLGAQQ/40TmAUbeUiEyikGKTOKdeMnLSzGnhxuNt21fuajIySHwcDes6ya/6s+MhyKJYC4dWUTs3QWpxcC/aVfxDwSdhslDjbIDs4YfdOK2R/k5V9KGWtKaSABUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
- header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
-From:   <nobuhiro1.iwamatsu@toshiba.co.jp>
-To:     <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: host: xhci-plat: Use dev_is_pci() helper
-Thread-Topic: [PATCH] usb: host: xhci-plat: Use dev_is_pci() helper
-Thread-Index: AQHZZ4yszw2Uu6nch0evsEAfagPfg68cT50AgAD1WeA=
-Date:   Wed, 5 Apr 2023 22:01:16 +0000
-X-TSB-HOP2: ON
-Message-ID: <TYWPR01MB94208A9EDA57A18757715DCE92909@TYWPR01MB9420.jpnprd01.prod.outlook.com>
-References: <20230405070141.2028455-1-nobuhiro1.iwamatsu@toshiba.co.jp>
- <2023040503-catatonic-gazing-9830@gregkh>
-In-Reply-To: <2023040503-catatonic-gazing-9830@gregkh>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB9420:EE_|OSZPR01MB8782:EE_
-x-ms-office365-filtering-correlation-id: 6d7f755c-319c-4169-4d90-08db36214785
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eQmDXcEEGIG2oPSEHYptmvLwS8vbE1xgHC269hvg2aiOx+CGRB5cHIPEc9D36aJI1t0Bry5dGA8ZXvr6Hj0pAHsCdx6jKYraXdEqz5pHCrAW2WEK+Fp9mkRrTPRpoyHTPRjJpTiylUrAfZcjJtNyfJhAsr644UrxUYdzouTbOKyix3d4jxps+5d3wxiXTC5BmaS6MAC+N/hyQpcVTtbq88HMW5agCL6akTqdqkOFRBFwTN7h8ezPtDqt1sPRHY4JH6JsQr9TSRAmmUg5y47lgc78ccin4i7drpbskjprGAkuzNxu4KKbyOefEbJEVtjXT+GWZCJIgWkQWraab/yUwT3mckWT+1Jfyl3MggVmXXpitAYTJnSHIdWX4iWh1+NqXwEOWuc2ZZvbmAVXtBTt+qmqlwcpdyfF41RI/YenmtzCmK8dwzrpamY2OjJcgrBaThuyVRPud6o7u0nPwWGCcBwGZ5NDSzTou5pggmWCzouy450+mmRSshkFI6CvvTtGhyi7addtUjnzG4ny0zmvN2zVZm90QVIN1EOCNndl7YT/JDL+etj5L5b/1wFOkYNp9m7/GX4LFaMcKE9XQ+cZK3ORk94uCMByLSuhur+nfarFCgKcCDatVhZXVj1mz4dQcrFF8fIq2Dr43QmMsb+uSg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB9420.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(451199021)(71200400001)(7696005)(55016003)(83380400001)(38100700002)(86362001)(33656002)(38070700005)(53546011)(26005)(6506007)(9686003)(122000001)(186003)(66946007)(2906002)(54906003)(5660300002)(8936002)(41300700001)(52536014)(316002)(76116006)(64756008)(66556008)(8676002)(6916009)(66446008)(66476007)(4326008)(478600001)(95630200002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?TGF5UHlJd01ZU2NTcVVBNHRxdjhjWHFJY3JFN3RpSndJUUxIRVdoekNS?=
- =?iso-2022-jp?B?b2NuNGxLSWttYUZFd0pRVjVpa3E3SmhBNzlYYzBDU3puY2ZGVkJSSGh1?=
- =?iso-2022-jp?B?M3oxR1pJRVlrWE8wQ21OdklpR0lkZlpoQ09zb0xWbVliNEVRRlZ1UzVD?=
- =?iso-2022-jp?B?YVk3ZnMySlBXc2VPYmo4ZDZXNEl0emxSVEdnU2tJbTNwcjkwVmQwMzZK?=
- =?iso-2022-jp?B?STZSc3BwK3VndWVYeEtVM3hlRFJPM0pacHZXdjFBbE1sQWlmd0hWZ0t1?=
- =?iso-2022-jp?B?bzBHRkJnWUd1TFR4Z1FMK1JZeDdkazRWalhBZ3N6UE8vRm04U0ozZ2ZE?=
- =?iso-2022-jp?B?YXFQWnBKZ1lXSE9xK2o2elo5dWt1d1pMRUt0NWNxVzN6djJicXNIOVB4?=
- =?iso-2022-jp?B?Y2k4Z1c4Q1VKQ1l0T0JsbGVBa2FTUWN6R3lNVGZ0bkhyOFZEanJjOVJC?=
- =?iso-2022-jp?B?U2pvdFJGenFJYU5HL1kySVFuTjdaQlVNRllZVEpZc3BQZ2tueWkxWk40?=
- =?iso-2022-jp?B?eDdFVHBrTUU1cVM1eExFYWg4Q1dlL3VXTk1HSXNHbEYwOU9BNjhUamt4?=
- =?iso-2022-jp?B?YjZxZWlCMC9pZlBnRFFYTWdBN2wzY001QWVYVFBjdnZtSFNJakZ1d3hD?=
- =?iso-2022-jp?B?bTN1eEdmSUkzemhHbnFLTUxjRnZHTk9PNDRKTHZwM3hNK2J4azZVLzEw?=
- =?iso-2022-jp?B?YWJHalRERlorQlRIcDNabU5aYU5rajJ6bCtsRlRXUm9zVGtHaUpWTTFn?=
- =?iso-2022-jp?B?bW9CSUJSZDhta3p1NFR0V1BKcU16ek8vUlA4dkRuVHRDeC92T2JxbDZM?=
- =?iso-2022-jp?B?ckpMRGdSaHM5Wm51YTJaZmkvOTh4RmtVMkhKY3VpOU1jZlMzZXBka3Zq?=
- =?iso-2022-jp?B?UTR6RHIzWGxGQ2tqWVV5YWhscnpFZ1lGWkFwb2l3anU4ODc4NGp5a0Fp?=
- =?iso-2022-jp?B?c3hFSm9kS1pBTStnTUljZlFtVGphc0YvWXJ6cTlhMHdNM2wvYXU5TGlz?=
- =?iso-2022-jp?B?blpWYUtvME5tUWxEbkV3ZnBtQUcrcitBSitKeGIwR0RmajlINkpEK2Iz?=
- =?iso-2022-jp?B?MjZBZXpFaFZZWndGeFFOVnJtL0JDeUZwNHZoTHBYMmZseUVoNms0NmJN?=
- =?iso-2022-jp?B?ZHNlaEhRYXl4bG8xekh5a0dSY1JiK2FzWTFPa08zdWN5Y2x2MkpsNnhB?=
- =?iso-2022-jp?B?UHZONlZnbkh0SjluMnJEeS9ZdUtadUoyaytDeDZqVVozNitHUmQxU29W?=
- =?iso-2022-jp?B?cGNVSWJQbXJ1NHhJbUgrR2REYkorcnVjNlpFVTBRWWFHakJaVDlRU1o1?=
- =?iso-2022-jp?B?MVJreFdBMlk2QzdTZW5UZ1oxelBNcldiNEQ2U2w2d2VlaU9rOFozYk15?=
- =?iso-2022-jp?B?bm41dS90UUVzQ1NhWTB2NlFkVVJVWVZVRHozTGNUd2p1dWpOQjNMcWdK?=
- =?iso-2022-jp?B?bkpuajRqc1RIWW03VlA5S3dXUmdCY1g2WFRySmlKS3ZjUkpyMDB2b3lr?=
- =?iso-2022-jp?B?QnZWb2J5cTkvZ2VCMDdWcGEyMGVmRWNjNjBlYk1PckZhM0hhTGlua05X?=
- =?iso-2022-jp?B?VkV4NW5MVXR4MklLalg4RzZkK3NCcndWdGdhV2VvUGtTZUprZXg0STBY?=
- =?iso-2022-jp?B?M1ppUndUYldtTDR5NGtHOVB4OU9uMEpmQ08rOHlRVkJJNi9QdkFBUGIv?=
- =?iso-2022-jp?B?NXRaYVp4UmJEMitWdVNQbU1IOUR0aXE5NkZrYmQ1RksySGlVRno5Y3Fu?=
- =?iso-2022-jp?B?alZ2eTJYallMTWZXTFQ1ejBybDYveS90a0RVbWUzS2pNbUtHdSt6UURs?=
- =?iso-2022-jp?B?WUg5dk1xYysyTXNwL3NlNGRyVmt6TEdFTHpTMzV3ZTRWc095RHVwcmRv?=
- =?iso-2022-jp?B?L01zbWJ6enUxVWZSUEhUYnhBQS9zQm9RY1g0cXl1WmkrTEViS0tMYkpG?=
- =?iso-2022-jp?B?Wm5zUGNONFE5LzFBeWFURS9NVmdzMTNZZ0xvZVYrTWFZMjdsa0tYQVpU?=
- =?iso-2022-jp?B?UzdDdVlVUzIwRnJkUStRV2NRK05ZQlJuVHJLT2lBNEwwNkU5dis1MUgv?=
- =?iso-2022-jp?B?Z0V0OHAybGZwQ0g0Tzc0ZUkrdDA5dTRycFN3OFV2VFQ0YUY4bVhGZlIw?=
- =?iso-2022-jp?B?OVVpZ2dVcjFkVmdERE9IaGJSU28yUWRBRXlHWjE3czRUTkFBQ3Y3eE1H?=
- =?iso-2022-jp?B?TVk4em9tcUZHYkhnTmZNQ2FGNWpwMW41OVFFc2NBV3IzSnhVZDV6MnV0?=
- =?iso-2022-jp?B?aFJtWTJ1Q0xpeXVqSVg4RFBBUjNLeEtXWFRtTW5XOUpyOGZrQXVKejV6?=
- =?iso-2022-jp?B?c3JHZzdxVVNjOXBUR0EyWGEyZHV5dmorUWc9PQ==?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: 8BIT
+        Wed, 5 Apr 2023 18:08:01 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66485267
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:07:59 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id cm5so18803647pfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680732479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6G4NsFlCDV5fs2a2Hk+HPn6BW+TSo8l8fhvL/n7IKto=;
+        b=Co/XH8kheGMcW5639kFQflWIBdRbseeE5Rgi33B4NHAwkIuhJ8cRjGblOk3jTnpe3M
+         r8NDGd4BbIPvGUCTtlIr1C3Zi3M3kVBDoSPBmqFnbVUgJEH+rMm0xic9kbB5F1PS469K
+         v1mqbc0XbrOyTEZFxU0ygPvmf+3dHmAY6CsJ9O7wnH7swCU/AVkriErypZpzAdgN2JX5
+         g7RiLqySQwykhvK9Yp436hJ6RVIMG7NxCvKb3YHlnhCMdin4lAC9yBtRjNUKm8bUitaS
+         sSu9j6TkAiYHkxQxzNBHO0Xb9op6XALV5XasEjMG0VTfxTM7nkVUzYMSqHE97uOdWJz9
+         t2rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680732479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6G4NsFlCDV5fs2a2Hk+HPn6BW+TSo8l8fhvL/n7IKto=;
+        b=4rJysrSQJbGIJBEBDP6qlw6OB7kT9Ufv5vA7PKtiOoEhV1wbrlGLR5LrLQ0ec/nOep
+         kvRVopv3g0VsM5u3cXiblA2xh/peZnXL18wtnnXCGHazDwfAMLUd6djBrH+0mHZcvsPF
+         nm+XY8fgFo50k/zKzhrZNunzsj+2T873B+1Tskt88I/BX5/IVBU0dppJGYjAYSJwXKH2
+         0CqcgreMQ9fl3CbT7VsK98cwp5EaqHo2ARjH35HQH6QvCnoMNpEo9IfoCizh837HqUbV
+         BmWivHYbctlnS0ByyYR3nIX8znQYF/4WQ9K6X/p/wQIdKQy2HAUMTw61FnK/sqWCC/9L
+         pkZg==
+X-Gm-Message-State: AAQBX9fN4BxDEwgvRvySeiXJBmhlmZjar6RSP37737kr+UbkPR+0vJU5
+        KIppaU9D8zKyGt5KwuAksrd5ye37sZQiNk8ItqcCbQ==
+X-Google-Smtp-Source: AKy350YWe0LQY4a1WtMtO9UBAtN8fCXxF/yrfEr5xXDYzw+Sj0JKwU0Q2JALgP82rgc6URVJ5DF6xJk/YwaCPJm10os=
+X-Received: by 2002:a05:6a00:999:b0:625:cda5:c28c with SMTP id
+ u25-20020a056a00099900b00625cda5c28cmr4345578pfg.6.1680732478867; Wed, 05 Apr
+ 2023 15:07:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB9420.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d7f755c-319c-4169-4d90-08db36214785
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Apr 2023 22:01:16.4630
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LLNzOkaGiaIwjr8B+daUh7e8a1Pj1MOp8rExB3CoqCFii4QxKF5S8E19P7vIo9ZIm5iJGb3f6e4t0stJKUdk2pgfmczBCBTiSKv5bJmmGU3+juhtQDmxe0aAQfXgHdKk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8782
-X-OriginatorOrg: toshiba.co.jp
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230331014356.1033759-1-davidai@google.com> <20230331014356.1033759-6-davidai@google.com>
+ <CAL_JsqJErVOZZ==i1HpMABfuVEDC+drboLTntMDB0sUC9ZdQ_Q@mail.gmail.com>
+In-Reply-To: <CAL_JsqJErVOZZ==i1HpMABfuVEDC+drboLTntMDB0sUC9ZdQ_Q@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 5 Apr 2023 15:07:22 -0700
+Message-ID: <CAGETcx_YhXqgyuWwH7BrMV4-z2LVEq5-X-FtPvmi-9tCrjVXVw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 5/6] dt-bindings: cpufreq: add bindings for virtual
+ kvm cpufreq
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-> -----Original Message-----
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Wednesday, April 5, 2023 4:22 PM
-> To: iwamatsu nobuhiro(岩松 信洋 ○ＤＩＴＣ□ＤＩＴ○ＯＳＴ)
-> <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Cc: mathias.nyman@intel.com; linux-usb@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] usb: host: xhci-plat: Use dev_is_pci() helper
-> 
-> On Wed, Apr 05, 2023 at 04:01:41PM +0900, Nobuhiro Iwamatsu wrote:
-> > Use common dev_is_pci() helper for checking PCI devices.
+On Fri, Mar 31, 2023 at 5:47=E2=80=AFAM Rob Herring <robh+dt@kernel.org> wr=
+ote:
+>
+> On Thu, Mar 30, 2023 at 8:45=E2=80=AFPM David Dai <davidai@google.com> wr=
+ote:
 > >
-> > Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> > Add devicetree bindings for a virtual kvm cpufreq driver.
+> >
+> > Co-developed-by: Saravana Kannan <saravanak@google.com>
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > Signed-off-by: David Dai <davidai@google.com>
 > > ---
-> >  drivers/usb/host/xhci-plat.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  .../bindings/cpufreq/cpufreq-virtual-kvm.yaml | 39 +++++++++++++++++++
+> >  1 file changed, 39 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-v=
+irtual-kvm.yaml
 > >
-> > diff --git a/drivers/usb/host/xhci-plat.c
-> > b/drivers/usb/host/xhci-plat.c index b9f9625467d61e..2c95189424fa6e
-> > 100644
-> > --- a/drivers/usb/host/xhci-plat.c
-> > +++ b/drivers/usb/host/xhci-plat.c
-> > @@ -363,7 +363,7 @@ static int xhci_generic_plat_probe(struct
-> platform_device *pdev)
-> >  			is_acpi_device_node(sysdev->fwnode))
-> >  			break;
-> >  #ifdef CONFIG_PCI
-> > -		else if (sysdev->bus == &pci_bus_type)
-> > +		else if (dev_is_pci(sysdev))
-> 
-> With that change, you can also get rid of the #ifdef lines too, right?
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-=
+kvm.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.ya=
+ml
+> > new file mode 100644
+> > index 000000000000..31e64558a7f1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual-kvm.yam=
+l
+> > @@ -0,0 +1,39 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/cpufreq/cpufreq-virtual-kvm.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Virtual KVM CPUFreq
+> > +
+> > +maintainers:
+> > +  - David Dai <davidai@google.com>
+> > +
+> > +description: |
+> > +
+> > +  KVM CPUFreq is a virtualized driver in guest kernels that sends util=
+ization
+> > +  of its vCPUs as a hint to the host. The host uses hint to schedule v=
+CPU
+> > +  threads and select CPU frequency. It enables accurate Per-Entity Loa=
+d
+> > +  Tracking for tasks running in the guest by querying host CPU frequen=
+cy
+> > +  unless a virtualized FIE exists(Like AMUs).
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: virtual,kvm-cpufreq
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    {
+> > +      #address-cells =3D <2>;
+> > +      #size-cells =3D <2>;
+> > +
+> > +      cpufreq {
+> > +            compatible =3D "virtual,kvm-cpufreq";
+> > +      };
+>
+> The same thing was tried on non-virtual h/w too. This is not a device
+> so it doesn't go in DT. It is just an abuse of DT as a kernel driver
+> instantiation mechanism.
 
-Yes, that's right. I will send v2 patch with it.
+Because it has no registers it's reading and writing, right? Yeah,
+just went with this for now to make it easy for people to cherry pick
+and test it. Maybe we shouldn't have added documentation and made this
+look too official.
 
-Best regards,
-  Nobuhiro
+In the end, I'm expecting this will be a real MMIO device. Until we
+move from RFC to PATCH, feel free to ignore this patch.
 
+-Saravana
