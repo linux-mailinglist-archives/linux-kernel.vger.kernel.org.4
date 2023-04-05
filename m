@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B416D892D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEE96D8930
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjDEVBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S232797AbjDEVD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjDEVBk (ORCPT
+        with ESMTP id S229587AbjDEVD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:01:40 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827375583
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:01:36 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so38576520pjz.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:01:36 -0700 (PDT)
+        Wed, 5 Apr 2023 17:03:27 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA03840D3;
+        Wed,  5 Apr 2023 14:03:26 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id t19so36277837qta.12;
+        Wed, 05 Apr 2023 14:03:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680728496;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680728606;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fHFlMisxaJ0plZrJeiWQsYMJJxbUcOQBZpoj9lXl62o=;
-        b=o68UQJlSeR/2dP30d3/3CG29eQi7NJUexGjKnFCJlBRne7MBh/pnOLR6z5hr0IcBKF
-         rGtNS+VfkApuHBT4LOZszkfDA5ur0hx2XsTYBVaUo9Mpo8zstckblRhZIrIFyUAyNKeC
-         bImEOJVQiHH/0xwOgCdHD3FzLTUkJUOUg8YxvZjMvIvVZvTfDl/MO8+nVHCZ6Hjl/s9/
-         nBOkPddImEOqiBfKtLNmE4rQkxJtcAAr2zemszvWQQ2l4d4CdHEk5hq0cYT/tIfQAHNQ
-         PalbkNTzzkjmk+8KnlFVIxi2D0sXhuYRAxUUR3QGgi5uBzGsU5s1ufo++LrWQ+Aq5Ks9
-         PXBA==
+        bh=iC6S0Dd2wld+hFfeTW38jpjfvqTCQBMPpfTFPRnn/3Y=;
+        b=eVWI8JOB0Had3eImwcXP0NoKKQ6I2s3MyEt3DNSFiUrTVYCm104vOLyhAjR/VAT7ad
+         PPEF/QAko3n3Q/io0d/zmQJO9DWimzOr4tkqXrygIY4InIIaKRjflbIRTosoplEZpPi5
+         VpeDsFVvfttkDAb8JN8PZnOj69ZTtXTSGxuQ+KQlxc69faA1Fz33khhfMIW6MrzwfXVk
+         UdOn736Mh8vUSwjQgQghEr61biqcyq6Z0p1OPTO1XVOpl7dRqeIj59y8+fqQ9qa3fPXu
+         a+4sc8QFjNWCHRjGJ1cPwTaD4+4rgOxx0GH1AmeovU1I8E9li58kn0ZUCzioSp8keiOz
+         YJgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680728496;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680728606;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fHFlMisxaJ0plZrJeiWQsYMJJxbUcOQBZpoj9lXl62o=;
-        b=KaHUWMWzcEMcUqGL8+jUKaWCjB4hW6QO3Qn+yrJHpZ6ALHp6skLtphFaIW6jNb7y11
-         qgqyiiNKBiuF7T6ATyxC6o1iWD3vHTOqmQJk3m+XfcB9gtyyD4cj7zJAF8ao3x4tgOQi
-         aMZkKc54TAVOFnSScljl5cHFb0WZLlxrs/69W1jeayWOKsOeMm44ix2QzlByvlk4XL0N
-         BH6yuS+o2qcUEG5gitRfW/n1Caj6XfKQWOnlLc+3cU/TDxYwpujhr58lQu9nwq57KbO1
-         VGnv0kbwG9oG915Op1Ai9fbOuED+6ig406TB0gtTRDscdetD8BTmdEwhMrw2vb6oAJuX
-         2SRw==
-X-Gm-Message-State: AAQBX9e1OVZHEfrLxO9QbUJWRaqOtQpWBX670iLvDsr6TiXoD5qsSFfW
-        2UdRrHZVxNmn50l6ECCNcUqkWQxknJp8Wyhrl2FpVw==
-X-Google-Smtp-Source: AKy350aHiztqd9S0M+CMjOQXju2vYq2NssFDb70LAGMoQGKeCoDHJhiRNivzaqFcE6TN33nMAdUuT1+/TPOGcn3A86M=
-X-Received: by 2002:a17:902:a40a:b0:1a0:535b:22d9 with SMTP id
- p10-20020a170902a40a00b001a0535b22d9mr3252431plq.10.1680728495555; Wed, 05
- Apr 2023 14:01:35 -0700 (PDT)
+        bh=iC6S0Dd2wld+hFfeTW38jpjfvqTCQBMPpfTFPRnn/3Y=;
+        b=3HthH86z4RxapDDaN23wnKQLyoQKUT06xpgOdNzgLxbHD4tHei6FrPqHP3FvakIdZp
+         CjHe9scxRrGaC9FBUao+kJfTjPrV2uvAI2o1FZUG4k4a/JZb2EnXmiZZqzlhT4fIL54L
+         WtQi8p4j9YN1qeaIomstHbxcYSfs85v/FCn4jiazSjAkjRspmBZtO++2/DMeIk4I7dOS
+         jtLpYfZkufjCwEmmxPbYxpYa/CKIaLX60DTipuHeDAOVpLOgelKBysvjxdeUj0+XZhNn
+         XzaerM3O+oOuCtpThCPzwutYFpvi0z0euLIxOByyS3cmkxSwkyotS9WjQsG76oBymGZG
+         OUZA==
+X-Gm-Message-State: AAQBX9c+PwC7aBH35PFop5+nL+udBL8nDVy7YOySnZB8c73k26PjEP4Q
+        45JXxWT9VgZQrf0tTTJYdX4=
+X-Google-Smtp-Source: AKy350aRL7IyXF1vZb82PW7LiWWRNpZCTqbPmjXNkeYpJSLW6nfQdG7gkP1VaMxaYraVyWiWYIVzzg==
+X-Received: by 2002:ac8:5a84:0:b0:3d3:fe29:1caf with SMTP id c4-20020ac85a84000000b003d3fe291cafmr6902530qtc.0.1680728605725;
+        Wed, 05 Apr 2023 14:03:25 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id 15-20020a37080f000000b007485a383921sm4686543qki.116.2023.04.05.14.03.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 14:03:25 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id B2DCF27C0054;
+        Wed,  5 Apr 2023 17:03:24 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 05 Apr 2023 17:03:24 -0400
+X-ME-Sender: <xms:HOItZJx3fVNX-q2IeOqrKBXk2JG6hCxtnPdDBEUV7TLHwVlOCoxPEQ>
+    <xme:HOItZJQxqBmoyZioJiw7SkqQWw41IRs7sgXxIOaEIEb6sL2pqq42fImUubknd_2Qw
+    9DSzxr3ZhN2m4D7lg>
+X-ME-Received: <xmr:HOItZDVs-AyUF5YGTsgSNUehQxxe4zF9XHAt7mSGv7Mmo3Kh_GyK3PXzdnlcDg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgudehkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:HOItZLgcvbIXFoL62LJyL9wrDorZ9Clnzd0Z_hXLuxkTbNtdzzrVbg>
+    <xmx:HOItZLBONkhNe_qEkICkn9z6uSoGClmEPjxa3PrgDUDuA-JREaHHCQ>
+    <xmx:HOItZEI9-DTwcujZQ2D63OZvZOU3c2UL6JlHXwy6K5e9_6X0PKFTvA>
+    <xmx:HOItZP7sjfqG4TDmELTOvSYi6SQ1aIdrGJNI1XKAPkrIRyIIuVHuiw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Apr 2023 17:03:23 -0400 (EDT)
+Date:   Wed, 5 Apr 2023 14:02:22 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH v6 00/15] Rust pin-init API for pinned initialization of
+ structs
+Message-ID: <ZC3h3q+56gM8pKOX@boqun-archlinux>
+References: <20230405193445.745024-1-y86-dev@protonmail.com>
 MIME-Version: 1.0
-References: <20230330224348.1006691-1-davidai@google.com> <ZCx97IKjsBibjdGc@linux.dev>
- <86sfdfv0e1.wl-maz@kernel.org>
-In-Reply-To: <86sfdfv0e1.wl-maz@kernel.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 5 Apr 2023 14:00:59 -0700
-Message-ID: <CAGETcx90SiaztPO21GsHSr18XUTHoLWt3Jv+y=EW5yfjJgzJHw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     David Dai <davidai@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        kernel-team@android.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405193445.745024-1-y86-dev@protonmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,179 +106,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 1:49=E2=80=AFPM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 04 Apr 2023 20:43:40 +0100,
-> Oliver Upton <oliver.upton@linux.dev> wrote:
-> >
-> > Folks,
-> >
-> > On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
-> >
-> > <snip>
-> >
-> > > PCMark
-> > > Higher is better
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > > | Test Case (score) | Baseline |  Hypercall | %delta |  MMIO | %delta=
- |
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > > | Weighted Total    |     6136 |       7274 |   +19% |  6867 |   +12%=
- |
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > > | Web Browsing      |     5558 |       6273 |   +13% |  6035 |    +9%=
- |
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > > | Video Editing     |     4921 |       5221 |    +6% |  5167 |    +5%=
- |
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > > | Writing           |     6864 |       8825 |   +29% |  8529 |   +24%=
- |
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > > | Photo Editing     |     7983 |      11593 |   +45% | 10812 |   +35%=
- |
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > > | Data Manipulation |     5814 |       6081 |    +5% |  5327 |    -8%=
- |
-> > > +-------------------+----------+------------+--------+-------+-------=
--+
-> > >
-> > > PCMark Performance/mAh
-> > > Higher is better
-> > > +-----------+----------+-----------+--------+------+--------+
-> > > |           | Baseline | Hypercall | %delta | MMIO | %delta |
-> > > +-----------+----------+-----------+--------+------+--------+
-> > > | Score/mAh |       79 |        88 |   +11% |   83 |    +7% |
-> > > +-----------+----------+-----------+--------+------+--------+
-> > >
-> > > Roblox
-> > > Higher is better
-> > > +-----+----------+------------+--------+-------+--------+
-> > > |     | Baseline |  Hypercall | %delta |  MMIO | %delta |
-> > > +-----+----------+------------+--------+-------+--------+
-> > > | FPS |    18.25 |      28.66 |   +57% | 24.06 |   +32% |
-> > > +-----+----------+------------+--------+-------+--------+
-> > >
-> > > Roblox Frames/mAh
-> > > Higher is better
-> > > +------------+----------+------------+--------+--------+--------+
-> > > |            | Baseline |  Hypercall | %delta |   MMIO | %delta |
-> > > +------------+----------+------------+--------+--------+--------+
-> > > | Frames/mAh |    91.25 |     114.64 |   +26% | 103.11 |   +13% |
-> > > +------------+----------+------------+--------+--------+--------+
-> >
-> > </snip>
-> >
-> > > Next steps:
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > We are continuing to look into communication mechanisms other than
-> > > hypercalls that are just as/more efficient and avoid switching into t=
-he VMM
-> > > userspace. Any inputs in this regard are greatly appreciated.
+On Wed, Apr 05, 2023 at 07:35:30PM +0000, Benno Lossin wrote:
+> Changelog:
+> v5 -> v6:
+> - Change `pinned_drop` macro to allow `mut self` in the signature.
+> - Change statement fragment to tt fragemnt in `pinned_drop` to prevent
+>   parsing errors.
+> - Move evaluation of the value in `stack_pin_init!`/`stack_try_pin_init!`
+>   to the beginning.
 
-Hi Oliver and Marc,
+Could you elaborate why? To make sure the $val evaluation happens
+unconditionally?
 
-Replying to both of you in this one email.
+> - Move setting uninitialized flag in front of dropping the value in
+>   `StackInit::init`.
+> - Remove `Unpin` requirement on `zeroed()`.
+> - Add note about `Pointee` to the `Zeroable` impl on raw pointers.
+> 
 
-> >
-> > We're highly unlikely to entertain such an interface in KVM.
-> >
-> > The entire feature is dependent on pinning vCPUs to physical cores, for=
- which
-> > userspace is in the driver's seat. That is a well established and docum=
-ented
-> > policy which can be seen in the way we handle heterogeneous systems and
-> > vPMU.
-> >
-> > Additionally, this bloats the KVM PV ABI with highly VMM-dependent inte=
-rfaces
-> > that I would not expect to benefit the typical user of KVM.
-> >
-> > Based on the data above, it would appear that the userspace implementat=
-ion is
-> > in the same neighborhood as a KVM-based implementation, which only furt=
-her
-> > weakens the case for moving this into the kernel.
-
-Oliver,
-
-Sorry if the tables/data aren't presented in an intuitive way, but
-MMIO vs hypercall is definitely not in the same neighborhood. The
-hypercall method often gives close to 2x the improvement that the MMIO
-method gives. For example:
-
-- Roblox FPS: MMIO improves it by 32% vs hypercall improves it by 57%.
-- Frames/mAh: MMIO improves it by 13% vs hypercall improves it by 26%.
-- PC Mark Data manipulation: MMIO makes it worse by 8% vs hypercall
-improves it by 5%
-
-Hypercall does better for other cases too, just not as good. For example,
-- PC Mark Photo editing: Going from MMIO to hypercall gives a 10% improveme=
-nt.
-
-These are all pretty non-trivial, at least in the mobile world. Heck,
-whole teams would spend months for 2% improvement in battery :)
-
-> >
-> > I certainly can appreciate the motivation for the series, but this feat=
-ure
-> > should be in userspace as some form of a virtual device.
->
-> +1 on all of the above.
-
-Marc and Oliver,
-
-We are not tied to hypercalls. We want to do the right thing here, but
-MMIO going all the way to userspace definitely doesn't cut it as is.
-This is where we need some guidance. See more below.
-
-> The one thing I'd like to understand that the comment seems to imply
-> that there is a significant difference in overhead between a hypercall
-> and an MMIO. In my experience, both are pretty similar in cost for a
-> handling location (both in userspace or both in the kernel).
-
-I think the main difference really is that in our hypercall vs MMIO
-comparison the hypercall is handled in the kernel vs MMIO goes all the
-way to userspace. I agree with you that the difference probably won't
-be significant if both of them go to the same "depth" in the privilege
-levels.
-
-> MMIO
-> handling is a tiny bit more expensive due to a guaranteed TLB miss
-> followed by a walk of the in-kernel device ranges, but that's all. It
-> should hardly register.
->
-> And if you really want some super-low latency, low overhead
-> signalling, maybe an exception is the wrong tool for the job. Shared
-> memory communication could be more appropriate.
-
-Yeah, that's one of our next steps. Ideally, we want to use shared
-memory for the host to guest information flow. It's a 32-bit value
-representing the current frequency that the host can update whenever
-the host CPU frequency changes and the guest can read whenever it
-needs it.
-
-For guest to host information flow, we'll need a kick from guest to
-host because we need to take action on the host side when threads
-migrate between vCPUs and cause a significant change in vCPU util.
-Again it can be just a shared memory and some kick. This is what we
-are currently trying to figure out how to do.
-
-If there are APIs to do this, can you point us to those please? We'd
-also want the shared memory to be accessible by the VMM (so, shared
-between guest kernel, host kernel and VMM).
-
-Are the above next steps sane? Or is that a no-go? The main thing we
-want to cut out is the need for having to switch to userspace for
-every single interaction because, as is, it leaves a lot on the table.
-
-Also, thanks for all the feedback. Glad to receive it.
-
--Saravana
+Regards,
+Boqun
