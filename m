@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A2C6D789F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FE96D78A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237444AbjDEJl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S237241AbjDEJmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237241AbjDEJlw (ORCPT
+        with ESMTP id S237457AbjDEJmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:41:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FCC90;
-        Wed,  5 Apr 2023 02:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680687709; x=1712223709;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kVOobzmnj++i6/mTKNgBVbf82YVzMo2cPA27RJYUBOw=;
-  b=WYqB7Va5djM/Yk/74wEawGWrJtjQdbptwGGlKz/Qa9y0Nse88o3GUNXf
-   s86u3QaOKPrwJBDTYsHxCqk/9YsvNBncOfppYuk56ljhGwL0asBefhiMU
-   p0jW07msRJapnnCnS3FctdDo5jWOX0OH3AfxLj7vG8sRsX8OcySt8fYXb
-   ch3ucxPAIi2+zVQxDuf0Q/ZkhyuwoqlJcibpVtrrEf4ewmU4FE4TZ0LbK
-   mbV7mG+1vvQr+SiukBPpoaD5PLOdJ1QuPC0HFMBQbx76h/u8PJZI9g5h5
-   0gOM+ddQkvcNvCjCqfC2D01biY6KwOH/O7fPRSZf0aNwi9oB/3So+tp6q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="326445343"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="326445343"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 02:41:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="830301145"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="830301145"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Apr 2023 02:41:45 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 1225913A; Wed,  5 Apr 2023 12:41:47 +0300 (EEST)
-Date:   Wed, 5 Apr 2023 12:41:47 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Olliver Schinagl <oliver@schinagl.nl>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>
-Subject: Re: [PATCH v1 1/2] iopoll: Introduce ioreadXX_poll_timeout() macros
-Message-ID: <20230405094147.GS33314@black.fi.intel.com>
-References: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
- <3a348abc-d1f3-364f-88de-a0012fbc0fde@schinagl.nl>
- <ZC04J30xQTVPJ1ho@smile.fi.intel.com>
+        Wed, 5 Apr 2023 05:42:01 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5935259
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:41:55 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r11so139580156edd.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680687713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0GjPZEs8t5YeiwXNylHqVxhWNUDxoz5iAqxoJIu/8Q0=;
+        b=yLqz41niCnA/4M7/IrxcpnX+Rzo4R6MbgmPCqwq2kgPg/nr+Y/R4zhnDHiboyEfeHZ
+         sgsAvPj4xkfkVHxUQ/U/64JQKOaevc52GhQnSgzkueU/7uAgfWHsItJaAtvGlGEgbue6
+         aZdgY7oKNN8kRfDtsIE/r6thnnk71KDvsVKxmdmM23LdB5nUHJaKh3lRf8h7jBgudKmS
+         O8SaYoHpbZ25XDySw1N0lu4UgF9GS9ntyjnJhSKurB0EznnNBmRB267YvyBmuAhpazrO
+         CnVSvdOpFVZAZ6Rse1DqDZctMuGFLwb1DBbIDUNky4dLha8Z/Qf/o5ctMJcn+pQQGjVa
+         9mnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680687713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0GjPZEs8t5YeiwXNylHqVxhWNUDxoz5iAqxoJIu/8Q0=;
+        b=h7AnmIdB1iQG9U0F/1s7XHqiJG0zxoLGcUh8R+ymIMwHl10BXAJYHORjSr0chzKzYV
+         1jqCLja8J5UiDQD292zDNyhcl/1B2X2oNReaM+Z6cV/ZHuFeNxZoSNbN0kWcCEIgHGJK
+         lQ4sEdrSLdRMprL61SUfjHtFmJwoWrByJ1opeF5Gc4+gkfintqqcZbgf4PpB0M55MuAD
+         Ly6iqqQ2OkqVK526qOxrsSseT/7TfKFJLLflfmHZwzIxamrNhWVKzaAp6WADC1hSgdA3
+         sxkvrG7HEHpSidJKymz+BizLcBQyW4+gpPnVp+PQwAzoP4s6gLd4khjR63IAZnaynCmZ
+         Q8jQ==
+X-Gm-Message-State: AAQBX9eYVm7gf3xRcAriZ3TyhqrtbQGp4LMI68FAvSbfzmcHWvyefJwc
+        esiH6t5yIKAQ/9pgHLCWnpMerQ==
+X-Google-Smtp-Source: AKy350Z+GWU8X5Rfpn9ZSONreiFN8UZk88nM4GBu2VN6MfCfdsudG3SA9Oy22EAYtXBrPqLsB6sqfQ==
+X-Received: by 2002:a17:906:a854:b0:8a6:e075:e364 with SMTP id dx20-20020a170906a85400b008a6e075e364mr2221475ejb.26.1680687713687;
+        Wed, 05 Apr 2023 02:41:53 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
+        by smtp.gmail.com with ESMTPSA id tc27-20020a1709078d1b00b009231714b3d4sm7142175ejc.151.2023.04.05.02.41.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 02:41:53 -0700 (PDT)
+Message-ID: <1403741d-ef51-a9c5-821f-358c8f470dab@linaro.org>
+Date:   Wed, 5 Apr 2023 11:41:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZC04J30xQTVPJ1ho@smile.fi.intel.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 1/2] dt-bindings: phy: qcom,qmp-usb: Fix phy subnode
+ for SM6115 & QCM2290 USB3 PHY
+Content-Language: en-US
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org
+References: <20230401154725.1059563-1-bhupesh.sharma@linaro.org>
+ <20230401154725.1059563-2-bhupesh.sharma@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230401154725.1059563-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 01/04/2023 17:47, Bhupesh Sharma wrote:
+> The USB3 SS (QMP) PHY found on Qualcomm SM6115 & QCM2290 SoCs is
+> similar to sm8150 QMP PHY in the sense that the phy subnode supports
+> 6 regs, namely TX lane 1, RX lane 1, PCS, TX lane 2, RX lane 2 and
+> PCS_MISC.
+> 
+> Update the dt-bindings document to reflect the same.
 
-On Wed, Apr 05, 2023 at 11:58:15AM +0300, Andy Shevchenko wrote:
-> On Fri, Mar 31, 2023 at 10:12:31AM +0200, Olliver Schinagl wrote:
-> > On 30-03-2023 16:14, Andy Shevchenko wrote:
-> 
-> ...
-> 
-> > But I actually have a small addendum for this series, as it will break
-> > `drivers/net/wwan/t7xx/t7xx_dpmaif.c` due to a redefinition (yeah I know).
-> > 
-> > So I have:
-> > https://gitlab.com/olliver/linux/-/commit/c9e591f2dabb2dbaeceebee61fa70b70fdbffc2a
-> > https://gitlab.com/olliver/linux/-/commit/41e0f8c08a1c55940813a240215910336ad7bec2
-> > https://gitlab.com/olliver/linux/-/commit/f36562f09b0185d403415864ef7218b46a742cdc
-> > https://gitlab.com/olliver/linux/-/commit/66237fd97bc42d272602b01dc0cca541c619b2be
-> > 
-> > Which actually replaces silly calls like readx_poll_timeout(ioread32, ... .
-> > 
-> > Do you want me to (re-?)post this as a series? I can put your thunderbolt
-> > (and your changes here) and post as one big series (or you can do the same
-> > obviously).
-> 
-> I believe the best course of action is to collect this series and your fix
-> in your hands and send it as a material for Linux WWAN subsystem with Mika's
-> Ack (if he has no objections). That said, let's wait for Mika's answer
-> on this.
 
-No objections from my side.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Bhupesh,
+
+Can you use scripts/get_maintainers.pl to get the Cc addresses instead
+of writing them manually or inventing?
+
+Best regards,
+Krzysztof
+
