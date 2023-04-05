@@ -2,164 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B396D85F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA726D8603
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232680AbjDES1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S233860AbjDESaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjDES1s (ORCPT
+        with ESMTP id S229492AbjDESaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:27:48 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2052.outbound.protection.outlook.com [40.107.237.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A6B3A9F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:27:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J6ikn0BMgx6Aob3br7FVADoz3W8G0SMR/9OwLL/p/PADMj80p+0GKRUueZneLR+/zA3IzsnFCPx2wYg2DU/ssNoPFQxhoTLDhwUaqnrD4qfAHPl36cTh7pd4LQhFeZP2nadLumiVsg4l/YHYcPSC/wSHahmQfg0BTLoOfpieLxc0+zvd3sNp5g2gRY0/X7f3uMbcwSMJLlyxqou90JVS+/P4jwBGdB1IUewWU4ibQ/2ewekZJciV77pZB1X3nbVxoICodgv1BWyNEvjJg/gFx27PB6+7SiaJ7ByZpd8HTFOytI0a1RI1U+FUK4gfwgiiP7EG6umMlx2ys82clD9Pwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K2I0b9CZzJRAYG8FDj2uU7WSYe7YsbtDgg8B7DuEz2E=;
- b=dFMlvUlIa02NjoAI2LaJe+2mMvl2ko2RsvWUIvDSXkWcG4fqxFZ3fSQLq2psW/8jOwX1PMdG+YYCs9PR7cQY8zG6USx9WXNw4SEvwvaS48ERi7ZP8bnPq8WDlNiXrE7IQduh7XAAv/alTAiJkKcaQ3Hk/PLXFTsuDF5qmSvWh9J1JlBrsfXtXySnhB8oPReDC6vzKdKH/Skuq4bnxIwwyjzthPhaD9AtWhi5HOaxXx9RN21uTavboCM3d0FGuAcLSqjz78ftkgrJ8HvkkF3sm0/x4O0Xd0TvtdNMjHIwaKWXA4IimliIg+yhSVCRfOpwRSzDYdTMWIUDhEqlBzDBhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K2I0b9CZzJRAYG8FDj2uU7WSYe7YsbtDgg8B7DuEz2E=;
- b=2lsKnRe7jWbRLbxeW/t8Z6m7E6FDrUZAAOTvWp8fA/KF49Ra5qhb/FC1PJVsmWSzoqP9R65zWAeGBQyCZSDN8Qt0O8Nu65Jq3bqoojg3hU9hNHejMitLyGMJ3PJoxbbMqBLQaWKlY1tzuWTmYYauGaxSlc2nvXe5VaCFQgo2t54=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
- DM4PR12MB6638.namprd12.prod.outlook.com (2603:10b6:8:b5::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.35; Wed, 5 Apr 2023 18:27:45 +0000
-Received: from DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
- ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6254.035; Wed, 5 Apr 2023
- 18:27:45 +0000
-Message-ID: <9f37165a-5cdb-a688-2595-6cc9bf0e5e43@amd.com>
-Date:   Wed, 5 Apr 2023 14:29:06 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] drm/amd/display: Fix potential null dereference
-To:     Igor Artemiev <Igor.A.Artemiev@mcst.ru>,
-        David Airlie <airlied@gmail.com>
-Cc:     lvc-project@linuxtesting.org,
-        Harry Wentland <harry.wentland@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
-References: <20230403131037.1912215-1-Igor.A.Artemiev@mcst.ru>
-Content-Language: en-US
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-In-Reply-To: <20230403131037.1912215-1-Igor.A.Artemiev@mcst.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0459.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d6::18) To DM4PR12MB6280.namprd12.prod.outlook.com
- (2603:10b6:8:a2::11)
+        Wed, 5 Apr 2023 14:30:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450B210E6;
+        Wed,  5 Apr 2023 11:30:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D758963FDD;
+        Wed,  5 Apr 2023 18:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 225C7C433D2;
+        Wed,  5 Apr 2023 18:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680719418;
+        bh=eC5lvqoT/q5ShJSZpTkIfYCwnUt/o1ct3RNlGhkzaoI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=eTltNe+Ba+LbO0e+ZBlC0h1BY4DyZconlM2o52CNyo3qe/XjLniM75scQ6gLjasq3
+         8tDDphRs60xpFjj6Obc5u5yBwvO29HeO6QxOLpWf6KcBMrtnVqpcjIJNVIzpj1IMJV
+         643hmQ1bawkn5iKGLMgpCVS87BKb2Ip+aR5SGBA3gGNHlRZdUiNFYYuE8YU4jwd5yP
+         Dwff1zb5soCTUT5d9pEP5h96xdy5ypUsbfQy4ndALwNlSHhradkuZfwLFv52nI1z82
+         JtdgDCLMZQu0EWoHzpcegqIVDUqBbAu6y6iqvDAxPXT0k3CgAQclV36UAg4dhOnQ+d
+         fVu4Dfo5zBGBQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EF817E29F4C;
+        Wed,  5 Apr 2023 18:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DM4PR12MB6638:EE_
-X-MS-Office365-Filtering-Correlation-Id: f021f918-2eb6-4deb-5a23-08db36037307
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: exnOe1+xJt6dX119oY/G03GMr/aS1Fl33obhSS3yrgwUYFB5m66wroGdGCGH5GFZ1/tztTh9onxZ0liqhc5QmFRlO+irW4BXZJp35igbfQ8UiDe8EcYdCtPEivM+Id/izwkFPkLkyOdpLnbPhHq0HY/WU4rdEI5F/ifFiEqqHrwrgjqhYhdHE02xOh2/s9znBUk+RN/ElFmZZkBBKXdhp6s94srHgeV7EXjqc/HubVKC+9MsT2qTMxzWONgu49U4CfgQfVSVsMbksvnk+gCCm1vYwh06E3EmIbg0UuHo+fJ60JrorllIVa3xYkFMOinAVeWNOjInyJ7jRSsmxoXxQYp9sSZ7KBSyLjxeBbEL0dH6MbgX2ot0SuYXNjZb0ePci2x6NNT2heDsJBvxYXKCzu08IRz/PBRuqej4PMpJt+sgEAjs9OE56HEtU9zWkwX0J8YXxdEderm9CtEfWl3x6IfgsnC2eMG7FHbSUJbntyezEZ/HXcH3BN6edSGTAyBdeXYsio/mwGHTqESg1soeAPtNYNevH72JBO21nIscT2ltKjU6SdSqi6qlAxdL0BLTUfwZfC3Vqyggyk7gpu7JTPVdmy47ydoL/0t87Ws/tnUM2BPImY9VXVi4u5lvyrAQM9s7u7SdmmRILf1lvzZXLg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(39860400002)(346002)(366004)(451199021)(6512007)(26005)(6506007)(53546011)(4326008)(186003)(86362001)(478600001)(54906003)(110136005)(316002)(5660300002)(6486002)(66476007)(8936002)(36756003)(41300700001)(44832011)(2906002)(66946007)(31696002)(8676002)(38100700002)(66556008)(6666004)(31686004)(2616005)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUJNOS96TjZsblgxMEhpTEk3cEFDa1plazhHVktwMDRBSEJ0U0VjdWd1WVZI?=
- =?utf-8?B?ZXU0YXRrQTVJNHN1bGlXQXpBbExxSDlGNmR2aU9YYUozTk9CYzZTSjJ1VHJi?=
- =?utf-8?B?VDdhamcwZ3QrZk9XbnR1NWJhaDV5UC9HNVFyaVg5ODRlcEY1dXYySUZ1TVdX?=
- =?utf-8?B?UVhmMFRURG16OUREZStFV2Z0SnFQU0lxcVVmSktSZjh0bEwyc2Z2MXpyd0hs?=
- =?utf-8?B?RDNrU3JhV0E4WENrdUt0aXJrQjY0VnFrcmNwUWl0VEZlbHI2VFpvWmwzd1Rn?=
- =?utf-8?B?Y3VrU0x4VzlrUkZXUFM0eVlNdEUxQkNVaGFSM0ZkblZuSDVhOUNwUEF4aGRn?=
- =?utf-8?B?TFBkd21WYW9ydUVKRWxHcUxiUzJFN0tzZFh1ZWxhNWhwTlJ3ckI2Zks3S29y?=
- =?utf-8?B?UTRQaXdkM0xQOFlWTjZsSDMwNlR0VVF5b255MHR4c0JBd3lBWXlESkRUNmFk?=
- =?utf-8?B?QXBuSDUyaFR1OXhqWmJHQjB2cGdvME1NYnRzMGdPVUdNOVhrc3EzdWpaZmlu?=
- =?utf-8?B?ZFlweHBRVUwvdUdrelQ2dXRzOWgzTTJMd2QvQmV1MHNOWDkrNnNKcGtzOTBG?=
- =?utf-8?B?RVlUMXZoRVkrK0JUcTVra3FJaFh5dWpxS1JZSmVFbWVQTS9pVjNpcGJLcW1V?=
- =?utf-8?B?bUdrR0FxbE8yOEx0YVdYd0g0WngwUDJmS0NRbFA0eHZNZjhwbGk3Y3I2UVVZ?=
- =?utf-8?B?WVFHTUlISFB3eVB1NmErTWU2U0J3SUVMdlhjUHNoVGlLZkZDVWFpT1o4UE9x?=
- =?utf-8?B?c2NMd1FoRUVFaUhLVDN3cUIzOFR5OTFPMG5LN3pTSi9MUmZDNCtYZGlMQzlz?=
- =?utf-8?B?eTBZU0NtOXJBSmt2YXdHRGlPNEVTbUI3WkFCbVpMZVJXcERsNmZXTUNZTk9Q?=
- =?utf-8?B?Q3pWdVNtRTRwQmN2Q1YvVFdQbVVBVUJNV0lWS0pqVUJoc0dITnM4V1o0SVVw?=
- =?utf-8?B?aFBHTm5XY1BYdzhTbFIvcm5nUVVOdndJWEZZUDdvdCtObkFZeGUzZGZNN3Ro?=
- =?utf-8?B?b3hsTkRUYkVhN0xEaWVBcEJnY24wMVV6Y09UVXpPTTdMVEdEbDF0T1BGdzRZ?=
- =?utf-8?B?NU9KYkhYdzZYVXVXMWdUQWJRVTBWSkJ2SFhLVktXVmxaVk4zWnRLRDNPMzZo?=
- =?utf-8?B?VHZ4cXB0K09UTzhGRjN6OFNrbXIwcENHemVuazVqYUFxd1QxNUxaV1ZKdGMy?=
- =?utf-8?B?dTA3elFtdkEySVhiL211d3NsYlJtY0txN0ttNXFGZXo4NlVzT1dmT3ZrKy9Z?=
- =?utf-8?B?RXJZUktWM0s0Sm9DaW03N0FsaWFFOHVtSDVPWS9WZXhNOEZmeXRUMnFIcE84?=
- =?utf-8?B?Z3VlSkhkbEp6YUZLREZDb3Byc2dXQzRQc05UZC81dEZIOFBNSFJ5TDc4Tyt6?=
- =?utf-8?B?OXhCNlpBcW5rMmhvWlY3UzdlQXdqd3pEVlZOYW45eFNuTzZxbWJEVU5OTEFj?=
- =?utf-8?B?TVhQOVQxaEJ0ZzJmaUxTekNZYTlrSCtjZ3lSMC9QRlh4TzJQZkFTRmJZYXhk?=
- =?utf-8?B?TVpQcnQza1lGcHJJWFdLck1YdXdSU3NMMXlmSXlpTEplSGNPelZFcWZJRW1F?=
- =?utf-8?B?cHpRcGZkVXNIOHJpUGVIYjNaR0dkeVRETVg4OGpBZEIxSXUxK2hPby9QU1Jh?=
- =?utf-8?B?TnZUdHNLSGtmMDRQV3Z1YU41MGpSYjJFRVJaQ0pWQkkyUjRSRDBtR1ovamJy?=
- =?utf-8?B?MEJGcmR6ZWdCY0dEbnRlRTA3N0hhSXBFN0VSbkpWR0E3Yjgyb2EycmtZM2k1?=
- =?utf-8?B?bUtuSHQyK20zMnIxNXdkYjhJQlVNQ0w3YTZZWGZ4M0ZjeGlyMjFqOW40aE40?=
- =?utf-8?B?bDUydHNaQ3RPVFdjTVlYYk1sTW11TE1HVjF4S2RjdE5scmtlSFpoa0NRaXVJ?=
- =?utf-8?B?Tm5FZGVxTk14YklKNlFqTjFjNVM2blJ2a1lOVjc5dTc1S3BlSWw5YXk0YlNY?=
- =?utf-8?B?UVoyLzBNR05XWXlwM2VpYmhLL3BIMkVXVzVLL0x0M0VobHN6ZWl3L3hOK2lk?=
- =?utf-8?B?NGtQMjdVbzRybE53bUVoTG9naDdaWnJZR1BYZ0pKRlorT2ZXQXd0WnI0MGpq?=
- =?utf-8?B?UmZOdmV2bVk1aGhudTB6MVc5MW1YK3doVThFZ1RidG1ud1EvalF5cnFSTk1Z?=
- =?utf-8?Q?NXibd5dOq9+uGXNuSrrc6gyto?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f021f918-2eb6-4deb-5a23-08db36037307
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 18:27:44.8130
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CiDGPRhg8DEKf5rMA1BIlaSsljcmtHRle3GwMuXQFRFXJjmLX7kMUdNkoAPeKjRb1dYolNkAWNBQh/LrySw/Nw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6638
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests: xsk: Add xskxceiver.h dependency to
+ Makefile
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168071941796.18884.13193055443894349169.git-patchwork-notify@kernel.org>
+Date:   Wed, 05 Apr 2023 18:30:17 +0000
+References: <20230403130151.31195-1-kal.conley@dectris.com>
+In-Reply-To: <20230403130151.31195-1-kal.conley@dectris.com>
+To:     Kal Conley <kal.conley@dectris.com>
+Cc:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/23 09:10, Igor Artemiev wrote:
-> The adev->dm.dc pointer can be NULL and dereferenced in amdgpu_dm_fini()
-> without checking.
-> 
-> Add a NULL pointer check before calling dc_dmub_srv_destroy().
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 9a71c7d31734 ("drm/amd/display: Register DMUB service with DC")
-> Signed-off-by: Igor Artemiev <Igor.A.Artemiev@mcst.ru>
+Hello:
 
-Applied, thanks!
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
+On Mon,  3 Apr 2023 15:01:51 +0200 you wrote:
+> xskxceiver depends on xskxceiver.h so tell make about it.
+> 
+> Signed-off-by: Kal Conley <kal.conley@dectris.com>
 > ---
->   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index a01fd41643fc..27f7a554874e 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -1854,7 +1854,8 @@ static void amdgpu_dm_fini(struct amdgpu_device *adev)
->   		dc_deinit_callbacks(adev->dm.dc);
->   #endif
->   
-> -	dc_dmub_srv_destroy(&adev->dm.dc->ctx->dmub_srv);
-> +	if (adev->dm.dc)
-> +		dc_dmub_srv_destroy(&adev->dm.dc->ctx->dmub_srv);
->   
->   	if (dc_enable_dmub_notifications(adev->dm.dc)) {
->   		kfree(adev->dm.dmub_notify);
+>  tools/testing/selftests/bpf/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [bpf-next] selftests: xsk: Add xskxceiver.h dependency to Makefile
+    https://git.kernel.org/bpf/bpf-next/c/9af87166944b
+
+You are awesome, thank you!
 -- 
-Hamza
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
