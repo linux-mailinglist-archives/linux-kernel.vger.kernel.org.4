@@ -2,118 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A87E6D8035
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC026D803B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238441AbjDEO7r convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 10:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
+        id S238377AbjDEPBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjDEO7p (ORCPT
+        with ESMTP id S229879AbjDEPBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:59:45 -0400
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CB61FF7;
-        Wed,  5 Apr 2023 07:59:44 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id t10so141660331edd.12;
-        Wed, 05 Apr 2023 07:59:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680706782;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PIwPFSHZcZTOVeokZaz942Rb6z1/6U2kl/cQF2ZCigE=;
-        b=5bS2HCsY35fAE37qkFgV8uZnvsrcEf1jzxU2tn9nGp+zJIh1LIW1m4M/jwBCSSHBKV
-         su7HMqesWIDztCB5kTGfAclcRu0hyZEJwprGFpfwHnIbKdMlPl+P2WG3afpLcu/BnCa/
-         RXhm+ey2ysrTga10wgSbYSzmidWdMEh9UiwknM4ttqv43oTOrru09szjeDKMHitJ6VuN
-         5wYRL4uuddVSHvuDBHW07f8yNKknSYzlOh2O8XzOaAYR6i3YLcNeAI7LaEpuw0qfdYsJ
-         xkKolKpiQCp3F3YgvH4KUIAu49iFWv1lpDNRg8LGlNM/vbw94as5yov4R2aW/rJkoFxG
-         3S2Q==
-X-Gm-Message-State: AAQBX9cYyPRrgMnrA+1LcF29aj4alA9+jUc7zJPTNx1R3K5nrgojX61v
-        mboDFX7NhwuFnwfKS0ivL4WBXemNFCWTpv3w2/4=
-X-Google-Smtp-Source: AKy350a4pvA7bHYbF3tn7kupoBqb+rMIx2cjRVXOEUqiuhWhUrNUA75BhjkFXftrDZzlVLFANv2u1dboAZf4nW2MZkk=
-X-Received: by 2002:a17:907:3f92:b0:934:b5d6:14d0 with SMTP id
- hr18-20020a1709073f9200b00934b5d614d0mr1986841ejc.2.1680706782565; Wed, 05
- Apr 2023 07:59:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230329-acpi-header-cleanup-v1-0-8dc5cd3c610e@kernel.org> <20230329-acpi-header-cleanup-v1-5-8dc5cd3c610e@kernel.org>
-In-Reply-To: <20230329-acpi-header-cleanup-v1-5-8dc5cd3c610e@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 5 Apr 2023 16:59:31 +0200
-Message-ID: <CAJZ5v0h8pEq4Tx-Q=VPT-XR73NRk=_XQg6vgr-wA-CFesuuSLg@mail.gmail.com>
-Subject: Re: [PATCH 5/5] ACPI: Replace irqdomain.h include with struct declarations
-To:     Rob Herring <robh@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
+        Wed, 5 Apr 2023 11:01:32 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A274203;
+        Wed,  5 Apr 2023 08:01:31 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 63922320031A;
+        Wed,  5 Apr 2023 11:01:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 05 Apr 2023 11:01:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1680706889; x=1680793289; bh=QJ
+        L8kruNqpnU3ciJpzabnkEsxgv2FytG75yCcU3W/5A=; b=ori40a6yjrumQN+QpS
+        twsnnpOyY0XZFZgXzcV323I2xrb8tq+3ugZ2Hwgla4DGgKg5+72bzAbHlT07lYDg
+        8ECtCtD71CYbPx1qZf+w8U1Dtxn97KAi7xH7MbkzvYNc12B3RvdrQP9kmiAbcHpz
+        0EsJFcqZ8/RKkkCmRX/BX3uN4NU7+ApS0Ms+o0zf/sLMhUgx1p+bZcJ/oeWOeCGi
+        MQxi4RdgoTd9ga4THNuTJs11y+QhgmuBdpkW5gMjdJnMG6tH+HPPgQKMZTUbqZ/S
+        /1itP5hj9z4QXL18vPukLm3VSUWpPMZWAw9xoBnSpClf0/cZ/P5FOGieNk9UkoxX
+        nWAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680706889; x=1680793289; bh=QJL8kruNqpnU3
+        ciJpzabnkEsxgv2FytG75yCcU3W/5A=; b=nnn8TVnC++0k4aTM9GXIQp5yL6N9e
+        CJyMbl6Ea4MJLJkhiQJk96wJqU7u2QsGUFgeiq3YFIxtvy77dV+AsKqsFr0qbLrH
+        aewSDtJu+7Yro2kDsL5RziJMh+btTMwxBK2S+awpQtmBDeKrKPiHVfmgBFX0JNRl
+        UC+lThGaMAzAqCN/TYYfcVqbkgLCnk+J2CRNGyk8UExZNewCH2tzkkR5j75/8hYC
+        07d+kok9epFSTrxV5btmKLIXmH4fYJkymjsT/AOVs4nf1NvkIC30l6TjAUBX1oBO
+        oxn0U6gwxiGycGlnc9A8ad8bc0k7wiiS09M9cez99tpDwRM1Hmp7zdnLg==
+X-ME-Sender: <xms:SI0tZJnhpS047e-aQCA53jeB_NuS6Uma_EFn0nN5TUojShodAHD6eQ>
+    <xme:SI0tZE2gUmdK0is8xJiUTO1itJRp4KSYtjM5Drgt2vynJhoGDtNZN6dQcWwrokcap
+    xLxG4p1LgobiMvFqiE>
+X-ME-Received: <xmr:SI0tZPrGj7573KcBg8vrSuljcTRhwgy-Xb9RoIaS1BhqEZSNvttBIcvA7YlP2nqECFN0ab5WdYcFfeMN-P1Je6G3jxEVLFs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgkeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:SI0tZJnAV880vctHO3cTZBt1T2h7PBKrm1mVdCArS8GwuLI7Xaq96w>
+    <xmx:SI0tZH07tpY1p5lcqBUrE9NIYA01hzsqzvm4ybLp0ncxc8xmEXvi2Q>
+    <xmx:SI0tZIs-LKOubOo0350bqkn99Zf6takSCvy_FljGRjSy40mDBDFN4w>
+    <xmx:SI0tZFm80BbguG3rPX46x3lJYv7veP-pnO0Yx074npAn_g6Prby3Zg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Apr 2023 11:01:27 -0400 (EDT)
+Date:   Wed, 5 Apr 2023 17:01:26 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Rob Herring <robh@kernel.org>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Marc Zyngier <maz@kernel.org>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH 7/7] dt-bindings: display: add panel-timing property to
+ sitronix,st7789v
+Message-ID: <d3d3cnpoeiozaqvbgy4e767omkjqi5vywj6jkxcl6pzgwu654k@kebuuk6irse4>
+References: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
+ <20230314115644.3775169-8-gerald.loacker@wolfvision.net>
+ <20230316215735.GA3940832-robh@kernel.org>
+ <dd26836f-d54c-65d1-0acc-8a09745bb066@wolfvision.net>
+ <20230329091636.mu6ml3gvw5mvkhm4@penduick>
+ <d5a31f75-eb93-0ff2-cd5b-19cdec58e103@wolfvision.net>
+ <20230330145811.asot2cvux4ebbeqy@penduick>
+ <5f1f90e2-eee8-d941-e4b0-7f2411a9d415@wolfvision.net>
+ <20230404160419.xlnlxq7sbsqopfwo@houat>
+ <2c3fa5ee-78a9-8359-01fc-3137f3cb1b9b@wolfvision.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="uqdnhsc2u25qcidy"
+Content-Disposition: inline
+In-Reply-To: <2c3fa5ee-78a9-8359-01fc-3137f3cb1b9b@wolfvision.net>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
 
-On Wed, Mar 29, 2023 at 11:21 PM Rob Herring <robh@kernel.org> wrote:
->
-> linux/acpi.h includes irqdomain.h which includes of.h. Break the include
-> chain by replacing the irqdomain include with forward declarations for
-> struct irq_domain and irq_domain_ops which is sufficient for acpi.h.
->
-> Cc: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  include/linux/acpi.h | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index efff750f326d..169c17c0b0dc 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -10,12 +10,14 @@
->
->  #include <linux/errno.h>
->  #include <linux/ioport.h>      /* for struct resource */
-> -#include <linux/irqdomain.h>
->  #include <linux/resource_ext.h>
->  #include <linux/device.h>
->  #include <linux/property.h>
->  #include <linux/uuid.h>
->
-> +struct irq_domain;
-> +struct irq_domain_ops;
-> +
->  #ifndef _LINUX
->  #define _LINUX
->  #endif
->
-> --
+--uqdnhsc2u25qcidy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This causes build issues in linux-next, so I've dropped the series.  I
-will be happy to pick it up again when the build issues are addressed,
-though.
+On Tue, Apr 04, 2023 at 06:26:25PM +0200, Michael Riesch wrote:
+> >>>> A different question is the partial mode, for which (IIUC) you sugge=
+st
+> >>>> the overscan feature. As I have never heard of this before, it would=
+ be
+> >>>> very nice if you could point me to some examples. Where would the
+> >>>> effective resolution be set in this case?
+> >>>
+> >>> So, back when CRT were a thing the edges of the tube were masked by t=
+he
+> >>> plastic case. HDMI inherited from that and that's why you still have
+> >>> some UI on some devices (like consoles) to setup the active area of t=
+he
+> >>> display.
+> >>>
+> >>> The underlying issue is exactly what you describe: the active area is
+> >>> larger than what the plastic case allows to see. I don't think anyone
+> >>> ever had the usecase you have, but it would be the right solution to =
+me
+> >>> to solve essentially the same issue the same way we do on other output
+> >>> types.
+> >>
+> >> OK, we'll look into the overscan feature. But still the information
+> >> about the active area should come from the driver, right?
+> >=20
+> > No, the userspace is in charge there.
+>=20
+> I'd prefer not to have the hardware description in user space. But we
+> can continue this discussing once our v2 is out.
 
-Thanks!
+I'm not sure if it's worth doing something if you don't agree with it :)
+
+At the end of the day, "the hardware" is a matter of semantics, and you
+would argue that it's only the (user) visible part of the display, and I
+would argue that it's the whole panel and we would both be somewhat
+right.
+
+The thing is: having the margins definition allows the userspace to be
+aware that there's overscan to deal with, and for example setup the
+scaler to properly display whatever you put in there.
+
+If you just report a weird mode that doesn't match any kind of standard,
+well, you could still do that, but you would need to tell the compositor
+which mode you would need to scale down from.
+
+In both case the userspace is involved. One is generic, the other isn't
+and probably requires some extra development.
+
+Maxime
+
+--uqdnhsc2u25qcidy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZC2NRgAKCRDj7w1vZxhR
+xUKjAP0bosIXR0c4/QGmXsVFAriJBRNXL74WtMDPDn1tfpDQaAD+N1650T66iI7O
+gnDqW/1Wwe83g8aBarlnGNN9YWcSNw0=
+=hGRX
+-----END PGP SIGNATURE-----
+
+--uqdnhsc2u25qcidy--
