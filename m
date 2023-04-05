@@ -2,53 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3526D76C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65996D76DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237469AbjDEIYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S237492AbjDEI3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237332AbjDEIYP (ORCPT
+        with ESMTP id S237165AbjDEI3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:24:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E53526B8
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:24:13 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pjyR6-0004QA-P7; Wed, 05 Apr 2023 10:24:08 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3E3E81A7068;
-        Wed,  5 Apr 2023 08:24:04 +0000 (UTC)
-Date:   Wed, 5 Apr 2023 10:24:03 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Robin van der Gracht <robin@protonic.nl>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Shuangpeng Bai <sjb7183@psu.edu>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] net: can: j1939: Fix out-of-bounds memory access in
- j1939_tp_tx_dat_new
-Message-ID: <20230405-backlit-unscathed-fab6044bdc4c@pengutronix.de>
-References: <20230404073128.3173900-1-o.rempel@pengutronix.de>
+        Wed, 5 Apr 2023 04:29:00 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E12B24C2B;
+        Wed,  5 Apr 2023 01:28:53 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pjyVe-0007pG-02; Wed, 05 Apr 2023 10:28:50 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id DFD7AC2160; Wed,  5 Apr 2023 10:26:54 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 10:26:54 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: lantiq: remove unused function declaration
+Message-ID: <20230405082654.GC5556@alpha.franken.de>
+References: <20230329210328.9320-1-olek2@wp.pl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4l7fptulstbh7cod"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404073128.3173900-1-o.rempel@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+In-Reply-To: <20230329210328.9320-1-olek2@wp.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,59 +41,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 29, 2023 at 11:03:28PM +0200, Aleksander Jan Bajkowski wrote:
+> The removed function declaration is a leftover of the old gphy firmware
+> loader, that has been removed in d5103604f78e1afc29e586785af540c82b573f3a.
+> 
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> ---
+>  arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> index 4790cfa190d6..c2e0acb755cd 100644
+> --- a/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> +++ b/arch/mips/include/asm/mach-lantiq/xway/lantiq_soc.h
+> @@ -94,9 +94,6 @@ extern __iomem void *ltq_cgu_membase;
+>  #define LTQ_MPS_BASE_ADDR	(KSEG1 + 0x1F107000)
+>  #define LTQ_MPS_CHIPID		((u32 *)(LTQ_MPS_BASE_ADDR + 0x0344))
+>  
+> -/* allow booting xrx200 phys */
+> -int xrx200_gphy_boot(struct device *dev, unsigned int id, dma_addr_t dev_addr);
+> -
+>  /* request a non-gpio and set the PIO config */
+>  #define PMU_PPE			 BIT(13)
+>  extern void ltq_pmu_enable(unsigned int module);
+> -- 
+> 2.30.2
 
---4l7fptulstbh7cod
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+applied to mips-next.
 
-On 04.04.2023 09:31:28, Oleksij Rempel wrote:
-> In the j1939_tp_tx_dat_new function, an out-of-bounds memory access
-> could occur during the memcpy operation if the size of skb->cb is
-> larger than the size of struct j1939_sk_buff_cb. This is because the
-> memcpy operation uses the size of skb->cb, leading to a read beyond
-> the struct j1939_sk_buff_cb.
->=20
-> To address this issue, we have updated the memcpy operation to use the
-> size of struct j1939_sk_buff_cb instead of the size of skb->cb. This
-> ensures that the memcpy operation only reads the memory within the
-> bounds of struct j1939_sk_buff_cb, preventing out-of-bounds memory
-> access.
->=20
-> Additionally, a static_assert has been added to check that the size of
-> skb->cb is greater than or equal to the size of struct j1939_sk_buff_cb.
-> This ensures that the skb->cb buffer is large enough to hold the
-> j1939_sk_buff_cb structure.
->=20
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Reported-by: Shuangpeng Bai <sjb7183@psu.edu>
-> Tested-by: Shuangpeng Bai <sjb7183@psu.edu>
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Thomas.
 
-Applied.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---4l7fptulstbh7cod
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQtMCAACgkQvlAcSiqK
-BOjssAf+O9dv5x401qELD8L9Ah8/YlghfKAAA3rx9N8lJHSPIH97AjLbklcPLzTc
-Jmxi/SMQm0/RfKMkyFqHNxuv0xM0N41xFNNmjHR22PmS39TFIe5xtOdEEBccMZ2X
-22tUOXM7fXGLBQmeTlepA8JJxnoBUXQ2UQlsCAlAQboyQ1HIvAJHd/68jS96jz47
-zGVs8clal7jvE5kPVjxckgTotvOePCh/RB/AznSpq5Z1Fhc1sKVnG2InfJbI5QpQ
-BMBGU4HbRtQBuV50B5X8HiT2fJzwR05zQJHSQ/2OM+uoFts/yQOwceckWh4qGgjg
-cz73S0O0SfIWB/CSNUMWpsD/1j8sIw==
-=3uI+
------END PGP SIGNATURE-----
-
---4l7fptulstbh7cod--
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
