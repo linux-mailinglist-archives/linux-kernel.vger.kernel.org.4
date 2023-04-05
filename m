@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC866D7969
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865CC6D797B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbjDEKRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S237788AbjDEKSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235049AbjDEKRn (ORCPT
+        with ESMTP id S237291AbjDEKSs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:17:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B84198D;
-        Wed,  5 Apr 2023 03:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680689862; x=1712225862;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=EGf9OnEDe3hrZhNghZlA7uytU/26J3PuuPCSwZuV6VU=;
-  b=Q0qSPoXc9eXYvSEWmBpNiGhrHVJZSAqC15dLlMer+/NBgkovDK0e71VQ
-   gmOQd6z2jmUzFwLTHNLhMNd8Ig3BjhofI722ngCZlRhDlI7Ya7VIbmzu/
-   IgNFX4mKJttcoUNVvwB1jRwZCBbdlrHtfJKkWb+HPQSi3xn5GO8+9wY6d
-   DPyr+sWysBCOTpA5kGVUCcKo+EVkE6gprTd2fGwfxRoGC/w2RjWH9QvHf
-   lDtSUap094gKpRunmWjJSj1VOKDOUn+LmtzhmvZEZikeBCU232kpXIuxI
-   o7sn2DwHQePl/5uxRNFplr5VluxBVsfmo41ygYN9JU7CMFYqVxL+/D0Zp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344132895"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="344132895"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 03:17:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="810584030"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="810584030"
-Received: from wtedesch-mobl1.ger.corp.intel.com ([10.252.53.134])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 03:17:39 -0700
-Date:   Wed, 5 Apr 2023 13:17:36 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Brenda Streiff <brenda.streiff@ni.com>
-cc:     Gratian Crisan <gratian.crisan@ni.com>,
-        Jason Smith <jason.smith@ni.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH tty-next 2/2] serial: 8250: add driver for NI UARTs
-In-Reply-To: <862a78b5-b89a-0b26-e0f8-f910dd3434ba@ni.com>
-Message-ID: <b5736c6e-6b2d-875e-5a81-8f7b66a19d5f@linux.intel.com>
-References: <20230329154235.615349-1-brenda.streiff@ni.com> <20230329154235.615349-3-brenda.streiff@ni.com> <4687fc63-65ad-c717-70b4-731079be38f7@linux.intel.com> <862a78b5-b89a-0b26-e0f8-f910dd3434ba@ni.com>
+        Wed, 5 Apr 2023 06:18:48 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF7C4C27;
+        Wed,  5 Apr 2023 03:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=yJ16+cUT0D7ZVTErfZwxzpUUZnFQ1yqnqpQx3pT2yuE=; b=xNXdVbtPEQ7P54mUHFZ1T4HKNB
+        ukQx0seAcml+qIAsJ2sLzXRsiPchyuM64rLCzMlXxHsQDJRIubi+34vv2ToTtIK3iZ/ATyjSda7nf
+        Oi2DuJUcczk+WMWnVT2qwWkyJD3QAXEK2xlyRuNt22/NHyFnwsMVRkYyGSyMIgd9gNQ3W/xQFbSBS
+        04x9A54r2+piVmdAQxWvxOwSDHWjBFCypmkT7M8k2rGFTEQ/rckQKkDwrzYNKZxeF8zX3o/ab0/Lg
+        g2z8YmB1ZKNG43Y+0bFl7O0drdS8B3229jr1dcUD+kvN3Fd9mJ+V2VRBvVKwteoplvcd9FyB1jD+u
+        UQlBk+rA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56198)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pk0Db-0005KI-EB; Wed, 05 Apr 2023 11:18:19 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pk0DW-0006DJ-CA; Wed, 05 Apr 2023 11:18:14 +0100
+Date:   Wed, 5 Apr 2023 11:18:14 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hkallweit1@gmail.com, andrew@lunn.ch,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Looi Hong Aun <hong.aun.looi@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>,
+        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
+        Tan Tee Min <tee.min.tan@intel.com>,
+        hock.leong.kweh@intel.com
+Subject: Re: [PATCH net 1/1] net: stmmac: check fwnode for phy device before
+ scanning for phy
+Message-ID: <ZC1K5mLAkkO7bjA4@shell.armlinux.org.uk>
+References: <20230405093945.3549491-1-michael.wei.hong.sit@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-906799157-1680689861=:2159"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405093945.3549491-1-michael.wei.hong.sit@intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-906799157-1680689861=:2159
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 31 Mar 2023, Brenda Streiff wrote:
-
-> On 3/31/23 06:46, Ilpo Järvinen wrote:
-> > On Wed, 29 Mar 2023, Brenda Streiff wrote:
+On Wed, Apr 05, 2023 at 05:39:45PM +0800, Michael Sit Wei Hong wrote:
+> Some DT devices already have phy device configured in the DT/ACPI.
+> Current implementation scans for a phy unconditionally even though
+> there is a phy listed in the DT/ACPI and already attached.
 > 
-> > > +	int irq;
-> > > +	int rs232_property = 0;
-> > > +	unsigned int prescaler;
-> > > +	const char *transceiver;
-> > > +	int txfifosz, rxfifosz;
-> > 
-> > Try to follow reverse xmas-tree order.
+> We should check the fwnode if there is any phy device listed in
+> fwnode and decide whether to scan for a phy to attach to.y
 > 
-> Is reverse xmas tree also the rule in the tty subsystem? I was aware of
-> it for netdev but I thought that was a netdev-specific rule (since it
-> only shows up in maintainer-netdev.rst and not more broadly)
+> Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-I'd say that not as strictly as e.g. netdev does so if e.g. due to 
-initialization order it cannot be fully achieved no special trickery is 
-required (in contrast to what you'd get from e.g. netdev telling to put
-them out of line).
+Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-It seems generally useful for declarations, especially when they're as 
-many as in the one I picked up above (I think might be due to less eye 
-movement required when looking for a particular variable by its name).
+> Fixes: fe2cfbc96803 ("net: stmmac: check if MAC needs to attach to a PHY")
+> Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index d41a5f92aee7..7ca9be7bec06 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -1134,22 +1134,26 @@ static void stmmac_check_pcs_mode(struct stmmac_priv *priv)
+>  static int stmmac_init_phy(struct net_device *dev)
+>  {
+>  	struct stmmac_priv *priv = netdev_priv(dev);
+> +	struct fwnode_handle *phy_fwnode;
+>  	struct fwnode_handle *fwnode;
+> -	bool phy_needed;
+>  	int ret;
+>  
+> +	if (!phylink_expects_phy(priv->phylink))
+> +		return 0;
+> +
+>  	fwnode = of_fwnode_handle(priv->plat->phylink_node);
+>  	if (!fwnode)
+>  		fwnode = dev_fwnode(priv->device);
+>  
+>  	if (fwnode)
+> -		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
+> +		phy_fwnode = fwnode_get_phy_node(fwnode);
+> +	else
+> +		phy_fwnode = NULL;
+>  
+> -	phy_needed = phylink_expects_phy(priv->phylink);
+>  	/* Some DT bindings do not set-up the PHY handle. Let's try to
+>  	 * manually parse it
+>  	 */
+> -	if (!fwnode || phy_needed || ret) {
+> +	if (!phy_fwnode || IS_ERR(phy_fwnode)) {
+>  		int addr = priv->plat->phy_addr;
+>  		struct phy_device *phydev;
+>  
+> @@ -1165,6 +1169,9 @@ static int stmmac_init_phy(struct net_device *dev)
+>  		}
+>  
+>  		ret = phylink_connect_phy(priv->phylink, phydev);
+> +	} else {
+> +		fwnode_handle_put(phy_fwnode);
+> +		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
+>  	}
+>  
+>  	if (!priv->plat->pmt) {
 
+LGTM, thanks for taking on board my suggestion.
 
 -- 
- i.
-
---8323329-906799157-1680689861=:2159--
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
