@@ -2,165 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB456D73E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A55C6D73F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbjDEFrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 01:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        id S236930AbjDEFu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 01:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDEFro (ORCPT
+        with ESMTP id S236956AbjDEFuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 01:47:44 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BC0170C;
-        Tue,  4 Apr 2023 22:47:44 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3351tnGo007823;
-        Wed, 5 Apr 2023 05:47:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=TLKJHdc3VccYlSywWH1a0S5oQcjXUBe78mOuAGfTabU=;
- b=JEjTogwnXtJ40GUDihd0ZlEiqh3TZWbaqlzlDz1eMpifeb6sZPuXrNtoJ7ZPVTKFcXx+
- 8T6ej6o1dQL9OCY5ry8JBRbh0NviAmwWdbHXduCOY7rJ2xKg1JWcen3GBhGM3hWDkfD5
- 8XRdoxk+e4nwn/4peRobTGQkf+4Fwie+a3E/3s/tupZjFJIKfsIpcj+ZlQn4H5avtVEq
- of9czsSBx9spY60uNYlW2lzr0sFopUFIOEXyByGG16A8S6VewFhTbGZAcgZytyV9RVxI
- eV5q+EejqZ8zvrzjVlRXU201Shi/ZWuykJBFvD5DyEPz5rF0Zq4DwSEThl+cQS2v9i9J SA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prpg21sfg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 05:47:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3355lAW4006120
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Apr 2023 05:47:10 GMT
-Received: from [10.50.42.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 4 Apr 2023
- 22:47:06 -0700
-Message-ID: <ac3faf07-7974-fb26-2d58-0ddc014fce66@quicinc.com>
-Date:   Wed, 5 Apr 2023 11:16:41 +0530
+        Wed, 5 Apr 2023 01:50:22 -0400
+X-Greylist: delayed 74 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 22:49:55 PDT
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AF21BEF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 22:49:55 -0700 (PDT)
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202304050548380861f07e5c4f7ec6b0
+        for <linux-kernel@vger.kernel.org>;
+        Wed, 05 Apr 2023 07:48:38 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=eaofLLxNrKLouJpv9xBZNno2aDJjC1A6uNHxejf6/ws=;
+ b=e8Ukaa/HzGzvXcqtUvbQdG5KcX2P/0y9PDnqTdEYsORtJQFZfi2xjCxy4xYFM2/JcGc9YL
+ Sxg5qzx/0dY36h77qkhpOEEGSY9bw9Q6dJoKxArmeSzf+PLcVLYdoPiZohXvjsn5JV/u1Aiv
+ HvsXzSDLzKV8vIeqY1oqSxkd9t3AI=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 1/9] tty: n_gsm: fix redundant assignment of gsm->encoding
+Date:   Wed,  5 Apr 2023 07:47:22 +0200
+Message-Id: <20230405054730.3850-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/3] venus: enable sufficient sequence change support for
- vp9
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-media@vger.kernel.org>, <stanimir.k.varbanov@gmail.com>,
-        <quic_vgarodia@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <mchehab@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        "Viswanath Boma" <quic_vboma@quicinc.com>
-References: <1680589032-26046-1-git-send-email-quic_dikshita@quicinc.com>
- <1680589032-26046-3-git-send-email-quic_dikshita@quicinc.com>
- <8f0404d0-659d-0855-15dd-8a45f6fd1871@linaro.org>
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <8f0404d0-659d-0855-15dd-8a45f6fd1871@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RKpY77CEjftV9kZosu9ZKOVMtam58ZM9
-X-Proofpoint-ORIG-GUID: RKpY77CEjftV9kZosu9ZKOVMtam58ZM9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-05_02,2023-04-04_05,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
- suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304050053
-X-Spam-Status: No, score=-2.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Daniel Starke <daniel.starke@siemens.com>
 
-On 4/4/2023 11:52 PM, Konrad Dybcio wrote:
->
-> On 4.04.2023 08:17, Dikshita Agarwal wrote:
->> VP9 supports resolution change at interframe.
->> Currenlty, if sequence change is detected at interframe and
->> resources are sufficient, sequence change event is not raised
->> by firmware to driver until the next keyframe.
->> This change add the HFI to notify the sequence change in this
->> case to driver.
->>
->> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
->> Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
->> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
->> Tested-by: Nathan Hebert <nhebert@chromium.org>
->> ---
->>   drivers/media/platform/qcom/venus/hfi_cmds.c   | 1 +
->>   drivers/media/platform/qcom/venus/hfi_helper.h | 2 ++
->>   drivers/media/platform/qcom/venus/vdec.c       | 8 ++++++++
->>   3 files changed, 11 insertions(+)
->>
->> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
->> index 930b743..e2539b5 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
->> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
->> @@ -521,6 +521,7 @@ static int pkt_session_set_property_1x(struct hfi_session_set_property_pkt *pkt,
->>   		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*en);
->>   		break;
->>   	}
->> +	case HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT:
->>   	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER: {
->>   		struct hfi_enable *in = pdata;
->>   		struct hfi_enable *en = prop_data;
->> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
->> index d2d6719..20516b4 100644
->> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
->> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
->> @@ -469,6 +469,8 @@
->>   #define HFI_PROPERTY_PARAM_VDEC_PIXEL_BITDEPTH			0x1003007
->>   #define HFI_PROPERTY_PARAM_VDEC_PIC_STRUCT			0x1003009
->>   #define HFI_PROPERTY_PARAM_VDEC_COLOUR_SPACE			0x100300a
->> +#define HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT \
->> +								0x0100300b
->>   
->>   /*
->>    * HFI_PROPERTY_CONFIG_VDEC_COMMON_START
->> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
->> index 4ceaba3..f0394b9 100644
->> --- a/drivers/media/platform/qcom/venus/vdec.c
->> +++ b/drivers/media/platform/qcom/venus/vdec.c
->> @@ -671,6 +671,14 @@ static int vdec_set_properties(struct venus_inst *inst)
->>   			return ret;
->>   	}
->>   
->> +	/* Enabling sufficient sequence change support for VP9 */
->> +	if (is_fw_rev_or_newer(inst->core, 5, 4, 51)) {
->> +		ptype = HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT;
->> +		ret = hfi_session_set_property(inst, ptype, &en);
->> +		if (ret)
->> +			return ret;
->> +	}
-> Does it never have to be turned off? Or does it happen automatically
-> at session closure?
->
-> Konrad
+The function gsmld_open() contains a redundant assignment of gsm->encoding.
+The same value of GSM_ADV_OPT is already assigned to it during the
+initialization of the struct in gsm_alloc_mux() a few lines earlier.
 
-Any property set to FW is applied for entire video session and it 
-doesn't need to change so
+Fix this by removing the redundant second assignment of gsm->encoding in
+gsmld_open().
 
-there is no need to turn it off or unset it.
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks,
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index b7e1369a035c..c42c8b89fd46 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -3585,7 +3585,6 @@ static int gsmld_open(struct tty_struct *tty)
+ 	tty->receive_room = 65536;
+ 
+ 	/* Attach the initial passive connection */
+-	gsm->encoding = GSM_ADV_OPT;
+ 	gsmld_attach_gsm(tty, gsm);
+ 
+ 	/* The mux will not be activated yet, we wait for correct
+-- 
+2.34.1
 
-Dikshita
-
->> +
->>   	ptype = HFI_PROPERTY_PARAM_VDEC_CONCEAL_COLOR;
->>   	conceal = ctr->conceal_color & 0xffff;
->>   	conceal |= ((ctr->conceal_color >> 16) & 0xffff) << 10;
