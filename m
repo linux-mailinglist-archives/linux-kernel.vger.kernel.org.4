@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F316D713E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC896D7140
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbjDEA0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 20:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S236464AbjDEA2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 20:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236398AbjDEA0M (ORCPT
+        with ESMTP id S235905AbjDEA2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 20:26:12 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27B3468F
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:26:11 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id f66-20020a255145000000b00b714602d43fso34147110ybb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 17:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680654371;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7nmekayv4SH0rSzad1MWQ/D12tu4qT2henSiDZHgO0k=;
-        b=F8myf2Vk5oC+wfqXzA+dbw6vKDjJcFQrVY+T9nS3zKGAM/fnAYbaYPzlSa3APE4GKI
-         Us+ZIKQPuxrHRhIPV4Mzr2UVC6DPG+JqRYq2Scpqm81tE87jqBg2pe4d5DKZZyZvoOO3
-         Yc8I/k1VlrrxVzYn+GBDlQOYTxM/kra4Rd8KdsQk528etR9zMkwWB6pRtMM7ep3lY2Dz
-         KUN5DSnpJX7VlsUuEj7awsm8jjWxEjyIlB2FzFjXrQQMmJifEQVA1ASHyiB4Q51YH6hY
-         WnzXUXzCLQaklydceakKhaTu1IvdZcWj8vK0ZFy59x14+R38+vDc5csEPfCCZRQ47eJZ
-         2bxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680654371;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7nmekayv4SH0rSzad1MWQ/D12tu4qT2henSiDZHgO0k=;
-        b=Gs0z74vCb9HiwgZjaEV1DsoBsdR/Zm/G9tozgvgkv6PUifRGMFgRePMMMIPQI/TRvd
-         5b8Z9cvHP7+LYs5SVq6YlKvLN+2VkBIjjN5zZmhowewmrQ8YC1sFS2Wl3G4GD6Z5Mc+R
-         asTXSJtJci8bLtBwShwJZ15puWY8cxmwEdQYLhb5JrXaelpoLRMRcWhP35CS2s9wPAzG
-         5QVglQ5u/dGrXcYlbRJN1BAvGYpQFVLaSZPOso1iXxMGjRCLPogLJ9C2O/CjFBzh3VlM
-         5S8Mr6vO9H1ZbeDxcUEFuFag7yYZC6ubI9Q/ZmDPFgP6897m+LLoOFCAouop0E7Gi6AS
-         DolQ==
-X-Gm-Message-State: AAQBX9eYWzhDv1rrWsJpaO9Mzg/RMF9wEVB3ljqDvaYkSgbdLRfSp7gO
-        zgXf30I/Qwi5C5BL/qDe/TnSfzLOtO0=
-X-Google-Smtp-Source: AKy350Zrca+kTf8uAmn8KwWlRlkThBg9VVg3KUirIvr13awIBm+8dbSPPIlv9RIoOYVBfSdL1NPe+65QX10=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:73c6:0:b0:b78:1b26:a642 with SMTP id
- o189-20020a2573c6000000b00b781b26a642mr2634832ybc.1.1680654371045; Tue, 04
- Apr 2023 17:26:11 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  4 Apr 2023 17:26:08 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230405002608.418442-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86/mmu: Refresh CR0.WP prior to checking for emulated
- permission faults
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mathias Krause <minipli@grsecurity.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 20:28:43 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3D844A2;
+        Tue,  4 Apr 2023 17:28:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Prlq820FBz4x1f;
+        Wed,  5 Apr 2023 10:28:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680654516;
+        bh=IK+wQSWATW2SBQfuxCqPJzZRVCiDm2H3nNB7sONCNag=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wp0zf63NQrpV1Z6NZnxx5g+DM2DA4rybDANyh9w4iM4nKvMUdd8wOna+c8wpahbCb
+         r2IiBmt6z5RHnEgFlOoWwOr/SsdQPFllUnCoBUkDQTsrsHH94scpjPFpGpksrILvze
+         pOc8Enmwi0PKIHHiFttRssXB34XUpghKJNdyD2oldeRJ6gUrPFG/NJLps886w26BiE
+         ypX4pQdd/0T+RBbwt5BLc+Rhd2xzsisnG5wsvbPKoptA41DNaYzp0jgzx17stg3Yvr
+         8QxP0WokJ6inKYM1G7h10y56NLsjR49dc9YEZqNckc7hD/LP1HizDvpr0WGGg9saQl
+         z6umbq3AdIPmQ==
+Date:   Wed, 5 Apr 2023 10:28:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the clk tree
+Message-ID: <20230405102834.2ad44472@canb.auug.org.au>
+In-Reply-To: <20230403095939.423806fa@canb.auug.org.au>
+References: <20230403095939.423806fa@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/dun5jGAOw/Lz_slIS91M_q_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If CR0.WP may be guest-owned, i.e. TDP is enabled, refresh the MMU's
-snapshot of the guest's CR0.WP prior to checking for permission faults
-when emulating a guest memory access.  If the guest toggles only CR0.WP
-and triggers emulation of a supervisor write, e.g. when KVM is emulating
-UMIP, KVM may consume a stale CR0.WP, i.e. use stale protection bits
-metadata.
+--Sig_/dun5jGAOw/Lz_slIS91M_q_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Mathias Krause <minipli@grsecurity.net>
-Link: https://lkml.kernel.org/r/677169b4-051f-fcae-756b-9a3e1bb9f8fe%40grsecurity.net
-Fixes: fb509f76acc8 ("KVM: VMX: Make CR0.WP a guest owned bit")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu.h     | 26 +++++++++++++++++++++++++-
- arch/x86/kvm/mmu/mmu.c | 15 +++++++++++++++
- 2 files changed, 40 insertions(+), 1 deletion(-)
+Hi all,
 
-diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-index 89f532516a45..92d5a1924fc1 100644
---- a/arch/x86/kvm/mmu.h
-+++ b/arch/x86/kvm/mmu.h
-@@ -113,6 +113,8 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
- bool kvm_can_do_async_pf(struct kvm_vcpu *vcpu);
- int kvm_handle_page_fault(struct kvm_vcpu *vcpu, u64 error_code,
- 				u64 fault_address, char *insn, int insn_len);
-+void __kvm_mmu_refresh_passthrough_bits(struct kvm_vcpu *vcpu,
-+					struct kvm_mmu *mmu);
- 
- int kvm_mmu_load(struct kvm_vcpu *vcpu);
- void kvm_mmu_unload(struct kvm_vcpu *vcpu);
-@@ -153,6 +155,24 @@ static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
- 					  vcpu->arch.mmu->root_role.level);
- }
- 
-+static inline void kvm_mmu_refresh_passthrough_bits(struct kvm_vcpu *vcpu,
-+						    struct kvm_mmu *mmu)
-+{
-+	/*
-+	 * When EPT is enabled, KVM may passthrough CR0.WP to the guest, i.e.
-+	 * @mmu's snapshot of CR0.WP and thus all related paging metadata may
-+	 * be stale.  Refresh CR0.WP and the metadata on-demand when checking
-+	 * for permission faults.  Exempt nested MMUs, i.e. MMUs for shadowing
-+	 * nEPT and nNPT, as CR0.WP is ignored in both cases.  Note, KVM does
-+	 * need to refresh nested_mmu, a.k.a. the walker used to translate L2
-+	 * GVAs to GPAs, as that "MMU" needs to honor L2's CR0.WP.
-+	 */
-+	if (!tdp_enabled || mmu == &vcpu->arch.guest_mmu)
-+		return;
-+
-+	__kvm_mmu_refresh_passthrough_bits(vcpu, mmu);
-+}
-+
- /*
-  * Check if a given access (described through the I/D, W/R and U/S bits of a
-  * page fault error code pfec) causes a permission fault with the given PTE
-@@ -184,8 +204,12 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
- 	u64 implicit_access = access & PFERR_IMPLICIT_ACCESS;
- 	bool not_smap = ((rflags & X86_EFLAGS_AC) | implicit_access) == X86_EFLAGS_AC;
- 	int index = (pfec + (not_smap << PFERR_RSVD_BIT)) >> 1;
--	bool fault = (mmu->permissions[index] >> pte_access) & 1;
- 	u32 errcode = PFERR_PRESENT_MASK;
-+	bool fault;
-+
-+	kvm_mmu_refresh_passthrough_bits(vcpu, mmu);
-+
-+	fault = (mmu->permissions[index] >> pte_access) & 1;
- 
- 	WARN_ON(pfec & (PFERR_PK_MASK | PFERR_RSVD_MASK));
- 	if (unlikely(mmu->pkru_mask)) {
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 4c874d4ec68f..47269d50e98d 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5186,6 +5186,21 @@ static union kvm_cpu_role kvm_calc_cpu_role(struct kvm_vcpu *vcpu,
- 	return role;
- }
- 
-+void __kvm_mmu_refresh_passthrough_bits(struct kvm_vcpu *vcpu,
-+					struct kvm_mmu *mmu)
-+{
-+	const bool cr0_wp = kvm_is_cr0_bit_set(vcpu, X86_CR0_WP);
-+
-+	BUILD_BUG_ON((KVM_MMU_CR0_ROLE_BITS & KVM_POSSIBLE_CR0_GUEST_BITS) != X86_CR0_WP);
-+	BUILD_BUG_ON((KVM_MMU_CR4_ROLE_BITS & KVM_POSSIBLE_CR4_GUEST_BITS));
-+
-+	if (is_cr0_wp(mmu) == cr0_wp)
-+		return;
-+
-+	mmu->cpu_role.base.cr0_wp = cr0_wp;
-+	reset_guest_paging_metadata(vcpu, mmu);
-+}
-+
- static inline int kvm_mmu_get_tdp_level(struct kvm_vcpu *vcpu)
- {
- 	/* tdp_root_level is architecture forced level, use it if nonzero */
+On Mon, 3 Apr 2023 09:59:39 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the clk tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> In file included from include/linux/device/driver.h:21,
+>                  from include/linux/device.h:32,
+>                  from include/linux/platform_device.h:13,
+>                  from drivers/clk/mediatek/clk-mt8188-wpe.c:9:
+> drivers/clk/mediatek/clk-mt8188-wpe.c:91:31: error: 'clk_mt8188_vpp1_id_t=
+able' undeclared here (not in a function)
+>    91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+>       |                               ^~~~~~~~~~~~~~~~~~~~~~~~
+> include/linux/module.h:243:15: note: in definition of macro 'MODULE_DEVIC=
+E_TABLE'
+>   243 | extern typeof(name) __mod_##type##__##name##_device_table        =
+       \
+>       |               ^~~~
+> include/linux/module.h:243:21: error: '__mod_platform__clk_mt8188_vpp1_id=
+_table_device_table' aliased to undefined symbol 'clk_mt8188_vpp1_id_table'
+>   243 | extern typeof(name) __mod_##type##__##name##_device_table        =
+       \
+>       |                     ^~~~~~
+> drivers/clk/mediatek/clk-mt8188-wpe.c:91:1: note: in expansion of macro '=
+MODULE_DEVICE_TABLE'
+>    91 | MODULE_DEVICE_TABLE(platform, clk_mt8188_vpp1_id_table);
+>       | ^~~~~~~~~~~~~~~~~~~
+>=20
+> Caused by commit
+>=20
+>   f42b9e9a43e3 ("clk: mediatek: Add MT8188 wpesys clock support")
+>=20
+> I have used the clk tree from next-20230331 for today.
 
-base-commit: 27d6845d258b67f4eb3debe062b7dacc67e0c393
--- 
-2.40.0.348.gf938b09366-goog
+I am still getting this failure.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dun5jGAOw/Lz_slIS91M_q_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQswLIACgkQAVBC80lX
+0GyipQf/WGMqwZz29ywsCdO0OsVyg01gHFGsViQlO+4TaDV9wP23TVGSPKYBo90T
+BtoaznguPn6iWZge0JULraLddDhITtnuEDD00yyOfN9GLf0aN0oQMt9M7IJf/Les
+Pv+K2IsizSynRRssci3N4jKwjDMuBDuAxSHHUdAetBvCbcsRVyRe7LpVsxOzGXBC
+4/05XQ5eIJW7zEZquRfDCuOHUHokM/9uVZMKE01nOJOeazMrwc0ZU9YSDufTcxtY
+Ir+wOK+dQSrP0vX0lA8qKLol8/mmQ2oUgvSke4gska7vx6ViqQaywgWthLJTttsw
+YBLQO4XZZmf8elZ1zcm5AadoGmmTng==
+=lHoL
+-----END PGP SIGNATURE-----
+
+--Sig_/dun5jGAOw/Lz_slIS91M_q_--
