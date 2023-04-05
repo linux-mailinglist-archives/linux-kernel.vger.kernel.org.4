@@ -2,276 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBED6D75E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A005F6D75ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbjDEHxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 03:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
+        id S236745AbjDEH4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 03:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjDEHxs (ORCPT
+        with ESMTP id S236881AbjDEH4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 03:53:48 -0400
-Received: from mail22.mail.schwarz (mail22.mail.schwarz [185.124.192.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7E330CD;
-        Wed,  5 Apr 2023 00:53:44 -0700 (PDT)
-X-SCHWARZ-TO: linux-kernel@vger.kernel.org, kuba@kernel.org, pabeni@redhat.com,
- edumazet@google.com, netdev@vger.kernel.org, pshelar@ovn.org,
- dev@openvswitch.org, davem@davemloft.net
-X-SCHWARZ-ENVELOPEFROM: felix.huettner@mail.schwarz
-Received: from unknown (HELO kernel-bug-kernel-bug) ([45.129.43.133])
-  by mail22.mail.schwarz with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 07:53:42 +0000
-Date:   Wed, 5 Apr 2023 07:53:41 +0000
-From:   Felix Huettner <felix.huettner@mail.schwarz>
-To:     netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Cc:     pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        pshelar@ovn.org, davem@davemloft.net, luca.czesla@mail.schwarz
-Subject: [PATCH net v3] net: openvswitch: fix race on port output
-Message-ID: <ZC0pBXBAgh7c76CA@kernel-bug-kernel-bug>
+        Wed, 5 Apr 2023 03:56:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF15330CD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 00:56:06 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 01B7322A08;
+        Wed,  5 Apr 2023 07:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680681365; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xOVxNB8HtRAB/vrvcBSvvaaCDbPjbTPMfGPoFO/sRm4=;
+        b=MXqjiYOyqECzjydT+vgseWpLNhB/g74XCGJkiT5MnY1wT6S50fTJoV0wuwV4gcwSma3tGy
+        y17GJ47+XviQYpHu1N4Mke8OBXYLRifYX4uOh5HEg7boeAez7LWPwTdvbfYwIuUkNl2Zyg
+        906G6qndhsX0bYCI1FCRDxDRqbZ5LjI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA76E13A10;
+        Wed,  5 Apr 2023 07:56:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id O3X7K5QpLWQdMAAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 05 Apr 2023 07:56:04 +0000
+Message-ID: <1231926a-5d03-5631-a376-b0d738c7e25c@suse.com>
+Date:   Wed, 5 Apr 2023 09:55:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+From:   Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH v5 03/15] x86/mtrr: replace some constants with defines
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-4-jgross@suse.com>
+ <20230403160323.GAZCr4y14GvOA4dZID@fat_crate.local>
+Content-Language: en-US
+In-Reply-To: <20230403160323.GAZCr4y14GvOA4dZID@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------IQYPkb0olrMzgzmmwqI5EqBt"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-assume the following setup on a single machine:
-1. An openvswitch instance with one bridge and default flows
-2. two network namespaces "server" and "client"
-3. two ovs interfaces "server" and "client" on the bridge
-4. for each ovs interface a veth pair with a matching name and 32 rx and
-   tx queues
-5. move the ends of the veth pairs to the respective network namespaces
-6. assign ip addresses to each of the veth ends in the namespaces (needs
-   to be the same subnet)
-7. start some http server on the server network namespace
-8. test if a client in the client namespace can reach the http server
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------IQYPkb0olrMzgzmmwqI5EqBt
+Content-Type: multipart/mixed; boundary="------------Ybu5ECOuFbD4KD4ejV9tEQgT";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>
+Message-ID: <1231926a-5d03-5631-a376-b0d738c7e25c@suse.com>
+Subject: Re: [PATCH v5 03/15] x86/mtrr: replace some constants with defines
+References: <20230401063652.23522-1-jgross@suse.com>
+ <20230401063652.23522-4-jgross@suse.com>
+ <20230403160323.GAZCr4y14GvOA4dZID@fat_crate.local>
+In-Reply-To: <20230403160323.GAZCr4y14GvOA4dZID@fat_crate.local>
 
-when following the actions below the host has a chance of getting a cpu
-stuck in a infinite loop:
-1. send a large amount of parallel requests to the http server (around
-   3000 curls should work)
-2. in parallel delete the network namespace (do not delete interfaces or
-   stop the server, just kill the namespace)
+--------------Ybu5ECOuFbD4KD4ejV9tEQgT
+Content-Type: multipart/mixed; boundary="------------VcCcozEGVP00090GMJEfK0nT"
 
-there is a low chance that this will cause the below kernel cpu stuck
-message. If this does not happen just retry.
-Below there is also the output of bpftrace for the functions mentioned
-in the output.
+--------------VcCcozEGVP00090GMJEfK0nT
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The series of events happening here is:
-1. the network namespace is deleted calling
-   `unregister_netdevice_many_notify` somewhere in the process
-2. this sets first `NETREG_UNREGISTERING` on both ends of the veth and
-   then runs `synchronize_net`
-3. it then calls `call_netdevice_notifiers` with `NETDEV_UNREGISTER`
-4. this is then handled by `dp_device_event` which calls
-   `ovs_netdev_detach_dev` (if a vport is found, which is the case for
-   the veth interface attached to ovs)
-5. this removes the rx_handlers of the device but does not prevent
-   packages to be sent to the device
-6. `dp_device_event` then queues the vport deletion to work in
-   background as a ovs_lock is needed that we do not hold in the
-   unregistration path
-7. `unregister_netdevice_many_notify` continues to call
-   `netdev_unregister_kobject` which sets `real_num_tx_queues` to 0
-8. port deletion continues (but details are not relevant for this issue)
-9. at some future point the background task deletes the vport
+T24gMDMuMDQuMjMgMTg6MDMsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gU2F0LCBB
+cHIgMDEsIDIwMjMgYXQgMDg6MzY6NDBBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IEBAIC02NDMsMTAgKzY0NiwxMiBAQCBzdGF0aWMgYm9vbCBzZXRfbXRycl92YXJfcmFu
+Z2VzKHVuc2lnbmVkIGludCBpbmRleCwgc3RydWN0IG10cnJfdmFyX3JhbmdlICp2cikNCj4+
+ICAgCXVuc2lnbmVkIGludCBsbywgaGk7DQo+PiAgIAlib29sIGNoYW5nZWQgPSBmYWxzZTsN
+Cj4+ICAgDQo+PiArI2RlZmluZSBCQVNFX01BU0sJKE1UUlJfQkFTRV9UWVBFX01BU0sgfCAo
+c2l6ZV9hbmRfbWFzayA8PCBQQUdFX1NISUZUKSkNCj4+ICsjZGVmaW5lIE1BU0tfTUFTSwko
+TVRSUl9NQVNLX1ZBTElEIHwgKHNpemVfYW5kX21hc2sgPDwgUEFHRV9TSElGVCkpDQo+IA0K
+PiBObywgIk1BU0tfTUFTSyIgaXMgdG9vIG11Y2guIDotKQ0KDQpBbnkgYmV0dGVyIHN1Z2dl
+c3Rpb24gZm9yIHRoZSBuYW1lPyA6LSkNCg0KPiBBbnl3YXksIHNvIEkgc3RhcnRlZCBsb29r
+aW5nIGF0IHRoaXMgYW5kIGhlcmUncyB3aGF0IEknbSBzZWVpbmcgb24gbXkNCj4gbWFjaGlu
+ZSBldmVuIHdpdGggdGhlIG9sZCBjb2RlOg0KPiANCj4gICAgICAgICAgcmRtc3IoTVRSUnBo
+eXNCYXNlX01TUihpbmRleCksIGxvLCBoaSk7DQo+ICAgICAgICAgIGlmICgodnItPmJhc2Vf
+bG8gJiAweGZmZmZmMGZmVUwpICE9IChsbyAmIDB4ZmZmZmYwZmZVTCkNCj4gICAgICAgICAg
+ICAgIHx8ICh2ci0+YmFzZV9oaSAmIChzaXplX2FuZF9tYXNrID4+ICgzMiAtIFBBR0VfU0hJ
+RlQpKSkgIT0NCj4gICAgICAgICAgICAgICAgICAoaGkgJiAoc2l6ZV9hbmRfbWFzayA+PiAo
+MzIgLSBQQUdFX1NISUZUKSkpKSB7DQo+IA0KPiANCj4gc2l6ZV9hbmRfbWFzazoJCTB4MDAw
+MDAwMGZmZmYwMDAwMA0KPiB0aGUgc2hpZnRlZCB2ZXJzaW9uOgkweDAwMDAwMDAwMDAwMGZm
+ZmYNCj4gDQo+IHdoaWNoIGlzIGJpdHMgWzE1OjBdDQo+IA0KPiBOb3csIGxvb2tpbmcgYXQg
+TVRSUnBoeXNCYXNlX01TUidzIGRlZmluaXRpb24sIHRoZSBoaWdoIDMyIGJpdHMgYXJlOg0K
+PiANCj4gWzYzIC4uLiByZXNlcnZlZCAuLi4gXVsgbWF4X2FkZHIgLi4uIDMyIF0NCj4gDQo+
+IGFuZCB0aGF0IHNlY29uZCBzbGljZTogZnJvbSBtYXhfYWRkciB0byB0aGUgMzJuZCBiaXQg
+b2YgdGhlIHdob2xlIE1TUiBpcw0KPiB0aGUgc2Vjb25kIHBhcnQgb2YgUGh5c0Jhc2UuDQo+
+IA0KPiBtYXhfYWRkciBha2EgcGh5c19hZGRyIGNvbWVzIGZyb206DQo+IA0KPiAJcGh5c19h
+ZGRyID0gY3B1aWRfZWF4KDB4ODAwMDAwMDgpICYgMHhmZjsNCj4gDQo+IG9uIHRoYXQgbWFj
+aGluZSwgdGhhdCB2YWx1ZSBpcyA0OC4NCj4gDQo+IFdoaWNoIG1lYW5zLCB0aGUgcGh5c2Fk
+ZHIgc2xpY2Ugc2hvdWxkIGJlIFs0OCAuLiAzMl0sIGkuZS4sDQo+IA0KPiAJMHgwMDAxZmZm
+ZjAwMDAwMDAwDQoNCk5vLiBUaGUgIjQ4IiBpcyB0aGUgX251bWJlcl8gb2YgcGh5c2ljYWwg
+YWRkcmVzcyBiaXRzLCBzbyB0aGUgNjQgYml0IGFkZHJlc3MNCm1hc2sgd2lsbCBiZSAwMDAw
+ZmZmZi5mZmZmZmZmZiAoNDggYml0cyBzZXQpLg0KDQo+IA0KPiBhbmQgd2hlbiB5b3Ugc2hp
+ZnQgdGhhdCBieSAzMiBzbyB0aGF0IGl0IGNhbiBiZSBBTkRlZCB3aXRoIHRoZSBoaWdoDQo+
+IHBvcnRpb24gb2YgdGhlIE1TUiwgaXQgYmVjb21lcw0KPiANCj4gMHgwMDAwMDAwMDAwMDFm
+ZmZmDQo+IA0KPiBpLmUuLCBiaXQgMTYgaXMgc2V0IHRvby4NCj4gDQo+IEFuZCB0aGF0IG1h
+eCBhZGRyZXNzIGNhbiBiZSB1cCB0byA1MToNCj4gDQo+ICJSYW5nZSBQaHlzaWNhbCBCYXNl
+LUFkZHJlc3MgKFBoeXNCYXNlKeKAlEJpdHMgNTE6MTIuIFRoZSBtZW1vcnktcmFuZ2UgYmFz
+ZS1hZGRyZXNzIGluDQo+IHBoeXNpY2FsLWFkZHJlc3Mgc3BhY2UuIFBoeXNCYXNlIGlzIGFs
+aWduZWQgb24gYSA0LUtieXRlIChvciBncmVhdGVyKSBhZGRyZXNzIGluIHRoZSA1Mi1iaXQN
+Cj4gcGh5c2ljYWwtYWRkcmVzcyBzcGFjZSBzdXBwb3J0ZWQgYnkgdGhlIEFNRDY0IGFyY2hp
+dGVjdHVyZS4gUGh5c0Jhc2UgcmVwcmVzZW50cyB0aGUgbW9zdC0NCj4gc2lnbmlmaWNhbnQg
+NDAtYWRkcmVzcyBiaXRzIG9mIHRoZSBwaHlzaWNhbCBhZGRyZXNzLiBQaHlzaWNhbC1hZGRy
+ZXNzDQo+IGJpdHMgMTE6MCBhcmUgYXNzdW1lZCB0byBiZSAwLiINCj4gDQo+IExvbmcgc3Rv
+cnkgc2hvcnQsIHNpemVfYW5kX21hc2sgbmVlZHMgdG8gYmUgZG9uZSBmcm9tDQo+IA0KPiAJ
+c2l6ZV9hbmRfbWFzayA9IH5zaXplX29yX21hc2sgJiAweGZmZmZmMDAwMDBVTEw7DQo+IA0K
+PiB0bw0KPiANCj4gCXNpemVfYW5kX21hc2sgPSB+c2l6ZV9vcl9tYXNrICYgR0VOTUFTS19V
+TEwocGh5c19hZGRyLCAyMCk7DQoNClRoaXMgbXVzdCBiZSBwaHlzX2FkZHIgLSAxLCBhcyB3
+ZSBzdGFydCB0byBjb3VudCB3aXRoIGJpdCAwLg0KDQo+IA0KPiBzaXplX29yX21hc2sgYml0
+cyBhbHJlYWR5IHRvb2sgaW50byBjb25zaWRlcmF0aW9uIHRoZSBwaHlzX2FkZHI6DQo+IA0K
+PiAJc2l6ZV9vcl9tYXNrID0gU0laRV9PUl9NQVNLX0JJVFMocGh5c19hZGRyKTsNCj4gDQo+
+IGFuZCBzaXplX2FuZF9tYXNrIG5lZWRzIHRvIGRvIGl0IHRvby4NCj4gDQo+IFJpZ2h0Pw0K
+PiANCj4gSSdsbCB0ZXN0IHRoaXMgb24gdGhlIGJveGVzIGhlcmUgZXZlcnl3aGVyZS4gSSBn
+dWVzcyB0aGlzIGdldHMgaGl0IG9ubHkNCj4gb24gYm94ZXMgd2hlcmUgdGhlIHBoeXNfYWRk
+ciBvZiB0aGUgdmFyaWFibGUgTVRSUnMgZ29lcyBvdmVyIHRoZSAxNg0KPiBiaXRzLg0KPiAN
+Cj4gQXMgdG8gdGhpcyBwYXRjaDogcGxlYXNlIG1ha2UgYWxsIHRoZSBiaXQgYW5kIG1hc2sg
+ZGVmaW5pdGlvbnMgeW91J3JlDQo+IGFkZGluZyBhcyBjbG9zZSB0byB0aGUgTVRSUiBiaXQg
+YW5kIG1hc2sgZGVmaW5pdGlvbiBuYW1lcyBpbiB0aGUNCj4gQVBNK1NETS4gSSd2ZSBzdGFy
+dGVkIHRoaXMgYWxyZWFkeSAob250b3Agb2YgeW91cnMpOg0KDQpPa2F5Lg0KDQoNCkp1ZXJn
+ZW4NCg==
+--------------VcCcozEGVP00090GMJEfK0nT
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-If after 7. but before 9. a packet is send to the ovs vport (which is
-not deleted at this point in time) which forwards it to the
-`dev_queue_xmit` flow even though the device is unregistering.
-In `skb_tx_hash` (which is called in the `dev_queue_xmit`) path there is
-a while loop (if the packet has a rx_queue recorded) that is infinite if
-`dev->real_num_tx_queues` is zero.
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-To prevent this from happening we update `do_output` to handle devices
-without carrier the same as if the device is not found (which would
-be the code path after 9. is done).
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-Additionally we now produce a warning in `skb_tx_hash` if we will hit
-the inifinite loop.
+--------------VcCcozEGVP00090GMJEfK0nT--
 
-bpftrace (first word is function name):
+--------------Ybu5ECOuFbD4KD4ejV9tEQgT--
 
-__dev_queue_xmit server: real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
-netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 1, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 1
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 2, reg_state: 1
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 6, reg_state: 2
-ovs_netdev_detach_dev server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, reg_state: 2
-netdev_rx_handler_unregister server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-netdev_rx_handler_unregister ret server: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 27, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 22, reg_state: 2
-dp_device_event server: real_num_tx_queues: 1 cpu 9, pid: 21024, tid: 21024, event 18, reg_state: 2
-netdev_unregister_kobject: real_num_tx_queues: 1, cpu: 9, pid: 21024, tid: 21024
-synchronize_rcu_expedited: cpu 9, pid: 21024, tid: 21024
-ovs_vport_send server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-__dev_queue_xmit server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-netdev_core_pick_tx server: addr: 0xffff9f0a46d4a000 real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024, skb_addr: 0xffff9edb6f207000, reg_state: 2
-broken device server: real_num_tx_queues: 0, cpu: 2, pid: 28024, tid: 28024
-ovs_dp_detach_port server: real_num_tx_queues: 0 cpu 9, pid: 9124, tid: 9124, reg_state: 2
-synchronize_rcu_expedited: cpu 9, pid: 33604, tid: 33604
+--------------IQYPkb0olrMzgzmmwqI5EqBt
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-stuck message:
+-----BEGIN PGP SIGNATURE-----
 
-watchdog: BUG: soft lockup - CPU#5 stuck for 26s! [curl:1929279]
-Modules linked in: veth pktgen bridge stp llc ip_set_hash_net nft_counter xt_set nft_compat nf_tables ip_set_hash_ip ip_set nfnetlink_cttimeout nfnetlink openvswitch nsh nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 tls binfmt_misc nls_iso8859_1 input_leds joydev serio_raw dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua sch_fq_codel drm efi_pstore virtio_rng ip_tables x_tables autofs4 btrfs blake2b_generic zstd_compress raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c raid1 raid0 multipath linear hid_generic usbhid hid crct10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel virtio_net ahci net_failover crypto_simd cryptd psmouse libahci virtio_blk failover
-CPU: 5 PID: 1929279 Comm: curl Not tainted 5.15.0-67-generic #74-Ubuntu
-Hardware name: OpenStack Foundation OpenStack Nova, BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-RIP: 0010:netdev_pick_tx+0xf1/0x320
-Code: 00 00 8d 48 ff 0f b7 c1 66 39 ca 0f 86 e9 01 00 00 45 0f b7 ff 41 39 c7 0f 87 5b 01 00 00 44 29 f8 41 39 c7 0f 87 4f 01 00 00 <eb> f2 0f 1f 44 00 00 49 8b 94 24 28 04 00 00 48 85 d2 0f 84 53 01
-RSP: 0018:ffffb78b40298820 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffff9c8773adc2e0 RCX: 000000000000083f
-RDX: 0000000000000000 RSI: ffff9c8773adc2e0 RDI: ffff9c870a25e000
-RBP: ffffb78b40298858 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff9c870a25e000
-R13: ffff9c870a25e000 R14: ffff9c87fe043480 R15: 0000000000000000
-FS:  00007f7b80008f00(0000) GS:ffff9c8e5f740000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f7b80f6a0b0 CR3: 0000000329d66000 CR4: 0000000000350ee0
-Call Trace:
- <IRQ>
- netdev_core_pick_tx+0xa4/0xb0
- __dev_queue_xmit+0xf8/0x510
- ? __bpf_prog_exit+0x1e/0x30
- dev_queue_xmit+0x10/0x20
- ovs_vport_send+0xad/0x170 [openvswitch]
- do_output+0x59/0x180 [openvswitch]
- do_execute_actions+0xa80/0xaa0 [openvswitch]
- ? kfree+0x1/0x250
- ? kfree+0x1/0x250
- ? kprobe_perf_func+0x4f/0x2b0
- ? flow_lookup.constprop.0+0x5c/0x110 [openvswitch]
- ovs_execute_actions+0x4c/0x120 [openvswitch]
- ovs_dp_process_packet+0xa1/0x200 [openvswitch]
- ? ovs_ct_update_key.isra.0+0xa8/0x120 [openvswitch]
- ? ovs_ct_fill_key+0x1d/0x30 [openvswitch]
- ? ovs_flow_key_extract+0x2db/0x350 [openvswitch]
- ovs_vport_receive+0x77/0xd0 [openvswitch]
- ? __htab_map_lookup_elem+0x4e/0x60
- ? bpf_prog_680e8aff8547aec1_kfree+0x3b/0x714
- ? trace_call_bpf+0xc8/0x150
- ? kfree+0x1/0x250
- ? kfree+0x1/0x250
- ? kprobe_perf_func+0x4f/0x2b0
- ? kprobe_perf_func+0x4f/0x2b0
- ? __mod_memcg_lruvec_state+0x63/0xe0
- netdev_port_receive+0xc4/0x180 [openvswitch]
- ? netdev_port_receive+0x180/0x180 [openvswitch]
- netdev_frame_hook+0x1f/0x40 [openvswitch]
- __netif_receive_skb_core.constprop.0+0x23d/0xf00
- __netif_receive_skb_one_core+0x3f/0xa0
- __netif_receive_skb+0x15/0x60
- process_backlog+0x9e/0x170
- __napi_poll+0x33/0x180
- net_rx_action+0x126/0x280
- ? ttwu_do_activate+0x72/0xf0
- __do_softirq+0xd9/0x2e7
- ? rcu_report_exp_cpu_mult+0x1b0/0x1b0
- do_softirq+0x7d/0xb0
- </IRQ>
- <TASK>
- __local_bh_enable_ip+0x54/0x60
- ip_finish_output2+0x191/0x460
- __ip_finish_output+0xb7/0x180
- ip_finish_output+0x2e/0xc0
- ip_output+0x78/0x100
- ? __ip_finish_output+0x180/0x180
- ip_local_out+0x5e/0x70
- __ip_queue_xmit+0x184/0x440
- ? tcp_syn_options+0x1f9/0x300
- ip_queue_xmit+0x15/0x20
- __tcp_transmit_skb+0x910/0x9c0
- ? __mod_memcg_state+0x44/0xa0
- tcp_connect+0x437/0x4e0
- ? ktime_get_with_offset+0x60/0xf0
- tcp_v4_connect+0x436/0x530
- __inet_stream_connect+0xd4/0x3a0
- ? kprobe_perf_func+0x4f/0x2b0
- ? aa_sk_perm+0x43/0x1c0
- inet_stream_connect+0x3b/0x60
- __sys_connect_file+0x63/0x70
- __sys_connect+0xa6/0xd0
- ? setfl+0x108/0x170
- ? do_fcntl+0xe8/0x5a0
- __x64_sys_connect+0x18/0x20
- do_syscall_64+0x5c/0xc0
- ? __x64_sys_fcntl+0xa9/0xd0
- ? exit_to_user_mode_prepare+0x37/0xb0
- ? syscall_exit_to_user_mode+0x27/0x50
- ? do_syscall_64+0x69/0xc0
- ? __sys_setsockopt+0xea/0x1e0
- ? exit_to_user_mode_prepare+0x37/0xb0
- ? syscall_exit_to_user_mode+0x27/0x50
- ? __x64_sys_setsockopt+0x1f/0x30
- ? do_syscall_64+0x69/0xc0
- ? irqentry_exit+0x1d/0x30
- ? exc_page_fault+0x89/0x170
- entry_SYSCALL_64_after_hwframe+0x61/0xcb
-RIP: 0033:0x7f7b8101c6a7
-Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 2a 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 18 89 54 24 0c 48 89 34 24 89
-RSP: 002b:00007ffffd6b2198 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7b8101c6a7
-RDX: 0000000000000010 RSI: 00007ffffd6b2360 RDI: 0000000000000005
-RBP: 0000561f1370d560 R08: 00002795ad21d1ac R09: 0030312e302e302e
-R10: 00007ffffd73f080 R11: 0000000000000246 R12: 0000561f1370c410
-R13: 0000000000000000 R14: 0000000000000005 R15: 0000000000000000
- </TASK>
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQtKY8FAwAAAAAACgkQsN6d1ii/Ey8m
+6wf+KO3iTJGZQrcDvgDCOqpSfswsNY4aYRcFlURCVgHK2a7hUB2pR6qTbkcpSyExdyPaZTHe5deD
+4q05pl0F9SF3A2rYUOL/s/IER1hMVL4zBjGazXbqqxP9j0BPbDkjGkB24JDjaE5/7+Q2J/3cDytt
+rKR+VBsu5NBo0vrY2DHyPbWWcTwLOkAhKytYaCLsL/YUM3RoZ3SG4rPHVSDXi9Qe7anyzE757/Bq
+AgKs+Uoq2ypUHvNNtiwPQ/UeC3zUgjEUmxOOqdl/l49tjqJHZdIP43fr90EAV2FwF24VoolLgXLd
+nxCHgp3VfMRUzU81EH9rIVIhYD+nvosGeJw9xC77tg==
+=F5pu
+-----END PGP SIGNATURE-----
 
-Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
-Co-developed-by: Luca Czesla <luca.czesla@mail.schwarz>
-Signed-off-by: Luca Czesla <luca.czesla@mail.schwarz>
-Signed-off-by: Felix Huettner <felix.huettner@mail.schwarz>
----
-v3:
-  - remove unlikely in DEBUG_NET_WARN_ON_ONCE
-v2: https://lore.kernel.org/all/ZCvSskSPwFv6kYrD@kernel-bug-kernel-bug/
-  - replace BUG_ON with DEBUG_NET_WARN_ON_ONCE
-  - use netif_carrier_ok() instead of checking for NETREG_REGISTERED
-v1: https://lore.kernel.org/netdev/ZCaXfZTwS9MVk8yZ@kernel-bug-kernel-bug/
-
- net/core/dev.c            | 1 +
- net/openvswitch/actions.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 253584777101..48067321c0db 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3199,6 +3199,7 @@ static u16 skb_tx_hash(const struct net_device *dev,
- 	}
-
- 	if (skb_rx_queue_recorded(skb)) {
-+		DEBUG_NET_WARN_ON_ONCE(qcount == 0);
- 		hash = skb_get_rx_queue(skb);
- 		if (hash >= qoffset)
- 			hash -= qoffset;
-diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
-index ca3ebfdb3023..a8cf9a88758e 100644
---- a/net/openvswitch/actions.c
-+++ b/net/openvswitch/actions.c
-@@ -913,7 +913,7 @@ static void do_output(struct datapath *dp, struct sk_buff *skb, int out_port,
- {
- 	struct vport *vport = ovs_vport_rcu(dp, out_port);
-
--	if (likely(vport)) {
-+	if (likely(vport && netif_carrier_ok(vport->dev))) {
- 		u16 mru = OVS_CB(skb)->mru;
- 		u32 cutlen = OVS_CB(skb)->cutlen;
-
---
-2.40.0
-
-
+--------------IQYPkb0olrMzgzmmwqI5EqBt--
