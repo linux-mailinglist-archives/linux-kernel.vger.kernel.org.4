@@ -2,343 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3126D899A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41F16D8999
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbjDEVfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S231965AbjDEVfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjDEVfN (ORCPT
+        with ESMTP id S229587AbjDEVfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:35:13 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A6A7A9F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:35:11 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id w9so144556946edc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680730509;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=XsbPLOoZy3IpCVle9f3gfXkiDPXo3wFa1tXKUWRKGVg=;
-        b=p0m+HR1QQ3N+oi6geD/qwqW7kEa4uqZsXJHk3StcmFJTsjTxSXLBuJzEZeKbVTf69X
-         kFBbgPdfJSIEl/j6MZSWFMzNZGHFg5HKSvg6l11ehsHq/GnWjreNi6Q1bZkhL9sYl95b
-         4Z25B1HJt1GmR9s+9S8Co0m+ZRaLZ4ybI+ycA+nqBqoG8oIP5cnStCEvCoy5dIDcNmhJ
-         ngslMDl5mQT3FdIBE8Kvt9U7M09W8YG6drbBl7KKd5rxT3Sh/N4po3g64M7coBnRUg9S
-         vtXRjhhaRDha82MZ8NK1Q5cptG4C0r7yeCUIwSSgB4sXhHpjyFnsjnwbVxrbLBud7xU4
-         oSnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680730509;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XsbPLOoZy3IpCVle9f3gfXkiDPXo3wFa1tXKUWRKGVg=;
-        b=Fm7vh84slozWA0TNG1+LeS34twAYNpFkVSe7VRhIOdk4MR0RlncaZsCvXPHbO+a3W/
-         U8gbuz5KDl9wMivaOkRYgTmdrqe4S/EDMzJHx2HYcUkppRB65dqigggoDJvwej1VL86I
-         JujMASa8HAQdauQq2LkPG5PgSHk7uMT7lmGFBlnWIyiLOsfQsy1/Ebztwqph3iyqOvaE
-         F2t8XH1sv++jB8T5g0DNEpuZ8w+DFKjwOo4hR9P0+PgfLV+YN5RzQ1p9qQANaAvdHNb9
-         //pd+lv/EUbfU0Ry8H8LD0/hU2LxMSa9Yo8rggYhaP9WfB+otlVui0hoWrstg//bhGtG
-         u4lA==
-X-Gm-Message-State: AAQBX9eDHsWD7h5gVU6M14cRRFhA0sE20LQ8Slfj5NNVa0Idjqvl1tk8
-        DhvTwGYpeYInonHbk50riuokwg==
-X-Google-Smtp-Source: AKy350Y1d7gbDVVNTMqhI+CI6pBTgOs7TRKtMFmndCYIelLHIglwKV/vWSWJO9AopwvBlNldCSA+6A==
-X-Received: by 2002:a17:906:d79b:b0:93f:9b68:a0f4 with SMTP id pj27-20020a170906d79b00b0093f9b68a0f4mr3707529ejb.26.1680730509442;
-        Wed, 05 Apr 2023 14:35:09 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id qp24-20020a170907207800b0093f822321fesm7799826ejb.137.2023.04.05.14.35.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 14:35:09 -0700 (PDT)
-References: <20230405193445.745024-1-y86-dev@protonmail.com>
- <20230405193445.745024-9-y86-dev@protonmail.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v6 08/15] rust: init/sync: add `InPlaceInit` trait to
- pin-initialize smart pointers
-Date:   Wed, 05 Apr 2023 23:34:35 +0200
-In-reply-to: <20230405193445.745024-9-y86-dev@protonmail.com>
-Message-ID: <87355et3lf.fsf@metaspace.dk>
+        Wed, 5 Apr 2023 17:35:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5681A5259
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:35:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E314E6414C
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 21:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50BB1C433AF
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 21:35:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680730505;
+        bh=cjiTXBmQgK6HvYB6yUnrD3p0Tq770yHiircAii49rZM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dOW9j4OxBqmQA1QRUHtmy+KdjtT8k5pmYnoF8suO17Z0OZ8KX+18Vbw3/tZu50RqJ
+         PQjxWsMtduybWuZsYVVz6z66euJDBQ+4oeCknE6Fu9AUfRDaZ5peZkJgbBUZg80GNO
+         LUmzJPm3b1tP0xQEj8VsfxSqWp+VrmMLm7OlokNPDJKPfSNFA5MozXqzbXFGmRVU0h
+         Q81WlsjgPAKs4GkQtSffn8xLx7NkCqx+mjkoZuK6+JA7WNVhL4iwJ492dmrroiJW5A
+         Ika9wbhym4IKyCYVd78vC1reX1wpn2LVR9Ldybqmjmlr3Bu6QTW1F0r0tjXYM0cZ65
+         oPr7BgwwffQYQ==
+Received: by mail-lf1-f54.google.com with SMTP id y15so48443226lfa.7
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:35:05 -0700 (PDT)
+X-Gm-Message-State: AAQBX9cF0LMbuFJPboRMLYn12/1NOkHkBXDDOEDq10XKYMKDZiv/amal
+        5GmY4I73yUm77uD+sh6+5mmFgwyUU1fu4Rnq8hM=
+X-Google-Smtp-Source: AKy350Yy0Fr4PxGVRM7fFKCSF0i0pFBVOII0OBWGSkNWnCb9/+flCLz/wEm22fukE5qQ/GEMs4X0LSWo1bwqexjLk6U=
+X-Received: by 2002:ac2:4910:0:b0:4eb:c44:ed50 with SMTP id
+ n16-20020ac24910000000b004eb0c44ed50mr2400474lfi.9.1680730503081; Wed, 05 Apr
+ 2023 14:35:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
+ <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name> <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
+ <20230404202445.6qkl7hz67qgievqz@box.shutemov.name> <CAMj1kXFrm74+zNcSpHJ1kw38PTMOFk1cTx_EAoGFHaG1fYzRTQ@mail.gmail.com>
+ <20230404210153.tll2mojlglx4rfsa@box.shutemov.name> <CAMj1kXGvcg-E84h1T_vPi7qxPWxEXBpyuB79KOL+ON7v5YAgJg@mail.gmail.com>
+ <e46777d3-adea-90a2-afc4-35f9d7cef50c@intel.com> <CAMj1kXEDYa5YcRj7t9JJmQ21+ierue2q6ADOXUOMjoOGndGRug@mail.gmail.com>
+ <969a3d2a-52e7-e60e-5de6-c550c548730d@intel.com> <20230405190636.4mrq2daz6a23yhvr@box.shutemov.name>
+ <7dd9297f-b065-2ace-1c77-22dd0126c526@amd.com> <96513ddd-ee87-5fae-cb5c-79d0120fd326@intel.com>
+In-Reply-To: <96513ddd-ee87-5fae-cb5c-79d0120fd326@intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 5 Apr 2023 23:34:51 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEMf=qkZv_CroNXmg_VP3ESUWa3Ba8AK4OyNBACsFq74w@mail.gmail.com>
+Message-ID: <CAMj1kXEMf=qkZv_CroNXmg_VP3ESUWa3Ba8AK4OyNBACsFq74w@mail.gmail.com>
+Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 5 Apr 2023 at 23:23, Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 4/5/23 13:11, Tom Lendacky wrote:
+> >>> The thing that worries me is the "Near future firmware" where someone
+> >>> runs a ~6.4 kernel and has a fast boot experience.  They upgrade to a
+> >>> newer, "dropped protocol" kernel and their boot gets slower.
+> >
+> > Right, so that is what begs the question of when to actually drop the
+> > call. Or does it really need to be dropped? It's a small patch to
+> > execute a boot services call, I guess I don't see the big deal of it
+> > being there.
+> > If the firmware still has the protocol, the call is made, if it doesn't,
+> > its not. In the overall support for unaccepted memory, this seems to be
+> > a very minor piece.
+>
+> I honestly don't think it's a big deal either, at least on the kernel
+> side.  Maybe it's a bigger deal to the firmware folks on their side.
+>
+> So, the corrected table looks something like this:
+>
+>               |                   Kernel                   |
+>               |                                            |
+>               | Unenlightened | Enlightened | Dropped UEFI |
+> Firmware      |     ~5.19??   |    ~6.4??   | protocol     |
+>               |---------------+-------------+--------------|
+> Deployed      |   Slow boot   |  Slow boot  |  Slow boot   |
+> Near future   |   Slow boot   |  Fast boot  |  Slow boot   |
+> Far future    |  2GB limited  |  Fast Boot  |  Fast boot   |
+>
 
-Benno Lossin <y86-dev@protonmail.com> writes:
+I don't think there is any agreement on the firmware side on what
+constitutes are reasonable minimum to accept when lazy accept is in
+use, so the 2 GiB is really the upper bound here, and it could
+substantially less.
 
-> The `InPlaceInit` trait that provides two functions, for initializing
-> using `PinInit<T, E>` and `Init<T>`. It is implemented by `Arc<T>`,
-> `UniqueArc<T>` and `Box<T>`.
 >
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> Cc: Andreas Hindborg <a.hindborg@samsung.com>
-> ---
+> But, honestly, I don't see much benefit to the "dropped UEFI protocol".
+> It adds complexity and will represent a regression either in boot
+> speeds, or in unenlightened kernels losing RAM when moving to newer
+> firmware.  Neither of those is great.
+>
+> Looking at this _purely_ from the kernel perspective, I think I'd prefer
+> this situation:
+>
+>           |            Kernel           |
+>           |                             |
+>           | Unenlightened | Enlightened |
+> Firmware  |     ~5.19??   |    ~6.4??   |
+>           |---------------+-------------+
+> Deployed  |   Slow boot   |  Slow boot  |
+> Future    |   Slow boot   |  Fast boot  |
+>
+> and not have future firmware drop support for the handshake protocol.
+> That way there are no potential regressions.
+>
+> Is there a compelling reason on the firmware side to drop the
+> ExitBootServices() protocol that I'm missing?
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-
->  rust/kernel/init.rs     | 128 ++++++++++++++++++++++++++++++++++++----
->  rust/kernel/sync/arc.rs |  24 ++++++++
->  2 files changed, 139 insertions(+), 13 deletions(-)
->
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index ecef0376d726..6499cf5c9c20 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -114,10 +114,16 @@
->  //! [`impl Init<T, E>`]: Init
->  //! [`Opaque`]: kernel::types::Opaque
->  //! [`pin_data`]: ::macros::pin_data
-> -//! [`UniqueArc<T>`]: kernel::sync::UniqueArc
->
-> +use crate::{
-> +    error::{self, Error},
-> +    sync::UniqueArc,
-> +};
->  use alloc::boxed::Box;
-> -use core::{cell::Cell, convert::Infallible, marker::PhantomData, mem::MaybeUninit, ptr};
-> +use core::{
-> +    alloc::AllocError, cell::Cell, convert::Infallible, marker::PhantomData, mem::MaybeUninit,
-> +    pin::Pin, ptr,
-> +};
->
->  #[doc(hidden)]
->  pub mod __internal;
-> @@ -309,7 +315,6 @@ pub mod macros;
->  ///
->  /// [`try_pin_init!`]: kernel::try_pin_init
->  /// [`NonNull<Self>`]: core::ptr::NonNull
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -363,8 +368,6 @@ macro_rules! pin_init {
->  ///     }
->  /// }
->  /// ```
-> -///
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -586,8 +589,6 @@ macro_rules! try_pin_init {
->  ///
->  /// This initializer is for initializing data in-place that might later be moved. If you want to
->  /// pin-initialize, use [`pin_init!`].
-> -///
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -635,8 +636,6 @@ macro_rules! init {
->  ///     }
->  /// }
->  /// ```
-> -///
-> -/// [`Error`]: kernel::error::Error
->  // For a detailed example of how this macro works, see the module documentation of the hidden
->  // module `__internal` inside of `init/__internal.rs`.
->  #[macro_export]
-> @@ -842,7 +841,8 @@ macro_rules! try_init {
->  /// A pin-initializer for the type `T`.
->  ///
->  /// To use this initializer, you will need a suitable memory location that can hold a `T`. This can
-> -/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`].
-> +/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::pin_init`] function of a
-> +/// smart pointer like [`Arc<T>`] on this.
->  ///
->  /// Also see the [module description](self).
->  ///
-> @@ -861,7 +861,6 @@ macro_rules! try_init {
->  ///
->  /// [`Arc<T>`]: crate::sync::Arc
->  /// [`Arc::pin_init`]: crate::sync::Arc::pin_init
-> -/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
->  #[must_use = "An initializer must be used in order to create its value."]
->  pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
->      /// Initializes `slot`.
-> @@ -878,7 +877,8 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
->  /// An initializer for `T`.
->  ///
->  /// To use this initializer, you will need a suitable memory location that can hold a `T`. This can
-> -/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Because [`PinInit<T, E>`] is a super trait, you can
-> +/// be [`Box<T>`], [`Arc<T>`], [`UniqueArc<T>`]. Use the [`InPlaceInit::init`] function of a smart
-> +/// pointer like [`Arc<T>`] on this. Because [`PinInit<T, E>`] is a super trait, you can
->  /// use every function that takes it as well.
->  ///
->  /// Also see the [module description](self).
-> @@ -903,7 +903,6 @@ pub unsafe trait PinInit<T: ?Sized, E = Infallible>: Sized {
->  /// move the pointee after initialization.
->  ///
->  /// [`Arc<T>`]: crate::sync::Arc
-> -/// [`UniqueArc<T>`]: kernel::sync::UniqueArc
->  #[must_use = "An initializer must be used in order to create its value."]
->  pub unsafe trait Init<T: ?Sized, E = Infallible>: Sized {
->      /// Initializes `slot`.
-> @@ -982,3 +981,106 @@ unsafe impl<T> Init<T> for T {
->          Ok(())
->      }
->  }
-> +
-> +/// Smart pointer that can initialize memory in-place.
-> +pub trait InPlaceInit<T>: Sized {
-> +    /// Use the given pin-initializer to pin-initialize a `T` inside of a new smart pointer of this
-> +    /// type.
-> +    ///
-> +    /// If `T: !Unpin` it will not be able to move afterwards.
-> +    fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-> +    where
-> +        E: From<AllocError>;
-> +
-> +    /// Use the given pin-initializer to pin-initialize a `T` inside of a new smart pointer of this
-> +    /// type.
-> +    ///
-> +    /// If `T: !Unpin` it will not be able to move afterwards.
-> +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
-> +    where
-> +        Error: From<E>,
-> +    {
-> +        // SAFETY: We delegate to `init` and only change the error type.
-> +        let init = unsafe {
-> +            pin_init_from_closure(|slot| init.__pinned_init(slot).map_err(|e| Error::from(e)))
-> +        };
-> +        Self::try_pin_init(init)
-> +    }
-> +
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
-> +    where
-> +        E: From<AllocError>;
-> +
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-> +    where
-> +        Error: From<E>,
-> +    {
-> +        // SAFETY: We delegate to `init` and only change the error type.
-> +        let init = unsafe {
-> +            init_from_closure(|slot| init.__pinned_init(slot).map_err(|e| Error::from(e)))
-> +        };
-> +        Self::try_init(init)
-> +    }
-> +}
-> +
-> +impl<T> InPlaceInit<T> for Box<T> {
-> +    #[inline]
-> +    fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-> +    where
-> +        E: From<AllocError>,
-> +    {
-> +        let mut this = Box::try_new_uninit()?;
-> +        let slot = this.as_mut_ptr();
-> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
-> +        // slot is valid and will not be moved, because we pin it later.
-> +        unsafe { init.__pinned_init(slot)? };
-> +        // SAFETY: All fields have been initialized.
-> +        Ok(unsafe { this.assume_init() }.into())
-> +    }
-> +
-> +    #[inline]
-> +    fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
-> +    where
-> +        E: From<AllocError>,
-> +    {
-> +        let mut this = Box::try_new_uninit()?;
-> +        let slot = this.as_mut_ptr();
-> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
-> +        // slot is valid.
-> +        unsafe { init.__init(slot)? };
-> +        // SAFETY: All fields have been initialized.
-> +        Ok(unsafe { this.assume_init() })
-> +    }
-> +}
-> +
-> +impl<T> InPlaceInit<T> for UniqueArc<T> {
-> +    #[inline]
-> +    fn try_pin_init<E>(init: impl PinInit<T, E>) -> Result<Pin<Self>, E>
-> +    where
-> +        E: From<AllocError>,
-> +    {
-> +        let mut this = UniqueArc::try_new_uninit()?;
-> +        let slot = this.as_mut_ptr();
-> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
-> +        // slot is valid and will not be moved, because we pin it later.
-> +        unsafe { init.__pinned_init(slot)? };
-> +        // SAFETY: All fields have been initialized.
-> +        Ok(unsafe { this.assume_init() }.into())
-> +    }
-> +
-> +    #[inline]
-> +    fn try_init<E>(init: impl Init<T, E>) -> Result<Self, E>
-> +    where
-> +        E: From<AllocError>,
-> +    {
-> +        let mut this = UniqueArc::try_new_uninit()?;
-> +        let slot = this.as_mut_ptr();
-> +        // SAFETY: When init errors/panics, slot will get deallocated but not dropped,
-> +        // slot is valid.
-> +        unsafe { init.__init(slot)? };
-> +        // SAFETY: All fields have been initialized.
-> +        Ok(unsafe { this.assume_init() })
-> +    }
-> +}
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index eee7008e5e3e..43a53fbe175d 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -17,6 +17,8 @@
->
->  use crate::{
->      bindings,
-> +    error::{self, Error},
-> +    init::{InPlaceInit, Init, PinInit},
->      types::{ForeignOwnable, Opaque},
->  };
->  use alloc::boxed::Box;
-> @@ -163,6 +165,28 @@ impl<T> Arc<T> {
->          // `Arc` object.
->          Ok(unsafe { Self::from_inner(Box::leak(inner).into()) })
->      }
-> +
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    ///
-> +    /// If `T: !Unpin` it will not be able to move afterwards.
-> +    #[inline]
-> +    pub fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Self>
-> +    where
-> +        Error: From<E>,
-> +    {
-> +        UniqueArc::pin_init(init).map(|u| u.into())
-> +    }
-> +
-> +    /// Use the given initializer to in-place initialize a `T`.
-> +    ///
-> +    /// This is equivalent to [`pin_init`], since an [`Arc`] is always pinned.
-> +    #[inline]
-> +    pub fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-> +    where
-> +        Error: From<E>,
-> +    {
-> +        UniqueArc::init(init).map(|u| u.into())
-> +    }
->  }
->
->  impl<T: ?Sized> Arc<T> {
-
+The protocol only exists to stop the firmware from eagerly accepting
+all memory on behalf of the OS. So from the firmware side, it would be
+more about removing that functionality (making the protocol call moot)
+rather than removing the protocol itself.
