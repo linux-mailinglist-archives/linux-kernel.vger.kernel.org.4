@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FF06D76FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8E96D7F68
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237517AbjDEIdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S238551AbjDEO1V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 10:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236910AbjDEIdd (ORCPT
+        with ESMTP id S238474AbjDEO1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:33:33 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B15B22704;
-        Wed,  5 Apr 2023 01:33:32 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pjyaC-0007rR-01; Wed, 05 Apr 2023 10:33:32 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 86A2EC2424; Wed,  5 Apr 2023 10:29:55 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 10:29:55 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] MIPS: Remove no longer used ide.h
-Message-ID: <20230405082955.GB6145@alpha.franken.de>
-References: <20230403094113.6056-1-tsbogend@alpha.franken.de>
- <20230403094113.6056-2-tsbogend@alpha.franken.de>
+        Wed, 5 Apr 2023 10:27:10 -0400
+Received: from correo3.correozimbra.cl (correo3.correozimbra.cl [200.29.152.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE97DE41
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:26:55 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by correo3.correozimbra.cl (Postfix) with ESMTP id E8B32DA5B50;
+        Wed,  5 Apr 2023 04:30:07 -0400 (-04)
+Received: from correo3.correozimbra.cl ([127.0.0.1])
+        by localhost (correo3.correozimbra.cl [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id SIrcLIX3IbRK; Wed,  5 Apr 2023 04:30:07 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by correo3.correozimbra.cl (Postfix) with ESMTP id 08308DA5B45;
+        Wed,  5 Apr 2023 04:30:07 -0400 (-04)
+X-Virus-Scanned: amavisd-new at correo3.correozimbra.cl
+Received: from correo3.correozimbra.cl ([127.0.0.1])
+        by localhost (correo3.correozimbra.cl [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qdaSd8TJ1PPk; Wed,  5 Apr 2023 04:30:06 -0400 (-04)
+Received: from [23.146.243.50] (unknown [23.146.243.50])
+        by correo3.correozimbra.cl (Postfix) with ESMTPSA id 6B545DA5B3A;
+        Wed,  5 Apr 2023 04:30:03 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403094113.6056-2-tsbogend@alpha.franken.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Actualizacion
+To:     Recipients <rsilva@villalemana.cl>
+From:   "@zimbra" <rsilva@villalemana.cl>
+Date:   Wed, 05 Apr 2023 01:29:59 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230405083003.6B545DA5B3A@correo3.correozimbra.cl>
+X-Spam-Status: No, score=2.8 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 11:41:11AM +0200, Thomas Bogendoerfer wrote:
-> There are only three drivers left using ide.h, which are all m68k only.
-> 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/include/asm/ide.h              |  13 ---
->  arch/mips/include/asm/mach-generic/ide.h | 138 -----------------------
->  2 files changed, 151 deletions(-)
->  delete mode 100644 arch/mips/include/asm/ide.h
->  delete mode 100644 arch/mips/include/asm/mach-generic/ide.h
+Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
 
-applied to mips-next.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Confirme los detalles de la cuenta a continuación.
+_____________________________________
+1. Nombre y apellido:
+2. Correo electrónico completo en:
+3. Nombre de usuario:
+4. Contraseña:
+5. Vuelva a escribir la contraseña:
+_____________________________________
+ 
+NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+ 
+Nos disculpamos por cualquier inconveniente causado.
+ 
+Sinceramente
+Atención al cliente
+Equipo de soporte técnico de Zimbra.
+ 
+Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
