@@ -2,124 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935776D8473
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C4C6D8478
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233782AbjDERCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S229645AbjDERDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbjDERCU (ORCPT
+        with ESMTP id S233751AbjDERDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:02:20 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4646A63
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:00:40 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso40184541pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 10:00:40 -0700 (PDT)
+        Wed, 5 Apr 2023 13:03:30 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4146A41;
+        Wed,  5 Apr 2023 10:02:20 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17786581fe1so39204302fac.10;
+        Wed, 05 Apr 2023 10:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680713989;
+        d=gmail.com; s=20210112; t=1680714139;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pwKkt8UZiD6fRvOx9rvYnVXlwR4u+FrQ9QF6T/cZZ2g=;
-        b=K0VXt7uzMbgeVdLQlGWjVFdFVdL2wVsoMEWVeT63P3jknf0qvrRohz3eZ2D96Vkso5
-         bjvvI5yDDjeoJx5vzt0xpQZk59equg1a0ShTWy/kQofIjMboQL4aTDSYUYVmZ32bZLH2
-         R0JpLjorAL2vKr2EHj0m2F2GYS70yeh3yhoRGidaG6PG8VS6KEsTpmbVFHHT5r5EGjuE
-         uXkAkhKHcMYTjAkkzhxaFdyllF/8L5teR8f1+yuKF654OHlN1Eitguh4YOE4x0wKHHtU
-         jsiYKFCykDbQG9qKckPJSDchmm8/000DTTaJxA8CqmlxZdtljmSCKJCXP2HF6BBTBasy
-         0mFQ==
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wJdooDkKozVkmq/jE5ZIJWHR45XBypuBSfKalkLMI0w=;
+        b=lhndkTBq464U/Xt0gXIA3bzt6cy6hrEA9CqJAkmYdK2UONW6KBlkuDpUphZApxzZ9o
+         yH+WHRlywqpAaRY1ZtroZg+JfQkLAfyKahIkrCYlwB8BXLszNLKTUN0LxaTxuFJpxv/J
+         S2qbhbPM09ZG6KYFJPTlz29MDb3EjQCWPS/ogkmwnK4Ok3hQVrUk8DaF1hLSvfHFz2MM
+         IN/5d8GU44EBeqpNMLWKF4dmwjDfDmJYym1vvYwa+NWi0bSwStQADBYpJ2H27HZ2SAUm
+         +VswydxOZfluEWZLiH8oDcX3aCdtzHI8rUg8jISF3gXISZ067fWckPPrRZxI4ec1rMwD
+         FOHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680713989;
+        d=1e100.net; s=20210112; t=1680714139;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pwKkt8UZiD6fRvOx9rvYnVXlwR4u+FrQ9QF6T/cZZ2g=;
-        b=KeCKOdfA1Rhz7oTbJ1A5QTN1xjcDmLnBkVxpJu47zH8p1ehwPZSRIRXLrVcBny0Mbc
-         iksFxJRqrHPSKKhcZOml4pZ25b9bV1lfkA4X7ojIKWiug8yZoT/qTV4iXDbvcVCK5voR
-         GQ/oaIkeMXsJPPKlilJEg9+u1D4yRddD6wQRBykWObszIXRPXFC3KRVOj+rARQNhvMS2
-         JnJxYR9wLJK83q8BU/sP7b2qjjAMF3IFlBetpX8DsZ+TU7dF2w/jPpezCtoDiZuuPgBS
-         cCY2Xb0mTPaz2CdyUUJqSPjkZhkf+j0MLYBC7UDPg2HPtDveVLJzJfOMg1Ag7iUJYWCS
-         9MyQ==
-X-Gm-Message-State: AAQBX9fV2u/ScdsWtAEvdXC5FytmeivmC4kXDdFyJzWi3pLDJQMrNhEP
-        JUjBvHWqHEsGz0t7+PQDQXWo8VIUsmWSAb9479w=
-X-Google-Smtp-Source: AKy350bGw9ye0QyyHuauw+aT8RcP5GbRWyMs9bq4TNM0KhIyUtjWQiDxlmKbWulcAimscfqzgrrhBQ==
-X-Received: by 2002:a17:90b:3511:b0:22c:afd6:e597 with SMTP id ls17-20020a17090b351100b0022cafd6e597mr7288067pjb.17.1680713989285;
-        Wed, 05 Apr 2023 09:59:49 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:c807:a26a:a179:b5ec])
-        by smtp.gmail.com with ESMTPSA id a17-20020a170902ee9100b001a24cded097sm10339946pld.236.2023.04.05.09.59.48
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wJdooDkKozVkmq/jE5ZIJWHR45XBypuBSfKalkLMI0w=;
+        b=uhrshRQ1Cs7Ukpkh2G+Lu1ccU0gLGHT40clpt2j31M+b0xYREAXWkIK4pDPWZ8mVHw
+         5Q0AK4OJSyh7sIngKMKP4OvlsFDck+eSwEVy2K3+6vX2v36DFYEKvbUiwuhyDGdKWE0I
+         Dja+M9r2pTEZnyDB/DsWuABCgj3ZtzVPGgi4xAfZz5DALZ/knxvhFqi0HfQBg89BGW0+
+         d+JwjdW188Ei6Msn6jhJ19yrjdlFOOl2AISKu78LsTG1U4UIBEotm+hICqBuEUpc0U8y
+         TU8WWFRezPSqhZOtqPZGYlTqfWNzpKzCKRpjJPjhMjiaUfuxvSMuMdhZ/iArD4xmTabk
+         6tfQ==
+X-Gm-Message-State: AAQBX9ewaMjkHgqN0u1qOye8uJUossttIvCXeR/ilUTBw6RE6Otfu+B4
+        M12R59k2dHynCo9NIuwk6Rg=
+X-Google-Smtp-Source: AKy350Y+q+FZUc+o6NJRWKav1W5Jicca/zmUWi5GHYLjZcSC8DIl2a9Q6sS0FbYDYCYe31KADbNeuQ==
+X-Received: by 2002:a05:6870:6025:b0:17a:cb34:758a with SMTP id t37-20020a056870602500b0017acb34758amr4109941oaa.34.1680714139060;
+        Wed, 05 Apr 2023 10:02:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s15-20020a0568301e0f00b006a1508d348dsm7177806otr.22.2023.04.05.10.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 09:59:48 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 10:59:46 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Simon Horman <horms@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Dan Carpenter <error27@gmail.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] remoteproc: pru: remove always true check positive
- unsigned value
-Message-ID: <20230405165946.GA3812912@p14s>
-References: <20230404-pru-always-true-v1-1-b1b55eeff188@kernel.org>
+        Wed, 05 Apr 2023 10:02:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 5 Apr 2023 10:02:16 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, Looi Hong Aun <hong.aun.looi@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
+Subject: Re: [PATCH net v3 2/3] net: stmmac: check if MAC needs to attach to
+ a PHY
+Message-ID: <5bb39f85-7ef0-4cbb-a06b-0d6431ab09b7@roeck-us.net>
+References: <20230324081656.2969663-1-michael.wei.hong.sit@intel.com>
+ <20230324081656.2969663-3-michael.wei.hong.sit@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404-pru-always-true-v1-1-b1b55eeff188@kernel.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230324081656.2969663-3-michael.wei.hong.sit@intel.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 02:44:53PM +0200, Simon Horman wrote:
-> In both cases they type of da is u32. And PRU_PDRAM_DA is 0.
-> So the check da >= PRU_PDRAM_DA is always true and can be removed.
+Hi,
+
+On Fri, Mar 24, 2023 at 04:16:55PM +0800, Michael Sit Wei Hong wrote:
+> After the introduction of the fixed-link support, the MAC driver
+> no longer attempt to scan for a PHY to attach to. This causes the
+> non fixed-link setups to stop working.
 > 
-> Flagged by Smatch:
+> Using the phylink_expects_phy() to check and determine if the MAC
+> should expect and attach a PHY.
 > 
->  drivers/remoteproc/pru_rproc.c:660 pru_d_da_to_va() warn: always true condition '(da >= 0) => (0-u32max >= 0)'
->  drivers/remoteproc/pru_rproc.c:709 pru_i_da_to_va() warn: always true condition '(da >= 0) => (0-u32max >= 0)'
-> 
-> No functional changes intended.
-> Compile tested only.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://www.spinics.net/lists/kernel/msg4025983.html
-> Signed-off-by: Simon Horman <horms@kernel.org>
+> Fixes: ab21cf920928 ("net: stmmac: make mdio register skips PHY scanning for fixed-link")
+> Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+> Signed-off-by: Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
+
+With this patch in linux-next, the orangepi-pc qemu emulation fails to
+bring up the Ethernet interface. The following error is seen.
+
+[   12.482401] dwmac-sun8i 1c30000.ethernet eth0: Register MEM_TYPE_PAGE_POOL RxQ-0
+[   12.487789] dwmac-sun8i 1c30000.ethernet eth0: PHY [mdio_mux-0.1:01] driver [Generic PHY] (irq=POLL)
+[   12.488177] dwmac-sun8i 1c30000.ethernet eth0: no phy found
+[   12.488295] dwmac-sun8i 1c30000.ethernet eth0: __stmmac_open: Cannot attach to PHY (error: -19)
+
+Reverting this patch fixes the problem.
+
 > ---
->  drivers/remoteproc/pru_rproc.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-
-Applied
-
-Thanks,
-Mathieu
-
-
-> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-> index b76db7fa693d..095f66130f48 100644
-> --- a/drivers/remoteproc/pru_rproc.c
-> +++ b/drivers/remoteproc/pru_rproc.c
-> @@ -657,7 +657,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
->  		swap(dram0, dram1);
->  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 8f543c3ab5c5..41f0f3b74933 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -1135,6 +1135,7 @@ static int stmmac_init_phy(struct net_device *dev)
+>  {
+>  	struct stmmac_priv *priv = netdev_priv(dev);
+>  	struct fwnode_handle *fwnode;
+> +	bool phy_needed;
+>  	int ret;
 >  
-> -	if (da >= PRU_PDRAM_DA && da + len <= PRU_PDRAM_DA + dram0.size) {
-> +	if (da + len <= PRU_PDRAM_DA + dram0.size) {
->  		offset = da - PRU_PDRAM_DA;
->  		va = (__force void *)(dram0.va + offset);
->  	} else if (da >= PRU_SDRAM_DA &&
-> @@ -706,8 +706,7 @@ static void *pru_i_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
+>  	fwnode = of_fwnode_handle(priv->plat->phylink_node);
+> @@ -1144,10 +1145,11 @@ static int stmmac_init_phy(struct net_device *dev)
+>  	if (fwnode)
+>  		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
+>  
+> +	phy_needed = phylink_expects_phy(priv->phylink);
+>  	/* Some DT bindings do not set-up the PHY handle. Let's try to
+>  	 * manually parse it
 >  	 */
->  	da &= 0xfffff;
+> -	if (!fwnode || ret) {
+> +	if (!fwnode || phy_needed || ret) {
+
+I don't really understand this condition. It starts taking this path even if ret == 0
+and fwnode != NULL if phy_needed is set. That means this path is now taken even if
+phylink_fwnode_phy_connect() returned no error. That seems odd.
+
+Guenter
+
+>  		int addr = priv->plat->phy_addr;
+>  		struct phy_device *phydev;
 >  
-> -	if (da >= PRU_IRAM_DA &&
-> -	    da + len <= PRU_IRAM_DA + pru->mem_regions[PRU_IOMEM_IRAM].size) {
-> +	if (da + len <= PRU_IRAM_DA + pru->mem_regions[PRU_IOMEM_IRAM].size) {
->  		offset = da - PRU_IRAM_DA;
->  		va = (__force void *)(pru->mem_regions[PRU_IOMEM_IRAM].va +
->  				      offset);
+> -- 
+> 2.34.1
 > 
