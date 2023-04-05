@@ -2,187 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F346D85A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F126D85AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbjDESE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S233940AbjDESJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjDESEL (ORCPT
+        with ESMTP id S233949AbjDESJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:04:11 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C17C6E8B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:03:29 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so22504692wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 11:03:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680717782;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TQdcTlDGXvPRJ4m15hfcne85GRNuWqVXBxpqryUgNqc=;
-        b=DzGA6NL7PFjpkBNgTxQ8fPF/wI6uojo5o+hoBkP00PtSFDftbFN10OBnm60fqSjHfY
-         RoDRjnCTLB3EDE4JQG0YC/TkNNT2GbF3+Ie2TIcX0ylQ8d55buoS3o8udqunISyH1JX8
-         HxsvCvbxk9syy6I7b4xrXC36+6yxsYeXfYA5Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680717782;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TQdcTlDGXvPRJ4m15hfcne85GRNuWqVXBxpqryUgNqc=;
-        b=hZATnT+PrQt+t7CaKjY+2/OBc/qiIOlksUtFLRJGhXZo4iLAZ5kcRcy4AWOGVu9dOD
-         GZJ3kpUPFa+douUXcItH7mIADQ1y2OzbVhW02eyZ/BDpEFO77Ss6WaM4lWh9qeMhsU7Z
-         RPsTAMTX6inwg4UF9IoumUeqyfBYGOB0vNvl/UbHeO9m/5YEfq96oh2nS7xHa89y2a9c
-         IwiKsUdgezzPb0AnmHcOQXaFmLCEBDSH61izP1JFNy9yiWGTKYiCwJDe4ZU929K51vAI
-         zatHLYiuv9CATgz/J7uNfhkDrRG0YlnNOzDXUgPLaxowGRi0Lc63Fyl4tmWpoLkc5T/B
-         YTFw==
-X-Gm-Message-State: AAQBX9e4SYWAIACQjM6JzDgOOEZ9yBusjeK5LhGrFc+DMpilUfqLcXAO
-        Uad6vpLL5InlYWJx7o4O6H2lMg==
-X-Google-Smtp-Source: AKy350atwB7m2uAvdLkAs0GkN4WMx7NuiwMzD0Tg6MaI9xhXWQOqFnENfLJpeMTEz25CAljjq65WsQ==
-X-Received: by 2002:a05:600c:21ca:b0:3eb:3104:efef with SMTP id x10-20020a05600c21ca00b003eb3104efefmr5464126wmj.31.1680717781652;
-        Wed, 05 Apr 2023 11:03:01 -0700 (PDT)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:9d:6:cf6a:9ae6:15f1:4213])
-        by smtp.gmail.com with ESMTPSA id bd5-20020a05600c1f0500b003f0472ffc7csm2913233wmb.11.2023.04.05.11.03.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 11:03:01 -0700 (PDT)
-From:   Florent Revest <revest@chromium.org>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, mark.rutland@arm.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org,
-        jolsa@kernel.org, xukuohai@huaweicloud.com, lihuafei1@huawei.com,
-        Florent Revest <revest@chromium.org>
-Subject: [PATCH v6 5/5] selftests/bpf: Update the tests deny list on aarch64
-Date:   Wed,  5 Apr 2023 20:02:50 +0200
-Message-Id: <20230405180250.2046566-6-revest@chromium.org>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-In-Reply-To: <20230405180250.2046566-1-revest@chromium.org>
-References: <20230405180250.2046566-1-revest@chromium.org>
+        Wed, 5 Apr 2023 14:09:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE817AB4;
+        Wed,  5 Apr 2023 11:08:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0929E62A0A;
+        Wed,  5 Apr 2023 18:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF733C433EF;
+        Wed,  5 Apr 2023 18:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680717793;
+        bh=OsCB65lowLOj8jUPEPOpRTKGMW9a2IEkVkWAQoDZ1MQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2LDOGmHKp+S+Azkxarow4ppeYaIRu2lohVI2KVIBxhNnj1fJFMHbiw0U2mYiNbeET
+         Lhtt72c5v1Lc/lNf/zQHxOh3GidMe1/ekU/Os/3D0klSbG+zPlDoNRattoelnM7L6U
+         0uD7NGL03IFeo9JXVRVPJgeMQTyFl2vNAuIKdVYo=
+Date:   Wed, 5 Apr 2023 20:03:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v2 03/13] rust: lock: introduce `Mutex`
+Message-ID: <2023040554-promoter-chevron-10b2@gregkh>
+References: <20230405175111.5974-1-wedsonaf@gmail.com>
+ <20230405175111.5974-3-wedsonaf@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405175111.5974-3-wedsonaf@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that ftrace supports direct call on arm64, BPF tracing programs work
-on that architecture. This fixes the vast majority of BPF selftests
-except for:
+On Wed, Apr 05, 2023 at 02:51:01PM -0300, Wedson Almeida Filho wrote:
+> +void rust_helper_mutex_lock(struct mutex *lock)
+> +{
+> +	mutex_lock(lock);
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_mutex_lock);
+> +
 
-- multi_kprobe programs which require fprobe, not available on arm64 yet
-- tracing_struct which requires trampoline support to access struct args
+No need to ever unlock a mutex?
 
-This patch updates the list of BPF selftests which are known to fail so
-the BPF CI can validate the tests which pass now.
+thanks,
 
-Signed-off-by: Florent Revest <revest@chromium.org>
----
- tools/testing/selftests/bpf/DENYLIST.aarch64 | 82 ++------------------
- 1 file changed, 5 insertions(+), 77 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
-index 99cc33c51eaa..6b95cb544094 100644
---- a/tools/testing/selftests/bpf/DENYLIST.aarch64
-+++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
-@@ -1,33 +1,5 @@
--bloom_filter_map                                 # libbpf: prog 'check_bloom': failed to attach: ERROR: strerror_r(-524)=22
--bpf_cookie/lsm
--bpf_cookie/multi_kprobe_attach_api
--bpf_cookie/multi_kprobe_link_api
--bpf_cookie/trampoline
--bpf_loop/check_callback_fn_stop                  # link unexpected error: -524
--bpf_loop/check_invalid_flags
--bpf_loop/check_nested_calls
--bpf_loop/check_non_constant_callback
--bpf_loop/check_nr_loops
--bpf_loop/check_null_callback_ctx
--bpf_loop/check_stack
--bpf_mod_race                                     # bpf_mod_kfunc_race__attach unexpected error: -524 (errno 524)
--bpf_tcp_ca/dctcp_fallback
--btf_dump/btf_dump: var_data                      # find type id unexpected find type id: actual -2 < expected 0
--cgroup_hierarchical_stats                        # attach unexpected error: -524 (errno 524)
--d_path/basic                                     # setup attach failed: -524
--deny_namespace                                   # attach unexpected error: -524 (errno 524)
--fentry_fexit                                     # fentry_attach unexpected error: -1 (errno 524)
--fentry_test                                      # fentry_attach unexpected error: -1 (errno 524)
--fexit_sleep                                      # fexit_attach fexit attach failed: -1
--fexit_stress                                     # fexit attach unexpected fexit attach: actual -524 < expected 0
--fexit_test                                       # fexit_attach unexpected error: -1 (errno 524)
--get_func_args_test                               # get_func_args_test__attach unexpected error: -524 (errno 524) (trampoline)
--get_func_ip_test                                 # get_func_ip_test__attach unexpected error: -524 (errno 524) (trampoline)
--htab_update/reenter_update
--kfree_skb                                        # attach fentry unexpected error: -524 (trampoline)
--kfunc_call/subprog                               # extern (var ksym) 'bpf_prog_active': not found in kernel BTF
--kfunc_call/subprog_lskel                         # skel unexpected error: -2
--kfunc_dynptr_param/dynptr_data_null              # libbpf: prog 'dynptr_data_null': failed to attach: ERROR: strerror_r(-524)=22
-+bpf_cookie/multi_kprobe_attach_api               # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
-+bpf_cookie/multi_kprobe_link_api                 # kprobe_multi_link_api_subtest:FAIL:fentry_raw_skel_load unexpected error: -3
- kprobe_multi_bench_attach                        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
- kprobe_multi_test/attach_api_addrs               # bpf_program__attach_kprobe_multi_opts unexpected error: -95
- kprobe_multi_test/attach_api_pattern             # bpf_program__attach_kprobe_multi_opts unexpected error: -95
-@@ -35,50 +7,6 @@ kprobe_multi_test/attach_api_syms                # bpf_program__attach_kprobe_mu
- kprobe_multi_test/bench_attach                   # bpf_program__attach_kprobe_multi_opts unexpected error: -95
- kprobe_multi_test/link_api_addrs                 # link_fd unexpected link_fd: actual -95 < expected 0
- kprobe_multi_test/link_api_syms                  # link_fd unexpected link_fd: actual -95 < expected 0
--kprobe_multi_test/skel_api                       # kprobe_multi__attach unexpected error: -524 (errno 524)
--ksyms_module/libbpf                              # 'bpf_testmod_ksym_percpu': not found in kernel BTF
--ksyms_module/lskel                               # test_ksyms_module_lskel__open_and_load unexpected error: -2
--libbpf_get_fd_by_id_opts                         # test_libbpf_get_fd_by_id_opts__attach unexpected error: -524 (errno 524)
--linked_list
--lookup_key                                       # test_lookup_key__attach unexpected error: -524 (errno 524)
--lru_bug                                          # lru_bug__attach unexpected error: -524 (errno 524)
--modify_return                                    # modify_return__attach failed unexpected error: -524 (errno 524)
--module_attach                                    # skel_attach skeleton attach failed: -524
--mptcp/base                                       # run_test mptcp unexpected error: -524 (errno 524)
--netcnt                                           # packets unexpected packets: actual 10001 != expected 10000
--rcu_read_lock                                    # failed to attach: ERROR: strerror_r(-524)=22
--recursion                                        # skel_attach unexpected error: -524 (errno 524)
--ringbuf                                          # skel_attach skeleton attachment failed: -1
--setget_sockopt                                   # attach_cgroup unexpected error: -524
--sk_storage_tracing                               # test_sk_storage_tracing__attach unexpected error: -524 (errno 524)
--skc_to_unix_sock                                 # could not attach BPF object unexpected error: -524 (errno 524)
--socket_cookie                                    # prog_attach unexpected error: -524
--stacktrace_build_id                              # compare_stack_ips stackmap vs. stack_amap err -1 errno 2
--task_local_storage/exit_creds                    # skel_attach unexpected error: -524 (errno 524)
--task_local_storage/recursion                     # skel_attach unexpected error: -524 (errno 524)
--test_bprm_opts                                   # attach attach failed: -524
--test_ima                                         # attach attach failed: -524
--test_local_storage                               # attach lsm attach failed: -524
--test_lsm                                         # test_lsm_first_attach unexpected error: -524 (errno 524)
--test_overhead                                    # attach_fentry unexpected error: -524
--timer                                            # timer unexpected error: -524 (errno 524)
--timer_crash                                      # timer_crash__attach unexpected error: -524 (errno 524)
--timer_mim                                        # timer_mim unexpected error: -524 (errno 524)
--trace_printk                                     # trace_printk__attach unexpected error: -1 (errno 524)
--trace_vprintk                                    # trace_vprintk__attach unexpected error: -1 (errno 524)
--tracing_struct                                   # tracing_struct__attach unexpected error: -524 (errno 524)
--trampoline_count                                 # attach_prog unexpected error: -524
--unpriv_bpf_disabled                              # skel_attach unexpected error: -524 (errno 524)
--user_ringbuf/test_user_ringbuf_post_misaligned   # misaligned_skel unexpected error: -524 (errno 524)
--user_ringbuf/test_user_ringbuf_post_producer_wrong_offset
--user_ringbuf/test_user_ringbuf_post_larger_than_ringbuf_sz
--user_ringbuf/test_user_ringbuf_basic             # ringbuf_basic_skel unexpected error: -524 (errno 524)
--user_ringbuf/test_user_ringbuf_sample_full_ring_buffer
--user_ringbuf/test_user_ringbuf_post_alignment_autoadjust
--user_ringbuf/test_user_ringbuf_overfill
--user_ringbuf/test_user_ringbuf_discards_properly_ignored
--user_ringbuf/test_user_ringbuf_loop
--user_ringbuf/test_user_ringbuf_msg_protocol
--user_ringbuf/test_user_ringbuf_blocking_reserve
--verify_pkcs7_sig                                 # test_verify_pkcs7_sig__attach unexpected error: -524 (errno 524)
--vmlinux                                          # skel_attach skeleton attach failed: -524
-+kprobe_multi_test/skel_api                       # libbpf: failed to load BPF skeleton 'kprobe_multi': -3
-+module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
-+tracing_struct                                   # tracing_struct__attach unexpected error: -524 (errno 524)
-\ No newline at end of file
--- 
-2.40.0.577.gac1e443424-goog
-
+greg k-h
