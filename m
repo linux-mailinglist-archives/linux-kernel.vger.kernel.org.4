@@ -2,128 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82536D783C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E86216D7846
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbjDEJ3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S237740AbjDEJ35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237654AbjDEJ24 (ORCPT
+        with ESMTP id S237538AbjDEJ3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:28:56 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03560468F;
-        Wed,  5 Apr 2023 02:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1680686901; x=1712222901;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aLX6+vqdQNVvF14fetM/8YAe4WRk9gZuo75cuAymbAw=;
-  b=oq9jDHdOhWb8mK+/V9qQKPUdImnRpJIk2QVm1YqYX8ctCH1VxbIsn5GI
-   aA30Th3OLiaNOinXEJUqeSiJ0AbQDPGyBGvVQPx82UCXKi7BVYlSQWZ2t
-   u7z1ZSuF+C45QSLQ67FmmQ+kGmX3lC0tklEmMwQzWxGc4EE4AR5jSxYqX
-   L8e2PbCvGsHjgFPtouhWk4PcfmgPnd9PAbTLsDLW7wXHi/sc0/WTS+0lp
-   ij7pM666MtkDuJktA3LvOKAy82enej5+8kKYyKQldn+2JwZ6ciEycDtqF
-   E/8JYmlSl3H9S+4SE5hBYN+gyprHMhzVyDjocslnyjQicsKcxmao0h+cc
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,319,1673938800"; 
-   d="asc'?scan'208";a="219516254"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Apr 2023 02:28:20 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 5 Apr 2023 02:28:19 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 5 Apr 2023 02:28:17 -0700
-Date:   Wed, 5 Apr 2023 10:28:03 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-CC:     Anup Patel <anup@brainfault.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <bjorn@kernel.org>
-Subject: Re: [PATCH v3 6/8] RISC-V: KVM: Add ONE_REG interface for AIA CSRs
-Message-ID: <20230405-icon-arrogance-62bf7d627a5d@wendy>
-References: <20230403093310.2271142-1-apatel@ventanamicro.com>
- <20230403093310.2271142-7-apatel@ventanamicro.com>
- <osrpjiywxtkgxb5i6mfvxzfrzrnjv75uqzvlu3fouo4mqsktgj@blcmyjt3twqg>
- <CAAhSdy1JEQBiO55iCy97arO63VjGc+NicUvvwzTpK97W97LmJg@mail.gmail.com>
- <ejt3x4p7xhxfvwiafnogfwdn5dzd4qyowlht22utnbvzefsbyh@7dch4mebwckm>
- <uogikq56rf7jytuufhsutdedb73b3rh67biwpzsz6ngg5rudco@qcwt7plumwpb>
- <20230404-5cfffb017198773dc3e81dab@wendy>
+        Wed, 5 Apr 2023 05:29:35 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158135B9C;
+        Wed,  5 Apr 2023 02:29:00 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r11so139504622edd.5;
+        Wed, 05 Apr 2023 02:29:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680686936;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VBpy8sWwJTgWGLvReKzXSppeMMMH/k1pHf1dgNFGfSc=;
+        b=ioBNji+RxxxGGQ36bVeyUwYahfusubuoh5Nwpq0S6lk+P1tK3t617l85xXHF1RH0E0
+         OGxhS5anmVXjcVjpR+cbMmDWNfn4bIBMxP+oldipb595Nm4MKsIiMhXp2ZiYKDkndoSp
+         Ip0puBLq2gl8EIc5OPqJfRLUr1eeu6Dp2CS1jPMDYXAbJ5VSj+oa/5eC1+QsHEh7XbIG
+         xLx6LP3veiE7hqgzSPqs2IgixTI7cdW2YUmY3BZSoDwC4d//d1vznOdaiwKh1KwmZOWm
+         wjt7g9JbyuUknwjyUUyhh5+p47Pnizp9TtWBp2UEfkhNqXSxT2868Yxo175m3wJ1KHoE
+         h98w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680686936;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VBpy8sWwJTgWGLvReKzXSppeMMMH/k1pHf1dgNFGfSc=;
+        b=SHWyKgsDncwSdPlNUQjq2UlOrZr62JAm4gvLf4Uglf5KxeGmUU16EbrbO9M+SuB9/y
+         98IcWyYBKUVVuIBAGhmF0DFVkoFxlaQ2N6HMZAADk6RykWkc1G+HZTtylXX0+dXnGNk0
+         n6dOg7876kOO+duSceYMDPEMzGpDDODNzVuIyHcvN4awczj3PwJyCBNdgjqscTwMITn5
+         Pa6YfMMyBPcfVtYI1bt3BYKzXkNgbMzCFlP69rC2oRkFhPgEWxCz1uVj5EQUBQOkSegF
+         q1ODoUbEIEno3ZPebwi12BUZ6IMOz3Zt4rAb8pwZKQcjSDe5GaHJ4EciG5N6Jq66NCss
+         NbxA==
+X-Gm-Message-State: AAQBX9cIIhIprIQrNw/t47z72bV2aMbVh4cLOS0P4ZBgEsdtz3HCJZ+O
+        dwNZC1Z5T3ALJ6C6OHiuiH0=
+X-Google-Smtp-Source: AKy350YUNRcjDWMLp0qTEat7nfaXpF/+sohcF9dQ+5CXzGSGZoXIEtlOhulbBix6Li3JgyJN/QV8Ig==
+X-Received: by 2002:a17:906:6894:b0:944:18ef:c970 with SMTP id n20-20020a170906689400b0094418efc970mr2515964ejr.32.1680686936010;
+        Wed, 05 Apr 2023 02:28:56 -0700 (PDT)
+Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id qp25-20020a170907207900b009342fe44911sm7031978ejb.123.2023.04.05.02.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 02:28:55 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 11:28:53 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Subject: Re: [RESEND PATCH v4 03/21] staging: media: tegra-video: fix
+ .vidioc_enum_fmt_vid_cap to return all formats
+Message-ID: <ZC0_VX5VDOkSVhn6@orome>
+References: <20230309144320.2937553-1-luca.ceresoli@bootlin.com>
+ <20230309144320.2937553-4-luca.ceresoli@bootlin.com>
+ <85268d69-3d3b-2c0f-ba26-073f09052362@xs4all.nl>
+ <20230404161251.272cc78b@booty>
+ <20230405023048.GD9915@pendragon.ideasonboard.com>
+ <20230405103134.2ae10766@booty>
+ <dddd76a7-f882-f1dd-0781-fcc1f9b4e060@xs4all.nl>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6/ymYoyceqNd1+G4"
+        protocol="application/pgp-signature"; boundary="05p1aaOYNTitphbN"
 Content-Disposition: inline
-In-Reply-To: <20230404-5cfffb017198773dc3e81dab@wendy>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <dddd76a7-f882-f1dd-0781-fcc1f9b4e060@xs4all.nl>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---6/ymYoyceqNd1+G4
+
+--05p1aaOYNTitphbN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 04, 2023 at 12:58:41PM +0100, Conor Dooley wrote:
-> On Tue, Apr 04, 2023 at 01:52:43PM +0200, Andrew Jones wrote:
-> > On Mon, Apr 03, 2023 at 02:23:01PM +0200, Andrew Jones wrote:
->=20
-> > > It's probably best if neither depend on each other, since they're
-> > > independent, but otherwise the order doesn't matter. It'd be nice to =
-call
-> > > the order out in the cover letter to give patchwork a chance at autom=
-atic
-> > > build testing, though. To call it out, I believe adding
-> > >=20
-> > > Based-on: 20230401112730.2105240-1-apatel@ventanamicro.com
-> > >=20
-> > > to the cover letter should work.
-> >=20
-> > I also just noticed that this based on "RISC-V: KVM: Add ONE_REG
-> > interface to enable/disable SBI extensions"[1] and it needs to be
-> > in order to pick up the KVM_REG_RISCV_SUBTYPE_MASK and
-> > KVM_REG_RISCV_SUBTYPE_SHIFT defines. It'd be good to call that
-> > patch out with Based-on.
-> >=20
-> > [1]: 20230331174542.2067560-2-apatel@ventanamicro.com
->=20
-> I've been waiting for a review on that for a while.. It's been 3
-> weeks, so just gonna merge it and see what breaks!
+On Wed, Apr 05, 2023 at 10:50:37AM +0200, Hans Verkuil wrote:
+[...]
+> Note that this driver will stay in staging since it still fails when I try to
+> capture from two sensors at the same time: syncpoint errors start appearing
+> in that case. I think there are locking issues. I think I have someone to take
+> a look at that, but first I want your series to get merged.
 
-I did in fact break some stuff, but the output was no worse than if the
-dependencies had not been specified...
-I've fixed it (I think!) and told it to ignore the old state, so it'll
-re-run against the stuff it missed.
+Mikko (added) is familiar with syncpoints, so he may be able to help
+with. Can you provide steps to reproduce these issues? That may make
+it easier for us to help figure this out.
 
-Cheers,
-Conor.
+Unfortunately I don't have any device with an actual sensor on it, so
+I can only test with the test pattern generator, but syncpoint errors
+sound like they would happen with either setup.
 
---6/ymYoyceqNd1+G4
+Thierry
+
+--05p1aaOYNTitphbN
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC0/IwAKCRB4tDGHoIJi
-0llzAQD7CVUsawsm7wpvaamyFV3X2C65V7xha05w4L4rhlmyWAEAr3QHqpnSd9Pd
-JL27yJCJfcvHvC6TY2wuWqeH5ArIAAk=
-=jbmg
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQtP1UACgkQ3SOs138+
+s6FNpw//dPYUajgCSBJRv0WcnavPtJ3hVlgqhl2wBA4rqtD1NNMJEWkZsI/IUwFu
+Lq/UJQuk/brWu8OplLlMaLWm5lngUBMM+t7qHepjdX5GFGKRB684Q106smQw071R
+FZ/UqPxLxi9jjWtfAukVZfTjaMxrHt2iSKzz/mc1Lfs2TItZVG0pEEzC3XQdUxks
+xn/2wtvoxYBWtDUY132MRYCvS5t26sP8iiZX4Xlm7QYFkQtpwkUi2BmLDS+pPJ08
+QulGePJQHZT95TMrSFCcBmuIxJSPYVUlkzG35IxtkVc93NV6TuVHqW3dRg34+jtN
+Cj9d5mFQ2fPNrNiHGCT7OTTKI8kVy3nZS+yXydHYIQ1NkAOfFzKSHxwd+XA419SY
+emZIhrXy/5VxsNpygDOkkiiP+0VfXKhlGVar0mJhOSKbmbiQwP1T0eQDpeFi7TCF
+WW8KFHJqGQgsfSL8pxxqbrwxY2zv5kLllHkyEfU/xSNgvjL3u1qfLnvy8HviuxGX
+fmwk/pOaR0+wenBd89SY8tNyz9Nc3DwrfQ70mPclhfG0WrsenmSgzmlk2hWNha7V
+I2T44bFe95lkDhDFU60gnlKL8jpPeICyIVJ3RXPpXN099f8JzjNI3GqfgUwIfaKA
+Whu5bJHeUZ+EPc0lrH0kkbjY8w2oTyC9W6tF87eqa8M7kujVdgE=
+=GclZ
 -----END PGP SIGNATURE-----
 
---6/ymYoyceqNd1+G4--
+--05p1aaOYNTitphbN--
