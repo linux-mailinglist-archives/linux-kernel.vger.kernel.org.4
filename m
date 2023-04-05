@@ -2,172 +2,405 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DE66D7BD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A646D7BCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237907AbjDELpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
+        id S237096AbjDELom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237936AbjDELpf (ORCPT
+        with ESMTP id S237767AbjDELoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:45:35 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE456191
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 04:45:15 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230405114448epoutp014932628edb8050eb340d840545a0ff27~TB0c_lqxB3157131571epoutp01D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:44:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230405114448epoutp014932628edb8050eb340d840545a0ff27~TB0c_lqxB3157131571epoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1680695088;
-        bh=rVfuadgpm2r+fbODJBwW7FHg9iGMIKszhoNLes3w9/k=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=FA3CfjNuiS/4p0NaMWX8nDkK02qQZsd53jXmnWoskvT9M2wac9xwWn9Q3cJ/6Clh+
-         7a9zYg9b4x/1zKkCNqZlsahuWDxDKWehGi1YyppF0tNugU21Hm4MX6k1pAtOp547ZK
-         Z/cgRWMX2ZKpGZaBMYS079RsreUwSzcMS4zw5sCg=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20230405114447epcas2p437f613334472a210992fd02a52044d07~TB0cNqgjI1493614936epcas2p4L;
-        Wed,  5 Apr 2023 11:44:47 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Ps2qM12Npz4x9Pt; Wed,  5 Apr
-        2023 11:44:47 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5A.36.08750.F2F5D246; Wed,  5 Apr 2023 20:44:47 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230405114446epcas2p407c9cec3d428fd5108df91645a1088dc~TB0a3BlRE1493614936epcas2p4K;
-        Wed,  5 Apr 2023 11:44:46 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230405114446epsmtrp10124bd5287285a01281511652f9c15c1~TB0a2RhRK2604326043epsmtrp1c;
-        Wed,  5 Apr 2023 11:44:46 +0000 (GMT)
-X-AuditID: b6c32a47-9f5fe7000000222e-59-642d5f2fdbc5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7C.D7.18071.E2F5D246; Wed,  5 Apr 2023 20:44:46 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230405114445epsmtip1c6f71047a0f6d677803115fad54d4f5b~TB0alHfz_1454714547epsmtip1T;
-        Wed,  5 Apr 2023 11:44:45 +0000 (GMT)
-Message-ID: <d5627bf6-8cae-f260-f18e-6259a40237c3@samsung.com>
-Date:   Wed, 5 Apr 2023 20:42:22 +0900
+        Wed, 5 Apr 2023 07:44:39 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AD259F5;
+        Wed,  5 Apr 2023 04:44:11 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 406A35821F4;
+        Wed,  5 Apr 2023 07:43:38 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 05 Apr 2023 07:43:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680695018; x=1680698618; bh=BvuQB3YrSy/XsrAgLKIr85mggyxf9SOUTW/
+        mTPUnfq4=; b=LZ4LiyiopyJetN+aebdKjNTWDrB9z3MuQ37R6s+1JQb5gXtaNQN
+        TtQhZMyeysezVhbINrrJFtk72mPxyLMbtTcT8nY4NJblnwyc4+v/OBtCYPg81+bi
+        ymd5P1rOrSJ0zA5X3Fpb+BpwI8+gVADE/wcwhD2Ceq4KwuMvKsbnIyP7lHZiFLaU
+        zlhskDYauCnkwzoFgIEPqxYIS9AjngpQT58MaiZrQQChqEq4eu4E6nhS+9LknEq2
+        1/NWfb6ub3JVhyTMl6WdFH9mZAqI8R0RHoHJTGVdZivz7WcTqVGxYnE6YBetGT8F
+        yvPSGVoNJi03xFUc/NdB1m5aFYAdYBwdGOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=i3db14652.fm2;
+         t=1680695018; x=1680698618; bh=BvuQB3YrSy/XsrAgLKIr85mggyxf9SOU
+        TW/mTPUnfq4=; b=h+gPM1X9IKsm6KmPXyYAU3qKp1UfxUWsqjmDKWzTq74nL7bL
+        WoqUWWrfo9cdC23acx1hgfoxK4dkgjmLN4NJ8nQAZWiYTn5WRhJ4W+IY6DqJRx5n
+        oSd1RkQOw+ZZOy9+ImK+u9AGbK8ReBT58VyyOAlgeGzdThpcw+a3hPvLI4GexNcz
+        0WatuUVno2t4+ITT6flCxcoDet/gTOG4DGx5y+C1Hd6VwIabzOii6zG9G6jR85QC
+        li6Guiz8nhgIy7jhkaiK+gkTTYv0EhMaT9OCIPEAfkecwayrHLWIpIRNOPY0qcZb
+        TtUnzyWQIm08wcgTHv5fo6y2K4rRvg5NILLT6w==
+X-ME-Sender: <xms:6F4tZBkAKvRQYotVW5W-x7uzCqsuSajY1x8nguexPBFVaVpPKY8lPg>
+    <xme:6F4tZM2c-r4dyXFleZcWw001GswYTm3k1vbzw1DcicZa2Qdv5Wg2eQQKi7m92zYjz
+    YH0ZStBtWkxPB3Lud4>
+X-ME-Received: <xmr:6F4tZHpJ8cNHM3Vi5MtZNc6jzgivDPcqSg8EBWFOgNuxfUmy4Gdzx40IEbspx5iVaStqvDjhNy74clDA92p8H-k5dVPHVm8X>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddggeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeffrghm
+    ihgvnhcunfgvucfoohgrlhcuoegulhgvmhhorghlsehfrghsthhmrghilhdrtghomheqne
+    cuggftrfgrthhtvghrnhepteefiefhieetgfevhfegfeehffetteduieetudfgleetvdff
+    udelveejfefhfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepughlvghmohgrlhesfhgrshhtmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:6F4tZBlRGwMdE5g9Juckwn8r_yQRaMjdZ_9hEglceZ1agmQFcWtosw>
+    <xmx:6F4tZP3BzYrX33WZIrExKk-w12e6_gcnbLXIR3EcfMyjzyHfiXLpSA>
+    <xmx:6F4tZAuDB7Lx5RR5Ae5fryAIKzTzNh7wetTs3Jy_3zfVrMTvH2uYXA>
+    <xmx:6V4tZEX3FsEzIZpyLZiAICgyGPg2jht9wTVVVfgS4fn959nIXDbCqXzhz1g>
+Feedback-ID: i3db14652:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Apr 2023 07:43:31 -0400 (EDT)
+Message-ID: <43be59ed-fd35-b4d3-4dc4-99a6727632e2@fastmail.com>
+Date:   Wed, 5 Apr 2023 20:43:28 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.9.0
-Subject: Re: [PATCH 1/3] spi: s3c64xx: support spi polling mode using
- devicetree
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 08/11] PCI: rockchip: Fix window mapping and address
+ translation for endpoint
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Chanho Park <chanho61.park@samsung.com>
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <c1163417-16ea-63ee-5b8d-47cdff8069b1@linaro.org>
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     damien.lemoal@opensource.wdc.com, xxm@rock-chips.com,
+        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Caleb Connolly <kc@postmarketos.org>,
+        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Lin Huang <hl@rock-chips.com>,
+        Hugh Cole-Baker <sigmaris@gmail.com>,
+        linux-pci@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230404082426.3880812-1-rick.wertenbroek@gmail.com>
+ <20230404082426.3880812-9-rick.wertenbroek@gmail.com>
+From:   Damien Le Moal <dlemoal@fastmail.com>
+In-Reply-To: <20230404082426.3880812-9-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPJsWRmVeSWpSXmKPExsWy7bCmua5+vG6KwdIJLBYP5m1js1j84zmT
-        xdSHT9gsLu/Xtph/5Byrxd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMlu0br3CLsDt8f1JZ+Y
-        PTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8AWlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pm
-        YKhraGlhrqSQl5ibaqvk4hOg65aZA3SdkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUg
-        JafAvECvODG3uDQvXS8vtcTK0MDAyBSoMCE748j1D4wF67kqJq5+w9jAuI+ji5GDQ0LARGLz
-        lcQuRi4OIYEdjBKzL51mg3A+MUrsnnGeEcL5xiixePI9pi5GTrCOSZ/fQiX2MkqcvbeCHcJ5
-        zShxd9pzFpAqXgE7ifa2a4wgNouAisTbn3OZIOKCEidnPgGrERWIkui7vYkVxBYWCJJYefA+
-        mM0sIC5x68l8JpChIgJHGSW273zLCuIwC5xnlLj8+T9YN5uAtsT39YvBOjiBtr298o4Rolte
-        YvvbOcwgDRICazkkzrd+YIM43EWib/JmqCeEJV4d38IOYUtJvOxvg7KzJdqn/2GFsCskLm6Y
-        DdVrLDHrWTsjKMiYBTQl1u/Sh4SessSRWywQa/kkOg7/ZYcI80p0tAlBNKpJ3J96DmqIjMSk
-        IyuhDvCQOPpzG9MERsVZSMEyC8n7s5A8Mwth7wJGllWMYqkFxbnpqcVGBcbw2E7Oz93ECE65
-        Wu47GGe8/aB3iJGJg/EQowQHs5IIr2qXVooQb0piZVVqUX58UWlOavEhRlNg5ExklhJNzgcm
-        /bySeEMTSwMTMzNDcyNTA3MlcV5p25PJQgLpiSWp2ampBalFMH1MHJxSDUy17sv0U5dv+D9r
-        fqX76/QlV2T0L/1vDJi8wYyt6LRprJ8zm3DNnyK+pqedrYdPMqzYd5g7PDJRavv+lxN50vce
-        j5RfrJe0yXmm88qb5158juuevznxzOQDJfk8mYWr3d8/nxZRdFeqROyc5JRd29hmFR/MapW/
-        +77gqbMEZ/Hd2TFfNlbO3KOn7Hel7H/qqU/dz5Zye72/I3ZubUxNv+7DvRcOLLrwY5v93uhZ
-        r86WZfyYubY5Y9FJvcYJ9mZ/CkKXL+y7mpF/qST1AsNa9R9XSr4dZNdkUvaUrlunNk3knUSZ
-        7ObNQnc4Fj/5kH315qfFixfXr8qcyhF/tf8m08TTC5ITV+neYjV4z+riPWPqYSWW4oxEQy3m
-        ouJEAMYDeDhCBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSnK5evG6KwZynrBYP5m1js1j84zmT
-        xdSHT9gsLu/Xtph/5Byrxd7XW9ktNj2+xmpxedccNosZ5/cxWTR+vMlu0br3CLsDt8f1JZ+Y
-        PTat6mTzuHNtD5vH5iX1Hn1bVjF6fN4kF8AWxWWTkpqTWZZapG+XwJVx5PoHxoL1XBUTV79h
-        bGDcx9HFyMkhIWAiMenzW8YuRi4OIYHdjBI7v/UxQSRkJJY/62ODsIUl7rccYYUoeskosW7W
-        W3aQBK+AnUR72zVGEJtFQEXi7c+5TBBxQYmTM5+wgNiiAlESnw+0gNULCwRJrDx4nxXEZhYQ
-        l7j1ZD5YvYjAUUaJ5UdqQRYwC5xllDh+bALUtt+MEtN3zQTrZhPQlvi+fjFYNyfQ5rdX3jFC
-        TDKT6NraBWXLS2x/O4d5AqPQLCSHzEKycBaSlllIWhYwsqxilEwtKM5Nzy02LDDMSy3XK07M
-        LS7NS9dLzs/dxAiONC3NHYzbV33QO8TIxMF4iFGCg1lJhFe1SytFiDclsbIqtSg/vqg0J7X4
-        EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqY+E8mw7SqW/KxqpXOPWQXW2C5gXVge
-        revNsYd5z+RTvwvOJk3JPHO68uJj7bd/lM8eODh/7mUtX+c+v7zg8hVi5d8YzzRurtUJlv9S
-        9MvcTSDoQbm47YPLBZs/c6ecmHNnQdA9v3/yhTMWhcRoGdfyrFCo+HKCU3v+z8tvPs5t6avl
-        m3rUV0tL2O79+Zv+RdsZZO9wqe/idLr84JzzUeNUprrlzXvWnak53jDlyf40lUdmiwKTFfS8
-        Cg1vdG/ivffS+WzE3IIyjg3LcqZmvRWdoaNUxtFVv3D9s6L1DlnZW+M1JJiepCu3Ku+9zpS9
-        VHbV7fiHqcf/mD3czFP0JfkHg27p9PlbFwhwRObekFNiKc5INNRiLipOBABc8m3NIwMAAA==
-X-CMS-MailID: 20230405114446epcas2p407c9cec3d428fd5108df91645a1088dc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230404061409epcas2p15750d5844aa8d3655d1bfd094fac14a9
-References: <20230404060011.108561-1-jaewon02.kim@samsung.com>
-        <CGME20230404061409epcas2p15750d5844aa8d3655d1bfd094fac14a9@epcas2p1.samsung.com>
-        <20230404060011.108561-2-jaewon02.kim@samsung.com>
-        <c1163417-16ea-63ee-5b8d-47cdff8069b1@linaro.org>
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/4/23 17:24, Rick Wertenbroek wrote:
+> The RK3399 PCI endpoint core has 33 windows for PCIe space, now in the
+> driver up to 32 fixed size (1M) windows are used and pages are allocated
+> and mapped accordingly. The driver first used a single window and allocated
+> space inside which caused translation issues (between CPU space and PCI
+> space) because a window can only have a single translation at a given
+> time, which if multiple pages are allocated inside will cause conflicts.
+> Now each window is a single region of 1M which will always guarantee that
+> the translation is not in conflict.
+> 
+> Set the translation register addresses for physical function. As documented
+> in the technical reference manual (TRM) section 17.5.5 "PCIe Address
+> Translation" and section 17.6.8 "Address Translation Registers Description"
+> 
+> Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
+> ---
+>  drivers/pci/controller/pcie-rockchip-ep.c | 110 +++++++++-------------
+>  drivers/pci/controller/pcie-rockchip.h    |  30 +++---
+>  2 files changed, 64 insertions(+), 76 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
+> index 7591a7be78e0..f366846ad77c 100644
+> --- a/drivers/pci/controller/pcie-rockchip-ep.c
+> +++ b/drivers/pci/controller/pcie-rockchip-ep.c
+> @@ -64,52 +64,30 @@ static void rockchip_pcie_clear_ep_ob_atu(struct rockchip_pcie *rockchip,
+>  }
+>  
+>  static void rockchip_pcie_prog_ep_ob_atu(struct rockchip_pcie *rockchip, u8 fn,
+> -					 u32 r, u32 type, u64 cpu_addr,
+> -					 u64 pci_addr, size_t size)
+> +					 u32 r, u64 cpu_addr, u64 pci_addr,
+> +					 size_t size)
+>  {
+>  	u64 sz = 1ULL << fls64(size - 1);
+>  	int num_pass_bits = ilog2(sz);
+> -	u32 addr0, addr1, desc0, desc1;
+> -	bool is_nor_msg = (type == AXI_WRAPPER_NOR_MSG);
+> +	u32 addr0, addr1, desc0;
+>  
+> -	/* The minimal region size is 1MB */
+>  	if (num_pass_bits < 8)
+>  		num_pass_bits = 8;
+>  
+> -	cpu_addr -= rockchip->mem_res->start;
+> -	addr0 = ((is_nor_msg ? 0x10 : (num_pass_bits - 1)) &
+> -		PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
+> -		(lower_32_bits(cpu_addr) & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+> -	addr1 = upper_32_bits(is_nor_msg ? cpu_addr : pci_addr);
+> -	desc0 = ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN(fn) | type;
+> -	desc1 = 0;
+> -
+> -	if (is_nor_msg) {
+> -		rockchip_pcie_write(rockchip, 0,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r));
+> -		rockchip_pcie_write(rockchip, 0,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR1(r));
+> -		rockchip_pcie_write(rockchip, desc0,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_DESC0(r));
+> -		rockchip_pcie_write(rockchip, desc1,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r));
+> -	} else {
+> -		/* PCI bus address region */
+> -		rockchip_pcie_write(rockchip, addr0,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r));
+> -		rockchip_pcie_write(rockchip, addr1,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR1(r));
+> -		rockchip_pcie_write(rockchip, desc0,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_DESC0(r));
+> -		rockchip_pcie_write(rockchip, desc1,
+> -				    ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r));
+> -
+> -		addr0 =
+> -		    ((num_pass_bits - 1) & PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
+> -		    (lower_32_bits(cpu_addr) &
+> -		     PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+> -		addr1 = upper_32_bits(cpu_addr);
+> -	}
+> +	addr0 = ((num_pass_bits - 1) & PCIE_CORE_OB_REGION_ADDR0_NUM_BITS) |
+> +		(lower_32_bits(pci_addr) & PCIE_CORE_OB_REGION_ADDR0_LO_ADDR);
+> +	addr1 = upper_32_bits(pci_addr);
+> +	desc0 = ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN(fn) | AXI_WRAPPER_MEM_WRITE;
+> +
+> +	/* PCI bus address region */
+> +	rockchip_pcie_write(rockchip, addr0,
+> +			    ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r));
+> +	rockchip_pcie_write(rockchip, addr1,
+> +			    ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR1(r));
+> +	rockchip_pcie_write(rockchip, desc0,
+> +			    ROCKCHIP_PCIE_AT_OB_REGION_DESC0(r));
+> +	rockchip_pcie_write(rockchip, 0,
+> +			    ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r));
+>  }
+>  
+>  static int rockchip_pcie_ep_write_header(struct pci_epc *epc, u8 fn, u8 vfn,
+> @@ -248,6 +226,11 @@ static void rockchip_pcie_ep_clear_bar(struct pci_epc *epc, u8 fn, u8 vfn,
+>  			    ROCKCHIP_PCIE_AT_IB_EP_FUNC_BAR_ADDR1(fn, bar));
+>  }
+>  
+> +static inline u32 rockchip_ob_region(phys_addr_t addr)
+> +{
+> +	return (addr >> ilog2(SZ_1M)) & 0x1f;
+> +}
+> +
+>  static int rockchip_pcie_ep_map_addr(struct pci_epc *epc, u8 fn, u8 vfn,
+>  				     phys_addr_t addr, u64 pci_addr,
+>  				     size_t size)
+> @@ -256,18 +239,9 @@ static int rockchip_pcie_ep_map_addr(struct pci_epc *epc, u8 fn, u8 vfn,
+>  	struct rockchip_pcie *pcie = &ep->rockchip;
+>  	u32 r;
+>  
+> -	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
+> -	/*
+> -	 * Region 0 is reserved for configuration space and shouldn't
+> -	 * be used elsewhere per TRM, so leave it out.
+> -	 */
+> -	if (r >= ep->max_regions - 1) {
+> -		dev_err(&epc->dev, "no free outbound region\n");
+> -		return -EINVAL;
+> -	}
+> +	r = rockchip_ob_region(addr);
 
-On 23. 4. 5. 14:42, Krzysztof Kozlowski wrote:
-> On 04/04/2023 08:00, Jaewon Kim wrote:
->> This patch adds new 'samsung,spi-polling' property to support polling mode.
-> Do not use "This commit/patch", but imperative mood. See:
-> https://protect2.fireeye.com/v1/url?k=3cb451b1-5d3f4488-3cb5dafe-000babffae10-4326e9d41dfad262&q=1&e=1125b69d-6d9e-4c91-a8fd-3470cd2278e4&u=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.17.1%2Fsource%2FDocumentation%2Fprocess%2Fsubmitting-patches.rst%23L95
->
-> Also, binding should be before its usage.
+Nit: you can move this together with the decalration:
 
-thanks.
+	u32 r = rockchip_ob_region(addr);
 
-I will refer to it in next version.
+>  
+> -	rockchip_pcie_prog_ep_ob_atu(pcie, fn, r, AXI_WRAPPER_MEM_WRITE, addr,
+> -				     pci_addr, size);
+> +	rockchip_pcie_prog_ep_ob_atu(pcie, fn, r, addr, pci_addr, size);
+>  
+>  	set_bit(r, &ep->ob_region_map);
+>  	ep->ob_addr[r] = addr;
+> @@ -282,15 +256,11 @@ static void rockchip_pcie_ep_unmap_addr(struct pci_epc *epc, u8 fn, u8 vfn,
+>  	struct rockchip_pcie *rockchip = &ep->rockchip;
+>  	u32 r;
+>  
+> -	for (r = 0; r < ep->max_regions - 1; r++)
+> +	for (r = 0; r < ep->max_regions; r++)
+>  		if (ep->ob_addr[r] == addr)
+>  			break;
+>  
+> -	/*
+> -	 * Region 0 is reserved for configuration space and shouldn't
+> -	 * be used elsewhere per TRM, so leave it out.
+> -	 */
+> -	if (r == ep->max_regions - 1)
+> +	if (r == ep->max_regions)
+>  		return;
+>  
+>  	rockchip_pcie_clear_ep_ob_atu(rockchip, r);
+> @@ -388,6 +358,7 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
+>  	u16 flags, mme, data, data_mask;
+>  	u8 msi_count;
+>  	u64 pci_addr, pci_addr_mask = 0xff;
 
->> In some environments, polling mode is required even if DMA is supported.
-> Why? What are these environments? You need to explain all this in commit
-> msg.
->
+Nit: pci_addr_mask is constant and never changed, so we could get rid of this
+variable and use a macro instead.
 
-We are providing a VM environment in which several Guest OSs are running.
+> +	u32 r;
+>  
+>  	/* Check MSI enable bit */
+>  	flags = rockchip_pcie_read(&ep->rockchip,
+> @@ -421,13 +392,12 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
+>  				       ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
+>  				       ROCKCHIP_PCIE_EP_MSI_CTRL_REG +
+>  				       PCI_MSI_ADDRESS_LO);
+> -	pci_addr &= GENMASK_ULL(63, 2);
+>  
+>  	/* Set the outbound region if needed. */
+>  	if (unlikely(ep->irq_pci_addr != (pci_addr & ~pci_addr_mask) ||
+>  		     ep->irq_pci_fn != fn)) {
+> -		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, ep->max_regions - 1,
+> -					     AXI_WRAPPER_MEM_WRITE,
+> +		r = rockchip_ob_region(ep->irq_phys_addr);
+> +		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, r,
+>  					     ep->irq_phys_addr,
+>  					     pci_addr & ~pci_addr_mask,
+>  					     pci_addr_mask + 1);
+> @@ -516,6 +486,8 @@ static int rockchip_pcie_parse_ep_dt(struct rockchip_pcie *rockchip,
+>  	if (err < 0 || ep->max_regions > MAX_REGION_LIMIT)
+>  		ep->max_regions = MAX_REGION_LIMIT;
+>  
+> +	ep->ob_region_map = 0;
+> +
+>  	err = of_property_read_u8(dev->of_node, "max-functions",
+>  				  &ep->epc->max_functions);
+>  	if (err < 0)
+> @@ -536,7 +508,8 @@ static int rockchip_pcie_ep_probe(struct platform_device *pdev)
+>  	struct rockchip_pcie *rockchip;
+>  	struct pci_epc *epc;
+>  	size_t max_regions;
+> -	int err;
+> +	struct pci_epc_mem_window *windows = NULL;
+> +	int err, i;
+>  
+>  	ep = devm_kzalloc(dev, sizeof(*ep), GFP_KERNEL);
+>  	if (!ep)
+> @@ -583,15 +556,26 @@ static int rockchip_pcie_ep_probe(struct platform_device *pdev)
+>  	/* Only enable function 0 by default */
+>  	rockchip_pcie_write(rockchip, BIT(0), PCIE_CORE_PHY_FUNC_CFG);
+>  
+> -	err = pci_epc_mem_init(epc, rockchip->mem_res->start,
+> -			       resource_size(rockchip->mem_res), PAGE_SIZE);
+> +	windows = devm_kcalloc(dev, ep->max_regions, sizeof(struct pci_epc_mem_window), GFP_KERNEL);
 
-There are cases where DMA exist only in HostOS and not exist in GuestOS.
-In this case, SPI in GuestOS runs with polling mode.
+Nit: long line. Please split it at sizeof(...).
 
-I thought it was correct that the polling mode was supported optional, 
-not quirk.
-I have plan to change the polling mode if there is no 'dmas' property.
-
-How about your opinion?
-
-
->> Changed it to support not only with quick but also optinally with
-> typo: optionally
->
->> devicetree.
->>
-> Best regards,
-> Krzysztof
->
->
-
-Thanks
-
-Jaewon Kim
+> +	if (!windows) {
+> +		err = -ENOMEM;
+> +		goto err_uninit_port;
+> +	}
+> +	for (i = 0; i < ep->max_regions; i++) {
+> +		windows[i].phys_base = rockchip->mem_res->start + (SZ_1M * i);
+> +		windows[i].size = SZ_1M;
+> +		windows[i].page_size = SZ_1M;
+> +	}
+> +	err = pci_epc_multi_mem_init(epc, windows, ep->max_regions);
+> +	devm_kfree(dev, windows);
+> +
+>  	if (err < 0) {
+>  		dev_err(dev, "failed to initialize the memory space\n");
+>  		goto err_uninit_port;
+>  	}
+>  
+>  	ep->irq_cpu_addr = pci_epc_mem_alloc_addr(epc, &ep->irq_phys_addr,
+> -						  SZ_128K);
+> +						  SZ_1M);
+>  	if (!ep->irq_cpu_addr) {
+>  		dev_err(dev, "failed to reserve memory space for MSI\n");
+>  		err = -ENOMEM;
+> diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
+> index ffc68a3a5fee..5797ba73bb6b 100644
+> --- a/drivers/pci/controller/pcie-rockchip.h
+> +++ b/drivers/pci/controller/pcie-rockchip.h
+> @@ -139,6 +139,7 @@
+>  
+>  #define PCIE_RC_RP_ATS_BASE		0x400000
+>  #define PCIE_RC_CONFIG_NORMAL_BASE	0x800000
+> +#define PCIE_EP_PF_CONFIG_REGS_BASE	0x800000
+>  #define PCIE_RC_CONFIG_BASE		0xa00000
+>  #define PCIE_EP_CONFIG_BASE		0xa00000
+>  #define PCIE_EP_CONFIG_DID_VID		(PCIE_EP_CONFIG_BASE + 0x00)
+> @@ -232,13 +233,15 @@
+>  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_ME				BIT(16)
+>  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MASK_MSI_CAP	BIT(24)
+>  #define ROCKCHIP_PCIE_EP_DUMMY_IRQ_ADDR				0x1
+> -#define ROCKCHIP_PCIE_EP_FUNC_BASE(fn)	(((fn) << 12) & GENMASK(19, 12))
+> +#define ROCKCHIP_PCIE_EP_PCI_LEGACY_IRQ_ADDR		0x3
+> +#define ROCKCHIP_PCIE_EP_FUNC_BASE(fn) \
+> +	(PCIE_EP_PF_CONFIG_REGS_BASE + (((fn) << 12) & GENMASK(19, 12)))
+> +#define ROCKCHIP_PCIE_EP_VIRT_FUNC_BASE(fn) \
+> +	(PCIE_EP_PF_CONFIG_REGS_BASE + 0x10000 + (((fn) << 12) & GENMASK(19, 12)))
+>  #define ROCKCHIP_PCIE_AT_IB_EP_FUNC_BAR_ADDR0(fn, bar) \
+> -	(PCIE_RC_RP_ATS_BASE + 0x0840 + (fn) * 0x0040 + (bar) * 0x0008)
+> +	(PCIE_CORE_AXI_CONF_BASE + 0x0828 + (fn) * 0x0040 + (bar) * 0x0008)
+>  #define ROCKCHIP_PCIE_AT_IB_EP_FUNC_BAR_ADDR1(fn, bar) \
+> -	(PCIE_RC_RP_ATS_BASE + 0x0844 + (fn) * 0x0040 + (bar) * 0x0008)
+> -#define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r) \
+> -	(PCIE_RC_RP_ATS_BASE + 0x0000 + ((r) & 0x1f) * 0x0020)
+> +	(PCIE_CORE_AXI_CONF_BASE + 0x082c + (fn) * 0x0040 + (bar) * 0x0008)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_DEVFN_MASK	GENMASK(19, 12)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_DEVFN(devfn) \
+>  	(((devfn) << 12) & \
+> @@ -246,20 +249,21 @@
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_BUS_MASK	GENMASK(27, 20)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_BUS(bus) \
+>  		(((bus) << 20) & ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0_BUS_MASK)
+> +#define PCIE_RC_EP_ATR_OB_REGIONS_1_32 (PCIE_CORE_AXI_CONF_BASE + 0x0020)
+> +#define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR0(r) \
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x0000 + ((r) & 0x1f) * 0x0020)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_PCI_ADDR1(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x0004 + ((r) & 0x1f) * 0x0020)
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x0004 + ((r) & 0x1f) * 0x0020)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0_HARDCODED_RID	BIT(23)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN_MASK	GENMASK(31, 24)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN(devfn) \
+>  		(((devfn) << 24) & ROCKCHIP_PCIE_AT_OB_REGION_DESC0_DEVFN_MASK)
+>  #define ROCKCHIP_PCIE_AT_OB_REGION_DESC0(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x0008 + ((r) & 0x1f) * 0x0020)
+> -#define ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r)	\
+> -		(PCIE_RC_RP_ATS_BASE + 0x000c + ((r) & 0x1f) * 0x0020)
+> -#define ROCKCHIP_PCIE_AT_OB_REGION_CPU_ADDR0(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x0018 + ((r) & 0x1f) * 0x0020)
+> -#define ROCKCHIP_PCIE_AT_OB_REGION_CPU_ADDR1(r) \
+> -		(PCIE_RC_RP_ATS_BASE + 0x001c + ((r) & 0x1f) * 0x0020)
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x0008 + ((r) & 0x1f) * 0x0020)
+> +#define ROCKCHIP_PCIE_AT_OB_REGION_DESC1(r) \
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x000c + ((r) & 0x1f) * 0x0020)
+> +#define ROCKCHIP_PCIE_AT_OB_REGION_DESC2(r) \
+> +		(PCIE_RC_EP_ATR_OB_REGIONS_1_32 + 0x0010 + ((r) & 0x1f) * 0x0020)
+>  
+>  #define ROCKCHIP_PCIE_CORE_EP_FUNC_BAR_CFG0(fn) \
+>  		(PCIE_CORE_CTRL_MGMT_BASE + 0x0240 + (fn) * 0x0008)
 
