@@ -2,253 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437BA6D8A8C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B91D6D8A92
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjDEW1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 18:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S232512AbjDEW3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDEW1y (ORCPT
+        with ESMTP id S229461AbjDEW3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:27:54 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2280A5599
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:27:53 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id ml21so13528076pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:27:53 -0700 (PDT)
+        Wed, 5 Apr 2023 18:29:03 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB6D2719
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:29:02 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 140-20020a630792000000b0050be9465db8so10967431pgh.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:29:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680733672; x=1683325672;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f7n6ZHU9DswArvev3x3C5JunnjxxD0aP7VI6Us40Ktk=;
-        b=IWLa/I9qckCVEpjSeRFOEHN3bDuEOcMWL0Fp32HmEnEmQzHeo19JAhz7MbxzdCus5t
-         qvLryGjiewAdkxX3E7399GnWNA6apQoqPuCG+9EeRHH9S0v2oYGbD/i5FLSt/lXUPVqw
-         XStacpS6uYlCb5tEnocPapXGCR26RGqFRUiDXjzR6+YfVSI0uOfOchhMtDde2hBUfcGV
-         snuIgKG3e6z/sZIjB+Ww09bm+aEDN01aWH9ngC8V2d4hU1Ylv6BeVkQqAei8cfm11o5J
-         GyS2lBMMU8QK212e7QPz63J1QEvn1ONAC2CMyZxZZbNlj+Tzk9l8WqFGp78P1psxIcGE
-         Y4jQ==
+        d=google.com; s=20210112; t=1680733742;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GWR9MlnovPb4azeMHr07bRFmjnPJymKEQvz5exk2wDc=;
+        b=VmY8UlSKwzQO0K5HFS4LZyNPsx2yz03z8VFeH0jzD3xNKquWByhUadcUB64clw/ukK
+         PS0lE7ms2N4zjfi8yBjDa838Jv9P/Ebe1rmQaDpZapGQHrRUF7T36fqfDV4nrOsV5AMd
+         SGz0kry10Itl5RDl9lqCNIJymFOfJXu3eyUU9TTKRLkH+oIyMJ/lPP7ew2v5fMpzLKgu
+         h2uPt2YYNrcvek8x7z9xu1hq0h+WSNdpNf1iKUK96UPq7N13/VzzDBzL4pGp1LrBOcqG
+         9eHu/EI4kCb1GuSPO4OgPgpAKgvx41nOj6p+bBeCRlZUmYgF2jGC97zqN3Q2IAWdiWYG
+         FlOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680733672; x=1683325672;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f7n6ZHU9DswArvev3x3C5JunnjxxD0aP7VI6Us40Ktk=;
-        b=SOTpMasCFey2c+rWaKiXSW+4qj8u04jnuJAs3qlzcLiIku3zisyyjp0HnwRbSIkcUQ
-         VqQmDR/5ktl3v4cA4SYq2woQNyc2wX4pj+3LJkvIP7Ued4MtAv/6zuCo8chAeyU6FECT
-         ktV7GSFWJLjBJl7EpiX7PSMUjhsh4C0uNU4qqBGEYu5ZNH1XGWse+WoF2CzAEwxKULqL
-         kTWi1NVJc4VvoCoTbS2EHC2b3eoNzYpCeBo2sEhNrK6WmDD8cOBCxzD4tQLR6u9Uag/F
-         GCFYIShjtqkq0/zsdrsD5jK22X9QxCJsF+HTovcgFUooBaEme96p5QsW3lFL5nM8uIKh
-         GO1g==
-X-Gm-Message-State: AAQBX9cHsSCH5v4vmzVdj1IJXORMamJyE0BXzOwOQYcRKdErsTONEkBc
-        bPx/c41ggYG77qgslK6Mr+Y2+Z9X5RMCDA==
-X-Google-Smtp-Source: AKy350aW/XxRu2aHlmOxqyRBXU+NVVb4rYchkTGdm26FJ9DX6Cq+sHVZ3Mg5L79EC64kerClGYVKfg==
-X-Received: by 2002:a17:902:d505:b0:1a1:b172:5428 with SMTP id b5-20020a170902d50500b001a1b1725428mr9894065plg.18.1680733671932;
-        Wed, 05 Apr 2023 15:27:51 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id w2-20020a1709027b8200b0019ab3308554sm31508pll.85.2023.04.05.15.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 15:27:51 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Kieran Bingham <kieran.bingham@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        akpm@linux-foundation.org, kapil.hali@broadcom.com
-Subject: [PATCH v2] scripts/gdb: add a Radix Tree Parser
-Date:   Wed,  5 Apr 2023 15:27:43 -0700
-Message-Id: <20230405222743.1191674-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1680733742;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GWR9MlnovPb4azeMHr07bRFmjnPJymKEQvz5exk2wDc=;
+        b=QJ9ns2lh0tm9zRlMbqZFvivEQwpILruMuDtaz2e0oGvGAPUm8d+NBlshKXvrRU36ms
+         Ox/gGecU9JZj+y/Ib34SbYz1My7FkBHITH82ftY8acA4ufwhDfqkPAEzn0DJndWMWtq3
+         AgH6g1Pn18hiY7NdXn3tb3jX3LRSFLX22qBF8W1ucxAET/fmsYfp+lgZvuhPzMHjiE1P
+         o5bb3+y9fYZk1hw0DbQXYHuGNEYSsep5hGctZcv7tJEz2R2+lzB2DDU8ix3U+JO8/NrI
+         kW/d8HPamut6ycC1yhcSM7TFCZuIKYR4tKj6qCKB01JTXb89L4eDtOchEMjKdkESz65T
+         QhYA==
+X-Gm-Message-State: AAQBX9dmLW0W3+L2W2KG5Tgnkw35a6brpPXzJxUkbfozm9c4UiB6jRrR
+        /xEFcVvomoam4J7/B46BQnooaEw28qKRFF00JA==
+X-Google-Smtp-Source: AKy350YZoCywDUVBhRVt0H67teuAx9CW+FCj9ARmbfK2XibL5Z5UEPVhVCnv/dIxeX7eINO95mUrqIM2r7ufZiriPQ==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a17:90a:7308:b0:23f:1caa:233a with
+ SMTP id m8-20020a17090a730800b0023f1caa233amr1734038pjk.1.1680733741709; Wed,
+ 05 Apr 2023 15:29:01 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 22:29:00 +0000
+In-Reply-To: <f0232380-4171-f4d3-f1a6-07993e551b46@redhat.com> (message from
+ David Hildenbrand on Mon, 3 Apr 2023 10:21:48 +0200)
+Mime-Version: 1.0
+Message-ID: <diqzilea0xqr.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
+        corbet@lwn.net, dave.hansen@intel.com, ddutile@redhat.com,
+        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
+        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
+        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
+        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
+        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
+        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
+        rppt@kernel.org, seanjc@google.com, shuah@kernel.org,
+        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
+        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
+        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
+        yu.c.zhang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kieran Bingham <kieran.bingham@linaro.org>
 
-Linux makes use of the Radix Tree data structure to store pointers
-indexed by integer values. This structure is utilised across many
-structures in the kernel including the IRQ descriptor tables, and
-several filesystems.
+Thanks for your review!
 
-This module provides a method to lookup values from a structure given
-its head node.
+David Hildenbrand <david@redhat.com> writes:
 
-Usage:
+> On 01.04.23 01:50, Ackerley Tng wrote:
 
-The function lx_radix_tree_lookup, must be given a symbol of type struct
-radix_tree_root, and an index into that tree.
+>> ...
 
-The object returned is a generic integer value, and must be cast
-correctly to the type based on the storage in the data structure.
+>> diff --git a/include/uapi/linux/restrictedmem.h  
+>> b/include/uapi/linux/restrictedmem.h
+>> new file mode 100644
+>> index 000000000000..22d6f2285f6d
+>> --- /dev/null
+>> +++ b/include/uapi/linux/restrictedmem.h
+>> @@ -0,0 +1,8 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
+>> +#define _UAPI_LINUX_RESTRICTEDMEM_H
+>> +
+>> +/* flags for memfd_restricted */
+>> +#define RMFD_USERMNT		0x0001U
 
-For example, to print the irq descriptor in the sparse irq_desc_tree at
-index 18, try the following:
+> I wonder if we can come up with a more expressive prefix than RMFD.
+> Sounds more like "rm fd" ;) Maybe it should better match the
+> "memfd_restricted" syscall name, like "MEMFD_RSTD_USERMNT".
 
-(gdb) print (struct irq_desc)$lx_radix_tree_lookup(irq_desc_tree, 18)
 
-This script previously existed under commit
-e127a73d41ac471d7e3ba950cf128f42d6ee3448 ("scripts/gdb: add a Radix Tree
-Parser") and was later reverted with
-b447e02548a3304c47b78b5e2d75a4312a8f17e1i (Revert "scripts/gdb: add a
-Radix Tree Parser").
+RMFD did actually sound vulgar, I'm good with MEMFD_RSTD_USERMNT!
 
-This version expects the XArray based radix tree implementation and has
-been verified using QEMU/x86 on Linux 6.3-rc5.
+>> +
+>> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
+>> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+>> index c5d869d8c2d8..f7b62364a31a 100644
+>> --- a/mm/restrictedmem.c
+>> +++ b/mm/restrictedmem.c
+>> @@ -1,11 +1,12 @@
+>>    // SPDX-License-Identifier: GPL-2.0
+>> -#include "linux/sbitmap.h"
 
-Signed-off-by: Kieran Bingham <kieran.bingham@linaro.org>
-[florian: revive and update for xarray implementation]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
-Changes in v2:
+> Looks like an unrelated change?
 
-- guarded against a NULL node in the while loop
 
- scripts/gdb/linux/constants.py.in |  8 +++
- scripts/gdb/linux/radixtree.py    | 90 +++++++++++++++++++++++++++++++
- scripts/gdb/vmlinux-gdb.py        |  1 +
- 3 files changed, 99 insertions(+)
- create mode 100644 scripts/gdb/linux/radixtree.py
+Will remove this in the next revision.
 
-diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
-index 2efbec6b6b8d..6c886deb0b18 100644
---- a/scripts/gdb/linux/constants.py.in
-+++ b/scripts/gdb/linux/constants.py.in
-@@ -17,6 +17,7 @@
- #include <linux/hrtimer.h>
- #include <linux/mount.h>
- #include <linux/of_fdt.h>
-+#include <linux/radix-tree.h>
- #include <linux/threads.h>
- 
- /* We need to stringify expanded macros so that they can be parsed */
-@@ -68,6 +69,13 @@ LX_VALUE(NR_CPUS)
- /* linux/of_fdt.h> */
- LX_VALUE(OF_DT_HEADER)
- 
-+/* linux/radix-tree.h */
-+LX_GDBPARSED(RADIX_TREE_ENTRY_MASK)
-+LX_GDBPARSED(RADIX_TREE_INTERNAL_NODE)
-+LX_GDBPARSED(RADIX_TREE_MAP_SIZE)
-+LX_GDBPARSED(RADIX_TREE_MAP_SHIFT)
-+LX_GDBPARSED(RADIX_TREE_MAP_MASK)
-+
- /* Kernel Configs */
- LX_CONFIG(CONFIG_GENERIC_CLOCKEVENTS)
- LX_CONFIG(CONFIG_GENERIC_CLOCKEVENTS_BROADCAST)
-diff --git a/scripts/gdb/linux/radixtree.py b/scripts/gdb/linux/radixtree.py
-new file mode 100644
-index 000000000000..074543ac763d
---- /dev/null
-+++ b/scripts/gdb/linux/radixtree.py
-@@ -0,0 +1,90 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+#  Radix Tree Parser
-+#
-+# Copyright (c) 2016 Linaro Ltd
-+# Copyright (c) 2023 Broadcom
-+#
-+# Authors:
-+#  Kieran Bingham <kieran.bingham@linaro.org>
-+#  Florian Fainelli <f.fainelli@gmail.com>
-+
-+import gdb
-+
-+from linux import utils
-+from linux import constants
-+
-+radix_tree_root_type = utils.CachedType("struct xarray")
-+radix_tree_node_type = utils.CachedType("struct xa_node")
-+
-+def is_internal_node(node):
-+    long_type = utils.get_long_type()
-+    return ((node.cast(long_type) & constants.LX_RADIX_TREE_ENTRY_MASK) == constants.LX_RADIX_TREE_INTERNAL_NODE)
-+
-+def entry_to_node(node):
-+    long_type = utils.get_long_type()
-+    node_type = node.type
-+    indirect_ptr = node.cast(long_type) & ~constants.LX_RADIX_TREE_INTERNAL_NODE
-+    return indirect_ptr.cast(radix_tree_node_type.get_type().pointer())
-+
-+def node_maxindex(node):
-+    return (constants.LX_RADIX_TREE_MAP_SIZE << node['shift']) - 1
-+
-+def lookup(root, index):
-+    if root.type == radix_tree_root_type.get_type().pointer():
-+        node = root.dereference()
-+    elif root.type != radix_tree_root_type.get_type():
-+        raise gdb.GdbError("must be {} not {}"
-+                           .format(radix_tree_root_type.get_type(), root.type))
-+
-+    node = root['xa_head']
-+    if node == 0:
-+        return None
-+
-+    if not (is_internal_node(node)):
-+        if (index > 0):
-+            return None
-+        return node
-+
-+    node = entry_to_node(node)
-+    maxindex = node_maxindex(node)
-+
-+    if (index > maxindex):
-+        return None
-+
-+    shift = node['shift'] + constants.LX_RADIX_TREE_MAP_SHIFT
-+
-+    while True:
-+        offset = (index >> node['shift']) & constants.LX_RADIX_TREE_MAP_MASK
-+        slot = node['slots'][offset]
-+
-+        if slot == 0:
-+            return None
-+
-+        node = slot.cast(node.type.pointer()).dereference()
-+        if node == 0:
-+            return None
-+
-+        shift -= constants.LX_RADIX_TREE_MAP_SHIFT
-+        if (shift <= 0):
-+            break
-+
-+    return node
-+
-+class LxRadixTree(gdb.Function):
-+    """ Lookup and return a node from a RadixTree.
-+
-+$lx_radix_tree_lookup(root_node [, index]): Return the node at the given index.
-+If index is omitted, the root node is dereference and returned."""
-+
-+    def __init__(self):
-+        super(LxRadixTree, self).__init__("lx_radix_tree_lookup")
-+
-+    def invoke(self, root, index=0):
-+        result = lookup(root, index)
-+        if result is None:
-+            raise gdb.GdbError("No entry in tree at index {}".format(index))
-+
-+        return result
-+
-+LxRadixTree()
-diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
-index 3a5b44cd6bfe..4a5056f2c247 100644
---- a/scripts/gdb/vmlinux-gdb.py
-+++ b/scripts/gdb/vmlinux-gdb.py
-@@ -38,3 +38,4 @@ else:
-     import linux.genpd
-     import linux.device
-     import linux.mm
-+    import linux.radixtree
--- 
-2.34.1
+>> +#include <linux/namei.h>
+>>    #include <linux/pagemap.h>
+>>    #include <linux/pseudo_fs.h>
+>>    #include <linux/shmem_fs.h>
+>>    #include <linux/syscalls.h>
+>>    #include <uapi/linux/falloc.h>
+>>    #include <uapi/linux/magic.h>
+>> +#include <uapi/linux/restrictedmem.h>
+>>    #include <linux/restrictedmem.h>
 
+>>    struct restrictedmem {
+>> @@ -189,19 +190,20 @@ static struct file  
+>> *restrictedmem_file_create(struct file *memfd)
+>>    	return file;
+>>    }
+
+>> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+>> +static int restrictedmem_create(struct vfsmount *mount)
+>>    {
+>>    	struct file *file, *restricted_file;
+>>    	int fd, err;
+
+>> -	if (flags)
+>> -		return -EINVAL;
+>> -
+>>    	fd = get_unused_fd_flags(0);
+>>    	if (fd < 0)
+>>    		return fd;
+
+>> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+>> +	if (mount)
+>> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0,  
+>> VM_NORESERVE);
+>> +	else
+>> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+>> +
+>>    	if (IS_ERR(file)) {
+>>    		err = PTR_ERR(file);
+>>    		goto err_fd;
+>> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int,  
+>> flags)
+>>    	return err;
+>>    }
+
+>> +static bool is_shmem_mount(struct vfsmount *mnt)
+>> +{
+>> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
+>> +}
+>> +
+>> +static bool is_mount_root(struct file *file)
+>> +{
+>> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+>> +}
+
+> I'd inline at least that function, pretty self-explaining.
+
+
+Will inline this in the next revision.
+
+>> +
+>> +static int restrictedmem_create_on_user_mount(int mount_fd)
+>> +{
+>> +	int ret;
+>> +	struct fd f;
+>> +	struct vfsmount *mnt;
+>> +
+>> +	f = fdget_raw(mount_fd);
+>> +	if (!f.file)
+>> +		return -EBADF;
+>> +
+>> +	ret = -EINVAL;
+>> +	if (!is_mount_root(f.file))
+>> +		goto out;
+>> +
+>> +	mnt = f.file->f_path.mnt;
+>> +	if (!is_shmem_mount(mnt))
+>> +		goto out;
+>> +
+>> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+>> +	if (ret)
+>> +		goto out;
+>> +
+>> +	ret = mnt_want_write(mnt);
+>> +	if (unlikely(ret))
+>> +		goto out;
+>> +
+>> +	ret = restrictedmem_create(mnt);
+>> +
+>> +	mnt_drop_write(mnt);
+>> +out:
+>> +	fdput(f);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
+>> +{
+>> +	if (flags & ~RMFD_USERMNT)
+>> +		return -EINVAL;
+>> +
+>> +	if (flags == RMFD_USERMNT) {
+>> +		if (mount_fd < 0)
+>> +			return -EINVAL;
+>> +
+>> +		return restrictedmem_create_on_user_mount(mount_fd);
+>> +	} else {
+>> +		return restrictedmem_create(NULL);
+>> +	}
+
+
+> You can drop the else case:
+
+> if (flags == RMFD_USERMNT) {
+> 	...
+> 	return restrictedmem_create_on_user_mount(mount_fd);
+> }
+> return restrictedmem_create(NULL);
+
+
+I'll be refactoring this to adopt Kirill's suggestion of using a single
+restrictedmem_create(mnt) call.
+
+
+> I do wonder if you want to properly check for a flag instead of
+> comparing values. Results in a more natural way to deal with flags:
+
+> if (flags & RMFD_USERMNT) {
+
+> }
+
+
+Will use this in the next revision.
+
+>> +}
+>> +
+>>    int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
+>>    		       struct restrictedmem_notifier *notifier, bool exclusive)
+>>    {
+
+> The "memfd_restricted" vs. "restrictedmem" terminology is a bit
+> unfortunate, but not your fault here.
+
+
+> I'm not a FS person, but it does look good to me.
