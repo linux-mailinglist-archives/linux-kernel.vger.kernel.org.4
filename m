@@ -2,274 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B91D6D8A92
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5A26D8A9D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbjDEW3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 18:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
+        id S232640AbjDEWbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjDEW3D (ORCPT
+        with ESMTP id S229631AbjDEWbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:29:03 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB6D2719
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:29:02 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 140-20020a630792000000b0050be9465db8so10967431pgh.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:29:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680733742;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GWR9MlnovPb4azeMHr07bRFmjnPJymKEQvz5exk2wDc=;
-        b=VmY8UlSKwzQO0K5HFS4LZyNPsx2yz03z8VFeH0jzD3xNKquWByhUadcUB64clw/ukK
-         PS0lE7ms2N4zjfi8yBjDa838Jv9P/Ebe1rmQaDpZapGQHrRUF7T36fqfDV4nrOsV5AMd
-         SGz0kry10Itl5RDl9lqCNIJymFOfJXu3eyUU9TTKRLkH+oIyMJ/lPP7ew2v5fMpzLKgu
-         h2uPt2YYNrcvek8x7z9xu1hq0h+WSNdpNf1iKUK96UPq7N13/VzzDBzL4pGp1LrBOcqG
-         9eHu/EI4kCb1GuSPO4OgPgpAKgvx41nOj6p+bBeCRlZUmYgF2jGC97zqN3Q2IAWdiWYG
-         FlOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680733742;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GWR9MlnovPb4azeMHr07bRFmjnPJymKEQvz5exk2wDc=;
-        b=QJ9ns2lh0tm9zRlMbqZFvivEQwpILruMuDtaz2e0oGvGAPUm8d+NBlshKXvrRU36ms
-         Ox/gGecU9JZj+y/Ib34SbYz1My7FkBHITH82ftY8acA4ufwhDfqkPAEzn0DJndWMWtq3
-         AgH6g1Pn18hiY7NdXn3tb3jX3LRSFLX22qBF8W1ucxAET/fmsYfp+lgZvuhPzMHjiE1P
-         o5bb3+y9fYZk1hw0DbQXYHuGNEYSsep5hGctZcv7tJEz2R2+lzB2DDU8ix3U+JO8/NrI
-         kW/d8HPamut6ycC1yhcSM7TFCZuIKYR4tKj6qCKB01JTXb89L4eDtOchEMjKdkESz65T
-         QhYA==
-X-Gm-Message-State: AAQBX9dmLW0W3+L2W2KG5Tgnkw35a6brpPXzJxUkbfozm9c4UiB6jRrR
-        /xEFcVvomoam4J7/B46BQnooaEw28qKRFF00JA==
-X-Google-Smtp-Source: AKy350YZoCywDUVBhRVt0H67teuAx9CW+FCj9ARmbfK2XibL5Z5UEPVhVCnv/dIxeX7eINO95mUrqIM2r7ufZiriPQ==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:90a:7308:b0:23f:1caa:233a with
- SMTP id m8-20020a17090a730800b0023f1caa233amr1734038pjk.1.1680733741709; Wed,
- 05 Apr 2023 15:29:01 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 22:29:00 +0000
-In-Reply-To: <f0232380-4171-f4d3-f1a6-07993e551b46@redhat.com> (message from
- David Hildenbrand on Mon, 3 Apr 2023 10:21:48 +0200)
-Mime-Version: 1.0
-Message-ID: <diqzilea0xqr.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
-        corbet@lwn.net, dave.hansen@intel.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
-        rppt@kernel.org, seanjc@google.com, shuah@kernel.org,
-        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
-        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
-        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
-        yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 5 Apr 2023 18:31:36 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 15:31:34 PDT
+Received: from alln-iport-8.cisco.com (alln-iport-8.cisco.com [173.37.142.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C5810C8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=9024; q=dns/txt; s=iport;
+  t=1680733894; x=1681943494;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hVP+U8JQfuHPAmjtmIY5NQJcglbPXDOTcwXu+SAHQUA=;
+  b=a4aNk8bruRkkqBUnoSsFEaiS4nkvoM8ic0wLRmJpGZYGnD7gM6s79gXa
+   c4PBqizLAg91RA3yAcQ5BQEIrqzCCOs4kbrJKtRYqUGhF7gDeIz/hlzJx
+   9QW/tZj+MbAGua8yyFDVMBvbLidg9X+GIMRUusFNRLoHzdb0v/GIoxGlm
+   k=;
+X-IronPort-AV: E=Sophos;i="5.98,322,1673913600"; 
+   d="scan'208";a="91839697"
+Received: from rcdn-core-11.cisco.com ([173.37.93.147])
+  by alln-iport-8.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 05 Apr 2023 22:30:30 +0000
+Received: from localhost.localdomain ([10.160.65.27])
+        by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTP id 335MUSxI031603;
+        Wed, 5 Apr 2023 22:30:29 GMT
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        xe-linux-external@cisco.com
+Cc:     Marcin Wierzbicki <mawierzb@cisco.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 1/2] arm64: dts: cisco: add device tree for Cisco CrayAr Argos
+Date:   Wed,  5 Apr 2023 15:30:26 -0700
+Message-Id: <20230405223028.1268141-1-danielwa@cisco.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.160.65.27, [10.160.65.27]
+X-Outbound-Node: rcdn-core-11.cisco.com
+X-Spam-Status: No, score=-10.0 required=5.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Marcin Wierzbicki <mawierzb@cisco.com>
 
-Thanks for your review!
+Adds device tree include file for Cisco CrayAR SoC and
+device tree file for Cisco CrayAR Argos EVB board.
 
-David Hildenbrand <david@redhat.com> writes:
+Cc: xe-linux-external@cisco.com
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
+Signed-off-by: Daniel Walker <danielwa@cisco.com>
+---
+ MAINTAINERS                                |   5 +
+ arch/arm64/Kconfig.platforms               |   5 +
+ arch/arm64/boot/dts/Makefile               |   1 +
+ arch/arm64/boot/dts/cisco/Makefile         |   2 +
+ arch/arm64/boot/dts/cisco/crayar.dtsi      | 247 +++++++++++++++++++++
+ arch/arm64/boot/dts/cisco/crayar_argos.dts |  32 +++
+ 6 files changed, 292 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/cisco/Makefile
+ create mode 100644 arch/arm64/boot/dts/cisco/crayar.dtsi
+ create mode 100644 arch/arm64/boot/dts/cisco/crayar_argos.dts
 
-> On 01.04.23 01:50, Ackerley Tng wrote:
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 90abe83c02f3..ff99020029f8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4793,6 +4793,11 @@ X:	drivers/char/ipmi/
+ X:	drivers/char/random.c
+ X:	drivers/char/tpm/
+ 
++CISCO ARM64 DEVICE TREE SUPPORT
++M:	xe-linux-external@cisco.com
++S:	Supported
++F:	arch/arm64/boot/dts/cisco/
++
+ CHECKPATCH
+ M:	Andy Whitcroft <apw@canonical.com>
+ M:	Joe Perches <joe@perches.com>
+diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+index 89a0b13b058d..740099c56382 100644
+--- a/arch/arm64/Kconfig.platforms
++++ b/arch/arm64/Kconfig.platforms
+@@ -94,6 +94,11 @@ config ARCH_BITMAIN
+ 	help
+ 	  This enables support for the Bitmain SoC Family.
+ 
++config ARCH_CISCO_CRAYAR_ARGOS
++	bool "Cisco Argos Platform"
++	help
++	  This enables support for the Cisco Argos Platform.
++
+ config ARCH_EXYNOS
+ 	bool "Samsung Exynos SoC family"
+ 	select COMMON_CLK_SAMSUNG
+diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+index 7b107fa7414b..3f83583f9996 100644
+--- a/arch/arm64/boot/dts/Makefile
++++ b/arch/arm64/boot/dts/Makefile
+@@ -11,6 +11,7 @@ subdir-y += arm
+ subdir-y += bitmain
+ subdir-y += broadcom
+ subdir-y += cavium
++subdir-y += cisco
+ subdir-y += exynos
+ subdir-y += freescale
+ subdir-y += hisilicon
+diff --git a/arch/arm64/boot/dts/cisco/Makefile b/arch/arm64/boot/dts/cisco/Makefile
+new file mode 100644
+index 000000000000..b1d4220df2f4
+--- /dev/null
++++ b/arch/arm64/boot/dts/cisco/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_CISCO_CRAYAR_ARGOS) += crayar_argos.dtb
+diff --git a/arch/arm64/boot/dts/cisco/crayar.dtsi b/arch/arm64/boot/dts/cisco/crayar.dtsi
+new file mode 100644
+index 000000000000..6ae5e1653318
+--- /dev/null
++++ b/arch/arm64/boot/dts/cisco/crayar.dtsi
+@@ -0,0 +1,247 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device Tree Include file for Cisco CrayAR family SoC.
++ *
++ * Copyright (C) 2022 Cisco
++ */
++
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++
++/ {
++	compatible = "cisco,crayar";
++	interrupt-parent = <&gic>;
++	#address-cells = <0x2>;
++	#size-cells = <0x2>;
++
++	base_clk: base-clk {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <500000000>;
++	};
++
++	cpus {
++		#address-cells = <0x1>;
++		#size-cells = <0x0>;
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x00000>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_0>;
++		};
++
++		cpu1: cpu@100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x00100>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_1>;
++		};
++
++		cpu2: cpu@200 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x00200>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_2>;
++		};
++
++		cpu3: cpu@300 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x00300>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_3>;
++		};
++
++		cpu4: cpu@10000 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x10000>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_4>;
++		};
++
++		cpu5: cpu@10100 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x10100>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_5>;
++		};
++
++		cpu6: cpu@10200 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x10200>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_6>;
++		};
++
++		cpu7: cpu@10300 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a75";
++			reg = <0x10300>;
++			enable-method = "spin-table";
++			cpu-release-addr = <0x0 0x7003fff8>;
++			next-level-cache = <&l2_7>;
++		};
++
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++				core1 {
++					cpu = <&cpu1>;
++				};
++				core2 {
++					cpu = <&cpu2>;
++				};
++				core3 {
++					cpu = <&cpu3>;
++				};
++			};
++			cluster1 {
++				core0 {
++					cpu = <&cpu4>;
++				};
++				core1 {
++					cpu = <&cpu5>;
++				};
++				core2 {
++					cpu = <&cpu6>;
++				};
++				core3 {
++					cpu = <&cpu7>;
++				};
++			};
++		};
++
++		l2_0: l2-cache0 {
++			compatible = "cache";
++			next-level-cache = <&l3_0>;
++		};
++
++		l2_1: l2-cache1 {
++			compatible = "cache";
++			next-level-cache = <&l3_0>;
++		};
++
++		l2_2: l2-cache2 {
++			compatible = "cache";
++			next-level-cache = <&l3_0>;
++		};
++
++		l2_3: l2-cache3 {
++			compatible = "cache";
++			next-level-cache = <&l3_0>;
++		};
++
++		l2_4: l2-cache4 {
++			compatible = "cache";
++			next-level-cache = <&l3_1>;
++		};
++
++		l2_5: l2-cache5 {
++			compatible = "cache";
++			next-level-cache = <&l3_1>;
++		};
++
++		l2_6: l2-cache6 {
++			compatible = "cache";
++			next-level-cache = <&l3_1>;
++		};
++
++		l2_7: l2-cache7 {
++			compatible = "cache";
++			next-level-cache = <&l3_1>;
++		};
++
++		l3_0: l3-cache0 {
++			compatible = "cache";
++		};
++
++		l3_1: l3-cache1 {
++			compatible = "cache";
++		};
++	};
++
++	cci: cci@2e000000 {
++		compatible = "arm,cci-550";
++		reg = <0x0 0x2e000000 0x0 0x1000>;
++		ranges = <0x0 0x0 0x2e000000 0x6000>;
++		#address-cells = <0x1>;
++		#size-cells = <0x1>;
++
++	};
++
++	timer: timer {
++		compatible = "arm,armv8-timer";
++		interrupt-parent = <&gic>;
++		interrupts =	<GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>,
++				<GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>;
++	};
++
++	gic: interrupt-controller@20000000 {
++		compatible = "arm,gic-v3";
++		reg =	<0x0 0x20000000 0x0 0x10000>,	/* GICD */
++			<0x0 0x20060000 0x0 0x100000>;	/* GICR */
++		#interrupt-cells = <3>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++		interrupt-controller;
++		msi-controller;
++		mbi-ranges = <256 224>;
++
++		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
++
++		its: msi-controller@20040000 {
++			compatible = "arm,gic-v3-its";
++			reg = <0x0 0x20040000 0x0 0x10000>;
++			msi-controller;
++			#msi-cells = <1>;
++		};
++	};
++
++	soc {
++		compatible = "simple-bus";
++		ranges = <0x0 0x0 0x0 0x0 0x100 0x0>;
++		#address-cells = <0x2>;
++		#size-cells = <0x2>;
++
++		uart0: serial@23f80000 {
++			compatible = "ns16550a";
++			reg = <0x0 0x23f80000 0x0 0x100>;
++			interrupts = <GIC_SPI 129 IRQ_TYPE_LEVEL_HIGH>;
++			reg-shift = <0x2>;
++			reg-io-width = <0x4>;
++			clocks = <&base_clk>;
++			current-speed = <9600>;
++			status = "disabled";
++		};
++
++		uart1: serial@23fc0000 {
++			compatible = "ns16550a";
++			reg = <0x0 0x23fc0000 0x0 0x100>;
++			interrupts = <GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>;
++			reg-shift = <0x2>;
++			reg-io-width = <0x4>;
++			clocks = <&base_clk>;
++			current-speed = <9600>;
++			status = "disabled";
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/cisco/crayar_argos.dts b/arch/arm64/boot/dts/cisco/crayar_argos.dts
+new file mode 100644
+index 000000000000..cbdf3c13bf52
+--- /dev/null
++++ b/arch/arm64/boot/dts/cisco/crayar_argos.dts
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Device Tree file for Cisco CrayAR Argos EVB board.
++ *
++ * Copyright (C) 2022 Cisco
++ */
++
++/dts-v1/;
++#include "crayar.dtsi"
++
++/ {
++	compatible = "cisco,crayar-argos", "cisco,crayar";
++	model = "Cisco CrayAr Argos EVB";
++	version = <0x00000001>;
++
++	aliases {
++		serial0 = &uart0;
++	};
++
++	chosen {
++		stdout-path = "serial0:9600n8";
++	};
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x0 0x80000000 0x0 0x80000000>;
++	};
++};
++
++&uart0 {
++	status = "okay";
++};
+-- 
+2.25.1
 
->> ...
-
->> diff --git a/include/uapi/linux/restrictedmem.h  
->> b/include/uapi/linux/restrictedmem.h
->> new file mode 100644
->> index 000000000000..22d6f2285f6d
->> --- /dev/null
->> +++ b/include/uapi/linux/restrictedmem.h
->> @@ -0,0 +1,8 @@
->> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
->> +#define _UAPI_LINUX_RESTRICTEDMEM_H
->> +
->> +/* flags for memfd_restricted */
->> +#define RMFD_USERMNT		0x0001U
-
-> I wonder if we can come up with a more expressive prefix than RMFD.
-> Sounds more like "rm fd" ;) Maybe it should better match the
-> "memfd_restricted" syscall name, like "MEMFD_RSTD_USERMNT".
-
-
-RMFD did actually sound vulgar, I'm good with MEMFD_RSTD_USERMNT!
-
->> +
->> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
->> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
->> index c5d869d8c2d8..f7b62364a31a 100644
->> --- a/mm/restrictedmem.c
->> +++ b/mm/restrictedmem.c
->> @@ -1,11 +1,12 @@
->>    // SPDX-License-Identifier: GPL-2.0
->> -#include "linux/sbitmap.h"
-
-> Looks like an unrelated change?
-
-
-Will remove this in the next revision.
-
->> +#include <linux/namei.h>
->>    #include <linux/pagemap.h>
->>    #include <linux/pseudo_fs.h>
->>    #include <linux/shmem_fs.h>
->>    #include <linux/syscalls.h>
->>    #include <uapi/linux/falloc.h>
->>    #include <uapi/linux/magic.h>
->> +#include <uapi/linux/restrictedmem.h>
->>    #include <linux/restrictedmem.h>
-
->>    struct restrictedmem {
->> @@ -189,19 +190,20 @@ static struct file  
->> *restrictedmem_file_create(struct file *memfd)
->>    	return file;
->>    }
-
->> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
->> +static int restrictedmem_create(struct vfsmount *mount)
->>    {
->>    	struct file *file, *restricted_file;
->>    	int fd, err;
-
->> -	if (flags)
->> -		return -EINVAL;
->> -
->>    	fd = get_unused_fd_flags(0);
->>    	if (fd < 0)
->>    		return fd;
-
->> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
->> +	if (mount)
->> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0,  
->> VM_NORESERVE);
->> +	else
->> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
->> +
->>    	if (IS_ERR(file)) {
->>    		err = PTR_ERR(file);
->>    		goto err_fd;
->> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int,  
->> flags)
->>    	return err;
->>    }
-
->> +static bool is_shmem_mount(struct vfsmount *mnt)
->> +{
->> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
->> +}
->> +
->> +static bool is_mount_root(struct file *file)
->> +{
->> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
->> +}
-
-> I'd inline at least that function, pretty self-explaining.
-
-
-Will inline this in the next revision.
-
->> +
->> +static int restrictedmem_create_on_user_mount(int mount_fd)
->> +{
->> +	int ret;
->> +	struct fd f;
->> +	struct vfsmount *mnt;
->> +
->> +	f = fdget_raw(mount_fd);
->> +	if (!f.file)
->> +		return -EBADF;
->> +
->> +	ret = -EINVAL;
->> +	if (!is_mount_root(f.file))
->> +		goto out;
->> +
->> +	mnt = f.file->f_path.mnt;
->> +	if (!is_shmem_mount(mnt))
->> +		goto out;
->> +
->> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
->> +	if (ret)
->> +		goto out;
->> +
->> +	ret = mnt_want_write(mnt);
->> +	if (unlikely(ret))
->> +		goto out;
->> +
->> +	ret = restrictedmem_create(mnt);
->> +
->> +	mnt_drop_write(mnt);
->> +out:
->> +	fdput(f);
->> +
->> +	return ret;
->> +}
->> +
->> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
->> +{
->> +	if (flags & ~RMFD_USERMNT)
->> +		return -EINVAL;
->> +
->> +	if (flags == RMFD_USERMNT) {
->> +		if (mount_fd < 0)
->> +			return -EINVAL;
->> +
->> +		return restrictedmem_create_on_user_mount(mount_fd);
->> +	} else {
->> +		return restrictedmem_create(NULL);
->> +	}
-
-
-> You can drop the else case:
-
-> if (flags == RMFD_USERMNT) {
-> 	...
-> 	return restrictedmem_create_on_user_mount(mount_fd);
-> }
-> return restrictedmem_create(NULL);
-
-
-I'll be refactoring this to adopt Kirill's suggestion of using a single
-restrictedmem_create(mnt) call.
-
-
-> I do wonder if you want to properly check for a flag instead of
-> comparing values. Results in a more natural way to deal with flags:
-
-> if (flags & RMFD_USERMNT) {
-
-> }
-
-
-Will use this in the next revision.
-
->> +}
->> +
->>    int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
->>    		       struct restrictedmem_notifier *notifier, bool exclusive)
->>    {
-
-> The "memfd_restricted" vs. "restrictedmem" terminology is a bit
-> unfortunate, but not your fault here.
-
-
-> I'm not a FS person, but it does look good to me.
