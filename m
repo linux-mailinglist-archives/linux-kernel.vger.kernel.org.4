@@ -2,77 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC506D862A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049616D862B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbjDESj5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 14:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S231230AbjDESkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbjDESjw (ORCPT
+        with ESMTP id S234175AbjDESkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:39:52 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346261BC5;
-        Wed,  5 Apr 2023 11:39:51 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id r11so143440829edd.5;
-        Wed, 05 Apr 2023 11:39:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680719989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hf01kvsvjUqGL7/i9jyPXAdwko9hlY5PySP1S08JZ2o=;
-        b=Iq7K7QBLXPura1VOrKf4cvbco9z2dZw42+jRAjPH4cbRqEC6vmbcryfVDfc55FXwnW
-         7s3xTIhOGx3fEFbgNRdxhcnB7PrZJOm32N5v1KBReR7ldTT4xXCQsnWAcjMK3jgGD7mG
-         N7//amTYUSfO1SdJ4myhMk/9eIZYyDA5y+CK1kyp+9VXZSHr5KTuddOzh9d3Gyp+8rsR
-         JtYbGpX5B4p0Q5F1ym6uZ89ir6svlrSFZgR8yNDVMDnTE/swb7mcnOSqrUedykRQRMnn
-         6pGfxfd0WJB2EiftzXDSTBetTqpzpObchxtSV7qcN/oVhxhv2Puz1GaAx7jgPQH3fBEb
-         7Crg==
-X-Gm-Message-State: AAQBX9eFjewwdqRVwq2kzKq7eQD242nXy05oaHO0JOYBczcq39tM5Oog
-        pyBQRQNDPdoTEE/Wv19/OtLlcCFyShKFZbnSUTJDm01b
-X-Google-Smtp-Source: AKy350bOANU2XzGCBd75k+fjLBMVbsqKgE8oPRzOS+2EasLew5PkGrxJaQqc5xhbZNSotr8gc/wYu/EvrgbUJj+k7j4=
-X-Received: by 2002:a17:907:8c17:b0:8b1:3298:c587 with SMTP id
- ta23-20020a1709078c1700b008b13298c587mr2151268ejc.2.1680719989471; Wed, 05
- Apr 2023 11:39:49 -0700 (PDT)
+        Wed, 5 Apr 2023 14:40:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E9E6194
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:40:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680720014; x=1712256014;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zgirNs/yy9kf5VlqEnEGs45ztndGGwdnGjYncEsTT3U=;
+  b=LXnOPxTF41AHdN3THl750QLPTzeRdHPnqRaorr5QGds86ddLxubZWaHX
+   XbKSdsxEuhAntlGOoqR0nlsSxXZFftgDgf+LSbn2sSQ767TX1vVvbcOZ/
+   Y0IWPb5XtWXnoNMONekCjHCY43JtnImUN0PflQVCWnamwqg2lXg7YjzTt
+   Wl9hycpO3AcNmB23pm2ACSBXuk7JqAdYUt8Flq6wh9MBk5/MZs7Hh1GM5
+   VL7zwwFt/tHPoD+yZlwPa+x/sgtfFdLgYfy1wFH+4zcgXBUprN8Nwu8Ck
+   QlX8YyE+0813OyJf9p8EdJnyrDjsw5gyOoK0WCD9jCteC7QdwECPsZ3Dt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="340030870"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="340030870"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 11:40:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="636993556"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="636993556"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by orsmga003.jf.intel.com with ESMTP; 05 Apr 2023 11:40:12 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Borislav Petkov" <bp@alien8.de>, "Ingo Molnar" <mingo@redhat.com>
+Cc:     "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "x86" <x86@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>,
+        Chintan M Patel <chintan.m.patel@intel.com>
+Subject: [RFC PATCH] x86/fpu/xstate: Add more diagnostic information on inconsistent xstate sizes
+Date:   Wed,  5 Apr 2023 11:39:42 -0700
+Message-Id: <20230405183942.734019-1-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org> <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org>
-In-Reply-To: <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 5 Apr 2023 20:39:38 +0200
-Message-ID: <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v6.4-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yang Li <yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 8:32 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> just a gentle reminder
+A warning is emitted when xstate sizes are found inconsistent.
+But the warning message doesn't show enough information to diagnose
+the issue.
 
-This is in my linux-next branch, I'll merge it into thermal tomorrow.
+Provide more detailed xstate size information to help debug the issue.
+As a hypothetical example, on a platform that may report incorrect
+xstate size in CPUID.0xd.1:EBX, the diagnostic information after
+the warning will show:
+[    0.000000] x86/fpu: max_features=0x407
+[    0.000000] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+[    0.000000] x86/fpu: xstate_offset[10]: 832, xstate_sizes[10]:    8
+[    0.000000] x86/fpu: total size: 840 bytes
+[    0.000000] x86/fpu: XCR0=0x7, IA32_XSS=0x400
+[    0.000000] x86/fpu: kernel_size from CPUID.0xd.0x1:EBX: 576 bytes
 
->  because more material will come in the next days
+XCR0 | IA32_XSS is 0x407 which is consistent with max_features.
+CPUID.0xd.0x1:EBX should report the size of the xsave area
+containing xstate components corresponding to bits set in
+XCR0 | IA32_XSS. But it only reports 576 bytes of xsave area which
+doesn't count xstate sizes for AVX (offset 2 and 256 bytes) and
+PASID (offset 10 and 8 bytes). This confirms that the platform
+reports xstate size incorrectly through the CPUID bits.
 
-So why can't it wait?
+Suggest-by: Dave Hansen <dave.hansen@linux.intel.com>
+Tested-by: Chintan M Patel <chintan.m.patel@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+---
+ arch/x86/kernel/fpu/xstate.c | 33 +++++++++++++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 0bab497c9436..5f27fcdc6c90 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -602,8 +602,37 @@ static bool __init paranoid_xstate_size_valid(unsigned int kernel_size)
+ 		}
+ 	}
+ 	size = xstate_calculate_size(fpu_kernel_cfg.max_features, compacted);
+-	XSTATE_WARN_ON(size != kernel_size,
+-		       "size %u != kernel_size %u\n", size, kernel_size);
++	if (size != kernel_size) {
++		u64 xcr0, ia32_xss;
++
++		XSTATE_WARN_ON(1, "size %u != kernel_size %u\n",
++			       size, kernel_size);
++
++		/* Show more information to help diagnose the size issue. */
++		pr_info("x86/fpu: max_features=0x%llx\n",
++			fpu_kernel_cfg.max_features);
++		print_xstate_offset_size();
++		pr_info("x86/fpu: total size: %u bytes\n", size);
++		xcr0 = xgetbv(XCR_XFEATURE_ENABLED_MASK);
++		if (compacted) {
++			rdmsrl(MSR_IA32_XSS, ia32_xss);
++			pr_info("x86/fpu: XCR0=0x%llx, IA32_XSS=0x%llx\n",
++				xcr0, ia32_xss);
++		} else {
++			pr_info("x86/fpu: XCR0=0x%llx\n", xcr0);
++		}
++		/*
++		 * In compact case, CPUID.0xd.0x1:EBX reports the size of
++		 * the XSAVE size containing all the state components
++		 * corresponding to bits set in XCR0 | IA32_XSS.
++		 *
++		 * Otherwise, CPUID.0xd.0x0:EBX reports the size of an XSAVE
++		 * area containing all the *user* state components
++		 * corresponding to bits set in XCR0.
++		 */
++		pr_info("x86/fpu: kernel_size from CPUID.0xd.0x%x:EBX: %u bytes\n",
++			compacted ? 1 : 0, kernel_size);
++	}
+ 	return size == kernel_size;
+ }
+ 
+-- 
+2.37.1
+
