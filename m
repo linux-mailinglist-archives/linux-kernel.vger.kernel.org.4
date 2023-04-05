@@ -2,220 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1E16D7DE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADE66D7E6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238320AbjDENmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
+        id S237833AbjDEODN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237259AbjDENmf (ORCPT
+        with ESMTP id S231953AbjDEOCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:42:35 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F091FE0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:42:34 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D9F0F5C00D3;
-        Wed,  5 Apr 2023 09:42:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 05 Apr 2023 09:42:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680702151; x=
-        1680788551; bh=FZGH5Oe7v8drJWg0YjWA6GRDzpcW267pyOqwWY55WMg=; b=M
-        3nlr1G+xVsldJNzVhrZwfgKKeuvQaqnOZH6nDdi0Wclau3pIecVGaTKglQ3601bt
-        WM4XCddZRFRO1e3RXCRsToD/uY1Cji2uP7XlPF9XE6MmQBNYhiYemGui1DUsP+c/
-        3lTGDdAvgzcxGMJ4ZpoltjS+RT/Hu1V+oARbqF1RrpQvCOaVlVG2ldiCcVLXWCSI
-        seICNxBK2CMmnkFE7ybVtKcoQRhxKvvui7sNabHM+zDQtwhnfeI6z1f9iLaL7Ppj
-        vQw52uQPKfdMBm4/T4R/KnPs6bjBSSoYb9qx2en1VVQxc7XsczYF6O+tOkgubbPl
-        oq/tJ2oe1We+1BcdJOY6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680702151; x=1680788551; bh=FZGH5Oe7v8drJ
-        Wg0YjWA6GRDzpcW267pyOqwWY55WMg=; b=mxpaTGTpZ6faV+4oGCQWgilzrMMWV
-        q1QRAkA1R7mZEqiNUBrdOP/0cK/Y9lC63jS2pNTqlvDe2H0TEWg2lF3QFLW7W4yt
-        +mYtC1vgw/Co+3qviRyMckpCoQWDCKKfaiEJt1ZLA2q/xRMsUU8tlGg2dR9hUt9i
-        FoKH/mp+IcyUPuhb7IwujoFZfh6I2AlKiT8NiufWoYoIpX7FY6lUcBymWB3ggQGd
-        sgzfAQnsOBLXeqkLz+SFF1qIQAEZOrJlM08SSzPbCiKPGppMqu/SNYymVX8IEqkM
-        gZUBqea1S71CG/CCzEYMJvR49lYQQ2YIQq+68iq+T41EZ/XjOvFjP6Oig==
-X-ME-Sender: <xms:x3otZNVLjDz_yzE7kbfDES8ZoQXoJfxVfTnSEz1E1XIcZaxYwLUXdg>
-    <xme:x3otZNnDL7oJGnbFNCVPdJO5aAlQNpGtG4EHHl3fCo9rF2hn94TAVk_0Iq2OchfNv
-    MEChmzSy4wrPEmHSQg>
-X-ME-Received: <xmr:x3otZJaxt-Hiinz1Y28byVEHB1d4RsoE6Wr8vblUsbE47i0A8UH_cDI34BP6Jx1MLFP7GQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgieekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:x3otZAXN7jNFwjcHuUYr2rGG8UDlGRAtFzI1Ujd85-NK-CgFnnAexA>
-    <xmx:x3otZHmNvzuUlR1MuN2-whKMrO4-ntCTf_WsD0wN1gkxx4sugQ0N_g>
-    <xmx:x3otZNeOHGTqECNwZq02qzJ47coDMIJiEXnc9FFUQz9mioICKJfUSw>
-    <xmx:x3otZJqKnUnktgKTy04gcXcv4BM0gclmI0z9r_PNcj32yCY5T7R2tA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Apr 2023 09:42:30 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 74A80102846; Wed,  5 Apr 2023 16:42:26 +0300 (+03)
-Date:   Wed, 5 Apr 2023 16:42:26 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Min M. Xu" <min.m.xu@intel.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jiewen Yao <jiewen.yao@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
-Message-ID: <20230405134226.2ptk3rd7mfin3wlm@box.shutemov.name>
-References: <cover.1680628986.git.thomas.lendacky@amd.com>
- <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
- <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
- <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
- <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name>
- <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
- <20230404202445.6qkl7hz67qgievqz@box.shutemov.name>
- <CAMj1kXFrm74+zNcSpHJ1kw38PTMOFk1cTx_EAoGFHaG1fYzRTQ@mail.gmail.com>
- <20230404210153.tll2mojlglx4rfsa@box.shutemov.name>
- <CAMj1kXGvcg-E84h1T_vPi7qxPWxEXBpyuB79KOL+ON7v5YAgJg@mail.gmail.com>
+        Wed, 5 Apr 2023 10:02:08 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6046A60;
+        Wed,  5 Apr 2023 07:01:12 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 0a9710086bac5137; Wed, 5 Apr 2023 16:01:09 +0200
+Received: from kreacher.localnet (unknown [213.134.163.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 2172C1B4EA4C;
+        Wed,  5 Apr 2023 16:01:09 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>
+Subject: [PATCH 13/32] ACPICA: Avoid undefined behavior: applying zero offset to null pointer
+Date:   Wed, 05 Apr 2023 15:42:43 +0200
+Message-ID: <2580576.Lt9SDvczpP@kreacher>
+In-Reply-To: <4845957.31r3eYUQgx@kreacher>
+References: <4845957.31r3eYUQgx@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXGvcg-E84h1T_vPi7qxPWxEXBpyuB79KOL+ON7v5YAgJg@mail.gmail.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.219
+X-CLIENT-HOSTNAME: 213.134.163.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepleduvdfhudehvddukeetffdtffejkedttefgveeftdeuvedvleelgeeiteelueelnecuffhomhgrihhnpegrshgrnhdrshhopdhgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
+        WEIRD_PORT autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 09:46:59AM +0200, Ard Biesheuvel wrote:
-> On Tue, 4 Apr 2023 at 23:02, Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> >
-> > On Tue, Apr 04, 2023 at 10:41:02PM +0200, Ard Biesheuvel wrote:
-> > > On Tue, 4 Apr 2023 at 22:24, Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> > > >
-> > > > On Tue, Apr 04, 2023 at 09:49:52PM +0200, Ard Biesheuvel wrote:
-> > > > > On Tue, 4 Apr 2023 at 20:09, Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> > > > > >
-> > > > > > On Tue, Apr 04, 2023 at 10:57:52AM -0700, Dave Hansen wrote:
-> > > > > > > On 4/4/23 10:45, Kirill A. Shutemov wrote:
-> > > > > > > > I still think it is a bad idea.
-> > > > > > > >
-> > > > > > > > As I asked before, please include my
-> > > > > > > >
-> > > > > > > > Nacked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > > > > > >
-> > > > > > > > into the patch.
-> > > > > > >
-> > > > > > > I was pretty opposed to this when I first saw it too.  But, Tom and
-> > > > > > > company have worn down my opposition a bit.
-> > > > > > >
-> > > > > > > The fact is that we have upstream kernels out there with SEV-SNP support
-> > > > > > > that don't know anything about unaccepted memory.  They're either
-> > > > > > > relegated to using the pre-accepted memory (4GB??) or _some_ entity
-> > > > > > > needs to accept the memory.  That entity obviously can't be the kernel
-> > > > > > > unless we backport unaccepted memory support.
-> > > > > > >
-> > > > > > > This both lets the BIOS be the page-accepting entity _and_ allows the
-> > > > > > > entity to delegate that to the kernel when it needs to.
-> > > > > > >
-> > > > > > > As much as I want to nak this and pretend that that those existing
-> > > > > > > kernel's don't exist, my powers of self-delusion do have their limits.
-> > > > > > >
-> > > > > > > If our AMD friends don't do this, what is their alternative?
-> > > > > >
-> > > > > > The alternative is coordination on the host side: VMM can load a BIOS that
-> > > > > > pre-accepts all memory if the kernel is older.
-> > > > > >
-> > > > >
-> > > > > And how does one identify such a kernel? How does the VMM know which
-> > > > > kernel the guest is going to load after it boots?
-> > > >
-> > > > VMM has to know what it is running. Yes, it is cumbersome. But enabling
-> > > > phase for a feature is often rough. It will get smoother overtime.
-> > > >
-> > >
-> > > So how does the VMM get informed about what it is running? How does it
-> > > distinguish between kernels that support unaccepted memory and ones
-> > > that don't? And how does it predict which kernel a guest is going to
-> > > load?
-> >
-> > User will specify if it wants unaccepted memory or not for the VM. And if
-> > it does it is his responsibility to have kernel that supports it.
-> >
-> > And you have not addressed my question:
-> >
-> >         How is it different from any other feature the kernel is not [yet] aware
-> >         of?
-> >
-> 
-> It is the same problem, but this is just a better solution.
+From: Tamir Duberstein <tamird@google.com>
 
-Okay, we at least agree that there are more then one solution to the
-problem.
+ACPICA commit 770653e3ba67c30a629ca7d12e352d83c2541b1e
 
-> Having a BIOS menu option (or similar) to choose between unaccepted
-> memory or not (or to expose CXL memory via the EFI memory map, which is
-> another hack I have seen) is just unnecessary complication, if the
-> kernel can simply inform the loader about what it supports. We do this
-> all the time with things like OsIndications.
+Before this change we see the following UBSAN stack trace in Fuchsia:
 
-It assumes that kernel calls ExitBootServices() which is not always true.
-A bootloader in between will make impossible for kernel to use any of
-futures exposed this way.
+  #0    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
+  #1.2  0x000020d0f660777f in ubsan_get_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:41 <libclang_rt.asan.so>+0x3d77f
+  #1.1  0x000020d0f660777f in maybe_print_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:51 <libclang_rt.asan.so>+0x3d77f
+  #1    0x000020d0f660777f in ~scoped_report() compiler-rt/lib/ubsan/ubsan_diag.cpp:387 <libclang_rt.asan.so>+0x3d77f
+  #2    0x000020d0f660b96d in handlepointer_overflow_impl() compiler-rt/lib/ubsan/ubsan_handlers.cpp:809 <libclang_rt.asan.so>+0x4196d
+  #3    0x000020d0f660b50d in compiler-rt/lib/ubsan/ubsan_handlers.cpp:815 <libclang_rt.asan.so>+0x4150d
+  #4    0x000021e4213b3302 in acpi_ds_init_aml_walk(struct acpi_walk_state*, union acpi_parse_object*, struct acpi_namespace_node*, u8*, u32, struct acpi_evaluate_info*, u8) ../../third_party/acpica/source/components/dispatcher/dswstate.c:682 <platform-bus-x86.so>+0x233302
+  #5    0x000021e4213e2369 in acpi_ds_call_control_method(struct acpi_thread_state*, struct acpi_walk_state*, union acpi_parse_object*) ../../third_party/acpica/source/components/dispatcher/dsmethod.c:605 <platform-bus-x86.so>+0x262369
+  #6    0x000021e421437fac in acpi_ps_parse_aml(struct acpi_walk_state*) ../../third_party/acpica/source/components/parser/psparse.c:550 <platform-bus-x86.so>+0x2b7fac
+  #7    0x000021e4214464d2 in acpi_ps_execute_method(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/parser/psxface.c:244 <platform-bus-x86.so>+0x2c64d2
+  #8    0x000021e4213aa052 in acpi_ns_evaluate(struct acpi_evaluate_info*) ../../third_party/acpica/source/components/namespace/nseval.c:250 <platform-bus-x86.so>+0x22a052
+  #9    0x000021e421413dd8 in acpi_ns_init_one_device(acpi_handle, u32, void*, void**) ../../third_party/acpica/source/components/namespace/nsinit.c:735 <platform-bus-x86.so>+0x293dd8
+  #10   0x000021e421429e98 in acpi_ns_walk_namespace(acpi_object_type, acpi_handle, u32, u32, acpi_walk_callback, acpi_walk_callback, void*, void**) ../../third_party/acpica/source/components/namespace/nswalk.c:298 <platform-bus-x86.so>+0x2a9e98
+  #11   0x000021e4214131ac in acpi_ns_initialize_devices(u32) ../../third_party/acpica/source/components/namespace/nsinit.c:268 <platform-bus-x86.so>+0x2931ac
+  #12   0x000021e42147c40d in acpi_initialize_objects(u32) ../../third_party/acpica/source/components/utilities/utxfinit.c:304 <platform-bus-x86.so>+0x2fc40d
+  #13   0x000021e42126d603 in acpi::acpi_impl::initialize_acpi(acpi::acpi_impl*) ../../src/devices/board/lib/acpi/acpi-impl.cc:224 <platform-bus-x86.so>+0xed603
 
-But we talked about this before.
+Add a simple check that avoids incrementing a pointer by zero, but
+otherwise behaves as before. Note that our findings are against ACPICA
+20221020, but the same code exists on master.
 
-BTW, can we at least acknowledge the limitation in the commit message?
+Link: https://github.com/acpica/acpica/commit/770653e3
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/acpica/dswstate.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-> We can phase out the protocol implementation from the firmware once we
-> no longer need it, at which point the LocateProtocol() call just
-> becomes a NOP (we do the same thing for UGA support, which has
-> disappeared a long time ago, but we still look for the protocol in the
-> EFI stub).
-> 
-> Once the firmware stops exposing this protocol (and ceases to accept
-> memory on the OS's behalf), we can phase it out from the kernel as
-> well.
-
-It is unlikely to ever happen. In few year everybody will forget about
-this conversation. Regardless of what is written in commit message.
-
-Everything works, why bother?
-
-> The only other potential solution I see is exposing the unaccepted
-> memory as coldplugged ACPI memory objects, and implementing the accept
-> calls via PRM methods. But PRM has had very little test coverage, so
-> it is anybody's guess whether it works for the stable kernels that we
-> need to support with this. It would also mean that the new unaccepted
-> memory logic would need to be updated and cross reference these memory
-> regions with EFI unaccepted memory regions and avoid claiming them
-> both.
-
-Nah. That is a lot of complexity for no particular reason.
-
+diff --git a/drivers/acpi/acpica/dswstate.c b/drivers/acpi/acpica/dswstate.c
+index 95af370a7dce..d3841ded3a81 100644
+--- a/drivers/acpi/acpica/dswstate.c
++++ b/drivers/acpi/acpica/dswstate.c
+@@ -576,9 +576,14 @@ acpi_ds_init_aml_walk(struct acpi_walk_state *walk_state,
+ 	ACPI_FUNCTION_TRACE(ds_init_aml_walk);
+ 
+ 	walk_state->parser_state.aml =
+-	    walk_state->parser_state.aml_start = aml_start;
+-	walk_state->parser_state.aml_end =
+-	    walk_state->parser_state.pkg_end = aml_start + aml_length;
++	    walk_state->parser_state.aml_start =
++	    walk_state->parser_state.aml_end =
++	    walk_state->parser_state.pkg_end = aml_start;
++	/* Avoid undefined behavior: applying zero offset to null pointer */
++	if (aml_length != 0) {
++		walk_state->parser_state.aml_end += aml_length;
++		walk_state->parser_state.pkg_end += aml_length;
++	}
+ 
+ 	/* The next_op of the next_walk will be the beginning of the method */
+ 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.35.3
+
+
+
+
+
