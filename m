@@ -2,145 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634A96D82B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246196D82BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238237AbjDEPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        id S238918AbjDEPzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238896AbjDEPyN (ORCPT
+        with ESMTP id S238791AbjDEPzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:54:13 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633A6E88;
-        Wed,  5 Apr 2023 08:53:48 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 958B632007CF;
-        Wed,  5 Apr 2023 11:53:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 05 Apr 2023 11:53:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1680710005; x=1680796405; bh=Nw
-        bB+EHW5S+V11givdbxuIy2Uf+thntoCfTqZWxMcBg=; b=YAuUXEBHlJ+kw9Zmtu
-        9I5T+IGhxkBqddi19dn4r+kNWXx/0s7MbpimtmFPL+aPlqdAyBvCvEsdsYUd5tTf
-        dBua9XG68Yl0nAEEaOyNWPgbGp6alKd9HHDJSvPFHUNlT8zuWj1g9huygqraxlWC
-        Y+7aQ0Y5o6JpEn9vn6pvB592FVfSJZTE0wQ53CHjaAn3N3A83rdRSbIzi5UNwgov
-        IcI7SaTPzh0bHkde+aJv1IK0dSQpj45he+L1xtfkD90bXKLSnl9xy0H9KtD29GkI
-        2+G9FZEVKV8Ap9yXYVustJlay4HAIUJFWpO3k3GqLJgcjagxLjHlqMCd0ESl4Zi8
-        VyAg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680710005; x=1680796405; bh=NwbB+EHW5S+V1
-        1givdbxuIy2Uf+thntoCfTqZWxMcBg=; b=X0YUdqlMVBOCdYHJ8fMsj7rw5LYNz
-        ZGJ0nWIBBIL3CKMDRVVw2YGPAAiFOVnx7L1394T+EXUfeUzEKvYMxNmF0dJpg65D
-        qT9JFnQfBWcM5VGeF55Js0uJ5ogNkDIdRPUREUIHT1EtxI8FePekTl0V4NAuAe5Y
-        qNymd5gN9jUrHF8b/D8IDIAoOBs1X79EO2v/otVPN+ytEPy8eYxvMw6YOZAONkMt
-        5RApka5ld90qALBZBcg+sniYxlayLf3ViaDFB298sG58vLKWLb118o2FnrdR0eT0
-        dNfDQuIkc53XS6ntd6jHdr0SIi5xBB7v6AC/Ua1W+XfuOjYh6m52RqtGw==
-X-ME-Sender: <xms:dJktZBPFWqBnr6mfzO8DOWuR7c2ENV4acvVeClXUTDoQiGEtbLwiIg>
-    <xme:dJktZD8XL0MU9X_rpIxSZPrpwdJrQZi4UNvkvOPT8n1qmRwJJhnzaxlhv6m8EtCUs
-    E1IXfLm605CI-wMb7E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgleehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:dJktZATYY_Gq6fxyBxmSUcz4MrTxtMytmGT595pv1iPmDASW8AykXw>
-    <xmx:dJktZNv9KVxTxhp3cBNuP4GxEpbXZJqZRlFfZTzbjmsLL8Lq-zBh9Q>
-    <xmx:dJktZJecGyTQlt79mmyr2IRJEdz3IZbauZ6UTCmdguaRSG1KRzZvdQ>
-    <xmx:dZktZMB0Nzly1u5fZB3wNDYr-LgmhzIWAQJpCsBbi2IUq8MXyn4L5g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C4968B60098; Wed,  5 Apr 2023 11:53:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
-Mime-Version: 1.0
-Message-Id: <92fe3838-41f0-4e27-8467-161553ff724f@app.fastmail.com>
-In-Reply-To: <20230405150554.30540-2-tzimmermann@suse.de>
-References: <20230405150554.30540-1-tzimmermann@suse.de>
- <20230405150554.30540-2-tzimmermann@suse.de>
-Date:   Wed, 05 Apr 2023 17:53:03 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 01/18] fbdev: Prepare generic architecture helpers
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 5 Apr 2023 11:55:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467ADC0
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:54:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680710091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vp3w4ancoxCL4bBUeQO/Nr+Lv6anEYF8uurUtTzkQO0=;
+        b=D1SD/LFI/xktYCHzgJmeRXgkhrOxW6lB9GWaAhcQpdIMX7TDECoEYsGc71nwYj1bDvY5u7
+        iqle/KRZRb7Lt0NyRPgQoULjMl2TQCENTnYlZ86D4WjrzcjADVo9CEi16BElR9FIbYLMFD
+        dtZPozeXslyN37kWkBXovycUFfWIp+U=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-359-ZM3c5hhPPuaEz2D70lTdGA-1; Wed, 05 Apr 2023 11:54:50 -0400
+X-MC-Unique: ZM3c5hhPPuaEz2D70lTdGA-1
+Received: by mail-wr1-f69.google.com with SMTP id m4-20020adfa3c4000000b002e75158e632so1857142wrb.17
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:54:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680710089;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vp3w4ancoxCL4bBUeQO/Nr+Lv6anEYF8uurUtTzkQO0=;
+        b=O8RtgG0p5TGCQnA7jv+21aRpPLoCxgtIT99VTq4qeelQSItgZfAmsdJYM5jmyUZ1j2
+         RlbZZEWOZuQ34jXrZKwK+g0M7bNfOqbmOenD+iDfhfwg4bkeBdkZDkARkoQ9Ou6P/9Gp
+         6Fi0wSglsJhFstc1S3/Ib5mdSV1B3Mb0ur9N2QU1GBG4FrCNEJ8b+m2Pe01gN4ZXQWLD
+         Zdl9VjEY4Nr0RdRfyFg5g9PVrQA6FAmMR65vzLDRxpal0nSHw9Uc6lop9tuq4BYDiDxj
+         omkdBYs3QJYTBm+dS9BdBqovAtOVV8iYAXJRWcRAhNCCCPm+jBO3g98/smVKtUYVa6SV
+         5Nww==
+X-Gm-Message-State: AAQBX9fa19LzWXJkmTw0/8E+okbOy5fkD6eaS/wOJEIqcUHXTPjRaE1B
+        HU441I2wgshvLmLEhPy5h962/65OvLAhEscHSF49+t/9t+pmRiztU6fmL+s/4oj3Shvj1S/wCAl
+        Il+O+NymUJIiAInqSqJwubdLp
+X-Received: by 2002:adf:e0c3:0:b0:2cf:e747:b0d4 with SMTP id m3-20020adfe0c3000000b002cfe747b0d4mr4423521wri.40.1680710088969;
+        Wed, 05 Apr 2023 08:54:48 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bvV4mM6l4icTruP+qcXPPdpwTQeXltyFNrRrLmVB/ZGcHH+qjmdVbXXVCHqfw84CwFj+T03A==
+X-Received: by 2002:adf:e0c3:0:b0:2cf:e747:b0d4 with SMTP id m3-20020adfe0c3000000b002cfe747b0d4mr4423506wri.40.1680710088611;
+        Wed, 05 Apr 2023 08:54:48 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
+        by smtp.gmail.com with ESMTPSA id c1-20020adfef41000000b002d322b9a7f5sm15323873wrp.88.2023.04.05.08.54.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 08:54:48 -0700 (PDT)
+Message-ID: <19dad66f-4ec8-358c-df7f-35481f855c81@redhat.com>
+Date:   Wed, 5 Apr 2023 17:54:46 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] mm/khugepaged: Check again on anon uffd-wp during
+ isolation
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        linux-stable <stable@vger.kernel.org>
+References: <20230405155120.3608140-1-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230405155120.3608140-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023, at 17:05, Thomas Zimmermann wrote:
-> Generic implementations of fb_pgprotect() and fb_is_primary_device()
-> have been in the source code for a long time. Prepare the header file
-> to make use of them.
->
-> Improve the code by using an inline function for fb_pgprotect() and
-> by removing include statements.
->
-> Symbols are protected by preprocessor guards. Architectures that
-> provide a symbol need to define a preprocessor token of the same
-> name and value. Otherwise the header file will provide a generic
-> implementation. This pattern has been taken from <asm/io.h>.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+On 05.04.23 17:51, Peter Xu wrote:
+> Khugepaged collapse an anonymous thp in two rounds of scans.  The 2nd round
+> done in __collapse_huge_page_isolate() after hpage_collapse_scan_pmd(),
+> during which all the locks will be released temporarily. It means the
+> pgtable can change during this phase before 2nd round starts.
+> 
+> It's logically possible some ptes got wr-protected during this phase, and
+> we can errornously collapse a thp without noticing some ptes are
+> wr-protected by userfault.  e1e267c7928f wanted to avoid it but it only did
+> that for the 1st phase, not the 2nd phase.
+> 
+> Since __collapse_huge_page_isolate() happens after a round of small page
+> swapins, we don't need to worry on any !present ptes - if it existed
+> khugepaged will already bail out.  So we only need to check present ptes
+> with uffd-wp bit set there.
+> 
+> This is something I found only but never had a reproducer, I thought it was
+> one caused a bug in Muhammad's recent pagemap new ioctl work, but it turns
+> out it's not the cause of that but an userspace bug.  However this seems to
+> still be a real bug even with a very small race window, still worth to have
+> it fixed and copy stable.
+> 
+> Cc: linux-stable <stable@vger.kernel.org>
+> Fixes: e1e267c7928f ("khugepaged: skip collapse if uffd-wp detected")
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   mm/khugepaged.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index a19aa140fd52..42ac93b4bd87 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -575,6 +575,10 @@ static int __collapse_huge_page_isolate(struct vm_area_struct *vma,
+>   			result = SCAN_PTE_NON_PRESENT;
+>   			goto out;
+>   		}
+> +		if (pte_uffd_wp(pteval)) {
+> +			result = SCAN_PTE_UFFD_WP;
+> +			goto out;
+> +		}
+>   		page = vm_normal_page(vma, address, pteval);
+>   		if (unlikely(!page) || unlikely(is_zone_device_page(page))) {
+>   			result = SCAN_PAGE_NULL;
 
-Moving this into generic code is good, but I'm not sure
-about the default for fb_pgprotect():
+Yes, I agree that would be a small race where it could happen.
 
-> +
-> +#ifndef fb_pgprotect
-> +#define fb_pgprotect fb_pgprotect
-> +static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
-> +				unsigned long off)
-> +{ }
-> +#endif
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-I think most architectures will want the version we have on
-arc, arm, arm64, loongarch, and sh already:
+-- 
+Thanks,
 
-static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
-                                unsigned long off)
-{
-       vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
-}
+David / dhildenb
 
-so I'd suggest making that version the default, and treating the
-empty ones (m68knommu, sparc32) as architecture specific
-workarounds.
-
-I see that sparc64 and parisc use pgprot_uncached here, but as
-they don't define a custom pgprot_writecombine, this ends up being
-the same, and they can use the above definition as well.
-
-mips defines pgprot_writecombine but uses pgprot_noncached
-in fb_pgprotect(), which is probably a mistake and should have
-been updated as part of commit 4b050ba7a66c ("MIPS: pgtable.h:
-Implement the pgprot_writecombine function for MIPS").
-
-    Arnd
