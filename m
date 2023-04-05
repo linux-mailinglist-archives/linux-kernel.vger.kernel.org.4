@@ -2,94 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BFE6D7E26
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238A16D7E50
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238130AbjDENzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
+        id S237560AbjDEOBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237197AbjDENzb (ORCPT
+        with ESMTP id S238199AbjDEOAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:55:31 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AEA525D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:55:24 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-278-9dLbTwq9NiGEBp4om-cqZw-1; Wed, 05 Apr 2023 14:55:21 +0100
-X-MC-Unique: 9dLbTwq9NiGEBp4om-cqZw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 5 Apr
- 2023 14:55:19 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 5 Apr 2023 14:55:19 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'chi wu' <wuchi.zero@gmail.com>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "ojaswin@linux.ibm.com" <ojaswin@linux.ibm.com>,
-        "ritesh.list@gmail.com" <ritesh.list@gmail.com>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] ext4: simplify 32bit calculation of lblk
-Thread-Topic: [PATCH] ext4: simplify 32bit calculation of lblk
-Thread-Index: AQHZZ5teJkhs7xpdHUusWw1uRGHlOq8ckyfAgAAGhICAACKd0A==
-Date:   Wed, 5 Apr 2023 13:55:19 +0000
-Message-ID: <1ee0b5d2914046f28616c0fc8beba237@AcuMS.aculab.com>
-References: <20230403135304.19858-1-wuchi.zero@gmail.com>
- <ZC0J6I1pYNZBB30y@infradead.org>
- <CA+tQmHA_3_Oc-0AQ0a29DTwU4mkEqhOiAE6gXa4Ly4gZGpn5Vw@mail.gmail.com>
- <d04ead6617314074b297c10458010d6b@AcuMS.aculab.com>
- <CA+tQmHAwRNxvH+BBA60BdSoVYxK+NzzNyP6TW2Y_gsaWAhu9iQ@mail.gmail.com>
-In-Reply-To: <CA+tQmHAwRNxvH+BBA60BdSoVYxK+NzzNyP6TW2Y_gsaWAhu9iQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 5 Apr 2023 10:00:46 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDBD1BDD;
+        Wed,  5 Apr 2023 07:00:44 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 942f2422d11c465e; Wed, 5 Apr 2023 16:00:43 +0200
+Received: from kreacher.localnet (unknown [213.134.163.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 8BB6E1B4EA5B;
+        Wed,  5 Apr 2023 16:00:42 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>,
+        Kees Cook <kees@outflux.net>
+Subject: [PATCH 28/32] ACPICA: acpi_madt_oem_data: Fix flexible array member definition
+Date:   Wed, 05 Apr 2023 15:56:06 +0200
+Message-ID: <2094939.KlZ2vcFHjT@kreacher>
+In-Reply-To: <4845957.31r3eYUQgx@kreacher>
+References: <4845957.31r3eYUQgx@kreacher>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.219
+X-CLIENT-HOSTNAME: 213.134.163.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhgvvghssehouhht
+ fhhluhigrdhnvght
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogY2hpIHd1DQo+IFNlbnQ6IDA1IEFwcmlsIDIwMjMgMTM6NDgNCj4gDQo+IERhdmlkIExh
-aWdodCA8RGF2aWQuTGFpZ2h0QGFjdWxhYi5jb20+IOS6jjIwMjPlubQ05pyINeaXpeWRqOS4iSAx
-OTo0M+WGmemBk++8mg0KPiA+DQo+ID4gRnJvbTogY2hpIHd1DQo+ID4gPiBTZW50OiAwNSBBcHJp
-bCAyMDIzIDA5OjQ4DQo+ID4gPg0KPiA+ID4gQ2hyaXN0b3BoIEhlbGx3aWcgPGhjaEBpbmZyYWRl
-YWQub3JnPiDkuo4yMDIz5bm0NOaciDXml6XlkajkuIkgMTM6NDDlhpnpgZPvvJoNCj4gPiA+ID4N
-Cj4gPiA+ID4gT24gTW9uLCBBcHIgMDMsIDIwMjMgYXQgMDk6NTM6MDRQTSArMDgwMCwgd3VjaGkg
-d3JvdGU6DQo+ID4gPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgIGlmIChibG9jayA+IGV4dF9i
-bG9jaykNCj4gPiA+ID4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gZXh0
-X3BibGsgKyAoYmxvY2sgLSBleHRfYmxvY2spOw0KPiA+ID4gPiA+IC0gICAgICAgICAgICAgICAg
-ICAgICBlbHNlDQo+ID4gPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJu
-IGV4dF9wYmxrIC0gKGV4dF9ibG9jayAtIGJsb2NrKTsNCj4gPiA+ID4gPiArICAgICAgICAgICAg
-ICAgICAgICAgcmV0dXJuIGV4dF9wYmxrICsgKChzaWduZWQgbG9uZyBsb25nKWJsb2NrIC0gKHNp
-Z25lZCBsb25nDQo+IGxvbmcpZXh0X2Jsb2NrKTsNCj4gPiA+ID4NCj4gPiA+ID4gQW5kIHdoYXQg
-ZXhhY3RseSBpcyB0aGUgdmFsdWUgYWRkIGhlcmUsIGV4Y2VwdCBmb3IgdHVybmluZyBhbiBlYXN5
-DQo+ID4gPiA+IHRvIHBhcnNlIHN0YXRlbWVudCBpbnRvIGEgY29tcGxleCBleHByZXNzaW9uIHVz
-aW5nIGNhc3RzPw0KPiA+ID4gPg0KPiA+ID4gWWVz77yMaXQgd2lsbCBiZSBtb3JlIGNvbXBsZXgu
-IHRoZSBvcmlnaW5hbCBpbnRlbnRpb24gaXMgdG8gcmVkdWNlIHRoZQ0KPiA+ID4gY29uZGl0aW9u
-YWwgYnJhbmNoLg0KPiA+DQo+ID4gV2hhdCBpcyB3cm9uZyB3aXRoIGp1c3Q6DQo+ID4gICAgICAg
-ICByZXR1cm4gZXh0X3BibGsgKyBibG9jayAtIGV4dF9ibG9jazsNCj4gPiAoNjRiaXQgKyAzMmJp
-dCAtIDMyYml0KQ0KPiA+DQoNCj4gb2gsIEl0J3MgbXkgZmF1bHQuIEkgYW0gdHJhcHBlZCBpbiB0
-aGF0IGV4dF9wYmxrICsgYmxvY2sgbWF5IG92ZXJmbG93LA0KPiBidXQgaXQgaXMgb2sgaGVyZS4g
-dGhhbmtzLg0KDQpUaGF0IGRvZXNuJ3QgbWF0dGVyLCBpdCB3aWxsICd1bi1vdmVyZmxvdycgd2hl
-biBleHRfYmxvY2sgaXMgc3VidHJhY3RlZC4NCllvdSBkbyBuZWVkIHRoZSAnKycgdG8gaGFwcGVu
-IGJlZm9yZSB0aGUgJy0nLCBvayBiZWNhdXNlICsvLSBncm91cA0KbGVmdCB0byByaWdodCBpbiBD
-Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
-YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
-Tm86IDEzOTczODYgKFdhbGVzKQ0K
+From: Kees Cook <kees@outflux.net>
+
+ACPICA commit e7f6d8c1b7f79eb4b9b07f1bc09c549a2acbd6e8
+
+Use ACPI_FLEX_ARRAY() helper to define flexible array member alone in a
+struct. Fixes issue #812.
+
+No binary changes appear in the .text nor .data sections.
+
+Link: https://github.com/acpica/acpica/commit/e7f6d8c1
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/acpi/actbl2.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
+index a51fd4090d27..0029336775a9 100644
+--- a/include/acpi/actbl2.h
++++ b/include/acpi/actbl2.h
+@@ -1274,7 +1274,7 @@ enum acpi_madt_rintc_version {
+ /* 80: OEM data */
+ 
+ struct acpi_madt_oem_data {
+-	u8 oem_data[0];
++	ACPI_FLEX_ARRAY(u8, oem_data);
+ };
+ 
+ /*
+-- 
+2.35.3
+
+
+
+
 
