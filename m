@@ -2,132 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD62C6D7138
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677556D713A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbjDEAYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 20:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
+        id S236532AbjDEAY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 20:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjDEAYE (ORCPT
+        with ESMTP id S236551AbjDEAYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 20:24:04 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED56B44A2
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:24:02 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id s4-20020a170902ea0400b001a1f4137086so20132723plg.14
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 17:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680654242;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p87TlfEWUQUWF/U6DKpIAcvgJ6qE5zvfkuSSXmWeaSM=;
-        b=iGqgYLSCPieJJI3XpFkdhzJOZrloI3O0PZsey+G/ubf6sgL9079NDhuP9xRnCNF3Zw
-         eqA58CZM0rrY63n6tsHxR+L2MpO4Wt0ziwh1mEDuGD2r9MAyuq30e/sHfqh//gBc49RW
-         nFQDxf2nD1iVfByt5Ny71yg+0oimnHgyst5nXM/F0ByU0yVR/8M1kb3V4vSxlDyu2VuX
-         fK/KJXrEybkQfW3x3UU6Ivny6UdWA4nUGA5V9j5z/sAnF+mzZtvSrZ6+PWhBiDxcRlHA
-         RoMHP9dstV9Qa1DQDLhyhLpR5bE7vJI3gaeNbVtZO5+VXB5n1slWlZ2g07y2BlvfgkR9
-         DdTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680654242;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p87TlfEWUQUWF/U6DKpIAcvgJ6qE5zvfkuSSXmWeaSM=;
-        b=pYy4Ju/zmvWMD77CRzbgHxcnLQ4w+X8H9lHWwI4lCMRqk7IoeCn4ecX2mO7a8OxyHp
-         Ku6hXkJa2/LTdhEy3ebe7aDsDhee3Y0SckMNOTAoABYgauj5tu9ENpgIQHUKhPO+/rXt
-         6o5uqsYc24AKpfjZng4y6JMQHIFPPeEbX4gaCfJa5GSuL9BRcZjey0tn48wnTGZfI8Fi
-         HGjbM23xEd/tv+m7JTkF9dvmGfkKltR7VE9shZO7ynPc0kLpL0NEwX9TyI1HHOJn0hSm
-         O73pIl2FG1Xy/6iNirwCaCLTYhgnk5+U09uPyB7pO8xVXT+cH+mrZyoTeLZ+8CLfvkVx
-         Hpow==
-X-Gm-Message-State: AAQBX9cX5bdcV94kW7cYxeh+RPO9O6mqhejWvLeql90DeYueRIgujNi/
-        3HTbmWiSJkj2PclvLVJpB8FcKk3yA6A=
-X-Google-Smtp-Source: AKy350YfAHD0tGEP8NKG3E+4x7j1V06lXO30sgxfIPzVVsRfGUHjdjyLPeoT5bsFgHDUQTvimcRQdy1nhBM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:4591:b0:234:acfd:c8da with SMTP id
- v17-20020a17090a459100b00234acfdc8damr1587177pjg.2.1680654242457; Tue, 04 Apr
- 2023 17:24:02 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  4 Apr 2023 17:23:59 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230405002359.418138-1-seanjc@google.com>
-Subject: [PATCH] KVM: nVMX: Emulate NOPs in L2, and PAUSE if it's not intercepted
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mathias Krause <minipli@grsecurity.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 20:24:41 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EEF4697
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:24:38 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id CC49332009C8;
+        Tue,  4 Apr 2023 20:24:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 04 Apr 2023 20:24:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:content-type:date:date
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1680654275; x=1680740675; bh=Mx+3ceIjpuMWUpIMcp9gQXCLaSq9TOOpb+J
+        xGIo/9cA=; b=CE85zjxhK1DPeU2JCKYp4z2uFnTO9DaVAvDgttFVg8mbxqbRxiA
+        DPy5XLJAZ3/snXYkXfx78pLUrlQHqK2FnN9hGQ2ft8aCRjTLwmTxIFsTYQ0TmZzC
+        92C+Qk5Q0gyP2pgORJIrY9K/EQ4sVw7IKK9KkCk4oA1tAlaAnmWIF9QHiJCTdrEY
+        5d8AnZr6kxSWcewAJlEotTZKz7SL01cbdRszVPeDJESxQNhdGRU0TBC0aOEvTmN0
+        RUOWk5mjx+rP7vlwrll/FRQCQTmJth7hDckNWFzLJeKuQ6eIf8c/L8yOoCRSOg0d
+        45YQdchFmJNC4sIU0FKikgubaPROC0qtwuA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680654275; x=1680740675; bh=Mx+3ceIjpuMWU
+        pIMcp9gQXCLaSq9TOOpb+JxGIo/9cA=; b=K2usp+SXX4/YOmEgHiHEjRvy/boeX
+        WrwruqLDVAG/EGZBsB2NK77LzL1xMw2X42QDYbyzsTQzv7OqLV7LnQMcL0ne6XdH
+        67QrSaiGhyOizctyR5m9t0Mmhcu0BXUnBMRtbuYTgZdjpk6Pp0DLbT2NDdNS2F2b
+        b8hTUOzhe6z80V4RFasnIWSuetIZLfoaHC4j2wqN51tG9ZdVdn9xbzlWAkHXp0hW
+        0rHUZuUyLSF9wS82xxRAz3Lqw4yNx8f8rhvV6zQegHeCtgRZ8K/5xMb1UN+/tkh3
+        /YEeGb9oYZ+mKCoeHnmrA7CVymGdHWczfzL7VC+w8fSMHgetYZXsQso2g==
+X-ME-Sender: <xms:w78sZJq9u71A60idOY4QN92y9Eq3VTgWDsKldfM1n7Si7CpAmIhlRg>
+    <xme:w78sZLoyNhOg6ToZVeVU65_GiQatG2RN23r0KceA_5OX9GGqRhCktNvxZYFWCek27
+    LT8VC1Y1obqNWWerlk>
+X-ME-Received: <xmr:w78sZGMNf-Z_KGm7r8Y1_krZ0HSyBxX8o9X9avNOcimWsCYHOC76J-yJxyjZVYdEBII5EFre61yzTc0tg5mGbpZg8jBsfklUv8CiEfI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejtddgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpeflohhshhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhs
+    hhhtrhhiphhlvghtthdrohhrgheqnecuggftrfgrthhtvghrnhepudeigeehieejuedvte
+    dufeevtdejfeegueefgffhkefgleefteetledvtdfftefgnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvg
+    htthdrohhrgh
+X-ME-Proxy: <xmx:w78sZE4RR8Cmtnt7tZzZHKnP70WeuAbwjoClz6ex_KVbpOTwJipOkA>
+    <xmx:w78sZI42-ou7JgzcH57BI3-5NsPOXUVpBOo0atGpXQQAiW1N3J3ZNw>
+    <xmx:w78sZMhqW1aHrnVr4TGg0lQFLkvrhCtSpwfQ7Khz4XkADoppa4jvuw>
+    <xmx:w78sZNhTTTQdjZuz01Xa9P1W-xlGqTRnm1pLVNyFa1zvO5GvyRZz0g>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 20:24:33 -0400 (EDT)
+Date:   Wed, 5 Apr 2023 09:24:30 +0900
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] prctl: Add PR_GET_AUXV to copy auxv to userspace
+Message-ID: <ZCy/vgprgeVUwCGv@localhost>
+References: <d81864a7f7f43bca6afa2a09fc2e850e4050ab42.1680611394.git.josh@joshtriplett.org>
+ <20230404124355.3efa7a201d2aa9896dc6353e@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404124355.3efa7a201d2aa9896dc6353e@linux-foundation.org>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend VMX's nested intercept logic for emulated instructions to handle
-"pause" interception, in quotes because KVM's emulator doesn't filter out
-NOPs when checking for nested intercepts.  Failure to allow emulation of
-NOPs results in KVM injecting a #UD into L2 on any NOP that collides with
-the emulator's definition of PAUSE, i.e. on all single-byte NOPs.
+On Tue, Apr 04, 2023 at 12:43:55PM -0700, Andrew Morton wrote:
+> On Tue, 4 Apr 2023 21:31:48 +0900 Josh Triplett <josh@joshtriplett.org> wrote:
+> 
+> > If a library wants to get information from auxv (for instance,
+> > AT_HWCAP/AT_HWCAP2), it has a few options, none of them perfectly
+> > reliable or ideal:
+> > 
+> > - Be main or the pre-main startup code, and grub through the stack above
+> >   main. Doesn't work for a library.
+> > - Call libc getauxval. Not ideal for libraries that are trying to be
+> >   libc-independent and/or don't otherwise require anything from other
+> >   libraries.
+> > - Open and read /proc/self/auxv. Doesn't work for libraries that may run
+> >   in arbitrarily constrained environments that may not have /proc
+> >   mounted (e.g. libraries that might be used by an init program or a
+> >   container setup tool).
+> > - Assume you're on the main thread and still on the original stack, and
+> >   try to walk the stack upwards, hoping to find auxv. Extremely bad
+> >   idea.
+> > - Ask the caller to pass auxv in for you. Not ideal for a user-friendly
+> >   library, and then your caller may have the same problem.
+> 
+> How does glibc's getauxval() do its thing?  Why can't glibc-independent
+> code do the same thing?
 
-For PAUSE itself, honor L1's PAUSE-exiting control, but ignore PLE to
-avoid unnecessarily injecting a #UD into L2.  Per the SDM, the first
-execution of PAUSE after VM-Entry is treated as the beginning of a new
-loop, i.e. will never trigger a PLE VM-Exit, and so L1 can't expect any
-given execution of PAUSE to deterministically exit.
+glibc owns the pre-main startup code in programs linked to glibc, so it
+can record auxv for later reference in getauxval. That isn't an option
+for something that *doesn't* own the pre-main startup code.
 
-  ... the processor considers this execution to be the first execution of
-  PAUSE in a loop. (It also does so for the first execution of PAUSE at
-  CPL 0 after VM entry.)
+> > --- a/include/uapi/linux/prctl.h
+> > +++ b/include/uapi/linux/prctl.h
+> > @@ -290,4 +290,6 @@ struct prctl_mm_map {
+> >  #define PR_SET_VMA		0x53564d41
+> >  # define PR_SET_VMA_ANON_NAME		0
+> >  
+> > +#define PR_GET_AUXV		0x41555856
+> 
+> How was this constant arrived at?
 
-All that said, the PLE side of things is currently a moot point, as KVM
-doesn't expose PLE to L1.
+It's 'A' 'U' 'X' 'V', inspired by PR_SET_VMA above which is 'S' 'V' 'M' 'A'.
 
-Note, vmx_check_intercept() is still wildly broken when L1 wants to
-intercept an instruction, as KVM injects a #UD instead of synthesizing a
-nested VM-Exit.  That issue extends far beyond NOP/PAUSE and needs far
-more effort to fix, i.e. is a problem for the future.
+> > --- a/kernel/sys.c
+> > +++ b/kernel/sys.c
+> > @@ -2377,6 +2377,16 @@ static inline int prctl_get_mdwe(unsigned long arg2, unsigned long arg3,
+> >  		PR_MDWE_REFUSE_EXEC_GAIN : 0;
+> >  }
+> >  
+> > +static int prctl_get_auxv(void __user *addr, unsigned long len)
+> > +{
+> > +	struct mm_struct *mm = current->mm;
+> > +	unsigned long size = min_t(unsigned long, sizeof(mm->saved_auxv), len);
+> > +
+> > +	if (size && copy_to_user(addr, mm->saved_auxv, size))
+> > +		return -EFAULT;
+> > +	return sizeof(mm->saved_auxv);
+> > +}
+> 
+> The type choices are unpleasing.  Maybe make `len' a size_t and make
+> the function return a size_t?  That way prctl_get_auxv() will be much
+> nicer, but the caller less so.
 
-Fixes: 07721feee46b ("KVM: nVMX: Don't emulate instructions in guest mode")
-Cc: Mathias Krause <minipli@grsecurity.net>
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+It'd have to be an ssize_t return to support returning -EFAULT. Also,
+sadly, size_t would still look just as bad, because
+`sizeof(mm->saved_auxv)` doesn't have type size_t (at least according to
+the error from the type-safe min macro). So this would still need a cast
+or a `min_t`.
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 9ae4044f076f..1e560457bf9a 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7898,6 +7898,21 @@ static int vmx_check_intercept(struct kvm_vcpu *vcpu,
- 		/* FIXME: produce nested vmexit and return X86EMUL_INTERCEPTED.  */
- 		break;
- 
-+	case x86_intercept_pause:
-+		/*
-+		 * PAUSE is a single-byte NOP with a REPE prefix, i.e. collides
-+		 * with vanilla NOPs in the emulator.  Apply the interception
-+		 * check only to actual PAUSE instructions.  Don't check
-+		 * PAUSE-loop-exiting, software can't expect a given PAUSE to
-+		 * exit, i.e. KVM is within its rights to allow L2 to execute
-+		 * the PAUSE.
-+		 */
-+		if ((info->rep_prefix != REPE_PREFIX) ||
-+		    !nested_cpu_has2(vmcs12, CPU_BASED_PAUSE_EXITING))
-+			return X86EMUL_CONTINUE;
-+
-+		break;
-+
- 	/* TODO: check more intercepts... */
- 	default:
- 		break;
+But I'm happy to change the argument to size_t and the return value to
+ssize_t, if you'd prefer. Will send v3 with that changed.
 
-base-commit: 27d6845d258b67f4eb3debe062b7dacc67e0c393
--- 
-2.40.0.348.gf938b09366-goog
-
+- Josh Triplett
