@@ -2,86 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55C86D899D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CA26D89A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbjDEVfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S232940AbjDEVg6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 17:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbjDEVfR (ORCPT
+        with ESMTP id S232829AbjDEVgy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:35:17 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399C56E97;
-        Wed,  5 Apr 2023 14:35:14 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pkAmX-0001hG-Ps; Wed, 05 Apr 2023 23:35:05 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: (subset) [PATCH v2 0/2] Add PWM fan support to Rock 5B board
-Date:   Wed, 05 Apr 2023 23:35:04 +0200
-Message-ID: <840877554.0ifERbkFSE@diego>
-In-Reply-To: <1a914522-8780-febd-7224-121b1f1fc2ba@roeck-us.net>
-References: <20230404173807.490520-1-cristian.ciocaltea@collabora.com>
- <168071663557.3186456.17606522894011578076.b4-ty@sntech.de>
- <1a914522-8780-febd-7224-121b1f1fc2ba@roeck-us.net>
+        Wed, 5 Apr 2023 17:36:54 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BF95FD3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:36:50 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-68-pbqxvDXyOE-yB95Y9KmqPw-1; Wed, 05 Apr 2023 22:36:46 +0100
+X-MC-Unique: pbqxvDXyOE-yB95Y9KmqPw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 5 Apr
+ 2023 22:36:44 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 5 Apr 2023 22:36:44 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Arnd Bergmann' <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.osdn.me>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "linux-m68k@vger.kernel.org" <linux-m68k@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: RE: [PATCH v4] Kconfig: introduce HAS_IOPORT option and select it as
+ necessary
+Thread-Topic: [PATCH v4] Kconfig: introduce HAS_IOPORT option and select it as
+ necessary
+Thread-Index: AQHZZ/3AaiQodugroEmdF5H6jyGRq68dOQLw
+Date:   Wed, 5 Apr 2023 21:36:44 +0000
+Message-ID: <ccff565cde1440b8bff92d96f94a32b5@AcuMS.aculab.com>
+References: <20230323163354.1454196-1-schnelle@linux.ibm.com>
+ <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
+ <B1EC1AC7-6BB5-4B66-B171-24687C3CBFB3@zytor.com>
+ <d8686aaf-f12e-446b-9a80-335bb4266a4d@app.fastmail.com>
+In-Reply-To: <d8686aaf-f12e-446b-9a80-335bb4266a4d@app.fastmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 5. April 2023, 21:04:04 CEST schrieb Guenter Roeck:
-> On 4/5/23 10:45, Heiko Stuebner wrote:
-> > On Tue, 4 Apr 2023 20:38:05 +0300, Cristian Ciocaltea wrote:
-> >> This patch series enables support for the PWM controlled heat sink fan
-> >> on the Rock 5B SBC and, additionally, converts the hwmon PWM fan bindings
-> >> to DT schema format.
-> >>
-> >> Changes in v2:
-> >>   - Updated PATCH 1/2 according to Rob's review
-> >>   - Added Reviewed-by from Christopher to PATCH 2/2
-> >>   - v1: https://lore.kernel.org/lkml/20230403105052.426135-1-cristian.ciocaltea@collabora.com/
-> >>
-> >> [...]
-> > 
-> > Applied, thanks!
-> > 
+From: Linuxppc-dev Arnd Bergmann
+> Sent: 05 April 2023 21:32
 > 
-> Both patches or only the second one ?
+> On Wed, Apr 5, 2023, at 22:00, H. Peter Anvin wrote:
+> > On April 5, 2023 8:12:38 AM PDT, Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> >>On Thu, 2023-03-23 at 17:33 +0100, Niklas Schnelle wrote:
+> >>> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/O
+> >>> Port access. In a future patch HAS_IOPORT=n will disable compilation of
+> >>> the I/O accessor functions inb()/outb() and friends on architectures
+> >>> which can not meaningfully support legacy I/O spaces such as s390.
+> >>> >>
+> >>Gentle ping. As far as I can tell this hasn't been picked to any tree
+> >>sp far but also hasn't seen complains so I'm wondering if I should send
+> >>a new version of the combined series of this patch plus the added
+> >>HAS_IOPORT dependencies per subsystem or wait until this is picked up.
+> >
+> > You need this on a system supporting not just ISA but also PCI.
+> >
+> > Typically on non-x86 architectures this is simply mapped into a memory window.
+> 
+> I'm pretty confident that the list is correct here, as the HAS_IOPORT
+> symbol is enabled exactly for the architectures that have a way to
+> map the I/O space. PCIe generally works fine without I/O space, the
+> only exception are drivers for devices that were around as early PCI.
 
-only the second one of course. According to earlier talks the dts patch
-does already follow the text binding, so the yaml conversion is actually
-not a requirement for it.
+Isn't there a difference between cpu that have inb()/outb() (probably
+only x86?) and architectures (well computer designs) that can generate
+PCI 'I/O' cycles by some means.
+It isn't even just PCI I/O cycles, I've used an ARM cpu (SA1100)
+that mapped a chuck of physical address space onto PCMCIA I/O cycles.
 
-So I picked the dts patch let the binding sort itself when people have
-time for it :-) .
+If the hardware can map a PCI 'IO' bar into normal kernel address
+space then the bar and accesses can be treated exactly like a memory bar.
+This probably leaves x86 as the outlier where you need (IIRC) io_readl()
+and friends that can generate in/out instructions for those accesses.
 
+There are also all the x86 ISA devices which need in/out instructions.
+But (with the likely exception of the UART) they are pretty much
+platform specific.
 
-Looking at the mail b4 created, I guessed this would also be visible
-with the subject saying (subset) and the listed commits only showing
+So, to my mind at least, HAS_IOPORT is just the wrong question.
 
-[2/2] arm64: dts: rockchip: rk3588-rock-5b: Add pwm-fan
-      commit: f36bb17653e4b9e26bbdb1224027d20614e77636
+	David
 
-
-Heiko
-
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
