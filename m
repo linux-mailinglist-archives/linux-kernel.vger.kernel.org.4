@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B441B6D73E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D266D73EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236926AbjDEFsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 01:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
+        id S236934AbjDEFs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 01:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjDEFsp (ORCPT
+        with ESMTP id S236791AbjDEFsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Apr 2023 01:48:45 -0400
 Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC081FEC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163FE1FF9
         for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 22:48:41 -0700 (PDT)
-Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 20230405054839879abfdb55a9e8ffe0
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 2023040505484057848010262370f28e
         for <linux-kernel@vger.kernel.org>;
-        Wed, 05 Apr 2023 07:48:39 +0200
+        Wed, 05 Apr 2023 07:48:40 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=daniel.starke@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=4HQ/5t4h1V7LJfN8OsbuPnPZmtymnOtNckgYd4DfAxE=;
- b=T4gOJLO0EONRcJ/JhF17g7thnU5wmgZ1MRfNRjRSe8lb5VDGp8sMWH+UBGvu67yrB49PXW
- gk1Hyi7XvA8pCFnPFfeoWTO2CWsV0QrYazyVvzAiymXj3By/y7doeRDKQ+uzGlxq+hVDgO8f
- AYBP/QQs4W4/B5TigMY06Pnw9iWIk=;
+ bh=xxgQqLsGOzLe4pCbEfkz/EaZ+wxQSNX7N39w6RgURFA=;
+ b=eZ3I4zrvFPqu1M2TRu3krk2dat6R4RsYQhkGqaGoZg8Dz6mJCvbWnek5gvnvQgcjpjAr2r
+ bTRBnWepQHm+WBIGdWQ4PLzvhZn31PC0F9cp62IHtxLXazhDtRCbaI7ueuveVH6am0Qj7Hi+
+ s6ni7+kz2sNpWRjDVWYpZGbw0OQ4I=;
 From:   "D. Starke" <daniel.starke@siemens.com>
 To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
         jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org,
         Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH 3/9] tty: n_gsm: add missing description to gsm_config
-Date:   Wed,  5 Apr 2023 07:47:24 +0200
-Message-Id: <20230405054730.3850-3-daniel.starke@siemens.com>
+Subject: [PATCH 4/9] tty: n_gsm: fix unneeded initialization of ret in gsm_dlci_config
+Date:   Wed,  5 Apr 2023 07:47:25 +0200
+Message-Id: <20230405054730.3850-4-daniel.starke@siemens.com>
 In-Reply-To: <20230405054730.3850-1-daniel.starke@siemens.com>
 References: <20230405054730.3850-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
@@ -50,48 +50,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Starke <daniel.starke@siemens.com>
 
-Currently, all available structure fields in gsmmux.h except those
-for gsm_config are commented.
+The variable 'ret' is not used before assignment from gsm_activate_mux().
+Still it gets initialized to zero at declaration.
 
-Fix this by adding appropriate comments to the not commented fields.
+Fix this as remarked in the link below by removing the initialization.
+
+Fixes: edd5f60c3400 ("tty: n_gsm: fix mux activation issues in gsm_config()")
+Link: https://lore.kernel.org/all/b42bc4d1-cc9d-d115-c981-aaa053bdc59f@kernel.org/
 
 Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 ---
- include/uapi/linux/gsmmux.h | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/tty/n_gsm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/gsmmux.h b/include/uapi/linux/gsmmux.h
-index 33ee7b857c52..422a52e184b3 100644
---- a/include/uapi/linux/gsmmux.h
-+++ b/include/uapi/linux/gsmmux.h
-@@ -8,17 +8,17 @@
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index eb21ca583642..d42b92cbae88 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -3276,7 +3276,7 @@ static void gsm_copy_config_values(struct gsm_mux *gsm,
  
- struct gsm_config
+ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
  {
--	unsigned int adaption;
--	unsigned int encapsulation;
--	unsigned int initiator;
--	unsigned int t1;
--	unsigned int t2;
--	unsigned int t3;
--	unsigned int n2;
--	unsigned int mru;
--	unsigned int mtu;
--	unsigned int k;
--	unsigned int i;
-+	unsigned int adaption;	/* Convergence layer type */
-+	unsigned int encapsulation; /* Framing (0 = basic option, 1 = advanced option) */
-+	unsigned int initiator;	/* Initiator or responder */
-+	unsigned int t1;	/* Acknowledgment timer */
-+	unsigned int t2;	/* Response timer for multiplexer control channel */
-+	unsigned int t3;	/* Response timer for wake-up procedure */
-+	unsigned int n2;	/* Maximum number of retransmissions */
-+	unsigned int mru;	/* Maximum incoming frame payload size */
-+	unsigned int mtu;	/* Maximum outgoing frame payload size */
-+	unsigned int k;		/* Window size */
-+	unsigned int i;		/* Frame type (1 = UIH, 2 = UI) */
- 	unsigned int unused[8];	/* Can not be used */
- };
+-	int ret = 0;
++	int ret;
+ 	int need_close = 0;
+ 	int need_restart = 0;
  
 -- 
 2.34.1
