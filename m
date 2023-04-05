@@ -2,274 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46806D88F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29086D88FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjDEUpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        id S233603AbjDEUqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234887AbjDEUpG (ORCPT
+        with ESMTP id S232498AbjDEUqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:45:06 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2066.outbound.protection.outlook.com [40.107.92.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7B65242
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:44:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LOTlugiV7AxgGnfOSMUV0JJeKj/2DwqZsce8ldZY5rUtuIVy16uLsGeI7VweFtxQ4lUSCvIj6TC8QBrxYvUc7g9ATSFWAP+V9eUDEkXXYWDvgxA2UIJsJvIMPp5sbhqObdCDr8HP+1VBoW06goO0Wa5nlzxesiJ716rTFzTpC0/l135WzCCr77+LiX74eogtmk2zAFE0iVRxb1NQjxFcG0cXy9SESqryXpljlnT7F9Taze8R2nVa5I/oR2vX6JqadnzOoyJsmo0J972F+JiCC3vB/nuWV/a6XVWU3502qieO0ocO8fNfmnw3qV5qIFXTytmx+ukJAKaSnHX6dCQfiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p/SycE5m8Av6XTuiWTZlTvatLbo/K6QKFCe/nWlYro4=;
- b=VNlAS68Jqe5fGkC8yrtkheG3fQl3TkBXI8sAH59YeDetmmaK5bleN1Uk4Eb1WfMHQRZHxbxgql0ogdQZUFzmgM9hLyHBqEgyqkUYbnaFRTEPfddPiLUguFPCS3+gXTn2Zsmb5fEYOKbruDCh6ORCHU6oxWPU22zhiv7m1s3Rv2Y7ceLndC7Z0MlBKm//qy9nOLIjSGkX41hF1jnwAMTAeGfbORcN0YYbyjjb7gM+0OBXhlMbiv38poZJQGxJk9RiwoNRO9BMKTWrl9XJFGSRYUAdR1kB8BBbhZguJrC/YLDuYN8P/xVvNLkXg13eEhX6eDVZftcorOXGCUMOaORSKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p/SycE5m8Av6XTuiWTZlTvatLbo/K6QKFCe/nWlYro4=;
- b=tZAkzSV7ZkngL2rC+7v3tg9wHuKZbVU+IP1e68dHxSS7EWxxYx5exM7cxPWJrrHoCbq0Ewq3e4AJQ3X0/johORQIfNYSIwVWruppxay/VI8nxXDKGNnr3lE1ji+Mlcqu6v8Htwxxqq3Y8iU8vUULLCVp8U0hpJS41knI8MZwPjc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- BY5PR12MB4179.namprd12.prod.outlook.com (2603:10b6:a03:211::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6277.30; Wed, 5 Apr 2023 20:44:36 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6254.033; Wed, 5 Apr 2023
- 20:44:36 +0000
-Message-ID: <3215dfb9-8f7f-625f-44a9-85320cd32019@amd.com>
-Date:   Wed, 5 Apr 2023 16:44:33 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-CA
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
-        Dave Airlie <airlied@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        andrey.grodzovsky@amd.com,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
- <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
- <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
- <c952a63a2c0c7377e1e15b1d06c1a941f3456d60.camel@pengutronix.de>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
-In-Reply-To: <c952a63a2c0c7377e1e15b1d06c1a941f3456d60.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0066.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:111::17) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Wed, 5 Apr 2023 16:46:44 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6601A1B3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:46:41 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id ek18so144312037edb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 13:46:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680727600;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjVK3OcYLqF4e28UZO8WCt8ffeDwGmSl2Tba2xHUZTQ=;
+        b=S+FdGx5OVDOWQ5NuClG6fFfByhM2/uoL0xdBSpNlIboO6AGKXYv1pvtR2kEIBF2v4w
+         Uly2Hz01alFFO2T+djikpxMRSJnCd9IXU44uuX25AUrkgzYGL7zbRApowvRQzu8J5KNh
+         kEzfSQHpHEZ5WJg25yd/d7auULoMB6ftWjkuWB9XgetRuRFLN1ej6aHCLAHSth0Uaf8p
+         0ZmUWWUrsSMBHh8tTWLEIIZVC7S2W90Xpm4ad96OE9Td91v7frJfEV9QnzNXVBaBnc8G
+         WY7ARbfUIYTwTJngzPviMkVSdp+c0w/j314svGS7lC3JIvE0PhsfyU37Qa33UvDD1d+g
+         +7KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680727600;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PjVK3OcYLqF4e28UZO8WCt8ffeDwGmSl2Tba2xHUZTQ=;
+        b=qpzdI6Cgwvi/Gm1SUpTlDHEmMFXGfdeJfD7llEccd0kwqUSDamAhP7WcHipn8TZ4nL
+         aGfEYm2ULnx5qsmo3E/Z/s1RL4++Mu0RB08FfZnZwFohgtM5icQ+3ttxEHSMq8jl5jv+
+         6pQyhK4tvTkmbAPEjjtdkn6HYpLZYW4QEhcTtjD0Fvu/m83WSpwK0LYtxA/iH7iY7QrS
+         ehkid0qmJwXq9/XSKPY8Iky1o0Thg9KlTYLra/UKybYY5TkBH6M4SLrl5smeZDSIkCBa
+         d6ALqM14Iud7wZFKuNENBKB//AIeCCDRgPktYA4ZC5Dl81RmPEu1AMJP5HWA/v39TIpj
+         R31w==
+X-Gm-Message-State: AAQBX9flBiXj03n0xnR1Kmkc44E/MiWusMWKPZGtH2MQMHQshojwg/KG
+        k49d8JB7mYtlJOvjLJ3TfkU34g==
+X-Google-Smtp-Source: AKy350aGDXTiJvSHX/YUEcY6IQZp4Bdeq9EFS0GjiPQShb4Gy7iz8du0uRkNAB08ACzio3QUcIPdCA==
+X-Received: by 2002:a17:906:16c8:b0:933:3a22:8513 with SMTP id t8-20020a17090616c800b009333a228513mr4053369ejd.53.1680727599845;
+        Wed, 05 Apr 2023 13:46:39 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id xb7-20020a170907070700b00948c2f245a9sm3928942ejb.110.2023.04.05.13.46.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 13:46:39 -0700 (PDT)
+References: <20230405193445.745024-1-y86-dev@protonmail.com>
+ <20230405193445.745024-2-y86-dev@protonmail.com>
+User-agent: mu4e 1.10.1; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: Re: [PATCH v6 01/15] rust: enable the `pin_macro` feature
+Date:   Wed, 05 Apr 2023 22:45:57 +0200
+In-reply-to: <20230405193445.745024-2-y86-dev@protonmail.com>
+Message-ID: <87fs9et5u8.fsf@metaspace.dk>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|BY5PR12MB4179:EE_
-X-MS-Office365-Filtering-Correlation-Id: c41e17a2-5381-4245-d21f-08db3616919e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 74Ac/HF9pQJdpQY9bqkz087gmOBzvlx+JRFPsiaQdUdzgrlChTC7ijtKg53d1HqyYZZhIk9KY2qTJBLlEu4uerO/GQloeHTxaCjR9Awz1n5/IYX/3dI0NqFDG7MO0lY+zfiZR9bxg+Owk3cdIAJm5Q7OrHv93VuLPo40c0uPAxZ9uKJKOWwBWXhvuavZeenxKCLGzbGGUMCedAiMxknaZJplymfjSrPBmWtwATrIrssObEwJsfbosa/Awwc+VLx2i5ra1+0ozjxi399N6SVJPaUr079nu21ZC/lowYhDJpG3d0+Nz9ZzldL0BIy90iqQ56rvOhEjcMe8VLTwtSbE9+RZEmpcfhxLhSfA2UMjsvyBhVOu2/MptciHfhld7ynxo9fqL7K3p3VhQCR/NhJG1vT3inoi9uxt2MXdmu+iUFocuhKFnS9KQpahBjtG3AVlWaoAr/mlIImdgA6HgZf+0edOF6vesGbKOlr1cl86Hw6hWt3cWp1VqngCnsE8xYBZ46ZxgcaCpmbFSAKXrAwd9+kgkB69/v7KiIW9DYbP2BSuBH9GzZg8ag++a+zrpYygTG7QmSopdQVfhL3zowqavUNbg8VgE+4/f92Hx1qOPJbhhXr0Bc+MA5SP9Og0cM9i2VjDVTKdYmqXif1EV0Erpg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(451199021)(83380400001)(36756003)(31696002)(86362001)(38100700002)(110136005)(478600001)(316002)(6486002)(41300700001)(44832011)(5660300002)(8936002)(2906002)(8676002)(66556008)(66946007)(31686004)(66476007)(186003)(2616005)(66899021)(26005)(6512007)(6506007)(53546011)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cXBXbTI3ZXlEamttWUlsK0cxWWNVWnNHOU9ZUWN4bWtnMmVDbkJtcE96Q2dW?=
- =?utf-8?B?amFJQU1qOTd6WjlyU2VjY3dlcUhHdjB5eVI4UWYxK091cXlUYnQvZG9UZDZD?=
- =?utf-8?B?SWlRMEVNLzUra0RPRU85NnZXcE44MkhuWmVCaGZnNG5kQ1U1K1RUU21taGFm?=
- =?utf-8?B?VU1DNCtNVnZqOGh4VkhBU1ZISHFYcFIvYWdQOHN2Z0ZaT0RtY0tXUWJPQWsy?=
- =?utf-8?B?Njk5aWlOSTV2OEJpM3hUVTljejUvd2krdzdMWGtaWlBhQXpwU0MzRExjZ0tl?=
- =?utf-8?B?aW9GWjNFOFZzNHVicXJ0MWpNa3g2Mk1lQmZnTE8zL1hIdTVTNERZQzQrejFK?=
- =?utf-8?B?U1ZLRkhmT1ZNWUd6SVA1cXFjQmhBS05rMVhNYUtFT1h4SThJektFRk1ydHhn?=
- =?utf-8?B?dXFSU21nTlYzVlhPS01STWt1NnVvSkNJZkNSSDdHUVAxZUlGOVBtTjhDQ3Nv?=
- =?utf-8?B?SWpWeGsranRNdUkvVFJOVVN0WVhlVjQwUFFveEFSbi9tUmlOclhGN1V3VklO?=
- =?utf-8?B?amNpM2ZZUzBXdytEaTVlSldVQ0JrY2h4TlArNDk3bzFtOWRIbmxPaS92cVNC?=
- =?utf-8?B?M2JnNEJOMmxodU1sd1hCMW5BeVk3ZUJUVVk1dWVGRkVDV2dwY0JneStPQjVB?=
- =?utf-8?B?TGQ1NU03cDF0anA2WkRkZzBaMmRZbGJYMEMvNWZnMjVDS29rUnVZUGVvb2dx?=
- =?utf-8?B?eFlhREZpeHNGVG9JKzA4VFZ4SnhvZ3hmdUZEeE1XdkhlQ21zV01GaGJPRHZs?=
- =?utf-8?B?b1NMY0wxWWlJNVhnNVhrekRDaUFMWVg2OVZsWkNtdFVQbTV4RVVFc2pPVGQ1?=
- =?utf-8?B?TWxHQ0p6THNaZUtZMlFXRkdqQlUvYVdCaTZTQjl1YWJobkFpdlM1UUt6YUdV?=
- =?utf-8?B?ZHVsSTlvaUM2UkVUeXhEV3ZqLzBUeE1ocW5jVEx5SWRUL0lXN1Y1anM3UUVN?=
- =?utf-8?B?RlZIaEhoYU9aa0NHNCsveG4wZE1VUjlDb3RndHdrOCtLdlp3OG5GYVVJRDdR?=
- =?utf-8?B?d2hTUG5oVlJBTlBGYXpMSzVRN2Y4YTlqaThZajNkY0U4R29KbnAxU0tZamc2?=
- =?utf-8?B?bm12bGZIS1dwTndIMTZ3cldmekpEQVRJaFc1bHhkazhzLzNEYmZHUEVIa2d1?=
- =?utf-8?B?aWhSZ0NVR3psWUROOHE1bXZ1VnFIbnplekZ0ODJYZ09RS0VQUWRMNXJhMjJs?=
- =?utf-8?B?WGxQUG1EZzVkLzZmVU9udFJBU2NaelV4ek5WMmJsTjdFOHhMWnBvbXdPUWJB?=
- =?utf-8?B?L20zelY1dldIZkZDelkrSVk4c2ErNUdMVDlyTDRUVXJJL096b2RlTnIwd3VJ?=
- =?utf-8?B?ZGdoUzZjeUh3dTNUcnFrTDFuNU9neWNaRHJsSzR4R3p2eU03Vk5abTFCa1JX?=
- =?utf-8?B?M1p3RlZLcDQ1Wnd2NWdmQ2ZlTVBjU0lmTXlOYVBjRFBCQ2kyamorTDk0MUZ0?=
- =?utf-8?B?c1I1cURWSlpLK3R6TTF5cEduRmpXemhRZkwzV09DOGhMTnFnQVBnNlhJWFBu?=
- =?utf-8?B?RjczTVh1ZFh3L2YwTGVsOFVoNXFBQWt6RlFDbHlFa0h6N1A2NFdpRkVkWkht?=
- =?utf-8?B?R3Q3c01SWEFwU3dxRFRpSk9jSUQyeXZ4TkxoYmEyRjRlc2FZSGtKcHNQU25I?=
- =?utf-8?B?RTlHTXZTYU1YbEJKTEY3bENJRFNFZ0dUZFluZGYyY1dLTEtVTHhiSHkwUU1B?=
- =?utf-8?B?OWVmaWVOb0VGencyYWZTbEoyR3E3ejA1aHJuQzRkQXF2L2VoVy8zRk4wR0ov?=
- =?utf-8?B?Yi9zZklyYkl2cndQa2hSN2FJZWtVWHI3bGIvcEE4eE5OekxNT09uRnZqZWVJ?=
- =?utf-8?B?RkRpS05uVWJtMEVRYVhEU085cjIwbnlhcXlkRFdSMEdlWnphbGtUOG1mbzl0?=
- =?utf-8?B?RGNyZUpDeUdkcitkdU5vUytHWGhZQnZvRldsV1hidzBrbnk1aU5UeU5na3JE?=
- =?utf-8?B?SmFGdFVZb2ZGU0NabGxXWXFFOG50VGNVc2x0MHZCSStNSDlwV1hYR2hIWUVj?=
- =?utf-8?B?T3BKRE9YNnFjYW54U2ZpUSs4Z0x4Q1VnbytWM0tYS2JHS1drNG13Vmwrc3o1?=
- =?utf-8?B?OFZiL3Zady8vMmhTZjFYQURDOENOYzdPSHl5ZXRKN2dFeXFURjdEVVpZdUlH?=
- =?utf-8?Q?swVWqyyf/2ibeoAgNPfQFistk?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c41e17a2-5381-4245-d21f-08db3616919e
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 20:44:36.5388
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GwZepKefboyPLJMFWujKMGF2SW/0Mf9Yi3ear81KKWwb31p9gAvu7b7giBm8LT29
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4179
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-05 13:44, Lucas Stach wrote:
-> Hi Luben,
-> 
-> Am Dienstag, dem 04.04.2023 um 00:31 -0400 schrieb Luben Tuikov:
->> On 2023-03-28 04:54, Lucas Stach wrote:
->>> Hi Danilo,
->>>
->>> Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
->>>> Hi all,
->>>>
->>>> Commit df622729ddbf ("drm/scheduler: track GPU active time per entity") 
->>>> tries to track the accumulated time that a job was active on the GPU 
->>>> writing it to the entity through which the job was deployed to the 
->>>> scheduler originally. This is done within drm_sched_get_cleanup_job() 
->>>> which fetches a job from the schedulers pending_list.
->>>>
->>>> Doing this can result in a race condition where the entity is already 
->>>> freed, but the entity's newly added elapsed_ns field is still accessed 
->>>> once the job is fetched from the pending_list.
->>>>
->>>> After drm_sched_entity_destroy() being called it should be safe to free 
->>>> the structure that embeds the entity. However, a job originally handed 
->>>> over to the scheduler by this entity might still reside in the 
->>>> schedulers pending_list for cleanup after drm_sched_entity_destroy() 
->>>> already being called and the entity being freed. Hence, we can run into 
->>>> a UAF.
->>>>
->>> Sorry about that, I clearly didn't properly consider this case.
->>>
->>>> In my case it happened that a job, as explained above, was just picked 
->>>> from the schedulers pending_list after the entity was freed due to the 
->>>> client application exiting. Meanwhile this freed up memory was already 
->>>> allocated for a subsequent client applications job structure again. 
->>>> Hence, the new jobs memory got corrupted. Luckily, I was able to 
->>>> reproduce the same corruption over and over again by just using 
->>>> deqp-runner to run a specific set of VK test cases in parallel.
->>>>
->>>> Fixing this issue doesn't seem to be very straightforward though (unless 
->>>> I miss something), which is why I'm writing this mail instead of sending 
->>>> a fix directly.
->>>>
->>>> Spontaneously, I see three options to fix it:
->>>>
->>>> 1. Rather than embedding the entity into driver specific structures 
->>>> (e.g. tied to file_priv) we could allocate the entity separately and 
->>>> reference count it, such that it's only freed up once all jobs that were 
->>>> deployed through this entity are fetched from the schedulers pending list.
->>>>
->>> My vote is on this or something in similar vain for the long term. I
->>> have some hope to be able to add a GPU scheduling algorithm with a bit
->>> more fairness than the current one sometime in the future, which
->>> requires execution time tracking on the entities.
->>
->> Danilo,
->>
->> Using kref is preferable, i.e. option 1 above.
->>
->> Lucas, can you shed some light on,
->>
->> 1. In what way the current FIFO scheduling is unfair, and
->> 2. shed some details on this "scheduling algorithm with a bit
->> more fairness than the current one"? 
-> 
-> I don't have a specific implementation in mind yet. However the current
-> FIFO algorithm can be very unfair if you have a sparse workload compete
-> with one that generates a lot of jobs without any throttling aside from
-> the entity queue length.
 
-Ah, that's interesting, let's see, a "sparse workload compete with one that
-generates a lot of jobs", so basically we have a sparse workload compete
-with a dense workload. So we can represent this with two entities, A, B,
-whose jobs we're going to represent by the entities, names A and B.
-So if we let A be the sparse workload and B the dense workload,
-we have this, wlog,
+Benno Lossin <y86-dev@protonmail.com> writes:
 
-      First/oldest job, .........................., latter/new jobs.
-Subm: A, B, B, B, B, B, A, B, B, B, B, B, A, B, B, B, B, B, A, ...
-Time: t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, .....
+> This feature enables the use of the `pin!` macro for the `stack_pin_init!`
+> macro. This feature is already stabilized in Rust version 1.68.
+>
+> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> Acked-by: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Andreas Hindborg <a.hindborg@samsung.com>
+> ---
 
-The current FIFO algorithm, would prefer to execute those jobs
-in order of submission, i.e. oldest-ready-first job. Assume
-that all jobs are ready. Then we'll execute them in order.
-This is desirable and fair. We want to execute the jobs
-in the order they were submitted, given also that they are
-ready to be executed. So perhaps we want to execute them like this:
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 
-      First/oldest job, .........................., latter/new jobs.
-Subm: A, B, B, B, B, B, A, B, B, B, B, B, A, B, B, B, B, B, A, ...
-Time: t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, ....
-Exec:          A, B, B, B, B, B, A, B, B, B, B, B, A, B, B, B, B, B, A, ...   
-
-Any other ordering would starve either A, or B. If we executed the 2nd A
-job at t6 or t7, then that would starve the 3rd/4th job in B, since the 2nd A job
-arrives at the same time as that of the 3rd B job, at time t6.
-The time t3-t0 is some delta > 0, some initial scheduler-start up time.
-
-IOW, we don't want to delay a job any more than it should wait--the oldest
-job, which is also ready, should execute next, so that we're fair how
-it executes in real time. We cannot boot B at t6, so that we execute A,
-just because it is sparse, but just arrived.
-
-From A's point of view, it shouldn't expect its job execution time distribution
-to be any different than its submission time distribution.
-
-Do you think there's a job permutation which offers a fairer scheduling
-than the Exec line above for the Submission line above?
-
-> By tracking the actual GPU time consumed by
-> the entities we could implement something with a bit more fairness like
-> deficit round robin (don't pin me on the specific algorithm, as I
-> haven't given it much thought yet).
-
-Since there's no preemption, this would be hard to achieve--you're at the mercy
-of the execution time of job A_i for an entity A job i. (Assuming there's no
-preemption as it is the current state of the GPU scheduler.)
-
-The only thing you can do, is punish the next job from this entity, A_i+1,
-to execute much later. However, you don't know how long A_i+1 would take. If A_i+1
-takes very little time, then you're better off executing it at the next opportune
-time, i.e. when it would normally execute. But such an algorithm, which doesn't
-know a priori the execution time of a job, would punish A_i+1 to execute much later.
-
-But if A_i+1 takes time as long or longer than A_i, then punishing it to execute much
-later, would simply delay it, from an observer's point a view, it wouldn't teach
-the context to submit smaller jobs, so that GPU sharing is more fair.
-
-(Note that if we know the job's time a priori, we could do something like bin packing
-to accommodate fair scheduling over the long run.)
-
-One way to partially remedy the situation is parallelism. The more parallel execution
-units (schedulers) you have, the more the alleviation. We'd get in trouble iff we get
-all jobs executing in all schedulers, each taking a long time, with probability going
-to 0 as you increase the parallel execution units (not considering a pathological
-execution time distribution, where all jobs take a long time universally.)
-
-Thinking about the FIFO discussion above: even if one job in a sparse-with-dense load
-distributions from a number of context, takes a long long time to execute, the very next
-job you'd want to execute is the oldest (the one who's been waiting to most) ready
-job--why delay it any further--that'll starve it.
--- 
-Regards,
-Luben
+>  rust/kernel/lib.rs     | 1 +
+>  scripts/Makefile.build | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 223564f9f0cc..4317b6d5f50b 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -17,6 +17,7 @@
+>  #![feature(core_ffi_c)]
+>  #![feature(dispatch_from_dyn)]
+>  #![feature(generic_associated_types)]
+> +#![feature(pin_macro)]
+>  #![feature(receiver_trait)]
+>  #![feature(unsize)]
+>
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 76323201232a..ba4102b9d94d 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -277,7 +277,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
+>  # Compile Rust sources (.rs)
+>  # ---------------------------------------------------------------------------
+>
+> -rust_allowed_features := core_ffi_c
+> +rust_allowed_features := core_ffi_c,pin_macro
+>
+>  rust_common_cmd = \
+>  	RUST_MODFILE=$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
 
