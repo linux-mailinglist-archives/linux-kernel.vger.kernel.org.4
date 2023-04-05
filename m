@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62E86D7A47
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F7D6D7A4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbjDEKss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        id S237862AbjDEKs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237636AbjDEKsk (ORCPT
+        with ESMTP id S237842AbjDEKsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:48:40 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90ADD5590
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:48:38 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id o20so33914513ljp.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 03:48:38 -0700 (PDT)
+        Wed, 5 Apr 2023 06:48:41 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7711558F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:48:39 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id s20so16520296ljp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 03:48:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680691717;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZG2HCtNxlgwN2tmS23WngsoPcjjiHvvoCCuFSy8KcdU=;
-        b=tMb0fkkc8uT0wd4kgaghM5StLPoEDgwCBmUZ70raGVJ3a1NkpO1ZTe6kPry7hLpv5P
-         GFOlCWOi8d/QIzAVUDiDuKvcmmn7ZFz7n4K55wAogNZNred2qCX0Pq2LuaLa4MAuxu4N
-         ogjT5XozqnKc1EXwbOtkvT22DqHbkDjnJDIqfUyYlK018/lQvmN0Hd39aQwI8MWEty6h
-         3CkDaW+6mZqLEDdbodG8ojkKjeQkXe2A09YoshyDeD004VZ+LOlal19utadAqfGp+8r7
-         dnLJhuYeQdUn0iRCzRufvY3cbSHO03lIT7dWQaQ45Qm7WLbhNGHaHedYnXRdLa/EVaiv
-         +PNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680691717;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1680691718;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZG2HCtNxlgwN2tmS23WngsoPcjjiHvvoCCuFSy8KcdU=;
-        b=62fDoUB5blq99VeW67KBPO8Z04TKn9gYxsK+056CNVh+BrZNCUfQzq+zoSwbXo/LL/
-         XbxCqSw/wYBh52QWfQQKQ5OdhIc0wBPXnE8OeOPAxH6WWzpDTY9VRNx/4pz6wIR+aBbo
-         5TPoD3mYsrOfvMiIwwR/f7PBPVBq30ZB2U3lB8UUGU94T3hDUce0AKo7TrkrmyKcx5f9
-         5siLDiJgnlbpAhnA1fl2ME9GuBhmtCSjrVS6Ye+bLJutltbNIR5Z90w5WfCBeoad3zix
-         qaihBBGhv0zjFE47DFDWTBwEiHSTr9NS9aWqXyY5Ybgu7vMAMpLgqMHljHly0bxZ1G7B
-         85mQ==
-X-Gm-Message-State: AAQBX9d2Bc8uUkvFH5IXMrPIcD0sptfjjMGUC8TpMoPW7dCq0SuMElks
-        kQ+2plw9lJnLK80ZslJhe9JcoQ==
-X-Google-Smtp-Source: AKy350YKyZEdK7pLHgd5YB2Bd5YC6pZqq+CkwOXKtrhPPd0UKP4XdNNIoXlNEXBxtxBLHqLsj+wEJw==
-X-Received: by 2002:a2e:9d83:0:b0:298:9fb5:9f20 with SMTP id c3-20020a2e9d83000000b002989fb59f20mr1957018ljj.26.1680691716773;
-        Wed, 05 Apr 2023 03:48:36 -0700 (PDT)
+        bh=PjlBvbh3eaYQdMUrEcW9s95jBLrDwV6kOykUeIJwqFU=;
+        b=O0Un5q8xa8eZEAV0HNXsomUkDQh2PLo3gU+WS5eAM7Q6JfyVLgD4ZwWF4bxpLJH7T3
+         HemIheY1djbO+KnIKfvnhbGRLxAD6J2DG8cYF+xD5duGwweh9v1FlQBEQkWppa2SLpP8
+         JYoV/W/oIcWwCeE/segxii9FnXawpxNUDSV1W9Qe2ZzaFcY2Uk93H1D90JrKqPwgLzoF
+         Zu67hVbXLfaOzMdZEj3y02Yv7dSBJ/H1lqfX5hAUMY6BLIE2nDQsGudh3fgxFDLlNjWE
+         atvPtXNIuzDrLIhAmaycrx38GTWG5RJkehBIcrI7ESjT2f3pJRjDLfnO9rkaLG61PUdO
+         NQOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680691718;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PjlBvbh3eaYQdMUrEcW9s95jBLrDwV6kOykUeIJwqFU=;
+        b=0HoTe55HaTooDA5dRZhrFzKBqJ4pELCsTHMpl1SjK6bRMD4fKB/qG+tCbb9ILs1Kg0
+         qh4IW/cUdIjWhEkHkC2jqSxm04Han0jd8JtH4OC/HXG5bCobAVHD8ftRovw8ToG3fYth
+         VB1tXPTh4KeEEdpOhZpcIj/5203I9Jlmrc0ODbKoYeOVJyfml7OZCw55NkGu9ndDhhfm
+         rP/sJOI2IPE4JjtSFVR3995BUVXoCLU9dbpFOn0BdnD17wmdIC2w2QgSQhaIH8OYUnfq
+         kIro824rw6sWCVC+x2oOWJr+BL2xIwmIQXpS526tmqlqPEmRn8VX0X2PKxClFSO47WRe
+         GSWg==
+X-Gm-Message-State: AAQBX9cTVJAX6kW/ScO0hQivOMo9af21XiJHYNbvNchscnoydrUF4FrG
+        IuIjTDkmK8Fby6x6OaS1KfJhgw==
+X-Google-Smtp-Source: AKy350bdVUEFNr57PjDT6SWEHZQXvm3/rcWvHgODiBYoZ8YyxqMc3d59JioLMc0ssYPawDgwC2T53g==
+X-Received: by 2002:a2e:7814:0:b0:29d:ce75:5d06 with SMTP id t20-20020a2e7814000000b0029dce755d06mr1802690ljc.32.1680691717969;
+        Wed, 05 Apr 2023 03:48:37 -0700 (PDT)
 Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id u4-20020a2e9b04000000b00295a3a64816sm2777299lji.2.2023.04.05.03.48.35
+        by smtp.gmail.com with ESMTPSA id u4-20020a2e9b04000000b00295a3a64816sm2777299lji.2.2023.04.05.03.48.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 03:48:36 -0700 (PDT)
+        Wed, 05 Apr 2023 03:48:37 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v2 0/2] Resolve MPM register space situation
-Date:   Wed, 05 Apr 2023 12:48:33 +0200
-Message-Id: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
+Date:   Wed, 05 Apr 2023 12:48:34 +0200
+Subject: [PATCH v2 1/2] dt-bindings: interrupt-controller: mpm: Pass MSG
+ RAM slice through phandle
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAFSLWQC/32NQQ6CMBAAv0L2bA20opWT/zDEbGuBTWhLtkg0h
- L9beYDHmWQyKyTH5BI0xQrsFkoUQwZ5KMAOGHon6JkZZClVqaQWc5zICp96Rv/wkxf2rLVxylh
- 5PUHODCYnDGOwQw7DaxyznNh19N4/9zbzQGmO/Nm3S/Wzfw5LJUpRmYvWWHc1KnUbKSDHY+Qe2
- m3bviyDJTHGAAAA
+Message-Id: <20230328-topic-msgram_mpm-v2-1-e24a48e57f0d@linaro.org>
+References: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
+In-Reply-To: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -72,11 +72,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680691715; l=2181;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680691715; l=2113;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=PGToSdNHkfoH7oxxoFUu9HnlKuR8i20PGmrHfAvQgnY=;
- b=5Av9gDhmhgmJn0VA+nRwiin3TUmgFd55mTdHow3w2FRnEPpBNUjRrUGoQ3AZ4JnM6WWhwflaydmZ
- qa819xQ5BkSWsagI1LVXmxQ1PU1LOBzlgrxI9YNDg2Xd/EUUZIzK
+ bh=R+nl9I6wuHXVSNu7ub0x4qWS9SfiNOhOzZJ7YrNBpgo=;
+ b=nkKf8A9vZ3gv5c16oKZQlCBsfqwPAK9cloJD47Af9w4oLjF/q/kjJyT9Hl4zHElrEPnSKgSNhvrx
+ izmgdvb9B9gxIw16BlNtjyjYEqwTaT7Nulq0JppAGtU2sjuLOcj/
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -88,72 +88,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
-- deprecate 'reg', make qcom,rpm-msg-ram required [1/2]
-- Use devm_ioremap() [2/2]
+Due to the wild nature of the Qualcomm RPM Message RAM, we can't really
+use 'reg' to point to the MPM's slice of Message RAM without cutting into
+an already-defined RPM MSG RAM node used for GLINK and SMEM.
 
-Link to v1: https://lore.kernel.org/r/20230328-topic-msgram_mpm-v1-0-1b788a5f5a33@linaro.org
-
-Depends on resolution of https://github.com/devicetree-org/dt-schema/issues/104
-
-The MPM (and some other things, irrelevant to this patchset) resides
-(as far as the ARM cores are concerned, anyway) in a MMIO-mapped region
-that's a portion of the RPM (low-power management core)'s RAM, known
-as the RPM Message RAM. Representing this relation in the Device Tree
-creates some challenges, as one would either have to treat a memory
-region as a bus, map nodes in a way such that their reg-s would be
-overlapping, or supply the nodes with a slice of that region.
-
-This series implements the third option, by adding a qcom,rpm-msg-ram
-property, which has been used for some drivers poking into this region
-before. Bindings ABI compatibility is preserved through keeping the
-"normal" (a.k.a read the reg property and map that region) way of
-passing the register space.
-
-Example representation with this patchset:
-
-/ {
-	[...]
-
-	mpm: interrupt-controller {
-		compatible = "qcom,mpm";
-		qcom,rpm-msg-ram = <&apss_mpm>;
-		[...]
-	};
-
-	[...]
-
-	soc: soc@0 {
-		[...]
-
-		rpm_msg_ram: sram@45f0000 {
-			compatible = "qcom,rpm-msg-ram", "mmio-sram";
-			reg = <0 0x045f0000 0 0x7000>;
-			#address-cells = <1>;
-			#size-cells = <1>;
-			ranges = <0 0x0 0x045f0000 0x7000>;
-
-			apss_mpm: sram@1b8 {
-				reg = <0x1b8 0x48>;
-			};
-		};
-	};
-};
+Document passing the register space as a slice of SRAM through the
+qcom,rpm-msg-ram property. This also makes 'reg' deprecated.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (2):
-      dt-bindings: interrupt-controller: mpm: Pass MSG RAM slice through phandle
-      irqchip: irq-qcom-mpm: Support passing a slice of SRAM as reg space
+ .../devicetree/bindings/interrupt-controller/qcom,mpm.yaml   | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
- .../bindings/interrupt-controller/qcom,mpm.yaml     | 12 +++++++++---
- drivers/irqchip/irq-qcom-mpm.c                      | 21 ++++++++++++++++++---
- 2 files changed, 27 insertions(+), 6 deletions(-)
----
-base-commit: 8417c8f5007bf4567ccffda850a3157c7d905f67
-change-id: 20230328-topic-msgram_mpm-c688be3bc294
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+index 509d20c091af..61fc5b1b74dc 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
+@@ -29,6 +29,12 @@ properties:
+     maxItems: 1
+     description:
+       Specifies the base address and size of vMPM registers in RPM MSG RAM.
++    deprecated: true
++
++  qcom,rpm-msg-ram:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the APSS MPM slice of the RPM Message RAM
+ 
+   interrupts:
+     maxItems: 1
+@@ -64,23 +70,22 @@ properties:
+ 
+ required:
+   - compatible
+-  - reg
+   - interrupts
+   - mboxes
+   - interrupt-controller
+   - '#interrupt-cells'
+   - qcom,mpm-pin-count
+   - qcom,mpm-pin-map
++  - qcom,rpm-msg-ram
+ 
+ additionalProperties: false
+ 
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+-    mpm: interrupt-controller@45f01b8 {
++    mpm: interrupt-controller {
+         compatible = "qcom,mpm";
+         interrupts = <GIC_SPI 197 IRQ_TYPE_EDGE_RISING>;
+-        reg = <0x45f01b8 0x1000>;
+         mboxes = <&apcs_glb 1>;
+         interrupt-controller;
+         #interrupt-cells = <2>;
+@@ -93,4 +98,5 @@ examples:
+                            <86 183>,
+                            <90 260>,
+                            <91 260>;
++        qcom,rpm-msg-ram = <&apss_mpm>;
+     };
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.40.0
 
