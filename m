@@ -2,614 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A156E6D824A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0FC6D824C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238232AbjDEPoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S238918AbjDEPpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238254AbjDEPoH (ORCPT
+        with ESMTP id S238944AbjDEPpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:44:07 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36F26A66
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:43:42 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-947a47eb908so56698566b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680709385;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=evQ2yt2QmFRI6ww4FTLAtNNICgBtWk0wPp/MFca+oo4=;
-        b=d6ElVG1P0SdrkQdNgcvG2N6daZAsB0SEIM1nYmVJD3/ZgWqd8eO+UDha65uvLpKDx3
-         //DYLSgCcndYT+S5nitB9hdezoBhSPy2v2ugdYCDFrFd60xSVys0uUXJYD4hiFpRSuFB
-         U2hv8yP6KSohzY8Si6LKNgrnv2/Olld1kNvck=
+        Wed, 5 Apr 2023 11:45:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65D16EAB
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680709403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9+5VtQajWJ6aryPiByZHs9cjsreXsrWr3HePjo1dmYw=;
+        b=QgWGo3uTGrQ0lAOnYiXbcXaxemF29bGFSwn0KLnDFv6yLoj0VxrTT9Vq43rWPI1Y98gyO8
+        VII8yZSBU2DT9omSEKHq2E0c3E+rfT3iyUd2DQdmyKO6bI6K8z5zhdEODv4IMoCbAJ3ked
+        +p0dIbkgs4KYmtVix+UzmSuo1XbrW5Q=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-508-HpkldPjZP26aNWsVjHhn_g-1; Wed, 05 Apr 2023 11:43:22 -0400
+X-MC-Unique: HpkldPjZP26aNWsVjHhn_g-1
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3e2daffa0d4so12274021cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:43:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680709385;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=evQ2yt2QmFRI6ww4FTLAtNNICgBtWk0wPp/MFca+oo4=;
-        b=Gy0FcatnmnzBc+0XrSPvnlotT6Kn9lQqIiZOT+cp+K3Fgc9r1M8uMc/Fc9Ozw82pPv
-         /E5hKjmiMdEJf2x8/Kh84yxDHKI8TVNARBY0fm2ZfwFrJS4vK1F8I3gARhBV7g+jPYMu
-         wPuISaAQHEoSoKdQWKUMGPNvhkTUR8g30uDqrFNqzv4xu7YZoEyKW8MTaqFeCeNomzT9
-         8tAO+z/dqT3CpqD34PjKGnf7LhNhF5whjPhQ09lxD7uPFIYGfMuUrpCoGF4SLKVHIHFZ
-         M0Qh4BkW4Weyj+ME4tfLySTmLE3mny7laVcO4C9RsnE3oC49eUB8PZqVbR7M3cbUFKX2
-         Hb0A==
-X-Gm-Message-State: AAQBX9cvhtpqwfaBnCTEkDdtOfworZY42sG34iy/h8M8tgDG6/cKfve0
-        vlsZlfG1/U7+UJFFaJytlwLajw==
-X-Google-Smtp-Source: AKy350YDEEUMqgbUE9rf7HmvKkCImjgAbHnXINZlBloS8ybCPK8XeweKhbseZPLcMMxRyaxh6iFQxw==
-X-Received: by 2002:a17:906:13:b0:8f0:ba09:4abe with SMTP id 19-20020a170906001300b008f0ba094abemr3333657eja.2.1680709384604;
-        Wed, 05 Apr 2023 08:43:04 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id z9-20020a17090665c900b0093fa8c2e877sm7432869ejn.80.2023.04.05.08.43.03
+        d=1e100.net; s=20210112; t=1680709402;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9+5VtQajWJ6aryPiByZHs9cjsreXsrWr3HePjo1dmYw=;
+        b=18BDov9mflJaTlNHD+wxvi8lW0jnOq/jeKEw8lVTLWWIx/uguYIRKr92Nn6qkB4iOU
+         BqhWrHC1dQTzpeJR8ze20nZcmuos+ytOHvhSJcO/KpcOM0gc80iQnFIaNZylE2u2hpan
+         pSV8FUzMJF3dYzTMkQgBm0hzIeI4RzTCaSv+9Zt1XKeg2Fr6WevfO7CdIZKpsg5ez4jF
+         l2qMkM3z+w2mFShy/xh0u25Sqm5+UqyTTAtiNrrKrYaK0jIv5uEtdlMUz0XBfnfvlNGU
+         OPzAtO9FfJYh1vpak+O33cTH6J+fjRCU4cdn2EFOL8n1xxImz8IiDfOm0ClVl+Jx8qm9
+         TW/A==
+X-Gm-Message-State: AAQBX9f9gVTXkC8Try/5c89l4sF4SVtVgeUQas8hGckLclV81/jjNKmK
+        5enrAMy8Q2nk7lpk3gfUwhuh6y8fnjtS/p18yuToDdzMLuBJE5ux3SedBLH6pTie/VWDR95lu8l
+        XY8pc1v2sXX7/MqkVPvaRk27M
+X-Received: by 2002:a05:6214:508f:b0:5aa:14b8:e935 with SMTP id kk15-20020a056214508f00b005aa14b8e935mr5332692qvb.2.1680709401929;
+        Wed, 05 Apr 2023 08:43:21 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y+dqb9QrfztOw+KW0CP34FDawHm56qfppdjPpbcsE7psQgXBNb1GRyofOuvw2sxegNfHvQLA==
+X-Received: by 2002:a05:6214:508f:b0:5aa:14b8:e935 with SMTP id kk15-20020a056214508f00b005aa14b8e935mr5332654qvb.2.1680709401524;
+        Wed, 05 Apr 2023 08:43:21 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id f24-20020ac84658000000b003b9a73cd120sm4059709qto.17.2023.04.05.08.43.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 08:43:03 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 17:43:01 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH RFC 12/18] rust: drm: sched: Add GPU scheduler abstraction
-Message-ID: <ZC2XBfJGAdNMQjpZ@phenom.ffwll.local>
-Mail-Followup-To: Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-12-917ff5bc80a8@asahilina.net>
+        Wed, 05 Apr 2023 08:43:21 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 11:43:19 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] mm/userfaultfd: fix uffd-wp handling for THP
+ migration entries
+Message-ID: <ZC2XF8qLXNOqIqGw@x1n>
+References: <20230405142535.493854-1-david@redhat.com>
+ <20230405142535.493854-2-david@redhat.com>
+ <ZC2P7Z7S87myvSst@x1n>
+ <c4c3ddb7-66fe-08e3-e59a-352f8aec6c6f@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230307-rust-drm-v1-12-917ff5bc80a8@asahilina.net>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <c4c3ddb7-66fe-08e3-e59a-352f8aec6c6f@redhat.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 11:25:37PM +0900, Asahi Lina wrote:
-> The GPU scheduler manages scheduling GPU jobs and dependencies between
-> them. This Rust abstraction allows Rust DRM drivers to use this
-> functionality.
+On Wed, Apr 05, 2023 at 05:17:31PM +0200, David Hildenbrand wrote:
+> On 05.04.23 17:12, Peter Xu wrote:
+> > On Wed, Apr 05, 2023 at 04:25:34PM +0200, David Hildenbrand wrote:
+> > > Looks like what we fixed for hugetlb in commit 44f86392bdd1 ("mm/hugetlb:
+> > > fix uffd-wp handling for migration entries in hugetlb_change_protection()")
+> > > similarly applies to THP.
+> > > 
+> > > Setting/clearing uffd-wp on THP migration entries is not implemented
+> > > properly. Further, while removing migration PMDs considers the uffd-wp
+> > > bit, inserting migration PMDs does not consider the uffd-wp bit.
+> > > 
+> > > We have to set/clear independently of the migration entry type in
+> > > change_huge_pmd() and properly copy the uffd-wp bit in
+> > > set_pmd_migration_entry().
+> > > 
+> > > Verified using a simple reproducer that triggers migration of a THP, that
+> > > the set_pmd_migration_entry() no longer loses the uffd-wp bit.
+> > > 
+> > > Fixes: f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: David Hildenbrand <david@redhat.com>
+> > 
+> > Reviewed-by: Peter Xu <peterx@redhat.com>
+> > 
+> > Thanks, one trivial nitpick:
+> > 
+> > > ---
+> > >   mm/huge_memory.c | 14 ++++++++++++--
+> > >   1 file changed, 12 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > > index 032fb0ef9cd1..bdda4f426d58 100644
+> > > --- a/mm/huge_memory.c
+> > > +++ b/mm/huge_memory.c
+> > > @@ -1838,10 +1838,10 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> > >   	if (is_swap_pmd(*pmd)) {
+> > >   		swp_entry_t entry = pmd_to_swp_entry(*pmd);
+> > >   		struct page *page = pfn_swap_entry_to_page(entry);
+> > > +		pmd_t newpmd;
+> > >   		VM_BUG_ON(!is_pmd_migration_entry(*pmd));
+> > >   		if (is_writable_migration_entry(entry)) {
+> > > -			pmd_t newpmd;
+> > >   			/*
+> > >   			 * A protection check is difficult so
+> > >   			 * just be safe and disable write
+> > > @@ -1855,8 +1855,16 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> > >   				newpmd = pmd_swp_mksoft_dirty(newpmd);
+> > >   			if (pmd_swp_uffd_wp(*pmd))
+> > >   				newpmd = pmd_swp_mkuffd_wp(newpmd);
+> > > -			set_pmd_at(mm, addr, pmd, newpmd);
+> > > +		} else {
+> > > +			newpmd = *pmd;
+> > >   		}
+> > > +
+> > > +		if (uffd_wp)
+> > > +			newpmd = pmd_swp_mkuffd_wp(newpmd);
+> > > +		else if (uffd_wp_resolve)
+> > > +			newpmd = pmd_swp_clear_uffd_wp(newpmd);
+> > > +		if (!pmd_same(*pmd, newpmd))
+> > > +			set_pmd_at(mm, addr, pmd, newpmd);
+> > >   		goto unlock;
+> > >   	}
+> > >   #endif
+> > > @@ -3251,6 +3259,8 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+> > >   	pmdswp = swp_entry_to_pmd(entry);
+> > >   	if (pmd_soft_dirty(pmdval))
+> > >   		pmdswp = pmd_swp_mksoft_dirty(pmdswp);
+> > > +	if (pmd_swp_uffd_wp(*pvmw->pmd))
+> > > +		pmdswp = pmd_swp_mkuffd_wp(pmdswp);
+> > 
+> > I think it's fine to use *pmd, but maybe still better to use pmdval?  I
+> > worry pmdp_invalidate()) can be something else in the future that may
+> > affect the bit.
 > 
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
-
-Overall (with my limited rust knowledge) I really like this, it nicely
-encodes the state transitions of jobs and anything else I looked into.
-Some thoughts/questions below.
-
-> ---
->  drivers/gpu/drm/Kconfig         |   5 +
->  rust/bindings/bindings_helper.h |   1 +
->  rust/helpers.c                  |   6 +
->  rust/kernel/drm/mod.rs          |   2 +
->  rust/kernel/drm/sched.rs        | 358 ++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 372 insertions(+)
+> Wondering how I ended up with that, I realized that it's actually
+> wrong and might have worked by chance for my reproducer on x86.
 > 
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index 70a983a17ac2..8b5ad6aee126 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -39,6 +39,11 @@ config RUST_DRM_GEM_SHMEM_HELPER
->  	depends on RUST_DRM
->  	select DRM_GEM_SHMEM_HELPER
->  
-> +config RUST_DRM_SCHED
-> +	bool
-> +	depends on RUST_DRM
-> +	select DRM_SCHED
-> +
->  config DRM_MIPI_DBI
->  	tristate
->  	depends on DRM
-> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-> index b6696011f3a4..dc01be08676e 100644
-> --- a/rust/bindings/bindings_helper.h
-> +++ b/rust/bindings/bindings_helper.h
-> @@ -13,6 +13,7 @@
->  #include <drm/drm_gem_shmem_helper.h>
->  #include <drm/drm_ioctl.h>
->  #include <drm/drm_syncobj.h>
-> +#include <drm/gpu_scheduler.h>
->  #include <linux/delay.h>
->  #include <linux/device.h>
->  #include <linux/dma-fence.h>
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 11965b1e2f4e..1b33ed602090 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -408,6 +408,12 @@ void rust_helper___spin_lock_init(spinlock_t *lock, const char *name,
->  }
->  EXPORT_SYMBOL_GPL(rust_helper___spin_lock_init);
->  
-> +unsigned long rust_helper_msecs_to_jiffies(const unsigned int m)
-> +{
-> +	return msecs_to_jiffies(m);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_msecs_to_jiffies);
-> +
->  #ifdef CONFIG_DMA_SHARED_BUFFER
->  
->  void rust_helper_dma_fence_get(struct dma_fence *fence)
-> diff --git a/rust/kernel/drm/mod.rs b/rust/kernel/drm/mod.rs
-> index dae98826edfd..3ddf7712aab3 100644
-> --- a/rust/kernel/drm/mod.rs
-> +++ b/rust/kernel/drm/mod.rs
-> @@ -8,4 +8,6 @@ pub mod file;
->  pub mod gem;
->  pub mod ioctl;
->  pub mod mm;
-> +#[cfg(CONFIG_RUST_DRM_SCHED)]
-> +pub mod sched;
->  pub mod syncobj;
-> diff --git a/rust/kernel/drm/sched.rs b/rust/kernel/drm/sched.rs
-> new file mode 100644
-> index 000000000000..a5275cc16179
-> --- /dev/null
-> +++ b/rust/kernel/drm/sched.rs
-> @@ -0,0 +1,358 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR MIT
-> +
-> +//! DRM Scheduler
-> +//!
-> +//! C header: [`include/linux/drm/gpu_scheduler.h`](../../../../include/linux/drm/gpu_scheduler.h)
-> +
-> +use crate::{
-> +    bindings, device,
-> +    dma_fence::*,
-> +    error::{to_result, Result},
-> +    prelude::*,
-> +    sync::{Arc, UniqueArc},
-> +};
-> +use alloc::boxed::Box;
-> +use core::marker::PhantomData;
-> +use core::mem::MaybeUninit;
-> +use core::ops::{Deref, DerefMut};
-> +use core::ptr::addr_of_mut;
-> +
-> +/// Scheduler status after timeout recovery
-> +#[repr(u32)]
-> +pub enum Status {
-> +    /// Device recovered from the timeout and can execute jobs again
-> +    Nominal = bindings::drm_gpu_sched_stat_DRM_GPU_SCHED_STAT_NOMINAL,
-> +    /// Device is no longer available
-> +    NoDevice = bindings::drm_gpu_sched_stat_DRM_GPU_SCHED_STAT_ENODEV,
-> +}
-> +
-> +/// Scheduler priorities
-> +#[repr(i32)]
-> +pub enum Priority {
-> +    /// Low userspace priority
-> +    Min = bindings::drm_sched_priority_DRM_SCHED_PRIORITY_MIN,
-> +    /// Normal userspace priority
-> +    Normal = bindings::drm_sched_priority_DRM_SCHED_PRIORITY_NORMAL,
-> +    /// High userspace priority
-> +    High = bindings::drm_sched_priority_DRM_SCHED_PRIORITY_HIGH,
-> +    /// Kernel priority (highest)
-> +    Kernel = bindings::drm_sched_priority_DRM_SCHED_PRIORITY_KERNEL,
-> +}
-> +
-> +/// Trait to be implemented by driver job objects.
-> +pub trait JobImpl: Sized {
-> +    /// Called when the scheduler is considering scheduling this job next, to get another Fence
-> +    /// for this job to block on. Once it returns None, run() may be called.
-> +    fn prepare(_job: &mut Job<Self>) -> Option<Fence> {
-
-So if I get this all right then Job<T> allows us to nicely parametrize the
-job with the driver structure itself, but not really anything else. I do
-wonder whether this needs a bit more with a type both for the job and
-entity and the drm/sched code + rust wrapper guaranteeing that the
-lifetimes of these make sense. With just the job parametrized drivers need
-to make sure they refcount anything else hanging of that properly which
-means if they get some detail wrong there might be an unintentional leak.
-
-If we instead also give a parametrized entity where the driver can stuff
-anything necessary and sched code guarantees that it'll clean up the any
-mess on teardown and guarantee that the entity survives, I think a lot of
-drivers could benefit from that and it would be easier for them to have
-the right lifetimes for everything and no leaks.
-
-
-> +        None // Equivalent to NULL function pointer
-> +    }
-> +
-> +    /// Called before job execution to check whether the hardware is free enough to run the job.
-> +    /// This can be used to implement more complex hardware resource policies than the hw_submission
-> +    /// limit.
-> +    fn can_run(_job: &mut Job<Self>) -> bool {
-> +        true
-> +    }
-> +
-> +    /// Called to execute the job once all of the dependencies have been resolved. This may be
-> +    /// called multiple times, if timed_out() has happened and drm_sched_job_recovery() decides
-> +    /// to try it again.
-> +    fn run(job: &mut Job<Self>) -> Result<Option<Fence>>;
-> +
-> +    /// Called when a job has taken too long to execute, to trigger GPU recovery.
-> +    ///
-> +    /// This method is called in a workqueue context.
-> +    fn timed_out(job: &mut Job<Self>) -> Status;
-> +}
-> +
-> +unsafe extern "C" fn prepare_job_cb<T: JobImpl>(
-> +    sched_job: *mut bindings::drm_sched_job,
-> +    _s_entity: *mut bindings::drm_sched_entity,
-> +) -> *mut bindings::dma_fence {
-> +    // SAFETY: All of our jobs are Job<T>.
-> +    let p = crate::container_of!(sched_job, Job<T>, job) as *mut Job<T>;
-> +
-> +    match T::prepare(unsafe { &mut *p }) {
-> +        None => core::ptr::null_mut(),
-> +        Some(fence) => fence.into_raw(),
-> +    }
-> +}
-> +
-> +unsafe extern "C" fn run_job_cb<T: JobImpl>(
-> +    sched_job: *mut bindings::drm_sched_job,
-> +) -> *mut bindings::dma_fence {
-> +    // SAFETY: All of our jobs are Job<T>.
-> +    let p = crate::container_of!(sched_job, Job<T>, job) as *mut Job<T>;
-> +
-> +    match T::run(unsafe { &mut *p }) {
-> +        Err(e) => e.to_ptr(),
-> +        Ok(None) => core::ptr::null_mut(),
-> +        Ok(Some(fence)) => fence.into_raw(),
-> +    }
-> +}
-> +
-> +unsafe extern "C" fn can_run_job_cb<T: JobImpl>(sched_job: *mut bindings::drm_sched_job) -> bool {
-> +    // SAFETY: All of our jobs are Job<T>.
-> +    let p = crate::container_of!(sched_job, Job<T>, job) as *mut Job<T>;
-> +
-> +    T::can_run(unsafe { &mut *p })
-> +}
-> +
-> +unsafe extern "C" fn timedout_job_cb<T: JobImpl>(
-> +    sched_job: *mut bindings::drm_sched_job,
-> +) -> bindings::drm_gpu_sched_stat {
-> +    // SAFETY: All of our jobs are Job<T>.
-> +    let p = crate::container_of!(sched_job, Job<T>, job) as *mut Job<T>;
-> +
-> +    T::timed_out(unsafe { &mut *p }) as bindings::drm_gpu_sched_stat
-> +}
-> +
-> +unsafe extern "C" fn free_job_cb<T: JobImpl>(sched_job: *mut bindings::drm_sched_job) {
-> +    // SAFETY: All of our jobs are Job<T>.
-> +    let p = crate::container_of!(sched_job, Job<T>, job) as *mut Job<T>;
-> +
-> +    // Convert the job back to a Box and drop it
-> +    // SAFETY: All of our Job<T>s are created inside a box.
-> +    unsafe { Box::from_raw(p) };
-> +}
-> +
-> +/// A DRM scheduler job.
-> +pub struct Job<T: JobImpl> {
-> +    job: bindings::drm_sched_job,
-> +    inner: T,
-> +}
-> +
-> +impl<T: JobImpl> Deref for Job<T> {
-> +    type Target = T;
-> +
-> +    fn deref(&self) -> &Self::Target {
-> +        &self.inner
-> +    }
-> +}
-> +
-> +impl<T: JobImpl> DerefMut for Job<T> {
-> +    fn deref_mut(&mut self) -> &mut Self::Target {
-> +        &mut self.inner
-> +    }
-> +}
-> +
-> +impl<T: JobImpl> Drop for Job<T> {
-> +    fn drop(&mut self) {
-> +        // SAFETY: At this point the job has either been submitted and this is being called from
-> +        // `free_job_cb` above, or it hasn't and it is safe to call `drm_sched_job_cleanup`.
-> +        unsafe { bindings::drm_sched_job_cleanup(&mut self.job) };
-> +    }
-> +}
-> +
-> +/// A pending DRM scheduler job (not yet armed)
-> +pub struct PendingJob<'a, T: JobImpl>(Box<Job<T>>, PhantomData<&'a T>);
-> +
-> +impl<'a, T: JobImpl> PendingJob<'a, T> {
-> +    /// Add a fence as a dependency to the job
-> +    pub fn add_dependency(&mut self, fence: Fence) -> Result {
-> +        to_result(unsafe {
-> +            bindings::drm_sched_job_add_dependency(&mut self.0.job, fence.into_raw())
-> +        })
-> +    }
-> +
-> +    /// Arm the job to make it ready for execution
-> +    pub fn arm(mut self) -> ArmedJob<'a, T> {
-> +        unsafe { bindings::drm_sched_job_arm(&mut self.0.job) };
-> +        ArmedJob(self.0, PhantomData)
-> +    }
-> +}
-> +
-> +impl<'a, T: JobImpl> Deref for PendingJob<'a, T> {
-> +    type Target = Job<T>;
-> +
-> +    fn deref(&self) -> &Self::Target {
-> +        &self.0
-> +    }
-> +}
-> +
-> +impl<'a, T: JobImpl> DerefMut for PendingJob<'a, T> {
-> +    fn deref_mut(&mut self) -> &mut Self::Target {
-> +        &mut self.0
-> +    }
-> +}
-> +
-> +/// An armed DRM scheduler job (not yet submitted)
-> +pub struct ArmedJob<'a, T: JobImpl>(Box<Job<T>>, PhantomData<&'a T>);
-> +
-> +impl<'a, T: JobImpl> ArmedJob<'a, T> {
-> +    /// Returns the job fences
-> +    pub fn fences(&self) -> JobFences<'_> {
-> +        JobFences(unsafe { &mut *self.0.job.s_fence })
-> +    }
-> +
-> +    /// Push the job for execution into the scheduler
-> +    pub fn push(self) {
-> +        // After this point, the job is submitted and owned by the scheduler
-> +        let ptr = match self {
-> +            ArmedJob(job, _) => Box::<Job<T>>::into_raw(job),
-> +        };
-
-If I get this all right then this all makes sure that drivers can't use
-the job after push and they don't forgot to call arm.
-
-What I'm not seeing is how we force drivers to call push once they've
-called arm? I haven't check what the code does, but from the docs it
-sounds like if you don't call push then drop will get called. Which wreaks
-the book-keeping on an armed job. Or is there someting that prevents
-ArmedJob<T> from having the Drop trait and so the only way to not go boom
-is by pushing it?
-
-Googling for "rust undroppable" seems to indicate that this isn't a thing
-rust can do?
-
-> +
-> +        // SAFETY: We are passing in ownership of a valid Box raw pointer.
-> +        unsafe { bindings::drm_sched_entity_push_job(addr_of_mut!((*ptr).job)) };
-> +    }
-> +}
-> +impl<'a, T: JobImpl> Deref for ArmedJob<'a, T> {
-> +    type Target = Job<T>;
-> +
-> +    fn deref(&self) -> &Self::Target {
-> +        &self.0
-> +    }
-> +}
-> +
-> +impl<'a, T: JobImpl> DerefMut for ArmedJob<'a, T> {
-> +    fn deref_mut(&mut self) -> &mut Self::Target {
-> +        &mut self.0
-> +    }
-> +}
-> +
-> +/// Reference to the bundle of fences attached to a DRM scheduler job
-> +pub struct JobFences<'a>(&'a mut bindings::drm_sched_fence);
-> +
-> +impl<'a> JobFences<'a> {
-> +    /// Returns a new reference to the job scheduled fence.
-> +    pub fn scheduled(&mut self) -> Fence {
-> +        unsafe { Fence::get_raw(&mut self.0.scheduled) }
-
-This feels a bit murky, because the safety of this relies on the safety of
-the ArmedJob and the guarantee (promise?) that the driver will push it.
-I'd just have two functions scheduled_fence and finished_fence in the
-ArmedJob impl and one safety note explaining why we can wrap it in the
-refcounted Fence.
-
-> +    }
-> +
-> +    /// Returns a new reference to the job finished fence.
-> +    pub fn finished(&mut self) -> Fence {
-> +        unsafe { Fence::get_raw(&mut self.0.finished) }
-> +    }
-> +}
-> +
-> +struct EntityInner<T: JobImpl> {
-> +    entity: bindings::drm_sched_entity,
-> +    // TODO: Allow users to share guilty flag between entities
-> +    sched: Arc<SchedulerInner<T>>,
-> +    guilty: bindings::atomic_t,
-> +    _p: PhantomData<T>,
-> +}
-> +
-> +impl<T: JobImpl> Drop for EntityInner<T> {
-> +    fn drop(&mut self) {
-> +        // SAFETY: The EntityInner is initialized. This will cancel/free all jobs.
-> +        unsafe { bindings::drm_sched_entity_destroy(&mut self.entity) };
-> +    }
-> +}
-> +
-> +// SAFETY: TODO
-> +unsafe impl<T: JobImpl> Sync for EntityInner<T> {}
-> +unsafe impl<T: JobImpl> Send for EntityInner<T> {}
-> +
-> +/// A DRM scheduler entity.
-> +pub struct Entity<T: JobImpl>(Pin<Box<EntityInner<T>>>);
-> +
-> +impl<T: JobImpl> Entity<T> {
-> +    /// Create a new scheduler entity.
-> +    pub fn new(sched: &Scheduler<T>, priority: Priority) -> Result<Self> {
-> +        let mut entity: Box<MaybeUninit<EntityInner<T>>> = Box::try_new_zeroed()?;
-> +
-> +        let mut sched_ptr = &sched.0.sched as *const _ as *mut _;
-> +
-> +        // SAFETY: The Box is allocated above and valid.
-> +        unsafe {
-> +            bindings::drm_sched_entity_init(
-> +                addr_of_mut!((*entity.as_mut_ptr()).entity),
-> +                priority as _,
-> +                &mut sched_ptr,
-> +                1,
-> +                addr_of_mut!((*entity.as_mut_ptr()).guilty),
-> +            )
-> +        };
-> +
-> +        // SAFETY: The Box is allocated above and valid.
-> +        unsafe { addr_of_mut!((*entity.as_mut_ptr()).sched).write(sched.0.clone()) };
-> +
-> +        // SAFETY: entity is now initialized.
-> +        Ok(Self(Pin::from(unsafe { entity.assume_init() })))
-> +    }
-> +
-> +    /// Create a new job on this entity.
-> +    ///
-> +    /// The entity must outlive the pending job until it transitions into the submitted state,
-> +    /// after which the scheduler owns it.
-> +    pub fn new_job(&self, inner: T) -> Result<PendingJob<'_, T>> {
-> +        let mut job: Box<MaybeUninit<Job<T>>> = Box::try_new_zeroed()?;
-> +
-> +        // SAFETY: We hold a reference to the entity (which is a valid pointer),
-> +        // and the job object was just allocated above.
-> +        to_result(unsafe {
-> +            bindings::drm_sched_job_init(
-> +                addr_of_mut!((*job.as_mut_ptr()).job),
-> +                &self.0.as_ref().get_ref().entity as *const _ as *mut _,
-> +                core::ptr::null_mut(),
-> +            )
-> +        })?;
-> +
-> +        // SAFETY: The Box pointer is valid, and this initializes the inner member.
-> +        unsafe { addr_of_mut!((*job.as_mut_ptr()).inner).write(inner) };
-> +
-> +        // SAFETY: All fields of the Job<T> are now initialized.
-> +        Ok(PendingJob(unsafe { job.assume_init() }, PhantomData))
-> +    }
-> +}
-> +
-> +/// DRM scheduler inner data
-> +pub struct SchedulerInner<T: JobImpl> {
-> +    sched: bindings::drm_gpu_scheduler,
-> +    _p: PhantomData<T>,
-> +}
-> +
-> +impl<T: JobImpl> Drop for SchedulerInner<T> {
-> +    fn drop(&mut self) {
-> +        // SAFETY: The scheduler is valid. This assumes drm_sched_fini() will take care of
-> +        // freeing all in-progress jobs.
-> +        unsafe { bindings::drm_sched_fini(&mut self.sched) };
-> +    }
-> +}
-> +
-> +// SAFETY: TODO
-> +unsafe impl<T: JobImpl> Sync for SchedulerInner<T> {}
-> +unsafe impl<T: JobImpl> Send for SchedulerInner<T> {}
-> +
-> +/// A DRM Scheduler
-> +pub struct Scheduler<T: JobImpl>(Arc<SchedulerInner<T>>);
-> +
-> +impl<T: JobImpl> Scheduler<T> {
-> +    const OPS: bindings::drm_sched_backend_ops = bindings::drm_sched_backend_ops {
-> +        prepare_job: Some(prepare_job_cb::<T>),
-> +        can_run_job: Some(can_run_job_cb::<T>),
-> +        run_job: Some(run_job_cb::<T>),
-> +        timedout_job: Some(timedout_job_cb::<T>),
-> +        free_job: Some(free_job_cb::<T>),
-
-Two general questions with no relevance here really, just about vtable
-best practices:
-
-So the trait has default impls for exactly the functions that are optional
-here, but either way we always end up with non-NULL function pointers. I
-guess there's no way to avoid that when you have a nice wrapping with
-traits and all that like here?
-
-Another unrelated thing: How const is const? The C code side generally
-uses ops pointers for runtime time casting, so if the const is less const
-that a naive C hacker would expect, it might result in some fun.
-
-Cheers, Daniel
-
-> +    };
-> +    /// Creates a new DRM Scheduler object
-> +    // TODO: Shared timeout workqueues & scores
-> +    pub fn new(
-> +        device: &impl device::RawDevice,
-> +        hw_submission: u32,
-> +        hang_limit: u32,
-> +        timeout_ms: usize,
-> +        name: &'static CStr,
-> +    ) -> Result<Scheduler<T>> {
-> +        let mut sched: UniqueArc<MaybeUninit<SchedulerInner<T>>> = UniqueArc::try_new_uninit()?;
-> +
-> +        // SAFETY: The drm_sched pointer is valid and pinned as it was just allocated above.
-> +        to_result(unsafe {
-> +            bindings::drm_sched_init(
-> +                addr_of_mut!((*sched.as_mut_ptr()).sched),
-> +                &Self::OPS,
-> +                hw_submission,
-> +                hang_limit,
-> +                bindings::msecs_to_jiffies(timeout_ms.try_into()?).try_into()?,
-> +                core::ptr::null_mut(),
-> +                core::ptr::null_mut(),
-> +                name.as_char_ptr(),
-> +                device.raw_device(),
-> +            )
-> +        })?;
-> +
-> +        // SAFETY: All fields of SchedulerInner are now initialized.
-> +        Ok(Scheduler(unsafe { sched.assume_init() }.into()))
-> +    }
-> +}
+> That should make it work:
 > 
-> -- 
-> 2.35.1
-> 
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index f977c965fdad..fffc953fa6ea 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -3257,7 +3257,7 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>         pmdswp = swp_entry_to_pmd(entry);
+>         if (pmd_soft_dirty(pmdval))
+>                 pmdswp = pmd_swp_mksoft_dirty(pmdswp);
+> -       if (pmd_swp_uffd_wp(*pvmw->pmd))
+> +       if (pmd_uffd_wp(pmdval))
+>                 pmdswp = pmd_swp_mkuffd_wp(pmdswp);
+>         set_pmd_at(mm, address, pvmw->pmd, pmdswp);
+>         page_remove_rmap(page, vma, true);
+
+I guess pmd_swp_uffd_wp() just reads the _USER bit 2 which is also set for
+a present pte, but then it sets swp uffd-wp always even if it was not set.
+
+Yes the change must be squashed in to be correct, with that, my R-b keeps.
+
+Thanks,
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Peter Xu
+
