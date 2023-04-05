@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25706D89DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0680E6D89E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbjDEVyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S234132AbjDEVy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbjDEVyI (ORCPT
+        with ESMTP id S233290AbjDEVyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:54:08 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440F1989;
-        Wed,  5 Apr 2023 14:54:05 -0700 (PDT)
+        Wed, 5 Apr 2023 17:54:11 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2147D7D9D;
+        Wed,  5 Apr 2023 14:54:10 -0700 (PDT)
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 335LrpFu114247;
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 335LrpK8051049;
         Wed, 5 Apr 2023 16:53:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1680731631;
-        bh=8uKbFKLPkoXzvdoTYFcW5QTSiE+wGcfcnoidQvafueM=;
+        bh=L6UbggJ7FdGciU/ke9bu3ATBqIXrqPHW+3cCKOhBbok=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=l586TJ+CUvamRFh0pFNCogl0pMN8s9dNVVQa4mSZVJiXvXNX+umumE5mToM0C06hv
-         jl8mU1uMW9NNFj7gPqnn2x6iD8Rwg+Bt3joX6E2x6fUI3N2cb5D1nC8ta+rRobmFT5
-         aC09dcyTa1xvRjSDp80l0nDTxZrCDysvfiE3Z4tU=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 335LrpHV047555
+        b=ZsUkGY5NHk6+kTdbQ8pahYt11BbGuasAKW1x/gtVgGmR21MbiqJpdStV51OPL5s3Z
+         R98hZSBXxWWzwF1r8f9Z4cTl/LRp4x97pfNxNwVXhrGbx1Kh+fxzEFgKmTb5lpD8LJ
+         YQT6SxYm72lYlJ4q374R3DQv6NMO2drNu4jNjth0=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 335Lrpax047558
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Wed, 5 Apr 2023 16:53:51 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 5
  Apr 2023 16:53:50 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 5 Apr 2023 16:53:50 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 335LroAK091628;
+ Frontend Transport; Wed, 5 Apr 2023 16:53:51 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 335Lrogv045963;
         Wed, 5 Apr 2023 16:53:50 -0500
 From:   Bryan Brattlof <bb@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -50,9 +50,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Bryan Brattlof <bb@ti.com>
-Subject: [PATCH v3 2/7] arm64: dts: ti: k3-am62-wakeup: add VTM node
-Date:   Wed, 5 Apr 2023 16:53:23 -0500
-Message-ID: <20230405215328.3755561-3-bb@ti.com>
+Subject: [PATCH v3 3/7] arm64: dts: ti: k3-am62a-wakeup: add VTM node
+Date:   Wed, 5 Apr 2023 16:53:24 -0500
+Message-ID: <20230405215328.3755561-4-bb@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230405215328.3755561-1-bb@ti.com>
 References: <20230405215328.3755561-1-bb@ti.com>
@@ -69,24 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The am62x supports a single Voltage and Thermal Management (VTM) module
-located in the wakeup domain with two associated temperature monitors
-located in hot spots of the die.
+The am62ax supports a single Voltage and Thermal Management (VTM) device
+located in the wakeup domain with three associated temperature monitors
+located in various hot spots of the die.
 
 Signed-off-by: Bryan Brattlof <bb@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi | 33 +++++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi  |  8 +++++
- arch/arm64/boot/dts/ti/k3-am62.dtsi         |  8 +++--
- 3 files changed, 47 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi
+ arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi | 47 ++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi  |  8 ++++
+ arch/arm64/boot/dts/ti/k3-am62a.dtsi         |  2 +
+ 3 files changed, 57 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi
 new file mode 100644
-index 0000000000000..a358757e26f07
+index 0000000000000..85ce545633ea5
 --- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi
-@@ -0,0 +1,33 @@
++++ b/arch/arm64/boot/dts/ti/k3-am62a-thermal.dtsi
+@@ -0,0 +1,47 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
 +#include <dt-bindings/thermal/thermal.h>
@@ -99,7 +99,7 @@ index 0000000000000..a358757e26f07
 +
 +		trips {
 +			main0_crit: main0-crit {
-+				temperature = <105000>;	/* milliCelsius */
++				temperature = <125000>;	/* milliCelsius */
 +				hysteresis = <2000>;	/* milliCelsius */
 +				type = "critical";
 +			};
@@ -113,20 +113,34 @@ index 0000000000000..a358757e26f07
 +
 +		trips {
 +			main1_crit: main1-crit {
-+				temperature = <105000>;	/* milliCelsius */
++				temperature = <125000>;	/* milliCelsius */
++				hysteresis = <2000>;	/* milliCelsius */
++				type = "critical";
++			};
++		};
++	};
++
++	main2_thermal: main2-thermal {
++	       polling-delay-passive = <250>;	/* milliSeconds */
++	       polling-delay = <500>;		/* milliSeconds */
++	       thermal-sensors = <&wkup_vtm0 2>;
++
++		trips {
++			main2_crit: main2-crit {
++				temperature = <125000>;	/* milliCelsius */
 +				hysteresis = <2000>;	/* milliCelsius */
 +				type = "critical";
 +			};
 +		};
 +	};
 +};
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-index 7726ebae25394..eae0528871862 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-@@ -61,4 +61,12 @@ wkup_rti0: watchdog@2b000000 {
- 		/* Used by DM firmware */
- 		status = "reserved";
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
+index 81d984414fd4a..9bdafead7199a 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
+@@ -51,4 +51,12 @@ wkup_rtc0: rtc@2b1f0000 {
+ 		wakeup-source;
+ 		status = "disabled";
  	};
 +
 +	wkup_vtm0: temperature-sensor@b00000 {
@@ -137,35 +151,16 @@ index 7726ebae25394..eae0528871862 100644
 +		#thermal-sensor-cells = <1>;
 +	};
  };
-diff --git a/arch/arm64/boot/dts/ti/k3-am62.dtsi b/arch/arm64/boot/dts/ti/k3-am62.dtsi
-index a401f52252439..5e72c445f37a9 100644
---- a/arch/arm64/boot/dts/ti/k3-am62.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62.dtsi
-@@ -81,6 +81,7 @@ cbass_main: bus@f0000 {
- 			 <0x00 0x04000000 0x00 0x04000000 0x00 0x01ff1400>,
- 
- 			 /* Wakeup Domain Range */
-+			 <0x00 0x00b00000 0x00 0x00b00000 0x00 0x00002400>, /* VTM */
- 			 <0x00 0x2b000000 0x00 0x2b000000 0x00 0x00300400>,
- 			 <0x00 0x43000000 0x00 0x43000000 0x00 0x00020000>;
- 
-@@ -91,14 +92,17 @@ cbass_mcu: bus@4000000 {
- 			ranges = <0x00 0x04000000 0x00 0x04000000 0x00 0x01ff1400>; /* Peripheral window */
- 		};
- 
--		cbass_wakeup: bus@2b000000 {
-+		cbass_wakeup: bus@b00000 {
- 			compatible = "simple-bus";
- 			#address-cells = <2>;
- 			#size-cells = <2>;
--			ranges = <0x00 0x2b000000 0x00 0x2b000000 0x00 0x00300400>, /* Peripheral Window */
-+			ranges = <0x00 0x00b00000 0x00 0x00b00000 0x00 0x00002400>, /* VTM */
-+				 <0x00 0x2b000000 0x00 0x2b000000 0x00 0x00300400>, /* Peripheral Window */
- 				 <0x00 0x43000000 0x00 0x43000000 0x00 0x00020000>;
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a.dtsi b/arch/arm64/boot/dts/ti/k3-am62a.dtsi
+index fe60c9ce21e3d..61a210ecd5ff1 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62a.dtsi
+@@ -115,6 +115,8 @@ cbass_wakeup: bus@b00000 {
+ 				 <0x00 0x78100000 0x00 0x78100000 0x00 0x00008000>; /* DM R5 BTCM*/
  		};
  	};
 +
-+	#include "k3-am62-thermal.dtsi"
++	#include "k3-am62a-thermal.dtsi"
  };
  
  /* Now include the peripherals for each bus segments */
