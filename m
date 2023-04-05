@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D25E6D86F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922BB6D86F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjDETfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
+        id S233419AbjDETfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbjDETfm (ORCPT
+        with ESMTP id S231886AbjDETfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 5 Apr 2023 15:35:42 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A930D5FE1;
-        Wed,  5 Apr 2023 12:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=GJLiNwhsL8BaZ9KZ/zH+hWXBLPuylC9ipjO8vXLfsjw=; b=xaJkJYJMmcRDgsC5EpE9PRIgAQ
-        HYv4+O2SHOJNB4PRH5kk8ZEsg5rvoIEsUC2FDG1gtqjCW2CRKPBLLrpsD6a+ZJV/znHN7muxtUtsT
-        yBtbpPOYuABPPh1etdclBxinSgqEt/2mGDjmNaZas/9XQKGVlIKbAY40aBlw5RIJNzVw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pk8up-009YP9-2g; Wed, 05 Apr 2023 21:35:31 +0200
-Date:   Wed, 5 Apr 2023 21:35:31 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     netdev@vger.kernel.org, linux@armlinux.org.uk,
-        hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org,
-        system@metrotek.ru, stable@vger.kernel.org
-Subject: Re: [PATCH net] net: sfp: initialize sfp->i2c_block_size at sfp
- allocation
-Message-ID: <19d7ef3c-de9d-4a44-92e9-16ac14b663d9@lunn.ch>
-References: <20230405153900.747-1-i.bornyakov@metrotek.ru>
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E235BA0
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:35:40 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 19:35:35 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680723338; x=1680982538;
+        bh=0fJvllTidlaCaBo/L7PXilYIMiZzcU0zSrjFdHjiHhM=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Fxif8rejuKpk/l/W8YF7xN4PsUldUMWaYkCeF0cSmqf39ZQBQAPT5/VvAEaVQP8Qk
+         yWOQtoDd/RLcY3hDXIzSMOmwV+u+0kinLF+jUrj+fnHm8Kg5kuPBw5HBWe632wBKq8
+         i/dd8/kUGR9Azl39wvXs4SQHkhpQAAiJMukJzAZL2N92z6sfN/DdPOjAK0bOEPoEOn
+         BIkqCMFzyzoAMIU9h8mphq2nADjSG5xWg9QPGrZVsozZQW9ZnrJns6aABSXvTt+fyu
+         /ec5bW+UPS+YPcZ/DkQ6UOi1YJIBMak2teChMLfbuaxC6xvCzzm02fSubkcN7kEsw/
+         2Dxu1z2R2Q/3g==
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Alice Ryhl <alice@ryhl.io>, Andreas Hindborg <nmi@metaspace.dk>
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>
+Subject: [PATCH v6 01/15] rust: enable the `pin_macro` feature
+Message-ID: <20230405193445.745024-2-y86-dev@protonmail.com>
+In-Reply-To: <20230405193445.745024-1-y86-dev@protonmail.com>
+References: <20230405193445.745024-1-y86-dev@protonmail.com>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405153900.747-1-i.bornyakov@metrotek.ru>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 06:39:00PM +0300, Ivan Bornyakov wrote:
-> sfp->i2c_block_size is initialized at SFP module insertion in
-> sfp_sm_mod_probe(). Because of that, if SFP module was not inserted
-> since boot, ethtool -m leads to zero-length I2C read attempt.
-> 
->   # ethtool -m xge0
->   i2c i2c-3: adapter quirk: no zero length (addr 0x0050, size 0, read)
->   Cannot get Module EEPROM data: Operation not supported
+This feature enables the use of the `pin!` macro for the `stack_pin_init!`
+macro. This feature is already stabilized in Rust version 1.68.
 
-Do i understand you correct in that this is when the SFP cage has
-always been empty? The I2C transaction is going to fail whatever the
-length is.
+Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
+Acked-by: Boqun Feng <boqun.feng@gmail.com>
+Cc: Andreas Hindborg <a.hindborg@samsung.com>
+---
+ rust/kernel/lib.rs     | 1 +
+ scripts/Makefile.build | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-> If SFP module was plugged then removed at least once,
-> sfp->i2c_block_size will be initialized and ethtool -m will fail with
-> different error
-> 
->   # ethtool -m xge0
->   Cannot get Module EEPROM data: Remote I/O error
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 223564f9f0cc..4317b6d5f50b 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -17,6 +17,7 @@
+ #![feature(core_ffi_c)]
+ #![feature(dispatch_from_dyn)]
+ #![feature(generic_associated_types)]
++#![feature(pin_macro)]
+ #![feature(receiver_trait)]
+ #![feature(unsize)]
 
-So again, the SFP cage is empty?
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 76323201232a..ba4102b9d94d 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -277,7 +277,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
+ # Compile Rust sources (.rs)
+ # ------------------------------------------------------------------------=
+---
 
-I wonder if a better fix is to use
+-rust_allowed_features :=3D core_ffi_c
++rust_allowed_features :=3D core_ffi_c,pin_macro
 
-sfp->state & SFP_F_PRESENT
+ rust_common_cmd =3D \
+ =09RUST_MODFILE=3D$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
+--
+2.39.2
 
-in sfp_module_eeprom() and sfp_module_eeprom_by_page() and don't even
-do the I2C read if there is no module in the cage?
 
-   Andrew
