@@ -2,103 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0B66D7CF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5C06D7D01
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237665AbjDEMul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58050 "EHLO
+        id S238044AbjDEMzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbjDEMuj (ORCPT
+        with ESMTP id S238051AbjDEMzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:50:39 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E3030CD;
-        Wed,  5 Apr 2023 05:50:38 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pk2ay-0006VW-GK; Wed, 05 Apr 2023 14:50:36 +0200
-Message-ID: <fbe78d1a-b75c-3565-9a8d-2a9aecc1eed3@leemhuis.info>
-Date:   Wed, 5 Apr 2023 14:50:36 +0200
+        Wed, 5 Apr 2023 08:55:42 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F9530FE;
+        Wed,  5 Apr 2023 05:55:33 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzcv-3yyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4505:1fdc::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Ps4Ny5fhqz49Q2n;
+        Wed,  5 Apr 2023 15:55:30 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1680699331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HNlTPAbjdtS26ypADnDdofnih8dcbhDcszLgzK/cR+0=;
+        b=bI7FZgFMqo//ViNpPq7jYGOxhp9IesTmsJVAX0Eo5c7D6ga+bpA92xBtBLRiDa9OwVSrtB
+        +nTDzTQyID4tjKmyR4TpS6doUA0xu8HagJGnoUI1ngkqbOnCQ0kQXPcLBEg6IUJ4SDciCC
+        IP/xkhXdI3xIZg/BGvX14LVBrLDyalGAFndCb2cPuA0SuyamIe/odMhJ4qRDrxga8XD2NF
+        1BcP1VNcgLJ/q3W7gBpKWa8Qb2FVAI5Ty3xw5CacKhOpctyoyqJWA6xbewDwXwRm6dj1WX
+        gtzqg4asxpRsgZbuV22pRytuzAGrzszawafHtnK6HEEyYK88RKkafZi7jRkL4Q==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1680699331; a=rsa-sha256;
+        cv=none;
+        b=MrEsYbXqv8x/IMkRuiqwAMNR6s6kHHfREWcaSzHUlSnPlVxxCEFP4SvbobAFIE1KJFwxA7
+        EJb0safaC+6u0omwm4fTd2nLoG8cQXPPIgbQUa2ZBgiPUXx4VbqB1BDQrFYGUWOmLB+vwc
+        /JGJ9XupAVcHPBvz6jWZrwsE1BYJCmdPavY2J5RbuzuDsRr/W4PY6vJjtCwgsQfCvkaay2
+        dhCf9FW/OFifHqghRQ0W4nCY2ldntAk0iM7UOiYRWeYeMvVFG731jAF5W5g3yoRG0k1g0r
+        r5tKjqnVCCOMAZQlqdsWfRHlt0rHnW1uNw+QHUKc8ug4lmgGjyP71Dcf+sYzpg==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1680699331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HNlTPAbjdtS26ypADnDdofnih8dcbhDcszLgzK/cR+0=;
+        b=O3PXthfiZO+Fw2/XArNmAJKVG3Dgdv2a5dBezMRzTrzIdijwbbllX/PEhcBeeoWKBaL7Ql
+        JKzBCk2hJxmd6TJexn04kUM5Tx3zWbMXYwKPqNC5Ei0+6cKRYVaXJa4d8JZhpUaMU0in0Z
+        iVjXPu7h+Yw2BTDulmUTZmjZ/0vVDlyiJ61AAFZkg2cxV3fxNYeEUuVzk38jq+ZzGgUS+3
+        pUbeU6L0Fonff3Hny5UndBPqIqAyXbyTmpDv1HUbAXLXy6S9teYzedAM3aNsAgQiE4i0KF
+        jp47D47tioQ6Yp4vhsfE+qcuInNEXyvv5NbS2OPLVWBRH14qoYGvtiAbO44PrA==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 4B2A7634C91;
+        Wed,  5 Apr 2023 15:52:53 +0300 (EEST)
+Date:   Wed, 5 Apr 2023 15:52:52 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
+        kernel@puri.sm, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] media: hi846: fix usage of
+ pm_runtime_get_if_in_use()
+Message-ID: <ZC1vJNIGeEu+xi+i@valkosipuli.retiisi.eu>
+References: <20230405092904.1129395-1-martin.kepplinger@puri.sm>
+ <20230405092904.1129395-2-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Andrea Righi <andrea.righi@canonical.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
-          Linux regressions mailing list 
-          <regressions@lists.linux.dev>
-References: <ZBLLSmLbt2P4ZN6O@righiandr-XPS-13-7390>
- <59064730-e731-d137-ae92-e19622a122d0@leemhuis.info>
-In-Reply-To: <59064730-e731-d137-ae92-e19622a122d0@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680699038;e1d1d8a7;
-X-HE-SMSGID: 1pk2ay-0006VW-GK
-X-Spam-Status: No, score=-1.4 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405092904.1129395-2-martin.kepplinger@puri.sm>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+Hi Martin,
 
-On 16.03.23 10:45, Linux regression tracking #adding (Thorsten Leemhuis)
-wrote:
-> On 16.03.23 08:54, Andrea Righi wrote:
->> Hello,
->>
->> the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
->> gets stuck and never completes the boot. On the console I see this:
->>
->> [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
->> [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
->> [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
->> [   72.064949] Task dump for CPU 22:
->> [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
->> [   72.078156] Workqueue: efi_rts_wq efi_call_rts
->> [   72.082595] Call trace:
->> [   72.085029]  __switch_to+0xbc/0x100
->> [   72.088508]  0xffff80000fe83d4c
->>
->> After that, as a consequence, I start to get a lot of hung task timeout traces.
->>
->> I tried to bisect the problem and I found that the offending commit is
->> this one:
->>
->>  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
->>
->> I've reverted this commit for now and everything works just fine, but I
->> was wondering if the problem could be caused by a lack of entropy on
->> these arm64 boxes or something else.
+On Wed, Apr 05, 2023 at 11:29:03AM +0200, Martin Kepplinger wrote:
+> pm_runtime_get_if_in_use() does not only return nonzero values when
+> the device is in use, it can return a negative errno too.
 > 
-> Thanks for the report. To be sure the issue doesn't fall through the
-> cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-> tracking bot:
+> And especially during resuming from system suspend, when runtime pm
+> is not yet up again, this can very well happen. And in such a case
+> the subsequent pm_runtime_put() call would result in a refcount underflow!
+
+I think this issue should have a more generic solution, it's very difficult
+to address this in drivers only with the current APIs.
+
+pm_runtime_get_if_in_use() will also return an error if runtime PM is
+disabled, so this patch will break the driver for that configuration.
+
 > 
-> #regzbot ^introduced e7b813b32a42
-> #regzbot title efi: stuck at boot (efi_call_rts) on arm64
-> #regzbot ignore-activity
+> Fix it by correctly using pm_runtime_get_if_in_use().
+> 
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>  drivers/media/i2c/hi846.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
+> index 5b5ea5425e984..0b0eda2e223cd 100644
+> --- a/drivers/media/i2c/hi846.c
+> +++ b/drivers/media/i2c/hi846.c
+> @@ -1544,7 +1544,7 @@ static int hi846_set_ctrl(struct v4l2_ctrl *ctrl)
+>  					 exposure_max);
+>  	}
+>  
+> -	if (!pm_runtime_get_if_in_use(&client->dev))
+> +	if (pm_runtime_get_if_in_use(&client->dev) <= 0)
+>  		return 0;
+>  
+>  	switch (ctrl->id) {
 
-#regzbot fix: eb684408f3ea4856
-#regzbot ignore-activity
+-- 
+Kind regards,
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
-
-
+Sakari Ailus
