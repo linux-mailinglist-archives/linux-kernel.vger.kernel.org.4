@@ -2,103 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C590B6D7CB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43FA6D7CC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbjDEMeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S237765AbjDEMgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238044AbjDEMeR (ORCPT
+        with ESMTP id S238046AbjDEMgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:34:17 -0400
-Received: from ci74p00im-qukt09082302.me.com (ci74p00im-qukt09082302.me.com [17.57.156.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4E14200
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-        s=1a1hai; t=1680698055;
-        bh=F9sCyrOcH7GGRQDR6k6ODpcaztnsDl3q3KGT+/q2kkg=;
-        h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To;
-        b=NmXz7YV7suT/an18Bm3kXN9qYYtVjz3JC1Pi8c0rRjXIdgsdCD8vRXK/hBea1Z9Lu
-         quEvBE0iU0J7QwF/85KbSweyw1r7Qx/Fuv5ZGD/UPBXkFcoTwgXTaAFXgvU3AbgwWT
-         4rrXV9DwtnE0SYMeftz7cBij6tYLUzfFQmuJo3L8WnFBUdEg2cUESCcpJobOgAXrgB
-         l+99wx4vkv/KGzD0Md7ar0jhyNvmMeMkXw7t/L1m+1fdGYUmrMcDUZ8Q4QVJ8DebbB
-         wv7+thpKKDIfqJPeY/Hz7QrQaWpX6M/549f2GK66uUSQVnetRWhjLQyg6xutArhL6q
-         xsAQInPOLXWUw==
-Received: from localhost (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
-        by ci74p00im-qukt09082302.me.com (Postfix) with ESMTPSA id 54AAE2FC0494;
-        Wed,  5 Apr 2023 12:34:13 +0000 (UTC)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 05 Apr 2023 14:34:11 +0200
-Message-Id: <CROTQHUM88W0.2URPO95U5ZMS5@void.crly.cz>
-Cc:     "Frank Oltmanns" <frank@oltmanns.dev>,
-        "Chen-Yu Tsai" <wens@csie.org>, "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Samuel Holland" <samuel@sholland.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drm/sun4i: uncouple DSI dotclock divider from
- TCON0_DCLK_REG
-From:   "Roman Beranek" <romanberanek@icloud.com>
-To:     "Maxime Ripard" <maxime@cerno.tech>
-X-Mailer: aerc 0.14.0
-References: <20230320161636.24411-1-romanberanek@icloud.com>
- <87wn356ni4.fsf@oltmanns.dev> <20230327202045.ceeqqwjug4ktxtsf@penduick>
- <CRHKFX934UA0.1MCKCD8SJSPIE@iMac.local>
- <20230329195802.veybo3367zifw77n@penduick>
-In-Reply-To: <20230329195802.veybo3367zifw77n@penduick>
-X-Proofpoint-ORIG-GUID: 8ldobzSC-nxTZzHvT0knq1iLnYTlBAI9
-X-Proofpoint-GUID: 8ldobzSC-nxTZzHvT0knq1iLnYTlBAI9
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.62.513.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2021-12-02?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=366 suspectscore=0
- adultscore=0 clxscore=1015 phishscore=0 malwarescore=0 spamscore=0
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2304050113
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 5 Apr 2023 08:36:50 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55C92D44
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:36:47 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5002f12ccfeso43450a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 05:36:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1680698206; x=1683290206;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6iWx9EB6J3L8iIop1bmZ+pNlziIEisMA1uL8RnykGc=;
+        b=Mhpu4CDBYYy7UnbecnwaJGBwUWEJJZkdvrEefXyX2r+r4FENpB1qkR+tX4rIEcLLNc
+         HUVfqZlrktiiC1UivQlXrKHRQSwPD9fmbGSjOmWfxRDbCoEgopYVA0XuQ3TzQrDsGHl8
+         V/sMzxOY9dAQhT6ShYmtLicdzfCt+/18NkPTo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680698206; x=1683290206;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E6iWx9EB6J3L8iIop1bmZ+pNlziIEisMA1uL8RnykGc=;
+        b=jHZyvKwXaWuJ6wu8bRkd3TEPlTbyEyOh1yBJIzSbREgdO1P5G6fELbnnBFYUBGdUbJ
+         Cjwpi54ey6D6G/X9SxAL9v4TM297olblp1eiej0mHKher0EkoLl7VxRd6XHE1C+7o1/u
+         zZt9Doo/HjW4IapeVcmm5ZEhP4A85jdTvU8broMY10kZEHEC/Ngexj/SBhl2xoaupBa8
+         CAvschD5Vt9zCByHEOks1DmD6m83ENTJ1RKH8glgzBvUJculybKe6JVOSinUjT8G8EWn
+         aXEU5RLMA2oLB26ujnIRs2V/6nttViMuBmYzznmV5aSPzSSmvJH3DcL171HY5oZQDt9z
+         hUJQ==
+X-Gm-Message-State: AAQBX9cVdqCF83H2OIImtxfpoTcTTdlLpjoQTFptquFqvIiDVBZIu8pm
+        CcQ5js//umclCSolWH3gT9n/yg==
+X-Google-Smtp-Source: AKy350YIBJGEKIbnfG5Qb41ZqY8oW3SBwxFUxtFvD5haG8Sd7EjZxbYnmEZUvlkuPcFwlyaw2lVQPg==
+X-Received: by 2002:a05:6402:d0e:b0:502:e50:3358 with SMTP id eb14-20020a0564020d0e00b005020e503358mr1779099edb.3.1680698206345;
+        Wed, 05 Apr 2023 05:36:46 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id q16-20020a50aa90000000b004af6c5f1805sm7265301edc.52.2023.04.05.05.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 05:36:45 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 14:36:43 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH RFC 04/18] rust: drm: gem: Add GEM object abstraction
+Message-ID: <ZC1rW+ZktoC9fBaX@phenom.ffwll.local>
+Mail-Followup-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-4-917ff5bc80a8@asahilina.net>
+ <ZC1WwJDr1iqSQnYs@phenom.ffwll.local>
+ <CANiq72=h9qKrpkY2K962__rs-JLsmWxPXocx040ZeDSKGf_Brw@mail.gmail.com>
+ <ZC1aEZpgZLkq8xTv@phenom.ffwll.local>
+ <CANiq72=hoVw566orbDYcJyw2+SFfxpR1rdJVbbR3kkrjJUASww@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72=hoVw566orbDYcJyw2+SFfxpR1rdJVbbR3kkrjJUASww@mail.gmail.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Maxime,
+On Wed, Apr 05, 2023 at 02:32:12PM +0200, Miguel Ojeda wrote:
+> On Wed, Apr 5, 2023 at 1:23 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> >
+> > Ok if this is just interim I think it's fine. Would still be good to have
+> > the MAINTAINERS entry though even just to cover the interim state. Least
+> > because I'm assuming that when things are split up you'd still want to
+> > keep the rust list on cc for the rust parts, even when they move into
+> > subsystems?
+> 
+> Sorry, I missed to reply the second part of your email -- replying here.
+> 
+> Currently, the subsystem's code is under `rust/` (though modules can
+> go already into other folders). One of the reasons was technical
+> simplicity, and a nice side effect is that we could bootstrap things
+> while getting C maintainers involved over time.
+> 
+> To accomplish that, the guidelines for contributing Rust code are that
+> the respective maintainers need to be at least Cc'd, even if the files
+> do not hit the `F:` fields for the time being -- see [1]. But, for us,
+> ideally, the maintainers will take the changes through their tree,
+> instead of going through the Rust one, since that is the end goal.
+> 
+> And, of course, if you already want to have `F:` fields for the Rust
+> code, that is even better! (Whether those should be in the same entry
+> or in a new one, it is up to you, of course, and whether it is a
+> different set of people / level of support / etc.)
+> 
+> Then, when the `kernel` crate split happens, we can move the code
+> directly under whatever folders it should be naturally, when their
+> maintainers are ready. For some subsystems, that may mean they do not
+> need any `F:` fields since they are already covered (e.g. if they did
+> not create a new entry for Rust code only). And for cases like yours,
+> where you already had `F:` fields, it means the move of the files can
+> be done right away as soon as the split happens.
+> 
+> In short, we would definitely welcome if you add `F:` fields already
+> (whether in existing or new entries) -- it would mean you are ahead of
+> the curve! :)
+> 
+> As for the mailing list, yes, for the time being, I ask that all
+> changes to please be sent to the Rust list, so that everybody that
+> wants to follow the Rust progress has everything in a single place, so
+> that we try to remain consistent in the beginning on e.g. coding
+> guidelines, so that Rust reviewers can help spot mistakes, and so on
+> and so forth.
+> 
+> But, as Rust grows in the kernel, as systems become non-experimental,
+> and as maintainers take ownership of the code, that should eventually
+> go away and let things be as usual with C code. Then the Rust
+> subsystem (and its list) will become smaller, and it will be the
+> subsystem (and the discussion place) for anything not covered by other
+> subsystems, such as core Rust abstractions and types, Rust
+> infrastructure and so on.
+> 
+> How does that sound?
 
-On Wed Mar 29, 2023 at 9:58 PM CEST, Maxime Ripard wrote:
-> > In order to preserve semantic correctness however, I propose to preface
-> > the change with a patch that renames sun4i_dotclock and tcon-pixel-cloc=
-k
-> > such that dot/pixel is replaced with d/data. What do you think?
->
-> I don't think it's exposed to the userspace in any way so it makes sense =
-to me
->
+Yeah sounds all great!
 
-Here's a new series that includes those renames:
-<https://lore.kernel.org/all/20230331110245.43527-1-me@crly.cz/>
+I think interim at least a separate rust drm entry
+would be good, to make sure we always cc both rust and dri-devel. Once
+it's too much for you and you generally trust the dri-devel folks to not
+design stupid interfaces, we can then drop that and only ping rust folks
+when needed. I do expect that's some years out though.
+-Daniel
 
-It turns out however that the new dclk rates can't be set exactly as
-requested without touching pll-video0*, tcon0 now therefore gets
-reparented from pll-mipi to pll-video0-2x which, as it further turns
-out, breaks DSI. While simply forbidding the video0-2x mux option seems
-to me as the right way to go because there's not much use for it with
-non-DSI interfaces either besides the opportunity to power pll-mipi
-down, I'd like to run by you first.
+> 
+> [1] https://rust-for-linux.com/contributing#the-rust-subsystem (I may
+> reorganize this to be Rust's `P:` field, by the way)
+> 
+> Cheers,
+> Miguel
 
-Kind regards,
-Roman
-
-* As pll-mipi doesn't have CLK_SET_RATE_PARENT flag set, pll-video0
-  retains its boot-time rate of 294 MHz set by sunxi-dw-hdmi driver
-  in u-boot. Why 294 MHz (as opposed to the default rate of 297 MHz)?
-  The driver actually asks for 297 MHz, clock_set_pll3 rounds it to
-  294 MHz though because it limits itself to 6 MHz steps.
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
