@@ -2,80 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260136D7766
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129D06D7780
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbjDEIzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S237585AbjDEI5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbjDEIzu (ORCPT
+        with ESMTP id S237156AbjDEI5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:55:50 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F52930C1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:55:48 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id j4-20020a6b5504000000b00758646159fbso21831036iob.20
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 01:55:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680684947; x=1683276947;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gW9o6KUk5mM/VZpzbUF/+r0YpaUIjfVWfRZvrqXmET0=;
-        b=YL90hSxXAP1SQPuy8jOM8EFTAUU11IYS1QYWxZqr1bkxO5fM/Hfx6khXXL+gKOZEkk
-         ltwTgYM5w3vmuc5BZHMTGQiRDltWE03Qqbxu16B9oBTOn1Pj+MtvcluzLKTkxzBe+XSc
-         YdLniSLj/xGbuVTz6D77grVlUq0Vb/OfWZ0PSwZgKNJOhHlaB4aCnGbXC2DST1hcfBOr
-         tJx9inkADZr4sCeBiORaIoB8wcWL5zMxyFtkbuRFPThnHJtd+pt6n9x47gFhdNA9vbel
-         XpvNPmDgeNpV7MAkRyTxDL9pUaOuD57b8uQaCKUe0Bd8cxFaai32t0J1wMKQXDWc49xZ
-         PTwQ==
-X-Gm-Message-State: AAQBX9fQfYBH6Z4JIpHY4OZEkwWlvJWVAA4I8JYjrIe+j+7jDuJb2+Rn
-        kbpkVfIhLbqM/tK6Rq/N4ew2QOcWy3jhevacI/vytYdwknEG
-X-Google-Smtp-Source: AKy350atZsR/b5sleI6/xqFnXJtAo9+T2biISUU0v4Uh7Q8dqJLG414PZJ4xP/gkMcG6kCKaWHaCmXz7Hj2Uq6AIUvo2bLyT7LJT
+        Wed, 5 Apr 2023 04:57:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF98EF3;
+        Wed,  5 Apr 2023 01:57:35 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3353P13X020986;
+        Wed, 5 Apr 2023 08:57:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=MR5oeKO6FH6O4seXNc7wjyNJ87NDngE4KlNL7Gp8Gvg=;
+ b=E1UgCKQjSFQ0R8UWQkMPiKmG+YeO3N/s1ZeUR5n859BFWtR/3U2PDe1sfGSOcLboMhMT
+ BhyL77QfxWvOdbbbrDZG817EX79G08jxHnX/ycCNXO+upViMwfhx/pojv7NAHDN6sZfe
+ ACy/tzvOtNPcQ2IKbdx/p05WTKN7zth54xCK0YajvFVyVVoSfKlv50kYFaNEA5WRO4T9
+ OKPulsvIv+F2wELWBs0n/b/QZLpm4lZzmnQTGTbfPXq/e+5fDJ30/8c/HozCHwQKhErV
+ 58zQHuuMtxMxilueaQ3ydX8n+3P1JfITE1uHUOnnyCsPOTlqFWkxAgeIZ4D8IG19ouMB qw== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prmkmthjc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 08:56:59 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3358uwaN003859
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Apr 2023 08:56:58 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 5 Apr 2023 01:56:53 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v6 0/8] Enable IPQ9754 USB
+Date:   Wed, 5 Apr 2023 14:26:35 +0530
+Message-ID: <cover.1680682939.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b21:b0:326:1bf1:234 with SMTP id
- e1-20020a056e020b2100b003261bf10234mr3330838ilu.3.1680684947582; Wed, 05 Apr
- 2023 01:55:47 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 01:55:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000047b8d005f892f5f0@google.com>
-Subject: [syzbot] Monthly overlayfs report
-From:   syzbot <syzbot+listf458cf6e943ee253729f@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, miklos@szeredi.hu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IVWlfoKf75uUo2TlUnEOpW77F3cQ6rIp
+X-Proofpoint-ORIG-GUID: IVWlfoKf75uUo2TlUnEOpW77F3cQ6rIp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-05_04,2023-04-04_05,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 mlxlogscore=528 impostorscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304050080
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello overlayfs maintainers/developers,
+This patch series adds the relevant phy and controller
+configurations for enabling USB on IPQ9754
 
-This is a 30-day syzbot report for the overlayfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/overlayfs
+Depends on:
+https://lore.kernel.org/all/20230217142030.16012-1-quic_devipriy@quicinc.com/
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 11 issues are still open and 17 have been fixed so far.
+[v6]:
+        - Incorporated review comments
+	- Resolve make dtbs_check messages
+	- Fixed pcs_usb offset
+	- Board dts file name changed
 
-Some of the still happening issues:
+[v5]:
+        - Incorporated review comments
+	- 'make dtbs_check' giving the following messages since
+	  ipq9574 doesn't have power domains. Hope this is ok
 
-Crashes Repro Title
-785     Yes   possible deadlock in ovl_maybe_copy_up
-              https://syzkaller.appspot.com/bug?extid=c18f2f6a7b08c51e3025
-442     Yes   possible deadlock in mnt_want_write (2)
-              https://syzkaller.appspot.com/bug?extid=b42fe626038981fb7bfa
-24      Yes   BUG: unable to handle kernel paging request in take_dentry_name_snapshot
-              https://syzkaller.appspot.com/bug?extid=90392eaed540afcc8fc3
-11      Yes   WARNING: locking bug in take_dentry_name_snapshot
-              https://syzkaller.appspot.com/bug?extid=5a195884ee3ad761db4e
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+	- Move qmp phy DT node to newer specification
+
+[v4]:
+        - Incorporated review comments
+	- Address all 'make dtbs_check' errors
+
+[v3]:
+        - Incorporated review comments regarding coding style
+
+[v2]:
+        - Incorporated review comments regarding coding style,
+          maintaining sorted order of entries and unused phy register
+          offsets
+        - Removed NOC clock entries from DT node (will be implemented
+          later with interconnect support)
+        - Fixed 'make dtbs_check' errors/warnings
+
+[v1]:
+        https://lore.kernel.org/linux-arm-msm/5dac3aa4-8dc7-f9eb-5cf3-b361efdc9494@linaro.org/T/
+
+Varadarajan Narayanan (8):
+  dt-bindings: phy: qcom,qusb2: Document IPQ9574 compatible
+  dt-bindings: phy: qcom,qmp-usb: Add IPQ9574 USB3 PHY
+  dt-bindings: usb: dwc3: Add IPQ9574 compatible
+  clk: qcom: gcc-ipq9574: Add USB related clocks
+  phy: qcom-qusb2: add QUSB2 support for IPQ9574
+  phy: qcom: qmp: Update IPQ9574 USB Phy initialization Sequence
+  arm64: dts: qcom: ipq9574: Add USB related nodes
+  arm64: dts: qcom: ipq9574: Enable USB
+
+ .../devicetree/bindings/phy/qcom,qusb2-phy.yaml    |   3 +-
+ .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml        |   2 +-
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |  22 +++-
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts        |  16 +++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 120 +++++++++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                     |  37 +++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c            | 115 ++++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c              |   3 +
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h       |   2 +
+ 9 files changed, 317 insertions(+), 3 deletions(-)
+
+-- 
+2.7.4
+
