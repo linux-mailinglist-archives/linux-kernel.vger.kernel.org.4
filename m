@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BD76D7FCD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3DF6D838E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238360AbjDEOnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
+        id S232099AbjDEQVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238137AbjDEOnB (ORCPT
+        with ESMTP id S231906AbjDEQVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:43:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3E610CE
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:43:00 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pk4L8-0000GF-Oh; Wed, 05 Apr 2023 16:42:22 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pk4L4-0007Dh-7f; Wed, 05 Apr 2023 16:42:18 +0200
-Date:   Wed, 5 Apr 2023 16:42:18 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 00/12] Rework PHY reset handling
-Message-ID: <20230405144218.kl7dqtms4x534jvi@pengutronix.de>
-References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
- <03ed8642-e521-f079-05b8-de9ffa97237a@gmail.com>
+        Wed, 5 Apr 2023 12:21:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B0A7689
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:21:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 172F163F87
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCDBC433EF;
+        Wed,  5 Apr 2023 16:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680711660;
+        bh=GzJotDDyx4YLgFNr3TBry5o3drZWZVKpvv5e3qKlLUQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DSOaLTHWUE4O2oIJGxfOpv2NKBLHCKFSXvv6mQCkqTsX3FMjQgDSazRsx67j1FA6k
+         6iQlM6slmxke4aiKaIHdPDSFYDqq559jMGPHwrw7a0OVco7dv4D7moVwcxTpFRiDl0
+         DLMpCIQUQPV/sD6QmYE7DOwWWIW9cDecpS0E606XkLdSfcrmJ8yb4KgI7QQbJllxu0
+         JBWz2RVtA1AKHtUe0AdggOim/K4/e+VikwPbI2gFsZXhGm9SlJVWuZGidmhScvMWS5
+         DH6Hoc80zXsaW5cHiqkmKWfxiM1qS+fHUJvMezK3TlBRrEEhU+xFmI8u3nLGLsQBqP
+         HK/pIreXffQtQ==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: fix to tag FIEMAP_EXTENT_DELALLOC in fiemap() for delay allocated extent
+Date:   Wed,  5 Apr 2023 22:43:59 +0800
+Message-Id: <20230405144359.930253-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03ed8642-e521-f079-05b8-de9ffa97237a@gmail.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+xfstest generic/614 fails to run due below reason:
 
-On 23-04-05, Florian Fainelli wrote:
-> Hi Marco,
-> 
-> On 4/5/2023 2:26 AM, Marco Felsch wrote:
-> > The current phy reset handling is broken in a way that it needs
-> > pre-running firmware to setup the phy initially. Since the very first
-> > step is to readout the PHYID1/2 registers before doing anything else.
-> > 
-> > The whole dection logic will fall apart if the pre-running firmware
-> > don't setup the phy accordingly or the kernel boot resets GPIOs states
-> > or disables clocks. In such cases the PHYID1/2 read access will fail and
-> > so the whole detection will fail.
-> 
-> PHY reset is a bit too broad and should need some clarifications between:
-> 
-> - external reset to the PHY whereby a hardware pin on the PHY IC may be used
-> 
-> - internal reset to the PHY whereby we call into the PHY driver soft_reset
-> function to have the PHY software reset itself
-> 
-> You are changing the way the former happens, not the latter, at least not
-> changing the latter intentionally if at all.
+generic/614 1s ... [not run] test requires delayed allocation buffered writes
 
-Yes.
+The root cause is f2fs tags wrong fiemap flag for delay allocated
+extent.
 
-> This is important because your cover letter will be in the merge commit in
-> the networking tree.
+Quoted from fiemap.h:
+FIEMAP_EXTENT_UNKNOWN		0x00000002 /* Data location unknown. */
+FIEMAP_EXTENT_DELALLOC		0x00000004 /* Location still pending.
+						    * Sets EXTENT_UNKNOWN. */
+FIEMAP_EXTENT_UNWRITTEN		0x00000800 /* Space allocated, but
+						    * no data (i.e. zero). */
 
-Ah okay, I didn't know that. I will adapt the cover letter accordingly.
+FIEMAP_EXTENT_UNWRITTEN means block address is preallocated, but w/o
+been written any data, which status f2fs is not supported now, for all
+NEW_ADDR block addresses, it means delay allocated blocks, so let's
+tag FIEMAP_EXTENT_DELALLOC instead.
 
-> Will do a more thorough review on a patch by patch basis. Thanks.
+Testcase:
+xfs_io -f -c 'pwrite 0 64k' /mnt/f2fs/file;
+filefrag -v /mnt/f2fs/file
 
-Thanks a lot, looking forward to it.
+Output:
+- Before
+Filesystem type is: f2f52010
+Fize of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..      15:          0..        15:     16:             last,unwritten,merged,eof
+/mnt/f2fs/file: 1 extent found
 
-Regards,
-  Marco
+After:
+Filesystem type is: f2f52010
+File size of /mnt/f2fs/file is 65536 (16 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..      15:          0..         0:      0:             last,unknown_loc,delalloc,eof
+/mnt/f2fs/file: 1 extent found
+
+Fixes: 7f63eb77af7b ("f2fs: report unwritten area in f2fs_fiemap")
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/data.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 359de650772e..3afc9764743e 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -1995,7 +1995,10 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+ 	}
+ 
+ 	if (size) {
+-		flags |= FIEMAP_EXTENT_MERGED;
++		if (flags & FIEMAP_EXTENT_DELALLOC)
++			phys = 0;
++		else
++			flags |= FIEMAP_EXTENT_MERGED;
+ 		if (IS_ENCRYPTED(inode))
+ 			flags |= FIEMAP_EXTENT_DATA_ENCRYPTED;
+ 
+@@ -2035,7 +2038,7 @@ int f2fs_fiemap(struct inode *inode, struct fiemap_extent_info *fieinfo,
+ 				size += blks_to_bytes(inode, 1);
+ 			}
+ 		} else if (map.m_flags & F2FS_MAP_DELALLOC) {
+-			flags = FIEMAP_EXTENT_UNWRITTEN;
++			flags = FIEMAP_EXTENT_DELALLOC;
+ 		}
+ 
+ 		start_blk += bytes_to_blks(inode, size);
+-- 
+2.36.1
+
