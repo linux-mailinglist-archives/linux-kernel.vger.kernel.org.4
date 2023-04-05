@@ -2,136 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0216D722A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 03:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC40B6D723E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 04:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236706AbjDEBsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 21:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S236711AbjDECBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 22:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjDEBsN (ORCPT
+        with ESMTP id S232695AbjDECB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 21:48:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E953AA4;
-        Tue,  4 Apr 2023 18:48:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PrnZx1DHzz4xD8;
-        Wed,  5 Apr 2023 11:48:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680659289;
-        bh=HtCJVZlsRz3boECnbqp+FJ8f4M1pyjbQcdvtBiFysuc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y5+ja68+vhf8a13nthJFwDS7MCBhAXRQeiUyqii3nUG7mKAdX5L/HpdWv+nifArQO
-         9aP6Saf7f+3Kmz082U6AU/G7K7GF33d+lfM+Xq12i0Vbm/lP8lvuBO5edY97dnuvC2
-         v+UEYmc3WyiffPqfZ5I+C+GpXywQ+uH7Te+yJpmVizjc1VdoEqnCftzCcDkVmQuiWZ
-         uT3Z6Ty0oyTZxLyHPI0VxVEd3BdZdMeca+gDWSlaJY1pqHxI5+nGdeTDKPCAUqLqIL
-         uF/DO7BNRAlCwTYtxwLtlCkVrSIJM2DYqZow5jDu/jeQJ+B6EKPoGiGZuVTnXkMseF
-         wzdUHpfTxBXWg==
-Date:   Wed, 5 Apr 2023 11:48:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the hid tree
-Message-ID: <20230405114807.5a57bf46@canb.auug.org.au>
-In-Reply-To: <366ab6c4d488645aee5cbf49fb2e9b39d9bb1e22.camel@hadess.net>
-References: <20230404154005.449800c3@canb.auug.org.au>
-        <20230404154254.6c3be26b@canb.auug.org.au>
-        <e1eb90db85ed7adad08bb99054f5cda3cb626794.camel@hadess.net>
-        <20230404185500.7953d9d2@canb.auug.org.au>
-        <366ab6c4d488645aee5cbf49fb2e9b39d9bb1e22.camel@hadess.net>
+        Tue, 4 Apr 2023 22:01:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DE33ABC;
+        Tue,  4 Apr 2023 19:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=bnij7B0KBrBY34+9pqfeC1+5qwU+6Gl1IMo8qKh3a0w=; b=sLskrmc3H71rRgY//Xwu9rGo7X
+        aP4mZe/iMJJUITsQCbgmmLjhL0J5B6WIAdIFTVxffAeFdNIiHKUHzc35OnXRMQJGMs/HbiIkmbQbA
+        Oi/LUv26ON/XEbYsGEbrNZJ7Tk+ohjnsLW32+jHrRkkB3aTjqwoz/ub8m7KmvZHXNeloOE7Fr0mzh
+        vijvMUpKsKJGjjgL+yiEAjlaI5bX0lqfmbMRVkYfJXpnZzptixH4lBIRWIAKWimLFodTQFXGseosL
+        7djeMmKOIhVXuLOaejB3zI9u3BAdUbcDP64LJ5cQ6lX6DT1H/iLMrqbjtQ5Ts9n9h1sUg9B4LP2s2
+        ZZl4whzA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjsSi-0038fI-1W;
+        Wed, 05 Apr 2023 02:01:24 +0000
+Date:   Tue, 4 Apr 2023 19:01:24 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     jim.cromie@gmail.com
+Cc:     Song Liu <song@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
+ module_memory")
+Message-ID: <ZCzWdLOg1i2p1Q67@bombadil.infradead.org>
+References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
+ <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
+ <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
+ <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
+ <CAJfuBxzGJvrJo9nTXxZ3xZ7QmdSb6YxBw-bojZjQTpACBeK_sQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NTmVx3rhRGf2PCqGL/9kBmg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJfuBxzGJvrJo9nTXxZ3xZ7QmdSb6YxBw-bojZjQTpACBeK_sQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NTmVx3rhRGf2PCqGL/9kBmg
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 04, 2023 at 07:38:41PM -0600, jim.cromie@gmail.com wrote:
+> On Mon, Apr 3, 2023 at 2:44 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Fri, Mar 31, 2023 at 05:27:04PM -0700, Song Liu wrote:
+> > > On Fri, Mar 31, 2023 at 12:00 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > >
+> > > > On Thu, Mar 30, 2023 at 04:45:43PM -0600, jim.cromie@gmail.com wrote:
+> > > > > hi Luis, etal
+> > > > >
+> > > > > kmemleak is reporting 19 leaks during boot
+> > > > >
+> > > > > because the hexdumps appeared to have module-names,
+> > > > > and Ive been hacking nearby, and see the same names
+> > > > > every time I boot my test-vm, I needed a clearer picture
+> > > > > Jason corroborated and bisected.
+> > > > >
+> > > > > the 19 leaks split into 2 groups,
+> > > > > 9 with names of builtin modules in the hexdump,
+> > > > > all with the same backtrace
+> > > > > 9 without module-names (with a shared backtrace)
+> > > > > +1 wo name-ish and a separate backtrace
+> > > >
+> > > > Song, please take a look.
+> > >
+> > > I will look into this next week.
+> >
+> > I'm thinking this may be it, at least this gets us to what we used to do
+> > as per original Catalinas' 4f2294b6dc88d ("kmemleak: Add modules
+> > support") and right before Song's patch.
+> >
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 6b6da80f363f..3b9c71fa6096 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -2240,7 +2240,10 @@ static int move_module(struct module *mod, struct load_info *info)
+> >                  * which is inside the block. Just mark it as not being a
+> >                  * leak.
+> >                  */
+> > -               kmemleak_ignore(ptr);
+> > +               if (type == MOD_INIT_TEXT)
+> > +                       kmemleak_ignore(ptr);
+> > +               else
+> > +                       kmemleak_not_leak(ptr);
+> >                 if (!ptr) {
+> >                         t = type;
+> >                         goto out_enomem;
+> >
+> > We used to use the grey area for the TEXT but the original commit
+> > doesn't explain too well why we grey out init but not the others. Ie
+> > why kmemleak_ignore() on init and kmemleak_not_leak() on the others.
+> >
+> > Catalinas, any thoughts / suggestions? Should we just stick to
+> > kmemleak_not_leak() for both now?
+> >
+> >   Luis
+> 
+> So I have mixed results.
+> 
+> your patch fixed the 19 leaks on my worktree / branch where I found them.
+> 
+> on top of
+> ac3b43283923 module: replace module_layout with module_memory
+> 
+> it fixed the (same) 19, but gets a few new ones.
+> whats weird is that once they report, they disappear from
+> /sys/kernel/debug/kmemleak
 
-Hi Bastien,
+I think I missed the MOD_INIT_DATA and MOD_INIT_RODATA. Can you try the
+patch below instead:
 
-On Tue, 04 Apr 2023 11:18:35 +0200 Bastien Nocera <hadess@hadess.net> wrote:
->
-> Before I send patches, does this look correct to you?
->=20
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 7930dca84616..7c7f88ca4f62 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -1926,7 +1926,7 @@ static void __usb_wireless_status_intf(struct work_=
-struct *ws)
-> 1926=E2=8B=AE1926=E2=94=82=20
-> 1927=E2=8B=AE1927=E2=94=82 /**
-> 1928=E2=8B=AE1928=E2=94=82  * usb_set_wireless_status - sets the wireless=
-_status struct member
-> 1929=E2=8B=AE    =E2=94=82- * @dev: the device to modify
->     =E2=8B=AE1929=E2=94=82+ * @iface: the interface to modify
-> 1930=E2=8B=AE1930=E2=94=82  * @status: the new wireless status
-> 1931=E2=8B=AE1931=E2=94=82  *
-> 1932=E2=8B=AE1932=E2=94=82  * Set the wireless_status struct member to th=
-e new value, and emit
+From 6890bd43866c40e1b58a832361812cdc5d965e4c Mon Sep 17 00:00:00 2001
+From: Luis Chamberlain <mcgrof@kernel.org>
+Date: Tue, 4 Apr 2023 18:52:47 -0700
+Subject: [PATCH] module: fix kmemleak annotations for non init ELF sections
 
-That looks good.
+Commit ac3b43283923 ("module: replace module_layout with module_memory")
+reworked the way to handle memory allocations to make it clearer. But it
+lost in translation how we handle kmemleak_ignore() or kmemleak_not_leak()
+for these sections.
 
-> diff --git a/include/linux/usb.h b/include/linux/usb.h
-> index a48eeec62a66..3d523ebf0c09 100644
-> --- a/include/linux/usb.h
-> +++ b/include/linux/usb.h
-> @@ -261,7 +261,8 @@ struct usb_interface {
->  261=E2=8B=AE 261=E2=94=82      unsigned needs_binding:1;       /* needs =
-delayed unbind/rebind */
->  262=E2=8B=AE 262=E2=94=82      unsigned resetting_device:1;    /* true: =
-bandwidth alloc after reset */
->  263=E2=8B=AE 263=E2=94=82      unsigned authorized:1;          /* used f=
-or interface authorization */
->  264=E2=8B=AE    =E2=94=82-     enum usb_wireless_status wireless_status;
->     =E2=8B=AE 264=E2=94=82+     enum usb_wireless_status wireless_status;=
- /* whether the emitter is
->     =E2=8B=AE 265=E2=94=82+                                              =
-  * connected to this receiver */
->  265=E2=8B=AE 266=E2=94=82      struct work_struct wireless_status_work;
->  266=E2=8B=AE 267=E2=94=82=20
->  267=E2=8B=AE 268=E2=94=82      struct device dev;              /* interf=
-ace specific device info */
->=20
+Fix this and clarify the comments a bit more.
 
-This is not right, though.  The warning was about
-"wireless_status_work" not "wireless_status", so I think you need a
-description of wireless_status_work in the block comment above the
-struct definition.
+Fixes: ac3b43283923 ("module: replace module_layout with module_memory")
+Reported-by: Jim Cromie <jim.cromie@gmail.com>
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module/main.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 5cc21083af04..fe0f3b8fd3a8 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2233,11 +2233,23 @@ static int move_module(struct module *mod, struct load_info *info)
+ 		ptr = module_memory_alloc(mod->mem[type].size, type);
+ 
+ 		/*
+-		 * The pointer to this block is stored in the module structure
+-		 * which is inside the block. Just mark it as not being a
+-		 * leak.
++		 * The pointer to these blocks of memory are stored on the module
++		 * structure and we keep that around so long as the module is
++		 * around. We only free that memory when we unload the module.
++		 * Just mark them as not being a leak then. The .init* ELF
++		 * sections *do* get freed after boot so we treat them slightly
++		 * differently and only grey them out as they work as typical
++		 * memory allocations which *do* get eventually get freed.
+ 		 */
+-		kmemleak_ignore(ptr);
++		switch (type) {
++		case MOD_INIT_TEXT: /* fallthrough */
++		case MOD_INIT_DATA: /* fallthrough */
++		case MOD_INIT_RODATA: /* fallthrough */
++			kmemleak_ignore(ptr);
++			break;
++		default:
++			kmemleak_not_leak(ptr);
++		}
+ 		if (!ptr) {
+ 			t = type;
+ 			goto out_enomem;
+-- 
+2.39.2
 
---Sig_/NTmVx3rhRGf2PCqGL/9kBmg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQs01cACgkQAVBC80lX
-0Gy4gAgAm8jakAMnjG8YvTuuQ5jMmRVMy29Vlqg5yNQK4+OAFV6NXaNuPb2pdKK9
-7a04gaR/prutPTyjjZVvn57dLDEYrN1bk4e0dkZorUkQwb6dM6BtqSStsudRBndk
-/ZfuGXxEG6N3k+8NKH8mvsN2+7JoLYSyHB3kADOgr6XwslGbhW7B1vZ7u1Fj1Wr8
-An6ExY31g4lwdv8PzuWyUpu8nqD7eBQuNFIwHkCgFiFt5n9JoO70oFbNkn3cyipI
-3zuHvaHQ9F+pZUCbqIKV5/aWIBJmbvKR/4dBokNEuTu/W/Z6uR+S7rOsb7infiuI
-oPXy/vQyrmEcu788yNVrvLiadHg17g==
-=TfKY
------END PGP SIGNATURE-----
-
---Sig_/NTmVx3rhRGf2PCqGL/9kBmg--
