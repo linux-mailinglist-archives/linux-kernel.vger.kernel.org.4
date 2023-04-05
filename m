@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25056D86AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FCC6D86BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjDETSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S234580AbjDETTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjDETSx (ORCPT
+        with ESMTP id S234557AbjDETTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:18:53 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950675FFA;
-        Wed,  5 Apr 2023 12:18:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1WceT7uarOJB+m/Xc4WcMgeqPVhWuV2FTYN+2lJ1++8=; b=mTRWrUvj7ivETCwmvKVYiaSAwY
-        Ion/otxLpsUjZO6LrIHJuQE53DfVPQuNWFv1cA3+vJVhnlr50x8LkwEWiO2An8+Y+aYMQOthXTnwT
-        O5DcxXkDWrqIyAy36FBrI7HhfDmWwusmAmvRS6GAG+roVh9GvwHOL2TQTbn8otzalGvjxRdaitmJy
-        4bhJ4wcS1l8U8TahZk7G3Y8+egm3pTOTAO34D50KkG/OvCbtibe32yX333UOP3x7I0s8uhFQdroD6
-        VnsnEOEK3PbyY2eYQ7pduJYts9uyOJOtjmlMAoeRz13l6RbFsg6SOzoIWf4mKTplFG22Z/73olKys
-        lW7pZDEA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pk8eK-00A3g3-0u;
-        Wed, 05 Apr 2023 19:18:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFAB7300202;
-        Wed,  5 Apr 2023 21:18:26 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ACA8E200D7A67; Wed,  5 Apr 2023 21:18:26 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 21:18:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v2 03/13] rust: lock: introduce `Mutex`
-Message-ID: <20230405191826.GA365912@hirez.programming.kicks-ass.net>
-References: <20230405175111.5974-1-wedsonaf@gmail.com>
- <20230405175111.5974-3-wedsonaf@gmail.com>
- <2023040554-promoter-chevron-10b2@gregkh>
- <2023040509-tamer-clinic-c14c@gregkh>
+        Wed, 5 Apr 2023 15:19:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B5F76A5;
+        Wed,  5 Apr 2023 12:19:28 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335JCoZr029433;
+        Wed, 5 Apr 2023 19:19:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=GwOm8iSIThbL0FbKFm8PRDGRSzotLgTDRpmZYgTp4SM=;
+ b=jPpYFcENpmjXkpb0YANEYZkz+q2pfKv03r8t/HKVMPycyhBzF6FVmmUQU9EzL91WBIDJ
+ Ij+ikplWUBtS5zNizBX3J4ua8Cr01Ypxx5MrpdmgrfHdYh5EiyFdLxp2/OTJWDhlJoOP
+ cg037EqsNHCDU/p2NbRmtJW3vn5Dy+lQ1uBAwTelY951LKK2PS+hLz1zEGiuvAfJRggC
+ G1aVjok18+MMx+Xhr85BALh308MK1fw4OMFljNcWmLeTlBxkyVa5sAYZ076CJ70B2RQC
+ vzlBkkTH8VXZlFwfzBNXPA7tdgjNt9gvPhNEI5iSb4Mj7ymJsUGXJbk/P/L6fqEow8Tx 8A== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ps9umrfqj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 19:19:19 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3352CteD023017;
+        Wed, 5 Apr 2023 19:19:17 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3ppc873jrs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 19:19:17 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 335JJFt612452472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Apr 2023 19:19:15 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E09E20040;
+        Wed,  5 Apr 2023 19:19:15 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6517D20049;
+        Wed,  5 Apr 2023 19:19:13 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.12.224])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed,  5 Apr 2023 19:19:13 +0000 (GMT)
+Date:   Thu, 6 Apr 2023 00:49:10 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/8] Some fixes and cleanup to mballoc
+Message-ID: <ZC3Jm7lpXirelmI/@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230321161220.418652-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023040509-tamer-clinic-c14c@gregkh>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20230321161220.418652-1-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: b0BMsYnMySU3NDe_AmYHgaOtXIqMNsuM
+X-Proofpoint-GUID: b0BMsYnMySU3NDe_AmYHgaOtXIqMNsuM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-05_13,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ spamscore=0 bulkscore=0 mlxlogscore=896 mlxscore=0 adultscore=0
+ priorityscore=1501 phishscore=0 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304050170
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,22 +82,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:04:22PM +0200, Greg KH wrote:
-> On Wed, Apr 05, 2023 at 08:03:11PM +0200, Greg KH wrote:
-> > On Wed, Apr 05, 2023 at 02:51:01PM -0300, Wedson Almeida Filho wrote:
-> > > +void rust_helper_mutex_lock(struct mutex *lock)
-> > > +{
-> > > +	mutex_lock(lock);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(rust_helper_mutex_lock);
-> > > +
-> > 
-> > No need to ever unlock a mutex?
+On Wed, Mar 22, 2023 at 12:12:12AM +0800, Kemeng Shi wrote:
+> We use cluster unit and block unit for different structure members. For
+> example, in struct ext4_prealloc_space, pa_lstart and pa_pstart are in
+> block unit while pa_len and pa_free are in cluster unit; in struct
+> ext4_free_extent, fe_logical is in block unit while fe_start and fe_len
+> are in cluster unit. The first five patches fix wrong unit use in
+> mballoc.
+> The rest is random bugfix and cleanup to mballoc, More details can be
+> found in respective patches.
+> Besides, "kvm-xfstest smoke" passes all test.
+> Thanks!
 > 
-> Oh nevermind, mutex_lock() is a macro, mutex_unlock() is not...
+> Kemeng Shi (8):
+>   ext4: fix wrong unit use in ext4_mb_normalize_request
+>   ext4: fix unit mismatch in ext4_mb_new_blocks_simple
+>   ext4: fix wrong unit use in ext4_mb_new_inode_pa
+>   ext4: fix wrong unit use in ext4_mb_find_by_goal
+>   ext4: treat stripe in block unit
+>   ext4: add EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated
+>   ext4: remove ext4_block_group and ext4_block_group_offset declaration
+>   ext4: try all groups in ext4_mb_new_blocks_simple
+> 
+>  fs/ext4/ext4.h    |  4 ---
+>  fs/ext4/mballoc.c | 75 +++++++++++++++++++++++++++++++++++------------
+>  fs/ext4/super.c   | 13 ++++++++
+>  3 files changed, 70 insertions(+), 22 deletions(-)
+Hi Kemeng,
 
-Yeah, so I despise all these stupid helpers... but I suppose it's the
-best they could come up with to interface the languages :/
+Thanks for the patches, they mostly look good to me. I'm running some
+tests at my end as well and would provide my RVBs after that. Just
+adding a few comments to some of the patches in the meantime.
 
-The only hope is that the thing can do cross-language LTO or something
-to re-inline stuff.
+Regards,
+Ojaswin
+> 
+> -- 
+> 2.30.0
+> 
