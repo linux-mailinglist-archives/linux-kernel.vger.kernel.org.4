@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514686D8B16
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F0C6D5911
+	for <lists+linux-kernel@lfdr.de>; Tue,  4 Apr 2023 09:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbjDEXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S230004AbjDDHA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 03:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbjDEXZR (ORCPT
+        with ESMTP id S233735AbjDDHAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:25:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7D859CD;
-        Wed,  5 Apr 2023 16:25:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29BBF6418C;
-        Wed,  5 Apr 2023 23:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05104C433D2;
-        Wed,  5 Apr 2023 23:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680737115;
-        bh=0iZdW6mWX4hwDGKgVhQgPbiMcrKMWX7sqyjps7Gj0Cw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YoB0Sj7jPXfsgzdEIK/25IWwhAJni+fewvcgAfeW842j0ajGqiHZb+TbxdmKExVCw
-         b6tXg+f3Dffmeeys7uR415qgza+aksTOtGHyxlYU2Um5REVJ/J7NpA24JuAGd1VIcv
-         90l5hsw0QLZuUyNVHQs6j4yEW44caSIMrU0p/vXjNbwB+8iqQo+dH1TvxdhWYXXkNp
-         4ucLXPOFxWC7o1o3GuKhC/Uv6mdKexeqLVkF05d/Fk+YSNMJaYWiM4N+FHsdmlLGfm
-         sGLf/JatPWIZp3yngZ9qXPdagdSBqQeW2ypD8rXJssSwYioainXBMRlkw6E9ixJuDU
-         7XZJF9b/xH2vw==
-Date:   Wed, 5 Apr 2023 16:25:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Simon Horman <horms@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH net-next] net: sunhme: move asm includes to below linux
- includes
-Message-ID: <20230405162514.3af0776f@kernel.org>
-In-Reply-To: <ZC2/Pi+M4rWw89x2@casper.infradead.org>
-References: <20230405-sunhme-includes-fix-v1-1-bf17cc5de20d@kernel.org>
-        <082e6ff7-6799-fa80-81e2-6f8092f8bb51@gmail.com>
-        <ZC23vf6tNKU1FgRP@kernel.org>
-        <ZC240XCeYCaSCu0X@casper.infradead.org>
-        <dee4b415-0696-90f3-0e2f-2230ff941e1b@gmail.com>
-        <ZC2/Pi+M4rWw89x2@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 4 Apr 2023 03:00:23 -0400
+X-Greylist: delayed 123 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 00:00:21 PDT
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 06FC210CF
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 00:00:20 -0700 (PDT)
+Received: from localhost.localdomain (unknown [40.50.201.1])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 3602D18008E786;
+        Tue,  4 Apr 2023 14:57:42 +0800 (CST)
+X-MD-Sfrom: zeming@nfschina.com
+X-MD-SrcIP: 40.50.201.1
+From:   Li zeming <zeming@nfschina.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: [PATCH] sched: rt: Optimization function 'pick_next_rt_entity'
+Date:   Thu,  6 Apr 2023 07:29:00 +0800
+Message-Id: <20230405232900.4019-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=2.5 required=5.0 tests=DATE_IN_FUTURE_24_48,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Apr 2023 19:34:38 +0100 Matthew Wilcox wrote:
-> On Wed, Apr 05, 2023 at 02:09:55PM -0400, Sean Anderson wrote:
-> > On 4/5/23 14:07, Matthew Wilcox wrote:  
-> > > We always include linux/* headers before asm/*.  The "sorting" of
-> > > headers in this way was inappropriate.  
-> > 
-> > Is this written down anywhere? I couldn't find it in Documentation/process...  
-> 
-> Feel free to send a patch.
+The moral of this function is to obtain the next RT scheduling entity
+object,while 'list_entry' Implementation function of  'container_of'
+returns the next RT scheduling entity object (no new code should be
+added afterwards), directly returning 'list_entry' The execution result
+is sufficient.
 
-Patch to documentation, checkpatch or both :)
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ kernel/sched/rt.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 0a11f44adee5..e9b1c08c20a7 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1769,7 +1769,6 @@ static inline void set_next_task_rt(struct rq *rq, struct task_struct *p, bool f
+ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+ {
+ 	struct rt_prio_array *array = &rt_rq->active;
+-	struct sched_rt_entity *next = NULL;
+ 	struct list_head *queue;
+ 	int idx;
+ 
+@@ -1779,9 +1778,8 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+ 	queue = array->queue + idx;
+ 	if (SCHED_WARN_ON(list_empty(queue)))
+ 		return NULL;
+-	next = list_entry(queue->next, struct sched_rt_entity, run_list);
+ 
+-	return next;
++	return list_entry(queue->next, struct sched_rt_entity, run_list);
+ }
+ 
+ static struct task_struct *_pick_next_task_rt(struct rq *rq)
+-- 
+2.18.2
+
