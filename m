@@ -2,107 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209066D8142
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0F66D8146
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238632AbjDEPND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
+        id S238847AbjDEPNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238551AbjDEPMl (ORCPT
+        with ESMTP id S238815AbjDEPMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:12:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8263D7ECB;
-        Wed,  5 Apr 2023 08:10:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Apr 2023 11:12:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FE0CA;
+        Wed,  5 Apr 2023 08:10:53 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-212-122.ewe-ip-backbone.de [91.248.212.122])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9462625CA;
-        Wed,  5 Apr 2023 15:10:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A41DAC433D2;
-        Wed,  5 Apr 2023 15:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680707447;
-        bh=D4YX5DK0pun7qG4OSMVc8e9vaDN+H7CmPuWpZRhiBTU=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 77EFE6603193;
+        Wed,  5 Apr 2023 16:10:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680707451;
+        bh=jRgDSO3v+VKl5PXcXNslYAslMAv3VPkQGjzS7XPnMAc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H++unxUb7nt0bWB0cZRIpirjyl6fMUIanjR0IybKKbOFCDZQ7fl3nGRfgXxHBmOTc
-         aLr8pCNoVrScF3nXsYVeVlit6tFVqt3RTHudqPjdJeU4XNb3Fm+L6FyB4ZGRpA8mku
-         uHDprHNH/IIWooGinODcsKEp00ZKOvzTS5e+wLSdqGlH/MPkZGOJVa2hJjKHooD4a0
-         m1oiZgR8OnAyymsDZMT9AjB6JLhQsxqkpcXhI/shb8qZ4C8ggWEHL6au6GNGlms1bf
-         2LcKx7iD5BDrkm8i9BaGwlDiJoOZSwNIUEO5nDNUcLF6Xb9gQmEcDK0dMfWFuHYUX9
-         29DfTcAe3KLQg==
-Date:   Wed, 5 Apr 2023 16:10:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 64/65] ASoC: tlv320aic32x4: div: Switch to
- determine_rate
-Message-ID: <692983f2-4aef-4ab9-9777-43f46b9cb4ba@sirena.org.uk>
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-64-9a1358472d52@cerno.tech>
+        b=osaLU4v0nFMMIg4IDSyBdT3qBWT4X2O8k3ZrjGFMI34Qldf+cjvbHjMxFoTgz7Bvk
+         w97swc1hCobTNouVTULuzJzMgyztKpUTHLucjF3uiHjTaf5KoEZjeiX0LQT9FZB49R
+         OyB0xMBsbOxjKCqG6Pi11HTbRtuyCkZXbXT7mv7CeKgZ7tQ/hT4DGy1i8GeKbB5HEG
+         v8rZxZVwV06Tb9DTN7CXXJUIx5Yxw3NKo1YsIyHILsO754gI91j1Q8e2ckF7XNzUki
+         iILfoWhnlG04i2rRfuAPTXxlwdCtsK2URf+5j34B88VED3fByRqlgvFUnNh3WQ2oIf
+         jHbnHWu6mceKw==
+Received: by mercury (Postfix, from userid 1000)
+        id 203631065C70; Wed,  5 Apr 2023 17:10:49 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 17:10:49 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv1 0/3] generic-ohci/ehci: add RK3588 support
+Message-ID: <20230405151049.qksjk6e3za7fwuz6@mercury.elektranox.org>
+References: <20230404145350.45388-1-sebastian.reichel@collabora.com>
+ <2023040524-hazelnut-landfall-7d26@gregkh>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3Lzv7qB7yUCBJADV"
+        protocol="application/pgp-signature"; boundary="rspdxdya3ht4irto"
 Content-Disposition: inline
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-64-9a1358472d52@cerno.tech>
-X-Cookie: 1 bulls, 3 cows.
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <2023040524-hazelnut-landfall-7d26@gregkh>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -110,40 +61,62 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---3Lzv7qB7yUCBJADV
+--rspdxdya3ht4irto
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 04, 2023 at 12:11:54PM +0200, Maxime Ripard wrote:
+Hi Greg,
 
-> The driver does implement round_rate() though, which means that we can
-> change the rate of the clock, but we will never get to change the
-> parent.
+On Wed, Apr 05, 2023 at 04:49:37PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Apr 04, 2023 at 04:53:47PM +0200, Sebastian Reichel wrote:
+> > Hi,
+> >=20
+> > This increases the max. allowed clocks for generic-ohci from 3 to 4.
+> > On RK3588 a total of 4 clocks is required to access the OHCI registers.
+> > EHCI already supports 4 clocks.
+> >=20
+> > Changes since PATCHv1:
+> >  * https://lore.kernel.org/all/20230331163148.5863-1-sebastian.reichel@=
+collabora.com/
+> >  * Add Alan's Acked-by to the driver patch increasing the clock count
+> >  * Update bindings, adding rockchip,rk3588-ohci and rockchip,rk3588-ehc=
+i compatibles
+>=20
+> This is "v1" according to the subject line, right?
 
-> However, It's hard to tell whether it's been done on purpose or not.
+Well the previous version was also about adding RK3588 support.
+I did not see anything RK3588 specific and thus used "increase
+allowed clocks" as subject for the cover letter. Rob's review
+effectively asked for RK3588 specific compatibles to be added,
+so this is a v2 of the series with that change included.
 
-> Since we'll start mandating a determine_rate() implementation, let's
-> convert the round_rate() implementation to a determine_rate(), which
-> will also make the current behavior explicit. And if it was an
-> oversight, the clock behaviour can be adjusted later on.
+Since increasing the maximum number of clocks is no longer the
+dominant content of the series I changed the cover letter's
+subject. Sorry that this confused you.
 
-Similar comments to the other patch, I'm pretty sure this is just
-surprising design on the part of the clock API and we should just allow
-reparenting.
+Greetings,
 
---3Lzv7qB7yUCBJADV
+-- Sebastian
+
+--rspdxdya3ht4irto
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtj2AACgkQJNaLcl1U
-h9C6nwf/eAXWoy2nqSW5TGkiJhKHJv8x94Toi8TRODFF+R/hoCeBiwbDpLoGU2W+
-XtYiCa4AsVVTQShMscEuygSt4HqR2Hm7gaw+SoRwfdX/dEpqMCCF1Uzc9IAgRRv/
-3aWJLZtx/5Mpyu3eaA6b7ul2tFP8PDE90ePyk1zHCZGUE189FK95s3Xc6zmVnuy2
-Es8Td9JeVAZhnxCyLYGLVjoUw8/LsBEXAQWpSr/ayacNPTQa9PlPM3k/HCggwR7g
-3NRnovXN1XYJ2pkkaN9RB9yifiB9Doz8KnLhSJVYG2lIaFMyYDSuYFu2zEIa8M/y
-YabesVhSGONiNYKoP8QmdjTZqKi2nw==
-=i5C8
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQtj3UACgkQ2O7X88g7
++pqcFA//anAG2suOvroCaC8qsNmoHOqpuRSWuMaS+dC1mr39LGBBpnUMqUl0Kx4T
+UvthCvr6jtqBwAuianN+qU0rMTbGdCTvYgmVWXDyO8BkxmI8S3VxmhWbYEuJ3KCF
+BxIaeUde9b08ED00pibR1VeAGqvCoSJZIL7OBfX6ZeRT75P5P+PdWn4hGi622MGX
+zh/Wa3ukrzktinNn8TfjabKqDDrDxwvaKL8eMgLsZ2BqBsEnBc7Y8hN2Wp5JBOTL
+w4ySz+Co/oUSZJurNfflVFZxdw/EPTC8mHKph4ilr6VgyLJEpv/9aqqegIqtUWet
+Y+xZSHaxhBG21VECJ+HcEXCu0sWDNQ3lGdiYR3UCXck3tw8gg5Ego9YerFddHlt+
+TuvA28IsfIIMCE9SHyeRZr6upIyI+pMUYCjkvrB+n0GnMYylL44myeOz5lhqSRDc
+1IBU3aC6W6ukZra8MgO0lqeqU1CUd78Row+SSxCXkSrLwymEQC1ar3BokAFw36K4
+EnjGXq3HqY1ZHrRo2x/j6oekOyQu+9aB/CCyAacplJhtadPF41ETk0u+/SvrICGr
+nzCqkNiSedsV0YL6w4UpWW8WoJrKGgoSRM1EI8JoS3X0FEywdKu2BLyyq8oPz0mS
+lGKOAh9Wivyfct38wMcODDxIOLZrTB7RvJpiUoCO3xuDtHksBmM=
+=i930
 -----END PGP SIGNATURE-----
 
---3Lzv7qB7yUCBJADV--
+--rspdxdya3ht4irto--
