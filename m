@@ -2,155 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA22D6D8B4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BA56D8B53
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 02:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbjDEX7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S229754AbjDFAAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 20:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234103AbjDEX7p (ORCPT
+        with ESMTP id S234273AbjDEX7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:59:45 -0400
-Received: from mail-ed1-x562.google.com (mail-ed1-x562.google.com [IPv6:2a00:1450:4864:20::562])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED74C7683
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:59:40 -0700 (PDT)
-Received: by mail-ed1-x562.google.com with SMTP id eh3so145219051edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 16:59:40 -0700 (PDT)
+        Wed, 5 Apr 2023 19:59:53 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E052A729F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:59:47 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-546422bd3ceso198803707b3.21
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 16:59:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680739179;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aiktHjl/mMcq2QHaTiXh/kaZ7IlrVAnqoR/RxQRC2zg=;
-        b=M4qbOdZXV1C/wDoAtkeyblRD3pP/gVWJ2ejk/HkiM7w0jCcQ+v29RtLw8uUviwLJl1
-         auBRb4iOIKy8itmdG/qdpbrAKRxz64u2qESoitiubJYsYHgTftPuHS1ASwXk3vl7M4az
-         3IStF2usOaKTZJlThJ/IelRoZTkMFI4q2YFm8=
+        d=google.com; s=20210112; t=1680739187;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jxf42gC6VhPGRjwvo8awTKl9BzUHx2xinZ2m33bgrQk=;
+        b=nesyRQqqoTy+PoU/LaBv18i8BsnOkWBojTUXKokYIRHcE3ixI1nx0uhvjz5PSsjIDA
+         jGdUeBsAm9PFNbne4pg4dCvRtJjPdLysgEkXZ9X6pLiY59z5QafiFNhna+en8DsZfHYd
+         OO+YB8sK+eDu0AGQ8k5IcjtIf9VYKFHiB66d4CiMUrT6dfDFXdfGglc0VfUUI3g+okRG
+         fDK51qdW27/OQY8zN46yLsyesPZXOtZXo72r9s8kYgpe0eBrL0OoRgtistmKIgEEsFO5
+         mG7OYIT9rPLb8TuG+bo/RvnApHIPQQb8euJH2TLZdrLHn4g05HohhceB7LpXTKkyqhMp
+         Ua5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680739179;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aiktHjl/mMcq2QHaTiXh/kaZ7IlrVAnqoR/RxQRC2zg=;
-        b=qkCt93GUP6YoY2dd7KSjAAjrZoViyD5xs/rY2+PgYstAlbs8qvIv82nrwoK+P0PFma
-         VJUwbbAOYAGxlgUoU76n3+BP4nrd71Ag9FNbYLj5YcK9VTG0j6YZuKND/y/POhqKWU3A
-         /aWPFAARbsHMlhmWZ9I7XG+jnrTW4tIadZ58JH8P3xQVmDSXVCbZDJfDyBddAtWVyNg9
-         Zd14Ff8yG1qx/6EX1J66OIKsl7+4oHktTbeIL7Kc5uwezyVXKQa2wSM3HcxP6czVvBWz
-         1a0VEL8mpwA7mz2U/SE9XlF2coo6raek47guGFyuu0B8teYyppT/st/fjeJggYH3BrWs
-         X8AA==
-X-Gm-Message-State: AAQBX9cUjwt59rf8Nz2IPlkojRi5a1DUVg7RceylQdXg3iyarmxo+ZUw
-        7xvulfxDTlqE2rFOfTpXvl2hC95NkcdD9VmgWfT4vy6TxAps
-X-Google-Smtp-Source: AKy350ZO1gDgW7Ny5Ov0vBQrRbAUQYqALMitKDhaeYZHL3oGuCKea7cv8SV217niml8vcg3/D1sq64+4Br0U
-X-Received: by 2002:a17:906:edcb:b0:930:f953:9614 with SMTP id sb11-20020a170906edcb00b00930f9539614mr5666535ejb.1.1680739178981;
-        Wed, 05 Apr 2023 16:59:38 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id hd33-20020a17090796a100b00949174b747bsm8548ejc.96.2023.04.05.16.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 16:59:38 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1680739187;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jxf42gC6VhPGRjwvo8awTKl9BzUHx2xinZ2m33bgrQk=;
+        b=Wo9gvaUTK8P04h7FLdoxD0AzP8DJVEraBGFD886bKnLDMwPzTt3yk1vZpCGLKFk/Q9
+         4J6T46xhWUKcnMZ2E0OmeHqv0T0Zqls76kipTD6w6tWMDedNmKCPY7q+CbLFt6YoXAax
+         1gtcoxv+vDuVcRJjUy3rmDwjfTQML7Hp6d0v3fI5uHty5LVg1iz7aam80xj0KluTRPUT
+         fjcWTKWtvSEkg9dtbp+2ufEGf0hMzbSnnE0iZ5VKUKMtmIb5kJ5B2CS+YkknydRXf1xd
+         tQirwzlGFv6sg4keL/8ji04Wej07B5BaNEptZKLaiuXTzwWU8Eksced/TNtpkKUudg+j
+         Yj8g==
+X-Gm-Message-State: AAQBX9faSiPrPyRP4yg2+4T27hFLnk4i1O50iuVB4P55JkBnmnUdVLT8
+        3WSIV431m1qJlDWcSpLlN2F6LfPwfU0=
+X-Google-Smtp-Source: AKy350b4cDoXYPsRlMRHohMLckVvU0YVhPrht4uYzWVfTzjIyCRe0ISsCa6DarqChome5te0mu4tegcx3UE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:d753:0:b0:b71:f49f:8d22 with SMTP id
+ o80-20020a25d753000000b00b71f49f8d22mr688483ybg.3.1680739186875; Wed, 05 Apr
+ 2023 16:59:46 -0700 (PDT)
+Date:   Wed,  5 Apr 2023 16:59:32 -0700
+In-Reply-To: <20230404071759.75376-1-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230404071759.75376-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <168073781051.657542.2486795284440545503.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: x86/pmu: Zero out pmu->all_valid_pmc_idx each time
+ it's refreshed
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests: xsk: Add test UNALIGNED_INV_DESC_4K1_FRAME_SIZE
-Date:   Thu,  6 Apr 2023 01:59:19 +0200
-Message-Id: <20230405235920.7305-3-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230405235920.7305-1-kal.conley@dectris.com>
-References: <20230405235920.7305-1-kal.conley@dectris.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add unaligned descriptor test for frame size of 4001. Using an odd frame
-size ensures that the end of the UMEM is not near a page boundary. This
-allows testing descriptors that staddle the end of the UMEM but not a
-page.
+On Tue, 04 Apr 2023 15:17:59 +0800, Like Xu wrote:
+> The kvm_pmu_refresh() may be called repeatedly (e.g. configure guest
+> CPUID repeatedly or update MSR_IA32_PERF_CAPABILITIES) and each
+> call will use the last pmu->all_valid_pmc_idx value, with the residual
+> bits introducing additional overhead later in the vPMU emulation.
+> 
+> 
 
-This test used to fail without the previous commit ("xsk: Add check for
-unaligned descriptors that overrun UMEM").
+Applied to kvm-x86 pmu, thanks!
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 24 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  1 +
- 2 files changed, 25 insertions(+)
+[1/1] KVM: x86/pmu: Zero out pmu->all_valid_pmc_idx each time it's refreshed
+      https://github.com/kvm-x86/linux/commit/7e768ce8278b
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 1a4bdd5aa78c..5a9691e942de 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -69,6 +69,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#include <assert.h>
- #include <fcntl.h>
- #include <errno.h>
- #include <getopt.h>
-@@ -1876,6 +1877,29 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		test->ifobj_rx->umem->unaligned_mode = true;
- 		testapp_invalid_desc(test);
- 		break;
-+	case TEST_TYPE_UNALIGNED_INV_DESC_4K1_FRAME: {
-+		u64 page_size, umem_size;
-+
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_INV_DESC_4K1_FRAME_SIZE");
-+		/* Odd frame size so the UMEM doesn't end near a page boundary. */
-+		test->ifobj_tx->umem->frame_size = 4001;
-+		test->ifobj_rx->umem->frame_size = 4001;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		/* This test exists to test descriptors that staddle the end of
-+		 * the UMEM but not a page.
-+		 */
-+		page_size = sysconf(_SC_PAGESIZE);
-+		umem_size = test->ifobj_tx->umem->num_frames * test->ifobj_tx->umem->frame_size;
-+		assert(umem_size % page_size > PKT_SIZE);
-+		assert(umem_size % page_size < page_size - PKT_SIZE);
-+		testapp_invalid_desc(test);
-+		break;
-+	}
- 	case TEST_TYPE_UNALIGNED:
- 		if (!testapp_unaligned(test))
- 			return;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index cc24ab72f3ff..919327807a4e 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -78,6 +78,7 @@ enum test_type {
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
-+	TEST_TYPE_UNALIGNED_INV_DESC_4K1_FRAME,
- 	TEST_TYPE_HEADROOM,
- 	TEST_TYPE_TEARDOWN,
- 	TEST_TYPE_BIDI,
--- 
-2.39.2
-
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
