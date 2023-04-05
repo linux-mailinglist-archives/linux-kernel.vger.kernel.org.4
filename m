@@ -2,212 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB086D8A50
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:09:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C566D8A6D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbjDEWJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 18:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S229815AbjDEWPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbjDEWJL (ORCPT
+        with ESMTP id S229520AbjDEWO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:09:11 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FBD5FFB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:09:09 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id er13so103712421edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:09:09 -0700 (PDT)
+        Wed, 5 Apr 2023 18:14:59 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D7F55BA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:14:58 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54c061acbc9so24795047b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680732547;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VV/LEg+1K/+PzJjj4wMMq87FxzLFqVRxIlDeAN3GtQ=;
-        b=1OjuUgQrRjuJT9p80ONTyaXNz4s8PdY39mhrpx1gJY02/lXWHqqaflfvLOguOuEzH7
-         cPhLjlOxFRb7b7qltgegR11aTNy7Sys/kbjFgBnzr2MAdq2RJWLTtmuRsci2bGGEpS6t
-         cXh9aub7rqGGoZuCbbAYlrVe4ewXmV8Z75h79fzHAQOxwG+VmJ/R5BixX0dhLoKzX1BS
-         rb56SXDcdA6VOPi6nXtexynwSPCn3zz+AoluEz6HQtfPk6Jmzfos4JE2V3xyv0UU+zqx
-         nuYZGbVSnOlQzMgvf7mWlqtt8EIJmVsVU/SAy8TtxajrGH2HESEauYOFGu1KxT4Crpo2
-         xpmA==
+        d=gmail.com; s=20210112; t=1680732897; x=1683324897;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DkhXpIZUd3UwhU4/lPqmcT7Rq+/mxVouewhINmK6tsk=;
+        b=pxsFvIdCQX5T8/WamHNGUFAQiy6rc/pB9Q0GGGcaNvOPupvECPHOmLok5F8qw7p4qq
+         IaUplh2wRu+EtfPYS6faSsvuLVtXsnJ9FQs47dQIMqd3WkUMA+SJ1gR7m2eAv1m42bdV
+         enqgCoZ0vw2bWPA5k+vPGImt7lJeW8s1Tyq5R2bMQ8ZelMtU9rC10akMY+MVJyLigyMe
+         YDjg2V4MiIo7OS33ZXVF0BttVrevBgS8V0XkfyUViI+hxJ1gmUfiorUGQDgQMWwzo1cG
+         9TOG2eqj94GSY+TOfBLRD84d3PwOG+u80k3oiRE66Qga68zG5r7qE8KLJGJ29UlC4rqY
+         uydQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680732547;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9VV/LEg+1K/+PzJjj4wMMq87FxzLFqVRxIlDeAN3GtQ=;
-        b=Z9x50J5R8K1YWDcyUvZf4vj/PzYIyoydDQqC3ri/pSMfNXM47wtvH98O8h/8nKnarY
-         OpALojWCyEu6J++j+DpWu985fnOfamegrCYBK+PoCR93EQWYW9ix90Qm/fsidS/EpCKW
-         lm7vQxgCU6q2mFQhIDh+jz5bqHBfzDE8TE3Rr1LP/xr0FTICXW2n7V64u3np+Efo0y6v
-         Ep0k7xqRJsF475DMEoeVRqRDODu2ApG7tb8qcos6sk4Bl7QVe+WvgsmSSyYTlaBicVEr
-         UU+7qJSijy7MpYDmw9SQh3noSFSi92qHjhmdaJbzCo+jH9O04uzeDgwhtx1TfR+W7RPd
-         bnSA==
-X-Gm-Message-State: AAQBX9dq2i71Mj7EbXA5MJgITH9OCGHslEDAXRXTld4CN9Tr+uZcPSBv
-        XwesUrm5whYMMZS8wQfAramPUw==
-X-Google-Smtp-Source: AKy350azv/xLBkCkm2mvVLhiJp6U1GdlEgzaCLm9Kt7kGlOU75AEdYl3sQWgGoRITWe4CvJfMRL0iQ==
-X-Received: by 2002:a17:906:4d08:b0:8bf:e95c:467b with SMTP id r8-20020a1709064d0800b008bfe95c467bmr4368186eju.63.1680732547550;
-        Wed, 05 Apr 2023 15:09:07 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id i12-20020a1709064ecc00b008e8e975e185sm7857506ejv.32.2023.04.05.15.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 15:09:07 -0700 (PDT)
-References: <20230405193445.745024-1-y86-dev@protonmail.com>
- <20230405193445.745024-12-y86-dev@protonmail.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v6 11/15] rust: init: add `Zeroable` trait and
- `init::zeroed` function
-Date:   Thu, 06 Apr 2023 00:08:28 +0200
-In-reply-to: <20230405193445.745024-12-y86-dev@protonmail.com>
-Message-ID: <87lej6rngc.fsf@metaspace.dk>
+        d=1e100.net; s=20210112; t=1680732897; x=1683324897;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkhXpIZUd3UwhU4/lPqmcT7Rq+/mxVouewhINmK6tsk=;
+        b=paFNEmmgRz38F8BBqSHtFDX4tTXSJJxUwVYYIy4IjMxeWqQ9APtIYNwDsPHzhDsKqD
+         gxfpYodueiXA3ILWGadVoj18H8m2HYUHoqcmmT7SzNBdITBtnCjdpcDPGRz1pCCOAw5X
+         UO7n6hb6nmKG4atmFcEkoMRV9/HrxHvKAAwD24cmNlbfje+wyErALq8U+rZFM3DhjQnd
+         B6qGDpXsBuj1MrTJJkYthmGKfV539+WTjWouEGK8HBejLnM7T1RuoJRPZro2ckX9xSpE
+         tuZWnP2DZY7s5jKcsZ6Gtb6EjCaQeLNUOi/T2mwjJP+ywM0CpFdzse+14nmi+hxISWYg
+         RItQ==
+X-Gm-Message-State: AAQBX9dk5xKQqJss1gJYQ2wals5si5mxCpomXzseU2L2rAfc0MrLnUhX
+        dxCyZ2aefdmSLcrQHW9N1kz4lrkqF/btomRbdA==
+X-Google-Smtp-Source: AKy350YvZzcCXznNAshm4nkhb+tXooHeeqMHJLSjyZ7eZ2GO7EoFf+dLZh7Nupu7xRx1Gh5tGbv86eg8x71I/HKO51M=
+X-Received: by 2002:a81:b389:0:b0:545:5b2c:4bf6 with SMTP id
+ r131-20020a81b389000000b005455b2c4bf6mr4470191ywh.7.1680732897657; Wed, 05
+ Apr 2023 15:14:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   Rui Salvaterra <rsalvaterra@gmail.com>
+Date:   Wed, 5 Apr 2023 23:14:45 +0100
+Message-ID: <CALjTZvakMZQsqzzjjXh_fw4+Zra5y5o-fhc5gDVTYM1uM40RNQ@mail.gmail.com>
+Subject: [BUG?] unchecked MSR access error: WRMSR to 0x19c
+To:     x86@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, everyone,
 
-Benno Lossin <y86-dev@protonmail.com> writes:
+I have a Haswell (Core i7-4770R) machine running Linux 6.3-rc5 on
+which, after a while under load (say, compiling the kernel), I get
+this trace=E2=80=A6
 
-> Add the `Zeroable` trait which marks types that can be initialized by
-> writing `0x00` to every byte of the type. Also add the `init::zeroed`
-> function that creates an initializer for a `Zeroable` type that writes
-> `0x00` to every byte.
->
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> Cc: Andreas Hindborg <a.hindborg@samsung.com>
-> ---
+[  832.549630] unchecked MSR access error: WRMSR to 0x19c (tried to
+write 0x000000000000aaa8) at rIP: 0xffffffff816f66a6
+(throttle_active_work+0xa6/0x1d0)
+[  832.549652] Call Trace:
+[  832.549654]  <TASK>
+[  832.549655]  process_one_work+0x1ab/0x300
+[  832.549661]  worker_thread+0x4b/0x340
+[  832.549664]  ? process_one_work+0x300/0x300
+[  832.549676]  kthread+0xac/0xc0
+[  832.549679]  ? kthread_exit+0x20/0x20
+[  832.549682]  ret_from_fork+0x1f/0x30
+[  832.549693]  </TASK>
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+=E2=80=A6 after which I get these from time to time in dmesg.
 
->  rust/kernel/init.rs | 97 ++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 95 insertions(+), 2 deletions(-)
->
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index 99751375e7c8..ffd539e2f5ef 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -195,8 +195,14 @@ use crate::{
->  };
->  use alloc::boxed::Box;
->  use core::{
-> -    alloc::AllocError, cell::Cell, convert::Infallible, marker::PhantomData, mem::MaybeUninit,
-> -    pin::Pin, ptr,
-> +    alloc::AllocError,
-> +    cell::Cell,
-> +    convert::Infallible,
-> +    marker::PhantomData,
-> +    mem::MaybeUninit,
-> +    num::*,
-> +    pin::Pin,
-> +    ptr::{self, NonNull},
->  };
->
->  #[doc(hidden)]
-> @@ -1323,3 +1329,90 @@ pub unsafe trait PinnedDrop: __internal::HasPinData {
->      /// automatically.
->      fn drop(self: Pin<&mut Self>, only_call_from_drop: __internal::OnlyCallFromDrop);
->  }
-> +
-> +/// Marker trait for types that can be initialized by writing just zeroes.
-> +///
-> +/// # Safety
-> +///
-> +/// The bit pattern consisting of only zeroes is a valid bit pattern for this type. In other words,
-> +/// this is not UB:
-> +///
-> +/// ```rust,ignore
-> +/// let val: Self = unsafe { core::mem::zeroed() };
-> +/// ```
-> +pub unsafe trait Zeroable {}
-> +
-> +/// Create a new zeroed T.
-> +///
-> +/// The returned initializer will write `0x00` to every byte of the given `slot`.
-> +#[inline]
-> +pub fn zeroed<T: Zeroable>() -> impl Init<T> {
-> +    // SAFETY: Because `T: Zeroable`, all bytes zero is a valid bit pattern for `T`
-> +    // and because we write all zeroes, the memory is initialized.
-> +    unsafe {
-> +        init_from_closure(|slot: *mut T| {
-> +            slot.write_bytes(0, 1);
-> +            Ok(())
-> +        })
-> +    }
-> +}
-> +
-> +macro_rules! impl_zeroable {
-> +    ($($({$($generics:tt)*})? $t:ty, )*) => {
-> +        $(unsafe impl$($($generics)*)? Zeroable for $t {})*
-> +    };
-> +}
-> +
-> +impl_zeroable! {
-> +    // SAFETY: All primitives that are allowed to be zero.
-> +    bool,
-> +    char,
-> +    u8, u16, u32, u64, u128, usize,
-> +    i8, i16, i32, i64, i128, isize,
-> +    f32, f64,
-> +
-> +    // SAFETY: These are ZSTs, there is nothing to zero.
-> +    {<T: ?Sized>} PhantomData<T>, core::marker::PhantomPinned, Infallible, (),
-> +
-> +    // SAFETY: Type is allowed to take any value, including all zeros.
-> +    {<T>} MaybeUninit<T>,
-> +
-> +    // SAFETY: All zeros is equivalent to `None` (option layout optimization guarantee).
-> +    Option<NonZeroU8>, Option<NonZeroU16>, Option<NonZeroU32>, Option<NonZeroU64>,
-> +    Option<NonZeroU128>, Option<NonZeroUsize>,
-> +    Option<NonZeroI8>, Option<NonZeroI16>, Option<NonZeroI32>, Option<NonZeroI64>,
-> +    Option<NonZeroI128>, Option<NonZeroIsize>,
-> +
-> +    // SAFETY: All zeros is equivalent to `None` (option layout optimization guarantee).
-> +    //
-> +    // In this case we are allowed to use `T: ?Sized`, since all zeros is the `None` variant.
-> +    {<T: ?Sized>} Option<NonNull<T>>,
-> +    {<T: ?Sized>} Option<Box<T>>,
-> +
-> +    // SAFETY: `null` pointer is valid.
-> +    //
-> +    // We cannot use `T: ?Sized`, since the VTABLE pointer part of fat pointers is not allowed to be
-> +    // null.
-> +    //
-> +    // When `Pointee` gets stabilized, we could use
-> +    // `T: ?Sized where <T as Pointee>::Metadata: Zeroable`
-> +    {<T>} *mut T, {<T>} *const T,
-> +
-> +    // SAFETY: `null` pointer is valid and the metadata part of these fat pointers is allowed to be
-> +    // zero.
-> +    {<T>} *mut [T], {<T>} *const [T], *mut str, *const str,
-> +
-> +    // SAFETY: `T` is `Zeroable`.
-> +    {<const N: usize, T: Zeroable>} [T; N], {<T: Zeroable>} Wrapping<T>,
-> +}
-> +
-> +macro_rules! impl_tuple_zeroable {
-> +    ($(,)?) => {};
-> +    ($first:ident, $($t:ident),* $(,)?) => {
-> +        // SAFETY: All elements are zeroable and padding can be zero.
-> +        unsafe impl<$first: Zeroable, $($t: Zeroable),*> Zeroable for ($first, $($t),*) {}
-> +        impl_tuple_zeroable!($($t),* ,);
-> +    }
-> +}
-> +
-> +impl_tuple_zeroable!(A, B, C, D, E, F, G, H, I, J);
+[  836.709562] CPU7: Core temperature is above threshold, cpu clock is
+throttled (total events =3D 219)
+[  836.709569] CPU3: Core temperature is above threshold, cpu clock is
+throttled (total events =3D 219)
+[ 1272.792138] CPU2: Core temperature is above threshold, cpu clock is
+throttled (total events =3D 1)
+[ 1272.792156] CPU6: Core temperature is above threshold, cpu clock is
+throttled (total events =3D 1)
 
+This is the microcode revision on the CPU.
+
+[    0.000000] microcode: updated early: 0xe -> 0x1c, date =3D 2019-11-12
+
+Note that I have the exact same issue on an Ivy Bridge (Core
+i7-3720QM) machine, but not on an Ivy Bridge laptop (Celeron 1007U).
+Maybe this is a legitimate warning, but please note that I've
+thorughly cleaned the machines before retesting to see if, by
+coincidence, I had any airway/cooling issues. The fact that it started
+happening recently (since Linux 6.1, I believe), and the fact that
+running stress-ng --cpu 16 before the unchecked WRMSR error happens
+doesn't cause any thermal throttling events, lead me to believe this
+is possibly some unintended oversight.
+
+Please let me know if you need any additional information (.config, or
+anything else).
+
+Thanks in advance,
+Rui
