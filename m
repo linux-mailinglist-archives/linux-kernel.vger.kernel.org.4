@@ -2,158 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B9F6D7266
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 04:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339186D7273
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 04:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbjDECYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 22:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S236758AbjDEC1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 22:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjDECYu (ORCPT
+        with ESMTP id S235802AbjDEC1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 22:24:50 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6089E1FDC;
-        Tue,  4 Apr 2023 19:24:40 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c18so33085061ple.11;
-        Tue, 04 Apr 2023 19:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680661480;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9QNbM9lP47YBzDxJmWKWYEJzZC9ZIOjbZpNDsjzB1/E=;
-        b=Xihw6CgZ9/9usz7a8VJsWY8rfqP+LOYjs7G3CCcJY+RprHUpGDw82g//kV+M/lN2eN
-         MCKYQ+HhvY5W1cSsIACkXEtTwItPP3atD7PSnn6CY3edFU7fRlyEpyLbrZYs5XvWXdKy
-         t9elDA+lhxpC06IPynnlGlvRp14mdfczCSvYnTbh9qn3oESdwAnGclujGnTFKq1PvYHe
-         UNDDXArlN2SssUcwAIha7XxGo6wmqlEvq3mMQaulR81DCsd7RPPSH6PKtAexQR7gj6dj
-         3c+zp0QURkwJcGXiXIAuMESlFidSs+6E6PbTvTKTDji9VpvU3LDj2Ttziz8wU064/qwl
-         Zonw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680661480;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9QNbM9lP47YBzDxJmWKWYEJzZC9ZIOjbZpNDsjzB1/E=;
-        b=4lHcdDcU+kVkqi3c8yjTzXgbF5KWrrxDG0ZvG+z7Yqq2/nUytX09hE3RcbBmOk1mon
-         mGliFZIbRvM1ifPWww13EcQslHE/dsMtxDlExyOKiQ/N7XtBCDKGB83K9RTJfOZWHmbX
-         BSCJKvTFJ6sdNpsTs0qAOE7s//aAoO7ocQ9qB4GA7gXmnngrIJpEorDv5TRkXyNCXxMS
-         tcJzD0vl5vChBEmNGiuMxHXGgxWau2fIQZOY6JAuE13nFzF4jTwX625OhEF3DYH7wAG9
-         j/sUPbzHv4zCAYbS+v0aX20AfzjK57XirEXRyA3Hu32vsGuLzofrcDOtlsOJ4i8+KIUV
-         dk7g==
-X-Gm-Message-State: AAQBX9dXt7pAKbxR00URXFVSrumboZk0+ORyaV5FpjFsNz52ZfXm3oUB
-        k+/PilDtGY8k9qU/cACcYDg=
-X-Google-Smtp-Source: AKy350YC3ggg9qLvnDzmFothcUSjAQpi7xNqcwvsbbun0pCTYz8A4L5T/wFudH3EGQ7zlYXf1Kpd3g==
-X-Received: by 2002:a05:6a20:659c:b0:da:c40:8dc with SMTP id p28-20020a056a20659c00b000da0c4008dcmr4172153pzh.6.1680661479619;
-        Tue, 04 Apr 2023 19:24:39 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-18.three.co.id. [180.214.232.18])
-        by smtp.gmail.com with ESMTPSA id x9-20020aa793a9000000b005898fcb7c1bsm9679454pff.177.2023.04.04.19.24.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Apr 2023 19:24:39 -0700 (PDT)
-Message-ID: <364610b8-2c40-6a71-513e-4e154b077055@gmail.com>
-Date:   Wed, 5 Apr 2023 09:24:30 +0700
+        Tue, 4 Apr 2023 22:27:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB7626AD;
+        Tue,  4 Apr 2023 19:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=liwfgRAmKok6/KSZncO+fQ8xOc+1qIirOvQozJbmQE8=; b=4BmqmFWLry1SHUJ0Tq5b7pp92/
+        feseonXDmF3CWCJJacVakhyupfia8MqOB/G11JJDU0m6r+ttpBtfyureiWgDEOZ5IlHPzOSqtn5Ic
+        M3tUevN407qt5DsaER/bqP4Ys/NfkBMmn5FxJLa2COKVDrM9LxO38rNJEPArux++t3y9zb3vzKPYl
+        kykHR0/z0lMkZDVbZrNjDgI6ReCPxSXLocqTyrhX43Uqdcy93IWtlwejhfyWRgoIv1ikwcCNaWtUI
+        FBzRL9GvDH4XJ0L+dahhBVs778M0834muN7f/xPaOYV+1h8KJJe1MFKdz3C5xqfRvV6C1pVJA9o21
+        CAJZ9pVA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjsrb-003A03-1M;
+        Wed, 05 Apr 2023 02:27:07 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, mcgrof@kernel.org
+Subject: [PATCH v2 0/6] module: avoid userspace pressure on unwanted allocations
+Date:   Tue,  4 Apr 2023 19:26:56 -0700
+Message-Id: <20230405022702.753323-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V4 06/10] hte: Re-phrase tegra API document
-Content-Language: en-US
-To:     Dipen Patel <dipenp@nvidia.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linus.walleij@linaro.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
-References: <20230323012929.10815-1-dipenp@nvidia.com>
- <20230323012929.10815-7-dipenp@nvidia.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20230323012929.10815-7-dipenp@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/23/23 08:29, Dipen Patel wrote:
-> Make Tegra194 API document generic to make it applicable for
-> current and future tegra hte providers.
-> 
-> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
-> ---
->  Documentation/driver-api/hte/tegra194-hte.rst | 33 +++++++++----------
->  1 file changed, 16 insertions(+), 17 deletions(-)
-> 
+This v2 series follows up on the first iteration of these patches [0].
+They have the following changes made:
 
-While generalizing the doc, the doc file name should also be renamed
-(i.e. to tegra-hte.rst).
+  o Rolled in fix for an kmemleak issue reported by Jim Cromie
+  o Dropped from this series all the semaphore & and simplifications
+    on kmod.c as that should just be sent as a separate bike-shedding
+    opporunity patch series and it does not in any way address the
+    the unwanted allocations.
+  o The rest of the feedback was just from Greg KH and I've addressed
+    all his feedback. I decided to do away with the debug.c as a
+    separate file and leave the #ifdef CONFIG_MODULE_DEBUG eyesore
+    at the end of main.c. I guess it's not so bad there.
+  o *Tons* of fixes and enhancements to my counters, including tons
+    of documentation to help ensure we don't loose track of some of
+    the tribal knowledge and so to help ensure we have references to
+    what our accounting looks like. Those large wasted virtual memory
+    allocations on a simple qemu idle boring boot are simply rediculous, I
+    am quite baffled we had not spotted this before, and so it all reveals
+    we have quite a bit of optimizations left to do to make loading modules
+    an even more smoother experience at bootup.
 
-> diff --git a/Documentation/driver-api/hte/tegra194-hte.rst b/Documentation/driver-api/hte/tegra194-hte.rst
-> index f2d617265546..85e654772782 100644
-> --- a/Documentation/driver-api/hte/tegra194-hte.rst
-> +++ b/Documentation/driver-api/hte/tegra194-hte.rst
-> @@ -5,25 +5,25 @@ HTE Kernel provider driver
->  
->  Description
->  -----------
-> -The Nvidia tegra194 HTE provider driver implements two GTE
-> -(Generic Timestamping Engine) instances: 1) GPIO GTE and 2) LIC
-> -(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the
-> -timestamp from the system counter TSC which has 31.25MHz clock rate, and the
-> -driver converts clock tick rate to nanoseconds before storing it as timestamp
-> -value.
-> +The Nvidia tegra HTE provider also known as GTE (Generic Timestamping Engine)
-> +driver implements two GTE instances: 1) GPIO GTE and 2) LIC
-> +(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the timestamp
-> +from the system counter TSC which has 31.25MHz clock rate, and the driver
-> +converts clock tick rate to nanoseconds before storing it as timestamp value.
->  
->  GPIO GTE
->  --------
->  
->  This GTE instance timestamps GPIO in real time. For that to happen GPIO
-> -needs to be configured as input. The always on (AON) GPIO controller instance
-> -supports timestamping GPIOs in real time and it has 39 GPIO lines. The GPIO GTE
-> -and AON GPIO controller are tightly coupled as it requires very specific bits
-> -to be set in GPIO config register before GPIO GTE can be used, for that GPIOLIB
-> -adds two optional APIs as below. The GPIO GTE code supports both kernel
-> -and userspace consumers. The kernel space consumers can directly talk to HTE
-> -subsystem while userspace consumers timestamp requests go through GPIOLIB CDEV
-> -framework to HTE subsystem.
-> +needs to be configured as input. Only the always on (AON) GPIO controller
-> +instance supports timestamping GPIOs in real time as it is tightly coupled with
-> +the GPIO GTE. To support this, GPIOLIB adds two optional APIs as mentioned
-> +below. The GPIO GTE code supports both kernel and userspace consumers. The
-> +kernel space consumers can directly talk to HTE subsystem while userspace
-> +consumers timestamp requests go through GPIOLIB CDEV framework to HTE
-> +subsystem. The hte devicetree binding described at
-> +``Documentation/devicetree/bindings/timestamp`` provides an example of how a
-> +consumer can request an GPIO line.
->  
->  See gpiod_enable_hw_timestamp_ns() and gpiod_disable_hw_timestamp_ns().
->  
-> @@ -34,9 +34,8 @@ returns the timestamp in nanoseconds.
->  LIC (Legacy Interrupt Controller) IRQ GTE
->  -----------------------------------------
->  
-> -This GTE instance timestamps LIC IRQ lines in real time. There are 352 IRQ
-> -lines which this instance can add timestamps to in real time. The hte
-> -devicetree binding described at ``Documentation/devicetree/bindings/timestamp``
-> +This GTE instance timestamps LIC IRQ lines in real time. The hte devicetree
-> +binding described at ``Documentation/devicetree/bindings/timestamp``
->  provides an example of how a consumer can request an IRQ line. Since it is a
->  one-to-one mapping with IRQ GTE provider, consumers can simply specify the IRQ
->  number that they are interested in. There is no userspace consumer support for
+If you'd like a tree this is on my 20230404-module-alloc-opts branch based
+on modules-next [1].
 
-The wording LGTM, thanks!
+[0] https://lkml.kernel.org/r/20230329053149.3976378-1-mcgrof@kernel.org
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20230404-module-alloc-opts
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Luis Chamberlain (6):
+  module: fix kmemleak annotations for non init ELF sections
+  module: move finished_loading()
+  module: extract patient module check into helper
+  module: avoid allocation if module is already present and ready
+  debugfs: add debugfs_create_atomic64_t for atomic64_t
+  module: add debug stats to help identify memory pressure
+
+ Documentation/core-api/kernel-api.rst |  22 +-
+ fs/debugfs/file.c                     |  36 +++
+ include/linux/debugfs.h               |   2 +
+ kernel/module/Kconfig                 |  37 +++
+ kernel/module/Makefile                |   1 +
+ kernel/module/decompress.c            |   4 +
+ kernel/module/internal.h              |  74 +++++
+ kernel/module/main.c                  | 198 ++++++++----
+ kernel/module/stats.c                 | 428 ++++++++++++++++++++++++++
+ kernel/module/tracking.c              |   7 +-
+ 10 files changed, 742 insertions(+), 67 deletions(-)
+ create mode 100644 kernel/module/stats.c
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.39.2
 
