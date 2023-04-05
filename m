@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDDC6D7DE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902636D7E73
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238305AbjDENju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S237705AbjDEODg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238312AbjDENjr (ORCPT
+        with ESMTP id S238371AbjDEOCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:39:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F4B49F9;
-        Wed,  5 Apr 2023 06:39:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Apr 2023 10:02:22 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA556EAC;
+        Wed,  5 Apr 2023 07:01:19 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 86045bb57f15bc7f; Wed, 5 Apr 2023 16:01:14 +0200
+Received: from kreacher.localnet (unknown [213.134.163.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4263062923;
-        Wed,  5 Apr 2023 13:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB7FC433D2;
-        Wed,  5 Apr 2023 13:39:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680701985;
-        bh=71JyiYjAQDNGrKu+w+/togKyzP+qtWLnOs7G5jvJ0Ew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gbkdGElrkRBoUGegV3mZmLyZa43DZoWFu3fZhnCs2uzfNnfX/SYZkeyLc3V3tToOE
-         ZPPZvdYBspsu7NmdivFCcCsJ/0kJ0ft/uOsaYeA/tnKHI7HiavjM3fUsJ4D58uvGhC
-         IBYGAfxgDF8TcZesH90UaLMcCpPjxWdIJtL4bhsupW1tJ62t84muKF1/rJXaZZ3rj/
-         pwhYQZd92udtI+X6pJA9Ng74oTnEKOabVyVIz81i+60kogWJW20h6RTGEv8e81TL9c
-         kl0g3cKf+MdCNL+x5P+LPvHP9W5kIle+tRlHVPBcjl2q6IvkN22HXBGfpO6FgaiuIX
-         FVoLaFLa+AQbQ==
-Date:   Wed, 5 Apr 2023 14:39:38 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <20230405133938.GD8371@google.com>
-References: <20230307112835.81886-1-okan.sahin@analog.com>
- <20230307112835.81886-6-okan.sahin@analog.com>
- <20230315175223.GI9667@google.com>
- <20230315175257.GJ9667@google.com>
- <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
- <20230329143615.GS2673958@google.com>
- <MN2PR03MB51685B1F84AA679FB604E738E7929@MN2PR03MB5168.namprd03.prod.outlook.com>
- <20230403140950.GF548901@google.com>
- <ZC0zA1bVsrg0XEld@smile.fi.intel.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id A96F61B4E9E1;
+        Wed,  5 Apr 2023 16:01:13 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>
+Subject: [PATCH 10/32] ACPICA: MADT: Add RISC-V INTC interrupt controller
+Date:   Wed, 05 Apr 2023 15:40:12 +0200
+Message-ID: <1782750.VLH7GnMWUR@kreacher>
+In-Reply-To: <4845957.31r3eYUQgx@kreacher>
+References: <4845957.31r3eYUQgx@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZC0zA1bVsrg0XEld@smile.fi.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.219
+X-CLIENT-HOSTNAME: 213.134.163.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Apr 2023, Andy Shevchenko wrote:
+From: Sunil V L <sunilvl@ventanamicro.com>
 
-> On Mon, Apr 03, 2023 at 03:09:50PM +0100, Lee Jones wrote:
-> > On Mon, 03 Apr 2023, Sahin, Okan wrote:
->
-> ...
->
->
-> > > In fact, one of the maintainers suggested assigning chip_info to data
-> > > instead of enumeration. Then I added chip_info and put devices into
-> > > sub-structure above. I will replace chip_info with id structure in max77541
-> > > device structure, right? I will use enumeration for data as I will assign
-> > > it to id, and distinguish different devices.
-> >
-> > Yes, that's correct.  Please remove chip_info altogether.
->
-> Then it will provoke casting in the OF ID table which I believe is not what
-> we want. I would agree on your first suggestion to have a plain number in I²C
-> ID table, but I'm against it in OF and/or ACPI ID table.
+ACPICA commit bd6d1ae1e13abe78e149c8b61b4bc7bc7feab015
 
-And I'm against passing MFD information through the OF/ACPI APIs.
+The ECR to add RISC-V INTC interrupt controller is approved by
+the UEFI forum and will be available in the next revision of
+the ACPI specification.
 
-You can put through raw platform data or a device descriptor.
+Link: https://github.com/acpica/acpica/commit/bd6d1ae1
+Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/acpi/actbl2.h | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-Ref: git grep -A5 "struct of_device_id.*{" -- drivers/mfd
+diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
+index e0f205f9ab4c..9af17cb66faa 100644
+--- a/include/acpi/actbl2.h
++++ b/include/acpi/actbl2.h
+@@ -891,7 +891,8 @@ enum acpi_madt_type {
+ 	ACPI_MADT_TYPE_MSI_PIC = 21,
+ 	ACPI_MADT_TYPE_BIO_PIC = 22,
+ 	ACPI_MADT_TYPE_LPC_PIC = 23,
+-	ACPI_MADT_TYPE_RESERVED = 24,	/* 24 to 0x7F are reserved */
++	ACPI_MADT_TYPE_RINTC = 24,
++	ACPI_MADT_TYPE_RESERVED = 25,	/* 25 to 0x7F are reserved */
+ 	ACPI_MADT_TYPE_OEM_RESERVED = 0x80	/* 0x80 to 0xFF are reserved for OEM use */
+ };
+ 
+@@ -1251,6 +1252,24 @@ enum acpi_madt_lpc_pic_version {
+ 	ACPI_MADT_LPC_PIC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
+ };
+ 
++/* 24: RISC-V INTC */
++struct acpi_madt_rintc {
++	struct acpi_subtable_header header;
++	u8 version;
++	u8 reserved;
++	u32 flags;
++	u64 hart_id;
++	u32 uid;		/* ACPI processor UID */
++};
++
++/* Values for RISC-V INTC Version field above */
++
++enum acpi_madt_rintc_version {
++	ACPI_MADT_RINTC_VERSION_NONE = 0,
++	ACPI_MADT_RINTC_VERSION_V1 = 1,
++	ACPI_MADT_RINTC_VERSION_RESERVED = 2	/* 2 and greater are reserved */
++};
++
+ /* 80: OEM data */
+ 
+ struct acpi_madt_oem_data {
+-- 
+2.35.3
 
---
-Lee Jones [李琼斯]
+
+
+
+
