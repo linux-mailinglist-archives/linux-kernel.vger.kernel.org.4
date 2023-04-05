@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480CD6D7C7C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BA46D7C83
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237096AbjDEM0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S238017AbjDEM0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237607AbjDEMZ6 (ORCPT
+        with ESMTP id S237210AbjDEM0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:25:58 -0400
+        Wed, 5 Apr 2023 08:26:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2AC5BB1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:25:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D442759F9
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:25:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23FE461F20
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:25:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FBEC433EF;
-        Wed,  5 Apr 2023 12:25:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD2C63BF0
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDB0C433D2;
+        Wed,  5 Apr 2023 12:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680697545;
-        bh=bAwNBCT1MGIbFhfi1b8vQ7dGwmdleZML+qyHObqZRQk=;
+        s=k20201202; t=1680697549;
+        bh=2ViGdaKT/6uhXxtE9hEmZxbA1lJCR9L0M3W86yX8NRw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KPOtQy8Ee4LrHoVqOczsriag5PVojCKmXM94FJN53cCN/Kjhca3liQPkl1EK70DoR
-         Jx6ap1CJdrLIJWJQUafLgOF43B1AMwDdDIKsTChWkKyqbGxpn+wZG/XYvHPteNrixv
-         FX3o3y1OnI4dTIJylk4XYwRuprXpAcqbVD1I83P/da1l8nQRscfiUVKlYcJi5ttGrX
-         ukqnp9uvc/IjzCVMNSm1G5GF6culM+CoEDjaz6nWDuszHwKMcR96tOCN99ustwAM2Z
-         y5MjhdnhvizTLHtLpKGEfz7HKqHxX4KAHlVS+BFhLlnvt/wN/7pPZTFuoG9uKyhjPs
-         a4I3oUAKayhAQ==
+        b=ajQw2KUV+U7AlAbiTWrS44Dn0JZN29/FoH1Uf8830ZM+AiH14ll6N7SCKY3yinvSk
+         6wgekz2Ry/KZ14hWq5an/q3SN2Kwl5SQ9zwPNyT83LUKOl9imwkpyf+rRPEpaV/pKr
+         iirivpX5fvCEKGAMpPWYyCnenDzSY3TM5s+QoFAl1htZYqVX5XKCQCXFOHq/CkRmD7
+         KThlEWaRgCIHJzdHdI+e6Ix/4ulLo4dTDJigCAwSBLfKgQwWEn106b5Z1z+ILnu/nr
+         gCRldej6QzOmFl0kwKL63r37T7YsR71KlVs5K+T4dN/YKUz7kEqAuacvXNOTClBBNq
+         YNTyl9P0SStoA==
 From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org,
-        Daniel Baluta <daniel.baluta@oss.nxp.com>
-Cc:     linux-kernel@vger.kernel.org, cujomalainey@chromium.org,
-        tiwai@suse.com, perex@perex.cz, kai.vehmanen@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, yung-chuan.liao@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, lgirdwood@gmail.com,
-        pierre-louis.bossart@linux.intel.com
-In-Reply-To: <20230405092655.19587-1-daniel.baluta@oss.nxp.com>
-References: <20230405092655.19587-1-daniel.baluta@oss.nxp.com>
-Subject: Re: [PATCH] ASoC: SOF: pm: Tear down pipelines only if DSP was
- active
-Message-Id: <168069754270.50709.3405991457967735088.b4-ty@kernel.org>
-Date:   Wed, 05 Apr 2023 13:25:42 +0100
+To:     Liam.Howlett@Oracle.com, Mark Brown <broonie@kernel.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230403-regmap-maple-walk-fine-v2-1-c07371c8a867@kernel.org>
+References: <20230403-regmap-maple-walk-fine-v2-1-c07371c8a867@kernel.org>
+Subject: Re: [PATCH v2] regmap: Use mas_walk() instead of mas_find()
+Message-Id: <168069754829.50839.3429287671431516828.b4-ty@kernel.org>
+Date:   Wed, 05 Apr 2023 13:25:48 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -59,25 +53,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Apr 2023 12:26:55 +0300, Daniel Baluta wrote:
-> With PCI if the device was suspended it is brought back to full
-> power and then suspended again.
+On Tue, 04 Apr 2023 20:42:28 +0100, Mark Brown wrote:
+> Liam recommends using mas_walk() instead of mas_find() for our use case so
+> let's do that, it avoids some minor overhead associated with being able to
+> restart the operation which we don't need since we do a simple search.
 > 
-> This doesn't happen when device is described via DT.
 > 
-> We need to make sure that we tear down pipelines only if the device
-> was previously active (thus the pipelines were setup).
-> 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
 
 Thanks!
 
-[1/1] ASoC: SOF: pm: Tear down pipelines only if DSP was active
-      commit: 0b186bb06198653d74a141902a7739e0bde20cf4
+[1/1] regmap: Use mas_walk() instead of mas_find()
+      commit: fac79bad889bb167a37492181646992c8c48903b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
