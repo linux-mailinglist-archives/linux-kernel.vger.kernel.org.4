@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7905F6D7A60
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62956D7A62
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237270AbjDEKwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
+        id S237478AbjDEKwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjDEKw2 (ORCPT
+        with ESMTP id S237087AbjDEKwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:52:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EE14C20;
-        Wed,  5 Apr 2023 03:52:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A97763CA0;
-        Wed,  5 Apr 2023 10:52:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE13C433D2;
-        Wed,  5 Apr 2023 10:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680691946;
-        bh=NFRpILb73SbXaqiAYsKtilbT82AouxOyjWQbgbTHezs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZnYIJ5Ar3+7sS99S55DFY6IBTnOyKAQxvj8tmXpSFEJ822wruQow62yrmM7Xpkj5m
-         fRq+tYuuarRJh46WQxH4roDT3GYkRtyo5KDmHhoKU0KWBJXK4kMnBT793JQIjnM4yo
-         ZwZTRrOBLoOPkCmrUhaaf8Um6WytBYRszsq/jRjkumMgKN4IiNmrDJgw1Ipi7RfZkX
-         u74vNyWMYYwrjW1k2bNH3jnsiLPaVeABlhyVyrfrdaQqw6hbCs1h66XMH8NNM1ddhb
-         402AqjJ7tq5c9iB59DNpyd1K/Q3Iy2h6WciigcDJS9WnYR1O+sYtQ/8/EW8lxQvovQ
-         b+vAxvqbwncGQ==
-Date:   Wed, 5 Apr 2023 11:52:19 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Support Opensource <support.opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steve Twiss <stwiss.opensource@diasemi.com>,
-        DLG-Adam.Thomson.Opensource@dm.renesas.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Subject: Re: [PATCH v2 2/3] regulator: da9063: implement basic XVP setter
-Message-ID: <35202b81-abd6-4e0b-b2ad-a385cbb3979d@sirena.org.uk>
-References: <20230403-da9063-disable-unused-v2-0-2f1bd2a2434a@skidata.com>
- <20230403-da9063-disable-unused-v2-2-2f1bd2a2434a@skidata.com>
+        Wed, 5 Apr 2023 06:52:51 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D60ED8;
+        Wed,  5 Apr 2023 03:52:50 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id kq3so34008848plb.13;
+        Wed, 05 Apr 2023 03:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680691970;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qyZL4BMGnlQcpUW+1AtbAH7ZK7yLm3loW0kemOn3s2Q=;
+        b=I+GKYM1ucjAMACk3J1W9G8wRmj1vsYla+LCsnAs81/hC4b8xl4Pt+BpDSc8lziTvQ5
+         ccmaRNzlCVZMxE5K2fAQqQBITVuI44pK4WtjDz6fPUX47D79+ONaIdZ+xNPqU+bdbppb
+         L+KLvrz0jXnR8B9gVCNLmMAlY8ESrimFfB+N26EKm6PCxvcQVJVvzCqWf1Ql5h0PWGAO
+         z2S7efsMA+1lZ1LOp8oSZdRzX1jhaAad88MJkqYqmylUGlGpic+S+YM22TGAfEWqWW9Y
+         jRuzUedk+n5tNtCvAybU53WrBQlR6By2WY7MwXggRnful3YAlcWIUEQGiSHM2Mf54zLA
+         bN5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680691970;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qyZL4BMGnlQcpUW+1AtbAH7ZK7yLm3loW0kemOn3s2Q=;
+        b=61cGzLvVICKWz11ORww5zoYegAnNCgPRpdJmMvm/SLJaNRMTGaNCeVrwUcO5AmaySh
+         14mn3XfHZAo4fUrELf9/vMgvaXwk1IR/bXxeQKsfUTIcy336OCjhQw17bqt+IT/65MRz
+         izud55a8T5aFIKW02tM4HEYnNLyuXyeUuoqbrYZ/rmYgJ8B/qgpkls9Raf5u3iDBbkSp
+         OMVLM/wqtBT0zLAJm/lOJFeGPhUPl8PuOpRUVR6UTqfjGpuP2C2SWabmxTTnmSIAWyaH
+         Zy4jq3zcM2CyI0SJGEd9F8lslH5OxO3p/7bHooapLrWnCNdkXz/D5YBTXsuLrmNN6U+M
+         Ahbw==
+X-Gm-Message-State: AAQBX9c2HBuAYRVEc6EbxZ1ks8amP5pA6BFuKcJjGVplUjHQd2UhhJUH
+        JPxDCvPq99ne/kWV4QfulGiewG73tuamOQ==
+X-Google-Smtp-Source: AKy350byL6x7NMUoTF7F7xGRaI6G2uSNn6vXt451+x5q2pw4YjQbWLimjhgD6A0tSUY9QTuGosG9BQ==
+X-Received: by 2002:a05:6a20:c515:b0:cc:606a:4330 with SMTP id gm21-20020a056a20c51500b000cc606a4330mr4804528pzb.55.1680691969655;
+        Wed, 05 Apr 2023 03:52:49 -0700 (PDT)
+Received: from dragonet (dragonet.kaist.ac.kr. [143.248.133.220])
+        by smtp.gmail.com with ESMTPSA id y7-20020aa78047000000b005897f5436c0sm10396942pfm.118.2023.04.05.03.52.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 03:52:49 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 19:52:45 +0900
+From:   "Dae R. Jeong" <threeearcat@gmail.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: kernel BUG in find_lock_entries
+Message-ID: <ZC1S_f9nworAQpm_@dragonet>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RCHnR4IsBmgTcBdi"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230403-da9063-disable-unused-v2-2-2f1bd2a2434a@skidata.com>
-X-Cookie: 1 bulls, 3 cows.
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---RCHnR4IsBmgTcBdi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We observed an issue "kernel BUG in find_lock_entries". This was
+observed a few months ago.
 
-On Wed, Apr 05, 2023 at 07:29:08AM +0200, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
->=20
-> Allow to en- and disable voltage monitoring from the device tree.
-> Consider that the da9063 only monitors UV *and* OV together, so both
-> must be en- or disabled.
+Unfortunately, we have not found a reproducer for the crash yet. We
+will inform you if we have any update on this crash.
 
-I have no idea what a "basic XVP setter" is and this isn't super
-enlightening.  Is VP supposed to mean voltage protection or something?
+Detailed crash information is attached below.
 
-> +	/* make sure that both UV/OV protections are either enabled or disabled=
- */
-> +	if (uv_l->prot !=3D ov_l->prot || uv_l->err !=3D ov_l->err || uv_l->war=
-n !=3D ov_l->warn) {
-> +		dev_err(config->dev, "%s: regulator-uv-X-microvolt !=3D regulator-ov-X=
--microvolt\n",
-> +			regl->desc.name);
-> +		return -EINVAL;
+Best regards,
+Dae R. Jeong
 
-I'm not sure that a user is going to figure out that this refers to the
-protection levels, there's no hint as to what the X might be and the
-error suggests that both the under and over voltage protection limits
-must be have the same value, not just both be provided.
+-----
+- Kernel version:
+6.0-rc7
 
---RCHnR4IsBmgTcBdi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtUuIACgkQJNaLcl1U
-h9AsoAf+KvtAxc8Zw7X+DUeCMbRgu7dC4di4jW4yUNhLH2DRMEo9/jBLgRh2vO64
-5ySVz2O/jMvoyAKyJarrFtlEpncvCnFeiodAHH/8hNFYNJ8Wi3uiW5CzhEpmxMQ5
-43yLej97NrhwFh381TO3iUjgqWfcvMWUq/Kb8bxHSZJPvT4vUzJXD5kAXs8LxVx9
-0pkXk+GJyVEbKrVLlbryx9NC0NUArxASTq9sKolZuYJvGc6+/UJ8rmVmpdxVdVFV
-vHSkXgiKxPoQ34I+6q+0jgGuKPowL3pxGr+qFU9e7YiEEeQKMPj243h15O2Yy8cO
-qac8PhwJdq+3ZhHoflXF0K7uf6IMhw==
-=tCLj
------END PGP SIGNATURE-----
-
---RCHnR4IsBmgTcBdi--
+- Crash report:
+------------[ cut here ]------------
+kernel BUG at mm/filemap.c:2112!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 18497 Comm: syz-executor.0 Not tainted 6.0.0-rc7-00167-g92162e4a9862 #2
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+RIP: 0010:find_lock_entries+0xa93/0xaa0 mm/filemap.c:2111
+Code: 4c 89 ef 48 c7 c6 c0 2a bc 8b e8 b8 ce 0e 00 0f 0b e8 71 99 a8 09 e8 4c 04 d3 ff 4c 89 ef 48 c7 c6 a0 1e bc 8b e8 9d ce 0e 00 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 90 55 48 89 e5 41 57 41 56 41
+RSP: 0018:ffffc90009e0f9c0 EFLAGS: 00010246
+RAX: 9de53b58cea03600 RBX: ffffea0000664dc0 RCX: 0000000000040000
+RDX: ffffc90011e81000 RSI: 000000000003ffff RDI: 0000000000040000
+RBP: ffffc90009e0faf0 R08: ffffffff81e3af0a R09: ffffed1026b84f14
+R10: ffffed1026b84f14 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffea0000664dc0 R14: 00fff00000020015 R15: ffffc90009e0fa40
+FS:  00007fa68d5be700(0000) GS:ffff888135c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056481d8d7317 CR3: 0000000018571000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ truncate_inode_pages_range+0x195/0x1120 mm/truncate.c:364
+ kill_bdev block/bdev.c:75 [inline]
+ set_blocksize+0x348/0x3c0 block/bdev.c:151
+ blkdev_bszset+0x202/0x2a0 block/ioctl.c:459
+ blkdev_ioctl+0x225/0x810 block/ioctl.c:597
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0x110/0x180 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+ do_syscall_64+0x4e/0xa0 arch/x86/entry/common.c:82
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x4725fd
+Code: 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fa68d5bdbe8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000057bf80 RCX: 00000000004725fd
+RDX: 0000000020000080 RSI: 0000000040081271 RDI: 0000000000000005
+RBP: 00000000f477909a R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000057cbd8
+R13: 000000000057bf8c R14: 00007ffddba46f90 R15: 00007fa68d5bdd80
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:find_lock_entries+0xa93/0xaa0 mm/filemap.c:2111
+Code: 4c 89 ef 48 c7 c6 c0 2a bc 8b e8 b8 ce 0e 00 0f 0b e8 71 99 a8 09 e8 4c 04 d3 ff 4c 89 ef 48 c7 c6 a0 1e bc 8b e8 9d ce 0e 00 <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 90 55 48 89 e5 41 57 41 56 41
+RSP: 0018:ffffc90009e0f9c0 EFLAGS: 00010246
+RAX: 9de53b58cea03600 RBX: ffffea0000664dc0 RCX: 0000000000040000
+RDX: ffffc90011e81000 RSI: 000000000003ffff RDI: 0000000000040000
+RBP: ffffc90009e0faf0 R08: ffffffff81e3af0a R09: ffffed1026b84f14
+R10: ffffed1026b84f14 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffea0000664dc0 R14: 00fff00000020015 R15: ffffc90009e0fa40
+FS:  00007fa68d5be700(0000) GS:ffff888135c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056481d8d7317 CR3: 0000000018571000 CR4: 0000000000350ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
