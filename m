@@ -2,189 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC8D6D88FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CB16D8904
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjDEUqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
+        id S233950AbjDEUrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjDEUqo (ORCPT
+        with ESMTP id S231886AbjDEUrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:46:44 -0400
-Received: from mailout1.w2.samsung.com (mailout1.w2.samsung.com [211.189.100.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A419DE2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:46:40 -0700 (PDT)
-Received: from uscas1p1.samsung.com (unknown [182.198.245.206])
-        by mailout1.w2.samsung.com (KnoxPortal) with ESMTP id 20230405204637usoutp015ef6b6614e9934f7d73974181ef158ee~TJNhvFsWs1469714697usoutp01c;
-        Wed,  5 Apr 2023 20:46:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w2.samsung.com 20230405204637usoutp015ef6b6614e9934f7d73974181ef158ee~TJNhvFsWs1469714697usoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1680727597;
-        bh=VGr1dXcVug5jWFRjhyP5yHrMbpFmYORGRUjHZROX8/s=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=O3w88ECkjEe8knXqb2p0YBFjONNZpUs77Lmgux6H6ciyUTidBwFvHzmto6XZl8NHp
-         ipWEkQs9Qzq0mGI0+xRp8rKldzGmfex0gVSLRn45SfkWsVE0Au0KJyoMc8ufClP8MZ
-         9kpJj7n3daIO01iFND5UpS3QIP2ibJXhl8kWWIRU=
-Received: from ussmges1new.samsung.com (u109.gpu85.samsung.co.kr
-        [203.254.195.109]) by uscas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230405204637uscas1p1706736250917ab88edbe4af6a5b4fe81~TJNhj7HFh1825818258uscas1p1L;
-        Wed,  5 Apr 2023 20:46:37 +0000 (GMT)
-Received: from uscas1p2.samsung.com ( [182.198.245.207]) by
-        ussmges1new.samsung.com (USCPEMTA) with SMTP id EB.42.09634.D2EDD246; Wed, 
-        5 Apr 2023 16:46:37 -0400 (EDT)
-Received: from ussmgxs1new.samsung.com (u89.gpu85.samsung.co.kr
-        [203.254.195.89]) by uscas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230405204637uscas1p2fb449663414a31f130fd5b02caac3340~TJNhPr82H1349813498uscas1p2B;
-        Wed,  5 Apr 2023 20:46:37 +0000 (GMT)
-X-AuditID: cbfec36d-71bff700000025a2-bc-642dde2d8917
-Received: from SSI-EX1.ssi.samsung.com ( [105.128.2.146]) by
-        ussmgxs1new.samsung.com (USCPEXMTA) with SMTP id EA.0B.09541.D2EDD246; Wed, 
-        5 Apr 2023 16:46:37 -0400 (EDT)
-Received: from SSI-EX2.ssi.samsung.com (105.128.2.227) by
-        SSI-EX1.ssi.samsung.com (105.128.2.226) with Microsoft SMTP Server
-        (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
-        15.1.2375.24; Wed, 5 Apr 2023 13:46:36 -0700
-Received: from SSI-EX2.ssi.samsung.com ([105.128.2.227]) by
-        SSI-EX2.ssi.samsung.com ([105.128.2.227]) with mapi id 15.01.2375.024; Wed,
-        5 Apr 2023 13:46:36 -0700
-From:   Nate Thornton <nate.thornton@samsung.com>
-To:     "kbusch@kernel.org" <kbusch@kernel.org>
-CC:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        Wed, 5 Apr 2023 16:47:37 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2046.outbound.protection.outlook.com [40.107.223.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899232127;
+        Wed,  5 Apr 2023 13:47:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F1jsMfzBv7FrC771D5HawEgqFKgpnKtzO4ho+vANObgqyWpbcTlww9ZSVCgYsNnunrozJ8EjVJSXeMNEpag9S+byTrGNyFauaK95rXsXy/weisZt7PeQyinv2phwznyI0gCPFkKFMqnWZgDFUUM0tzOBebiXH6gi0L2Yz2G92toY5PfLFrJXdTALQcL/XvOITiCxrEnXEK1YCtEGMC7BJEz4CzBvdQiVDPfG+7yFtJNRScuxsGCUGMfdimoDZxZg2aichFLQscjBPMMfz+hZw/eBh5ylnq0umKnIuhSQHrjDBOfGeXitg2ppLRko0sbUGO2s8Xdr9mWbtUbp6EcQaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tVm69r/ZLcJuOwjQxANksU2NBot7plm0KCCt5W3gxFM=;
+ b=UwBLoJIHNriO4mUH88UoRFw5R4u5QFpOw1BdmI+nQQ6grr0lwAARiSnoAesL6cq8/XKc8wjCq5MRCPVVWw3yC41eITTfu7uTudPtgLYg4mMBreFnQBBV+I6MaSMG2+1hEc0fagmpmGVWGpmJpCTC1tS2rEqVeF2KKLw6jpIY1YY2PW7akzm8zHckGEtqp0r7py0jAsostcmKtH1Hv2W/t+sBtPrd90JFKnZjoMHklyU6ohgHMg1zdzbomYnYWdO9xsk2esD6/STw+KXpwtXmozEZIyKsX+KA3HN7ymeVGA6RBYEb2hFe2HmmHwsAmM278K3CYYtK6FtB2tlCH4ihoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tVm69r/ZLcJuOwjQxANksU2NBot7plm0KCCt5W3gxFM=;
+ b=qc7/I0hc5kGbprsUgPeGesIx0spg5eTHmlgyyAQokYaUAwoZDpiIL4ZaAjI+JHnxHnd5/nZ3kwzz34QDCMECvI9Hl7RdZHapu4U5zhw/bEKEXt5QA4aQMnh/j6VvxCT68fvcD16S2KayrM6rA5eLwe5tZQsm/wxhN+pYF57emhY=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by SN7PR12MB6839.namprd12.prod.outlook.com (2603:10b6:806:265::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.37; Wed, 5 Apr
+ 2023 20:47:34 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f4d:82d0:c8c:bebe]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f4d:82d0:c8c:bebe%2]) with mapi id 15.20.6254.028; Wed, 5 Apr 2023
+ 20:47:34 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Kalle Valo <kvalo@kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "ath11k@lists.infradead.org" <ath11k@lists.infradead.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: nvme: Incorrect Async Event Trace string
-Thread-Topic: nvme: Incorrect Async Event Trace string
-Thread-Index: Adln9MG4z0NU2uKCTiKEWprdC5v+bQ==
-Date:   Wed, 5 Apr 2023 20:46:36 +0000
-Message-ID: <6f4a7ffad0c7495391116b8b983882b3@samsung.com>
+Subject: RE: [PATCH] wifi: ath11k: Add a warning for wcn6855 spurious wakeup
+ events
+Thread-Topic: [PATCH] wifi: ath11k: Add a warning for wcn6855 spurious wakeup
+ events
+Thread-Index: AQHZRXOqXg7kg0s2bUm/zBYW2vp/U67ixXn5gAAIeYCAAAIvs4AAAR8AgDn2UjeAAKzFUA==
+Date:   Wed, 5 Apr 2023 20:47:34 +0000
+Message-ID: <MN0PR12MB6101F8C3E851055F03FA37B7E2909@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230220213807.28523-1-mario.limonciello@amd.com>
+        <87r0ubqo81.fsf@kernel.org>     <980959ea-b72f-4cc0-7662-4dd64932d005@amd.com>
+        <87mt4zqmgh.fsf@kernel.org>     <805fe9f0-7dbf-4483-9281-072db3765ff6@amd.com>
+ <87lej6aak5.fsf@kernel.org>
+In-Reply-To: <87lej6aak5.fsf@kernel.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [105.128.2.176]
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-04-05T20:47:32Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=0cb5637b-2ed8-436b-879f-f1faad0d1f1e;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2023-04-05T20:47:32Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 845a419b-542a-4096-bca1-7381b0941ef5
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|SN7PR12MB6839:EE_
+x-ms-office365-filtering-correlation-id: eb052a14-1982-4d4f-d1f1-08db3616fba8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LxiEkgRo6oxuPjmHxha3hrn81B/H4zL5by2iq8wRMxw25uWjPNnnu0BfeybaXmGIMh7DnQyckdTFfGVGTPIlUgO+OBDNnQNhpDsD4UBdYPa47u2OoZUxMIFP0YMCiamnjLfeW/770xngFIp1MZ0eYz7IDgXIscx3hR3uZcRWFwawD9rmwg2jja090uuwl3abLknkiWi9yhSl0JnFBx7y+NY8WD16+LqLkvINzmo06YJvSRtlBCiwQ7JYYIG6kmQcKRlg1U2qyoVtoznD7nqNnfS4KtRNGFaQ3iUc2oMnd4nzmngrRH/6vicnj+6U/VwIxcECIEsKvRzVCbrL0ltZIbRvgczv1rKYXh6JLuwyPe24Vx3SI2aAMxjrLofoP4izGiWvcZ0AT6SgbhvqGGohV5ENk3nH05+EZqtXDqi+/4ZFn0TaN+AbqOHDiQc75xaeF8+OTORAhh/5fh7QWUO58a5clO/JXbYMcPwrS7AWMXfeHDGSiCcAl6OOkpqUY0SKifDQ5F4U5brSgnj1xEcbOJluookMA0mTnKw4S0YdXjjM5XdNRNjtN722mvrHJceD3spCgnlQC/DZMTPAm+QD1GIKf0Ai/lTCMeHVGtaBOXw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(396003)(39860400002)(136003)(451199021)(86362001)(38070700005)(33656002)(2906002)(55016003)(7696005)(71200400001)(53546011)(83380400001)(186003)(6506007)(26005)(966005)(9686003)(4326008)(8676002)(76116006)(66946007)(66476007)(66446008)(66556008)(64756008)(478600001)(54906003)(52536014)(5660300002)(122000001)(6916009)(38100700002)(316002)(41300700001)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Xp8zlMgootCA/eGas1nYiw4Wo429dOEqgphIqwwMy9v4gJJoWfKopK2A8eUP?=
+ =?us-ascii?Q?0ZhiNJrDqGahNJLV0+kVnrKUCTYSlePVghYTZc7gB85P/6WflqX+6nMurK8W?=
+ =?us-ascii?Q?TiU7FHw9QsGRgBltbKrr56OTnb2ViQHvFBLbtFmIHe4WHqvjV6+TAMCQDXjM?=
+ =?us-ascii?Q?5wJFPJ2vqkpOwSf9teU81MsiO4ERpxrywlxmpxdldZouy/Vkxkz3qQYA4i6Y?=
+ =?us-ascii?Q?ZZJiCQmiIvPaHLWaf/fgpOpv1yYkcA2xr1B283T0p/TxnPwqEZNm1XW3cy4M?=
+ =?us-ascii?Q?MENHYtLhxlc7ex1mAb0uiDiveWpWCyfPf50ZuB6bsPgY7jubCxXymn4osBAI?=
+ =?us-ascii?Q?NHNtqbLXzp2IZbJQCspOtfOd/aTmOlIDKwp6v7OZWMOcxw2c/kkQ33A2K+Hw?=
+ =?us-ascii?Q?Ip4HeYNiv/4KjOh8aALcmYP1nLcDlUozxYMpC+9x0M3PCrZMDXe22oN5dL85?=
+ =?us-ascii?Q?bXUnkkh+DrgYOMcWS0MEnYMBJ5haCLMtxrTHq5aW7jro4gZsQwSBPt5qUYN9?=
+ =?us-ascii?Q?98HFd4DNW6AsUi6NeR8pURonlzGlV5jv+evoSqaRFkliGWeMfdE4NZtCiuQa?=
+ =?us-ascii?Q?OVw+ae/v3mEbX49Q/s2rcXI9XYRKLh45WvF5cd5mEe8PvtVoSNjcscVyKcl0?=
+ =?us-ascii?Q?I54vYhHG06eGGDK2mjSeF7j3biyw4v7cuINqqBkUG8tXsNrYtIvPkw4u7NTO?=
+ =?us-ascii?Q?UM83/aQMsgTq/fX13zUr2v6hO6zNaf+mD/XQRvKAxe1Dn92GEhFMqtF1+UZV?=
+ =?us-ascii?Q?7yBpd9tHb6EX/HW2R2u7XhNFw/w4g6PSKy8A+XMV7SIwrYEJCdESDbHA9hN4?=
+ =?us-ascii?Q?V6spwF2knJH4gNDy6+dwNH6W6bGGq3ql5TPFh0yxjwaCjF14xZCv7Z331ldr?=
+ =?us-ascii?Q?evleItFTmmDvFarpQNaOboA5uSWFNPQH0Llupp2EREeZdyF+ET4o5FW+vQAL?=
+ =?us-ascii?Q?ImaWSwy7TQIinNza2/OO8iW7DUGUkAXhaK6eeHyP2N9QZ/Wg8XPrCz4xNsMe?=
+ =?us-ascii?Q?0eDjpL6dK4Ou2oC3aDTTcCpVUqoz/v/JZEbnd2zAqI6C3rPkD+eNtxV1upCe?=
+ =?us-ascii?Q?Igids4lVzL/c0xWBdVEhV7Q08UBw37AcfVOhwSDsFkjvBruqLZyz/mEwgXO0?=
+ =?us-ascii?Q?8aT8uoZUbxNK2zv0sbqAPiE7GlWIwFWoLeGDCu0LwzV6DyBhYlDLmG9Z1+R3?=
+ =?us-ascii?Q?rS54262I/kJ0UtnU8CyWGxzV358WMKjm8Po7Cn/Tyg2rxRfGxKKjUBQNSId6?=
+ =?us-ascii?Q?CKDY9fXk7nCHYnDjWokdu4WKzkTccXShdZM9QN+gXLE9yGuMburXgcntDCh7?=
+ =?us-ascii?Q?OEGFBLgoLzY6mRcJjvutx86iqa5STO1L9y2Ai/OPk7WMIMHAxDjUfsQ2hfSk?=
+ =?us-ascii?Q?OU6nlBog4j8G/FMU+Zk8l1khEqYK50EzdlFaNhpptXKVl4rqk2P6f1FElbLE?=
+ =?us-ascii?Q?8Jpm046I4XqJjtPRPOnyV96c4R7pX2UFPOB8mKyqCgyghUSihhWPZvL2h+Ly?=
+ =?us-ascii?Q?xL7x6K3we0+HBu2q5VtY38hiqcz2Ajc4i1yep0LoqDV0d370uOxwETSjQrrL?=
+ =?us-ascii?Q?a2IJY9+c64xItAq/D7s=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrGIsWRmVeSWpSXmKPExsWy7djX87q693RTDK4/1LSYdOgao8XlXXPY
-        LOYve8ruwOyxaVUnm8fmJfUenzfJBTBHcdmkpOZklqUW6dslcGVMObuUpWCfVMWbiwdYGxib
-        RboYOTkkBEwkPq5ay9rFyMUhJLCSUWL1lsksEE4rk8S+459ZYaqW3l3ODJFYyyhx5coqqJaP
-        jBIPdn2GcpYySnx/sIwJpIVNQF9i7penzCC2iIC2xOsre8DmMgu0MUqcuvQALCEsYChx7VwD
-        C0SRmcS5CzugbD2JJT9/s4HYLAIqEh9PTgC7g1fASuJTbz9YnFFATOL7qTVgy5gFxCVuPZnP
-        BHGroMSi2XuYIWwxiX+7HrJB2IoS97+/ZIeo15FYsPsTG4StLbFs4WtmiPmCEidnPmGBqJeU
-        OLjiBtjREgKNHBLPT9+CSrhIPDu5EmqZtMTV61OZIQbxSfz99Yixi5EDKM4r0dEmBFHiIXHk
-        8XmwvUICsRItXR/YJjDKz0Jy9iwkJ81CctIsJCctYGRZxSheWlycm55abJiXWq5XnJhbXJqX
-        rpecn7uJEZg0Tv87nLuDccetj3qHGJk4GA8xSnAwK4nwqnZppQjxpiRWVqUW5ccXleakFh9i
-        lOZgURLnNbQ9mSwkkJ5YkpqdmlqQWgSTZeLglGpgmt+x+wdf2a1jPouip/1/2t+dnyk+QU7o
-        t+/ZpCMzgm+fq35Q1nf3Vj1/x/dNydXfqh/JfjHdUqwkp3JVQvv09yu+KeFmvM9lvsXX9N5f
-        rhMU+bKnXya6ucxkqcYcLcHvdYfncd2ZFP/lt+SdCQUcCV/+vfgQlvft1o+Fha+f8WtG8fVs
-        YE/SXBJgMOvd/bzVYumTKwqtRMt/WHSnnr1dZHmMz6vzmeb9nTK9lX6Tp+qGCiQqpIqmO62t
-        /rhFTPPgw8VGLA+cHK5+UJBaunqJV+Ef7oAyq6O/nPmmaXdna5bMs/ihLi2sz3FwQg5P3v6Q
-        rrg1Sh3Gy1+tzgk+v9EpQkkp5mLtf5YXcy90XD6gxFKckWioxVxUnAgAJsJoiYkDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNLMWRmVeSWpSXmKPExsWS2cA0SVf3nm6KwYFHAhaTDl1jtLi8aw6b
-        xfxlT9kdmD02repk89i8pN7j8ya5AOYoLpuU1JzMstQifbsErowpZ5eyFOyTqnhz8QBrA2Oz
-        SBcjJ4eEgInE0rvLmbsYuTiEBFYzSnw6PZcdJCEk8JFRYupdqMRSRol3Ly4zgSTYBPQl5n55
-        ygxiiwhoS7y+socFpIhZoI1R4tSlB2AJYQFDiWvnGlggiswkzl3YAWXrSSz5+ZsNxGYRUJH4
-        eHICK4jNK2Al8am3HyzOKCAm8f3UGrBlzALiEreezGeCOFVAYsme88wQtqjEy8f/WCFsRYn7
-        31+yQ9TrSCzY/YkNwtaWWLbwNTPEfEGJkzOfsEDUS0ocXHGDZQKj6CwkK2YhaZ+FpH0WkvYF
-        jCyrGMVLi4tz0yuKDfNSy/WKE3OLS/PS9ZLzczcxAuPn9L/DkTsYj976qHeIkYmD8RCjBAez
-        kgivapdWihBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFeIdeJ8UIC6YklqdmpqQWpRTBZJg5OqQam
-        ytnOOkZMad2Ve65cctjLpFV4z89vt9e28/dN3F/lLuPXV98t2aX5fNXS+4wh0bETbpcUFR9O
-        fXqqMoa9V+T7w4XsO6peqfl+s6gTV2yvfLi0PNfv+dVWC4H5eVILbbw+vpe5I38na46ZSUWV
-        W7vX78c7zixuuZVjeF1E91ju7brarUuXmgZG5ioWLtzn38bbuOq0aMbuhdE7lef/D5+yt5yh
-        sFpfdMktBnfvmpRMscC3b94/e3Gj2/eZwJKJrw0/f72/t3DKUolm89tViq+XqoUq2pdPv7Sg
-        waW1wEUl50zhpsfiz9iKzQK/JV3fUpoxJaLqePRHhnv3Jnyzlki4mrN8OUtX3r/cuV8vepYp
-        sRRnJBpqMRcVJwIAWlfQAA4DAAA=
-X-CMS-MailID: 20230405204637uscas1p2fb449663414a31f130fd5b02caac3340
-CMS-TYPE: 301P
-X-CMS-RootMailID: 20230405204637uscas1p2fb449663414a31f130fd5b02caac3340
-References: <CGME20230405204637uscas1p2fb449663414a31f130fd5b02caac3340@uscas1p2.samsung.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb052a14-1982-4d4f-d1f1-08db3616fba8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Apr 2023 20:47:34.1984
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RZNXbZZlynEaDg7tbBK7p3hGNnWaCwqbLMjoK41PYbBPusWbHAvEQwFpkHIb0jO4PewZV5MoZUsVXPwwyDEnKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6839
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Keith,
+[Public]
 
-With NVMe Asynchronous Event kernel debug tracing, there are duplicate entr=
-ies in the symbolic table that cause the decoded event string to be incorre=
-ct for certain events. This is easily observed by enabling SMART / Health e=
-vents, then lowering the temperature threshold so the drive will generate a=
-n event. I observed the issue on the 5.15 kernel and the trace macro remain=
-s the same in 6.x
+> > On 2/27/23 07:14, Kalle Valo wrote:
+> >
+> >> Mario Limonciello <mario.limonciello@amd.com> writes:
+> >>
+> >>> On 2/27/23 06:36, Kalle Valo wrote:
+> >>>
+> >>>> Mario Limonciello <mario.limonciello@amd.com> writes:
+> >>>>
+> >>>>> +static void ath11k_check_s2idle_bug(struct ath11k_base *ab)
+> >>>>> +{
+> >>>>> +	struct pci_dev *rdev;
+> >>>>> +
+> >>>>> +	if (pm_suspend_target_state !=3D PM_SUSPEND_TO_IDLE)
+> >>>>> +		return;
+> >>>>> +
+> >>>>> +	if (ab->id.device !=3D WCN6855_DEVICE_ID)
+> >>>>> +		return;
+> >>>>> +
+> >>>>> +	if (ab->qmi.target.fw_version >=3D WCN6855_S2IDLE_VER)
+> >>>>> +		return;
+> >>>>> +
+> >>>>> +	rdev =3D pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0,
+> 0));
+> >>>>> +	if (rdev->vendor =3D=3D PCI_VENDOR_ID_AMD)
+> >>>>> + ath11k_warn(ab, "fw_version 0x%x may cause spurious wakeups.
+> >>>>> Upgrade to 0x%x or later.",
+> >>>>> +			    ab->qmi.target.fw_version,
+> WCN6855_S2IDLE_VER);
+> >>>>
+> >>>> I understand the reasons for this warning but I don't really trust t=
+he
+> >>>> check 'ab->qmi.target.fw_version >=3D WCN6855_S2IDLE_VER'. I don't
+> know
+> >>>> how the firmware team populates the fw_version so I'm worried that i=
+f
+> we
+> >>>> ever switch to a different firmware branch (or similar) this warning
+> >>>> might all of sudden start triggering for the users.
+> >>>>
+> >>>
+> >>> In that case, maybe would it be better to just have a list of the
+> >>> public firmware with issue and ensure it doesn't match one of those?
+> >>
+> >> You mean ath11k checking for known broken versions and reporting that?
+> >> We have so many different firmwares to support in ath11k, I'm not real=
+ly
+> >> keen on adding tests for a specific version.
+> >
+> > I checked and only found a total of 7 firmware versions published for
+> > WCN6855 at your ath11k-firmware repo.  I'm not sure how many went to
+> > linux-firmware.  But it seems like a relatively small list to have.
+>=20
+> ath11k supports also other hardware families than just WCN6855, so there
+> are a lot of different firmware versions and branches.
 
-I am using a Samsung PM173X drive in my testing, but any drive that support=
-s asynchronous events and temperature readings should suffice.
+Right, but this change was explicitly checking the device ID matched WCN685=
+5.
 
-e.g.
-# Enable NVMe Async Event debug tracing
-$ echo 1 > /sys/kernel/debug/tracing/events/nvme/nvme_async_event/enable
+So it could be a single check for that device and any of the 5 bad firmware=
+ binaries.
 
-# Enable Asynchronous Event Notification for SMART / Critical Health Warnin=
-gs (bits 0:7)
-$ nvme set-feature /dev/nvme0 --feature-id=3D0xB --value=3D0xF
-set-feature:0x0b (Async Event Configuration), value:0x0000000f, cdw12:00000=
-000, save:0
+>=20
+> >> We have a list of known important bugs in the wiki:
+> >>
+> >>
+> https://wireless.wiki.kernel.org/en/users/drivers/ath11k#known_bugslimita
+> tions
+> >>
+> >> What about adding the issue there, would that get more exposure to the
+> >> bug and hopefully the users would upgrade the firmware?
+> >>
+> >
+> > The problem is when this happens users have no way to know it's even
+> > caused by wireless.  So why would they go looking at the wireless
+> > wiki?
+> >
+> > The GPIO used for WLAN is different from design to design so we can't
+> > put it in the GPIO driver.  There are plenty of designs that have
+> > valid reasons to wakeup from other GPIOs as well so it can't just be
+> > the GPIO driver IRQ.
+>=20
+> I understand your problem but my problem is that I have three Qualcomm
+> drivers to support and that's a major challenge itself. So I try to keep
+> the drivers as simple as possible and avoid any hacks.
 
-# Reduce Temperature Threshold to 64 Kelvin, thus triggering an event (unle=
-ss it's cold)
-$ nvme set-feature /dev/nvme0 --feature-id=3D0x4 --value=3D0x40
-
-# Observe that the Asynchronous Event Notification (AEN) is 0x000001. This =
-corresponds to a SMART / Health status
-# but is labeled as NVME_AER_NOTICE_FW_ACT_STARTING
-$ cat /sys/kernel/debug/tracing/trace
-# tracer: nop
-#
-# entries-in-buffer/entries-written: 1/1   #P:20
-#
-#                                _-----=3D> irqs-off
-#                               / _----=3D> need-resched
-#                              | / _---=3D> hardirq/softirq
-#                              || / _--=3D> preempt-depth
-#                              ||| / _-=3D> migrate-disable
-#                              |||| /     delay
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-          <idle>-0       [017] d.h..   745.082580: nvme_async_event: nvme0:=
- NVME_AEN=3D0x000001 [NVME_AER_NOTICE_FW_ACT_STARTING]
-
-
-
-The AER name duplications are in drivers/nvme/host/trace.h where it tries t=
-o combine the Asynchronous Event Type, and types specific to the Notice eve=
-nt type. In my case, I should be seeing NVME_AER_SMART.
-		aer_name(NVME_AER_NOTICE_NS_CHANGED),		// 0
-		aer_name(NVME_AER_NOTICE_ANA),			// 3
-		aer_name(NVME_AER_NOTICE_FW_ACT_STARTING),	// 1
-		aer_name(NVME_AER_NOTICE_DISC_CHANGED),		// 0xF0
-		aer_name(NVME_AER_ERROR),				// 0
-		aer_name(NVME_AER_SMART),				// 1
-		aer_name(NVME_AER_CSS),					// 6
-		aer_name(NVME_AER_VS))					// 7
-=09
-
-Referring to NVM Express Base Specification, Revision 2.0c, 5.2.1 Command C=
-ompletion: The Event Type is in the lower bits 0:3 of Dword 0. The Event Ty=
-pe then describes specific Event Information in bits 8:15. (Note that two E=
-vent Types are missing: NVME_AER_NOTICE (2) and NVME_AER_IMMEDIATE (3). The=
- other values, 4 and 5, are marked as Reserved in the spec. For completenes=
-s, we may want to add the missing definitions.)
-
-In nvme_handle_aen_notice it is decoding bits 8:15 and passing that into th=
-e trace. That maybe explains why the NVME_AER_NOTICE_* entries were added t=
-o the symbolic names. If this is still desired, it may require a second TRA=
-CE_EVENT definition specific to notice events.
-
-Although I am new to the kernel, I am happy to help with a patch if you can=
- describe the desired behavior.
-
-Thanks,
-Nate
-
-
+OK.
