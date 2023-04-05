@@ -2,79 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F62E6D8669
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9DF6D8672
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbjDES6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
+        id S233431AbjDETAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjDES6Q (ORCPT
+        with ESMTP id S229756AbjDETAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:58:16 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE0AE72
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:58:12 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a1b23f49e2so111025ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 11:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680721092;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uF/GWlWvG/Tqd7xZnqk6+z1z8ng2ZczSoQf0IxH0nxE=;
-        b=mTLcOThNPraoToNCDo62CKn3q0zTBrE4OUIgJMokbRoEjFiclTOQAC9ufE6sPzF2q2
-         0ROTVYH70JUwqpE0+oYoLViPsETO5UheRiBAVTKmruopCUIQnoeUtERMtR7Z0PzaM/pX
-         WKCLnOI7q4KJV6m8Yn6iazjA/iG8cMUajRwEd1JtrtdZr0BvxnZZ1iGU7o+GXqXIpqt4
-         D+dzgUG0jx8FqwnWAyGg8EI3onHVXFkm4GVPKPnec8aCPL+mzZHqNmGSbJou6X/7FlQl
-         QuXMWUYWGK0Xuuou8B7Br5skBfwL25AJ0WEePA2SWttvlE+AusSKoQYCac1lpRNn6uxR
-         wynA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680721092;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uF/GWlWvG/Tqd7xZnqk6+z1z8ng2ZczSoQf0IxH0nxE=;
-        b=JVO0cAq8aE6ObI60ivgLhdvMPTr4npHYYL3jnWDLNTw8r/sRnGsewXK1OJou+YJpd3
-         y3+s9/iXqvyf4szvsHPtwFvRr4BN8xHJeWrn5/jys14EdWiAyl8z0ZOxlafmwxbmRzhw
-         4SCdKPbYUDLNNU52FkEC0Jd5cPQCfi3gPWKHFFiURHgiGSVcLZ8iY78vv2Fwi7xDo2xJ
-         OGelcdgw0yZEX0OTCl82LK6TW+hEqQH+tA+8YSNnQUIVVHoSzDr7DKr63puqjglZMdJf
-         c2tyQ2hK7ZYCsl9jDgyqsPAO6uXXe4H+4RqRidn8sv7X00XSB3x8Nc8uSRs4eGwWo/6P
-         RTgw==
-X-Gm-Message-State: AAQBX9eV9L4xk52VFcXese6qXL+KvbGCbSHEVRE8gQ6wRWGHSUDH4odQ
-        Of51Ls0VOJ2nO9dLG688ek8VrQ==
-X-Google-Smtp-Source: AKy350bAeZQvqaU/ztHd1scjIH9GtWNSI+ys3t1nF/pvEZZ3JLmOfyhLEGWdtmnD3176tx7+P41gog==
-X-Received: by 2002:a17:903:50e:b0:1a1:ea19:8f40 with SMTP id jn14-20020a170903050e00b001a1ea198f40mr21348plb.18.1680721091709;
-        Wed, 05 Apr 2023 11:58:11 -0700 (PDT)
-Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id m129-20020a632687000000b0050be4ff460esm9748194pgm.4.2023.04.05.11.58.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 11:58:10 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 11:58:07 -0700
-From:   William McVicker <willmcvicker@google.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sajid Dalvi <sdalvi@google.com>,
-        Han Jingoo <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, kernel-team@android.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
-Message-ID: <ZC3Ev7qnUDdG0cFd@google.com>
-References: <ZC12lN9Cs0QlPhVh@lpieralisi>
- <20230405182753.GA3626483@bhelgaas>
+        Wed, 5 Apr 2023 15:00:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C5AE7E;
+        Wed,  5 Apr 2023 12:00:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D89A6401A;
+        Wed,  5 Apr 2023 19:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57899C433D2;
+        Wed,  5 Apr 2023 19:00:06 +0000 (UTC)
+Date:   Wed, 5 Apr 2023 15:00:02 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Ross Zwisler <zwisler@google.com>
+Subject: Re: [for-linus][PATCH 2/3] tracing: Fix ftrace_boot_snapshot
+ command line logic
+Message-ID: <20230405150002.642a0f26@gandalf.local.home>
+In-Reply-To: <20230405142654.813714541@goodmis.org>
+References: <20230405135813.735507007@goodmis.org>
+        <20230405142654.813714541@goodmis.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230405182753.GA3626483@bhelgaas>
-X-Spam-Status: No, score=-14.8 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,131 +48,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023, Bjorn Helgaas wrote:
-> On Wed, Apr 05, 2023 at 03:24:36PM +0200, Lorenzo Pieralisi wrote:
-> > On Thu, Mar 16, 2023 at 06:05:02PM -0500, Sajid Dalvi wrote:
-> > > On Tue, Feb 28, 2023 at 10:36 PM Sajid Dalvi <sdalvi@google.com> wrote:
-> > > >
-> > > > Thanks for your review Jingoo.
-> > > > Sajid
-> > > >
-> > > > On Tue, Feb 28, 2023 at 4:04 PM Han Jingoo <jingoohan1@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
-> > > > > >
-> > > > > > In dw_pcie_host_init() regardless of whether the link has been started
-> > > > > > or not, the code waits for the link to come up. Even in cases where
-> > > > > > start_link() is not defined the code ends up spinning in a loop for 1
-> > > > > > second. Since in some systems dw_pcie_host_init() gets called during
-> > > > > > probe, this one second loop for each pcie interface instance ends up
-> > > > > > extending the boot time.
-> > > > > >
-> > > > > > Call trace when start_link() is not defined:
-> > > > > > dw_pcie_wait_for_link << spins in a loop for 1 second
-> > > > > > dw_pcie_host_init
-> > > > > >
-> > > > > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
-> > > > >
-> > > > > (CC'ed Krzysztof Kozlowski)
-> > > > >
-> > > > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
-> > > > >
-> > > > > It looks good to me. I also checked the previous thread.
-> > > > > I agree with Krzysztof's opinion that we should include
-> > > > > only hardware-related features into DT.
-> > > > > Thank you.
-> > > > >
-> > > > > Best regards,
-> > > > > Jingoo Han
-> > > > >
-> > > > > > ---
-> > > > > >  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
-> > > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > > index 9952057c8819..9709f69f173e 100644
-> > > > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > > @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
-> > > > > >                 ret = dw_pcie_start_link(pci);
-> > > > > >                 if (ret)
-> > > > > >                         goto err_remove_edma;
-> > > > > > -       }
-> > > > > >
-> > > > > > -       /* Ignore errors, the link may come up later */
-> > > > > > -       dw_pcie_wait_for_link(pci);
-> > > > > > +               /* Ignore errors, the link may come up later */
-> > > > > > +               dw_pcie_wait_for_link(pci);
-> > > > > > +       }
-> > > > > >
-> > > > > >         bridge->sysdata = pp;
-> > > > > >
-> > > > > > --
-> > > > > > 2.39.2.722.g9855ee24e9-goog
-> > > > > >
-> > > 
-> > > @bhelgaas Can this be picked up in your tree:
-> > >  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/
-> > 
-> > This patch seems fine to me. The question I have though is why the
-> > *current* code is written the way it is. Perhaps it is just the way
-> > it is, I wonder whether this change can trigger a regression though.
+On Wed, 05 Apr 2023 09:58:15 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> The new code will look basically like this:
+> The kernel command line ftrace_boot_snapshot by itself is supposed to
+> trigger a snapshot at the end of boot up of the main top level trace
+> buffer. A ftrace_boot_snapshot=foo will do the same for an instance called
+> foo that was created by trace_instance=foo,...
 > 
->   if (!dw_pcie_link_up(pci)) {
->     dw_pcie_start_link(pci);
->     dw_pcie_wait_for_link(pci);
->   }
+> The logic was broken where if ftrace_boot_snapshot was by itself, it would
+> trigger a snapshot for all instances that had tracing enabled, regardless
+> if it asked for a snapshot or not.
 > 
-> If the link is already up by the time we get here, this change means
-> we won't get this message emitted by dw_pcie_wait_for_link():
+> When a snapshot is requested for a buffer, the buffer's
+> tr->allocated_snapshot is set to true. Use that to know if a trace buffer
+> wants a snapshot at boot up or not.
 > 
->   dev_info(pci->dev, "PCIe Gen.%u x%u link up\n", ...)
+> Since the top level buffer is part of the ftrace_trace_arrays list,
+> there's no reason to treat it differently than the other buffers. Just
+> iterate the list if ftrace_boot_snapshot was specified.
 > 
-> I don't know how important that is, but I bet somebody cares about it.
+> Link: https://lkml.kernel.org/r/20230405022341.895334039@goodmis.org
 > 
-> From the commit log, I expected the patch to do something based on
-> whether ->start_link() was defined, but there really isn't a direct
-> connection, so maybe the log could be refined.
+> Cc: stable@vger.kernel.org
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Ross Zwisler <zwisler@google.com>
+> Fixes: 9c1c251d670bc ("tracing: Allow boot instances to have snapshot buffers")
+
+I guess I didn't need to Cc stable here, as the commit it fixed was added
+in the 6.3 merge window.
+
+ $ git describe --contains 9c1c251d670bc
+ v6.3-rc1~126^2~8
+
+Oh well.
+
+-- Steve
+
+
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  kernel/trace/trace.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 > 
-> Bjorn
-> 
-> -- 
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index ed1d1093f5e9..4686473b8497 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -10393,19 +10393,20 @@ __init static int tracer_alloc_buffers(void)
+>  
+>  void __init ftrace_boot_snapshot(void)
+>  {
+> +#ifdef CONFIG_TRACER_MAX_TRACE
+>  	struct trace_array *tr;
+>  
+> -	if (snapshot_at_boot) {
+> -		tracing_snapshot();
+> -		internal_trace_puts("** Boot snapshot taken **\n");
+> -	}
+> +	if (!snapshot_at_boot)
+> +		return;
+>  
+>  	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
+> -		if (tr == &global_trace)
+> +		if (!tr->allocated_snapshot)
+>  			continue;
+> -		trace_array_puts(tr, "** Boot snapshot taken **\n");
+> +
+>  		tracing_snapshot_instance(tr);
+> +		trace_array_puts(tr, "** Boot snapshot taken **\n");
+>  	}
+> +#endif
+>  }
+>  
+>  void __init early_trace_init(void)
 
-After taking a deeper dive into this patch, I found that [1] changes the
-original intent which was to skip the call to dw_pcie_wait_for_link()
-when pci->ops->start_link is NULL. I talked to Sajid offline and he
-agreed we should put back the start_link NULL check. The updated patch
-should look like this:
-
-  if (!dw_pcie_link_up(pci) && pci->ops && pci->ops->start_link) {
-    ret = dw_pcie_start_link(pci);
-    if (ret)
-      goto err_free_msi;
-    dw_pcie_wait_for_link(pci);
-  }
-
-
-...which will ensure that we don't call dw_pcie_wait_for_link() when
-pci->ops->start_link is NULL.
-
-With regards to the log, I think there are 2 ways to solve this:
-
-1) We could also call dw_pcie_wait_for_link() in a new else if
-   dw_pcie_link_up() returns 1.
-2) We could add this to the top of dw_pcie_wait_for_link() and leave the
-   code as is:
-
-   if (!pci->ops || !pci->ops->start_link)
-     return 0;
-
-I kind of like (2) since that solves both Sajid's original issue and
-will keep the original log.
-
-[1] https://lore.kernel.org/all/20220624143428.8334-14-Sergey.Semin@baikalelectronics.ru/
-
-Regards,
-Will
