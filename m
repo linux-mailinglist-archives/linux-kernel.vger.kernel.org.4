@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8D86D82FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BE46D82FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjDEQGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S236512AbjDEQGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjDEQGl (ORCPT
+        with ESMTP id S233317AbjDEQGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:06:41 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0151659CD;
-        Wed,  5 Apr 2023 09:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=sazrJU4w8BvwcUrOpjX/vjDRrO2IbyUUqQvpLwhaH7k=; b=1A/fF0lXMxmJYKpvJL/EEpXji3
-        7MnzCQeJXXZyH4TdJYoaLcfPHniiMY6hAej8r5IcFsnddrNlnuI1k7KbuXsOzhdejLx/5O4H2cJsP
-        k+4WKpKM6UPPg9a2A2LU9Ajt+q+H3LUSKpajZ5GOU6fvtpqKcrSZ+PvSlp9Hwj45wB58=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pk5eI-009XMT-0P; Wed, 05 Apr 2023 18:06:14 +0200
-Date:   Wed, 5 Apr 2023 18:06:13 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 06/12] net: phy: add phy_device_atomic_register helper
-Message-ID: <a5a4e735-7b24-4933-b431-f36305689a79@lunn.ch>
-References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
- <20230405-net-next-topic-net-phy-reset-v1-6-7e5329f08002@pengutronix.de>
- <ad0b0d90-04bf-457c-9bdf-a747d66871b5@lunn.ch>
- <20230405152225.tu3wmbcvchuugs5u@pengutronix.de>
+        Wed, 5 Apr 2023 12:06:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD45420F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680710797; x=1712246797;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=sqg0P88YoT8lsSN0phoEeZOOz98+mdr1CWyuLIJ3O8o=;
+  b=DgH9z4O4QNOcukmb8TMoRdMa+KW4FlyEf/LebEUp6YeMins629MoRESA
+   ErhvLfQpLi1c+4Xbn9WN5fcscYCaD063T4kZ4MmiRNJAnKouCQAXAdW7l
+   XEOrFhqN7webL/qJcZEFQboBEyJw2fWAdn41FhvYTg5LpvHqeFYGDm7XR
+   jKm+GcoSFqlD7zToIDNBi6xsHgrjIn6hhB9fLhGETtHxBXA1qJ8F9rGuj
+   npEB1hiEWEGyjzeUTE5co8a8QtZJywKhtNdZT/7OxyDUgA7Ek72pDxl2j
+   XryalJTSNrBwov1TH504CuDrifnvK9OyQsWK3g9MORa+wBWEr13ym8ADt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="428781597"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="428781597"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 09:06:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="719374688"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="719374688"
+Received: from dlemiech-mobl.ger.corp.intel.com (HELO localhost) ([10.252.43.158])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 09:06:33 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 01/19] drm/i915/i915_scatterlist: Fix kerneldoc
+ formatting issue - missing '@'
+In-Reply-To: <20230405134526.GE8371@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230331092607.700644-1-lee@kernel.org>
+ <20230331092607.700644-2-lee@kernel.org> <87jzyt0yil.fsf@intel.com>
+ <20230403162059.GC8371@google.com> <878rf80ynz.fsf@intel.com>
+ <20230405134526.GE8371@google.com>
+Date:   Wed, 05 Apr 2023 19:06:29 +0300
+Message-ID: <87jzyqz52y.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405152225.tu3wmbcvchuugs5u@pengutronix.de>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,34 +69,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The current fwnode_mdio.c don't provide the proper helper functions yet.
-> Instead the parsing is spread between fwnode_mdiobus_register_phy() and
-> fwnode_mdiobus_phy_device_register(). Of course these can be extracted
-> and exported but I don't see the benefit. IMHO it just cause jumping
-> around files and since fwnode is a proper firmware abstraction we could
-> use is directly wihin core/lib files.
+On Wed, 05 Apr 2023, Lee Jones <lee@kernel.org> wrote:
+> On Tue, 04 Apr 2023, Jani Nikula wrote:
+>
+>> On Mon, 03 Apr 2023, Lee Jones <lee@kernel.org> wrote:
+>> > On Mon, 03 Apr 2023, Jani Nikula wrote:
+>> >
+>> >> On Fri, 31 Mar 2023, Lee Jones <lee@kernel.org> wrote:
+>> >> > Fixes the following W=1 kernel build warning(s):
+>> >> >
+>> >> >  drivers/gpu/drm/i915/i915_scatterlist.c:62: warning: Function parameter or member 'size' not described in 'i915_refct_sgt_init'
+>> >> >
+>> >> > Cc: Jani Nikula <jani.nikula@linux.intel.com>
+>> >> > Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+>> >> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>> >> > Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+>> >> > Cc: David Airlie <airlied@gmail.com>
+>> >> > Cc: Daniel Vetter <daniel@ffwll.ch>
+>> >> > Cc: intel-gfx@lists.freedesktop.org
+>> >> > Cc: dri-devel@lists.freedesktop.org
+>> >> > Signed-off-by: Lee Jones <lee@kernel.org>
+>> >>
+>> >> Thanks for the patches!
+>> >>
+>> >> Applied all but one of the drm/i915 patches to drm-intel-next or
+>> >> drm-intel-gt-next depending on the area. There were a couple of issues
+>> >> that I fixed while applying. There was a conflict with patch 5/19
+>> >> against drm-intel-gt-next so I left that one out.
+>> >
+>> > Thanks Jani.  I'll rebase and see what's left.
+>>
+>> We also took notice and aim to track this more aggressively [1].
+>
+> Thanks.
+>
+> I did clean-up all of the GPU warnings already a couple of years ago,
+> but they seem to have crept back over time.  It would be great if we
+> could put some extra checks in place to prevent them in the future.
 
-No, assuming fwnode is the proper firmware abstraction is wrong. You
-need to be very careful any time you convert of_ to fwnode_ and look
-at the history of every property. Look at the number of deprecated OF
-properties in Documentation/devicetree/bindings. They should never be
-moved to fwnode_ because then you are moving deprecated properties to
-ACPI, which never had them in the first place! You cannot assume DT
-and ACPI are the same thing, have the same binding. And the same is
-true, in theory, in the opposite direction. We don't want the DT
-properties polluted with ACPI only properties. Not that anybody takes
-ACPI seriously in networking.
+We are pretty zealous about warnings in general in i915. We have a bunch
+of extra warnings in our local Makefile and use -Werror in
+development. Inspired by this series, we added kernel-doc check to the
+build, and hope to add kernel-doc -Werror too once we're done.
 
-> I know and I thought about adding the firmware parsing helpers first but
-> than I went this way. I can split this of course to make the patch
-> smaller.
+> My aim, albeit ambitious, is to clean-up all of the W=1 warnings in the
+> kernel, then have them promoted to W=0, so they warn more loudly during
+> development, thus keeping them from reappearing.
 
-Please do. Also, i read your commit message thinking it was a straight
-copy of the code, and hence i did not need to review the code. But in
-fact it is new code. So i need to take a close look at it.
+I wish it was easier to do the equivalent of W=1 on a driver or Makefile
+basis. I like to keep i915 clean, but I don't like to use W=1 because
+there are just so many warnings currently.
 
-But what i think is most important for this patchset is the
-justification for not fixing the current API. Why is it broken beyond
-repair?
+The other alternative is fixing and moving extra warnings from W=1 to
+W=0 one by one.
 
-     Andrew
+
+BR,
+Jani.
+
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
