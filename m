@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAFA6D86C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CEE6D86D1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232356AbjDETXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S233903AbjDET0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjDETXx (ORCPT
+        with ESMTP id S232999AbjDET0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:23:53 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855DC4C12
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:23:52 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a1b23f49e2so112405ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 12:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680722632;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DRIWNvg6XZhs4LfiKJrEHIsoLeWRLmaLzAOUbmZeUIQ=;
-        b=kYiSIPlvaAdtY8uiTjFB22ywpmPruu8pumj2R492/MIJoR2DtDKVfznt1EtbKaSaQa
-         gdGqBL0ltAnGXQL27fVXVsg3nP36sVQTg1g9L0TIz1OGouh7uO8azQ9s//Xv3nOk/8WM
-         5g4IcGHL+i6cGSsR1TjMYjMtr8PPpjMoJ3STKazh2jM/GgFk+ty+0YBDHG7L0L9QJkm3
-         2fq6b7zzUWoA8AlqkkfD0mAPRoenEk7ksununR5gX0t37yGcKTBoq1naRM2UywhYqkD8
-         ObSYMf2wV8QXhrM3CYEA/ZJZ6WPV4dJ2RVT1SxLAioYsFa/vSxy/KHwUShKNBGyxIyTw
-         USvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680722632;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DRIWNvg6XZhs4LfiKJrEHIsoLeWRLmaLzAOUbmZeUIQ=;
-        b=gXJmKGILgwvhZtmhBn0B1gDAOo6PfoGU53uB9JUEO/2AJqriExPOvfkqphgBr1TKa0
-         3h4gCUbmThK0CC4wrCVjhHY7SjGTjssvmJtN5hSSPN7jJZqwY/D64C+rrtOhg4/jb6xU
-         19EubN2OPu5BoGcUCjB8ixJmSXQNnaNlKn+e2uLgOSkBY9un6tRtJxB1E/oypjznZp+b
-         OKf0iown6hkVDPsvGevaYdTp2NwxUNUTkrvW5T3rxUNhoD0wOUH7ZXuYcXpAJ3ocoiez
-         mXO1wVVQreWnXOF8PDq3VJ12213N7U5bhj85JpyCcES3QT7XUasj7ECgW40DIx6kuHO7
-         5SsQ==
-X-Gm-Message-State: AAQBX9cpjeG9LCt5w5AJ/f0AZVdxu9Ti5wpwYEHCay5/b97yajYxhKYI
-        Ovu92MRlwTQbX9YtD57Z+NaHZw==
-X-Google-Smtp-Source: AKy350YkzfVf2fy7LAO4VO6fm4pbXqwaToWynx58lUYTN/kWXKa6chf/0Mc+PfTk3SuZPpVn9yMocQ==
-X-Received: by 2002:a17:902:ab85:b0:1a2:914e:fe00 with SMTP id f5-20020a170902ab8500b001a2914efe00mr33393plr.14.1680722631706;
-        Wed, 05 Apr 2023 12:23:51 -0700 (PDT)
-Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id je3-20020a170903264300b00196807b5189sm10458008plb.292.2023.04.05.12.23.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 12:23:50 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 12:23:47 -0700
-From:   William McVicker <willmcvicker@google.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sajid Dalvi <sdalvi@google.com>,
-        Han Jingoo <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, kernel-team@android.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
-Message-ID: <ZC3Kw4AYiMKY7nCR@google.com>
-References: <ZC12lN9Cs0QlPhVh@lpieralisi>
- <20230405182753.GA3626483@bhelgaas>
- <ZC3Ev7qnUDdG0cFd@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 5 Apr 2023 15:26:39 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3716E81;
+        Wed,  5 Apr 2023 12:26:38 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335H9bnK006737;
+        Wed, 5 Apr 2023 19:26:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=S+33/pgyoxtd9MjBH4Z12tl+VNtdXnPUGY+UOZET5fk=;
+ b=b82h+2aPiC5Bnm/2U6QNKDt20KCWdc2G2IpYpFAk/muKZSLKWdQwszcZlOLbWBvC8gUu
+ Rox3n1NDnxZMFpPHvRJ6M4fQCsT6474G6zUZ9t7fcjXlydy5Xfn4bz5wQ4WQCbotF0A9
+ Jvjj/T6GkzsvS8rgc3z90xsc8r+JudP0lxtvyG/zeoqI2nLx//xYiMEs+fOb86t12i/R
+ 1MzKy0bUmrux3MlRTqVGpiz91REezyxNtHQOY6EDOknHLgWGhzDcJq5WtSGyccsrMnVR
+ 4wcIwID83DXgMgjHpvlVZ+eODhMfZEopz3YzWA8JEBdD3MCBS0mt70zHMW7Dtzss1cEB Qw== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3psaamyy09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 19:26:30 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3354LpMD003805;
+        Wed, 5 Apr 2023 19:26:27 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3ppbvftqt1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 19:26:27 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 335JQPFN28246714
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Apr 2023 19:26:25 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A23220043;
+        Wed,  5 Apr 2023 19:26:25 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA9FA20040;
+        Wed,  5 Apr 2023 19:26:23 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.12.224])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Wed,  5 Apr 2023 19:26:23 +0000 (GMT)
+Date:   Thu, 6 Apr 2023 00:56:21 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/8] ext4: fix wrong unit use in ext4_mb_new_inode_pa
+Message-ID: <ZC3LXYKjp5zwYfO1@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230321161220.418652-1-shikemeng@huaweicloud.com>
+ <20230321161220.418652-4-shikemeng@huaweicloud.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZC3Ev7qnUDdG0cFd@google.com>
-X-Spam-Status: No, score=-14.8 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+In-Reply-To: <20230321161220.418652-4-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Qewt5pUpOTtzDUTJsSFEgoklDhcmgBWd
+X-Proofpoint-ORIG-GUID: Qewt5pUpOTtzDUTJsSFEgoklDhcmgBWd
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-05_13,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 clxscore=1015
+ spamscore=0 suspectscore=0 phishscore=0 mlxlogscore=895 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304050170
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,163 +84,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05/2023, William McVicker wrote:
-> On 04/05/2023, Bjorn Helgaas wrote:
-> > On Wed, Apr 05, 2023 at 03:24:36PM +0200, Lorenzo Pieralisi wrote:
-> > > On Thu, Mar 16, 2023 at 06:05:02PM -0500, Sajid Dalvi wrote:
-> > > > On Tue, Feb 28, 2023 at 10:36 PM Sajid Dalvi <sdalvi@google.com> wrote:
-> > > > >
-> > > > > Thanks for your review Jingoo.
-> > > > > Sajid
-> > > > >
-> > > > > On Tue, Feb 28, 2023 at 4:04 PM Han Jingoo <jingoohan1@gmail.com> wrote:
-> > > > > >
-> > > > > > On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
-> > > > > > >
-> > > > > > > In dw_pcie_host_init() regardless of whether the link has been started
-> > > > > > > or not, the code waits for the link to come up. Even in cases where
-> > > > > > > start_link() is not defined the code ends up spinning in a loop for 1
-> > > > > > > second. Since in some systems dw_pcie_host_init() gets called during
-> > > > > > > probe, this one second loop for each pcie interface instance ends up
-> > > > > > > extending the boot time.
-> > > > > > >
-> > > > > > > Call trace when start_link() is not defined:
-> > > > > > > dw_pcie_wait_for_link << spins in a loop for 1 second
-> > > > > > > dw_pcie_host_init
-> > > > > > >
-> > > > > > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
-> > > > > >
-> > > > > > (CC'ed Krzysztof Kozlowski)
-> > > > > >
-> > > > > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
-> > > > > >
-> > > > > > It looks good to me. I also checked the previous thread.
-> > > > > > I agree with Krzysztof's opinion that we should include
-> > > > > > only hardware-related features into DT.
-> > > > > > Thank you.
-> > > > > >
-> > > > > > Best regards,
-> > > > > > Jingoo Han
-> > > > > >
-> > > > > > > ---
-> > > > > > >  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
-> > > > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > > > index 9952057c8819..9709f69f173e 100644
-> > > > > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > > > @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
-> > > > > > >                 ret = dw_pcie_start_link(pci);
-> > > > > > >                 if (ret)
-> > > > > > >                         goto err_remove_edma;
-> > > > > > > -       }
-> > > > > > >
-> > > > > > > -       /* Ignore errors, the link may come up later */
-> > > > > > > -       dw_pcie_wait_for_link(pci);
-> > > > > > > +               /* Ignore errors, the link may come up later */
-> > > > > > > +               dw_pcie_wait_for_link(pci);
-> > > > > > > +       }
-> > > > > > >
-> > > > > > >         bridge->sysdata = pp;
-> > > > > > >
-> > > > > > > --
-> > > > > > > 2.39.2.722.g9855ee24e9-goog
-> > > > > > >
-> > > > 
-> > > > @bhelgaas Can this be picked up in your tree:
-> > > >  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/
-> > > 
-> > > This patch seems fine to me. The question I have though is why the
-> > > *current* code is written the way it is. Perhaps it is just the way
-> > > it is, I wonder whether this change can trigger a regression though.
-> > 
-> > The new code will look basically like this:
-> > 
-> >   if (!dw_pcie_link_up(pci)) {
-> >     dw_pcie_start_link(pci);
-> >     dw_pcie_wait_for_link(pci);
-> >   }
-> > 
-> > If the link is already up by the time we get here, this change means
-> > we won't get this message emitted by dw_pcie_wait_for_link():
-> > 
-> >   dev_info(pci->dev, "PCIe Gen.%u x%u link up\n", ...)
-> > 
-> > I don't know how important that is, but I bet somebody cares about it.
-> > 
-> > From the commit log, I expected the patch to do something based on
-> > whether ->start_link() was defined, but there really isn't a direct
-> > connection, so maybe the log could be refined.
-> > 
-> > Bjorn
-> > 
-> > -- 
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> > 
+On Wed, Mar 22, 2023 at 12:12:15AM +0800, Kemeng Shi wrote:
+> fe_logical and win are both in block unit. Remove wrong convertion for
+> win from block unit to cluster unit.
 > 
-> After taking a deeper dive into this patch, I found that [1] changes the
-> original intent which was to skip the call to dw_pcie_wait_for_link()
-> when pci->ops->start_link is NULL. I talked to Sajid offline and he
-> agreed we should put back the start_link NULL check. The updated patch
-> should look like this:
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
->   if (!dw_pcie_link_up(pci) && pci->ops && pci->ops->start_link) {
->     ret = dw_pcie_start_link(pci);
->     if (ret)
->       goto err_free_msi;
->     dw_pcie_wait_for_link(pci);
->   }
-> 
-> 
-> ...which will ensure that we don't call dw_pcie_wait_for_link() when
-> pci->ops->start_link is NULL.
-> 
-> With regards to the log, I think there are 2 ways to solve this:
-> 
-> 1) We could also call dw_pcie_wait_for_link() in a new else if
->    dw_pcie_link_up() returns 1.
-> 2) We could add this to the top of dw_pcie_wait_for_link() and leave the
->    code as is:
-> 
->    if (!pci->ops || !pci->ops->start_link)
->      return 0;
-> 
-> I kind of like (2) since that solves both Sajid's original issue and
-> will keep the original log.
-> 
-> [1] https://lore.kernel.org/all/20220624143428.8334-14-Sergey.Semin@baikalelectronics.ru/
-> 
-> Regards,
-> Will
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 7f695830621a..86d978e1f7dc 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4640,8 +4640,7 @@ ext4_mb_new_inode_pa(struct ext4_allocation_context *ac)
+>  		if (offs && offs < win)
+>  			win = offs;
+>  
+> -		ac->ac_b_ex.fe_logical = ac->ac_o_ex.fe_logical -
+> -			EXT4_NUM_B2C(sbi, win);
+> +		ac->ac_b_ex.fe_logical = ac->ac_o_ex.fe_logical - win;
+>  		BUG_ON(ac->ac_o_ex.fe_logical < ac->ac_b_ex.fe_logical);
+>  		BUG_ON(ac->ac_o_ex.fe_len > ac->ac_b_ex.fe_len);
 
-Below is what I'm thinking will do the job. I verified on a Pixel 6
-(which doesn't have start_link() defined) that we don't have the 1
-second wait from dw_pcie_wait_for_link() during probe.
+So this bit of code is removed in the patchset I sent here [1]. My patchset
+is mostly ready to be merged and Ted did mention that he was going to
+pick that up soon. So would it be okay with you if we drop this particular patch?
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-index 8e33e6e59e68..1bf04324ad2d 100644
---- a/drivers/pci/controller/dwc/pcie-designware.c
-+++ b/drivers/pci/controller/dwc/pcie-designware.c
-@@ -648,13 +648,16 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
- {
- 	u32 offset, val;
- 	int retries;
-+	int link_up = dw_pcie_link_up(pci);
- 
--	/* Check if the link is up or not */
--	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
--		if (dw_pcie_link_up(pci))
--			break;
-+	if (!link_up && !(pci->ops && pci->ops->start_link))
-+		return 0;
- 
-+	/* Check if the link is up or not */
-+	for (retries = 0; !link_up && retries < LINK_WAIT_MAX_RETRIES; retries++) {
- 		usleep_range(LINK_WAIT_USLEEP_MIN, LINK_WAIT_USLEEP_MAX);
-+
-+		link_up = dw_pcie_link_up(pci);
- 	}
- 
- 	if (retries >= LINK_WAIT_MAX_RETRIES) {
-
+[1]
+https://lore.kernel.org/linux-ext4/9b35f3955a1d7b66bbd713eca1e63026e01f78c1.1679731817.git.ojaswin@linux.ibm.com
+>  	}
+> -- 
+> 2.30.0
+> 
