@@ -2,77 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52276D81C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C586D81CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237929AbjDEP1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
+        id S238160AbjDEP2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238380AbjDEP1p (ORCPT
+        with ESMTP id S238376AbjDEP14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:27:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A1B59E2;
-        Wed,  5 Apr 2023 08:27:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1878462846;
-        Wed,  5 Apr 2023 15:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C336C433EF;
-        Wed,  5 Apr 2023 15:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680708463;
-        bh=ZJ164SnGgqIvXyjNNV6hdkEgoumLpXWqRzQfJEslbyg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AkpWeNScttPdj2sshYPtKjTL45rilXQgp2j0Ogxq32B4OFuAWqTJtcIOrfniU9tXs
-         IJp3XzmtGrOSCWVXdn/JpHYoqU0Uv0FSKW/pBgTI5n58Sz18n1Uf8t8Q+3IJ0clHjC
-         yGxe2ltW3F87uyoyvVkHIKIE7MnbdNG9WCqCNUlNreQJevarw0/Llskc/IR4MKPdkt
-         vHlOilgLiklygioe7sns7juZYiE/71sEL9FXjap7ilmNyn1S9MO+vuxUt/brUtUPtw
-         vQW5F8lh7BTKmSX9x6eEMpWIAA3LQ8FAjYaZYBrSaEugKDSHcywcqrwd69bTEh2qgg
-         YztXv+g1A6udg==
-Date:   Wed, 5 Apr 2023 16:27:37 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jacky Huang <ychuang570808@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        arnd@arndb.de, schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH v6 05/12] dt-bindings: mfd: syscon: Add
- nuvoton,ma35d1-sys compatible
-Message-ID: <20230405152737.GP8371@google.com>
-References: <20230328021912.177301-1-ychuang570808@gmail.com>
- <20230328021912.177301-6-ychuang570808@gmail.com>
+        Wed, 5 Apr 2023 11:27:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E9F65A6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680708472; x=1712244472;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jFz3mcuwvxLK4peDOd1fOVOYB1iBDnaLvmVg+Ie6v6g=;
+  b=SQlBhL8GHnfCWQg9v66bA5R06Tur5fifNzzNgrdVBl1YRQ9SM9ENQHMe
+   dUpj5ADl5/ckkQJ7xlaMJ57yqm0Xr5+EyneMwfjEEnZoDwlm4SGu+vZvR
+   NEu/pS6gSB3MLUeJQYb9UySQ4OcARlyFwBpzqIRY+UgGnSE/YHTP3S+y7
+   Gygj4mUcsGHLac+MKVfJkChrFAV/CkxQRZhaFogVkmEb/2Mt2RQANomIv
+   HgSOew46mmROqd/FFDkAd5+NuD/Y31aHMzBk7vaYNMdiQVwgXFz0rREsp
+   TdXnlbpmHJheP8EdAnKPGF46QLtJRZAyx3S6ttaTecXkjJFONK7CYjvIm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="405261162"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="405261162"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 08:27:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="797951017"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="797951017"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 05 Apr 2023 08:27:50 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 968F01D5; Wed,  5 Apr 2023 18:27:52 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cwchoi00@gmail.com>
+Subject: [PATCH v2 0/5] extcon: Core cleanups and documentation fixes
+Date:   Wed,  5 Apr 2023 18:27:40 +0300
+Message-Id: <20230405152745.24959-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230328021912.177301-6-ychuang570808@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Mar 2023, Jacky Huang wrote:
+A few fixes and some cleanups against extcon core module.
 
-> From: Jacky Huang <ychuang3@nuvoton.com>
->
-> Add Nuvoton ma35d1 system registers compatible.
->
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
->  1 file changed, 1 insertion(+)
+Changelog v2:
+- dropped applied patches
+- completely rewrote the patch to handle name field
+- dropped kasprintf_strarray() patch for now (Chanwoo)
+- used new IDA APIs (Chanwoo)
+- added tag (Bumwoo) to the patches that haven't changed
 
-Applied, thanks
+Cc: Chanwoo Choi <cwchoi00@gmail.com>
 
---
-Lee Jones [李琼斯]
+Note, MAINTAINERS shows what it has and hence the above Cc is manually
+added. If the database has issues it should be updated, but it's out of
+scope of this series.
+
+Andy Shevchenko (5):
+  extcon: Make the allocation and freeing to be private calls
+  extcon: Get rid of not really used name field in struct extcon_dev
+  extcon: Use unique number for the extcon device ID
+  extcon: Use sizeof(*pointer) instead of sizeof(type)
+  extcon: Drop unneeded assignments
+
+ drivers/extcon/extcon.c         | 48 ++++++++++++++++-----------------
+ drivers/extcon/extcon.h         |  9 ++++---
+ include/linux/extcon-provider.h |  9 -------
+ 3 files changed, 30 insertions(+), 36 deletions(-)
+
+-- 
+2.40.0.1.gaa8946217a0b
+
