@@ -2,89 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD236D7B05
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF10D6D7B15
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237567AbjDELTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S237845AbjDELUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjDELTL (ORCPT
+        with ESMTP id S237835AbjDELUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:19:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78E52736;
-        Wed,  5 Apr 2023 04:19:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F5506393E;
-        Wed,  5 Apr 2023 11:19:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C2BC433EF;
-        Wed,  5 Apr 2023 11:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680693549;
-        bh=BUqrMf5rugKOvu5i7YMra5i2Meg/d8oi/Wngm9HZQ7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sbuhl6EJw/SVKi8omiyWSr41YolSgsDeuXiZjJpIzHCnerSej0RciO5pHzzy5e84q
-         8hQK0D0/hPvIdJDJaNt4csp029xip1uOKnaxLfournFZFuXTiw44fFh7xeFarH2Ust
-         i3PL2nw+WQKul4NY9QXpp5eVHGjVZQT/aASf4AGuNV2utltrnyeCAv67TMneJWV6XS
-         0w5acvUiHRzi7atkPH6NaNBQPv5SwiMy0CGWCnTHIeQ3Zt4YtFu9InLfvN2qfQUDeB
-         mp4lQS9bEZh4mlN7s7mTnqm7vF5gpLNoZ9IagOymAQSRG4dR2FjLTEf/m8B+n4unro
-         hE/uZhLykbtxw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pk1Ay-0002dY-9y; Wed, 05 Apr 2023 13:19:40 +0200
-Date:   Wed, 5 Apr 2023 13:19:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: PCI: Fix unit address of example root port
-Message-ID: <ZC1ZTHeRqtghwVBB@hovoldconsulting.com>
-References: <20230317112019.9090-1-johan+linaro@kernel.org>
+        Wed, 5 Apr 2023 07:20:19 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD57C527F;
+        Wed,  5 Apr 2023 04:19:59 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54601d90118so514767947b3.12;
+        Wed, 05 Apr 2023 04:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680693599;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OVTqfRf2jpWEeoD6UNL26R0hpOD3j9XRAva3jj9aVBk=;
+        b=UMTYBNcPhbAF0ABt8KophwzX/Ny6OPNn+L6EnmU5IkTiR+fwtjtTvvmlWyMYj3Pkd/
+         c/AorgHXggjcy/x5fLftLDXcSRee6X3AtQ1pW2rCBk6CYlNeeb39l9Sc0PgP3d01I3hi
+         qodJYbUqCHZ235SHXXOkTEXGGEHXyT2WxYP95YphXmCso64A4JEn5pUvLQzjn8+qM2mo
+         ffZ5LUVWgPBrcIjs91pPf+lKHjgH0EcvEuCyvhchd69BLf5uIsTKD4aB1cF0OsfHG7q9
+         zt9q5kpD8Hxo6x9MnvBm6HE/Ec1pZ6n+yeI3K4SLL9P/DBFTyptpplVjTZnPhcQNN5G2
+         eRLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680693599;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OVTqfRf2jpWEeoD6UNL26R0hpOD3j9XRAva3jj9aVBk=;
+        b=gnGsyHt0/baNqTyypBgsi4Nih6MEvvXIh2FBDoRoLxGkshOE67aoIv01kk/AAOIdRR
+         Qn8FlkRX/zD9AmJp3+r0GQhweb1y36HFE/HhcW+9UuJKC8cypaAEYBIaZ33eD7ymmiMG
+         TTLB+is/WT63/LPnTrppQaZcYzKYqRR+RtBVJG5+Du2nEAf89ZFeAFPBMvWAB4BfoZvR
+         T8au+r5GJw8PaBYVf53iFB5OWV7dQ9cm2b6oR4E2y+eXAxTdD11iwy9RuaWVjV6fdCNo
+         pYBRItOhRcAwIzfhKFEPzAnYjDbZVH8CuJYi7Z4Vu6ULsHx8idV6rA0pjdtDECwPz0Ws
+         ogjA==
+X-Gm-Message-State: AAQBX9daecNUAAaCSOw0oTUHKKQ/Erg+Ya9I3nThUxJ4SCvD9Je5gm37
+        N9/pNS67O/jdZ6Z+/KdEKExq0dKOoi+W+xRJmJg=
+X-Google-Smtp-Source: AKy350bbnQi/kk0Ucraeyifb8HGzxmDoYIzCbR5PfgN3LBUwsGHhS/jbvYqgxE1Tugt8wPoVLCb1KVJOEW5vVrBJUTs=
+X-Received: by 2002:a81:c509:0:b0:52e:e095:d840 with SMTP id
+ k9-20020a81c509000000b0052ee095d840mr3519608ywi.0.1680693598783; Wed, 05 Apr
+ 2023 04:19:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317112019.9090-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-4-917ff5bc80a8@asahilina.net> <ZC1WwJDr1iqSQnYs@phenom.ffwll.local>
+In-Reply-To: <ZC1WwJDr1iqSQnYs@phenom.ffwll.local>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 5 Apr 2023 13:19:47 +0200
+Message-ID: <CANiq72=h9qKrpkY2K962__rs-JLsmWxPXocx040ZeDSKGf_Brw@mail.gmail.com>
+Subject: Re: [PATCH RFC 04/18] rust: drm: gem: Add GEM object abstraction
+To:     Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+Cc:     Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 12:20:19PM +0100, Johan Hovold wrote:
-> Fix the unit address of the example root port which is identical to the
-> device number (i.e. 1).
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
+On Wed, Apr 5, 2023 at 1:08=E2=80=AFPM Daniel Vetter <daniel@ffwll.ch> wrot=
+e:
+>
+> Uh all the rust helper wrappers for all the kernel in a single file does
+> not sound good. Can we not split these up into each subsystem, and then
+> maybe instead of sprinkling #ifdef all over a .c file Make the compilatio=
+n
+> of that file conditional on rust support (plus whatever other Kconfig gat=
+e
+> the other c files has already)?
 
-This one hasn't showed up in linux-next yet. Could you pick it up for
-6.4, Lorenzo?
+Indeed, the plan is splitting the `kernel` crate and giving each
+subsystem its own crate, bindings, helpers, etc.
 
->  Documentation/devicetree/bindings/pci/pci.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/pci.txt b/Documentation/devicetree/bindings/pci/pci.txt
-> index 6a8f2874a24d..8b7c52436558 100644
-> --- a/Documentation/devicetree/bindings/pci/pci.txt
-> +++ b/Documentation/devicetree/bindings/pci/pci.txt
-> @@ -76,7 +76,7 @@ Example:
->  pcie@10000000 {
->  	compatible = "pci-host-ecam-generic";
->  	...
-> -	pcie@0008 {
-> +	pcie@1 {
->  		/* Root port 00:01.0 is external-facing */
->  		reg = <0x00000800 0 0 0 0>;
->  		external-facing;
-
-Johan
+Cheers,
+Miguel
