@@ -2,77 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEC76D77AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2AA6D77B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237156AbjDEJBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S237581AbjDEJDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237576AbjDEJA6 (ORCPT
+        with ESMTP id S237156AbjDEJDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:00:58 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EEE4C31
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:00:44 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id s3-20020a056602240300b007589413aea0so21449987ioa.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:00:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680685242; x=1683277242;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zTNZysYHQS0b2FE+g6aMtRxrh6qH9orUWgF0r43WgUQ=;
-        b=g/u2vV0uzXhtMc9dVv2Lft/PosXlGOLbBysmfcqSlePNnC0CGH2obQxidF5QVJECD0
-         qyO1St1b71f0WlGI33TyCyiI0NRtlOw1eCI1ORPfaqpdlZdYelJKGH4mcUjjJkJA0x9R
-         V0e+LJOyN0SPOF+rG/fJyih+vz/D/TkqWYwtOyXFalpJmN5Cf5zLAVKdSzp9CFAQd3ZH
-         rYVKH/ejVxqoY2Eqo0vN7I2ryyg5PcGttiIo1Q0zqxxotFlcR8fQ8SmY0nGD/SzSqBL/
-         HO9lbDcTg12OWreX9Wwzp5qVniLyhUzd8xh65cvgWhgdF3Jbk7jg8NfYMZcawEJ/wciv
-         xg5Q==
-X-Gm-Message-State: AAQBX9cOPUYj5BjkVrVZR7RaLB7NamJXlrBD81zPTqmCiZ1/3iOc9rS4
-        VgxYMqD5sJslQz1MnS1zGIy085Z4vQDshvO+cjzueRDd5c5/
-X-Google-Smtp-Source: AKy350Yb3PbjA9xjWvuhrssojAZ5Gu0qd8YrGc9fQPzRMI2kC91RdfFipNX9PmYnaDtezk9BtZAE76wjXUvXa5Qavf5mb0AHZTph
+        Wed, 5 Apr 2023 05:03:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21130E72;
+        Wed,  5 Apr 2023 02:03:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A86956232B;
+        Wed,  5 Apr 2023 09:03:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C66D2C433D2;
+        Wed,  5 Apr 2023 09:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680685411;
+        bh=AreqL9r3Yew0sS4T15gu7pKjtnVtIobuhUST+Klm1yw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HoiMD4ktg4vcT8DaHpg95N0uDYOIuwAtTu2tfk+coIc2mMWV6gChq++iSqy5GykFX
+         HsPr8Dfx6UHNDwBRT5AOUI1VEZr549y6Ej+TP7escZ2cXIw8oILL7x+eaOybITT5rl
+         xD50WscOk53x55uLD1MX3jI0CW6KoWP4hm/rbhn5pr52oA7Ar7lIAh0ME6Q9OIQRR2
+         2bWp4TYd8i3s17V7Mv4qpDVmINkt4yHhGLXaszEz6Z9HrWUZFqneAmiYmAkXVuvT/V
+         kJDAVELtV17iGrnfjzO+EvHHJsvDzmL+oMHSyBoXILjYpc88XGh7hqUoB6aPruoF7A
+         jC6d0+RFBprLg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1pjz3h-0001uw-Vn; Wed, 05 Apr 2023 11:04:02 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] xhci: fix debugfs register accesses while suspended
+Date:   Wed,  5 Apr 2023 11:03:42 +0200
+Message-Id: <20230405090342.7363-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1949:b0:326:b2af:72d3 with SMTP id
- x9-20020a056e02194900b00326b2af72d3mr2706739ilu.3.1680685242097; Wed, 05 Apr
- 2023 02:00:42 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 02:00:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d5a93805f8930638@google.com>
-Subject: [syzbot] Monthly fuse report
-From:   syzbot <syzbot+list69b50efce6f847334104@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello fuse maintainers/developers,
+Wire up the debugfs regset device pointer so that the controller is
+resumed before accessing registers to avoid crashing or locking up if it
+happens to be runtime suspended.
 
-This is a 30-day syzbot report for the fuse subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/fuse
-
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 8 issues are still open and 34 have been fixed so far.
-
-Some of the still happening issues:
-
-Crashes Repro Title
-146     Yes   INFO: task hung in fuse_simple_request
-              https://syzkaller.appspot.com/bug?extid=46fe899420456e014d6b
-26      Yes   INFO: task hung in lookup_slow (3)
-              https://syzkaller.appspot.com/bug?extid=7cfc6a4f6b025f710423
-13      Yes   INFO: task hung in walk_component (5)
-              https://syzkaller.appspot.com/bug?extid=8fba0e0286621ce71edd
-
+Fixes: 02b6fdc2a153 ("usb: xhci: Add debugfs interface for xHCI driver")
+Cc: stable@vger.kernel.org # 4.15: 30332eeefec8: debugfs: regset32: Add Runtime PM support
+Cc: stable@vger.kernel.org # 4.15
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/host/xhci-debugfs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
+index 0bc7fe11f749..99baa60ef50f 100644
+--- a/drivers/usb/host/xhci-debugfs.c
++++ b/drivers/usb/host/xhci-debugfs.c
+@@ -133,6 +133,7 @@ static void xhci_debugfs_regset(struct xhci_hcd *xhci, u32 base,
+ 	regset->regs = regs;
+ 	regset->nregs = nregs;
+ 	regset->base = hcd->regs + base;
++	regset->dev = hcd->self.controller;
+ 
+ 	debugfs_create_regset32((const char *)rgs->name, 0444, parent, regset);
+ }
+-- 
+2.39.2
+
