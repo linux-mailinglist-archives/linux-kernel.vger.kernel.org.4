@@ -2,142 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B806D7916
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC29F6D7923
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbjDEJ4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S237007AbjDEJ66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237289AbjDEJ4c (ORCPT
+        with ESMTP id S236779AbjDEJ6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:56:32 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07EA2619A;
-        Wed,  5 Apr 2023 02:56:05 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:53732.1379365523
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 42B571002A1;
-        Wed,  5 Apr 2023 17:55:47 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 4ddf140fa579419ea56efb54462e5e03 for javierm@redhat.com;
-        Wed, 05 Apr 2023 17:55:49 CST
-X-Transaction-ID: 4ddf140fa579419ea56efb54462e5e03
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <fabb3433-e8f1-f162-891b-8aac28ef7662@189.cn>
-Date:   Wed, 5 Apr 2023 17:55:47 +0800
+        Wed, 5 Apr 2023 05:58:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586745BA6;
+        Wed,  5 Apr 2023 02:58:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B9CB63C4B;
+        Wed,  5 Apr 2023 09:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C85C433A0;
+        Wed,  5 Apr 2023 09:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680688676;
+        bh=8fsJPPLfev3l8+gscgaQ0CoPSzss6xl/YWJE3Tf7VfY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PSPPQN2bJmhVA8jfvTHRTeJSsa9UiOzhRR7CZd6O6/dhIE7eLbM3SqIx5AKeHG4V4
+         oixleKiZxpnRAfM3MhVfglhQ7x251oxWPCyIPiCAKnbEskt+fMkUrIiQwF28hh0MdE
+         nD97xCn1gXlJw+IjI5XC9FxyRyWCcZw3LySRZEzWxpwGBZ8VA76Hp+dRjOLBo4TdBS
+         e3xcsBq6zWwX84ykmzXuhJ2RQeV9fsNntoOttEa4l3zKi3s4hE6EAexgajHWTEubh9
+         bov6YCVVOL410McdyDPhO8E64oxxoZAHkkcjzs785pbSqksW0eJ3GD1pn/wCg6DHcv
+         vyfqeXDxXQs3A==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-50263dfe37dso1409358a12.0;
+        Wed, 05 Apr 2023 02:57:56 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dE7PtFx4PP32Tdjio6VF436roTeCecPDMfXwYRqMCIFR9sekQ3
+        N3VA+Mu4gEWzofpjG6FKM968oedJjE5lbCK4AiM=
+X-Google-Smtp-Source: AKy350YQpAioYSRN4w5Le466Ai80EZCCFWQ4+P3FMiSqYGsYZpptCoVP3ppNrdYq+BM40PINp8W62w3iQqrPAC5DfPU=
+X-Received: by 2002:a50:9f2b:0:b0:4ad:738b:66ff with SMTP id
+ b40-20020a509f2b000000b004ad738b66ffmr733329edf.2.1680688674658; Wed, 05 Apr
+ 2023 02:57:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] video/aperture: fix typos
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20230404040101.2165600-1-suijingfeng@loongson.cn>
- <0ad03743-0224-b154-a149-e3e4d54b252d@suse.de>
- <87355fex1f.fsf@minerva.mail-host-address-is-not-set>
- <87zg7ndi57.fsf@minerva.mail-host-address-is-not-set>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <87zg7ndi57.fsf@minerva.mail-host-address-is-not-set>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
+ <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn> <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
+ <dfd6a1cb-25be-cc11-4134-b2e92e353c00@loongson.cn> <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
+ <CAAhV-H54MWEXgqPqv+23vQxQU455iMnwON37uiByyci9cgh5Hg@mail.gmail.com> <CAMj1kXEe37g=1DEQcWFEDCLRihZLX14Kso0dwon71W+5jqyDrA@mail.gmail.com>
+In-Reply-To: <CAMj1kXEe37g=1DEQcWFEDCLRihZLX14Kso0dwon71W+5jqyDrA@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 5 Apr 2023 17:57:34 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7XMWKOQhfh5z5s79oJ_RDCfa5VSEs2m=9thq1GFL=WzA@mail.gmail.com>
+Message-ID: <CAAhV-H7XMWKOQhfh5z5s79oJ_RDCfa5VSEs2m=9thq1GFL=WzA@mail.gmail.com>
+Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
+ relocate kernel
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Youling Tang <tangyouling@loongson.cn>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        linux-efi@vger.kernel.org, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Ard,
 
-thanks you for the time and effort  for reviewing.
-
-On 2023/4/4 19:03, Javier Martinez Canillas wrote:
-> Javier Martinez Canillas <javierm@redhat.com> writes:
+On Wed, Apr 5, 2023 at 4:20=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wro=
+te:
 >
-> [...]
+> On Wed, 5 Apr 2023 at 10:14, Huacai Chen <chenhuacai@kernel.org> wrote:
+> >
+> > Hi, Ard,
+> >
+> > What is the status of this patch now?
+> >
 >
->>>>    	/*
->>>>    	 * Remove the device from the device hierarchy. This is the right thing
->>>> -	 * to do for firmware-based DRM drivers, such as EFI, VESA or VGA. After
->>>> +	 * to do for firmware-based fb drivers, such as EFI, VESA or VGA. After
->>> That sentences is not well phrased. Maybe say 'This is required for
->>> firmware-provided graphics, such as EFI, VESA or VGA.'
->>>
->> Graphic drivers or display drivers would indeed be more accurate here. But
->> I think that "fb drivers" is still well pharsed since the are other places
->> where either fbdev or DRM drivers for firmware-provided framebuffers are
->> named like that.
->>
-> Sui,
+> I'd still like to understand how zboot is affected. It has
 >
-> Maybe you could post a follow-up patch to improve the comment as suggested
-> by Thomas?
+> static unsigned long alloc_preferred_address(unsigned long alloc_size)
+> {
+> #ifdef EFI_KIMG_PREFERRED_ADDRESS
+>         efi_physical_addr_t efi_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
 >
-Yes, certainly.
+>         if (efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS, EFI_LOADER_=
+DATA,
+>                         alloc_size / EFI_PAGE_SIZE, &efi_addr) =3D=3D EFI=
+_SUCCESS)
+>                 return efi_addr;
+> #endif
+>         return ULONG_MAX;
+> }
+>
+> and if I understand you correctly, we never needed this in the first plac=
+e?
+Technically we don't need this, but I think setting a preferred
+address as before may be better (keeping the default behavior the same
+as before can avoid some unexpected problem).
 
-
-This is the right thing to do for conflicting drivers takes over the 
-hardware resource required.
-
-
-But the comments is actually nearly perfect in overall, it has some 
-difficulty to improve
-
-the perfection.  Below is my personal understanding toward the above 
-sentence.
-
-
-efifb and simplefb belong to the class of firmware based framebuffer driver.
-
-They are generic and platform agnostic, yet they have to relay on the 
-firmware
-
-to passing fb format, fb size, fb base address, fb resolution and fb 
-stride etc to the kernel.
-
-Linux kernel using those information to fill the global screen_info 
-structure.
-
-sysfb_init() then using the global screen_info to  create a platform device,
-
-the device will be claimed by efifb or simplefb driver finally. This is 
-a hand over solution.
-
-It relay on the firmware setup such a framebuffer and hand over the 
-state(this is
-
-actually a kind of modeset state) to kernel.
-
-
-efifb only own the potential hardware resource for a very short time if a
-
-conflicting drm driver probe successfully.
-
-
-For the platform/graphics without  a drm driver, developers may choose to
-
-use efifb driver as a replacement.  So, there are no conflicting happen on
-
-such a case. The `nomodeset` kernel cmd options can also be used for
-
-debugging and testing purpose if the more intelligent drm driver is broken
-
-due to bugs.
-
+Huacai
+>
+> (I understand this is a separate issue, but it would be nice to get
+> rid of EFI_KIMG_PREFERRED_ADDRESS entirely if we can.)
+>
+>
+>
+> > On Wed, Mar 1, 2023 at 8:06=E2=80=AFPM Huacai Chen <chenhuacai@kernel.o=
+rg> wrote:
+> > >
+> > > Hi, Youling,
+> > >
+> > > On Wed, Mar 1, 2023 at 6:08=E2=80=AFPM Youling Tang <tangyouling@loon=
+gson.cn> wrote:
+> > > >
+> > > > Hi, Huacai
+> > > >
+> > > > On 03/01/2023 05:30 PM, Huacai Chen wrote:
+> > > > > Hi, Youling,
+> > > > >
+> > > > > On Wed, Mar 1, 2023 at 5:21=E2=80=AFPM Youling Tang <tangyouling@=
+loongson.cn> wrote:
+> > > > >>
+> > > > >> Hi, Huacai
+> > > > >>
+> > > > >> On 03/01/2023 04:55 PM, Huacai Chen wrote:
+> > > > >>> Since Linux-6.3, LoongArch supports PIE kernel now, so let's re=
+introduce
+> > > > >>> efi_relocate_kernel() to relocate the core kernel.
+> > > > >>
+> > > > >> If we strongly rely on the PIE feature after the modification, w=
+e need
+> > > > >> to modify it as follows,
+> > > > > There is no strong rely, efi_relocate_kernel() can also handle th=
+e
+> > > > > non-PIE kernel.
+> > > >
+> > > > IMHO, if EFI_KIMG_PREFERRED_ADDRESS is no longer defined as
+> > > > `PHYSADDR(VMLINUX_LOAD_ADDRESS)` (physical link address), we need t=
+o
+> > > > relocate through the RELOCATABLE function, so it is recommended to
+> > > > select RELOCATABLE if EFI_STUB is enabled
+> > > We can select RELOCATABLE when we modify EFI_KIMG_PREFERRED_ADDRESS.
+> > > Before that I prefer to give a chance to build a non-PIE kernel.
+> > >
+> > > Huacai
+> > > >
+> > > > Youling.
+> > > > >
+> > > > > Huacai
+> > > > >>
+> > > > >> --- a/arch/loongarch/Kconfig
+> > > > >> +++ b/arch/loongarch/Kconfig
+> > > > >> @@ -137,6 +137,7 @@ config LOONGARCH
+> > > > >>          select PCI_MSI_ARCH_FALLBACKS
+> > > > >>          select PCI_QUIRKS
+> > > > >>          select PERF_USE_VMALLOC
+> > > > >> +       select RELOCATABLE
+> > > > >>          select RTC_LIB
+> > > > >>          select SMP
+> > > > >>          select SPARSE_IRQ
+> > > > >>
+> > > > >> or:
+> > > > >>
+> > > > >> --- a/arch/loongarch/Kconfig
+> > > > >> +++ b/arch/loongarch/Kconfig
+> > > > >> @@ -360,6 +360,7 @@ config EFI_STUB
+> > > > >>          default y
+> > > > >>          depends on EFI
+> > > > >>          select EFI_GENERIC_STUB
+> > > > >> +       select RELOCATABLE
+> > > > >>          help
+> > > > >>
+> > > > >> Youling.
+> > > > >>
+> > > > >>>
+> > > > >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > >>> ---
+> > > > >>>  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-----=
+--------
+> > > > >>>  1 file changed, 7 insertions(+), 17 deletions(-)
+> > > > >>>
+> > > > >>> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/dr=
+ivers/firmware/efi/libstub/loongarch-stub.c
+> > > > >>> index eee7ed43cdfb..72c71ae201f0 100644
+> > > > >>> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
+> > > > >>> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
+> > > > >>> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned l=
+ong *image_addr,
+> > > > >>>                                efi_loaded_image_t *image,
+> > > > >>>                                efi_handle_t image_handle)
+> > > > >>>  {
+> > > > >>> -     int nr_pages =3D round_up(kernel_asize, EFI_ALLOC_ALIGN) =
+/ EFI_PAGE_SIZE;
+> > > > >>> -     efi_physical_addr_t kernel_addr =3D EFI_KIMG_PREFERRED_AD=
+DRESS;
+> > > > >>>       efi_status_t status;
+> > > > >>> +     unsigned long kernel_addr =3D 0;
+> > > > >>>
+> > > > >>> -     /*
+> > > > >>> -      * Allocate space for the kernel image at the preferred o=
+ffset. This is
+> > > > >>> -      * the only location in memory from where we can execute =
+the image, so
+> > > > >>> -      * no point in falling back to another allocation.
+> > > > >>> -      */
+> > > > >>> -     status =3D efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRE=
+SS,
+> > > > >>> -                          EFI_LOADER_DATA, nr_pages, &kernel_a=
+ddr);
+> > > > >>> -     if (status !=3D EFI_SUCCESS)
+> > > > >>> -             return status;
+> > > > >>> -
+> > > > >>> -     *image_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
+> > > > >>> -     *image_size =3D kernel_asize;
+> > > > >>> +     kernel_addr =3D (unsigned long)&kernel_offset - kernel_of=
+fset;
+> > > > >>> +
+> > > > >>> +     status =3D efi_relocate_kernel(&kernel_addr, kernel_fsize=
+, kernel_asize,
+> > > > >>> +                  EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min=
+_align(), 0x0);
+> > > > >>>
+> > > > >>> -     memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
+> > > > >>> -            (void *)&kernel_offset - kernel_offset,
+> > > > >>> -            kernel_fsize);
+> > > > >>> +     *image_addr =3D kernel_addr;
+> > > > >>> +     *image_size =3D kernel_asize;
+> > > > >>>
+> > > > >>>       return status;
+> > > > >>>  }
+> > > > >>>
+> > > > >>
+> > > >
+> > > >
