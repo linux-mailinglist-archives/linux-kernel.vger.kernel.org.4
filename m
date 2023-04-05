@@ -2,92 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B8F6D734F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9D06D7352
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236823AbjDEETo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 00:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
+        id S236831AbjDEEV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 00:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236778AbjDEETl (ORCPT
+        with ESMTP id S236701AbjDEEV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 00:19:41 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AFD10F9
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 21:19:38 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id r11so34824882wrr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 21:19:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user; t=1680668377;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/BjpitaAtSgkqnnZepwdAnWUHtXKGCm4ypPOIBhTYG4=;
-        b=e4BiLC+K4OYu8TIu0STxll21APg+0MALOyXN2SMFNO5cMHrJpvXOAIvzfiUxo2q+V5
-         WDvHh+QslH4AhH+2TjZuYkNkEaTLztytVL2f0UYCH/TmJEd/0TAAlr//N84HDPO+XfkD
-         bvPR0eoq113cOieEQrQOeDXLnxrzu4Jx3aEwesqPJ349gVeRWz3Da6iqV4pSU/2Y4iNt
-         MnRmqCgCxV0aZLY7aaRW/N/kl8M1sH1Tu+WzfPMLUDgArZTNBjGppJ3nUd1FX9TI0JaZ
-         seEVGGKFa1LrcmSBIBRzX4kFY1havHXXvqCKrIitnLfe41G3TACDVnWYFtLdpqNQBFsi
-         ii4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680668377;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/BjpitaAtSgkqnnZepwdAnWUHtXKGCm4ypPOIBhTYG4=;
-        b=n/i9zcL0GPP0uW+dIZ+MSIqash427YhnLiKSM6SecPv/eCkfJyhq81wqKITziuOeUs
-         CdXTu+Ro7EzNT/oQWRoJDLj2/T9s4wz1JrSp3AEBGmzdwdUX1OUAkzxUh3i3aAhu0mxq
-         W/Rgm+8vjbwGku7xsfAvVO1lGZud4VTO2Ur6eI7mRFNp6f5duOHG455/I9epbiXy241v
-         jahe5UtbKEam/C/D2cglJZGTPtseFryMuNuA0/FUkjN81E/vtzJUu4URYXH/OBxV0Cxk
-         H5RJPIRLSLfcGdKwnr9tITKO+hIJkt46kzw4MKWrjaTIRvMCNF1PlBL/ezIp8EwguOAX
-         ygog==
-X-Gm-Message-State: AAQBX9dTKcUp3wYFby/SYtfw8V1Z1rPqFabaKcjD2ScwgwOpubrbePXR
-        Y3UWKQtttnAe9auHXYz3tiebrw==
-X-Google-Smtp-Source: AKy350blw7YP4lnrKWGeXu58qdeqpEXA8gM8aenLdDfKqAQOydoUR5t2gTdnK43PxXcc1htfiqIEPA==
-X-Received: by 2002:a5d:6b91:0:b0:2e5:9101:e3af with SMTP id n17-20020a5d6b91000000b002e59101e3afmr3411038wrx.31.1680668377340;
-        Tue, 04 Apr 2023 21:19:37 -0700 (PDT)
-Received: from smtpclient.apple (global-5-142.n-2.net.cam.ac.uk. [131.111.5.142])
-        by smtp.gmail.com with ESMTPSA id t12-20020a7bc3cc000000b003ee42696acesm797550wmj.16.2023.04.04.21.19.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Apr 2023 21:19:36 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH V4 22/23] platform/surface: Disable for RISC-V
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <20230404182037.863533-23-sunilvl@ventanamicro.com>
-Date:   Wed, 5 Apr 2023 05:19:35 +0100
-Cc:     linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-acpi@vger.kernel.org, linux-crypto@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, llvm@lists.linux.dev,
-        Weili Qian <qianweili@huawei.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Tom Rix <trix@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Mark Gross <markgross@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Len Brown <lenb@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <EAC85F14-B1DA-4358-9042-A607436D582A@jrtc27.com>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-23-sunilvl@ventanamicro.com>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+        Wed, 5 Apr 2023 00:21:27 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3576710CC;
+        Tue,  4 Apr 2023 21:21:26 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (fp76f193f3.tkyc206.ap.nuro.jp [118.241.147.243])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 33E95496;
+        Wed,  5 Apr 2023 06:21:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1680668484;
+        bh=06b+qUYIeMEy2j8ZVYH6n4c5h8AQzDzTI/K0SUs6hpU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g3DXZAgPSkFBSo349r719aTrMG7jL1OCfZ9KbK4o1fsp7QOcrbMaCRgkDyEV9l+tL
+         8Rfv6IRNp4kn9ARMeNqKbl9eJJSgw/Dc6xBDN8wdyXmxC1B4CIGSaSa3KHRae7vWtB
+         DUwjObQxnBwC+v856IkhPUrrk+TgLUIXLO6dLmKI=
+Date:   Wed, 5 Apr 2023 07:21:31 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Adam Pigg <adam@piggz.co.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 2/9] media: v4l2: Add NV12_16L16 pixel format to v4l2
+ format info
+Message-ID: <20230405042131.GO9915@pendragon.ideasonboard.com>
+References: <20230324151228.2778112-1-paul.kocialkowski@bootlin.com>
+ <20230324151228.2778112-3-paul.kocialkowski@bootlin.com>
+ <20230325210120.GB22214@pendragon.ideasonboard.com>
+ <40774dc0ef32246af76a202caca3632abc1ae25f.camel@ndufresne.ca>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <40774dc0ef32246af76a202caca3632abc1ae25f.camel@ndufresne.ca>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,108 +59,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4 Apr 2023, at 19:20, Sunil V L <sunilvl@ventanamicro.com> wrote:
->=20
-> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled
-> in allmodconfig build. However, RISC-V doesn't support sub-word
-> atomics which is used by this driver.
+Hi Nicolas,
 
-Why not? Compilers and libatomic do, so surely the Linux kernel should
-too.
+On Fri, Mar 31, 2023 at 02:54:20PM -0400, Nicolas Dufresne wrote:
+> Le samedi 25 mars 2023 à 23:01 +0200, Laurent Pinchart a écrit :
+> > On Fri, Mar 24, 2023 at 04:12:21PM +0100, Paul Kocialkowski wrote:
+> > > Represent the NV12_16L16 pixel format in the v4l2 format info table.
+> > > This is a 16x16 tiled version of NV12.
+> > > 
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > ---
+> > >  drivers/media/v4l2-core/v4l2-common.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> > > index 3d044b31caad..5101989716aa 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-common.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
+> > > @@ -280,6 +280,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+> > >  		/* Tiled YUV formats */
+> > >  		{ .format = V4L2_PIX_FMT_NV12_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > >  		{ .format = V4L2_PIX_FMT_P010_4L4, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 4, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > > +		{ .format = V4L2_PIX_FMT_NV12_16L16,	.pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2,
+> > > +		  .block_w = { 16, 16, 0, 0 }, .block_h = { 16, 16, 0, 0 } },
+> > 
+> > Not necessarily related to this patch, but I'm a bit puzzled by why
+> > V4L2_PIX_FMT_NV12_4L4 doesn't list block sizes.
+> 
+> It looks like Ezequiel introduced that initially, but didn't introduce any tiled
+> format, as a side effect, we missed it and no one ever used it.
+> 
+> In practice, its not dramatic, since most of the time, the alignment needed is
+> bigger then the block (specially with only 4x4 tiles), but we should certainly
+> fix that, thanks for spotting.
 
-> Due to this, the build fails
-> with below error.
->=20
-> In function =C3=A2=E2=82=AC=CB=9Cssh_seq_next=C3=A2=E2=82=AC=E2=84=A2,
->    inlined from =C3=A2=E2=82=AC=CB=9Cssam_request_write_data=C3=A2=E2=82=
-=AC=E2=84=A2 at drivers/platform/surface/aggregator/controller.c:1483:8:
-> ././include/linux/compiler_types.h:399:45: error: call to =
-=C3=A2=E2=82=AC=CB=9C__compiletime_assert_335=C3=A2=E2=82=AC=E2=84=A2 =
-declared with attribute error: BUILD_BUG failed
->  399 |         _compiletime_assert(condition, msg, =
-__compiletime_assert_, __COUNTER__)
->      |                                             ^
-> ./include/linux/compiler.h:78:45: note: in definition of macro =
-=C3=A2=E2=82=AC=CB=9Cunlikely=C3=A2=E2=82=AC=E2=84=A2
->   78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
->      |                                             ^
-> ././include/linux/compiler_types.h:387:9: note: in expansion of macro =
-=C3=A2=E2=82=AC=CB=9C__compiletime_assert=C3=A2=E2=82=AC=E2=84=A2
->  387 |         __compiletime_assert(condition, msg, prefix, suffix)
->      |         ^~~~~~~~~~~~~~~~~~~~
-> ././include/linux/compiler_types.h:399:9: note: in expansion of macro =
-=C3=A2=E2=82=AC=CB=9C_compiletime_assert=C3=A2=E2=82=AC=E2=84=A2
->  399 |         _compiletime_assert(condition, msg, =
-__compiletime_assert_, __COUNTER__)
->      |         ^~~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:39:37: note: in expansion of macro =
-=C3=A2=E2=82=AC=CB=9Ccompiletime_assert=C3=A2=E2=82=AC=E2=84=A2
->   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), =
-msg)
->      |                                     ^~~~~~~~~~~~~~~~~~
-> ./include/linux/build_bug.h:59:21: note: in expansion of macro =
-=C3=A2=E2=82=AC=CB=9CBUILD_BUG_ON_MSG=C3=A2=E2=82=AC=E2=84=A2
->   59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
->      |                     ^~~~~~~~~~~~~~~~
-> ./arch/riscv/include/asm/cmpxchg.h:335:17: note: in expansion of macro =
-=C3=A2=E2=82=AC=CB=9CBUILD_BUG=C3=A2=E2=82=AC=E2=84=A2
->  335 |                 BUILD_BUG();                                    =
-        \
->      |                 ^~~~~~~~~
-> ./arch/riscv/include/asm/cmpxchg.h:344:30: note: in expansion of macro =
-=C3=A2=E2=82=AC=CB=9C__cmpxchg=C3=A2=E2=82=AC=E2=84=A2
->  344 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                   =
-        \
->      |                              ^~~~~~~~~
-> ./include/linux/atomic/atomic-instrumented.h:1916:9: note: in =
-expansion of macro =C3=A2=E2=82=AC=CB=9Carch_cmpxchg=C3=A2=E2=82=AC=E2=84=A2=
+Just to make sure this won't fall through the cracks, will you send a
+patch ?
 
-> 1916 |         arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
->      |         ^~~~~~~~~~~~
-> drivers/platform/surface/aggregator/controller.c:61:32: note: in =
-expansion of macro =C3=A2=E2=82=AC=CB=9Ccmpxchg=C3=A2=E2=82=AC=E2=84=A2
->   61 |         while (unlikely((ret =3D cmpxchg(&c->value, old, new)) =
-!=3D old)) {
->      |                                ^~~~~~~
->=20
-> So, disable this driver for RISC-V even when ACPI is enabled for now.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> ---
-> drivers/platform/surface/aggregator/Kconfig | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/platform/surface/aggregator/Kconfig =
-b/drivers/platform/surface/aggregator/Kconfig
-> index c114f9dd5fe1..88afc38ffdc5 100644
-> --- a/drivers/platform/surface/aggregator/Kconfig
-> +++ b/drivers/platform/surface/aggregator/Kconfig
-> @@ -4,7 +4,7 @@
-> menuconfig SURFACE_AGGREGATOR
-> 	tristate "Microsoft Surface System Aggregator Module Subsystem =
-and Drivers"
-> 	depends on SERIAL_DEV_BUS
-> -	depends on ACPI
-> +	depends on ACPI && !RISCV
+> > >  
+> > >  		/* YUV planar formats, non contiguous variant */
+> > >  		{ .format = V4L2_PIX_FMT_YUV420M, .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
 
-If you insist on doing this, at least make it some new config variable
-that=E2=80=99s self-documenting and means this automatically gets =
-re-enabled
-when arch/riscv fixes this deficiency? Hard-coding arch lists like this
-seems like a terrible anti-pattern.
+-- 
+Regards,
 
-Jess
-
-> 	select CRC_CCITT
-> 	help
-> 	  The Surface System Aggregator Module (Surface SAM or SSAM) is =
-an
-> --=20
-> 2.34.1
->=20
->=20
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
+Laurent Pinchart
