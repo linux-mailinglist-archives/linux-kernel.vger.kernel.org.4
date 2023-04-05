@@ -2,84 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACEC66D74CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 08:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177236D74D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 08:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbjDEG5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 02:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S237037AbjDEG6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 02:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236556AbjDEG5Q (ORCPT
+        with ESMTP id S236911AbjDEG6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 02:57:16 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB634224;
-        Tue,  4 Apr 2023 23:57:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PrwRV2nQSz4x1d;
-        Wed,  5 Apr 2023 16:57:10 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680677830;
-        bh=ZYE4FSoL01GL/b1FxXpvB3WN1JHzBLRQ8oHkl6EBENA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RjK2+P+nt4DxmCp5W7wO8jweEN6FjSQBRIRcM9zCPMmVWRgz2y8uka4RNYtrTRO/F
-         ejAA4iwur7DUhfpB2vT7MYnKlvBomDvlfm8MZFou9WIoHv0aG+UTCxvuzd0wONoZ3n
-         SpqMmOcXFatXPyFDa1iN5ai5bHOTsdvWazuKuBDryPqLHeU8vEsEYl/xpjEe6sUlNS
-         DMWOQ3a0RkngmygkbwAG+Eiv0T+Mbl8ClTFb03obhQyfMZ2TP1TYYiMqJsDiRWKvCy
-         Ez1LgpurVA9Fw8SBPcz0Bf1Zks6RuoYKC7/rJvFpvoM/XWmcirSPwF9BEywMPya+26
-         FSvrFgWOBS9Ew==
-Date:   Wed, 5 Apr 2023 16:57:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: a couple of breaks
-Message-ID: <20230405165707.189c1a99@canb.auug.org.au>
+        Wed, 5 Apr 2023 02:58:10 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B90D4236
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 23:58:08 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id y4so138681165edo.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 23:58:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680677887;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b0Tz16hU06t/jQvjXVl+O8i4gFgw1SyUWujyjlJaCwE=;
+        b=PpeuMEURank6WUN37V4HZv7lRqZapYIrqDhEh/0MAOF0xAM6iGWHE3p8+TaQbwKqqt
+         SqBNO0Se7fAt0U4SLk+d1uBfYaIB7XEsMdmz+E32OPu/fPKk+ITy79f3ExewF+X66HYx
+         0bjVb1NfXnBvhNXvfOhgltXAl1uRRp3fSKPkxlADVSGEvak1/2cZ4Xfeuw+azyOEegnS
+         Fw0rWnlbSXuycNRHp9YYphMyg6Q7i+IajYa+p6r/9ph+dnezsvf2Ewti+4+CzjcH1u11
+         BcClMQhgyNnYjKsgPxfhLurW/gyHXJRbgb1ncHIgxQ7sGG3oVfU9WX5OLXhFd30i25Cd
+         YyPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680677887;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b0Tz16hU06t/jQvjXVl+O8i4gFgw1SyUWujyjlJaCwE=;
+        b=a0eymKeGMH/AUR6N/4GmzSGPwo/7shi8NLIwVZtY5WAverFHLxmxW4k9Vp/9MRL8Ya
+         Xh9ysRvpLLv/zvPM5JkXbFW8eyDM3uXo58cGWsyv1+flXBW6y8+merbXLe1SiNDfPQxL
+         moTapMV08pWQl/cEsCFHG//HKITM9GTIq6zm8ZJlwt40K/bLJoU2Z0Pz9Nors7nAnIug
+         3z76o3Ed+2xC/8ekZ6JfroLyAKMpdn7oqTkCpUexUc5ZaevhKgZEzepJ1rn60PYdTF4J
+         ndqgY15w9UBIclYOOY24ypagK/iGbwUIrO6qhYBY/cTowL3cQmX2Q/u8r9LKvZRBgqSk
+         8lQg==
+X-Gm-Message-State: AAQBX9f1hz6jXwFQpeeHoo+9n8RAndbmchncf0oX/4EkwFVbTtyDRDvZ
+        23NTWKq34LRZRh8fDCV6EQD03w==
+X-Google-Smtp-Source: AKy350ZE3HG/9IWJXBZKKUuUf6EPSfW9JpqSBUDBkoR1mNRrxXUL7GIWWbjCguslGb4ZJPTIDoA3gg==
+X-Received: by 2002:a17:906:384a:b0:931:6641:9897 with SMTP id w10-20020a170906384a00b0093166419897mr1759666ejc.44.1680677886921;
+        Tue, 04 Apr 2023 23:58:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170906d18a00b00923f05b2931sm6938769ejz.118.2023.04.04.23.58.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 23:58:06 -0700 (PDT)
+Message-ID: <79ddaff0-00a9-36db-2bc0-4c844ffd9528@linaro.org>
+Date:   Wed, 5 Apr 2023 08:58:05 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_Da=ETof2xoOLUdxWJQ41HK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-1.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V2 5/9] dt-bindings: PCI: qcom: Add IPQ9574
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, mani@kernel.org, p.zabel@pengutronix.de,
+        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+References: <20230404164828.8031-1-quic_devipriy@quicinc.com>
+ <20230404164828.8031-6-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230404164828.8031-6-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/_Da=ETof2xoOLUdxWJQ41HK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 04/04/2023 18:48, Devi Priya wrote:
+> Add bindings for PCIe hosts on IPQ9574 platform and allow
+> msi-parent property
 
-Hi all,
+Missing full stop. Also in your other patches.
 
-There will be no linux-next releases over the coming Easter long
-weekend i.e. no release on Friday or Monday.
+> 
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  Changes in V2:
+> 	- Updated the commit message and dropped the aggr_noc entries
+> 	  as it will be handled via interconnect driver
+> 
+>  .../devicetree/bindings/pci/qcom,pcie.yaml    | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> index fb32c43dd12d..8657ab65008c 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> @@ -26,6 +26,7 @@ properties:
+>            - qcom,pcie-ipq8064-v2
+>            - qcom,pcie-ipq8074
+>            - qcom,pcie-ipq8074-gen3
+> +          - qcom,pcie-ipq9574
+>            - qcom,pcie-msm8996
+>            - qcom,pcie-qcs404
+>            - qcom,pcie-sa8540p
+> @@ -105,6 +106,8 @@ properties:
+>      items:
+>        - const: pciephy
+>  
+> +  msi-parent: true
 
-After that, I will be on vacation from April 13 to May 7 inclusive.  So
-Wednesday April 12 will be the last release I do until May 8.
-Unfortunately, that means I will miss the whole next merge window.
+Isn't this conflicting with Mani's series:
+https://lore.kernel.org/all/20230108203340.GA229573-robh@kernel.org/
+https://lore.kernel.org/all/20230111123004.21048-1-manivannan.sadhasivam@linaro.org/#t
 
---=20
-Cheers,
-Stephen Rothwell
+Although for some reason Mani's patch references non-existing commit and
+hunk...
 
---Sig_/_Da=ETof2xoOLUdxWJQ41HK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Best regards,
+Krzysztof
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQtG8MACgkQAVBC80lX
-0GyPvwf+PkCFkU+yQebriBYjrhdlwlxo1DUrhQh2hNF2t37bT2HXhjRNvgyk+7BF
-8QzOEmO86Qj2cIDjzpvRVbWQR6bI9JRsSyQX+8/M9QRJBzSOyWkyn3jmwSXwT/49
-CCGIQJ6iY7RPxH9DMhHTsrdaMrl6lKMbHiOmxb1aDOeb1hr+bXwce4lhCDiEPXrr
-kvsVdIKD1c0cU2WomUGa54hiwJlnl9c18Fpvoye3uAKo3zqHE1H07QkR7ImrrddV
-C4/YiIqRG/9XwIoA3daVQpSQfaL85gza5VqQ+rUMl34jk2MiPMKlYjpEUrIbE71T
-6dvKsWDhtwQs/bfMQX/7vkFxRf+LNQ==
-=0IVH
------END PGP SIGNATURE-----
-
---Sig_/_Da=ETof2xoOLUdxWJQ41HK--
