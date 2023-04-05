@@ -2,198 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43FA6D7CC5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6AB6D7CC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237765AbjDEMgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S237022AbjDEMiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238046AbjDEMgu (ORCPT
+        with ESMTP id S237148AbjDEMiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:36:50 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55C92D44
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:36:47 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5002f12ccfeso43450a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 05:36:47 -0700 (PDT)
+        Wed, 5 Apr 2023 08:38:18 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA7D19AA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:38:16 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-4fa3c1a7a5aso364824a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 05:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680698206; x=1683290206;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6iWx9EB6J3L8iIop1bmZ+pNlziIEisMA1uL8RnykGc=;
-        b=Mhpu4CDBYYy7UnbecnwaJGBwUWEJJZkdvrEefXyX2r+r4FENpB1qkR+tX4rIEcLLNc
-         HUVfqZlrktiiC1UivQlXrKHRQSwPD9fmbGSjOmWfxRDbCoEgopYVA0XuQ3TzQrDsGHl8
-         V/sMzxOY9dAQhT6ShYmtLicdzfCt+/18NkPTo=
+        d=grsecurity.net; s=grsec; t=1680698295;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oucJoA3lSCrdUjWumODrDlx48gsAfc37yEIVb8RrZF8=;
+        b=q0IxO5s7OuFfEyZn2WZ1coD3k1/U9QhlbbZY+daBGxmxvTanKmfNbelzWna18Es7lS
+         o6TJiqXw8I5NoYULfUk7t/OG8kNQKJld5dgdMRiu+Tuuexa2SLfwyiducy2b3ckxUIb2
+         GAHd5aZSNxwYAKYnS+HH0jP9js18Xz3mi9Ylzpbdpf40qrR37uodiTyKxbK15rrV+P6r
+         nq3a/hfqvJ6B1AXcEbehhHsdyAUMPzJbqKtqecB5V7uAb6UsXWACv7JOiIIj/Ln+nAld
+         dUOP03BV0/LtOR6yPaYNuLsF8YexNNlQrJ9KGZY5FmnjKCjCkMVLeY8Eaf9j+qag2Xok
+         eCFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680698206; x=1683290206;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E6iWx9EB6J3L8iIop1bmZ+pNlziIEisMA1uL8RnykGc=;
-        b=jHZyvKwXaWuJ6wu8bRkd3TEPlTbyEyOh1yBJIzSbREgdO1P5G6fELbnnBFYUBGdUbJ
-         Cjwpi54ey6D6G/X9SxAL9v4TM297olblp1eiej0mHKher0EkoLl7VxRd6XHE1C+7o1/u
-         zZt9Doo/HjW4IapeVcmm5ZEhP4A85jdTvU8broMY10kZEHEC/Ngexj/SBhl2xoaupBa8
-         CAvschD5Vt9zCByHEOks1DmD6m83ENTJ1RKH8glgzBvUJculybKe6JVOSinUjT8G8EWn
-         aXEU5RLMA2oLB26ujnIRs2V/6nttViMuBmYzznmV5aSPzSSmvJH3DcL171HY5oZQDt9z
-         hUJQ==
-X-Gm-Message-State: AAQBX9cVdqCF83H2OIImtxfpoTcTTdlLpjoQTFptquFqvIiDVBZIu8pm
-        CcQ5js//umclCSolWH3gT9n/yg==
-X-Google-Smtp-Source: AKy350YIBJGEKIbnfG5Qb41ZqY8oW3SBwxFUxtFvD5haG8Sd7EjZxbYnmEZUvlkuPcFwlyaw2lVQPg==
-X-Received: by 2002:a05:6402:d0e:b0:502:e50:3358 with SMTP id eb14-20020a0564020d0e00b005020e503358mr1779099edb.3.1680698206345;
-        Wed, 05 Apr 2023 05:36:46 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id q16-20020a50aa90000000b004af6c5f1805sm7265301edc.52.2023.04.05.05.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 05:36:45 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 14:36:43 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH RFC 04/18] rust: drm: gem: Add GEM object abstraction
-Message-ID: <ZC1rW+ZktoC9fBaX@phenom.ffwll.local>
-Mail-Followup-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-4-917ff5bc80a8@asahilina.net>
- <ZC1WwJDr1iqSQnYs@phenom.ffwll.local>
- <CANiq72=h9qKrpkY2K962__rs-JLsmWxPXocx040ZeDSKGf_Brw@mail.gmail.com>
- <ZC1aEZpgZLkq8xTv@phenom.ffwll.local>
- <CANiq72=hoVw566orbDYcJyw2+SFfxpR1rdJVbbR3kkrjJUASww@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1680698295;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oucJoA3lSCrdUjWumODrDlx48gsAfc37yEIVb8RrZF8=;
+        b=uaY2Kt657gpiR8pRQepX21In1ezTbixl+/9T6sN8nDuzdt1EMMffgPdguLnXisQSOk
+         mqGtx0od5lsAQ1l9vXTBl33IXyCINJrqNiRX+GXYNvmZfcFXu39CQ0KVpuAfSBnxeCZ4
+         6x2EepI5RtzrKjyvBVKINCRWwrvPwMqL3AQPv3dZvpl4TaF6XWg3k8VSsGkHlmgQ7mlq
+         vfQkyzB3yovvqrWZXQkgDxIKH98OcS9iCbO+FmHUELs4yDOQb4R9yE5nM/Nq7v8KBtp5
+         lBwmQ+F63/HcEdqIYwaMKgCjmWTpB39g+TESRB/QJMGuet7fySpCGMj7GHH5h/vhrLXG
+         RHnA==
+X-Gm-Message-State: AAQBX9cPxRDlajyQKMUOjteMPysJJAyBnhtM0wvnUed3MYPwmfMGygmF
+        7JOK73QBMCGX5CmIhM2+SLj/OA==
+X-Google-Smtp-Source: AKy350Z9uJSgcxjQUJ+39fyMfUzYh79t8mdIzQlAtGLEN7Zs8ouxcnOa+MRMId/Baqwu5GL3zpePbQ==
+X-Received: by 2002:a50:ed10:0:b0:4fa:7679:d44c with SMTP id j16-20020a50ed10000000b004fa7679d44cmr1685232eds.11.1680698295213;
+        Wed, 05 Apr 2023 05:38:15 -0700 (PDT)
+Received: from ?IPV6:2003:f6:af39:8900:5941:dee7:da1a:b514? (p200300f6af3989005941dee7da1ab514.dip0.t-ipconnect.de. [2003:f6:af39:8900:5941:dee7:da1a:b514])
+        by smtp.gmail.com with ESMTPSA id r19-20020a50c013000000b004fd29e87535sm7195179edb.14.2023.04.05.05.38.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 05:38:14 -0700 (PDT)
+Message-ID: <a1ed2308-b521-14c0-a118-19c1afffd1d6@grsecurity.net>
+Date:   Wed, 5 Apr 2023 14:38:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72=hoVw566orbDYcJyw2+SFfxpR1rdJVbbR3kkrjJUASww@mail.gmail.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] KVM: x86/mmu: Refresh CR0.WP prior to checking for
+ emulated permission faults
+Content-Language: en-US, de-DE
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230405002608.418442-1-seanjc@google.com>
+From:   Mathias Krause <minipli@grsecurity.net>
+In-Reply-To: <20230405002608.418442-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 02:32:12PM +0200, Miguel Ojeda wrote:
-> On Wed, Apr 5, 2023 at 1:23 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > Ok if this is just interim I think it's fine. Would still be good to have
-> > the MAINTAINERS entry though even just to cover the interim state. Least
-> > because I'm assuming that when things are split up you'd still want to
-> > keep the rust list on cc for the rust parts, even when they move into
-> > subsystems?
-> 
-> Sorry, I missed to reply the second part of your email -- replying here.
-> 
-> Currently, the subsystem's code is under `rust/` (though modules can
-> go already into other folders). One of the reasons was technical
-> simplicity, and a nice side effect is that we could bootstrap things
-> while getting C maintainers involved over time.
-> 
-> To accomplish that, the guidelines for contributing Rust code are that
-> the respective maintainers need to be at least Cc'd, even if the files
-> do not hit the `F:` fields for the time being -- see [1]. But, for us,
-> ideally, the maintainers will take the changes through their tree,
-> instead of going through the Rust one, since that is the end goal.
-> 
-> And, of course, if you already want to have `F:` fields for the Rust
-> code, that is even better! (Whether those should be in the same entry
-> or in a new one, it is up to you, of course, and whether it is a
-> different set of people / level of support / etc.)
-> 
-> Then, when the `kernel` crate split happens, we can move the code
-> directly under whatever folders it should be naturally, when their
-> maintainers are ready. For some subsystems, that may mean they do not
-> need any `F:` fields since they are already covered (e.g. if they did
-> not create a new entry for Rust code only). And for cases like yours,
-> where you already had `F:` fields, it means the move of the files can
-> be done right away as soon as the split happens.
-> 
-> In short, we would definitely welcome if you add `F:` fields already
-> (whether in existing or new entries) -- it would mean you are ahead of
-> the curve! :)
-> 
-> As for the mailing list, yes, for the time being, I ask that all
-> changes to please be sent to the Rust list, so that everybody that
-> wants to follow the Rust progress has everything in a single place, so
-> that we try to remain consistent in the beginning on e.g. coding
-> guidelines, so that Rust reviewers can help spot mistakes, and so on
-> and so forth.
-> 
-> But, as Rust grows in the kernel, as systems become non-experimental,
-> and as maintainers take ownership of the code, that should eventually
-> go away and let things be as usual with C code. Then the Rust
-> subsystem (and its list) will become smaller, and it will be the
-> subsystem (and the discussion place) for anything not covered by other
-> subsystems, such as core Rust abstractions and types, Rust
-> infrastructure and so on.
-> 
-> How does that sound?
+On 05.04.23 02:26, Sean Christopherson wrote:
+> If CR0.WP may be guest-owned, i.e. TDP is enabled, refresh the MMU's
+> snapshot of the guest's CR0.WP prior to checking for permission faults
+> when emulating a guest memory access.  If the guest toggles only CR0.WP
+> and triggers emulation of a supervisor write, e.g. when KVM is emulating
+> UMIP, KVM may consume a stale CR0.WP, i.e. use stale protection bits
+> metadata.
 
-Yeah sounds all great!
+This reads a little awkward for a non-native speaker. Maybe something
+like this:
 
-I think interim at least a separate rust drm entry
-would be good, to make sure we always cc both rust and dri-devel. Once
-it's too much for you and you generally trust the dri-devel folks to not
-design stupid interfaces, we can then drop that and only ping rust folks
-when needed. I do expect that's some years out though.
--Daniel
+    As CR0.WP may be guest-owned if TDP is enabled, refresh...
+    [in between as is]
+    ...consume a stale CR0.WP and use stale protection bits metadata.
 
 > 
-> [1] https://rust-for-linux.com/contributing#the-rust-subsystem (I may
-> reorganize this to be Rust's `P:` field, by the way)
+> Reported-by: Mathias Krause <minipli@grsecurity.net>
+> Link: https://lkml.kernel.org/r/677169b4-051f-fcae-756b-9a3e1bb9f8fe%40grsecurity.net
+> Fixes: fb509f76acc8 ("KVM: VMX: Make CR0.WP a guest owned bit")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/mmu.h     | 26 +++++++++++++++++++++++++-
+>  arch/x86/kvm/mmu/mmu.c | 15 +++++++++++++++
+>  2 files changed, 40 insertions(+), 1 deletion(-)
 > 
-> Cheers,
-> Miguel
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 89f532516a45..92d5a1924fc1 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -113,6 +113,8 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+>  bool kvm_can_do_async_pf(struct kvm_vcpu *vcpu);
+>  int kvm_handle_page_fault(struct kvm_vcpu *vcpu, u64 error_code,
+>  				u64 fault_address, char *insn, int insn_len);
+> +void __kvm_mmu_refresh_passthrough_bits(struct kvm_vcpu *vcpu,
+> +					struct kvm_mmu *mmu);
+>  
+>  int kvm_mmu_load(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_unload(struct kvm_vcpu *vcpu);
+> @@ -153,6 +155,24 @@ static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
+>  					  vcpu->arch.mmu->root_role.level);
+>  }
+>  
+> +static inline void kvm_mmu_refresh_passthrough_bits(struct kvm_vcpu *vcpu,
+> +						    struct kvm_mmu *mmu)
+> +{
+> +	/*
+> +	 * When EPT is enabled, KVM may passthrough CR0.WP to the guest, i.e.
+> +	 * @mmu's snapshot of CR0.WP and thus all related paging metadata may
+> +	 * be stale.  Refresh CR0.WP and the metadata on-demand when checking
+> +	 * for permission faults.  Exempt nested MMUs, i.e. MMUs for shadowing
+> +	 * nEPT and nNPT, as CR0.WP is ignored in both cases.  Note, KVM does
+> +	 * need to refresh nested_mmu, a.k.a. the walker used to translate L2
+> +	 * GVAs to GPAs, as that "MMU" needs to honor L2's CR0.WP.
+> +	 */
+> +	if (!tdp_enabled || mmu == &vcpu->arch.guest_mmu)
+> +		return;
+> +
+> +	__kvm_mmu_refresh_passthrough_bits(vcpu, mmu);
+> +}
+> +
+>  /*
+>   * Check if a given access (described through the I/D, W/R and U/S bits of a
+>   * page fault error code pfec) causes a permission fault with the given PTE
+> @@ -184,8 +204,12 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+>  	u64 implicit_access = access & PFERR_IMPLICIT_ACCESS;
+>  	bool not_smap = ((rflags & X86_EFLAGS_AC) | implicit_access) == X86_EFLAGS_AC;
+>  	int index = (pfec + (not_smap << PFERR_RSVD_BIT)) >> 1;
+> -	bool fault = (mmu->permissions[index] >> pte_access) & 1;
+>  	u32 errcode = PFERR_PRESENT_MASK;
+> +	bool fault;
+> +
+> +	kvm_mmu_refresh_passthrough_bits(vcpu, mmu);
+> +
+> +	fault = (mmu->permissions[index] >> pte_access) & 1;
+>  
+>  	WARN_ON(pfec & (PFERR_PK_MASK | PFERR_RSVD_MASK));
+>  	if (unlikely(mmu->pkru_mask)) {
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 4c874d4ec68f..47269d50e98d 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5186,6 +5186,21 @@ static union kvm_cpu_role kvm_calc_cpu_role(struct kvm_vcpu *vcpu,
+>  	return role;
+>  }
+>  
+> +void __kvm_mmu_refresh_passthrough_bits(struct kvm_vcpu *vcpu,
+> +					struct kvm_mmu *mmu)
+> +{
+> +	const bool cr0_wp = kvm_is_cr0_bit_set(vcpu, X86_CR0_WP);
+> +
+> +	BUILD_BUG_ON((KVM_MMU_CR0_ROLE_BITS & KVM_POSSIBLE_CR0_GUEST_BITS) != X86_CR0_WP);
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> +	BUILD_BUG_ON((KVM_MMU_CR4_ROLE_BITS & KVM_POSSIBLE_CR4_GUEST_BITS));
+
+Just curious, this should assert that we don't run into similar issues
+if we make more bits of CR4 guest owned?
+
+> +
+> +	if (is_cr0_wp(mmu) == cr0_wp)
+> +		return;
+> +
+> +	mmu->cpu_role.base.cr0_wp = cr0_wp;
+> +	reset_guest_paging_metadata(vcpu, mmu);
+> +}
+> +
+>  static inline int kvm_mmu_get_tdp_level(struct kvm_vcpu *vcpu)
+>  {
+>  	/* tdp_root_level is architecture forced level, use it if nonzero */
+> 
+> base-commit: 27d6845d258b67f4eb3debe062b7dacc67e0c393
+
+Tested-by: Mathias Krause <minipli@grsecurity.net>
+
+Thanks again, Sean!
