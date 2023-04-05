@@ -2,174 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9ECE6D839C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE50E6D839E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbjDEQ0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S233171AbjDEQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjDEQ0I (ORCPT
+        with ESMTP id S233116AbjDEQ0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:26:08 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D9ACA;
-        Wed,  5 Apr 2023 09:26:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680711965; x=1712247965;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OBPArDpGTZjCLqy9R4ICyoG2JGVamWpModrhzwKQTJE=;
-  b=eQEZrZKM4DS0aZKPJ5TE/Hch5M/Q8kA/g5vhMnfUej1ou9egQueYeSgd
-   tSM4Vei2GeyuyFyF8AXNwIaou4pisOg2kCQx3Auh+gQVJC6hbzSE8ygqk
-   rQ08vjOz9mS3A5tx3DH7ZC6ClSvzsKWTO7DBHDH9SVzXbZ7Ldf+GXeZVt
-   cQsfkUcXXCFRnUKtqolcQe/QOp1ED2sG+/vfH3rQrweHDzWo46zXIHlQY
-   YkZOsaIWO0iAG4jgcq4rUy/LmxEHvobwUffv6lsoh9bXchEMc4H+x/Ov0
-   S++BfuEdkOfZD5F3E2Utxhb+yCVuaEBhqLLTVvAYX8XYxLvDHY8Gg8MGI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="428787799"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="428787799"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 09:25:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="686806956"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="686806956"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.42.88])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 09:25:32 -0700
-Message-ID: <2aaba740-35e4-4a68-2676-63d47898378c@intel.com>
-Date:   Wed, 5 Apr 2023 19:25:27 +0300
+        Wed, 5 Apr 2023 12:26:10 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D9BE4B;
+        Wed,  5 Apr 2023 09:26:07 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335EXiX3023638;
+        Wed, 5 Apr 2023 16:26:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=QNwGQCcewi+A9hhC1YukXd0m9GvUUdeS8CRiiYHOuII=;
+ b=shk6KC+/XkX9q6H5Qv0hlbifg5Q3cZBp1Ys+DdeJ76bCvwSEcC1GrIHYUNhvH4dEcbri
+ W6DFRot4JvSfJjttAoFI3Tc1uG3OhsaUkP6GcAaS0AT8YoPM1Qp5YBy8IPqy6V4UfXXD
+ HfDKVKPvnbyo7cMNzqZPzfXcdNaL0P1h/NouDmXEmTm/DTRio0+wHYY10rE0J0VrajnV
+ TOOJFmfSE82DSdpTwGb6jHB0felyTn5sW27bqCfi7tcDKjO8iEskshu1grDlTfkOgL6U
+ bkfLahApD3fWBq17MpZ6Eg3ASz/FQOqP7hGOPYQwibkFmrW8uytqje+mMpg2Q8Zg1Mq8 HQ== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ps75jhm8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 16:26:02 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 335ES8Vj009629;
+        Wed, 5 Apr 2023 16:26:01 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3ppc87y6gb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 16:26:01 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 335GQ0kM34472318
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Apr 2023 16:26:00 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8BA5E5805C;
+        Wed,  5 Apr 2023 16:26:00 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CDA65805A;
+        Wed,  5 Apr 2023 16:26:00 +0000 (GMT)
+Received: from [9.160.127.161] (unknown [9.160.127.161])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Apr 2023 16:25:59 +0000 (GMT)
+Message-ID: <bc6564dc-3bfd-298b-43a8-b5a629f4631f@linux.ibm.com>
+Date:   Wed, 5 Apr 2023 11:25:59 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.1
-Subject: Re: [PATCH v5 00/17] Reference count checker and related fixes
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] leds: Ensure hardware blinking turns off when requested
+To:     pavel@ucw.cz
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220520171134.31415-1-eajames@linux.ibm.com>
 Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Stephane Eranian <eranian@google.com>
-References: <20230320212248.1175731-1-irogers@google.com>
- <CAP-5=fX4=pUmcFpRZ5xFds1awSr7HSo1F9rH4=D7NJXW9OXXVQ@mail.gmail.com>
- <7443d427-783b-44b6-85e6-5e667bb83a94@intel.com>
- <ZCxvYpeoemPHUmJ4@kernel.org> <ZCxyZcnd9/4zjbQZ@kernel.org>
- <527b8bcb-d462-5fff-5310-703b55902a61@intel.com>
- <ZC11tTdXuJR/M8o+@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <ZC11tTdXuJR/M8o+@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <20220520171134.31415-1-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kzLJbnNLsHHO4xFA8-ESx998SlxvHJbq
+X-Proofpoint-ORIG-GUID: kzLJbnNLsHHO4xFA8-ESx998SlxvHJbq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-05_11,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ adultscore=0 priorityscore=1501 clxscore=1011 malwarescore=0
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=788 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304050146
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/04/23 16:20, Arnaldo Carvalho de Melo wrote:
-> Em Wed, Apr 05, 2023 at 11:47:26AM +0300, Adrian Hunter escreveu:
->> On 4/04/23 21:54, Arnaldo Carvalho de Melo wrote:
->>> Em Tue, Apr 04, 2023 at 03:41:38PM -0300, Arnaldo Carvalho de Melo escreveu:
->>>> Em Tue, Apr 04, 2023 at 08:25:41PM +0300, Adrian Hunter escreveu:
->>>>> On 4/04/23 18:58, Ian Rogers wrote:
->>>>>> Ping. It would be nice to have this landed or at least the first 10
->>>>>> patches that refactor the map API and are the bulk of the
->>>>>> lines-of-code changed. Having those landed would make it easier to
->>>>>> rebase in the future, but I also think the whole series is ready to
->>>>>> go.
->>>>>
->>>>> I was wondering if the handling of dynamic data like struct map makes
->>>>> any sense at present.  Perhaps someone can reassure me.
->>>>>
->>>>> A struct map can be updated when an MMAP event is processed.  So it
->>>>
->>>> Yes, it can, and the update is made via a new PERF_RECORD_MMAP, right?
->>>>
->>>> So:
->>>>
->>>> 	perf_event__process_mmap()
->>>> 	  machine__process_mmap2_event()
->>>> 	    map__new() + thread__insert_map(thread, map)
->>>> 	    	maps__fixup_overlappings()
->>>> 			maps__insert(thread->maps, map);
->>>>
->>>> Ok, from this point on new samples on ] map->start .. map->end ] will
->>>> grab a refcount to this new map in its hist_entry, right?
->>>>
->>>> When we want to sort by dso we will look at hist_entry->map->dso, etc.
->>>
->>> And in 'perf top' we go decaying hist entries, when we delete the
->>> hist_entry, drop the reference count to things it holds, that will then
->>> be finally deleted when no more hist_entries point to it.
->>>
->>>>> seems like anything racing with event processing is already broken, and
->>>>> reference counting / locking cannot help - unless there is also
->>>>> copy-on-write (which there isn't at present)?
->  
->> So I checked, and struct map *is* copy-on-write in
->> maps__fixup_overlappings(), so that should not be a problem.
->  
->>>>> For struct maps, referencing it while simultaneously processing
->>>>> events seems to make even less sense?
-> 
->>>> Can you elaborate some more?
->  
->> Only that the maps are not necessarily stable e.g. the map that you
->> need has been replaced in the meantime.
-> 
-> Well, it may be sliced in several or shrunk by new ones overlapping it,
-> but it if completely disappears, say a new map starts before the one
-> disappearing and ends after it, then it remains with reference counts if
-> there are hist_entries (or other data structure) pointing to them,
-> right?
->  
->> But upon investigation, the only user at the moment is
->> maps__find_ams().  If we kept the removed maps (we used to),
->> it might be possible to make maps__find_ams() work correctly
->> in any case.
-> 
-> Humm, I think I see what you mean, maps__find_ams() is called when we
-> are annotating a symbol, not when we're processing a sample, so it may
-> be the case that at the time of annotation the executable that is being
-> found (its parsing the target IP of a 'call' assembly instruction) was
-> replaced, is that the case?
 
-Yes, that is the possibility
+On 5/20/22 12:11, Eddie James wrote:
+> If an LED is blinking through the hardware and the trigger is deactivated,
+> the driver will set the brightness to 0 to disable blinking. However, if
+> the LED driver doesn't support non-blocking operations, the request for
+> setting brightness to 0 will get queued. Then if a user requests a new
+> non-zero brightness before the request for 0 brightness is executed, the
+> LED blinking will not get disabled since the brightness will simply be
+> updated.
+> Fix this by flushing the workqueue before updating the requested
+> brightness.
 
+
+I just realized this never made it anywhere. Pavel, any thoughts?
+
+
+Thanks,
+
+Eddie
+
+
+>
+> Fixes: 4d71a4a12b13 ("leds: Add support for setting brightness in a synchronous way")
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>   drivers/leds/led-class.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+> index 6a8ea94834fa..861a1cb5df5b 100644
+> --- a/drivers/leds/led-class.c
+> +++ b/drivers/leds/led-class.c
+> @@ -55,6 +55,8 @@ static ssize_t brightness_store(struct device *dev,
+>   
+>   	if (state == LED_OFF)
+>   		led_trigger_remove(led_cdev);
+> +	/* flush out any request to disable blinking */
+> +	flush_work(&led_cdev->set_brightness_work);
+>   	led_set_brightness(led_cdev, state);
+>   	flush_work(&led_cdev->set_brightness_work);
+>   
