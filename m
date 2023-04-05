@@ -2,147 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DF06D870A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A466D870D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbjDETiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S233825AbjDETjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233825AbjDETib (ORCPT
+        with ESMTP id S232465AbjDETjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:38:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F869109;
-        Wed,  5 Apr 2023 12:37:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AE84640BE;
-        Wed,  5 Apr 2023 19:37:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97283C433EF;
-        Wed,  5 Apr 2023 19:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680723429;
-        bh=TLG3NZx0ALC463PDdufiBKczspw2zuA1W3rAJxepf5k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DTAlaf5qV1uSiQa5LuJCDGh/hcwXVcZFLUHADH/hguhCT/5asojITIl11hbOfUD4I
-         WEp7f4zsiFPpt7MZHXgDyCm6UG1y3a0CAn4ZmVd4lGyakXjZH0MGDsXJx/WShChi3E
-         p1+/Baw4gZykoqsFEiejtkDuVyjs3oPs9/bRD89LqFfEyHL5OiGzOkdPu7ZnFYegJu
-         0X5xKiFKYZQRSgUmExpzXr/f/Y6GC0oI+7DIsxxwXQXtq6Jeu9saRp9j+Q2RRi6IrF
-         HMruhZtAyGqwpOxwu2Ag8JCFs8aCQNZwMlYleJ6p/YWva8D1ultBAArTnD5/bVweNK
-         /woEU+KZWin+w==
-Date:   Wed, 5 Apr 2023 14:37:08 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Denis Plotnikov <den-plotnikov@yandex-team.ru>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shshaikh@marvell.com, manishc@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH] qlcnic: check pci_reset_function result
-Message-ID: <20230405193708.GA3632282@bhelgaas>
+        Wed, 5 Apr 2023 15:39:11 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463817D82
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:38:34 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id x20so38386831ljq.9
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 12:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680723505;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5f0mC+vCbK8/t6861d0Rm2iLKPedST0RJhiJavXpidc=;
+        b=O9u3HSfoQYfNm6hUe5TGddkA7cx/XjoVwsGfqDgI7F3H+tUYOwSbPAseA3xNdBIIDK
+         bBRAR5iK7zjnYQ3VOKqF700zJn4FuPbmEr8/GvFUm6YArkvGYHpcSh4oaisU2ezPOXOT
+         sUHslTba6C7mypK/br5++omC6AonLN5v0G4WjZOMmo9iRNdZFYrtliDA/4vQWQV8um05
+         NQhUBRstoghlaBAD7zIObzOfXVS3o5aAw+gBgmGviJCC4CborHlJg0hTc/KmNVUz7omK
+         4ibETRW+fJ6DFbqcoiPFVyt20L7IYuTKdgROvdWw4pQlQxbWvx1GDh+r1rzq3JMz9b4F
+         aDKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680723505;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5f0mC+vCbK8/t6861d0Rm2iLKPedST0RJhiJavXpidc=;
+        b=j837WN2lbAElX73F4+41Vo6FwbvtbN+TC5WwHDH+44NT/7QRilRMJ7kv7j6+SnugHp
+         x4cReZOkMVLTdBpHoLtgfKWx+jPaNsXxh+lLeueT6SS0fEfVA5zaxTUvuPX6oIaUIZbH
+         AeKPYNBub+K6GROB/7SoDrPZMCsIL9/E9z19HvvoOHqPbPQSyL6jgKqjiuaTu0n7AkTR
+         G424ia7zYrmz4tk6yvOhEIgaiIheRkFUgM2g7tLNj1p2VWJaeuMhngsYZVtar/1YLgsT
+         H8v3+pxpA5XWuVTKmNw12gsV2UpqC5OcIO2NsgRarLd+EfoFgMBJHrcd2MIovVZ5WB8N
+         qeEw==
+X-Gm-Message-State: AAQBX9ffuCMNAVk8hJqq/BsqHBm/TtUcpr+4k8yuUn9wdd4tGc/6HELv
+        eA8dNHbdglq7eZzMtl1ziGpyzQ==
+X-Google-Smtp-Source: AKy350aAERgJC0es3w+VWzIC+SauE/zhEA0eNoS8iq5QTbMpYVHS9MuKuSDX22w+FZJxFPZwvr9Ggw==
+X-Received: by 2002:a2e:8085:0:b0:29a:95d8:3e04 with SMTP id i5-20020a2e8085000000b0029a95d83e04mr2084998ljg.50.1680723504998;
+        Wed, 05 Apr 2023 12:38:24 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id x23-20020a2e9c97000000b002934febffe4sm2966662lji.128.2023.04.05.12.38.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 12:38:24 -0700 (PDT)
+Message-ID: <374d3d19-2459-064c-c7e6-7e13b4dc368d@linaro.org>
+Date:   Wed, 5 Apr 2023 22:38:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC1x57v1JdUyK7aG@corigine.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v5 1/2] dt-bindings: phy: qcom,qmp-usb: Fix phy subnode
+ for SM6115 & QCM2290 USB3 PHY
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, kishon@kernel.org, vkoul@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230405191633.1864671-1-bhupesh.sharma@linaro.org>
+ <20230405191633.1864671-2-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230405191633.1864671-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 03:04:39PM +0200, Simon Horman wrote:
-> On Mon, Apr 03, 2023 at 01:58:49PM +0300, Denis Plotnikov wrote:
-> > On 31.03.2023 20:52, Simon Horman wrote:
-> > > On Fri, Mar 31, 2023 at 11:06:05AM +0300, Denis Plotnikov wrote:
-> > > > Static code analyzer complains to unchecked return value.
-> > > > It seems that pci_reset_function return something meaningful
-> > > > only if "reset_methods" is set.
-> > > > Even if reset_methods isn't used check the return value to avoid
-> > > > possible bugs leading to undefined behavior in the future.
-> > > > 
-> > > > Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
-> > > nit: The tree this patch is targeted at should be designated, probably
-> > >       net-next, so the '[PATCH net-next]' in the subject.
-> > > 
-> > > > ---
-> > > >   drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c | 4 +++-
-> > > >   1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
-> > > > index 87f76bac2e463..39ecfc1a1dbd0 100644
-> > > > --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
-> > > > +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
-> > > > @@ -628,7 +628,9 @@ int qlcnic_fw_create_ctx(struct qlcnic_adapter *dev)
-> > > >   	int i, err, ring;
-> > > >   	if (dev->flags & QLCNIC_NEED_FLR) {
-> > > > -		pci_reset_function(dev->pdev);
-> > > > +		err = pci_reset_function(dev->pdev);
-> > > > +		if (err && err != -ENOTTY)
-> > > Are you sure about the -ENOTTY part?
-> > > 
-> > > It seems odd to me that an FLR would be required but reset is not supported.
-> > No, I'm not sure. My logic is: if the reset method isn't set than
-> > pci_reset_function() returns -ENOTTY so treat that result as ok.
-> > pci_reset_function may return something different than -ENOTTY only if
-> > pci_reset_fn_methods[m].reset_fn is set.
+On 05/04/2023 22:16, Bhupesh Sharma wrote:
+> The USB3 SS (QMP) PHY found on Qualcomm SM6115 & QCM2290 SoCs is
+> similar to sm8150 QMP PHY (which is named as 'usb_1_qmpphy' in
+> sm8150 dtsi file, see [1]) in the sense that the phy subnode supports
+
+usb_1_qmpphy on sm8150 is a USB+DP PHY, see 
+https://patchwork.kernel.org/project/linux-phy/patch/20230324215550.1966809-4-dmitry.baryshkov@linaro.org/
+
+> 6 regs, namely TX lane 1, RX lane 1, PCS, TX lane 2, RX lane 2 and
+> PCS_MISC.
 > 
-> I see your reasoning: -ENOTTY means nothing happened, and probably that is ok.
-> I think my main question is if that can ever happen.
-> If that is unknown, then I think this conservative approach makes sense.
+> Update the dt-bindings document to reflect the same.
+> 
+> [1]. https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/qcom/sm8150.dtsi#n3394
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> ---
+>   .../devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml    | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> index e81a38281f8c..1575dc70bcf2 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-usb3-phy.yaml
+> @@ -276,7 +276,9 @@ allOf:
+>           compatible:
+>             contains:
+>               enum:
+> +              - qcom,qcm2290-qmp-usb3-phy
+>                 - qcom,sdm845-qmp-usb3-phy
+> +              - qcom,sm6115-qmp-usb3-phy
+>                 - qcom,sm8150-qmp-usb3-phy
+>                 - qcom,sm8350-qmp-usb3-phy
+>                 - qcom,sm8450-qmp-usb3-phy
+> @@ -318,12 +320,10 @@ allOf:
+>               enum:
+>                 - qcom,ipq6018-qmp-usb3-phy
+>                 - qcom,ipq8074-qmp-usb3-phy
+> -              - qcom,qcm2290-qmp-usb3-phy
+>                 - qcom,sc7180-qmp-usb3-phy
+>                 - qcom,sc8180x-qmp-usb3-phy
+>                 - qcom,sdx55-qmp-usb3-uni-phy
+>                 - qcom,sdx65-qmp-usb3-uni-phy
+> -              - qcom,sm6115-qmp-usb3-phy
+>                 - qcom,sm8150-qmp-usb3-uni-phy
+>                 - qcom,sm8250-qmp-usb3-phy
+>       then:
 
-The commit log mentions "reset_methods", which I don't think is really
-relevant here because reset_methods is an internal implementation
-detail.  The point is that pci_reset_function() returns 0 if it was
-successful and a negative value if it failed.
+-- 
+With best wishes
+Dmitry
 
-If the driver thinks the device needs to be reset, ignoring any
-negative return value seems like a mistake because the device was not
-reset.
-
-If the reset is required for a firmware update to take effect, maybe a
-diagnostic would be helpful if it fails, e.g., the other "Adapter
-initialization failed.  Please reboot" messages.
-
-"QLCNIC_NEED_FLR" suggests that the driver expects an FLR (as opposed
-to other kinds of reset).  If the driver knows that all qlcnic devices
-support FLR, it could use pcie_flr() directly.
-
-pci_reset_function() does have the possibility that the reset works on
-some devices but not all.  Secondary Bus Reset fails if there are
-other functions on the same bus, e.g., a multi-function device.  And
-there's some value in doing the reset the same way in all cases.
-
-So I would suggest something like:
-
-  if (dev->flags & QLCNIC_NEED_FLR) {
-    err = pcie_flr(dev->pdev);
-    if (err) {
-      dev_err(&pdev->dev, "Adapter reset failed (%d). Please reboot\n", err);
-      return err;
-    }
-    dev->flags &= ~QLCNIC_NEED_FLR;
-  }
-
-Or, if there are qlcnic devices that don't support FLR:
-
-  if (dev->flags & QLCNIC_NEED_FLR) {
-    err = pci_reset_function(dev->pdev);
-    if (err) {
-      dev_err(&pdev->dev, "Adapter reset failed (%d). Please reboot\n", err);
-      return err;
-    }
-    dev->flags &= ~QLCNIC_NEED_FLR;
-  }
-
-> > > > +			return err;
-> > > >   		dev->flags &= ~QLCNIC_NEED_FLR;
-> > > >   	}
-> > > > -- 
-> > > > 2.25.1
-> > > > 
