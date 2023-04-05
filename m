@@ -2,68 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3076D837E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F956D8375
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjDEQTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
+        id S229679AbjDEQTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjDEQTi (ORCPT
+        with ESMTP id S229446AbjDEQTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:19:38 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB3C10D1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:19:13 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-23b2fe6c4f9so120294a91.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 09:19:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680711552; x=1683303552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hIf6WOekKcX5cYk5n6UfHyTuwolCuQ5aOTxYYMf+HPA=;
-        b=GyF6XruEcbEScRnuqs6RQtdnVAffeAwDNhR2YCAmw+Qc8S0WRFoL3Sxb4xjqjwQnQq
-         OJ8Jiu9y2bolJdZp3mVpP2NSYELRJRHnJhmmEf704erywyOH/2UMAWbPe1zUpU1HuWGv
-         VSOVAZddOLhrbspdDkzCd879KiYIXO2SObxHTSB/0VdvDjNYdSg/GRsAtG8hhds2RC8i
-         0YQxpgt1eQwUExDD4y4em5xkDQ4Ja2RDE4QesV1V72RAvOfmTpQ6TgOhMRmSY1LBV0Jw
-         Y3K4AtG7RcIN10tIjIywe0UgWQ8Pfvq8uXWnf35XFo8HTAEdN8X6iyZOXwZycLtwVXuD
-         6flw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680711552; x=1683303552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hIf6WOekKcX5cYk5n6UfHyTuwolCuQ5aOTxYYMf+HPA=;
-        b=xKD0lQ788K8sheYee8YrIRiweT4DYkdmXk5ulTYLBj3E6QiFAkw1hF//otLfo5MSvI
-         gse17g+wa2sSbhI7qfGJn/IPxqXbz18ViHa82JmZhBDE+YGpmJtVU640u7VCmfoO9DV/
-         q7yYwIhdVsQEN2LZrAp06TaU9m33HEadDRJNLcPnoexhj7dBNPOWHOAEB3FUxFlnWhto
-         q0vO5CH5Gbcmvu5fTt6eme6tKOYCQ1Z+y2/ApgoqAXLZQWEb8LusdtRn7J/2kh7VYCud
-         D+bCsQVqc/G5T4RFbDPe6YCHaAP9KrTQPjow4gIzb4awvqSciv7BrEQQPqijge/bUNzA
-         +lnQ==
-X-Gm-Message-State: AAQBX9dgE7eJMWtdijOiW1zBYN9is4g9zoZk6SIJ4WgKCwWfagWYMCpe
-        NyNbrYfWTuxdG6n/KyaRXMrmCw==
-X-Google-Smtp-Source: AKy350YuR4SzIqLhfXjHdCg5Q5TcgtTe9L4cP8UXNGekibda/wa7NCXzFPTK0foK5aYzgJ9lqM59Vw==
-X-Received: by 2002:a05:6a00:139d:b0:62d:e32a:8b5a with SMTP id t29-20020a056a00139d00b0062de32a8b5amr2835918pfg.2.1680711552583;
-        Wed, 05 Apr 2023 09:19:12 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id x24-20020a62fb18000000b00582f222f088sm10878011pfm.47.2023.04.05.09.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 09:19:12 -0700 (PDT)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     akpm@linux-foundation.org, willy@infradead.org, lstoakes@gmail.com
-Cc:     mgorman@suse.de, vbabka@suse.cz, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH v2 2/2] mm: mlock: use folios_put() in mlock_folio_batch()
-Date:   Thu,  6 Apr 2023 00:18:54 +0800
-Message-Id: <20230405161854.6931-2-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20230405161854.6931-1-zhengqi.arch@bytedance.com>
-References: <20230405161854.6931-1-zhengqi.arch@bytedance.com>
+        Wed, 5 Apr 2023 12:19:22 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BF3134;
+        Wed,  5 Apr 2023 09:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=km6mpQ1Um3jlOO4FLcCYa1cMiZEF6yyn6QqpA+XaoIM=; b=xtESDoRXBgCukBKOnj4Wrl50Ey
+        aRUaP0bvQOr1jrjbJMXUKUBsm0l++p5XblmaTb+50R8/g9LePV88SR+LS61EBvoO++r0buVupysbn
+        LfuJIEHGqaMGs4PMOBBm5Es84TpOEiNNqsGBiHg8DQe6n1X08eehYgNicwWA8DM1ys1H8W5+Qp49o
+        Z1jLR0oIVPDAu2nDYkkpxrfwApYJhaDTH9k6f5CPtGZylHMURS35T7iRyZcTXSM75/5zWROPlnX2X
+        mLkWD/LAUZC4K3OJRmG+FGDEzBWn/bI7ANnljQgt5VSpjiX1HhpYyjThHql+iZR3YYa/wtcF/QZff
+        wx17/Z8w==;
+Received: from p200300ccff0b98001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0b:9800:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pk5qn-0001u6-SG; Wed, 05 Apr 2023 18:19:10 +0200
+Received: from andi by aktux with local (Exim 4.96)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pk5qn-00017p-1V;
+        Wed, 05 Apr 2023 18:19:09 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tony@atomide.com, andreas@kemnade.info, afd@ti.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH v6 0/2] dt-bindings: omap: Convert omap.txt to yaml
+Date:   Wed,  5 Apr 2023 18:19:06 +0200
+Message-Id: <20230405161908.4312-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,28 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since we have updated mlock to use folios, it's better
-to call folios_put() instead of calling release_pages()
-directly.
+Convert board compatibles to yaml and add the new yaml file to
+MAINTAINERS so that emails are properly distributed
 
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- mm/mlock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in V6:
+ - reflect the rename also in the file header
 
-diff --git a/mm/mlock.c b/mm/mlock.c
-index 617469fce96d..40b43f8740df 100644
---- a/mm/mlock.c
-+++ b/mm/mlock.c
-@@ -206,7 +206,7 @@ static void mlock_folio_batch(struct folio_batch *fbatch)
- 
- 	if (lruvec)
- 		unlock_page_lruvec_irq(lruvec);
--	release_pages(fbatch->folios, fbatch->nr);
-+	folios_put(fbatch->folios, folio_batch_count(fbatch));
- 	folio_batch_reinit(fbatch);
- }
- 
+Changes in V5:
+ - renamed the new file to ti/omap.yaml
+
+Changes in V4:
+ - fix order 
+ - re-add dra7 to .txt to have it sorted out later
+
+Changes in V3:
+ - update MAINTAINERS
+ - remove converted stuff from .txt
+
+Changes in V2:
+- renamed file
+- fixed gta04
+- added Openpandora, Epson Moverio BT-200
+- drop example
+- remove descriptions if just reformatting the name
+
+Andreas Kemnade (1):
+  MAINTAINERS: add board bindings list to OMAP2+ files
+
+Andrew Davis (1):
+  dt-bindings: omap: Convert omap.txt to yaml
+
+ .../devicetree/bindings/arm/omap/omap.txt     | 152 ------------------
+ .../devicetree/bindings/arm/ti/omap.yaml      | 147 +++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 148 insertions(+), 152 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/ti/omap.yaml
+
 -- 
-2.20.1
+2.39.2
 
