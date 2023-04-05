@@ -2,175 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDA06D87B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9905D6D87A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbjDEUGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S230252AbjDEUCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjDEUGv (ORCPT
+        with ESMTP id S230175AbjDEUCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:06:51 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D6F268B;
-        Wed,  5 Apr 2023 13:06:50 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.221.228])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 335K0Sot3654908
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Wed, 5 Apr 2023 13:00:29 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 335K0Sot3654908
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023030901; t=1680724836;
-        bh=e+7idCFcOldUdf6Kn1N4qPSHOAd8AGbMfDqGpl68/MY=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=EcXIoUqgD3GVk8dx9ASffLO9ApOOB/n4lbb3fej1ORvYHN0/iMb/OoqoAXejO+Zl0
-         Rw/g8eHLmO+3g1cgp+fB4K8y/Tv66bULY41CG0VNoNe1xXssQzoSffnMPSdWphcYwf
-         ZzGlpNJKo4CsJ2a2nk0pmTpZD0wBYq7o8dQL4gvncAtMrlBPm5aJCuPjVQ630EH6kU
-         RTKT9BP7sk08N3WlXh3R+KcPbOQKrbUAmaN/sN+VsgfhU1MyFvVfA0l5ideAWavhGi
-         1hSCNrnhuIGoxexs5BAE4C0+dBVdtOYUI9AG6FgCpZuqROhanSelavXMtP8wX3ELEQ
-         7+LEVmStcCTzw==
-Date:   Wed, 05 Apr 2023 13:00:27 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.osdn.me>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?ISO-8859-1?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4=5D_Kconfig=3A_introduce_HAS=5FI?= =?US-ASCII?Q?OPORT_option_and_select_it_as_necessary?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
-References: <20230323163354.1454196-1-schnelle@linux.ibm.com> <248a41a536d5a3c9e81e8e865b34c5bf74cd36d4.camel@linux.ibm.com>
-Message-ID: <B1EC1AC7-6BB5-4B66-B171-24687C3CBFB3@zytor.com>
+        Wed, 5 Apr 2023 16:02:36 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65DF7D9D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:01:52 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id a5so36136291qto.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 13:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680724911;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pgGe4pUmwbq6B4NsSylYT8hCeXq6m9SaGK88QHwMshQ=;
+        b=U19A8LKKl+fJZGxIKAXOBNvTvfbruhrr9biRcs2jmTzqRJxz4iytcYWdCpajJcxvwL
+         SJ7M89UuRB1y87JneNoNtLAoYdjiP+Y7PTD7ccg6AYHFy0XXhuQgSXJff1QmL5rAj6Dn
+         5onLrBqZ9ZDU34znBogo1SI+PnwCzyGahtovnaRZjHfKD3c1qB5WyX/s0XdHNuq4G5ny
+         34qzJcKY+G8YJNQB1ZoQcEUiKw+nY/MFX9Azbkhoi3Ko/K4WTuML2T6c7h0pVu/5T55A
+         E3cKNp0nAcZNcE7onDk+5IJB7MquiTZfDskUcBkVKxPhe7JCHVNa5UErAS3pGWRn/jCW
+         XF6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680724911;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pgGe4pUmwbq6B4NsSylYT8hCeXq6m9SaGK88QHwMshQ=;
+        b=diBND2SCnblavVjnflgqyu4ArV4Cnv63KmhBk3CSBln83fHGL3Zq6dr1Mue5zXgoUo
+         OX1NgiruutlqmMGOwnU+XhHmewaOnETMnVByR1cKyD1HdPZXB+h9nybiBfWLgj1TvMGF
+         E30INomIXus7rUoV+MDA8UitrZdVg31+3eOpDRjnxPrjSQctiyIxe/g8NVIK3oPNIMk7
+         nONnNiPiGjopOgb945dYCzGDCn37vRuwXVRxfptJKHjboexVy4NOJfEu/v4vcj/yKb6U
+         xzpJbFskdqvRjMwzq+aFA5PNqBKt+rvEIe5tougfUh8/2x6Ud8hfZLYwfhx7VsrbGImP
+         ViuA==
+X-Gm-Message-State: AAQBX9eMaVEL7ZWbdBx5jTHICBeqx+IvYxvKY/rm2FktoITXDjglp8Z3
+        yukHhperv9u+hZ5ZgWaPLiDvKg==
+X-Google-Smtp-Source: AKy350aX1Q577kbAVVqqzQ4NQD8iEi6zXbeaKnSWtw5h60ZgijFkV1O+9yZytvy5u9fCAVUX4DekmA==
+X-Received: by 2002:ac8:5a93:0:b0:3e3:82c4:db44 with SMTP id c19-20020ac85a93000000b003e382c4db44mr6147901qtc.52.1680724911154;
+        Wed, 05 Apr 2023 13:01:51 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id f8-20020a05620a280800b00749fa9e12e9sm4669594qkp.124.2023.04.05.13.01.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 13:01:50 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 16:01:50 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: global_reclaim() and code documentation (was: Re: [PATCH v3 3/3] mm:
+ vmscan: ignore non-LRU-based reclaim in memcg reclaim
+Message-ID: <20230405200150.GA35884@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On April 5, 2023 8:12:38 AM PDT, Niklas Schnelle <schnelle@linux=2Eibm=2Eco=
-m> wrote:
->On Thu, 2023-03-23 at 17:33 +0100, Niklas Schnelle wrote:
->> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/=
-O
->> Port access=2E In a future patch HAS_IOPORT=3Dn will disable compilatio=
-n of
->> the I/O accessor functions inb()/outb() and friends on architectures
->> which can not meaningfully support legacy I/O spaces such as s390=2E
->>=20
->> The following architectures do not select HAS_IOPORT:
->>=20
->> * ARC
->> * C-SKY
->> * Hexagon
->> * Nios II
->> * OpenRISC
->> * s390
->> * User-Mode Linux
->> * Xtensa
->>=20
->> All other architectures select HAS_IOPORT at least conditionally=2E
->>=20
->> The "depends on" relations on HAS_IOPORT in drivers as well as ifdefs
->> for HAS_IOPORT specific sections will be added in subsequent patches on
->> a per subsystem basis=2E
->>=20
->> Co-developed-by: Arnd Bergmann <arnd@kernel=2Eorg>
->> Signed-off-by: Arnd Bergmann <arnd@kernel=2Eorg>
->> Acked-by: Johannes Berg <johannes@sipsolutions=2Enet> # for ARCH=3Dum
->> Acked-by: Geert Uytterhoeven <geert@linux-m68k=2Eorg>
->> Signed-off-by: Niklas Schnelle <schnelle@linux=2Eibm=2Ecom>
->> ---
->> Note: This patch is the initial patch of a larger series[0]=2E This pat=
-ch
->> introduces the HAS_IOPORT config option while the rest of the series ad=
-ds
->> driver dependencies and the final patch removes inb() / outb() and frie=
-nds on
->> platforms that don't support them=2E=20
->>=20
->> Thus each of the per-subsystem patches is independent from each other b=
-ut
->> depends on this patch while the final patch depends on the whole series=
-=2E Thus
->> splitting this initial patch off allows the per-subsytem HAS_IOPORT dep=
-endency
->> addition be merged separately via different trees without breaking the =
-build=2E
->>=20
->> [0] https://lore=2Ekernel=2Eorg/lkml/20230314121216=2E413434-1-schnelle=
-@linux=2Eibm=2Ecom/
->>=20
->> Changes since v3:
->> - List archs without HAS_IOPORT in commit message (Arnd)
->> - Select HAS_IOPORT for LoongArch (Arnd)
->> - Use "select HAS_IOPORT if (E)ISA || =2E=2E" instead of a "depends on"=
- for (E)ISA
->>   for m68k and parisc
->> - Select HAS_IOPORT with config GSC on parisc (Arnd)
->> - Drop "depends on HAS_IOPORT" for um's config ISA (Johannes)
->> - Drop "depends on HAS_IOPORT" for config ISA on x86 and parisc where i=
-t is
->>   always selected (Arnd)
->>=20
->
->Gentle ping=2E As far as I can tell this hasn't been picked to any tree
->sp far but also hasn't seen complains so I'm wondering if I should send
->a new version of the combined series of this patch plus the added
->HAS_IOPORT dependencies per subsystem or wait until this is picked up=2E
->
->Thanks,
->Niklas
->
->
+On Fri, Mar 31, 2023 at 12:30:11AM -0700, Yosry Ahmed wrote:
+> On Fri, Mar 31, 2023 at 12:25 AM Yu Zhao <yuzhao@google.com> wrote:
+> > On Fri, Mar 31, 2023 at 1:08 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > ...
+> >
+> > > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > > index a3e38851b34ac..bf9d8e175e92a 100644
+> > > --- a/mm/vmscan.c
+> > > +++ b/mm/vmscan.c
+> > > @@ -533,7 +533,35 @@ EXPORT_SYMBOL(mm_account_reclaimed_pages);
+> > >  static void flush_reclaim_state(struct scan_control *sc,
+> > >                                 struct reclaim_state *rs)
+> > >  {
+> > > -       if (rs) {
+> > > +       /*
+> > > +        * Currently, reclaim_state->reclaimed includes three types of pages
+> > > +        * freed outside of vmscan:
+> > > +        * (1) Slab pages.
+> > > +        * (2) Clean file pages from pruned inodes.
+> > > +        * (3) XFS freed buffer pages.
+> > > +        *
+> > > +        * For all of these cases, we have no way of finding out whether these
+> > > +        * pages were related to the memcg under reclaim. For example, a freed
+> > > +        * slab page could have had only a single object charged to the memcg
+> > > +        * under reclaim. Also, populated inodes are not on shrinker LRUs
+> > > +        * anymore except on highmem systems.
+> > > +        *
+> > > +        * Instead of over-reporting the reclaimed pages in a memcg reclaim,
+> > > +        * only count such pages in system-wide reclaim. This prevents
+> > > +        * unnecessary retries during memcg charging and false positive from
+> > > +        * proactive reclaim (memory.reclaim).
+> >
+> > What happens when writing to the root memory.reclaim?
+> >
+> > > +        *
+> > > +        * For uncommon cases were the freed pages were actually significantly
+> > > +        * charged to the memcg under reclaim, and we end up under-reporting, it
+> > > +        * should be fine. The freed pages will be uncharged anyway, even if
+> > > +        * they are not reported properly, and we will be able to make forward
+> > > +        * progress in charging (which is usually in a retry loop).
+> > > +        *
+> > > +        * We can go one step further, and report the uncharged objcg pages in
+> > > +        * memcg reclaim, to make reporting more accurate and reduce
+> > > +        * under-reporting, but it's probably not worth the complexity for now.
+> > > +        */
+> > > +       if (rs && !cgroup_reclaim(sc)) {
+> >
+> > To answer the question above, global_reclaim() would be preferred.
+> 
+> Great point, global_reclaim() is fairly recent. I didn't see it
+> before. Thanks for pointing it out. I will change it for v4 -- will
+> wait for more feedback before respinning.
 
-You need this on a system supporting not just ISA but also PCI=2E
+I didn't realize it came back, I deleted it a while ago:
 
-Typically on non-x86 architectures this is simply mapped into a memory win=
-dow=2E
+commit b5ead35e7e1d3434ce436dfcb2af32820ce54589
+Author: Johannes Weiner <hannes@cmpxchg.org>
+Date:   Sat Nov 30 17:55:40 2019 -0800
+
+    mm: vmscan: naming fixes: global_reclaim() and sane_reclaim()
+    
+    Seven years after introducing the global_reclaim() function, I still have
+    to double take when reading a callsite.  I don't know how others do it,
+    this is a terrible name.
+    
+    Invert the meaning and rename it to cgroup_reclaim().
+
+Could you shed some light on why it was brought back? It's not clear
+to me from the changelog in a579086c99ed70cc4bfc104348dbe3dd8f2787e6.
+
+We also now have this:
+
+static bool cgroup_reclaim(struct scan_control *sc)
+{
+        return sc->target_mem_cgroup;
+}
+
+static bool global_reclaim(struct scan_control *sc)
+{
+        return !sc->target_mem_cgroup || mem_cgroup_is_root(sc->target_mem_cgroup);
+}
+
+The name suggests it's the same thing twice, with opposite
+polarity. But of course they're subtly different, and not documented.
+
+When do you use which?
