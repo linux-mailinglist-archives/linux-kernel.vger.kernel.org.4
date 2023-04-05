@@ -2,76 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1EE26D89EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EB26D8A37
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbjDEV7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S233341AbjDEWBf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 18:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjDEV7m (ORCPT
+        with ESMTP id S229590AbjDEWBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:59:42 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD797692
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:59:40 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50299ceefa4so837326a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:59:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1680731979;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=RZZVkPe4AwCbs7pG7yz8OubdmqvEAqRS47xr1RdAx9w=;
-        b=ERYi2dpfiVAnS8c8CJFU01G0Zh34IwJJhXbOOe9qa65Sdogiq2+lBBlXX4UaMWXiGl
-         3pByt8yzAClGmfMHTH1TurTPaJZ4sdTnyBsqNrvY83aiXY5rmrypjwccyXqmepm6h9ym
-         x42ez/i70xtNQh1AvTN7FOvZJ642iGusLuWmQtoCF6B4ZL6YctoQWiFdH3TeXtoVaVAh
-         PHmvF2Ymx1na1IeLk/O3quXY5YZAc+RHjMgrX3l/KYpQwIAs0oRQ2HANnnzrQeN57kcW
-         +zEfc+AVNEKZOM8XEIWluADGyJUIXKaN883bVUsErupZ9C4oYzDpFTGDlU8z1ERB6d12
-         AFWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680731979;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RZZVkPe4AwCbs7pG7yz8OubdmqvEAqRS47xr1RdAx9w=;
-        b=ogEZm+H2MN6u80Ix5XvIh9ApvWWwEhWArkeMJSg3ETgZ4IQFEmMhNlMJwwPOMWL1mQ
-         XhwQLyfqnIR8jj2IlwrhM4jKd10VBjJU3PmVO5FN/Bzsk37IVmigNaNwwozzRaFILRgb
-         iMa9lOxkD0vJv/rSRkS4cPzNwe18TXGHgsqHXDULIl/a+6MhooBW5qi25d29LCXmg+9d
-         7ANk3XnD5aIzmoK7v4R+/goJcY4vuiFKZC65HjhuQBmcOek/2O7/PHYWxgS/hflrb5pZ
-         aqOvbhVmXTomGjbSiflW44DHcv51XEupDx2bdpKajVn/rn0A7zMVY+n9pwAb7V6a41an
-         ImkA==
-X-Gm-Message-State: AAQBX9cPAeCGtsVuenymmFCQt3hBdMQSd7nBEf7mDVyddDJ8ehT0fj5U
-        Vql1JK3p5fMX6i+DrHob495KYg==
-X-Google-Smtp-Source: AKy350aZ5fbWqOqFqxsZjsVdzrI8BDvIV15oXyKuAnwypjN/QNgCyXKwxwCQnsSOgZUF/qv629FpHg==
-X-Received: by 2002:a05:6402:b04:b0:4fd:215e:b691 with SMTP id bm4-20020a0564020b0400b004fd215eb691mr3735096edb.4.1680731978953;
-        Wed, 05 Apr 2023 14:59:38 -0700 (PDT)
-Received: from localhost ([79.142.230.34])
-        by smtp.gmail.com with ESMTPSA id h5-20020a50c385000000b004ad601533a3sm7837803edf.55.2023.04.05.14.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 14:59:38 -0700 (PDT)
-References: <20230405193445.745024-1-y86-dev@protonmail.com>
- <20230405193445.745024-15-y86-dev@protonmail.com>
-User-agent: mu4e 1.10.1; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <alice@ryhl.io>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>
-Subject: Re: [PATCH v6 14/15] rust: sync: reduce stack usage of
- `UniqueArc::try_new_uninit`
-Date:   Wed, 05 Apr 2023 23:59:01 +0200
-In-reply-to: <20230405193445.745024-15-y86-dev@protonmail.com>
-Message-ID: <87pm8irnw5.fsf@metaspace.dk>
+        Wed, 5 Apr 2023 18:01:30 -0400
+Received: from mo-csw.securemx.jp (mo-csw1114.securemx.jp [210.130.202.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA9C7692;
+        Wed,  5 Apr 2023 15:01:28 -0700 (PDT)
+Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 335M1KqW016554; Thu, 6 Apr 2023 07:01:20 +0900
+X-Iguazu-Qid: 2wHHmhMsGZCr9m8ktM
+X-Iguazu-QSIG: v=2; s=0; t=1680732080; q=2wHHmhMsGZCr9m8ktM; m=D+oJM7Ity5a/bmmgYqLwb3x3gjKpQvTPm5vlixlaEAA=
+Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
+        by relay.securemx.jp (mx-mr1112) id 335M1Iit029747
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 6 Apr 2023 07:01:19 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MgXMNYRgWxLk1PgTP03IEC4MNw6B0WLkNhF0AHbYAQNP0zyixqOCVZp1lOfTSUxIgOt2BnIEEpxo3qFprDYp+0Rj9KPWgpZS5bVtYJrdWaqZdZOaEPT2Ez9P3a1cjIoJDiZPpIibNCzk8G0A0tyt/2JxUCfWKjNzKkc6GCOoegeaWrBTxQJ/r26g5+eZdIF9MvMfrxXMEyrVvF+P9+wzY/EL+czjLHhf3RgYcby8RQ88OkH0/vR4m7nx0th4m2RAHCZEXn0BShgobIepyKLlT4OSgJ3xZLuqb6a7a/1+KyqG0Qa+dBLJj6PhcdOS4i8wHX2TgQpFo0vJej7+2l4jNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=66/JNg70qwlyJbCmkKUak74pYdAj+7u5PI33seXBdKM=;
+ b=Yi3xTdDKZCGt0UFCW5u66OpllVXrG6O04nuo7Tpa9t3hleNuCO+G/8kuBLsF0EIH0V3pUacohXDQkkVZ9KXu4m1iZhCEtk8XQBPdSa3SOnTatWapH1EHQymbjqd2HTdySP5/BVoYqgSEevzOz6RVMoS1fnxaIpCOkRkwT6cmooL8HeIcA7e1XsuAfM+fUQeF90lBKT4Ifee5OGFBSLX+b2dJLPkLGAQQ/40TmAUbeUiEyikGKTOKdeMnLSzGnhxuNt21fuajIySHwcDes6ya/6s+MhyKJYC4dWUTs3QWpxcC/aVfxDwSdhslDjbIDs4YfdOK2R/k5V9KGWtKaSABUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
+ header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
+From:   <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     <gregkh@linuxfoundation.org>
+CC:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: host: xhci-plat: Use dev_is_pci() helper
+Thread-Topic: [PATCH] usb: host: xhci-plat: Use dev_is_pci() helper
+Thread-Index: AQHZZ4yszw2Uu6nch0evsEAfagPfg68cT50AgAD1WeA=
+Date:   Wed, 5 Apr 2023 22:01:16 +0000
+X-TSB-HOP2: ON
+Message-ID: <TYWPR01MB94208A9EDA57A18757715DCE92909@TYWPR01MB9420.jpnprd01.prod.outlook.com>
+References: <20230405070141.2028455-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+ <2023040503-catatonic-gazing-9830@gregkh>
+In-Reply-To: <2023040503-catatonic-gazing-9830@gregkh>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB9420:EE_|OSZPR01MB8782:EE_
+x-ms-office365-filtering-correlation-id: 6d7f755c-319c-4169-4d90-08db36214785
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eQmDXcEEGIG2oPSEHYptmvLwS8vbE1xgHC269hvg2aiOx+CGRB5cHIPEc9D36aJI1t0Bry5dGA8ZXvr6Hj0pAHsCdx6jKYraXdEqz5pHCrAW2WEK+Fp9mkRrTPRpoyHTPRjJpTiylUrAfZcjJtNyfJhAsr644UrxUYdzouTbOKyix3d4jxps+5d3wxiXTC5BmaS6MAC+N/hyQpcVTtbq88HMW5agCL6akTqdqkOFRBFwTN7h8ezPtDqt1sPRHY4JH6JsQr9TSRAmmUg5y47lgc78ccin4i7drpbskjprGAkuzNxu4KKbyOefEbJEVtjXT+GWZCJIgWkQWraab/yUwT3mckWT+1Jfyl3MggVmXXpitAYTJnSHIdWX4iWh1+NqXwEOWuc2ZZvbmAVXtBTt+qmqlwcpdyfF41RI/YenmtzCmK8dwzrpamY2OjJcgrBaThuyVRPud6o7u0nPwWGCcBwGZ5NDSzTou5pggmWCzouy450+mmRSshkFI6CvvTtGhyi7addtUjnzG4ny0zmvN2zVZm90QVIN1EOCNndl7YT/JDL+etj5L5b/1wFOkYNp9m7/GX4LFaMcKE9XQ+cZK3ORk94uCMByLSuhur+nfarFCgKcCDatVhZXVj1mz4dQcrFF8fIq2Dr43QmMsb+uSg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB9420.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(451199021)(71200400001)(7696005)(55016003)(83380400001)(38100700002)(86362001)(33656002)(38070700005)(53546011)(26005)(6506007)(9686003)(122000001)(186003)(66946007)(2906002)(54906003)(5660300002)(8936002)(41300700001)(52536014)(316002)(76116006)(64756008)(66556008)(8676002)(6916009)(66446008)(66476007)(4326008)(478600001)(95630200002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?TGF5UHlJd01ZU2NTcVVBNHRxdjhjWHFJY3JFN3RpSndJUUxIRVdoekNS?=
+ =?iso-2022-jp?B?b2NuNGxLSWttYUZFd0pRVjVpa3E3SmhBNzlYYzBDU3puY2ZGVkJSSGh1?=
+ =?iso-2022-jp?B?M3oxR1pJRVlrWE8wQ21OdklpR0lkZlpoQ09zb0xWbVliNEVRRlZ1UzVD?=
+ =?iso-2022-jp?B?YVk3ZnMySlBXc2VPYmo4ZDZXNEl0emxSVEdnU2tJbTNwcjkwVmQwMzZK?=
+ =?iso-2022-jp?B?STZSc3BwK3VndWVYeEtVM3hlRFJPM0pacHZXdjFBbE1sQWlmd0hWZ0t1?=
+ =?iso-2022-jp?B?bzBHRkJnWUd1TFR4Z1FMK1JZeDdkazRWalhBZ3N6UE8vRm04U0ozZ2ZE?=
+ =?iso-2022-jp?B?YXFQWnBKZ1lXSE9xK2o2elo5dWt1d1pMRUt0NWNxVzN6djJicXNIOVB4?=
+ =?iso-2022-jp?B?Y2k4Z1c4Q1VKQ1l0T0JsbGVBa2FTUWN6R3lNVGZ0bkhyOFZEanJjOVJC?=
+ =?iso-2022-jp?B?U2pvdFJGenFJYU5HL1kySVFuTjdaQlVNRllZVEpZc3BQZ2tueWkxWk40?=
+ =?iso-2022-jp?B?eDdFVHBrTUU1cVM1eExFYWg4Q1dlL3VXTk1HSXNHbEYwOU9BNjhUamt4?=
+ =?iso-2022-jp?B?YjZxZWlCMC9pZlBnRFFYTWdBN2wzY001QWVYVFBjdnZtSFNJakZ1d3hD?=
+ =?iso-2022-jp?B?bTN1eEdmSUkzemhHbnFLTUxjRnZHTk9PNDRKTHZwM3hNK2J4azZVLzEw?=
+ =?iso-2022-jp?B?YWJHalRERlorQlRIcDNabU5aYU5rajJ6bCtsRlRXUm9zVGtHaUpWTTFn?=
+ =?iso-2022-jp?B?bW9CSUJSZDhta3p1NFR0V1BKcU16ek8vUlA4dkRuVHRDeC92T2JxbDZM?=
+ =?iso-2022-jp?B?ckpMRGdSaHM5Wm51YTJaZmkvOTh4RmtVMkhKY3VpOU1jZlMzZXBka3Zq?=
+ =?iso-2022-jp?B?UTR6RHIzWGxGQ2tqWVV5YWhscnpFZ1lGWkFwb2l3anU4ODc4NGp5a0Fp?=
+ =?iso-2022-jp?B?c3hFSm9kS1pBTStnTUljZlFtVGphc0YvWXJ6cTlhMHdNM2wvYXU5TGlz?=
+ =?iso-2022-jp?B?blpWYUtvME5tUWxEbkV3ZnBtQUcrcitBSitKeGIwR0RmajlINkpEK2Iz?=
+ =?iso-2022-jp?B?MjZBZXpFaFZZWndGeFFOVnJtL0JDeUZwNHZoTHBYMmZseUVoNms0NmJN?=
+ =?iso-2022-jp?B?ZHNlaEhRYXl4bG8xekh5a0dSY1JiK2FzWTFPa08zdWN5Y2x2MkpsNnhB?=
+ =?iso-2022-jp?B?UHZONlZnbkh0SjluMnJEeS9ZdUtadUoyaytDeDZqVVozNitHUmQxU29W?=
+ =?iso-2022-jp?B?cGNVSWJQbXJ1NHhJbUgrR2REYkorcnVjNlpFVTBRWWFHakJaVDlRU1o1?=
+ =?iso-2022-jp?B?MVJreFdBMlk2QzdTZW5UZ1oxelBNcldiNEQ2U2w2d2VlaU9rOFozYk15?=
+ =?iso-2022-jp?B?bm41dS90UUVzQ1NhWTB2NlFkVVJVWVZVRHozTGNUd2p1dWpOQjNMcWdK?=
+ =?iso-2022-jp?B?bkpuajRqc1RIWW03VlA5S3dXUmdCY1g2WFRySmlKS3ZjUkpyMDB2b3lr?=
+ =?iso-2022-jp?B?QnZWb2J5cTkvZ2VCMDdWcGEyMGVmRWNjNjBlYk1PckZhM0hhTGlua05X?=
+ =?iso-2022-jp?B?VkV4NW5MVXR4MklLalg4RzZkK3NCcndWdGdhV2VvUGtTZUprZXg0STBY?=
+ =?iso-2022-jp?B?M1ppUndUYldtTDR5NGtHOVB4OU9uMEpmQ08rOHlRVkJJNi9QdkFBUGIv?=
+ =?iso-2022-jp?B?NXRaYVp4UmJEMitWdVNQbU1IOUR0aXE5NkZrYmQ1RksySGlVRno5Y3Fu?=
+ =?iso-2022-jp?B?alZ2eTJYallMTWZXTFQ1ejBybDYveS90a0RVbWUzS2pNbUtHdSt6UURs?=
+ =?iso-2022-jp?B?WUg5dk1xYysyTXNwL3NlNGRyVmt6TEdFTHpTMzV3ZTRWc095RHVwcmRv?=
+ =?iso-2022-jp?B?L01zbWJ6enUxVWZSUEhUYnhBQS9zQm9RY1g0cXl1WmkrTEViS0tMYkpG?=
+ =?iso-2022-jp?B?Wm5zUGNONFE5LzFBeWFURS9NVmdzMTNZZ0xvZVYrTWFZMjdsa0tYQVpU?=
+ =?iso-2022-jp?B?UzdDdVlVUzIwRnJkUStRV2NRK05ZQlJuVHJLT2lBNEwwNkU5dis1MUgv?=
+ =?iso-2022-jp?B?Z0V0OHAybGZwQ0g0Tzc0ZUkrdDA5dTRycFN3OFV2VFQ0YUY4bVhGZlIw?=
+ =?iso-2022-jp?B?OVVpZ2dVcjFkVmdERE9IaGJSU28yUWRBRXlHWjE3czRUTkFBQ3Y3eE1H?=
+ =?iso-2022-jp?B?TVk4em9tcUZHYkhnTmZNQ2FGNWpwMW41OVFFc2NBV3IzSnhVZDV6MnV0?=
+ =?iso-2022-jp?B?aFJtWTJ1Q0xpeXVqSVg4RFBBUjNLeEtXWFRtTW5XOUpyOGZrQXVKejV6?=
+ =?iso-2022-jp?B?c3JHZzdxVVNjOXBUR0EyWGEyZHV5dmorUWc9PQ==?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB9420.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d7f755c-319c-4169-4d90-08db36214785
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Apr 2023 22:01:16.4630
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LLNzOkaGiaIwjr8B+daUh7e8a1Pj1MOp8rExB3CoqCFii4QxKF5S8E19P7vIo9ZIm5iJGb3f6e4t0stJKUdk2pgfmczBCBTiSKv5bJmmGU3+juhtQDmxe0aAQfXgHdKk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8782
+X-OriginatorOrg: toshiba.co.jp
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,89 +122,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-Benno Lossin <y86-dev@protonmail.com> writes:
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Wednesday, April 5, 2023 4:22 PM
+> To: iwamatsu nobuhiro(岩松 信洋 ○ＤＩＴＣ□ＤＩＴ○ＯＳＴ)
+> <nobuhiro1.iwamatsu@toshiba.co.jp>
+> Cc: mathias.nyman@intel.com; linux-usb@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] usb: host: xhci-plat: Use dev_is_pci() helper
+> 
+> On Wed, Apr 05, 2023 at 04:01:41PM +0900, Nobuhiro Iwamatsu wrote:
+> > Use common dev_is_pci() helper for checking PCI devices.
+> >
+> > Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> > ---
+> >  drivers/usb/host/xhci-plat.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/host/xhci-plat.c
+> > b/drivers/usb/host/xhci-plat.c index b9f9625467d61e..2c95189424fa6e
+> > 100644
+> > --- a/drivers/usb/host/xhci-plat.c
+> > +++ b/drivers/usb/host/xhci-plat.c
+> > @@ -363,7 +363,7 @@ static int xhci_generic_plat_probe(struct
+> platform_device *pdev)
+> >  			is_acpi_device_node(sysdev->fwnode))
+> >  			break;
+> >  #ifdef CONFIG_PCI
+> > -		else if (sysdev->bus == &pci_bus_type)
+> > +		else if (dev_is_pci(sysdev))
+> 
+> With that change, you can also get rid of the #ifdef lines too, right?
 
-> `UniqueArc::try_new_uninit` calls `Arc::try_new(MaybeUninit::uninit())`.
-> This results in the uninitialized memory being placed on the stack,
-> which may be arbitrarily large due to the generic `T` and thus could
-> cause a stack overflow for large types.
->
-> Change the implementation to use the pin-init API which enables in-place
-> initialization. In particular it avoids having to first construct and
-> then move the uninitialized memory from the stack into the final location.
->
-> Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> Cc: Andreas Hindborg <a.hindborg@samsung.com>
-> ---
+Yes, that's right. I will send v2 patch with it.
 
-Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
-
->  rust/kernel/lib.rs      |  1 -
->  rust/kernel/sync/arc.rs | 16 +++++++++++++---
->  2 files changed, 13 insertions(+), 4 deletions(-)
->
-> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index 821bd067151c..2d7606135ef6 100644
-> --- a/rust/kernel/lib.rs
-> +++ b/rust/kernel/lib.rs
-> @@ -28,7 +28,6 @@
->  #[cfg(not(CONFIG_RUST))]
->  compile_error!("Missing kernel configuration for conditional compilation");
->
-> -#[allow(unused_extern_crates)]
->  // Allow proc-macros to refer to `::kernel` inside the `kernel` crate (this crate).
->  extern crate self as kernel;
->
-> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-> index 43a53fbe175d..d05caa723718 100644
-> --- a/rust/kernel/sync/arc.rs
-> +++ b/rust/kernel/sync/arc.rs
-> @@ -18,7 +18,8 @@
->  use crate::{
->      bindings,
->      error::{self, Error},
-> -    init::{InPlaceInit, Init, PinInit},
-> +    init::{self, InPlaceInit, Init, PinInit},
-> +    try_init,
->      types::{ForeignOwnable, Opaque},
->  };
->  use alloc::boxed::Box;
-> @@ -30,6 +31,7 @@ use core::{
->      pin::Pin,
->      ptr::NonNull,
->  };
-> +use macros::pin_data;
->
->  /// A reference-counted pointer to an instance of `T`.
->  ///
-> @@ -122,6 +124,7 @@ pub struct Arc<T: ?Sized> {
->      _p: PhantomData<ArcInner<T>>,
->  }
->
-> +#[pin_data]
->  #[repr(C)]
->  struct ArcInner<T: ?Sized> {
->      refcount: Opaque<bindings::refcount_t>,
-> @@ -502,9 +505,16 @@ impl<T> UniqueArc<T> {
->
->      /// Tries to allocate a new [`UniqueArc`] instance whose contents are not initialised yet.
->      pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>, AllocError> {
-> -        Ok(UniqueArc::<MaybeUninit<T>> {
-> +        // INVARIANT: The refcount is initialised to a non-zero value.
-> +        let inner = Box::try_init::<AllocError>(try_init!(ArcInner {
-> +            // SAFETY: There are no safety requirements for this FFI call.
-> +            refcount: Opaque::new(unsafe { bindings::REFCOUNT_INIT(1) }),
-> +            data <- init::uninit::<T, AllocError>(),
-> +        }? AllocError))?;
-> +        Ok(UniqueArc {
->              // INVARIANT: The newly-created object has a ref-count of 1.
-> -            inner: Arc::try_new(MaybeUninit::uninit())?,
-> +            // SAFETY: The pointer from the `Box` is valid.
-> +            inner: unsafe { Arc::from_inner(Box::leak(inner).into()) },
->          })
->      }
->  }
+Best regards,
+  Nobuhiro
 
