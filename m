@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4621C6D71A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431DB6D71A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236723AbjDEAph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 20:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
+        id S236757AbjDEApr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 20:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236610AbjDEAp3 (ORCPT
+        with ESMTP id S236701AbjDEApd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 20:45:29 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB124C0C
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:45:28 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id y186-20020a62cec3000000b00627df3d6ec4so15517285pfg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 17:45:28 -0700 (PDT)
+        Tue, 4 Apr 2023 20:45:33 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CD049F1
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:45:31 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id h4-20020a170902f54400b001a1f5f00f3fso19958083plf.2
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 17:45:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680655528;
+        d=google.com; s=20210112; t=1680655530;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=tf25xAl4fSdxFBAk8i0l5aGjOrxXQadDD1CZezPxob4=;
-        b=k3vSRE8uQSYLQ5FHcz/pee6bDiPafNfanLHpLWinnqWSebl9zem+gxu9QQCpk/1Brr
-         55gJmi5Wx+I48U9ScE+y+g8gHjPKFwfcATMGdcaqLioTN3kx0U6W9NqCr3xKtOt3dqAL
-         41/V11LD7CC3rDGsHXBIiRdUOer0/+Nyl1JEuiv0BHHyHp2Td/Ok924VfjEFsKwwEojB
-         ywDI8B4uzpOSjrB94WT9uSVf4u9rj6DcnfUdsQZBto5gS3FaVEHCmdVeqFPs+wEtWcbW
-         J26aicb/UNXWJw2I9Yo0vTBRTQr5QMnYiGkS/yGxNxB14JmxviepHPNH3t+5kfJkCixT
-         t8eA==
+        bh=SL1I67lV9tgXgAEvmRnaRT+4/QRS9Sk5XoUvQ3XeqRI=;
+        b=J1cGRcd7ht1RyeB1dMJiFXaAS4GM2LJk6yDcKESwIL0R8iRCfuxajLpzX5zKnLczuT
+         bxHd8FnJcmI+SMglu4+SA0klmsqwRW5SfSo5bl5HR6bJHuu1qPq6v3juzseWWsYJgb/V
+         qrrGQHve/MBiMDnwbl1Esflahc8hUQ8bBJobaJ6AxXYy65kpWiJyj3l4dYWC7G27Im0e
+         t74ZnovCetz0rNdxnZIXALMXptBqCyPGES/luAPTP1pp0sriD8E2SrddR/A2hqU9zu7A
+         ooe89p4LhjJK3UJbupaz4huRnLNo5WWpBkBpLENrTH0Edn7F1ChvNZXsQlCy9xesCATr
+         orEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680655528;
+        d=1e100.net; s=20210112; t=1680655530;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tf25xAl4fSdxFBAk8i0l5aGjOrxXQadDD1CZezPxob4=;
-        b=uJTzKBMYF7gMmObmPTpF4T69ohceqXdN1W1xJpScdfXKDd2/FRz8HaDie1sFARzNUq
-         HCcXl3K/KlZVNgY7ZN+HCHvP8ZxtKDYfmWv+2Z9jeegQ6S6FeLm2xt/tJPJb644n3jI/
-         sVTk0ULFj17S1jcRsu06EpSdXGPCYmEmFerYC0BqD4rA5i10eSMR19hLFAYewytVtwOU
-         N+MkxlbnLrlB+r8s+uywhFz3Xj99s37ZgjbujFMZclI6jdKcYbKiY4PLMS+I3el0yhuw
-         BgPcykeoxs6xEZbopX4yO7+UpCqfEYlGA4B0GQ681T7nBIJ+w0MtxFVlY+EJ9ih6tyoJ
-         Jlfw==
-X-Gm-Message-State: AAQBX9dbk45QmDMNJgLQHNJdbvrK+K3TBjoMI158NjzaPKpDZGZTzdq3
-        RElae4iTEqvw/Ew1oQii5VR8im6phEE=
-X-Google-Smtp-Source: AKy350YQgPiVQ7TtKQ68stor3n0AywFETiUdHnWp6vGFe/hNxqXs6gbyqffX7Pgd+A5LSfaogEOyIqxTAkE=
+        bh=SL1I67lV9tgXgAEvmRnaRT+4/QRS9Sk5XoUvQ3XeqRI=;
+        b=rUZri2jOo4hy7CnZyCVVtunsDPameZ17yISYWfx2UhHktYTODf2YWYsmrEFf04qZlw
+         6LIyJVIKDoFFxCBSuQWNlaMc+32jWffIQFWJBsZbhB5vshRBwgvD4xwAYbx8XLrdNIv7
+         zInGsMJfrCZ7lSmMaZgRxGgQlUEa1SX4fH3UM/HfotF9o2QlMAANyDBjuaTd4wF6OZKS
+         GoJ4Yk2+b5QPMlrUOwHeRnNdRFujA322LVeqcC8JPIwQPycw15z3M1pMi90FUOzjp0OY
+         MOBfHkgDYRZsst7ye/s9TNaS9A0Gy5AvT0nYSPVnYtvtWvVgbgOTbyZpBa7LDzfsKS1r
+         B7pA==
+X-Gm-Message-State: AAQBX9cJa3rJUx3X00HKIij32KDXdOidlcNjJOA9ViwI5mu7+U3FYWVL
+        uD3jCg4rQ5CMGXJfT+7G3xhZOGsPOSQ=
+X-Google-Smtp-Source: AKy350b+7TkaPc85UJyDGGxPNsKQJ5NzJqSs32SuDcgOx/mehzhkZh/APMybqR/hRpf7gTv56c0ExKyqQ5k=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:b692:b0:19f:3aa9:9ea1 with SMTP id
- c18-20020a170902b69200b0019f3aa99ea1mr1802510pls.8.1680655528391; Tue, 04 Apr
- 2023 17:45:28 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:4591:b0:234:acfd:c8da with SMTP id
+ v17-20020a17090a459100b00234acfdc8damr1604747pjg.2.1680655530265; Tue, 04 Apr
+ 2023 17:45:30 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  4 Apr 2023 17:45:17 -0700
+Date:   Tue,  4 Apr 2023 17:45:18 -0700
 In-Reply-To: <20230405004520.421768-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230405004520.421768-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230405004520.421768-4-seanjc@google.com>
-Subject: [PATCH v4 3/6] KVM: selftests: Move XGETBV and XSETBV helpers to
- common code
+Message-ID: <20230405004520.421768-5-seanjc@google.com>
+Subject: [PATCH v4 4/6] KVM: selftests: Rework dynamic XFeature helper to take
+ mask, not bit
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -74,95 +74,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aaron Lewis <aaronlewis@google.com>
+Take the XFeature mask in __vm_xsave_require_permission() instead of the
+bit so that there's no need to define macros for both the bit and the
+mask.  Asserting that only a single bit is set and retrieving said bit
+is easy enough via log2 helpers.
 
-The instructions XGETBV and XSETBV are useful to other tests.  Move
-them to processor.h to make them more broadly available.
+Opportunistically clean up the error message for the
+ARCH_REQ_XCOMP_GUEST_PERM sanity check.
 
-No functional change intended.
-
-Reviewed-by: Jim Mattson <jmattson@google.com>
-Signed-off-by: Aaron Lewis <aaronlewis@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-[sean: reword shortlog]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  | 18 ++++++++++++++
- tools/testing/selftests/kvm/x86_64/amx_test.c | 24 +++----------------
- 2 files changed, 21 insertions(+), 21 deletions(-)
+ .../selftests/kvm/include/x86_64/processor.h    |  6 +++---
+ .../selftests/kvm/lib/x86_64/processor.c        | 17 ++++++++++-------
+ tools/testing/selftests/kvm/x86_64/amx_test.c   |  2 +-
+ 3 files changed, 14 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 3538fa6db72d..f6061fe7057f 100644
+index f6061fe7057f..41d798375570 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -510,6 +510,24 @@ static inline void set_cr4(uint64_t val)
- 	__asm__ __volatile__("mov %0, %%cr4" : : "r" (val) : "memory");
+@@ -1098,10 +1098,10 @@ uint64_t kvm_hypercall(uint64_t nr, uint64_t a0, uint64_t a1, uint64_t a2,
+ uint64_t __xen_hypercall(uint64_t nr, uint64_t a0, void *a1);
+ void xen_hypercall(uint64_t nr, uint64_t a0, void *a1);
+ 
+-void __vm_xsave_require_permission(int bit, const char *name);
++void __vm_xsave_require_permission(uint64_t xfeature, const char *name);
+ 
+-#define vm_xsave_require_permission(perm)	\
+-	__vm_xsave_require_permission(perm, #perm)
++#define vm_xsave_require_permission(xfeature)	\
++	__vm_xsave_require_permission(xfeature, #xfeature)
+ 
+ enum pg_level {
+ 	PG_LEVEL_NONE,
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index a12b21a2ef37..898b30096c80 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -697,7 +697,7 @@ uint64_t kvm_get_feature_msr(uint64_t msr_index)
+ 	return buffer.entry.data;
  }
  
-+static inline u64 xgetbv(u32 index)
-+{
-+	u32 eax, edx;
-+
-+	__asm__ __volatile__("xgetbv;"
-+		     : "=a" (eax), "=d" (edx)
-+		     : "c" (index));
-+	return eax | ((u64)edx << 32);
-+}
-+
-+static inline void xsetbv(u32 index, u64 value)
-+{
-+	u32 eax = value;
-+	u32 edx = value >> 32;
-+
-+	__asm__ __volatile__("xsetbv" :: "a" (eax), "d" (edx), "c" (index));
-+}
-+
- static inline struct desc_ptr get_gdt(void)
+-void __vm_xsave_require_permission(int bit, const char *name)
++void __vm_xsave_require_permission(uint64_t xfeature, const char *name)
  {
- 	struct desc_ptr gdt;
+ 	int kvm_fd;
+ 	u64 bitmask;
+@@ -705,12 +705,15 @@ void __vm_xsave_require_permission(int bit, const char *name)
+ 	struct kvm_device_attr attr = {
+ 		.group = 0,
+ 		.attr = KVM_X86_XCOMP_GUEST_SUPP,
+-		.addr = (unsigned long) &bitmask
++		.addr = (unsigned long) &bitmask,
+ 	};
+ 
+ 	TEST_ASSERT(!kvm_supported_cpuid,
+ 		    "kvm_get_supported_cpuid() cannot be used before ARCH_REQ_XCOMP_GUEST_PERM");
+ 
++	TEST_ASSERT(is_power_of_2(xfeature),
++		    "Dynamic XFeatures must be enabled one at a time");
++
+ 	kvm_fd = open_kvm_dev_path_or_exit();
+ 	rc = __kvm_ioctl(kvm_fd, KVM_GET_DEVICE_ATTR, &attr);
+ 	close(kvm_fd);
+@@ -720,16 +723,16 @@ void __vm_xsave_require_permission(int bit, const char *name)
+ 
+ 	TEST_ASSERT(rc == 0, "KVM_GET_DEVICE_ATTR(0, KVM_X86_XCOMP_GUEST_SUPP) error: %ld", rc);
+ 
+-	__TEST_REQUIRE(bitmask & (1ULL << bit),
++	__TEST_REQUIRE(bitmask & xfeature,
+ 		       "Required XSAVE feature '%s' not supported", name);
+ 
+-	TEST_REQUIRE(!syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_GUEST_PERM, bit));
++	TEST_REQUIRE(!syscall(SYS_arch_prctl, ARCH_REQ_XCOMP_GUEST_PERM, ilog2(xfeature)));
+ 
+ 	rc = syscall(SYS_arch_prctl, ARCH_GET_XCOMP_GUEST_PERM, &bitmask);
+ 	TEST_ASSERT(rc == 0, "prctl(ARCH_GET_XCOMP_GUEST_PERM) error: %ld", rc);
+-	TEST_ASSERT(bitmask & (1ULL << bit),
+-		    "prctl(ARCH_REQ_XCOMP_GUEST_PERM) failure bitmask=0x%lx",
+-		    bitmask);
++	TEST_ASSERT(bitmask & xfeature,
++		    "'%s' (0x%lx) not permitted after prctl(ARCH_REQ_XCOMP_GUEST_PERM) perrmited=0x%lx",
++		    name, xfeature, bitmask);
+ }
+ 
+ void vcpu_init_cpuid(struct kvm_vcpu *vcpu, const struct kvm_cpuid2 *cpuid)
 diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
-index 5c82d7e6f552..af1ef6f79d32 100644
+index af1ef6f79d32..a0f74f5121a6 100644
 --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
-@@ -65,24 +65,6 @@ struct xtile_info {
+@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
+ 	 * Note, all off-by-default features must be enabled before anything
+ 	 * caches KVM_GET_SUPPORTED_CPUID, e.g. before using kvm_cpu_has().
+ 	 */
+-	vm_xsave_require_permission(XSTATE_XTILE_DATA_BIT);
++	vm_xsave_require_permission(XFEATURE_MASK_XTILEDATA);
  
- static struct xtile_info xtile;
- 
--static inline u64 __xgetbv(u32 index)
--{
--	u32 eax, edx;
--
--	asm volatile("xgetbv;"
--		     : "=a" (eax), "=d" (edx)
--		     : "c" (index));
--	return eax + ((u64)edx << 32);
--}
--
--static inline void __xsetbv(u32 index, u64 value)
--{
--	u32 eax = value;
--	u32 edx = value >> 32;
--
--	asm volatile("xsetbv" :: "a" (eax), "d" (edx), "c" (index));
--}
--
- static inline void __ldtilecfg(void *cfg)
- {
- 	asm volatile(".byte 0xc4,0xe2,0x78,0x49,0x00"
-@@ -160,10 +142,10 @@ static void init_regs(void)
- 	set_cr4(cr4);
- 	GUEST_ASSERT(this_cpu_has(X86_FEATURE_OSXSAVE));
- 
--	xcr0 = __xgetbv(0);
-+	xcr0 = xgetbv(0);
- 	xcr0 |= XFEATURE_MASK_XTILE;
--	__xsetbv(0x0, xcr0);
--	GUEST_ASSERT((__xgetbv(0) & XFEATURE_MASK_XTILE) == XFEATURE_MASK_XTILE);
-+	xsetbv(0x0, xcr0);
-+	GUEST_ASSERT((xgetbv(0) & XFEATURE_MASK_XTILE) == XFEATURE_MASK_XTILE);
- }
- 
- static void __attribute__((__flatten__)) guest_code(struct tile_config *amx_cfg,
+ 	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_XFD));
+ 	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_XSAVE));
 -- 
 2.40.0.348.gf938b09366-goog
 
