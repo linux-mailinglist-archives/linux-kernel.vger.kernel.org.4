@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46666D7BC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E236D7BBB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237903AbjDELnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S237582AbjDELnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237894AbjDELnt (ORCPT
+        with ESMTP id S237443AbjDELnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:43:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E725FD8;
-        Wed,  5 Apr 2023 04:43:20 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335BQKMt015464;
-        Wed, 5 Apr 2023 11:42:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=2u1bt7sISW7gYR56t/sEB8xayuIhGFjBWFB7FY5nIho=;
- b=kRIHBKevPXWIgKQZLuz0h0Tk05ns77bzHnDwj6AwZFGKWel+YUG40bITSkY/jjDdFk11
- 1MjmGUGTmJd36f141wMuYweHn74wZy8N/L2OxX1sKxgGYMpYcaYz0ONsCn2pJOg6Awed
- quv1tMLPvIAihDr/UUKOEIHqTeXo4qAj8wtYknUpAXcqV9cjUoB61P04pYol9qWS81Ux
- PM9KTPGRZXpFMlvDFl86Du6ymqujptR+0ijwskZljtBHQ8Dp0kEAx6/VybVJ0nvcey4q
- dmGLOrqrUP246pxQ3SwmtdWJAr/SOFtNrlaNb7Wj5s+q9Cz1yggiJ9JkQ66TPiPDJ84E Ng== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prwc79bx0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 11:42:27 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 335BgRh1027969
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Apr 2023 11:42:27 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 5 Apr 2023 04:42:21 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v8 8/8] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Wed, 5 Apr 2023 17:11:27 +0530
-Message-ID: <a1d3329d53af5d0abb978e71c1cde1ed3b9c91df.1680693149.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1680693149.git.quic_varada@quicinc.com>
-References: <cover.1680693149.git.quic_varada@quicinc.com>
+        Wed, 5 Apr 2023 07:43:16 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD0D3AA9;
+        Wed,  5 Apr 2023 04:42:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DQKKqvngu6XrRzj+GHyns7zyGuc6jnX9ARbttsuRzGk=; b=idnRPt7gzQIUPNNaD/IneFbHZm
+        Hm/M7lAn3X4M4YAYJsQgsjTurXZhVLP+iiZ9DLmmlDgK6Ty2FAY7CRFNNpqMni4zQbFYv3FtAENxu
+        rNPAKqNkSHWeLDWiAjKwNyv5my/aHd3mnPLCSOHTHa9T7oJzr+m9d08KJcsOsdQQx5jQUsB9UhhSb
+        RLcTiqExcEOHERblZmxKkZC4oD4bnhiuRkWSqwuebLcFLkMDvh1IOWxDvijroXsSnIf9/EcuRxJFg
+        DXJ4LPSdwxCbUqwIBrua3JDo72zyVBMFh6D4PI6IsCPV+XocyHo3f1L25Z3MBwKSoBQ7MBQZtcEmr
+        6DcJWnTw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pk1WT-009tua-07;
+        Wed, 05 Apr 2023 11:41:53 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F3173300274;
+        Wed,  5 Apr 2023 13:41:48 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9417320B6A7D6; Wed,  5 Apr 2023 13:41:48 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 13:41:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
+        dhildenb@redhat.com, alougovs@redhat.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <20230405114148.GA351571@hirez.programming.kicks-ass.net>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ePSz6AGMWaSZfUlPeFFpaRYyLraPuMsB
-X-Proofpoint-ORIG-GUID: ePSz6AGMWaSZfUlPeFFpaRYyLraPuMsB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-05_07,2023-04-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- malwarescore=0 phishscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=668
- adultscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304050106
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZC1XD/sEJY+zRujE@lothringen>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,63 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turn on USB related nodes
+On Wed, Apr 05, 2023 at 01:10:07PM +0200, Frederic Weisbecker wrote:
+> On Wed, Apr 05, 2023 at 12:44:04PM +0200, Frederic Weisbecker wrote:
+> > On Tue, Apr 04, 2023 at 04:42:24PM +0300, Yair Podemsky wrote:
+> > > +	int state = atomic_read(&ct->state);
+> > > +	/* will return true only for cpus in kernel space */
+> > > +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
+> > > +}
+> > 
+> > Also note that this doesn't stricly prevent userspace from being interrupted.
+> > You may well observe the CPU in kernel but it may receive the IPI later after
+> > switching to userspace.
+> > 
+> > We could arrange for avoiding that with marking ct->state with a pending work bit
+> > to flush upon user entry/exit but that's a bit more overhead so I first need to
+> > know about your expectations here, ie: can you tolerate such an occasional
+> > interruption or not?
+> 
+> Bah, actually what can we do to prevent from that racy IPI? Not much I fear...
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- Changes in v5:
-	- Move "host" mode specification to board dts
-	- Due to dependency with earlier patches board dts
-	  filename changed ipq9574-al02-c7.dts -> ipq9574-rdp433.dts
+Yeah, so I don't think that's actually a problem. The premise is that
+*IFF* NOHZ_FULL stays in userspace, then it will never observe the IPI.
 
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+If it violates this by doing syscalls or other kernel entries; it gets
+to keep the pieces.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 859973b..92ff7ee 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -44,6 +44,10 @@
- 	};
- };
- 
-+&dwc_0 {
-+	dr_mode = "host";
-+};
-+
- &pcie1_phy {
- 	status = "okay";
- };
-@@ -107,6 +111,14 @@
- 	clock-frequency = <32000>;
- };
- 
-+&usb_0_qmpphy {
-+	status = "okay";
-+};
-+
-+&usb_0_qusbphy {
-+	status = "okay";
-+};
-+
- &tlmm {
- 
- 	pcie_1_pin: pcie-1-state {
-@@ -173,6 +185,10 @@
- 	};
- };
- 
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
--- 
-2.7.4
 
