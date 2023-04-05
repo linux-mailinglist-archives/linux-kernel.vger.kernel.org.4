@@ -2,240 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC29F6D7923
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7C76D792B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237007AbjDEJ66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S237219AbjDEKAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236779AbjDEJ6z (ORCPT
+        with ESMTP id S231624AbjDEKAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:58:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586745BA6;
-        Wed,  5 Apr 2023 02:58:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B9CB63C4B;
-        Wed,  5 Apr 2023 09:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C85C433A0;
-        Wed,  5 Apr 2023 09:57:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680688676;
-        bh=8fsJPPLfev3l8+gscgaQ0CoPSzss6xl/YWJE3Tf7VfY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PSPPQN2bJmhVA8jfvTHRTeJSsa9UiOzhRR7CZd6O6/dhIE7eLbM3SqIx5AKeHG4V4
-         oixleKiZxpnRAfM3MhVfglhQ7x251oxWPCyIPiCAKnbEskt+fMkUrIiQwF28hh0MdE
-         nD97xCn1gXlJw+IjI5XC9FxyRyWCcZw3LySRZEzWxpwGBZ8VA76Hp+dRjOLBo4TdBS
-         e3xcsBq6zWwX84ykmzXuhJ2RQeV9fsNntoOttEa4l3zKi3s4hE6EAexgajHWTEubh9
-         bov6YCVVOL410McdyDPhO8E64oxxoZAHkkcjzs785pbSqksW0eJ3GD1pn/wCg6DHcv
-         vyfqeXDxXQs3A==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-50263dfe37dso1409358a12.0;
-        Wed, 05 Apr 2023 02:57:56 -0700 (PDT)
-X-Gm-Message-State: AAQBX9dE7PtFx4PP32Tdjio6VF436roTeCecPDMfXwYRqMCIFR9sekQ3
-        N3VA+Mu4gEWzofpjG6FKM968oedJjE5lbCK4AiM=
-X-Google-Smtp-Source: AKy350YQpAioYSRN4w5Le466Ai80EZCCFWQ4+P3FMiSqYGsYZpptCoVP3ppNrdYq+BM40PINp8W62w3iQqrPAC5DfPU=
-X-Received: by 2002:a50:9f2b:0:b0:4ad:738b:66ff with SMTP id
- b40-20020a509f2b000000b004ad738b66ffmr733329edf.2.1680688674658; Wed, 05 Apr
- 2023 02:57:54 -0700 (PDT)
+        Wed, 5 Apr 2023 06:00:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D41A6;
+        Wed,  5 Apr 2023 03:00:36 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3359cUWa002449;
+        Wed, 5 Apr 2023 10:00:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=RcU5QX2H+naJU/RnfYHZlRtFeE/30+0/6/b4AeyX1+s=;
+ b=W/B+J02YJ2TrNlMViira1wQagewemDFqr2kMzEqkInVtYMi1JRAENkmOj49T52RJUQVz
+ Qftqmz42ZbcKKIJjSO+4VFLz1e4+bKNivNJzIFfX9c30n8E+pN2/CIKdr08+srj0bH0m
+ 5rUH6Hw9LIhXnuZw/ZJA4ipS0bjRcAuoUZgxB+PKLyEQcNDeWQRW5zeP4nhs1V4avG+X
+ g4gLz/tAyo3cRtUvoKgzp72bODCnPgxS2+5BY1yHXG4TDlOAmtjPVDg5oB5lTm1Rt7+i
+ 4pPys54PYCSAAvMhy/+EJ7V11VwKh19G6U0wk8Q71caYjHdfGEX7eAQbcy7ELNXwVg30 JA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prnvg2dnn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Apr 2023 10:00:27 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 335A0PhX002702
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Apr 2023 10:00:26 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 5 Apr 2023 03:00:20 -0700
+Date:   Wed, 5 Apr 2023 15:30:16 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Johan Hovold <johan@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v6 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Message-ID: <20230405100015.GA11731@varda-linux.qualcomm.com>
+References: <cover.1680682939.git.quic_varada@quicinc.com>
+ <aaf44ceccef9c7b20a08b8c9fa534f99468f8856.1680682939.git.quic_varada@quicinc.com>
+ <ZC08PfY+TN3+lBT4@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
- <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn> <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
- <dfd6a1cb-25be-cc11-4134-b2e92e353c00@loongson.cn> <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
- <CAAhV-H54MWEXgqPqv+23vQxQU455iMnwON37uiByyci9cgh5Hg@mail.gmail.com> <CAMj1kXEe37g=1DEQcWFEDCLRihZLX14Kso0dwon71W+5jqyDrA@mail.gmail.com>
-In-Reply-To: <CAMj1kXEe37g=1DEQcWFEDCLRihZLX14Kso0dwon71W+5jqyDrA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 5 Apr 2023 17:57:34 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7XMWKOQhfh5z5s79oJ_RDCfa5VSEs2m=9thq1GFL=WzA@mail.gmail.com>
-Message-ID: <CAAhV-H7XMWKOQhfh5z5s79oJ_RDCfa5VSEs2m=9thq1GFL=WzA@mail.gmail.com>
-Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
- relocate kernel
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Youling Tang <tangyouling@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-efi@vger.kernel.org, loongarch@lists.linux.dev,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZC08PfY+TN3+lBT4@hovoldconsulting.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lfx1yn7mrgcHaXzzz0_KPmdmKXrrlXZx
+X-Proofpoint-ORIG-GUID: lfx1yn7mrgcHaXzzz0_KPmdmKXrrlXZx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-05_06,2023-04-04_05,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 mlxlogscore=927
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304050091
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ard,
+On Wed, Apr 05, 2023 at 11:15:41AM +0200, Johan Hovold wrote:
+> On Wed, Apr 05, 2023 at 02:26:42PM +0530, Varadarajan Narayanan wrote:
+> > Add USB phy and controller related nodes
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> >  Changes in v6:
+> > 	- Introduce fixed regulators for the phy
+> > 	- Resolved all 'make dtbs_check' messages
+>
+>
+> > +		usb_0_qmpphy: phy@7d000 {
+> > +			compatible = "qcom,ipq9574-qmp-usb3-phy";
+> > +			reg = <0x0007d000 0xa00>;
+> > +			#phy-cells = <0>;
+> > +
+> > +			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> > +				 <&xo_board_clk>,
+> > +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> > +				 <&gcc GCC_USB0_PIPE_CLK>;
+> > +			clock-names = "aux",
+> > +				      "ref",
+> > +				      "com_aux",
+>
+> Looks like you just ignored my comment that you need to rename this
+> clock (and update the binding). :(
+>
+> 	https://lore.kernel.org/lkml/ZCaznloORtzgioOP@hovoldconsulting.com/
 
-On Wed, Apr 5, 2023 at 4:20=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wro=
-te:
->
-> On Wed, 5 Apr 2023 at 10:14, Huacai Chen <chenhuacai@kernel.org> wrote:
-> >
-> > Hi, Ard,
-> >
-> > What is the status of this patch now?
-> >
->
-> I'd still like to understand how zboot is affected. It has
->
-> static unsigned long alloc_preferred_address(unsigned long alloc_size)
-> {
-> #ifdef EFI_KIMG_PREFERRED_ADDRESS
->         efi_physical_addr_t efi_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
->
->         if (efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS, EFI_LOADER_=
-DATA,
->                         alloc_size / EFI_PAGE_SIZE, &efi_addr) =3D=3D EFI=
-_SUCCESS)
->                 return efi_addr;
-> #endif
->         return ULONG_MAX;
-> }
->
-> and if I understand you correctly, we never needed this in the first plac=
-e?
-Technically we don't need this, but I think setting a preferred
-address as before may be better (keeping the default behavior the same
-as before can avoid some unexpected problem).
+Sorry. My mistake. Will post a new patch.
+Ignore V7. Missed the update in the binding.
 
-Huacai
+Thanks
+Varada
 >
-> (I understand this is a separate issue, but it would be nice to get
-> rid of EFI_KIMG_PREFERRED_ADDRESS entirely if we can.)
+> > +				      "pipe";
+> > +
+> > +			resets = <&gcc GCC_USB0_PHY_BCR>,
+> > +				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> > +			reset-names = "phy",
+> > +				      "phy_phy";
+> > +
+> > +			vdda-pll-supply = <&reg_usb_1p8>;
+> > +			vdda-phy-supply = <&reg_usb_0p925>;
+> > +
+> > +			status = "disabled";
+> > +
+> > +			#clock-cells = <0>;
+> > +			clock-output-names = "usb0_pipe_clk";
+> > +		};A
 >
->
->
-> > On Wed, Mar 1, 2023 at 8:06=E2=80=AFPM Huacai Chen <chenhuacai@kernel.o=
-rg> wrote:
-> > >
-> > > Hi, Youling,
-> > >
-> > > On Wed, Mar 1, 2023 at 6:08=E2=80=AFPM Youling Tang <tangyouling@loon=
-gson.cn> wrote:
-> > > >
-> > > > Hi, Huacai
-> > > >
-> > > > On 03/01/2023 05:30 PM, Huacai Chen wrote:
-> > > > > Hi, Youling,
-> > > > >
-> > > > > On Wed, Mar 1, 2023 at 5:21=E2=80=AFPM Youling Tang <tangyouling@=
-loongson.cn> wrote:
-> > > > >>
-> > > > >> Hi, Huacai
-> > > > >>
-> > > > >> On 03/01/2023 04:55 PM, Huacai Chen wrote:
-> > > > >>> Since Linux-6.3, LoongArch supports PIE kernel now, so let's re=
-introduce
-> > > > >>> efi_relocate_kernel() to relocate the core kernel.
-> > > > >>
-> > > > >> If we strongly rely on the PIE feature after the modification, w=
-e need
-> > > > >> to modify it as follows,
-> > > > > There is no strong rely, efi_relocate_kernel() can also handle th=
-e
-> > > > > non-PIE kernel.
-> > > >
-> > > > IMHO, if EFI_KIMG_PREFERRED_ADDRESS is no longer defined as
-> > > > `PHYSADDR(VMLINUX_LOAD_ADDRESS)` (physical link address), we need t=
-o
-> > > > relocate through the RELOCATABLE function, so it is recommended to
-> > > > select RELOCATABLE if EFI_STUB is enabled
-> > > We can select RELOCATABLE when we modify EFI_KIMG_PREFERRED_ADDRESS.
-> > > Before that I prefer to give a chance to build a non-PIE kernel.
-> > >
-> > > Huacai
-> > > >
-> > > > Youling.
-> > > > >
-> > > > > Huacai
-> > > > >>
-> > > > >> --- a/arch/loongarch/Kconfig
-> > > > >> +++ b/arch/loongarch/Kconfig
-> > > > >> @@ -137,6 +137,7 @@ config LOONGARCH
-> > > > >>          select PCI_MSI_ARCH_FALLBACKS
-> > > > >>          select PCI_QUIRKS
-> > > > >>          select PERF_USE_VMALLOC
-> > > > >> +       select RELOCATABLE
-> > > > >>          select RTC_LIB
-> > > > >>          select SMP
-> > > > >>          select SPARSE_IRQ
-> > > > >>
-> > > > >> or:
-> > > > >>
-> > > > >> --- a/arch/loongarch/Kconfig
-> > > > >> +++ b/arch/loongarch/Kconfig
-> > > > >> @@ -360,6 +360,7 @@ config EFI_STUB
-> > > > >>          default y
-> > > > >>          depends on EFI
-> > > > >>          select EFI_GENERIC_STUB
-> > > > >> +       select RELOCATABLE
-> > > > >>          help
-> > > > >>
-> > > > >> Youling.
-> > > > >>
-> > > > >>>
-> > > > >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > >>> ---
-> > > > >>>  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++-----=
---------
-> > > > >>>  1 file changed, 7 insertions(+), 17 deletions(-)
-> > > > >>>
-> > > > >>> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/dr=
-ivers/firmware/efi/libstub/loongarch-stub.c
-> > > > >>> index eee7ed43cdfb..72c71ae201f0 100644
-> > > > >>> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
-> > > > >>> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-> > > > >>> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned l=
-ong *image_addr,
-> > > > >>>                                efi_loaded_image_t *image,
-> > > > >>>                                efi_handle_t image_handle)
-> > > > >>>  {
-> > > > >>> -     int nr_pages =3D round_up(kernel_asize, EFI_ALLOC_ALIGN) =
-/ EFI_PAGE_SIZE;
-> > > > >>> -     efi_physical_addr_t kernel_addr =3D EFI_KIMG_PREFERRED_AD=
-DRESS;
-> > > > >>>       efi_status_t status;
-> > > > >>> +     unsigned long kernel_addr =3D 0;
-> > > > >>>
-> > > > >>> -     /*
-> > > > >>> -      * Allocate space for the kernel image at the preferred o=
-ffset. This is
-> > > > >>> -      * the only location in memory from where we can execute =
-the image, so
-> > > > >>> -      * no point in falling back to another allocation.
-> > > > >>> -      */
-> > > > >>> -     status =3D efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRE=
-SS,
-> > > > >>> -                          EFI_LOADER_DATA, nr_pages, &kernel_a=
-ddr);
-> > > > >>> -     if (status !=3D EFI_SUCCESS)
-> > > > >>> -             return status;
-> > > > >>> -
-> > > > >>> -     *image_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
-> > > > >>> -     *image_size =3D kernel_asize;
-> > > > >>> +     kernel_addr =3D (unsigned long)&kernel_offset - kernel_of=
-fset;
-> > > > >>> +
-> > > > >>> +     status =3D efi_relocate_kernel(&kernel_addr, kernel_fsize=
-, kernel_asize,
-> > > > >>> +                  EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min=
-_align(), 0x0);
-> > > > >>>
-> > > > >>> -     memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
-> > > > >>> -            (void *)&kernel_offset - kernel_offset,
-> > > > >>> -            kernel_fsize);
-> > > > >>> +     *image_addr =3D kernel_addr;
-> > > > >>> +     *image_size =3D kernel_asize;
-> > > > >>>
-> > > > >>>       return status;
-> > > > >>>  }
-> > > > >>>
-> > > > >>
-> > > >
-> > > >
+> Johan
