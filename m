@@ -2,208 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0686D73BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF086D73C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbjDEF3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 01:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
+        id S236731AbjDEFbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 01:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236449AbjDEF3m (ORCPT
+        with ESMTP id S229516AbjDEFbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 01:29:42 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97D63C0A
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 22:29:40 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 334KonRL023404;
-        Wed, 5 Apr 2023 05:29:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=references : from :
- to : cc : subject : in-reply-to : date : message-id : content-type :
- mime-version; s=corp-2022-7-12;
- bh=NV5cXk8RvPlA4g2AYczFd1XAy6aUnAGjHGSoDcJ4jEU=;
- b=Mo0lpGSWctSvdO++EuVhVivzuDZN8+T4ng5KP8XBu7d/F5UzL/KUKUXrDjUScgHoVzrt
- K81vNgXLtp6Euo2NbPHdT4zduPvAFNVVfsOZDxVXvHIzeH3L7Y1oVAG5Sd0N8Mv2yq4E
- vUSXFqZ+CL1udu6rKeeZ+x64BxbhJea1g4+fMJ2QflhpLlqJm6zcH62SQlOYwezF+4iV
- T3vfHfaL3yGha5c9byKRK9lSHiiRX30aa2hVpma7MYoBrUq/WTxdc5H5FEF7bPYH9QGa
- GT2Z05c83TG6U85mK4ccsgblKr98vLqvZXJQZ0jE2/9TPyKRy5qZFJ92c80TdShEnejH ZA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppb1dqek8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Apr 2023 05:29:09 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3353ulns028063;
-        Wed, 5 Apr 2023 05:29:08 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pptuqtun9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Apr 2023 05:29:08 +0000
+        Wed, 5 Apr 2023 01:31:48 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9193C0A
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 22:31:47 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ocu1Y4PPhKgFTTrTpBX+k4BYc4DefFsRLRjTP4lOcTI0JURyI4u2Co4GvQoLFp4MB9Gynhm7MDgJf4Msc05RpUSd6AaRPuLQp+S/jGEKHb6aEi6rlpSUPf/e1WdB5XuSyCVbUa/CIn//gvebklQUA8PorH/w1aGPQVDYOvl2jjG9SlWp8st5WW6SKd2AUiDkpofuMYPruZMzuGcHQgs8RaGRtiQiGuiMWIOT8z2X+ui3DCt4HfZTQ6Nay0bjgflrmg6/cqLnHh+bk8fpTsg2UqKAvLg04GkU+PVtFexprRy3jnrbwjCUXpUs5bCYjrrlDxOIp5FEgiFAa3uasM7WTQ==
+ b=R4YXUiNf3Y0O/TW0kPLfMYoLnwoVOYv/xlDYCsZJ8YHGPv23tVmD1IhjVeXGfU95pO7gNfCA9F6x/uXM9Jc8cXM+l0he+9IpTdlPKU6wZ9FKzQEA+HcSUZU3gvGSnBdcE6SdgbEg96smoG0wMRl0qz3ZmIAYOw/HgJws9YABRbDRqn3FTPWdUG1BfccXxW3Kt+Je1Hfb3NVhbdReb52hm4xg39aS+fiW+aSCSeekMmZDI9KRmKPH/2OgrdHv4YNUuWmlaETYh8p6FleCqIACwlvbv2ccqMTNcLoOoEd/f9M1MfY0o0dDLRZu/L+nwIamlXp3r112MzFHSb59snIQIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NV5cXk8RvPlA4g2AYczFd1XAy6aUnAGjHGSoDcJ4jEU=;
- b=aGXgei/GXf1fidfHBah0aEwRVTJM4LGyyvJ1uJ7Ovvj1xS4ScbNlfY/gWz06081KdkSiiep2P7AYXT3JEhGWezQC0brwEjijtqT5fxvOmcCp6L+JYvz7R84uspKk3kHweIv1DLOsg128VLCbpi/5XiWNG3/5gqSaC3XPCLazjAIV6TOu1rO+a7xEQd6J8w5JCbxI09XWzUr5VHsmiWbEgJxJMAeOTFfM5SvgrJCcSiej8DXPZ+bHT7cuA71pr4uihGVN0EnVisGjajNn3UqdVKHe6VYiD7z73K+HDwcXOR2TkwNpuzcQ457c1nXtwtsD/R60bvzedN06yhG4dQ53ig==
+ bh=TyOup8jBLejKQBzRLeZ2fQqNG1v21Ox1LUSUbRg9OMM=;
+ b=kTHnOMMpE+YGdOr0feViIF0PQiJ2CcpZZ11IyxqLY9Z0MNSk0zFn5lTxHckfP5VZhmMNtGvt1mgFkmwSw4/2FSMR9MlLYO/fOi+AB+5dfHarB6wOXqPR4+XdlpeDcNInHVRNYa1C8TnCJ69HUHGRmaNhqnofhmQbVn5IJKGLNOc0NflheZssCO83IGjj9KxemlYQz2rw/VuYpJbPlYyaNS8DPsE0JQDZ24KZVjMeMzukzInarRiPf1H0m9G60bhAFwz8CTbv1gI/jTxBzZnlt9Y2um56hf+s5MVbwd9tR4iczA7kmqXR98aHQoQp3ZYUhLfRBSfZKjv5NuUV0jyJUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NV5cXk8RvPlA4g2AYczFd1XAy6aUnAGjHGSoDcJ4jEU=;
- b=oTMWJdOtadqOv77Tql6G0ggEIFlaTaY/JOeljcZi50juTujMHoJ3xG61okiajBUj8ljxo8FZzsPVd8oqKc5/wGEwV7mbj9AK/q5ebj8gGpH6aa/no+qAOEGpJcFhHbdWNcNjIRZwt3evZBlM5jXvsWQfB7fCkowxn4mRsuveoq4=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by CH0PR10MB5034.namprd10.prod.outlook.com (2603:10b6:610:c9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Wed, 5 Apr
- 2023 05:29:06 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::986d:1a90:f60a:53b6]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::986d:1a90:f60a:53b6%8]) with mapi id 15.20.6254.035; Wed, 5 Apr 2023
- 05:29:05 +0000
-References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
- <20230403052233.1880567-9-ankur.a.arora@oracle.com> <87pm8kq96d.ffs@tglx>
-User-agent: mu4e 1.4.10; emacs 27.2
-From:   Ankur Arora <ankur.a.arora@oracle.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
-        willy@infradead.org, mgorman@suse.de, peterz@infradead.org,
-        rostedt@goodmis.org, vincent.guittot@linaro.org, jon.grimm@amd.com,
-        bharata@amd.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com, ankur.a.arora@oracle.com
-Subject: Re: [PATCH 8/9] irqentry: define irqentry_exit_allow_resched()
-In-reply-to: <87pm8kq96d.ffs@tglx>
-Date:   Tue, 04 Apr 2023 22:29:15 -0700
-Message-ID: <87v8iakic4.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW2PR16CA0049.namprd16.prod.outlook.com
- (2603:10b6:907:1::26) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+ bh=TyOup8jBLejKQBzRLeZ2fQqNG1v21Ox1LUSUbRg9OMM=;
+ b=fKOcPjsFlE6qvVyURNZA55PwUaHApwB9y6lI6vKLmewFdY/G0mB0RL6YeOiy+dskbuB1h0GeaVgOugpia2I3++pZtFdtm1MZcmPNT+wYDC4mMjh0617MZTaNjhoG7dKCbZ8dxcYp99qnh1mVgMAnTo7Dqi1YmKjT+eNx1kA6Umk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6309.namprd12.prod.outlook.com (2603:10b6:8:96::19) by
+ CY5PR12MB6129.namprd12.prod.outlook.com (2603:10b6:930:27::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.41; Wed, 5 Apr 2023 05:31:45 +0000
+Received: from DS7PR12MB6309.namprd12.prod.outlook.com
+ ([fe80::de58:ace6:16ba:96eb]) by DS7PR12MB6309.namprd12.prod.outlook.com
+ ([fe80::de58:ace6:16ba:96eb%3]) with mapi id 15.20.6254.035; Wed, 5 Apr 2023
+ 05:31:44 +0000
+Message-ID: <639be6a6-929b-e27c-60a8-487b908812ce@amd.com>
+Date:   Wed, 5 Apr 2023 11:01:32 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Reply-To: nikunj@amd.com
+Subject: Re: [PATCH v2 03/11] virt: sev-guest: Add snp_guest_req structure
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     bp@alien8.de, dionnaglaze@google.com, pgonda@google.com,
+        seanjc@google.com, pbonzini@redhat.com, michael.roth@amd.com,
+        ketanch@iitk.ac.in
+References: <20230326144701.3039598-1-nikunj@amd.com>
+ <20230326144701.3039598-4-nikunj@amd.com>
+ <403cacf7-2694-d60d-1079-b8a3efcaebed@amd.com>
+From:   "Nikunj A. Dadhania" <nikunj@amd.com>
+In-Reply-To: <403cacf7-2694-d60d-1079-b8a3efcaebed@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN3PR01CA0028.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:97::7) To DS7PR12MB6309.namprd12.prod.outlook.com
+ (2603:10b6:8:96::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|CH0PR10MB5034:EE_
-X-MS-Office365-Filtering-Correlation-Id: a62eae0b-7130-4727-3f5d-08db3596ac25
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6309:EE_|CY5PR12MB6129:EE_
+X-MS-Office365-Filtering-Correlation-Id: 243fce32-246b-4455-0f63-08db35970b0c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fa3Odt/nMv23IRtz8tV0FJqZXtPVRXjHKiKRMSdctbtXLSBBFSRTbDcfW6wLKYunufLVVOnL0Y7lEQy7lIDY7ZlRZfiKp+yxIyIk2SCYmMZvx0bvAzrEm3uGQtWYY+VmIT2EPXB5PCOu8E/6W10QYmVngV+L4qVppDDB0DVQZcnjvKrXzvXMPkfgDN4duTEI1B60uaO8Qt/U2Y7DkiKqeEJr2WubR5C3hIpMNZW3ZaltPPPebVXACzcX+l36UbqmGG01Y+84pxL3ZKYjWIib7GYTMOxtfKbCEQgAIxEcJPuo1RLlku70QqLum3IrChXZF+Q+bA66YcJF7E0vrlYT5kHiqs7NdtsCzz57DWfzDD4KPZ8OQ5zftpynI2eoFLv+Va6BKU2V0UWxw7uLCIBLaPDT0U3vUIdf0Zjb7wplluYOgzPZL2YMLdRNcynowpO4GpTKTNY8FTXBT2naMjiyzJcn6GLZQZNPV8D6pB/16G5bf0SE8U5rraqkuH+Srj/eEID8sJuuyPMl2K3WRcZ2Vx0s3RQHp8jiupB6ZELq8E+r+9DUeEjKlXuBbFx9EXIw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(366004)(136003)(376002)(39860400002)(451199021)(6486002)(6512007)(2616005)(38100700002)(6506007)(6666004)(107886003)(186003)(8936002)(26005)(7416002)(2906002)(5660300002)(4326008)(36756003)(478600001)(66556008)(66476007)(66946007)(41300700001)(6916009)(8676002)(86362001)(316002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: q5ea54QXC5jrr8hnby5H8okeF0jpkaX6GC7EBvwNcxF6jygK9ETe6zXPahZ9KNmv669QyLm9R+3ufQAleJAZn6ejyXX7vBbmGLy+UkTqv0+emyeC2rjQExdNtb3ce3BRluTsGplnt7S4cl3/n46S/4hknCel+qxeRxWbzjHHJaJDHLW14pwHVfnZSlhMsfVJKt5LGVaB9Fid9UsFke31ZGydvbGG/1ZI8ZaiHR1TLpxGpDq3YEu2vypGs/Erj6jIz/y+JsQw6qkGMdjn7XtlKMRIZmLlVMn4Q8l15xpSrI4xIEsF7TDGNZ74diQ8a2kzxYIoEa6SXIZ0v4cC9RXKsU95LCXwDf7J/X5FFuMNjoHENykN86oVVd2oVnlVf6G/NGLR4e7pgXfzQ07K0IZJrO5spXzqu658d5gp9PSMHAeAnUavwQ7jzePgORPB2HviMBwJyoHUnns81Ldz+3DtyN6xV5C5UL7mYy/5ombw73yi27o/TbVjC9XP7ZGyZ78F3zj+xGFcGlc9Xk0bChWBP0qLKSfN61FqGjxXv5sENgF3ivR32aAOn1/uLIYXCnrozHWPWHZEQ3oLhxP5XWWbHkAnU7ayxCI+Xy1I9FG354tCCVNgOTbfSr2gdyRQpgtFr7e11f1fsvA3041WMN5LAg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6309.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(366004)(396003)(136003)(346002)(451199021)(6666004)(38100700002)(41300700001)(66946007)(4326008)(66556008)(36756003)(8676002)(6486002)(66476007)(31696002)(8936002)(5660300002)(478600001)(3450700001)(83380400001)(186003)(2906002)(53546011)(316002)(6506007)(6512007)(26005)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SJQxZ662w/J7QQHtyGaR0dpVIE7qrqcq8htEnC39UyLb00hyefnNQGfax5OP?=
- =?us-ascii?Q?Z2U1WNVTMJ+upbRGTlGlPzJOZ+LK7ZU/47HS7RPxJhaIQqRUMO+F1NMmtYLp?=
- =?us-ascii?Q?01F1olKg2cBaoYbAX1Ydlms10BwY0bWMiw+ve5Z26xaCSVgwkq/pTudXO8hW?=
- =?us-ascii?Q?UEL7q9nGaNin21b4ouH5XUGnUm1itJibITINLksoiJZMZ4dEE5xykLXd7dqI?=
- =?us-ascii?Q?6LNL0A92KeyyLHVjdNyQsSKY1ig4wMIN0MDb1mzhbnnBqoWKnCOPSwhrzSSt?=
- =?us-ascii?Q?LW+mPWzfQ/rpX7oUSmtbrmrI5OoyEUKg5qu4j06L1ej259tksET1bUgKabvU?=
- =?us-ascii?Q?qcvojFgdWSWo6EGof274i0BTwphA94Drd5BfpTnUxF6DKhY79NpwzT8fdmeJ?=
- =?us-ascii?Q?2lXQe23Asg+pNbA45SRYQrvsmUGE11RH4DsTrh0V1At4QD1KVJajZys0e4Q+?=
- =?us-ascii?Q?aHxvm99f2dOUEOWCecYO2EtGbOrKwOHt2EB9CMxWorldvJAfw+pvyxYXqT9k?=
- =?us-ascii?Q?4IZzX8g05lblx73EZ17J5ewrjihuTGaaKia92FxffgVfm1GiPNmz4uOPC2Ka?=
- =?us-ascii?Q?3lTzGRqYby2grFBqq5OXNEXWY3C74ZK/Z82zjnHc7s/Gt97a5F2Duq4bfXMU?=
- =?us-ascii?Q?Mgb1BLs8M+a6+jSFG4znvCW+E+SWkytTVG74PadxDdDGv3LT4x6G2Yi9T6b5?=
- =?us-ascii?Q?rVjvyztGPCMjIc7wSWGWchol5iPXfRNEmhpXlo5Es0n74BKvbGvqqim+JelU?=
- =?us-ascii?Q?A4wDyTDrdLOhG0IqtVmbnDwaT/NvhrI1peB5cVoILqcNsCsmXVga3U78yalW?=
- =?us-ascii?Q?JkmcgCq+UsYPiMJxrvhgAtgLmsCJdiV8igolL2gtdGhq1J2MgO1n/I0cuBl4?=
- =?us-ascii?Q?5w2fc9mq867Yq6jC3T6R0W52ifQ80WZmNw5fqBtYbR5lOPNvVqLnKnLmQ54F?=
- =?us-ascii?Q?kwiOZhR45JFWyMI+r5uaJr/KKHqjGkp+m+4mvC0nXlJJGgLK5O8vNp8z5PEu?=
- =?us-ascii?Q?ebIwmARDyQQfE5A5gbP5JMZ5Vjegitu2Qb+AKn30nTkdd0xAY6GmzNf2l4yv?=
- =?us-ascii?Q?BjvQ1qKexK9zWgK/G9zLlwrsSkSJKMRoAuNNVfiv2DNSRSQXQxRgzBxzjEgg?=
- =?us-ascii?Q?1BG4HWuWzwkVMK4VSa+8YEnATrOK0Gm2xT2Vmu7SBLbYLBxe0dJn8tc4trLC?=
- =?us-ascii?Q?c0BYlWfTcOhW/uvoSfCPfUPvmBo9LaIvb61wu0Y+4aYVzpAyB9FLXer5kkk3?=
- =?us-ascii?Q?o+GwHqIa2duu5vz1WAH1VSkJEcyrLQhlbVxLXvunPHhjQA4QMnmMq2FT1cx/?=
- =?us-ascii?Q?qhahJu95nyyL+XaisHyWePJa6cn2/hvw15XFWP1bSL7SLJvk61u0Ov9Y8Y1Z?=
- =?us-ascii?Q?ujW79RMapo9nLZHv82uF+N1DtKmuAW1RBNoFHUIvPY2RULXtbEcxsxH1nqpN?=
- =?us-ascii?Q?0Vy22D9vKGdPfPZW4aHegJUo285/AF8loMt7r684xMCCMkpDvaRGyoo72KAb?=
- =?us-ascii?Q?MdJ6LDk15YkxTtJmZXxl6kEukz7SuA+SM9SSeNdMkykewKenNyBjjoU76MfA?=
- =?us-ascii?Q?ML2b2FiCj9u7yXWXPk2CEr9IK3rqHGiUhAACASk+V2iCdS5WWBP78KCqdgIQ?=
- =?us-ascii?Q?UA=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?mgXBmZHoH3RyuIBqyP5GLdHLxQQWqtQGiZNUjhw4fLqm1HjGk7H5WWkJguqJ?=
- =?us-ascii?Q?YOlfJY5mqs3SK27BqLhq1C29gBB426x0Bq2RaJKjOSzcUyeiMZ8wg4DUUf0c?=
- =?us-ascii?Q?2BuOXigmpKzNAiefhKJSiYeN/DUMcuB/5rncHMYXnuiNxPWjPlvSrHuSISi1?=
- =?us-ascii?Q?Jw9GtBmuB7U5Mj4ylFQ9PSz6XnbHzUpKqOQZncs0TxnLbXsQbLFyDOnbFJ2L?=
- =?us-ascii?Q?S/WsiBYcpVwRMeZzjmLlEj9V4RAPiTSfHmArurKLju9anCySZfwn4KvSSOvs?=
- =?us-ascii?Q?CpfBa6zaC8pBMhcFWV6rwa64TNVvHi4GcU23R1y632it+cE9PQV+vpRRxh3b?=
- =?us-ascii?Q?F+yHN8ZrylfnQeG5OareHczt05RnzZmJoLM4NDDTZLUXMh4x4sn839SrBB4C?=
- =?us-ascii?Q?5/wT6eZ17AHuATVIhg1ZEPHu5aidaHbSoI4SiYdRV2W/c4HcBQjQO1dNW4SV?=
- =?us-ascii?Q?yDzqEqqwJvO0rU3Gy+bS1DFjh3j2f3y9YQJ5vzmq6O87TmWEEhPMlUZnkbcj?=
- =?us-ascii?Q?0OgQr21+SYh74oRhRZX+PdQodplV6UwjtuKLn00Z9Ud53VmM41F/NkhGaMKf?=
- =?us-ascii?Q?D7ip70qtVQ0eaLTIq7ForscdpbifQhnIAVIYWxROIZUSttCl7Eo1CXXXv8Zm?=
- =?us-ascii?Q?BcDO+thoCXRZ1XjvbxSlLQVtTFaDQd6NwD+ZJp1+JX2gjcJFvDRI2ErHwjc0?=
- =?us-ascii?Q?VYZzGYhsZiqixzaVbHqaT5zah650M/BNlsCWUXNOBD7FB0GhhNTeKN9nVU0R?=
- =?us-ascii?Q?6gw2YHj1YgeXLFqYwpg2BZ0dywNubSb/JakgSGLNkjYJat2m/7FKYXzeWoyS?=
- =?us-ascii?Q?AS1wMisYOn72SiuCGOx5lO683Z8AxxEsozMRh85GJRfcY/msOiunpTgS9iqg?=
- =?us-ascii?Q?l/LKHXNIsu8D9QCnrGCVTcG7aPsofXH/T0dzHETFwxg7ZZxnOf43vzOvzLfM?=
- =?us-ascii?Q?VYf6b/Yr/alzfPyU/E6zEfe/CTDGJ+6vTxP1NlRYrsSAPhZ8rJx0Ak2voQt4?=
- =?us-ascii?Q?rktv1uDoON9xiDkYps6DgfJttDRQznoSkeBWTfQEk1ltvVEpuS9MapC3Mpgq?=
- =?us-ascii?Q?OxhxMR0qwKRjlG8hCP9zsxYREd7BnaePFjTPRXchw5ZZXsN3akNkf5SmQTn8?=
- =?us-ascii?Q?yCg5LxYAnYc7n4IyvYbuZ2kP2Bxa0muDf22laMF1mRojMs1rcc6XV40=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a62eae0b-7130-4727-3f5d-08db3596ac25
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U1ArWjNXU0tYMWJJdjdvRjdQME9FcHhidktBaHdsRTJjbGgxMnhPUDhrd25G?=
+ =?utf-8?B?c3lqVEhQMEF0QlhjWFZZUGprZkx6b1hFdmgxUU4rc0xzQzZtT3JxN1c4Mk8v?=
+ =?utf-8?B?S3F0dDZZdTloSlpZVjV3R2pQalphQVVyaC9qRDBldTEyOGx2Zzc2VHdWTjli?=
+ =?utf-8?B?TjVSUGNnTkNwN0VIWFRHSDROVjlzN0Y4YlhSR01ZYjd3U1A4TUhVK0lia0wy?=
+ =?utf-8?B?U0M3aStSaVFybTBhK3BxYk1seDcvNTNTS0FiaFpoTDl3UmpveVJXWWpmSmx6?=
+ =?utf-8?B?K1h4KzUyMTcvKzY0RzRhSEVxYkY0cWtaTVNlcGhzMVZkejFWQm5qR2JLN1Zl?=
+ =?utf-8?B?RVdETzdiT3o5L0xPaDNod3ZaSFJ6bDFFdHpGSFQ5UGRQNmVJUnJrenlWdWRm?=
+ =?utf-8?B?ZTVQYllzT2tBYUxLZGNqOGxKT2dxNnZQanlJT0VIMUZPVkp1Q1VLS0N5OUNK?=
+ =?utf-8?B?S3cycTMvYVJkZ1ArK0FYdWx2ODFGVzI4TTM4bENGWkxJWDhOVlovU0JUbWw3?=
+ =?utf-8?B?elk0eVZFZnN4VW1iaWlaRUYyUWFpRlVtbjRRdHZyUHQxKzE2Mjl2cXZQbDgw?=
+ =?utf-8?B?YWRwb3c1WTZCbGlpckw1cFRtNURVQmRQaVF2YlJaWjY0YzduNUE0bTJzQjhT?=
+ =?utf-8?B?Y0RaMm9uV1lZVFRhdE1IbFU0L0o1SVJyQjBzQUluV3QvWFV4emJPVEdzRWRW?=
+ =?utf-8?B?RmpNK2RieVlPZS9vR1NYbFNXTGhtOWkxYzY2YTBLSlhPZHAzeE1kMjk0VGVI?=
+ =?utf-8?B?NkhHTFlrTDNVWGVUWWVUYXVqTk5OMnhJY2UrNDJDNjFyemFyKzJNU20yWGND?=
+ =?utf-8?B?NGNWN3FpSzAwd1FGNlFPRVlQRHVsMmFveWQvbmFLRHNOVGp0ZVEyYjlDbVFP?=
+ =?utf-8?B?bTBHUlNQSi9BOGJhdk5MUWtnejNPcHQxK1N3eXBucXU5WWNWRmtvdG4wTVdD?=
+ =?utf-8?B?TkpIdnZCaDNvUm5Nb1ZaUHZKZGtRQkQ1S3U4QWt4MzFTaC9IZU55VWV2NWVO?=
+ =?utf-8?B?VHI5L29QdWtxT3hHcXh3eXUzSXFRU3hBUXRVejhCc2t3b3NEKzE0aVlsTXcv?=
+ =?utf-8?B?ZTNtZmo4QWlJdWdNK3RSazE0WUEwOG9CdCtFSm5XL2dGV2dESm5ZSWc1ZE5Z?=
+ =?utf-8?B?VFZZblNRZG9HUmdQelpZWnppNXQ5ZU1QOFMrRDNaY08vdTFDN296Y3dWWEtM?=
+ =?utf-8?B?TFQxcG9BTVlCK0NENFZMY3NncWk5U1ZCazBQcExubG92UEExOVdYczJST05h?=
+ =?utf-8?B?Y1Uybkt2MjNDajk0MEVuTnRPb1l5UUdreldla0MzcnVPL2ZubkJXeDNuSWVG?=
+ =?utf-8?B?UFRUbklGdFFrSmdwMmdlWVA2a1AwSVd1Zm9URXJqZDFHSEJDMXR4YzNGb21q?=
+ =?utf-8?B?VEJxOTVNdlY1ODR4NXB5T3luaStyL0ozZlJuaWJJSUFUTUJPWkdpYVc3SzlJ?=
+ =?utf-8?B?OHRkS2J2c1hUYnhQVzR5RHpEaFFlejVFVG4wNGxORUlHNCtJa1B6d3FFalMr?=
+ =?utf-8?B?WG45ZU1ERlNoKzFSYzI5SG5zbXRmNUt0cllReWluMnNKZXY0SURhMWNjZFVK?=
+ =?utf-8?B?blk4RHc0U0M5RzI4VWVVb2RITmNLdkV6NWV2U0gxb2J0cm5mZFRFdy9QaE85?=
+ =?utf-8?B?cWpJODZWUjUyZ1pnc2VYdXNzcTJkYXpOUEt1Y3ZRdkxxbC90a1UyeDRqUnhT?=
+ =?utf-8?B?UjJBVXpoaUt4ZlFEN3ZVVThIL1IzaU9zcFpBQjNlY05kb2lWNlh1dXJsWHFH?=
+ =?utf-8?B?dzg3MGdLWis0a1BpSlIzT3haMStaRmNwYWRaYVZ0cEVOck4wcm9Ddi9tb2FJ?=
+ =?utf-8?B?aDFaQ0F0T01FK1VEbERQMllZTmZPU0l2Y3poNXk0dDFjTk1HTERTSTZtNmRr?=
+ =?utf-8?B?Z05oWHBmd0ltZWdaY0FXeUpvVlBnSmQ5K0M2SkVDRklsa005cW43YzVpcHor?=
+ =?utf-8?B?dWU2VFJRZEJJY3VleEVKeVpOOHBvQmR0NjNWTjViRWEwYjNLMEkrbjY2aEJq?=
+ =?utf-8?B?K1B5MzNnZjQraXJ3VFF5VjdTNDNVR0ZnaTlreDdWMUtFbnJudnFTQ1RJM0Nh?=
+ =?utf-8?B?SmFGUXVxMmZpOFVmL3A0TGJqQzBLZ3lSU1hEaDFEbEpTTmY5K2lNOWdhTDFa?=
+ =?utf-8?Q?6z0wcZBhipWvLKUFvcQ2JjrIR?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 243fce32-246b-4455-0f63-08db35970b0c
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6309.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 05:29:05.5378
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 05:31:44.8766
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VRwJ9oUpzekyMPQBnUPYQc+NrjHVe/GtT6wRFgKDIeM7h2m3+8RBzJN1LKhoJyMwZ+NBmX7Q42QQ2REQQV+BhGY4nOmwzOUdJG6vpH6yIQc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5034
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-05_02,2023-04-04_05,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304050050
-X-Proofpoint-GUID: UyasIRkzKwehl8YjLJMlOWvvGj1BsXGy
-X-Proofpoint-ORIG-GUID: UyasIRkzKwehl8YjLJMlOWvvGj1BsXGy
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: xB8pZ9ALuuefZgSp8O2E8Qvnj5bHVWzKwAQS8yUEq8CM1s4sl26AA7ZTa2FHkUpojkhdFXar2+nd0AZRtKbeRA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6129
+X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Thomas Gleixner <tglx@linutronix.de> writes:
-
-> On Sun, Apr 02 2023 at 22:22, Ankur Arora wrote:
->> Allow threads marked TIF_ALLOW_RESCHED to be rescheduled in irqexit.
+On 4/4/2023 1:29 AM, Tom Lendacky wrote:
+> On 3/26/23 09:46, Nikunj A Dadhania wrote:
+>> Add a snp_guest_req structure to simplify the function arguments. The
+>> structure will be used to call the SNP Guest message request API
+>> instead of passing a long list of parameters.
 >>
->> This is only necessary under !preempt_model_preemptible() for which
->> we reuse the same logic as irqentry_exit_code_resched().
->
-> This tells what this patch is doing but completely fails to explain why
-> this is necessary and useful.
+>> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+>> ---
+>>   drivers/virt/coco/sev-guest/sev-guest.c | 87 ++++++++++++++-----------
+>>   drivers/virt/coco/sev-guest/sev-guest.h | 19 ++++++
+>>   2 files changed, 68 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
+>> index 6ae197b57644..ec93dee330f2 100644
+>> --- a/drivers/virt/coco/sev-guest/sev-guest.c
+>> +++ b/drivers/virt/coco/sev-guest/sev-guest.c
+>> @@ -60,16 +60,6 @@ static inline unsigned int get_ctx_authsize(struct snp_guest_dev *snp_dev)
+>>       return 0;
+>>   }
+>>   -static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
+>> -{
+>> -    char zero_key[VMPCK_KEY_LEN] = {0};
+>> -
+>> -    if (snp_dev->vmpck)
+>> -        return !memcmp(snp_dev->vmpck, zero_key, VMPCK_KEY_LEN);
+>> -
+>> -    return true;
+>> -}
+>> -
+> 
+> This change seems separate from the changes for snp_guest_req.
 
-Thanks. Yeah, it does seem to miss that completely.
+Sure, will create a separate patch.
 
-Needs some massaging, but does something like this clarify it's purpose?
+> 
+>>   /*
+>>    * If an error is received from the host or AMD Secure Processor (ASP) there
+>>    * are two options. Either retry the exact same encrypted request or discontinue
+>> @@ -198,8 +188,9 @@ static int verify_and_dec_payload(struct snp_guest_dev *snp_dev, void *payload,
+>>       struct snp_guest_msg_hdr *resp_hdr = &resp->hdr;
+>>       struct aesgcm_ctx *ctx = snp_dev->ctx;
+>>   -    dev_dbg(snp_dev->dev, "response [seqno %lld type %d version %d sz %d]\n",
+>> -        resp_hdr->msg_seqno, resp_hdr->msg_type, resp_hdr->msg_version, resp_hdr->msg_sz);
+>> +    pr_debug("response [seqno %lld type %d version %d sz %d]\n",
+>> +         resp_hdr->msg_seqno, resp_hdr->msg_type, resp_hdr->msg_version,
+>> +         resp_hdr->msg_sz);
+> 
+> Again, not related to the purpose of this patch.
 
-On kernels with PREEMPTION_NONE/_VOLUNTARY, rescheduling of kernel
-tasks happens when they allow it -- for instance by synchronously
-calling cond_resched() in a long running task.
+The idea was to get rid of dev_dbg for the movement, will do in a separate patch.
 
-There are cases where it is not convenient to periodically call
-cond_resched() -- for instance when executing a potentially
-long running instruction (such as REP STOSB on x86).
+> 
+>>         /* Verify that the sequence counter is incremented by 1 */
+>>       if (unlikely(resp_hdr->msg_seqno != (req_hdr->msg_seqno + 1)))
+>> @@ -221,34 +212,34 @@ static int verify_and_dec_payload(struct snp_guest_dev *snp_dev, void *payload,
+>>       return dec_payload(ctx, resp, payload, resp_hdr->msg_sz);
+>>   }
+>>   -static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno, int version, u8 type,
+>> -            void *payload, size_t sz)
+>> +static int enc_payload(struct snp_guest_dev *snp_dev, u64 seqno,
+>> +               struct snp_guest_req *req, u8 __vmpck_id)
+> 
+> Can the vmpck_id be part of the snp_guest_req structure?
 
-To handle kernel code sections which can be safely preempted, but
-cannot explicitly call cond_resched(), allow them to mark themselves
-TIF_ALLOW_RESCHED.
+Sure, that should be possible.
 
-Contexts marked such (via allow_resched()) can be rescheduled in the
-irqexit path. This is, of course only needed with
-!preempt_model_preemptible() and the rescheduling logic is functionally
-same as irqentry_exit_code_resched().
+> 
+>>   {
+>> -    struct snp_guest_msg *req = snp_dev->request;
+>> -    struct snp_guest_msg_hdr *hdr = &req->hdr;
+>> +    struct snp_guest_msg *msg = snp_dev->request;
+>> +    struct snp_guest_msg_hdr *hdr = &msg->hdr;
+>>   -    memset(req, 0, sizeof(*req));
+>> +    memset(msg, 0, sizeof(*msg));
+>>         hdr->algo = SNP_AEAD_AES_256_GCM;
+>>       hdr->hdr_version = MSG_HDR_VER;
+>>       hdr->hdr_sz = sizeof(*hdr);
+>> -    hdr->msg_type = type;
+>> -    hdr->msg_version = version;
+>> +    hdr->msg_type = req->msg_type;
+>> +    hdr->msg_version = req->msg_version;
+>>       hdr->msg_seqno = seqno;
+>> -    hdr->msg_vmpck = vmpck_id;
+>> -    hdr->msg_sz = sz;
+>> +    hdr->msg_vmpck = __vmpck_id;
+>> +    hdr->msg_sz = req->req_sz;
+>>         /* Verify the sequence number is non-zero */
+>>       if (!hdr->msg_seqno)
+>>           return -ENOSR;
+>>   -    dev_dbg(snp_dev->dev, "request [seqno %lld type %d version %d sz %d]\n",
+>> +    pr_debug("request [seqno %lld type %d version %d sz %d]\n",
+> 
+> Unrelated change.
 
---
-ankur
+Will move to a separate patch.
+
+> 
+>>           hdr->msg_seqno, hdr->msg_type, hdr->msg_version, hdr->msg_sz);
+>>   -    return __enc_payload(snp_dev->ctx, req, payload, sz);
+>> +    return __enc_payload(snp_dev->ctx, msg, req->req_buf, req->req_sz);
+>>   }
+>>   -static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, __u64 *fw_err)
+>> +static int __handle_guest_request(struct snp_guest_dev *snp_dev, struct snp_guest_req *req)
+>>   {
+>>       unsigned long err = 0xff, override_err = 0;
+>>       unsigned long req_start = jiffies;
+>> @@ -262,7 +253,7 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
+>>        * sequence number must be incremented or the VMPCK must be deleted to
+>>        * prevent reuse of the IV.
+>>        */
+>> -    rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
+>> +    rc = snp_issue_guest_request(req->exit_code, &snp_dev->input, &err);
+>>       switch (rc) {
+>>       case -ENOSPC:
+>>           /*
+>> @@ -273,7 +264,7 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
+>>            * IV reuse.
+>>            */
+>>           override_npages = snp_dev->input.data_npages;
+>> -        exit_code    = SVM_VMGEXIT_GUEST_REQUEST;
+>> +        req->exit_code    = SVM_VMGEXIT_GUEST_REQUEST;
+>>             /*
+>>            * Override the error to inform callers the given extended
+>> @@ -314,8 +305,8 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
+>>        */
+>>       snp_inc_msg_seqno(snp_dev);
+>>   -    if (fw_err)
+>> -        *fw_err = override_err ?: err;
+>> +    if (req->fw_err)
+>> +        *req->fw_err = override_err ?: err;
+>>         if (override_npages)
+>>           snp_dev->input.data_npages = override_npages;
+>> @@ -332,13 +323,14 @@ static int __handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code,
+>>       return rc;
+>>   }
+>>   -static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, int msg_ver,
+>> -                u8 type, void *req_buf, size_t req_sz, void *resp_buf,
+>> -                u32 resp_sz, __u64 *fw_err)
+>> +static int snp_send_guest_request(struct snp_guest_dev *snp_dev, struct snp_guest_req *req)
+>>   {
+>>       u64 seqno;
+>>       int rc;
+>>   +    if (!snp_dev || !req)
+>> +        return -ENODEV;
+> 
+> This seems unrelated, at least the check for snp_dev. And looking at the only caller, a guest request is always provided. So this seems unnecessary - at least at this point in the series.
+
+Right, not necessary here, but will be needed when sev-guest driver calls this after the movement to sev.c. Otherwise, I will need to add this in the movement patch 5/11.
+
+> 
+>> +
+>>       /* Get message sequence and verify that its a non-zero */
+>>       seqno = snp_get_msg_seqno(snp_dev);
+>>       if (!seqno)
+>> @@ -347,21 +339,22 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+>>       memset(snp_dev->response, 0, sizeof(struct snp_guest_msg));
+>>         /* Encrypt the userspace provided payload */
+>> -    rc = enc_payload(snp_dev, seqno, msg_ver, type, req_buf, req_sz);
+>> +    rc = enc_payload(snp_dev, seqno, req, vmpck_id);
+>>       if (rc)
+>>           return rc;
+>>   -    rc = __handle_guest_request(snp_dev, exit_code, fw_err);
+>> +    rc = __handle_guest_request(snp_dev, req);
+>>       if (rc) {
+>> -        if (rc == -EIO && *fw_err == SNP_GUEST_REQ_INVALID_LEN)
+>> +        if (rc == -EIO && *req->fw_err == SNP_GUEST_REQ_INVALID_LEN)
+>>               return rc;
+>>   -        dev_alert(snp_dev->dev, "Detected error from ASP request. rc: %d, fw_err: %llu\n", rc, *fw_err);
+>> +        dev_alert(snp_dev->dev, "Detected error from ASP request. rc: %d, fw_err: %llu\n",
+>> +              rc, *req->fw_err);
+>>           snp_disable_vmpck(snp_dev);
+>>           return rc;
+>>       }
+>>   -    rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
+>> +    rc = verify_and_dec_payload(snp_dev, req->resp_buf, req->resp_sz);
+> 
+> Can't you just pass req here?
+
+Yes, can do that.
+
+> 
+>>       if (rc) {
+>>           dev_alert(snp_dev->dev, "Detected unexpected decode failure from ASP. rc: %d\n", rc);
+>>           snp_disable_vmpck(snp_dev);
+>> @@ -371,6 +364,24 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
+>>       return 0;
+>>   }
+>>   +
+>> +static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, u8 msg_version,
+>> +                u8 msg_type, void *req_buf, size_t req_sz, void *resp_buf,
+>> +                u32 resp_sz, __u64 *fw_err)
+>> +{
+>> +    struct snp_guest_req guest_req = {
+>> +        .msg_version = msg_version,
+>> +        .msg_type = msg_type,
+>> +        .req_buf = req_buf,
+>> +        .req_sz = req_sz,
+>> +        .resp_buf = resp_buf,
+>> +        .resp_sz = resp_sz,
+>> +        .fw_err = fw_err,
+>> +        .exit_code = exit_code,
+>> +    };
+> 
+> Add a blank line here.
+
+Sure.
+
+Regards
+Nikunj
+
