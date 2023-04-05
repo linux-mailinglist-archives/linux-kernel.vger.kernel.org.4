@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E356D7344
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18EDE6D7347
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236967AbjDEEQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 00:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        id S236692AbjDEER1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 00:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236952AbjDEEPu (ORCPT
+        with ESMTP id S229478AbjDEERO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 00:15:50 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F696588;
-        Tue,  4 Apr 2023 21:13:58 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso3184236pjf.0;
-        Tue, 04 Apr 2023 21:13:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680668038;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g+eDgVmaMNqTGd/qimf7inW6PM2Odulp3OAAIGSep28=;
-        b=iNrh8MwpZTJp1/VsSUuhHD+RWSZIhffT6gnBL4keUujDn73PLiWdZVcqoHqe/CUT/Q
-         jUfSwd63M2+sJxGA9h92ZbVUubUN/0TDw35v3a66VhYAUZPB7p5ZImgHeP9ap1quYSTY
-         7qUKmyUhjxCEIxetgg7OxZkE9YuFUjp9lQToDJlOdfvnvj6CdzDbTjmDw6vCwaUolZOG
-         Hfy8jyorhQRmUgxkTWHoEPfsxf2YxwB/BpA4b6KGlCJk3FxSGxcIWuEUYLERuSVC6xtX
-         S1ehtHMD2EabPwFGrFRyjWbpdytFU2tzvbL9zuwm7GenTGV41Htdxe+NJux5TYw32foo
-         xuFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680668038;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g+eDgVmaMNqTGd/qimf7inW6PM2Odulp3OAAIGSep28=;
-        b=hxO/I52yG0KIXnJ2KqZe70mV1n5Tw0TpRZJEQwYAQG+b++llUrqJUJCxx5n7o9nxNv
-         dO1kRTjmiRizb6qVq3apWS6zoo7E5L0MXH9cXd64zH8X7mRfOlAHgadSGC9KtwWqSrEi
-         WvZJJDopc+WBri0Nb1bpLYIE/LkTKOp9QCYELgsj8gKKmBAKZafdOQeyOl6C8WV8iP9W
-         vshOnJaFWjdcPJ8WXQW8Od8tNCmCCmnecRZdcRQKtXMTBuCCYV+xANZ4NokmolORvFs/
-         LEPv7xZEqTUNWAh0CMDYeIeyGmYecWNsGLncyeeLbnuQ7AXFRR3WXQfimY7ny3plad7a
-         lEEQ==
-X-Gm-Message-State: AAQBX9dNM9I9ZqYsHyC3KGgFrYGMkUXcL5j6ojlP5T5Dg9miB5JGBTOK
-        8IYaIsK131ZojwBPDN1QUk4=
-X-Google-Smtp-Source: AKy350aa0WqEYXIb7klDnyPc0BJYiDHt2ptboBEKE+V8VXGw8wdHA/4o0VizGL/mUTbK4owxRMvojA==
-X-Received: by 2002:a05:6a20:4b1d:b0:db:6d42:118b with SMTP id fp29-20020a056a204b1d00b000db6d42118bmr1513649pzb.0.1680668037817;
-        Tue, 04 Apr 2023 21:13:57 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-25.three.co.id. [180.214.232.25])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa79196000000b005ac419804d5sm9752051pfa.98.2023.04.04.21.13.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 21:13:57 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id CF32B1067AD; Wed,  5 Apr 2023 11:13:53 +0700 (WIB)
-Date:   Wed, 5 Apr 2023 11:13:53 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/179] 6.1.23-rc2 review
-Message-ID: <ZCz1gTqDN2/ffy5E@debian.me>
-References: <20230404183150.381314754@linuxfoundation.org>
+        Wed, 5 Apr 2023 00:17:14 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2784EFF;
+        Tue,  4 Apr 2023 21:16:22 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3354GAWU025714;
+        Tue, 4 Apr 2023 23:16:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680668170;
+        bh=83jjpNGOMOIIiqNKc0ZogJ9UGHRqAmuLnriIBn5Y8Ro=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=fmkxfVRTddYJFjA8db84DHNQgs3fH/GB5RY6nUlIBDReB1pVy64eMtW2CusjWLTQ4
+         Z9wPV6Zvy3w9SIjXtHhS94YzdxqZtu6alKlC8fU+PqBGx2F/nwMHsaoxD1Fuv0cN24
+         yGGk5Xb8lZrfNeHE63WTitbfAGzNcjbUnwNzX4Q4=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3354GAXh030420
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 4 Apr 2023 23:16:10 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
+ Apr 2023 23:16:10 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 4 Apr 2023 23:16:10 -0500
+Received: from [10.24.69.26] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3354G7AG056029;
+        Tue, 4 Apr 2023 23:16:08 -0500
+Message-ID: <4b189f02-27b3-d885-aaf2-98eb2077d479@ti.com>
+Date:   Wed, 5 Apr 2023 09:46:07 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4IS1w0E7de1Z9A85"
-Content-Disposition: inline
-In-Reply-To: <20230404183150.381314754@linuxfoundation.org>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] cpufreq: amd-pstate: set varaiable mode_state_machine
+ storage-class-specifier to static
+Content-Language: en-US
+To:     Tom Rix <trix@redhat.com>, <ray.huang@amd.com>,
+        <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230404003337.1912901-1-trix@redhat.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230404003337.1912901-1-trix@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,35 +68,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---4IS1w0E7de1Z9A85
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 04, 2023 at 08:32:15PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.23 release.
-> There are 179 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+On 04/04/23 06:03, Tom Rix wrote:
+> smatch reports
+> drivers/cpufreq/amd-pstate.c:907:25: warning: symbol
+>    'mode_state_machine' was not declared. Should it be static?
+> 
+> This variable is only used in one file so it should be static.
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+You might want to use the Fixes: commit ("")
+tag? It will help people to pick the patch while
+back-porting fixes to older kernels.'
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+For example:
+https://lore.kernel.org/all/20230403072443.83810-2-d-gole@ti.com/
 
---=20
-An old man doll... just what I always wanted! - Clara
+Fixes: 0651a730924b ("gpio: davinci: Add support for system 
+suspend/resume PM")
 
---4IS1w0E7de1Z9A85
-Content-Type: application/pgp-signature; name="signature.asc"
+Otherwise,
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZCz1eQAKCRD2uYlJVVFO
-o69uAQCpbQD9fVGkO3TpA4q6Gx0Z7bzIoYtj5AbQ7vW3/U1EhQD8CNhpANnWuz7p
-CPowXnqXRENGZN1w/ZYe0vydh9IYpgw=
-=k1b5
------END PGP SIGNATURE-----
+>   drivers/cpufreq/amd-pstate.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 6f4b8040d46c..5a3d4aa0f45a 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -904,7 +904,7 @@ static int amd_pstate_change_driver_mode(int mode)
+>   	return 0;
+>   }
+>   
+> -cppc_mode_transition_fn mode_state_machine[AMD_PSTATE_MAX][AMD_PSTATE_MAX] = {
+> +static cppc_mode_transition_fn mode_state_machine[AMD_PSTATE_MAX][AMD_PSTATE_MAX] = {
+>   	[AMD_PSTATE_DISABLE]         = {
+>   		[AMD_PSTATE_DISABLE]     = NULL,
+>   		[AMD_PSTATE_PASSIVE]     = amd_pstate_register_driver,
 
---4IS1w0E7de1Z9A85--
+-- 
+Thanks and Regards,
+Dhruva Gole
