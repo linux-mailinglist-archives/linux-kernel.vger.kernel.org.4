@@ -2,132 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C022D6D8B00
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 145EE6D8B05
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjDEXOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53494 "EHLO
+        id S233331AbjDEXR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 19:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjDEXOg (ORCPT
+        with ESMTP id S231906AbjDEXRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:14:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E02F46B7;
-        Wed,  5 Apr 2023 16:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680736475; x=1712272475;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FKhsDwBgWocxbDBm71IX9YxYgh4XGnM3GUQYRhxeNgQ=;
-  b=aH44hVKWcHMGqpaDDNa35ciWwmCvPRrv4RFYby3nVCcBMjRWuDBW6dXH
-   nCY23xzlvqJRSXBqoRt17caMdlc6wXL2BGa75VZNyY7QlMJm/e0hCl/N5
-   moit6dOkft1G4Ve1sVU3RLc1cO2REfBj8MC9iMbdnrsjbKwH/aexI4ztC
-   9lPU2SdhQyp4CM926Fa2rNMOF4rdK4imPN77iwTi+Q8CYzzmXe0odW2wx
-   5hDUKO0lDDyobVPByPXlIFao9lqFd7Z6NBQOvWsyQbK1codTxIeCWmIPF
-   WwbKu46i0gX5+hWKcIH+Xebl9MUcrYOHOD4RT2eCmtNHUoMfyvgODf6Y8
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="341318982"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="341318982"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 16:14:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="798099746"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="798099746"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Apr 2023 16:14:30 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkCKj-000QtT-0M;
-        Wed, 05 Apr 2023 23:14:29 +0000
-Date:   Thu, 6 Apr 2023 07:14:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: Re: [PATCH v6 2/8] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <202304060712.gqBA4oqQ-lkp@intel.com>
-References: <20230405125759.4201-3-quic_kriskura@quicinc.com>
+        Wed, 5 Apr 2023 19:17:25 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF606A45
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:17:24 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id kq3so35842748plb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 16:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680736644; x=1683328644;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PDzgTcPpeDzPZmNkPQBXcTLrsDlwbvUKWbaA0gDoJUI=;
+        b=FA/i5tIsA2TyBUZl/mohObwLBcCEWph5/toLXCLH/HMFb4nOmn2/ptwjytnLFDVU+b
+         sZkbdyF2aClqiI3rgyqkCVnm8fPFhkzlMVbbsuIlYWVeYr5d6LKdM2pmiiYNqsjitVI2
+         MBXITOhFwfz/IJ6Idq87lmdJk7L2ZgEVE4o6CA0820G/ZBznbBKibQk6Ja3Wfc+DvHsy
+         Hk/OzEmyKBapnFLpBC60jZFv9WZs/jgoRSw2EveGlp0UluJBZStUGW07QJ1G+GrtZXVO
+         ff/RTZoA3z5eSkMSack2kynYDuFcV03lF4mqowCe9FRVuzE0Puq62xpztpf9T0pM075L
+         7YFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680736644; x=1683328644;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDzgTcPpeDzPZmNkPQBXcTLrsDlwbvUKWbaA0gDoJUI=;
+        b=HPwkbyVFQSsGHL0cOAdL4hBkMLhxgCQSED8ehjoctgcNO7tznF3LiwPgf0MhFjiGBX
+         X1DeyMGo0LDh8gv8qQ/Y3TYvr4NDVpnSNx1EHPKNaBiOWixpPEWRfs+XLZV8dupNH+7o
+         6XFEwjzvvjrx4dU/CBEowG+sl3LBDcSrpmjXfIfYMZx//YNKE/Lqmg9sSr+DTV4sHk3p
+         9dNt3juGE90zQlf8gO4ve+Ca6fy8YucZUIVrKqvClcrt5uBuZqrK8tq9iIcEVRn3Yh20
+         ANDneIWFFxJLpj0Z9nQL/wveaJ/lLTPy1V/X9LGXx5rHW4eIZUJBmrrFq2Qg8AZ2OpVh
+         Z6Jw==
+X-Gm-Message-State: AAQBX9fwAOmhUsCPtgSks69EdQKMD+kVHqEkhhkZtq2iBunEM+rnLKx6
+        POCj2eRVuVtOCaItoyVwrFs=
+X-Google-Smtp-Source: AKy350ZZ3PAoIxgkCqj/uzJqfDtq+TiJc0UUUejDnRB0U97K/u3fpiCAOoJu2oY3ROKMuxwohPnfcg==
+X-Received: by 2002:a17:90b:224f:b0:23c:ffbf:859e with SMTP id hk15-20020a17090b224f00b0023cffbf859emr8417356pjb.35.1680736643704;
+        Wed, 05 Apr 2023 16:17:23 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id c12-20020a17090ab28c00b002340d317f3esm1872087pjr.52.2023.04.05.16.17.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 16:17:23 -0700 (PDT)
+Message-ID: <9c9ca17a-7211-633d-7072-44992ab6852e@gmail.com>
+Date:   Thu, 6 Apr 2023 08:17:19 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405125759.4201-3-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation fixes
+To:     Bumwoo Lee <bw365.lee@samsung.com>,
+        'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     'MyungJoo Ham' <myungjoo.ham@samsung.com>,
+        'Chanwoo Choi' <cw00.choi@samsung.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+ <CGME20230330101146epcas1p2240da3a618b18cea96735bbd6fe3f322@epcas1p2.samsung.com>
+ <ZCVgWX2t1fpGzZX9@smile.fi.intel.com>
+ <010e01d9636a$8f23edc0$ad6bc940$@samsung.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Content-Language: en-US
+In-Reply-To: <010e01d9636a$8f23edc0$ad6bc940$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krishna,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On 23. 3. 31. 09:48, Bumwoo Lee wrote:
+> Hi Andy Shevchenko
+>> -----Original Message-----
+>> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Sent: Thursday, March 30, 2023 7:12 PM
+>> To: Bumwoo Lee <bw365.lee@samsung.com>; linux-kernel@vger.kernel.org
+>> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>; Chanwoo Choi
+>> <cw00.choi@samsung.com>
+>> Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation
+>> fixes
+>>
+>> On Wed, Mar 22, 2023 at 04:39:51PM +0200, Andy Shevchenko wrote:
+>>> A few fixes to the documentation and some cleanups against extcon core
+>>> module.
+>>
+>> Anything I should do with the series?
+>> Any comments on it?
+>>
+>> --
+>> With Best Regards,
+>> Andy Shevchenko
+>>
+> 
+> Looks fine to me.
+> 
+> Acked-by: Bumwoo Lee <bw365.lee@samsung.com>
+> 
+> MR. Chanwoo, Would you please take a look at this patch series.
+> 
 
-[auto build test WARNING on usb/usb-linus]
-[also build test WARNING on robh/for-next linus/master v6.3-rc5 next-20230405]
-[cannot apply to usb/usb-testing usb/usb-next pza/reset/next pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Actually, Acked tag will be replied by Maintainer or the driver owner.
+If you want to review the mailing list patch, I think that Reviewed-by tag is proper.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/dt-bindings-usb-Add-bindings-for-multiport-properties-on-DWC3-controller/20230405-210221
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-patch link:    https://lore.kernel.org/r/20230405125759.4201-3-quic_kriskura%40quicinc.com
-patch subject: [PATCH v6 2/8] usb: dwc3: core: Access XHCI address space temporarily to read port info
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/a0de434ac81429422ecdf84fe968bd8c3f73445b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Krishna-Kurapati/dt-bindings-usb-Add-bindings-for-multiport-properties-on-DWC3-controller/20230405-210221
-        git checkout a0de434ac81429422ecdf84fe968bd8c3f73445b
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
+Unfortunately, I could not see the any review comment from you even if this patchset
+have the some review contents. Also you didn't review the any patches of extcon before.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304060712.gqBA4oqQ-lkp@intel.com/
+I'm always welcome for many reviewers in order to improve the linux kernel.
+But, in this case, I'm not sure that you are reviewing this patchset.
 
-All warnings (new ones prefixed by >>):
-
->> ./drivers/usb/dwc3/core.h:1666: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-
-vim +1666 ./drivers/usb/dwc3/core.h
-
-  1664	
-  1665	/**
-> 1666	 * Find the offset of the extended capabilities with capability ID id.
-  1667	 *
-  1668	 * @base	PCI MMIO registers base address.
-  1669	 * @start	address at which to start looking, (0 or HCC_PARAMS to start at
-  1670	 *		beginning of list)
-  1671	 * @id		Extended capability ID to search for, or 0 for the next
-  1672	 *		capability
-  1673	 *
-  1674	 * Returns the offset of the next matching extended capability structure.
-  1675	 * Some capabilities can occur several times, e.g., the XHCI_EXT_CAPS_PROTOCOL,
-  1676	 * and this provides a way to find them all.
-  1677	 */
-  1678	
+So that I'm sorry that I cannot take your acked-tag. 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
