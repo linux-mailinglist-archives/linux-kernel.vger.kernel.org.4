@@ -2,207 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9866D7A36
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C636D7A38
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237849AbjDEKrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S237855AbjDEKrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237740AbjDEKrI (ORCPT
+        with ESMTP id S237427AbjDEKrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:47:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2011249F9;
-        Wed,  5 Apr 2023 03:47:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD08D63C57;
-        Wed,  5 Apr 2023 10:47:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55A2C433EF;
-        Wed,  5 Apr 2023 10:46:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680691623;
-        bh=q4mbSRyaECqXZBaI2chRUC8g7fKSua/OlQr5LOzU8Lc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NYk7GArMLcHuZT6LglhcwfKswPjiUhvpykd6UfUcigFlmjTxk81cdWTM8meuG87OK
-         auDr+rMup6Gh3bPqxaK+PCnitUXnEcraBkw66jONfxwMxKRcJ0aR9cXwA0je2NqU2a
-         SuaAOx/GkY80DSvwBckR1cf/XsDftwTEfg7AN0H7peYfBa1gba7rbOJrs6tgMXDXKm
-         XQ8oLmDqeHfK/qTHu9W+FGatJMx9o8YWlmPrCEP5+hb9JJQI1gRSJ+nqGxZxfBVt+4
-         TebyxdRgWJ3of8pZKvTeVOoEeLzzAf8umVcViGN092/imnB2nDAMnXOUUYGrgP7fXR
-         olLMJGuWAKHZg==
-Date:   Wed, 5 Apr 2023 12:46:54 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        helgaas@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        mmaddireddy@nvidia.com, kw@linux.com, bhelgaas@google.com,
-        vidyas@nvidia.com, sanjayc@nvidia.com, ksitaraman@nvidia.com,
-        ishah@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v5 7/8] PCI: tegra194: add interconnect support in
- Tegra234
-Message-ID: <ZC1Rnrb0MObR5S42@lpieralisi>
-References: <20230330133354.714-1-sumitg@nvidia.com>
- <20230330133354.714-8-sumitg@nvidia.com>
+        Wed, 5 Apr 2023 06:47:19 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4625254;
+        Wed,  5 Apr 2023 03:47:14 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A6EDD604F0;
+        Wed,  5 Apr 2023 12:47:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680691632; bh=hl//JDs8oq/nFxtyl7Fq4HFZ8Dr8YwBH1A6IHePegpc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=StbPfXMQOa28PhM8mfR0ME6qhsOvy8QMZRN7TuL7mUskbgoDvFKcmZHg6GGg8qgkR
+         dNqMyIjsKNSZPBhMxbJvzBpEbYMlu0Uykqmh52DgZOBkWokwlSWsp/BpCWk+FZrbHH
+         +97so/zBN8tKSxMvSfNGO0vfe44cixjfL1phmw9BCpSaLGw/6mM9hgDXSO7R7n+qBy
+         bHpjU2JyGscV4qMFiH5PSUVZNlDewCpMRF+HJdvsctDDlLwDdWgVcq+TVQ2BdufYYY
+         I3eYGzbWROuLoV5oGxuVi+dS976YaWCbAAZ07anzsvjTUlNd/dPc4jmaMY71yN4rST
+         oc7mofrpMtKTg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0qOeGV9IwPxq; Wed,  5 Apr 2023 12:47:09 +0200 (CEST)
+Received: from [10.0.1.5] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id CAF59604EF;
+        Wed,  5 Apr 2023 12:47:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680691629; bh=hl//JDs8oq/nFxtyl7Fq4HFZ8Dr8YwBH1A6IHePegpc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=BD3o07zr31fwFUHKIAj09rN8O2tBI1duCjOmrbyBmT5qBHsLQhFwF0QFKirt/WMKf
+         85F2c9dfPAkSqvgySttS171CXy6jIRia/Eeiy6PfxvI1FL7GShrfrueXGm9Vwy1hlB
+         CUtBTwel/SzyxrNfr5Ra5UkdHPEMIT1G7X/V+CDewFf401P41ffca4N71od1tvzGrc
+         0dAYzeOTXg7n2ObapyRY53npaC78kz/D8p/e5U19iQR/TTRjJq0CnPfh4GHppWZyr4
+         t9wbeys/K8HgNsrsZWsKG3jC0R1D0BQS7e7OQgsyYJVVJJKkz2mDn/cxzMwj0X9MMe
+         bYVGs7ILjfjxw==
+Message-ID: <f871aa71-9c2e-6a31-151c-2e4cae70a0b2@alu.unizg.hr>
+Date:   Wed, 5 Apr 2023 12:47:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330133354.714-8-sumitg@nvidia.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] tracing: Free error logs of tracing instances
+Content-Language: en-US, hr
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Eric Biggers <ebiggers@kernel.org>
+References: <20230404194504.5790b95f@gandalf.local.home>
+ <5d6332fc-a64a-5e1a-33e0-a7f1e31b2f90@alu.unizg.hr>
+In-Reply-To: <5d6332fc-a64a-5e1a-33e0-a7f1e31b2f90@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-You should still capitalize the subject.
-
-"PCI: tegra194: Add interconnect.."
-
-On Thu, Mar 30, 2023 at 07:03:53PM +0530, Sumit Gupta wrote:
-> Add support to request DRAM bandwidth with Memory Interconnect
-> in Tegra234 SoC. The DRAM BW required for different modes depends
-> on speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
+On 5.4.2023. 5:57, Mirsad Goran Todorovac wrote:
+> On 05. 04. 2023. 01:45, Steven Rostedt wrote:
+>> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>>
+>> When a tracing instance is removed, the error messages that hold errors
+>> that occurred in the instance needs to be freed. The following reports a
+>> memory leak:
+>>
+>>   # cd /sys/kernel/tracing
+>>   # mkdir instances/foo
+>>   # echo 'hist:keys=x' > instances/foo/events/sched/sched_switch/trigger
+>>   # cat instances/foo/error_log
+>>   [  117.404795] hist:sched:sched_switch: error: Couldn't find field
+>>     Command: hist:keys=x
+>>                        ^
+>>   # rmdir instances/foo
+>>
+>> Then check for memory leaks:
+>>
+>>   # echo scan > /sys/kernel/debug/kmemleak
+>>   # cat /sys/kernel/debug/kmemleak
+>> unreferenced object 0xffff88810d8ec700 (size 192):
+>>    comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
+>>    hex dump (first 32 bytes):
+>>      60 dd 68 61 81 88 ff ff 60 dd 68 61 81 88 ff ff  `.ha....`.ha....
+>>      a0 30 8c 83 ff ff ff ff 26 00 0a 00 00 00 00 00  .0......&.......
+>>    backtrace:
+>>      [<00000000dae26536>] kmalloc_trace+0x2a/0xa0
+>>      [<00000000b2938940>] tracing_log_err+0x277/0x2e0
+>>      [<000000004a0e1b07>] parse_atom+0x966/0xb40
+>>      [<0000000023b24337>] parse_expr+0x5f3/0xdb0
+>>      [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
+>>      [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
+>>      [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
+>>      [<000000002cadc509>] vfs_write+0x162/0x670
+>>      [<0000000059c3b9be>] ksys_write+0xca/0x170
+>>      [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
+>>      [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>> unreferenced object 0xffff888170c35a00 (size 32):
+>>    comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
+>>    hex dump (first 32 bytes):
+>>      0a 20 20 43 6f 6d 6d 61 6e 64 3a 20 68 69 73 74  .  Command: hist
+>>      3a 6b 65 79 73 3d 78 0a 00 00 00 00 00 00 00 00  :keys=x.........
+>>    backtrace:
+>>      [<000000006a747de5>] __kmalloc+0x4d/0x160
+>>      [<000000000039df5f>] tracing_log_err+0x29b/0x2e0
+>>      [<000000004a0e1b07>] parse_atom+0x966/0xb40
+>>      [<0000000023b24337>] parse_expr+0x5f3/0xdb0
+>>      [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
+>>      [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
+>>      [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
+>>      [<000000002cadc509>] vfs_write+0x162/0x670
+>>      [<0000000059c3b9be>] ksys_write+0xca/0x170
+>>      [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
+>>      [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
+>>
+>> The problem is that the error log needs to be freed when the instance is
+>> removed.
+>>
+>> Link: https://lore.kernel.org/lkml/76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr/
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 2f754e771b1a6 ("tracing: Have the error logs show up in the proper instances")
+>> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>> ---
+>>   kernel/trace/trace.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+>> index 8ae51f1dea8e..352a804b016d 100644
+>> --- a/kernel/trace/trace.c
+>> +++ b/kernel/trace/trace.c
+>> @@ -9516,6 +9516,7 @@ static int __remove_instance(struct trace_array *tr)
+>>   	tracefs_remove(tr->dir);
+>>   	free_percpu(tr->last_func_repeats);
+>>   	free_trace_buffers(tr);
+>> +	clear_tracing_err_log(tr);
+>>   
+>>   	for (i = 0; i < tr->nr_topts; i++) {
+>>   		kfree(tr->topts[i].topts);
 > 
-> Suggested-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
-
-You should add a Link to the relevant lore archive, I am
-pretty sure Bjorn chimed in too.
-
-This patch does too many things at once; more importantly it
-does *not* explain why we request memory bandwidth and why it
-is required and *safe* given that the current code works so far.
-
-So:
-
-patch 1: fix the array overflow issues with the current code
-patch 2: add memory bandwidth interconnect support
-
-Thanks,
-Lorenzo
-
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/pci/controller/dwc/pcie-tegra194.c | 44 ++++++++++++++++++----
->  1 file changed, 36 insertions(+), 8 deletions(-)
+> Hello,
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
-> index 09825b4a075e..89d829a946ee 100644
-> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
-> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
-> @@ -14,6 +14,7 @@
->  #include <linux/delay.h>
->  #include <linux/gpio.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/interconnect.h>
->  #include <linux/interrupt.h>
->  #include <linux/iopoll.h>
->  #include <linux/kernel.h>
-> @@ -223,6 +224,7 @@
->  #define EP_STATE_ENABLED	1
->  
->  static const unsigned int pcie_gen_freq[] = {
-> +	GEN1_CORE_CLK_FREQ,   /* PCI_EXP_LNKSTA_CLS == 0; undefined */
->  	GEN1_CORE_CLK_FREQ,
->  	GEN2_CORE_CLK_FREQ,
->  	GEN3_CORE_CLK_FREQ,
-> @@ -287,6 +289,7 @@ struct tegra_pcie_dw {
->  	unsigned int pex_rst_irq;
->  	int ep_state;
->  	long link_status;
-> +	struct icc_path *icc_path;
->  };
->  
->  static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
-> @@ -309,6 +312,27 @@ struct tegra_pcie_soc {
->  	enum dw_pcie_device_mode mode;
->  };
->  
-> +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
-> +{
-> +	struct dw_pcie *pci = &pcie->pci;
-> +	u32 val, speed, width;
-> +
-> +	val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
-> +
-> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
-> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
-> +
-> +	val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
-> +
-> +	if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
-> +		dev_err(pcie->dev, "can't set bw[%u]\n", val);
-> +
-> +	if (speed >= ARRAY_SIZE(pcie_gen_freq))
-> +		speed = 0;
-> +
-> +	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
-> +}
-> +
->  static void apply_bad_link_workaround(struct dw_pcie_rp *pp)
->  {
->  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> @@ -452,14 +476,12 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
->  	struct tegra_pcie_dw *pcie = arg;
->  	struct dw_pcie_ep *ep = &pcie->pci.ep;
->  	struct dw_pcie *pci = &pcie->pci;
-> -	u32 val, speed;
-> +	u32 val;
->  
->  	if (test_and_clear_bit(0, &pcie->link_status))
->  		dw_pcie_ep_linkup(ep);
->  
-> -	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
-> -		PCI_EXP_LNKSTA_CLS;
-> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
-> +	tegra_pcie_icc_set(pcie);
->  
->  	if (pcie->of_data->has_ltr_req_fix)
->  		return IRQ_HANDLED;
-> @@ -945,9 +967,9 @@ static int tegra_pcie_dw_host_init(struct dw_pcie_rp *pp)
->  
->  static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
->  {
-> -	u32 val, offset, speed, tmp;
->  	struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
->  	struct dw_pcie_rp *pp = &pci->pp;
-> +	u32 val, offset, tmp;
->  	bool retry = true;
->  
->  	if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
-> @@ -1018,9 +1040,7 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
->  		goto retry_link;
->  	}
->  
-> -	speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
-> -		PCI_EXP_LNKSTA_CLS;
-> -	clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
-> +	tegra_pcie_icc_set(pcie);
->  
->  	tegra_pcie_enable_interrupts(pp);
->  
-> @@ -2224,6 +2244,14 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, pcie);
->  
-> +	pcie->icc_path = devm_of_icc_get(&pdev->dev, "write");
-> +	ret = PTR_ERR_OR_ZERO(pcie->icc_path);
-> +	if (ret) {
-> +		tegra_bpmp_put(pcie->bpmp);
-> +		dev_err_probe(&pdev->dev, ret, "failed to get write interconnect\n");
-> +		return ret;
-> +	}
-> +
->  	switch (pcie->of_data->mode) {
->  	case DW_PCIE_RC_TYPE:
->  		ret = devm_request_irq(dev, pp->irq, tegra_pcie_rp_irq_handler,
-> -- 
-> 2.17.1
+> Apparently, this fixed the issue (leak) with the same config, kernel commit and
+> HW.
 > 
+> Please add
+> 
+> Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+> 
+> at your convenience.
+> 
+> The bisect was obviously misleading, but not intentionally. This is the first time
+> my bisect was wrong (out of five or six), so I will thoroughly investigate the fault,
+> for - needless to say - quality binary search bisect is essential to hunt down bug.
+I found the culprit.
+
+I have naively classified build 6.1.0-ftrace-06910-g90b12f423d3c as "good",
+giving me a false negative.
+
+It turned out that it takes at least two attempts on
+
+# echo scan > /sys/kernel/debug/kmemleak
+
+to display the "ftracetest" leak in the
+
+# cat /sys/kernel/debug/kmemleak
+
+output. First try again showed no leaks. The log shows "looks good". I don't
+remember what I did on Jan/26th, but it was obviously not good enough.
+
+Mea culpa.
+
+The leak is present already in the v5.9.0, which is earliest which I can boot
+with the default kmod v30+20220630-3ubuntu1 and default ZSTD kernel compression.
+
+If it mattered, I could proceed bisect on the other device (we'd get Fixes:
+line, but the bug is already patched).
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
