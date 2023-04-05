@@ -2,102 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DE56D786A
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E9E6D786D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237755AbjDEJcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S237349AbjDEJdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237792AbjDEJc1 (ORCPT
+        with ESMTP id S237812AbjDEJcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:32:27 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5921C55B4
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:31:52 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-545e529206eso288932787b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680687098;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/f7k2pCQfyKc9i/c1APoOdFbnqMktgzwaYI9MvzI7I=;
-        b=ekKxX2C34tJMVaSXEvswV0dn6KXZYLxQfRnib0ncGtIcCdhLZO6fp2nRbolxeyWGzA
-         AYVX07eNPDMYwUsG3dP9BPeP2e5BeikACMPWKsdDgc9PBzoPPBBUTk13ZhX6F2+JKfY6
-         0OD8NNIJRYP47IGm3P76WE55/EhcYUESreY4vB7hWrB4RXU2uyx6p/zbGqbRv9IrZT1o
-         3SX29/CnmHD0LUzKLULvlZPEIAsp9DmlVdWIbFIOTDAi41BBAkSO3R3dHc62ZaimoKx5
-         DMZ56/BJN9X5Vfs7MNZwyOpTZ1qU4u2jyV1QMMmjqflFOkckrT5g9iMG32sRJt8BUZ1F
-         xtPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680687098;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/f7k2pCQfyKc9i/c1APoOdFbnqMktgzwaYI9MvzI7I=;
-        b=QHQf76OAF36DlMKQCRvfJeL8NY8fwBRPoHCdnddZWJMhvFHt/q9zJw6SKwxOYph3vK
-         fA/qY4lGv7wOqiUUCyKZq+iKHXx633hU+8+QTrqNPMX+h5Q6dxnzU9HqMdVO+/QfJuhc
-         wA3HK4LJtUfQQyGTTfGr4qSWNfSTEVNMAkSPcEy3xGBd8DTu0vremisLG9kQoDWW6evg
-         VLg+YeTMZpjc3D/e7bcV+2YQ8j0O9fzQlnxABqHftKwol1HnYBWoJ0k1LPFB1QCVICqI
-         9tPVuMAVsqC5oOt9qoScwPQYSPZAg0nnm3zKCFAdK/peWpxK2M/xX8C1RUq9guXijgnw
-         9hHw==
-X-Gm-Message-State: AAQBX9fD9lNsXFDkfTiZMhrSbSld4acUeAcTWcNQceEYVydjI7blTHK/
-        TfiGuZMAD/X04AmmCxFTE4jsNVTDPrQ=
-X-Google-Smtp-Source: AKy350aKsyRuBxaFkts/Dkw/YAKF8fPlfRHIbx10T2+rN8xaLh+uXq86LvxxLKF39pNGTOckwR/zSyrRIDs=
-X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a81:ad04:0:b0:544:5aa0:e212 with SMTP id
- l4-20020a81ad04000000b005445aa0e212mr3163443ywh.6.1680687097844; Wed, 05 Apr
- 2023 02:31:37 -0700 (PDT)
-Date:   Wed,  5 Apr 2023 09:31:33 +0000
-In-Reply-To: <20230405093133.1858140-1-badhri@google.com>
-Mime-Version: 1.0
-References: <20230405093133.1858140-1-badhri@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230405093133.1858140-2-badhri@google.com>
-Subject: [PATCH v1 2/2] usb: gadget: udc: core: Prevent redundant calls to pullup
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 5 Apr 2023 05:32:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03A36582;
+        Wed,  5 Apr 2023 02:31:58 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E64EC66031AA;
+        Wed,  5 Apr 2023 10:31:42 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680687103;
+        bh=IjuIU51gMW8XlICzxXyr4QkGEAFe1hN1h63Bv5o1B0c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KHey3j7LPMg8VocJKU9Q1MyxKI/W6U2D7gUC0OE8uJxqRFErk2f+iB3oz39dEqsyo
+         xDGR+tTHrdWXOD61d6G/HjZC4nl+gi3WcjmVqU8bGUD1SBhTtT6QJpWjWQixesVBkZ
+         JR6N9x5NZE3ST+cPKwuZXUxYIxlLw6zOMAFvIMcy2vR+470DZgYJsou+aiNMuVQhRV
+         HLGzORmIh9+FOf3PlD4t1y8Q2LQoQtNlqSl1HDkb60FuwVYV/USuqlpf8eglQd/rEB
+         c7fMluUSrFZW5iDHVbfJhYOVVc13M1/Xs0t0sdSr+61BKGthWRub6uF3dlZ2ewITPx
+         zxZSlZ1gcZhZg==
+Message-ID: <a244d54e-c5b7-2305-3662-ad434ec50856@collabora.com>
+Date:   Wed, 5 Apr 2023 11:31:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/3] dt-bindings: pinctrl: mediatek: deprecate custom
+ drive strength property
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230327-cleanup-pinctrl-binding-v3-0-6f56d5c7a8de@baylibre.com>
+ <20230327-cleanup-pinctrl-binding-v3-1-6f56d5c7a8de@baylibre.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230327-cleanup-pinctrl-binding-v3-1-6f56d5c7a8de@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-usb_gadget_connect calls gadget->ops->pullup without
-checking whether gadget->connected was previously set.
-Make this symmetric to usb_gadget_disconnect by returning
-early if gadget->connected is already set.
+Il 04/04/23 18:29, Alexandre Mergnat ha scritto:
+> Deprecate mediatek,drive-strength-adv which shall not exist, that was an
+> unnecessary property that leaked upstream from downstream kernels and
+> there's no reason to use it.
+> 
+> The generic property drive-strength-microamp should be used instead.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Cc: stable@vger.kernel.org
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-Fixes: 5a1da544e572 ("usb: gadget: core: do not try to disconnect gadget if it is not connected")
----
- drivers/usb/gadget/udc/core.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 890f92cb6344..7eeaf7dbb350 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -708,6 +708,9 @@ int usb_gadget_connect(struct usb_gadget *gadget)
- 		goto out;
- 	}
- 
-+	if (gadget->connected)
-+		goto out;
-+
- 	if (gadget->deactivated) {
- 		/*
- 		 * If gadget is deactivated we only save new state.
--- 
-2.40.0.348.gf938b09366-goog
 
