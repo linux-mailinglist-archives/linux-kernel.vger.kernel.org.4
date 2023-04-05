@@ -2,66 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E076D7DCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949A96D7E93
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237308AbjDENek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S237965AbjDEOE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237259AbjDENei (ORCPT
+        with ESMTP id S238239AbjDEODy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:34:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390524ECD;
-        Wed,  5 Apr 2023 06:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680701677; x=1712237677;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WTaTpeinTLP9YiOHzm0EGWTxzWO7nFA7QVsXFAsmTRw=;
-  b=ViE9e8lb/f4YFn8BLBIAPWwrvr3c1t158UnxgKgGXqumi/DmvhXiGA8B
-   RYN/Ow593rrjMCr0Ttno7t4A1kwy5SRC7mqa3IiLU0Bf+ON174hS0EB71
-   Eo0PqpJEdLj+wF4MO3CGckSghZYf9Vvhs+DsEP7u8rH2SBCUjaYdStL2M
-   CI9KQFMZGPIJqFpeRbkNgiAUD7fK+H2hDRieWbXG4EoG5UWeXNfH4f6LX
-   LcMFIB7Si7khvdX8UFOpFKJ6BLucqkL15rVVtYVvImAokLLZvhxXJC021
-   I0mgf8CEqAdj0E9GoMcrEx8gFxp9bjAxhdf+YMk860ueNlQ/SYArxJOJU
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="345032966"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="345032966"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 06:34:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="776056257"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="776056257"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2023 06:34:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pk3HU-00Cqst-0F;
-        Wed, 05 Apr 2023 16:34:32 +0300
-Date:   Wed, 5 Apr 2023 16:34:31 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 0/3] lib/string_helpers et al.: Change return value of
- strreplace()
-Message-ID: <ZC1454AwRUNFTbIW@smile.fi.intel.com>
-References: <20230323123704.37983-1-andriy.shevchenko@linux.intel.com>
+        Wed, 5 Apr 2023 10:03:54 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE0E6587;
+        Wed,  5 Apr 2023 07:01:51 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 85bf5c05fd45d395; Wed, 5 Apr 2023 16:01:26 +0200
+Received: from kreacher.localnet (unknown [213.134.163.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id A41471B4EA6F;
+        Wed,  5 Apr 2023 16:01:25 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>
+Subject: [PATCH 03/32] ACPICA: Add missing macro ACPI_FUNCTION_TRACE() for acpi_ns_repair_HID()
+Date:   Wed, 05 Apr 2023 15:34:51 +0200
+Message-ID: <2903188.e9J7NaK4W3@kreacher>
+In-Reply-To: <4845957.31r3eYUQgx@kreacher>
+References: <4845957.31r3eYUQgx@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230323123704.37983-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.219
+X-CLIENT-HOSTNAME: 213.134.163.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +49,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 02:37:01PM +0200, Andy Shevchenko wrote:
-> It's more convenient to have strreplace() to return the pointer to
->  the string itself. This will help users to make their code better.
-> 
-> The patch 1 kills the only user of the returned value of strreplace(),
-> Patch 2 converts the return value of strreplace(). And patch 3 shows
-> how it may be useful. That said, the series can be routed via fs tree,
-> with or without the last patch.
+From: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 
-Since there are no comments, who can apply this (patches 1 and 2)?
-Greg, are you fine with the kobject change?
+ACPICA commit 2d85f3d30cdf9ceeb516e76bdc3c5c5d1d9b9fea
 
-> In v2:
-> - removed not anymore used variable (LKP)
-> - added tag (Jan)
-> - fixed wording (Kees)
-> - actually return the pointer to the string itself
-> 
-> Andy Shevchenko (3):
->   jbd2: Avoid printing outside the boundary of the buffer
->   lib/string_helpers: Change returned value of the strreplace()
->   kobject: Use return value of strreplace()
-> 
->  fs/jbd2/journal.c      |  6 ++----
->  include/linux/string.h |  2 +-
->  lib/kobject.c          |  3 +--
->  lib/string_helpers.c   | 12 ++++++++----
->  4 files changed, 12 insertions(+), 11 deletions(-)
+The following commit add function tracing macros for the namespace repiar
+mechanism.
 
+  commit 87b8dba05b4cf8c111948327023c710e2b6b5a05
+  Add function trace macros to improve namespace debugging
+
+But it missed the trace macro for the entry of ns_repair_HID(). Let's add
+it.
+
+Link: https://github.com/acpica/acpica/commit/2d85f3d3
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/acpi/acpica/nsrepair2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/acpica/nsrepair2.c b/drivers/acpi/acpica/nsrepair2.c
+index dd533c887e3a..957d7eb4861f 100644
+--- a/drivers/acpi/acpica/nsrepair2.c
++++ b/drivers/acpi/acpica/nsrepair2.c
+@@ -499,7 +499,7 @@ acpi_ns_repair_HID(struct acpi_evaluate_info *info,
+ 	char *source;
+ 	char *dest;
+ 
+-	ACPI_FUNCTION_NAME(ns_repair_HID);
++	ACPI_FUNCTION_TRACE(ns_repair_HID);
+ 
+ 	/* We only care about string _HID objects (not integers) */
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.35.3
+
+
 
 
