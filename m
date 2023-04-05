@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572A16D7BCF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88486D7BD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbjDELpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S237989AbjDELpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237804AbjDELpG (ORCPT
+        with ESMTP id S237995AbjDELp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:45:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96BC4480
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 04:44:40 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-246-6ghQMl58PVCD9K9Rjt0DSg-1; Wed, 05 Apr 2023 12:43:49 +0100
-X-MC-Unique: 6ghQMl58PVCD9K9Rjt0DSg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 5 Apr
- 2023 12:43:47 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Wed, 5 Apr 2023 12:43:47 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'chi wu' <wuchi.zero@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     "tytso@mit.edu" <tytso@mit.edu>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "ojaswin@linux.ibm.com" <ojaswin@linux.ibm.com>,
-        "ritesh.list@gmail.com" <ritesh.list@gmail.com>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] ext4: simplify 32bit calculation of lblk
-Thread-Topic: [PATCH] ext4: simplify 32bit calculation of lblk
-Thread-Index: AQHZZ5teJkhs7xpdHUusWw1uRGHlOq8ckyfA
-Date:   Wed, 5 Apr 2023 11:43:47 +0000
-Message-ID: <d04ead6617314074b297c10458010d6b@AcuMS.aculab.com>
-References: <20230403135304.19858-1-wuchi.zero@gmail.com>
- <ZC0J6I1pYNZBB30y@infradead.org>
- <CA+tQmHA_3_Oc-0AQ0a29DTwU4mkEqhOiAE6gXa4Ly4gZGpn5Vw@mail.gmail.com>
-In-Reply-To: <CA+tQmHA_3_Oc-0AQ0a29DTwU4mkEqhOiAE6gXa4Ly4gZGpn5Vw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 5 Apr 2023 07:45:27 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE735B83
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 04:45:04 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id t10so140166944edd.12
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 04:45:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680695102;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HdOj0OMeU7Kbl8/Cm9oHj9tDRqlIG6IbeRXc2cStlMw=;
+        b=NKmDsnNLZ3F0old3NSU1c7NOt0hVPF2Toy47D2sRrnopr1pKfLLPb2ypDdJq0GJ1Uf
+         +wsAVy5NM8X52W2XPFzfZ7Mc9rq/Yu5El40Qyb7zix+r6/h+eFsUEXxT6YpfUjaWsG5s
+         qbtQljxsxQiF++LKdxKl7Pk+k6eIyirMeQCPqExOMOXA9yMVdIl+JctOH7vl/fDpp7uj
+         zCkTVrotcsdMN18M50p1Kl0Rqc015RQAfUgPf5uHOTIwZ8AZ6YqK8O2Z3JJPP2cdLrkw
+         feuBEeM+KR5u8z8FN/+iJ1jUZquOE3frD42EPmgTLFtml7aVpcHrEp/2V+xWH8AlQjzn
+         gp/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680695102;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdOj0OMeU7Kbl8/Cm9oHj9tDRqlIG6IbeRXc2cStlMw=;
+        b=pImCrVc3+m2WalikQP0uKBzYVo1cvkog+BLLxhx83ANNJcpYUaLjWq/qinIrGx0WqX
+         3oNhoO/cO/j6VvZUqQ+D/sO0PO07HdzmAjigXKWmWmDns31LUtqFEO3+ed3v6AZLiZe4
+         r0TWcD5O347wqkgklBqLT2z7DUMha4upuUwpOencTMzr+h/PKDB3u6lPgGBzOMa2aSnw
+         DfR0kJytHgu23MuIh9O/tEPb1CE8wvfJBKPQGtIXBh0GHLzLremCgcNA616N0htqTv9F
+         wPnCKwlg/KIOqxpA6snQDKfY6NVXrnw41HXiMTqtLAwQbfTIN5iY+UqUUiGCRD0kV2Kd
+         SO1w==
+X-Gm-Message-State: AAQBX9c+8cgFsgzaHxDLOxlGq3BImtbNxj4Yvj0CB9BNlOzHsCnFHdch
+        329VDb/DtSgcJ46QU+lJEmtpWg==
+X-Google-Smtp-Source: AKy350bRu+tmVuaScuqf8Ece0qNIue1RIxkN5PZaZQ2LzbqpKMd50l/+nnydW76AKtuw9oEKpqZB4A==
+X-Received: by 2002:a17:906:85ca:b0:933:dfca:1716 with SMTP id i10-20020a17090685ca00b00933dfca1716mr2736541ejy.26.1680695102703;
+        Wed, 05 Apr 2023 04:45:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
+        by smtp.gmail.com with ESMTPSA id um4-20020a170906cf8400b00928e0ea53e5sm7239617ejb.84.2023.04.05.04.45.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 04:45:02 -0700 (PDT)
+Message-ID: <8fc3dd22-79df-32cb-c219-896eda8fa986@linaro.org>
+Date:   Wed, 5 Apr 2023 13:45:01 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 10/10] memory: mtk-smi: mt8365: Add SMI Support
 Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230207-iommu-support-v2-0-60d5fa00e4e5@baylibre.com>
+ <20230207-iommu-support-v2-10-60d5fa00e4e5@baylibre.com>
+ <9847bc48-c96c-3599-e876-bcf9ebf1522e@linaro.org>
+ <CAFGrd9pBdaHLGUZHkaz2_XKafyX=dxu9UckQxrphg52EG=A1SQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAFGrd9pBdaHLGUZHkaz2_XKafyX=dxu9UckQxrphg52EG=A1SQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,22 +83,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogY2hpIHd1DQo+IFNlbnQ6IDA1IEFwcmlsIDIwMjMgMDk6NDgNCj4gDQo+IENocmlzdG9w
-aCBIZWxsd2lnIDxoY2hAaW5mcmFkZWFkLm9yZz4g5LqOMjAyM+W5tDTmnIg15pel5ZGo5LiJIDEz
-OjQw5YaZ6YGT77yaDQo+ID4NCj4gPiBPbiBNb24sIEFwciAwMywgMjAyMyBhdCAwOTo1MzowNFBN
-ICswODAwLCB3dWNoaSB3cm90ZToNCj4gPiA+IC0gICAgICAgICAgICAgICAgICAgICBpZiAoYmxv
-Y2sgPiBleHRfYmxvY2spDQo+ID4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZXR1
-cm4gZXh0X3BibGsgKyAoYmxvY2sgLSBleHRfYmxvY2spOw0KPiA+ID4gLSAgICAgICAgICAgICAg
-ICAgICAgIGVsc2UNCj4gPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiBl
-eHRfcGJsayAtIChleHRfYmxvY2sgLSBibG9jayk7DQo+ID4gPiArICAgICAgICAgICAgICAgICAg
-ICAgcmV0dXJuIGV4dF9wYmxrICsgKChzaWduZWQgbG9uZyBsb25nKWJsb2NrIC0gKHNpZ25lZCBs
-b25nIGxvbmcpZXh0X2Jsb2NrKTsNCj4gPg0KPiA+IEFuZCB3aGF0IGV4YWN0bHkgaXMgdGhlIHZh
-bHVlIGFkZCBoZXJlLCBleGNlcHQgZm9yIHR1cm5pbmcgYW4gZWFzeQ0KPiA+IHRvIHBhcnNlIHN0
-YXRlbWVudCBpbnRvIGEgY29tcGxleCBleHByZXNzaW9uIHVzaW5nIGNhc3RzPw0KPiA+DQo+IFll
-c++8jGl0IHdpbGwgYmUgbW9yZSBjb21wbGV4LiB0aGUgb3JpZ2luYWwgaW50ZW50aW9uIGlzIHRv
-IHJlZHVjZSB0aGUNCj4gY29uZGl0aW9uYWwgYnJhbmNoLg0KDQpXaGF0IGlzIHdyb25nIHdpdGgg
-anVzdDoNCglyZXR1cm4gZXh0X3BibGsgKyBibG9jayAtIGV4dF9ibG9jazsNCig2NGJpdCArIDMy
-Yml0IC0gMzJiaXQpDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUs
-IEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJl
-Z2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On 05/04/2023 11:53, Alexandre Mergnat wrote:
+> Ok, I will move the driver patch before the DTS patches in the next version.
+> 
+
+Or do not send it together at all, which might solve your dependency
+problem. According to your cover letter I cannot take the memory
+controller bits, so I am waiting for dependencies to hit the mainline.
+Alternatively I will need pull request with stable tag.
+
+Best regards,
+Krzysztof
 
