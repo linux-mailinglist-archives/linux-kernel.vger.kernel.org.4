@@ -2,107 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A75C6D8322
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7797D6D8345
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbjDEQLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
+        id S229907AbjDEQNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjDEQKy (ORCPT
+        with ESMTP id S234091AbjDEQM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:10:54 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6098659C;
-        Wed,  5 Apr 2023 09:10:49 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-248-212-122.ewe-ip-backbone.de [91.248.212.122])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C41F56603101;
-        Wed,  5 Apr 2023 17:10:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680711047;
-        bh=O0OERdh8YQllL/WUi4nWvlzY8+V5Fv1hvisy2ugrnhI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WbxXH31kvJ+rymvSpUIGGj1exJoQutsqaeLZcu701DEv+NQ7wP4UW7nVEyD04xuFp
-         NkypRVHronXrDyCFhgdNiXm90w7sdnmP01aDBPD4iRtRPG9ZvfM8w6SNzcwyv93Oxc
-         3rbxyPq2DJz9qIDdV5sx4fanYq5qk9mUw2nlZOjoGSlaI+gGUF9kniOpQPLnTfJY4h
-         Ze/4h+X8VQR0EpEugKxeUzD7F7+2NTVRFUELRksEIvcrB6dYM90r4D2A4lbK3Tj6Tj
-         MaG1hwYcQ6q+dDf2TGsN0eLMEfZB34PlL4Brk6VMlUYWhGmoLqsXdKt68lNLWORwPg
-         gvBQ8c+gnGdeg==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 4482B4807E3; Wed,  5 Apr 2023 18:10:45 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCHv2 2/2] net: ethernet: stmmac: dwmac-rk: fix optional phy regulator handling
-Date:   Wed,  5 Apr 2023 18:10:43 +0200
-Message-Id: <20230405161043.46190-3-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230405161043.46190-1-sebastian.reichel@collabora.com>
-References: <20230405161043.46190-1-sebastian.reichel@collabora.com>
+        Wed, 5 Apr 2023 12:12:57 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D83F7AB2;
+        Wed,  5 Apr 2023 09:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680711148; x=1712247148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kY6FYRMMLrAPbGBkMo9Na+eZcMkaq3QXvRDWH/QYHCg=;
+  b=aVlxFBkdAORWAaS0M/Y1B0D5Bolmh7oIwo6aYZHn5PxeC3ZyVU32ru1P
+   taVAKbugtxg+00dBpAQhATOv0vMxLIjRb3Ej+tokRgh4tjh9dq+Htb6W9
+   LdUvrlEpI89Q5Qr3NleDBCr18rrcfGGDJ5qIAdN8Gt8vfr52WESv1V6AC
+   f3h3j1jaUySffKnv/VkJWUomYHc2BbhnmDeuuwv+IX4gxZHt2KFdjwWLE
+   9m/0lR31cr1PX2Bs4pXpmAMnWvN/dFBAttxme487FzwwcB9MPerF2lvzj
+   elk8gT3TXtWmOPorNsY+6QengeuN3mOXyqV0UmWxjjZ1ANk2bbDLd6ixd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="331100655"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="331100655"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 09:11:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="1016526158"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="1016526158"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 05 Apr 2023 09:11:18 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pk5jA-00CuLV-2x;
+        Wed, 05 Apr 2023 19:11:16 +0300
+Date:   Wed, 5 Apr 2023 19:11:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, techsupport@winsystems.com,
+        pdemetrotion@winsystems.com, quarium@gmail.com,
+        jhentges@accesio.com, jay.dolan@accesio.com
+Subject: Re: [PATCH v6 0/3] Migrate the PCIe-IDIO-24 and WS16C48 GPIO drivers
+ to the regmap API
+Message-ID: <ZC2dpCtxa/dlIcov@smile.fi.intel.com>
+References: <cover.1680708357.git.william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680708357.git.william.gray@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The usual devm_regulator_get() call already handles "optional"
-regulators by returning a valid dummy and printing a warning
-that the dummy regulator should be described properly. This
-code open coded the same behaviour, but masked any errors that
-are not -EPROBE_DEFER and is quite noisy.
+On Wed, Apr 05, 2023 at 11:45:41AM -0400, William Breathitt Gray wrote:
+> Changes in v6:
+>  - Wrap lines to 80 characters rather than 100 for set_type_config()
+>  - Remove regmap_config max_register lines as superfluous
+>  - Enable use_raw_spinlock to prevent deadlocks when running -rt kernels
+>  - Check regmap_update_bit() ret value before goto exit_unlock
+>  - Rename exit_early label to the more descriptive exit_unlock
+>  - Add sparse annotations for lock acquire/release in
+>    ws16c48_handle_pre_irq() and ws16c48_handle_post_irq()
+>  - Explicitly add 0 to WS16C48_ENAB in ws16c48_irq_init_hw() for sake of
+>    symmetry to match the other WS16C48_ENAB operations 
+> Changes in v5:
+>  - Refactor for map parameter removal from handle_mask_sync()
+>  - Cleanups and line wrappings to 100 characters rather than 80
+>  - Adjust to change mutex/spinlock_t type locks to raw_spin_lock_t type
+>  - Remove pex8311_intcsr table configurations as superfluous
+>  - Adjust to set pex8311_intcsr_regmap_config reg_base to
+>    PLX_PEX8311_PCI_LCS_INTCSR
+>  - Rename PAGE_FIELD_PAGE_* defines to POL_PAGE, ENAB_PAGE, and
+>    INT_ID_PAGE
+> Changes in v4:
+>  - Allocate idio24gpio before using it in idio_24_probe()
+> Changes in v3:
+>  - Drop map from set_type_config() parameter list; regmap can be passed
+>    by irq_drv_data instead
+>  - Adjust idio_24_set_type_config() for parameter list
+>  - Add mutex to prevent clobbering the COS_ENABLE register when masking
+>    IRQ and setting their type configuration
+> Changes in v2:
+>  - Simplify PCIe-IDIO-24 register offset defines to remove superfluous
+>    arithmetic
+>  - Check for NULL pointer after chip->irq_drv_data allocation
+>  - Set gpio_regmap drvdata and use gpio_regmap_get_drvdata() to get the
+>    regmap in idio_24_reg_map_xlate()
+> 
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
+> 
+> A patch to pass irq_drv_data as a parameter for struct regmap_irq_chip
+> set_type_config() is included. This is needed by the
+> idio_24_set_type_config() and ws16c48_set_type_config() callbacks in
+> order to update the type configuration on their respective devices.
+> 
+> This patchset depends on the "Drop map from handle_mask_sync()
+> parameters" patchset [0].
+> 
+> [0] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.org/
 
-This change effectively unmasks and propagates regulators errors
-not involving -ENODEV, downgrades the error print to warning level
-if no regulator is specified and captures the probe defer message
-for /sys/kernel/debug/devices_deferred.
+Looks good to me now.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Fixes: 2e12f536635f8 ("net: stmmac: dwmac-rk: Use standard devicetree property for phy regulator")
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+It might be that regmap locks are unnecessary, but as far as I understood
+dropping them would require more intrusion into the regmap APIs along with
+GPIO regmap implementation.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-index 6fdad0f10d6f..d9deba110d4b 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-@@ -1656,14 +1656,11 @@ static struct rk_priv_data *rk_gmac_setup(struct platform_device *pdev,
- 		}
- 	}
- 
--	bsp_priv->regulator = devm_regulator_get_optional(dev, "phy");
-+	bsp_priv->regulator = devm_regulator_get(dev, "phy");
- 	if (IS_ERR(bsp_priv->regulator)) {
--		if (PTR_ERR(bsp_priv->regulator) == -EPROBE_DEFER) {
--			dev_err(dev, "phy regulator is not available yet, deferred probing\n");
--			return ERR_PTR(-EPROBE_DEFER);
--		}
--		dev_err(dev, "no regulator found\n");
--		bsp_priv->regulator = NULL;
-+		ret = PTR_ERR(bsp_priv->regulator);
-+		dev_err_probe(dev, ret, "failed to get phy regulator\n");
-+		return ERR_PTR(ret);
- 	}
- 
- 	ret = of_property_read_string(dev->of_node, "clock_in_out", &strings);
+> William Breathitt Gray (3):
+>   regmap: Pass irq_drv_data as a parameter for set_type_config()
+>   gpio: pcie-idio-24: Migrate to the regmap API
+>   gpio: ws16c48: Migrate to the regmap API
+> 
+>  drivers/base/regmap/regmap-irq.c |   8 +-
+>  drivers/gpio/Kconfig             |   6 +
+>  drivers/gpio/gpio-pcie-idio-24.c | 677 +++++++++++--------------------
+>  drivers/gpio/gpio-ws16c48.c      | 552 +++++++++----------------
+>  include/linux/regmap.h           |   6 +-
+>  5 files changed, 447 insertions(+), 802 deletions(-)
+> 
+> 
+> base-commit: 7b59bdbc3965ca8add53e084af394c13a2be22a8
+> prerequisite-patch-id: cd19046150b7cff1be4ac7152198777aa960a3df
+> prerequisite-patch-id: bd3e3830d9ce4f3876a77483364d7190b7fdffa7
+> -- 
+> 2.39.2
+> 
+
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
