@@ -2,98 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A5C6D83FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3D16D8400
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbjDEQqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S233445AbjDEQqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbjDEQqg (ORCPT
+        with ESMTP id S233132AbjDEQqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:46:36 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972B535B1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:46:33 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7589c3519bfso1094439f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 09:46:33 -0700 (PDT)
+        Wed, 5 Apr 2023 12:46:39 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC5910FA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:46:37 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id x8so26528980qvr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 09:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680713193; x=1683305193;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XzDRh3J+8SvEaXn0A+6OwXdLsL1cECKaJ2d44EZkMv8=;
-        b=cvI9QcotuV/WktpPWLiG9q4P4hb+fv6+L6fSPKWafHE+/Rha1cywCFPBTcxcs7VOfF
-         N2ouY2O52fIxorXrYcHLYhkSGr5sQ1qOJw8wE+22T7X5px1V2h0oDQtykbM00fv+er7Y
-         ciNCEt6vEUY3Ost7gBNPDhWIpDUWZrJ2f7UQ7gmXcxcDWUzSvUWcTaAn4zEZf7xmmHQ5
-         JuyZih1ualPwJ4GOudcl4LRQ/+nICcjsA1Ne1W9BLHY1ePAq4HJQMeWlv1hV5wlFfj9j
-         9HONukPaW9BEyzUlrOr7RjHnP0crt4tssSxH+GSgSZEv3keTR95daTnBl1Zq72l143Gf
-         cA+A==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1680713196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sa+9pa12UmUjhKyTqLxLSiMluret+wii+CF3J0jK7jk=;
+        b=4CVIGLIvD5XLJwF7kKQi4Qu6xgohTeysQzKJaqg+Qf0R/8y2SUap5kOBzjK5w5wPpt
+         vsDsY067e9TF/TgevFFX8iGdqvhWcJzoHFq6E/E8beiP4K9Xj6or6ITogC5sF5cf3SkV
+         qZ98XMUc6G6iyPcqAmmWcM/9wwax8Zt0oCRemV0vFQuWjGlRBzjU8iAgoFCaPPQbxPLY
+         iKzCnLoy9U6n/lMwemanEkiEYoHqEfztlEAR3WJyBhGdZQBKbAEXPQ+8k1vw5qseoeV1
+         dx2w3/F/InpnnEHDOZVYQHDmfXJm2Yt9k6fMZ+4Rq7fMSniAJQZihIq86vwRCkj0NTsO
+         +oyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680713193; x=1683305193;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XzDRh3J+8SvEaXn0A+6OwXdLsL1cECKaJ2d44EZkMv8=;
-        b=B8mysg5nFb578ZPkO2l5NPqVJzhDve9STxQ+5fJTpw8ns0ujKQncvPI+01M5xrA/NC
-         NIMNJuJD+E5SrLEMQgmDBHa6oA/235CX9mnPl7Hbl6zyj1KVJsBH2Ee67o/scxsNgyi5
-         YxbRITkNKnCpLs2WRFWfEaxBsgTlST7hesbgEAJyQD0GAqSR8ZIDRY/icvkOydGxsPQA
-         PGRqP4BWv5S0NY+09LbgeoEAUDMMnOQ4xfJ8bB1E07OE6yBFIV5rh6RU2EeaQGDJigsj
-         TMtt82P2hJcJ/LIr96NQ+zs6qPHzJSaCVXT230vNm85v0c5p11Ai7yTN38TUofjYzTeb
-         h6Yg==
-X-Gm-Message-State: AAQBX9dN+39EBCNzP1z6OHYGkAEUmem3PMm9IRvd5c0gG2kY2Lj4fM3f
-        xVfYg9E+fb09r5SFsWwS2YcQyhCQldno0YT4WiSt1A==
-X-Google-Smtp-Source: AKy350Zpwf9mFVQTQK0zdVakkitvp5e+RlJjveBB+ifhwqXu+VbfbTE1RvfDJdPOPfDc5Uo0oYEAHQ==
-X-Received: by 2002:a92:7d04:0:b0:313:fb1b:2f86 with SMTP id y4-20020a927d04000000b00313fb1b2f86mr1403917ilc.0.1680713192956;
-        Wed, 05 Apr 2023 09:46:32 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 19-20020a921813000000b00326ca02f30dsm800189ily.65.2023.04.05.09.46.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 09:46:32 -0700 (PDT)
-Message-ID: <aae10acf-7567-48e9-37b5-12db6a69719e@kernel.dk>
-Date:   Wed, 5 Apr 2023 10:46:31 -0600
+        d=1e100.net; s=20210112; t=1680713196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sa+9pa12UmUjhKyTqLxLSiMluret+wii+CF3J0jK7jk=;
+        b=XyXU7PA3zL3VsgHwTH9mFKf6DD5Y3pIwKKjNrhk6rdwexVReVbsihWRbMafAVaQJtQ
+         3Xb02BHavOokjVcdv9b+ZTLi8Jv1Dle5i/qWXbySvZx7AdS5Oc8ZhuNaJQwK6ZIL4w1S
+         tfUwz6EPFt1PzdkX7l0Tf5XmRuxmLQYn53ZDRa2DTfMQlVkOcUiI9Lx2rFVAeHtH6djJ
+         F/N4ZOZUE1HE6AT4MJEDxjaoJv1jxuLnBY5VT5hQRiyYqoX0tEhFu7agVHCKSZwcB9vY
+         zPkhQQK28u4F9YOhJZT+4bA745JyPn0pzco41IZC8UU3dywIMwwO+6nQF6MOsLJyHZt1
+         CGgg==
+X-Gm-Message-State: AAQBX9ehlGVyat9Urt4Q7Zgx4bbmfJg5R+6eqqJ3NGWASno4V8pZivHE
+        4Kotrr/V1179D3KjC8cPi7YlyQ==
+X-Google-Smtp-Source: AKy350YmvjsKpbOEHLeFrppOJKubNmyQWY5AKJDzEHzgeBB88DMvvWgZC2aUv7q2CJGsyBk/VUkpCg==
+X-Received: by 2002:a05:6214:2aa3:b0:572:636d:626a with SMTP id js3-20020a0562142aa300b00572636d626amr3546423qvb.25.1680713196626;
+        Wed, 05 Apr 2023 09:46:36 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id q7-20020a37f707000000b0074a05d4c61esm4528147qkj.60.2023.04.05.09.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 09:46:36 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 12:46:35 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/psi: set varaiable psi_cgroups_enabled
+ storage-class-specifier to static
+Message-ID: <20230405164635.GA31303@cmpxchg.org>
+References: <20230405163602.1939400-1-trix@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: kernel BUG in find_lock_entries
-Content-Language: en-US
-To:     "Dae R. Jeong" <threeearcat@gmail.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <ZC1S_f9nworAQpm_@dragonet>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZC1S_f9nworAQpm_@dragonet>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405163602.1939400-1-trix@redhat.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/23 4:52 AM, Dae R. Jeong wrote:
-> Hi,
+On Wed, Apr 05, 2023 at 12:36:02PM -0400, Tom Rix wrote:
+> smatch reports
+> kernel/sched/psi.c:143:1: warning: symbol
+>   'psi_cgroups_enabled' was not declared. Should it be static?
 > 
-> We observed an issue "kernel BUG in find_lock_entries". This was
-> observed a few months ago.
+> This variable is only used in one file so should be static.
 > 
-> Unfortunately, we have not found a reproducer for the crash yet. We
-> will inform you if we have any update on this crash.
-> 
-> Detailed crash information is attached below.
-> 
-> Best regards,
-> Dae R. Jeong
-> 
-> -----
-> - Kernel version:
-> 6.0-rc7
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-This is pretty old. Does it trigger on a current kernel?
-
--- 
-Jens Axboe
-
-
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
