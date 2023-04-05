@@ -2,199 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3D86D7B6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1E86D7B76
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbjDELfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S237912AbjDELgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjDELfl (ORCPT
+        with ESMTP id S237871AbjDELf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:35:41 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C651BD7
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 04:35:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680694540; x=1712230540;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=z4M+lGF3PxW5jIEFmkFI2Pz3GGvuMaU0PB9nsRWm/Lw=;
-  b=Hwcs9KWlyi8Y93C/nzd+FGEtcdQeEevE3hRgWNanU/7O7h/iJbDS1KnT
-   XbBpFb9k+u26nvsb2atOAoqht9L3RW7VlEsXIEiEqlZT3QIoh06V5HZ5s
-   sQwwzMamvkVekCUfFlSHLR6KC5CKCtch1JFf5Y7Bjh7rUGPGbVvZBHAtH
-   hkfuOdtRbugcej2XKKTL7RayOKoCfqFstkfSQuwfwr/fGdwNf0xKDYGDo
-   CRjlZVaSUrgLHBORYoHHgUzPhOcFf5vZyRXj3jB3ahHmMLK0E55ITrYRr
-   nHDVEjiF/jaEFFpclDiQ1sSSmm2/wa38AJVwBXuvSaUyxgyH8UppyWn+L
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="370257021"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="370257021"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 04:35:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="860943315"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="860943315"
-Received: from aslawinx-mobl.ger.corp.intel.com (HELO [10.99.16.144]) ([10.99.16.144])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 04:35:36 -0700
-Message-ID: <030c2cbf-dec3-91fb-ac82-949cf5764b78@linux.intel.com>
-Date:   Wed, 5 Apr 2023 13:35:34 +0200
+        Wed, 5 Apr 2023 07:35:58 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887F41BD7;
+        Wed,  5 Apr 2023 04:35:55 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id e18so35855315wra.9;
+        Wed, 05 Apr 2023 04:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680694553;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FlvKXsC33Y3r1CipsD3fypO8/mtd2VSfqMY0AAuYEJU=;
+        b=lORbIDSoT/048s2YK0Ooqaq76pp9nO16IgSl7E0zcw4519qRfB2EB9bS33CYOOkI5J
+         pfTaClxlRxqDfVRYTx2Z+UgdqAZLwhJB9A5pB14jcytveOARMJzLG5xpjgyCQ8NG+8lz
+         ev3K604YpC9YuL/r728Z1Y9hLVtLsaw+N/7x4L7nFGT0fiuzIfjnVXthx/T5amkZgCq0
+         pEEuVse58fqlV2CyoHyzTOON/kzCpp1NDkIarzhDQElXYaKK062+3PuMCp88nlhfHLQh
+         IU1Fh5+UUIInU8suruQpN1cboZlK59YnMqsD0tiYx/ZtqdSFCdDLQzmdD790LguYejUB
+         v8aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680694553;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlvKXsC33Y3r1CipsD3fypO8/mtd2VSfqMY0AAuYEJU=;
+        b=l1p4Nal/G3l4CLnqG2AoBkxX1vYXVfPVa2Dxx9n0fUj23CuwOHOTca5Gawcr+2oTjl
+         fd3k34m2VFQya4eBFtQPIIO6Fb5Zdda4CFW85+2rKoqYn3uo0TzwoFSBrlGdVNy7k58u
+         1eaUOeqpk7q8HThRCng7urkBlGLUkx3zZmFqs7xLsycyAav0hCxREP6v4yfUllUCvtJA
+         hQyNTk+qI02jC28ofcCxsZRq/li5aKmO0L5AlMwJ0mayXcORX+E1Xy2hfFZx3yRswcmD
+         Zo4SIctrFcUsuw/G/HckKXSzAyOvN8ofXFJJC03qIF8rnWbDF8M9zAQtixEFDfA6nUAz
+         MAbA==
+X-Gm-Message-State: AAQBX9csPRk53vQu36/yGJJSU+UEUA1k0n7+64ld187DVXoUYGLMzZRK
+        1hlqfsJKqvesNG3kA9LdVwc=
+X-Google-Smtp-Source: AKy350aseZzBCum6L3ZdzJV0ccP/niUOapvEPnQGYI92PSTLWqPEIZgktt6CkrodRO1mno8ot6F6IQ==
+X-Received: by 2002:adf:f004:0:b0:2cf:f01f:ed89 with SMTP id j4-20020adff004000000b002cff01fed89mr4390917wro.24.1680694553507;
+        Wed, 05 Apr 2023 04:35:53 -0700 (PDT)
+Received: from [192.168.237.204] (s-8d3a2aa4.on.site.uni-stuttgart.de. [141.58.42.164])
+        by smtp.gmail.com with ESMTPSA id r7-20020a5d4987000000b002ceacff44c7sm14806432wrq.83.2023.04.05.04.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 04:35:53 -0700 (PDT)
+Message-ID: <bedd7426-5875-dbd7-38fe-2e943c7109f8@gmail.com>
+Date:   Wed, 5 Apr 2023 13:35:45 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [EXTERNAL] Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
+Subject: Re: [PATCH V4 22/23] platform/surface: Disable for RISC-V
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Marc Zyngier <maz@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-23-sunilvl@ventanamicro.com>
+ <0c433e15-640e-280f-fcb0-a8fe081d1bcc@gmail.com>
+ <ZC1XUdD3DFnNauQ2@sunil-laptop>
 Content-Language: en-US
-To:     "Ding, Shenghao" <shenghao-ding@ti.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     "Lu, Kevin" <kevin-lu@ti.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
-        "Navada Kanyana, Mukund" <navada@ti.com>,
-        Shenghao Ding <13916275206@139.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>
-References: <20230329100107.8181-1-13916275206@139.com>
- <8d0d0478-1e45-ea52-f1b7-910b747d6282@linux.intel.com>
- <7a0cfa60e2a244168edd49c3d2f6a2bd@ti.com>
- <458d7c2f-bcee-9ec3-e955-9661a06a3349@wanadoo.fr>
- <bbae9e35f2bf4cbcbc78f852041e4b2e@ti.com>
-From:   =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <bbae9e35f2bf4cbcbc78f852041e4b2e@ti.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <ZC1XUdD3DFnNauQ2@sunil-laptop>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/2023 1:21 PM, Ding, Shenghao wrote:
-> Hi Both
-> I wrote a test code to verify the be32_to_cpu & be32_to_cpup,
-> static int __init lkm_init(void)
-> {
-> 	char test_buf[]={0x12, 0x34, 0xab, 0xbc, 0x56, 0x78, 0xef};
-> 	unsigned int *k, p, q;
-> 	int i;
-> 
-> 	printk("Hello, Shanghai!\n");
-> 
-> 	for (i = 0; i < 4; i ++) {
-> 		k = (unsigned int *)&test_buf[i];
-> 		p = be32_to_cpup((__be32 *)k);
-> 		q = be32_to_cpu(test_buf[i]);
-> 		printk("%d: *k = 0x%08x p = 0x%08x q = 0x%08x %ld\n",
-> 			i, *k, p, q, sizeof(unsigned int));
-> 	}
-> 	return 0;
-> }
-> The output is:
-> [ 9109.722548] Hello, Shanghai!
-> [ 9109.726287] 0: *k = 0xbcab3412 p = 0x1234abbc q = 0x12000000 4
-> [ 9109.727665] 1: *k = 0x56bcab34 p = 0x34abbc56 q = 0x34000000 4
-> [ 9109.728553] 2: *k = 0x7856bcab p = 0xabbc5678 q = 0xabffffff 4
-> [ 9109.729308] 3: *k = 0xef7856bc p = 0xbc5678ef q = 0xbcffffff 4
-> Apparently, be32_to_cpup's output is what I expected.
-> Looking forward to your comments. Thanks.
-> 
-
-It makes sense, as array access reads 8 bit value, you would need to 
-access value using pointer instead. So instead of doing 
-be32_to_cpu(test_buf[i]) you would need to do be32_to_cpu(*(test_buf + 
-i)) if I didn't mess the pointer magic ;)
-
-And then I'm not sure which is better, be32_to_cpup or be32_to_cpu.
-
-> BR
-> Shenghao Ding
-> -----Original Message-----
-> From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Sent: Saturday, April 1, 2023 4:41 AM
-> To: Ding, Shenghao <shenghao-ding@ti.com>; Amadeusz Slawinski <amadeuszx.slawinski@linux.intel.com>; Shenghao Ding <13916275206@139.com>; broonie@kernel.org; lgirdwood@gmail.com; perex@perex.cz; pierre-louis.bossart@linux.intel.com
-> Cc: Lu, Kevin <kevin-lu@ti.com>; alsa-devel@alsa-project.org; linux-kernel@vger.kernel.org; Xu, Baojun <x1077012@ti.com>; Gupta, Peeyush <peeyush@ti.com>; Navada Kanyana, Mukund <navada@ti.com>
-> Subject: [EXTERNAL] Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
-> 
-> Le 31/03/2023 à 04:19, Ding, Shenghao a écrit :
->> Hi Amadeusz Sławiński
->> Thanks for your comment.
->> Answer inline.
->>
->> -----Original Message-----
->> From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
->> Sent: Thursday, March 30, 2023 7:54 PM
->> To: Shenghao Ding <13916275206@139.com>; broonie@kernel.org;
->> lgirdwood@gmail.com; perex@perex.cz;
->> pierre-louis.bossart@linux.intel.com
->> Cc: Lu, Kevin <kevin-lu@ti.com>; Ding, Shenghao
->> <shenghao-ding@ti.com>; alsa-devel@alsa-project.org;
->> linux-kernel@vger.kernel.org; Xu, Baojun <x1077012@ti.com>; Gupta,
->> Peeyush <peeyush@ti.com>; Navada Kanyana, Mukund <navada@ti.com>
->> Subject: [EXTERNAL] Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
->>
->> On 3/29/2023 12:01 PM, Shenghao Ding wrote:
->>> Create tas2781 driver.
+On 4/5/23 13:11, Sunil V L wrote:
+> On Wed, Apr 05, 2023 at 11:33:00AM +0200, Maximilian Luz wrote:
+>> On 4/4/23 20:20, Sunil V L wrote:
+>>> With CONFIG_ACPI enabled for RISC-V, this driver gets enabled
+>>> in allmodconfig build. However, RISC-V doesn't support sub-word
+>>> atomics which is used by this driver. Due to this, the build fails
+>>> with below error.
 >>>
->>> Signed-off-by: Shenghao Ding <13916275206@139.com>
+>>> In function â€˜ssh_seq_nextâ€™,
+>>>       inlined from â€˜ssam_request_write_dataâ€™ at drivers/platform/surface/aggregator/controller.c:1483:8:
+>>> ././include/linux/compiler_types.h:399:45: error: call to â€˜__compiletime_assert_335â€™ declared with attribute error: BUILD_BUG failed
+>>>     399 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>>         |                                             ^
+>>> ./include/linux/compiler.h:78:45: note: in definition of macro â€˜unlikelyâ€™
+>>>      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+>>>         |                                             ^
+>>> ././include/linux/compiler_types.h:387:9: note: in expansion of macro â€˜__compiletime_assertâ€™
+>>>     387 |         __compiletime_assert(condition, msg, prefix, suffix)
+>>>         |         ^~~~~~~~~~~~~~~~~~~~
+>>> ././include/linux/compiler_types.h:399:9: note: in expansion of macro â€˜_compiletime_assertâ€™
+>>>     399 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>>         |         ^~~~~~~~~~~~~~~~~~~
+>>> ./include/linux/build_bug.h:39:37: note: in expansion of macro â€˜compiletime_assertâ€™
+>>>      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>>>         |                                     ^~~~~~~~~~~~~~~~~~
+>>> ./include/linux/build_bug.h:59:21: note: in expansion of macro â€˜BUILD_BUG_ON_MSGâ€™
+>>>      59 | #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+>>>         |                     ^~~~~~~~~~~~~~~~
+>>> ./arch/riscv/include/asm/cmpxchg.h:335:17: note: in expansion of macro â€˜BUILD_BUGâ€™
+>>>     335 |                 BUILD_BUG();                                            \
+>>>         |                 ^~~~~~~~~
+>>> ./arch/riscv/include/asm/cmpxchg.h:344:30: note: in expansion of macro â€˜__cmpxchgâ€™
+>>>     344 |         (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+>>>         |                              ^~~~~~~~~
+>>> ./include/linux/atomic/atomic-instrumented.h:1916:9: note: in expansion of macro â€˜arch_cmpxchgâ€™
+>>>    1916 |         arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>>>         |         ^~~~~~~~~~~~
+>>> drivers/platform/surface/aggregator/controller.c:61:32: note: in expansion of macro â€˜cmpxchgâ€™
+>>>      61 |         while (unlikely((ret = cmpxchg(&c->value, old, new)) != old)) {
+>>>         |                                ^~~~~~~
 >>>
->>> ---
->>> Changes in v10:
->>>     - using be16_to_cpu and be32_to_cpu instead of SMS_HTONS and SMS_HTONL
->>>     - optimize and reduce the boundary checks
->>>     - Add comments on some kmemdup instead of kzalloc+memcpy
->>>     Changes to be committed:
->>> 	modified:   sound/soc/codecs/Kconfig
->>> 	modified:   sound/soc/codecs/Makefile
->>> 	new file:   sound/soc/codecs/tas2781-dsp.c
->>> 	new file:   sound/soc/codecs/tas2781-dsp.h
->>> 	new file:   sound/soc/codecs/tas2781-i2c.c
->>> 	new file:   sound/soc/codecs/tas2781.h
->>> ---
+>>> So, disable this driver for RISC-V even when ACPI is enabled for now.
 >>
->> ...
+>> CONFIG_SURFACE_PLATFORMS should be enabled for ARM64 || X86 || COMPILE_TEST only,
+>> so I guess the issue only happens when compiling with the latter enabled?
 >>
->>> +
->>> +static int fw_parse_block_data_kernel(struct tasdevice_fw *tas_fmw,
->>> +	struct tasdev_blk *block, const struct firmware *fmw, int offset) {
->>> +	const unsigned char *data = fmw->data;
->>> +
->>> +	if (offset + 16 > fmw->size) {
->>> +		dev_err(tas_fmw->dev, "%s: File Size error\n", __func__);
->>> +		offset = -EINVAL;
->>> +		goto out;
->>> +	}
->>> +	block->type = be32_to_cpup((__be32 *)&data[offset]);
+>> I'm not aware of any current plans of MS to release RISC-V-based Surface
+>> devices, so you could maybe also just explicitly disable CONFIG_SURFACE_PLATFORMS.
+>> In any case, I don't see any issues with disabling the whole platform/surface
+>> or only individual drivers for RISC-V, so for either solution:
 >>
->> Wouldn't just be32_to_cpu(data[offset]) work instead of be32_to_cpup?
->> Same in other cases.
->> [DING] data[] is a char array, the code will convert data[offset],
->> data[offset + 1], data[offset + 2] and data[offset + 3] into host instead of data[offset] only.
+>> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
 >>
+> Hi Maximilian,
 > 
-> Not sure to follow you.
-> Isn't it the purpose of be32_to_cpu() to take a 32 bits word, in other words 4 x 8 bits char, and swap what if needed (little endian arch)?
-> 
-> It ends to __swab32() ([1] for the "constant" implementation)
-> 
-> 
-> be32_to_cpup(&p) ends to __swab32(*p), which really looks to the same as be32_to_cpu(p).
-> 
-> Can you elaborate more?
-> 
-> CJ
-> 
-> 
-> [1]:
-> https://elixir.bootlin.com/linux/v6.3-rc3/source/include/uapi/linux/swab.h#L18
-> 
+> Thanks!. Yes, COMPILE_TEST gets enabled for allmodconfig builds. Since
+> the whole intention of COMPILE_TEST appears to be able to compile-test
+> drivers on a platform than they are supposed to be used, I think it is
+> better not to skip whole set of drivers but only that which can not build.
+> So, I prefer to keep this change as is.
 
+Hi Sunil,
+
+What I wanted to say with my previous mail: I'm fairly confident that
+platform/surface drivers will not be actively used on RISC-V hardware any
+time soon (not sure if that came over in this way). But whatever you/others
+prefer, I'm happy with either.
+
+Best regards,
+Max
