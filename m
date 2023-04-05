@@ -2,158 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3C46D73FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7256D7401
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 07:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236939AbjDEFuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 01:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S236926AbjDEFzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 01:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236914AbjDEFun (ORCPT
+        with ESMTP id S236791AbjDEFzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 01:50:43 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA0F4C03;
-        Tue,  4 Apr 2023 22:50:38 -0700 (PDT)
-Received: from meshulam.tesarici.cz (unknown [213.235.133.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 95AAC146F42;
-        Wed,  5 Apr 2023 07:50:35 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1680673836; bh=C6IoX1lNnZuMQVKkhnCjrralN+LFGIlZN5OAc7rJaB4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DRgzo7h1wuQuX014pRD4WI6hBDhus4EADUwMUp/tp6AOU1W3Pxi4llJwYF4dIP5X2
-         SQvmcDpXcJ/Hsu/C70o3uNuXktY8E3g+vwEVtiDZO+ZqaRi4kSzAxXNtyzP6fhNtKJ
-         LSNVcaMbud89X8j367tlgvJO/OgHWNc9C271WjXt7vxPPNwNTOxrEu8gd71qDCo5c8
-         U4cX3yPTR98SmE+zYoTR4R18oCL/dSVcF73S4KsxNf6f2u1wQbSOaA+7ju0xhAYDJi
-         S8n4p4rfOlbCborvL4nnPKGLQHcmK6Z3qVXzlYgKk+K5a7UKXckauLOhqIdUOSxBpk
-         Wt1gMEwTn/KMg==
-Date:   Wed, 5 Apr 2023 07:50:34 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     Dexuan-Linux Cui <dexuan.linux@gmail.com>,
-        Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Jianxiong Gao <jxgao@google.com>,
-        David Stevens <stevensd@chromium.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-Subject: Re: [PATCH v1 2/2] swiotlb: Fix slot alignment checks
-Message-ID: <20230405075034.3c36bb77@meshulam.tesarici.cz>
-In-Reply-To: <20230405072801.05bb94ef@meshulam.tesarici.cz>
-References: <cover.1679382779.git.petr.tesarik.ext@huawei.com>
-        <c90887e4d75344abe219cc5e12f7c6dab980cfce.1679382779.git.petr.tesarik.ext@huawei.com>
-        <CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com>
-        <CO1PR21MB13320305E02BA121623213DABF939@CO1PR21MB1332.namprd21.prod.outlook.com>
-        <20230405064019.6258ebb3@meshulam.tesarici.cz>
-        <SA1PR21MB1335C5F774195F2C3431BF93BF909@SA1PR21MB1335.namprd21.prod.outlook.com>
-        <20230405072801.05bb94ef@meshulam.tesarici.cz>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
+        Wed, 5 Apr 2023 01:55:04 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1841198C
+        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 22:55:02 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eh3so138266518edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 04 Apr 2023 22:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680674101;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/3QuqF+VUImX1V5KpitdapwWJCPNXUqbEanRNw7dR5I=;
+        b=mGgBLifE2V3m6QfJ3/xgYZp6oJDkrqAEJQhU01ExR+0FTmcJL5AxKvR6LGIu96DeXv
+         9/iI1w6f5DDmpwJPEClgomFqQOwvYaHzWUzjae1itmsulZZ6y9M7A0tZy2FwQAZlrHZw
+         EPkFyTPOHHlf1OZ0Pf6yQiwACv4m6WUdTPJqN1WK756K47vba3oFg74pzaLRiu72xsB/
+         3ODGSzc3o/kPPnypNx3JZQAa4nlv2AxgFfn3KUTQ6CzdJOn9z2nRHS2ZQj8eLX7TfQSO
+         yq46+6ClvuMTigEpSSTJs/v276FbRBYXWQBFg8KdQWwq9m+Wi8zCL6wfGOnlEHWQcQ/+
+         IKqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680674101;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/3QuqF+VUImX1V5KpitdapwWJCPNXUqbEanRNw7dR5I=;
+        b=Q8aJW82qWFsoytBpgOc+6G4/koqmpFNOEadalrdAki2lDSbHWIxD/RRckWMncdEOtY
+         WKlqQOBxjn08pm+JWlUzTuMPYMDCmZAUF88omA4BD8v46YM0dtJbEyXRa7ikj9YMezDD
+         7ZxNAoXe3YrH8XkThChh0lDCQjG79eQKo944EOLumP7Nq1kGmwqVsSitO2u/vlwn3uWz
+         zF3fjE35uJDf8UCAOiguUKJlXWs2bPE4bnYEZjpDqWUwAeMXJRElyhhK3MXIGazU2WWU
+         d5j8J59lPVV6lYv6xPjkwAE84qXNtanOXIq2aAOuwwFLo/rWTImxA9ptpt/LdXbR00i2
+         z+Pg==
+X-Gm-Message-State: AAQBX9chH0pj81oByMcqJDABPU1Aon2cekHo/vdPTETzAD1g+gLE2+to
+        GkdcSxxbBLgwVCF8PSCHfbJoAPc4mAAutHLwRvs=
+X-Google-Smtp-Source: AKy350arSlAk4kVthIv++2B8xcUpK5sIrMPiq3sRcfqef32uwJ6Np+4A7B049HjtI6zQ3Wj6ymq+xA==
+X-Received: by 2002:a17:906:d929:b0:92c:8e4a:1a42 with SMTP id rn9-20020a170906d92900b0092c8e4a1a42mr1902655ejb.32.1680674101329;
+        Tue, 04 Apr 2023 22:55:01 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
+        by smtp.gmail.com with ESMTPSA id tq24-20020a170907c51800b00947abb70c93sm6555688ejc.112.2023.04.04.22.55.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 22:55:00 -0700 (PDT)
+Message-ID: <c49a2dbf-ea5a-f70f-1508-47e821942c9d@linaro.org>
+Date:   Wed, 5 Apr 2023 07:54:59 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] arm64: dts: qcom: sm8550: add Soundwire controllers
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230404073915.61779-1-krzysztof.kozlowski@linaro.org>
+ <305fcdae-84f5-7edb-26e4-588162fed018@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <305fcdae-84f5-7edb-26e4-588162fed018@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Apr 2023 07:32:06 +0200
-Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
+On 04/04/2023 19:55, Konrad Dybcio wrote:
+> 
+> 
+> On 4.04.2023 09:39, Krzysztof Kozlowski wrote:
+>> Add nodes for LPASS Soundwire v2.0.0 controllers.  Use labels with
+>> indices matching downstream DTS, to make any comparisons easier.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Changes since v1:
+>> 1. Correct IO range length.
+>>
+>> The bindings and driver are here:
+>> https://lore.kernel.org/linux-arm-msm/20230403132503.62090-1-krzysztof.kozlowski@linaro.org/T/#t
+>> ---
+>>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 109 +++++++++++++++++++++++++++
+>>  1 file changed, 109 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> index dc6150e97d46..14e4de7a1a0e 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>> @@ -2004,6 +2004,33 @@ lpass_wsa2macro: codec@6aa0000 {
+>>  			#sound-dai-cells = <1>;
+>>  		};
+>>  
+>> +		/* WSA2 */
+>> +		swr3: soundwire-controller@6ab0000 {
+>> +			compatible = "qcom,soundwire-v2.0.0";
+>> +			reg = <0 0x06ab0000 0 0x10000>;
+>> +			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&lpass_wsa2macro>;
+>> +			clock-names = "iface";
+>> +
+> Any reason this and swr0 have comments instead of labels?
 
-> On Wed, 5 Apr 2023 05:11:42 +0000
-> Dexuan Cui <decui@microsoft.com> wrote:
->=20
-> > > From: Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz>
-> > > Sent: Tuesday, April 4, 2023 9:40 PM   =20
-> > > > > ...
-> > > > > Hi Petr, this patch has gone into the mainline:
-> > > > > 0eee5ae10256 ("swiotlb: fix slot alignment checks")
-> > > > >
-> > > > > Somehow it breaks Linux VMs on Hyper-V: a regular VM with
-> > > > > swiotlb=3Dforce or a confidential VM (which uses swiotlb) fails t=
-o boot.
-> > > > > If I revert this patch, everything works fine. =20
-> > > >
-> > > > The log is pasted below. Looks like the SCSI driver hv_storvsc fail=
-s to
-> > > > detect the disk capacity:   =20
-> > >=20
-> > > The first thing I can imagine is that there are in fact no (free) slo=
-ts
-> > > in the SWIOTLB which match the alignment constraints, so the map
-> > > operation fails. However, this would result in a "swiotlb buffer is
-> > > full" message in the log, and I can see no such message in the log
-> > > excerpt you have posted.
-> > >=20
-> > > Please, can you check if there are any "swiotlb" messages preceding t=
-he
-> > > first error message?
-> > >=20
-> > > Petr T   =20
-> >=20
-> > There is no "swiotlb buffer is full" error.
-> >=20
-> > The hv_storvsc driver (drivers/scsi/storvsc_drv.c) calls scsi_dma_map(),
-> > which doesn't return -ENOMEM when the failure happens. =20
->=20
-> I see...
->=20
-> Argh, you're right. This is a braino. The alignment mask is in fact an
-> INVERTED mask, i.e. it masks off bits that are not relevant for the
-> alignment. The more strict alignment needed the more bits must be set,
-> so the individual alignment constraints must be combined with an OR
-> instead of an AND.
->=20
-> Can you apply the following change and check if it fixes the issue?
+Actually no, I can go with label consistently. It's not actually used
+for anything...
 
-Actually, this will not work either. The mask is used to mask off both
-high address bits and low address bits (below swiotlb slot granularity).
+> 
+>> +			qcom,din-ports = <4>;
+>> +			qcom,dout-ports = <9>;
+>> +
+>> +			qcom,ports-sinterval =		<0x07 0x1f 0x3f 0x07 0x1f 0x3f 0x18f 0xff 0xff 0x0f 0x0f 0xff 0x31f>;
+>> +			qcom,ports-offset1 =		/bits/ 8 <0x01 0x03 0x05 0x02 0x04 0x15 0x00 0xff 0xff 0x06 0x0d 0xff 0x00>;
+>> +			qcom,ports-offset2 =		/bits/ 8 <0xff 0x07 0x1f 0xff 0x07 0x1f 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
+>> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
+>> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x0f>;
+>> +			qcom,ports-word-length =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0x08 0xff 0xff 0xff 0xff 0xff 0x18>;
+>> +			qcom,ports-block-pack-mode =	/bits/ 8 <0x00 0x01 0x01 0x00 0x01 0x01 0x00 0x00 0x00 0x01 0x01 0x00 0x00>;
+>> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
+>> +			qcom,ports-lane-control =	/bits/ 8 <0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff 0xff>;
+>> +
+>> +			#address-cells = <2>;
+>> +			#size-cells = <0>;
+>> +			#sound-dai-cells = <1>;
+>> +			status = "disabled";
+>> +		};
+> [...]
+> 
+> 
+>> +		swr2: soundwire-controller@6d30000 {
+>> +			compatible = "qcom,soundwire-v2.0.0";
+>> +			reg = <0 0x06d30000 0 0x10000>;
+>> +			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
+>> +					      <&intc GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
+> There's no different interrupt-parent, so -extended seems excessive.
+> Unless that was maybe supposed to use some PDC-mapped irq?
+> 
 
-What should help is this:
+Eh, apparently copy-pasta. Thanks,
 
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index 5b919ef832b6..c924e53d679e 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -622,8 +622,7 @@ static int swiotlb_do_find_slots(struct device *dev, in=
-t area_index,
- 	dma_addr_t tbl_dma_addr =3D
- 		phys_to_dma_unencrypted(dev, mem->start) & boundary_mask;
- 	unsigned long max_slots =3D get_max_slots(boundary_mask);
--	unsigned int iotlb_align_mask =3D
--		dma_get_min_align_mask(dev) & ~(IO_TLB_SIZE - 1);
-+	unsigned int iotlb_align_mask;
- 	unsigned int nslots =3D nr_slots(alloc_size), stride;
- 	unsigned int offset =3D swiotlb_align_offset(dev, orig_addr);
- 	unsigned int index, slots_checked, count =3D 0, i;
-@@ -639,8 +638,9 @@ static int swiotlb_do_find_slots(struct device *dev, in=
-t area_index,
- 	 * allocations.
- 	 */
- 	if (alloc_size >=3D PAGE_SIZE)
--		iotlb_align_mask &=3D PAGE_MASK;
--	iotlb_align_mask &=3D alloc_align_mask;
-+		iotlb_align_mask |=3D ~PAGE_MASK;
-+	iotlb_align_mask |=3D alloc_align_mask | dma_get_min_align_mask(dev);
-+	iotlb_align_mask &=3D ~(IO_TLB_SIZE - 1);
-=20
- 	/*
- 	 * For mappings with an alignment requirement don't bother looping to
 
-Petr T
+Best regards,
+Krzysztof
+
