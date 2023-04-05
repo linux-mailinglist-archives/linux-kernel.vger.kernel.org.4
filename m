@@ -2,215 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F216D7F77
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4296D7F76
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238373AbjDEO3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S238566AbjDEO3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238615AbjDEO3b (ORCPT
+        with ESMTP id S238395AbjDEO3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:29:31 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9995C65BB
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:29:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=sOAW7WUfRBEQYKDcVis1b6UsgGBI3Q2DcAGh0P9Rqag=; b=FvB11/aTy4PrZZbdB5ibIw3dfd
-        CSvLH+hG4gs0y+zCUJ1ZJoPYDpg1cJTQYV6OxhJHn1sNgAsU2hidOlBim87m7Odu1zOKLPcZARBRe
-        UTFj63cFTzdO3vi29Yv28YY8iuppLgZop5L01pb2lG7XUcRggvvpk6tDQXMAugjfgjyxkwlt8ExPL
-        UrE5vMdQdir07Pa45viioTO9BpnCz3bdMvoE8HFXzlnzhdQsAjnE8YXzbqafRS4rkjNQFpmgBwY/V
-        m9Dl5OgQT2RfNTfF68gW75Jn8Ti9IHj6Q+Vkrvr+elpR+X2zD7bUuzPaI9bS6keLztM/B1uxhkqj0
-        VyjBcPog==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pk47j-00057M-QH; Wed, 05 Apr 2023 16:28:31 +0200
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pk47j-000Dt8-Fy; Wed, 05 Apr 2023 16:28:31 +0200
-Message-ID: <3e1a5b94-5aed-aa4b-c5ee-a44c185504bf@metafoo.de>
-Date:   Wed, 5 Apr 2023 07:28:29 -0700
+        Wed, 5 Apr 2023 10:29:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A311128;
+        Wed,  5 Apr 2023 07:28:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9B4E220698;
+        Wed,  5 Apr 2023 14:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680704922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=YqF8idOT1k8dhFhoAQM1OZCaPGH+LbOP3hVosygnnAQ=;
+        b=WVaVx3f8jfJQKBrfm1KKPpu1TcMgehaxgeLwwQ9QdGOHYxkx8YPpK+YnwBcH/TuDfUtltp
+        eGYu5tbmV+Jy0lWoWendCQ+RFdn948Skgg9VRW3qrz2VzOewuUgNOEED7NoEOReVQlebjg
+        aQSL802rqCiFXe2+0TVtvusx2+oMtNc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680704922;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=YqF8idOT1k8dhFhoAQM1OZCaPGH+LbOP3hVosygnnAQ=;
+        b=k7dqNQ3FQNhza/bL6k9yridUZP846ungl/5G4HuGIotJRUoBC4mwuwU/xNE9aquALOp7hH
+        jMzFA8BhZsNC/tAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7850B13A31;
+        Wed,  5 Apr 2023 14:28:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ocHaHJqFLWT3CwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 05 Apr 2023 14:28:42 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Mel Gorman <mgorman@techsingularity.net>,
+        Kees Cook <keescook@chromium.org>,
+        linux-hardening@vger.kernel.org,
+        Alexander Halbuer <halbuer@sra.uni-hannover.de>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH] mm, page_alloc: use check_pages_enabled static key to check tail pages
+Date:   Wed,  5 Apr 2023 16:28:40 +0200
+Message-Id: <20230405142840.11068-1-vbabka@suse.cz>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: iio: ad7192: Pending IRQ on SDO/RDY causing retrigger of
- interrupt handler and missing every sample
-Content-Language: en-US
-To:     =?UTF-8?Q?Nuno_S=c3=a1?= <noname.nuno@gmail.com>,
-        Fabrizio Lamarque <fl.scratchpad@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-References: <CAPJMGm4GaSjD6bdqMwCr2EVZGenWzT-nCCf3BMRaD1TSfAabpA@mail.gmail.com>
- <6d58a58cd7e8a7cbb91b2658e9a85b44b34b64dc.camel@gmail.com>
- <CAPJMGm5WxnmtyW2DnZe4rSUFJ-KtKGmNsf7pStcaK=4suBHWuw@mail.gmail.com>
- <3c5f31cf533ef26ea586e2d18b31995541a95411.camel@gmail.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <3c5f31cf533ef26ea586e2d18b31995541a95411.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26866/Wed Apr  5 09:23:41 2023)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/23 06:49, Nuno Sá wrote:
-> On Wed, 2023-04-05 at 15:20 +0200, Fabrizio Lamarque wrote:
->> On Wed, Apr 5, 2023 at 12:30 PM Nuno Sá <noname.nuno@gmail.com> wrote:
->>> On Wed, 2023-04-05 at 11:53 +0200, Fabrizio Lamarque wrote:
->>>> Link:
->>>> https://lore.kernel.org/all/20210906065630.16325-3-alexandru.tachici@analog.com/
->>>>
->>>> This commit broke the driver functionality, i.e. cat in_voltage1_raw
->>>> triggers a correct sampling sequence only the first time, then it
->>>> always returns the first sampled value.
->>>>
->>>> Following the sequence of ad_sigma_delta_single_conversion() within
->>>> ad_sigma_delta.c, this is due to:
->>>>
->>>> - IRQ resend mechanism is always enabled for ARM cores
->>>> (CONFIG_HARDIRQS_SW_RESEND)
->>>> - Edge IRQs are always made pending when a corresponding event
->>>> happens, even after disable_irq(). This is intentional and designed to
->>>> prevent missing signal edges.
->>>> - Level IRQs are not impacted by IRQ resend (i.e. IRQ_PENDING is
->>>> always cleared).
->>>> - SPI communication causes the IRQ to be set pending (even if
->>>> corresponding interrupt is disabled)
->>>> - The second time ad_sigma_delta_single_conversion() is called,
->>>> enable_irq() will trigger the interrupt immediately, even if RDY line
->>>> is high.
->>>> - In turn, this causes the call
->>>> wait_for_completion_interruptible_timeout() to exit immediately, with
->>>> RDY line still high.
->>>> - Right after the SPI register read, the MODE register is written with
->>>> AD_SD_MODE_IDLE, and pending conversion is stopped. Hence DATA
->>>> register is never updated.
->>>>
->>>> I would suggest to revert this commit or set the flag with
->>>> IRQF_TRIGGER_LOW instead of IRQF_TRIGGER_FALLING, but I am not sure
->>>> about the problem solved by this commit and how to replicate it.
->>>> Another option would be to keep IRQ flags within bindings only.
->>>>
->>> I'm starting to think that what's stated in that commit
->>>
->>> "Leaving IRQ on level instead of falling might trigger a sample read
->>> when the IRQ is enabled, as the SDO line is already low. "
->>>
->>> might actually be related with something else...
->> Hi Nuno Sá,
->>   thank you again for your replies and the time you are spending in checking
->> the reported issues.
->> I see what you mean...
->> I was asking for details on the actual issue that was solved to have a better
->> understanding of the change.
->>
-> Yeah, Alex is no longer in ADI so I cannot really say.
->
->>>> As a side note, AD7192 datasheet says that the falling edge on SDO
->>>> line _can_ be used as an interrupt to processor, but it also states
->>>> that the _level_ on SDO/RDY line indicates the sample is ready. What
->>>> happens on SDO/RDY interrupt line before the ADC conversion is
->>>> triggered should be ignored.
->>>>
->>> Well, from the datasheet (as you already know):
->>>
->>> "
->>> In addition, DOUT/RDY operates as a data ready pin, going low to indicate
->>> the completion of a conversion. If the data is not read after the
->>> conversion,
->>> the pin goes high before the next
->>> update occurs. The DOUT/RDY falling edge can be used as an interrupt to a
->>> processor, indicating that valid
->>> data is available.
->>> "
->>>
->>> So I really read IRQF_TRIGGER_FALLING in the above and all the other sigma
->>> delta devices have the same setting (I think). So the fact that it works
->>> with
->>> level IRQs might just be lucky instead of fixing the real problem. Can you
->>> try
->>> the below patch (I'm starting to think it might be related):
->>>
->> We have been using those ADC series for about a decade, the shared SDO/RDY
->> signal has its own quirks.
->> We also discussed several years ago in a support ticket with ADI, both
->> level and edge
->> sensing should be acceptable, provided that limitations are understood.
->>> https://lore.kernel.org/linux-iio/20230306044737.862-1-honda@mechatrax.com/
->> I just tested the patch, but, at least on the platform I'm working on
->> (I.MX6), it does not
->> solve the issue.
->> Whereas the thread describes the very same issue I am experiencing, I
->> am not sure
->> IRQ_DISABLE_UNLAZY would have any impact. By reading CPU registers I see
-> I was expecting to have. AFAIU, the lazy approach would be the responsible for
-> this behavior because when you call disable_irq() it does not really mask the
-> IRQ in HW. Just marks it as disabled and if another IRQ event comes set's it to
-> PENDING and only then masks at HW level... If we "unlazy" the IRQ, we should
-> mask the IRQ right away so I would expect not to have any pending IRQ...
->
->> the IRQ line disabled at the hardware level, but when the IRQ flag of
->> the processor
->> is set (and this happens even if the interrupt is masked in HW), the
->> interrupt is immediately
->> triggered anyway.
->> (I see GPIOx_IMR cleared, so interrupt is masked, but GPIOx_ISR set. As soon
->> as
->> enable_irq() is called the interrupt is triggered. Just by clearing
->> GPIOx_ISR before
->> enable_irq() solves the issue. I might share a few debug printk).
->>
-> Might be that the problem is actually in the behavior of the above controller?
-> As said, I would expect a masked IRQ not to be handled and set to PENDING.
->
->> The "real issue" here is that we have a pending IRQ on the RDY line set
->> even if IRQ is disabled (masked) at the hardware level.
->> It does not happen for level sensing interrupts.
->>
->> This link might further clarify why this should be intentional:
->> https://www.kernel.org/doc/html/latest/core-api/genericirq.html#delayed-interrupt-disable
->> (note that I see the IRQ masked at the hardware level anyway, but it
->> does not prevent
->> the described behavior to happen)
->>
->> In case the interrupt flag has to be IRQF_TRIGGER_FALLING, it might be viable
->> to
->> enable the IRQ before the measurement is requested and eventually
->> ignore any spurious
->> interrupt until the measurement is started (SPI write completed).
->>
-> Oh no, that looks like just going around the real problem. It would be
-> interesting to test this in some other platforms to see if the behavior is the
-> same... I guess now is the time to fully understand this. IIRC, originally
-> everything was set as LEVEL but since the datasheet states EDGE should be used,
-> Alex moved the flags to EDGE.
->
-> Maybe you're also right and we should just remove the flags and let users decide
-> in the bindings whatever works best for their platforms given the fact that it
-> appears that both LEVEL vs EDGE can be used.
->
-> Anyways,
->
-> +cc Lars since he was the original developer on the sigma delta stuff and maybe
-> he remembers something about this level vs edge mess.
->
-> Lars, can you shed some light :)?
-I don't remember. But the driver was written with the assumption that 
-irq_disable() will stop recording of IRQ events. If that does not hold 
-we might have to switch from irq_enable/irq_disable to 
-request_irq/free_irq, which will come with a slight overhead.
+Commit 700d2e9a36b9 ("mm, page_alloc: reduce page alloc/free sanity
+checks") has introduced a new static key check_pages_enabled to control
+when struct pages are sanity checked during allocation and freeing. Mel
+Gorman suggested that free_tail_pages_check() could use this static key
+as well, instead of relying on CONFIG_DEBUG_VM. That makes sense, so do
+that. Also rename the function to free_tail_page_prepare() because it
+works on a single tail page and has a struct page preparation component
+as well as the optional checking component.
+Also remove some unnecessary unlikely() within static_branch_unlikely()
+statements that Mel pointed out for commit 700d2e9a36b9.
 
+Suggested-by: Mel Gorman <mgorman@techsingularity.net>
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+---
+ mm/hugetlb_vmemmap.c |  2 +-
+ mm/page_alloc.c      | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index a15cc56cf70a..656b00d1a2fb 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -264,7 +264,7 @@ static void vmemmap_remap_pte(pte_t *pte, unsigned long addr,
+  * How many struct page structs need to be reset. When we reuse the head
+  * struct page, the special metadata (e.g. page->flags or page->mapping)
+  * cannot copy to the tail struct page structs. The invalid value will be
+- * checked in the free_tail_pages_check(). In order to avoid the message
++ * checked in the free_tail_page_prepare(). In order to avoid the message
+  * of "corrupted mapping in tail page". We need to reset at least 3 (one
+  * head struct page struct and two tail struct page structs) struct page
+  * structs.
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index a109444e9f44..7df5bf07e013 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1308,7 +1308,7 @@ static inline bool free_page_is_bad(struct page *page)
+ 	return true;
+ }
+ 
+-static int free_tail_pages_check(struct page *head_page, struct page *page)
++static int free_tail_page_prepare(struct page *head_page, struct page *page)
+ {
+ 	struct folio *folio = (struct folio *)head_page;
+ 	int ret = 1;
+@@ -1319,7 +1319,7 @@ static int free_tail_pages_check(struct page *head_page, struct page *page)
+ 	 */
+ 	BUILD_BUG_ON((unsigned long)LIST_POISON1 & 1);
+ 
+-	if (!IS_ENABLED(CONFIG_DEBUG_VM)) {
++	if (!static_branch_unlikely(&check_pages_enabled)) {
+ 		ret = 0;
+ 		goto out;
+ 	}
+@@ -1447,9 +1447,9 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 			ClearPageHasHWPoisoned(page);
+ 		for (i = 1; i < (1 << order); i++) {
+ 			if (compound)
+-				bad += free_tail_pages_check(page, page + i);
++				bad += free_tail_page_prepare(page, page + i);
+ 			if (static_branch_unlikely(&check_pages_enabled)) {
+-				if (unlikely(free_page_is_bad(page + i))) {
++				if (free_page_is_bad(page + i)) {
+ 					bad++;
+ 					continue;
+ 				}
+@@ -2375,7 +2375,7 @@ static inline bool check_new_pages(struct page *page, unsigned int order)
+ 		for (int i = 0; i < (1 << order); i++) {
+ 			struct page *p = page + i;
+ 
+-			if (unlikely(check_new_page(p)))
++			if (check_new_page(p))
+ 				return true;
+ 		}
+ 	}
+-- 
+2.40.0
 
