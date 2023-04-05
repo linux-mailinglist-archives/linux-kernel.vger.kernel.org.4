@@ -2,134 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82566D7E6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1E16D7DE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238398AbjDEODP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 10:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
+        id S238320AbjDENmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237972AbjDEOCP (ORCPT
+        with ESMTP id S237259AbjDENmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:02:15 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55DB6E92;
-        Wed,  5 Apr 2023 07:01:12 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id e9a06f4bd0d167b5; Wed, 5 Apr 2023 16:01:11 +0200
-Received: from kreacher.localnet (unknown [213.134.163.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 996111B4E9E1;
-        Wed,  5 Apr 2023 16:01:10 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 12/32] ACPICA: Avoid undefined behavior: load of misaligned address
-Date:   Wed, 05 Apr 2023 15:41:50 +0200
-Message-ID: <1879151.CQOukoFCf9@kreacher>
-In-Reply-To: <4845957.31r3eYUQgx@kreacher>
-References: <4845957.31r3eYUQgx@kreacher>
+        Wed, 5 Apr 2023 09:42:35 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F091FE0
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:42:34 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D9F0F5C00D3;
+        Wed,  5 Apr 2023 09:42:31 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 05 Apr 2023 09:42:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680702151; x=
+        1680788551; bh=FZGH5Oe7v8drJWg0YjWA6GRDzpcW267pyOqwWY55WMg=; b=M
+        3nlr1G+xVsldJNzVhrZwfgKKeuvQaqnOZH6nDdi0Wclau3pIecVGaTKglQ3601bt
+        WM4XCddZRFRO1e3RXCRsToD/uY1Cji2uP7XlPF9XE6MmQBNYhiYemGui1DUsP+c/
+        3lTGDdAvgzcxGMJ4ZpoltjS+RT/Hu1V+oARbqF1RrpQvCOaVlVG2ldiCcVLXWCSI
+        seICNxBK2CMmnkFE7ybVtKcoQRhxKvvui7sNabHM+zDQtwhnfeI6z1f9iLaL7Ppj
+        vQw52uQPKfdMBm4/T4R/KnPs6bjBSSoYb9qx2en1VVQxc7XsczYF6O+tOkgubbPl
+        oq/tJ2oe1We+1BcdJOY6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680702151; x=1680788551; bh=FZGH5Oe7v8drJ
+        Wg0YjWA6GRDzpcW267pyOqwWY55WMg=; b=mxpaTGTpZ6faV+4oGCQWgilzrMMWV
+        q1QRAkA1R7mZEqiNUBrdOP/0cK/Y9lC63jS2pNTqlvDe2H0TEWg2lF3QFLW7W4yt
+        +mYtC1vgw/Co+3qviRyMckpCoQWDCKKfaiEJt1ZLA2q/xRMsUU8tlGg2dR9hUt9i
+        FoKH/mp+IcyUPuhb7IwujoFZfh6I2AlKiT8NiufWoYoIpX7FY6lUcBymWB3ggQGd
+        sgzfAQnsOBLXeqkLz+SFF1qIQAEZOrJlM08SSzPbCiKPGppMqu/SNYymVX8IEqkM
+        gZUBqea1S71CG/CCzEYMJvR49lYQQ2YIQq+68iq+T41EZ/XjOvFjP6Oig==
+X-ME-Sender: <xms:x3otZNVLjDz_yzE7kbfDES8ZoQXoJfxVfTnSEz1E1XIcZaxYwLUXdg>
+    <xme:x3otZNnDL7oJGnbFNCVPdJO5aAlQNpGtG4EHHl3fCo9rF2hn94TAVk_0Iq2OchfNv
+    MEChmzSy4wrPEmHSQg>
+X-ME-Received: <xmr:x3otZJaxt-Hiinz1Y28byVEHB1d4RsoE6Wr8vblUsbE47i0A8UH_cDI34BP6Jx1MLFP7GQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgieekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:x3otZAXN7jNFwjcHuUYr2rGG8UDlGRAtFzI1Ujd85-NK-CgFnnAexA>
+    <xmx:x3otZHmNvzuUlR1MuN2-whKMrO4-ntCTf_WsD0wN1gkxx4sugQ0N_g>
+    <xmx:x3otZNeOHGTqECNwZq02qzJ47coDMIJiEXnc9FFUQz9mioICKJfUSw>
+    <xmx:x3otZJqKnUnktgKTy04gcXcv4BM0gclmI0z9r_PNcj32yCY5T7R2tA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Apr 2023 09:42:30 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 74A80102846; Wed,  5 Apr 2023 16:42:26 +0300 (+03)
+Date:   Wed, 5 Apr 2023 16:42:26 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
+Message-ID: <20230405134226.2ptk3rd7mfin3wlm@box.shutemov.name>
+References: <cover.1680628986.git.thomas.lendacky@amd.com>
+ <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
+ <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
+ <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
+ <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name>
+ <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
+ <20230404202445.6qkl7hz67qgievqz@box.shutemov.name>
+ <CAMj1kXFrm74+zNcSpHJ1kw38PTMOFk1cTx_EAoGFHaG1fYzRTQ@mail.gmail.com>
+ <20230404210153.tll2mojlglx4rfsa@box.shutemov.name>
+ <CAMj1kXGvcg-E84h1T_vPi7qxPWxEXBpyuB79KOL+ON7v5YAgJg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.219
-X-CLIENT-HOSTNAME: 213.134.163.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtqhertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeetteevgfelhfefveeutefhudekleejgfeviedufefgleeuteeftedvieelleeinecuffhomhgrihhnpegrshgrnhdrshhopdhgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3
-X-Spam-Status: No, score=1.7 required=5.0 tests=SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK,WEIRD_PORT autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGvcg-E84h1T_vPi7qxPWxEXBpyuB79KOL+ON7v5YAgJg@mail.gmail.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tamir Duberstein <tamird@google.com>
+On Wed, Apr 05, 2023 at 09:46:59AM +0200, Ard Biesheuvel wrote:
+> On Tue, 4 Apr 2023 at 23:02, Kirill A. Shutemov <kirill@shutemov.name> wrote:
+> >
+> > On Tue, Apr 04, 2023 at 10:41:02PM +0200, Ard Biesheuvel wrote:
+> > > On Tue, 4 Apr 2023 at 22:24, Kirill A. Shutemov <kirill@shutemov.name> wrote:
+> > > >
+> > > > On Tue, Apr 04, 2023 at 09:49:52PM +0200, Ard Biesheuvel wrote:
+> > > > > On Tue, 4 Apr 2023 at 20:09, Kirill A. Shutemov <kirill@shutemov.name> wrote:
+> > > > > >
+> > > > > > On Tue, Apr 04, 2023 at 10:57:52AM -0700, Dave Hansen wrote:
+> > > > > > > On 4/4/23 10:45, Kirill A. Shutemov wrote:
+> > > > > > > > I still think it is a bad idea.
+> > > > > > > >
+> > > > > > > > As I asked before, please include my
+> > > > > > > >
+> > > > > > > > Nacked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > > > > > >
+> > > > > > > > into the patch.
+> > > > > > >
+> > > > > > > I was pretty opposed to this when I first saw it too.  But, Tom and
+> > > > > > > company have worn down my opposition a bit.
+> > > > > > >
+> > > > > > > The fact is that we have upstream kernels out there with SEV-SNP support
+> > > > > > > that don't know anything about unaccepted memory.  They're either
+> > > > > > > relegated to using the pre-accepted memory (4GB??) or _some_ entity
+> > > > > > > needs to accept the memory.  That entity obviously can't be the kernel
+> > > > > > > unless we backport unaccepted memory support.
+> > > > > > >
+> > > > > > > This both lets the BIOS be the page-accepting entity _and_ allows the
+> > > > > > > entity to delegate that to the kernel when it needs to.
+> > > > > > >
+> > > > > > > As much as I want to nak this and pretend that that those existing
+> > > > > > > kernel's don't exist, my powers of self-delusion do have their limits.
+> > > > > > >
+> > > > > > > If our AMD friends don't do this, what is their alternative?
+> > > > > >
+> > > > > > The alternative is coordination on the host side: VMM can load a BIOS that
+> > > > > > pre-accepts all memory if the kernel is older.
+> > > > > >
+> > > > >
+> > > > > And how does one identify such a kernel? How does the VMM know which
+> > > > > kernel the guest is going to load after it boots?
+> > > >
+> > > > VMM has to know what it is running. Yes, it is cumbersome. But enabling
+> > > > phase for a feature is often rough. It will get smoother overtime.
+> > > >
+> > >
+> > > So how does the VMM get informed about what it is running? How does it
+> > > distinguish between kernels that support unaccepted memory and ones
+> > > that don't? And how does it predict which kernel a guest is going to
+> > > load?
+> >
+> > User will specify if it wants unaccepted memory or not for the VM. And if
+> > it does it is his responsibility to have kernel that supports it.
+> >
+> > And you have not addressed my question:
+> >
+> >         How is it different from any other feature the kernel is not [yet] aware
+> >         of?
+> >
+> 
+> It is the same problem, but this is just a better solution.
 
-ACPICA commit 807665510f1ea71bbdc063c27782a1da56e8e10a
+Okay, we at least agree that there are more then one solution to the
+problem.
 
-Before this change we see the following UBSAN stack trace in Fuchsia:
+> Having a BIOS menu option (or similar) to choose between unaccepted
+> memory or not (or to expose CXL memory via the EFI memory map, which is
+> another hack I have seen) is just unnecessary complication, if the
+> kernel can simply inform the loader about what it supports. We do this
+> all the time with things like OsIndications.
 
-  #0    0x00002234800696e6 in acpi_tb_get_root_table_entry(u8*, u32) ../../third_party/acpica/source/components/tables/tbutils.c:231 <platform-bus-x86.so>+0x9106e6
-  #1.2  0x0000233d72c8777f in ubsan_get_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:41 <libclang_rt.asan.so>+0x3d77f
-  #1.1  0x0000233d72c8777f in maybe_print_stack_trace() compiler-rt/lib/ubsan/ubsan_diag.cpp:51 <libclang_rt.asan.so>+0x3d77f
-  #1    0x0000233d72c8777f in ~scoped_report() compiler-rt/lib/ubsan/ubsan_diag.cpp:387 <libclang_rt.asan.so>+0x3d77f
-  #2    0x0000233d72c88385 in handletype_mismatch_impl() compiler-rt/lib/ubsan/ubsan_handlers.cpp:137 <libclang_rt.asan.so>+0x3e385
-  #3    0x0000233d72c87ead in compiler-rt/lib/ubsan/ubsan_handlers.cpp:142 <libclang_rt.asan.so>+0x3dead
-  #4    0x00002234800696e6 in acpi_tb_get_root_table_entry(u8*, u32) ../../third_party/acpica/source/components/tables/tbutils.c:231 <platform-bus-x86.so>+0x9106e6
-  #5    0x00002234800691dd in acpi_tb_parse_root_table(acpi_physical_address) ../../third_party/acpica/source/components/tables/tbutils.c:385 <platform-bus-x86.so>+0x9101dd
-  #6    0x0000223480070b06 in acpi_initialize_tables(struct acpi_table_desc*, u32, u8) ../../third_party/acpica/source/components/tables/tbxface.c:160 <platform-bus-x86.so>+0x917b06
-  #7    0x000022347fb803b4 in acpi::acpi_impl::initialize_acpi(acpi::acpi_impl*) ../../src/devices/board/lib/acpi/acpi-impl.cc:200 <platform-bus-x86.so>+0x4273b4
-  #8    0x000022347fa30d14 in x86::X86::early_acpi_init(x86::X86*) ../../src/devices/board/drivers/x86/init.cc:34 <platform-bus-x86.so>+0x2d7d14
-  #9    0x000022347fa310cf in x86::X86::early_init(x86::X86*) ../../src/devices/board/drivers/x86/init.cc:43 <platform-bus-x86.so>+0x2d80cf
-  #10   0x000022347fa79410 in x86::X86::Bind(x86::X86*) ../../src/devices/board/drivers/x86/x86.cc:144 <platform-bus-x86.so>+0x320410
-  #11   0x000022347fa78ec0 in x86::X86::create_and_bind(void*, zx_device_t*) ../../src/devices/board/drivers/x86/x86.cc:123 <platform-bus-x86.so>+0x31fec0
-  #12   0x000020dc8908502f in λ(const zx_driver::bind_op::(anon class)*) ../../src/devices/bin/driver_host/zx_driver.cc:36 <<application>>+0x41502f
-  #13   0x000020dc89084e03 in fit::internal::target<(lambda at../../src/devices/bin/driver_host/zx_driver.cc:34:61), false, false, void>::invoke(void*) ../../sdk/lib/fit/include/lib/fit/internal/function.h:181 <<application>>+0x414e03
-  #14   0x000020dc8935a930 in fit::internal::function_base<16UL, false, void()>::invoke(const fit::internal::function_base<16UL, false, void ()>*) ../../sdk/lib/fit/include/lib/fit/internal/function.h:505 <<application>>+0x6ea930
-  #15   0x000020dc893e2f8a in fit::function_impl<16UL, false, void()>::operator()(const fit::function_impl<16UL, false, void ()>*) ../../sdk/lib/fit/include/lib/fit/function.h:300 <<application>>+0x772f8a
-  #16   0x000020dc8948dec5 in async::internal::retained_task::Handler(async_dispatcher_t*, async_task_t*, zx_status_t) ../../zircon/system/ulib/async/task.cc:25 <<application>>+0x81dec5
-  #17   0x000023ab5abcf91e in λ(const driver_runtime::Dispatcher::post_task::(anon class)*, std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >, zx_status_t) ../../src/devices/bin/driver_runtime/dispatcher.cc:715 <libdriver_runtime.so>+0xed91e
-  #18   0x000023ab5abcf621 in fit::internal::target<(lambda at../../src/devices/bin/driver_runtime/dispatcher.cc:714:7), true, false, void, std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request>>, int>::invoke(void*, std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >, int) ../../sdk/lib/fit/include/lib/fit/internal/function.h:128 <libdriver_runtime.so>+0xed621
-  #19   0x000023ab5abaa482 in fit::internal::function_base<24UL, true, void(std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request>>, int)>::invoke(const fit::internal::function_base<24UL, true, void (std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >, int)>*, std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >, int) ../../sdk/lib/fit/include/lib/fit/internal/function.h:505 <libdriver_runtime.so>+0xc8482
-  #20   0x000023ab5abaa0f8 in fit::callback_impl<24UL, true, void(std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request>>, int)>::operator()(fit::callback_impl<24UL, true, void (std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >, int)>*, std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >, int) ../../sdk/lib/fit/include/lib/fit/function.h:451 <libdriver_runtime.so>+0xc80f8
-  #21   0x000023ab5ab81c76 in driver_runtime::callback_request::Call(driver_runtime::callback_request*, std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >, zx_status_t) ../../src/devices/bin/driver_runtime/callback_request.h:67 <libdriver_runtime.so>+0x9fc76
-  #22   0x000023ab5ab8e7ef in driver_runtime::Dispatcher::dispatch_callback(driver_runtime::Dispatcher*, std::__2::unique_ptr<driver_runtime::callback_request, std::__2::default_delete<driver_runtime::callback_request> >) ../../src/devices/bin/driver_runtime/dispatcher.cc:1093 <libdriver_runtime.so>+0xac7ef
-  #23   0x000023ab5ab91d67 in driver_runtime::Dispatcher::dispatch_callbacks(driver_runtime::Dispatcher*, std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>) ../../src/devices/bin/driver_runtime/dispatcher.cc:1169 <libdriver_runtime.so>+0xafd67
-  #24   0x000023ab5abbe9a2 in λ(const driver_runtime::Dispatcher::create_with_adder::(anon class)*, std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>) ../../src/devices/bin/driver_runtime/dispatcher.cc:338 <libdriver_runtime.so>+0xdc9a2
-  #25   0x000023ab5abbe6d2 in fit::internal::target<(lambda at../../src/devices/bin/driver_runtime/dispatcher.cc:337:7), true, false, void, std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter>>, fbl::ref_ptr<driver_runtime::Dispatcher>>::invoke(void*, std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>) ../../sdk/lib/fit/include/lib/fit/internal/function.h:128 <libdriver_runtime.so>+0xdc6d2
-  #26   0x000023ab5abac1e5 in fit::internal::function_base<8UL, true, void(std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter>>, fbl::ref_ptr<driver_runtime::Dispatcher>)>::invoke(const fit::internal::function_base<8UL, true, void (std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>)>*, std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>) ../../sdk/lib/fit/include/lib/fit/internal/function.h:505 <libdriver_runtime.so>+0xca1e5
-  #27   0x000023ab5ababe32 in fit::function_impl<8UL, true, void(std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter>>, fbl::ref_ptr<driver_runtime::Dispatcher>)>::operator()(const fit::function_impl<8UL, true, void (std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>)>*, std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>) ../../sdk/lib/fit/include/lib/fit/function.h:300 <libdriver_runtime.so>+0xc9e32
-  #28   0x000023ab5ab95444 in driver_runtime::Dispatcher::event_waiter::invoke_callback(driver_runtime::Dispatcher::event_waiter*, std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, fbl::ref_ptr<driver_runtime::Dispatcher>) ../../src/devices/bin/driver_runtime/dispatcher.h:299 <libdriver_runtime.so>+0xb3444
-  #29   0x000023ab5ab94feb in driver_runtime::Dispatcher::event_waiter::handle_event(std::__2::unique_ptr<driver_runtime::Dispatcher::event_waiter, std::__2::default_delete<driver_runtime::Dispatcher::event_waiter> >, async_dispatcher_t*, async::wait_base*, zx_status_t, zx_packet_signal_t const*) ../../src/devices/bin/driver_runtime/dispatcher.cc:1259 <libdriver_runtime.so>+0xb2feb
-  #30   0x000023ab5abbef74 in async_loop_owned_event_handler<driver_runtime::Dispatcher::event_waiter>::handle_event(async_loop_owned_event_handler<driver_runtime::Dispatcher::event_waiter>*, async_dispatcher_t*, async::wait_base*, zx_status_t, zx_packet_signal_t const*) ../../src/devices/bin/driver_runtime/async_loop_owned_event_handler.h:59 <libdriver_runtime.so>+0xdcf74
-  #31   0x000023ab5abbf1cb in async::wait_method<async_loop_owned_event_handler<driver_runtime::Dispatcher::event_waiter>, &async_loop_owned_event_handler<driver_runtime::Dispatcher::event_waiter>::handle_event>::call_handler(async_dispatcher_t*, async_wait_t*, zx_status_t, zx_packet_signal_t const*) ../../zircon/system/ulib/async/include/lib/async/cpp/wait.h:201 <libdriver_runtime.so>+0xdd1cb
-  #32   0x000023ab5ac323a9 in async_loop_dispatch_wait(async_loop_t*, async_wait_t*, zx_status_t, zx_packet_signal_t const*) ../../zircon/system/ulib/async-loop/loop.c:381 <libdriver_runtime.so>+0x1503a9
-  #33   0x000023ab5ac2ba82 in async_loop_run_once(async_loop_t*, zx_time_t) ../../zircon/system/ulib/async-loop/loop.c:330 <libdriver_runtime.so>+0x149a82
-  #34   0x000023ab5ac2b102 in async_loop_run(async_loop_t*, zx_time_t, _Bool) ../../zircon/system/ulib/async-loop/loop.c:288 <libdriver_runtime.so>+0x149102
-  #35   0x000023ab5ac2ceb7 in async_loop_run_thread(void*) ../../zircon/system/ulib/async-loop/loop.c:840 <libdriver_runtime.so>+0x14aeb7
-  #36   0x000040b3be411f1c in start_c11(void*) ../../zircon/third_party/ulib/musl/pthread/pthread_create.c:55 <libc.so>+0xd7f1c
-  #37   0x000040b3be53ce8d in thread_trampoline(uintptr_t, uintptr_t) ../../zircon/system/ulib/runtime/thread.cc:100 <libc.so>+0x202e8d
+It assumes that kernel calls ExitBootServices() which is not always true.
+A bootloader in between will make impossible for kernel to use any of
+futures exposed this way.
 
-Link: https://github.com/acpica/acpica/commit/80766551
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/tbutils.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+But we talked about this before.
 
-diff --git a/drivers/acpi/acpica/tbutils.c b/drivers/acpi/acpica/tbutils.c
-index cfe50c53ad4d..bb4a56e5673a 100644
---- a/drivers/acpi/acpica/tbutils.c
-+++ b/drivers/acpi/acpica/tbutils.c
-@@ -165,6 +165,7 @@ struct acpi_table_header *acpi_tb_copy_dsdt(u32 table_index)
- static acpi_physical_address
- acpi_tb_get_root_table_entry(u8 *table_entry, u32 table_entry_size)
- {
-+	u32 address32;
- 	u64 address64;
- 
- 	/*
-@@ -176,8 +177,8 @@ acpi_tb_get_root_table_entry(u8 *table_entry, u32 table_entry_size)
- 		 * 32-bit platform, RSDT: Return 32-bit table entry
- 		 * 64-bit platform, RSDT: Expand 32-bit to 64-bit and return
- 		 */
--		return ((acpi_physical_address)
--			(*ACPI_CAST_PTR(u32, table_entry)));
-+		ACPI_MOVE_32_TO_32(&address32, table_entry);
-+		return address32;
- 	} else {
- 		/*
- 		 * 32-bit platform, XSDT: Truncate 64-bit to 32-bit and return
+BTW, can we at least acknowledge the limitation in the commit message?
+
+> We can phase out the protocol implementation from the firmware once we
+> no longer need it, at which point the LocateProtocol() call just
+> becomes a NOP (we do the same thing for UGA support, which has
+> disappeared a long time ago, but we still look for the protocol in the
+> EFI stub).
+> 
+> Once the firmware stops exposing this protocol (and ceases to accept
+> memory on the OS's behalf), we can phase it out from the kernel as
+> well.
+
+It is unlikely to ever happen. In few year everybody will forget about
+this conversation. Regardless of what is written in commit message.
+
+Everything works, why bother?
+
+> The only other potential solution I see is exposing the unaccepted
+> memory as coldplugged ACPI memory objects, and implementing the accept
+> calls via PRM methods. But PRM has had very little test coverage, so
+> it is anybody's guess whether it works for the stable kernels that we
+> need to support with this. It would also mean that the new unaccepted
+> memory logic would need to be updated and cross reference these memory
+> regions with EFI unaccepted memory regions and avoid claiming them
+> both.
+
+Nah. That is a lot of complexity for no particular reason.
+
 -- 
-2.35.3
-
-
-
-
+  Kiryl Shutsemau / Kirill A. Shutemov
