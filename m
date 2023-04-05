@@ -2,200 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB296D7697
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A006D7698
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237410AbjDEIOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        id S237124AbjDEIPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237329AbjDEION (ORCPT
+        with ESMTP id S236486AbjDEIPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:14:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80E0F5;
-        Wed,  5 Apr 2023 01:14:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42B2D6245E;
-        Wed,  5 Apr 2023 08:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CFBFC4339E;
-        Wed,  5 Apr 2023 08:14:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680682451;
-        bh=1nSglfItAuDI4ol4In4nVcuiP9G4IB0lSOQfSgEOfCY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=L2Yi2n4zcZcm4bQPPU9sZ242yVQyuXbhGtQaan735qEWwqiZ3wEPVMZQsqABQgPEE
-         h4Kuprkm89+5gPA24oQ2/9I6eV+LxhDUM2DUcXKpKVy5YXk7ArZN8NAuzjgl5VARRM
-         wcer0NjYmQr4y7zJeSmHLlI0s9iLgrNG/AiSJm3oCm76Psb/7/jWEHFAIoE64Br1Ir
-         lkpXFbN/G+Wp+8QoAUqC4V96V88RgLk80ykpJndM/K6uzZYw3/LwclwTFJxRWBOlFP
-         4KsAIdE+vLwRKmB/mycLYLgwJ26PzfrOT1aGIFg+RaabKatVZcAOnvHIPkiwmY5GQd
-         GpKW41dSctb4g==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5002e950e23so208382a12.1;
-        Wed, 05 Apr 2023 01:14:11 -0700 (PDT)
-X-Gm-Message-State: AAQBX9fg1rVS6/naNV0sH8O/Ni+I5Xv9506cLvgUbwJQxll5ytn6PMv6
-        VfjrAv2SbrwVtgzET/Bm+jLWhzU2iE6FuAJSDDQ=
-X-Google-Smtp-Source: AKy350aZNiqLEErKnpGDDjTYf9nmSTpBW2y8eaHbCzbBzYF6e/OECEGTKWU0mUgFMSf3y0GLmz5oA6Fxo7YXcJdc8Xk=
-X-Received: by 2002:a50:9509:0:b0:4ab:49b9:686d with SMTP id
- u9-20020a509509000000b004ab49b9686dmr691501eda.1.1680682449803; Wed, 05 Apr
- 2023 01:14:09 -0700 (PDT)
+        Wed, 5 Apr 2023 04:15:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EC0DF
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KQiY2BSTqgmN+97qITG2MYayhrDwaEuFNxVLU8l4ftY=; b=YwHgF0dOXNDf/Zvb8KQ+KLe6Jj
+        G7kemxYPf+LFnG8NepZohdGNzMPRGotzaBiSL0J1qTtxAPue6Stc8rPpVKiTVa3fODkl6bjEFTJgW
+        zshTeymiz1oNvX1jnCUipTXuZqfyV4lNaiNeH2vkQDAXd36K/nzscTkzZ7tR0qSlS21glbMxqCYbs
+        KNn3HfPaw9SVaozewM/GEP4DO5+etM2YQBkhRFFShKAz2hxiIEZb5YU0eKavycd3Z5FziTod2J/Dt
+        ZisACwOlCaVREyBmjq//NrtnBSjn2zrO6QhZpKo5g6wOYw9S8F+YkA2PqbNWmgmcI0ilJ5PJgrQFC
+        +6Y25Qkg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pjyI6-00GBdn-Ld; Wed, 05 Apr 2023 08:14:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B0898300202;
+        Wed,  5 Apr 2023 10:14:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8DC4026A69DAC; Wed,  5 Apr 2023 10:14:49 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 10:14:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Dai <davidai@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Saravana Kannan <saravanak@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/6] sched/fair: Add util_guest for tasks
+Message-ID: <20230405081449.GX4253@hirez.programming.kicks-ass.net>
+References: <20230330224348.1006691-1-davidai@google.com>
+ <20230330224348.1006691-2-davidai@google.com>
 MIME-Version: 1.0
-References: <20230301085545.2373646-1-chenhuacai@loongson.cn>
- <aba37b65-6fc4-721e-ebc5-df52533e4791@loongson.cn> <CAAhV-H6xAKQ94T5=+iVASwi8F=7+G_ptSGVVBOw4L1fCR+EQOw@mail.gmail.com>
- <dfd6a1cb-25be-cc11-4134-b2e92e353c00@loongson.cn> <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
-In-Reply-To: <CAAhV-H4q2+s2fV6DqSK8H0cByvJsd78GBB_Vw9gxHMfBu2Scug@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 5 Apr 2023 16:13:57 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H54MWEXgqPqv+23vQxQU455iMnwON37uiByyci9cgh5Hg@mail.gmail.com>
-Message-ID: <CAAhV-H54MWEXgqPqv+23vQxQU455iMnwON37uiByyci9cgh5Hg@mail.gmail.com>
-Subject: Re: [PATCH] efi/loongarch: Reintroduce efi_relocate_kernel() to
- relocate kernel
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org,
-        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330224348.1006691-2-davidai@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ard,
+On Thu, Mar 30, 2023 at 03:43:36PM -0700, David Dai wrote:
+> @@ -499,6 +509,7 @@ struct sched_avg {
+>  	unsigned long			load_avg;
+>  	unsigned long			runnable_avg;
+>  	unsigned long			util_avg;
+> +	unsigned long			util_guest;
+>  	struct util_est			util_est;
+>  } ____cacheline_aligned;
+>  
 
-What is the status of this patch now?
+Yeah, no... you'll have to make room first.
 
-Huacai
+struct sched_avg {
+	/* typedef u64 -> __u64 */ long long unsigned int     last_update_time;          /*     0     8 */
+	/* typedef u64 -> __u64 */ long long unsigned int     load_sum;                  /*     8     8 */
+	/* typedef u64 -> __u64 */ long long unsigned int     runnable_sum;              /*    16     8 */
+	/* typedef u32 -> __u32 */ unsigned int               util_sum;                  /*    24     4 */
+	/* typedef u32 -> __u32 */ unsigned int               period_contrib;            /*    28     4 */
+	long unsigned int          load_avg;                                             /*    32     8 */
+	long unsigned int          runnable_avg;                                         /*    40     8 */
+	long unsigned int          util_avg;                                             /*    48     8 */
+	struct util_est {
+		unsigned int       enqueued;                                             /*    56     4 */
+		unsigned int       ewma;                                                 /*    60     4 */
+	} __attribute__((__aligned__(8)))util_est __attribute__((__aligned__(8))); /*    56     8 */
 
-On Wed, Mar 1, 2023 at 8:06=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org> =
-wrote:
->
-> Hi, Youling,
->
-> On Wed, Mar 1, 2023 at 6:08=E2=80=AFPM Youling Tang <tangyouling@loongson=
-.cn> wrote:
-> >
-> > Hi, Huacai
-> >
-> > On 03/01/2023 05:30 PM, Huacai Chen wrote:
-> > > Hi, Youling,
-> > >
-> > > On Wed, Mar 1, 2023 at 5:21=E2=80=AFPM Youling Tang <tangyouling@loon=
-gson.cn> wrote:
-> > >>
-> > >> Hi, Huacai
-> > >>
-> > >> On 03/01/2023 04:55 PM, Huacai Chen wrote:
-> > >>> Since Linux-6.3, LoongArch supports PIE kernel now, so let's reintr=
-oduce
-> > >>> efi_relocate_kernel() to relocate the core kernel.
-> > >>
-> > >> If we strongly rely on the PIE feature after the modification, we ne=
-ed
-> > >> to modify it as follows,
-> > > There is no strong rely, efi_relocate_kernel() can also handle the
-> > > non-PIE kernel.
-> >
-> > IMHO, if EFI_KIMG_PREFERRED_ADDRESS is no longer defined as
-> > `PHYSADDR(VMLINUX_LOAD_ADDRESS)` (physical link address), we need to
-> > relocate through the RELOCATABLE function, so it is recommended to
-> > select RELOCATABLE if EFI_STUB is enabled
-> We can select RELOCATABLE when we modify EFI_KIMG_PREFERRED_ADDRESS.
-> Before that I prefer to give a chance to build a non-PIE kernel.
->
-> Huacai
-> >
-> > Youling.
-> > >
-> > > Huacai
-> > >>
-> > >> --- a/arch/loongarch/Kconfig
-> > >> +++ b/arch/loongarch/Kconfig
-> > >> @@ -137,6 +137,7 @@ config LOONGARCH
-> > >>          select PCI_MSI_ARCH_FALLBACKS
-> > >>          select PCI_QUIRKS
-> > >>          select PERF_USE_VMALLOC
-> > >> +       select RELOCATABLE
-> > >>          select RTC_LIB
-> > >>          select SMP
-> > >>          select SPARSE_IRQ
-> > >>
-> > >> or:
-> > >>
-> > >> --- a/arch/loongarch/Kconfig
-> > >> +++ b/arch/loongarch/Kconfig
-> > >> @@ -360,6 +360,7 @@ config EFI_STUB
-> > >>          default y
-> > >>          depends on EFI
-> > >>          select EFI_GENERIC_STUB
-> > >> +       select RELOCATABLE
-> > >>          help
-> > >>
-> > >> Youling.
-> > >>
-> > >>>
-> > >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > >>> ---
-> > >>>  drivers/firmware/efi/libstub/loongarch-stub.c | 24 ++++++---------=
-----
-> > >>>  1 file changed, 7 insertions(+), 17 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/driver=
-s/firmware/efi/libstub/loongarch-stub.c
-> > >>> index eee7ed43cdfb..72c71ae201f0 100644
-> > >>> --- a/drivers/firmware/efi/libstub/loongarch-stub.c
-> > >>> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-> > >>> @@ -21,26 +21,16 @@ efi_status_t handle_kernel_image(unsigned long =
-*image_addr,
-> > >>>                                efi_loaded_image_t *image,
-> > >>>                                efi_handle_t image_handle)
-> > >>>  {
-> > >>> -     int nr_pages =3D round_up(kernel_asize, EFI_ALLOC_ALIGN) / EF=
-I_PAGE_SIZE;
-> > >>> -     efi_physical_addr_t kernel_addr =3D EFI_KIMG_PREFERRED_ADDRES=
-S;
-> > >>>       efi_status_t status;
-> > >>> +     unsigned long kernel_addr =3D 0;
-> > >>>
-> > >>> -     /*
-> > >>> -      * Allocate space for the kernel image at the preferred offse=
-t. This is
-> > >>> -      * the only location in memory from where we can execute the =
-image, so
-> > >>> -      * no point in falling back to another allocation.
-> > >>> -      */
-> > >>> -     status =3D efi_bs_call(allocate_pages, EFI_ALLOCATE_ADDRESS,
-> > >>> -                          EFI_LOADER_DATA, nr_pages, &kernel_addr)=
-;
-> > >>> -     if (status !=3D EFI_SUCCESS)
-> > >>> -             return status;
-> > >>> -
-> > >>> -     *image_addr =3D EFI_KIMG_PREFERRED_ADDRESS;
-> > >>> -     *image_size =3D kernel_asize;
-> > >>> +     kernel_addr =3D (unsigned long)&kernel_offset - kernel_offset=
-;
-> > >>> +
-> > >>> +     status =3D efi_relocate_kernel(&kernel_addr, kernel_fsize, ke=
-rnel_asize,
-> > >>> +                  EFI_KIMG_PREFERRED_ADDRESS, efi_get_kimg_min_ali=
-gn(), 0x0);
-> > >>>
-> > >>> -     memcpy((void *)EFI_KIMG_PREFERRED_ADDRESS,
-> > >>> -            (void *)&kernel_offset - kernel_offset,
-> > >>> -            kernel_fsize);
-> > >>> +     *image_addr =3D kernel_addr;
-> > >>> +     *image_size =3D kernel_asize;
-> > >>>
-> > >>>       return status;
-> > >>>  }
-> > >>>
-> > >>
-> >
-> >
+	/* size: 64, cachelines: 1, members: 9 */
+	/* forced alignments: 1 */
+} __attribute__((__aligned__(64)));
+
+
