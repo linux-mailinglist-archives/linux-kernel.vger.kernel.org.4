@@ -2,149 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C73816D780F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416446D783A
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237314AbjDEJ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
+        id S237548AbjDEJ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237015AbjDEJ0g (ORCPT
+        with ESMTP id S237534AbjDEJ2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:26:36 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2DE4200
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:26:33 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e18so35488305wra.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680686792;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j86FY1X3mQJSpSUEyPXpteWdgUQhvm2ft4SxXMxYnjA=;
-        b=JZe6wEaenAlkzh6A+1SZGKPIIY7+28I3FbXLdAPA642CT61U15GFayMED3USy2vRur
-         cnbsEM61d76fdpGl1Fp43vpXgh/pbVd1RNpCtrcxKxodCsLRcn2TD10MV6TChmFOcmxq
-         bAfQZN/1MLLqUqBa5MuDi80FDwDM9rsv3Cr8bzvonlV68Q2now/PCsJPotFN5h0SDUpi
-         1hSyWfVY6gTWtsYurymkF8JgnXpoxqfKd2QV368FNEQneJd0WzHoFGH6Q49synXoxzMC
-         bduw8wIButE9cgIZUbMablcXnwTNxIbaY3B9Xb2wXBV6xb9UmOQhfaNb0MQWZikYiVMH
-         FX1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680686792;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j86FY1X3mQJSpSUEyPXpteWdgUQhvm2ft4SxXMxYnjA=;
-        b=akIjI2ddLZHXF6lT038Dsi6v8NJDMovlZG3imordjArABcJvpPWFhgNmFRnPuN9TvV
-         PF0AjSimBfqRi79rr5c6ZUobAL5p8rZPZc7Q2uxNcucExuta+WGtOja4csZMTSskIHwV
-         LumLDINjNyjkjMN5HUkQzHMH6lLkqeJEFsIVkft5LpvWjGcql4PoxdqtJ4LdJods38wU
-         kstb/fGAKY9I9QYPNXuKI9SfYDBy+41Ws3dXAgDf5ihV2KD3rCT4+9jDzsoMpZlm1Yii
-         BcXmn6d7xlsNzYtkP2SS1yRk+MXaaJ2PKbCKu23ZL2QGE3j8l/ZnZa1l6uR/WL+BHL7I
-         ouEw==
-X-Gm-Message-State: AAQBX9cwL5s+PyM7YVI00pVO/ELdWMB4833+RBf8i8ULWlkUjSLm/rJO
-        w3CbP6U8gIrICou5CBwaFvBoHw==
-X-Google-Smtp-Source: AKy350a42YeJ75k615TMGQYvStQrB2Lwyie5IHBEE2n0FdEzZ/N7NZ9pnWljziB9hk5G3LjzKvWGSA==
-X-Received: by 2002:adf:e30e:0:b0:2c7:46f:c410 with SMTP id b14-20020adfe30e000000b002c7046fc410mr3314136wrj.36.1680686792347;
-        Wed, 05 Apr 2023 02:26:32 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id s12-20020adfeccc000000b002da1261aa44sm14576762wro.48.2023.04.05.02.26.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 02:26:31 -0700 (PDT)
-Message-ID: <b9c35799-7abf-116a-d0f4-531d1d3cd7b2@baylibre.com>
-Date:   Wed, 5 Apr 2023 11:26:30 +0200
+        Wed, 5 Apr 2023 05:28:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB9C5BA6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:28:06 -0700 (PDT)
+Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <m.felsch@pengutronix.de>)
+        id 1pjzPx-0004pA-P4; Wed, 05 Apr 2023 11:27:01 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+Subject: [PATCH 00/12] Rework PHY reset handling
+Date:   Wed, 05 Apr 2023 11:26:51 +0200
+Message-Id: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RESEND 1/2] pwm: mtk-disp: Disable shadow registers before
- setting backlight values
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, thierry.reding@gmail.com
-Cc:     u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
-        weiqing.kong@mediatek.com, jitao.shi@mediatek.com,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, wenst@chromium.org,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>
-References: <20230403133054.319070-1-angelogioacchino.delregno@collabora.com>
- <20230403133054.319070-2-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230403133054.319070-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANs+LWQC/x2NQQrDMAwEvxJ0rsFNXUL7ldKD40i1ICjGckpKy
+ N8rcljY2cPsDoqVUeHZ7VDxy8qLGFwvHaQc5YOOJ2PofX/zwd+dYLNszbWlcDqx5J+rqNYCDQ+
+ iYaIQPZhijIpurFFSNoms82xjqUi8nZ+v93H8AdfhtMyDAAAA
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+        Keyur Chudgar <keyur@os.amperecomputing.com>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de
+X-Mailer: b4 0.12.1
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::28
+X-SA-Exim-Mail-From: m.felsch@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/2023 15:30, AngeloGioacchino Del Regno wrote:
-> If shadow registers usage is not desired, disable that before performing
-> any write to CON0/1 registers in the .apply() callback, otherwise we may
-> lose clkdiv or period/width updates.
-> 
-> Fixes: cd4b45ac449a ("pwm: Add MediaTek MT2701 display PWM driver support")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->   drivers/pwm/pwm-mtk-disp.c | 24 +++++++++++++-----------
->   1 file changed, 13 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/pwm/pwm-mtk-disp.c b/drivers/pwm/pwm-mtk-disp.c
-> index 692a06121b28..82b430d881a2 100644
-> --- a/drivers/pwm/pwm-mtk-disp.c
-> +++ b/drivers/pwm/pwm-mtk-disp.c
-> @@ -138,6 +138,19 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
->   	high_width = mul_u64_u64_div_u64(state->duty_cycle, rate, div);
->   	value = period | (high_width << PWM_HIGH_WIDTH_SHIFT);
->   
-> +	if (mdp->data->bls_debug && !mdp->data->has_commit) {
-> +		/*
-> +		 * For MT2701, disable double buffer before writing register
-> +		 * and select manual mode and use PWM_PERIOD/PWM_HIGH_WIDTH.
-> +		 */
-> +		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
-> +					 mdp->data->bls_debug_mask,
-> +					 mdp->data->bls_debug_mask);
-> +		mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
-> +					 mdp->data->con0_sel,
-> +					 mdp->data->con0_sel);
-> +	}
-> +
->   	mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
->   				 PWM_CLKDIV_MASK,
->   				 clk_div << PWM_CLKDIV_SHIFT);
-> @@ -152,17 +165,6 @@ static int mtk_disp_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
->   		mtk_disp_pwm_update_bits(mdp, mdp->data->commit,
->   					 mdp->data->commit_mask,
->   					 0x0);
-> -	} else {
-> -		/*
-> -		 * For MT2701, disable double buffer before writing register
-> -		 * and select manual mode and use PWM_PERIOD/PWM_HIGH_WIDTH.
-> -		 */
-> -		mtk_disp_pwm_update_bits(mdp, mdp->data->bls_debug,
-> -					 mdp->data->bls_debug_mask,
-> -					 mdp->data->bls_debug_mask);
-> -		mtk_disp_pwm_update_bits(mdp, mdp->data->con0,
-> -					 mdp->data->con0_sel,
-> -					 mdp->data->con0_sel);
->   	}
->   
->   	mtk_disp_pwm_update_bits(mdp, DISP_PWM_EN, mdp->data->enable_mask,
+The current phy reset handling is broken in a way that it needs
+pre-running firmware to setup the phy initially. Since the very first
+step is to readout the PHYID1/2 registers before doing anything else.
 
-Hi,
+The whole dection logic will fall apart if the pre-running firmware
+don't setup the phy accordingly or the kernel boot resets GPIOs states
+or disables clocks. In such cases the PHYID1/2 read access will fail and
+so the whole detection will fail.
 
-I've made a non-regression test for the mt8365-evk (i350-evk) board.
-It's fine for me.
+I fixed this via this series, the fix will include a new kernel API
+called phy_device_atomic_register() which will do all necessary things
+and return a 'struct phy_device' on success. So setting up a phy and the
+phy state machine is more convenient.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
-Tested-by: Alexandre Mergnat <amergnat@baylibre.com>
+I tested the series on a i.MX8MP-EVK and a custom board which have a
+TJA1102 dual-port ethernet phy. Other testers are welcome :)
 
 Regards,
-Alex
+  Marco
+
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+---
+Marco Felsch (12):
+      net: phy: refactor phy_device_create function
+      net: phy: refactor get_phy_device function
+      net: phy: add phy_device_set_miits helper
+      net: phy: unify get_phy_device and phy_device_create parameter list
+      net: phy: add phy_id_broken support
+      net: phy: add phy_device_atomic_register helper
+      net: mdio: make use of phy_device_atomic_register helper
+      net: phy: add possibility to specify mdio device parent
+      net: phy: nxp-tja11xx: make use of phy_device_atomic_register()
+      of: mdio: remove now unused of_mdiobus_phy_device_register()
+      net: mdiobus: remove now unused fwnode helpers
+      net: phy: add default gpio assert/deassert delay
+
+ Documentation/firmware-guide/acpi/dsd/phy.rst     |   2 +-
+ MAINTAINERS                                       |   1 -
+ drivers/net/ethernet/adi/adin1110.c               |   6 +-
+ drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c       |   8 +-
+ drivers/net/ethernet/hisilicon/hns/hns_dsaf_mac.c |  11 +-
+ drivers/net/ethernet/socionext/netsec.c           |   7 +-
+ drivers/net/mdio/Kconfig                          |   7 -
+ drivers/net/mdio/Makefile                         |   1 -
+ drivers/net/mdio/acpi_mdio.c                      |  20 +-
+ drivers/net/mdio/fwnode_mdio.c                    | 183 ------------
+ drivers/net/mdio/mdio-xgene.c                     |   6 +-
+ drivers/net/mdio/of_mdio.c                        |  23 +-
+ drivers/net/phy/bcm-phy-ptp.c                     |   2 +-
+ drivers/net/phy/dp83640.c                         |   2 +-
+ drivers/net/phy/fixed_phy.c                       |   6 +-
+ drivers/net/phy/mdio_bus.c                        |   7 +-
+ drivers/net/phy/micrel.c                          |   2 +-
+ drivers/net/phy/mscc/mscc_ptp.c                   |   2 +-
+ drivers/net/phy/nxp-c45-tja11xx.c                 |   2 +-
+ drivers/net/phy/nxp-tja11xx.c                     |  47 ++-
+ drivers/net/phy/phy_device.c                      | 348 +++++++++++++++++++---
+ drivers/net/phy/sfp.c                             |   7 +-
+ include/linux/fwnode_mdio.h                       |  35 ---
+ include/linux/of_mdio.h                           |   8 -
+ include/linux/phy.h                               |  46 ++-
+ 25 files changed, 442 insertions(+), 347 deletions(-)
+---
+base-commit: 054fbf7ff8143d35ca7d3bb5414bb44ee1574194
+change-id: 20230405-net-next-topic-net-phy-reset-4f79ff7df4a0
+
+Best regards,
+-- 
+Marco Felsch <m.felsch@pengutronix.de>
+
