@@ -2,187 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AC46D88B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023096D88BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjDEUhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S231656AbjDEUjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjDEUhq (ORCPT
+        with ESMTP id S229507AbjDEUjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:37:46 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EA2B7
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:37:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1680727062;
-        bh=GCrzLfmJ/YJUNa83ehp8ndG+hkTWNE4OACr1TV4rtoY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QmiMEc5b1ZgBoogiU4cD52fR2VejOD73M7FvlJs9/POq5OW2tdZkbujYPS0VJVv+Q
-         lfrdQiTGcZ+Bnu6wfjHMtZVdrw3nqZ2DnLJ/IQPKXyOuW6hqS+KmhWWIF64+iSLFLO
-         TA2hwZhbIB/+YbwV9818WLS8b0pIEHadRpYxy+5zeL4G+ValGMzG9zOnaFgCRlOYsi
-         uqeLqceMin1sh/bDhwmUd26gwgLmVIOVbfHg11T4pV6ZXYirDO8PgixLS8i3MiMht9
-         PMvj2WcKOAK5BdkjOyQ8OA94hfAv4tBAgQaA6C5svnYjmtxRuj39qyzciQtfwtrZdh
-         PZRytQFYk5A8w==
-Received: from [10.1.0.206] (unknown [192.222.195.223])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PsGfG4h1jzv1M;
-        Wed,  5 Apr 2023 16:37:42 -0400 (EDT)
-Message-ID: <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
-Date:   Wed, 5 Apr 2023 16:37:42 -0400
+        Wed, 5 Apr 2023 16:39:06 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56A81B3;
+        Wed,  5 Apr 2023 13:39:05 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id hg25-20020a05600c539900b003f05a99a841so4776223wmb.3;
+        Wed, 05 Apr 2023 13:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680727144;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ih5QT8Ee7yYAcHkFKgIrf6VHRThaccKYn0ouyxLK294=;
+        b=XWN2t1JqM/F5A/mul8DGE7DcZYG4DiP3Q3YyXwSb0Bc7lunuTE8WZKeNaoGpfrmPID
+         goseeJrXh9/ERf6v796J0RjASFbZvZ3nM2SBnJWHp0Czm37pWmluWK/xyeixO8XZwpLg
+         eXIUIG+5UNEnMsXiimVXRjPeeUk2OqWzt0hW6X7ODlnG0fHkzRwMaPXBBUctY4clZUp6
+         5ImCH1bciRg8/vvpu92DsnXVekn27CO0vttLARxfD76hwq8RjBuVyYkvpxKXxtP8e5B0
+         l/xbjm+QXlenZTmyev5Whv64JWjD+UeuVpArdvDI+e1tKapQxCIXGkByJb//OoazREwz
+         Tn1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680727144;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ih5QT8Ee7yYAcHkFKgIrf6VHRThaccKYn0ouyxLK294=;
+        b=ZofVQ672tiRflR3GT1BEOOSkMK83nCxgU6hA24K2u4a9k6gyTSWvsF0w66cswEDaS+
+         cgf4eEj9SBRu+iYh9nEjRlHpdfv6/gcV32wAhJscRwHb0oMI0c5ePFo/k01ndZNXJZVt
+         64OMEgTho9XoXRGyS/koyMzVNK4bzjV6RMHFsvRlTMZeWcFKe6ZCA+kNfXBZnN4QOeYV
+         tIf+7dBAxgCgX62B/1VHIqtGX57c04sjHLQyplcjjgrfZAJhj5bbPJ8fBxZD04d0YsLf
+         DwC6jaFofQ5FfKvV6161lla+d5p8BplR3p5KHop3BXcct0ew8iWUxVO8JGXi2uP7pd72
+         9iNQ==
+X-Gm-Message-State: AAQBX9cDLVHkDBXnQ4Tjq7b3aQRNV09EW564PfUSEJYSY6PVXQGkjAsP
+        A7pKuTLcgw2CzvbwCOuDTZ0=
+X-Google-Smtp-Source: AKy350aQpmAuEz4xnXn3BfBxrWaBDey1yEmmuFzVTtpMQ6JQIzXhv+z4Oz1KKsR5jK4vTi7hrPBp1Q==
+X-Received: by 2002:a7b:ce16:0:b0:3ed:4b0f:5378 with SMTP id m22-20020a7bce16000000b003ed4b0f5378mr5711811wmc.27.1680727143977;
+        Wed, 05 Apr 2023 13:39:03 -0700 (PDT)
+Received: from arinc9-PC.lan ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c469300b003eda46d6792sm3259867wmo.32.2023.04.05.13.39.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 13:39:03 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [RFC PATCH net-next 0/12] net: dsa: mt7530: fix port 5 phylink, phy muxing, and port 6
+Date:   Wed,  5 Apr 2023 23:38:47 +0300
+Message-Id: <20230405203859.391267-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-05 12:26, Mathieu Desnoyers wrote:
-[...]
->   #ifdef CONFIG_SCHED_MM_CID
-> +/*
-> + * Migration from src cpu. Called from set_task_cpu(). There are no guarantees
-> + * that the rq lock is held.
-> + */
-> +void sched_mm_cid_migrate_from(struct task_struct *t)
-> +{
-> +	int src_cid, *src_pcpu_cid, last_mm_cid;
-> +	struct mm_struct *mm = t->mm;
-> +	struct rq *src_rq;
-> +	struct task_struct *src_task;
-> +
-> +	if (!mm)
-> +		return;
-> +
-> +	last_mm_cid = t->last_mm_cid;
-> +	/*
-> +	 * If the migrated task has no last cid, or if the current
-> +	 * task on src rq uses the cid, it means the destination cpu
-> +	 * does not have to reallocate its cid to keep the cid allocation
-> +	 * compact.
-> +	 */
-> +	if (last_mm_cid == -1)
-> +		return;
-> +
-> +	src_rq = task_rq(t);
-> +	src_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu_of(src_rq));
-> +	src_cid = READ_ONCE(*src_pcpu_cid);
-> +
-> +	if (!mm_cid_is_valid(src_cid) || last_mm_cid != src_cid)
-> +		return;
-> +
-> +	/*
-> +	 * If we observe an active task using the mm on this rq, it means we
-> +	 * are not the last task to be migrated from this cpu for this mm, so
-> +	 * there is no need to clear the src_cid.
-> +	 */
-> +	rcu_read_lock();
-> +	src_task = rcu_dereference(src_rq->curr);
-> +	if (src_task->mm_cid_active && src_task->mm == mm) {
-> +		rcu_read_unlock();
-> +		t->last_mm_cid = -1;
-> +		return;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	/*
-> +	 * If the source cpu cid is set, and matches the last cid of the
-> +	 * migrated task, clear the source cpu cid to keep cid allocation
-> +	 * compact to cover the case where this task is the last task using
-> +	 * this mm on the source cpu. If there happens to be other tasks left
-> +	 * on the source cpu using this mm, the next task using this mm will
-> +	 * reallocate its cid on context switch.
-> +	 *
-> +	 * We cannot keep ownership of concurrency ID without runqueue
-> +	 * lock held when it is not used by a current task, because it
-> +	 * would lead to allocation of more concurrency ids than there
-> +	 * are possible cpus in the system. The last_mm_cid is used as
-> +	 * a hint to conditionally unset the dst cpu cid, keeping
-> +	 * allocated concurrency ids compact.
-> +	 */
-> +	if (cmpxchg(src_pcpu_cid, src_cid, mm_cid_set_lazy_put(src_cid)) != src_cid)
-> +		return;
-> +
-> +	/*
-> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
-> +	 * rq->curr->mm matches the scheduler barrier in context_switch()
-> +	 * between store to rq->curr and load of prev and next task's
-> +	 * per-mm/cpu cid.
+Hello!
 
-Thinking about it further, I suspect the transition:
+This patch series is mainly focused on improving the support for port 5,
+setting up port 6, and refactoring the MT7530 DSA subdriver.
 
-          *   user -> kernel   lazy + mmgrab() active
+The only missing piece to properly support port 5 as a CPU port is the
+fixes [0] [1] [2] from Richard.
 
-in context_switch() lacks a memory barrier we need here (it's only an
-atomic_inc with mmgrab()).
+I have very thoroughly tested the patch series with every possible mode to
+use. I'll let the name of the dtb files speak for themselves.
 
-The scenario is a transition from user to kernel thread happening 
-concurrently with migrate-from.
+MT7621 Unielec:
 
-Because there is no memory barrier between set rq->curr to a value that
-has a NULL mm and loading per-mm/cpu cid value in mm_cid_put_lazy() for 
-the prev task, nothing guarantees that the following src_rq->curr rcu 
-dereference here will observe the store.
+only-gmac0-mt7621-unielec-u7621-06-16m.dtb
+rgmii-only-gmac0-mt7621-unielec-u7621-06-16m.dtb
+only-gmac1-mt7621-unielec-u7621-06-16m.dtb
+gmac0-and-gmac1-mt7621-unielec-u7621-06-16m.dtb
+phy0-muxing-mt7621-unielec-u7621-06-16m.dtb
+phy4-muxing-mt7621-unielec-u7621-06-16m.dtb
+port5-as-user-mt7621-unielec-u7621-06-16m.dtb
 
-Or am I missing something ?
+tftpboot 0x80008000 mips-uzImage.bin; tftpboot 0x83000000 mips-rootfs.cpio.uboot; tftpboot 0x83f00000 $dtb; bootm 0x80008000 0x83000000 0x83f00000
 
-Thanks,
+MT7623 Bananapi:
 
-Mathieu
+only-gmac0-mt7623n-bananapi-bpi-r2.dtb
+rgmii-only-gmac0-mt7623n-bananapi-bpi-r2.dtb
+only-gmac1-mt7623n-bananapi-bpi-r2.dtb
+gmac0-and-gmac1-mt7623n-bananapi-bpi-r2.dtb
+phy0-muxing-mt7623n-bananapi-bpi-r2.dtb
+phy4-muxing-mt7623n-bananapi-bpi-r2.dtb
+port5-as-user-mt7623n-bananapi-bpi-r2.dtb
 
+tftpboot 0x80008000 arm-uImage; tftpboot 0x83000000 arm-rootfs.cpio.uboot; tftpboot 0x83f00000 $dtb; bootm 0x80008000 0x83000000 0x83f00000
 
-> +	 *
-> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
-> +	 * rq->curr->mm_cid_active matches the barrier in
-> +	 * sched_mm_cid_exit_signals(), sched_mm_cid_before_execve(), and
-> +	 * sched_mm_cid_after_execve() between store to t->mm_cid_active and
-> +	 * load of per-mm/cpu cid.
-> +	 */
-> +
-> +	/*
-> +	 * If we observe an active task using the mm on this rq after setting the lazy-put
-> +	 * flag, this task will be responsible for transitioning from lazy-put
-> +	 * flag set to MM_CID_UNSET.
-> +	 */
-> +	rcu_read_lock();
-> +	src_task = rcu_dereference(src_rq->curr);
-> +	if (src_task->mm_cid_active && src_task->mm == mm) {
-> +		rcu_read_unlock();
-> +		/*
-> +		 * We observed an active task for this mm, clearing the destination
-> +		 * cpu mm_cid is not relevant for compactness.
-> +		 */
-> +		t->last_mm_cid = -1;
-> +		return;
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	/*
-> +	 * The src_cid is unused, so it can be unset.
-> +	 */
-> +	if (cmpxchg(src_pcpu_cid, mm_cid_set_lazy_put(src_cid), MM_CID_UNSET) != mm_cid_set_lazy_put(src_cid))
-> +		return;
-> +	__mm_cid_put(mm, src_cid);
-> +}
+Current CPU ports setup of MT7530:
 
+mt7530_setup()
+-> mt7530_setup_port5()
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+mt753x_phylink_mac_config()
+-> mt753x_mac_config()
+   -> mt7530_mac_config()
+      -> mt7530_setup_port5()
+-> mt753x_pad_setup()
+   -> mt7530_pad_clk_setup() sets up port 6, rename to mt7530_setup_port6()
+
+How it will be with the patch series:
+
+mt7530_setup()
+-> mt7530_setup_port5() runs if the port is not used as a CPU, DSA, or user port
+
+mt753x_phylink_mac_config()
+-> mt753x_mac_config()
+   -> mt7530_mac_config()
+      -> mt7530_setup_port5()
+      -> mt7530_setup_port6()
+
+CPU ports setup of MT7531 for reference:
+
+mt7531_setup()
+-> mt753x_cpu_port_enable()
+   -> mt7531_cpu_port_config()
+      -> mt7531_mac_config()
+         -> mt7531_rgmii_setup()
+         -> mt7531_sgmii_setup_mode_an()
+         -> etc.
+
+mt753x_phylink_mac_config()
+-> mt753x_mac_config()
+   -> mt7531_mac_config()
+      -> mt7531_rgmii_setup()
+      -> mt7531_sgmii_setup_mode_an()
+      -> etc.
+
+[0] https://lore.kernel.org/netdev/20230212213949.672443-1-richard@routerhints.com/
+[1] https://lore.kernel.org/netdev/20230212215152.673221-1-richard@routerhints.com/
+[2] https://lore.kernel.org/netdev/20230212214027.672501-1-richard@routerhints.com/
+
+Arınç
+
 
