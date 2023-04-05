@@ -2,204 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D796D75F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14046D75FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237071AbjDEH4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 03:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
+        id S237189AbjDEH5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 03:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237041AbjDEH4h (ORCPT
+        with ESMTP id S237180AbjDEH4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 03:56:37 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC50F30ED;
-        Wed,  5 Apr 2023 00:56:35 -0700 (PDT)
-Received: from [192.168.2.41] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 27A40210DEC6;
-        Wed,  5 Apr 2023 00:56:33 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 27A40210DEC6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1680681395;
-        bh=egqdAV4kdd4zNtqfpyFgRnX5D2obdbt5vjBGu/pAukg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D+25i0yDYLpCIJ/YBM9SNd9uQlmVXmidaOufFyZqtV31fx3il+atpwL7iIac0YPKB
-         dnaowxVR8WqIefn4i8lHUEGLmic9T7PQvIHou4sRaUmXj/T18tzeWyZW9DVRnLPfBi
-         Cf+PG1MyCAbSGCJ7UmRTN2898Bv6P5yvTUpeLS/4=
-Message-ID: <8d39a9a1-4b7b-08fe-7b09-2ff0a419468f@linux.microsoft.com>
-Date:   Wed, 5 Apr 2023 09:56:31 +0200
+        Wed, 5 Apr 2023 03:56:53 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A31D4C29
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 00:56:48 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id fi11so15439049edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 00:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680681406;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
+        b=TbfE/M3KLTLcH5vT2Fre6fZYOYPWvvtxQkGTov6z1yTYm3WWX0o+lTIhTOG+wcSwIr
+         Shh1zY364kogmQhRAc0fmFUnYMo7ZU5Ky8ffXUG3ryGAwkPV8ypCT8eTFfjq9CYDvF34
+         wd9tQF0WuIJQpr3lhmr30HlFr0l1LwFrvYdgr8mH0O6e9FfWr5OPxhkLBM/13q30F9ig
+         EG1EUr+OVaWTOJKmPFrxHNqGlS+65K8SsVkrarg61QTLcPElkQBRwd5OoyrukvetA/wf
+         Vqy9Mst7SvFcranOTqZhNf+dN08TZqf8qZtRsH7Kuac3IsmXwWAy0wOKyifHo22AsbGf
+         ub3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680681406;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q2eIUIgQam+Znm92t75ub3SSql/5kD/CSnGjaZOIeRE=;
+        b=2uDnABO3cpfzFvFY77a4g0GKjcM5mvITs+MsqRNH+oFXCnjktgt+8s+/k2tXNKJjv/
+         eVMqnIufJsdNQhuEszBAfInvCgOMOgejb0p3nGmYmqFCInb+5CI2FpyXVa/FuuJ2db0O
+         k+0+iJAbSW+VGT4ib90TtEd3UhfULKhJgNwaDDAFKHmKzsGUHWTDjcYdVaN22aGPvgyY
+         s4qoOiO29J8nRTh00aWtxLNwMV8nnEeULnt1eFoDQq7YFLxo/2bBGDPkqpaYmEnkvSAK
+         9lli5wPXESzsEMb5j6f2BTmA6Qso/swKQtJtqMRSbdC6G5IcjVnjMbUqahUDY2e1qxST
+         GiTg==
+X-Gm-Message-State: AAQBX9fC0nG0E0MZ54YmTq1V6J4EnNGv11KOR8SgeKqDBVcczoEex7Bw
+        tBOLtdA97etgix6YE5Sz4oeXkVdmqYrHb6PCk7I=
+X-Google-Smtp-Source: AKy350aKLqDIJOBs2+w17/O65tIzNsWo0HsCJMoNyTEOl6/xftBTjTFN3K+wYTFKjUWLGLXPGVtupVTP2HNAQxlPhhQ=
+X-Received: by 2002:a17:906:f8db:b0:92b:ec37:e4b7 with SMTP id
+ lh27-20020a170906f8db00b0092bec37e4b7mr1145683ejb.14.1680681406051; Wed, 05
+ Apr 2023 00:56:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 0/8] Support ACPI PSP on Hyper-V
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kalra, Ashish" <ashish.kalra@amd.com>,
-        linux-crypto@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-References: <20230320191956.1354602-1-jpiotrowski@linux.microsoft.com>
- <20230322154655.GDZBsi75f6LnQStxSp@fat_crate.local>
- <1d25221c-eaab-0f97-83aa-8b4fbe3a53ed@linux.microsoft.com>
- <20230322181541.GEZBtFzRAMcH9BAzUe@fat_crate.local>
- <ecf005b1-ddb9-da4c-4526-28df4806426c@linux.microsoft.com>
- <20230323152342.GFZBxu/m3u6aFUDY/7@fat_crate.local>
- <105d019c-2249-5dfd-e032-95944ea6dc8c@linux.microsoft.com>
- <20230323163450.GGZBx/qpnclFnMaf7e@fat_crate.local>
- <c8458bfa-0985-f6a5-52a3-ef96c7669fe6@linux.microsoft.com>
- <20230402154425.GCZCmi2eiKYO2yYhNs@fat_crate.local> <877cutsczn.ffs@tglx>
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <877cutsczn.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7208:2202:b0:65:e547:3943 with HTTP; Wed, 5 Apr 2023
+ 00:56:45 -0700 (PDT)
+Reply-To: tamimbinhamadalthani00@gmail.com
+From:   Tamim Mohammed Taher <cisskhadidiatou890@gmail.com>
+Date:   Wed, 5 Apr 2023 00:56:45 -0700
+Message-ID: <CAAYY=dY1_XALb_mD3qTfxhx_hk9X7aOuccJ_bL2QrungoJAyKA@mail.gmail.com>
+Subject: RE:Saudi Arabia-Inquiry about your products.!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=DEAR_SOMETHING,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:52c listed in]
+        [list.dnswl.org]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [tamimbinhamadalthani00[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [cisskhadidiatou890[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [cisskhadidiatou890[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.7 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/2023 8:20 AM, Thomas Gleixner wrote:
-> On Sun, Apr 02 2023 at 17:44, Borislav Petkov wrote:
->> On Fri, Mar 24, 2023 at 06:10:09PM +0100, Jeremi Piotrowski wrote:
->>> Since the AMD PSP is a privileged device, there is a desire to not have to trust the
->>> ACPI stack,
->>
->> And yet you do:
->>
->> +	err = acpi_parse_aspt(&res[0], &pdata);
->> +	if (err)
->> +		return err;
->>
->> You don't trust the ACPI stack, and yet you're parsing an ACPI table?!?!
->> You have to make up your mind here.
->>
->> Btw, you still haven't answered my question about doing:
->>
->> 	devm_request_irq(dev, 9, ..)
->>
->> where 9 is the default ACPI interrupt.
->>
->> You can have some silly table tell you what to map or you can simply map
->> IRQ 9 and be done with it. In this second case you can *really* not
->> trust ACPI because you know which IRQ it is
+Dear Sir/Madam,
 
-Will respond to this mail directly.
 
-> 
-> The real problem here is that the information provided about the overall
-> design and requirements is close to zero. All we heard so far is hand
-> waving about not trusting PCI and ACPI.
 
-That's not a fair characterization Thomas, but I will turn the other cheek.
+Can you supply your products to  the government of (Saudi Arabia). We
+buy in larger quantity if your company can supply please reply with
+your products detail for more information.
 
-> 
-> Jeremi, can you please describe exactly what the design and constraints
-> are in understandable and coherent sentences?
-> 
+Looking forward to hearing from you.
 
-Here goes, I will keep it as simple as I can.
+Thanks and Regards
 
-The goal of these patches is to operate all the hardware interfaces required
-to run AMD SEV-SNP VMs, but in the context of a Linux VM running on top of
-Hyper-V. This Linux VM is called the SNP-host VM. All the patches I submit 
-target the SNP-host VM kernel, which uses KVM to bring up SEV-SNP VMs. To get
-SEV-SNP working you need to combine this work with AMD's KVM SEV-SNP patches.
-I posted two patch sets: one that extends AMD's patches, and one that is
-independent of them (this one here) that could be merged sooner.
+ Mr.Tamim Mohammed Taher
 
-Here are the design constraints:
-1. the interfaces exposed to the SNP-host VM to operate SEV-SNP match real
-   hardware interface specifications defined by AMD. This is because we are
-   emulating/virtualizing a hardware feature, and not some made up virtual
-   thing.
-
-2. the SNP-host VM may run either Windows(Hyper-V) or Linux, so the SEV-SNP
-   interfaces need to be supported by both.
-
-3. Hyper-V Generation 2 VMs do not have a PCI bus. The SNP-host VM must be a
-   Hyper-V Gen 2 VM.
-
-One of the components needed to operate SEV-SNP is the Platform Security
-Processor (PSP), aka AMD Secure Processor (ASP). The PSP is the root-of-trust on
-AMD systems. The PSP is specified as being discoverable either on the PCI bus,
-or through the presence of an ACPI table with the "ASPT" (AMD Secure Processor
-Table) signature.
-
-Here goes the design:
-Constraint 1 means that only the two specified ways of discovering and
-configuring a PSP inside the SNP-host VM were in the running: PCI or ASPT.
-Constraint 3 means that the PCI version of the PSP is not a viable option.
-Additionally, the ASPT is used on AMD hardware in Microsoft datacenters, which
-means it is supported in Hyper-V (constraint 2). The outcome is that the
-SNP-host VM sees an ASPT.
-
-The ASPT provides the following information: memory range of PSP registers and
-offsets of individual PSP registers inside that memory range. There are 7
-registers:
-- 6 are related to the "command submission" portion of the PSP; the ccp module
-  knows how to operate those.
-- the last one, "ACPI CmdResp" register, is used to configure the PSP interrupt
-  to the OS.
-
-The PSP interrupt configuration through the "ACPI CmdResp" register takes the
-following information:
-- APIC ID
-- interrupt vector
-- destination mode (physical/logical)
-- message type (fixed/lowest priority)
-
-So to hook this up with the Linux device model I wrote patches that do the
-following:
-Detect the ASPT table, extract information and register a "psp" platform_device
-for the "ccp" module to bind to.
-Create an irq_domain and encapsulate dealing with the PSP interrupt register
-there, so that the "ccp" module has an irq number that it passes to
-request_irq().
-
-There is an "if (hypervisor == Hyper-V)" check before the ASPT table detection.
-Here is the reasoning behind that:
-According to AMD specifications the *same* PSP may be discoverable both through
-ASPT and on the PCI bus. In that case, if the ASPT is to be used the OS is supposed
-to disable the "PCI interface" through the "ACPI CmdResp" register, which will
-result in no PCI-MSI interrupts, BAR writes ignored, BAR reads return all 0xF's.
-I can't verify whether that would work correctly, so in the interest of not
-breaking other users, the ASPT handling is hidden behind the hypervisor check.
-There is nothing Hyper-V specific about any of this code, it supports a hardware
-interface present in server grade hardware and would work on physical hardware if
-when (not if) someone removes the condition.
-
-That's all there is to it.
-
-All the other information I gave is background information that I hoped would
-help better understand the setting. The most relevant piece of information is the
-one that I came across last. You asked "what makes this PSP device special". The PSP
-is the root-of-trust on the system, it controls memory encryption keys, it can
-encrypt/decrypt individual memory pages. SEV-SNP ties together a lot of system components
-and requires enabling support for it in the AMD IOMMU too, which is presumably why
-the PSP gets the same special treatment (as the AMD IOMMU). The ASPT and AMD PSP interrupt
-configuration through the "ACPI CmdResp" register is based on a similar design of the AMD IOMMU.
-The AMD IOMMU is:
-- discovered through the presence of the IVRS ACPI table
-- the MMIO address of the IOMMU is parsed out of the IVRS table
-- if x2APIC support is enabled, the IOMMU interrupts are delivered based on
-  programming APIC-ID+vector+destination mode into an interrupt control register
-  in IOMMU MMIO space. This causes any PCI-MSI configuration present for the
-  IOMMU to   be ignored.
-- Linux supports and uses that interrupt delivery mechanism. It is implemented
-  as an irq_domain.
-
-Do you think it makes sense to include parts of the above description in cover letter
-commit message?
-
-Thanks,
-Jeremi
+Email:tamimbinhamadalthani00@gmail.com
