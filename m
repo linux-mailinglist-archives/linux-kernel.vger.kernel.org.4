@@ -2,78 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6528E6D82AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 634A96D82B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239177AbjDEPw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S238237AbjDEPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239183AbjDEPwp (ORCPT
+        with ESMTP id S238896AbjDEPyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:52:45 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24FA76A9
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:52:16 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id g19so34129867lfr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680709932;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RzhGkCCE7Mmse3BXh1R6OwWUFg/6uxYNifrssBA8/10=;
-        b=RTcDdys/xqW5gM53VxD5eUZfe++zteVv3zK0GZQs+udTNMQNDzW6VKV7HTHqx3I1mq
-         abMO+hINJMvgKt1jSfoq+K6058w5R7H/Gz6NM7FBzyo0an3sP1jR3HFPMix53UpSagWc
-         9itE6Aw2GDkoFv2FTuav7IJIeF6OKX2aU6FGLL6qL7aDPCrzP+TLa1nwZe/kaS4/qLvj
-         MA5EjSGckxoO28/RU4+aa778fdwaQAD1CPCDQ/vY/tqpEHN8Eh+ALMfgpRI2TgwO6B1f
-         tD9RUDC7jRVt0QkqimCcnrtCwuKIDtpZhs6oLchHVuvkzEAeIGbTAKQpT+73LRdh7GR5
-         4Nsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680709932;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RzhGkCCE7Mmse3BXh1R6OwWUFg/6uxYNifrssBA8/10=;
-        b=zu3O8T+A+ukWheKH4093bm9GFN5xi9fCW4merRmuFezYE02APMttMEY1NopinRhgMS
-         WUELWe2xPQBk0ZjbrYbk5IkcJ12mCJmWJ2+oYlo97D/pBcJ/MHGiBH/lbqukyEo1G3L0
-         bB8QYdVIeMKtVD6hyCBn7anhEcZSBaKdYRXxZrHmwavv2gqR4lcTsr1D8CnPg95DmGos
-         lxqkchNfQ2DMEX49LknY6O4lS3fHPe+SJO7Hi/M1oEWVkPmingIYFnTK0xuZLCQbYDDs
-         PQNWl8hrzUFs5jcM3li36H5Mx0crd7Q9l68s5u9KO6P3uAGHJ1tZIsYP7wIkDLmXwxHO
-         9k9A==
-X-Gm-Message-State: AAQBX9f/o2B9L5pAMHK5WOJfKz/8vKJItkC1HKD3+kf/EXdVZ9oUJRlf
-        5oLJ8zJqIDRY2W5eY6OjjsMjRA==
-X-Google-Smtp-Source: AKy350aboXNnQOxQffuMVZGBS1YW3IivyHOCDAxSN+Nh9v8H4PML4Vl64+16f/8MX3+PYl7C/avJrQ==
-X-Received: by 2002:a05:6512:951:b0:4eb:beb:5edd with SMTP id u17-20020a056512095100b004eb0beb5eddmr1609116lft.20.1680709932376;
-        Wed, 05 Apr 2023 08:52:12 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id u28-20020a056512041c00b004dc4c1e1e97sm2869112lfk.264.2023.04.05.08.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 08:52:12 -0700 (PDT)
-Message-ID: <f9311055-ca42-f497-0049-ac5428713ea7@linaro.org>
-Date:   Wed, 5 Apr 2023 17:52:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 5/5] arm64: dts: qcom: sm8450: simplify
- interrupts-extended
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230405060906.143058-1-krzysztof.kozlowski@linaro.org>
- <20230405060906.143058-5-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230405060906.143058-5-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Wed, 5 Apr 2023 11:54:13 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E633A6E88;
+        Wed,  5 Apr 2023 08:53:48 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 958B632007CF;
+        Wed,  5 Apr 2023 11:53:25 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 05 Apr 2023 11:53:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680710005; x=1680796405; bh=Nw
+        bB+EHW5S+V11givdbxuIy2Uf+thntoCfTqZWxMcBg=; b=YAuUXEBHlJ+kw9Zmtu
+        9I5T+IGhxkBqddi19dn4r+kNWXx/0s7MbpimtmFPL+aPlqdAyBvCvEsdsYUd5tTf
+        dBua9XG68Yl0nAEEaOyNWPgbGp6alKd9HHDJSvPFHUNlT8zuWj1g9huygqraxlWC
+        Y+7aQ0Y5o6JpEn9vn6pvB592FVfSJZTE0wQ53CHjaAn3N3A83rdRSbIzi5UNwgov
+        IcI7SaTPzh0bHkde+aJv1IK0dSQpj45he+L1xtfkD90bXKLSnl9xy0H9KtD29GkI
+        2+G9FZEVKV8Ap9yXYVustJlay4HAIUJFWpO3k3GqLJgcjagxLjHlqMCd0ESl4Zi8
+        VyAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680710005; x=1680796405; bh=NwbB+EHW5S+V1
+        1givdbxuIy2Uf+thntoCfTqZWxMcBg=; b=X0YUdqlMVBOCdYHJ8fMsj7rw5LYNz
+        ZGJ0nWIBBIL3CKMDRVVw2YGPAAiFOVnx7L1394T+EXUfeUzEKvYMxNmF0dJpg65D
+        qT9JFnQfBWcM5VGeF55Js0uJ5ogNkDIdRPUREUIHT1EtxI8FePekTl0V4NAuAe5Y
+        qNymd5gN9jUrHF8b/D8IDIAoOBs1X79EO2v/otVPN+ytEPy8eYxvMw6YOZAONkMt
+        5RApka5ld90qALBZBcg+sniYxlayLf3ViaDFB298sG58vLKWLb118o2FnrdR0eT0
+        dNfDQuIkc53XS6ntd6jHdr0SIi5xBB7v6AC/Ua1W+XfuOjYh6m52RqtGw==
+X-ME-Sender: <xms:dJktZBPFWqBnr6mfzO8DOWuR7c2ENV4acvVeClXUTDoQiGEtbLwiIg>
+    <xme:dJktZD8XL0MU9X_rpIxSZPrpwdJrQZi4UNvkvOPT8n1qmRwJJhnzaxlhv6m8EtCUs
+    E1IXfLm605CI-wMb7E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:dJktZATYY_Gq6fxyBxmSUcz4MrTxtMytmGT595pv1iPmDASW8AykXw>
+    <xmx:dJktZNv9KVxTxhp3cBNuP4GxEpbXZJqZRlFfZTzbjmsLL8Lq-zBh9Q>
+    <xmx:dJktZJecGyTQlt79mmyr2IRJEdz3IZbauZ6UTCmdguaRSG1KRzZvdQ>
+    <xmx:dZktZMB0Nzly1u5fZB3wNDYr-LgmhzIWAQJpCsBbi2IUq8MXyn4L5g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C4968B60098; Wed,  5 Apr 2023 11:53:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <92fe3838-41f0-4e27-8467-161553ff724f@app.fastmail.com>
+In-Reply-To: <20230405150554.30540-2-tzimmermann@suse.de>
+References: <20230405150554.30540-1-tzimmermann@suse.de>
+ <20230405150554.30540-2-tzimmermann@suse.de>
+Date:   Wed, 05 Apr 2023 17:53:03 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Daniel Vetter" <daniel.vetter@ffwll.ch>,
+        "Helge Deller" <deller@gmx.de>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 01/18] fbdev: Prepare generic architecture helpers
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,32 +95,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 5, 2023, at 17:05, Thomas Zimmermann wrote:
+> Generic implementations of fb_pgprotect() and fb_is_primary_device()
+> have been in the source code for a long time. Prepare the header file
+> to make use of them.
+>
+> Improve the code by using an inline function for fb_pgprotect() and
+> by removing include statements.
+>
+> Symbols are protected by preprocessor guards. Architectures that
+> provide a symbol need to define a preprocessor token of the same
+> name and value. Otherwise the header file will provide a generic
+> implementation. This pattern has been taken from <asm/io.h>.
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 
+Moving this into generic code is good, but I'm not sure
+about the default for fb_pgprotect():
 
-On 5.04.2023 08:09, Krzysztof Kozlowski wrote:
-> The parent controller for both interrupts is GIC, so no need for
-> interrupts-extended.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> +
+> +#ifndef fb_pgprotect
+> +#define fb_pgprotect fb_pgprotect
+> +static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+> +				unsigned long off)
+> +{ }
+> +#endif
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 1dd000748f9e..1dc5d2c49aad 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -2298,8 +2298,8 @@ swr0: soundwire-controller@3250000 {
->  		swr2: soundwire-controller@33b0000 {
->  			compatible = "qcom,soundwire-v1.7.0";
->  			reg = <0 0x033b0000 0 0x2000>;
-> -			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
-> -					      <&intc GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupts = <GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 520 IRQ_TYPE_LEVEL_HIGH>;
->  			interrupt-names = "core", "wakeup";
->  
->  			clocks = <&vamacro>;
+I think most architectures will want the version we have on
+arc, arm, arm64, loongarch, and sh already:
+
+static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+                                unsigned long off)
+{
+       vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+}
+
+so I'd suggest making that version the default, and treating the
+empty ones (m68knommu, sparc32) as architecture specific
+workarounds.
+
+I see that sparc64 and parisc use pgprot_uncached here, but as
+they don't define a custom pgprot_writecombine, this ends up being
+the same, and they can use the above definition as well.
+
+mips defines pgprot_writecombine but uses pgprot_noncached
+in fb_pgprotect(), which is probably a mistake and should have
+been updated as part of commit 4b050ba7a66c ("MIPS: pgtable.h:
+Implement the pgprot_writecombine function for MIPS").
+
+    Arnd
