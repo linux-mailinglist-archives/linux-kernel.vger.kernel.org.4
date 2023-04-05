@@ -2,168 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F4C6D7AF4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CD96D7AFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237832AbjDELQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S237331AbjDELSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237843AbjDELQf (ORCPT
+        with ESMTP id S230520AbjDELSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:16:35 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEF559D2;
-        Wed,  5 Apr 2023 04:16:13 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso36902543pjb.2;
-        Wed, 05 Apr 2023 04:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680693373;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n6OXfkDuf3MCgikRaPSbB/O12A7AoKBBWB7PbjMP2MY=;
-        b=BBxYrUNNDMwp7+Tqeh1bO3vHzynEz0eJ2RXoNzmmg3eCVXIsCV2koZKaVJlb0ZUxyU
-         W+zimIXyQ8DMibtueC8dVquK0OfEfjc5BsTUgacp2ZH10gtZyKFPAqKlE+xXaHGMk/2D
-         Dr5frSOdrwTuaD6UtKlR+uHhqQcWHNWqsLNWz+fh9tNXLT2FZWGu97t1LqTSnjw7xAEs
-         6/ccGh/xEYnxn3xnLSoY6ncqOhRrTLX/p0gzqxo0jIPJwn406x8mvTC4kvp9x/3B64gN
-         eDPiGll1tt195UBvZu8/5qG7W7xlLj4O3pXWci2QbSE0HNiLETQnnomISHYZh/N4Mj5N
-         mqMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680693373;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n6OXfkDuf3MCgikRaPSbB/O12A7AoKBBWB7PbjMP2MY=;
-        b=nPmTQPbOoLypFb8wbeYIo1U7eilLJiqe6fa2+SyiQizVpSf/FFY4Tc1gJn/jeWx5Dj
-         TnT0oKojWDHi7cXUSyCRMz6nnhzrMQk50RRiFzbqETM1SBEApGgymfDnznHThNQASQwz
-         papE4hUCksU27uD5eFSAjASdibgbgHTWySsi8XkFHSo3UTJCEpRn+2IhanRs7tu64wQr
-         uPpo3yYxQZXwbxSBVcx+KcH84lvd26OfzfDsAx2aWWWIbFuSFC7jybYLVA6XpOmp3eeS
-         +ucxsUWQ9YlyNIf43P7MrE8zw3uWChXxaxCGcAqmkI8ZM7OUkmx7AlR9HS8yaBoU3lXS
-         /eQA==
-X-Gm-Message-State: AAQBX9eYK1EBpkbs9OWsn2cM3VxmWZ6e4/U4cm/17TUmMGu13PHAta4k
-        2x9fUrPpnX8U4PLfdiZWV1E=
-X-Google-Smtp-Source: AKy350YYBD6yGza/LzBE2u0U8/bo6+93p5WXzhhL3ABjKqpdFYKYX6wXfdST+neNSVrpJjOlP2hRqw==
-X-Received: by 2002:a17:902:d491:b0:1a1:d70f:712d with SMTP id c17-20020a170902d49100b001a1d70f712dmr7139789plg.31.1680693372699;
-        Wed, 05 Apr 2023 04:16:12 -0700 (PDT)
-Received: from pavilion.. ([2402:e280:218d:82:89c2:2f77:b4c8:3f7c])
-        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b001960706141fsm9931144plb.149.2023.04.05.04.16.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 04:16:12 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@nxp.com
-Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Saalim Quadri <danascape@gmail.com>
-Subject: [PATCH v3] ASoC: dt-bindings: wm8510: Convert to dtschema
-Date:   Wed,  5 Apr 2023 16:46:05 +0530
-Message-Id: <20230405111605.5250-1-danascape@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 5 Apr 2023 07:18:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8733A10C9;
+        Wed,  5 Apr 2023 04:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680693511; x=1712229511;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9FDnGH/JYe0GqhI92TPpxoAKeqbsOMhaQvbTHPwFltg=;
+  b=Hw9mzB4Jl4jbmNIOb1m0hvCsCwRYZVgvkfU5Mx4pBWBhYq/xyMDVwWD+
+   W6qAFT27xaq5BC7XcVzrCrK8cgj2MkYTPvTOr0wE17cQq/URs3owZRwkr
+   /MJsiLN9xYLd7EQMwQpcCdHreQPMJzPgnV9LaFpQbrqXojTqyzQSjGb/g
+   RqPxnIzlcVjaDKc3nl1fzQ7//bDaJD5qvnsmbpQG7jP0L3E6AeXD4yM6A
+   NOhIkhW/T58DQWTgIPVBgjPOO3fkjvYIydpyf1jXC9qMK8LeA2eqAesoJ
+   vrjrPJu+qpZQrdDL54AaK4+Ym5H08javiWcXU6ZuvUl03gsNWGe86EyIG
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="322806005"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="322806005"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 04:18:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="776020838"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="776020838"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2023 04:18:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pk19S-00Co5K-2v;
+        Wed, 05 Apr 2023 14:18:06 +0300
+Date:   Wed, 5 Apr 2023 14:18:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Olliver Schinagl <oliver@schinagl.nl>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Subject: Re: [PATCH v1 1/2] iopoll: Introduce ioreadXX_poll_timeout() macros
+Message-ID: <ZC1Y7tk40kL6SnT7@smile.fi.intel.com>
+References: <20230330141413.25569-1-andriy.shevchenko@linux.intel.com>
+ <3a348abc-d1f3-364f-88de-a0012fbc0fde@schinagl.nl>
+ <ZC04J30xQTVPJ1ho@smile.fi.intel.com>
+ <20230405094147.GS33314@black.fi.intel.com>
+ <ZC1YXarlQKresoTv@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZC1YXarlQKresoTv@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the WM8510 audio CODEC bindings to DT schema
+On Wed, Apr 05, 2023 at 02:15:42PM +0300, Andy Shevchenko wrote:
+> On Wed, Apr 05, 2023 at 12:41:47PM +0300, Mika Westerberg wrote:
+> > On Wed, Apr 05, 2023 at 11:58:15AM +0300, Andy Shevchenko wrote:
+> > > On Fri, Mar 31, 2023 at 10:12:31AM +0200, Olliver Schinagl wrote:
+> > > > On 30-03-2023 16:14, Andy Shevchenko wrote:
 
-Signed-off-by: Saalim Quadri <danascape@gmail.com>
----
-Changes from V2 -> V3:
-    > Drop unneeded SPI example
+...
 
-Changes from V1 -> V2:
-    > Added cirrus opensource as the maintainer
-    > Added missing $ref to dai-common.yaml
-    > Dropped I2C and SPI description
-    > Added sound-dai-cells property
-    > Added 'compatible' as the required property
-    > additionalProperties: false -> unevaluatedProperties: false after adding $ref
-    > Added SPI example
+> > > > But I actually have a small addendum for this series, as it will break
+> > > > `drivers/net/wwan/t7xx/t7xx_dpmaif.c` due to a redefinition (yeah I know).
+> > > > 
+> > > > So I have:
+> > > > https://gitlab.com/olliver/linux/-/commit/c9e591f2dabb2dbaeceebee61fa70b70fdbffc2a
+> > > > https://gitlab.com/olliver/linux/-/commit/41e0f8c08a1c55940813a240215910336ad7bec2
+> > > > https://gitlab.com/olliver/linux/-/commit/f36562f09b0185d403415864ef7218b46a742cdc
+> > > > https://gitlab.com/olliver/linux/-/commit/66237fd97bc42d272602b01dc0cca541c619b2be
+> > > > 
+> > > > Which actually replaces silly calls like readx_poll_timeout(ioread32, ... .
+> > > > 
+> > > > Do you want me to (re-?)post this as a series? I can put your thunderbolt
+> > > > (and your changes here) and post as one big series (or you can do the same
+> > > > obviously).
+> > > 
+> > > I believe the best course of action is to collect this series and your fix
+> > > in your hands and send it as a material for Linux WWAN subsystem with Mika's
+> > > Ack (if he has no objections). That said, let's wait for Mika's answer
+> > > on this.
+> > 
+> > No objections from my side.
+> 
+> Thank you, Mika!
+> 
+> This implies that I stop issuing a new version and Olliver takes over.
 
- .../devicetree/bindings/sound/wlf,wm8510.yaml | 41 +++++++++++++++++++
- .../devicetree/bindings/sound/wm8510.txt      | 18 --------
- 2 files changed, 41 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8510.yaml
- delete mode 100644 Documentation/devicetree/bindings/sound/wm8510.txt
+Olliver, just note that I reduced a lot your initial patch in a sense to add
+only what is close to the existing users, i.e. ioreadXX() and their atomic
+versions (no be(), no _rep() variants). If you are objecting that, you need
+to have yet another patch(es) to prove that there are users.
 
-diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8510.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8510.yaml
-new file mode 100644
-index 000000000000..6d12b0ac37e2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/wlf,wm8510.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/wlf,wm8510.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: WM8510 audio CODEC
-+
-+maintainers:
-+  - patches@opensource.cirrus.com
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: wlf,wm8510
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#sound-dai-cells":
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        codec@1a {
-+            compatible = "wlf,wm8510";
-+            reg = <0x1a>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/sound/wm8510.txt b/Documentation/devicetree/bindings/sound/wm8510.txt
-deleted file mode 100644
-index e6b6cc041f89..000000000000
---- a/Documentation/devicetree/bindings/sound/wm8510.txt
-+++ /dev/null
-@@ -1,18 +0,0 @@
--WM8510 audio CODEC
--
--This device supports both I2C and SPI (configured with pin strapping
--on the board).
--
--Required properties:
--
--  - compatible : "wlf,wm8510"
--
--  - reg : the I2C address of the device for I2C, the chip select
--          number for SPI.
--
--Example:
--
--wm8510: codec@1a {
--	compatible = "wlf,wm8510";
--	reg = <0x1a>;
--};
+Also note, that I reordered macro appearance to be consistent with existing
+schema.
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
