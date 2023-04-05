@@ -2,143 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73C656D8AE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B096D8AE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjDEXEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
+        id S229481AbjDEXEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 19:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjDEXEV (ORCPT
+        with ESMTP id S232869AbjDEXEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:04:21 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4007161BF
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:04:20 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id j13so35563793pjd.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 16:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1680735860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KrKOMt3UyE7cKr4ReAMcPC7o/oJjZhoBrpSamEnzwcU=;
-        b=iBasCSC6te0W78R7Bld/4KqgYzDWUZzqACRfp85/HVPjnIURY/CCvj/MiI6rm+++ti
-         gqpugla/+KDIYJg63rR+HSbATePR4WT4ESQqUSZbNXhXwDsDekOQI3dc/hhfGsX4ZmQH
-         ecTKCtm9wkF//A0omDOb3qG1mFeJtK6feClVFbSUVOuk+pMTKJePNaAaUzd151jRcXcN
-         DByT2oDMO7+9+lh1FRHXVJeLQZdjpwBHrNdyfejgPhOeMKO+SfFKXC+BSv2ILVK7l638
-         6WjxIUoe58jT0iOyh0VhO3qcTR60vFv7HyGZ3OdUkrwxLi3TmR49uTk80nkqRXSgT7Hb
-         bdmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680735860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KrKOMt3UyE7cKr4ReAMcPC7o/oJjZhoBrpSamEnzwcU=;
-        b=zEMSYmwHbfbKbGWt8rGM8IpZVvkxUoeD00q4tgqKLpL5Mc+kfAcpwEWcPfDXDyTa0y
-         fUbi39W8/axMdljb6/yiPmBbSrYaA7KFKVtD4/CpEA2eQkyGLO4V8+y/lkpgJxxxRKuT
-         EJmC/2uwSb7hjprN1u8cfHhcK0ssiPFUAa7gs4D8IpNr2oezAArAsMFrA5kl6SPMmOL7
-         QhPaX53w+KMbKDarJYPIlAQw+543v6uG6Y0I8KhIBMvjsGU6OZIFtaTfswRyvFBLLhls
-         Sv2aGm3Z9HcFgApoFMnHkcFQUnm1KrZ5Pl9lxuJ311GKp9lUy8rhZPhr7tjZCXE3zRuh
-         VMBQ==
-X-Gm-Message-State: AAQBX9eq3RdFfCkkZ+kWNsMp/kMfr7hd3f1LEIgMLmmsICk9bMp3OxiC
-        nZEbnJfZI3bFXpf8yofZAdFTtOlG+Zm4C7FGFBY=
-X-Google-Smtp-Source: AKy350b+42w1smjir37jF3mpwW0jtsgJwT9OCuZ/HHxaFRTXRFnztFkwSl+Lgm5digRUYn3uj9z7oA==
-X-Received: by 2002:a17:902:f152:b0:199:1b8a:42a8 with SMTP id d18-20020a170902f15200b001991b8a42a8mr6304205plb.6.1680735859685;
-        Wed, 05 Apr 2023 16:04:19 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
-        by smtp.gmail.com with ESMTPSA id b18-20020a63e712000000b005038291e5cbsm9739867pgi.35.2023.04.05.16.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 16:04:18 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pkCAp-00HVND-O9; Thu, 06 Apr 2023 09:04:15 +1000
-Date:   Thu, 6 Apr 2023 09:04:15 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Ryosuke Yasuoka <ryasuoka@redhat.com>
-Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xfs: Use for_each_perag() to iterate all available AGs
-Message-ID: <20230405230415.GT3223426@dread.disaster.area>
-References: <20230404084701.2791683-1-ryasuoka@redhat.com>
- <20230405010403.GO3223426@dread.disaster.area>
- <CAHpthZoWRWS2bXFDQrB+iOz7AA_ZLGJKmytHjN582VaWQ_TRwg@mail.gmail.com>
+        Wed, 5 Apr 2023 19:04:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC037A9F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680735879; x=1712271879;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=DUFoSzec5fZiiQaU9RW0QF5RKVNJleEQFUuWZQ4zhgI=;
+  b=UQrTagLxQWM3HQSrCQQX42owEXt0Laz4ydI07xcGzbEd3P4xrB7qfUoB
+   A0/h0dLpyxJn87j0VVVeBrmXipL+arMdQk+jytfKqmAzgzs+qYziewIo5
+   IjcSkJcUjxqa9vaeaACmpPNmjXoUyrXe9pXn96CGm6D0aS04otBE3s1Sf
+   BJHBVc8TM/oQ+HdxQqZ7m8cYhenKc6Cl1LQ5gQC5falKLKHulqLNiuI1z
+   IZz+Er3xx0n2s84IZJDjP48yq/nSXvKHK/SAECn0x5vdDqPQWffAgpx86
+   nXedqIkuE+cvZe9o3wJrsy6H3On7XX0CXFhy4AkDNhkz+vFFntiYRx0vp
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="345179016"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="345179016"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 16:04:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="664225729"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="664225729"
+Received: from skansra-mobl.amr.corp.intel.com (HELO [10.209.62.228]) ([10.209.62.228])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 16:04:38 -0700
+Message-ID: <5b8bbe752ce03cc690441cf4b6f6fe0f608a1e54.camel@linux.intel.com>
+Subject: Re: [PATCH] sched: rt: Optimization function 'pick_next_rt_entity'
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Li zeming <zeming@nfschina.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+Date:   Wed, 05 Apr 2023 16:04:38 -0700
+In-Reply-To: <20230405232900.4019-1-zeming@nfschina.com>
+References: <20230405232900.4019-1-zeming@nfschina.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHpthZoWRWS2bXFDQrB+iOz7AA_ZLGJKmytHjN582VaWQ_TRwg@mail.gmail.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 05:04:14PM +0900, Ryosuke Yasuoka wrote:
-> Dave,
-> 
-> Thank you for reviewing my requests.
-> 
-> > > for_each_perag_wrap() doesn't expect 0 as 2nd arg.
-> > > To iterate all the available AGs, just use for_each_perag() instead.
-> >
-> > Thanks, Ryosuke-san. IIUC, this is a fix for the recent sysbot
-> > reported filestreams oops regression?
-> >
-> > Can you include the context of the failure it reported (i.e. the
-> > trace from the oops), and the 'reported-by' tag for the syzbot
-> > report?
-> >
-> > It should probably also include a 'Fixes: bd4f5d09cc93 ("xfs:
-> > refactor the filestreams allocator pick functions")' tag as well.
-> 
-> No. my request is in the same code area where syzbot bug was reported,
-> but it might not be relevant. A kernel applying my patch got the same Oops.
-> 
-> I'm indeed checking the syzbot's bug and I realized that this small bug fix
-> is not related to it based on my tests. Thus I sent the patch
-> as a separate one.
-> 
-> > While this will definitely avoid the oops, I don't think it is quite
-> > right. If we want to iterate all AGs, then we should be starting the
-> > iteration at AG 0, not start_agno. i.e.
-> >
-> > +                       for_each_perag(args->mp, 0, args->pag)
-> 
-> I agree with your proposal because it is more direct.
-> However, as the current for_each_perag() macro always assigns 0 to (agno),
-> it will cause compilation errors.
+On Thu, 2023-04-06 at 07:29 +0800, Li zeming wrote:
+> The moral of this function is to obtain the next RT scheduling entity
+> object,while 'list_entry' Implementation function of  'container_of'
+> returns the next RT scheduling entity object (no new code should be
+> added afterwards), directly returning 'list_entry' The execution result
+> is sufficient.
 
-Yup, I didn't compile test my suggestion - i just quickly wrote it
-down to demonstrate what I was thinking. I expect that you have
-understood that using for_each_perag() was what I was suggesting is
-used, not that the sample code I wrote is exactly correct. IOWs,
+Suggest changing the subject from "Optimization function 'pick_next_rt_enti=
+ty'
+to "Simplify pick_next_rt_entity()"
 
-		for_each_perag(args->mp, start_agno, args->pag)
+Suggest simplifying the comment:
 
-would have worked, even though the code does not do what it looks
-like it should from the context of start_agno. Which means this
-would be better:
+Remove useless intermediate variable "next" and its initialization.  Direct=
+ly return the
+next RT scheduling entity obtained from list_entry().
 
-		start_agno = 0;
-		for_each_perag_from(args->mp, start_agno, args->pag)
+Otherwise the patch itself looks fine.
 
-because it directly documents the value we are iterating from.
+Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+>=20
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>  kernel/sched/rt.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+> index 0a11f44adee5..e9b1c08c20a7 100644
+> --- a/kernel/sched/rt.c
+> +++ b/kernel/sched/rt.c
+> @@ -1769,7 +1769,6 @@ static inline void set_next_task_rt(struct rq *rq, =
+struct task_struct *p, bool f
+>  static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
+>  {
+>  	struct rt_prio_array *array =3D &rt_rq->active;
+> -	struct sched_rt_entity *next =3D NULL;
+>  	struct list_head *queue;
+>  	int idx;
+> =20
+> @@ -1779,9 +1778,8 @@ static struct sched_rt_entity *pick_next_rt_entity(=
+struct rt_rq *rt_rq)
+>  	queue =3D array->queue + idx;
+>  	if (SCHED_WARN_ON(list_empty(queue)))
+>  		return NULL;
+> -	next =3D list_entry(queue->next, struct sched_rt_entity, run_list);
+> =20
+> -	return next;
+> +	return list_entry(queue->next, struct sched_rt_entity, run_list);
+>  }
+> =20
+>  static struct task_struct *_pick_next_task_rt(struct rq *rq)
 
-> Although I haven't checked other callers deeply, we should modify
-> the macro as follows:
-> 
->  #define for_each_perag(mp, agno, pag) \
-> -   (agno) = 0; \
->   for_each_perag_from((mp), (agno), (pag))
-
-That is not correct, either. agno needs to be a variable - it is
-the loop agno counter that tracks the iteration.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
