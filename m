@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D056D81B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD936D81B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbjDEPXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
+        id S238395AbjDEP0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238762AbjDEPXV (ORCPT
+        with ESMTP id S238181AbjDEP0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:23:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5BF5B9A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:23:04 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pk4xx-00073O-O3; Wed, 05 Apr 2023 17:22:29 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pk4xt-00017e-Jm; Wed, 05 Apr 2023 17:22:25 +0200
-Date:   Wed, 5 Apr 2023 17:22:25 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 06/12] net: phy: add phy_device_atomic_register helper
-Message-ID: <20230405152225.tu3wmbcvchuugs5u@pengutronix.de>
-References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
- <20230405-net-next-topic-net-phy-reset-v1-6-7e5329f08002@pengutronix.de>
- <ad0b0d90-04bf-457c-9bdf-a747d66871b5@lunn.ch>
+        Wed, 5 Apr 2023 11:26:41 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430FF1701
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:26:40 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id fi11so18532602edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:26:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1680708398; x=1683300398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SiNSMmn4P5V1jwJhNPZuiJRsbJQ57AhnJVTBbX8pgZo=;
+        b=NSoOjhoaVJ30e5PphrSukeB/G2v7DuMPOO2t5SabWWaGhavl0xfhxz0DYH8NUGuXbq
+         iMT3QA4D9glPde1jx+NRYc8+RO/WQk6HfomFOrKRPVeweDhkiix+sLVAHAWS3c75EQud
+         OcT5h++l1ropGhkanYmM5XQ20yzWKHMTFH0CM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680708398; x=1683300398;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SiNSMmn4P5V1jwJhNPZuiJRsbJQ57AhnJVTBbX8pgZo=;
+        b=p38ML2Q+zGvyA+qBWuAL/bNTBwcbZnlV25Di+C+kcjEaehaSwOpuhtvQp0wUglYQTg
+         R6xqL0TI2Y0eg08T2mvJ26oAX33i6rdiMKAPknXcT4A7MVxJpHESVB2yvDfga9sroo0t
+         HBtdvRIBN/WARgJHgklZsexIRh9KNFttpHzEkAidERkAV6PiX2XReo9Tx61altTj62vV
+         ehJlCpV232F7DP+jAnOE/onLS1E1KwKF732awfwtUMLFxWQ2wy8wezr+KiVoHtiq/Hxi
+         wFsOaSrxMEmrFcDVLOn4UdLCcL0RvItd4NWxcjCPfuBJ1SB3GGcN8+TCRkLQ3K5YVDwU
+         oYDw==
+X-Gm-Message-State: AAQBX9fo9uDFDioEziNtkpbMvBM8dKNY8aKgcMPWNmRu7OYwNISaSInW
+        gZmyQXqovaTO/ogfJDlBJ1r8xyWBIB28nO7jpZ4oGQ==
+X-Google-Smtp-Source: AKy350YYQEHQItFy+7w1Ec8L0bpVhyAcoHK+tYGYtHfjsS3mkr9dBUV+KkVqGekNviLSiY2Jx48jOg==
+X-Received: by 2002:a17:906:eb01:b0:947:c201:df9b with SMTP id mb1-20020a170906eb0100b00947c201df9bmr3262797ejb.9.1680708398243;
+        Wed, 05 Apr 2023 08:26:38 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id gx20-20020a1709068a5400b00931faf03db0sm7469017ejc.27.2023.04.05.08.26.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 08:26:37 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id er13so101030463edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:26:36 -0700 (PDT)
+X-Received: by 2002:a17:907:2075:b0:947:72cd:9325 with SMTP id
+ qp21-20020a170907207500b0094772cd9325mr1890350ejb.15.1680708395703; Wed, 05
+ Apr 2023 08:26:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad0b0d90-04bf-457c-9bdf-a747d66871b5@lunn.ch>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230405022702.753323-1-mcgrof@kernel.org> <20230405022702.753323-6-mcgrof@kernel.org>
+In-Reply-To: <20230405022702.753323-6-mcgrof@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 5 Apr 2023 08:26:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whH+OsAY+9qLc9Hz+-W8u=dvD3NLWHemOQpZPcgZa52fA@mail.gmail.com>
+Message-ID: <CAHk-=whH+OsAY+9qLc9Hz+-W8u=dvD3NLWHemOQpZPcgZa52fA@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] debugfs: add debugfs_create_atomic64_t for atomic64_t
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-04-05, Andrew Lunn wrote:
-> > To bundle the phy firmware parsing step within phx_device.c the commit
-> > copies the required code from fwnode_mdio.c. After we converterd all
-> > callers of fwnode_mdiobus_* to this new API we can remove the support
-> > from fwnode_mdio.c.
-> 
-> Why bundle the code? Why not call it in fwnode_mdio.c?
+On Tue, Apr 4, 2023 at 7:27=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org>=
+ wrote:
+>
+> Sometimes you want to add debugfs entries for atomic counters which
+> can be pretty large using atomic64_t. Add support for these.
 
-The current fwnode_mdio.c don't provide the proper helper functions yet.
-Instead the parsing is spread between fwnode_mdiobus_register_phy() and
-fwnode_mdiobus_phy_device_register(). Of course these can be extracted
-and exported but I don't see the benefit. IMHO it just cause jumping
-around files and since fwnode is a proper firmware abstraction we could
-use is directly wihin core/lib files.
+So I realize why you use atomic64, but I really suspect you'd be
+better off with just the regular "atomic_long".
 
-> The bundling in this patch makes it harder to see the interesting part
-> of this patch, how the reset is handled. That is what this whole
-> patchset is about, so you want the review focus to be on that.
+This is not some debug stat that we care deeply about on 32-bit, and
+"atomic64" is often really really nasty on 32-bit architectures.
 
-I know and I thought about adding the firmware parsing helpers first but
-than I went this way. I can split this of course to make the patch
-smaller.
+For example, on x86, instead of being a single instruction, it ends up
+being a cmpxchg loop. In fact, even a single atomic read is a cmpxchg
+(admittedly without the need for looping).
 
-Regards,
-  Marco
+And yeah, I realize that we don't have a "atomic_long" debugfs
+interface either. But I think we could just use atomic_long for the
+module code (avoiding all the horrors of 64-bit atomics on 32-bit
+architectures), and then using just 'var->counter' for the value. It's
+not like the debugfs stuff actually does any truly atomic updates.
 
+So something like
 
-> 
-> 	 Andrew
-> 
+        debugfs_create_ulong(... &val->counter ..);
+
+instead of
+
+        debugfs_create_atomic64(... &val ..);
+
+Hmm?
+
+I dunno. I just think this is not something that may be worth
+introducing a new thing for, when it is *so* painful on 32-bit, and
+doesn't seem worth it.
+
+                   Linus
