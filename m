@@ -2,90 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD306D8661
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F876D8667
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjDES4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S233880AbjDES5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjDES4d (ORCPT
+        with ESMTP id S231650AbjDES5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:56:33 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A603A59E3
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:56:31 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id i5so143725521eda.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 11:56:31 -0700 (PDT)
+        Wed, 5 Apr 2023 14:57:52 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5513A9D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:57:51 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id v14-20020a05600c470e00b003f06520825fso1671798wmo.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 11:57:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680720990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KUHx9jRHzGk0Yj8qja9+zPdMg8UV3tc3NMpsClxL/uU=;
-        b=PcOksGvousVNSQ3cXdcS8HWqwXWWJcKA52C1lMjGVEUryaoo1tPpsv5kRcDXnrszeS
-         JdYnxSepPg5yJ/fPSprlLRsupbI62wkDmZPCcKllTgOwxHqMqudEkwjw8ZhEs+8EK2a1
-         NUk4+UWeR0EaIswYspERC1kivvjsa0dWn2wnvu2WB9gk8GukcN9hVPDOmbhPQBLeN2uB
-         1jkZr4RwvxyVz3l3W89ZzOJwJB0ceoUCOYSHY8WiICNTCCA85y6wjPi+rNU0oBwOYs2l
-         N/U/n1chu5ml11hqxoxCZ1NlwaqbYeH6RnTye7Bn3qrwMNnUgKCvlLNecFKJWushISY0
-         CU7Q==
+        d=linaro.org; s=google; t=1680721069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BfK/ruuUAIVsaAum9iERPkTyValfNQl6BGUoiSN+Q9c=;
+        b=A2dfbpa4yjmhPFNsLPDYm25h4SnPTXoF8szEJengRiCITcljVlgz+fF4u8MDpHWONM
+         QCGgzCcX3LbfLXrBFiulnBMtVX/yw8pVsmTPQcXscyfkUOlu+MuGP3QIhZVAJO1KBQN6
+         xuTlY7LOjemgJsh/IDbnSBA3wJfRKcmLevjcIpsgdXkNqfnC9hN+G3do7+JeAZtQEzW6
+         K+NRVXUMgjiftBE/XpL8ZXjrjbwpZhti5IS49cPrw7v0XFEYaGWkVYKkNsr0U0t7K1bX
+         bcq+066VWnrfFNJQ7sNBE1vt/UL2orOC7WiXUAW1FE/iVeWBV37ioqHIFyLxgrXSOUun
+         +JTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680720990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KUHx9jRHzGk0Yj8qja9+zPdMg8UV3tc3NMpsClxL/uU=;
-        b=v6xrKuWXKJNNkh7kDnJEdd2QlKAsCm4ueeAjJ6r0aKDLtr9Gqq/KAx2+X5dwkO3PXd
-         5ku2XUaRzkBB/+k7pkzih2a+V1v7gvJ6zi0NuYSW4kTpOalYB/iuNBMeRTyh6rrm9DFq
-         mNDZrxcLnlujRUQMqR2a0tfvqoWPesjJpBwl5lZP7kadtM7xZTCSF6ilM7F2zKIWe/d9
-         Fl/n3iTuzolf4NAL+ww0T3/4PAGZ2yBaNNr4TmMU2ps3VAIEhAT3feirx9JswU2r/QpG
-         JqZOPz8IR7SD3BP0btbYOsshsF4Nxi4TipSS/116z4p1LN1Nf5IVPxZSm5mQkk4nYddB
-         HDeQ==
-X-Gm-Message-State: AAQBX9f0GP9qhmC/Zd4nADxmgqO9Vc3dgi7CSrxbG5TNN2nOTRjO7bEx
-        XU4AEnBgC5yeIUns1u/wDORQBUShcL0WRqkSFUZUCA==
-X-Google-Smtp-Source: AKy350bHaZuNUXPKWqtZZFlNYtm/KTUiWTEcxIzQpbSGE4xeqztd4ciQVHBO4lwV5nrlqSYhHlA8ehPxdZppf/JJggY=
-X-Received: by 2002:a17:906:95cf:b0:933:f6e8:26d9 with SMTP id
- n15-20020a17090695cf00b00933f6e826d9mr2247603ejy.15.1680720989801; Wed, 05
- Apr 2023 11:56:29 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680721069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BfK/ruuUAIVsaAum9iERPkTyValfNQl6BGUoiSN+Q9c=;
+        b=0uLQJR7x9ubzrlZfJWKtPlKZiv+Z9omdwyg6f0WzFSBxRa//PsoMZmHejWUOtehIgr
+         hitlDVzcDzGTHkwMOk1ecA34ESrZeib/+gnmPptXE9mqx1+08DT9gopJgOArDkCuaPYj
+         TeZyhHPu9dvMxJa5ZFrXPsqfOvBdbPU+sloNt5V171umzVNDfdHJ4gx/UFgkpflI5M9s
+         80PU4wc4WCT555WwvSoCeP408oo/nkdY7cqkBl2cpKpXYEOVLqaULmk/TYvc1sblHXDG
+         LKl6DrbZd3NeN4gmzw7gI1KYgJzkXZ7cTEGH9wAuWcwVckTYrghwos2cyCM51qMSGRJl
+         S+tQ==
+X-Gm-Message-State: AAQBX9fVvnzFGOFkubIuNMPVT6b3ScjBL7DStzE6g4gEYgG2JgTu8Rr/
+        JbzWa0GvoeOiZKzzSlIMb1wtlA==
+X-Google-Smtp-Source: AKy350axVpdPw22PByVRZ9ZA2cBFUasTWfKl93dB2TAQj0kvAxjYOL5YSOQOBMpf8tORSDmuKgkxuw==
+X-Received: by 2002:a05:600c:3644:b0:3eb:42fa:39d5 with SMTP id y4-20020a05600c364400b003eb42fa39d5mr5488382wmq.29.1680721069215;
+        Wed, 05 Apr 2023 11:57:49 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:6630:ee96:3710:24c8? ([2a05:6e02:1041:c10:6630:ee96:3710:24c8])
+        by smtp.googlemail.com with ESMTPSA id k22-20020a7bc416000000b003eeb1d6a470sm3037768wmi.13.2023.04.05.11.57.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 11:57:48 -0700 (PDT)
+Message-ID: <0a89bfa4-a473-b75f-3c06-b9d4a1f547a0@linaro.org>
+Date:   Wed, 5 Apr 2023 20:57:47 +0200
 MIME-Version: 1.0
-References: <20230404001353.468224-1-yosryahmed@google.com>
- <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
- <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com>
- <20230404145830.b34afedb427921de2f0e2426@linux-foundation.org>
- <CAJD7tkZCmkttJo+6XGROo+pmfQ+ppQp6=qukwvAGSeSBEGF+nQ@mail.gmail.com>
- <20230404152816.cec6d41bfb9de4680ae8c787@linux-foundation.org>
- <20230404153124.b0fa5074cf9fc3b9925e8000@linux-foundation.org>
- <CAJD7tkYFZGJqZ278stOWDyW3HgMP8iyAZu8hSG+bV-p9YoVxig@mail.gmail.com> <20230405114841.248dffb65526383823c71d60@linux-foundation.org>
-In-Reply-To: <20230405114841.248dffb65526383823c71d60@linux-foundation.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 5 Apr 2023 11:55:53 -0700
-Message-ID: <CAJD7tkZm2-Xx1axfhMH9wD4cJK5ySwg=kn9oXWeSBAR4npNp2Q@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] Ignore non-LRU-based reclaim in memcg reclaim
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [GIT PULL] thermal for v6.4-rc1
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Yang Li <yang.lee@linux.alibaba.com>
+References: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
+ <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org>
+ <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,43 +84,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 11:48=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Tue, 4 Apr 2023 16:46:30 -0700 Yosry Ahmed <yosryahmed@google.com> wro=
-te:
->
-> > > But the key question remains: how desirable is a backport?
-> > >
-> > > Looking at the changelogs I'm not seeing a clear statement of the
-> > > impact upon real-world users' real-world workloads.  (This is a hint)=
-.
-> > > So I am unable to judge.
-> > >
-> > > Please share your thoughts on this.
-> >
-> > I think it's nice to have but not really important. It occasionally
-> > causes writes to memory.reclaim to report false positives and *might*
-> > cause unnecessary retrying when charging memory, but probably too rare
-> > to be a practical problem.
-> >
-> > Personally, I intend to backport to our kernel at Google because it's
-> > a simple enough fix and we have occasionally seen test flakiness
-> > without it.
-> >
-> > I have a reworked version of the series that only has 2 patches:
-> > - simple-two-liner-patch (actually 5 lines)
-> > - one patch including all refactoring squashed (introducing
-> > flush_reclaim_state() with the huge comment, introducing
-> > mm_account_reclaimed_pages(), and moving set_task_reclaim_state()
-> > around).
-> >
-> > Let me know if you want me to send it as v5, or leave the current v4
-> > if you think backporting is not generally important.
->
-> Let's have a look at that v5 and see what people think?
+On 05/04/2023 20:39, Rafael J. Wysocki wrote:
+> On Wed, Apr 5, 2023 at 8:32 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi Rafael,
+>>
+>> just a gentle reminder
+> 
+> This is in my linux-next branch, I'll merge it into thermal tomorrow.
+> 
+>>   because more material will come in the next days
+> 
+> So why can't it wait?
 
-Sent v5 [1]. Thanks Andrew!
+There are more changes to be sent which is against thermal/bleeding-edge 
++  patches on the mailing list
 
-[1]https://lore.kernel.org/lkml/20230405185427.1246289-1-yosryahmed@google.=
-com/
+The branch thermal/bleeding-edge is based on thermal/linux-next which in 
+turn is based on linux-pm/next
+
+Having thermal/linux-next merged will allow me to merge 
+thermal/bleeding-edge into thermal/linux-next, then take the patches on 
+the mailing list and merge them into thermal/bleeding-edge.
+
+So at this point, I can send more patches based on the exported branch. 
+Otherwise, the patches I will send will depend on patches on the mailing 
+list.
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
+
