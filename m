@@ -2,146 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931FB6D830F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1F16D84DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbjDEQH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S229760AbjDER2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232978AbjDEQHs (ORCPT
+        with ESMTP id S231140AbjDER2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:07:48 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B815FCF;
-        Wed,  5 Apr 2023 09:07:46 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id j7so43177074ybg.4;
-        Wed, 05 Apr 2023 09:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680710865;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=THmN70ARi7g7nOYqZGnyM9XC7McNixSrT5VySL2L1XY=;
-        b=Ynq4GiK2SqmRrZlnbjGWooOzINuQI2kyGH0oZTjLcYpR8Rs6aNftMp8N3eW+t/dze4
-         OxZTEFcOklqlcLYKx79sZyHbFMBtgONxh5NkuXQGiHsY0F2DwOWWGZn0pboZLEEq8Aa4
-         83BKvuSCI+wDcqh4EjP63C5Li9q0E5JBjd8x0ZQxdYo8ZmEnqN15nKu8R+ZinzrwDgUL
-         xxcv7QVQWIA2qOlmPYwm+CX/InDQKN/fACdhJMxkNbkfhdYF3eJGIdLNFcfb6+2zEypL
-         ATdyu90rsv42mRDJ7Bd2xr2bb4rRJK677foENmhz467SujK7zqTYyxZUp2FyqtEagX0w
-         LNyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680710865;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=THmN70ARi7g7nOYqZGnyM9XC7McNixSrT5VySL2L1XY=;
-        b=aOQgwbPvqS5yKqtA6jfCMvGfgxiP4M37QpMBrEUFAogusBQsfCt02p09xxq7eGciOP
-         dRAvTO5iEH0PQW1/nzeRpvwyIN2z3qbwWoAnpFgxPHg481dxO+2qrB9c7dHIupBB6yif
-         TZVXdIaVPj28q0IhMq5I4mc//rov0HeO38sdlp1n3RHIGypzUYpkri1cGC4v0jI+OGuY
-         98CknoU34cwDvE/cToIwLnEsHCn81YmKnKYtUEmB1a7I8m+Q7ksfPonzfrBA4fmNhe1D
-         k+mkKFbV+3z733GDNCEhrR7OmatOYUgoI7XX6pDPrLB9bb7X6Mb5+F78My+W89ASHD8p
-         LMNw==
-X-Gm-Message-State: AAQBX9cZWIV0qNrY8SAl1/6wClqc7J6o3S5Jqwz3wzfpugk97MFLaSBP
-        uZWxgYmyOZEy5TqMjh9mGKxnOLrjhaVsDT4GgHjkJBRgP4g=
-X-Google-Smtp-Source: AKy350br5ntxgbSUHc424ssdCh8Ae26wHN0Kzb3Z0nBg8xN62+VacIWHvdlWqbfWl6gLgodcuHdyG3i46Pp7y5mcPDY=
-X-Received: by 2002:a25:c401:0:b0:b76:ae61:b68b with SMTP id
- u1-20020a25c401000000b00b76ae61b68bmr3849390ybf.5.1680710865451; Wed, 05 Apr
- 2023 09:07:45 -0700 (PDT)
+        Wed, 5 Apr 2023 13:28:16 -0400
+Received: from vern.gendns.com (vern.gendns.com [98.142.107.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1534C31;
+        Wed,  5 Apr 2023 10:28:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PEOSsUi8JIMvoW7QnnkpkkJijxo4IUuMnZ9vv3EjUhQ=; b=PlcvWllVCZZLIxn7TA0uYZOD2i
+        8Timk2idYv+lLO3yZJhWhHPsl92ZREHTEkcZ2uj1e53hz36DkB/efojzcWFV0Na8cR9Qj+10qLhOH
+        ta3+36sHegS1o46TQyP99X9cQQUBT/Z1QMqvJ9krER9Ob1/RWq++SuzdzpDHI3Xhy5MHfqna5eIZw
+        +3KCwr3As0xZzcRdS0d74nyj+RIivO7MbcvRaGz8ll694eT/OgE8InMgGs8kJwhgkR/6hUQpNlGNz
+        Za3hBrO3EltLq0JnttfLThWdO07VZ32OqVzWbWH2mgZNY1LmC2nLtlkLnHo1jx4ghOCQVGFpuJj4L
+        hqCUbhxg==;
+Received: from ip98-183-112-29.ok.ok.cox.net ([98.183.112.29]:48320 helo=[192.168.0.134])
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <david@lechnology.com>)
+        id 1pk5gX-00020w-28;
+        Wed, 05 Apr 2023 12:08:34 -0400
+Message-ID: <9d163cc7-d7ee-55e8-c01d-a1d4b3b19877@lechnology.com>
+Date:   Wed, 5 Apr 2023 11:07:56 -0500
 MIME-Version: 1.0
-References: <20230404072133.1022-1-lishuchang@hust.edu.cn>
-In-Reply-To: <20230404072133.1022-1-lishuchang@hust.edu.cn>
-From:   Justin Tee <justintee8345@gmail.com>
-Date:   Wed, 5 Apr 2023 09:07:34 -0700
-Message-ID: <CABPRKS9FDRyVwvO-sixFJ0uT64ua1s3r9UDNV_raD9bw+WN6HQ@mail.gmail.com>
-Subject: Re: [PATCH v2] scsi: lpfc: fix ioremap issues in 'lpfc_sli4_pci_mem_setup'
-To:     lishuchang@hust.edu.cn
-Cc:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        hust-os-kernel-patches@googlegroups.com,
-        James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 54/65] clk: da8xx: clk48: Switch to determine_rate
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-54-9a1358472d52@cerno.tech>
+ <04f5d305-9992-bcdc-cd54-111eb8254155@lechnology.com>
+ <3nyoulu5eba6eyo644crhbtog63jh7vockbp7dz6mxquj2omsn@j56kn6vkbktg>
+From:   David Lechner <david@lechnology.com>
+In-Reply-To: <3nyoulu5eba6eyo644crhbtog63jh7vockbp7dz6mxquj2omsn@j56kn6vkbktg>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks okay.
+On 4/5/23 10:22 AM, Maxime Ripard wrote:
+> Hi David,
+> 
+> On Wed, Apr 05, 2023 at 10:03:24AM -0500, David Lechner wrote:
+>> On 4/4/23 5:11 AM, Maxime Ripard wrote:
+>>> The TI DA8xx USB0 clk48 clocks implements a mux with a set_parent
+>>> hook, but doesn't provide a determine_rate implementation.
+>>>
+>>> This is a bit odd, since set_parent() is there to, as its name implies,
+>>> change the parent of a clock. However, the most likely candidate to
+>>> trigger that parent change is a call to clk_set_rate(), with
+>>> determine_rate() figuring out which parent is the best suited for a
+>>> given rate.
+>>>
+>>
+>> As mentioned in my previous review, parent is selected by device
+>> tree and should never be changed after init.
+> 
+> Great minds think alike then, because the driver implements exactly
+> that, either before or after that patch.
+> 
+> That patch makes the current behaviour explicit but doesn't change it in
+> any way.
+> 
+> So I guess that means that I can add your Acked-by on the three patches
+> you reviewed with the same message?
+> 
+> Maxime
 
-Reviewed-by: Justin Tee <justin.tee@broadcom.com>
+Yes, preferably with a simplified commit message.
 
-Thanks,
-Justin
+Acked-by: David Lechner <david@lechnology.com>
 
-On Tue, Apr 4, 2023 at 12:24=E2=80=AFAM <lishuchang@hust.edu.cn> wrote:
->
-> From: Shuchang Li <lishuchang@hust.edu.cn>
->
-> When if_type equals to zero and pci_resource_start(pdev, PCI_64BIT_BAR4)
-> returns false, drbl_regs_memmap_p is not remapped.This passes a NULL
-> pointer to iounmap(), which can trigger a WARN() on certain arches.
->
-> When if_type equals to six and pci_resource_start(pdev, PCI_64BIT_BAR4)
-> returns true, drbl_regs_memmap_p may has been remapped and
-> ctrl_regs_memmap_p is not remapped. This is a resource leak and passes
-> a NULL pointer to iounmap().
->
-> To fix these issues, we need to add null checks before iounmap(), and
-> change some goto lables.
->
-> Fixes: 1351e69fc6db ("scsi: lpfc: Add push-to-adapter support to sli4")
-> Signed-off-by: Shuchang Li <lishuchang@hust.edu.cn>
-> ---
->  drivers/scsi/lpfc/lpfc_init.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.=
-c
-> index 4f7485958c49..ed75230b0209 100644
-> --- a/drivers/scsi/lpfc/lpfc_init.c
-> +++ b/drivers/scsi/lpfc/lpfc_init.c
-> @@ -12026,7 +12026,7 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
->                                 goto out_iounmap_all;
->                 } else {
->                         error =3D -ENOMEM;
-> -                       goto out_iounmap_all;
-> +                       goto out_iounmap_ctrl;
->                 }
->         }
->
-> @@ -12044,7 +12044,7 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
->                         dev_err(&pdev->dev,
->                            "ioremap failed for SLI4 HBA dpp registers.\n"=
-);
->                         error =3D -ENOMEM;
-> -                       goto out_iounmap_ctrl;
-> +                       goto out_iounmap_all;
->                 }
->                 phba->pci_bar4_memmap_p =3D phba->sli4_hba.dpp_regs_memma=
-p_p;
->         }
-> @@ -12069,9 +12069,11 @@ lpfc_sli4_pci_mem_setup(struct lpfc_hba *phba)
->         return 0;
->
->  out_iounmap_all:
-> -       iounmap(phba->sli4_hba.drbl_regs_memmap_p);
-> +       if (phba->sli4_hba.drbl_regs_memmap_p)
-> +               iounmap(phba->sli4_hba.drbl_regs_memmap_p);
->  out_iounmap_ctrl:
-> -       iounmap(phba->sli4_hba.ctrl_regs_memmap_p);
-> +       if (phba->sli4_hba.ctrl_regs_memmap_p)
-> +               iounmap(phba->sli4_hba.ctrl_regs_memmap_p);
->  out_iounmap_conf:
->         iounmap(phba->sli4_hba.conf_regs_memmap_p);
->
-> --
-> 2.25.1
->
