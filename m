@@ -2,171 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B926D7CFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F229C6D7CED
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237943AbjDEMz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S237957AbjDEMsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237975AbjDEMzX (ORCPT
+        with ESMTP id S237382AbjDEMr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:55:23 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 05:55:21 PDT
-Received: from outbound-smtp44.blacknight.com (outbound-smtp44.blacknight.com [46.22.136.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD9755B3
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:55:21 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp44.blacknight.com (Postfix) with ESMTPS id EC4BBF850F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:45:20 +0100 (IST)
-Received: (qmail 19508 invoked from network); 5 Apr 2023 12:45:20 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 5 Apr 2023 12:45:20 -0000
-Date:   Wed, 5 Apr 2023 13:45:19 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org,
-        Alexander Halbuer <halbuer@sra.uni-hannover.de>
-Subject: Re: [PATCH] mm, page_alloc: reduce page alloc/free sanity checks
-Message-ID: <20230405124519.ir7y54aunmyg3tcn@techsingularity.net>
-References: <20230216095131.17336-1-vbabka@suse.cz>
+        Wed, 5 Apr 2023 08:47:59 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F119BF;
+        Wed,  5 Apr 2023 05:47:58 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id e13so15817902ioc.0;
+        Wed, 05 Apr 2023 05:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680698878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pyxlli4loMWMsjs2bBWeBBekdCpq1Dl8CfbkDwzwlrI=;
+        b=ouBFXzbW70/BFgL6IPPBJcFQJIk2Arypw/45lLL3CbwqM69FBOjqKkelnLKibGtls1
+         aH7dJfXVJXz/ZmZFErsAjWdZws5BH0Pe2f1ag9VMrw1hinL9cA3Tk2t9Mk73OipZ7WHv
+         SEHf5bc/NKocj4TrH2Blc/5WQ2si5GdxPzk60lP6l/4mJWN0gDMHpMFXYRQAUhbX5dvy
+         phYdtwnzs+ViAGzO7mxiGX/K1bWu+xgzwo/V91/hlnPkLRdKzAtqKnzB3hPQWfT8niQy
+         oof50QOdbuz+r6CxvgOajWW55XkIu15mGX0UQ8f6Zi3p4qiv8AeAFz5XAmxTFfeneSUs
+         bghg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680698878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pyxlli4loMWMsjs2bBWeBBekdCpq1Dl8CfbkDwzwlrI=;
+        b=0hyt8lQyOBf2ihK4Ol97jV2k29DHYcmNvx4usVYZ9Ois7/MDUwez/PlfB3YHT1Gzbq
+         oukFaArnO1ZWPmmDsmLOz4QqUYXJFNHFeN+LxH8Gn7mmyNqXxSEIgvVOwsvAhsHpyajl
+         jtInG65M1V+TeN9DACL5/w2D10XjeyEQYob5zmqnw3siQzKGtA/REaPO7+WupWA1HF49
+         C1/KE35amQOdd2qcAqQMkGogtxAc9lMngNm2O06ZfmpVGEWJWPm6ip5ctuzwa+gDnBiz
+         DMH95DIM03zsGddtN6Ov7ZxxKoq5bTjYbmpRm5XiEspjgleSyhcy6PTWb3A5UL8hkL2Y
+         AK0Q==
+X-Gm-Message-State: AAQBX9fNbgf5NU4RsBgiOCj7Ub5vKzysH6QlM+xLBGl7ANdqqMxVY1i1
+        4B4OC5ApVm2mUeLgdnA5NoBIJqFoyGOs6d4V5kQ9zenIkGsmaQ==
+X-Google-Smtp-Source: AKy350Y6fJIvyeE3iCR8wbzTrNfQxZR+kJ6f+zxi6P0lYBVeFnajitAnB+GVpjTzuzxaeb6jNU1ZyjpM82GgSyzyR+0=
+X-Received: by 2002:a02:7359:0:b0:3a7:e46e:ab64 with SMTP id
+ a25-20020a027359000000b003a7e46eab64mr3333498jae.1.1680698878222; Wed, 05 Apr
+ 2023 05:47:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20230216095131.17336-1-vbabka@suse.cz>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403135304.19858-1-wuchi.zero@gmail.com> <ZC0J6I1pYNZBB30y@infradead.org>
+ <CA+tQmHA_3_Oc-0AQ0a29DTwU4mkEqhOiAE6gXa4Ly4gZGpn5Vw@mail.gmail.com> <d04ead6617314074b297c10458010d6b@AcuMS.aculab.com>
+In-Reply-To: <d04ead6617314074b297c10458010d6b@AcuMS.aculab.com>
+From:   chi wu <wuchi.zero@gmail.com>
+Date:   Wed, 5 Apr 2023 20:47:47 +0800
+Message-ID: <CA+tQmHAwRNxvH+BBA60BdSoVYxK+NzzNyP6TW2Y_gsaWAhu9iQ@mail.gmail.com>
+Subject: Re: [PATCH] ext4: simplify 32bit calculation of lblk
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "ojaswin@linux.ibm.com" <ojaswin@linux.ibm.com>,
+        "ritesh.list@gmail.com" <ritesh.list@gmail.com>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 10:51:31AM +0100, Vlastimil Babka wrote:
-> Historically, we have performed sanity checks on all struct pages being
-> allocated or freed, making sure they have no unexpected page flags or
-> certain field values. This can detect insufficient cleanup and some
-> cases of use-after-free, although on its own it can't always identify
-> the culprit. The result is a warning and the "bad page" being leaked.
-> 
-> The checks do need some cpu cycles, so in 4.7 with commits 479f854a207c
-> ("mm, page_alloc: defer debugging checks of pages allocated from the
-> PCP") and 4db7548ccbd9 ("mm, page_alloc: defer debugging checks of freed
-> pages until a PCP drain") they were no longer performed in the hot paths
-> when allocating and freeing from pcplists, but only when pcplists are
-> bypassed, refilled or drained. For debugging purposes, with
-> CONFIG_DEBUG_VM enabled the checks were instead still done in the
-> hot paths and not when refilling or draining pcplists.
-> 
-> With 4462b32c9285 ("mm, page_alloc: more extensive free page checking
-> with debug_pagealloc"), enabling debug_pagealloc also moved the sanity
-> checks back to hot pahs. When both debug_pagealloc and CONFIG_DEBUG_VM
-> are enabled, the checks are done both in hotpaths and pcplist
-> refill/drain.
-> 
-> Even though the non-debug default today might seem to be a sensible
-> tradeoff between overhead and ability to detect bad pages, on closer
-> look it's arguably not. As most allocations go through the pcplists,
-> catching any bad pages when refilling or draining pcplists has only a
-> small chance, insufficient for debugging or serious hardening purposes.
-> On the other hand the cost of the checks is concentrated in the already
-> expensive drain/refill batching operations, and those are done under the
-> often contended zone lock. That was recently identified as an issue for
-> page allocation and the zone lock contention reduced by moving the
-> checks outside of the locked section with a patch "mm: reduce lock
-> contention of pcp buffer refill", but the cost of the checks is still
-> visible compared to their removal [1]. In the pcplist draining path
-> free_pcppages_bulk() the checks are still done under zone->lock.
-> 
-> Thus, remove the checks from pcplist refill and drain paths completely.
-> Introduce a static key check_pages_enabled to control checks during page
-> allocation a freeing (whether pcplist is used or bypassed). The static
-> key is enabled if either is true:
-> - kernel is built with CONFIG_DEBUG_VM=y (debugging)
-> - debug_pagealloc or page poisoning is boot-time enabled (debugging)
-> - init_on_alloc or init_on_free is boot-time enabled (hardening)
-> 
-> The resulting user visible changes:
-> - no checks when draining/refilling pcplists - less overhead, with
->   likely no practical reduction of ability to catch bad pages
-> - no checks when bypassing pcplists in default config (no
->   debugging/hardening) - less overhead etc. as above
-> - on typical hardened kernels [2], checks are now performed on each page
->   allocation/free (previously only when bypassing/draining/refilling
->   pcplists) - the init_on_alloc/init_on_free enabled should be sufficient
->   indication for preferring more costly alloc/free operations for
->   hardening purposes and we shouldn't need to introduce another toggle
-> - code (various wrappers) removal and simplification
-> 
-> [1] https://lore.kernel.org/all/68ba44d8-6899-c018-dcb3-36f3a96e6bea@sra.uni-hannover.de/
-> [2] https://lore.kernel.org/all/63ebc499.a70a0220.9ac51.29ea@mx.google.com/
-> 
-> Reported-by: Alexander Halbuer <halbuer@sra.uni-hannover.de>
-> Reported-by: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-
-Some minor comments below
-
-> @@ -1432,9 +1448,11 @@ static __always_inline bool free_pages_prepare(struct page *page,
->  		for (i = 1; i < (1 << order); i++) {
->  			if (compound)
->  				bad += free_tail_pages_check(page, page + i);
-
-free_tail_pages_check is also a function that only does something useful
-when CONFIG_DEBUG_VM is set. While it might be outside the scope of the
-patch, it might also benefit from check_pages_enabled checks?
-
-> -			if (unlikely(free_page_is_bad(page + i))) {
-> -				bad++;
-> -				continue;
-> +			if (static_branch_unlikely(&check_pages_enabled)) {
-> +				if (unlikely(free_page_is_bad(page + i))) {
-> +					bad++;
-> +					continue;
-> +				}
->  			}
->  			(page + i)->flags &= ~PAGE_FLAGS_CHECK_AT_PREP;
->  		}
-
-The unlikely() within a static_branch_unlikely probably adds very little
-given the block is so tiny. 
-
-> @@ -2392,56 +2369,20 @@ static inline int check_new_page(struct page *page)
->  	return 1;
->  }
->  
-> -static bool check_new_pages(struct page *page, unsigned int order)
-> +static inline bool check_new_pages(struct page *page, unsigned int order)
->  {
-> -	int i;
-> -	for (i = 0; i < (1 << order); i++) {
-> -		struct page *p = page + i;
-> +	if (static_branch_unlikely(&check_pages_enabled)) {
-> +		for (int i = 0; i < (1 << order); i++) {
-> +			struct page *p = page + i;
->  
-> -		if (unlikely(check_new_page(p)))
-> -			return true;
-> +			if (unlikely(check_new_page(p)))
-> +				return true;
-> +		}
->  	}
->  
-
-unlikely() within static_branch_unlikely probably adds very little.
-
-Otherwise, looks good. I agree that with changes over time that the ability
-of the checks to detect anything is reduced and it's probably at the point
-where it can only detect a very specific bit corruption instead of broken
-code. Commit 44042b449872 ("mm/page_alloc: allow high-order pages to be
-stored on the per-cpu lists") also likely reduced the ability of the checks
-to find anything.
-
--- 
-Mel Gorman
-SUSE Labs
+David Laight <David.Laight@aculab.com> =E4=BA=8E2023=E5=B9=B44=E6=9C=885=E6=
+=97=A5=E5=91=A8=E4=B8=89 19:43=E5=86=99=E9=81=93=EF=BC=9A
+>
+> From: chi wu
+> > Sent: 05 April 2023 09:48
+> >
+> > Christoph Hellwig <hch@infradead.org> =E4=BA=8E2023=E5=B9=B44=E6=9C=885=
+=E6=97=A5=E5=91=A8=E4=B8=89 13:40=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Mon, Apr 03, 2023 at 09:53:04PM +0800, wuchi wrote:
+> > > > -                     if (block > ext_block)
+> > > > -                             return ext_pblk + (block - ext_block)=
+;
+> > > > -                     else
+> > > > -                             return ext_pblk - (ext_block - block)=
+;
+> > > > +                     return ext_pblk + ((signed long long)block - =
+(signed long long)ext_block);
+> > >
+> > > And what exactly is the value add here, except for turning an easy
+> > > to parse statement into a complex expression using casts?
+> > >
+> > Yes=EF=BC=8Cit will be more complex. the original intention is to reduc=
+e the
+> > conditional branch.
+>
+> What is wrong with just:
+>         return ext_pblk + block - ext_block;
+> (64bit + 32bit - 32bit)
+>
+oh, It's my fault. I am trapped in that ext_pblk + block may overflow,
+but it is ok here. thanks.
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
