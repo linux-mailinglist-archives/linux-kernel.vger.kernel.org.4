@@ -2,63 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37CEF6D83DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783AB6D83E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjDEQjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S233386AbjDEQjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjDEQjN (ORCPT
+        with ESMTP id S229712AbjDEQjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:39:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27702135
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:39:13 -0700 (PDT)
+        Wed, 5 Apr 2023 12:39:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5C13C32;
+        Wed,  5 Apr 2023 09:39:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9C9A628FD
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C7DC433D2;
-        Wed,  5 Apr 2023 16:39:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA7962A64;
+        Wed,  5 Apr 2023 16:39:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A56C433D2;
+        Wed,  5 Apr 2023 16:39:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680712752;
-        bh=ZU4IDuI+UD+VYcqVNYCPsCR1gEEXwDspotTAU5Z68mQ=;
+        s=k20201202; t=1680712779;
+        bh=FRRpNPMbkCK5ISrmUiBJ9uBJN7ifEUtF4NdJ+Cnb1UU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gcwei0ZIHgrfb/bgNI3r8QtveRqgaFJPGCR4450FAHyW0oijbi4holZ76FOdmjCQO
-         OjTzfveG9WC2EzBNZdL0DobrlUqs0Jn5wcJXMEPSElL9pXT/kd00NjrciQUAUnGfiA
-         E33/nzdxauL4B6coAh87deRZTOf49q0Qj5/1N5bgz/FN/d1NwnT7ugiccACbXM0fkN
-         g6DwZyCUoL04fDx4epb3GwXzfHr7lA2KI0xEAkhaR1EMXlepjUDpQTLJvFk9QUc+4e
-         XlpDyOe+m3axxa8vMIqdnN9shZlT6yO27ciVaIrUtCdZ7xfk/f9gV8D5ndt6jL7DeW
-         LF4ANjVXpBPBA==
-Date:   Wed, 5 Apr 2023 17:39:06 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        martin.botka1@gmail.com, Shengyu Qu <wiagn233@outlook.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 3/3] regulator: axp20x: Add support for AXP313a
- variant
-Message-ID: <20230405163906.GT8371@google.com>
-References: <20230401001850.4988-1-andre.przywara@arm.com>
- <20230401001850.4988-4-andre.przywara@arm.com>
- <20230405142103.GL8371@google.com>
- <f1d7526b-7f51-462d-8192-0a05828bfc4f@sirena.org.uk>
- <20230405153651.GS8371@google.com>
- <e86dd4a9-540a-461f-a78a-5acb480e98b9@sirena.org.uk>
+        b=obCOchH5M0AM6BHXmzjcqjOXHG/V48niI7ItcjVw/xCETAQGWIDaPhSQLReFyWm9A
+         IddGZh6CtahcVFD9wOp8h15Js87RZe13laTVG0vVugfjPFA0qjTBRIFS/K3smSagm0
+         3Ir9fzbLmwQCNygOqdjlN/6eRQ3HUM+OkAl4/gKRRiOmcJr/SjsGCLOYArPBr7aJyh
+         sUVMx8mp0P6jwynz/D96FD9L+469GsW3fELDhraD0TUGYUEuHHUHo4WuXdcCjYO0In
+         DlEwxGoI6GxInHsd0K3EwuVfT2v1L8J8/W5bzqSOhMyHsfbShU28zg5rFVsda08hfd
+         G9yV8JwD7ab0g==
+Date:   Wed, 5 Apr 2023 09:39:37 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [f2fs-dev] [PATCH] f2fs: get out of a repeat loop when getting a
+ locked data page
+Message-ID: <ZC2kSfNUXKK4PfpM@google.com>
+References: <20230323213919.1876157-1-jaegeuk@kernel.org>
+ <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
+ <ZCG2mfviZfY1dqb4@google.com>
+ <ZCHCykI/BLcfDzt7@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e86dd4a9-540a-461f-a78a-5acb480e98b9@sirena.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <ZCHCykI/BLcfDzt7@casper.infradead.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,24 +58,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Apr 2023, Mark Brown wrote:
+On 03/27, Matthew Wilcox wrote:
+> On Mon, Mar 27, 2023 at 08:30:33AM -0700, Jaegeuk Kim wrote:
+> > On 03/26, Chao Yu wrote:
+> > > On 2023/3/24 5:39, Jaegeuk Kim wrote:
+> > > > https://bugzilla.kernel.org/show_bug.cgi?id=216050
+> > > > 
+> > > > Somehow we're getting a page which has a different mapping.
+> > > > Let's avoid the infinite loop.
+> > > > 
+> > > > Cc: <stable@vger.kernel.org>
+> > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > ---
+> > > >   fs/f2fs/data.c | 8 ++------
+> > > >   1 file changed, 2 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> > > > index bf51e6e4eb64..80702c93e885 100644
+> > > > --- a/fs/f2fs/data.c
+> > > > +++ b/fs/f2fs/data.c
+> > > > @@ -1329,18 +1329,14 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
+> > > >   {
+> > > >   	struct address_space *mapping = inode->i_mapping;
+> > > >   	struct page *page;
+> > > > -repeat:
+> > > > +
+> > > >   	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
+> > > >   	if (IS_ERR(page))
+> > > >   		return page;
+> > > >   	/* wait for read completion */
+> > > >   	lock_page(page);
+> > > > -	if (unlikely(page->mapping != mapping)) {
+> > > 
+> > > How about using such logic only for move_data_page() to limit affect for
+> > > other paths?
+> > 
+> > Why move_data_page() only? If this happens, we'll fall into a loop in anywhere?
+> > 
+> > > 
+> > > Jaegeuk, any thoughts about why mapping is mismatch in between page's one and
+> > > inode->i_mapping?
+> > 
+> > > 
+> > > After several times code review, I didn't get any clue about why f2fs always
+> > > get the different mapping in a loop.
+> > 
+> > I couldn't find the path to happen this. So weird. Please check the history in the
+> > bug.
+> > 
+> > > 
+> > > Maybe we can loop MM guys to check whether below folio_file_page() may return
+> > > page which has different mapping?
+> > 
+> > Matthew may have some idea on this?
+> 
+> There's a lot of comments in the bug ... hard to come into this one
+> cold.
+> 
+> I did notice this one (#119):
+> : Interestingly, ref count is 514, which looks suspiciously as a binary
+> : flag 1000000010. Is it possible that during 5.17/5.18 implementation
+> : of a "pin", somehow binary flag was written to ref count, or something
+> : like '1 << ...' happens?
+> 
+> That indicates to me that somehow you've got hold of a THP that is in
+> the page cache.  Probably shmem/tmpfs.  That indicate to me a refcount
+> problem that looks something like this:
+> 
+> f2fs allocates a page
+> f2fs adds the page to the page cache
+> f2fs puts the reference to the page without removing it from the
+> page cache (how?)
 
-> On Wed, Apr 05, 2023 at 04:36:51PM +0100, Lee Jones wrote:
-> > On Wed, 05 Apr 2023, Mark Brown wrote:
->
-> > > I'm waiting for the MFD.
->
-> > To do what?  #deadlock
->
-> Whatever it is you need to do to be happy with and apply the shared bit
-> of the series.  We're somehow on v10 here for what seems like it should
-> be a very simple change, I've not followed the ins and outs of how that
-> happened.
+Is it somewhat related to setting a bit in private field?
 
-From an MFD perspective, reviews happened followed by an approval in v9.
+When we migrate the blocks, we do:
+1) get_lock_page()
+2) submit read
+3) lock_page()
+3) set_page_dirty()
+4) set_page_private_gcing(page)
 
-I can't do anything without an Ack from you or some indication that you
-want me to apply the first 2 patches and share an IB.
+--- in fs/f2fs/f2fs.h
+1409 #define PAGE_PRIVATE_SET_FUNC(name, flagname) \
+1410 static inline void set_page_private_##name(struct page *page) \
+1411 { \
+1412         if (!PagePrivate(page)) { \
+1413                 get_page(page); \
+1414                 SetPagePrivate(page); \
+1415                 set_page_private(page, 0); \
+1416         } \
+1417         set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page)); \
+1418         set_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
+1419 }
 
---
-Lee Jones [李琼斯]
+
+5) set_page_writebac()
+6) submit write
+7) unlock_page()
+8) put_page(page)
+
+Later, f2fs_invalidate_folio will do put_page again by:
+clear_page_private_gcing(&folio->page);
+
+--- in fs/f2fs/f2fs.h
+1421 #define PAGE_PRIVATE_CLEAR_FUNC(name, flagname) \
+1422 static inline void clear_page_private_##name(struct page *page) \
+1423 { \
+1424         clear_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
+1425         if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) { \
+1426                 set_page_private(page, 0); \
+1427                 if (PagePrivate(page)) { \
+1428                         ClearPagePrivate(page); \
+1429                         put_page(page); \
+1430                 }\
+1431         } \
+1432 }
+
+> page is now free, gets reallocated into a THP
+> lookup from the f2fs file finds the new THP
+> things explode messily
+> 
+> Checking page->mapping is going to avoid the messy explosion, but
+> you'll still have a page in the page cache which doesn't actually
+> belong to you, and that's going to lead to subtle data corruption.
+> 
+> This should be caught by page_expected_state(), called from
+> free_page_is_bad(), called from free_pages_prepare().  Do your testers
+> have CONFIG_DEBUG_VM enabled?  That might give you a fighting chance at
+> finding the last place which called put_page().  It won't necessarily be
+> the _wrong_ place to call put_page() (that may have happened earlier),
+> but it may give you a clue.
+> 
+> > > 
+> > > struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
+> > > 		int fgp_flags, gfp_t gfp)
+> > > {
+> > > 	struct folio *folio;
+> > > 
+> > > 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
+> > > 	if (IS_ERR(folio))
+> > > 		return NULL;
+> > > 	return folio_file_page(folio, index);
+> > > }
+> > > 
+> > > Thanks,
+> > > 
+> > > > -		f2fs_put_page(page, 1);
+> > > > -		goto repeat;
+> > > > -	}
+> > > > -	if (unlikely(!PageUptodate(page))) {
+> > > > +	if (unlikely(page->mapping != mapping || !PageUptodate(page))) {
+> > > >   		f2fs_put_page(page, 1);
+> > > >   		return ERR_PTR(-EIO);
+> > > >   	}
