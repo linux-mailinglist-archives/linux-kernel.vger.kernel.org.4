@@ -2,111 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804B76D8DBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7696D8914
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjDFCwc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 22:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S230385AbjDEUuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233867AbjDFCwI (ORCPT
+        with ESMTP id S229479AbjDEUuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 22:52:08 -0400
-X-Greylist: delayed 18302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 19:51:51 PDT
-Received: from out15-50.antispamcloud.com (out15-50.antispamcloud.com [185.201.19.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693635FE1
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 19:51:51 -0700 (PDT)
-Received: from iix60.idcloudhost.com ([103.28.53.75])
-        by mx249.antispamcloud.com with esmtpsa (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <jXPKcXZDfI@nadilaaulya.my.id>)
-        id 1pkA55-0007Uw-Ir; Wed, 05 Apr 2023 22:50:13 +0200
-Received: from mob-176-243-3-86.net.vodafone.it ([176.243.3.86]:54427 helo=[192.168.43.208])
-        by iix60.idcloudhost.com with esmtpsa  (TLS1) tls TLS_DHE_RSA_WITH_AES_256_CBC_SHA
-        (Exim 4.96)
-        (envelope-from <jXPKcXZDfI@nadilaaulya.my.id>)
-        id 1pkA4v-0003N5-2r;
-        Thu, 06 Apr 2023 03:50:00 +0700
-Content-Type: text/plain; charset="iso-8859-1"
+        Wed, 5 Apr 2023 16:50:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25C6CD;
+        Wed,  5 Apr 2023 13:50:34 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so40781074pjt.2;
+        Wed, 05 Apr 2023 13:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680727834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKzNCLVl42oXEDNGT8TsESnDpIsZTaCWPqislM2wAtI=;
+        b=hxEM/qI4QHMC2jKXgsn0s21vyMD1Io+s5SE6tOIdKgfNYoPyz2Xkfq8xPJODLi5xt2
+         BNErNUaDdxAPZ7zaWCjJV1ct4ph1C3pfHMugBN0dRKDPlkEB0Xh95ToT5RnzkjaTTrfq
+         KJnlGl7An0mGYZ6fj7cegMLC4wAJjACoK9tUpi+Vxjaa+l8DzOAepCSJHPCNEK3xNLyl
+         JpODtvd79KchlQc160KgNCIB5JZeb/3uylAJnv2W0MMkw9qVM+w4XikbJlFCCJ13DRqI
+         zbdCHhU9Wavbqj/AY4e72OMafn0yixx7FKkjTGNiQh59ruILbzzpleVul6faXEyRCxLh
+         HjGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680727834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RKzNCLVl42oXEDNGT8TsESnDpIsZTaCWPqislM2wAtI=;
+        b=RTQvxhjhZ6SfM0H7TKcPE5IlPC2mw83t9cgH4gLFcdFxGyxJqLMNnnyTZpubjHDdqw
+         h6/NHNksDAnPvUHUVMC5wpiTL7pV91B1z+6NPKTVcSu2qLVIR4D28/JFdnoWPgXla0ke
+         8NiKpJLFEJvfQKBLkSe2zpxo6gSFQ7XcNhsy5YUaXDO9PRFCT9SpNPL4VHqd+QrgGBQK
+         YxzRf2rvqmjux2JCI/V7pI07Ii0fr93K0FJHlZc/xbWjJkqM0g8xkio07pkV+cZWDQwj
+         4mp8bgOj2z7AKY+Lz3Hh95NZuvqkBqXwPtsBiKFWPz39fcabFF80cGE9HD721Ws1/4ip
+         ZhzQ==
+X-Gm-Message-State: AAQBX9cOg+ZI6X5YEXals0ztydxK13DPgyDfSkR41KcwE7qVgQYZcJnV
+        bwPkCthJPAccrxMNKIhwTJI=
+X-Google-Smtp-Source: AKy350ZQjITByRIh6laCMZtN0D4PEu5si/p7iyC3zWOWJmAU0uCqGQIZmlDCQQfFDVIkWo4Gz74rfA==
+X-Received: by 2002:a17:902:d1d5:b0:1a3:d5af:9b6f with SMTP id g21-20020a170902d1d500b001a3d5af9b6fmr5296025plb.19.1680727833997;
+        Wed, 05 Apr 2023 13:50:33 -0700 (PDT)
+Received: from pavilion.. ([2402:e280:218d:82:616c:b78a:a01f:5113])
+        by smtp.gmail.com with ESMTPSA id w9-20020a170902a70900b001a260b5319bsm10577676plq.91.2023.04.05.13.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 13:50:33 -0700 (PDT)
+From:   Saalim Quadri <danascape@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@nxp.com
+Cc:     patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Saalim Quadri <danascape@gmail.com>
+Subject: [PATCH] ASoC: dt-bindings: wm8580: Convert to dtschema
+Date:   Thu,  6 Apr 2023 02:20:25 +0530
+Message-Id: <20230405205025.6448-1-danascape@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Inquiry
-To:     Recipients <jXPKcXZDfI@nadilaaulya.my.id>
-From:   "Mrs. Liubov Halkina" <jXPKcXZDfI@nadilaaulya.my.id>
-Date:   Wed, 05 Apr 2023 15:49:45 -0500
-Reply-To: cathles2126@aol.com
-X-AuthUser: jxpkcxzdfi@nadilaaulya.my.id
-Message-ID: <E1pkA55-0007Uw-Ir@mx249.antispamcloud.com>
-X-Originating-IP: 103.28.53.75
-X-Spampanel-Domain: cloudhost.id
-X-Spampanel-Username: iix60
-Authentication-Results: antispamcloud.com; auth=pass (login) smtp.auth=iix60@cloudhost.id
-X-Spampanel-Outgoing-Class: unsure
-X-Spampanel-Outgoing-Evidence: Combined (0.52)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9/iWsekoqn7fElRVT1CZrDPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w1OL79HMxE022P+rQy8YAdcSeERs4TOTnIH1kc1IWc5QvZ
- FNshWKOptDHV4rDuRrwD+zBJgS5HrOaXNfwbIcOpdhytPvAzwbvthr5T+WaJ3IrVe6MYchJAV6vY
- 2clitzmGR50Rt0hSj27ZfQBPfQS1BKGDzSBE0I7ahDVo+4Mi/dGECT3kI3RcmOSkkbGSnUdPy/CL
- haCNSxSeHzgt4C/wBQ1qSkPU1Z9IA5QRm6AYk/yjZOAkFkYkh+zBk/+h5FCL6wlQWcCa+d3t5m9d
- pOppr4EKf43h8s44lZGEOrirImZTn11A5J+voK+OZ+OysuJAeHDOlJamhyT3Zn1AP19paqpL04Lh
- kdzpQ3+YGOvCAqO4xQi9u21KYktPzlOrZrJEHFRKvsj+qr3uFx3SKW9wXJWlQddgqYifiN81A3Kr
- jtvHx/HPOHy66mtEZC0SffrcjrSM4XSckOzefRjSo7RJFnFk5QeoIhTb0vpmTUk/lmKzPznVCsTv
- wBdUt45TL/n+g1I5cU5ASWF3YihwlfqZPX6iPkYCg6IVeyIdiYVYZefHzJ6mVE7ewsipSVIfs4Yb
- 6F51o2dafSXEbwfPGzfUpXiX2pZguJIFYZQ5o/8glo7twBGNicoeAmiUJV7Lk7uPO6fMbrFkDBrl
- 30p2f0pIzFs+HYI+OPBhv7gMj92oF6sYlQv0kL5FekfrcqpfpJ7xGmS+MahgAkTUsi0l+6Y+feMH
- R8aq2/5i2Hq0azpR4/tJ1i8yWhKRhlZtIewm4g3qjDtNEr66BWV3gkpHrW5aDw5Ualc0WNVLVhn2
- ci9wolHuFYI49u8jswym/o0GV1/y46OqoeAXE4BQ8lBtKHg4RAwX31WVY5lWjWxuGSRuxeJzDfMA
- tOAceXA4ObfBDRMJjWbztcmmVLi5P0lVv9DM5YE5enyccp7RH4WQio3uGc4EkcYEFGi9FKW2Oquj
- YjMhEWyJzIkwSFAW0Pw8uiKeJZG7XQhExlDF+oTIhdGS/x0hu1s1K8XTCrJW070uKDB1yc6ww/XT
- ARu4cW2+Uxxg6J1fhOzjF0b4LXcjJZ5loijgMWruxKUku9HKw5IhWPC8+IJpFpKne5SaUkpGdYNY
- LvXfcnGNC76fNvUBGCoLT3N3abYXWbI9JuDPxxISxIxz7nWMGr3xQbXrR7W1uypKhXFibj3fdqcL
- 3gajWhuv+B0sXiGd+CR0+bwSJ9MYAzAMrOHK5tF4LTm+Tpi/hEbWrVVpgxtOyHAkGbMUNF55JnE6
- ETjtbMPjLpnRI5EDsgw8CVsONrMJuGzuoGnKTKcyccjSlBLa0Z1WYb08ADpE6rj9l4xDuhVGEyzE
- pCH9jwyCSFwt/3SZKT2WgmwgwxgOcbFs4wmqhX1OM8xewFO578I5fOquB5GOH0cddfTYFcVNLmly
- /OCFmsY98cJB17zYAWbDdcM2OyVTOCduVr2j/tLxg+DiPWzvay92L72jkjYVXu4E4Fz8wGp+xBlP
- H6E/MS+4ayUpOtEhdxekWDmK9g==
-X-Report-Abuse-To: spam@quarantine15.antispamcloud.com
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,FROM_LOCAL_NOVOWEL,HK_NAME_MR_MRS,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [185.201.19.50 listed in list.dnswl.org]
-        *  0.9 HK_RANDOM_FROM From username looks random
-        *  0.0 HK_RANDOM_ENVFROM Envelope sender username looks random
-        *  0.5 FROM_LOCAL_NOVOWEL From: localpart has series of non-vowel
-        *      letters
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [cathles2126[at]aol.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  2.5 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Convert the WM8580 and WM8581 audio CODEC bindings to DT schema
 
-I hope this email finds you well. I just wanted to follow up with you
-regarding the letter I sent to you last week regarding an inquiry. I was
-curious if you have received it and if you have had a chance to review
-the information contained within.
+Signed-off-by: Saalim Quadri <danascape@gmail.com>
+---
+ .../devicetree/bindings/sound/wlf,wm8580.yaml | 42 +++++++++++++++++++
+ .../devicetree/bindings/sound/wm8580.txt      | 16 -------
+ 2 files changed, 42 insertions(+), 16 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8580.yaml
+ delete mode 100644 Documentation/devicetree/bindings/sound/wm8580.txt
 
-I would greatly appreciate if you could confirm receipt of the letter
-and share your thoughts with me on the matter. Your feedback would be
-valuable as I move forward with this inquiry.
+diff --git a/Documentation/devicetree/bindings/sound/wlf,wm8580.yaml b/Documentation/devicetree/bindings/sound/wlf,wm8580.yaml
+new file mode 100644
+index 000000000000..2f27852cdc20
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/wlf,wm8580.yaml
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/wlf,wm8580.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: WM8580 and WM8581 audio CODEC
++
++maintainers:
++  - patches@opensource.cirrus.com
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    enum:
++      - wlf,wm8580
++      - wlf,wm8581
++
++  reg:
++    maxItems: 1
++
++  "#sound-dai-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        codec@1a {
++            compatible = "wlf,wm8580";
++            reg = <0x1a>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/sound/wm8580.txt b/Documentation/devicetree/bindings/sound/wm8580.txt
+deleted file mode 100644
+index ff3f9f5f2111..000000000000
+--- a/Documentation/devicetree/bindings/sound/wm8580.txt
++++ /dev/null
+@@ -1,16 +0,0 @@
+-WM8580 and WM8581 audio CODEC
+-
+-This device supports I2C only.
+-
+-Required properties:
+-
+-  - compatible : "wlf,wm8580", "wlf,wm8581"
+-
+-  - reg : the I2C address of the device.
+-
+-Example:
+-
+-wm8580: codec@1a {
+-	compatible = "wlf,wm8580";
+-	reg = <0x1a>;
+-};
+-- 
+2.34.1
 
-Please let me know if you need any additional information or
-clarification. I look forward to hearing back from you soon.
-
-Best regards,
-
-Liubov
