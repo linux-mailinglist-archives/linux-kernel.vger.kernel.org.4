@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9944B6D72BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 05:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1936D72C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 05:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236701AbjDEDrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 23:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
+        id S236714AbjDEDu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 23:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236202AbjDEDrm (ORCPT
+        with ESMTP id S236000AbjDEDuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 23:47:42 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCD040EE;
-        Tue,  4 Apr 2023 20:47:40 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3353lMXp010792;
-        Tue, 4 Apr 2023 22:47:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680666442;
-        bh=y44nt0ItQDarQ9AjTKqSbkNYAqch2DWGsz0GPcW0/mY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=kROhY+MGo9kCDirICM4+x6Lt72ZFF9k/jiOwqWhSTqHtHDuR6UPefaVDkC7aai0EW
-         q9kMUJTBl3NirENAJu81J9BLp++aAxYqQu7H95Pfafr7+WVc/cI02TT5+BbelUYw6v
-         2+WFVX6hnPxpZtceUxvc/spyWIjIuVv/bY57JyB0=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3353lM6i035713
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 4 Apr 2023 22:47:22 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 4
- Apr 2023 22:47:21 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 4 Apr 2023 22:47:21 -0500
-Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3353lHJu128455;
-        Tue, 4 Apr 2023 22:47:17 -0500
-Message-ID: <c1930df0-3806-c8fb-a100-17da60b6024f@ti.com>
-Date:   Wed, 5 Apr 2023 09:17:17 +0530
+        Tue, 4 Apr 2023 23:50:55 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599E12691;
+        Tue,  4 Apr 2023 20:50:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0VfNxCDL_1680666644;
+Received: from 30.240.113.3(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VfNxCDL_1680666644)
+          by smtp.aliyun-inc.com;
+          Wed, 05 Apr 2023 11:50:47 +0800
+Message-ID: <9cb06879-d743-e3b2-b8e3-23962b458202@linux.alibaba.com>
+Date:   Wed, 5 Apr 2023 11:50:40 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] dmaengine: ti: k3-udma-glue: do not create glue dma
- devices for udma channels
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 18/32] perf/alibaba_uncore: Assign parents for
+ event_source device
 Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <vkoul@kernel.org>,
-        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-References: <20230404081158.1266530-1-s-vadapalli@ti.com>
- <c3c6c922-4ab0-eef6-be87-fe5c015b2440@gmail.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <c3c6c922-4ab0-eef6-be87-fe5c015b2440@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org
+Cc:     linuxarm@huawei.com, Dan Williams <dan.j.williams@intel.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Robert Richter <rric@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Frank Li <Frank.li@nxp.com>, Vineet Gupta <vgupta@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Liang Kan <kan.liang@linux.intel.com>
+References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+ <20230404134225.13408-19-Jonathan.Cameron@huawei.com>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20230404134225.13408-19-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,89 +68,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 05/04/23 01:53, Péter Ujfalusi wrote:
+
+On 2023/4/4 PM9:42, Jonathan Cameron wrote:
+> Currently the PMU device appears directly under /sys/devices/
+> Only root busses should appear there, so instead assign the pmu->dev
+> parent to be the platform device.
 > 
+> Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
+> Cc: Shuai Xue <xueshuai@linux.alibaba.com>
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/perf/alibaba_uncore_drw_pmu.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> On 04/04/2023 11:11, Siddharth Vadapalli wrote:
->> From: Grygorii Strashko <grygorii.strashko@ti.com>
->>
->> In case K3 DMA glue layer is using UDMA channels (AM65/J721E/J7200) it
->> doesn't need to create own DMA devices per RX/TX channels as they are
->> never
->> used and just waste resources. The UDMA based platforms are coherent and
->> UDMA device iteslf is used for DMA memory management.
->>
->> Hence, update K3 DMA glue layer to create K3 DMA glue DMA devices per
->> RX/TX
->> channels only in case of PKTDMA (AM64) where coherency configurable
->> per DMA
->> channel.
->>
->> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
->> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->> ---
->>   drivers/dma/ti/k3-udma-glue.c | 70 +++++++++++++++++------------------
->>   1 file changed, 34 insertions(+), 36 deletions(-)
->>
->> diff --git a/drivers/dma/ti/k3-udma-glue.c
->> b/drivers/dma/ti/k3-udma-glue.c
->> index 789193ed0386..b0c9572b0d02 100644
->> --- a/drivers/dma/ti/k3-udma-glue.c
->> +++ b/drivers/dma/ti/k3-udma-glue.c
->> @@ -293,19 +293,18 @@ struct k3_udma_glue_tx_channel
->> *k3_udma_glue_request_tx_chn(struct device *dev,
->>       }
->>       tx_chn->udma_tchan_id = xudma_tchan_get_id(tx_chn->udma_tchanx);
->>   -    tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
->> -    tx_chn->common.chan_dev.parent =
->> xudma_get_device(tx_chn->common.udmax);
->> -    dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
->> -             tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
->> -    ret = device_register(&tx_chn->common.chan_dev);
->> -    if (ret) {
->> -        dev_err(dev, "Channel Device registration failed %d\n", ret);
->> -        put_device(&tx_chn->common.chan_dev);
->> -        tx_chn->common.chan_dev.parent = NULL;
->> -        goto err;
->> -    }
->> -
->>       if (xudma_is_pktdma(tx_chn->common.udmax)) {
-> 
-> it might be possible to narrow it down to include a test for atype_asel
-> 14 or 15, but then I would move that test to a helper (passing common as
-> parameter) and re-use it in other places to avoid getting out o sync
-> overtime.
-> Might not worth the effort, just an observation.
+> diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
+> index a7689fecb49d..0d129acf3f84 100644
+> --- a/drivers/perf/alibaba_uncore_drw_pmu.c
+> +++ b/drivers/perf/alibaba_uncore_drw_pmu.c
+> @@ -683,6 +683,7 @@ static int ali_drw_pmu_probe(struct platform_device *pdev)
+>  
+>  	drw_pmu->pmu = (struct pmu) {
+>  		.module		= THIS_MODULE,
+> +		.parent		= &pdev->dev,
+>  		.task_ctx_nr	= perf_invalid_context,
+>  		.event_init	= ali_drw_pmu_event_init,
+>  		.add		= ali_drw_pmu_add,
 
-Irrespective, we should at least add check for atype_asel == 14/15 along
-with xudma_is_pktdma().
 
-Refractoring these checks to separate function can be patch of its own
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
 
-> 
->> +        tx_chn->common.chan_dev.class = &k3_udma_glue_devclass;
->> +        tx_chn->common.chan_dev.parent =
->> xudma_get_device(tx_chn->common.udmax);
->> +        dev_set_name(&tx_chn->common.chan_dev, "tchan%d-0x%04x",
->> +                 tx_chn->udma_tchan_id, tx_chn->common.dst_thread);
->> +        ret = device_register(&tx_chn->common.chan_dev);
->> +        if (ret) {
->> +            dev_err(dev, "Channel Device registration failed %d\n",
->> ret);
-> 
-> my guess is that the put_device() is still needed, no?
+Thank you.
 
-Agree
-
-> 
->> +            tx_chn->common.chan_dev.parent = NULL;
->> +            goto err;
->> +        }
->> +
->>           /* prepare the channel device as coherent */
-
-[...]
-
--- 
-Regards
-Vignesh
+Best Regards,
+Shuai
