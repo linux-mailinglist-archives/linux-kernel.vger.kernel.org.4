@@ -2,97 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A0D6D72D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BA56D72F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 06:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236741AbjDEED0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 00:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S236797AbjDEEGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 00:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjDEEDY (ORCPT
+        with ESMTP id S229559AbjDEEGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 00:03:24 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818AE2D50;
-        Tue,  4 Apr 2023 21:03:19 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (fp76f193f3.tkyc206.ap.nuro.jp [118.241.147.243])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3B3FE905;
-        Wed,  5 Apr 2023 06:03:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1680667398;
-        bh=SLHOckHvMGRAwVUJoKjXIrUROsWklviE2bzEckKRICk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cmHUhuFhyc5s/hvJQxsLSLJynbeAksWvmhSNyN77i8r5moPt9vGyxsw2RR/miPFjN
-         AKsXaMyIrqvlqZHEpSjOZU1zDm5YSlXGL7CZn1c2RsqybuylgbehxavaXgKGdLc0NF
-         fIEEWasq34FDP7igQYku4AApreajzH/z3jJUW5rk=
-Date:   Wed, 5 Apr 2023 07:03:25 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] drm: shmobile: Fixes and enhancements
-Message-ID: <20230405040325.GL9915@pendragon.ideasonboard.com>
-References: <cover.1680273039.git.geert+renesas@glider.be>
+        Wed, 5 Apr 2023 00:06:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C921C30ED;
+        Tue,  4 Apr 2023 21:06:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64F5963965;
+        Wed,  5 Apr 2023 04:06:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F99C433EF;
+        Wed,  5 Apr 2023 04:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680667577;
+        bh=qjrgDVDa5fPmLzogqlbGWIXUX3IHvG/mEgP6jyFc9U4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VB2ma9b65mcKZzx6vfJffxl2Y4m6rs34Uvvwhr+1uCqV0tvAxrihAzmGzpxFi6gWY
+         LAcAZGmxJ314S/bPCspKDCb6MgKhvCOyGP4r0Cu+7OD33NhnOV1OKtLP4tedneBD/u
+         Kjm2Urynnngii28CKxMtvi8nQtEawo3QQ9ecZ+FyLiR09WI0DH5t14S/DVn02pEUUQ
+         lSdsqchxIS+Fx1a8SBpsxrqv/xW9FUXcm1qBAI7QuZae3g43/mcUcEeePTsFusZuKB
+         AnOqTCOjqcWSE+UKF7X9wkN7AXE6MAtqhXl5YVjBpxCqhkSEREWsiHL3fUscLHMnRe
+         V5+BEjHGG6UxA==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        phone-devel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: (subset) [PATCH 1/4] arm64: dts: msm8953: Replace xo_board with rpmcc sourced xo
+Date:   Tue,  4 Apr 2023 21:08:49 -0700
+Message-Id: <168066774416.443656.12283295998891742657.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230325112852.18841-1-a39.skl@gmail.com>
+References: <20230325112852.18841-1-a39.skl@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1680273039.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Sat, 25 Mar 2023 12:28:49 +0100, Adam Skladowski wrote:
+> Assign RPM_SMD_XO_CLK_SRC from rpmcc in place
+> of fixed-clock where possible.
+> 
+> 
 
-On Fri, Mar 31, 2023 at 04:48:06PM +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
-> 
-> Currently, there are two drivers for the LCD controller on Renesas
-> SuperH-based and ARM-based SH-Mobile and R-Mobile SoCs:
->   1. sh_mobile_lcdcfb, using the fbdev framework,
->   2. shmob_drm, using the DRM framework.
-> However, only the former driver can be used, as all platform support
-> integrates the former.  None of these drivers support DT-based systems.
-> 
-> This patch series is a first step to enable the SH-Mobile DRM driver for
-> Renesas ARM-based SH-Mobile and R-Mobile SoCs.  The next step planned is
-> to add DT support.
-> 
-> This has been tested on the R-Mobile A1-based Atmark Techno
-> Armadillo-800-EVA development board, using a temporary
-> platform-enablement patch[1].
-> 
-> Thanks for your comments!
+Applied, thanks!
 
-Thanks for reviving this driver. I'm looking forward to DT and KMS
-atomic support :-)
+[1/4] arm64: dts: msm8953: Replace xo_board with rpmcc sourced xo
+      commit: 3042fb4b61c8a6ce692a4914b1970daa56e6f04e
+[2/4] arm64: dts: msm8953: Provide dsi_phy clocks to gcc
+      commit: 635abd877516f6d5e35343d3c3eb233ab195ebc5
+[3/4] arm64: dts: msm8953: Drop unsupported dwc3 flag
+      commit: c0494df2cdac723f4c7df834c05d548ea3a804e9
+[4/4] arm64: dts: msm8953: Pad regs to 8 digits
+      commit: 26aae2310fd7375a5ca0dd772cd3bc57cf5e02bb
 
-Will you get these patches merged through drm-misc ?
-
-> [1] https://lore.kernel.org/r/c03d4edbd650836bf6a96504df82338ec6d800ff.1680272980.git.geert+renesas@glider.be
-> 
-> Geert Uytterhoeven (5):
->   drm: shmobile: Use %p4cc to print fourcc codes
->   drm: shmobile: Add support for DRM_FORMAT_XRGB8888
->   drm: shmobile: Switch to drm_crtc_init_with_planes()
->   drm: shmobile: Add missing call to drm_fbdev_generic_setup()
->   drm: shmobile: Make DRM_SHMOBILE visible on Renesas SoC platforms
-> 
->  drivers/gpu/drm/shmobile/Kconfig           |  2 +-
->  drivers/gpu/drm/shmobile/shmob_drm_crtc.c  | 35 +++++++++++++++++++---
->  drivers/gpu/drm/shmobile/shmob_drm_drv.c   |  3 ++
->  drivers/gpu/drm/shmobile/shmob_drm_kms.c   |  9 ++++--
->  drivers/gpu/drm/shmobile/shmob_drm_plane.c |  5 ++++
->  5 files changed, 47 insertions(+), 7 deletions(-)
-
+Best regards,
 -- 
-Regards,
-
-Laurent Pinchart
+Bjorn Andersson <andersson@kernel.org>
