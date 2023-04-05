@@ -2,84 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19096D804F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15BB6D8059
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238509AbjDEPCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:02:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S238551AbjDEPD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238444AbjDEPCo (ORCPT
+        with ESMTP id S238371AbjDEPDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:02:44 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384B05272;
-        Wed,  5 Apr 2023 08:02:35 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id r14so21172122oiw.12;
-        Wed, 05 Apr 2023 08:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680706954;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EhRyIgjjw/8FQdnlDM5/FtJDO4uPLSvO16WmWcJwo24=;
-        b=lkMbyXN0+Gr5hyqRu+Zh9p5RVRfg+ReWqCPNJ7jdZsha+KknsOJo+mt5KVBUSKx3QZ
-         rqC/1T9VIoLIsAL5nQLonAPIo8jqW8Q4Xum8/WK738sk0d/WYq166ZCace5xfurGM8/s
-         YOaiqcARQBZSSqvZv3j3MLAhK3QmCy/MPNm46qlSKki02kOZp8Eu6dFs1LokB2ZPPEX5
-         xegaqUhe12PytLTkFm2SnhXRqdjwEB4po+Us6DeWjFmOlLFzbhVCn3uVNxG59FZtuEDP
-         Qb5TdZ0sdRfuRn2CtzZrdfQPFWryS5xf0nc5sxlPZjgICd5t8xKsDyZ6LhG6XbQY8fan
-         PxAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680706954;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhRyIgjjw/8FQdnlDM5/FtJDO4uPLSvO16WmWcJwo24=;
-        b=038xOcDiuMBqfsS+406SsyKdKbTGSjH48wOPctKvfVNbOIagLHF2OdPob9uXeMBWBO
-         TA/5/xy410CfzbihgZzjYuTZnjyu9Q5o1vy6z4YXPlL7Tn2Be7pixnyM945EgFLG4l2s
-         /vw6pVj6iYq0OErEmtYOSmFjmes/oR1YbbNWbMUPTkO0JWsLmoOHqiJUFOrchi25frCr
-         d0g6BWR00GYHPVN4rKvudPL3UO4oQlURxXdDWDcnAaJFmxOfIbFChMCD3AHP6xyzG5xj
-         63HGET7JRfhRR2mIYWixJnvniEQMPTb8Rl+y0baaOnDEbYSB+VuTa8hWN/PSY+XN9Vu3
-         ZLUQ==
-X-Gm-Message-State: AAQBX9dpUy1YkCR/5p3T9/Q8AZgvoI9S+yfMzoEdvr4oY3Ow4iEgLkAt
-        gyePIFWVoP1rl+6TwlU6/ck=
-X-Google-Smtp-Source: AKy350Yov0sMo2NJt0LYV9mCs+JV37iFxk0Ys3SbZ149H8aH8DmTFJ9rnf3su4Ql91BmzF3OAyyQVA==
-X-Received: by 2002:a05:6808:a0c:b0:384:833:2a79 with SMTP id n12-20020a0568080a0c00b0038408332a79mr1502838oij.48.1680706954285;
-        Wed, 05 Apr 2023 08:02:34 -0700 (PDT)
-Received: from neuromancer. (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
-        by smtp.gmail.com with ESMTPSA id r84-20020acac157000000b003845f4991c7sm6349303oif.11.2023.04.05.08.02.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 08:02:14 -0700 (PDT)
-Message-ID: <642d8d76.ca0a0220.c2c2e.0f02@mx.google.com>
-X-Google-Original-Message-ID: <ZC2NaS2ohG7oCdLh@neuromancer.>
-Date:   Wed, 5 Apr 2023 10:02:01 -0500
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Subject: Re: [PATCH v4 9/9] wifi: rtw88: Add support for the SDIO based
- RTL8821CS chipset
-References: <20230403202440.276757-1-martin.blumenstingl@googlemail.com>
- <20230403202440.276757-10-martin.blumenstingl@googlemail.com>
- <642c609d.050a0220.46d72.9a10@mx.google.com>
- <CADcbR4LMY3BF_aNZ-gAWsvYHnRjV=qgWW_qmJhH339L_NgmqUQ@mail.gmail.com>
- <CAFBinCC2fr42FiC_LqqMf2ASDA_vY1d-NJJLHOF6pW1MjFRAzw@mail.gmail.com>
+        Wed, 5 Apr 2023 11:03:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C26B5B88
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680707031; x=1712243031;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=s7rfBjbUMp2WFw8EcYwbRYPBRxvKQ3TJdf9vrLan3wA=;
+  b=HIGXiv6HxtmX1vh3mgeWm5H7wup98I2vX5MQhjchI8HXGoO8NWNtSjsN
+   PFYjWla8IVN4zV345va9Yyrz2D6zIutVTLMKrFdqNzpLFSB1ulqtleoXP
+   5ceM3qCKDe57IWc0TU7S1LkzzIMmOS6NAYK3V12+28JO1ILdUxm82wMys
+   eXQeI+Ur65Q2e9OBH6uVC0VSbBFynkMRsefN+xmxHFmUD0Xa+spwueASV
+   kop5VU4ffBSNXh9W0RlS/wf/jfSkBRRW47BmdPIl7YCq/U7+o0ezxYLfx
+   wW37MM3C4eoHRkpfpvpADy6mq5gQ1lyPb/Mv9FVXnYqTRjSNFRZdNSMmK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="331079251"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="331079251"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 08:03:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="717072126"
+X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
+   d="scan'208";a="717072126"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2023 08:03:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pk4f9-00CsaA-03;
+        Wed, 05 Apr 2023 18:03:03 +0300
+Date:   Wed, 5 Apr 2023 18:03:02 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     Bumwoo Lee <bw365.lee@samsung.com>, linux-kernel@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: Re: [PATCH v1 07/14] extcon: Use unique number for the extcon device
+ ID
+Message-ID: <ZC2NpgQ/JktJAzDm@smile.fi.intel.com>
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+ <20230322144005.40368-8-andriy.shevchenko@linux.intel.com>
+ <f0a40f3a-2ff6-5529-ad84-1c66f7e381ea@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCC2fr42FiC_LqqMf2ASDA_vY1d-NJJLHOF6pW1MjFRAzw@mail.gmail.com>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+In-Reply-To: <f0a40f3a-2ff6-5529-ad84-1c66f7e381ea@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,28 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 11:27:49PM +0200, Martin Blumenstingl wrote:
-> Hello Chris,
-> 
-> On Tue, Apr 4, 2023 at 8:16 PM Chris Morgan <macroalpha82@gmail.com> wrote:
-> >
-> > Please disregard. I was building against linux main not wireless-next.
-> > I have tested and it appears to be working well, even suspend works now.
-> Thanks for this update - this is great news!
-> It's good to hear that suspend is now also working fine for you.
-> 
-> It would be awesome if I could get a Tested-by for this patch. This
-> works by replying to the patch with a line that consists of
-> "Tested-by: your name <your email address>". See [0] for an example.
+On Mon, Apr 03, 2023 at 11:52:46PM +0900, Chanwoo Choi wrote:
+> On 23. 3. 22. 23:39, Andy Shevchenko wrote:
 
-Sorry, bad manners on my part.
+...
 
-Tested-by: Chris Morgan <macromorgan@hotmail.com>
+> > +	ret = ida_simple_get(&extcon_dev_ids, 0, INT_MAX, GFP_KERNEL);
+> 
+> 
+> ida_simple_get and ida_simple_remove are deprecated on 
+> commit 3264ceec8f17 ("lib/idr.c: document that ida_simple_{get,remove}()
+> are deprecated"). Instead of them, better to use ida_alloc and ida_free 
+> according to the comments.
 
+Done for v2.
+
+...
+
+> > +	ida_simple_remove(&extcon_dev_ids, edev->id);
 > 
-> 
-> Best regards,
-> Martin
-> 
-> 
-> [0] https://lore.kernel.org/linux-wireless/4a76b5fe-c3d6-de44-c627-3f48fafdd905@lwfinger.net/
+> ditto.
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
