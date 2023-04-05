@@ -2,349 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F3E6D7FA2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F56A6D7F9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238152AbjDEOfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S238501AbjDEOfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbjDEOfo (ORCPT
+        with ESMTP id S238616AbjDEOe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:35:44 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19B565B9
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680705322; x=1712241322;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fnK5AYX8YRjNpcu/SufvtqA78jBP3l9AvlwPRJGeHDs=;
-  b=JeONkNMBf7Da669R9Lo2hTINJHUxSfm2SvobZNUuoDLimZrA6LG5Od+9
-   Wums1k+F+V2BwsvMNoVYwhIc8y78QZ0tlAYc6fYZ+4/XYxiExrdKSdgI8
-   jh3YQFin+1QtphoPGCXcAP3IC9r8S0sf5P9pEsLeIBKDSzN8mbnwLoD9z
-   wrd4KfkTxExbsEgq3K8IGIlb6UgJH4zg4PjzJc1RmggJv4Q+w0OmlrY6U
-   v9++fOtaKMbzWp4kvwMGLXgdzVSGJYzz7Ms/8S7c4n9mh4fMJtNW7XMvs
-   u3Iu2BUVzcEdQlh97MRTUWL3ODX/+9Kinq7eGungTs0y/acgu3aIDgfGC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="322846765"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="322846765"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 07:35:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="797940157"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="797940157"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Apr 2023 07:35:20 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pk4EF-000Qa8-0x;
-        Wed, 05 Apr 2023 14:35:15 +0000
-Date:   Wed, 05 Apr 2023 22:34:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fsfa3] BUILD SUCCESS WITH WARNING
- 91ba9bf02e0d11bbe0b6fe49f40fb90818f2a06d
-Message-ID: <642d86fa.zFpyPeovdDi70fya%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 5 Apr 2023 10:34:56 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907733AA9
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:34:49 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id l27so36449306wrb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 07:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680705288;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CW6SEmeeRI4KuBNDdzCiH6zGWbYI1ySCeEScYHS2P00=;
+        b=YrHVUT/qOMG/lSCl/TxA+5ER2cLvgR+4p4XnJeag4tAzZbSa4j3qiw+HWKAq8phWyx
+         nvFMFv6EI/PxNWwv1sE7v/QKbUHmbZFq5kswHNV7kLmwW1cCmCy8+qpVkhM/nCEPwUAX
+         26sEgrtGY1Rv1A3VoFoo+PK5gLppRKj5FW4WgFPLvfd4jkaYisdgCUj6vDZDRDiMbW52
+         Ko+yWY5tjQoCW0qTEv2iyTCq9ImTAuWX21wxSUwa8siGXcorQYuoS90KhkTSJhWAaRUl
+         MAkJ4r9Jn9hK5/1h95Cog+W/uA67v+kOzRm+rngmmTJXldtDd3dozxhZ41x/R5ZDIPUO
+         Uvuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680705288;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CW6SEmeeRI4KuBNDdzCiH6zGWbYI1ySCeEScYHS2P00=;
+        b=3JjJMs0qhEMSubSQx4UmHTAa8xypzog1OwLBovkKBt9+duQu3S4VY8Se4XSlpFZ21+
+         /4RJ3R+sUVLp8RdnszqVaXpRCi/pQjYau5ObAVMDcVL79OEX9dJW6sxnz6kE/0a2gsuz
+         8yaZUE+wkpmQryd0C5udXTCA31bwwF1i7MkX6/yV9jXpQDDG7ae67D18X3fa8JcfC5vH
+         RG/iH6IVO0nDmFgiVWAtRBL1bEHPnShEOGxK8DENJkvlOdxVSUyd/Bq7KDuzDuBHUirP
+         WsPSudXoXAZjijwjGBwYLCGF/Nc9mmCg4Pyx99ilw7diM1r//hR9dWFeJjaG/KJJQhta
+         9LMg==
+X-Gm-Message-State: AAQBX9dmjGn+lz1n9cZc3M7W7Oco4y0TS2hPCMrzmVdaVqm1pju6HYIS
+        6BvYrkw61ue21YuQxCmixDpB3g==
+X-Google-Smtp-Source: AKy350bRoK9o4nxpqsA5Es5CtZzavd7UOZlD9bG7h4k4M3SvZbJJl06c9LEpbSdXuqddV7dQYXIvsQ==
+X-Received: by 2002:a5d:4f06:0:b0:2cd:defe:cfd3 with SMTP id c6-20020a5d4f06000000b002cddefecfd3mr4511354wru.30.1680705288039;
+        Wed, 05 Apr 2023 07:34:48 -0700 (PDT)
+Received: from [192.168.1.172] ([93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id k4-20020a5d4284000000b002cefcac0c62sm15333506wrq.9.2023.04.05.07.34.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 07:34:47 -0700 (PDT)
+Message-ID: <25bcaa84-fb29-4343-d046-26e210fc81f4@baylibre.com>
+Date:   Wed, 5 Apr 2023 16:34:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 10/10] memory: mtk-smi: mt8365: Add SMI Support
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230207-iommu-support-v2-0-60d5fa00e4e5@baylibre.com>
+ <20230207-iommu-support-v2-10-60d5fa00e4e5@baylibre.com>
+ <9847bc48-c96c-3599-e876-bcf9ebf1522e@linaro.org>
+ <CAFGrd9pBdaHLGUZHkaz2_XKafyX=dxu9UckQxrphg52EG=A1SQ@mail.gmail.com>
+ <8fc3dd22-79df-32cb-c219-896eda8fa986@linaro.org>
+ <fd24877a-5fae-5434-dc56-61ab35ccd820@baylibre.com>
+ <e38658be-1a2a-bccb-3f30-18f1b031f71d@linaro.org>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <e38658be-1a2a-bccb-3f30-18f1b031f71d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fsfa3
-branch HEAD: 91ba9bf02e0d11bbe0b6fe49f40fb90818f2a06d  uapi: netfilter: ebtables: Replace zero-length array with flexible-array  member
 
-Warning reports:
+On 05/04/2023 15:54, Krzysztof Kozlowski wrote:
+> On 05/04/2023 15:06, Alexandre Mergnat wrote:
+>> On 05/04/2023 13:45, Krzysztof Kozlowski wrote:
+>>> On 05/04/2023 11:53, Alexandre Mergnat wrote:
+>>>> Ok, I will move the driver patch before the DTS patches in the next version.
+>>>>
+>>> Or do not send it together at all, which might solve your dependency
+>>> problem. According to your cover letter I cannot take the memory
+>>> controller bits, so I am waiting for dependencies to hit the mainline.
+>>> Alternatively I will need pull request with stable tag.
+>>>
+>> Ok, I prefer send the driver patch in another serie. That will solve the
+>> dependency with the DTS a least.
+> What dependency? Why do you have dependencies between drivers and DTS?
+> That's a no-go.
+I probably do something wrong but, that start with this comment [1]:
 
-https://lore.kernel.org/oe-kbuild-all/202303250602.DR5hZJXz-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303250644.7mtCknON-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202304051623.Cvewnzo2-lkp@intel.com
+> I guess we should add a independent "mediatek,mt8365-smi-common".
 
-Warning: (recently discovered and may have been fixed)
+Then I have added the mt8365 compatible support in the driver instead of using the mt8186 which already supported and used in the v1.
+I change the binding and DTS to use "mediatek,mt8365-smi-common" only (no more "mediatek,mt8186-smi-common").
+Maybe "dependency isn't the good word to use in that case.
+Except for the patch order in the serie (or send the driver in another one), everything is fine or there are others wrong things ?
 
-./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
-arch/alpha/include/asm/string.h:22:16: warning: array subscript 'unsigned char[16][0]' is partly outside array bounds of 'u8[15]' {aka 'unsigned char[15]'} [-Warray-bounds]
-arch/m68k/include/asm/io_no.h:17:11: warning: array subscript 0 is outside array bounds of 'volatile u8[0]' {aka 'volatile unsigned char[]'} [-Warray-bounds]
-arch/s390/include/asm/ptrace.h:69:26: warning: array subscript 0 is outside array bounds of 'struct psw_bits[0]' [-Warray-bounds]
-arch/sparc/include/asm/string.h:15:25: warning: array subscript 'unsigned char[16][0]' is partly outside array bounds of 'u8[15]' {aka 'unsigned char[15]'} [-Warray-bounds]
-drivers/cpufreq/brcmstb-avs-cpufreq.c:449:28: warning: array subscript 5 is outside array bounds of 'void[60]' [-Warray-bounds]
-drivers/dma/sh/rcar-dmac.c:914:36: warning: array subscript 4294967295 is above array bounds of 'const u32[7]' {aka 'const unsigned int[7]'} [-Warray-bounds]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_dpia.c:427:17: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_fixed_vs_pe_retimer.c:467:25: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/gpu/drm/arm/display/komeda/komeda_pipeline_state.c:199:24: warning: array subscript [0, 63] is outside array bounds of 'struct komeda_component_output[5]' [-Warray-bounds]
-drivers/gpu/drm/nouveau/nvif/outp.c:140:9: warning: array subscript '__int128 unsigned[0]' is partly outside array bounds of 'u8[15]' {aka 'unsigned char[15]'} [-Warray-bounds]
-drivers/gpu/drm/nouveau/nvif/outp.c:140:9: warning: array subscript 'unsigned char[16][0]' is partly outside array bounds of 'u8[15]' {aka 'unsigned char[15]'} [-Warray-bounds]
-drivers/net/ethernet/broadcom/tg3.c:17787:51: warning: array subscript 5 is above array bounds of 'struct tg3_napi[5]' [-Warray-bounds]
-drivers/net/ethernet/i825xx/sun3_82586.c:989:122: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]
-drivers/net/ethernet/microchip/sparx5/sparx5_psfp.c:167:31: warning: array subscript 4 is above array bounds of 'const struct sparx5_psfp_gce[4]' [-Warray-bounds]
-drivers/platform/chrome/cros_ec_vbc.c:36:15: warning: array subscript 'struct ec_params_vbnvcontext[1]' is partly outside array bounds of 'unsigned char[36]' [-Warray-bounds]
-fs/omfs/file.c:170:9: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
-include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile int[0]' [-Warray-bounds]
-include/asm-generic/rwonce.h:44:26: warning: array subscript 0 is outside array bounds of 'const volatile long long unsigned int[0]' [-Warray-bounds]
-include/asm-generic/unaligned.h:14:15: warning: array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
-include/linux/fortify-string.h:57:33: warning: '__builtin_memcpy' specified bound between 2147483648 and 4294967295 exceeds maximum object size 2147483647 [-Wstringop-overflow=]
-include/linux/fortify-string.h:57:33: warning: array subscript '__int128 unsigned[0]' is partly outside array bounds of 'u8[15]' {aka 'unsigned char[15]'} [-Warray-bounds]
-include/linux/fortify-string.h:57:33: warning: array subscript 'unsigned char[16][0]' is partly outside array bounds of 'u8[15]' {aka 'unsigned char[15]'} [-Warray-bounds]
-include/linux/fortify-string.h:57:33: warning: writing 16 bytes into a region of size 0 [-Wstringop-overflow=]
-lib/zstd/decompress/huf_decompress.c:1122:5: warning: 'HUF_fillDTableX2' accessing 624 bytes in a region of size 52 [-Wstringop-overflow=]
 
-Warning ids grouped by kconfigs:
+[1]: 
+https://lore.kernel.org/all/488d226a8a66bc6f5b96063b2816b59dd065ad3f.camel@mediatek.com/
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- arch-alpha-include-asm-string.h:warning:array-subscript-unsigned-char-is-partly-outside-array-bounds-of-u8-aka-unsigned-char
-|   |-- drivers-net-ethernet-microchip-sparx5-sparx5_psfp.c:warning:array-subscript-is-above-array-bounds-of-const-struct-sparx5_psfp_gce
-|   `-- drivers-platform-chrome-cros_ec_vbc.c:warning:array-subscript-struct-ec_params_vbnvcontext-is-partly-outside-array-bounds-of-unsigned-char
-|-- alpha-randconfig-r026-20230403
-|   `-- arch-alpha-include-asm-string.h:warning:array-subscript-unsigned-char-is-partly-outside-array-bounds-of-u8-aka-unsigned-char
-|-- arc-allyesconfig
-|   |-- drivers-net-ethernet-broadcom-tg3.c:warning:array-subscript-is-above-array-bounds-of-struct-tg3_napi
-|   |-- drivers-platform-chrome-cros_ec_vbc.c:warning:array-subscript-struct-ec_params_vbnvcontext-is-partly-outside-array-bounds-of-unsigned-char
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-|-- arm-allmodconfig
-|   |-- drivers-cpufreq-brcmstb-avs-cpufreq.c:warning:array-subscript-is-outside-array-bounds-of-void
-|   |-- drivers-dma-sh-rcar-dmac.c:warning:array-subscript-is-above-array-bounds-of-const-u32-aka-const-unsigned-int
-|   |-- drivers-net-ethernet-microchip-sparx5-sparx5_psfp.c:warning:array-subscript-is-above-array-bounds-of-const-struct-sparx5_psfp_gce
-|   |-- drivers-platform-chrome-cros_ec_vbc.c:warning:array-subscript-struct-ec_params_vbnvcontext-is-partly-outside-array-bounds-of-unsigned-char
-|   |-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-|   |-- include-linux-fortify-string.h:warning:array-subscript-unsigned-char-is-partly-outside-array-bounds-of-u8-aka-unsigned-char
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-|-- arm-allyesconfig
-|   |-- drivers-cpufreq-brcmstb-avs-cpufreq.c:warning:array-subscript-is-outside-array-bounds-of-void
-|   |-- drivers-dma-sh-rcar-dmac.c:warning:array-subscript-is-above-array-bounds-of-const-u32-aka-const-unsigned-int
-|   |-- drivers-net-ethernet-microchip-sparx5-sparx5_psfp.c:warning:array-subscript-is-above-array-bounds-of-const-struct-sparx5_psfp_gce
-|   |-- drivers-platform-chrome-cros_ec_vbc.c:warning:array-subscript-struct-ec_params_vbnvcontext-is-partly-outside-array-bounds-of-unsigned-char
-|   |-- include-linux-fortify-string.h:warning:__builtin_memcpy-specified-bound-between-and-exceeds-maximum-object-size
-|   |-- include-linux-fortify-string.h:warning:array-subscript-unsigned-char-is-partly-outside-array-bounds-of-u8-aka-unsigned-char
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-|-- arm-defconfig
-|   |-- drivers-cpufreq-brcmstb-avs-cpufreq.c:warning:array-subscript-is-outside-array-bounds-of-void
-|   |-- drivers-gpu-drm-nouveau-nvif-outp.c:warning:array-subscript-unsigned-char-is-partly-outside-array-bounds-of-u8-aka-unsigned-char
-|   |-- drivers-platform-chrome-cros_ec_vbc.c:warning:array-subscript-struct-ec_params_vbnvcontext-is-partly-outside-array-bounds-of-unsigned-char
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-|-- arm64-allyesconfig
-|   |-- drivers-cpufreq-brcmstb-avs-cpufreq.c:warning:array-subscript-is-outside-array-bounds-of-void
-|   |-- drivers-gpu-drm-arm-display-komeda-komeda_pipeline_state.c:warning:array-subscript-is-outside-array-bounds-of-struct-komeda_component_output
-|   |-- drivers-platform-chrome-cros_ec_vbc.c:warning:array-subscript-struct-ec_params_vbnvcontext-is-partly-outside-array-bounds-of-unsigned-char
-|   |-- include-asm-generic-unaligned.h:warning:array-subscript-is-outside-array-bounds-of-char
-|   |-- include-linux-fortify-string.h:warning:array-subscript-__int128-unsigned-is-partly-outside-array-bounds-of-u8-aka-unsigned-char
-|   |-- include-linux-fortify-string.h:warning:writing-bytes-into-a-region-of-size
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-|-- arm64-defconfig
-|   |-- drivers-cpufreq-brcmstb-avs-cpufreq.c:warning:array-subscript-is-outside-array-bounds-of-void
-|   |-- drivers-gpu-drm-nouveau-nvif-outp.c:warning:array-subscript-__int128-unsigned-is-partly-outside-array-bounds-of-u8-aka-unsigned-char
-|   |-- drivers-platform-chrome-cros_ec_vbc.c:warning:array-subscript-struct-ec_params_vbnvcontext-is-partly-outside-array-bounds-of-unsigned-char
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-|-- arm64-randconfig-r013-20230403
-|   `-- fs-omfs-file.c:warning:writing-bytes-into-a-region-of-size
-|-- i386-randconfig-a011-20230403
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-|-- i386-randconfig-a012-20230403
-|   `-- lib-zstd-decompress-huf_decompress.c:warning:HUF_fillDTableX2-accessing-bytes-in-a-region-of-size
-clang_recent_errors
-|-- i386-randconfig-a002-20230403
-|   `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
-|-- i386-randconfig-a003-20230403
-|   `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
-|-- i386-randconfig-a005-20230403
-|   `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
-|-- i386-randconfig-a013
-|   `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
-|-- x86_64-buildonly-randconfig-r002-20230403
-|   `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
-|-- x86_64-randconfig-a001-20230403
-|   `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
-|-- x86_64-randconfig-a002-20230403
-|   `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
-`-- x86_64-randconfig-a016
-    `-- usr-include-linux-netfilter_bridge-ebtables.h:warning:field-target-with-variable-sized-type-struct-ebt_entry_target-not-at-the-end-of-a-struct-or-class-is-a-GNU-extension
+Regards,
+Alexandre
 
-elapsed time: 727m
-
-configs tested: 167
-configs skipped: 8
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r001-20230403   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r005-20230403   gcc  
-alpha                randconfig-r021-20230403   gcc  
-alpha                randconfig-r026-20230403   gcc  
-alpha                randconfig-r034-20230403   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r006-20230403   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230403   gcc  
-arc                  randconfig-r016-20230403   gcc  
-arc                  randconfig-r022-20230403   gcc  
-arc                  randconfig-r032-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm                     davinci_all_defconfig   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r021-20230403   clang
-arm                  randconfig-r046-20230403   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r003-20230403   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230403   clang
-arm64                randconfig-r013-20230403   gcc  
-arm64                randconfig-r015-20230403   gcc  
-csky         buildonly-randconfig-r001-20230403   gcc  
-csky         buildonly-randconfig-r002-20230403   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230403   gcc  
-csky                 randconfig-r013-20230403   gcc  
-hexagon      buildonly-randconfig-r004-20230403   clang
-hexagon      buildonly-randconfig-r006-20230403   clang
-hexagon              randconfig-r004-20230403   clang
-hexagon              randconfig-r006-20230403   clang
-hexagon              randconfig-r041-20230403   clang
-hexagon              randconfig-r045-20230403   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                 randconfig-a012-20230403   gcc  
-i386                          randconfig-a012   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                 randconfig-a014-20230403   gcc  
-i386                          randconfig-a014   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                 randconfig-a016-20230403   gcc  
-i386                          randconfig-a016   gcc  
-i386                 randconfig-r021-20230403   gcc  
-i386                 randconfig-r022-20230403   gcc  
-i386                 randconfig-r023-20230403   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r004-20230403   gcc  
-ia64         buildonly-randconfig-r006-20230403   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r023-20230403   gcc  
-ia64                 randconfig-r024-20230403   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r026-20230403   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r005-20230403   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r014-20230403   gcc  
-m68k                 randconfig-r024-20230403   gcc  
-m68k                           sun3_defconfig   gcc  
-microblaze   buildonly-randconfig-r005-20230403   gcc  
-microblaze   buildonly-randconfig-r006-20230403   gcc  
-microblaze           randconfig-r015-20230403   gcc  
-microblaze           randconfig-r023-20230403   gcc  
-microblaze           randconfig-r024-20230403   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r001-20230403   gcc  
-mips                 randconfig-r015-20230403   clang
-mips                 randconfig-r024-20230403   clang
-mips                 randconfig-r026-20230403   clang
-nios2        buildonly-randconfig-r004-20230403   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230403   gcc  
-nios2                randconfig-r035-20230403   gcc  
-openrisc                         alldefconfig   gcc  
-openrisc     buildonly-randconfig-r003-20230403   gcc  
-openrisc             randconfig-r011-20230403   gcc  
-openrisc             randconfig-r025-20230403   gcc  
-parisc       buildonly-randconfig-r003-20230403   gcc  
-parisc       buildonly-randconfig-r005-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r036-20230403   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r005-20230403   gcc  
-powerpc                     pq2fads_defconfig   gcc  
-powerpc              randconfig-r005-20230403   clang
-powerpc              randconfig-r012-20230403   gcc  
-powerpc              randconfig-r013-20230403   gcc  
-powerpc              randconfig-r014-20230403   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r002-20230403   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r006-20230403   clang
-riscv                randconfig-r012-20230403   gcc  
-riscv                randconfig-r016-20230403   gcc  
-riscv                randconfig-r021-20230403   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             alldefconfig   clang
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230403   clang
-s390                 randconfig-r044-20230403   gcc  
-sh                               allmodconfig   gcc  
-sh                               j2_defconfig   gcc  
-sh                   randconfig-r001-20230403   gcc  
-sh                   randconfig-r003-20230403   gcc  
-sh                   randconfig-r036-20230403   gcc  
-sh                           se7705_defconfig   gcc  
-sh                   sh7724_generic_defconfig   gcc  
-sparc        buildonly-randconfig-r001-20230403   gcc  
-sparc        buildonly-randconfig-r004-20230403   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r021-20230403   gcc  
-sparc                randconfig-r031-20230403   gcc  
-sparc64      buildonly-randconfig-r006-20230403   gcc  
-sparc64              randconfig-r022-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230403   clang
-x86_64               randconfig-a002-20230403   clang
-x86_64               randconfig-a003-20230403   clang
-x86_64               randconfig-a004-20230403   clang
-x86_64               randconfig-a005-20230403   clang
-x86_64               randconfig-a006-20230403   clang
-x86_64               randconfig-a011-20230403   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64               randconfig-a013-20230403   gcc  
-x86_64                        randconfig-a013   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64               randconfig-a015-20230403   gcc  
-x86_64                        randconfig-a015   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64               randconfig-r005-20230403   clang
-x86_64               randconfig-r016-20230403   gcc  
-x86_64               randconfig-r022-20230403   gcc  
-x86_64               randconfig-r025-20230403   gcc  
-x86_64               randconfig-r026-20230403   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r026-20230403   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
