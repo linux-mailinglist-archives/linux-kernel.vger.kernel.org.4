@@ -2,72 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B531D6D763E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6716D7648
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237326AbjDEIFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S237298AbjDEIGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237333AbjDEIEs (ORCPT
+        with ESMTP id S236950AbjDEIGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:04:48 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBBE4EE2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:04:43 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-4fa3c1a7a5aso203720a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 01:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680681882;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=knNBWU1tEPnpVgHr0NHSaq41CVWca8alYZPbI02km30=;
-        b=UVfLyJ4U1LTTsw9/l2Ezvobf38cBIinJ6k1Wn4FHs5A3VFvzepgpOTTipJ0mhKt9hy
-         04xhVwg5jn/MCno6zaKR2LEZR2MPT7jh77ipxI9CTKy8vyzax6saAN0iASPnRcHvz0/5
-         VO+QDjmssHzCOHccG3SHDVEgcNrTHc3CPRJ6PyV7XAd31otafioMGfdCn/nhZp26xGWS
-         4tCpHmaFlK2XwywMhmtoMQvP8cUPNoA54gCjNZel/0bCPAoMB8rpB2hStnNFZCScSHvj
-         7/sQLhYpujqe4RydsR2eIB7JxXDh0H7gnhFMXBsXwpAfSWMOBmkJGh7Naivou/PW+6hS
-         nDbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680681882;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=knNBWU1tEPnpVgHr0NHSaq41CVWca8alYZPbI02km30=;
-        b=lNmKQQoQPzkhtGWXaf0SduKfkJbCLUKAeoq34WvPaM9wE/OipVXBeo0jvm1M0OIU5U
-         oyl4tutS8Doz1dbMBUSa6GVRLpU+bXOQ0xluZBNq6oOmqDOeH/LTabQcTp1JW/6mJ+aK
-         5RbKWT+/vitsGO9ih4gBGkmgDRSb9g6Z55hopQOBR9JSavcME6IsY7pVbHj6aKqphiE/
-         6ewsJE7JXXyYk7oj8Wp+4qx7N8o4gH5kVSNYpdBu0bOymWvLy3hBl3MPocl5x5QThKpe
-         YZ7IkfjCvWluIj+ut3p0AeorfWBw9lz9a05YWLfgl3X7bz7T5vYEyaENGwhsVud+yc3p
-         o5Gw==
-X-Gm-Message-State: AAQBX9d8MJ6x1n+1/MlJV9Pw9ZPaZdZUpJ1kmUIoRkyG5X2suC48nEN8
-        u9Ns020saBPEvY3yUt2K+FfFVg==
-X-Google-Smtp-Source: AKy350bgJJjBqVOKkAvuIHFoVn9ZmTBnPLaEXXwVS1XU/9ZvvW5IptbzaN4hC9/iTQUPBMsKyVCmDQ==
-X-Received: by 2002:a05:6402:202a:b0:4c6:10a7:c422 with SMTP id ay10-20020a056402202a00b004c610a7c422mr1122764edb.18.1680681882390;
-        Wed, 05 Apr 2023 01:04:42 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
-        by smtp.gmail.com with ESMTPSA id z21-20020a056402275500b00501d73cfc86sm6845839edd.9.2023.04.05.01.04.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 01:04:42 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        arm@kernel.org, soc@kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL 3/3] ARM: samsung: soc for v6.4
-Date:   Wed,  5 Apr 2023 10:04:38 +0200
-Message-Id: <20230405080438.156805-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230405080438.156805-1-krzysztof.kozlowski@linaro.org>
-References: <20230405080438.156805-1-krzysztof.kozlowski@linaro.org>
+        Wed, 5 Apr 2023 04:06:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AF395;
+        Wed,  5 Apr 2023 01:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=X4PVQdadl6ZTLGeoTeEp0Dd4gWHDvdr8s3g3jGogpgM=; b=DKg+iwJwTae61N3oz8ZS/lSVqH
+        kXviuaxC6aMQnQA5NKnoAYS+qajbWl5RIS05vx4JjXnA/1uY+a6/soU4CazZazeHQav2ueMfPrrCw
+        EQUtTTogq4y06UUHDaVZhomah8Ld7DY4BLc4PlF02mk+6H6VMn5G2AarBSTEbEfXR7zxMLhc8ipKq
+        fl5YJeELcKAFBG/bLUYgII+mWcmdo/VpMksm9FsNLpasKzi1IS7cA+k2ezf09uaGVGwNlxhm01sFE
+        KDYfuKdYv5cDPGcxNWj9Txx2BEhobQP6E+J5LNv2LY9KNdhtAkeSaFEL95RFldfCXBGTcR+AwDIHi
+        WB1uHuRg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pjy9S-009pS6-2w;
+        Wed, 05 Apr 2023 08:05:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9A0B2300274;
+        Wed,  5 Apr 2023 10:05:48 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6D9C5262312B5; Wed,  5 Apr 2023 10:05:48 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 10:05:48 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Dai <davidai@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+Message-ID: <20230405080548.GW4253@hirez.programming.kicks-ass.net>
+References: <20230330224348.1006691-1-davidai@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330224348.1006691-1-davidai@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,29 +84,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> Hi,
+> 
+> This patch series is a continuation of the talk Saravana gave at LPC 2022
+> titled "CPUfreq/sched and VM guest workload problems" [1][2][3]. The gist
+> of the talk is that workloads running in a guest VM get terrible task
+> placement and DVFS behavior when compared to running the same workload in
+> the host. Effectively, no EAS for threads inside VMs. This would make power
+> and performance terrible just by running the workload in a VM even if we
+> assume there is zero virtualization overhead.
+> 
+> We have been iterating over different options for communicating between
+> guest and host, ways of applying the information coming from the
+> guest/host, etc to figure out the best performance and power improvements
+> we could get.
+> 
+> The patch series in its current state is NOT meant for landing in the
+> upstream kernel. We are sending this patch series to share the current
+> progress and data we have so far. The patch series is meant to be easy to
+> cherry-pick and test on various devices to see what performance and power
+> benefits this might give for others.
+> 
+> With this series, a workload running in a VM gets the same task placement
+> and DVFS treatment as it would when running in the host.
+> 
+> As expected, we see significant performance improvement and better
+> performance/power ratio. If anyone else wants to try this out for your VM
+> workloads and report findings, that'd be very much appreciated.
+> 
+> The idea is to improve VM CPUfreq/sched behavior by:
+> - Having guest kernel to do accurate load tracking by taking host CPU
+>   arch/type and frequency into account.
+> - Sharing vCPU run queue utilization information with the host so that the
+>   host can do proper frequency scaling and task placement on the host side.
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+So, not having actually been send many of the patches I've no idea what
+you've done... Please, eradicate this ridiculous idea of sending random
+people a random subset of a patch series. Either send all of it or none,
+this is a bloody nuisance.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-soc-6.4
-
-for you to fetch changes up to cb56f508e541036ad41cb9a5afb46339b2f83b9f:
-
-  ARM: EXYNOS: Use of_address_to_resource() (2023-03-22 18:47:01 +0100)
-
-----------------------------------------------------------------
-Samsung mach/soc changes for v6.4
-
-Cleanup of OF-related functions: use of_property_read_bool() for reading
-bool and of_address_to_resource() for mapping MMIO.
-
-----------------------------------------------------------------
-Rob Herring (2):
-      ARM: exynos: Use of_property_read_bool() for boolean properties
-      ARM: EXYNOS: Use of_address_to_resource()
-
- arch/arm/mach-exynos/exynos.c  | 8 +++++---
- arch/arm/mach-exynos/suspend.c | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Having said that; my biggest worry is that you're making scheduler
+internals into an ABI. I would hate for this paravirt interface to tie
+us down.
