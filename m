@@ -2,56 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C566D8A6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFB06D8A7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjDEWPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 18:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S233880AbjDEWRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDEWO7 (ORCPT
+        with ESMTP id S229608AbjDEWRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:14:59 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D7F55BA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:14:58 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-54c061acbc9so24795047b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:14:58 -0700 (PDT)
+        Wed, 5 Apr 2023 18:17:46 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DAA5FFB;
+        Wed,  5 Apr 2023 15:17:45 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-502234a1f08so738461a12.3;
+        Wed, 05 Apr 2023 15:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680732897; x=1683324897;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DkhXpIZUd3UwhU4/lPqmcT7Rq+/mxVouewhINmK6tsk=;
-        b=pxsFvIdCQX5T8/WamHNGUFAQiy6rc/pB9Q0GGGcaNvOPupvECPHOmLok5F8qw7p4qq
-         IaUplh2wRu+EtfPYS6faSsvuLVtXsnJ9FQs47dQIMqd3WkUMA+SJ1gR7m2eAv1m42bdV
-         enqgCoZ0vw2bWPA5k+vPGImt7lJeW8s1Tyq5R2bMQ8ZelMtU9rC10akMY+MVJyLigyMe
-         YDjg2V4MiIo7OS33ZXVF0BttVrevBgS8V0XkfyUViI+hxJ1gmUfiorUGQDgQMWwzo1cG
-         9TOG2eqj94GSY+TOfBLRD84d3PwOG+u80k3oiRE66Qga68zG5r7qE8KLJGJ29UlC4rqY
-         uydQ==
+        d=gmail.com; s=20210112; t=1680733064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hEqIXUH9r3N7RlJaWcTaXBh5Rq77VEZamzqIxseklB4=;
+        b=pmsiCnEQWWLWi/RWqC3RyJX0o62CeS8Z4fd/L+0yznB4p6bf5jzdc0q68BM6tEr8hZ
+         3DC9FudqGexE2bxpU4U1d2i7r4P3vOjHlFzz9Ee3cKjZqENKgm5/nCpUl5Jn3n9isu3/
+         wJYzG56ZnWGQk9zM47BdN29nL4oVczqMlLigDTT8VsJJjQYNkZy5Alb82F903roLy1Uf
+         m39nLwErJdr+dNSK88w88IHH56g9BLF4VniO/3Xq88qgKajzWFhXXN1U32u8+NK/Nr4m
+         7+OgdOTa4lKVaveRtu8hh3wa75d6fd9iz486ZxTof0MAzkGQ6TifbSarDzDUGqRRgS/L
+         zuMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680732897; x=1683324897;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DkhXpIZUd3UwhU4/lPqmcT7Rq+/mxVouewhINmK6tsk=;
-        b=paFNEmmgRz38F8BBqSHtFDX4tTXSJJxUwVYYIy4IjMxeWqQ9APtIYNwDsPHzhDsKqD
-         gxfpYodueiXA3ILWGadVoj18H8m2HYUHoqcmmT7SzNBdITBtnCjdpcDPGRz1pCCOAw5X
-         UO7n6hb6nmKG4atmFcEkoMRV9/HrxHvKAAwD24cmNlbfje+wyErALq8U+rZFM3DhjQnd
-         B6qGDpXsBuj1MrTJJkYthmGKfV539+WTjWouEGK8HBejLnM7T1RuoJRPZro2ckX9xSpE
-         tuZWnP2DZY7s5jKcsZ6Gtb6EjCaQeLNUOi/T2mwjJP+ywM0CpFdzse+14nmi+hxISWYg
-         RItQ==
-X-Gm-Message-State: AAQBX9dk5xKQqJss1gJYQ2wals5si5mxCpomXzseU2L2rAfc0MrLnUhX
-        dxCyZ2aefdmSLcrQHW9N1kz4lrkqF/btomRbdA==
-X-Google-Smtp-Source: AKy350YvZzcCXznNAshm4nkhb+tXooHeeqMHJLSjyZ7eZ2GO7EoFf+dLZh7Nupu7xRx1Gh5tGbv86eg8x71I/HKO51M=
-X-Received: by 2002:a81:b389:0:b0:545:5b2c:4bf6 with SMTP id
- r131-20020a81b389000000b005455b2c4bf6mr4470191ywh.7.1680732897657; Wed, 05
- Apr 2023 15:14:57 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680733064;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hEqIXUH9r3N7RlJaWcTaXBh5Rq77VEZamzqIxseklB4=;
+        b=oLtdhAwpK4xccyKXBteesNhr0J+N1pDJNOG5byb8Jn/7hA/RF2UxtFF2bRs4gsDAkO
+         EJg9aZ/Wrc5XQgiauRWPafnDCWIDQa8J4Fjbp/TYHt2mtI9dQAqvtiGe+y/IOwmF5Fr1
+         F6cBRzNbH3QXLD85dUtYH3Ck3FiuN6O88Yio0E0AgG3yy2wFs6fhwu9tdvLj35yqyju5
+         xeLzk8ZRUj3awbrg+2mdlIiZB+dyPE/RMfjIFwgD21q6pPYqhZMlTDevfXvM+35MI/J2
+         qcCM1sPDS0XjTGMUGz5bNDy/uYGEmvFQ1TPuDRB48Ns3IOyxffu1TAE+AxBkf0DPVO1c
+         KQpg==
+X-Gm-Message-State: AAQBX9dcc4byrpbk2kmIM+/52doBQOr0yFvbhdsyh1TLuut6lDuLPR0H
+        teknMfhsic5i1l3pdrGmEGRViyFM8DUcr94H34nVcuZP2wQ=
+X-Google-Smtp-Source: AKy350bFshQZR6uFfnwgwVCvKoEOQ6UmaakkklRkKHeXhsOGp/5U0PRrShz5olbrGXznCNnIcmcPWyxT34bF0xLe2fU=
+X-Received: by 2002:a05:6402:b33:b0:500:2e94:26aa with SMTP id
+ bo19-20020a0564020b3300b005002e9426aamr3744876edb.20.1680733063621; Wed, 05
+ Apr 2023 15:17:43 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rui Salvaterra <rsalvaterra@gmail.com>
-Date:   Wed, 5 Apr 2023 23:14:45 +0100
-Message-ID: <CALjTZvakMZQsqzzjjXh_fw4+Zra5y5o-fhc5gDVTYM1uM40RNQ@mail.gmail.com>
-Subject: [BUG?] unchecked MSR access error: WRMSR to 0x19c
-To:     x86@kernel.org, linux-kernel@vger.kernel.org
+References: <CANn89iKn4rpqj_8fYt0UMMgAq5L_2PNoY0Ev70ck8u4t4FC_=g@mail.gmail.com>
+ <20230405194143.15708-1-kuniyu@amazon.com> <CANn89iJeHFb8VnFPUq4-d+jzAO6XKiSQhaPsPFY98wjH0Yx1Lw@mail.gmail.com>
+In-Reply-To: <CANn89iJeHFb8VnFPUq4-d+jzAO6XKiSQhaPsPFY98wjH0Yx1Lw@mail.gmail.com>
+From:   "Dae R. Jeong" <threeearcat@gmail.com>
+Date:   Thu, 6 Apr 2023 07:17:30 +0900
+Message-ID: <CACsK=jf=nO-2N5HhqKd80m6RYpAFEd8rfUBrog6sKgnLuUnd9w@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in tcp_write_timer_handler
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, bpf@vger.kernel.org,
+        davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, yoshfuji@linux-ipv6.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -64,52 +72,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, everyone,
+On Thu, Apr 6, 2023 at 4:48=E2=80=AFAM Eric Dumazet <edumazet@google.com> w=
+rote:
+>
+> On Wed, Apr 5, 2023 at 9:42=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.c=
+om> wrote:
+> >
+> > From:   Eric Dumazet <edumazet@google.com>
+> > Date:   Wed, 5 Apr 2023 13:28:16 +0200
+> > > On Wed, Apr 5, 2023 at 12:41=E2=80=AFPM Dae R. Jeong <threeearcat@gma=
+il.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > We observed an issue "KASAN: use-after-free Read in tcp_write_timer=
+_handler" during fuzzing.
+> > > >
+> > > > Unfortunately, we have not found a reproducer for the crash yet. We
+> > > > will inform you if we have any update on this crash.  Detailed cras=
+h
+> > > > information is attached below.
+> > > >
+> > >
+> > > Thanks for the report.
+> > >
+> > > I have dozens of similar syzbot reports, with no repro.
+> > >
+> > > I usually hold them, because otherwise it is just noise to mailing li=
+sts.
+> > >
+> > > Normally, all user TCP sockets hold a reference on the netns
+> > >
+> > > In all these cases, we see a netns being dismantled while there is at
+> > > least one socket with a live timer.
+> > >
+> > > This is therefore a kernel TCP socket, for which we do not have yet
+> > > debugging infra ( REF_TRACKER )
+> > >
+> > > CONFIG_NET_DEV_REFCNT_TRACKER=3Dy is helping to detect too many dev_p=
+ut(),
+> > > we need something tracking the "kernel sockets" as well.
+> >
+> > Maybe I missed something, but we track kernel sockets with netns
+> > by notrefcnt_tracker ?
+>
+> Oh right, I forgot I did this already :)
+>
+> commit 0cafd77dcd032d1687efaba5598cf07bce85997f
+> Author: Eric Dumazet <edumazet@google.com>
+> Date:   Thu Oct 20 23:20:18 2022 +0000
+>
+>     net: add a refcount tracker for kernel sockets
+>
+> Dae, make sure to not send reports based on old kernels.
+>
+> Using 6.0-rc7 is a waste of your time, and everyone else reading this thr=
+ead.
+>
+> I confess I did not check this, and I really should do that all the time.
 
-I have a Haswell (Core i7-4770R) machine running Linux 6.3-rc5 on
-which, after a while under load (say, compiling the kernel), I get
-this trace=E2=80=A6
+I'm sorry and I understand your time is valuable.
+I will let you know when I observe this issue again.
 
-[  832.549630] unchecked MSR access error: WRMSR to 0x19c (tried to
-write 0x000000000000aaa8) at rIP: 0xffffffff816f66a6
-(throttle_active_work+0xa6/0x1d0)
-[  832.549652] Call Trace:
-[  832.549654]  <TASK>
-[  832.549655]  process_one_work+0x1ab/0x300
-[  832.549661]  worker_thread+0x4b/0x340
-[  832.549664]  ? process_one_work+0x300/0x300
-[  832.549676]  kthread+0xac/0xc0
-[  832.549679]  ? kthread_exit+0x20/0x20
-[  832.549682]  ret_from_fork+0x1f/0x30
-[  832.549693]  </TASK>
+>
+> >
+> > I thought now CONFIG_NET_NS_REFCNT_TRACKER can catch the case.
+> >
+> >
+> > >
+> > > Otherwise bugs in subsystems not properly dismantling their kernel
+> > > socket at netns dismantle are next to impossible to track and fix.
+> > >
+> > > If anyone has time to implement this, feel free to submit patches.
+> > >
+> > > Thanks.
 
-=E2=80=A6 after which I get these from time to time in dmesg.
-
-[  836.709562] CPU7: Core temperature is above threshold, cpu clock is
-throttled (total events =3D 219)
-[  836.709569] CPU3: Core temperature is above threshold, cpu clock is
-throttled (total events =3D 219)
-[ 1272.792138] CPU2: Core temperature is above threshold, cpu clock is
-throttled (total events =3D 1)
-[ 1272.792156] CPU6: Core temperature is above threshold, cpu clock is
-throttled (total events =3D 1)
-
-This is the microcode revision on the CPU.
-
-[    0.000000] microcode: updated early: 0xe -> 0x1c, date =3D 2019-11-12
-
-Note that I have the exact same issue on an Ivy Bridge (Core
-i7-3720QM) machine, but not on an Ivy Bridge laptop (Celeron 1007U).
-Maybe this is a legitimate warning, but please note that I've
-thorughly cleaned the machines before retesting to see if, by
-coincidence, I had any airway/cooling issues. The fact that it started
-happening recently (since Linux 6.1, I believe), and the fact that
-running stress-ng --cpu 16 before the unchecked WRMSR error happens
-doesn't cause any thermal throttling events, lead me to believe this
-is possibly some unintended oversight.
-
-Please let me know if you need any additional information (.config, or
-anything else).
-
-Thanks in advance,
-Rui
+Best regards,
+Dae R. Jeong.
