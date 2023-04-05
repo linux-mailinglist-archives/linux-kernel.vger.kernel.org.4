@@ -2,124 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6206D84F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B656D84F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbjDERaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S229712AbjDERdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbjDERaJ (ORCPT
+        with ESMTP id S229481AbjDERd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:30:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D5B5FCC;
-        Wed,  5 Apr 2023 10:30:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 744E263D8E;
-        Wed,  5 Apr 2023 17:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C881BC433D2;
-        Wed,  5 Apr 2023 17:30:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680715806;
-        bh=MTlSWkTVvQnj8bCbTnc5vIL49pqfkTClsa++NdTazCs=;
-        h=From:Date:Subject:To:Cc:From;
-        b=ra9q1p5bmBMGWpFgB4v4l6pgMweSZ39xkScSBol3GZgeY/cHHHzKh2ngiGKiZuab1
-         Q2tiW81XjCEiSpZywmVvCx2jwPIpbpUdGWetARjxtx7IuNk+2vLW/UgKaeOlHx6HaG
-         bJmpCr+w0cKAwzpIJPCicRYW64MFIlAmzHjtywCJ9CKKQjZvjVNjoJiwWqFSLQ7cDl
-         tzXdjnvs2+3Shtz7WX8kLmFDw3/6tCBkyBzrAUYCvDla9Ny5JCeePSRTr7e62xPpZg
-         PNYRoT4Mzwn333ihQj1Ph2GnSXJUQMI/H7rJcaXmdJVi6o0Wmn7JsSFd7DrylGt2kd
-         fwasqzz7SlSLQ==
-From:   Simon Horman <horms@kernel.org>
-Date:   Wed, 05 Apr 2023 19:29:48 +0200
-Subject: [PATCH net-next] net: sunhme: move asm includes to below linux
- includes
+        Wed, 5 Apr 2023 13:33:27 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480E0C6;
+        Wed,  5 Apr 2023 10:33:26 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id n14so19232128plc.8;
+        Wed, 05 Apr 2023 10:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680716005; x=1683308005;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dfIxSAgBnjoBsJTsm7apfl83bnVQsBjbMBbd20jd8Yo=;
+        b=BVf6VqQ84/eKA/OKP0d392ZFkWvfA0Havc7uTLgejYFMbKIZOroTgT7FBFH6wCXKR0
+         P4syjSTVOsTJaFW+gMDyQMwRDIqhOzc9CE5ie6oNwEdBfg6axPYAJkS4x3+9KsKhxXaJ
+         3LDk7MEuwCN18Yhqtul9GzIrOvKFQypQBv5USw3QnSvPjDhSUrU7px+THEfuUFEvQFiw
+         CvXxqvgsAJqgJelxJwebbjZ38kwZQuvdn6X3Q7g1/B896+LzaYRg3REofOMfqLNYKQIA
+         ijyJeuxngNS1qSwCMGwFI/NUK6mmxZ7mkgNLeCILwoTtQBY9S4CrbqOX7pSwAsOR+3/D
+         LpWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680716005; x=1683308005;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dfIxSAgBnjoBsJTsm7apfl83bnVQsBjbMBbd20jd8Yo=;
+        b=Qouo/KdkeX0HPbIwGaki8xKNpLQdK/hdng/gh3LW0EJkJP9iNkOGZkPpYs+zxlND4y
+         +enTWdYfBFUHnt8vWEscLjMrDYnfFBa//0wM/KuCTD4/TDNy3CfERKrqJytaqhev9RNK
+         BQLd8eqKtGRs2usaIGNw0D6rgT1lPzEY9rFggOy4f2rQwaK417hYtFpa9ACLLg6xylRk
+         hkNR3R+npq7gbF0/EYmUdVLC9hLkZ+1a1YJbylxvnbWLlzi29dwv0W+kWn0AzX3xAupa
+         o9ssqtp5XKpbjF/hSxpLKTVSsPnbiPd3hxWXK+xg2+sgf+nwaBMYSl82Vgt6Q4SHnuhv
+         34gQ==
+X-Gm-Message-State: AAQBX9dkKwyNpgsqcaqbzjxeGJzVot6GYEACzWydewyJVTrs6f5ZI3O4
+        zdn3gRlnyhjbKwROKBwQbAZPVXi5SxA6S/IPtWBUB+nBeqO9Wg==
+X-Google-Smtp-Source: AKy350bDm99Rv+LuGpHQe773/4/0M8pyMVzIe2nOEMsW2ByGSDXab5KTd3RQx85MZpH+bfrQlgOm+ma8ibTz30cHp5g=
+X-Received: by 2002:a17:903:443:b0:1a2:ab1b:b62c with SMTP id
+ iw3-20020a170903044300b001a2ab1bb62cmr2876155plb.4.1680716005362; Wed, 05 Apr
+ 2023 10:33:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230405-sunhme-includes-fix-v1-1-bf17cc5de20d@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAywLWQC/x2NywoCMQxFf2XI2kAdLaK/Ii76SG2gRmmmMjDMv
- xtcnsM93A2UOpPCbdqg05eV32JwPEyQapAnIWdjmN18cmfnUYfUl1lJbWRSLLxi8T7ma8mX4Ap
- YGYMSxh4kVWtltGby08m2/6s7CC0otC7w2PcfiPhXhoQAAAA=
-To:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Sean Anderson <seanga2@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-m68k@lists.linux-m68k.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:2d49:b0:3bc:b7f6:a3f2 with HTTP; Wed, 5 Apr 2023
+ 10:33:25 -0700 (PDT)
+Reply-To: yapcoylillia52@gmail.com
+From:   Lillia Yapcoy <lilliayapcoy@gmail.com>
+Date:   Wed, 5 Apr 2023 19:33:25 +0200
+Message-ID: <CAHZfu_mb4Oa1JFx4NGpXr9yQ+Tkife=CnpZJh8-BoJiVQA=K2g@mail.gmail.com>
+Subject: Succession Opportunity
+To:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
+        MONEY_FRAUD_8,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,XFER_LOTSA_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:631 listed in]
+        [list.dnswl.org]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lilliayapcoy[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [yapcoylillia52[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  1.5 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.0 XFER_LOTSA_MONEY Transfer a lot of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A recent rearrangement of includes has lead to a problem on m68k
-as flagged by the kernel test robot.
+Beloved in Christ.
 
-Resolve this by moving the block asm includes to below linux includes.
-A side effect i that non-Sparc asm includes are now immediately
-before Sparc asm includes, which seems nice.
 
-Using sparse v0.6.4 I was able to reproduce this problem as follows
-using the config provided by the kernel test robot:
 
-$ wget https://download.01.org/0day-ci/archive/20230404/202304041748.0sQc4K4l-lkp@intel.com/config
-$ cp config .config
-$ make ARCH=m68k oldconfig
-$ make ARCH=m68k C=2 M=drivers/net/ethernet/sun
-   CC [M]  drivers/net/ethernet/sun/sunhme.o
- In file included from drivers/net/ethernet/sun/sunhme.c:19:
- ./arch/m68k/include/asm/irq.h:78:11: error: expected ‘;’ before ‘void’
-    78 | asmlinkage void do_IRQ(int irq, struct pt_regs *regs);
-       |           ^~~~~
-       |           ;
- ./arch/m68k/include/asm/irq.h:78:40: warning: ‘struct pt_regs’ declared inside parameter list will not be visible outside of this definition or declaration
-    78 | asmlinkage void do_IRQ(int irq, struct pt_regs *regs);
-       |                                        ^~~~~~~
+I know this news will surprise you as we have not met in person or
+worked on any type of business transaction in the past. In fact, I
+found your contact address in my search on google for a godly
+man/woman. Despite this, I have contacted you in good faith and I hope
+that I can believe that you have this opportunity, which is explained
+below.
 
-Compile tested only.
 
-Fixes: 1ff4f42aef60 ("net: sunhme: Alphabetize includes")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202304041748.0sQc4K4l-lkp@intel.com/
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- drivers/net/ethernet/sun/sunhme.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+I am Mrs. Lillia Yapcoy from Cape Town, South Africa. I was married to
+the late Mr. Henry Yapcoy who worked in a construction company in
+Houston, Texas, USA for over 18 years before he passed away in 2019.
+We were married with no children. He died after a short illness that
+lasted only four days. Until his death we were all born again
+Christians. Since his death I have chosen not to remarry or have
+children outside of my marriage, which is against the Bible.
 
-diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
-index ec85aef35bf9..b93613cd1994 100644
---- a/drivers/net/ethernet/sun/sunhme.c
-+++ b/drivers/net/ethernet/sun/sunhme.c
-@@ -14,9 +14,6 @@
-  *     argument : macaddr=0x00,0x10,0x20,0x30,0x40,0x50
-  */
- 
--#include <asm/byteorder.h>
--#include <asm/dma.h>
--#include <asm/irq.h>
- #include <linux/bitops.h>
- #include <linux/crc32.h>
- #include <linux/delay.h>
-@@ -45,6 +42,10 @@
- #include <linux/types.h>
- #include <linux/uaccess.h>
- 
-+#include <asm/byteorder.h>
-+#include <asm/dma.h>
-+#include <asm/irq.h>
-+
- #ifdef CONFIG_SPARC
- #include <asm/auxio.h>
- #include <asm/idprom.h>
 
+When my late husband was alive, he deposited a sum of ($2.5 million)
+in a bank in Houston, Texas. Currently the money is still in the bank
+and recently my doctor told me that I will not last another 3 months
+due to my cancer. While it was my stroke that bothered me the most,
+once I knew my condition, I decided to donate the money to the church,
+or better yet, to a Christian person who will follow the instructions
+I outline here as the money can be used.
+
+
+I want a church or godly people to use it to fund churches, orphanages
+and widows to spread the word of God and ensure the house of God is
+upheld. The Bible teaches us that blessed hands are those that give. I
+made this decision because I have no children to inherit the money and
+my husband's relatives are not Christians and I do not want my
+husband's hard-earned money to be misused by non-believers.
+
+
+I don't want this money to be misused. Hence the reason for this bold
+decision. I'm not afraid of death, so I know where I'm going. I know I
+want to be in the arms of the Lord. Exodus 14 VS 14 says the Lord will
+defend me and I will be silent. Please, I don't need calls due to
+health reasons and my husband's relatives are always by my side. I
+don't want them to know about this development. With God all things
+are possible.
+
+
+As soon as I hear from you I will provide you with the bank details
+that you will use to contact them. I will also issue you with a Power
+of Attorney authorizing you as the original beneficiary of the fund. I
+hope you and the church will always pray for me because the Lord is my
+shepherd. I am fortunate to have lived a worthy Christian life.
+Whoever wants to serve the Lord must serve him in spirit and truth.
+
+Please keep praying all your life, any delay in your response would
+give me room to search for churches or individual Christians for the
+same purpose. Please assure me that you will act as I explain here.
+Hope to hear from you.
+
+
+Remain blessed in the name of the Lord.
+
+
+Yours in Christ.
+
+Mrs Lillia Yapcoy.
