@@ -2,125 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 177A46D85B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1B96D85B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234102AbjDESKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S234087AbjDESKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234328AbjDESKB (ORCPT
+        with ESMTP id S234049AbjDESKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:10:01 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AD05BA0;
-        Wed,  5 Apr 2023 11:09:58 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id dw2so9576843qvb.11;
-        Wed, 05 Apr 2023 11:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680718197; x=1683310197;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e15NDV90+Lem0WfkCzOryMRGDIn7iIdQ9bmcL/lcTAE=;
-        b=CI7LCdF2QkqohUU82RAQYoU4RLrLFYOjC62If1NgVClAuPlpaMmTm42eafKWA9FNkE
-         wHbjP9QuDhg3p16ungJEbXZ4ijs4wvhBKbLJFJl3FkSM8p6hURMxIf59C4Wc8nbB6ARO
-         oiP4ftHEC9VHnu/6bHOwyeJ7jmpq8J37byNlkKIKUVifSFqTQ43IAFNRzsNnJuD2MPa0
-         pvlLpi8DghasiXKxqV1HA2LV0LAMyE4BbtZBweY21sq4yRxvBiqiIZMfOoGT8iLup/5h
-         AJMyq+7XJSjAJEQjcM4lh/ED1niiJnGAMmmTgysMvRFf+Gq8+QHoAZtUItoFdVFK/psf
-         NAKw==
+        Wed, 5 Apr 2023 14:10:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72451AC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680718203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iQaR8cLruAgHBCHSLgU+0MSFf8a4qwol/WFeB+l5N2I=;
+        b=EDqBYSHadGx6whOgb87cwnEb4PUip4+DZuWZL3jsKeS/Tx2MmDfqojCDd+brMfYbAjKssW
+        mSjCAt1ogqYA/8As8A1aSW2uo5lLzvWjInF1X/y57x34xk1YoFIA8uqhcvknPMic30ynUx
+        xxUtUkUMeIi441QWnR00k1iDgM2ZGyo=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-75-h8mqphgDOGC3IHxVEkD50Q-1; Wed, 05 Apr 2023 14:10:02 -0400
+X-MC-Unique: h8mqphgDOGC3IHxVEkD50Q-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3e1522cf031so12452821cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 11:10:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680718197; x=1683310197;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1680718202;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e15NDV90+Lem0WfkCzOryMRGDIn7iIdQ9bmcL/lcTAE=;
-        b=dFcRGfb/iGwg4GqS7WyeOITiuz0q+yzjI16ahk1LFNRjVXRdUNC74GihOxoa1gvX+Z
-         yr9tESje/3tI/9sAXCqatl6NDb010w0DCjYcEczq6Oss1dzY9SKUoWMWTDLRgmvK6MQI
-         373icFzYC67dXSGlUa6ChxPNQUWOKxL/Wdw4yXJ7/4iSV1hpNPHYeiugCV+6kOHZeQIm
-         XNvYcbXa9poda2G/n0yahlRA0fNxgkreAtEKYfi44ugb1T6Sz8Z1CJZg65yJiIhxOkQH
-         thu0ftKil9+iRbZT3/GlHy2DhkyRSqYTChn64RSxnLwZDIaCc5k69yfs2y3FiPaL0j6D
-         iLgQ==
-X-Gm-Message-State: AAQBX9cS3P9CUNIczHmrkDP5iesLbPwOcM6e9pifcqULAx5JSBMV2Dxi
-        2E8SNMmh+XM1ZVHuIJjlooE=
-X-Google-Smtp-Source: AKy350YP40NftxRGoMbZf+cXkc1NDSURNTwz1oVELRpXHFAPANN2531RcTGdwB/ooRMZf7BMyAyolw==
-X-Received: by 2002:a05:6214:d81:b0:56e:bdfb:f4c5 with SMTP id e1-20020a0562140d8100b0056ebdfbf4c5mr58808qve.36.1680718197251;
-        Wed, 05 Apr 2023 11:09:57 -0700 (PDT)
-Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with ESMTPSA id c22-20020a056214071600b005dd8b934599sm4408602qvz.49.2023.04.05.11.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 11:09:56 -0700 (PDT)
-Message-ID: <dee4b415-0696-90f3-0e2f-2230ff941e1b@gmail.com>
-Date:   Wed, 5 Apr 2023 14:09:55 -0400
+        bh=iQaR8cLruAgHBCHSLgU+0MSFf8a4qwol/WFeB+l5N2I=;
+        b=204tOEWcx2VSzBUKIy3Z6J3bG67RecvJX3D3Ppn/4l7ERKOw/flhgPqQEhmYnqumqq
+         XPbqP4kyyJi4GSjZJNilyWXtKhUsPmToNGpw0GJsY8kML3z7Tko5WgM3FJZABS8HdbIQ
+         JnsQGndoVmeh3PETHAG0Rxjwx58hrJet3C7NI1mDpYPTiEq45eVOujhltpK3Oq1pR9IB
+         uqeykx4P12lXA0WMEhD8zsswzoi/uKhT2s4ZDyoDNeHIyjOc6sS2N8/94ZLvDEin7HkO
+         XiHCo0abRo7emRBIFjGAVeZ0hiKmrdqSvkg6qVv3nPvWU2bHVvOCoxuVDBztmiWZvL3O
+         AfSg==
+X-Gm-Message-State: AAQBX9eA9S5FO2Tx09DGiP8Zf0XS3/F+7c+IuKiKFv9DqyYzQpiX3mJX
+        bY2z1lgXUoE1BCiJTrD3faL2lUA/+jlZgPleBzyPkVOKHJg+HrmATjtCK64FH84WLlacexsPMX8
+        hNYkzDq8i5edQbhYWx837fLmB
+X-Received: by 2002:a05:622a:1a24:b0:3e6:707e:d3c2 with SMTP id f36-20020a05622a1a2400b003e6707ed3c2mr7427862qtb.0.1680718201959;
+        Wed, 05 Apr 2023 11:10:01 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YSvj/32iOp1pxSx0WMu3r+k7g2O68tq9YtIyZ2lMFIwHgD2EkuFNYDwmPWW8noOYsVZWdd+Q==
+X-Received: by 2002:a05:622a:1a24:b0:3e6:707e:d3c2 with SMTP id f36-20020a05622a1a2400b003e6707ed3c2mr7427806qtb.0.1680718201547;
+        Wed, 05 Apr 2023 11:10:01 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id c30-20020ac86e9e000000b003e388264753sm4116280qtv.65.2023.04.05.11.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 11:10:01 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 14:09:59 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        linux-stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] mm/khugepaged: Check again on anon uffd-wp during
+ isolation
+Message-ID: <ZC25d12d0sc1L7tS@x1n>
+References: <20230405155120.3608140-1-peterx@redhat.com>
+ <CAHbLzkqKE-TE9Od1E=PQDGuhoR+r-TOz4LP8WQgucm_6ZVYTRA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next] net: sunhme: move asm includes to below linux
- includes
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Simon Horman <horms@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-m68k@lists.linux-m68k.org
-References: <20230405-sunhme-includes-fix-v1-1-bf17cc5de20d@kernel.org>
- <082e6ff7-6799-fa80-81e2-6f8092f8bb51@gmail.com>
- <ZC23vf6tNKU1FgRP@kernel.org> <ZC240XCeYCaSCu0X@casper.infradead.org>
-From:   Sean Anderson <seanga2@gmail.com>
-In-Reply-To: <ZC240XCeYCaSCu0X@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHbLzkqKE-TE9Od1E=PQDGuhoR+r-TOz4LP8WQgucm_6ZVYTRA@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gNC81LzIzIDE0OjA3LCBNYXR0aGV3IFdpbGNveCB3cm90ZToNCj4gT24gV2VkLCBBcHIg
-MDUsIDIwMjMgYXQgMDg6MDI6MzdQTSArMDIwMCwgU2ltb24gSG9ybWFuIHdyb3RlOg0KPj4g
-T24gV2VkLCBBcHIgMDUsIDIwMjMgYXQgMDE6MzQ6MTFQTSAtMDQwMCwgU2VhbiBBbmRlcnNv
-biB3cm90ZToNCj4+PiBPbiA0LzUvMjMgMTM6MjksIFNpbW9uIEhvcm1hbiB3cm90ZToNCj4+
-Pj4gQSByZWNlbnQgcmVhcnJhbmdlbWVudCBvZiBpbmNsdWRlcyBoYXMgbGVhZCB0byBhIHBy
-b2JsZW0gb24gbTY4aw0KPj4+PiBhcyBmbGFnZ2VkIGJ5IHRoZSBrZXJuZWwgdGVzdCByb2Jv
-dC4NCj4+Pj4NCj4+Pj4gUmVzb2x2ZSB0aGlzIGJ5IG1vdmluZyB0aGUgYmxvY2sgYXNtIGlu
-Y2x1ZGVzIHRvIGJlbG93IGxpbnV4IGluY2x1ZGVzLg0KPj4+PiBBIHNpZGUgZWZmZWN0IGkg
-dGhhdCBub24tU3BhcmMgYXNtIGluY2x1ZGVzIGFyZSBub3cgaW1tZWRpYXRlbHkNCj4+Pj4g
-YmVmb3JlIFNwYXJjIGFzbSBpbmNsdWRlcywgd2hpY2ggc2VlbXMgbmljZS4NCj4+Pj4NCj4+
-Pj4gVXNpbmcgc3BhcnNlIHYwLjYuNCBJIHdhcyBhYmxlIHRvIHJlcHJvZHVjZSB0aGlzIHBy
-b2JsZW0gYXMgZm9sbG93cw0KPj4+PiB1c2luZyB0aGUgY29uZmlnIHByb3ZpZGVkIGJ5IHRo
-ZSBrZXJuZWwgdGVzdCByb2JvdDoNCj4+Pj4NCj4+Pj4gJCB3Z2V0IGh0dHBzOi8vZG93bmxv
-YWQuMDEub3JnLzBkYXktY2kvYXJjaGl2ZS8yMDIzMDQwNC8yMDIzMDQwNDE3NDguMHNRYzRL
-NGwtbGtwQGludGVsLmNvbS9jb25maWcNCj4+Pj4gJCBjcCBjb25maWcgLmNvbmZpZw0KPj4+
-PiAkIG1ha2UgQVJDSD1tNjhrIG9sZGNvbmZpZw0KPj4+PiAkIG1ha2UgQVJDSD1tNjhrIEM9
-MiBNPWRyaXZlcnMvbmV0L2V0aGVybmV0L3N1bg0KPj4+PiAgICAgIENDIFtNXSAgZHJpdmVy
-cy9uZXQvZXRoZXJuZXQvc3VuL3N1bmhtZS5vDQo+Pj4+ICAgIEluIGZpbGUgaW5jbHVkZWQg
-ZnJvbSBkcml2ZXJzL25ldC9ldGhlcm5ldC9zdW4vc3VuaG1lLmM6MTk6DQo+Pj4+ICAgIC4v
-YXJjaC9tNjhrL2luY2x1ZGUvYXNtL2lycS5oOjc4OjExOiBlcnJvcjogZXhwZWN0ZWQg4oCY
-O+KAmSBiZWZvcmUg4oCYdm9pZOKAmQ0KPj4+PiAgICAgICA3OCB8IGFzbWxpbmthZ2Ugdm9p
-ZCBkb19JUlEoaW50IGlycSwgc3RydWN0IHB0X3JlZ3MgKnJlZ3MpOw0KPj4+PiAgICAgICAg
-ICB8ICAgICAgICAgICBefn5+fg0KPj4+PiAgICAgICAgICB8ICAgICAgICAgICA7DQo+Pj4+
-ICAgIC4vYXJjaC9tNjhrL2luY2x1ZGUvYXNtL2lycS5oOjc4OjQwOiB3YXJuaW5nOiDigJhz
-dHJ1Y3QgcHRfcmVnc+KAmSBkZWNsYXJlZCBpbnNpZGUgcGFyYW1ldGVyIGxpc3Qgd2lsbCBu
-b3QgYmUgdmlzaWJsZSBvdXRzaWRlIG9mIHRoaXMgZGVmaW5pdGlvbiBvciBkZWNsYXJhdGlv
-bg0KPj4+PiAgICAgICA3OCB8IGFzbWxpbmthZ2Ugdm9pZCBkb19JUlEoaW50IGlycSwgc3Ry
-dWN0IHB0X3JlZ3MgKnJlZ3MpOw0KPj4+PiAgICAgICAgICB8ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn4NCj4+Pg0KPj4+IFRoaXMgc2VlbXMgbGlr
-ZSBhIHByb2JsZW0gd2l0aCB0aGUgaGVhZGVyLiBtNjhrJ3MgYXNtL2lycS5oIHNob3VsZCBp
-bmNsdWRlIGxpbnV4L2ludGVycnVwdC5oIGJlZm9yZSBpdHMgZGVjbGFyYXRpb25zLg0KPj4N
-Cj4+IEhpIFNlYW4sDQo+Pg0KPj4gSSBkbyBzZWUgeW91ciBwb2ludC4gQnV0IFRCSCBJJ20g
-dW5zdXJlIHdoaWNoIHdheSB0byBnbyBvbiB0aGlzIG9uZS4NCj4+IEdlZXJ0LCBkbyB5b3Ug
-aGF2ZSBhbnkgaW5wdXQ/DQo+IA0KPiBXZSBhbHdheXMgaW5jbHVkZSBsaW51eC8qIGhlYWRl
-cnMgYmVmb3JlIGFzbS8qLiAgVGhlICJzb3J0aW5nIiBvZg0KPiBoZWFkZXJzIGluIHRoaXMg
-d2F5IHdhcyBpbmFwcHJvcHJpYXRlLg0KDQpJcyB0aGlzIHdyaXR0ZW4gZG93biBhbnl3aGVy
-ZT8gSSBjb3VsZG4ndCBmaW5kIGl0IGluIERvY3VtZW50YXRpb24vcHJvY2Vzcy4uLg0KDQot
-LVNlYW4NCg==
+On Wed, Apr 05, 2023 at 09:59:15AM -0700, Yang Shi wrote:
+> On Wed, Apr 5, 2023 at 8:51 AM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > Khugepaged collapse an anonymous thp in two rounds of scans.  The 2nd round
+> > done in __collapse_huge_page_isolate() after hpage_collapse_scan_pmd(),
+> > during which all the locks will be released temporarily. It means the
+> > pgtable can change during this phase before 2nd round starts.
+> >
+> > It's logically possible some ptes got wr-protected during this phase, and
+> > we can errornously collapse a thp without noticing some ptes are
+> > wr-protected by userfault.  e1e267c7928f wanted to avoid it but it only did
+> > that for the 1st phase, not the 2nd phase.
+> >
+> > Since __collapse_huge_page_isolate() happens after a round of small page
+> > swapins, we don't need to worry on any !present ptes - if it existed
+> > khugepaged will already bail out.  So we only need to check present ptes
+> > with uffd-wp bit set there.
+> >
+> > This is something I found only but never had a reproducer, I thought it was
+> > one caused a bug in Muhammad's recent pagemap new ioctl work, but it turns
+> > out it's not the cause of that but an userspace bug.  However this seems to
+> > still be a real bug even with a very small race window, still worth to have
+> > it fixed and copy stable.
+> 
+> Yeah, I agree. But I got confused by userfaultfd_wp(vma) and
+> pte_uffd_wp(pte). If a vma is armed with uffd wp, shall we skip the
+> whole vma? If so, whether it is better to just check vma? We do
+> revalidate vma once reacquiring mmap_lock, so we should be able to
+> bail out earlier.
+
+Checking against VMA is safe too, the difference is current code still
+allows thp to be collapsed as long as none of the page is explicitly
+protected over the thp range, even if the range is registered with
+userfault-wp.  That's also what e1e267c7928f does.
+
+Here we have slightly different handling between anon / file thps (file
+thps checks against the vma flags), IMHO mostly because we don't scan
+pgtables when making decisions to collapse a shmem thp, so we made it
+simple by checking against vma flags.  We can make it the same as anon but
+it might be an overkill just to scan the entries for uffd-wp purpose.
+
+For anon we always scans the pgtable anyway so it's easier to make a more
+accurate decision.
+
+Thanks,
+
+-- 
+Peter Xu
+
