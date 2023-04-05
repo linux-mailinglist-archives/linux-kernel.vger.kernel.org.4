@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8508D6D88AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695B46D88B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbjDEUfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        id S234318AbjDEUf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbjDEUfP (ORCPT
+        with ESMTP id S230228AbjDEUfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:35:15 -0400
+        Wed, 5 Apr 2023 16:35:19 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB6C6E8C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12457282;
         Wed,  5 Apr 2023 13:35:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=CGo2H4hJTPWzaMtaGj7Lktm7eVtZzNMbcJEtAOG6yWg=; b=UKqf4X5JbNA9vkONPxrzgBYW92
-        y09XAlnqRA7OvwgxflCIdnp0Um5FQLBJESmL9GajFwNqWNyPMsr3IH7WOA01XyOMbP4CP1z8jS3gz
-        AoIFfDcZsDikZEyuzzGAs5QUAnyQnHqoorkaoXlh7AByLTwd+Tl1z/5xmLxuSwe1tdotRtxaIDwTm
-        S5WOlqzZjRDkZPBG7HK9G4F/DbwDDRXcusDUt3P4eYN87AjkvhbHYj4R0LtL81zjvauwnezN+HlhK
-        4cwNNLBjtpvOE5WSXvIrFookL368xlZp4zhHqffGNtMeaRt5iCteXQXi8mm98bIUr3hlamASpWN8S
-        aqZYwOfA==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=TqXpp0mGR6pbQr82UrkZafoUwwcLEWn2SwPyhW5ccH4=; b=X5xdE8rLMlmIhymO9yURWuCRx9
+        w1LgYZs4/coLMo59/hY71k4+rqnnXzqaLc5HYdKHqVHeoeTjhEf7wUc+AnskcobUNmGIMxBiv8Nn8
+        4fequI0umG+GJm1tyfsebfRL+VKkmKOxEwafCKr8gSWS1hpUZbDjeFqnf5ue3DwhmTAMrdbOYR7Vs
+        1us/UOeklOrrDnWWlQ0mwgKBLyIuyRsaCVXegU/FjJbxeXni04d40TF9X1ydJQypCAQlOZPMknDfW
+        luZOgQOsCu0wq15gDwNE23B8ohPubiurmXTgY3jEVQMDaFCaX4lsgzS0gc8tNvC4H8mXH5q3iqLZM
+        4fHLE72w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pk9qT-005dWW-2P;
+        id 1pk9qT-005dWa-2g;
         Wed, 05 Apr 2023 20:35:05 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     david@redhat.com, patches@lists.linux.dev,
@@ -42,10 +42,12 @@ Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
         colin.i.king@gmail.com, jim.cromie@gmail.com,
         catalin.marinas@arm.com, jbaron@akamai.com,
         rick.p.edgecombe@intel.com, mcgrof@kernel.org
-Subject: [PATCH v2 0/2] kmod: simplify with a semaphore
-Date:   Wed,  5 Apr 2023 13:35:03 -0700
-Message-Id: <20230405203505.1343562-1-mcgrof@kernel.org>
+Subject: [PATCH v2 1/2] Change DEFINE_SEMAPHORE() to take a number argument
+Date:   Wed,  5 Apr 2023 13:35:04 -0700
+Message-Id: <20230405203505.1343562-2-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230405203505.1343562-1-mcgrof@kernel.org>
+References: <20230405203505.1343562-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
@@ -59,48 +61,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I split the semaphore simplification work out from my first patch series [0]
-because as although the changes came out of that effort, in the end this set
-of patches are slightly orthogonal to the goal behind that series and this
-ended up being mostly a cleanup with mild bike shedding exercise.
+From: Peter Zijlstra <peterz@infradead.org>
 
-As revealed from the first series, there is some tribal knowledge around
-why some binary semaphores are not just mutexes, so we cannot just convert
-them all to mutex. So I've extended Peter's patch with some of that tribal
-knowledge.
+Fundamentally semaphores are a counted primitive, but
+DEFINE_SEMAPHORE() does not expose this and explicitly creates a
+binary semaphore.
 
-Changes on this v2:
+Change DEFINE_SEMAPHORE() to take a number argument and use that in the
+few places that open-coded it using __SEMAPHORE_INITIALIZER().
 
-  o split this series up into its own
-  o adopt Peter's patch and extend it with some documentation as to why
-    some folks stick to binary semaphores over mutexes
-  o modify kmod.c to use the preferred declaration
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+[mcgrof: add some tribal knowledge about why some folks prefer
+ binary sempahores over mutexes]
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ arch/mips/cavium-octeon/setup.c                       |  2 +-
+ arch/x86/kernel/cpu/intel.c                           |  2 +-
+ drivers/firmware/efi/runtime-wrappers.c               |  2 +-
+ drivers/firmware/efi/vars.c                           |  2 +-
+ drivers/macintosh/adb.c                               |  2 +-
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c      |  2 +-
+ drivers/platform/x86/intel/ifs/sysfs.c                |  2 +-
+ drivers/scsi/esas2r/esas2r_ioctl.c                    |  2 +-
+ .../vc04_services/interface/vchiq_arm/vchiq_arm.c     |  2 +-
+ include/linux/semaphore.h                             | 11 +++++++++--
+ kernel/printk/printk.c                                |  2 +-
+ net/rxrpc/call_object.c                               |  6 ++----
+ 12 files changed, 21 insertions(+), 16 deletions(-)
 
-This goes boot tested.
-
-[0] https://lkml.kernel.org/r/20230329053149.3976378-1-mcgrof@kernel.orgsemaphore
-
-Luis Chamberlain (1):
-  modules/kmod: replace implementation with a sempahore
-
-Peter Zijlstra (1):
-  Change DEFINE_SEMAPHORE() to take a number argument
-
- arch/mips/cavium-octeon/setup.c               |  2 +-
- arch/x86/kernel/cpu/intel.c                   |  2 +-
- drivers/firmware/efi/runtime-wrappers.c       |  2 +-
- drivers/firmware/efi/vars.c                   |  2 +-
- drivers/macintosh/adb.c                       |  2 +-
- .../net/ethernet/broadcom/bnx2x/bnx2x_main.c  |  2 +-
- drivers/platform/x86/intel/ifs/sysfs.c        |  2 +-
- drivers/scsi/esas2r/esas2r_ioctl.c            |  2 +-
- .../interface/vchiq_arm/vchiq_arm.c           |  2 +-
- include/linux/semaphore.h                     | 11 ++++++--
- kernel/module/kmod.c                          | 26 +++++--------------
- kernel/printk/printk.c                        |  2 +-
- net/rxrpc/call_object.c                       |  6 ++---
- 13 files changed, 28 insertions(+), 35 deletions(-)
-
+diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
+index a71727f7a608..c5561016f577 100644
+--- a/arch/mips/cavium-octeon/setup.c
++++ b/arch/mips/cavium-octeon/setup.c
+@@ -72,7 +72,7 @@ extern void pci_console_init(const char *arg);
+ static unsigned long long max_memory = ULLONG_MAX;
+ static unsigned long long reserve_low_mem;
+ 
+-DEFINE_SEMAPHORE(octeon_bootbus_sem);
++DEFINE_SEMAPHORE(octeon_bootbus_sem, 1);
+ EXPORT_SYMBOL(octeon_bootbus_sem);
+ 
+ static struct octeon_boot_descriptor *octeon_boot_desc_ptr;
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 291d4167fab8..12bad63822f0 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -1177,7 +1177,7 @@ static const struct {
+ static struct ratelimit_state bld_ratelimit;
+ 
+ static unsigned int sysctl_sld_mitigate = 1;
+-static DEFINE_SEMAPHORE(buslock_sem);
++static DEFINE_SEMAPHORE(buslock_sem, 1);
+ 
+ #ifdef CONFIG_PROC_SYSCTL
+ static struct ctl_table sld_sysctls[] = {
+diff --git a/drivers/firmware/efi/runtime-wrappers.c b/drivers/firmware/efi/runtime-wrappers.c
+index 1fba4e09cdcf..a400c4312c82 100644
+--- a/drivers/firmware/efi/runtime-wrappers.c
++++ b/drivers/firmware/efi/runtime-wrappers.c
+@@ -158,7 +158,7 @@ void efi_call_virt_check_flags(unsigned long flags, const char *call)
+  * none of the remaining functions are actually ever called at runtime.
+  * So let's just use a single lock to serialize all Runtime Services calls.
+  */
+-static DEFINE_SEMAPHORE(efi_runtime_lock);
++static DEFINE_SEMAPHORE(efi_runtime_lock, 1);
+ 
+ /*
+  * Expose the EFI runtime lock to the UV platform
+diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
+index bd75b87f5fc1..bfc5fa6aa47b 100644
+--- a/drivers/firmware/efi/vars.c
++++ b/drivers/firmware/efi/vars.c
+@@ -21,7 +21,7 @@
+ /* Private pointer to registered efivars */
+ static struct efivars *__efivars;
+ 
+-static DEFINE_SEMAPHORE(efivars_lock);
++static DEFINE_SEMAPHORE(efivars_lock, 1);
+ 
+ static efi_status_t check_var_size(bool nonblocking, u32 attributes,
+ 				   unsigned long size)
+diff --git a/drivers/macintosh/adb.c b/drivers/macintosh/adb.c
+index 23bd0c77ac1a..56599515d51a 100644
+--- a/drivers/macintosh/adb.c
++++ b/drivers/macintosh/adb.c
+@@ -80,7 +80,7 @@ static struct adb_driver *adb_controller;
+ BLOCKING_NOTIFIER_HEAD(adb_client_list);
+ static int adb_got_sleep;
+ static int adb_inited;
+-static DEFINE_SEMAPHORE(adb_probe_mutex);
++static DEFINE_SEMAPHORE(adb_probe_mutex, 1);
+ static int sleepy_trackpad;
+ static int autopoll_devs;
+ int __adb_probe_sync;
+diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
+index 5d1e4fe335aa..5a105bab4387 100644
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
+@@ -298,7 +298,7 @@ const u32 dmae_reg_go_c[] = {
+ 
+ /* Global resources for unloading a previously loaded device */
+ #define BNX2X_PREV_WAIT_NEEDED 1
+-static DEFINE_SEMAPHORE(bnx2x_prev_sem);
++static DEFINE_SEMAPHORE(bnx2x_prev_sem, 1);
+ static LIST_HEAD(bnx2x_prev_list);
+ 
+ /* Forward declaration */
+diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
+index ee636a76b083..4c3c642ee19a 100644
+--- a/drivers/platform/x86/intel/ifs/sysfs.c
++++ b/drivers/platform/x86/intel/ifs/sysfs.c
+@@ -13,7 +13,7 @@
+  * Protects against simultaneous tests on multiple cores, or
+  * reloading can file while a test is in progress
+  */
+-static DEFINE_SEMAPHORE(ifs_sem);
++static DEFINE_SEMAPHORE(ifs_sem, 1);
+ 
+ /*
+  * The sysfs interface to check additional details of last test
+diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
+index e003d923acbf..055d2e87a2c8 100644
+--- a/drivers/scsi/esas2r/esas2r_ioctl.c
++++ b/drivers/scsi/esas2r/esas2r_ioctl.c
+@@ -56,7 +56,7 @@ dma_addr_t esas2r_buffered_ioctl_addr;
+ u32 esas2r_buffered_ioctl_size;
+ struct pci_dev *esas2r_buffered_ioctl_pcid;
+ 
+-static DEFINE_SEMAPHORE(buffered_ioctl_semaphore);
++static DEFINE_SEMAPHORE(buffered_ioctl_semaphore, 1);
+ typedef int (*BUFFERED_IOCTL_CALLBACK)(struct esas2r_adapter *,
+ 				       struct esas2r_request *,
+ 				       struct esas2r_sg_context *,
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+index cddcd3c596c9..1a656fdc9445 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -149,7 +149,7 @@ static char *g_fragments_base;
+ static char *g_free_fragments;
+ static struct semaphore g_free_fragments_sema;
+ 
+-static DEFINE_SEMAPHORE(g_free_fragments_mutex);
++static DEFINE_SEMAPHORE(g_free_fragments_mutex, 1);
+ 
+ static int
+ vchiq_blocking_bulk_transfer(struct vchiq_instance *instance, unsigned int handle, void *data,
+diff --git a/include/linux/semaphore.h b/include/linux/semaphore.h
+index 6694d0019a68..2d6aa3fd7861 100644
+--- a/include/linux/semaphore.h
++++ b/include/linux/semaphore.h
+@@ -25,8 +25,15 @@ struct semaphore {
+ 	.wait_list	= LIST_HEAD_INIT((name).wait_list),		\
+ }
+ 
+-#define DEFINE_SEMAPHORE(name)	\
+-	struct semaphore name = __SEMAPHORE_INITIALIZER(name, 1)
++/*
++ * There is a big difference between a binary semaphore and a mutex.
++ * You cannot call mutex_unlock() from IRQ context because it takes an
++ * internal mutex spin_lock in a non-IRQ-safe manner. Both try_lock()
++ * and unlock() can be called from IRQ context. A mutex must also be
++ * released in the same context that locked it.
++ */
++#define DEFINE_SEMAPHORE(_name, _n)	\
++	struct semaphore _name = __SEMAPHORE_INITIALIZER(_name, _n)
+ 
+ static inline void sema_init(struct semaphore *sem, int val)
+ {
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index fd0c9f913940..76987aaa5a45 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -89,7 +89,7 @@ static DEFINE_MUTEX(console_mutex);
+  * console_sem protects updates to console->seq and console_suspended,
+  * and also provides serialization for console printing.
+  */
+-static DEFINE_SEMAPHORE(console_sem);
++static DEFINE_SEMAPHORE(console_sem, 1);
+ HLIST_HEAD(console_list);
+ EXPORT_SYMBOL_GPL(console_list);
+ DEFINE_STATIC_SRCU(console_srcu);
+diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
+index e9f1f49d18c2..3e5cc70884dd 100644
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -40,10 +40,8 @@ const char *const rxrpc_call_completions[NR__RXRPC_CALL_COMPLETIONS] = {
+ 
+ struct kmem_cache *rxrpc_call_jar;
+ 
+-static struct semaphore rxrpc_call_limiter =
+-	__SEMAPHORE_INITIALIZER(rxrpc_call_limiter, 1000);
+-static struct semaphore rxrpc_kernel_call_limiter =
+-	__SEMAPHORE_INITIALIZER(rxrpc_kernel_call_limiter, 1000);
++static DEFINE_SEMAPHORE(rxrpc_call_limiter, 1000);
++static DEFINE_SEMAPHORE(rxrpc_kernel_call_limiter, 1000);
+ 
+ void rxrpc_poke_call(struct rxrpc_call *call, enum rxrpc_call_poke_trace what)
+ {
 -- 
 2.39.2
 
