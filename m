@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BAF6D83EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8371E6D83F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbjDEQlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S232896AbjDEQnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbjDEQlM (ORCPT
+        with ESMTP id S229516AbjDEQnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:41:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A92E75
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:41:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C51A62A73
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:41:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383CDC433EF;
-        Wed,  5 Apr 2023 16:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680712870;
-        bh=DV0/yjdD/+FEcW0k9WYhDje1AP1oYkbQXJY73iIbEvo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=giYLlI6EETXpR4/c/J+NZDFti5eGPMXnL6nscnQvcZ8jeUSYsW1ZEGGF0czEZS22d
-         /r4CLg1kygBtLNHI+7wzGWnyahOQGSZx3F1jDEZdUKNCgPdS16gP3gYlqKIx3PfY69
-         s6L/US5Ybq3zUF6uEaT3SQSLZVnqFGyNFDpe5LCYHT6MbWrQS3e23pVfOGMKIgxTgX
-         ircGp63ITTW4MY6W9Whg7k+PWvnLYEjRL86gNGUffCcDrU0zpi929kilLSyzpSvwEK
-         HTFl5T0Oo4KC2SV5vhA96xXfpAKScaHHyhDI+J6Mef5Tq8WxkC3UBc2gLzVYY/hGYC
-         v792PEs4N65UA==
-Date:   Wed, 5 Apr 2023 17:41:05 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 01/19] drm/i915/i915_scatterlist: Fix kerneldoc
- formatting issue - missing '@'
-Message-ID: <20230405164105.GU8371@google.com>
-References: <20230331092607.700644-1-lee@kernel.org>
- <20230331092607.700644-2-lee@kernel.org>
- <87jzyt0yil.fsf@intel.com>
- <20230403162059.GC8371@google.com>
- <878rf80ynz.fsf@intel.com>
- <20230405134526.GE8371@google.com>
- <87jzyqz52y.fsf@intel.com>
+        Wed, 5 Apr 2023 12:43:51 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C4AE26B3;
+        Wed,  5 Apr 2023 09:43:50 -0700 (PDT)
+Received: from [192.168.2.41] (77-166-152-30.fixed.kpn.net [77.166.152.30])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5CA6D210DEDB;
+        Wed,  5 Apr 2023 09:43:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5CA6D210DEDB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680713029;
+        bh=6UIH2vmF08rmY+8MR3XIm6gXvAVwqi0BtmTVVd5Yo2w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DHYRJ5HZpDoWTCjVjlbXHcBGwh7nVVESx+eihe+xoRrFwigR+UbQGwM3PDIflhNG6
+         iLU1SkwB9Oq0vH6jY6PiEutdbdU2HMt9eS8wnnmv6vzecYVfx3LkXfqOrsGIDgEFAJ
+         xW8LKtSdWGbq1WY3e6DmFzERtRG9RWi9LVpgDI/4=
+Message-ID: <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
+Date:   Wed, 5 Apr 2023 18:43:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87jzyqz52y.fsf@intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>
+References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
+ <ZAd2MRNLw1JAXmOf@google.com>
+Content-Language: en-US
+From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+In-Reply-To: <ZAd2MRNLw1JAXmOf@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Apr 2023, Jani Nikula wrote:
+On 3/7/2023 6:36 PM, Sean Christopherson wrote:
+> Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM: SVM:
+> hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.  KVM
+> doesn't magically handle the flushes correctly for the shadow/legacy MMU, KVM just
+> happens to get lucky and not run afoul of the underlying bugs.  The revert appears
+> to be reasonably straightforward (see bottom).
 
-> On Wed, 05 Apr 2023, Lee Jones <lee@kernel.org> wrote:
-> > On Tue, 04 Apr 2023, Jani Nikula wrote:
-> >
-> >> On Mon, 03 Apr 2023, Lee Jones <lee@kernel.org> wrote:
-> >> > On Mon, 03 Apr 2023, Jani Nikula wrote:
-> >> >
-> >> >> On Fri, 31 Mar 2023, Lee Jones <lee@kernel.org> wrote:
-> >> >> > Fixes the following W=1 kernel build warning(s):
-> >> >> >
-> >> >> >  drivers/gpu/drm/i915/i915_scatterlist.c:62: warning: Function parameter or member 'size' not described in 'i915_refct_sgt_init'
-> >> >> >
-> >> >> > Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> >> >> > Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> >> >> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> >> >> > Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> >> >> > Cc: David Airlie <airlied@gmail.com>
-> >> >> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> >> >> > Cc: intel-gfx@lists.freedesktop.org
-> >> >> > Cc: dri-devel@lists.freedesktop.org
-> >> >> > Signed-off-by: Lee Jones <lee@kernel.org>
-> >> >>
-> >> >> Thanks for the patches!
-> >> >>
-> >> >> Applied all but one of the drm/i915 patches to drm-intel-next or
-> >> >> drm-intel-gt-next depending on the area. There were a couple of issues
-> >> >> that I fixed while applying. There was a conflict with patch 5/19
-> >> >> against drm-intel-gt-next so I left that one out.
-> >> >
-> >> > Thanks Jani.  I'll rebase and see what's left.
-> >>
-> >> We also took notice and aim to track this more aggressively [1].
-> >
-> > Thanks.
-> >
-> > I did clean-up all of the GPU warnings already a couple of years ago,
-> > but they seem to have crept back over time.  It would be great if we
-> > could put some extra checks in place to prevent them in the future.
->
-> We are pretty zealous about warnings in general in i915. We have a bunch
-> of extra warnings in our local Makefile and use -Werror in
-> development. Inspired by this series, we added kernel-doc check to the
-> build, and hope to add kernel-doc -Werror too once we're done.
+Hi Sean,
 
-Sounds good that you're on it.  At least in your part of GPU.
+I'm back, and I don't have good news. The fix for the missing hyperv TLB flushes has
+landed in Linus' tree and I now had the chance to test things outside Azure, in WSL on my
+AMD laptop.
 
-kernel-doc warnings are surfaced by enabling W=1.
+There is some seriously weird interaction going on between TDP MMU and Hyper-V, with
+or without enlightened TLB. My laptop has 16 vCPUs, so the WSL VM also has 16 vCPUs.
+I have hardcoded the kernel to disable enlightened TLB (so we know that is not interfering).
+I'm running a Flatcar Linux VM inside the WSL VM using legacy BIOS, a single CPU
+and 4GB of RAM.
 
-> > My aim, albeit ambitious, is to clean-up all of the W=1 warnings in the
-> > kernel, then have them promoted to W=0, so they warn more loudly during
-> > development, thus keeping them from reappearing.
->
-> I wish it was easier to do the equivalent of W=1 on a driver or Makefile
-> basis. I like to keep i915 clean, but I don't like to use W=1 because
-> there are just so many warnings currently.
+If I run with `kvm.tdp_mmu=0`, I can boot and shutdown my VM consistently in 20 seconds.
 
-Well that's what I hope to improve (again). :)
+If I run with TDP MMU, the VM boot stalls for seconds at a time in various spots
+(loading grub, decompressing kernel, during kernel boot), the boot output feels like
+it's happening in slow motion. The fastest I see it finish the same cycle is 2 minutes,
+I have also seen it take 4 minutes, sometimes even not finish at all. Same everything,
+the only difference is the value of `kvm.tdp_mmu`.
 
-> The other alternative is fixing and moving extra warnings from W=1 to
-> W=0 one by one.
+So I would like to revisit disabling tdp_mmu on hyperv altogether for the time being but it
+should probably be with the following condition:
 
-Right, that's where I'd like to end up eventually.
+  tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled && !hypervisor_is_type(X86_HYPER_MS_HYPERV)
 
---
-Lee Jones [李琼斯]
+Do you have an environment where you would be able to reproduce this? A Windows server perhaps
+or an AMD laptop?
+
+Jeremi
+
+> 
+> And _if_ we want to hack-a-fix it, then I would strongly prefer a very isolated,
+> obviously hacky fix, e.g.
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 36e4561554ca..a9ba4ae14fda 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -5779,8 +5779,13 @@ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
+>         tdp_root_level = tdp_forced_root_level;
+>         max_tdp_level = tdp_max_root_level;
+>  
+> +       /*
+> +        * FIXME: Remove the enlightened TLB restriction when KVM properly
+> +        * handles TLB flushes for said enlightenment.
+> +        */.
+>  #ifdef CONFIG_X86_64
+> -       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
+> +       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled &&
+> +                         !(ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB);
+>  #endif
+>         /*
+>          * max_huge_page_level reflects KVM's MMU capabilities irrespective
+> 
+> 
