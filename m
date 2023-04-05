@@ -2,44 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2500B6D84A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5038E6D84AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjDEROW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S232244AbjDERPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjDEROU (ORCPT
+        with ESMTP id S229544AbjDERPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:14:20 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B37A9B;
-        Wed,  5 Apr 2023 10:14:19 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pk6i9-0003OV-71; Wed, 05 Apr 2023 19:14:17 +0200
-Message-ID: <fdffc009-47cf-e88d-5b9e-d6301f7f73f2@leemhuis.info>
-Date:   Wed, 5 Apr 2023 19:14:16 +0200
+        Wed, 5 Apr 2023 13:15:03 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74097B2;
+        Wed,  5 Apr 2023 10:15:02 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id m16so26549902qvi.12;
+        Wed, 05 Apr 2023 10:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680714901;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=16y+eEJkId2mz59HB8zrsXfv3Ngj1u1SaDWwb8VA0Ns=;
+        b=BBhLQRWKVMwdciQ/giXksgH0Y55dsegImnBWgpNXYTGYxbgRvgj9PcnWf39zIMWiy0
+         RkKvM86O0PRQzQONpVIaDNVFeCKKlWYmAv8KB1lPNTC3U5caIA6xzVnvUb0FfeFIl3uY
+         kaxAjTGKmKBTlLVVSTlSQqGC3PzyxknknvNcc8I7xT9mTgs8C39sh1Z64pPZvDxLeQ4A
+         RgKXPRgPd48QkXdfOV5hPlrxtANllIP79nI+f2W+FNWqWxD05kSuhYyg/USMik8nEqhF
+         eQNv0bx3I/C1YliccNyEiOrsrGAmy68SCXsneauWQKw1MhcJm47D0NskcH1bXle5GsVM
+         4czQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680714901;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=16y+eEJkId2mz59HB8zrsXfv3Ngj1u1SaDWwb8VA0Ns=;
+        b=7q3VrViAGwdQZ01vc8TD5Y05fwrM0+DyysQPQV89ZxYO0g+Dgx0ip2JGUgZVmq8A4R
+         D/5iWo9zWKOdegUYY13djS6VYOAGkkgMnh8w0i4iMomdq/xLKG7BSMmcrGRXAL11fHJB
+         soEolLgdo2dEWn5g326Q5CSG+JADuNhPqF1UQNz6nGHYPSxFv0Iz/ZCg8SkH2xcm1Dnw
+         PDSfk5zvQWmxx7477qWJ0/6iL/jcaE60uB6mvLl5J+crjMcrA+ucZOICGeqdamr/6ROe
+         2+bKhfpgvJ30xX5jQMXDm45S6SHQgP5ldMqqCwIrHbLl9yRZqh2at1TexHa8/5fI7DIq
+         dc2A==
+X-Gm-Message-State: AAQBX9evWW72hjzhkSvteNbof+ezA90BBBcWUlwDe/8HD8XLeRfyW2u/
+        HJ9S47EPVwWDw/Dm5Eq9JaIixe07EpnpeA==
+X-Google-Smtp-Source: AKy350ZBk8wcvi8GCFHoFkg6HY0O08LMgg6x95nLwBzNqXw6YCbrBz4uyV4fszDXUP6/5DuBjtG9QQ==
+X-Received: by 2002:a05:6214:509b:b0:56e:98a1:fff1 with SMTP id kk27-20020a056214509b00b0056e98a1fff1mr11374861qvb.7.1680714901438;
+        Wed, 05 Apr 2023 10:15:01 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id ct9-20020a056214178900b005dd8b934571sm4403209qvb.9.2023.04.05.10.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 10:15:01 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH v3 0/3] regulator: da9063: disable unused voltage monitors
+Date:   Wed, 05 Apr 2023 19:14:33 +0200
+Message-Id: <20230403-da9063-disable-unused-v3-0-cc4dc698864c@skidata.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 1/3] ARM: dts: meson: Fix the UART compatible strings
-Content-Language: en-US, de-DE
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
-References: <20211227180026.4068352-1-martin.blumenstingl@googlemail.com>
- <20211227180026.4068352-2-martin.blumenstingl@googlemail.com>
- <20230405132900.ci35xji3xbb3igar@rcn-XPS-13-9305>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20230405132900.ci35xji3xbb3igar@rcn-XPS-13-9305>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680714859;c2d3ee1d;
-X-HE-SMSGID: 1pk6i9-0003OV-71
-X-Spam-Status: No, score=-1.4 required=5.0 tests=NICE_REPLY_A,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHmsLWQC/4WOQY7CMAxFr4KyxihxEoaw4h4jFk7j0gjajpxSz
+ Qj17qSVWM/KerL++/+lCkvmos67lxKec8njUMHud6rpaLgx5FRZoUarnbaQKOhjPblQfDA8h2f
+ hBMaf7JGxdd4GVbORCkMUGppuTfdUJpb18SPc5t+t8PtauZWxh6kTpk8N6i9jDbrgTwerg/Pag
+ 4EYSSjYy62n/Dg0Y7/KulymUf628TOuyv92zggasDUxIaGzji7lnhNNtCmvy7K8AZB2CgwSAQA
+ A
+To:     Support Opensource <support.opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steve Twiss <stwiss.opensource@diasemi.com>
+Cc:     DLG-Adam.Thomson.Opensource@dm.renesas.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,56 +83,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
+Follow-up for my initial patch regarding the disabling of unused
+voltage monitors. We use the PWR_OK functionality, which asserts GP_FB2
+if every monitored voltage is in range. This patch should provide the
+possibility to deactivate a voltage monitor from the DT if the regulator
+might be disabled during run time. For this purpose, the regulator
+notification support is used:
+https://lore.kernel.org/all/cover.1622628333.git.matti.vaittinen@fi.rohmeurope.com/
 
-On 05.04.23 15:29, Ricardo Cañuelo wrote:
-> Hi Martin,
-> 
-> On lun 27-12-2021 19:00:24, Martin Blumenstingl wrote:
->> The dt-bindings for the UART controller only allow the following values
->> for Meson6 SoCs:
->> - "amlogic,meson6-uart", "amlogic,meson-ao-uart"
->> - "amlogic,meson6-uart"
->>
->> Use the correct fallback compatible string "amlogic,meson-ao-uart" for
->> AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
->> domain UART controllers.
-> 
-> KernelCI detected that this patch introduced a regression in
-> stable-rc/linux-4.14.y on a meson8b-odroidc1.
-> After this patch was applied the tests running on this platform don't
-> show any serial output.
-> 
-> This doesn't happen in other stable branches nor in mainline, but 4.14
-> hasn't still reached EOL and it'd be good to find a fix.
-> 
-> Here's the bisection report:
-> https://groups.io/g/kernelci-results/message/40147
-> 
-> KernelCI info:
-> https://linux.kernelci.org/test/case/id/64234f7761021a30b262f776/
+v2: https://lore.kernel.org/r/20230403-da9063-disable-unused-v2-0-2f1bd2a2434a@skidata.com
 
-Wait, what? A patch (5225e1b87432 ("ARM: dts: meson: Fix the UART
-compatible strings")) that was merged for v5.17-rc4 and is not in the
-list of patches that were in 4.14.312-rc1
-(https://lore.kernel.org/all/20230403140351.636471867@linuxfoundation.org/
-) is meant to suddenly cause this? How is this possible? Am I totally on
-the wrong track here and misunderstanding something, or is this a
-bisection that went horribly sideways?
+---
+Changelog:
+v3:
+2:
+- add clarifications, reword XVP to voltage monitoring
+- improve error messages
+- ensure that only one severity is set
+3:
+- document that ov and uv require same severity and level
 
-Ciao, Thorsten
+v2:
+- reworked solution, based on Adam Thomson's feedback
 
-> Test log:
-> https://storage.kernelci.org/stable-rc/linux-4.14.y/v4.14.311-43-g88e481d604e9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-meson8b-odroidc1.html
-> 
-> Thanks,
-> Ricardo
-> 
-> #regzbot introduced: 5225e1b87432dcf0d0fc3440824b91d04c1d6cc1
-> #regzbot title: no serial output in KernelCI tests on meson8b-odroidc1
-> for stable-4.14
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+---
+Benjamin Bara (3):
+      regulator: da9063: add voltage monitoring registers
+      regulator: da9063: implement setter for voltage monitoring
+      dt-bindings: mfd: dlg,da9063: document voltage monitoring
+
+ .../devicetree/bindings/mfd/dlg,da9063.yaml        |  17 ++-
+ drivers/regulator/da9063-regulator.c               | 147 +++++++++++++++++----
+ include/linux/mfd/da9063/registers.h               |  23 ++++
+ 3 files changed, 157 insertions(+), 30 deletions(-)
+---
+base-commit: 7e364e56293bb98cae1b55fd835f5991c4e96e7d
+change-id: 20230403-da9063-disable-unused-15836e2f4539
+
+Best regards,
+-- 
+Benjamin Bara <benjamin.bara@skidata.com>
+
