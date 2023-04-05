@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA78F6D8272
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40526D8279
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239068AbjDEPrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S239100AbjDEPsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239043AbjDEPr3 (ORCPT
+        with ESMTP id S239084AbjDEPsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:47:29 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD1649E5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:47:02 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id bx10so19426335ljb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:47:01 -0700 (PDT)
+        Wed, 5 Apr 2023 11:48:04 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DF565B9
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:47:42 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id e9so22481911ljq.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680709617;
+        d=linaro.org; s=google; t=1680709652;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dxSZTYnDcq5s93QjGt0L3XgCVNV0CavkH4ScS09zEU8=;
-        b=xmb9RSub4xOC3+mtoNF99fZ6KiHrpV6FrYFEALIIG0bYj1LKC7/mqZg9F9a6rnqsNX
-         Ha5rht9rzSAvwtTbiRg35h2tGPRgWH/9K6YyN3tDojfpBMi/XhKwiW8pyZrMcqHO6GI7
-         eGGJRe+atnga41rSRnRd29rbg/+N0DtPowse9SH+j1zrARQ1vkz6h4pZDt1tl+SyFNhW
-         vqpN3V/H2+HcDhZ74UqWm+sJ3I6KAcLovNLJuqf+COCHb/LpaEpXtOvtzP5HexzKstm0
-         Pl1he+1oK9i9x0A8frK7bV0Ix6SFwXyNhct3lKNM9iioRRWS8Xahq0IgJhFtdZA2P0o5
-         qL0A==
+        bh=teOccrm2PQgYq8QnTmz+eRFW97mM0aIsbw7UQ2Tfsrg=;
+        b=AvwwU6K+f/BqP7dTEd6k00OCbTMgmklmpUWVFJG0/N5HQwHt65kpliYGlUaUSByx0e
+         H7nKN0UZWK5d9DJmWDS6XfL5uEQk3fQ9ulyZKOlmjMapn2SrA0+XELU7gzs1rqvooYTL
+         M8+zIJuqlqgxEd/KOAUSkh77fnFe5is/CFo5t0JhSzufiKWv355X6rM7iNKSVGZ1I+yY
+         nECV88VdV9+X2l4NHS6N59d6LBDyVLWSB9iJn4J1NfhKwUC+1/e0HpdUWhuHCkYSqP/V
+         Y6T1ce1e+1LxKx8FyOqG7wdzQPvuJpmu/GJc09uXMbdJjB2QVEFOfh/Q68D285+rEYl9
+         xNpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680709617;
+        d=1e100.net; s=20210112; t=1680709652;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dxSZTYnDcq5s93QjGt0L3XgCVNV0CavkH4ScS09zEU8=;
-        b=B/XNu/aAXoIxTk8v7yk7qKC7C7KLCXNfR5uhD5bWFm4dJmO50Y3RmNgCrCb3pYS4dy
-         nIWiEStijzfax4sgE0jNd9CEapScj+8qh0TmmsSMUcH7MQI0rnQRXhauxmcVDfbMYX8Z
-         Pyxx6Y//kip7pJ8BOkMA/Xun3jBx/gFDA0cfOxs/TCqyjfX/RelJXnR+UyQNVCMWUX/P
-         PZWa9uQxya1fKqMjLTDQRdoxX+7IBU2p46a67rIL3mjyagPYLGVfgiqXFtZm6XqOvoGr
-         /6gOs2xgI+gtVO9V5B5uxMgvTQe7nRS2+v9mHvk3nqCVY09hbp8MyrDH+HwnXy1L5esn
-         4AYQ==
-X-Gm-Message-State: AAQBX9fCZyDcAeBaa+wr5O6vGVXuMzmLUFOuqP2RL3yKNIiQ3wplC33P
-        pDrf5G3yBbAd0kxemQUppXvclg==
-X-Google-Smtp-Source: AKy350YnAa/sHazifyT3J9hcsEFG1SqVCFTYFoilpzg/MpP/TjDc1+ftvez2CGD5umA6Eq+UEcNEYg==
-X-Received: by 2002:a2e:9bd8:0:b0:2a6:23ac:4e70 with SMTP id w24-20020a2e9bd8000000b002a623ac4e70mr2383740ljj.14.1680709616858;
-        Wed, 05 Apr 2023 08:46:56 -0700 (PDT)
+        bh=teOccrm2PQgYq8QnTmz+eRFW97mM0aIsbw7UQ2Tfsrg=;
+        b=D7u4vfJKUtzBJi4AjXZ1V5H03mbFvoFjbmMAfIaFxE0Gaqr+584+6Ul9dmdsUIb9yr
+         pIR6hKP6NimWLz2zkX57uzvaX1YCjnBRGe4jAkheiWCsojw0zAH4rUFgJV6qsPIUgoST
+         nDbIxC5LTv1D3Kpsw9RVQ9oGYOSDQYF9ediIKVXdKm9zb4NzUgW+Er+8mAKg+1ZCv59x
+         qxL9eKU2Ph3cduGy88N/cNvEWYbfK/Nirfz5hcMMMSoF6VoCppScR8Jm4TCumzPk3jhI
+         v9Grkf4r6o+kL9an1g0XIA/iNR2o23jwnP7i23344+0sPDGDRwNxUVkUV5Avxipn8X24
+         kIPg==
+X-Gm-Message-State: AAQBX9dns2iVljfzXILDo7hze5IYWnLKalZE3qL1h+V5gjaLFnIa02Cz
+        wmpavs3NF+XES41YUU2PI2U14w==
+X-Google-Smtp-Source: AKy350Z5M3Jv3GGcIu3XJdxnZIkAjAQCiMZ6gEBAUxr0KzwYutHIISYMmbJr9557hIJFRR2DQ3zFaQ==
+X-Received: by 2002:a2e:6a05:0:b0:29b:d471:c817 with SMTP id f5-20020a2e6a05000000b0029bd471c817mr1626652ljc.12.1680709651970;
+        Wed, 05 Apr 2023 08:47:31 -0700 (PDT)
 Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id i19-20020a2e8093000000b0029f3e2efbb9sm2905499ljg.90.2023.04.05.08.46.55
+        by smtp.gmail.com with ESMTPSA id l22-20020a2e8356000000b0029352fc39fbsm2802323ljh.63.2023.04.05.08.47.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 08:46:56 -0700 (PDT)
-Message-ID: <4feaadbe-966d-0c2a-d502-e758194bba5f@linaro.org>
-Date:   Wed, 5 Apr 2023 17:46:55 +0200
+        Wed, 05 Apr 2023 08:47:31 -0700 (PDT)
+Message-ID: <33d5daba-99fe-72db-0409-2099719a67ba@linaro.org>
+Date:   Wed, 5 Apr 2023 17:47:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sc8280xp: label the Soundwire nodes
+Subject: Re: [PATCH 2/5] arm64: dts: qcom: sm8450: label the Soundwire nodes
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -65,8 +65,9 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230405060906.143058-1-krzysztof.kozlowski@linaro.org>
+ <20230405060906.143058-2-krzysztof.kozlowski@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230405060906.143058-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230405060906.143058-2-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -91,29 +92,36 @@ On 5.04.2023 08:09, Krzysztof Kozlowski wrote:
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> index cd38320dafda..c195a57fd180 100644
-> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-> @@ -2497,7 +2497,6 @@ rxmacro: rxmacro@3200000 {
->  			status = "disabled";
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index ce4b7d0a09ab..1dd000748f9e 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -2153,13 +2153,13 @@ wsa2macro: codec@31e0000 {
+>  			#sound-dai-cells = <1>;
 >  		};
 >  
-> -		/* RX */
->  		swr1: soundwire-controller@3210000 {
->  			compatible = "qcom,soundwire-v1.6.0";
->  			reg = <0 0x03210000 0 0x2000>;
-> @@ -2572,13 +2571,13 @@ wsamacro: codec@3240000 {
->  			status = "disabled";
+> -		/* WSA2 */
+>  		swr4: soundwire-controller@31f0000 {
+>  			compatible = "qcom,soundwire-v1.7.0";
+>  			reg = <0 0x031f0000 0 0x2000>;
+>  			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
+>  			clocks = <&wsa2macro>;
+>  			clock-names = "iface";
+> +			label = "WSA2";
+>  
+>  			qcom,din-ports = <2>;
+>  			qcom,dout-ports = <6>;
+> @@ -2268,13 +2268,13 @@ wsamacro: codec@3240000 {
+>  			#sound-dai-cells = <1>;
 >  		};
 >  
 > -		/* WSA */
 >  		swr0: soundwire-controller@3250000 {
+>  			compatible = "qcom,soundwire-v1.7.0";
 >  			reg = <0 0x03250000 0 0x2000>;
->  			compatible = "qcom,soundwire-v1.6.0";
 >  			interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
 >  			clocks = <&wsamacro>;
 >  			clock-names = "iface";
@@ -121,11 +129,3 @@ Konrad
 >  
 >  			qcom,din-ports = <2>;
 >  			qcom,dout-ports = <6>;
-> @@ -2600,7 +2599,6 @@ swr0: soundwire-controller@3250000 {
->  			status = "disabled";
->  		};
->  
-> -		/* TX */
->  		swr2: soundwire-controller@3330000 {
->  			compatible = "qcom,soundwire-v1.6.0";
->  			reg = <0 0x03330000 0 0x2000>;
