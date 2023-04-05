@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAD06D724E
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 04:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03ED26D724F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 04:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236727AbjDECKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 22:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        id S236534AbjDECNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 22:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbjDECKT (ORCPT
+        with ESMTP id S232695AbjDECNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 22:10:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB2C3C0A;
-        Tue,  4 Apr 2023 19:10:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C70263986;
-        Wed,  5 Apr 2023 02:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7CB7C433D2;
-        Wed,  5 Apr 2023 02:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680660617;
-        bh=4zJ4kLaeaZbHgZtylnXU4eUVkHyBkUaet36sI15YNo8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=MtjY6CQPKm7hzi4jCZ8G4ZOL70G+tRaFbgX3Qo1mjQaCWGGszB8J+6X6ckYA1cCV9
-         D/uDMZy3uroXe8iDIyGvCA+nt5eBFAC4kdREUHIIHjiAq5rWKLFt7Z23UMMKUs3tEI
-         tdkvEB4bDgwNUXA/VL8U5DY3nIdHFxZRHzEmI6YIA8RmeH7C4DR/faW2p/caJAhYgp
-         jEe2rLGDO29zc6uAcLkqNgAOoUkWajZQvYf4V/W+fMge/vnekc+dJ1Pbh7GjrXQ97+
-         yBrcxsdVgPWvtpq8npBOlH+BuXyJFzeaa9ZKCiXuflPBMz1Pwm3Dir4aHm3SglcKD4
-         h9TZ/FwmeFW1w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97249E4D02D;
-        Wed,  5 Apr 2023 02:10:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 4 Apr 2023 22:13:05 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B086119BD;
+        Tue,  4 Apr 2023 19:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680660784; x=1712196784;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=w+JnPxtm7tNsQ6086I9DiyvCHKa0VadIfgzIchRU8KQ=;
+  b=jU2CxC9CCUJlzQmSdvA6/Ucg43+0WlDms21Y1WcH7o5KxGH/3yZ6irLX
+   u4Y7bYk2FI3LmB2dYUJWgb0N3CObHaHq/5FqXrClYKNr+OcPxRaVgTTDc
+   erOVs8wWAWFCZyxKEeOjZH8CpQYmQ1q/tnPJjdcVvqVLZYlj6qHDPS880
+   rdI2lsiJW2o4o749VOrs3dEqHCyU4noKAYjeg8MNfsi9DVm9fOV/xVDyr
+   hpti8Ye4a8Ahrv2+MH5vS95Luqgn692tZKUi9K3dyCGRn+FSlOlSBh0lz
+   yMzB79MqYHyXlX7u38dHjZKghVRI3u3l/pTojHMSisTiCRYUETXjT8iLU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="428637808"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="428637808"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 19:13:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="830198271"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="830198271"
+Received: from ubuntu.bj.intel.com ([10.238.155.108])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Apr 2023 19:13:02 -0700
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     urezki@gmail.com, paulmck@kernel.org, frederic@kernel.org,
+        joel@joelfernandes.org, qiang1.zhang@intel.com
+Cc:     qiang.zhang1211@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rcu/kvfree: Delay the execution of drain_page_cache()
+Date:   Wed,  5 Apr 2023 10:13:42 +0800
+Message-Id: <20230405021342.606264-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: qrtr: correct types of trace event
- parameters
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168066061761.16096.17994837774956890281.git-patchwork-notify@kernel.org>
-Date:   Wed, 05 Apr 2023 02:10:17 +0000
-References: <20230402-qrtr-trace-types-v1-1-92ad55008dd3@kernel.org>
-In-Reply-To: <20230402-qrtr-trace-types-v1-1-92ad55008dd3@kernel.org>
-To:     Simon Horman <horms@kernel.org>
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, mani@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
+executed before kfree_rcu_monitor() to drain page cache, if the
+bnode structure's->gp_snap has done, the kvfree_rcu_bulk() will
+fill the page cache again in kfree_rcu_monitor(), this commit
+therefore move drain_page_cache() after kfree_rcu_monitor() to
+drain page cache.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/rcu/tree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, 03 Apr 2023 17:43:16 +0200 you wrote:
-> The arguments passed to the trace events are of type unsigned int,
-> however the signature of the events used __le32 parameters.
-> 
-> I may be missing the point here, but sparse flagged this and it
-> does seem incorrect to me.
-> 
->   net/qrtr/ns.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/qrtr.h):
->   ./include/trace/events/qrtr.h:11:1: warning: cast to restricted __le32
->   ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
->   ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
->   ... (a lot more similar warnings)
->   net/qrtr/ns.c:115:47:    expected restricted __le32 [usertype] service
->   net/qrtr/ns.c:115:47:    got unsigned int service
->   net/qrtr/ns.c:115:61: warning: incorrect type in argument 2 (different base types)
->   ... (a lot more similar warnings)
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next] net: qrtr: correct types of trace event parameters
-    https://git.kernel.org/netdev/net-next/c/054fbf7ff814
-
-You are awesome, thank you!
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 35be35f8236b..3461fc2640b9 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3424,8 +3424,8 @@ kfree_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+ 		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+ 
+ 		count = krc_count(krcp);
+-		count += drain_page_cache(krcp);
+ 		kfree_rcu_monitor(&krcp->monitor_work.work);
++		count += drain_page_cache(krcp);
+ 
+ 		sc->nr_to_scan -= count;
+ 		freed += count;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.32.0
 
