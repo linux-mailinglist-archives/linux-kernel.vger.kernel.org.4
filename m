@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052E66D8481
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84456D8488
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjDERFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43412 "EHLO
+        id S231514AbjDERHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234580AbjDERF2 (ORCPT
+        with ESMTP id S229699AbjDERHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:05:28 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B49BB4
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:05:25 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 184so7517237pga.12
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 10:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680714325;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0J8BjN3v3zbxtn9Ff5pgyzXShUCpXpsxAXyIsMTyb8Y=;
-        b=dSzQwxz/6d293u1whcOfGyDSj4AjNaIWfhA9/jIoXyfnoPgPjpUPkZ205+XxFN7bTl
-         kDSO6T+zB9Z/iOcafUQ1EC1GaZJm+M2/XcaDRR+21rmCH9ueVQp0+gIOHC2Qz+QJT9T2
-         p+ne9Juq/vR7tJS5muRlJs+wzTiTp5lbgnY7OjIhwtQTWKyIeLiXT08yDkMvKikMWM5I
-         atv/1pj1CSO6kxr/nyx3XgNbfbLJ1RkLokTfTIOkhkuxAuqYRQ1SQjsC8801rn2Oiwpp
-         NcY/mCiYFxeRSZUcYm0Ur3WaJk/XNUDH38FHS3Mlzy6DqAkurhYWBJZ/GuQoZNFiYM7y
-         vV0g==
+        Wed, 5 Apr 2023 13:07:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD172C6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680714400;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+jGMyE/H4z0XX1rbokRrj+UlMMC2RKbOMB2U8991WxU=;
+        b=gsytrA3zaQKWI+6qf3PBSvOUnP+vnIwl4te0xeaJtSZDGQfDTLA0vefCZTxyq8qG2ytsZ+
+        4jngw6fo7dFaaAmdP0LEVPIHvobNQcLQCcaCxDCYrABBrMW4Goju02PrSUUJTI6SZw2wVV
+        UwEzCzx8z1lvF0BA2uEzDc0UxCOizZI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-170-8PHMBuSfO-Kg5xmuAxR2Yg-1; Wed, 05 Apr 2023 13:06:39 -0400
+X-MC-Unique: 8PHMBuSfO-Kg5xmuAxR2Yg-1
+Received: by mail-wm1-f69.google.com with SMTP id k25-20020a05600c1c9900b003ef79f2c207so11868658wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 10:06:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680714325;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0J8BjN3v3zbxtn9Ff5pgyzXShUCpXpsxAXyIsMTyb8Y=;
-        b=lCuYKauNSApVi34XXaL0Mbnn9k9zPXJyMjxcg790DLw52UJ77bBAOtVJu8652JjhFJ
-         xYhrWAf+xXXEWhbfuSN4iS7p0vcs+WRQVZJKhvvV0KU2fC0EksHOIJO6I1GETsWVSCIR
-         7s2cc6MzGqkKFwf+JFXtpIRHtyXqjXBz75Ioap9MhW3M2g9uGOOp79IBDdkU9WyA9BYT
-         FrGPNi5cYdt5Lm/zhmxIefJqjvlAmDMouVdMOxGAwkL+bTMLzCY/PXyxrnkGFt5ECv2v
-         8YFUiOe+XyuSjgRRV2waWM4QV3+oRqtsef5xQjBe1c2qaduLt4S17f7CuybYM40qkgqr
-         Eo9Q==
-X-Gm-Message-State: AAQBX9dgolrvbo1SCKhF6QPaNB7qbgRtFZgpeZQSVN+HuqXbArjXjDgO
-        k+LifpmQIUUcS4cNUybRX2aGUQ==
-X-Google-Smtp-Source: AKy350bSv7SP2W/HmJsUQFAOmeQBv/BRCMSDf3erD7SPH10bbiAi7s+W6emdyhqEG+1Eb1kaR2EYFw==
-X-Received: by 2002:aa7:978f:0:b0:625:4b46:e019 with SMTP id o15-20020aa7978f000000b006254b46e019mr3264493pfp.9.1680714324848;
-        Wed, 05 Apr 2023 10:05:24 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:c807:a26a:a179:b5ec])
-        by smtp.gmail.com with ESMTPSA id x24-20020a63db58000000b0050fb618800dsm9535377pgi.67.2023.04.05.10.05.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 10:05:24 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 11:05:22 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tanmay Shah <tanmay.shah@amd.com>
-Cc:     andersson@kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Tarak Reddy <tarak.reddy@amd.com>
-Subject: Re: [PATCH v3 2/2] remoteproc: enhance rproc_put() for clusters
-Message-ID: <20230405170522.GB3812912@p14s>
-References: <20230328164921.1895937-1-tanmay.shah@amd.com>
- <20230328164921.1895937-3-tanmay.shah@amd.com>
+        d=1e100.net; s=20210112; t=1680714398;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+jGMyE/H4z0XX1rbokRrj+UlMMC2RKbOMB2U8991WxU=;
+        b=OwwFOS1npMtTtsHhLy8qf5O4rwfi8baKcyHzqQa+14+rchB95OjblAK0DFuwwaQ32H
+         itVI1ySkj8laYjFxSqysHWjldHbu9mrztKKCiCtMEzzwoyrodb9MwLWaulPExq5BTFMh
+         5gs8PffOGU8afoeyQWMfQc/vo19fiqJQT9jozbkYb891wmdSENX9kG83BS8IqL/KhMiG
+         wLvllIyCDIFRn3H8SJd150R8lEpO5O4ZfRO+NUSWkj7bhdvuuoggkmEUML4VK4JXcyQU
+         YVXgA34qGIIRmtwZ7AgJjvgUfNPHeQHZipX6mApIE7tceHZIfi2bkfdb65ZvfukOKjva
+         GIXw==
+X-Gm-Message-State: AAQBX9cioujPENiE0drNFNCC7FI53nIsm+MB72ZjhJby/joEBDW/0ILV
+        LQqntZMScAOJ/Pwq/3IEeRKHgCtC/s4QxYer6CviRbs8RFQ2gukiXs1SjXhib9J2phTLbiUpKFN
+        EfL4Gnm5N+hnYvCkV2+A1hdls
+X-Received: by 2002:a05:600c:3644:b0:3eb:42fa:39d5 with SMTP id y4-20020a05600c364400b003eb42fa39d5mr5247556wmq.29.1680714398418;
+        Wed, 05 Apr 2023 10:06:38 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Zc3yUUSM0QMVb09Y7+zHVijaxSRVwUv8quFIs59ptAnEOpLeN1hskZOZ5fkbJtamSWNoF0vQ==
+X-Received: by 2002:a05:600c:3644:b0:3eb:42fa:39d5 with SMTP id y4-20020a05600c364400b003eb42fa39d5mr5247534wmq.29.1680714398050;
+        Wed, 05 Apr 2023 10:06:38 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c703:d00:ca74:d9ea:11e0:dfb? (p200300cbc7030d00ca74d9ea11e00dfb.dip0.t-ipconnect.de. [2003:cb:c703:d00:ca74:d9ea:11e0:dfb])
+        by smtp.gmail.com with ESMTPSA id k4-20020a5d4284000000b002cefcac0c62sm15631552wrq.9.2023.04.05.10.06.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 10:06:37 -0700 (PDT)
+Message-ID: <d6f6f4a5-2b6d-d3d6-0806-8c41ac5dcdf0@redhat.com>
+Date:   Wed, 5 Apr 2023 19:06:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328164921.1895937-3-tanmay.shah@amd.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 2/6] module: move finished_loading()
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org
+Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+References: <20230405022702.753323-1-mcgrof@kernel.org>
+ <20230405022702.753323-3-mcgrof@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230405022702.753323-3-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 09:49:24AM -0700, Tanmay Shah wrote:
-> This patch enhances rproc_put() to support remoteproc clusters
-> with multiple child nodes as in rproc_get_by_phandle().
+On 05.04.23 04:26, Luis Chamberlain wrote:
+> This has no functional change, just moves a routine earlier
+> as we'll make use of it next.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303221441.cuBnpvye-lkp@intel.com/
-> Signed-off-by: Tarak Reddy <tarak.reddy@amd.com>
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 > ---
-> 
-> Changes in v3:
->   - remove module_put call that was introduced in the patch by mistake
->   - remove redundant check in rproc_put
->   - Add inline comments in rproc_put that explains functionality
-> 
-> Changes in v2:
->   - Introduce this patch to fix rproc_put as per modified rproc_get_by_phandle
-> 
->  drivers/remoteproc/remoteproc_core.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index a3e7c8798381..d8f28c6fe3a3 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -2559,7 +2559,22 @@ EXPORT_SYMBOL(rproc_free);
->   */
->  void rproc_put(struct rproc *rproc)
->  {
-> -	module_put(rproc->dev.parent->driver->owner);
-> +	struct platform_device *cluster_pdev;
-> +
-> +	if (rproc->dev.parent->driver) {
-> +		module_put(rproc->dev.parent->driver->owner);
-> +	} else {
-> +		/*
-> +		 * If the remoteproc's parent does not have a driver,
-> +		 * driver is associated with the cluster.
-> +		 */
-> +		cluster_pdev = of_find_device_by_node(rproc->dev.parent->of_node->parent);
-> +		if (cluster_pdev) {
-> +			module_put(cluster_pdev->dev.driver->owner);
-> +			put_device(&cluster_pdev->dev);
-> +		}
-> +	}
-> +
 
-This looks good to me now.
+I'd simply squash into #3, as that's short enough that the move doesn't 
+add significant noise. Anyhow:
 
-Bjorn, please have a look at this set when you have a minute.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
+-- 
 Thanks,
-Mathieu
 
->  	put_device(&rproc->dev);
->  }
->  EXPORT_SYMBOL(rproc_put);
-> -- 
-> 2.25.1
-> 
+David / dhildenb
+
