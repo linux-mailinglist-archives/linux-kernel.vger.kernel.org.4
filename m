@@ -2,94 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F286D85EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1D16D85EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234135AbjDESYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S234033AbjDESY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjDESYt (ORCPT
+        with ESMTP id S230100AbjDESY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:24:49 -0400
-Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226B23A9F;
-        Wed,  5 Apr 2023 11:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1680719050;
-        bh=7Nl52tGHqcsiPw/xmAb/LjUgiMWKfLo4pbV1xDkMOBY=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=AV+chS/zAW+VTX6tSwISxGEgwZPAokvLWTKacRk0NwyvRYGSqPV/Ani6gHC0BZXLF
-         qw9VeqKHFVZY/v8uT2CRqS9nQC4WW3wg7zN8G6MPKBLYyEs4g8QQzZtMbekwMswN2B
-         3fr6BE1p/zwZJMU9RtSQiDR3QdptV6wl8gSDVAymnC03hUQaEY5YvHcWaSMiw0ezcR
-         RS8omk7RJKoLiMd4ZJt8h/XeVVA0//aPPUY72msTVgtzj9T1GSmGoqjmTCCIWmQ2Cw
-         SeYZEI7tzUzMwe91L+3gAa71pIwwGotFWEC9OPQhRJxzbCJWdzqcgOdZauYZUi8pSE
-         BR5rcYqgMIs+g==
-X-secureTransport-forwarded: yes
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     Marek Vasut <marex@denx.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        kernel <kernel@dh-electronics.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
-Thread-Topic: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
-Thread-Index: AQHZZ9hJaqalrClMnUSWr1zaggJvEq8cxTeAgAA/z6A=
-Date:   Wed, 5 Apr 2023 18:24:01 +0000
-Message-ID: <e7aa3b3220e148ee96f5a1c361721845@dh-electronics.com>
-References: <20230405160258.46998-1-cniedermaier@dh-electronics.com>
- <20230405160258.46998-2-cniedermaier@dh-electronics.com>
- <05fa147c-116b-59b4-d14b-760bbefd7602@denx.de>
-In-Reply-To: <05fa147c-116b-59b4-d14b-760bbefd7602@denx.de>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 5 Apr 2023 14:24:26 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176254226;
+        Wed,  5 Apr 2023 11:24:22 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-17aa62d0a4aso39527321fac.4;
+        Wed, 05 Apr 2023 11:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680719059;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ONtXHsFdkNYgP1HOTNA0FlfkBGs3b4xV19x0hQRzSms=;
+        b=YpYX0GN+Nh/RoB4ClA83wZO9sfkDDFUDB8RQcRJh1glosn/bCLWQAcVwr6TBF56CWg
+         1gMrOHy/J+eTvX2+IoXBRsWADsXrHrPrU2jsNETWnrY+r59FFY8wyPas/SGegRvZjN0s
+         56x+ZNkGRMJz+jDbANPbKi54y7tryHoZ8xYDVlU2jyjSSrpSf6bU4Vp9ujUOrkXc/Njx
+         +nlVwTFRxOvR3Ww+CMkYOwZAmZrD4Q8790oXKn90GpNsWLcOoRLUVznuKg7eJTeJeL8M
+         u21kIWubNqGi+epoWyxyURJ6LtJvM7Q/UbSmRFLnOqs7X6czOwdFHFxlWczw0Y3Jhno+
+         Y2Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680719059;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ONtXHsFdkNYgP1HOTNA0FlfkBGs3b4xV19x0hQRzSms=;
+        b=Gqzy9b4Z+008TkIaduJICWjrz249WKJPEjrz0KKJorH8iDSa397QdRA2AkgehN7pU5
+         ctVtYR9yE/U8JtG/lGo0mDA5iz02QalpXp9F8oA/0Ol8HSH6QZLH8HzmL+XJVckle6XZ
+         SwNjH5nx6NJPcZcycnNWfI8wOcNwvY40UhHjyNOw5HjHHadtz7Tc21Hivc8lAsBsq0An
+         A2flWTMibyHN5HU70pEFHVvc0DLvdyU5a6L84y1bFAzAaVQvOuJb7r4ZkI4WDby85UnF
+         c8I/VgtHI0TGyYsK6qx7/E3eGlIiUS3fke+NVPhRsCRzRtgccu6r4P0pc8lUJR5zWl4L
+         JzIA==
+X-Gm-Message-State: AAQBX9dEc30VjPesBe5GHk4Ng3FGtN4bZCCvlg7KmRdY8pMCHMYZLnK9
+        kSvkeQMP4F2eFIX/b3CbpRg=
+X-Google-Smtp-Source: AKy350bDmas/yzxcH3Kf/5PqXkUJUvVJpjI1WNx8Mz5HkO6lYyL07ItMMKVTA08EYa7t1nW8ThCyag==
+X-Received: by 2002:a05:6870:2181:b0:177:a15a:4d5e with SMTP id l1-20020a056870218100b00177a15a4d5emr4487368oae.37.1680719059618;
+        Wed, 05 Apr 2023 11:24:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id vi17-20020a0568710d9100b001803597b4cesm6075364oab.55.2023.04.05.11.24.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 11:24:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 5 Apr 2023 11:24:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/185] 6.2.10-rc2 review
+Message-ID: <b1ee46c3-7a3a-492b-8547-3d608082d78c@roeck-us.net>
+References: <20230405100309.298748790@linuxfoundation.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405100309.298748790@linuxfoundation.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogTWFyZWsgVmFzdXQgW21haWx0bzptYXJleEBkZW54LmRlXQ0KU2VudDogV2VkbmVzZGF5
-LCBBcHJpbCA1LCAyMDIzIDY6MjUgUE0NCj4gT24gNC81LzIzIDE4OjAyLCBDaHJpc3RvcGggTmll
-ZGVybWFpZXIgd3JvdGU6DQo+IA0KPiBbLi4uXQ0KPiANCj4+ICsvIHsNCj4+ICsgICAgIG1vZGVs
-ID0gIkRIIGVsZWN0cm9uaWNzIGkuTVg2VUxMIERIQ09SIG9uIG1hdmVvIGJveCI7DQo+PiArICAg
-ICBjb21wYXRpYmxlID0gImRoLGlteDZ1bGwtZGhjb3ItbWF2ZW8tYm94IiwgImRoLGlteDZ1bGwt
-ZGhjb3Itc29tIiwNCj4+ICsgICAgICAgICAgICAgICAgICAiZnNsLGlteDZ1bGwiOw0KPj4gKw0K
-Pj4gKyAgICAgYWxpYXNlcyB7DQo+PiArICAgICAgICAgICAgIC9kZWxldGUtcHJvcGVydHkvIG1t
-YzA7IC8qIEF2b2lkIGRvdWJsZSBkZWZpbml0aW9ucyAqLw0KPj4gKyAgICAgICAgICAgICAvZGVs
-ZXRlLXByb3BlcnR5LyBtbWMxOw0KPj4gKyAgICAgICAgICAgICBtbWMyID0gJnVzZGhjMjsgLyog
-ZU1NQyBzaG91bGQgYmUgbW1jMiAqLw0KPiANCj4gV2h5IG5vdCBtbWMwID8NCj4gDQo+IFVzZSBy
-b290PVBBUlRVVUlEPSB3aGVuIGJvb3RpbmcgdG8gYXZvaWQgYW55IGRlcGVuZGVuY3kgb24NCj4g
-cm9vdD0vZGV2L21tY2JsazJwTiBlbnVtZXJhdGlvbi4NCg0KVGhpcyBpcyBkdWUgdG8gc29mdHdh
-cmUgaW50ZXJjaGFuZ2VhYmlsaXR5IHdpdGggdGhlIERIQ09NDQppLk1YNlVMTCwgd2hlcmUgdGhl
-IGVNTUMgaXMgYWx3YXlzIG1tYzIuDQoNCj4gDQo+PiArICAgICAgICAgICAgIHNwaTAgPSAmZWNz
-cGk0Ow0KPj4gKyAgICAgICAgICAgICBzcGkzID0gJmVjc3BpMTsNCj4+ICsgICAgIH07DQo+IA0K
-PiBbLi4uXQ0KPiANCj4+ICsmaW9tdXhjIHsNCj4+ICsgICAgIHBpbmN0cmwtMCA9IDwmcGluY3Ry
-bF9ob2dfbWF2ZW9fYm94PjsNCj4+ICsgICAgIHBpbmN0cmwtbmFtZXMgPSAiZGVmYXVsdCI7DQo+
-PiArDQo+PiArICAgICBwaW5jdHJsX2hvZ19tYXZlb19ib3g6IGhvZy1tYXZlby1ib3gtZ3JwIHsN
-Cj4+ICsgICAgICAgICAgICAgZnNsLHBpbnMgPSA8DQo+PiArICAgICAgICAgICAgICAgICAgICAg
-TVg2VUxfUEFEX0dQSU8xX0lPMDVfX0dQSU8xX0lPMDUgICAgICAgIDB4NDAwMTIwYjAgLyogQlVU
-VE9OX1VTRVIgKi8NCj4+ICsgICAgICAgICAgICAgICAgICAgICBNWDZVTF9QQURfR1BJTzFfSU8w
-OF9fR1BJTzFfSU8wOCAgICAgICAgMHg0MDAxMjBiMCAvKiBCVVRUT05fUkVTRVQgKi8NCj4+ICsg
-ICAgICAgICAgICAgICAgICAgICBNWDZVTF9QQURfQ1NJX1BJWENMS19fR1BJTzRfSU8xOCAgICAg
-ICAgMHg0MDAxMjBiMCAvKiBMRURfRyAqLw0KPj4gKyAgICAgICAgICAgICAgICAgICAgIE1YNlVM
-X1BBRF9DU0lfREFUQTAyX19HUElPNF9JTzIzICAgICAgICAweDQwMDEyMGIwIC8qIExFRF9CICov
-DQo+IA0KPiBTaG91bGQgdGhlICJTSU9OKDEgPDwgMzApOiBTb2Z0d2FyZSBJbnB1dCBPbiBGaWVs
-ZC4iIGJpdCByZWFsbHkgYmUgc2V0DQo+IG9uIEdQSU9zIHdoaWNoIGFyZSBPVVRQVVQgKGxpa2Ug
-TEVEcykgPw0KDQpJIHRoaW5rIGZvciBJTlBVVCBpdCBkb2Vzbid0IG1hdHRlciwgYnV0IGZvciBP
-VVRQVVQgSSB0aGVuIGhhdmUgYSBmZWVkYmFjay4NCg0KUmVnYXJkcw0KQ2hyaXN0b3BoDQo=
+On Wed, Apr 05, 2023 at 12:03:46PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.10 release.
+> There are 185 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 07 Apr 2023 10:02:32 +0000.
+> Anything received after that time might be too late.
+> 
+
+Build results:
+	total: 155 pass: 155 fail: 0
+Qemu test results:
+	total: 520 pass: 520 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
