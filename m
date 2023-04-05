@@ -2,39 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09AE6D8B39
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C926D8B3B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbjDEXrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S233998AbjDEXrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 19:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbjDEXrN (ORCPT
+        with ESMTP id S233910AbjDEXrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:47:13 -0400
-Received: from mo-csw.securemx.jp (mo-csw1514.securemx.jp [210.130.202.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5E77684;
-        Wed,  5 Apr 2023 16:46:48 -0700 (PDT)
-Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 335NkIWO004496; Thu, 6 Apr 2023 08:46:19 +0900
-X-Iguazu-Qid: 34trPsC3CYtl3ZnLTY
-X-Iguazu-QSIG: v=2; s=0; t=1680738378; q=34trPsC3CYtl3ZnLTY; m=ep8IdKMrzZrb5kKMToUvekiVRfV5745ux+7fYG9copo=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1513) id 335NkHZI026619
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 6 Apr 2023 08:46:17 +0900
-From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH v2] usb: host: xhci-plat: Use dev_is_pci() helper
-Date:   Thu,  6 Apr 2023 08:46:05 +0900
-X-TSB-HOP2: ON
-Message-Id: <20230405234605.2310155-1-nobuhiro1.iwamatsu@toshiba.co.jp>
-X-Mailer: git-send-email 2.39.2
+        Wed, 5 Apr 2023 19:47:17 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43D4172B5;
+        Wed,  5 Apr 2023 16:47:11 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1131)
+        id B3420210DEF1; Wed,  5 Apr 2023 16:47:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B3420210DEF1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680738430;
+        bh=yNAS5erRHhc/EFovP6vHaxgN265p2mfiB1fFyCTB5Ps=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i8wtK9UPGKsH/hQJPEblp8Q6kuursJLm1edttlRDGEHQKBvD9GGnufAYR3CfXxm2j
+         2oMf29rR+yni6ErUPADLi/D+JxmFvZ9qU37T5InL8qmMhswYu0CKJS1AAgJCglkCTp
+         mZ22BaHALA/7hjZldRK4mkGR6lXf38c10Eo+8sDY=
+Date:   Wed, 5 Apr 2023 16:47:10 -0700
+From:   Kelsey Steele <kelseysteele@linux.microsoft.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/185] 6.2.10-rc2 review
+Message-ID: <20230405234710.GB5053@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20230405100309.298748790@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405100309.298748790@linuxfoundation.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,34 +52,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use common dev_is_pci() helper for checking PCI devices.
-And if CONFIG_PCI is not defined, dev_is_pci returns false. Therefore,
-CONFIG_PCI is also unnecessary, so remove it.
+On Wed, Apr 05, 2023 at 12:03:46PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.10 release.
+> There are 185 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 07 Apr 2023 10:02:32 +0000.
+> Anything received after that time might be too late.
 
-Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
- v2: Remove CONFIG_PCI
+No regressions found on WSL (x86 and arm64).
 
- drivers/usb/host/xhci-plat.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Built, booted, and reviewed dmesg.
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index b9f9625467d61e..76c5a84616eaee 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -362,10 +362,8 @@ static int xhci_generic_plat_probe(struct platform_device *pdev)
- 		if (is_of_node(sysdev->fwnode) ||
- 			is_acpi_device_node(sysdev->fwnode))
- 			break;
--#ifdef CONFIG_PCI
--		else if (sysdev->bus == &pci_bus_type)
-+		else if (dev_is_pci(sysdev))
- 			break;
--#endif
- 	}
- 
- 	if (!sysdev)
--- 
-2.36.1
+Thank you.
 
-
+Tested-by: Kelsey Steele <kelseysteele@linux.microsoft.com> 
