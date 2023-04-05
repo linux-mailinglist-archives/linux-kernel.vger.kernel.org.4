@@ -2,91 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A30D6D7CAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D446D7CA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238037AbjDEMcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
+        id S238020AbjDEMc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238025AbjDEMcb (ORCPT
+        with ESMTP id S237375AbjDEMcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:32:31 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F255B9D;
-        Wed,  5 Apr 2023 05:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=R0oXmomB7CE455X2FHzGCtcL8upYdv/7BC030arTe9s=; b=Aq0Kq05NbpaT3FgQF09VSkWq90
-        vjaB/TXCx4ewCShuCMYVBLYXnNCtPEvBkc4H6wfKd+AHZmzANfgx9EV4ofCkMlmyIjmzAnG8eXesO
-        54U+A4HaZxxlp27LYexXLsW5HjIYsOnHvSKnfGb2qVcx06ZE7SE87Qm3XW0l0XsDKX6Y=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pk2J6-009WGo-Mv; Wed, 05 Apr 2023 14:32:08 +0200
-Date:   Wed, 5 Apr 2023 14:32:08 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 00/12] Rework PHY reset handling
-Message-ID: <da635af8-2052-40d5-846f-eda14af8c69b@lunn.ch>
-References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
+        Wed, 5 Apr 2023 08:32:25 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6E31BC5;
+        Wed,  5 Apr 2023 05:32:24 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id m16so21954373ybk.0;
+        Wed, 05 Apr 2023 05:32:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680697943;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SQcMbra2CgBD1rOvxGpRVnkzaGjn0KHujzI1BY777uY=;
+        b=MkV5dExLiNqHfiYmWMuvch56083VrvbatouYUkL58SSm+WrMUvsdZSE3XxB3d8jeJf
+         EK33MHkqG3MELcpSeqXzpH2whK3o8Lmx0GixFiv1YWYv+7tRaeIgngnfWuJ/dlYntL3q
+         5EMAWmxeenJFRgI1bH3bR+6XbKuOpqI4Hockj/fOTVKrWkTCss31mmnSsukYKg1k+IqN
+         OkLaehmee/JjhR7r8W8jnPHDsXhFzcqjzFr6Z2qWPssKR8xHf9IYTgj2dDtB5ES4viLg
+         7lFMhaiKVbLFTNAbOFF+3ByTplR68WQgItjc+07KNEyaqeeqNZwZ4frv2WtLxz60hAz8
+         3V2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680697943;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SQcMbra2CgBD1rOvxGpRVnkzaGjn0KHujzI1BY777uY=;
+        b=ol7j5E8ufFI1Fuv8+OTBBCVmw9aX0iEOHuaTeD3Yyadn8VBuFAPFJW6uFuUwRIuFzq
+         JdHQpbmF9dM2IQ8jzRcVyybSOufJXB/SNgdRco2Nz6mmx9lv8M/m/gnGZAzm2be0ORcf
+         WPEKIDTswlVriJmekt9QoXZe82LrzWmBvRKnuCsdfSfse3KJDdddXRnz/dPRiLRDWXRE
+         AHvdmiwXR12aSfvWKFm3qo98yUETJ4JLgxb3HyWCpGcBin9KcGlAQsI5S9PjQj327+VL
+         2hD894W/Gu1/KJ1WjElCN3ultkverTw03WOuFtLyh7Nkf2HPB3XM6IZ44B+h6ygfRITE
+         sLKQ==
+X-Gm-Message-State: AAQBX9eFfm3AXwv1xhLFo2LZBTGyin9XRVilBtmJeSAJLl99m64txkDu
+        lkxFooG9nLclzwLEyKQQI8kvixiH0mkOEQYL8yU=
+X-Google-Smtp-Source: AKy350aMnNZlfVQMcWZwmVtFWd+CgIw1TUjVeCFV7ElU/MTu09D8SpK7RVipDHvOLoDOmHM2e3Wga5qC1FlXouLi1XY=
+X-Received: by 2002:a25:774d:0:b0:b80:2bf9:2f78 with SMTP id
+ s74-20020a25774d000000b00b802bf92f78mr4111595ybc.11.1680697943516; Wed, 05
+ Apr 2023 05:32:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-4-917ff5bc80a8@asahilina.net> <ZC1WwJDr1iqSQnYs@phenom.ffwll.local>
+ <CANiq72=h9qKrpkY2K962__rs-JLsmWxPXocx040ZeDSKGf_Brw@mail.gmail.com> <ZC1aEZpgZLkq8xTv@phenom.ffwll.local>
+In-Reply-To: <ZC1aEZpgZLkq8xTv@phenom.ffwll.local>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 5 Apr 2023 14:32:12 +0200
+Message-ID: <CANiq72=hoVw566orbDYcJyw2+SFfxpR1rdJVbbR3kkrjJUASww@mail.gmail.com>
+Subject: Re: [PATCH RFC 04/18] rust: drm: gem: Add GEM object abstraction
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+Cc:     Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 11:26:51AM +0200, Marco Felsch wrote:
-> The current phy reset handling is broken in a way that it needs
-> pre-running firmware to setup the phy initially. Since the very first
-> step is to readout the PHYID1/2 registers before doing anything else.
-> 
-> The whole dection logic will fall apart if the pre-running firmware
-> don't setup the phy accordingly or the kernel boot resets GPIOs states
-> or disables clocks. In such cases the PHYID1/2 read access will fail and
-> so the whole detection will fail.
-> 
-> I fixed this via this series, the fix will include a new kernel API
-> called phy_device_atomic_register() which will do all necessary things
-> and return a 'struct phy_device' on success. So setting up a phy and the
-> phy state machine is more convenient.
+On Wed, Apr 5, 2023 at 1:23=E2=80=AFPM Daniel Vetter <daniel@ffwll.ch> wrot=
+e:
+>
+> Ok if this is just interim I think it's fine. Would still be good to have
+> the MAINTAINERS entry though even just to cover the interim state. Least
+> because I'm assuming that when things are split up you'd still want to
+> keep the rust list on cc for the rust parts, even when they move into
+> subsystems?
 
-Please add a section explaining why the current API is broken beyond
-repair.  You need to justify adding a new call, rather than fixing the
-existing code to just do what is necessary to allow the PHY to be
-found.
+Sorry, I missed to reply the second part of your email -- replying here.
 
-	Andrew
+Currently, the subsystem's code is under `rust/` (though modules can
+go already into other folders). One of the reasons was technical
+simplicity, and a nice side effect is that we could bootstrap things
+while getting C maintainers involved over time.
+
+To accomplish that, the guidelines for contributing Rust code are that
+the respective maintainers need to be at least Cc'd, even if the files
+do not hit the `F:` fields for the time being -- see [1]. But, for us,
+ideally, the maintainers will take the changes through their tree,
+instead of going through the Rust one, since that is the end goal.
+
+And, of course, if you already want to have `F:` fields for the Rust
+code, that is even better! (Whether those should be in the same entry
+or in a new one, it is up to you, of course, and whether it is a
+different set of people / level of support / etc.)
+
+Then, when the `kernel` crate split happens, we can move the code
+directly under whatever folders it should be naturally, when their
+maintainers are ready. For some subsystems, that may mean they do not
+need any `F:` fields since they are already covered (e.g. if they did
+not create a new entry for Rust code only). And for cases like yours,
+where you already had `F:` fields, it means the move of the files can
+be done right away as soon as the split happens.
+
+In short, we would definitely welcome if you add `F:` fields already
+(whether in existing or new entries) -- it would mean you are ahead of
+the curve! :)
+
+As for the mailing list, yes, for the time being, I ask that all
+changes to please be sent to the Rust list, so that everybody that
+wants to follow the Rust progress has everything in a single place, so
+that we try to remain consistent in the beginning on e.g. coding
+guidelines, so that Rust reviewers can help spot mistakes, and so on
+and so forth.
+
+But, as Rust grows in the kernel, as systems become non-experimental,
+and as maintainers take ownership of the code, that should eventually
+go away and let things be as usual with C code. Then the Rust
+subsystem (and its list) will become smaller, and it will be the
+subsystem (and the discussion place) for anything not covered by other
+subsystems, such as core Rust abstractions and types, Rust
+infrastructure and so on.
+
+How does that sound?
+
+[1] https://rust-for-linux.com/contributing#the-rust-subsystem (I may
+reorganize this to be Rust's `P:` field, by the way)
+
+Cheers,
+Miguel
