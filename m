@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9246D8700
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEBF6D8702
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234305AbjDEThp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56660 "EHLO
+        id S234149AbjDETiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233978AbjDETh0 (ORCPT
+        with ESMTP id S234120AbjDEThj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:37:26 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725AE6E87
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:36:55 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 19:36:35 +0000
+        Wed, 5 Apr 2023 15:37:39 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3B17D80
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:37:18 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 19:36:40 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680723402; x=1680982602;
-        bh=rQ0nPIiJCYuONUdlBX7Jess/7/le2Ye/jbd2l3BM7gs=;
+        s=protonmail3; t=1680723416; x=1680982616;
+        bh=gdEIW+2bBi1IvDlMbXGasea4+ibnJ2p7QwfZLUN+zQA=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=OB0cXCAT8KPyh5sJqZD72dctiecqZyhcJtXqtwTwilCoqreMC86SP4Re43jRS5Vn3
-         QjJhcsB9M2T5QUUTdd4WlUrSMXCfntEnaOBS5bBmcXqC/KX0QZhv0/rauQFB4uzvbg
-         sbtLjGd67ARDpv6WJ046BmTO91lGZmsrQVxO+bHQq86uH+Ox1LaX8F0OZdnoNDfWiU
-         x7W6oB/F/zophz0Ev/5F7eKaQL2d/zYeUFRJ+t82ZOgKbEt3zrKBvrT+n+eStdpDG4
-         nYJ+2vS2QT50GaNsFpjeZkSP1hmMA8LNvqQlJxpBrubTxcpK5cy7NwalDvK/pKJU6C
-         aFFGzSj8OpQhg==
+        b=vseFoYZ2AedjxwlXJ3fIjHnHGUIujb/axlbQHpdZbxcvkaslLN1WTFsA7YM3LB858
+         pvGizao1DJjhKyBl5p537z73NOCdj8QKKV0wxa8vDj1p/P/N1pwYEIsvwH95IH7M/i
+         7atH4Ra2gTX00vff6+oQkXRiBbmAYenT3MLkzkdvZfo83e5cbHej45umedVd5CMw6T
+         5vJGlDEJGGHciHru9A9lR0u5EV/UFjCLbaQywYwQhX6KaWBvFsUG/jIsucCcbFqjq6
+         qxMaxldA43c/Qj2lugQvRJGBBbu1/HQPdMJy/sTz4tnKDF8AD1em+wG2NUQ8pepM39
+         GsZn59T03sAjg==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,8 +39,8 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
         Alice Ryhl <aliceryhl@google.com>,
         Andreas Hindborg <a.hindborg@samsung.com>
-Subject: [PATCH v6 11/15] rust: init: add `Zeroable` trait and `init::zeroed` function
-Message-ID: <20230405193445.745024-12-y86-dev@protonmail.com>
+Subject: [PATCH v6 12/15] rust: prelude: add `pin-init` API items to prelude
+Message-ID: <20230405193445.745024-13-y86-dev@protonmail.com>
 In-Reply-To: <20230405193445.745024-1-y86-dev@protonmail.com>
 References: <20230405193445.745024-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -57,146 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the `Zeroable` trait which marks types that can be initialized by
-writing `0x00` to every byte of the type. Also add the `init::zeroed`
-function that creates an initializer for a `Zeroable` type that writes
-`0x00` to every byte.
+Add `pin-init` API macros and traits to the prelude.
 
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Gary Guo <gary@garyguo.net>
-Cc: Andreas Hindborg <a.hindborg@samsung.com>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 ---
- rust/kernel/init.rs | 97 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 95 insertions(+), 2 deletions(-)
+ rust/kernel/prelude.rs | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-index 99751375e7c8..ffd539e2f5ef 100644
---- a/rust/kernel/init.rs
-+++ b/rust/kernel/init.rs
-@@ -195,8 +195,14 @@ use crate::{
- };
- use alloc::boxed::Box;
- use core::{
--    alloc::AllocError, cell::Cell, convert::Infallible, marker::PhantomDat=
-a, mem::MaybeUninit,
--    pin::Pin, ptr,
-+    alloc::AllocError,
-+    cell::Cell,
-+    convert::Infallible,
-+    marker::PhantomData,
-+    mem::MaybeUninit,
-+    num::*,
-+    pin::Pin,
-+    ptr::{self, NonNull},
- };
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index 0bc1c97e5604..fcdc511d2ce8 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -18,7 +18,7 @@ pub use core::pin::Pin;
+ pub use alloc::{boxed::Box, vec::Vec};
 
- #[doc(hidden)]
-@@ -1323,3 +1329,90 @@ pub unsafe trait PinnedDrop: __internal::HasPinData =
-{
-     /// automatically.
-     fn drop(self: Pin<&mut Self>, only_call_from_drop: __internal::OnlyCal=
-lFromDrop);
- }
+ #[doc(no_inline)]
+-pub use macros::{module, vtable};
++pub use macros::{module, pin_data, pinned_drop, vtable};
+
+ pub use super::build_assert;
+
+@@ -27,8 +27,12 @@ pub use super::build_assert;
+ pub use super::dbg;
+ pub use super::{pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr=
+_notice, pr_warn};
+
++pub use super::{init, pin_init, try_init, try_pin_init};
 +
-+/// Marker trait for types that can be initialized by writing just zeroes.
-+///
-+/// # Safety
-+///
-+/// The bit pattern consisting of only zeroes is a valid bit pattern for t=
-his type. In other words,
-+/// this is not UB:
-+///
-+/// ```rust,ignore
-+/// let val: Self =3D unsafe { core::mem::zeroed() };
-+/// ```
-+pub unsafe trait Zeroable {}
+ pub use super::static_assert;
+
+ pub use super::error::{code::*, Error, Result};
+
+ pub use super::{str::CStr, ThisModule};
 +
-+/// Create a new zeroed T.
-+///
-+/// The returned initializer will write `0x00` to every byte of the given =
-`slot`.
-+#[inline]
-+pub fn zeroed<T: Zeroable>() -> impl Init<T> {
-+    // SAFETY: Because `T: Zeroable`, all bytes zero is a valid bit patter=
-n for `T`
-+    // and because we write all zeroes, the memory is initialized.
-+    unsafe {
-+        init_from_closure(|slot: *mut T| {
-+            slot.write_bytes(0, 1);
-+            Ok(())
-+        })
-+    }
-+}
-+
-+macro_rules! impl_zeroable {
-+    ($($({$($generics:tt)*})? $t:ty, )*) =3D> {
-+        $(unsafe impl$($($generics)*)? Zeroable for $t {})*
-+    };
-+}
-+
-+impl_zeroable! {
-+    // SAFETY: All primitives that are allowed to be zero.
-+    bool,
-+    char,
-+    u8, u16, u32, u64, u128, usize,
-+    i8, i16, i32, i64, i128, isize,
-+    f32, f64,
-+
-+    // SAFETY: These are ZSTs, there is nothing to zero.
-+    {<T: ?Sized>} PhantomData<T>, core::marker::PhantomPinned, Infallible,=
- (),
-+
-+    // SAFETY: Type is allowed to take any value, including all zeros.
-+    {<T>} MaybeUninit<T>,
-+
-+    // SAFETY: All zeros is equivalent to `None` (option layout optimizati=
-on guarantee).
-+    Option<NonZeroU8>, Option<NonZeroU16>, Option<NonZeroU32>, Option<NonZ=
-eroU64>,
-+    Option<NonZeroU128>, Option<NonZeroUsize>,
-+    Option<NonZeroI8>, Option<NonZeroI16>, Option<NonZeroI32>, Option<NonZ=
-eroI64>,
-+    Option<NonZeroI128>, Option<NonZeroIsize>,
-+
-+    // SAFETY: All zeros is equivalent to `None` (option layout optimizati=
-on guarantee).
-+    //
-+    // In this case we are allowed to use `T: ?Sized`, since all zeros is =
-the `None` variant.
-+    {<T: ?Sized>} Option<NonNull<T>>,
-+    {<T: ?Sized>} Option<Box<T>>,
-+
-+    // SAFETY: `null` pointer is valid.
-+    //
-+    // We cannot use `T: ?Sized`, since the VTABLE pointer part of fat poi=
-nters is not allowed to be
-+    // null.
-+    //
-+    // When `Pointee` gets stabilized, we could use
-+    // `T: ?Sized where <T as Pointee>::Metadata: Zeroable`
-+    {<T>} *mut T, {<T>} *const T,
-+
-+    // SAFETY: `null` pointer is valid and the metadata part of these fat =
-pointers is allowed to be
-+    // zero.
-+    {<T>} *mut [T], {<T>} *const [T], *mut str, *const str,
-+
-+    // SAFETY: `T` is `Zeroable`.
-+    {<const N: usize, T: Zeroable>} [T; N], {<T: Zeroable>} Wrapping<T>,
-+}
-+
-+macro_rules! impl_tuple_zeroable {
-+    ($(,)?) =3D> {};
-+    ($first:ident, $($t:ident),* $(,)?) =3D> {
-+        // SAFETY: All elements are zeroable and padding can be zero.
-+        unsafe impl<$first: Zeroable, $($t: Zeroable),*> Zeroable for ($fi=
-rst, $($t),*) {}
-+        impl_tuple_zeroable!($($t),* ,);
-+    }
-+}
-+
-+impl_tuple_zeroable!(A, B, C, D, E, F, G, H, I, J);
++pub use super::init::{InPlaceInit, Init, PinInit};
 --
 2.39.2
 
