@@ -2,278 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE106D7F05
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DDC6D7F0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238082AbjDEORe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
+        id S238398AbjDEOSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237960AbjDEORc (ORCPT
+        with ESMTP id S237646AbjDEOSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:17:32 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B8D30D4;
-        Wed,  5 Apr 2023 07:17:05 -0700 (PDT)
-Received: from smtp2.mailbox.org (unknown [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Ps6Bz417pz9swV;
-        Wed,  5 Apr 2023 16:16:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1680704219;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=htf8oY2zN7s7CfrqPK2E7qq9nCDox7EcEQCOC7zPblM=;
-        b=oPXG/K/tZgTDFSP/g0ZugToiYl5HYUl3zcKwXKzYU1kfwJbWHZUitMq/vnh9r+IyfUE48J
-        7q9JOaHrEy160Wiiq8uS7ISfMYjz0twXnwxWR16oQ0p3xfMXXGHRkq5hFeRGsTBQph30X8
-        TKUffrcpIBoGi8VsnO/JhyXYeJEK8sbvRP82DALC7Qjq+QRSTFSI1lEIRLFohQjD5jmJlz
-        EULZizrCQXUkkGDhVdEuJdNUv5dHJjFIpVF+9XzFI1VRhGtvLrfKSSM298U+sRJbbTS0kd
-        z65gnNeNYc4qoBxDRYlpL+PpCEEF8QOVFXCKqayWZzIBq04s5IJ4J3V2QEznUQ==
-Date:   Wed, 5 Apr 2023 16:16:59 +0200 (CEST)
-From:   torvic9@mailbox.org
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Message-ID: <2126933783.670264.1680704219146@office.mailbox.org>
-In-Reply-To: <914630853.739773.1680701145159@office.mailbox.org>
-References: <1de9eccd-8570-3b69-4be2-347e862bcc33@mailbox.org>
- <CAK7LNATY8PvkDesOBQxLw11t1-OT9EsrNHekjAeOjLDhwPcP8w@mail.gmail.com>
- <914630853.739773.1680701145159@office.mailbox.org>
-Subject: Re: [Question] Restore previous "local tag" behaviour
+        Wed, 5 Apr 2023 10:18:12 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A216F5FE8;
+        Wed,  5 Apr 2023 07:17:48 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id ew6so141374835edb.7;
+        Wed, 05 Apr 2023 07:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680704266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gimnYVeRT5Ual27rDuwguD8QOIPyBqLLZeCy9UtpDHk=;
+        b=i7Lwf1d+h99qQcQRPi1brnjQQkNsqbi82jDBwp2udTnqAeJTWtBLGDIA01yNQL6row
+         ZgAoRWmGc+pF1uK7WnxxeRSty5vZbEXha74ihCXAp2M2hQWG3h4MQXSDq83PmjITTlEY
+         1TEsdgXlIIHXegoxT+tvvL144fO9uavFxIsYm4xR+oWaHG/67Mbe3vXI2VQIx6RTBLau
+         SUT61wOC+HjiaqVLtSkcGmdHyZ7effqqHEvmQaoyQ8ziHXviInyJiv5WpPRW5492RHM9
+         tJ8EeAt4z9bcihE2b48t8jL5ajgHXKDZvGizKjCBFNbS9COTmew+128z7S+VL4vkDCxO
+         yPrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680704266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gimnYVeRT5Ual27rDuwguD8QOIPyBqLLZeCy9UtpDHk=;
+        b=CRzLy1uA4IQJFXBY20GEAR5uz1SlSBHhMivRJEwE298xyjo8VpL5dLa7hxj37YTz9E
+         s9fBn3Okh0fKj0g/kpEhMjsr4UbBjQBky/ug3/Up5NrfYRs87TNxztxuHHiSxdjGWENR
+         N6c3NHhrimh7vN3L03C3YeK0vXYA2y/fzPjtJHLkyBpmLxPvECPas9uZKFpQFFkD0ATQ
+         eQoqP2KRIDr7Rljskcf8NNf/4WTM1yIwpYgqd37hgHWnc/p+P7VJ48EOpni1P4x3W9Em
+         DT/AaXxNBNHYo7LXgcBbUzyXtjLOQeQ6RyXXiyze7rgqKXXVw8Znh+0a2S2gREZ9dUKM
+         b/NQ==
+X-Gm-Message-State: AAQBX9cRZ0CaVookE/iJPN5ifNeTXjrnJbOE/oOikY18u+l4V9R9w+0b
+        W7J0B2msYCA2VuTmn7dUsZ8hCzaWMqCRhM2R
+X-Google-Smtp-Source: AKy350ZLwW17aF+39vghcTuhCDYFbM0+I7GCNro7zTtnC9fuZakgWqGvzxqPQ4Er/diScFgX88yB5w==
+X-Received: by 2002:a17:907:5c7:b0:928:796d:71e8 with SMTP id wg7-20020a17090705c700b00928796d71e8mr3874454ejb.3.1680704265983;
+        Wed, 05 Apr 2023 07:17:45 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id g6-20020a170906348600b009334219656dsm7381246ejb.56.2023.04.05.07.17.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 07:17:45 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>
+Subject: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
+Date:   Wed,  5 Apr 2023 16:17:05 +0200
+Message-Id: <20230405141710.3551-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Priority: 3
-Importance: Normal
-X-MBO-RS-ID: b4b5770ff6d9110ed7b
-X-MBO-RS-META: 6gdifqewmau31sxkybzje61rp4fscdif
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add generic and target specific support for local{,64}_try_cmpxchg
+and wire up support for all targets that use local_t infrastructure.
 
-> torvic9@mailbox.org hat am 05.04.2023 13:25 GMT geschrieben:
->=20
-> =20
-> > Masahiro Yamada <masahiroy@kernel.org> hat am 01.04.2023 06:22 GMT gesc=
-hrieben:
-> >=20
-> > =20
-> > On Tue, Mar 28, 2023 at 2:44=E2=80=AFAM Tor Vic <torvic9@mailbox.org> w=
-rote:
-> > >
-> > > Hi,
-> > >
-> > > When I'm building my kernels, I used to tag my personal releases with=
- a
-> > > similar annotated tag commit as with vanilla kernel, just appending
-> > > "-tv" or similar to it, i.e. "v6.3-rc4" becomes "v6.3-rc4-tv".
-> >=20
-> > I do not understand what you want to achieve.
-> >=20
-> >=20
-> >=20
-> > Let's say you wanted to release "v6.0-rc4-tv",
-> > which consists of v6.0-rc4 with 331 extra commits.
-> >=20
-> >=20
-> > $ git checkout  v6.0-rc5^
-> > HEAD is now at 4ed9c1e971b1 Merge tag 'kbuild-fixes-v6.0-2' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
-> > $ git describe
-> > v6.0-rc4-331-g4ed9c1e971b1
-> > $ make kernelrelease
-> > 6.0.0-rc4-00331-g4ed9c1e971b1
-> >=20
-> >=20
-> > Then, you released it as "v6.0-rc4-tv".
-> >=20
-> > $ git tag -a v6.0-rc4-tv -m "Linux v6.0-rc4-tv"
-> > $ make kernelrelease
-> > 6.0.0-rc4
-> >=20
-> >=20
-> > Then, kernelrelease becomes clean '6.0.0-rc4'.
-> > Is this what you want?
-> >=20
-> > It is apparently wrong since there are
-> > 331 commits between v6.0-rc4 and v6.0-rc4-tv.
-> >=20
-> > That is what 6ab7e1f95e96 _fixed_.
-> >=20
-> >=20
-> > The behavior is now clearer and correct.
-> >=20
-> > $ git describe
-> > v6.3-rc4-174-g2bac7dc169af
-> > $ git tag  -a v6.3-rc4-tv  -m "Linux v6.3-rc4-tv"
-> > $ make kernelrelease
-> > 6.3.0-rc4-00174-g2bac7dc169af
-> >=20
-> >=20
-> > If you wanted to make a "-tv" release,
-> > you would want to change the version field in Makefile
-> > before tagging.
-> >=20
-> >=20
-> >  diff --git a/Makefile b/Makefile
-> >  index da2586d4c728..8639036f5095 100644
-> >  --- a/Makefile
-> >  +++ b/Makefile
-> >  @@ -2,7 +2,7 @@
-> >   VERSION =3D 6
-> >   PATCHLEVEL =3D 3
-> >   SUBLEVEL =3D 0
-> >  -EXTRAVERSION =3D -rc4
-> >  +EXTRAVERSION =3D -rc4-tv
-> >   NAME =3D Hurr durr I'ma ninja sloth
-> >=20
-> >   # *DOCUMENTATION*
-> >=20
-> >=20
-> >=20
-> > Then, kernelrelease shows it is a "-tv" release.
-> >=20
-> > $ make kernelrelease
-> > 6.3.0-rc4-tv
-> >=20
->=20
-> Hi,
->=20
-> sorry for the late reply, and my explanation was not very clear indeed.
-> The above suggestion is what I'm looking for, but without modifying the s=
-ource.
->=20
-> Let me try to give an example:
->=20
-> 1. In sourcedir; source is at a tagged release:
->     $ git describe HEAD
->     v6.3-rc5-tv
->=20
-> 2. Copy the kernel config which has LOCALVERSION_AUTO=3Dy and LOCALVERSIO=
-N=3D"":
->     $ cp /path/to/config ./config
->=20
-> 3. Run oldconfig:
->     $ make oldconfig
->=20
-> 4. Run kernelrelease:
->     $ make -s kernelrelease
->     6.3.0-rc5-0071-g0f69b90f
->=20
-> Expected: 6.3-rc5-tv (or maybe 6.3.0-rc5-tv?).
->=20
-> I tried adding the exact tag to the 'localversion' file, but then I get t=
-his
-> concatenated string:
->     6.3.0-rc5v6.3-rc5-tv
-> And only adding "-tv" I at least get something better:
->     6.3.0-rc5-tv-0071-g0f69b90f
->=20
-> I do agree that the new behaviour is more correct, I'm just trying to fin=
-d a clean way
-> to have my tag as kernel version for "releases".
-> If there is no other way, then I'm going to use your suggestion of changi=
-ng Makefile,
-> which I assume can be done with a simple sed command.
->=20
-> Sorry I'm confused in a very "noob" way....
->=20
-> Cheers,
-> Tor Vic
->=20
->
+The patch enables x86 targets to emit special instruction for
+local_try_cmpxchg and also local64_try_cmpxchg for x86_64.
 
-Hi again,
+The last patch changes __perf_output_begin in events/ring_buffer
+to use new locking primitive and improves code from
 
-You don't need to reply.
+     4b3:	48 8b 82 e8 00 00 00 	mov    0xe8(%rdx),%rax
+     4ba:	48 8b b8 08 04 00 00 	mov    0x408(%rax),%rdi
+     4c1:	8b 42 1c             	mov    0x1c(%rdx),%eax
+     4c4:	48 8b 4a 28          	mov    0x28(%rdx),%rcx
+     4c8:	85 c0                	test   %eax,%eax
+     ...
+     4ef:	48 89 c8             	mov    %rcx,%rax
+     4f2:	48 0f b1 7a 28       	cmpxchg %rdi,0x28(%rdx)
+     4f7:	48 39 c1             	cmp    %rax,%rcx
+     4fa:	75 b7                	jne    4b3 <...>
 
-I've decided to change my build script according to your suggestion of usin=
-g
-EXTRAVERSION in Makefile, which seems to be the easiest and cleanest way of=
- getting
-the desired result.
+to
 
-Thanks for your help!
-=20
-> >=20
-> >=20
-> >=20
-> >=20
-> >=20
-> >=20
-> > > This has worked just fine so far, but...
-> > >
-> > > Since commit 6ab7e1f95e96f0c688ae132b0e9a16c0f206689d ("setlocalversi=
-on:
-> > > use only the correct release tag for git-describe"), this is not take=
-n
-> > > into account anymore, it uses the "git describe" tag instead of using
-> > > the actually tagged commit as "kernelrelease".
-> > >
-> > > Is there a way to restore the previous behaviour without having to
-> > > revert this (and preceding) commits?
-> > >
-> > > I know that we can disable CONFIG_LOCALVERSION_AUTO=3Dy and append
-> > > directly to CONFIG_LOCALVERSION, but maybe someone knows how to use t=
-he
-> > > "old" way of using tags...?
-> > >
-> > > In other words, when I have a local tag, I want "kernelrelease" to us=
-e
-> > > just that tag, and when I don't tag anything, it should just use the
-> > > standard "git describe" tag.
-> >=20
-> >=20
-> > Again, I do not understand.
-> >=20
-> > git tag is not stable information.
-> >=20
-> > If you call it "a release",
-> > you would want to work in the same way with/without git
-> > even if most kernel developers are working in a git tree.
-> >=20
-> >=20
-> > The mainline kernel, stable-kernel, linux-next are
-> > released in https://kernel.org/
-> > (and GitHub allows users to download a tarball of
-> > a tagged commit.)
-> >=20
-> >=20
-> > A released tarball (of course, there is no tag there),
-> > produces the same kernelrelease as the git tree does.
-> >=20
-> > You are requiring the kernelrelease be different
-> > with/without the *-tv tag.
-> > That is not what the release would look like.
-> >=20
-> > The mainline kernel and stable kernel increment
-> > the version field in Makefile.
-> > linux-next has "localversion-next" at the top of the tree.
-> >=20
-> >=20
-> >=20
-> >=20
-> >=20
-> >=20
-> > > For the moment I have just reverted the related commits as they don't
-> > > serve any purpose for my needs.
-> > >
-> > > Cheers,
-> > >
-> > > Tor Vic
-> >=20
-> >=20
-> >=20
-> > --=20
-> > Best Regards
-> > Masahiro Yamada
+     4b2:	48 8b 4a 28          	mov    0x28(%rdx),%rcx
+     4b6:	48 8b 82 e8 00 00 00 	mov    0xe8(%rdx),%rax
+     4bd:	48 8b b0 08 04 00 00 	mov    0x408(%rax),%rsi
+     4c4:	8b 42 1c             	mov    0x1c(%rdx),%eax
+     4c7:	85 c0                	test   %eax,%eax
+     ...
+     4d4:	48 89 c8             	mov    %rcx,%rax
+     4d7:	48 0f b1 72 28       	cmpxchg %rsi,0x28(%rdx)
+     4dc:	0f 85 d0 00 00 00    	jne    5b2 <...>
+     ...
+     5b2:	48 89 c1             	mov    %rax,%rcx
+     5b5:	e9 fc fe ff ff       	jmp    4b6 <...>
+
+Please note that in addition to removed compare, the load from
+0x28(%rdx) gets moved out of the loop and the code is rearranged
+according to likely/unlikely tags in the source.
+---
+v2:
+
+Implement target specific support for local_try_cmpxchg and
+local_cmpxchg using typed C wrappers that call their _local
+counterpart and provide additional checking of their input
+arguments.
+
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Jun Yi <yijun@loongson.cn>
+
+Uros Bizjak (5):
+  locking/atomic: Add generic try_cmpxchg{,64}_local support
+  locking/generic: Wire up local{,64}_try_cmpxchg
+  locking/arch: Wire up local_try_cmpxchg
+  locking/x86: Define arch_try_cmpxchg_local
+  events: Illustrate the transition to local{,64}_try_cmpxchg
+
+ arch/alpha/include/asm/local.h              | 12 +++++++++--
+ arch/loongarch/include/asm/local.h          | 13 +++++++++--
+ arch/mips/include/asm/local.h               | 13 +++++++++--
+ arch/powerpc/include/asm/local.h            | 11 ++++++++++
+ arch/x86/events/core.c                      |  9 ++++----
+ arch/x86/include/asm/cmpxchg.h              |  6 ++++++
+ arch/x86/include/asm/local.h                | 13 +++++++++--
+ include/asm-generic/local.h                 |  1 +
+ include/asm-generic/local64.h               | 12 ++++++++++-
+ include/linux/atomic/atomic-arch-fallback.h | 24 ++++++++++++++++++++-
+ include/linux/atomic/atomic-instrumented.h  | 20 ++++++++++++++++-
+ kernel/events/ring_buffer.c                 |  5 +++--
+ scripts/atomic/gen-atomic-fallback.sh       |  4 ++++
+ scripts/atomic/gen-atomic-instrumented.sh   |  2 +-
+ 14 files changed, 126 insertions(+), 19 deletions(-)
+
+-- 
+2.39.2
+
