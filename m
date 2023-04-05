@@ -2,102 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5B66D7B83
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6049D6D7B85
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 13:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237413AbjDELig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 07:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
+        id S237607AbjDELjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 07:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237224AbjDELie (ORCPT
+        with ESMTP id S237539AbjDELjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 07:38:34 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB3B3A9F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 04:38:32 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id t14so36985007ljd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 04:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680694711;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=378I/gGZlt8XUX5v0VEtIxxbJng/T1aUDlAEzlMMcMo=;
-        b=K+TH1p9OQZgmI9dQubTs+egT3pRWY+Lpl3EeU1AX7BLJkeIuKwuvuMT2EgjyLdn46r
-         MTssKlRaFBhVvVhW830j/MP4QWs6SiY3mSu+FXq+KA2OXXTdmCE6cIeoFAHmqqgYHOVq
-         Kh+dVIMN2QEmtWiZtqRe17Qr1sjWCyUCsK8n7PusEQ5iBOo35a9SSA76SXWsz9lgopJg
-         M0J6UrwhPs0bm+hMRezXpugxb4c0IcaODV49ZUde3/Ay11jybapgYXfIJo1ceLLLyN5m
-         XbIYWIMhFOKkUroEcaSMRAj+rxcBwPnypjslHTR/V6x9nA0E//q00u+FAemPppbXDzLb
-         rC+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680694711;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=378I/gGZlt8XUX5v0VEtIxxbJng/T1aUDlAEzlMMcMo=;
-        b=kIKIdt7iuQtNQD5jPL5lnnzezYSWpqHG2JGfXgYfQVIJ+ZH0HlUi4UMnN2+l6daQKL
-         KrUGiXvbz1x03srh6bsGpltzpT9ATzadmYy0zRkR7qJhvefgDx+UhowaLdZDOGEcihVP
-         8k9+suvnscXXH+6WWSEdduvBnTOkRVk6bu0FW/EVyUPg11iTpaSf3pIMxNUkGGiPvTkY
-         3bs15Z9QvpPsrfm6rMJ5bEAMzPlRBYKptEgZYRvK60ddmgdK9atS5jhOcBpkFRMpPtK3
-         Javay4N9VReykda9aU8pu5q1vqtTqDW+pFNsjvof6O1NqHHBBDPSxZT7UcyUcL0M9cjI
-         hRQQ==
-X-Gm-Message-State: AAQBX9eN//m894y68kl739ZX6yMnLhDJRHgrwoE1K3lk9YMOQwx0dEp8
-        r6j9hRiXVymW8kRVJbGIhLvoSg==
-X-Google-Smtp-Source: AKy350aShuFWZOnsO9uiMPtmd4KhuD0q/HPao2SXlOdTQ2JBpssmhXtALI05z1DLB358PL1P//dxeg==
-X-Received: by 2002:a2e:3812:0:b0:29c:d6f6:8c4 with SMTP id f18-20020a2e3812000000b0029cd6f608c4mr1680050lja.16.1680694710858;
-        Wed, 05 Apr 2023 04:38:30 -0700 (PDT)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id l15-20020a2e700f000000b002a2d7a460f2sm2806492ljc.116.2023.04.05.04.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 04:38:30 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        Vinod Polimera <quic_vpolimer@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
-        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
-Subject: Re: [PATCH v1 0/3] Fixes for PSR
-Date:   Wed,  5 Apr 2023 14:38:29 +0300
-Message-Id: <168069464072.1851814.16480389656681286482.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1680271114-1534-1-git-send-email-quic_vpolimer@quicinc.com>
-References: <1680271114-1534-1-git-send-email-quic_vpolimer@quicinc.com>
+        Wed, 5 Apr 2023 07:39:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DE54203;
+        Wed,  5 Apr 2023 04:39:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F156233F;
+        Wed,  5 Apr 2023 11:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62CBC433EF;
+        Wed,  5 Apr 2023 11:39:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680694740;
+        bh=Ac8wTw9RR/85DVjXUxxvaiBRTiHVdB/k4QsbhkKgWLM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JIqe1gT4vcZIjvsLtoiJSi7tp746yDBu8/mBlP7hSvfcy6MiuGPFRFV6I6sGvAcqY
+         XtsGkzf23WgZfFcc5+tYHRwqD7PmCkFKK66bhRC9NV7yETzLjwFoX8mszseSHlHiEN
+         Z7SyhqCLWzqji4K5cPC14ShD5XRljk/DznftXq1oszUh7/Igqt/DQk8+UJjnqsmdsr
+         asjOUvsKkgudJc5SeChHwKi3d8WqhlE7rCo6/E6+w5joroS2iYKklD23zo1WeI9sNo
+         cH/VyU/2rANX8tas5/ILiklfubyKhrBbrjR/AfxJRhBSVNGvQ43gbNvyWji9l/ftCi
+         BDvz5roOGy2Uw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pk1UB-00059d-BR; Wed, 05 Apr 2023 13:39:31 +0200
+Date:   Wed, 5 Apr 2023 13:39:31 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     gregkh@linuxfoundation.org, nathan@kernel.org,
+        ndesaulniers@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] USB: serial: quatech2: remove unused qt2_setdevice
+ function
+Message-ID: <ZC1d850dwMjggbzo@hovoldconsulting.com>
+References: <20230321181255.1825963-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321181255.1825963-1-trix@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 31 Mar 2023 19:28:31 +0530, Vinod Polimera wrote:
-> while in virtual terminal with PSR enabled, there will be
-> no atomic commits triggered resulting in no screen update.
-> Update the dirtyfb flag into plane state during atomic check
-> to flush the pixel data explicitly.
+On Tue, Mar 21, 2023 at 02:12:55PM -0400, Tom Rix wrote:
+> clang with W=1 reports
+> drivers/usb/serial/quatech2.c:179:19: error: unused function
+>   'qt2_setdevice' [-Werror,-Wunused-function]
+> static inline int qt2_setdevice(struct usb_device *dev, u8 *data)
+>                   ^
+> This function is not used, so remove it.
 > 
-> Avoid scheduling PSR commits from different work queues while
-> running in PSR mode already.
-> 
-> [...]
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Applied, thanks!
+Now applied, thanks.
 
-[1/3] drm/msm/dpu: set dirty_fb flag while in self refresh mode
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/ddf5387d1fb7
-[2/3] msm/disp/dpu: allow atomic_check in PSR usecase
-      https://gitlab.freedesktop.org/lumag/msm/-/commit/86c56ba51aec
-
-Note, patch 3, which solves a different issue (and which requires additional changes) was not applied.
-
-Best regards,
--- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Johan
