@@ -2,96 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E4F6D7E53
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AE06D7E20
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238160AbjDEOBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
+        id S237833AbjDENye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237860AbjDEOAz (ORCPT
+        with ESMTP id S237446AbjDENyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:00:55 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45F5525D;
-        Wed,  5 Apr 2023 07:00:47 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 5d14c08f8e88d672; Wed, 5 Apr 2023 16:00:46 +0200
-Received: from kreacher.localnet (unknown [213.134.163.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 911C91B4EA5B;
-        Wed,  5 Apr 2023 16:00:45 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>,
-        Kees Cook <kees@outflux.net>
-Subject: [PATCH 26/32] ACPICA: acpi_pci_routing_table: Replace fixed-size array with flex array member
-Date:   Wed, 05 Apr 2023 15:54:25 +0200
-Message-ID: <2656292.X9hSmTKtgW@kreacher>
-In-Reply-To: <4845957.31r3eYUQgx@kreacher>
-References: <4845957.31r3eYUQgx@kreacher>
+        Wed, 5 Apr 2023 09:54:33 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537E113E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:54:31 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id b20so141295057edd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 06:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680702869;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p8Iuh0IiFYm20OyO5pxZvbSOFVNhaWvAY5Q417BYDls=;
+        b=K69pvH4Wpx6N/Hgu8hVF4CdTepkKmSgss1zM6Ey7r2QZLEN5VnIJjnRfwQcMBo4M8a
+         ESdH4tDXaqEKob6suZP1XrG3sKFfNieood23du/yUgy8x3fmZtaMDdRhMmtVP/5cTc05
+         xJWv0ng+LbAflGcF7ve7Xn9r+nYdZK9yuxy/I/4jlk2A359uwykvWw2v1elLxy9CORsW
+         D/knuLne8tSJo2j+ape+Oq7EvQFeTPGkK8FJ3iXiz38WXRqpUAkrAPnw+CwqupysoXSO
+         X4EPdKIDGhD/YQ8UWQul2zmShAvXxsKieW+J+oUWAO/6VjEQwv4ca7ctgi9Q9WpHNsca
+         irow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680702869;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p8Iuh0IiFYm20OyO5pxZvbSOFVNhaWvAY5Q417BYDls=;
+        b=4rhZ8Z/7h6VPAi/hNhjqK0M25WnVg7ELXu1dQghaWtWzZYqenzrVfn19WRx7xN/rLi
+         7CIXr4LLuKrCBPQTqzGyqwtZ2b5ODiinktXFYTqOXkVEhMbUKbszTxl7xrIwog0a9HnZ
+         MwO5Yy1yAN6UT+RsiG1HlgL2XqA3FZ8qseG/bY5qU6p/q+nA3vK8tgIEmRFB2FR6qkSy
+         phIyifzFV3/NeFJsKbxBChOgMKVtJmN7xOW6x5nUCVUCNiGDAZUHUdFw1Ldb5nZfI+Yv
+         +PEHLd8Yimv6zabDDJCPhOJiGEM4Kp8yLX0UV4NrjrxcQR+2ULbS56IsDfj73vmkW+GX
+         fmsA==
+X-Gm-Message-State: AAQBX9eaIERDao19qSIMgTNK31VXoDIGzdic6yemkLsiueFI+qKf1IRo
+        f2lbpUs2li3NCMTO1F6Tn2eC2g==
+X-Google-Smtp-Source: AKy350bPfXexYPtEgp8ZhWsektOp/hbKdkXu4xztIT8ip6Kd356UsKREg/wRh9RqozjJsoOo2LhMYw==
+X-Received: by 2002:a17:906:4e59:b0:930:fe49:5383 with SMTP id g25-20020a1709064e5900b00930fe495383mr2870387ejw.76.1680702869311;
+        Wed, 05 Apr 2023 06:54:29 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:3f:6b2:54cd:498e? ([2a02:810d:15c0:828:3f:6b2:54cd:498e])
+        by smtp.gmail.com with ESMTPSA id xd2-20020a170907078200b0094809142160sm5948567ejb.55.2023.04.05.06.54.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 06:54:28 -0700 (PDT)
+Message-ID: <2b238291-8939-cd52-2169-db217bb9fe04@linaro.org>
+Date:   Wed, 5 Apr 2023 15:54:27 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.219
-X-CLIENT-HOSTNAME: 213.134.163.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhgvvghssehouhht
- fhhluhigrdhnvght
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 00/10] Add IOMMU support to MT8365 SoC
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Yong Wu <yong.wu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230207-iommu-support-v2-0-60d5fa00e4e5@baylibre.com>
+ <00a0d832-9a0b-6160-31eb-30d2e9c32c79@linaro.org>
+ <3c51a5d3-8d76-9d8e-7cbe-6a2a1776b360@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3c51a5d3-8d76-9d8e-7cbe-6a2a1776b360@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <kees@outflux.net>
+On 05/04/2023 15:13, Alexandre Mergnat wrote:
+> 
+> On 05/04/2023 13:43, Krzysztof Kozlowski wrote:
+>> On 05/04/2023 10:06, Alexandre Mergnat wrote:
+>>> This commits are based on the Fabien Parent <fparent@baylibre.com> work.
+>>>
+>>> The purpose of this series is to add the following HWs / IPs support for
+>>> the MT8365 SoC:
+>>> - System Power Manager
+>>> - MultiMedia Memory Management Unit "M4U" (IOMMU)
+>>>    - Smart Multimedia Interface "SMI"
+>>>      - Local arbiter "LARB"
+>>>
+>>> This series depends to two others which add power support for MT8365 SoC
+>>> [1] [2].
+>> So does it mean they cannot be merged? On first glance I do not see the
+>> dependency, so I wonder if we understand the dependencies the same. And
+>> subsystems.
+> Exactly, we shouldn't merge it before the dependent series to don't ]
+> break the build due to
+> "#include <dt-bindings/power/mediatek,mt8365-power.h>" in the DTSI file.
+> Additionally, LARB will not work properly (or at all) without the power 
+> support.
 
-ACPICA commit f4a3afd78c28dede0907f47951f0b73c9a776d4e
-
-The "Source" array is actually a dynamically sized array, but it
-is defined as a fixed-size 4 byte array. This results in tripping
-both compile-time and run-time bounds checkers (e.g. via either
-__builtin_object_size() or -fsanitize=bounds).
-
-To retain the padding, create a union with an unused Pad variable of
-size 4, and redefine Source as a proper flexible array member.
-
-No binary changes appear in the .text nor .data sections.
-
-Link: https://github.com/acpica/acpica/commit/f4a3afd7
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/acpi/acrestyp.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/acpi/acrestyp.h b/include/acpi/acrestyp.h
-index 52e82d65016b..4c3b7b393f82 100644
---- a/include/acpi/acrestyp.h
-+++ b/include/acpi/acrestyp.h
-@@ -693,7 +693,10 @@ struct acpi_pci_routing_table {
- 	u32 pin;
- 	u64 address;		/* here for 64-bit alignment */
- 	u32 source_index;
--	char source[4];		/* pad to 64 bits so sizeof() works in all cases */
-+	union {
-+		char pad[4];	/* pad to 64 bits so sizeof() works in all cases */
-+		ACPI_FLEX_ARRAY(char, source);
-+	};
- };
- 
- #endif				/* __ACRESTYP_H__ */
--- 
-2.35.3
+And how driver is related to it? If it is, you might have some unusual
+coupling between power and memory controller driver.
 
 
-
-
+Best regards,
+Krzysztof
 
