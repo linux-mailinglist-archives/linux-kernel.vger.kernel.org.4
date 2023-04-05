@@ -2,136 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213866D88B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AC46D88B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjDEUfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S230078AbjDEUhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbjDEUfO (ORCPT
+        with ESMTP id S229507AbjDEUhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:35:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702E16A72;
-        Wed,  5 Apr 2023 13:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=YNsOcxvyBsREks0tqN6x4wPg4m3MWZPixrfEIPIhg1U=; b=gfUuvSKg4yYImkFYNGmsyBbM9/
-        98+9D7ZfdVo5oy0g+qCsN+zRZAdeIcw42D6VL+3B4EETojpzrqXxf2fPwN5IrpuXCzNsChVc8ePOW
-        bzq20BGd/mVGhBbLILr3CvX48WxYtJL9sRJ3Oe1bzyk6981tRGzBPh8znM++Pop3RGrpUwwgqpGNi
-        hczxpBcuxOjTfJsezWUl6mrDXv6j4w6WsSccnsoXFIJ7rVVSqVCKi1gjncinIWeBtXqnM8IMFIUvz
-        5B5Z79iMSHvBm3Ns+7ZzHWRzMhw7m440onLHSzpBwnCLi0BRl520qUOiTOIWiYocYXHd/dnrb5ALb
-        yTVa8mag==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pk9qT-005dWc-2p;
-        Wed, 05 Apr 2023 20:35:05 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     david@redhat.com, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org
-Cc:     christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, mcgrof@kernel.org
-Subject: [PATCH v2 2/2] modules/kmod: replace implementation with a sempahore
-Date:   Wed,  5 Apr 2023 13:35:05 -0700
-Message-Id: <20230405203505.1343562-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230405203505.1343562-1-mcgrof@kernel.org>
-References: <20230405203505.1343562-1-mcgrof@kernel.org>
+        Wed, 5 Apr 2023 16:37:46 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EA2B7
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1680727062;
+        bh=GCrzLfmJ/YJUNa83ehp8ndG+hkTWNE4OACr1TV4rtoY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QmiMEc5b1ZgBoogiU4cD52fR2VejOD73M7FvlJs9/POq5OW2tdZkbujYPS0VJVv+Q
+         lfrdQiTGcZ+Bnu6wfjHMtZVdrw3nqZ2DnLJ/IQPKXyOuW6hqS+KmhWWIF64+iSLFLO
+         TA2hwZhbIB/+YbwV9818WLS8b0pIEHadRpYxy+5zeL4G+ValGMzG9zOnaFgCRlOYsi
+         uqeLqceMin1sh/bDhwmUd26gwgLmVIOVbfHg11T4pV6ZXYirDO8PgixLS8i3MiMht9
+         PMvj2WcKOAK5BdkjOyQ8OA94hfAv4tBAgQaA6C5svnYjmtxRuj39qyzciQtfwtrZdh
+         PZRytQFYk5A8w==
+Received: from [10.1.0.206] (unknown [192.222.195.223])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4PsGfG4h1jzv1M;
+        Wed,  5 Apr 2023 16:37:42 -0400 (EDT)
+Message-ID: <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
+Date:   Wed, 5 Apr 2023 16:37:42 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
+ mm_cid
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
+References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplfy the concurrency delimiter we user for kmod with the semaphore.
-I had used the kmod strategy to try to implement a similar concurrency
-delimiter for the kernel_read*() calls from the finit_module() path
-so to reduce vmalloc() memory pressure. That effort didn't provid yet
-conclusive results, but one thing that did became clear is we can use
-the suggested alternative solution with semaphores which Linus hinted
-at instead of using the atomic / wait strategy.
+On 2023-04-05 12:26, Mathieu Desnoyers wrote:
+[...]
+>   #ifdef CONFIG_SCHED_MM_CID
+> +/*
+> + * Migration from src cpu. Called from set_task_cpu(). There are no guarantees
+> + * that the rq lock is held.
+> + */
+> +void sched_mm_cid_migrate_from(struct task_struct *t)
+> +{
+> +	int src_cid, *src_pcpu_cid, last_mm_cid;
+> +	struct mm_struct *mm = t->mm;
+> +	struct rq *src_rq;
+> +	struct task_struct *src_task;
+> +
+> +	if (!mm)
+> +		return;
+> +
+> +	last_mm_cid = t->last_mm_cid;
+> +	/*
+> +	 * If the migrated task has no last cid, or if the current
+> +	 * task on src rq uses the cid, it means the destination cpu
+> +	 * does not have to reallocate its cid to keep the cid allocation
+> +	 * compact.
+> +	 */
+> +	if (last_mm_cid == -1)
+> +		return;
+> +
+> +	src_rq = task_rq(t);
+> +	src_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu_of(src_rq));
+> +	src_cid = READ_ONCE(*src_pcpu_cid);
+> +
+> +	if (!mm_cid_is_valid(src_cid) || last_mm_cid != src_cid)
+> +		return;
+> +
+> +	/*
+> +	 * If we observe an active task using the mm on this rq, it means we
+> +	 * are not the last task to be migrated from this cpu for this mm, so
+> +	 * there is no need to clear the src_cid.
+> +	 */
+> +	rcu_read_lock();
+> +	src_task = rcu_dereference(src_rq->curr);
+> +	if (src_task->mm_cid_active && src_task->mm == mm) {
+> +		rcu_read_unlock();
+> +		t->last_mm_cid = -1;
+> +		return;
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	/*
+> +	 * If the source cpu cid is set, and matches the last cid of the
+> +	 * migrated task, clear the source cpu cid to keep cid allocation
+> +	 * compact to cover the case where this task is the last task using
+> +	 * this mm on the source cpu. If there happens to be other tasks left
+> +	 * on the source cpu using this mm, the next task using this mm will
+> +	 * reallocate its cid on context switch.
+> +	 *
+> +	 * We cannot keep ownership of concurrency ID without runqueue
+> +	 * lock held when it is not used by a current task, because it
+> +	 * would lead to allocation of more concurrency ids than there
+> +	 * are possible cpus in the system. The last_mm_cid is used as
+> +	 * a hint to conditionally unset the dst cpu cid, keeping
+> +	 * allocated concurrency ids compact.
+> +	 */
+> +	if (cmpxchg(src_pcpu_cid, src_cid, mm_cid_set_lazy_put(src_cid)) != src_cid)
+> +		return;
+> +
+> +	/*
+> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
+> +	 * rq->curr->mm matches the scheduler barrier in context_switch()
+> +	 * between store to rq->curr and load of prev and next task's
+> +	 * per-mm/cpu cid.
 
-I've stress tested this with kmod test 0008:
+Thinking about it further, I suspect the transition:
 
-time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
+          *   user -> kernel   lazy + mmgrab() active
 
-And I get only a *slight* delay. That delay however is small, a few
-seconds for a full test loop run that runs 150 times, for about ~30-40
-seconds. The small delay is worth the simplfication IMHO.
+in context_switch() lacks a memory barrier we need here (it's only an
+atomic_inc with mmgrab()).
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- kernel/module/kmod.c | 26 +++++++-------------------
- 1 file changed, 7 insertions(+), 19 deletions(-)
+The scenario is a transition from user to kernel thread happening 
+concurrently with migrate-from.
 
-diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
-index b717134ebe17..925eb85b8346 100644
---- a/kernel/module/kmod.c
-+++ b/kernel/module/kmod.c
-@@ -40,8 +40,7 @@
-  * effect. Systems like these are very unlikely if modules are enabled.
-  */
- #define MAX_KMOD_CONCURRENT 50
--static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
--static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
-+static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
- 
- /*
-  * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
-@@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
- 	if (ret)
- 		return ret;
- 
--	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
--		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
--				    atomic_read(&kmod_concurrent_max),
--				    MAX_KMOD_CONCURRENT, module_name);
--		ret = wait_event_killable_timeout(kmod_wq,
--						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
--						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
--		if (!ret) {
--			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
--					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
--			return -ETIME;
--		} else if (ret == -ERESTARTSYS) {
--			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
--			return ret;
--		}
-+	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
-+	if (ret) {
-+		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
-+				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
-+		return ret;
- 	}
- 
- 	trace_module_request(module_name, wait, _RET_IP_);
- 
- 	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
- 
--	atomic_inc(&kmod_concurrent_max);
--	wake_up(&kmod_wq);
-+	up(&kmod_concurrent_max);
- 
- 	return ret;
- }
+Because there is no memory barrier between set rq->curr to a value that
+has a NULL mm and loading per-mm/cpu cid value in mm_cid_put_lazy() for 
+the prev task, nothing guarantees that the following src_rq->curr rcu 
+dereference here will observe the store.
+
+Or am I missing something ?
+
+Thanks,
+
+Mathieu
+
+
+> +	 *
+> +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
+> +	 * rq->curr->mm_cid_active matches the barrier in
+> +	 * sched_mm_cid_exit_signals(), sched_mm_cid_before_execve(), and
+> +	 * sched_mm_cid_after_execve() between store to t->mm_cid_active and
+> +	 * load of per-mm/cpu cid.
+> +	 */
+> +
+> +	/*
+> +	 * If we observe an active task using the mm on this rq after setting the lazy-put
+> +	 * flag, this task will be responsible for transitioning from lazy-put
+> +	 * flag set to MM_CID_UNSET.
+> +	 */
+> +	rcu_read_lock();
+> +	src_task = rcu_dereference(src_rq->curr);
+> +	if (src_task->mm_cid_active && src_task->mm == mm) {
+> +		rcu_read_unlock();
+> +		/*
+> +		 * We observed an active task for this mm, clearing the destination
+> +		 * cpu mm_cid is not relevant for compactness.
+> +		 */
+> +		t->last_mm_cid = -1;
+> +		return;
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	/*
+> +	 * The src_cid is unused, so it can be unset.
+> +	 */
+> +	if (cmpxchg(src_pcpu_cid, mm_cid_set_lazy_put(src_cid), MM_CID_UNSET) != mm_cid_set_lazy_put(src_cid))
+> +		return;
+> +	__mm_cid_put(mm, src_cid);
+> +}
+
+
 -- 
-2.39.2
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
