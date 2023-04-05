@@ -2,108 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C48A6D76C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22D16D76C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbjDEIXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S237406AbjDEIYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237406AbjDEIXN (ORCPT
+        with ESMTP id S237166AbjDEIYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:23:13 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249061993;
-        Wed,  5 Apr 2023 01:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680682993; x=1712218993;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=r504Qe8P4MHFcScLYxteLcGwz6RXRu5O8J4JW4W87o0=;
-  b=GZNeTiga5r2eTOS0bd8C7vVVeaW35a8WZJIRmjYie+Jsbp0Vr4JYTETz
-   jBIAAyl7hmTsm12qkRSB3oUm2UvDaQq3yAqF516M2qhmaG97Sh9pQJqSK
-   MPfUCme3LKmHKOabQuZpMZFBaQy1olXoG4bOd9Ewkw3+lThPiKmV1Va7j
-   zgCXm1tavYdQcS2RL+0UzP9VVE/JvVmRA7CVvP9a8i1l0bz7zjMMlslt0
-   O+nXDMI/KTIbFT5FiOdwZ+jNAvTA+RVctL4mFjc7OF3Oi/lk/3hnHP2W9
-   vjJVVmEnnt1Dh/u9GXczydnUZb3oQAWyp26a9bykJaHJxdr4z7ZXxhDxv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="339892296"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="339892296"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:23:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="1016393497"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="1016393497"
-Received: from wtedesch-mobl1.ger.corp.intel.com ([10.252.53.134])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:23:11 -0700
-Date:   Wed, 5 Apr 2023 11:23:09 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "D. Starke" <daniel.starke@siemens.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/9] tty: n_gsm: fix unneeded initialization of ret in
- gsm_dlci_config
-In-Reply-To: <20230405054730.3850-4-daniel.starke@siemens.com>
-Message-ID: <2d67db22-3a5d-1ed7-cfa7-d549aa1475b@linux.intel.com>
-References: <20230405054730.3850-1-daniel.starke@siemens.com> <20230405054730.3850-4-daniel.starke@siemens.com>
+        Wed, 5 Apr 2023 04:24:04 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675711FEC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:24:02 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id kc4so33730660plb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 01:24:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680683042; x=1683275042;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=41kW5fOWjdzzcQ6HaiOHsjJFnjWCo4jg2HDR0g9ZrRI=;
+        b=hvPyGjTaqkAim64JERwI6jDwd9oKYUmwfQgATu2CpsI537P4wa8S+mWmEWztO9C3eX
+         JAe/OaQLF6YYFmLz1LRTezQVEnA/GMRRP5kceCwIMh2viFwSaa3jDgEAKApHahGmaXlH
+         cyjISWJ9FsPJH8IfMsSjzFW19Q1jrchas1W7nzk4H49B2qLkNMn9P6mpZsh5YrnfAozy
+         cBR9rXP9HrRwwOsANQGkdNTq1YcfxWkRcoLQqmciB46F+taAsGk0XyeNaud8Cl7CHpUv
+         1zGlTO+P79o9vwpMH5JbQkFUUIcnYhEILh0tf07JI52BLC+aPsdRvs77zNjjgZOHMlwM
+         7P0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680683042; x=1683275042;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=41kW5fOWjdzzcQ6HaiOHsjJFnjWCo4jg2HDR0g9ZrRI=;
+        b=mhp1UiadyBteBa2BvYuZGyLZQ6vPljABFH0x0w+uR6iexjp87XlUVLg3XtbbKSzWST
+         T8I2IjO32LbhghzCPIeELpN9N+hhQJS4MnSCQmaafvVaH3MMwACk1+9a1UYnt3H5xT1x
+         NGjcmrrqL+33zU23LE/Vse5xcHmWLvvWLbXwLMIz5lOXHPZpspwgyM1g8pMNlsx0MLvb
+         /L3A5nqGdmbHE/TchRHfuiNGldlakcft4r/RREVERZF5W51jLdaSQiAIKpYsj7jetEDE
+         yrPjrlSD65n3RWY3cVU4r8v0bz8UhJQOQyH/3yz1BSrZIFqg1bmYWmz7mFLzLa3oRCps
+         SdVA==
+X-Gm-Message-State: AAQBX9eY69jj9pDt3q7ReXFF6ssPg2zZYR5PpIuVkf3x7OA2d/vRMtKe
+        JhlAA8XASiMnSHSewIano/st0QfsWp2mJVpslIM=
+X-Google-Smtp-Source: AKy350Z57qv0on/viwWfb7uiYxg9JOqBDkixuNkHHVTrWsKTLutowT1MjPflmOF9tOi+cdt690427ULkg2WmcvwO8dk=
+X-Received: by 2002:a17:902:6bc1:b0:1a1:f70c:c800 with SMTP id
+ m1-20020a1709026bc100b001a1f70cc800mr2293985plt.8.1680683041767; Wed, 05 Apr
+ 2023 01:24:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:1119:b0:5f:a108:3ef7 with HTTP; Wed, 5 Apr 2023
+ 01:24:01 -0700 (PDT)
+Reply-To: maddahhussain10@yahoo.com
+From:   Maddah Hussain <abdwabbomaddah746@gmail.com>
+Date:   Wed, 5 Apr 2023 09:24:01 +0100
+Message-ID: <CAFC-3iemAZebeuFVSMMWXqy3ePePAsYnmkOWwVozdMZiAPz5+g@mail.gmail.com>
+Subject: Why No Response Yet?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Apr 2023, D. Starke wrote:
-
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> The variable 'ret' is not used before assignment from gsm_activate_mux().
-> Still it gets initialized to zero at declaration.
-> 
-> Fix this as remarked in the link below by removing the initialization.
-> 
-> Fixes: edd5f60c3400 ("tty: n_gsm: fix mux activation issues in gsm_config()")
-
-This doesn't "fix" any bug so Fixes tag seems inappropriate unless does it 
-fix a compiler warning (in which case you should quote the warning in 
-this changelog and state you're fixing this warning from compiler)?
-
-> Link: https://lore.kernel.org/all/b42bc4d1-cc9d-d115-c981-aaa053bdc59f@kernel.org/
-> 
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> ---
->  drivers/tty/n_gsm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index eb21ca583642..d42b92cbae88 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -3276,7 +3276,7 @@ static void gsm_copy_config_values(struct gsm_mux *gsm,
->  
->  static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
->  {
-> -	int ret = 0;
-> +	int ret;
-
-While at it, I'd move the declaration into the block where it's used so 
-the scope where the variable is used is easier to see on the first glance.
-
->  	int need_close = 0;
->  	int need_restart = 0;
->  
-> 
-
-
 -- 
- i.
-
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Maddah Hussain
