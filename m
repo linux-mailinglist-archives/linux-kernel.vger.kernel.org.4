@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9D66D7F36
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34D06D7F3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237804AbjDEOVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S237958AbjDEOWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237929AbjDEOVo (ORCPT
+        with ESMTP id S237184AbjDEOWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:21:44 -0400
+        Wed, 5 Apr 2023 10:22:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2447065B8
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:21:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646926A6E;
+        Wed,  5 Apr 2023 07:21:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C851662695
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:21:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10A5C4339B;
-        Wed,  5 Apr 2023 14:21:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680704469;
-        bh=dHpgODcNgqxK0uVP+IR7uJMaZZhj+un3AM6tvrsl1yI=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0ED6624C2;
+        Wed,  5 Apr 2023 14:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79D1C433D2;
+        Wed,  5 Apr 2023 14:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680704494;
+        bh=eyBjOtC7CJFOS5X6Sp9ly9THlOS5XlccxmCOFpUhOl4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kXqN1EvncaN4mFD5qhnaffryz18okXhP/B1iV0qPXZE8orhz6N+l+jGGD8w2Wy6mE
-         +vlFw07nyzlylojdpCO93Q+saAqwXL75BfGbV/fifkVW32W8jKh3Ga65i83TPY8p8b
-         PHaeRkGU9CFJuAKqzsAMGHA3sSnIVxuoxsRvnFmOXcDtdOKP6n1i/2yQeN+2WHq16F
-         uCGrITSMkCi9eHe9sMCt6RO84yBcNNzqVVNByvPkNZNthv/WVGi5G4b15tS0uIQeKT
-         vJE+5wLdFnLVT4QKnm3VgG7iEC1fX7ONDKnfI6KJ/0bOGE48UamnP7Wy7KEoB6egKf
-         3tUnpPxmplZ6g==
-Date:   Wed, 5 Apr 2023 15:21:03 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
-        Mark Brown <broonie@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        martin.botka1@gmail.com, Shengyu Qu <wiagn233@outlook.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 3/3] regulator: axp20x: Add support for AXP313a
- variant
-Message-ID: <20230405142103.GL8371@google.com>
-References: <20230401001850.4988-1-andre.przywara@arm.com>
- <20230401001850.4988-4-andre.przywara@arm.com>
+        b=bkToI3kjLCFkg/Q9XiT8E06SrfvrJtgXoZM39QA51VeWtLgANnUBE7hJ/ogxNxeOI
+         ydJTjh3bdKT69RKz8iF1i+7JV4C9BaVRxmH+dqVKXlurRTsJCPinJ1tXHUEDS8Ui6G
+         Qymz+m9pc6XZp6tnGjnOumjKfK6rAeR//gpPltw8=
+Date:   Wed, 5 Apr 2023 16:21:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shaun Tancheff <shaun.tancheff@gmail.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Shaun Tancheff <shaun.tancheff@hpe.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] memcg-v1: Enable setting memory min, low, high
+Message-ID: <2023040500-drinking-obvious-bd85@gregkh>
+References: <20230405110107.127156-1-shaun.tancheff@gmail.com>
+ <2023040529-commodore-humongous-47c3@gregkh>
+ <CAJ48U8X28dhTWouqeT83Uqys__qf2+z-6NcdC1SbOr_xOzjgWg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230401001850.4988-4-andre.przywara@arm.com>
+In-Reply-To: <CAJ48U8X28dhTWouqeT83Uqys__qf2+z-6NcdC1SbOr_xOzjgWg@mail.gmail.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -61,140 +58,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark,
+On Wed, Apr 05, 2023 at 08:54:07PM +0700, Shaun Tancheff wrote:
+> On Wed, Apr 5, 2023 at 6:23 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> 
+> > On Wed, Apr 05, 2023 at 06:01:07PM +0700, Shaun Tancheff wrote:
+> > > From: Shaun Tancheff <shaun.tancheff@hpe.com>
+> > >
+> > > For users that are unable to update to memcg-v2 this
+> > > provides a method where memcg-v1 can more effectively
+> > > apply enough memory pressure to effectively throttle
+> > > filesystem I/O or otherwise minimize being memcg oom
+> > > killed at the expense of reduced performance.
+> > >
+> > > This patch extends the memcg-v1 legacy sysfs entries
+> > > with:
+> > >     limit_in_bytes.min, limit_in_bytes.low and
+> > >     limit_in_bytes.high
+> > > Since old software will need to be updated to take
+> > > advantage of the new files a secondary method
+> > > of setting min, low and high based on a percentage
+> > > of the limit is also provided. The percentages
+> > > are determined by module parameters.
+> > >
+> > > The available module parameters can be set at
+> > > kernel boot time, for example:
+> > >    memcontrol.memcg_min=10
+> > >    memcontrol.memcg_low=30
+> > >    memcontrol.memcg_high=80
+> > >
+> > > Would set min to 10%, low to 30% and high to 80% of
+> > > the value written to:
+> > >   /sys/fs/cgroup/memory/<grp>/memory.limit_in_bytes
+> > >
+> > > Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
+> > > ---
+> > > v0: Initial hard coded limits by percent.
+> > > v1: Added sysfs access and module parameters for percent values to enable
+> > > v2: Fix 32-bit, remove need for missing __udivdi3
+> > >  mm/memcontrol.c | 83 ++++++++++++++++++++++++++++++++++++++++++++++++-
+> > >  1 file changed, 82 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > > index 2eee092f8f11..3cf8386f4f45 100644
+> > > --- a/mm/memcontrol.c
+> > > +++ b/mm/memcontrol.c
+> > > @@ -73,6 +73,18 @@
+> > >
+> > >  #include <trace/events/vmscan.h>
+> > >
+> > > +static unsigned int memcg_v1_min_default_percent;
+> > > +module_param_named(memcg_min, memcg_v1_min_default_percent, uint, 0600);
+> > > +MODULE_PARM_DESC(memcg_min, "memcg v1 min default percent");
+> > > +
+> > > +static unsigned int memcg_v1_low_default_percent;
+> > > +module_param_named(memcg_low, memcg_v1_low_default_percent, uint, 0600);
+> > > +MODULE_PARM_DESC(memcg_low, "memcg v1 low default percent");
+> > > +
+> > > +static unsigned int memcg_v1_high_default_percent;
+> > > +module_param_named(memcg_high, memcg_v1_high_default_percent, uint,
+> > 0600);
+> > > +MODULE_PARM_DESC(memcg_high, "memcg v1 high default percent");
+> >
+> > This is not the 1990's, why are you using module parameters for this?
+> >
+> And this isn't a module, so why use module options, how are you supposed
+> > to set them?
+> >
+> Ah .. guess I'm a bit out of date.
+> The can be set either on the kernel command line or through sysfs,
+> nominally
+>   /sys/module/memcontrol/parameters/memcg_high
+>   /sys/module/memcontrol/parameters/memcg_low
+>   /sys/module/memcontrol/parameters/memcg_min
 
-On Sat, 01 Apr 2023, Andre Przywara wrote:
+But again, memcontrol is not a module, right?
 
-> From: Martin Botka <martin.botka@somainline.org>
->
-> The AXP313a is your typical I2C controlled PMIC, although in a lighter
-> fashion compared to the other X-Powers PMICs: it has only three DCDC
-> rails, three LDOs, and no battery charging support.
->
-> The AXP313a datasheet does not describe a register to change the DCDC
-> switching frequency, and talks of it being fixed at 3 MHz. Check that
-> the property allowing to change that frequency is absent from the DT,
-> and bail out otherwise.
->
-> The third LDO, RTCLDO, is fixed, and cannot even be turned on or off,
-> programmatically. On top of that, its voltage is customisable (either
-> 1.8V or 3.3V), which we cannot describe easily using the existing
-> regulator wrapper functions. This should be fixed properly, using
-> regulator-{min,max}-microvolt in the DT, but this requires more changes
-> to the code. As some other PMICs (AXP2xx, AXP803) seem to paper over the
-> same problem as well, we follow suit here and pretend it's a fixed 1.8V
-> regulator. A proper fix can follow later. The BSP code seems to ignore
-> this regulator altogether.
->
-> Describe the AXP313A's voltage settings and switch registers, how the
-> voltages are encoded, and connect this to the MFD device via its
-> regulator ID.
->
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  drivers/regulator/axp20x-regulator.c | 60 ++++++++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
+> I will look at making these sysctl values instead.
 
-Is this on your radar?
+Yeah, just stick with that please.
 
-Can I take the other two patches without causing issues?
+thanks,
 
-> diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-> index d260c442b788d..81f339009df9b 100644
-> --- a/drivers/regulator/axp20x-regulator.c
-> +++ b/drivers/regulator/axp20x-regulator.c
-> @@ -134,6 +134,11 @@
->  #define AXP22X_PWR_OUT_DLDO4_MASK	BIT_MASK(6)
->  #define AXP22X_PWR_OUT_ALDO3_MASK	BIT_MASK(7)
->
-> +#define AXP313A_DCDC1_NUM_VOLTAGES	107
-> +#define AXP313A_DCDC23_NUM_VOLTAGES	88
-> +#define AXP313A_DCDC_V_OUT_MASK		GENMASK(6, 0)
-> +#define AXP313A_LDO_V_OUT_MASK		GENMASK(4, 0)
-> +
->  #define AXP803_PWR_OUT_DCDC1_MASK	BIT_MASK(0)
->  #define AXP803_PWR_OUT_DCDC2_MASK	BIT_MASK(1)
->  #define AXP803_PWR_OUT_DCDC3_MASK	BIT_MASK(2)
-> @@ -638,6 +643,48 @@ static const struct regulator_desc axp22x_drivevbus_regulator = {
->  	.ops		= &axp20x_ops_sw,
->  };
->
-> +static const struct linear_range axp313a_dcdc1_ranges[] = {
-> +	REGULATOR_LINEAR_RANGE(500000,   0,  70,  10000),
-> +	REGULATOR_LINEAR_RANGE(1220000, 71,  87,  20000),
-> +	REGULATOR_LINEAR_RANGE(1600000, 88, 106, 100000),
-> +};
-> +
-> +static const struct linear_range axp313a_dcdc2_ranges[] = {
-> +	REGULATOR_LINEAR_RANGE(500000,   0, 70, 10000),
-> +	REGULATOR_LINEAR_RANGE(1220000, 71, 87, 20000),
-> +};
-> +
-> +/*
-> + * This is deviating from the datasheet. The values here are taken from the
-> + * BSP driver and have been confirmed by measurements.
-> + */
-> +static const struct linear_range axp313a_dcdc3_ranges[] = {
-> +	REGULATOR_LINEAR_RANGE(500000,   0,  70, 10000),
-> +	REGULATOR_LINEAR_RANGE(1220000, 71, 102, 20000),
-> +};
-> +
-> +static const struct regulator_desc axp313a_regulators[] = {
-> +	AXP_DESC_RANGES(AXP313A, DCDC1, "dcdc1", "vin1",
-> +			axp313a_dcdc1_ranges, AXP313A_DCDC1_NUM_VOLTAGES,
-> +			AXP313A_DCDC1_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-> +			AXP313A_OUTPUT_CONTROL, BIT(0)),
-> +	AXP_DESC_RANGES(AXP313A, DCDC2, "dcdc2", "vin2",
-> +			axp313a_dcdc2_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-> +			AXP313A_DCDC2_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-> +			AXP313A_OUTPUT_CONTROL, BIT(1)),
-> +	AXP_DESC_RANGES(AXP313A, DCDC3, "dcdc3", "vin3",
-> +			axp313a_dcdc3_ranges, AXP313A_DCDC23_NUM_VOLTAGES,
-> +			AXP313A_DCDC3_CONRTOL, AXP313A_DCDC_V_OUT_MASK,
-> +			AXP313A_OUTPUT_CONTROL, BIT(2)),
-> +	AXP_DESC(AXP313A, ALDO1, "aldo1", "vin1", 500, 3500, 100,
-> +		 AXP313A_ALDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-> +		 AXP313A_OUTPUT_CONTROL, BIT(3)),
-> +	AXP_DESC(AXP313A, DLDO1, "dldo1", "vin1", 500, 3500, 100,
-> +		 AXP313A_DLDO1_CONRTOL, AXP313A_LDO_V_OUT_MASK,
-> +		 AXP313A_OUTPUT_CONTROL, BIT(4)),
-> +	AXP_DESC_FIXED(AXP313A, RTC_LDO, "rtc-ldo", "vin1", 1800),
-> +};
-> +
->  /* DCDC ranges shared with AXP813 */
->  static const struct linear_range axp803_dcdc234_ranges[] = {
->  	REGULATOR_LINEAR_RANGE(500000,
-> @@ -1040,6 +1087,15 @@ static int axp20x_set_dcdc_freq(struct platform_device *pdev, u32 dcdcfreq)
->  		def = 3000;
->  		step = 150;
->  		break;
-> +	case AXP313A_ID:
-> +		/* The DCDC PWM frequency seems to be fixed to 3 MHz. */
-> +		if (dcdcfreq != 0) {
-> +			dev_err(&pdev->dev,
-> +				"DCDC frequency on AXP313a is fixed to 3 MHz.\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		return 0;
->  	default:
->  		dev_err(&pdev->dev,
->  			"Setting DCDC frequency for unsupported AXP variant\n");
-> @@ -1232,6 +1288,10 @@ static int axp20x_regulator_probe(struct platform_device *pdev)
->  		drivevbus = of_property_read_bool(pdev->dev.parent->of_node,
->  						  "x-powers,drive-vbus-en");
->  		break;
-> +	case AXP313A_ID:
-> +		regulators = axp313a_regulators;
-> +		nregulators = AXP313A_REG_ID_MAX;
-> +		break;
->  	case AXP803_ID:
->  		regulators = axp803_regulators;
->  		nregulators = AXP803_REG_ID_MAX;
-> --
-> 2.35.7
->
-
---
-Lee Jones [李琼斯]
+greg k-h
