@@ -2,161 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B906D8AE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C656D8AE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbjDEXEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S232489AbjDEXEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 19:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjDEXEd (ORCPT
+        with ESMTP id S229623AbjDEXEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:04:33 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515C36A70
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680735871; x=1712271871;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DFp4m96fnacZ3JCiIXdl8tovzsb6+a+6LACIVJs3xME=;
-  b=TFciDEOnZWX20GHgWcDu9uirgVUL0pKJ19MTsOX6ATEKUaXlKtiS0WS1
-   niVrO9xFRI1xLc8jCOQ/o/m9uKhCFs0K3wBdEYhWa5BbEpvinVKv0Qp4P
-   PLakEUPWyzPV10uhUzmnvl5vtMDKNU3Qf13ddpekf0czy5luf+UcGAH4U
-   ciN80xgbenGek3IpKpxyhZ7mpTZC+im9s3oN0zXcTveGs0qvu8WaNWkBx
-   kzIrlAcnND/rytshAYwrMPWR0Db1QWxATYs1EnYAhDYSQS1jNRf2Cf+L2
-   Qxy6kBG3LOdSlj8viA9XX2uvyJgU6GbjXb6wpwhglshXw+Or+z1InCrui
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="405373440"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="405373440"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 16:04:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="830538523"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="830538523"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Apr 2023 16:04:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkCB2-000Qsc-1w;
-        Wed, 05 Apr 2023 23:04:28 +0000
-Date:   Thu, 6 Apr 2023 07:03:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:131:14:
- warning: no previous prototype for 'bpf_testmod_fentry_test1'
-Message-ID: <202304060622.P2hBPE4g-lkp@intel.com>
+        Wed, 5 Apr 2023 19:04:21 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4007161BF
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:04:20 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id j13so35563793pjd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 16:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1680735860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KrKOMt3UyE7cKr4ReAMcPC7o/oJjZhoBrpSamEnzwcU=;
+        b=iBasCSC6te0W78R7Bld/4KqgYzDWUZzqACRfp85/HVPjnIURY/CCvj/MiI6rm+++ti
+         gqpugla/+KDIYJg63rR+HSbATePR4WT4ESQqUSZbNXhXwDsDekOQI3dc/hhfGsX4ZmQH
+         ecTKCtm9wkF//A0omDOb3qG1mFeJtK6feClVFbSUVOuk+pMTKJePNaAaUzd151jRcXcN
+         DByT2oDMO7+9+lh1FRHXVJeLQZdjpwBHrNdyfejgPhOeMKO+SfFKXC+BSv2ILVK7l638
+         6WjxIUoe58jT0iOyh0VhO3qcTR60vFv7HyGZ3OdUkrwxLi3TmR49uTk80nkqRXSgT7Hb
+         bdmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680735860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KrKOMt3UyE7cKr4ReAMcPC7o/oJjZhoBrpSamEnzwcU=;
+        b=zEMSYmwHbfbKbGWt8rGM8IpZVvkxUoeD00q4tgqKLpL5Mc+kfAcpwEWcPfDXDyTa0y
+         fUbi39W8/axMdljb6/yiPmBbSrYaA7KFKVtD4/CpEA2eQkyGLO4V8+y/lkpgJxxxRKuT
+         EJmC/2uwSb7hjprN1u8cfHhcK0ssiPFUAa7gs4D8IpNr2oezAArAsMFrA5kl6SPMmOL7
+         QhPaX53w+KMbKDarJYPIlAQw+543v6uG6Y0I8KhIBMvjsGU6OZIFtaTfswRyvFBLLhls
+         Sv2aGm3Z9HcFgApoFMnHkcFQUnm1KrZ5Pl9lxuJ311GKp9lUy8rhZPhr7tjZCXE3zRuh
+         VMBQ==
+X-Gm-Message-State: AAQBX9eq3RdFfCkkZ+kWNsMp/kMfr7hd3f1LEIgMLmmsICk9bMp3OxiC
+        nZEbnJfZI3bFXpf8yofZAdFTtOlG+Zm4C7FGFBY=
+X-Google-Smtp-Source: AKy350b+42w1smjir37jF3mpwW0jtsgJwT9OCuZ/HHxaFRTXRFnztFkwSl+Lgm5digRUYn3uj9z7oA==
+X-Received: by 2002:a17:902:f152:b0:199:1b8a:42a8 with SMTP id d18-20020a170902f15200b001991b8a42a8mr6304205plb.6.1680735859685;
+        Wed, 05 Apr 2023 16:04:19 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-91-157.pa.nsw.optusnet.com.au. [49.181.91.157])
+        by smtp.gmail.com with ESMTPSA id b18-20020a63e712000000b005038291e5cbsm9739867pgi.35.2023.04.05.16.04.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 16:04:18 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pkCAp-00HVND-O9; Thu, 06 Apr 2023 09:04:15 +1000
+Date:   Thu, 6 Apr 2023 09:04:15 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Ryosuke Yasuoka <ryasuoka@redhat.com>
+Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xfs: Use for_each_perag() to iterate all available AGs
+Message-ID: <20230405230415.GT3223426@dread.disaster.area>
+References: <20230404084701.2791683-1-ryasuoka@redhat.com>
+ <20230405010403.GO3223426@dread.disaster.area>
+ <CAHpthZoWRWS2bXFDQrB+iOz7AA_ZLGJKmytHjN582VaWQ_TRwg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAHpthZoWRWS2bXFDQrB+iOz7AA_ZLGJKmytHjN582VaWQ_TRwg@mail.gmail.com>
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri,
+On Wed, Apr 05, 2023 at 05:04:14PM +0900, Ryosuke Yasuoka wrote:
+> Dave,
+> 
+> Thank you for reviewing my requests.
+> 
+> > > for_each_perag_wrap() doesn't expect 0 as 2nd arg.
+> > > To iterate all the available AGs, just use for_each_perag() instead.
+> >
+> > Thanks, Ryosuke-san. IIUC, this is a fix for the recent sysbot
+> > reported filestreams oops regression?
+> >
+> > Can you include the context of the failure it reported (i.e. the
+> > trace from the oops), and the 'reported-by' tag for the syzbot
+> > report?
+> >
+> > It should probably also include a 'Fixes: bd4f5d09cc93 ("xfs:
+> > refactor the filestreams allocator pick functions")' tag as well.
+> 
+> No. my request is in the same code area where syzbot bug was reported,
+> but it might not be relevant. A kernel applying my patch got the same Oops.
+> 
+> I'm indeed checking the syzbot's bug and I realized that this small bug fix
+> is not related to it based on my tests. Thus I sent the patch
+> as a separate one.
+> 
+> > While this will definitely avoid the oops, I don't think it is quite
+> > right. If we want to iterate all AGs, then we should be starting the
+> > iteration at AG 0, not start_agno. i.e.
+> >
+> > +                       for_each_perag(args->mp, 0, args->pag)
+> 
+> I agree with your proposal because it is more direct.
+> However, as the current for_each_perag() macro always assigns 0 to (agno),
+> it will cause compilation errors.
 
-FYI, the error/warning still remains.
+Yup, I didn't compile test my suggestion - i just quickly wrote it
+down to demonstrate what I was thinking. I expect that you have
+understood that using for_each_perag() was what I was suggesting is
+used, not that the sample code I wrote is exactly correct. IOWs,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   99ddf2254febae9eab7fb0bcc02c5322243f5c49
-commit: fee356ede980b6c2c8db612e18b25738356d6744 selftests/bpf: Add bpf_testmod_fentry_* functions
-date:   5 months ago
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fee356ede980b6c2c8db612e18b25738356d6744
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout fee356ede980b6c2c8db612e18b25738356d6744
-        make O=/tmp/kselftest headers
-        make O=/tmp/kselftest -C tools/testing/selftests
+		for_each_perag(args->mp, start_agno, args->pag)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304060622.P2hBPE4g-lkp@intel.com/
+would have worked, even though the code does not do what it looks
+like it should from the context of start_agno. Which means this
+would be better:
 
-All warnings (new ones prefixed by >>):
+		start_agno = 0;
+		for_each_perag_from(args->mp, start_agno, args->pag)
 
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:32:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_1' [-Wmissing-prototypes]
-      32 | bpf_testmod_test_struct_arg_1(struct bpf_testmod_struct_arg_2 a, int b, int c) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:38:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_2' [-Wmissing-prototypes]
-      38 | bpf_testmod_test_struct_arg_2(int a, struct bpf_testmod_struct_arg_2 b, int c) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:44:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_3' [-Wmissing-prototypes]
-      44 | bpf_testmod_test_struct_arg_3(int a, int b, struct bpf_testmod_struct_arg_2 c) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:50:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_4' [-Wmissing-prototypes]
-      50 | bpf_testmod_test_struct_arg_4(struct bpf_testmod_struct_arg_1 a, int b,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:57:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_5' [-Wmissing-prototypes]
-      57 | bpf_testmod_test_struct_arg_5(void) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:63:1: warning: no previous prototype for 'bpf_testmod_test_mod_kfunc' [-Wmissing-prototypes]
-      63 | bpf_testmod_test_mod_kfunc(int i)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:81:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_user_1' [-Wmissing-prototypes]
-      81 | bpf_testmod_test_btf_type_tag_user_1(struct bpf_testmod_btf_type_tag_1 __user *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:89:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_user_2' [-Wmissing-prototypes]
-      89 | bpf_testmod_test_btf_type_tag_user_2(struct bpf_testmod_btf_type_tag_2 *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:94:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_percpu_1' [-Wmissing-prototypes]
-      94 | bpf_testmod_test_btf_type_tag_percpu_1(struct bpf_testmod_btf_type_tag_1 __percpu *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:99:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_percpu_2' [-Wmissing-prototypes]
-      99 | bpf_testmod_test_btf_type_tag_percpu_2(struct bpf_testmod_btf_type_tag_3 *arg) {
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:103:14: warning: no previous prototype for 'bpf_testmod_loop_test' [-Wmissing-prototypes]
-     103 | noinline int bpf_testmod_loop_test(int n)
-         |              ^~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:115:30: warning: no previous prototype for 'bpf_testmod_return_ptr' [-Wmissing-prototypes]
-     115 | __weak noinline struct file *bpf_testmod_return_ptr(int arg)
-         |                              ^~~~~~~~~~~~~~~~~~~~~~
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:131:14: warning: no previous prototype for 'bpf_testmod_fentry_test1' [-Wmissing-prototypes]
-     131 | noinline int bpf_testmod_fentry_test1(int a)
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:136:14: warning: no previous prototype for 'bpf_testmod_fentry_test2' [-Wmissing-prototypes]
-     136 | noinline int bpf_testmod_fentry_test2(int a, u64 b)
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:141:14: warning: no previous prototype for 'bpf_testmod_fentry_test3' [-Wmissing-prototypes]
-     141 | noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:149:1: warning: no previous prototype for 'bpf_testmod_test_read' [-Wmissing-prototypes]
-     149 | bpf_testmod_test_read(struct file *file, struct kobject *kobj,
-         | ^~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:200:1: warning: no previous prototype for 'bpf_testmod_test_write' [-Wmissing-prototypes]
-     200 | bpf_testmod_test_write(struct file *file, struct kobject *kobj,
-         | ^~~~~~~~~~~~~~~~~~~~~~
+because it directly documents the value we are iterating from.
 
+> Although I haven't checked other callers deeply, we should modify
+> the macro as follows:
+> 
+>  #define for_each_perag(mp, agno, pag) \
+> -   (agno) = 0; \
+>   for_each_perag_from((mp), (agno), (pag))
 
-vim +/bpf_testmod_fentry_test1 +131 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+That is not correct, either. agno needs to be a variable - it is
+the loop agno counter that tracks the iteration.
 
-   130	
- > 131	noinline int bpf_testmod_fentry_test1(int a)
-   132	{
-   133		return a + 1;
-   134	}
-   135	
- > 136	noinline int bpf_testmod_fentry_test2(int a, u64 b)
-   137	{
-   138		return a + b;
-   139	}
-   140	
- > 141	noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
-   142	{
-   143		return a + b + c;
-   144	}
-   145	
+Cheers,
 
+Dave.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Dave Chinner
+david@fromorbit.com
