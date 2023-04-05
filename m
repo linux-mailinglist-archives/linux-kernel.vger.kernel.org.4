@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2F46D78E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8211F6D78EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237439AbjDEJxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S237504AbjDEJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237354AbjDEJxv (ORCPT
+        with ESMTP id S237537AbjDEJx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:53:51 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39961701
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:53:50 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id r7-20020a17090b050700b002404be7920aso34939070pjz.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:53:50 -0700 (PDT)
+        Wed, 5 Apr 2023 05:53:58 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CCB59C5
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:53:57 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5419d4c340aso666155107b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:53:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680688429;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680688436;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oy2BUyKU9CIKLi1foQ67EW9MQk9XYp7SRMcmahMZwkQ=;
-        b=LXYcpEe+0yHYS4ZGeCbJiWd6kiQqbRWoASiO+X5Q3/XVNgY8uyTbKewb0xT4sMxt1m
-         kImY4IX82RF9YIEXSsyyAOHn6ged3qZ7vVdYzKyGFYc/NgpuK1Co0NXbSOttKI8M4DDO
-         FlJcTb/tbn0Lq9tlDUbHd+/Cf7vHAiC1WwQ95lWUHNclRb7TShClo722Z9h39hTCTMkz
-         Opv3eIsjsRb8NVcm2qoOqztMRkF3tEvXyLzhihSkMot1QW0nOTAmxkd9ghDMquREgOUH
-         ScYeDZVkbM2BHZ23CYgm1GApTu4ANReP+CN21DTxzO5HCh5uBwuZqX9U9fNQw8ri7AcD
-         uEpQ==
+        bh=5iOSArHk024MTuP20+LfK+TSvK8bw9LtXROoLVLejjk=;
+        b=7Uhb3WdWDVsf6TYFe+umMn4wDTRYNHiTsp6yIjkcoLw1p1l29pM7WBJ+zVMXhUxiVO
+         SQO/CIrJBNske5zK5KEWcDWbfCQyjxXDOYX11DjJMvBID3Ab9xoi8VxMKHrwUm/NFJUr
+         Cw3fTVW7kcZOTsSzLVL7195o404s3Epv9UQC8tngCiX57FYxqsHOGZiSdWsT/n7dU2Fh
+         XGTW1qow/H7Qj0A3OOtckT3HkZ5e5zB83WaZsle70oQvMQDlJLMrSQqfxN8ObRrkg4Dp
+         wQXrSYee3501or48hdVKDtLOKW46fCozI31k7KRkKUnWbgvKRZmhOLctJhJ+yfXP8yw4
+         RR1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680688430;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oy2BUyKU9CIKLi1foQ67EW9MQk9XYp7SRMcmahMZwkQ=;
-        b=5xQ1u+qfhdzOjPY+z2DvZCOqEcnf2wfD6BB+hkpB6N2RnKkpc6LbqGANnfEbE1i25h
-         3dO3g8Y154sT8cl7iLL9QLLrcnHFjO5Rv76IrDz1FQDQ+xovtMbof1yqrp1bJpTuVKoX
-         fYp0tGqmc5Z9LOjXNg1PzwZ4cpTMyclrKY2L1fjqoTIEK1KiUqVGa91CCf1OPZhpiHk3
-         e099E7xNCMiUjI55FNbqFmVsz8wj5wui7zGWHHBwyUuvwP5zDnjTLrJd1w+5zg7M5b8o
-         IrcEze59r/fFL5zfdEFnmIUnLuTihc+1K59/oCbRnh4fZiH81ELayR14GmiIp62c3bQB
-         6uoQ==
-X-Gm-Message-State: AAQBX9foAgiXpZPT+V4glfvK4G79OZTufY258RtJghhhzz0Hjpde90hE
-        la7hFFsR0OM4E70xDturXb8yvw==
-X-Google-Smtp-Source: AKy350Zf8+5GytyTlr5OtZiGKrk+DQQGEEFknlCrX0tF0d4j+ZkQ2GlVotnK/coXWtacwGkKg44WCw==
-X-Received: by 2002:a17:902:ced2:b0:1a1:aa28:e67a with SMTP id d18-20020a170902ced200b001a1aa28e67amr6792822plg.48.1680688429703;
-        Wed, 05 Apr 2023 02:53:49 -0700 (PDT)
-Received: from [10.200.10.217] ([139.177.225.248])
-        by smtp.gmail.com with ESMTPSA id p4-20020a1709026b8400b001a053b7e892sm9714095plk.195.2023.04.05.02.53.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 02:53:49 -0700 (PDT)
-Message-ID: <1d3b071f-ead7-4431-c9f8-c712e7c8bdc6@bytedance.com>
-Date:   Wed, 5 Apr 2023 17:53:44 +0800
+        d=1e100.net; s=20210112; t=1680688436;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5iOSArHk024MTuP20+LfK+TSvK8bw9LtXROoLVLejjk=;
+        b=I2uOZbG6aJ0fq433MDDboW1uRf1nDlPXjS1au3f2EqXBEur9fyyEBbNMs1AO5f7Gsy
+         mc0FMD2qYQbXsfGxmBF4hfUTPRvN+S18jtKovh9HbXPm3qgzdPxPs7LbCPGn4Dz5BRSL
+         DXY6lRDzgVygLflaixjuLXv5zKj9bpJTsRfyrWBLue6nHejXM3sJuoZGA+MAXP42IG2s
+         oaHVogRUs3WmomB64oJFbpwYP8WP/KvILsVJ6uDf25Cud3fa5hW41L7QNTQwdB89Bbtc
+         YtSxP9+Yr8hmUqFdGdXawmIJM+bH4peJcp/QGoXdDW+sHIXuUHN0AarwZA8dEO1UTHIU
+         1iKg==
+X-Gm-Message-State: AAQBX9e/pC98wHoYi3+Vgw6FZnqOQlQwCybtrsOfWMm7AXiDUelNPQvB
+        4lTA7iUupxOZbyFzNhY6SCNvGbIdWSAy4FYmvDCKbQ==
+X-Google-Smtp-Source: AKy350ajegbH1cuY0qZ0BH0n+8kNh3daZf3iUgBZUAQloEazK8c1dLkyVfoFXBAExarPcPJs42OwNyuAKjoJ5gK5rTA=
+X-Received: by 2002:a81:ad0b:0:b0:545:3f42:2d97 with SMTP id
+ l11-20020a81ad0b000000b005453f422d97mr3195246ywh.3.1680688436322; Wed, 05 Apr
+ 2023 02:53:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH v2 0/3] Some fixes and cleanup for maple tree.
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Liam.Howlett@oracle.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org
-References: <20230314124203.91572-1-zhangpeng.00@bytedance.com>
- <20230404132702.9240f3a77d0c00fca4b9bf55@linux-foundation.org>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <20230404132702.9240f3a77d0c00fca4b9bf55@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230207-iommu-support-v2-0-60d5fa00e4e5@baylibre.com>
+ <20230207-iommu-support-v2-10-60d5fa00e4e5@baylibre.com> <9847bc48-c96c-3599-e876-bcf9ebf1522e@linaro.org>
+In-Reply-To: <9847bc48-c96c-3599-e876-bcf9ebf1522e@linaro.org>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Wed, 5 Apr 2023 11:53:45 +0200
+Message-ID: <CAFGrd9pBdaHLGUZHkaz2_XKafyX=dxu9UckQxrphg52EG=A1SQ@mail.gmail.com>
+Subject: Re: [PATCH v2 10/10] memory: mtk-smi: mt8365: Add SMI Support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ok, I will move the driver patch before the DTS patches in the next version=
+.
 
-在 2023/4/5 04:27, Andrew Morton 写道:
+Regards,
+Alexandre
 
-> On Tue, 14 Mar 2023 20:42:00 +0800 Peng Zhang <zhangpeng.00@bytedance.com> wrote:
+
+Le mer. 5 avr. 2023 =C3=A0 11:43, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> a =C3=A9crit :
 >
->> Some fixes and clean up for maple tree.
->>
->> The bug fixed by [PATCH v2 1/3] does not seem to be triggered due to some
->> coincidences, because now the implementation of mtree_lookup_walk() scans
->> pivots one by one and exits the loop early. The test cases for the bugs fixed by
->> [PATCH v2 3/3] are difficult to write. If I think of how to write them later,
->> I will send them out. So I send out the second edition first.
-> Do we feel that any of these should be backported into -stable kernels?
-> [3/3] looks to be a candidate for this?
-
-Both [1/3] and [3/3] can be sent to the stable kernel, do I need to do anything?
-
+> On 05/04/2023 10:06, Alexandre Mergnat wrote:
+> > Add MT8365 SMI common support.
+> >
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> > ---
+>
+> Why the driver patch is after DTS? Driver code cannot be mixed with the
+> DTS on branches/repos, so such ordering suggest your patchset is not
+> bisectable.
+>
+> Best regards,
+> Krzysztof
+>
