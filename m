@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381BE6D7E85
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4FD6D7DD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238100AbjDEOEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
+        id S238293AbjDENh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238232AbjDEODO (ORCPT
+        with ESMTP id S237308AbjDENhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:03:14 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A412372A0;
-        Wed,  5 Apr 2023 07:01:35 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id e95ffb0460b9d498; Wed, 5 Apr 2023 16:01:21 +0200
-Received: from kreacher.localnet (unknown [213.134.163.219])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id EFB311B4EA6F;
-        Wed,  5 Apr 2023 16:01:20 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 06/32] ACPICA: Add support for ASPT table in disassembler
-Date:   Wed, 05 Apr 2023 15:36:51 +0200
-Message-ID: <1953193.PYKUYFuaPT@kreacher>
-In-Reply-To: <4845957.31r3eYUQgx@kreacher>
-References: <4845957.31r3eYUQgx@kreacher>
+        Wed, 5 Apr 2023 09:37:24 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1050A4ECD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:37:22 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-3261b76b17aso1180495ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 06:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680701841;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SMACiJoNW6UL2b8KEXrA9z4AHCYPwLvMVkZG5jbqYsU=;
+        b=0SbrqR9Hi2bWm4bLG/5yE8o+jagwr5aLVKJ10+MOeHuh65tZpSboNe3YBLIJb9yRma
+         6aUGVy1vXvM9WHZcuJ3OQo07NKs96I5Pu8c4KAqH+7vjm0A0eBmGar9GQDAoiEfTjjKI
+         S77L3SLvhI36dkqqUyiNoPqE0OVa6SKvTXMvrb8r9IfNXxNvVRpx1Ft/If7yFlbSqLx6
+         nufX8WVg0Hw9mjQl/rwT5c5W3dGWXWkGQXWLpFBUf0IdN1BJ/2CnQYHiB6usAZa8n4x2
+         Ep9AWHFYMdIINBv3I1yMNN1PxKW3yZOIpxjzEIokw95DLH2rr2gTYrnnjOiKrpNoIbTy
+         B/tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680701841;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SMACiJoNW6UL2b8KEXrA9z4AHCYPwLvMVkZG5jbqYsU=;
+        b=2WCESRVonL3mxz+eFnY6UHpBui2FhFyITDkzBO/9yyhdcptXT4eNwXtidilGc5jc87
+         Yx/8XDJU2ei0J9tH4bzFRwDkNAd8TwuWCOBdXs07iThtI1JzVFicvhhVFdf6JYlR02/S
+         qJhC4Xe6OmEa0R4nYa4d9zsJbqBwqNUlUQ9YdeZ9QIUl8tCJ75DbJ+MH7Z2yt6A4LxAg
+         HLPnPDAin8ot+24Fv36widP0mgtoySIUvrLt60zA9adbsERtV2T447Xm0xr6OY+zktD9
+         u00BvO8RWII+ZIj1aGUIrTPVC9plI16bvcNyInBfJelZBOU9rzQn4AF6GMpsufFWQDbL
+         CQSw==
+X-Gm-Message-State: AAQBX9dEFiA5bF7tuMJ0jnAx3/O9CLF/Oxd7mk1KymBvvFQewx59n2yH
+        nibRGIYNDCrNRX8J2yCvNhIrwQ==
+X-Google-Smtp-Source: AKy350Zi/uU7mBlI7a3mLEo2lbcBTqjpeVirj1zVYuJdxOFP0K02w1bg5MQyzg/cTnEsUTe/dc0ljQ==
+X-Received: by 2002:a05:6602:3941:b0:758:9c9e:d6c6 with SMTP id bt1-20020a056602394100b007589c9ed6c6mr1788054iob.2.1680701841412;
+        Wed, 05 Apr 2023 06:37:21 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id u19-20020a02b1d3000000b0040b4ac6490dsm680489jah.96.2023.04.05.06.37.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 06:37:21 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <2933618.1680689716@warthog.procyon.org.uk>
+References: <2933618.1680689716@warthog.procyon.org.uk>
+Subject: Re: [PATCH] iov_iter: Remove last_offset member
+Message-Id: <168070184053.176456.9607242016242560793.b4-ty@kernel.dk>
+Date:   Wed, 05 Apr 2023 07:37:20 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.219
-X-CLIENT-HOSTNAME: 213.134.163.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepieeuhedtkeejffdtieehheegveegueegteehudeikeetvdffgfdtgeffudehteeunecuffhomhgrihhnpehgihhthhhusgdrtghomhdpmhhitghrohhsohhfthdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
 
-ACPICA commit 6771f8b758299bd383bab145d5fd36ec229b2d70
+On Wed, 05 Apr 2023 11:15:16 +0100, David Howells wrote:
+> Can you add this to the block tree?
+> 
+> David
+> 
+> 
 
-ASPT is the AMD Secure Processor table, found in Hyper-V VMs when SNP
-isolation is exposed to the VM and in some high-end AMD servers. This
-commit adds support for rev 1 of the ASPT spec in the disassembler.
+Applied, thanks!
 
-Link: https://github.com/acpica/acpica/commit/6771f8b7
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/acpi/actbl1.h | 46 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+[1/1] iov_iter: Remove last_offset member
+      commit: 867e1cbba73ea240f9417439479df7eb74b1299c
 
-diff --git a/include/acpi/actbl1.h b/include/acpi/actbl1.h
-index 81b9e794424d..b5e011da5271 100644
---- a/include/acpi/actbl1.h
-+++ b/include/acpi/actbl1.h
-@@ -26,6 +26,7 @@
-  */
- #define ACPI_SIG_AEST           "AEST"	/* Arm Error Source Table */
- #define ACPI_SIG_ASF            "ASF!"	/* Alert Standard Format table */
-+#define ACPI_SIG_ASPT           "ASPT"	/* AMD Secure Processor Table */
- #define ACPI_SIG_BERT           "BERT"	/* Boot Error Record Table */
- #define ACPI_SIG_BGRT           "BGRT"	/* Boot Graphics Resource Table */
- #define ACPI_SIG_BOOT           "BOOT"	/* Simple Boot Flag Table */
-@@ -109,6 +110,51 @@ struct acpi_whea_header {
- 	u64 mask;		/* Bitmask required for this register instruction */
- };
- 
-+/* https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/acpitabl/ns-acpitabl-aspt_table */
-+#define ASPT_REVISION_ID 0x01
-+struct acpi_table_aspt {
-+	struct acpi_table_header header;
-+	u32 num_entries;
-+};
-+
-+struct acpi_aspt_header {
-+	u16 type;
-+	u16 length;
-+};
-+
-+enum acpi_aspt_type {
-+	ACPI_ASPT_TYPE_GLOBAL_REGS = 0,
-+	ACPI_ASPT_TYPE_SEV_MBOX_REGS = 1,
-+	ACPI_ASPT_TYPE_ACPI_MBOX_REGS = 2,
-+};
-+
-+/* 0: ASPT Global Registers */
-+struct acpi_aspt_global_regs {
-+	struct acpi_aspt_header header;
-+	u32 reserved;
-+	u64 feature_reg_addr;
-+	u64 irq_en_reg_addr;
-+	u64 irq_st_reg_addr;
-+};
-+
-+/* 1: ASPT SEV Mailbox Registers */
-+struct acpi_aspt_sev_mbox_regs {
-+	struct acpi_aspt_header header;
-+	u8 mbox_irq_id;
-+	u8 reserved[3];
-+	u64 cmd_resp_reg_addr;
-+	u64 cmd_buf_lo_reg_addr;
-+	u64 cmd_buf_hi_reg_addr;
-+};
-+
-+/* 2: ASPT ACPI Mailbox Registers */
-+struct acpi_aspt_acpi_mbox_regs {
-+	struct acpi_aspt_header header;
-+	u32 reserved1;
-+	u64 cmd_resp_reg_addr;
-+	u64 reserved2[2];
-+};
-+
- /*******************************************************************************
-  *
-  * ASF - Alert Standard Format table (Signature "ASF!")
+Best regards,
 -- 
-2.35.3
-
-
+Jens Axboe
 
 
 
