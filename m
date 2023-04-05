@@ -2,89 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678546D84A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2500B6D84A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjDERNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S231167AbjDEROW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjDERNm (ORCPT
+        with ESMTP id S229544AbjDEROU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:13:42 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9262B1BEF;
-        Wed,  5 Apr 2023 10:13:39 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E9E381EC041F;
-        Wed,  5 Apr 2023 19:13:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680714818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=l1yYjOVfDDFDfs+ACNRWWBr1VXqTIVZyacyw+scxJDU=;
-        b=Gmn6hTWrm+VCwVrg4U8luazNYwEGUj0L7/c8GfWaRGh/2QUA59eMWi9NEYt8MRAyVGeyzA
-        qXNifYvSySqG3DJL92TIzWdPoRPuar8waRlL8Tv7rX97R0nZNT6hatwJ6jvmis/4L7nLps
-        mRcXntv6qCLJqe6IowxCItjNC8wChHg=
-Date:   Wed, 5 Apr 2023 19:13:33 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v5 01/27] x86/boot: Align vmlinuz sections on page size
-Message-ID: <20230405171333.GDZC2sPc3D7rDdK6TH@fat_crate.local>
-References: <cover.1678785672.git.baskov@ispras.ru>
- <159597c484778da5e59c3a5728669f131f800b5a.1678785672.git.baskov@ispras.ru>
+        Wed, 5 Apr 2023 13:14:20 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B37A9B;
+        Wed,  5 Apr 2023 10:14:19 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pk6i9-0003OV-71; Wed, 05 Apr 2023 19:14:17 +0200
+Message-ID: <fdffc009-47cf-e88d-5b9e-d6301f7f73f2@leemhuis.info>
+Date:   Wed, 5 Apr 2023 19:14:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <159597c484778da5e59c3a5728669f131f800b5a.1678785672.git.baskov@ispras.ru>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/3] ARM: dts: meson: Fix the UART compatible strings
+Content-Language: en-US, de-DE
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>
+References: <20211227180026.4068352-1-martin.blumenstingl@googlemail.com>
+ <20211227180026.4068352-2-martin.blumenstingl@googlemail.com>
+ <20230405132900.ci35xji3xbb3igar@rcn-XPS-13-9305>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20230405132900.ci35xji3xbb3igar@rcn-XPS-13-9305>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680714859;c2d3ee1d;
+X-HE-SMSGID: 1pk6i9-0003OV-71
+X-Spam-Status: No, score=-1.4 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 01:13:28PM +0300, Evgeniy Baskov wrote:
-> To protect sections on page table level each section needs to be
-> aligned on page size (4KB).
 
-Protect against what?
 
-> Set sections alignment in linker script for the kernel decompressor
-> (boot/compressed/vmlinux.lds.S).
+On 05.04.23 15:29, Ricardo Cañuelo wrote:
+> Hi Martin,
+> 
+> On lun 27-12-2021 19:00:24, Martin Blumenstingl wrote:
+>> The dt-bindings for the UART controller only allow the following values
+>> for Meson6 SoCs:
+>> - "amlogic,meson6-uart", "amlogic,meson-ao-uart"
+>> - "amlogic,meson6-uart"
+>>
+>> Use the correct fallback compatible string "amlogic,meson-ao-uart" for
+>> AO UART. Drop the "amlogic,meson-uart" compatible string from the EE
+>> domain UART controllers.
+> 
+> KernelCI detected that this patch introduced a regression in
+> stable-rc/linux-4.14.y on a meson8b-odroidc1.
+> After this patch was applied the tests running on this platform don't
+> show any serial output.
+> 
+> This doesn't happen in other stable branches nor in mainline, but 4.14
+> hasn't still reached EOL and it'd be good to find a fix.
+> 
+> Here's the bisection report:
+> https://groups.io/g/kernelci-results/message/40147
+> 
+> KernelCI info:
+> https://linux.kernelci.org/test/case/id/64234f7761021a30b262f776/
 
-Do not talk about *what* the patch is doing in the commit message - that
-should be obvious from the diff itself. Rather, concentrate on the *why*
-it needs to be done.
+Wait, what? A patch (5225e1b87432 ("ARM: dts: meson: Fix the UART
+compatible strings")) that was merged for v5.17-rc4 and is not in the
+list of patches that were in 4.14.312-rc1
+(https://lore.kernel.org/all/20230403140351.636471867@linuxfoundation.org/
+) is meant to suddenly cause this? How is this possible? Am I totally on
+the wrong track here and misunderstanding something, or is this a
+bisection that went horribly sideways?
 
-> Also introduce symbols that can be used to reference compressed
-> kernel blob section later in the later patches.
+Ciao, Thorsten
 
-Introduce those with the respective patch that uses them. This one is
-adding section alignment only and that's all that it should do.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> Test log:
+> https://storage.kernelci.org/stable-rc/linux-4.14.y/v4.14.311-43-g88e481d604e9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-meson8b-odroidc1.html
+> 
+> Thanks,
+> Ricardo
+> 
+> #regzbot introduced: 5225e1b87432dcf0d0fc3440824b91d04c1d6cc1
+> #regzbot title: no serial output in KernelCI tests on meson8b-odroidc1
+> for stable-4.14
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
