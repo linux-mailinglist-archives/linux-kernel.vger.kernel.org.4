@@ -2,147 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150306D85FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B396D85F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjDES2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S232680AbjDES1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234154AbjDES16 (ORCPT
+        with ESMTP id S231311AbjDES1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:27:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A12361A2;
-        Wed,  5 Apr 2023 11:27:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3569C64083;
-        Wed,  5 Apr 2023 18:27:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FDBC433D2;
-        Wed,  5 Apr 2023 18:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680719275;
-        bh=S45JL7p28MzbNIkK/R/Rxee7+W/06GYb1Miri9LtNes=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pSYqHsSrKTYeLipOE4a9ZP6avOxOgVZqmcWjoiGzeqAOx/sI/cjao7rIPo/01zM/D
-         lhu2OAZPIb8qrmmUx16Aj2cPQYjBJ2Gj2o2eFulUB64Ys346lQ62uhO6r0ytNsPEhp
-         x8UTVuwkjdoA8GmgWn/3IFcJg9jOie3vlbUyCcVnjyr//fgh9TVFmwKw9B8E/Xd9zd
-         GldJk1xpXv80Y/1Y1k0959vxdsqhru9u2kcgGCD5yCEqZV3+jZ+Me5DW6VtfawPzhg
-         bVTkQLmHILjnQHygnRNqzF7Tlw/ZRsBjDoKnHnxaLIP5vEtAhuJxHVNGZeW+OeFBgO
-         jcOxVYBzBSDoA==
-Date:   Wed, 5 Apr 2023 13:27:53 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Sajid Dalvi <sdalvi@google.com>, Han Jingoo <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, kernel-team@android.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
-Message-ID: <20230405182753.GA3626483@bhelgaas>
+        Wed, 5 Apr 2023 14:27:48 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2052.outbound.protection.outlook.com [40.107.237.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A6B3A9F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:27:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J6ikn0BMgx6Aob3br7FVADoz3W8G0SMR/9OwLL/p/PADMj80p+0GKRUueZneLR+/zA3IzsnFCPx2wYg2DU/ssNoPFQxhoTLDhwUaqnrD4qfAHPl36cTh7pd4LQhFeZP2nadLumiVsg4l/YHYcPSC/wSHahmQfg0BTLoOfpieLxc0+zvd3sNp5g2gRY0/X7f3uMbcwSMJLlyxqou90JVS+/P4jwBGdB1IUewWU4ibQ/2ewekZJciV77pZB1X3nbVxoICodgv1BWyNEvjJg/gFx27PB6+7SiaJ7ByZpd8HTFOytI0a1RI1U+FUK4gfwgiiP7EG6umMlx2ys82clD9Pwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=K2I0b9CZzJRAYG8FDj2uU7WSYe7YsbtDgg8B7DuEz2E=;
+ b=dFMlvUlIa02NjoAI2LaJe+2mMvl2ko2RsvWUIvDSXkWcG4fqxFZ3fSQLq2psW/8jOwX1PMdG+YYCs9PR7cQY8zG6USx9WXNw4SEvwvaS48ERi7ZP8bnPq8WDlNiXrE7IQduh7XAAv/alTAiJkKcaQ3Hk/PLXFTsuDF5qmSvWh9J1JlBrsfXtXySnhB8oPReDC6vzKdKH/Skuq4bnxIwwyjzthPhaD9AtWhi5HOaxXx9RN21uTavboCM3d0FGuAcLSqjz78ftkgrJ8HvkkF3sm0/x4O0Xd0TvtdNMjHIwaKWXA4IimliIg+yhSVCRfOpwRSzDYdTMWIUDhEqlBzDBhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K2I0b9CZzJRAYG8FDj2uU7WSYe7YsbtDgg8B7DuEz2E=;
+ b=2lsKnRe7jWbRLbxeW/t8Z6m7E6FDrUZAAOTvWp8fA/KF49Ra5qhb/FC1PJVsmWSzoqP9R65zWAeGBQyCZSDN8Qt0O8Nu65Jq3bqoojg3hU9hNHejMitLyGMJ3PJoxbbMqBLQaWKlY1tzuWTmYYauGaxSlc2nvXe5VaCFQgo2t54=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DM4PR12MB6638.namprd12.prod.outlook.com (2603:10b6:8:b5::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.35; Wed, 5 Apr 2023 18:27:45 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%9]) with mapi id 15.20.6254.035; Wed, 5 Apr 2023
+ 18:27:45 +0000
+Message-ID: <9f37165a-5cdb-a688-2595-6cc9bf0e5e43@amd.com>
+Date:   Wed, 5 Apr 2023 14:29:06 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] drm/amd/display: Fix potential null dereference
+To:     Igor Artemiev <Igor.A.Artemiev@mcst.ru>,
+        David Airlie <airlied@gmail.com>
+Cc:     lvc-project@linuxtesting.org,
+        Harry Wentland <harry.wentland@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>
+References: <20230403131037.1912215-1-Igor.A.Artemiev@mcst.ru>
+Content-Language: en-US
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230403131037.1912215-1-Igor.A.Artemiev@mcst.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4PR01CA0459.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d6::18) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZC12lN9Cs0QlPhVh@lpieralisi>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DM4PR12MB6638:EE_
+X-MS-Office365-Filtering-Correlation-Id: f021f918-2eb6-4deb-5a23-08db36037307
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: exnOe1+xJt6dX119oY/G03GMr/aS1Fl33obhSS3yrgwUYFB5m66wroGdGCGH5GFZ1/tztTh9onxZ0liqhc5QmFRlO+irW4BXZJp35igbfQ8UiDe8EcYdCtPEivM+Id/izwkFPkLkyOdpLnbPhHq0HY/WU4rdEI5F/ifFiEqqHrwrgjqhYhdHE02xOh2/s9znBUk+RN/ElFmZZkBBKXdhp6s94srHgeV7EXjqc/HubVKC+9MsT2qTMxzWONgu49U4CfgQfVSVsMbksvnk+gCCm1vYwh06E3EmIbg0UuHo+fJ60JrorllIVa3xYkFMOinAVeWNOjInyJ7jRSsmxoXxQYp9sSZ7KBSyLjxeBbEL0dH6MbgX2ot0SuYXNjZb0ePci2x6NNT2heDsJBvxYXKCzu08IRz/PBRuqej4PMpJt+sgEAjs9OE56HEtU9zWkwX0J8YXxdEderm9CtEfWl3x6IfgsnC2eMG7FHbSUJbntyezEZ/HXcH3BN6edSGTAyBdeXYsio/mwGHTqESg1soeAPtNYNevH72JBO21nIscT2ltKjU6SdSqi6qlAxdL0BLTUfwZfC3Vqyggyk7gpu7JTPVdmy47ydoL/0t87Ws/tnUM2BPImY9VXVi4u5lvyrAQM9s7u7SdmmRILf1lvzZXLg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(39860400002)(346002)(366004)(451199021)(6512007)(26005)(6506007)(53546011)(4326008)(186003)(86362001)(478600001)(54906003)(110136005)(316002)(5660300002)(6486002)(66476007)(8936002)(36756003)(41300700001)(44832011)(2906002)(66946007)(31696002)(8676002)(38100700002)(66556008)(6666004)(31686004)(2616005)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUJNOS96TjZsblgxMEhpTEk3cEFDa1plazhHVktwMDRBSEJ0U0VjdWd1WVZI?=
+ =?utf-8?B?ZXU0YXRrQTVJNHN1bGlXQXpBbExxSDlGNmR2aU9YYUozTk9CYzZTSjJ1VHJi?=
+ =?utf-8?B?VDdhamcwZ3QrZk9XbnR1NWJhaDV5UC9HNVFyaVg5ODRlcEY1dXYySUZ1TVdX?=
+ =?utf-8?B?UVhmMFRURG16OUREZStFV2Z0SnFQU0lxcVVmSktSZjh0bEwyc2Z2MXpyd0hs?=
+ =?utf-8?B?RDNrU3JhV0E4WENrdUt0aXJrQjY0VnFrcmNwUWl0VEZlbHI2VFpvWmwzd1Rn?=
+ =?utf-8?B?Y3VrU0x4VzlrUkZXUFM0eVlNdEUxQkNVaGFSM0ZkblZuSDVhOUNwUEF4aGRn?=
+ =?utf-8?B?TFBkd21WYW9ydUVKRWxHcUxiUzJFN0tzZFh1ZWxhNWhwTlJ3ckI2Zks3S29y?=
+ =?utf-8?B?UTRQaXdkM0xQOFlWTjZsSDMwNlR0VVF5b255MHR4c0JBd3lBWXlESkRUNmFk?=
+ =?utf-8?B?QXBuSDUyaFR1OXhqWmJHQjB2cGdvME1NYnRzMGdPVUdNOVhrc3EzdWpaZmlu?=
+ =?utf-8?B?ZFlweHBRVUwvdUdrelQ2dXRzOWgzTTJMd2QvQmV1MHNOWDkrNnNKcGtzOTBG?=
+ =?utf-8?B?RVlUMXZoRVkrK0JUcTVra3FJaFh5dWpxS1JZSmVFbWVQTS9pVjNpcGJLcW1V?=
+ =?utf-8?B?bUdrR0FxbE8yOEx0YVdYd0g0WngwUDJmS0NRbFA0eHZNZjhwbGk3Y3I2UVVZ?=
+ =?utf-8?B?WVFHTUlISFB3eVB1NmErTWU2U0J3SUVMdlhjUHNoVGlLZkZDVWFpT1o4UE9x?=
+ =?utf-8?B?c2NMd1FoRUVFaUhLVDN3cUIzOFR5OTFPMG5LN3pTSi9MUmZDNCtYZGlMQzlz?=
+ =?utf-8?B?eTBZU0NtOXJBSmt2YXdHRGlPNEVTbUI3WkFCbVpMZVJXcERsNmZXTUNZTk9Q?=
+ =?utf-8?B?Q3pWdVNtRTRwQmN2Q1YvVFdQbVVBVUJNV0lWS0pqVUJoc0dITnM4V1o0SVVw?=
+ =?utf-8?B?aFBHTm5XY1BYdzhTbFIvcm5nUVVOdndJWEZZUDdvdCtObkFZeGUzZGZNN3Ro?=
+ =?utf-8?B?b3hsTkRUYkVhN0xEaWVBcEJnY24wMVV6Y09UVXpPTTdMVEdEbDF0T1BGdzRZ?=
+ =?utf-8?B?NU9KYkhYdzZYVXVXMWdUQWJRVTBWSkJ2SFhLVktXVmxaVk4zWnRLRDNPMzZo?=
+ =?utf-8?B?VHZ4cXB0K09UTzhGRjN6OFNrbXIwcENHemVuazVqYUFxd1QxNUxaV1ZKdGMy?=
+ =?utf-8?B?dTA3elFtdkEySVhiL211d3NsYlJtY0txN0ttNXFGZXo4NlVzT1dmT3ZrKy9Z?=
+ =?utf-8?B?RXJZUktWM0s0Sm9DaW03N0FsaWFFOHVtSDVPWS9WZXhNOEZmeXRUMnFIcE84?=
+ =?utf-8?B?Z3VlSkhkbEp6YUZLREZDb3Byc2dXQzRQc05UZC81dEZIOFBNSFJ5TDc4Tyt6?=
+ =?utf-8?B?OXhCNlpBcW5rMmhvWlY3UzdlQXdqd3pEVlZOYW45eFNuTzZxbWJEVU5OTEFj?=
+ =?utf-8?B?TVhQOVQxaEJ0ZzJmaUxTekNZYTlrSCtjZ3lSMC9QRlh4TzJQZkFTRmJZYXhk?=
+ =?utf-8?B?TVpQcnQza1lGcHJJWFdLck1YdXdSU3NMMXlmSXlpTEplSGNPelZFcWZJRW1F?=
+ =?utf-8?B?cHpRcGZkVXNIOHJpUGVIYjNaR0dkeVRETVg4OGpBZEIxSXUxK2hPby9QU1Jh?=
+ =?utf-8?B?TnZUdHNLSGtmMDRQV3Z1YU41MGpSYjJFRVJaQ0pWQkkyUjRSRDBtR1ovamJy?=
+ =?utf-8?B?MEJGcmR6ZWdCY0dEbnRlRTA3N0hhSXBFN0VSbkpWR0E3Yjgyb2EycmtZM2k1?=
+ =?utf-8?B?bUtuSHQyK20zMnIxNXdkYjhJQlVNQ0w3YTZZWGZ4M0ZjeGlyMjFqOW40aE40?=
+ =?utf-8?B?bDUydHNaQ3RPVFdjTVlYYk1sTW11TE1HVjF4S2RjdE5scmtlSFpoa0NRaXVJ?=
+ =?utf-8?B?Tm5FZGVxTk14YklKNlFqTjFjNVM2blJ2a1lOVjc5dTc1S3BlSWw5YXk0YlNY?=
+ =?utf-8?B?UVoyLzBNR05XWXlwM2VpYmhLL3BIMkVXVzVLL0x0M0VobHN6ZWl3L3hOK2lk?=
+ =?utf-8?B?NGtQMjdVbzRybE53bUVoTG9naDdaWnJZR1BYZ0pKRlorT2ZXQXd0WnI0MGpq?=
+ =?utf-8?B?UmZOdmV2bVk1aGhudTB6MVc5MW1YK3doVThFZ1RidG1ud1EvalF5cnFSTk1Z?=
+ =?utf-8?Q?NXibd5dOq9+uGXNuSrrc6gyto?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f021f918-2eb6-4deb-5a23-08db36037307
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 18:27:44.8130
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CiDGPRhg8DEKf5rMA1BIlaSsljcmtHRle3GwMuXQFRFXJjmLX7kMUdNkoAPeKjRb1dYolNkAWNBQh/LrySw/Nw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6638
+X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 03:24:36PM +0200, Lorenzo Pieralisi wrote:
-> On Thu, Mar 16, 2023 at 06:05:02PM -0500, Sajid Dalvi wrote:
-> > On Tue, Feb 28, 2023 at 10:36 PM Sajid Dalvi <sdalvi@google.com> wrote:
-> > >
-> > > Thanks for your review Jingoo.
-> > > Sajid
-> > >
-> > > On Tue, Feb 28, 2023 at 4:04 PM Han Jingoo <jingoohan1@gmail.com> wrote:
-> > > >
-> > > > On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
-> > > > >
-> > > > > In dw_pcie_host_init() regardless of whether the link has been started
-> > > > > or not, the code waits for the link to come up. Even in cases where
-> > > > > start_link() is not defined the code ends up spinning in a loop for 1
-> > > > > second. Since in some systems dw_pcie_host_init() gets called during
-> > > > > probe, this one second loop for each pcie interface instance ends up
-> > > > > extending the boot time.
-> > > > >
-> > > > > Call trace when start_link() is not defined:
-> > > > > dw_pcie_wait_for_link << spins in a loop for 1 second
-> > > > > dw_pcie_host_init
-> > > > >
-> > > > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
-> > > >
-> > > > (CC'ed Krzysztof Kozlowski)
-> > > >
-> > > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
-> > > >
-> > > > It looks good to me. I also checked the previous thread.
-> > > > I agree with Krzysztof's opinion that we should include
-> > > > only hardware-related features into DT.
-> > > > Thank you.
-> > > >
-> > > > Best regards,
-> > > > Jingoo Han
-> > > >
-> > > > > ---
-> > > > >  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
-> > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > index 9952057c8819..9709f69f173e 100644
-> > > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > > @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
-> > > > >                 ret = dw_pcie_start_link(pci);
-> > > > >                 if (ret)
-> > > > >                         goto err_remove_edma;
-> > > > > -       }
-> > > > >
-> > > > > -       /* Ignore errors, the link may come up later */
-> > > > > -       dw_pcie_wait_for_link(pci);
-> > > > > +               /* Ignore errors, the link may come up later */
-> > > > > +               dw_pcie_wait_for_link(pci);
-> > > > > +       }
-> > > > >
-> > > > >         bridge->sysdata = pp;
-> > > > >
-> > > > > --
-> > > > > 2.39.2.722.g9855ee24e9-goog
-> > > > >
-> > 
-> > @bhelgaas Can this be picked up in your tree:
-> >  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/
+On 4/3/23 09:10, Igor Artemiev wrote:
+> The adev->dm.dc pointer can be NULL and dereferenced in amdgpu_dm_fini()
+> without checking.
 > 
-> This patch seems fine to me. The question I have though is why the
-> *current* code is written the way it is. Perhaps it is just the way
-> it is, I wonder whether this change can trigger a regression though.
+> Add a NULL pointer check before calling dc_dmub_srv_destroy().
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 9a71c7d31734 ("drm/amd/display: Register DMUB service with DC")
+> Signed-off-by: Igor Artemiev <Igor.A.Artemiev@mcst.ru>
 
-The new code will look basically like this:
+Applied, thanks!
 
-  if (!dw_pcie_link_up(pci)) {
-    dw_pcie_start_link(pci);
-    dw_pcie_wait_for_link(pci);
-  }
+> ---
+>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index a01fd41643fc..27f7a554874e 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -1854,7 +1854,8 @@ static void amdgpu_dm_fini(struct amdgpu_device *adev)
+>   		dc_deinit_callbacks(adev->dm.dc);
+>   #endif
+>   
+> -	dc_dmub_srv_destroy(&adev->dm.dc->ctx->dmub_srv);
+> +	if (adev->dm.dc)
+> +		dc_dmub_srv_destroy(&adev->dm.dc->ctx->dmub_srv);
+>   
+>   	if (dc_enable_dmub_notifications(adev->dm.dc)) {
+>   		kfree(adev->dm.dmub_notify);
+-- 
+Hamza
 
-If the link is already up by the time we get here, this change means
-we won't get this message emitted by dw_pcie_wait_for_link():
-
-  dev_info(pci->dev, "PCIe Gen.%u x%u link up\n", ...)
-
-I don't know how important that is, but I bet somebody cares about it.
-
-From the commit log, I expected the patch to do something based on
-whether ->start_link() was defined, but there really isn't a direct
-connection, so maybe the log could be refined.
-
-Bjorn
