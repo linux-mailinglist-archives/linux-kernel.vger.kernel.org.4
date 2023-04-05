@@ -2,172 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 660936D7A5B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7905F6D7A60
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237842AbjDEKvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S237270AbjDEKwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237597AbjDEKu5 (ORCPT
+        with ESMTP id S231733AbjDEKw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:50:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49D0255A4
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:50:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CF03175A;
-        Wed,  5 Apr 2023 03:51:36 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AE113F73F;
-        Wed,  5 Apr 2023 03:50:50 -0700 (PDT)
-Message-ID: <0da58608-2958-fc6c-effb-2f73013c609f@arm.com>
-Date:   Wed, 5 Apr 2023 12:50:48 +0200
+        Wed, 5 Apr 2023 06:52:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EE14C20;
+        Wed,  5 Apr 2023 03:52:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A97763CA0;
+        Wed,  5 Apr 2023 10:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE13C433D2;
+        Wed,  5 Apr 2023 10:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680691946;
+        bh=NFRpILb73SbXaqiAYsKtilbT82AouxOyjWQbgbTHezs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZnYIJ5Ar3+7sS99S55DFY6IBTnOyKAQxvj8tmXpSFEJ822wruQow62yrmM7Xpkj5m
+         fRq+tYuuarRJh46WQxH4roDT3GYkRtyo5KDmHhoKU0KWBJXK4kMnBT793JQIjnM4yo
+         ZwZTRrOBLoOPkCmrUhaaf8Um6WytBYRszsq/jRjkumMgKN4IiNmrDJgw1Ipi7RfZkX
+         u74vNyWMYYwrjW1k2bNH3jnsiLPaVeABlhyVyrfrdaQqw6hbCs1h66XMH8NNM1ddhb
+         402AqjJ7tq5c9iB59DNpyd1K/Q3Iy2h6WciigcDJS9WnYR1O+sYtQ/8/EW8lxQvovQ
+         b+vAxvqbwncGQ==
+Date:   Wed, 5 Apr 2023 11:52:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Support Opensource <support.opensource@diasemi.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Steve Twiss <stwiss.opensource@diasemi.com>,
+        DLG-Adam.Thomson.Opensource@dm.renesas.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Subject: Re: [PATCH v2 2/3] regulator: da9063: implement basic XVP setter
+Message-ID: <35202b81-abd6-4e0b-b2ad-a385cbb3979d@sirena.org.uk>
+References: <20230403-da9063-disable-unused-v2-0-2f1bd2a2434a@skidata.com>
+ <20230403-da9063-disable-unused-v2-2-2f1bd2a2434a@skidata.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH 1/6] sched/fair: Add util_guest for tasks
-Content-Language: en-US
-To:     David Dai <davidai@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-References: <20230330224348.1006691-1-davidai@google.com>
- <20230330224348.1006691-2-davidai@google.com>
- <e3aa7e66-27d0-034b-7bdf-f4fab1c2df25@arm.com>
- <CABN1KC+E5tdCBTDu8x_mNzk6L0=Yu8DfpyV-9rMddiRigOFrCQ@mail.gmail.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <CABN1KC+E5tdCBTDu8x_mNzk6L0=Yu8DfpyV-9rMddiRigOFrCQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RCHnR4IsBmgTcBdi"
+Content-Disposition: inline
+In-Reply-To: <20230403-da9063-disable-unused-v2-2-2f1bd2a2434a@skidata.com>
+X-Cookie: 1 bulls, 3 cows.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 03:11, David Dai wrote:
-> On Mon, Apr 3, 2023 at 4:40 AM Dietmar Eggemann
-> <dietmar.eggemann@arm.com> wrote:
->>
->> Hi David,
-> Hi Dietmar, thanks for your comments.
->>
->> On 31/03/2023 00:43, David Dai wrote:
 
-[...]
+--RCHnR4IsBmgTcBdi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>> index 6986ea31c984..998649554344 100644
->>> --- a/kernel/sched/fair.c
->>> +++ b/kernel/sched/fair.c
->>> @@ -4276,14 +4276,16 @@ static int newidle_balance(struct rq *this_rq, struct rq_flags *rf);
->>>
->>>  static inline unsigned long task_util(struct task_struct *p)
->>>  {
->>> -     return READ_ONCE(p->se.avg.util_avg);
->>> +     return max(READ_ONCE(p->se.avg.util_avg),
->>> +                     READ_ONCE(p->se.avg.util_guest));
->>>  }
->>>
->>>  static inline unsigned long _task_util_est(struct task_struct *p)
->>>  {
->>>       struct util_est ue = READ_ONCE(p->se.avg.util_est);
->>>
->>> -     return max(ue.ewma, (ue.enqueued & ~UTIL_AVG_UNCHANGED));
->>> +     return max_t(unsigned long, READ_ONCE(p->se.avg.util_guest),
->>> +                     max(ue.ewma, (ue.enqueued & ~UTIL_AVG_UNCHANGED)));
->>>  }
->>
->> I can't see why the existing p->uclamp_req[UCLAMP_MIN].value can't be
->> used here instead p->se.avg.util_guest.
-> Using p->uclamp_req[UCLAMP_MIN].value would result in folding in
-> uclamp values into task_util and task_util_est for all tasks that have
-> uclamp values set. The intent of these patches isn’t to modify
-> existing uclamp behaviour. Users would also override util values from
-> the guest when they set uclamp values.
->>
->> I do understand the issue of inheriting uclamp values at fork but don't
->> get the not being `additive` thing. We are at task level here.
+On Wed, Apr 05, 2023 at 07:29:08AM +0200, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
+>=20
+> Allow to en- and disable voltage monitoring from the device tree.
+> Consider that the da9063 only monitors UV *and* OV together, so both
+> must be en- or disabled.
 
-> Uclamp values are max aggregated with other tasks at the runqueue
-> level when deciding CPU frequency. For example, a vCPU runqueue may
-> have an util of 512 that results in setting 512 to uclamp_min on the
-> vCPU task. This is insufficient to drive a frequency response if it
-> shares the runqueue with another host task running with util of 512 as
-> it would result in a clamped util value of 512 at the runqueue(Ex. If
-> a guest thread had just migrated onto this vCPU).
+I have no idea what a "basic XVP setter" is and this isn't super
+enlightening.  Is VP supposed to mean voltage protection or something?
 
-OK, see your point now. You want an accurate per-task boost for this
-vCPU task on the host run-queue.
-And a scenario in which a vCPU can ask for 100% in these moments is not
-sufficient I guess? In this case uclamp_min could work.
+> +	/* make sure that both UV/OV protections are either enabled or disabled=
+ */
+> +	if (uv_l->prot !=3D ov_l->prot || uv_l->err !=3D ov_l->err || uv_l->war=
+n !=3D ov_l->warn) {
+> +		dev_err(config->dev, "%s: regulator-uv-X-microvolt !=3D regulator-ov-X=
+-microvolt\n",
+> +			regl->desc.name);
+> +		return -EINVAL;
 
->> The fact that you have to max util_avg and util_est directly in
->> task_util() and _task_util_est() tells me that there are places where
->> this helps and uclamp_task_util() is not called there.
-> Can you clarify on this point a bit more?
+I'm not sure that a user is going to figure out that this refers to the
+protection levels, there's no hint as to what the X might be and the
+error suggests that both the under and over voltage protection limits
+must be have the same value, not just both be provided.
 
-Sorry, I meant s/util_est/util_guest/.
+--RCHnR4IsBmgTcBdi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The effect of the change in _task_util_est() you see via:
+-----BEGIN PGP SIGNATURE-----
 
-enqueue_task_fair()
-  util_est_enqueue()
-    cfs_rq->avg.util_est.enqueued += _task_util_est(p)
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtUuIACgkQJNaLcl1U
+h9AsoAf+KvtAxc8Zw7X+DUeCMbRgu7dC4di4jW4yUNhLH2DRMEo9/jBLgRh2vO64
+5ySVz2O/jMvoyAKyJarrFtlEpncvCnFeiodAHH/8hNFYNJ8Wi3uiW5CzhEpmxMQ5
+43yLej97NrhwFh381TO3iUjgqWfcvMWUq/Kb8bxHSZJPvT4vUzJXD5kAXs8LxVx9
+0pkXk+GJyVEbKrVLlbryx9NC0NUArxASTq9sKolZuYJvGc6+/UJ8rmVmpdxVdVFV
+vHSkXgiKxPoQ34I+6q+0jgGuKPowL3pxGr+qFU9e7YiEEeQKMPj243h15O2Yy8cO
+qac8PhwJdq+3ZhHoflXF0K7uf6IMhw==
+=tCLj
+-----END PGP SIGNATURE-----
 
-so that `sugov_get_util() -> cpu_util_cfs() ->
-cfs_rq->avg.util_est.enqueued` can see the effect of util_guest?
-
-Not sure about the change in task_util() yet.
-
->> When you say in the cover letter that you tried uclamp_min, how exactly
->> did you use it? Did you run the existing mainline or did you use
->> uclamp_min as a replacement for util_guest in this patch here?
-
-> I called sched_setattr_nocheck() with .sched_flags =
-> SCHED_FLAG_UTIL_CLAMP when updating uclamp_min and clamp_max is left
-> at 1024. Uclamp_min was not aggregated with task_util and
-> task_util_est during my testing. The only caveat there is that I added
-> a change to only reset uclamp on fork when testing(I realize there is
-> specifically a SCHED_FLAG_RESET_ON_FORK, but I didn’t want to reset
-> other sched attributes).
-
-OK, understood. It's essentially a util_est v2 for vCPU tasks on host.
-
->>>  static inline unsigned long task_util_est(struct task_struct *p)
->>> @@ -6242,6 +6244,15 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->>>        */
->>>       util_est_enqueue(&rq->cfs, p);
->>>
->>> +     /*
->>> +      * The normal code path for host thread enqueue doesn't take into
->>> +      * account guest task migrations when updating cpufreq util.
->>> +      * So, always update the cpufreq when a vCPU thread has a
->>> +      * non-zero util_guest value.
->>> +      */
->>> +     if (READ_ONCE(p->se.avg.util_guest))
->>> +             cpufreq_update_util(rq, 0);
->>
->>
->> This is because enqueue_entity() -> update_load_avg() ->
->> attach_entity_load_avg() -> cfs_rq_util_change() requires root run-queue
->> (&rq->cfs == cfs_rq) to call cpufreq_update_util()?
-> The enqueue_entity() would not call into update_load_avg() due to the
-> check for !se->avg.last_update_time. se->avg.last_update_time is
-> non-zero because the vCPU task did not migrate before this enqueue.
-> This enqueue path is reached when util_guest is updated for the vCPU
-> task through the sched_setattr_nocheck call where we want to ensure a
-> frequency update occurs.
-
-OK, vCPU tasks are pinned so always !WF_MIGRATED wakeup I guess?
+--RCHnR4IsBmgTcBdi--
