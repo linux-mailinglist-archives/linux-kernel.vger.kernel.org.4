@@ -2,221 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164976D8907
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCA16D8910
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbjDEUrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S234096AbjDEUth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234474AbjDEUrs (ORCPT
+        with ESMTP id S232640AbjDEUtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:47:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1041BEE;
-        Wed,  5 Apr 2023 13:47:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 391F262BB9;
-        Wed,  5 Apr 2023 20:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62061C433EF;
-        Wed,  5 Apr 2023 20:47:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680727666;
-        bh=JHYkzEFJehfbG4+KRCg90sRcADee5WmNO6JSJDaA3UI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KcHIC6dk/n3uDrmqf2bu7zCEr2DJ28jvt/zGKEVORnaPu5cmB/PPFR8mfpeGN/do5
-         NpDaLZ7zP7rS5/zBniaVT8rxVDJz5wXWVpsnD8PD55oeh8HNwDMGQ3lFXXFM48ZVIa
-         pzzusqmdFST6v5G6DN5KPM87zqTQHjI3D1oRsUfoPiput1EuVKhDSNPDMQ6E7NLqe+
-         6YsQ4khuyLr0TT78b3fBh/Uxkv0Aaw+JUOkc2MBPgOkEc86xCee7NYch51aJntyXX1
-         wo75tXqHKzWTaLjc8F8sc+bDJbnDcWD/7S1KDhL7Jrffne5O14KVvejg72d2xpuAGJ
-         WisliDXJc8UyA==
-Date:   Wed, 5 Apr 2023 13:47:44 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Chao Yu <chao@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [f2fs-dev] [PATCH] f2fs: get out of a repeat loop when getting a
- locked data page
-Message-ID: <ZC3ecF7pklH8CxBw@google.com>
-References: <20230323213919.1876157-1-jaegeuk@kernel.org>
- <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
- <ZCG2mfviZfY1dqb4@google.com>
- <ZCHCykI/BLcfDzt7@casper.infradead.org>
- <ZC2kSfNUXKK4PfpM@google.com>
+        Wed, 5 Apr 2023 16:49:35 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AF21736
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:49:34 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-545e907790fso585059947b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 13:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1680727773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5pWPy9H+by09Lc7YU/CRUS1UICIUAlLK+lHzVatngeE=;
+        b=B3041m78p7E6ryUg79fJRRVjBHF6S5BGYn5Vxoe4WzJgWCwBFKMhH3uCrn1/jJZWeS
+         NXL4m6wLhrcYN8Cq+JD9SYut3PwbUIAvvnyWIsyR4gtqbKFLTA4ut4VA+q54zO0CEnvn
+         NwZn2DeWuS1gOoYvfcIQU+VbqBTOmwV8Xs0cWCB7OYPx22b47dy3J6jpF7Mhe2SukCUT
+         vtyztoHiaW1wpek56l3thVBng3IVX+R6LFPLTIhNA75IEwUltMDMC4F9hI9m9gxYURRZ
+         noi73sXaKEWbUT4DnrKeFoRs9BbqSnAf7R2DrdsWNWeP5E9GfbnBUjlymoBdW5qqnskd
+         4UJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680727773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5pWPy9H+by09Lc7YU/CRUS1UICIUAlLK+lHzVatngeE=;
+        b=egR8CMRot6ckXi04GQP9EPBk/JJIc+kwmSfTcoCF8H9vg2QJ/KuD2xEWit5cUYQ1xJ
+         cOLAVXWKldB3mPfMQsijBH5j4RV+HpmjLe3d2rfqBXiOfqr92m1ymN834BOtIyRDpPX4
+         czNIgiICx1B4z5HiQiKFuIx6pXdp0C6cOR9vDdi4y6Eqc9ctMf/gbFAdogLn+eS5IJbe
+         Vu52PzDniVRlgGV5mawLS404aZXW0wIniuLR8qcSxtFmZ7qSCrzYQUoKhA1DFXbNNBkG
+         pgb6Aota985OoUclLaQc+Xy1woU1q38Vi3wkQUTxuw2dKh2ZSImnis4hI+t+eod6N7xe
+         813w==
+X-Gm-Message-State: AAQBX9evV5tEfCLQeGrL8APhwTW+shwQfU95p1jD7A9Jch9G+9mpdfa/
+        yvmc2BINaZDdddKJTtBJ/oy6vLEhuY7TuMNBL4Be
+X-Google-Smtp-Source: AKy350YJj7FMbHWmT59qEFH/cQJBdm+KmHto/nwnR0zUZtFhRoG0MUVWwyxqKH3jKCnaogS2NEmGimPdd7MjJk49mRI=
+X-Received: by 2002:a81:9902:0:b0:545:632d:e78b with SMTP id
+ q2-20020a819902000000b00545632de78bmr2838427ywg.0.1680727773518; Wed, 05 Apr
+ 2023 13:49:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC2kSfNUXKK4PfpM@google.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
+ <20230331123221.3273328-3-roberto.sassu@huaweicloud.com> <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
+ <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com> <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
+ <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com> <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
+In-Reply-To: <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 5 Apr 2023 16:49:22 -0400
+Message-ID: <CAHC9VhTO02CGUt0DUUmx=TUYS7Q81fas_Qy5miOFonaye0NEmw@mail.gmail.com>
+Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05, Jaegeuk Kim wrote:
-> On 03/27, Matthew Wilcox wrote:
-> > On Mon, Mar 27, 2023 at 08:30:33AM -0700, Jaegeuk Kim wrote:
-> > > On 03/26, Chao Yu wrote:
-> > > > On 2023/3/24 5:39, Jaegeuk Kim wrote:
-> > > > > https://bugzilla.kernel.org/show_bug.cgi?id=216050
-> > > > > 
-> > > > > Somehow we're getting a page which has a different mapping.
-> > > > > Let's avoid the infinite loop.
-> > > > > 
-> > > > > Cc: <stable@vger.kernel.org>
-> > > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > > > > ---
-> > > > >   fs/f2fs/data.c | 8 ++------
-> > > > >   1 file changed, 2 insertions(+), 6 deletions(-)
-> > > > > 
-> > > > > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > > > > index bf51e6e4eb64..80702c93e885 100644
-> > > > > --- a/fs/f2fs/data.c
-> > > > > +++ b/fs/f2fs/data.c
-> > > > > @@ -1329,18 +1329,14 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
-> > > > >   {
-> > > > >   	struct address_space *mapping = inode->i_mapping;
-> > > > >   	struct page *page;
-> > > > > -repeat:
-> > > > > +
-> > > > >   	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
-> > > > >   	if (IS_ERR(page))
-> > > > >   		return page;
-> > > > >   	/* wait for read completion */
-> > > > >   	lock_page(page);
-> > > > > -	if (unlikely(page->mapping != mapping)) {
-> > > > 
-> > > > How about using such logic only for move_data_page() to limit affect for
-> > > > other paths?
-> > > 
-> > > Why move_data_page() only? If this happens, we'll fall into a loop in anywhere?
-> > > 
-> > > > 
-> > > > Jaegeuk, any thoughts about why mapping is mismatch in between page's one and
-> > > > inode->i_mapping?
-> > > 
-> > > > 
-> > > > After several times code review, I didn't get any clue about why f2fs always
-> > > > get the different mapping in a loop.
-> > > 
-> > > I couldn't find the path to happen this. So weird. Please check the history in the
-> > > bug.
-> > > 
-> > > > 
-> > > > Maybe we can loop MM guys to check whether below folio_file_page() may return
-> > > > page which has different mapping?
-> > > 
-> > > Matthew may have some idea on this?
-> > 
-> > There's a lot of comments in the bug ... hard to come into this one
-> > cold.
-> > 
-> > I did notice this one (#119):
-> > : Interestingly, ref count is 514, which looks suspiciously as a binary
-> > : flag 1000000010. Is it possible that during 5.17/5.18 implementation
-> > : of a "pin", somehow binary flag was written to ref count, or something
-> > : like '1 << ...' happens?
-> > 
-> > That indicates to me that somehow you've got hold of a THP that is in
-> > the page cache.  Probably shmem/tmpfs.  That indicate to me a refcount
-> > problem that looks something like this:
-> > 
-> > f2fs allocates a page
-> > f2fs adds the page to the page cache
-> > f2fs puts the reference to the page without removing it from the
-> > page cache (how?)
-> 
-> Is it somewhat related to setting a bit in private field?
-> 
-> When we migrate the blocks, we do:
-> 1) get_lock_page()
-> 2) submit read
-> 3) lock_page()
-> 3) set_page_dirty()
-> 4) set_page_private_gcing(page)
-> 
-> --- in fs/f2fs/f2fs.h
-> 1409 #define PAGE_PRIVATE_SET_FUNC(name, flagname) \
-> 1410 static inline void set_page_private_##name(struct page *page) \
-> 1411 { \
-> 1412         if (!PagePrivate(page)) { \
-> 1413                 get_page(page); \
-> 1414                 SetPagePrivate(page); \
-> 1415                 set_page_private(page, 0); \
-> 1416         } \
-> 1417         set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page)); \
-> 1418         set_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
-> 1419 }
-> 
-> 
-> 5) set_page_writebac()
-> 6) submit write
-> 7) unlock_page()
-> 8) put_page(page)
-> 
-> Later, f2fs_invalidate_folio will do put_page again by:
-> clear_page_private_gcing(&folio->page);
-> 
-> --- in fs/f2fs/f2fs.h
-> 1421 #define PAGE_PRIVATE_CLEAR_FUNC(name, flagname) \
-> 1422 static inline void clear_page_private_##name(struct page *page) \
-> 1423 { \
-> 1424         clear_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
-> 1425         if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) { \
-> 1426                 set_page_private(page, 0); \
-> 1427                 if (PagePrivate(page)) { \
-> 1428                         ClearPagePrivate(page); \
-> 1429                         put_page(page); \
-> 1430                 }\
-> 1431         } \
-> 1432 }
+On Wed, Apr 5, 2023 at 4:43=E2=80=AFPM Casey Schaufler <casey@schaufler-ca.=
+com> wrote:
+> On 4/5/2023 12:59 PM, Paul Moore wrote:
+> > On Wed, Apr 5, 2023 at 5:44=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> >> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
+> >>> On 4/4/2023 11:54 AM, Paul Moore wrote:
+> >>>> On Fri, Mar 31, 2023 at 8:33=E2=80=AFAM Roberto Sassu
+> >>>> <roberto.sassu@huaweicloud.com> wrote:
+> > ..
+> >
+> >>>>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.=
+c
+> >>>>> index cfcbb748da2..8392983334b 100644
+> >>>>> --- a/security/smack/smack_lsm.c
+> >>>>> +++ b/security/smack/smack_lsm.c
+> >>>>> @@ -52,6 +52,15 @@
+> >>>>>   #define SMK_RECEIVING  1
+> >>>>>   #define SMK_SENDING    2
+> >>>>>
+> >>>>> +/*
+> >>>>> + * Smack uses multiple xattrs.
+> >>>>> + * SMACK64 - for access control, SMACK64EXEC - label for the progr=
+am,
+> >>>> I think it would be good to move SMACK64EXEC to its own line; it too=
+k
+> >>>> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set to '4'
+> >>>> when I only say three comment lines ... ;)
+> >>>>
+> >>>>> + * SMACK64MMAP - controls library loading,
+> >>>>> + * SMACK64TRANSMUTE - label initialization,
+> >>>>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
+> >>>>> + */
+> >>>>> +#define SMACK_INODE_INIT_XATTRS 4
+> >>>> If smack_inode_init_security() only ever populates a single xattr, a=
+nd
+> >>>> that is the only current user of SMACK_INODE_INIT_XATTRS, can we mak=
+e
+> >>>> this '1' and shrink the xattr allocation a bit?
+> >>> If the parent directory is marked with SMACK64_TRANSMUTE, the access
+> >>> rule allowing the access has the "t" mode, and the object being initi=
+alized
+> >>> is a directory, the new inode should get the SMACK64_TRANSMUTE attrib=
+ute.
+> >>> The callers of security_inode_init_security() don't seem to care.
+> >>> I can't say if the evm code is getting SMACK64_TRANSMUTE or, for that
+> >>> matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older syst=
+em
+> >>> allowed for multiple Smack xattrs, but I'm not clear on exactly how.
+> >> If you like to set an additional xattr, that would be possible now.
+> >> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
+> >> another time and set SMACK64_TRANSMUTE.
+> >>
+> >> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
+> >> EVM would protect SMACK64_TRANSMUTE too.
+> >
+> > Ooookay, but can someone explain to me how either the current, or
+> > patched, smack_inode_init_security() function can return multiple
+> > xattrs via the security_inode_init_security() LSM hook?
+>
+> It can't.
 
-It seems f2fs_invalidate_folio and f2fs_release_folio drop the refcount by
-folio_detach_private() additionally.
+I didn't think so.
 
-https://lore.kernel.org/lkml/20230405204321.2056498-1-jaegeuk@kernel.org/T/#u
+To be really specific, that's what we're talking about with this
+patch: the number of xattrs that smack_inode_init_security() can
+return to the LSM hook (and EVM, and the caller ...).  If it's only
+ever going to be one, I think we can adjust the
+'SMACK_INODE_INIT_XATTRS' down to '1' and save ourselves some
+allocation space.
 
-> 
-> > page is now free, gets reallocated into a THP
-> > lookup from the f2fs file finds the new THP
-> > things explode messily
-> > 
-> > Checking page->mapping is going to avoid the messy explosion, but
-> > you'll still have a page in the page cache which doesn't actually
-> > belong to you, and that's going to lead to subtle data corruption.
-> > 
-> > This should be caught by page_expected_state(), called from
-> > free_page_is_bad(), called from free_pages_prepare().  Do your testers
-> > have CONFIG_DEBUG_VM enabled?  That might give you a fighting chance at
-> > finding the last place which called put_page().  It won't necessarily be
-> > the _wrong_ place to call put_page() (that may have happened earlier),
-> > but it may give you a clue.
-> > 
-> > > > 
-> > > > struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
-> > > > 		int fgp_flags, gfp_t gfp)
-> > > > {
-> > > > 	struct folio *folio;
-> > > > 
-> > > > 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
-> > > > 	if (IS_ERR(folio))
-> > > > 		return NULL;
-> > > > 	return folio_file_page(folio, index);
-> > > > }
-> > > > 
-> > > > Thanks,
-> > > > 
-> > > > > -		f2fs_put_page(page, 1);
-> > > > > -		goto repeat;
-> > > > > -	}
-> > > > > -	if (unlikely(!PageUptodate(page))) {
-> > > > > +	if (unlikely(page->mapping != mapping || !PageUptodate(page))) {
-> > > > >   		f2fs_put_page(page, 1);
-> > > > >   		return ERR_PTR(-EIO);
-> > > > >   	}
+--=20
+paul-moore.com
