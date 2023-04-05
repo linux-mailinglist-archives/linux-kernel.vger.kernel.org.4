@@ -2,131 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87B46D8912
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804B76D8DBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjDEUuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S230114AbjDFCwc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 22:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232985AbjDEUuA (ORCPT
+        with ESMTP id S233867AbjDFCwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:50:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF6A10E7;
-        Wed,  5 Apr 2023 13:49:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IKKsnS3MuUIvRxMy4gZqz2HRi+ZqkC38lFixxuuqyM0=; b=fE14ROxcsZyXXmo/B5pJ4W4N7Y
-        BL9RtcBObIBQP/0sd7V5jWKBJCz8XJSFdaseUG5oekzFKVgjuSYzxKu6Uc9dXu+SJ3JppkqmcWjbH
-        hM93rlw1sXbzoSMyDOYJYy5VyseTmP/h5f2BpVl8IzNhm5WEZ+ANtK4lggPZUFCc01Jy3CI7Lcr7o
-        qSaC+u81xVk2+VP9FezUkzI1pt7zLW1h4TDhaZT6+ZubXunWdEUx20wDNw4+AjEdMeezAwbnbkjAx
-        RVTo6TX23eHJWeBE948QSCg+cxyVX0aRK5iS3YHn0htgslwFijmbwaYqCAhDwkocw+qmqJbZBuvwC
-        /B3+rYJA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pkA4d-00Gkcy-NU; Wed, 05 Apr 2023 20:49:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0CE1C30036C;
-        Wed,  5 Apr 2023 22:49:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E98FA26A19DBF; Wed,  5 Apr 2023 22:49:42 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 22:49:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v2 03/13] rust: lock: introduce `Mutex`
-Message-ID: <20230405204942.GH365912@hirez.programming.kicks-ass.net>
-References: <20230405175111.5974-1-wedsonaf@gmail.com>
- <20230405175111.5974-3-wedsonaf@gmail.com>
- <2023040554-promoter-chevron-10b2@gregkh>
- <2023040509-tamer-clinic-c14c@gregkh>
- <20230405191826.GA365912@hirez.programming.kicks-ass.net>
- <ZC3YWLmIick4jSSv@wedsonaf-dev>
- <20230405202932.GG365912@hirez.programming.kicks-ass.net>
- <ZC3cxzpnrnXf/osU@wedsonaf-dev>
+        Wed, 5 Apr 2023 22:52:08 -0400
+X-Greylist: delayed 18302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 19:51:51 PDT
+Received: from out15-50.antispamcloud.com (out15-50.antispamcloud.com [185.201.19.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693635FE1
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 19:51:51 -0700 (PDT)
+Received: from iix60.idcloudhost.com ([103.28.53.75])
+        by mx249.antispamcloud.com with esmtpsa (TLSv1.2:AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <jXPKcXZDfI@nadilaaulya.my.id>)
+        id 1pkA55-0007Uw-Ir; Wed, 05 Apr 2023 22:50:13 +0200
+Received: from mob-176-243-3-86.net.vodafone.it ([176.243.3.86]:54427 helo=[192.168.43.208])
+        by iix60.idcloudhost.com with esmtpsa  (TLS1) tls TLS_DHE_RSA_WITH_AES_256_CBC_SHA
+        (Exim 4.96)
+        (envelope-from <jXPKcXZDfI@nadilaaulya.my.id>)
+        id 1pkA4v-0003N5-2r;
+        Thu, 06 Apr 2023 03:50:00 +0700
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC3cxzpnrnXf/osU@wedsonaf-dev>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Inquiry
+To:     Recipients <jXPKcXZDfI@nadilaaulya.my.id>
+From:   "Mrs. Liubov Halkina" <jXPKcXZDfI@nadilaaulya.my.id>
+Date:   Wed, 05 Apr 2023 15:49:45 -0500
+Reply-To: cathles2126@aol.com
+X-AuthUser: jxpkcxzdfi@nadilaaulya.my.id
+Message-ID: <E1pkA55-0007Uw-Ir@mx249.antispamcloud.com>
+X-Originating-IP: 103.28.53.75
+X-Spampanel-Domain: cloudhost.id
+X-Spampanel-Username: iix60
+Authentication-Results: antispamcloud.com; auth=pass (login) smtp.auth=iix60@cloudhost.id
+X-Spampanel-Outgoing-Class: unsure
+X-Spampanel-Outgoing-Evidence: Combined (0.52)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9/iWsekoqn7fElRVT1CZrDPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w1OL79HMxE022P+rQy8YAdcSeERs4TOTnIH1kc1IWc5QvZ
+ FNshWKOptDHV4rDuRrwD+zBJgS5HrOaXNfwbIcOpdhytPvAzwbvthr5T+WaJ3IrVe6MYchJAV6vY
+ 2clitzmGR50Rt0hSj27ZfQBPfQS1BKGDzSBE0I7ahDVo+4Mi/dGECT3kI3RcmOSkkbGSnUdPy/CL
+ haCNSxSeHzgt4C/wBQ1qSkPU1Z9IA5QRm6AYk/yjZOAkFkYkh+zBk/+h5FCL6wlQWcCa+d3t5m9d
+ pOppr4EKf43h8s44lZGEOrirImZTn11A5J+voK+OZ+OysuJAeHDOlJamhyT3Zn1AP19paqpL04Lh
+ kdzpQ3+YGOvCAqO4xQi9u21KYktPzlOrZrJEHFRKvsj+qr3uFx3SKW9wXJWlQddgqYifiN81A3Kr
+ jtvHx/HPOHy66mtEZC0SffrcjrSM4XSckOzefRjSo7RJFnFk5QeoIhTb0vpmTUk/lmKzPznVCsTv
+ wBdUt45TL/n+g1I5cU5ASWF3YihwlfqZPX6iPkYCg6IVeyIdiYVYZefHzJ6mVE7ewsipSVIfs4Yb
+ 6F51o2dafSXEbwfPGzfUpXiX2pZguJIFYZQ5o/8glo7twBGNicoeAmiUJV7Lk7uPO6fMbrFkDBrl
+ 30p2f0pIzFs+HYI+OPBhv7gMj92oF6sYlQv0kL5FekfrcqpfpJ7xGmS+MahgAkTUsi0l+6Y+feMH
+ R8aq2/5i2Hq0azpR4/tJ1i8yWhKRhlZtIewm4g3qjDtNEr66BWV3gkpHrW5aDw5Ualc0WNVLVhn2
+ ci9wolHuFYI49u8jswym/o0GV1/y46OqoeAXE4BQ8lBtKHg4RAwX31WVY5lWjWxuGSRuxeJzDfMA
+ tOAceXA4ObfBDRMJjWbztcmmVLi5P0lVv9DM5YE5enyccp7RH4WQio3uGc4EkcYEFGi9FKW2Oquj
+ YjMhEWyJzIkwSFAW0Pw8uiKeJZG7XQhExlDF+oTIhdGS/x0hu1s1K8XTCrJW070uKDB1yc6ww/XT
+ ARu4cW2+Uxxg6J1fhOzjF0b4LXcjJZ5loijgMWruxKUku9HKw5IhWPC8+IJpFpKne5SaUkpGdYNY
+ LvXfcnGNC76fNvUBGCoLT3N3abYXWbI9JuDPxxISxIxz7nWMGr3xQbXrR7W1uypKhXFibj3fdqcL
+ 3gajWhuv+B0sXiGd+CR0+bwSJ9MYAzAMrOHK5tF4LTm+Tpi/hEbWrVVpgxtOyHAkGbMUNF55JnE6
+ ETjtbMPjLpnRI5EDsgw8CVsONrMJuGzuoGnKTKcyccjSlBLa0Z1WYb08ADpE6rj9l4xDuhVGEyzE
+ pCH9jwyCSFwt/3SZKT2WgmwgwxgOcbFs4wmqhX1OM8xewFO578I5fOquB5GOH0cddfTYFcVNLmly
+ /OCFmsY98cJB17zYAWbDdcM2OyVTOCduVr2j/tLxg+DiPWzvay92L72jkjYVXu4E4Fz8wGp+xBlP
+ H6E/MS+4ayUpOtEhdxekWDmK9g==
+X-Report-Abuse-To: spam@quarantine15.antispamcloud.com
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,FROM_LOCAL_NOVOWEL,HK_NAME_MR_MRS,
+        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [185.201.19.50 listed in list.dnswl.org]
+        *  0.9 HK_RANDOM_FROM From username looks random
+        *  0.0 HK_RANDOM_ENVFROM Envelope sender username looks random
+        *  0.5 FROM_LOCAL_NOVOWEL From: localpart has series of non-vowel
+        *      letters
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [cathles2126[at]aol.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.5 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 05:40:39PM -0300, Wedson Almeida Filho wrote:
-> On Wed, Apr 05, 2023 at 10:29:32PM +0200, Peter Zijlstra wrote:
-> > On Wed, Apr 05, 2023 at 05:21:44PM -0300, Wedson Almeida Filho wrote:
-> > > On Wed, Apr 05, 2023 at 09:18:26PM +0200, Peter Zijlstra wrote:
-> > > > On Wed, Apr 05, 2023 at 08:04:22PM +0200, Greg KH wrote:
-> > > > > On Wed, Apr 05, 2023 at 08:03:11PM +0200, Greg KH wrote:
-> > > > > > On Wed, Apr 05, 2023 at 02:51:01PM -0300, Wedson Almeida Filho wrote:
-> > > > > > > +void rust_helper_mutex_lock(struct mutex *lock)
-> > > > > > > +{
-> > > > > > > +	mutex_lock(lock);
-> > > > > > > +}
-> > > > > > > +EXPORT_SYMBOL_GPL(rust_helper_mutex_lock);
-> > > > > > > +
-> > > > > > 
-> > > > > > No need to ever unlock a mutex?
-> > > > > 
-> > > > > Oh nevermind, mutex_lock() is a macro, mutex_unlock() is not...
-> > > > 
-> > > > Yeah, so I despise all these stupid helpers... but I suppose it's the
-> > > > best they could come up with to interface the languages :/
-> > > > 
-> > > > The only hope is that the thing can do cross-language LTO or something
-> > > > to re-inline stuff.
-> > > 
-> > > One thing we could to do improve the situation is to convert some of the
-> > > existing macros into inline functions on the header files.
-> > > 
-> > > We can't do it for all cases (e.g., cases like mutex_init that declare a new
-> > > static variable when lockdep is enabled) but mutex_lock is just a function
-> > > when lockdep is disabled, and just calls mutex_lock_nested() when it is enabled.
-> > > 
-> > > How do you feel about this?
-> > > 
-> > > -#define mutex_lock(lock) mutex_lock_nested(lock, 0)
-> > > +static inline void mutex_lock(struct mutex *lock)
-> > > +{
-> > > +       mutex_lock_nested(lock, 0);
-> > > +}
-> > 
-> > Can rust actually parse C headers and inline C functions ? I thought the
-> > whole problem was that it can only call C ABI symbols (which inline
-> > functions are not).
-> 
-> Rust can't. We use a tool called bindgen to read C header files and generate
-> equivalent Rust (extern "C") declarations for functions. The tool has been
-> enhanced recently (https://github.com/rust-lang/rust-bindgen/pull/2335) to
-> handle static inline functions by automatically generating helpers like the one
-> above (in addition to the Rust decls).
+Hello,
 
-Oh man, that's sad, I was hoping it would write the equivalent inline
-function in rust.
+I hope this email finds you well. I just wanted to follow up with you
+regarding the letter I sent to you last week regarding an inquiry. I was
+curious if you have received it and if you have had a chance to review
+the information contained within.
 
-> So the situation is improved in that we don't need to manually write (and
-> commit) the helpers. It may improve further in the future if we get better
-> integration of the languages.
+I would greatly appreciate if you could confirm receipt of the letter
+and share your thoughts with me on the matter. Your feedback would be
+valuable as I move forward with this inquiry.
 
-But yeah, feel free to convert macros to inline functions where the
-difference is moot. There is indeed no real reason for mutex_lock() to
-not be an inline function in that case.
+Please let me know if you need any additional information or
+clarification. I look forward to hearing back from you soon.
+
+Best regards,
+
+Liubov
