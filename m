@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1994D6D7711
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DD56D770F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbjDEIga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S237489AbjDEIgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237495AbjDEIgZ (ORCPT
+        with ESMTP id S237128AbjDEIgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:36:25 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C7D4ED7
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tuc7Tw7Iz8O2ng1TY5WWW4Og8yXZPJKe3/KO5Hh4bng=; b=kzDdQllYU4MHR2+xJdhlNID6UO
-        ixmZ9W2cY/kFcFp2YipCVtTMbraZ+lAFgdpkcF6+ijMqQLvESLq1Q6pPjV/fDPRVvjLYU/jWDePex
-        g4PTvbs5Y6Xnp1/2Ryw7aA6OPMUXlNrvf4pFR80QvXWH1Fel5Z8COGIlZFEyB3D7VXlyir6pnYaTb
-        JIcTUJmn6nt8j3zhLHwCJap0iHgsdbWuoj8P7EhimqAUMosa0c3RiHLy5/xCqMm5MvEtrNOWiOPBY
-        L9lja1W+eQHKEAZyAFMH/8/Y50i/VWURlyIQqpNAaLAndECEnwkh4rOE7su8u3yizKEkVxjR7xF35
-        /ZNy67iw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pjycL-00GCRj-LO; Wed, 05 Apr 2023 08:35:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CAE8F300202;
-        Wed,  5 Apr 2023 10:35:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A6D2226C567C0; Wed,  5 Apr 2023 10:35:43 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 10:35:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
-        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, efault@gmx.de
-Subject: Re: [PATCH 14/17] sched/eevdf: Better handle mixed slice length
-Message-ID: <20230405083543.GZ4253@hirez.programming.kicks-ass.net>
-References: <20230328092622.062917921@infradead.org>
- <20230328110354.562078801@infradead.org>
- <CAKfTPtAkFBw5zt0+WK7dWBUE9OrbOOExG8ueUE6ogdCEQZhpXQ@mail.gmail.com>
- <20230404092936.GD284733@hirez.programming.kicks-ass.net>
- <20230404135050.GA471948@google.com>
+        Wed, 5 Apr 2023 04:36:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA65271C;
+        Wed,  5 Apr 2023 01:36:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41E90621F6;
+        Wed,  5 Apr 2023 08:36:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A95C4339E;
+        Wed,  5 Apr 2023 08:36:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680683777;
+        bh=ImzeZUFNJhml8hQCobJLElzt2smrsWg3HmVJ1efYQPQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RRzrlb4grcco6JMZ9hj9E0jLzPYBeGHOSy5nGU5wJ0BCNcmhkO7gL0eSp1+Pv3fc5
+         7dVTq19HHGbuUrQEtx8PpzK0JzPPkk5xJX9aDPSBBiOGwwWPC5vjKeyBMKiLUQ+Qga
+         fsOqMcthI4xiZEV7pcwc6kdEbBV/qnOkBqkk9Lw7UnNWz/e5VcM2xoZxAiXOdC7jte
+         dppIPlfq/MAwmKFl7W25PwvPNQRNKBqIqOJT9AuEp6SoNjSnNn06h4Xts8l1hmz0Ms
+         OxkXZX4CXveuWXtrXaxVTXSAmG4WQTWMqco/DR9D1wifQvNPwEPMuHE8G/Ag7tbmDU
+         U48TP0O3LOOmw==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Xiang Chen <chenxiang66@hisilicon.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Yihang Li <liyihang9@huawei.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, John Garry <john.garry@huawei.com>,
+        Xingui Yang <yangxingui@huawei.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: hisi_sas: work around build failure in suspend function
+Date:   Wed,  5 Apr 2023 10:36:04 +0200
+Message-Id: <20230405083611.3376739-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404135050.GA471948@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 01:50:50PM +0000, Joel Fernandes wrote:
-> On Tue, Apr 04, 2023 at 11:29:36AM +0200, Peter Zijlstra wrote:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> > Heh, this is actually the correct behaviour. If you have a u=1 and a
-> > u=.5 task, you should distribute time on a 2:1 basis, eg. 67% vs 33%.
-> 
-> Splitting like that sounds like starvation of the sleeper to me. If something
-> sleeps a lot, it will get even less CPU time on an average than it would if
-> there was no contention from the u=1 task.
+The suspend/resume functions in this driver seem to have multiple
+problems, the latest one just got introduced by a bugfix:
 
-No, sleeping, per definition, means you're not contending for CPU. What
-CFS does, giving them a little boost, is strictly yuck and messes with
-latency -- because suddenly you have a task that said it wasn't
-competing appear as if it were, but you didn't run it (how could you, it
-wasn't there to run) -- but it still needs to catch up.
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
+ 5142 |         if (atomic_read(&device->power.usage_count)) {
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
+drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
+ 5142 |         if (atomic_read(&device->power.usage_count)) {
 
-The reason it does that, is mostly because at the time we didn't want to
-do the whole lag thing -- it's somewhat heavy on the u64 mults and 32bit
-computing was still a thing :/ So hacks happened.
+As far as I can tell, the 'usage_count' is not meant to be accessed
+by device drivers at all, though I don't know what the driver is
+supposed to do instead.
 
-That said; I'm starting to regret not pushing the EEVDF thing harder
-back in 2010 when I first wrote it :/
+Another problem is the use of the deprecated UNIVERSAL_DEV_PM_OPS(),
+and marking functions as __maybe_unused to avoid warnings about
+unused functions.  This should probably be changed to using
+DEFINE_RUNTIME_DEV_PM_OPS().
 
-> And also CGroups will be even more weird than it already is in such a world,
-> 2 different containers will not get CPU time distributed properly- say if
-> tasks in one container sleep a lot and tasks in another container are CPU
-> bound.
+Both changes require actually understanding what the driver needs to
+do, and being able to test this, so instead here is the simplest
+patch to make it pass the randconfig builds instead.
 
-Cgroups are an abomination anyway :-) /me runs like hell. But no, I
-don't actually expect too much trouble there.
+Fixes: e368d38cb952 ("scsi: hisi_sas: Exit suspend state when usage count is greater than 0")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+Maintainers: If possible, please revisit this to do a proper fix.
+If that takes too much time, this patch can be applied as a
+workaround in the meantime, and might also help in case the
+e368d38cb952 patch gets backported to stable kernels.
+---
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Or rather, as per the above, time distribution is now more proper than
-it was :-)
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index d160b9b7479b..12d588454f5d 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -5139,11 +5139,13 @@ static int _suspend_v3_hw(struct device *device)
+ 	flush_workqueue(hisi_hba->wq);
+ 	interrupt_disable_v3_hw(hisi_hba);
+ 
++#ifdef CONFIG_PM
+ 	if (atomic_read(&device->power.usage_count)) {
+ 		dev_err(dev, "PM suspend: host status cannot be suspended\n");
+ 		rc = -EBUSY;
+ 		goto err_out;
+ 	}
++#endif
+ 
+ 	rc = disable_host_v3_hw(hisi_hba);
+ 	if (rc) {
+@@ -5162,7 +5164,9 @@ static int _suspend_v3_hw(struct device *device)
+ 
+ err_out_recover_host:
+ 	enable_host_v3_hw(hisi_hba);
++#ifdef CONFIG_PM
+ err_out:
++#endif
+ 	interrupt_enable_v3_hw(hisi_hba);
+ 	clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
+ 	clear_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
+-- 
+2.39.2
+
