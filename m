@@ -2,78 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894CF6D77A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32206D77A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237621AbjDEJAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S237619AbjDEJAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237632AbjDEJAR (ORCPT
+        with ESMTP id S237629AbjDEJAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:00:17 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04553525B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 02:00:02 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id g7-20020a056602242700b00758e7dbd0dbso22285306iob.16
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 02:00:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680685184; x=1683277184;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NNG1RRAgOc5xNMcVnUF0kEf92wRl9GxQVlJgSil8NBY=;
-        b=aKLu11v9TCi3gP70Go8jTNIiMXDBXpM07wnH2hKfCAXp626D5Hu8/dp6zsZiRkvZhB
-         wk9MzcK7t7sEkiVMXX3B7+gC8cKqazvHcFMbibSnydhRwHT9nWFbGkn102bLZId1SW3H
-         J4IUZPdJJ+OytappXgRjPy9wFt71ogkVpV+/ZFvUiVIp6vThYGn44btxFKjAF96AocBY
-         cIJAQqstWZw/rRB/mYBggDu28JTBVVd12jPRuUuyVK+Z4hLuBYTlC9EWQQSieJXkynoZ
-         BPknVAz4ze7xXTQX8tgUMAiJKCwjMx+XfseYOoIPGMBM7S996KaFXzoMIsxpO4Ix/iEn
-         Hcmg==
-X-Gm-Message-State: AAQBX9cLL0PkVSyJ82u2LxbCZe4skR3ysmxNFFt7ylWXbBOucizls+HY
-        bXWbM0SG5LeLc8pMkeCns5sLxylWHDUNM31cP3Wf1hgZ2ols
-X-Google-Smtp-Source: AKy350Z2HfnrBvcIU9j3Lf4yhtRThKMMaUdYCmBJY49mPh3WBG06p6q1dh6WhMI65K8DQBhQ0QIxOVWuM/zbwP8cjt1GG/aws/4y
+        Wed, 5 Apr 2023 05:00:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479354C26;
+        Wed,  5 Apr 2023 02:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680685237; x=1712221237;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=zNd4QNauho2B9S7q4taI3HGIdrkY7fbxy/Q2SsKQaFo=;
+  b=bBkRWoPNfebBul9vtMlsQWFXUiDFmDeEWuKq0+PTXVz28ptr7J5N6lyx
+   44wzelxfYJo5wc9L02PbG+NIQY/eoQJMaFIxDW/VsX83pwlE1JPSpgTa9
+   iAkNCAKZPDzgFuhfog8N8+3BTViwTz4MgdF/X35YL6E20/obAEDzPvZsY
+   Z7IqSkbgIAEbbS5pP4Yy22IJ1W+Pv+uIb7pqwiHDRVAOkQRFW7ZMbq7Vv
+   JTlxTOj++HQ0bGErf059AWvC3rPv78e7w7N8n1l6b45txjdWFsIxmA+cQ
+   iWJq/x1tO3/9ZdTqG/XWFrEPDzQ89hkbJcL6sgWsfNqYrxXNdM3lT3Wtf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344118641"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="344118641"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 02:00:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="636820172"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="636820172"
+Received: from wtedesch-mobl1.ger.corp.intel.com ([10.252.53.134])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 02:00:30 -0700
+Date:   Wed, 5 Apr 2023 12:00:28 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "D. Starke" <daniel.starke@siemens.com>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 7/9] tty: n_gsm: increase gsm_mux unsupported counted
+ where appropriate
+In-Reply-To: <20230405054730.3850-7-daniel.starke@siemens.com>
+Message-ID: <fe8c6288-1df-bdb0-34d-68e6cb983a7a@linux.intel.com>
+References: <20230405054730.3850-1-daniel.starke@siemens.com> <20230405054730.3850-7-daniel.starke@siemens.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b19b:0:b0:3f6:e3c2:d4be with SMTP id
- t27-20020a02b19b000000b003f6e3c2d4bemr3174418jah.0.1680685184237; Wed, 05 Apr
- 2023 01:59:44 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 01:59:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000062c5e105f89303b1@google.com>
-Subject: [syzbot] Monthly staging report
-From:   syzbot <syzbot+list6f64c923a6c14b0e0449@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello staging maintainers/developers,
+On Wed, 5 Apr 2023, D. Starke wrote:
 
-This is a 30-day syzbot report for the staging subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/staging
+> From: Daniel Starke <daniel.starke@siemens.com>
+> 
+> The structure gsm_mux contains the 'unsupported' field. However, there is
+> currently no place in the code which increases this counter.
+> 
+> Increase the 'unsupported' statistics counter in the following case:
+> - an unsupported frame type has been requested by the peer via parameter
+>   negotiation
+> - a control frame with an unsupported but known command has been received
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 3 issues are still open and 13 have been fixed so far.
+So inconsistent/unsupported adaptation doesn't fall under the second 
+bullet?
 
-Some of the still happening issues:
+(Please excuse my ignorance, I'm trying to review your patches with 
+somewhat limited knowledge about how things work).
 
-Crashes Repro Title
-266     Yes   INFO: task hung in r871xu_dev_remove
-              https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-236     Yes   INFO: task hung in netdev_run_todo (2)
-              https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
-50      Yes   memory leak in r8712_init_recv_priv
-              https://syzkaller.appspot.com/bug?extid=1c46f3771695bccbdb3a
+-- 
+ i.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>  drivers/tty/n_gsm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 317aa67ed169..49cb2dbfa233 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -1589,6 +1589,7 @@ static int gsm_process_negotiation(struct gsm_mux *gsm, unsigned int addr,
+>  		if (debug & DBG_ERRORS)
+>  			pr_info("%s unsupported I frame request in PN\n",
+>  				__func__);
+> +		gsm->unsupported++;
+>  		return -EINVAL;
+>  	default:
+>  		if (debug & DBG_ERRORS)
+> @@ -1896,6 +1897,8 @@ static void gsm_control_message(struct gsm_mux *gsm, unsigned int command,
+>  		/* Optional unsupported commands */
+>  	case CMD_RPN:	/* Remote port negotiation */
+>  	case CMD_SNC:	/* Service negotiation command */
+> +		gsm->unsupported++;
+> +		fallthrough;
+>  	default:
+>  		/* Reply to bad commands with an NSC */
+>  		buf[0] = command;
+> 
