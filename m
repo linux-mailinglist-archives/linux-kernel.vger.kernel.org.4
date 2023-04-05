@@ -2,85 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D866D863D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD046D8641
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbjDESsY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 5 Apr 2023 14:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
+        id S233800AbjDESsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231280AbjDESsW (ORCPT
+        with ESMTP id S230059AbjDESsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:48:22 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7110F5589;
-        Wed,  5 Apr 2023 11:48:21 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-502a9a5769fso723459a12.0;
-        Wed, 05 Apr 2023 11:48:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680720500;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=67fV9I5I66Rtlizh+eEB91Qx22aI651awT8qt0NxLiM=;
-        b=Havt3C34yVT8OdzuFBWJ2oQ/vLNkZ6NfChvSV69ONuRt2VCoRBVxAIVUH7tLx0SD5p
-         92Opcvvbf3vCh50PLfIU4bJJkBRizXfuwrft2CkPAeeArkbO6nhgnqaZfWGVcKFlcIac
-         Tl9Dj9OMtgy5W6yA0eBqbjO9GHZQwU/qYcSVroZNHrAbRRNByr7hivVLv6AUxLwTXjT9
-         E3A/GJzgf1pGoh/BmFyKojytHRiQT6XX8mRquZ0ZU4S4Es+Iky7gnCmTrv3cUsqtkrMh
-         8twDE9efS0IGLaQlfWeeeol4MJYgNKWrZtSzGlJUbyprglI4XIre8TuPYQmh9jekrhlJ
-         0ARw==
-X-Gm-Message-State: AAQBX9drBg/brcRuyIEra/dB78ZKPnKhCyA17NUfBDjv9oo6H+m1x3ib
-        9Ss/kPsdA9cmOxZ8iy1FsPSLne5N9s6iFyg5arL6z4iESow=
-X-Google-Smtp-Source: AKy350afGseDTvgP0P0rMFW2L1TF3FKQo72LCTM5A8Y8LIjGFZf8kMZTrFjMv0JSLW31Acq/pmbqbk1oWP64qZZ40y8=
-X-Received: by 2002:a50:aa93:0:b0:4fb:2593:846 with SMTP id
- q19-20020a50aa93000000b004fb25930846mr1715812edc.3.1680720499981; Wed, 05 Apr
- 2023 11:48:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
- <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org> <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 5 Apr 2023 20:48:08 +0200
-Message-ID: <CAJZ5v0iNbA0rt3QyaFA7ved19yK8-nabyJi7yCfbnVKQaMPCmA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v6.4-rc1
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yang Li <yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 5 Apr 2023 14:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8317F5589;
+        Wed,  5 Apr 2023 11:48:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20DD663E7A;
+        Wed,  5 Apr 2023 18:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E15C433D2;
+        Wed,  5 Apr 2023 18:48:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680720523;
+        bh=85pV6+BglfXFKvptSlWlbOdngDBPoHAexzT1F8MZ1Eg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iPO5fkws81xBu9pR7DaAYQI4BPxx98OJkIPiL6CBk6R1G2Yj+M8OBx/s/22f1I7z0
+         S6Q36YH2bTWlS6uTqW558FNdIB/nocqcwr8J3KxpkVxQxwX4MtYY7H9MIJ0vXlRoW1
+         4WFXG8M2wulSta8dxKzFQSR6Cj1eiSRDv1uHfua4=
+Date:   Wed, 5 Apr 2023 11:48:41 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 0/3] Ignore non-LRU-based reclaim in memcg reclaim
+Message-Id: <20230405114841.248dffb65526383823c71d60@linux-foundation.org>
+In-Reply-To: <CAJD7tkYFZGJqZ278stOWDyW3HgMP8iyAZu8hSG+bV-p9YoVxig@mail.gmail.com>
+References: <20230404001353.468224-1-yosryahmed@google.com>
+        <20230404143824.a8c57452f04929da225a17d0@linux-foundation.org>
+        <CAJD7tkbZgA7QhkuxEbp=Sam6NCA0i3cZJYF4Z1nrLK1=Rem+Gg@mail.gmail.com>
+        <20230404145830.b34afedb427921de2f0e2426@linux-foundation.org>
+        <CAJD7tkZCmkttJo+6XGROo+pmfQ+ppQp6=qukwvAGSeSBEGF+nQ@mail.gmail.com>
+        <20230404152816.cec6d41bfb9de4680ae8c787@linux-foundation.org>
+        <20230404153124.b0fa5074cf9fc3b9925e8000@linux-foundation.org>
+        <CAJD7tkYFZGJqZ278stOWDyW3HgMP8iyAZu8hSG+bV-p9YoVxig@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 8:39 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Apr 5, 2023 at 8:32 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> >
-> > Hi Rafael,
-> >
-> > just a gentle reminder
->
-> This is in my linux-next branch, I'll merge it into thermal tomorrow.
->
-> >  because more material will come in the next days
->
-> So why can't it wait?
+On Tue, 4 Apr 2023 16:46:30 -0700 Yosry Ahmed <yosryahmed@google.com> wrote:
 
-BTW, I get a merge conflict in
-drivers/thermal/mediatek/auxadc_thermal.c on an attempt to merge
-thermal/linux-next into my linux-next branch.
+> > But the key question remains: how desirable is a backport?
+> >
+> > Looking at the changelogs I'm not seeing a clear statement of the
+> > impact upon real-world users' real-world workloads.  (This is a hint).
+> > So I am unable to judge.
+> >
+> > Please share your thoughts on this.
+> 
+> I think it's nice to have but not really important. It occasionally
+> causes writes to memory.reclaim to report false positives and *might*
+> cause unnecessary retrying when charging memory, but probably too rare
+> to be a practical problem.
+> 
+> Personally, I intend to backport to our kernel at Google because it's
+> a simple enough fix and we have occasionally seen test flakiness
+> without it.
+> 
+> I have a reworked version of the series that only has 2 patches:
+> - simple-two-liner-patch (actually 5 lines)
+> - one patch including all refactoring squashed (introducing
+> flush_reclaim_state() with the huge comment, introducing
+> mm_account_reclaimed_pages(), and moving set_task_reclaim_state()
+> around).
+> 
+> Let me know if you want me to send it as v5, or leave the current v4
+> if you think backporting is not generally important.
+
+Let's have a look at that v5 and see what people think?
