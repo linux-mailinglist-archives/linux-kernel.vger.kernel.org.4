@@ -2,142 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817006D7F69
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B476D7E48
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238505AbjDEO1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S237579AbjDEOAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238471AbjDEO1K (ORCPT
+        with ESMTP id S237980AbjDEOAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:27:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658E4EFD;
-        Wed,  5 Apr 2023 07:26:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Apr 2023 10:00:41 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D961AE5D;
+        Wed,  5 Apr 2023 07:00:39 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 6ad874797a78371e; Wed, 5 Apr 2023 16:00:38 +0200
+Received: from kreacher.localnet (unknown [213.134.163.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B916277C;
-        Wed,  5 Apr 2023 14:26:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37AD3C433D2;
-        Wed,  5 Apr 2023 14:26:57 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1pk46B-000qkf-0e;
-        Wed, 05 Apr 2023 10:26:55 -0400
-Message-ID: <20230405142655.019084805@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 05 Apr 2023 09:58:16 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [for-linus][PATCH 3/3] tracing: Free error logs of tracing instances
-References: <20230405135813.735507007@goodmis.org>
+        by v370.home.net.pl (Postfix) with ESMTPSA id 7E7D81B4EA57;
+        Wed,  5 Apr 2023 16:00:37 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>
+Subject: [PATCH 31/32] ACPICA: add os specific support for Zephyr RTOS
+Date:   Wed, 05 Apr 2023 15:59:00 +0200
+Message-ID: <6519395.G0QQBjFxQf@kreacher>
+In-Reply-To: <4845957.31r3eYUQgx@kreacher>
+References: <4845957.31r3eYUQgx@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.163.219
+X-CLIENT-HOSTNAME: 213.134.163.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: Najumon <najumon.ba@intel.com>
 
-When a tracing instance is removed, the error messages that hold errors
-that occurred in the instance needs to be freed. The following reports a
-memory leak:
+ACPICA commit 463d30f0a8edc5dccad20c2d189dc55111d51aae
 
- # cd /sys/kernel/tracing
- # mkdir instances/foo
- # echo 'hist:keys=x' > instances/foo/events/sched/sched_switch/trigger
- # cat instances/foo/error_log
- [  117.404795] hist:sched:sched_switch: error: Couldn't find field
-   Command: hist:keys=x
-                      ^
- # rmdir instances/foo
+The acpica will be integrated as module into Zephyr project for
+enable acpi bus driver. This patch is for enable os specific
+support layer for Zephyr.
 
-Then check for memory leaks:
-
- # echo scan > /sys/kernel/debug/kmemleak
- # cat /sys/kernel/debug/kmemleak
-unreferenced object 0xffff88810d8ec700 (size 192):
-  comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
-  hex dump (first 32 bytes):
-    60 dd 68 61 81 88 ff ff 60 dd 68 61 81 88 ff ff  `.ha....`.ha....
-    a0 30 8c 83 ff ff ff ff 26 00 0a 00 00 00 00 00  .0......&.......
-  backtrace:
-    [<00000000dae26536>] kmalloc_trace+0x2a/0xa0
-    [<00000000b2938940>] tracing_log_err+0x277/0x2e0
-    [<000000004a0e1b07>] parse_atom+0x966/0xb40
-    [<0000000023b24337>] parse_expr+0x5f3/0xdb0
-    [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
-    [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
-    [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
-    [<000000002cadc509>] vfs_write+0x162/0x670
-    [<0000000059c3b9be>] ksys_write+0xca/0x170
-    [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
-    [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
-unreferenced object 0xffff888170c35a00 (size 32):
-  comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
-  hex dump (first 32 bytes):
-    0a 20 20 43 6f 6d 6d 61 6e 64 3a 20 68 69 73 74  .  Command: hist
-    3a 6b 65 79 73 3d 78 0a 00 00 00 00 00 00 00 00  :keys=x.........
-  backtrace:
-    [<000000006a747de5>] __kmalloc+0x4d/0x160
-    [<000000000039df5f>] tracing_log_err+0x29b/0x2e0
-    [<000000004a0e1b07>] parse_atom+0x966/0xb40
-    [<0000000023b24337>] parse_expr+0x5f3/0xdb0
-    [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
-    [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
-    [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
-    [<000000002cadc509>] vfs_write+0x162/0x670
-    [<0000000059c3b9be>] ksys_write+0xca/0x170
-    [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
-    [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
-
-The problem is that the error log needs to be freed when the instance is
-removed.
-
-Link: https://lore.kernel.org/lkml/76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr/
-Link: https://lore.kernel.org/linux-trace-kernel/20230404194504.5790b95f@gandalf.local.home
-
-Cc: stable@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Eric Biggers <ebiggers@kernel.org>
-Fixes: 2f754e771b1a6 ("tracing: Have the error logs show up in the proper instances")
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Tested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Link: https://github.com/acpica/acpica/commit/463d30f0
+Signed-off-by: Najumon <najumon.ba@intel.com>
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- kernel/trace/trace.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/acpi/platform/acenv.h    |  2 ++
+ include/acpi/platform/aczephyr.h | 48 ++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+ create mode 100644 include/acpi/platform/aczephyr.h
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 4686473b8497..36a6037823cd 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -9516,6 +9516,7 @@ static int __remove_instance(struct trace_array *tr)
- 	tracefs_remove(tr->dir);
- 	free_percpu(tr->last_func_repeats);
- 	free_trace_buffers(tr);
-+	clear_tracing_err_log(tr);
+diff --git a/include/acpi/platform/acenv.h b/include/acpi/platform/acenv.h
+index 0fa7bbf85c83..337ffa931ee8 100644
+--- a/include/acpi/platform/acenv.h
++++ b/include/acpi/platform/acenv.h
+@@ -209,6 +209,8 @@
+ #elif defined(_AED_EFI) || defined(_GNU_EFI) || defined(_EDK2_EFI)
+ #include "acefi.h"
  
- 	for (i = 0; i < tr->nr_topts; i++) {
- 		kfree(tr->topts[i].topts);
++#elif defined(__ZEPHYR__)
++#include "aczephyr.h"
+ #else
+ 
+ /* Unknown environment */
+diff --git a/include/acpi/platform/aczephyr.h b/include/acpi/platform/aczephyr.h
+new file mode 100644
+index 000000000000..2f0d30c3c5fd
+--- /dev/null
++++ b/include/acpi/platform/aczephyr.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
++/******************************************************************************
++ *
++ * Module Name: aczephyr.h - OS specific defines, etc.
++ *
++ * Copyright (C) 2000 - 2023, Intel Corp.
++ *
++ *****************************************************************************/
++
++#ifndef __ACZEPHYR_H__
++#define __ACZEPHYR_H__
++
++#define SEEK_SET FS_SEEK_SET
++#define SEEK_END FS_SEEK_END
++
++#define ACPI_MACHINE_WIDTH      64
++
++#define ACPI_NO_ERROR_MESSAGES
++#undef ACPI_DEBUG_OUTPUT
++#define ACPI_USE_SYSTEM_CLIBRARY
++#undef ACPI_DBG_TRACK_ALLOCATIONS
++#define ACPI_SINGLE_THREADED
++#define ACPI_USE_NATIVE_RSDP_POINTER
++
++#include <zephyr/kernel.h>
++#include <zephyr/device.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <ctype.h>
++#include <zephyr/fs/fs.h>
++#include <zephyr/sys/printk.h>
++#include <zephyr/sys/__assert.h>
++
++/******************************************************************************
++ *
++ * FUNCTION:    acpi_enable_dbg_print
++ *
++ * PARAMETERS:  Enable, 	            - Enable/Disable debug print
++ *
++ * RETURN:      None
++ *
++ * DESCRIPTION: Enable/disable debug print
++ *
++ *****************************************************************************/
++
++void acpi_enable_dbg_print(bool enable);
++#endif
 -- 
-2.39.2
+2.35.3
+
+
+
+
+
