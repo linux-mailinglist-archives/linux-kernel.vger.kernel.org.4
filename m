@@ -2,152 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B96B6D7D65
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA406D7D6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238216AbjDENJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
+        id S238232AbjDENKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238205AbjDENIz (ORCPT
+        with ESMTP id S238261AbjDENJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:08:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37EB271C
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:08:52 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335BXMYx028010;
-        Wed, 5 Apr 2023 13:08:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=FfCX+5MS5/mbJzVh7X50G8k35Eqk7y00iwhhaK8QWd8=;
- b=lbb181pwcf7fONX0LdOwWx1fUCQ5LqYPqG7AEnLeFLiMp0duUKYEuX8leNC240b/bDlk
- aUr2OXuFeRl6ECE9yL+Hb1MsTMpVX73NJDfHSOmAbS/Eib2uBZiOVR2Fa1GPeCA7upHk
- dfhcVjxrOONLcFTyoFlhV7CgVxpMAjPF2S9xvpbIT2a7qWTIAw+7DJmQLb4ZGICUA09E
- ta/GJQYCK4z27tAx7RDxzBEobt5FJ5fDkIRnPqDd7YJnqTFo0Iv5IaEi28KTClTYaQe/
- P843NTxFUAWMbDpMwKjDUHaVevEoK9JW7Mo1ybkE4CyFSQuv/cXLTSmIGGtZdzVbrTbs Hw== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ps75jc2ub-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 13:08:47 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 334BDPkV018271;
-        Wed, 5 Apr 2023 13:08:45 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3ppc86thes-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 13:08:44 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 335D8gUl46465508
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 Apr 2023 13:08:42 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 73C0B20040;
-        Wed,  5 Apr 2023 13:08:42 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4AD1720043;
-        Wed,  5 Apr 2023 13:08:42 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  5 Apr 2023 13:08:42 +0000 (GMT)
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Popov <alex.popov@linux.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] s390/stackleak: provide fast __stackleak_poison() implementation
-Date:   Wed,  5 Apr 2023 15:08:41 +0200
-Message-Id: <20230405130841.1350565-3-hca@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230405130841.1350565-1-hca@linux.ibm.com>
-References: <20230405130841.1350565-1-hca@linux.ibm.com>
+        Wed, 5 Apr 2023 09:09:57 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2700271C;
+        Wed,  5 Apr 2023 06:09:56 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id fi11so17438451edb.10;
+        Wed, 05 Apr 2023 06:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680700195;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lrrn9Os7k/oSQLAsT1c79tz/mKrZxstzRd8x/1yg5OY=;
+        b=jq671NIvFC1RCtZAsM8SH4MdrPC/7JD0eGHg73Ked+Uqr2YYRYUTCfiFbzp6Vy0jUO
+         bcUyq8S95NmcCSGNMjba7bfl4G8ud/MVmch4PrJklkL6EJwBV2GAGqqSGmMS00zcHCSO
+         uMel4YZsnM+WGlUFXPOrx576FOPsPMItMJamtg+qY7cm6YLxXVy1dnQxWOzumNs/3+Nb
+         BPdAtYBijvc2ed34pB3WJSS7A0VhS943F3bYimc6oQqkjn8yuzhe90uYlVxfqT1neuDW
+         0x5zlV0JUOQWSru2rPW9NDnwsEOSEQZMlObWkKvcHm/nFCdtXZW7BDzbBZRy+EQo/PG5
+         V2cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680700195;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lrrn9Os7k/oSQLAsT1c79tz/mKrZxstzRd8x/1yg5OY=;
+        b=UAJWy1KnDA/3y+nlAoG0RStlwjtxnii46gclKkSPnOZbMgSj6QlJ3dPbP8aSP/hh5K
+         cjHhzZpS9Hgf3PWuQPtDbFaojI2ceCgEH6BqeJt5O+cnbPZXf7sWUbfwFjwPP9xG/3ay
+         74b+3IBs5B9I4/huRc4b72oMVTtALMFNEFYBab3LY4hEff9HCEaaYWdjbHWnjHdocyoq
+         2pISBFLKLVxWwjA5Kxb9e9nUaSW7EAYGq+OHw0ypzDxSJZDvzAwNNgDi2rCflet3N+R8
+         P/ACGy+zUwEIYNugTQTiOacmjwoCquHbmZG9NqmFrBrTpk4YZx4GwcAwrzHwdp94gvrm
+         AV7Q==
+X-Gm-Message-State: AAQBX9cHeM35i0/QeAVF7RZb96o3lSjVzGcXXGrQN2Vj5keGmVRY8ZPV
+        krM69RkPx5CZKuPgb47bcVU=
+X-Google-Smtp-Source: AKy350a5Nz3W7YKjiebz8MBrsJk59qHlbv1+CekqwjMDfRDUGg3XAjtJfBeqDSAfgIvKy1kTkhxcTA==
+X-Received: by 2002:a17:907:1b1c:b0:949:87e1:5b31 with SMTP id mp28-20020a1709071b1c00b0094987e15b31mr1050535ejc.19.1680700195086;
+        Wed, 05 Apr 2023 06:09:55 -0700 (PDT)
+Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id qq8-20020a17090720c800b008def483cf79sm7327438ejb.168.2023.04.05.06.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 06:09:54 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     will@kernel.org, catalin.marinas@arm.com,
+        Besar Wicaksono <bwicaksono@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, suzuki.poulose@arm.com,
+        vsethi@nvidia.com, jonathanh@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] arm64: defconfig: enable ARM CoreSight PMU driver
+Date:   Wed,  5 Apr 2023 15:09:48 +0200
+Message-Id: <168070017414.4044223.13292657935768427902.b4-ty@nvidia.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230321200535.10584-1-bwicaksono@nvidia.com>
+References: <20230321200535.10584-1-bwicaksono@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6MIjz_VF5-ht1h1HZarl0nvZAfl7B397
-X-Proofpoint-ORIG-GUID: 6MIjz_VF5-ht1h1HZarl0nvZAfl7B397
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-05_08,2023-04-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
- suspectscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0
- mlxlogscore=757 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304050118
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide an s390 specific __stackleak_poison() implementation which is
-faster than the generic variant.
+From: Thierry Reding <treding@nvidia.com>
 
-For the original implementation with an enforced 4kb stackframe for the
-getpid() system call the system call overhead increases by a factor of 3 if
-the stackleak feature is enabled. Using the s390 mvc based variant this is
-reduced to an increase of 25% instead.
+On Tue, 21 Mar 2023 15:05:35 -0500, Besar Wicaksono wrote:
+> Enable driver for Coresight PMU arch device.
+> 
+> 
 
-This is within the expected area, since the mvc based implementation is
-more or less a memset64() variant which comes with similar results. See
-commit 0b77d6701cf8 ("s390: implement memset16, memset32 & memset64").
+Applied, thanks!
 
-Reviewed-by: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
----
- arch/s390/include/asm/processor.h | 35 +++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+[1/1] arm64: defconfig: enable ARM CoreSight PMU driver
+      (no commit info)
 
-diff --git a/arch/s390/include/asm/processor.h b/arch/s390/include/asm/processor.h
-index efffc28cbad8..dc17896a001a 100644
---- a/arch/s390/include/asm/processor.h
-+++ b/arch/s390/include/asm/processor.h
-@@ -118,6 +118,41 @@ unsigned long vdso_size(void);
- 
- #define HAVE_ARCH_PICK_MMAP_LAYOUT
- 
-+#define __stackleak_poison __stackleak_poison
-+static __always_inline void __stackleak_poison(unsigned long erase_low,
-+					       unsigned long erase_high,
-+					       unsigned long poison)
-+{
-+	unsigned long tmp, count;
-+
-+	count = erase_high - erase_low;
-+	if (!count)
-+		return;
-+	asm volatile(
-+		"	cghi	%[count],8\n"
-+		"	je	2f\n"
-+		"	aghi	%[count],-(8+1)\n"
-+		"	srlg	%[tmp],%[count],8\n"
-+		"	ltgr	%[tmp],%[tmp]\n"
-+		"	jz	1f\n"
-+		"0:	stg	%[poison],0(%[addr])\n"
-+		"	mvc	8(256-8,%[addr]),0(%[addr])\n"
-+		"	la	%[addr],256(%[addr])\n"
-+		"	brctg	%[tmp],0b\n"
-+		"1:	stg	%[poison],0(%[addr])\n"
-+		"	larl	%[tmp],3f\n"
-+		"	ex	%[count],0(%[tmp])\n"
-+		"	j	4f\n"
-+		"2:	stg	%[poison],0(%[addr])\n"
-+		"	j	4f\n"
-+		"3:	mvc	8(1,%[addr]),0(%[addr])\n"
-+		"4:\n"
-+		: [addr] "+&a" (erase_low), [count] "+&d" (count), [tmp] "=&a" (tmp)
-+		: [poison] "d" (poison)
-+		: "memory", "cc"
-+		);
-+}
-+
- /*
-  * Thread structure
-  */
+Best regards,
 -- 
-2.37.2
-
+Thierry Reding <treding@nvidia.com>
