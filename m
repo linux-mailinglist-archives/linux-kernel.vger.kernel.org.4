@@ -2,65 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED096D812F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29966D8143
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238334AbjDEPMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S238839AbjDEPNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238769AbjDEPMH (ORCPT
+        with ESMTP id S238730AbjDEPMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:12:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE19B7681;
-        Wed,  5 Apr 2023 08:10:06 -0700 (PDT)
+        Wed, 5 Apr 2023 11:12:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC97EC0;
+        Wed,  5 Apr 2023 08:10:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F654625CB;
-        Wed,  5 Apr 2023 15:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBFD4C433EF;
-        Wed,  5 Apr 2023 15:09:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA53F625CE;
+        Wed,  5 Apr 2023 15:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604D1C433D2;
+        Wed,  5 Apr 2023 15:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680707361;
-        bh=FxEmb+M2evgHnsZfxS1UlIMfH2L1Tho1TVG1Xe+iAC4=;
+        s=k20201202; t=1680707405;
+        bh=rJ3M+zYS15q5Quad0wzrZG7xL5+9ADdP5E4EpauPQDA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BZFI+hPK7i84yEj5DRuNajp7u5CO+lLZbstdWLXSiIhmTyCEHJzqgSQK2mWWzVADj
-         UVfAqMLBjzc+0/B8t1S1EtEyTmAX7O4vXGWETm4XB8slG/pY2Y+n1NW8jkYI/p3I4z
-         2bhDnE9nPiVv6o8QlPO9o7+kBiLijrMFOS+/IIUI8bqp0QD6qxBPStpUj71GDGL48l
-         imc11RsRiFRYgVFkiWgn8l4v52ZOCg38SsHvEnnFHwWGhDHUsB2OAp3bnfv7mBQFv6
-         Xfz4sQWmsgF/hu6uuonIy3yuE7mSiqw84kUm55dL8OlqaGqnHtr04qlK4CHM4MzCbT
-         6srFOk0V9VyDQ==
-Date:   Wed, 5 Apr 2023 16:09:15 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
+        b=uwvoLG9Mg6dizDLr402j7UdbsqsQxuYjteYBhYwhrJlAsrbTC9nd6DQo1IzXxCIaN
+         9U72nBXMiZahaLCTdTcDIyoRUQ+ocS5hUtOmf5c/huPkH9rNDWmoozW7pynZHzH+D0
+         BGkdmKh+F8uLhLLPmXVxsc28WnJBRX2V3SfGP8T4wKvdqas3AfRJERK4rgMzIwhb2E
+         qUgFyspMctrP+YLPss7RMpYkfaXUxCSqnJxvkR2qxW/mhhhcEOUM7AD8vA30RzOHfq
+         MNkaCuaeprkDAK/eetegajbSH5jkLfbeRNdoBlc7xa5It9mB4L6J4Y1vI1mBg8lIkR
+         DpSUyJSUzAZBg==
+Date:   Wed, 5 Apr 2023 16:09:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH 05/10] mfd: rt5033: Apply preparatory changes before
- adding rt5033-charger driver
-Message-ID: <20230405150915.GN8371@google.com>
-References: <cover.1677620677.git.jahau@rocketmail.com>
- <4edfef7fdf129185355d4dd2d3928d63c04bac73.1677620677.git.jahau@rocketmail.com>
- <20230305105551.GJ2574592@google.com>
- <9ce4110c-eaff-3f8b-65da-8407e05af493@rocketmail.com>
- <64840676-b779-8ebb-3a7b-27d58e0e0346@rocketmail.com>
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 63/65] ASoC: tlv320aic32x4: pll: Switch to
+ determine_rate
+Message-ID: <6b83dd87-3819-4db4-bd07-92487a1df09d@sirena.org.uk>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-63-9a1358472d52@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bXPsTMNAHQ2iLa6U"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <64840676-b779-8ebb-3a7b-27d58e0e0346@rocketmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20221018-clk-range-checks-fixes-v3-63-9a1358472d52@cerno.tech>
+X-Cookie: 1 bulls, 3 cows.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,74 +109,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 02 Apr 2023, Jakob Hauser wrote:
 
-> Hi Lee,
->
-> On 05.03.23 17:14, Jakob Hauser wrote:
-> > On 05.03.23 11:55, Lee Jones wrote:
-> > > On Tue, 28 Feb 2023, Jakob Hauser wrote:
-> > >
-> > > > Order the register blocks to have the masks in descending manner.
-> > > >
-> > > > Add new defines for constant voltage shift (RT5033_CHGCTRL2_CV_SHIFT),
-> > > > MIVR mask (RT5033_CHGCTRL4_MIVR_MASK), pre-charge current shift
-> > > > (RT5033_CHGCTRL4_IPREC_SHIFT), internal timer disable
-> > > > (RT5033_INT_TIMER_DISABLE), termination disable (RT5033_TE_DISABLE),
-> > > > CFO disable (RT5033_CFO_DISABLE), UUG disable
-> > > > (RT5033_CHARGER_UUG_DISABLE).
-> > > >
-> > > > The fast charge timer type needs to be written on mask 0x38
-> > > > (RT5033_CHGCTRL3_TIMER_MASK). To avoid a bit shift on
-> > > > application, change the
-> > > > values of the timer types to fit the mask. Added the timout
-> > > > duration as a
-> > > > comment. And the timer between TIMER8 and TIMER12 is most likely
-> > > > TIMER10, see
-> > > > e.g. RT5036 [1] page 28 bottom.
-> > > >
-> > > > Add value options for MIVR (Minimum Input Voltage Regulation).
-> > > >
-> > > > Move RT5033_TE_ENABLE_MASK to the block "RT5033 CHGCTRL1
-> > > > register", in order
-> > > > to have the masks of the register collected there. To fit the
-> > > > naming scheme,
-> > > > rename it to RT5033_CHGCTRL1_TE_EN_MASK.
-> > > >
-> > > > Move RT5033_CHG_MAX_CURRENT to the block "RT5033 charger
-> > > > fast-charge current".
-> > > >
-> > > > Add new defines RT5033_CV_MAX_VOLTAGE and
-> > > > RT5033_CHG_MAX_PRE_CURRENT to the
-> > > > blocks "RT5033 charger constant charge voltage" and "RT5033
-> > > > charger pre-charge
-> > > > current limits".
-> > > >
-> > > > In include/linux/mfd/rt5033.h, turn power_supply "psy" into a
-> > > > pointer in order
-> > > > to use it in devm_power_supply_register().
-> > >
-> > > Are there no present users to account for?
-> >
-> > At least none I'm aware of. Within the upstream kernel the
-> > rt5033_charger power_supply didn't exist so far, the patchset is about
-> > to implement it.
->
-> Is there anything you want me to change or improve on this patch?
+--bXPsTMNAHQ2iLa6U
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If there were I would have said. :)  Please fix up the other review
-comments in the set and submit the next revision.
+On Tue, Apr 04, 2023 at 12:11:53PM +0200, Maxime Ripard wrote:
 
-> > > > [1] https://media.digikey.com/pdf/Data%20Sheets/Richtek%20PDF/RT5036%20%20Preliminary.pdf
-> > > >
-> > > > Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
-> > > > ---
-> > > >   include/linux/mfd/rt5033-private.h | 53 ++++++++++++++++++++----------
-> > > >   include/linux/mfd/rt5033.h         |  2 +-
-> > > >   2 files changed, 36 insertions(+),` 19 deletions(-)
->
-> Kind regards,
-> Jakob
+> The driver does implement round_rate() though, which means that we can
+> change the rate of the clock, but we will never get to change the
+> parent.
 
---
-Lee Jones [李琼斯]
+> However, It's hard to tell whether it's been done on purpose or not.
+
+> Since we'll start mandating a determine_rate() implementation, let's
+> convert the round_rate() implementation to a determine_rate(), which
+> will also make the current behavior explicit. And if it was an
+> oversight, the clock behaviour can be adjusted later on.
+
+Similar comments to the other patch, I'm pretty sure this is just
+surprising design on the part of the clock API and we should just allow
+reparenting.
+
+--bXPsTMNAHQ2iLa6U
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtjzwACgkQJNaLcl1U
+h9AOwgf9ErN1u2S7sQlFKj2SeLpE5lRKnNP6D1ooc6560nzhA27lBtrYHbRW8SJl
+T+kbhVrNtrlNbq+4ODnnfurtCWZnzgv4x6SDSb4ifzjckcCo4hjqHk9kcGQk/0Cw
+pe5S6KjNiGE3LWSWa85iqnAHH8XPVms/VcjAtDbLdiXBqV0fBmvKHpKkqpQ2IKiJ
+CPVabkZYMXj4Qh+tGAScos2ZPgNI6nG1euebgm1iPDvutLxcxU8RVHA++BVKNa62
+/ijunLrZY+U2Msq+RZQGuSWr7TfdD1DUhxhdnTG4Hjm4Q3r0KaWeixGyICYY6TyC
+r4CUzpWuZDn+9YNx2ETW7ACv6ayuMg==
+=P5db
+-----END PGP SIGNATURE-----
+
+--bXPsTMNAHQ2iLa6U--
