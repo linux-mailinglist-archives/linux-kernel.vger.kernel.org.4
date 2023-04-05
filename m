@@ -2,147 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 865CC6D797B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8369F6D79A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237788AbjDEKSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S237403AbjDEK1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237291AbjDEKSs (ORCPT
+        with ESMTP id S229645AbjDEK1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:18:48 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF7C4C27;
-        Wed,  5 Apr 2023 03:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=yJ16+cUT0D7ZVTErfZwxzpUUZnFQ1yqnqpQx3pT2yuE=; b=xNXdVbtPEQ7P54mUHFZ1T4HKNB
-        ukQx0seAcml+qIAsJ2sLzXRsiPchyuM64rLCzMlXxHsQDJRIubi+34vv2ToTtIK3iZ/ATyjSda7nf
-        Oi2DuJUcczk+WMWnVT2qwWkyJD3QAXEK2xlyRuNt22/NHyFnwsMVRkYyGSyMIgd9gNQ3W/xQFbSBS
-        04x9A54r2+piVmdAQxWvxOwSDHWjBFCypmkT7M8k2rGFTEQ/rckQKkDwrzYNKZxeF8zX3o/ab0/Lg
-        g2z8YmB1ZKNG43Y+0bFl7O0drdS8B3229jr1dcUD+kvN3Fd9mJ+V2VRBvVKwteoplvcd9FyB1jD+u
-        UQlBk+rA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56198)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pk0Db-0005KI-EB; Wed, 05 Apr 2023 11:18:19 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pk0DW-0006DJ-CA; Wed, 05 Apr 2023 11:18:14 +0100
-Date:   Wed, 5 Apr 2023 11:18:14 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        Wed, 5 Apr 2023 06:27:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC0D30CD;
+        Wed,  5 Apr 2023 03:27:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03197638AB;
+        Wed,  5 Apr 2023 10:27:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9A6C433EF;
+        Wed,  5 Apr 2023 10:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680690449;
+        bh=mJHD/VmsgZklSSL4AaouJi3AwiQtaNWYzxCEFaUka70=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=mbRsBO9aff5Hb6WL19C4UI9wRlNWvVrXtTCfn/L992N0BzD+Pgeq6B9jIL8rYkYG2
+         YLxV1zanFLuvnp4m597gFkPh5sOuoDDj/eBCz9Ege0AXIfuyv4+dPqAPL0t0ApFR3u
+         EeUvzEiDQez5SI6ymVhtQXWqv9ax0ZzD2pRmg+9KRxGJygNhB4JBZR2XhIOntBxqr9
+         qoWiLSMS4Jxww/BadE1sHi5I7Z7pP2oGZyd6lov9oNB4POv4Ki9YpgSh+To+RZqgub
+         RLqdmRNqv8xSxWyoLqDfSKpI02lL11NWHctOzgEY3QN7B9ZcillipIp1Oj1uDzcyLe
+         EbtOn4NDM5qiQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        hkallweit1@gmail.com, andrew@lunn.ch,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>,
-        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        hock.leong.kweh@intel.com
-Subject: Re: [PATCH net 1/1] net: stmmac: check fwnode for phy device before
- scanning for phy
-Message-ID: <ZC1K5mLAkkO7bjA4@shell.armlinux.org.uk>
-References: <20230405093945.3549491-1-michael.wei.hong.sit@intel.com>
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] wifi: ath11k: Add a warning for wcn6855 spurious wakeup events
+References: <20230220213807.28523-1-mario.limonciello@amd.com>
+        <87r0ubqo81.fsf@kernel.org>
+        <980959ea-b72f-4cc0-7662-4dd64932d005@amd.com>
+        <87mt4zqmgh.fsf@kernel.org>
+        <805fe9f0-7dbf-4483-9281-072db3765ff6@amd.com>
+Date:   Wed, 05 Apr 2023 13:27:22 +0300
+In-Reply-To: <805fe9f0-7dbf-4483-9281-072db3765ff6@amd.com> (Mario
+        Limonciello's message of "Mon, 27 Feb 2023 07:19:10 -0600")
+Message-ID: <87lej6aak5.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405093945.3549491-1-michael.wei.hong.sit@intel.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 05:39:45PM +0800, Michael Sit Wei Hong wrote:
-> Some DT devices already have phy device configured in the DT/ACPI.
-> Current implementation scans for a phy unconditionally even though
-> there is a phy listed in the DT/ACPI and already attached.
-> 
-> We should check the fwnode if there is any phy device listed in
-> fwnode and decide whether to scan for a phy to attach to.y
-> 
-> Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Mario Limonciello <mario.limonciello@amd.com> writes:
 
-Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> On 2/27/23 07:14, Kalle Valo wrote:
+>
+>> Mario Limonciello <mario.limonciello@amd.com> writes:
+>>
+>>> On 2/27/23 06:36, Kalle Valo wrote:
+>>>
+>>>> Mario Limonciello <mario.limonciello@amd.com> writes:
+>>>>
+>>>>> +static void ath11k_check_s2idle_bug(struct ath11k_base *ab)
+>>>>> +{
+>>>>> +	struct pci_dev *rdev;
+>>>>> +
+>>>>> +	if (pm_suspend_target_state != PM_SUSPEND_TO_IDLE)
+>>>>> +		return;
+>>>>> +
+>>>>> +	if (ab->id.device != WCN6855_DEVICE_ID)
+>>>>> +		return;
+>>>>> +
+>>>>> +	if (ab->qmi.target.fw_version >= WCN6855_S2IDLE_VER)
+>>>>> +		return;
+>>>>> +
+>>>>> +	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
+>>>>> +	if (rdev->vendor == PCI_VENDOR_ID_AMD)
+>>>>> + ath11k_warn(ab, "fw_version 0x%x may cause spurious wakeups.
+>>>>> Upgrade to 0x%x or later.",
+>>>>> +			    ab->qmi.target.fw_version, WCN6855_S2IDLE_VER);
+>>>>
+>>>> I understand the reasons for this warning but I don't really trust the
+>>>> check 'ab->qmi.target.fw_version >= WCN6855_S2IDLE_VER'. I don't know
+>>>> how the firmware team populates the fw_version so I'm worried that if we
+>>>> ever switch to a different firmware branch (or similar) this warning
+>>>> might all of sudden start triggering for the users.
+>>>>
+>>>
+>>> In that case, maybe would it be better to just have a list of the
+>>> public firmware with issue and ensure it doesn't match one of those?
+>>
+>> You mean ath11k checking for known broken versions and reporting that?
+>> We have so many different firmwares to support in ath11k, I'm not really
+>> keen on adding tests for a specific version.
+>
+> I checked and only found a total of 7 firmware versions published for
+> WCN6855 at your ath11k-firmware repo.  I'm not sure how many went to
+> linux-firmware.  But it seems like a relatively small list to have.
 
-> Fixes: fe2cfbc96803 ("net: stmmac: check if MAC needs to attach to a PHY")
-> Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-> ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index d41a5f92aee7..7ca9be7bec06 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -1134,22 +1134,26 @@ static void stmmac_check_pcs_mode(struct stmmac_priv *priv)
->  static int stmmac_init_phy(struct net_device *dev)
->  {
->  	struct stmmac_priv *priv = netdev_priv(dev);
-> +	struct fwnode_handle *phy_fwnode;
->  	struct fwnode_handle *fwnode;
-> -	bool phy_needed;
->  	int ret;
->  
-> +	if (!phylink_expects_phy(priv->phylink))
-> +		return 0;
-> +
->  	fwnode = of_fwnode_handle(priv->plat->phylink_node);
->  	if (!fwnode)
->  		fwnode = dev_fwnode(priv->device);
->  
->  	if (fwnode)
-> -		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
-> +		phy_fwnode = fwnode_get_phy_node(fwnode);
-> +	else
-> +		phy_fwnode = NULL;
->  
-> -	phy_needed = phylink_expects_phy(priv->phylink);
->  	/* Some DT bindings do not set-up the PHY handle. Let's try to
->  	 * manually parse it
->  	 */
-> -	if (!fwnode || phy_needed || ret) {
-> +	if (!phy_fwnode || IS_ERR(phy_fwnode)) {
->  		int addr = priv->plat->phy_addr;
->  		struct phy_device *phydev;
->  
-> @@ -1165,6 +1169,9 @@ static int stmmac_init_phy(struct net_device *dev)
->  		}
->  
->  		ret = phylink_connect_phy(priv->phylink, phydev);
-> +	} else {
-> +		fwnode_handle_put(phy_fwnode);
-> +		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
->  	}
->  
->  	if (!priv->plat->pmt) {
+ath11k supports also other hardware families than just WCN6855, so there
+are a lot of different firmware versions and branches.
 
-LGTM, thanks for taking on board my suggestion.
+>> We have a list of known important bugs in the wiki:
+>>
+>> https://wireless.wiki.kernel.org/en/users/drivers/ath11k#known_bugslimitations
+>>
+>> What about adding the issue there, would that get more exposure to the
+>> bug and hopefully the users would upgrade the firmware?
+>>
+>
+> The problem is when this happens users have no way to know it's even
+> caused by wireless.  So why would they go looking at the wireless
+> wiki?
+>
+> The GPIO used for WLAN is different from design to design so we can't
+> put it in the GPIO driver.  There are plenty of designs that have
+> valid reasons to wakeup from other GPIOs as well so it can't just be
+> the GPIO driver IRQ.
+
+I understand your problem but my problem is that I have three Qualcomm
+drivers to support and that's a major challenge itself. So I try to keep
+the drivers as simple as possible and avoid any hacks.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
