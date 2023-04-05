@@ -2,155 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8666D7158
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 748F46D715F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 02:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbjDEAfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 4 Apr 2023 20:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S236679AbjDEAfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 4 Apr 2023 20:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234699AbjDEAf1 (ORCPT
+        with ESMTP id S236592AbjDEAfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 4 Apr 2023 20:35:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030F93C19
-        for <linux-kernel@vger.kernel.org>; Tue,  4 Apr 2023 17:35:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9018D62238
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 00:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778E9C433EF;
-        Wed,  5 Apr 2023 00:35:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680654926;
-        bh=mwyGRFVE7UXU4VltUnClGeQB9w/yKZov+rkmzpNbM7M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Le3fqn8WuECi4wtHkaO/GkVlYAF1Z4ZCEfhJ1FzLfSxmMR500cNi2LpgxfTswhzou
-         LZr045meU2rt1qbQOZlISDiymqJFAn7MVEh037VpmhN57pF7A5WeXJsTWu5iSzZ+y4
-         kytSvQ4kt+C5w92Le6AY4Hg8CsgddJAq0bq91DxjESj76oqL6p/hWZLbmRcI1h2G5c
-         0ihhvavPq4qgyu4cAUpaEWGZaL+PbO27xDzGnPepGXCYdlpVBubXiWbkr2GOyzHLHt
-         kERrOaGz1BNR8qZvvXM/Fo+7unvzhtk5JKRMadV/KIHFPRrUKL8jY25ycJNP/3wbfS
-         +aQlA9UMzd11g==
-Message-ID: <0a85063f-ec04-d7e8-83bc-c716aeb9e79a@kernel.org>
-Date:   Wed, 5 Apr 2023 08:35:25 +0800
+        Tue, 4 Apr 2023 20:35:51 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68BF340FB;
+        Tue,  4 Apr 2023 17:35:50 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1131)
+        id 47FBF210DEA2; Tue,  4 Apr 2023 17:35:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 47FBF210DEA2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680654949;
+        bh=Lm837P1CWGU8gkD+0NV2QWBXE5Jg3ngDlIEqKcG2dP0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bm+VFJUTZ9EP37yQqCXwxrbvAIZkC7cLHJlx+azokqRk0E1LbMTvMiGWyVnjYGv5L
+         QVCO0+0iouZxRAkyN/RA4tKcR0ejiuxJ77Y2lDJK6j2SuGnLJveu3JG6ngEH/KD57A
+         CvkVQmNtE6VWGJO/SBE8g62bCiQAXfNZO3AyDsYI=
+Date:   Tue, 4 Apr 2023 17:35:49 -0700
+From:   Kelsey Steele <kelseysteele@linux.microsoft.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        decui@microsoft.com, petrtesarik@huaweicloud.com,
+        linux-hyperv@vger.kernel.org, iommu@lists.linux.dev,
+        robin.murphy@arm.com, dexuan.linux@gmail.com,
+        tyler.hicks@microsoft.com
+Subject: Re: [PATCH 6.1 000/179] 6.1.23-rc2 review
+Message-ID: <20230405003549.GA21326@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20230404183150.381314754@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] f2fs: Fix system crash due to lack of free space in
- LFS
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     yonggil.song@samsung.com,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <CGME20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
- <20230321001251epcms2p4c1fd48495643dbfca2cf82a433490bb8@epcms2p4>
- <48f18a16-c6d8-3df4-55c5-11546e7dde35@kernel.org>
- <ZCsGfTM1SjLblTVG@google.com>
- <87c74724-da3d-c5fd-b70d-b80a48ec058e@kernel.org>
- <ZCyV8ZSrj1rlJslZ@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <ZCyV8ZSrj1rlJslZ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404183150.381314754@linuxfoundation.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/5 5:26, Jaegeuk Kim wrote:
-> On 04/04, Chao Yu wrote:
->> On 2023/4/4 1:01, Jaegeuk Kim wrote:
->>> On 04/01, Chao Yu wrote:
->>>> On 2023/3/21 8:12, Yonggil Song wrote:
->>>>> When f2fs tries to checkpoint during foreground gc in LFS mode, system
->>>>> crash occurs due to lack of free space if the amount of dirty node and
->>>>> dentry pages generated by data migration exceeds free space.
->>>>> The reproduction sequence is as follows.
->>>>>
->>>>>     - 20GiB capacity block device (null_blk)
->>>>>     - format and mount with LFS mode
->>>>>     - create a file and write 20,000MiB
->>>>>     - 4k random write on full range of the file
->>>>>
->>>>>     RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
->>>>>     Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
->>>>>     RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
->>>>>     RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
->>>>>     RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
->>>>>     RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
->>>>>     R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
->>>>>     R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
->>>>>     FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
->>>>>     CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>     CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
->>>>>     DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>>>     DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>>>     Call Trace:
->>>>>     <TASK>
->>>>>     allocate_segment_by_default+0x9c/0x110 [f2fs]
->>>>>     f2fs_allocate_data_block+0x243/0xa30 [f2fs]
->>>>>     ? __mod_lruvec_page_state+0xa0/0x150
->>>>>     do_write_page+0x80/0x160 [f2fs]
->>>>>     f2fs_do_write_node_page+0x32/0x50 [f2fs]
->>>>>     __write_node_page+0x339/0x730 [f2fs]
->>>>>     f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
->>>>>     block_operations+0x257/0x340 [f2fs]
->>>>>     f2fs_write_checkpoint+0x102/0x1050 [f2fs]
->>>>>     f2fs_gc+0x27c/0x630 [f2fs]
->>>>>     ? folio_mark_dirty+0x36/0x70
->>>>>     f2fs_balance_fs+0x16f/0x180 [f2fs]
->>>>>
->>>>> This patch adds checking whether free sections are enough before checkpoint
->>>>> during gc.
->>>>>
->>>>> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
->>>>> ---
->>>>>     fs/f2fs/gc.c      | 10 ++++++++--
->>>>>     fs/f2fs/gc.h      |  2 ++
->>>>>     fs/f2fs/segment.h | 27 ++++++++++++++++++++++-----
->>>>>     3 files changed, 32 insertions(+), 7 deletions(-)
->>>>>
->>>>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
->>>>> index 4546e01b2ee0..dd563866d3c9 100644
->>>>> --- a/fs/f2fs/gc.c
->>>>> +++ b/fs/f2fs/gc.c
->>>>> @@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>>>>     		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
->>>>>     	};
->>>>>     	unsigned int skipped_round = 0, round = 0;
->>>>> +	unsigned int need_lower = 0, need_upper = 0;
->>>>>     	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
->>>>>     				gc_control->nr_free_secs,
->>>>> @@ -1858,8 +1859,13 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->>>>>     		}
->>>>>     	}
->>>>> -	/* Write checkpoint to reclaim prefree segments */
->>>>> -	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
->>>>> +	ret = get_need_secs(sbi, &need_lower, &need_upper);
->>>>
->>>> Can we avoid calling has_curseg_enough_space() for this case?
->>>
->>> Why? :P
->>
->> We won't check the return value of get_need_secs(), so it's not needed to call
->> has_curseg_enough_space() in get_need_secs() in this path, right?
+On Tue, Apr 04, 2023 at 08:32:15PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.23 release.
+> There are 179 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> I see. Thanks. I think we can do like this:
+> Responses should be made by Thu, 06 Apr 2023 18:31:13 +0000.
+> Anything received after that time might be too late.
 > 
-> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
-> [Jaegeuk Kim: code clean-up]
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 
-Better, thanks! :)
+Hi Greg, 
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+6.1.23-rc2 is failing to boot on x86 WSL. A bisect leads to commit
+c2f05366b687 ("swiotlb: fix slot alignment checks") being the problem
+and reverting this patch puts everything back in a working state.
 
-Thanks,
+There's a report from Dexuan who also encountered this error on a Linux
+VM on Hyper-V:
+
+https://lore.kernel.org/all/CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com/
+
+Adding a chunk of my log below which shows errors occuring from the hv_strvsc driver.
+
++cc Dexuan, Petr, Tyler, Hyper-V list, swiotlb list and maintainers
+
+-Kelsey
+
+
+
+[    1.796960] scsi 0:0:0:0: Direct-Access
+PQ: 0 ANSI: 0
+[    1.798026] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[    1.799408] sd 0:0:0:0: [sda] Sector size 0 reported, assuming 512.
+[    1.800296] sd 0:0:0:0: [sda] 1 512-byte logical blocks: (512 B/512
+B)
+[    1.801029] sd 0:0:0:0: [sda] 0-byte physical blocks
+[    1.804195] sd 0:0:0:0: [sda] Write Protect is on
+[    1.804820] sd 0:0:0:0: [sda] Mode Sense: 0f 00 80 00
+[    1.806353] scsi 0:1:1:0: Direct-Access
+PQ: 0 ANSI: 0
+[    1.806711] sd 0:0:0:0: [sda] Asking for cache data failed
+[    1.807534] sd 0:1:1:0: Attached scsi generic sg9 type 0
+[    1.808063] sd 0:0:0:0: [sda] Assuming drive cache: write through
+[    1.809789] sd 0:1:1:0: [sdj] Test Unit Ready failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.810476] sd 0:0:0:0: [sda] Sector size 0 reported, assuming 512.
+[    1.810988] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#520
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.812072] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#521
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.812943] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#522
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.812966] scsi 0:4:0:0: Direct-Access
+PQ: 0 ANSI: 0
+[    1.813001] sd 0:1:1:0: [sdj] Read Capacity(10) failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.813097] scsi 0:4:0:0: Attached scsi generic sg10 type 0
+[    1.815128] sd 0:4:0:0: [sdk] Test Unit Ready failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.815790] scsi 0:6:0:0: Direct-Access
+PQ: 0 ANSI: 0
+[    1.815949] sd 0:6:0:0: Attached scsi generic sg11 type 0
+[    1.816072] sd 0:0:0:0: [sda] Write Protect is off
+[    1.816075] sd 0:0:0:0: [sda] Mode Sense: 00 00 00 00
+[    1.816466] sd 0:1:1:0: [sdj] Sense not available.
+[    1.816515] sd 0:1:1:0: [sdj] 0 512-byte logical blocks: (0 B/0 B)
+[    1.816517] sd 0:1:1:0: [sdj] 0-byte physical blocks
+[    1.816974] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#155
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.817056] sd 0:1:1:0: [sdj] Write Protect is off
+[    1.817058] sd 0:1:1:0: [sdj] Mode Sense: 00 00 00 00
+[    1.817756] sd 0:6:0:0: [sdl] Test Unit Ready failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.818109] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#67
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.820136] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#68
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.821920] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#69
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.822789] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#156
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.823115] sd 0:1:1:0: [sdj] Asking for cache data failed
+[    1.823367] sd 0:6:0:0: [sdl] Read Capacity(10) failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.823373] sd 0:6:0:0: [sdl] Sense not available.
+[    1.823376] sd 0:6:0:0: [sdl] 0 512-byte logical blocks: (0 B/0 B)
+[    1.823377] sd 0:6:0:0: [sdl] 0-byte physical blocks
+[    1.825457] sd 0:0:0:0: [sda] Attached SCSI disk
+[    1.825632] sd 0:6:0:0: [sdl] Write Protect is off
+[    1.825636] sd 0:6:0:0: [sdl] Mode Sense: 00 00 00 00
+[    1.825934] sd 0:1:1:0: [sdj] Assuming drive cache: write through
+[    1.825970] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#157
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.826005] sd 0:6:0:0: [sdl] Asking for cache data failed
+[    1.826007] sd 0:6:0:0: [sdl] Assuming drive cache: write through
+[    1.826092] sd 0:4:0:0: [sdk] Read Capacity(10) failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.826141] sd 0:1:1:0: [sdj] Attached SCSI disk
+[    1.826649] sd 0:6:0:0: [sdl] Attached SCSI disk
+[    1.845293] sd 0:4:0:0: [sdk] Sense not available.
+[    1.846327] sd 0:4:0:0: [sdk] 0 512-byte logical blocks: (0 B/0 B)
+[    1.847370] sd 0:4:0:0: [sdk] 0-byte physical blocks
+[    1.854709] sd 0:4:0:0: [sdk] Write Protect is off
+[    1.855569] sd 0:4:0:0: [sdk] Mode Sense: 00 00 00 00
+[    1.858191] sd 0:4:0:0: [sdk] Asking for cache data failed
+[    1.858876] sd 0:4:0:0: [sdk] Assuming drive cache: write through
+[    1.860270] sd 0:4:0:0: [sdk] Attached SCSI disk
+[    1.965050] scsi 0:0:0:0: Direct-Access
+PQ: 0 ANSI: 0
+[    1.966030] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[    1.966347] sd 0:0:0:0: [sda] Sector size 0 reported, assuming 512.
+[    1.967120] sd 0:0:0:0: [sda] 1 512-byte logical blocks: (512 B/512
+B)
+[    1.967175] scsi 0:0:0:1: Direct-Access     Msft     Virtual Disk
+1.0  PQ: 0 ANSI: 5
+[    1.967644] sd 0:0:0:0: [sda] 0-byte physical blocks
+[    1.968899] scsi 0:0:0:1: scsi_get_vpd_buf: VPD page 0x00 result 12 >
+4 bytes
+[    1.969160] sd 0:0:0:0: [sda] Write Protect is on
+[    1.970184] sd 0:0:0:0: [sda] Mode Sense: 0f 00 80 00
+[    1.970797] sd 0:0:0:0: [sda] Asking for cache data failed
+[    1.971230] sd 0:0:0:0: [sda] Assuming drive cache: write through
+[    1.972270] sd 0:0:0:1: Attached scsi generic sg12 type 0
+[    1.972511] sd 0:0:0:1: [sdm] 8388616 512-byte logical blocks: (4.29
+GB/4.00 GiB)
+[    1.972763] sd 0:0:0:0: [sda] 744728 512-byte logical blocks: (381
+MB/364 MiB)
+[    1.973379] sd 0:0:0:1: [sdm] 4096-byte physical blocks
+[    1.973749] sd 0:0:0:1: [sdm] Write Protect is off
+[    1.974745] sda: detected capacity change from 1 to 744728
+[    1.974776] sd 0:0:0:1: [sdm] Mode Sense: 00 00 00 00
+[    1.974781] scsi 0:2:1:0: Direct-Access
+PQ: 0 ANSI: 0
+[    1.974925] sd 0:2:1:0: Attached scsi generic sg13 type 0
+[    1.977046] sd 0:2:1:0: [sdn] Test Unit Ready failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.978129] sd 0:0:0:0: [sda] Attached SCSI disk
+[    1.979617] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#30
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.979972] sd 0:0:0:1: [sdm] No Caching mode page found
+[    1.981154] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#31
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.981172] sd 0:0:0:1: [sdm] Assuming drive cache: write through
+[    1.982140] EXT4-fs (sda): VFS: Can't find ext4 filesystem
+[    1.982953] scsi 0:7:0:0: Direct-Access
+PQ: 0 ANSI: 0
+[    1.982957] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: tag#32
+cmd 0x25 status: scsi 0x0 srb 0x20 hv 0xc0000001
+[    1.983085] sd 0:2:1:0: [sdn] Read Capacity(10) failed: Result:
+hostbyte=0x01 driverbyte=DRIVER_OK
+[    1.983088] sd 0:2:1:0: [sdn] Sense not availThe connection with the
+virtual machine or container was closed.
+
+
+
+
+
