@@ -2,124 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DD56D770F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F36A6D7714
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237489AbjDEIgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S237554AbjDEIgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237128AbjDEIgT (ORCPT
+        with ESMTP id S237539AbjDEIg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:36:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA65271C;
-        Wed,  5 Apr 2023 01:36:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41E90621F6;
-        Wed,  5 Apr 2023 08:36:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A95C4339E;
-        Wed,  5 Apr 2023 08:36:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680683777;
-        bh=ImzeZUFNJhml8hQCobJLElzt2smrsWg3HmVJ1efYQPQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RRzrlb4grcco6JMZ9hj9E0jLzPYBeGHOSy5nGU5wJ0BCNcmhkO7gL0eSp1+Pv3fc5
-         7dVTq19HHGbuUrQEtx8PpzK0JzPPkk5xJX9aDPSBBiOGwwWPC5vjKeyBMKiLUQ+Qga
-         fsOqMcthI4xiZEV7pcwc6kdEbBV/qnOkBqkk9Lw7UnNWz/e5VcM2xoZxAiXOdC7jte
-         dppIPlfq/MAwmKFl7W25PwvPNQRNKBqIqOJT9AuEp6SoNjSnNn06h4Xts8l1hmz0Ms
-         OxkXZX4CXveuWXtrXaxVTXSAmG4WQTWMqco/DR9D1wifQvNPwEPMuHE8G/Ag7tbmDU
-         U48TP0O3LOOmw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Xiang Chen <chenxiang66@hisilicon.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Yihang Li <liyihang9@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, John Garry <john.garry@huawei.com>,
-        Xingui Yang <yangxingui@huawei.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: hisi_sas: work around build failure in suspend function
-Date:   Wed,  5 Apr 2023 10:36:04 +0200
-Message-Id: <20230405083611.3376739-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 5 Apr 2023 04:36:29 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C853C3E;
+        Wed,  5 Apr 2023 01:36:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680683787; x=1712219787;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=kZYnLU8SOtNyYo+2Y55HVr7QX63LleD2aWRYlI7W+Ro=;
+  b=hXf1/3j43Zd6IBUnyZUqha9nlweT8GV7q1hhVnjEKqu8hPGc4WJP6FLU
+   yzPSYKU5Y/AYFSdeIYiTSSu2HlIZjtyB+uRmFwflps/0/yE1TL7woB6qH
+   t7ewIG+CbXS/Bvt9a3Oc31RX7mck8g17kBLoLe7l+X0MiZUVRpbx1Tzz4
+   awiiaxghEB43VZZJPfJ0uATt5AVFxyq/+uXX6Tj88ZOuayq3bDPB2bUoZ
+   ALm/TfJ0eDvlQBFvgAd+MKcWZDAKBwUoZg2THeaG2emNBdq4P2wcXut/A
+   G9XmITkySogcF7sR6IS5mFHS/0z5ReYmCNqjS4kMz4SOmuyMvn2kuE5Po
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344114409"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="344114409"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 01:36:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="689187109"
+X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
+   d="scan'208";a="689187109"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 05 Apr 2023 01:36:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pjyct-00Ckig-1k;
+        Wed, 05 Apr 2023 11:36:19 +0300
+Date:   Wed, 5 Apr 2023 11:36:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v6 5/5]  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <ZC0zA1bVsrg0XEld@smile.fi.intel.com>
+References: <20230307112835.81886-1-okan.sahin@analog.com>
+ <20230307112835.81886-6-okan.sahin@analog.com>
+ <20230315175223.GI9667@google.com>
+ <20230315175257.GJ9667@google.com>
+ <MN2PR03MB5168249900206433A082875EE7889@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230329143615.GS2673958@google.com>
+ <MN2PR03MB51685B1F84AA679FB604E738E7929@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230403140950.GF548901@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230403140950.GF548901@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Apr 03, 2023 at 03:09:50PM +0100, Lee Jones wrote:
+> On Mon, 03 Apr 2023, Sahin, Okan wrote:
 
-The suspend/resume functions in this driver seem to have multiple
-problems, the latest one just got introduced by a bugfix:
+...
 
-drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
-drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
- 5142 |         if (atomic_read(&device->power.usage_count)) {
-drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
-drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
- 5142 |         if (atomic_read(&device->power.usage_count)) {
 
-As far as I can tell, the 'usage_count' is not meant to be accessed
-by device drivers at all, though I don't know what the driver is
-supposed to do instead.
+> > In fact, one of the maintainers suggested assigning chip_info to data
+> > instead of enumeration. Then I added chip_info and put devices into
+> > sub-structure above. I will replace chip_info with id structure in max77541
+> > device structure, right? I will use enumeration for data as I will assign
+> > it to id, and distinguish different devices.
+> 
+> Yes, that's correct.  Please remove chip_info altogether.
 
-Another problem is the use of the deprecated UNIVERSAL_DEV_PM_OPS(),
-and marking functions as __maybe_unused to avoid warnings about
-unused functions.  This should probably be changed to using
-DEFINE_RUNTIME_DEV_PM_OPS().
+Then it will provoke casting in the OF ID table which I believe is not what
+we want. I would agree on your first suggestion to have a plain number in I²C
+ID table, but I'm against it in OF and/or ACPI ID table.
 
-Both changes require actually understanding what the driver needs to
-do, and being able to test this, so instead here is the simplest
-patch to make it pass the randconfig builds instead.
-
-Fixes: e368d38cb952 ("scsi: hisi_sas: Exit suspend state when usage count is greater than 0")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-Maintainers: If possible, please revisit this to do a proper fix.
-If that takes too much time, this patch can be applied as a
-workaround in the meantime, and might also help in case the
-e368d38cb952 patch gets backported to stable kernels.
----
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index d160b9b7479b..12d588454f5d 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -5139,11 +5139,13 @@ static int _suspend_v3_hw(struct device *device)
- 	flush_workqueue(hisi_hba->wq);
- 	interrupt_disable_v3_hw(hisi_hba);
- 
-+#ifdef CONFIG_PM
- 	if (atomic_read(&device->power.usage_count)) {
- 		dev_err(dev, "PM suspend: host status cannot be suspended\n");
- 		rc = -EBUSY;
- 		goto err_out;
- 	}
-+#endif
- 
- 	rc = disable_host_v3_hw(hisi_hba);
- 	if (rc) {
-@@ -5162,7 +5164,9 @@ static int _suspend_v3_hw(struct device *device)
- 
- err_out_recover_host:
- 	enable_host_v3_hw(hisi_hba);
-+#ifdef CONFIG_PM
- err_out:
-+#endif
- 	interrupt_enable_v3_hw(hisi_hba);
- 	clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
- 	clear_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
