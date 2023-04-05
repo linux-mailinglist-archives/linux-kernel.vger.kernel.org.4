@@ -2,222 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B086D88E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E444B6D88EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 22:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbjDEUn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 16:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55764 "EHLO
+        id S234717AbjDEUoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 16:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234179AbjDEUnp (ORCPT
+        with ESMTP id S233862AbjDEUoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 16:43:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B364683E0;
-        Wed,  5 Apr 2023 13:43:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3FD862887;
-        Wed,  5 Apr 2023 20:43:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32284C433EF;
-        Wed,  5 Apr 2023 20:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680727402;
-        bh=6e4aZuW0CQQJwSrwrHjU6vWTR/ojeKCfsa6BmYjfvTA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kVU7e56XTp0GILO03kRtXnM7vFH2/BeDjpP+O+rtcTuTvrF1HZsC3vtmE8rd0+ljh
-         zyXVwpICoks53jh1WRHNftqqHZZtLrWGmJMv1e8uf2m4eK6CfXuHCaPBCPgNRFlNZg
-         gSloE5T4979gfWCTRQODPVDJ25EQTdiqwFy2xNd66vQZULILV3reSwLQtTvMFP27yG
-         iWbMAFcMbdUzMM/pD/cpPK7+IDIepwMqmBcOw8MKIj0vnFWZ5CMwP6xfVwtbf7FhdP
-         BkKYpeYDaHmWMoVyyVBqkelbmdHwoUgnMcypzG6dyEYJLkUL9Uu4izVri6EJSYGoFZ
-         3AleDHXkHQjGw==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] f2fs: attach/detach private value in pair
-Date:   Wed,  5 Apr 2023 13:43:21 -0700
-Message-Id: <20230405204321.2056498-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+        Wed, 5 Apr 2023 16:44:04 -0400
+Received: from sonic304-16.consmr.mail.bf2.yahoo.com (sonic304-16.consmr.mail.bf2.yahoo.com [74.6.128.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252FD7EEA
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:43:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680727429; bh=o79+MK6dpUzZUQXvocZyHLwH3RptZrKXroxGX/4QlUk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ieE0DjEhftH/TEwvf/6S90sdZLDG7xCc4FtHlvMCrpgR6w0j7eEH4LMzborZxM+mBFWR5oRDukzLrojlh5dyWFKeS2MNW1UTxDM45tgNlCtKL/+lKvbgktp1QLFjIrwWgrMQD7NAeO/bYkto0FKEg2NCwJ5Nm5nTZErLXUl8o/XwfnCtx+xT3ZOE9+gV+SHQPRX+9xKCtLdGNA/CQqs0HCL03ojXwcjbaigHq3+9BKuTULiVhw2rT/4bYSO6e0aOsM/12jHhU6EquTNqVRB0pmHegZEMqCEJZW2/f3srgtSvrKhalh5OtspFcNJmftTyKZ5MQWHAh95XwlD4fu2QGA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680727429; bh=k5D18lCf6ys6zehgqpmGHlf6J/sxe8IO1texY18gVOH=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=JJeZQJtNv+xp01noIOqtNc+ybpPIOtQByEi84rMElvG4I23OS6ziiy7jwg54BDdy1lolVlhNAaKLWjvyo2o7fPR0Tt/StVcC7GFKu9hA/0j5IeORKoVkqBIwfA4pTOSQuSHbf1VjodA1Fx6F9E7EOTHYZfY3SC3A4dZ7x3OHj1qSLlxLdwlBKkUzdP9WtagXrJo4j3P4d0skLBzb1QEHb6SO2jlKcJJSk0px2yqUvdYxvf23uQkYpMnu/0CHukZtTS44IDwxMbvbeFN/zWfyt/KDJ5v1nZkcJVvUgqbp3sdm8uY3fMMI9Amm3YfF/4BEAix9QmmC7NuYt0tvlhrO8g==
+X-YMail-OSG: pGkYCcMVM1nXs1G3qp3EEk4uRDZUEogs8IkOwmZb7_E_GvwyQ0Mb7UP4ruFY7CJ
+ SsexIpSaG0rHXiUxzB9Y8eAtsrwEnO6Go7TjAMX8cBwtlbInty.18CSPtyu.QZK3g.Vv8OIQNf8k
+ viXyX.dmX8JxXGxMExcc6Z67JqdeSGdrxdwQnZHwyZbQMur0n_t3CbPR5HyYIYQh_GLHKM2daHlt
+ TtJ1uQMs0ki1UtR0jTUYX4aLbfO0OGoOHY3bPjeauMyFWStQyryjD4PxL0wh7AmxY.S1KUQGk16l
+ aWu4hcqdPc_oR5l41Z43v6LcAhcIwbIYlYN_0xUiXzMNWwrAjpEHO4XGruNbVRj3KGHhAMb956dB
+ i6pIsbX_w64mDLxz9.otx279RxjnK7wGabSew5n4NzgNXgKxcrGm.OBhHNGhKAXvf_FzyxZP6XhN
+ 0.W3JtKOORDvR9xISzpLCfAvE4mgYowk1l_9m25LUXC77uWCFeYna9vmQLdsSbUJqpKoUFKMKeYC
+ 3MOd1podyV1EGZw0vGoI5jZcmxIRAyWU6OOVLfwxSYHc2DYuNbfmoe_AGczw8uJ7g72jW8qSQ_AZ
+ 8ZQpyzYSbf4JQw.JlZo_rs.Dtx5NUcGGu3t7aRhBuMCOfkWsPT9KXpl.Apbk4b9RXYJwIPGmClfN
+ UCICJKPVGu1xj7ZtFDlZZnIOHWIWDvlkX2wGBOAtT.CvYsVNDThYu_0XxcbLIylNGsSxaFv6r95_
+ NIvcOHfmdPMYGrXO_ha59nbUYkqSGKTZz_yEpgeXL6Pbm349.ZM78G1Nfwq4dsvleHgUbMHeusBH
+ jjrJsBCaVUmT2EV03JdVRXLsnlMBrIiMGhYhnWB_IzI0Khj3kaSyHgWOIJrbOiFwOyMwI.3ZDD91
+ ouQrErNw7zFua3HRwFXrXssOD36HQ0nHns_LDR.bvO3RjX53BsJvlMjYQvjuElDGDHIESlNQA1Bw
+ SmSaaHw5CCVAcRfStZ9ue9PoApAREMP3PPn1WPVNO6bYF1MZ_JGZ0VdLXJkr2r5p08bg_ZK38YCE
+ jBA4RPg3mQxG4I9OpPBvHBQvROsu4VtDUh7._o0otpQc_xzfOtT6SKtzxQfSw0ASMZqKMXZaIj6a
+ yxWUmlG5cutIDixf.BSfLYPRbtJsjHm0FLRKzEaDpS0L5OFFqLX4evooHBayEB6OBtpuBhokYiQV
+ CnF5E6I_lG_Zozjgm6GLWx5fyiFErB1F4WOObsaz.36PxAXR5S9zfijxoKCul_4NLpqLBMZ2Ze2D
+ XBzBloXGykzjWPfWiyFS6sY.1kdUsp0zhMyQxi3TwUP3wN1UifZlJcGT3ZyLoZexOrdPfvu9Crwh
+ rn_xXeFCh6kC5_Z3Wlh..Y7w.HDr_KhsPg_NoqMMOEeF8Ne5BYjzyfLKFaIvmTABmthZl741gWHA
+ u9wS641YpGg49vDgPv0fE6cy6GqQVRu0jE3kV.CUbHl.1yip0CmP2D_mC56wIzUJ2MpOI98uQOfd
+ HuS2P.pReMlq_a8LLhVmqVi5_6R_ohnQid5cM85iodrl3ry_B4FiRY2wS3OMQKAgCrwqksaSiEtz
+ 1Vjt4rfexQPocrz0kfs9_4mZxFdgRJl6GFqOjec3pSy6jyjVQScTG9TMnp_iTNsVc3GAuCu0aogB
+ WK310mQzz7aESOLfhFDBY4beFzpeBjwxl_1ZJiUsJfWtLHUYREGcPU1Ags0jBqoxqJas4fVECoRS
+ gOuqqdYZoGEWvQiWVNtYXLYUDTizHPRX4NDhL.CTl6DqqSu_gdvj2EngZ05QDARibIMpFt9opCv6
+ lUObqtZ4gXn.bLyKZqmBmvP7zFVLlcjAFqzNYDBDD6fl03rpFYmmtT0ZsWp_amuJUTMicHrLodYt
+ .nI0Th_XGrF8WLBEmidme5NbJwDPE1if3XjrhCfULE3ifaWYpjq2FJIZxmhPR0dWRtpCL9I6bVdL
+ fyn0Mb_qG_QH3JKhKNqkX1z__KFFyE_xmRpoubIk_hMkKjKv13k_IS60zIuHaGyxlG43iqXtgFQO
+ NltK.hVWiRG47fQ5_WHaz0DNq05Q.PjYYJ5y93MkFjqixC0VHTeNMyBIeNmAnzbyyaRtf3oyjelv
+ YT7c54V7BiDcQrfDQYn70DQlKLXwItRReLbZ1N1VZTRA4FqLM12EMlCNn2s161BaeqZciUV84tA.
+ A8bGh1qNAGeOMUUNdr_YHRxB3lreoUytRUpjbFH9HYWyRIHvWfUuXgQ5MyApiXSH2oahmQ5q05ir
+ FGGm8kWKKOgTPO0l1Xl94GVfm5SGQN6WkxPqBe5RuDb1OsEScD5stzPfodTQs.AhzGhMPqtDctlf
+ EWc787yi550Hd
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 2e24c7fd-7294-401d-8e1a-0b8c9b02a20a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.bf2.yahoo.com with HTTP; Wed, 5 Apr 2023 20:43:49 +0000
+Received: by hermes--production-ne1-7dbd98dd99-t5dz4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f9cdb95437a94bd13984470700a1b503;
+          Wed, 05 Apr 2023 20:43:45 +0000 (UTC)
+Message-ID: <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
+Date:   Wed, 5 Apr 2023 13:43:42 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, reiserfs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
+ <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
+ <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
+ <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com>
+ <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
+ <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-set_page_private_# increases a refcount after attaching page->private, and
-clear_page_private_# decreases it.
-But, f2fs_release_folio and f2fs_invalidate_folio call folio_detach_private()
-which decreases the refcount again, which corrupts the page cache.
+On 4/5/2023 12:59 PM, Paul Moore wrote:
+> On Wed, Apr 5, 2023 at 5:44 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+>> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
+>>> On 4/4/2023 11:54 AM, Paul Moore wrote:
+>>>> On Fri, Mar 31, 2023 at 8:33 AM Roberto Sassu
+>>>> <roberto.sassu@huaweicloud.com> wrote:
+> ..
+>
+>>>>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+>>>>> index cfcbb748da2..8392983334b 100644
+>>>>> --- a/security/smack/smack_lsm.c
+>>>>> +++ b/security/smack/smack_lsm.c
+>>>>> @@ -52,6 +52,15 @@
+>>>>>   #define SMK_RECEIVING  1
+>>>>>   #define SMK_SENDING    2
+>>>>>
+>>>>> +/*
+>>>>> + * Smack uses multiple xattrs.
+>>>>> + * SMACK64 - for access control, SMACK64EXEC - label for the program,
+>>>> I think it would be good to move SMACK64EXEC to its own line; it took
+>>>> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set to '4'
+>>>> when I only say three comment lines ... ;)
+>>>>
+>>>>> + * SMACK64MMAP - controls library loading,
+>>>>> + * SMACK64TRANSMUTE - label initialization,
+>>>>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
+>>>>> + */
+>>>>> +#define SMACK_INODE_INIT_XATTRS 4
+>>>> If smack_inode_init_security() only ever populates a single xattr, and
+>>>> that is the only current user of SMACK_INODE_INIT_XATTRS, can we make
+>>>> this '1' and shrink the xattr allocation a bit?
+>>> If the parent directory is marked with SMACK64_TRANSMUTE, the access
+>>> rule allowing the access has the "t" mode, and the object being initialized
+>>> is a directory, the new inode should get the SMACK64_TRANSMUTE attribute.
+>>> The callers of security_inode_init_security() don't seem to care.
+>>> I can't say if the evm code is getting SMACK64_TRANSMUTE or, for that
+>>> matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older system
+>>> allowed for multiple Smack xattrs, but I'm not clear on exactly how.
+>> If you like to set an additional xattr, that would be possible now.
+>> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
+>> another time and set SMACK64_TRANSMUTE.
+>>
+>> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
+>> EVM would protect SMACK64_TRANSMUTE too.
+> Ooookay, but can someone explain to me how either the current, or
+> patched, smack_inode_init_security() function can return multiple
+> xattrs via the security_inode_init_security() LSM hook?
 
-Cc: <stable@vger.kernel.org>
-Fixes: b763f3bedc2d ("f2fs: restructure f2fs page.private layout")
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/compress.c |  4 ++--
- fs/f2fs/data.c     |  6 ++++--
- fs/f2fs/f2fs.h     | 48 ++++++++++++++++------------------------------
- 3 files changed, 22 insertions(+), 36 deletions(-)
+It can't.
 
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 11653fa79289..70b3910db413 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -1854,7 +1854,7 @@ void f2fs_cache_compressed_page(struct f2fs_sb_info *sbi, struct page *page,
- 		return;
- 	}
- 
--	set_page_private_data(cpage, ino);
-+	set_page_private_ino(cpage, ino);
- 
- 	if (!f2fs_is_valid_blkaddr(sbi, blkaddr, DATA_GENERIC_ENHANCE_READ))
- 		goto out;
-@@ -1917,7 +1917,7 @@ void f2fs_invalidate_compress_pages(struct f2fs_sb_info *sbi, nid_t ino)
- 				continue;
- 			}
- 
--			if (ino != get_page_private_data(&folio->page)) {
-+			if (ino != get_page_private_ino(&folio->page)) {
- 				folio_unlock(folio);
- 				continue;
- 			}
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index 359de650772e..7262c754ff8b 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -3724,8 +3724,9 @@ void f2fs_invalidate_folio(struct folio *folio, size_t offset, size_t length)
- 
- 	if (test_opt(sbi, COMPRESS_CACHE) &&
- 			inode->i_ino == F2FS_COMPRESS_INO(sbi))
--		clear_page_private_data(&folio->page);
-+		clear_page_private_ino(&folio->page);
- 
-+	WARN_ON_ONCE(page_private(&folio->page));
- 	folio_detach_private(folio);
- }
- 
-@@ -3742,12 +3743,13 @@ bool f2fs_release_folio(struct folio *folio, gfp_t wait)
- 		struct inode *inode = folio->mapping->host;
- 
- 		if (inode->i_ino == F2FS_COMPRESS_INO(sbi))
--			clear_page_private_data(&folio->page);
-+			clear_page_private_ino(&folio->page);
- 	}
- 
- 	clear_page_private_reference(&folio->page);
- 	clear_page_private_gcing(&folio->page);
- 
-+	WARN_ON_ONCE(page_private(&folio->page));
- 	folio_detach_private(folio);
- 	return true;
- }
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index dfead8160a51..3d883201e7a5 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1395,6 +1395,7 @@ enum {
- 	PAGE_PRIVATE_ONGOING_MIGRATION,		/* data page which is on-going migrating */
- 	PAGE_PRIVATE_INLINE_INODE,		/* inode page contains inline data */
- 	PAGE_PRIVATE_REF_RESOURCE,		/* dirty page has referenced resources */
-+	PAGE_PRIVATE_DATA,			/* page has referenced data */
- 	PAGE_PRIVATE_MAX
- };
- 
-@@ -1409,73 +1410,56 @@ static inline bool page_private_##name(struct page *page) \
- #define PAGE_PRIVATE_SET_FUNC(name, flagname) \
- static inline void set_page_private_##name(struct page *page) \
- { \
--	if (!PagePrivate(page)) { \
--		get_page(page); \
--		SetPagePrivate(page); \
--		set_page_private(page, 0); \
--	} \
-+	if (!PagePrivate(page)) \
-+		attach_page_private(page, 0); \
- 	set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page)); \
- 	set_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
- }
- 
-+/* clear private by f2fs_release_folio or f2fs_invalidate_folio */
- #define PAGE_PRIVATE_CLEAR_FUNC(name, flagname) \
- static inline void clear_page_private_##name(struct page *page) \
- { \
- 	clear_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
--	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) { \
-+	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) \
- 		set_page_private(page, 0); \
--		if (PagePrivate(page)) { \
--			ClearPagePrivate(page); \
--			put_page(page); \
--		}\
--	} \
- }
- 
- PAGE_PRIVATE_GET_FUNC(nonpointer, NOT_POINTER);
- PAGE_PRIVATE_GET_FUNC(inline, INLINE_INODE);
- PAGE_PRIVATE_GET_FUNC(gcing, ONGOING_MIGRATION);
- PAGE_PRIVATE_GET_FUNC(dummy, DUMMY_WRITE);
-+PAGE_PRIVATE_GET_FUNC(data, DATA);
- 
- PAGE_PRIVATE_SET_FUNC(reference, REF_RESOURCE);
- PAGE_PRIVATE_SET_FUNC(inline, INLINE_INODE);
- PAGE_PRIVATE_SET_FUNC(gcing, ONGOING_MIGRATION);
- PAGE_PRIVATE_SET_FUNC(dummy, DUMMY_WRITE);
-+PAGE_PRIVATE_SET_FUNC(data, DATA);
- 
- PAGE_PRIVATE_CLEAR_FUNC(reference, REF_RESOURCE);
- PAGE_PRIVATE_CLEAR_FUNC(inline, INLINE_INODE);
- PAGE_PRIVATE_CLEAR_FUNC(gcing, ONGOING_MIGRATION);
- PAGE_PRIVATE_CLEAR_FUNC(dummy, DUMMY_WRITE);
-+PAGE_PRIVATE_CLEAR_FUNC(data, DATA);
- 
--static inline unsigned long get_page_private_data(struct page *page)
-+static inline nid_t get_page_private_ino(struct page *page)
- {
--	unsigned long data = page_private(page);
--
--	if (!test_bit(PAGE_PRIVATE_NOT_POINTER, &data))
-+	if (!page_private_data(page))
- 		return 0;
--	return data >> PAGE_PRIVATE_MAX;
-+	return page_private(page) >> PAGE_PRIVATE_MAX;
- }
- 
--static inline void set_page_private_data(struct page *page, unsigned long data)
-+static inline void set_page_private_ino(struct page *page, nid_t ino)
- {
--	if (!PagePrivate(page)) {
--		get_page(page);
--		SetPagePrivate(page);
--		set_page_private(page, 0);
--	}
--	set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page));
--	page_private(page) |= data << PAGE_PRIVATE_MAX;
-+	set_page_private_data(page);
-+	page_private(page) |= ino << PAGE_PRIVATE_MAX;
- }
- 
--static inline void clear_page_private_data(struct page *page)
-+static inline void clear_page_private_ino(struct page *page)
- {
- 	page_private(page) &= GENMASK(PAGE_PRIVATE_MAX - 1, 0);
--	if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) {
--		set_page_private(page, 0);
--		if (PagePrivate(page)) {
--			ClearPagePrivate(page);
--			put_page(page);
--		}
--	}
-+	clear_page_private_data(page);
- }
- 
- /* For compression */
--- 
-2.40.0.348.gf938b09366-goog
+>   I'm hoping
+> I'm missing something really obvious, but I can only see a single
+> Smack xattr being returned ...
+
+Smack is setting the transmute attribute in smack_d_instantiate().
+The exec and mmap attributes are always set explicitly.
+
+I don't know how the "extra" Smack attributes were obtained by evm
+before, and I haven't been looking at how they're doing it now.
+I have assumed that CONFIG_EVM_EXTRA_SMACK_XATTRS does something
+meaningful.
 
