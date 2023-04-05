@@ -2,229 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A756D89E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A59E6D89E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjDEVyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S233015AbjDEV6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjDEVyK (ORCPT
+        with ESMTP id S229958AbjDEV6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:54:10 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E132134;
-        Wed,  5 Apr 2023 14:54:08 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 335LrprS109534;
-        Wed, 5 Apr 2023 16:53:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680731631;
-        bh=clqkHsNQNcPVqIpQ6r2HdCEYxIyKH+fSK/iWYtt4KeQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=q4TxB4/wlcDugwc0k4vKpcYY4rQsHB56Oynu5+zLDyKfOypO8FHc0WMKG9YdBNEJZ
-         Iy7caS9x466GAS2MxDqiCtbCZGkBifItQyWGcKSpCb8QAx+DjG3sXQCk4Fn4cIEVSO
-         FjMWdmpahtRPyDa6QmQa07kTCVeAcpx07uj+4M3M=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 335Lrp4Y031351
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 5 Apr 2023 16:53:51 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 5
- Apr 2023 16:53:51 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 5 Apr 2023 16:53:51 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 335Lrp4g049459;
-        Wed, 5 Apr 2023 16:53:51 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Keerthy <j-keerthy@ti.com>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        ARM Linux Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bryan Brattlof <bb@ti.com>
-Subject: [PATCH v3 7/7] arm64: dts: ti: j721s2: Add VTM node
-Date:   Wed, 5 Apr 2023 16:53:28 -0500
-Message-ID: <20230405215328.3755561-8-bb@ti.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230405215328.3755561-1-bb@ti.com>
-References: <20230405215328.3755561-1-bb@ti.com>
+        Wed, 5 Apr 2023 17:58:39 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33A17692
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:58:38 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id op26so2074534qvb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680731917; x=1683323917;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=szpoCB2qwdblfPt0Wbn2EH90MaiJLksNaYH07lCeLt0=;
+        b=GPQ92rmEo75tj8kmVQFx/DUN5HcwfDV0giAu/HPi5bhjcUVJyLgQF5HAhe3TdZC+Ln
+         oSIyBhyl2opNiYPz2l9E4Ta9gtAaLMH0a6B6zNrksy1DYwi2k18esBbG1BXJRJGtSqrx
+         ov/itszEgR1XCHLY57zsyEPBJNt9fmle+qRHChaGQmKHhhYRJVCMkwu5m8oe6AkLQy5a
+         YXgUiSAZM9j0ul3KGo1UBUPov+qBvypnuNneVPm2d3BrBegEiuZeNVnICL1GEhF0UgTm
+         ilbyH7XVql/TQpB9aWGOyZNM0aT9lmOLi0vUiKdavkyfe7lRTjALxASCcDrmHu9sOeva
+         fxpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680731917; x=1683323917;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=szpoCB2qwdblfPt0Wbn2EH90MaiJLksNaYH07lCeLt0=;
+        b=14RL2XuVvD/BBoClW46xTBCwpPElOVVYT/YT2hCionaPXJrNPEA3WYRoCK8jPu4QsQ
+         hi5ihq1tHL+RUjMEileRc4FQAHbuGTLVEBQiD28/X/TqsSFjcA5POP3hpSsuURTEetp4
+         QEJHYIBH2Ab9vF2j7seScjNmCEDhAUbfLbIEe1P93R+p+xVi/8zXyGvsK/MRyGZSL9Yp
+         x1XxgCWtRw/vVJoCOFlevTsJGgznRQvwnqmt0Jk869vQBXNvjQei70ELT7IdZ+BIDp4f
+         qfTr1hvBHxx+lzShlqEWQuFUnRFrLF/hRJKjC6N+u73CGV3jMsTJZjUEJREDQ6VlQgVe
+         GDmg==
+X-Gm-Message-State: AAQBX9fb9OkVwHxsJXaMKPeeZkBK1XJoNA49NdXyMuaQWRDcAHzbOzoZ
+        3wlkwmcfpldEbj0fhJyhv1OJNjYhmuegQw==
+X-Google-Smtp-Source: AKy350YajoqQ019eIOrR43NhyXS6yO4/doM/oM2EhARmsL/5Q9G6RCpH+GSTcBjZ/HFTPV6TRvlQuA==
+X-Received: by 2002:a05:6214:ccc:b0:5b3:e172:b63e with SMTP id 12-20020a0562140ccc00b005b3e172b63emr1335240qvx.22.1680731917255;
+        Wed, 05 Apr 2023 14:58:37 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id nf1-20020a0562143b8100b005e5afa59f3dsm15918qvb.39.2023.04.05.14.58.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 14:58:36 -0700 (PDT)
+Message-ID: <4cb63482-82e4-36b5-dce9-078d0946c71e@gmail.com>
+Date:   Wed, 5 Apr 2023 14:58:34 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] scripts/gdb: add a Radix Tree Parser
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        akpm@linux-foundation.org, kapil.hali@broadcom.com
+References: <20230404214049.1016811-1-f.fainelli@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230404214049.1016811-1-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keerthy <j-keerthy@ti.com>
+On 4/4/23 14:40, Florian Fainelli wrote:
+[snip]
+> +    shift = node['shift'] + constants.LX_RADIX_TREE_MAP_SHIFT
+> +
+> +    while True:
+> +        offset = (index >> node['shift']) & constants.LX_RADIX_TREE_MAP_MASK
+> +        slot = node['slots'][offset]
 
-VTM stands for Voltage Thermal Management. Add the thermal zones.
-Six sensors mapping to six thermal zones. Main0, Main1, Main2, Main3,
-WKUP1 & WKUP2 domains respectively.
-
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-[bb@ti.com: rebased on v6.3-rc1]
-Signed-off-by: Bryan Brattlof <bb@ti.com>
----
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |   9 ++
- arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi | 101 ++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-j721s2.dtsi         |   4 +
- 3 files changed, 114 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index a353705a7463e..a178368224f44 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -379,4 +379,13 @@ adc {
- 			compatible = "ti,am3359-adc";
- 		};
- 	};
-+
-+	wkup_vtm0: temperature-sensor@42040000 {
-+		compatible = "ti,j7200-vtm";
-+		reg = <0x0 0x42040000 0x0 0x350>,
-+		      <0x0 0x42050000 0x0 0x350>,
-+		      <0x0 0x43000300 0x0 0x10>;
-+		power-domains = <&k3_pds 154 TI_SCI_PD_SHARED>;
-+		#thermal-sensor-cells = <1>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi
-new file mode 100644
-index 0000000000000..f7b1a15b8fa0a
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <dt-bindings/thermal/thermal.h>
-+
-+wkup0_thermal: wkup0-thermal {
-+	polling-delay-passive = <250>; /* milliseconds */
-+	polling-delay = <500>; /* milliseconds */
-+	thermal-sensors = <&wkup_vtm0 0>;
-+
-+	trips {
-+		wkup0_crit: wkup0-crit {
-+			temperature = <125000>; /* milliCelsius */
-+			hysteresis = <2000>; /* milliCelsius */
-+			type = "critical";
-+		};
-+	};
-+};
-+
-+wkup1_thermal: wkup1-thermal {
-+	polling-delay-passive = <250>; /* milliseconds */
-+	polling-delay = <500>; /* milliseconds */
-+	thermal-sensors = <&wkup_vtm0 1>;
-+
-+	trips {
-+		wkup1_crit: wkup1-crit {
-+			temperature = <125000>; /* milliCelsius */
-+			hysteresis = <2000>; /* milliCelsius */
-+			type = "critical";
-+		};
-+	};
-+};
-+
-+main0_thermal: main0-thermal {
-+	polling-delay-passive = <250>; /* milliseconds */
-+	polling-delay = <500>; /* milliseconds */
-+	thermal-sensors = <&wkup_vtm0 2>;
-+
-+	trips {
-+		main0_crit: main0-crit {
-+			temperature = <125000>; /* milliCelsius */
-+			hysteresis = <2000>; /* milliCelsius */
-+			type = "critical";
-+		};
-+	};
-+};
-+
-+main1_thermal: main1-thermal {
-+	polling-delay-passive = <250>; /* milliseconds */
-+	polling-delay = <500>; /* milliseconds */
-+	thermal-sensors = <&wkup_vtm0 3>;
-+
-+	trips {
-+		main1_crit: main1-crit {
-+			temperature = <125000>; /* milliCelsius */
-+			hysteresis = <2000>; /* milliCelsius */
-+			type = "critical";
-+		};
-+	};
-+};
-+
-+main2_thermal: main2-thermal {
-+	polling-delay-passive = <250>; /* milliseconds */
-+	polling-delay = <500>; /* milliseconds */
-+	thermal-sensors = <&wkup_vtm0 4>;
-+
-+	trips {
-+		main2_crit: main2-crit {
-+			temperature = <125000>; /* milliCelsius */
-+			hysteresis = <2000>; /* milliCelsius */
-+			type = "critical";
-+		};
-+	};
-+};
-+
-+main3_thermal: main3-thermal {
-+	polling-delay-passive = <250>; /* milliseconds */
-+	polling-delay = <500>; /* milliseconds */
-+	thermal-sensors = <&wkup_vtm0 5>;
-+
-+	trips {
-+		main3_crit: main3-crit {
-+			temperature = <125000>; /* milliCelsius */
-+			hysteresis = <2000>; /* milliCelsius */
-+			type = "critical";
-+		};
-+	};
-+};
-+
-+main4_thermal: main4-thermal {
-+	polling-delay-passive = <250>; /* milliseconds */
-+	polling-delay = <500>; /* milliseconds */
-+	thermal-sensors = <&wkup_vtm0 6>;
-+
-+	trips {
-+		main4_crit: main4-crit {
-+			temperature = <125000>; /* milliCelsius */
-+			hysteresis = <2000>; /* milliCelsius */
-+			type = "critical";
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2.dtsi
-index 376924726f1f3..4aab2daf85fc7 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2.dtsi
-@@ -163,6 +163,10 @@ cbass_mcu_wakeup: bus@28380000 {
- 		};
- 
- 	};
-+
-+	thermal_zones: thermal-zones {
-+		#include "k3-j721s2-thermal.dtsi"
-+	};
- };
- 
- /* Now include peripherals from each bus segment */
+We need to check for slot == 0 here, unless there are other comments, I 
+will spin a v2 with that change.
 -- 
-2.40.0
+Florian
 
