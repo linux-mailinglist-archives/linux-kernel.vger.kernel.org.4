@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8371E6D83F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20946D83F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbjDEQnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S231967AbjDEQo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjDEQnv (ORCPT
+        with ESMTP id S230182AbjDEQow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:43:51 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C4AE26B3;
-        Wed,  5 Apr 2023 09:43:50 -0700 (PDT)
-Received: from [192.168.2.41] (77-166-152-30.fixed.kpn.net [77.166.152.30])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5CA6D210DEDB;
-        Wed,  5 Apr 2023 09:43:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5CA6D210DEDB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1680713029;
-        bh=6UIH2vmF08rmY+8MR3XIm6gXvAVwqi0BtmTVVd5Yo2w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DHYRJ5HZpDoWTCjVjlbXHcBGwh7nVVESx+eihe+xoRrFwigR+UbQGwM3PDIflhNG6
-         iLU1SkwB9Oq0vH6jY6PiEutdbdU2HMt9eS8wnnmv6vzecYVfx3LkXfqOrsGIDgEFAJ
-         xW8LKtSdWGbq1WY3e6DmFzERtRG9RWi9LVpgDI/4=
-Message-ID: <959c5bce-beb5-b463-7158-33fc4a4f910c@linux.microsoft.com>
-Date:   Wed, 5 Apr 2023 18:43:46 +0200
+        Wed, 5 Apr 2023 12:44:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C1E10FA;
+        Wed,  5 Apr 2023 09:44:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 438006263A;
+        Wed,  5 Apr 2023 16:44:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8678C433D2;
+        Wed,  5 Apr 2023 16:44:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680713090;
+        bh=m/iAEV0ikYlqTgKl+JEswqP5UlbqIZYlrv78hBvG1fw=;
+        h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+        b=WV0lzHWRtTaZI8sRbOQCjT6qzICyIJuI7OudtRYvEqIXoUaAJvmM74tkspJHJoMqA
+         1AYBZu+E9L/XylTww+H5Yed72/2SVlcjlatxFVWGKXFnEDcnsyhDYw1x8LNa8J0YK4
+         fPTUS9b2DT1rrHgweZbSJ/D/zdS11ammmmqm0jwcUOZ6oiLkD2HIv6w1BKNlTQQ7GO
+         dTfANG3k+3D4v61RROf/abK3LBJL1g8cmJcomwITvOldI9PPjkAuLfJtGRQmxk+1FT
+         +rqYw/ylo5Scs7KkXADes7zZFGgSZ8UGq+4bQ/iF5JamrC2599poQbtsuq5reW5jo5
+         eOHNkkszcHG3Q==
+Received: by mail-ed1-f52.google.com with SMTP id eh3so142580326edb.11;
+        Wed, 05 Apr 2023 09:44:50 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fSh1W3TybJg8jX/2+T5wFL5fhTfvCE+UydHttwSrOHu3azuStD
+        FfoBz3/Cj2Lv0y/Ezw4/pVxmU6LEQvT3oPvllcU=
+X-Google-Smtp-Source: AKy350YhHVNlM9NlxEoGRGdWg9VZMOKaU0pTCqe6SN6WzX7x8l7ccLpcwDdFDb4I98F0QDUjQfwIw7c/3FPLYCd+os8=
+X-Received: by 2002:a17:907:8a07:b0:924:32b2:e3d1 with SMTP id
+ sc7-20020a1709078a0700b0092432b2e3d1mr1968732ejc.3.1680713088788; Wed, 05 Apr
+ 2023 09:44:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
- <ZAd2MRNLw1JAXmOf@google.com>
-Content-Language: en-US
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-In-Reply-To: <ZAd2MRNLw1JAXmOf@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220520171134.31415-1-eajames@linux.ibm.com> <bc6564dc-3bfd-298b-43a8-b5a629f4631f@linux.ibm.com>
+In-Reply-To: <bc6564dc-3bfd-298b-43a8-b5a629f4631f@linux.ibm.com>
+Reply-To: lee@kernel.org
+From:   Lee Jones <lee@kernel.org>
+Date:   Wed, 5 Apr 2023 17:44:37 +0100
+X-Gmail-Original-Message-ID: <CAPxw_W_10Z173z+s4DYDc6A1raVff2B8EhOWxg9AVgoqj-eS+A@mail.gmail.com>
+Message-ID: <CAPxw_W_10Z173z+s4DYDc6A1raVff2B8EhOWxg9AVgoqj-eS+A@mail.gmail.com>
+Subject: Re: [PATCH] leds: Ensure hardware blinking turns off when requested
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     pavel@ucw.cz, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/2023 6:36 PM, Sean Christopherson wrote:
-> Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM: SVM:
-> hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.  KVM
-> doesn't magically handle the flushes correctly for the shadow/legacy MMU, KVM just
-> happens to get lucky and not run afoul of the underlying bugs.  The revert appears
-> to be reasonably straightforward (see bottom).
+Apologies for any chaos this may cause, I'm replying from Gmail since
+this doesn't appear to be in my inbox.
 
-Hi Sean,
+On Wed, 5 Apr 2023 at 17:26, Eddie James <eajames@linux.ibm.com> wrote:
+>
+>
+> On 5/20/22 12:11, Eddie James wrote:
+> > If an LED is blinking through the hardware and the trigger is deactivated,
+> > the driver will set the brightness to 0 to disable blinking. However, if
+> > the LED driver doesn't support non-blocking operations, the request for
+> > setting brightness to 0 will get queued. Then if a user requests a new
+> > non-zero brightness before the request for 0 brightness is executed, the
+> > LED blinking will not get disabled since the brightness will simply be
+> > updated.
+> > Fix this by flushing the workqueue before updating the requested
+> > brightness.
+>
+>
+> I just realized this never made it anywhere. Pavel, any thoughts?
 
-I'm back, and I don't have good news. The fix for the missing hyperv TLB flushes has
-landed in Linus' tree and I now had the chance to test things outside Azure, in WSL on my
-AMD laptop.
+Submit a [RESEND] please.
 
-There is some seriously weird interaction going on between TDP MMU and Hyper-V, with
-or without enlightened TLB. My laptop has 16 vCPUs, so the WSL VM also has 16 vCPUs.
-I have hardcoded the kernel to disable enlightened TLB (so we know that is not interfering).
-I'm running a Flatcar Linux VM inside the WSL VM using legacy BIOS, a single CPU
-and 4GB of RAM.
+Also, please ensure you re-run get_maintainer.pl before doing so.
 
-If I run with `kvm.tdp_mmu=0`, I can boot and shutdown my VM consistently in 20 seconds.
-
-If I run with TDP MMU, the VM boot stalls for seconds at a time in various spots
-(loading grub, decompressing kernel, during kernel boot), the boot output feels like
-it's happening in slow motion. The fastest I see it finish the same cycle is 2 minutes,
-I have also seen it take 4 minutes, sometimes even not finish at all. Same everything,
-the only difference is the value of `kvm.tdp_mmu`.
-
-So I would like to revisit disabling tdp_mmu on hyperv altogether for the time being but it
-should probably be with the following condition:
-
-  tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled && !hypervisor_is_type(X86_HYPER_MS_HYPERV)
-
-Do you have an environment where you would be able to reproduce this? A Windows server perhaps
-or an AMD laptop?
-
-Jeremi
-
-> 
-> And _if_ we want to hack-a-fix it, then I would strongly prefer a very isolated,
-> obviously hacky fix, e.g.
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 36e4561554ca..a9ba4ae14fda 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5779,8 +5779,13 @@ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
->         tdp_root_level = tdp_forced_root_level;
->         max_tdp_level = tdp_max_root_level;
->  
-> +       /*
-> +        * FIXME: Remove the enlightened TLB restriction when KVM properly
-> +        * handles TLB flushes for said enlightenment.
-> +        */.
->  #ifdef CONFIG_X86_64
-> -       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
-> +       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled &&
-> +                         !(ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB);
->  #endif
->         /*
->          * max_huge_page_level reflects KVM's MMU capabilities irrespective
-> 
-> 
+> > Fixes: 4d71a4a12b13 ("leds: Add support for setting brightness in a synchronous way")
+> > Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> > ---
+> >   drivers/leds/led-class.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+> > index 6a8ea94834fa..861a1cb5df5b 100644
+> > --- a/drivers/leds/led-class.c
+> > +++ b/drivers/leds/led-class.c
+> > @@ -55,6 +55,8 @@ static ssize_t brightness_store(struct device *dev,
+> >
+> >       if (state == LED_OFF)
+> >               led_trigger_remove(led_cdev);
+> > +     /* flush out any request to disable blinking */
+> > +     flush_work(&led_cdev->set_brightness_work);
+> >       led_set_brightness(led_cdev, state);
+> >       flush_work(&led_cdev->set_brightness_work);
+> >
