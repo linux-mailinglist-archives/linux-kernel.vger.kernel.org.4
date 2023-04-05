@@ -2,75 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F3E6D793F
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D536D7943
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237537AbjDEKF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S237586AbjDEKHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237501AbjDEKFt (ORCPT
+        with ESMTP id S237501AbjDEKHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:05:49 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0349D171E
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:05:49 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id c9so35464138lfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 03:05:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680689147;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=RSS8/RKlSvc304T0TO5FEOz3LhPmNXbE1doFI+LVa4dzj4qQMTwj0AfSCy8PVnJAPE
-         RhQwb+is+jBbBXS8EYUwCVRZoVlzGLdQCqXVEHD1gNf0bj+3ugtZbsmG87giep02AeFN
-         8WcXsXvupsXBqEKHCtgpdaTOk0NfeHx/0sYjgXE+l0CAaGbDIpaS8sbvRFfj7avkimdc
-         6rNzRjWwnP6UfcnLAmeQNXWsKnUzGfXP6T9R2YzDXauSOh95xDFwjLkPG0io+dZ4biof
-         YZy50dcLNK4oEjCzsnacWnSa3K7eocRN1TTUhCMlwnDSdNGDxB4n78TwjQUiq7YGYfJO
-         9XVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680689147;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=ToRypZExp+t5NelPpF2SR6f2nkzRsBcR5czQhqP6FimLn2+Ty3yuoDDrhNT6NIpPUw
-         +8sW0B9IIvw5m4piBgvvsatyo0NqB+P8YSBz8ZjTL/puND1GcJSlOuAyv9pSS72PC28c
-         CMM0/tiQvknGqit4WkoWg6bPod540DhVy0a8RF3l3rpMd9P/8hPcfkdkxPAYzUw9eiBT
-         q5a62IFnMBfnmDUG0nQhDQA8RY98a0ZfiTomsPIsMzt9wL4oY4vMH58vLDu+ENR5hcBq
-         AHgGwYqrrYFYRUxDWahjsw4v9bh0XqxDfHuGOPbfLT0W2B5RMlan5B0VX9d9jKwt1EZz
-         yWnQ==
-X-Gm-Message-State: AAQBX9fgDUqmNXCKAzgNrdZuRv7p549BZAVqSdPLwP4sQFaUeNiuvpUr
-        Mv5QXAZiNKvbFXyrtvMxIMvT0wYwgjttYb6y+54=
-X-Google-Smtp-Source: AKy350bmwc61lWQ1dww09QmL6YQ4ROjcd0J2u/9fAxu1nbd2NzwhvyfVIcKyrimiGvqdJ/11xuOTNUaD65LjoJiv2IU=
-X-Received: by 2002:ac2:44ba:0:b0:4eb:2643:d5cf with SMTP id
- c26-20020ac244ba000000b004eb2643d5cfmr1679547lfm.7.1680689147046; Wed, 05 Apr
- 2023 03:05:47 -0700 (PDT)
+        Wed, 5 Apr 2023 06:07:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6671BD0
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680689169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QtxKCZQq9P6gn2grmwTtfOWjbfdkBo+gZpF7sZrBSXo=;
+        b=b2W/2Dlwi1r5J9mP8B82GRV9KqfjJBuYdZSMtbTlJp6qq3VB6lTENlLJDeqQIe0mNw3kUf
+        eMxDtDgIXJ51bW6nEPSV6GmJ47mL347YrL0543C9xm76IFiXoqfBWKvDroOn6cVrtZJFV1
+        YFg95cqAMLDGB3nK0CBwZVng3ZpMo7M=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-mMkzMFZ3NGWUO3hz9QkDEw-1; Wed, 05 Apr 2023 06:06:08 -0400
+X-MC-Unique: mMkzMFZ3NGWUO3hz9QkDEw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 509DE280AA22;
+        Wed,  5 Apr 2023 10:06:07 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.200])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BF4CE400F4F;
+        Wed,  5 Apr 2023 10:06:06 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 958C31800097; Wed,  5 Apr 2023 12:06:05 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 12:06:05 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Min M. Xu" <min.m.xu@intel.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Jiewen Yao <jiewen.yao@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v7 6/6] x86/efi: Safely enable unaccepted memory in UEFI
+Message-ID: <ts3dltyfxkchkop3y6uenz34bghyg2phwmlxxbigxi3b7nzy3d@b7a6a57ogpm2>
+References: <20230330114956.20342-1-kirill.shutemov@linux.intel.com>
+ <cover.1680628986.git.thomas.lendacky@amd.com>
+ <1d38d28c2731075d66ac65b56b813a138900f638.1680628986.git.thomas.lendacky@amd.com>
+ <20230404174506.pjdikxvk2fsyy4au@box.shutemov.name>
+ <bc9e6d82-c7c1-47dc-e91f-57d9b4e2bb0a@intel.com>
+ <20230404180917.4fsgkzcdhqvph6io@box.shutemov.name>
+ <CAMj1kXF0XyEOuSUDqgsLSYK8GSkGN1xK3RQ525+BxhG+7+vnCA@mail.gmail.com>
+ <20230404202445.6qkl7hz67qgievqz@box.shutemov.name>
+ <CAMj1kXFrm74+zNcSpHJ1kw38PTMOFk1cTx_EAoGFHaG1fYzRTQ@mail.gmail.com>
+ <20230404210153.tll2mojlglx4rfsa@box.shutemov.name>
 MIME-Version: 1.0
-Received: by 2002:a05:6520:34b:b0:24d:cf61:2e9f with HTTP; Wed, 5 Apr 2023
- 03:05:46 -0700 (PDT)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <harrykuunda@gmail.com>
-Date:   Wed, 5 Apr 2023 03:05:46 -0700
-Message-ID: <CAKN7XSUKBhWkL5MBFsL-3XBkr-6VcwnZ61o41Fmy9dQMhZ1R8g@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404210153.tll2mojlglx4rfsa@box.shutemov.name>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+  Hi,
+
+> User will specify if it wants unaccepted memory or not for the VM. And if
+> it does it is his responsibility to have kernel that supports it.
+> 
+> And you have not addressed my question:
+> 
+> 	How is it different from any other feature the kernel is not [yet] aware
+> 	of?
+
+Come on.  Automatic feature negotiation is standard procedure in many
+places.  It's not like we inventing something totally new here.
+
+Just one example:  When a virtio device learns a new trick a feature flag
+is added for it, and in case both guest and host support it it can be
+enabled, otherwise not.  There is no need for the user to configure the
+virtio device features manually according to the capabilities of the
+kernel it is going to boot.
+
+take care,
+  Gerd
+
