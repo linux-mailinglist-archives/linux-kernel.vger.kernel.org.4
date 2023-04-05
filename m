@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F36A6D7D70
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBDF6D7D72
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238242AbjDENKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54584 "EHLO
+        id S238159AbjDENKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238159AbjDENKA (ORCPT
+        with ESMTP id S238231AbjDENKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:10:00 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227D71FEC;
-        Wed,  5 Apr 2023 06:09:59 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id ek18so140992747edb.6;
-        Wed, 05 Apr 2023 06:09:59 -0700 (PDT)
+        Wed, 5 Apr 2023 09:10:43 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E47271C;
+        Wed,  5 Apr 2023 06:10:41 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id c18so34337110ple.11;
+        Wed, 05 Apr 2023 06:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680700197;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vc6lpfSkhCFjZHegYgPH2xzL1XMSoHFdPSi+Hb5EdvY=;
-        b=qpg7ZYCUnkTeF3b6x6kbrQyX2BavDizjxk/2XDA79QURowrQ2TbSVfnW9rhylzBJVT
-         1Bh7GPohy51Twy9gO++ipoy3Npo7zP1qFrfSpDxjTnCVtD0G5EX3k9J7mtmLF6TiOyZ/
-         jp9R9bZUq8O6it5kb8HhTDsI7smP/fK4rrUanIziLOjI+po+bbPTwt+LMQC5lv7AOsx4
-         KBmXD+yTXr/wx0/LyNF95sugOW7ylL2LzW/eXYXM6HRABFbuzCGAP+vMVli8IPh6XCXi
-         fk5aupAgTSlvSPViPo6Qb9TaBnB3Sqhia0EzRbKYCp3ctOmKWf2/s5tFu6WhrXooniJm
-         U11g==
+        d=gmail.com; s=20210112; t=1680700241; x=1683292241;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VtodILvQ2ZMMlQviiIR+jJTYn+DhiSUAYYkxKahJV3E=;
+        b=ggCDlh67old4Wkj7U8Xwno8MC/kO4SkXOblBCvDt9kFG9v2sdYQESfxZLEmPnPdtNG
+         OJBOohulVFZIASbj3NL7CFupbP+jc9yRP4ht4QCyFhgimVu/BqWnrgc5lfgT2yYRdNUq
+         qW8lh+CsnB4Oj5uoqqlnJEI1zfWII7fa0Nre5xYhqH9FDrJ5q7RjXz/fJe7F2QhyJrsH
+         1O4TGb31QZ31/4xJ5ybx/TO+hJP86nkJuIpZEAiR5DKL7r2GRSG/140XbcGfoY8SNEsf
+         CpZmjcHzjMeZ/eXc9aCRpOtrdv829DWm3sp339ddYNW0S9d/FxVUCgeJgtIcQFIbLsr/
+         UfNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680700197;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vc6lpfSkhCFjZHegYgPH2xzL1XMSoHFdPSi+Hb5EdvY=;
-        b=1Dxk7Ea000htkesDgE8R4v47psAGTCi+v+sXc9HyozFKMQrqF57u+67I2xZ4oya/kq
-         1wUCOMOr0/FK+MgOw78O6bjejwqlKpjzUef6/wViicxYF1sGPnVTApT5LubkB9POhnC1
-         BM59SlKzDSJjJqY7loEfHW5hg9UgHtDPzdTgfxpcMVpTbAnZEn07Z1nXZDdzQAkA1B5q
-         m4KafNb/jsxT74yj2gcx8yN8vW2ofaRK79dkOTMP+GV1ng2Kiiv1nQCaR1lRL/iaydEp
-         6Bg58cdq7PjCZlXRWJ9m9jQyq9SGFyCEOrhWR6DhCC1ARTH71OBBK7hFznAvLFpD+zID
-         2ktQ==
-X-Gm-Message-State: AAQBX9fCpMNlgDrjJuhcsxhLFgtANkPoOSmmYBskOWvGOS4YEMsvC1Iq
-        z1JjSLjZbr6JnzEO3IhzoIc=
-X-Google-Smtp-Source: AKy350alzGXioav9KKWdOSGxp9WUWI3K1jkYkHhw8Tueh9auQSnW3kxrsPw/x7HQfCybtSFuZaTkmQ==
-X-Received: by 2002:a17:906:2b0d:b0:93f:fbe:c389 with SMTP id a13-20020a1709062b0d00b0093f0fbec389mr2911447ejg.13.1680700197494;
-        Wed, 05 Apr 2023 06:09:57 -0700 (PDT)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id h23-20020a170906261700b008e0bb004976sm7311267ejc.134.2023.04.05.06.09.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 06:09:57 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
-Cc:     Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-tegra@vger.kernel.org
-Subject: Re: (subset) [PATCH 20/20] soc/tegra: cbb: remove MODULE_LICENSE in non-modules
-Date:   Wed,  5 Apr 2023 15:09:50 +0200
-Message-Id: <168070017411.4044223.332660591498857046.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230228130215.289081-21-nick.alcock@oracle.com>
-References: <20230228130215.289081-1-nick.alcock@oracle.com> <20230228130215.289081-21-nick.alcock@oracle.com>
+        d=1e100.net; s=20210112; t=1680700241; x=1683292241;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VtodILvQ2ZMMlQviiIR+jJTYn+DhiSUAYYkxKahJV3E=;
+        b=vAyVRpOr83iSPsLofc0tkkx0wAdYdXDgUqFTEFd09s1S/wbImuU0EUwyxBnenuqKUt
+         o7yS7BVKboXje6zSbPU9nFqAtCgG3AnvmS6NemHK9vzQRadL97ji1Qipui8vQTU94k8v
+         9WAtMzjY5WeQtl3g3W4IDhEyjl20/TkdfE5+IeVf8EowL1tTCt9ogzYh5QP1z6WuJWPK
+         p/l5qhEwYRLihGdfzJnan/aIu5A3jsU4smxogQTy4yEC2X85vgWQwErYEUb8MCaDTOnY
+         Ls4UOgprFRDffJAPpe0n/VyxVg14uJnZ/hb62YQ4+AD0PQD+qcxjlu6NYpzqaoD/5NnV
+         XSAA==
+X-Gm-Message-State: AAQBX9e9qi8KuMuCjHcNbt5N9V1mJwnGAnqD9DKh3ryZrxjOu2lcUmg0
+        TtdKB6aHLxZ7PLG8S/xMZiQ=
+X-Google-Smtp-Source: AKy350Y78GB5qsViRCXJ2kOADdulfOaU/53okcrylJp8k7Da2LwyAVBtU9ZjdYg6bmzyh9d1Gzo7Vw==
+X-Received: by 2002:a17:90b:1c8d:b0:234:b964:5703 with SMTP id oo13-20020a17090b1c8d00b00234b9645703mr6584614pjb.18.1680700240841;
+        Wed, 05 Apr 2023 06:10:40 -0700 (PDT)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id t23-20020a17090a5d9700b0023d0290afbdsm1383910pji.4.2023.04.05.06.10.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Apr 2023 06:10:40 -0700 (PDT)
+Message-ID: <df2fd045-daef-246f-8f44-5c2a301b4804@gmail.com>
+Date:   Wed, 5 Apr 2023 06:10:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 6.2 000/185] 6.2.10-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230405100309.298748790@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230405100309.298748790@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
 
-On Tue, 28 Feb 2023 13:02:15 +0000, Nick Alcock wrote:
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+
+On 4/5/2023 3:03 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.10 release.
+> There are 185 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> [...]
+> Responses should be made by Fri, 07 Apr 2023 10:02:32 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.10-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Applied, thanks!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels build tested on 
+BMIPS_GENERIC:
 
-[20/20] soc/tegra: cbb: remove MODULE_LICENSE in non-modules
-        (no commit info)
-
-Best regards,
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-Thierry Reding <treding@nvidia.com>
+Florian
