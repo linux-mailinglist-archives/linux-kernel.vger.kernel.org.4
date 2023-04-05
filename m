@@ -2,107 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70BB66D81FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33FE6D81FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238539AbjDEPdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        id S237845AbjDEPdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbjDEPc6 (ORCPT
+        with ESMTP id S237929AbjDEPdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:32:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45F411C
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:32:52 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pk56z-0008CX-OP; Wed, 05 Apr 2023 17:31:49 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pk56y-0001Ro-IB; Wed, 05 Apr 2023 17:31:48 +0200
-Date:   Wed, 5 Apr 2023 17:31:48 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 00/12] Rework PHY reset handling
-Message-ID: <20230405153148.f2pk2tya67uyweki@pengutronix.de>
-References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
- <da635af8-2052-40d5-846f-eda14af8c69b@lunn.ch>
+        Wed, 5 Apr 2023 11:33:43 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABEE83
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:33:42 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id ga7so35361580qtb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:33:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1680708821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JAA83h3rMO9yiss39MIEuvqUfO0ThiaUitzgjnYkq/E=;
+        b=VFVjB+wajJZwttZLFmf3dH6GInBwfa6fgjRbdG4XHeLh8yVA+kDknIw516FXMYv7gX
+         SF45vZdirh06fUl+obsZmsZTMVmlK3sbHEmnLMLrlinCZvBHyOK6D00LTyFid2/Uenpx
+         JCdm/5J2HOw2ZLn0wL7sWdFccemN8yuW2S5qA5BbzbpVvN4eMI3j0CSfFH1zA50mzVN9
+         oSYsv5JvTyg7SDNQMP4nIj9xHu3oeIuYxX+KWDQvTkvKvb1XMedpjmvky27E4AAoGSAt
+         mz3tgDEDM+lt1ipLb9cut24IDz8vWCXeoYiDQximUhIrfv8S4C149xyyu40wmuYsn0Qj
+         AJsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680708821;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JAA83h3rMO9yiss39MIEuvqUfO0ThiaUitzgjnYkq/E=;
+        b=epprPSiTSyELbXQkiBwmSB0saUlYu1PUEVl8X/9dnOjSwbS98AaeapaSwxRnriZ4B7
+         Xz4cmSclZi1PraCfFAdSr004FPEjt/ZKUQPo9ZIeslWok/J81fcLqcvFIZ8MmLPFKJpE
+         6fK3pGFapL0ozyxJkhwQYAi/LM9CFi39MjUaV01V1tU8yMAv07C6LR2l1t2tUQbiXKht
+         7WX0T795uwL2Y6viAXSWSil7FU5PaF3SIRD1xn8OtuzEQkfQ2FFxq4ovQv0CNPqIPF60
+         1QdBsajTSSgbSjMwOywODlASgDc0yEbz8gdqNI07dpG2FfmO+va6G985HQ9i65s5Pmv2
+         pNuQ==
+X-Gm-Message-State: AAQBX9dWAlV3t1qZIyLwNiTov2/RyBJ4eehdq6aKctbCqUVEwlQZHuPw
+        b2ph5lwnz0j9T/Cysp4QvcqJYQ==
+X-Google-Smtp-Source: AKy350ZL3doRQBP2nu8UnusnIpVB12rSuYq2Qlw6uZRfd0UNr5PXOWG51ep5iSgydRWgvN5Ch/fdtw==
+X-Received: by 2002:a05:622a:1749:b0:3e3:86d4:5df0 with SMTP id l9-20020a05622a174900b003e386d45df0mr5606985qtk.55.1680708821401;
+        Wed, 05 Apr 2023 08:33:41 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id 84-20020a370a57000000b007422fa6376bsm4500271qkk.77.2023.04.05.08.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 08:33:40 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1pk58m-007MHn-08;
+        Wed, 05 Apr 2023 12:33:40 -0300
+Date:   Wed, 5 Apr 2023 12:33:39 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Nipun Gupta <nipun.gupta@amd.com>
+Cc:     alex.williamson@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, git@amd.com, harpreet.anand@amd.com,
+        michal.simek@amd.com
+Subject: Re: [PATCH] vfio/cdx: add support for CDX bus
+Message-ID: <ZC2U0/v0toRVSWhf@ziepe.ca>
+References: <20230403142525.29494-1-nipun.gupta@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <da635af8-2052-40d5-846f-eda14af8c69b@lunn.ch>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230403142525.29494-1-nipun.gupta@amd.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On Mon, Apr 03, 2023 at 07:55:25PM +0530, Nipun Gupta wrote:
 
-On 23-04-05, Andrew Lunn wrote:
-> On Wed, Apr 05, 2023 at 11:26:51AM +0200, Marco Felsch wrote:
-> > The current phy reset handling is broken in a way that it needs
-> > pre-running firmware to setup the phy initially. Since the very first
-> > step is to readout the PHYID1/2 registers before doing anything else.
-> > 
-> > The whole dection logic will fall apart if the pre-running firmware
-> > don't setup the phy accordingly or the kernel boot resets GPIOs states
-> > or disables clocks. In such cases the PHYID1/2 read access will fail and
-> > so the whole detection will fail.
-> > 
-> > I fixed this via this series, the fix will include a new kernel API
-> > called phy_device_atomic_register() which will do all necessary things
-> > and return a 'struct phy_device' on success. So setting up a phy and the
-> > phy state machine is more convenient.
-> 
-> Please add a section explaining why the current API is broken beyond
-> repair.  You need to justify adding a new call, rather than fixing the
-> existing code to just do what is necessary to allow the PHY to be
-> found.
+> +enum {
+> +	CDX_ID_F_VFIO_DRIVER_OVERRIDE = 1,
+> +};
 
-TIL from Florian that you use the cover-letter information in your merge
-commits. I will adapt the cover-letter accordingly and mention why this
-PR introduces a new API.
+This seems to be missing the file2alias part.
 
-Regards,
-  Marco
+> +static void vfio_cdx_regions_cleanup(struct vfio_cdx_device *vdev)
+> +{
+> +	kfree(vdev->regions);
+> +}
+> +
+> +static int vfio_cdx_reset_device(struct vfio_cdx_device *vdev)
+> +{
+> +	return cdx_dev_reset(&vdev->cdx_dev->dev);
+> +}
 
+Wrapper functions should be avoided.
 
-> 
-> 	Andrew
-> 
+> +static void vfio_cdx_close_device(struct vfio_device *core_vdev)
+> +{
+> +	struct vfio_cdx_device *vdev =
+> +		container_of(core_vdev, struct vfio_cdx_device, vdev);
+> +	int ret;
+> +
+> +	vfio_cdx_regions_cleanup(vdev);
+> +
+> +	/* reset the device before cleaning up the interrupts */
+> +	ret = vfio_cdx_reset_device(vdev);
+> +	if (WARN_ON(ret))
+> +		dev_warn(core_vdev->dev,
+> +			 "VFIO_CDX: reset device has failed (%d)\n", ret);
+
+This is pretty problematic.. if the reset can fail the device is
+returned to the system in an unknown state and it seems pretty likely
+that it can be a way to attack the kernel.
+
+> +	case VFIO_DEVICE_RESET:
+> +	{
+> +		return vfio_cdx_reset_device(vdev);
+> +	}
+
+What happens to MMIO access during this reset?
+
+> +static int vfio_cdx_mmap_mmio(struct vfio_cdx_region region,
+> +			      struct vm_area_struct *vma)
+> +{
+> +	u64 size = vma->vm_end - vma->vm_start;
+> +	u64 pgoff, base;
+> +
+> +	pgoff = vma->vm_pgoff &
+> +		((1U << (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
+> +	base = pgoff << PAGE_SHIFT;
+> +
+> +	if (region.size < PAGE_SIZE || base + size > region.size)
+> +		return -EINVAL;
+> +
+> +	vma->vm_pgoff = (region.addr >> PAGE_SHIFT) + pgoff;
+> +	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+
+pgprot_device
+
+> +	return remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
+> +			       size, vma->vm_page_prot);
+
+io_remap_pfn_range
+> +static int vfio_cdx_mmap(struct vfio_device *core_vdev,
+> +			 struct vm_area_struct *vma)
+> +{
+> +	struct vfio_cdx_device *vdev =
+> +		container_of(core_vdev, struct vfio_cdx_device, vdev);
+> +	struct cdx_device *cdx_dev = vdev->cdx_dev;
+> +	unsigned int index;
+> +
+> +	index = vma->vm_pgoff >> (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT);
+> +
+> +	if (vma->vm_end < vma->vm_start)
+> +		return -EINVAL;
+> +	if (vma->vm_start & ~PAGE_MASK)
+> +		return -EINVAL;
+> +	if (vma->vm_end & ~PAGE_MASK)
+> +		return -EINVAL;
+
+The core code already assures these checks.
+
+> +	if (!(vma->vm_flags & VM_SHARED))
+> +		return -EINVAL;
+> +	if (index >= cdx_dev->res_count)
+> +		return -EINVAL;
+> +
+> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_MMAP))
+> +		return -EINVAL;
+> +
+> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_READ) &&
+> +	    (vma->vm_flags & VM_READ))
+> +		return -EINVAL;
+> +
+> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_WRITE) &&
+> +	    (vma->vm_flags & VM_WRITE))
+> +		return -EINVAL;
+> +
+> +	vma->vm_private_data = cdx_dev;
+
+not needed
+
+> diff --git a/drivers/vfio/cdx/vfio_cdx_private.h b/drivers/vfio/cdx/vfio_cdx_private.h
+> new file mode 100644
+> index 000000000000..8b6f1ee3f5cd
+> --- /dev/null
+> +++ b/drivers/vfio/cdx/vfio_cdx_private.h
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
+> + */
+> +
+> +#ifndef VFIO_CDX_PRIVATE_H
+> +#define VFIO_CDX_PRIVATE_H
+> +
+> +#define VFIO_CDX_OFFSET_SHIFT    40
+> +#define VFIO_CDX_OFFSET_MASK (((u64)(1) << VFIO_CDX_OFFSET_SHIFT) - 1)
+> +
+> +#define VFIO_CDX_OFFSET_TO_INDEX(off) ((off) >> VFIO_CDX_OFFSET_SHIFT)
+> +
+> +#define VFIO_CDX_INDEX_TO_OFFSET(index)	\
+> +	((u64)(index) << VFIO_CDX_OFFSET_SHIFT)
+
+use static inlines for function-line macros
+
+> +struct vfio_cdx_region {
+> +	u32			flags;
+> +	u32			type;
+> +	u64			addr;
+> +	resource_size_t		size;
+> +	void __iomem		*ioaddr;
+> +};
+> +
+> +struct vfio_cdx_device {
+> +	struct vfio_device	vdev;
+> +	struct cdx_device	*cdx_dev;
+> +	struct device		*dev;
+> +	struct vfio_cdx_region	*regions;
+> +};
+
+This header file does not seem necessary right now
+
+Jason
