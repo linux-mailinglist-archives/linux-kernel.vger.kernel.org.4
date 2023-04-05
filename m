@@ -2,84 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C78F6D8720
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777236D8759
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbjDEToI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S234242AbjDETvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjDEToG (ORCPT
+        with ESMTP id S234115AbjDETu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:44:06 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FA5EE
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:44:05 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5027d3f4cd7so757919a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 12:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680723844;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GlttmAhfT5tfz8lSYZXT2wZbb4L2id7GE8MRRXSka3I=;
-        b=kox1NmeppAO+btjdlcJRvX4LHERbmW9X6UNWU2fGJfXgDKwvYrXLaAtDKKOi9/ZHmG
-         FaQUiR0OxXA3TwoYJDfOc0qxo+meoNoTW6q224GBmZuV0Tt/s/wm3YC7uj1TNdOGtvpY
-         GOkt9UZsSRQ51GE6GE6MwqI5r33C3BpQ+C7BE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680723844;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GlttmAhfT5tfz8lSYZXT2wZbb4L2id7GE8MRRXSka3I=;
-        b=l138wcg1zMMW3c+R4WyxYxr8Ro+IBc8+5IWCYqq7WcRO0tleb0LA8950qCJYTLdDon
-         eFvhjFrqRblovfUMu0A5/arrbB+bswFxLVwI+UH06tfqeCqD5nV4Xg0zi2CdNolcCm7i
-         a3bwkNIi9og6fvlOgruBXVV3unLMTcM7Bpts3Zvak5aqELNyFpdHH7xZ4pfuEGYhqSSi
-         jhsmSP6S2zLgNfT5x8Wm+PHTascpJiVdy/ViOqsyIa/lmwZbMxVEISF1XNsbAsBXrfJ4
-         WS9dVlT4QpqU28aRaN9bguxnSJR2XS1CsUYBqIptE7kYHyuKK5SEXy24vJ7M7s2pgy9y
-         wCYA==
-X-Gm-Message-State: AAQBX9eyIz4FLmlh5YDPfgt2oYgb6hG3deu8HvGGwaSH8OfhysMmaiCi
-        Q3ZpfCXGzxX1+7iqMr9ovFAMBtm3Z5qcooiGXjNz6g==
-X-Google-Smtp-Source: AKy350YvVUUbriDswTxaE8pZKoKOQAtkJat3YNNaD6oYPXNTWkSmq9GFochAcswbb1rGrRQF8fxEKjZzfjR/m5YE4xc=
-X-Received: by 2002:a50:d781:0:b0:500:547b:4e1b with SMTP id
- w1-20020a50d781000000b00500547b4e1bmr1853965edi.6.1680723843878; Wed, 05 Apr
- 2023 12:44:03 -0700 (PDT)
+        Wed, 5 Apr 2023 15:50:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9EA83E8;
+        Wed,  5 Apr 2023 12:50:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4C15640E6;
+        Wed,  5 Apr 2023 19:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D594C4339C;
+        Wed,  5 Apr 2023 19:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680724219;
+        bh=sJprvVjFu7eTeNtRU2SllTC316R4pT5/9QEMKa99s9c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=dDNCAYbSq51IQ82/Il9ty/kohsmaqUOw5/76Tk81ki96fD+5AqVdEhzzNBuf+VZKS
+         IhpJ0+D6ttg4fGbv8pn5tPZy2ZPqnUQ5FhN6KWnlv2X/jtB4WQ6goZP9qlUDO0Fu6s
+         1QZa59tL+CgnLAJg+KwBqbLq4gCPtZS0+fjJU6HQ969YkgBCtCQRxi9srKaZnRM4+b
+         GHMcC+JLQj8mBIGPzZl5kV049TVouOuVAkrb6iXBqXGQDY/GSAXn3Z9vLxDWRBFjHf
+         +mSkLILVQzn8esz61WHjfkGEgRSbqugU0fdZCsekVO22lc4vQKXbiNY6BkWbl0+rDe
+         McKAxYuxbj4cA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F33C2E2A033;
+        Wed,  5 Apr 2023 19:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230403143601.32168-1-kal.conley@dectris.com>
- <CAJ8uoz1BKJ1_jq6Sum-OkZQTR_ftmr5Enj+Cmn4Qsi15_jOpbQ@mail.gmail.com> <c0596a62-0873-5638-920b-235c55ff33a2@linux.dev>
-In-Reply-To: <c0596a62-0873-5638-920b-235c55ff33a2@linux.dev>
-From:   Kal Cutter Conley <kal.conley@dectris.com>
-Date:   Wed, 5 Apr 2023 21:48:43 +0200
-Message-ID: <CAHApi-mzLH7yVOT0cM03yafzTJJqfGwOBTa3q5U6jBdWnAx3VQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] xsk: Fix unaligned descriptor validation
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@mellanox.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests: xsk: Disable IPv6 on VETH1
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168072421899.28321.8394298131712932461.git-patchwork-notify@kernel.org>
+Date:   Wed, 05 Apr 2023 19:50:18 +0000
+References: <20230405082905.6303-1-kal.conley@dectris.com>
+In-Reply-To: <20230405082905.6303-1-kal.conley@dectris.com>
+To:     Kal Cutter Conley <kal.conley@dectris.com>
+Cc:     bjorn@kernel.org, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        shuah@kernel.org, weqaar.janjua@gmail.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Is this case covered by an existing test?
->
+Hello:
 
-No. I submitted a test but I was asked to make minor changes to it. I
-plan to submit the test once this gets picked up on bpf-next.
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
+
+On Wed,  5 Apr 2023 10:29:04 +0200 you wrote:
+> This change fixes flakiness in the BIDIRECTIONAL test:
+> 
+>     # [is_pkt_valid] expected length [60], got length [90]
+>     not ok 1 FAIL: SKB BUSY-POLL BIDIRECTIONAL
+> 
+> When IPv6 is enabled, the interface will periodically send MLDv1 and
+> MLDv2 packets. These packets can cause the BIDIRECTIONAL test to fail
+> since it uses VETH0 for RX.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] selftests: xsk: Disable IPv6 on VETH1
+    https://git.kernel.org/bpf/bpf-next/c/f2b50f172683
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
