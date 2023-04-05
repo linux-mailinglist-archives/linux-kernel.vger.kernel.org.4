@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81D86D86A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A25056D86AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjDETSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
+        id S231664AbjDETSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjDETSc (ORCPT
+        with ESMTP id S229473AbjDETSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:18:32 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E104C12;
-        Wed,  5 Apr 2023 12:18:31 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0E3615C00E4;
-        Wed,  5 Apr 2023 15:18:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 05 Apr 2023 15:18:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680722311; x=1680808711; bh=bE+E0Y1C9R+WPWsn9rc36pOCMKER1kFL5t/
-        J3nXSkvM=; b=BukNnHfAZxYDsFASjrk9opQ9o7F8nOt76VeWt7zjvRLfegXY6ld
-        3WRzgQnlAy678Lp5XjA8asAjwATG7PaCQh1ctXdEVZMta3WtsyjV7DzP3F6ZGWr4
-        t0D5DUJ2vdEoMp34xllFcuG9XFTYWtn7vrUz9PKL8m0L7bTnRndWdg/OG1+7LitK
-        rLW1mNU0hYSLCcRTM3RI1cJxIRbRMRvRxJB2Usr0QOgvXxng2kByDwZtaEz5jIw0
-        9l34gvWpIbcn08L8JBTVTvfbov5wkyhiu8s/tbbb60qPDWSE3uoPVsuvygcwQTs4
-        zz/2Hd8vMBfjW8XRGuY48WHOpS0D3rDy5UQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680722311; x=1680808711; bh=bE+E0Y1C9R+WPWsn9rc36pOCMKER1kFL5t/
-        J3nXSkvM=; b=mBzRuwmi/mH5BXBc0hxzJWMuNCjioL5desU9eaU//+9f3/YEoTX
-        6jt7qmS/umdvEWj2swpa5t1wgWyWLe1G0fuKZSDFM7db/dQc9+uIe3EFQnHTFlPZ
-        55AEAnsYagt9/09dvaTUGxLmkc/5000PhXWWn2OZLL8oAGQYAODLFJAiOaNOlqs3
-        Gtakgb1Sl53iaP/R6m1JilDgcVQ0imDp4aKrui1X4GDFSWbYZOD9RuZ7XNpjd7NV
-        uv89qdNSq8YDXVYmBNC6NLUemElP4e7WTuWjK7NjF0mEhuBDFZd50jtY2DwIYCJ0
-        aJX1VZ+p4j7w/Cfb/GVJl3rYYdZyVC3SsCw==
-X-ME-Sender: <xms:hsktZC4SbR8plVQVShy3o1Sw8eIabxCPNdZFadRGi6Lyx3DhDnEFzw>
-    <xme:hsktZL4tJE5UKk5M68Uz4SneFr13WBW9gn5Dv_cCkte1xUREh2PQG4tT95cbcn0eQ
-    WzmTUOhtpQP5m9X4_U>
-X-ME-Received: <xmr:hsktZBeGCK0aiqj9pZD5nzzUONLXAvHANBMioWf7ikPO_ITFCoib0cZToA_IX6pWtpqh>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgudefjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:hsktZPItMSlLhkAx8zfEIkAOM4OycdRprb_u-hIk4rembOsm1O-pEg>
-    <xmx:hsktZGLAkyzq2cH3bveUkLo6b-LhCbT_UsXFGlEBLiIu3u0GJzndDA>
-    <xmx:hsktZAyS_5Dw4xeNnYkRO2KxsQ9rVPVc-Bu3Kg3Vgkd7L3AdUuEyjw>
-    <xmx:h8ktZDWvlYa1Dun4724lVv4zwURsR0r5YKOM5PUzyetJk6g_rKFtPg>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 5 Apr 2023 15:18:28 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: Remove deprecated CONFIG_MIPS_CMP
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230405185128.15237-1-tsbogend@alpha.franken.de>
-Date:   Wed, 5 Apr 2023 20:18:17 +0100
-Cc:     John Crispin <john@phrozen.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2559C525-E9DC-43AA-ADBD-B2C2262DA760@flygoat.com>
-References: <20230405185128.15237-1-tsbogend@alpha.franken.de>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 5 Apr 2023 15:18:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950675FFA;
+        Wed,  5 Apr 2023 12:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1WceT7uarOJB+m/Xc4WcMgeqPVhWuV2FTYN+2lJ1++8=; b=mTRWrUvj7ivETCwmvKVYiaSAwY
+        Ion/otxLpsUjZO6LrIHJuQE53DfVPQuNWFv1cA3+vJVhnlr50x8LkwEWiO2An8+Y+aYMQOthXTnwT
+        O5DcxXkDWrqIyAy36FBrI7HhfDmWwusmAmvRS6GAG+roVh9GvwHOL2TQTbn8otzalGvjxRdaitmJy
+        4bhJ4wcS1l8U8TahZk7G3Y8+egm3pTOTAO34D50KkG/OvCbtibe32yX333UOP3x7I0s8uhFQdroD6
+        VnsnEOEK3PbyY2eYQ7pduJYts9uyOJOtjmlMAoeRz13l6RbFsg6SOzoIWf4mKTplFG22Z/73olKys
+        lW7pZDEA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pk8eK-00A3g3-0u;
+        Wed, 05 Apr 2023 19:18:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFAB7300202;
+        Wed,  5 Apr 2023 21:18:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ACA8E200D7A67; Wed,  5 Apr 2023 21:18:26 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 21:18:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v2 03/13] rust: lock: introduce `Mutex`
+Message-ID: <20230405191826.GA365912@hirez.programming.kicks-ass.net>
+References: <20230405175111.5974-1-wedsonaf@gmail.com>
+ <20230405175111.5974-3-wedsonaf@gmail.com>
+ <2023040554-promoter-chevron-10b2@gregkh>
+ <2023040509-tamer-clinic-c14c@gregkh>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023040509-tamer-clinic-c14c@gregkh>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 05, 2023 at 08:04:22PM +0200, Greg KH wrote:
+> On Wed, Apr 05, 2023 at 08:03:11PM +0200, Greg KH wrote:
+> > On Wed, Apr 05, 2023 at 02:51:01PM -0300, Wedson Almeida Filho wrote:
+> > > +void rust_helper_mutex_lock(struct mutex *lock)
+> > > +{
+> > > +	mutex_lock(lock);
+> > > +}
+> > > +EXPORT_SYMBOL_GPL(rust_helper_mutex_lock);
+> > > +
+> > 
+> > No need to ever unlock a mutex?
+> 
+> Oh nevermind, mutex_lock() is a macro, mutex_unlock() is not...
 
+Yeah, so I despise all these stupid helpers... but I suppose it's the
+best they could come up with to interface the languages :/
 
-> 2023=E5=B9=B44=E6=9C=885=E6=97=A5 19:51=EF=BC=8CThomas Bogendoerfer =
-<tsbogend@alpha.franken.de> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Commit 5cac93b35c14 ("MIPS: Deprecate CONFIG_MIPS_CMP") deprecated
-> CONFIG_MIPS_CMP and after 9 years it's time to remove it.
->=20
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> =E2=80=94
-
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-Thanks
-- Jiaxun=
+The only hope is that the thing can do cross-language LTO or something
+to re-inline stuff.
