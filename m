@@ -2,46 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3606D7E7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F357F6D7DDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238181AbjDEOEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
+        id S238290AbjDENiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238116AbjDEODM (ORCPT
+        with ESMTP id S237308AbjDENiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:03:12 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F40972A2;
-        Wed,  5 Apr 2023 07:01:32 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 23896dadccd63884; Wed, 5 Apr 2023 16:01:19 +0200
-Received: from kreacher.localnet (unknown [213.134.163.219])
+        Wed, 5 Apr 2023 09:38:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1CA1FE0;
+        Wed,  5 Apr 2023 06:38:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id E75991B4EA6F;
-        Wed,  5 Apr 2023 16:01:18 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 07/32] ACPICA: Add support for Arm's MPAM ACPI table version 2
-Date:   Wed, 05 Apr 2023 15:37:35 +0200
-Message-ID: <7533327.EvYhyI6sBW@kreacher>
-In-Reply-To: <4845957.31r3eYUQgx@kreacher>
-References: <4845957.31r3eYUQgx@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.219
-X-CLIENT-HOSTNAME: 213.134.163.219
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejuddgjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdfhjedtgfekvdeitdeiiefgkeeljeegffelleeuheehfedugffhfeefvedtgfehnecuffhomhgrihhnpegrrhhmrdgtohhmpdhgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeifedrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 85F391FDCA;
+        Wed,  5 Apr 2023 13:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680701895; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QJB6JausIoM2TpCFlcltYiVgxIJXfNDhv2tfVNi51a8=;
+        b=PSWCa6+E70vuHh8QdAwk1rqmwZDX3NrtK++R8IoUBNtVSgDM9yuYupFVFE2ZfCmvd9Ztt7
+        W3HW7PK6YTFtj+eBLB6Cn47zwpkJtWqwYMEubGXb45nU56Yq34764kpuikzCPrwO9VeY8a
+        KqnUvAbIhHeD61QIUrvaQkyH8NK6nsU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680701895;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QJB6JausIoM2TpCFlcltYiVgxIJXfNDhv2tfVNi51a8=;
+        b=WtRZHSH/HeN4sTFozH5y/rc1Nr4xWAsB1hYSZJlePOuelk7+lPQeqqkmgSz/CDw70aAIwh
+        zbfMDjtmyyMaEmCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A4A013A10;
+        Wed,  5 Apr 2023 13:38:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4GgQCMZ5LWRSbgAAMHmgww
+        (envelope-from <colyli@suse.de>); Wed, 05 Apr 2023 13:38:14 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH] bcache: make kobj_type structures constant
+From:   Coly Li <colyli@suse.de>
+In-Reply-To: <4cc38847-a967-487b-8efe-81b741ab6782@t-8ch.de>
+Date:   Wed, 5 Apr 2023 21:38:01 +0800
+Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F63C6A45-E428-4557-9995-FDB43CE243B3@suse.de>
+References: <20230214-kobj_type-bcache-v1-1-cf00ead7bee7@weissschuh.net>
+ <125CA8D6-D3B7-42FB-83BE-DCA688F2ACAF@suse.de>
+ <20230214152119.epkfhkojqjvokqmv@t-8ch.de>
+ <9DE71214-283C-4410-B5A4-22DFDA7021F4@suse.de>
+ <4cc38847-a967-487b-8efe-81b741ab6782@t-8ch.de>
+To:     =?utf-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,165 +76,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hesham Almatary <hesham.almatary@huawei.com>
-
-ACPICA commit 005e24bcaa6e4c7db327b4f81fb63b2715aac7e6
-
-Complies with ACPI for Memory System Resource Partitioning and
-Monitoring 2.0 [1]. Document number: DEN0065, as of December 2022.
-
-Support for all types of MPAM resources. No support yet for:
-1) MPAM PCC Interface Type
-2) The optional Resource-specific data per MSC node, introduced in v2 of the
-MPAM ACPI spec.
-
-[1] https://developer.arm.com/documentation/den0065/latest
-
-Link: https://github.com/acpica/acpica/commit/005e24bc
-Signed-off-by: Hesham Almatary <hesham.almatary@huawei.com>
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/acpi/actbl2.h | 116 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
-
-diff --git a/include/acpi/actbl2.h b/include/acpi/actbl2.h
-index 65f9e834e921..b082175906ba 100644
---- a/include/acpi/actbl2.h
-+++ b/include/acpi/actbl2.h
-@@ -35,6 +35,7 @@
- #define ACPI_SIG_MADT           "APIC"	/* Multiple APIC Description Table */
- #define ACPI_SIG_MCFG           "MCFG"	/* PCI Memory Mapped Configuration table */
- #define ACPI_SIG_MCHI           "MCHI"	/* Management Controller Host Interface table */
-+#define ACPI_SIG_MPAM           "MPAM"	/* Memory System Resource Partitioning and Monitoring Table */
- #define ACPI_SIG_MPST           "MPST"	/* Memory Power State Table */
- #define ACPI_SIG_MSDM           "MSDM"	/* Microsoft Data Management Table */
- #define ACPI_SIG_NFIT           "NFIT"	/* NVDIMM Firmware Interface Table */
-@@ -1332,6 +1333,121 @@ struct acpi_table_mchi {
- 	u8 pci_function;
- };
- 
-+/*******************************************************************************
-+ *
-+ * MPAM - Memory System Resource Partitioning and Monitoring
-+ *
-+ * Conforms to "ACPI for Memory System Resource Partitioning and Monitoring 2.0"
-+ * Document number: ARM DEN 0065, December, 2022.
-+ *
-+ ******************************************************************************/
-+
-+/* MPAM RIS locator types. Table 11, Location types */
-+enum acpi_mpam_locator_type {
-+	ACPI_MPAM_LOCATION_TYPE_PROCESSOR_CACHE = 0,
-+	ACPI_MPAM_LOCATION_TYPE_MEMORY = 1,
-+	ACPI_MPAM_LOCATION_TYPE_SMMU = 2,
-+	ACPI_MPAM_LOCATION_TYPE_MEMORY_CACHE = 3,
-+	ACPI_MPAM_LOCATION_TYPE_ACPI_DEVICE = 4,
-+	ACPI_MPAM_LOCATION_TYPE_INTERCONNECT = 5,
-+	ACPI_MPAM_LOCATION_TYPE_UNKNOWN = 0xFF
-+};
-+
-+/* MPAM Functional dependency descriptor. Table 10 */
-+struct acpi_mpam_func_deps {
-+	u32 producer;
-+	u32 reserved;
-+};
-+
-+/* MPAM Processor cache locator descriptor. Table 13 */
-+struct acpi_mpam_resource_cache_locator {
-+	u64 cache_reference;
-+	u32 reserved;
-+};
-+
-+/* MPAM Memory locator descriptor. Table 14 */
-+struct acpi_mpam_resource_memory_locator {
-+	u64 proximity_domain;
-+	u32 reserved;
-+};
-+
-+/* MPAM SMMU locator descriptor. Table 15 */
-+struct acpi_mpam_resource_smmu_locator {
-+	u64 smmu_interface;
-+	u32 reserved;
-+};
-+
-+/* MPAM Memory-side cache locator descriptor. Table 16 */
-+struct acpi_mpam_resource_memcache_locator {
-+	u8 reserved[7];
-+	u8 level;
-+	u32 reference;
-+};
-+
-+/* MPAM ACPI device locator descriptor. Table 17 */
-+struct acpi_mpam_resource_acpi_locator {
-+	u64 acpi_hw_id;
-+	u32 acpi_unique_id;
-+};
-+
-+/* MPAM Interconnect locator descriptor. Table 18 */
-+struct acpi_mpam_resource_interconnect_locator {
-+	u64 inter_connect_desc_tbl_off;
-+	u32 reserved;
-+};
-+
-+/* MPAM Locator structure. Table 12 */
-+struct acpi_mpam_resource_generic_locator {
-+	u64 descriptor1;
-+	u32 descriptor2;
-+};
-+
-+union acpi_mpam_resource_locator {
-+	struct acpi_mpam_resource_cache_locator cache_locator;
-+	struct acpi_mpam_resource_memory_locator memory_locator;
-+	struct acpi_mpam_resource_smmu_locator smmu_locator;
-+	struct acpi_mpam_resource_memcache_locator mem_cache_locator;
-+	struct acpi_mpam_resource_acpi_locator acpi_locator;
-+	struct acpi_mpam_resource_interconnect_locator interconnect_ifc_locator;
-+	struct acpi_mpam_resource_generic_locator generic_locator;
-+};
-+
-+/* Memory System Component Resource Node Structure Table 9 */
-+struct acpi_mpam_resource_node {
-+	u32 identifier;
-+	u8 ris_index;
-+	u16 reserved1;
-+	u8 locator_type;
-+	union acpi_mpam_resource_locator locator;
-+	u32 num_functional_deps;
-+};
-+
-+/* Memory System Component (MSC) Node Structure. Table 4 */
-+struct acpi_mpam_msc_node {
-+	u16 length;
-+	u8 interface_type;
-+	u8 reserved;
-+	u32 identifier;
-+	u64 base_address;
-+	u32 mmio_size;
-+	u32 overflow_interrupt;
-+	u32 overflow_interrupt_flags;
-+	u32 reserved1;
-+	u32 overflow_interrupt_affinity;
-+	u32 error_interrupt;
-+	u32 error_interrupt_flags;
-+	u32 reserved2;
-+	u32 error_interrupt_affinity;
-+	u32 max_nrdy_usec;
-+	u64 hardware_id_linked_device;
-+	u32 instance_id_linked_device;
-+	u32 num_resouce_nodes;
-+};
-+
-+struct acpi_table_mpam {
-+	struct acpi_table_header header;	/* Common ACPI table header */
-+};
-+
- /*******************************************************************************
-  *
-  * MPST - Memory Power State Table (ACPI 5.0)
--- 
-2.35.3
 
 
+> 2023=E5=B9=B44=E6=9C=885=E6=97=A5 01:38=EF=BC=8CThomas Wei=C3=9Fschuh =
+<linux@weissschuh.net> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Hi Coly,
+>=20
+> On 2023-02-15 00:16:03+0800, Coly Li wrote:
+>>> 2023=E5=B9=B42=E6=9C=8814=E6=97=A5 23:21=EF=BC=8CThomas Wei=C3=9Fschuh=
+ <linux@weissschuh.net> =E5=86=99=E9=81=93=EF=BC=9A
+>>>=20
+>>> On Tue, Feb 14, 2023 at 05:51:09PM +0800, Coly Li wrote:
+>>>>=20
+>>>>=20
+>>>>> 2023=E5=B9=B42=E6=9C=8814=E6=97=A5 11:13=EF=BC=8CThomas Wei=C3=9Fsch=
+uh <linux@weissschuh.net> =E5=86=99=E9=81=93=EF=BC=9A
+>>>>>=20
+>>>>> Since commit ee6d3dd4ed48 ("driver core: make kobj_type =
+constant.")
+>>>>> the driver core allows the usage of const struct kobj_type.
+>>>>>=20
+>>>>> Take advantage of this to constify the structure definitions to =
+prevent
+>>>>> modification at runtime.
+>>>>>=20
+>>>>=20
+>>>> How the const structure definition can prevent modification at run =
+time?
+>>>=20
+>>> It will be put into .rodata instead of .data by the compiler.
+>>> The .rodata section is mapped as read-only via the pagetable.
+>>>=20
+>>> See Documentation/security/self-protection.rst
+>>> "Function pointers and sensitive variables must not be writable".
+>>=20
+>> I see. Thanks for the information.
+>>=20
+>> This patch will be added into my testing queue, and submitted later.
+>=20
+> It seems this was not submitted.
+> Or did I miss it?
 
+No I don=E2=80=99t submit it yet. It is not emergent fix, and stay with =
+other testing patches together.
+
+Do you want it to go now?
+
+Coly Li
 
