@@ -2,66 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BE46D82FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75766D830C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236512AbjDEQGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S231741AbjDEQHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 12:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbjDEQGk (ORCPT
+        with ESMTP id S231859AbjDEQHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 12:06:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD45420F
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680710797; x=1712246797;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=sqg0P88YoT8lsSN0phoEeZOOz98+mdr1CWyuLIJ3O8o=;
-  b=DgH9z4O4QNOcukmb8TMoRdMa+KW4FlyEf/LebEUp6YeMins629MoRESA
-   ErhvLfQpLi1c+4Xbn9WN5fcscYCaD063T4kZ4MmiRNJAnKouCQAXAdW7l
-   XEOrFhqN7webL/qJcZEFQboBEyJw2fWAdn41FhvYTg5LpvHqeFYGDm7XR
-   jKm+GcoSFqlD7zToIDNBi6xsHgrjIn6hhB9fLhGETtHxBXA1qJ8F9rGuj
-   npEB1hiEWEGyjzeUTE5co8a8QtZJywKhtNdZT/7OxyDUgA7Ek72pDxl2j
-   XryalJTSNrBwov1TH504CuDrifnvK9OyQsWK3g9MORa+wBWEr13ym8ADt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="428781597"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="428781597"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 09:06:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="719374688"
-X-IronPort-AV: E=Sophos;i="5.98,321,1673942400"; 
-   d="scan'208";a="719374688"
-Received: from dlemiech-mobl.ger.corp.intel.com (HELO localhost) ([10.252.43.158])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 09:06:33 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 01/19] drm/i915/i915_scatterlist: Fix kerneldoc
- formatting issue - missing '@'
-In-Reply-To: <20230405134526.GE8371@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230331092607.700644-1-lee@kernel.org>
- <20230331092607.700644-2-lee@kernel.org> <87jzyt0yil.fsf@intel.com>
- <20230403162059.GC8371@google.com> <878rf80ynz.fsf@intel.com>
- <20230405134526.GE8371@google.com>
-Date:   Wed, 05 Apr 2023 19:06:29 +0300
-Message-ID: <87jzyqz52y.fsf@intel.com>
+        Wed, 5 Apr 2023 12:07:35 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8144ECD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 09:07:32 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5005c57f95cso76619a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 09:07:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1680710851; x=1683302851;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ir3s/Lf5lvCAlrm1TfcesrDtB2jAmtZCISN/6dp3hBc=;
+        b=VNUObGKko6sqyyipxJHZOjjD7Vgl2nINPanPLg9CF5dNFM42M+zPkinw5lJovFp5IT
+         KgryiwfHZwGoUCHvFhE9cgxsLTI65w6qpIN9bd0/wPOfFcL5qWWLKMUORCChrg/EDytj
+         /mEZ5jrCc5FzC1si2MslaSmste3VoXKbRjv7g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680710851; x=1683302851;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ir3s/Lf5lvCAlrm1TfcesrDtB2jAmtZCISN/6dp3hBc=;
+        b=hrkKUQXJJvkloEllmpaxZ2Epk7SbLDTa/VYnP8O7McESMKKQaHknCU659AC93tnjJE
+         fgGXcQQk21zR29Q6PZ6HqXWA9LSq3tkg0eY3wCKxHEPG7mPfvJV7B0qWpymLaCQZMvRK
+         CjtKpu4qUmQFqzojl7Ud3BbtTRF9NYc+8pVcwcTNOJ4/mbMHXVAJO3Iw/9LaX7GMTZ6N
+         c8wXeKbknzL9ybyKkvvV3xEHRwp8YXfIL5lLHWqBItQZqrl+6gc0OIX5EN7p5VdmaCE1
+         /kw7SCxn9DlKvxtWlFaQvZa3qXkXo7YmjmyXJiOIwKWU1DgWIk102FaOetJ0RDPzGwna
+         uoYw==
+X-Gm-Message-State: AAQBX9e9O484LjjoSISwNaU9WhT7I5qka/7lLCS3wcdCpPtDhRx3wEOE
+        bRrDBFig92otRVBZozS/hdD1sQ==
+X-Google-Smtp-Source: AKy350aQMCCIGd+ttlIn6lmvnbNQhhwBJ1Oi0jxEBwn9z6WIX2aUYNMX4MoVCA82q+F4FspzQF+uZA==
+X-Received: by 2002:a17:906:10c9:b0:931:4285:ea16 with SMTP id v9-20020a17090610c900b009314285ea16mr2360239ejv.7.1680710851411;
+        Wed, 05 Apr 2023 09:07:31 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id a23-20020a170906369700b0092a59ee224csm7492153ejc.185.2023.04.05.09.07.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 09:07:31 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 18:07:28 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 01/18] fbdev: Prepare generic architecture helpers
+Message-ID: <ZC2cwIJJlyDWge+B@phenom.ffwll.local>
+Mail-Followup-To: Arnd Bergmann <arnd@arndb.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+References: <20230405150554.30540-1-tzimmermann@suse.de>
+ <20230405150554.30540-2-tzimmermann@suse.de>
+ <92fe3838-41f0-4e27-8467-161553ff724f@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <92fe3838-41f0-4e27-8467-161553ff724f@app.fastmail.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,64 +95,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Apr 2023, Lee Jones <lee@kernel.org> wrote:
-> On Tue, 04 Apr 2023, Jani Nikula wrote:
->
->> On Mon, 03 Apr 2023, Lee Jones <lee@kernel.org> wrote:
->> > On Mon, 03 Apr 2023, Jani Nikula wrote:
->> >
->> >> On Fri, 31 Mar 2023, Lee Jones <lee@kernel.org> wrote:
->> >> > Fixes the following W=1 kernel build warning(s):
->> >> >
->> >> >  drivers/gpu/drm/i915/i915_scatterlist.c:62: warning: Function parameter or member 'size' not described in 'i915_refct_sgt_init'
->> >> >
->> >> > Cc: Jani Nikula <jani.nikula@linux.intel.com>
->> >> > Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
->> >> > Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
->> >> > Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
->> >> > Cc: David Airlie <airlied@gmail.com>
->> >> > Cc: Daniel Vetter <daniel@ffwll.ch>
->> >> > Cc: intel-gfx@lists.freedesktop.org
->> >> > Cc: dri-devel@lists.freedesktop.org
->> >> > Signed-off-by: Lee Jones <lee@kernel.org>
->> >>
->> >> Thanks for the patches!
->> >>
->> >> Applied all but one of the drm/i915 patches to drm-intel-next or
->> >> drm-intel-gt-next depending on the area. There were a couple of issues
->> >> that I fixed while applying. There was a conflict with patch 5/19
->> >> against drm-intel-gt-next so I left that one out.
->> >
->> > Thanks Jani.  I'll rebase and see what's left.
->>
->> We also took notice and aim to track this more aggressively [1].
->
-> Thanks.
->
-> I did clean-up all of the GPU warnings already a couple of years ago,
-> but they seem to have crept back over time.  It would be great if we
-> could put some extra checks in place to prevent them in the future.
+On Wed, Apr 05, 2023 at 05:53:03PM +0200, Arnd Bergmann wrote:
+> On Wed, Apr 5, 2023, at 17:05, Thomas Zimmermann wrote:
+> > Generic implementations of fb_pgprotect() and fb_is_primary_device()
+> > have been in the source code for a long time. Prepare the header file
+> > to make use of them.
+> >
+> > Improve the code by using an inline function for fb_pgprotect() and
+> > by removing include statements.
+> >
+> > Symbols are protected by preprocessor guards. Architectures that
+> > provide a symbol need to define a preprocessor token of the same
+> > name and value. Otherwise the header file will provide a generic
+> > implementation. This pattern has been taken from <asm/io.h>.
+> >
+> > Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> 
+> Moving this into generic code is good, but I'm not sure
+> about the default for fb_pgprotect():
+> 
+> > +
+> > +#ifndef fb_pgprotect
+> > +#define fb_pgprotect fb_pgprotect
+> > +static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+> > +				unsigned long off)
+> > +{ }
+> > +#endif
+> 
+> I think most architectures will want the version we have on
+> arc, arm, arm64, loongarch, and sh already:
+> 
+> static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+>                                 unsigned long off)
+> {
+>        vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+> }
+> 
+> so I'd suggest making that version the default, and treating the
+> empty ones (m68knommu, sparc32) as architecture specific
+> workarounds.
 
-We are pretty zealous about warnings in general in i915. We have a bunch
-of extra warnings in our local Makefile and use -Werror in
-development. Inspired by this series, we added kernel-doc check to the
-build, and hope to add kernel-doc -Werror too once we're done.
+Yeah I was about to type the same suggestion :-)
+-Daniel
 
-> My aim, albeit ambitious, is to clean-up all of the W=1 warnings in the
-> kernel, then have them promoted to W=0, so they warn more loudly during
-> development, thus keeping them from reappearing.
-
-I wish it was easier to do the equivalent of W=1 on a driver or Makefile
-basis. I like to keep i915 clean, but I don't like to use W=1 because
-there are just so many warnings currently.
-
-The other alternative is fixing and moving extra warnings from W=1 to
-W=0 one by one.
-
-
-BR,
-Jani.
-
+ 
+> I see that sparc64 and parisc use pgprot_uncached here, but as
+> they don't define a custom pgprot_writecombine, this ends up being
+> the same, and they can use the above definition as well.
+> 
+> mips defines pgprot_writecombine but uses pgprot_noncached
+> in fb_pgprotect(), which is probably a mistake and should have
+> been updated as part of commit 4b050ba7a66c ("MIPS: pgtable.h:
+> Implement the pgprot_writecombine function for MIPS").
+> 
+>     Arnd
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
