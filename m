@@ -2,140 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EE86D8650
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57106D8654
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbjDESyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        id S234355AbjDESyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjDESx7 (ORCPT
+        with ESMTP id S232566AbjDESyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:53:59 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98523A9E;
-        Wed,  5 Apr 2023 11:53:57 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id br40so5571055qkb.9;
-        Wed, 05 Apr 2023 11:53:57 -0700 (PDT)
+        Wed, 5 Apr 2023 14:54:32 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AECB558E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:54:30 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id o4-20020a056a00214400b00627ddde00f4so16497119pfk.4
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 11:54:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680720837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DRtXFO8p+VJqvb8EGOqoRE2s3RWE1f66fx+Rp1t5D9o=;
-        b=OMlSV93FLik5uu6Z8lBQaDkNCKwnSNM3KQNtekolqO7lEAxeuPLjS7vAMwzAzhfHZ9
-         iiFaH/lpB9PdL8VEOyRPJ2pWuyf0eRnq8GXT9u4Qo7TmPlJABcbGiYYymYezYDB9VYTc
-         xkNWzfRwbvB7nsbQtDV4/jeva/rzwD/SG5iPLBdW1yU5S04rD1O1LmD0uMbkKZ9cGtiw
-         +p904lLQLMu8a2ioQfdd0zG/38JialqxNkswfgAIGzhFtqnihwTUUxXK7+i0iOfKFj0n
-         RxGvXaOp6UMT9qYlKaIWuENHXQXsbghZYBb+ZiWjtEDaJJlLAe6PZq1h6UR5rPhPq351
-         o8gA==
+        d=google.com; s=20210112; t=1680720870;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=74VbkkX1JNgTJppCDrpyUBhSlzGYrPPYVv0NXjoYgyc=;
+        b=DvoZtrowqtchOBo3Knj2bdyh+0reXXG6EgqqogY/mAyo+TSHhWSb9U2cJKuwxd7h2w
+         o2RX0e8+Zwu1WADDOlnnpGNdNztCU7WB8Qje6IiAB/MfTzkr62n9cE3NrDiwNbW0sDjH
+         VkmeCcgNPVtOFmHHi+9HgWbW0Z24Zu6e6XFf+Qci0FBgIegloiaEWYx/NseVj73FQU7q
+         Q51X91yYhlKkYuSLDOnFpKRH7l1zCwbwiEAGW0rXRqhGF9SRBlbwebErhD2Q+IgzmaDJ
+         ZIZh4OMxhCZbxyMwD9Ftdx6AM+OvFYs2mi3lYMsNUVLkpHDU34ZfxGINsWiKNbF9ytdL
+         jp6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680720837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DRtXFO8p+VJqvb8EGOqoRE2s3RWE1f66fx+Rp1t5D9o=;
-        b=4m39JjkQvJ/s7F/lUJ6miKU3QORnr/SjopxFomB/I5pe2RfAmAy2xxnH/KW2vV8ATR
-         wdaoBU5NWKHcV8Vu2fFYVqOoqDn5h3Scco95RkUyk9m/toRQ0br3Onh6N4a5JQACvqrE
-         EkzZqXTV2tZpVbBUZzS7YOPeuPbgGdX3IrTSw2UPg4CkGkvISkridFDQA0Ti/zOdYyPd
-         BCZggEka0Cw2csMmyL6AoBNZ4Buy6bS374qpTuP+eFgR2rEb7Tm2L48KTiTp/inAMf/H
-         uqgItKmDsYqF02TGK6klGaRotaqy2RMcPMMt+M1IMoL50eR5PKzbATKKpSj2OF6xrIJs
-         6OGA==
-X-Gm-Message-State: AAQBX9dfhw1pW865yNuoXSqvVTyx1F0unwFk8BUKvlkHJ8CohZ6/pSLj
-        FyNhUDyhlU5e90+3rDW1KaYssgED5ToPT11g7pOd9e5jWJsD03kI
-X-Google-Smtp-Source: AKy350aArjUI2H96/efNuT4p4Gns0LFchwaT84DgmUSYAPmyhG0Hxnacumi6y7a0qpoFL35F7ev0gS5BSSlbBVcMbIg=
-X-Received: by 2002:a05:620a:280a:b0:745:7249:49ed with SMTP id
- f10-20020a05620a280a00b00745724949edmr1345672qkp.6.1680720836842; Wed, 05 Apr
- 2023 11:53:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230405141710.3551-1-ubizjak@gmail.com> <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-In-Reply-To: <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Wed, 5 Apr 2023 20:53:45 +0200
-Message-ID: <CAFULd4a6u=LB0ivfHtHt=jRxeJeLWuBot=Pync6pbrvKi=CdjA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>
+        d=1e100.net; s=20210112; t=1680720870;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=74VbkkX1JNgTJppCDrpyUBhSlzGYrPPYVv0NXjoYgyc=;
+        b=HOa2dtA45/Otd4/dj2kNeY91k2aM67XEbA06gs1PJLrNYl26iV9PCVDzVgLez8/DDz
+         un2fbHecQ0hXazVDzG+kpEBzC37sfwSbwi6f+eZgeph92E+xQFOd9CL9DQmMPq5OR7xm
+         cy70LR6xYEmFSUZ7PUFxbsEH1x1u3moVKBaMNY2l/lMyxP1DfJMoUTA5RXaE8DoAICaa
+         jQWUiBQtXQvwxky7WQ3LvK06bTX5CKXGYTiheb207dMW0zWhUEf4SzuYkTuU9le/0zjD
+         xCmfKviRThQBGjjLNNysV2R2lHNpYSBZrz54gR7VZwsWLDFFtj2wAA+3o4Lv/jvh05ko
+         QgZA==
+X-Gm-Message-State: AAQBX9cAe1NxCDLRovDNsq2aMHVnuU5oUOI990aAQzPH8KX7Q1+zXgAP
+        N0YIE0sXJFGqP1CTS2oYFXk6cyGv7tYV63Je
+X-Google-Smtp-Source: AKy350YH2iSQX6gNnTj2zSUoqJgUjpVMBh1a0kuQQW4A3Qs4h6unL0l7+ARu30/SrGo0X9cSZkV5qMEnH3NanZCo
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:90a:6c65:b0:23f:a26e:daa3 with SMTP
+ id x92-20020a17090a6c6500b0023fa26edaa3mr2624714pjj.9.1680720869909; Wed, 05
+ Apr 2023 11:54:29 -0700 (PDT)
+Date:   Wed,  5 Apr 2023 18:54:25 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <20230405185427.1246289-1-yosryahmed@google.com>
+Subject: [PATCH v5 0/2] Ignore non-LRU-based reclaim in memcg reclaim
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 6:37=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> On 4/5/23 07:17, Uros Bizjak wrote:
-> > Add generic and target specific support for local{,64}_try_cmpxchg
-> > and wire up support for all targets that use local_t infrastructure.
->
-> I feel like I'm missing some context.
->
-> What are the actual end user visible effects of this series?  Is there a
-> measurable decrease in perf overhead?  Why go to all this trouble for
-> perf?  Who else will use local_try_cmpxchg()?
+Upon running some proactive reclaim tests using memory.reclaim, we
+noticed some tests flaking where writing to memory.reclaim would be
+successful even though we did not reclaim the requested amount fully.
+Looking further into it, I discovered that *sometimes* we over-report
+the number of reclaimed pages in memcg reclaim.
 
-This functionality was requested by perf people [1], so perhaps Steven
-can give us some concrete examples. In general, apart from the removal
-of unneeded compare instruction on x86, usage of try_cmpxchg also
-results in slightly better code on non-x86 targets [2], since the code
-now correctly identifies fast-path through the cmpxchg loop.
+Reclaimed pages through other means than LRU-based reclaim are tracked
+through reclaim_state in struct scan_control, which is stashed in
+current task_struct. These pages are added to the number of reclaimed
+pages through LRUs. For memcg reclaim, these pages generally cannot be
+linked to the memcg under reclaim and can cause an overestimated count
+of reclaimed pages. This short series tries to address that.
 
-Also important is that try_cmpxchg code reuses the result of cmpxchg
-instruction in the loop, so a read from the memory in the loop is
-eliminated. When reviewing the cmpxchg usage sites, I found numerous
-places where unnecessary read from memory was present in the loop, two
-examples can be seen in the last patch of this series.
+Patch 1 ignores pages reclaimed outside of LRU reclaim in memcg reclaim.
+The pages are uncharged anyway, so even if we end up under-reporting
+reclaimed pages we will still succeed in making progress during
+charging.
 
-Also, using try_cmpxchg prevents inconsistencies of the cmpxchg loop,
-where the result of the cmpxchg is compared with the wrong "old" value
-- one such bug is still lurking in x86 APIC code, please see [3].
+Patch 2 is just refactoring, it adds helpers that wrap some
+operations on current->reclaim_state, and rename
+reclaim_state->reclaimed_slab to reclaim_state->reclaimed. It also adds
+a huge comment explaining why we ignore pages reclaimed outside of LRU
+reclaim in memcg reclaim.
 
-Please note that apart from perf subsystem, event subsystem can also
-be improved by using local_try_cmpxchg. This is the reason that the
-last patch includes a change in events/core.c.
+The patches are divided as such so that patch 1 can be easily backported
+without all the refactoring noise.
 
-> I'm all for improving things, and perf is an important user.  But, if
-> the goal here is improving performance, it would be nice to see at least
-> a stab at quantifying the performance delta.
+v4 -> v5:
+- Separate the functional fix into its own patch, and squash all the
+  refactoring into a single second patch for ease of backporting (Andrew
+  Morton).
 
-[1] https://lore.kernel.org/lkml/20230301131831.6c8d4ff5@gandalf.local.home=
-/
-[2] https://lore.kernel.org/lkml/Yo91omfDZtTgXhyn@FVFF77S0Q05N.cambridge.ar=
-m.com/
-[3] https://lore.kernel.org/lkml/20230227160917.107820-1-ubizjak@gmail.com/
+v4: https://lore.kernel.org/lkml/20230404001353.468224-1-yosryahmed@google.com/
 
-Uros.
+Yosry Ahmed (2):
+  mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+  mm: vmscan: refactor reclaim_state helpers
+
+ fs/inode.c           |  3 +-
+ fs/xfs/xfs_buf.c     |  3 +-
+ include/linux/swap.h | 17 ++++++++++-
+ mm/slab.c            |  3 +-
+ mm/slob.c            |  6 ++--
+ mm/slub.c            |  5 ++-
+ mm/vmscan.c          | 73 +++++++++++++++++++++++++++++++++-----------
+ 7 files changed, 78 insertions(+), 32 deletions(-)
+
+-- 
+2.40.0.348.gf938b09366-goog
+
