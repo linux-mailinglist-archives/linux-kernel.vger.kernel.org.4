@@ -2,262 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD426D8B3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BCB6D8B3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 01:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbjDEXs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 19:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
+        id S231346AbjDEXsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 19:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbjDEXsx (ORCPT
+        with ESMTP id S229907AbjDEXss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 19:48:53 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97447695;
-        Wed,  5 Apr 2023 16:48:51 -0700 (PDT)
+        Wed, 5 Apr 2023 19:48:48 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572EC6EA8
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 16:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680738526; x=1712274526;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=RKd1NLj+BYQtHKtZdAQ3chWvH60h3Be/F5ffNMSTggw=;
+  b=eOb9/QrYtvJDCBHI4iq5NGTC5YzP0dAOsFYIxjOFhEK6TSCgc5w8S4rM
+   SNtmsrwipGxytrg5jqDX3HKlTcaF5SVr9Q0gWmnYKe6uUDVHOQw62PZ2b
+   9tRfGrgOVqFQknNiyHZ1OYYXuAbcevMDmbzxJ6nIuV7J2DNXxYAEAT4iY
+   +TLDAhT4IMLlgD534QtwED7KPSRgtfIYwWF/UwIY9jlsPxZsuAXNbbi5o
+   2U+dASPDYDe+BFGch4YpoZSewJQQv2mDmYSCuhf7E/bUSTfvEZ6kp8qHV
+   T73W41SSwNYIEU+duA1W/KQXm7LHIkA1X8ddPS75eBYpBlsIJrDPWNgCg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="370430032"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="370430032"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 16:48:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="861172383"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="861172383"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 05 Apr 2023 16:48:44 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 5 Apr 2023 16:48:44 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 5 Apr 2023 16:48:44 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 5 Apr 2023 16:48:43 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.46) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 5 Apr 2023 16:48:43 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bjWb60QM+mc+GWtfat4vXbeR7I+fAuAnXKzTwv6p2RTO8fzhYS/QxN1WMz3vPaFGLzp44LYizcljBeWirpEU72iUNr4GFh02ns4FrqlOUeTRMfeGhkvAw0hqeVjeT8sI1ASTg8XtJfXqUrWG91AWossqPTJjhnbN4thB6mQaxnIQomXTi9rR6EwyQ7/bnSOkdi9+Hxe3feBbYbSZlTslg6Zi+vT5SngM+bWXMF5Y6RsUXH8bjE2QiMNXxHi2t5ZOGvDZngyp2Zctlz/SZ7+wPFWQ/TrwuIIpeZOg45UkpsGQOTQkWTiwhbkFl8R4qQyxp4qaB6Fvysx23reeQGLuMg==
+ b=LuGOCBULuk3F4N0qG6ptv+1NhoUgWYtgeeRW/JKS7a/g9GqUcu2HduxMT491WaVhQ2pW0eHDs5aZS7mLzJEa8SR/WRAGEI8bahprBfAXb4OzrVvnUQdxojThuydTqk2OWRlNDdhutpGOhzkurpqOXMRzo5xw/EYMz23CO5ZxRy82UIwV9mRtR+KM/kt9iEHE0tYtMrfWamxwC9PCeNggj16U+gKrYZjm4Y8slq7lr15KWAFRVPgbg1wA5bol6ymiu/a4yDtoIvXJaK0LljnTOtJfr3JVd4hMUh1zTa/zbffmY4j/RIxxGn/0TT+lP+f+oNo1Pz9ljdYh3a8EAdwQRA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C8ebVcd/2bOXLpPkp09qqS5sbtf8/fY71rqwKjQZaXE=;
- b=FSISSYnxQGbeljddeVy1Azw35fbTYA/rlBout9MPO37DfHNrO1lGPXTw6quC/DWzazqQgwitn0oMXzFGFnseIWz+T/Cnb5xRhuHSosw9IoBpljZ3S3TDH3kdm3jxbgc18piZr8HNnmYhz0symqtdr+rYbtp4XGTfqwhD0yt7E3HB34cBsvU2oCaQekfWQRnPdQXOXlZTE69ZlF2R2Vi+UasjL7KjEoy6UQuYyOAh3TqDTzljSIB1DRHwEUgKl6HtGaQvehJmWhQdfYdILOy0401pyrKajHux4nVCe1HAKu6RtI6w4VFcaHTfFnzIWuZPlHu5zHA1bTTrgMbWYUUwTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C8ebVcd/2bOXLpPkp09qqS5sbtf8/fY71rqwKjQZaXE=;
- b=Fb/S8vITSLnS++7GHBbRcQLmdnLFW7Eeu1vbiUGHcwJdn/ZFGLlolwFbo02oZs291ubKl67qK3UOtXP/Uw9naUgV1Fbddxg/vX3CSBbm0pKL3dEGbIa64oBOtELegL5JJGdNI5cCYROFVbc9JkGMvzHqRJBp7i/IZ+8QsXja7jk=
-Received: from BN0PR10CA0021.namprd10.prod.outlook.com (2603:10b6:408:143::24)
- by CH2PR12MB4152.namprd12.prod.outlook.com (2603:10b6:610:a7::8) with
+ bh=8eRfzpW6wjFcgx1VyauYhMSX8MZJMV6WKckv+56zKhk=;
+ b=XL9K1YtN/Y+s8CXdFlA7loI+EVrPbBn/IuVPL/15MFexksktWrRfSsRsQ9AtLOIvZzOMEHUIX9j/dzD/4DFzRVq3zfpbOAaDpbt5/+UIKhIYuOyUr1ZxuxU0FHfLQUsU0Y+5U7j0llh8+5BEM+C3VheK9QWRVZJDMOued5fu3H+Ka+IBc+Z05/cMGI5T1RPEFp6YxuwFjmPcpmy5ZNxAprIz4ZuHJiSEMOIGsaRjQZDEzj+mnZHYmJn1UrajSLCwdVy70x70LHUFHtfYjh1WNU4Y0DyEyABI1PgWelO962JQSttpPK8C4xqArRscEY2HfDi2v0Qu21N2Op8ANCaQPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by SJ2PR11MB7646.namprd11.prod.outlook.com (2603:10b6:a03:4c3::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Wed, 5 Apr
- 2023 23:48:49 +0000
-Received: from BN8NAM11FT084.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:143:cafe::33) by BN0PR10CA0021.outlook.office365.com
- (2603:10b6:408:143::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35 via Frontend
- Transport; Wed, 5 Apr 2023 23:48:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT084.mail.protection.outlook.com (10.13.176.169) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6277.30 via Frontend Transport; Wed, 5 Apr 2023 23:48:49 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 5 Apr
- 2023 18:48:46 -0500
-Date:   Wed, 5 Apr 2023 18:48:26 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>
-Subject: Re: [PATCH RFC v8 48/56] KVM: SVM: Add SNP-specific handling for
- memory attribute updates
-Message-ID: <20230405234826.adaxo5fws6icwngy@amd.com>
-References: <20230220183847.59159-1-michael.roth@amd.com>
- <20230220183847.59159-49-michael.roth@amd.com>
- <f664f44d-fc0a-1af7-070c-306ab100bbc9@intel.com>
+ 2023 23:48:42 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::d651:ac39:526d:604f%12]) with mapi id 15.20.6277.030; Wed, 5 Apr 2023
+ 23:48:42 +0000
+Message-ID: <50a87b32-282e-e4d5-8fb4-a4a99d1b0ed5@intel.com>
+Date:   Wed, 5 Apr 2023 16:48:37 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.1
+Subject: Re: [PATCH v3 18/19] x86/resctrl: Add cpu offline callback for
+ resctrl work
+Content-Language: en-US
+To:     James Morse <james.morse@arm.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        <shameerali.kolothum.thodi@huawei.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        <carl@os.amperecomputing.com>, <lcherian@marvell.com>,
+        <bobo.shaobowang@huawei.com>, <tan.shaopeng@fujitsu.com>,
+        <xingxin.hx@openanolis.org>, <baolin.wang@linux.alibaba.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>, <peternewman@google.com>
+References: <20230320172620.18254-1-james.morse@arm.com>
+ <20230320172620.18254-19-james.morse@arm.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20230320172620.18254-19-james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0239.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::34) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <f664f44d-fc0a-1af7-070c-306ab100bbc9@intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT084:EE_|CH2PR12MB4152:EE_
-X-MS-Office365-Filtering-Correlation-Id: f406b4a7-764a-40c5-4fbf-08db36304db1
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|SJ2PR11MB7646:EE_
+X-MS-Office365-Filtering-Correlation-Id: cc4f38cf-5394-4d36-e6ac-08db363048fb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HvHpBlwzja9kOmDkOyCtdnIhn6oCjda6QMp/kx2ib12Vc8oRCFF6OLgqH18VP+52mOwE8pslf4qSa/TKBwEnsI/w99cqg7GEaHpcaDJPscurtIl7UKkwDU6wORB/ipVBCSLCfZ2veyzVbG7hdXZ9DbfYPIGH7RTthDk1Lw1QAGSuX95O+v+oA2NRNSmXgNdugKeNW8hLynA8SZg2qI77PbRI5S9VQ/aGqz7L0vzvNi7Cd9E5ku5FuWjMaN74NkEnm1tGdWYVYn8S5btWlgVkU6zRaNntuvjoYJsoVJNJ8vQ+N00jbfcKHVUb5lG0Fv5/x25UQ1okGV5MbtOxGazymkveQUdyFrx4bKkHOlZjlW/1wgkyAH5fIsJyZfq6WYiPPP+Lvk+xgZo8jNaxbufqWRyRP4CX3Hfy03FdK8w8Ynwy6raYuTUJCX7SRKX6JHCZGwl0SalY5hFuoCdMD57ihvu0Ryzq9htO4AqaJtZhBxnVaJfVS8mS+mC+uWdc+imHPS1CvsWbaQLrGNuhCiuXoaHeEO6ZhqOUnuDSZuMnNA3qWMfAgWTrGBFrFvxsCBCZTMsBX5FMy7cAgwxXWDXgvyO88ezUsDTwNsVvX/Td2R+piDYDLZk8R4r/pu9eMTZ8EMW4SQey0K08jyJzcJ9KDKc7FDnvOcehvt6CNQiba8wvNj5LtutVaQb52NkEQeJAvRT6xilScXW+2jQAYiOAxa5I0OFySQNXPdRjYtW9hnYCXXt7xWMHJAISnCD/N+3EJHfvsnrKkCjQUHFiqKgsOw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(39860400002)(396003)(451199021)(36840700001)(46966006)(40470700004)(1076003)(53546011)(26005)(16526019)(186003)(40460700003)(4326008)(478600001)(54906003)(36860700001)(82310400005)(316002)(966005)(7416002)(86362001)(7406005)(5660300002)(36756003)(8936002)(2906002)(82740400003)(44832011)(70206006)(6916009)(70586007)(8676002)(356005)(81166007)(41300700001)(15650500001)(40480700001)(6666004)(2616005)(426003)(336012)(83380400001)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 23:48:49.2384
+X-Microsoft-Antispam-Message-Info: qV/EPBWQSqLxhrGn0N0k+THOiKX7byd3c/HAuJH79P6MdD/J4w85S+A+x0ofMP9VchtPTwgEkGkxJXA7UYoS7ZXocKrlgeGQA39Za0cg817Sgq9mzhLFio9sk3GgJn3PSb/exE6rpLgSzX9o2IAer1RFELT6oCJ3zyVzssg1PChW+8xY7RGlIoKYWFTlmly8vm2ahUsfogphtMnQx2MdOtXYfvs/pH/J3yFB2qWP1AWZE/3T1RVVHTCC/mDcdRJEwZJJKv57zYpj5tyhjOEENhcm0Bh4e3A2pI+Ly5aJAkoifaq3r6gtLw3IKuIXTp1kJpKDNEBnC3IRK/evzYPYaVbB5u6zJgUEiGPAh7r3N81H/hq3VHJFJpmS3SwndAAUe9PE3ebmmC0GerlA3su7wL5KL84VfeZX/gvEqtll4kdv4PCYShenZa6srufnNcwVQEMxitfrVgrGQCZAP1d2HoLDQNfUjI2FHXNgapXOqS0a0/dpJGCsCFLtuLweS0cCYQVPH554afp3xEJ5f47rbJQaNN6Z05DiBnnjZpzPPPi9ZtsSJA+yrfJTnp4z5Sl/Wxa4D2E4LiYXWZHem81r5nCLs9VI87XHFm/6aamUoWAmxlbI8LMZu9+OOdyE+5C/ND6HFsSNLkwl2WRjXgj/zg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199021)(31686004)(2616005)(36756003)(31696002)(82960400001)(38100700002)(66556008)(44832011)(7416002)(4744005)(4326008)(66476007)(8676002)(41300700001)(86362001)(66946007)(8936002)(5660300002)(6512007)(6486002)(83380400001)(6666004)(478600001)(26005)(186003)(54906003)(2906002)(6506007)(53546011)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1J1MmorSTAxOExrU3piWTRxTGJVdkxwWXl1QSt2WmRXckR2M1lCZG04eXFW?=
+ =?utf-8?B?RERod2ZzMmZCVUhyUzVFRFAxbXo1ODJldSszYjIrenkrMWhhTlM2YnlPSmVr?=
+ =?utf-8?B?ZDgwaWJ5SXFOTjljeW12azVMZVRPOEd3Z1M1VHZneG03QlIwVDBCeTZQV3ll?=
+ =?utf-8?B?dnVKYndpS0ExMW1ubDFSeW8xeUw3M1BLaGlBbEVDMlpKWDhlWUI5MlduV1RB?=
+ =?utf-8?B?bUhOZXo1QksrUUpYMGNob3NmVktGdFFuUTVUTzBIZStxRlM2aVJhbGhjVm9o?=
+ =?utf-8?B?ek1WTmhwbkxmNC9hcVVESzFleUkrSjVDVnZiTlduSGI4dGdOQ3RCcjErWXJh?=
+ =?utf-8?B?TEZRRThxb2FiWFRxK1YvZmpyVk1hdWJORFprSGlPNGhZd3o4OXEveG81Tyt4?=
+ =?utf-8?B?K2JrWlZtMHJZMzBRMjFLYVJxaE54Ry93c1F4SUw1RHpqLzBuUGZhVlgzUWNr?=
+ =?utf-8?B?anJuSmFKSEUya3lCa3hvN1NjejYrMkFtTnh1Q01OSWNZZ3p5T3RHdGRUT3Vi?=
+ =?utf-8?B?dFppeUIrS0FZNFBTL04wbTZ1ak1tZWZzc0pvd2h1OUQ5VU5TMVNqY2xqbHpJ?=
+ =?utf-8?B?SlRaai8rZi9rUkZldk5URUhyS1pDRTNzbitMM2tTN2dOQzNSbURERUNCTDhK?=
+ =?utf-8?B?YnJqcG11V3Q3dnA4T2JMRFdMSm94NDhBWldjZzRFL1ZQWVcwaTRQWExYSm8r?=
+ =?utf-8?B?THUxZmM3UjJuRUszK204ZmJVbE9QN05tTFgwVys5RHArV2RtOVJuSzJCaEUz?=
+ =?utf-8?B?SjdnUk91ZFVDR1A3S1pFY1dnTWdoNklGamJHRTdEN3V1cXVMSHhUWnorRjgx?=
+ =?utf-8?B?TzEwaEhWREUwK0RnSkordzQxcm9KanlHak1MR1VvZGQzcm5IczNzYkgvV0k4?=
+ =?utf-8?B?c1lzejFscTFySWFLVnZlYVpNdndidm1sdGVvZ1JhU2lZUnNmeVZ2MkpyTWpG?=
+ =?utf-8?B?KzZTN0t2bmcwOHpTZ2VoSGJiUkgzN3dIeWJrQ1Z0ekoramNCMmpGNXBITzBR?=
+ =?utf-8?B?UnJjR3pFR1hkK2hCWjZWZmY1TEhXbWtkUUJ0QlkzcEpvMjA5SnZzOCtES1dw?=
+ =?utf-8?B?aEdxRUhMdE0zTnhEWVFSaXNlbVp1QVRHZXl1dUkvdm5ueTJ4eXlUSDN6RStY?=
+ =?utf-8?B?L1lMVGFaYWpVVnJSc3FJZmpJaWZmaUxDRXBvRm9Yc0lrL3Y2RUwyRUNCTnpo?=
+ =?utf-8?B?SjQ0OVhtYU5qS0RxeDNHTit2SVlIUEZxQW1CRnFwZlhLdDB0cnVyTER0Q2pU?=
+ =?utf-8?B?QkVXRFh5Q2pOWXJqRzV5eFpMU25aMmQrNHpwbC9HWjBCcEJTdTRhVnFHOGlX?=
+ =?utf-8?B?SHdtTFhUeU4zM09BaGh5c010dEZGbVpkeGdqZFZXZDlJbVoyK2ZuWWRkUWtp?=
+ =?utf-8?B?NGtsd3RuNk4zcWthZm5kdlZXenBKVUFUM0hsNDg0L3R3cVVMUWxBRUdGV2xu?=
+ =?utf-8?B?ZC9lLy9kNFMxbmZMcEFiQy9RMStzMzYyd0dGa1hKUVlaQ25yaXFUK2FZSVpV?=
+ =?utf-8?B?ME5iUHVMb2o0Qk5jQ0JObzlzRjhDb0FWWlRkYnpJanZ0bElySVovQ3NVTGlh?=
+ =?utf-8?B?M0dpVUllL3lqU1o3bGxVNnprdG5qbEhiUU9PTjl4aEU3ZHpsR0hkT1AyTTFh?=
+ =?utf-8?B?L0lwdGdjd3puMGFyTHRFcnZWOFNzSTRQQXM1cmpsSlU1Z09ERUNBbWZ6Y2dO?=
+ =?utf-8?B?Y01VWERkKzlvQ1RsbHdUWGZyZVhONG9hR1Z5VlVWVFBpbEl3N21pTnZ3L0J0?=
+ =?utf-8?B?b0o3eEgrNVIySDlWVTNuT2ZxZk5Ca09mVUY2NHRXeXp5enk5d0NzZ0Q0N0Jj?=
+ =?utf-8?B?VkFLQjFaUjdFZFNKeVNGa25xMmR2QTZHeHZIblBYckxuRjl4cU9sM2NBL003?=
+ =?utf-8?B?YVkwbW9BcGtER2JIZEtlck9NelJNd21tay9TcVV3T1QrV29yY0c0Y1MxeFNR?=
+ =?utf-8?B?Q0NwRi80Yk1lZjZIRmtWcWcwbzVIcUgxbVJzMXJwMnU0OUZCQi9qRUdLK3Jo?=
+ =?utf-8?B?b051dFFWZ3dWVW9HbTJMa0FiNlNnMjBTUzdzeEJLNEdKNm9TVVNQWnJXakky?=
+ =?utf-8?B?VnR4Mzk1NUwwRDdpREF1aUI0eG5sMWVmZjNCTzE1eXZFcm4vUjZwMlZOMGhh?=
+ =?utf-8?B?cEU1c0x2cUtpcHRjNTdCNFlGT3hXQ2FCRUwzT3lUSWZQNWZsbkF4ZFIvQTl1?=
+ =?utf-8?B?Z1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc4f38cf-5394-4d36-e6ac-08db363048fb
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 23:48:41.7754
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f406b4a7-764a-40c5-4fbf-08db36304db1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT084.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4152
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_FILL_THIS_FORM_SHORT
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zbe5zcp+sRMc3Bn2tYDdN30iz+ojrBSuH8z4dZfc/iN9g/nNQXumkGicjMdNLriNHiTPF5XE+QKD+l4LZ29uDEalWxau3Jzl8xqPunF2jMs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7646
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 03:37:00PM -0800, Dave Hansen wrote:
-> On 2/20/23 10:38, Michael Roth wrote:
-> > +		/*
-> > +		 * TODO: The RMP entry's hugepage bit is ignored for
-> > +		 * shared/unassigned pages. Either handle looping through each
-> > +		 * sub-page as part of snp_make_page_shared(), or remove the
-> > +		 * level argument.
-> > +		 */
-> > +		if (op == SNP_PAGE_STATE_PRIVATE && order &&
-> > +		    IS_ALIGNED(gfn, 1 << order) && (gfn + (1 << order)) <= end) {
-> > +			level = order_to_level(order);
-> > +			npages = 1 << order;
-> > +		}
-> 
-> That's a wee bit obtuse.
-> 
-> First of all, I assume that the 'RFC' is because of these TODOs and they
-> won't survive to the point when you ask for this to be merged.
+Hi James,
 
-Yes, will make sure to have all the TODOs in the tree addressed before
-dropping the RFC tag.
+On 3/20/2023 10:26 AM, James Morse wrote:
 
-> 
-> BTW, what keeps the restrictedmem_get_page() offset and the gfn aligned?
+> -static int resctrl_offline_cpu(unsigned int cpu)
+> -{
+> -	struct rdtgroup *rdtgrp;
+>  	struct rdt_resource *r;
+>  
+>  	mutex_lock(&rdtgroup_mutex);
+> +	resctrl_offline_cpu(cpu);
+> +
+>  	for_each_capable_rdt_resource(r)
+>  		domain_remove_cpu(cpu, r);
+> -	list_for_each_entry(rdtgrp, &rdt_all_groups, rdtgroup_list) {
+> -		if (cpumask_test_and_clear_cpu(cpu, &rdtgrp->cpu_mask)) {
+> -			clear_childcpus(rdtgrp, cpu);
+> -			break;
+> -		}
+> -	}
+>  	clear_closid_rmid(cpu);
+>  	mutex_unlock(&rdtgroup_mutex);
+>  
 
-I don't think anything enforces that currently, but there is a TODO in the
-UPM v10 patchset to enforce that:
+I find this and the previous patch to be very complicated. It is not clear
+to me why resctrl_offline_cpu(cpu) is required to be before offline of domain.
+Previous patch would not be needed if the existing order of operations
+is maintained.
 
-  https://github.com/AMDESE/linux/commit/5c86db7f98701f614c48946b733f2542c962f139#diff-e7514a224c92c2e47224f99919405a37ee7edc4612953135229cfb6e07a680d8R2131
-
-So currently this patch relies on the following:
-
- - the fact that the memslot alignment/sizes for a standard x86 guest's
-   associated memory regions are 2M-aligned, so when they are bound to a
-   restrictedmem FD they are naturally packed in at restrictedmem offsets
-   that are also 2M-aligned. But of course we can't assume userspace will
-   live up to this assumption and need the above TODO in KVM to enforce
-   this when registering new memslots.
-
- - that restrictedmem/shmem will ensure that THPs are only allocated for
-   restrictedmem offsets that are 2M-aligned. I think this enforcement
-   happens in shmem_alloc_hugefolio().
-
-which both seem to hold in testing. But it's probably a good idea to add
-an explicit check for this, at least until KVM implements something to
-enforce this earlier in guest life-cycle.
-
-> 
-> Let's start with this:
-> 
-> > +static inline u8 order_to_level(int order)
-> > +{
-> > +	BUILD_BUG_ON(KVM_MAX_HUGEPAGE_LEVEL > PG_LEVEL_1G);
-> > +
-> > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_1G))
-> > +		return PG_LEVEL_1G;
-> > +
-> > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_2M))
-> > +		return PG_LEVEL_2M;
-> > +
-> > +	return PG_LEVEL_4K;
-> > +}
-> 
-> Right now, 'order' comes only from restrictedmem_get_page(), which I dug
-> out of:
-> 
-> > https://github.com/mdroth/linux/commit/c6792672cd11737fd255dff10b2d5b6bccc626a8
-> 
-> That order is *only* filled in by THPs.  That makes the PG_LEVEL_1G
-> stuff here kinda silly.  I guess it might be seen as thorough, but it's
-> dead code.  I'd probably just make this work on order==9 || order==0 and
-> warn on anything else.
-
-Ok, makes sense.
-
-> 
-> I'd also highly recommend some comments about how racy this all is.  I
-> guess it probably works, but it would be good to add some comments about
-> page splits and collapsing.
-
-Collapsing while in this code path should be ok since the 4K sub-pages will
-just end up getting mapped as 4K in RMP table. KVM MMU will then map
-them into nested page table as 4K as well and we'll get non-optimal
-performance, but things should otherwise work.
-
-Splitting is a similar story: if we map as 2M in RMP table, and then
-afterward the page gets split, then KVM MMU during fault time would map
-the pages in the NPT as 4K, and when the guest attempts to access
-private pages of this sort they'll generate a nested page fault with
-PFERR_GUEST_RMP_BIT and PFERR_GUEST_SIZEM_BIT set, and the code in
-handle_rmp_page_fault() will issue a PSMASH instruction to split the
-2M RMP entry into 512 4K RMP entries.
-
-Will add some comments around this.
-
-> 
-> It's also not obvious why this only cares about private pages.
-
-Mainly because the shared memory that actually get mapped into the guest
-is always shared in the RMP table. It is normal VMA memory that is not
-allocated by UPM/restrictedmem. We will never attempt to make them
-private, so there is never a need to bother with switching them back to
-shared.
-
-So we only need to handle RMP updates for the UPM/restrictedmem PFNs.
-Obviously for shared->private conversion before mapping it into the
-guest, but also for private->shared conversion since we will still
-get RMP check failures if we try to leave the PFNs as private in the
-RMP table and map the above-mentioned VMA memory into the guest
-instead.
-
-Will add some more comments around this.
-
-> 
-> Anyway, this is the exact kind of thing where I really like a
-> well-commented helper:
-> 
-> bool can_install_large_rmp_entry(gfn, order)
-> {
-> 	// small pages, blah blah
-> 	if (!order)
-> 		return false;
-> 
-> 	// The region being updated must be aligned
-> 	if (!IS_ALIGNED(gfn, 1 << order))
-> 		return false;
-> 	// ... and fit
-> 	if (gfn + (1 << order)) > end)
-> 		return false;
-> 
-> 	return true;	
-> }
-> 
-> Which gets used like this:
-> 
-> 	if (op == SNP_PAGE_STATE_PRIVATE &&
-> 	    can_install_large_rmp_entry(gfn, order)) {
-> 		level = ...
-> 	}
-
-Makes sense, will implement something along these lines.
-
-Thanks!
-
--Mike
-
+Reinette
