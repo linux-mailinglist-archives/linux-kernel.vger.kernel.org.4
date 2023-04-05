@@ -2,64 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951ED6D85E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2C66D85E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjDESUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50002 "EHLO
+        id S232267AbjDESXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjDESUV (ORCPT
+        with ESMTP id S233306AbjDESXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:20:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1C37689;
-        Wed,  5 Apr 2023 11:20:12 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-212-122.ewe-ip-backbone.de [91.248.212.122])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 75B3866031B4;
-        Wed,  5 Apr 2023 19:20:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680718810;
-        bh=O1SmSIaEGwTASaQ4p6AtJMjiy2CQgrBY5WPfIwkrp5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fzAzEpU6ldXCM+XK3H6e+HZis/nAJchFpWM59ew9VuFeiMTYws6t0NpVWmCD8LiNb
-         pZA4/SOCs/EIA5rfDlV8dMKiXJ72z2tH8HnZjLDn2DkSzx8zYtE13JoPGBjJTFM+eb
-         EOoqF02Zip1wlCdQnoeCzb/VP0bNrdeiUNLXguk2zNWLZg4ifKNLsVkUgo+P1Mv3Mo
-         ingtMZYWTLb17Wv7myGa1Vr2hxzg7rhCEG8rSiiDuoHXTuI8UXHWf5qgCiwbDxhqQV
-         V5gK7vdN1yo2rJkUAmDs5rbmGhXOhPMUMvRKnfZRxFvvGQvByTcwH5/ywsriiYSt6E
-         GBBKkrCLg/xJw==
-Received: by mercury (Postfix, from userid 1000)
-        id A88D5106125E; Wed,  5 Apr 2023 20:20:08 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 20:20:08 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCHv2 2/2] net: ethernet: stmmac: dwmac-rk: fix optional phy
- regulator handling
-Message-ID: <20230405182008.tmegtq5xprkcwvss@mercury.elektranox.org>
-References: <20230405161043.46190-1-sebastian.reichel@collabora.com>
- <20230405161043.46190-3-sebastian.reichel@collabora.com>
- <ZC2zMzaUMY0/VCRR@corigine.com>
+        Wed, 5 Apr 2023 14:23:41 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5EB525D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 11:23:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AsE7ddGjCESrXmWDs0TubItMzn+wTVlTE/WCLAapZN9PEXwVcuPzpexHXbTiqkAUZ/9qJPFtq2hobET1pZrctklGjnEWAuV+cgFTDToHBVmkBYt7U3tUyrC9XjCGBXgcxOJxLl6OiNUlbLpptGkyGrKpFYr4zeiVkka26fAnvLRnPwe5r1TMUf1aawaLLdaji3Em7f6t+U6R4ZBQ5L5aK7qLnqp8Uc48D6Xc4N70kJsd/ktgDOHqMzuSunatl2bSzZvk+j/ICbJgzsIdQGPToFEPR7ivvLdKQ8srDrRvfqjdySv9oylv+4U3XFFGJn3q7BCAPB/UmP27FNExzSw6tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XyV4Oo8W9PFipzAyIxXlJomh9ZdUsww7SX35J7vs0os=;
+ b=ntHx0JtiQJwMldoxx3kpJpAuWHnW+8DVPtdTRg5A/cW4Y/pIdrHiYluGrI045ZfCdUENyZ7Jn6+rcpWmkL/9U0uQBorw+ruFz0YORdNx9BxfeYGCFAL2jpz3exfQBD8ESpY0/vPd4b/FNB+K6/zoVUVaYQdJeXy13X6dYWx2tYtrB5PENWBT7zHI8Fn7lG6c5EavzBzDc8oN5O+WwZAQ+sizXTFNoifty0jKRrNfwQhqHjC2Zj2aWMmgiicJi0RH7hDxyZssaO1w1d6sTeBdCspX1XhwxtFJJGjlXPRIr6tLmIm8mPvRajm1/2RdyL4lT8pCeHvZhBo7U+PaeC91fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XyV4Oo8W9PFipzAyIxXlJomh9ZdUsww7SX35J7vs0os=;
+ b=V5OLEMLUbfbh87O35VuQhcaYG7fZISRvJbvpc97qZ057XyTpd92yZyx3IK4+WIJVmDiXbqduJydIM2SMoGfaZcA3RA5yRFHTftoc2G3OVMtqFwJhbHaz63RxL4AYiBq2rSSUYJ1Xl7N8awXMllKRVOX0jb4uLuHXrW1CLXgGTFI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ PH7PR12MB7428.namprd12.prod.outlook.com (2603:10b6:510:203::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.33; Wed, 5 Apr 2023 18:23:36 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6254.033; Wed, 5 Apr 2023
+ 18:23:36 +0000
+Message-ID: <9bce7374-ef67-75d0-4040-870ba131819e@amd.com>
+Date:   Wed, 5 Apr 2023 14:23:32 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-CA
+To:     Asahi Lina <lina@asahilina.net>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+References: <20230406-scheduler-uaf-2-v1-1-972531cf0a81@asahilina.net>
+From:   Luben Tuikov <luben.tuikov@amd.com>
+Subject: Re: [PATCH] drm/scheduler: Fix UAF race in
+ drm_sched_entity_push_job()
+In-Reply-To: <20230406-scheduler-uaf-2-v1-1-972531cf0a81@asahilina.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4PR01CA0471.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d6::22) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4mi6hilgokkjkgxj"
-Content-Disposition: inline
-In-Reply-To: <ZC2zMzaUMY0/VCRR@corigine.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|PH7PR12MB7428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d05666d-3ee6-40fd-a9e1-08db3602deb0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yPVkLt8eNuw4Rx2t4P4WydFB6biFgLCVOeEGvhTwhIWcS2Gsh8ykjiuc9LhfnOOYBnfBZr5MGNUbhKvqrWC/+KB2kqx1GOrzo/Hcrup1YBMQTHQ+3V+EBRFu6lBaESjQ4xlDsJL35tsLeGdB4VeiPyBmzBfTrvoW1g5x2LlM9Af3KaoBLL5Yx7Ebz66HdGzfucrFXOEvexRNK0dyBSIYQPBClXSi7+MK911v9zE7EEmLIKt5Jo+DdmTmRRkizgFSfKKYegttLbKgXXuWK3z+fdE2cB8vTNaE6oUVU2fu9JfwpCx5cy9IyJrGkp3bkoOUT+GtVA8LhMIpj30MCQkqcGef78topaCEWTxvDmiMEn7uHH8b7zwP2fTAW6rlrqTkE4KTYWehDJYBd5Xx+xp9dCOLBpPYwt+bC8xLu0G+RcS9+ZoTD99TXgpttknL6BK67aqY5pDa4mLUaq8oqJzxLI6zQtwNL6tLUrpY4H4gE96tOKFDK5CoR/JtYNUfAvOMyG7WoKt82zq31nEfBc7k6cqdBbqG/DslSAm2Ja4kJm7RFAFh8LW9gmbEz5Qev1h2GohWsuaWq7n8xys3gRHtjrgg0n2s694/gkXEWaYWMsueYRV1QM5iiZTF4Q1cIWwzg3X8EFNIEOO9gmqEo6YJaw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(366004)(136003)(451199021)(31696002)(86362001)(8676002)(36756003)(6486002)(66946007)(66556008)(66476007)(41300700001)(4326008)(6666004)(110136005)(316002)(186003)(6506007)(44832011)(5660300002)(8936002)(38100700002)(2906002)(53546011)(478600001)(6512007)(2616005)(26005)(83380400001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SDFvMFJUNjFZRFFQWjI4SkNkYi9rdkUyYWpCdENJRUFHVU5WUVV1Tndic2Jp?=
+ =?utf-8?B?cllnREE0My9QSDQxNXpvd0l1RFFkMFRvdnpEKzUwblRJbEFiSlJGOFpjSTBY?=
+ =?utf-8?B?QkY3SVArckppamJlQTFIM1VCeEVXYXRZOGx4RG91ZUVTcHdkWkxFTDRzR2gy?=
+ =?utf-8?B?a2huZDU2WFJPTkM1YllYRTVTaWp3SXM1Y0ZPYTkzVWx1NVJpM0tCMGNEYWFa?=
+ =?utf-8?B?TlFpOFlJd2NtVEJRUGYyaThtTUtwRGxUL0RhVzlxWlduMTZWcU81Z2VJajNr?=
+ =?utf-8?B?Q1NyU1RJSlRLU0pwL3pET0h4dzJtczJmQXk1bmZXbXVDbmFSMDBpNGFCcDdG?=
+ =?utf-8?B?L2JvR3JCNmVkZldMM0Rtckx2T2JaWExEeHk2czVBdVJnaVVVWVQ0Nk82N3RV?=
+ =?utf-8?B?dkV6YU5jOVJRVU9mVHBoVGJlbjdzRFlwdklFSHI1NmhQaUNPKzR6aWFzcDB2?=
+ =?utf-8?B?L3pGR3R3V3dmaTFmVklRN1loa3R4aTF6Qm04aFhScVFpUjdMdGRIbjZMRUdl?=
+ =?utf-8?B?eGdWdFVzaVdPOFV1OEdDTE9sbE9hSHdFYWtZcFNrWVZWTndQdjk2dUxGMEUw?=
+ =?utf-8?B?cWJ6c0RLZlNDSmlVa1I5eVZzN2l2K0ZwQXRBaDN6eEdGUWtQMzhwcWFXWjhj?=
+ =?utf-8?B?ZTBxN0psZGZCQUxtSGJHT0hrRml6ZENldlFFQUlZamhoYkw1OUN4TGhnMW1R?=
+ =?utf-8?B?VzhRalAyTXByaTdyS3VhZzZDZ3RLQW1XbUJOb003V1ZwYm5xUlJvQlRveTdE?=
+ =?utf-8?B?aTBXMFk2T3czOEpKbWdXRUloaWxGQURkaTBsWjc3WE9tSlp3UTVod25VaVZ1?=
+ =?utf-8?B?dzd4Nkc0UnVoN0VCN2lKcmJKQ2hVdWlGc3oyeWZyTFJDY3oxUy9VZm9RRnhM?=
+ =?utf-8?B?eTlxdWJsaXRETmtQa09aVzdMZWFYeUJDWTlOTDJsUzJHWDdGWmtRUklRQTlK?=
+ =?utf-8?B?K1VUaXNhVzhsektEMElJd2Fvbm84aDY1WmlDK2s2QWJTMEs4VGRBVVEyL0x0?=
+ =?utf-8?B?U0dESzR6T1BsUC9ZZExtRVN2QkNHOTA0Nnp4c3NQZXlDTWhISmlLbzVVUnNX?=
+ =?utf-8?B?dzkzQ2tsS3hGTEJMMUZWSTVYOUEwMVlKYnVBWDJrelBZcUh5Q0lOQm5YNGZu?=
+ =?utf-8?B?cUFRUzVaWXVLaEp2OVpoNVVYOXhVeW94VmwwUmRMdnhwbEZMTGRhVEVGRnVH?=
+ =?utf-8?B?NmYvL0ZndmFzbmowUm1ybFZiRHcxNHJzcGxXMzRFY3dwYW5WY1lmaTN2SXlh?=
+ =?utf-8?B?NFVuaUkzTlQvaEdxUGZvUTFMNU9uRGNkcjQrWEg2bXVKTWNWeDNNaStHbVRx?=
+ =?utf-8?B?d0ZoME9tRjFYbEtNRU55UVU4NTlWUnY0YUFGWnE2MDZOOG5kSmdkZGpjMWR2?=
+ =?utf-8?B?MjRNZG9ZN3lPc3oyWm1LTVlRRXNsa0xRQnAyaGplWDVwSGpQd1NsOVpwQlFk?=
+ =?utf-8?B?TFBjR2x1UTcvNnVhMDdwaTZZUERjV1JYT0FpZldRcG5OeWpZcDZDaFhDZkVu?=
+ =?utf-8?B?VGNNMVZGcWlQeWpFTGZXeEk5QTlXbGRTcFljQlEzWlpYSHpYMFFWc3VscWdn?=
+ =?utf-8?B?azRSUkxHU0owTm1MM0Y1T2pVQUV4VU1oYUwvdlphRUhOY3o3RW1pZHl5QXh5?=
+ =?utf-8?B?ekF4ZlZWRWxndyswWGVwQTVKS2xBS0s4aC92TjZYbU5RWjhXcVFNSGlXZE42?=
+ =?utf-8?B?ckw3anQvaFY4aFBqY2RVdHI5YTJVUWk2NHRjU2Jlc1R2S3I4dkp2a2Frc3Mx?=
+ =?utf-8?B?WitpYmVFbUtFU1JDaE1uUmxHbnVENG9kNnVzVWZnQTVmeGtRbkhVOWtEMDlM?=
+ =?utf-8?B?YitTZlJBdXp1R0QvMDRkYzlyVDEvZER5eDRwcjRvaXZla2ZxeU04eGE4UEVm?=
+ =?utf-8?B?K1RnODJ2clRMUzQ2a0hTMDVwaGF3cDdaKzIrUjcvdW51cHQ0Qng3RWhrL2xG?=
+ =?utf-8?B?d2tRZ3hNRUROQ0gydWNMbFJIWlVVQWtwcWZxWnU0blg3aG5sbnZrUzNGc0Vn?=
+ =?utf-8?B?TDFmczVtZTlWTWoyMDVWeE1CclNSTDN2cFIwbGF1ZTMwS2g1M0VJdDVNRnhD?=
+ =?utf-8?B?dG5Sd2VBaHUvV0thVSszZS9Yc1JPcW9OR0pJTW5NcnhaL0YwaHRuckJXdnNl?=
+ =?utf-8?Q?7S7GwBnZMtNWsuGX6CXtxaXrH?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d05666d-3ee6-40fd-a9e1-08db3602deb0
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 18:23:35.8434
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6Y0CHZ1M+7gPmBEXTi1zqkCgrDVxwDompNMC6Leg9C+ECACFB9QOq8OzFCPTDhwv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7428
+X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,97 +125,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-04-05 12:37, Asahi Lina wrote:
+> After a job is pushed into the queue, it is owned by the scheduler core
+> and may be freed at any time, so we can't write nor read the submit
+> timestamp after that point.
+> 
+> Fixes oopses observed with the drm/asahi driver, found with kASAN.
+> 
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> ---
 
---4mi6hilgokkjkgxj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's a good fix! Thanks for fixing this. I'll push
+this through drm-misc-next and drm-misc-fixes, if there
+are no objections.
 
-Hi Simon,
+Reviewed-by: Luben Tuikov <luben.tuikov@amd.com>
 
-On Wed, Apr 05, 2023 at 07:43:15PM +0200, Simon Horman wrote:
-> On Wed, Apr 05, 2023 at 06:10:43PM +0200, Sebastian Reichel wrote:
-> > The usual devm_regulator_get() call already handles "optional"
-> > regulators by returning a valid dummy and printing a warning
-> > that the dummy regulator should be described properly. This
-> > code open coded the same behaviour, but masked any errors that
-> > are not -EPROBE_DEFER and is quite noisy.
-> >=20
-> > This change effectively unmasks and propagates regulators errors
-> > not involving -ENODEV, downgrades the error print to warning level
-> > if no regulator is specified and captures the probe defer message
-> > for /sys/kernel/debug/devices_deferred.
-> >=20
-> > Fixes: 2e12f536635f8 ("net: stmmac: dwmac-rk: Use standard devicetree p=
-roperty for phy regulator")
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> >  drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c | 11 ++++-------
-> >  1 file changed, 4 insertions(+), 7 deletions(-)
-> >=20
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/n=
-et/ethernet/stmicro/stmmac/dwmac-rk.c
-> > index 6fdad0f10d6f..d9deba110d4b 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
-> > @@ -1656,14 +1656,11 @@ static struct rk_priv_data *rk_gmac_setup(struc=
-t platform_device *pdev,
-> >  		}
-> >  	}
-> > =20
-> > -	bsp_priv->regulator =3D devm_regulator_get_optional(dev, "phy");
-> > +	bsp_priv->regulator =3D devm_regulator_get(dev, "phy");
-> >  	if (IS_ERR(bsp_priv->regulator)) {
-> > -		if (PTR_ERR(bsp_priv->regulator) =3D=3D -EPROBE_DEFER) {
-> > -			dev_err(dev, "phy regulator is not available yet, deferred probing\=
-n");
-> > -			return ERR_PTR(-EPROBE_DEFER);
-> > -		}
-> > -		dev_err(dev, "no regulator found\n");
-> > -		bsp_priv->regulator =3D NULL;
->=20
-> Does phy_power_on() need to be updated for this change?
-> F.e. Does the bsp_priv->regulator =3D=3D NULL still make sense?
+Regards,
+Luben
 
-Yes, it can be removed (but does not hurt). The regulator API
-returns NULL for devm_regulator_get when CONFIG_REGULATOR is
-not enabled. But regulator_enable/regulator_disable are just
-'return 0;' stubs for that case anyways.
+>  drivers/gpu/drm/scheduler/sched_entity.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
+> index 15d04a0ec623..e0a8890a62e2 100644
+> --- a/drivers/gpu/drm/scheduler/sched_entity.c
+> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
+> @@ -507,12 +507,19 @@ void drm_sched_entity_push_job(struct drm_sched_job *sched_job)
+>  {
+>  	struct drm_sched_entity *entity = sched_job->entity;
+>  	bool first;
+> +	ktime_t submit_ts;
+>  
+>  	trace_drm_sched_job(sched_job, entity);
+>  	atomic_inc(entity->rq->sched->score);
+>  	WRITE_ONCE(entity->last_user, current->group_leader);
+> +
+> +	/*
+> +	 * After the sched_job is pushed into the entity queue, it may be
+> +	 * completed and freed up at any time. We can no longer access it.
+> +	 * Make sure to set the submit_ts first, to avoid a race.
+> +	 */
+> +	sched_job->submit_ts = submit_ts = ktime_get();
+>  	first = spsc_queue_push(&entity->job_queue, &sched_job->queue_node);
+> -	sched_job->submit_ts = ktime_get();
+>  
+>  	/* first job wakes up scheduler */
+>  	if (first) {
+> @@ -529,7 +536,7 @@ void drm_sched_entity_push_job(struct drm_sched_job *sched_job)
+>  		spin_unlock(&entity->rq_lock);
+>  
+>  		if (drm_sched_policy == DRM_SCHED_POLICY_FIFO)
+> -			drm_sched_rq_update_fifo(entity, sched_job->submit_ts);
+> +			drm_sched_rq_update_fifo(entity, submit_ts);
+>  
+>  		drm_sched_wakeup(entity->rq->sched);
+>  	}
+> 
+> ---
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> change-id: 20230406-scheduler-uaf-2-44cf8faed245
+> 
+> Thank you,
+> ~~ Lina
+> 
 
--- Sebastian
-
-> > +		ret =3D PTR_ERR(bsp_priv->regulator);
-> > +		dev_err_probe(dev, ret, "failed to get phy regulator\n");
-> > +		return ERR_PTR(ret);
-> >  	}
-> > =20
-> >  	ret =3D of_property_read_string(dev->of_node, "clock_in_out", &string=
-s);
-> > --=20
-> > 2.39.2
-> >=20
->=20
-> --=20
-> To unsubscribe, send mail to kernel-unsubscribe@lists.collabora.co.uk.
-
---4mi6hilgokkjkgxj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQtu8sACgkQ2O7X88g7
-+ppRzA//QWUeFo5AdCjnToZr9ZTGZKoAOkYOoiXq5DvMYDdMSL6ibt8BGYJrSQ8/
-M792jDTc9YSAAF5vhzIjRlNaJsJVTZmFHXTuS6axvZTl/YwcyhnEpkTSEyf4YQCT
-Nh+BBl7Ie54dAAIgeowmcEwxnw736AIZczRCwjAz2/ZJm5WHXf2eXzTCifiav2V2
-ouTdJEfWiUn5/UJj+m1tbdbfRO+UWE+bASkEWNArhYi/5RcC1dMWElatorRxHz/0
-6aNaGmsRrC4XWETq/rpnvrDjDJO59NRpe43SkIiP5oB/HXb0MU6iAeuWtXbYr+G2
-i7qBELe4WT4Uiz48Nub0bguVZad86bkVg8T4+rTtli/JcTtX8g6ai0iMdvY59+ui
-y9B31VQD2KTupt5tU7wH10yvrS9KG9/c7qM2e4t1Iy7FuTtE2AaeFAdH85Wna+M/
-Sfm7qhcJBL7dSprzg84JUIw0akvLUnWi56YW5NcZFWLc5PU0si0rdh6lBKQf7GyB
-1VSseI4T37/ENwiyD359hkR3KHoK5fVzlkHacg3IBWd4KoUniJnnk39SPNPTeBEg
-57BSO1DykUFrVSIdVqEz1UE6NMs9L/qrm1XEl4W2rwLe20ROfBpN43T+r8yxg45u
-kw9DAyRKwsSzlMjaiUaDqisFn/rZIrlWD4AAz9Th/HK2vaJtUfU=
-=x7Bi
------END PGP SIGNATURE-----
-
---4mi6hilgokkjkgxj--
