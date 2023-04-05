@@ -2,108 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8866D8A9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274A26D8AAB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 00:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjDEWbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 18:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S233280AbjDEWdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 18:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDEWbf (ORCPT
+        with ESMTP id S232642AbjDEWcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 18:31:35 -0400
-Received: from alln-iport-1.cisco.com (alln-iport-1.cisco.com [173.37.142.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BA01721
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1370; q=dns/txt; s=iport;
-  t=1680733894; x=1681943494;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nODPX+s+Q/kJw5P5tL3y79XtWx5aevSrDkBNT3QoGeM=;
-  b=Wx22jJYy8Bo2D0CA/+jjEEHDdqtRfmrz2cT7P9lIHfiZAY+L0gvWlbwH
-   zGv4fvAALV9GePKFPVkwg15PlEt/OJrJ3IIISZQ7NWR58S2h25C6sPJzG
-   LA2Wh2P4D4YnLV0b8w1C8bggIeNaYaiDzmYu+ES3jdRAE2zRqCQT6fhHg
-   Q=;
-X-IronPort-AV: E=Sophos;i="5.98,322,1673913600"; 
-   d="scan'208";a="96032875"
-Received: from rcdn-core-11.cisco.com ([173.37.93.147])
-  by alln-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 05 Apr 2023 22:30:31 +0000
-Received: from localhost.localdomain ([10.160.65.27])
-        by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTP id 335MUSxJ031603;
-        Wed, 5 Apr 2023 22:30:30 GMT
-From:   Daniel Walker <danielwa@cisco.com>
-To:     - <xe-linux-external@cisco.com>
-Cc:     Marcin Wierzbicki <mawierzb@cisco.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Walker <dwalker@fifo99.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: cisco: document the CrayAR compatibles
-Date:   Wed,  5 Apr 2023 15:30:27 -0700
-Message-Id: <20230405223028.1268141-2-danielwa@cisco.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.160.65.27, [10.160.65.27]
-X-Outbound-Node: rcdn-core-11.cisco.com
-X-Spam-Status: No, score=-10.0 required=5.0 tests=DKIMWL_WL_HIGH,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 5 Apr 2023 18:32:45 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11911721
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 15:32:28 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id kp6-20020a170903280600b001a2945a7fdeso10778557plb.18
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 15:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680733948;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Gu2QsUrLzhWAeLzNTmiDWMuuwgGUJt5zdF3ZUZTfDtU=;
+        b=Ic1+NmDLa5hMPtGVT8+HebQhOzm+kEy+BqEiLEtn+OlCuFrgeenhk8Ei5IhgHP7PFO
+         eeER4W3YVU7OjGoXtDaRa2v00Q4mA4BRjRKbY+moqn9fUzpd9J3fOLNMEsAQwxZSmFAN
+         zEtXNk6jlku/4N0COH2zXWsx/euB+01q00epSAu0jyzLc2/sltspKE3bB6roHqVjtGqg
+         VzMHDk3si+DA6W8KXKy+W0gYsfEYxlU1JEAsppztBzx/e3ztJAFLGXUIzmY9i5iBOdlz
+         /2zB9ElbSyQs7GT/ZG774asZvNwjHOtnCVfMMPNi5dyMxANZV96RmdxXXumeB8Gon07o
+         jqsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680733948;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gu2QsUrLzhWAeLzNTmiDWMuuwgGUJt5zdF3ZUZTfDtU=;
+        b=xiwsSc2JL3t0lnvWPtl+8w/d9BdmilMEe/bOc8NA2EmYYUR+XB/JwmsmuDqMlIKHlg
+         PxP3hb3qHencG9M+xRoKpD1XFAQAsrZKzAG/fSjA/0Grp3ungT1I/XAXLN9O9bDJWG/A
+         BwcUwdnUx5WgWpoBda3DW5toZTvFZZtMkHBR0T/0rx+CjBv9ud4cHSIOQzNa8xajHEf+
+         kPvBdyV48eWOGqjH2sf35E+kklfKXGiCS+vbHEsm6zPaFsewgLqNVOnjmXmg3bU8tcQI
+         zOwhOSj59Z1yc+WHscdB7zevthvsuPGyv0dDNRPv/NIufch/5asvlT0QFiX5FTHn8ifh
+         18mw==
+X-Gm-Message-State: AAQBX9ccJPq0j0Q5v97iJS0V3dPa0H5KIimd3uaBCQwv832JQPmYqO+X
+        DsWfFuY0JFyAOhhPOdRBzryTeH0hdPY+Co2Dew==
+X-Google-Smtp-Source: AKy350bu8kP+l7JHrBlhgnLqNucEG6rtKm9issrnydB2heDAMrKaEZaVtTKV56Xmq1ks6MtG/TvZQI0fxIJ6Cse1xA==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a05:6a00:2313:b0:593:fcfb:208b with
+ SMTP id h19-20020a056a00231300b00593fcfb208bmr4149900pfh.3.1680733947764;
+ Wed, 05 Apr 2023 15:32:27 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 22:32:26 +0000
+In-Reply-To: <20230404082507.sbyfahwc4gdupmya@box.shutemov.name> (kirill@shutemov.name)
+Mime-Version: 1.0
+Message-ID: <diqzfs9e0xl1.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
+        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe the compatible properties for the Cisco CrayAR SoC.
 
-Cc: xe-linux-external@cisco.com
-Cc: Marcin Wierzbicki <mawierzb@cisco.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Signed-off-by: Daniel Walker <dwalker@fifo99.com>
----
- .../devicetree/bindings/arm/cisco/crayar.yaml | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/cisco/crayar.yaml
+Thanks for reviewing these patches!
 
-diff --git a/Documentation/devicetree/bindings/arm/cisco/crayar.yaml b/Documentation/devicetree/bindings/arm/cisco/crayar.yaml
-new file mode 100644
-index 000000000000..0ee4e6313ab0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/cisco/crayar.yaml
-@@ -0,0 +1,27 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/cisco/crayar.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cisco CrayAR based Platforms
-+
-+maintainers:
-+  - xe-linux-external@cisco.com
-+
-+description:
-+  Cisco CrayAR boards with CrayAR SOC
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+      - description: Cisco CrayAR Argos evaluation board
-+        items:
-+          - const: cisco,crayar-argos
-+          - const: cisco,crayar
-+
-+additionalProperties: true
-+
-+...
--- 
-2.25.1
+"Kirill A. Shutemov" <kirill@shutemov.name> writes:
 
+> On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
+
+>> ...
+
+>> +static int restrictedmem_create_on_user_mount(int mount_fd)
+>> +{
+>> +	int ret;
+>> +	struct fd f;
+>> +	struct vfsmount *mnt;
+>> +
+>> +	f = fdget_raw(mount_fd);
+>> +	if (!f.file)
+>> +		return -EBADF;
+>> +
+>> +	ret = -EINVAL;
+>> +	if (!is_mount_root(f.file))
+>> +		goto out;
+>> +
+>> +	mnt = f.file->f_path.mnt;
+>> +	if (!is_shmem_mount(mnt))
+>> +		goto out;
+>> +
+>> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+
+> Why MAY_EXEC?
+
+
+Christian pointed out that this check does not make sense, I'll be
+removing the entire check in the next revision.
+
+>> +	if (ret)
+>> +		goto out;
+>> +
+>> +	ret = mnt_want_write(mnt);
+>> +	if (unlikely(ret))
+>> +		goto out;
+>> +
+>> +	ret = restrictedmem_create(mnt);
+>> +
+>> +	mnt_drop_write(mnt);
+>> +out:
+>> +	fdput(f);
+>> +
+>> +	return ret;
+>> +}
+
+> We need review from fs folks. Look mostly sensible, but I have no
+> experience in fs.
+
+>> +
+>> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
+>> +{
+>> +	if (flags & ~RMFD_USERMNT)
+>> +		return -EINVAL;
+>> +
+>> +	if (flags == RMFD_USERMNT) {
+>> +		if (mount_fd < 0)
+>> +			return -EINVAL;
+>> +
+>> +		return restrictedmem_create_on_user_mount(mount_fd);
+>> +	} else {
+>> +		return restrictedmem_create(NULL);
+>> +	}
+
+> Maybe restructure with single restrictedmem_create() call?
+
+> 	struct vfsmount *mnt = NULL;
+
+> 	if (flags == RMFD_USERMNT) {
+> 		...
+> 		mnt = ...();
+> 	}
+
+> 	return restrictedmem_create(mnt);
+
+Will do so in the next revision.
+
+>> +}
+>> +
+>>   int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
+>>   		       struct restrictedmem_notifier *notifier, bool exclusive)
+>>   {
+>> --
+>> 2.40.0.348.gf938b09366-goog
