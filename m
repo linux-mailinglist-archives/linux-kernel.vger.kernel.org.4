@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726FB6D7890
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0676D788C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbjDEJjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
+        id S237230AbjDEJjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237250AbjDEJjR (ORCPT
+        with ESMTP id S236821AbjDEJi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:39:17 -0400
+        Wed, 5 Apr 2023 05:38:59 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10A6E45;
-        Wed,  5 Apr 2023 02:39:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAF41BCD;
+        Wed,  5 Apr 2023 02:38:43 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 92502EBEA7;
-        Wed,  5 Apr 2023 02:29:50 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id AADA2EBD85;
+        Wed,  5 Apr 2023 02:29:52 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XkIvBR3ZAw1f; Wed,  5 Apr 2023 02:29:49 -0700 (PDT)
+        with ESMTP id Gzx8Ou6BRyKA; Wed,  5 Apr 2023 02:29:52 -0700 (PDT)
 From:   Martin Kepplinger <martin.kepplinger@puri.sm>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1680686989; bh=J+SamVitwrn6CSgDX3gHlDODJDXG4R3njYfPnja5Jks=;
+        t=1680686991; bh=lBhbPCF1Y4hppeWsEQDV7v/uKE47NGMFGiQeVEMoCLI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RDNMOi4apUwBdA6TXv0o8U8+by8UsFv1XJ5M6skx4DGbgp2CDK461L5iRaVc4ww0J
-         M+/zQYDA6IR4BhqXlxvu+oFW3V5stI27gUa3cPeJFr5bY/P2xL8BAa+g6t32wQXjWT
-         kNjdPdJ0R0ALVZoUk35Fben1X5i3tBTAXGp9XkwXIf4nczOxVqnE6UuoCGxTya1pKx
-         g2erFkmlWiboKNeSe/lc/ZX9SIKPJp/V1Fs9Q6kz0OJObYtWT377N/tffdac+tpVYb
-         Ya1tiupdpMorc3npNqmBwARch79BffWirqR/H248dZnDumjArgkS2qmzqGruX+ZJRj
-         fJ+TU8dZw/kmg==
+        b=JZ+XhHgSha6aNpNiRwh5xIElof1z2G6wmwGi51ucJh2CJ9qjHisHZPxsLE4jkBEfw
+         SfUEPsUgz5dOm2W2GGcbO+Es8ZMt1IVVpfppavp/RU7Hv+kWU1Af8pfBGfVmuqGPDz
+         AYaWpxRxeEhJoHPBn7ZBxTBCXCye5EVupEkR+1BxzMa8XVwQvX2f1wUa5ZS/Kglz4u
+         boIAamlgQA4Ignb3b+ZD9FUtHmMTh2sHOGGL/Ritg/b8uBgSU4YRUPw1ZAMXTAPG9i
+         4vehL5AdeDjPhgyi93ZmgGkHgsoF4scrXwhpY6GM4dxXycNQDI0hJLD+llVTZaSAcV
+         hb1U/XgGYEx6Q==
 To:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     kernel@puri.sm, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Martin Kepplinger <martin.kepplinger@puri.sm>
-Subject: [PATCH v1 1/2] media: hi846: fix usage of pm_runtime_get_if_in_use()
-Date:   Wed,  5 Apr 2023 11:29:03 +0200
-Message-Id: <20230405092904.1129395-2-martin.kepplinger@puri.sm>
+Subject: [PATCH v1 2/2] media: hi846: preserve the streaming state during system suspend
+Date:   Wed,  5 Apr 2023 11:29:04 +0200
+Message-Id: <20230405092904.1129395-3-martin.kepplinger@puri.sm>
 In-Reply-To: <20230405092904.1129395-1-martin.kepplinger@puri.sm>
 References: <20230405092904.1129395-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
@@ -51,33 +51,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pm_runtime_get_if_in_use() does not only return nonzero values when
-the device is in use, it can return a negative errno too.
+The hi846 driver changed the "streaming" state inside of "start/stop_streaming".
+The problem is that inside of the (system) suspend callback, it calls
+"stop_streaming" unconditionally. So streaming would always be stopped
+when suspending.
 
-And especially during resuming from system suspend, when runtime pm
-is not yet up again, this can very well happen. And in such a case
-the subsequent pm_runtime_put() call would result in a refcount underflow!
+That makes sense with runtime pm for example, after s_stream(..., 0) but
+does not preserve the "streaming" state during system suspend when
+currently streaming.
 
-Fix it by correctly using pm_runtime_get_if_in_use().
+Fix this by simply setting the streaming state outside of "start/stop_streaming"
+which is s_stream().
+
+While at it, improve things a bit by not assigning "1", but the "enable"
+value we later compare against, and fix one error handling path in resume().
 
 Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 ---
- drivers/media/i2c/hi846.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/hi846.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
-index 5b5ea5425e984..0b0eda2e223cd 100644
+index 0b0eda2e223cd..1ca6e9407d618 100644
 --- a/drivers/media/i2c/hi846.c
 +++ b/drivers/media/i2c/hi846.c
-@@ -1544,7 +1544,7 @@ static int hi846_set_ctrl(struct v4l2_ctrl *ctrl)
- 					 exposure_max);
+@@ -1780,8 +1780,6 @@ static int hi846_start_streaming(struct hi846 *hi846)
+ 		return ret;
  	}
  
--	if (!pm_runtime_get_if_in_use(&client->dev))
-+	if (pm_runtime_get_if_in_use(&client->dev) <= 0)
- 		return 0;
+-	hi846->streaming = 1;
+-
+ 	dev_dbg(&client->dev, "%s: started streaming successfully\n", __func__);
  
- 	switch (ctrl->id) {
+ 	return ret;
+@@ -1793,8 +1791,6 @@ static void hi846_stop_streaming(struct hi846 *hi846)
+ 
+ 	if (hi846_write_reg(hi846, HI846_REG_MODE_SELECT, HI846_MODE_STANDBY))
+ 		dev_err(&client->dev, "failed to stop stream");
+-
+-	hi846->streaming = 0;
+ }
+ 
+ static int hi846_set_stream(struct v4l2_subdev *sd, int enable)
+@@ -1816,10 +1812,12 @@ static int hi846_set_stream(struct v4l2_subdev *sd, int enable)
+ 		}
+ 
+ 		ret = hi846_start_streaming(hi846);
++		hi846->streaming = enable;
+ 	}
+ 
+ 	if (!enable || ret) {
+ 		hi846_stop_streaming(hi846);
++		hi846->streaming = 0;
+ 		pm_runtime_put(&client->dev);
+ 	}
+ 
+@@ -1898,6 +1896,8 @@ static int __maybe_unused hi846_resume(struct device *dev)
+ 		if (ret) {
+ 			dev_err(dev, "%s: start streaming failed: %d\n",
+ 				__func__, ret);
++			hi846_stop_streaming(hi846);
++			hi846->streaming = 0;
+ 			goto error;
+ 		}
+ 	}
 -- 
 2.30.2
 
