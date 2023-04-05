@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F11F6D7FA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8FA6D7FAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjDEOf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S237682AbjDEOgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238585AbjDEOfw (ORCPT
+        with ESMTP id S237940AbjDEOgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:35:52 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABFC5BA2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-        s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=O9qsVtudALGLwqSWlwx8JyfCo7w9dKtcJnZOpk30+nw=; b=DlpY8ALDzRkY0Vd0u7yzQs9LBV
-        DC4fFC4CeukD3NGMmBYbSYKvhL5vs6+gluzjxdbJJYS8qkqMVf2e6l1kJL5FVuguQlSobqOfKsZv8
-        ZjU/b6w3IHbk+oRtP6KcNUUh/BMoqx0TqGhk+4Y5H56ai4OrRRO5iZOlhTiRh4BPsNNjiiU/VrsHI
-        O/Er5z6QZnS4d9njvu5hZQvhH7R7fPGcaAXPy225LYBFmJrjsqz4QDm4I9pvjchaI4opd6K1nHL0Q
-        DA9ztU9XQBYB1xUfPP+OeyQv9FDIHGq6lxXk4mQKtUVXjZD3P9FI/wyBfVoXMBqdS2Kx57PMDna8M
-        ZM1qSofQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www381.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <lars@metafoo.de>)
-        id 1pk4EU-0005ur-Gg; Wed, 05 Apr 2023 16:35:30 +0200
-Received: from [2604:5500:c0e5:eb00:da5e:d3ff:feff:933b]
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1pk4EU-0009WK-50; Wed, 05 Apr 2023 16:35:30 +0200
-Message-ID: <f57b8e3d-4382-015e-743b-8663c55d9f84@metafoo.de>
-Date:   Wed, 5 Apr 2023 07:35:28 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: iio: ad7192: Pending IRQ on SDO/RDY causing retrigger of
- interrupt handler and missing every sample
-Content-Language: en-US
-To:     =?UTF-8?Q?Nuno_S=c3=a1?= <noname.nuno@gmail.com>,
-        Fabrizio Lamarque <fl.scratchpad@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-References: <CAPJMGm4GaSjD6bdqMwCr2EVZGenWzT-nCCf3BMRaD1TSfAabpA@mail.gmail.com>
- <6d58a58cd7e8a7cbb91b2658e9a85b44b34b64dc.camel@gmail.com>
- <CAPJMGm5WxnmtyW2DnZe4rSUFJ-KtKGmNsf7pStcaK=4suBHWuw@mail.gmail.com>
- <3c5f31cf533ef26ea586e2d18b31995541a95411.camel@gmail.com>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-In-Reply-To: <3c5f31cf533ef26ea586e2d18b31995541a95411.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26866/Wed Apr  5 09:23:41 2023)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 5 Apr 2023 10:36:53 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410AC30CD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:36:46 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id z4-20020a25bb04000000b00b392ae70300so35889402ybg.21
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 07:36:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680705405;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RWivmQTSE7fXCajVfyJAnAM0Fpds1MOJIBUOFkpZKxM=;
+        b=kggaAQUE346YPq4F5Egzxk9gnUAUBuyU9eRijnJTa16NS9m5MPPr5LYT8UaGGH/cdf
+         IHQln9rwwqV9rdfN3kkWvwCBg1+p0+HxNriWaYcGxMslx9+/6ihwBOKb1B/jhjeZ6HZe
+         /sIS9gFJqkscK3rkuWZSIqQfyLIexGTtiF9e/ggd469qc1hK0Wp4RXWB5FlXCUThTqsC
+         ZnKRDMK97Fw9uxDXFCICbN88pk+oEtahhcJ595Xcp87qTpuVk9/ZxpEqx9T10Ownafuu
+         xrAcPnUvWE9aWCA3bR9xOOEh2tYKOsjYy8zbE2z5I5dkFBT0zzNPdWJwMVA72gQ3bp1+
+         bkuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680705405;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RWivmQTSE7fXCajVfyJAnAM0Fpds1MOJIBUOFkpZKxM=;
+        b=LbgnxlxxFg7mHcbIWAGmwfzC0/Cg37cnx4QP2xbvqJVicsEONtN5TPMD5lKQZJcuOD
+         CwECeyZ5xZh0gf48iDqcAY8q7ytCPW0BBpNFBzFs0cCGDGNJHWtP6InHhMGRSYk1ztIE
+         MQOSkwtE/k37ZCRQkKDxq1DTihkHlt6HeJoGTQA5ZnmmNT9Zz/r/56Vu9amRH4pZGzck
+         7XxM3wqnhelNd14v/whOVmOlYFFFaowP/02Dry7ejHfgnA9bzwhmYSacBmcGl0XkQ+C2
+         d7hRgZLhjwK3QTgZ68WrKMyZvQnd87hUUox4HdRRqtzyZSHuchNA5aQtRJyvYoElYMr9
+         ri/w==
+X-Gm-Message-State: AAQBX9d2fmlujmqOMfT8mqZC3EG1paR/gXg4wU4eBDpfRUt6DkiOqxIy
+        gdWen0yCiu0aruo/QyYqk9KxZMwAvMc=
+X-Google-Smtp-Source: AKy350Z1dNW+aToDyrzxNFqh4wc1xDAYoEZD2hNl0NzK1mj47aj/7EWCL/Y2XMuGzAaiEyKX1syzZjmJR+Q=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:ccd3:0:b0:b31:34ab:5ca0 with SMTP id
+ l202-20020a25ccd3000000b00b3134ab5ca0mr3705641ybf.11.1680705405554; Wed, 05
+ Apr 2023 07:36:45 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 07:36:44 -0700
+In-Reply-To: <a1ed2308-b521-14c0-a118-19c1afffd1d6@grsecurity.net>
+Mime-Version: 1.0
+References: <20230405002608.418442-1-seanjc@google.com> <a1ed2308-b521-14c0-a118-19c1afffd1d6@grsecurity.net>
+Message-ID: <ZC2HfNLa7sLewJtl@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Refresh CR0.WP prior to checking for
+ emulated permission faults
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/23 06:49, Nuno Sá wrote:
-> [...]
-> I just tested the patch, but, at least on the platform I'm working on
-> (I.MX6), it does not
-> solve the issue.
-> Whereas the thread describes the very same issue I am experiencing, I
-> am not sure
-> IRQ_DISABLE_UNLAZY would have any impact. By reading CPU registers I see
-> I was expecting to have. AFAIU, the lazy approach would be the responsible for
-> this behavior because when you call disable_irq() it does not really mask the
-> IRQ in HW. Just marks it as disabled and if another IRQ event comes set's it to
-> PENDING and only then masks at HW level... If we "unlazy" the IRQ, we should
-> mask the IRQ right away so I would expect not to have any pending IRQ...
->
->> the IRQ line disabled at the hardware level, but when the IRQ flag of
->> the processor
->> is set (and this happens even if the interrupt is masked in HW), the
->> interrupt is immediately
->> triggered anyway.
->> (I see GPIOx_IMR cleared, so interrupt is masked, but GPIOx_ISR set. As soon
->> as
->> enable_irq() is called the interrupt is triggered. Just by clearing
->> GPIOx_ISR before
->> enable_irq() solves the issue. I might share a few debug printk).
+On Wed, Apr 05, 2023, Mathias Krause wrote:
+> On 05.04.23 02:26, Sean Christopherson wrote:
+> > +void __kvm_mmu_refresh_passthrough_bits(struct kvm_vcpu *vcpu,
+> > +					struct kvm_mmu *mmu)
+> > +{
+> > +	const bool cr0_wp =3D kvm_is_cr0_bit_set(vcpu, X86_CR0_WP);
+> > +
+> > +	BUILD_BUG_ON((KVM_MMU_CR0_ROLE_BITS & KVM_POSSIBLE_CR0_GUEST_BITS) !=
+=3D X86_CR0_WP);
+>=20
+> > +	BUILD_BUG_ON((KVM_MMU_CR4_ROLE_BITS & KVM_POSSIBLE_CR4_GUEST_BITS));
+>=20
+> Just curious, this should assert that we don't run into similar issues
+> if we make more bits of CR4 guest owned?
 
-This sounds to me that the GPIO driver should implement an 
-`irq_enable()` callback where it clears the pending bits before 
-unmasking. This is consistent with what other GPIO IRQ drivers do.
+Yes?  I'm not sure what you're asking.  BUILD_BUG_ON() is a just more flexi=
+ble
+version of stiatic_assert(); it only requires that the inputs be compile-ti=
+me
+constants, not purely "static".
+
+he above throws an error at compile-time if there is new overlap between th=
+e
+CR{0,4} MMU role bits and the possible guest-owned bits.  E.g. adding SMEP =
+to the
+possible guest-owned CR4 bits yields:
+
+arch/x86/kvm/mmu/mmu.c: In function =E2=80=98__kvm_mmu_refresh_passthrough_=
+bits=E2=80=99:
+include/linux/compiler_types.h:397:45: error: call to =E2=80=98__compiletim=
+e_assert_1564=E2=80=99
+ declared with attribute error: BUILD_BUG_ON failed: (KVM_MMU_CR4_ROLE_BITS=
+ & KVM_POSSIBLE_CR4_GUEST_BITS)
+  397 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |                                             ^
+include/linux/compiler_types.h:378:25: note: in definition of macro =E2=80=
+=98__compiletime_assert=E2=80=99
+  378 |                         prefix ## suffix();                        =
+     \
+      |                         ^~~~~~
+include/linux/compiler_types.h:397:9: note: in expansion of macro =E2=80=98=
+_compiletime_assert=E2=80=99
+  397 |         _compiletime_assert(condition, msg, __compiletime_assert_, =
+__COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:39:37: note: in expansion of macro =E2=80=98compi=
+letime_assert=E2=80=99
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg=
+)
+      |                                     ^~~~~~~~~~~~~~~~~~
+include/linux/build_bug.h:50:9: note: in expansion of macro =E2=80=98BUILD_=
+BUG_ON_MSG=E2=80=99
+   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condit=
+ion)
+      |         ^~~~~~~~~~~~~~~~
+arch/x86/kvm/mmu/mmu.c:5191:9: note: in expansion of macro =E2=80=98BUILD_B=
+UG_ON=E2=80=99
+ 5191 |         BUILD_BUG_ON((KVM_MMU_CR4_ROLE_BITS & KVM_POSSIBLE_CR4_GUES=
+T_BITS));
+      |         ^~~~~~~~~~~~
+scripts/Makefile.build:252: arch/x86/kvm/mmu/mmu.o] Error 1
 
