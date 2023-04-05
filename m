@@ -2,224 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33FE6D81FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075B36D8206
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 17:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbjDEPdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 11:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
+        id S238748AbjDEPew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 11:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237929AbjDEPdn (ORCPT
+        with ESMTP id S238770AbjDEPes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 11:33:43 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABEE83
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 08:33:42 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id ga7so35361580qtb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 08:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1680708821;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JAA83h3rMO9yiss39MIEuvqUfO0ThiaUitzgjnYkq/E=;
-        b=VFVjB+wajJZwttZLFmf3dH6GInBwfa6fgjRbdG4XHeLh8yVA+kDknIw516FXMYv7gX
-         SF45vZdirh06fUl+obsZmsZTMVmlK3sbHEmnLMLrlinCZvBHyOK6D00LTyFid2/Uenpx
-         JCdm/5J2HOw2ZLn0wL7sWdFccemN8yuW2S5qA5BbzbpVvN4eMI3j0CSfFH1zA50mzVN9
-         oSYsv5JvTyg7SDNQMP4nIj9xHu3oeIuYxX+KWDQvTkvKvb1XMedpjmvky27E4AAoGSAt
-         mz3tgDEDM+lt1ipLb9cut24IDz8vWCXeoYiDQximUhIrfv8S4C149xyyu40wmuYsn0Qj
-         AJsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680708821;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JAA83h3rMO9yiss39MIEuvqUfO0ThiaUitzgjnYkq/E=;
-        b=epprPSiTSyELbXQkiBwmSB0saUlYu1PUEVl8X/9dnOjSwbS98AaeapaSwxRnriZ4B7
-         Xz4cmSclZi1PraCfFAdSr004FPEjt/ZKUQPo9ZIeslWok/J81fcLqcvFIZ8MmLPFKJpE
-         6fK3pGFapL0ozyxJkhwQYAi/LM9CFi39MjUaV01V1tU8yMAv07C6LR2l1t2tUQbiXKht
-         7WX0T795uwL2Y6viAXSWSil7FU5PaF3SIRD1xn8OtuzEQkfQ2FFxq4ovQv0CNPqIPF60
-         1QdBsajTSSgbSjMwOywODlASgDc0yEbz8gdqNI07dpG2FfmO+va6G985HQ9i65s5Pmv2
-         pNuQ==
-X-Gm-Message-State: AAQBX9dWAlV3t1qZIyLwNiTov2/RyBJ4eehdq6aKctbCqUVEwlQZHuPw
-        b2ph5lwnz0j9T/Cysp4QvcqJYQ==
-X-Google-Smtp-Source: AKy350ZL3doRQBP2nu8UnusnIpVB12rSuYq2Qlw6uZRfd0UNr5PXOWG51ep5iSgydRWgvN5Ch/fdtw==
-X-Received: by 2002:a05:622a:1749:b0:3e3:86d4:5df0 with SMTP id l9-20020a05622a174900b003e386d45df0mr5606985qtk.55.1680708821401;
-        Wed, 05 Apr 2023 08:33:41 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id 84-20020a370a57000000b007422fa6376bsm4500271qkk.77.2023.04.05.08.33.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 08:33:40 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pk58m-007MHn-08;
-        Wed, 05 Apr 2023 12:33:40 -0300
-Date:   Wed, 5 Apr 2023 12:33:39 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Nipun Gupta <nipun.gupta@amd.com>
-Cc:     alex.williamson@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, git@amd.com, harpreet.anand@amd.com,
-        michal.simek@amd.com
-Subject: Re: [PATCH] vfio/cdx: add support for CDX bus
-Message-ID: <ZC2U0/v0toRVSWhf@ziepe.ca>
-References: <20230403142525.29494-1-nipun.gupta@amd.com>
+        Wed, 5 Apr 2023 11:34:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68244E64;
+        Wed,  5 Apr 2023 08:34:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E08EC63E21;
+        Wed,  5 Apr 2023 15:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7C9C433EF;
+        Wed,  5 Apr 2023 15:34:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680708886;
+        bh=q6hazTR3zs7E7OVM3zxpzK5DagX6jtQENEamOL0SGKU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mlbEhXatZkXJ9X7FsGvPf2rH95VpY5tOnyIMJWR/0y9to3LuusuWOEW94RzKcDlKg
+         HsFf5CsPOKukH8P5uoSP2Z0JlxMdLwy9OxF/8G86S5WBCQNQtEOwVMDqSea8cvrsDU
+         564oj+TiTuatTLbxixAITrHG3+c5+iQ5kEWuaj8LLDEFmeZMfABdscXZNA/eAMWJAk
+         0YkRM5fCov8t3qCX2aBvV3kmH3qO4N9tKQnMqdz4QY5qygfyDOUcQlTmMnAu3at4ih
+         jXuoUGUjvrX+RS3OfX29rQcD6mKS146C1VyprHv8nlDm6+/mgIZ+D1r/IpS6sIO5UV
+         4+HTzWQ25QIJA==
+Date:   Wed, 5 Apr 2023 16:34:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 43/65] ASoC: tlv320aic32x4: Add a determine_rate hook
+Message-ID: <fcc11e4d-eba6-4eff-b3e5-9488a4da84c3@sirena.org.uk>
+References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
+ <20221018-clk-range-checks-fixes-v3-43-9a1358472d52@cerno.tech>
+ <01f32440-8dd2-4030-9006-a3123be55845@sirena.org.uk>
+ <erm4iq3mygnrr4h2gd5cag3sfuovv47ibdqsbmxcfabngvnwy4@z63ksvj55zuu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rWy5+BLE6plJ+54H"
 Content-Disposition: inline
-In-Reply-To: <20230403142525.29494-1-nipun.gupta@amd.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <erm4iq3mygnrr4h2gd5cag3sfuovv47ibdqsbmxcfabngvnwy4@z63ksvj55zuu>
+X-Cookie: 1 bulls, 3 cows.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 07:55:25PM +0530, Nipun Gupta wrote:
 
-> +enum {
-> +	CDX_ID_F_VFIO_DRIVER_OVERRIDE = 1,
-> +};
+--rWy5+BLE6plJ+54H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This seems to be missing the file2alias part.
+On Wed, Apr 05, 2023 at 05:17:21PM +0200, Maxime Ripard wrote:
+> On Tue, Apr 04, 2023 at 04:26:18PM +0100, Mark Brown wrote:
 
-> +static void vfio_cdx_regions_cleanup(struct vfio_cdx_device *vdev)
-> +{
-> +	kfree(vdev->regions);
-> +}
-> +
-> +static int vfio_cdx_reset_device(struct vfio_cdx_device *vdev)
-> +{
-> +	return cdx_dev_reset(&vdev->cdx_dev->dev);
-> +}
+> > To be honest it's surprising that we'd have to manually specify this, I
+> > would expect to be able to reparent.  I suspect it'd be better to go the
+> > other way here and allow reparenting.
 
-Wrapper functions should be avoided.
+> Yeah, I think I'd prefer to allow reparenting too, but as can be seen
+> from the other reviewers in that thread, it seems like we have a very
+> split community here, so that doesn't sound very realistic without some
+> major pushback :)
 
-> +static void vfio_cdx_close_device(struct vfio_device *core_vdev)
-> +{
-> +	struct vfio_cdx_device *vdev =
-> +		container_of(core_vdev, struct vfio_cdx_device, vdev);
-> +	int ret;
-> +
-> +	vfio_cdx_regions_cleanup(vdev);
-> +
-> +	/* reset the device before cleaning up the interrupts */
-> +	ret = vfio_cdx_reset_device(vdev);
-> +	if (WARN_ON(ret))
-> +		dev_warn(core_vdev->dev,
-> +			 "VFIO_CDX: reset device has failed (%d)\n", ret);
+For these ASoC drivers I think we should just do the reparenting,
+they're very much at the leaf of the tree so the considerations that
+make it a problem sometimes are unlikely to apply.
 
-This is pretty problematic.. if the reset can fail the device is
-returned to the system in an unknown state and it seems pretty likely
-that it can be a way to attack the kernel.
+--rWy5+BLE6plJ+54H
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +	case VFIO_DEVICE_RESET:
-> +	{
-> +		return vfio_cdx_reset_device(vdev);
-> +	}
+-----BEGIN PGP SIGNATURE-----
 
-What happens to MMIO access during this reset?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQtlQYACgkQJNaLcl1U
+h9B5kwgAhgnq7R11Qu+B0UHvMPR+YuXSbduHynE7TqBLfStAOBSo1K13PASgQaa9
+wrmguaiF0D05AzsDdSViUh7jt1zNtO3da+OYl8oXujrIbMZbGni9L/fGVLPLH9LH
+S4EKLVYbDM7dTpVx0aDXvlVCYW21kOHRWWv/J6PmtESnjJOfnQGHe3Xs1h8ZgovN
+olevNVv7bIIBbK+syW2trg9ueeQFhIP8zFvA7seKaKplyJQN6b6ZBpF5/0RIVobC
+9KooGdA4p3nEKzSBi+TYDZL/NYxlB7m/Y8nMussyk40gnvHmlVGYXLA0nVd3MP6U
+GEwYUUby6V7fvlt7mTxduZug5WAoPQ==
+=MZpO
+-----END PGP SIGNATURE-----
 
-> +static int vfio_cdx_mmap_mmio(struct vfio_cdx_region region,
-> +			      struct vm_area_struct *vma)
-> +{
-> +	u64 size = vma->vm_end - vma->vm_start;
-> +	u64 pgoff, base;
-> +
-> +	pgoff = vma->vm_pgoff &
-> +		((1U << (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT)) - 1);
-> +	base = pgoff << PAGE_SHIFT;
-> +
-> +	if (region.size < PAGE_SIZE || base + size > region.size)
-> +		return -EINVAL;
-> +
-> +	vma->vm_pgoff = (region.addr >> PAGE_SHIFT) + pgoff;
-> +	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
-
-pgprot_device
-
-> +	return remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
-> +			       size, vma->vm_page_prot);
-
-io_remap_pfn_range
-> +static int vfio_cdx_mmap(struct vfio_device *core_vdev,
-> +			 struct vm_area_struct *vma)
-> +{
-> +	struct vfio_cdx_device *vdev =
-> +		container_of(core_vdev, struct vfio_cdx_device, vdev);
-> +	struct cdx_device *cdx_dev = vdev->cdx_dev;
-> +	unsigned int index;
-> +
-> +	index = vma->vm_pgoff >> (VFIO_CDX_OFFSET_SHIFT - PAGE_SHIFT);
-> +
-> +	if (vma->vm_end < vma->vm_start)
-> +		return -EINVAL;
-> +	if (vma->vm_start & ~PAGE_MASK)
-> +		return -EINVAL;
-> +	if (vma->vm_end & ~PAGE_MASK)
-> +		return -EINVAL;
-
-The core code already assures these checks.
-
-> +	if (!(vma->vm_flags & VM_SHARED))
-> +		return -EINVAL;
-> +	if (index >= cdx_dev->res_count)
-> +		return -EINVAL;
-> +
-> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_MMAP))
-> +		return -EINVAL;
-> +
-> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_READ) &&
-> +	    (vma->vm_flags & VM_READ))
-> +		return -EINVAL;
-> +
-> +	if (!(vdev->regions[index].flags & VFIO_REGION_INFO_FLAG_WRITE) &&
-> +	    (vma->vm_flags & VM_WRITE))
-> +		return -EINVAL;
-> +
-> +	vma->vm_private_data = cdx_dev;
-
-not needed
-
-> diff --git a/drivers/vfio/cdx/vfio_cdx_private.h b/drivers/vfio/cdx/vfio_cdx_private.h
-> new file mode 100644
-> index 000000000000..8b6f1ee3f5cd
-> --- /dev/null
-> +++ b/drivers/vfio/cdx/vfio_cdx_private.h
-> @@ -0,0 +1,32 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
-> + */
-> +
-> +#ifndef VFIO_CDX_PRIVATE_H
-> +#define VFIO_CDX_PRIVATE_H
-> +
-> +#define VFIO_CDX_OFFSET_SHIFT    40
-> +#define VFIO_CDX_OFFSET_MASK (((u64)(1) << VFIO_CDX_OFFSET_SHIFT) - 1)
-> +
-> +#define VFIO_CDX_OFFSET_TO_INDEX(off) ((off) >> VFIO_CDX_OFFSET_SHIFT)
-> +
-> +#define VFIO_CDX_INDEX_TO_OFFSET(index)	\
-> +	((u64)(index) << VFIO_CDX_OFFSET_SHIFT)
-
-use static inlines for function-line macros
-
-> +struct vfio_cdx_region {
-> +	u32			flags;
-> +	u32			type;
-> +	u64			addr;
-> +	resource_size_t		size;
-> +	void __iomem		*ioaddr;
-> +};
-> +
-> +struct vfio_cdx_device {
-> +	struct vfio_device	vdev;
-> +	struct cdx_device	*cdx_dev;
-> +	struct device		*dev;
-> +	struct vfio_cdx_region	*regions;
-> +};
-
-This header file does not seem necessary right now
-
-Jason
+--rWy5+BLE6plJ+54H--
