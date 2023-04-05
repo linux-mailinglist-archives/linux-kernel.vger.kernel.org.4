@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEBF6D8702
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFF56D8703
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbjDETiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S234191AbjDETiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234120AbjDEThj (ORCPT
+        with ESMTP id S233978AbjDEThr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:37:39 -0400
+        Wed, 5 Apr 2023 15:37:47 -0400
 Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3B17D80
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:37:18 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 19:36:40 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AB47ED3;
+        Wed,  5 Apr 2023 12:37:23 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 19:36:46 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680723416; x=1680982616;
-        bh=gdEIW+2bBi1IvDlMbXGasea4+ibnJ2p7QwfZLUN+zQA=;
+        s=protonmail3; t=1680723420; x=1680982620;
+        bh=1WSR+3j5APk6WFOfsZYaDLZ1ObxYh9T91Sr8wPbfRw8=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=vseFoYZ2AedjxwlXJ3fIjHnHGUIujb/axlbQHpdZbxcvkaslLN1WTFsA7YM3LB858
-         pvGizao1DJjhKyBl5p537z73NOCdj8QKKV0wxa8vDj1p/P/N1pwYEIsvwH95IH7M/i
-         7atH4Ra2gTX00vff6+oQkXRiBbmAYenT3MLkzkdvZfo83e5cbHej45umedVd5CMw6T
-         5vJGlDEJGGHciHru9A9lR0u5EV/UFjCLbaQywYwQhX6KaWBvFsUG/jIsucCcbFqjq6
-         qxMaxldA43c/Qj2lugQvRJGBBbu1/HQPdMJy/sTz4tnKDF8AD1em+wG2NUQ8pepM39
-         GsZn59T03sAjg==
+        b=gIAC/mOOQsrGPHeH8MWVmjbtNZMWpl3fvw6wzhswjwD+kTxKAikOdGjIYqZrgiDgO
+         cLnku8pMSgkAr8LUUqTiNG/rkTYdzlNTIE++lzbtQ9FAbxeopU7Umzk4u71AiRIvUj
+         nGKHGH6DrAnFJ6AXx43be8qId2ZEpaPMxfF0gSL8+YVtzWbNoRbs03z7OOmPjEyZmW
+         rc4bPNouOWn3BwYCL4Qm9AMu1duo8VES6XU5zR6NeZqs4uzIqjNgp0j+v6Iov68jU3
+         OTmUHo0uZzeYjLKSP9htEdL/0CdLwjEE0H48tNPLaWZIrA20VdgUoRPvqMZHoBQZRZ
+         FRiZxNv92S3eg==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,8 +39,8 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
         Alice Ryhl <aliceryhl@google.com>,
         Andreas Hindborg <a.hindborg@samsung.com>
-Subject: [PATCH v6 12/15] rust: prelude: add `pin-init` API items to prelude
-Message-ID: <20230405193445.745024-13-y86-dev@protonmail.com>
+Subject: [PATCH v6 13/15] rust: types: add common init-helper functions for `Opaque`
+Message-ID: <20230405193445.745024-14-y86-dev@protonmail.com>
 In-Reply-To: <20230405193445.745024-1-y86-dev@protonmail.com>
 References: <20230405193445.745024-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -57,43 +57,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add `pin-init` API macros and traits to the prelude.
+Add helper functions to more easily initialize `Opaque<T>` via FFI and
+rust raw initializer functions.
+These functions take a function pointer to the FFI/raw initialization
+function and take between 0-4 other arguments. It then returns an
+initializer that uses the FFI/raw initialization function along with the
+given arguments to initialize an `Opaque<T>`.
 
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Reviewed-by: Gary Guo <gary@garyguo.net>
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
+Cc: Gary Guo <gary@garyguo.net>
 ---
- rust/kernel/prelude.rs | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ rust/kernel/init.rs  |  9 +++++++++
+ rust/kernel/types.rs | 47 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 56 insertions(+)
 
-diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-index 0bc1c97e5604..fcdc511d2ce8 100644
---- a/rust/kernel/prelude.rs
-+++ b/rust/kernel/prelude.rs
-@@ -18,7 +18,7 @@ pub use core::pin::Pin;
- pub use alloc::{boxed::Box, vec::Vec};
+diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
+index ffd539e2f5ef..a501fb823ae9 100644
+--- a/rust/kernel/init.rs
++++ b/rust/kernel/init.rs
+@@ -177,6 +177,14 @@
+ //! }
+ //! ```
+ //!
++//! For the special case where initializing a field is a single FFI-functi=
+on call that cannot fail,
++//! there exist helper functions [`Opaque::ffi_init`]. These functions ini=
+tialize a single
++//! [`Opaque`] field by just delegating to the FFI-function. You can use t=
+hese in combination with
++//! [`pin_init!`].
++//!
++//! For more information on how to use [`pin_init_from_closure()`], take a=
+ look at the uses inside
++//! the `kernel` crate. The [`sync`] module is a good starting point.
++//!
+ //! [`sync`]: kernel::sync
+ //! [pinning]: https://doc.rust-lang.org/std/pin/index.html
+ //! [structurally pinned fields]:
+@@ -187,6 +195,7 @@
+ //! [`impl PinInit<T, E>`]: PinInit
+ //! [`impl Init<T, E>`]: Init
+ //! [`Opaque`]: kernel::types::Opaque
++//! [`Opaque::ffi_init`]: kernel::types::Opaque::ffi_init
+ //! [`pin_data`]: ::macros::pin_data
 
- #[doc(no_inline)]
--pub use macros::{module, vtable};
-+pub use macros::{module, pin_data, pinned_drop, vtable};
+ use crate::{
+diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+index ff2b2fac951d..dbfae9bb97ce 100644
+--- a/rust/kernel/types.rs
++++ b/rust/kernel/types.rs
+@@ -2,6 +2,7 @@
 
- pub use super::build_assert;
+ //! Kernel types.
 
-@@ -27,8 +27,12 @@ pub use super::build_assert;
- pub use super::dbg;
- pub use super::{pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, pr=
-_notice, pr_warn};
++use crate::init::{self, PinInit};
+ use alloc::boxed::Box;
+ use core::{
+     cell::UnsafeCell,
+@@ -248,6 +249,52 @@ impl<T> Opaque<T> {
+     }
+ }
 
-+pub use super::{init, pin_init, try_init, try_pin_init};
++macro_rules! opaque_init_funcs {
++    ($($abi:literal $name:ident($($arg_name:ident: $arg_typ:ident),*);)*) =
+=3D> {
++        impl<T> Opaque<T> {
++            $(
++                /// Create an initializer using the given initializer func=
+tion.
++                ///
++                /// # Safety
++                ///
++                /// The given function **must** under all circumstances in=
+itialize the memory
++                /// location to a valid `T`. If it fails to do so it resul=
+ts in UB.
++                ///
++                /// If any parameters are given, those need to be valid fo=
+r the function. Valid
++                /// means that calling the function with those parameters =
+complies with the above
++                /// requirement **and** every other requirement on the fun=
+ction itself.
++                pub unsafe fn $name<$($arg_typ),*>(
++                    init_func: unsafe extern $abi fn(*mut T $(, $arg_typ)*=
+),
++                    $($arg_name: $arg_typ,)*
++                ) -> impl PinInit<Self> {
++                    // SAFETY: The safety contract of this function ensure=
+s that `init_func` fully
++                    // initializes `slot`.
++                    unsafe {
++                        init::pin_init_from_closure(move |slot| {
++                            init_func(Self::raw_get(slot) $(, $arg_name)*)=
+;
++                            Ok(())
++                        })
++                    }
++                }
++            )*
++        }
++    }
++}
 +
- pub use super::static_assert;
-
- pub use super::error::{code::*, Error, Result};
-
- pub use super::{str::CStr, ThisModule};
++opaque_init_funcs! {
++    "C" ffi_init();
++    "C" ffi_init1(arg1: A1);
++    "C" ffi_init2(arg1: A1, arg2: A2);
++    "C" ffi_init3(arg1: A1, arg2: A2, arg3: A3);
++    "C" ffi_init4(arg1: A1, arg2: A2, arg3: A3, arg4: A4);
 +
-+pub use super::init::{InPlaceInit, Init, PinInit};
++    "Rust" manual_init();
++    "Rust" manual_init1(arg1: A1);
++    "Rust" manual_init2(arg1: A1, arg2: A2);
++    "Rust" manual_init3(arg1: A1, arg2: A2, arg3: A3);
++    "Rust" manual_init4(arg1: A1, arg2: A2, arg3: A3, arg4: A4);
++}
++
+ /// A sum type that always holds either a value of type `L` or `R`.
+ pub enum Either<L, R> {
+     /// Constructs an instance of [`Either`] containing a value of type `L=
+`.
 --
 2.39.2
 
