@@ -2,143 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87B86D7914
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B806D7916
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 11:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237823AbjDEJ4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 05:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S237168AbjDEJ4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 05:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbjDEJ4R (ORCPT
+        with ESMTP id S237289AbjDEJ4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 05:56:17 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A2D5BA2;
-        Wed,  5 Apr 2023 02:55:46 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3359cGt2030593;
-        Wed, 5 Apr 2023 09:55:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=2u1bt7sISW7gYR56t/sEB8xayuIhGFjBWFB7FY5nIho=;
- b=SZy/eNBnBNciwwLKcZYqungWMQ7PMe18APjwdFfpE5KidHxoPwHS3LDor92+U3ZEhkb0
- q0IhAVTYGlhJjlXgC+SR1JeTOP/tTcqt/8WRWTDHlCp+k5ttK8U93rIA01PJqBqiM5BM
- PrR6KIYFY1F52loN6WuaiD26TBQ9fgH69EkeIHsIzCcQiTHhSY1SWrP6FI5LnHA48bmI
- 0/FgBPtjhXrGV+S3nXzeZkC/+z5VyRYXdTBr3Wv5vRKuQuPaourqzPkg0egVrMnwF205
- 2gJRMm8057FN0spNxBfhQNufMFt0CdO7HctnJUjAxL2jd05tOW7WAV6iWtToh9kQOATm Aw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prg8wue2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Apr 2023 09:55:33 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3359tXXd032481
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Apr 2023 09:55:33 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 5 Apr 2023 02:55:27 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <gregkh@linuxfoundation.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v7 8/8] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Wed, 5 Apr 2023 15:24:05 +0530
-Message-ID: <2ba6141bff3dc2a29bfc7b7b6a05cc7a5e609c5b.1680688209.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1680688209.git.quic_varada@quicinc.com>
-References: <cover.1680688209.git.quic_varada@quicinc.com>
+        Wed, 5 Apr 2023 05:56:32 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07EA2619A;
+        Wed,  5 Apr 2023 02:56:05 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:53732.1379365523
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 42B571002A1;
+        Wed,  5 Apr 2023 17:55:47 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-7b48884fd-tj646 with ESMTP id 4ddf140fa579419ea56efb54462e5e03 for javierm@redhat.com;
+        Wed, 05 Apr 2023 17:55:49 CST
+X-Transaction-ID: 4ddf140fa579419ea56efb54462e5e03
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <fabb3433-e8f1-f162-891b-8aac28ef7662@189.cn>
+Date:   Wed, 5 Apr 2023 17:55:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uFCq0-tFWVnwJHmEn-AsxVEMIAzBKkIH
-X-Proofpoint-ORIG-GUID: uFCq0-tFWVnwJHmEn-AsxVEMIAzBKkIH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-05_05,2023-04-04_05,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0 mlxlogscore=668
- adultscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304050091
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] video/aperture: fix typos
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Helge Deller <deller@gmx.de>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230404040101.2165600-1-suijingfeng@loongson.cn>
+ <0ad03743-0224-b154-a149-e3e4d54b252d@suse.de>
+ <87355fex1f.fsf@minerva.mail-host-address-is-not-set>
+ <87zg7ndi57.fsf@minerva.mail-host-address-is-not-set>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <87zg7ndi57.fsf@minerva.mail-host-address-is-not-set>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turn on USB related nodes
+Hi,
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- Changes in v5:
-	- Move "host" mode specification to board dts
-	- Due to dependency with earlier patches board dts
-	  filename changed ipq9574-al02-c7.dts -> ipq9574-rdp433.dts
+thanks you for the time and effort  for reviewing.
 
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+On 2023/4/4 19:03, Javier Martinez Canillas wrote:
+> Javier Martinez Canillas <javierm@redhat.com> writes:
+>
+> [...]
+>
+>>>>    	/*
+>>>>    	 * Remove the device from the device hierarchy. This is the right thing
+>>>> -	 * to do for firmware-based DRM drivers, such as EFI, VESA or VGA. After
+>>>> +	 * to do for firmware-based fb drivers, such as EFI, VESA or VGA. After
+>>> That sentences is not well phrased. Maybe say 'This is required for
+>>> firmware-provided graphics, such as EFI, VESA or VGA.'
+>>>
+>> Graphic drivers or display drivers would indeed be more accurate here. But
+>> I think that "fb drivers" is still well pharsed since the are other places
+>> where either fbdev or DRM drivers for firmware-provided framebuffers are
+>> named like that.
+>>
+> Sui,
+>
+> Maybe you could post a follow-up patch to improve the comment as suggested
+> by Thomas?
+>
+Yes, certainly.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 859973b..92ff7ee 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -44,6 +44,10 @@
- 	};
- };
- 
-+&dwc_0 {
-+	dr_mode = "host";
-+};
-+
- &pcie1_phy {
- 	status = "okay";
- };
-@@ -107,6 +111,14 @@
- 	clock-frequency = <32000>;
- };
- 
-+&usb_0_qmpphy {
-+	status = "okay";
-+};
-+
-+&usb_0_qusbphy {
-+	status = "okay";
-+};
-+
- &tlmm {
- 
- 	pcie_1_pin: pcie-1-state {
-@@ -173,6 +185,10 @@
- 	};
- };
- 
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
--- 
-2.7.4
+
+This is the right thing to do for conflicting drivers takes over the 
+hardware resource required.
+
+
+But the comments is actually nearly perfect in overall, it has some 
+difficulty to improve
+
+the perfection.  Below is my personal understanding toward the above 
+sentence.
+
+
+efifb and simplefb belong to the class of firmware based framebuffer driver.
+
+They are generic and platform agnostic, yet they have to relay on the 
+firmware
+
+to passing fb format, fb size, fb base address, fb resolution and fb 
+stride etc to the kernel.
+
+Linux kernel using those information to fill the global screen_info 
+structure.
+
+sysfb_init() then using the global screen_info to  create a platform device,
+
+the device will be claimed by efifb or simplefb driver finally. This is 
+a hand over solution.
+
+It relay on the firmware setup such a framebuffer and hand over the 
+state(this is
+
+actually a kind of modeset state) to kernel.
+
+
+efifb only own the potential hardware resource for a very short time if a
+
+conflicting drm driver probe successfully.
+
+
+For the platform/graphics without  a drm driver, developers may choose to
+
+use efifb driver as a replacement.  So, there are no conflicting happen on
+
+such a case. The `nomodeset` kernel cmd options can also be used for
+
+debugging and testing purpose if the more intelligent drm driver is broken
+
+due to bugs.
 
