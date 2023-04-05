@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF71B6D7FCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BD76D7FCD
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238406AbjDEOmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S238360AbjDEOnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238363AbjDEOl7 (ORCPT
+        with ESMTP id S238137AbjDEOnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:41:59 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E774D5FDC;
-        Wed,  5 Apr 2023 07:41:46 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id q14so37535264ljm.11;
-        Wed, 05 Apr 2023 07:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680705705;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OrPnHM6kR07tQpQhjwYQFPsQYzV9Yi9Okr9ge4OtXWY=;
-        b=Y6XW9Eor55qHHGh9dkFtt3Xvy98hvF32Ayr5ibjrJd8L8A9B3ddu/ykIvGxNp6x3XB
-         xAAnssCqt7nFmQhONLg1R4bRmUBjFdmIUk4A+o0UTfkAlaFJ7acZGykT+rdbSkG5I2qw
-         JDOTDueTu7YyhJB3X37Edaqz+M8Q17WLUOGk9kBQNpnLxPvkGXX+4cYbJxqnURT0+hTA
-         wnbqXw9GeBbsHv3POnHu+Z+cq1OPENhvRr+rKOEPS0feVeTxIk/Hhy4Dl0KnTFKzecoc
-         Ni36qGbhyetiGBde6UNs/cm6y7n4GSCyym4vSxrYIgRNZQAYax3hGhgdHqzA9XoQMzPN
-         /Y5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680705705;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OrPnHM6kR07tQpQhjwYQFPsQYzV9Yi9Okr9ge4OtXWY=;
-        b=KFIw/a4zZUr4nsML8mmXQES4GbYPVHwf7kSPAZkELmbultyUoDMuiHUPEdBLLpzi2R
-         MLjhkEMm8/43uoOHlC2GB6NqU+xldQVPLwsiSWA+apBIN03tSyU93/9MpXXySEdbeNol
-         qbXVuhHksxOnHCXRcf+pEKgZkm2E9ioUP45ExZ2NmbTyj+wUShVfn93E0Ks2gBtpNR3C
-         ErokFRf3YySnbkxNDZFk5avieBnPcxHoM6tx9Zn2WDt7quEYohSNgCKmZua/tGN5dbPd
-         /3RnCHxNdeSMsuv47VOxKcuXcUNIPAmYZEAn0BGbjb6+xLDANvB8Nh9uquQa3yQNN0yT
-         yDVA==
-X-Gm-Message-State: AAQBX9fn9y+k8F19RUvU0vrRsdYTQBtFme+omf4EkEf7pkFBoA4VdPaZ
-        +3zKm20/ryZyEx+W4QiI6IY=
-X-Google-Smtp-Source: AKy350bWnufP/jBagnfX16UQ9PaTzblcl0/JCus6iY6SfZ5mY8xLEDazVjN73F8XIGJ0jRybIvPMjg==
-X-Received: by 2002:a2e:b992:0:b0:295:b10f:7c9a with SMTP id p18-20020a2eb992000000b00295b10f7c9amr826333ljp.4.1680705704844;
-        Wed, 05 Apr 2023 07:41:44 -0700 (PDT)
-Received: from pc636 (host-90-233-209-177.mobileonline.telia.com. [90.233.209.177])
-        by smtp.gmail.com with ESMTPSA id c11-20020a05651c014b00b0029e5448e752sm2866434ljd.131.2023.04.05.07.41.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 07:41:44 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 5 Apr 2023 16:41:42 +0200
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     urezki@gmail.com, paulmck@kernel.org, frederic@kernel.org,
-        joel@joelfernandes.org, qiang.zhang1211@gmail.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu/kvfree: Delay the execution of drain_page_cache()
-Message-ID: <ZC2IpnVzW6pjjqbk@pc636>
-References: <20230405021342.606264-1-qiang1.zhang@intel.com>
+        Wed, 5 Apr 2023 10:43:01 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3E610CE
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:43:00 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pk4L8-0000GF-Oh; Wed, 05 Apr 2023 16:42:22 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1pk4L4-0007Dh-7f; Wed, 05 Apr 2023 16:42:18 +0200
+Date:   Wed, 5 Apr 2023 16:42:18 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+        Keyur Chudgar <keyur@os.amperecomputing.com>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 00/12] Rework PHY reset handling
+Message-ID: <20230405144218.kl7dqtms4x534jvi@pengutronix.de>
+References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
+ <03ed8642-e521-f079-05b8-de9ffa97237a@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405021342.606264-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <03ed8642-e521-f079-05b8-de9ffa97237a@gmail.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,40 +72,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 10:13:42AM +0800, Zqiang wrote:
-> Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
-> executed before kfree_rcu_monitor() to drain page cache, if the
-> bnode structure's->gp_snap has done, the kvfree_rcu_bulk() will
-> fill the page cache again in kfree_rcu_monitor(), this commit
-> therefore move drain_page_cache() after kfree_rcu_monitor() to
-> drain page cache.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tree.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 35be35f8236b..3461fc2640b9 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3424,8 +3424,8 @@ kfree_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
->  		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
->  
->  		count = krc_count(krcp);
-> -		count += drain_page_cache(krcp);
->  		kfree_rcu_monitor(&krcp->monitor_work.work);
-> +		count += drain_page_cache(krcp);
->  
->  		sc->nr_to_scan -= count;
->  		freed += count;
-> -- 
-> 2.32.0
-One question. Maybe we can update the put_cached_bnode() with
-checking if backoff_page_cache_fill was set to prevent cache
-growing?
+Hi Florian,
 
-Thanks!
+On 23-04-05, Florian Fainelli wrote:
+> Hi Marco,
+> 
+> On 4/5/2023 2:26 AM, Marco Felsch wrote:
+> > The current phy reset handling is broken in a way that it needs
+> > pre-running firmware to setup the phy initially. Since the very first
+> > step is to readout the PHYID1/2 registers before doing anything else.
+> > 
+> > The whole dection logic will fall apart if the pre-running firmware
+> > don't setup the phy accordingly or the kernel boot resets GPIOs states
+> > or disables clocks. In such cases the PHYID1/2 read access will fail and
+> > so the whole detection will fail.
+> 
+> PHY reset is a bit too broad and should need some clarifications between:
+> 
+> - external reset to the PHY whereby a hardware pin on the PHY IC may be used
+> 
+> - internal reset to the PHY whereby we call into the PHY driver soft_reset
+> function to have the PHY software reset itself
+> 
+> You are changing the way the former happens, not the latter, at least not
+> changing the latter intentionally if at all.
 
---
-Uladzislau Rezki
+Yes.
+
+> This is important because your cover letter will be in the merge commit in
+> the networking tree.
+
+Ah okay, I didn't know that. I will adapt the cover letter accordingly.
+
+> Will do a more thorough review on a patch by patch basis. Thanks.
+
+Thanks a lot, looking forward to it.
+
+Regards,
+  Marco
