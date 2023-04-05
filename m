@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC456D8412
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F326D840E
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 18:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbjDEQtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 12:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbjDEQtB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233536AbjDEQtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 5 Apr 2023 12:49:01 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C4230F9;
-        Wed,  5 Apr 2023 09:49:00 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-177b78067ffso39182381fac.7;
-        Wed, 05 Apr 2023 09:49:00 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233485AbjDEQs7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 5 Apr 2023 12:48:59 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2804D3AAB;
+        Wed,  5 Apr 2023 09:48:59 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id h1-20020a4adcc1000000b0053e9796cc7dso2931235oou.4;
+        Wed, 05 Apr 2023 09:48:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680713339;
+        d=1e100.net; s=20210112; t=1680713338;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=YOm7tILvDPZI6czqCDOR13IkcnfefKihrcBUjqz0L8Y=;
-        b=FBHtD7JQejEhsI9wObe4Eogffs+RpO1AYMOSZanKRSZbz6nSvco9Z0VsrVy16Oqgxj
-         IJ6xsUy6EEGKBd7TJ8TVWU5cM76FlZUQgKQ2VAek5W3A7xu/CXJXwrenTYJQ6eyk/NYp
-         b0t+7alzlWeT1OFbFK6TAoVbrg3NpDPr4UGOihwGNT9x2ZEYhBQeIn7cXEqXubvetQcA
-         1SzRpLLJvK6UFqYyV5iLKgi2DN/E5X1kn0tGrqanausEBrLqEKLbHLvEL/CdOTc+40P7
-         yAhrPhJjq/pTLPuwESRAbB0LDId+uOVEIR4yTk099t4gulmBh3tB5MiAGNhXhBUCbmIE
-         ++XA==
-X-Gm-Message-State: AAQBX9fGx+Bom8dVHn/GarV15ZSXMRT6A+HrCP3CUVaFbGx0dTL84ULg
-        zx/JXYcLLGEGmI/GA4bK/g==
-X-Google-Smtp-Source: AKy350bOWFf1ufKwVRHaSJOkmcOubEUaoDXmzwdrxIlRe4vQv0WbM2rbpalQ0GPhRcx5gis4QHzRZA==
-X-Received: by 2002:a05:6871:90:b0:17e:de1c:c557 with SMTP id u16-20020a056871009000b0017ede1cc557mr4517825oaa.12.1680713339438;
-        Wed, 05 Apr 2023 09:48:59 -0700 (PDT)
+        bh=7txYggN2JwlOgtYe4eHEvjrkY9LG17YWZv5dce4ogFI=;
+        b=GXEJvW3djiNayPMTxsGpFxIlM0lWiVIKINTpF/VTSa4fNP0eRS113FsTd5XNrTmaRG
+         sU0ATEllhVd5fPES/4wnoKzRZCKgEGAQVYDAiiZ/IA5ruFm0hQBJdchAg0+tw34ELM6g
+         roVM63bxiKfs9BLBpG2+m1895ruCP55+ay5Y5ZVBQKaCcV0mkCLdYlPe7m6u3stbMmw2
+         rvtRSiNdH880V7anY0ZypcC+VGqs8IQyqBDRh4ZNhxRj2B6X6jzS2O6vCHx7VoXxTpgP
+         6RY2ZgfI2cw4QJ3pYPDvwOqtqZIMkuxxFLjnevmd5YFaBLQtQowNGvjnNXVag5w8rWmo
+         CCgQ==
+X-Gm-Message-State: AAQBX9fY/XAbRIC1i8xV40nUkbxDEBJtBU5QWVRjoCJdROtt8uYtgG54
+        aqxDEQwxgZNeQwv8F97aey6Zyjn35Q==
+X-Google-Smtp-Source: AKy350ZOWsoXuIh71UIF2+sLLrwOl+BpqIIgKkgejqQBZ32ulm5gvnnvuwY3zC6rOomi+M4QLEKW3A==
+X-Received: by 2002:a4a:418e:0:b0:538:242e:803a with SMTP id x136-20020a4a418e000000b00538242e803amr3420413ooa.0.1680713338369;
+        Wed, 05 Apr 2023 09:48:58 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m16-20020a9d7ad0000000b006a119c75ad8sm6996757otn.55.2023.04.05.09.48.58
+        by smtp.gmail.com with ESMTPSA id c5-20020a4aacc5000000b00524f381f681sm6880102oon.27.2023.04.05.09.48.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 09:48:59 -0700 (PDT)
-Received: (nullmailer pid 2821005 invoked by uid 1000);
+        Wed, 05 Apr 2023 09:48:58 -0700 (PDT)
+Received: (nullmailer pid 2821002 invoked by uid 1000);
         Wed, 05 Apr 2023 16:48:57 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-In-Reply-To: <20230405-topic-master_stats-v1-1-1b1fa2739953@linaro.org>
-References: <20230405-topic-master_stats-v1-0-1b1fa2739953@linaro.org>
- <20230405-topic-master_stats-v1-1-1b1fa2739953@linaro.org>
-Message-Id: <168071287381.2812239.11751360706280715268.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: soc: qcom: Add RPM Master stats
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>, ahalaney@redhat.com,
+        linux-kernel@vger.kernel.org, quic_harshq@quicinc.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        Andy Gross <agross@kernel.org>, quic_shazhuss@quicinc.com,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        quic_wcheng@quicinc.com, Bjorn Andersson <andersson@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, quic_jackp@quicinc.com,
+        quic_ppratap@quicinc.com
+In-Reply-To: <20230405125759.4201-2-quic_kriskura@quicinc.com>
+References: <20230405125759.4201-1-quic_kriskura@quicinc.com>
+ <20230405125759.4201-2-quic_kriskura@quicinc.com>
+Message-Id: <168071287318.2812205.17997019926296843813.robh@kernel.org>
+Subject: Re: [PATCH v6 1/8] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
 Date:   Wed, 05 Apr 2023 11:48:57 -0500
 X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -69,31 +76,30 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 05 Apr 2023 17:01:35 +0200, Konrad Dybcio wrote:
-> The RPM MSG RAM contains per-RPM-master (e.g. APPS, ADSP etc.) sleep
-> statistics. They let one assess which core is actively preventing the
-> system from entering a true low-power mode.
+On Wed, 05 Apr 2023 18:27:52 +0530, Krishna Kurapati wrote:
+> Add bindings to indicate properties required to support multiport
+> on Snps Dwc3 controller.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
->  .../bindings/soc/qcom/rpm-master-stats.yaml        | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
+> Link to v5: https://lore.kernel.org/all/20230310163420.7582-2-quic_kriskura@quicinc.com/
+> 
+>  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml: properties:compatible: [{'const': 'qcom,rpm-master-stats'}] is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.yaml: ignoring, error in schema: properties: compatible
-Documentation/devicetree/bindings/soc/qcom/rpm-master-stats.example.dtb: /example-0/stats: failed to match any schema with compatible: ['qcom,rpm-master-stats']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230405-topic-master_stats-v1-1-1b1fa2739953@linaro.org
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230405125759.4201-2-quic_kriskura@quicinc.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
