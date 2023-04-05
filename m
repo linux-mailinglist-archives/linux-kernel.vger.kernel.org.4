@@ -2,196 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37516D8506
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8316D8507
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 19:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbjDERjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 13:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        id S232305AbjDERjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 13:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjDERjd (ORCPT
+        with ESMTP id S229484AbjDERjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 13:39:33 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F55FCA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:39:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aZIOscz3aFJ57ziwPAlVwSc+YMPmYctTdfVURIc5H22hZmDHFg1oi7kEaJY46QS2Q/cYRK/Q59NXtQ0zcTZtncNzIg276Lr/NhKkRmcg4mrdwyvGEhzM7yZCgLXMg2sE3X+YCr60jLxK3U8/6Kl/rmPPzE8gmQB0/8ZdLgiISxux2vQCy5zovBELXnqKqOh+8FtRJ5V/8FIN9YsdxFe3PwkXkTJsa+Lb2q1GQUY88rSzfq7SWQ1dwAB/BvpZi7U+LNSZ+GXAdct/Jpuo8falwz99XjUJPaeO7SqlTZCocVIcDHnmbuiF73kHlRUor2+dJwOZDyyVpKz3kZRMQ4pHng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VJOOkJdX0uJ67JF/hhjbme0EMRWX9YVgqygK7Vxjao8=;
- b=OFkfZQiU7RpEKPXXw0jDCaiWM2HBXgD9W0Ni2U8LcS61zqc1SwKj9G7CCju+sjXGxnL3223kNPK2p44cjt7Kd8NxhrVb8sG880VB2q+bKEwNXvPdJV5euJWTYxH4W1pr4qDnWEijq4cIOzgJv9+wuERwUaqw2sRubV0H9zVmbrcpEeCqgdv/vCkBSdK7ath0K81v7egIad0UAyGUiZsEQ/f8E9Z7b0JidjCufwzCNfS72EI9PNV8i8CKKnEd5sVgNYqgdgxV2m45hlmnr/7r09L47XEJmF+6Ip+DXi3qwZ0mMfHGI34nbVb0sMv7PkmeQSwA/501crT5RFsdKiCuXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VJOOkJdX0uJ67JF/hhjbme0EMRWX9YVgqygK7Vxjao8=;
- b=PyQpV9HY1JWcL1hR+0s7JaguMuNPbmZFW8em1xA0cyUv+PDlmh+Y3fwaO4g2jK3XkvBjkbwfS4idC/IXHNZRr0jS94z0LRbpDZl6WmvfLS6PYV7yMoR5mCiK7m0X1Oa3FVSCUGawqplxxVfXZvGI7xWZfTm3lf90VCY1MVlMNLw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- MW4PR12MB6683.namprd12.prod.outlook.com (2603:10b6:303:1e2::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.24; Wed, 5 Apr 2023 17:39:29 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6254.033; Wed, 5 Apr 2023
- 17:39:29 +0000
-Message-ID: <ecef210b-dc7d-e385-f9b2-927d55a6777e@amd.com>
-Date:   Wed, 5 Apr 2023 13:39:25 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Content-Language: en-CA
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Danilo Krummrich <dakr@redhat.com>, airlied@gmail.com,
-        daniel@ffwll.ch, l.stach@pengutronix.de,
-        "Prosyak, Vitaly" <Vitaly.Prosyak@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230331000622.4156-1-dakr@redhat.com>
- <6ad72a7f-302f-4be1-0d53-00ff9dc37ef7@amd.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-Subject: Re: [PATCH] drm/scheduler: set entity to NULL in
- drm_sched_entity_pop_job()
-In-Reply-To: <6ad72a7f-302f-4be1-0d53-00ff9dc37ef7@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT4PR01CA0393.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:108::26) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Wed, 5 Apr 2023 13:39:49 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445D26198
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 10:39:47 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id i6so43521279ybu.8
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 10:39:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1680716386;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wn46LGEpZ0M5stJvauaV3sIQJfEZiQ2d5fn4bU/HeCg=;
+        b=N6vIgBsXL9Tc+SxUB5qdxhR2+VuiR4GBOHhlJAyH5t5+aJfqWvjAgeCaxXC0JDdqyf
+         wRDoQEetY/FS++C5y8k6cInjCt+fkQ0Ej9Nox1oZBDJkTdCexhA3Wyqa48vYNuW5bDn6
+         LDhVYDVrtuNATgraPVVuzYMM8jNlqUVS6HJoc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680716386;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wn46LGEpZ0M5stJvauaV3sIQJfEZiQ2d5fn4bU/HeCg=;
+        b=5GpVDD5iBF3eV0RpJqcZQ+XMna3r9D6NeWqo1JEVhkU9qUfyDSmi+poV0xLe8eq4Fm
+         7gQXUcTkKpF/IDI6KH/OcSp/+oTq994juF88TZj3wWTZm/trcTxjs1OwwKuxZhrSLuFb
+         oQm/10lgQN8eEiskrceZ68o4sxKj5P7Jq5p8YXuV4ddIWY5v6OObOSUN8BvUalREf5I1
+         wn+0SWZblB+8VNqwNzPLThzRGl6fwwLYxZ7A6yIZuVR2Ny4bBuLAc6iRNty0IIFt/zow
+         SaamvlULsJOjB9ro0ggt7jCsXRLHG8xmKw01iDXeP9KNIBE2fd3ZZzttH9U3L//vp1YT
+         44ig==
+X-Gm-Message-State: AAQBX9ehlByx2ucQLWCRcWY/TYcQYzBpy0urMOSP9M4bTptwphNSuk0h
+        ZE8gQIUn9Sdbvw//TNhQZXlop1rNRZWvlNj1GK8/Og==
+X-Google-Smtp-Source: AKy350YrxrbAQS47RhEOI1F17SciZMZl03bjJJAdLmUum16T7qBukaaAt9HUe8MxrtuIQLogywUBCx8MUh7dFXE8RXM=
+X-Received: by 2002:a25:7605:0:b0:b69:fab9:de39 with SMTP id
+ r5-20020a257605000000b00b69fab9de39mr56463ybc.2.1680716386295; Wed, 05 Apr
+ 2023 10:39:46 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|MW4PR12MB6683:EE_
-X-MS-Office365-Filtering-Correlation-Id: a9ec803a-fe88-4fc3-bfa7-08db35fcb51e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: i0EqaXfZXeiNnRLJdwvXgThFr8fnne0kz5wjxMYJqLXLE435lwO+o314KQPFRpRfofV03lDNJ9Bg57lOqGrPMH+2KTSG4XgGIuFuYVSDnA2UsdQQ3iexvgGMXNZQ+eRvPB1MxJC8+K8ZXuoZ1E3D/pSctfd/tmgChTLgNgmIfzgjEH+ltC+BQ9OHHY0fNYNJNp1CkPkB6a2s7o5EaxEcyXV3LYcvZpPrd+mEn3a9ws2PTIQSoRRbE5snBkt7z199Q+MFGaoVbas25YJgOikLEqdY/JRkvN685g0030DD32+BhqPUN1XHWqrMApk6pJWRYCQ0tveJIGsDNrtPGsp7AgVGSLCTCl42+k41u1pmtPKjCKl2qm+3BdxJLwbybdT2caHhfEgrxGRtJLD9E7CPXmbT0NnnMpnz7HrLjLu6GWnLOip8mm/h3Z92F8bZwnqMDYyYUPuIWfoTS6p6pIL8BgXMXMJrcyXz8zbg3sK5yEy33jvpY5g0Fb2nDxS1vnI/f4tvEo496Pj7+ws7KxuplQ9dQejxTry9+K/D/4bo4eSbFoYaezsjvZPkgi7bxlEcnqGHUvvTYvLUJHlyZqxLV8ovDgj9HBB6VEk6JuJ88Hiok3H/d60x6u1eU/iTx7rZ+f1gWXx32oGtlzY47bLlsQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(36756003)(66946007)(6636002)(316002)(6666004)(66476007)(6486002)(66556008)(110136005)(8676002)(41300700001)(5660300002)(478600001)(44832011)(2906002)(6506007)(86362001)(31696002)(186003)(2616005)(38100700002)(8936002)(53546011)(26005)(6512007)(83380400001)(66574015)(4326008)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2IwWVRLU0xKRTgwRDFqUzBNTjVrVUVVam96QmRhZllLZnJ5NThTZnhsTkow?=
- =?utf-8?B?Y1BvMkZJVjYzUzVMSmM0cnNvZ2JMcGNnNnJWWjlmSEtnUE0rQlV5NTl4czFR?=
- =?utf-8?B?SjFRV21HK0JWOWtwYmF0ak1sWWlzM3NGQjVwbk0vVWZXTXFEWTJCOWlkbW95?=
- =?utf-8?B?MnkyMmNEcy9BMUVJeDBsN3VBYlAwaFhuK2Z3SmlXNnpWaHBzcVJlbHhId1pz?=
- =?utf-8?B?STJ2Nm44V1lBaXN1TTlpRXpnZmtjU2FpU2s2OXVYS21PR1JNQVdIcDYyOTcy?=
- =?utf-8?B?UG9RUC9tNkZoZWxEN3BiOE9ReGNycm1kNlYxaENwUVMyQzN6Tnk5MXF2MjIy?=
- =?utf-8?B?ZjU1VDdrWTU2TEhVKzBiUGFSdmdxSmxGS2ZXUXBxZ0FZdHNWRkU1bUxvTXZU?=
- =?utf-8?B?VENDQkpRY0twMHB1NWV2ODcvRWFkS2hjcGpSKy8rNTk2dmt2NzRHUW5UcUdK?=
- =?utf-8?B?S0VyWmVOZEpmTnZtaTdmbDNib2VIOTc3WVF4ZUdzQkRDMkIzVm9aM2UzOHpE?=
- =?utf-8?B?SHFObzcxZjFmN3pPbHlxOG1WR0IzM0lieHNWdHFFY3B4eVB4WUxzTit1dkdZ?=
- =?utf-8?B?ckpoOERtOUFMeGNpYWhjcmxlS2U1eXdoeXVrQThEeVk0cEdLL2ZwUVFmREpj?=
- =?utf-8?B?MkRIQnFIb0xaRDNCK2dpejdWNHJNamdKVGYxV1lVRG9VU1h0RXBkZ0lScEcz?=
- =?utf-8?B?Wlk4TDNKc2JpcEI4WXNrMWt1b3NhbG1Bc0RDR1JsM010YVFVakhtdExuTm9x?=
- =?utf-8?B?anhYb0QxMXJ5Ykh6NThTQmhYQWxWTk41UGQxbGVFYUNTV0NPUUlkRHhMK3Vy?=
- =?utf-8?B?cnlCTWpGVWNpWlpzbmRraEx2UTNTbktZZHZ1Y2tnRlMwUmZMZjRtNFY0TU5T?=
- =?utf-8?B?L3REUnJlcVgxd0IwRDlJMmZaY1hsbEJrV0RsMjVES0M4TVJua1dtY2MvY2hF?=
- =?utf-8?B?V3hZYktoaGZmZ1VRcmFiYjVxaktoVy9teUR1djVvNW1rQWw4MWVZWkd0allC?=
- =?utf-8?B?OTU1UjFHWlZFRnZvaWVVQ2tWUWVKYWhjYk5DWjcyV3hwcFhoU2hNQmp0ODVw?=
- =?utf-8?B?cFBzL2hMeTR1amdPbkJWR0FkY1pOcmNOdTRlam9mWlFkKytFQXBOeUE1Rk9w?=
- =?utf-8?B?TzFGK2lrWU5vRTVjWlNMYWpjeDVQeGtUcWlPTUFuM2U4dWpSak5lWmlvcjI0?=
- =?utf-8?B?ekV3U0xpbTNrVkpnU0pTVzhBbkJpSTZmNDNQNzZTV1paN0tSZXlKRWtRSW1H?=
- =?utf-8?B?eEFZMElBNG12NXhPYWZnZmxXVXdsbU1kWUFidjVpd0JBR0tFVG52ZkdzeG1K?=
- =?utf-8?B?Z1FZM3ZUZlowMzNZS0l1ZksrZUgrSTV2eG1xdkdtTHZGaGdXN052QzI1bDlS?=
- =?utf-8?B?dTBhNFRWVGtJTlVLMFF3NUl3blAxelZUR1R0ekl0SE1zK1VuNmIza280M2lL?=
- =?utf-8?B?QnIxTlAydkgwcVRHYkJjMXE2T0J5SHdsQ1NtWERvZEJnL01QN2M3bnNzcnRD?=
- =?utf-8?B?L01SbW1TWWtzOEU3MkNqalNHSDcvbFA4YVExdFN2TmJEWUtJUy8wZUpCaDZ6?=
- =?utf-8?B?ek9EaEhER21IUEowdWdsU1lSaHk2SzRwNTgyWTZpSE13V3lBMkRxOTJ3WlFZ?=
- =?utf-8?B?L2JOWjI2OFphSjc3TWhKS2Z5YWFieFlpVnFNbUVEUHVCOHQvZkhqV2czL0VM?=
- =?utf-8?B?U2dMMVp6OFFYOEpPazBqTWhyL3BtWHpERFIrOGVuaWV3Qm9XRnVkMVVLbkZP?=
- =?utf-8?B?YkpWSGlIa1BnV21tcFcyR0dkWnRhZGVUSlpFZk85c1lVb0tMOXJnWTVsbUhJ?=
- =?utf-8?B?SS9WN2x0RzVza0RVSWYvUlpQV2FrVUJINlJmVktLUmE5YThEQlh0VW8walJN?=
- =?utf-8?B?eXZ2NFgvK25nU2pROEY2QSt4TFJGNkxYaDRLRDdmcVR3U0IyTHcvR0lYb2xk?=
- =?utf-8?B?bmNocHFja3ppKzdwcFZ6eFpPQUhwVVJRTXB3ejg4VGtBQUNVcndqRlp4ZWNm?=
- =?utf-8?B?SjdIRitpZEhPM2JqblZtb1FVNHJmNHlnSkVpaEJNZEtOSVU3MGNuSXdJZUhK?=
- =?utf-8?B?anB3S1QrbkkzOStTRGx1Zm8wRStzQWZQZFNQTThYSnUydkFhV2RvamFNY0Vt?=
- =?utf-8?Q?aqXavQpdYA1gMULVkqYtgZXNa?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9ec803a-fe88-4fc3-bfa7-08db35fcb51e
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2023 17:39:29.1460
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jPbgaiN2BjkQUvu685Vl3vc1Hn+zPPBtvYqLuqQSghyY6Gbt8CON4s/JDwmSjTDu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6683
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <1680266529-28429-1-git-send-email-ziwei.dai@unisoc.com>
+In-Reply-To: <1680266529-28429-1-git-send-email-ziwei.dai@unisoc.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 5 Apr 2023 13:39:35 -0400
+Message-ID: <CAEXW_YR5MZhHuDsMVEB8A=80k3sjecp-yTXNLv6XCaq9h2JH2A@mail.gmail.com>
+Subject: Re: [PATCH V2] rcu: Make sure new krcp free business is handled after
+ the wanted rcu grace period.
+To:     Ziwei Dai <ziwei.dai@unisoc.com>
+Cc:     urezki@gmail.com, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shuang.wang@unisoc.com,
+        yifan.xin@unisoc.com, ke.wang@unisoc.com, xuewen.yan@unisoc.com,
+        zhiguo.niu@unisoc.com, zhaoyang.huang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_OTHER_BAD_TLD autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-31 01:59, Christian König wrote:
-> Am 31.03.23 um 02:06 schrieb Danilo Krummrich:
->> It already happend a few times that patches slipped through which
->> implemented access to an entity through a job that was already removed
->> from the entities queue. Since jobs and entities might have different
->> lifecycles, this can potentially cause UAF bugs.
->>
->> In order to make it obvious that a jobs entity pointer shouldn't be
->> accessed after drm_sched_entity_pop_job() was called successfully, set
->> the jobs entity pointer to NULL once the job is removed from the entity
->> queue.
->>
->> Moreover, debugging a potential NULL pointer dereference is way easier
->> than potentially corrupted memory through a UAF.
->>
->> Signed-off-by: Danilo Krummrich <dakr@redhat.com>
-> 
-> In general "YES PLEASE!", but I fear that this will break amdgpus reset 
-> sequence.
-> 
-> On the other hand when amdgpu still relies on that pointer it's clearly 
-> a bug (which I pointed out tons of times before).
-> 
-> Luben any opinion on that? Could you drive cleaning that up as well?
+On Fri, Mar 31, 2023 at 8:43=E2=80=AFAM Ziwei Dai <ziwei.dai@unisoc.com> wr=
+ote:
+>
+> In kfree_rcu_monitor(), new free business at krcp is attached to any free
+> channel at krwp. kfree_rcu_monitor() is responsible to make sure new free
+> business is handled after the rcu grace period. But if there is any none-=
+free
+> channel at krwp already, that means there is an on-going rcu work,
+> which will cause the kvfree_call_rcu()-triggered free business is done
+> before the wanted rcu grace period ends.
+>
+> This commit ignore krwp which has non-free channel at kfree_rcu_monitor()=
+,
+> to fix the issue that kvfree_call_rcu() loses effectiveness.
+>
+> Below is the css_set obj "from_cset" use-after-free case caused by
+> kvfree_call_rcu() losing effectiveness.
+> CPU 0 calls rcu_read_lock(), then use "from_cset", then hard irq comes,
+> the task is schedule out.
+> CPU 1 calls kfree_rcu(cset, rcu_head), willing to free "from_cset" after =
+new gp.
+> But "from_cset" is freed right after current gp end. "from_cset" is reall=
+ocated.
+> CPU 0 's task arrives back, references "from_cset"'s member, which causes=
+ crash.
+>
+> CPU 0                                   CPU 1
+> count_memcg_event_mm()
+> |rcu_read_lock()  <---
+> |mem_cgroup_from_task()
+>  |// css_set_ptr is the "from_cset" mentioned on CPU 1
+>  |css_set_ptr =3D rcu_dereference((task)->cgroups)
+>  |// Hard irq comes, current task is scheduled out.
+>
+>                                         cgroup_attach_task()
+>                                         |cgroup_migrate()
+>                                         |cgroup_migrate_execute()
+>                                         |css_set_move_task(task, from_cse=
+t, to_cset, true)
+>                                         |cgroup_move_task(task, to_cset)
+>                                         |rcu_assign_pointer(.., to_cset)
+>                                         |...
+>                                         |cgroup_migrate_finish()
+>                                         |put_css_set_locked(from_cset)
+>                                         |from_cset->refcount return 0
+>                                         |kfree_rcu(cset, rcu_head) // mea=
+ns to free from_cset after new gp
+>                                         |add_ptr_to_bulk_krc_lock()
+>                                         |schedule_delayed_work(&krcp->mon=
+itor_work, ..)
+>
+>                                         kfree_rcu_monitor()
+>                                         |krcp->bulk_head[0]'s work attach=
+ed to krwp->bulk_head_free[]
+>                                         |queue_rcu_work(system_wq, &krwp-=
+>rcu_work)
+>                                         |if rwork->rcu.work is not in WOR=
+K_STRUCT_PENDING_BIT state,
+>                                         |call_rcu(&rwork->rcu, rcu_work_r=
+cufn) <--- request a new gp
+>
+>                                         // There is a perious call_rcu(..=
+, rcu_work_rcufn)
+>                                         // gp end, rcu_work_rcufn() is ca=
+lled.
+>                                         rcu_work_rcufn()
+>                                         |__queue_work(.., rwork->wq, &rwo=
+rk->work);
+>
+>                                         |kfree_rcu_work()
+>                                         |krwp->bulk_head_free[0] bulk is =
+freed before new gp end!!!
+>                                         |The "from_cset" is freed before =
+new gp end.
+>
+> // the task is scheduled in after many ms.
+>  |css_set_ptr->subsys[(subsys_id) <--- Caused kernel crash, because css_s=
+et_ptr is freed.
+>
+> v2: Use helper function instead of inserted code block at kfree_rcu_monit=
+or().
+>
+> Fixes: c014efeef76a ("rcu: Add multiple in-flight batches of kfree_rcu() =
+work")
+> Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
 
-I didn't find any references to scheduling entity after the job
-is submitted to the hardware. (I commented the same in the other
-thread, we just need to decide which way to go.)
+Please update the fixes tag to:
+5f3c8d620447 ("rcu/tree: Maintain separate array for vmalloc ptrs")
 
-Regards,
-Luben
+The issue happened when 5f3c8d620447 started looking at multiple
+channels at the same time in the same work handler function.
 
-> 
-> Thanks,
-> Christian.
-> 
->> ---
->> I'm aware that drivers could already use job->entity in arbitrary places, since
->> they in control of when the entity is actually freed. A quick grep didn't give
->> me any results where this would actually be the case, however maybe I also just
->> didn't catch it.
->>
->> If, therefore, we don't want to set job->entity to NULL I think we should at
->> least add a comment somewhere.
->> ---
->>
->>   drivers/gpu/drm/scheduler/sched_entity.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
->> index 15d04a0ec623..a9c6118e534b 100644
->> --- a/drivers/gpu/drm/scheduler/sched_entity.c
->> +++ b/drivers/gpu/drm/scheduler/sched_entity.c
->> @@ -448,6 +448,12 @@ struct drm_sched_job *drm_sched_entity_pop_job(struct drm_sched_entity *entity)
->>   			drm_sched_rq_update_fifo(entity, next->submit_ts);
->>   	}
->>   
->> +	/* Jobs and entities might have different lifecycles. Since we're
->> +	 * removing the job from the entities queue, set the jobs entity pointer
->> +	 * to NULL to prevent any future access of the entity through this job.
->> +	 */
->> +	sched_job->entity = NULL;
->> +
->>   	return sched_job;
->>   }
->>   
-> 
+I think a better fix might be to separate out the work handler
+functions for each channel separately. That way we get more
+parallelism.
 
+but since this is urgent,
+Acked-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+
+thanks,
+
+ - Joel
+
+
+
+> ---
+>  kernel/rcu/tree.c | 27 +++++++++++++++++++--------
+>  1 file changed, 19 insertions(+), 8 deletions(-)
+>
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 8e880c0..7b95ee9 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3024,6 +3024,18 @@ static void kfree_rcu_work(struct work_struct *wor=
+k)
+>         return !!READ_ONCE(krcp->head);
+>  }
+>
+> +static bool
+> +need_wait_for_krwp_work(struct kfree_rcu_cpu_work *krwp)
+> +{
+> +       int i;
+> +
+> +       for (i =3D 0; i < FREE_N_CHANNELS; i++)
+> +               if (!list_empty(&krwp->bulk_head_free[i]))
+> +                       return true;
+> +
+> +       return !!krwp->head_free;
+> +}
+> +
+>  static int krc_count(struct kfree_rcu_cpu *krcp)
+>  {
+>         int sum =3D atomic_read(&krcp->head_count);
+> @@ -3107,15 +3119,14 @@ static void kfree_rcu_monitor(struct work_struct =
+*work)
+>         for (i =3D 0; i < KFREE_N_BATCHES; i++) {
+>                 struct kfree_rcu_cpu_work *krwp =3D &(krcp->krw_arr[i]);
+>
+> -               // Try to detach bulk_head or head and attach it over any
+> -               // available corresponding free channel. It can be that
+> -               // a previous RCU batch is in progress, it means that
+> -               // immediately to queue another one is not possible so
+> -               // in that case the monitor work is rearmed.
+> -               if ((!list_empty(&krcp->bulk_head[0]) && list_empty(&krwp=
+->bulk_head_free[0])) ||
+> -                       (!list_empty(&krcp->bulk_head[1]) && list_empty(&=
+krwp->bulk_head_free[1])) ||
+> -                               (READ_ONCE(krcp->head) && !krwp->head_fre=
+e)) {
+> +               // Try to detach bulk_head or head and attach it, only wh=
+en
+> +               // all channels are free.  Any channel is not free means =
+at krwp
+> +               // there is on-going rcu work to handle krwp's free busin=
+ess.
+> +               if (need_wait_for_krwp_work(krwp))
+> +                       continue;
+>
+> +               // kvfree_rcu_drain_ready() might handle this krcp, if so=
+ give up.
+> +               if (need_offload_krc(krcp)) {
+>                         // Channel 1 corresponds to the SLAB-pointer bulk=
+ path.
+>                         // Channel 2 corresponds to vmalloc-pointer bulk =
+path.
+>                         for (j =3D 0; j < FREE_N_CHANNELS; j++) {
+> --
+> 1.9.1
+>
