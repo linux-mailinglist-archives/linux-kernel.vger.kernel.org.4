@@ -2,154 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C4C6D7ED6
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814276D7EDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238286AbjDEOML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S238431AbjDEOMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237415AbjDEOMJ (ORCPT
+        with ESMTP id S238420AbjDEOM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:12:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C971A5FFD;
-        Wed,  5 Apr 2023 07:11:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C14CD63D5B;
-        Wed,  5 Apr 2023 14:11:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C62EC433D2;
-        Wed,  5 Apr 2023 14:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680703864;
-        bh=/91OdxcceXlk9n2QulFc+G81aiye5qM0WmboWUgmAKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S3mG4GKYXcT4zgIKUANmFLwKo4QghsEFwrr1tzxUUS1bDH2JjmjGKLPOCXch2ZQn1
-         8Whj5kWYeAHC6rKp+S/xfB0R6kLyQrq4cgQcp5Z/GROne2A1PDJpZ6vZAzjhWZe39f
-         Y8kXSZhSOfK6qdw+Pf3qCabsH96ScDJJ1LDbenuHU9sr4kIKCNDxXNTAXfvf/2dr+Y
-         krVeeiy9w5Dk6Zaf4CXCpz4akJ52kY6av5J58d++FMLRU+P56Z1Im3kh+1i2shc3WM
-         27vhWE8B0D8BQzciVNTzktv2fs3Nh7gDfUYDZp2tNzJwF+i/xaBgejgzIP1YnagpYP
-         ic/naqEwt6Txg==
-Date:   Wed, 5 Apr 2023 16:10:59 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Seth Jenkins <sethjenkins@google.com>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dhowells@redhat.com,
-        Jann Horn <jannh@google.com>,
-        Natalie Silvanovich <natashenka@google.com>
-Subject: Re: fsconfig parsing bugs
-Message-ID: <20230405-kaschieren-mandelkern-f9fdbc7d95a0@brauner>
-References: <CALxfFW4BXhEwxR0Q5LSkg-8Vb4r2MONKCcUCVioehXQKr35eHg@mail.gmail.com>
- <20220901145028.3lndphzrylsyqx5o@wittgenstein>
+        Wed, 5 Apr 2023 10:12:29 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60362D7D
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:11:57 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54606036bb3so513738557b3.6
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 07:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680703915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EMf3CEm47nTLug6fCPtN+WxmLwlongS4K4cghIdEwTU=;
+        b=b2+D20d+G3y26sJt0PGAqN2BwPks7gQqkoFULGuxRE92c66/T8BoUIIZsvO/x2OWF9
+         ULoCwNY6uCF9YDTaNjV5EbaWg6yjghvOKu+xCeB73pXQmXaCmSp2cnsYUZ22R69fni32
+         tY+D4WAb0Lc3TtW+qk0Tam+O8p1h3eWpEQw0yvNZKXM7rZtHXsoKRu9oHiI7PwXWBgZH
+         /s/7SggpWitW+kAqzqtNCtao2mI8DVZXM/Cqhn97f/0436Qiga2MD2M/xiZnQNbBIYLS
+         OQFJ8iTfybzfaBbK/qOkgKogYYi8J1Y21p/48dTudnw8zPhBNbl33Cqin6/wkmP1dMpb
+         SVrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680703915;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EMf3CEm47nTLug6fCPtN+WxmLwlongS4K4cghIdEwTU=;
+        b=mbBGjdZ1UkAargDGelv94dMLNvi4ZICAi+pSTMKpPQudyqd+rgMcigxqTx4nEpw/EB
+         R9NzqvygIHKm100XTFo6d5nXuyQ1nvZMzCC6K8BJzSf4Y+jxEIVP7pLRcowwDcsM3JJr
+         p6xIOqzVARLp7pZLQfl60jjMuiflDAHEBndgMN5udQzhn88G4em3iwVmeuwXz99rbNja
+         4uF5pAd/4vSb2CqhdUwMvMrDFmBaCmKdnEfPYKHl30H2K3g0FEPSj8fAg5iVwihvOoyG
+         ndZ2h0qEIxRikhFDktJRytdq1yKoae5IOWrrsCBsZpIVkO61BwtDYF2sXBR8GS6kXe9S
+         FHGw==
+X-Gm-Message-State: AAQBX9cOu5oCoA3YMzpGWux3e8wBsZI4/wXzaVcpWqpXKBjAK5kCsTcp
+        qW1cInnwOE5BV3Rok0/Auj+DwMJUYHuMqxuY+zNOLA==
+X-Google-Smtp-Source: AKy350YIM3whqkVRkgoliO4ELqOTHysvMP2mHMSt3HJC9fOJRdlX3dZXSC6LOSHQXd5zBwLeL+SU3/ZlW/2/8tJ+/Lw=
+X-Received: by 2002:a81:c509:0:b0:549:143f:3d3 with SMTP id
+ k9-20020a81c509000000b00549143f03d3mr3685321ywi.0.1680703914860; Wed, 05 Apr
+ 2023 07:11:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220901145028.3lndphzrylsyqx5o@wittgenstein>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230327193829.3756640-1-abel.vesa@linaro.org>
+ <CAGETcx9f1p2esfyzyfU04EAB1FXh=d9-U81DaGyZNjL_Vti3oQ@mail.gmail.com>
+ <ZCVyBuKMvDV0gQPW@linaro.org> <CAGETcx-mxzzZ_FU6Agju9gMhFOEDhY6Rj78BnvAVJjNtZhif=w@mail.gmail.com>
+ <ZCZolyDL/awnt73K@linaro.org>
+In-Reply-To: <ZCZolyDL/awnt73K@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 5 Apr 2023 16:11:18 +0200
+Message-ID: <CAPDyKFprQwBfya-TpaVJfn82LgM9N_iE8npO9r-HzAyJXpb-hQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Allow genpd providers to power off domains on sync state
+To:     Saravana Kannan <saravanak@google.com>,
+        Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 04:50:28PM +0200, Christian Brauner wrote:
-> On Wed, Aug 31, 2022 at 04:12:21PM -0700, Seth Jenkins wrote:
-> > The codebase-wide refactor efforts to using the latest fs mounting API
-> > (with support for fsopen/fsconfig/fsmount etc.) have introduced some
-> > bugs into mount configuration parsing in several parse_param handlers,
-> > most notably shmem_parse_one() which can be accessed from a userns.
-> > There are several cases where the following code pattern is used:
-> > 
-> > ctx->value = <expression>
-> > if(ctx->value is invalid)
-> >    goto fail;
-> > ctx->seen |= SHMEM_SEEN_X;
-> > break;
-> > 
-> > However, this coding pattern does not work in the case where multiple
-> > fsconfig calls are made. For example, if I were to call fsconfig with
-> > the key "nr_blocks" twice, the first time with a valid value, and the
-> > second time with an invalid value, the invalid value will be persisted
-> > and used upon creation of the mount for the value of ctx->blocks, and
-> > consequently for sbinfo->max_blocks.
-> > 
-> > This code pattern is used for Opt_nr_blocks, Opt_nr_inodes, Opt_uid,
-> > Opt_gid and Opt_huge. Probably the proper thing to do is to check for
-> > validity before assigning the value to the shmem_options struct in the
-> > fs_context.
-> > 
-> > We also see this code pattern replicated throughout other filesystems
-> > for uid/gid resolution, including hugetlbfs, FUSE, ntfs3 and ffs.
-> > 
-> > The other outstanding issue I noticed comes from the fact that
-> > fsconfig syscalls may occur in a different userns than that which
-> > called fsopen. That means that resolving the uid/gid via
-> > current_user_ns() can save a kuid that isn't mapped in the associated
-> > namespace when the filesystem is finally mounted. This means that it
-> > is possible for an unprivileged user to create files owned by any
-> > group in a tmpfs mount (since we can set the SUID bit on the tmpfs
-> > directory), or a tmpfs that is owned by any user, including the root
-> > group/user. This is probably outside the original intention of this
-> > code.
-> > 
-> > The fix for this bug is not quite so simple as the others. The options
-> > that I've assessed are:
-> > 
-> > - Resolve the kuid/kgid via the fs_context namespace - this does
-> > however mean that any task outside the fsopen'ing userns that tries to
-> > set the uid/gid of a tmpfs will have to know that the uid/gid will be
-> > resolved by a different namespace than that which the current task is
-> > in. It also subtly changes the behavior of this specific subsystem in
-> > a userland visible way.
-> > - Globally disallow fsconfig calls originating from outside the
-> > fs_context userns - This is a more robust solution that would prevent
-> > any similar bugs, but it may impinge on valid mount use-cases. It's
-> > the best from a security standpoint and if it's determined that it was
-> > not in the original intention to be juggling user/mount namespaces
-> > this way, it's probably the ideal solution.
-> > - Throw EINVAL if the kuid specified cannot be mapped in the mounting
-> > userns (and/or potentially in the fs_context userns) - This is
-> > probably the solution that remains most faithful to all potential
-> > use-cases, but it doesn't reduce the potential for variants in the
-> > future in other parts of the codebase and it also introduces some
-> > slight derivative logic bug risk.
-> > - Don't resolve the uid/gid specified in fsconfig at all, and resolve
-> > it during mount-time when calling an associated fill_super. This is
-> > precedented and used in other parts of the codebase, but specificity
-> > is lost in the final error case since an end-user cannot easily
-> > attribute a mount failure to an unmappable uid.
-> > 
-> > I've also attached a PoC for this bug that demonstrates that an
-> > unprivileged user can create files/directories with root uid/gid's.
-> > There is no deadline for this issue as we can't see any obvious way to
-> > cross a privilege boundary with this.
-> > 
-> > Thanks in advance!
-> 
-> I'm involved in 2 large projects that make use of the new mount api LXC
-> and CRIU. None of them call fsconfig() outside of the target user
-> namespace. util-linux mount(2) does not yet use the new mount api and so
-> can't be affected either but will in maybe even the next release.
-> Additionally, glibc 2.36 is the first glibc with support for the new
-> mount api which just released. So all users before that users would have
-> to write their own system call wrappers so I think we have some liberty
-> here.
-> 
-> I think this is too much of a restriction to require that fsopen() and
-> fsconfig() userns must match in order to set options. It is pretty handy
-> to be able to set mount options outside of fc->user_ns. And we'd
-> definitely want to make use of this in the future.
-> 
-> So ideally, we just switch all filesystems that are mountable in userns
-> over to use fc->user_ns. There's not really a big regression risk here
-> because it's not used in userns workloads widely today. Taking a close
-> look, the affected filesystems are devpts and tmpfs. Having them rely on
-> fc->user_ns aligns them with how fuse does it today.
+Abel, Saravana,
 
-Seth, did you plan on sending a patch for this? I'd like to get this
-sorted now that more projects are starting to make use of the new mount
-api.
+On Fri, 31 Mar 2023 at 06:59, Abel Vesa <abel.vesa@linaro.org> wrote:
+>
+> On 23-03-30 12:50:44, Saravana Kannan wrote:
+> > On Thu, Mar 30, 2023 at 4:27=E2=80=AFAM Abel Vesa <abel.vesa@linaro.org=
+> wrote:
+> > >
+> > > On 23-03-27 17:17:28, Saravana Kannan wrote:
+> > > > On Mon, Mar 27, 2023 at 12:38=E2=80=AFPM Abel Vesa <abel.vesa@linar=
+o.org> wrote:
+> > > > >
+> > > > > There have been already a couple of tries to make the genpd "disa=
+ble
+> > > > > unused" late initcall skip the powering off of domains that might=
+ be
+> > > > > needed until later on (i.e. until some consumer probes). The conc=
+lusion
+> > > > > was that the provider could return -EBUSY from the power_off call=
+back
+> > > > > until the provider's sync state has been reached. This patch seri=
+es tries
+> > > > > to provide a proof-of-concept that is working on Qualcomm platfor=
+ms.
+> > > >
+> > > > I'm giving my thoughts in the cover letter instead of spreading it
+> > > > around all the patches so that there's context between the comments=
+.
+> > > >
+> > > > 1) Why can't all the logic in this patch series be implemented at t=
+he
+> > > > framework level? And then allow the drivers to opt into this behavi=
+or
+> > > > by setting the sync_state() callback.
+> > > >
+> > > > That way, you can land it only for QC drivers by setting up
+> > > > sync_state() callback only for QC drivers, but actually have the sa=
+me
+> > > > code function correctly for non-QC drivers too. And then once we ha=
+ve
+> > > > this functionality working properly for QC drivers for one kernel
+> > > > version (or two), we'll just have the framework set the device's
+> > > > driver's sync_state() if it doesn't have one already.
+> > >
+> > > I think Ulf has already NACK'ed that approach here:
+> > > [1] https://lore.kernel.org/lkml/CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y1Sir=
+-G+GoxkCvpN=3DiiA@mail.gmail.com/
+> >
+> > I would have NACK'ed that too because that's an incomplete fix. As I
+> > said further below, the fix needs to be at the aggregation level where
+> > you aggregate all the current consumer requests. In there, you need to
+> > add in the "state at boot" input that gets cleared out after a
+> > sync_state() call is received for that power domain.
+> >
+>
+> So, just to make sure I understand your point. You would rather have the
+> genpd_power_off check if 'state at boot' is 'on' and return busy and
+> then clear then, via a generic genpd sync state you would mark 'state at
+> boot' as 'off' and queue up a power off request for each PD from there.
+> And as for 'state at boot' it would check the enable bit through
+> provider.
+>
+> Am I right so far?
+
+I am not sure I completely follow what you are suggesting here.
+
+Although, let me point out that there is no requirement from the genpd
+API point of view, that the provider needs to be a driver. This means
+that the sync_state callback may not even be applicable for all genpd
+providers.
+
+In other words, it looks to me that we may need some new genpd helper
+functions, no matter what. More importantly, it looks like we need an
+opt-in behaviour, unless we can figure out a common way for genpd to
+understand whether the sync_state thing is going to be applicable or
+not. Maybe Saravana has some ideas around this?
+
+Note that, I don't object to extending genpd to be more clever and to
+share common code, of course. We could, for example, make
+genpd_power_off() to bail out earlier, rather than calling the
+->power_off() callback and waiting for it to return -EBUSY. Both of
+you have pointed this out to me, in some of the earlier
+replies/discussions too.
+
+>
+> > > And suggested this new approach that this patch series proposes.
+> > > (Unless I missunderstood his point)
+> > >
+> > > >
+> > > > 2) sync_state() is not just about power on/off. It's also about the
+> > > > power domain level. Can you handle that too please?
+> > >
+> > > Well, this patchset only tries to delay the disabling of unused power
+> > > domains until all consumers have had a chance to probe. So we use syn=
+c
+> > > state only to queue up a power-off request to make sure those unused
+> > > ones get disabled.
+> >
+> > Sure, but the design is completely unusable for a more complete
+> > sync_state() behavior. I'm okay if you want to improve the
+> > sync_state() behavior in layers, but don't do it in a way where the
+> > current design will definitely not work for what you want to add in
+> > the future.
+>
+> But you would still be OK with the qcom_cc sync state wrapper, I guess,
+> right? Your concern is only about the sync state callback being not
+> genpd generic one, AFAIU.
+>
+> >
+> > > >
+> > > > 3) In your GDSC drivers, it's not clear to me if you are preventing
+> > > > power off until sync_state() only for GDSCs that were already on at
+> > > > boot. So if an off-at-boot GDSC gets turned on, and then you attemp=
+t
+> > > > to turn it off before all its consumers have probed, it'll fail to
+> > > > power it off even though that wasn't necessary?
+> > >
+> > > I think we can circumvent looking at a GDSC by knowing it there was e=
+ver
+> > > a power on request since boot. I'll try to come up with something in =
+the
+> > > new version.
+> >
+> > Please no. There's nothing wrong with reading the GDSC values. Please
+> > read them and don't turn on GDSC's that weren't on at boot.
+>
+> Sorry for the typos above, I basically said that for this concern of
+> yours, we can add the 'state at boot' thing you mentioned above by
+> looking at the GDSC (as in reading reg).
+>
+> >
+> > Otherwise you are making it a hassle for the case where there is a
+> > consumer without a driver for a GDSC that was off at boot. You are now
+> > forcing the use of timeouts or writing to state_synced file. Those
+> > should be absolute last resorts, but you are making that a requirement
+> > with your current implementation. If you implement it correctly by
+> > reading the GDSC register, things will "just work". And it's not even
+> > hard to do.
+> >
+> > NACK'ed until this is handled correctly.
+> >
+> > >
+> > > >
+> > > > 4) The returning -EBUSY when a power off is attempted seems to be
+> > > > quite wasteful. The framework will go through the whole sequence of
+> > > > trying to power down, send the notifications and then fail and then
+> > > > send the undo notifications. Combined with point (2) I think this c=
+an
+> > > > be handled better at the aggregation level in the framework to avoi=
+d
+> > > > even going that far into the power off sequence.
+> > >
+> > > Again, have a look at [1] (above).
+> >
+> > See my reply above. If you do it properly at the framework level, this
+> > can be done in a clean way and will work for all power domains.
+> >
+> > -Saravana
+> >
+> > >
+> > > Ulf, any thoughts on this 4th point?
+
+Please, see my reply above.
+
+[...]
+
+Kind regards
+Uffe
