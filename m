@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D784A6D7524
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F322D6D751F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 09:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236912AbjDEHTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 03:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
+        id S236889AbjDEHSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 03:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjDEHTF (ORCPT
+        with ESMTP id S230050AbjDEHSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 03:19:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87D74236
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 00:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680679144; x=1712215144;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=829QezRVhy1NQcNbUENzdQ1yIK4H7cKGwsXDe7ZwJbk=;
-  b=Esl1c0X1bdmFxGiyeEqRqf7rz6/ykzQHtPrRTfqz0o0XTZNDH2IF+/pw
-   KEr2cY61pZI85W13vVYs1h0lb7tQvijCVKzvfCocVp2ABncMqr7G7vkPB
-   Hfum2IIEYnK6Kp9Iqj9V2X7S1lmKj8rQqYc/4f+9YzzeE98o7uSQ3bDen
-   j20GXuq99OFBfpTPuICi7ERehUOmmLQPFDgjOpMmnTnDa7PoRI7NLt+wk
-   ayMQ10TQ3NSY3duBUDXK9yl0qoPpy8vd2kqTpY+p1tjj3d/utjxexk+rt
-   YMbpHz4wyG6quo3JykRnfgC7Uux69uP5/GT+yE62HVMe4/PuFfvCLKkSy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="344966488"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="344966488"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 00:19:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="663932497"
-X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="663932497"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2023 00:19:00 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pjxQ5-000QNy-26;
-        Wed, 05 Apr 2023 07:19:01 +0000
-Date:   Wed, 5 Apr 2023 15:18:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: arch/powerpc/kvm/e500mc.c:171:5: error: no previous prototype for
- 'kvmppc_e500mc_check_processor_compat'
-Message-ID: <202304051534.jWWiT0cj-lkp@intel.com>
+        Wed, 5 Apr 2023 03:18:43 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6797826BA;
+        Wed,  5 Apr 2023 00:18:41 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 4E8DA300097AE;
+        Wed,  5 Apr 2023 09:18:39 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 43BA6E24E3; Wed,  5 Apr 2023 09:18:39 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 09:18:39 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 6/7] PCI: pciehp: Rely on `link_active_reporting'
+Message-ID: <20230405071839.GA27005@wunner.de>
+References: <alpine.DEB.2.21.2304042200040.37565@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2304042243250.37565@angie.orcam.me.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.DEB.2.21.2304042243250.37565@angie.orcam.me.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+On Tue, Apr 04, 2023 at 10:56:21PM +0100, Maciej W. Rozycki wrote:
+> Use `link_active_reporting' to determine whether Data Link Layer Link 
+> Active Reporting is available rather than re-retrieving the capability.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 
-FYI, the error/warning still remains.
+I provided a Reviewed-by for this patch back in February:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   76f598ba7d8e2bfb4855b5298caedd5af0c374a8
-commit: 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f KVM: PPC: Fix refactoring goof in kvmppc_e500mc_init()
-date:   2 months ago
-config: powerpc-buildonly-randconfig-r003-20230405 (https://download.01.org/0day-ci/archive/20230405/202304051534.jWWiT0cj-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7cb79f433e75b05d1635aefaa851cfcd1cb7dc4f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+https://lore.kernel.org/linux-pci/20230213135327.GA29595@wunner.de/
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304051534.jWWiT0cj-lkp@intel.com/
+Please always include collected tags when reposting your patches.
 
-All errors (new ones prefixed by >>):
+I also noted back then that this patch does not depend on the preceding
+patches in the series.  So please move it to the front of the series
+so that it can be picked up despite the other patches still being
+under discussion.  That way you reduce the size of any future reposts
+of the series and make life easier both for yourself and reviewers.
 
->> arch/powerpc/kvm/e500mc.c:171:5: error: no previous prototype for 'kvmppc_e500mc_check_processor_compat' [-Werror=missing-prototypes]
-     171 | int kvmppc_e500mc_check_processor_compat(void)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+Thanks,
 
+Lukas
 
-vim +/kvmppc_e500mc_check_processor_compat +171 arch/powerpc/kvm/e500mc.c
-
-   170	
- > 171	int kvmppc_e500mc_check_processor_compat(void)
-   172	{
-   173		int r;
-   174	
-   175		if (strcmp(cur_cpu_spec->cpu_name, "e500mc") == 0)
-   176			r = 0;
-   177		else if (strcmp(cur_cpu_spec->cpu_name, "e5500") == 0)
-   178			r = 0;
-   179	#ifdef CONFIG_ALTIVEC
-   180		/*
-   181		 * Since guests have the privilege to enable AltiVec, we need AltiVec
-   182		 * support in the host to save/restore their context.
-   183		 * Don't use CPU_FTR_ALTIVEC to identify cores with AltiVec unit
-   184		 * because it's cleared in the absence of CONFIG_ALTIVEC!
-   185		 */
-   186		else if (strcmp(cur_cpu_spec->cpu_name, "e6500") == 0)
-   187			r = 0;
-   188	#endif
-   189		else
-   190			r = -ENOTSUPP;
-   191	
-   192		return r;
-   193	}
-   194	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+> NB this has been compile-tested only with PPC64LE and x86-64
+> configurations.
+> 
+> No change from v6.
+> 
+> New change in v6.
+> ---
+>  drivers/pci/hotplug/pciehp_hpc.c |    7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> linux-pcie-link-active-reporting-hpc.diff
+> Index: linux-macro/drivers/pci/hotplug/pciehp_hpc.c
+> ===================================================================
+> --- linux-macro.orig/drivers/pci/hotplug/pciehp_hpc.c
+> +++ linux-macro/drivers/pci/hotplug/pciehp_hpc.c
+> @@ -984,7 +984,7 @@ static inline int pcie_hotplug_depth(str
+>  struct controller *pcie_init(struct pcie_device *dev)
+>  {
+>  	struct controller *ctrl;
+> -	u32 slot_cap, slot_cap2, link_cap;
+> +	u32 slot_cap, slot_cap2;
+>  	u8 poweron;
+>  	struct pci_dev *pdev = dev->port;
+>  	struct pci_bus *subordinate = pdev->subordinate;
+> @@ -1030,9 +1030,6 @@ struct controller *pcie_init(struct pcie
+>  	if (dmi_first_match(inband_presence_disabled_dmi_table))
+>  		ctrl->inband_presence_disabled = 1;
+>  
+> -	/* Check if Data Link Layer Link Active Reporting is implemented */
+> -	pcie_capability_read_dword(pdev, PCI_EXP_LNKCAP, &link_cap);
+> -
+>  	/* Clear all remaining event bits in Slot Status register. */
+>  	pcie_capability_write_word(pdev, PCI_EXP_SLTSTA,
+>  		PCI_EXP_SLTSTA_ABP | PCI_EXP_SLTSTA_PFD |
+> @@ -1051,7 +1048,7 @@ struct controller *pcie_init(struct pcie
+>  		FLAG(slot_cap, PCI_EXP_SLTCAP_EIP),
+>  		FLAG(slot_cap, PCI_EXP_SLTCAP_NCCS),
+>  		FLAG(slot_cap2, PCI_EXP_SLTCAP2_IBPD),
+> -		FLAG(link_cap, PCI_EXP_LNKCAP_DLLLARC),
+> +		FLAG(pdev->link_active_reporting, true),
+>  		pdev->broken_cmd_compl ? " (with Cmd Compl erratum)" : "");
+>  
+>  	/*
