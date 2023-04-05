@@ -2,141 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C34D06D7F3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2B46D7F3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 16:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237958AbjDEOWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 10:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        id S238253AbjDEOWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 10:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237184AbjDEOWG (ORCPT
+        with ESMTP id S238265AbjDEOW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 10:22:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646926A6E;
-        Wed,  5 Apr 2023 07:21:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0ED6624C2;
-        Wed,  5 Apr 2023 14:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79D1C433D2;
-        Wed,  5 Apr 2023 14:21:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680704494;
-        bh=eyBjOtC7CJFOS5X6Sp9ly9THlOS5XlccxmCOFpUhOl4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bkToI3kjLCFkg/Q9XiT8E06SrfvrJtgXoZM39QA51VeWtLgANnUBE7hJ/ogxNxeOI
-         ydJTjh3bdKT69RKz8iF1i+7JV4C9BaVRxmH+dqVKXlurRTsJCPinJ1tXHUEDS8Ui6G
-         Qymz+m9pc6XZp6tnGjnOumjKfK6rAeR//gpPltw8=
-Date:   Wed, 5 Apr 2023 16:21:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shaun Tancheff <shaun.tancheff@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Shaun Tancheff <shaun.tancheff@hpe.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] memcg-v1: Enable setting memory min, low, high
-Message-ID: <2023040500-drinking-obvious-bd85@gregkh>
-References: <20230405110107.127156-1-shaun.tancheff@gmail.com>
- <2023040529-commodore-humongous-47c3@gregkh>
- <CAJ48U8X28dhTWouqeT83Uqys__qf2+z-6NcdC1SbOr_xOzjgWg@mail.gmail.com>
+        Wed, 5 Apr 2023 10:22:26 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651805FFC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 07:21:57 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-4fd1f2a0f82so60290a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 07:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1680704513; x=1683296513;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0hEm3Bu1ajK6bUPoSCMbJz7g4+4dYw9soC8zApe4hMc=;
+        b=dpunbt78Nu2bqL1/MCP1Yrvt88iEad8oMRiJF84xlTSiCngaKtk5FA3RBCcFzIOsOt
+         kgwObyB+ED+hE6Et0bKNge+WJMib2ruloC80JurL5XZQySHnCnIA1r4RRQrkxWk4kT7m
+         nMs2nmS1mHd/Ruhd8U1HtKNlbUAe6jhQh1GtU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680704513; x=1683296513;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0hEm3Bu1ajK6bUPoSCMbJz7g4+4dYw9soC8zApe4hMc=;
+        b=U7e7KzjFl1T7ZyDmnwNqASDr2V5PykIqmH79tePZRxtRvNw8z8JzRai4UOMuZFUTJi
+         Fd+e2uSgnHRC0hdWZbvuzf1+E9zlOLV90aKtev0tzSgtcQT3bU4X5Y3WXeg8OLriqT99
+         +rz1Uk4tVzL1H9D/AmPpt6PbfWnyJUJGWLbJ0187ykosSYL0QCOxhOj0bBHsEI6gO9fa
+         9IQHQcGO/t+rFsHGSXb8xVzW7RDu9FkVPv7/FbVOIkW8muScZ38gfg68oESv+3Ms0nLf
+         RJ6ODKezxZTBqUTbZUGWzhYOTFEmBseTxQFeJ9Fnl/cACH+Yg/UNxEWpPCIEqmcy+J+R
+         HhvQ==
+X-Gm-Message-State: AAQBX9dCO0MqJDEU+v8YL1NOb+eVwzo6tpnchfoVVQWjnxOhs880wS/A
+        7NP47rgia2ztDhSIn9JhjRK1OA==
+X-Google-Smtp-Source: AKy350bxxApiu6QlBT7LFjNT5HOmCcGl6WDZP6khnW7b0dJcrSCSEyjhjNy22KbR8irHrR8fUaM/Aw==
+X-Received: by 2002:a17:906:2093:b0:933:2e79:4632 with SMTP id 19-20020a170906209300b009332e794632mr2053178ejq.1.1680704513565;
+        Wed, 05 Apr 2023 07:21:53 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id r6-20020a1709064d0600b0093034e71b94sm7467929eju.65.2023.04.05.07.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 07:21:53 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 16:21:50 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH RFC 10/18] drm/scheduler: Add can_run_job callback
+Message-ID: <ZC2D/pQsNgaoSzzh@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-10-917ff5bc80a8@asahilina.net>
+ <ZC16Q8MhHEcutX1b@phenom.ffwll.local>
+ <20502c4c-c987-3117-119a-2fd38ae5f607@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ48U8X28dhTWouqeT83Uqys__qf2+z-6NcdC1SbOr_xOzjgWg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20502c4c-c987-3117-119a-2fd38ae5f607@amd.com>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:54:07PM +0700, Shaun Tancheff wrote:
-> On Wed, Apr 5, 2023 at 6:23â€¯PM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Wed, Apr 05, 2023 at 04:14:11PM +0200, Christian König wrote:
+> Am 05.04.23 um 15:40 schrieb Daniel Vetter:
+> > On Tue, Mar 07, 2023 at 11:25:35PM +0900, Asahi Lina wrote:
+> > > Some hardware may require more complex resource utilization accounting
+> > > than the simple job count supported by drm_sched internally. Add a
+> > > can_run_job callback to allow drivers to implement more logic before
+> > > deciding whether to run a GPU job.
+> > > 
+> > > Signed-off-by: Asahi Lina <lina@asahilina.net>
+> > Ok scheduler rules, or trying to summarize the entire discussion:
+> > 
+> > dma_fence rules are very tricky. The two main chapters in the docs are
+> > 
+> > https://dri.freedesktop.org/docs/drm/driver-api/dma-buf.html?highlight=dma_buf#dma-fence-cross-driver-contract
+> > https://dri.freedesktop.org/docs/drm/driver-api/dma-buf.html?highlight=dma_buf#indefinite-dma-fences
+> > 
+> > Unforutunately I don't think it's possible to check this at compile time,
+> > thus far all we can do is validate at runtime. I've posted two patches for
+> > this:
+> > 
+> > https://lore.kernel.org/dri-devel/20201023122216.2373294-17-daniel.vetter@ffwll.ch/
+> > https://lore.kernel.org/dri-devel/20201023122216.2373294-20-daniel.vetter@ffwll.ch/
+> > 
+> > Unfortunately most drivers are buggy and get this completely wrong, so
+> > realistically we'd need to make this a per-driver opt-out and annotate all
+> > current drivers. Well except amdgpu is correct by now I think (they'd
+> > still need to test that).
 > 
-> > On Wed, Apr 05, 2023 at 06:01:07PM +0700, Shaun Tancheff wrote:
-> > > From: Shaun Tancheff <shaun.tancheff@hpe.com>
-> > >
-> > > For users that are unable to update to memcg-v2 this
-> > > provides a method where memcg-v1 can more effectively
-> > > apply enough memory pressure to effectively throttle
-> > > filesystem I/O or otherwise minimize being memcg oom
-> > > killed at the expense of reduced performance.
-> > >
-> > > This patch extends the memcg-v1 legacy sysfs entries
-> > > with:
-> > >     limit_in_bytes.min, limit_in_bytes.low and
-> > >     limit_in_bytes.high
-> > > Since old software will need to be updated to take
-> > > advantage of the new files a secondary method
-> > > of setting min, low and high based on a percentage
-> > > of the limit is also provided. The percentages
-> > > are determined by module parameters.
-> > >
-> > > The available module parameters can be set at
-> > > kernel boot time, for example:
-> > >    memcontrol.memcg_min=10
-> > >    memcontrol.memcg_low=30
-> > >    memcontrol.memcg_high=80
-> > >
-> > > Would set min to 10%, low to 30% and high to 80% of
-> > > the value written to:
-> > >   /sys/fs/cgroup/memory/<grp>/memory.limit_in_bytes
-> > >
-> > > Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
+> There is still one potential memory allocation in the run_job callback in
+> amdgpu which I wasn't able to fix yet.
+> 
+> But that one is purely academic and could potentially be trivially replaced
+> with using GFP_ATOMIC if we ever have to.
+
+I think the modeset in the tdr code was more scary, and I'm not sure you
+really managed to get rid of absolutely everything in there yet.
+-Daniel
+
+> 
+> Christian.
+> 
+> >   And Rob Clark is working on patches to fix up
+> > msm.
+> > 
+> > I think best here is if you work together with Rob to make sure these
+> > annotations are mandatory for any rust drivers (I don't want new buggy
+> > drivers at least). Would also be great to improve the kerneldoc for all
+> > the driver hooks to explain these restrictions and link to the relevant
+> > kerneldocs (there's also one for the dma_fence signalling annotations
+> > which might be worth linking too).
+> > 
+> > I don't see any way to make this explicit in rust types, it's really only
+> > something runtime tests (using lockdep) can catch. Somewhat disappointing.
+> > 
+> > For the other things discussed here:
+> > 
+> > - Option<Dma_Fence> as the return value for ->prepare_job makes sense to
+> >    me.
+> > 
+> > - I don't see any way a driver can use ->can_run_job without breaking the
+> >    above rules, that really doesn't sound like a good idea to me.
+> > 
+> > Cheers, Daniel
+> > 
 > > > ---
-> > > v0: Initial hard coded limits by percent.
-> > > v1: Added sysfs access and module parameters for percent values to enable
-> > > v2: Fix 32-bit, remove need for missing __udivdi3
-> > >  mm/memcontrol.c | 83 ++++++++++++++++++++++++++++++++++++++++++++++++-
-> > >  1 file changed, 82 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > > index 2eee092f8f11..3cf8386f4f45 100644
-> > > --- a/mm/memcontrol.c
-> > > +++ b/mm/memcontrol.c
-> > > @@ -73,6 +73,18 @@
-> > >
-> > >  #include <trace/events/vmscan.h>
-> > >
-> > > +static unsigned int memcg_v1_min_default_percent;
-> > > +module_param_named(memcg_min, memcg_v1_min_default_percent, uint, 0600);
-> > > +MODULE_PARM_DESC(memcg_min, "memcg v1 min default percent");
+> > >   drivers/gpu/drm/scheduler/sched_main.c | 10 ++++++++++
+> > >   include/drm/gpu_scheduler.h            |  8 ++++++++
+> > >   2 files changed, 18 insertions(+)
+> > > 
+> > > diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> > > index 4e6ad6e122bc..5c0add2c7546 100644
+> > > --- a/drivers/gpu/drm/scheduler/sched_main.c
+> > > +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> > > @@ -1001,6 +1001,16 @@ static int drm_sched_main(void *param)
+> > >   		if (!entity)
+> > >   			continue;
+> > > +		if (sched->ops->can_run_job) {
+> > > +			sched_job = to_drm_sched_job(spsc_queue_peek(&entity->job_queue));
+> > > +			if (!sched_job) {
+> > > +				complete_all(&entity->entity_idle);
+> > > +				continue;
+> > > +			}
+> > > +			if (!sched->ops->can_run_job(sched_job))
+> > > +				continue;
+> > > +		}
 > > > +
-> > > +static unsigned int memcg_v1_low_default_percent;
-> > > +module_param_named(memcg_low, memcg_v1_low_default_percent, uint, 0600);
-> > > +MODULE_PARM_DESC(memcg_low, "memcg v1 low default percent");
+> > >   		sched_job = drm_sched_entity_pop_job(entity);
+> > >   		if (!sched_job) {
+> > > diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
+> > > index 9db9e5e504ee..bd89ea9507b9 100644
+> > > --- a/include/drm/gpu_scheduler.h
+> > > +++ b/include/drm/gpu_scheduler.h
+> > > @@ -396,6 +396,14 @@ struct drm_sched_backend_ops {
+> > >   	struct dma_fence *(*prepare_job)(struct drm_sched_job *sched_job,
+> > >   					 struct drm_sched_entity *s_entity);
+> > > +	/**
+> > > +	 * @can_run_job: Called before job execution to check whether the
+> > > +	 * hardware is free enough to run the job.  This can be used to
+> > > +	 * implement more complex hardware resource policies than the
+> > > +	 * hw_submission limit.
+> > > +	 */
+> > > +	bool (*can_run_job)(struct drm_sched_job *sched_job);
 > > > +
-> > > +static unsigned int memcg_v1_high_default_percent;
-> > > +module_param_named(memcg_high, memcg_v1_high_default_percent, uint,
-> > 0600);
-> > > +MODULE_PARM_DESC(memcg_high, "memcg v1 high default percent");
-> >
-> > This is not the 1990's, why are you using module parameters for this?
-> >
-> And this isn't a module, so why use module options, how are you supposed
-> > to set them?
-> >
-> Ah .. guess I'm a bit out of date.
-> The can be set either on the kernel command line or through sysfs,
-> nominally
->   /sys/module/memcontrol/parameters/memcg_high
->   /sys/module/memcontrol/parameters/memcg_low
->   /sys/module/memcontrol/parameters/memcg_min
+> > >   	/**
+> > >            * @run_job: Called to execute the job once all of the dependencies
+> > >            * have been resolved.  This may be called multiple times, if
+> > > 
+> > > -- 
+> > > 2.35.1
+> > > 
+> 
 
-But again, memcontrol is not a module, right?
-
-> I will look at making these sysctl values instead.
-
-Yeah, just stick with that please.
-
-thanks,
-
-greg k-h
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
