@@ -2,109 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21BA6D7A1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF4D6D7A27
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 12:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237828AbjDEKoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 06:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S237450AbjDEKpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 06:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237588AbjDEKoE (ORCPT
+        with ESMTP id S237250AbjDEKpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 06:44:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E694ECA;
-        Wed,  5 Apr 2023 03:44:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2975763C57;
-        Wed,  5 Apr 2023 10:44:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC61C433EF;
-        Wed,  5 Apr 2023 10:44:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680691441;
-        bh=+ZO/yBxfJv0GaHczUgdJTBFHBjfQ/ykADeJttq42HmQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RfEi0EWHrVtgDNTDmAkQHpOA1xGMHUdirDcpsD08NWpiRE8In3RAHPfhmz+mLo3Re
-         keFWgaWXAHpSzJgLMWdEzHtCNaP6XaC77hbIAZwK+4PpDX/Zwb9pTItZlq4DbE4Bcj
-         gF37NoMLKD33dyuHM4yV5O3ouVk+s6lLupFGmAHvGBDdJp1MrGsgJ5ZzVLp7GXS7g2
-         UIOMTpAu0+CUNt+73VKyRli+76KWSC33YcG5QeaD76fiXSWmghliODfhBl98LZE/dA
-         PhaBHuqHXYQ037jMpcPmRNTtYCqZtKeIbh0pk5/nikjbQBZDel/38qAxiwMpnOZnDc
-         uqZAC/jHMG+Ow==
-Date:   Wed, 5 Apr 2023 12:43:58 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Yair Podemsky <ypodemsk@redhat.com>
-Cc:     linux@armlinux.org.uk, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, davem@davemloft.net, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, akpm@linux-foundation.org,
-        peterz@infradead.org, arnd@arndb.de, keescook@chromium.org,
-        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
-        ardb@kernel.org, juerg.haefliger@canonical.com,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        tony@atomide.com, linus.walleij@linaro.org,
-        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
-        dhildenb@redhat.com, alougovs@redhat.com
-Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to CPUs in kernel mode
-Message-ID: <ZC1Q7uX4rNLg3vEg@lothringen>
-References: <20230404134224.137038-1-ypodemsk@redhat.com>
- <20230404134224.137038-4-ypodemsk@redhat.com>
+        Wed, 5 Apr 2023 06:45:42 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECBD19B2
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 03:45:41 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-158-QrVyRzgdOBaHChDADgWO2w-1; Wed, 05 Apr 2023 11:45:38 +0100
+X-MC-Unique: QrVyRzgdOBaHChDADgWO2w-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 5 Apr
+ 2023 11:45:36 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 5 Apr 2023 11:45:36 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Alexey Dobriyan' <adobriyan@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] string: implement streq()
+Thread-Topic: [PATCH] string: implement streq()
+Thread-Index: AQHZZwV5Ya2vbUrSK0i2c63OpoVNQq8ciTUQ
+Date:   Wed, 5 Apr 2023 10:45:36 +0000
+Message-ID: <64f79f9610284091863ec8ce54660b85@AcuMS.aculab.com>
+References: <4b595ab9-238c-43a5-aba0-be5d6afc0f87@p183>
+ <20230403141641.6ace0d85fd48fbed5c02d7ef@linux-foundation.org>
+ <db6ce106-a5fc-4742-a59e-ccbd39dfd69d@p183>
+In-Reply-To: <db6ce106-a5fc-4742-a59e-ccbd39dfd69d@p183>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404134224.137038-4-ypodemsk@redhat.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 04:42:24PM +0300, Yair Podemsky wrote:
-> @@ -191,6 +192,20 @@ static void tlb_remove_table_smp_sync(void *arg)
->  	/* Simply deliver the interrupt */
->  }
->  
-> +
-> +#ifdef CONFIG_CONTEXT_TRACKING
-> +static bool cpu_in_kernel(int cpu, void *info)
-> +{
-> +	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
-
-Like Peter said, an smp_mb() is required here before the read (unless there is
-already one between the page table modification and that ct->state read?).
-
-So that you have this pairing:
-
-
-           WRITE page_table                  WRITE ct->state
-	   smp_mb()                          smp_mb() // implied by atomic_fetch_or
-           READ ct->state                    READ page_table
-
-> +	int state = atomic_read(&ct->state);
-> +	/* will return true only for cpus in kernel space */
-> +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
-> +}
-
-Also note that this doesn't stricly prevent userspace from being interrupted.
-You may well observe the CPU in kernel but it may receive the IPI later after
-switching to userspace.
-
-We could arrange for avoiding that with marking ct->state with a pending work bit
-to flush upon user entry/exit but that's a bit more overhead so I first need to
-know about your expectations here, ie: can you tolerate such an occasional
-interruption or not?
-
-Thanks.
+RnJvbTogQWxleGV5IERvYnJpeWFuDQo+IFNlbnQ6IDA0IEFwcmlsIDIwMjMgMTU6NTUNCj4gDQo+
+IE9uIE1vbiwgQXByIDAzLCAyMDIzIGF0IDAyOjE2OjQxUE0gLTA3MDAsIEFuZHJldyBNb3J0b24g
+d3JvdGU6DQo+ID4gT24gU2F0LCAxIEFwciAyMDIzIDIwOjQ4OjA1ICswMzAwIEFsZXhleSBEb2Jy
+aXlhbiA8YWRvYnJpeWFuQGdtYWlsLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiA+IE1vc3Qgb2YgdGhl
+IHRpbWUgc3RyY21wKCkgaXMgYmVpbmcgdXNlZCwgc3RyaW5ncyBhcmUgY2hlY2tlZCBmb3IgZXF1
+YWxpdHkuDQo+ID4gPiBBZGQgd3JhcHBlciB0byByZWxheSBzdWNoIGludGVudCAoaXQgaXMgc2hv
+cnRlciB0byB0eXBlLCB0b28pLg0KPiA+ID4NCj4gPiA+IFVzZQ0KPiA+ID4gCWlmIChzdHJlcShz
+LCAicyIpKSB7DQo+ID4gPiAJfQ0KPiA+ID4gb3INCj4gPiA+IAlpZiAoIXN0cmVxKHMsICJzIikp
+IHsNCj4gPiA+IAl9DQo+ID4NCj4gPiBHZWUsIGRvIHdlIHJlYWxseSB3YW50IHRoaXM/ICBJIG1l
+YW4sIHdlIGFsbCBrbm93IGhvdyBzdHJjbXAoKSB3b3JrcywNCj4gPiBkb24ndCB3ZT8NCj4gPg0K
+PiA+IEknbSB0aGlua2luZyBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8gcmVtb3ZlIHRoZSB2YXJpb3Vz
+IGN1dGUgbGl0dGxlDQo+ID4gc3RyZXEoKSBtYWNyb3MgYW5kIG9wZW4tY29kZSBzdHJjbXAoLi4u
+KT09MC4NCj4gDQo+IE5vISBJdCdzIGNvb2wsIHRydXN0IG1lLiBUcnkgaXQgb3V0LCB5b3UnbGwg
+bGlrZSBpdC4NCj4gV2UgImtub3ciIGhvdyBzdHJjbXAoKSB3b3JrcyBiZWNhdXNlIEMgZGlkbid0
+IGhhdmUgc3RyZXEoKSBmcm9tDQo+IHRoZSB2ZXJ5IGJlZ2lubmluZy4NCj4gDQo+IHN0cmNtcCgp
+IGlzIG9ubHkgZm9yIGluc2VydGlvbiBpbnRvIHRyZWVzLiBIYWxmIG9mIHRoZSB0aW1lIHlvdSBu
+ZWVkDQo+IHRvIHJlYWQgdG8gdGhlIGVuZCBvZiB0aGUgZXhwcmVzc2lvbiB0byBrbm93IGlmIGl0
+IGlzIGNoZWNrIGZvciBlcXVhbGl0eQ0KPiBvciBpbmVxdWFsaXR5LiBXaXRoIHN0cmVxKCksIHlv
+dSBkb24ndC4NCg0KSW5zdGVhZCB5b3UgaGF2ZSB0byBnbyBhd2F5IGFuZCBsb29rIHVwIHdoYXQg
+YSBmdW5jdGlvbg0KeW91J3ZlIG5ldmVyIGhlYXJkIG9mIGRvZXMuDQoNCkxpdmUgd2l0aCBzdHJj
+bXAoKS4uLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFt
+bGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3Ry
+YXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
