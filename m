@@ -2,177 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27626D86C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CAFA6D86C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 21:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjDETWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 15:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S232356AbjDETXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 15:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjDETWM (ORCPT
+        with ESMTP id S229473AbjDETXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 15:22:12 -0400
-Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FF2619B;
-        Wed,  5 Apr 2023 12:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1680722526;
-        bh=bxOssrZ9p9edKrGOiBzAQqPL3Zbov8F9eu6w8/r57AY=;
-        h=From:To:Cc:Subject:Date;
-        b=h83ld2ciRGFg9XAgqEoFGe8kahjEeACGalZ/CsGFBDZuFiqIqHfBvKday4N7B/S1L
-         ekypLw9t6sdxIF+zC6niQdnhF9s9sQdZsWezfa4e1Gx6oMUXgkHDDJaQgeBWuIvwkd
-         4c8ogu7/IzzMVaJFhFNuTeoTQgPWDMDKR7WSBoLg=
-Received: from wen-VirtualBox.lan ([106.92.97.36])
-        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
-        id 5808F8A9; Thu, 06 Apr 2023 03:22:00 +0800
-X-QQ-mid: xmsmtpt1680722520tvhd1dmos
-Message-ID: <tencent_16F9553E8354D950D704214D6EA407315F0A@qq.com>
-X-QQ-XMAILINFO: MRw/zKT/0BpPOmBcxVwbT4iLv0RSfXAa7tRZuGbItYjMP9KJbNXJQY5dn8EsQt
-         iu0FXvaWDBoaAcra6QNRb3xk0UE75zAziNTY90gkuUOEfpmhRSRu2A/sxRdznXgE6AfFGtYfeiZh
-         dn/E+1u9TuLo0y+8CtMZ9vhoy/aecXGy1vKRJg3t8Fv1plWPaKMGn/lfPL+wZ5ZTEr/wv928k9IS
-         z0dEVqVQ6ztthcBEUhQAVQ3ywD6VIRJNOlhU8xX75l0alv8sSlmFzrdND94QxwTfxPFzHZsquheJ
-         ANFQgOmwUIu5fOpnAGjn1pq0/l5TUsGkuskS9pemxOTz3D51Kfd973Q1R4MWYsQ2D6EhUAksoqjr
-         QjnvRRiGA6zuZFL8jExCLDiqRySkbZOHIUEiSpDiVC28IduPBljyVgyfjRZLHG4rWMABxyNm2bfk
-         eRaXoo3t+U3J4xVrseT2jXVlp0Bmrj5sKEB4RcpaPHnYyJlwO67Eyfoy5SRdSacuV1B9f8o6mJc0
-         JpuV1WOs6VTL/8Dr00keXy1mvwR3fwQAIE3axisJcAqQizQ8wbZ3w7tZzrVUXwk7i/bBj2PtVBqo
-         u9RYa/SSJZT8PvlZsds1AiIi8r4J5a52F/0BBb/oSlwLgmaiRYryKNDL0ub7pRpWmj66Xo6mRuhS
-         g47YiFBpFKdo3N5Z423y9ufqQm9OdyqUl8yBfg2/I02YiXmpPCEjdJFpmOsEf0Z2GOycG+/BdK0x
-         WeN17gj4M9B4xXnDDt4Ou+VJAXWIMOUIY7m2QZL91Cbq43SthOvYN4dbTomOL0W0ga/7eraGKPch
-         M7fkeAQboG50+PCeEwGTasIFUwX319+WtkX4sCZCkqAIr91MI/ccy6hQEHJ9c9QngbwbakL09vcQ
-         YSX3XFc5sA8aWMJTBkJ5H9STKw53BunIfLllhyhCPGaeyfL/zwm9hrLA9SPOb3jJToaTcEOcy2Hi
-         7B/CDNt4bsNBusZRkdLKTBoyn7TddAUsIyOu1ctmoNta6jmx8iwrx2ldmtigkQsEw+w+IOC333Uf
-         qhgWeWBekwdmXolNFg
-From:   wenyang.linux@foxmail.com
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Wen Yang <wenyang.linux@foxmail.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>, Fu Wei <wefu@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michal Nazarewicz <m.nazarewicz@samsung.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v2] eventfd: use wait_event_interruptible_locked_irq() helper
-Date:   Thu,  6 Apr 2023 03:20:02 +0800
-X-OQ-MSGID: <20230405192002.48836-1-wenyang.linux@foxmail.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 5 Apr 2023 15:23:53 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855DC4C12
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:23:52 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a1b23f49e2so112405ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 12:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680722632;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DRIWNvg6XZhs4LfiKJrEHIsoLeWRLmaLzAOUbmZeUIQ=;
+        b=kYiSIPlvaAdtY8uiTjFB22ywpmPruu8pumj2R492/MIJoR2DtDKVfznt1EtbKaSaQa
+         gdGqBL0ltAnGXQL27fVXVsg3nP36sVQTg1g9L0TIz1OGouh7uO8azQ9s//Xv3nOk/8WM
+         5g4IcGHL+i6cGSsR1TjMYjMtr8PPpjMoJ3STKazh2jM/GgFk+ty+0YBDHG7L0L9QJkm3
+         2fq6b7zzUWoA8AlqkkfD0mAPRoenEk7ksununR5gX0t37yGcKTBoq1naRM2UywhYqkD8
+         ObSYMf2wV8QXhrM3CYEA/ZJZ6WPV4dJ2RVT1SxLAioYsFa/vSxy/KHwUShKNBGyxIyTw
+         USvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680722632;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DRIWNvg6XZhs4LfiKJrEHIsoLeWRLmaLzAOUbmZeUIQ=;
+        b=gXJmKGILgwvhZtmhBn0B1gDAOo6PfoGU53uB9JUEO/2AJqriExPOvfkqphgBr1TKa0
+         3h4gCUbmThK0CC4wrCVjhHY7SjGTjssvmJtN5hSSPN7jJZqwY/D64C+rrtOhg4/jb6xU
+         19EubN2OPu5BoGcUCjB8ixJmSXQNnaNlKn+e2uLgOSkBY9un6tRtJxB1E/oypjznZp+b
+         OKf0iown6hkVDPsvGevaYdTp2NwxUNUTkrvW5T3rxUNhoD0wOUH7ZXuYcXpAJ3ocoiez
+         mXO1wVVQreWnXOF8PDq3VJ12213N7U5bhj85JpyCcES3QT7XUasj7ECgW40DIx6kuHO7
+         5SsQ==
+X-Gm-Message-State: AAQBX9cpjeG9LCt5w5AJ/f0AZVdxu9Ti5wpwYEHCay5/b97yajYxhKYI
+        Ovu92MRlwTQbX9YtD57Z+NaHZw==
+X-Google-Smtp-Source: AKy350YkzfVf2fy7LAO4VO6fm4pbXqwaToWynx58lUYTN/kWXKa6chf/0Mc+PfTk3SuZPpVn9yMocQ==
+X-Received: by 2002:a17:902:ab85:b0:1a2:914e:fe00 with SMTP id f5-20020a170902ab8500b001a2914efe00mr33393plr.14.1680722631706;
+        Wed, 05 Apr 2023 12:23:51 -0700 (PDT)
+Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
+        by smtp.gmail.com with ESMTPSA id je3-20020a170903264300b00196807b5189sm10458008plb.292.2023.04.05.12.23.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 12:23:50 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 12:23:47 -0700
+From:   William McVicker <willmcvicker@google.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sajid Dalvi <sdalvi@google.com>,
+        Han Jingoo <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>, kernel-team@android.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
+Message-ID: <ZC3Kw4AYiMKY7nCR@google.com>
+References: <ZC12lN9Cs0QlPhVh@lpieralisi>
+ <20230405182753.GA3626483@bhelgaas>
+ <ZC3Ev7qnUDdG0cFd@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,
-        RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <ZC3Ev7qnUDdG0cFd@google.com>
+X-Spam-Status: No, score=-14.8 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wen Yang <wenyang.linux@foxmail.com>
+On 04/05/2023, William McVicker wrote:
+> On 04/05/2023, Bjorn Helgaas wrote:
+> > On Wed, Apr 05, 2023 at 03:24:36PM +0200, Lorenzo Pieralisi wrote:
+> > > On Thu, Mar 16, 2023 at 06:05:02PM -0500, Sajid Dalvi wrote:
+> > > > On Tue, Feb 28, 2023 at 10:36 PM Sajid Dalvi <sdalvi@google.com> wrote:
+> > > > >
+> > > > > Thanks for your review Jingoo.
+> > > > > Sajid
+> > > > >
+> > > > > On Tue, Feb 28, 2023 at 4:04 PM Han Jingoo <jingoohan1@gmail.com> wrote:
+> > > > > >
+> > > > > > On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
+> > > > > > >
+> > > > > > > In dw_pcie_host_init() regardless of whether the link has been started
+> > > > > > > or not, the code waits for the link to come up. Even in cases where
+> > > > > > > start_link() is not defined the code ends up spinning in a loop for 1
+> > > > > > > second. Since in some systems dw_pcie_host_init() gets called during
+> > > > > > > probe, this one second loop for each pcie interface instance ends up
+> > > > > > > extending the boot time.
+> > > > > > >
+> > > > > > > Call trace when start_link() is not defined:
+> > > > > > > dw_pcie_wait_for_link << spins in a loop for 1 second
+> > > > > > > dw_pcie_host_init
+> > > > > > >
+> > > > > > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> > > > > >
+> > > > > > (CC'ed Krzysztof Kozlowski)
+> > > > > >
+> > > > > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> > > > > >
+> > > > > > It looks good to me. I also checked the previous thread.
+> > > > > > I agree with Krzysztof's opinion that we should include
+> > > > > > only hardware-related features into DT.
+> > > > > > Thank you.
+> > > > > >
+> > > > > > Best regards,
+> > > > > > Jingoo Han
+> > > > > >
+> > > > > > > ---
+> > > > > > >  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
+> > > > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > > > index 9952057c8819..9709f69f173e 100644
+> > > > > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > > > @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+> > > > > > >                 ret = dw_pcie_start_link(pci);
+> > > > > > >                 if (ret)
+> > > > > > >                         goto err_remove_edma;
+> > > > > > > -       }
+> > > > > > >
+> > > > > > > -       /* Ignore errors, the link may come up later */
+> > > > > > > -       dw_pcie_wait_for_link(pci);
+> > > > > > > +               /* Ignore errors, the link may come up later */
+> > > > > > > +               dw_pcie_wait_for_link(pci);
+> > > > > > > +       }
+> > > > > > >
+> > > > > > >         bridge->sysdata = pp;
+> > > > > > >
+> > > > > > > --
+> > > > > > > 2.39.2.722.g9855ee24e9-goog
+> > > > > > >
+> > > > 
+> > > > @bhelgaas Can this be picked up in your tree:
+> > > >  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/
+> > > 
+> > > This patch seems fine to me. The question I have though is why the
+> > > *current* code is written the way it is. Perhaps it is just the way
+> > > it is, I wonder whether this change can trigger a regression though.
+> > 
+> > The new code will look basically like this:
+> > 
+> >   if (!dw_pcie_link_up(pci)) {
+> >     dw_pcie_start_link(pci);
+> >     dw_pcie_wait_for_link(pci);
+> >   }
+> > 
+> > If the link is already up by the time we get here, this change means
+> > we won't get this message emitted by dw_pcie_wait_for_link():
+> > 
+> >   dev_info(pci->dev, "PCIe Gen.%u x%u link up\n", ...)
+> > 
+> > I don't know how important that is, but I bet somebody cares about it.
+> > 
+> > From the commit log, I expected the patch to do something based on
+> > whether ->start_link() was defined, but there really isn't a direct
+> > connection, so maybe the log could be refined.
+> > 
+> > Bjorn
+> > 
+> > -- 
+> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> > 
+> 
+> After taking a deeper dive into this patch, I found that [1] changes the
+> original intent which was to skip the call to dw_pcie_wait_for_link()
+> when pci->ops->start_link is NULL. I talked to Sajid offline and he
+> agreed we should put back the start_link NULL check. The updated patch
+> should look like this:
+> 
+>   if (!dw_pcie_link_up(pci) && pci->ops && pci->ops->start_link) {
+>     ret = dw_pcie_start_link(pci);
+>     if (ret)
+>       goto err_free_msi;
+>     dw_pcie_wait_for_link(pci);
+>   }
+> 
+> 
+> ...which will ensure that we don't call dw_pcie_wait_for_link() when
+> pci->ops->start_link is NULL.
+> 
+> With regards to the log, I think there are 2 ways to solve this:
+> 
+> 1) We could also call dw_pcie_wait_for_link() in a new else if
+>    dw_pcie_link_up() returns 1.
+> 2) We could add this to the top of dw_pcie_wait_for_link() and leave the
+>    code as is:
+> 
+>    if (!pci->ops || !pci->ops->start_link)
+>      return 0;
+> 
+> I kind of like (2) since that solves both Sajid's original issue and
+> will keep the original log.
+> 
+> [1] https://lore.kernel.org/all/20220624143428.8334-14-Sergey.Semin@baikalelectronics.ru/
+> 
+> Regards,
+> Will
 
-wait_event_interruptible_locked_irq was introduced by commit 22c43c81a51e
-("wait_event_interruptible_locked() interface"), but older code such as
-eventfd_{write,read} still uses the open code implementation.
-Inspired by commit 8120a8aadb20
-("fs/timerfd.c: make use of wait_event_interruptible_locked_irq()"), this
-patch replaces the open code implementation with a single macro call.
+Below is what I'm thinking will do the job. I verified on a Pixel 6
+(which doesn't have start_link() defined) that we don't have the 1
+second wait from dw_pcie_wait_for_link() during probe.
 
-No functional change intended.
-
-Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Dylan Yudaken <dylany@fb.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: David Woodhouse <dwmw@amazon.co.uk>
-Cc: Fu Wei <wefu@redhat.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Michal Nazarewicz <m.nazarewicz@samsung.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- fs/eventfd.c | 41 +++++++----------------------------------
- 1 file changed, 7 insertions(+), 34 deletions(-)
-
-diff --git a/fs/eventfd.c b/fs/eventfd.c
-index 249ca6c0b784..95850a13ce8d 100644
---- a/fs/eventfd.c
-+++ b/fs/eventfd.c
-@@ -228,7 +228,6 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
- 	struct file *file = iocb->ki_filp;
- 	struct eventfd_ctx *ctx = file->private_data;
- 	__u64 ucnt = 0;
--	DECLARE_WAITQUEUE(wait, current);
+diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+index 8e33e6e59e68..1bf04324ad2d 100644
+--- a/drivers/pci/controller/dwc/pcie-designware.c
++++ b/drivers/pci/controller/dwc/pcie-designware.c
+@@ -648,13 +648,16 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
+ {
+ 	u32 offset, val;
+ 	int retries;
++	int link_up = dw_pcie_link_up(pci);
  
- 	if (iov_iter_count(to) < sizeof(ucnt))
- 		return -EINVAL;
-@@ -239,23 +238,11 @@ static ssize_t eventfd_read(struct kiocb *iocb, struct iov_iter *to)
- 			spin_unlock_irq(&ctx->wqh.lock);
- 			return -EAGAIN;
- 		}
--		__add_wait_queue(&ctx->wqh, &wait);
--		for (;;) {
--			set_current_state(TASK_INTERRUPTIBLE);
--			if (ctx->count)
--				break;
--			if (signal_pending(current)) {
--				__remove_wait_queue(&ctx->wqh, &wait);
--				__set_current_state(TASK_RUNNING);
--				spin_unlock_irq(&ctx->wqh.lock);
--				return -ERESTARTSYS;
--			}
+-	/* Check if the link is up or not */
+-	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
+-		if (dw_pcie_link_up(pci))
+-			break;
++	if (!link_up && !(pci->ops && pci->ops->start_link))
++		return 0;
+ 
++	/* Check if the link is up or not */
++	for (retries = 0; !link_up && retries < LINK_WAIT_MAX_RETRIES; retries++) {
+ 		usleep_range(LINK_WAIT_USLEEP_MIN, LINK_WAIT_USLEEP_MAX);
 +
-+		if (wait_event_interruptible_locked_irq(ctx->wqh, ctx->count)) {
- 			spin_unlock_irq(&ctx->wqh.lock);
--			schedule();
--			spin_lock_irq(&ctx->wqh.lock);
-+			return -ERESTARTSYS;
- 		}
--		__remove_wait_queue(&ctx->wqh, &wait);
--		__set_current_state(TASK_RUNNING);
++		link_up = dw_pcie_link_up(pci);
  	}
- 	eventfd_ctx_do_read(ctx, &ucnt);
- 	current->in_eventfd = 1;
-@@ -275,7 +262,6 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
- 	struct eventfd_ctx *ctx = file->private_data;
- 	ssize_t res;
- 	__u64 ucnt;
--	DECLARE_WAITQUEUE(wait, current);
  
- 	if (count < sizeof(ucnt))
- 		return -EINVAL;
-@@ -288,23 +274,10 @@ static ssize_t eventfd_write(struct file *file, const char __user *buf, size_t c
- 	if (ULLONG_MAX - ctx->count > ucnt)
- 		res = sizeof(ucnt);
- 	else if (!(file->f_flags & O_NONBLOCK)) {
--		__add_wait_queue(&ctx->wqh, &wait);
--		for (res = 0;;) {
--			set_current_state(TASK_INTERRUPTIBLE);
--			if (ULLONG_MAX - ctx->count > ucnt) {
--				res = sizeof(ucnt);
--				break;
--			}
--			if (signal_pending(current)) {
--				res = -ERESTARTSYS;
--				break;
--			}
--			spin_unlock_irq(&ctx->wqh.lock);
--			schedule();
--			spin_lock_irq(&ctx->wqh.lock);
--		}
--		__remove_wait_queue(&ctx->wqh, &wait);
--		__set_current_state(TASK_RUNNING);
-+		res = wait_event_interruptible_locked_irq(ctx->wqh,
-+				ULLONG_MAX - ctx->count > ucnt);
-+		if (!res)
-+			res = sizeof(ucnt);
- 	}
- 	if (likely(res > 0)) {
- 		ctx->count += ucnt;
--- 
-2.37.2
+ 	if (retries >= LINK_WAIT_MAX_RETRIES) {
 
