@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345D76D7C84
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480CD6D7C7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 14:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237974AbjDEM02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 08:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
+        id S237096AbjDEM0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 08:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237986AbjDEM0W (ORCPT
+        with ESMTP id S237607AbjDEMZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 08:26:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9691F5B9D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680697533;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BtaxBOj8mnM7DN2UjknzYp2RwNpAvLMIaj8lPVQZwQI=;
-        b=EpvidRlbdUV9x5ix7U5ux7iUMAiJSPliCKARVyO+AF8HlJYHGbzXM4KFfauiUZrtla5P2T
-        zNEpYvzOTYHxYMS/mZFjRkczeRzjW3q3TCjcz/oUNmwhJY1af1tgGq6goiG9Sf7ZRNwPzo
-        +Q4Q1SBX+RVcZKPQecrJMoRaeNC+gfs=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-135-K5GWBFPYMQO0LIZOvianbA-1; Wed, 05 Apr 2023 08:25:32 -0400
-X-MC-Unique: K5GWBFPYMQO0LIZOvianbA-1
-Received: by mail-qt1-f200.google.com with SMTP id f2-20020ac87f02000000b003e6372b917dso12299561qtk.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 05:25:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680697531;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BtaxBOj8mnM7DN2UjknzYp2RwNpAvLMIaj8lPVQZwQI=;
-        b=BE/KvD/zsQn3NJe7CQ6cgWSBkFDDM+64dF2/6OWDZOYb98oykaoYS9RfNLqtjhjwXq
-         wYEHS1od9zJYjodNf8jlFdiZF9zI3bpBMOUTYkLsbQtd6mQAzNCJY6DO/8/LhTpmkaFY
-         /ZagfM1MXIoJ+kGEc9XGvPpp/31kBdsrj3g/yHzwU94i65Cqz41Etau+Eee2ecv9M447
-         lQ6gaUpixGFqxLwRNfX+SXd2oZZ57eQwX+jgPq3TFihGOJRD5MlJ/mBz6gKxCq1uZtG0
-         s00BgaWx3WJMFmR9MxeUTXYGw+uw2SOVaouVMTbWGD9Uz7d3PQDgvsURN1SpA1kKHWIm
-         KPzw==
-X-Gm-Message-State: AAQBX9fs/1EDHh03f8+ptY2Kxi9aI+4WRMyzcNwrRLASwYnLoM61ReBw
-        2rvXtmW9Y/Kxj/relfQQRHIJLkw/oq5+X9WU7D8WnM5AtQMaZyKNIgohG0WN3Bn0YQK3V/kt+Ye
-        2PKaG+0r70WskP50YjhpFbPEWcoVD/F4J
-X-Received: by 2002:a05:622a:5c8:b0:3df:50ef:faff with SMTP id d8-20020a05622a05c800b003df50effaffmr3851679qtb.58.1680697531665;
-        Wed, 05 Apr 2023 05:25:31 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bl30K1aMDtLrpZycNDR3RRPTtKiSsq+aP+ezde4JPUuEqrHjgYildV8mBp+Ypt/84i5OCPDQ==
-X-Received: by 2002:a05:622a:5c8:b0:3df:50ef:faff with SMTP id d8-20020a05622a05c800b003df50effaffmr3851658qtb.58.1680697531439;
-        Wed, 05 Apr 2023 05:25:31 -0700 (PDT)
-Received: from [192.168.1.31] (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id b25-20020ac87559000000b003e45a39ed74sm3959361qtr.81.2023.04.05.05.25.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Apr 2023 05:25:31 -0700 (PDT)
-Message-ID: <120b6729-c329-ea4d-2f69-f8bc5c2925bf@redhat.com>
-Date:   Wed, 5 Apr 2023 05:25:29 -0700
+        Wed, 5 Apr 2023 08:25:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2AC5BB1
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 05:25:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23FE461F20
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 12:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FBEC433EF;
+        Wed,  5 Apr 2023 12:25:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680697545;
+        bh=bAwNBCT1MGIbFhfi1b8vQ7dGwmdleZML+qyHObqZRQk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=KPOtQy8Ee4LrHoVqOczsriag5PVojCKmXM94FJN53cCN/Kjhca3liQPkl1EK70DoR
+         Jx6ap1CJdrLIJWJQUafLgOF43B1AMwDdDIKsTChWkKyqbGxpn+wZG/XYvHPteNrixv
+         FX3o3y1OnI4dTIJylk4XYwRuprXpAcqbVD1I83P/da1l8nQRscfiUVKlYcJi5ttGrX
+         ukqnp9uvc/IjzCVMNSm1G5GF6culM+CoEDjaz6nWDuszHwKMcR96tOCN99ustwAM2Z
+         y5MjhdnhvizTLHtLpKGEfz7HKqHxX4KAHlVS+BFhLlnvt/wN/7pPZTFuoG9uKyhjPs
+         a4I3oUAKayhAQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org,
+        Daniel Baluta <daniel.baluta@oss.nxp.com>
+Cc:     linux-kernel@vger.kernel.org, cujomalainey@chromium.org,
+        tiwai@suse.com, perex@perex.cz, kai.vehmanen@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, lgirdwood@gmail.com,
+        pierre-louis.bossart@linux.intel.com
+In-Reply-To: <20230405092655.19587-1-daniel.baluta@oss.nxp.com>
+References: <20230405092655.19587-1-daniel.baluta@oss.nxp.com>
+Subject: Re: [PATCH] ASoC: SOF: pm: Tear down pipelines only if DSP was
+ active
+Message-Id: <168069754270.50709.3405991457967735088.b4-ty@kernel.org>
+Date:   Wed, 05 Apr 2023 13:25:42 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH] nvmem: layouts: sl28vpd: set varaiable sl28vpd_layout
- storage-class-specifier to static
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     srinivas.kandagatla@linaro.org, linux-kernel@vger.kernel.org
-References: <20230404163629.1923871-1-trix@redhat.com>
- <cce4b409e20b073431b44a44f7f0a614@walle.cc>
-From:   Tom Rix <trix@redhat.com>
-In-Reply-To: <cce4b409e20b073431b44a44f7f0a614@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-00303
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 05 Apr 2023 12:26:55 +0300, Daniel Baluta wrote:
+> With PCI if the device was suspended it is brought back to full
+> power and then suspended again.
+> 
+> This doesn't happen when device is described via DT.
+> 
+> We need to make sure that we tear down pipelines only if the device
+> was previously active (thus the pipelines were setup).
+> 
+> [...]
 
-On 4/4/23 12:09 PM, Michael Walle wrote:
-> Am 2023-04-04 18:36, schrieb Tom Rix:
->> smatch reports
->> drivers/nvmem/layouts/sl28vpd.c:144:21: warning: symbol
->>   'sl28vpd_layout' was not declared. Should it be static?
->>
->> This variable is only used in one file so it should be static.
->>
->> Signed-off-by: Tom Rix <trix@redhat.com>
->
-> Fixes tag?
->
-I am cleaning all of the similar reports by smatch, there is a couple 
-hundred.
+Applied to
 
-Because the code works as-is, I do not consider them broken and needing 
-fixes tags.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-However I do not mind adding then if they are required.
+Thanks!
 
-Tom
+[1/1] ASoC: SOF: pm: Tear down pipelines only if DSP was active
+      commit: 0b186bb06198653d74a141902a7739e0bde20cf4
 
-> Reviewed-by: Michael Walle <michael@walle.cc>
->
-> -michael
->
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
