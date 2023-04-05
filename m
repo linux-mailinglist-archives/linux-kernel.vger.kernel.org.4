@@ -2,102 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A5E6D7D82
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2016D7D8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 15:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbjDENQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 09:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S237259AbjDENTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 09:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237448AbjDENQq (ORCPT
+        with ESMTP id S238232AbjDENTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 09:16:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89361E7A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:16:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Apr 2023 09:19:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BEE1FFD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 06:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680700730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S1IMAu3kJtNv64ElJe0Fo5uhPnChLUpWs29JbgHtniM=;
+        b=WwhYR+Ric8UxUwd57qGty39JWtMegrt7ZWGKBEWihakgVTzdsb9XCL8ghQ8BQ2UYaX0S40
+        zvDkvlj6g+QDg9tS6Fu6NEoYOPiBArGx/ALlQGZHqSBEi/Gzw9S63noINHcXvH9obGnatU
+        hM5rGJ4yzWrGa66o0bEO0tztd3rSu6Q=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-385-l5gOn0chODCL3P1Aybk6Zg-1; Wed, 05 Apr 2023 09:18:47 -0400
+X-MC-Unique: l5gOn0chODCL3P1Aybk6Zg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21EB9628F2
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 13:16:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE671C433D2;
-        Wed,  5 Apr 2023 13:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680700604;
-        bh=fKUuw9gW9/x9L0Vo9NhNeOr4f0JKSotdNhqzYqerBHI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=efc3gNA+SyVNEIqCPohQlb6VFkjcFfGi7g8lT0QchOArXzJcRUGQmNbooTJjH3B2J
-         3EBPVbYAydWFbPPVrqgmr8wC2DBN5h3Z7A0hjKTXyiQbKuBED2rYHJne2tDhhO0rJB
-         2FjNF+wt0bqUdpwXGosQC1AtH9aOmCNbCx4JGqSB3umRLLL2OIp3PmTxxWEFRKStvW
-         QeExIvvbicz/H2RETL5ckN+tIBix8HRmK3G0YgSePdjWXpq+ViirRsCNcfvWZkGSgl
-         uj9wd+FGq9IdXtEZ9w87uCp4lW4AhZbNuhSDDjw3cn/HDOR2cdyULLb3eRPtBMmI2x
-         m/oCGW4xOKh4g==
-Date:   Wed, 5 Apr 2023 21:16:37 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Andreas Henriksson <andreas@fatal.se>
-Cc:     Marco Felsch <m.felsch@pengutronix.de>, Jun Li <jun.li@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Xu Yang <xu.yang_2@nxp.com>
-Subject: Re: [PATCH] arm64: dts: imx8mp-evk: add dual-role usb port1 support
-Message-ID: <20230405131637.GB11367@dragon>
-References: <20230323105826.2058003-1-m.felsch@pengutronix.de>
- <PA4PR04MB964081F4DB2E16D8E300B08389849@PA4PR04MB9640.eurprd04.prod.outlook.com>
- <20230327084947.dcguxgyo2lfen2ms@fatal.se>
- <20230330143813.teid36w24a4esjsx@pengutronix.de>
- <20230403093812.rjj2wkusajsx5mwi@fatal.se>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A8F981C05140;
+        Wed,  5 Apr 2023 13:18:46 +0000 (UTC)
+Received: from nyarly.com (ovpn-116-127.gru2.redhat.com [10.97.116.127])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4848740C20FA;
+        Wed,  5 Apr 2023 13:18:40 +0000 (UTC)
+From:   Thiago Becker <tbecker@redhat.com>
+To:     Steve French <sfrench@samba.org>, Paulo Alcantara <pc@cjr.nz>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        Thiago Rafael Becker <trbecker@gmail.com>
+Cc:     Thiago Becker <tbecker@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] cifs: sanitize paths in cifs_update_super_prepath.
+Date:   Wed,  5 Apr 2023 10:16:48 -0300
+Message-Id: <20230405131647.6389-1-tbecker@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403093812.rjj2wkusajsx5mwi@fatal.se>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 11:38:12AM +0200, Andreas Henriksson wrote:
-> Hello Marco Felsch,
-> 
-> On Thu, Mar 30, 2023 at 04:38:13PM +0200, Marco Felsch wrote:
-> > Hi,
-> > 
-> > On 23-03-27, Andreas Henriksson wrote:
-> [...]
-> > > / {
-> > >     gpio-sbu-mux {
-> > >         compatible = "gpio-sbu-mux";
-> [...]
-> > I didn't tested it but at the moment I don't see the problem with my
-> > patch. 
-> 
-> As Jun Li helpfully explained my patch is not correct, so don't bother.
-> 
-> I don't have a problem with your patch, was just trying to share
-> what I had done.
-> 
-> I've since learned that the board I'll be working on will not even have
-> SS, so I will not pursue SBU. I'll most likely use your patches instead
-> as they seem simpler than what I did and should fully meet my needs for
-> an usb port that works in both host and device mode.
-> 
-> Not that it matters, but +1 from me on applying your patches.
-> (If people are hesitant to do it because of lack of SS, then maybe
-> that could be adressed by adding a comment setting the expectations?)
+After a server reboot, clients are failing to move files with ENOENT.
+This is caused by DFS referrals containing multiple separators, which
+the server move call doesn't recognize.
 
-Marco,
+v1: Initial patch.
+v2: Move prototype to header.
 
-Could you update the patch to mention a bit about Super-Speed support
-as discussed here?
+BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=2182472
+Fixes: a31080899d5f ("cifs: sanitize multiple delimiters in prepath")
+Actually-Fixes: 24e0a1eff9e2 ("cifs: switch to new mount api")
+Signed-off-by: Thiago Rafael Becker <tbecker@redhat.com>
+---
+ fs/cifs/fs_context.c | 13 +++++++------
+ fs/cifs/fs_context.h |  3 +++
+ fs/cifs/misc.c       |  2 +-
+ 3 files changed, 11 insertions(+), 7 deletions(-)
 
-Shawn
+diff --git a/fs/cifs/fs_context.c b/fs/cifs/fs_context.c
+index 6d13f8207e96a..ace11a1a7c8ab 100644
+--- a/fs/cifs/fs_context.c
++++ b/fs/cifs/fs_context.c
+@@ -441,13 +441,14 @@ int smb3_parse_opt(const char *options, const char *key, char **val)
+  * but there are some bugs that prevent rename from working if there are
+  * multiple delimiters.
+  *
+- * Returns a sanitized duplicate of @path. The caller is responsible for
+- * cleaning up the original.
++ * Returns a sanitized duplicate of @path. @gfp indicates the GFP_* flags
++ * for kstrdup.
++ * The caller is responsible for freeing the original.
+  */
+ #define IS_DELIM(c) ((c) == '/' || (c) == '\\')
+-static char *sanitize_path(char *path)
++char *cifs_sanitize_prepath(char *prepath, gfp_t gfp)
+ {
+-	char *cursor1 = path, *cursor2 = path;
++	char *cursor1 = prepath, *cursor2 = prepath;
+ 
+ 	/* skip all prepended delimiters */
+ 	while (IS_DELIM(*cursor1))
+@@ -469,7 +470,7 @@ static char *sanitize_path(char *path)
+ 		cursor2--;
+ 
+ 	*(cursor2) = '\0';
+-	return kstrdup(path, GFP_KERNEL);
++	return kstrdup(prepath, gfp);
+ }
+ 
+ /*
+@@ -531,7 +532,7 @@ smb3_parse_devname(const char *devname, struct smb3_fs_context *ctx)
+ 	if (!*pos)
+ 		return 0;
+ 
+-	ctx->prepath = sanitize_path(pos);
++	ctx->prepath = cifs_sanitize_prepath(pos, GFP_KERNEL);
+ 	if (!ctx->prepath)
+ 		return -ENOMEM;
+ 
+diff --git a/fs/cifs/fs_context.h b/fs/cifs/fs_context.h
+index 3de00e7127ec4..f4eaf85589022 100644
+--- a/fs/cifs/fs_context.h
++++ b/fs/cifs/fs_context.h
+@@ -287,4 +287,7 @@ extern void smb3_update_mnt_flags(struct cifs_sb_info *cifs_sb);
+  */
+ #define SMB3_MAX_DCLOSETIMEO (1 << 30)
+ #define SMB3_DEF_DCLOSETIMEO (1 * HZ) /* even 1 sec enough to help eg open/write/close/open/read */
++
++extern char *cifs_sanitize_prepath(char *prepath, gfp_t gfp);
++
+ #endif
+diff --git a/fs/cifs/misc.c b/fs/cifs/misc.c
+index b44fb51968bfb..7f085ed2d866b 100644
+--- a/fs/cifs/misc.c
++++ b/fs/cifs/misc.c
+@@ -1195,7 +1195,7 @@ int cifs_update_super_prepath(struct cifs_sb_info *cifs_sb, char *prefix)
+ 	kfree(cifs_sb->prepath);
+ 
+ 	if (prefix && *prefix) {
+-		cifs_sb->prepath = kstrdup(prefix, GFP_ATOMIC);
++		cifs_sb->prepath = cifs_sanitize_prepath(prefix, GFP_ATOMIC);
+ 		if (!cifs_sb->prepath)
+ 			return -ENOMEM;
+ 
+-- 
+2.39.2
+
