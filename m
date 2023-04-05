@@ -2,105 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16BF6D893B
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A106D8949
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 23:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233726AbjDEVHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 17:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S234174AbjDEVIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 17:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbjDEVHC (ORCPT
+        with ESMTP id S234135AbjDEVH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 17:07:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4486A44;
-        Wed,  5 Apr 2023 14:06:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E333E629AF;
-        Wed,  5 Apr 2023 21:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B7CC433EF;
-        Wed,  5 Apr 2023 21:06:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680728811;
-        bh=fz0oE9b+bDhzOWWOAvv6B6YisnPYx9wmX8/hMqSu9jo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=s50Ds8+mcer6wqL8iE5+a76eX25ZEddQ7rNLtSxRtv8Jn3/CdiL6j3uxH/wqDveOw
-         qgL1XvfnKm2+lSpWLQAh8V6/h1ZB8H9CDr7Ae/+1Ar5S9u5LuaQAhLIwrEOBeCs8cK
-         foA2pKx8rUuxKmBIT5bMgxZMoL+KCqQNWAUUIfoc3VMQ71wdZfh2SzLQYSdGzOPjg5
-         ICNfrjCeFUXxd0wbe/xkWzpicgJL3eY1PUr78B2qN2q+Iv14IBX7lJ3e3o+eH8aSem
-         eqfVYml43FLB3TBMy1joQUGmRg94bGjdUBtiv2GMuLSiND7h5RVXiajwHy6mTEMROj
-         ZCjJT4e/Ladjw==
-Message-ID: <43a469322f1557feb252a08bd4a42f03.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Wed, 5 Apr 2023 17:07:59 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E7B7AAB
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 14:07:56 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id bm13so10422171pfb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 14:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680728875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sml6aLd7NKNtOPArQglRTFmPrwxLRHpfQGEdpLGQuKU=;
+        b=hzTkqmv9kRVCuEZOHA2Eqet8sLVNbtm1v12CcRdciL89msd39FaXGObgLEAtilXQyw
+         8/nTJHQyEKtHUXCZDNVNUwjpTKf3T8Bkx+UVT8ihgYKBi77tqtVuIBHbp6G5BxfUwt8G
+         W5zxIeGHDJwNo9S7D5TYRs0cwadJf/BNQQs0a4O3I6poQik0dh2klYu6Z2u3dGzNnweb
+         OgcKeZNhlCtp8r2xGYgU3R1uYe35oXfVzjM1MTAFlcQRsQqvtrJSbVphRz52PniweMYe
+         mIyeb3OvhjOXZbUZJkXeD9VUUvZjh8RZ3FdimwT4HGsTjmkW282x/qfCTCsK7d/MGJDt
+         9q7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680728875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sml6aLd7NKNtOPArQglRTFmPrwxLRHpfQGEdpLGQuKU=;
+        b=tEndlk/yDHQeAaZNXeEHIWpR8Xt2d9Qmclxnb+LBDI0ng0ubmx5+rFWBM3JDdfTjkn
+         Lp4yiBMFK7Ns8ikWPPhingS594qlczRY9JfeIM7wY9LxLZuxAUbnLJBEsslj8SQnvKzG
+         ponLPo+3HW9mwXrlmr8uoe0H8Zt/ZpiVyaLGCDuKDXK6x3b2uXvuE94jyPgm76ROQUQO
+         00e4EtasyxgLmJSN2kNg7tgw4SaBzvc9OyeTfLR8ehAg1IiWKB/QFwAhh6vwIuAGTGDO
+         9jUy8qV8ksuZS/v1BZeutfs0UiSBXh6WIChjbbiFditaTXsURR589CFE9DV3G98EbJzr
+         1lHQ==
+X-Gm-Message-State: AAQBX9dt9RiecVaYNcZFZYkijGkk5pXNUGcmxm2SgGsJIdNBJZvpIIQo
+        gpuX4wrh/ttSkdruto+8xjghQku3uEmcD0wAa9CCmQ==
+X-Google-Smtp-Source: AKy350a1ele4zhxKI9UlE9RFiSzwa5NSjMvOCRjyurTKaNDCmlUY6tE70hOuWN6BZR42t9Xf7juFWt7K2QkuVmJZcy4=
+X-Received: by 2002:a63:474b:0:b0:50f:ad00:3f92 with SMTP id
+ w11-20020a63474b000000b0050fad003f92mr2366072pgk.3.1680728874841; Wed, 05 Apr
+ 2023 14:07:54 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230330224348.1006691-1-davidai@google.com> <ZCx97IKjsBibjdGc@linux.dev>
+ <86sfdfv0e1.wl-maz@kernel.org> <ZC0n0HRsmNJeJZps@google.com>
+In-Reply-To: <ZC0n0HRsmNJeJZps@google.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 5 Apr 2023 14:07:18 -0700
+Message-ID: <CAGETcx_9SdyCQ5UHhjsnV5+X8arhXoZS2NN-mewtPM3oHuZrkw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+To:     Quentin Perret <qperret@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, David Dai <davidai@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230329075104.165176-3-mmyangfl@gmail.com>
-References: <20230329075104.165176-1-mmyangfl@gmail.com> <20230329075104.165176-3-mmyangfl@gmail.com>
-Subject: Re: [PATCH v2 2/4] clk: hisilicon: Use helper functions
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     David Yang <mmyangfl@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Nick Alcock <nick.alcock@oracle.com>
-To:     David Yang <mmyangfl@gmail.com>, linux-clk@vger.kernel.org
-Date:   Wed, 05 Apr 2023 14:06:49 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting David Yang (2023-03-29 00:50:51)
-> Remove redundant codes.
->=20
-> Signed-off-by: David Yang <mmyangfl@gmail.com>
-> ---
->  drivers/clk/hisilicon/clk-hi3519.c      | 134 ++----------
->  drivers/clk/hisilicon/clk-hi3559a.c     | 228 +++-----------------
->  drivers/clk/hisilicon/clk-hi3660.c      | 207 ++++++------------
->  drivers/clk/hisilicon/clk-hi3670.c      | 270 +++++++++---------------
->  drivers/clk/hisilicon/crg-hi3516cv300.c | 177 ++--------------
->  drivers/clk/hisilicon/crg-hi3798cv200.c | 206 +++---------------
+On Wed, Apr 5, 2023 at 12:48=E2=80=AFAM 'Quentin Perret' via kernel-team
+<kernel-team@android.com> wrote:
+>
+> On Tuesday 04 Apr 2023 at 21:49:10 (+0100), Marc Zyngier wrote:
+> > On Tue, 04 Apr 2023 20:43:40 +0100,
+> > Oliver Upton <oliver.upton@linux.dev> wrote:
+> > >
+> > > Folks,
+> > >
+> > > On Thu, Mar 30, 2023 at 03:43:35PM -0700, David Dai wrote:
+> > >
+> > > <snip>
+> > >
+> > > > PCMark
+> > > > Higher is better
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > > | Test Case (score) | Baseline |  Hypercall | %delta |  MMIO | %del=
+ta |
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > > | Weighted Total    |     6136 |       7274 |   +19% |  6867 |   +1=
+2% |
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > > | Web Browsing      |     5558 |       6273 |   +13% |  6035 |    +=
+9% |
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > > | Video Editing     |     4921 |       5221 |    +6% |  5167 |    +=
+5% |
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > > | Writing           |     6864 |       8825 |   +29% |  8529 |   +2=
+4% |
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > > | Photo Editing     |     7983 |      11593 |   +45% | 10812 |   +3=
+5% |
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > > | Data Manipulation |     5814 |       6081 |    +5% |  5327 |    -=
+8% |
+> > > > +-------------------+----------+------------+--------+-------+-----=
+---+
+> > > >
+> > > > PCMark Performance/mAh
+> > > > Higher is better
+> > > > +-----------+----------+-----------+--------+------+--------+
+> > > > |           | Baseline | Hypercall | %delta | MMIO | %delta |
+> > > > +-----------+----------+-----------+--------+------+--------+
+> > > > | Score/mAh |       79 |        88 |   +11% |   83 |    +7% |
+> > > > +-----------+----------+-----------+--------+------+--------+
+> > > >
+> > > > Roblox
+> > > > Higher is better
+> > > > +-----+----------+------------+--------+-------+--------+
+> > > > |     | Baseline |  Hypercall | %delta |  MMIO | %delta |
+> > > > +-----+----------+------------+--------+-------+--------+
+> > > > | FPS |    18.25 |      28.66 |   +57% | 24.06 |   +32% |
+> > > > +-----+----------+------------+--------+-------+--------+
+> > > >
+> > > > Roblox Frames/mAh
+> > > > Higher is better
+> > > > +------------+----------+------------+--------+--------+--------+
+> > > > |            | Baseline |  Hypercall | %delta |   MMIO | %delta |
+> > > > +------------+----------+------------+--------+--------+--------+
+> > > > | Frames/mAh |    91.25 |     114.64 |   +26% | 103.11 |   +13% |
+> > > > +------------+----------+------------+--------+--------+--------+
+> > >
+> > > </snip>
+> > >
+> > > > Next steps:
+> > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > We are continuing to look into communication mechanisms other than
+> > > > hypercalls that are just as/more efficient and avoid switching into=
+ the VMM
+> > > > userspace. Any inputs in this regard are greatly appreciated.
+> > >
+> > > We're highly unlikely to entertain such an interface in KVM.
+> > >
+> > > The entire feature is dependent on pinning vCPUs to physical cores, f=
+or which
+> > > userspace is in the driver's seat. That is a well established and doc=
+umented
+> > > policy which can be seen in the way we handle heterogeneous systems a=
+nd
+> > > vPMU.
+> > >
+> > > Additionally, this bloats the KVM PV ABI with highly VMM-dependent in=
+terfaces
+> > > that I would not expect to benefit the typical user of KVM.
+> > >
+> > > Based on the data above, it would appear that the userspace implement=
+ation is
+> > > in the same neighborhood as a KVM-based implementation, which only fu=
+rther
+> > > weakens the case for moving this into the kernel.
+> > >
+> > > I certainly can appreciate the motivation for the series, but this fe=
+ature
+> > > should be in userspace as some form of a virtual device.
+> >
+> > +1 on all of the above.
+>
+> And I concur with all the above as well. Putting this in the kernel is
+> not an obvious fit at all as that requires a number of assumptions about
+> the VMM.
+>
+> As Oliver pointed out, the guest topology, and how it maps to the host
+> topology (vcpu pinning etc) is very much a VMM policy decision and will
+> be particularly important to handle guest frequency requests correctly.
+>
+> In addition to that, the VMM's software architecture may have an impact.
+> Crosvm for example does device emulation in separate processes for
+> security reasons, so it is likely that adjusting the scheduling
+> parameters ('util_guest', uclamp, or else) only for the vCPU thread that
+> issues frequency requests will be sub-optimal for performance, we may
+> want to adjust those parameters for all the tasks that are on the
+> critical path.
+>
+> And at an even higher level, assuming in the kernel a certain mapping of
+> vCPU threads to host threads feels kinda wrong, this too is a host
+> userspace policy decision I believe. Not that anybody in their right
+> mind would want to do this, but I _think_ it would technically be
+> feasible to serialize the execution of multiple vCPUs on the same host
+> thread, at which point the util_guest thingy becomes entirely bogus. (I
+> obviously don't want to conflate this use-case, it's just an example
+> that shows the proposed abstraction in the series is not a perfect fit
+> for the KVM userspace delegation model.)
 
-Maybe you can do this file by file in a different patch? And the commit
-text can say that you're migrating to the new way of registering clks
-with a device pointer?
+See my reply to Oliver and Marc. To me it looks like we are converging
+towards having shared memory between guest, host kernel and VMM and
+that should address all our concerns.
 
->  drivers/clk/hisilicon/crg.h             |   6 -
->  7 files changed, 260 insertions(+), 968 deletions(-)
->=20
-> diff --git a/drivers/clk/hisilicon/clk-hi3519.c b/drivers/clk/hisilicon/c=
-lk-hi3519.c
-> index ad0c7f350cf0..199d1b8c3140 100644
-> --- a/drivers/clk/hisilicon/clk-hi3519.c
-> +++ b/drivers/clk/hisilicon/clk-hi3519.c
-> @@ -6,11 +6,13 @@
->   */
-> =20
->  #include <dt-bindings/clock/hi3519-clock.h>
-> -#include <linux/clk-provider.h>
+The guest will see a MMIO device, writing to it will trigger the host
+kernel to do the basic "set util_guest/uclamp for the vCPU thread that
+corresponds to the vCPU" and then the VMM can do more on top as/if
+needed (because it has access to the shared memory too). Does that
+make sense?
 
-It's still a clk provider. Keep this include.
+Even in the extreme example, the stuff the kernel would do would still
+be helpful, but not sufficient. You can aggregate the
+util_guest/uclamp and do whatever from the VMM.
+Technically in the extreme example, you don't need any of this. The
+normal util tracking of the vCPU thread on the host side would be
+sufficient.
 
-> +
-> +#include <linux/kernel.h>
->  #include <linux/module.h>
-> -#include <linux/platform_device.h>
+Actually any time we have only 1 vCPU host thread per VM, we shouldn't
+be using anything in this patch series and not instantiate the guest
+device at all.
 
-Also still a platform driver. Keep this include.
+> So +1 from me to move this as a virtual device of some kind. And if the
+> extra cost of exiting all the way back to userspace is prohibitive (is
+> it btw?),
 
-> +#include <linux/of_device.h>
+I think the "13% increase in battery consumption for games" makes it
+pretty clear that going to userspace is prohibitive. And that's just
+one example.
 
-Not sure what this include is for.
+> then we can try to work on that. Maybe something a la vhost
+> can be done to optimize, I'll have a think.
+>
+> > The one thing I'd like to understand that the comment seems to imply
+> > that there is a significant difference in overhead between a hypercall
+> > and an MMIO. In my experience, both are pretty similar in cost for a
+> > handling location (both in userspace or both in the kernel). MMIO
+> > handling is a tiny bit more expensive due to a guaranteed TLB miss
+> > followed by a walk of the in-kernel device ranges, but that's all. It
+> > should hardly register.
+> >
+> > And if you really want some super-low latency, low overhead
+> > signalling, maybe an exception is the wrong tool for the job. Shared
+> > memory communication could be more appropriate.
+>
+> I presume some kind of signalling mechanism will be necessary to
+> synchronously update host scheduling parameters in response to guest
+> frequency requests, but if the volume of data requires it then a shared
+> buffer + doorbell type of approach should do.
 
-> +
->  #include "clk.h"
-> -#include "reset.h"
-> +#include "crg.h"
+Part of the communication doesn't need synchronous handling by the
+host. So, what I said above.
+
+> Thinking about it, using SCMI over virtio would implement exactly that.
+> Linux-as-a-guest already supports it IIRC, so possibly the problem
+> being addressed in this series could be 'simply' solved using an SCMI
+> backend in the VMM...
+
+This will be worse than all the options we've tried so far because it
+has the userspace overhead AND uclamp overhead.
+
+-Saravana
