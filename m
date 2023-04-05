@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147846D85EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150306D85FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 20:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbjDESZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 14:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S231799AbjDES2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 14:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjDESZh (ORCPT
+        with ESMTP id S234154AbjDES16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 14:25:37 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22A13ABC;
-        Wed,  5 Apr 2023 11:25:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id cu12so24267784pfb.13;
-        Wed, 05 Apr 2023 11:25:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680719136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iCptc+kA5zXDdmAuA5of1pjj6ECPBD9EyosUWG9DOXY=;
-        b=b0wEGUnlTwRu184txYCFSgU2+1bYA32X8C5SLFPd+pjOQ2zXGpQxoat+6txV4sYjCm
-         cL7gvZagcwGc+pjq2zl2c0aNLW5CJZdYMhU+25BnYZhFxT7+Waako8RpTlAFUaZHlP86
-         JHYKZMqcULWxbGSVQziwbxkFOLSqIAkYqURZ+1nt4Ad5TRFe9N+fTSgOtVO6AuRCtCvb
-         42mmmtEKBsoe2QTXn215aqHmlo4ThRkTNco3b17whfWNwPWTuYO3AJxqjlaYJsZ4ivFq
-         D6e8C5I9wuQmNJNLYy3/HuTJ/S9PG46kFbAHWTUukbRb4zblNUYsbZ0XCJE4Tl6GPY1K
-         aLyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680719136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iCptc+kA5zXDdmAuA5of1pjj6ECPBD9EyosUWG9DOXY=;
-        b=UZ4J4eHjekOO0VYxjNQwGdnBow47Ku54wXDBEqOzLxzn0fBQ+kZFxSchysTU5O8Z/k
-         chLdCcLiBbsaL/4FjlGFLkDkRYpZQtrw+zi/YBzg9MYoSR6vwPCJO5UC24RAwqHGDsKi
-         McMiYzfEPdkTm0zM0vatP3GraIQ8xor615ofE3FRkYHRd/mFHYHM0xsQKBYoSG+GTrbH
-         4tCEr6cO39/dirG3A1UYhCqeoMjG44R/mTXPrQTusjdVUYk/fedwTUuydA/CTKHm+D1M
-         mTssh7d1zEmpe84wlFjtU0DHVzKElBUDZ4sC7+wF9enRvbTRRMVg6o/yFbmgLixTc9EJ
-         igxw==
-X-Gm-Message-State: AAQBX9erKIIAzoX0sqScukCO6V7KPes62N08gFwHMw/hpZO9Vktrq6c1
-        2daHSjzkatFWShEsjbcpMhqQ+SMI6FClyfXOO5Y=
-X-Google-Smtp-Source: AKy350b2Wbwyv1L6f98Vzq50lFWkxGC/rY4GOuWs7FtED4TSHS3YhFkk1MiIL8vg5A5HXY/zuoZ7yyYU0CHr6Hvz1hw=
-X-Received: by 2002:a05:6a00:1783:b0:62b:e52e:1bb with SMTP id
- s3-20020a056a00178300b0062be52e01bbmr3905606pfg.0.1680719135951; Wed, 05 Apr
- 2023 11:25:35 -0700 (PDT)
+        Wed, 5 Apr 2023 14:27:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A12361A2;
+        Wed,  5 Apr 2023 11:27:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3569C64083;
+        Wed,  5 Apr 2023 18:27:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FDBC433D2;
+        Wed,  5 Apr 2023 18:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680719275;
+        bh=S45JL7p28MzbNIkK/R/Rxee7+W/06GYb1Miri9LtNes=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=pSYqHsSrKTYeLipOE4a9ZP6avOxOgVZqmcWjoiGzeqAOx/sI/cjao7rIPo/01zM/D
+         lhu2OAZPIb8qrmmUx16Aj2cPQYjBJ2Gj2o2eFulUB64Ys346lQ62uhO6r0ytNsPEhp
+         x8UTVuwkjdoA8GmgWn/3IFcJg9jOie3vlbUyCcVnjyr//fgh9TVFmwKw9B8E/Xd9zd
+         GldJk1xpXv80Y/1Y1k0959vxdsqhru9u2kcgGCD5yCEqZV3+jZ+Me5DW6VtfawPzhg
+         bVTkQLmHILjnQHygnRNqzF7Tlw/ZRsBjDoKnHnxaLIP5vEtAhuJxHVNGZeW+OeFBgO
+         jcOxVYBzBSDoA==
+Date:   Wed, 5 Apr 2023 13:27:53 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Sajid Dalvi <sdalvi@google.com>, Han Jingoo <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>, kernel-team@android.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
+Message-ID: <20230405182753.GA3626483@bhelgaas>
 MIME-Version: 1.0
-References: <20230405155120.3608140-1-peterx@redhat.com> <CAHbLzkqKE-TE9Od1E=PQDGuhoR+r-TOz4LP8WQgucm_6ZVYTRA@mail.gmail.com>
- <ZC25d12d0sc1L7tS@x1n>
-In-Reply-To: <ZC25d12d0sc1L7tS@x1n>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 5 Apr 2023 11:25:24 -0700
-Message-ID: <CAHbLzkqzYxCrJdH8f7OY5x9-mngK+xKJUZ+HCB9V-O+yQqKE4w@mail.gmail.com>
-Subject: Re: [PATCH] mm/khugepaged: Check again on anon uffd-wp during isolation
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        linux-stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZC12lN9Cs0QlPhVh@lpieralisi>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 11:10=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Apr 05, 2023 at 09:59:15AM -0700, Yang Shi wrote:
-> > On Wed, Apr 5, 2023 at 8:51=E2=80=AFAM Peter Xu <peterx@redhat.com> wro=
-te:
+On Wed, Apr 05, 2023 at 03:24:36PM +0200, Lorenzo Pieralisi wrote:
+> On Thu, Mar 16, 2023 at 06:05:02PM -0500, Sajid Dalvi wrote:
+> > On Tue, Feb 28, 2023 at 10:36 PM Sajid Dalvi <sdalvi@google.com> wrote:
 > > >
-> > > Khugepaged collapse an anonymous thp in two rounds of scans.  The 2nd=
- round
-> > > done in __collapse_huge_page_isolate() after hpage_collapse_scan_pmd(=
-),
-> > > during which all the locks will be released temporarily. It means the
-> > > pgtable can change during this phase before 2nd round starts.
+> > > Thanks for your review Jingoo.
+> > > Sajid
 > > >
-> > > It's logically possible some ptes got wr-protected during this phase,=
- and
-> > > we can errornously collapse a thp without noticing some ptes are
-> > > wr-protected by userfault.  e1e267c7928f wanted to avoid it but it on=
-ly did
-> > > that for the 1st phase, not the 2nd phase.
-> > >
-> > > Since __collapse_huge_page_isolate() happens after a round of small p=
-age
-> > > swapins, we don't need to worry on any !present ptes - if it existed
-> > > khugepaged will already bail out.  So we only need to check present p=
-tes
-> > > with uffd-wp bit set there.
-> > >
-> > > This is something I found only but never had a reproducer, I thought =
-it was
-> > > one caused a bug in Muhammad's recent pagemap new ioctl work, but it =
-turns
-> > > out it's not the cause of that but an userspace bug.  However this se=
-ems to
-> > > still be a real bug even with a very small race window, still worth t=
-o have
-> > > it fixed and copy stable.
-> >
-> > Yeah, I agree. But I got confused by userfaultfd_wp(vma) and
-> > pte_uffd_wp(pte). If a vma is armed with uffd wp, shall we skip the
-> > whole vma? If so, whether it is better to just check vma? We do
-> > revalidate vma once reacquiring mmap_lock, so we should be able to
-> > bail out earlier.
->
-> Checking against VMA is safe too, the difference is current code still
-> allows thp to be collapsed as long as none of the page is explicitly
-> protected over the thp range, even if the range is registered with
-> userfault-wp.  That's also what e1e267c7928f does.
->
-> Here we have slightly different handling between anon / file thps (file
-> thps checks against the vma flags), IMHO mostly because we don't scan
-> pgtables when making decisions to collapse a shmem thp, so we made it
-> simple by checking against vma flags.  We can make it the same as anon bu=
-t
-> it might be an overkill just to scan the entries for uffd-wp purpose.
->
-> For anon we always scans the pgtable anyway so it's easier to make a more
-> accurate decision.
+> > > On Tue, Feb 28, 2023 at 4:04 PM Han Jingoo <jingoohan1@gmail.com> wrote:
+> > > >
+> > > > On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
+> > > > >
+> > > > > In dw_pcie_host_init() regardless of whether the link has been started
+> > > > > or not, the code waits for the link to come up. Even in cases where
+> > > > > start_link() is not defined the code ends up spinning in a loop for 1
+> > > > > second. Since in some systems dw_pcie_host_init() gets called during
+> > > > > probe, this one second loop for each pcie interface instance ends up
+> > > > > extending the boot time.
+> > > > >
+> > > > > Call trace when start_link() is not defined:
+> > > > > dw_pcie_wait_for_link << spins in a loop for 1 second
+> > > > > dw_pcie_host_init
+> > > > >
+> > > > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> > > >
+> > > > (CC'ed Krzysztof Kozlowski)
+> > > >
+> > > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> > > >
+> > > > It looks good to me. I also checked the previous thread.
+> > > > I agree with Krzysztof's opinion that we should include
+> > > > only hardware-related features into DT.
+> > > > Thank you.
+> > > >
+> > > > Best regards,
+> > > > Jingoo Han
+> > > >
+> > > > > ---
+> > > > >  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
+> > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > index 9952057c8819..9709f69f173e 100644
+> > > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+> > > > >                 ret = dw_pcie_start_link(pci);
+> > > > >                 if (ret)
+> > > > >                         goto err_remove_edma;
+> > > > > -       }
+> > > > >
+> > > > > -       /* Ignore errors, the link may come up later */
+> > > > > -       dw_pcie_wait_for_link(pci);
+> > > > > +               /* Ignore errors, the link may come up later */
+> > > > > +               dw_pcie_wait_for_link(pci);
+> > > > > +       }
+> > > > >
+> > > > >         bridge->sysdata = pp;
+> > > > >
+> > > > > --
+> > > > > 2.39.2.722.g9855ee24e9-goog
+> > > > >
+> > 
+> > @bhelgaas Can this be picked up in your tree:
+> >  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/
+> 
+> This patch seems fine to me. The question I have though is why the
+> *current* code is written the way it is. Perhaps it is just the way
+> it is, I wonder whether this change can trigger a regression though.
 
-Aha, I see. It does resolve my confusion. Thanks for elaborating.
+The new code will look basically like this:
 
-The patch looks good to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
+  if (!dw_pcie_link_up(pci)) {
+    dw_pcie_start_link(pci);
+    dw_pcie_wait_for_link(pci);
+  }
 
->
-> Thanks,
->
-> --
-> Peter Xu
->
+If the link is already up by the time we get here, this change means
+we won't get this message emitted by dw_pcie_wait_for_link():
+
+  dev_info(pci->dev, "PCIe Gen.%u x%u link up\n", ...)
+
+I don't know how important that is, but I bet somebody cares about it.
+
+From the commit log, I expected the patch to do something based on
+whether ->start_link() was defined, but there really isn't a direct
+connection, so maybe the log could be refined.
+
+Bjorn
