@@ -2,109 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487C36D7637
-	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA0A6D7639
+	for <lists+linux-kernel@lfdr.de>; Wed,  5 Apr 2023 10:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbjDEIEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 04:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
+        id S237301AbjDEIEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 04:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237209AbjDEIEb (ORCPT
+        with ESMTP id S237290AbjDEIEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 04:04:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A98E49E5
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 01:04:26 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-947cd8b2de3so31871066b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 01:04:26 -0700 (PDT)
+        Wed, 5 Apr 2023 04:04:41 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712F35258;
+        Wed,  5 Apr 2023 01:04:38 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id nc3so8377923qvb.1;
+        Wed, 05 Apr 2023 01:04:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680681864; x=1683273864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1qeWL9csSccLs6fLdE0uQkmoTpVTl/CNeE7DAxN2MXc=;
-        b=Xhq2FpN6Mn9U+EjSMWm81/rOkL0bCFC+/2wjeKRsitvqUzxRSPfp9fuoLeyBFssxEy
-         uDCSbz1YbvYjEPswqb3S2GTeD5WrMfOxja6ExrIKkGQLeADhlgbB7YOPra4MuzjHMrmj
-         ZXdFh+JVuRGjSQyYZanQX5QlEVziDHiVidIiylGL7f0MyJUhqMsMEyHDcOQ7gNiV1wC+
-         ahUaXralaKBaRSz4fOK+iGVNv27U4eaNu+zC6QxXTv6Jps/OaYMBUjv3ab9gY0hKw4g7
-         NAydS21zEz4TOSL9DVk3uvDj3K8Lk9ct3FFtJCd1yGfrC7kCaSATBwW4q2DaUE7YXwsp
-         DLwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680681864; x=1683273864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1680681877;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1qeWL9csSccLs6fLdE0uQkmoTpVTl/CNeE7DAxN2MXc=;
-        b=KgDR7W3s4hSYKcKRIoTkVcGCzalDtuLncAgXpx9kGGpXVtuhSEbI2FNRnD2eYl5i3z
-         ETcVxBfYgh1MMaMhhEjPJYPzDa8m2PgONkPKdKadJV8JVxRD9WjwGGJVWk47stfAd+iM
-         p/6MStPJ7LSt9CtYAOr5i7ucJbJTJFVUTTGHXvwcaqBm5P9Wwh4FffDmBtE8XzawaqTv
-         HuPwe5Gfet421BJpOWRHjonH/fJkbtLqH2uOzve8m8dl5a0kfrazVLIqzIgEH6zd/Apn
-         m3L2rsYss16LqwLrflWzruISpP30guz9khZja0MLLOnZ9zmME+97ywd7HBsE2YDv752V
-         EZIQ==
-X-Gm-Message-State: AAQBX9fUD+rz/32/exjtfhbdhg/vYRpxQWXYy97bAd3CiVvC/XYtjytI
-        l+nm/dpbV/NS+bZq82mqUd+Q8g==
-X-Google-Smtp-Source: AKy350bF5rLJogTrsY1f6blQnOqzcwkAlbB5v+pmHg+Ta3p4lfp6J5hb3yzzRk5ijVMDrTT8n0Y6cA==
-X-Received: by 2002:a05:6402:2026:b0:4fd:2533:f56 with SMTP id ay6-20020a056402202600b004fd25330f56mr1005988edb.39.1680681864506;
-        Wed, 05 Apr 2023 01:04:24 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id a65-20020a509ec7000000b004fbf6b35a56sm6955177edf.76.2023.04.05.01.04.23
+        bh=/5PlaQL0CwR1homUmLCaXKeBaMRCzkIszzV6MDUmfG4=;
+        b=YNPV6kOcrw8yHuwnYLE+ZH8fv/gPuymuZVnICGCeZbz/+Cy85jGtT3FrkaCy+2qe7n
+         FeMVf5hYCb1UzyVbusTEAv1Qf5c2wborR1NlhnqvE+Xt6FNTgcTnMcW+ODGuBgLAgaJ6
+         vtUlEs5J6ioKRVzrQ5M1VWXkHgBU65FXj5AnvXcAQsn6k+DqSM5+AGcI5YF8y3l1A3Sq
+         zNNVwK1djHbmKfKT+FVlJKNF7FSXanDFg+eRqRYFYvQWtISQVsql6R4rKIYVpjCDWiv9
+         71ZDqMchKYOV2fIcDmhJTeJcb08hH8z+2LEls2dy6bPhdfs0ctBlsq46lJkHSmiKYP8r
+         oV5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680681877;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/5PlaQL0CwR1homUmLCaXKeBaMRCzkIszzV6MDUmfG4=;
+        b=BpkbFQwk2Nb71kfTKUEI6o1oLv1hs0hxVm+yehpWKso5yjoz2EM5XY1v3S2oaevB7i
+         q0a2+fY/mtOC4jGnZINynonrfof2OzfZgUnFzGeGqA607cFFdNDZC9hmprJR2za13LHK
+         MXuDFsIzspGXiwaI02DGK5+/5ewkCTtx+K0HLeAXpyhm7uMToZ87ukpNXSxh5Kengnay
+         A3N/xVyJwk+49AMLSzaLofuw18odzCQ71jUv3kLrWf2DbIfUXPsKvmXOKKOkUecKIv52
+         krx6uHOMgW8ykFlAHHS/l+Dl3KYYiXLUqzS0cu92lyG8zXpDZOFQ7VdaXdPEA3yJ39cW
+         QozQ==
+X-Gm-Message-State: AAQBX9fW1wQtpCU0bbgICyiif3KYUaRXgyLb5BKw6euQ881ZLKGVkHr7
+        TbSn2kpySA8gRPXm43qsHUA=
+X-Google-Smtp-Source: AKy350ZGNrcVWqCmJG7MDx3CCggJaOTbtdILZjJWRUgva6hOWEcG/qwscVEjJzWs+5IqLSiAfz0HVA==
+X-Received: by 2002:a05:6214:2342:b0:5c0:51f0:eb45 with SMTP id hu2-20020a056214234200b005c051f0eb45mr7720103qvb.15.1680681877394;
+        Wed, 05 Apr 2023 01:04:37 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id f30-20020ad4559e000000b005e2fc1182besm3340730qvx.4.2023.04.05.01.04.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 01:04:23 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 08:04:20 +0000
-From:   Quentin Perret <qperret@google.com>
-To:     David Dai <davidai@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [RFC PATCH 2/6] kvm: arm64: Add support for get_cur_cpufreq
- service
-Message-ID: <ZC0rhEHTlz6dHKC0@google.com>
-References: <20230330224348.1006691-1-davidai@google.com>
- <20230330224348.1006691-3-davidai@google.com>
+        Wed, 05 Apr 2023 01:04:36 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     mazziesaccount@gmail.com
+Cc:     DLG-Adam.Thomson.Opensource@dm.renesas.com, bbara93@gmail.com,
+        benjamin.bara@skidata.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, stwiss.opensource@diasemi.com,
+        support.opensource@diasemi.com
+Subject: Re: [PATCH v2 1/3] regulator: da9063: add voltage monitoring registers
+Date:   Wed,  5 Apr 2023 10:04:22 +0200
+Message-Id: <20230405080422.560239-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2652d7df-b208-b88a-026e-5821d3d745ef@gmail.com>
+References: <2652d7df-b208-b88a-026e-5821d3d745ef@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330224348.1006691-3-davidai@google.com>
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday 30 Mar 2023 at 15:43:37 (-0700), David Dai wrote:
-> This service allows guests to query the host for frequency of the CPU
-> that the vCPU is currently running on.
+Thank you for the feedback!
 
-I assume the intention here is to achieve scale invariance in the guest
-to ensure its PELT signals represent how much work is actually being
-done. If so, it's likely the usage of activity monitors will be superior
-for this type of thing as that may allow us to drop the baked-in
-assumption about vCPU pinning. IIRC, AMUs v2 (arm64-specific obv) have
-extended support for virtualization, so I'd suggest looking into
-supporting that first.
+On Wed, 5 Apr 2023 at 09:29, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> Just a very minor thing - wouldn't this check be better as:
+> if (regl->info->vmon.mask) ?
+> We may have device(s) where 0 is a valid reg. However, mask 0 is
+> probably not making sense - unless I misunderstand something?
 
-And assuming we also want to support this on hardware that don't have
-AMUs, or don't have the right virt extensions, then the only thing I can
-think of is to have the VMM expose non-architectural AMUs to the guest,
-maybe emulated using PMUs. If the guest uses Linux, it'll need to grow
-support for non-architectural AMUs which is its own can of worms though.
-
-Thanks,
-Quentin
+This config is specific to the da9063. On this IC, register 0 is used for
+PAGE_CON (control register). The registers relevant for voltage monitoring are
+on 0x115-0x117. So IMHO this should be fine.
