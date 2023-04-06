@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CA86DA289
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7196DA288
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239229AbjDFUVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S239196AbjDFUV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238981AbjDFUVE (ORCPT
+        with ESMTP id S238977AbjDFUVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Apr 2023 16:21:04 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AD793D8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D1993E4
         for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:21:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1680812462; x=1712348462;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=kHnMH+5Ty9vpOYHxJB9coCCq990ixF1Ymwjs8OZoq8o=;
-  b=XszhB/p1ihVVFu09cV1MpN5gVhbhCDzklnyT4oAhE+6sET8v3rmyeRb8
-   udbUAfSwD71gm72bs/fypaRHMH4+JQrecuwyx4gpjKxcW7i4rPoThcT8y
-   j76DZ//nJJDtkfEhaDSxr4/4v8To2npoQEazub0zJC6JG1whTNlKgqM8O
-   pLLG5PZx86g3d6KDhZswEhxWnxzukImYTALKTlK1SI2HwNNu3vr6HtbWg
-   5FkNsPBI9btxJa2GvHASvFGzTHUAbgk0OVz4hPZl5GE+lBpGveflkD5ou
-   uj187HVApBxcivibLxoQKWe9uDR7sxF/yPB3VrWP9cnipq4yRCTkLwAIA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="407957784"
+  bh=7BReSg2zsB5y0pHQ7AAJ8Y7mGqv5oVtV05dcWb8L9Pw=;
+  b=N6rjBtfx65jWcCQmdQg2ssaKQfkguwVN4wsZi4TXcALhVZtpef6g+FVp
+   iLebNQ2VJHiC2/Q9AuySYVZKTMRfpbhxQpFQU+sKPIg3NzJBX3DQHal2U
+   BY2bpMOLc+ccxhbqUANIZvKWK0pmTEanH8Uj9VafZRymRshds2gSs/PjW
+   kHPIe/rgjAWtySDEj5Q2Rwmc+VffbaFxceR2MTqKQgWRBQUipmAECz5jT
+   T4Oy7q9KssoFsoVy4hoU81gtN/EwYoYB6B32SA4JATRd+AZxdJfYe0WcK
+   9C0GhEQ2geELryEYBDauu2HO+1tTIH8wKRcAF5A+efuwetvozuF3Zpg+e
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="407957793"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="407957784"
+   d="scan'208";a="407957793"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 13:21:01 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861529890"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861529894"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="861529890"
+   d="scan'208";a="861529894"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2023 13:21:00 -0700
+  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2023 13:21:01 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v4 08/12] sched/topology: Check SDF_SHARED_CHILD in highest_flag_domain()
-Date:   Thu,  6 Apr 2023 13:31:44 -0700
-Message-Id: <20230406203148.19182-9-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v4 09/12] sched/topology: Remove SHARED_CHILD from ASYM_PACKING
+Date:   Thu,  6 Apr 2023 13:31:45 -0700
+Message-Id: <20230406203148.19182-10-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
@@ -74,8 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not assume that all the children of a scheduling domain have a given
-flag. Check whether it has the SDF_SHARED_CHILD meta flag.
+Only x86 and Power7 use ASYM_PACKING. They use it differently.
+
+Power7 has cores of equal priority, but the SMT siblings of a core have
+different priorities. Parent scheduling domains do not need (nor have) the
+ASYM_PACKING flag. SHARED_CHILD is not needed. Using SHARED_PARENT would
+cause the topology debug code to complain.
+
+X86 has cores of different priority, but all the SMT siblings of the core
+have equal priority. It needs ASYM_PACKING at the MC level, but not at the
+SMT level (it also needs it at upper levels if they have scheduling groups
+of different priority). Removing ASYM_PACKING from the SMT domain causes
+the topology debug code to complain.
+
+Remove SHARED_CHILD for now. We still need a topology check that satisfies
+both architectures.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -90,68 +103,40 @@ Cc: Tim C. Chen <tim.c.chen@intel.com>
 Cc: Valentin Schneider <vschneid@redhat.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
-Suggested-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Suggested-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v3:
- * Introduced this patch.
+ * Removed spurious space.
 
 Changes since v2:
- * N/A
+ * Introduced this patch.
 
 Changes since v1:
  * N/A
 ---
- kernel/sched/sched.h | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ include/linux/sched/sd_flags.h | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 060616944d7a..70abce91b549 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1772,6 +1772,13 @@ queue_balance_callback(struct rq *rq,
- 	for (__sd = rcu_dereference_check_sched_domain(cpu_rq(cpu)->sd); \
- 			__sd; __sd = __sd->parent)
- 
-+/* A mask of all the SD flags that have the SDF_SHARED_CHILD metaflag */
-+#define SD_FLAG(name, mflags) (name * !!((mflags) & SDF_SHARED_CHILD)) |
-+static const unsigned int SD_SHARED_CHILD_MASK =
-+#include <linux/sched/sd_flags.h>
-+0;
-+#undef SD_FLAG
-+
- /**
-  * highest_flag_domain - Return highest sched_domain containing flag.
-  * @cpu:	The CPU whose highest level of sched domain is to
-@@ -1779,16 +1786,25 @@ queue_balance_callback(struct rq *rq,
-  * @flag:	The flag to check for the highest sched_domain
-  *		for the given CPU.
+diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
+index 57bde66d95f7..fad77b5172e2 100644
+--- a/include/linux/sched/sd_flags.h
++++ b/include/linux/sched/sd_flags.h
+@@ -132,12 +132,9 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
+ /*
+  * Place busy tasks earlier in the domain
   *
-- * Returns the highest sched_domain of a CPU which contains the given flag.
-+ * Returns the highest sched_domain of a CPU which contains @flag. If @flag has
-+ * the SDF_SHARED_CHILD metaflag, all the children domains also have @flag.
+- * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
+- *               up, but currently assumed to be set from the base domain
+- *               upwards (see update_top_cache_domain()).
+  * NEEDS_GROUPS: Load balancing flag.
   */
- static inline struct sched_domain *highest_flag_domain(int cpu, int flag)
- {
- 	struct sched_domain *sd, *hsd = NULL;
+-SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
++SD_FLAG(SD_ASYM_PACKING, SDF_NEEDS_GROUPS)
  
- 	for_each_domain(cpu, sd) {
--		if (!(sd->flags & flag))
-+		if (sd->flags & flag) {
-+			hsd = sd;
-+			continue;
-+		}
-+
-+		/*
-+		 * Stop the search if @flag is known to be shared at lower
-+		 * levels. It will not be found further up.
-+		 */
-+		if (flag & SD_SHARED_CHILD_MASK)
- 			break;
--		hsd = sd;
- 	}
- 
- 	return hsd;
+ /*
+  * Prefer to place tasks in a sibling domain
 -- 
 2.25.1
 
