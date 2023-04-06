@@ -2,55 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8726D9F5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE9F6D9F5F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239795AbjDFR5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S239607AbjDFR6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDFR5w (ORCPT
+        with ESMTP id S229458AbjDFR6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:57:52 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F158F
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:57:48 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id l7-20020a0566022dc700b0074cc9aba965so24475068iow.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:57:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680803868; x=1683395868;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7OAjhxcL9fqt8GNm9m6OaHCzJ6s3UX0YV8ZcboF3hs=;
-        b=NHaYPnaOtiH6olc+xziRl2K2PSB2IkmxE8uwYUiNMdETJM6Fm+xKxNuws+/WSwHSmo
-         D+lut25QFQX0Hyu6PUPHOy/5xwE2KdVnPpoSm6q+D5kQwFcO1Sonrdo1oEphgj3oactq
-         cGH6clRujJ5XEl5cM4mdwVfj4RjmDAYCf9/Xkpk9mEFQ2zFK6DiqKl9Yp6vRCQXgr1Sy
-         pctm4yot/2aioAxDs5X8vo06dJHJW/qP9+0GvL7S5eIw9JQ/8MdvbbjGax726iaeuqIH
-         GjRA3P7FlqmNwIuVtV/PlFkuahigyLhr80Qye6yCreOL8HREXjd6ir47P+HkJSXIEpws
-         9GAA==
-X-Gm-Message-State: AAQBX9frPDiLmjD1n/Dn/KbzZXObdsPNV4vQE+4VRb8zHaSLHSIW8Ubg
-        M6SCx8VQiFiR3Wq/7G5s5HjURe06hGZLRnglYgoVu6h3AE0/
-X-Google-Smtp-Source: AKy350aNB7RclPM1dRcssP7G9ms+u3wSYsdlFAc8Hj5SYtoKgfabzhQy9oUF9F2+6j2GIgQGxB9pwHaQawCIxV7mjMfgbde6Ibk3
+        Thu, 6 Apr 2023 13:58:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164368F;
+        Thu,  6 Apr 2023 10:58:41 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [119.155.57.40])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F9A966031C3;
+        Thu,  6 Apr 2023 18:58:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680803919;
+        bh=iDHptxLrH6idtLyBiS7LT+XDwnK/m3agYt8Smg6/hz4=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=OxNZsdEWCfq01riJrdhCPz2E5cG2FDqn6AYBagBBpt8BFdwsDbF5X3dyGzepGnEp4
+         O8p8CKjBy12PaSMsDylduEJTG7kmHWJwhD5JQln4uxlglVL2MyV+IB6hRnP7Jxnt71
+         6biVBO/5FVI2QnGLUp/Ce7cD33HwlYLPcNl7Mc5maing9KE3f2XauyyUxb9MmBvR9c
+         fYkczFqQVTS3dXLy4sK+rRjAqgfWp9QPHH4pIsWnqfCoL0BdDkqlVj3AXT5XHj2bQ2
+         7lrFsK/CwHikGFZd94AuN2KnwYV0xPXSlNIcuakcYk3SZgW9Z/uNaVGqEskgvTRsY4
+         rDaAQl21xYlMQ==
+Message-ID: <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com>
+Date:   Thu, 6 Apr 2023 22:58:27 +0500
 MIME-Version: 1.0
-X-Received: by 2002:a02:6308:0:b0:3a7:e46f:7d30 with SMTP id
- j8-20020a026308000000b003a7e46f7d30mr5505993jac.3.1680803868218; Thu, 06 Apr
- 2023 10:57:48 -0700 (PDT)
-Date:   Thu, 06 Apr 2023 10:57:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000080a2d405f8aea527@google.com>
-Subject: [syzbot] [dri?] WARNING in vkms_get_vblank_timestamp
-From:   syzbot <syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com>
-To:     airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, hamohammed.sa@gmail.com,
-        linux-kernel@vger.kernel.org, melissa.srw@gmail.com,
-        rodrigosiqueiramelo@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com>
+ <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,87 +85,380 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello,
 
-syzbot found the following issue on:
+Thank you so much for the review. Do you have any thoughts on the build
+error on arc architecture?
+https://lore.kernel.org/all/e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com
 
-HEAD commit:    4b0f4525dc4f Add linux-next specific files for 20230331
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ea0159c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=85cc4b935a1f7194
-dashboard link: https://syzkaller.appspot.com/bug?extid=75cc0f9f7e6324dd2501
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cb3659c80000
+On 4/6/23 8:52 PM, Michał Mirosław wrote:
+> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:>
+>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>> the info about page table entries. The following operations are supported
+>> in this ioctl:
+>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>   (PAGE_IS_SWAPPED).
+>> - Find pages which have been written-to and write protect the pages
+>>   (atomic PAGE_IS_WRITTEN + PAGEMAP_WP_ENGAGE)
+>>
+>> This IOCTL can be extended to get information about more PTE bits.
+> [...]
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+> [...]
+>> +static inline bool is_pte_uffd_wp(pte_t pte)
+>> +{
+>> +       return ((pte_present(pte) && pte_uffd_wp(pte)) ||
+>> +               pte_swp_uffd_wp_any(pte));
+> 
+> Nit: outer parentheses are not needed for `return`ed value -- please
+> remove. (Same in other places.)
+Will remove.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8d06bb015df3/disk-4b0f4525.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6a1c1ebf3724/vmlinux-4b0f4525.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4bb2b8d6cd7d/bzImage-4b0f4525.xz
+> 
+>> @@ -1768,11 +1789,416 @@ static int pagemap_release(struct inode *inode, struct file *file)
+>>         return 0;
+>>  }
+>>
+>> +#define PM_SCAN_FOUND_MAX_PAGES        (1)
+>> +#define PM_SCAN_BITS_ALL       (PAGE_IS_WRITTEN | PAGE_IS_FILE |       \
+>> +                                PAGE_IS_PRESENT | PAGE_IS_SWAPPED)
+>> +#define PM_SCAN_OPS            (PM_SCAN_OP_GET | PM_SCAN_OP_WP)
+>> +#define PM_SCAN_OP_IS_WP(a)    (a->flags & PM_SCAN_OP_WP)
+> 
+> Nit: PM_SCAN_DO_UFFD_WP()? It would shift the hint in the name from
+> what op is executed to what behaviour is requested.
+Will do.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+75cc0f9f7e6324dd2501@syzkaller.appspotmail.com
+> 
+>> +#define PM_SCAN_BITMAP(wt, file, present, swap)        \
+>> +       (wt | file << 1 | present << 2 | swap << 3)
+> 
+> Please parenthesize macro arguments ("(wt)", "(file)", etc.) to not
+> have to worry about operator precedence when passed a complex
+> expression.
+Like this?
+#define PM_SCAN_BITMAP(wt, file, present, swap)	\
+	((wt) | (file << 1) | (present << 2) | (swap << 3))
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 6019 at drivers/gpu/drm/vkms/vkms_crtc.c:103 vkms_get_vblank_timestamp+0x1cf/0x240 drivers/gpu/drm/vkms/vkms_crtc.c:103
-Modules linked in:
-CPU: 1 PID: 6019 Comm: syz-executor.1 Not tainted 6.3.0-rc4-next-20230331-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:vkms_get_vblank_timestamp+0x1cf/0x240 drivers/gpu/drm/vkms/vkms_crtc.c:103
-Code: ce 73 fc e8 53 e9 63 fc 4c 89 e1 48 ba 00 00 00 00 00 fc ff df 48 c1 e9 03 80 3c 11 00 75 65 49 89 04 24 eb c4 e8 b1 ce 73 fc <0f> 0b eb bb e8 d8 80 c6 fc e9 de fe ff ff e8 0e 81 c6 fc e9 78 fe
-RSP: 0018:ffffc9000b3873d8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000004e19fc6e8a RCX: 0000000000000000
-RDX: ffff8880756257c0 RSI: ffffffff850f429f RDI: 0000000000000006
-RBP: ffff88801dc84000 R08: 0000000000000006 R09: 0000004e19fc6e8a
-R10: 0000004e19fc6e8a R11: 0000000000000000 R12: ffffc9000b387540
-R13: 0000004e19fc6e8a R14: 0000000000004e20 R15: ffffffff850f40d0
-FS:  00007f5372809700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000202fc000 CR3: 0000000027361000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- drm_crtc_get_last_vbltimestamp+0x102/0x1a0 drivers/gpu/drm/drm_vblank.c:877
- drm_crtc_next_vblank_start+0x13f/0x2b0 drivers/gpu/drm/drm_vblank.c:1006
- set_fence_deadline drivers/gpu/drm/drm_atomic_helper.c:1531 [inline]
- drm_atomic_helper_wait_for_fences+0x1b4/0x780 drivers/gpu/drm/drm_atomic_helper.c:1578
- drm_atomic_helper_commit drivers/gpu/drm/drm_atomic_helper.c:2007 [inline]
- drm_atomic_helper_commit+0x1bd/0x370 drivers/gpu/drm/drm_atomic_helper.c:1979
- drm_atomic_commit+0x20a/0x300 drivers/gpu/drm/drm_atomic.c:1503
- drm_client_modeset_commit_atomic+0x69b/0x7e0 drivers/gpu/drm/drm_client_modeset.c:1045
- drm_client_modeset_commit_locked+0x149/0x580 drivers/gpu/drm/drm_client_modeset.c:1148
- pan_display_atomic drivers/gpu/drm/drm_fb_helper.c:1690 [inline]
- drm_fb_helper_pan_display+0x28f/0x970 drivers/gpu/drm/drm_fb_helper.c:1750
- fb_pan_display+0x2fb/0x6c0 drivers/video/fbdev/core/fbmem.c:924
- bit_update_start+0x49/0x1f0 drivers/video/fbdev/core/bitblit.c:387
- fbcon_switch+0xbcf/0x1380 drivers/video/fbdev/core/fbcon.c:2169
- redraw_screen+0x2bd/0x740 drivers/tty/vt/vt.c:965
- fbcon_modechanged+0x526/0x620 drivers/video/fbdev/core/fbcon.c:2704
- fbcon_update_vcs+0x3e/0x50 drivers/video/fbdev/core/fbcon.c:2749
- do_fb_ioctl+0x6d7/0x740 drivers/video/fbdev/core/fbmem.c:1125
- fb_ioctl+0xeb/0x150 drivers/video/fbdev/core/fbmem.c:1202
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5371a8c0f9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5372809168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f5371bac050 RCX: 00007f5371a8c0f9
-RDX: 0000000020000000 RSI: 0000000000004601 RDI: 0000000000000005
-RBP: 00007f5371ae7b39 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd0e5e571f R14: 00007f5372809300 R15: 0000000000022000
- </TASK>
+> 
+> I
+> 
+> [...]
+>> +static inline bool pagemap_scan_is_written_set(struct pagemap_scan_private *p)
+> 
+> pagemap_scan_checks_page_written? or similar 'scan is written' doesn't
+> seem to convey the expected intention.
+> The function is used only once in ..._test_walk(), so maybe just
+> inline, possibly using a temporary `bool` to make the condition easier
+> to read?
+I'll update the name of function. Using bool doesn't help much. Lets keep
+the same implementation.
+
+> 
+> [...]
+> 
+>> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+> 
+> Could you try out how the code would look when passing the bitmap
+> instead of separate booleans?
+It doesn't look better. Right now we have less duplicate code.
+
+> 
+>> +                              struct pagemap_scan_private *p,
+>> +                              unsigned long addr, unsigned int n_pages)
+>> +{
+> [...]
+>> +       if ((cur->start + cur->len * PAGE_SIZE == addr) &&
+>> +           (cur->bitmap == bitmap)) {
+> 
+> Nit: bitmap check is cheaper, so I'd put it first. BTW, inner
+> parentheses are not needed here.
+Will do.
+
+> 
+>> +               cur->len += n_pages;
+>> +               p->found_pages += n_pages;
+>> +
+>> +               if (p->max_pages && (p->found_pages == p->max_pages))
+>> +                       return PM_SCAN_FOUND_MAX_PAGES;
+>> +
+>> +               return 0;
+>> +       }
+>> +
+>> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
+> 
+> It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
+> have vec_len == 0 here, then we'd not fit the entry in the userspace
+> buffer anyway. Am I missing something?
+No. I'd explained it with diagram last time:
+https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@collabora.com
+
+I'll add a concise comment here.
+
+> 
+>> +
+>> +               if (cur->len) {
+>> +                       memcpy(&p->vec[p->vec_index], cur,
+>> +                              sizeof(struct page_region));
+>> +                       p->vec_index++;
+>> +               }
+>> +               cur->start = addr;
+>> +               cur->len = n_pages;
+>> +               cur->bitmap = bitmap;
+>> +               p->found_pages += n_pages;
+>> +
+>> +               if (p->max_pages && (p->found_pages == p->max_pages))
+>> +                       return PM_SCAN_FOUND_MAX_PAGES;
+>> +
+>> +               return 0;
+>> +       }
+>> +
+>> +       return -ENOSPC;
+>> +}
+>> +
+>> +static inline int pagemap_scan_deposit(struct pagemap_scan_private *p,
+>> +                                      struct page_region __user *vec,
+>> +                                      unsigned long *vec_index)
+> 
+> ..._deposit() is used only in single place - please inline.
+It is already inline.
+
+> 
+> [...]
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +                                 unsigned long end, struct mm_walk *walk)
+>> +{
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       bool is_written, is_file, is_present, is_swap;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +       unsigned long addr = end;
+>> +       spinlock_t *ptl;
+>> +       int ret = 0;
+>> +       pte_t *pte;
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +       ptl = pmd_trans_huge_lock(pmd, vma);
+>> +       if (ptl) {
+> 
+> Nit: `page_lock` or `pt_lock` to make it easier to guess the purpose?
+No, in this file ptl is used religiously for this lock. So I'll keep it ptl
+to keep consistency.
+
+> 
+>> +               unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +               is_written = !is_pmd_uffd_wp(*pmd);
+>> +               is_file = vma->vm_file;
+>> +               is_present = pmd_present(*pmd);
+>> +               is_swap = is_swap_pmd(*pmd);
+>> +
+>> +               spin_unlock(ptl);
+>> +
+>> +               /*
+>> +                * Break huge page into small pages if the WP operation need to
+>> +                * be performed is on a portion of the huge page or if max_pages
+>> +                * pages limit would exceed.
+> 
+> BTW, could the `max_pages` limit be relaxed a bit (in that it would be
+> possible to return more pages if they all merge into the last vector
+> entry) so that it would not need to split otherwise-matching huge
+> page? It would remove the need for this special handling in the kernel
+> and splitting the page by this read-only-appearing ioctl?
+No, this cannot be done. Otherwise we'll not be able to emulate Windows
+syscall GetWriteWatch() which specifies the exact number of pages. Usually
+in most of cases, either user will not use THP or not perform the operation
+on partial huge page. So this part is only there to keep things correct for
+those users who do use THP and partial pagemap_scan operations.
+
+> 
+>> +                */
+>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+>> +                   ((end - start < HPAGE_SIZE) ||
+>> +                    (p->max_pages &&
+>> +                     (p->max_pages - p->found_pages) < n_pages))) {
+>> +
+>> +                       split_huge_pmd(vma, pmd, start);
+>> +                       goto process_smaller_pages;
+>> +               }
+>> +
+>> +               if (p->max_pages &&
+>> +                   p->found_pages + n_pages > p->max_pages)
+>> +                       n_pages = p->max_pages - p->found_pages;
+>> +
+>> +               ret = pagemap_scan_output(is_written, is_file, is_present,
+>> +                                         is_swap, p, start, n_pages);
+>> +               if (ret < 0)
+>> +                       return ret;
+>> +
+>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+>> +                   uffd_wp_range(vma, start, HPAGE_SIZE, true) < 0)
+>> +                       ret = -EINVAL;
+> 
+> Why not propagate the error from uffd_wp_range()?
+uffd_wp_range() returns status in long variable. We cannot return long in
+this function. So intead of type casting long to int and then return I've
+used -EINVAL. Would following be more suitable?
+
+long ret2 = uffd_wp_range(vma, start, HPAGE_SIZE, true);
+if (ret2 < 0)
+	return (int)ret2;
+
+> 
+> [...]
+>> +static long do_pagemap_cmd(struct mm_struct *mm,
+>> +                          struct pm_scan_arg __user *uarg)
+> 
+> Please rename the function to `do_pagemap_scan` as it implements just
+> this single ioctl now.
+Will do.
+
+> 
+>> +{
+> [...]
+>> +       start = (unsigned long)untagged_addr(arg.start);
+>> +       vec = (struct page_region *)(unsigned long)untagged_addr(arg.vec);
+> 
+> Is the inner cast needed?
+arg.vec remains 64-bit on 32-bit systems. So casting 64bit value directly
+to struct page_region pointer errors out. So I've added specific casting to
+unsigned long first before casting to pointers.
+
+> 
+>> +       ret = pagemap_scan_args_valid(&arg, start, vec);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       end = start + arg.len;
+>> +       p.max_pages = arg.max_pages;
+>> +       p.found_pages = 0;
+>> +       p.flags = arg.flags;
+>> +       p.required_mask = arg.required_mask;
+>> +       p.anyof_mask = arg.anyof_mask;
+>> +       p.excluded_mask = arg.excluded_mask;
+>> +       p.return_mask = arg.return_mask;
+>> +       p.cur.len = 0;
+>> +       p.cur.start = 0;
+>> +       p.vec = NULL;
+>> +       p.vec_len = (PAGEMAP_WALK_SIZE >> PAGE_SHIFT);
+> 
+> Nit: parentheses are not needed here, please remove.
+Will do.
+
+> 
+>> +
+>> +       /*
+>> +        * Allocate smaller buffer to get output from inside the page walk
+>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>> +        * we want to return output to user in compact form where no two
+>> +        * consecutive regions should be continuous and have the same flags.
+>> +        * So store the latest element in p.cur between different walks and
+>> +        * store the p.cur at the end of the walk to the user buffer.
+>> +        */
+>> +       p.vec = kmalloc_array(p.vec_len, sizeof(struct page_region),
+>> +                             GFP_KERNEL);
+>> +       if (!p.vec)
+>> +               return -ENOMEM;
+>> +
+>> +       walk_start = walk_end = start;
+>> +       while (walk_end < end && !ret) {
+> 
+> The loop will stop if a previous iteration returned ENOSPC (and the
+> error will be lost) - is it intended?
+It is intentional. -ENOSPC means that the user buffer is full even though
+there was more memory to walk over. We don't treat this error. So when
+buffer gets full, we stop walking over further as user buffer has gotten
+full and return as success.
+
+> 
+>> +               p.vec_index = 0;
+>> +
+>> +               empty_slots = arg.vec_len - vec_index;
+>> +               p.vec_len = min(p.vec_len, empty_slots);
+>> +
+>> +               walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+>> +               if (walk_end > end)
+>> +                       walk_end = end;
+>> +
+>> +               mmap_read_lock(mm);
+>> +               ret = walk_page_range(mm, walk_start, walk_end,
+>> +                                     &pagemap_scan_ops, &p);
+>> +               mmap_read_unlock(mm);
+>> +
+>> +               if (ret && ret != -ENOSPC && ret != PM_SCAN_FOUND_MAX_PAGES)
+>> +                       goto free_data;
+>> +
+>> +               walk_start = walk_end;
+>> +               if (p.vec_index) {
+>> +                       if (copy_to_user(&vec[vec_index], p.vec,
+>> +                                        p.vec_index *
+>> +                                        sizeof(struct page_region))) {
+> 
+> sizeof(*p.vec) ?
+Sure.
+
+> 
+>> +                               ret = -EFAULT;
+>> +                               goto free_data;
+>> +                       }
+>> +                       vec_index += p.vec_index;
+>> +               }
+>> +       }
+>> +       ret = pagemap_scan_deposit(&p, vec, &vec_index);
+>> +       if (!ret)
+>> +               ret = vec_index;
+>> +free_data:
+>> +       kfree(p.vec);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static long pagemap_scan_ioctl(struct file *file, unsigned int cmd,
+>> +                              unsigned long arg)
+>> +{
+>> +       struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)arg;
+> 
+> This is specific to PAGEMAP_SCAN ioctl, so should go into do_pagemap_cmd().
+Sure.
+
+> 
+>> +       struct mm_struct *mm = file->private_data;
+>> +
+>> +       switch (cmd) {
+>> +       case PAGEMAP_SCAN:
+>> +               return do_pagemap_cmd(mm, uarg);
+> [...]
+>> --- a/include/linux/userfaultfd_k.h
+>> +++ b/include/linux/userfaultfd_k.h
+>> @@ -210,6 +210,14 @@ extern bool userfaultfd_wp_async(struct vm_area_struct *vma);
+>>
+>>  #else /* CONFIG_USERFAULTFD */
+>>
+>> +static inline long uffd_wp_range(struct mm_struct *dst_mm,
+>> +                                struct vm_area_struct *vma,
+>> +                                unsigned long start, unsigned long len,
+>> +                                bool enable_wp)
+>> +{
+>> +       return 0;
+>> +}
+>> +
+>>  /* mm helpers */
+>>  static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
+>>                                 unsigned long reason)
+> 
+> Shouldn't this part be in the patch introducing uffd_wp_range()?
+We have not added uffd_wp_range() in previous patches. We just need this
+stub for this patch for the case when CONFIG_USERFAULTFD isn't enabled.
+
+I'd this as separate patch before this patch. Mike asked me to merge it
+with this patch in order not to break bisectability.
+https://lore.kernel.org/all/ZBK+86eMMazwfhdx@kernel.org
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> Best Regards
+> Michał Mirosław
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+BR,
+Muhammad Usama Anjum
