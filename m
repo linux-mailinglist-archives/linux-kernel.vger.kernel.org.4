@@ -2,83 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75A96DA232
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A165D6DA239
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238444AbjDFUH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
+        id S238717AbjDFUHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236697AbjDFUHY (ORCPT
+        with ESMTP id S230035AbjDFUHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:07:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9AD83F2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680811600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UhmlLvqF6da/QeN+M/XiLghLgzDAr8RSwO2FXFQLnAM=;
-        b=fo+s4t3gHydQtSYukR101dvYEjiPtJ11UYRHI7eJum/+q5r5qacYSxpbcVYudPIM755f1b
-        bwnRL3XjTQr4bMDxIGVJ/TKMnqb1JEYD965h7i+hYEogE8GRUU48yK4OEga0kctUfXYn1s
-        7unWkZEP3DOUmYt3bXoIPYTD1AHc5yU=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-hJbmPxKSNKu6dn7Sfg1rew-1; Thu, 06 Apr 2023 16:06:39 -0400
-X-MC-Unique: hJbmPxKSNKu6dn7Sfg1rew-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3e385709826so3669131cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:06:39 -0700 (PDT)
+        Thu, 6 Apr 2023 16:07:52 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6F89033
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:07:50 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id r29so40630229wra.13
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680811669;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7SImv1Rdk/+kE5EteKBqsurf3m5xVNf7BO/4yX5HUIM=;
+        b=WjeHYe0vmiAkeua0VT7ZVcJlF+Tnlz4iYE2OEXOy+OvmP4Ud89Kz7xAz4rtag4h26a
+         I23SMRAiz7875kUZ5VCa8FysC35Ny5SWMXJKEQSfiXc6Am4pHX6PwpZor8IFq/Ipinu1
+         wfOUcEhsShJfMew+6uQyu5WY1RKRBgdWNjJYy8kS8jWboL05splsbv/yjipH0X23f0wC
+         sBmZ3lb5ye8WmgEx1l6gS8DyA1OI/imHst38pOe5px8cA5BqNsCOKyIzEJo+XyCc/HBk
+         hhVB7hV4hGxRxTR/YweB1sXuSlYvzdnS9TeWrVDbbyDzKcc06/cWX6y5wgXjaZyJ3TML
+         OEKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680811598; x=1683403598;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UhmlLvqF6da/QeN+M/XiLghLgzDAr8RSwO2FXFQLnAM=;
-        b=A5Wjs3Fds6zHfBao1GbnxjVlZgcV/O8gNFSHEd/MX9nxba1aEnCSt/snllMaGGDH2B
-         uvMODG643oRT2PwttiBhSAH8w99snK2bcHMwPKik2t+E07ezah+Li3Jk07lXgTGwR48e
-         bZH7oFDYyraYhsfuEFBKxtvH+l4nfNCYS80aH95B39MMnR/bsBVELUaU5jpZhjqlI9oK
-         P6zHR8gBtVLkhun9wiplxgYfFGeDOxRyOT5lVV4A0D0UlHgLb/Dm5Sb/V85grQxvw4xX
-         UKKHnP7lPFEDrspe7alPtaE3Z1DISCPNZVHQLQwLtYwWyduc/XvKsS7BmMz28Us6ntAD
-         WAiw==
-X-Gm-Message-State: AAQBX9f3l081WnTgF/57d1gpSe4O0BgZUgcsKZRYEXNwQHlCe9dxBRLt
-        QMquKEWcrayex+B2jhr402q9fw4zMgQ0WZndpzbTfGoq1WauWg1nRd2cdxyMseYELxop2CtIx+g
-        Bb2/TzCITmx2x9MEpvtpcA5K1
-X-Received: by 2002:ac8:4e81:0:b0:3e6:707e:d3b1 with SMTP id 1-20020ac84e81000000b003e6707ed3b1mr367779qtp.0.1680811598752;
-        Thu, 06 Apr 2023 13:06:38 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZPAT8/mfBeygZApOE+HH1z1q+F581N5hs+GA2lzop1GnVCSbhthuavSrBaVKK/62Zf7anwGQ==
-X-Received: by 2002:ac8:4e81:0:b0:3e6:707e:d3b1 with SMTP id 1-20020ac84e81000000b003e6707ed3b1mr367746qtp.0.1680811598535;
-        Thu, 06 Apr 2023 13:06:38 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-227-151.dyn.eolo.it. [146.241.227.151])
-        by smtp.gmail.com with ESMTPSA id m8-20020ac866c8000000b003e398d00fabsm647030qtp.85.2023.04.06.13.06.36
+        d=1e100.net; s=20210112; t=1680811669;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7SImv1Rdk/+kE5EteKBqsurf3m5xVNf7BO/4yX5HUIM=;
+        b=h+QGTud9MeU5Yo5c9uZz7C8AIEf+XI4qylLqgowFfuM9NHZRRTb5cWXw/uUAArAYI6
+         zVLpmtZEnOZG9NtlHyv979U4A36TWQb4xDSt1yWifHMT1mPXulLkkSJRran3uR6Ys/o0
+         4zevI/KvwzToVwKHKuSGu2nDVpybDygkg+PQ3y2iHvS3bokvpnboHTEsdLsUZHbS2Zdi
+         CqbOx4LlIaZeY4zbkH+n14qNGAKcjIHdFqKVzsKk5vNEThv7ZJaIy732BgrmWh2AjRxt
+         e1sNnxqXKht+rDR9Jizc+a2AGlAG+R+FJ0QufchqJfkWKXX46yuCqmShsY4vzxGlH6GM
+         FGOQ==
+X-Gm-Message-State: AAQBX9dWiKfULaiHEd+9rJTPKsVqVDpOGQglxab+D3T35v76yb7XxfG4
+        RYRi0xMasOi/jBVRiUS4/6dlog==
+X-Google-Smtp-Source: AKy350aqh8Akw7hp7e53sm6ji/MH7B41I+AjfxnjeOwFkxczT7A+0E2LkoY06UBce0pl07AQwayx1Q==
+X-Received: by 2002:a05:6000:508:b0:2d7:89ce:8319 with SMTP id a8-20020a056000050800b002d789ce8319mr6475533wrf.27.1680811668794;
+        Thu, 06 Apr 2023 13:07:48 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:4793:cb9a:340b:2f72])
+        by smtp.gmail.com with ESMTPSA id c11-20020adfe74b000000b002d89e113691sm2560506wrn.52.2023.04.06.13.07.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 13:06:38 -0700 (PDT)
-Message-ID: <7ab4950ea08e89fe0481a08a8b49de4291b9451f.camel@redhat.com>
-Subject: Re: [PATCH net-next 2/3] ksz884x: remove unused #defines
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date:   Thu, 06 Apr 2023 22:06:35 +0200
-In-Reply-To: <ZC7vgRFmqAjGQyss@kernel.org>
-References: <20230405-ksz884x-unused-code-v1-0-a3349811d5ef@kernel.org>
-         <20230405-ksz884x-unused-code-v1-2-a3349811d5ef@kernel.org>
-         <454a61709e442f717fbde4b0ebb8b4c3fdfb515e.camel@redhat.com>
-         <20230406090017.0fc0ae34@kernel.org> <ZC7vgRFmqAjGQyss@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 06 Apr 2023 13:07:48 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v2 0/7] arm64: dts: qcom: sa8775p: add more IOMMUs
+Date:   Thu,  6 Apr 2023 22:07:16 +0200
+Message-Id: <20230406200723.552644-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,35 +81,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-04-06 at 18:12 +0200, Simon Horman wrote:
-> On Thu, Apr 06, 2023 at 09:00:17AM -0700, Jakub Kicinski wrote:
-> > On Thu, 06 Apr 2023 15:37:36 +0200 Paolo Abeni wrote:
-> > > On Wed, 2023-04-05 at 10:39 +0200, Simon Horman wrote:
-> > > > Remove unused #defines from ksz884x driver.
-> > > >=20
-> > > > These #defines may have some value in documenting the hardware.
-> > > > But that information may be accessed via scm history. =20
-> > >=20
-> > > I personally have a slight preference for keeping these definitions i=
-n
-> > > the sources (for doc purposes), but it's not a big deal.=20
-> > >=20
-> > > Any 3rd opinion more then welcome!
-> >=20
-> > I had the same reaction, FWIW.
-> >=20
-> > Cleaning up unused "code" macros, pure software stuff makes perfect
-> > sense. But I feel a bit ambivalent about removing definitions of HW
-> > registers and bits.
->=20
-> I guess that it two down-votes for removing the #defines.
->=20
-> Would it be acceptable if I reworked the series to only remove
-> the dead code - which would leave only subset of patch 3/3 ?
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-I would be fine with that.
+Add the GPU and PCIe IOMMUs for sa8775p platforms as well as the required
+GPU clock controller driver.
 
-Thanks!
+v1 -> v2:
+- remove unused include in the GPUCC driver
+- remove unused clock from the GPUCC driver and make it compatible
+  with the generic QCom GPUCC bindings
+- put the new defconfig option in the right place (as per savedefconfig)
+  and make the GPUCC driver a module rather than built-in
+- describe the smmu clocks for sa8775p in dt-bindings
 
-Paolo
+Bartosz Golaszewski (6):
+  dt-bindings: clock: qcom: describe the GPUCC clock for SA8775P
+  arm64: defconfig: enable the SA8775P GPUCC driver
+  dt-bindings: iommu: arm,smmu: enable clocks for sa8775p
+  arm64: dts: qcom: sa8775p: add the pcie smmu node
+  arm64: dts: qcom: sa8775p: add the GPU clock controller node
+  arm64: dts: qcom: sa8775p: add the GPU IOMMU node
+
+Shazad Hussain (1):
+  clk: qcom: add the GPUCC driver for sa8775p
+
+ .../devicetree/bindings/clock/qcom,gpucc.yaml |   2 +
+ .../devicetree/bindings/iommu/arm,smmu.yaml   |   5 +-
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 124 ++++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/clk/qcom/Kconfig                      |   8 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/gpucc-sa8775p.c              | 625 ++++++++++++++++++
+ .../dt-bindings/clock/qcom,sa8775p-gpucc.h    |  50 ++
+ 8 files changed, 814 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/clk/qcom/gpucc-sa8775p.c
+ create mode 100644 include/dt-bindings/clock/qcom,sa8775p-gpucc.h
+
+-- 
+2.37.2
 
