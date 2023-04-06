@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977DE6DA3AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE4E6DA3AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239993AbjDFUmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
+        id S239801AbjDFUmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239554AbjDFUlc (ORCPT
+        with ESMTP id S240337AbjDFUla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:41:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C0A7AB9;
-        Thu,  6 Apr 2023 13:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mWCYh+aHqMQPGU92cJY3RsdVCoOL6xggKE9AswxAjjI=; b=FVfGvilevbgchwqZb52BXeY8SA
-        yM4/PlPBCQF19uANo8phcXNg55OCv069MBl+d8kfOQ5fzChyQXwG8hcFBV26OSUTZK3K1MfiWWUTP
-        32vXXFNGdIMRTR5weNKpSj9tpJQJ08tYy7FODzQZIricHNb+7nLm/NlEmcEHUZUat4+aVvWRzkbiz
-        ZruHBv84ED5dthnKaC9V4SqK0Yq3SlaeD80X0P16qTbl5RgzuVxK7Xp1Z9JmtdzlZpwNiqopTQUez
-        SR04HbpaphOyaR+GDCdQeqjdy2CICbldb2Fzsbp+GTvV1FLr5ojiF1w7bxi5Fvgja+sPSUoHU2akV
-        mOqncIzg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pkWMX-0009V8-4F; Thu, 06 Apr 2023 20:37:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B0750300274;
-        Thu,  6 Apr 2023 22:37:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 190072625036A; Thu,  6 Apr 2023 22:37:39 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 22:37:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        "H. Peter Anvin" <hpa@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Asit Mallick <asit.k.mallick@intel.com>,
-        Cfir Cohen <cfir@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        David Kaplan <David.Kaplan@amd.com>,
-        David Rientjes <rientjes@google.com>,
-        Dirk Hohndel <dirkhh@vmware.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jiri Slaby <jslaby@suse.cz>, Joerg Roedel <joro@8bytes.org>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [RFC PATCH 1/7] x86/entry: Move PUSH_AND_CLEAR_REGS out of
- paranoid_entry
-Message-ID: <20230406203738.GE405948@hirez.programming.kicks-ass.net>
-References: <20230403140605.540512-1-jiangshanlai@gmail.com>
- <20230403140605.540512-2-jiangshanlai@gmail.com>
+        Thu, 6 Apr 2023 16:41:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5DFB45D;
+        Thu,  6 Apr 2023 13:38:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC10860F77;
+        Thu,  6 Apr 2023 20:38:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9211FC433D2;
+        Thu,  6 Apr 2023 20:38:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680813488;
+        bh=3Cznac5B+3sy6hB9DB3/iijT0kNRLGM0krGAPHIjwzU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XFJOGBaUci1k2qda+64OPr7W9hnUOcTeNhu8CRqtWNtPwUevBZwT16jGG3OVwhyt6
+         AuNgxgN1jYEMc5w6gdtT9yJkiZucj+V/TNA30stBeFypoEk7ngGvA6hqr02fwi5Aez
+         GHIbpj6mPZOr3k79jsZDKz8U4hCkRCsxNRrSyrRO+wsrPoD+BVL8nkL8cgyQi8KOCn
+         dERdf/af6ZVxFtDuA+E7sSDkjuZjomZO80b6DxcjawKGW1SgxcO7nPGGFoR+oMlhid
+         NBMfqT6f5zCbIiEtVmuoanCXWzgnXbMAvqboU/k95P4EGkmZtrMa7LljcY1ea7YzzI
+         TCri2M0SRZ1vg==
+Message-ID: <8353399f-c6de-8da7-78f1-d6a558c462d0@kernel.org>
+Date:   Thu, 6 Apr 2023 22:38:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403140605.540512-2-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V2 3/3] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        kernel <kernel@dh-electronics.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230406154900.6423-1-cniedermaier@dh-electronics.com>
+ <20230406154900.6423-3-cniedermaier@dh-electronics.com>
+ <5478133e-7772-1db9-3473-1ec86fa2aae2@linaro.org>
+ <a7fcfe695623491da96639079eb14c8f@dh-electronics.com>
+ <f6c8586f-a5d1-875f-b2c0-7871112cf1b1@linaro.org>
+ <ff95314402a349a5a2998c1b5e2b13a2@dh-electronics.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <ff95314402a349a5a2998c1b5e2b13a2@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 10:05:59PM +0800, Lai Jiangshan wrote:
-> @@ -915,11 +922,8 @@ SYM_CODE_END(xen_failsafe_callback)
->   * R14 - old CR3
->   * R15 - old SPEC_CTRL
->   */
-> -SYM_CODE_START(paranoid_entry)
-> +SYM_FUNC_START(paranoid_entry)
->  	ANNOTATE_NOENDBR
-> -	UNWIND_HINT_FUNC
+On 06/04/2023 21:57, Christoph Niedermaier wrote:
+>>>>> +     aliases {
+>>>>> +             /delete-property/ mmc0; /* Avoid double definitions */
+>>>>
+>>>> I don't understand it. What is "double definition" of aliases?
+>>>
+>>> Otherwise I end up like this:
+>>> mmc0 = &usdhc1;
+>>> mmc1 = &usdhc2;
+>>> mmc2 = &usdhc2;
+>>>
+>>> Is "Ensure unique allocation" a better comment here?
+>>>
+>>>>
+>>>>> +             /delete-property/ mmc1;
+>>>>> +             mmc2 = &usdhc2; /* eMMC should be mmc2 */
+>>>>
+>>>> Why? How is this labeled on the board (physically or on schematics)? If
+>>>> you answer here "for booting", then the answer is NAK. Don't add
+>>>> software policies to Devicetree.
+>>>
+>>> The name in the schematics is "SD2".
+>>
+>> Answering also to above - then likely the aliases should be dropped from
+>> SoM. I doubt that Som calls it SD1 and your board SD2...
+> 
+> Maybe I don't quite get it, but the hardware starts counting at 1. The first
+> interface is SD1 and it is used as WiFi. The second one is SD2 which is the
+> eMMC. So with this aliases it should match SD2 to mmc2.
+> Do you want me to delete the aliases in the include file "imx6ull-dhcor-som.dtsi"
 
-That isn't quite equivalent. SYM_FUNC_START() gets you ENDBR, while the
-SYM_CODE_START(); ANNOTATE_NOENDBR; UNWIND_HINT_FUNC is
-explicitly no ENDBR.
+Yes, because it incorrectly calls eMMC as mmc1. You said it is SD2, right?
 
 
-> -	PUSH_AND_CLEAR_REGS save_ret=1
-> -	ENCODE_FRAME_POINTER 8
->  
->  	/*
->  	 * Always stash CR3 in %r14.  This value will be restored,
-
+Best regards,
+Krzysztof
 
