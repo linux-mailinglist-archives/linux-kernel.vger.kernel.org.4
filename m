@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E8D6D8DFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553286D8DFE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbjDFD2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S235216AbjDFD3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjDFD2B (ORCPT
+        with ESMTP id S230059AbjDFD32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:28:01 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293221701
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:28:00 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id m6so27734131qvq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 20:28:00 -0700 (PDT)
+        Wed, 5 Apr 2023 23:29:28 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7C83C3E
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:29:27 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id l11-20020a170902d34b00b001a4ee9558fcso749519plk.8
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 20:29:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680751679; x=1683343679;
-        h=content-disposition:mime-version:mail-followup-to:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7exQMg8RF8/DHRsTNojhOJZnK3THgVkfQJB/jXiE+DE=;
-        b=W/YamV4sOSzc+l3jhXPBKF1I079lJ9iIH16zzexlcJVcL3IPmp4TuiFWl16kc6R3hK
-         Myj0Dv722LSRisflBbcf77GZgqUUKafoJmFF6GY8w+hrYMr5f3zhrGwMqf5bj7HZq6pr
-         +deNEKNhOnF1RqYzUBxjOhrUxXi5c2ernc2bp8pqGujGncB37FSSlp6h/wfJ57jiohcO
-         GWl6eHIQFtm69m5XfJ7G7orfVAiBZg01k1EEYDBiVBfWiBROEa1i+OvMeBgY/+ydc7J1
-         OJPsbbPzjSOYnOm+CK1rrME9kQZf3wc30cyQF1ZUbOXEe7h54gmEzx/LqDixUnBJRk2o
-         rgrA==
+        d=google.com; s=20210112; t=1680751767;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h15CORNu9ncNp+50JVcQuXVD3PLOS7VZQZXoeAXoypI=;
+        b=YKrkA/XjuX6OGTnY3lclc41AWxFCIYXsmF5hsRRCLlmr/LZ/haCyTj+ldKjCXP8dx/
+         Xq2z7o5zczfJZ9cf8f60rjTXF041Ij3mBapglLv595BKKT1dHfwz8ajiynXQgNNrpPED
+         RnwEe4tF62B4cDtts0qC/qqvSbw0qTJHgGROg3d+Z4cSQkFptlm3vuTRtZMgf+TmnpP/
+         9tGxwCI5eHvVZZW+dtgQV1vu5M3DSvVWbeE6uS7RLNUN1mCSf5RSfdJ4xRmI2+n1pGmJ
+         /6D7+hEO8OeHOXEzIgx8VLIOe8wkCFSqtvoc7+/n8OwTC9wqC1LRubCSVkKe7NXzzfwG
+         mZ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680751679; x=1683343679;
-        h=content-disposition:mime-version:mail-followup-to:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7exQMg8RF8/DHRsTNojhOJZnK3THgVkfQJB/jXiE+DE=;
-        b=lWQ1SgKMErqgX/2ZjhtH13ldPgYK6nPbdoAYPAKUdBjQU+PjaZi8rDLHaOWHwJ8Ro2
-         LH9ZEvIhZ6LMml5T+EyPOMMAywsO2gqjTUv/klUjSlWG7SEvU5RQC0GF+3CJbuZGHFty
-         jiutfLmmusv8aZX6255vjhf4p3C6VCPlbcRaBHRnacOPz80p9CyxYwG+aFgIo0ufsu4e
-         WnKtlpbH4/F55n/BMilX6zTx41tq9MjW1ouSPwmbFovrvP6VUAM5dbrU5miwoXkpT/dc
-         /SvM3IVbMD/GPHP+zagM8GPDhHF0mPbhK/20pIt9g9peF4Nmuu94bG9WNnFtn1c9LRHK
-         U5Kw==
-X-Gm-Message-State: AAQBX9c7QOFNb3qzrOWukpgAH/7gDIQuVtzw9/HRIHqDmfwxwpBwRnBw
-        ZeYfLeIc+byHhZuivjEXoZtT1OrvXG0=
-X-Google-Smtp-Source: AKy350YNT6s+D3654vCH0sED8S9QdFo7wAa1VQoxz3QPrLsyYYWKcEHNFAjb0aW5yuRRa9eLXOL5ZA==
-X-Received: by 2002:a05:6214:d01:b0:5ba:168d:d3fc with SMTP id 1-20020a0562140d0100b005ba168dd3fcmr2350396qvh.4.1680751678927;
-        Wed, 05 Apr 2023 20:27:58 -0700 (PDT)
-Received: from Gentoo ([191.96.227.90])
-        by smtp.gmail.com with ESMTPSA id 65-20020a370744000000b0074a29c9d8b7sm146896qkh.134.2023.04.05.20.27.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 20:27:58 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 08:57:42 +0530
-From:   Bhaskar Chowdhury <bhaskarlinux73@gmail.com>
-To:     LinuxKernel <linux-kernel@vger.kernel.org>
-Subject:  testing I am a genuine human , please don't block by spamassiain
- rule
-Message-ID: <ZC48LikauSUu03Nb@Gentoo>
-Mail-Followup-To: Bhaskar Chowdhury <bhaskarlinux73@gmail.com>,
-        LinuxKernel <linux-kernel@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ULK8sQ2TDIzwxCpq"
-Content-Disposition: inline
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        d=1e100.net; s=20210112; t=1680751767;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h15CORNu9ncNp+50JVcQuXVD3PLOS7VZQZXoeAXoypI=;
+        b=S8Ck+e6n2zgUe1diRlUwAb0HoiNEkFneBwL03JSPBj4TcpmNOnOzBj/7LrCnkpWCwT
+         9tFVnWKFtKcDMYP9RvjCe4/vxNHvg7go0W904g9ee6EKgUAATc1jz0rsFAmKUh7+fxBB
+         U5dW1Y6HdQkDOlCm5nsA08WdDMGnjq/nDpdTyRzPkvjIheEiOv/PFdAgzDXCZbd10b3N
+         FeXqMQD3jl73g0dpE5qU87XD+XAoMst7h3AzXS28vTYhCcSF4D+BrmIhXQjztKlU92Ll
+         3LgShKeIiYvkyW3nCmIyOV3cR6OrVGA9xCcH+jfyhSgPnm+qv2kkrJBvK0NMid5KPk37
+         vL9Q==
+X-Gm-Message-State: AAQBX9eGuIzwI+mkMGSCm5kUnry6inm3yBBh+7Pk0QfbuoySCWISlJd5
+        YbQo2aDkF8fbRdJnG/s+eSY6tRsjLjQ=
+X-Google-Smtp-Source: AKy350Y5pJ/sdE/HZdSCmlnnToA2XpgFqtC6nkm7umunJfj4QTc3Sw1KtIh0wSIpP63Yb2wWDL9RYav5Qdc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:9a8b:b0:1a0:6000:7fd0 with SMTP id
+ w11-20020a1709029a8b00b001a060007fd0mr3552643plp.5.1680751766855; Wed, 05 Apr
+ 2023 20:29:26 -0700 (PDT)
+Date:   Wed, 5 Apr 2023 20:29:25 -0700
+In-Reply-To: <9fbf5b4022d67157d6305bc1811f36d9096c26fc.1680179693.git.houwenlong.hwl@antgroup.com>
+Mime-Version: 1.0
+References: <9227068821b275ac547eb2ede09ec65d2281fe07.1680179693.git.houwenlong.hwl@antgroup.com>
+ <9fbf5b4022d67157d6305bc1811f36d9096c26fc.1680179693.git.houwenlong.hwl@antgroup.com>
+Message-ID: <ZC48lSLO417emh/E@google.com>
+Subject: Re: [PATCH 2/3] KVM: x86: Don't update KVM PV feature CPUID during
+ vCPU running
+From:   Sean Christopherson <seanjc@google.com>
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Kechen Lu <kechenl@nvidia.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,36 +73,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++Kechen
 
---ULK8sQ2TDIzwxCpq
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
+On Thu, Mar 30, 2023, Hou Wenlong wrote:
+> __kvm_update_cpuid_runtime() may be called during vCPU running and KVM
+> PV feature CPUID is updated too. But the cached KVM PV feature bitmap is
+> not updated. Actually, KVM PV feature CPUID shouldn't be updated,
+> otherwise, KVM PV feature would be broken in guest. Currently, only
+> KVM_FEATURE_PV_UNHALT is updated, and it's impossible after disallow
+> disable HLT exits. However, KVM PV feature CPUID should be updated only
+> in KVM_SET_CPUID{,2} ioctl.
+> 
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> ---
+>  arch/x86/kvm/cpuid.c | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 6972e0be60fa..af92d3422c79 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -222,6 +222,17 @@ static struct kvm_cpuid_entry2 *kvm_find_kvm_cpuid_features(struct kvm_vcpu *vcp
+>  					     vcpu->arch.cpuid_nent);
+>  }
+>  
+> +static void kvm_update_pv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *entries,
+> +				int nent)
+> +{
+> +	struct kvm_cpuid_entry2 *best;
+> +
+> +	best = __kvm_find_kvm_cpuid_features(vcpu, entries, nent);
+> +	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
+> +		(best->eax & (1 << KVM_FEATURE_PV_UNHALT)))
+> +		best->eax &= ~(1 << KVM_FEATURE_PV_UNHALT);
+> +}
+> +
+>  void kvm_update_pv_runtime(struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_cpuid_entry2 *best = kvm_find_kvm_cpuid_features(vcpu);
+> @@ -280,11 +291,6 @@ static void __kvm_update_cpuid_runtime(struct kvm_vcpu *vcpu, struct kvm_cpuid_e
+>  		     cpuid_entry_has(best, X86_FEATURE_XSAVEC)))
+>  		best->ebx = xstate_required_size(vcpu->arch.xcr0, true);
+>  
+> -	best = __kvm_find_kvm_cpuid_features(vcpu, entries, nent);
+> -	if (kvm_hlt_in_guest(vcpu->kvm) && best &&
+> -		(best->eax & (1 << KVM_FEATURE_PV_UNHALT)))
+> -		best->eax &= ~(1 << KVM_FEATURE_PV_UNHALT);
+> -
+>  	if (!kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_MISC_ENABLE_NO_MWAIT)) {
+>  		best = cpuid_entry2_find(entries, nent, 0x1, KVM_CPUID_INDEX_NOT_SIGNIFICANT);
+>  		if (best)
+> @@ -402,6 +408,7 @@ static int kvm_set_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid_entry2 *e2,
+>  	int r;
+>  
+>  	__kvm_update_cpuid_runtime(vcpu, e2, nent);
+> +	kvm_update_pv_cpuid(vcpu, e2, nent);
 
-testing ....
+Hrm, this will silently conflict with the proposed per-vCPU controls[*].  Though
+arguably that patch is buggy and "needs" to toggle PV_UNHALT when userspace
+messes with HLT passthrough.  But that doesn't really make sense either because
+no guest will react kindly to KVM_FEATURE_PV_UNHALT disappearing.
 
---
-Thanks,
-Bhaskar
+I really wish this code didn't exist, i.e. that KVM let/forced userspace deal
+with correctly defining guest CPUID.
 
-"Here's looking at you kid"-- Casablanca
-https://about.me/unixbhaskar
+Kechen, is it feasible for your userspace to clear PV_UNHALT when it (might) use
+the per-vCPU control?  I.e. can KVM do as this series proposes and update guest
+CPUID only on KVM_SET_CPUID{2}?  Dropping the behavior for the per-VM control
+is probably not an option as I gotta assume that'd break userspace, but I would
+really like to avoid carrying that over to the per-vCPU control, which would get
+quite messy and probably can't work anyways.
 
---ULK8sQ2TDIzwxCpq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCAAdFiEEs7FAjU4eq1yogJSEAkGeLcGNq5MFAmQuPC4ACgkQAkGeLcGN
-q5PJaQv+Kz7fVsyIPYG2iALhkecXxL6Jrv9Uxs7g5QYgbLcA9ZNfkChRALClXFYC
-W1YJ3/fyh09KyYC++6LLkCGPmaqQD0z0PUAYCALY2KDDPvZml+C96Ac4Yx9t1siz
-WniMIdqSJ91r+7QfmatUIPlbw17AB0hR7H3C0OtUrUuQjqMdmA0kJlckyzWbbg/M
-3FfYfXUJUxe78RcQPYVfwq0vc2Kb3Yg1BMpkJ583me1Ryei6tO1qffcupFN+XOhv
-Coydun7xFmHXFjuMRk8OSEQgVXKs0n4YQRaPuzJbfKp0SdEHeq6G62Muz3tDkYT6
-/LT7rTbeOM19imYR8ddhqCtYdq5+dDOK49n86Mzp2l9w3YC8nNGikHfLaEQFCswa
-OoCuwiLKWU6PaUyltJrZ1JwAH2GZS3ZIa/CRVldnHIaq04JS+bIwf4hfSJseNmHc
-8V5ZWm3ioKDn9TBV3xfoec0cJjcvffkLnz69uq/goll+5SOm3IU3pEJfulDR+X1H
-DwmjVnGr
-=zdXR
------END PGP SIGNATURE-----
-
---ULK8sQ2TDIzwxCpq--
+[*] https://lkml.kernel.org/r/20230121020738.2973-6-kechenl%40nvidia.com
