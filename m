@@ -2,213 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2226D936A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0396D936C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbjDFJ6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
+        id S235622AbjDFJ6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236316AbjDFJ5g (ORCPT
+        with ESMTP id S236777AbjDFJ6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:57:36 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2089.outbound.protection.outlook.com [40.107.8.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289069003;
-        Thu,  6 Apr 2023 02:56:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FsXvZ7KdTfH90Mhe1DoNdr+OsAmVWLrOhawp0tMMNsHpZr4c2zf0ogMqaJ3IHXOqX9cWPcwmCTmi/qHuTrM4loVj+JpdTOmq/edOo13OkY80LhkzD9uGEYrkfyGdBpjkE7IEpClbPkWnY4IMBuHhPHgGKbPrpyIAPD36sFquLqSrEdaI8lQ+31oW5gf8bwVVBtNUkgo9uSZACN33UeWsQAVmbxTvuOm1xm9YD3s9zBXPET76Ld1O6XYRXssRBRD/+qcq3DLf1QdyL3ir1nc3pp3viJBtFs2xmFBLpGCEcTVoUbe0cm84lJ3ISULnmPSU2ZhtYfdkJry1Zkc2x8W4+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1RXX4TT2ASqdiKhE67DCvLDebqmlpmUdgAsc+MtqUmM=;
- b=kyaWGuqOCWbNO4wAXA/a0TS0A2Rfzar+KddhCyRG8E6VuX0FZ2DSGC0lAIwM4DLhhw7j/iozAHMhe606YUCYIjsn5y65UWd1YceRC1OstJTGuCTuQykhH8SjekSKus4JbqLp921elWZSJB/J+nRv7o/ric97DMUYN1h+Rf3gvxtNVYoLjtBKrJR5p44lR+CAJ5njATp5LfcS9UI9X5YzYWI5PbHBsL2S1Swf+aG7EeJ+SEN+6ntdJlmsvPcjJYURBGXgHIhuHNWEZvG/aqI25QXHECfDugGh8QUUqjfH38KsWVsPJR6MlMnPSe564f75xjiTwGhjTlKhMZBg3b8s4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1RXX4TT2ASqdiKhE67DCvLDebqmlpmUdgAsc+MtqUmM=;
- b=SPwrgtPeGmRTsNBLQWKda5tjvwl3yOJDTpHbrea8CWgYbLGMc92gd54Q6KyIlKLQAVXjtm4n+1F4NTWoMEv0KoPwR22M59qa1QaWxmuUUaMf93fdr4JLMnoTlZgN6jIfmn2blPUcWcaIap3in+IElNFE7PluLjSky3nl9YUcttQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by PA4PR04MB7549.eurprd04.prod.outlook.com (2603:10a6:102:e0::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.29; Thu, 6 Apr
- 2023 09:56:01 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::9701:b3b3:e698:e733]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::9701:b3b3:e698:e733%7]) with mapi id 15.20.6277.031; Thu, 6 Apr 2023
- 09:56:00 +0000
-From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-To:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH net] net: phy: nxp-c45-tja11xx: disable port and global interrupts
-Date:   Thu,  6 Apr 2023 12:55:46 +0300
-Message-Id: <20230406095546.74351-1-radu-nicolae.pirea@oss.nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0102CA0092.eurprd01.prod.exchangelabs.com
- (2603:10a6:803:15::33) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Thu, 6 Apr 2023 05:58:31 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399D18689
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:57:39 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 11:57:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680775056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5sQCwT1mq1QRO85FjPfVbYWFXzUgv8PGHqw/MqwDsYo=;
+        b=IXwplGbrqeBQRCXHGHtbF/cuq9tUigyNFgohQLMDgHo2gYIvOAjcAC2s9W50Ps0qWAqsOY
+        mLL1+fMwZmPfag4LloQKdBg4I97I1wEFazECkDyeO+emz8VBeVlHPZhEgRPHdGb9UM395c
+        mD93dB3AFcWh4OfP3K176FULWhEP2HAtfQ0dSIiFhCvggPjgsqEE/k+OksVpm2PxAXa5X6
+        wlu9dyCH+VN6tY4++vjYArDrWF4UNpkC9X4Yfm/g1/4Xfl7z0ewCjKlGURfGcP798wdKeR
+        DYAboZ6RP1uI8942LZSckucLmC+kqpzLzPsi/UGf16csA2LHAXa/QpWpQY35Mg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680775056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5sQCwT1mq1QRO85FjPfVbYWFXzUgv8PGHqw/MqwDsYo=;
+        b=mUoABadoSCcWJ0ufaNuqlABINm5JtK14pOpVQ/iBlDae4aghn/EPq4vbgAzKYODSY6lDpz
+        ESuT7gMmxUA08GDA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Pavel Tatashin <pasha.tatashin@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [RFC] tick_sched_timer() is not properly aligned, fixed by chance
+Message-ID: <20230406095735.0_14edn3@linutronix.de>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|PA4PR04MB7549:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87ce4c26-5d5f-42f2-cde3-08db3685206c
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ILiF9UppvdxcQG/8klbGKYTP4UWnM2FslvRt5mLiyqLbnof+l38vlpyXwLbHNIzv/QRMFC7JDRy68N3rnJpXfFRmQsG4WfZEzudGBg+7r+qM/qTfpD6fSpM9T/Z8oXyti8JkVlUN/UpOBaIp+nGDBmliuEG5gEcxlBvNgAmJZdoWJm1/zvfEavJX5H2LkPUQbIAIaRE/DeHj2/WXYfCioxmaoCd1fdx6ZGADj2L86vqDE9MLX5PGvM8XDUfGzJGF9tbbCrZNqYOVPt5eQJNsKRrZLXPn88tXx2kYGM1qof6U6UZYMdKXjDcqOrcpq+JXvcvpkrrPexB4lEwl1vw2v9GRJzVBuJRaquEYWnvRMISR9kURXlkwfCiXcIu6fQgwpqGqLf8ap6xQy/pujnVQy/z8GgI4daT9tPSOjFNh/u5Vi0GRh+z3+6dv0C6ObYbdKGeXeZZm7MdDJHMgROvj+cdu6uOwfcfF2E/pzRO3v998+ckScRgvrLMhlRqdtbPRa60AmHNWDSJ59TiBgAg2yjMsNNyRLL2xUMr5h1R6q6BlH6HGY4yXXSZlkbBHJkno+GF2cD/QPFqSGb7kDhWKP4YVBy794oMwyK3gF1Bv1Z/gH5eut1n9nG+pc36ZKtrR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199021)(6666004)(41300700001)(86362001)(6486002)(4326008)(186003)(8676002)(52116002)(38100700002)(2906002)(66476007)(66946007)(66556008)(83380400001)(316002)(8936002)(38350700002)(478600001)(26005)(5660300002)(2616005)(6512007)(6506007)(1076003)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rFp0zez7/JCxnZTX4yYss31LEnLmHNvvrB/UJO553/q7nZcQighA6K1WdgUZ?=
- =?us-ascii?Q?Rm8mJnMBDB1PJ/VeFvx9pXz1uIxQoppP/lcyDy5yA73zUJH+x55OL+S4hk3W?=
- =?us-ascii?Q?ymEB4LeqFoJAd7ZHqhLwBAjustud42JKH3rGDf9Zc3ow8rGFRug4zrqqXwxe?=
- =?us-ascii?Q?poU29Kkk/e9N7YdlJPp3We/FSQRuBKUSiZq08BmmiyjOE50DKIlV3yCNzRMn?=
- =?us-ascii?Q?kc2i0PwLxC94+GmMdZZwwY13gat8JmZjDWSfunoHFA0j6Rhf7r4ZPyr4xLSe?=
- =?us-ascii?Q?PfqxdEvfTZ1gaYSrTOle+/n4lWac7+uFmp3qBXTJE83zPuRzDnvFuJLB+0fr?=
- =?us-ascii?Q?s45wLXpoB7GSbMc889O9ZvKJ5RC6yNs3+zyfy+ebbSlqOYsEG+M9UGIGdR7i?=
- =?us-ascii?Q?4aLV5PbCCkQKcF5eY4GsBmSJE8Xy4W/bTwqItN9MHc5fBtYfn3/gezvnRqNU?=
- =?us-ascii?Q?3UxIxvRvpDu4J9x3zg7aqQm+gYwaim9TnaJF8Eksq4Z9Z7Y5w6KwVEvJfJuw?=
- =?us-ascii?Q?+KtptEZv/fDoa6uL1C6o+8AjnTkaCFnm5rTWhUG22YdXaOVNvM31CE4rK1py?=
- =?us-ascii?Q?R6zbEEylzQhHGCL459zahk8BybOHDUWW99wjXRwy7HNmuMtvGtJDGwamV6wX?=
- =?us-ascii?Q?oB6GUQyq/iTX46kdyLY9FhYE1lGApaQM8G57vPdF553WCV0EDTvbWgP/HqXI?=
- =?us-ascii?Q?1pRw4UKS/Tk0fuWYqmpCsJAXS/Wc2VHp//hbrUb06wCvEaePS5UefKuEIMSN?=
- =?us-ascii?Q?EaG+/l7y1wYojCI5URTnFtPpX0qxZ4/Li12dB5e3sOpvrMN6e/sQGTJ1UbIc?=
- =?us-ascii?Q?R6ZY+yguGQ6NYfpQG/WggXOE1mFq59U6Rv6qQES9+qLwMvjWdcqnJzQp6VHU?=
- =?us-ascii?Q?oLzOXFoS5om+7w2kp5u4d71y2F3MBX9c5OWmqu+uQoLHqp7rnXP4oZ8x5aa5?=
- =?us-ascii?Q?MqYkKx13sPyTWa3bSvyPJa+aNOwA4vf1PIKfuPxNBTL/hs1Kl5qhB6WG6uWk?=
- =?us-ascii?Q?2lFCeBSWBbROXAGmcfJiDbpMbi80Dtp9Fc3Q1bl6egEpKRQqth4yo2sTbpRm?=
- =?us-ascii?Q?Njk1aRR91sNDw8S1kcViZIMDL6dyd7qUhBM3MzjYpKwXxBTy8/QCvSdFA7qT?=
- =?us-ascii?Q?UkBeRnVcd4RtEgOUcX8mksX4cHz+ba/hpJ15tFY+nmvQJ1decUCIt0UVDflW?=
- =?us-ascii?Q?DqFjOop+DF/8fSxHRqssdETECuT8hIGgW+luSipDFz2be8KTymNhDMP+W8D6?=
- =?us-ascii?Q?P6i5Jdj1mU1jzZRgzGCWdIpAplrMYnVOdAKEyrGWmSkVtyahQbXuGhXYPVkn?=
- =?us-ascii?Q?MlQptOWbBjwWyyKdC5Di8+7TRettnylm3XZocJDhITJ5rykqssnbXi8R+VrB?=
- =?us-ascii?Q?8E8of439cyg4y9wr4PyeNEYBPs0f1lZ3hcS94G8//gRhnuf7C+8KwxPIIuXE?=
- =?us-ascii?Q?RcjWP79FgiexxsxSVSc1vIxu0dJiMh2il5dHHKfRjVqZvXVhPEZEajwaYClW?=
- =?us-ascii?Q?BPjCoo5BayCvtjWf6IorZK1IZFdHV+grDDMqLU3t35CiRaehvwtNiqn8C2B/?=
- =?us-ascii?Q?gM+UnjTUXDGnyxhjqd5mXP4kqvHn5JaPdA1mAu0CnkACmlB2tuCO23x75Q7A?=
- =?us-ascii?Q?PQ=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87ce4c26-5d5f-42f2-cde3-08db3685206c
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 09:56:00.8042
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8+QXD6h1oe7Xobb0hu087v9hZ7Nn+G2l06bCF/DMyvrhDRrkdNf+eZwHj80NCvehS/LIhPJXne6OMi/wxuCG0VudS4lAiUFYPw3uWU7lIzk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7549
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disabling only the link event irq is not enough to disable the
-interrupts. PTP will still be able to generate interrupts.
+With HIGHRES enabled tick_sched_timer() is programmed every jiffy to
+expire the timer_list timers. This timer is programmed accurate in
+respect to CLOCK_MONOTONIC so that 0 is the first tick and the next one
+is 1000/CONFIG_HZ ms later. For HZ=3D250 every 4 ms and so the us/ns part
+of the timer is always 0. This can be observed by enabling hrtimer_start
+events and looking for the tick_sched_timer timer:
 
-The interrupts are organised in a tree on the C45 TJA11XX PHYs. To
-completely disable the interrupts, they are disable from the top of the
-interrupt tree.
+| <idle>-0 [009] 137.085041: hrtimer_start: hrtimer=3D000000002df4f2bc func=
+tion=3Dtick_sched_timer expires=3D162784000000 softexpires=3D162784000000 m=
+ode=3D0xa
+| <idle>-0 [026] 137.085300: hrtimer_start: hrtimer=3D00000000b0911b5d func=
+tion=3Dtick_sched_timer expires=3D316384000000 softexpires=3D316384000000 m=
+ode=3D0xa
 
-Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
-CC: stable@vger.kernel.org # 5.15+
-Signed-off-by: Radu Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
----
- drivers/net/phy/nxp-c45-tja11xx.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+The lower part (us, ns) is zero. This is important for certain work
+loads where it is needed to either align with the timer or hide after
+it.
 
-diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
-index 029875a59ff8..ce718a5865a4 100644
---- a/drivers/net/phy/nxp-c45-tja11xx.c
-+++ b/drivers/net/phy/nxp-c45-tja11xx.c
-@@ -31,6 +31,10 @@
- #define DEVICE_CONTROL_CONFIG_GLOBAL_EN	BIT(14)
- #define DEVICE_CONTROL_CONFIG_ALL_EN	BIT(13)
- 
-+#define VEND1_PORT_IRQ_ENABLES		0x0072
-+#define PORT1_IRQ			BIT(1)
-+#define GLOBAL_IRQ			BIT(0)
-+
- #define VEND1_PHY_IRQ_ACK		0x80A0
- #define VEND1_PHY_IRQ_EN		0x80A1
- #define VEND1_PHY_IRQ_STATUS		0x80A2
-@@ -235,7 +239,7 @@ struct nxp_c45_phy_stats {
- 	u16		mask;
- };
- 
--static bool nxp_c45_poll_txts(struct phy_device *phydev)
-+static bool nxp_c45_poll(struct phy_device *phydev)
- {
- 	return phydev->irq <= 0;
- }
-@@ -448,7 +452,7 @@ static void nxp_c45_process_txts(struct nxp_c45_phy *priv,
- static long nxp_c45_do_aux_work(struct ptp_clock_info *ptp)
- {
- 	struct nxp_c45_phy *priv = container_of(ptp, struct nxp_c45_phy, caps);
--	bool poll_txts = nxp_c45_poll_txts(priv->phydev);
-+	bool poll_txts = nxp_c45_poll(priv->phydev);
- 	struct skb_shared_hwtstamps *shhwtstamps_rx;
- 	struct ptp_clock_event event;
- 	struct nxp_c45_hwts hwts;
-@@ -699,7 +703,7 @@ static void nxp_c45_txtstamp(struct mii_timestamper *mii_ts,
- 		NXP_C45_SKB_CB(skb)->header = ptp_parse_header(skb, type);
- 		skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
- 		skb_queue_tail(&priv->tx_queue, skb);
--		if (nxp_c45_poll_txts(priv->phydev))
-+		if (nxp_c45_poll(priv->phydev))
- 			ptp_schedule_worker(priv->ptp_clock, 0);
- 		break;
- 	case HWTSTAMP_TX_OFF:
-@@ -772,7 +776,7 @@ static int nxp_c45_hwtstamp(struct mii_timestamper *mii_ts,
- 				 PORT_PTP_CONTROL_BYPASS);
- 	}
- 
--	if (nxp_c45_poll_txts(priv->phydev))
-+	if (nxp_c45_poll(priv->phydev))
- 		goto nxp_c45_no_ptp_irq;
- 
- 	if (priv->hwts_tx)
-@@ -892,10 +896,12 @@ static int nxp_c45_config_intr(struct phy_device *phydev)
- {
- 	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
- 		return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
--					VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-+					VEND1_PORT_IRQ_ENABLES,
-+					PORT1_IRQ | GLOBAL_IRQ);
- 	else
- 		return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
--					  VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-+					  VEND1_PORT_IRQ_ENABLES,
-+					  PORT1_IRQ | GLOBAL_IRQ);
- }
- 
- static irqreturn_t nxp_c45_handle_interrupt(struct phy_device *phydev)
-@@ -1290,6 +1296,10 @@ static int nxp_c45_config_init(struct phy_device *phydev)
- 	phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_PORT_FUNC_ENABLES,
- 			 PTP_ENABLE);
- 
-+	if (!nxp_c45_poll(phydev))
-+		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
-+				 VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-+
- 	return nxp_c45_start_op(phydev);
- }
- 
--- 
-2.34.1
+With commit
+	857baa87b6422 ("sched/clock: Enable sched clock early")
 
+merged into v4.19-rc1 this 0 offset is gone. The problematic part is the
+last hunk of the patch:
+
+|@@ -356,7 +374,7 @@ u64 sched_clock_cpu(int cpu)
+|                return sched_clock() + __sched_clock_offset;
+|
+|        if (unlikely(!sched_clock_running))
+|-               return 0ull;
+|+               return sched_clock();
+|
+|        preempt_disable_notrace();
+|        scd =3D cpu_sdc(cpu);
+
+which returns the sched_clock() without any offset. The gain of this is
+the high resolution output of the bootlog very early, so we see something
+like this:
+|[    0.000000] tsc: Detected 1995.083 MHz processor
+|[    0.000893] e820: update [mem 0x00000000-0x00000fff] usable =3D=3D> res=
+erved
+|[    0.008179] e820: remove [mem 0x000a0000-0x000fffff] usable
+|[    0.014395] last_pfn =3D 0xa40000 max_arch_pfn =3D 0x400000000
+|[    0.020667] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT
+|[    0.029822] last_pfn =3D 0xbe000 max_arch_pfn =3D 0x400000000
+|[    0.050770] found SMP MP-table at [mem 0x000fd2a0-0x000fd2af]
+|[    0.057015] Kernel/User page tables isolation: disabled on command line.
+|[    0.064452] Using GB pages for direct mapping
+|[    0.070337] RAMDISK: [mem 0x32d23000-0x35688fff]
+|[    0.075298] ACPI: Early table checksum verification disabled
+=E2=80=A6
+|[    1.662577] ..TIMER: vector=3D0x30 apic1=3D0 pin1=3D2 apic2=3D-1 pin2=
+=3D-1
+|[    1.687317] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles=
+: 0x398412f243e, max_idle_ns: 881590620736 ns
+|[    1.699071] Calibrating delay loop (skipped), value calculated using ti=
+mer frequency.. 3990.16 BogoMIPS (lpj=3D7980332)
+|[    1.703070] pid_max: default: 32768 minimum: 301
+|[    1.707238] LSM: Security Framework initializing
+
+but the tick_sched_timer() is no longer properly aligned:
+| <idle>-0 [002] 131.286274: hrtimer_start: hrtimer=3D000000000b8c5637 func=
+tion=3Dtick_sched_timer expires=3D130680348871 softexpires=3D130680348871 m=
+ode=3D0xa
+| <idle>-0 [006] 131.286275: hrtimer_start: hrtimer=3D00000000e08369e4 func=
+tion=3Dtick_sched_timer expires=3D317880348871 softexpires=3D317880348871 m=
+ode=3D0xa
+
+instead of 0 we have "348871" here. I consider this as a bug given that
+this important.
+
+Then PeterZ had other problems and committed
+	776f22913b8e5 ("sched/clock: Make local_clock() noinstr")
+
+which is part of v6.3-rc1. The important part here is (again) the last
+hunk, the local_clock() implementation:
+
+|noinstr u64 local_clock(void)
+|{
+|       u64 clock;
+|
+|       if (static_branch_likely(&__sched_clock_stable))
+|               return sched_clock() + __sched_clock_offset;
+|
+|       preempt_disable_notrace();
+|       clock =3D sched_clock_local(this_scd());
+|       preempt_enable_notrace();
+|
+|       return clock;
+|}
+
+With the static branch disabled that early in the boot we fallback to
+the sched_clock_local() which has the tick-based resolution. That means
+the output is back Tick based resolution for most part of the boot
+process:
+
+|[    0.000000] tsc: Detected 1995.095 MHz processor
+|[    0.000661] e820: update [mem 0x00000000-0x00000fff] usable =3D=3D> res=
+erved
+|[    0.000665] e820: remove [mem 0x000a0000-0x000fffff] usable
+|[    0.000677] last_pfn =3D 0xa40000 max_arch_pfn =3D 0x400000000
+|[    0.000684] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT
+|[    0.001043] last_pfn =3D 0xbe000 max_arch_pfn =3D 0x400000000
+|[    0.004000] found SMP MP-table at [mem 0x000fd2a0-0x000fd2af]
+|[    0.004000] Using GB pages for direct mapping
+=E2=80=A6
+|[    0.004000] Switched APIC routing to cluster x2apic.
+|[    0.004000] ..TIMER: vector=3D0x30 apic1=3D0 pin1=3D2 apic2=3D-1 pin2=
+=3D-1
+|[    0.004000] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles=
+: 0x3984298f70d, max_idle_ns: 881590726857 ns
+|[    2.083356] Calibrating delay loop (skipped), value calculated using ti=
+mer frequency.. 3990.19 BogoMIPS (lpj=3D7980380)
+|[    2.096542] pid_max: default: 32768 minimum: 301
+|[    2.113889] Dentry cache hash table entries: 8388608 (order: 14, 671088=
+64 bytes, vmalloc hugepage)
+
+and the tick_sched_timer timer is programmed as expected.
+
+The tick_sched_timer story is that it uses ktime_get() to set the
+initial expire time and then always incremented. If the returned value
+is jiffy-based then it will work as expected. If it has higher precision
+then the time has to be adjusted since it is not expected.
+
+So, what do we do?
+- We would need to provide stable patches for v4.19=E2=80=A6v6.1 to address=
+ the
+  timer issue.
+
+- The high precision timestamps during boot are gone. Is it important to
+  bring that back? Or could that new local_clock() implementation be
+  backported?
+
+- An alternative is to ensure that the time returned by ktime_get() in
+  tick_setup_device() is aligned with zeros.
+
+Sebastian
