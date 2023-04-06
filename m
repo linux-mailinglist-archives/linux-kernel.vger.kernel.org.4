@@ -2,103 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81BF6D8DE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DB36D8DE8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbjDFDJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S234954AbjDFDPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234468AbjDFDJ1 (ORCPT
+        with ESMTP id S235115AbjDFDPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:09:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E735119
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:09:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F126A62B81
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:09:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08EAFC433EF;
-        Thu,  6 Apr 2023 03:09:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1680750564;
-        bh=qmfN1/nZWFYxeYB8LHJmYXp/zoyQ9JZ4CGLm4sEKFQs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hw3Jox4le087rkMSVEXUWHYw3A5AGUk8FE4Rf5JhrZBD1A33Hc4JEDG7/+pFbio56
-         tkUykuJxMXDFbbyy5V40rf/CdWLMa/D90ZdQGHSdR4+l4Tph/lvSfF7Ao76rW7TkuK
-         wchTJPzFkwEr021R2I7kxNpHowo/90buDdLNQoFc=
-Date:   Wed, 5 Apr 2023 20:09:23 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     jaewon31.kim@samsung.com
-Cc:     "jstultz@google.com" <jstultz@google.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-Subject: Re: [PATCH v2] dma-buf/heaps: system_heap: Avoid DoS by limiting
- single allocations to half of all memory
-Message-Id: <20230405200923.9b0dca2165ef3335a0f6b112@linux-foundation.org>
-In-Reply-To: <20230406021712epcms1p216f274040d25d18380668ffbfa809c48@epcms1p2>
-References: <20230405185650.239f9721f066aa480e83d543@linux-foundation.org>
-        <20230405172524.e25b62e1c548a95564b1d324@linux-foundation.org>
-        <20230406000854.25764-1-jaewon31.kim@samsung.com>
-        <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
-        <CGME20230406000841epcas1p3630010a770682be0f1d540a448f3e00e@epcms1p2>
-        <20230406021712epcms1p216f274040d25d18380668ffbfa809c48@epcms1p2>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 5 Apr 2023 23:15:15 -0400
+X-Greylist: delayed 139 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 20:15:07 PDT
+Received: from smtp.outflux.net (mta.outflux.net [IPv6:2001:19d0:2:6:c0de:0:736d:7471])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B097EEF;
+        Wed,  5 Apr 2023 20:15:06 -0700 (PDT)
+Received: from auth (localhost [127.0.0.1]) (authenticated bits=0)
+        by vinyl.outflux.net (8.15.2/8.15.2/Debian-10) with ESMTPSA id 3363AHIU030078
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 5 Apr 2023 20:10:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=outflux.net;
+        s=2016010; t=1680750617;
+        bh=Pe74VMnRV20BuyTdq7hkWWtRcm3dXjJIjDpuFrKZ4JU=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=YGPOZw9vtSSE5jPwGaH/yNy7G26n9knoZOABBe92QWjYJRc4jQQlR+bRtBrzpAl0w
+         L4CvSsAu7jLHgs+g9oo4K1TRJ9qP7lQlU1a4eZ7LYYmgu6tGYhuzoYJsCzr7+jnXF3
+         rOQxwr9HikYhgg4yAUJ4nSJVmEMafjlSC2BmwxbQ=
+Date:   Wed, 05 Apr 2023 20:10:17 -0700
+From:   Kees Cook <kees@outflux.net>
+To:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org
+CC:     Andy Shevchenko <andy@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        =?ISO-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 1/9] kunit: tool: Enable CONFIG_FORTIFY_SOURCE under UML
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230406000212.3442647-1-keescook@chromium.org>
+References: <20230405235832.never.487-kees@kernel.org> <20230406000212.3442647-1-keescook@chromium.org>
+Message-ID: <63B5793C-50B2-4FDB-A562-8476F7103A66@outflux.net>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-MIMEDefang-Filter: outflux$Revision: 1.316 $
+X-HELO: [127.0.0.1]
+Envelope-To: kunit-dev@googlegroups.com
+Envelope-To: linux-kernel@vger.kernel.org
+Envelope-To: jose.exposito89@gmail.com
+Envelope-To: dlatypov@google.com
+Envelope-To: linus.walleij@linaro.org
+Envelope-To: andreyknvl@gmail.com
+Envelope-To: mhiramat@kernel.org
+Envelope-To: ebiggers@google.com
+Envelope-To: sander@svanheule.net
+Envelope-To: Jason@zx2c4.com
+Envelope-To: yury.norov@gmail.com
+Envelope-To: linux@rasmusvillemoes.dk
+Envelope-To: dan.j.williams@intel.com
+Envelope-To: vbabka@suse.cz
+Envelope-To: liam.howlett@oracle.com
+Envelope-To: ndesaulniers@google.com
+Envelope-To: ojeda@kernel.org
+Envelope-To: geert+renesas@glider.be
+Envelope-To: rdunlap@infradead.org
+Envelope-To: zhaoyang.huang@unisoc.com
+Envelope-To: glider@google.com
+Envelope-To: nathan@kernel.org
+Envelope-To: akpm@linux-foundation.org
+Envelope-To: davidgow@google.com
+Envelope-To: brendan.higgins@linux.dev
+Envelope-To: peterz@infradead.org
+Envelope-To: jpoimboe@kernel.org
+Envelope-To: broonie@kernel.org
+Envelope-To: puyou.lu@gmail.com
+Envelope-To: cezary.rojewski@intel.com
+Envelope-To: andy@kernel.org
+Envelope-To: linux-hardening@vger.kernel.org
+Envelope-To: keescook@chromium.org
+X-Scanned-By: MIMEDefang 2.83
+X-Spam-Status: No, score=0.2 required=5.0 tests=DKIM_INVALID,DKIM_SIGNED,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Apr 2023 11:17:12 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
 
-> >> +       if (len / PAGE_SIZE > totalram_pages())
-> >> +               return ERR_PTR(-ENOMEM);
-> >
-> >We're catering for a buggy caller here, aren't we?  Are such large
-> >requests ever reasonable?
-> >
-> >How about we decide what's the largest reasonable size and do a
-> >WARN_ON(larger-than-that), so the buggy caller gets fixed?
-> 
-> Yes we're considering a buggy caller. I thought even totalram_pages() / 2 in
-> the old ion system is also unreasonable. To avoid the /2, I changed it to
-> totalram_pages() though.
-> 
-> Because userspace can request that size repeately, I think WARN_ON() may be
-> called to too often, so that it would fill the kernel log buffer.
 
-Oh geeze.  I trust that userspace needs elevated privileges of some form?
+On April 5, 2023 5:02:00 PM PDT, Kees Cook <keescook@chromium=2Eorg> wrote=
+:
+>From: Kees Cook <kees@outflux=2Enet>
 
-If so, then spamming dmesg isn't an issue - root can do much worse than
-that.
+Hah oops=2E Wrong From/SoB=2E That's what I get for writing this on a plan=
+e=2E
 
-> Even we think WARN_ON_ONCE rather than WARN_ON, the buggy point is not kernel
-> layer. Unlike page fault mechanism, this dma-buf system heap gets the size from 
-> userspace, and it is allowing unlimited size. I think we can't fix the buggy
-> user space with the kernel warning log. So I think warning is not enough,
-> and we need a safeguard in kernel layer.
 
-I really dislike that ram/2 thing - it's so arbitrary, hence is surely
-wrong for all cases.  Is there something more thoughtful we can do?
-
-I mean, top priority here is to inform userspace that it's buggy so
-that it gets fixed (assuming this requires elevated privileges).  And
-userspace which requests (totalram_pages()/2 - 1) bytes is still buggy,
-but we did nothing to get the bug fixed.
-
+--=20
+Kees Cook
