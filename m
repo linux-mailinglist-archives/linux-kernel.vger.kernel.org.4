@@ -2,197 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214FC6DA4A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB976DA4A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237266AbjDFVYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
+        id S231144AbjDFV02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDFVYQ (ORCPT
+        with ESMTP id S229880AbjDFV0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:24:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5C72121;
-        Thu,  6 Apr 2023 14:24:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 47D0D64355;
-        Thu,  6 Apr 2023 21:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E8DC433EF;
-        Thu,  6 Apr 2023 21:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680816253;
-        bh=LbWm78oWoTDpGOfCvbkZXdpUH2nKup/cCLkZcPzTBfg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ED3Rcxi6MZkfT2K29Xh0PPSaCSyAJXkPmlaVq1Fd46F/RXf6E3OAgmvoD0JWFNyoQ
-         INPAjF2jOtAJVRtZaDMqmX3YbmwK5/t9lXRmc60rBv0Q7H/ADkIqUZFQ7VANSW3yWA
-         AKu41KcJA0FiuL1twCnRmuSsVi2BhewIAd+g2CWyprGBk5IMC2ZFwRBCXEJuUrr/nk
-         HEC6xQfsTwUgiOia/fYkXYDU7FI2uk6geUnEsHSH6Accg8zN4UtjH3OMyl4PPg06dT
-         SOOy4TPVr8GksBmolbovQUQM9mLIS3JNGkcZY+glGsvsXpB2l/X9xGlMAW2YzUUj90
-         wEWs3/r8u+6Sw==
-Message-ID: <4f739cc6847975991874d56ef9b9716c82cf62a3.camel@kernel.org>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        miklos@szeredi.hu, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        amir73il@gmail.com
-Date:   Thu, 06 Apr 2023 17:24:11 -0400
-In-Reply-To: <d61ed13b-0fd2-0283-96d2-0ff9c5e0a2f9@linux.ibm.com>
-References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
-         <20230406-diffamieren-langhaarig-87511897e77d@brauner>
-         <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
-         <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
-         <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
-         <20230406-wasser-zwanzig-791bc0bf416c@brauner>
-         <546145ecbf514c4c1a997abade5f74e65e5b1726.camel@kernel.org>
-         <45a9c575-0b7e-f66a-4765-884865d14b72@linux.ibm.com>
-         <60339e3bd08a18358ac8c8a16dc67c74eb8ba756.camel@kernel.org>
-         <d61ed13b-0fd2-0283-96d2-0ff9c5e0a2f9@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 6 Apr 2023 17:26:01 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79C010EF
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 14:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1680816360; x=1712352360;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=dw2FXW+kXlTDs2MZ5yKwncsONZt9jql57ufr5g/GGhU=;
+  b=tOC8jbwqyy/PUhjffXKZlmtUeZmkw89XHH4HNDvEZVgiGBU1pQxohZ0A
+   GwT+z2+hFPqylKEAxqK03Yzlo3FpE38pMSNaXFI8TG0k4tS75TXGNSboU
+   gDq5fbCuqdswpLgFowwrMMqNcp2wPmsI/Hl6V0nbepmQPjstqXeTt1Sew
+   w=;
+X-IronPort-AV: E=Sophos;i="5.98,323,1673913600"; 
+   d="scan'208";a="315704168"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-9694bb9e.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 21:25:59 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-m6i4x-9694bb9e.us-east-1.amazon.com (Postfix) with ESMTPS id CFE0681BA3;
+        Thu,  6 Apr 2023 21:25:57 +0000 (UTC)
+Received: from EX19D003UWC001.ant.amazon.com (10.13.138.144) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Thu, 6 Apr 2023 21:25:48 +0000
+Received: from freeip.amazon.com (10.106.178.8) by
+ EX19D003UWC001.ant.amazon.com (10.13.138.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 6 Apr 2023 21:25:47 +0000
+Date:   Thu, 6 Apr 2023 16:25:39 -0500
+From:   Geoff Blake <blakgeof@amazon.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+CC:     <will@kernel.org>, <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <ilkka@os.amperecomputing.com>
+Subject: Re: [PATCH] perf/arm-cmn: Fix DTC reset
+In-Reply-To: <f0b61513276ee2c448ae02a6840135571039cea7.1680792373.git.robin.murphy@arm.com>
+Message-ID: <b2488619-a306-981c-1172-7efce749c10e@amazon.com>
+References: <f0b61513276ee2c448ae02a6840135571039cea7.1680792373.git.robin.murphy@arm.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+X-Originating-IP: [10.106.178.8]
+X-ClientProxiedBy: EX19D039UWB003.ant.amazon.com (10.13.138.93) To
+ EX19D003UWC001.ant.amazon.com (10.13.138.144)
+X-Spam-Status: No, score=-10.0 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-04-06 at 16:22 -0400, Stefan Berger wrote:
->=20
-> On 4/6/23 15:37, Jeff Layton wrote:
-> > On Thu, 2023-04-06 at 15:11 -0400, Stefan Berger wrote:
-> > >=20
-> > > On 4/6/23 14:46, Jeff Layton wrote:
-> > > > On Thu, 2023-04-06 at 17:01 +0200, Christian Brauner wrote:
-> > > > > On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
-> > >=20
-> > > >=20
-> > > > Correct. As long as IMA is also measuring the upper inode then it s=
-eems
-> > > > like you shouldn't need to do anything special here.
-> > >=20
-> > > Unfortunately IMA does not notice the changes. With the patch provide=
-d in the other email IMA works as expected.
-> > >=20
-> >=20
-> >=20
-> > It looks like remeasurement is usually done in ima_check_last_writer.
-> > That gets called from __fput which is called when we're releasing the
-> > last reference to the struct file.
-> >=20
-> > You've hooked into the ->release op, which gets called whenever
-> > filp_close is called, which happens when we're disassociating the file
-> > from the file descriptor table.
-> >=20
-> > So...I don't get it. Is ima_file_free not getting called on your file
-> > for some reason when you go to close it? It seems like that should be
-> > handling this.
->=20
-> I would ditch the original proposal in favor of this 2-line patch shown h=
-ere:
->=20
-> https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b22=
-1af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
->=20
->=20
+Ran this patch on an AWS C6g.metal and unfortunately still see the 
+spurious IRQs trigger quickly (within 10 tries) when using the following 
+flow:
 
-Ok, I think I get it. IMA is trying to use the i_version from the
-overlayfs inode.
+perf stat -a -e arm_cmn_0/event=0x5,type=0x5/ -- sleep 600
+kexec -e 
 
-I suspect that the real problem here is that IMA is just doing a bare
-inode_query_iversion. Really, we ought to make IMA call
-vfs_getattr_nosec (or something like it) to query the getattr routine in
-the upper layer. Then overlayfs could just propagate the results from
-the upper layer in its response.
+Adding in the simple shutdown routine, I have run over 100 of the 
+above cycles and the spurious IRQs haven't triggered.  I think we still 
+need both for now.
 
-That sort of design may also eventually help IMA work properly with more
-exotic filesystems, like NFS or Ceph.
+-Geoff  
 
-> The new proposed i_version increase occurs on the inode that IMA sees lat=
-er on for
-> the file that's being executed and on which it must do a re-evaluation.
->=20
-> Upon file changes ima_inode_free() seems to see two ima_file_free() calls=
-,
-> one for what seems to be the upper layer (used for vfs_* functions below)
-> and once for the lower one.
-> The important thing is that IMA will see the lower one when the file gets
-> executed later on and this is the one that I instrumented now to have its
-> i_version increased, which in turn triggers the re-evaluation of the file=
- post
-> modification.
->=20
-> static ssize_t ovl_write_iter(struct kiocb *iocb, struct iov_iter *iter)
-> [...]
-> 	struct fd real;
-> [...]
-> 	ret =3D ovl_real_fdget(file, &real);
-> 	if (ret)
-> 		goto out_unlock;
->=20
-> [...]
-> 	if (is_sync_kiocb(iocb)) {
-> 		file_start_write(real.file);
-> -->		ret =3D vfs_iter_write(real.file, iter, &iocb->ki_pos,
-> 				     ovl_iocb_to_rwf(ifl));
-> 		file_end_write(real.file);
-> 		/* Update size */
-> 		ovl_copyattr(inode);
-> 	} else {
-> 		struct ovl_aio_req *aio_req;
->=20
-> 		ret =3D -ENOMEM;
-> 		aio_req =3D kmem_cache_zalloc(ovl_aio_request_cachep, GFP_KERNEL);
-> 		if (!aio_req)
-> 			goto out;
->=20
-> 		file_start_write(real.file);
-> 		/* Pacify lockdep, same trick as done in aio_write() */
-> 		__sb_writers_release(file_inode(real.file)->i_sb,
-> 				     SB_FREEZE_WRITE);
-> 		aio_req->fd =3D real;
-> 		real.flags =3D 0;
-> 		aio_req->orig_iocb =3D iocb;
-> 		kiocb_clone(&aio_req->iocb, iocb, real.file);
-> 		aio_req->iocb.ki_flags =3D ifl;
-> 		aio_req->iocb.ki_complete =3D ovl_aio_rw_complete;
-> 		refcount_set(&aio_req->ref, 2);
-> -->		ret =3D vfs_iocb_iter_write(real.file, &aio_req->iocb, iter);
-> 		ovl_aio_put(aio_req);
-> 		if (ret !=3D -EIOCBQUEUED)
-> 			ovl_aio_cleanup_handler(aio_req);
-> 	}
->          if (ret > 0)						<--- this get it to work
->                  inode_maybe_inc_iversion(inode, false);		<--- since this=
- inode is known to IMA
-> out:
->          revert_creds(old_cred);
-> out_fdput:
->          fdput(real);
->=20
-> out_unlock:
->          inode_unlock(inode);
->=20
->=20
->=20
->=20
->     Stefan
->=20
-> >=20
-> > In any case, I think this could use a bit more root-cause analysis.
->=20
+On Thu, 6 Apr 2023, Robin Murphy wrote:
 
---=20
-Jeff Layton <jlayton@kernel.org>
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> It turns out that my naive DTC reset logic fails to work as intended,
+> since clearing PMCR.PMU_EN appears to result in writes to PMOVSR_CLR
+> being ignored, while some hard-to-characterise combination of conditions
+> (differently between DTC0 and secondary DTCs) also appears to result in
+> PMOVSR reading as zero even when an overflow remains asserted. Thus
+> rather than resetting the PMU to a nice clean state, we can currently
+> end up with screaming spurious interrupts from secondary DTCs which we
+> can neither see nor clear. This behaviour is of course not documented.
+> 
+> Resetting PMCR to disable the interrupt output but enable the PMU itself
+> seems to at least make the PMOVSR_CLR write work as expected on DTC0
+> (although it looks like writing to PMCR twice has actually been having
+> some hidden side-effect of clearing any pending overflows there).
+> Unfortunately this still does not seem to help secondary DTCs, but going
+> beyond PMU scope and additionally resetting DTC_CTL does seems to make
+> everything work out, and superficially looks sensible. Therefore pile
+> that onto the house of empirical cards too, until I can check with the
+> hardware team whether there's actually any proper recommended way of
+> recovering from an arbitrary PMU state after an oops/kexec/whatever.
+> 
+> Fixes: 0ba64770a2f2 ("perf: Add Arm CMN-600 PMU driver")
+> Reported-by: Geoff Blake <blakgeof@amazon.com>
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> This supersedes the previous shutdown/IRQ patches, now that I've
+> finally managed to make *some* sense of what's really going on. If
+> anyone's interested, this is the contrivance I used for testing:
+> 
+> https://gitlab.arm.com/linux-arm/linux-rm/-/commit/d8f1035c5bc510516d6e4f0b7bf0b875a749daf7
+> ---
+>  drivers/perf/arm-cmn.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+> index 144cc08d9e04..81fe01171e33 100644
+> --- a/drivers/perf/arm-cmn.c
+> +++ b/drivers/perf/arm-cmn.c
+> @@ -1899,7 +1899,10 @@ static int arm_cmn_init_dtc(struct arm_cmn *cmn, struct arm_cmn_node *dn, int id
+>         if (dtc->irq < 0)
+>                 return dtc->irq;
+> 
+> -       writel_relaxed(0, dtc->base + CMN_DT_PMCR);
+> +       if (idx == 0)
+> +               writel_relaxed(0, dtc->base + CMN_DT_DTC_CTL);
+> +
+> +       writel_relaxed(CMN_DT_PMCR_PMU_EN, dtc->base + CMN_DT_PMCR);
+>         writel_relaxed(0x1ff, dtc->base + CMN_DT_PMOVSR_CLR);
+>         writel_relaxed(CMN_DT_PMCR_OVFL_INTR_EN, dtc->base + CMN_DT_PMCR);
+> 
+> --
+> 2.39.2.101.g768bb238c484.dirty
+> 
+> 
