@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF806DA441
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943526DA448
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbjDFVA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57966 "EHLO
+        id S240067AbjDFVAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjDFVAX (ORCPT
+        with ESMTP id S239448AbjDFVAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:00:23 -0400
+        Thu, 6 Apr 2023 17:00:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B447AA0;
-        Thu,  6 Apr 2023 14:00:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07DB8684;
+        Thu,  6 Apr 2023 14:00:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 552CA64CA1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D142F64CB8;
         Thu,  6 Apr 2023 21:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B6B78C4339E;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6BE3C433A8;
         Thu,  6 Apr 2023 21:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1680814820;
-        bh=lxPVkhPmUYtm3jDwsxt8qNEdEZ0oXkG23WIBFwHOauI=;
+        bh=XoYnhpz1nosnbu8m31uMeB//5D2cdGXQcYGY+UFtxp0=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TXPl0+2Wnh3BPGasq4HB513RBatX1VFF60+2t9xCSQdsYoGtj1A37ODU3Nk3lTtl7
-         fVl2fDjTV357KTvSkODiijIfobNDxXf6l7GgUPtZF+dcH69Q98J2hdM7KR0PKGi5Zy
-         4xNPlpqX+Pzlk9aRcwUK2MYRezhPKHaKyONQkFW0h9gSbv8Kq9HaM6983coZU5p8qO
-         BQrYbw67t1u9fxoRLOIBA0mdDGJR0+iVodldq5j3TbO3BRb0kPHk24BCvjzvCLh+Tb
-         eqruqakdhFfpwEDQwzilm3zffqOOIbZFg/7O/l1Q0zSeC/63ejZmmqnjkkxhZl6SMs
-         yq/g8HwWYTLlw==
+        b=SzSUPaBEjPIB7kRWqwJYsYFZC3nBllN0sRNEDxXVOcbnq7OdlBpTFUD0ZK/hx2WfM
+         KJs5s+MwmzHav0izATjxmWgowKC333q/SHdtHjfRAzbPe1TiIhWLhmjSyQhoRa61vL
+         QknkLTU6Uvhi9YgXl+hwI8JVgpmxpEBac5TZGPgshWwi1vMrqeHLhI1cDzMiCUTeZ9
+         R1An7G6IsCsa60FWMgN53rmZ1AmArvgTOD1UhUZaNL/uIltoulL/HQ93PTGmJokR38
+         t7ovKMPaC7wJ/Yv3/xO2N7sbWeoJZCS1Zse+4hKCQo0uKYoxmvlAPwiFYX20els/1p
+         tSzxJ2M2yhUvA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 97743E4F153;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5DC4C4167B;
         Thu,  6 Apr 2023 21:00:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v1] Bluetooth: btnxpuart: No need to check the received
- bootloader signature
+Subject: Re: [PATCH] Bluetooth: hci_h5: Complements reliable packet processing
+ logic.
 From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <168081482061.2619.11741204657524521970.git-patchwork-notify@kernel.org>
+Message-Id: <168081482080.2619.3659825366548108220.git-patchwork-notify@kernel.org>
 Date:   Thu, 06 Apr 2023 21:00:20 +0000
-References: <20230403122430.1024235-4-neeraj.sanjaykale@nxp.com>
-In-Reply-To: <20230403122430.1024235-4-neeraj.sanjaykale@nxp.com>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+References: <20230403162928.118172-1-eddy.zhang@rock-chips.com>
+In-Reply-To: <20230403162928.118172-1-eddy.zhang@rock-chips.com>
+To:     Qiqi Zhang <eddy.zhang@rock-chips.com>
 Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -63,24 +62,26 @@ Hello:
 This patch was applied to bluetooth/bluetooth-next.git (master)
 by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-On Mon,  3 Apr 2023 17:54:30 +0530 you wrote:
-> We can never assume the uart will deliver a complete packet to the BT
-> layer at once, the expected packet may be divided into several parts by
-> uart as uart doesn't know the received packet size, the received data
-> count may mismatch with the expected packet size, so here
-> is_valid_bootloader_signature() check may always return false.
+On Tue,  4 Apr 2023 00:29:28 +0800 you wrote:
+> As shown in the schematic diagram below.There may be a critical
+> scenario in the current code. If the device does not receive an
+> pure ack sent by the host due to insufficient receive buffer or
+> other reasons and triggers a retransmission, the host will always
+> be in an 'out-of-order' state.The state machine will get stuck.
 > 
-> Even we remove the count check in is_valid_bootloader_signature(), then
-> the first part of the data which includes the packet type can pass the
-> is_valid_bootloader_signature() check, but the remaining parts don't
-> have the packet type data still cannot pass the check, here return
-> directly will cause the data loss.
+>        host                 device
+>      SEQ3,ACK4 --------->
+>                <--------- SEQ4,ACK4
+>      pure ACK  ---------> (not received)
+> (out-of-order) <--------- SEQ4,ACK4(retransmission)
+> 		........
+> (out-of-order) <--------- SEQ4,ACK4(retransmission)
 > 
 > [...]
 
 Here is the summary with links:
-  - [v1] Bluetooth: btnxpuart: No need to check the received bootloader signature
-    https://git.kernel.org/bluetooth/bluetooth-next/c/b1ff41fd0ee6
+  - Bluetooth: hci_h5: Complements reliable packet processing logic.
+    https://git.kernel.org/bluetooth/bluetooth-next/c/13a6ebae665d
 
 You are awesome, thank you!
 -- 
