@@ -2,89 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5808E6D8E6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792F36D8E72
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjDFEkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 00:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
+        id S229608AbjDFEnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjDFEkU (ORCPT
+        with ESMTP id S233396AbjDFEnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:40:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D23A86B0;
-        Wed,  5 Apr 2023 21:40:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 6 Apr 2023 00:43:52 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A006EB8;
+        Wed,  5 Apr 2023 21:43:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80E8F642AB;
-        Thu,  6 Apr 2023 04:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C5387C4339B;
-        Thu,  6 Apr 2023 04:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680756018;
-        bh=KovWrG/4iyTPO4xu7Gs3LeZHG6KgCCbmr54VIlegrUQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gY90QfEHoJe40H32tpkysWMTk6vHwdEd7/oZs6++hzpmKJDdDFH9ZGilq7D+obqle
-         FNgoO8LH0EqwntzS/7mFzLWybCBHlcGTaHyC1jx/CWG93jBtnDd04mYj2Br30cAuFj
-         LyHgXlNxxMVZ7gqS5tV+nUirLLy9J+R+dTdUHtxpVildrKvzVsETyZ64aKXzdWqVkN
-         /kDe7Ci4b//na0+xMmoAM2nIGUd+qapAj/rCavMEv8TGl0rLM94enmTl8JmYIvRuEE
-         gQ7esdvpz2DNdGmi792RuAV4l0/+XB+FRIaFhmc5ataztDRKENmbzIyQ20epE4CQLX
-         gPZlTdIrkMALg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A448FE29F4E;
-        Thu,  6 Apr 2023 04:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsTR92J6nz4x1f;
+        Thu,  6 Apr 2023 14:43:49 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680756229;
+        bh=+Ko2OIlzwdRoql+rtYQMKZeomnKowo61cyjuefUuDa0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=P4ZzMFocVpGCAbn27eSqHFJVajfvQF1kET6U6UHotaiFLib83Q7pvq/YtUre0/Xcj
+         oVSEPielB/Jpg5CcK8bgL2or3AS6zWFOGYtMmv63ST/UeFOVgHHVexfpKEIc2RAgEr
+         AL2kLkTINW6lbgnYUZp8q5gXIMRVg3j8uNYzE3K3AXeNPwpjgroIEyetFKHuehwV+x
+         sGoe4C1B+yts9ATtw3kN/ueSC0RRODTagBD06eE9iFA1ycsGEAbz3Y+Jc4igE8F2CG
+         K3VXo+jB0TlH1bNT+VcioyCX/NTZ5cVjwGo78eGeAhOy9WbSHvKc9HzAAgjj9dh9Lg
+         BiznxH4HFVQGw==
+Date:   Thu, 6 Apr 2023 14:43:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the rcu tree
+Message-ID: <20230406144346.514455d4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] kallsyms: move module-related functions under
- correct configs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168075601866.17428.2889245679074422058.git-patchwork-notify@kernel.org>
-Date:   Thu, 06 Apr 2023 04:40:18 +0000
-References: <20230330102001.2183693-1-vmalik@redhat.com>
-In-Reply-To: <20230330102001.2183693-1-vmalik@redhat.com>
-To:     Viktor Malik <vmalik@redhat.com>
-Cc:     bpf@vger.kernel.org, mcgrof@kernel.org, daniel@iogearbox.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, lkp@intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/a450L8mY_u27og465C3=MmK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/a450L8mY_u27og465C3=MmK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Hi all,
 
-On Thu, 30 Mar 2023 12:20:01 +0200 you wrote:
-> Functions for searching module kallsyms should have non-empty
-> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
-> only CONFIG_MODULES check was used for many of these, which may have
-> caused complilation errors on some configs.
-> 
-> This patch moves all relevant functions under the correct configs.
-> 
-> [...]
+After merging the rcu tree, today's linux-next build (htmldocs) produced
+this warning:
 
-Here is the summary with links:
-  - [bpf-next,v2] kallsyms: move module-related functions under correct configs
-    https://git.kernel.org/bpf/bpf-next/c/34bf93472f8f
+kernel/rcu/tree.c:2808: warning: Function parameter or member 'head_free_gp=
+_snap' not described in 'kfree_rcu_cpu_work'
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Introduced by commit
 
+  07030d20c8ec ("rcu/kvfree: Add debug check for GP complete for kfree_rcu_=
+cpu list")
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/a450L8mY_u27og465C3=MmK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQuTgIACgkQAVBC80lX
+0Gxktwf9FLv3dDI160G/BE2HxUCWinMOIyGHz1A44WczLCDCEfA5IrOAjvcPxnga
+5oL8s2GI2PQgMWlCrgO2azgCpaLIHuS/aVkne7nvO8YMPL4ru8Lqcrj4lryMq7gF
+dxzjUX3eav3pw6xI1EtWc/S8VjBiNQdhWPCrnFesHHRWOld6t5LDPwaBCo60ivze
+IDINHDiY0JtpWcAzwBq4jNWwzuXbJcesswyC9yLpWe8JxIyRLsL/wOuFzigD7aWW
+s7VW/P9t1bhVgllQEreHkLeApN5bVAK2Gv9LV6Mx5ORdBbJaQP07xyTv0R/y1nZ2
+AU0JbJzYNZbZ3iRokSBfl6yEE7/NSQ==
+=h5q7
+-----END PGP SIGNATURE-----
+
+--Sig_/a450L8mY_u27og465C3=MmK--
