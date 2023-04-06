@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53A66D9C8D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABF46D9C96
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239785AbjDFPja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
+        id S239722AbjDFPpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjDFPj2 (ORCPT
+        with ESMTP id S229667AbjDFPpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:39:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857631732;
-        Thu,  6 Apr 2023 08:39:26 -0700 (PDT)
-Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1N9MYu-1qVVyt10GS-015JJz; Thu, 06 Apr 2023 17:39:03 +0200
-Message-ID: <d0bf241b-ead4-94b7-3f03-a26227f9eb58@i2se.com>
-Date:   Thu, 6 Apr 2023 17:39:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: brcmstb: Add two optional props
-To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
+        Thu, 6 Apr 2023 11:45:33 -0400
+X-Greylist: delayed 25635 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 08:45:29 PDT
+Received: from mx2.securetransport.de (mx2.securetransport.de [188.68.39.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF20D93E0;
+        Thu,  6 Apr 2023 08:45:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1680795886;
+        bh=weRr1LfyAYwIVDshDBkw836sXDNQAJoCHuPZdD7UunU=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=m8Vr+QgQKVzNEXm4+kJGJOj63AuaBKTLCTeOtD2QmJREzINjWCTPQj0ZuUzykykEN
+         H48sB7bllBO3j2CZyf5JX/fR+ShM/NyE6Y2A/xlqDDikKaoKkPIg/rpvTEDbY3ckIm
+         Axm0dZPE2MgTv1UJAgs0SOaEfpZEHsDkuP2avTVNIlAS/Q1bsSzhFf+t47ty7uKDUx
+         NSqQeeillvmYxZJvw9tp2J3bylLK2GY/PmpysUUHP6C6JSo7GZQJ5a22HSQ0cCIqDK
+         oDUbGiurPEPzNWhnoB4SYoOIrS672aMflVoBzURROY23Jlea8rHkd3Y7tRLfmwJ52W
+         LhFGIU7WRnAxw==
+X-secureTransport-forwarded: yes
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Complaints-To: abuse@cubewerk.de
+To:     Marek Vasut <marex@denx.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230406124625.41325-1-jim2101024@gmail.com>
- <20230406124625.41325-2-jim2101024@gmail.com>
-Content-Language: en-US
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <20230406124625.41325-2-jim2101024@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:nknTnX5dlSCEMuTzZzTH1lzDx7myKdzZXx63p/ALhR5p/l1cSBy
- /WVL/VeWlNJRfuyPTv3z8OZICfKrmkG8l1dad5ttQkPqrRPTpFW+HjZL8FfkOz39Bx8e6cy
- vDV+pMAiGfNRtiH0hMZAfvPAbLsy5UAXhIAbE0EwJl3GqM7J5hdrBtwFv80E4+82mzLLblU
- mnBo88FTMBiQMQJibNy7Q==
-UI-OutboundReport: notjunk:1;M01:P0:1JPu3Fn+QcE=;R2rM/eZ8PosqU/E3uRLSGrLJ8xn
- tSj49CxxVi1/9bgT6bzPsMFvXzbtk/c3JjjZ4zbTou1QamVn/o6LKCFCZT7p+FQplf4XbnOrM
- 03IZourgA/SwhPEUg4y5658zCqcUNE//OCMFEiQsy0nYefH4LO6HMfQljXYwpoypaYaHuqV++
- T7azvAR1Ugr6zap3dH8O9zr7jnCazLDzZ14DKFrLzHQ91tiAqTwVp6T2Kc0MJ0nepSx4L7TpV
- b+3+LnvBEBq8fF2yYz+15ff6J7p+L/01HRxcEin1Olh4pLRUomWhxMsFnIUL8vN+JIUvnBJJ3
- pJtMph81OwHIxCantSeZTSds9PE/hjMbb2+QFvW4jTmmvjRmCtvZ/XWnoWtGUtQ45id/Q4r0l
- fqi2NRjuTBYmF+Fl9CmmrwIBZoTqVb7xEH/cgdrJvkDgKscNeMQ8std+OUy/g24bfJx7YnLBg
- NkgCcBMd2cjpI4/WLXCti9hDwxXmT9oQcfo1f/cKQiVCNCiw0ar0sQhoCPRXu8K6ymLMRPD9f
- lJz2qR3dV47nb+yHd+LfboaeADyuChHxTVpT4jA1w+3P/VbYPky894EKQfokJ6cNvIt4gh+cC
- Tr7qRA53J4IVD2lZbzS6yHuO3UTeD4tFCWntiemCZrY4FPj5yAEeTOcH1Eln8iLCvok5IhXR/
- BEwyrnuU2Cxs23GCCzeJ5GlpzGUBGf28MckPl2r/FQ==
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        kernel <kernel@dh-electronics.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: RE: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
+Thread-Topic: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
+Thread-Index: AQHZZ9hJaqalrClMnUSWr1zaggJvEq8cxTeAgAA/z6D//+elAIABBfrQgAA/KQCAADr0QA==
+Date:   Thu, 6 Apr 2023 15:44:36 +0000
+Message-ID: <622e846f1d2c4f8abba171202640d1d3@dh-electronics.com>
+References: <20230405160258.46998-1-cniedermaier@dh-electronics.com>
+ <20230405160258.46998-2-cniedermaier@dh-electronics.com>
+ <05fa147c-116b-59b4-d14b-760bbefd7602@denx.de>
+ <e7aa3b3220e148ee96f5a1c361721845@dh-electronics.com>
+ <42737c19-698f-8cc8-45b2-8ff08a274f87@denx.de>
+ <531df359744f4bdb9fd34eafc864d2bc@dh-electronics.com>
+ <50c88cc4-e046-6c43-2d35-116d1d4ea2f8@denx.de>
+In-Reply-To: <50c88cc4-e046-6c43-2d35-116d1d4ea2f8@denx.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,70 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jim,
-
-Am 06.04.23 um 14:46 schrieb Jim Quinlan:
-> Regarding "brcm,enable-l1ss":
-> 
->    The Broadcom STB/CM PCIe HW -- which is also used by RPi SOCs -- requires
->    the driver probe to configure one of three clkreq# modes:
-> 
->    (a) clkreq# driven by the RC
->    (b) clkreq# driven by the EP for ASPM L0s, L1
->    (c) bidirectional clkreq#, as used for L1 Substates (L1SS).
-> 
->    The HW can tell the difference between (a) and (b), but does not know
->    when to configure (c).  Further, the HW will cause a CPU abort on boot if
->    guesses wrong regarding the need for (c).  So we introduce the boolean
->    "brcm,enable-l1ss" property to indicate that (c) is desired.  This
->    property is already present in the Raspian version of Linux, but the
->    driver implementaion that will follow adds more details and discerns
->    between (a) and (b).
-> 
-> Regarding "brcm,completion-timeout-msecs"
-> 
->    Our HW will cause a CPU abort if the L1SS exit time is longer than the
->    completion abort timeout.  We've been asked to make this configurable, so
->    we are introducing "brcm,completion-abort-msecs".
-> 
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> ---
->   .../devicetree/bindings/pci/brcm,stb-pcie.yaml       | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> index 7e15aae7d69e..ef4ccc05b258 100644
-> --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> @@ -64,6 +64,18 @@ properties:
->   
->     aspm-no-l0s: true
->   
-> +  brcm,enable-l1ss:
-> +    description: Indicates that the downstream device is L1SS
-> +      capable and L1SS is desired, e.g. by setting
-> +      CONFIG_PCIEASPM_POWER_SUPERSAVE=y.  Note that CLKREQ#
-
-not sure about this, but maybe we should avoid references to Linux 
-kernel config parameter in a DT binding. Since the driver already gaves 
-warning in case the DT parameter is present, but kernel config doesn't 
-fit, this should be enough.
-
-> +      assertion to clock active must be within 400ns.
-> +    type: boolean
-> +
-> +  brcm,completion-timeout-msecs:
-> +    description: Number of msecs before completion timeout
-> +      abort occurs.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-
-According to the driver at least 0 is not allowed, maybe we should 
-define minimum and maximum here and let dtbs_check take care of invalid 
-values?
-
-Best regards
-
-> +
->     brcm,scb-sizes:
->       description: u64 giving the 64bit PCIe memory
->         viewport size of a memory controller.  There may be up to
+RnJvbTogTWFyZWsgVmFzdXQgW21haWx0bzptYXJleEBkZW54LmRlXQ0KU2VudDogVGh1cnNkYXks
+IEFwcmlsIDYsIDIwMjMgNDoxMCBQTQ0KPiBPbiA0LzYvMjMgMTA6MzcsIENocmlzdG9waCBOaWVk
+ZXJtYWllciB3cm90ZToNCj4+IEZyb206IE1hcmVrIFZhc3V0IFttYWlsdG86bWFyZXhAZGVueC5k
+ZV0NCj4+IFNlbnQ6IFdlZG5lc2RheSwgQXByaWwgNSwgMjAyMyA4OjQ3IFBNDQo+Pj4gT24gNC81
+LzIzIDIwOjI0LCBDaHJpc3RvcGggTmllZGVybWFpZXIgd3JvdGU6DQo+Pj4+IEZyb206IE1hcmVr
+IFZhc3V0IFttYWlsdG86bWFyZXhAZGVueC5kZV0NCj4+Pj4gU2VudDogV2VkbmVzZGF5LCBBcHJp
+bCA1LCAyMDIzIDY6MjUgUE0NCj4+Pj4+IE9uIDQvNS8yMyAxODowMiwgQ2hyaXN0b3BoIE5pZWRl
+cm1haWVyIHdyb3RlOg0KPj4+Pj4NCj4+Pj4+IFsuLi5dDQo+Pj4+Pg0KPj4+Pj4+ICsvIHsNCj4+
+Pj4+PiArICAgICBtb2RlbCA9ICJESCBlbGVjdHJvbmljcyBpLk1YNlVMTCBESENPUiBvbiBtYXZl
+byBib3giOw0KPj4+Pj4+ICsgICAgIGNvbXBhdGlibGUgPSAiZGgsaW14NnVsbC1kaGNvci1tYXZl
+by1ib3giLCAiZGgsaW14NnVsbC1kaGNvci1zb20iLA0KPj4+Pj4+ICsgICAgICAgICAgICAgICAg
+ICAiZnNsLGlteDZ1bGwiOw0KPj4+Pj4+ICsNCj4+Pj4+PiArICAgICBhbGlhc2VzIHsNCj4+Pj4+
+PiArICAgICAgICAgICAgIC9kZWxldGUtcHJvcGVydHkvIG1tYzA7IC8qIEF2b2lkIGRvdWJsZSBk
+ZWZpbml0aW9ucyAqLw0KPj4+Pj4+ICsgICAgICAgICAgICAgL2RlbGV0ZS1wcm9wZXJ0eS8gbW1j
+MTsNCj4+Pj4+PiArICAgICAgICAgICAgIG1tYzIgPSAmdXNkaGMyOyAvKiBlTU1DIHNob3VsZCBi
+ZSBtbWMyICovDQo+Pj4+Pg0KPj4+Pj4gV2h5IG5vdCBtbWMwID8NCj4+Pj4+DQo+Pj4+PiBVc2Ug
+cm9vdD1QQVJUVVVJRD0gd2hlbiBib290aW5nIHRvIGF2b2lkIGFueSBkZXBlbmRlbmN5IG9uDQo+
+Pj4+PiByb290PS9kZXYvbW1jYmxrMnBOIGVudW1lcmF0aW9uLg0KPj4+Pg0KPj4+PiBUaGlzIGlz
+IGR1ZSB0byBzb2Z0d2FyZSBpbnRlcmNoYW5nZWFiaWxpdHkgd2l0aCB0aGUgREhDT00NCj4+Pj4g
+aS5NWDZVTEwsIHdoZXJlIHRoZSBlTU1DIGlzIGFsd2F5cyBtbWMyLg0KPj4+DQo+Pj4gK0NDIFVs
+ZiAsIEkgdmFndWVseSByZWNhbGwgc29tZSBkaXNjdXNzaW9uIGFib3V0IHRoaXMgZW51bWVyYXRp
+b24gYW5kIEkNCj4+PiBhbSBub3Qgc3VyZSBvbmUgY2FuIHJlYWxseSBkZXBlbmQgb24gdGhhdC4N
+Cj4+DQo+PiBUaGF0IHdoeSBJIHRoaW5rIGl0IGdvb2QgdG8gaGF2ZSBhIGRlZmluZWQgbnVtYmVy
+IGZvciBtbWNibGsgZGV2aWNlcw0KPj4gb24gYW4gZW1iZWRkZWQgc3lzdGVtLiBBbiBleGNlcnB0
+IGZyb20gWzFdOg0KPiANCj4gSSBtaWdodCBiZSBtaXNyZW1lbWJlcmluZyB0aGlzLCBidXQgY291
+bGQgaXQgYmUgdGhhdCwgaWYgYW55IG5vbi1PRg0KPiBTRE1NQyBjb250cm9sbGVyIHByb2JlcyBl
+YXJseSBhbmQgaG9ncyB0aGUgL2Rldi9tbWNibGsyIGJlZm9yZSB0aGUgT0YNCj4gb25lcyBoYXZl
+IGEgY2hhbmNlIHRvIHByb2JlLCB0aGVuIHRoZSBPRiBvbmVzIHdvdWxkIGZhaWwgdG8gcHJvYmUg
+Pw0KPiANCj4+IEFsdGVybmF0aXZlIHNvbHV0aW9ucyBsaWtlIFBBUlRVVUlEcyBkbyBub3QgY292
+ZXIgdGhlIGNhc2Ugd2hlcmUgbXVsdGlwbGUNCj4+IG1tY2JsayBkZXZpY2VzIGNvbnRhaW4gdGhl
+IHNhbWUgaW1hZ2UuDQo+IA0KPiBJIGFncmVlLCB0aGlzIGlzIGluZGVlZCBhIGRvd25zaWRlIG9m
+IFBBUlRVVUlEIC4NCj4gDQo+PiBUaGlzIGlzIGEgY29tbW9uIGlzc3VlIG9uIGRldmljZXMNCj4+
+IHRoYXQgY2FuIGJvb3QgYm90aCBmcm9tIGVNTUMgKGZvciByZWd1bGFyIGJvb3QpIGFuZCBTRCBj
+YXJkcyAoYXMgYQ0KPj4gdGVtcG9yYXJ5IGJvb3QgbWVkaXVtIGZvciBkZXZlbG9wbWVudCkuIFdo
+ZW4gYSBmaXJtd2FyZSBpbWFnZSBpcw0KPj4gaW5zdGFsbGVkIHRvIGVNTUMgYWZ0ZXIgYSB0ZXN0
+IGJvb3QgdmlhIFNEIGNhcmQsIHRoZXJlIHdpbGwgYmUgbm8NCj4+IHJlbGlhYmxlIHdheSB0byBy
+ZWZlciB0byBhIHNwZWNpZmljIGRldmljZSB1c2luZyAoUEFSVClVVUlEcyBvZGVyDQo+PiBMQUJF
+THMNCj4gDQo+IFRoaXMgY2FuIGJlIHNvbHZlZCBieSB0aGUgaW5zdGFsbGVyIHVwZGF0aW5nIHRo
+ZSBQQVJUVVVJRCBvbiB0aGUgZU1NQw0KPiBob3dldmVyLg0KPiANCj4+IFsxXSBodHRwczovL3Bh
+dGNod29yay5rZXJuZWwub3JnL3Byb2plY3QvbGludXgtbW1jL3BhdGNoLzIwMjAwODI1MTM0NDQx
+LjE3NTM3LTItbWF0dGhpYXMuc2NoaWZmZXJAZXcudHEtZ3JvdXAuY29tLw0KPj4NCj4+IFNvIGZh
+ciBJIGhhdmUgbmV2ZXIgaGFkIGEgcHJvYmxlbSB3aXRoIG51bWJlcmluZyBtbWNibGsgZGV2aWNl
+cyB2aWEgYWxpYXNlcy4NCj4gDQo+IEJhc2VkIG9uIHRoZSBhYm92ZSwgSSBkb24ndCB0aGluayBl
+aXRoZXIgdGhlIGFsaWFzZXMgb3IgUEFSVFVVSUQgaXMgYQ0KPiBwZXJmZWN0IHNvbHV0aW9uLCBi
+dXQgdGhlIGFsaWFzZXMgc2hvdWxkIGJlIGZpbmUgZm9yIG14NnVsbCBhdCBsZWFzdD8NCj4gU28g
+SSB0aGluayB3ZSBjYW4gY29uY2x1ZGUgdGhpcyBkaXNjdXNzaW9uIHRocmVhZCA/DQoNClllcywg
+SSB3aWxsIHNlbmQgYSBuZXcgdmVyc2lvbiB3aXRoIHRoZSBjaGFuZ2VzIG9uIHRoZSBmaXJzdCBw
+YXRjaC4NCg0KUmVnYXJkcw0KQ2hyaXN0b3BoDQo=
