@@ -2,109 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087FD6DA065
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B466DA069
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240174AbjDFS4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S240318AbjDFS4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239433AbjDFS4O (ORCPT
+        with ESMTP id S239433AbjDFS4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:56:14 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD8986AE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:56:09 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id l17so3730696ejp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:56:09 -0700 (PDT)
+        Thu, 6 Apr 2023 14:56:34 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842769004
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:56:33 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id p203so47170700ybb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680807368;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UKWsjR8dvIajtx2lwaiB5l0sOFoUN7LSgDCFNG47cFM=;
-        b=XjEn4vgMEEWThuDKwwudOndDLakz8rYSUEfoHZwSYrR6827fNdSGSO5eLlexBm5Vnv
-         tSV1KY44b4wSwtSr51m0PBvwMwp/0KLHLjqKJ96ZUc3ucHFXbi9LT6XdH8cjJoopAUrh
-         Ym5qIw6Au09J4j2KcDO9vVWmeYCubuWXG375CMn+1emhdEhvUwcqL4RzuRFGmjXsxWbK
-         r7fj/AMOTrPXVdbRheBL2iM6dw8z4NA/WYfN8ctJd6Kh+usy4dKzg6QQPS6MuvdUdA/4
-         +emlWHLb6n8v1gvxdH6Tpkfz+AmWrjyQ9zC/GdwNnduqIZ1ZPGqPVK0d5djvwMW1RIX6
-         wDJw==
+        d=linaro.org; s=google; t=1680807392;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ucnAW8w35vol8Pg57OLPiTr9yW6zisn9tO1ygQITttI=;
+        b=biLsD71bt/4qhOiC+fjKpXwMJ7DLuQs+qj3u1Sm3s/qCNkrktChSmO29ZgGtDVliSq
+         gzoFMDRfEEJ1Id8nivsrn+6O2Bm9wkSqLZRb/Z4MGRDMuQeGoV46EtSSmF50tPOQx0qw
+         m4ZIY3q50IWmZPapaUOGPmVxbiKyoEz4TmtOxpH98EC3Fmo3VpqOd4AcPfubhe4dXsOZ
+         Ma6IJj+keATFHXQvx1xtILQ8Pt8JGRCtihK6+VaQyuog4KgGxKfPg7FaUzFgxnyGr2lB
+         qWpfjWGeReUfg1lDInoDgjJ2Ey/TplX3Fv0IH6fda92c2lYRCWfL3iWfv8ZADggCSPPd
+         nk+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807368;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UKWsjR8dvIajtx2lwaiB5l0sOFoUN7LSgDCFNG47cFM=;
-        b=3xml4VBJtnUbo9NnMqixtS8jrTnyi+hOHLPzdhtLU2fnDXsKKh6WiXkrlP4Nu+ZhJQ
-         ZLaoL+L9kKSDNFO5qs+84yDaX5g3+dgo0dp2gze6qzNhLQ9eEBdyoUph/BGZscjePUvg
-         6KJlwdzGsneXCFrykCJDgx9pcJAjTCfIC0afsVoJV4QVZG+Ut5w/nE900eO6zwJhMRyu
-         huFYF13PZIqgKBiBe1Xwhv3tl7ftEXNvF69HdtH69p1Z8G9LLDUQGgxAk3q77b2ELs9M
-         nrcekbVtyZjZRl5sE0GbquU1gA7+Ga3Ks9Lkd1358IZ6b0oNe7m4YhbjZf1xzmypz6G3
-         zQ9g==
-X-Gm-Message-State: AAQBX9doowvbnZGBoPmN7HeqLOqf2bm7wvwSUpVHPFjYv/a6chB0/kAw
-        vGDZ+WSu7uGRu4NdolVjge/W7g==
-X-Google-Smtp-Source: AKy350b5CYgkCwCJEQ33zJ/y2kC09b+dJi0dyD9TAE8pwMa6j0ytFRRtCmrXrSvkvumeFJwFghiQKw==
-X-Received: by 2002:a17:906:828f:b0:931:462f:f141 with SMTP id h15-20020a170906828f00b00931462ff141mr6219852ejx.20.1680807368361;
-        Thu, 06 Apr 2023 11:56:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id qw34-20020a1709066a2200b008c76facbbf7sm1144477ejc.171.2023.04.06.11.56.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:56:07 -0700 (PDT)
-Message-ID: <5e2e5b82-35ae-c3b5-becb-40d387226a7a@linaro.org>
-Date:   Thu, 6 Apr 2023 20:56:06 +0200
+        d=1e100.net; s=20210112; t=1680807392;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ucnAW8w35vol8Pg57OLPiTr9yW6zisn9tO1ygQITttI=;
+        b=IC8ji/9aT6Ya5DW7fqozqAci8QsC2qrYhYc3zYuBqccvjiOnfVIx8CgYNsMGaskk5J
+         AMGj49YtBwHiG+bE9c1OLgaIwby1FVjEDwN6b7sqiDCOw/CQ+Se9hyZWkLoriaXvhuf4
+         3h32tNQonLIE7njd8DSN/PIUQozXNJF11hm5Xx0KCEyz6MqcvVeDDFtQfuLt6p68shUP
+         Y4rLZ3Ma/799TZyRf46gENiifTbmkn1LMbFBT4PQKAlIa2b9zlSa5z/cH9I9dMxYtpt/
+         4BLyBqBNoxpTdtX9wBlDMRHCTXDZ46bTSh5wmw+jAJNY4p7n1HKbQyBKYVsY5CrxE0tq
+         WzyA==
+X-Gm-Message-State: AAQBX9fuOljV9Upn0D/cKHgIs410XkR4aqPtpTZFoS056TcDtm8lRwLH
+        aN9S6mGZTWuP82X3Hu/1td1fGOP8eiLHH8LmYpqFMg==
+X-Google-Smtp-Source: AKy350aLyY8waJyCoRar/QqAuHJLAJ4vbrM/5IkmzmLH9JFqvplgiFfoD5QooPuJEJQ83FPjVX8k1FVTGH4xULbcZa8=
+X-Received: by 2002:a25:d64e:0:b0:b8b:f02b:ba20 with SMTP id
+ n75-20020a25d64e000000b00b8bf02bba20mr210452ybg.9.1680807392707; Thu, 06 Apr
+ 2023 11:56:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: cisco: document the CrayAR
- compatibles
-Content-Language: en-US
-To:     "Daniel Walker (danielwa)" <danielwa@cisco.com>
-Cc:     "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>,
-        "Marcin Wierzbicki -X (mawierzb - GLOBALLOGIC INC at Cisco)" 
-        <mawierzb@cisco.com>, Rob Herring <robh+dt@kernel.org>,
-        Daniel Walker <dwalker@fifo99.com>,
+References: <20230406-topic-lenovo_features-v1-0-c73a5180e48e@linaro.org>
+ <20230406-topic-lenovo_features-v1-4-c73a5180e48e@linaro.org>
+ <7476b5ba-426c-3701-c4aa-d3e2db3de112@linaro.org> <bceb91fa-c94b-a0bf-a612-19fc5778810e@linaro.org>
+In-Reply-To: <bceb91fa-c94b-a0bf-a612-19fc5778810e@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 6 Apr 2023 21:56:21 +0300
+Message-ID: <CAA8EJprmzibdarZCKDtAa14HTShxTwQ6FQfi665hbVR_=5MLaQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm6115p-j606f: Enable ATH10K WiFi
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230405223028.1268141-2-danielwa@cisco.com>
- <6a9f041b-1c35-4691-8451-7119cd05ed17@linaro.org>
- <20230406151512.GL40472@zorba>
- <14634180-aca9-a3e9-d1af-dfaca77b42ee@linaro.org>
- <20230406183253.GM40472@zorba>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406183253.GM40472@zorba>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 20:32, Daniel Walker (danielwa) wrote:
->>>>> +++ b/Documentation/devicetree/bindings/arm/cisco/crayar.yaml
->>>>
->>>> How many (or not many) platforms do you expect from Cisco? We mostly
->>>> have one file per SoC manufacturer.
->>>
->>> We have two SoC's one called CrayAR and another called Craw. I've submitted the
->>> Craw dts file before , but I've not resubmitted it. Under Craw I think we have
->>> at least two, but more likely five variations. CrayAR we have one variation with
->>> at least one more planned.
->>>
->>> So we would plan over time to add two dtsi files and three to four dts files to
->>> this directory. Then more over time.
->>
->> So just keep them in one file maybe.
-> 
-> If/when I submit again with anther chip we can discuss it at that time.
+On Thu, 6 Apr 2023 at 21:32, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 6.04.2023 19:51, Dmitry Baryshkov wrote:
+> > On 06/04/2023 18:25, Konrad Dybcio wrote:
+> >> Enable the onboard QCA Wi-Fi. HW identifiers for reference:
+> >> qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400e0000
+> >>
+> >> Firmware sources:
+> >> /vendor/firmware_mnt/image/wlanmdsp.bin -> qcom/.../wlanmdsp.mbn
+> >> /vendor/firmware_mnt/image/bdwlan.bXX [1] -> [2] -> ath10k/.../board-2.bin
+> >> [3] -> ath10k/.../firmware-5.bin
+> >>
+> >> Not sure where 3 comes from on the device itself, gotta investigate that..
+> >>
+> >> According to [4], it's called WCN3990_STRAIT.
+> >>
+> >> [1] XX = board_id printed when the file is missing or by your downstream
+> >> kernel firmware loader in the dmesg; if XX=ff, use bdwlan.bin
+> >
+> > Since the board_id is 0xff, please add qcom,ath10k-calibration-variant
+> Do I make up a name, or is there some convention?
+>
+> I see Johan used "LE_X13S" in commit 2702f54f400ad3979632cdb76553772414f4c5e3.
+> Should I go with "LE_P11"?
 
-Or you can do it now.
+I think Lenovo_P11 or LENOVO_P11 might be better.
 
-Best regards,
-Krzysztof
+>
+> >
+> > Ideally, could you please send the bdwlan to ath10k for inclusion, see https://wireless.wiki.kernel.org/en/users/drivers/ath10k/boardfiles .
+> The legal situation is ambiguous at best :/
 
+As usual :-(
+
+>
+> Konrad
+> >
+> >>
+> >> [2] https://github.com/jhugo/linux/blob/5.5rc2_wifi/README
+> >> [3] https://github.com/kvalo/ath10k-firmware/blob/master/WCN3990/hw1.0/HL3.1/WLAN.HL.3.1-01040-QCAHLSWMTPLZ-1/firmware-5.bin
+> >> [4] https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/wlan/qca-wifi-host-cmn/-/blob/LA.VENDOR.1.0.r1-20700-WAIPIO.QSSI13.0/hif/src/hif_hw_version.h#L55
+> >>
+> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> >> ---
+> >>   arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts | 8 ++++++++
+> >>   1 file changed, 8 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> >> index 2aac25171dec..4ba8e59a27d8 100644
+> >> --- a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> >> +++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> >> @@ -315,6 +315,14 @@ &usb_hsphy {
+> >>       status = "okay";
+> >>   };
+> >>   +&wifi {
+> >> +    vdd-0.8-cx-mx-supply = <&pm6125_l8>;
+> >> +    vdd-1.8-xo-supply = <&pm6125_l16>;
+> >> +    vdd-1.3-rfa-supply = <&pm6125_l17>;
+> >> +    vdd-3.3-ch0-supply = <&pm6125_l23>;
+> >> +    status = "okay";
+> >> +};
+> >> +
+> >>   &xo_board {
+> >>       clock-frequency = <19200000>;
+> >>   };
+> >>
+> >
+
+
+
+-- 
+With best wishes
+Dmitry
