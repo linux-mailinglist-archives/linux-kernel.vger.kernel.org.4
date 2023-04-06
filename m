@@ -2,115 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE1B6D9267
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A876D926B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236170AbjDFJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
+        id S236060AbjDFJNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjDFJN2 (ORCPT
+        with ESMTP id S235374AbjDFJNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:13:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595C24EED
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680772347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sv2PpChimMYumCFtZaOaAxih1ECUzoRlTNbMO8Dqb/8=;
-        b=Jkwyc4Lq67oa21YjMIPX/DUU6w/tJ4GvV7lGelU5IuqR2GuM4SzO8rfoQqNEcU5JshFyrv
-        T7pbyOMo4yuK20i8FfnmU/R0nFVV8F83btHC+9EybH2hj6sSCfoH9jjRUiTJq02xXUDlfI
-        VY2zoeOF2ywf/qHJGl+7cigF8OtoeMg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-499-bbJHhxB2MTulRR-9lYLWOw-1; Thu, 06 Apr 2023 05:12:22 -0400
-X-MC-Unique: bbJHhxB2MTulRR-9lYLWOw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 6 Apr 2023 05:13:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E28D65BC;
+        Thu,  6 Apr 2023 02:13:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7FBCA38123B9;
-        Thu,  6 Apr 2023 09:12:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 84D22492C14;
-        Thu,  6 Apr 2023 09:12:19 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230405191915.041c2834@kernel.org>
-References: <20230405191915.041c2834@kernel.org> <20230405165339.3468808-1-dhowells@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH net-next v4 00/20] splice, net: Replace sendpage with sendmsg(MSG_SPLICE_PAGES), part 1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAA56436B;
+        Thu,  6 Apr 2023 09:13:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4555BC4339B;
+        Thu,  6 Apr 2023 09:13:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680772415;
+        bh=vbMbCGgTsG/EZ7Md1sa2L63/OfODcU0xFJC9drgHnHs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c6nrtJsVDgsTMyfmw+R/5sknEu3XZtabIHqNWopiwiSHZSNHW/7ANPYneemPFOIuL
+         x4YGAKTGz2FBcVQ/Ww9xgSfO0D6FK+7zUStqeZLIEf99fBCvzyY9b4qlU3i1zjylxM
+         t0ib0GmIkKnfDhoO9+3+g1cFvYJ2BXMFhbf/Zepcy9sKg6Q4qCiemW0x32yeGcZWSt
+         WfaRjsMbeLAwHr8r7u+ZmJSMo4hreZ1Dawpe5Gq5EYjBdx0CgCckDnn3dzODkXh6Zl
+         LNzV/virzkA9PR1/U4vT+jhfHTrRjDHGxnxyjj7hALO4RAZZ952lq+kedhXlrNTin5
+         67ncvX6valRPw==
+Date:   Thu, 6 Apr 2023 10:13:29 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Maarten Zanders <maarten.zanders@mind.be>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] leds: lp55xx: configure internal charge pump
+Message-ID: <20230406091329.GX8371@google.com>
+References: <20230331114610.48111-1-maarten.zanders@mind.be>
+ <20230331114610.48111-3-maarten.zanders@mind.be>
+ <20230405152627.GO8371@google.com>
+ <32c0a958-58bd-7476-c276-94c8f33ffbb3@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3629143.1680772339.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 06 Apr 2023 10:12:19 +0100
-Message-ID: <3629144.1680772339@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <32c0a958-58bd-7476-c276-94c8f33ffbb3@mind.be>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> wrote:
+On Thu, 06 Apr 2023, Maarten Zanders wrote:
 
-> Thanks for splitting off a smaller series!
-> My day is out of hours so just a trivial comment, in case kbuild bot
-> hasn't pinged you - this appears to break the build on the relatively
-> recently added page_frag_cache in google's vNIC (gve).
+>
+> > Sorry Maarten, just a couple of small nits.
+>
+> No need to be sorry.
+>
+>
+> > This fits on one line, no?  < 100-chars?
+>
+> I thought the line length was meant to be <80 chars according to:
+>
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
+>
+> Happy to adapt if this shouldn't be taken as strict as I tried to do. Either
+> way I'll post an update with a cleanup.
 
-Yep.  I've just been fixing that up.
+checkpatch.pl now checks for >100-chars.
 
-I'll also break off the samples patch and that can go by itself.  Is there=
- a
-problem with the 32-bit userspace build environment that patchwork is usin=
-g?
-The sample programs that patch adds are all userspace helpers.  It seems t=
-hat
-<features.h> is referencing a file that doesn't exist:
+> > > --- a/include/linux/platform_data/leds-lp55xx.h
+> > > +++ b/include/linux/platform_data/leds-lp55xx.h
+> > > @@ -73,6 +73,9 @@ struct lp55xx_platform_data {
+> > >   	/* Clock configuration */
+> > >   	u8 clock_mode;
+> > >
+> > > +	/* Charge pump mode */
+> > > +	u32 charge_pump_mode;
+> > That's a lot of data.  Does it need to be u32?
+>
+> No, it luckily doesn't get that big. This is to avoid an intermediate
+> variable & casting as the DT parameter has to be 32bit (which I learned from
+> an earlier comment). It was changed from u8 in v5 of the patch.
 
-In file included from /usr/include/features.h:514,
-                 from /usr/include/bits/libc-header-start.h:33,
-                 from /usr/include/stdio.h:27,
-                 from ../samples/net/alg-hash.c:9:
-/usr/include/gnu/stubs.h:7:11: fatal error: gnu/stubs-32.h: No such file o=
-r directory
-    7 | # include <gnu/stubs-32.h>
-      |           ^~~~~~~~~~~~~~~~
-compilation terminated.
+Fair enough.
 
-Excerpt from:
-
-https://patchwork.hopto.org/static/nipa/737278/13202278/build_32bit/
-
-https://patchwork.kernel.org/project/netdevbpf/patch/20230405165339.346880=
-8-2-dhowells@redhat.com/
-
-David
-
+--
+Lee Jones [李琼斯]
