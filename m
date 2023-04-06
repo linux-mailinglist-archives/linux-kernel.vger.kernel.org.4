@@ -2,83 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA0C6D975C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A90DA6D9761
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238116AbjDFMxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S238137AbjDFMxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238016AbjDFMxC (ORCPT
+        with ESMTP id S238083AbjDFMxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:53:02 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A956B49CE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:53:00 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id y15so50666968lfa.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 05:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680785579;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lbC+iDQolRLSwOunJ/j7FQP3aZrBUa7C2T5gWVYhv6I=;
-        b=zvpzUfUNH0GaukXLBpAPf+hyShEdxGxtOyRluKQdxEtL4QovW/AkW/ylzw1ZaXMDtA
-         k/3W7Pick4ECwKGVjnf06RQCkdb0mN2xE5IeE5sv9Gw2IIutccQwQx/++EOHPlzdMsH6
-         GsjLFOKt7NNvQhsfj8bEYMC27jBNpDMUcg91xXE1rK0VCaBb+iA0U8R/0NIO1JRQKZ2m
-         LPtPSJirHSB05LBpEne3q/R8NhgqnwbqW+Plwu7B8Bst4cKi8Sd/lyZiZVytq/9e9P70
-         kPjQK++aERFwC1g5gXjSODs39UIli3d8luM642smqM6GgAauZWGZh+n0ekiDfxoBeyrW
-         TNZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680785579;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lbC+iDQolRLSwOunJ/j7FQP3aZrBUa7C2T5gWVYhv6I=;
-        b=AXqFWavFcf1zHZUyQmu5wh+B2TFN8Kp2cauaM3HubLtEZBhSPXh+aBe59/kr4bR7J0
-         f3do8qLx+emq+dcBteJpYd/i2Ne8YrTwBjPX4+80NaIgQxJ+92Q9q/+YpVuRp2cpcysp
-         LDufi3v7clWdPBHxw4qHtYToqZ7vd7ydrRkfz8Wvxg/DbFz5YKq+57YOaPr1RJLDzir3
-         e5ZfyDoKZDRgUWUG6NetpDrdvCDOPdquzMDQ457aILOzOwFnEtWMww7mHg4kLd5wfX+n
-         EZTPjd8ahXdaOAROz0+ED39qVekBwgHtwaAqySJxtOdFSt4dRJoohoxa5Zxj7WkXCO3a
-         h4Gg==
-X-Gm-Message-State: AAQBX9cJWvZowpSGPBpGZpz0Su16cPTJax3Ryold65vg9fKRDyngvf9m
-        CTE9BLRz6vA/6hZd4VwN75/iNg==
-X-Google-Smtp-Source: AKy350b/+CKd1ZodmBJD15FdPa3PXTOhvJljgBnSb42oOTa4LlbkXPdGlX4ifOYVKBresOlnli8ugA==
-X-Received: by 2002:a19:ae03:0:b0:4ec:5648:70e4 with SMTP id f3-20020a19ae03000000b004ec564870e4mr158178lfc.12.1680785578924;
-        Thu, 06 Apr 2023 05:52:58 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id y2-20020ac24462000000b004db1a7e6decsm249856lfl.205.2023.04.06.05.52.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 05:52:58 -0700 (PDT)
-Message-ID: <857aa6c9-3dcb-d5f7-14bb-6c69c9167b09@linaro.org>
-Date:   Thu, 6 Apr 2023 14:52:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: net: Convert ATH10K to YAML
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>, linux-wireless@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kalle Valo <kvalo@kernel.org>, Andy Gross <agross@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        ath10k@lists.infradead.org
-References: <20230406-topic-ath10k_bindings-v2-0-557f884a65d1@linaro.org>
- <20230406-topic-ath10k_bindings-v2-1-557f884a65d1@linaro.org>
- <168078494959.2736424.13312532374051031538.robh@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <168078494959.2736424.13312532374051031538.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Thu, 6 Apr 2023 08:53:53 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FE97ABC
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:53:38 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 9B3D2320092F;
+        Thu,  6 Apr 2023 08:53:34 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Apr 2023 08:53:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680785614; x=1680872014; bh=NrHJgzbhqZ7+MztyMMTX6mfrSilLvQqi2tw
+        u3lH9TZs=; b=e9Fd2cZYpOb4VJc7jWL8RogUKySG330vw8tWyyL8zQViTpAq+hi
+        5Zc0VIkNIBbSqiuPqB2Kv/8YF4dfq+BtuMTxNSWcn8idT/g0B4EtsydObgf9IuLJ
+        p7x3+5LQpwW+beJAWeIEbfgDm21bm/e/wUxGRqY0i+Pf+ZRRMwbIE5wvDVBRJkyI
+        /xK8yNaeQSVCFoV5Ws0vm5hnpXL/2W2XWwIKemhFYifKfg6QH3R60KYUtp1X1zKw
+        4+nBaaj69/2LZlGFlhNkva4GM3WoqfMRPFSbqdfWlcAbg/wMYcNa1/z87S5v5PDk
+        ENDUi92Z6ufAPxX6A9pHx0pNv4FPKjL87vA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680785614; x=1680872014; bh=NrHJgzbhqZ7+MztyMMTX6mfrSilLvQqi2tw
+        u3lH9TZs=; b=F8TjLH4FM0It22AdoHcSpQN14joDlbLNsohsuwUqiQP0S09Gl4m
+        RSREHKVGtP+dzcPlTKuiWgwnTksJfSE7RuK1EOZxB/I7RzGtyG5SbPn0Xb2h09Ea
+        ECegtsxClzdeYCZ7YZ9YG+JGSzLrITwDPbm7GwcJ3A5e+5h4F4dEFRzakyVRJ0mL
+        0lofbKRvUdWBlWmcAXH7Dvb0w/ptCQOnseSU8AxEC7tgVuuyTMsOoE4VG0K3fV99
+        k+pyYBUVRyjIT6Tf/swiNyK9lG5r3CfxRVGorcPsAXTXRK3Pdj2yImdmZVCDtXPF
+        9O3TMXXCXDVaRd+7GvHMgiKPF7LWJmmYAPg==
+X-ME-Sender: <xms:zcAuZJUYFEjY3sjPbxw6y0a9GujFN_A76rt7A2yNG88-LZRQrZhelA>
+    <xme:zcAuZJlx9uWQUNOy0waUhp8ZM_qcZFBl0GwcR1qoYYvFeNMigldoian-gBev3eQOz
+    WsUL47pmQ_R71Rs6wA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:zcAuZFYsarJ6iJ_zAqXKZdZ9dy_JyL-ASHDcEaJPUOkizFHzA9PvHQ>
+    <xmx:zcAuZMWQNRO4601yuAsYy5auiCge4Ss7OZV4TgzANRSeMSRfF-zICQ>
+    <xmx:zcAuZDlmv9VgrW_UnQW2lYypO7LRlwOu02dQ5KZMghQepz4E3EUqMg>
+    <xmx:zsAuZF7W9K93fPjbIJFlZyYVA2eOTd910-a2gcZgwqyjUwZolJZQsg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7425FB60093; Thu,  6 Apr 2023 08:53:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <3c2ba6f9-bea1-4510-8fbb-6521fab74a9d@app.fastmail.com>
+In-Reply-To: <20230406124812.GA1589248@pevik>
+References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
+ <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
+ <20230406105646.GB1545779@pevik>
+ <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
+ <20230406124812.GA1589248@pevik>
+Date:   Thu, 06 Apr 2023 14:53:13 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Petr Vorel" <pvorel@suse.cz>
+Cc:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "LTP List" <ltp@lists.linux.it>, llvm@lists.linux.dev,
+        chrubis <chrubis@suse.cz>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Anders Roxell" <anders.roxell@linaro.org>,
+        =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>,
+        "Benjamin Copeland" <ben.copeland@linaro.org>,
+        "Tudor Cretu" <tudor.cretu@arm.com>
+Subject: Re: LTP: list of failures on 32bit and compat mode
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,59 +97,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 6, 2023, at 14:48, Petr Vorel wrote:
+>> On Thu, Apr 6, 2023, at 12:56, Petr Vorel wrote:
 
+>> Ah, I see. This must be the padding code then, not the time64
+>> conversion:
+>
+>> +int recvmmsg(int fd, struct mmsghdr *msgvec, unsigned int vlen, unsi=
+gned int flags, struct timespec *timeout)
+>> +{
+>> +#if LONG_MAX > INT_MAX
+>> +       struct mmsghdr *mh =3D msgvec;
+>> +       unsigned int i;
+>> +       for (i =3D vlen; i; i--, mh++)
+>> +               mh->msg_hdr.__pad1 =3D mh->msg_hdr.__pad2 =3D 0;
+>> +#endif
+>
+> I suppose this is a suggestion for fix in LTP. I'd expect is should go=
+ into
+> testcases/kernel/syscalls/sendmmsg/sendmmsg_var.h into static inline i=
+nt
+> sys_recvmmsg(...)
+>
+> But that at least on glibc 64bit compilation does not see __pad1 membe=
+r:
+>
+> ../sendmmsg/sendmmsg_var.h: In function =E2=80=98sys_recvmmsg=E2=80=99:
+> ../sendmmsg/sendmmsg_var.h:47:28: error: =E2=80=98struct msghdr=E2=80=99=
+ has no member=20
+> named =E2=80=98__pad1=E2=80=99
+>    47 |                 mh->msg_hdr.__pad1 =3D mh->msg_hdr.__pad2 =3D =
+0;
+>       |                            ^
 
-On 6.04.2023 14:47, Rob Herring wrote:
-> 
-> On Thu, 06 Apr 2023 13:54:04 +0200, Konrad Dybcio wrote:
->> Convert the ATH10K bindings to YAML.
->>
->> Dropped properties that are absent at the current state of mainline:
->> - qcom,msi_addr
->> - qcom,msi_base
->>
->> qcom,coexist-support and qcom,coexist-gpio-pin do very little and should
->> be reconsidered on the driver side, especially the latter one.
->>
->> Somewhat based on the ath11k bindings.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../bindings/net/wireless/qcom,ath10k.txt          | 215 ------------
->>  .../bindings/net/wireless/qcom,ath10k.yaml         | 359 +++++++++++++++++++++
->>  2 files changed, 359 insertions(+), 215 deletions(-)
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.example.dtb: wifi@18800000: wifi-firmware: 'wifi-firmware' does not match any of the regexes: 'pinctrl-[0-9]+'
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.example.dtb: wifi@18800000: wifi-firmware: 'iommus' is a required property
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qcom,ath10k.yaml
-> 
-> doc reference errors (make refcheckdocs):
-> MAINTAINERS: Documentation/devicetree/bindings/net/wireless/qcom,ath10k.txt
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230406-topic-ath10k_bindings-v2-1-557f884a65d1@linaro.org
-Oh, CHECK_DTBS=1 doesn't run dt_binding_check and I didn't run that
-explicitly before resending.. my bad..
+Sorry, I should have been clearer, the snippet I cited is
+from the musl sources, and the __pad access is what causes the
+segfault. The fix is to catch the fault on ltp, same as for the
+time64 conversions.
 
-Konrad
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+      Arnd
