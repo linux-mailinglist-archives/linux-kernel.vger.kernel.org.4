@@ -2,197 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024756D9D99
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457FD6D9D9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239242AbjDFQeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S239405AbjDFQhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjDFQeC (ORCPT
+        with ESMTP id S238461AbjDFQg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:34:02 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6499766;
-        Thu,  6 Apr 2023 09:33:53 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Psn9T5WxSz67MmR;
-        Fri,  7 Apr 2023 00:33:01 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 6 Apr
- 2023 17:33:50 +0100
-Date:   Thu, 6 Apr 2023 17:33:49 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Liang Kan <kan.liang@linux.intel.com>, <linux-cxl@vger.kernel.org>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <will@kernel.org>, <linuxarm@huawei.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH v4 5/5] docs: perf: Minimal introduction the the CXL PMU
- device and driver
-Message-ID: <20230406173349.00007503@Huawei.com>
-In-Reply-To: <642ca39865e8b_21a8294d9@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20230330164556.31533-1-Jonathan.Cameron@huawei.com>
-        <20230330164556.31533-6-Jonathan.Cameron@huawei.com>
-        <642ca39865e8b_21a8294d9@dwillia2-xfh.jf.intel.com.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 6 Apr 2023 12:36:58 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FA17EC9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:36:56 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g18so2816716ejx.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680799015;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GiN+bdc9flg9WBnmPGDLiXSY2JIdJVbrctj9Em7/5aI=;
+        b=PDYjE39rDxgqj82gn7sMLrrCgVGKgBcGOWjDiRh1JtpuxeTweyrEs57kA3+qKgsk5F
+         H6RUuRjq8g2toCH4e38ehSYTc5USvaiCYWFNFTJN5cyh2OpRgq32RrHS04t5sO6TddNQ
+         rgYFnfMXnFPDkTdIgnJ/27SnuwvbIbmnd9ESCjimCCX9md+AHA5cjR+Mf2ba//JEQ0r+
+         NK/NMQEmuCw5HcfRNzaliEDuWIJJufm1HfI/I1oc+AN4FZTGFmKO6L53cmSBucpE8oWB
+         GovtLXTLIAglvwGZzGlF74nzdKfGIq2bTyhldA/nv9Bqpe1+2ExqlFFegOPHcClW9fxt
+         YnbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680799015;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GiN+bdc9flg9WBnmPGDLiXSY2JIdJVbrctj9Em7/5aI=;
+        b=OJfkkG1cjgqSpUNshpTPIxfzd/jdj5dfDrBp+bC4Rbeq2E50gPffX5mYei9zJBw8og
+         qaMDFNIZC5H7nko5vxDm9cRRyqikaEDQTx8Fcu9c4nIyfdWk6sfDS31h4KDWV3m4Eyp7
+         r6RnF/VxzGZu4fSqTBZqj9l+U/kLN2Z99cfaNxiv1sDzrVQ4HHmuDVk4jBQnKvbFgi9T
+         FMAlNNuxdso5FLo5Q8syN9IZQPZFKuiA3QnN6vvCNe4UqP5et7MGf9u/pc8TjQfJOFeU
+         8+xuz0eU7iPm5yKompjXFoffZjERVXBTjJNd9tcdKJeOpGYd6RiNuMrClgSYkvHAHcic
+         xC1w==
+X-Gm-Message-State: AAQBX9falyjiIaCvtaxCBqBeAEgYPgmM19X4cru4MtRw9xQxOEo/HIKj
+        F4Yjcdn7YVlLmcCEOip/bIUfUg==
+X-Google-Smtp-Source: AKy350a32KTWiAed4A3ybnDeyPP8SUNar1QVwzvKi8g14wgwAULFc0Y6x+79u4XbjZYOQycCMzpYLQ==
+X-Received: by 2002:a17:906:7b50:b0:878:52cd:9006 with SMTP id n16-20020a1709067b5000b0087852cd9006mr7683835ejo.69.1680799014860;
+        Thu, 06 Apr 2023 09:36:54 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id ww7-20020a170907084700b00947a40ded80sm1012286ejb.104.2023.04.06.09.36.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 09:36:54 -0700 (PDT)
+Message-ID: <aa947a69-a0bf-50e6-9ff2-770f436d58e2@linaro.org>
+Date:   Thu, 6 Apr 2023 18:36:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
+Content-Language: en-US
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Marek Vasut <marex@denx.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        kernel <kernel@dh-electronics.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230405160258.46998-1-cniedermaier@dh-electronics.com>
+ <20230405160258.46998-2-cniedermaier@dh-electronics.com>
+ <05fa147c-116b-59b4-d14b-760bbefd7602@denx.de>
+ <e7aa3b3220e148ee96f5a1c361721845@dh-electronics.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e7aa3b3220e148ee96f5a1c361721845@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
+On 05/04/2023 20:24, Christoph Niedermaier wrote:
+> From: Marek Vasut [mailto:marex@denx.de]
+> Sent: Wednesday, April 5, 2023 6:25 PM
+>> On 4/5/23 18:02, Christoph Niedermaier wrote:
+>>
+>> [...]
+>>
+>>> +/ {
+>>> +     model = "DH electronics i.MX6ULL DHCOR on maveo box";
+>>> +     compatible = "dh,imx6ull-dhcor-maveo-box", "dh,imx6ull-dhcor-som",
+>>> +                  "fsl,imx6ull";
+>>> +
+>>> +     aliases {
+>>> +             /delete-property/ mmc0; /* Avoid double definitions */
+>>> +             /delete-property/ mmc1;
+>>> +             mmc2 = &usdhc2; /* eMMC should be mmc2 */
+>>
+>> Why not mmc0 ?
+>>
+>> Use root=PARTUUID= when booting to avoid any dependency on
+>> root=/dev/mmcblk2pN enumeration.
 > 
-> > +
-> > +    /sys/bus/cxl/device/cpmu<id>
-> > +
-> > +The associated PMU is registered as
-> > +
-> > +   /sys/bus/event_sources/devices/cpmu<id>
-> > +
-> > +In common with other CXL bus devices, the id has no specific meaning and the
-> > +relationship to specific CXL device should be established via the device parent
-> > +of the device on the CXL bus.  
-> 
-> So I went to go add some text about how to identify PMUs in a persistent
-> manner from one boot to the next. For CXL memdevs this is done by the
-> 'serial' attribute which is always stable regardless of the device init
-> order. That's harder to get to from the pmu device because it may be
-> associated with a device that does not have a memdev.
-> 
-> I think it's also going to be frustrating for userspace to see
-> randomized pmu ids across devices since that probing will happen in
-> parallel. So how about:
+> This is due to software interchangeability with the DHCOM
+> i.MX6ULL, where the eMMC is always mmc2.
 
-Solving this in general for perf PMU drivers was what the parent device thing
-was about.  There is an argument that enabling any other path to get to
-this association is both unnecessary and just possibly unwise.
+That's not the reason to have aliases. The number should match numbering
+in your datasheet/schematics/user-guide, not what your software wants.
 
-The nice advantage of just using an IDA and relying on parentage for the
-association was that I could avoid naming questions for all the other
-places these might turn in a CXL topology. The Lazy / efficient option ;)
+Use PARTUUID for SW dependencies.
 
-You can now see exactly which PCI device a given instance is associated with.
-Custom ABI is going to be harder for anyone to use than that.
-
-I suppose we can potentially enable both paths - but it's not quite
-as straight forwards as you suggest.
-
-> 
-> 1/ Add serial as an attribute for each PMU to export
-
-Where does it come from? We only have one source of serial number per device.
-That's no where near enough to work out where a PMU is. 
-
-> 2/ Change the device name format to be "pmuX.Y" where X can just reuse
-
-Could use something a little more detailed cxl bus, but the one registered and use
-to address this in bus/event_sources needs to be cxl specific so a cxl_ prefix
-is needed I think
-
-Given we need to namespace what the ids refer to, I'm currently going with
-pmu_memX.Y pmu_dspX.Y.Z pmu_uspX.Y
-on the cxl bus and
-cxl_pmu_memX.Y cxl_pmu_dspX.Y.Z cxl_pmu_uspX.Y on even sources bus.
-(Z needed because dsp index from 0 for each usp)
-We can figure out what to do about other CXL EPs later and for now at least
-there is no way to hand a CPMU instance off a host bridge (nothing in CEDT
-to tell you where to find it).
-
-I've had a fun day hacking PMUs onto the other emulated CXL devices to test
-this. 
-There is a can of worms I'll avoid for this series by just sticking to type3
-device PMUs for now.
-
-  I have no idea yet how we handle the interrupts safely for ports as those
-  interrupts are in control the pcie port driver not the CXL dport one.
-  At somepoint I'll send out an RFC about that if no one gets to it before
-  me.  For now I've hacked portdrv to always allocate max vectors and am ignoring the
-  lovely back traces due to thing getting torn down in the wrong order on shutdown.
-  For upstream ports I've hacked portdrv to pretend it knows there is something to handle.
-  As a starting point I think we'll need to teach portdrv enough about CXL
-  to be able to tell if it should provide interrupt services..
-
-Hence I'll keep the code to register the other PMUs for a future patch set
-and just make sure the code is structured to enable that in this series.
-
-
-> the memdev id for endpoints and be another value for switches, and Y is
-> guaranteed to be 0-based and in hardware discovery order.
-
-Also need to change registration order as PMUs were registered before the
-memdev, but that's easy enough to do.
-
-> 
-> ...with that, someone can write a udev script that can persistently
-> identify PMU[Y] on device[serial] each boot.
-
-> 
-> That also cleans up a /sys/bus/cxl/devices listing to make it clear
-> which pmu instances belong together.
->  
-> > +
-> > +PMU driver provides description of available events and filter options in sysfs.
-> > +
-> > +The "format" directory describes all formats of the config (event vendor id,
-> > +group id and mask) config1 (threshold, filter enables) and config2 (filter
-> > +parameters) fields of the perf_event_attr structure.  The "events" directory
-> > +describes all documented events show in perf list.
-> > +
-> > +The events shown in perf list are the most fine grained events with a single
-> > +bit of the event mask set. More general events may be enable by setting
-> > +multiple mask bits in config. For example, all Device to Host Read Requests
-> > +may be captured on a single counter by setting the bits for all of
-> > +
-> > +* d2h_req_rdcurr
-> > +* d2h_req_rdown
-> > +* d2h_req_rdshared
-> > +* d2h_req_rdany
-> > +* d2h_req_rdownnodata
-> > +
-> > +Example of usage::
-> > +
-> > +  $#perf list
-> > +  cpmu0/clock_ticks/                                 [Kernel PMU event]
-> > +  cpmu0/d2h_req_itomwr/                              [Kernel PMU event]
-> > +  cpmu0/d2h_req_rdany/                               [Kernel PMU event]
-> > +  cpmu0/d2h_req_rdcurr/                              [Kernel PMU event]
-> > +  -----------------------------------------------------------
-> > +
-> > +  $# perf stat -e cpmu0/clock_ticks/ -e cpmu0/d2h_req_itowrm/  
-> 
-> Ah here's the examples I was looking for in the last patch, nice.
-> 
-> > +
-> > +Vendor specific events may also be available and if so can be used via
-> > +
-> > +  $# perf stat -e cpmu0/vid=VID,gid=GID,mask=MASK/
-> > +
-> > +The driver does not support sampling. So "perf record" and attaching to
-> > +a task are unsupported.  
-> 
-> Is this a common restriction for CPU-external pmus, or do you see
-> sampling support required to get this upstream?
-
-It's a common restriction. Whilst we could potentially implement sampling
-based on the presence of a suitable clock_ticks event it don't see it
-as a requirement initially.
-
-Jonathan
-
+Best regards,
+Krzysztof
 
