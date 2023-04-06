@@ -2,108 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC026D8F73
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6337E6D8F78
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235393AbjDFGbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:31:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
+        id S235427AbjDFGc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234504AbjDFGbs (ORCPT
+        with ESMTP id S232896AbjDFGc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:31:48 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FCE1712
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:31:47 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id nh20-20020a17090b365400b0024496d637e1so650369pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680762706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=obqxU2mz+jsw4Hq+pdxHcftpRbpV6+H1hg2uFdKXnJg=;
-        b=ptJ5Ich+H+NtwSCosTGyCsY/Pp8sDLBBsJO3lvmHJWFzVRghQY6PrLbGWedx3zug+q
-         wSAXcIfZKbYI8+XSF4EtFioPbIG+l4U+P4n4GbbdLj2DUQZBpHOTn2K/AtKxAc79YakZ
-         6Fzw/Zdad+E4P8kZ4z4AZwliiD7Jf04Hx9CUtIWhtkkDd12bdxiuiv7zknh/YMlnuMqx
-         kfykzcr+Y+DK+HRFlA4++5JDf+LdXpA9olP5rj+AqMId4X1H566ZHEWgk6IJYvwJF8YD
-         EQO8+qrAhPiWtTravKJwe8WwDGc6xdXJDJsTrTcxEqIMmT7gOcaG6uOHN0bpsebBEeaz
-         0Dag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680762706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=obqxU2mz+jsw4Hq+pdxHcftpRbpV6+H1hg2uFdKXnJg=;
-        b=LItSTtbq+hNOKqBJ0EzMg720gvGSwrdznSq6EkwuZF0aGuFmM9q8YQH1o52sFOH4A/
-         8DkExQmPBiiRtfkWvjvM3CrH1Fcq0wa+/mMFhBfeTwVcfN98Bw13cnBnhotOKxjgTqqU
-         R5VQLjV4b22Dw9vEsKj2iBV6V497aVkiVjENf2cDiigwsuBPzSWQyiMY2MzpyxrsDXJM
-         gzaVk0sTcoF3Q435nm+iCjGpuh1iLE+233OLVGdbjUg8/dPs/2bbBVL+x1in0+XArFM7
-         Z+NO1Z0ZCFVuI1m/yO6eKwhrjSuZimnGQwP5+DEYCljmfTz3VqP0BjVIL7Sojpo9OPgs
-         7A+w==
-X-Gm-Message-State: AAQBX9e6I7i6RIZQSXUWZ0ANyskElpcHer3yaJNF7Xh7xXNJKq/uaoFU
-        BB+nnMzHPgnWfI4vECjzLStUxEcQSA5LtW6YV+BQoA==
-X-Google-Smtp-Source: AKy350bD/Y64vs0qD2MjbI2NJK9P6rHL4AOtwZ1mlHpfcDrjjo6HIcGlm9zSWVu5nF5ZmUVlW1s6jp7cSID+mqvlTXA=
-X-Received: by 2002:a17:90b:1083:b0:244:9620:c114 with SMTP id
- gj3-20020a17090b108300b002449620c114mr318232pjb.1.1680762706468; Wed, 05 Apr
- 2023 23:31:46 -0700 (PDT)
+        Thu, 6 Apr 2023 02:32:57 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCB81712;
+        Wed,  5 Apr 2023 23:32:56 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 335JJWx1008158;
+        Thu, 6 Apr 2023 06:32:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=W8fuFynOzEkF9xzS/VbiRUIeSynChenJ3AB3QoB4N/g=;
+ b=WQphwdhhXEED5qe77ZO/7SUMTPoHKAIdN8UwY61lB+Gjk0waR7GH3DoGScEEOUIM6uBG
+ dPAi72iyRMmvw/iXmzBxirZNLlO4rY8w1MYef0RSBxuiu/DhMWljx9YszyhGpxDaC2Ci
+ 9DHUypxrK32bd4TuRl5Rjxq3Sky+rrUuqlQeOVyKasmmjiZl8zjFUrUVmqhHVVaSC0wO
+ go5e1HDKbyXwLtxO6LdVOOQTMa0s1+ECDUJ4bnkUGcVsIEERVRhxRVk4odPqPkwSW7Nq
+ zOS/fiG+PyDa2tZIYxt/tsGtcqi7NC4vMnw9/3QvG6MF6iwHO9kwpmh099cAKmFo7NHh uw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppc7u2276-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Apr 2023 06:32:38 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3366DYGG013990;
+        Thu, 6 Apr 2023 06:32:37 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ppt3jfjee-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Apr 2023 06:32:37 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3366Sw9q021327;
+        Thu, 6 Apr 2023 06:32:36 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ppt3jfjdf-1;
+        Thu, 06 Apr 2023 06:32:36 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     error27@gmail.com, kernel-janitors@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Leon Romanovsky <leon@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Rob Herring <robh@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] niu: Fix missing unwind goto in niu_alloc_channels()
+Date:   Wed,  5 Apr 2023 23:31:18 -0700
+Message-Id: <20230406063120.3626731-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <20230406061905.2460827-1-badhri@google.com> <ZC5m0onNYztT4Zbl@kroah.com>
-In-Reply-To: <ZC5m0onNYztT4Zbl@kroah.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Wed, 5 Apr 2023 23:31:10 -0700
-Message-ID: <CAPTae5J40pmziEk6k0iBEuJ7=NMeFdnk-hkzUCibqRj4aGbzjQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stern@rowland.harvard.edu, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_02,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304060056
+X-Proofpoint-ORIG-GUID: wRQ8roJm4lBKfJBBFkGUyi5oUtON5QFe
+X-Proofpoint-GUID: wRQ8roJm4lBKfJBBFkGUyi5oUtON5QFe
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 11:29=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Thu, Apr 06, 2023 at 06:19:04AM +0000, Badhri Jagan Sridharan wrote:
-> > usb_udc_connect_control does not check to see if the udc
-> > has already been started. This causes gadget->ops->pullup
-> > to be called through usb_gadget_connect when invoked
-> > from usb_udc_vbus_handler even before usb_gadget_udc_start
-> > is called. Guard this by checking for udc->started in
-> > usb_udc_connect_control before invoking usb_gadget_connect.
-> >
-> > Guarding udc_connect_control, udc->started and udc->vbus
-> > with its own mutex as usb_udc_connect_control_locked
-> > can be simulataneously invoked from different code paths.
-> >
-> > Cc: stable@vger.kernel.org
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
-> > ---
-> >  drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
-> >  1 file changed, 16 insertions(+), 4 deletions(-)
->
-> Why resend v1 when it's been reviewed already?
+Smatch reports: drivers/net/ethernet/sun/niu.c:4525
+	niu_alloc_channels() warn: missing unwind goto?
 
-I just now sent a note.
-Apologies resent V1 again instead of V2. Have sent V2 for real.
-Sorry for the confusion.
+If niu_rbr_fill() fails, then we are directly returning 'err' without
+freeing the channels.
 
->
-> confused,
->
-> greg k-h
+Fix this by changing direct return to a goto 'out_err'.
+
+Fixes: a3138df9f20e ("[NIU]: Add Sun Neptune ethernet driver.")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+This is purely based on static analysis. Only compile tested.
+---
+ drivers/net/ethernet/sun/niu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/sun/niu.c b/drivers/net/ethernet/sun/niu.c
+index ab8b09a9ef61..7a2e76776297 100644
+--- a/drivers/net/ethernet/sun/niu.c
++++ b/drivers/net/ethernet/sun/niu.c
+@@ -4522,7 +4522,7 @@ static int niu_alloc_channels(struct niu *np)
+ 
+ 		err = niu_rbr_fill(np, rp, GFP_KERNEL);
+ 		if (err)
+-			return err;
++			goto out_err;
+ 	}
+ 
+ 	tx_rings = kcalloc(num_tx_rings, sizeof(struct tx_ring_info),
+-- 
+2.38.1
+
