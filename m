@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB696D9EA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E7F6D9EAA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238397AbjDFRXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        id S239501AbjDFRXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238578AbjDFRXX (ORCPT
+        with ESMTP id S239653AbjDFRXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:23:23 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B98A5F4
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:22:53 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-93434918b67so111411066b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680801708;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=145yGzODgxY+rJbwAEpe0vSJYcWx7FkVo4x57vw/2Ds=;
-        b=J3QonWmOAxHMqJ1EOSUj4Rs4updaQcuUihcgcTFNhvmsCy6vBtmalIIUSokDtx0F3o
-         6nHdCIpzrLSH+VxgApjJ8P2UKckkNOkxX/fwqeuvB1cGopdBPEPwOnwC0KJ3GsZyHB2W
-         lszpadIv4hDgi03TskBGJpV3t+bDZsTEL0pGZgx1pl2e+DHeJwKaUvIFHVjPHSxHNkqP
-         jZtZPk3HiuFjSs3/9EMd2Q1h/dPqJqn3uopp1XusIxh+cfVVyR84rP6A1HeFr3Huklb5
-         JjnpiK3qXY8wlTF4ziKCllgSkJV7EMH3nOtGeRVKFnwORSESnC2LfbhneG+9pO1Bz2WS
-         sPmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680801708;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=145yGzODgxY+rJbwAEpe0vSJYcWx7FkVo4x57vw/2Ds=;
-        b=u8Li2/A5pQhtYD7TgEZk5i+5X5KBWTMo71i95qxV4QjlRxfX4bXpy4MItofcdpO4Yg
-         3TCtjPHhjZm4Dd2hBHw5r0YyTn2b1IhFNMoZR2eAsLlso0W4SQi26L3BaQ5KjXkD9anO
-         qPslnKkVky1/HbuMD5Sj45EjFNC0p6lX9x87LndbRDXNbTmAekD2s3XRJqdD3WzgNGGH
-         N5j9c3FGrxcgcMsds2Il4JCkFH0Exi8p7qqDJKpN7lZQTmWwHDfwjjXzNtoCgWCP0tGg
-         Zq38nSFeqaAn9Qg0Mw9QX2WhFhSVRY8aA5iCfs4ww2gszhzBSXiucXzYd/zD85BFnRT9
-         I9dA==
-X-Gm-Message-State: AAQBX9eW6/V2ZyBo8kQZf0RMEDIMbEZOOCVHgXMyjlMpKo8vo6z4dC8r
-        mnUkvjrf0B+e13LurVxC6bVHng==
-X-Google-Smtp-Source: AKy350YRBx7KoZyPvNoeZ4w8rpaupgS8OEN5BdZpbF0ZP0CslF/6SZi49GUb5ys+HM8ofDMXceerJw==
-X-Received: by 2002:a05:6402:344:b0:502:246e:6739 with SMTP id r4-20020a056402034400b00502246e6739mr235993edw.27.1680801707878;
-        Thu, 06 Apr 2023 10:21:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id jr3-20020a170906a98300b00933356c681esm1046545ejb.150.2023.04.06.10.21.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 10:21:47 -0700 (PDT)
-Message-ID: <c79ca1c4-d7d7-50f5-ee2c-1c1ff459c429@linaro.org>
-Date:   Thu, 6 Apr 2023 19:21:46 +0200
+        Thu, 6 Apr 2023 13:23:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5111992;
+        Thu,  6 Apr 2023 10:23:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F74A64A66;
+        Thu,  6 Apr 2023 17:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB393C433EF;
+        Thu,  6 Apr 2023 17:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680801726;
+        bh=6S/67Dpkn+c4teeGqF2QJn7eQBBjGDbIM8p7vVVCfxk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NTePh2R8YK4QR589LdgsFQmSjLP0EBHdg8XVumlvAwpz/tejlY4GsLplKvml5QbN9
+         xcPfIrcbJk4ziO8lQjBcUkX5KEs6cHa37t4bMqLanpw+D4IjaUp1IBuI4g8KeXqr4a
+         zqfuNt0ggbfUr9ycQ+C222ZuUdcFJ+xRmVT526JzDUTYKHc0tUTASbdaRSzEq2fK/A
+         XQDCwMnp1h0I11P5bJOLp58vhTX36tJjl90ydvRfzRuW6ONJ29KBqhQv/e62ciPy4m
+         rDDtXYze7lqPJsqd/YiszMW2g5iA8og6+9YmRVMxAf7s4hxyi4JqCJhlASRcMKUE/y
+         sgunoPx1Ts3fA==
+Date:   Thu, 6 Apr 2023 18:22:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mfd tree
+Message-ID: <6cd5dba5-2241-458d-9791-30d0851eee22@sirena.org.uk>
+References: <20230406120055.11fcfe5b@canb.auug.org.au>
+ <20230406073646.GW8371@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/5] dt-bindings: Add Blaize vendor prefix
-Content-Language: en-US
-To:     Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "soc@kernel.org" <soc@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "olof@lixom.net" <olof@lixom.net>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        James Cowgill <james.cowgill@blaize.com>,
-        Matt Redfearn <matthew.redfearn@blaize.com>,
-        Neil Jones <neil.jones@blaize.com>
-References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
- <20230406102149.729726-2-nikolaos.pasaloukos@blaize.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406102149.729726-2-nikolaos.pasaloukos@blaize.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YKVx4Er2cI58EMgd"
+Content-Disposition: inline
+In-Reply-To: <20230406073646.GW8371@google.com>
+X-Cookie: Man and wife make one fool.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 12:22, Niko Pasaloukos wrote:
-> Blaize, Inc. (www.blaize.com) is a SoC manufacturer with integrated
-> programmable Graph-Streaming-Processors for AI and ML.
-> 
-> Co-developed-by: James Cowgill <james.cowgill@blaize.com>
-> Signed-off-by: James Cowgill <james.cowgill@blaize.com>
-> Co-developed-by: Matt Redfearn <matt.redfearn@blaize.com>
-> Signed-off-by: Matt Redfearn <matt.redfearn@blaize.com>
-> Co-developed-by: Neil Jones <neil.jones@blaize.com>
-> Signed-off-by: Neil Jones <neil.jones@blaize.com>
-> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
 
-Four people were working on one pattern in vendor prefixes? I have
-doubts, because this is very trivial patch.
+--YKVx4Er2cI58EMgd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Apr 06, 2023 at 08:36:46AM +0100, Lee Jones wrote:
 
+> Applied, squashed and credit given, thanks:
 
-Best regards,
-Krzysztof
+> Author: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> Date:   Thu Feb 16 22:22:12 2023 +0000
+>=20
+>     mfd: qcom-pm8008: Convert irq chip to config regs
+>=20
+>     Replace type and virtual registers, which are both deprecated,
+>     with config registers. This also simplifies the driver because
+>     IRQ types are set in one place, the set_type_config() callback.
 
+You should need this I think:
+
+The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
+
+  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/r=
+egmap-set-type-irq-drv-data
+
+for you to fetch changes up to 7697c64b9e4908196f0ae68aa6d423dd40607973:
+
+  regmap: Pass irq_drv_data as a parameter for set_type_config() (2023-04-0=
+5 17:19:24 +0100)
+
+----------------------------------------------------------------
+regmap: Pass irq_drv_data as a parameter for set_type_config()
+
+Allow callbacks to access irq_drv_data.
+
+----------------------------------------------------------------
+William Breathitt Gray (1):
+      regmap: Pass irq_drv_data as a parameter for set_type_config()
+
+ drivers/base/regmap/regmap-irq.c | 8 +++++---
+ include/linux/regmap.h           | 6 ++++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+
+--YKVx4Er2cI58EMgd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQu/7cACgkQJNaLcl1U
+h9BEmwf5AbbQK6uYa8E2kZr2HbtFWxxPLAkraF+8KZJNPH+WPijZ2H7CWzbXo0D+
+FHOnL/nERJ6NgSxpvUhiZ4Kso79tN9lS3+ER369cqfjOAkduyhRrvfkHWQ0VL7M8
++X+R2Nbioc0YDx+7ZCkq2rHYlhrTYlyaLPy9aSBel1Upithl5jC0BpE5rTKdx78E
+Won6FP7FCLWp+AIrvXusZJjyJTTlh+VySCiSow1AX057i68h3XJvD3W4wKNQUlgD
+PcUwtNCz7v6q9mE5wO7qrWNKGLw+QLnGOkjpCPUaXNKtjFWUIDjl1TQMJ3wO0loS
+1wp3vU68wfnH0XAKA9SEczFehC2Yyg==
+=2ePA
+-----END PGP SIGNATURE-----
+
+--YKVx4Er2cI58EMgd--
