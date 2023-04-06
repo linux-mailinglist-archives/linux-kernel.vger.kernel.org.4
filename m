@@ -2,154 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA50E6D9454
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2436D945A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236425AbjDFKpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
+        id S237244AbjDFKps convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 06:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjDFKpW (ORCPT
+        with ESMTP id S237045AbjDFKpq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:45:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD804EE2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:44:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680777874;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TjBeC5ttXVWU6637sM9DbdFklYW1fd4puIgmp2kM1PM=;
-        b=aSOx4gUxbXzfjwQjPxESMNJ6qCt9S60xTSmsFVtwhM2kpaVqcol8cP7BvpGzki+pfgP2/p
-        KCWSwasyD6q7RAk8XeRfZXTXtvOMHz5yKY84pcegFm1e53ucds03gOyX3238cXtc/x57dl
-        5UXqBkfKVyy6DeTFQHizwOxiRU063Lg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-70-SZNGZtiyM0CrKCX3eOJxrA-1; Thu, 06 Apr 2023 06:44:32 -0400
-X-MC-Unique: SZNGZtiyM0CrKCX3eOJxrA-1
-Received: by mail-ej1-f69.google.com with SMTP id 28-20020a170906019c00b009343596918cso47364ejb.16
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 03:44:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680777872; x=1683369872;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TjBeC5ttXVWU6637sM9DbdFklYW1fd4puIgmp2kM1PM=;
-        b=Io68tvl8upE5jZgcDZ6sBNZZYpsW6JMpaNySd9QJcUZ4xkPgGhE/25sVPiHbDLle0G
-         /7atsSAtLfMtH89p14gLnL1ts1PuG+TDBJdYupMFe9ZlOWaLkRJqik9NKyYLUcqz4Gv1
-         5Qy2sbrB4izXu4jjw1a9Yh97P+oX59N/wnfccvkDLnGRlDe1Vha68tZZJD/v2Lmoda+g
-         PtyVlY++q4HKiPzPqHEwqbqkEOnQ37Mhfoq6wZ8/7yX+klNJOVh7V70OWY1NRqbyxw1t
-         CGTIL6IFcNYMvBHgaywUhmmZmQ3brCCMPerbz7+zjUBDmJW7bkuJG8NWG8Vt67Vfk3Yt
-         pH9A==
-X-Gm-Message-State: AAQBX9dTd7mg7IJGIGwU8dyjY5hiY5RcQcB5hUoElX/IUDM9s2kBOr3H
-        6S+K3IYCnBECLfVzPl+d7ww3e3y7gM50MWq/1sXaMtPQCsKPqJenJwvUs+JHi1E6Cb1Xffvbl2g
-        P2H4R8+0EnVYXMIWfpmmH3zS0
-X-Received: by 2002:a17:906:5383:b0:939:4c86:d47b with SMTP id g3-20020a170906538300b009394c86d47bmr5936475ejo.19.1680777871848;
-        Thu, 06 Apr 2023 03:44:31 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YKw5d9sAnmrCv7+iF3IpuymujbqUnc6kSfxderJa9L09/Chkn5ceYeFPalKsTfyG9jc8ZvEw==
-X-Received: by 2002:a17:906:5383:b0:939:4c86:d47b with SMTP id g3-20020a170906538300b009394c86d47bmr5936465ejo.19.1680777871569;
-        Thu, 06 Apr 2023 03:44:31 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id rj13-20020a1709076c8d00b00947ccb6150bsm520220ejc.102.2023.04.06.03.44.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 03:44:30 -0700 (PDT)
-Message-ID: <c12fcff3-d9aa-2d8d-7053-224207defc26@redhat.com>
-Date:   Thu, 6 Apr 2023 12:44:30 +0200
+        Thu, 6 Apr 2023 06:45:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCA86589
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:45:40 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1pkN7E-0001s4-B0; Thu, 06 Apr 2023 12:45:16 +0200
+Message-ID: <9c72c7162da56234addd7083ec774e525a13957c.camel@pengutronix.de>
+Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Luben Tuikov <luben.tuikov@amd.com>,
+        Danilo Krummrich <dakr@redhat.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        andrey.grodzovsky@amd.com, tvrtko.ursulin@linux.intel.com,
+        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        lina@asahilina.net, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 06 Apr 2023 12:45:12 +0200
+In-Reply-To: <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
+References: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
+         <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
+         <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
+         <3004a2bf-e725-643e-82af-8a217784e796@redhat.com>
+         <013781a3-5abd-8c66-8a0a-dd36c9c487af@amd.com>
+         <28d10733-b217-7ccc-4b8c-54bdc8249234@amd.com>
+         <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] platform/x86: think-lmi: Remove unnecessary casts for
- attributes
-Content-Language: en-US, nl
-To:     =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230329-think-lmi-attrs-v1-1-5794f2367cc2@weissschuh.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230329-think-lmi-attrs-v1-1-5794f2367cc2@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Am Donnerstag, dem 06.04.2023 um 10:27 +0200 schrieb Daniel Vetter:
+> On Thu, 6 Apr 2023 at 10:22, Christian König <christian.koenig@amd.com> wrote:
+> > 
+> > Am 05.04.23 um 18:09 schrieb Luben Tuikov:
+> > > On 2023-04-05 10:05, Danilo Krummrich wrote:
+> > > > On 4/4/23 06:31, Luben Tuikov wrote:
+> > > > > On 2023-03-28 04:54, Lucas Stach wrote:
+> > > > > > Hi Danilo,
+> > > > > > 
+> > > > > > Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
+> > > > > > > Hi all,
+> > > > > > > 
+> > > > > > > Commit df622729ddbf ("drm/scheduler: track GPU active time per entity")
+> > > > > > > tries to track the accumulated time that a job was active on the GPU
+> > > > > > > writing it to the entity through which the job was deployed to the
+> > > > > > > scheduler originally. This is done within drm_sched_get_cleanup_job()
+> > > > > > > which fetches a job from the schedulers pending_list.
+> > > > > > > 
+> > > > > > > Doing this can result in a race condition where the entity is already
+> > > > > > > freed, but the entity's newly added elapsed_ns field is still accessed
+> > > > > > > once the job is fetched from the pending_list.
+> > > > > > > 
+> > > > > > > After drm_sched_entity_destroy() being called it should be safe to free
+> > > > > > > the structure that embeds the entity. However, a job originally handed
+> > > > > > > over to the scheduler by this entity might still reside in the
+> > > > > > > schedulers pending_list for cleanup after drm_sched_entity_destroy()
+> > > > > > > already being called and the entity being freed. Hence, we can run into
+> > > > > > > a UAF.
+> > > > > > > 
+> > > > > > Sorry about that, I clearly didn't properly consider this case.
+> > > > > > 
+> > > > > > > In my case it happened that a job, as explained above, was just picked
+> > > > > > > from the schedulers pending_list after the entity was freed due to the
+> > > > > > > client application exiting. Meanwhile this freed up memory was already
+> > > > > > > allocated for a subsequent client applications job structure again.
+> > > > > > > Hence, the new jobs memory got corrupted. Luckily, I was able to
+> > > > > > > reproduce the same corruption over and over again by just using
+> > > > > > > deqp-runner to run a specific set of VK test cases in parallel.
+> > > > > > > 
+> > > > > > > Fixing this issue doesn't seem to be very straightforward though (unless
+> > > > > > > I miss something), which is why I'm writing this mail instead of sending
+> > > > > > > a fix directly.
+> > > > > > > 
+> > > > > > > Spontaneously, I see three options to fix it:
+> > > > > > > 
+> > > > > > > 1. Rather than embedding the entity into driver specific structures
+> > > > > > > (e.g. tied to file_priv) we could allocate the entity separately and
+> > > > > > > reference count it, such that it's only freed up once all jobs that were
+> > > > > > > deployed through this entity are fetched from the schedulers pending list.
+> > > > > > > 
+> > > > > > My vote is on this or something in similar vain for the long term. I
+> > > > > > have some hope to be able to add a GPU scheduling algorithm with a bit
+> > > > > > more fairness than the current one sometime in the future, which
+> > > > > > requires execution time tracking on the entities.
+> > > > > Danilo,
+> > > > > 
+> > > > > Using kref is preferable, i.e. option 1 above.
+> > > > I think the only real motivation for doing that would be for generically
+> > > > tracking job statistics within the entity a job was deployed through. If
+> > > > we all agree on tracking job statistics this way I am happy to prepare a
+> > > > patch for this option and drop this one:
+> > > > https://lore.kernel.org/all/20230331000622.4156-1-dakr@redhat.com/T/#u
+> > > Hmm, I never thought about "job statistics" when I preferred using kref above.
+> > > The reason kref is attractive is because one doesn't need to worry about
+> > > it--when the last user drops the kref, the release is called to do
+> > > housekeeping. If this never happens, we know that we have a bug to debug.
+> > 
+> > Yeah, reference counting unfortunately have some traps as well. For
+> > example rarely dropping the last reference from interrupt context or
+> > with some unexpected locks help when the cleanup function doesn't expect
+> > that is a good recipe for problems as well.
+> > 
+Fully agreed.
 
-On 3/29/23 06:50, Thomas Weißschuh wrote:
-> These casts are unnecessary and could break if structure layouts are
-> randomized or implementation details change.
-> Use the proper syntax that works without casts.
+> > > Regarding the patch above--I did look around the code, and it seems safe,
+> > > as per your analysis, I didn't see any reference to entity after job submission,
+> > > but I'll comment on that thread as well for the record.
+> > 
+> > Reference counting the entities was suggested before. The intentionally
+> > avoided that so far because the entity might be the tip of the iceberg
+> > of stuff you need to keep around.
+> > 
+> > For example for command submission you also need the VM and when you
+> > keep the VM alive you also need to keep the file private alive....
 > 
-> Also remove some unnecessary braces that checkpatch complains about.
+> Yeah refcounting looks often like the easy way out to avoid
+> use-after-free issue, until you realize you've just made lifetimes
+> unbounded and have some enourmous leaks: entity keeps vm alive, vm
+> keeps all the bo alives, somehow every crash wastes more memory
+> because vk_device_lost means userspace allocates new stuff for
+> everything.
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> If possible a lifetime design where lifetimes have hard bounds and you
+> just borrow a reference under a lock (or some other ownership rule) is
+> generally much more solid. But also much harder to design correctly
+> :-/
+> 
+The use we are discussing here is to keep the entity alive as long as
+jobs from that entity are still active on the HW. While there are no
+hard bounds on when a job will get inactive, at least it's not
+unbounded. On a crash/fault the job will be removed from the hardware
+pretty soon.
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Well behaved jobs after a application shutdown might take a little
+longer, but I don't really see the new problem with keeping the entity
+alive? As long as a job is active on the hardware, we can't throw out
+the VM or BOs, no difference whether the entity is kept alive or not.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+Some hardware might have ways to expedite job inactivation by
+deactivating scheduling queues, or just taking a fault, but for some HW
+we'll just have to wait for the job to finish.
 
 Regards,
+Lucas
 
-Hans
-
-
-
-> ---
->  drivers/platform/x86/think-lmi.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+> > Additional to that we have some ugly inter dependencies between tearing
+> > down an application (potential with a KILL signal from the OOM killer)
+> > and backward compatibility for some applications which render something
+> > and quit before the rendering is completed in the hardware.
 > 
-> diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-> index c816646eb661..02bfd6e3fed2 100644
-> --- a/drivers/platform/x86/think-lmi.c
-> +++ b/drivers/platform/x86/think-lmi.c
-> @@ -862,19 +862,18 @@ static umode_t auth_attr_is_visible(struct kobject *kobj,
->  	struct tlmi_pwd_setting *setting = to_tlmi_pwd_setting(kobj);
->  
->  	/* We only want to display level and index settings on HDD/NVMe */
-> -	if ((attr == (struct attribute *)&auth_index) ||
-> -			(attr == (struct attribute *)&auth_level)) {
-> +	if (attr == &auth_index.attr || attr == &auth_level.attr) {
->  		if ((setting == tlmi_priv.pwd_hdd) || (setting == tlmi_priv.pwd_nvme))
->  			return attr->mode;
->  		return 0;
->  	}
->  
->  	/* We only display certificates on Admin account, if supported */
-> -	if ((attr == (struct attribute *)&auth_certificate) ||
-> -			(attr == (struct attribute *)&auth_signature) ||
-> -			(attr == (struct attribute *)&auth_save_signature) ||
-> -			(attr == (struct attribute *)&auth_cert_thumb) ||
-> -			(attr == (struct attribute *)&auth_cert_to_password)) {
-> +	if (attr == &auth_certificate.attr ||
-> +	    attr == &auth_signature.attr ||
-> +	    attr == &auth_save_signature.attr ||
-> +	    attr == &auth_cert_thumb.attr ||
-> +	    attr == &auth_cert_to_password.attr) {
->  		if ((setting == tlmi_priv.pwd_admin) && tlmi_priv.certificate_support)
->  			return attr->mode;
->  		return 0;
+> Yeah I think that part would also be good to sort out once&for all in
+> drm/sched, because i915 has/had the same struggle.
+> -Daniel
 > 
-> ---
-> base-commit: fcd476ea6a888ef6e6627f4c21a2ea8cca3e9312
-> change-id: 20230329-think-lmi-attrs-994abb757e98
+> > 
+> > Regards,
+> > Christian.
+> > 
+> > > 
+> > > Regards,
+> > > Luben
+> > > 
+> > > > Christian mentioned amdgpu tried something similar to what Lucas tried
+> > > > running into similar trouble, backed off and implemented it in another
+> > > > way - a driver specific way I guess?
+> > > > 
+> > > > > Lucas, can you shed some light on,
+> > > > > 
+> > > > > 1. In what way the current FIFO scheduling is unfair, and
+> > > > > 2. shed some details on this "scheduling algorithm with a bit
+> > > > > more fairness than the current one"?
+> > > > > 
+> > > > > Regards,
+> > > > > Luben
+> > > > > 
+> > > > > > > 2. Somehow make sure drm_sched_entity_destroy() does block until all
+> > > > > > > jobs deployed through this entity were fetched from the schedulers
+> > > > > > > pending list. Though, I'm pretty sure that this is not really desirable.
+> > > > > > > 
+> > > > > > > 3. Just revert the change and let drivers implement tracking of GPU
+> > > > > > > active times themselves.
+> > > > > > > 
+> > > > > > Given that we are already pretty late in the release cycle and etnaviv
+> > > > > > being the only driver so far making use of the scheduler elapsed time
+> > > > > > tracking I think the right short term solution is to either move the
+> > > > > > tracking into etnaviv or just revert the change for now. I'll have a
+> > > > > > look at this.
+> > > > > > 
+> > > > > > Regards,
+> > > > > > Lucas
+> > > > > > 
+> > > > > > > In the case of just reverting the change I'd propose to also set a jobs
+> > > > > > > entity pointer to NULL  once the job was taken from the entity, such
+> > > > > > > that in case of a future issue we fail where the actual issue resides
+> > > > > > > and to make it more obvious that the field shouldn't be used anymore
+> > > > > > > after the job was taken from the entity.
+> > > > > > > 
+> > > > > > > I'm happy to implement the solution we agree on. However, it might also
+> > > > > > > make sense to revert the change until we have a solution in place. I'm
+> > > > > > > also happy to send a revert with a proper description of the problem.
+> > > > > > > Please let me know what you think.
+> > > > > > > 
+> > > > > > > - Danilo
+> > > > > > > 
+> > 
 > 
-> Best regards,
+> 
 
