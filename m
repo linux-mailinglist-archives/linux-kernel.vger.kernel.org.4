@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8212C6D8E0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C70E96D8E0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235308AbjDFDqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S235327AbjDFDqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235291AbjDFDqd (ORCPT
+        with ESMTP id S235323AbjDFDqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:46:33 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C8D8A4D
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:46:28 -0700 (PDT)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230406034625epoutp015c3d3f425da8ebc0afe7fdfee08ae47b~TO8DepUo82076020760epoutp01g
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:46:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230406034625epoutp015c3d3f425da8ebc0afe7fdfee08ae47b~TO8DepUo82076020760epoutp01g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1680752785;
-        bh=F6TnWqpipLif1YaNPe5q/YfeK/PMuczMZeivqyAT7qg=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=S63a4TP0P3OvwygpAMCi7f3vFyRm0eCOGAvDPVYNSrBoUYojSCxooJiBnNpV8snzE
-         C8BuROHxfayeTE689nf5ZCMBAU8YmsNkXVsEFwq+PkKZCzI4bof9mH4OU52jKKjEiq
-         NAOBPEWkvJWJxc4/1iSYa6Drd1QbMUQSV7DzZv54=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20230406034624epcas1p431bbd58d390d872c94473b800d7ff1f0~TO8C9Lnqd2190321903epcas1p4P;
-        Thu,  6 Apr 2023 03:46:24 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.222]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PsS8w41Wsz4x9Py; Thu,  6 Apr
-        2023 03:46:24 +0000 (GMT)
-X-AuditID: b6c32a38-5fbfa70000029402-0e-642e40903842
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        38.EE.37890.0904E246; Thu,  6 Apr 2023 12:46:24 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH v2] dma-buf/heaps: system_heap: Avoid DoS by limiting
- single allocations to half of all memory
-Reply-To: jaewon31.kim@samsung.com
-Sender: =?UTF-8?B?6rmA7J6s7JuQ?= <jaewon31.kim@samsung.com>
-From:   =?UTF-8?B?6rmA7J6s7JuQ?= <jaewon31.kim@samsung.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     "jstultz@google.com" <jstultz@google.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230405200923.9b0dca2165ef3335a0f6b112@linux-foundation.org>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230406034624epcms1p3c132d43833c9eee0bd3c470fe16cd7c3@epcms1p3>
-Date:   Thu, 06 Apr 2023 12:46:24 +0900
-X-CMS-MailID: 20230406034624epcms1p3c132d43833c9eee0bd3c470fe16cd7c3
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmnu4EB70Ug2//ZC3mrF/DZrHw4V1m
-        i9WbfC26N89ktOh9/4rJ4s+JjWwWl3fNYbO4t+Y/q8Xrb8uYLU7d/cxu8W79FzYHbo/Db94z
-        e+z9toDFY+esu+weCzaVemxa1cnmsenTJHaPO9f2sHmcmPGbxaNvyypGj8+b5AK4orJtMlIT
-        U1KLFFLzkvNTMvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4AuVlIoS8wpBQoF
-        JBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBXoFSfmFpfmpevlpZZYGRoYGJkCFSZkZ7R/38hU
-        MFG04tXCtAbGdwJdjBwcEgImEqenFnUxcnEICexglNjwdhYzSJxXQFDi7w5hEFNYoERi8m6F
-        LkZOoBIlibM/rrCD2MIC1hL7F81gArHZBCwltt+cyAhiiwjoSqx6vosZZCSzwEFmiZPXJoMV
-        SQjwSsxof8oCYUtLbF++FayBU8Bb4sXF2cwQcVGJm6vfssPY74/NZ4SwRSRa752FqhGUePBz
-        NyPMnD/Hn7NB2MUSyzofQO2qkVhxbhVU3Fyi4e1KMJtXwFfiw8pOsBtYBFQlml5/Y4WocZGY
-        +vYi2HxmAXmJ7W/ngIOBWUBTYv0ufYgSRYmdv+cyQpTwSbz72sMK89aOeU+g1qpJtDz7ChWX
-        kfj77xmU7SHx6eReJkgwX2CW2LmljWUCo8IsREjPQrJ5FsLmBYzMqxjFUguKc9NTiw0LTOBR
-        m5yfu4kRnHS1LHYwzn37Qe8QIxMH4yFGCQ5mJRFe1S6tFCHelMTKqtSi/Pii0pzU4kOMpkA/
-        T2SWEk3OB6b9vJJ4QxNLAxMzIxMLY0tjMyVx3i9PtVOEBNITS1KzU1MLUotg+pg4OKUamOY7
-        Wgl4dM35v5btKJdTYDtT5e8Mqxl7b+WazVmx5a/wXadrbkc3m6ZLzDX9V/hhG+ODx08/RoT6
-        f2dSPnciomRGbky5ls+7d486Jy9l2SraeSnIbGrLhfsvZULOxU4q/WLCzNVb/ypBfW6NcI1b
-        67sTyYqvd/suUl8+y0+jI/dUaqh70+v/bs/5mRZqx32xfvVJrvlUSpbP6y2qTNuNRaac/6/5
-        61e6ubfLnKblNatns8odEWfc/Jv5WvXp/ijWB7KOy4UzTlxN/vQn6A3H3dpaoanVtlVatVcv
-        2cuXu19v+GV1p6PsSSbH7L21L+bIVpy7aWdnY8Dx81zSnZjWKUlbyu1fK7SryqrXLLJgUmIp
-        zkg01GIuKk4EAH+KRW5DBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230406000841epcas1p3630010a770682be0f1d540a448f3e00e
-References: <20230405200923.9b0dca2165ef3335a0f6b112@linux-foundation.org>
-        <20230405185650.239f9721f066aa480e83d543@linux-foundation.org>
-        <20230405172524.e25b62e1c548a95564b1d324@linux-foundation.org>
-        <20230406000854.25764-1-jaewon31.kim@samsung.com>
-        <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
-        <20230406021712epcms1p216f274040d25d18380668ffbfa809c48@epcms1p2>
-        <CGME20230406000841epcas1p3630010a770682be0f1d540a448f3e00e@epcms1p3>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        Wed, 5 Apr 2023 23:46:46 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7724E975A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:46:44 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id w133so28209296oib.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 20:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1680752803; x=1683344803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2HC8P/hmf80QzMRLst56jAGHCnOy19Nb1SfXkyKnng=;
+        b=OdCYn4+VByG1SRoySM17nK1AXgMbZVRXlJ5uIqR+tfwGuKggZw222F7duYA9Vb89YK
+         27pnFjed1vkAWjIH3w9kqNNxzyvrRs3I40xpJc8gABvfqFbm84Ah6fCAVV+EpDcHKNEM
+         T6LqevGxh7v6QeMq8lX+Fn0O2uSvDEMaPjduq6COs02ZgwWQq7TWFyzEWjpUoxp8g7/W
+         HeDHWwDs5YlngSYn9Y4eEcJFWPL1d9LCI5B4h6ljv4T9xfXx5ZEmdJDMYKPLEVyc5Sh4
+         e44ljucW2T/N/BZX5bfGqLHRrTCgxLP8TCM5oFflHLmQC3TPZL8Zpd5lDO1iSTWcWsjf
+         DH2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680752803; x=1683344803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e2HC8P/hmf80QzMRLst56jAGHCnOy19Nb1SfXkyKnng=;
+        b=gnyXeY4KeiTzZQUmIoKgPpRzMxaJqudbTVzl8eqP5QxoEIKdB519ZKJ+DvgNd7fx5t
+         hh0DkrF9ltyrU7kWHwnajg61DddEhk8bBP0gJtauvryh4aeDXEJqoxNvl6sO4QNssHYj
+         5zq7EUjNAgEwhrUkWr6sQjic2sbbQazDTxuHjnRn4TTtE30C5GKg3bVR/TFIQf1hSNgN
+         QmjB6ulzpWWO2dkD3FeRIglU90VkgkcntLS5qMZNsZyFbYuNa0gsggREZ/nickDnyxwd
+         HojSY3gmJCSG3aeptQ5xjxBdNU3v52i0Nl4wf6mLvLw/+cYrTt8CrFbuisJ5uE86j2qa
+         HRbA==
+X-Gm-Message-State: AAQBX9fH/birTEnDROLGHcAREEFSOxBuQlReQS9NehPWrLM8sq2YrG3r
+        WQA/MpfkT3O02NdIPjiDeYrxKA==
+X-Google-Smtp-Source: AKy350aAm5JE1r76kf6Lxl9p5V+N5sZaj6KFuUrSbX6DgQQJMad992E4+fIEGKxtn2iiwPmCcOOrnA==
+X-Received: by 2002:aca:d17:0:b0:388:f4de:1ed7 with SMTP id 23-20020aca0d17000000b00388f4de1ed7mr3555483oin.1.1680752803481;
+        Wed, 05 Apr 2023 20:46:43 -0700 (PDT)
+Received: from sunil-laptop ([106.51.83.242])
+        by smtp.gmail.com with ESMTPSA id en12-20020a056808394c00b003898ebb8be0sm215967oib.48.2023.04.05.20.46.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 20:46:43 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 09:16:31 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Marc Zyngier <maz@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V4 08/23] RISC-V: ACPI: Cache and retrieve the RINTC
+ structure
+Message-ID: <ZC5Al3swBGK1WP0g@sunil-laptop>
+References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
+ <20230404182037.863533-9-sunilvl@ventanamicro.com>
+ <h4wgl5pc4bptxsmlmf7ggohq2y2uwk6ecaoytyywbwhf2ubnzj@ojanwytq5lrk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <h4wgl5pc4bptxsmlmf7ggohq2y2uwk6ecaoytyywbwhf2ubnzj@ojanwytq5lrk>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,60 +93,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Thu, 06 Apr 2023 11:17:12 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
->
->> >> +       if (len / PAGE_SIZE > totalram_pages())
->> >> +               return ERR_PTR(-ENOMEM);
->> >
->> >We're catering for a buggy caller here, aren't we?  Are such large
->> >requests ever reasonable?
->> >
->> >How about we decide what's the largest reasonable size and do a
->> >WARN_ON(larger-than-that), so the buggy caller gets fixed?
->> 
->> Yes we're considering a buggy caller. I thought even totalram_pages() / 2 in
->> the old ion system is also unreasonable. To avoid the /2, I changed it to
->> totalram_pages() though.
->> 
->> Because userspace can request that size repeately, I think WARN_ON() may be
->> called to too often, so that it would fill the kernel log buffer.
->
->Oh geeze.  I trust that userspace needs elevated privileges of some form?
->
+On Wed, Apr 05, 2023 at 05:17:48PM +0200, Andrew Jones wrote:
+> On Tue, Apr 04, 2023 at 11:50:22PM +0530, Sunil V L wrote:
+> > RINTC structures in the MADT provide mapping between the hartid
+> > and the CPU. This is required many times even at run time like
+> > cpuinfo. So, instead of parsing the ACPI table every time, cache
+> > the RINTC structures and provide a function to get the correct
+> > RINTC structure for a given cpu.
+> > 
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  arch/riscv/include/asm/acpi.h |  2 ++
+> >  arch/riscv/kernel/acpi.c      | 60 +++++++++++++++++++++++++++++++++++
+> >  2 files changed, 62 insertions(+)
+> > 
+> > diff --git a/arch/riscv/include/asm/acpi.h b/arch/riscv/include/asm/acpi.h
+> > index 9be52b6ffae1..1606dce8992e 100644
+> > --- a/arch/riscv/include/asm/acpi.h
+> > +++ b/arch/riscv/include/asm/acpi.h
+> > @@ -59,6 +59,8 @@ static inline bool acpi_has_cpu_in_madt(void)
+> >  
+> >  static inline void arch_fix_phys_package_id(int num, u32 slot) { }
+> >  
+> > +struct acpi_madt_rintc *acpi_cpu_get_madt_rintc(int cpu);
+> > +u32 get_acpi_id_for_cpu(int cpu);
+> >  #endif /* CONFIG_ACPI */
+> >  
+> >  #endif /*_ASM_ACPI_H*/
+> > diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
+> > index 81d448c41714..40ab55309c70 100644
+> > --- a/arch/riscv/kernel/acpi.c
+> > +++ b/arch/riscv/kernel/acpi.c
+> > @@ -24,6 +24,66 @@ EXPORT_SYMBOL(acpi_disabled);
+> >  int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
+> >  EXPORT_SYMBOL(acpi_pci_disabled);
+> >  
+> > +static struct acpi_madt_rintc cpu_madt_rintc[NR_CPUS];
+> > +
+> > +static int acpi_parse_madt_rintc(union acpi_subtable_headers *header, const unsigned long end)
+> > +{
+> > +	struct acpi_madt_rintc *rintc = (struct acpi_madt_rintc *)header;
+> > +	int cpuid;
+> > +
+> > +	if (!(rintc->flags & ACPI_MADT_ENABLED))
+> > +		return 0;
+> > +
+> > +	cpuid = riscv_hartid_to_cpuid(rintc->hart_id);
+> > +	/*
+> > +	 * When CONFIG_SMP is disabled, mapping won't be created for
+> > +	 * all cpus.
+> > +	 * CPUs more than NR_CPUS, will be ignored.
+> > +	 */
+> > +	if (cpuid >= 0 && cpuid < NR_CPUS)
+> > +		cpu_madt_rintc[cpuid] = *rintc;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int acpi_init_rintc_array(void)
+> > +{
+> > +	if (acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0) > 0)
+> > +		return 0;
+> > +
+> > +	return -ENODEV;
+> 
+> As Conor pointed out, the errors could be propagated from
+> acpi_table_parse_madt(), which could reduce this function to
+> 
+>  return acpi_table_parse_madt(ACPI_MADT_TYPE_RINTC, acpi_parse_madt_rintc, 0);
+> 
+> where the '< 0' check would be in the caller below. That sounds good to
+> me, but then I'd take that a step further and just drop this helper
+> altogether.
+> 
+Thanks, Conor, Drew. I used similar to how others have used
+acpi_table_parse_madt(). But your suggestion makes sense. Will remove
+the wrapper function also.
 
-I'm sorry I don't know the whole Android dma-buf allocation process. AFAIK
-Android apps do not allocate itself, they request dma-buf memory to the
-Android system process named of Allocator. Then the Allocator seems to have
-privileges to use the dma-buf heap. So normal Android apps do NOT need the
-privileges.
-
->If so, then spamming dmesg isn't an issue - root can do much worse than
->that.
->
->> Even we think WARN_ON_ONCE rather than WARN_ON, the buggy point is not kernel
->> layer. Unlike page fault mechanism, this dma-buf system heap gets the size from 
->> userspace, and it is allowing unlimited size. I think we can't fix the buggy
->> user space with the kernel warning log. So I think warning is not enough,
->> and we need a safeguard in kernel layer.
->
->I really dislike that ram/2 thing - it's so arbitrary, hence is surely
->wrong for all cases.  Is there something more thoughtful we can do?
->
->I mean, top priority here is to inform userspace that it's buggy so
->that it gets fixed (assuming this requires elevated privileges).  And
->userspace which requests (totalram_pages()/2 - 1) bytes is still buggy,
->but we did nothing to get the bug fixed.
-
-That ram/2 seems to be arbitrary, but I thought just ram, not ram/2, is 
-reasonble as a safeguard in kernel side even after the userspace process or
-common library check the abnormal size.
-
-I thought the userspace context would get -ENOMEM either in ram case or in
-__GFP_RETRY_MAYFAIL case. And -ENOMEM is enough to inform. The usespace
-may not fully recognize that it is buggy though.
-
-I'm not sure that all the userspace context use the Android libdmabufheap
-library and there is no other route directly using kernel dma-buf heap
-ioctl. Anyway do you think size checking code should be added to the
-libdmabufheap rather than kernel side?
-
+Thanks,
+Sunil
