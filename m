@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765436D8F12
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6B96D8F18
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234827AbjDFGI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48942 "EHLO
+        id S233790AbjDFGL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjDFGIx (ORCPT
+        with ESMTP id S229520AbjDFGLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:08:53 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7212D7AA6;
-        Wed,  5 Apr 2023 23:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fDWf4nAhD0zyQGJYq2Dxz+ZEFeykqBOaN4y5e8brTbk=; b=5ZsNf1bdLk57Ww0yfj5IjViF3o
-        mRt2dSJWeWt2gLHkPbIAd3Z5i4IBxCvr9XiCrvITIT/ojqNopE50ETWAHcbPPno1+HZjp30GOlodN
-        FvNaGA4KX0FBKEFcMQwfrV2ib49uBy6gfGoQ8dzbTEpbmKlgRppHSFsxs/S5ptUoiFAD5mASdrBiX
-        g+LLoAb8yfzh+AJlEdp/lN4obmpW5gqhFKHClLjAXhzVKPRm1vGdlMH9E6JoYzTjEDLSYyxfmVBCp
-        NIC3iYJ8EvU7+kWf2U9/0FNoiHjlMMI8/y5nPf2S08JAexgGqFz3u3SuMENvgQz/rQvaMYwVICef4
-        FrdnlizA==;
-Received: from p200300ccff190e001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff19:e00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pkInd-0001dl-9V; Thu, 06 Apr 2023 08:08:45 +0200
-Received: from andi by aktux with local (Exim 4.96)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pkInc-000Qqj-37;
-        Thu, 06 Apr 2023 08:08:44 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     pavel@ucw.cz, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andreas@kemnade.info,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mazziesaccount@gmail.com,
-        hns@goldelico.com
-Subject: [PATCH 2/2] leds: bd2606mvv: Driver for the Rohm 6 Channel i2c LED driver
-Date:   Thu,  6 Apr 2023 08:08:25 +0200
-Message-Id: <20230406060825.103187-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406060825.103187-1-andreas@kemnade.info>
-References: <20230406060825.103187-1-andreas@kemnade.info>
+        Thu, 6 Apr 2023 02:11:25 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F0577AA6;
+        Wed,  5 Apr 2023 23:11:24 -0700 (PDT)
+Received: from [10.156.156.87] (unknown [167.220.238.23])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 55373210DEFE;
+        Wed,  5 Apr 2023 23:11:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 55373210DEFE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680761483;
+        bh=ezHWNn7n387QVTk8qA/7+6tmpBJrUdIWMn5BsSB4Rfc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kizOPtsSEfmhjfyYE/LRhkxpKxpUYiH50s2GFISVPlIbUaC6f0LM5W6sAshQu57Ff
+         4EHQL2HORqxfiy+Y/9mbVMQleoj8tPW5sb+m9bqvtPvbwDr496LS5o+j8Lz2RtDCZY
+         VlA30pH1mVnhDQtVTezWL6FlqAQzHTCMxJy+m204=
+Message-ID: <c0b2454c-3945-debf-f991-79139413f370@linux.microsoft.com>
+Date:   Thu, 6 Apr 2023 11:41:18 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] PCI: hv: Use nested hypercall for retargeting interrupts
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com, lpieralisi@kernel.org,
+        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nunodasneves@linux.microsoft.com
+References: <20230404113546.856813-1-jinankjain@linux.microsoft.com>
+ <ZC4BlSo0D1uNliFk@liuwe-devbox-debian-v2>
+From:   Jinank Jain <jinankjain@linux.microsoft.com>
+In-Reply-To: <ZC4BlSo0D1uNliFk@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,203 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device provides 6 channels which can be individually
-turned off and on but groups of two channels share a common brightness
-register.
+This was observed while testing pass-through PCI devices on the nested 
+MSHV setup.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/leds/Kconfig          |  11 +++
- drivers/leds/Makefile         |   1 +
- drivers/leds/leds-bd2606mvv.c | 145 ++++++++++++++++++++++++++++++++++
- 3 files changed, 157 insertions(+)
- create mode 100644 drivers/leds/leds-bd2606mvv.c
+Regards,
 
-diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-index 9dbce09eabacf..cc4eadbb2542e 100644
---- a/drivers/leds/Kconfig
-+++ b/drivers/leds/Kconfig
-@@ -551,6 +551,17 @@ config LEDS_REGULATOR
- 	help
- 	  This option enables support for regulator driven LEDs.
- 
-+config LEDS_BD2606MVV
-+	tristate "LED driver for BD2606MVV"
-+	depends on LEDS_CLASS
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  This option enables support for BD2606MVV LED driver chips
-+	  accessed via the I2C bus. It supports setting brightness, with
-+	  the limitiation that there are groups of two channels sharing
-+	  a brightness setting, but not the on/off setting.
-+
- config LEDS_BD2802
- 	tristate "LED driver for BD2802 RGB LED"
- 	depends on LEDS_CLASS
-diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-index d30395d11fd84..c07d1512c745a 100644
---- a/drivers/leds/Makefile
-+++ b/drivers/leds/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_LEDS_ARIEL)		+= leds-ariel.o
- obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
- obj-$(CONFIG_LEDS_BCM6328)		+= leds-bcm6328.o
- obj-$(CONFIG_LEDS_BCM6358)		+= leds-bcm6358.o
-+obj-$(CONFIG_LEDS_BD2606MVV)		+= leds-bd2606mvv.o
- obj-$(CONFIG_LEDS_BD2802)		+= leds-bd2802.o
- obj-$(CONFIG_LEDS_BLINKM)		+= leds-blinkm.o
- obj-$(CONFIG_LEDS_CLEVO_MAIL)		+= leds-clevo-mail.o
-diff --git a/drivers/leds/leds-bd2606mvv.c b/drivers/leds/leds-bd2606mvv.c
-new file mode 100644
-index 0000000000000..47ddd016bae3f
---- /dev/null
-+++ b/drivers/leds/leds-bd2606mvv.c
-@@ -0,0 +1,145 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Andreas Kemnade
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/leds.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+#define BD2606_MAX_LEDS 6
-+#define BD2606_MAX_BRIGHTNESS 63
-+#define BD2606_REG_PWRCNT 3
-+#define ldev_to_led(c)	container_of(c, struct bd2606mvv_led, ldev)
-+
-+struct bd2606mvv_led {
-+	bool active;
-+	unsigned int led_no;
-+	struct led_classdev ldev;
-+	struct bd2606mvv_priv *priv;
-+};
-+
-+struct bd2606mvv_priv {
-+	struct bd2606mvv_led leds[BD2606_MAX_LEDS];
-+	struct regmap *regmap;
-+};
-+
-+static int
-+bd2606mvv_brightness_set(struct led_classdev *led_cdev,
-+		      enum led_brightness brightness)
-+{
-+	struct bd2606mvv_led *led = ldev_to_led(led_cdev);
-+	struct bd2606mvv_priv *priv = led->priv;
-+	int err;
-+
-+	if (brightness == 0) {
-+		return regmap_update_bits(priv->regmap,
-+					  BD2606_REG_PWRCNT,
-+					  1 << led->led_no,
-+					  0);
-+	}
-+
-+	/* shared brightness register */
-+	err = regmap_write(priv->regmap, led->led_no / 2,
-+			   brightness);
-+	if (err)
-+		return err;
-+
-+	return regmap_update_bits(priv->regmap,
-+				  BD2606_REG_PWRCNT,
-+				  1 << led->led_no,
-+				  1 << led->led_no);
-+}
-+
-+static const struct regmap_config bd2606mvv_regmap = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = 0x3,
-+};
-+
-+static int bd2606mvv_probe(struct i2c_client *client)
-+{
-+	struct device_node *np, *child;
-+	struct device *dev = &client->dev;
-+	struct bd2606mvv_priv *priv;
-+	int err, count, reg;
-+
-+	np = dev_of_node(dev);
-+	if (!np)
-+		return -ENODEV;
-+
-+	count = of_get_available_child_count(np);
-+	if (!count || count > BD2606_MAX_LEDS)
-+		return -EINVAL;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->regmap = devm_regmap_init_i2c(client, &bd2606mvv_regmap);
-+	if (IS_ERR(priv->regmap)) {
-+		err = PTR_ERR(priv->regmap);
-+		dev_err(dev, "Failed to allocate register map: %d\n", err);
-+		return err;
-+	}
-+
-+	i2c_set_clientdata(client, priv);
-+
-+	for_each_available_child_of_node(np, child) {
-+		struct bd2606mvv_led *led;
-+		struct led_init_data init_data = {};
-+
-+		init_data.fwnode = of_fwnode_handle(child);
-+
-+		err = of_property_read_u32(child, "reg", &reg);
-+		if (err) {
-+			of_node_put(child);
-+			return err;
-+		}
-+		if (reg < 0 || reg >= BD2606_MAX_LEDS ||
-+		    priv->leds[reg].active) {
-+			of_node_put(child);
-+			return -EINVAL;
-+		}
-+		led = &priv->leds[reg];
-+
-+		led->active = true;
-+		led->priv = priv;
-+		led->led_no = reg;
-+		led->ldev.brightness_set_blocking = bd2606mvv_brightness_set;
-+		led->ldev.max_brightness = BD2606_MAX_BRIGHTNESS;
-+		err = devm_led_classdev_register_ext(dev, &led->ldev,
-+						     &init_data);
-+		if (err < 0) {
-+			of_node_put(child);
-+			return dev_err_probe(dev, err,
-+					     "couldn't register LED %s\n",
-+					     led->ldev.name);
-+		}
-+	}
-+	return 0;
-+}
-+
-+static const struct of_device_id __maybe_unused of_bd2606mvv_leds_match[] = {
-+	{ .compatible = "rohm,bd2606mvv", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, of_bd2606mvv_leds_match);
-+
-+static struct i2c_driver bd2606mvv_driver = {
-+	.driver   = {
-+		.name    = "leds-bd2606mvv",
-+		.of_match_table = of_match_ptr(of_bd2606mvv_leds_match),
-+	},
-+	.probe_new = bd2606mvv_probe,
-+};
-+
-+module_i2c_driver(bd2606mvv_driver);
-+
-+MODULE_AUTHOR("Andreas Kemnade <andreas@kemnade.info>");
-+MODULE_DESCRIPTION("BD2606 LED driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.2
+Jinank
 
+On 4/6/2023 4:47 AM, Wei Liu wrote:
+> On Tue, Apr 04, 2023 at 11:35:46AM +0000, Jinank Jain wrote:
+>> In case of nested MSHV, retargeting interrupt hypercall should be sent
+>> to L0 hypervisor instead of L1 hypervisor.
+>>
+>> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> While I think this is a sensible change -- how did you discover this?
+> Can you provide a bit more information?
+>
+>> ---
+>>   drivers/pci/controller/pci-hyperv.c | 10 ++++++++--
+>>   1 file changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+>> index f33370b75628..2123f632ecf7 100644
+>> --- a/drivers/pci/controller/pci-hyperv.c
+>> +++ b/drivers/pci/controller/pci-hyperv.c
+>> @@ -704,8 +704,14 @@ static void hv_arch_irq_unmask(struct irq_data *data)
+>>   		}
+>>   	}
+>>   
+>> -	res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT | (var_size << 17),
+>> -			      params, NULL);
+>> +	if (hv_nested)
+>> +		res = hv_do_nested_hypercall(HVCALL_RETARGET_INTERRUPT |
+>> +					     (var_size << 17),
+>> +					     params, NULL);
+>> +	else
+>> +		res = hv_do_hypercall(HVCALL_RETARGET_INTERRUPT |
+>> +				      (var_size << 17),
+>> +				      params, NULL);
+>>   
+>>   exit_unlock:
+>>   	spin_unlock_irqrestore(&hbus->retarget_msi_interrupt_lock, flags);
+>> -- 
+>> 2.34.1
+>>
