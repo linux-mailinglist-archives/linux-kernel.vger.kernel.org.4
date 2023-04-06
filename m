@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8256D9A97
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E746D9A85
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239225AbjDFOiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S238412AbjDFOgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238352AbjDFOid (ORCPT
+        with ESMTP id S239228AbjDFOgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:38:33 -0400
+        Thu, 6 Apr 2023 10:36:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87284CC10;
-        Thu,  6 Apr 2023 07:36:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2992ECC3F;
+        Thu,  6 Apr 2023 07:34:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCCE06478C;
-        Thu,  6 Apr 2023 14:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48A63C4339C;
-        Thu,  6 Apr 2023 14:31:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A71B64888;
+        Thu,  6 Apr 2023 14:32:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132A5C4339B;
+        Thu,  6 Apr 2023 14:32:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680791494;
-        bh=fS1epBKc6/LIuAlKccrK1+yZRgDIBGUB741ssPvpdOQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SjiLsj18bWuofLs6hhWeLC/lLw/a3iNtZ9wlEueFZEmCpkNlYBNfrW2g/JfGJHGTi
-         vet9hVGN3GV90yUx+3gAa/XNftBN0j39XOMRCSz2X9AIryTOjRKZkau8WazkdAVbKe
-         7jo/OiVuhS8JxGUofx57NN8frKBM2tj4fn33MN5OokPIYjhPFpYfjxIVlje0uFnNYq
-         o+keawWHSe/sdTrcyzxIyVKkwcke3vee+fUSrJSER8RnbtzoGn6X9DOk/pfIaR/jlM
-         ZoF5CIu1w4YilJ9YwXKoTj0fnpznmfu4LCYmI1CVH3mBWnGcBheecAhLYWYKRmVcUM
-         1CooyEc8vqBvg==
-Date:   Thu, 6 Apr 2023 08:32:12 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] wifi: mt76: Replace zero-length array with
- flexible-array member
-Message-ID: <ZC7X7KCb+JEkPe5D@work>
+        s=k20201202; t=1680791545;
+        bh=6BIfB4wvUgxIKkIw8tnOtXgIf705ROTUHHNPNs8dsBU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HnyHBjB9ixqoCm2AAGGQAs5SQAV+xhCcNC69AqlnekuQZfxKN0kITpAErvMRHDZh6
+         VcqXJirOq/uTqY8BTI3G+H3RLiGOCPSF+xWPa0nMFs9fCRhRpfI9m816+7yZLeLMsD
+         WeX72Uh/lOexY6KXBJA5MXuIb606v667hYXN9WGxUO+qrjD9SfYdVmBPaWLbbOROAN
+         LBfAaJF4RVgkMHvIKSS9rpCmplEJPd44+Y8V3pHFI97iYtPOqlM3xpUDb4kunIyfvg
+         evY2bO5TsWZTdrQJLR2omBZbXU+QNSUmxgi2Grp3uSna0s36CCiTMorD+ztGy+mrcv
+         MtmuhJ2xgmX3Q==
+Date:   Thu, 6 Apr 2023 15:32:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] kselftest: Support nolibc
+Message-ID: <bdac4e4a-383d-4d60-8ce4-f26c1e265335@sirena.org.uk>
+References: <20230405-kselftest-nolibc-v1-0-63fbcd70b202@kernel.org>
+ <ZC7VLXGpB8PRdj12@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="MTmPwNu10y8JhqJR"
 Content-Disposition: inline
+In-Reply-To: <ZC7VLXGpB8PRdj12@1wt.eu>
+X-Cookie: Man and wife make one fool.
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -67,33 +60,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays are deprecated [1] and have to be replaced by C99
-flexible-array members.
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
-on memcpy() and help to make progress towards globally enabling
--fstrict-flex-arrays=3 [2]
+--MTmPwNu10y8JhqJR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Link: https://github.com/KSPP/linux/issues/78 [1]
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Apr 06, 2023 at 04:20:29PM +0200, Willy Tarreau wrote:
+> On Thu, Apr 06, 2023 at 02:56:28PM +0100, Mark Brown wrote:
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-index a5e6ee4daf92..9bf4b4199ee3 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-@@ -127,7 +127,7 @@ struct mt76_connac2_mcu_rxd {
- 	u8 rsv1[2];
- 	u8 s2d_index;
- 
--	u8 tlv[0];
-+	u8 tlv[];
- };
- 
- struct mt76_connac2_patch_hdr {
--- 
-2.34.1
+> > At present the kselftest header can't be used with nolibc since it makes
+> > use of vprintf() which is not available in nolibc and seems like it would
+> > be inappropriate to implement given the minimal system requirements and
+> > environment intended for nolibc.
 
+> In fact we already have vfprintf(), and printf() is based on it, so
+> wouldn't it just be a matter of adding vprintf() that calls vfprintf()
+> for your case ? Maybe just something like this :
+
+>   static int vprintf(const char *fmt, va_list args)
+>   {
+> 	return vfprintf(stdout, fmt, args);
+>   }
+
+> It's possible I'm missing something, but it's also possible you didn't
+> find vfprintf() which is why I prefer to raise my hand ;-)
+
+Oh, yes - I just didn't find that.  Can't remember what I searched for
+but it didn't match.
+
+> > This has resulted in some open coded
+> > kselftests which use nolibc to test features that are supposed to be
+> > controlled via libc and therefore better exercised in an environment with
+> > no libc.
+
+> Yeah that's ugly. In nolibc-test we now have two build targets so that
+> we can more easily verify the compatibility between the default libc and
+> nolibc, so my recommendation would be to stick to a common subset of both
+> libcs, but not to rely on nolibc-specific stuff that could make tests
+> harder to debug.
+
+For these features we simply never want to run with a proper libc since
+if we use a libc which has support for the features then we can't
+meaningfully interact with them.  We're trying to test interfaces that
+libc is supposed to use.
+
+--MTmPwNu10y8JhqJR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQu1/MACgkQJNaLcl1U
+h9AKrQf9FJ4PEMz9Ni8fLSHTryCUuwHgsy8fRLZ3E6W81upwXdouPyElgX3Rz/Xy
+yY1pRVTt8kH4WH36JsswWeXSO1UzyRLFi9JOpeQtWOXRIiB+8fwNEGqqIW3nw2p+
+LNE4ew8WlOwKMbOxBxR6bGP8rfILBLogGQrT9eoxoP13e6+6lxg9EB9ydjcGWwlG
+CLw+zUg73api6eKp5KY2cczbt5uXjTynFSygQo5YXaQ9a4vMzqwb9y9myIq4bs57
+6A1yyfbP9+2nBQ7WSijAU+/jPAbE37mZvV74s9AxXu5dUgTaGEn8RsfVX44DYamw
+Biml/SBG2ZWtwJbZt8/ttN08eP7n4A==
+=WIUj
+-----END PGP SIGNATURE-----
+
+--MTmPwNu10y8JhqJR--
