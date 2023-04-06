@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9B96D8E28
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA246D8E30
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235187AbjDFD6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57732 "EHLO
+        id S235286AbjDFEDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235045AbjDFD6D (ORCPT
+        with ESMTP id S234262AbjDFEDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:58:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565339760;
-        Wed,  5 Apr 2023 20:58:02 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PsSKw0VcRzSqkp;
-        Thu,  6 Apr 2023 11:54:12 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 6 Apr 2023 11:57:30 +0800
-CC:     <yangyicong@hisilicon.com>, <linuxarm@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: Re: [PATCH 04/32] perf/hisi-uncore: Assign parents for event_source
- devices
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <gregkh@linuxfoundation.org>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-5-Jonathan.Cameron@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <233516c4-be85-ec0b-e586-bb1c5f78a9b5@huawei.com>
-Date:   Thu, 6 Apr 2023 11:57:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 6 Apr 2023 00:03:13 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A06EF8A66;
+        Wed,  5 Apr 2023 21:03:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=zqUsr
+        WEJN0EiZ0bTUfv4/qeAkVy9cBKYCLeIfX7cEo8=; b=J7ZByYFYppM8MUiCvP0jc
+        ulA6W6BWRLqFwwZOuKXbqOQQ891n1880EbUgGcKkjcTqAZ2FX54JRxn9GKyhUSlt
+        Ryr7TfM/KHeo/PjhjxRlsgNMC2XM6B8p+qui7tXkUJw2K9PCTo9C7qv8rjpMOohb
+        rlld0/z32qXAFHpAJKu6p4=
+Received: from localhost.localdomain (unknown [119.3.119.19])
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wC3s2FARC5klsq6Ag--.47216S2;
+        Thu, 06 Apr 2023 12:02:09 +0800 (CST)
+From:   Chen Aotian <chenaotian2@163.com>
+To:     pablo@netfilter.org
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chen Aotian <chenaotian2@163.com>
+Subject: [PATCH] netfilter: nf_tables: Modify nla_memdup's flag to GFP_KERNEL_ACCOUNT
+Date:   Thu,  6 Apr 2023 12:01:51 +0800
+Message-Id: <20230406040151.1676-1-chenaotian2@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20230404134225.13408-5-Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wC3s2FARC5klsq6Ag--.47216S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZrykKFy3GF18ZFy8tF1fJFb_yoW3ZwcEkr
+        yvqF40krWrJrZFgr1rJayqyrWSga18Z3WS9a4fZFZ0yayrGw48uFZ7XF1rZan8Ww4UA3W5
+        ZwnFqF1DJw1jkjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbc4S5UUUUU==
+X-Originating-IP: [119.3.119.19]
+X-CM-SenderInfo: xfkh0tprwlt0qs6rljoofrz/1tbiHQJJwGI69pVlIgAAsq
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,30 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/4 21:41, Jonathan Cameron wrote:
-> Currently the PMU device appears directly under /sys/devices/
-> Only root busses should appear there, so instead assign the pmu->dev
-> parent to be the platform device.
-> 
-> Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+For memory alloc that store user data from nla[NFTA_OBJ_USERDATA], 
+use GFP_KERNEL_ACCOUNT is more suitable.
 
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+Signed-off-by: Chen Aotian <chenaotian2@163.com>
+---
+ net/netfilter/nf_tables_api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  drivers/perf/hisilicon/hisi_uncore_pmu.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> index f1b0f5e1a28f..b4350e5dc3fc 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> @@ -538,6 +538,7 @@ void hisi_pmu_init(struct hisi_pmu *hisi_pmu, const char *name,
->  
->  	pmu->name               = name;
->  	pmu->module             = module;
-> +	pmu->parent		= hisi_pmu->dev;
->  	pmu->task_ctx_nr        = perf_invalid_context;
->  	pmu->event_init         = hisi_uncore_pmu_event_init;
->  	pmu->pmu_enable         = hisi_uncore_pmu_enable;
-> 
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 6004d4b24..cd52109e6 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -7052,7 +7052,7 @@ static int nf_tables_newobj(struct sk_buff *skb, const struct nfnl_info *info,
+ 	}
+ 
+ 	if (nla[NFTA_OBJ_USERDATA]) {
+-		obj->udata = nla_memdup(nla[NFTA_OBJ_USERDATA], GFP_KERNEL);
++		obj->udata = nla_memdup(nla[NFTA_OBJ_USERDATA], GFP_KERNEL_ACCOUNT);
+ 		if (obj->udata == NULL)
+ 			goto err_userdata;
+ 
+-- 
+2.25.1
+
