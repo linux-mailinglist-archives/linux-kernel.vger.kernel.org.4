@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF526DA521
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44466DA56D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbjDFV7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S238887AbjDFV7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238890AbjDFV6s (ORCPT
+        with ESMTP id S239782AbjDFV7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:58:48 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D808B456
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 14:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680818315; x=1712354315;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kdKSu0Ilf3scrWldP6tXEaPIfWisiYg96qJ2ydXFqLQ=;
-  b=iPnK82++uVYH8Qszv8redkWJaTMx5yRRmnXyMJkpIhTW6xuX+1eKF1eW
-   HqdnH95MS4I3E+JT6j5VPP0vLKWyPEApLsr0oOqCIoypJXe9NI50uiWU3
-   azbGmubUZK+A6a7pmMbMvCPbrZVDYOu50IROtdCsDqsQPpvNESi7ECcf9
-   Yxk1yI2v6ylWxBoOuwE5XQvYgx2d35cPLCCMjPWPEtaMEsvc3TD/Fi51Q
-   jYlNMA5Y5uRJU46H+8IzNIUQAUE2pJYYao3nGkZLMkA31qsxoVun+bo59
-   P0a9VU8N8M3OIFbHEAfkNDPzi31hbyv77xG0n7oKjiQ3qybpOJP42Adqq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="405667971"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="405667971"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 14:58:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664652583"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="664652583"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.219.12])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 14:58:34 -0700
-Date:   Thu, 6 Apr 2023 14:58:33 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: octeon: remove typedef declaration for
- cvmx_fau_op_size
-Message-ID: <ZC9AieBk+Z9Sgn/b@aschofie-mobl2>
-References: <20230405181841.GA6820@koolguy>
+        Thu, 6 Apr 2023 17:59:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC01B46D;
+        Thu,  6 Apr 2023 14:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=U8JW0408VL+0xUA1rdsbCgWZ7VzW8QR93tRjPIuuUHY=; b=sKDCcUHIsdldUKSc73yu/nAvU6
+        q6H0Z+iGdUSkV7WetTYD+KgssCbS+ZImEj+6QfYcyDgYu5l9HneHncQ5MvI0BHtsDJgx0qOUwcjha
+        fpVsoxDJxr8by/Ar77X7MEaXVF09SCCtLNQxRneTi4wwfu64EJBeUjtaN8pcKt2XxxA8YiFNsfQm/
+        RvMBNsfjjRxFhER9xNRkWS4XmtJ+yCZKz6D8c6P7Z0uJArOWfB48hWJeNJbnFcIGvL/zJo96OwIh0
+        /WElvKlA4J3IjrXq6ZHxU0fMQdEZnz5u7gWfOjKAWGfqWtcZ48BeJ5gEUmcStPP90J+AoWe3dT/k/
+        O8RKFAyQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pkXcz-000CyW-U7; Thu, 06 Apr 2023 21:58:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CA2D430036C;
+        Thu,  6 Apr 2023 23:58:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 57DDF20B52972; Thu,  6 Apr 2023 23:58:43 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 23:58:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Asit Mallick <asit.k.mallick@intel.com>,
+        Cfir Cohen <cfir@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        David Rientjes <rientjes@google.com>,
+        Dirk Hohndel <dirkhh@vmware.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jiri Slaby <jslaby@suse.cz>, Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, x86@kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [RFC PATCH 3/7] x86/entry: Implement atomic-IST-entry
+Message-ID: <20230406215843.GH405948@hirez.programming.kicks-ass.net>
+References: <20230403140605.540512-1-jiangshanlai@gmail.com>
+ <20230403140605.540512-4-jiangshanlai@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405181841.GA6820@koolguy>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230403140605.540512-4-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:18:41PM +0200, Dalvin-Ehinoma Noah Aiguobas wrote:
-> Fix checkpatch.pl warning: do not add new typedefs in
-> drivers/staging/octeon/octeon-stubs.h:216
-> 
-> Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-> ---
->  drivers/staging/octeon/octeon-stubs.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-> index 3e7b92cd2e35..9f269626b862 100644
-> --- a/drivers/staging/octeon/octeon-stubs.h
-> +++ b/drivers/staging/octeon/octeon-stubs.h
-> @@ -213,12 +213,12 @@ enum cvmx_fau_op_size {
->  	CVMX_FAU_OP_SIZE_64 = 3
->  };
->  
-> -typedef enum {
-> +enum cvmx_spi_mode {
->  	CVMX_SPI_MODE_UNKNOWN = 0,
->  	CVMX_SPI_MODE_TX_HALFPLEX = 1,
->  	CVMX_SPI_MODE_RX_HALFPLEX = 2,
->  	CVMX_SPI_MODE_DUPLEX = 3
-> -} cvmx_spi_mode_t;
-> +};
+On Mon, Apr 03, 2023 at 10:06:01PM +0800, Lai Jiangshan wrote:
+> +static __always_inline
+> +void copy_regs_exception_head(struct pt_regs *target, const struct pt_regs *from)
+> +{
+> +	target->ss	= from->ss;
+> +	target->sp	= from->sp;
+> +	target->flags 	= from->flags;
+> +	target->cs	= from->cs;
+> +	target->ip	= from->ip;
+> +	target->orig_ax	= from->orig_ax;
+> +}
+> +
+> +static __always_inline
+> +void copy_regs_general_registers(struct pt_regs *target, const struct pt_regs *from)
+> +{
+> +	target->di  = from->di;
+> +	target->si  = from->si;
+> +	target->dx  = from->dx;
+> +	target->cx  = from->cx;
+> +	target->ax  = from->ax;
+> +	target->r8  = from->r8;
+> +	target->r9  = from->r9;
+> +	target->r10 = from->r10;
+> +	target->r11 = from->r11;
+> +	target->bx  = from->bx;
+> +	target->bp  = from->bp;
+> +	target->r12 = from->r12;
+> +	target->r13 = from->r13;
+> +	target->r14 = from->r14;
+> +	target->r15 = from->r15;
+> +}
 
-Commit msg says typedef cvmx_fau_op_size was removed, not this one.
+> +/* Replicate the interrupted atomic-IST-entry's CLEAR_REGS macro. */
+> +static __always_inline void replicate_clear_regs(struct pt_regs *target)
+> +{
+> +	target->di  = 0;
+> +	target->si  = 0;
+> +	target->dx  = 0;
+> +	target->cx  = 0;
+> +	target->ax  = 0;
+> +	target->r8  = 0;
+> +	target->r9  = 0;
+> +	target->r10 = 0;
+> +	target->r11 = 0;
+> +	target->bx  = 0;
+> +	target->bp  = 0;
+> +	target->r12 = 0;
+> +	target->r13 = 0;
+> +	target->r14 = 0;
+> +	target->r15 = 0;
+> +}
 
->  
->  typedef enum {
->  	CVMX_HELPER_INTERFACE_MODE_DISABLED,
-> @@ -1362,7 +1362,7 @@ static inline struct cvmx_wqe *cvmx_pow_work_request_sync(cvmx_pow_wait_t wait)
->  }
->  
->  static inline int cvmx_spi_restart_interface(int interface,
-> -					cvmx_spi_mode_t mode, int timeout)
-> +					enum cvmx_spi_mode mode, int timeout)
->  {
->  	return 0;
->  }
-> -- 
-> 2.25.1
-> 
+I think there's compilers smart enough to see through your attempts at
+avoiding mem{set,cpy}() there and I think we'll end up needing something
+like __inline_memset() and __inline_memcpy() like here:
+
+https://lore.kernel.org/lkml/Y759AJ%2F0N9fqwDED@hirez.programming.kicks-ass.net/
