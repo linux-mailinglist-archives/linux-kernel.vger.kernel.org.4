@@ -2,327 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD356D9BFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904896D9C14
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbjDFPRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S238783AbjDFPUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238411AbjDFPRH (ORCPT
+        with ESMTP id S238699AbjDFPUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:17:07 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3198685
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:16:59 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id i3so437521uag.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1680794218;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dg6TNa2vuEo6vYvQjhHJtmhbqHNEPTWF/K/ZgZoahhs=;
-        b=NJAZS8c1olUUiKSGDc7+qwuZjEfCd4rrJH9E3ERCLLmiydyXhFp0FPr3JMQg0o3K9x
-         mal9+G031qFGrc3FBkIOGnIg7nlgznYx/D5MW5aKxwinwZFD+KrtcNwskvZ9d4ZeXQTS
-         sOUYYRBJwfHceUqm8nnvnWj3HIoIMES9d3w/FZBtKAVFjZIdHZjVPlr7QDLLj9FUiAMV
-         qIuOy85QXFEnu/RQcYju5uYonoQmXig4/uXXmUwystgCgs5fNF9EAVsouK+EiScfWpGC
-         sAMdiyUtR8IIk6IUxJLzYBzFDqXaiH39vuZM850RqRT1ukoOGxri6Exlp/saR5wtRc+g
-         waEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680794218;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dg6TNa2vuEo6vYvQjhHJtmhbqHNEPTWF/K/ZgZoahhs=;
-        b=kTfvnExgXPQOE0plfuqq5r4RGHes+uqPShse+KE0dUFAdR6EEWWj3YcRBJ6qb7Ss+s
-         UWhNvvVJbMCeYHt6F2rQKMbYpL2ySVi0uYZ+Yi/b3RBXewixB2Z2wSusRkQjmdiKxtN1
-         pLhxWTyotj8n68b6dXlGI0rFM0alBTO4fa/BxoYOje4GhAOvVokHBksOXmlUuCvAUdJH
-         RSD1gLy8AFeRdID3ZeA5azgRRE8yrbv66DyRH6eDG++NXVWIj6tlXXWNMjr0VNTGFRH5
-         PrdAdNSPULWyA4brw2/L0DywzH99+fHGWvciHV4xdfe38KP6XDaaeUK6ZiVQ0AGvwQU5
-         ObiA==
-X-Gm-Message-State: AAQBX9cxwDAisIIZr9x5CJbas6Mc2+AUrJjcNZrGhMefCnbGOFXI+1sd
-        Me2wx8DMjTxyh65PgYNb5icjxFm9eoibjgtrnM6uLg==
-X-Google-Smtp-Source: AKy350Yq/RNSiWTZPYCNZkw4exmVOf8gYNbaIuv4psde+ACRoxCkOzCPCv2vygU6rC5dnsWlipPczVB6GgwF11j0MLg=
-X-Received: by 2002:a1f:b688:0:b0:43c:5f0e:2399 with SMTP id
- g130-20020a1fb688000000b0043c5f0e2399mr7039754vkf.1.1680794218209; Thu, 06
- Apr 2023 08:16:58 -0700 (PDT)
+        Thu, 6 Apr 2023 11:20:39 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C319747;
+        Thu,  6 Apr 2023 08:20:35 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 55C7918837A6;
+        Thu,  6 Apr 2023 15:20:32 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 1E16725002FD;
+        Thu,  6 Apr 2023 15:20:32 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id F1F5A9B403F4; Thu,  6 Apr 2023 15:20:31 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 5442891201E3;
+        Thu,  6 Apr 2023 15:20:31 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+In-Reply-To: <20230330150752.gdquw5kudtrqgzyz@skbuf>
+References: <20230327160009.bdswnalizdv2u77z@skbuf>
+ <87pm8tooe1.fsf@kapio-technology.com>
+ <20230327225933.plm5raegywbe7g2a@skbuf>
+ <87ileljfwo.fsf@kapio-technology.com>
+ <20230328114943.4mibmn2icutcio4m@skbuf>
+ <87cz4slkx5.fsf@kapio-technology.com>
+ <20230330124326.v5mqg7do25tz6izk@skbuf>
+ <87wn2yxunb.fsf@kapio-technology.com>
+ <20230330130936.hxme34qrqwolvpsh@skbuf>
+ <875yaimgro.fsf@kapio-technology.com>
+ <20230330150752.gdquw5kudtrqgzyz@skbuf>
+Date:   Thu, 06 Apr 2023 17:17:46 +0200
+Message-ID: <87o7o1ox9h.fsf@kapio-technology.com>
 MIME-Version: 1.0
-References: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net> <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
-In-Reply-To: <20230406-feature-controls-lens-v1-1-543189a680de@wolfvision.net>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Thu, 6 Apr 2023 16:16:42 +0100
-Message-ID: <CAPY8ntArOOqPQzvkJrQEyuVFfb6j8x6WODTMHOn1qHPU588mbQ@mail.gmail.com>
-Subject: Re: [libcamera-devel] [PATCH RFC 1/4] media: v4l2-ctrls: add lens
- group status controls for zoom and focus
-To:     michael.riesch@wolfvision.net
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Riesch via B4 Relay 
-        <devnull+michael.riesch.wolfvision.net@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        libcamera-devel@lists.libcamera.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael
+On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
+> As a bug fix, stop reporting to switchdev those FDB entries with
+> BR_FDB_ADDED_BY_USER && !BR_FDB_STATIC. Then, after "net" is merged into
+> "net-next" next Thursday (the ship has sailed for today), add "bool static"
 
-Thanks for the patch.
-
-I've got a personal interest here as I'd love to be able to control a
-couple of CCTV lenses that I have. Those have standard motors with
-potentiometers for position feedback, not stepper motors, but
-otherwise have the same limitations of slow movement.
-
-On Thu, 6 Apr 2023 at 15:31, Michael Riesch via B4 Relay via
-libcamera-devel <libcamera-devel@lists.libcamera.org> wrote:
->
-> From: Michael Riesch <michael.riesch@wolfvision.net>
->
-> Add the controls V4L2_CID_FOCUS_STATUS and V4L2_CID_ZOOM_STATUS that report
-> the status of the zoom lens group and the focus lens group, respectively.
-> The returned data structure contains the current position of the lens group
-> as well as movement indication flags.
->
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> ---
->  .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 48 ++++++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-core.c          |  9 ++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  7 ++++
->  include/media/v4l2-ctrls.h                         |  2 +
->  include/uapi/linux/v4l2-controls.h                 | 13 ++++++
->  include/uapi/linux/videodev2.h                     |  2 +
->  6 files changed, 81 insertions(+)
->
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> index daa4f40869f8..3a270bc63f1a 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> @@ -149,6 +149,30 @@ enum v4l2_exposure_metering -
->      to the camera, negative values towards infinity. This is a
->      write-only control.
->
-> +``V4L2_CID_FOCUS_STATUS (struct)``
-> +    The current status of the focus lens group. This is a read-only control.
-> +    The returned data structure contains the current position and movement
-> +    indication flags. The unit of the current position is undefined. Positive
-> +    values move the focus closer to the camera, negative values towards
-> +    infinity. The possible flags are described in the table below.
-
-The units are undefined, but positive and negative mean something with
-respect to some unspecified focal distance represented by 0. That
-seems a little odd.
-
-I was going to suggest that it seems to make sense to follow the same
-units as V4L2_CID_FOCUS_ABSOLUTE, but on reading that description in
-[1] it's the same text.
-I suspect there was a little too much copy/paste from
-V4L2_CID_FOCUS_RELATIVE, or the intent was that increasing the value
-brings the focus closer, and decreasing moves it towards infinity.
-
-If we did specify that it was the same units as
-V4L2_CID_FOCUS_ABSOLUTE, then what would that mean for use with
-V4L2_CID_FOCUS_RELATIVE? Then again the only user of _RELATIVE appears
-to be ov5693 with atomisp and that just maps it onto _ABSOLUTE, so
-potentially it's redundant and could be deprecated.
-
-[1] https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/ext-ctrls-camera.html
-
-> +
-> +.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_LENS_STATUS_IDLE``
-> +      - Focus lens group is at rest.
-> +    * - ``V4L2_LENS_STATUS_BUSY``
-> +      - Focus lens group is moving.
-> +    * - ``V4L2_LENS_STATUS_REACHED``
-> +      - Focus lens group has reached its target position.
-> +    * - ``V4L2_LENS_STATUS_FAILED``
-> +      - Focus lens group has failed to reach its target position. The driver
-> +       will not transition from this state until another action is performed
-> +       by an application.
-
-When would the lens state transition from V4L2_LENS_STATUS_REACHED to
-V4L2_LENS_STATUS_IDLE?
-If it's reached the position then it is at rest, and being at rest is
-the definition of V4L2_LENS_STATUS_IDLE.
-Likewise the lens always has a target position based on the control
-value, so it's always at V4L2_LENS_STATUS_REACHED when it's not
-moving.
-Is there a need to have 2 states?
-
-If the position is the same units as V4L2_CID_FOCUS_ABSOLUTE, then do
-you leave the determination of state to the application?
-
->  ``V4L2_CID_FOCUS_AUTO (boolean)``
->      Enables continuous automatic focus adjustments. The effect of manual
->      focus adjustments while this feature is enabled is undefined,
-> @@ -239,6 +263,30 @@ enum v4l2_auto_focus_range -
->      movement. A negative value moves the zoom lens group towards the
->      wide-angle direction. The zoom speed unit is driver-specific.
->
-> +``V4L2_CID_ZOOM_STATUS (struct)``
-> +    The current status of the zoom lens group. This is a read-only control.
-> +    The returned data structure contains the current position and movement
-> +    indication flags. The unit of the current position is driver-specific and
-> +    its value should be a positive integer. The possible flags are described
-> +    in the table below.
-> +
-> +.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_LENS_STATUS_IDLE``
-> +      - Zoom lens group is at rest.
-> +    * - ``V4L2_LENS_STATUS_BUSY``
-> +      - Zoom lens group is moving.
-> +    * - ``V4L2_LENS_STATUS_REACHED``
-> +      - Zoom lens group has reached its target position.
-> +    * - ``V4L2_LENS_STATUS_FAILED``
-> +      - Zoom lens group has failed to reach its target position. The driver will
-> +       not transition from this state until another action is performed by an
-> +       application.
-> +
->  ``V4L2_CID_IRIS_ABSOLUTE (integer)``
->      This control sets the camera's aperture to the specified value. The
->      unit is undefined. Larger values open the iris wider, smaller values
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> index 29169170880a..f6ad30f311c5 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> @@ -350,6 +350,9 @@ void v4l2_ctrl_type_op_log(const struct v4l2_ctrl *ctrl)
->         case V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS:
->                 pr_cont("HEVC_DECODE_PARAMS");
->                 break;
-> +       case V4L2_CTRL_TYPE_LENS_STATUS:
-> +               pr_cont("LENS_STATUS");
-> +               break;
->         default:
->                 pr_cont("unknown type %d", ctrl->type);
->                 break;
-> @@ -918,6 +921,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
->                         return -EINVAL;
->                 break;
->
-> +       case V4L2_CTRL_TYPE_LENS_STATUS:
-> +               break;
-> +
->         default:
->                 return -EINVAL;
->         }
-> @@ -1605,6 +1611,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
->         case V4L2_CTRL_TYPE_AREA:
->                 elem_size = sizeof(struct v4l2_area);
->                 break;
-> +       case V4L2_CTRL_TYPE_LENS_STATUS:
-> +               elem_size = sizeof(struct v4l2_ctrl_lens_status);
-> +               break;
->         default:
->                 if (type < V4L2_CTRL_COMPOUND_TYPES)
->                         elem_size = sizeof(s32);
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 564fedee2c88..9b26a3aa9e9c 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1044,6 +1044,8 @@ const char *v4l2_ctrl_get_name(u32 id)
->         case V4L2_CID_CAMERA_ORIENTATION:       return "Camera Orientation";
->         case V4L2_CID_CAMERA_SENSOR_ROTATION:   return "Camera Sensor Rotation";
->         case V4L2_CID_HDR_SENSOR_MODE:          return "HDR Sensor Mode";
-> +       case V4L2_CID_FOCUS_STATUS:             return "Focus, Status";
-> +       case V4L2_CID_ZOOM_STATUS:              return "Zoom, Status";
-
-Is there a need for the comma in the text strings?
-
-Cheers
-  Dave
-
->
->         /* FM Radio Modulator controls */
->         /* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> @@ -1593,6 +1595,11 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->                 *flags |= V4L2_CTRL_FLAG_WRITE_ONLY |
->                           V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
->                 break;
-> +       case V4L2_CID_FOCUS_STATUS:
-> +       case V4L2_CID_ZOOM_STATUS:
-> +               *type = V4L2_CTRL_TYPE_LENS_STATUS;
-> +               *flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE;
-> +               break;
->         case V4L2_CID_FLASH_STROBE_STATUS:
->         case V4L2_CID_AUTO_FOCUS_STATUS:
->         case V4L2_CID_FLASH_READY:
-> diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-> index e59d9a234631..f7273ffc20c9 100644
-> --- a/include/media/v4l2-ctrls.h
-> +++ b/include/media/v4l2-ctrls.h
-> @@ -52,6 +52,7 @@ struct video_device;
->   * @p_hdr10_cll:               Pointer to an HDR10 Content Light Level structure.
->   * @p_hdr10_mastering:         Pointer to an HDR10 Mastering Display structure.
->   * @p_area:                    Pointer to an area.
-> + * @p_lens_status:             Pointer to a lens status structure.
->   * @p:                         Pointer to a compound value.
->   * @p_const:                   Pointer to a constant compound value.
->   */
-> @@ -81,6 +82,7 @@ union v4l2_ctrl_ptr {
->         struct v4l2_ctrl_hdr10_cll_info *p_hdr10_cll;
->         struct v4l2_ctrl_hdr10_mastering_display *p_hdr10_mastering;
->         struct v4l2_area *p_area;
-> +       struct v4l2_ctrl_lens_status *p_lens_status;
->         void *p;
->         const void *p_const;
->  };
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index 5e80daa4ffe0..8b037467ba9a 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -993,6 +993,19 @@ enum v4l2_auto_focus_range {
->
->  #define V4L2_CID_HDR_SENSOR_MODE               (V4L2_CID_CAMERA_CLASS_BASE+36)
->
-> +struct v4l2_ctrl_lens_status {
-> +       __u32 flags;
-> +       __s32 current_position;
-> +};
-> +
-> +#define V4L2_LENS_STATUS_IDLE                  (0 << 0)
-> +#define V4L2_LENS_STATUS_BUSY                  (1 << 0)
-> +#define V4L2_LENS_STATUS_REACHED               (1 << 1)
-> +#define V4L2_LENS_STATUS_FAILED                        (1 << 2)
-> +
-> +#define V4L2_CID_FOCUS_STATUS                  (V4L2_CID_CAMERA_CLASS_BASE + 37)
-> +#define V4L2_CID_ZOOM_STATUS                   (V4L2_CID_CAMERA_CLASS_BASE + 38)
-> +
->  /* FM Modulator class control IDs */
->
->  #define V4L2_CID_FM_TX_CLASS_BASE              (V4L2_CTRL_CLASS_FM_TX | 0x900)
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 17a9b975177a..256c21c68720 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -1888,6 +1888,8 @@ enum v4l2_ctrl_type {
->         V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS        = 0x0272,
->         V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX      = 0x0273,
->         V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS       = 0x0274,
-> +
-> +       V4L2_CTRL_TYPE_LENS_STATUS              = 0x0300,
->  };
->
->  /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
->
-> --
-> 2.30.2
->
+It is probably too late today (now I have a Debian based VM that can do
+the selftests), but with this bug fix I have 1) not submitted bug fixes
+before and 2) it probably needs an appropriate explanation, where I
+don't know the problem well enough for general switchcores to submit
+with a suitable text.
