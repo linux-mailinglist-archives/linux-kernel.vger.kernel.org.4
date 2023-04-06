@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A806D9FFA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8426DA000
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240240AbjDFSi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S239655AbjDFSjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240242AbjDFSi5 (ORCPT
+        with ESMTP id S238976AbjDFSj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:38:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A777E5FDB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680806289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cL0xEv36os7K6igc2mQAflPTjWsCcGWjiQ4JpavLjnU=;
-        b=Yy9eM+eMTQ1V1UjpsAGiDyVGbAnbN3nHk+MakqTnF8S0TEAjfEdLeQNDdzd1IAKYq6Dws3
-        G6X3aQ6KoEvYrNX3elZblmSlLkngH8DOt4XOWoibeg/9jqE+TKUgY7NQcCT4qi44ZBetJW
-        KDFImEFGvL+oE29rLghQiYE9hcSRlrw=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-215-uQp7gJRbMMiS-I0FS_r8kA-1; Thu, 06 Apr 2023 14:38:08 -0400
-X-MC-Unique: uQp7gJRbMMiS-I0FS_r8kA-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-4fa77edcbf5so762683a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:38:08 -0700 (PDT)
+        Thu, 6 Apr 2023 14:39:29 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E7672BC
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:39:20 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id a44so22957752ljr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680806358;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DzdRb6pnkmsus+yIRwXbtWlbX60lc0X5WvMqlzQrDnw=;
+        b=X2Gjkg08dhQfvA179XoZ/xMR768GPvfiMhSriliUPS2VW6IF+caRHk3oyvVi7zwceb
+         rqYCEXyxbM47uvulQ890YxCwMio7oYiokZU2Q2jZhV26zZNSDHH9/llKN7QMvPHwijoB
+         k9EhQm1tsSNbf9P+mHF3sTpNQfqODiLXNa2JNoUVN+pORj0bkoQB9VgOokmYekFC//8T
+         ciHran2eaQcJEHjLnY3Gp0WpL++IGG6DSMQSXZ4UvxjGlhCI2gxMgvG+jL166wo+n6ir
+         SeM2dr+e68hlv6tP2zTG1o3cIlQ4PJhsocx6ilN9qs9kyYpThk0Qvjf4a8FHQo1RzQiZ
+         dm8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680806287;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cL0xEv36os7K6igc2mQAflPTjWsCcGWjiQ4JpavLjnU=;
-        b=uSegcLReoP5ViUviY9eNsrNAKav96d82ouY6w7VJbiAzdEqbp8hyG0D7WAYqk+FO7d
-         CxyF6i7MT9HmfSQ+UGfZDVjQva5eugPsF4g8dFfNBzx8dRB0BKAWi6pO8hssUEhwMayc
-         XZ2KbdIupesgjHJQz+gDEYNf2MuN4lEusTaNr2ZoD3F4EperOKhj50BA2ycTP8mOtsjA
-         7CVdMWBOLkzLiCa6ldrNI3WmFcVWUIWMLoI3GfRIMATNoqxGug7+nysK5EzcdXdAwkxe
-         bkBFf9A5tOFtfWNJ53R8tvbUFTlidCjkb8ZZA5X5QkB8VeResJ6QhN3dZzlYbfsGJacJ
-         IE5g==
-X-Gm-Message-State: AAQBX9fpYdWPO0FlGieKgTw+F+d1+HNcsE3iT/7iMOsseOSw6DdxI0ZU
-        gEdp6iBAhKE7iXFOlHeYW1M3xzm9dGAXIWMs3irsOz6qmWSagJJLGvlR+ri9SQ7YOwDcTFvGIQ+
-        jou0PpJ+fVCaTpEXib83s9yy9
-X-Received: by 2002:a05:6402:70e:b0:4fc:535c:3aa1 with SMTP id w14-20020a056402070e00b004fc535c3aa1mr475747edx.10.1680806287233;
-        Thu, 06 Apr 2023 11:38:07 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bn8KXU73iNBODtP7YbUGAxE1utUCnkQ8ktBabX2iMDmsXj0FzDJn95e86pszBxnyLCKIdpYQ==
-X-Received: by 2002:a05:6402:70e:b0:4fc:535c:3aa1 with SMTP id w14-20020a056402070e00b004fc535c3aa1mr475715edx.10.1680806286873;
-        Thu, 06 Apr 2023 11:38:06 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id x102-20020a50baef000000b004af73333d6esm1047561ede.53.2023.04.06.11.38.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 11:38:06 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 3FD93A746CA; Thu,  6 Apr 2023 20:38:05 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Kal Conley <kal.conley@dectris.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        d=1e100.net; s=20210112; t=1680806358;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DzdRb6pnkmsus+yIRwXbtWlbX60lc0X5WvMqlzQrDnw=;
+        b=poJPLXsX+9Hp3GkAitbUbBZ8yXM1F+dWUMMO7lBGWji8qG3a9OxL/VT+7ZBQlyXfOH
+         GFl8m4D0YFgYNvapQuS1uDCOj7uA3MijdRSHbb9BDy7Czx3JoGSHszerYAi1AkavwVOz
+         A3eioFhVgwHNlT+sTD20PLNZn2lRKZpQ6+nVmm6xpWYWkHCm65DdQLBhXYgYQp+KrkjV
+         n42CmZPNWuKaPf63SV2nFmehqcQ2lfRUYmZhcjGvE/of2jESEIrwwkkv3Ujy+Nhfy0Id
+         HA9/l+LvsVWAoDJDgDEEw4F/asvUqDGRb1D4ONYxIWgYOcFeElCyu3zdk96UPza3EV0h
+         S92A==
+X-Gm-Message-State: AAQBX9fku44aj2uxvP9KPvcdnzhzHtNuMK/ugT7XeT1BoEQPek9S7ksf
+        03KukDyScgqrHotTgl65LRQRgw==
+X-Google-Smtp-Source: AKy350a3OD9HVmDgKylvrWyF5U95HSWfUl8N+EQpPalZT/JEENS+L64vmodPR1w4RzfkvCnGXQavIw==
+X-Received: by 2002:a2e:3814:0:b0:295:a958:2bca with SMTP id f20-20020a2e3814000000b00295a9582bcamr3199301lja.6.1680806358396;
+        Thu, 06 Apr 2023 11:39:18 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05651c102c00b0029b32a40934sm385427ljm.113.2023.04.06.11.39.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 11:39:17 -0700 (PDT)
+Message-ID: <5437085b-706b-2f9a-686e-b95a9a0e6993@linaro.org>
+Date:   Thu, 6 Apr 2023 20:39:11 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: Convert ATH10K to YAML
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/3] xsk: Support UMEM chunk_size > PAGE_SIZE
-In-Reply-To: <20230406130205.49996-2-kal.conley@dectris.com>
-References: <20230406130205.49996-1-kal.conley@dectris.com>
- <20230406130205.49996-2-kal.conley@dectris.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 06 Apr 2023 20:38:05 +0200
-Message-ID: <87sfdckgaa.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
+ <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
+ <223892d0-9b1b-9459-dec1-574875f7c1c6@linaro.org>
+ <8c818f95-b4a4-658f-701d-3151afdd5179@linaro.org>
+ <6720f61e-550f-6e16-8860-54233a3ea069@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <6720f61e-550f-6e16-8860-54233a3ea069@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kal Conley <kal.conley@dectris.com> writes:
 
-> Add core AF_XDP support for chunk sizes larger than PAGE_SIZE. This
-> enables sending/receiving jumbo ethernet frames up to the theoretical
-> maxiumum of 64 KiB. For chunk sizes > PAGE_SIZE, the UMEM is required
-> to consist of HugeTLB VMAs (and be hugepage aligned). Initially, only
-> SKB mode is usable pending future driver work.
 
-Hmm, interesting. So how does this interact with XDP multibuf?
+On 6.04.2023 20:30, Krzysztof Kozlowski wrote:
+> On 06/04/2023 20:26, Konrad Dybcio wrote:
+> 
+>>>> +        interrupts:
+>>>> +          items:
+>>>> +            - description: CE0
+>>>> +            - description: CE1
+>>>> +            - description: CE2
+>>>> +            - description: CE3
+>>>> +            - description: CE4
+>>>> +            - description: CE5
+>>>> +            - description: CE6
+>>>> +            - description: CE7
+>>>> +            - description: CE8
+>>>> +            - description: CE9
+>>>> +            - description: CE10
+>>>> +            - description: CE11
+>>>
+>>> What about interrupt-names here? If they are not expected, then just
+>>> interrupt-names: false
+>> They obviously wouldn't hurt, but they're unused on the driver side:
+>>
+>> for (i = 0; i < CE_COUNT; i++) {
+>> 		ret = platform_get_irq(ar_snoc->dev, i);
+>>
+>> So I will forbid them.
+> 
+> Assuming DTS does not have them.
+Tested locally, no warnings, so looks like nobody used them in dt.
 
--Toke
-
+Konrad
+> 
+> Best regards,
+> Krzysztof
+> 
