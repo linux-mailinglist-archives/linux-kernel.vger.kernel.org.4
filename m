@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16CFB6D8D63
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4A56D8D61
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbjDFCU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 22:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S234568AbjDFCUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 22:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjDFCU5 (ORCPT
+        with ESMTP id S229631AbjDFCUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 22:20:57 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5784B6E88;
-        Wed,  5 Apr 2023 19:20:55 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id C69C124E25E;
-        Thu,  6 Apr 2023 10:20:53 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 6 Apr
- 2023 10:20:53 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 6 Apr
- 2023 10:20:53 +0800
-Message-ID: <42bdb4e2-bb18-5e4d-f6fb-68564c89efee@starfivetech.com>
-Date:   Thu, 6 Apr 2023 10:20:50 +0800
+        Wed, 5 Apr 2023 22:20:12 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58036EAF;
+        Wed,  5 Apr 2023 19:20:11 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id z11so24912329pfh.4;
+        Wed, 05 Apr 2023 19:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680747611;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QPttce9mwmXnSVxB26FbEZfZew9OpavH8s0yj1jWAxQ=;
+        b=FFnWjHp1JyVAdpXSYKsLs04rmCn/J2U/vI6DrqybZIScrcKTCtwyhmRW+kbIEPN7ha
+         2tUSl4YGQ/Vjx/kpH03mIbQ62YEkKX7j8RLdbRqvqTXpS8ThznMXKs65Tgvs8u08pTc6
+         mri3CqlPB393s4ENfHkYnZhV0+BmTY3pEIG0qJO/2pr+BPAeSrIKoqUxLb2zhVLrBFgy
+         Cu/JWGzMOCcE9HrzJbDXJiWBJJVYcKztmEyVOR5e/+wh9ARFfFrNSwGlpcUM9Xkf65xR
+         h2RPMjjVmVXjzzRzBq27I0h+V7nNnOJUDEGxfhRnlJhEtZLz0rt12SiFOmiYyVbovT8U
+         uPEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680747611;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QPttce9mwmXnSVxB26FbEZfZew9OpavH8s0yj1jWAxQ=;
+        b=ClgcBO3COgXZrB5JkAHrXbL3Bjchya4xnJ+aBYqjLQ3u/1nqoCspT45CbTF8lXDl/R
+         7VPHdFN9dF6h/jFmyQbofHqvjE4bV9eU5xsLd1sVjTEQdQSFwgDenCTduqmOiXd3nT6X
+         VtKMpzT96MLcNFmMH5BI5QROZKEPRcvnFIue8ZrV66Izn8es188h89WAO7kzR65BICfq
+         CVrEt7p6ODxGK8jSFoPJSbFlL7CyMGDYDA9LPerpv3N/yD9GVcFrWUf6lMxFPNQGTLFa
+         pnMvnatmvtYXsZ8HwCBQVyRg8Xg/+1BaK+MmOKSb0R8toj4i5CklRW5v2S1sBENFXDjk
+         kgtw==
+X-Gm-Message-State: AAQBX9cMN92jg/L4ahs/UF/ejUQX0yQKrUNpzFng3QbRu3Qc5d8S85+q
+        bfU6JbWeqQk6z16+9o3QCvpKgOoT2DT2W03kX+c=
+X-Google-Smtp-Source: AKy350ah/yAbNH61dTfsbN07VXnYGkfpcj6Q1ghmXf8mxiMvh8fyNX8pjOrxn77qIo7g1qOrHpABjcAD/0nRU8I3M3g=
+X-Received: by 2002:a05:6a00:174f:b0:62a:424b:2af0 with SMTP id
+ j15-20020a056a00174f00b0062a424b2af0mr4713798pfc.0.1680747611176; Wed, 05 Apr
+ 2023 19:20:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RESEND v6 1/2] dt-bindings: soc: starfive: Add StarFive syscon
- doc
-To:     Conor Dooley <conor@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
-References: <20230315055813.94740-1-william.qiu@starfivetech.com>
- <20230315055813.94740-2-william.qiu@starfivetech.com>
- <850bc37e-c6d1-2381-a851-965a4cbee8a0@linaro.org>
- <e38efd81-9c79-553b-7556-7aff30f6ec50@starfivetech.com>
- <f25cc55e-3405-4b17-fb45-5ae5eb36a404@linaro.org>
- <d0b1d44e-6d6e-536c-046e-be6a53f1d240@starfivetech.com>
- <20230405-bullseye-handsaw-5c2e4dab772f@spud>
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <20230405-bullseye-handsaw-5c2e4dab772f@spud>
+References: <20230403095200.1391782-1-korantwork@gmail.com> <168063175075.174995.217166777153935864.b4-ty@google.com>
+In-Reply-To: <168063175075.174995.217166777153935864.b4-ty@google.com>
+From:   Xinghui Li <korantwork@gmail.com>
+Date:   Thu, 6 Apr 2023 10:21:20 +0800
+Message-ID: <CAEm4hYV-M1sbboOon_O=eRsk6LEgwog+oUKBpdnAkchs=KMWEw@mail.gmail.com>
+Subject: Re: [PATCH REBASED] KVM: x86: SVM: Fix one redefine issue about VMCB_AVIC_APIC_BAR_MASK
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        mlevitsk@redhat.com, linux-kernel@vger.kernel.org, x86@kernel.org,
+        kvm@vger.kernel.org, Xinghui Li <korantli@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 5, 2023 at 7:44=E2=80=AFAM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Mon, 03 Apr 2023 17:52:00 +0800, korantwork@gmail.com wrote:
+> > VMCB_AVIC_APIC_BAR_MASK is defined twice with the same value in svm.h,
+> > which is meaningless. Delete the duplicate one.
+>
+> Applied to kvm-x86 svm, thanks!
+>
+> In the future, please don't use "PATCH REBASED".  If you're sending a new
+> version of a patch that's been rebased, then the revision number needs to=
+ be
+> bumped.  The fact that the only change is that the patch was rebased isn'=
+t
+> relevant as far as versioning is concerned, it's still a new version.  Th=
+e
+> cover letter and/or ignored part of the patch is where the delta between
+> versions should be captured.
+>
+> And in this case, there really was no need to send a new version, the ori=
+ginal
+> patch still applies cleanly.  I suspect that the REBASED version was sent=
+ as a
+> form of a ping, which again is not the right way to ping a patch/series. =
+ If you
+> want to ping, please reply to the original patch.  Unnecessarily sending =
+new
+> versions means more patches to sort through, i.e. makes maintainers lives=
+ harder,
+> not easier.
+>
+Firstly, I'm so so SORRY to burden you in this way.
+I found the last patch can't be am directly, so I send a new patch
+with the last rebased code.
+I used to believe that this would alleviate your burden, but
+unfortunately, it had the opposite effect.
+Again, sorry for my wrong operation.
 
-
-On 2023/4/6 0:38, Conor Dooley wrote:
-> On Mon, Mar 20, 2023 at 03:32:14PM +0800, William Qiu wrote:
-> 
->> >>> Does not look like you tested the bindings. Please run `make
->> >>> dt_binding_check` (see
->> >>> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->> >>>
->> >>> ... or your PLL clock controller was not tested.
->> >>>
->> >>> Best regards,
->> >>> Krzysztof
->> >>>
->> >> Hi Krzysztof,
->> >> 
->> >> I've already done`make dt_binding_check`, and get no error. So maybe PLL clock controller
->> >> was not tested which I didn't add in this patch series. And PLL clock controller belongs
->> >> to Xingyu Wu, I would tell him.
->> > 
->> > What's confusing you do not allow here clock controller.
-> 
->> I'll add it then.
-> 
-> What's the plan here William?
-> Can you sort something out with Xingyu Wu so that the dt-binding is
-> added in a complete manner?
-> In the meantime, gonna drop this series as "Changes Requested" from
-> patchwork.
-> 
-> Cheers,
-> Conor.
-
-Hi Conor,
-
-After discussing with Xingyu, I will sort all of it and send a complete
-dt-binding today.
-
-Best regards,
-William
+Thanks~
