@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DBC6D8CEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F326D8CF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbjDFBqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S234802AbjDFBuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 21:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjDFBqO (ORCPT
+        with ESMTP id S233641AbjDFBuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:46:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3216C729B;
-        Wed,  5 Apr 2023 18:46:13 -0700 (PDT)
+        Wed, 5 Apr 2023 21:50:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3EA65A9;
+        Wed,  5 Apr 2023 18:50:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB13E642E7;
-        Thu,  6 Apr 2023 01:46:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7A6C433D2;
-        Thu,  6 Apr 2023 01:46:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD399642E0;
+        Thu,  6 Apr 2023 01:50:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A1FC433D2;
+        Thu,  6 Apr 2023 01:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680745572;
-        bh=HDCBusMkO55J/81bAiDcUmDhrM9EeFRF67au4Tkp4JU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ckJt/UhduAy2IEVvv/Nexydv+11FUQggOYVoeE2xOeRohO7HfM9FCbpxGgQ8IZjeO
-         X0CfjbmDwZyC0uyJi6SPW40YlTG4Ecg59sEDFNJbeUcjPTz37n69g1/E4Zl0YH59+f
-         DzKnl4+3lnDxOn3rzoUCuthMlbMSGznw6gueDK3MkLXuaVvT5qWlxr7rG7Ydxbg2Xb
-         rfyq3Np4x+FVVDFaXaxbVPqiHt3Js3IZ45uQ9+hRJTISv5IgEBJTc7g4c6h4a4i+QP
-         9IkLgRlBBQRkiD5wGuXr8C1GlE6tLIHCLlSiJzl7BLvYInGTCdkU8vfg5Ve1vh7W+M
-         Y1maXJ7COXfUw==
-Date:   Thu, 6 Apr 2023 10:46:07 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: Re: [PATCH] tracing: Free error logs of tracing instances
-Message-Id: <20230406104607.b6ccc8b969d5031275ad0764@kernel.org>
-In-Reply-To: <20230404194504.5790b95f@gandalf.local.home>
-References: <20230404194504.5790b95f@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        s=k20201202; t=1680745805;
+        bh=xgpkfNiyM2OsqZ9AjY4VjyDtc1aONna/URR/VaLtHlg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aAton7TQlCgNxi38nrF0Di/+BG0JaOPRYgDRjd1hEVudb3rurcj+JPE0hrpS3vP5m
+         kLdFzQLeoFO56ngekzX4tlDDvgneNXs2IdyLX8wM8TFOAwo+fbg0nBJL5GzOJutRQQ
+         jR9xmxItGDDCvR+PCEOPfCVEIW7/CfpSfqQ5o5J/qsIjAvT1OJq14igoRsFBs4EOAV
+         exhqmAZpsf8eXQXoSl2iwZxvW4CTjZ4TOYr4/soe3ULjuM2g70H68PflMyx4rqbtpr
+         0LrcBmGc+VK7K+n3Zwr78O4tpUkonUXd8mhRnN/Dk4pOKux0Gu6DZ2FWpazv9NS2cW
+         hg3kSO5Ef2qJQ==
+Message-ID: <9dc4ba32-5be5-26d8-5dd2-9bd48d6b0af4@kernel.org>
+Date:   Thu, 6 Apr 2023 09:50:01 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [f2fs-dev] [PATCH] f2fs: get out of a repeat loop when getting a
+ locked data page
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
+References: <20230323213919.1876157-1-jaegeuk@kernel.org>
+ <8aea02b0-86f9-539a-02e9-27b381e68b66@kernel.org>
+ <ZCG2mfviZfY1dqb4@google.com> <ZCHCykI/BLcfDzt7@casper.infradead.org>
+ <ZC2kSfNUXKK4PfpM@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZC2kSfNUXKK4PfpM@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,99 +63,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 19:45:04 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On 2023/4/6 0:39, Jaegeuk Kim wrote:
+> On 03/27, Matthew Wilcox wrote:
+>> On Mon, Mar 27, 2023 at 08:30:33AM -0700, Jaegeuk Kim wrote:
+>>> On 03/26, Chao Yu wrote:
+>>>> On 2023/3/24 5:39, Jaegeuk Kim wrote:
+>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216050
+>>>>>
+>>>>> Somehow we're getting a page which has a different mapping.
+>>>>> Let's avoid the infinite loop.
+>>>>>
+>>>>> Cc: <stable@vger.kernel.org>
+>>>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>>>> ---
+>>>>>    fs/f2fs/data.c | 8 ++------
+>>>>>    1 file changed, 2 insertions(+), 6 deletions(-)
+>>>>>
+>>>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>>>> index bf51e6e4eb64..80702c93e885 100644
+>>>>> --- a/fs/f2fs/data.c
+>>>>> +++ b/fs/f2fs/data.c
+>>>>> @@ -1329,18 +1329,14 @@ struct page *f2fs_get_lock_data_page(struct inode *inode, pgoff_t index,
+>>>>>    {
+>>>>>    	struct address_space *mapping = inode->i_mapping;
+>>>>>    	struct page *page;
+>>>>> -repeat:
+>>>>> +
+>>>>>    	page = f2fs_get_read_data_page(inode, index, 0, for_write, NULL);
+>>>>>    	if (IS_ERR(page))
+>>>>>    		return page;
+>>>>>    	/* wait for read completion */
+>>>>>    	lock_page(page);
+>>>>> -	if (unlikely(page->mapping != mapping)) {
+>>>>
+>>>> How about using such logic only for move_data_page() to limit affect for
+>>>> other paths?
+>>>
+>>> Why move_data_page() only? If this happens, we'll fall into a loop in anywhere?
+>>>
+>>>>
+>>>> Jaegeuk, any thoughts about why mapping is mismatch in between page's one and
+>>>> inode->i_mapping?
+>>>
+>>>>
+>>>> After several times code review, I didn't get any clue about why f2fs always
+>>>> get the different mapping in a loop.
+>>>
+>>> I couldn't find the path to happen this. So weird. Please check the history in the
+>>> bug.
+>>>
+>>>>
+>>>> Maybe we can loop MM guys to check whether below folio_file_page() may return
+>>>> page which has different mapping?
+>>>
+>>> Matthew may have some idea on this?
+>>
+>> There's a lot of comments in the bug ... hard to come into this one
+>> cold.
+>>
+>> I did notice this one (#119):
+>> : Interestingly, ref count is 514, which looks suspiciously as a binary
+>> : flag 1000000010. Is it possible that during 5.17/5.18 implementation
+>> : of a "pin", somehow binary flag was written to ref count, or something
+>> : like '1 << ...' happens?
+>>
+>> That indicates to me that somehow you've got hold of a THP that is in
+>> the page cache.  Probably shmem/tmpfs.  That indicate to me a refcount
+>> problem that looks something like this:
+>>
+>> f2fs allocates a page
+>> f2fs adds the page to the page cache
+>> f2fs puts the reference to the page without removing it from the
+>> page cache (how?)
+> 
+> Is it somewhat related to setting a bit in private field?
 
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> When a tracing instance is removed, the error messages that hold errors
-> that occurred in the instance needs to be freed. The following reports a
-> memory leak:
-> 
->  # cd /sys/kernel/tracing
->  # mkdir instances/foo
->  # echo 'hist:keys=x' > instances/foo/events/sched/sched_switch/trigger
->  # cat instances/foo/error_log
->  [  117.404795] hist:sched:sched_switch: error: Couldn't find field
->    Command: hist:keys=x
->                       ^
->  # rmdir instances/foo
-> 
-> Then check for memory leaks:
-> 
->  # echo scan > /sys/kernel/debug/kmemleak
->  # cat /sys/kernel/debug/kmemleak
-> unreferenced object 0xffff88810d8ec700 (size 192):
->   comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
->   hex dump (first 32 bytes):
->     60 dd 68 61 81 88 ff ff 60 dd 68 61 81 88 ff ff  `.ha....`.ha....
->     a0 30 8c 83 ff ff ff ff 26 00 0a 00 00 00 00 00  .0......&.......
->   backtrace:
->     [<00000000dae26536>] kmalloc_trace+0x2a/0xa0
->     [<00000000b2938940>] tracing_log_err+0x277/0x2e0
->     [<000000004a0e1b07>] parse_atom+0x966/0xb40
->     [<0000000023b24337>] parse_expr+0x5f3/0xdb0
->     [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
->     [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
->     [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
->     [<000000002cadc509>] vfs_write+0x162/0x670
->     [<0000000059c3b9be>] ksys_write+0xca/0x170
->     [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
->     [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> unreferenced object 0xffff888170c35a00 (size 32):
->   comm "bash", pid 869, jiffies 4294950577 (age 215.752s)
->   hex dump (first 32 bytes):
->     0a 20 20 43 6f 6d 6d 61 6e 64 3a 20 68 69 73 74  .  Command: hist
->     3a 6b 65 79 73 3d 78 0a 00 00 00 00 00 00 00 00  :keys=x.........
->   backtrace:
->     [<000000006a747de5>] __kmalloc+0x4d/0x160
->     [<000000000039df5f>] tracing_log_err+0x29b/0x2e0
->     [<000000004a0e1b07>] parse_atom+0x966/0xb40
->     [<0000000023b24337>] parse_expr+0x5f3/0xdb0
->     [<00000000594ad074>] event_hist_trigger_parse+0x27f8/0x3560
->     [<00000000293a9645>] trigger_process_regex+0x135/0x1a0
->     [<000000005c22b4f2>] event_trigger_write+0x87/0xf0
->     [<000000002cadc509>] vfs_write+0x162/0x670
->     [<0000000059c3b9be>] ksys_write+0xca/0x170
->     [<00000000f1cddc00>] do_syscall_64+0x3e/0xc0
->     [<00000000868ac68c>] entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> 
-> The problem is that the error log needs to be freed when the instance is
-> removed.
-> 
-> Link: https://lore.kernel.org/lkml/76134d9f-a5ba-6a0d-37b3-28310b4a1e91@alu.unizg.hr/
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 2f754e771b1a6 ("tracing: Have the error logs show up in the proper instances")
-> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+IIUC, it looks the page reference is added/removed as pair.
 
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you!
-
-> ---
->  kernel/trace/trace.c | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 8ae51f1dea8e..352a804b016d 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -9516,6 +9516,7 @@ static int __remove_instance(struct trace_array *tr)
->  	tracefs_remove(tr->dir);
->  	free_percpu(tr->last_func_repeats);
->  	free_trace_buffers(tr);
-> +	clear_tracing_err_log(tr);
->  
->  	for (i = 0; i < tr->nr_topts; i++) {
->  		kfree(tr->topts[i].topts);
-> -- 
-> 2.39.2
+> When we migrate the blocks, we do:
+> 1) get_lock_page()
+
+- f2fs_grab_cache_page
+  - pagecache_get_page
+   - __filemap_get_folio
+    - no_page  -> filemap_alloc_folio  page_ref = 1 (referenced by caller)
+     - filemap_add_folio page_ref = 2 (referenced by radix tree)
+
+> 2) submit read
+> 3) lock_page()
+> 3) set_page_dirty()
+> 4) set_page_private_gcing(page)
+
+page_ref = 3 (reference by private data)
+
 > 
+> --- in fs/f2fs/f2fs.h
+> 1409 #define PAGE_PRIVATE_SET_FUNC(name, flagname) \
+> 1410 static inline void set_page_private_##name(struct page *page) \
+> 1411 { \
+> 1412         if (!PagePrivate(page)) { \
+> 1413                 get_page(page); \
+> 1414                 SetPagePrivate(page); \
+> 1415                 set_page_private(page, 0); \
+> 1416         } \
+> 1417         set_bit(PAGE_PRIVATE_NOT_POINTER, &page_private(page)); \
+> 1418         set_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
+> 1419 }
+> 
+> 
+> 5) set_page_writebac()
+> 6) submit write
+> 7) unlock_page()
+> 8) put_page(page)
 
+page_ref = 2 (ref by caller was removed)
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Later, f2fs_invalidate_folio will do put_page again by:
+> clear_page_private_gcing(&folio->page);
+
+page_ref = 1 (ref by private was removed, and the last left ref is hold by radix tree)
+
+> 
+> --- in fs/f2fs/f2fs.h
+> 1421 #define PAGE_PRIVATE_CLEAR_FUNC(name, flagname) \
+> 1422 static inline void clear_page_private_##name(struct page *page) \
+> 1423 { \
+> 1424         clear_bit(PAGE_PRIVATE_##flagname, &page_private(page)); \
+> 1425         if (page_private(page) == BIT(PAGE_PRIVATE_NOT_POINTER)) { \
+> 1426                 set_page_private(page, 0); \
+> 1427                 if (PagePrivate(page)) { \
+> 1428                         ClearPagePrivate(page); \
+
+Since PagePrivate was cleared, so folio_detach_private in
+f2fs_invalidate_folio()/f2fs_release_folio will just skip drop reference.
+
+static inline void *folio_detach_private(struct folio *folio)
+{
+	void *data = folio_get_private(folio);
+
+	if (!folio_test_private(folio))
+		return NULL;
+	folio_clear_private(folio);
+	folio->private = NULL;
+	folio_put(folio);
+
+	return data;
+}
+
+Or am I missing something?
+
+Thanks,
+
+> 1429                         put_page(page); \
+> 1430                 }\
+> 1431         } \
+> 1432 }
+> 
+>> page is now free, gets reallocated into a THP
+>> lookup from the f2fs file finds the new THP
+>> things explode messily
+>>
+>> Checking page->mapping is going to avoid the messy explosion, but
+>> you'll still have a page in the page cache which doesn't actually
+>> belong to you, and that's going to lead to subtle data corruption.
+>>
+>> This should be caught by page_expected_state(), called from
+>> free_page_is_bad(), called from free_pages_prepare().  Do your testers
+>> have CONFIG_DEBUG_VM enabled?  That might give you a fighting chance at
+>> finding the last place which called put_page().  It won't necessarily be
+>> the _wrong_ place to call put_page() (that may have happened earlier),
+>> but it may give you a clue.
+>>
+>>>>
+>>>> struct page *pagecache_get_page(struct address_space *mapping, pgoff_t index,
+>>>> 		int fgp_flags, gfp_t gfp)
+>>>> {
+>>>> 	struct folio *folio;
+>>>>
+>>>> 	folio = __filemap_get_folio(mapping, index, fgp_flags, gfp);
+>>>> 	if (IS_ERR(folio))
+>>>> 		return NULL;
+>>>> 	return folio_file_page(folio, index);
+>>>> }
+>>>>
+>>>> Thanks,
+>>>>
+>>>>> -		f2fs_put_page(page, 1);
+>>>>> -		goto repeat;
+>>>>> -	}
+>>>>> -	if (unlikely(!PageUptodate(page))) {
+>>>>> +	if (unlikely(page->mapping != mapping || !PageUptodate(page))) {
+>>>>>    		f2fs_put_page(page, 1);
+>>>>>    		return ERR_PTR(-EIO);
+>>>>>    	}
