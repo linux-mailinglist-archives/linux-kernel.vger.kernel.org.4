@@ -2,68 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E3A6DA618
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2CB6DA61A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjDFXP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 19:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S231597AbjDFXSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 19:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjDFXP1 (ORCPT
+        with ESMTP id S229500AbjDFXSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:15:27 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBC36E82;
-        Thu,  6 Apr 2023 16:15:24 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id f188so29259198ybb.3;
-        Thu, 06 Apr 2023 16:15:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680822924; x=1683414924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bXUdQboTgq9TFHD5xYoyvY+r2FwQ208ps3K2xaFR8lE=;
-        b=J6b622BG1gXLhYxaAqxI60m8PJ9dpsAToqn8/bw060Mj/WjKMcb27A1PZJYYjqSCKk
-         YL6wmKKpHtgdGoycmJbzHzIJIgn+59IyJp8pThkSZKSWQdQkUAR6uLU+czmpZN0BeQeB
-         NPspe/NghvLZFvp5EmPwgPiXGHd8Zu9qLgFsD3STX3QRgJUu3vArhQino/s/3xCgorHR
-         7kqCgVu20gjAqzHsBHvul2OPC33FH3OjqgNe/AntOQqaI9PeSC5N3Z1R2PjF8aAckbE0
-         +hboL72q0gnjzKiA0rKnHpfe1Q0LG7KahOe5cMq2ReXDFo4Tb8dsjRCNbctusBUDx7Lm
-         4d6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680822924; x=1683414924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bXUdQboTgq9TFHD5xYoyvY+r2FwQ208ps3K2xaFR8lE=;
-        b=8DLXq4d3CTJae4C3c85yLJhukG2XvdULYBjJ3TvK+M/cV6tVjN+GWdxO/Tni8kstkI
-         vfMAGtTebQZS8px8EH3c2/ZlHN5d92oZ0zCoL+ED6RPL3YuTy+AoMySAhKfQsTPmfUyC
-         +MtWJWkDv/6V8ykg9jK4Wk9uQAMz6DGJ+BLOeh2z65SzvuDRXmETqvHTQsn3DIJBCKWq
-         nb7NkkbQpo5IRjGexqR9K0OXaM6bLATFj5YZPdYuAKGhAJTMUHOUwtY7ilzDXzY54Qls
-         cvgiuBZHXOtMSvXogwhM58G3nnIZr50xK90Xk5CtqnTiBEoBd4iWxgx+vqL1b6xcWuRd
-         uAzw==
-X-Gm-Message-State: AAQBX9efxw4wXlGg6bJ6ZnIjyEvjpkDqurrr/EOpXbBeZLelpDPGA7xW
-        8N2oS2/sic+K0SC9bhnrKITq8kAlBXo4O1ZpzgI=
-X-Google-Smtp-Source: AKy350ZNun7osiWw0y3G6kLtDI8UN4MscjAjaiAX1u0K0V2HPrGHlxAyY2wLPbLZDvojx1cmJe4gYK8hJbzkO28NnV0=
-X-Received: by 2002:a25:be11:0:b0:b4c:9333:293 with SMTP id
- h17-20020a25be11000000b00b4c93330293mr552544ybk.11.1680822923678; Thu, 06 Apr
- 2023 16:15:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230329233921.16729-1-technoboy85@gmail.com>
-In-Reply-To: <20230329233921.16729-1-technoboy85@gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Fri, 7 Apr 2023 01:15:12 +0200
-Message-ID: <CANiq72n+bqNaJbsHEK+eu_W2_CGb_yGWu_Oc6K9pe524N1W03g@mail.gmail.com>
-Subject: Re: [PATCH] rust: fix bindgen arguments
-To:     technoboy85@gmail.com
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Matteo Croce <teknoraver@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        Thu, 6 Apr 2023 19:18:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28FA65A9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:18:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0528564C53
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 23:18:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F48C433D2;
+        Thu,  6 Apr 2023 23:18:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680823099;
+        bh=ODThk000LPCEIam9IGQSsRcCc9ncW9gMxgTuCgZN9cU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pbOXkosmkWQuhNnpt3Y8SlHwx1PuWcz4qXQ4Dz8lkDvoa8GBMtYtjz1xqGdojF7YV
+         kYlzGHL+RyOwHjP/U6jmR4aud70G4r8/xF9+0h1Z8nsRmRC8sM0fr0ABFJZOl/z32X
+         Tu+Jzntjpv2G+jVl1s3n8E7IhQxpRw1darGnyVHE=
+Date:   Thu, 6 Apr 2023 16:18:18 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Peng Liu <liupeng17@lenovo.com>
+Subject: Re: [PATCH RESEND 0/3] scripts/gdb: timerlist fixes
+Message-Id: <20230406161818.6626e128cf1a2e8483bb6572@linux-foundation.org>
+In-Reply-To: <20230406221217.1585486-1-f.fainelli@gmail.com>
+References: <20230406221217.1585486-1-f.fainelli@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,19 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matteo,
+On Thu,  6 Apr 2023 15:12:14 -0700 Florian Fainelli <f.fainelli@gmail.com> wrote:
 
-On Thu, Mar 30, 2023 at 1:39=E2=80=AFAM <technoboy85@gmail.com> wrote:
->
-> bindgen renamed some arguments to be more inclusive.
-> Detect if bindgen uses the new syntax and use it,
-> otherwise fallback to the previous one.
+> Since you have been collecting my patches touching scripts/gdb,
+> (re)sending those fixes from Amjad that restore a functional
+> "lx-timerlist" scripts.
 
-We will be updating to a new `bindgen` version soon-ish, at which time
-I will perform the change from one to the other directly, instead of
-having to handle both cases.
+The first two issues appear to have already been fixed:
 
-But thanks for this patch!
+https://lore.kernel.org/all/TYCP286MB21463BD277330B26DDC18903C6819@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM/T/#u
+https://lore.kernel.org/all/TYCP286MB2146EE1180A4D5176CBA8AB2C6819@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM/T/#u
+https://lore.kernel.org/all/TYCP286MB214640FF0E7F04AC3926A39EC6819@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM/T/#u
 
-Cheers,
-Miguel
+Thanks, I'll queue up the third patch.
+
+(And I'm going to have to redo the above three patches and rebase,
+because I now see hotmail's Message-ID's fooled my Link: extraction
+script, grr)
+
+
+While I'm there, I'm wondering if the xrange patch should be backported
+to -stable kernels.  We want gdb to work well with Python3 on older
+kernels, yes?
+
+
+Also, I added your Signed-off-by: to "scripts/gdb: timerlist: convert
+int chunks to str", since you were on the patch delivery path.
+
