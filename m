@@ -2,199 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE5B6DA0BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA00B6DA0C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240426AbjDFTML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40042 "EHLO
+        id S240476AbjDFTMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238918AbjDFTMI (ORCPT
+        with ESMTP id S240443AbjDFTMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:12:08 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ADB83D1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:12:05 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54c0c9de33aso30879427b3.15
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680808324;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cpsE6KgOhMVCFiOCT+c6VxdLOLlRj25yt0zZTwjoKGE=;
-        b=G/p5wRC4+zaq69yJuw5Ew7kCkuzr1eOR3eOXXE0vVw3QzJylVPnV/knyu7xVvAp9PS
-         CEVwos7mpF1E+6HKlcwjfwa/5ys8+Krm8xBMoFKno5xiSW3TFOhfLWv5mKfCazf+iXm7
-         sGv5d87gLA1COLmom+bIainElIy2yV8F4SIew9xMzEPpYd2cEzWq1tf8QHTJlgu2rVHj
-         mrgjtfNMkp0bTL1AHtzLupO1SRcPyzXhHGol5tM0RAbKfgNvbc4d+XQekKldtos27T+2
-         cpLMMSqwLsdx8MwBH3lzA0fMIunILPJ6/2v346l7dqtR//c3LZb0bLE0y7xv+J6jqHtF
-         9n4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680808324;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cpsE6KgOhMVCFiOCT+c6VxdLOLlRj25yt0zZTwjoKGE=;
-        b=h5xi6SIM12aAO039QgdZ0UOl0hHPkumeSOEiifRLKHFq1hQ+oufx6HUWT6dz3DKeGr
-         RUN00tFV14qJbswnvpeXNWDlZbWH+3+YRRXz1hyncsUbMOsFHED6ANSlhigfX0wPoRw4
-         FE+fkMe0iLAqja8L51eemmUa2BOpC0HZp3WtgVC/mq2BcL2hxu0pNMHGbljNJEzc6g4F
-         gKJjfax/B2dishACXE1YxHT0SJQZxDR0rIHz/kXANCQzQUTW4PMIv7+Jm/JEYjqnAJ32
-         tU12NvjhTNpq6Qv9VfONekjs/dukFqy/zErbdN7CPyiLivWRtZM7j0+CJeJh7+PshfQc
-         232Q==
-X-Gm-Message-State: AAQBX9cyI2bqXfhv+j4HMM5AxkjOgEnCfwcyjo9CaIxQpfVnCM9UKFR/
-        G1J1l96ANeYYqIV+rzmlIy1P8GBllUs=
-X-Google-Smtp-Source: AKy350YzWCmpi9L04Wj/8wziPCdl1iFrVOO5U0T2HprWLAGYcdFKPvj6V08tW6KRhGKuNvr6zRwPtaqX5mE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:430c:0:b0:54c:a67:90b with SMTP id
- q12-20020a81430c000000b0054c0a67090bmr2372621ywa.5.1680808324471; Thu, 06 Apr
- 2023 12:12:04 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 12:12:03 -0700
-In-Reply-To: <2cedc5ca5e1d126a0abf3b651c6fef1a8970fcfd.camel@intel.com>
-Mime-Version: 1.0
-References: <20230405005911.423699-1-seanjc@google.com> <20230405005911.423699-2-seanjc@google.com>
- <626179c54707297736158da89ee634705cd6d62f.camel@intel.com>
- <ZC4j37H2+2945xxb@google.com> <2cedc5ca5e1d126a0abf3b651c6fef1a8970fcfd.camel@intel.com>
-Message-ID: <ZC8J2J9Js7Z99k6/@google.com>
-Subject: Re: [PATCH 1/3] KVM: VMX: Don't rely _only_ on CPUID to enforce XCR0
- restrictions for ECREATE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 6 Apr 2023 15:12:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FEE59D5;
+        Thu,  6 Apr 2023 12:12:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 73E1C1F37C;
+        Thu,  6 Apr 2023 19:12:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680808327;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tHJ/7zRzPjjXOi2F10vF9rZ9V0TrUv+2tZqKAaapEJU=;
+        b=OcWrcu0l98HfYbAucJ2Hcyt6xXggIfTTy5Tsapp7gnXEzlPLvYa/KNF/2UsoeSFNw7mz+c
+        nKJRRPe3+geqL+NNYh0j2GFgzO7+hqBcL6obQV815ngtkhaj55h9r6jvBuVyimr12w6MJ2
+        8FkEZ1SDsB2QDoxxT+DvLTaLDs7B9Fc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680808327;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tHJ/7zRzPjjXOi2F10vF9rZ9V0TrUv+2tZqKAaapEJU=;
+        b=FbcQ+OKRAnKlPWN101NAUu79j+AbCjziWGryLPWJU+eXNpligODazsgBwjkDEhlYUzofY6
+        2r8/sWP2wbRKgeCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 385F21351F;
+        Thu,  6 Apr 2023 19:12:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id EHnMDIcZL2Q4QgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Thu, 06 Apr 2023 19:12:07 +0000
+Date:   Thu, 6 Apr 2023 21:12:04 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Genjian <zhanggenjian123@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Genjian Zhang <zhanggenjian@kylinos.cn>,
+        k2ci <kernel-bot@kylinos.cn>
+Subject: Re: [PATCH] btrfs: fix uninitialized variable warning
+Message-ID: <20230406191204.GZ19619@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20230324020838.67149-1-zhanggenjian@kylinos.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230324020838.67149-1-zhanggenjian@kylinos.cn>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023, Huang, Kai wrote:
-> On Wed, 2023-04-05 at 18:44 -0700, Sean Christopherson wrote:
-> > On Wed, Apr 05, 2023, Huang, Kai wrote:
-> > > On Tue, 2023-04-04 at 17:59 -0700, Sean Christopherson wrote:
-> > > > Explicitly check the vCPU's supported XCR0 when determining whether=
- or not
-> > > > the XFRM for ECREATE is valid.  Checking CPUID works because KVM up=
-dates
-> > > > guest CPUID.0x12.1 to restrict the leaf to a subset of the guest's =
-allowed
-> > > > XCR0, but that is rather subtle and KVM should not modify guest CPU=
-ID
-> > > > except for modeling true runtime behavior (allowed XFRM is most def=
-initely
-> > > > not "runtime" behavior).
-> > > >=20
-> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > > ---
-> > > >  arch/x86/kvm/vmx/sgx.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
-> > > > index aa53c98034bf..362a31b19b0e 100644
-> > > > --- a/arch/x86/kvm/vmx/sgx.c
-> > > > +++ b/arch/x86/kvm/vmx/sgx.c
-> > > > @@ -175,7 +175,8 @@ static int __handle_encls_ecreate(struct kvm_vc=
-pu *vcpu,
-> > > >  	    (u32)attributes & ~sgx_12_1->eax ||
-> > > >  	    (u32)(attributes >> 32) & ~sgx_12_1->ebx ||
-> > > >  	    (u32)xfrm & ~sgx_12_1->ecx ||
-> > > > -	    (u32)(xfrm >> 32) & ~sgx_12_1->edx) {
-> > > > +	    (u32)(xfrm >> 32) & ~sgx_12_1->edx ||
-> > > > +	    xfrm & ~vcpu->arch.guest_supported_xcr0) {
-> > >=20
-> > > Perhaps this change is needed even without patch 2?
-> > >=20
-> > > This is because when CPUID 0xD doesn't exist, guest_supported_xcr0 is=
- 0.  But
-> > > when CPUID 0xD doesn't exist, IIUC currently KVM doesn't clear SGX in=
- CPUID, and
-> > > sgx_12_1->ecx is always set to 0x3.
-> >=20
-> > Hrm, that's a bug in this patch.  Drat.  More below.
-> >=20
-> > > __handle_encls_ereate() doesn't check CPUID 0xD either, so w/o above =
-explicit
-> > > check xfrm against guest_supported_xcr0, it seems guest can successfu=
-lly run
-> > > ECREATE when it doesn't have CPUID 0xD?
-> >=20
-> > ECREATE doesn't have a strict dependency on CPUID 0xD or XSAVE.  This e=
-xact scenario
-> > is called out in the SDM:
-> >=20
-> >   Legal values for SECS.ATTRIBUTES.XFRM conform to these requirements:
-> >     * XFRM[1:0] must be set to 0x3.
-> >     * If the processor does support XSAVE, XFRM must contain a value th=
-at would
-> >       be legal if loaded into XCR0.
-> >     * If the processor does not support XSAVE, or if the system softwar=
-e has not
-> >       enabled XSAVE, then XFRM[63:2] must be zero.
-> >=20
-> > So the above needs to be either
-> >=20
-> > 	xfrm & ~(vcpu->arch.guest_supported_xcr0 | XFEATURE_MASK_FPSSE)
-> >=20
-> > or
-> >=20
-> > 	(xfrm & ~XFEATURE_MASK_FPSSE & ~vcpu->arch.guest_supported_xcr0)
-> >=20
-> >=20
-> > I think I prefer the first one as I find it slightly more obvious that =
-FP+SSE are
-> > allowed in addition to the XCR0 bits.
->=20
-> The above check doesn't verify xfrm is a super set of 0x3.  I think we ve=
-rify
-> that per SDM:
+On Fri, Mar 24, 2023 at 10:08:38AM +0800, Genjian wrote:
+> From: Genjian Zhang <zhanggenjian@kylinos.cn>
+> 
+> compiler warning:
+> 
+> ../fs/btrfs/volumes.c: In function ‘btrfs_init_new_device’:
+> ../fs/btrfs/volumes.c:2703:3: error: ‘seed_devices’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+>  2703 |   btrfs_setup_sprout(fs_info, seed_devices);
+>       |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> ../fs/btrfs/send.c: In function ‘get_cur_inode_state’:
+> ../include/linux/compiler.h:70:32: error: ‘right_gen’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+>    70 |   (__if_trace.miss_hit[1]++,1) :  \
+>       |                                ^
+> ../fs/btrfs/send.c:1878:6: note: ‘right_gen’ was declared here
+>  1878 |  u64 right_gen;
+>       |      ^~~~~~~~~
+> 
+> Initialize the uninitialized variables.
+> 
+> Reported-by: k2ci <kernel-bot@kylinos.cn>
+> Signed-off-by: Genjian Zhang <zhanggenjian@kylinos.cn>
 
-Oooh, right.  It's not that FP+SSE are always allowed, it's that FP+SSE mus=
-t always
-be _set_.  So this?
-
-		xfrm & ~(vcpu->arch.guest_supported_xcr0 | XFEATURE_MASK_FPSSE) ||
-		(xfrm & XFEATURE_MASK_FPSSE) !=3D XFEATURE_MASK_FPSSE
-
-> 39.7.3 Processor Extended States and ENCLS[ECREATE]
->=20
-> The ECREATE leaf function of the ENCLS instruction enforces a number of
-> consistency checks described earlier. The execution of ENCLS[ECREATE] lea=
-f
-> function results in a #GP(0) in any of the following cases:
->   =E2=80=A2 SECS.ATTRIBUTES.XFRM[1:0] is not 3.
->   =E2=80=A2 The processor does not support XSAVE and any of the following=
- is true:
-> 	=E2=80=94 SECS.ATTRIBUTES.XFRM[63:2] is not 0.
-> 	=E2=80=94 SECS.SSAFRAMESIZE is 0.
->   =E2=80=A2 The processor supports XSAVE and any of the following is true=
-:
-> 	=E2=80=94 XSETBV would fault on an attempt to load XFRM into XCR0.
-> 	=E2=80=94 XFRM[63]=3D1.
-> 	=E2=80=94 The SSAFRAME is too small to hold required, enabled states ...
->=20
->=20
-> And in the ECREATE pseudo code, the relevant parts seem to be:
->=20
-> 	(* Check lower 2 bits of XFRM are set *)
-> 	IF ( ( DS:TMP_SECS.ATTRIBUTES.XFRM BitwiseAND 03H) =E2=89=A0 03H)
-> 		THEN #GP(0); FI;
->=20
-> 	IF (XFRM is illegal)
-> 		THEN #GP(0); FI;
->=20
-> The first part is clear, but the second part is vague.=20
->=20
-> I am not sure in hardware behaviour, whether XCR0 is actually checked in
-> ECREATE.  It's more likely XCRO is actually checked in EENTER. =C2=A0
->=20
-> But I think it's just fine to also check against XCR0 here.
-
-ECREATE doesn't check XCR0, it checks that XFRM represents a legal XCR0 val=
-ues
-for the platform, which in KVM is tracked as guest_supported_xcr0.
+The warnings are still reported by other build reports so I'll apply
+this patch. If you have found more please send a patch or I can update
+this one once applied. Thanks.
