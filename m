@@ -2,278 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8446D9CE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF6F6D9CE5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239636AbjDFP7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S239587AbjDFQAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239575AbjDFP7j (ORCPT
+        with ESMTP id S239658AbjDFP74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:59:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA6593CB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:59:37 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-502aa0f24daso168838a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680796776;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AplaefBCy4jgU0hSoDn8uiF5723L/p4wjvwrPGw0IfA=;
-        b=gGKuB4DXICi8Qyrsr/iB5D2crNbj234tTQQX25ZKovI11TOejRxqtHRV9XZSwmjbsm
-         dyCTMAPlbXxtY2BjIa33zif3zSmqA/s3H/rScTKe9O96zoPrBkuZURo9TcM/hokdgXKK
-         ZLYF17+DF5Y6/cYDuwrWaCJ0PdcZI3b16iG2c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680796776;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AplaefBCy4jgU0hSoDn8uiF5723L/p4wjvwrPGw0IfA=;
-        b=oMGV+4E/9OlIEwkkr0bq26QYAXlQFJaRVZZKw6/I1K4bk/fMK3TUk9zSR6OQrDYbVN
-         rQ+YU7xKZkiFEEi2ZS8P/jWhBTBH65kSHqI9w5Ap1MIsnn+4Ib9Mj3N4hWeuxhQA70G8
-         SD3iOn/BrcKe/Dw7PLmaKLsM4ROzGVT78ERsT83QdiFF9ZfmaQe5WNK4sX+BCP0Lpcyi
-         ia0wWwke6fj9NrVA5H60/ceFa1ujR1HeKDY0f6BSJWylXEsFpBPRk9PleVPo+lGGRfNK
-         8KDHAgvtQxm8cfRoJkCSUDuVdlI4sVcyfON141/KumAYzQ26YkvWn+sIC0ZymyxW70hF
-         Blwg==
-X-Gm-Message-State: AAQBX9dmAPYtPQ3C6o+2OEECUoNj32VLbeopRlAvTJscBMsZWbEi3BPn
-        7zvq4RTjsyrBlfL6McAHfk0GqQ==
-X-Google-Smtp-Source: AKy350YHIgePAu2+ro+fzbAXMA/CtM0AI/WX/4aNshApMGbl7AMOGARvO0Mww9K50QkZRokT46Ekag==
-X-Received: by 2002:a05:6402:27ce:b0:502:c397:adc8 with SMTP id c14-20020a05640227ce00b00502c397adc8mr63407ede.1.1680796776024;
-        Thu, 06 Apr 2023 08:59:36 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id i11-20020a50870b000000b004bd6e3ed196sm892265edb.86.2023.04.06.08.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 08:59:35 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 17:59:33 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Danilo Krummrich <dakr@redhat.com>,
-        Dave Airlie <airlied@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        andrey.grodzovsky@amd.com, tvrtko.ursulin@linux.intel.com,
-        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        lina@asahilina.net, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
-Message-ID: <ZC7sZfn9XJpqN7ni@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Danilo Krummrich <dakr@redhat.com>, Dave Airlie <airlied@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, andrey.grodzovsky@amd.com,
-        tvrtko.ursulin@linux.intel.com,
-        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
-        Boris Brezillon <boris.brezillon@collabora.com>, lina@asahilina.net,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
- <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
- <3004a2bf-e725-643e-82af-8a217784e796@redhat.com>
- <013781a3-5abd-8c66-8a0a-dd36c9c487af@amd.com>
- <28d10733-b217-7ccc-4b8c-54bdc8249234@amd.com>
- <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
- <9c72c7162da56234addd7083ec774e525a13957c.camel@pengutronix.de>
- <31f03135-40e4-a6ad-37e0-3b434a37922d@amd.com>
- <9ac69b11802331f9e024ab837b85214c4243e3fd.camel@pengutronix.de>
- <cdc29af8-8c04-cf46-1872-3feab954bc55@amd.com>
+        Thu, 6 Apr 2023 11:59:56 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F06A27A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:59:54 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7283F5C00FB;
+        Thu,  6 Apr 2023 11:59:51 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 06 Apr 2023 11:59:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680796791; x=
+        1680883191; bh=trO8jc03FJLvTQr9TJ/mrkQxrmA3NZ7pQ+cjfH4ljHA=; b=D
+        dqEV9U0jb0GbAcy+Z+YHa9vWqDcOdV11TU5V3txMnnIIP/5vEB/EV2TeqaYRqUp7
+        O+do7wxJwzR7J/3JEqfHu4EgpTMFhEOC/lPN/RWakbh5xgkNK22zvCQ7TPe64fRP
+        9IGy/0C+rB6l954EP+bkQg0WIzCWHx6GyPwQHu3jIRohFqwkpIx1Jc+Nz7IswKxu
+        CL/oYYxIb4os9svlgXjpF4iKyF4f0kYxFuCoHqC2ahtMQe923nFOQBb3DojjpyjN
+        oCX64nG1Gyo1gWIcUTr5y6wWe4wBqJoq6JAcaq4j44DqeMYf0f1HNN5ZcrPnoV4d
+        tzTboTMYUMoD+DS56fbIA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680796791; x=1680883191; bh=trO8jc03FJLvT
+        Qr9TJ/mrkQxrmA3NZ7pQ+cjfH4ljHA=; b=pVWYKPCweySGyFodQ6stjV6Orskps
+        S7oJXvI2shkOWIEovlHJFRiFkQfHb0YTEWY3C2pvDbKp55W17Zas4Jg40lv2Pe+u
+        QOxUbsSeJMhOSG549C1WvdfU8INOnYKan6gTN/HzhhIKn7mRGHnqxCp5/IfyOk2x
+        w4EsV4p49OqaDs6qeA9P+oj0A/mSJQSBrsE8KfSko3HetmPKDEz3aK9ImQ82WBKA
+        nZxOofj9FwGWum+FeFiNdtHRPeEHSuNxdakoG5liGZUzlD+nY/0KarBj1Afo/PLd
+        XiIm11qskilbFiB+NuPDlU2tDmfSGP808fBwBggLNSB3GIEKDD32aqhIQ==
+X-ME-Sender: <xms:d-wuZOGYKRdPR4FbI4wBLuDKAm8j3exKvy9T1tef-ZE7RsJW4NNaZg>
+    <xme:d-wuZPVZcpGEqAapEzOLb6WE1_46iwN6h887z22Zg2NoOLsj_nD1VZzlDMMJyHejC
+    8Yz4CuDKJYIAiFS3Dg>
+X-ME-Received: <xmr:d-wuZILDvgWryvRzbtLcNV4ftpHtlhS2gPs_MA1Cz2ybUprj1_8TDB6zUvjai6lk2Ya7_g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgleefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeffhedvveeuheeljedtkedtkeeiieekgedtveeu
+    tdejkeevudffudfgveeggfduvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:d-wuZIF2mxK6csJbkXB-3A945w7EesREBPmn9cnIOex7jg2etjySRA>
+    <xmx:d-wuZEUf2fFnY9JHWBwxEmRYym8tSQhcQmta4B-BbQ4a_Iqd8GJVyA>
+    <xmx:d-wuZLPqDDZ5MOd7SMGtP98upclQctmwMR7OxTexonXs5V0Qyo_hSA>
+    <xmx:d-wuZPaUeJMiAOaHvIwALv4LZxdCaqv8_faqo09_L9GQZXMZ5IA9Ig>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Apr 2023 11:59:50 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 311BB109B00; Thu,  6 Apr 2023 18:59:48 +0300 (+03)
+Date:   Thu, 6 Apr 2023 18:59:48 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] x86/mm/iommu/sva: Fix error code for LAM enabling
+ failure due to SVA
+Message-ID: <20230406155948.hlhb53xb3plq6sh5@box>
+References: <20230403111020.3136-1-kirill.shutemov@linux.intel.com>
+ <20230403111020.3136-2-kirill.shutemov@linux.intel.com>
+ <24661bc4-cc95-5c1b-b88d-94d4ce335d0b@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cdc29af8-8c04-cf46-1872-3feab954bc55@amd.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <24661bc4-cc95-5c1b-b88d-94d4ce335d0b@intel.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 05:33:18PM +0200, Christian König wrote:
-> Am 06.04.23 um 17:24 schrieb Lucas Stach:
-> > Am Donnerstag, dem 06.04.2023 um 16:21 +0200 schrieb Christian König:
-> > > Am 06.04.23 um 12:45 schrieb Lucas Stach:
-> > > > Am Donnerstag, dem 06.04.2023 um 10:27 +0200 schrieb Daniel Vetter:
-> > > > > On Thu, 6 Apr 2023 at 10:22, Christian König <christian.koenig@amd.com> wrote:
-> > > > > > Am 05.04.23 um 18:09 schrieb Luben Tuikov:
-> > > > > > > On 2023-04-05 10:05, Danilo Krummrich wrote:
-> > > > > > > > On 4/4/23 06:31, Luben Tuikov wrote:
-> > > > > > > > > On 2023-03-28 04:54, Lucas Stach wrote:
-> > > > > > > > > > Hi Danilo,
-> > > > > > > > > > 
-> > > > > > > > > > Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
-> > > > > > > > > > > Hi all,
-> > > > > > > > > > > 
-> > > > > > > > > > > Commit df622729ddbf ("drm/scheduler: track GPU active time per entity")
-> > > > > > > > > > > tries to track the accumulated time that a job was active on the GPU
-> > > > > > > > > > > writing it to the entity through which the job was deployed to the
-> > > > > > > > > > > scheduler originally. This is done within drm_sched_get_cleanup_job()
-> > > > > > > > > > > which fetches a job from the schedulers pending_list.
-> > > > > > > > > > > 
-> > > > > > > > > > > Doing this can result in a race condition where the entity is already
-> > > > > > > > > > > freed, but the entity's newly added elapsed_ns field is still accessed
-> > > > > > > > > > > once the job is fetched from the pending_list.
-> > > > > > > > > > > 
-> > > > > > > > > > > After drm_sched_entity_destroy() being called it should be safe to free
-> > > > > > > > > > > the structure that embeds the entity. However, a job originally handed
-> > > > > > > > > > > over to the scheduler by this entity might still reside in the
-> > > > > > > > > > > schedulers pending_list for cleanup after drm_sched_entity_destroy()
-> > > > > > > > > > > already being called and the entity being freed. Hence, we can run into
-> > > > > > > > > > > a UAF.
-> > > > > > > > > > > 
-> > > > > > > > > > Sorry about that, I clearly didn't properly consider this case.
-> > > > > > > > > > 
-> > > > > > > > > > > In my case it happened that a job, as explained above, was just picked
-> > > > > > > > > > > from the schedulers pending_list after the entity was freed due to the
-> > > > > > > > > > > client application exiting. Meanwhile this freed up memory was already
-> > > > > > > > > > > allocated for a subsequent client applications job structure again.
-> > > > > > > > > > > Hence, the new jobs memory got corrupted. Luckily, I was able to
-> > > > > > > > > > > reproduce the same corruption over and over again by just using
-> > > > > > > > > > > deqp-runner to run a specific set of VK test cases in parallel.
-> > > > > > > > > > > 
-> > > > > > > > > > > Fixing this issue doesn't seem to be very straightforward though (unless
-> > > > > > > > > > > I miss something), which is why I'm writing this mail instead of sending
-> > > > > > > > > > > a fix directly.
-> > > > > > > > > > > 
-> > > > > > > > > > > Spontaneously, I see three options to fix it:
-> > > > > > > > > > > 
-> > > > > > > > > > > 1. Rather than embedding the entity into driver specific structures
-> > > > > > > > > > > (e.g. tied to file_priv) we could allocate the entity separately and
-> > > > > > > > > > > reference count it, such that it's only freed up once all jobs that were
-> > > > > > > > > > > deployed through this entity are fetched from the schedulers pending list.
-> > > > > > > > > > > 
-> > > > > > > > > > My vote is on this or something in similar vain for the long term. I
-> > > > > > > > > > have some hope to be able to add a GPU scheduling algorithm with a bit
-> > > > > > > > > > more fairness than the current one sometime in the future, which
-> > > > > > > > > > requires execution time tracking on the entities.
-> > > > > > > > > Danilo,
-> > > > > > > > > 
-> > > > > > > > > Using kref is preferable, i.e. option 1 above.
-> > > > > > > > I think the only real motivation for doing that would be for generically
-> > > > > > > > tracking job statistics within the entity a job was deployed through. If
-> > > > > > > > we all agree on tracking job statistics this way I am happy to prepare a
-> > > > > > > > patch for this option and drop this one:
-> > > > > > > > https://lore.kernel.org/all/20230331000622.4156-1-dakr@redhat.com/T/#u
-> > > > > > > Hmm, I never thought about "job statistics" when I preferred using kref above.
-> > > > > > > The reason kref is attractive is because one doesn't need to worry about
-> > > > > > > it--when the last user drops the kref, the release is called to do
-> > > > > > > housekeeping. If this never happens, we know that we have a bug to debug.
-> > > > > > Yeah, reference counting unfortunately have some traps as well. For
-> > > > > > example rarely dropping the last reference from interrupt context or
-> > > > > > with some unexpected locks help when the cleanup function doesn't expect
-> > > > > > that is a good recipe for problems as well.
-> > > > > > 
-> > > > Fully agreed.
-> > > > 
-> > > > > > > Regarding the patch above--I did look around the code, and it seems safe,
-> > > > > > > as per your analysis, I didn't see any reference to entity after job submission,
-> > > > > > > but I'll comment on that thread as well for the record.
-> > > > > > Reference counting the entities was suggested before. The intentionally
-> > > > > > avoided that so far because the entity might be the tip of the iceberg
-> > > > > > of stuff you need to keep around.
-> > > > > > 
-> > > > > > For example for command submission you also need the VM and when you
-> > > > > > keep the VM alive you also need to keep the file private alive....
-> > > > > Yeah refcounting looks often like the easy way out to avoid
-> > > > > use-after-free issue, until you realize you've just made lifetimes
-> > > > > unbounded and have some enourmous leaks: entity keeps vm alive, vm
-> > > > > keeps all the bo alives, somehow every crash wastes more memory
-> > > > > because vk_device_lost means userspace allocates new stuff for
-> > > > > everything.
-> > > > > 
-> > > > > If possible a lifetime design where lifetimes have hard bounds and you
-> > > > > just borrow a reference under a lock (or some other ownership rule) is
-> > > > > generally much more solid. But also much harder to design correctly
-> > > > > :-/
-> > > > > 
-> > > > The use we are discussing here is to keep the entity alive as long as
-> > > > jobs from that entity are still active on the HW. While there are no
-> > > > hard bounds on when a job will get inactive, at least it's not
-> > > > unbounded. On a crash/fault the job will be removed from the hardware
-> > > > pretty soon.
-> > > > 
-> > > > Well behaved jobs after a application shutdown might take a little
-> > > > longer, but I don't really see the new problem with keeping the entity
-> > > > alive? As long as a job is active on the hardware, we can't throw out
-> > > > the VM or BOs, no difference whether the entity is kept alive or not.
-> > > Exactly that's the problem. VM & BOs are dropped as soon as the process
-> > > is destroyed, we *don't* wait for the hw to finish before doing so.
-> > > 
-> > > Just the backing store managed by all the house keeping objects isn't
-> > > freed until the hw is idle preventing a crash or accessing freed memory.
-> > > 
-> > > This behavior is rather important for the OOM killer since we need to be
-> > > able to tear down the process as fast as possible in that case.
-> > > 
-> > Are you talking about the dropping of pending jobs in
-> > drm_sched_entity_kill? I'm certainly not trying to change that in any
-> > way. Those aren't put onto the hardware yet, so we can always safely
-> > drop them and do so as fast as possible.
+On Thu, Apr 06, 2023 at 08:31:40AM -0700, Dave Hansen wrote:
+> On 4/3/23 04:10, Kirill A. Shutemov wrote:
+> > Normally, LAM and SVA are mutually exclusive. LAM enabling will fail if
+> > SVA is already in use.
 > > 
-> > What I'm concerned about are the jobs that are already scheduled on the
-> > HW. At least with Vivante hardware there is no race free way to get rid
-> > of jobs once they are put on the ring. So whatever the scheduler or DRM
-> > core is doing, we have to hold on to the BOs and GPU memory management
-> > structures to keep the hardware from operating on freed memory.
+> > Correct error code for the failure. EINTR is nonsensical there.
 > > 
-> > That's already a lot of memory, so I don't really see the issue with
-> > keeping the entity around in a quiescent state until all the currently
-> > queued jobs have left the HW.
-> > 
-> > > Changing that is possible, but that's quite a huge change I'm not really
-> > > willing to do just for tracking the time spend.
-> > > 
-> > Yea, it's a big change and whether it's a good idea really depends on
-> > what we a gaining from it. You seem to see quite low value in "just
-> > tracking the time spent" and that might be true, but it also forces all
-> > drivers that want to implement fdinfo to roll their own time tracking.
-> > I would rather see more of this moved to the scheduler and thus shared
-> > between drivers.
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Fixes: 23e5d9ec2bab ("x86/mm/iommu/sva: Make LAM and SVA mutually exclusive")
+> > Reported-by: Dmitry Vyukov <dvyukov@google.com>
 > 
-> That's generally a good idea, but if that means that we need to restructure
-> the whole entity handling then I would object. That's simply not worth it
-> when we can implement it differently.
+> Hi Kirill,
 > 
-> What we could do is to keep the submitted fences around in the entity.
-> Similar to the tracking amdgpu does, see struct amdgpu_ctx_entity.
-> 
-> This way the entity doesn't needs to stay around after it delivered the job
-> to the hw.
+> These look fine. But in the future, Link:'s for Reported-by's would be
+> very appreciated if the discussion happened in public.
 
-I've done a _very_ cursory look, but from that the design seems to be that
-we only keep something very small around to avoid oopsing (just
-drm_sched_entity) and the overall gpu ctx goes away synchronously (more or
-less) when userspace destroys it.
+Got it.
 
-And then the actual fdinfo reporting or any reporting is a pure pull model
-where you come from drm_file -> gpu ctx -> amdgpu_ctx_entity and have
-borrowed references by holding enough locks.
+For this one it is:
 
-The push model, where the scheduler job actively pushes the stats all the
-way to the userspace/uapi ctx object is imo impossible to get right.
-i915-gem tried a few times, and solutions start with sprinkling rcu
-everywhere and only get worse. Imo absolute no-go.
+Link: https://lore.kernel.org/all/CACT4Y+YfqSMsZArhh25TESmG-U4jO5Hjphz87wKSnTiaw2Wrfw@mail.gmail.com
 
-If I understand this right then yes I think extracting the
-amgpu_ctx_entity split into a bit of helper. Might want to extract the
-context xarray and lookup too and put it into drm_file, including the
-amdgpu_ctx_mgr->lock and iterating over stats for fdinfo maybe too to make
-this really worth it.
-
-Of all the failed attempts I've seen for exposing ctx stats this (amdgpu
-push model) is imo the only solid one.
-
-Cheers, Daniel
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+  Kiryl Shutsemau / Kirill A. Shutemov
