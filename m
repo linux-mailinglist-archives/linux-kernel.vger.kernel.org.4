@@ -2,403 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0704B6DA584
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7116DA588
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239323AbjDFWFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S232925AbjDFWGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239562AbjDFWFC (ORCPT
+        with ESMTP id S229459AbjDFWG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:05:02 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA00A5CB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:05:01 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id l11so762434qtj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:05:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680818698; x=1683410698;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=foA3pXnOMEI3cPd0gEtz9FKmZb7kgJDnrVn+KDAiuIc=;
-        b=ghYSPH9xEE45W2qMuxnqlrYh633jNBUmZa7ISrZgxcU8oBUtt/AhavwlWXQru0Pe0h
-         2oZjkcezHe7uxIedRmxQV4zn5RPnVai+24WF3s+LT8FF6KehjmQJhIYlXZKTKB3xKWZx
-         0uS+ed5K7kZvhYjxJmJiK0BWbAYW0pvL46jvyMQy1woXzwJGwxIbHVn1VxtX7ruJ4IMO
-         wOVWBhlic4x2REWr08HMIBZtYMNj53rQImhZat1S+qdlgWnUus0KKYlSbfimL48tNxfh
-         x0kSOnr2KOAs1vNzbap+OzrgGAAMrTNm+x7jpDKKd31zeN34H/BMqtIyadxm7zkXkFr2
-         0TXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680818698; x=1683410698;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=foA3pXnOMEI3cPd0gEtz9FKmZb7kgJDnrVn+KDAiuIc=;
-        b=0Nj08dTx0yhMZMVrffclon0phejqAf837CAqZD0cMTFIIAlc3Axbg/M746Lp2U8729
-         tvmPtHdg7bUfbhfi0qqMRbmkRKX1B0M6deuRVT9Y17UATTWU/DIIusaRAWY75Sv3qScq
-         uUXTtYLLr3OnuXGnIgv57Yo3Ooe443X+4FNQJ0Mx4R1ekAmMJaR8E4D7SC9Zr3X1/JMu
-         PubtmG27z1UH7U0EU45fGB6Xx4HpZTpqUPokBOwST02jGA8yxZ9zUP+BGZCgltOmQDtY
-         H4VPrqq9DQ8HpXGw6Gt1lhdfa3qc+NHL3ZYW18KMIQ8/NL3KtkCHXWnPaXGAHMMkFiCJ
-         VaOQ==
-X-Gm-Message-State: AAQBX9fDrD7ivGFh9DccPV6N+9Phvlp0WqXUjFb0Xn/kTAz8x/TxXqGk
-        Qc79dNy2koCWiNeKhUKESfCTme0yt2GMjQ==
-X-Google-Smtp-Source: AKy350YzF8iFwJcF/VTXOXbvV0W9tZlIp66Pz25bETrgsrh8AoY/Pbq3CV6fVAVOPaRyyqMaNasbFQ==
-X-Received: by 2002:ac8:5a8b:0:b0:3e6:6502:16af with SMTP id c11-20020ac85a8b000000b003e6650216afmr649548qtc.40.1680818698555;
-        Thu, 06 Apr 2023 15:04:58 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id dm24-20020a05620a1d5800b00746a7945d87sm786356qkb.52.2023.04.06.15.04.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 15:04:57 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>, kapil.hali@broadcom.com
-Subject: [PATCH v2] scripts/gdb: Print interrupts
-Date:   Thu,  6 Apr 2023 15:04:51 -0700
-Message-Id: <20230406220451.1583239-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Apr 2023 18:06:29 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2080.outbound.protection.outlook.com [40.107.244.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEB1A5CB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:06:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j9B4291J6JKZmFcG5mxWtBCmbiqBoI9Jb1mNKEetDaumAjDYJjRCZRh7RGk1aEQfEvdkahGsM7NI9MRxuOHwV1cyU/TvqlAwoVVIS0tNS8mMeH0wzPKu/qu007xgIVd51k/5uovPVmvK6VtpqV3/BvsnuXtqMznNeRcI1EpH50rPg0hYGTsqsdtr9QKrkJ32lgEBcWi0RD/DfPokCM8j3TFXHq0jAhJf5o89mALzQ10wnrt1cfXkGl/keTnX2msU6xbagtHfzErfzTpYzxKkdsuhq8VzfXX1LpUze86i8pHbgzDh6Ogd3A9162qEyJK5MrTN7Vl1E78FF6CBT80miQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TNOmR5FDstWaywEjBxqHOUQSQFeQ0u0WjM0ChnvwZok=;
+ b=JzRuNR8NlN1WhgQNzMhmA+xD7Yh/2e2h+HEXNkZoSdgu/aWXTaAzvJ7ZiG8S45D7Il+Jqct9R2+Q4BDtdjxY+MhbSf2HMltuqI/62bfWXa0xsu0PkbLfB/2Y3rGF/l3QqAKsTSoiExrJi3Cn3AUT+wcU6+8CypFOLnE7Y5wqvkbIVqdRurg4oM2gi/e0ZCB7rl7Xv9h5WBgtwXyLSpvBQe2NpeZIVIH1sxZ3oG38KzCJlonsEPDbPu1bLzdN6bQ3D4Rwo+Bg5rfmyGzSVW9We8kiYYVpORRbxqYj9NRGVDclH6AVXSxeLMpey3EPK+Puxajq1r5Sbk9TRVlISHwNDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TNOmR5FDstWaywEjBxqHOUQSQFeQ0u0WjM0ChnvwZok=;
+ b=Q0mL/qz9Q8jzjUJZQ2P1jwfqU39raycatjG0YG34Cs8R0k0315AEMu4Tjkv/vZCZYC56E23KyOnOfs3PAgCPoJ/Q/mxF6O1vi+6PD/6Lmew0d9yBh6Z4pFfxKuhExXmCkAYnYIO3rfEWNzYAf6xE+Fgxd0aszOv5sIPWjpQlnco=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ DS0PR12MB8479.namprd12.prod.outlook.com (2603:10b6:8:155::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.31; Thu, 6 Apr 2023 22:06:22 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::8299:158a:c296:de80%6]) with mapi id 15.20.6277.031; Thu, 6 Apr 2023
+ 22:06:22 +0000
+Message-ID: <5374f5aa-fa88-11e6-e38c-9d104c5a6c50@amd.com>
+Date:   Thu, 6 Apr 2023 18:06:17 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Danilo Krummrich <dakr@redhat.com>, daniel@ffwll.ch,
+        Dave Airlie <airlied@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
+ <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
+ <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
+ <c952a63a2c0c7377e1e15b1d06c1a941f3456d60.camel@pengutronix.de>
+ <3215dfb9-8f7f-625f-44a9-85320cd32019@amd.com>
+ <8312fa88a3929b83a8ccdca1a0ab33bef15fa0ae.camel@pengutronix.de>
+Content-Language: en-CA
+From:   Luben Tuikov <luben.tuikov@amd.com>
+Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
+In-Reply-To: <8312fa88a3929b83a8ccdca1a0ab33bef15fa0ae.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4PR01CA0338.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:fc::9) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|DS0PR12MB8479:EE_
+X-MS-Office365-Filtering-Correlation-Id: f5c2c04b-1ec5-4679-20fa-08db36eb27d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dxI1cZ5Z8Sd2nZT2fYNL3/p7GktCUVR9XLnPlmCo9vQ6VzHgxub4VA0uPcspDkgB0zeVazTnhBgmhj4zSQtQxc6f+1u44a/ZJHTfMH8/ubkt5kGA7fMJqL7zKpwc7b2HHYslmpFEtnxGEiVia18P74KLK66Cly7lMr8SjRn9Xj22OvSADBpR5ppAaRSuZ1ZyxQXzLVj32Q8wyw/wihfQUe213Yh9adVX9Ly/9vr/GUaWJmuXEIWoEw2yvM/HbKwQ9NRmVKnaQMY67aQhzAUAxXEw8WiA4q07noL8rqpsBw428i6TnkWrE1SynWzvug0Unk3rm2SOd5Lu3RHHSboqBmAm7XQz5mel6Ux+bsLqZ+WZWhXEjPQzxMcmeyhwEFzFpO/kC3osSnapoI8rKBNeFkimoZMlXrkugyiMvtXrxis1zz9cOgKA3498RxpCmwYPBbKzHfHgVX3lANZ/BmoluW66ZgCqPHMm0xJOzEqJXhzaiseUah9ppw8EtdZyc/8GGQI375k+FCdgTQ0wsliuu7SUYdEBF6RvPW/4mC+dZLMWqWLkDUpI6X2TkT9l+N7/56GnR1p9ZtFT1/DFYUnjJ5Lt4NmrkinwOxl3OE7Zx+I4aalFY0A7Z7GKb/rttw0OIw+Wi8MDNgWdun6lTr6Bmw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(136003)(366004)(396003)(451199021)(66899021)(31686004)(38100700002)(36756003)(5660300002)(2906002)(44832011)(31696002)(8936002)(41300700001)(8676002)(86362001)(66556008)(66946007)(66476007)(6486002)(2616005)(83380400001)(110136005)(6512007)(6506007)(53546011)(26005)(6666004)(186003)(316002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZldwRis5UzZiSFVCcnRTOXZBeGVlcXNYLzJ2WW9DNmlyZXd6ZXUvcllSYkpo?=
+ =?utf-8?B?N2o2YU9ZMU9VM1p6N1lUbEE5Z0tSVDY1T2FNMndBRFl4ZCtqU0RuanAreW54?=
+ =?utf-8?B?VHVXRzJqcjJBTUpyL0htZUM5Um83YWVEK3NOc2xYTjZqeitJS2xRc2RyajJD?=
+ =?utf-8?B?U0cwSng4bTZqSERUMndqcUUybzFSVis1R091Y1FpdDQ2NnZBQ3NrUUhOcjR6?=
+ =?utf-8?B?SzdhdFlhelF1MFRaMmozZytTSU4zT25rR3RyYS9iYjBGQnZjQ2pkK2VIRVNZ?=
+ =?utf-8?B?eHFsM0MwSmtKaFJzOGZvVUNUdVFhbGxPWXkzeDVBNmd0SmNaaVlxME9qdm9S?=
+ =?utf-8?B?dHowMWJJU29NellIcUMyd0NBaHZYM2Y0TSt0V3diZUhRWGJGN0x3UTRNOWJB?=
+ =?utf-8?B?TTJXNmJLOFVBUG4vUlBZajUxTWF2ODVGTzJVZ2kzNXFhMGpxS1d2ck5ZM01w?=
+ =?utf-8?B?VDhSSnpQWW5scmNncXo2U3FOWDVhL1phRThDbGs4WDdod2hsSE9IRlFtbmJE?=
+ =?utf-8?B?c01IYVZpaGhSY3lTWmlZazF6YUxCUWxRMlNQamNuUzNOcXBiUWprTHRXZDVW?=
+ =?utf-8?B?REpROG8zWnFvdnRHek8vN0pJVWVYaFFhN3lwYVdGcjJObUxhZVlHSmpCRy9j?=
+ =?utf-8?B?aFJMN2NiaHYyVXlFVkhVdVpUa1MybTc3ZGo4Z2VrcjRCdlZtZnNCQlFubnVE?=
+ =?utf-8?B?TlRKQ29nOHh5eDJsUFgybTk1M25xZE9jUngrYUN3Ky96YUF3YmZHbnQrczdn?=
+ =?utf-8?B?SitrSzZqei9MZHF2L09iN3RDU0dITWFKa21mS1pSbHZFQ1llamREVVVlVUZr?=
+ =?utf-8?B?Yzh3dml2MW5YSGhJUy90VFJ0dW1KT1Vqdm9POFc4cEltaWY0VnRpVG9XaEtS?=
+ =?utf-8?B?cnQ0ZnU1SnV6U012amw3TXh0SXZ4ODUrRkpnTWhiYm5GMmc2U0pQY3ZkMjBI?=
+ =?utf-8?B?bUlnSllRazUvVERjdW5nVzExQmlaaE5rTkNmVzFWNFkrTExld3M2dG81b0x4?=
+ =?utf-8?B?OHFReFBBRFZ6QUFPTm14d2I5a3NYWFJVRVJUQ1lTVlZTSHkrVHF1WEFEK0VD?=
+ =?utf-8?B?WmpIVGNtUlRwWWkvajdLSnZRazU1R2l2Y2s4Y0V4M1Rocmo4TzFHVnF2b0dI?=
+ =?utf-8?B?VjFWMDVyYjFNRSs1OUMzVCtRYTFyOGdsRVJoMVRBWkl3dkw1WHk0MXovV21w?=
+ =?utf-8?B?aHpiNnpmNzRMVDBZdzkra3BnRDQxMk5RcE5qTys3VXRhZnpGSHVRN3VNcThD?=
+ =?utf-8?B?UkFXWWZLOTFBYzhKOVM1TEp0THNXajFJaUk5ZExvSFJzVnorcVNLQTBya0cw?=
+ =?utf-8?B?S25saUFkTWxlUzlBYUNmcXhyNFdHQVo5UlExVFMzM1c0eFR4VGlveS84ZFZx?=
+ =?utf-8?B?aSs0SHRJRkVyOHdOWEhiQzgzWnhmNWZxeUhKY2FkZFFoM081YzMxWjhqUzJH?=
+ =?utf-8?B?RlBBUkFXZlVNZWxXZnRJWGl6NWVuMnp1OExnQldMY2JvS001dTRXaHJUQTRZ?=
+ =?utf-8?B?cVVMNWhsSzNpeDNDREVmMFlXUkJUZmtOU2lHa29nRHhwVXZLZk1UWllCZkI5?=
+ =?utf-8?B?Ym5SZWFlTCtTT0RQajBCbng5SEQwL0Jway9wNnpSYlYzWGhUQUlXYWdIMGhO?=
+ =?utf-8?B?Q0E0enVlMWo3c3NqZlJLZld0anFvNUFBaXJCSWNDMU4ralNUNGcwVVpiTXBr?=
+ =?utf-8?B?VnI0UGFhRzl4Z3cwUUQvd0JGREJsZzgwak9TY2pieEhtOFgxRC9ZR254TjRM?=
+ =?utf-8?B?M1N4MnZ1cnZtaU9wdmlnTWJkSWYzSnA1NExadFFIN3ZxUUwzbFhveFlsSmlR?=
+ =?utf-8?B?VjhETjNYZTd2Wk15dDRpNWwvRXJUc1UvSWdjTDNJNDFyUjFQOHA4SXJ5djEy?=
+ =?utf-8?B?TzFDNzIyVlV2eXp5NlBHWmlnbXNUa0F2THRpZ05yU0JqRUJuRWV0QUIwTm0w?=
+ =?utf-8?B?ajJGenRBcTBhcWpIUDVIL2tvSWx6WUJnWExhSTZCOE1xQ0hkOWs1ai90aHRN?=
+ =?utf-8?B?dmJHQllOT0lRM29BRTU4Q1hjYXl5a0lBR0lKTHROaWxYZ3psN2NBZFRTZCtS?=
+ =?utf-8?B?eXlyUWY2UzBHOS9tUjNIazh6aUovWUcyWlBYK1QzQlZwVEpaa3QwSGZGK0tU?=
+ =?utf-8?Q?xOC1WacxMkxKrgfoWcCvjmJjj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f5c2c04b-1ec5-4679-20fa-08db36eb27d2
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 22:06:21.9228
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4++WE8STcRc0mbrpHi/15FnML9Q78SWS35/9bTp9ZYq2ala5cQriuTMpD5YYBYSO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8479
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This GDB script prints the interrupts in the system in the same way that
-/proc/interrupts does. This does include the architecture specific part
-done by arch_show_interrupts() for x86, ARM, ARM64 and MIPS. Example
-output from an ARM64 system:
+On 2023-04-06 11:58, Lucas Stach wrote:
+> Am Mittwoch, dem 05.04.2023 um 16:44 -0400 schrieb Luben Tuikov:
+>> On 2023-04-05 13:44, Lucas Stach wrote:
+>>> Hi Luben,
+>>>
+>>> Am Dienstag, dem 04.04.2023 um 00:31 -0400 schrieb Luben Tuikov:
+>>>> On 2023-03-28 04:54, Lucas Stach wrote:
+>>>>> Hi Danilo,
+>>>>>
+>>>>> Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
+>>>>>> Hi all,
+>>>>>>
+>>>>>> Commit df622729ddbf ("drm/scheduler: track GPU active time per entity") 
+>>>>>> tries to track the accumulated time that a job was active on the GPU 
+>>>>>> writing it to the entity through which the job was deployed to the 
+>>>>>> scheduler originally. This is done within drm_sched_get_cleanup_job() 
+>>>>>> which fetches a job from the schedulers pending_list.
+>>>>>>
+>>>>>> Doing this can result in a race condition where the entity is already 
+>>>>>> freed, but the entity's newly added elapsed_ns field is still accessed 
+>>>>>> once the job is fetched from the pending_list.
+>>>>>>
+>>>>>> After drm_sched_entity_destroy() being called it should be safe to free 
+>>>>>> the structure that embeds the entity. However, a job originally handed 
+>>>>>> over to the scheduler by this entity might still reside in the 
+>>>>>> schedulers pending_list for cleanup after drm_sched_entity_destroy() 
+>>>>>> already being called and the entity being freed. Hence, we can run into 
+>>>>>> a UAF.
+>>>>>>
+>>>>> Sorry about that, I clearly didn't properly consider this case.
+>>>>>
+>>>>>> In my case it happened that a job, as explained above, was just picked 
+>>>>>> from the schedulers pending_list after the entity was freed due to the 
+>>>>>> client application exiting. Meanwhile this freed up memory was already 
+>>>>>> allocated for a subsequent client applications job structure again. 
+>>>>>> Hence, the new jobs memory got corrupted. Luckily, I was able to 
+>>>>>> reproduce the same corruption over and over again by just using 
+>>>>>> deqp-runner to run a specific set of VK test cases in parallel.
+>>>>>>
+>>>>>> Fixing this issue doesn't seem to be very straightforward though (unless 
+>>>>>> I miss something), which is why I'm writing this mail instead of sending 
+>>>>>> a fix directly.
+>>>>>>
+>>>>>> Spontaneously, I see three options to fix it:
+>>>>>>
+>>>>>> 1. Rather than embedding the entity into driver specific structures 
+>>>>>> (e.g. tied to file_priv) we could allocate the entity separately and 
+>>>>>> reference count it, such that it's only freed up once all jobs that were 
+>>>>>> deployed through this entity are fetched from the schedulers pending list.
+>>>>>>
+>>>>> My vote is on this or something in similar vain for the long term. I
+>>>>> have some hope to be able to add a GPU scheduling algorithm with a bit
+>>>>> more fairness than the current one sometime in the future, which
+>>>>> requires execution time tracking on the entities.
+>>>>
+>>>> Danilo,
+>>>>
+>>>> Using kref is preferable, i.e. option 1 above.
+>>>>
+>>>> Lucas, can you shed some light on,
+>>>>
+>>>> 1. In what way the current FIFO scheduling is unfair, and
+>>>> 2. shed some details on this "scheduling algorithm with a bit
+>>>> more fairness than the current one"? 
+>>>
+>>> I don't have a specific implementation in mind yet. However the current
+>>> FIFO algorithm can be very unfair if you have a sparse workload compete
+>>> with one that generates a lot of jobs without any throttling aside from
+>>> the entity queue length.
+>>
+>> Ah, that's interesting, let's see, a "sparse workload compete with one that
+>> generates a lot of jobs", so basically we have a sparse workload compete
+>> with a dense workload. So we can represent this with two entities, A, B,
+>> whose jobs we're going to represent by the entities, names A and B.
+>> So if we let A be the sparse workload and B the dense workload,
+>> we have this, wlog,
+>>
+>>       First/oldest job, .........................., latter/new jobs.
+>> Subm: A, B, B, B, B, B, A, B, B, B, B, B, A, B, B, B, B, B, A, ...
+>> Time: t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, .....
+>>
+>> The current FIFO algorithm, would prefer to execute those jobs
+>> in order of submission, i.e. oldest-ready-first job. Assume
+>> that all jobs are ready. Then we'll execute them in order.
+>> This is desirable and fair. We want to execute the jobs
+>> in the order they were submitted, given also that they are
+>> ready to be executed. So perhaps we want to execute them like this:
+>>
+>>       First/oldest job, .........................., latter/new jobs.
+>> Subm: A, B, B, B, B, B, A, B, B, B, B, B, A, B, B, B, B, B, A, ...
+>> Time: t0,t1,t2,t3,t4,t5,t6,t7,t8,t9, ....
+>> Exec:          A, B, B, B, B, B, A, B, B, B, B, B, A, B, B, B, B, B, A, ...   
+>>
+>> Any other ordering would starve either A, or B. If we executed the 2nd A
+>> job at t6 or t7, then that would starve the 3rd/4th job in B, since the 2nd A job
+>> arrives at the same time as that of the 3rd B job, at time t6.
+>> The time t3-t0 is some delta > 0, some initial scheduler-start up time.
+>>
+> For simplicity now also assume that all jobs from A take 5ms of GPU
+> time, while jobs from B take 50ms of GPU time.
+> 
+>> IOW, we don't want to delay a job any more than it should wait--the oldest
+>> job, which is also ready, should execute next, so that we're fair how
+>> it executes in real time. We cannot boot B at t6, so that we execute A,
+>> just because it is sparse, but just arrived.
+>>
+>> From A's point of view, it shouldn't expect its job execution time distribution
+>> to be any different than its submission time distribution.
+>>
+>> Do you think there's a job permutation which offers a fairer scheduling
+>> than the Exec line above for the Submission line above?
+>>
+> Yes, if we try to keep some fairness of actual GPU time made available
+> to each entity by tracking the time spent over a sampling interval, we
+> would see that at t6 B has already spent 100ms of GPU time, while A has
+> only spent 5ms, so naturally we would prefer the newly submitted job
+> from entity A when choosing the next job to schedule.
 
-(gdb) lx-interruptlist
-           CPU0       CPU1       CPU2       CPU3
- 10:       3167      1225      1276      2629     GICv2   30 Level     arch_timer
- 13:          0         0         0         0     GICv2   36 Level     arm-pmu
- 14:          0         0         0         0     GICv2   37 Level     arm-pmu
- 15:          0         0         0         0     GICv2   38 Level     arm-pmu
- 16:          0         0         0         0     GICv2   39 Level     arm-pmu
- 28:          0         0         0         0  interrupt-controller@8410640    5 Edge      brcmstb-gpio-wake
- 30:        125         0         0         0     GICv2  128 Level     ttyS0
- 31:          0         0         0         0  interrupt-controller@8416000    0 Level     mspi_done
- 32:          0         0         0         0  interrupt-controller@8410640    3 Edge      brcmstb-waketimer
- 33:          0         0         0         0  interrupt-controller@8418580    8 Edge      brcmstb-waketimer-rtc
- 34:        872         0         0         0     GICv2  230 Level     brcm_scmi@0
- 35:          0         0         0         0  interrupt-controller@8410640   10 Edge      8d0f200.usb-phy
- 37:          0         0         0         0     GICv2   97 Level     PCIe PME
- 42:          0         0         0         0     GICv2  145 Level     xhci-hcd:usb1
- 43:         94         0         0         0     GICv2   71 Level     mmc1
- 44:          0         0         0         0     GICv2   70 Level     mmc0
-IPI0:        23       666       154        98      Rescheduling interrupts
-IPI1:       247      1053      1701       634      Function call interrupts
-IPI2:         0         0         0         0      CPU stop interrupts
-IPI3:         0         0         0         0      CPU stop (for crash dump) interrupts
-IPI4:         0         0         0         0      Timer broadcast interrupts
-IPI5:         7         9         5         0      IRQ work interrupts
-IPI6:         0         0         0         0      CPU wake-up interrupts
-ERR:          0
+The problem is that you cannot inquire a priori about the actual
+time the next task (job) would take. It might be the case
+that the next A job would take a long time while the next B would take
+very small amount of time.
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
-Changes in v2:
+> 
+>>> By tracking the actual GPU time consumed by
+>>> the entities we could implement something with a bit more fairness like
+>>> deficit round robin (don't pin me on the specific algorithm, as I
+>>> haven't given it much thought yet).
+>>
+>> Since there's no preemption, this would be hard to achieve--you're at the mercy
+>> of the execution time of job A_i for an entity A job i. (Assuming there's no
+>> preemption as it is the current state of the GPU scheduler.)
+>>
+>> The only thing you can do, is punish the next job from this entity, A_i+1,
+>> to execute much later. However, you don't know how long A_i+1 would take. If A_i+1
+>> takes very little time, then you're better off executing it at the next opportune
+>> time, i.e. when it would normally execute. But such an algorithm, which doesn't
+>> know a priori the execution time of a job, would punish A_i+1 to execute much later.
+>>
+>> But if A_i+1 takes time as long or longer than A_i, then punishing it to execute much
+>> later, would simply delay it, from an observer's point a view, it wouldn't teach
+>> the context to submit smaller jobs, so that GPU sharing is more fair.
+> 
+> Without preemption we can't really make the scheduling absolutely fair,
+> but we can still do better than the simple FIFO. If a entity has taken
 
-- fixed typo in commit message and explained that some architectures do
-  get the output of arch_show_interrupts() to be printed out
+This is exactly my point as I stated above "Since there's no preemption..."
 
- scripts/gdb/linux/constants.py.in |  14 ++
- scripts/gdb/linux/interrupts.py   | 232 ++++++++++++++++++++++++++++++
- scripts/gdb/vmlinux-gdb.py        |   1 +
- 3 files changed, 247 insertions(+)
- create mode 100644 scripts/gdb/linux/interrupts.py
+> up a disproportionate amount of GPU time over the last sampling
+> interval, we can derate it when picking the next job to schedule to
+> allow other entities to take up more GPU time in the next sampling
+> interval.
 
-diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
-index e484e2e7e4d5..36fd2b145853 100644
---- a/scripts/gdb/linux/constants.py.in
-+++ b/scripts/gdb/linux/constants.py.in
-@@ -15,6 +15,7 @@
- #include <linux/clk-provider.h>
- #include <linux/fs.h>
- #include <linux/hrtimer.h>
-+#include <linux/irq.h>
- #include <linux/mount.h>
- #include <linux/of_fdt.h>
- #include <linux/radix-tree.h>
-@@ -57,6 +58,10 @@ LX_VALUE(SB_NODIRATIME)
- /* linux/htimer.h */
- LX_GDBPARSED(hrtimer_resolution)
- 
-+/* linux/irq.h */
-+LX_GDBPARSED(IRQD_LEVEL)
-+LX_GDBPARSED(IRQ_HIDDEN)
-+
- /* linux/mount.h */
- LX_VALUE(MNT_NOSUID)
- LX_VALUE(MNT_NODEV)
-@@ -85,3 +90,12 @@ LX_CONFIG(CONFIG_HIGH_RES_TIMERS)
- LX_CONFIG(CONFIG_NR_CPUS)
- LX_CONFIG(CONFIG_OF)
- LX_CONFIG(CONFIG_TICK_ONESHOT)
-+LX_CONFIG(CONFIG_GENERIC_IRQ_SHOW_LEVEL)
-+LX_CONFIG(CONFIG_X86_LOCAL_APIC)
-+LX_CONFIG(CONFIG_SMP)
-+LX_CONFIG(CONFIG_X86_THERMAL_VECTOR)
-+LX_CONFIG(CONFIG_X86_MCE_THRESHOLD)
-+LX_CONFIG(CONFIG_X86_MCE_AMD)
-+LX_CONFIG(CONFIG_X86_MCE)
-+LX_CONFIG(CONFIG_X86_IO_APIC)
-+LX_CONFIG(CONFIG_HAVE_KVM)
-diff --git a/scripts/gdb/linux/interrupts.py b/scripts/gdb/linux/interrupts.py
-new file mode 100644
-index 000000000000..ef478e273791
---- /dev/null
-+++ b/scripts/gdb/linux/interrupts.py
-@@ -0,0 +1,232 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright 2023 Broadcom
-+
-+import gdb
-+
-+from linux import constants
-+from linux import cpus
-+from linux import utils
-+from linux import radixtree
-+
-+irq_desc_type = utils.CachedType("struct irq_desc")
-+
-+def irq_settings_is_hidden(desc):
-+    return desc['status_use_accessors'] & constants.LX_IRQ_HIDDEN
-+
-+def irq_desc_is_chained(desc):
-+    return desc['action'] and desc['action'] == gdb.parse_and_eval("&chained_action")
-+
-+def irqd_is_level(desc):
-+    return desc['irq_data']['common']['state_use_accessors'] & constants.LX_IRQD_LEVEL
-+
-+def show_irq_desc(prec, irq):
-+    text = ""
-+
-+    desc = radixtree.lookup(gdb.parse_and_eval("&irq_desc_tree"), irq)
-+    if desc is None:
-+        return text
-+
-+    desc = desc.cast(irq_desc_type.get_type())
-+    if desc is None:
-+        return text
-+
-+    if irq_settings_is_hidden(desc):
-+        return text
-+
-+    any_count = 0
-+    if desc['kstat_irqs']:
-+        for cpu in cpus.each_online_cpu():
-+            any_count += cpus.per_cpu(desc['kstat_irqs'], cpu)
-+
-+    if (desc['action'] == 0 or irq_desc_is_chained(desc)) and any_count == 0:
-+        return text;
-+
-+    text += "%*d: " % (prec, irq)
-+    for cpu in cpus.each_online_cpu():
-+        if desc['kstat_irqs']:
-+            count = cpus.per_cpu(desc['kstat_irqs'], cpu)
-+        else:
-+            count = 0
-+        text += "%10u" % (count)
-+
-+    name = "None"
-+    if desc['irq_data']['chip']:
-+        chip = desc['irq_data']['chip']
-+        if chip['name']:
-+            name = chip['name'].string()
-+        else:
-+            name = "-"
-+
-+    text += "  %8s" % (name)
-+
-+    if desc['irq_data']['domain']:
-+        text += "  %*lu" % (prec, desc['irq_data']['hwirq'])
-+    else:
-+        text += "  %*s" % (prec, "")
-+
-+    if constants.LX_CONFIG_GENERIC_IRQ_SHOW_LEVEL:
-+        text += " %-8s" % ("Level" if irqd_is_level(desc) else "Edge")
-+
-+    if desc['name']:
-+        text += "-%-8s" % (desc['name'].string())
-+
-+    """ Some toolchains may not be able to provide information about irqaction """
-+    try:
-+        gdb.lookup_type("struct irqaction")
-+        action = desc['action']
-+        if action is not None:
-+            text += "  %s" % (action['name'].string())
-+            while True:
-+                action = action['next']
-+                if action is not None:
-+                    break
-+                if action['name']:
-+                    text += ", %s" % (action['name'].string())
-+    except:
-+        pass
-+
-+    text += "\n"
-+
-+    return text
-+
-+def show_irq_err_count(prec):
-+    cnt = utils.gdb_eval_or_none("irq_err_count")
-+    text = ""
-+    if cnt is not None:
-+        text += "%*s: %10u\n" % (prec, "ERR", cnt['counter'])
-+    return text
-+
-+def x86_show_irqstat(prec, pfx, field, desc):
-+    irq_stat = gdb.parse_and_eval("&irq_stat")
-+    text = "%*s: " % (prec, pfx)
-+    for cpu in cpus.each_online_cpu():
-+        stat = cpus.per_cpu(irq_stat, cpu)
-+        text += "%10u " % (stat[field])
-+    text += "  %s\n" % (desc)
-+    return text
-+
-+def x86_show_mce(prec, var, pfx, desc):
-+    pvar = gdb.parse_and_eval(var)
-+    text = "%*s: " % (prec, pfx)
-+    for cpu in cpus.each_online_cpu():
-+        text += "%10u " % (cpus.per_cpu(pvar, cpu))
-+    text += "  %s\n" % (desc)
-+    return text
-+
-+def x86_show_interupts(prec):
-+    text = x86_show_irqstat(prec, "NMI", '__nmi_count', 'Non-maskable interrupts')
-+
-+    if constants.LX_CONFIG_X86_LOCAL_APIC:
-+        text += x86_show_irqstat(prec, "LOC", 'apic_timer_irqs', "Local timer interrupts")
-+        text += x86_show_irqstat(prec, "SPU", 'irq_spurious_count', "Spurious interrupts")
-+        text += x86_show_irqstat(prec, "PMI", 'apic_perf_irqs', "Performance monitoring interrupts")
-+        text += x86_show_irqstat(prec, "IWI", 'apic_irq_work_irqs', "IRQ work interrupts")
-+        text += x86_show_irqstat(prec, "RTR", 'icr_read_retry_count', "APIC ICR read retries")
-+        if utils.gdb_eval_or_none("x86_platform_ipi_callback") is not None:
-+            text += x86_show_irqstat(prec, "PLT", 'x86_platform_ipis', "Platform interrupts")
-+
-+    if constants.LX_CONFIG_SMP:
-+        text += x86_show_irqstat(prec, "RES", 'irq_resched_count', "Rescheduling interrupts")
-+        text += x86_show_irqstat(prec, "CAL", 'irq_call_count', "Function call interrupts")
-+        text += x86_show_irqstat(prec, "TLB", 'irq_tlb_count', "TLB shootdowns")
-+
-+    if constants.LX_CONFIG_X86_THERMAL_VECTOR:
-+        text += x86_show_irqstat(prec, "TRM", 'irq_thermal_count', "Thermal events interrupts")
-+
-+    if constants.LX_CONFIG_X86_MCE_THRESHOLD:
-+        text += x86_show_irqstat(prec, "THR", 'irq_threshold_count', "Threshold APIC interrupts")
-+
-+    if constants.LX_CONFIG_X86_MCE_AMD:
-+        text += x86_show_irqstat(prec, "DFR", 'irq_deferred_error_count', "Deferred Error APIC interrupts")
-+
-+    if constants.LX_CONFIG_X86_MCE:
-+        text += x86_show_mce(prec, "&mce_exception_count", "MCE", "Machine check exceptions")
-+        text == x86_show_mce(prec, "&mce_poll_count", "MCP", "Machine check polls")
-+
-+    text += show_irq_err_count(prec)
-+
-+    if constants.LX_CONFIG_X86_IO_APIC:
-+        cnt = utils.gdb_eval_or_none("irq_mis_count")
-+        if cnt is not None:
-+            text += "%*s: %10u\n" % (prec, "MIS", cnt['counter'])
-+
-+    if constants.LX_CONFIG_HAVE_KVM:
-+        text += x86_show_irqstat(prec, "PIN", 'kvm_posted_intr_ipis', 'Posted-interrupt notification event')
-+        text += x86_show_irqstat(prec, "NPI", 'kvm_posted_intr_nested_ipis', 'Nested posted-interrupt event')
-+        text += x86_show_irqstat(prec, "PIW", 'kvm_posted_intr_wakeup_ipis', 'Posted-interrupt wakeup event')
-+
-+    return text
-+
-+def arm_common_show_interrupts(prec):
-+    text = ""
-+    nr_ipi = utils.gdb_eval_or_none("nr_ipi")
-+    ipi_desc = utils.gdb_eval_or_none("ipi_desc")
-+    ipi_types = utils.gdb_eval_or_none("ipi_types")
-+    if nr_ipi is None or ipi_desc is None or ipi_types is None:
-+        return text
-+
-+    if prec >= 4:
-+        sep = " "
-+    else:
-+        sep = ""
-+
-+    for ipi in range(nr_ipi):
-+        text += "%*s%u:%s" % (prec - 1, "IPI", ipi, sep)
-+        desc = ipi_desc[ipi].cast(irq_desc_type.get_type().pointer())
-+        if desc == 0:
-+            continue
-+        for cpu in cpus.each_online_cpu():
-+            text += "%10u" % (cpus.per_cpu(desc['kstat_irqs'], cpu))
-+        text += "      %s" % (ipi_types[ipi].string())
-+        text += "\n"
-+    return text
-+
-+def aarch64_show_interrupts(prec):
-+    text = arm_common_show_interrupts(prec)
-+    text += "%*s: %10lu\n" % (prec, "ERR", gdb.parse_and_eval("irq_err_count"))
-+    return text
-+
-+def arch_show_interrupts(prec):
-+    text = ""
-+    if utils.is_target_arch("x86"):
-+        text += x86_show_interupts(prec)
-+    elif utils.is_target_arch("aarch64"):
-+        text += aarch64_show_interrupts(prec)
-+    elif utils.is_target_arch("arm"):
-+        text += arm_common_show_interrupts(prec)
-+    elif utils.is_target_arch("mips"):
-+        text += show_irq_err_count(prec)
-+    else:
-+        raise gdb.GdbError("Unsupported architecture: {}".format(target_arch))
-+
-+    return text
-+
-+class LxInterruptList(gdb.Command):
-+    """Print /proc/interrupts"""
-+
-+    def __init__(self):
-+        super(LxInterruptList, self).__init__("lx-interruptlist", gdb.COMMAND_DATA)
-+
-+    def invoke(self, arg, from_tty):
-+        nr_irqs = gdb.parse_and_eval("nr_irqs")
-+        prec = 3
-+        j = 1000
-+        while prec < 10 and j <= nr_irqs:
-+            prec += 1
-+            j *= 10
-+
-+        gdb.write("%*s" % (prec + 8, ""))
-+        for cpu in cpus.each_online_cpu():
-+            gdb.write("CPU%-8d" % cpu)
-+        gdb.write("\n")
-+
-+        if utils.gdb_eval_or_none("&irq_desc_tree") is None:
-+            return
-+
-+        for irq in range(nr_irqs):
-+            gdb.write(show_irq_desc(prec, irq))
-+        gdb.write(arch_show_interrupts(prec))
-+
-+
-+LxInterruptList()
-diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
-index 2f57adcf3dff..2a72f91059b5 100644
---- a/scripts/gdb/vmlinux-gdb.py
-+++ b/scripts/gdb/vmlinux-gdb.py
-@@ -42,3 +42,4 @@ else:
-     import linux.device
-     import linux.mm
-     import linux.radixtree
-+    import linux.interrupts
--- 
-2.34.1
+The problem is that you don't know how long that new/other job would
+take--it may be a long-time job as well. What if the punished context's
+next job was a small quick job, but because of its previous job, it's now
+been punished to wait a long time. What exacerbates the problem is if
+the favourite new context picked has a big long job as the next job
+because its previous job was a quick one.
+
+The base problem with DRR, and similar scheduling algorithms when
+applied to the GPU scheduling is that you don't know how long the next
+job would take, a priori, and make decisions on context's past jobs. In
+classical DRR applied to networking, you send bytes (the work done) until its
+quanta is exhausted and then you move on to another one--which is preemption.
+
+This approach would work if you get a hint from userspace as to the size
+of jobs a context would send, i.e. knowing a priori. Then you can formulate
+a context permutation which would achieve fairness, somewhat.
+
+Are you seeing contexts sending lots of big jobs very frequently and other
+contexts sending small jobs very infrequently?
+
+What you could do, is use an adjusted-time-spent scheduling algorithm,
+where you calculate the running average of a context's (past) jobs,
+and schedule it with a frequency, such that the average time spent on the GPU
+is about the same as that of other context's jobs.
+
+Regards,
+Luben
 
