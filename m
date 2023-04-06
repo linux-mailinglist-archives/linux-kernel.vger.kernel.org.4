@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CF46D9BDC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790186D9BB1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239668AbjDFPJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S239686AbjDFPFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDFPJ3 (ORCPT
+        with ESMTP id S239429AbjDFPF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:09:29 -0400
-X-Greylist: delayed 183 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 08:09:04 PDT
-Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:df01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E89A49FF;
-        Thu,  6 Apr 2023 08:09:04 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net (mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:5708:0:640:5704:0])
-        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 523C360263;
-        Thu,  6 Apr 2023 18:04:12 +0300 (MSK)
-Received: from den-plotnikov-w.yandex-team.ru (unknown [2a02:6b8:b081:b509::1:20])
-        by mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id 54SddM0OoiE0-BlJ8zXkE;
-        Thu, 06 Apr 2023 18:04:11 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1680793451; bh=uT6P8O/ObGQAv1KfFPSPTzaiH0ko44WcONlGqu7lgcM=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=vVBmP036Ddx8dYBXXWchfwThvZXoPY/JdtPoqqu1z53chZD8mixRIBDEV51FdK1OB
-         cki+wXjp7Sd10zuDF9Ys0vIxjRgEjoB/xYGkhQtT4m4qJlTJFt6YMMgY+Iv6sKYXbF
-         43Z7c5r7SH5IS8tSfIop8fGwuzu1KhvyWjZ+cjas=
-Authentication-Results: mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Denis Plotnikov <den-plotnikov@yandex-team.ru>
-To:     linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, den-plotnikov@yandex-team.ru,
-        target-devel@vger.kernel.org, varun@chelsio.com,
-        nab@linux-iscsi.org, martin.petersen@oracle.com
-Subject: [PATCH] scsi: target: cxgbit: check skb dequeue result
-Date:   Thu,  6 Apr 2023 18:04:05 +0300
-Message-Id: <20230406150405.300909-1-den-plotnikov@yandex-team.ru>
+        Thu, 6 Apr 2023 11:05:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51919619F;
+        Thu,  6 Apr 2023 08:05:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E004960EAE;
+        Thu,  6 Apr 2023 15:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F340EC433D2;
+        Thu,  6 Apr 2023 15:05:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680793517;
+        bh=4XTqoOIzV1pxO6uiQBLvYXY23I2rTr+JdRE8YKQSOtw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oCiIggbXe3BgCKtrTHBwVF+8Hja3/ccC2vEhQsEal9BJRvZhGbwurz76UG6+dU+4/
+         YHVTSseZitltDrfhBrE1vCsH+wrlB/GCrtOzz1NH7zd7VoTYmPC9F5xzc4VscpeDBc
+         ncvRPXWn31GnWvyZo/TXSSRjYHxLV3BALR0LR3kX4Haz9MAsoF8KniOn2SAQI2w1QS
+         2ZwvDNAqDE5gnEAamGuA6v9ebBMcQ4ZfzubKNAVXYLGYPaHbJNIqdmJJmE6HOojhZh
+         MEQTDVMF2eRt713mKxqok4l/eIJHSVGenCoZg79J0fF6rDiREFKQVVhVHebPxSUUa7
+         hrwZ1fHaV4p7g==
+From:   Chao Yu <chao@kernel.org>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chao Yu <chao@kernel.org>
+Subject: [PATCH v2] ext4: fix to report fstrim.minlen back to userspace
+Date:   Thu,  6 Apr 2023 23:04:10 +0800
+Message-Id: <20230406150410.3853001-1-chao@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On a couple of abort packet paths skb dequeuing may end up with
-returning NULL, which, in turn, may end up with further null
-pointer dereference.
+Quoted from manual of fstrim(8):
 
-Fix it by checking the return value of skb dequeuing.
+"-m, --minimum minimum-size
+	..., if it's smaller than the device's minimum, and report that
+(fstrim_range.minlen) back to userspace."
 
-Found by Linux Verification Center(linuxtesting.org) with SVACE.
+So this patch tries to report adjusted fstrim_range.minlen back to
+userspace via FITRIM interface, if the value is smaller than device's
+minimum discard granularity.
 
-Fixes: 9730ffcb8957 (cxgbit: add files for cxgbit.ko)
-Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
+Signed-off-by: Chao Yu <chao@kernel.org>
 ---
- drivers/target/iscsi/cxgbit/cxgbit_cm.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+v2:
+- fix the wrong calculation of range->minlen.
+ fs/ext4/mballoc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/target/iscsi/cxgbit/cxgbit_cm.c b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
-index 518ded214e74..d43fd761c20a 100644
---- a/drivers/target/iscsi/cxgbit/cxgbit_cm.c
-+++ b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
-@@ -669,6 +669,9 @@ static int cxgbit_send_abort_req(struct cxgbit_sock *csk)
- 		cxgbit_send_tx_flowc_wr(csk);
- 
- 	skb = __skb_dequeue(&csk->skbq);
-+	if (!skb)
-+		return 0;
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index d8b9d6a83d1e..4af51a16fc64 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -6491,6 +6491,10 @@ int ext4_trim_fs(struct super_block *sb, struct fstrim_range *range)
+ 				discard_granularity >> sb->s_blocksize_bits);
+ 		if (minlen > EXT4_CLUSTERS_PER_GROUP(sb))
+ 			goto out;
 +
- 	cxgb_mk_abort_req(skb, len, csk->tid, csk->txq_idx,
- 			  csk->com.cdev, cxgbit_abort_arp_failure);
- 
-@@ -1769,9 +1772,10 @@ static void cxgbit_abort_req_rss(struct cxgbit_sock *csk, struct sk_buff *skb)
- 		cxgbit_send_tx_flowc_wr(csk);
- 
- 	rpl_skb = __skb_dequeue(&csk->skbq);
--
--	cxgb_mk_abort_rpl(rpl_skb, len, csk->tid, csk->txq_idx);
--	cxgbit_ofld_send(csk->com.cdev, rpl_skb);
-+	if (!rpl_skb) {
-+		cxgb_mk_abort_rpl(rpl_skb, len, csk->tid, csk->txq_idx);
-+		cxgbit_ofld_send(csk->com.cdev, rpl_skb);
-+	}
- 
- 	if (wakeup_thread) {
- 		cxgbit_queue_rx_skb(csk, skb);
++		/* Report adjusted minlen back to userspace */
++		range->minlen = EXT4_C2B(EXT4_SB(sb), minlen) <<
++						sb->s_blocksize_bits;
+ 	}
+ 	if (end >= max_blks - 1) {
+ 		end = max_blks - 1;
 -- 
 2.25.1
 
