@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2376D906E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2AD6D9071
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbjDFH2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S235234AbjDFH3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjDFH2r (ORCPT
+        with ESMTP id S233235AbjDFH3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:28:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 506AF6E88
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:28:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1CA316F8;
-        Thu,  6 Apr 2023 00:29:29 -0700 (PDT)
-Received: from [192.168.1.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B173A3F73F;
-        Thu,  6 Apr 2023 00:28:42 -0700 (PDT)
-Message-ID: <d368e1b5-8094-ee30-9812-3a321e8bedb7@arm.com>
-Date:   Thu, 6 Apr 2023 09:28:32 +0200
+        Thu, 6 Apr 2023 03:29:13 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C5B76BD;
+        Thu,  6 Apr 2023 00:29:10 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 50A0E1C000B;
+        Thu,  6 Apr 2023 07:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1680766149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3N0MhR4UYPZqjjIJvCfac3PeMhUE3Q3jLEyIQ0jdrco=;
+        b=EUYCN/AWFMTjvujuAKiAKwj/VmBeL/nIoOV0dvYnKt3iBE5JMxuOOT9akAY2HcqPJ3z0nu
+        SlJloGIh0syhJSYVb2Fp1+2jd2/wzh+8PrUC+dx2A9o9oFsPMjpQHvYRsQDQqsOOK5obTi
+        v5jH2wATkipLFNTyV0flAZn/6r0H/Jy5BkCWm8oWoGT4LG/hzEGaI60x8y7tQJNxmNG+mA
+        u/S5tDyZowoNjr1UFuJOkXN1V/jQdph98yrrrcbink3ugR9u6t2x17UZBnqnWk8xLX3M5k
+        d58+/CRAgk4AixYwBOOYVPy7WcyqZ0C9oODAhH78rg+Ua7ObCuZNso1kpo6EWA==
+Date:   Thu, 6 Apr 2023 09:29:06 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-phy@lists.infradead.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
+Message-ID: <20230406092906.658889a2@bootlin.com>
+In-Reply-To: <20230323103154.264546-1-herve.codina@bootlin.com>
+References: <20230323103154.264546-1-herve.codina@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 3/3] cacheinfo: Add use_arch[|_cache]_info field/function
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20230327115953.788244-1-pierre.gondois@arm.com>
- <20230327115953.788244-4-pierre.gondois@arm.com>
- <20230327121734.GB31342@willie-the-truck>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20230327121734.GB31342@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Will,
+Hi all,
 
-On 3/27/23 14:17, Will Deacon wrote:
-> On Mon, Mar 27, 2023 at 01:59:51PM +0200, Pierre Gondois wrote:
->> The cache information can be extracted from either a Device
->> Tree (DT), the PPTT ACPI table, or arch registers (clidr_el1
->> for arm64).
->>
->> The clidr_el1 register is used only if DT/ACPI information is not
->> available. It does not states how caches are shared among CPUs.
->>
->> Add a use_arch_cache_info field/function to identify when the
->> DT/ACPI doesn't provide cache information. Use this information
->> to assume L1 caches are privates and L2 and higher are shared among
->> all CPUs.
->>
->> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->> ---
->>   arch/arm64/kernel/cacheinfo.c |  5 +++++
->>   drivers/base/cacheinfo.c      | 20 ++++++++++++++++++--
->>   include/linux/cacheinfo.h     |  2 ++
->>   3 files changed, 25 insertions(+), 2 deletions(-)
->>
->> diff --git a/arch/arm64/kernel/cacheinfo.c b/arch/arm64/kernel/cacheinfo.c
->> index c307f69e9b55..b6306cda0fa7 100644
->> --- a/arch/arm64/kernel/cacheinfo.c
->> +++ b/arch/arm64/kernel/cacheinfo.c
->> @@ -96,3 +96,8 @@ int populate_cache_leaves(unsigned int cpu)
->>   	}
->>   	return 0;
->>   }
->> +
->> +bool use_arch_cache_info(unsigned int cpu)
->> +{
->> +	return true;
->> +}
+I haven't received any feedback on this RFC.
+Have you had a chance to review it ?
+
+Best regards,
+Hervé
+
+On Thu, 23 Mar 2023 11:31:50 +0100
+Herve Codina <herve.codina@bootlin.com> wrote:
+
+> Hi,
 > 
-> It would be a lot nicer if this was a static inline function in a header
-> rather than a weak symbol.
-
-I am not sure I see where the static inline function should be added.
-Do you prefer to have function like the following in
-include/linux/cacheinfo.h ?
-
-static inline bool use_arch_cache_info(unsigned int cpu)
-{
-#if defined(CONFIG_ARM64)
-	return true;
-#else
-	return false;
-#endif
-}
-
-Regards,
-Pierre
-
+> I have a system where I need to handle an HDLC interface.
 > 
-> Will
+> The HDLC data are transferred using a TDM bus on which a PEF2256 is
+> present. The PEF2256 transfers data from/to the TDM bus to/from E1 line.
+> This PEF2256 is also connected to a PowerQUICC SoC for the control path
+> and the TDM is connected to the SoC (QMC component) for the data path.
+> 
+> From the HDLC driver, I need to handle data using the QMC and carrier
+> detection using the PEF2256 (E1 line carrier).
+> 
+> The HDLC driver consider the PEF2256 as a generic PHY.
+> So, the design is the following:
+> 
+> +----------+          +-------------+              +---------+
+> | HDLC drv | <-data-> | QMC channel | <-- TDM -->  | PEF2256 |
+> +----------+          +-------------+              |         | <--> E1
+>    ^   +---------+     +---------+                 |         |
+>    +-> | Gen PHY | <-> | PEF2256 | <- local bus -> |         |
+>        +---------+     | PHY drv |                 +---------+
+>                        +---------+
+> 
+> In order to implement this, I had to:
+>  1 - Extend the generic PHY API to support get_status() and notification
+>      on status change.
+>  2 - Introduce a new kind of generic PHY named "basic phy". This PHY
+>      familly can provide a link status in the get_status() data.
+>  3 - Support the PEF2256 PHY as a "basic phy"
+> 
+> The purpose of this RFC series is to discuss this design.
+> 
+> The QMC driver code is available on linux-next. In this series:
+> - patch 1: driver HDLC using the QMC channel
+> - patch 2: Extend the generic PHY API
+> - patch 3: Use the "basic phy" in the HDLC driver
+> - patch 4: Implement the PEF2256 PHY driver
+> 
+> I did 2 patches for the HDLC driver in order to point the new PHY family
+> usage in the HDLC driver. In the end, these two patches will be squashed
+> and the bindings will be added.
+> 
+> Hope to have some feedback on this proposal.
+> 
+> Best regards,
+> Hervé
+> 
+> Herve Codina (4):
+>   net: wan: Add support for QMC HDLC
+>   phy: Extend API to support 'status' get and notification
+>   net: wan: fsl_qmc_hdlc: Add PHY support
+>   phy: lantiq: Add PEF2256 PHY support
+> 
+>  drivers/net/wan/Kconfig                 |  12 +
+>  drivers/net/wan/Makefile                |   1 +
+>  drivers/net/wan/fsl_qmc_hdlc.c          | 558 ++++++++++++++++++++++++
+>  drivers/phy/lantiq/Kconfig              |  15 +
+>  drivers/phy/lantiq/Makefile             |   1 +
+>  drivers/phy/lantiq/phy-lantiq-pef2256.c | 131 ++++++
+>  drivers/phy/phy-core.c                  |  88 ++++
+>  include/linux/phy/phy-basic.h           |  27 ++
+>  include/linux/phy/phy.h                 |  89 +++-
+>  9 files changed, 921 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/net/wan/fsl_qmc_hdlc.c
+>  create mode 100644 drivers/phy/lantiq/phy-lantiq-pef2256.c
+>  create mode 100644 include/linux/phy/phy-basic.h
+> 
+
