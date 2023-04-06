@@ -2,113 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDB46D8D1D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB246D8D1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbjDFB5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S231696AbjDFB4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 21:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234539AbjDFB5F (ORCPT
+        with ESMTP id S229608AbjDFB4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:57:05 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A46283CE
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:57:02 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PsPkf381dz4f3v5b
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:56:58 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgCnUyHoJi5kX936GA--.31319S6;
-        Thu, 06 Apr 2023 09:56:59 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     dennis@kernel.org, tj@kernel.org, cl@linux.com, linux-mm@kvack.org,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk
-Cc:     linux-kernel@vger.kernel.org, dchinner@redhat.com,
-        yebin10@huawei.com, yebin@huaweicloud.com
-Subject: [PATCH v2 2/2] lib/percpu_counter: fix dying cpu compare race
-Date:   Thu,  6 Apr 2023 09:56:29 +0800
-Message-Id: <20230406015629.1804722-3-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230406015629.1804722-1-yebin@huaweicloud.com>
-References: <20230406015629.1804722-1-yebin@huaweicloud.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCnUyHoJi5kX936GA--.31319S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW7ArWDXw1ktFy7KFyfZwb_yoW8WFy5pr
-        4UKry5Jr18AF92k343Kw1vqF9I9r1kAF4rKwnrGF1fAFnxZa45urW0yrs8JF109rn7Wrya
-        qryjgF4xCa4Yv3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-        xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2
-        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-        Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUHbyAUUUUU
-        =
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 5 Apr 2023 21:56:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8BEA9
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:56:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CF7618D1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B921C433EF;
+        Thu,  6 Apr 2023 01:56:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680746211;
+        bh=NfVX/6hHzwCtO9HI9+XPZetTVkhGP+gQgPt3MPubcPk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kuo7uiXVaEjL4NGKpZ/ikc8NnyHxIM22q0eFCcPGmhranX/JO3hTSRGZf2Y8eEAQL
+         VeKbZ2PDbfGbh0icOYaML7+71C3fqLRioDIOS7pritKeZtSAR8+wIwuQf3gvJITAvP
+         mqDuEA+9mr/JJYl9mwWQGzkpkpbTYxsZ9929/Hw8=
+Date:   Wed, 5 Apr 2023 18:56:50 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     jaewon31.kim@samsung.com
+Cc:     "jstultz@google.com" <jstultz@google.com>,
+        "tjmercier@google.com" <tjmercier@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+Subject: Re: [PATCH v2] dma-buf/heaps: system_heap: Avoid DoS by limiting
+ single allocations to half of all memory
+Message-Id: <20230405185650.239f9721f066aa480e83d543@linux-foundation.org>
+In-Reply-To: <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
+References: <20230405172524.e25b62e1c548a95564b1d324@linux-foundation.org>
+        <20230406000854.25764-1-jaewon31.kim@samsung.com>
+        <CGME20230406000841epcas1p3630010a770682be0f1d540a448f3e00e@epcms1p3>
+        <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+On Thu, 06 Apr 2023 10:44:19 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
 
-In commit 8b57b11cca88 ("pcpcntrs: fix dying cpu summation race") a race
-condition between a cpu dying and percpu_counter_sum() iterating online CPUs
-was identified.
-Acctually, there's the same race condition between a cpu dying and
-__percpu_counter_compare(). Here, use 'num_online_cpus()' for quick judgment.
-But 'num_online_cpus()' will be decreased before call 'percpu_counter_cpu_dead()',
-then maybe return incorrect result.
-To solve above issue, also need to add dying CPUs count when do quick judgment
-in __percpu_counter_compare().
+> >> ...
+> >>
+> >> --- a/drivers/dma-buf/heaps/system_heap.c
+> >> +++ b/drivers/dma-buf/heaps/system_heap.c
+> >> @@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+> >>  	struct page *page, *tmp_page;
+> >>  	int i, ret = -ENOMEM;
+> >>  
+> >> +	if (len / PAGE_SIZE > totalram_pages() / 2)
+> >> +		return ERR_PTR(-ENOMEM);
+> >> +
+> >
+> >This seems so random.  Why ram/2 rather than ram/3 or 17*ram/35?
+> 
+> Hello
+> 
+> Thank you for your comment.
+> 
+> I just took the change from the old ion driver code, and actually I thought the
+> half of all memory is unrealistic. It could be unwanted size like negative,
+> or too big size which incurs slowness or OoM panic.
+> 
+> >
+> >Better behavior would be to try to allocate what the caller asked
+> >for and if that doesn't work out, fail gracefully after freeing the
+> >partial allocations which have been performed thus far.  If dma_buf
+> >is changed to do this then that change is useful in many scenarios other
+> >than this crazy corner case.
+> 
+> I think you would like __GFP_RETRY_MAYFAIL. Actually T.J. Mercier recommended
+> earlier, here's what we discussed.
+> https://lore.kernel.org/linux-mm/20230331005140epcms1p1ac5241f02f645e9dbc29626309a53b24@epcms1p1/
+> 
+> I just worried about a case in which we need oom kill to get more memory but
+> let me change my mind. That case seems to be rare. I think now it's time when
+> we need to make a decision and not to allow oom kill for dma-buf system heap
+> allocations.
+> 
+> But I still want to block that huge size over ram. For an unavailabe size,
+> I think, we don't have to do memory reclaim or killing processes, and we can
+> avoid freezing screen in user perspecitve.
+> 
+> This is eventually what I want. Can we check totalram_pages and and apply
+> __GFP_RETRY_MAYFAIL?
+> 
+> --- a/drivers/dma-buf/heaps/system_heap.c
+> +++ b/drivers/dma-buf/heaps/system_heap.c
+> @@ -41,7 +41,7 @@ struct dma_heap_attachment {
+>         bool mapped;
+>  };
+>  
+> -#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
+> +#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP | __GFP_RETRY_MAYFAIL)
+>  #define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
+>  #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+>                                 | __GFP_NORETRY) & ~__GFP_RECLAIM) \
+> @@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+>         struct page *page, *tmp_page;
+>         int i, ret = -ENOMEM;
+>  
+> +       if (len / PAGE_SIZE > totalram_pages())
+> +               return ERR_PTR(-ENOMEM);
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- lib/percpu_counter.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+We're catering for a buggy caller here, aren't we?  Are such large
+requests ever reasonable?
 
-diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
-index 5004463c4f9f..399840cb0012 100644
---- a/lib/percpu_counter.c
-+++ b/lib/percpu_counter.c
-@@ -227,6 +227,15 @@ static int percpu_counter_cpu_dead(unsigned int cpu)
- 	return 0;
- }
- 
-+static __always_inline unsigned int num_count_cpus(void)
-+{
-+#ifdef CONFIG_HOTPLUG_CPU
-+	return (num_online_cpus() + num_dying_cpus());
-+#else
-+	return num_online_cpus();
-+#endif
-+}
-+
- /*
-  * Compare counter against given value.
-  * Return 1 if greater, 0 if equal and -1 if less
-@@ -237,7 +246,7 @@ int __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch)
- 
- 	count = percpu_counter_read(fbc);
- 	/* Check to see if rough count will be sufficient for comparison */
--	if (abs(count - rhs) > (batch * num_online_cpus())) {
-+	if (abs(count - rhs) > (batch * num_count_cpus())) {
- 		if (count > rhs)
- 			return 1;
- 		else
--- 
-2.31.1
-
+How about we decide what's the largest reasonable size and do a
+WARN_ON(larger-than-that), so the buggy caller gets fixed?
