@@ -2,130 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08A06DA17F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CF26DA17D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbjDFTgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        id S236928AbjDFTf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237209AbjDFTgJ (ORCPT
+        with ESMTP id S229882AbjDFTf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:36:09 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD57AA6
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:36:08 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id sg7so3938274ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:36:08 -0700 (PDT)
+        Thu, 6 Apr 2023 15:35:57 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B083BE72
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:35:56 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-503e71247bbso22193a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680809766; x=1683401766;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cfBu7ny4boS9Y/7qj052s9pihxiH3sSFTHbJOJ58P+A=;
-        b=Twlx/bP6m2jy2fZonvmqk4nFEHpd1/ykkoIVh2l143Ux0L+oKc4kWlPpsaaZodPA2J
-         zAYrdKpQ34FVVvCh0Lm4vKu6s2BejMK8CdBoCkTWzUmE/LxXTutJ44EtLlSSnJJ931W2
-         eBhoP2mTglWndlfd/RYDH6tzg9cP/68TA9P08=
+        d=gmail.com; s=20210112; t=1680809756; x=1683401756;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9aMy8PktJ2aJ10teNXP10wqqWlTdBdIzTbHlbEeFkSs=;
+        b=jxmUEgB7LiuifZ1IuGoqTcbqrZG/zQqFaoz5BZqs6Jt2jf3yQ1FtaNrYO5nnjHlfjN
+         iqhUovts0pfqwWAVzR3Bn8yiBuPg+PYi32niQv30QxDtuOiKSZgnLXCZRg3mh7LUanmw
+         KGmuT153qTlYCt/b6lcNgWDKb4jGz85XV0ZaezF/Reun3QbGdr7AA7DRH2aa0QJbQWLB
+         //zjYOFA+GII4Gdr8rP9SxDB68ELZj9YEZPe6BAIbURu/R2jrLFzaLwtlbRF7XJeOj8A
+         wPK5dw+ZViX1fymgOwYBFf73Ds0yyMYoUvWu8nsAd2hgEP/MXVhNO8/W5tL1erYFzqru
+         7bvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680809766; x=1683401766;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cfBu7ny4boS9Y/7qj052s9pihxiH3sSFTHbJOJ58P+A=;
-        b=aExCdmjeSMKfHYPzRVfr7AkJRKJvNJ0w0isDd45JP+ooRYW8zvbHi9XD0gjg7HX3j5
-         MKlFhLbpLQdHWZ9rDeROOuB5y0gr46OcvVKUAKCbCaB7jq6gahEwPYSY7t+35Maen5Q9
-         GIHAnUU+NidY0ODa36Vs/4CypFwOU8Fe9wscfrWGr5h1wlfIYQXow4iGdzoHCtgYUVcb
-         HeUrLAl+7lhFOShtD6wNVwgd5PfVaSL+VmyxVbI2LVTqfJWkS6eWlFT6sovoVO5OSlJF
-         anhYsTSuFuoiSv5D3lhFx0iucOf8Z8VF1lAInO25CkYCkzV7g+4VV1WptF0h19R3ujB+
-         /KkA==
-X-Gm-Message-State: AAQBX9cuPFNcCpW6TPrUhebZLC0mUKowAiG+7GD8WfRoEUsrFLJzDCr8
-        0XqS5G4rPYsHGg3kWT13YJ6YTBf/Rjy4kn9PyD8Hp6H8
-X-Google-Smtp-Source: AKy350YNd/GIqdXWGkFzj0TW54XEa4Pl60LyfdhDlgym8vGx3HmkfmRqKWDmUuMp/jO9drt5LlczBQ==
-X-Received: by 2002:a17:906:4a8b:b0:944:43e:7983 with SMTP id x11-20020a1709064a8b00b00944043e7983mr8295597eju.67.1680809766338;
-        Thu, 06 Apr 2023 12:36:06 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id ht16-20020a170907609000b00931db712768sm1183239ejc.4.2023.04.06.12.36.05
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1680809756; x=1683401756;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9aMy8PktJ2aJ10teNXP10wqqWlTdBdIzTbHlbEeFkSs=;
+        b=I80Zubd3Qa+2vboSGpYCOnFRPQSzCqP3gVe/2zCuJTE+x57Zra685EHRH7Wyl0vbXh
+         lvFAiUGvD/sXTM3/QqAGkY7c//UJk/stwprlJwrroFDFju35uDizYasz8ncsdYsoOFxP
+         N1ofKAZWXmUhS4fTxQwqwqjfYHFKWA+L48+z8cMk1H3ady+3Z5d8J7XhQ9KQjUoslIsw
+         Ty5XbQ+t2k/lpdBAbjkX0ougndWAWGezUN7zC3XZYcvO0o2UjDPTEXoe0uMu3Rrhza+I
+         GZTnKjRRk+uc82NOU+ZnVA52NW8dg1Ycr74KB2QjdG5QNZ1oTNBNwE68WcbEQtcEEnpM
+         UJ/A==
+X-Gm-Message-State: AAQBX9eynwIWEksfoSJViDBZVjKWd7NjH/qTUzv/GnIrOX4sFwySb6co
+        nLS6a8yys35Spg3N88hT90RqGhfluFb2jg==
+X-Google-Smtp-Source: AKy350ZZpZ/vAiNw6nyXDZzK94bTzbGCYpglrN1rSNejizwSVBg5Qy17tXKO1AYdUfx7lHMIgJUrOg==
+X-Received: by 2002:aa7:9483:0:b0:627:fea9:2060 with SMTP id z3-20020aa79483000000b00627fea92060mr61616pfk.13.1680809756094;
+        Thu, 06 Apr 2023 12:35:56 -0700 (PDT)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id bm1-20020a056a00320100b0062dd993fdfcsm1718945pfb.105.2023.04.06.12.35.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 12:36:05 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id sg7so3938136ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:36:05 -0700 (PDT)
-X-Received: by 2002:a17:906:e41:b0:933:1967:a984 with SMTP id
- q1-20020a1709060e4100b009331967a984mr3762785eji.15.1680809765017; Thu, 06 Apr
- 2023 12:36:05 -0700 (PDT)
+        Thu, 06 Apr 2023 12:35:55 -0700 (PDT)
+Message-ID: <faf0b76d-b7ad-0326-1058-ae879167d6db@gmail.com>
+Date:   Fri, 7 Apr 2023 04:35:53 +0900
 MIME-Version: 1.0
-References: <caca6879210940428e0aa2a1496907ab@AcuMS.aculab.com>
-In-Reply-To: <caca6879210940428e0aa2a1496907ab@AcuMS.aculab.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 6 Apr 2023 12:35:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whd4w2wu13O9b5VRKE1b3MoUk89Q_WzhELyqXGAKmfqmQ@mail.gmail.com>
-Message-ID: <CAHk-=whd4w2wu13O9b5VRKE1b3MoUk89Q_WzhELyqXGAKmfqmQ@mail.gmail.com>
-Subject: Re: revert bab65e48cb064 PCI/MSI Sanitize MSI-X checks
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: multipart/mixed; boundary="000000000000faf1ae05f8b004fe"
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/5] extcon: Drop unneeded assignments
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Bumwoo Lee <bw365.lee@samsung.com>
+References: <20230405152745.24959-1-andriy.shevchenko@linux.intel.com>
+ <20230405152745.24959-6-andriy.shevchenko@linux.intel.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230405152745.24959-6-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000faf1ae05f8b004fe
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 23. 4. 6. 00:27, Andy Shevchenko wrote:
+> In one case the assignment is duplicative, in the other,
+> it's better to move it into the loop — the user of it.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Bumwoo Lee <bw365.lee@samsung.com>
+> ---
+>  drivers/extcon/extcon.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index 50c5fd454488..88ce0656d23c 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -245,7 +245,7 @@ static DEFINE_MUTEX(extcon_dev_list_lock);
+>  
+>  static int check_mutually_exclusive(struct extcon_dev *edev, u32 new_state)
+>  {
+> -	int i = 0;
+> +	int i;
+>  
+>  	if (!edev->mutually_exclusive)
+>  		return 0;
+> @@ -1246,7 +1246,7 @@ static int extcon_alloc_groups(struct extcon_dev *edev)
+>   */
+>  int extcon_dev_register(struct extcon_dev *edev)
+>  {
+> -	int ret, index = 0;
+> +	int ret, index;
+>  
+>  	ret = create_extcon_class();
+>  	if (ret < 0)
+> @@ -1255,7 +1255,7 @@ int extcon_dev_register(struct extcon_dev *edev)
+>  	if (!edev || !edev->supported_cable)
+>  		return -EINVAL;
+>  
+> -	for (; edev->supported_cable[index] != EXTCON_NONE; index++);
+> +	for (index = 0; edev->supported_cable[index] != EXTCON_NONE; index++);
+>  
+>  	edev->max_supported = index;
+>  	if (index > SUPPORTED_CABLE_MAX) {
 
-On Thu, Apr 6, 2023 at 4:05=E2=80=AFAM David Laight <David.Laight@aculab.co=
-m> wrote:
->
-> So code like:
->         for (i =3D 0; i < 16; i++)
->                 msix_tbl[i].entry =3D i;
->         nvec =3D pci_enable_msix_range(dev, msix_tbl, 1, 16);
-> Now returns -22 if the hardware only supports 8 interrupts.
->
-> Previously it returned 8.
 
-Does just moving the pci_msix_validate_entries() down to below the
-hwsize update code fix it?
+On previous version, I already replied the my ack.
+But this version doesn't contain my ack tag.
 
-IOW, something like this attached patch?
+So that 
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com> again.
 
-ENTIRELY UNTESTED! This may be seriously broken for some reason, but
-it does seem like the current code makes no sense (that "Keep the IRQ
-virtual hackery working" comment seems to not possibly be true since
-the MSIX nvec has effectively been checked against hwsize by the
-pci_msix_validate_entries() code before).
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
-I don't know this code. Thomas?
-
-                     Linus
-
---000000000000faf1ae05f8b004fe
-Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
-Content-Disposition: attachment; filename="patch.diff"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lg5iq4dx0>
-X-Attachment-Id: f_lg5iq4dx0
-
-IGRyaXZlcnMvcGNpL21zaS9tc2kuYyB8IDYgKysrLS0tCiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNl
-cnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGNpL21zaS9t
-c2kuYyBiL2RyaXZlcnMvcGNpL21zaS9tc2kuYwppbmRleCAxZjcxNjYyNGNhNTYuLjhlZGM3YmVl
-YmY2ZiAxMDA2NDQKLS0tIGEvZHJpdmVycy9wY2kvbXNpL21zaS5jCisrKyBiL2RyaXZlcnMvcGNp
-L21zaS9tc2kuYwpAQCAtODA1LDkgKzgwNSw2IEBAIGludCBfX3BjaV9lbmFibGVfbXNpeF9yYW5n
-ZShzdHJ1Y3QgcGNpX2RldiAqZGV2LCBzdHJ1Y3QgbXNpeF9lbnRyeSAqZW50cmllcywgaW50CiAJ
-aWYgKGh3c2l6ZSA8IDApCiAJCXJldHVybiBod3NpemU7CiAKLQlpZiAoIXBjaV9tc2l4X3ZhbGlk
-YXRlX2VudHJpZXMoZGV2LCBlbnRyaWVzLCBudmVjLCBod3NpemUpKQotCQlyZXR1cm4gLUVJTlZB
-TDsKLQogCWlmIChod3NpemUgPCBudmVjKSB7CiAJCS8qIEtlZXAgdGhlIElSUSB2aXJ0dWFsIGhh
-Y2tlcnkgd29ya2luZyAqLwogCQlpZiAoZmxhZ3MgJiBQQ0lfSVJRX1ZJUlRVQUwpCkBAIC04MTks
-NiArODE2LDkgQEAgaW50IF9fcGNpX2VuYWJsZV9tc2l4X3JhbmdlKHN0cnVjdCBwY2lfZGV2ICpk
-ZXYsIHN0cnVjdCBtc2l4X2VudHJ5ICplbnRyaWVzLCBpbnQKIAlpZiAobnZlYyA8IG1pbnZlYykK
-IAkJcmV0dXJuIC1FTk9TUEM7CiAKKwlpZiAoIXBjaV9tc2l4X3ZhbGlkYXRlX2VudHJpZXMoZGV2
-LCBlbnRyaWVzLCBudmVjLCBod3NpemUpKQorCQlyZXR1cm4gLUVJTlZBTDsKKwogCXJjID0gcGNp
-X3NldHVwX21zaV9jb250ZXh0KGRldik7CiAJaWYgKHJjKQogCQlyZXR1cm4gcmM7Cg==
---000000000000faf1ae05f8b004fe--
