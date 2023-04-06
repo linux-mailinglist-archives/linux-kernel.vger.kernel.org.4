@@ -2,121 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C216DA60F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037316DA611
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239411AbjDFXCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 19:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S237453AbjDFXHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 19:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjDFXB7 (ORCPT
+        with ESMTP id S229604AbjDFXHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:01:59 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18602A3;
-        Thu,  6 Apr 2023 16:01:58 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336MRxvo013858;
-        Thu, 6 Apr 2023 23:01:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id; s=corp-2022-7-12;
- bh=QYrH7mgx9goRgDjZnqA63zjuyrkGvo4AdK4TauLX8A8=;
- b=yh3NYsUNBCzx4Q8vjpGLqFRWbYQ5hFX50BLsXK9/Uu9UVlREaO9zmtHBpd62mWwKNsGP
- c9ApWwfJzcG1EmXGV2OkMBQTroGMtt/3wITD98lNZsn4LzO56DPy47qtUQ5eVtoCI3sN
- suG7bmYEEwyu951tHNqHTl9a4+uzNVZYlAWSjrtf4qVy2GPYXVQcN/7gO3o2CckN2+M/
- luIG0rr/RzAd3czsh9hufvo5Yl4UKHP88qJtCUajemi7yt745+beXEH6r+Gkrs01rH0J
- GtRFZAYMALVSDs4oJ0j6t9C/0P0lNkS9mQH21ToI78pK95dP0nxrHVYaBAvYD8LBR2ZS 7w== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppbd442q2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Apr 2023 23:01:34 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 336KlH5P009090;
-        Thu, 6 Apr 2023 23:01:33 GMT
-Received: from brm-x62-16.us.oracle.com (brm-x62-16.us.oracle.com [10.80.150.37])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ppt3kqpt4-1;
-        Thu, 06 Apr 2023 23:01:33 +0000
-From:   Jane Chu <jane.chu@oracle.com>
-To:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, ira.weiny@intel.com, willy@infradead.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2] dax: enable dax fault handler to report VM_FAULT_HWPOISON
-Date:   Thu,  6 Apr 2023 17:01:27 -0600
-Message-Id: <20230406230127.716716-1-jane.chu@oracle.com>
-X-Mailer: git-send-email 2.18.4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
- suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304060200
-X-Proofpoint-ORIG-GUID: nMaMTcFEj8i5h-91hzIIjnDqo_X59Jn0
-X-Proofpoint-GUID: nMaMTcFEj8i5h-91hzIIjnDqo_X59Jn0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 6 Apr 2023 19:07:39 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46B99754
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:07:37 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id ix20so38800493plb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 16:07:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680822457;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ftgRsIRurrmlei9zUcdBf7zAoeZBAD6u0Ofdt2c7jnY=;
+        b=gDI/38A0QEyvcJdTvryj/RlJjLyzOWuva3RsRYFTi8qUyOfx3nw3R7QznN+qkPY4XZ
+         ccBxZVG2TeyU8kWTP7Vl9hXvSEQksG56WepXqoO1fxxRZMOCyOw95mzWHTagFgyfM91G
+         084RlrL1xam833IRUiHKAMotebiV1mYW32ypw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680822457;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ftgRsIRurrmlei9zUcdBf7zAoeZBAD6u0Ofdt2c7jnY=;
+        b=XjpHHcS9XEItZH9w17TpEb9wn328ba1/VPPSyicQ1IJxNuiUVAcIin6WrhqydKoNEr
+         cppOUlSnl74UoznWDXTrVXFXd47riQkD+4gt8HcCH0RKbLJXqICN8Zw9usSrCwZfjBf1
+         XzFlpJlTsax4KhGiRhpl0/tFGLtLrbswZ/7LgdE0crwkKuv5ECSODpurP2/mJn1I89CD
+         Xc2dZFY015yeNJ41oWUq8HpBev1cr0kZqWVeUaH10Hlyu4CBph2lMjTb29RFb6P/c5+P
+         McwfDJ90u1aQxC3XZS1GtguiXCdbq/Y0J0Qc//YtRHhPYlVaKAtrPiMM2CjduGtHiJcj
+         Evsg==
+X-Gm-Message-State: AAQBX9eZpW8GWICBW0Fcf16MoXAthW2xjjvCFcUKcvXgZu3/hj1Mu9m0
+        afTc4l28A2uEAjmJH6pHSfddYw==
+X-Google-Smtp-Source: AKy350aDCdI3xpZAS/LyiI5Pa/nh6KeIByrtcQXya3W6Z/vwPJpRvLBF4YpbooBaSix0ke9dKSmyuw==
+X-Received: by 2002:a17:90b:1c88:b0:23f:9439:9a27 with SMTP id oo8-20020a17090b1c8800b0023f94399a27mr261706pjb.20.1680822457326;
+        Thu, 06 Apr 2023 16:07:37 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id nn12-20020a17090b38cc00b00231224439c1sm3605704pjb.27.2023.04.06.16.07.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 16:07:36 -0700 (PDT)
+Message-ID: <642f50b8.170a0220.95ab9.859f@mx.google.com>
+X-Google-Original-Message-ID: <202304061602.@keescook>
+Date:   Thu, 6 Apr 2023 16:07:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     linux-hardening@vger.kernel.org, Kees Cook <kees@outflux.net>,
+        Andy Shevchenko <andy@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 3/9] string: Add Kunit tests for strcat() family
+References: <20230405235832.never.487-kees@kernel.org>
+ <20230406000212.3442647-3-keescook@chromium.org>
+ <CAG_fn=V-3yxPihQdt+OJuOfF6sBuNvQ2OQfYNZak1xbx6viU2w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=V-3yxPihQdt+OJuOfF6sBuNvQ2OQfYNZak1xbx6viU2w@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When dax fault handler fails to provision the fault page due to
-hwpoison, it returns VM_FAULT_SIGBUS which lead to a sigbus delivered
-to userspace with .si_code BUS_ADRERR.  Channel dax backend driver's
-detection on hwpoison to the filesystem to provide the precise reason
-for the fault.
+On Thu, Apr 06, 2023 at 11:11:09AM +0200, Alexander Potapenko wrote:
+> > +static void strncat_test(struct kunit *test)
+> > +{
+> > +       char dest[8];
+> > +
+> > +       /* Destination is terminated. */
+> > +       memset(dest, 0, sizeof(dest));
+> > +       KUNIT_EXPECT_EQ(test, strlen(dest), 0);
+> > +       /* Empty copy of size 0 does nothing. */
+> > +       KUNIT_EXPECT_TRUE(test, strncat(dest, "", 0) == dest);
+> > +       KUNIT_EXPECT_STREQ(test, dest, "");
+> > +       /* Empty copy of size 1 does nothing too. */
+> > +       KUNIT_EXPECT_TRUE(test, strncat(dest, "", 1) == dest);
+> > +       KUNIT_EXPECT_STREQ(test, dest, "");
+> > +       /* Copy of max 0 characters should do nothing. */
+> > +       KUNIT_EXPECT_TRUE(test, strncat(dest, "asdf", 0) == dest);
+> > +       KUNIT_EXPECT_STREQ(test, dest, "");
+> > +
+> > +       /* 4 characters copied in, even if max is 8. */
+> > +       KUNIT_EXPECT_TRUE(test, strncat(dest, "four\000123", 8) == dest);
+> > +       KUNIT_EXPECT_STREQ(test, dest, "four");
+> > +       KUNIT_EXPECT_EQ(test, dest[5], '\0');
+> 
+> Maybe also add a test case for strncat(dest, "four", 4) that checks
+> that the fourth byte of dest is not 0?
 
-Signed-off-by: Jane Chu <jane.chu@oracle.com>
----
- drivers/nvdimm/pmem.c | 2 +-
- fs/dax.c              | 2 +-
- include/linux/mm.h    | 2 ++
- 3 files changed, 4 insertions(+), 2 deletions(-)
+I think I don't understand what state you want to test for? The line
+above (STREQ is checking dest is "four". Maybe I should check for
+dest[6] being 0 as well as dest[5]. But if that's not what you mean, I'm
+not sure. Is it something here:
 
-diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
-index ceea55f621cc..46e094e56159 100644
---- a/drivers/nvdimm/pmem.c
-+++ b/drivers/nvdimm/pmem.c
-@@ -260,7 +260,7 @@ __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
- 		long actual_nr;
- 
- 		if (mode != DAX_RECOVERY_WRITE)
--			return -EIO;
-+			return -EHWPOISON;
- 
- 		/*
- 		 * Set the recovery stride is set to kernel page size because
-diff --git a/fs/dax.c b/fs/dax.c
-index 3e457a16c7d1..c93191cd4802 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -1456,7 +1456,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
- 
- 		map_len = dax_direct_access(dax_dev, pgoff, PHYS_PFN(size),
- 				DAX_ACCESS, &kaddr, NULL);
--		if (map_len == -EIO && iov_iter_rw(iter) == WRITE) {
-+		if (map_len == -EHWPOISON && iov_iter_rw(iter) == WRITE) {
- 			map_len = dax_direct_access(dax_dev, pgoff,
- 					PHYS_PFN(size), DAX_RECOVERY_WRITE,
- 					&kaddr, NULL);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1f79667824eb..e4c974587659 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3217,6 +3217,8 @@ static inline vm_fault_t vmf_error(int err)
- {
- 	if (err == -ENOMEM)
- 		return VM_FAULT_OOM;
-+	else if (err == -EHWPOISON)
-+		return VM_FAULT_HWPOISON;
- 	return VM_FAULT_SIGBUS;
- }
- 
+char dest[16];
+memset(dest, 0, sizeof(dest));
+// dest == ""
+strncat(dest, "four", 4);
+// dest == "four"
+strncat(dest, "four", 4);
+// dest == "fourfour"
+
+strncat's "n" is how much to reach from source -- dest will always be
+terminated.
+
 -- 
-2.18.4
-
+Kees Cook
