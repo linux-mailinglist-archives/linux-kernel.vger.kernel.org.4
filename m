@@ -2,69 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEA26D97FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657116D9811
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238443AbjDFNV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
+        id S238407AbjDFNXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238213AbjDFNU7 (ORCPT
+        with ESMTP id S237316AbjDFNXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:20:59 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C290A24A;
-        Thu,  6 Apr 2023 06:20:29 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50263dfe37dso6341573a12.0;
-        Thu, 06 Apr 2023 06:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680787227;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oqZbUgv+5sJFBzHrCS1hTYdTwSuWj9s9ZIzsmU8yC2w=;
-        b=maOYQjQq1ZPe9acCFlODIHwUftIv67eW0Nk33eytV7fht+mIS6IOChb1Fpyyf+ladC
-         /jzbQ1Uh7XIyb3FhHZN1Y3USpm4DFrMrP2/EMOyMOTG4f7J+6aB517MwlQvVUaQctn5N
-         Wg2z/ofeOItPpQtCPxHv3ZBywLDnNr8qYlBl8IQE9Dmu2rtzjCmsct/cUcKRMNNIiPwY
-         EcdjaphACQqnpXYQ1llqNRibnTn9t+cVpBPAPNd9Y2/oDXDqe+IeAQHHVntwt6tkoE5G
-         IBdJ/xlK0gqFMwYJb7sQfdvS8ddABQ6+/Q7ng7HWI+ACFWT/YezGm0VDNDKgRgdq7KlJ
-         b71Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787227;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oqZbUgv+5sJFBzHrCS1hTYdTwSuWj9s9ZIzsmU8yC2w=;
-        b=VO01mcZ+KeCbMJ7VjSdCAWCGyb0ppVnkcPuTtmESna9RNLosurPiz9cSwr3ujMHNiZ
-         gygpbuaTZSIU4jtOMjbGsMdyu50gZjBNeRe9gsUaGc9woFFtZn4WKPNnQUrKoeWVTkmM
-         nMjCdMQ8NhaQYrWwNMhzbd/uQjAf0oHOMJmxKhQ0myk9FrkO+iucUkkiEX90zuMd0kjR
-         47IMjAPg6R4Q9Jd62aGlxkKeycQOCKxQtPxlXszfDKij2ME4arIGdwsTnAJuGU+mU7x+
-         pYHYtLpr/wJ4bG/dg2tgDHi4VwqXetUQfNVlkvqGcE244Ogznz92NElDMnkQXkvaoyVn
-         5tpw==
-X-Gm-Message-State: AAQBX9cGUqo2efz0f2BRGVYmvfvHgFURddHR92JZubupCuYLlwKe3j4R
-        63utAEz9TJ81W+MWfDgSufhXa0BLccE=
-X-Google-Smtp-Source: AKy350ZH1y4lO92mtQ+oGAOmmz/4VGtw0S/ag8WjFpP1TR8VRgW/7kKdvzi/z1PQxSNAHPAb4acOrw==
-X-Received: by 2002:aa7:c0d1:0:b0:501:cf67:97fc with SMTP id j17-20020aa7c0d1000000b00501cf6797fcmr5477693edp.10.1680787227544;
-        Thu, 06 Apr 2023 06:20:27 -0700 (PDT)
-Received: from 127.com ([2620:10d:c092:600::2:a638])
-        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b0050470aa444fsm312732edb.51.2023.04.06.06.20.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 06:20:27 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] io_uring: optimise io_req_local_work_add
-Date:   Thu,  6 Apr 2023 14:20:14 +0100
-Message-Id: <fb11597e9bbcb365901824f8c5c2cf0d6ee100d0.1680782017.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <cover.1680782016.git.asml.silence@gmail.com>
-References: <cover.1680782016.git.asml.silence@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Thu, 6 Apr 2023 09:23:08 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B032A24E
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:22:33 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 2A1C63200077;
+        Thu,  6 Apr 2023 09:21:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Apr 2023 09:21:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680787309; x=1680873709; bh=sq
+        PML68DV/2AVgzbY0WB2FUqQA1gP/X2nV3S+ylVMPY=; b=kNplL4707kGSWICP9E
+        jvSP3IGDCO8TACGOJA/OdHm2I3etUzbuEd6dgiN765LKaJC2jFdY1DzzPszQYwhV
+        XiDvtLzntOXquYKt2AcMUaobvmJUOK8xYQhfGfpFkBWczo+fy+9b1O8k0JpvT25j
+        ig5mW9OLFaQeqIJcK6S9Pl6UHwoe9XHgBqKYh3LXCZoTN+n6xkKUwYDhGogIa6c+
+        ya74EMrA5iCr8BWVEY9mVrE7G7Gvs99MTlTRKkitRGQHZdEGQ6sm0gY2IQFseUxo
+        gyiWpRxSq8KQIi5f/P52KNQGZjKjOBGx6TKtHOIQRTk0Xf+DfNFBHAAy/qLgKudT
+        I2dg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680787309; x=1680873709; bh=sqPML68DV/2AV
+        gzbY0WB2FUqQA1gP/X2nV3S+ylVMPY=; b=mGNstugzxtjWOqRSoe8QsIOTQzgcB
+        7Js95mFmM6cCF1+hJRt8bQk7GwoFZWogg+duDF6DwBEew7pLP8Cb/jHI9AEN6mmv
+        1q7lNxgsEUmK6N2apaL/zICarmmmB6USeMtBauMAORCKsy1WEb/rGX3iOEiY67DS
+        /3VOdyl7q/C76+xAA57dwbrYWLlROd65RojPYtjQTyQKXStF4GPHcQLmbIWTGK0t
+        EehQzv/nIjZdYhIk5lAG/R6Wfi+iQJ32vJO8VN4NgTdex1ws68zARp2cS5ZL8beZ
+        30l9mlIN8cvNxgMG7rzvo2IPffzMXSu+b4sMjOnqE1R1LV+q+BS4ra8VQ==
+X-ME-Sender: <xms:bccuZCfSwd1IqDNiQ2bHme3uedSHq_YV3sCw3HpyJ2yuObhft9_1DQ>
+    <xme:bccuZMOgP2QrQ_v7JqH86gT5tDbV0zZbGVHhG22TWcQ7DoOYPEDCdThNou-T0Pa9S
+    DImc22uqvViYDKaS3U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:bccuZDj9qh78Izg1gWFzPpyJi5YfySNms1ODxAUNLltdSDDYni5reA>
+    <xmx:bccuZP-M0fLT7mrnUpA-uVqfIZa6gbHdNaDK6c8Yj_B--nwoYOu6ig>
+    <xmx:bccuZOvmPQFgQR2LWcihUOzt3-fI7DZq_0LMInoQqVzYXoq-V3vF7g>
+    <xmx:bccuZMCjcxR11rliZ36_cfFhopG8RBr3ZGyUwEiG_jRsKz_T0wxcMA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7D0E6B60093; Thu,  6 Apr 2023 09:21:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <c2a6d31f-173b-4d08-b377-e31748f33443@app.fastmail.com>
+In-Reply-To: <20230406131755.GA1608262@pevik>
+References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
+ <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
+ <20230406105646.GB1545779@pevik>
+ <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
+ <20230406124812.GA1589248@pevik>
+ <3c2ba6f9-bea1-4510-8fbb-6521fab74a9d@app.fastmail.com>
+ <20230406131755.GA1608262@pevik>
+Date:   Thu, 06 Apr 2023 15:21:26 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Petr Vorel" <pvorel@suse.cz>
+Cc:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "LTP List" <ltp@lists.linux.it>, llvm@lists.linux.dev,
+        chrubis <chrubis@suse.cz>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Anders Roxell" <anders.roxell@linaro.org>,
+        =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>,
+        "Benjamin Copeland" <ben.copeland@linaro.org>,
+        "Tudor Cretu" <tudor.cretu@arm.com>
+Subject: Re: LTP: list of failures on 32bit and compat mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,91 +97,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chains of memory accesses are never good for performance.
-The req->task->io_uring->in_cancel in io_req_local_work_add() is there
-so that when a task is exiting via io_uring_try_cancel_requests() and
-starts waiting for completions it gets woken up by every new task_work
-item queued.
+On Thu, Apr 6, 2023, at 15:17, Petr Vorel wrote:
+>> On Thu, Apr 6, 2023, at 14:48, Petr Vorel wrote:
+>> >> On Thu, Apr 6, 2023, at 12:56, Petr Vorel wrote:
 
-Do a little trick by announcing waiting in io_uring_try_cancel_requests()
-making io_req_local_work_add() to wake us up. We also need to check for
-deferred tw items after prepare_to_wait(TASK_INTERRUPTIBLE);
+> Thanks! I've just searched in musl as well, because it didn't make sense to me
+> it'd be a code for LTP.
+>
+> "to catch the fault on ltp" I wonder if it's not actually musl bug.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/io_uring.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+No, musl is fine here. The problem is that ltp passes an invalid pointer,
+expecting to get -EFAULT from the kernel when that faults in
+copy_to_user().
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 0ea50c46f27f..9bbf58297a0e 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1335,10 +1335,6 @@ static void io_req_local_work_add(struct io_kiocb *req, unsigned flags)
- 			      &req->io_task_work.node));
- 
- 	if (!first) {
--		if (unlikely(atomic_read(&req->task->io_uring->in_cancel))) {
--			io_move_task_work_from_local(ctx);
--			return;
--		}
- 		if (ctx->flags & IORING_SETUP_TASKRUN_FLAG)
- 			atomic_or(IORING_SQ_TASKRUN, &ctx->rings->sq_flags);
- 		if (ctx->has_evfd)
-@@ -3205,6 +3201,12 @@ static __cold bool io_uring_try_cancel_requests(struct io_ring_ctx *ctx,
- 	enum io_wq_cancel cret;
- 	bool ret = false;
- 
-+	/* set it so io_req_local_work_add() would wake us up */
-+	if (ctx->flags & IORING_SETUP_DEFER_TASKRUN) {
-+		atomic_set(&ctx->cq_wait_nr, 1);
-+		smp_mb();
-+	}
-+
- 	/* failed during ring init, it couldn't have issued any requests */
- 	if (!ctx->rings)
- 		return false;
-@@ -3259,6 +3261,8 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
- {
- 	struct io_uring_task *tctx = current->io_uring;
- 	struct io_ring_ctx *ctx;
-+	struct io_tctx_node *node;
-+	unsigned long index;
- 	s64 inflight;
- 	DEFINE_WAIT(wait);
- 
-@@ -3280,9 +3284,6 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
- 			break;
- 
- 		if (!sqd) {
--			struct io_tctx_node *node;
--			unsigned long index;
--
- 			xa_for_each(&tctx->xa, index, node) {
- 				/* sqpoll task will cancel all its requests */
- 				if (node->ctx->sq_data)
-@@ -3305,7 +3306,13 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
- 		prepare_to_wait(&tctx->wait, &wait, TASK_INTERRUPTIBLE);
- 		io_run_task_work();
- 		io_uring_drop_tctx_refs(current);
--
-+		xa_for_each(&tctx->xa, index, node) {
-+			if (!llist_empty(&node->ctx->work_llist)) {
-+				WARN_ON_ONCE(node->ctx->submitter_task &&
-+					     node->ctx->submitter_task != current);
-+				goto end_wait;
-+			}
-+		}
- 		/*
- 		 * If we've seen completions, retry without waiting. This
- 		 * avoids a race where a completion comes in before we did
-@@ -3313,6 +3320,7 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
- 		 */
- 		if (inflight == tctx_inflight(tctx, !cancel_all))
- 			schedule();
-+end_wait:
- 		finish_wait(&tctx->wait, &wait);
- 	} while (1);
- 
--- 
-2.40.0
+There is nothing wrong with musl sanitizing the data behind that
+pointer, but then you get a signal instead of the EFAULT error.
 
+     Arnd
