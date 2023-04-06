@@ -2,154 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B57F6D982C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0E56D9830
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237539AbjDFN2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S238588AbjDFN2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234723AbjDFN2e (ORCPT
+        with ESMTP id S238521AbjDFN2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:28:34 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED78493D6
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:28:29 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id e9so25430428ljq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:28:29 -0700 (PDT)
+        Thu, 6 Apr 2023 09:28:40 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732CB902D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:28:33 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id y15so50810112lfa.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:28:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680787708;
+        d=linaro.org; s=google; t=1680787712;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YRMl5tP4avmZIwtGIOxBRcaMj9GFhkoxx5NiWKp1wTg=;
-        b=g6SNlKh2ImuDKwjuN8GoC2n3bz6tqsdQbcUHAAycJ0wm1rj7eeO/5jb2XaH8m9WcW7
-         6bMfMmvOupRJo4GP+U14a/xBQRn4fyJyuzeqvJjLQGSPDAhDkXZrQu4sexLYptwecu9r
-         zlbiXtMSP/6tkyFGNbDnEGb+yVuTav8cZ4bMRragoC3wUuJwhRBtYy9C6ql7VE36717/
-         uZr2BELPnSDIyvZZLSaapMdVNNTB10OO74rLdQvSk8QWuiTChSsxXfvOSX6oxRGW89mU
-         UdGGxB673dTPP0M+JK9635akE79A/iHU2nzVBcEpnY0cSsJMyEx91nJQKLpLG/KplcSq
-         d/Nw==
+        bh=B/EYwiDQhUW4YEmdZOCemB3N2W/Dg9tNc5lKjH1epoQ=;
+        b=cdvVQBzhf2PQsKTcMuHserN+U/aS7ZWtSSQriiN16ak8G83qx8lqqUTxAEk/on4Z3S
+         x/Mb869elBKjnTXLP3IwGiRYxmfeHWkA4fm4hb/YUtM82iqp5loKtGma8JPZkbfiH7nc
+         ShAEwJbxF/rvvh2T5QW4uPwTKcGc5P2O0X0gUk43E5bUO3snNYExbxGApedZrl6TNqqC
+         dDSRmwVlcBP5l4/3eecuDgB1EJZnwJHjysWZ5iyKNIwJDegonGc0WIyeGjBooxx0GNh/
+         hENqXeWmd9SUWK/HNxSdp1IMWZMkO47GGvgNrlHdOLLlwGAD4ml+pSuV/2ZU1F+TSAgt
+         h83w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787708;
+        d=1e100.net; s=20210112; t=1680787712;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRMl5tP4avmZIwtGIOxBRcaMj9GFhkoxx5NiWKp1wTg=;
-        b=cy0xKWUNrFRZS+0c6hcNCogW77dBVEHG2xY8o2oimZ+tvvNlIzOKs3K6/vBkh3qcB7
-         z6aO7mQFm4N5yVZFIe9GShpV124jPlNc1kJ8FF6GWTGfbO+QI8WkUPVLItOSir4DPwlw
-         bbSHyAGV6IjpmkRCMoO0f9V9NgIUkuzH6BVtP8g4ueO4lNBvROG0bv44TbfhRmAEXDDf
-         laGeYZBq3Q67EdIoKwKpBphdBuR1lf8dQzK/QhcrySlLFRl/TFeAH+ZY2xGnFmCBu8+3
-         FiVOZgOkGzFYH18KbQ4eQZu9c4Vjg7wj5DSuYo1UlKepzUe7VVxAUjB7GXiMdj+wSFG9
-         KOHg==
-X-Gm-Message-State: AAQBX9fHA/4X8cdSqCA8qe9sDvxvMi+mcG2uPDuSlvbkmCOYBnaUA446
-        YLqya0OsMyOfSjHw45F8/SM47w==
-X-Google-Smtp-Source: AKy350aq63xXfADHam0MwfZcQprABn7EPyGc2eWjG6O1DFFxRTSaaT7DFN5OH0kM+MVt8tQdJfntKA==
-X-Received: by 2002:a2e:9c50:0:b0:29f:1e4f:a71d with SMTP id t16-20020a2e9c50000000b0029f1e4fa71dmr2967555ljj.44.1680787708197;
-        Thu, 06 Apr 2023 06:28:28 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id f3-20020a2e6a03000000b0029c13f4d519sm285717ljc.119.2023.04.06.06.28.26
+        bh=B/EYwiDQhUW4YEmdZOCemB3N2W/Dg9tNc5lKjH1epoQ=;
+        b=0yIry4+CM9BT2Y9LhfBWWwi7afEav6CzRLIQj8kBth6k8qLETK0k9SO6Tc/40iz9IR
+         A9RbZkNijqRzBzhPOcWPbE9pjHysn5TI+jjlyf3mXexlGoXiZkTBk22v3OjmMc0SLBbV
+         3+jVcuaO/gFAx0eoJD3lvo4AmpCNCOOES7hxSUIF1yDyYofOZ0+uQVPLhUb2YoLOGvm9
+         DcsCtc+ktzlHzadcLUAfpWP5kD0y5MNik5X+iled9LGI5mCdGfTIn/gr8uyVAyFM4SPr
+         ooWpMIOlEvR43jCwiaRus/fGmCGi48n8btqz0GzV65pxFpiy1qVYsDV4XV/VCFU8ct6x
+         qx0A==
+X-Gm-Message-State: AAQBX9c+jG+a6OA9Pow1kQ8zyLDNu0t94OkzTq8agfC4U7IguXxCwepE
+        yKp77+T1unQPTR62NgE8pKjdEg==
+X-Google-Smtp-Source: AKy350ZaQpuoGr/0Wi4agBDl4nVyoBDk54/kiArKJqfB+wNXdEoQUjZ65D1rLNitTMaS7yiBL9Z3Pw==
+X-Received: by 2002:a05:6512:3983:b0:4d8:86c1:4782 with SMTP id j3-20020a056512398300b004d886c14782mr1547618lfu.23.1680787711665;
+        Thu, 06 Apr 2023 06:28:31 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id d14-20020ac2544e000000b004e844eeb555sm262262lfn.214.2023.04.06.06.28.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 06:28:27 -0700 (PDT)
-Message-ID: <63da0c87-5343-509e-4786-96a5b10eef33@linaro.org>
-Date:   Thu, 6 Apr 2023 15:28:26 +0200
+        Thu, 06 Apr 2023 06:28:31 -0700 (PDT)
+Message-ID: <86e3e7b6-710d-6c2d-4f01-22933ab15101@linaro.org>
+Date:   Thu, 6 Apr 2023 16:28:30 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v2 7/7] soundwire: qcom: use tabs for indentation in
- defines
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/7] arm64: defconfig: enable the SA8775P GPUCC driver
+Content-Language: en-GB
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     Patrick Lai <quic_plai@quicinc.com>
-References: <20230403132503.62090-1-krzysztof.kozlowski@linaro.org>
- <20230403132503.62090-8-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230403132503.62090-8-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>
+References: <20230328193632.226095-1-brgl@bgdev.pl>
+ <20230328193632.226095-4-brgl@bgdev.pl>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230328193632.226095-4-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3.04.2023 15:25, Krzysztof Kozlowski wrote:
-> Use consistently only tabs to indent the value in defines.
+On 28/03/2023 22:36, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Enable the GPUCC module for SA8775P platforms in the arm64 defconfig.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/soundwire/qcom.c | 34 +++++++++++++++++-----------------
->  1 file changed, 17 insertions(+), 17 deletions(-)
+>   arch/arm64/configs/defconfig | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-> index f2e1135ef113..77a5e4cbbe9b 100644
-> --- a/drivers/soundwire/qcom.c
-> +++ b/drivers/soundwire/qcom.c
-> @@ -58,9 +58,9 @@
->  #define SWRM_INTERRUPT_STATUS_SPECIAL_CMD_ID_FINISHED		BIT(10)
->  #define SWRM_INTERRUPT_STATUS_AUTO_ENUM_FAILED			BIT(11)
->  #define SWRM_INTERRUPT_STATUS_AUTO_ENUM_TABLE_IS_FULL		BIT(12)
-> -#define SWRM_INTERRUPT_STATUS_BUS_RESET_FINISHED_V2             BIT(13)
-> -#define SWRM_INTERRUPT_STATUS_CLK_STOP_FINISHED_V2              BIT(14)
-> -#define SWRM_INTERRUPT_STATUS_EXT_CLK_STOP_WAKEUP               BIT(16)
-> +#define SWRM_INTERRUPT_STATUS_BUS_RESET_FINISHED_V2		BIT(13)
-> +#define SWRM_INTERRUPT_STATUS_CLK_STOP_FINISHED_V2		BIT(14)
-> +#define SWRM_INTERRUPT_STATUS_EXT_CLK_STOP_WAKEUP		BIT(16)
->  #define SWRM_INTERRUPT_MAX					17
->  #define SWRM_V1_3_INTERRUPT_MASK_ADDR				0x204
->  #define SWRM_V1_3_INTERRUPT_CLEAR				0x208
-> @@ -125,20 +125,20 @@
->  #define SWRM_REG_VAL_PACK(data, dev, id, reg)	\
->  			((reg) | ((id) << 16) | ((dev) << 20) | ((data) << 24))
->  
-> -#define MAX_FREQ_NUM		1
-> -#define TIMEOUT_MS		100
-> -#define QCOM_SWRM_MAX_RD_LEN	0x1
-> -#define QCOM_SDW_MAX_PORTS	14
-> -#define DEFAULT_CLK_FREQ	9600000
-> -#define SWRM_MAX_DAIS		0xF
-> -#define SWR_INVALID_PARAM 0xFF
-> -#define SWR_HSTOP_MAX_VAL 0xF
-> -#define SWR_HSTART_MIN_VAL 0x0
-> -#define SWR_BROADCAST_CMD_ID    0x0F
-> -#define SWR_MAX_CMD_ID	14
-> -#define MAX_FIFO_RD_RETRY 3
-> -#define SWR_OVERFLOW_RETRY_COUNT 30
-> -#define SWRM_LINK_STATUS_RETRY_CNT 100
-> +#define MAX_FREQ_NUM						1
-> +#define TIMEOUT_MS						100
-> +#define QCOM_SWRM_MAX_RD_LEN					0x1
-> +#define QCOM_SDW_MAX_PORTS					14
-> +#define DEFAULT_CLK_FREQ					9600000
-> +#define SWRM_MAX_DAIS						0xF
-> +#define SWR_INVALID_PARAM					0xFF
-> +#define SWR_HSTOP_MAX_VAL					0xF
-> +#define SWR_HSTART_MIN_VAL					0x0
-> +#define SWR_BROADCAST_CMD_ID					0x0F
-> +#define SWR_MAX_CMD_ID						14
-> +#define MAX_FIFO_RD_RETRY					3
-> +#define SWR_OVERFLOW_RETRY_COUNT				30
-> +#define SWRM_LINK_STATUS_RETRY_CNT				100
->  
->  enum {
->  	MASTER_ID_WSA = 1,
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index d206a9120ee4..fa0a145defe2 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -1161,6 +1161,7 @@ CONFIG_MSM_MMCC_8998=m
+>   CONFIG_MSM_GCC_8998=y
+>   CONFIG_QCS_GCC_404=y
+>   CONFIG_SA_GCC_8775P=y
+> +CONFIG_SA_GPUCC_8775P=y
+
+=m, please.
+
+>   CONFIG_SC_DISPCC_8280XP=m
+>   CONFIG_SC_GCC_7180=y
+>   CONFIG_SC_GCC_7280=y
+
+-- 
+With best wishes
+Dmitry
+
