@@ -2,113 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D9A6D8F3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CAB6D8F46
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbjDFGQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S235172AbjDFGTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbjDFGOr (ORCPT
+        with ESMTP id S235146AbjDFGTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:14:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD5EA256;
-        Wed,  5 Apr 2023 23:14:42 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3365084U029480;
-        Thu, 6 Apr 2023 06:14:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=rrWFm4g2kka8YobOBx5TxnOwKU7kNUjdVQZ8CY5LXiQ=;
- b=Lj5hGLZVtxYeN/RFfbgRUDd2oH7rbgtpjY2WBZxazLEd8T7vWqv7RX5OnPM1B5UILPqF
- yFo3WSyt3tWNecPPfBgZfUOwciN5gn1nuSt7lrYd5GVhXW0IYG4pKlmNoeeqGKqt01p1
- Qbo7daQY93fx3xzW2ZVPEdOJlHzaL9n2wLrvklHv7C+UsAmhKXJBaJg1Byji6YEQQqmk
- hE8640P/pLVhiAcE4tv3G+UaLdi3qEW2+/ViF280iUaDmz+i31Lo2dg55oO6zkvZ7n/h
- RwOwusWNpMeIif6aeT9t4r5Q/6XqMK2C3k3LB6q0v2Hij4LvgMoPWbVD55qMJVA2od/V AA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3prn7qmv47-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 06:14:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3366EKOf001319
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Apr 2023 06:14:20 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 5 Apr 2023 23:14:12 -0700
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
-        <broonie@kernel.org>, <rafal@milecki.pl>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_ipkumar@quicinc.com>
-Subject: [PATCH V3 5/5] arm64: defconfig: Enable ipq6018 apss clock and PLL controller
-Date:   Thu, 6 Apr 2023 11:43:14 +0530
-Message-ID: <20230406061314.10916-6-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230406061314.10916-1-quic_devipriy@quicinc.com>
-References: <20230406061314.10916-1-quic_devipriy@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4w4iFH4np_chfTmc2qL1RUMHbH5zUxB1
-X-Proofpoint-GUID: 4w4iFH4np_chfTmc2qL1RUMHbH5zUxB1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_02,2023-04-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=825 suspectscore=0 adultscore=0
- bulkscore=0 mlxscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304060053
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 6 Apr 2023 02:19:11 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59088A6F
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:19:09 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id g187-20020a2520c4000000b00b74680a7904so37847814ybg.15
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680761949;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yBhMce5MJnmp23KM1dsJQjjtpNOxg2YPVBV4k7AdjEQ=;
+        b=f95UCFKn0uTCbjQCWEXcq7AdTnSUiCnb/MbtUrtqIyUocE6lFMHuZSKtyzDtH3J2MJ
+         zPpUQhZ8QUk/rHLV4sISAlNJzO5VtsRsROsNTA5E96PHrGGjT7qceMIE8FyjnQShkxOg
+         hwLIC93bWqAE7MQxWglfHo71HBWsdThRaBGoV5va6sY+IbKam7YDkJGmXRASxnNZsBrI
+         bE/MDSpbGjcUvhy6zAfQA6v9DITyCxipViW5mXoOgPcm2P+DvpBISv1btzoK+3J6sCKM
+         FVieDNpMD4J2YDkyJQHgYPVxpurh3mCKd01/jKrc14JBOeQmzDZQREQfxbHhUny8tOLs
+         XDIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680761949;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yBhMce5MJnmp23KM1dsJQjjtpNOxg2YPVBV4k7AdjEQ=;
+        b=4vW8pzX2NyjfFqAF0mBt74CctaPG75ivxnQX5bamMA6IekVWwcLLzw9P4qM9Zr7TVC
+         YL/Bbz1vCY/zaw4AiT2PYROMshDhRt2MPs7mVjXPjbvWZLLCIc4npPGPCcGzbMsWQOSe
+         KKsHyKCE9Xnp39uUL5YabOhIwt6ApoXw49yBLS9SkBbRi7/iYKOe7jWbIZ+YqWQ4qTqV
+         dQiiyJY7jZV0wyu2Z7/1rq9I1Sf6xuhQB9YxjLqpgzJ9N7x/02xaoPs/7g4LlScgmw7a
+         h33k2e0boFTDfd13/nEJFRk38uW2p0sbyAkKkoyj6TuaslkPTxn7fFcKcq80PqRzoKX+
+         2YsQ==
+X-Gm-Message-State: AAQBX9fvOxCfXXB3IGeweX2yx2xczXvXqN9wzYYlzoKyhOKW2W1uQNBp
+        B1HiAHbq/CKB+raYcBgzYxuQHNLfA+w=
+X-Google-Smtp-Source: AKy350Zo04k7Ro9p6QXCkkCo0nTUklSt9cX0wzh9BfIVX4oI2g65uM6b3SUtF6OXma7tzCQPwu/2G9y1AfE=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a81:b389:0:b0:545:5b2c:4bf6 with SMTP id
+ r131-20020a81b389000000b005455b2c4bf6mr5083031ywh.7.1680761949204; Wed, 05
+ Apr 2023 23:19:09 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 06:19:04 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Message-ID: <20230406061905.2460827-1-badhri@google.com>
+Subject: [PATCH v1 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect only
+ when started
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PLL and IPQ6018 APSS clock controller are used on several
-IPQ platforms to clock the CPU. Hence it should be enabled and built-in.
+usb_udc_connect_control does not check to see if the udc
+has already been started. This causes gadget->ops->pullup
+to be called through usb_gadget_connect when invoked
+from usb_udc_vbus_handler even before usb_gadget_udc_start
+is called. Guard this by checking for udc->started in
+usb_udc_connect_control before invoking usb_gadget_connect.
 
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+Guarding udc_connect_control, udc->started and udc->vbus
+with its own mutex as usb_udc_connect_control_locked
+can be simulataneously invoked from different code paths.
+
+Cc: stable@vger.kernel.org
+
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
 ---
- Changes in V3:
-	- No change
+ drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 3dcbba739db6..890f92cb6344 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -56,6 +56,8 @@ static LIST_HEAD(udc_list);
+ /* Protects udc_list, udc->driver, driver->is_bound, and related calls */
+ static DEFINE_MUTEX(udc_lock);
+ 
++/* Protects udc->vbus, udc-started and udc_connect_control_locked */
++static DEFINE_MUTEX(udc_connect_control_lock);
+ /* ------------------------------------------------------------------------- */
+ 
+ /**
+@@ -1078,9 +1080,10 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+ 
+ /* ------------------------------------------------------------------------- */
+ 
+-static void usb_udc_connect_control(struct usb_udc *udc)
++/* Acquire udc_connect_control_lock before calling this function. */
++static void usb_udc_connect_control_locked(struct usb_udc *udc)
+ {
+-	if (udc->vbus)
++	if (udc->vbus && udc->started)
+ 		usb_gadget_connect(udc->gadget);
+ 	else
+ 		usb_gadget_disconnect(udc->gadget);
+@@ -1099,10 +1102,12 @@ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+ {
+ 	struct usb_udc *udc = gadget->udc;
+ 
++	mutex_lock(&udc_connect_control_lock);
+ 	if (udc) {
+ 		udc->vbus = status;
+-		usb_udc_connect_control(udc);
++		usb_udc_connect_control_locked(udc);
+ 	}
++	mutex_unlock(&udc_connect_control_lock);
+ }
+ EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+ 
+@@ -1140,14 +1145,18 @@ static inline int usb_gadget_udc_start(struct usb_udc *udc)
+ {
+ 	int ret;
+ 
++	mutex_lock(&udc_connect_control_lock);
+ 	if (udc->started) {
+ 		dev_err(&udc->dev, "UDC had already started\n");
++		mutex_unlock(&udc_connect_control_lock);
+ 		return -EBUSY;
+ 	}
+ 
+ 	ret = udc->gadget->ops->udc_start(udc->gadget, udc->driver);
+ 	if (!ret)
+ 		udc->started = true;
++	usb_udc_connect_control_locked(udc);
++	mutex_unlock(&udc_connect_control_lock);
+ 
+ 	return ret;
+ }
+@@ -1165,13 +1174,17 @@ static inline int usb_gadget_udc_start(struct usb_udc *udc)
+  */
+ static inline void usb_gadget_udc_stop(struct usb_udc *udc)
+ {
++	mutex_lock(&udc_connect_control_lock);
+ 	if (!udc->started) {
+ 		dev_err(&udc->dev, "UDC had already stopped\n");
++		mutex_unlock(&udc_connect_control_lock);
+ 		return;
+ 	}
+ 
+ 	udc->gadget->ops->udc_stop(udc->gadget);
+ 	udc->started = false;
++	usb_udc_connect_control_locked(udc);
++	mutex_unlock(&udc_connect_control_lock);
+ }
+ 
+ /**
+@@ -1527,7 +1540,6 @@ static int gadget_bind_driver(struct device *dev)
+ 	if (ret)
+ 		goto err_start;
+ 	usb_gadget_enable_async_callbacks(udc);
+-	usb_udc_connect_control(udc);
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 	return 0;
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8f24c280dec2..27dc617ec296 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1153,6 +1153,7 @@ CONFIG_QCOM_CLK_APCS_MSM8916=y
- CONFIG_QCOM_CLK_APCC_MSM8996=y
- CONFIG_QCOM_CLK_SMD_RPM=y
- CONFIG_QCOM_CLK_RPMH=y
-+CONFIG_IPQ_APSS_6018=y
- CONFIG_IPQ_GCC_5332=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
+base-commit: d629c0e221cd99198b843d8351a0a9bfec6c0423
 -- 
-2.17.1
+2.40.0.348.gf938b09366-goog
 
