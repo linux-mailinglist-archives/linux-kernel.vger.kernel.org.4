@@ -2,110 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF9E6D8F9B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A8F6D8FA3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235550AbjDFGkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
+        id S235565AbjDFGmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235272AbjDFGkV (ORCPT
+        with ESMTP id S235272AbjDFGmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:40:21 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D715102;
-        Wed,  5 Apr 2023 23:40:20 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id b20so146847749edd.1;
-        Wed, 05 Apr 2023 23:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680763218;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ufn8dXIrnh+56Iea4gFx0gEX9oFLFPbZkbSS9EDVPbA=;
-        b=fnJmHXkS2uyJjTmT3M6mMzRezWhpgHAgnt756Nb+ik0p9gixZjwrz7Z4/YqDN02THY
-         Be58g0grhcXPBndhQETpFchxKaPbVFYpiJmjBg9Lhb2Fg5/uiBYoTC/G4IQwh7t+4lqi
-         //UhTEXWr6WY9mRlSMJCl1nfISa9UByZ2o6RKHEm31XxuMu075zVF1gnbEZL82u+1nQL
-         Djf9YFGdGf2rBdQaOGFivSZp5laX4lswHSRNqPFbxE+6bpUYdixhefzOh/IRR1DHe2F7
-         HG3di5HCADSwluycWG3FxosUxs0jomgIzbAo3etbwibwYndaB0P+MNznCakHUpr9orB+
-         gtgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680763218;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ufn8dXIrnh+56Iea4gFx0gEX9oFLFPbZkbSS9EDVPbA=;
-        b=wXlkXt04q+xsW/oaSLvVwv4j1MS9ruvbnItuYVnruGQHL7dDf9evE0SgdSl8wGqjIT
-         67JHmyVJ0j9uXr9tu5E825z/IDeEhmgRCUkXAb+GSirIyaow+fuNP8p8/9PBA/Nw8sjC
-         VHk4pPfSIzMAkux7AAkHygcbKGDEtnZEg0qE0MIkrbV5Oi81tpvA6k8fkKy4BA1tbxON
-         dqkZ39zqDGub6wHFNcHPYNkhEf3V3D08anZGQVoTiu8dCym01VXmd3Teci7iOTS0vQya
-         zIWh29MbtjuJtBQ7VK920OXp90Fh/6ZwuFQjINgt7Bxi8b6I3vu7f+KpTgUj/jtIa5Ac
-         SSoA==
-X-Gm-Message-State: AAQBX9dIdjG/RYiYKrsMimFEVb6tXPLJ+yS14+90HoIYtzGDskv9g54o
-        j9+IE6UnpNo0qG9lFax6NIZYy2zg5TkFzqjXsg4NaL8s
-X-Google-Smtp-Source: AKy350ZaitaIP37QKRvJ09Xxq14dBzKuBhP+qsRlaK9rt9XekriZtwV+88QyzbMY8o0YYuKBJFV84rdt3YK3h7b9m5s=
-X-Received: by 2002:a17:906:3a8f:b0:947:335f:5a10 with SMTP id
- y15-20020a1709063a8f00b00947335f5a10mr2624674ejd.12.1680763218206; Wed, 05
- Apr 2023 23:40:18 -0700 (PDT)
+        Thu, 6 Apr 2023 02:42:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE74102;
+        Wed,  5 Apr 2023 23:42:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A5FC62A96;
+        Thu,  6 Apr 2023 06:42:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BDA8C433EF;
+        Thu,  6 Apr 2023 06:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680763335;
+        bh=mJqfGgkA1fMz6skz9F+zwsRRFRctn6sP7FnHEqyeZJw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BECv1iinE7TxL2/LN70X9EyhKkkahnEO0lctucOs5wq0wMqUcqlULI3/C0hflGF/6
+         xkj6ZhM+0ot9r+9R+5YG1/cv5bvIbidRcHjHrOxwkMdZjRGHd7GaR43jg/JeLI3fKm
+         oaYpAJX2QfCUTEq+HlgZgnuunsRSkS9Tzu8WiReZEjmeHGenr/UXfbWjcipVkDm8LR
+         8dKvxmx1Fe/UuGgQuRbt2FkFXyJ/fLeS0RTnQ1XrZjymIYczf3UJytZLTP2SWV1C2p
+         23zLDwheOy+pb0z7eleokhheSCUSdpnOPyxNknVf3bf6/9yHeHP4yhpFtb0/OeeVZL
+         +NAOBcf3fUKCg==
+Date:   Thu, 6 Apr 2023 08:42:12 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>, linux-crypto@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Held Felix <Felix.Held@amd.com>,
+        linux-kernel@vger.kernel.org,
+        Mark Hasemeyer <markhas@chromium.org>,
+        Grzegorz Bernacki <gjb@semihalf.com>
+Subject: Re: [PATCH v8 0/6] Use CCP driver to handle PSP I2C arbitration
+Message-ID: <ZC5pxORLN+SF/91S@sai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jan Dabros <jsd@semihalf.com>, linux-crypto@vger.kernel.org,
+        linux-i2c@vger.kernel.org, Held Felix <Felix.Held@amd.com>,
+        linux-kernel@vger.kernel.org, Mark Hasemeyer <markhas@chromium.org>,
+        Grzegorz Bernacki <gjb@semihalf.com>
+References: <20230403183216.3493-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-References: <20230405200341.4911-1-danascape@gmail.com> <168074344623.1301612.621743725976519280.robh@kernel.org>
-In-Reply-To: <168074344623.1301612.621743725976519280.robh@kernel.org>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Thu, 6 Apr 2023 09:40:06 +0300
-Message-ID: <CAEnQRZBCN6JrjvaJSD5dnuLXOUyx8Y9LOucY_Fwqcf4ZZLuwJg@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: dt-bindings: wm8904: Convert to dtschema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Saalim Quadri <danascape@gmail.com>, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.baluta@nxp.com,
-        robh+dt@kernel.org, broonie@kernel.org,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dxxWHW86FhdhLb9p"
+Content-Disposition: inline
+In-Reply-To: <20230403183216.3493-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 4:24=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
->
->
-> On Thu, 06 Apr 2023 01:33:41 +0530, Saalim Quadri wrote:
-> > Convert the WM8904 audio CODEC bindings to DT schema
-> >
-> > Signed-off-by: Saalim Quadri <danascape@gmail.com>
-> > ---
-> >  .../devicetree/bindings/sound/wlf,wm8904.yaml | 66 +++++++++++++++++++
-> >  .../devicetree/bindings/sound/wm8904.txt      | 33 ----------
-> >  2 files changed, 66 insertions(+), 33 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8904.=
-yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/sound/wm8904.txt
-> >
->
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
->
-So, these properties are present in some dts files! We need to
-evaluated if they are always expected
-or can be optional.
 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
->
-> Full log is available here: https://patchwork.ozlabs.org/project/devicetr=
-ee-bindings/patch/20230405200341.4911-1-danascape@gmail.com
->
->
-> audio-codec@1a: Unevaluated properties are not allowed ('AVDD-supply', 'C=
-PVDD-supply', 'DBVDD-supply', 'DCVDD-supply', 'MICVDD-supply' were unexpect=
-ed)
->         arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dtb
->         arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dtb
->
+--dxxWHW86FhdhLb9p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, Apr 03, 2023 at 01:32:09PM -0500, Mario Limonciello wrote:
+> The CCP driver now has symbols that can be used by i2c-designware-amdpsp
+> to handle the communication regarding i2c arbitration with the PSP for
+> both Cezanne and Mendocino based designs.
+
+How should this go upstream, i.e. are there dependencies? Shall I pick
+the I2C patches or is it better if all goes via the crypto tree?
+
+
+--dxxWHW86FhdhLb9p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQuacQACgkQFA3kzBSg
+KbbnKA/9FkOCsNE4br0lLkyFwLvhKnpsOXOiXTTASDuP/uTpLQKhjbNamFkckTJd
+DNohsW34fuxuwG2mdQPd+812+lIrWJS9EZJMMaOll9kNySJNtMUU5ezPWBReIiRL
+wKL8Yi+xaCr2/vhbCpLc0DIi6SbskJy1vMk+ceZ8SGh8l+IYDvBMowf0DbnXl43b
+hyjM6xpmjQ4smTwdVACx38K1IdDOYCsoO+6h/pcDcgriE8hiRz4P7vbru+yWqJt6
+XTVGU5P666vYOwq/ZSbkWz2dCZZ88Ukz6kpa4SgWPzA6r+qJ3A6pWErBHd64OmwF
+s3/24EOuWF/QgEO2Rwu5n7WjKVaQCWPYmsXmdixwWbW9pHJUxWU9dLApbItBuMZn
+VK3hR9Mr+lOF/bJGfnpjo1pjv5S1TvOnMsn6qyeFuBV2rYDg8TR8jQTsQOaYuhmL
+Ji2twu1v1KFNQ4SDIevv8pqQLZz88vrW15qH0ZlsmXV0lTAJNW+ycJLh5Rub2aGa
+SRBctuqB8Smp2S0H5HKwGTX135JYBAkmJEfc8jY8HcM/ZCjRXazsv723XUcj/yto
+WktxREwePFhtU1WU3XvcwovTkrzDqpIu3yK/HkDxsqn+mQHbec7FDz5BG3xT5rn/
+dzCoH4X8SbKPlewobhUVBFcZvT7wO4+bu8OToDVOrbO3PHRV/hc=
+=0N0f
+-----END PGP SIGNATURE-----
+
+--dxxWHW86FhdhLb9p--
