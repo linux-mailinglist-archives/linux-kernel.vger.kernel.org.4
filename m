@@ -2,138 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B236DA47F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471AE6DA483
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238443AbjDFVMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
+        id S239456AbjDFVN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbjDFVMo (ORCPT
+        with ESMTP id S233520AbjDFVN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:12:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C628A79;
-        Thu,  6 Apr 2023 14:12:43 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [119.155.57.40])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E1DF666031CB;
-        Thu,  6 Apr 2023 22:12:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680815562;
-        bh=jpv185g+czi+1tMEl7JrJg752pEJcPwtivD3XpZ0TXw=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=DrBepuaie+n9o6W1SSg0a0FDPSz0KooP8jIDuIrlC8GOYZwq5SG35XM9e2z8HzpDb
-         Rzkga9U1BnxIDZVnxhWOiiekt2s4E7+JisS1+X2AQoZjtBXcpEXwiX9Rjp7uCfOz4F
-         JR63zOkdQGDf35/NbuYvRx9q0IYvMDelsStedGQc7NbDHDdkvWWxS/STyNtn0RTIeX
-         7Q6KJm8padayOB9G3s2dUYCkAwlSN9OTRhXzGOfEzC8vnDQgP4cClBUGPtXe8OXNYT
-         NDrh+5gNUuM5R54q89+uxsIMK70bC8CE0UxFfOZmeH40c9wSXs7yifEPwR3gc6CsEm
-         qevdtb/oURlaA==
-Message-ID: <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com>
-Date:   Fri, 7 Apr 2023 02:12:31 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com>
- <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 6 Apr 2023 17:13:26 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20D67ED8;
+        Thu,  6 Apr 2023 14:13:25 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id r7-20020a17090b050700b002404be7920aso40072862pjz.5;
+        Thu, 06 Apr 2023 14:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680815605; x=1683407605;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZCVxELTrTSpy+imTMqTFnISjchyfQpqhQ55LHn6jdbg=;
+        b=P9D31KMZRx3CWKpYsg2NNvmH2mCLl2uppn2ugSQSjGU4vqInWkmyu1Wi32rbp5tK9u
+         0GKxvf3Uvk7GnT8cFt4iNuLCYJ9lOcgfU6q3u1/sGlLLFWfAIz4hz3eB4ZUs4USQJlew
+         p9FjACPWwwb6AldUPasIkdMD0etPiPfAAT1u9v4ISWc0V72Pa/kgZ53GmitlH4jQ71Ab
+         +Okrf47Tk75ucVsLd0dAZEZjK+Kg6hF80mjaN8Nc/pnRkrv9dV//C/EdABsy+tnqcf5E
+         s708xfpxKZlIsYnjy/MmALz8tXNyAdL/7HBdFaSuUOTcNiORwr/Lng1ILyxOHPFDEBFS
+         JuWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680815605; x=1683407605;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZCVxELTrTSpy+imTMqTFnISjchyfQpqhQ55LHn6jdbg=;
+        b=BEf5gy+sjfBp97MfB4EYpwXV+Hvl+PLnOltVHqccsbaCnnyMCt8cIuE9xBsGulS1bJ
+         tCwnsgdnmxc5NSc6P3P3PgcmX3k0/z5iGgZ2h1IoOV+daGA5FNi9Wzp1XqDB+35AB+8z
+         0SQhUGuWq3UMckIN0qgbzGksjdFiuGEVc/KNVTuX4rUCoZ6mfcKt2kK1sOReAG5pQ3qA
+         r2YAViGmHfEoyRBi3t/YLRQbM4qgTh27R2evMbeV+CDUUa7Fv66YODPI2oNl6fmN9Hko
+         tSbYONL1gRoORexuq+fulkqIvKNx6rIKDTxB8W9K6+txwcFJFVSEkzYt0SZVqN/oy7Gi
+         eliQ==
+X-Gm-Message-State: AAQBX9cf1kOvW5EYkX51ibcacJIr8u0t3/gG69RBW2Fye5tn8MtPJ4MG
+        WJ7EGFvkag49C16sXziDPSw=
+X-Google-Smtp-Source: AKy350bCNbW4udGWvvxKY/H8/KCHVbh8qEweSTRFs1xww/19WFZ+7Qjc3Ib1wuNseDFh42n12fqeuw==
+X-Received: by 2002:a17:90b:4f48:b0:22c:59c3:8694 with SMTP id pj8-20020a17090b4f4800b0022c59c38694mr12486611pjb.44.1680815605163;
+        Thu, 06 Apr 2023 14:13:25 -0700 (PDT)
+Received: from localhost ([67.170.148.130])
+        by smtp.gmail.com with ESMTPSA id n32-20020a17090a2ca300b00227223c58ecsm1567684pjd.42.2023.04.06.14.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 14:13:24 -0700 (PDT)
+Date:   Thu, 06 Apr 2023 14:13:23 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Xin Liu <liuxin350@huawei.com>, andrii@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org
+Cc:     bpf@vger.kernel.org, hsinweih@uci.edu,
+        linux-kernel@vger.kernel.org, yanan@huawei.com,
+        wuchangye@huawei.com, xiesongyang@huawei.com,
+        kongweibin2@huawei.com, liuxin350@huawei.com,
+        zhangmingyi5@huawei.com
+Message-ID: <642f35f3881ee_6e3a2085@john.notmuch>
+In-Reply-To: <20230406122622.109978-1-liuxin350@huawei.com>
+References: <20230406122622.109978-1-liuxin350@huawei.com>
+Subject: RE: [PATCH bpf-next] bpf, sockmap: fix deadlocks in the sockhash and
+ sockmap
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 1:12 AM, Michał Mirosław wrote:
-> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
-> [...]
->> --- a/fs/proc/task_mmu.c
->> +++ b/fs/proc/task_mmu.c
-> [...]
->> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->> +                                 unsigned long end, struct mm_walk *walk)
->> +{
->> +       struct pagemap_scan_private *p = walk->private;
->> +       bool is_written, is_file, is_present, is_swap;
->> +       struct vm_area_struct *vma = walk->vma;
->> +       unsigned long addr = end;
->> +       spinlock_t *ptl;
->> +       int ret = 0;
->> +       pte_t *pte;
->> +
->> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->> +       ptl = pmd_trans_huge_lock(pmd, vma);
->> +       if (ptl) {
-> [...]
->> +               return ret;
->> +       }
->> +process_smaller_pages:
->> +       if (pmd_trans_unstable(pmd))
->> +               return 0;
+Xin Liu wrote:
+> When huang uses sched_switch tracepoint, the tracepoint
+> does only one thing in the mounted ebpf program, which
+> deletes the fixed elements in sockhash ([0])
 > 
-> Why pmd_trans_unstable() is needed here and not only after split_huge_pmd()?
-I'm not entirely sure. But the idea is if THP is unstable, we should
-return. As it doesn't seem like after splitting THP can be unstable, we
-should not check it. Do you agree with the following?
+> It seems that elements in sockhash are rarely actively
+> deleted by users or ebpf program. Therefore, we do not
+> pay much attention to their deletion. Compared with hash
+> maps, sockhash only provides spin_lock_bh protection.
+> This causes it to appear to have self-locking behavior
+> in the interrupt context.
+> 
+>   [0]:https://lore.kernel.org/all/CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com/
+> 
+> Reported-by: Hsin-Wei Hung <hsinweih@uci.edu>
+> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+> Signed-off-by: Xin Liu <liuxin350@huawei.com>
 
+Yeah even if we delete entries we do it from a sockops. Thanks for the
+fix.
 
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1957,11 +1957,11 @@ static int pagemap_scan_pmd_entry(pmd_t *pmd,
-unsigned long start,
-
- 		return ret;
- 	}
--process_smaller_pages:
-+
- 	if (pmd_trans_unstable(pmd))
- 		return 0;
- #endif
--
-+process_smaller_pages:
- 	for (addr = start; addr < end && !ret; pte++, addr += PAGE_SIZE)
-
-
--- 
-BR,
-Muhammad Usama Anjum
+Acked-by: John Fastabend <john.fastabend@gmail.com>
