@@ -2,152 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B466DA069
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531F76DA06F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240318AbjDFS4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S239605AbjDFS6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239433AbjDFS4e (ORCPT
+        with ESMTP id S239799AbjDFS6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:56:34 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842769004
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:56:33 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id p203so47170700ybb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:56:33 -0700 (PDT)
+        Thu, 6 Apr 2023 14:58:11 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293E330C1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:58:09 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id qb20so3736687ejc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680807392;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ucnAW8w35vol8Pg57OLPiTr9yW6zisn9tO1ygQITttI=;
-        b=biLsD71bt/4qhOiC+fjKpXwMJ7DLuQs+qj3u1Sm3s/qCNkrktChSmO29ZgGtDVliSq
-         gzoFMDRfEEJ1Id8nivsrn+6O2Bm9wkSqLZRb/Z4MGRDMuQeGoV46EtSSmF50tPOQx0qw
-         m4ZIY3q50IWmZPapaUOGPmVxbiKyoEz4TmtOxpH98EC3Fmo3VpqOd4AcPfubhe4dXsOZ
-         Ma6IJj+keATFHXQvx1xtILQ8Pt8JGRCtihK6+VaQyuog4KgGxKfPg7FaUzFgxnyGr2lB
-         qWpfjWGeReUfg1lDInoDgjJ2Ey/TplX3Fv0IH6fda92c2lYRCWfL3iWfv8ZADggCSPPd
-         nk+g==
+        d=linaro.org; s=google; t=1680807487;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z4laVqvDzX6NVLaZ7/XvxDcJwyPyRVfzt8CESBHu0Is=;
+        b=VAr8/ifN5KAg3loChJriSbYYFNzuy9HoEtWTu7+b37s0CEC9NvOyH1AYzOgS88W0A3
+         blYZjuR1jHENqHvoxPy4bdy8DXQyPXzXLc86KcPBZJjDXtmEU1GsNS0RbwAUVTuce+l2
+         wsISQDGSV0q37EjjhxOzblhH9T5MRYdY+9TAcYJhPWBmZiDV6eax0BazAd/OCayoVZ52
+         IYpKMW86Mw1Cqm87jQTVv0yDjm/NKX3o+3cli66+/L6cZmuUAFuHWJs6PvMgdO02qOCp
+         XBKBykeVGZsP+SlUh3NmtijtJycs8dVwyszLif+bjTtQIwekEk0F/KrhoJ6XBMwjVd80
+         dcNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807392;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ucnAW8w35vol8Pg57OLPiTr9yW6zisn9tO1ygQITttI=;
-        b=IC8ji/9aT6Ya5DW7fqozqAci8QsC2qrYhYc3zYuBqccvjiOnfVIx8CgYNsMGaskk5J
-         AMGj49YtBwHiG+bE9c1OLgaIwby1FVjEDwN6b7sqiDCOw/CQ+Se9hyZWkLoriaXvhuf4
-         3h32tNQonLIE7njd8DSN/PIUQozXNJF11hm5Xx0KCEyz6MqcvVeDDFtQfuLt6p68shUP
-         Y4rLZ3Ma/799TZyRf46gENiifTbmkn1LMbFBT4PQKAlIa2b9zlSa5z/cH9I9dMxYtpt/
-         4BLyBqBNoxpTdtX9wBlDMRHCTXDZ46bTSh5wmw+jAJNY4p7n1HKbQyBKYVsY5CrxE0tq
-         WzyA==
-X-Gm-Message-State: AAQBX9fuOljV9Upn0D/cKHgIs410XkR4aqPtpTZFoS056TcDtm8lRwLH
-        aN9S6mGZTWuP82X3Hu/1td1fGOP8eiLHH8LmYpqFMg==
-X-Google-Smtp-Source: AKy350aLyY8waJyCoRar/QqAuHJLAJ4vbrM/5IkmzmLH9JFqvplgiFfoD5QooPuJEJQ83FPjVX8k1FVTGH4xULbcZa8=
-X-Received: by 2002:a25:d64e:0:b0:b8b:f02b:ba20 with SMTP id
- n75-20020a25d64e000000b00b8bf02bba20mr210452ybg.9.1680807392707; Thu, 06 Apr
- 2023 11:56:32 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680807487;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z4laVqvDzX6NVLaZ7/XvxDcJwyPyRVfzt8CESBHu0Is=;
+        b=1Jwe+OL7qoxZbfowd7gVUXfb9S7C50pI65tSNifmvuMjeLOHkEBWGqc/7AikoHvdxQ
+         V4jwM4AXSZx2BpDGl44breL2TiwpuHa09E8HnX6I5mAxgKpOP0ZpfXAuw8lnLCNcbYhF
+         Q7yCKLMqSBQl4aiungIhP51wRigRJYnCfuUo/in16eG1Cpm4GIrXI2eCAH2hvJ6cguHm
+         GcBMJIsS6tAXahVkBgQD4/cuhUvAngOvbXXSoK8Vhi9lg26mc+u5NaKCYk7JRZiBbYy1
+         /67UYAl8hKrJ+gsIrsgDbeb2IKBZ6DhOTD8ed5pqiQIk0wRqJ013ROpTp2hW9MnndJv1
+         2UJQ==
+X-Gm-Message-State: AAQBX9fSpAHHYixxZZWenFhDaTw/KinXfHKi+OyhMQjVn8/oCGFceo1J
+        qPTfi2pGAzjikMdMNVI95UeHCg==
+X-Google-Smtp-Source: AKy350b+jnaYTB7EvEGGB3HZJ57CP7XCCDhy1CDUWipMsmKS+z/iO6WOJEDrDVeYp/cHH5uNjDZLag==
+X-Received: by 2002:a17:906:828f:b0:931:462f:f141 with SMTP id h15-20020a170906828f00b00931462ff141mr6222885ejx.20.1680807487576;
+        Thu, 06 Apr 2023 11:58:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id gv11-20020a1709072bcb00b009273859a9bdsm1129456ejc.122.2023.04.06.11.58.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 11:58:07 -0700 (PDT)
+Message-ID: <df75afe8-0926-6725-f7aa-f26d6a6be79f@linaro.org>
+Date:   Thu, 6 Apr 2023 20:58:06 +0200
 MIME-Version: 1.0
-References: <20230406-topic-lenovo_features-v1-0-c73a5180e48e@linaro.org>
- <20230406-topic-lenovo_features-v1-4-c73a5180e48e@linaro.org>
- <7476b5ba-426c-3701-c4aa-d3e2db3de112@linaro.org> <bceb91fa-c94b-a0bf-a612-19fc5778810e@linaro.org>
-In-Reply-To: <bceb91fa-c94b-a0bf-a612-19fc5778810e@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 6 Apr 2023 21:56:21 +0300
-Message-ID: <CAA8EJprmzibdarZCKDtAa14HTShxTwQ6FQfi665hbVR_=5MLaQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm6115p-j606f: Enable ATH10K WiFi
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/4] dt-bindings: iio: dac: add mcp4822
+Content-Language: en-US
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230405140114.99011-1-frattaroli.nicolas@gmail.com>
+ <20230405140114.99011-4-frattaroli.nicolas@gmail.com>
+ <748c4391-1c8c-8fc2-cef9-6091512c77ef@linaro.org>
+ <4357039.nDxAD4yF8u@archbook>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4357039.nDxAD4yF8u@archbook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Apr 2023 at 21:32, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 6.04.2023 19:51, Dmitry Baryshkov wrote:
-> > On 06/04/2023 18:25, Konrad Dybcio wrote:
-> >> Enable the onboard QCA Wi-Fi. HW identifiers for reference:
-> >> qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400e0000
-> >>
-> >> Firmware sources:
-> >> /vendor/firmware_mnt/image/wlanmdsp.bin -> qcom/.../wlanmdsp.mbn
-> >> /vendor/firmware_mnt/image/bdwlan.bXX [1] -> [2] -> ath10k/.../board-2.bin
-> >> [3] -> ath10k/.../firmware-5.bin
-> >>
-> >> Not sure where 3 comes from on the device itself, gotta investigate that..
-> >>
-> >> According to [4], it's called WCN3990_STRAIT.
-> >>
-> >> [1] XX = board_id printed when the file is missing or by your downstream
-> >> kernel firmware loader in the dmesg; if XX=ff, use bdwlan.bin
-> >
-> > Since the board_id is 0xff, please add qcom,ath10k-calibration-variant
-> Do I make up a name, or is there some convention?
->
-> I see Johan used "LE_X13S" in commit 2702f54f400ad3979632cdb76553772414f4c5e3.
-> Should I go with "LE_P11"?
+On 05/04/2023 16:17, Nicolas Frattaroli wrote:
+> On Mittwoch, 5. April 2023 16:10:10 CEST Krzysztof Kozlowski wrote:
+>> On 05/04/2023 16:01, Nicolas Frattaroli wrote:
+>>> The MCP4801, MCP4802, MCP4811, MCP4812, MCP4821, and MCP4822 are
+>>> SPI digital-to-analog converters by Microchip, which have an
+>>> internal voltage reference, in contrast to the MCP49xx series
+>>> of DACs which use an external voltage reference.
+>>>
+>>> Thus, these need a separate binding, as to not overcomplicate
+>>> the mcp4922 binding.
+>>
+>> The difference is just one property which is very easy to handle - one
+>> allOf:if:then: with
+>>     vref-supply: false
+>>
+>> Are there any other differences?
+>>
+>> Best regards,
+>> Krzysztof
+>>
+>>
+> 
+> In place of the external vref input, the MCP48XX series chips also
+> have a "SHDN" input, which is an active-low pin to disable the whole
+> chip and put it in a low power state. Future users of the bindings
+> may want to model this as being tied to some GPIO, though I haven't
+> done it here since I don't care about this feature.
 
-I think Lenovo_P11 or LENOVO_P11 might be better.
+OK to keep them separate, but then you should add here powerdown-gpios.
+Bindings should be complete.
 
->
-> >
-> > Ideally, could you please send the bdwlan to ath10k for inclusion, see https://wireless.wiki.kernel.org/en/users/drivers/ath10k/boardfiles .
-> The legal situation is ambiguous at best :/
+Best regards,
+Krzysztof
 
-As usual :-(
-
->
-> Konrad
-> >
-> >>
-> >> [2] https://github.com/jhugo/linux/blob/5.5rc2_wifi/README
-> >> [3] https://github.com/kvalo/ath10k-firmware/blob/master/WCN3990/hw1.0/HL3.1/WLAN.HL.3.1-01040-QCAHLSWMTPLZ-1/firmware-5.bin
-> >> [4] https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/wlan/qca-wifi-host-cmn/-/blob/LA.VENDOR.1.0.r1-20700-WAIPIO.QSSI13.0/hif/src/hif_hw_version.h#L55
-> >>
-> >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> >> ---
-> >>   arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts | 8 ++++++++
-> >>   1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-> >> index 2aac25171dec..4ba8e59a27d8 100644
-> >> --- a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-> >> +++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-> >> @@ -315,6 +315,14 @@ &usb_hsphy {
-> >>       status = "okay";
-> >>   };
-> >>   +&wifi {
-> >> +    vdd-0.8-cx-mx-supply = <&pm6125_l8>;
-> >> +    vdd-1.8-xo-supply = <&pm6125_l16>;
-> >> +    vdd-1.3-rfa-supply = <&pm6125_l17>;
-> >> +    vdd-3.3-ch0-supply = <&pm6125_l23>;
-> >> +    status = "okay";
-> >> +};
-> >> +
-> >>   &xo_board {
-> >>       clock-frequency = <19200000>;
-> >>   };
-> >>
-> >
-
-
-
--- 
-With best wishes
-Dmitry
