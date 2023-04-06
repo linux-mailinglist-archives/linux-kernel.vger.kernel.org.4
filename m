@@ -2,114 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AA86D95D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4D36D95FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238485AbjDFLhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S238490AbjDFLjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbjDFLgl (ORCPT
+        with ESMTP id S238595AbjDFLip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:36:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201A8B747;
-        Thu,  6 Apr 2023 04:34:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0B2B645A3;
-        Thu,  6 Apr 2023 11:34:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB69C4339E;
-        Thu,  6 Apr 2023 11:34:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680780856;
-        bh=ttxrWK0ds3BLQZme7B06MSYATP5g4gqhmeNnU6qH4I0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A8PWhkXdW6/MNpjP3Mjj7Rjd/Y4dw71SmfZ6nkSS02tEmAeDuYvDgwyJzTUvLz9kv
-         YbdDmNC2TYWqDB4bKjHImMxUckhCHQoMKxCjwUzX5KqpQ+gwusjRpnT/ZVsq/Sagwh
-         aP+Q2uxOGbGhz6MtvlKSZz10hxS2i3eyJ4tSrca3zpzlhCvwlOSLzAwWWOi8AOz80P
-         zQTEnRv3D0rplqKWn3MG/BeTtfMSxbm5u6j01XBbPNJEdAPnSZ+bfTksL2h8mpRCCK
-         2OCXeuG7bE9SnDxHXS2QxzROMmM/4Y7gdoiLCqffKOeEiR1vDh7CXD+tJsCA/AP4N/
-         Voj6a9fLjbpvQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 5/8] scsi: core: Improve scsi_vpd_inquiry() checks
-Date:   Thu,  6 Apr 2023 07:33:57 -0400
-Message-Id: <20230406113400.649038-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113400.649038-1-sashal@kernel.org>
-References: <20230406113400.649038-1-sashal@kernel.org>
+        Thu, 6 Apr 2023 07:38:45 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA21A2;
+        Thu,  6 Apr 2023 04:35:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YLWXUtPlBzNRctfCp3LF0O5qcqt639y98cAc4+5cpy0=; b=glPn+IesWMVvAEJ0FzHVYHlEFj
+        mDPZh/l+MAcwkoHuEVHKHvWYjJKzKcO27aTPHOE/ZP3xxdayp+pqNxyEcn53jKLX+vE5ryB0vmGDm
+        hucmfHkLa3t5buJXyt5Eab9FqtXZRimI8ppRc3PPfSjxj9ddEYev32YRD/yHWUZQ/h5W0puY9i0yg
+        AlQeX+lvyLb8m8lKNkP9KmlUnNCQUafwrDG9zsD+Z17K82ir5hVTCV7ruIcxu9bABMniUZsUOSqOn
+        bmxZx4yPp/bFR4DJepmG7R/XSEH+10DRX3Gt5SQmBV579k/RXppbMxCag/DNgKJ163mFRvLOdeLXF
+        JePUuJtg==;
+Received: from p200300ccff190e001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff19:e00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pkNsM-0002Aa-Vf; Thu, 06 Apr 2023 13:34:00 +0200
+Date:   Thu, 6 Apr 2023 13:33:57 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     pavel@ucw.cz, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hns@goldelico.com
+Subject: Re: [PATCH 1/2] dt-bindings: leds: ROHM BD2606MVV LED driver
+Message-ID: <20230406133357.45e48bd3@aktux>
+In-Reply-To: <f73050b7-3f86-0dcd-5e43-d8a9258afcae@gmail.com>
+References: <20230406060825.103187-1-andreas@kemnade.info>
+        <20230406060825.103187-2-andreas@kemnade.info>
+        <f73050b7-3f86-0dcd-5e43-d8a9258afcae@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.24; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Hi Matti,
 
-[ Upstream commit f0aa59a33d2ac2267d260fe21eaf92500df8e7b4 ]
+On Thu, 6 Apr 2023 11:32:42 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-Some USB-SATA adapters have broken behavior when an unsupported VPD page is
-probed: Depending on the VPD page number, a 4-byte header with a valid VPD
-page number but with a 0 length is returned. Currently, scsi_vpd_inquiry()
-only checks that the page number is valid to determine if the page is
-valid, which results in receiving only the 4-byte header for the
-non-existent page. This error manifests itself very often with page 0xb9
-for the Concurrent Positioning Ranges detection done by sd_read_cpr(),
-resulting in the following error message:
+> Hi Andreas,
+> 
+> Thanks for the patch! Adding new support for devices is Much Appreciated!
+> 
+> On 4/6/23 09:08, Andreas Kemnade wrote:
+> > Document ROHM BD2606MVV LED driver devicetree bindings.
+> > 
+> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > ---
+> >   .../bindings/leds/rohm,bd2606mvv.yaml         | 76 +++++++++++++++++++
+> >   1 file changed, 76 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml b/Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
+> > new file mode 100644
+> > index 0000000000000..6d4ddd8d31162
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
+> > @@ -0,0 +1,76 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/leds/rohm,bd2606mvv.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: BD2606MVV LED controller
+> > +
+> > +maintainers:
+> > +  - Andreas Kemnade <andreas@kemnade.info>
+> > +
+> > +description:
+> > +  The BD2606 MVV is a programmable LED controller connected via I2C that can
+> > +  drive 6 separate lines. Each of them can be individually switched on and off
+> > +  but the brightness setting is shared between two of them.  
+> 
+> Maybe add a link to data-sheet?
+> https://fscdn.rohm.com/en/products/databook/datasheet/ic/power/led_driver/bd2606mvv_1-e.pdf
+> 
+Maybe also (because it has the register description):
+https://fscdn.rohm.com/en/products/databook/applinote/ic/power/led_driver/bd2606mvv_tsb_001_ug-e.pdf
 
-sd 0:0:0:0: [sda] Invalid Concurrent Positioning Ranges VPD page
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: rohm,bd2606mvv
+> > +
+> > +  reg:
+> > +    description: I2C slave address of the controller.
+> > +    maxItems: 1
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > +patternProperties:
+> > +  "^led@[0-6]$":
+> > +    type: object
+> > +    $ref: common.yaml#
+> > +    unevaluatedProperties: false
+> > +
+> > +    properties:
+> > +      reg:
+> > +        minimum: 0
+> > +        maximum: 6
+> > +
+> > +    required:
+> > +      - reg
+> > +
+> > +additionalProperties: false  
+> 
+> According to the data-sheet, BD2606 has an enable-pin. Should it be 
+> visible in the bindings?
+> 
+yes, it should.
 
-Prevent such misleading error message by adding a check in
-scsi_vpd_inquiry() to verify that the page length is not 0.
-
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Link: https://lore.kernel.org/r/20230322022211.116327-1-damien.lemoal@opensource.wdc.com
-Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/scsi.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index febe29a9b8b06..acd118da88bfb 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -351,11 +351,18 @@ static int scsi_vpd_inquiry(struct scsi_device *sdev, unsigned char *buffer,
- 	if (result)
- 		return -EIO;
- 
--	/* Sanity check that we got the page back that we asked for */
-+	/*
-+	 * Sanity check that we got the page back that we asked for and that
-+	 * the page size is not 0.
-+	 */
- 	if (buffer[1] != page)
- 		return -EIO;
- 
--	return get_unaligned_be16(&buffer[2]) + 4;
-+	result = get_unaligned_be16(&buffer[2]);
-+	if (!result)
-+		return -EIO;
-+
-+	return result + 4;
- }
- 
- /**
--- 
-2.39.2
-
+Regards,
+Andreas
