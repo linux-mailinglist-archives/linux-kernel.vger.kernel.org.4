@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81B046D8C7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AEE6D8C7C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbjDFBK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
+        id S231655AbjDFBLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 21:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjDFBKY (ORCPT
+        with ESMTP id S232560AbjDFBK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:10:24 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDB57281;
-        Wed,  5 Apr 2023 18:10:22 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id f7-20020a4ab647000000b0054101f316c7so2539423ooo.13;
-        Wed, 05 Apr 2023 18:10:22 -0700 (PDT)
+        Wed, 5 Apr 2023 21:10:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB736E96
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680743380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gHoyjTxQNsIixkHB5UoenspL4I5fGKVvNYeLFs2CchU=;
+        b=GgfimKgv/spC3Tz8NwS4NAjT5VWiBiToKF1w0gFZV1Ohk6lDhZmCJXDVsm2PidMqmO2hnU
+        F6jPW46klkAVsllJOiVoRBv3cwfZRol7MYA5i4YFhieVGhUv9h8x2oF1ZlXcqS4wnYKV/M
+        Eo1q5CcLpKHtQ4rSo5JhQaDLg588WgU=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-620-ZxC9hGGCOdecqGThSapg2g-1; Wed, 05 Apr 2023 21:09:39 -0400
+X-MC-Unique: ZxC9hGGCOdecqGThSapg2g-1
+Received: by mail-qt1-f197.google.com with SMTP id s23-20020a05622a1a9700b003e6578904c3so7170897qtc.17
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 18:09:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680743422;
+        d=1e100.net; s=20210112; t=1680743379;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yFesBBHzxWYkEFkum0aSO7GPX9U9Sjvp2fw545n6LzU=;
-        b=j4fD+ppDMpm3QSjq+Jr8yxpVOyIZRkZ2Bhwq/s3OUHSdGB1SmrioEY+jo1Q0Ua8oqm
-         QgKoPwwgl09FODQbpaNQS9PmzYT10qTbCfZtfXratpiApXyobRpTOnspEjqDJdcXEAdZ
-         gY66kywJDleAWxrFsriYWGOxgpxTJ7SSXxXI4g7myTNJ54+en9tPf4T4lVVPZ7NbIKT+
-         cZMSL9ksWeHNTtaUgu+sNTklCOmZfuTm0nOIFAvvaf1TjIdAxMfqMPhxRgkAI7UNmeo8
-         3PW994sls3I6WcS0XNpxqI9cVEhyCYabiFNvqj2siGl7Q1ug9eSn/NMeQKm7xf6EyIr+
-         It2w==
-X-Gm-Message-State: AAQBX9dvwWw32DUPUlFV9UDt4CPLiKwGevFyNL3ygrpATp4hfr0DhprU
-        b2B3e1rqCCVv+iJmwzh7G+YrCDFhmQ==
-X-Google-Smtp-Source: AKy350YufB0TmW8MSkABr7bePEAyAYrEhMD25kHeSFMvJDktSVM+1U+1hLzbkaUAJZjOf6Ky2ey5Ig==
-X-Received: by 2002:a4a:4542:0:b0:536:a65c:12d0 with SMTP id y63-20020a4a4542000000b00536a65c12d0mr3768416ooa.8.1680743421844;
-        Wed, 05 Apr 2023 18:10:21 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id a4-20020a4aae44000000b00524faf3d2d7sm7344838oon.41.2023.04.05.18.10.21
+        bh=gHoyjTxQNsIixkHB5UoenspL4I5fGKVvNYeLFs2CchU=;
+        b=I0kgStpqkYFF+UDRcwqLigbWrHgRPMy+tRrEFTf0JXqXmWwVR4JotrnE8YzM8Hbn0z
+         nJ4p/HgCtGp46MmuRCTZT1fx6TIxs3zkoG3e81LaCWt83XhYTU0RfQ3r1WIXbPxcyQf5
+         zpMqdM9inYb7H/xzv4zXPlhdQv9jc2q3uQ8Ce2zZ0lTY6bQUPk0XYPlYZ6by8g/PF7Fp
+         FMG2ZUBxGEur8c2cnuY3Q13Kg5usRtK0OnhtGqMCPjGPiOpR1M0Q1PIdl6wk7+cIUSz0
+         ILllAsqzyxWQJwGf0rNqpetTvR/AQ7wn/pBkE9xV9TcHAymkqOqNMUUK/rrWMtiApkcU
+         pxXQ==
+X-Gm-Message-State: AAQBX9cwHBOKCGvL3O7q/pgi3bi8q9UsTeM9ubl3PzdiaVDex4/CQtFk
+        8bUbjSYIP5zjP55wQEmD9SLdvNUbY3LIe7wPkBjqWmzJxYC7dayBUsFuYm17IBHlqMABJ+cRqGd
+        uAyiruPS5l65MOBsz9Yp5aSGT
+X-Received: by 2002:ac8:5f10:0:b0:3db:7f42:ab0f with SMTP id x16-20020ac85f10000000b003db7f42ab0fmr8396460qta.67.1680743379363;
+        Wed, 05 Apr 2023 18:09:39 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZIbqKuhrrAyaCl1AzzFxLvOp0zEgA8xN+j2J99j+/2qw3uGQfHd57fnQTzqA2s828Rsp3zMQ==
+X-Received: by 2002:ac8:5f10:0:b0:3db:7f42:ab0f with SMTP id x16-20020ac85f10000000b003db7f42ab0fmr8396435qta.67.1680743379073;
+        Wed, 05 Apr 2023 18:09:39 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id f9-20020ac84989000000b003defe5ab4aesm56174qtq.94.2023.04.05.18.09.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 18:10:21 -0700 (PDT)
-Received: (nullmailer pid 1296695 invoked by uid 1000);
-        Thu, 06 Apr 2023 01:10:20 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: mvebu: Use of_address_to_resource()
-Date:   Wed,  5 Apr 2023 20:07:38 -0500
-Message-Id: <20230406010738.1269781-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 05 Apr 2023 18:09:38 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] clk: mediatek: fhctl: set varaiables fhctl_offset_v1,2 storage-class-specifier to static
+Date:   Wed,  5 Apr 2023 21:09:35 -0400
+Message-Id: <20230406010935.1944976-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace of_get_property() and of_translate_address() calls with a single
-call to of_address_to_resource().
+smatch reports
+drivers/clk/mediatek/clk-fhctl.c:17:27: warning: symbol
+  'fhctl_offset_v1' was not declared. Should it be static?
+drivers/clk/mediatek/clk-fhctl.c:30:27: warning: symbol
+  'fhctl_offset_v2' was not declared. Should it be static?
 
-Signed-off-by: Rob Herring <robh@kernel.org>
+These variables are only used in one file so should be static.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-One more to add to the prior series[1]. Though there is no dependency 
-and this isn't for cpu nodes.
+ drivers/clk/mediatek/clk-fhctl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-[1] https://lore.kernel.org/all/20230327-mvebu-clk-fixes-v1-0-438de1026efd@kernel.org/
-
- drivers/clk/mvebu/armada_ap_cp_helper.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/clk/mvebu/armada_ap_cp_helper.c b/drivers/clk/mvebu/armada_ap_cp_helper.c
-index 6a930f697ee5..e7005de66327 100644
---- a/drivers/clk/mvebu/armada_ap_cp_helper.c
-+++ b/drivers/clk/mvebu/armada_ap_cp_helper.c
-@@ -16,15 +16,13 @@
- char *ap_cp_unique_name(struct device *dev, struct device_node *np,
- 			const char *name)
- {
--	const __be32 *reg;
--	u64 addr;
-+	struct resource res;
+diff --git a/drivers/clk/mediatek/clk-fhctl.c b/drivers/clk/mediatek/clk-fhctl.c
+index 45e4842cbf04..33b6ad8fdc2e 100644
+--- a/drivers/clk/mediatek/clk-fhctl.c
++++ b/drivers/clk/mediatek/clk-fhctl.c
+@@ -14,7 +14,7 @@
+ #define PERCENT_TO_DDSLMT(dds, percent_m10) \
+ 	((((dds) * (percent_m10)) >> 5) / 100)
  
- 	/* Do not create a name if there is no clock */
- 	if (!name)
- 		return NULL;
+-const struct fhctl_offset fhctl_offset_v1 = {
++static const struct fhctl_offset fhctl_offset_v1 = {
+ 	.offset_hp_en = 0x0,
+ 	.offset_clk_con = 0x4,
+ 	.offset_rst_con = 0x8,
+@@ -27,7 +27,7 @@ const struct fhctl_offset fhctl_offset_v1 = {
+ 	.offset_mon = 0x10,
+ };
  
--	reg = of_get_property(np, "reg", NULL);
--	addr = of_translate_address(np, reg);
-+	of_address_to_resource(np, 0, &res);
- 	return devm_kasprintf(dev, GFP_KERNEL, "%llx-%s",
--			      (unsigned long long)addr, name);
-+			      (unsigned long long)res.start, name);
- }
+-const struct fhctl_offset fhctl_offset_v2 = {
++static const struct fhctl_offset fhctl_offset_v2 = {
+ 	.offset_hp_en = 0x0,
+ 	.offset_clk_con = 0x8,
+ 	.offset_rst_con = 0xc,
 -- 
-2.39.2
+2.27.0
 
