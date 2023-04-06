@@ -2,159 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9946D9D08
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2A76D9D16
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239878AbjDFQGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
+        id S239888AbjDFQHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239860AbjDFQG2 (ORCPT
+        with ESMTP id S239844AbjDFQHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:06:28 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A86493F4
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:06:07 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j11so348330wrd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680797165; x=1683389165;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=tGBcjAE6j139nGrIeCa4gFdeD5NsoReg/shcLBHBhms=;
-        b=ilJZDzEidBWQIUC/WEyHBGDCmt0cL+CP5MSZDpG5JB4DEmx+iCCm2eolefvzKHqePs
-         pPr5KEMziD1SfnzjcT7+V2LbK6NO4kGSMU9+vrMBiNxCUo+0yCJLJXN1GOd8xnTsrDFP
-         5ttKj7hXEN+WARyIDBN+aJMbKgLwykkxseBQlNWWYddQ7j24/HTKyL2rfD5d9YgpSvH8
-         NCOWr7ne1XNH4RceyRoq74JZKlfolKiIu4uOwzNmkdyjCaRkkE3yNkOn5sgi+Brd7EQ9
-         BxsNdGp4804+wu6FlQ7CxoZI5ausQcPB0JIBbA10IeZTz+Q1A1ccbUueZTedCg1t2U74
-         YoGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680797165; x=1683389165;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tGBcjAE6j139nGrIeCa4gFdeD5NsoReg/shcLBHBhms=;
-        b=ifxI1ayKa+kth2hw7neTMHAb4SIpZzrRVwmSmxdnPJ/zO8HM/JYHHWWAM3rszgwHn7
-         KT10M5DfC1xWjhgFOkdPIyNu23uVB8zAzgeqTlUIWxNSqQ1ZVAOHBN3OxJYwjPOt+uhi
-         L2ojlyZkIudU/k2VLXQcp6/Kq0O3v8mNql4vCB8XDf0YndgFFYpj4Sq7EQrQRtaYyqRf
-         R5RxgAAKtyPeU3TIpzx8kYJ6SwjsgCVQ4U6O5rzce/jCWhgYJvMDpyeoweCcWorbe5no
-         lxpcUjoVmVl+WGu+UQ82DiTl0BpeF2SIav9PeoLRpMZo6A3REA+09aS//tLTZKlCsLPo
-         xqyg==
-X-Gm-Message-State: AAQBX9cjmzrGm+ALIEDYGRRApFO4yq0dIXlQLJU6YdB5msZhjfLjR2Ks
-        RfmIeFyFkaUp37LaESGRBAyhww==
-X-Google-Smtp-Source: AKy350Z6NL84QoajoMkHAcqHoiPnqfDtjwjHP1ozYJ3eK1bhBdJxqz9vdxU74lO60iF0AtXdxGpuBg==
-X-Received: by 2002:a5d:6584:0:b0:2ee:ee98:efbe with SMTP id q4-20020a5d6584000000b002eeee98efbemr1836418wru.58.1680797165454;
-        Thu, 06 Apr 2023 09:06:05 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:8569:a62a:11bd:c344? ([2a01:e0a:982:cbb0:8569:a62a:11bd:c344])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d634a000000b002e116cbe24esm2112794wrw.32.2023.04.06.09.06.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 09:06:05 -0700 (PDT)
-Message-ID: <9835aeba-6e4c-0594-427b-9990fc07407a@linaro.org>
-Date:   Thu, 6 Apr 2023 18:06:04 +0200
+        Thu, 6 Apr 2023 12:07:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8819EE4;
+        Thu,  6 Apr 2023 09:07:00 -0700 (PDT)
+Received: from workpc.. (109-252-119-170.nat.spd-mgts.ru [109.252.119.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D662966031C6;
+        Thu,  6 Apr 2023 17:06:56 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680797218;
+        bh=Hk90072+fNtMk6bzJlUk3vMa94X4jOPr38sjSqJGC68=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TH08idU5sasycPk66wdrwrZWcxg/7Zyy0vnU/rvtWLMSQCnWqR9sufNIHDMt1NqCI
+         kaSdKDy4CLUXpyyJnsgkHHbnJpWjoG1seTkqmqiaw3TtIb/jzh8dN59CvqgSDAWuXd
+         dLiGDkamMv2gWwTj0Gwrv/dJq65b4oTMWtbrdQ/+ssBKv79x8rDhe84Wv/HegpkjtO
+         rv0vjx5/VXtvIXjIGo1VEl/oZaUrK9794lnBIJLMrt0FHAV65ixcCun5Za6l+nL+jH
+         wWz94cfPKOR7sTmMBaomC3wlLst5l5yTJonZyYboDwfPi9jpS+fmiMXB+64tbt8c+J
+         0g82VUu1eSmvw==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v2 0/7] Move dma-buf mmap() reservation locking down to exporters
+Date:   Thu,  6 Apr 2023 19:06:30 +0300
+Message-Id: <20230406160637.541702-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/2] of: fdt: Allow the kernel to mark nomap regions
- received from fdt
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>, Lucas Tanure <tanure@linux.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        martin.blumenstingl@googlemail.com, narmstrong@baylibre.com,
-        stefan@agner.ch
-References: <20230406151429.524591-1-tanure@linux.com>
- <20230406151429.524591-3-tanure@linux.com>
- <CAL_JsqL_MLHO-zk0HAmuAmiJQ_TmD4EN5YC0JmRs7PXjStjr3A@mail.gmail.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <CAL_JsqL_MLHO-zk0HAmuAmiJQ_TmD4EN5YC0JmRs7PXjStjr3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 17:48, Rob Herring wrote:
-> On Thu, Apr 6, 2023 at 10:14 AM Lucas Tanure <tanure@linux.com> wrote:
->>
->> Reserved regions can be described in FDT and device trees, but FDT doesn't
->> provide the related flags, like nomap.
-> 
-> It took me a minute to understand what you meant by FDT vs. device
-> trees. Use the exact things you are talking about: /memreserve/ and
-> /reserved-memory node.
-> 
->> So allow the kernel to mark regions where the base and size received from
->> the device tree are the same as the base and region on FDT.
->> Here we trust that the device tree has a more updated description of the
->> region than the one received from FDT.
->>
->> Signed-off-by: Lucas Tanure <tanure@linux.com>
->> ---
->>   drivers/of/fdt.c | 10 ++++++----
->>   1 file changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
->> index d1a68b6d03b3..754a7ea4f45c 100644
->> --- a/drivers/of/fdt.c
->> +++ b/drivers/of/fdt.c
->> @@ -482,11 +482,13 @@ static int __init early_init_dt_reserve_memory(phys_addr_t base,
->>          if (nomap) {
->>                  /*
->>                   * If the memory is already reserved (by another region), we
->> -                * should not allow it to be marked nomap, but don't worry
->> -                * if the region isn't memory as it won't be mapped.
->> +                * should not allow it to be marked nomap, unless is the exact same region
->> +                * (same base and size), which the kernel knows better and should be allowed to mark
->> +                *  it as nomap.
->> +                * But don't worry if the region isn't memory as it won't be mapped.
->>                   */
->> -               if (memblock_overlaps_region(&memblock.memory, base, size) &&
->> -                   memblock_is_region_reserved(base, size))
->> +               if (memblock_overlaps_region(&memblock.memory, base, size) == MEMBLOCK_OVERLAPS &&
->> +                   memblock_is_region_reserved(base, size) == MEMBLOCK_OVERLAPS)
-> 
-> Won't this fail to work as IIRC memblock will merge regions when they
-> are adjacent and have the same atrributes.
-> 
-> Perhaps instead, the DT code should ignore any /memreserve/ entries
-> that are also in /reserved-memory.
-> 
-> I would suggest just reverse the order they are processed, but I
-> suspect that might cause some regression. This code is all fragile
-> especially with platforms putting in 100 regions.
-> 
-> Finally, perhaps fix u-boot. The reason the reserved location goes in
-> both places was to support an OS not supporting /reserved-memory. I
-> think that support has been in place for a lot longer than anyone
-> would care about.
+This patchset makes dma-buf exporters responisble for taking care of
+the reservation lock. I also included patch that moves drm-shmem to use
+reservation lock, to let CI test the whole set. I'm going to take all
+the patches via the drm-misc tree, please give an ack.
 
-Fixing U-Boot won't fix already tagged and in-the-field mainline u-boot
-releases that adds /memreserve/ entries, so yes u-boot should be definitely
-fixed but Linux should ignore the /memreserve/ entries when they matches
-an /reserved-memory node like when the U-Boot /memreserve/ code was added.
+Previous policy stated that dma-buf core takes the lock around mmap()
+callback. Which meant that both importers and exporters shouldn't touch
+the reservation lock in the mmap() code path. This worked well until
+Intel-CI found a deadlock problem in a case of self-imported dma-buf [1].
 
-Neil
+The problem happens when userpace mmaps a self-imported dma-buf, i.e.
+mmaps the dma-buf FD. DRM core treats self-imported dma-bufs as own GEMs
+[2]. There is no way to differentiate a prime GEM from a normal GEM for
+drm-shmem in drm_gem_shmem_mmap(), which resulted in a deadlock problem
+for drm-shmem mmap() code path once it's switched to use reservation lock.
 
-> 
-> Rob
-> 
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+It was difficult to fix the drm-shmem problem without adjusting dma-buf
+locking policy. In parctice not much changed from importers perspective
+because previosly dma-buf was taking the lock in between of importers
+and exporters. Now this lock is shifted down to exporters.
+
+[1] https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
+[2] https://elixir.bootlin.com/linux/v6.3-rc4/source/drivers/gpu/drm/drm_prime.c#L924
+
+Changelog:
+
+v2: - Added ack from Christian König to the DRM patch.
+
+    - Dropped "fixes" tag from the patches, like was requested by
+      Christian König. The patches don't actually need a backport
+      and merely improve the locking policy.
+
+    - Dropped "reverts" from the patch titles to prevent them from
+      auto-backporting by the stable bot based on the title.
+
+    - Added r-b from Emil Velikov and placed the drm_WARN in the
+      drm-shmem patch like he suggested in a comment to v1.
+
+    - Corrected drm-shmem patch dma_resv_lock(obj->resv) inconsistently
+      used with dma_resv_unlock(shmem->base.resv). Now shmem->base.resv
+      variant is used for all locks/unlocks.
+
+Dmitry Osipenko (7):
+  media: videobuf2: Don't assert held reservation lock for dma-buf
+    mmapping
+  dma-buf/heaps: Don't assert held reservation lock for dma-buf mmapping
+  udmabuf: Don't assert held reservation lock for dma-buf mmapping
+  fastrpc: Don't assert held reservation lock for dma-buf mmapping
+  drm: Don't assert held reservation lock for dma-buf mmapping
+  dma-buf: Change locking policy for mmap()
+  drm/shmem-helper: Switch to reservation lock
+
+ drivers/dma-buf/dma-buf.c                     |  17 +-
+ drivers/dma-buf/heaps/cma_heap.c              |   3 -
+ drivers/dma-buf/heaps/system_heap.c           |   3 -
+ drivers/dma-buf/udmabuf.c                     |   2 -
+ drivers/gpu/drm/drm_gem_shmem_helper.c        | 208 ++++++++----------
+ drivers/gpu/drm/drm_prime.c                   |   2 -
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   2 -
+ drivers/gpu/drm/lima/lima_gem.c               |   8 +-
+ drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   2 -
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |   7 +-
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   6 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
+ drivers/gpu/drm/tegra/gem.c                   |   2 -
+ .../common/videobuf2/videobuf2-dma-contig.c   |   3 -
+ .../media/common/videobuf2/videobuf2-dma-sg.c |   3 -
+ .../common/videobuf2/videobuf2-vmalloc.c      |   3 -
+ drivers/misc/fastrpc.c                        |   3 -
+ include/drm/drm_gem_shmem_helper.h            |  14 +-
+ 18 files changed, 117 insertions(+), 190 deletions(-)
+
+-- 
+2.39.2
 
