@@ -2,138 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC3B6D94AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BD66D94B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237111AbjDFLHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S236987AbjDFLI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbjDFLHe (ORCPT
+        with ESMTP id S229697AbjDFLI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:07:34 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A607A9D;
-        Thu,  6 Apr 2023 04:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=29DiQcJ+NesR4bzlrgSGDb6JnN91qFQawEIe6tNxYUo=; b=BaTEkyAhdN5dw6cCUs02xo/plw
-        WLCS1AwOw7Zev1BLZKXfHyhlnjjP4ozYoeSUWRONWbmN0kba+V79CUy1Jbd7mClSdQvOmm+DeKbF9
-        QOgTs7KK1c0Y1EvvPS9742xOwiQ+ehUMnp9kMAfP6KIc6NCR7kwM+lsRFHvBII9EYFbKGZqnuVvpk
-        WsRwArejLCyVoakKWoeGXIFdfT2za2hfvRhiJfZaz0u5hp+5h6b6SWAdw9AOGikDrBObt7z+PXTfe
-        jazufLNrIJMXtIDEZSWaGiw3XZ2UHf2CnxFB1+BRLVDOySv5sNwEVGNnVEVoHmEt5FTgJ3o4LFSnS
-        /rlKe9rQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46406)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pkNSN-0006ry-9H; Thu, 06 Apr 2023 12:07:07 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pkNSH-0007R0-4o; Thu, 06 Apr 2023 12:07:01 +0100
-Date:   Thu, 6 Apr 2023 12:07:01 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH net-next] net: dsa: mt7530: fix port specifications
- for MT7988
-Message-ID: <ZC6n1XAGyZFlxyXx@shell.armlinux.org.uk>
-References: <20230406100445.52915-1-arinc.unal@arinc9.com>
+        Thu, 6 Apr 2023 07:08:57 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0212E61BF;
+        Thu,  6 Apr 2023 04:08:56 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id h25so50329148lfv.6;
+        Thu, 06 Apr 2023 04:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680779334;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/gb/p8Phn+9Nf7rsHXJphZe6NkAx5/VMdhxR1tnG5eo=;
+        b=pCQkgJ0DMSDKS7q2DKALshhL0nUMLxnufHTTeu60Vz20LWnRfEVfnKMoYTYj+0aVTC
+         8pF9zic8cgYW/s98jAw9oAdccbwJsFZ1vOgO9joDXycTsZQiEzbKPWBSyFcQppuF2rtZ
+         pYCphKV+MnEIQOHgFHD4zrWimK+SOYAFKXCck/JJkdyOKjhxZMAwyAWSaCAl/1Ro156l
+         /0jsAGKhDjVv0jaMDOX2aRg7nIesUMcgh5A1VUSWQ5gBJEVFum/i7SGI1wXH/CXkU7Vv
+         fVG7/YpYzFKE/Z3BxtU1xU9OZ7HEK+FQFKoE3mq0/1Ok2fCQUNglW/Zznq3tFm9tKSen
+         9xCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680779334;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/gb/p8Phn+9Nf7rsHXJphZe6NkAx5/VMdhxR1tnG5eo=;
+        b=kEiAjfhLnxkrrGhjXIhD6tDFhkhf9fzeQh6x/Ezc4y+QYb2ELR65fUullRqyhBbZ1m
+         5TBW48mbGivP1RX0HhhfmSMbMSkUFCTg6uHeBXCX6IPLyB2nfulmWGgrun8ZMUrnltGR
+         hqJYLaosm7UUV7OsLjAuWKxeO/0Lw5uL7lCowIe90wxM4kAEOBRy6WhOzdQpwpg7/a3A
+         36zDYbUszQtgIBHJqoV833mdLijFUh7C+bOJ4GDXB0JNDC/5RUV3+dAk0UDeh371L46s
+         c0GYQcmJ75PbFCjzuoY+FbKNQOc6YcN2eWHYxHko1VTl3w0Ldfrbh178ogLz2IhI5FG5
+         WC4g==
+X-Gm-Message-State: AAQBX9dOlA+fTPuPDVuay6Uc5VjxQX6jMNAioaLmZLelpgKQvZFcSUd/
+        Bjga8dCi+0Dm06BwgY4oGB3Cwcp9P54=
+X-Google-Smtp-Source: AKy350Ysp6avI4wzgpDGJnJtHgUBZzokgK4EHBgLxVb8sWq9dms3IaDHErcwEi7Hv7EXosqggHnUgg==
+X-Received: by 2002:a05:6512:951:b0:4e9:bafc:88d0 with SMTP id u17-20020a056512095100b004e9bafc88d0mr2486708lft.23.1680779333817;
+        Thu, 06 Apr 2023 04:08:53 -0700 (PDT)
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id r26-20020ac252ba000000b004e048852377sm218667lfm.263.2023.04.06.04.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 04:08:53 -0700 (PDT)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH 1/3] dt-bindings: nvmem: brcm,nvram: add #nvmem-cell-cells for MACs
+Date:   Thu,  6 Apr 2023 13:08:02 +0200
+Message-Id: <20230406110804.12024-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230406100445.52915-1-arinc.unal@arinc9.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:04:45PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> 
-> On the switch on the MT7988 SoC, there are only 4 PHYs. There's only port 6
-> as the CPU port, there's no port 5. Split the switch statement with a check
-> to enforce these for the switch on the MT7988 SoC. The internal phy-mode is
-> specific to MT7988 so put it for MT7988 only.
-> 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
-> 
-> Daniel, this is based on the information you provided me about the switch.
-> I will add this to my current patch series if it looks good to you.
-> 
-> Arınç
-> 
-> ---
->  drivers/net/dsa/mt7530.c | 67 ++++++++++++++++++++++++++--------------
->  1 file changed, 43 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index 6fbbdcb5987f..f167fa135ef1 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -2548,7 +2548,7 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
->  	phy_interface_zero(config->supported_interfaces);
->  
->  	switch (port) {
-> -	case 0 ... 4: /* Internal phy */
-> +	case 0 ... 3: /* Internal phy */
->  		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
->  			  config->supported_interfaces);
->  		break;
-> @@ -2710,37 +2710,56 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  	struct mt7530_priv *priv = ds->priv;
->  	u32 mcr_cur, mcr_new;
->  
-> -	switch (port) {
-> -	case 0 ... 4: /* Internal phy */
-> -		if (state->interface != PHY_INTERFACE_MODE_GMII &&
-> -		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
-> -			goto unsupported;
-> -		break;
-> -	case 5: /* Port 5, a CPU port. */
-> -		if (priv->p5_interface == state->interface)
-> +	if (priv->id == ID_MT7988) {
-> +		switch (port) {
-> +		case 0 ... 3: /* Internal phy */
-> +			if (state->interface != PHY_INTERFACE_MODE_INTERNAL)
+From: Rafał Miłecki <rafal@milecki.pl>
 
-How do these end up with PHY_INTERFACE_MODE_INTERNAL ? phylib defaults
-to GMII mode without something else being specified in DT.
+Broadcom's NVRAM contains MACs for Ethernet interfaces. Those MACs are
+usually base addresses that are also used for calculating other MACs.
 
-Also note that you should *not* be validating state->interface in the
-mac_config() method because it's way too late to reject it - if you get
-an unsupported interface here, then that is down to the get_caps()
-method being buggy. Only report interfaces in get_caps() that you are
-prepared to handle in the rest of the system.
+For example if a router vendor decided to use gmac0 it most likely
+programmed NVRAM of each unit with a proper "et0macaddr" value. That is
+a base.
 
+Ethernet interface is usually connected to switch port. Switch usually
+includes few LAN ports and a WAN port. MAC of WAN port gets calculated
+as relative address to the interface one. Offset varies depending on
+device model.
+
+Wireless MACs may also need to be calculated using relevant offsets.
+
+To support all those scenarios let MAC NVMEM cells be referenced with an
+index specifying MAC offset.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ .../devicetree/bindings/nvmem/brcm,nvram.yaml        | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+index 36def7128fca..a921e05cc544 100644
+--- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
++++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+@@ -36,14 +36,26 @@ properties:
+   et0macaddr:
+     type: object
+     description: First Ethernet interface's MAC address
++    properties:
++      "#nvmem-cell-cells":
++        description: The first argument is a MAC address offset.
++        const: 1
+ 
+   et1macaddr:
+     type: object
+     description: Second Ethernet interface's MAC address
++    properties:
++      "#nvmem-cell-cells":
++        description: The first argument is a MAC address offset.
++        const: 1
+ 
+   et2macaddr:
+     type: object
+     description: Third Ethernet interface's MAC address
++    properties:
++      "#nvmem-cell-cells":
++        description: The first argument is a MAC address offset.
++        const: 1
+ 
+ unevaluatedProperties: false
+ 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.34.1
+
