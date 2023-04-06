@@ -2,95 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF346DA5DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223EC6DA5DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239290AbjDFWe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S238302AbjDFWfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239247AbjDFWe4 (ORCPT
+        with ESMTP id S230210AbjDFWf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:34:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374AB7ED0;
-        Thu,  6 Apr 2023 15:34:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9DF264CE7;
-        Thu,  6 Apr 2023 22:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A7FC433D2;
-        Thu,  6 Apr 2023 22:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680820495;
-        bh=vBLIz7ZskpOa4TmmFIjmguzsaYx53b28m5xn+F8JkR8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=BnSW6D2qutMf6jzRK5iD9c23LkECG1g2oOGKgbzjcXgxLBflo+Z/iTCEujfwnRNKG
-         HMeYeieP35iGl70FfNN6xWoIg7K0N56bsxiBZyibnnWLpDjoJqZtaHRggruD5xw6Ww
-         f9TCvQZrwepmUp9dkjsbDvj4fYfTTD8kWftzmKQPkLaz1E2iCETNQDZbC0sD75VX8S
-         g3fGr9kzFM4LOWDTVP2N9jmS9iVZj8OoMU5pv5N12p5eUu2jxmfkDUQDZD46XjSg6y
-         rCF5NiABDXkiUdP1WiI0WjBrIxgo/jhtM1HxZ1kN1/V+FZvFaHp0tY39kybQjYC6yl
-         ky9o674HJjaSQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id AFFDB154047D; Thu,  6 Apr 2023 15:34:54 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 15:34:54 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Will Deacon <will@kernel.org>
-Subject: Re: Litmus test names
-Message-ID: <ea9376b4-4b3d-48ee-9c27-ad8de8a7b5cb@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <e00896d4-29e6-4373-b1c2-a995ffb0fdf5@rowland.harvard.edu>
+        Thu, 6 Apr 2023 18:35:29 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748BA7ED3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:35:27 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id w4so38718344plg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680820527; x=1683412527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q2S3D1pZbFjzSQGr6ymBjndZ14Ty5JYYwZq/s9YKUYw=;
+        b=NC/P+NUjLIH9ceTT5aAOEi4oKo521K55RNY3eFC1ntQyuCPpqCbfOPkdSm9tjhUjmo
+         a3Br3WG0YiOIMINK170lf0Szcn+iT324gVFvydToNPxee1A+ug6gigKmLyG8XF6E72ll
+         xJ1m8oJzEuToFZvcVhlMMlwz1sxmQd4wgxcqL9LTWf4E/Rag6Th1DMqV0bjP8ld/M55r
+         SpEiNoOst7nyscQYC/8DrrUXoeRvF7qIKTEcOXs7z/FYkIIrUx/LvkoVxsBw+CZxh+c7
+         /uGWbsjECm913JmXGBkgenfkpjw5t/YW2bqnZ6vJXQ7awkoXgBDuOyzPs1DCAIUWVnCL
+         LUHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680820527; x=1683412527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q2S3D1pZbFjzSQGr6ymBjndZ14Ty5JYYwZq/s9YKUYw=;
+        b=48KR+GB5Z3NNsPrZXdGWvWU7b9clcYQhuGpOmNtQTQ8nllYB4J0g0OGYZ2H3STluip
+         KidK/djpvKMjFFsqkJ107YNWmQ0xNMCb9rjsFPnaKNE38TUlhcfDYeCxEUqpI02r6zgq
+         TEF4KCYoK9bWkPHpc/FNjljzT/3T+eABfFtWwwtygHIz76Cm4vpIjUhoU9wX44UcsysF
+         2YsdL8J5SuPFCFlypLDZCKNIcCAuP+Jbklt9fDDljpSJkLhpJOpELkfsYi3iq/UcndSz
+         IJYuPM9Bcnqr8w/xCU+Vqlrf79lf5hlSSZ2DKLW9ljRUN+YPW9BWiQVg1MkD6wzeQJB/
+         Y9XA==
+X-Gm-Message-State: AAQBX9dV3ivUhr01e9no6D6ugKvmKwJgcby2E3npGe25b5NfxgJrG6et
+        pfHNVY5/SavZh0nox4PsmOo+3IWA/fuSGLNnsnJ9MQ==
+X-Google-Smtp-Source: AKy350ah2O8qYURR1sUGonwB93ZBhpzt1TblHI7jb/4F+Y4ShGWiAjdHhab88q75Bq27Kx1cNZs015oX4B64nE556dE=
+X-Received: by 2002:a17:902:ab93:b0:19a:7bd4:5b0d with SMTP id
+ f19-20020a170902ab9300b0019a7bd45b0dmr262103plr.8.1680820526770; Thu, 06 Apr
+ 2023 15:35:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e00896d4-29e6-4373-b1c2-a995ffb0fdf5@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
+ <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com>
+From:   Daniel Rosenberg <drosen@google.com>
+Date:   Thu, 6 Apr 2023 15:35:15 -0700
+Message-ID: <CA+PiJmQXcgWD3Uu-pRCU6OfkRepeqwr7qi1uO2rfmy0FPm_sOQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
-> Paul:
-> 
-> I just saw that two of the files in tools/memory-model/litmus-tests have 
-> almost identical names:
-> 
-> 	Z6.0+pooncelock+pooncelock+pombonce.litmus
-> 	Z6.0+pooncelock+poonceLock+pombonce.litmus
-> 
-> They differ only by a lower-case 'l' vs. a capital 'L'.  It's not at all 
-> easy to see, and won't play well in case-insensitive filesystems.
-> 
-> Should one of them be renamed?
+On Thu, Apr 6, 2023 at 1:55=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> Something feels off here. Can you paste a bit of verifier log for the
+> failure you were getting. And let's have a selftest for this situation
+> as well.
+>
+> ARG_PTR_TO_MEM shouldn't be qualified with the DYNPTR_TYPE flag, it's
+> just memory, there is no need to know what type of dynptr it was
+> derived from. So if that happens, the problem is somewhere else. Let's
+> root cause and fix that. Having a selftest that demonstrates the
+> problem will help with that.
+>
+>
+This label is added by dynptr_slice(_rdwr)
 
-Quite possibly!
+if (meta.func_id =3D=3D special_kfunc_list[KF_bpf_dynptr_slice] ||
+   meta.func_id =3D=3D special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
+enum bpf_type_flag type_flag =3D
+get_dynptr_type_flag(meta.initialized_dynptr.type);
+...
+regs[BPF_REG_0].type =3D PTR_TO_MEM | type_flag;
 
-The "L" denotes smp_mb__after_spinlock().  The only code difference
-between these is that Z6.0+pooncelock+poonceLock+pombonce.litmus has
-smp_mb__after_spinlock() and Z6.0+pooncelock+pooncelock+pombonce.litmus
-does not.
-
-Suggestions for a better name?  We could capitalize all the letters
-in LOCK, I suppose...
-
-							Thanx, Paul
+That extra flag was causing the type to be unexpected later on.
+I'll add a selftest for this as well.
