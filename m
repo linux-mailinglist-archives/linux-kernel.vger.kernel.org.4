@@ -2,137 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F716D93E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E006D93E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237256AbjDFKW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:22:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S237207AbjDFKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237154AbjDFKWg (ORCPT
+        with ESMTP id S237047AbjDFKXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:22:36 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13716975C;
-        Thu,  6 Apr 2023 03:21:58 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3365ZVoW018085;
-        Thu, 6 Apr 2023 03:21:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=ettstRGWvS56fnp3bZw7OTRsDyBJuDTMzGdoHrt4m3U=;
- b=AuEUVsob9pI8yLEZmhz0ucR+2nCRPWdAd/X4rd8o637+FwspykV3P9hBhCpkJcw9tETY
- /nb2966Knmg1cCLW0LPzquWUlVe6vPaA0702DUpBvgmhwa5VzgTEYxY0NQS4IUHnLTUQ
- 4cLfguRqXvl7JIO6IR+s708jYJFCMKK3TZGEIlJEP/FdRc9basH0yGOiGz+NCvhl08tz
- SMVw9jw1S63kMAV4uSeZK6U0xdo7s4gAALO3ClvTmWBbSw9C9PfO0bwWemINW2EXQV9L
- OJQdKpzfTGSbZFUHU6jKblKQh4Z9lbrqpWnmMY8AvTT9rjWAl10kkPjuECr4BILoN9EZ 4w== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3psr2e1cnb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 03:21:47 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 6 Apr
- 2023 03:21:45 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Thu, 6 Apr 2023 03:21:45 -0700
-Received: from hyd1soter3.marvell.com (unknown [10.29.37.12])
-        by maili.marvell.com (Postfix) with ESMTP id 1E8F65B693B;
-        Thu,  6 Apr 2023 03:21:39 -0700 (PDT)
-From:   Hariprasad Kelam <hkelam@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <kuba@kernel.org>, <davem@davemloft.net>,
-        <willemdebruijn.kernel@gmail.com>, <andrew@lunn.ch>,
-        <sgoutham@marvell.com>, <lcherian@marvell.com>,
-        <gakula@marvell.com>, <jerinj@marvell.com>, <sbhatta@marvell.com>,
-        <hkelam@marvell.com>, <naveenm@marvell.com>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <maxtram95@gmail.com>
-Subject: [net-next Patch v6 6/6] docs: octeontx2: Add Documentation for QOS
-Date:   Thu, 6 Apr 2023 15:51:03 +0530
-Message-ID: <20230406102103.19910-7-hkelam@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230406102103.19910-1-hkelam@marvell.com>
-References: <20230406102103.19910-1-hkelam@marvell.com>
+        Thu, 6 Apr 2023 06:23:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 295848A48;
+        Thu,  6 Apr 2023 03:22:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBCA516F8;
+        Thu,  6 Apr 2023 03:23:01 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.20.171])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42B2E3F762;
+        Thu,  6 Apr 2023 03:22:15 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 11:22:09 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Florent Revest <revest@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com, lihuafei1@huawei.com
+Subject: Re: [PATCH v6 3/5] samples: ftrace: Save required argument registers
+ in sample trampolines
+Message-ID: <ZC6dUacJjFVDyDGz@FVFF77S0Q05N>
+References: <20230405180250.2046566-1-revest@chromium.org>
+ <20230405180250.2046566-4-revest@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: J3Rm-QNBHcfqAdC6fE_5OFVKWBxcsyVC
-X-Proofpoint-ORIG-GUID: J3Rm-QNBHcfqAdC6fE_5OFVKWBxcsyVC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_04,2023-04-06_01,2023-02-09_01
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405180250.2046566-4-revest@chromium.org>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add QOS example configuration along with tc-htb commands
+On Wed, Apr 05, 2023 at 08:02:48PM +0200, Florent Revest wrote:
+> The ftrace-direct-too sample traces the handle_mm_fault function whose
+> signature changed since the introduction of the sample. Since:
+> commit bce617edecad ("mm: do page fault accounting in handle_mm_fault")
+> handle_mm_fault now has 4 arguments. Therefore, the sample trampoline
+> should save 4 argument registers.
+> 
+> s390 saves all argument registers already so it does not need a change
+> but x86_64 needs an extra push and pop.
+> 
+> This also evolves the signature of the tracing function to make it
+> mirror the signature of the traced function.
+> 
+> Signed-off-by: Florent Revest <revest@chromium.org>
 
-Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
----
- .../ethernet/marvell/octeontx2.rst            | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
 
-diff --git a/Documentation/networking/device_drivers/ethernet/marvell/octeontx2.rst b/Documentation/networking/device_drivers/ethernet/marvell/octeontx2.rst
-index 5ba9015336e2..eca4309964c8 100644
---- a/Documentation/networking/device_drivers/ethernet/marvell/octeontx2.rst
-+++ b/Documentation/networking/device_drivers/ethernet/marvell/octeontx2.rst
-@@ -13,6 +13,7 @@ Contents
- - `Drivers`_
- - `Basic packet flow`_
- - `Devlink health reporters`_
-+- `Quality of service`_
- 
- Overview
- ========
-@@ -287,3 +288,41 @@ For example::
- 	 NIX_AF_ERR:
- 	        NIX Error Interrupt Reg : 64
- 	        Rx on unmapped PF_FUNC
-+
-+
-+Quality of service
-+==================
-+
-+octeontx2 silicon and CN10K transmit interface consists of five transmit levels starting from SMQ/MDQ, TL4 to TL1.
-+The hardware uses the below algorithms depending on the priority of scheduler queues
-+
-+1. Strict Priority
-+
-+      -  Once packets are submitted to MDQ, hardware picks all active MDQs having different priority
-+         using strict priority.
-+
-+2. Round Robin
-+
-+      - Active MDQs having the same priority level are chosen using round robin.
-+
-+3. Each packet will traverse MDQ, TL4 to TL1 levels. Each level contains an array of queues to support scheduling and
-+   shaping.
-+
-+4. once the user creates tc classes with different priority
-+
-+   -  Driver configures schedulers allocated to the class with specified priority along with rate-limiting configuration.
-+
-+5. Enable HW TC offload on the interface::
-+
-+        # ethtool -K <interface> hw-tc-offload on
-+
-+6. Crate htb root::
-+
-+        # tc qdisc add dev <interface> clsact
-+        # tc qdisc replace dev <interface> root handle 1: htb offload
-+
-+7. Create tc classes with different  priorities::
-+
-+        # tc class add dev <interface> parent 1: classid 1:1 htb rate 10Gbit prio 1
-+
-+        # tc class add dev <interface> parent 1: classid 1:2 htb rate 10Gbit prio 7
--- 
-2.17.1
+Thanks for this!
 
+Mark.
+
+> ---
+>  samples/ftrace/ftrace-direct-too.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+> index f28e7b99840f..71ed4ee8cb4a 100644
+> --- a/samples/ftrace/ftrace-direct-too.c
+> +++ b/samples/ftrace/ftrace-direct-too.c
+> @@ -5,14 +5,14 @@
+>  #include <linux/ftrace.h>
+>  #include <asm/asm-offsets.h>
+>  
+> -extern void my_direct_func(struct vm_area_struct *vma,
+> -			   unsigned long address, unsigned int flags);
+> +extern void my_direct_func(struct vm_area_struct *vma, unsigned long address,
+> +			   unsigned int flags, struct pt_regs *regs);
+>  
+> -void my_direct_func(struct vm_area_struct *vma,
+> -			unsigned long address, unsigned int flags)
+> +void my_direct_func(struct vm_area_struct *vma, unsigned long address,
+> +		    unsigned int flags, struct pt_regs *regs)
+>  {
+> -	trace_printk("handle mm fault vma=%p address=%lx flags=%x\n",
+> -		     vma, address, flags);
+> +	trace_printk("handle mm fault vma=%p address=%lx flags=%x regs=%p\n",
+> +		     vma, address, flags, regs);
+>  }
+>  
+>  extern void my_tramp(void *);
+> @@ -34,7 +34,9 @@ asm (
+>  "	pushq %rdi\n"
+>  "	pushq %rsi\n"
+>  "	pushq %rdx\n"
+> +"	pushq %rcx\n"
+>  "	call my_direct_func\n"
+> +"	popq %rcx\n"
+>  "	popq %rdx\n"
+>  "	popq %rsi\n"
+>  "	popq %rdi\n"
+> -- 
+> 2.40.0.577.gac1e443424-goog
+> 
