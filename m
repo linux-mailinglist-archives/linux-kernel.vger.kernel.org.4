@@ -2,111 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FED36D98A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D926D98AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236806AbjDFNyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S238797AbjDFNzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236672AbjDFNyQ (ORCPT
+        with ESMTP id S238363AbjDFNyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:54:16 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3E57D9A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:54:15 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v1so39605011wrv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680789253; x=1683381253;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ezT0NDsUMsm10HBHulD+tvoUb5KJlGUy+bX2OIndrqE=;
-        b=uDn1XPw9QQnbG4CQ/ZnIv0s2GKDkcAOuVrNy4bSd/rPD71Z1tjzz2Yl4Ib//qRquqD
-         ijBC8iwNnJWx0dlc0+sWzs3VwmKgE2tcP5THEEd2WuecNJ+ZxtRKg6iZ47HU+QQsIeTJ
-         NxpnTAhbMSfnaB1BC4rMxBBMQak4EtC3iuzo1WEVBVSwgsM00tJbpNo6GUusIJRfs+XB
-         KXyTUHQ4clWDylm8qqroPxqDPz9Gg/FUmdrYFCGd+CfrJy+9a44kn3PCMa3bVvf+pcR8
-         rccg+q9IXhXCWV1jdJtirFTmD7r/POHza+D6RjOpeocWbQJ1ktALfp64bs+z9Z2O6eoO
-         tpsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680789253; x=1683381253;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ezT0NDsUMsm10HBHulD+tvoUb5KJlGUy+bX2OIndrqE=;
-        b=N7CpDQhbf6ok20QGB/kf+SU9z1dC44GR7CB45xXxbmss3EljMriVyDd6EK7dI6tGRG
-         RopHsT0ogjjXDtcnhMaC3k4N14b8NouyQce2Ijv+OZppQG9vvJs5uqoGrJq2nuYTYW8g
-         YQkYdKVzBXeM44m1B0NvEpJvFgQmXXba9AdMt53OnSYJzLfQpyWy4aStVmAvMgBQbbOi
-         rdwzuk5xXvy1mkP5hKeL3kgyFy7cvyjPu59/n0Ex/mhHTQ3JRCAn4KfSXIbbw0z/0KQG
-         ewkBwUoAj9uBi/QAu7VovcwcwMs0VGM0ZfCctcqCgrmRzWR8oE4wWV/zbTsRUVxr3IIq
-         BO4Q==
-X-Gm-Message-State: AAQBX9fBkIT5/KcR6/qD5rgh9VSdMtu9/MXgZBA2/BccTdgyr+ASD225
-        CnXvfaZz50tavvXTewq5tCHzDg==
-X-Google-Smtp-Source: AKy350bC0LRKYynmaTA4IXUV15q6OdxA7m8TujnIRxxxtl9PPIg0UCGI2eOFvvdpUHN2V+bZpayO6A==
-X-Received: by 2002:a5d:4846:0:b0:2ce:a8d6:309a with SMTP id n6-20020a5d4846000000b002cea8d6309amr6795139wrs.61.1680789253438;
-        Thu, 06 Apr 2023 06:54:13 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6630:ee96:3710:24c8? ([2a05:6e02:1041:c10:6630:ee96:3710:24c8])
-        by smtp.googlemail.com with ESMTPSA id k15-20020a056000004f00b002c71dd1109fsm1860813wrx.47.2023.04.06.06.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 06:54:12 -0700 (PDT)
-Message-ID: <0a42d419-7ec2-6d09-9b19-15aa25888625@linaro.org>
-Date:   Thu, 6 Apr 2023 15:54:11 +0200
+        Thu, 6 Apr 2023 09:54:41 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5D09777;
+        Thu,  6 Apr 2023 06:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=eCyDhIIH7zROrQHs1/YiKAKEaRN5MqlP/rzgVydjPvI=; b=T8qx3rQouZ7XvU4SiE9YvRbYYJ
+        eZ/TIFFWd6LmzPMmlepLNKX294cnNsz5NBy1K0lf6uyD5yo8cEVMMD66JAuSKt2jdTgaf6+EumK2y
+        H3+38xMvHD4Jz1kfvnOmzRVGQzMEvPTeRioo/AiUb+xhnlOoHJmBpes1tBDESCRP7XFs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pkQ46-009dDs-Gr; Thu, 06 Apr 2023 15:54:14 +0200
+Date:   Thu, 6 Apr 2023 15:54:14 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [net-next PATCH v6 16/16] arm: mvebu: dt: Add PHY LED support
+ for 370-rd WAN port
+Message-ID: <ebaedccc-a73b-48fc-8735-c0567d899d5c@lunn.ch>
+References: <20230327141031.11904-1-ansuelsmth@gmail.com>
+ <20230327141031.11904-17-ansuelsmth@gmail.com>
+ <ZCKl1A9dZOIAdMY8@duo.ucw.cz>
+ <2e5c6dfb-5f55-416f-a934-6fa3997783b7@lunn.ch>
+ <ZCsu4qD8k947kN7v@duo.ucw.cz>
+ <7cadf888-8d6e-4b7d-8f94-7e869fd49ee2@lunn.ch>
+ <ZC6OZ2f/NLJxZgle@duo.ucw.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/5] clocksource: Convert to platform remove callback
- returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20230313075430.2730803-1-u.kleine-koenig@pengutronix.de>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230313075430.2730803-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZC6OZ2f/NLJxZgle@duo.ucw.cz>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 08:54, Uwe Kleine-König wrote:
-> Hello,
+> I don't think basing stuff on position is reasonable. (And am not sure
+> if making difference between MAC and PHY leds is good idea).
 > 
-> this patch series adapts the platform drivers below drivers/clk
-> to use the .remove_new() callback. Compared to the traditional .remove()
-> callback .remove_new() returns no value. This is a good thing because
-> the driver core doesn't (and cannot) cope for errors during remove. The
-> only effect of a non-zero return value in .remove() is that the driver
-> core emits a warning. The device is removed anyhow and an early return
-> from .remove() usually yields a resource leak.
+> Normally, there's ethernet port with two LEDs, one is usually green
+> and indicates link, second being yellow and indicates activity,
+> correct?
+
+Nope. I have machines with 1, 2 or 3 LEDs. I have green, yellow, white
+and red LEDs.
+
+Part of the problem is 802.3 says absolutely nothing about LEDs. So
+every vendor is free to do whatever why want. There is no
+standardisation at all. So we have to assume every vendor does
+something different.
+
+> On devices like ADSL modems, there is one LED per port, typically on
+> with link and blinking with activity.  
 > 
-> Most clocksource drivers are not supposed to be removed. Two drivers are
-> adapted here to actually prevent removal. One driver is fixed not to
-> return an error code in .remove() and then the two remaining drivers
-> with a remove callback are trivially converted to .remove_new().
+> Could we use that distinction instead? (id):green:link,
+> (id):yellow:activity, (id):?:linkact -- for combined LED as it seems.
 > 
+> Are there any other common leds? I seem to remember "100mbps" lights
+> from time where 100mbit was fast...?
 
-Applied and fixed up patch #2
+But what about 2.5G, 5G, 10G, 40G... And 10Mbps for automotive. And
+collision for 1/2 duplex, which is making a bit of a comeback in
+automotive.
 
+Plus, we are using ledtrig-netdev. A wifi device is a netdev. A CAN
+bus devices is a netdev. Link speed has a totally different meaning
+for 802.11 and CAN.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+You are also assuming the LEDs have fixed meaning. But they are not
+fixed, they mean whatever the ledtrig-netdev is configured to make
+them blink.  I even have one of my boxes blinking heartbeat, because
+if has a habit of crashing... And i think for Linux LEDs in general,
+we should not really tie an LED to a meaning. Maybe tie it to a label
+on the case, but the meaning of an LED is all about software, what
+ledtrig- is controlling it.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+As to differentiating MAC and PHY, we need to, because as i said, both
+could offer LEDs. Generally, Ethernet switches have LED controllers
+per MAC port. Most switches have internal PHYs, and those PHYs don't
+have LED controllers. However, not all ports have internal PHYs, there
+can be external PHYs with its own LED controller. So in that case,
+both the MAC and the PHY could register an LED controller for the same
+netdev. It comes down to DT to indicate what LED controllers are
+actually wired to an LED.
 
+	 Andrew
