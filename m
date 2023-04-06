@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D666D9434
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996BE6D943B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbjDFKdY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 06:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S237218AbjDFKfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236283AbjDFKdT (ORCPT
+        with ESMTP id S229820AbjDFKfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:33:19 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A638155B4;
-        Thu,  6 Apr 2023 03:33:17 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C88AA24E31E;
-        Thu,  6 Apr 2023 18:33:15 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 6 Apr
- 2023 18:33:15 +0800
-Received: from williamqiu-virtual-machine.starfivetech.com (171.223.208.138)
- by EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Thu, 6 Apr 2023 18:33:15 +0800
-From:   William Qiu <william.qiu@starfivetech.com>
-To:     <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        William Qiu <william.qiu@starfivetech.com>
-Subject: [PATCH v7 2/2] riscv: dts: starfive: jh7110: Add syscon nodes
-Date:   Thu, 6 Apr 2023 18:33:08 +0800
-Message-ID: <20230406103308.1280860-3-william.qiu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230406103308.1280860-1-william.qiu@starfivetech.com>
-References: <20230406103308.1280860-1-william.qiu@starfivetech.com>
+        Thu, 6 Apr 2023 06:35:31 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC8F59D8;
+        Thu,  6 Apr 2023 03:35:30 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id qb20so228934ejc.6;
+        Thu, 06 Apr 2023 03:35:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680777329; x=1683369329;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGuAgbNs5CTknDNOGrtLvzwspFWhgu5cW+fjK35Mz+s=;
+        b=lCXLJlQ05okjD1v8I8Qn6yqjnnq5ni94/ldOkuJoqje+mKYxO0KCv6eQEtFRGjlY0b
+         2eo2yBqK4vYDF7vAGnbFRj1TnyDdFXTL6DxuPeuMHWKJyRUyLKUAoYYS5iTzP94x9yiD
+         2sNIPr8IFOPFPDgdLMBjaH4Lu6dQtZbFp2KePtguHGU3cfTQI+dVh+P23J65FZ3qNr4d
+         BZHgCul9A3uve2hJGbcfbpTBmFrFBBbitH+gu03GbnljbgDEDYKW3CVWaCmKMrvjyfcS
+         6B57+oRCL+gHq6FnB1jVOjDJJoAJCyjOHxdU/0s6+TExnJ1hq3xFVy1zvqLLvuLS692r
+         4MSQ==
+X-Gm-Message-State: AAQBX9cpcF3twiOFbxtg3uJZAL7RpCnQYg0RZ6m1/Z9nr9e5mtLLOEqq
+        MJiaHd3BZ0I2g8kj7yMrdSE=
+X-Google-Smtp-Source: AKy350YXHjg34fLflvR+ude6ubhzFwE7wJPF3+v9yxjWMV1do1zeoA+wLilXlgnXWp9IgtkblGlegg==
+X-Received: by 2002:a17:907:3201:b0:8b1:2eef:154c with SMTP id xg1-20020a170907320100b008b12eef154cmr6195530ejb.0.1680777328619;
+        Thu, 06 Apr 2023 03:35:28 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id xh8-20020a170906da8800b0094809142160sm642128ejb.55.2023.04.06.03.35.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 03:35:27 -0700 (PDT)
+Message-ID: <26be2c81-9431-6b43-e3e9-52d7d184750e@kernel.org>
+Date:   Thu, 6 Apr 2023 12:35:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Asit Mallick <asit.k.mallick@intel.com>,
+        Cfir Cohen <cfir@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        David Rientjes <rientjes@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, x86@kernel.org
+References: <20230403140605.540512-1-jiangshanlai@gmail.com>
+ <19035c40-e756-6efd-1c02-b09109fb44c1@intel.com>
+ <CAJhGHyBHmC=UXr88GsykO9eUeqJZp59jrCH3ngkFiCxVBW2F3g@mail.gmail.com>
+ <3591487f-96ae-3ab7-6ce7-e524a070c9e7@redhat.com>
+ <20230406101254.GI386572@hirez.programming.kicks-ass.net>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [RFC PATCH 0/7] x86/entry: Atomic statck switching for IST
+In-Reply-To: <20230406101254.GI386572@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add stg_syscon/sys_syscon/aon_syscon nodes for JH7110 Soc.
+On 06. 04. 23, 12:12, Peter Zijlstra wrote:
+> On Tue, Apr 04, 2023 at 07:03:45PM +0200, Paolo Bonzini wrote:
+>> On 4/4/23 05:17, Lai Jiangshan wrote:
+>>> The cover letter has 800+ lines of comments.  About 100-300 lines
+>>> of comments will be moved into the code which would make the diffstat
+>>> not so appealing.
+>>
+>> Removing assembly from arch/x86/entry/ and adding English to Documentation/?
+>> That's _even more_ appealing. :)
+> 
+> I *much* prefer in-code comments to random gibberish that's instantly
+> out of date squirreled away somewhere in an unreadable format in
+> Documentation/
 
-Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
++1 as one can link comments in the code to Documentation easily 
+nowadays. They are sourced and end up in the generated Documentation [1] 
+then. One only needs to type the kernel-doc properly.
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 4c5fdb905da8..f271c3184d3a 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -353,6 +353,11 @@ i2c2: i2c@10050000 {
- 			status = "disabled";
- 		};
+[1] https://www.kernel.org/doc/html/latest
 
-+		stg_syscon: syscon@10240000 {
-+			compatible = "starfive,jh7110-stg-syscon", "syscon";
-+			reg = <0x0 0x10240000 0x0 0x1000>;
-+		};
-+
- 		uart3: serial@12000000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x12000000 0x0 0x10000>;
-@@ -457,6 +462,11 @@ syscrg: clock-controller@13020000 {
- 			#reset-cells = <1>;
- 		};
-
-+		sys_syscon: syscon@13030000 {
-+			compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
-+			reg = <0x0 0x13030000 0x0 0x1000>;
-+		};
-+
- 		sysgpio: pinctrl@13040000 {
- 			compatible = "starfive,jh7110-sys-pinctrl";
- 			reg = <0x0 0x13040000 0x0 0x10000>;
-@@ -486,6 +496,11 @@ aoncrg: clock-controller@17000000 {
- 			#reset-cells = <1>;
- 		};
-
-+		aon_syscon: syscon@17010000 {
-+			compatible = "starfive,jh7110-aon-syscon", "syscon", "simple-mfd";
-+			reg = <0x0 0x17010000 0x0 0x1000>;
-+		};
-+
- 		aongpio: pinctrl@17020000 {
- 			compatible = "starfive,jh7110-aon-pinctrl";
- 			reg = <0x0 0x17020000 0x0 0x10000>;
---
-2.34.1
+-- 
+js
+suse labs
 
