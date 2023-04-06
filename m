@@ -2,142 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19556DA640
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB5C6DA645
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjDFXpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 19:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        id S231171AbjDFXqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 19:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjDFXoz (ORCPT
+        with ESMTP id S237261AbjDFXpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:44:55 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCF0120
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:44:36 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id r7-20020a17090b050700b002404be7920aso40298109pjz.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 16:44:36 -0700 (PDT)
+        Thu, 6 Apr 2023 19:45:49 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D09E56
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:45:48 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so40743711ybl.19
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 16:45:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680824675;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hM5yP2pQ2NYPi6a+BhVoXAxnw5yjpnbyF9Bo/kTEiDk=;
-        b=NowLn9YBZM92Cp2OL5BmFlN9nwYVbhKaDMqG/Opl98f5kJFZ5sXo2v/Edo1DAC4o9a
-         i6R7W5yuOoxF2wzBMVTYpJWlKO0stRMEG6NkXheFwz7TjS/ewsm1KKduXKi7kioAdkg4
-         msEuo/UZ220uvMQc5Wkm9Mp5gP5BWtApfT39LWfuNhvA+wRRCcnKQoVzWseHvDT2Ip+w
-         szzIQKeGI9flnnH2LHAQowsq2vJHpZY28hkU3+Ei8EmgiHspiKxB9wAKZbO5O/uqdNUX
-         0yiFWTyny/KcdRwj+kd0UZxivX/6ddaMGnBYiIvrSEWtAOSodpV4M/qjRzcHxBCjN6Gu
-         mW0A==
+        d=google.com; s=20210112; t=1680824747;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DaYHJStM+TYBK1P7E0zU6EMtALdZ0CRygZGLPtB7ENU=;
+        b=sdQg8FBAz0C18VlkTgoy2p4dkvRhR3Dp5cD/n9t72TKfIz4++VuY6I0zizOWXImkex
+         5+y/Vabl7NIcgd5bqwMRoP1foI5RdcPykxdrwS5h5W+vK4vHPA8iLGhhY/9eVLuVq7LJ
+         rtXg/mtVt9/r0W/Gp02waHB87xYmYMMz8N5axYeH/t2g2MnPv1YBxt/SWiBleWxMoFGP
+         W3PxnAfZRNMkO7j6pzoITRkT1ZqBrOR+8KIzFodb0nnSN1VaH/DlH/QrDZHfRWfRZVKo
+         Yrf6iQHYbsOnRC492U2M0GHL//h9DtWuy7jCbTsLjwzskfU9dgX750rcnCeVqwQ4SSH0
+         nslg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680824675;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hM5yP2pQ2NYPi6a+BhVoXAxnw5yjpnbyF9Bo/kTEiDk=;
-        b=fJv4xh5iXei4yp0KmOy72u8fRr7Xjhe6E9W3esdEXWA+m6DAHZE+slOYfSE5ZlEDzV
-         CMNgg+NbscAXUoUqi7VffYOf4ROqCioD1qV4x0ifu5hmE924qtzcsniUyCF2FnU6mNZk
-         996cMBPmbDMAoJEuIu84fAfkcZyIkvZlJYW63m8WaD6o+FQ/AMlxVvg7LIaqinhByHdq
-         wlRgFgi8LfiVYBjAMvcIs/h3qVkN+NexIAlUXLuc4KUcAXu918LBOn8knpRMnZenDuCz
-         MiqjqvGeO18mQ3nSQ37uXpQJBhuu4uv+dR/8X4S9bwn6IWXmV0Wb6lcVVvQvMa8W2JMi
-         tY1w==
-X-Gm-Message-State: AAQBX9cfAm3AIHrG10Wv4NrkuMBKH6huMZNR2s07zQGCM/rDJCJ+94Ni
-        +iqZEP7LTHDc3uRMXGJ7XmY=
-X-Google-Smtp-Source: AKy350YRhZDeCWKl13JSZFKjtkuk1LnkcWSoeniRa4MoFv/lhHeS/ZsEbV1z3/R80ckYKT8TscvQZQ==
-X-Received: by 2002:a05:6a20:4918:b0:de:807e:620e with SMTP id ft24-20020a056a20491800b000de807e620emr916525pzb.58.1680824675582;
-        Thu, 06 Apr 2023 16:44:35 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:6a8d:6a82:8d0e:6dc8])
-        by smtp.gmail.com with ESMTPSA id c17-20020a62e811000000b0062d9ced3db3sm1863836pfi.23.2023.04.06.16.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 16:44:34 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 6 Apr 2023 16:44:32 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     akpm@linux-foundation.org, hughd@google.com, willy@infradead.org,
-        markhemm@googlemail.com, rientjes@google.com, surenb@google.com,
-        shakeelb@google.com, quic_pkondeti@quicinc.com, linux-mm@kvack.org,
+        d=1e100.net; s=20210112; t=1680824747;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DaYHJStM+TYBK1P7E0zU6EMtALdZ0CRygZGLPtB7ENU=;
+        b=iV7xh6wc+1lDIqPkh1AQeLWPiB6Wqa+BpbEwqDL7xZ102U2dBCtqO/NVJjEHM2Ki0j
+         ZmGAzQTvDEW8HwT2TqnL4gtCAmtONCly7+1T22vZJFaPOMoT11WfqC7TPm4LeYICWc52
+         djBmLlOignDIsyfUkch8WjekBNsQIbqX9jXvMYoOuGVxcdAnIhv2yZFR82gJphkR1E2I
+         JNNv9U2UAirrpK13ZsRjayOpeihCzRgVsbH3fWM6aCTTFCZSLrvDLE0DSxieszZdY2E8
+         DIcblkm8EHGqLxvTLXkhBKWXhF9Y3sPzXuGHzmxl9KfvsfDSCdPMxZ3larbwmiQTsIy8
+         qBcg==
+X-Gm-Message-State: AAQBX9ezdlu4TYgUAjClQfs2A3DSI+ehjrv6p4N8AslMY2bLCjzAeusF
+        ZmvKFrpOgbt2idmMQji1wyuz/4e3Up0=
+X-Google-Smtp-Source: AKy350aGZUwtNydkHSBPRgLpLi6ohpNqAzeLjaYjPafLp+dQcPbHRHTzLfpOT7GD88Jr8srfRmEqlpGvWgI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:cf49:0:b0:b8b:fca4:7454 with SMTP id
+ f70-20020a25cf49000000b00b8bfca47454mr140186ybg.4.1680824747496; Thu, 06 Apr
+ 2023 16:45:47 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 16:45:46 -0700
+In-Reply-To: <20230214050757.9623-6-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230214050757.9623-1-likexu@tencent.com> <20230214050757.9623-6-likexu@tencent.com>
+Message-ID: <ZC9Zqn/+J5vaXKfo@google.com>
+Subject: Re: [PATCH v4 05/12] KVM: x86/pmu: Error when user sets the
+ GLOBAL_STATUS reserved bits
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V7 2/2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED
- for shmem
-Message-ID: <ZC9ZYAp8a46dILdO@google.com>
-References: <cover.1676378702.git.quic_charante@quicinc.com>
- <631e42b6dffdcc4b4b24f5be715c37f78bf903db.1676378702.git.quic_charante@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <631e42b6dffdcc4b4b24f5be715c37f78bf903db.1676378702.git.quic_charante@quicinc.com>
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 06:21:50PM +0530, Charan Teja Kalla wrote:
-> Currently fadvise(2) is supported only for the files that doesn't
-> associated with noop_backing_dev_info thus for the files, like shmem,
-> fadvise results into NOP. But then there is file_operations->fadvise()
-> that lets the file systems to implement their own fadvise
-> implementation. Use this support to implement some of the POSIX_FADV_XXX
-> functionality for shmem files.
+On Tue, Feb 14, 2023, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
-> advices to shmem files which can be helpful for the clients who may want
-> to manage the shmem pages of the files that are created through
-> shmem_file_setup[_with_mnt](). One usecase is implemented on the
-> Snapdragon SoC's running Android where the graphics client is allocating
-> lot of shmem pages per process and pinning them. When this process is
-> put to background, the instantaneous reclaim is performed on those shmem
-> pages using the logic implemented downstream[3][4]. With this patch, the
-> client can now issue the fadvise calls on the shmem files that does the
-> instantaneous reclaim which can aid the use cases like mentioned above.
-> 
-> This usecase lead to ~2% reduction in average launch latencies of the
-> apps and 10% in total number of kills by the low memory killer running
-> on Android.
-> 
-> Some questions asked while reviewing this patch:
-> Q) Can the same thing be achieved with FD mapped to user and use
-> madvise?
-> A) All drivers are not mapping all the shmem fd's to user space and want
-> to manage them with in the kernel. Ex: shmem memory can be mapped to the
-> other subsystems and they fill in the data and then give it to other
-> subsystem for further processing, where, the user mapping is not at all
-> required.  A simple example, memory that is given for gpu subsystem
-> which can be filled directly and give to display subsystem. And the
-> respective drivers know well about when to keep that memory in ram or
-> swap based on may be a user activity.
-> 
-> Q) Should we add the documentation section in Manual pages?
-> A) The man[1] pages for the fadvise() whatever says is also applicable
-> for shmem files. so couldn't feel it correct to add specific to shmem
-> files separately.
-> 
-> Q) The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
-> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing API
-> and this difference will cause confusion?
-> A) man pages [2] says that "POSIX_FADV_DONTNEED attempts to free cached
-> pages associated with the specified region." This means on issuing this
-> FADV, it is expected to free the file cache pages. And it is
-> implementation defined If the dirty pages may be attempted to writeback.
-> And the unwritten dirty pages will not be freed. So, FADV_DONTNEED also
-> covers the semantics of MADV_PAGEOUT for file pages and there is no
-> purpose of PAGEOUT for file pages.
-> 
-> [1] https://linux.die.net/man/2/fadvise
-> [2] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
-> [3] https://git.codelinaro.org/clo/la/platform/vendor/qcom/opensource/graphics-kernel/-/blob/gfx-kernel.lnx.1.0.r3-rel/kgsl_reclaim.c#L289
-> [4] https://android.googlesource.com/kernel/common/+/refs/heads/android12-5.10/mm/shmem.c#4310
-> 
-> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+> If the user space sets reserved bits when restoring the MSR_CORE_
+> PERF_GLOBAL_STATUS register, these bits will be accidentally returned
+> when the guest runs a read access to this register, and cannot be cleared
+> up inside the guest, which makes the guest's PMI handler very confused.
 
-I am not familar with why the shmem has noop_backing_dev_info
-but the below code to reclaim shmem pages and POXIS_FADV_DONTNEED
-semantic looks correct for me.
+The changelog needs to state what the patch actually does.
 
-Only nit is the description covers mostly DONTNEED case but not
-WILLNEED case.
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/vmx/pmu_intel.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 904f832fc55d..aaea25d2cae8 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -397,7 +397,7 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  			reprogram_fixed_counters(pmu, data);
+>  		break;
+>  	case MSR_CORE_PERF_GLOBAL_STATUS:
+> -		if (!msr_info->host_initiated)
+> +		if (!msr_info->host_initiated || (data & pmu->global_ovf_ctrl_mask))
+
+This is wrong.  Bits 60:58 are reserved in IA32_PERF_GLOBAL_OVF_CTRL, but are
+ASCI, CTR_FREEZE, and LBR_FREEZE respectively in MSR_CORE_PERF_GLOBAL_STATUS.
+
+>  			return 1; /* RO MSR */
+>  
+>  		pmu->global_status = data;
+> -- 
+> 2.39.1
+> 
