@@ -2,134 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB246D8D1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DE16D8D22
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjDFB4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S234402AbjDFCBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 22:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjDFB4x (ORCPT
+        with ESMTP id S229520AbjDFCBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:56:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8BEA9
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:56:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 5 Apr 2023 22:01:02 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E38B49CA;
+        Wed,  5 Apr 2023 19:01:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CF7618D1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:56:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B921C433EF;
-        Thu,  6 Apr 2023 01:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1680746211;
-        bh=NfVX/6hHzwCtO9HI9+XPZetTVkhGP+gQgPt3MPubcPk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kuo7uiXVaEjL4NGKpZ/ikc8NnyHxIM22q0eFCcPGmhranX/JO3hTSRGZf2Y8eEAQL
-         VeKbZ2PDbfGbh0icOYaML7+71C3fqLRioDIOS7pritKeZtSAR8+wIwuQf3gvJITAvP
-         mqDuEA+9mr/JJYl9mwWQGzkpkpbTYxsZ9929/Hw8=
-Date:   Wed, 5 Apr 2023 18:56:50 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     jaewon31.kim@samsung.com
-Cc:     "jstultz@google.com" <jstultz@google.com>,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-Subject: Re: [PATCH v2] dma-buf/heaps: system_heap: Avoid DoS by limiting
- single allocations to half of all memory
-Message-Id: <20230405185650.239f9721f066aa480e83d543@linux-foundation.org>
-In-Reply-To: <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
-References: <20230405172524.e25b62e1c548a95564b1d324@linux-foundation.org>
-        <20230406000854.25764-1-jaewon31.kim@samsung.com>
-        <CGME20230406000841epcas1p3630010a770682be0f1d540a448f3e00e@epcms1p3>
-        <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsPqG3J9sz4xDt;
+        Thu,  6 Apr 2023 12:00:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680746458;
+        bh=607S+2cLm7jn5sIpFzj5mU4PWCdG+/tkOtlmiB072Bk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mqlDValoONH2hHkdpU6TIBefJscNKb8g+3vesYG1EhHdXdSe32sOC8RXoDKmWOZhR
+         4NODFygIOb3tzp0oHoT5qfxFqHC37Ximj985n19fPsVRiEBuslRN214kY6gD5kwFxa
+         tPvYF12LDu2xrALw1o4q+8tx/cDhi3QUO9KdtIelzY+YEy59Bo6Lb1G1haDb/TNr6l
+         928r3FxWxKgs2Q4L26cogEvkC005f2xsmAMsXLIKogdsC8c+dsSq8d8JHZRgY9XqrA
+         Lj51E8NcHKcVGL8+3O2CdGTZTNFQSLaRTheeCyWXK1+6BY2ROAPdT+otrO6cXr5+Gg
+         VWdvj9h4JfK7Q==
+Date:   Thu, 6 Apr 2023 12:00:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mfd tree
+Message-ID: <20230406120055.11fcfe5b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/mvKyDBugPa/ArnB/8ZWRUbo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Apr 2023 10:44:19 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+--Sig_/mvKyDBugPa/ArnB/8ZWRUbo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> >> ...
-> >>
-> >> --- a/drivers/dma-buf/heaps/system_heap.c
-> >> +++ b/drivers/dma-buf/heaps/system_heap.c
-> >> @@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
-> >>  	struct page *page, *tmp_page;
-> >>  	int i, ret = -ENOMEM;
-> >>  
-> >> +	if (len / PAGE_SIZE > totalram_pages() / 2)
-> >> +		return ERR_PTR(-ENOMEM);
-> >> +
-> >
-> >This seems so random.  Why ram/2 rather than ram/3 or 17*ram/35?
-> 
-> Hello
-> 
-> Thank you for your comment.
-> 
-> I just took the change from the old ion driver code, and actually I thought the
-> half of all memory is unrealistic. It could be unwanted size like negative,
-> or too big size which incurs slowness or OoM panic.
-> 
-> >
-> >Better behavior would be to try to allocate what the caller asked
-> >for and if that doesn't work out, fail gracefully after freeing the
-> >partial allocations which have been performed thus far.  If dma_buf
-> >is changed to do this then that change is useful in many scenarios other
-> >than this crazy corner case.
-> 
-> I think you would like __GFP_RETRY_MAYFAIL. Actually T.J. Mercier recommended
-> earlier, here's what we discussed.
-> https://lore.kernel.org/linux-mm/20230331005140epcms1p1ac5241f02f645e9dbc29626309a53b24@epcms1p1/
-> 
-> I just worried about a case in which we need oom kill to get more memory but
-> let me change my mind. That case seems to be rare. I think now it's time when
-> we need to make a decision and not to allow oom kill for dma-buf system heap
-> allocations.
-> 
-> But I still want to block that huge size over ram. For an unavailabe size,
-> I think, we don't have to do memory reclaim or killing processes, and we can
-> avoid freezing screen in user perspecitve.
-> 
-> This is eventually what I want. Can we check totalram_pages and and apply
-> __GFP_RETRY_MAYFAIL?
-> 
-> --- a/drivers/dma-buf/heaps/system_heap.c
-> +++ b/drivers/dma-buf/heaps/system_heap.c
-> @@ -41,7 +41,7 @@ struct dma_heap_attachment {
->         bool mapped;
->  };
->  
-> -#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
-> +#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP | __GFP_RETRY_MAYFAIL)
->  #define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
->  #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
->                                 | __GFP_NORETRY) & ~__GFP_RECLAIM) \
-> @@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
->         struct page *page, *tmp_page;
->         int i, ret = -ENOMEM;
->  
-> +       if (len / PAGE_SIZE > totalram_pages())
-> +               return ERR_PTR(-ENOMEM);
+Hi all,
 
-We're catering for a buggy caller here, aren't we?  Are such large
-requests ever reasonable?
+After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-How about we decide what's the largest reasonable size and do a
-WARN_ON(larger-than-that), so the buggy caller gets fixed?
+drivers/mfd/qcom-pm8008.c:135:35: error: initialization of 'int (*)(unsigne=
+d int **, unsigned int,  const struct regmap_irq *, int,  void *)' from inc=
+ompatible pointer type 'int (*)(unsigned int **, unsigned int,  const struc=
+t regmap_irq *, int)' [-Werror=3Dincompatible-pointer-types]
+  135 |         .set_type_config        =3D pm8008_set_type_config,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+drivers/mfd/qcom-pm8008.c:135:35: note: (near initialization for 'pm8008_ir=
+q_chip.set_type_config')
+
+Caused by commit
+
+  72a8a08b0c62 ("mfd: qcom-pm8008: Convert irq chip to config regs")
+
+interacting with commit
+
+  7697c64b9e49 ("regmap: Pass irq_drv_data as a parameter for set_type_conf=
+ig()")
+
+from the regmap tree.
+
+I have applied the following merge fix patch:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 6 Apr 2023 11:37:44 +1000
+Subject: [PATCH] fixup for "mfd: qcom-pm8008: Convert irq chip to config re=
+gs"
+
+interacting with "regmap: Pass irq_drv_data as a parameter for set_type_con=
+fig()"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/mfd/qcom-pm8008.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
+index a33fbc42ac8e..e60c838a78c1 100644
+--- a/drivers/mfd/qcom-pm8008.c
++++ b/drivers/mfd/qcom-pm8008.c
+@@ -85,7 +85,8 @@ static unsigned int pm8008_get_irq_reg(struct regmap_irq_=
+chip_data *data,
+ }
+=20
+ static int pm8008_set_type_config(unsigned int **buf, unsigned int type,
+-				  const struct regmap_irq *irq_data, int idx)
++				  const struct regmap_irq *irq_data, int idx,
++				  void *irq_drv_data)
+ {
+ 	switch (type) {
+ 	case IRQ_TYPE_EDGE_FALLING:
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mvKyDBugPa/ArnB/8ZWRUbo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQuJ9cACgkQAVBC80lX
+0GxjxAf/Vc1lKpnpAQaX8Tfo8qUzyWqESkMVIzryq16rPMpQFBSGcCJhaOtn6YHg
+cvClXHZ/eICToNzt/tzcyjda2zg/xxPDWChpjzck9czst9m33EfM0NfOHR0Bvvhb
+kFLoZH/qFfYfVEjLc0V7iVSwv5W2/tsYfzQvxKI9Kzw3A7Oq2MyO38+e9qMyi/cy
+zDbsV/4wiBmPeRAVP4Yjgqpz+SlsRXWueKLj/EymZUxYJ9c+yE1pDxDirkeefuHS
+YXGVTtj/gJEfmyOoszY59JXAbwMp6A0XSpOJWGkpWQgmLmt7oVpW+CxjJn1y8/0N
+klYtMkR47enCKyvVJkSoOPzAxA0PIg==
+=dupP
+-----END PGP SIGNATURE-----
+
+--Sig_/mvKyDBugPa/ArnB/8ZWRUbo--
