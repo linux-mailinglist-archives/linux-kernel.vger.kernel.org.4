@@ -2,135 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A036DA487
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECCE6DA48A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239506AbjDFVOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46330 "EHLO
+        id S239634AbjDFVQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjDFVOp (ORCPT
+        with ESMTP id S229674AbjDFVQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:14:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E849D59D3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 14:14:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 830FF60FB4
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 21:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C448C433EF;
-        Thu,  6 Apr 2023 21:14:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680815683;
-        bh=MIZftBGiJqlzHjA5Wfhi/OoQu1CpPVe/qKv92HcO38A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BZVs0J84dWOYp9AmkZySPpRpECfmhqVYLW3dNTClilflAUwxPMPoAX4HQGEbfHaVV
-         SD7NZszCXY9k0UypwGRAcpkzVMd+VBKKQ1o7bmyuns65JfrDe4eaxD/A7CqtSgGJHF
-         KJXuu17qvlLpKPGGQ94cILkxHbUpTuGa1JeXPRAEKNjIIEL3fGhmpGa1cuVlNuT65X
-         +vfpenWSctWuM9deyYvSAUufC3pxiOBZ/cM11ZazQ+9NYRSYVjAc6BzMTECOC+uQtG
-         EUO8WVcn0uIz5CVcMcxPE89Oa46BxRQecyu5YuAcrs1/bBpDzQpTl+nfwG6hx2j2ip
-         BhWKjUIT9GWFQ==
-Date:   Fri, 7 Apr 2023 00:14:31 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm-treewide-redefine-max_order-sanely-fix.txt
-Message-ID: <ZC82N4sP5xE63kl4@kernel.org>
-References: <9460377a-38aa-4f39-ad57-fb73725f92db@roeck-us.net>
- <20230406072529.vupqyrzqnhyozeyh@box.shutemov.name>
- <83e6bc46-dfc0-0e95-e69c-5b996af1e50b@roeck-us.net>
- <20230406151015.yndcm24fyxitvqyc@box.shutemov.name>
+        Thu, 6 Apr 2023 17:16:05 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B806D59D3;
+        Thu,  6 Apr 2023 14:16:04 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so20760423wms.5;
+        Thu, 06 Apr 2023 14:16:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680815763; x=1683407763;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6lOB5ARfGOYEbOJuOOIkoDNFazek9EYhd8NdB3O+Pqc=;
+        b=T1EQxXwBGxRCzd+nQ/X9dscNsP85DNGmxbnIPhED2zM/jcIkui9WY00IC7LFaQcSdq
+         pV8l8n7gtGFhPlFYXTPnRmRaipn0ayUuz6EAmsuO8J9nu/EKNCk89lMH9QP7asAzS+pv
+         84LVB9uVdCldScuIyRDRY/TvnkRXfYszm17UqT03ndftjj5PC01b154UGP5Xj4lhk6KG
+         DEcIQJ8qE8vsdvRQc6SkKyhA2DYcHJdglzrDR116lA2fBRs8RcXx+K7NS+1LgP8f0Sp/
+         W0Q/TYU0L8dx1Hb0KLtbXrLRGa/Bv+m9U/lxaF2TtSQ1guHp38ZXbWhIVpjIjOWgztiW
+         8EAw==
+X-Gm-Message-State: AAQBX9cRB5toQ7gSjUJooW3JJafknxsA8CbCNbK1XdLoYUiChJ4o+sho
+        CXnChuyggbgBGA+ZJsycqqQ=
+X-Google-Smtp-Source: AKy350bFBFVzLm2hXJDAAJFmqfFoFiqu7tuqcsv6GPx8JyFGzRWcMGQcFcO3U1/dMGr4ogDL/rsj8w==
+X-Received: by 2002:a05:600c:b53:b0:3ed:9a09:183 with SMTP id k19-20020a05600c0b5300b003ed9a090183mr8535149wmr.2.1680815762942;
+        Thu, 06 Apr 2023 14:16:02 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id o8-20020a05600c378800b003edff838723sm2637515wmr.3.2023.04.06.14.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 14:16:02 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 21:15:59 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, mikelley@microsoft.com
+Subject: Re: [PATCH v9 0/5] Device tree support for Hyper-V VMBus driver
+Message-ID: <ZC82j/M2DTozOmo0@liuwe-devbox-debian-v2>
+References: <1679298460-11855-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406151015.yndcm24fyxitvqyc@box.shutemov.name>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <1679298460-11855-1-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 06:10:15PM +0300, Kirill A. Shutemov wrote:
-> On Thu, Apr 06, 2023 at 06:57:41AM -0700, Guenter Roeck wrote:
-> > On 4/6/23 00:25, Kirill A. Shutemov wrote:
-> > > On Wed, Apr 05, 2023 at 10:20:26PM -0700, Guenter Roeck wrote:
-> > > > Hi,
-> > > > 
-> > > > On Wed, Mar 15, 2023 at 06:38:00PM +0300, Kirill A. Shutemov wrote:
-> > > > > fix min() warning
-> > > > > 
-> > > > > Link: https://lkml.kernel.org/r/20230315153800.32wib3n5rickolvh@box
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > >    Link: https://lore.kernel.org/oe-kbuild-all/202303152343.D93IbJmn-lkp@intel.com/
-> > > > > Signed-off-by: "Kirill A. Shutemov" <kirill@shutemov.name>
-> > > > > Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > > > > Cc: Zi Yan <ziy@nvidia.com>
-> > > > > Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> > > > 
-> > > > This patch results in various boot failures (hang) on arm targets
-> > > > in linux-next. Debug messages reveal the reason.
-> > > > 
-> > > > ########### MAX_ORDER=10 start=0 __ffs(start)=-1 min()=10 min_t=-1
-> > > >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > > 
-> > > > If start==0, __ffs(start) returns 0xfffffff or (as int) -1, which min_t()
-> > > > interprets as such, while min() apparently uses the returned unsigned long
-> > > > value. Obviously a negative order isn't received well by the rest of the
-> > > > code.
-> > > 
-> > > Actually, __ffs() is not defined for 0.
-> > > 
-> > > Maybe something like this?
-> > > 
-> > > diff --git a/mm/memblock.c b/mm/memblock.c
-> > > index 7911224b1ed3..63603b943bd0 100644
-> > > --- a/mm/memblock.c
-> > > +++ b/mm/memblock.c
-> > > @@ -2043,7 +2043,11 @@ static void __init __free_pages_memory(unsigned long start, unsigned long end)
-> > >   	int order;
-> > >   	while (start < end) {
-> > > -		order = min_t(int, MAX_ORDER, __ffs(start));
-> > > +		/* __ffs() behaviour is undefined for 0 */
-> > > +		if (start)
-> > > +			order = min_t(int, MAX_ORDER, __ffs(start));
-> > > +		else
-> > > +			order = MAX_ORDER;
-> > 
-> > Shouldn't that be
-> > 		else
-> > 			order = 0;
-> > ?
+On Mon, Mar 20, 2023 at 12:47:35AM -0700, Saurabh Sengar wrote:
+> This set of patches expands the VMBus driver to include device tree
+> support. This feature allows for a kernel boot without the use of ACPI
+> tables, resulting in a smaller memory footprint and potentially faster
+> boot times. This is tested by enabling CONFIG_OF and OF_EARLY_FLATTREE
+> for x86.
 > 
-> +Mike.
+> The first two patches enable compilation of Hyper-V APIs in a non-ACPI
+> build.
 > 
-> No. start == 0 is MAX_ORDER-aligned. We want to free the pages in the
-> largest chunks alignment allows.
+> The third patch converts the VMBus driver from acpi to more generic
+> platform driver.
+> 
+> The fourth patch introduces the device tree documentation for VMBus.
+> 
+> The fifth patch adds device tree support to the VMBus driver. Currently
+> this is tested only for x86 and it may not work for other archs.
+> 
+[...]
+>  .../bindings/bus/microsoft,vmbus.yaml         |  54 ++++++++
+>  MAINTAINERS                                   |   1 +
+>  drivers/clocksource/hyperv_timer.c            |  15 ++-
+>  drivers/hv/Kconfig                            |   5 +-
+>  drivers/hv/vmbus_drv.c                        | 122 ++++++++++++++----
+>  include/linux/acpi.h                          |   5 +
+>  6 files changed, 172 insertions(+), 30 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/bus/microsoft,vmbus.yaml
+> 
 
-Right. Before the changes to MAX_ORDER it was
+Applied to hyperv-next.
 
-		order = min(MAX_ORDER - 1UL, __ffs(start));
-
-which would evaluate to 10.
-
-I'd just prefer the comment to include the explanation about why we choose
-MAX_ORDER for start == 0. Say
-
-	/*
-	 * __ffs() behaviour is undefined for 0 and we want to free the
-	 * pages in the largest chunks alignment allows, so set order to
-	 * MAX_ORDER when start == 0
-	 */
+Thanks,
+Wei.
 
 > -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
-
--- 
-Sincerely yours,
-Mike.
+> 2.34.1
+> 
