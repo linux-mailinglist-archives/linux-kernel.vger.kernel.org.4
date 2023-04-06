@@ -2,76 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7F56D8E3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68BD6D8E45
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235061AbjDFEIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 00:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S235146AbjDFERe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234696AbjDFEI2 (ORCPT
+        with ESMTP id S233641AbjDFERc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:08:28 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3035A7A9A
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 21:08:27 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so39469966pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 21:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680754106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dE6cxXzdOccukGxMzeGKLxZd5ekq4xiFUcQTZn1Zt5c=;
-        b=Q9vHCT2qowFiUwiB2FG9J80FVBU1hrus1jGPhYqZX4M0nJZ6xgLKa/SGJRvmz2zXPG
-         EPd+7HtKFA69kAWL4SaM0g5JRKT/ZAdSBIehaTsFucGlQ378XZhqNrniSm+aMH5MkoA1
-         WSdI2iZGgZ6OO8zGWXoGUtND56YdBVvr7P9LB5uuPIix6IcvLv8jBZST5tovz3Pa0J8S
-         +tuXN1Wy8TMhtthuIVCqZyVtBjHL7jKko6oP0WFAcathtUUXxdLT+2d4o0mQTXP6yI+G
-         V0T6Dte7H+zk+tCWYsP5x7hpyKz5EsMRIehlDdkE2Yv85QPvYsyr6Juwpq5xfd8jkvWK
-         wUDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680754106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dE6cxXzdOccukGxMzeGKLxZd5ekq4xiFUcQTZn1Zt5c=;
-        b=AZTX9sn9ap8pc7PF5S9MsklycwsWGMpbcE0aNkksXQ9lokStWWa7LGLK7x7qV7TDhZ
-         i7AbkxGbgJeLmc0oj79K0ZRd90WcNZGWmwH9l1U3OpBeKkQZOdD1oEZgmdDJhtVUxcNz
-         UviA0rYLDWvYjy/VTqNaHtO6M4IoKso5KiwhFHLBFoxTz3PEqjqV5zZKCsXxJEXtdpTS
-         l8OW8hAKBXpYs0cbUMVjXVYH2Jf7oL5oBtxvs59ifOpHVNkKZt3hhr4bqLvd90d8xa75
-         gOTOxYiUtHA5yoJorhPUWqUc8Z7XS2a1twput45bEAgsmPPLIdVtWeuaCbu2xWQLYQ2N
-         3OhA==
-X-Gm-Message-State: AAQBX9cz4wXsRzoOW3Z8fR/R2JuP6CpakNfthU3aELEbtmdD9kqspi0t
-        WaLqsXX0XWfYymFOVXdwDxSYYg==
-X-Google-Smtp-Source: AKy350aJ8jJ3OD86h4pgxT/vqUKDZm73JsnlZ/8LC0WBUj3Qa0WMnuGy2ZZ+d3TkT5XDsbEuLFrebA==
-X-Received: by 2002:a17:902:d489:b0:19a:bbd0:c5cc with SMTP id c9-20020a170902d48900b0019abbd0c5ccmr9856328plg.60.1680754106673;
-        Wed, 05 Apr 2023 21:08:26 -0700 (PDT)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id jf17-20020a170903269100b001a4edbabad3sm297895plb.230.2023.04.05.21.08.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 21:08:25 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 12:08:20 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] irqchip: irq-qcom-mpm: Support passing a slice of
- SRAM as reg space
-Message-ID: <20230406040820.GB111746@dragon>
-References: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
- <20230328-topic-msgram_mpm-v2-2-e24a48e57f0d@linaro.org>
+        Thu, 6 Apr 2023 00:17:32 -0400
+X-Greylist: delayed 472 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 21:17:31 PDT
+Received: from smtp-out0.aaront.org (smtp-out0.aaront.org [52.10.12.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F74B8690
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 21:17:30 -0700 (PDT)
+Received: by smtp-out0.aaront.org (Postfix) with ESMTP id 4PsSgj51ydzJQ;
+        Thu,  6 Apr 2023 04:09:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aaront.org; h=
+    from:to:cc:subject:date:message-id:mime-version
+    :content-transfer-encoding; s=elwxqanhxhag6erl; bh=NASh0ELdjVlYA
+    TWtGAhESwP0/qGYU3DPBNFRmdeYc2w=; b=wh6d82KTw6M1wbyCg3biZskqEuiDf
+    65Iz5kDiNrEn3tsXb8iZUZmdDYz9uU2eeM/WvRgACEVh+WBWN6Uy9KCkValuSWhm
+    XbFi+q1YmKcrY2D901g/k2sqdX72xsHhJbQlSU7Mp3JOdbbDZifVsKczcU5c/0kh
+    1DOgqrJ2X7vIcyZsMrBvUCTlvIftFcRRLSFyHxSO/cO5voIcUi58H57pIYUtXWvX
+    7hodtwKGAoTBvZoXUeyj6X+XaWBVwqlpwvvewJIslcTcVmEtbW5Bkj3O9AF//M2v
+    qNVLJSMBm1C+AWQz+fKuIMszKxKqAZKrB1omxDsGi+0qQJ/ccK9qeEcnw==
+From:   Aaron Thompson <dev@aaront.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, Aaron Thompson <dev@aaront.org>
+Subject: [PATCH] sched/clock: Fix local_clock() before sched_clock_init()
+Date:   Thu,  6 Apr 2023 04:08:47 +0000
+Message-Id: <20230406040847.569970-1-dev@aaront.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328-topic-msgram_mpm-v2-2-e24a48e57f0d@linaro.org>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,21 +53,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 12:48:35PM +0200, Konrad Dybcio wrote:
-> The MPM hardware is accessible to us from the ARM CPUs through a shared
-> memory region (RPM MSG RAM) that's also concurrently accessed by other
-> kinds of cores on the system (like modem, ADSP etc.). Modeling this
-> relation in a (somewhat) sane manner in the device tree basically
-> requires us to either present the MPM as a child of said memory region
-> (which makes little sense, as a mapped memory carveout is not a bus),
-> define nodes which bleed their register spaces into one another, or
-> passing their slice of the MSG RAM through some kind of a property.
-> 
-> Go with the third option and add a way to map a region passed through
-> the "qcom,rpm-msg-ram" property as our register space.
-> 
-> The current way of using 'reg' is preserved for ABI reasons.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Have local_clock() return sched_clock() if sched_clock_init() has not
+yet run. sched_clock_cpu() has this check but it was not included in the
+new noinstr implementation of local_clock().
 
-Acked-by: Shawn Guo <shawn.guo@linaro.org>
+The effect can be seen on x86 with CONFIG_PRINTK_TIME enabled, for
+instance. scd->clock quickly reaches the value of TICK_NSEC and that
+value is returned until sched_clock_init() runs.
+
+dmesg without this patch:
+
+    [    0.000000] kvm-clock: ...
+    [    0.000002] kvm-clock: ...
+    [    0.000672] clocksource: ...
+    [    0.001000] tsc: ...
+    [    0.001000] e820: ...
+    [    0.001000] e820: ...
+     ...
+    [    0.001000] ..TIMER: ...
+    [    0.001000] clocksource: ...
+    [    0.378956] Calibrating delay loop ...
+    [    0.379955] pid_max: ...
+
+dmesg with this patch:
+
+    [    0.000000] kvm-clock: ...
+    [    0.000001] kvm-clock: ...
+    [    0.000675] clocksource: ...
+    [    0.002685] tsc: ...
+    [    0.003331] e820: ...
+    [    0.004190] e820: ...
+     ...
+    [    0.421939] ..TIMER: ...
+    [    0.422842] clocksource: ...
+    [    0.424582] Calibrating delay loop ...
+    [    0.425580] pid_max: ...
+
+Fixes: 776f22913b8e ("sched/clock: Make local_clock() noinstr")
+Signed-off-by: Aaron Thompson <dev@aaront.org>
+---
+ kernel/sched/clock.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
+index 5732fa75ebab..b5cc2b53464d 100644
+--- a/kernel/sched/clock.c
++++ b/kernel/sched/clock.c
+@@ -300,6 +300,9 @@ noinstr u64 local_clock(void)
+ 	if (static_branch_likely(&__sched_clock_stable))
+ 		return sched_clock() + __sched_clock_offset;
+ 
++	if (!static_branch_likely(&sched_clock_running))
++		return sched_clock();
++
+ 	preempt_disable_notrace();
+ 	clock = sched_clock_local(this_scd());
+ 	preempt_enable_notrace();
+-- 
+2.39.2
+
