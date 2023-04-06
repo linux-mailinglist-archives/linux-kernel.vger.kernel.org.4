@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC956DA1ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C66D6DA1F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238378AbjDFTrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S238202AbjDFTrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbjDFTrZ (ORCPT
+        with ESMTP id S237744AbjDFTr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:47:25 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440F493EB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:47:20 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id r11so40598102wrr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:47:20 -0700 (PDT)
+        Thu, 6 Apr 2023 15:47:27 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2783DAD0F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:47:25 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id x17so52273899lfu.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680810439;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bXUDVofzbruFWvxInSCiMp68YTGp52NFTniah4vjDOg=;
-        b=Qv+otAu1UfAjM8GTfhZEGFrwdb/8qT2pvcgo690fxcFpH1NtoSCCLqrLCH+95AK3G5
-         dJ9eKBgEjSk78VYJTFtG5aL09U2/LBG2NT1RvXGLUqlmuLZTMmfa5deMmidpGId1PK0N
-         gDBUxbLgfuUCKS8/uiFL73C3JsW/hfKHDkSJj3wmKtsOPyF/hyZXppammwV3RaSzQkfN
-         KyKfIpMNCfEJ8uo448tqUTXAlL5VFaJ+L6DsDOIKIC3TUkSXx5uBI5j7fWRo20jfE6ZO
-         HBForh6qpZNiT8uAi2dvGJubQVTkiiVEZzPXYxeENYMz63JRe9gKEzIs3Cg4MuJybc/F
-         5HRw==
+        d=linaro.org; s=google; t=1680810444;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=erhM/TQgaI6MfiVP7E4GPYEuma65YzEyePLYNCwXrh0=;
+        b=hfsMOUYk1nnVxsfGKoEnMhqGM5tJwWku1qgPY7yNPBYAicEeFP63P0BtVeYxKx8PNk
+         gYB9CeTSYwlComPTA8v1Y+VSSbbID12NEKLwgRUkWT1tMizUGJ6q0bYZLMHFDpj/9zWI
+         CsvXRp+x7M299jNcRmoEFQS6INvo46knZVyLO9nToka17cFpyA57xSU0HXLZ8F8FqHg7
+         fEcsxa4vQFJPpO/8qc2oNgyYVSWrcyH3KA5OATzxHN186Q/QxykKpqRhZWX4AI12uoAG
+         dTXaTFWViatr1Qhvjm91dBbrgjtXbzGSl3fmJqPIRRPJ35WO1embvbYB6GHPODKv6D6s
+         7FhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680810439;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bXUDVofzbruFWvxInSCiMp68YTGp52NFTniah4vjDOg=;
-        b=i42b4TUK7N+GyhG+fs0CKPUO6C2YR3NAfu7njwcv6sAkU2pGtQr18RFw45wqq8qp1T
-         nxV9GBq+NBd1sAjZGbNASbkuu83AwzrLhE5qwsJF11sYI3arAI0gXRi8NonHk5DJ/p78
-         5IMuk8WOBjMiKAyjwTcyJXwmkdygC6n99Z83QsX5DfxpA0fc/mW1lT0ILuUaDmeC9PsQ
-         AW3flXV6PA4fwhO5M+C2bblJHNrEW+cqHPJIej3xA9HaZ7KIyfUbcE0oJoCjfQjS1ZpJ
-         tLnKDytJ/il3GjXSzunEyEF1e1KmAcinXPVHzagDSJ+csslWZmxhhuyeLQuxk9tkKHmi
-         X4aw==
-X-Gm-Message-State: AAQBX9fNkWG6FXD84C+z/OL9Y9J8p6NPb+bw67qywJvhA9dX1W7x8trQ
-        Mo5JcItCEkbmQnzs52PVmXjjzg==
-X-Google-Smtp-Source: AKy350YplvG0jP1fW81hi9f7EU3fuyxwRIfuj0elPEpyP0tkNZz4BYSplTmw7FvRhC7WQC6CNjZAWg==
-X-Received: by 2002:adf:fe03:0:b0:2e5:26eb:bd1b with SMTP id n3-20020adffe03000000b002e526ebbd1bmr7466331wrr.58.1680810438846;
-        Thu, 06 Apr 2023 12:47:18 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:4793:cb9a:340b:2f72])
-        by smtp.gmail.com with ESMTPSA id k15-20020a056000004f00b002c71dd1109fsm2593323wrx.47.2023.04.06.12.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 12:47:18 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2 5/5] arm64: dts: qcom: sa8775p-ride: enable UFS
-Date:   Thu,  6 Apr 2023 21:47:03 +0200
-Message-Id: <20230406194703.495836-6-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230406194703.495836-1-brgl@bgdev.pl>
-References: <20230406194703.495836-1-brgl@bgdev.pl>
+        d=1e100.net; s=20210112; t=1680810444;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=erhM/TQgaI6MfiVP7E4GPYEuma65YzEyePLYNCwXrh0=;
+        b=nw8KxxvjRSsV0wYHWPU7HLFAaNjE6c59+A50rLBx9DpdUh0ngsYf6ciqfVtNzXVN3t
+         G54N/18kQ21ARI5Aw4dFtJ1vOY3vUv69ZS1RkysFkr3bjoTcGibK16uY9deY3+4UVPlw
+         n/wzFRo1UDy0h+UwBHUxofaGW5UQXiDDTjfvwl/VqcMBITBYDYuwczOFDYWwq/5KIncS
+         /Q+suLvkrxD1yoiQmoG6R4nCU5ZtXyP7+ISd+JsFTLeU9uUHGc+3c6h4PbOOZnOX1hwm
+         4Y23e91BBeAMz3k+YMvhcLX+yIqDFrNbEaMECGByF2eapUVt567p//uK33IfVkrXijNM
+         ZSnA==
+X-Gm-Message-State: AAQBX9dzCx+M1kZP5GXRSyMBlzD8ASW/pRO6IV/62rMcGFXL2m6it/aU
+        474TRpVx9aAPE6LJqARHYnlxqg==
+X-Google-Smtp-Source: AKy350YCcv46M30Sn3lVJgHE7VYbzqp+Gvq/SeWNaYZzU+x6xxsIrwcc10SmO6n9eX+0lS+o+ffh4g==
+X-Received: by 2002:a05:6512:65:b0:4eb:df5:7418 with SMTP id i5-20020a056512006500b004eb0df57418mr66197lfo.36.1680810444140;
+        Thu, 06 Apr 2023 12:47:24 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id z15-20020a056512376f00b004db45096c99sm386981lft.85.2023.04.06.12.47.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 12:47:23 -0700 (PDT)
+Message-ID: <8522a34c-de77-444b-159b-5b8732b52a9e@linaro.org>
+Date:   Thu, 6 Apr 2023 21:47:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V3 4/5] arm64: dts: qcom: ipq9574: Add SMPA1 regulator
+ node
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
+References: <20230406070032.22243-1-quic_devipriy@quicinc.com>
+ <20230406070032.22243-5-quic_devipriy@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230406070032.22243-5-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Enable the UFS and its PHY on sa8775p-ride.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+On 6.04.2023 09:00, Devi Priya wrote:
+> Add support for SMPA1 regulator node in IPQ9574.
+> 
+> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  Changes in V3:
+> 	- Updated the regulator-min-microvolt with the SVS voltage 725000uV
+> 
+>  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> index 3ae38cf327ea..06f579b1c590 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> @@ -44,6 +44,25 @@
+>  	};
+>  };
+>  
+> +&rpm_requests {
+> +	regulators {
+> +		compatible = "qcom,rpm-mp5496-regulators";
+> +
+> +		ipq9574_s1: s1 {
+> +		/*
+> +		 * During kernel bootup, the SoC runs at 800MHz with 875mV set by the bootloaders.
+> +		 * During regulator registration, kernel not knowing the initial voltage,
+> +		 * considers it as zero and brings up the regulators with minimum supported voltage.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index f238a02a5448..2bb001a3ea55 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -5,6 +5,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- 
- #include "sa8775p.dtsi"
-@@ -20,6 +21,7 @@ aliases {
- 		serial2 = &uart17;
- 		i2c18 = &i2c18;
- 		spi16 = &spi16;
-+		ufshc1 = &ufs_mem_hc;
- 	};
- 
- 	chosen {
-@@ -426,6 +428,23 @@ &uart17 {
- 	status = "okay";
- };
- 
-+&ufs_mem_hc {
-+	reset-gpios = <&tlmm 149 GPIO_ACTIVE_LOW>;
-+	vcc-supply = <&vreg_l8a>;
-+	vcc-max-microamp = <1100000>;
-+	vccq-supply = <&vreg_l4c>;
-+	vccq-max-microamp = <1200000>;
-+
-+	status = "okay";
-+};
-+
-+&ufs_mem_phy {
-+	vdda-phy-supply = <&vreg_l4a>;
-+	vdda-pll-supply = <&vreg_l1c>;
-+
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <38400000>;
- };
--- 
-2.37.2
+> +		 * Updating the regulator-min-microvolt with SVS voltage of 725000uV so that
+s/Updating/Update
+s/725000uV/725mV here and below (for consistency with the first mention
+of 800mV)
 
+Konrad
+> +		 * the regulators are brought up with 725000uV which is sufficient for all the
+> +		 * corner parts to operate at 800MHz
+> +		 */
+> +			regulator-min-microvolt = <725000>;
+> +			regulator-max-microvolt = <1075000>;
+> +		};
+> +	};
+> +};
+> +
+>  &pcie1_phy {
+>  	status = "okay";
+>  };
