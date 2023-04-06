@@ -2,112 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD386D9183
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FFA6D9189
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236102AbjDFI2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S236127AbjDFI2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236117AbjDFI2K (ORCPT
+        with ESMTP id S236113AbjDFI2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:28:10 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE217686
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:28:07 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id b20so147427839edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:28:06 -0700 (PDT)
+        Thu, 6 Apr 2023 04:28:48 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A265C4C0E
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:28:45 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5047060185eso27829a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:28:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680769685;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=mind.be; s=google; t=1680769724;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=I7lRsFf1L4fQnEzaLtv1MoTYQNVZVAYHc8tBsB/TvO4=;
-        b=anCP01luFaDe/Jo9JpPc1+q4v3LHR2ILhcK572jKQfQXsNvmBrCEj6DwlfSnw6PmL1
-         ssFajYuwhXB9prFYXGt6GtMnh+K+To39qgruZl5UfU8V/1BeHynpoAKF7oDgwe5g68P5
-         k3KNCOw8pdZTvzuLL4bG7kGuCU0LSoqZe5hg0v3/PzPlaOHKBEfoKI1XYWSDmUx0127l
-         wDljBKLysSLOMNNqfcwYP/ML+ZHVCteLo6eJNsnO9g/1HF12UCiCcFHssVRwm0o4vwm3
-         wutGqGDdRgxBvsyIP3IIUpvWAoYYDO9CRj5py/f7gVcX7DD+PywkZWpOV9g6DyGqPqEF
-         1HFA==
+        bh=20coA4glkdpOkZOcWK/cfFVjecshS2DyrEnIOMLBfXs=;
+        b=fG9Oec8fFAktEZy9s0Bjlye2DO74mjUPYSB2HhLP1kpvMKjH1Wq7+lOy+HdpXjHAbw
+         JYngnqiVxaMuAEm7crsLXZWcMhQJzj5zTLKWYVkMslBRRVWV9f07s0l3Vu73eqbzuzHC
+         h4V9pJn83impfmYkIlth4CaQCVKLF3h9dnIUz+lQWc8AFBe5MiEwoH+StUDkcYzWUPBo
+         +822andwpq5ju15VUDstlvj4wUUYIlzK16mjfVbrnxPZmdJwYjyNqr4Lb5sbVbsLoO9f
+         9bS96PznUv7vaW1N+EPK1lrqTLuxApEJuEWqjMcaHYO0+kfhEFTa0+C/MQStsW0l6Exo
+         M4Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680769685;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1680769724;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I7lRsFf1L4fQnEzaLtv1MoTYQNVZVAYHc8tBsB/TvO4=;
-        b=JpgfjLoVHEfPD32J1lPao5K17w2N05+psIZEYezojSDYK6uD95e08RXwaJ5WrbwDjB
-         fxp2gJuXz4gnDEqMECbZN3FRRdeNaAQ0rllPuqnRc6WoLYL0lnYEu/2R4E09zyAQYag1
-         hZ6Ti9u6ZBB1d7aX0im62NpkawJ8y+rJlNuOVellR3rLJYBPi24M1U8YpJ3bMqBUQKlJ
-         8lVZMeX8pIMHCSbpqiWffnfhgCdCq7wY5q2H2ErIFyfE4WId9iJDRq04tmV2l0ai/UPP
-         Z9990j3JJIhgWau/YUb57QJdy+taqJd1KpUT4f6jIR1ZH8JNfuU0N1wUmAmxFYCLaahF
-         iTiw==
-X-Gm-Message-State: AAQBX9ewBqJj6ZPtKBUTdZQvxgPedT4Dr6lJJm2BnYAY/5vz9dGOhtnD
-        kRsi9GG9e1lht2Izi5g0Pq2byA==
-X-Google-Smtp-Source: AKy350YLVffCoF2DKktsXZ/ZRG76zI6+Z/r/Kp9Idluq6+XCLkBjUWzD/AXwoB/SDw9rBljyBzOcHA==
-X-Received: by 2002:a17:906:524e:b0:93b:943f:6261 with SMTP id y14-20020a170906524e00b0093b943f6261mr5057621ejm.74.1680769685528;
-        Thu, 06 Apr 2023 01:28:05 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b00946c1068b14sm479754ejc.120.2023.04.06.01.28.04
+        bh=20coA4glkdpOkZOcWK/cfFVjecshS2DyrEnIOMLBfXs=;
+        b=2xGRhBe+gGdUNGn2w3STClz8tYQOOwtTgrc4KqgEGcrSYWh4SuRvOn15y7bl+xh5U6
+         JifvkQ+PqnvRHugLtoQwNXmUyvxfob1de+tOIcptpbN3OC7mULA5pzW2rGjIvS/szS6S
+         ++0dlsMYN/1NNGj0Kc9SJ1KpmZF8I+/i2nZnFnhXaRRdVHmt8H6FZobZ2lpkZrW93hmK
+         YozjGHKShEPxQVJNv894xUOt03xfo2mgKVvsEqsAm3Go8GRfDfEUkMbCl1OzPgT93W7/
+         kUX/lHdJXusCSTLSLVQE2EdT4wPFLfpTn5krtTzD2Z0E835Pbi8Sb5p0r0U/MvTuGQ/s
+         DnlQ==
+X-Gm-Message-State: AAQBX9eCwOh0vhOzDrH1qgZbpwfLrYuFx8FQM2znhJuFQhoql778Mzuf
+        2uOhzgw2ZhPniGpjoe9wnll+SA==
+X-Google-Smtp-Source: AKy350alUEuW7MUoCbOTgUwV8VD7WVrguT6Wesjzfgmmw0tCYJxCkMvhqRVh6CFt5sUSX/ls27qBgQ==
+X-Received: by 2002:a05:6402:148:b0:502:32ae:14fb with SMTP id s8-20020a056402014800b0050232ae14fbmr4101278edu.5.1680769724141;
+        Thu, 06 Apr 2023 01:28:44 -0700 (PDT)
+Received: from [192.168.2.9] (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id 26-20020a508e5a000000b004fcd78d1215sm418780edx.36.2023.04.06.01.28.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 01:28:05 -0700 (PDT)
-Message-ID: <d7e795b8-6c36-70c5-73e4-ae115cac32a9@linaro.org>
-Date:   Thu, 6 Apr 2023 10:28:03 +0200
+        Thu, 06 Apr 2023 01:28:43 -0700 (PDT)
+Message-ID: <32c0a958-58bd-7476-c276-94c8f33ffbb3@mind.be>
+Date:   Thu, 6 Apr 2023 10:28:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 3/3] dt-bindings: mfd: dlg,da9063: document voltage
- monitoring
-Content-Language: en-US
-To:     Benjamin Bara <bbara93@gmail.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 2/2] leds: lp55xx: configure internal charge pump
+To:     Lee Jones <lee@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Steve Twiss <stwiss.opensource@diasemi.com>
-Cc:     DLG-Adam.Thomson.Opensource@dm.renesas.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-References: <20230403-da9063-disable-unused-v3-0-cc4dc698864c@skidata.com>
- <20230403-da9063-disable-unused-v3-3-cc4dc698864c@skidata.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230403-da9063-disable-unused-v3-3-cc4dc698864c@skidata.com>
-Content-Type: text/plain; charset=UTF-8
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230331114610.48111-1-maarten.zanders@mind.be>
+ <20230331114610.48111-3-maarten.zanders@mind.be>
+ <20230405152627.GO8371@google.com>
+Content-Language: en-US
+From:   Maarten Zanders <maarten.zanders@mind.be>
+In-Reply-To: <20230405152627.GO8371@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2023 19:14, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
-> 
-> Document that the da9063 only provides under- *and* over-voltage
-> monitoring in one, and therefore requires both to be configured with the
-> same severity and value. Add an example for clarification.
-> 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 
-This is a friendly reminder during the review process.
+> Sorry Maarten, just a couple of small nits.
 
-It looks like you received a tag and forgot to add it.
+No need to be sorry.
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+> This fits on one line, no?  < 100-chars?
 
-If a tag was not added on purpose, please state why and what changed.
+I thought the line length was meant to be <80 chars according to:
 
-Best regards,
-Krzysztof
+https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-long-lines-and-strings
+
+Happy to adapt if this shouldn't be taken as strict as I tried to do. 
+Either way I'll post an update with a cleanup.
+
+>
+>> --- a/include/linux/platform_data/leds-lp55xx.h
+>> +++ b/include/linux/platform_data/leds-lp55xx.h
+>> @@ -73,6 +73,9 @@ struct lp55xx_platform_data {
+>>   	/* Clock configuration */
+>>   	u8 clock_mode;
+>>
+>> +	/* Charge pump mode */
+>> +	u32 charge_pump_mode;
+> That's a lot of data.  Does it need to be u32?
+
+No, it luckily doesn't get that big. This is to avoid an intermediate 
+variable & casting as the DT parameter has to be 32bit (which I learned 
+from an earlier comment). It was changed from u8 in v5 of the patch.
+
+Thanks for the review,
+Maarten
 
