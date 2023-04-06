@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BA56D9E5B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DC86D9E5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239809AbjDFRSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        id S239998AbjDFRTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239799AbjDFRSd (ORCPT
+        with ESMTP id S239681AbjDFRSk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:18:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9757FA5F8;
-        Thu,  6 Apr 2023 10:18:27 -0700 (PDT)
+        Thu, 6 Apr 2023 13:18:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3094E8A63;
+        Thu,  6 Apr 2023 10:18:31 -0700 (PDT)
 Received: from localhost (unknown [188.27.34.213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 29CF666031D8;
-        Thu,  6 Apr 2023 18:18:26 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 698F566031C8;
+        Thu,  6 Apr 2023 18:18:29 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680801506;
-        bh=qXAW+NxBtXP2ZLN97K9FdNC+pkjm39ZBXXRQWxqaxDQ=;
+        s=mail; t=1680801509;
+        bh=3rBxNv391K3rouaSGtWY3Lj00PK9hBEW9sLwGyEnlTc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ci7RrtHc9ZBNPOLRstPWC2OfXurE6hOiXoO0xHokWOqtETMDVeKr5a2cgZfpU9qZu
-         C8TCUnss3cRqVa/nrK+V1sgtwpglXXJezjiafg4mO/MvhtRUwliCQR9HAwQYcKDq10
-         yt3yWVja6aB/A5t+/bBxpU6Wiuf9+XeqFoOWB57YP8uMw4KSh3RhW0YXjK0025xFdQ
-         5eam5pCDuPDqVoWPzf7Lr9Jv2LOJL+v8dg5hWsGEOCyDWha7cqVk7YVwj7n4HZ6idl
-         XCp9FHDM6cWwtr4hl+UXUXB62/uckrMQV/Axi/FcvnAYlYzLFoFl4nWFoc4Qt3WTZS
-         8RtYV5NrCxm3w==
+        b=bl4w6nXZGqf18D4iiH+vG/e5Wf4FQyayN1k9plwSHhE78gG9RyfROQ7nmV1gBSyBF
+         rgOvHtGwhraHpJGDVCKzvmN0upDAX6/J0FpWxPvmSrnIywJ4IucS1x87tGWs6Muzaw
+         tSd1O3yeOlxtyPnKMnFUEEO/d4fMWchz0gSyR4PHoD5iyyF5ncm5Qfn80NkvcSx0SG
+         +D6XWEg+5ty4LEReXeUBtUyCE0IAIKZk9GVEqnYDBQOJCwrknCfVIV5PGXx4r/RXsV
+         u0TAWwWMCshNiuHxxNbJop+XX7gPT+lAz1CPIhaKmCxjBkDK58NEODNcylatt2nFGv
+         hGcvfIsDgZzPA==
 From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
@@ -43,9 +43,9 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         kernel@collabora.com
-Subject: [PATCH v2 5/8] regulator: fan53555: Make use of the bit macros
-Date:   Thu,  6 Apr 2023 20:18:03 +0300
-Message-Id: <20230406171806.948290-6-cristian.ciocaltea@collabora.com>
+Subject: [PATCH v2 6/8] regulator: fan53555: Improve vsel_mask computation
+Date:   Thu,  6 Apr 2023 20:18:04 +0300
+Message-Id: <20230406171806.948290-7-cristian.ciocaltea@collabora.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230406171806.948290-1-cristian.ciocaltea@collabora.com>
 References: <20230406171806.948290-1-cristian.ciocaltea@collabora.com>
@@ -60,54 +60,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For consistency and improved clarity, use BIT() and GENMASK() macros for
-defining the bitfields inside the registers. No functional changes
-intended.
+In preparation for introducing support for additional regulators which
+do not use the maximum number of voltage selectors available for a given
+mask, improve the mask computation formula by using fls().
 
-While here, also fix DIE_{ID,REV} inconsistent indentation.
+Note fls() requires the bitops header, hence include it explicitly and
+drop bits.h which is already pulled by bitops.h.
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 ---
- drivers/regulator/fan53555.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/regulator/fan53555.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/regulator/fan53555.c b/drivers/regulator/fan53555.c
-index 68ebcd4ccef7..181e5eb00e7a 100644
+index 181e5eb00e7a..39c9c29f4ff6 100644
 --- a/drivers/regulator/fan53555.c
 +++ b/drivers/regulator/fan53555.c
-@@ -41,23 +41,23 @@
- #define FAN53555_MONITOR	0x05
+@@ -8,7 +8,7 @@
+ // Copyright (c) 2012 Marvell Technology Ltd.
+ // Yunfan Zhang <yfzhang@marvell.com>
  
- /* VSEL bit definitions */
--#define VSEL_BUCK_EN	(1 << 7)
--#define VSEL_MODE		(1 << 6)
-+#define VSEL_BUCK_EN		BIT(7)
-+#define VSEL_MODE		BIT(6)
- /* Chip ID and Verison */
--#define DIE_ID		0x0F	/* ID1 */
--#define DIE_REV		0x0F	/* ID2 */
-+#define DIE_ID			0x0F	/* ID1 */
-+#define DIE_REV			0x0F	/* ID2 */
- /* Control bit definitions */
--#define CTL_OUTPUT_DISCHG	(1 << 7)
--#define CTL_SLEW_MASK		(0x7 << 4)
--#define CTL_RESET			(1 << 2)
-+#define CTL_OUTPUT_DISCHG	BIT(7)
-+#define CTL_SLEW_MASK		GENMASK(6, 4)
-+#define CTL_RESET		BIT(2)
- #define CTL_MODE_VSEL0_MODE	BIT(0)
- #define CTL_MODE_VSEL1_MODE	BIT(1)
- 
- #define FAN53555_NVOLTAGES	64	/* Numbers of voltages */
- #define FAN53526_NVOLTAGES	128
- 
--#define TCS_VSEL0_MODE		(1 << 7)
--#define TCS_VSEL1_MODE		(1 << 6)
-+#define TCS_VSEL0_MODE		BIT(7)
-+#define TCS_VSEL1_MODE		BIT(6)
- 
- #define TCS_SLEW_MASK		GENMASK(4, 3)
- 
+-#include <linux/bits.h>
++#include <linux/bitops.h>
+ #include <linux/err.h>
+ #include <linux/i2c.h>
+ #include <linux/module.h>
+@@ -486,7 +486,7 @@ static int fan53555_regulator_register(struct fan53555_device_info *di,
+ 	rdesc->min_uV = di->vsel_min;
+ 	rdesc->uV_step = di->vsel_step;
+ 	rdesc->vsel_reg = di->vol_reg;
+-	rdesc->vsel_mask = di->vsel_count - 1;
++	rdesc->vsel_mask = BIT(fls(di->vsel_count - 1)) - 1;
+ 	rdesc->ramp_reg = di->slew_reg;
+ 	rdesc->ramp_mask = di->slew_mask;
+ 	rdesc->ramp_delay_table = di->ramp_delay_table;
 -- 
 2.40.0
 
