@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF54D6D9C80
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53A66D9C8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239550AbjDFPhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S239785AbjDFPja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238842AbjDFPhA (ORCPT
+        with ESMTP id S229617AbjDFPj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:37:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88456E82
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680795417; x=1712331417;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RSuKlqLGPKWhfVgHlvf1htxnxLkC+h8DaNCqY4VdQRA=;
-  b=mHvTJ7jCx6IkFxjZht3OsFyZ6NRY6NcD+7A//M2EfcpYrE45PWGcXR3R
-   aW+GoH6/2dsnzvbG+905mUhurwRvaWyib6GsUHPDI4lUtjIEHCVz1Lb+S
-   0CQ2cc4DNrGbX3z/oY/sMz9NLMbb0zpzjQFruzaERmIvhWlXAEiPnW0rf
-   UFwO1+84bK08p3rZHHS04G3XUfuJDe6MxRz7IqIgHM6YX7CAhxA6gotW4
-   LuGfEQCX7l0GwwTLSbD2izyIkPAg5j1rVQDkqdJ4KBximRxsyr/3QIJXw
-   Z8i55BwdP9Q3CXAK54XV6IHrrI8zHZ8jdv3SW9NA3SioZ+/6VFuczV/yY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="405579511"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="405579511"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 08:36:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="717507703"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="717507703"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 06 Apr 2023 08:36:57 -0700
-Received: from [10.251.27.208] (kliang2-mobl1.ccr.corp.intel.com [10.251.27.208])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id E21F15807A3;
-        Thu,  6 Apr 2023 08:36:56 -0700 (PDT)
-Message-ID: <1185d81f-71cc-0428-881a-db4f2cbac823@linux.intel.com>
-Date:   Thu, 6 Apr 2023 11:36:55 -0400
+        Thu, 6 Apr 2023 11:39:28 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857631732;
+        Thu,  6 Apr 2023 08:39:26 -0700 (PDT)
+Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N9MYu-1qVVyt10GS-015JJz; Thu, 06 Apr 2023 17:39:03 +0200
+Message-ID: <d0bf241b-ead4-94b7-3f03-a26227f9eb58@i2se.com>
+Date:   Thu, 6 Apr 2023 17:39:02 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/2] perf/x86/intel/ds: Use the size from each PEBS record
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: brcmstb: Add two optional props
+To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230406124625.41325-1-jim2101024@gmail.com>
+ <20230406124625.41325-2-jim2101024@gmail.com>
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        eranian@google.com
-References: <20230328222735.1367829-1-kan.liang@linux.intel.com>
- <20230328222735.1367829-2-kan.liang@linux.intel.com>
- <20230406131351.GL386572@hirez.programming.kicks-ass.net>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230406131351.GL386572@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20230406124625.41325-2-jim2101024@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:nknTnX5dlSCEMuTzZzTH1lzDx7myKdzZXx63p/ALhR5p/l1cSBy
+ /WVL/VeWlNJRfuyPTv3z8OZICfKrmkG8l1dad5ttQkPqrRPTpFW+HjZL8FfkOz39Bx8e6cy
+ vDV+pMAiGfNRtiH0hMZAfvPAbLsy5UAXhIAbE0EwJl3GqM7J5hdrBtwFv80E4+82mzLLblU
+ mnBo88FTMBiQMQJibNy7Q==
+UI-OutboundReport: notjunk:1;M01:P0:1JPu3Fn+QcE=;R2rM/eZ8PosqU/E3uRLSGrLJ8xn
+ tSj49CxxVi1/9bgT6bzPsMFvXzbtk/c3JjjZ4zbTou1QamVn/o6LKCFCZT7p+FQplf4XbnOrM
+ 03IZourgA/SwhPEUg4y5658zCqcUNE//OCMFEiQsy0nYefH4LO6HMfQljXYwpoypaYaHuqV++
+ T7azvAR1Ugr6zap3dH8O9zr7jnCazLDzZ14DKFrLzHQ91tiAqTwVp6T2Kc0MJ0nepSx4L7TpV
+ b+3+LnvBEBq8fF2yYz+15ff6J7p+L/01HRxcEin1Olh4pLRUomWhxMsFnIUL8vN+JIUvnBJJ3
+ pJtMph81OwHIxCantSeZTSds9PE/hjMbb2+QFvW4jTmmvjRmCtvZ/XWnoWtGUtQ45id/Q4r0l
+ fqi2NRjuTBYmF+Fl9CmmrwIBZoTqVb7xEH/cgdrJvkDgKscNeMQ8std+OUy/g24bfJx7YnLBg
+ NkgCcBMd2cjpI4/WLXCti9hDwxXmT9oQcfo1f/cKQiVCNCiw0ar0sQhoCPRXu8K6ymLMRPD9f
+ lJz2qR3dV47nb+yHd+LfboaeADyuChHxTVpT4jA1w+3P/VbYPky894EKQfokJ6cNvIt4gh+cC
+ Tr7qRA53J4IVD2lZbzS6yHuO3UTeD4tFCWntiemCZrY4FPj5yAEeTOcH1Eln8iLCvok5IhXR/
+ BEwyrnuU2Cxs23GCCzeJ5GlpzGUBGf28MckPl2r/FQ==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jim,
 
-
-On 2023-04-06 9:13 a.m., Peter Zijlstra wrote:
-> On Tue, Mar 28, 2023 at 03:27:35PM -0700, kan.liang@linux.intel.com wrote:
->> From: Kan Liang <kan.liang@linux.intel.com>
->>
->> The kernel warning for the unexpected PEBS record can also be observed
->> during a context switch, when the below commands are running in parallel
->> for a while on SPR.
->>
->>   while true; do perf record --no-buildid -a --intr-regs=AX -e
->>   cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
->>
->>   while true; do perf record -o /tmp/out -W -d -e
->>   '{ld_blocks.store_forward:period=1000000,
->>   MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
->>   -c 1037 ./triad; done
->>   *The triad program is just the generation of loads/stores.
->>
->> The current PEBS code assumes that all the PEBS records in the DS buffer
->> have the same size, aka cpuc->pebs_record_size. It's true for the most
->> cases, since the DS buffer is always flushed in every context switch.
->>
->> However, there is a corner case that breaks the assumption.
->> A system-wide PEBS event with the large PEBS config may be enabled
->> during a context switch. Some PEBS records for the system-wide PEBS may
->> be generated while the old task is sched out but the new one hasn't been
->> sched in yet. When the new task is sched in, the cpuc->pebs_record_size
->> may be updated for the per-task PEBS events. So the existing system-wide
->> PEBS records have a different size from the later PEBS records.
->>
->> Two methods were considered to fix the issue.
->> One is to flush the DS buffer for the system-wide PEBS right before the
->> new task sched in. It has to be done in the generic code via the
->> sched_task() call back. However, the sched_task() is shared among
->> different ARCHs. The movement may impact other ARCHs, e.g., AMD BRS
->> requires the sched_task() is called after the PMU has started on a
->> ctxswin. The method is dropped.
->>
->> The other method is implemented here. It doesn't assume that all the
->> PEBS records have the same size any more. The size from each PEBS record
->> is used to parse the record. For the previous platform (PEBS format < 4),
->> which doesn't support adaptive PEBS, there is nothing changed.
+Am 06.04.23 um 14:46 schrieb Jim Quinlan:
+> Regarding "brcm,enable-l1ss":
 > 
-> Same as with the other; why can't we flush the buffer when we reprogram
-> the hardware?
+>    The Broadcom STB/CM PCIe HW -- which is also used by RPi SOCs -- requires
+>    the driver probe to configure one of three clkreq# modes:
+> 
+>    (a) clkreq# driven by the RC
+>    (b) clkreq# driven by the EP for ASPM L0s, L1
+>    (c) bidirectional clkreq#, as used for L1 Substates (L1SS).
+> 
+>    The HW can tell the difference between (a) and (b), but does not know
+>    when to configure (c).  Further, the HW will cause a CPU abort on boot if
+>    guesses wrong regarding the need for (c).  So we introduce the boolean
+>    "brcm,enable-l1ss" property to indicate that (c) is desired.  This
+>    property is already present in the Raspian version of Linux, but the
+>    driver implementaion that will follow adds more details and discerns
+>    between (a) and (b).
+> 
+> Regarding "brcm,completion-timeout-msecs"
+> 
+>    Our HW will cause a CPU abort if the L1SS exit time is longer than the
+>    completion abort timeout.  We've been asked to make this configurable, so
+>    we are introducing "brcm,completion-abort-msecs".
+> 
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> ---
+>   .../devicetree/bindings/pci/brcm,stb-pcie.yaml       | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> index 7e15aae7d69e..ef4ccc05b258 100644
+> --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> @@ -64,6 +64,18 @@ properties:
+>   
+>     aspm-no-l0s: true
+>   
+> +  brcm,enable-l1ss:
+> +    description: Indicates that the downstream device is L1SS
+> +      capable and L1SS is desired, e.g. by setting
+> +      CONFIG_PCIEASPM_POWER_SUPERSAVE=y.  Note that CLKREQ#
 
-For the current code, the pebs_record_size has been updated in another
-place before we reprogram the hardware.
-But I think it's possible to move the update of the pebs_record_size
-right before the hardware reprogram. So we can flush the buffer before
-everything is updated. Let me try this method.
+not sure about this, but maybe we should avoid references to Linux 
+kernel config parameter in a DT binding. Since the driver already gaves 
+warning in case the DT parameter is present, but kernel config doesn't 
+fit, this should be enough.
 
-Thanks,
-Kan
+> +      assertion to clock active must be within 400ns.
+> +    type: boolean
+> +
+> +  brcm,completion-timeout-msecs:
+> +    description: Number of msecs before completion timeout
+> +      abort occurs.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+
+According to the driver at least 0 is not allowed, maybe we should 
+define minimum and maximum here and let dtbs_check take care of invalid 
+values?
+
+Best regards
+
+> +
+>     brcm,scb-sizes:
+>       description: u64 giving the 64bit PCIe memory
+>         viewport size of a memory controller.  There may be up to
