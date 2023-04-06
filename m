@@ -2,82 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336386D94A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E57796D94AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbjDFLDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S237485AbjDFLEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237171AbjDFLDq (ORCPT
+        with ESMTP id S236992AbjDFLEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:03:46 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41CB7AA5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:03:44 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-4fa3c48480fso1171357a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:03:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680779023;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/NO3FWQS8N1l2fxmDI15auHW33rD9sbIu3IDLBnVfTw=;
-        b=VDG+eQQFrtGBwGEtdzXnh5TBUo5s1Ndg0HB1t+2jaq83MbZRDXFMe5sk/XPNlxPFjF
-         xZQlTvsGTWPEgmIK9NGfuTxh1eRtsIQnNWjZNHfdTu2cqNe26EpsKP7toxU4+sGZuW2a
-         tH4g5/G5N1iYICnrp0BfDND23J0WaBPUud8OCttRjAlheZNHrV92xthbkzTR0lgycFxB
-         +wlh77I4gOQGuNTiMgCVbGv4pPmt06+WPZ3oWSSxvwATxuofxB3NZ+m/9CeDz+o5NCxu
-         7u85Jn2WW6lbwOtOX1ychBtoqm7EqsuT/yHBl7Zo7MYyRmBeqayiZdZgWGAO7Pf2xoFD
-         jtmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680779023;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/NO3FWQS8N1l2fxmDI15auHW33rD9sbIu3IDLBnVfTw=;
-        b=ohF5Pfuoorq272GOvnpN79a+D69AAoa9JKzxNJRPNjthFATgtWUVxG5ejzm8EcfDDB
-         0+tWkC2G36M3/joK1dFgSmvW8V1VHOFDwOQBbGe8Gunc2LvbaiUQRmaDxN7XvC6VdhAh
-         c+ADt9u2hUw+mzAf9pYxCwok9yXt+HJv3n1IWKUzSGj/lHTwb60+PTczyJrTU1WYxiTf
-         veLGRH2NjxNb3pTqj7wXAUJyOBVnXXZZhuCg0J7nhQOxZbmnSyG90awFBjPRXlMtmYSh
-         v+R2U+cpTavsDuz7wtQ/Yy50aRSAqICXfFiApzX98WnsbbZctP443bVpLlPMhtoFrEz3
-         bV0A==
-X-Gm-Message-State: AAQBX9eKO0+nPTQn/RPrl09WkjqhArVopk9FoD2pPgF3cJcp6kNV9+eU
-        xKLe449rXR2uew9UttNcxtqV3A==
-X-Google-Smtp-Source: AKy350YN1i4WHE0/bYTXwdvBY2jGHFdUyTaKTtJyQDzKYEPj8ydS7ZBgrfFxJsRzARhuzBMRsGt30A==
-X-Received: by 2002:aa7:d292:0:b0:501:d4f9:3141 with SMTP id w18-20020aa7d292000000b00501d4f93141mr3959367edq.32.1680779023149;
-        Thu, 06 Apr 2023 04:03:43 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id e14-20020a50d4ce000000b00502b0b0d75csm606988edj.46.2023.04.06.04.03.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 04:03:42 -0700 (PDT)
-Message-ID: <231b72cd-352c-10a9-8695-a04f61e36568@linaro.org>
-Date:   Thu, 6 Apr 2023 13:03:41 +0200
+        Thu, 6 Apr 2023 07:04:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA91703;
+        Thu,  6 Apr 2023 04:04:25 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336B4KCZ019975;
+        Thu, 6 Apr 2023 11:04:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YYcev94yQdsqVZnRqJnBM1uuqYiJhHnnxfI5yles50E=;
+ b=LLfE6rQu4eBtAkWY2KlhevqrvueFGgvVxmFfVC2/dtaxT9s9jR15jgDRk1eMigYhZmlh
+ m/N4C95zkrOSFe8ADsYKhgC87xZNPhcVds3x6s4zKbHDfMf3p3GIZU5e2ToF47WsPglG
+ JJOpgJh74s1cX4kPvCcWFxVqBZBUKZqr/Jesq+HiBK0q4LmTAp52busFum2dlhZi26XK
+ zngcY01lg5/m+9EFFUxh0IF56onOTnho/iGcizKU1/4kzFbSbAq4x6uCRJQPM7FnV2Tu
+ 9u4UajnCaU07BLFqAkHk0Jpf7j/K8Oh3nss0IfL4epoon1xD0LFBXGE25xTzzTNPksNo qA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psnmj0ya7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 11:04:21 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 336B44OQ013696
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Apr 2023 11:04:04 GMT
+Received: from [10.216.2.94] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 6 Apr 2023
+ 04:03:59 -0700
+Message-ID: <54e8f7b6-12ae-aac5-9092-7d1fef300db8@quicinc.com>
+Date:   Thu, 6 Apr 2023 16:33:56 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 8/8] regulator: fan53555: Add support for RK860X
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: arm: msm: Add bindings for multi
+ channel DDR in LLCC
 Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Joseph Chen <chenjh@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-References: <20230405194721.821536-1-cristian.ciocaltea@collabora.com>
- <20230405194721.821536-9-cristian.ciocaltea@collabora.com>
- <4115e47e-b64b-391a-493c-701c8de0565b@linaro.org>
- <53c803ce-2607-6fd1-485e-e19eb961fd08@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <53c803ce-2607-6fd1-485e-e19eb961fd08@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <20230313124040.9463-1-quic_kbajaj@quicinc.com>
+ <20230313124040.9463-3-quic_kbajaj@quicinc.com>
+ <2b3e39b9-ea70-db9b-89f7-09054df363c3@linaro.org>
+ <20230315134814.GA98488@thinkpad>
+ <c8f3499f-d927-6657-c7c6-732ed2222525@quicinc.com>
+ <f9728472-0dda-2fb2-1753-e9c039afa4c1@linaro.org>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <f9728472-0dda-2fb2-1753-e9c039afa4c1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: LruhRa6HfjYKtX6uWzwHewu6Jd5GizGq
+X-Proofpoint-ORIG-GUID: LruhRa6HfjYKtX6uWzwHewu6Jd5GizGq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_05,2023-04-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0
+ bulkscore=0 phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304060097
+X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,27 +92,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 12:08, Cristian Ciocaltea wrote:
->>> +	}, {
->>> +		.name = "rk8602",
->>> +		.driver_data = RK8602_VENDOR_ROCKCHIP
->>> +	}, {
->>> +		.name = "rk8603",
->>> +		.driver_data = RK8602_VENDOR_ROCKCHIP
+
+
+On 4/6/2023 3:04 PM, Krzysztof Kozlowski wrote:
+> On 06/04/2023 11:19, Komal Bajaj wrote:
 >>
->> Why do you need this entry match data if it is the same as rk8602?
+>>>>>    
+>>>>>      interrupts:
+>>>>>        maxItems: 1
+>>>>>    
+>>>>> +  multi-ch-bit-off:
+>>>>> +    items:
+>>>>> +      - description: Specifies the offset in bits into the multi_channel_register
+>>>>> +                     and the number of bits used to decide which LLCC configuration
+>>>>> +                     to use
+>>>> There are here few issues.
+>>>> First, I don't fully understand the property. What is an LLCC
+>>>> configuration? Like some fused values?
+>>
+>> There are different configuration for LLCC based on the number of
+>> DDR channel it uses. Here, we are basically trying to get information
+>> about the same.
+>>
+>>>>
+>>>> Second, don't make it a register specific, it will not scale easily to
+>>>> any new version of this interface. Although how this should look like
+>>>> depends on what is it.
+>>
+>> LLCC driver can only get DDR channel information from the register.
+
+Actually, any one can read this property there is no boundation to that.
+However, some of the bits information of this register only matters to 
+LLCC to make decision.
+
+> And why would that exactly matter to DT? How does it solve my concern
+> that your approach does not scale?
+
+I understand your concern about not making it register specific, however 
+this register is a secure fuse register where the interested bits are
+known to us and should only be used by llcc to select right slice 
+configuration table to apply.
+
+How about something like this,
+
+Add another property like qcom,tcsr_feature_config under qcom,scm
+and read this property under qcom_scm driver and expose
+read exported symbol for LLCC driver. LLCC driver can use API and
+apply bit offset/bit size to get right value inside the target driver 
+data(e.g .data = &XXXX_cfg }) or maintain it inside same 
+tcsr_feature_config DT (this can be discussed)
+Also, we can have a yaml file for tcsr_feature_config.
+
+e.g..
+
+
+scm: scm {
+         compatible = "qcom,scm-sm8450", "qcom,scm";
+         qcom,dload-mode = <&tcsr 0x13000>;
+         ...
+	qcom,tcsr_feature_config = <&tcsr_feature_config>
+};
+
+tcsr_feature_config: syscon@fd484000 {
+	compatible = "qcom, XXXX", qcom,tcsr-featureconfig";
+	reg = <0xXXXXXXXX 0xYYYY>;
+};
+
+
+-- Mukesh
+
 > 
-> This is consistent with the handling of syr827 and syr828:
+> Best regards,
+> Krzysztof
 > 
-> 		.name = "syr827",
-> 		.driver_data = FAN53555_VENDOR_SILERGY
-> 	}, {
-> 		.name = "syr828",
-> 		.driver_data = FAN53555_VENDOR_SILERGY
-
-Yeah, I understand, but it's not necessarily the pattern we want to
-continue. Unless these devices are not really compatible?
-
-Best regards,
-Krzysztof
-
