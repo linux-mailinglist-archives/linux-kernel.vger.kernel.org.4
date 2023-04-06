@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CBE6D8F7B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE37C6D8F83
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbjDFGeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S235449AbjDFGe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbjDFGeC (ORCPT
+        with ESMTP id S235481AbjDFGeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:34:02 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5409B30CD;
-        Wed,  5 Apr 2023 23:34:01 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id le6so36638151plb.12;
-        Wed, 05 Apr 2023 23:34:01 -0700 (PDT)
+        Thu, 6 Apr 2023 02:34:19 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA1F93C7
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:34:16 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id bt19so25150105pfb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680762841;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bXYyia8veGY8STLiF3slmavJjZFmlm+w/hngDTjzZY0=;
-        b=R3afHJBQ4HnkOUoJoR35NQQA3c1NoPaMxqm7+3AtPILkORwlkuH+DE6sRjsTyhAEc3
-         qzqM6Wqt28kmoQYchcEpKGGjgzimzjbbacSZMoNBnf0RkA2xnG6SDCXv7jurAllddcu4
-         /VrvbZfTXpCVvw3fZ/uvAq+HCU2ypmD40cFymwABMUwwkT+oVskc2Ha0wxsjNc89wNsM
-         RUb9zGC8l16pPRufdk9dz/xYsMEmH6b30B7naRNcfMBzu2i/7OzweOwRkw9jyMW21Rr8
-         ExwvFS73g6p6bH/Xb79DrQ+ZQObMhMgRFvSr2nuSw9BqQx1azWgkgkhzuqbDUomgWsLF
-         THVg==
+        d=google.com; s=20210112; t=1680762856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywRy2NXg/YzPGPsQQtseGk+ykosJNLGdFknAZq9oon8=;
+        b=SAJGqK+/VO4Kto7Td+yYhsLmaOk7HrEBQbs3efgqgCbat5ZLAhp8+7A64Ttj+QL4Ol
+         kMoPp46DeleCcru+sKESaaS4XM8ojsMov4kZwNlNa50x3yChuEl72k/EwiJTJSoZqyvu
+         lQ+tanhKOzHQ57N5CyFVO/lPL4ioc+kZIXfDcRZP2Sn7RoWZZXcu8cVe8uYVotuX+vLH
+         0lTtWjAVgfNB3YW+nlyP+cQ09U3HbvNmVPfL8Lu64z/oi02i4r26PbgHCxm496DzVioK
+         mmTbSN81gjo2RmFNF0vgxkrm3vXkwoTucl/0hout5Ksx3y6KrzCJfT47HD/rPnQjyXcm
+         VBSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680762841;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bXYyia8veGY8STLiF3slmavJjZFmlm+w/hngDTjzZY0=;
-        b=q1FBmIDFkS7DnAVB77kdbVABG9ysbj4qxkHi4qKubDbtkwJCfJmef1DuLuo29uwYl+
-         xhtwwg8ASzdtoc8n8C1v+JyR4EubHGXIsH+owHt1xwu3aPku1+8vtaq170erCDcAy6NF
-         qxEgVuKmJsxNdytkBb9mUovFehK6eNiZX3CAxAKxrricl5XbebxdE1u1tRwZxNsgnGr9
-         7HS2gwflQFuVxg/C/KXhc2DrQYWm87Ioc6j/n4dSjZ8wDqWBZm2jmi0lnqanP/CBFFvI
-         fqrGYhmqhMK3F9aRnfXlvloPGwQMl4lrBQRgCgTYx1gSXCJSFQ+C7Ilbmcbx3hMrbu1/
-         rQAw==
-X-Gm-Message-State: AAQBX9eALFLxWBl+1qNmqbyTQJ8+THSs39aCIK/GQjqycavaFfzB8tAN
-        MFae42kt7/3NYIvM6n831IQ=
-X-Google-Smtp-Source: AKy350Y6jJgwLrz2fyYPXQEcJzECbnqI4olEBQaCgpQ7EdrF4tZ3/YyrtiUOSpt6L+zA9+DGxPjTcw==
-X-Received: by 2002:a17:902:da86:b0:19f:31c5:1848 with SMTP id j6-20020a170902da8600b0019f31c51848mr10481523plx.27.1680762840754;
-        Wed, 05 Apr 2023 23:34:00 -0700 (PDT)
-Received: from localhost.localdomain ([218.66.91.195])
-        by smtp.gmail.com with ESMTPSA id kp6-20020a170903280600b00192fe452e17sm595896plb.162.2023.04.05.23.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 23:34:00 -0700 (PDT)
-From:   xiaoshoukui <xiaoshoukui@gmail.com>
-To:     dsterba@suse.cz
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiaoshoukui@ruijie.com.cn, xiaoshoukui <xiaoshoukui@gmail.com>
-Subject: [PATCH] btrfs: ioctl: fix assertion compatible sets when cocurrently adding multiple devices
-Date:   Thu,  6 Apr 2023 02:32:55 -0400
-Message-Id: <20230406063255.126375-1-xiaoshoukui@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        d=1e100.net; s=20210112; t=1680762856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ywRy2NXg/YzPGPsQQtseGk+ykosJNLGdFknAZq9oon8=;
+        b=oUXhtGgUYOHxh+unvmXaZWisOkUAOWCcoeDwvk4N8CMR4tNgQWXwLjEEnu+lM2fYBJ
+         XkGlc/fSbPAbMF/pOyfeIXfm6xMIUbetGIe3IEfG/LlplLzKDLMQ6Vl/qRoJwlZZJi/z
+         HnLVAe7NJnGQSh/spzBd/XpRZIkWZF6wRFai7wY2KjSGpTmu5ypNFh+AyXwuHlasHvg+
+         n4UH4XhC7FC0zsWLzbvGRRI3wqYrNz2rs6UESIuUxqn8B2dTUNSmm9YYg6VD9QO8dAYr
+         RFewg9RDQhAuKXi/Ri9PI/N6rKBI/xWvEGmyqLGx7DuDKF2aMedIlmCRQdt1DKpyWbt/
+         pTAw==
+X-Gm-Message-State: AAQBX9dd6W7p8HSVtyh9MORWEGpvKeJ6jpYd+8c+DrGejhIK9AB5iMxO
+        KzMjokjPQwcqVK2Y3vYi9tdSQYmU5eYjhhwN1UpGnA==
+X-Google-Smtp-Source: AKy350ZIR5QFT05CqoEKBHsSl5AdBctVFfha1iZRBdPWiB2ybG0JLlr1rtZDtUXKC1sPXgDpQ9x/mOpGRV/wttLQXGw=
+X-Received: by 2002:a63:e148:0:b0:503:7bbb:9a77 with SMTP id
+ h8-20020a63e148000000b005037bbb9a77mr2897768pgk.8.1680762855762; Wed, 05 Apr
+ 2023 23:34:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230405093133.1858140-1-badhri@google.com> <56abca17-7240-4bd5-98db-ef48059ff315@rowland.harvard.edu>
+In-Reply-To: <56abca17-7240-4bd5-98db-ef48059ff315@rowland.harvard.edu>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Wed, 5 Apr 2023 23:33:39 -0700
+Message-ID: <CAPTae5KxVj_F_4Z0Dh00C-SvKRgJMfUPFOuoUU5ZDW87WgMRBA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
+ only when started
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
+        balbi@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,72 +74,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ASSERT in btrfs_exclop_balance should also check for NONE and
-BALANCE_PAUSED status.
+> No blank line after cc: stable, and put the fixes above your
+signed-off-by line please.
 
-Scenario 1: With exclusive_operation state == BTRFS_EXCLOP_NONE.
-Cocurrently adding multiple devices to the same mount point and
-btrfs_exclop_finish executed finish before assertion in
-btrfs_exclop_balance, exclusive_operation will changed to
-BTRFS_EXCLOP_NONE state which lead to assertion failed:
-fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE ||
-fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD,
-in fs/btrfs/ioctl.c:456
-Call Trace:
- <TASK>
- btrfs_exclop_balance+0x13c/0x310
- ? memdup_user+0xab/0xc0
- ? PTR_ERR+0x17/0x20
- btrfs_ioctl_add_dev+0x2ee/0x320
- btrfs_ioctl+0x9d5/0x10d0
- ? btrfs_ioctl_encoded_write+0xb80/0xb80
- __x64_sys_ioctl+0x197/0x210
- do_syscall_64+0x3c/0xb0
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Fixed all commit message related concerns.
 
-Scenario 2: With exclusive_operation state == BTRFS_EXCLOP_BALANCE_PAUSED.
-Cocurrently adding multiple devices to the same mount point and
-btrfs_exclop_balance executed finish before the latter thread execute
-assertion in btrfs_exclop_balance, exclusive_operation will changed to
-BTRFS_EXCLOP_BALANCE_PAUSED state which lead to assertion failed:
-fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE ||
-fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD ||
-fs_info->exclusive_operation == BTRFS_EXCLOP_NONE,
-fs/btrfs/ioctl.c:458
-Call Trace:
- <TASK>
- btrfs_exclop_balance+0x240/0x410
- ? memdup_user+0xab/0xc0
- ? PTR_ERR+0x17/0x20
- btrfs_ioctl_add_dev+0x2ee/0x320
- btrfs_ioctl+0x9d5/0x10d0
- ? btrfs_ioctl_encoded_write+0xb80/0xb80
- __x64_sys_ioctl+0x197/0x210
- do_syscall_64+0x3c/0xb0
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> Why a global lock?  Shouldn't this be a per-device lock?
 
-Analyzed-by: xiaoshoukui <xiaoshoukui@ruijie.com.cn>
-Link: https://lore.kernel.org/linux-btrfs/20230404191042.GE19619@suse.cz/T/#t
-Signed-off-by: xiaoshoukui <xiaoshoukui@ruijie.com.cn>
----
- fs/btrfs/ioctl.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Ack ! Addressed this in V2.
 
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index a0ef1a1784c7..7df80b37bc44 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -454,7 +454,9 @@ void btrfs_exclop_balance(struct btrfs_fs_info *fs_info,
- 	case BTRFS_EXCLOP_BALANCE_PAUSED:
- 		spin_lock(&fs_info->super_lock);
- 		ASSERT(fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE ||
--		       fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD);
-+		       fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD ||
-+		       fs_info->exclusive_operation == BTRFS_EXCLOP_NONE ||
-+		       fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE_PAUSED);
- 		fs_info->exclusive_operation = BTRFS_EXCLOP_BALANCE_PAUSED;
- 		spin_unlock(&fs_info->super_lock);
- 		break;
--- 
-2.20.1
+On Wed, Apr 5, 2023 at 6:29=E2=80=AFPM Alan Stern <stern@rowland.harvard.ed=
+u> wrote:
+>
+> On Wed, Apr 05, 2023 at 09:31:32AM +0000, Badhri Jagan Sridharan wrote:
+> > usb_udc_connect_control does not check to see if the udc
+> > has already been started. This causes gadget->ops->pullup
+> > to be called through usb_gadget_connect when invoked
+> > from usb_udc_vbus_handler even before usb_gadget_udc_start
+> > is called. Guard this by checking for udc->started in
+> > usb_udc_connect_control before invoking usb_gadget_connect.
+> >
+> > Guarding udc_connect_control, udc->started and udc->vbus
+> > with its own mutex as usb_udc_connect_control_locked
+> > can be simulataneously invoked from different code paths.
+> >
+> > Cc: stable@vger.kernel.org
+> >
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
+>
+> There's a problem with this patch.
+>
+> > ---
+> >  drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
+> >  1 file changed, 16 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
+e.c
+> > index 3dcbba739db6..890f92cb6344 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+>
+> > @@ -1140,14 +1145,18 @@ static inline int usb_gadget_udc_start(struct u=
+sb_udc *udc)
+> >  {
+> >       int ret;
+> >
+> > +     mutex_lock(&udc_connect_control_lock);
+> >       if (udc->started) {
+> >               dev_err(&udc->dev, "UDC had already started\n");
+> > +             mutex_unlock(&udc_connect_control_lock);
+> >               return -EBUSY;
+> >       }
+> >
+> >       ret =3D udc->gadget->ops->udc_start(udc->gadget, udc->driver);
+> >       if (!ret)
+> >               udc->started =3D true;
+> > +     usb_udc_connect_control_locked(udc);
+> > +     mutex_unlock(&udc_connect_control_lock);
+>
+> You moved the connect_control call up here, into usb_gadget_udc_start().
 
+Have moved it back into gadget_bind_driver.
+
+>
+> >       return ret;
+> >  }
+> > @@ -1165,13 +1174,17 @@ static inline int usb_gadget_udc_start(struct u=
+sb_udc *udc)
+> >   */
+> >  static inline void usb_gadget_udc_stop(struct usb_udc *udc)
+> >  {
+> > +     mutex_lock(&udc_connect_control_lock);
+> >       if (!udc->started) {
+> >               dev_err(&udc->dev, "UDC had already stopped\n");
+> > +             mutex_unlock(&udc_connect_control_lock);
+> >               return;
+> >       }
+> >
+> >       udc->gadget->ops->udc_stop(udc->gadget);
+> >       udc->started =3D false;
+> > +     usb_udc_connect_control_locked(udc);
+> > +     mutex_unlock(&udc_connect_control_lock);
+> >  }
+> >
+> >  /**
+> > @@ -1527,7 +1540,6 @@ static int gadget_bind_driver(struct device *dev)
+> >       if (ret)
+> >               goto err_start;
+> >       usb_gadget_enable_async_callbacks(udc);
+> > -     usb_udc_connect_control(udc);
+>
+> This is where it used to be.
+>
+> The problem is that in the gadget_bind_driver pathway,
+> usb_gadget_enable_async_callbacks() has to run _before_ the gadget
+> connects.  Maybe you can fix this by leaving the function call in its
+> original location and protecting it with the new mutex?
+>
+> There may be a similar problem with disconnecting and the
+> gadget_unbind_driver pathway (usb_gadget_disable_async_callbacks() has to
+> run _after_ the disconnect occurs).  I haven't tried to follow the patch
+> in enough detail to see whether that's an issue.
+
+Thanks for explaining what's the expectation here. I have incorporated
+the feedback in v2.
+The new lock now additionally guards  gadget->connect and gadget->deactivat=
+e as
+well. Guarding all with the new lock as they are related to one another.
+I have made sure that the gadget_bind_driver and gadget_unbind_driver
+sequence remains unaltered.
+
+>
+> Alan Stern
+>
+> >
+> >       kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+> >       return 0;
+> >
+> > base-commit: d629c0e221cd99198b843d8351a0a9bfec6c0423
+> > --
+> > 2.40.0.348.gf938b09366-goog
+> >
