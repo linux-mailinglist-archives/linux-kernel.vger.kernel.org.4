@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D45B6D9F8F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02ABA6D9F91
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239653AbjDFSMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S239935AbjDFSMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239209AbjDFSMD (ORCPT
+        with ESMTP id S240057AbjDFSM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:12:03 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23ADF35B1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:11:59 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9188b85a615so158194366b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:11:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680804717;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3dlTAcrGsySRcdvFlIEAdlxMvmki5beeXo1X6M8HUAI=;
-        b=ybTaZYswIsB9kSiA+qHwOr2M6THedSXWNg2r1upNnTvDoVNgMlDyMeGCLzsO7NNSm6
-         5Cbh4D6zo1IKDuSlTU6JS1uORX1e/PB/3o9+C1v+264VOB9eSh0muVWSbw3FFTFW12g2
-         GZ6m29idMJqugoOdxtHeMseWxZcqPEDx/gCsq3Hy6qDZws8+fKQiDtnVlaAWkR78AJ5K
-         Fh40ASSh5pyV3a/j+tbiH4ETWy2LV5j1/aCT2KIsh0LNizCC91bSpHSzkC9vHqXxMK4G
-         oAXf0HXPO+mLSw7AfzTrVxjSTaSbS/mmQwCEvVTeUYdWSbehQHq5eveV+QS9HaeIDDRd
-         jsPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680804717;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3dlTAcrGsySRcdvFlIEAdlxMvmki5beeXo1X6M8HUAI=;
-        b=vBx8TTE6OIrp8LKe5noVa2Y5jnYwnoeg0TfW0XpMo0GW1Sxg8MHapJGoSp3Tsz0cCN
-         CHhu/gtJ/jWVvwZFFAS6LAFctgKhpJD9ZlvI8hGR1uq1UfoSDqQX+QiYBwa5Jze2BYFw
-         8XFMlVlOrQFgqv9CMFGu0jCBXCWQ/uvNw0xZ2xNCaLkDSNYLHF9Tz4y4xce5D8U6lDro
-         ZbpZ10eYlPhEban7qOHQOuU/rmzOPwmD2Gbhpzbqvu1CHX7SYdKZhn1eezBc8/YXTEHf
-         dxDRQkroq8Bq/VLMwQmLsQuQbrn/6wrmXXE9k3PTe9HAxhUx4Wrb+NYuQhkOtqqWL62G
-         rmig==
-X-Gm-Message-State: AAQBX9eg60W016mpghVxj6rABdBNCn7tmA4nsz15WDek8mRFxNZeuUav
-        oq1jW4AlygpqA6kKArBE8uSHYA==
-X-Google-Smtp-Source: AKy350YLeBw/Rt+uWm89BvbtIXmourGOXrTNPTJjVC12cxrxUYgvhnCNlbiIHz0DWz4hq8Sh7Nrwfw==
-X-Received: by 2002:a05:6402:59:b0:502:61d8:233b with SMTP id f25-20020a056402005900b0050261d8233bmr484101edu.19.1680804717562;
-        Thu, 06 Apr 2023 11:11:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id x102-20020a50baef000000b004af73333d6esm1024556ede.53.2023.04.06.11.11.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:11:57 -0700 (PDT)
-Message-ID: <284f1538-dfe3-8d54-d20f-b47365283e74@linaro.org>
-Date:   Thu, 6 Apr 2023 20:11:56 +0200
+        Thu, 6 Apr 2023 14:12:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8742D7F;
+        Thu,  6 Apr 2023 11:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680804748; x=1712340748;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=x00gcGg0KtEz1CEd1nzdSg630Kk7QhTFM270XTi9kus=;
+  b=MPxP9ZPPrXCvutWCFcP/h+IgzqUHA/HrvRfMkkXKkC3e6LddFYigXieE
+   D4WjcKLaBK4BYyCYWWPOuSKXb/mINOJUbn2vXlCI4dHkjp02PNKPNFTKo
+   bJLLJwYudsVTEr8S5vFMyIbqjmYg9AXhVp6OwMq991gW8y+FFsFAmTDOD
+   zbikcno9vPJVT3Hgzrs6cMfHEbZSEGCtQIrfzfCRKyC/xrND9HaFLIy8f
+   T3iKTBkHPwrOw0hQYykcTkVOycnV1uTlwNJuak6ADtKWoVBjB8+TVhHFJ
+   HmV1z65u1gV5HuIIriXX+tL7shAHyPMCelBkV/e13eRJzUspo9t8XzjOV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="341547457"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="341547457"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:12:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="719794491"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="719794491"
+Received: from mjjuenem-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.81.95])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:12:13 -0700
+Message-ID: <3a5a04091462fc33d4c61da2889fe7ce9bd55d97.camel@linux.intel.com>
+Subject: Re: [PATCH] platform/x86: intel-uncore-freq: Add client processors
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 06 Apr 2023 11:12:12 -0700
+In-Reply-To: <efcdc3fe-de74-0f0d-d9d5-3249fc1d5d53@redhat.com>
+References: <20230330145939.1022261-1-srinivas.pandruvada@linux.intel.com>
+         <efcdc3fe-de74-0f0d-d9d5-3249fc1d5d53@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH] dt-bindings: arm: amlogic: add C3 bindings
-Content-Language: en-US
-To:     Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-References: <20230406081627.4083103-1-kelvin.zhang@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406081627.4083103-1-kelvin.zhang@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 10:16, Kelvin Zhang wrote:
-> Document the new C3 SoC/board device tree bindings.
-> 
-> C3 is an advanced edge AI processor designed for smart IP camera
-> applications, which does not belong to Meson series.
-> 
-> Therefore, modify the title field accordingly.
-> 
-> Signed-off-by: Kelvin Zhang <kelvin.zhang@amlogic.com>
-> ---
->  Documentation/devicetree/bindings/arm/amlogic.yaml | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
-> index 274ee0890312..ade730f35519 100644
-> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
-> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/arm/amlogic.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Amlogic MesonX
-> +title: Amlogic SoC based Platforms
->  
->  maintainers:
->    - Kevin Hilman <khilman@baylibre.com>
-> @@ -211,6 +211,13 @@ properties:
->                - amlogic,aq222
->            - const: amlogic,s4
->  
-> +      - description: Boards with the Amlogic C3 C302X/C308L SoC
-> +        items:
-> +          - enum:
-> +              - amlogic,aw409
-> +              - amlogic,aw419
-> +          - const: amlogic,c3
+Hi Hans,
 
-Try to keep some order, e.g. between a and s.
+On Thu, 2023-04-06 at 12:58 +0200, Hans de Goede wrote:
+> Hi Srinivas,
+> 
+> On 3/30/23 16:59, Srinivas Pandruvada wrote:
+> > Make Intel uncore frequency driver support to client processor
+> > starting
+> > from Alder Lake.
+> > 
+> > Signed-off-by: Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>
+> 
+> I assume that this is independent from the
+> "[PATCH] platform/x86/intel-uncore-freq: Uncore frequency control via
+> TPMI"
+> changes ?
+> 
+Yes this is independent and there is no TPMI dependency.
 
-Best regards,
-Krzysztof
+
+Thanks,
+Srinivas
+
+> (just double checking before I merge this).
+> 
+> Regards,
+> 
+> Hans
+> 
+> 
+> 
+> > ---
+> >  .../platform/x86/intel/uncore-frequency/uncore-frequency.c | 7
+> > +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-
+> > frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-
+> > frequency.c
+> > index 00ac7e381441..32e2515ee366 100644
+> > --- a/drivers/platform/x86/intel/uncore-frequency/uncore-
+> > frequency.c
+> > +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-
+> > frequency.c
+> > @@ -204,6 +204,13 @@ static const struct x86_cpu_id
+> > intel_uncore_cpu_ids[] = {
+> >         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,   NULL),
+> >         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
+> >         X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
+> > +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
+> > +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
+> > +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
+> > +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P, NULL),
+> > +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S, NULL),
+> > +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE, NULL),
+> > +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, NULL),
+> >         {}
+> >  };
+> >  MODULE_DEVICE_TABLE(x86cpu, intel_uncore_cpu_ids);
+> 
 
