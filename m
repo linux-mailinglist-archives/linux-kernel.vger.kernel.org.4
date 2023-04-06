@@ -2,211 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342276D8B6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 02:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEAD6D8B6B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 02:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjDFAFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 20:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
+        id S234316AbjDFAFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 20:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233207AbjDFAFF (ORCPT
+        with ESMTP id S234329AbjDFAFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 20:05:05 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF51132;
-        Wed,  5 Apr 2023 17:04:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fTOrYyefg8IBMaozPONH1w99S51AR0+0UcmMiULcyvMMZCY/RJgH2yBk2aTdouREF0715Kyl19Y03jQcfQArmvySpnTmfQapVlpvOrHvLoFBG1OHl5xUZmxL6YXhgd/XxjLZMtsnlNyZdPXdBK1GFg7ERmHZK+DX3vO0su98QeMl0iT3rks4r2BWkVM1lTAzUV/46sE2bXvNXJJ3sr1ZszDm2XvNlw/9R6z8yHxrACqjlp91HREuB4XU5Ezyiy9KS9rpWbVbm7Gj9CN9hJQ95d0ozjT3l6Ra7H/oR3e09oDgwXiOF0awDDXAeMv/G6n+4V5p0vw3fYkp6oOv+W9lOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9CzskpIuQeyxVoHOiOiu8v+PZ42xvFd8ncVWRZ5es/I=;
- b=X9EyA2eUFq81jknu1QK1HjWocZ5bPnXtbCcT2ob/DrtTjjWdu6uQfqkX9B7xTEVNlaqI5AEYU7OznP4sDlOCll7b1jj/y83TPuwML0ywLd09tXDpkz4Yc8WVNo2ChCw6cDpXwy6hkgeK6h+PM8mcdB2WxX7ikX9PJ8Pme3fX82gbr3S5Y0M4bCqA8Z5T2hE4/3jRIJUigxr821dmraNQKNZbMcTy5CFY8ltdYwInMQ/LK1lVb/1KLZKn2uS7JsMqUDweD5MYUjKGvuB4nlsseCI7tFFiWx0XSs2qpFrE8WAjsyHKy4hCt7LCQs6qyKF71qBs13XmgNHle24gxzEqrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9CzskpIuQeyxVoHOiOiu8v+PZ42xvFd8ncVWRZ5es/I=;
- b=BdwVkV6bC7i8BIMbTzQnJMyUIS8rvQ9IUIqhmNG6N1DneW2+SxBPYRmg1ZFc5Qd/tz35eqPWeSztdEujhSnugW5zIUYHtEgCshoYLgZht6cyGL6yrxVer+CmSrp5/sODQ69H7aV+b6q55Em3kCUbOqXE8N5qXUmdgoGt0ImGfrxWzsQGwojydjEyVF1NSxZipQ9y9i3vb/UPXKKJbPdf4/Zn/Xd33UPIAztiPt+QBow0KZEmZZD3U2fktSi+Y7h19jo8p7KP4nyzJSgrkacK3QqPWDITnF31nA4uQTdoub6+T7y8QoKc7IYqYmZF7xYUHlbbgnQ6eUx6FRA+b/TzXA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
- by IA1PR12MB8192.namprd12.prod.outlook.com (2603:10b6:208:3f9::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Thu, 6 Apr
- 2023 00:03:46 +0000
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::265:64aa:fb3e:288]) by IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::265:64aa:fb3e:288%4]) with mapi id 15.20.6254.033; Thu, 6 Apr 2023
- 00:03:46 +0000
-Message-ID: <f0aff7ad-0b9f-c9e0-df27-23b8ec9b011e@nvidia.com>
-Date:   Wed, 5 Apr 2023 17:03:36 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH V4 06/10] hte: Re-phrase tegra API document
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linus.walleij@linaro.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
-References: <20230323012929.10815-1-dipenp@nvidia.com>
- <20230323012929.10815-7-dipenp@nvidia.com>
- <364610b8-2c40-6a71-513e-4e154b077055@gmail.com>
-Content-Language: en-US
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-In-Reply-To: <364610b8-2c40-6a71-513e-4e154b077055@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ2PR07CA0015.namprd07.prod.outlook.com
- (2603:10b6:a03:505::28) To IA1PR12MB6604.namprd12.prod.outlook.com
- (2603:10b6:208:3a0::7)
+        Wed, 5 Apr 2023 20:05:18 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD6E7A94
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 17:04:46 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230406000405epoutp024ed790eadbfac0082f92a27e55f475ac~TL57_2ZbY0058800588epoutp028
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:04:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230406000405epoutp024ed790eadbfac0082f92a27e55f475ac~TL57_2ZbY0058800588epoutp028
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680739445;
+        bh=lWYGoG0FmmVCnJuydXAiRY57m7vzGGk/nskJBK7osto=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=T2g1/k5MNjLlPCBGN9X8RNFQgEweIGF5nC1m0VYZ98q54+RQ1cASmTUz81ZrsaYkG
+         tVC96DXWgClDBoOQGXxaFy6N4DHelQZo5RcluuqEv4poKYTrDA4M0Y3VH9cv22+6pH
+         Euw0cX4zL8vnv2AT6PK2ZPQmAF/x5LvybYzF1H9k=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230406000405epcas1p27af26fba461f738e921c543bc55c6c68~TL57mnOOc1358113581epcas1p2Z;
+        Thu,  6 Apr 2023 00:04:05 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.38.240]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4PsMDN5bBCz4x9Pv; Thu,  6 Apr
+        2023 00:04:04 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7A.18.52037.47C0E246; Thu,  6 Apr 2023 09:04:04 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230406000404epcas1p1de0a8a7ebe6f054c101c62dc0738861d~TL56RVEqr0180701807epcas1p11;
+        Thu,  6 Apr 2023 00:04:04 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230406000404epsmtrp2cc514edd0107be99fc11ee31910f03db~TL56QjuP83074930749epsmtrp2I;
+        Thu,  6 Apr 2023 00:04:04 +0000 (GMT)
+X-AuditID: b6c32a37-7cbfd7000001cb45-50-642e0c74850f
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        51.EF.18071.37C0E246; Thu,  6 Apr 2023 09:04:03 +0900 (KST)
+Received: from bw365lee03 (unknown [10.88.97.170]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230406000403epsmtip12b2414cd7bcddc688099d48ffd0e598e~TL56HFOWw0054500545epsmtip1B;
+        Thu,  6 Apr 2023 00:04:03 +0000 (GMT)
+From:   "Bumwoo Lee" <bw365.lee@samsung.com>
+To:     "'Chanwoo Choi'" <cwchoi00@gmail.com>,
+        "'Andy Shevchenko'" <andriy.shevchenko@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>
+Cc:     "'MyungJoo Ham'" <myungjoo.ham@samsung.com>,
+        "'Chanwoo Choi'" <cw00.choi@samsung.com>
+In-Reply-To: <9c9ca17a-7211-633d-7072-44992ab6852e@gmail.com>
+Subject: RE: [PATCH v1 00/14] extcon: Core cleanups and documentation fixes
+Date:   Thu, 6 Apr 2023 09:04:03 +0900
+Message-ID: <05ee01d9681b$4c444ad0$e4cce070$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|IA1PR12MB8192:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0f4f5f6a-6498-402e-48b3-08db36326401
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: x/AX4q4DstHRFnA4uhh9PdkXzzU9/fBJCpP9GcG6/iX+NDZTfjxeI37n3OsolMS4MY4qcMXcCbQ29N9Yf8yjOFvf5eBlXxiJ6nxxPGQm0Xwv8g8+POVDFYOfOq787ncOMAVezfeQ5xuhCXv4mzZ0kIehp45qfv32DqEPL5fkeZ0sF4mn1WHAgltAVw2bZGgqJb5rBGjsfQjRTvtrZRetEnew0hmShRvvXrvQjx+QIQRFf3XwqJ8fxXthLG0HipdC5KPyD5iyfTLiq4VvMCIL96ZpDlQzQd1xUXFaTvjpPLSemOJjPYvayXaFIG0OPqbzQOfchshJMDUWwr86e+tvm80J2G8XVGYOaxR0EqAKoJyKOMNb3vlUJ7z8n/Ylh5tmrZ/DvVtaM0+5h6R2KiHFEBwjE3xIappeUz27yMPiAsEKN4em5b9c83LKRbDv7ejv4VHKOfZ37/USGtLvgmrxNV+EQaKLaD0Xm55KDVt9F4ok002cAngHQUEdfrb7uF6u9HdAHqGs71RyYPiZWRjU1amwI6JgNuNPZh6UG55AmsG/98bcs0FtiuSRAdkN4RAGAPS7gvN+6p3Yv0NCTluRtapSp59Tw6iCBzB67CdovBOJsWJ154J2yE3gWaNC0cFPzbIhqPzz+IQSNYRWm8IibGCC6P7dm2I/fkWcdJ1L0Kw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(39860400002)(346002)(136003)(451199021)(38100700002)(31696002)(6486002)(921005)(6512007)(2616005)(53546011)(6506007)(26005)(186003)(66476007)(8936002)(7416002)(2906002)(5660300002)(478600001)(36756003)(8676002)(66946007)(41300700001)(66556008)(86362001)(316002)(6666004)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SDNLZHg1T3ZoUlRBYWxJZldqV3BhVk5KbWJXaHpXN2ZtTW1haEV6YktZZjdP?=
- =?utf-8?B?ekI2RlZjYnlFMGppVVA5aXV0Q2pWWVJoRktvUldxRjQvUEg2V0FONGtFL2lJ?=
- =?utf-8?B?VzhmUGY0NTBCaDJrUWVhbkZpc05jbmk3ZlBiMERVbTREYnROTUtha0FuZk9Y?=
- =?utf-8?B?K0wvUGtrWk1CSk1FaFlrSnZjR2hGRDlqVnIvV0F5MUxLTkk4YmZPRHJkMXBP?=
- =?utf-8?B?NDVzTDJYYVpHZWZVSlUvUVRnRkNFbFJsRWdyN3FqR0dzMU1UKzltd3VXU1RF?=
- =?utf-8?B?dkkwai9OYk5lNGlEZFZUbkFkc2hxaGZBUkxPWW5qSDhJZUZRNHBEcjFhMEpW?=
- =?utf-8?B?SWRuL3VOT1ByRVVBSDJMc1E0TVBjUHRwUjhXdG1wUE5YdU54MmFzUGlFRk4y?=
- =?utf-8?B?RVRvSjlXczdsYnhWMEFidExrWDYrbytWNUxTei9lbHdFemZCc01kMWg4QlJn?=
- =?utf-8?B?a0VFc3Y5K3A5T2Y3cWJUZ05IbExNeGdWMkxHTnRpSFhlZVBQZG1FNG40TTdC?=
- =?utf-8?B?Y3dZY1V4R3A4bnVJSmoybStxTjl3UXNZQXJnSUJKMzBBMUswS1RyRGFOQXEy?=
- =?utf-8?B?T3FEdVhCV1ZZbXZQQ2JTOEJYUGhuVlFNOVRDWkNZbEdWVlZKaTNIbk1wdkx3?=
- =?utf-8?B?TXBuWEhpT2JJSmVBR1I3OXRmcXZ4TlBEMTZrM2RhUmN4Wm1OMkE1MnZYb0do?=
- =?utf-8?B?Z2hiU0xtK3ZteVZpd0lxS3BMUzVLUzh6ZGhoaXRBK0pOQXBDcVV3Z3lGcG5o?=
- =?utf-8?B?L2RZTTVKM09nZHpEOTJrbGpYaGFmTkZwUFBZQUdjQk40WVZYa0N0SUc2dVVI?=
- =?utf-8?B?RVlBSDhVTG9OL0JjcG5HOHR3WWJwVktrT3NwME55YXhhOVBQak9lKyt1MzZ6?=
- =?utf-8?B?Z0M0MktxQm8xd3hjY2ZSNXBPdGtJTERuRWpReWorNGMxdHE2L0c5N044cllw?=
- =?utf-8?B?bzRUSTdkOVc3MlpHaEFoRWRYVEgrNHNKTUw3K2ovczdWK2ovWTVmWGxHYjR0?=
- =?utf-8?B?Q29Bd0VacXk4VlArN21tclg5SEpsTDV3dTNBZjA1c1NVY0NaRVVOTzNWem1o?=
- =?utf-8?B?T20rRXNGc1d2NWFQYVdOWmszYTJuT3I4QjFaMFJzZUxaeWRENFlDYzVQTitx?=
- =?utf-8?B?WXNTTlcrY1dvbG9jV1JYM3FVeTJaTUhkc1FGTWNtcnVoL01WeFhQdkd3VjhE?=
- =?utf-8?B?SzdyM3JVNGx6WDdXQXR5cVdsWUxIcmF1dWFTK1UzMVNjNjE4QnB0cWRUakJO?=
- =?utf-8?B?QzREWFQ0cTE3Zk1rVXZJYk5JbjMxV1BQQnhqamlFOTRDbVMvV3lDcVFaM2Fu?=
- =?utf-8?B?VGQxNnYxbHhsSEJ0NUd2S0dESEM3YmNDaHU4YjlFMzV6d1BJOCtNL3BtMSsy?=
- =?utf-8?B?ZUd1dmEvdnJWUDVMazlnUUVITEZURldORW0vNGw5L2pHdUlxZXk1U0xGclNJ?=
- =?utf-8?B?T2NDV2xDWG5Rd1AxaTE0SjJyMWxscXVla05WWStJOEkvekJvUFJ6MXF1NkZa?=
- =?utf-8?B?TmZTRFAwOVVDTVdBTk9wNUxmc1owMlA1QUlPdkVhNnE3SnowYUdRQS9odDg2?=
- =?utf-8?B?ZzBuMzVKQVRLSVVEaEZ1ZHJDYi91eVU3Wk9zL0wvOUd5U01sK0xiYUw1bVFY?=
- =?utf-8?B?ZUJ2dStRZE5Rbk1xd2pEZkJQK1VCditrM3grZW5EQmd3a0hzRm1vMDlYRUt3?=
- =?utf-8?B?ZmMwRjJOUHpQZWxSWVRGdy9PRDJ5UGNnZjBIQnNKdmlTRWw5MlNKbW5PQkZP?=
- =?utf-8?B?RExKYjZhR3FuWW4xZ1FRaHdwLytTL3ZMSlpDeU16eVd0dDc4U2ZVSnlyRnM4?=
- =?utf-8?B?eWhOU3E2Z3VBdm5Rb1BvVjNpeG1saVA1ZEJxV3R2Z25RcUMxQzVzOXp0a1Yv?=
- =?utf-8?B?bDVxTG9XRitDaEM2MEhHMWFQK1VxaC9xWTBFWVArZ1J5WlNPVExzR1ZtbjF2?=
- =?utf-8?B?Y0xZdlh6cnBjOVEvczVIcEd1WlJRcFFjenB0TEZFWFdMWFBYbkcxSmNFc0Vm?=
- =?utf-8?B?SHhoekduVVI4WlIxNTJ6K2VTMjRQVjB0dDRWaGF6MW04OGlMbWtMLzBlcGxI?=
- =?utf-8?B?RUpySlVDYkhCOXN2RXU3aC8yamd0ZWVRd2paOEwvMXkzTG10UzhiaytWQ0xl?=
- =?utf-8?Q?Mni5yLYDxXkW0sZYdT892v4YX?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f4f5f6a-6498-402e-48b3-08db36326401
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 00:03:45.9530
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pCrBbTYQdCn2jvacuWo8QNjL8uLbQ/7tx8uNvYr0TTd+/6e0PRfat5pprl6AlOREKalPiuVUR1PwC4z4gmhAmA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8192
-X-Spam-Status: No, score=-0.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGAlEY1LzDm0raYXF7gtDG56/PSOwI4GWTXAXgcPsgCpiKc1QJ4seOJr4iUQWA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphk+LIzCtJLcpLzFFi42LZdlhTT7eERy/FYEezqEVv03Qmi+tfnrNa
+        PDuqbXF51xw2i9uNK9gcWD12zrrL7jHvZKBH35ZVjB6fN8kFsERl22SkJqakFimk5iXnp2Tm
+        pdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAbVVSKEvMKQUKBSQWFyvp29kU5ZeW
+        pCpk5BeX2CqlFqTkFJgV6BUn5haX5qXr5aWWWBkaGBiZAhUmZGfMOPmPseCpQMXbf3fZGxhX
+        8XYxcnBICJhIdO8y7WLk4hAS2MEoMX9+M3sXIyeQ84lR4t6iCojEN0aJTWcmMcI0HDrlChHf
+        yyjRcPwQO4TznFHixNJtbCDdbAJaEgvnzGcDSYgItDBKdN5/zgKSYBaIlmjbux5sBaeArcTF
+        W0dYQWxhAW+JU9OXM4NsYBFQkWi6nQgS5hWwlNh06TcThC0ocXLmE6gx8hLb385hBrElBBQk
+        fj5dBjZGRMBP4vLyy1A1IhKzO9uYQW6QEGjkkDh0opcNosFF4s32Z1C2sMSr41vYIWwpic/v
+        9kLF0yVWXrkDFc+ReH2/nRHCNpZ493Yt2J3MApoS63fpQ4QVJXb+nssIsZdP4t3XHlZIYPFK
+        dLQJQZQoS3Q/eMEEYUtKLH56h3ECo9IsJJ/NQvLZLCQfzEJYtoCRZRWjWGpBcW56arFhgTE8
+        qpPzczcxgpOjlvkOxmlvP+gdYmTiYDzEKMHBrCTCq9qllSLEm5JYWZValB9fVJqTWnyI0RQY
+        1BOZpUST84HpOa8k3tDE0sDEzMjEwtjS2ExJnPfLU+0UIYH0xJLU7NTUgtQimD4mDk6pBqaE
+        d8rKIcUqS8Va7+RYaXEtaPqWPf3GdROzb7sKTr8sf/797GVTju8PU3uDzFbduj7l1aWgZfP8
+        GkWfyV1YPLvsySGBmavmRprEizivSf5759GbP9np+inJXxn9JWoyHv4w3PhyRl5txabsVwEv
+        3JJ1jlZZRAf83PmhqFdZ86lQjZLD0/UPJxzN3/f0ZXL1/Hj23aucd7WLXHO5aZ/nXX3jmJrl
+        jwoX8Rv1vFGsn47fKvi6dxXngnt1y5MT3d5cu3bf7bdzxsPA9vyyhAK9mn9zFs1tSsk9fKPv
+        1ArT6AvPj6jcX3FC1uP4yl17Ul5859vI2v5KI4yr6+zTGwFsgleblLwX7dirxL/gb8pH5UNG
+        SizFGYmGWsxFxYkAlqeifxcEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrALMWRmVeSWpSXmKPExsWy7bCSnG4xj16KweQeK4vepulMFte/PGe1
+        eHZU2+LyrjlsFrcbV7A5sHrsnHWX3WPeyUCPvi2rGD0+b5ILYInisklJzcksSy3St0vgyphx
+        8h9jwVOBirf/7rI3MK7i7WLk4JAQMJE4dMq1i5GTQ0hgN6PEmd1aILaEgKTE2eWP2CFKhCUO
+        Hy7uYuQCKnnKKLH9x2smkBo2AS2JhXPms4EkRATaGCVuvPzADJJgFoiW2PN8MzNEx1wmiWVn
+        3oIlOAVsJS7eOsIKYgsLeEucmr6cGWQDi4CKRNPtRJAwr4ClxKZLv5kgbEGJkzOfsEDM1Jbo
+        fdjKCGHLS2x/O4cZ4lAFiZ9Pl4GNFBHwk7i8/DJUvYjE7M425gmMwrOQjJqFZNQsJKNmIWlZ
+        wMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/dxMjOFK0NHcwbl/1Qe8QIxMH4yFGCQ5m
+        JRFe1S6tFCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8F7pOxgsJpCeWpGanphakFsFkmTg4pRqY
+        zH6+LhRpKA7W/5CRfFN7f9iVK9nOtxfuZPn7Zf7itOCaExNEOreGKWke3Xvo1OIJsaf7Hsid
+        7LxXmWHQGGI+P6l1ReCdvflSz96fSYk2P3wz9uiMuHVXMv7K3ZHn23Ej0TssdPMW9pgzl7O+
+        /b+RdkEm8ExQdfXM1V8W/ueyXXH0xEG+M6WB3vv4bP4qa4tdjRf9FWjaO2vLjvPdZ1tW6dst
+        bd84eeKBxItzl5384/nf4aBjZtDXy0u3idrs47L3u2Ayc6Ox8LRV/zP70/yvH72jW5+74Xlf
+        h1z493AH32zf2923tZbZsnFsm9Bj/PnUsiLHEJaDlxe2CT6d81h149pcOV+JLnMVPQZejT4/
+        ByWW4oxEQy3mouJEANf0EWgDAwAA
+X-CMS-MailID: 20230406000404epcas1p1de0a8a7ebe6f054c101c62dc0738861d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230330101146epcas1p2240da3a618b18cea96735bbd6fe3f322
+References: <20230322144005.40368-1-andriy.shevchenko@linux.intel.com>
+        <CGME20230330101146epcas1p2240da3a618b18cea96735bbd6fe3f322@epcas1p2.samsung.com>
+        <ZCVgWX2t1fpGzZX9@smile.fi.intel.com>
+        <010e01d9636a$8f23edc0$ad6bc940$@samsung.com>
+        <9c9ca17a-7211-633d-7072-44992ab6852e@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/23 7:24 PM, Bagas Sanjaya wrote:
-> On 3/23/23 08:29, Dipen Patel wrote:
->> Make Tegra194 API document generic to make it applicable for
->> current and future tegra hte providers.
->>
->> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
->> ---
->>  Documentation/driver-api/hte/tegra194-hte.rst | 33 +++++++++----------
->>  1 file changed, 16 insertions(+), 17 deletions(-)
->>
-> 
-> While generalizing the doc, the doc file name should also be renamed
-> (i.e. to tegra-hte.rst).
+Hi
 
-make sense, I will do rename it in the next patch series.
+> -----Original Message-----
+> From: Chanwoo Choi <cwchoi00@gmail.com>
+> Sent: Thursday, April 6, 2023 8:17 AM
+> To: Bumwoo Lee <bw365.lee@samsung.com>; 'Andy Shevchenko'
+> <andriy.shevchenko@linux.intel.com>; linux-kernel@vger.kernel.org
+> Cc: 'MyungJoo Ham' <myungjoo.ham@samsung.com>; 'Chanwoo Choi'
+> <cw00.choi@samsung.com>
+> Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation
+> fixes
 > 
->> diff --git a/Documentation/driver-api/hte/tegra194-hte.rst b/Documentation/driver-api/hte/tegra194-hte.rst
->> index f2d617265546..85e654772782 100644
->> --- a/Documentation/driver-api/hte/tegra194-hte.rst
->> +++ b/Documentation/driver-api/hte/tegra194-hte.rst
->> @@ -5,25 +5,25 @@ HTE Kernel provider driver
->>  
->>  Description
->>  -----------
->> -The Nvidia tegra194 HTE provider driver implements two GTE
->> -(Generic Timestamping Engine) instances: 1) GPIO GTE and 2) LIC
->> -(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the
->> -timestamp from the system counter TSC which has 31.25MHz clock rate, and the
->> -driver converts clock tick rate to nanoseconds before storing it as timestamp
->> -value.
->> +The Nvidia tegra HTE provider also known as GTE (Generic Timestamping Engine)
->> +driver implements two GTE instances: 1) GPIO GTE and 2) LIC
->> +(Legacy Interrupt Controller) IRQ GTE. Both GTE instances get the timestamp
->> +from the system counter TSC which has 31.25MHz clock rate, and the driver
->> +converts clock tick rate to nanoseconds before storing it as timestamp value.
->>  
->>  GPIO GTE
->>  --------
->>  
->>  This GTE instance timestamps GPIO in real time. For that to happen GPIO
->> -needs to be configured as input. The always on (AON) GPIO controller instance
->> -supports timestamping GPIOs in real time and it has 39 GPIO lines. The GPIO GTE
->> -and AON GPIO controller are tightly coupled as it requires very specific bits
->> -to be set in GPIO config register before GPIO GTE can be used, for that GPIOLIB
->> -adds two optional APIs as below. The GPIO GTE code supports both kernel
->> -and userspace consumers. The kernel space consumers can directly talk to HTE
->> -subsystem while userspace consumers timestamp requests go through GPIOLIB CDEV
->> -framework to HTE subsystem.
->> +needs to be configured as input. Only the always on (AON) GPIO controller
->> +instance supports timestamping GPIOs in real time as it is tightly coupled with
->> +the GPIO GTE. To support this, GPIOLIB adds two optional APIs as mentioned
->> +below. The GPIO GTE code supports both kernel and userspace consumers. The
->> +kernel space consumers can directly talk to HTE subsystem while userspace
->> +consumers timestamp requests go through GPIOLIB CDEV framework to HTE
->> +subsystem. The hte devicetree binding described at
->> +``Documentation/devicetree/bindings/timestamp`` provides an example of how a
->> +consumer can request an GPIO line.
->>  
->>  See gpiod_enable_hw_timestamp_ns() and gpiod_disable_hw_timestamp_ns().
->>  
->> @@ -34,9 +34,8 @@ returns the timestamp in nanoseconds.
->>  LIC (Legacy Interrupt Controller) IRQ GTE
->>  -----------------------------------------
->>  
->> -This GTE instance timestamps LIC IRQ lines in real time. There are 352 IRQ
->> -lines which this instance can add timestamps to in real time. The hte
->> -devicetree binding described at ``Documentation/devicetree/bindings/timestamp``
->> +This GTE instance timestamps LIC IRQ lines in real time. The hte devicetree
->> +binding described at ``Documentation/devicetree/bindings/timestamp``
->>  provides an example of how a consumer can request an IRQ line. Since it is a
->>  one-to-one mapping with IRQ GTE provider, consumers can simply specify the IRQ
->>  number that they are interested in. There is no userspace consumer support for
+> Hi,
 > 
-> The wording LGTM, thanks!
+> On 23. 3. 31. 09:48, Bumwoo Lee wrote:
+> > Hi Andy Shevchenko
+> >> -----Original Message-----
+> >> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >> Sent: Thursday, March 30, 2023 7:12 PM
+> >> To: Bumwoo Lee <bw365.lee@samsung.com>; linux-kernel@vger.kernel.org
+> >> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>; Chanwoo Choi
+> >> <cw00.choi@samsung.com>
+> >> Subject: Re: [PATCH v1 00/14] extcon: Core cleanups and documentation
+> >> fixes
+> >>
+> >> On Wed, Mar 22, 2023 at 04:39:51PM +0200, Andy Shevchenko wrote:
+> >>> A few fixes to the documentation and some cleanups against extcon
+> >>> core module.
+> >>
+> >> Anything I should do with the series?
+> >> Any comments on it?
+> >>
+> >> --
+> >> With Best Regards,
+> >> Andy Shevchenko
+> >>
+> >
+> > Looks fine to me.
+> >
+> > Acked-by: Bumwoo Lee <bw365.lee@samsung.com>
+> >
+> > MR. Chanwoo, Would you please take a look at this patch series.
+> >
 > 
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Actually, Acked tag will be replied by Maintainer or the driver owner.
+> If you want to review the mailing list patch, I think that Reviewed-by tag
+> is proper.
 > 
+
+OK.
+Thank you for your detail guidance. I will follow this guidance on next time.
+
+> Unfortunately, I could not see the any review comment from you even if
+> this patchset have the some review contents. Also you didn't review the
+> any patches of extcon before.
+> 
+> I'm always welcome for many reviewers in order to improve the linux kernel.
+> But, in this case, I'm not sure that you are reviewing this patchset.
+> 
+> So that I'm sorry that I cannot take your acked-tag.
+> 
+
+I agree your comment.
+Thank you~
+
+> --
+> Best Regards,
+> Samsung Electronics
+> Chanwoo Choi
+
 
