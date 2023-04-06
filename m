@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A6B6DA382
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F69F6DA387
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239643AbjDFUkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
+        id S240117AbjDFUkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240574AbjDFUkQ (ORCPT
+        with ESMTP id S240689AbjDFUk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:40:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B5A12861;
-        Thu,  6 Apr 2023 13:36:09 -0700 (PDT)
+        Thu, 6 Apr 2023 16:40:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2965AF0F;
+        Thu,  6 Apr 2023 13:36:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6255E644AD;
-        Thu,  6 Apr 2023 20:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C716C433D2;
-        Thu,  6 Apr 2023 20:35:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A79760F91;
+        Thu,  6 Apr 2023 20:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2008FC433D2;
+        Thu,  6 Apr 2023 20:36:15 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -71,16 +71,16 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 42/68] hwmon: mc34vr500: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:35:23 +0200
-Message-Id: <20230406203530.3012191-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 43/68] hwmon: mcp3021: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:35:24 +0200
+Message-Id: <20230406203530.3012191-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,22 +93,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/mc34vr500.c | 2 +-
+ drivers/hwmon/mcp3021.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/mc34vr500.c b/drivers/hwmon/mc34vr500.c
-index 6268e973049c..6a7a950a9332 100644
---- a/drivers/hwmon/mc34vr500.c
-+++ b/drivers/hwmon/mc34vr500.c
-@@ -138,7 +138,7 @@ static int mc34vr500_read(struct device *dev, enum hwmon_sensor_types type,
- 	}
+diff --git a/drivers/hwmon/mcp3021.c b/drivers/hwmon/mcp3021.c
+index e093b1998296..a5f7a294f33d 100644
+--- a/drivers/hwmon/mcp3021.c
++++ b/drivers/hwmon/mcp3021.c
+@@ -102,7 +102,7 @@ static umode_t mcp3021_is_visible(const void *_data,
+ 	return 0444;
  }
  
--static const struct hwmon_channel_info *mc34vr500_info[] = {
-+static const struct hwmon_channel_info * const mc34vr500_info[] = {
- 	HWMON_CHANNEL_INFO(in, HWMON_I_MIN_ALARM),
- 	HWMON_CHANNEL_INFO(temp, HWMON_T_MAX_ALARM | HWMON_T_CRIT_ALARM
- 			   | HWMON_T_EMERGENCY_ALARM),
+-static const struct hwmon_channel_info *mcp3021_info[] = {
++static const struct hwmon_channel_info * const mcp3021_info[] = {
+ 	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
+ 	NULL
+ };
 -- 
 2.34.1
 
