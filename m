@@ -2,283 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0326D9163
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECDE6D9160
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235716AbjDFIVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S235374AbjDFIVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235829AbjDFIVY (ORCPT
+        with ESMTP id S229896AbjDFIVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:21:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE06FF
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680769237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wSaMfai72G9Tt4xz9KKUysgG6AJqyHxWXMI7tIwY4iE=;
-        b=Vy90ux3SpLupmE0v5h/0M9P/E5MzVxmhYgapC/UrQ/TypEB/QhON3r5+Szs+0rTF2IkllA
-        dFecaqExOI6dvpvYChSKaKKRaBhSEwcau8mwCZVrpcvSwE+Br1WEWBTv0oR8uZz54uOLkH
-        l1JVP4NpM19X2m77O6r1x8y8QQPMDqE=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-13-sROokbcDOIqjsWV4vea9mg-1; Thu, 06 Apr 2023 04:20:36 -0400
-X-MC-Unique: sROokbcDOIqjsWV4vea9mg-1
-Received: by mail-qv1-f69.google.com with SMTP id h7-20020a0cd807000000b005dd254e7babso17533158qvj.14
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:20:36 -0700 (PDT)
+        Thu, 6 Apr 2023 04:21:02 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9CE10F1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:21:00 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id dc30so33245346vsb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680769260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nAfsXtBn0nzDoaEWurrUoZWu1BXoDWafMp8Ribw2xoM=;
+        b=RWBBfn97A35m/Jk0+ZQHiYyz1tSkPCA8NXd7OvfztgUpqnxS4IwrXVkPgsvbhI3K8J
+         C2Y1gq8zbIz8ovfukafOgPsUgiw3fdIeDRR2tV18tFbtNt6tWwiKMxM0vzPzoPg84LTN
+         MlOAEz0P0HNHAPDpegqFGjb1/3jTgRac52EvA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680769236;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680769260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wSaMfai72G9Tt4xz9KKUysgG6AJqyHxWXMI7tIwY4iE=;
-        b=a4O7b8W6/xT+Bw/IxB16CyfMaIoDJ4Xuy8a5wnQgzf+a6StYAHdOvjRZowPcwyx0F3
-         4dctRcnWQwrDivuS2qxZ/mvRR/21Hw4BFFDLZhY7/jOX/BGw/Ut7ooLY9eRmsSBOUSpD
-         /xKzuqeoDWD2WaD83gszDkqtMJGxK5YOMxe4ExIuXbLreStHmkYHyg7XnSI58Bn88Cl/
-         jxWxW59c6ueLpT54Bd5JHUqCIz+UQBZl9xevYpN+f3R//YqRJuaFo8HACiv7WRqy1VXF
-         D0efrbymqiouoKoddJdQ/G+6l3WGA3a+etSU5fqzNHS8+CHGtIe4+mJ85ZW9ylj0KMCd
-         mfPg==
-X-Gm-Message-State: AAQBX9f38qC7mS3v3KLY2uDxza3evZ+pJM/ARxVZ1ykCARv97ndmevDR
-        k1Lvd7qt+5HuPxU/pXbAU7uikG7fXN5fiLLtqMcQtBBNtKfDltKNEN3bIzlxsaJ9MN3oZ4EFFtX
-        6TCNMDWFQqkqUvBPoUFqJlFS/
-X-Received: by 2002:ad4:5dcc:0:b0:5cb:6880:1924 with SMTP id m12-20020ad45dcc000000b005cb68801924mr2965868qvh.13.1680769235799;
-        Thu, 06 Apr 2023 01:20:35 -0700 (PDT)
-X-Google-Smtp-Source: AKy350b3FwOIlgZSFBk3ro3ZOBAKXBnZZPxON2GwjbIBNkLe/RaTkjn0brP0Q17gIbHvf8If/JBg2w==
-X-Received: by 2002:ad4:5dcc:0:b0:5cb:6880:1924 with SMTP id m12-20020ad45dcc000000b005cb68801924mr2965850qvh.13.1680769235574;
-        Thu, 06 Apr 2023 01:20:35 -0700 (PDT)
-Received: from LeoBras.redhat.com ([2804:1b3:a802:2599:3b52:5a:179c:6ae7])
-        by smtp.gmail.com with ESMTPSA id 186-20020a3705c3000000b007456c75edbbsm292776qkf.129.2023.04.06.01.20.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 01:20:35 -0700 (PDT)
-From:   Leonardo Bras <leobras@redhat.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Leonardo Bras <leobras@redhat.com>,
-        Guo Ren <guoren@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 2/2] riscv/cmpxchg: Deduplicate xchg() asm functions
-Date:   Thu,  6 Apr 2023 05:20:19 -0300
-Message-Id: <20230406082018.70367-3-leobras@redhat.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230406082018.70367-1-leobras@redhat.com>
-References: <20230406082018.70367-1-leobras@redhat.com>
+        bh=nAfsXtBn0nzDoaEWurrUoZWu1BXoDWafMp8Ribw2xoM=;
+        b=Qvp9uev+dUqCl/eMS+2Rf8miZWeDHyTlOSA17WURm2S2+PwhqF0T/yKZk4uKJthyX1
+         CNf/a5qC0NvpQZj77gnsc66vtFiqQZ4SJG9N1e9jaebSeuFCsejsGQmGiV/FIANL6gqs
+         8jLGaUEUsgc2/X3STMKgjvSmhDJXUgw5GPkpX9tsDMowCcvcohZNOZNVQuvbamMBTuk6
+         mnKesd9hk0v8yfLQEnTUgR06IB+8/zUJ70+Sj5cLJa+8owRNXrJTaYcY1MbO4fpFlVe0
+         5EMgtIWRFhy8OJaEao2kxTcL7wyMSwBHyn5tT+NV1r+P4G6ozZqr12Ac1wn61AaEKpe+
+         GkjQ==
+X-Gm-Message-State: AAQBX9c2Vp+ALvO+7MFWSEeJCGt3KGonycunusYqoKgd63QO8Kyh2SU3
+        V20ljaQmOAZTw9D/GH49zBu3/rFVS78jShx07shnYg==
+X-Google-Smtp-Source: AKy350az8HRB7kj3jahdnvQ8woBX6GVD/2pwkH0213hhBPvI/j4AeaNthtmiBUpiixn8/Rtdqp8Pfx5DUNJg/F/8jvI=
+X-Received: by 2002:a67:c81e:0:b0:414:4ef3:839 with SMTP id
+ u30-20020a67c81e000000b004144ef30839mr6485313vsk.7.1680769259766; Thu, 06 Apr
+ 2023 01:20:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com> <20230404104800.301150-3-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230404104800.301150-3-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 6 Apr 2023 16:20:48 +0800
+Message-ID: <CAGXv+5FrUPUg_SsRz6LrW_K_C7By2tSCQ9W_MNJr8XCOcn7gLA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/9] drm/mediatek: dp: Move AUX and panel poweron/off
+ sequence to function
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
+        daniel@ffwll.ch, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this header every xchg define (_relaxed, _acquire, _release, vanilla)
-contain it's own asm file, both for 4-byte variables an 8-byte variables,
-on a total of 8 versions of mostly the same asm.
+On Tue, Apr 4, 2023 at 6:48=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Everytime we run bridge detection and/or EDID read we run a poweron
+> and poweroff sequence for both the AUX and the panel; moreover, this
+> is also done when enabling the bridge in the .atomic_enable() callback.
+>
+> Move this power on/off sequence to a new mtk_dp_aux_panel_poweron()
+> function as to commonize it.
+> Note that, before this commit, in mtk_dp_bridge_atomic_enable() only
+> the AUX was getting powered on but the panel was left powered off if
+> the DP cable wasn't plugged in while now we unconditionally send a D0
+> request and this is done for two reasons:
+>  - First, whether this request fails or not, it takes the same time
+>    and anyway the DP hardware won't produce any error (or, if it
+>    does, it's ignorable because it won't block further commands)
+>  - Second, training the link between a sleeping/standby/unpowered
+>    display makes little sense.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dp.c | 76 ++++++++++++-------------------
+>  1 file changed, 30 insertions(+), 46 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek=
+/mtk_dp.c
+> index 84f82cc68672..76ea94167531 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> @@ -1253,6 +1253,29 @@ static void mtk_dp_audio_mute(struct mtk_dp *mtk_d=
+p, bool mute)
+>                            val[2], AU_TS_CFG_DP_ENC0_P0_MASK);
+>  }
+>
+> +static void mtk_dp_aux_panel_poweron(struct mtk_dp *mtk_dp, bool pwron)
+> +{
+> +       if (pwron) {
+> +               /* power on aux */
+> +               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> +                                  DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> +                                  DP_PWR_STATE_MASK);
+> +
+> +               /* power on panel */
+> +               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POW=
+ER_D0);
+> +               usleep_range(2000, 5000);
+> +       } else {
+> +               /* power off panel */
+> +               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POW=
+ER_D3);
+> +               usleep_range(2000, 3000);
+> +
+> +               /* power off aux */
+> +               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> +                                  DP_PWR_STATE_BANDGAP_TPLL,
+> +                                  DP_PWR_STATE_MASK);
+> +       }
+> +}
+> +
+>  static void mtk_dp_power_enable(struct mtk_dp *mtk_dp)
+>  {
+>         mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_RESET_AND_PROBE,
+> @@ -1937,16 +1960,9 @@ static enum drm_connector_status mtk_dp_bdg_detect=
+(struct drm_bridge *bridge)
+>         if (!mtk_dp->train_info.cable_plugged_in)
+>                 return ret;
+>
+> -       if (!enabled) {
+> -               /* power on aux */
+> -               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> -                                  DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> -                                  DP_PWR_STATE_MASK);
+> +       if (!enabled)
+> +               mtk_dp_aux_panel_poweron(mtk_dp, true);
+>
+> -               /* power on panel */
+> -               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POW=
+ER_D0);
 
-This is usually bad, as it means any change may be done in up to 8
-different places.
+I suspect the original code was somewhat wrong already? We shouldn't need
+to pull the panel out of standby just for HPD or reading EDID.
 
-Unify those versions by creating a new define with enough parameters to
-generate any version of the previous 8.
+This driver probably needs a lot more cleanup. :/
 
-Then unify the result under a more general define, and simplify
-arch_xchg* generation.
+ChenYu
 
-(This did not cause any change in generated asm)
-
-Signed-off-by: Leonardo Bras <leobras@redhat.com>
----
- arch/riscv/include/asm/cmpxchg.h | 135 +++++++------------------------
- 1 file changed, 31 insertions(+), 104 deletions(-)
-
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index f88fae357071c..905a888d8b04d 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -11,25 +11,30 @@
- #include <asm/barrier.h>
- #include <asm/fence.h>
- 
--#define __xchg_relaxed(ptr, new, size)					\
-+#define ____xchg(sfx, prepend, append, r, p, n)				\
-+({									\
-+	__asm__ __volatile__ (						\
-+		prepend							\
-+		"	amoswap" sfx " %0, %2, %1\n"			\
-+		append							\
-+		: "=r" (r), "+A" (*(p))					\
-+		: "r" (n)						\
-+		: "memory");						\
-+})
-+
-+#define ___xchg(ptr, new, size, sfx, prepend, append)			\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(new) __new = (new);					\
- 	__typeof__(*(ptr)) __ret;					\
- 	switch (size) {							\
- 	case 4:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.w %0, %2, %1\n"			\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
-+		____xchg(".w" sfx, prepend, append,			\
-+			 __ret, __ptr, __new);				\
- 		break;							\
- 	case 8:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.d %0, %2, %1\n"			\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
-+		____xchg(".d" sfx, prepend, append,			\
-+			 __ret, __ptr, __new);				\
- 		break;							\
- 	default:							\
- 		BUILD_BUG();						\
-@@ -37,114 +42,36 @@
- 	__ret;								\
- })
- 
--#define arch_xchg_relaxed(ptr, x)					\
-+#define __xchg_relaxed(ptr, new, size)					\
-+	___xchg(ptr, new, size, "", "", "")
-+
-+#define _arch_xchg(order, ptr, x)					\
- ({									\
- 	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg_relaxed((ptr),			\
--					    _x_, sizeof(*(ptr)));	\
-+	(__typeof__(*(ptr))) __xchg ## order((ptr),			\
-+					     _x_, sizeof(*(ptr)));	\
- })
- 
-+#define arch_xchg_relaxed(ptr, x)					\
-+	_arch_xchg(_relaxed, ptr, x)
-+
- #define __xchg_acquire(ptr, new, size)					\
--({									\
--	__typeof__(ptr) __ptr = (ptr);					\
--	__typeof__(new) __new = (new);					\
--	__typeof__(*(ptr)) __ret;					\
--	switch (size) {							\
--	case 4:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.w %0, %2, %1\n"			\
--			RISCV_ACQUIRE_BARRIER				\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	case 8:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.d %0, %2, %1\n"			\
--			RISCV_ACQUIRE_BARRIER				\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
--	__ret;								\
--})
-+	___xchg(ptr, new, size, "", "", RISCV_ACQUIRE_BARRIER)
- 
- #define arch_xchg_acquire(ptr, x)					\
--({									\
--	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg_acquire((ptr),			\
--					    _x_, sizeof(*(ptr)));	\
--})
-+	_arch_xchg(_acquire, ptr, x)
- 
- #define __xchg_release(ptr, new, size)					\
--({									\
--	__typeof__(ptr) __ptr = (ptr);					\
--	__typeof__(new) __new = (new);					\
--	__typeof__(*(ptr)) __ret;					\
--	switch (size) {							\
--	case 4:								\
--		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"	amoswap.w %0, %2, %1\n"			\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	case 8:								\
--		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"	amoswap.d %0, %2, %1\n"			\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
--	__ret;								\
--})
-+	___xchg(ptr, new, size, "", RISCV_RELEASE_BARRIER, "")
- 
- #define arch_xchg_release(ptr, x)					\
--({									\
--	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg_release((ptr),			\
--					    _x_, sizeof(*(ptr)));	\
--})
-+	_arch_xchg(_release, ptr, x)
- 
- #define __xchg(ptr, new, size)						\
--({									\
--	__typeof__(ptr) __ptr = (ptr);					\
--	__typeof__(new) __new = (new);					\
--	__typeof__(*(ptr)) __ret;					\
--	switch (size) {							\
--	case 4:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.w.aqrl %0, %2, %1\n"		\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	case 8:								\
--		__asm__ __volatile__ (					\
--			"	amoswap.d.aqrl %0, %2, %1\n"		\
--			: "=r" (__ret), "+A" (*__ptr)			\
--			: "r" (__new)					\
--			: "memory");					\
--		break;							\
--	default:							\
--		BUILD_BUG();						\
--	}								\
--	__ret;								\
--})
-+	___xchg(ptr, new, size, ".aqrl", "", "")
- 
- #define arch_xchg(ptr, x)						\
--({									\
--	__typeof__(*(ptr)) _x_ = (x);					\
--	(__typeof__(*(ptr))) __xchg((ptr), _x_, sizeof(*(ptr)));	\
--})
-+	_arch_xchg(, ptr, x)
- 
- #define xchg32(ptr, x)							\
- ({									\
--- 
-2.40.0
-
+> -               usleep_range(2000, 5000);
+> -       }
+>         /*
+>          * Some dongles still source HPD when they do not connect to any
+>          * sink device. To avoid this, we need to read the sink count
+> @@ -1958,16 +1974,8 @@ static enum drm_connector_status mtk_dp_bdg_detect=
+(struct drm_bridge *bridge)
+>         if (DP_GET_SINK_COUNT(sink_count))
+>                 ret =3D connector_status_connected;
+>
+> -       if (!enabled) {
+> -               /* power off panel */
+> -               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POW=
+ER_D3);
+> -               usleep_range(2000, 3000);
+> -
+> -               /* power off aux */
+> -               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> -                                  DP_PWR_STATE_BANDGAP_TPLL,
+> -                                  DP_PWR_STATE_MASK);
+> -       }
+> +       if (!enabled)
+> +               mtk_dp_aux_panel_poweron(mtk_dp, false);
+>
+>         return ret;
+>  }
+> @@ -1983,15 +1991,7 @@ static struct edid *mtk_dp_get_edid(struct drm_bri=
+dge *bridge,
+>
+>         if (!enabled) {
+>                 drm_atomic_bridge_chain_pre_enable(bridge, connector->sta=
+te->state);
+> -
+> -               /* power on aux */
+> -               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> -                                  DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> -                                  DP_PWR_STATE_MASK);
+> -
+> -               /* power on panel */
+> -               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POW=
+ER_D0);
+> -               usleep_range(2000, 5000);
+> +               mtk_dp_aux_panel_poweron(mtk_dp, true);
+>         }
+>
+>         /* eDP panels aren't removable, so we can return a cached EDID. *=
+/
+> @@ -2015,15 +2015,7 @@ static struct edid *mtk_dp_get_edid(struct drm_bri=
+dge *bridge,
+>         }
+>
+>         if (!enabled) {
+> -               /* power off panel */
+> -               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POW=
+ER_D3);
+> -               usleep_range(2000, 3000);
+> -
+> -               /* power off aux */
+> -               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> -                                  DP_PWR_STATE_BANDGAP_TPLL,
+> -                                  DP_PWR_STATE_MASK);
+> -
+> +               mtk_dp_aux_panel_poweron(mtk_dp, false);
+>                 drm_atomic_bridge_chain_post_disable(bridge, connector->s=
+tate->state);
+>         }
+>
+> @@ -2188,15 +2180,7 @@ static void mtk_dp_bridge_atomic_enable(struct drm=
+_bridge *bridge,
+>                 return;
+>         }
+>
+> -       /* power on aux */
+> -       mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+> -                          DP_PWR_STATE_BANDGAP_TPLL_LANE,
+> -                          DP_PWR_STATE_MASK);
+> -
+> -       if (mtk_dp->train_info.cable_plugged_in) {
+> -               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POW=
+ER_D0);
+> -               usleep_range(2000, 5000);
+> -       }
+> +       mtk_dp_aux_panel_poweron(mtk_dp, true);
+>
+>         /* Training */
+>         ret =3D mtk_dp_training(mtk_dp);
+> --
+> 2.40.0
+>
