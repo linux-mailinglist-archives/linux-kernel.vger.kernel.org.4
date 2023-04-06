@@ -2,229 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABEE6DA57F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4AE6DA583
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238258AbjDFWEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
+        id S230165AbjDFWFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDFWEl (ORCPT
+        with ESMTP id S239348AbjDFWEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:04:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B23419C;
-        Thu,  6 Apr 2023 15:04:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E86640B5;
-        Thu,  6 Apr 2023 22:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6297CC433EF;
-        Thu,  6 Apr 2023 22:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680818679;
-        bh=gSv31GXqMspT4cw2rDvjQ58dEwU++jU7Uf5w2hKIDIQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Zs8u9d/ojedGJk01+HASjYKXelYWBgu3u+CEGAmkQv35fERbfydvkqh7RCGWdV7Xh
-         97MILzLCOj7pCPyrZ7Zq4rry6E82uJHErr/Rh9KzA2emgaWmSNFcvi+eXkiKn3Dqu3
-         lgVRuBGh2ofgiE1ujPNuJAL2v+rvUw+Uh4uWTb/GGqyVC4VX8FmdIdGV4QpY8e/z8J
-         PxBU53QrGSQv3SlAQChdu4IEA4PtL/cAMqSExpm3mNXMOwRhbSwDJu0/Yh3PIlQg0/
-         bbH/cPZd3jhHqpxQ6ntRROv5r1ZqhO+yRsyLDU+Jd6j8AZX1ySZTqqyp20sAe1/W5D
-         RG0lcTKhHWgzg==
-Message-ID: <7d8f05e26dc7152dfad771dfc867dec145aa054b.camel@kernel.org>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        miklos@szeredi.hu, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        amir73il@gmail.com
-Date:   Thu, 06 Apr 2023 18:04:36 -0400
-In-Reply-To: <4f739cc6847975991874d56ef9b9716c82cf62a3.camel@kernel.org>
-References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
-         <20230406-diffamieren-langhaarig-87511897e77d@brauner>
-         <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
-         <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
-         <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
-         <20230406-wasser-zwanzig-791bc0bf416c@brauner>
-         <546145ecbf514c4c1a997abade5f74e65e5b1726.camel@kernel.org>
-         <45a9c575-0b7e-f66a-4765-884865d14b72@linux.ibm.com>
-         <60339e3bd08a18358ac8c8a16dc67c74eb8ba756.camel@kernel.org>
-         <d61ed13b-0fd2-0283-96d2-0ff9c5e0a2f9@linux.ibm.com>
-         <4f739cc6847975991874d56ef9b9716c82cf62a3.camel@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 6 Apr 2023 18:04:53 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B7CA5CB;
+        Thu,  6 Apr 2023 15:04:51 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336EvpVo016552;
+        Thu, 6 Apr 2023 22:04:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=YA7FDaUoxmNX9BwiqD4hG0qZzclOK6XYTvo5kS7D8b0=;
+ b=wpQ+788VbvC0lVz0vkbRKXW/lQdvOOeCCmxwk7NjLZCvFVHO10hmrg7FHKqwVlXwvNO3
+ KInYKZo2UoQToNw1iL+AEUOBwbgnPW0wIsEiC7zE2OJ7cv4nYSqQOuSln7FZ/3ypd5hV
+ yb6El+7Dj0uN6hlkUNSG0O8SUGOK7A4aJsyE13k81UGI59YO5qY5SKGxekKl/iCaOa4y
+ 4XNhbFxdl9Aa7azujtpet7/xuTSv2RF6ND/WsjBWn1jhV1/t0844qNhptpZ3LddM/L6I
+ SIH8n/7KjFuZsuS1ZtDHIv5luMoPmbhRvoBg6C+y8VSEy2huXTrmjamon8RuESQN1MYD Xw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppc7u3x1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Apr 2023 22:04:45 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 336KoArf027512;
+        Thu, 6 Apr 2023 22:04:44 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pptutpde6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Apr 2023 22:04:44 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lEPIiCS+i/QtpbDByBgTlfzd6ors6o41vrmldy9FYCkroqAvbbB/Ii5U1cxknF5VkPWBHdewxBFreazw0hq4NwEHcfJtaYpJe69mhDcOVOENKmKt5COLyYePp9UJIkbNnXclI5XWZmGuIVHZ1Y199pv3sfCo7iRF5P5fq75lE5X79vvZHYh7Il6+q0tDi5WpgOzpPbnl1tes+Rp2oigOz7Wr9sNH5pCzFdp+ibm8G/K82RugdkNAwS6syqoUPUuQ9FLKnSqLANH+HvMHEhqsW0+hZAuTz2OmgjLGKxncTfq5Z7c3lxGG2Cl0v4rhQmsKZWBAcHrBbnifcgxQv7aDpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YA7FDaUoxmNX9BwiqD4hG0qZzclOK6XYTvo5kS7D8b0=;
+ b=n6TUgQ68iu9FRNogAujGo3JKnC7TR5Cn/8icMislXvCBC1UdqppK/BIRZ2PseycR6yFZGTtkNcNwV2JTs0Tgc67nX/UmpuzBLGmVdt9l3jofXfQZv3CipAUkcn5PfcxJ+b5QnwSrJrAVdvSv/LeTdyqAHcx2lARM1eyl7MNYtNQ17DPBOzmanj0MMoHTAnYiB3xIEM5Db9Si2PvsgIuWpND92cGYrJdHpenhul82/ZpFSj1QlJNoKEkm441TnyDdKxh04HjiijSiK97vEv9nQOdi9w1reEqHt0jVV+4E8EnYNYpLNUeH/19lXQ27jbxhc9DABh6+Kq8gN6BihqBLKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YA7FDaUoxmNX9BwiqD4hG0qZzclOK6XYTvo5kS7D8b0=;
+ b=FVTWIweI8Cxy3kxnQzW91hOm/30oLAjQ8iHX0JB0iwLvgUUFqelfYq7R4/RUUdtV2lYtoYsTKXeM8DcgTbE87JYZJiYNJmX2guubIC8otzZMJ6c1C6buod21KlMuy5xxQ1eOnwRoAFRij6bEwtRLZF8GjysJDZ8YCwPuJSspnp4=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by BLAPR10MB4882.namprd10.prod.outlook.com (2603:10b6:208:30d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.31; Thu, 6 Apr
+ 2023 22:04:41 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::8bb9:2bb7:3930:b5da%7]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
+ 22:04:41 +0000
+Date:   Thu, 6 Apr 2023 18:04:37 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/mprotect: Fix do_mprotect_pkey() return on error
+Message-ID: <20230406220437.wiks6gm3k6tt662f@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230406193050.1363476-1-Liam.Howlett@oracle.com>
+ <20230406145345.9c5e4c91461cbf42509a92a9@linux-foundation.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406145345.9c5e4c91461cbf42509a92a9@linux-foundation.org>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT1P288CA0027.CANP288.PROD.OUTLOOK.COM (2603:10b6:b01::40)
+ To SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|BLAPR10MB4882:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba6313dd-952b-4723-e5fd-08db36eaebd7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fo/vT/l9K1wT5j+RHZUlTyWfekSwPECkbnnK6xUkg9Y6n9dbMM0p2Ih6MAZXeGl39qxvEaKdP97brWxdlIMlAW1Q5TkQ3B/5SshBOzD1nwWn9R/pGr7JLQ328Yoso5uupApSLIYqH4AZdUoFCT36heLGW4au3iyxg7POftUZEi00VeoyBjGFV0wmqoIaOIKqQVZjFBWxmhyBQrEkPFdkTQCY+HWOue5CKHn7ScikXyO4PV6iOMfzzryEE8YXM+Jq4xDa/AoaqLEnaOjS/Q2xwk4DDgOK+gFofGMa5ud4sL2N5vVYT/YgvEkgyRu13kksCaAcMa/E6rSpu4Onbm/VC2p+/Pny9SiRicqfoxOOpbdWQTYij8UNBC89uclhbILHfYuvwZ8SlQrjiq55Kdc6Wqk4CbJb1zTOjseZ7sYchoS04OxIZtTmIVkewhSH6tUmrPavmjo2iuuAJD4jKhy0O1o1Zk5cI9AbkTkHwroWz5jxtKgfSk8c24EjXloBwqKliMRJ9EG+kVrXGWQtfywqpCFbZ1plf1qnmhoT+C7R6J1UbChpQP6RtrnJXlA9DTa9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(346002)(366004)(39860400002)(396003)(376002)(451199021)(83380400001)(6486002)(478600001)(316002)(1076003)(26005)(6506007)(6666004)(9686003)(186003)(33716001)(6512007)(4326008)(5660300002)(38100700002)(2906002)(6916009)(66946007)(86362001)(66556008)(41300700001)(8676002)(66476007)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?25Poy6t76GkxnmFmcvuZW00rPXUdatc1gWFugL3PQez9CXoaA86l0VqfryRV?=
+ =?us-ascii?Q?ae/VAHuWHH8fkT90ucEz9cm3IVACzLvNYHRD2abx1HO2slw/gHzmkEh1vFr/?=
+ =?us-ascii?Q?FjEvT2vwjV7Lt8vjnCqshcEJKBPTzgjGVJRYHkRXPjpvUnOUS8StgHBSbzox?=
+ =?us-ascii?Q?CQEySgJyRQTPo+bqPMzXOs1pXslzjCVmlJRLgfCLv57CJQV+arQq5KWbfc+S?=
+ =?us-ascii?Q?SH5Fq04ZSu7Bjk2Y7XZqYFFtiDck4JlLGfgaLjX4zdFU3O7ooPVLYJYR8955?=
+ =?us-ascii?Q?w4WMqh9na9ux9zB/dSJV6tIpA3klkMw6cyGRY7VL6F2GQsvUMmdaYyl+5f2U?=
+ =?us-ascii?Q?K2JJNJ+woWeZhwN9RWB606hndWwaJ6TcyZMVaTXdvr2e2QM7tzbPvcwBJOjS?=
+ =?us-ascii?Q?t+jwrrx8aRIAGXbf8cRQzyRyWVpioPJvcYIcdyQVegggo3k7ZKd6FsGf+hh1?=
+ =?us-ascii?Q?BWV/C0UiOT6FvMeCW/aTR64UEdF5Ae+0Mx2NWn2GojYECksFduz/WL4ZndME?=
+ =?us-ascii?Q?AOaUbEFsd2FyOCMCxhS4NTE6g7pZ4oQT0Ps0sBp1km76qT70SbhVqkBt9XjY?=
+ =?us-ascii?Q?/SLI1gFKtJRySNYOdEr4FYl9XfpM69q6/kkNR1PXgFYg4ShXK80pM46DFdTq?=
+ =?us-ascii?Q?lIfmntWhPy7ewkJi3Hu5iMJjKfaQB2ywwq9vudSmewT/sVvzu+h9rVBHmmIG?=
+ =?us-ascii?Q?lTd35vwZmJF+C3hWQNcSwBwzQmZeQmMhdtKM2eTMl+wUNiuLit/3+6sXFI5s?=
+ =?us-ascii?Q?0HXND514UAcSMkaUX56XSRkMR5VlxKfpJaEExOWaFsADyIpbPrkT50rimh7o?=
+ =?us-ascii?Q?GVD0swbRzvStB/XIObLns8rq9awLfXl60XcS5X6ApzbPgaFp91BocQ/PvkJ7?=
+ =?us-ascii?Q?/O1efoXy9YQfz3WkGpmwQSA5d8RF9g4VK9NxkZAq+gza41+kcAW7xm6gP/Fa?=
+ =?us-ascii?Q?1GJM7fzbbcK1AiBmdjrE5V3hUi3vlGZey07iy1nkZtaFj1kqI8/4glVNCWjG?=
+ =?us-ascii?Q?13Doebyyz6fmKFolXzVWGi1bR5BajHDbvV0u7Th0/4aZJ3PvDnMwndHfEArS?=
+ =?us-ascii?Q?n2JAifFuRFloCHnXLaU7ubAaJtEK0PRKkWvoC5TFlGg/iLB3FLJI/3RhkA72?=
+ =?us-ascii?Q?BK8Nlisv/gfEUZIOgGHSufdG1rz7Woo5OODs783QT1g/LiHdzbssm5wKm/aI?=
+ =?us-ascii?Q?51K7Ix9A2SmttrperaHMVD7dVdRXJdvQ/jIz0BXjc0r4lKWUejs/qqhT8riG?=
+ =?us-ascii?Q?AeMXTXKxdssU2OLtsY7RcDhASE9b9r/3dnV+zodm2g00auqSRSSvy0BTyboj?=
+ =?us-ascii?Q?IjvHp8W7/azA0J4Qk7B4SsnRmPl31ZLQuS5g7b1qZ5n9NgYGTVnJzkMpf8vy?=
+ =?us-ascii?Q?S8oJHoIqagj+r+dVm+DdytGbKN5ra3vdbrUnRK5OAno59rSRzoYkRUGbrLdv?=
+ =?us-ascii?Q?NkE+vU3buyXjCT+a4KuFlsnulWftuc50pnIWZjhhnIk6h+KSuEHkwhE7sY97?=
+ =?us-ascii?Q?dfmCqwTMI2Foyb8jUMj/fD5Swgv5UP4F5KmnK5OnR3be90xbvsDpAyRf+72P?=
+ =?us-ascii?Q?J1j8yEfcIzUb3jsBAXoK2oZGTCcvbTOP03ZounLzzVz44o8qOtGBMOD1pfLR?=
+ =?us-ascii?Q?gQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: WEA/pb1FvbIYMM/WBeBBsQxx/up6VAopb8eDIPH8banVoj/x+X5z0T+fqpMyMlJxZwfv3W4TZlcZ3oJR1GDz6mTStoZQOiofJjinafbOMVhSzERAzltP357E9lSfiCHuIb4B0dcnjC7Z1gO6DHJh6LRLjna+ayEgUVhl9XQaSvZqpZzvpOVHVSqW2z5BoprGv4UPbxTk/8aWvONxTrtJFvC+OX9L2aEPGuvv9VIZigc69GLrixWjSvDj1+/eyshamqgeNXaPJOLx8c4Er/ugeGN93FGfAYoupc6fBWOt5RcNVE32TYN5oASQGmh7A32hJOKuciPW5S0XmChnrih34XRKu+h2r58U8fB4yWHOvTjfwQvf794Njje4Nne5RGsIa49SBbOUmkShVNouw7FZS9eJ0KV+8CXsBLxqtm/vZ+PvL70fB7j02owns5PYNOTwzKh12qroA12RbQBxsEjxoQqbrWiS5Rja+/qw8kHyB20il9ouuD0X4LWHHyuMpPExaeoR2ZGrdwXBxtQx+FtZ6ED05hJc1r368KSCUPSQ5TrSDsPgVxymcN8dLum3gegfgdRLgrfF7hhD7QPLmJyOJwOyLEnS14g/m95H0wGm6MKsHgAFyNcDsjhGaAg9EdpZQvyuP+Pnyl+ymdmpU9iOfbCPfuYw08K1EihnG0Cx/y8PKfhUc5pSg5qz2RJZoZ+5NCAnzuGUitYxiOcqHSFRneTz9F2W3j4HV42seztvbP87E3Vmx2kwFrM0R3FUN1oJTHB7S1sUjaLwI44xQv6ccJzfiw8xcRJoRSwIENfWC1+TVo7/NPHo+zy/mwMbjr7vIYVUVEqQJ0lkG8jUzwgW1g==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba6313dd-952b-4723-e5fd-08db36eaebd7
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 22:04:41.1179
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dI1Oz0pSUiDJx7631AckZkhIMQXO7mr306OsUbNW306bscqLMXGzJmwli3BsPKWs2XJmDqYDKZBpdtDBcBoNgg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4882
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_12,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304060195
+X-Proofpoint-ORIG-GUID: F6VNwk1f5u0sRS0NwFp_q6-2xgxQ4hAs
+X-Proofpoint-GUID: F6VNwk1f5u0sRS0NwFp_q6-2xgxQ4hAs
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-04-06 at 17:24 -0400, Jeff Layton wrote:
-> On Thu, 2023-04-06 at 16:22 -0400, Stefan Berger wrote:
-> >=20
-> > On 4/6/23 15:37, Jeff Layton wrote:
-> > > On Thu, 2023-04-06 at 15:11 -0400, Stefan Berger wrote:
-> > > >=20
-> > > > On 4/6/23 14:46, Jeff Layton wrote:
-> > > > > On Thu, 2023-04-06 at 17:01 +0200, Christian Brauner wrote:
-> > > > > > On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
-> > > >=20
-> > > > >=20
-> > > > > Correct. As long as IMA is also measuring the upper inode then it=
- seems
-> > > > > like you shouldn't need to do anything special here.
-> > > >=20
-> > > > Unfortunately IMA does not notice the changes. With the patch provi=
-ded in the other email IMA works as expected.
-> > > >=20
-> > >=20
-> > >=20
-> > > It looks like remeasurement is usually done in ima_check_last_writer.
-> > > That gets called from __fput which is called when we're releasing the
-> > > last reference to the struct file.
-> > >=20
-> > > You've hooked into the ->release op, which gets called whenever
-> > > filp_close is called, which happens when we're disassociating the fil=
-e
-> > > from the file descriptor table.
-> > >=20
-> > > So...I don't get it. Is ima_file_free not getting called on your file
-> > > for some reason when you go to close it? It seems like that should be
-> > > handling this.
-> >=20
-> > I would ditch the original proposal in favor of this 2-line patch shown=
- here:
-> >=20
-> > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b=
-221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
-> >=20
-> >=20
->=20
-> Ok, I think I get it. IMA is trying to use the i_version from the
-> overlayfs inode.
->=20
-> I suspect that the real problem here is that IMA is just doing a bare
-> inode_query_iversion. Really, we ought to make IMA call
-> vfs_getattr_nosec (or something like it) to query the getattr routine in
-> the upper layer. Then overlayfs could just propagate the results from
-> the upper layer in its response.
->=20
-> That sort of design may also eventually help IMA work properly with more
-> exotic filesystems, like NFS or Ceph.
->=20
->=20
->=20
+* Andrew Morton <akpm@linux-foundation.org> [230406 17:53]:
+> On Thu,  6 Apr 2023 15:30:50 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
+> 
+> > When the loop over the VMA is terminated early due to an error, the
+> > return code could be overwritten with ENOMEM.  Fix the return code by
+> > only setting the error on early loop termination when the error is not
+> > set.
+> > 
+> > Fixes: 2286a6914c77 ("mm: change mprotect_fixup to vma iterator")
+> > Cc: <stable@vger.kernel.org>
+> 
+> I do think we should always describe the user-visible effects when
+> proposing a backport.
+> 
+> a) so the -stable maintainers understand why we're recommending the
+>    backport and
+> 
+> b) to help some poor soul who is looking at the patch wondering if
+>    it will fix his customer's bug report.
 
-Maybe something like this? It builds for me but I haven't tested it. It
-looks like overlayfs already should report the upper layer's i_version
-in getattr, though I haven't tested that either:
+Thanks, I'll keep this in mind.
 
------------------------8<---------------------------
+> 
+> How's this?
+> 
+> : User-visible effects include: attempts to run mprotect() against a special
+> : mapping or with a poorly-aligned hugetlb address should return -EINVAL,
+> : but they presently return -ENOMEM.
 
-[PATCH] IMA: use vfs_getattr_nosec to get the i_version
-
-IMA currently accesses the i_version out of the inode directly when it
-does a measurement. This is fine for most simple filesystems, but can be
-problematic with more complex setups (e.g. overlayfs).
-
-Make IMA instead call vfs_getattr_nosec to get this info. This allows
-the filesystem to determine whether and how to report the i_version, and
-should allow IMA to work properly with a broader class of filesystems in
-the future.
-
-Reported-by: Stefan Berger <stefanb@linux.ibm.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- security/integrity/ima/ima_api.c  |  9 ++++++---
- security/integrity/ima/ima_main.c | 12 ++++++++----
- 2 files changed, 14 insertions(+), 7 deletions(-)
-
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_=
-api.c
-index d3662f4acadc..c45902e72044 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -13,7 +13,6 @@
- #include <linux/fs.h>
- #include <linux/xattr.h>
- #include <linux/evm.h>
--#include <linux/iversion.h>
- #include <linux/fsverity.h>
-=20
- #include "ima.h"
-@@ -246,10 +245,11 @@ int ima_collect_measurement(struct integrity_iint_cac=
-he *iint,
- 	struct inode *inode =3D file_inode(file);
- 	const char *filename =3D file->f_path.dentry->d_name.name;
- 	struct ima_max_digest_data hash;
-+	struct kstat stat;
- 	int result =3D 0;
- 	int length;
- 	void *tmpbuf;
--	u64 i_version;
-+	u64 i_version =3D 0;
-=20
- 	/*
- 	 * Always collect the modsig, because IMA might have already collected
-@@ -268,7 +268,10 @@ int ima_collect_measurement(struct integrity_iint_cach=
-e *iint,
- 	 * to an initial measurement/appraisal/audit, but was modified to
- 	 * assume the file changed.
- 	 */
--	i_version =3D inode_query_iversion(inode);
-+	result =3D vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
-+				   AT_STATX_SYNC_AS_STAT);
-+	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
-+		i_version =3D stat.change_cookie;
- 	hash.hdr.algo =3D algo;
- 	hash.hdr.length =3D hash_digest_size[algo];
-=20
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima=
-_main.c
-index d66a0a36415e..365db0e43d7c 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -24,7 +24,6 @@
- #include <linux/slab.h>
- #include <linux/xattr.h>
- #include <linux/ima.h>
--#include <linux/iversion.h>
- #include <linux/fs.h>
-=20
- #include "ima.h"
-@@ -164,11 +163,16 @@ static void ima_check_last_writer(struct integrity_ii=
-nt_cache *iint,
-=20
- 	mutex_lock(&iint->mutex);
- 	if (atomic_read(&inode->i_writecount) =3D=3D 1) {
-+		struct kstat stat;
-+
- 		update =3D test_and_clear_bit(IMA_UPDATE_XATTR,
- 					    &iint->atomic_flags);
--		if (!IS_I_VERSION(inode) ||
--		    !inode_eq_iversion(inode, iint->version) ||
--		    (iint->flags & IMA_NEW_FILE)) {
-+		if ((iint->flags & IMA_NEW_FILE) ||
-+		    vfs_getattr_nosec(&file->f_path, &stat,
-+				      STATX_CHANGE_COOKIE,
-+				      AT_STATX_SYNC_AS_STAT) ||
-+		    !(stat.result_mask & STATX_CHANGE_COOKIE) ||
-+		    stat.change_cookie !=3D iint->version) {
- 			iint->flags &=3D ~(IMA_DONE_MASK | IMA_NEW_FILE);
- 			iint->measured_pcrs =3D 0;
- 			if (update)
---=20
-2.39.2
-
-
+That sounds reasonable, although this isn't an exhaustive list. It could
+be an -EACCESS for multiple reasons, or anything the vm_ops returns.
