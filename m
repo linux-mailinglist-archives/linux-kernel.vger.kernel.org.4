@@ -2,208 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0C46D92AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6726D92AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236389AbjDFJ16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S235870AbjDFJ1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236180AbjDFJ14 (ORCPT
+        with ESMTP id S229677AbjDFJ1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:27:56 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FF76E9D;
-        Thu,  6 Apr 2023 02:27:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680773270; x=1712309270;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=InPNIBceKrNnxNxhCo8TDxqyXGZESVT0F+BzGH5I//k=;
-  b=TNpzp+bOMyh8T1FXO5QFZvfJd0Ndcn8MMb+f44sIuetfuVnHglVqhxjc
-   o4TGFiJmvRA0pTTRXWJK3Qz3Vr460JWfFP3+gGdbXDaoffCFlAifoo86a
-   xWPQxfoxB2LFOkjiomh7uPjiGG+sWhdHWvqOV2uH0C438m+zyIpyAQOLZ
-   0ANm+e1btBUMzKfM4aB3vO5KJV4kTzUsxxyWfgmyGV+IDJPv62Ly534uT
-   VgDAMtDfTzVVjMecNwJR6D1sceTfkffP3RSsZ48oT18wHOWEKqNs7aAS1
-   SOr3uYsDtNqaDPx3g2yOyLu6rY6T/uw3vRVbxGuc5Sjj7SjBI7SQuRbDW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="345288857"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="345288857"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 02:27:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="1016809916"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="1016809916"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Apr 2023 02:27:46 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkLuE-000RGg-0I;
-        Thu, 06 Apr 2023 09:27:46 +0000
-Date:   Thu, 6 Apr 2023 17:26:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
-Subject: Re: [PATCH v2 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-Message-ID: <202304061758.Tz5RJDZU-lkp@intel.com>
-References: <20230406062549.2461917-1-badhri@google.com>
+        Thu, 6 Apr 2023 05:27:36 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B2661AE;
+        Thu,  6 Apr 2023 02:27:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 03AC842529;
+        Thu,  6 Apr 2023 09:27:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1680773252;
+        bh=adiaPke7ib31zLxkeKxCgB0OeLdl6R7DeSrb3OTrYb4=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To;
+        b=kg3pvIO+mjbEdCO39a2fr5YvX5/alo1Myov+swiupQXyWXzoRzUR9sYVuqWss7Kkt
+         PEKHiRlX0y+FVa69sMmhY1tp+d+9kAhmiaNGIq9x5wbQiO3+f0XDioIPvgweORoiUJ
+         VFZ4qosUUmykgNoj+peK8OXqrQ5m6gBN1hMwOTqxzbNmmdEBB8iSL7VoWFqNMML1KX
+         pwpsvvcZfQB0ht9mIOuUPGKY0/Z87EpJjpcbTN/aEY3CoaTB++VvUXSmhba9tCVoK+
+         jEPzGcfCofoh3GUcG7mxYz1FBQk9uSsnd4KyN0q2Iqmp1sUjWXsWPB9rIqc2EdFVLl
+         OwTm/bFtcKSlg==
+Message-ID: <4ea53272-6324-96e6-ab29-82bccb624683@asahilina.net>
+Date:   Thu, 6 Apr 2023 18:27:27 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406062549.2461917-1-badhri@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/scheduler: Fix UAF in
+ drm_sched_fence_get_timeline_name
+Content-Language: en-US
+From:   Asahi Lina <lina@asahilina.net>
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, asahi@lists.linux.dev
+References: <20230406-scheduler-uaf-1-v1-1-8e5662269d25@asahilina.net>
+ <6b3433ee-0712-f789-51ee-3047ead9bb79@amd.com>
+ <cfbaceae-6d40-a8b3-e449-6473be234d2d@asahilina.net>
+ <180bd178-e3c0-85e3-785e-fc8a216cf65e@amd.com>
+ <df226249-734e-cb9e-8bc0-1eff625277e0@asahilina.net>
+In-Reply-To: <df226249-734e-cb9e-8bc0-1eff625277e0@asahilina.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Badhri,
+On 06/04/2023 18.15, Asahi Lina wrote:
+> On 06/04/2023 18.06, Christian König wrote:
+>> Am 06.04.23 um 10:49 schrieb Asahi Lina:
+>>> On 06/04/2023 17.29, Christian König wrote:
+>>>> Am 05.04.23 um 18:34 schrieb Asahi Lina:
+>>>>> A signaled scheduler fence can outlive its scheduler, since fences are
+>>>>> independently reference counted.
+>>>>
+>>>> Well that is actually not correct. Schedulers are supposed to stay
+>>>> around until the hw they have been driving is no longer present.
+>>>
+>>> But the fences can outlive that. You can GPU render into an imported
+>>> buffer, which attaches a fence to it. Then the GPU goes away but the
+>>> fence is still attached to the buffer. Then you oops when you cat that
+>>> debugfs file...
+>>
+>> No, exactly that's the point you wouldn't ops.
+>>
+>>>
+>>> My use case does this way more often (since schedulers are tied to
+>>> UAPI objects), which is how I found this, but as far as I can tell
+>>> this is already broken for all drivers on unplug/unbind/anything else
+>>> that would destroy the schedulers with fences potentially referenced
+>>> on separate scanout devices or at any other DMA-BUF consumer.
+>>
+>> Even if a GPU is hot plugged the data structures for it should only go
+>> away with the last reference, since the scheduler fence is referencing
+>> the hw fence and the hw fence in turn is referencing the driver this
+>> shouldn't happen.
+> 
+> So those fences can potentially keep half the driver data structures
+> alive just for existing in a signaled state? That doesn't seem sensible
+> (and it definitely doesn't work for our use case where schedulers can be
+> created and destroyed freely, it could lead to way too much junk
+> sticking around in memory).
+> 
+>>>
+>>>> E.g. the reference was scheduler_fence->hw_fence->driver->scheduler.
+>>>
+>>> It's up to drivers not to mess that up, since the HW fence has the
+>>> same requirements that it can outlive other driver objects, just like
+>>> any other fence. That's not something the scheduler has to be
+>>> concerned with, it's a driver correctness issue.
+>>>
+>>> Of course, in C you have to get it right yourself, while with correct
+>>> Rust abstractions will cause your code to fail to compile if you do it
+>>> wrong ^^
+>>>
+>>> In my particular case, the hw_fence is a very dumb object that has no
+>>> references to anything, only an ID and a pending op count. Jobs hold
+>>> references to it and decrement it until it signals, not the other way
+>>> around. So that object can live forever regardless of whether the rest
+>>> of the device is gone.
+>>
+>> That is then certainly a bug. This won't work that way, and the timelime
+>> name is just the tip of the iceberg here.
+>>
+>> The fence reference count needs to keep both the scheduler and driver
+>> alive. Otherwise you could for example unload the module and immediately
+>> ops because your fence_ops go away.
+> 
+> Yes, I realized the module issue after writing the email. But that's the
+> *only* thing it needs to hold a reference to! Which is much more
+> sensible than keeping a huge chunk of UAPI-adjacent data structures
+> alive for a signaled fence that for all we know might stick around
+> forever attached to some buffer.
+> 
+>>>> Your use case is now completely different to that and this won't work
+>>>> any more.
+>>>>
+>>>> This here might just be the first case where that breaks.
+>>>
+>>> This bug already exists, it's just a lot rarer for existing use
+>>> cases... but either way Xe is doing the same thing I am, so I'm not
+>>> the only one here either.
+>>
+>> No it doesn't. You just have implemented the references differently than
+>> they are supposed to be.
+>>
+>> Fixing this one occasion here would mitigate that immediate ops, but
+>> doesn't fix the fundamental problem.
+> 
+> Honestly, at this point I'm starting to doubt whether we want to use
+> drm_scheduler at all, because it clearly wasn't designed for our use
+> case and every time I try to fix something your answer has been "you're
+> using it wrong", and at the same time the practically nonexistent
+> documentation makes it impossible to know how it was actually designed
+> to be used.
 
-kernel test robot noticed the following build warnings:
+Also, requiring that the hw_fence keep the scheduler alive (which is 
+documented nowhere) is a completely ridiculous lifetime requirement and 
+layering violation across multiple subsystems. I have no idea how I'd 
+make Rust abstractions uphold that requirement safely without doing 
+something silly like having abstraction-specific hw_fence wrappers, and 
+then you run into deadlocks due to the scheduler potentially being 
+dropped from the job_done callback when the fence reference is dropped 
+and just... no, please. This is terrible. If you don't want me to fix it 
+we'll have to find another way because I can't work with this.
 
-[auto build test WARNING on d629c0e221cd99198b843d8351a0a9bfec6c0423]
+~~ Lina
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Badhri-Jagan-Sridharan/usb-gadget-udc-core-Prevent-redundant-calls-to-pullup/20230406-142708
-base:   d629c0e221cd99198b843d8351a0a9bfec6c0423
-patch link:    https://lore.kernel.org/r/20230406062549.2461917-1-badhri%40google.com
-patch subject: [PATCH v2 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect only when started
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20230406/202304061758.Tz5RJDZU-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2f12e8b0c9bf3d25df88c73b614c3e8d84bd7338
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Badhri-Jagan-Sridharan/usb-gadget-udc-core-Prevent-redundant-calls-to-pullup/20230406-142708
-        git checkout 2f12e8b0c9bf3d25df88c73b614c3e8d84bd7338
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/usb/gadget/udc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304061758.Tz5RJDZU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/gadget/udc/core.c:696:5: warning: no previous prototype for 'usb_gadget_connect_locked' [-Wmissing-prototypes]
-     696 | int usb_gadget_connect_locked(struct usb_gadget *gadget)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/usb/gadget/udc/core.c:749:5: warning: no previous prototype for 'usb_gadget_disconnect_locked' [-Wmissing-prototypes]
-     749 | int usb_gadget_disconnect_locked(struct usb_gadget *gadget)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/usb_gadget_connect_locked +696 drivers/usb/gadget/udc/core.c
-
-   694	
-   695	/* Internal version of usb_gadget_connect needs to be called with udc_connect_control_lock held. */
- > 696	int usb_gadget_connect_locked(struct usb_gadget *gadget)
-   697	{
-   698		int ret = 0;
-   699	
-   700		if (!gadget->ops->pullup) {
-   701			ret = -EOPNOTSUPP;
-   702			goto out;
-   703		}
-   704	
-   705		if (gadget->deactivated || !gadget->udc->started) {
-   706			/*
-   707			 * If gadget is deactivated we only save new state.
-   708			 * Gadget will be connected automatically after activation.
-   709			 *
-   710			 * udc first needs to be started before gadget can be pulled up.
-   711			 */
-   712			gadget->connected = true;
-   713			goto out;
-   714		}
-   715	
-   716		ret = gadget->ops->pullup(gadget, 1);
-   717		if (!ret)
-   718			gadget->connected = 1;
-   719	
-   720	out:
-   721		trace_usb_gadget_connect(gadget, ret);
-   722	
-   723		return ret;
-   724	}
-   725	
-   726	/**
-   727	 * usb_gadget_connect - software-controlled connect to USB host
-   728	 * @gadget:the peripheral being connected
-   729	 *
-   730	 * Enables the D+ (or potentially D-) pullup.  The host will start
-   731	 * enumerating this gadget when the pullup is active and a VBUS session
-   732	 * is active (the link is powered).
-   733	 *
-   734	 * Returns zero on success, else negative errno.
-   735	 */
-   736	int usb_gadget_connect(struct usb_gadget *gadget)
-   737	{
-   738		int ret;
-   739	
-   740		mutex_lock(&gadget->udc->connect_lock);
-   741		ret = usb_gadget_connect_locked(gadget);
-   742		mutex_unlock(&gadget->udc->connect_lock);
-   743	
-   744		return ret;
-   745	}
-   746	EXPORT_SYMBOL_GPL(usb_gadget_connect);
-   747	
-   748	/* Internal version of usb_gadget_disconnect needs to be called with udc->connect_lock held. */
- > 749	int usb_gadget_disconnect_locked(struct usb_gadget *gadget)
-   750	{
-   751		int ret = 0;
-   752	
-   753		if (!gadget->ops->pullup) {
-   754			ret = -EOPNOTSUPP;
-   755			goto out;
-   756		}
-   757	
-   758		if (!gadget->connected)
-   759			goto out;
-   760	
-   761		if (gadget->deactivated || !gadget->udc->started) {
-   762			/*
-   763			 * If gadget is deactivated we only save new state.
-   764			 * Gadget will stay disconnected after activation.
-   765			 *
-   766			 * udc should have been started before gadget being pulled down.
-   767			 */
-   768			gadget->connected = false;
-   769			goto out;
-   770		}
-   771	
-   772		ret = gadget->ops->pullup(gadget, 0);
-   773		if (!ret)
-   774			gadget->connected = 0;
-   775	
-   776		mutex_lock(&udc_lock);
-   777		if (gadget->udc->driver)
-   778			gadget->udc->driver->disconnect(gadget);
-   779		mutex_unlock(&udc_lock);
-   780	
-   781	out:
-   782		trace_usb_gadget_disconnect(gadget, ret);
-   783	
-   784		return ret;
-   785	}
-   786	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
