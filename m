@@ -2,117 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950FE6D9F27
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8416D9F2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240072AbjDFRqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
+        id S240098AbjDFRrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbjDFRqj (ORCPT
+        with ESMTP id S240062AbjDFRrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:46:39 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E55DE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:46:38 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-93b8c095335so12476166b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:46:38 -0700 (PDT)
+        Thu, 6 Apr 2023 13:47:15 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6D6E4C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:47:14 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id br6so51811323lfb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680803197;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RAECb/3wNcHEoEDLKDANAykGZzZoDwXPK2wrIHEQ2M4=;
-        b=VuuDK66XzIMzwP6ttaCqfnUgY9nG0smMaIRc2nItlYvdgub/p6Y5Aa/2Li187iMw48
-         FSSOONefopbdzJ9NJLaAgo+pTjRJ+YPqXb3OGyMqG5pyauXQCCsJvkWAv86EwxejwnHR
-         ZRjXXsO6i2UWS8m+V4FYPkXIk+0oncskp5Vgs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680803197;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:to:from:date:x-gm-message-state
+        d=linaro.org; s=google; t=1680803232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RAECb/3wNcHEoEDLKDANAykGZzZoDwXPK2wrIHEQ2M4=;
-        b=izIrvxu4zbSSx7ZqCkQC/xrJYae+jccKOCYOEw3zSd9gIUifo/jMsuiZfF9jifpgAQ
-         cKEDkATWCJ5PgPcFYlU75dnwMJVOaqW2rxuMGJJPh8iNIUHg/b7onR/CpfkNCVA2K+Rt
-         phiRN9WG6F0Jlw1iVi1KYuMb1r7ZjkdesQT5yGJ6nnVKW9PK/gQn7DHqJ58h/da5U8BX
-         opuVf7QL/kw0y9e2pFeK0xUJWHASHipvxvpD/Md7+QifIwn0DyF29/baMxaJr01dRG7G
-         1Aec7BYlAS1pNk6/MsSx3RBjV2lH31CrcO30PzPba1/yFJsrjREwzgw42Ov91kLMckn7
-         RhGw==
-X-Gm-Message-State: AAQBX9fW3RILICD7dDHjA6XDr92Hp3Yk0uMuS+HSwlAafqmpNjGGBYC5
-        5LFS/9I4xC779B6Z0ufDP6KuMA==
-X-Google-Smtp-Source: AKy350aYVOBsBs4/QQEvEUySoLjUIJYlbxbRczjqincoI9f4tnDptyR2vR64siqyySZnHr2/QV8hxw==
-X-Received: by 2002:a17:906:3f12:b0:947:8734:a058 with SMTP id c18-20020a1709063f1200b009478734a058mr5629604ejj.4.1680803196956;
-        Thu, 06 Apr 2023 10:46:36 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id kg13-20020a17090776ed00b008bc8ad41646sm1067618ejc.157.2023.04.06.10.46.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 10:46:36 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 19:46:34 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Asahi Lina <lina@asahilina.net>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Danilo Krummrich <dakr@redhat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Dave Airlie <airlied@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        andrey.grodzovsky@amd.com, tvrtko.ursulin@linux.intel.com,
-        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
-Message-ID: <ZC8FetzkowU4Q59K@phenom.ffwll.local>
-Mail-Followup-To: Asahi Lina <lina@asahilina.net>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Danilo Krummrich <dakr@redhat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Dave Airlie <airlied@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, andrey.grodzovsky@amd.com,
-        tvrtko.ursulin@linux.intel.com,
-        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <28d10733-b217-7ccc-4b8c-54bdc8249234@amd.com>
- <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
- <24fe6e14-0d0a-f874-766d-e8d045d1e80e@asahilina.net>
- <ZC6ab6LomidehGR3@phenom.ffwll.local>
- <9500edc9-4e9d-9d64-b444-ea9523779700@asahilina.net>
- <ZC7LCi0vqFOw3KL5@phenom.ffwll.local>
- <30534307-24af-b6f8-ea9f-e4264997bf9d@asahilina.net>
- <ZC7lrOHKCbrbgS3R@phenom.ffwll.local>
- <2416c870-d069-defc-d14e-514e7db7d2fd@asahilina.net>
- <ZC8ElEkZEp1TGZJg@phenom.ffwll.local>
+        bh=g2kphCzdyI8pFLM0XEcu5T4v/H3byCGSRbAeet3UKsQ=;
+        b=wDBvHwA7TFNy7JGBWgBcjPeqww2KMYjGxDTyJpfdjbn0yRz8IK9VkJ4QLV8oYvMcNS
+         UY+DsmQUN6SprUkBpgwlb6AdcA3jCYnvT2SComMrNGqJcJmgST5wbMpZ7ime7Gg/iRgI
+         k4OxRtFGDhZRrnuisEoVwNZg2ZjVStRNpIrGLL/yM/OtLIgBR61+udnwaw4a+2FAgTzB
+         tXRjfrpy6amxqkiAd6Oc5f6PF0/5qxN7Iino3SXatzD63d64Wvw2PP6ion3O9tFZIpVv
+         vKZbRKu0Wm/LP81xZ4aGpcVt45fXpnm/NYXLMUU+bO7cyER01JU1lNUzspPSJmtETmzr
+         3O5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680803232;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g2kphCzdyI8pFLM0XEcu5T4v/H3byCGSRbAeet3UKsQ=;
+        b=crlrDx4Oq65clucFHnXWjz/MODvxSL5ztue4ra/3S3M14AB4hWoyiack4N1MBdXNyq
+         uBiDDOTfX0ZyeumSgT0bDa3+3zV+Kmh6Ur9AIgVHFGf5UXrJfi8hqOI+F/F/HeWPc/JZ
+         RULDO3gxQ3qLRAGDV2RTrrxxHJqJA6/zwKfEBNfHApwnHLtBflWUFExnwEZSSEln+utk
+         /oEW06sn6WlHBok5mwROUzP/4y/7P2+OtjE7bI1XV6JZArKWozDBEhc0OFUtw5WZLiWe
+         lIO56n5afnOLT72WFLepbIP4xhoTbAWyqojEws5nJvrGVLQ2Xys46WjIk/HkNVdww00W
+         VU+Q==
+X-Gm-Message-State: AAQBX9czkJSKuUxeypAY1mL7+O3EZg25YgfeqHzQgagXkMBqyXoo7zyU
+        pSS2yOpt9ivz3lkYCg4a25hQfQ==
+X-Google-Smtp-Source: AKy350aFVxyM/ori3/dci0NsR1+uV42sLIEpq5lHD/+dBdDEqIdqvBj1dMatOXAgwjo45isQTkIfpg==
+X-Received: by 2002:a05:6512:991:b0:4dd:cb1d:b3cc with SMTP id w17-20020a056512099100b004ddcb1db3ccmr27761lft.11.1680803232479;
+        Thu, 06 Apr 2023 10:47:12 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id z17-20020a19f711000000b004ec634b0e26sm50398lfe.307.2023.04.06.10.47.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 10:47:12 -0700 (PDT)
+Message-ID: <ecf48eaf-b4b9-3749-894d-0f06d0b954e3@linaro.org>
+Date:   Thu, 6 Apr 2023 20:47:11 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC8ElEkZEp1TGZJg@phenom.ffwll.local>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/3] thermal/drivers/tsens: Extract and shift-in optional
+ MSB
+Content-Language: en-GB
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, amitk@kernel.org,
+        thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
+ <20230406145850.357296-4-bryan.odonoghue@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230406145850.357296-4-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 07:42:44PM +0200, Daniel Vetter wrote:
-> But I think there's tools to make sure we don't dig a complete hole with
-> these it sounds like. I guess another topic for pestering the rust folks.
+On 06/04/2023 17:58, Bryan O'Donoghue wrote:
+> In msm8939 some of the sensor calibration data traverses byte boundaries.
+> Two examples of this are thermal sensor 2 point 1 and sensor 9 point 2.
+> 
+> For sensor 2 point 1 we can get away with a simple read traversing byte
+> boundaries as the calibration most significant bits are adjacent to the
+> least significant across the byte boundary.
+> 
+> In this case a read starting at the end of the first byte for nine bits
+> will deliver up the data we want.
+> 
+> In the case of sensor 9 point 2 however, the most significant bits are not
+> adjacent and so therefore we need to perform two reads and or the bits
+> together.
+> 
+> If reg.p1_shift or reg.p2_shift is set then automatically search for
+> pX_sY_msb in the dts applying pX_shift as a right shift or into the pX_sY
+> value.
 
-Or to put it very bluntly: Could we make Arc<T> at least runtime enforce
-(with the usual lockdep annotation trick like fs_reclaim) that and Drop is
-the final one?
+I think that having this in the common code is a bit of an overkill. No 
+other platform has this 'peculiarity' up to now. So, it might be better 
+to add 8939-specific calibration function that calls 
+tsens_read_calibration(), mixes in the s10_p2_msb and then calls 
+compute_intercept_slope().
 
-If that's the rust Arc<T> linux semantics then I think my worries are 100%
-covered. And we'll sort out the trickier type based enforcement for
-special cases when they hit us.
+> 
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>   drivers/thermal/qcom/tsens.c | 33 +++++++++++++++++++++++++++++++++
+>   1 file changed, 33 insertions(+)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index a260f563b4889..eff2c8671c343 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -74,6 +74,7 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+>   {
+>   	u32 mode;
+>   	u32 base1, base2;
+> +	u32 msb;
+>   	char name[] = "sXX_pY_backup"; /* s10_p1_backup */
+>   	int i, ret;
+>   
+> @@ -122,6 +123,22 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+>   
+>   		dev_dbg(priv->dev, "%s 0x%x\n", name, p1[i]);
+>   
+> +		if (priv->reg && priv->reg[i].p1_shift) {
+> +			ret = snprintf(name, sizeof(name), "s%d_p1_msb",
+> +				       priv->sensor[i].hw_id);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &msb);
+> +			if (ret) {
+> +				dev_err(priv->dev, "Failed to read %s\n", name);
+> +				return ret;
+> +			}
+> +
+> +			dev_dbg(priv->dev, "%s 0x%x\n", name, msb);
+> +			p1[i] |= msb >> priv->reg[i].p1_shift;
+> +		}
+> +
+>   		ret = snprintf(name, sizeof(name), "s%d_p2%s", priv->sensor[i].hw_id,
+>   			       backup ? "_backup" : "");
+>   		if (ret < 0)
+> @@ -134,6 +151,22 @@ int tsens_read_calibration(struct tsens_priv *priv, int shift, u32 *p1, u32 *p2,
+>   		}
+>   
+>   		dev_dbg(priv->dev, "%s 0x%x\n", name, p2[i]);
+> +
+> +		if (priv->reg && priv->reg[i].p2_shift) {
+> +			ret = snprintf(name, sizeof(name), "s%d_p2_msb",
+> +				       priv->sensor[i].hw_id);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			ret = nvmem_cell_read_variable_le_u32(priv->dev, name, &msb);
+> +			if (ret) {
+> +				dev_err(priv->dev, "Failed to read %s\n", name);
+> +				return ret;
+> +			}
+> +
+> +			dev_dbg(priv->dev, "%s 0x%x\n", name, msb);
+> +			p2[i] |= msb >> priv->reg[i].p2_shift;
+> +		}
+>   	}
+>   
+>   	switch (mode) {
 
-The downside is that this is substantially stricter than kref on the C
-side, but I think that's a Good Thing :-)
--Daniel
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+With best wishes
+Dmitry
+
