@@ -2,283 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CD96D9B77
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BD56D9B7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239368AbjDFPAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S239329AbjDFPBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbjDFO7t (ORCPT
+        with ESMTP id S230085AbjDFPBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:59:49 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5F79EE1;
-        Thu,  6 Apr 2023 07:59:24 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id l18so29235947oic.13;
-        Thu, 06 Apr 2023 07:59:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680793158;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wcyQ9PVr/q3d+Z2b5CyPmPNAX1Bn6Htbl2OP4BAR1uE=;
-        b=xtIPrB9mnPkv01wG6BfT/mBnevWeJrS1Gci3xHrEVKnYznV5VRRFa3iIbpDKvg/7pY
-         MqlmcEAShgk/ozYFQ4C1L5r+lKQC1QE+tzfVsHVR3TvPG6mClO6CTOtErvvEiKA6pqcv
-         pBoYMeY6e/7k4JxxtfaEtJjdXgty2TuSFty5xb/P2Kcpe4hPpRAme2cHkd/nhsfhgRM/
-         wl/JLBW4BVyoEF69U2xQbLJuzgM3P5l+NrPjznREDxL9tJ3wx5OE9+L6DBxyrfnTwjZX
-         3YMXtZ5oucR3RqlWEgIH8eMLBG/s+L6rNKrtyKU24+9dzasMZb+DCopaQG5iiFI/fxKs
-         Q5kA==
-X-Gm-Message-State: AAQBX9fiNTETMRNi1mAhNtEnyZygrewjztiiOci7sr+G3VcI64oHaQGT
-        keAhXgZtLHtwFBx7+5W1Vg==
-X-Google-Smtp-Source: AKy350bjhoej/GkPRCQguDVc7FGMvBb8pRji3Y3UcdAY1y3ZiLemp4BMpemZ7xkxLgitjCt5O7uYJQ==
-X-Received: by 2002:a05:6808:f12:b0:389:122c:ad2c with SMTP id m18-20020a0568080f1200b00389122cad2cmr5138452oiw.27.1680793157817;
-        Thu, 06 Apr 2023 07:59:17 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 17-20020aca1211000000b0038b862bc35bsm401800ois.8.2023.04.06.07.59.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 07:59:17 -0700 (PDT)
-Received: (nullmailer pid 3082000 invoked by uid 1000);
-        Thu, 06 Apr 2023 14:59:16 -0000
-Date:   Thu, 6 Apr 2023 09:59:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH v3 05/11] of: Add a KUnit test for overlays and test
- managed APIs
-Message-ID: <20230406145916.GB3036886-robh@kernel.org>
-References: <20230327222159.3509818-1-sboyd@kernel.org>
- <20230327222159.3509818-6-sboyd@kernel.org>
+        Thu, 6 Apr 2023 11:01:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2438895;
+        Thu,  6 Apr 2023 08:01:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6A24647F4;
+        Thu,  6 Apr 2023 15:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF86C433EF;
+        Thu,  6 Apr 2023 15:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680793280;
+        bh=67Z2E96bZy7BCqWEhCsj19y7v8ycg2iEwkSVbNFV43s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mqkD+bXl9Cv9PACGClbea7PmXsLCGtizGea6Q8cX5/eZndr3cFfCgtw+tyDvaV0T+
+         tzKBnG97kn83kKwcRwuNLTD29F9X+L5ujbC74XEZhx3lg2lxSbMViVVzCWo9EL51Ex
+         3/uIfnE+3EcUu0IDvVLb0YCXXnP1cOFR8Fxo/vAeoUmhb+EXqB4GDzzhDyO2i1FDwB
+         nDhi0z3niUDYiWqFuyvDCOcCR4jypMI4rST4i/PVQQKByDTAPOxdmiM96KuL2UV799
+         mvV2ss6tx1VAeGl1qNnFnQP/FFXbgqwoP3zE6lvgDNYeDxC+W6IaV5UExMf0LXeTUG
+         QypH2nv5YMheQ==
+Date:   Thu, 6 Apr 2023 17:01:13 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        amir73il@gmail.com, Jeff Layton <jlayton@kernel.org>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
+ writes
+Message-ID: <20230406-wasser-zwanzig-791bc0bf416c@brauner>
+References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
+ <20230406-diffamieren-langhaarig-87511897e77d@brauner>
+ <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
+ <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
+ <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230327222159.3509818-6-sboyd@kernel.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 27, 2023 at 03:21:53PM -0700, Stephen Boyd wrote:
-> Test the KUnit test managed overlay APIs. Confirm that platform devices
-> are created and destroyed properly. This provides us confidence that the
-> test managed work correctly and can be relied upon to provide tests with
-> fake platform devices and device nodes via overlays compiled into the
-> kernel image.
+On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
+> On Thu, Apr 6, 2023 at 10:20 AM Stefan Berger <stefanb@linux.ibm.com> wrote:
+> > On 4/6/23 10:05, Paul Moore wrote:
+> > > On Thu, Apr 6, 2023 at 6:26 AM Christian Brauner <brauner@kernel.org> wrote:
+> > >> On Wed, Apr 05, 2023 at 01:14:49PM -0400, Stefan Berger wrote:
+> > >>> Overlayfs fails to notify IMA / EVM about file content modifications
+> > >>> and therefore IMA-appraised files may execute even though their file
+> > >>> signature does not validate against the changed hash of the file
+> > >>> anymore. To resolve this issue, add a call to integrity_notify_change()
+> > >>> to the ovl_release() function to notify the integrity subsystem about
+> > >>> file changes. The set flag triggers the re-evaluation of the file by
+> > >>> IMA / EVM once the file is accessed again.
+> > >>>
+> > >>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > >>> ---
+> > >>>   fs/overlayfs/file.c       |  4 ++++
+> > >>>   include/linux/integrity.h |  6 ++++++
+> > >>>   security/integrity/iint.c | 13 +++++++++++++
+> > >>>   3 files changed, 23 insertions(+)
+> > >>>
+> > >>> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+> > >>> index 6011f955436b..19b8f4bcc18c 100644
+> > >>> --- a/fs/overlayfs/file.c
+> > >>> +++ b/fs/overlayfs/file.c
+> > >>> @@ -13,6 +13,7 @@
+> > >>>   #include <linux/security.h>
+> > >>>   #include <linux/mm.h>
+> > >>>   #include <linux/fs.h>
+> > >>> +#include <linux/integrity.h>
+> > >>>   #include "overlayfs.h"
+> > >>>
+> > >>>   struct ovl_aio_req {
+> > >>> @@ -169,6 +170,9 @@ static int ovl_open(struct inode *inode, struct file *file)
+> > >>>
+> > >>>   static int ovl_release(struct inode *inode, struct file *file)
+> > >>>   {
+> > >>> +     if (file->f_flags & O_ACCMODE)
+> > >>> +             integrity_notify_change(inode);
+> > >>> +
+> > >>>        fput(file->private_data);
+> > >>>
+> > >>>        return 0;
+> > >>> diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+> > >>> index 2ea0f2f65ab6..cefdeccc1619 100644
+> > >>> --- a/include/linux/integrity.h
+> > >>> +++ b/include/linux/integrity.h
+> > >>> @@ -23,6 +23,7 @@ enum integrity_status {
+> > >>>   #ifdef CONFIG_INTEGRITY
+> > >>>   extern struct integrity_iint_cache *integrity_inode_get(struct inode *inode);
+> > >>>   extern void integrity_inode_free(struct inode *inode);
+> > >>> +extern void integrity_notify_change(struct inode *inode);
+> > >>
+> > >> I thought we concluded that ima is going to move into the security hook
+> > >> infrastructure so it seems this should be a proper LSM hook?
+> > >
+> > > We are working towards migrating IMA/EVM to the LSM layer, but there
+> > > are a few things we need to fix/update/remove first; if anyone is
+> > > curious, you can join the LSM list as we've been discussing some of
+> > > these changes this week.  Bug fixes like this should probably remain
+> > > as IMA/EVM calls for the time being, with the understanding that they
+> > > will migrate over with the rest of IMA/EVM.
+> > >
+> > > That said, we should give Mimi a chance to review this patch as it is
+> > > possible there is a different/better approach.  A bit of patience may
+> > > be required as I know Mimi is very busy at the moment.
+> >
+> > There may be a better approach actually by increasing the inode's i_version,
+> > which then should trigger the appropriate path in ima_check_last_writer().
 > 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  drivers/of/.kunitconfig            |   2 +
->  drivers/of/Kconfig                 |  10 +++
->  drivers/of/Makefile                |   1 +
->  drivers/of/kunit_overlay_test.dtso |   9 +++
->  drivers/of/overlay_test.c          | 110 +++++++++++++++++++++++++++++
->  5 files changed, 132 insertions(+)
->  create mode 100644 drivers/of/kunit_overlay_test.dtso
->  create mode 100644 drivers/of/overlay_test.c
+> I'm not the VFS/inode expert here, but I thought the inode's i_version
+> field was only supposed to be bumped when the inode metadata changed,
+> not necessarily the file contents, right?
 > 
-> diff --git a/drivers/of/.kunitconfig b/drivers/of/.kunitconfig
-> index 5a8fee11978c..7d570cb922a1 100644
-> --- a/drivers/of/.kunitconfig
-> +++ b/drivers/of/.kunitconfig
-> @@ -1,3 +1,5 @@
->  CONFIG_KUNIT=y
->  CONFIG_OF=y
->  CONFIG_OF_KUNIT_TEST=y
-> +CONFIG_OF_OVERLAY=y
-> +CONFIG_OF_OVERLAY_KUNIT_TEST=y
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index 1b995cecf5be..5bdeba11268d 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -113,6 +113,16 @@ config OF_OVERLAY
->  	  While this option is selected automatically when needed, you can
->  	  enable it manually to improve device tree unit test coverage.
->  
-> +config OF_OVERLAY_KUNIT_TEST
-> +	tristate "Device Tree overlay KUnit tests" if !KUNIT_ALL_TESTS
-> +	depends on OF_OVERLAY
-> +	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  This option builds KUnit unit tests for the device tree overlay code.
-> +
-> +	  If unsure, say N here, but this option is safe to enable.
-> +
->  config OF_NUMA
->  	bool
->  
-> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> index c694f998b9f5..2ad60d5b87ac 100644
-> --- a/drivers/of/Makefile
-> +++ b/drivers/of/Makefile
-> @@ -21,5 +21,6 @@ endif
->  
->  obj-$(CONFIG_KUNIT) += of_kunit.o
->  obj-$(CONFIG_OF_KUNIT_TEST) += of_test.o
-> +obj-$(CONFIG_OF_OVERLAY_KUNIT_TEST) += overlay_test.o kunit_overlay_test.dtbo.o
->  
->  obj-$(CONFIG_OF_UNITTEST) += unittest-data/
-> diff --git a/drivers/of/kunit_overlay_test.dtso b/drivers/of/kunit_overlay_test.dtso
-> new file mode 100644
-> index 000000000000..85f20b4b4c16
-> --- /dev/null
-> +++ b/drivers/of/kunit_overlay_test.dtso
-> @@ -0,0 +1,9 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +&{/} {
-> +	kunit-test {
-> +		compatible = "test,empty";
-> +	};
-> +};
-> diff --git a/drivers/of/overlay_test.c b/drivers/of/overlay_test.c
-> new file mode 100644
-> index 000000000000..66b1dceea568
-> --- /dev/null
-> +++ b/drivers/of/overlay_test.c
-> @@ -0,0 +1,110 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit tests for device tree overlays
-> + */
-> +#include <linux/device/bus.h>
-> +#include <linux/kconfig.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <kunit/of.h>
-> +#include <kunit/test.h>
-> +
-> +static const char * const kunit_node_name = "kunit-test";
-> +static const char * const kunit_compatible = "test,empty";
-> +
-> +/* Test that of_overlay_apply_kunit() adds a node to the live tree */
-> +static void of_overlay_apply_kunit_apply(struct kunit *test)
-> +{
-> +	struct device_node *np;
-> +
-> +	KUNIT_ASSERT_EQ(test, 0,
-> +			of_overlay_apply_kunit(test, kunit_overlay_test));
-> +
-> +	np = of_find_node_by_name(NULL, kunit_node_name);
-> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, np);
-> +	of_node_put(np);
-> +}
-> +
-> +static int bus_match_np(struct device *dev, const void *data)
-> +{
-> +	const struct device_node *np = data;
-> +
-> +	return np == dev->of_node;
-> +}
-> +
-> +/*
-> + * Test that of_overlay_apply_kunit() creates platform devices with the
-> + * expected device_node
-> + */
-> +static void of_overlay_apply_kunit_platform_device(struct kunit *test)
-> +{
-> +	struct device *dev;
-> +	struct device_node *np;
-> +
-> +	KUNIT_ASSERT_EQ(test, 0,
-> +			of_overlay_apply_kunit(test, kunit_overlay_test));
-> +
-> +	np = of_find_node_by_name(NULL, kunit_node_name);
-> +	of_node_put_kunit(test, np);
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
-> +
-> +	dev = bus_find_device(&platform_bus_type, NULL, np, bus_match_np);
+> That said, overlayfs is a bit different so maybe that's okay, but I
+> think we would need to hear from the VFS folks if this is acceptable.
 
-of_find_device_by_node()
+Ccing Jeff for awareness since he did the i_version rework a short time ago.
 
-> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, dev);
-> +	put_device(dev);
-> +}
-> +
-> +static int of_overlay_bus_match_compatible(struct device *dev, const void *data)
-> +{
-> +	return of_device_is_compatible(dev->of_node, data);
-> +}
-> +
-> +/* Test that of_overlay_apply_kunit() cleans up after the test is finished */
-> +static void of_overlay_apply_kunit_cleanup(struct kunit *test)
-> +{
-> +	struct device *dev;
-> +	struct device_node *np;
-> +
-> +	KUNIT_ASSERT_EQ(test, 0,
-> +			of_overlay_apply_kunit(test, kunit_overlay_test));
-> +
-> +	np = of_find_node_by_name(NULL, kunit_node_name);
-> +	of_node_put(np); /* Not derefing 'np' after this */
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
-> +
-> +	dev = bus_find_device(&platform_bus_type, NULL, np, bus_match_np);
+The documentation in include/linux/iversion.h states:
 
-And here.
+ * [...] The i_version must
+ * appear larger to observers if there was an explicit change to the inode's
+ * data or metadata since it was last queried.
 
-> +	put_device(dev); /* Not derefing 'device' after this */
-> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, dev);
-> +
-> +	/* Remove overlay */
-> +	kunit_cleanup(test);
+what I'm less sure in all of this is why this is called in ovl_release() and
+whether it's correct to increment the overlayfs inode's i_version.
 
-I guess this is testing the cleanup. It's not that obvious given the 
-overlay is removed by kunit_cleanup(). Not sure if anything can be done 
-though...
-
-> +
-> +	np = of_find_node_by_name(NULL, kunit_node_name);
-> +	KUNIT_EXPECT_PTR_EQ(test, NULL, np);
-> +	of_node_put(np);
-> +
-> +	dev = bus_find_device(&platform_bus_type, NULL, kunit_compatible,
-> +			      of_overlay_bus_match_compatible);
-> +	KUNIT_EXPECT_PTR_EQ(test, NULL, dev);
-> +	put_device(dev);
-> +}
-> +
-> +static struct kunit_case of_overlay_apply_kunit_test_cases[] = {
-> +	KUNIT_CASE(of_overlay_apply_kunit_apply),
-> +	KUNIT_CASE(of_overlay_apply_kunit_platform_device),
-> +	KUNIT_CASE(of_overlay_apply_kunit_cleanup),
-> +	{}
-> +};
-> +
-> +/*
-> + * Test suite for test managed device tree overlays.
-> + */
-> +static struct kunit_suite of_overlay_apply_kunit_suite = {
-> +	.name = "of_overlay_apply_kunit",
-> +	.test_cases = of_overlay_apply_kunit_test_cases,
-> +};
-> +
-> +kunit_test_suites(
-> +	&of_overlay_apply_kunit_suite,
-> +);
-> +MODULE_LICENSE("GPL");
-> -- 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
-> 
+The change is done to the inode of the copied up/modified file's inode in the
+upper layer. So the i_version should already be incremented when we call into
+the upper layer usually via vfs_*() methods.
