@@ -2,204 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA116DA605
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC336DA606
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239362AbjDFW5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S239373AbjDFW56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbjDFW5k (ORCPT
+        with ESMTP id S232836AbjDFW54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:57:40 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D2E59D8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:57:39 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso153685pjs.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:57:39 -0700 (PDT)
+        Thu, 6 Apr 2023 18:57:56 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D959D8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:57:55 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id j14-20020a17090a7e8e00b002448c0a8813so2629989pjl.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:57:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680821859;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3GKUQjQbagpE6YHTTFKMOdYbnnJw+93fjlpuKePTGp4=;
-        b=BnUl7njLD5FTU7/4mu5GqRsMACbCcdSoroWoOj7MBjrFNfCwzY7gVeRA5T48LDVjko
-         +NJyReBzh8vH2rtR//8/zxIhRUhXIbjiX5ICtFuIBtz4lv9clgdSs3+BdkiL1JoRdVb2
-         i1IHidb1Rj4MKWEt36IJCcDhY6GNVoJ1wbN1o=
+        d=gmail.com; s=20210112; t=1680821875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JXgNfES2xPmLIzA9XQu7yHUn8Ass15lCW/P1iL99/uE=;
+        b=HR7UuBf4gWbhbVlkBYitBViCVWlQ/s3oikpp4qMOZGC23Wn7C+/HAg9G3DJaHwPKjI
+         /4kFwj7mU8d768xogqeRJbJXcsUQ7YOFigy3I3fttmqsZdBwQy5P68Ti18yaKUjvNx8E
+         ob9nwpa2t3NZCxfEdG89sJjAPcVWust+QqYLfTetUNrgsSuZzuGeR6ylQQKpy5hwLbMx
+         YCvjNrTV5e4AeS5RG4HlfE8fh78Tz32Dy6s+gbvkufNeO+GORoX7obpDKuap4MLo9ael
+         R+A+INy2D5jQTW85sR97Sd5j8GPJX6pdhXUYVbLyPPn91497VoWvQ55Vqt3Ox+HsPl8Y
+         l8KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680821859;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GKUQjQbagpE6YHTTFKMOdYbnnJw+93fjlpuKePTGp4=;
-        b=BwbUQ49jniImAe/eKCtrLIZz6ubBkhZySc9Tckq08VQJzXDrKLbbYxsu5sx+jImWJk
-         +enF3kcwVNwWzMqq5JPp36IB6dIljmGJOULL7urVtE7uA6FZlhMmVlR8VdB/2bjwzOWF
-         l74zq5P+mT1jfS8AGhfAQK13541VQp00Y7OPr0Bdfz93CwVYarr3hV4cLC0zQNLOv08r
-         ZFEsSbT8Nmczrlg//SOx1m+TYhODphxkJmbpl5OlOBqNwShBnQt1u43mEym76WaU6uUr
-         HGud6KcTGRj3mZofKA7qJTKrWkixgaXoozweKAGZJd/2PFFzJ3Pe3MAmQfpJ1ICcTYag
-         9ZZA==
-X-Gm-Message-State: AAQBX9esFRSGC9T6ooo8Coovw1K3nzN8ZRJuBS1AZ5BlPKgkrsWoK7wP
-        7wbSVTPCbMJo+mQyXQZ5lT74Pg==
-X-Google-Smtp-Source: AKy350YyOPIqIP+baKYuUtYZr4axPZY8DTucdHt1X5A+hsmOgIFnvGFKt3oLkFSEwe1HOByoBgFzrw==
-X-Received: by 2002:a17:90b:164f:b0:240:67d5:aea1 with SMTP id il15-20020a17090b164f00b0024067d5aea1mr246700pjb.14.1680821858773;
-        Thu, 06 Apr 2023 15:57:38 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id mr23-20020a17090b239700b0023f9782333fsm1684277pjb.13.2023.04.06.15.57.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 15:57:38 -0700 (PDT)
-Message-ID: <642f4e62.170a0220.1f11f.36df@mx.google.com>
-X-Google-Original-Message-ID: <202304061554.@keescook>
-Date:   Thu, 6 Apr 2023 15:57:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-hardening@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Yury Norov <yury.norov@gmail.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Sander Vanheule <sander@svanheule.net>,
-        Eric Biggers <ebiggers@google.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 6/9] fortify: Split reporting and avoid passing string
- pointer
-References: <20230405235832.never.487-kees@kernel.org>
- <20230406000212.3442647-6-keescook@chromium.org>
- <CAHp75Vf-nG865UwbVjwFjVTtXA7mAdi4FfKCpTHDx55eFnbvAA@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1680821875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JXgNfES2xPmLIzA9XQu7yHUn8Ass15lCW/P1iL99/uE=;
+        b=bpybsfauoOZKg+09vkvLsgG/CMX3D4Qhll54avDZAbECg4hQuz4fEsx2cHDhk3qyaW
+         r+xuBF4bW14CDjks+yQtkDlBeBp0kDR2YVHyo9Cfj5di3uKks868DaTyahfZlVaN124y
+         ZJxmhkkXlCrL8VhGwv/HfM0IZmiuqK/OQzB60vjEQmPY33nsx+WbC2cf4qdii/OH9mnW
+         RLIK6hkUtu40H5PIPCWc42I8HpbFyUWzLYb4cV1nOWVQdyg94mxAuvbu/XGqAtQMkLZS
+         +PitoBlaN/zpdEaEuDxAgQguu4/aXQrTQqucuCfO1Mx+oHCRbHOiLmK8h7saIjM8GFDh
+         tBxA==
+X-Gm-Message-State: AAQBX9c6tJtkxC4M4sbutK2Nacg7gQ/oihFHgfpV8QR+c3C1jJOtXSDS
+        cOsizoWthaijOEbGGwe3z+7k2vpxyYYO6Hm50XvFJdjQ
+X-Google-Smtp-Source: AKy350Yh8xcHrviJawO8dzK8guWnatfjmYEClFJYOUxp53fgYbHjXiICm9F7JoMQh0LwehWyiEjx8T3vVLTGlkq9LzY=
+X-Received: by 2002:a17:903:2449:b0:1a0:1f4e:a890 with SMTP id
+ l9-20020a170903244900b001a01f4ea890mr266381pls.1.1680821875058; Thu, 06 Apr
+ 2023 15:57:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75Vf-nG865UwbVjwFjVTtXA7mAdi4FfKCpTHDx55eFnbvAA@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230406082004.2185420-1-naoya.horiguchi@linux.dev>
+In-Reply-To: <20230406082004.2185420-1-naoya.horiguchi@linux.dev>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 6 Apr 2023 15:57:43 -0700
+Message-ID: <CAHbLzkrMu2SsmbWP+1WDd7f6Mu8U-rmMA1_Gah9BJmGUUXYTMQ@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/huge_memory.c: warn with pr_warn_ratelimited
+ instead of VM_WARN_ON_ONCE_FOLIO
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Xu Yu <xuyu@linux.alibaba.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:20:52PM +0300, Andy Shevchenko wrote:
-> On Thu, Apr 6, 2023 at 3:02 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > In preparation for KUnit testing and further improvements in fortify
-> > failure reporting, split out the report and encode the function and
-> > access failure (read or write overflow) into a single int argument. This
-> > mainly ends up saving some space in the data segment. For a defconfig
-> > with FORTIFY_SOURCE enabled:
-> >
-> > $ size gcc/vmlinux.before gcc/vmlinux.after
-> >    text           data     bss     dec              hex filename
-> > 26132309        9760658 2195460 38088427        2452eeb gcc/vmlinux.before
-> > 26132386        9748382 2195460 38076228        244ff44 gcc/vmlinux.after
-> 
-> ...
-> 
-> > +       const char *name;
-> > +       const bool write = !!(reason & 0x1);
-> 
-> Perhaps define that as
-> 
-> FORTIFY_READ_WRITE  BIT(0)
-> FORTIFY_FUNC_SHIFT  1
-> 
-> const bool write = reason & FORTIFY_READ_WRITE; // and note no need for !! part
+On Thu, Apr 6, 2023 at 1:20=E2=80=AFAM Naoya Horiguchi
+<naoya.horiguchi@linux.dev> wrote:
+>
+> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>
+> split_huge_page_to_list() WARNs when called for huge zero pages, which
+> sounds to me too harsh because it does not imply a kernel bug, but just
+> notifies the event to admins.  On the other hand, this is considered
+> as critical by syzkaller and makes its testing less efficient, which
+> seems to me harmful.
+>
+> So replace the VM_WARN_ON_ONCE_FOLIO with pr_warn_ratelimited.
 
-Yeah, that reads better. The FIELD_GET suggestion down-thread is
-probably how I'll go.
+Makes sense to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-> 
-> switch (reason >> FORTIFY_FUNC_SHIFT) {
-> 
-> > +       switch (reason >> 1) {
-> > +       case FORTIFY_FUNC_strncpy:
-> > +               name = "strncpy";
-> > +               break;
-> > +       case FORTIFY_FUNC_strnlen:
-> > +               name = "strnlen";
-> > +               break;
-> > +       case FORTIFY_FUNC_strlen:
-> > +               name = "strlen";
-> > +               break;
-> > +       case FORTIFY_FUNC_strlcpy:
-> > +               name = "strlcpy";
-> > +               break;
-> > +       case FORTIFY_FUNC_strscpy:
-> > +               name = "strscpy";
-> > +               break;
-> > +       case FORTIFY_FUNC_strlcat:
-> > +               name = "strlcat";
-> > +               break;
-> > +       case FORTIFY_FUNC_strcat:
-> > +               name = "strcat";
-> > +               break;
-> > +       case FORTIFY_FUNC_strncat:
-> > +               name = "strncat";
-> > +               break;
-> > +       case FORTIFY_FUNC_memset:
-> > +               name = "memset";
-> > +               break;
-> > +       case FORTIFY_FUNC_memcpy:
-> > +               name = "memcpy";
-> > +               break;
-> > +       case FORTIFY_FUNC_memmove:
-> > +               name = "memmove";
-> > +               break;
-> > +       case FORTIFY_FUNC_memscan:
-> > +               name = "memscan";
-> > +               break;
-> > +       case FORTIFY_FUNC_memcmp:
-> > +               name = "memcmp";
-> > +               break;
-> > +       case FORTIFY_FUNC_memchr:
-> > +               name = "memchr";
-> > +               break;
-> > +       case FORTIFY_FUNC_memchr_inv:
-> > +               name = "memchr_inv";
-> > +               break;
-> > +       case FORTIFY_FUNC_kmemdup:
-> > +               name = "kmemdup";
-> > +               break;
-> > +       case FORTIFY_FUNC_strcpy:
-> > +               name = "strcpy";
-> > +               break;
-> > +       default:
-> > +               name = "unknown";
-> > +       }
-> 
-> ...
-> 
-> > +       WARN(1, "%s: detected buffer %s overflow\n", name, write ? "write" : "read");
-> 
-> Using str_read_write() ?
-> 
-> Dunno if it's already there or needs to be added. I have some patches
-> to move those str_*() to string_choices.h. We can also prepend yours
-> with those.
-
-Oh! Hah. I totally forgot about str_read_write. :) I will use that.
-
--- 
-Kees Cook
+>
+> Fixes: 478d134e9506 ("mm/huge_memory: do not overkill when splitting huge=
+_zero_page")
+> Reported-by: syzbot+07a218429c8d19b1fb25@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/lkml/000000000000a6f34a05e6efcd01@google.co=
+m/
+> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  mm/huge_memory.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index 81a5689806af..06bcdd6f5060 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -2649,9 +2649,10 @@ int split_huge_page_to_list(struct page *page, str=
+uct list_head *list)
+>         VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>
+>         is_hzp =3D is_huge_zero_page(&folio->page);
+> -       VM_WARN_ON_ONCE_FOLIO(is_hzp, folio);
+> -       if (is_hzp)
+> +       if (is_hzp) {
+> +               pr_warn_ratelimited("Called split_huge_page for huge zero=
+ page\n");
+>                 return -EBUSY;
+> +       }
+>
+>         if (folio_test_writeback(folio))
+>                 return -EBUSY;
+> --
+> 2.25.1
+>
