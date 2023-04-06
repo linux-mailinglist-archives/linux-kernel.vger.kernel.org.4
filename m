@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF70B6D94D9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29B56D94DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237563AbjDFLPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S237592AbjDFLQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237543AbjDFLPk (ORCPT
+        with ESMTP id S237513AbjDFLQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:15:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA4D7EEA;
-        Thu,  6 Apr 2023 04:15:39 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4559666031C5;
-        Thu,  6 Apr 2023 12:15:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680779738;
-        bh=Z9FAONHJXsqdRclhbJrYl+nWr1QeHPMowvuPQxfxQPo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dPUfn2F0fQXOoWw/LhHXmj7I5sHnUAs2uMKLfwE0QFoOEjf6/c3DfoURVk3HYpSuO
-         /9Ll1dnR1Y8LMCAp1bhyjqMFQ+GXfXOS9XqPKpYUycTOhd6fcwG2CR5aZAp4ortlfg
-         Xf0sG/qrIjHLHqEauLHg0wT4h73jh42CP7xLpo/WkcPC+M6LchHE81mHvOFoMrUHJr
-         bUyNN3JVdcIjhCEzuqaHtC+8qIC33GJaczStp8mSm/q8Wd9ZYVI+Kv50iPVqr3u0G5
-         m2iG/mQ7o1l+gFiNINDmid/+F2RgLCfKY1G4Idj7c140qci/W10qKEZDcOEl6Yt1x/
-         67l/27Z2SdZhA==
-Message-ID: <8fc46929-6d73-ea75-f44f-b83820c0e5df@collabora.com>
-Date:   Thu, 6 Apr 2023 14:15:34 +0300
+        Thu, 6 Apr 2023 07:16:38 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DFF49CC
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:16:36 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 20so40356227lju.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680779795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kqrTTFUw5jhbnIJzwUt5+WbmAoaABO4HowWEX8FOmUA=;
+        b=Fy3Be1ZW870RKME2mz/II9IZkV2GAbDzqTsrzlgK5tcByiOQB1qWSDJ74fl2QMK5uc
+         jupsONHrNKs8J2/W1xwEKHLkUrFJcYjJhhp201sw119JFUs+Qx3pgBPvj1f3m9eAWk4L
+         tt/vF8vXRlYWiDmBMgHq0p+Px6KkSuGhxB/YO9pJwSVJj+/DKSqTVQ/bqgz0sYvGoV77
+         Eo1Py037WBxa5P+wfmBxXjpsX9ur+wkUnjBnPtKlycGZaGHqKCH8oJznf5sE0aeVOfXb
+         2cXwfXGr7JFOiAphhqtp8mUsexzXR959y4UIDEh6XvX5/altkjK9MrVRo2mABPzcXJjQ
+         E6aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680779795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kqrTTFUw5jhbnIJzwUt5+WbmAoaABO4HowWEX8FOmUA=;
+        b=py9YHioHtiU6l8OIxU8wuxj7Jc5L5+IClOnBIUZ1JS4SGruuXKEWsgFA31NiQVfXJy
+         YCp9wJTAZsiJIFHQV9HLnM+N60BCUbINjlIgAUCabAFZANY35kwEyf7wbnsAkGz6OyCZ
+         mwsEtStdGZNBGCJcoc9x/ciJT0kpIEePltdlcGbAmw6sHBc1KxQUwbJuikH3puaAu5vz
+         e++/34NWnhNd06gQzoUdo4M9HiDrvouWZW2BJR51wNFcJOt76c1J+ppq4ksaF428R2tN
+         EjbEZzEdvVbxSadDPsNW2badU/1qino/EAuYnqfq6yIkC+JUlrcU2Mc5pAOgBWakQanx
+         x1Hg==
+X-Gm-Message-State: AAQBX9e159+5NflotFB77FFjOhpSlLdp5StIYLAWvcQhSERqjc2/324E
+        97TtOzDv9ddG62B9SI635IQUag==
+X-Google-Smtp-Source: AKy350br4WJxfZop0nas6YjL9sBW/LF8aFIt+5ebcVQjRmf0C7LboWIpCU/qY4dsNYCE0OrVMTsmuQ==
+X-Received: by 2002:a2e:8082:0:b0:2a4:1ecf:6342 with SMTP id i2-20020a2e8082000000b002a41ecf6342mr2570993ljg.25.1680779795132;
+        Thu, 06 Apr 2023 04:16:35 -0700 (PDT)
+Received: from ta1.c.googlers.com.com (61.215.228.35.bc.googleusercontent.com. [35.228.215.61])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05651c102c00b0029b32a40934sm241292ljm.113.2023.04.06.04.16.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 04:16:33 -0700 (PDT)
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, yebin10@huawei.com,
+        jack@suse.cz
+Cc:     enwlinux@gmail.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joneslee@google.com,
+        syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [RESEND PATCH] ext4: fix use-after-free Read in ext4_find_extent for bigalloc + inline
+Date:   Thu,  6 Apr 2023 11:16:27 +0000
+Message-Id: <20230406111627.1916759-1-tudor.ambarus@linaro.org>
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 8/8] regulator: fan53555: Add support for RK860X
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Joseph Chen <chenjh@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-References: <20230405194721.821536-1-cristian.ciocaltea@collabora.com>
- <20230405194721.821536-9-cristian.ciocaltea@collabora.com>
- <4115e47e-b64b-391a-493c-701c8de0565b@linaro.org>
- <53c803ce-2607-6fd1-485e-e19eb961fd08@collabora.com>
- <231b72cd-352c-10a9-8695-a04f61e36568@linaro.org>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <231b72cd-352c-10a9-8695-a04f61e36568@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,32 +71,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/23 14:03, Krzysztof Kozlowski wrote:
-> On 06/04/2023 12:08, Cristian Ciocaltea wrote:
->>>> +	}, {
->>>> +		.name = "rk8602",
->>>> +		.driver_data = RK8602_VENDOR_ROCKCHIP
->>>> +	}, {
->>>> +		.name = "rk8603",
->>>> +		.driver_data = RK8602_VENDOR_ROCKCHIP
->>>
->>> Why do you need this entry match data if it is the same as rk8602?
->>
->> This is consistent with the handling of syr827 and syr828:
->>
->> 		.name = "syr827",
->> 		.driver_data = FAN53555_VENDOR_SILERGY
->> 	}, {
->> 		.name = "syr828",
->> 		.driver_data = FAN53555_VENDOR_SILERGY
-> 
-> Yeah, I understand, but it's not necessarily the pattern we want to
-> continue. Unless these devices are not really compatible?
+From: Ye Bin <yebin10@huawei.com>
 
-They are compatible, so should I simply drop the rk8601 and rk8603 entries?
+Syzbot found the following issue:
+loop0: detected capacity change from 0 to 2048
+EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
+==================================================================
+BUG: KASAN: use-after-free in ext4_ext_binsearch_idx fs/ext4/extents.c:768 [inline]
+BUG: KASAN: use-after-free in ext4_find_extent+0x76e/0xd90 fs/ext4/extents.c:931
+Read of size 4 at addr ffff888073644750 by task syz-executor420/5067
 
-Probably also renaming rk8600 and rk8602, though I'm not sure what a
-proper naming scheme would be to combine the 2 variants for each.
+CPU: 0 PID: 5067 Comm: syz-executor420 Not tainted 6.2.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x290 lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:306
+ print_report+0x107/0x1f0 mm/kasan/report.c:417
+ kasan_report+0xcd/0x100 mm/kasan/report.c:517
+ ext4_ext_binsearch_idx fs/ext4/extents.c:768 [inline]
+ ext4_find_extent+0x76e/0xd90 fs/ext4/extents.c:931
+ ext4_clu_mapped+0x117/0x970 fs/ext4/extents.c:5809
+ ext4_insert_delayed_block fs/ext4/inode.c:1696 [inline]
+ ext4_da_map_blocks fs/ext4/inode.c:1806 [inline]
+ ext4_da_get_block_prep+0x9e8/0x13c0 fs/ext4/inode.c:1870
+ ext4_block_write_begin+0x6a8/0x2290 fs/ext4/inode.c:1098
+ ext4_da_write_begin+0x539/0x760 fs/ext4/inode.c:3082
+ generic_perform_write+0x2e4/0x5e0 mm/filemap.c:3772
+ ext4_buffered_write_iter+0x122/0x3a0 fs/ext4/file.c:285
+ ext4_file_write_iter+0x1d0/0x18f0
+ call_write_iter include/linux/fs.h:2186 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x7dc/0xc50 fs/read_write.c:584
+ ksys_write+0x177/0x2a0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4b7a9737b9
+RSP: 002b:00007ffc5cac3668 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4b7a9737b9
+RDX: 00000000175d9003 RSI: 0000000020000200 RDI: 0000000000000004
+RBP: 00007f4b7a933050 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000000079f R11: 0000000000000246 R12: 00007f4b7a9330e0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-Thanks,
-Cristian
+Above issue is happens when enable bigalloc and inline data feature. As
+commit 131294c35ed6 fixed delayed allocation bug in ext4_clu_mapped for
+bigalloc + inline. But it only resolved issue when has inline data, if
+inline data has been converted to extent(ext4_da_convert_inline_data_to_extent)
+before writepages, there is no EXT4_STATE_MAY_INLINE_DATA flag. However
+i_data is still store inline data in this scene. Then will trigger UAF
+when find extent.
+To resolve above issue, there is need to add judge "ext4_has_inline_data(inode)"
+in ext4_clu_mapped().
+
+Fixes: 131294c35ed6 ("ext4: fix delayed allocation bug in ext4_clu_mapped for bigalloc + inline")
+Reported-by: syzbot+bf4bb7731ef73b83a3b4@syzkaller.appspotmail.com
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Tested-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+Reviewed-by: Jan Kara <jack@suse.cz>
+---
+The patch was proposed 3 months ago, resend it as it probably got lost:
+https://lore.kernel.org/all/20230104071559.2051847-1-yebin@huaweicloud.com/#t
+
+ fs/ext4/extents.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index 3559ea6b0781..74251eebf831 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -5802,7 +5802,8 @@ int ext4_clu_mapped(struct inode *inode, ext4_lblk_t lclu)
+ 	 * mapped - no physical clusters have been allocated, and the
+ 	 * file has no extents
+ 	 */
+-	if (ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
++	if (ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA) ||
++	    ext4_has_inline_data(inode))
+ 		return 0;
+ 
+ 	/* search for the extent closest to the first block in the cluster */
+-- 
+2.40.0.348.gf938b09366-goog
+
