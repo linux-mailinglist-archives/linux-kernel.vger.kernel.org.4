@@ -2,64 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E606D968E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 733676D96CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjDFL6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S236881AbjDFMJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238807AbjDFL5c (ORCPT
+        with ESMTP id S236953AbjDFMJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:57:32 -0400
-X-Greylist: delayed 459 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 04:54:58 PDT
-Received: from mail-41103.protonmail.ch (mail-41103.protonmail.ch [185.70.41.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BD1E53
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:54:58 -0700 (PDT)
-Date:   Thu, 06 Apr 2023 11:44:55 +0000
-Authentication-Results: mail-41103.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="dZ9KpKqj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1680781504; x=1681040704;
-        bh=jDCBj8lshorW4gdkd4kJjUH+4/q9Xfg6ywnJShCYQyw=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=dZ9KpKqjZpp5ekB8Hwx8+atH3RXHtHtb8jmwcgcxXYUdxq3S5rnRvb6cG4JLo2Gnm
-         EN1w+HfX+LY6vfSUh5jAQujFu1YzwnJkbqNXXgDur99xiTx631qZQejUg/yV/ZmNkf
-         +pps5DwM7jmDLZKedntQZACZjQ1UWk8ng/xtOMgGlOdDmUxlLgqC4EJImgFKO4Ao2e
-         um4qiqDRJvzu3RT5NbJly5Q/Qw0c2pc1tiEoW5dOgY22o7C74Jr4Rkfz5wnhgBHTdn
-         SGYczFCacdgmFxBo+8mYgdxk87TFwM24WQ8lRnRXwcC2eJXRQ7Cu986BlW9+QxNrb5
-         QWf7kSBD4vN2Q==
-To:     =?utf-8?Q?Petr_Tesa=C5=99=C3=ADk?= <petr@tesarici.cz>
-From:   Juerg Haefliger <juergh@proton.me>
-Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Alexander Graf <graf@amazon.com>
-Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce buffers
-Message-ID: <20230406134440.72959135@gollum>
-In-Reply-To: <20230331110043.7b1ddfa3@meshulam.tesarici.cz>
-References: <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com> <20230331092553.677e9649@smeagol> <20230331110043.7b1ddfa3@meshulam.tesarici.cz>
-Feedback-ID: 45149698:user:proton
+        Thu, 6 Apr 2023 08:09:48 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4081C30EF
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:09:44 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Psfjy0sZmz17RBp;
+        Thu,  6 Apr 2023 19:42:14 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 6 Apr 2023 19:45:39 +0800
+Subject: Re: [PATCH 1/2] ubi: fix slab-out-of-bounds in
+ ubi_eba_get_ldesc+0xfb/0x130
+To:     ZhaoLong Wang <wangzhaolong1@huawei.com>, <richard@nod.at>,
+        <miquel.raynal@bootlin.com>, <vigneshr@ti.comubi_eba_copy_table>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20230406071331.1247429-1-wangzhaolong1@huawei.com>
+ <20230406071331.1247429-2-wangzhaolong1@huawei.com>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <f913edb9-b89a-993a-9748-6151d7d2ac52@huawei.com>
+Date:   Thu, 6 Apr 2023 19:45:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="b1_ayphHOVkQ7156P23PkrcwNhMKb9WleLOMbnybo3AJ1Q"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+In-Reply-To: <20230406071331.1247429-2-wangzhaolong1@huawei.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,178 +52,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
+Hi
+> From: Guo Xuenan <guoxuenan@huawei.com>
+> 
+> When using ioctl interface to resize ubi volume, ubi_resize_volume will
+> resize eba table first, but not change vol->reserved_pebs in the same
+> atomic context which may cause concurrency access eba table.
+> 
+> For example, When user do shrink ubi volume A calling ubi_resize_volume,
+> while the other thread is writing (volume B) and triggering wear-leveling,
+> which may calling ubi_write_fastmap, under these circumstances, KASAN may
+> report: slab-out-of-bounds in ubi_eba_get_ldesc+0xfb/0x130.
+> 
+> The main work of this patch include:
+> 1. fix races in ubi_resize_volume and ubi_update_fastmap, to avoid
+>     eba_tbl read out of bounds. first, we make eba_tbl and reserved_pebs
+>     updating under the protect of vol->volumes_lock. second, rollback
+>     volume in case of resize failure. Also mention that for volume
+>     shrinking failure, since part of volume has been shrunk and unmapped,
+>     there is no need to recover {rsvd/avail}_pebs.
+> 2. fix some memleak in error path of ubi_resize_volume when destroy
+>     new_eba_tbl.
+> 
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in ubi_eba_get_ldesc+0xfb/0x130 [ubi]
+> Read of size 4 at addr ffff88800f43f570 by task kworker/u16:0/7
+> CPU: 0 PID: 7 Comm: kworker/u16:0 Not tainted 5.16.0-rc7 #3
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> Workqueue: writeback wb_workfn (flush-ubifs_0_0)
+> Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x4d/0x66
+>   print_address_description.constprop.0+0x41/0x60
+>   kasan_report.cold+0x83/0xdf
+>   ubi_eba_get_ldesc+0xfb/0x130 [ubi]
+>   ubi_update_fastmap.cold+0x60f/0xc7d [ubi]
+>   ubi_wl_get_peb+0x25b/0x4f0 [ubi]
+>   try_write_vid_and_data+0x9a/0x4d0 [ubi]
+>   ubi_eba_write_leb+0x7e4/0x17d0 [ubi]
+>   ubi_leb_map+0x1a0/0x2c0 [ubi]
+>   ubifs_leb_map+0x139/0x270 [ubifs]
+>   ubifs_add_bud_to_log+0xb40/0xf30 [ubifs]
+>   make_reservation+0x86e/0xb00 [ubifs]
+>   ubifs_jnl_write_data+0x430/0x9d0 [ubifs]
+>   do_writepage+0x1d1/0x550 [ubifs]
+>   ubifs_writepage+0x37c/0x670 [ubifs]
+>   __writepage+0x67/0x170
+>   write_cache_pages+0x259/0xa90
+>   do_writepages+0x277/0x5d0
+>   __writeback_single_inode+0xb8/0x850
+>   writeback_sb_inodes+0x4b3/0xb20
+>   __writeback_inodes_wb+0xc1/0x220
+>   wb_writeback+0x59f/0x740
+>   wb_workfn+0x6d0/0xca0
+>   process_one_work+0x711/0xfc0
+>   worker_thread+0x95/0xd00
+>   kthread+0x3a6/0x490
+>   ret_from_fork+0x1f/0x30
+>   </TASK>
+> 
+> Allocated by task 711:
+>   kasan_save_stack+0x1e/0x50
+>   __kasan_kmalloc+0x81/0xa0
+>   ubi_eba_create_table+0x88/0x1a0 [ubi]
+>   ubi_resize_volume.cold+0x175/0xae7 [ubi]
+>   ubi_cdev_ioctl+0x57f/0x1a60 [ubi]
+>   __x64_sys_ioctl+0x13a/0x1c0
+>   do_syscall_64+0x35/0x80
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Last potentially related work creation:
+>   kasan_save_stack+0x1e/0x50
+>   __kasan_record_aux_stack+0xb7/0xc0
+>   call_rcu+0xd6/0x1000
+>   blk_stat_free_callback+0x28/0x30
+>   blk_release_queue+0x8a/0x2e0
+>   kobject_put+0x186/0x4c0
+>   scsi_device_dev_release_usercontext+0x620/0xbd0
+>   execute_in_process_context+0x2f/0x120
+>   device_release+0xa4/0x240
+>   kobject_put+0x186/0x4c0
+>   put_device+0x20/0x30
+>   __scsi_remove_device+0x1c3/0x300
+>   scsi_probe_and_add_lun+0x2140/0x2eb0
+>   __scsi_scan_target+0x1f2/0xbb0
+>   scsi_scan_channel+0x11b/0x1a0
+>   scsi_scan_host_selected+0x24c/0x310
+>   do_scsi_scan_host+0x1e0/0x250
+>   do_scan_async+0x45/0x490
+>   async_run_entry_fn+0xa2/0x530
+>   process_one_work+0x711/0xfc0
+>   worker_thread+0x95/0xd00
+>   kthread+0x3a6/0x490
+>   ret_from_fork+0x1f/0x30
+> The buggy address belongs to the object at ffff88800f43f500
+>   which belongs to the cache kmalloc-128 of size 128
+> The buggy address is located 112 bytes inside of
+>   128-byte region [ffff88800f43f500, ffff88800f43f580)
+> The buggy address belongs to the page:
+> page:ffffea00003d0f00 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0xf43c
+> head:ffffea00003d0f00 order:2 compound_mapcount:0 compound_pincount:0
+> flags: 0x1fffff80010200(slab|head|node=0|zone=1|lastcpupid=0x1fffff)
+> raw: 001fffff80010200 ffffea000046ba08 ffffea0000457208 ffff88810004d1c0
+> raw: 0000000000000000 0000000000190019 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> Memory state around the buggy address:
+>   ffff88800f43f400: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff88800f43f480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>> ffff88800f43f500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc
+>                                                               ^
+>   ffff88800f43f580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff88800f43f600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> 
+> The following steps can used to reproduce:
+> Process 1: write and trigger ubi wear-leveling
+>      ubimkvol /dev/ubi0 -s 5000MiB -N v1
+>      ubimkvol /dev/ubi0 -s 2000MiB -N v2
+>      ubimkvol /dev/ubi0 -s 10MiB -N v3
+>      mount -t ubifs /dev/ubi0_0 /mnt/ubifs
+>      while true;
+>      do
+>          filename=/mnt/ubifs/$((RANDOM))
+>          dd if=/dev/random of=${filename} bs=1M count=$((RANDOM % 1000))
+>          rm -rf ${filename}
+>          sync /mnt/ubifs/
+>      done
+> 
+> Process 2: do random resize
+>      struct ubi_rsvol_req req;
+>      req.vol_id = 1;
+>      req.bytes = (rand() % 50) * 512KB;
+>      ioctl(fd, UBI_IOCRSVOL, &req);
+> 
+> Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
+> Signed-off-by: ZhaoLong Wang <wangzhaolong1@huawei.com>
+> ---
+>   drivers/mtd/ubi/vmt.c | 24 +++++++++++++++++-------
+>   1 file changed, 17 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/mtd/ubi/vmt.c b/drivers/mtd/ubi/vmt.c
+> index 2c867d16f89f..97294def01eb 100644
+> --- a/drivers/mtd/ubi/vmt.c
+> +++ b/drivers/mtd/ubi/vmt.c
+> @@ -408,6 +408,7 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
+>   	struct ubi_device *ubi = vol->ubi;
+>   	struct ubi_vtbl_record vtbl_rec;
+>   	struct ubi_eba_table *new_eba_tbl = NULL;
+> +	struct ubi_eba_table *old_eba_tbl = NULL;
+>   	int vol_id = vol->vol_id;
+>   
+>   	if (ubi->ro_mode)
+> @@ -453,10 +454,13 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
+>   			err = -ENOSPC;
+>   			goto out_free;
+>   		}
+> +
+>   		ubi->avail_pebs -= pebs;
+>   		ubi->rsvd_pebs += pebs;
+>   		ubi_eba_copy_table(vol, new_eba_tbl, vol->reserved_pebs);
+> -		ubi_eba_replace_table(vol, new_eba_tbl);
+> +		old_eba_tbl = vol->eba_tbl;
+> +		vol->eba_tbl = new_eba_tbl;
+> +		vol->reserved_pebs = reserved_pebs;
+>   		spin_unlock(&ubi->volumes_lock);
+>   	}
+>   
+> @@ -471,7 +475,9 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
+>   		ubi->avail_pebs -= pebs;
+>   		ubi_update_reserved(ubi);
+>   		ubi_eba_copy_table(vol, new_eba_tbl, reserved_pebs);
+> -		ubi_eba_replace_table(vol, new_eba_tbl);
+> +		old_eba_tbl = vol->eba_tbl;
+> +		vol->eba_tbl = new_eba_tbl;
+> +		vol->reserved_pebs = reserved_pebs;
+>   		spin_unlock(&ubi->volumes_lock);
+>   	}
+>   
+> @@ -493,7 +499,6 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
+>   	if (err)
+>   		goto out_acc;
+>   
+> -	vol->reserved_pebs = reserved_pebs;
+>   	if (vol->vol_type == UBI_DYNAMIC_VOLUME) {
+>   		vol->used_ebs = reserved_pebs;
+>   		vol->last_eb_bytes = vol->usable_leb_size;
+> @@ -501,19 +506,24 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
+>   			(long long)vol->used_ebs * vol->usable_leb_size;
+>   	}
+>   
+> +	/* destroy old table */
+> +	ubi_eba_destroy_table(old_eba_tbl);
+>   	ubi_volume_notify(ubi, vol, UBI_VOLUME_RESIZED);
+>   	self_check_volumes(ubi);
+>   	return err;
+>   
+>   out_acc:
+> +	spin_lock(&ubi->volumes_lock);
+> +	vol->reserved_pebs = reserved_pebs - pebs;
+>   	if (pebs > 0) {
+> -		spin_lock(&ubi->volumes_lock);
+>   		ubi->rsvd_pebs -= pebs;
+>   		ubi->avail_pebs += pebs;
+> -		spin_unlock(&ubi->volumes_lock);
+> +		ubi_eba_copy_table(vol, old_eba_tbl, vol->reserved_pebs);
+> +	} else {
+> +		ubi_eba_copy_table(vol, old_eba_tbl, reserved_pebs);
+>   	}
+> -	return err;
+> -
+> +	vol->eba_tbl = old_eba_tbl;
+> +	spin_unlock(&ubi->volumes_lock);
+>   out_free:
+>   	ubi_eba_destroy_table(new_eba_tbl);
+>   	return err;
+> 
 
---b1_ayphHOVkQ7156P23PkrcwNhMKb9WleLOMbnybo3AJ1Q
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Besides that, it's better to protect 'vol->eba_tbl->entries' assignment 
+like:
+diff --git a/drivers/mtd/ubi/eba.c b/drivers/mtd/ubi/eba.c
+index 403b79d6efd5..5ae0c1bc6f41 100644
+--- a/drivers/mtd/ubi/eba.c
++++ b/drivers/mtd/ubi/eba.c
+@@ -1450,7 +1450,9 @@ int ubi_eba_copy_leb(struct ubi_device *ubi, int 
+from, int to,
+         }
 
-On Fri, 31 Mar 2023 11:00:43 +0200
-Petr Tesa=C5=99=C3=ADk <petr@tesarici.cz> wrote:
+         ubi_assert(vol->eba_tbl->entries[lnum].pnum == from);
++       spin_lock(&ubi->volumes_lock);
+         vol->eba_tbl->entries[lnum].pnum = to;
++       spin_unlock(&ubi->volumes_lock);
 
-> Hi Juerg,
->
-> On Fri, 31 Mar 2023 07:26:09 +0000
-> Juerg Haefliger <juergh@proton.me> wrote:
->
-> > On Tue, 28 Mar 2023 09:54:35 +0200
-> > Petr Tesarik <petrtesarik@huaweicloud.com> wrote:
-> >
-> >[...]
-> > > Anyway, I suspected that the buffers need not be imported into the vc=
-4
-> > > driver (also hinted by Eric Anholt in a 2018 blog post [1]), and it
-> > > seems I was right. I encountered the issue with Ubuntu 22.10; I
-> > > installed latest openSUSE Tumbleweed yesterday, and I was not able to
-> > > reproduce the issue there, most likely because the Mesa drivers have
-> > > been fixed meanwhile. This makes the specific case of the Raspberry P=
-i 4
-> > > drivers moot. The issue may still affect other combinations of driver=
-s,
-> > > but I don't have any other real-world example ATM.
-> >
-> > I'm only seeing this problem with Wayland, no issue when switching Ubun=
-tu to
-> > X. It seems Tumbleweed is using X by default.
->
-> I know; I was the team lead of SUSE low-level graphics engineers until
-> end of last year... I have just double-checked, but this output of
-> wayland-info in the GNOME session accessed over RDP is quite convincing:
+  out_unlock_buf:
+         mutex_unlock(&ubi->buf_mutex);
 
-It sure is but how did you get that?? For me it's:
-$ wayland-info
-failed to create display: No such file or directory
+Otherwise, a race between wear_leveling_work and shrinking volume could 
+happen:
 
-And from strace:
-connect(3, {sa_family=3DAF_UNIX, sun_path=3D"/run/user/1000/wayland-0"}, 27=
-) =3D -1 ENOENT (No such file or directory)
-
-Which is kind of expected when running X, no?
-$ ps -ef | grep -iP 'xorg|wayland'
-opensuse  1377  1375  0 09:13 tty2     00:00:16 /usr/bin/Xorg.bin vt2 -disp=
-layfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none =
--noreset -keeptty -novtswitch -verbose 3
-
-What am I missing?
-
-...Juerg
-
-
-
-> interface: 'wl_compositor',                              version:  5, nam=
-e:  1
-> interface: 'wl_shm',                                     version:  1, nam=
-e:  2
->         formats (fourcc):
->         0x48344258 =3D 'XB4H'
->         0x48344241 =3D 'AB4H'
->         0x48345258 =3D 'XR4H'
->         0x48345241 =3D 'AR4H'
->         0x30334258 =3D 'XB30'
->         0x30334241 =3D 'AB30'
->         0x30335258 =3D 'XR30'
->         0x30335241 =3D 'AR30'
->         0x36314752 =3D 'RG16'
->         0x34324258 =3D 'XB24'
->         0x34324241 =3D 'AB24'
->                  1 =3D 'XR24'
->                  0 =3D 'AR24'
-> interface: 'wl_output',                                  version:  3, nam=
-e:  3
->         x: 0, y: 0, scale: 1,
->         physical_width: 430 mm, physical_height: 270 mm,
->         make: 'FUS', model: 'P20W-5 ECO',
->         subpixel_orientation: unknown, output_transform: normal,
->         mode:
->                 width: 1680 px, height: 1050 px, refresh: 59.954 Hz,
->                 flags: current preferred
-> interface: 'zxdg_output_manager_v1',                     version:  3, nam=
-e:  4
->         xdg_output_v1
->                 output: 3
->                 name: 'HDMI-1'
->                 description: 'Fujitsu Siemens Computers GmbH 20"'
->                 logical_x: 0, logical_y: 0
->                 logical_width: 1680, logical_height: 1050
-> interface: 'wl_data_device_manager',                     version:  3, nam=
-e:  5
-> interface: 'zwp_primary_selection_device_manager_v1',    version:  1, nam=
-e:  6
-> interface: 'wl_subcompositor',                           version:  1, nam=
-e:  7
-> interface: 'xdg_wm_base',                                version:  4, nam=
-e:  8
-> interface: 'gtk_shell1',                                 version:  5, nam=
-e:  9
-> interface: 'wp_viewporter',                              version:  1, nam=
-e: 10
-> interface: 'zwp_pointer_gestures_v1',                    version:  3, nam=
-e: 11
-> interface: 'zwp_tablet_manager_v2',                      version:  1, nam=
-e: 12
-> interface: 'wl_seat',                                    version:  8, nam=
-e: 13
->         name: seat0
->         capabilities: pointer keyboard
->         keyboard repeat rate: 33
->         keyboard repeat delay: 500
-> interface: 'zwp_relative_pointer_manager_v1',            version:  1, nam=
-e: 14
-> interface: 'zwp_pointer_constraints_v1',                 version:  1, nam=
-e: 15
-> interface: 'zxdg_exporter_v1',                           version:  1, nam=
-e: 16
-> interface: 'zxdg_importer_v1',                           version:  1, nam=
-e: 17
-> interface: 'zwp_linux_dmabuf_v1',                        version:  3, nam=
-e: 18
->         formats (fourcc) and modifiers (names):
->         0x48344258 =3D 'XB4H'; 0x00ffffffffffffff =3D INVALID
->         0x48344241 =3D 'AB4H'; 0x00ffffffffffffff =3D INVALID
->         0x36314752 =3D 'RG16'; 0x00ffffffffffffff =3D INVALID
->         0x30334258 =3D 'XB30'; 0x00ffffffffffffff =3D INVALID
->         0x30335258 =3D 'XR30'; 0x00ffffffffffffff =3D INVALID
->         0x30334241 =3D 'AB30'; 0x00ffffffffffffff =3D INVALID
->         0x30335241 =3D 'AR30'; 0x00ffffffffffffff =3D INVALID
->         0x34324258 =3D 'XB24'; 0x00ffffffffffffff =3D INVALID
->         0x34325258 =3D 'XR24'; 0x00ffffffffffffff =3D INVALID
->         0x34324241 =3D 'AB24'; 0x00ffffffffffffff =3D INVALID
->         0x34325241 =3D 'AR24'; 0x00ffffffffffffff =3D INVALID
-> interface: 'wp_single_pixel_buffer_manager_v1',          version:  1, nam=
-e: 19
-> interface: 'zwp_keyboard_shortcuts_inhibit_manager_v1',  version:  1, nam=
-e: 20
-> interface: 'zwp_text_input_manager_v3',                  version:  1, nam=
-e: 21
-> interface: 'wp_presentation',                            version:  1, nam=
-e: 22
->         presentation clock id: 1 (CLOCK_MONOTONIC)
-> interface: 'xdg_activation_v1',                          version:  1, nam=
-e: 23
->
-> Petr T
-
-
---b1_ayphHOVkQ7156P23PkrcwNhMKb9WleLOMbnybo3AJ1Q
-Content-Type: application/pgp-signature; name=attachment.sig
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=attachment.sig
-
-LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0NCg0KaVFJekJBRUJDZ0FkRmlFRWhaZlU5Nkl1
-cHJ2aUxkZUxEOU9MQ1F1bVFyY0ZBbVF1c0tnQUNna1FEOU9MQ1F1bQ0KUXJlM3l3LytNd1BWaE5Y
-MjB0T3NzcW1vQnVwWFphMElzZGtpc0k4WnBIN2VrTHMveXZtZlRPRnRSQURqdVFndQ0Kdmg3RHEx
-N3RieGdyb0FLRU9ydjNuT2s4RVplWkZlZ2NTK0k3TnVhYVpEQUJhV0ZOQ1NjSlp0TkYrRUt4L2xX
-Tw0KdDluaEFRajVHK1JUZ2RrUmVla1A3aEpHeFVJRmhtWVpQM00zTVdwaFFqMTJLSnJTWWpYREhB
-akJMNDRFYnh5aQ0Kbi9vTEplRld6TUJBUWh4K0JDTlpqY1dHRlZGUnVOdlJhZE5EbXlrVFB5eWVw
-WTlUdWV5TWc1TGJXcHZLM2p3bw0KM25hOHRwd2U4T0UvbHlvSHBmVVVSWVQ3UjFMeWtMNkR0N3B4
-c25hQUJ6QkJqalZiLzhHVkdFYUFybU1BdCtWcw0Kd2FmTEhLUjlTM2ROT1FJUVBJNmFwUmZhZEF4
-QzBzNDBNQTdJOStvMFQxV25KUzdVdS9xVi9DODFVdHlZelpIaw0KYnFHbUIyQ0FCNS85cmVZTTVm
-WXorNVdROTFSSnVMeWlqV3krTG9iOGlYMVMxWnJla005V01ocXpxZzFhQXgzSA0KTGdIYUd5WkZG
-citBTUZ2MUN1czA2WFBKQVI1aWF3dU5OaTJwYWNEMXJacXhzSTd2QTk4R0ZzNjNFN3NjSjhMRg0K
-NVljS0pVRGppeDR2U2s4NjdIUGJPQ3BLVWZ1dzNjMi9weG5Oc0Q0L0FDQ2Z1QnFnSzRqV1E1L08x
-Qksxa0pqag0KdUp1SEhjVU5ydWRPcE05U3lrblZ6TXlZeUcrWDhUbW1RT1dkR0xoQlRKbUtxejB0
-WldtMkZlKzdLS3U4MWtkMA0KY05vS1E0akpQN2k0NkJicWxnQ0phU2hiamNKY2U1SmFTSWJ1OWp1
-WDVDZU9qSDI1Mkc4PQ0KPXhrdmYNCi0tLS0tRU5EIFBHUCBTSUdOQVRVUkUtLS0tLQ0K
-
---b1_ayphHOVkQ7156P23PkrcwNhMKb9WleLOMbnybo3AJ1Q--
-
+  ubi_resize_volume         wear_leveling_worker
+   ubi_eba_copy_table(vol, new_eba_tbl, reserved_pebs);
+                               vol->eba_tbl->entries[lnum].pnum = to; 
+// update old eba_tbl
+   vol->eba_tbl = new_eba_tbl
