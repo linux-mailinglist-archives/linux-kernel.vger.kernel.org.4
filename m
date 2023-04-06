@@ -2,85 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D606E6D9B17
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261436D9B26
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239496AbjDFOt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        id S238963AbjDFOu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239128AbjDFOtK (ORCPT
+        with ESMTP id S238925AbjDFOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:49:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEECD134;
-        Thu,  6 Apr 2023 07:47:52 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CE8081F8BE;
-        Thu,  6 Apr 2023 14:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1680792470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mzy026vw3G51S2cFNOMvtPChp1Fc2IDetowMzUM6ByQ=;
-        b=OKyhHn9/nrX8lFgQf0FvS8ZSX1BuOy5IaGmdbZH2COjgilmS1Z1hXOa3neeSBbeKnKxrzh
-        1DBeo2wzQ3RMxtDq6gwqJiW9vxEscX6MG13Pgq3NyCveDh7/b4KKZ2dK9JcgHSRAk84Syj
-        GUBoGYzzPFMwx861aosjJZoUuozSTKE=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 21B342C141;
-        Thu,  6 Apr 2023 14:47:50 +0000 (UTC)
-Date:   Thu, 6 Apr 2023 16:47:49 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Artem Savkov <asavkov@redhat.com>, bpf@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH bpf-next] kallsyms: Disable preemption for
- find_kallsyms_symbol_value
-Message-ID: <ZC7blVqUwiHWWJOg@alley>
-References: <20230403220254.2191240-1-jolsa@kernel.org>
+        Thu, 6 Apr 2023 10:50:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E5DFA258
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:49:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C57BC106F;
+        Thu,  6 Apr 2023 07:50:15 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B18EE3F762;
+        Thu,  6 Apr 2023 07:49:30 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     will@kernel.org
+Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ilkka@os.amperecomputing.com,
+        Geoff Blake <blakgeof@amazon.com>
+Subject: [PATCH] perf/arm-cmn: Fix DTC reset
+Date:   Thu,  6 Apr 2023 15:49:15 +0100
+Message-Id: <f0b61513276ee2c448ae02a6840135571039cea7.1680792373.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403220254.2191240-1-jolsa@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-04-04 00:02:54, Jiri Olsa wrote:
-> Artem reported suspicious RCU usage [1]. The reason is that verifier
-> calls find_kallsyms_symbol_value with preemption enabled which will
-> trigger suspicious RCU usage warning in rcu_dereference_sched call.
-> 
-> Disabling preemption in find_kallsyms_symbol_value and adding
-> __find_kallsyms_symbol_value function.
-> 
-> Fixes: 31bf1dbccfb0 ("bpf: Fix attaching fentry/fexit/fmod_ret/lsm to modules")
-> [1] https://lore.kernel.org/bpf/ZBrPMkv8YVRiWwCR@samus.usersys.redhat.com/
-> Reported-by: Artem Savkov <asavkov@redhat.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+It turns out that my naive DTC reset logic fails to work as intended,
+since clearing PMCR.PMU_EN appears to result in writes to PMOVSR_CLR
+being ignored, while some hard-to-characterise combination of conditions
+(differently between DTC0 and secondary DTCs) also appears to result in
+PMOVSR reading as zero even when an overflow remains asserted. Thus
+rather than resetting the PMU to a nice clean state, we can currently
+end up with screaming spurious interrupts from secondary DTCs which we
+can neither see nor clear. This behaviour is of course not documented.
 
-Just for record:
+Resetting PMCR to disable the interrupt output but enable the PMU itself
+seems to at least make the PMOVSR_CLR write work as expected on DTC0
+(although it looks like writing to PMCR twice has actually been having
+some hidden side-effect of clearing any pending overflows there).
+Unfortunately this still does not seem to help secondary DTCs, but going
+beyond PMU scope and additionally resetting DTC_CTL does seems to make
+everything work out, and superficially looks sensible. Therefore pile
+that onto the house of empirical cards too, until I can check with the
+hardware team whether there's actually any proper recommended way of
+recovering from an arbitrary PMU state after an oops/kexec/whatever.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Fixes: 0ba64770a2f2 ("perf: Add Arm CMN-600 PMU driver")
+Reported-by: Geoff Blake <blakgeof@amazon.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+This supersedes the previous shutdown/IRQ patches, now that I've
+finally managed to make *some* sense of what's really going on. If
+anyone's interested, this is the contrivance I used for testing:
 
-Best Regards,
-Petr
+https://gitlab.arm.com/linux-arm/linux-rm/-/commit/d8f1035c5bc510516d6e4f0b7bf0b875a749daf7
+---
+ drivers/perf/arm-cmn.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+index 144cc08d9e04..81fe01171e33 100644
+--- a/drivers/perf/arm-cmn.c
++++ b/drivers/perf/arm-cmn.c
+@@ -1899,7 +1899,10 @@ static int arm_cmn_init_dtc(struct arm_cmn *cmn, struct arm_cmn_node *dn, int id
+ 	if (dtc->irq < 0)
+ 		return dtc->irq;
+ 
+-	writel_relaxed(0, dtc->base + CMN_DT_PMCR);
++	if (idx == 0)
++		writel_relaxed(0, dtc->base + CMN_DT_DTC_CTL);
++
++	writel_relaxed(CMN_DT_PMCR_PMU_EN, dtc->base + CMN_DT_PMCR);
+ 	writel_relaxed(0x1ff, dtc->base + CMN_DT_PMOVSR_CLR);
+ 	writel_relaxed(CMN_DT_PMCR_OVFL_INTR_EN, dtc->base + CMN_DT_PMCR);
+ 
+-- 
+2.39.2.101.g768bb238c484.dirty
+
