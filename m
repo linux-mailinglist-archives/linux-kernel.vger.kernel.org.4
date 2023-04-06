@@ -2,188 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BE36DA5AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D76C6DA5B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjDFWU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S233135AbjDFWVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjDFWU0 (ORCPT
+        with ESMTP id S230311AbjDFWVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:20:26 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D178CB7;
-        Thu,  6 Apr 2023 15:20:24 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336ELPfU025565;
-        Thu, 6 Apr 2023 17:20:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=PODMain02222019;
- bh=LAZYYn6LQbqCkIbcPih7UrJPEovcL14E2ocGUEtKXJo=;
- b=BPh9I+7meyR69avxecV27H6uBIqFM78sPNT9ENfi5FGUiLkHiBZNlr+vLthHIo71ry0X
- 1+L6SaKIe4A9xXSPT2YDyKkC0LdYdO405+BZZc62lErV0s78udLVVBV+0Gu0PoyjPC9Z
- xtrMC5A1OLoxWj0EhP1WgLsQWWEWQb77f5gh9niSOmf74mYMfx+3ItmMb8QzPYsXqCz3
- E8f0TNWPBCWqAq+r/TJ40a7IsfWTEErVQvrODvwhFn035Uib9fmbov+LgnFk8OY7Xpz6
- lSRMNxB4+nai8FIJWce4YQvlQNKFzoTydMRLF0tHsifU1FLifkOJJid/MmSSSGgkS0kQ LQ== 
-Received: from ausex01.ad.cirrus.com ([141.131.3.19])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pph1r9v9r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 17:20:20 -0500
-Received: from ausex02.ad.cirrus.com (141.131.37.96) by ausex01.ad.cirrus.com
- (141.131.37.95) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Thu, 6 Apr
- 2023 17:20:20 -0500
-Received: from ftrev.crystal.cirrus.com (141.131.38.212) by
- anon-ausex02.ad.cirrus.com (141.131.37.96) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 6 Apr 2023 17:20:20 -0500
-From:   Fred Treven <fred.treven@cirrus.com>
-To:     <ben.bright@cirrus.com>, <james.ogletree@cirrus.com>,
-        <dmitry.torokhov@gmail.com>, <robh+dt@kernel.org>,
-        <krzystztof.kozlowski+dt@linaro.org>,
-        <patches@opensource.cirrus.com>, <linux-input@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Fred Treven <fred.treven@cirrus.com>
-Subject: [PATCH 2/2] dt-bindings: input: cirrus,cs40l26: Add bindings
-Date:   Thu, 6 Apr 2023 17:20:13 -0500
-Message-ID: <1680819613-29256-1-git-send-email-fred.treven@cirrus.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <Add devicetree bindings for CS40L26 driver>
-References: <Add devicetree bindings for CS40L26 driver>
+        Thu, 6 Apr 2023 18:21:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5DA59DA;
+        Thu,  6 Apr 2023 15:21:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AE3064272;
+        Thu,  6 Apr 2023 22:21:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67CA1C433EF;
+        Thu,  6 Apr 2023 22:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680819697;
+        bh=loBUikWknrpn/iXVH1Gwh7V+JZYKVvtJIqs39q/UxDE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=QyDjrY8DeTPQ2+fBmMWhTCQAlW0GIOFtcvGjykP4Lfu1fHE58veAJCYbgfKTACxLb
+         B31i9rURXYBRK5leAj9+xo04gi4BrKIJhGSJ2ikSVzkR0ZLp8u+nTf0o/u/llb1JCx
+         NFTILc27nqnS7z9x1VZlqy+CNQLhXLcSmtKkRq20W1oBVf7qN5XuYjePfNOPGPyVe6
+         G27DswAtra+PQFAnb3pHqxsqBowmVx0lauyKPGUQR8oJbfTgNZynnam07pshH5WgYQ
+         tDgBg3F37VEFHkzY4Zls6Gm/fzCU46lHFPSu+jzMCFD7DFa55hjhkB4s8XvClNKS0X
+         NbRceP7tT5N9A==
+Date:   Thu, 6 Apr 2023 17:21:35 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     "Natu, Mahesh" <mahesh.natu@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
+ error recovery
+Message-ID: <20230406222135.GA3743643@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: IBdmHK_zs5ET-5jl22vSb-bY6JDIHBhR
-X-Proofpoint-GUID: IBdmHK_zs5ET-5jl22vSb-bY6JDIHBhR
-X-Proofpoint-Spam-Reason: orgsafe
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a4803e7e-bbfe-8925-88e9-935775960e63@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree bindings for CS40L26 driver.
+On Thu, Apr 06, 2023 at 02:52:02PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> On 4/6/23 2:07 PM, Bjorn Helgaas wrote:
+> > On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> >> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
+> >> OS owns AER") adds support to clear error status in the Device Status
+> >> Register(DEVSTA) only if OS owns the AER support. But this change
+> >> breaks the requirement of the EDR feature which requires OS to cleanup
+> >> the error registers even if firmware owns the control of AER support.
+> >>
+> >> More details about this requirement can be found in PCIe Firmware
+> >> specification v3.3, Table 4-6 Interpretation of the _OSC Control Field.
+> >> If the OS supports the Error Disconnect Recover (EDR) feature and
+> >> firmware sends the EDR event, then during the EDR recovery window, OS
+> >> is responsible for the device error recovery and holds the ownership of
+> >> the following error registers.
+> >>
+> >> • Device Status Register
+> >> • Uncorrectable Error Status Register
+> >> • Correctable Error Status Register
+> >> • Root Error Status Register
+> >> • RP PIO Status Register
+> >>
+> >> So call pcie_clear_device_status() in edr_handle_event() if the error
+> >> recovery is successful.
+> >>
+> >> Reported-by: Tsaur Erwin <erwin.tsaur@intel.com>
+> >> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> >> ---
+> >>
+> >> Changes since v1:
+> >>  * Rebased on top of v6.3-rc1.
+> >>  * Fixed a typo in pcie_clear_device_status().
+> >>
+> >>  drivers/pci/pcie/edr.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
+> >> index a6b9b479b97a..87734e4c3c20 100644
+> >> --- a/drivers/pci/pcie/edr.c
+> >> +++ b/drivers/pci/pcie/edr.c
+> >> @@ -193,6 +193,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
+> >>  	 */
+> >>  	if (estate == PCI_ERS_RESULT_RECOVERED) {
+> >>  		pci_dbg(edev, "DPC port successfully recovered\n");
+> >> +		pcie_clear_device_status(edev);
+> >>  		acpi_send_edr_status(pdev, edev, EDR_OST_SUCCESS);
+> > 
+> > The implementation note in PCI Firmware r3.3, sec 4.6.12, shows the OS
+> > clearing error status *after* _OST is evaluated.
+> > 
+> > On the other hand, the _OSC DPC control bit in table 4-6 says that if
+> > the OS does not have DPC control, it can only write the Device Status
+> > error bits between the EDR Notify and invoking _OST.
+> > 
+> > Is one of those wrong, or am I missing something?
+> 
+> Agree. It is conflicting info. IMO, the argument that the OS is allowed to
+> clear the error registers during the EDR windows makes more sense. If OS
+> is allowed to touch error registers owned by firmware after that window,
+> it would lead to race conditions.
+> 
+> Mahesh, let us know your comments. Maybe we need to fix this in the firmware
+> specification.
 
-Signed-off-by: Fred Treven <fred.treven@cirrus.com>
----
- .../devicetree/bindings/input/cs40l26.yaml         | 92 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 93 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/input/cs40l26.yaml
+My assumption was this sequence is something like this, where firmware
+*can't* collect error status from devices below the Downstream Port
+because DPC has been triggered and they are not accessible:
 
-diff --git a/Documentation/devicetree/bindings/input/cs40l26.yaml b/Documentation/devicetree/bindings/input/cs40l26.yaml
-new file mode 100644
-index 000000000000..1036a374baa0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/cs40l26.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/cs40l26.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cirrus Logic CS40L26 Boosted Haptic Amplifier
-+
-+maintainers:
-+  - Fred Treven <fred.treven@cirrus.com>
-+
-+description:
-+  CS40L26 is a Boosted Haptic Driver with Integrated DSP and Waveform Memory
-+  with Advanced Closed Loop Algorithms and LRA protection
-+
-+properties:
-+  compatible:
-+    enum:
-+      - cirrus,cs40l26a
-+      - cirrus,cs40l26b
-+      - cirrus,cs40l27a
-+      - cirrus,cs40l27b
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+    description:
-+      Property describing the interrupt line the devices /ALERT pin is connected to.
-+      The device only has one interrupt source.
-+
-+  VA-supply:
-+    description: Regulator for VA analog voltage
-+
-+  VP-supply:
-+    description: Regulator for VP peak voltage
-+
-+  cirrus,bst-ipk-microamp:
-+    description:
-+      Maximum amount of current that can be drawn by the device's boost
-+      converter in uA. Accepted values are between 1600000 uA and 4800000 uA in
-+      50000 uA increments.
-+    minimum: 1600000
-+    maximum: 4800000
-+    default: 4500000
-+
-+  cirrus,bst-ctl-microvolt:
-+    description:
-+      Maximum target voltage to which the class H algorithm may increase the
-+      VBST supply, expressed in uV. Valid values range from 2550000 to 11000000
-+      (inclusive) in steps of 50000. If this value is specified as zero or VP
-+      rises above this value, VBST is bypassed to VP. If this value is omitted,
-+      the maximum target voltage remains at 11 V.
-+    minimum: 2550000
-+    maximum: 11000000
-+    default: 11000000
-+
-+  cirrus,bst-exploratory-mode-disable:
-+    description:
-+      Disable boost exploratory mode if this boolean is present in the
-+      devicetree. Boost exploratory mode allows the device to overshoot
-+      the set peak current limit. This has potential to damage the boost
-+      inductor. Disabling this mode will prevent this from happening; it will
-+      also prevent the device from detecting boost inductor short errors.
-+      (Default) Enabled
-+    type: boolean
-+
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      cs40l26: cs40l26@58 {
-+        compatible = "cirrus,cs40l26a";
-+        reg = <0x58>;
-+        interrupt-parent = <&gpio0>;
-+        interrupts = <57 8>;
-+        reset-gpios = <&gpio0 54 0>;
-+        VA-supply = <&dummy_vreg>;
-+        VP-supply = <&dummy_vreg>;
-+        cirrus,bst-ctl-microvolt = <2600000>; // Max boost voltage = 2.6V
-+        cirrus,bst-ipk-microamp = <1650000>; // Max boost current = 1.65A
-+        cirrus,bst-exploratory-mode-disabled; // Disable exploratory mode
-+      };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7051386d5a13..3cd9f0c8e38d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4934,6 +4934,7 @@ L:	patches@opensource.cirrus.com
- S:	Supported
- W:	https://github.com/CirrusLogic/linux-drivers/wiki
- T:	git https://github.com/CirrusLogic/linux-drivers.git
-+F:	Documentation/devicetree/bindings/input/cs40l26.yaml
- F:	drivers/input/misc/cs40l*
- F:	include/linux/input/cs40l*
- 
--- 
-2.7.4
+  - Hardware triggers DPC in a Downstream Port
+  - Firmware fields error interrupt
+  - Firmware captures Downstream Port error info (devices below are
+    not accessible because of DPC)
+  - Firmware sends EDR Notify to OS
+  - OS brings Downstream Port out of DPC
+  - OS collects error status from devices below Downstream Port
+  - OS evaluates _OST
+  - Firmware captures error status from devices below Downstream Port
 
+But that doesn't explain why *firmware* could not clear the error
+status of those devices after it captures it.
+
+I guess the flowchart *does* show firmware clearing the error status
+in the "do not continue recovery" path.
