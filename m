@@ -2,147 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1036D9CF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2786D9CFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239823AbjDFQEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
+        id S239829AbjDFQE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjDFQET (ORCPT
+        with ESMTP id S229806AbjDFQEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:04:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31929773
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680797020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nhE+sw2nPXqC1UJ8AXPzZyQsVdsNsrouSAWZ5kkzANM=;
-        b=dWws3ReVzaf1vuJLdCY8Y8YDsdV6j5W90zazengWjjtfrxrMsym80MBtH/+3Gaq/Ynd04F
-        +7AbQkm0N4aWGnWEi/5dDl52SqVBbOEw5PUasPAksp333kCd10hmkh/4koO1bXIVQOfISM
-        3BuIZZZFv8SD+YCzzkLeCaQHfFT+GrU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-240-wWM0zfQGPaqtdJojOinElg-1; Thu, 06 Apr 2023 12:03:39 -0400
-X-MC-Unique: wWM0zfQGPaqtdJojOinElg-1
-Received: by mail-ej1-f71.google.com with SMTP id hy11-20020a1709068a6b00b0093994122eddso436944ejc.17
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:03:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680797018;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nhE+sw2nPXqC1UJ8AXPzZyQsVdsNsrouSAWZ5kkzANM=;
-        b=4ypp6541i/zo4uNJhUrtTwF0H5L/eUrG9YlY0e8TnNJIXCDcZTE+Z3aCBq80najmyJ
-         pMe6yumI7+nA9/NykmKA21NTfPb25drQJDh13rcysxvlReqOp2cuwZQjrfrvagubzK6K
-         mv/BM50l9LuLDqt9RC6MF8TX9rb/X3vNoPEXGcS3ussEn0ov5Up8LTxp6S0LAY/0Z8YC
-         RdIvEWqxoQW29JAxM0neaLfso8Q5gRmDUkDfX+gCJwBnhtBJI/dAAUMNipSvRpGEkf2e
-         q5++pad2cAxKWzalos4anymJogWwDRY1ODwj+tDYZ8s2ELf71A/Ungd/j6veJAzBzkMw
-         OzXQ==
-X-Gm-Message-State: AAQBX9cPbKvT6Ae+1J2tpMIFgr5kLq3fIWyZb2gYsYKfP+i8MahIFlld
-        jE706KbkSBLAQy9bMD/hVDQg++JjurXTkkLj7EuB1YOougJpPEghIcs+g1uWzy9dzTSulZlsJ4/
-        hBhw96Vqao82XPPvJ01B53lamyGXEOUm85IHnA2fC
-X-Received: by 2002:a17:907:7f0b:b0:8b1:7569:b526 with SMTP id qf11-20020a1709077f0b00b008b17569b526mr3699965ejc.11.1680797017899;
-        Thu, 06 Apr 2023 09:03:37 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bj25JTqlPH4xO7mSRLb2uiNpfWZQ6CHwGpry0pz+NotDKptf776qNa/IjvZu9utWI9ekaWvAw2s40+5EjYFv8=
-X-Received: by 2002:a17:907:7f0b:b0:8b1:7569:b526 with SMTP id
- qf11-20020a1709077f0b00b008b17569b526mr3699956ejc.11.1680797017538; Thu, 06
- Apr 2023 09:03:37 -0700 (PDT)
+        Thu, 6 Apr 2023 12:04:23 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49EB9EDE;
+        Thu,  6 Apr 2023 09:04:21 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 62F1086081;
+        Thu,  6 Apr 2023 18:04:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1680797060;
+        bh=hGSNcP+ms4Vn8/e4xgcJRUfGMxd2RCu6Ltfl1sU5U6s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=j4i+KxNDBecht5uxlq7mB9s/myKyJeibtAw6iFvfBKc/35IQSSeYiwNomHTYvSM38
+         ZV0f7RQvqHTU7F8XqKMkKbMknDLh/LX+BsXSC4Qbmw5wskMY87lc38Gsao7ghJVBu0
+         sKQAUE4VDujl8OlqswgNihdfiYnN8v9S6HxQ4/18TjF0Us4y5GV7ue1sW9Ahpiwggv
+         02BgrUGjUBsruU1WsnOCGMf7QNQdy6JhvZDGxMG3heyLZi1nyh7Ju4IkVaJgnzFSAo
+         OGUNCH1vSn0rwTonZGzFA45PRxY6hT9Yg7YF79W9uY84FnIx1JUjZGD+oDMAgfGTFg
+         WPBhhvznCiwsw==
+Message-ID: <6865a0ce-fc77-df43-b36d-a586856c69d7@denx.de>
+Date:   Thu, 6 Apr 2023 18:04:18 +0200
 MIME-Version: 1.0
-References: <20230404084701.2791683-1-ryasuoka@redhat.com> <e51e9fb1-ad5c-5cf8-fa04-4e3a10023739@sandeen.net>
-In-Reply-To: <e51e9fb1-ad5c-5cf8-fa04-4e3a10023739@sandeen.net>
-From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
-Date:   Fri, 7 Apr 2023 01:03:26 +0900
-Message-ID: <CAHpthZrcegPXhti5tDdb=_nwafWnU-FXmtc6aRU7juowMpOnUQ@mail.gmail.com>
-Subject: Re: [PATCH] xfs: Use for_each_perag() to iterate all available AGs
-To:     Eric Sandeen <sandeen@sandeen.net>
-Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
+Content-Language: en-US
+To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        kernel <kernel@dh-electronics.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+References: <20230405160258.46998-1-cniedermaier@dh-electronics.com>
+ <20230405160258.46998-2-cniedermaier@dh-electronics.com>
+ <05fa147c-116b-59b4-d14b-760bbefd7602@denx.de>
+ <e7aa3b3220e148ee96f5a1c361721845@dh-electronics.com>
+ <42737c19-698f-8cc8-45b2-8ff08a274f87@denx.de>
+ <531df359744f4bdb9fd34eafc864d2bc@dh-electronics.com>
+ <50c88cc4-e046-6c43-2d35-116d1d4ea2f8@denx.de>
+ <622e846f1d2c4f8abba171202640d1d3@dh-electronics.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <622e846f1d2c4f8abba171202640d1d3@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric,
+On 4/6/23 17:44, Christoph Niedermaier wrote:
+> From: Marek Vasut [mailto:marex@denx.de]
+> Sent: Thursday, April 6, 2023 4:10 PM
+>> On 4/6/23 10:37, Christoph Niedermaier wrote:
+>>> From: Marek Vasut [mailto:marex@denx.de]
+>>> Sent: Wednesday, April 5, 2023 8:47 PM
+>>>> On 4/5/23 20:24, Christoph Niedermaier wrote:
+>>>>> From: Marek Vasut [mailto:marex@denx.de]
+>>>>> Sent: Wednesday, April 5, 2023 6:25 PM
+>>>>>> On 4/5/23 18:02, Christoph Niedermaier wrote:
+>>>>>>
+>>>>>> [...]
+>>>>>>
+>>>>>>> +/ {
+>>>>>>> +     model = "DH electronics i.MX6ULL DHCOR on maveo box";
+>>>>>>> +     compatible = "dh,imx6ull-dhcor-maveo-box", "dh,imx6ull-dhcor-som",
+>>>>>>> +                  "fsl,imx6ull";
+>>>>>>> +
+>>>>>>> +     aliases {
+>>>>>>> +             /delete-property/ mmc0; /* Avoid double definitions */
+>>>>>>> +             /delete-property/ mmc1;
+>>>>>>> +             mmc2 = &usdhc2; /* eMMC should be mmc2 */
+>>>>>>
+>>>>>> Why not mmc0 ?
+>>>>>>
+>>>>>> Use root=PARTUUID= when booting to avoid any dependency on
+>>>>>> root=/dev/mmcblk2pN enumeration.
+>>>>>
+>>>>> This is due to software interchangeability with the DHCOM
+>>>>> i.MX6ULL, where the eMMC is always mmc2.
+>>>>
+>>>> +CC Ulf , I vaguely recall some discussion about this enumeration and I
+>>>> am not sure one can really depend on that.
+>>>
+>>> That why I think it good to have a defined number for mmcblk devices
+>>> on an embedded system. An excerpt from [1]:
+>>
+>> I might be misremembering this, but could it be that, if any non-OF
+>> SDMMC controller probes early and hogs the /dev/mmcblk2 before the OF
+>> ones have a chance to probe, then the OF ones would fail to probe ?
+>>
+>>> Alternative solutions like PARTUUIDs do not cover the case where multiple
+>>> mmcblk devices contain the same image.
+>>
+>> I agree, this is indeed a downside of PARTUUID .
+>>
+>>> This is a common issue on devices
+>>> that can boot both from eMMC (for regular boot) and SD cards (as a
+>>> temporary boot medium for development). When a firmware image is
+>>> installed to eMMC after a test boot via SD card, there will be no
+>>> reliable way to refer to a specific device using (PART)UUIDs oder
+>>> LABELs
+>>
+>> This can be solved by the installer updating the PARTUUID on the eMMC
+>> however.
+>>
+>>> [1] https://patchwork.kernel.org/project/linux-mmc/patch/20200825134441.17537-2-matthias.schiffer@ew.tq-group.com/
+>>>
+>>> So far I have never had a problem with numbering mmcblk devices via aliases.
+>>
+>> Based on the above, I don't think either the aliases or PARTUUID is a
+>> perfect solution, but the aliases should be fine for mx6ull at least?
+>> So I think we can conclude this discussion thread ?
+> 
+> Yes, I will send a new version with the changes on the first patch.
 
-I failed to reply to you since I got some mistakes.
-Let me re-send my reply just in case.
-
-Thank you for reviewing my requests.
-
-> Can you explain what goes wrong if it is zero? Is there a test for this?
->
-> If it's a general problem, what if the other 2 callers pass in the variable
-> start_agno with a value of 0?
-
-Sorry I couldn't prepare any tests to confirm what happens if it is zero
-because it is a kind of general problem.
-
-IIUC, passing zero to for_each_perag_wrap() is not problematic.
-
-As the comment describes, this macro iterates all AG from start_agno through
-wrap_agno, then wrap to restart_agno, and then iterates again toward to
-start_agno - 1. It looks like some issue occurs when start_agno is zero.
-However, for_each_perag_wrap() actually won't wrap if start_agno is zero.
-
-static inline struct xfs_perag *
-xfs_perag_next_wrap(
-struct xfs_perag *pag,
-xfs_agnumber_t *agno,
-xfs_agnumber_t stop_agno,
-xfs_agnumber_t restart_agno,
-xfs_agnumber_t wrap_agno)
-{
-struct xfs_mount *mp = pag->pag_mount;
-
-*agno = pag->pag_agno + 1;
-xfs_perag_rele(pag);
-while (*agno != stop_agno) {
-if (*agno >= wrap_agno) {
-if (restart_agno >= stop_agno) <<<--- HERE
-break;
-*agno = restart_agno;
-}
-
-pag = xfs_perag_grab(mp, *agno);
-if (pag)
-return pag;
-(*agno)++;
-}
-return NULL;
-}
-
-/*
-* Iterate all AGs from start_agno through wrap_agno, then restart_agno through
-* (start_agno - 1).
-*/
-#define for_each_perag_wrap_range(mp, start_agno, restart_agno,
-wrap_agno, agno, pag) \
-for ((agno) = (start_agno), (pag) = xfs_perag_grab((mp), (agno)); \
-(pag) != NULL; \
-(pag) = xfs_perag_next_wrap((pag), &(agno), (start_agno), \
-(restart_agno), (wrap_agno)))
-...
-#define for_each_perag_wrap_at(mp, start_agno, wrap_agno, agno, pag) \
-for_each_perag_wrap_range((mp), (start_agno), 0, (wrap_agno), (agno), (pag))
-...
-#define for_each_perag_wrap(mp, start_agno, agno, pag) \
-for_each_perag_wrap_at((mp), (start_agno), (mp)->m_sb.sb_agcount, \
-(agno), (pag))
-
-OTOH, since we have already a for_each_perag() macro, which just iterates all AG
-from 0 and doesn't wrap, I think it is simpler to use for_earch_perag().
-
-Regards,
-Ryosuke
-
+Thank you
