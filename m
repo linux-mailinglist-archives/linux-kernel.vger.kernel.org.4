@@ -2,168 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6816D93E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9382F6D93EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236153AbjDFKZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
+        id S235753AbjDFK0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237010AbjDFKZf (ORCPT
+        with ESMTP id S235604AbjDFK0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:25:35 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F8A55B4;
-        Thu,  6 Apr 2023 03:25:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1680776692; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Cjs+XBV8Gu0KGOQFrhBmtUdPH6mSx/zabc0UXppUBcomoj8H64sVduwwQBzhN5QIjQV6bg/8iFJkZlzrURFcxDGpuY99MdR4ZTeJX4A6LIX9rf9U3DauKgjFpiDH+WRvhVIvGZNSmX9SCtFFuaFyJnhZjFA9GNiqE+cu9zdYvpY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1680776692; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=aKkAM3NtQAerwJ+wJavlq1ECKj7FR7c0TY3j7Hm+11M=; 
-        b=jH3ESseDVSFPtC7Et2RwsXwcCPqjCkMqq88JY8BdHPEijMeskkGShBZIuO40LMeHnvOCWKlNzm+dbBTrlYfku9dG9LuP7p9Ho7Uy3q4j4AD8LMz4f9YJpf5vkVT2S8DVEXkDL7+9BUYclT6acBRIl3wmMHnx75gDpXeZyTgtPQQ=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680776692;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=aKkAM3NtQAerwJ+wJavlq1ECKj7FR7c0TY3j7Hm+11M=;
-        b=cBhKMOAQ/qPqFfGu9Tir3tuBiWJl7fiTNs47Logi6CaloU7PzCCXbUVoq2ZwbxtD
-        mpN4ngp/yWDywmSXIUPABRocell4f2WPuJzJDnOyDj7u5LRBbyd/oYU8SiksYyCO7FA
-        V0HT1m/fMrUiDwALPniZmemNdHhUld7QDdB10xsw=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1680776691384567.9733051958792; Thu, 6 Apr 2023 03:24:51 -0700 (PDT)
-Message-ID: <79934b31-47ed-f2c7-03b6-fb2c2e95aa2d@arinc9.com>
-Date:   Thu, 6 Apr 2023 13:24:45 +0300
+        Thu, 6 Apr 2023 06:26:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BC21713;
+        Thu,  6 Apr 2023 03:26:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5DB3642B5;
+        Thu,  6 Apr 2023 10:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB72C433D2;
+        Thu,  6 Apr 2023 10:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680776779;
+        bh=yVOn8o+5hTtwRbr8XWL47ZWTuN1kQFTfBsh5tqfXXsQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QWYNS0Io9NTLz6QIIXU25HZjd2/sgvoDoIrhLx/Yz50kimlZLKl7PXdLTeRCF0E+F
+         TTLD39rqPrNIE5+pZd8q1vXeULBayb9zSJbktxLOl/65+bAcfLNlTCkGBqHMrJaMwc
+         KUc7zYbWYouSEJKxP5Sh2yWpPuLjnyRRJ30d4suhCC/CiMiHFAynVIIVf/UUWWPQ4i
+         XYBdhcocsdcpgZGnu2YYh3FhbABlkQX3a/UxiH+1AAtce8afGlPO/ekJSSfOYld9Ml
+         S8giSIw0VqfkGjV9gnpZf0KtdAdBVHyXkut8KomvYWM1D2yX/s9riOcAWU7ALSjpkP
+         lg0/Q0/5zKwQw==
+Date:   Thu, 6 Apr 2023 12:26:13 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        miklos@szeredi.hu, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        amir73il@gmail.com
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
+ writes
+Message-ID: <20230406-diffamieren-langhaarig-87511897e77d@brauner>
+References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Subject: Re: [RFC PATCH net-next] net: dsa: mt7530: fix port specifications
- for MT7988
-To:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230406100445.52915-1-arinc.unal@arinc9.com>
-Content-Language: en-US
-In-Reply-To: <20230406100445.52915-1-arinc.unal@arinc9.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230405171449.4064321-1-stefanb@linux.ibm.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Port 6 configuration is shared so it's simpler to put a label.
+On Wed, Apr 05, 2023 at 01:14:49PM -0400, Stefan Berger wrote:
+> Overlayfs fails to notify IMA / EVM about file content modifications
+> and therefore IMA-appraised files may execute even though their file
+> signature does not validate against the changed hash of the file
+> anymore. To resolve this issue, add a call to integrity_notify_change()
+> to the ovl_release() function to notify the integrity subsystem about
+> file changes. The set flag triggers the re-evaluation of the file by
+> IMA / EVM once the file is accessed again.
+> 
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> ---
+>  fs/overlayfs/file.c       |  4 ++++
+>  include/linux/integrity.h |  6 ++++++
+>  security/integrity/iint.c | 13 +++++++++++++
+>  3 files changed, 23 insertions(+)
+> 
+> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+> index 6011f955436b..19b8f4bcc18c 100644
+> --- a/fs/overlayfs/file.c
+> +++ b/fs/overlayfs/file.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/security.h>
+>  #include <linux/mm.h>
+>  #include <linux/fs.h>
+> +#include <linux/integrity.h>
+>  #include "overlayfs.h"
+>  
+>  struct ovl_aio_req {
+> @@ -169,6 +170,9 @@ static int ovl_open(struct inode *inode, struct file *file)
+>  
+>  static int ovl_release(struct inode *inode, struct file *file)
+>  {
+> +	if (file->f_flags & O_ACCMODE)
+> +		integrity_notify_change(inode);
+> +
+>  	fput(file->private_data);
+>  
+>  	return 0;
+> diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+> index 2ea0f2f65ab6..cefdeccc1619 100644
+> --- a/include/linux/integrity.h
+> +++ b/include/linux/integrity.h
+> @@ -23,6 +23,7 @@ enum integrity_status {
+>  #ifdef CONFIG_INTEGRITY
+>  extern struct integrity_iint_cache *integrity_inode_get(struct inode *inode);
+>  extern void integrity_inode_free(struct inode *inode);
+> +extern void integrity_notify_change(struct inode *inode);
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 6fbbdcb5987f..009f2c0948d6 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -2548,7 +2548,7 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
-  	phy_interface_zero(config->supported_interfaces);
-  
-  	switch (port) {
--	case 0 ... 4: /* Internal phy */
-+	case 0 ... 3: /* Internal phy */
-  		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
-  			  config->supported_interfaces);
-  		break;
-@@ -2710,37 +2710,50 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
-  	struct mt7530_priv *priv = ds->priv;
-  	u32 mcr_cur, mcr_new;
-  
--	switch (port) {
--	case 0 ... 4: /* Internal phy */
--		if (state->interface != PHY_INTERFACE_MODE_GMII &&
--		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
-+	if (priv->id == ID_MT7988) {
-+		switch (port) {
-+		case 0 ... 3: /* Internal phy */
-+			if (state->interface != PHY_INTERFACE_MODE_INTERNAL)
-+				goto unsupported;
-+			break;
-+		case 6: /* Port 6, a CPU port. */
-+			goto port6;
-+		default:
-  			goto unsupported;
--		break;
--	case 5: /* Port 5, a CPU port. */
--		if (priv->p5_interface == state->interface)
-+		}
-+	} else {
-+		switch (port) {
-+		case 0 ... 4: /* Internal phy */
-+			if (state->interface != PHY_INTERFACE_MODE_GMII)
-+				goto unsupported;
-  			break;
-+		case 5: /* Port 5, a CPU port. */
-+			if (priv->p5_interface == state->interface)
-+				break;
-  
--		if (mt753x_mac_config(ds, port, mode, state) < 0)
--			goto unsupported;
-+			if (mt753x_mac_config(ds, port, mode, state) < 0)
-+				goto unsupported;
-  
--		if (priv->p5_intf_sel == P5_INTF_SEL_GMAC5 ||
--		    priv->p5_intf_sel == P5_INTF_SEL_GMAC5_SGMII)
--			priv->p5_interface = state->interface;
--		break;
--	case 6: /* Port 6, a CPU port. */
--		if (priv->p6_interface == state->interface)
-+			if (priv->p5_intf_sel == P5_INTF_SEL_GMAC5 ||
-+			priv->p5_intf_sel == P5_INTF_SEL_GMAC5_SGMII)
-+				priv->p5_interface = state->interface;
-  			break;
-+		case 6: /* Port 6, a CPU port. */
-+port6:
-+			if (priv->p6_interface == state->interface)
-+				break;
-  
--		if (mt753x_mac_config(ds, port, mode, state) < 0)
--			goto unsupported;
-+			if (mt753x_mac_config(ds, port, mode, state) < 0)
-+				goto unsupported;
-  
--		priv->p6_interface = state->interface;
--		break;
--	default:
-+			priv->p6_interface = state->interface;
-+			break;
-+		default:
-  unsupported:
--		dev_err(ds->dev, "%s: unsupported %s port: %i\n",
--			__func__, phy_modes(state->interface), port);
--		return;
-+			dev_err(ds->dev, "%s: unsupported %s port: %i\n",
-+				__func__, phy_modes(state->interface), port);
-+			return;
-+		}
-  	}
-  
-  	mcr_cur = mt7530_read(priv, MT7530_PMCR_P(port));
-
-Arınç
+I thought we concluded that ima is going to move into the security hook
+infrastructure so it seems this should be a proper LSM hook?
