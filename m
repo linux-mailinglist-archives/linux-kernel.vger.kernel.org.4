@@ -2,77 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93AE6D98DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A036D98DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238914AbjDFOAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S238915AbjDFODX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238980AbjDFN7x (ORCPT
+        with ESMTP id S230029AbjDFODV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:59:53 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5743ABC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:59:47 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id q16so50921672lfe.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:59:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680789586;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ahOtErsAZTwjnxvLm+Q7vFYLyLF4PgdNHJFRQu9gQIE=;
-        b=kmt4M8Hx4w/t+axa3WrnxHX+1XcH/Csa7PEULn+hnUQNZeqU1vfcpgKvdXbL/8QOxC
-         I1CSGA2cglCL00n+FGfB5L0fcO2hL22Yf4raMBmrht4fzO7lZx72TZ55IOAhsFlDWsEl
-         wY2xiymIVcZbMRlKj+rEtpruZhTtBq7467tW7PkvpEfGqTaTc4gbg9ANzsRsvHSFEm3S
-         djbk4UQmDvDn1WJY9vBvFaCT6Rv265DYIRwtkH4Z/IS9IXtb8PG6GHTaIDtV9bWJxRkt
-         o70V7sNMM8ZdRx2IVfykopTkjF86wDJOWIPRg8b/b3NsJW4DKwT9fQfwgTjDolpf4zD/
-         7x6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680789586;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ahOtErsAZTwjnxvLm+Q7vFYLyLF4PgdNHJFRQu9gQIE=;
-        b=YzREYLYVfeoFwo6unpluA89pemGT3bx+UdqlKRI335F93yAGC87LvngyNYz2ZgZ9XL
-         ZL2Bp97/CkpJ7qR6dM2DX/QnWktjj5+RCTAAJ0OHOflaJFMPjrdeuEbdDqBsoX8lQFSR
-         JeLd8A0WhqBBj9gwvX5TGos4L4XDPQa2yC4iASV880ZY+LlF3b7QaV4gBMT2dp+PL3Do
-         Z5LlASP/imZU/n3rHe+5AZN2c16ECtv87nGHzkulNVqZx2BvQI7sJcBBIIjjQtIvNnrz
-         4KXFpiOk0cpcVmirYB3J8shDt6x3wfb8zknwd+CzqHpPAGZeuJWv9eNta0+bbsw7CXSX
-         vpJA==
-X-Gm-Message-State: AAQBX9fabVwmNgUQ1PhgubUwSXF0WPJeg86Y2uZMFomBoEw3DZixn/5Q
-        Q6lt53ZR5o31r9WhF91prxM//A==
-X-Google-Smtp-Source: AKy350aoUklCC061oW2drNDEOT/plxqF0kMjER+zJgHC6nWb/WxYQP5DpTC1JTzNFAyC748GebfEYg==
-X-Received: by 2002:a05:6512:503:b0:4e7:fa9a:4d3c with SMTP id o3-20020a056512050300b004e7fa9a4d3cmr2374207lfb.16.1680789585933;
-        Thu, 06 Apr 2023 06:59:45 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id z1-20020a2e8e81000000b00295a8c68585sm299658ljk.56.2023.04.06.06.59.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 06:59:45 -0700 (PDT)
-Message-ID: <af22628c-e54b-f7e1-16a6-6534f4526cd5@linaro.org>
-Date:   Thu, 6 Apr 2023 15:59:40 +0200
+        Thu, 6 Apr 2023 10:03:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF7749CE;
+        Thu,  6 Apr 2023 07:03:19 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Psjmj68qcznb9n;
+        Thu,  6 Apr 2023 21:59:49 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 6 Apr
+ 2023 22:03:16 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-fsdevel@vger.kernel.org>
+CC:     <viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <tj@kernel.org>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
+        <libaokun1@huawei.com>, <stable@vger.kernel.org>
+Subject: [RFC PATCH] writeback, cgroup: fix null-ptr-deref write in bdi_split_work_to_wbs
+Date:   Thu, 6 Apr 2023 22:02:47 +0800
+Message-ID: <20230406140247.1936541-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 09/11] arm64: dts: qcom: sm8250: Add Crypto Engine
- support
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org
-References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
- <20230405072836.1690248-10-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230405072836.1690248-10-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,51 +50,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+KASAN report null-ptr-deref:
+==================================================================
+BUG: KASAN: null-ptr-deref in bdi_split_work_to_wbs+0x6ce/0x6e0
+Write of size 8 at addr 0000000000000000 by task syz-executor.3/3514
 
+CPU: 3 PID: 3514 Comm: syz-executor.3 Not tainted 5.10.0-dirty #1
+Call Trace:
+ dump_stack+0xbe/0xfd
+ __kasan_report.cold+0x34/0x84
+ kasan_report+0x3a/0x50
+ check_memory_region+0xfd/0x1f0
+ bdi_split_work_to_wbs+0x6ce/0x6e0
+ __writeback_inodes_sb_nr+0x184/0x1f0
+ try_to_writeback_inodes_sb+0x7f/0xa0
+ ext4_nonda_switch+0x125/0x130
+ ext4_da_write_begin+0x126/0x6e0
+ generic_perform_write+0x199/0x3a0
+ ext4_buffered_write_iter+0x16d/0x2b0
+ ext4_file_write_iter+0xea/0x140
+ new_sync_write+0x2fa/0x430
+ vfs_write+0x4a1/0x570
+ ksys_write+0xf6/0x1f0
+ do_syscall_64+0x30/0x40
+ entry_SYSCALL_64_after_hwframe+0x61/0xc6
+RIP: 0033:0x45513d
+[...]
+==================================================================
 
-On 5.04.2023 09:28, Bhupesh Sharma wrote:
-> Add crypto engine (CE) and CE BAM related nodes and definitions to
-> 'sm8250.dtsi'.
-> 
-> Co-developed-by and Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8250.dtsi | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> index 7b78761f2041..2f6b8d4a2d41 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> @@ -2222,6 +2222,28 @@ ufs_mem_phy_lanes: phy@1d87400 {
->  			};
->  		};
->  
-> +		cryptobam: dma-controller@1dc4000 {
-> +			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-> +			reg = <0 0x01dc4000 0 0x24000>;
-> +			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-> +			#dma-cells = <1>;
-> +			qcom,ee = <0>;
-> +			qcom,controlled-remotely;
-> +			iommus = <&apps_smmu 0x594 0x0011>,
-> +				 <&apps_smmu 0x596 0x0011>;
-> +		};
-> +
-> +		crypto: crypto@1dfa000 {
-> +			compatible = "qcom,sm8250-qce", "qcom,sm8150-qce", "qcom,qce";
-> +			reg = <0 0x01dfa000 0 0x6000>;
-> +			dmas = <&cryptobam 4>, <&cryptobam 5>;
-> +			dma-names = "rx", "tx";
-> +			iommus = <&apps_smmu 0x594 0x0011>,
-> +				 <&apps_smmu 0x596 0x0011>;
-> +			interconnects = <&aggre2_noc MASTER_CRYPTO_CORE_0 &mc_virt SLAVE_EBI_CH0>;
-> +			interconnect-names = "memory";
-Shouldn't we also attach the contexts from qcom_cedev_ns_cb{}?
+Above issue may happen as follows:
 
-Konrad
-> +		};
-> +
->  		tcsr_mutex: hwlock@1f40000 {
->  			compatible = "qcom,tcsr-mutex";
->  			reg = <0x0 0x01f40000 0x0 0x40000>;
+            cpu1                        cpu2
+----------------------------|----------------------------
+ext4_nonda_switch
+ try_to_writeback_inodes_sb
+  __writeback_inodes_sb_nr
+   bdi_split_work_to_wbs
+    kmalloc(sizeof(*work), GFP_ATOMIC)  ---> alloc mem failed
+                                inode_switch_wbs
+                                 inode_switch_wbs_work_fn
+                                  wb_put_many
+                                   percpu_ref_put_many
+                                    ref->data->release(ref)
+                                     cgwb_release
+                                      &wb->release_work
+                                       cgwb_release_workfn
+                                        percpu_ref_exit
+                                         ref->data = NULL
+                                         kfree(data)
+    wb_get(wb)
+     percpu_ref_get(&wb->refcnt)
+      percpu_ref_get_many(ref, 1)
+       atomic_long_add(nr, &ref->data->count) ---> ref->data = NULL
+        atomic64_add(i, v) ---> trigger null-ptr-deref
+
+bdi_split_work_to_wbs() traverses &bdi->wb_list to split work into all wbs.
+If the allocation of new work fails, the on-stack fallback will be used and
+the reference count of the current wb is increased afterwards. If cgroup
+writeback membership switches occur before getting the reference count and
+the current wb is released as old_wd, then calling wb_get() or wb_put()
+will trigger the null pointer dereference above.
+
+A similar problem is fixed in commit 7fc5854f8c6e ("writeback: synchronize
+sync(2) against cgroup writeback membership switches"), but the patch only
+adds locks to sync_inodes_sb() and not to the __writeback_inodes_sb_nr()
+function that also calls bdi_split_work_to_wbs() function. So avoid the
+above race by adding the same lock to __writeback_inodes_sb_nr() and
+expanding the range of wb_switch_rwsem held in inode_switch_wbs_work_fn().
+
+Fixes: b817525a4a80 ("writeback: bdi_writeback iteration must not skip dying ones")
+Cc: stable@vger.kernel.org
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/fs-writeback.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+index 195dc23e0d83..52825aaf549b 100644
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -506,13 +506,13 @@ static void inode_switch_wbs_work_fn(struct work_struct *work)
+ 	spin_unlock(&new_wb->list_lock);
+ 	spin_unlock(&old_wb->list_lock);
+ 
+-	up_read(&bdi->wb_switch_rwsem);
+-
+ 	if (nr_switched) {
+ 		wb_wakeup(new_wb);
+ 		wb_put_many(old_wb, nr_switched);
+ 	}
+ 
++	up_read(&bdi->wb_switch_rwsem);
++
+ 	for (inodep = isw->inodes; *inodep; inodep++)
+ 		iput(*inodep);
+ 	wb_put(new_wb);
+@@ -936,6 +936,11 @@ static long wb_split_bdi_pages(struct bdi_writeback *wb, long nr_pages)
+  * have dirty inodes.  If @base_work->nr_page isn't %LONG_MAX, it's
+  * distributed to the busy wbs according to each wb's proportion in the
+  * total active write bandwidth of @bdi.
++ *
++ * Called under &bdi->wb_switch_rwsem, otherwise bdi_split_work_to_wbs()
++ * may race against cgwb (cgroup writeback) membership switches, which may
++ * cause some inodes to fail to write back, or even trigger a null pointer
++ * dereference using a freed wb.
+  */
+ static void bdi_split_work_to_wbs(struct backing_dev_info *bdi,
+ 				  struct wb_writeback_work *base_work,
+@@ -2637,8 +2642,11 @@ static void __writeback_inodes_sb_nr(struct super_block *sb, unsigned long nr,
+ 		return;
+ 	WARN_ON(!rwsem_is_locked(&sb->s_umount));
+ 
++	/* protect against inode wb switch, see inode_switch_wbs_work_fn() */
++	bdi_down_write_wb_switch_rwsem(bdi);
+ 	bdi_split_work_to_wbs(sb->s_bdi, &work, skip_if_busy);
+ 	wb_wait_for_completion(&done);
++	bdi_up_write_wb_switch_rwsem(bdi);
+ }
+ 
+ /**
+-- 
+2.31.1
+
