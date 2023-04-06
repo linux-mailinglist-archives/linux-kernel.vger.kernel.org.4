@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6881D6DA59C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA86B6DA59D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbjDFWMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S239092AbjDFWMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjDFWMf (ORCPT
+        with ESMTP id S238758AbjDFWMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:12:35 -0400
+        Thu, 6 Apr 2023 18:12:37 -0400
 Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765C0B455
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:12:33 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id ld14so233105qvb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:12:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21388AF29
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:12:36 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id ld14so233171qvb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680819151; x=1683411151;
+        d=gmail.com; s=20210112; t=1680819154; x=1683411154;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z/a+4VDDPwS/RRF9EmWa2djAoEzc30Ym18+xLqrhOLM=;
-        b=gHJIA+wejylPYAXvOEDxEAdVzRUU1Ha2hQerAHVOBbdUQpFufphds9hPOJ6hD4adY5
-         bZow27oUDQvaRW6tGFJkz/8bsKR7hZQyzfXs59FFkrKHVs7MmMvn450rHOjvlraslDCN
-         F0Lux9ajYawZ/6Z5zjkesB9N5aN86ENtqmON8+rS2x4VygFDzErgmGw/tmBhWgCxIZ7X
-         Hk+zgLN3fljPCgx52oBWIfNJ2XhyKYrKHBLnDHUVMEmSyxPdpcEmD0728fpK2VAudNqT
-         x4ByhI8CgDkJXhtcy1wdMLD++v2bFDDYAh8Sa0BysnlAuFk8ejG8Y+b2rRRwvY1dhq65
-         lRlA==
+        bh=77xXDgdfCYlHmKQzw7for8TBSRkg3UrZB/xabG2Isl4=;
+        b=LcKPGFVDy/mOCkEpIfP4CKdmezLCKFTavbhDx+mq+VC8uuI5iLWFjamnYvSNXc9wDR
+         cJursipFPE4EKOuAJWkHFtVFAr15r/ORCAF4cBrZElkFoNLpEreEEvbT12UH7jeX7y+N
+         Tt3uNRQOxRGpaU8G6YW9yMkr/0xfHUNBWbzCclK2yxaRXr8cLlIxut9rTaAwY7AL6rq4
+         6Tu73eYm9fSfMNU1/cMOLiNBoFv07fXTmRBGL5b1Vox9dPxqDJwVa3+KAED1JiAw/ans
+         kSG+2tPxs6xWUw14zBO+yomWFYsD98sJ0XLDW3WWELUFIKeJfcOJHztI5+7S3w8Cxx3Q
+         oQkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680819151; x=1683411151;
+        d=1e100.net; s=20210112; t=1680819154; x=1683411154;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z/a+4VDDPwS/RRF9EmWa2djAoEzc30Ym18+xLqrhOLM=;
-        b=2Cuv5Lq5ilu+09SsKf4JoxpNI2UKl+cna9O3WGCTMmdb+JSgIcggMBz3dAPQeQm2Ce
-         ozQnuF7uCgJG/78hFskzGADu5nyyFIz+7V0Vbisc1yt7ZYT7ZOWQ7MKJN4oVLjea1TZl
-         o/02RIszeZCEl7LIYV9ez+E08fVbAu0JeqK4Iq1U4zwbUue4aiqwAVsUQjpen1xeP+uB
-         dRwc8Fc/ATM7vBnmAuuRZ0FkD0f3Dw5F2kIGieackGNo9F28XXdVX/Shv+5UoDf1XYVX
-         14nFtz72SO7HRaSKerpUDBDguvAS/TniOLqDnEIO2glPqmNKswfS87KIcIVP1IWiPaNi
-         mFfg==
-X-Gm-Message-State: AAQBX9dEjO3i2nM/D0biBLHm++DecEQGc9HXxmGE/SQqo419r3vy2snT
-        /R9prO/8yjIDqRlu4CZzIvfrn+lV/Srv2A==
-X-Google-Smtp-Source: AKy350YyRUtbiLNikyC7Jn/5/dY4cME14lan2FXVhMd9UaEeGkoGtcFHTXiFKwhxrq/6tup+IIC1eg==
-X-Received: by 2002:ad4:5baa:0:b0:5c1:59b9:40b4 with SMTP id 10-20020ad45baa000000b005c159b940b4mr855565qvq.48.1680819151446;
-        Thu, 06 Apr 2023 15:12:31 -0700 (PDT)
+        bh=77xXDgdfCYlHmKQzw7for8TBSRkg3UrZB/xabG2Isl4=;
+        b=ilKL8P0Pm7oHlnWFG4gmGHD+aNeGB9uf/jRJKdTBiJM88zN/3CFKjP8tnRba4+aTim
+         0VmQOIByncI3dagZzurJSkHmC0Tl7UOj2GVcdg2wiLJqrVURKsxJTPYM6nYcfcUsvFTM
+         Oc9DTmr4BmyAprXt03fD7yXPNYj7jc/yJEj0d/VgJr01znUy2wX21RWWjtZYWk+SNCsu
+         05ZsdP/SaWpcZQ1M5GFKc+r3CIlu/CG9fDh/haCj2/u/9MNq9sMzgO9KDcXtMWqeWUky
+         pLf4QtXmCLYQemUxIsgM4VSPZD+z6YQ4hrTuncXM6+zoWObr3935REU+8VbM8xyEj+fD
+         pHug==
+X-Gm-Message-State: AAQBX9cBL6jNMhuPaVRQDmWeOR/Fbw/nsYzyS3oShMKlzsvyUBiuMSUn
+        eH3FprG5GkJm2Q0ueFhbGzBOKvnMmEf1rw==
+X-Google-Smtp-Source: AKy350Yolh5LxtrNdbXDQVMBqw2lmnAT8hcdH5vHHOZ+Vo5QoNxyS227ZfcbL1URY0OjHP6rMNuWRw==
+X-Received: by 2002:a05:6214:3016:b0:5ab:56d4:dc43 with SMTP id ke22-20020a056214301600b005ab56d4dc43mr1126556qvb.7.1680819154785;
+        Thu, 06 Apr 2023 15:12:34 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id ks15-20020a056214310f00b005dd8b9345e2sm816353qvb.122.2023.04.06.15.12.29
+        by smtp.gmail.com with ESMTPSA id ks15-20020a056214310f00b005dd8b9345e2sm816353qvb.122.2023.04.06.15.12.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 15:12:30 -0700 (PDT)
+        Thu, 06 Apr 2023 15:12:32 -0700 (PDT)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -57,9 +57,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Jan Kiszka <jan.kiszka@siemens.com>,
         Kieran Bingham <kbingham@kernel.org>
-Subject: [PATCH RESEND 2/3] scripts/gdb: timerlist: fix rb_node access
-Date:   Thu,  6 Apr 2023 15:12:16 -0700
-Message-Id: <20230406221217.1585486-3-f.fainelli@gmail.com>
+Subject: [PATCH RESEND 3/3] scripts/gdb: timerlist: convert int chunks to str
+Date:   Thu,  6 Apr 2023 15:12:17 -0700
+Message-Id: <20230406221217.1585486-4-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406221217.1585486-1-f.fainelli@gmail.com>
 References: <20230406221217.1585486-1-f.fainelli@gmail.com>
@@ -77,35 +77,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-"struct timerqueue_head" no longer has "next" member since v5.4-rc1:
-commit 511885d7061e ("lib/timerqueue: Rely on rbtree semantics for next
-timer")
+join() expects strings but integers are given.
 
-Therefore, access "rb_node" through active->rb_root->rb_root->rb_node.
-
-Moreoever, remove  curr.address.cast() on rb_node as this breaks the code
-and is not necessary.
+Convert chunks list to strings before passing it to join()
 
 Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 ---
- scripts/gdb/linux/timerlist.py | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ scripts/gdb/linux/timerlist.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
-index fac951236dc4..d16909f8df35 100644
+index d16909f8df35..98bb9a239283 100644
 --- a/scripts/gdb/linux/timerlist.py
 +++ b/scripts/gdb/linux/timerlist.py
-@@ -43,8 +43,7 @@ def print_timer(rb_node, idx):
+@@ -172,7 +172,7 @@ def pr_cpumask(mask):
+     if 0 < extra <= 4:
+         chunks[0] = chunks[0][0]  # Cut off the first 0
+ 
+-    return "".join(chunks)
++    return "".join(str(chunks))
  
  
- def print_active_timers(base):
--    curr = base['active']['next']['node']
--    curr = curr.address.cast(rbtree.rb_node_type.get_type().pointer())
-+    curr = base['active']['rb_root']['rb_root']['rb_node']
-     idx = 0
-     while curr:
-         yield print_timer(curr, idx)
+ class LxTimerList(gdb.Command):
 -- 
 2.34.1
 
