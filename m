@@ -2,80 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7F36DA46B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F006DA46D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240359AbjDFVHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
+        id S238077AbjDFVIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238738AbjDFVHU (ORCPT
+        with ESMTP id S240181AbjDFVHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:07:20 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D4DC15E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 14:06:55 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680815214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8nQERgw7YtZO2dqQmJe5wEgLvO/QyUuPIGGR9H4mYZI=;
-        b=1LYT09hmKpp/0aCVGL4McOc+Rjn7AZadoRtB4wBqtB0Lr1F0iYZS2Jc4AH5TpHnbnvZkCH
-        t0fJMvBGaTu5TJeVifIspYRT2RgRCTTgusK5Hl04MRh+xQS9/hL/+89wdAC5r2AInXgA2G
-        sxGCw9Y6sUxGh1zCVpB2Odn4VWsMkiyjR/rWeljHn7kFttoLkroLhFk/80h98Ij79cqQX6
-        961i6K1gudfDHE5XAxNLiHaEMMVvQYz27a1i1OZ0tO9tltl0nVPnFzhSm0G89BQTwT2/bO
-        4kKmd787am95i8dEUoFERr/mO/HV5jdUhzNX/R3DgQ/dpj3JE0+pWH1ewdzFig==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680815214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8nQERgw7YtZO2dqQmJe5wEgLvO/QyUuPIGGR9H4mYZI=;
-        b=3zbtsgsfLhai8L9wUUlJneYAdrA2/+NhtNhsTVRSaqLADYyo/seJkXnFa3qs4RJe5Ycl4d
-        WbVfwf5jmQcqHSCA==
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Laight <David.Laight@aculab.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: revert bab65e48cb064 PCI/MSI Sanitize MSI-X checks
-In-Reply-To: <CAHk-=whd4w2wu13O9b5VRKE1b3MoUk89Q_WzhELyqXGAKmfqmQ@mail.gmail.com>
-References: <caca6879210940428e0aa2a1496907ab@AcuMS.aculab.com>
- <CAHk-=whd4w2wu13O9b5VRKE1b3MoUk89Q_WzhELyqXGAKmfqmQ@mail.gmail.com>
-Date:   Thu, 06 Apr 2023 23:06:53 +0200
-Message-ID: <87bkk0ra8i.ffs@tglx>
+        Thu, 6 Apr 2023 17:07:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12E07683;
+        Thu,  6 Apr 2023 14:07:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B8C064CB6;
+        Thu,  6 Apr 2023 21:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A71EBC433D2;
+        Thu,  6 Apr 2023 21:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680815243;
+        bh=8o09ePc36Ij55cMUJKfcEw4yEArsEF1zRPWn37E0t4U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V7eOYvv+KF/5rTFMKF7zuUFsCyJcROELAP1MFStTnS9t8HPv0KJKl/flsDeMEH+zR
+         +l15xKbGdIJRY6up+rp6YMGN0LFavYC1t1D23c+LMAvc1Ts0uQZLOwiJPFoppsx/aR
+         /C/bHulCIOrlvS1Ogdt2WOeBFJOYKmJ4TXj6BBghZXQKI3xG2QfM8i6jm1BD5VM7vo
+         0VdbSltR2WEHpWUp6s3BjeWMLIUa7Xyq5bC5wo02w64u9DMQp0K1y5yACMu/bhPXY9
+         84LZfMmXWYUuRNdJcKICCTIYniFSkBrqETJIZHojDbsW0ylESUAaQnyGO3nfZGM+8i
+         wopze1cT975Ew==
+Date:   Thu, 6 Apr 2023 16:07:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
+ error recovery
+Message-ID: <20230406210722.GA3735581@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230315235449.1279209-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06 2023 at 12:35, Linus Torvalds wrote:
->> Previously it returned 8.
->
-> Does just moving the pci_msix_validate_entries() down to below the
-> hwsize update code fix it?
->
-> IOW, something like this attached patch?
->
-> ENTIRELY UNTESTED! This may be seriously broken for some reason, but
-> it does seem like the current code makes no sense (that "Keep the IRQ
-> virtual hackery working" comment seems to not possibly be true since
-> the MSIX nvec has effectively been checked against hwsize by the
-> pci_msix_validate_entries() code before).
+On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
+> OS owns AER") adds support to clear error status in the Device Status
+> Register(DEVSTA) only if OS owns the AER support. But this change
+> breaks the requirement of the EDR feature which requires OS to cleanup
+> the error registers even if firmware owns the control of AER support.
+> 
+> More details about this requirement can be found in PCIe Firmware
+> specification v3.3, Table 4-6 Interpretation of the _OSC Control Field.
+> If the OS supports the Error Disconnect Recover (EDR) feature and
+> firmware sends the EDR event, then during the EDR recovery window, OS
+> is responsible for the device error recovery and holds the ownership of
+> the following error registers.
+> 
+> • Device Status Register
+> • Uncorrectable Error Status Register
+> • Correctable Error Status Register
+> • Root Error Status Register
+> • RP PIO Status Register
+> 
+> So call pcie_clear_device_status() in edr_handle_event() if the error
+> recovery is successful.
+> 
+> Reported-by: Tsaur Erwin <erwin.tsaur@intel.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+> 
+> Changes since v1:
+>  * Rebased on top of v6.3-rc1.
+>  * Fixed a typo in pcie_clear_device_status().
+> 
+>  drivers/pci/pcie/edr.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
+> index a6b9b479b97a..87734e4c3c20 100644
+> --- a/drivers/pci/pcie/edr.c
+> +++ b/drivers/pci/pcie/edr.c
+> @@ -193,6 +193,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
+>  	 */
+>  	if (estate == PCI_ERS_RESULT_RECOVERED) {
+>  		pci_dbg(edev, "DPC port successfully recovered\n");
+> +		pcie_clear_device_status(edev);
+>  		acpi_send_edr_status(pdev, edev, EDR_OST_SUCCESS);
 
-Yes, that works too. But I rather remove the hwsize check from the
-validation function as I explained in my earlier reply to Bjorn in that
-thread.
+The implementation note in PCI Firmware r3.3, sec 4.6.12, shows the OS
+clearing error status *after* _OST is evaluated.
 
-Thanks,
+On the other hand, the _OSC DPC control bit in table 4-6 says that if
+the OS does not have DPC control, it can only write the Device Status
+error bits between the EDR Notify and invoking _OST.
 
-        tglx
+Is one of those wrong, or am I missing something?
+
+Bjorn
