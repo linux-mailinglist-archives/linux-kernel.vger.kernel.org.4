@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6939C6D90E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8EC6D90E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235420AbjDFH5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S236164AbjDFH5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233584AbjDFH4o (ORCPT
+        with ESMTP id S235974AbjDFH4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:56:44 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E137A83
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:56:40 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so19616594wms.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:56:40 -0700 (PDT)
+        Thu, 6 Apr 2023 03:56:46 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D87EE8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:56:42 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so19752026wmq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680767798; x=1683359798;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680767800; x=1683359800;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TyPpsxVpWOnetTwLjLWBEhY22mWrzGD8UY2J96nDW7k=;
-        b=zWiwnSsgiwxOBlt+XTfxNDIWh7S6hBxFbpT53Q6DVP73VgjAQBBiNcWHbTNm1NQ4LC
-         6pqQAdRucyOvolfvPCENnsYTh4SmeXtF5xdecqq1htyHcRzHlosL7IyumDA9nNm3FyO/
-         8ev3eyNOmBW0DmTdApje/h35er/G4crmmGN7T32j1zls7pRey9B2yrskW78yV8AghwbI
-         jZW/QbGawSZXx6t/6fg6ycU17hrdlHEWqpZGKxPxjgszMfSibTgrseFgucOvQYQLPFzf
-         88gjWSZI3rgJG+u4wRVyJZ0qLaSAts0fTE1gcWRAS8vB3rtTI6JxEIZw2PB4cCs97rae
-         ysbQ==
+        bh=gNi9s5gsbe8ZjVGEZMnnCOMkzPyfbeqhmcsiMSNwzak=;
+        b=jQB72RF1kU2G9Mv2bjPTvKAtczkjUDgx89Jx/89j+1/m+dfFIidmgc/fnI9OIhxtnF
+         n3D+940jqaQ1dzjmET4xLHOVouKS1Z1nUckKsYvAojjQQ2dp1h74luglG+4tL8u10zNK
+         qvzU/KNnS9ba+bCixZzgRMUoGun3eNMHJh529QG7kdOyLt3jICkEIk+k+xyl3xZcvNWB
+         47KAzshbPJfLtxsANfzznHQbPcOvuv06mGsfJAmNRWx+MoaVJWFvk+zqMFv4WEY5Ulri
+         KpCskKuh1ZZIUIWomPOqBOdbUZyx+lYZVQ0J/IOt8FFOdRjT/2d8tViwzi6W7o7mzlQG
+         8Z3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680767798; x=1683359798;
+        d=1e100.net; s=20210112; t=1680767800; x=1683359800;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TyPpsxVpWOnetTwLjLWBEhY22mWrzGD8UY2J96nDW7k=;
-        b=4HihJwvcR8j6Pp/ueeAkB+3PT/47qMFbTFLVcqutZKeMuyWQoemKbaCFdaEKHnAhH7
-         qA8XoSX1NetAzzGpkD4FNiFtK8JlGwj9k12mh3wSXq9ttDZojjBoh+KPEq32MWb6MlXi
-         gHlB+tqGN2C3OTAMAZL2lgSUQ1PVp6OYzqvZRRJpXKJ+uz6ORTo5Dg9Jmvi5cnb5mH/c
-         bMeaxplS9jv8iLFrQw5STSa++ifhrUHo4UqMyB53rbaX03pw3UaHkeIanJrcAJx7Cqyv
-         a3plOWABC7VF/nQXkck3t46u5uNcb8hIchebdyW9PbEo064qx+PFAxWhoQCnHwPPXijv
-         wOSg==
-X-Gm-Message-State: AAQBX9fMrJECsLuoC0vB25VRoYgVA5uuAJmc4DqU+pITlaDLtiHRVWm3
-        O3YoWvkFZ46fQDy5IMn5SSiTPA==
-X-Google-Smtp-Source: AKy350aoYZBUIUjFzkBavIzTYVsfyGZA4hS+0MW4Qt/hRxTFphhsgdP0xROXbIs0nJUPg1IGPrFs/A==
-X-Received: by 2002:a1c:7c12:0:b0:3ed:29e1:ed21 with SMTP id x18-20020a1c7c12000000b003ed29e1ed21mr6691164wmc.37.1680767798261;
-        Thu, 06 Apr 2023 00:56:38 -0700 (PDT)
+        bh=gNi9s5gsbe8ZjVGEZMnnCOMkzPyfbeqhmcsiMSNwzak=;
+        b=qttPiR8uhY01Z3EqWdu1fCzPU0WSCH1z1ueHYwdJOh8Sl4Si6nIdXT7iIybTu/pBx0
+         ZBBtjzURylC4UsTA4BvwaXYgj9tBVSbXYlbSKHYoDZke2stAshV6aX1a/vj4ghojuoUv
+         QyIycKTpjZNMSLb2IxyNRu8cVozpSJg/zHXWn24oTLb8J8f6xNjo7RgN33T4wC9Qxvz9
+         ISo9KSpJKkTApdQEV5FhECgHKOBkdxC2X33P37tpkvp2P8aygacqmBUL+QcDHD+om31+
+         SWiQyrCZXZdY0V6eFtFwmYHJFZmY9vL/shSm1T7zqPUyZP0lF5Q6SByxT50At9OHtro3
+         UfJg==
+X-Gm-Message-State: AAQBX9d8be6hfoG2GZuNrvgvPaIKNt+6tlBRhhUGIxE73uw2L5hLm87e
+        kvt+i9A2Luin0A/9qsbsVkUPZQ==
+X-Google-Smtp-Source: AKy350YJeINcgkSiFHsUzfuZMGAxe7IIkCg1m4Fm0xCZiGLP73LWn332XVr1GUER7zuKnKfgxQKtow==
+X-Received: by 2002:a05:600c:2296:b0:3ed:e4ac:d532 with SMTP id 22-20020a05600c229600b003ede4acd532mr7188353wmf.36.1680767800608;
+        Thu, 06 Apr 2023 00:56:40 -0700 (PDT)
 Received: from baylibre-ThinkPad-T14s-Gen-2i.. (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05600c458f00b003f03d483966sm4572651wmo.44.2023.04.06.00.56.36
+        by smtp.gmail.com with ESMTPSA id r15-20020a05600c458f00b003f03d483966sm4572651wmo.44.2023.04.06.00.56.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 00:56:38 -0700 (PDT)
+        Thu, 06 Apr 2023 00:56:40 -0700 (PDT)
 From:   Julien Panis <jpanis@baylibre.com>
 To:     lee@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
@@ -65,9 +65,9 @@ Cc:     yi.l.liu@intel.com, jgg@ziepe.ca, razor@blackwall.org,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
         jneanne@baylibre.com
-Subject: [PATCH v6 5/6] Documentation: Add TI TPS6594 PFSM
-Date:   Thu,  6 Apr 2023 09:56:21 +0200
-Message-Id: <20230406075622.8990-6-jpanis@baylibre.com>
+Subject: [PATCH v6 6/6] samples: Add userspace example for TI TPS6594 PFSM
+Date:   Thu,  6 Apr 2023 09:56:22 +0200
+Message-Id: <20230406075622.8990-7-jpanis@baylibre.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20230406075622.8990-1-jpanis@baylibre.com>
 References: <20230406075622.8990-1-jpanis@baylibre.com>
@@ -82,136 +82,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds documentation for the TPS6594 PFSM driver.
-
-The PFSM controls the operational states of the TPS6594 PMIC.
-Depending on the operational mode, some power domain networks
-remain energized while others can be off.
+This patch adds an example showing how to use PFSM devices
+from a userspace application. The PMIC is armed to be triggered
+by a RTC alarm to execute state transition.
 
 Signed-off-by: Julien Panis <jpanis@baylibre.com>
 ---
- Documentation/misc-devices/index.rst          |  1 +
- Documentation/misc-devices/tps6594-pfsm.rst   | 87 +++++++++++++++++++
- .../userspace-api/ioctl/ioctl-number.rst      |  1 +
- 3 files changed, 89 insertions(+)
- create mode 100644 Documentation/misc-devices/tps6594-pfsm.rst
+ samples/Kconfig            |   6 ++
+ samples/Makefile           |   1 +
+ samples/pfsm/.gitignore    |   2 +
+ samples/pfsm/Makefile      |   4 ++
+ samples/pfsm/pfsm-wakeup.c | 125 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 138 insertions(+)
+ create mode 100644 samples/pfsm/.gitignore
+ create mode 100644 samples/pfsm/Makefile
+ create mode 100644 samples/pfsm/pfsm-wakeup.c
 
-diff --git a/Documentation/misc-devices/index.rst b/Documentation/misc-devices/index.rst
-index 756be15a49a4..ecc40fbbcfb8 100644
---- a/Documentation/misc-devices/index.rst
-+++ b/Documentation/misc-devices/index.rst
-@@ -28,5 +28,6 @@ fit into other categories.
-    oxsemi-tornado
-    pci-endpoint-test
-    spear-pcie-gadget
-+   tps6594-pfsm
-    uacce
-    xilinx_sdfec
-diff --git a/Documentation/misc-devices/tps6594-pfsm.rst b/Documentation/misc-devices/tps6594-pfsm.rst
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 30ef8bd48ba3..f23aa60a74cf 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -253,6 +253,12 @@ config SAMPLE_INTEL_MEI
+ 	help
+ 	  Build a sample program to work with mei device.
+ 
++config SAMPLE_TPS6594_PFSM
++	bool "Build example program working with TPS6594 PFSM driver"
++	depends on HEADERS_INSTALL
++	help
++	  Build a sample program to work with PFSM devices.
++
+ config SAMPLE_WATCHDOG
+ 	bool "watchdog sample"
+ 	depends on CC_CAN_LINK
+diff --git a/samples/Makefile b/samples/Makefile
+index 7cb632ef88ee..231e45d7ed70 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -31,6 +31,7 @@ obj-$(CONFIG_VIDEO_PCI_SKELETON)	+= v4l/
+ obj-y					+= vfio-mdev/
+ subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
+ obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
++obj-$(CONFIG_SAMPLE_TPS6594_PFSM)	+= pfsm/
+ subdir-$(CONFIG_SAMPLE_WATCHDOG)	+= watchdog
+ subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
+ obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
+diff --git a/samples/pfsm/.gitignore b/samples/pfsm/.gitignore
 new file mode 100644
-index 000000000000..4ada37ccdcba
+index 000000000000..f350a030a060
 --- /dev/null
-+++ b/Documentation/misc-devices/tps6594-pfsm.rst
-@@ -0,0 +1,87 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/samples/pfsm/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++/pfsm-wakeup
+diff --git a/samples/pfsm/Makefile b/samples/pfsm/Makefile
+new file mode 100644
+index 000000000000..213e8d9f5dbc
+--- /dev/null
++++ b/samples/pfsm/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++userprogs-always-y += pfsm-wakeup
 +
-+=====================================
-+Texas Instruments TPS6594 PFSM driver
-+=====================================
++userccflags += -I usr/include
+diff --git a/samples/pfsm/pfsm-wakeup.c b/samples/pfsm/pfsm-wakeup.c
+new file mode 100644
+index 000000000000..299dd9e1f607
+--- /dev/null
++++ b/samples/pfsm/pfsm-wakeup.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * TPS6594 PFSM userspace example
++ *
++ * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
++ *
++ * This example shows how to use PFSMs from a userspace application,
++ * on TI j721s2 platform. The PMIC is armed to be triggered by a RTC
++ * alarm to execute state transition (RETENTION to ACTIVE).
++ */
 +
-+Author: Julien Panis (jpanis@baylibre.com)
++#include <fcntl.h>
++#include <stdio.h>
++#include <sys/ioctl.h>
++#include <unistd.h>
 +
-+Overview
-+========
++#include <linux/rtc.h>
++#include <linux/tps6594_pfsm.h>
 +
-+Strictly speaking, PFSM (Pre-configurable Finite State Machine) is not
-+hardware. It is a piece of code.
++#define ALARM_DELTA_SEC 30
 +
-+The TPS6594 PMIC (Power Management IC) integrates a state machine which
-+manages operational modes. Depending on the current operational mode,
-+some voltage domains remain energized while others can be off.
++#define RTC_A "/dev/rtc0"
 +
-+The PFSM driver can be used to trigger transitions between configured
-+states. It also provides R/W access to the device registers.
++#define PMIC_NB 3
++#define PMIC_A "/dev/pfsm-0-0x48"
++#define PMIC_B "/dev/pfsm-0-0x4c"
++#define PMIC_C "/dev/pfsm-2-0x58"
 +
-+Supported chips
-+---------------
++static const char * const dev_pfsm[] = {PMIC_A, PMIC_B, PMIC_C};
 +
-+- tps6594-q1
-+- tps6593-q1
-+- lp8764-q1
++int main(int argc, char *argv[])
++{
++	int i, ret, fd_rtc, fd_pfsm[PMIC_NB] = { 0 };
++	struct rtc_time rtc_tm;
++	struct pmic_state_opt pmic_opt = { 0 };
++	unsigned long data;
 +
-+Driver location
-+===============
++	fd_rtc = open(RTC_A, O_RDONLY);
++	if (fd_rtc < 0) {
++		perror("Failed to open RTC device.");
++		goto out;
++	}
 +
-+drivers/misc/tps6594-pfsm.c
++	for (i = 0 ; i < PMIC_NB ; i++) {
++		fd_pfsm[i] = open(dev_pfsm[i], O_RDWR);
++		if (fd_pfsm[i] < 0) {
++			perror("Failed to open PFSM device.");
++			goto out;
++		}
++	}
 +
-+Driver type definitions
-+=======================
++	/* Read RTC date/time */
++	ret = ioctl(fd_rtc, RTC_RD_TIME, &rtc_tm);
++	if (ret < 0) {
++		perror("Failed to read RTC date/time.");
++		goto out;
++	}
++	printf("Current RTC date/time is %d-%d-%d, %02d:%02d:%02d.\n",
++	       rtc_tm.tm_mday, rtc_tm.tm_mon + 1, rtc_tm.tm_year + 1900,
++	       rtc_tm.tm_hour, rtc_tm.tm_min, rtc_tm.tm_sec);
 +
-+include/uapi/linux/tps6594_pfsm.h
++	/* Set RTC alarm to ALARM_DELTA_SEC sec in the future, and check for rollover */
++	rtc_tm.tm_sec += ALARM_DELTA_SEC;
++	if (rtc_tm.tm_sec >= 60) {
++		rtc_tm.tm_sec %= 60;
++		rtc_tm.tm_min++;
++	}
++	if (rtc_tm.tm_min == 60) {
++		rtc_tm.tm_min = 0;
++		rtc_tm.tm_hour++;
++	}
++	if (rtc_tm.tm_hour == 24)
++		rtc_tm.tm_hour = 0;
++	ret = ioctl(fd_rtc, RTC_ALM_SET, &rtc_tm);
++	if (ret < 0) {
++		perror("Failed to set RTC alarm.");
++		goto out;
++	}
 +
-+Driver IOCTLs
-+=============
++	/* Enable alarm interrupts */
++	ret = ioctl(fd_rtc, RTC_AIE_ON, 0);
++	if (ret < 0) {
++		perror("Failed to enable alarm interrupts.");
++		goto out;
++	}
++	printf("Waiting %d seconds for alarm...\n", ALARM_DELTA_SEC);
 +
-+:c:macro::`PMIC_GOTO_STANDBY`
-+All device resources are powered down. The processor is off, and
-+no voltage domains are energized.
++	/*
++	 * Set RETENTION state with options for PMIC_C/B/A respectively.
++	 * Since PMIC_A is master, it should be the last one to be configured.
++	 */
++	pmic_opt.ddr_retention = 1;
++	for (i = PMIC_NB - 1 ; i >= 0 ; i--) {
++		printf("Set RETENTION state for PMIC_%d.\n", i);
++		sleep(1);
++		ret = ioctl(fd_pfsm[i], PMIC_SET_RETENTION_STATE, &pmic_opt);
++		if (ret < 0) {
++			perror("Failed to set RETENTION state.");
++			goto out_reset;
++		}
++	}
 +
-+:c:macro::`PMIC_GOTO_LP_STANDBY`
-+The digital and analog functions of the PMIC, which are not
-+required to be always-on, are turned off (low-power).
++	/* This blocks until the alarm ring causes an interrupt */
++	ret = read(fd_rtc, &data, sizeof(unsigned long));
++	if (ret < 0)
++		perror("Failed to get RTC alarm.");
++	else
++		puts("Alarm rang.\n");
 +
-+:c:macro::`PMIC_UPDATE_PGM`
-+Triggers a firmware update.
++out_reset:
++	ioctl(fd_rtc, RTC_AIE_OFF, 0);
 +
-+:c:macro::`PMIC_SET_ACTIVE_STATE`
-+One of the operational modes.
-+The PMICs are fully functional and supply power to all PDN loads.
-+All voltage domains are energized in both MCU and Main processor
-+sections.
++	/* Set ACTIVE state for PMIC_A */
++	ioctl(fd_pfsm[0], PMIC_SET_ACTIVE_STATE, 0);
 +
-+:c:macro::`PMIC_SET_MCU_ONLY_STATE`
-+One of the operational modes.
-+Only the power resources assigned to the MCU Safety Island are on.
++out:
++	for (i = 0 ; i < PMIC_NB ; i++)
++		if (fd_pfsm[i])
++			close(fd_pfsm[i]);
 +
-+:c:macro::`PMIC_SET_RETENTION_STATE`
-+One of the operational modes.
-+Depending on the triggers set, some DDR/GPIO voltage domains can
-+remain energized, while all other domains are off to minimize
-+total system power.
++	if (fd_rtc)
++		close(fd_rtc);
 +
-+Driver usage
-+============
-+
-+See available PFSMs::
-+
-+    # ls /dev/pfsm*
-+
-+Dump the registers of pages 0 and 1::
-+
-+    # hexdump -C /dev/pfsm-0-0x48
-+
-+See PFSM events::
-+
-+    # cat /proc/interrupts
-+
-+Userspace code example
-+----------------------
-+
-+samples/pfsm/pfsm-wakeup.c
-diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-index 0a1882e296ae..e48c92be5807 100644
---- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-+++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-@@ -180,6 +180,7 @@ Code  Seq#    Include File                                           Comments
- 'P'   00-0F  drivers/usb/class/usblp.c                               conflict!
- 'P'   01-09  drivers/misc/pci_endpoint_test.c                        conflict!
- 'P'   00-0F  xen/privcmd.h                                           conflict!
-+'P'   00-05  linux/tps6594_pfsm.h                                    conflict!
- 'Q'   all    linux/soundcard.h
- 'R'   00-1F  linux/random.h                                          conflict!
- 'R'   01     linux/rfkill.h                                          conflict!
++	return 0;
++}
 -- 
 2.37.3
 
