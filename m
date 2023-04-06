@@ -2,292 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8E46D96DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15AD6D96E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237224AbjDFMNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S236507AbjDFMOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237363AbjDFMNI (ORCPT
+        with ESMTP id S229710AbjDFMOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:13:08 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB571FCC;
-        Thu,  6 Apr 2023 05:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680783185; x=1712319185;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=6phrrFj6gvfwPEazvYRcrVUbpdVeZ3I1d0Qp0kiyn+c=;
-  b=MK43r5Xmnd4oKYGspqQDbeJL+I1gqv5DXDuz2D1ctaKptsZkpPArZdKz
-   zTuD4QU8xQEgM7hHf2RL8czxP+cLeHA6eBwnLpYBKl5Ky1C0BNieG5hT9
-   yOx0sCQ4g3OVwc+2bRCvKptmhuQhuhnNngV7zf9sukDbnZcnQOQf0UAk6
-   MD0e+L+nOI8DJ4/Y/goJ0+ZznraeRLuxHGlPJQYLT0p6kyzeH3Q0yT0Pn
-   5QTASHD5ugvLSFxlilNquJPow/W2J1xOZcHaTXGOxgQfrENQoNKmKKGrx
-   HGGOBdasAypzDeR5QWanVMqVU8DBwbxwlZWpeyddc1ADcHy+4WfvovaXS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="429003665"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="429003665"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 05:13:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="776465508"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="776465508"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Apr 2023 05:13:04 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 6 Apr 2023 05:13:04 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 6 Apr 2023 05:13:03 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 6 Apr 2023 05:13:03 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 6 Apr 2023 05:13:03 -0700
+        Thu, 6 Apr 2023 08:14:20 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2041.outbound.protection.outlook.com [40.107.223.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA481985;
+        Thu,  6 Apr 2023 05:14:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JS2Hb/gRXS90lIj80TSv4c7nJ/Fk+NMzP7f57Ju5s5XuSUW240lBgOz6BsW5iegdEZ377Jy0IHQuHuKztcaUYFa8HLBcEv2trudiWgTMuLy436LeuPMYKBpNy88X2pYgibm09iqhhsA2g0cOm1fHnJb6E0ZYOlR7FsafTFPs8EovRcHdJ9uXBnZRvrexT0dks6ZYLZn7N9V98hsCj4LgDSUpLDSVHaiN1GHXlpd09ild/FbTaZCpV779faABTnPzGsloyDp/EwMUnok/BRrNYWeGpH1H0Z+3kbvxEp4yMEu2gXloOKPab1RdYEbWnmxy5/NPl46CqEAHS3CgolfhdA==
+ b=Ffhjl/JnaX/dtweEhSogyGDvFJUKIxSp/qJbUWN/waZ0uAoXc+jjHzfEzwf3swzy1++dQfwrjg/lX8CGt5vlancCmpnwzS2rPbt+KV4QaO27CeWP6K9MqVxQWJbx24P1wC4pPB2LAUZEISem3UuCwnJ6wg9DRVAf0g/IjkA3adkjHD/dbsl/4oYpKZcdb0FlWTjXTyjNYLqvrQhHae5+F6BQX++MLVJ/YYU/f6KINqVhnQnlEQpo3yty1bUSYvuLn3Cj8J/vuikbmDTQoxH7ll0nyofxtXasFOm8aC4RPf+Re42Y75ofvAG/fMe4rvXmoTm3WiZRw8TplivZ/xiiLQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sE+Be6mBxirkp1/d7AR+LoZd7DDFRHR1q3Qo4rpwWvw=;
- b=oIk8RQLZFGO4VPEPNBgUfI/RcaARk4hyUWARCvTy99SUrAMjw+92LvQ0D+kt3VOJg6mOjTWXpoboT2ul/MDxA+Og6HwsuZJHrfEDXM/y6Bto5Nbo44js8syRCCkAzW/657KSdXW8PLH+TvPGMQWP+Dt+R6YsV8Ez1Qv71KPUeiqHI/yTQhxQGQEjADiLhk+gEz/S2upyqueef5IoIVCGhQ8/rO8LtmwhOTDXFvZE7wV/JCyNHYrkRzESJ3q6EhuBPZqSt49jDnhaoyWL2gW3wEbjvHFiy+fNzpm0aCigmQrQlgbwLKDHwcW8dRdJnR6q+Uj9AFdH/war+IFe9IRNoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BL0PR11MB3060.namprd11.prod.outlook.com (2603:10b6:208:72::24)
- by SN7PR11MB6601.namprd11.prod.outlook.com (2603:10b6:806:273::18) with
+ bh=qUCfkxBKDqDe9oYjj8GVGzzX5dXa0m4gxm0V8iZbKTM=;
+ b=K+MRUH8u+9iCxJUee+h0tgQRZwNVGQqlWNb4KkInFwCuJKbU9NXUCWfNvDLhSasS/tTcHwkjwDooubL1QBL4ApkLqUERMJk5dnHABY5XJb2Nc5mIz4B9W0PCZbZglFb3hqcwMPyMVBAfmdy1q8yng/5+lUVicz+/kehdsXsIFTGwFVvgWFBqrr2PR3wXE8F++cRB0VV1M7rTo/QwXPef+w2rUgITtCW3lNog6T8dNFYoR2mAXjmP9qZyNtbPFK/LaSGJex2VzpNmCXrXEoWtH+RpcbwPJs5Cj+47FgAhBOt41aR3Ab4rRr5la92dDRXtVMZVthObRLKrj+PCg1R72A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qUCfkxBKDqDe9oYjj8GVGzzX5dXa0m4gxm0V8iZbKTM=;
+ b=BxI07cjj9BpLYVdgRLhQlzaTzDzvBcpSrr0yogrE2/pRpNwP+DOnVJ47GN4wCOZHQeH/isIfe4kgzwK9G0ipF9iT0dK+c2BpsiVJZ8+EQgqRKb2EbhJcajJw485qaCDYz5jLtqSwDV9cU2nyZ3mGdySA0HNl9+/dUsvaAz3LmRCBS+Ak72p2dPrAbtku5d/cOcJnqusolFRu3CI5tcAchA4fYHdieZ25hnX/MVfgF6aiQThVq7kmZMgALm/Z/iaPxsZFymAX4B7DP0OTIcE9/Bo1MfIY0XKl3IMxF44DYooWm1OOhpe9YH2AvILNqfJS3wH12plETDmrAQCvZLAZOQ==
+Received: from MW4PR03CA0167.namprd03.prod.outlook.com (2603:10b6:303:8d::22)
+ by DM4PR12MB5392.namprd12.prod.outlook.com (2603:10b6:5:39f::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.31; Thu, 6 Apr
- 2023 12:13:02 +0000
-Received: from BL0PR11MB3060.namprd11.prod.outlook.com
- ([fe80::bb9:c617:3fd4:7bb3]) by BL0PR11MB3060.namprd11.prod.outlook.com
- ([fe80::bb9:c617:3fd4:7bb3%6]) with mapi id 15.20.6254.026; Thu, 6 Apr 2023
- 12:13:02 +0000
-Date:   Thu, 6 Apr 2023 20:12:45 +0800
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
-CC:     <akpm@linux-foundation.org>, <bagasdotme@gmail.com>,
-        <willy@infradead.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH v2] mm/swap: fix swap_info_struct race between swapoff
- and get_swap_pages()
-Message-ID: <20230406121245.GA376058@ziqianlu-desk2>
-References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
- <20230404154716.23058-1-rongwei.wang@linux.alibaba.com>
- <6dad8c2f-b896-3cc0-26c1-37f5fff406bd@linux.alibaba.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6dad8c2f-b896-3cc0-26c1-37f5fff406bd@linux.alibaba.com>
-X-ClientProxiedBy: SG2PR01CA0144.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::24) To BL0PR11MB3060.namprd11.prod.outlook.com
- (2603:10b6:208:72::24)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Thu, 6 Apr
+ 2023 12:14:16 +0000
+Received: from CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8d:cafe::83) by MW4PR03CA0167.outlook.office365.com
+ (2603:10b6:303:8d::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
+ Transport; Thu, 6 Apr 2023 12:14:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT014.mail.protection.outlook.com (10.13.175.99) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.30 via Frontend Transport; Thu, 6 Apr 2023 12:14:16 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 6 Apr 2023
+ 05:14:07 -0700
+Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 6 Apr 2023
+ 05:13:59 -0700
+Message-ID: <141f83be-e08b-9c0b-8939-554e3d5ed37d@nvidia.com>
+Date:   Thu, 6 Apr 2023 17:43:55 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [Patch v5 7/8] PCI: tegra194: add interconnect support in
+ Tegra234
+Content-Language: en-US
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+CC:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
+        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
+        <rafael@kernel.org>, <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <helgaas@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <mmaddireddy@nvidia.com>, <kw@linux.com>, <bhelgaas@google.com>,
+        <vidyas@nvidia.com>, <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>,
+        <ishah@nvidia.com>, <bbasu@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <20230330133354.714-1-sumitg@nvidia.com>
+ <20230330133354.714-8-sumitg@nvidia.com> <ZC1Rnrb0MObR5S42@lpieralisi>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <ZC1Rnrb0MObR5S42@lpieralisi>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR11MB3060:EE_|SN7PR11MB6601:EE_
-X-MS-Office365-Filtering-Correlation-Id: 25fd19c0-2104-47cd-0c96-08db3698449b
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT014:EE_|DM4PR12MB5392:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3547d38-da55-42b4-4228-08db36987101
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /AgmABMrnqT6cLWLTW3R/C2KNmhqSQeCJdmbrfYW29vsVpvd5n9+nKMoef1pMqJQTWiqUOqJy+hqGiZqIJNpDIFILSKTXHbyWkBX7vz6UYhn6gHl2mP5M+FKR9uLNZvF20h1Kcil6KxKypFGgoS8+0Zc07d9JY1GqQbvOa4rWzYJ0srcREzFZe6yCn/kEtvKrhgwpQ6wQ4JbOpnFfBBGaZ4w5x5Ulj07dLvaTQwsW1apb0YvQzs0MpEu8U045yViFbgiIscvJhpoNRRogdP4Iu0R3zILno69w69jUHLcrgsLkLjkGzpZG5X03MerZU8WQ8F50gUc5SRfkWACuauk4OvxIDMb9gRMLreGohBXWWq2clQzFl2XqoHwS9tiK127jUWljCKo02tVigO1bUxRMrfIy2UXIQO7wp48nqmYXJFyMWEKFjtWRKyySUZJvBjvfHtijxevckMIVHA5RigsE0PPfWOmaeTJMkjsQ+/IaNvNeAgkcauxbt4MBT1K9Sugk4OmVMslJSbSMgcQ6LXNDZj9YF6iMY1YJ/FV0MDRkqsoLoVEmdGssxnhkqegj16Z
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB3060.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(376002)(39860400002)(366004)(346002)(136003)(451199021)(66574015)(83380400001)(478600001)(6486002)(6666004)(186003)(316002)(26005)(9686003)(6512007)(6506007)(1076003)(33716001)(5660300002)(2906002)(44832011)(33656002)(38100700002)(66946007)(66556008)(66476007)(6916009)(82960400001)(4326008)(41300700001)(8676002)(8936002)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?9UsR1PkNV9q/pg5aEQIj+Ux+PiUwS4APKpBGAddbfAL3CdK/pjePoHZIbQ?=
- =?iso-8859-1?Q?e/IWwPCzD8bXZxE1GSSuB6KXk/dvE30IlwpNlLeshKNQh13QXXKdJvMIQK?=
- =?iso-8859-1?Q?/HGH5tHgqfip1Pxy2Nan7bX6m01XThAtsyFeRHOEJyNCSrBcyUiCzKmYyD?=
- =?iso-8859-1?Q?/O+72R2WARFOCa3WMsda+cdhTLcmkyIBTGlT22h4jTmTG4aR+8mfKE87+y?=
- =?iso-8859-1?Q?7CNo2GoZjZaIZukT1LNf6fYqdz0uMzzaH8D56uvDNpHPTPYH+6Ub5DTFS2?=
- =?iso-8859-1?Q?tBeSjZxl3ocKmSgDgnVMkhvss41RzSKh0f0f4AKzXxZWoH2OdT2+h3qOOJ?=
- =?iso-8859-1?Q?P9nKkRg4PtpRt9GmuK6pJE5flNnv1z9L97PuYc7UcS033Ni+JQj+UQ05LR?=
- =?iso-8859-1?Q?oQWUs5yt1JqmErF49YrBcjg1KVcF3OIPVoKeNmuUy0jQiQsMKYhk8yjnsA?=
- =?iso-8859-1?Q?N65s5zCTsEUlWMvD0O8U7do382VMvMl5rN6iobgEQTRUlvqormIkA7olhw?=
- =?iso-8859-1?Q?5aqwZkJQjYYXEFXClAbXvECV7WWmh4ZX13FSQSDSluvD3rbASLVpVDnBDX?=
- =?iso-8859-1?Q?M4vUT2YYQT1cLh+KO0UGNO/O9YJxVPoTQxnEW/9Q12boPFizTHnjsoBIGj?=
- =?iso-8859-1?Q?faDDiD25AaAqhKcUwtFCR9SAVNAnfVrJvK/h32X0ikpEWx3Wi/eUX+84Lf?=
- =?iso-8859-1?Q?GzcDAeJ2bMNlCly91e5jswTedIRkHAqOsUP/SH/X/XYBYQPy2VHaLIMh1Y?=
- =?iso-8859-1?Q?OCdgG2uZ/Y4lU2Un2WSb79mNkMaV9UZK7AMRwuDr0ZiAxXEqOeM4mrFslI?=
- =?iso-8859-1?Q?nlwWJyc9tsuBraEBlG196V31cJhYvliJjWaIpBYp5UMDV2D9sFp4Nv36kB?=
- =?iso-8859-1?Q?TMyCAk+BgnvtaxXOLap5bX3NxlLPfsncUjnXB3U3IU5qYk6tnS80YLfeNU?=
- =?iso-8859-1?Q?vRQQxuR0/1UO8XTgzmAB2lv+fjC5g9ZONFIMUfrnhbidnjO7AsR/DP36xC?=
- =?iso-8859-1?Q?6yLyy8kXS8qA+KXhINnoUupl/VIxFHx2tzFKsJngP7XTO4m1ppuwPd3H3S?=
- =?iso-8859-1?Q?D7WpamrlfUrHLd1IXEO2mHzhueTLKi6HrbhoBqF4qz+B1tAT0W+acKZa+f?=
- =?iso-8859-1?Q?zUj5DLIsCLfr4xtmdPbPYUevP9o2lceNWLNPm+XT3SQVUuFJyDK/+0ieU+?=
- =?iso-8859-1?Q?V/NnFg4az4BY/kjqkLyEe7YRodkJ0o2hIvRTRzadBA9AO8jLo3Opx/AeSa?=
- =?iso-8859-1?Q?lEbQ9Ezc0n9Ic2jyhFkxtfnhnIVhDmJR8dAbBSp22ZxjXu4WasyTS+oYMn?=
- =?iso-8859-1?Q?ivyFLIYRvKkJYPqYVnJ0DQEvhnh7HyJW+fXdtPw/TuvIX78MnNABe0+YAf?=
- =?iso-8859-1?Q?VbaVTVoko2lEwzMyNwntXlnRZCoCWyonG5Nev1f6aP+CcO4SufDXNKXIFN?=
- =?iso-8859-1?Q?NM5K+ABjoz0Dk6dxI0NSyRiSn9IMNXQM0D5V5BPMcktsD6YptIPiGKut8t?=
- =?iso-8859-1?Q?WsBptLjx29644TLco4yFNjRh1bbqrQS9OWYoKqQxz9y7ee6Gy8TIomqsZ/?=
- =?iso-8859-1?Q?gTg++ePw8Dn8/VxyrdOAP4aM0XL3es3DusvoxAOnPt8QkwxC4eXxly2v/r?=
- =?iso-8859-1?Q?uxlMjRm5TPA+ld61CTvCwjsCoAIPGrpGRJ?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25fd19c0-2104-47cd-0c96-08db3698449b
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR11MB3060.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 12:13:01.9661
+X-Microsoft-Antispam-Message-Info: /Rf7JeL3M8lr6mZ2+30qZM+iLv0DglIjLNEI2nSxKxAVbnjnD49bJyA9+f6LcsI6EB5ZJzlnM3REVpCu8O27r1qhZ0/oGEnmiQlqcT3+uHIceAuuGFvL/AkUFBDNnCBT9BqN+nTe0y1oC9VUliOSWiBHe9Y1W66jmWmpYWN8vGKvGkaH5zZhk6IkrRLe599tCUUUcAqee+YJlNjYoAxkuTHobijSjSzUzgSEp30IqQJtHRxsmae4n/avOyLfv//Kud7kue2sPlTLrwmktF0qh8ktgwgqZG45RW6EkTWh6UYO6hFfqypOaeZxGN0x6tTUPQ/eruoYS0lthkRSyJFDNsA/lqxU8Ub/DMlHaE65EEL43JR3Kdlh2Q8bZYlUBCcqIlLIoqeeLbBlcJ2aIjRMuYvXlpQ0ijwbS0Ldf6x0qc28W5A4P96NMPGADrGBeksAUCF2t7pqR7NuBszS9rucBYnXKlWRVJIHz/fCLcZVzyXiQ0gR/+t/Gg3uU22CNqObR/BNlmsoG0LbVXkeDGCA/7i57ODVddfItbE9GnwrtNPqYY7LV5tZ/dPbmVhYeoViGqjJlbahOaEjDzM1EHkijKrCKobEiDG89LYYB8BeTOV3Hv8FX9YWm4z/ekJuO1souKIjfmUKC/Upb4wiZ/O7xC3fPAJMHB3qhfwftdozeGv8yitYbU5o+KZ9derqZEosgjkFF+lX1B5N46YQMJG3chA2k7mPVD9snd/nPJpsov9GRKXq/dxrLD+zvJwtN/+SqB3nR2lHpI4JyzM9sKFTdF5Bl5rvw5YVJ4txMl93LpE=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(8936002)(41300700001)(316002)(54906003)(5660300002)(16576012)(2906002)(4326008)(186003)(70206006)(70586007)(6916009)(8676002)(478600001)(7416002)(31686004)(16526019)(31696002)(107886003)(6666004)(7636003)(40460700003)(26005)(83380400001)(356005)(2616005)(336012)(426003)(47076005)(36756003)(40480700001)(82310400005)(82740400003)(36860700001)(86362001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 12:14:16.0331
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B1+JkgsptAPebiF4g0VxV72wznndXbSVhos5m9QCFKGaQ5t/S4BTGliR2ob8ptctahCP7XEIytaRrVQNGpVNuA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6601
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3547d38-da55-42b4-4228-08db36987101
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5392
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 12:08:47AM +0800, Rongwei Wang wrote:
-> Hello
-> 
-> I have fix up some stuff base on Patch v1. And in order to help all readers
-> and reviewers to
-> 
-> reproduce this bug, share a reproducer here:
 
-I reproduced this problem under a VM this way:
-
-$ sudo ./stress-ng --swap 1
-// on another terminal
-$ for i in `seq 8`; do ./swap & done
-Looks simpler than yours :-)
-(Didn't realize you have posted your reproducer here since I'm not CCed
-and just found it after invented mine)
-Then the warning message normally appear within a few seconds.
-
-Here is the code for the above swap prog:
-
-#include <stdio.h>
-#include <stddef.h>
-#include <sys/mman.h>
-
-#define SIZE 0x100000
-
-int main(void)
-{
-        int i, ret;
-        void *p;
-
-        p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-        if (p == MAP_FAILED) {
-                perror("mmap");
-                return -1;
-        }
-
-        ret = 0;
-        while (1) {
-                for (i = 0; i < SIZE; i += 0x1000)
-                        ((char *)p)[i] = 1;
-                ret = madvise(p, SIZE, MADV_PAGEOUT);
-                if (ret != 0) {
-                        perror("madvise");
-                        break;
-                }
-        }
-
-        return ret;
-}
-
-Unfortunately, this test prog did not work on kernels before v5.4 because
-MADV_PAGEOUT is introduced in v5.4. I tested on v5.4 and the problem is
-also there.
-
-Haven't found a way to trigger swap with swap device come and go on
-kernels before v5.4; tried putting the test prog in a memcg with memory
-limit but then the prog is easily killed due to nowhere to swap out.
 
 > 
-> swap_bomb.sh
+> You should still capitalize the subject.
 > 
-> #!/usr/bin/env bash
+> "PCI: tegra194: Add interconnect.."
 > 
-> stress-ng -a 1 --class vm -t 12h --metrics --times -x bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap
-> --verify -v &
-> stress-ng -a 1 --class vm -t 12h --metrics --times -x bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap
-> --verify -v &
-> stress-ng -a 1 --class vm -t 12h --metrics --times -x bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap
-> --verify -v &
-> stress-ng -a 1 --class vm -t 12h --metrics --times -x bigheap,stackmmap,mlock,vm-splice,mmapaddr,mmapfixed,mmapfork,mmaphuge,mmapmany,mprotect,mremap,msync,msyncmany,physpage,tmpfs,vm-addr,vm-rw,brk,vm-segv,userfaultfd,malloc,stack,munmap,dev-shm,bad-altstack,shm-sysv,pageswap,madvise,vm,shm,env,mmap
-> --verify -v
+Sure.
+
+> On Thu, Mar 30, 2023 at 07:03:53PM +0530, Sumit Gupta wrote:
+>> Add support to request DRAM bandwidth with Memory Interconnect
+>> in Tegra234 SoC. The DRAM BW required for different modes depends
+>> on speed (Gen-1/2/3/4) and width/lanes (x1/x2/x4/x8).
+>>
+>> Suggested-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
 > 
+> You should add a Link to the relevant lore archive, I am
+> pretty sure Bjorn chimed in too.
 > 
-> madvise_shared.c
+Sure.
+
+> This patch does too many things at once; more importantly it
+> does *not* explain why we request memory bandwidth and why it
+> is required and *safe* given that the current code works so far.
 > 
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <sys/mman.h>
-> #include <unistd.h>
+> So:
 > 
-> #define MSIZE (1024 * 1024 * 2)
+> patch 1: fix the array overflow issues with the current code
+> patch 2: add memory bandwidth interconnect support
 > 
-> int main()
-> {
->         char *shm_addr;
->         unsigned long i;
+> Thanks,
+> Lorenzo
 > 
->         while (1) {
->                 // Map shared memory segment
->                 shm_addr =
->                     mmap(NULL, MSIZE, PROT_READ | PROT_WRITE,
->                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
->                 if (shm_addr == MAP_FAILED) {
->                         perror("Failed to map shared memory segment");
->                         exit(EXIT_FAILURE);
->                 }
-> 
->                 for (i = 0; i < MSIZE; i++) {
->                         shm_addr[i] = 1;
->                 }
-> 
->                 // Advise kernel on usage pattern of shared memory
->                 if (madvise(shm_addr, MSIZE, MADV_PAGEOUT) == -1) {
->                         perror
->                             ("Failed to advise kernel on shared memory
-> usage");
->                         exit(EXIT_FAILURE);
->                 }
-> 
->                 for (i = 0; i < MSIZE; i++) {
->                         shm_addr[i] = 1;
->                 }
-> 
->                 // Advise kernel on usage pattern of shared memory
->                 if (madvise(shm_addr, MSIZE, MADV_PAGEOUT) == -1) {
->                         perror
->                             ("Failed to advise kernel on shared memory
-> usage");
->                         exit(EXIT_FAILURE);
->                 }
->                 // Use shared memory
->                 printf("Hello, shared memory: 0x%lx\n", shm_addr);
-> 
->                 // Unmap shared memory segment
->                 if (munmap(shm_addr, MSIZE) == -1) {
->                         perror("Failed to unmap shared memory segment");
->                         exit(EXIT_FAILURE);
->                 }
->         }
-> 
->         return 0;
-> }
-> 
-> The bug will reproduce more quickly (about 2~5 minutes) if concurrent more
-> swap_bomb.sh and madvise_shared.
-> 
-> Thanks.
+Thank you for the review.
+I will split this patch into two and add the info as sugested in v6.
+
+Will spin a v6 soon if there is no further comment.
+
+Thanks,
+Sumit
+
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   drivers/pci/controller/dwc/pcie-tegra194.c | 44 ++++++++++++++++++----
+>>   1 file changed, 36 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+>> index 09825b4a075e..89d829a946ee 100644
+>> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+>> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/delay.h>
+>>   #include <linux/gpio.h>
+>>   #include <linux/gpio/consumer.h>
+>> +#include <linux/interconnect.h>
+>>   #include <linux/interrupt.h>
+>>   #include <linux/iopoll.h>
+>>   #include <linux/kernel.h>
+>> @@ -223,6 +224,7 @@
+>>   #define EP_STATE_ENABLED     1
+>>
+>>   static const unsigned int pcie_gen_freq[] = {
+>> +     GEN1_CORE_CLK_FREQ,   /* PCI_EXP_LNKSTA_CLS == 0; undefined */
+>>        GEN1_CORE_CLK_FREQ,
+>>        GEN2_CORE_CLK_FREQ,
+>>        GEN3_CORE_CLK_FREQ,
+>> @@ -287,6 +289,7 @@ struct tegra_pcie_dw {
+>>        unsigned int pex_rst_irq;
+>>        int ep_state;
+>>        long link_status;
+>> +     struct icc_path *icc_path;
+>>   };
+>>
+>>   static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
+>> @@ -309,6 +312,27 @@ struct tegra_pcie_soc {
+>>        enum dw_pcie_device_mode mode;
+>>   };
+>>
+>> +static void tegra_pcie_icc_set(struct tegra_pcie_dw *pcie)
+>> +{
+>> +     struct dw_pcie *pci = &pcie->pci;
+>> +     u32 val, speed, width;
+>> +
+>> +     val = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA);
+>> +
+>> +     speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
+>> +     width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
+>> +
+>> +     val = width * (PCIE_SPEED2MBS_ENC(pcie_link_speed[speed]) / BITS_PER_BYTE);
+>> +
+>> +     if (icc_set_bw(pcie->icc_path, MBps_to_icc(val), 0))
+>> +             dev_err(pcie->dev, "can't set bw[%u]\n", val);
+>> +
+>> +     if (speed >= ARRAY_SIZE(pcie_gen_freq))
+>> +             speed = 0;
+>> +
+>> +     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed]);
+>> +}
+>> +
+>>   static void apply_bad_link_workaround(struct dw_pcie_rp *pp)
+>>   {
+>>        struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+>> @@ -452,14 +476,12 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+>>        struct tegra_pcie_dw *pcie = arg;
+>>        struct dw_pcie_ep *ep = &pcie->pci.ep;
+>>        struct dw_pcie *pci = &pcie->pci;
+>> -     u32 val, speed;
+>> +     u32 val;
+>>
+>>        if (test_and_clear_bit(0, &pcie->link_status))
+>>                dw_pcie_ep_linkup(ep);
+>>
+>> -     speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+>> -             PCI_EXP_LNKSTA_CLS;
+>> -     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+>> +     tegra_pcie_icc_set(pcie);
+>>
+>>        if (pcie->of_data->has_ltr_req_fix)
+>>                return IRQ_HANDLED;
+>> @@ -945,9 +967,9 @@ static int tegra_pcie_dw_host_init(struct dw_pcie_rp *pp)
+>>
+>>   static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
+>>   {
+>> -     u32 val, offset, speed, tmp;
+>>        struct tegra_pcie_dw *pcie = to_tegra_pcie(pci);
+>>        struct dw_pcie_rp *pp = &pci->pp;
+>> +     u32 val, offset, tmp;
+>>        bool retry = true;
+>>
+>>        if (pcie->of_data->mode == DW_PCIE_EP_TYPE) {
+>> @@ -1018,9 +1040,7 @@ static int tegra_pcie_dw_start_link(struct dw_pcie *pci)
+>>                goto retry_link;
+>>        }
+>>
+>> -     speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+>> -             PCI_EXP_LNKSTA_CLS;
+>> -     clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+>> +     tegra_pcie_icc_set(pcie);
+>>
+>>        tegra_pcie_enable_interrupts(pp);
+>>
+>> @@ -2224,6 +2244,14 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
+>>
+>>        platform_set_drvdata(pdev, pcie);
+>>
+>> +     pcie->icc_path = devm_of_icc_get(&pdev->dev, "write");
+>> +     ret = PTR_ERR_OR_ZERO(pcie->icc_path);
+>> +     if (ret) {
+>> +             tegra_bpmp_put(pcie->bpmp);
+>> +             dev_err_probe(&pdev->dev, ret, "failed to get write interconnect\n");
+>> +             return ret;
+>> +     }
+>> +
+>>        switch (pcie->of_data->mode) {
+>>        case DW_PCIE_RC_TYPE:
+>>                ret = devm_request_irq(dev, pp->irq, tegra_pcie_rp_irq_handler,
+>> --
+>> 2.17.1
+>>
