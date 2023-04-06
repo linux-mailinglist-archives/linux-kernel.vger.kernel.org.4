@@ -2,118 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406216D9C4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009276D9C4D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbjDFP2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S239699AbjDFP2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239735AbjDFP0K (ORCPT
+        with ESMTP id S239720AbjDFP0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Apr 2023 11:26:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9318DA244
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB0D7EFE
         for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:25:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D7F64956
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5EB2C433AC;
-        Thu,  6 Apr 2023 15:25:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680794757;
-        bh=0XcFxg2ON9n02AwkyUk+wOw5Kqak4ShAAevzNca1xvI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mYHkuQ4xbB3ZPaH5cfe81BTQiCl1DaCLmjEdW1gEgWozyywUvAdj/u+kZ3gCOkEHt
-         v156BcMQfJ3TrI6O8IBkkxCFwRpPtSjBitdm7a2QbMaky3R91Xsc+y8Um8VNKc9c/E
-         7Ki7Wz38wQ2iBsC0Mcmq6Zo4lvHmb7YD2Tb1ghXku//AvhOnIiWiMp87zTo9zUvc9c
-         OMa5Z/gDkYZ/4+e3ldFstihQ0W+EfqnONZayqUla97UHsT+yJOWl+xxboR3z7A+7vC
-         RXFOhdWRmkoBNOwjjTjVNLBAOP4oS8jAeFld5uQXJEL2TRz3zEldBoZgeTHUeYpTZ1
-         KB2iOn3+ndqKw==
-Date:   Thu, 6 Apr 2023 16:25:52 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] arm64/sysreg: Convert HFGITR_EL2 to automatic
- generation
-Message-ID: <8aeccf95-6582-495e-930c-2d6723a21b6f@sirena.org.uk>
-References: <20230306-arm64-fgt-reg-gen-v3-0-decba93cbaab@kernel.org>
- <20230306-arm64-fgt-reg-gen-v3-2-decba93cbaab@kernel.org>
- <20230406144653.GB11479@willie-the-truck>
- <8474042a-d0e3-4316-9740-733c524f2e27@sirena.org.uk>
- <20230406150456.GA11802@willie-the-truck>
+Received: by mail-lf1-x131.google.com with SMTP id c9so40867279lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680794756;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h+aLAJdi57MkIHAk4AWHzzmjKf179Xo0Z9hPjbhZ5GY=;
+        b=vXmzd7o//II0DtLBliD/Cd4YPIy37kAjJcHbAQteg80mPSYB7Fw1EOEM1480ywgr1r
+         Yj8Mc5EqZ3NCoGpJFeqpZkzvWTWYfiJo3GZmYeikzok6CP0CR+5fGMr3DP6ee31NIfDb
+         CahU+uRT6ycDKlv8XD7FFdY69MQDA64XoiKS0xOtNKI57G7APIsmO0jDbKF8pucFjuTc
+         f/LMMRYZq70wJKLx6dzEgnjVadKQY4DUN0eIDbnaLXNMzK+jrFxJMNZ4AIWDE5GGF7uN
+         6r23e8VAAVJFGZpE9izmbG4R60NUCxapaiz9S05KWGTN9hTTQx7DqurwNOHoey0fiCE7
+         c30Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680794756;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h+aLAJdi57MkIHAk4AWHzzmjKf179Xo0Z9hPjbhZ5GY=;
+        b=8M/11pfY6J94JPGhnkkg/ruN/VqD1ZzFOTTqV77IeOh5VHAg0YqhU4CLaZ5uY6dZL7
+         dSUDjNq128ZyDoxUSHj4ayFlo+vobsYxPxNG7DI7xCyIPfT+sQuWsUIubSx7zkj8CpwS
+         fzYZMtokB3Ntmp0DITqcQ9sRh8v3rgGh9U3ZhhjJLAFLquP3PYlffjhoZaT9Y3qSLxpz
+         yZRuPGcSVQZ/0NQqXJbzuV6abKcODm/nRdfw6dRtFk8GNJvHx1yVld11k2o7QK3dyHvk
+         HnIhYKdzplcBnMo7qrMUYVbeoLqtPHJmNvKfb94s5pWypki1mk7LxczmorYzHZpuqSFl
+         1RcQ==
+X-Gm-Message-State: AAQBX9dPS5jvtN9D1Bib/J1XOouOCOi/UWa2XXmCb1TaZ4MCQMyZsc1z
+        4x43F6HqV1gBqx7LyzHrYsAYug==
+X-Google-Smtp-Source: AKy350Z4x/RfCeYKxOpT96M2FR+1jjmIOz6NzlI+3UZcFUKfdeJ4TK7EZ8A2Rr17YTWhPQdAfs8cCA==
+X-Received: by 2002:a05:6512:3e0a:b0:4e8:3d0:84b4 with SMTP id i10-20020a0565123e0a00b004e803d084b4mr1717667lfv.24.1680794756662;
+        Thu, 06 Apr 2023 08:25:56 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id h4-20020a197004000000b004cc9042c9cfsm300103lfc.158.2023.04.06.08.25.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 08:25:56 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Thu, 06 Apr 2023 17:25:53 +0200
+Subject: [PATCH 4/4] arm64: dts: qcom: sm6115p-j606f: Enable ATH10K WiFi
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dFFL3Q5P6UjSt4HY"
-Content-Disposition: inline
-In-Reply-To: <20230406150456.GA11802@willie-the-truck>
-X-Cookie: Man and wife make one fool.
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230406-topic-lenovo_features-v1-4-c73a5180e48e@linaro.org>
+References: <20230406-topic-lenovo_features-v1-0-c73a5180e48e@linaro.org>
+In-Reply-To: <20230406-topic-lenovo_features-v1-0-c73a5180e48e@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680794750; l=1711;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=c+mfIUkIT3IWXbGjBUEX4H/q5dNkCi4IImmpojiqHv0=;
+ b=36xnqFLl8WgGGY28BOulgRIS3xlFkVHwOuSSnkFCFyQYtEGlx0PnxuZQfPOkJjbl77W8FiK+voH8
+ zfR8LwosC5kiFdkLG6NAnj5pW4JOFrzVdW/fDtWJt6QuQBjyFvz6
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Enable the onboard QCA Wi-Fi. HW identifiers for reference:
+qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400e0000
 
---dFFL3Q5P6UjSt4HY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Firmware sources:
+/vendor/firmware_mnt/image/wlanmdsp.bin -> qcom/.../wlanmdsp.mbn
+/vendor/firmware_mnt/image/bdwlan.bXX [1] -> [2] -> ath10k/.../board-2.bin
+[3] -> ath10k/.../firmware-5.bin
 
-On Thu, Apr 06, 2023 at 04:04:57PM +0100, Will Deacon wrote:
-> On Thu, Apr 06, 2023 at 04:02:18PM +0100, Mark Brown wrote:
-> > On Thu, Apr 06, 2023 at 03:46:54PM +0100, Will Deacon wrote:
+Not sure where 3 comes from on the device itself, gotta investigate that..
 
-> > > Can't we generate this file from the architecture xml? That would hopefully
-> > > avoid typos like this and make review less tedious.
+According to [4], it's called WCN3990_STRAIT.
 
-> > I agree that this seems like a sensible idea however there has
-> > previously been pushback on the idea of providing tooling to do that,
-> > and we would want to manually integrate the output of any such tool
-> > since there are a number of cases where for legacy or usability reasons
-> > we rename or combine fields.  The cases where we use a Fields block to
-> > cover identical ELx versions are another issue.
+[1] XX = board_id printed when the file is missing or by your downstream
+kernel firmware loader in the dmesg; if XX=ff, use bdwlan.bin
 
-> > I also note that while the XML is viewable on the web AFAICT the only
-> > directly downloadable version of the architecture XML available
-> > externally is in PDF format which is not entirely helpful for this
-> > purpose.
+[2] https://github.com/jhugo/linux/blob/5.5rc2_wifi/README
+[3] https://github.com/kvalo/ath10k-firmware/blob/master/WCN3990/hw1.0/HL3.1/WLAN.HL.3.1-01040-QCAHLSWMTPLZ-1/firmware-5.bin
+[4] https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/wlan/qca-wifi-host-cmn/-/blob/LA.VENDOR.1.0.r1-20700-WAIPIO.QSSI13.0/hif/src/hif_hw_version.h#L55
 
-> Sorry, I didn't mean to automate this in the tree, just that you could
-> do it locally when you generate the patch (as I suspect this must be
-> tedious for you to write out by hand too!). We've had a string of typos
-> in the definitions so far, and it would be nice to take steps to avoid
-> that for future changes.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Yeah, normally it's not too bad (and it can be useful to make sure
-you've actually looked at the entire register definition properly) but I
-did just about get annoyed enough to write something locally while doing
-this register.  You could certainly get a good chunk of the way there,
-especially for simple fields (enums would need manual naming IIRC) - if
-it hadn't been for the pushback mentioned above combined with what's on
-developer.arm.com I'd probably have got round to doing something
-already.
+diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+index 2aac25171dec..4ba8e59a27d8 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
++++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+@@ -315,6 +315,14 @@ &usb_hsphy {
+ 	status = "okay";
+ };
+ 
++&wifi {
++	vdd-0.8-cx-mx-supply = <&pm6125_l8>;
++	vdd-1.8-xo-supply = <&pm6125_l16>;
++	vdd-1.3-rfa-supply = <&pm6125_l17>;
++	vdd-3.3-ch0-supply = <&pm6125_l23>;
++	status = "okay";
++};
++
+ &xo_board {
+ 	clock-frequency = <19200000>;
+ };
 
---dFFL3Q5P6UjSt4HY
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.40.0
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQu5H8ACgkQJNaLcl1U
-h9ASYwf+PKDiTK9B9hnM0lw5l4npXwSDgcAfZid5yLu8ZrXAK4Q3UdmdsQisS5oB
-Hcah25KOzgKd7I9CNYkMwe9V8vhCOXZYOiJ9M4+Ws2U1WRG9KK3E8HjvMFJTExSs
-y6PJZNtc3F9PQT0An/D3pK6a28z4hA8UoVCqzi5bqHBuZO6V0+FJipU5P7PvdXaQ
-OuDYlwZ9yYAsuy46gtU+EGSCyoy6PRm1n37zjHGGzMgywdbdeje46s/Mi5ZnBzYu
-tE/n7X+5SqVZx7XBkBC2yqZKpUfiEpUKPvocUimL5AJpIUF4fDIEIkbkIioOeCPa
-MWuF05raXBrWnvDpWvsNRrMzC8qHHg==
-=9Lpm
------END PGP SIGNATURE-----
-
---dFFL3Q5P6UjSt4HY--
