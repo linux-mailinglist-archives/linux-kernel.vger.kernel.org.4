@@ -2,127 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC7F6D9767
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DA86D976A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbjDFMzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S238200AbjDFMzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237514AbjDFMzV (ORCPT
+        with ESMTP id S236677AbjDFMzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:55:21 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469694C21;
-        Thu,  6 Apr 2023 05:55:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VfTAMRc_1680785713;
-Received: from 30.221.129.255(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VfTAMRc_1680785713)
-          by smtp.aliyun-inc.com;
-          Thu, 06 Apr 2023 20:55:14 +0800
-Message-ID: <a37f0f71-2ea0-857a-6e87-376d95d207a9@linux.alibaba.com>
-Date:   Thu, 6 Apr 2023 20:55:12 +0800
+        Thu, 6 Apr 2023 08:55:53 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4F07ABC
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:55:51 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id a11so40608793lji.6
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 05:55:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680785750;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MaSH6VKVyllvIVoyulNJHcX5Zf384xhMFQwlL1Td7+E=;
+        b=wBrcBeQW24D98uTBGo0EznIAoclKHU1IAdAx6zY8SbvuSxF7gXlCdn7qAL1Fj293ew
+         t6dDJAUTDlHKP8YDw4TqyykclcRLZn+5dY/G7JVAgDJb3uNISUGeERl2l2VpColLO33e
+         08yUE/E3+8Ijpb3avjmTnjQ2HPIaR3ONP5ZX+DspKQKmJQdBCD7zlGwzvCpsrWx98a7k
+         qXOWH44C4j84hPyACXmZbh0ofkdxA4qFHi7UygRagHt3M3hgvVvQ8RcNBqn4ovvc0C5u
+         RDz7FYVWHkYwHbROAG48RXjuxKyiy6+wDC3UwzTrbZtsKE3U5QWoLbntn0SKLHT/l6ou
+         X01Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680785750;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MaSH6VKVyllvIVoyulNJHcX5Zf384xhMFQwlL1Td7+E=;
+        b=JyT/lFTsHfRgZnqYHzLYC8mLF1Xp4dyioFwSu/PdxKgA6ugpdrOjZthOBHk7FGikT4
+         PVTLWy/8XcTm0xhTbOvKAFiZVsiSWtPjutMgQy/9G7NzErV5lfYxqwnMff0SAZ56Crez
+         1oB7ei5yrLZHOtDrJ+2PGiv2uL90lrOwrA2nnMKd0ovoy26DNv9eB9+h+u5+O8a/7EK0
+         j+FFRzGidKDAtpYicom5OrPMAltqBFmxCWP5I3PMTsYKtMdFT4t4zTerAAiNuUsrquRu
+         XC09pZw990f5BodKzzplOeBxClEqmgj7GrbHDKO1HEF1otwLql/SCRjzNxpLJogLKleb
+         AnDw==
+X-Gm-Message-State: AAQBX9cgPioa5+GHEQzLGcKwFnSoIyooxewyPDlkcW1o161nQyrAzjwW
+        ci7dA7xhZLj3PWhQPdtQLROo9fdoMj+njfXk52o=
+X-Google-Smtp-Source: AKy350Z1qNP61kw9TRZ4XNYACGWroatf156KUNP22OewSG5oObfBOG2l+kpUy85buNwqWEyoITzSog==
+X-Received: by 2002:a2e:9001:0:b0:2a1:bcd5:f2ff with SMTP id h1-20020a2e9001000000b002a1bcd5f2ffmr2885913ljg.21.1680785750152;
+        Thu, 06 Apr 2023 05:55:50 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id i13-20020a2e864d000000b00295765966d9sm276513ljj.86.2023.04.06.05.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 05:55:49 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v3 0/2] ATH10K YAML conversion
+Date:   Thu, 06 Apr 2023 14:55:43 +0200
+Message-Id: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH v2] mm/swap: fix swap_info_struct race between swapoff and
- get_swap_pages()
-Content-Language: en-US
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     akpm@linux-foundation.org, bagasdotme@gmail.com,
-        willy@infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
- <20230404154716.23058-1-rongwei.wang@linux.alibaba.com>
- <6dad8c2f-b896-3cc0-26c1-37f5fff406bd@linux.alibaba.com>
- <20230406121245.GA376058@ziqianlu-desk2>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <20230406121245.GA376058@ziqianlu-desk2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAE/BLmQC/42Nyw7CIBREf8WwFsOj1OrK/zDG3FIoNzbQQCWap
+ v8u7c6VLmcyc85MkoloEjnvZhJNxoTBlyD3O6Id+N5Q7EomggnJKlbTKYyoKUyOs8e9Rd+h7xM
+ 9gVUWGlkJqUj5tpAMbSN47crbP4ehlGM0Fl+b7Hor2WGaQnxv7szX9pcmc8ooN5Y3XKsyrS8De
+ ojhEGJPVmQWf2FEwSh1tE1TQa06/oVZluUDESuN/RcBAAA=
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680785748; l=1681;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=9PQjGqgVuPrZuUbC6cUZqXg2lX9Q/iqPOnarm0Ir/U4=;
+ b=QbX/IDeOvgPZmPLMuVm3A9jtVdyfC3mGd5j5WoF0iWQmtp0i76rX/IjzRRXkNMrWmz/Wk7/ZVWt/
+ iFPFoGnsCmiA5N8Wxs3bp9f9TR7mX9bI4fl2n1CklFsuD4GgybXY
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh, sorry, I miss this email just now, that because of I'm also replying 
-your previous email.
+v2 -> v3:
+- Ran dt_binding_check explicitly to uncover an issue with the
+  example - I had 2 levels of wifi-firmware{}.. Fixed that..
 
-On 2023/4/6 20:12, Aaron Lu wrote:
-> On Wed, Apr 05, 2023 at 12:08:47AM +0800, Rongwei Wang wrote:
->> Hello
->>
->> I have fix up some stuff base on Patch v1. And in order to help all readers
->> and reviewers to
->>
->> reproduce this bug, share a reproducer here:
-> I reproduced this problem under a VM this way:
->
-> $ sudo ./stress-ng --swap 1
-> // on another terminal
-> $ for i in `seq 8`; do ./swap & done
-> Looks simpler than yours :-)
-Cool, indeed become simpler.
-> (Didn't realize you have posted your reproducer here since I'm not CCed
-> and just found it after invented mine)
-> Then the warning message normally appear within a few seconds.
->
-> Here is the code for the above swap prog:
->
-> #include <stdio.h>
-> #include <stddef.h>
-> #include <sys/mman.h>
->
-> #define SIZE 0x100000
->
-> int main(void)
-> {
->          int i, ret;
->          void *p;
->
->          p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
->          if (p == MAP_FAILED) {
->                  perror("mmap");
->                  return -1;
->          }
->
->          ret = 0;
->          while (1) {
->                  for (i = 0; i < SIZE; i += 0x1000)
->                          ((char *)p)[i] = 1;
->                  ret = madvise(p, SIZE, MADV_PAGEOUT);
->                  if (ret != 0) {
->                          perror("madvise");
->                          break;
->                  }
->          }
->
->          return ret;
-> }
->
-> Unfortunately, this test prog did not work on kernels before v5.4 because
-> MADV_PAGEOUT is introduced in v5.4. I tested on v5.4 and the problem is
-> also there.
+I hope you folks don't mind me resending so quickly, but it was a
+trivial issue. Patch 2 unchanged.
 
-Maybe that is this bug can not be found since now. And we found this is 
-triggered by stress-ng-swap and stress-ng-madvise (PAGEOUT) firstly. It 
-seems this is that reason.
+v2: https://lore.kernel.org/r/20230406-topic-ath10k_bindings-v2-0-557f884a65d1@linaro.org
 
-It seems MADV_COLD is also introduced together with MADV_PAGEOUT. I have 
-no idea and have to depend on you.:-)
+v1 -> v2:
 
->
-> Haven't found a way to trigger swap with swap device come and go on
-> kernels before v5.4; tried putting the test prog in a memcg with memory
-> limit but then the prog is easily killed due to nowhere to swap out.
->
-Personally, I do not intend to continuing searching for the method to 
-reproduce before v5.4. Of course, if you have idea, I can try.
+Dropped:
+- '|' in /description
+- /properties/resets/minItems
+- Unnecessary level of 'items:' in /properties/ext-fem-name
+- reserved-memory in examples
+- status in examples
+- labels in examples
 
+Added:
+- /properties/wifi-firmware/additionalProperties: false
+- /properties/wifi-firmware/properties/iommus
+- /properties/qcom,coexist-support/enum (and reworded the description)
+- wifi-firmware and supplies in the SNoC example
 
-Thanks:-)
+Patch 2 is unchanged, picked up rb.
+
+v1: https://lore.kernel.org/r/20230406-topic-ath10k_bindings-v1-0-1ef181c50236@linaro.org
+
+This is my attempt at (finally) moving ATH10K to YAML.
+One inexistent dt property came out as part of that.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      dt-bindings: net: Convert ATH10K to YAML
+      arm64: dts: qcom: sdm845-polaris: Drop inexistent properties
+
+ .../bindings/net/wireless/qcom,ath10k.txt          | 215 -------------
+ .../bindings/net/wireless/qcom,ath10k.yaml         | 357 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts |   2 -
+ 3 files changed, 357 insertions(+), 217 deletions(-)
+---
+base-commit: 8417c8f5007bf4567ccffda850a3157c7d905f67
+change-id: 20230406-topic-ath10k_bindings-9af5fa834235
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
