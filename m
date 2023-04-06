@@ -2,166 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57796D94AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BFD6D94A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237485AbjDFLEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S237482AbjDFLEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236992AbjDFLEn (ORCPT
+        with ESMTP id S236569AbjDFLEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Apr 2023 07:04:43 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA91703;
-        Thu,  6 Apr 2023 04:04:25 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336B4KCZ019975;
-        Thu, 6 Apr 2023 11:04:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=YYcev94yQdsqVZnRqJnBM1uuqYiJhHnnxfI5yles50E=;
- b=LLfE6rQu4eBtAkWY2KlhevqrvueFGgvVxmFfVC2/dtaxT9s9jR15jgDRk1eMigYhZmlh
- m/N4C95zkrOSFe8ADsYKhgC87xZNPhcVds3x6s4zKbHDfMf3p3GIZU5e2ToF47WsPglG
- JJOpgJh74s1cX4kPvCcWFxVqBZBUKZqr/Jesq+HiBK0q4LmTAp52busFum2dlhZi26XK
- zngcY01lg5/m+9EFFUxh0IF56onOTnho/iGcizKU1/4kzFbSbAq4x6uCRJQPM7FnV2Tu
- 9u4UajnCaU07BLFqAkHk0Jpf7j/K8Oh3nss0IfL4epoon1xD0LFBXGE25xTzzTNPksNo qA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psnmj0ya7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 11:04:21 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 336B44OQ013696
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Apr 2023 11:04:04 GMT
-Received: from [10.216.2.94] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 6 Apr 2023
- 04:03:59 -0700
-Message-ID: <54e8f7b6-12ae-aac5-9092-7d1fef300db8@quicinc.com>
-Date:   Thu, 6 Apr 2023 16:33:56 +0530
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D6A8A7D;
+        Thu,  6 Apr 2023 04:04:23 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-946a769ae5cso101055066b.1;
+        Thu, 06 Apr 2023 04:04:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680779062; x=1683371062;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KITffEh21kVUliy1VoMjvw87Ra13t1dF1yglnrdIiXg=;
+        b=usylqcl/wK/WcBMCB9Hu/nARTEaCavpn8np7neoYl7ECcd2EtGYteDhzELH2v9HJdP
+         V3I2ZjeSUTpSM4HERKvvKyFhczrc+FgRxhfZXxpvPSQk4Yhln+TLijlhXraBs72Ykg6f
+         i7+21elxMtSS/J8WejMVs4oIhQ4PlxquPYUdhsTlXP69CLHvNPh5jmYKjTQSp0sLXLIk
+         VRj+rF+IGLVr3Q6eLbvFeGUl4OMUDsB5lCEXfAlZiFfhIykixbDWahp8GhdGaCMP5JNA
+         Tjrv+xiZRUdm5mUyjWfbuX7Br+eh53wz5xgwBQvcHT4NcF4afCmIWVP4pJryGxPCMkPq
+         gg8Q==
+X-Gm-Message-State: AAQBX9fQ6AXFIes6LE7BHc+miCJBUGyUASVOZ8h/dg8U+sp51LaiA/LK
+        jZvco0tkeGx7tkfmdUGEYfk=
+X-Google-Smtp-Source: AKy350bPuWpFa8lsTNUvA8+kwvxRwcrPzqvVF0WOgFdBH+8jM2uv4ltcv5/bo9+HatYAa9uEjqf0mA==
+X-Received: by 2002:aa7:de8e:0:b0:4fb:395a:6aa4 with SMTP id j14-20020aa7de8e000000b004fb395a6aa4mr4899183edv.31.1680779061830;
+        Thu, 06 Apr 2023 04:04:21 -0700 (PDT)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id 23-20020a508e17000000b00501dac14d7asm617927edw.3.2023.04.06.04.04.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 04:04:21 -0700 (PDT)
+Message-ID: <be836a4f-fc0f-bbcd-636d-4766fdd33c81@kernel.org>
+Date:   Thu, 6 Apr 2023 13:04:16 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/5] dt-bindings: arm: msm: Add bindings for multi
- channel DDR in LLCC
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Asit Mallick <asit.k.mallick@intel.com>,
+        Cfir Cohen <cfir@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        David Rientjes <rientjes@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Juergen Gross <jgross@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mike Stunes <mstunes@vmware.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, x86@kernel.org
+References: <20230403140605.540512-1-jiangshanlai@gmail.com>
+ <19035c40-e756-6efd-1c02-b09109fb44c1@intel.com>
+ <CAJhGHyBHmC=UXr88GsykO9eUeqJZp59jrCH3ngkFiCxVBW2F3g@mail.gmail.com>
+ <3591487f-96ae-3ab7-6ce7-e524a070c9e7@redhat.com>
+ <20230406101254.GI386572@hirez.programming.kicks-ass.net>
+ <26be2c81-9431-6b43-e3e9-52d7d184750e@kernel.org>
+ <20230406104750.GA392176@hirez.programming.kicks-ass.net>
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <20230313124040.9463-1-quic_kbajaj@quicinc.com>
- <20230313124040.9463-3-quic_kbajaj@quicinc.com>
- <2b3e39b9-ea70-db9b-89f7-09054df363c3@linaro.org>
- <20230315134814.GA98488@thinkpad>
- <c8f3499f-d927-6657-c7c6-732ed2222525@quicinc.com>
- <f9728472-0dda-2fb2-1753-e9c039afa4c1@linaro.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <f9728472-0dda-2fb2-1753-e9c039afa4c1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [RFC PATCH 0/7] x86/entry: Atomic statck switching for IST
+In-Reply-To: <20230406104750.GA392176@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LruhRa6HfjYKtX6uWzwHewu6Jd5GizGq
-X-Proofpoint-ORIG-GUID: LruhRa6HfjYKtX6uWzwHewu6Jd5GizGq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_05,2023-04-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0
- bulkscore=0 phishscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304060097
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/6/2023 3:04 PM, Krzysztof Kozlowski wrote:
-> On 06/04/2023 11:19, Komal Bajaj wrote:
->>
->>>>>    
->>>>>      interrupts:
->>>>>        maxItems: 1
->>>>>    
->>>>> +  multi-ch-bit-off:
->>>>> +    items:
->>>>> +      - description: Specifies the offset in bits into the multi_channel_register
->>>>> +                     and the number of bits used to decide which LLCC configuration
->>>>> +                     to use
->>>> There are here few issues.
->>>> First, I don't fully understand the property. What is an LLCC
->>>> configuration? Like some fused values?
->>
->> There are different configuration for LLCC based on the number of
->> DDR channel it uses. Here, we are basically trying to get information
->> about the same.
->>
+On 06. 04. 23, 12:47, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 12:35:24PM +0200, Jiri Slaby wrote:
+>> On 06. 04. 23, 12:12, Peter Zijlstra wrote:
+>>> On Tue, Apr 04, 2023 at 07:03:45PM +0200, Paolo Bonzini wrote:
+>>>> On 4/4/23 05:17, Lai Jiangshan wrote:
+>>>>> The cover letter has 800+ lines of comments.  About 100-300 lines
+>>>>> of comments will be moved into the code which would make the diffstat
+>>>>> not so appealing.
 >>>>
->>>> Second, don't make it a register specific, it will not scale easily to
->>>> any new version of this interface. Although how this should look like
->>>> depends on what is it.
+>>>> Removing assembly from arch/x86/entry/ and adding English to Documentation/?
+>>>> That's _even more_ appealing. :)
+>>>
+>>> I *much* prefer in-code comments to random gibberish that's instantly
+>>> out of date squirreled away somewhere in an unreadable format in
+>>> Documentation/
 >>
->> LLCC driver can only get DDR channel information from the register.
-
-Actually, any one can read this property there is no boundation to that.
-However, some of the bits information of this register only matters to 
-LLCC to make decision.
-
-> And why would that exactly matter to DT? How does it solve my concern
-> that your approach does not scale?
-
-I understand your concern about not making it register specific, however 
-this register is a secure fuse register where the interested bits are
-known to us and should only be used by llcc to select right slice 
-configuration table to apply.
-
-How about something like this,
-
-Add another property like qcom,tcsr_feature_config under qcom,scm
-and read this property under qcom_scm driver and expose
-read exported symbol for LLCC driver. LLCC driver can use API and
-apply bit offset/bit size to get right value inside the target driver 
-data(e.g .data = &XXXX_cfg }) or maintain it inside same 
-tcsr_feature_config DT (this can be discussed)
-Also, we can have a yaml file for tcsr_feature_config.
-
-e.g..
-
-
-scm: scm {
-         compatible = "qcom,scm-sm8450", "qcom,scm";
-         qcom,dload-mode = <&tcsr 0x13000>;
-         ...
-	qcom,tcsr_feature_config = <&tcsr_feature_config>
-};
-
-tcsr_feature_config: syscon@fd484000 {
-	compatible = "qcom, XXXX", qcom,tcsr-featureconfig";
-	reg = <0xXXXXXXXX 0xYYYY>;
-};
-
-
--- Mukesh
-
+>> +1 as one can link comments in the code to Documentation easily nowadays.
+>> They are sourced and end up in the generated Documentation [1] then. One
+>> only needs to type the kernel-doc properly.
 > 
-> Best regards,
-> Krzysztof
-> 
+> Urgh, so that kernel doc stuff can defeat its purpose too. Some of that
+> is so heavily formatted it is unreadable gibberish just like
+> Documentation/ :/
+
+Definitely it _can_ defeat the purpose and be heavily formatted.But it 
+doesn't have to. It's like programming in perl.
+
+What I had in mind was e.g. "DOC: TTY Struct Flags":
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/tty.h#n261
+
+Resulting in:
+https://www.kernel.org/doc/html/latest/driver-api/tty/tty_struct.html#tty-struct-flags
+
+Both the source and the result are quite readable, IMO. And the markup 
+in the source is not mandatory, it's only for emphasizing and hyperlinks.
+
+As I wrote, you can link the comment in the code. But definitely you 
+don't have to, if you don't want. I like the linking in Documentation as 
+I can put the pieces from various sources/headers together to one place 
+and build a bigger picture.
+
+> I really detest that whole RST thing, and my solution is to explicitly
+> not write kerneldoc, that way the doc generation stuff doesn't complain
+> and I don't get random drive by patches wrecking the perfectly readable
+> comment.
+
+Sure. Rst _sources_ are not readable, IMO. Only generated man pages or 
+html are.
+
+thanks,
+-- 
+js
+
