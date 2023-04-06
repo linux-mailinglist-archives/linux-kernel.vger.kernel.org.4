@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194F46D9C7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD376D9C7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239802AbjDFPfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S239783AbjDFPgq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 11:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239783AbjDFPfI (ORCPT
+        with ESMTP id S239747AbjDFPgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:35:08 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473E07D9A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:35:06 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-316d901b2ecso382525ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:35:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680795305;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VUL9Ul78Bpb3XRyOISIrcWSMNz2ErChRMmovjR4Alg0=;
-        b=OYF148h4Nm9P6PgvskOIuWTx30F1Bwm7sbtDJbrJbROEL6DvXKusP6nniCeRlURmqR
-         Bj2InPvg2FA4L1hHmkdJMUGoq+ezpYia8hiEp0SJQBf39ETQ75/GR2XsYCc8SFs1gUGj
-         Jf4DLn0zPZ0GlGNIpf+McheP0yGY5MwfsfoMtXPV96d4guPMxk/R7YSuetOPL3y+1scw
-         En0Dk0K+jo9iVfkcLHvTAX/VoDqS7L/4lxFgnddiTGSXicaTmbnwBfISMqbET7wnlqlr
-         8lZFgnbtACkUXk5Z9UmfE1fEuCigYlm6OgLjM5ppw/fUxFUJ9+u7Rmfu02TIZR1YcTUO
-         49CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680795305;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VUL9Ul78Bpb3XRyOISIrcWSMNz2ErChRMmovjR4Alg0=;
-        b=xuda0M11/zZEv7oGwNETl6dQfNvtL0WUpthfMmHtEUwS3iNGzn3aQ64jqiXrF9QBVA
-         FSPHFF3jrHmzYFdJG44cyarXzLU9BG1kyxj88KInMppTMbxvvd2z8SX629mwVqkn0hN/
-         GRiLNvUkPoFty9eNU0ERb7LUOKP3JM31s1999heLcvKvzA0Wb59Y81i1dpPaCPJ9SSHy
-         8ZQVxR+pQQPDXyQ28Y2RkgsmDHclmk47jx8Gb1IBS0DEK5wgzAEI/bMAvk8BJPuqSDxQ
-         K4ovS6mJmwkv+KsW1iNshUwbdM2YEppljiyuRW4meGy5HkgS8jPMMarvQep+7yFfwRyc
-         YR2g==
-X-Gm-Message-State: AAQBX9c+L88v/wqzjtcYWTxWMe6LW0z5+q9ACYzpgjpbAwS8ohIPzXL1
-        jOA5YhJK37OOIvqF6+QeCgJri4qMIj0doIjHUi6jW2PdRzSTQ95BB3ujvg==
-X-Google-Smtp-Source: AKy350bLXM1iysCDol/VAUBxZbdWNsWUekgKrBjhx1FHLZIm5wLO/EyiDgMXj5s262GeacHOp+oPA919pqPuO2gqhqY=
-X-Received: by 2002:a05:6e02:216b:b0:325:a6fe:11fc with SMTP id
- s11-20020a056e02216b00b00325a6fe11fcmr223040ilv.17.1680795305527; Thu, 06 Apr
- 2023 08:35:05 -0700 (PDT)
+        Thu, 6 Apr 2023 11:36:43 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABECB7D9A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:36:41 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-29-UuMCYDyaOwWGz8MYzNkIwA-1; Thu, 06 Apr 2023 16:36:38 +0100
+X-MC-Unique: UuMCYDyaOwWGz8MYzNkIwA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 6 Apr
+ 2023 16:36:36 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 6 Apr 2023 16:36:36 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Bjorn Helgaas' <helgaas@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: RE: revert bab65e48cb064 PCI/MSI Sanitize MSI-X checks
+Thread-Topic: revert bab65e48cb064 PCI/MSI Sanitize MSI-X checks
+Thread-Index: AdlodgFkFYa3Wd45RlGJwWEgKJXFDwAGyW4AAALDCHA=
+Date:   Thu, 6 Apr 2023 15:36:36 +0000
+Message-ID: <be2acdf424b74d948c3ff45093dc6332@AcuMS.aculab.com>
+References: <caca6879210940428e0aa2a1496907ab@AcuMS.aculab.com>
+ <20230406150742.GA3703273@bhelgaas>
+In-Reply-To: <20230406150742.GA3703273@bhelgaas>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230406144330.1932798-1-leitao@debian.org>
-In-Reply-To: <20230406144330.1932798-1-leitao@debian.org>
-From:   Willem de Bruijn <willemb@google.com>
-Date:   Thu, 6 Apr 2023 11:34:28 -0400
-Message-ID: <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
-Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
-To:     Breno Leitao <leitao@debian.org>
-Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
-        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
-        edumazet@google.com, pabeni@redhat.com, davem@davemloft.net,
-        dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dsahern@kernel.org,
-        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
-        marcelo.leitner@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,21 +63,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 10:45=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
-ote:
->
-> From: Breno Leitao <leit@fb.com>
->
-> This patchset creates the initial plumbing for a io_uring command for
-> sockets.
->
-> For now, create two uring commands for sockets, SOCKET_URING_OP_SIOCOUTQ
-> and SOCKET_URING_OP_SIOCINQ. They are similar to ioctl operations
-> SIOCOUTQ and SIOCINQ. In fact, the code on the protocol side itself is
-> heavily based on the ioctl operations.
+From: Bjorn Helgaas
+> Sent: 06 April 2023 16:08
+> 
+> [+cc linux-pci, regressions]
+> 
+> On Thu, Apr 06, 2023 at 11:05:14AM +0000, David Laight wrote:
+> > The change in bab65e48cb064 breaks pci_enable_msix_range().
+> > The intent is to optimise the sanity checks, but it is
+> > somewhat overenthusiastic.
+> >
+> > The interface allows you to ask for a lot of vectors and
+> > returns the number that were allocated.
+> > However, after the change, you can't request a vector
+> > that is higher than the largest the hardware supports.
+> > Which makes that rather pointless.
+> >
+> > So code like:
+> > 	for (i = 0; i < 16; i++)
+> > 		msix_tbl[i].entry = i;
+> > 	nvec = pci_enable_msix_range(dev, msix_tbl, 1, 16);
+> > Now returns -22 if the hardware only supports 8 interrupts.
+> >
+> > Previously it returned 8.
+> >
+> > I can fix my driver, but I suspect that any code that relies
+> > on a smaller number of vectors being returned is now broken.
+> 
+> Thanks for the report!  bab65e48cb06 ("PCI/MSI: Sanitize MSI-X
+> checks") appeared in v6.2-rc1, so this is a recent regression and it
+> would be good to fix it for v6.3.
 
-This duplicates all the existing ioctl logic of each protocol.
+I do try to test every release at around rc3.
 
-Can this just call the existing proto_ops.ioctl internally and translate fr=
-om/to
-io_uring format as needed?
+> bab65e48cb06 only touches drivers/pci/msi/msi.c, but since it didn't
+> go through the PCI tree, I'll let Thomas handle any revert (or better,
+> an improvement to pci_msix_validate_entries()) since he wrote and
+> applied the original.
+
+Looking it:
+
+static bool pci_msix_validate_entries(struct pci_dev *dev, struct msix_entry *entries,
+				      int nvec, int hwsize)
+{
+	bool nogap;
+	int i, j;
+
+	if (!entries)
+		return true;
+
+	nogap = pci_msi_domain_supports(dev, MSI_FLAG_MSIX_CONTIGUOUS, DENY_LEGACY);
+
+	for (i = 0; i < nvec; i++) {
+		/* Entry within hardware limit? */
+		if (entries[i].entry >= hwsize)
+			return false;
+
+		/* Check for duplicate entries */
+		for (j = i + 1; j < nvec; j++) {
+			if (entries[i].entry == entries[j].entry)
+				return false;
+		}
+		/* Check for unsupported gaps */
+		if (nogap && entries[i].entry != i)
+			return false;
+	}
+	return true;
+}
+
+It probably needs to return an updated 'nvec'.
+The gap/duplicate check is also a bit horrid, why not:
+		if (nogap) {
+			if (entries[i].entry != i)
+				return false;
+			continue;
+		}
+
+		if (!i || entries[i].entry > entries[i - 1].entry)
+			continue;
+
+		horrid, expensive loop...
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
