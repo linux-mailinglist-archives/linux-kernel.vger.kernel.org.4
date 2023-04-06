@@ -2,208 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F77D6D9241
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C836D9244
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236083AbjDFJGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S236060AbjDFJG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDFJGU (ORCPT
+        with ESMTP id S235870AbjDFJG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:06:20 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2046.outbound.protection.outlook.com [40.107.212.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C55A2127;
-        Thu,  6 Apr 2023 02:06:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NT2VWGxMTqdCSIA0RO52JXoFXpdpmR7Xh8EqGw3q8cdO9Ep4VBbEKRgkhu9XrmqW6CKshv2s1m/mDLgW8v1nkEx0dEGFHjRg6ZPadU7VhvLQORoDJwyNqk0iWC/hyIHjp3SK1QK+k2LT/5tfNepiCgeDs+1E/nCtKff+pVW+u3QA3Ccl1WNRfn4VydB2/bBl/dCorsR8KLEKVkiKAGPrWGbzygaTqrL0vJOaYkRvPw94OQGu6LQ8MdHio/93dPXFKPMksJMgNaKl3qVkp1IxNEVpd8tY8Q5NubAP1HYKsVesueC3yrPHguwOk2XPIEZ1nkiyl+I2Vrzo4YX8wonPCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lBtzoEQzftDK/D2RmrxlepcWllFg/pXlLWxUystsmkA=;
- b=Lw2ob66/HEROvGvqQQvcn8F7BwpAb04A5XiQtFXGCIGVqZoe5JNZmg7Frhbg6e8iA4K2OL8MU5zWUuoq00hwhIZK6ugxHpPsv7H50YRfg1L2LbCGGV2CbAg+4W4QdMgvReOPVW2EyN8MWBb5U8PiO34Wn5GK0XMCCMnaj49sk9AhtDBM7RQnJORbQhle0QDZmCxDvvbRUB/msMMvTIaIYKoiTShJvYOBQtRvp54PLai3JdgPwiTy9J7LiBfXMTjUE509vWZZ1Vag+wNiqufQz65xOb3TnIoXtntqeYqu0xJeLwwEqq3rQdcHAabPjfm0CLX3GPXLB4sm+lQ3OnufKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lBtzoEQzftDK/D2RmrxlepcWllFg/pXlLWxUystsmkA=;
- b=ILMTeYpx0EtB+bvNkhDWNCsmVmmetBncmNr+DD0DYPIGaJrv0DRAK0SGcV73yLpEy2yJwhvll5z+b3+S4fO3AAEMIvy7xH2whQuApv0fsyluuDHUP/8eO3CorYM7mYEix+aU21jeXLxo4zZwAmyPo0Ku5lfkxKlEA5fN6w/q0/4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by SN7PR12MB6689.namprd12.prod.outlook.com (2603:10b6:806:273::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Thu, 6 Apr
- 2023 09:06:14 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
- 09:06:14 +0000
-Message-ID: <180bd178-e3c0-85e3-785e-fc8a216cf65e@amd.com>
-Date:   Thu, 6 Apr 2023 11:06:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] drm/scheduler: Fix UAF in
- drm_sched_fence_get_timeline_name
-Content-Language: en-US
-To:     Asahi Lina <lina@asahilina.net>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, asahi@lists.linux.dev
-References: <20230406-scheduler-uaf-1-v1-1-8e5662269d25@asahilina.net>
- <6b3433ee-0712-f789-51ee-3047ead9bb79@amd.com>
- <cfbaceae-6d40-a8b3-e449-6473be234d2d@asahilina.net>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <cfbaceae-6d40-a8b3-e449-6473be234d2d@asahilina.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0152.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::6) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 6 Apr 2023 05:06:57 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E350749C3;
+        Thu,  6 Apr 2023 02:06:53 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pkLZy-0003aV-S5; Thu, 06 Apr 2023 11:06:50 +0200
+Message-ID: <71816e38-f919-11a4-1ac9-71416b54b243@leemhuis.info>
+Date:   Thu, 6 Apr 2023 11:06:50 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SN7PR12MB6689:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b1faf12-aeb6-4717-5437-08db367e2c21
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dT8QCU5sEF4FhMWe8Moqn65NPm4yCYUpM/lXkpr8ZVddGjHKldHNxvdXLfj2689d8e5ynhccyxIEc5hRMWuh1KkWgsa3u2iW/M5uqkFU2MpR2hVKG+gNP/oBWYKovSVXP6WIaX5wPTZp1bhrpa5cYktt+O6pojdgWwlv6+u6eSczNkoZ4fuljALU1Ed0XiqhxW2V6iM0HjPn1PbaHYRv/tnaUFbvlEYvs7W7gC3cuSpwZqdWhAiOQQYhoU0bpMFQBySI7fHTT7OL+QKWnEVlEepjmIxRXFmGp+7QfpMdqEiLL16Q72334OIaYdsy9FMsV+us1m7+DcNs9CYRRS0n4Y7YsbDmYjEe4zKXPRMDCg5l+0VIoj8Ad+eCA1ls22HqYLD4YIP4QcQ9jQj38ofUmyHV8MJN+l+drKUNTwkmqcL2Ms6bv0BMdQKIqcLcsYrus3FLmirTyymu7+v+klJeBLRIrdcEhUo+k0DTLeXYnrZRAENriBEMlvZ98qGhq3fjj5KNo//kjQOCaz85rTbjzc+cGsO5sfF1WaNby8eC1Mji5A55AFNEyPvkf7Blb1A2oFtNaexq+RJtgPRcautgFi2LZELHiIOJQwiGzwTsUF6/7r9PiXSh6wxUql1cczutShIL7YGcJuhX7U4xDksalA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199021)(86362001)(41300700001)(66556008)(6666004)(31696002)(316002)(66476007)(66946007)(36756003)(6486002)(4326008)(110136005)(2616005)(5660300002)(8676002)(8936002)(2906002)(38100700002)(186003)(6512007)(478600001)(66574015)(26005)(83380400001)(6506007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bzBSUGtmTXlHbFE3SDFvK0JCSGpmWVJWTlVRTERyYmxLdXdaRUh5N001YkR4?=
- =?utf-8?B?T2lQdnhwZkdOWnV5RXFYQnVSK2kyQzFLd3pQVnVPMEZzcXV4cGZLOC9jc3Nz?=
- =?utf-8?B?Q0FUTTV4UGtWS2lkMTJhKzVuNG9TRUVNeUU3RVNyZ2JwcDF3OUVZTkU5U0M4?=
- =?utf-8?B?aE5lT0RrRWliQzBuWWltbWExaXVNRWNyM09wUnVVQ0xrc0U0NzBHRU5Ibkln?=
- =?utf-8?B?ZTJtN01vVGpwdzh5K0FMakp6LzYzbjNGMEhtak54Vng0OTVtbVJVWTRuVWlW?=
- =?utf-8?B?RUdscHJNbkNlZ1lYU0RwcnZwWlBENWprc3F1NGQyRmVqTGQyNjFKRFFMRGxM?=
- =?utf-8?B?RFFPVWtGckx5OVZ5YlpWWmFhdFVUVUt0d1QwVk1HdW9wY1U1YkRCQTBpWFFh?=
- =?utf-8?B?TXpyOG9Rb0lSWUtFKzEvRHYzR2ZVcWZ6VEZwUWllbEdTWFVndlM0aUpnMkpM?=
- =?utf-8?B?cGk4eEs2THBVYTRVUHh3aVlQdWZwMUJKRVAwZDFwTXVBcHFVQW80NExQMG0r?=
- =?utf-8?B?aFdndEdQM3BIQ0ZnblI3Y1dEV01XN2VSck9INEUwcTdNT0tVTlFlQmJXbHB1?=
- =?utf-8?B?SUFLY3VBTXFKYnNhYWZJMlZaZGFRbEVHNGhSdmEzNnhlYm8xM0syZUdwSENR?=
- =?utf-8?B?aWo1VEd0Y3B4dHBEWm1kUVRPSkEyYjM2NTBncXA0QTBrK1AxUy9ROTFjemxH?=
- =?utf-8?B?NEpYOGpEdFJtanBjaEJHZG9MUzh5YnJZS25YaWZpdEhLVGRUcWxTNHdyS01y?=
- =?utf-8?B?dW5pL1pKY3AxbE5iUGRoSVJnbkFZZU1jSmk3U1QyZDRrbnZFZk9OclRaNkMv?=
- =?utf-8?B?M1g4RGhxUTJEMVd3YnlLOUhMQnloYWpZaWc0TDRDVE9raHExOUxJYUk4MkdL?=
- =?utf-8?B?enhCU3g2d3dxekZ4bCszSGRCdzlMMC91Zk5IQWdZczRlbjRNZ3oxaHZoVXNW?=
- =?utf-8?B?UXVDMm9LbTc4ZjdiMjhwVGI2YXpUVmRUQWl4TEFVaXdNYmhoZFVIMHFmLy9k?=
- =?utf-8?B?eFFNTVVhL2J5OGwrUVRBTjNUdEc1NVlKTU1hVGRVNVM0N0NYTzlTb255RnA4?=
- =?utf-8?B?SVQ2QXg3RmlmSDAwSkV6ekpsTGlXU1FEMjcveXNCNG9RNXVpUmUzYVp2a0Yy?=
- =?utf-8?B?TlZOZFF2Y0s5ajBwbFZpdy9HUi9VbWhoSUcrdlRDNWRrVU0ySzI1YlBnRUtn?=
- =?utf-8?B?KzBFTDFxZjhzRE9laVFsMmdqaGVBT0hkV3dGcXUvdFIxT1BPR3hiZUlROGM2?=
- =?utf-8?B?MG8vTVk3V0I1OWlTME9sVm1BRFhaL2RjVGhRdlRrZkVSMGdBN3RGb1plY0RI?=
- =?utf-8?B?Smt1YzlQL3pmdUFrVVRDKzIrakVQd0xzeFBNc1MwL0RPNU1oQXl4Y2JNSzNU?=
- =?utf-8?B?V1B3YkN0NG5yUEJCMHpLNUJuVXlHMlVVWCtYWGxzaFpTNU1PaE1Kbm1laXI4?=
- =?utf-8?B?ankrbmRIV25Wci9NdXhSWDdsdk1EKzNlWGIrVFZqUzkvZlVxM3VFRHpVL242?=
- =?utf-8?B?SEp3SjJCTkM2bmNHRklTT2U4aDRON2hwMTNacVhSaFR0a0dyTHQxRWtEOGtz?=
- =?utf-8?B?c2IzVGowVi9tY3c2emg2dFlDaWo0QVVTRko1TnEwemZHZlJRdG05T0w3L0tV?=
- =?utf-8?B?c1R3ZnBHRG1JUUhkMFROQzI4Nm4zdVV5RWsza1dJWWY0Mm1UKzN0eDF1eXV3?=
- =?utf-8?B?SEhRc3hpUmZXeUNiTklVcFh3WXpUNmhaNnk3djhkYjkrY25Kc0tBbTBvdlpq?=
- =?utf-8?B?ZnJCOXR1Zk9CcFRiM0pSOFZvKzJWYmFFMG4zMHBmeFd4L0lXbkdBcUQ2b2V1?=
- =?utf-8?B?T05PVnd2Yld3eEh2TXJkZ3F5ZWViMXdrd1pmUFpvZDhWMmRWNFRLbWZ6T05m?=
- =?utf-8?B?OHZ5OVoyejltRW9hNWRyTS9uWVdzNU1DR24wcWV2bVZkS1gwUGZHVzV1dER3?=
- =?utf-8?B?cE1Fakk4UUxidjV1UmIrVnlZZ1FuaVBGa0V1WWZVUkJVWXJUTWMxWlF6Wk1Z?=
- =?utf-8?B?V2hrWFlMcDFISXJ3Ym8vQmdhdTN2MVRqLzhqS0xISWpCZVJyZExNbVNjUk1m?=
- =?utf-8?B?cWU1eTBkaDl1emV5TEtub0RmQjNEMGxYemhVQTYybGZhTnRMQWZZaTIvRmJQ?=
- =?utf-8?Q?CGKVV4cDTI/PIctXDuAgJYYMM?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b1faf12-aeb6-4717-5437-08db367e2c21
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 09:06:13.8438
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M2gTGOwcUKhYIl+HGwoihHTcBhlAiqBYEMokM02MVO5dqhsYtbHl8aiRyl+gZ+of
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6689
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 1/3] ARM: dts: meson: Fix the UART compatible strings
+Content-Language: en-US, de-DE
+To:     =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20211227180026.4068352-1-martin.blumenstingl@googlemail.com>
+ <20211227180026.4068352-2-martin.blumenstingl@googlemail.com>
+ <20230405132900.ci35xji3xbb3igar@rcn-XPS-13-9305>
+ <fdffc009-47cf-e88d-5b9e-d6301f7f73f2@leemhuis.info>
+ <44556911-e56e-6171-07dd-05cc0e30c732@collabora.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+In-Reply-To: <44556911-e56e-6171-07dd-05cc0e30c732@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1680772014;6c814293;
+X-HE-SMSGID: 1pkLZy-0003aV-S5
+X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 06.04.23 um 10:49 schrieb Asahi Lina:
-> On 06/04/2023 17.29, Christian König wrote:
->> Am 05.04.23 um 18:34 schrieb Asahi Lina:
->>> A signaled scheduler fence can outlive its scheduler, since fences are
->>> independently reference counted.
->>
->> Well that is actually not correct. Schedulers are supposed to stay
->> around until the hw they have been driving is no longer present.
->
-> But the fences can outlive that. You can GPU render into an imported 
-> buffer, which attaches a fence to it. Then the GPU goes away but the 
-> fence is still attached to the buffer. Then you oops when you cat that 
-> debugfs file...
+[CCing the stable list as well as Greg and Sasha so they can correct me
+if I write something stupid]
 
-No, exactly that's the point you wouldn't ops.
+On 06.04.23 10:27, Ricardo Cañuelo wrote:
+> 
+> On 5/4/23 19:14, Thorsten Leemhuis wrote:
+>> Wait, what? A patch (5225e1b87432 ("ARM: dts: meson: Fix the UART
+>> compatible strings")) that was merged for v5.17-rc4 and is not in the
+>> list of patches that were in 4.14.312-rc1
+>> (https://lore.kernel.org/all/20230403140351.636471867@linuxfoundation.org/
+>> ) is meant to suddenly cause this? How is this possible? Am I totally on
+>> the wrong track here and misunderstanding something, or is this a
+>> bisection that went horribly sideways?
+> 
+> I didn't say this was introduced in 4.14.312-rc1, this has been failing
+> for a long time and it was merged for 4.14.267:
+> https://lwn.net/Articles/884977/
+> 
+> Sorry I wasn't clear before.
 
->
-> My use case does this way more often (since schedulers are tied to 
-> UAPI objects), which is how I found this, but as far as I can tell 
-> this is already broken for all drivers on unplug/unbind/anything else 
-> that would destroy the schedulers with fences potentially referenced 
-> on separate scanout devices or at any other DMA-BUF consumer.
+Ahh, no worries and thx for this. But well, in that case let me get back
+to something from your report:
 
-Even if a GPU is hot plugged the data structures for it should only go 
-away with the last reference, since the scheduler fence is referencing 
-the hw fence and the hw fence in turn is referencing the driver this 
-shouldn't happen.
+>>> KernelCI detected that this patch introduced a regression in
+>>> stable-rc/linux-4.14.y on a meson8b-odroidc1.
+>>> After this patch was applied the tests running on this platform don't
+>>> show any serial output.
+>>> 
+>>> This doesn't happen in other stable branches nor in mainline, but 4.14
+>>> hasn't still reached EOL and it'd be good to find a fix.
 
->
->> E.g. the reference was scheduler_fence->hw_fence->driver->scheduler.
->
-> It's up to drivers not to mess that up, since the HW fence has the 
-> same requirements that it can outlive other driver objects, just like 
-> any other fence. That's not something the scheduler has to be 
-> concerned with, it's a driver correctness issue.
->
-> Of course, in C you have to get it right yourself, while with correct 
-> Rust abstractions will cause your code to fail to compile if you do it 
-> wrong ^^
->
-> In my particular case, the hw_fence is a very dumb object that has no 
-> references to anything, only an ID and a pending op count. Jobs hold 
-> references to it and decrement it until it signals, not the other way 
-> around. So that object can live forever regardless of whether the rest 
-> of the device is gone.
+Well, the stable maintainers may correct me if I'm wrong, but as far as
+I know in that case it's the duty of the stable team (which was not even
+CCed on the report afaics) to look into this for two reasons:
 
-That is then certainly a bug. This won't work that way, and the timelime 
-name is just the tip of the iceberg here.
+* the regression does not happened in mainline (and maybe never has)
 
-The fence reference count needs to keep both the scheduler and driver 
-alive. Otherwise you could for example unload the module and immediately 
-ops because your fence_ops go away.
+* mainline developers never signed up for maintaining their work in
+longterm kernels; quite a few nevertheless help in situation like this,
+at least for recent series and if they asked for a backport through a
+"CC: <stable@" tag – but the latter doesn't seem to be the case here
+(not totally sure, but it looks like AUTOSEL picked this up) and it's a
+quite old series.
 
->
->> Your use case is now completely different to that and this won't work
->> any more.
->>
->> This here might just be the first case where that breaks.
->
-> This bug already exists, it's just a lot rarer for existing use 
-> cases... but either way Xe is doing the same thing I am, so I'm not 
-> the only one here either.
+>>> #regzbot introduced: 5225e1b87432dcf0d0fc3440824b91d04c1d6cc1
 
-No it doesn't. You just have implemented the references differently than 
-they are supposed to be.
+Thx for getting regzbot involved, but due to your usage it now considers
+this a mainline regression, as 5225e1b87432 is a mainline commit. As
+this only happens in a particular stable tree, it should use a commit id
+from there instead:
 
-Fixing this one occasion here would mitigate that immediate ops, but 
-doesn't fix the fundamental problem.
+#regzbot introduced: 23dfa42a0a2a91d640ef3fce585194b970d8680c
 
-Regards,
-Christian.
+(above line will make regzbot adjust this)
 
->
-> ~~ Lina
->
-
+Ciao, Thorsten
