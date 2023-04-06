@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EA86DA3DB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452866DA3DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240174AbjDFUng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
+        id S240190AbjDFUns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240193AbjDFUmz (ORCPT
+        with ESMTP id S240464AbjDFUna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:42:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D775BAF1E;
-        Thu,  6 Apr 2023 13:40:54 -0700 (PDT)
+        Thu, 6 Apr 2023 16:43:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AE1BDCF;
+        Thu,  6 Apr 2023 13:41:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3383364C45;
-        Thu,  6 Apr 2023 20:40:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E0A3C4339B;
-        Thu,  6 Apr 2023 20:40:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97C5564C3A;
+        Thu,  6 Apr 2023 20:41:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D5FC4339E;
+        Thu,  6 Apr 2023 20:40:53 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -71,16 +71,16 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 61/68] hwmon: tmp102: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:40:20 +0200
-Message-Id: <20230406204027.3012532-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 62/68] hwmon: tmp103: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:40:21 +0200
+Message-Id: <20230406204027.3012532-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,19 +93,19 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/tmp102.c | 2 +-
+ drivers/hwmon/tmp103.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/tmp102.c b/drivers/hwmon/tmp102.c
-index 2bf496a62206..e271556efe0b 100644
---- a/drivers/hwmon/tmp102.c
-+++ b/drivers/hwmon/tmp102.c
-@@ -141,7 +141,7 @@ static umode_t tmp102_is_visible(const void *data, enum hwmon_sensor_types type,
+diff --git a/drivers/hwmon/tmp103.c b/drivers/hwmon/tmp103.c
+index 56d5cbf36a45..d257bb91fc69 100644
+--- a/drivers/hwmon/tmp103.c
++++ b/drivers/hwmon/tmp103.c
+@@ -119,7 +119,7 @@ static umode_t tmp103_is_visible(const void *data, enum hwmon_sensor_types type,
  	}
  }
  
--static const struct hwmon_channel_info *tmp102_info[] = {
-+static const struct hwmon_channel_info * const tmp102_info[] = {
+-static const struct hwmon_channel_info *tmp103_info[] = {
++static const struct hwmon_channel_info * const tmp103_info[] = {
  	HWMON_CHANNEL_INFO(chip,
  			   HWMON_C_REGISTER_TZ),
  	HWMON_CHANNEL_INFO(temp,
