@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBBE6D8D89
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108AD6D8D92
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbjDFCgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 22:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S234855AbjDFCkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 22:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234923AbjDFCfE (ORCPT
+        with ESMTP id S234707AbjDFCkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 22:35:04 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E07883D0
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 19:35:02 -0700 (PDT)
+        Wed, 5 Apr 2023 22:40:14 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D76A1
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 19:40:14 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 90AFB604ED;
-        Thu,  6 Apr 2023 04:34:59 +0200 (CEST)
+        by domac.alu.hr (Postfix) with ESMTP id 52C4B604ED;
+        Thu,  6 Apr 2023 04:40:12 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680748500; bh=moyjB0vCzLhLbgsmt8YV49FqUNROO5qsChsvEK2tqEw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=m8PruuXOs0gkDxPuepXn7L3Sv+xfM980nDlvUrdRZOxqCSEWBIbCWaiWeVjGMpx1y
-         xzMrv2Pv2RAKG6g8HMbq+/J6rmCFSYr2ZfO6uHlq7UDvCb39JzgWBlQtX6lqZtqrVG
-         nfpn+t0SLSwM4yR9ONdJml0SmTWInXBTQxNSEi9XRf3+lpDRPXBuNXM6bfvEG1SQsF
-         HXBLadOWaNAVbSg/j+fO1EOs1BOusk6OOvu9ikptL1aeoeY0UI2210z8Ipo2I2ElYl
-         mhS+dxljAvfbGy3glKQ1Yh+FOeOutmXvIdhI6itZu9dGyi2hsS1m5Am9+78pCApyf5
-         l8+cw13kMmtJQ==
+        t=1680748812; bh=6iwS9N1f6yrv/fRw39XrCWuxjT36x9tRB2CPp+lKkJA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hArmBPqdR26Dnktm4X4gsuV7iRzcf0d4rwHyNceBMzE48kG0mhIaMhI5SzOG5oE4p
+         EYcohcFuOiEwPvJ9gM/Zxnd/bCMr5ysWkRQmnXzj+RquKimXbokyJCDUApAdxiSmQi
+         bzu6yjbhCkZJq+WZvGDGqPBS4+5rroghTxcvVXYUlGX6XP5Il137UKRNdC4NKYyD8v
+         /L3Z99Wg5KPC8hB4WHkh0LekBfTrkhU7+Smq2duZLRxtgSKtH04vtqgW3GXIdH1JP8
+         EyaRGFvlJ1+lT/jwhpgLfu95xuZtc5CBP0/VmdCJs6EQYYtz1pBlUgmh98d1ithVEZ
+         dWs1He3A7XGCg==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
         by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Jx_nZKwZw-ez; Thu,  6 Apr 2023 04:34:57 +0200 (CEST)
+        with ESMTP id YXHVEz7GHrb0; Thu,  6 Apr 2023 04:40:10 +0200 (CEST)
 Received: by domac.alu.hr (Postfix, from userid 1014)
-        id 31915604EF; Thu,  6 Apr 2023 04:34:57 +0200 (CEST)
+        id 291A5604EF; Thu,  6 Apr 2023 04:40:10 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680748497; bh=moyjB0vCzLhLbgsmt8YV49FqUNROO5qsChsvEK2tqEw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Wc6uKvlQ6W+whn6zqWuHrfayS68UrU/JRL5RRNrPm/RX11WI7HyCnrZkmoi15HTWo
-         n3ETlKN9S1Xhv9EfZn+eDzy3VOdV+SJvm3uvqW7wDtay6Wc2oYarPiscNf36DFqlNC
-         k2V7/4BFgx+lzns4c8xg8h4tKELZelvy1D6ad0f0L18n/TsXD7ppDF6Htq6UJ5ZICM
-         QAFbS/FBnIo0UpTN4uR+L0VtghXWuvkahSKpM3HLUa1y9tHsiAuAfAW62n6E0vHGYD
-         u+he7wi/sOGCYB9nEIzSLM2KOArtmApr2Wkhyc1WtRGVbGSfqGWaH3TskSmY03rU0S
-         2GZ6kTnneTBrA==
+        t=1680748810; bh=6iwS9N1f6yrv/fRw39XrCWuxjT36x9tRB2CPp+lKkJA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=k6/mxp6Jpy2wUOPN2PBz8o/HiaUMgegmeEJrcGbp4Q9rlJcyOw2QYBeZFsm5mWh0S
+         ouhEOuuyZOh7SJ0sNkWpcKnQbmU3YMaBaFDrFz867N/wUqPpVENPDgPhDs6+N2k/8P
+         vsVwgUb/bh0bb67FNaCvjv22Llomkx/bMQe4qiKW3OvIVVPkyRDNJuQQF6w2SGV/cj
+         R/90jI/OxkfyBCmCPc/zPDdzUJrRupHv85e1tK/tRtL6ao8YpGGMLYrT+NbH4sex8x
+         +Wy+MlYFCXUr6rVEGM6MyC8j2Lhfbd5KyUkwrnXxjwGEabgS/E6pXL7ZqqGfWmMdK0
+         f+XusOOXRYxDg==
 From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Russ Weight <russell.h.weight@intel.com>,
@@ -52,11 +52,13 @@ Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Zhengchao Shao <shaozhengchao@huawei.com>,
         Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>, Dan Carpenter <error27@gmail.com>
-Subject: [PATCH v3 1/2] test_firmware: Fix some racing conditions in test_fw_config locking.
-Date:   Thu,  6 Apr 2023 03:53:17 +0200
-Message-Id: <20230406015315.31505-1-mirsad.todorovac@alu.unizg.hr>
+        Dan Carpenter <error27@gmail.com>, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH v3 2/2] test_firmware: fix memory leak in trigger_batched_requests_store()
+Date:   Thu,  6 Apr 2023 03:53:19 +0200
+Message-Id: <20230406015315.31505-2-mirsad.todorovac@alu.unizg.hr>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230406015315.31505-1-mirsad.todorovac@alu.unizg.hr>
+References: <20230406015315.31505-1-mirsad.todorovac@alu.unizg.hr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -68,152 +70,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some functions were called both from locked and unlocked context, so the lock
-was dropped prematurely, introducing a race condition when deadlock was avoided.
+trigger_batched_requests_store() and trigger_batched_requests_async_store()
+both caused test_fw_config->reqs ptr to be overwritten with the new call to
+either function and the vzalloc() call, leaving the old memory object
+unreferenced.
 
-Having two locks wouldn't assure a race-proof mutual exclusion.
+Semantically the most simple and prudent solution seemed to be returning the
+-EBUSY errno in this case, rather than permitting a kernel memory leak.
 
-test_dev_config_update_bool_unlocked(), test_dev_config_update_u8_unlocked()
-and test_dev_config_update_size_t_unlocked() versions of the functions were
-introduced to be called from the locked contexts as a workaround without
-releasing the main driver's lock and causing a race condition, much like putc()
-and putc_unlocked() in stdio glibc library.
+However, this did fix closed only these obvious leaks, not all that are
+present in the test firmware loader.
 
-This should guarantee mutual exclusion and prevent any race conditions.
-
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
-Cc: Luis Chamberlain <mcgrof@kernel.org> 
-Cc: Russ Weight <russell.h.weight@intel.com> 
-Cc: Tianfei zhang <tianfei.zhang@intel.com> 
-Cc: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr> 
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr> 
-Cc: Zhengchao Shao <shaozhengchao@huawei.com> 
-Cc: Colin Ian King <colin.i.king@gmail.com> 
-Cc: linux-kernel@vger.kernel.org 
-Cc: Takashi Iwai <tiwai@suse.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Russ Weight <russell.h.weight@intel.com>
+Cc: Tianfei zhang <tianfei.zhang@intel.com>
+Cc: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Zhengchao Shao <shaozhengchao@huawei.com>
+Cc: Colin Ian King <colin.i.king@gmail.com>
+Cc: linux-kernel@vger.kernel.org
 Suggested-by: Dan Carpenter <error27@gmail.com>
+Suggested-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 ---
- lib/test_firmware.c | 52 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 38 insertions(+), 14 deletions(-)
+ lib/test_firmware.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 05ed84c2fc4c..272af8dc54b0 100644
+index 272af8dc54b0..b81f5621626e 100644
 --- a/lib/test_firmware.c
 +++ b/lib/test_firmware.c
-@@ -353,16 +353,26 @@ static ssize_t config_test_show_str(char *dst,
- 	return len;
- }
+@@ -919,6 +919,11 @@ static ssize_t trigger_batched_requests_store(struct device *dev,
  
--static int test_dev_config_update_bool(const char *buf, size_t size,
-+static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
- 				       bool *cfg)
- {
- 	int ret;
+ 	mutex_lock(&test_fw_mutex);
  
--	mutex_lock(&test_fw_mutex);
- 	if (kstrtobool(buf, cfg) < 0)
- 		ret = -EINVAL;
- 	else
- 		ret = size;
++	if (test_fw_config->reqs) {
++		rc = -EBUSY;
++		goto out_bail;
++	}
 +
-+	return ret;
-+}
+ 	test_fw_config->reqs =
+ 		vzalloc(array3_size(sizeof(struct test_batched_req),
+ 				    test_fw_config->num_requests, 2));
+@@ -1017,6 +1022,11 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
+ 
+ 	mutex_lock(&test_fw_mutex);
+ 
++	if (test_fw_config->reqs) {
++		rc = -EBUSY;
++		goto out_bail;
++	}
 +
-+static int test_dev_config_update_bool(const char *buf, size_t size,
-+				       bool *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = test_dev_config_update_bool_unlocked(buf, size, cfg);
- 	mutex_unlock(&test_fw_mutex);
- 
- 	return ret;
-@@ -373,7 +383,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
--static int test_dev_config_update_size_t(const char *buf,
-+static int test_dev_config_update_size_t_unlocked(
-+					 const char *buf,
- 					 size_t size,
- 					 size_t *cfg)
- {
-@@ -384,9 +395,7 @@ static int test_dev_config_update_size_t(const char *buf,
- 	if (ret)
- 		return ret;
- 
--	mutex_lock(&test_fw_mutex);
- 	*(size_t *)cfg = new;
--	mutex_unlock(&test_fw_mutex);
- 
- 	/* Always return full write size even if we didn't consume all */
- 	return size;
-@@ -402,6 +411,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
-+static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
-+{
-+	u8 val;
-+	int ret;
-+
-+	ret = kstrtou8(buf, 10, &val);
-+	if (ret)
-+		return ret;
-+
-+	*(u8 *)cfg = val;
-+
-+	/* Always return full write size even if we didn't consume all */
-+	return size;
-+}
-+
- static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- {
- 	u8 val;
-@@ -471,10 +495,10 @@ static ssize_t config_num_requests_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_u8(buf, count,
--				       &test_fw_config->num_requests);
-+	rc = test_dev_config_update_u8_unlocked(buf, count,
-+						&test_fw_config->num_requests);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
-@@ -518,10 +542,10 @@ static ssize_t config_buf_size_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_size_t(buf, count,
--					   &test_fw_config->buf_size);
-+	rc = test_dev_config_update_size_t_unlocked(buf, count,
-+						    &test_fw_config->buf_size);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
-@@ -548,10 +572,10 @@ static ssize_t config_file_offset_store(struct device *dev,
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_size_t(buf, count,
--					   &test_fw_config->file_offset);
-+	rc = test_dev_config_update_size_t_unlocked(buf, count,
-+						    &test_fw_config->file_offset);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
+ 	test_fw_config->reqs =
+ 		vzalloc(array3_size(sizeof(struct test_batched_req),
+ 				    test_fw_config->num_requests, 2));
 -- 
 2.30.2
 
