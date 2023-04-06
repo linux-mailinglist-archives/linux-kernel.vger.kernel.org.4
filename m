@@ -2,185 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392BF6DA1F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60FE16DA1FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbjDFTuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
+        id S238104AbjDFTvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:51:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238076AbjDFTuv (ORCPT
+        with ESMTP id S238068AbjDFTvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:50:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F6E4209;
-        Thu,  6 Apr 2023 12:50:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7338162C3D;
-        Thu,  6 Apr 2023 19:50:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C19C4339B;
-        Thu,  6 Apr 2023 19:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680810646;
-        bh=32/ERBuCPLg73Wp+3UJTiBuxgUhs/B+tC/Mg3mw9sJY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=mI5rb8Kqbexq5Sn0CO12HTVYh67g8aNr3I4vWR7XOtjcr/2qK8eLNe4N9yrReytaa
-         0yOep1u/DSfnBp9+6NLfRaBIxrMZxgnp7jyF5Bayn0bahU8w2wOdJ/95rwIW3sADPM
-         LyToKoIPQI6HgU7Fews06dS6yBdd6OE1bW68Msw2DBXRlyLI/2tn7QKdT/3vXRiqOz
-         YGSfra0HW+4hnWKkr97Tvrcdf/jprBkk53H57H8E5LyaqbGOlvuPuD0TRUspyiCe3e
-         pyrprNIIz1Xmk7JgGwWskIZjsG7uHgqEXr4VOS4AMXWTK/q/YgDfTGhIv8Ot6/gNM/
-         BFs+KFWxmBdCA==
-Date:   Thu, 6 Apr 2023 14:50:45 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Oliver O 'Halloran <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCHv2 pci-next 2/2] PCI/AER: Rate limit the reporting of the
- correctable errors
-Message-ID: <20230406195045.GA3729127@bhelgaas>
+        Thu, 6 Apr 2023 15:51:14 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EF99F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:51:13 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id y15so52209872lfa.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:51:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680810671;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EcXs2SGxl8yT2WI08MaUsydieqFeN/OG4gvIutKSaIM=;
+        b=uUgBhfwK1lYS/bWyIW7HZord9ImkwgZGvW6pk74imNsO407GInv9+MsCeOTfnjiLb0
+         ZZqD82AM9rEYP3sXTJ7V2sguRGQiXcUMuxVSSNlhFsSM5ICjzzawCyjAdml9cZkJP1K9
+         wrU359qabplJ4zwBrOdzjF76ho9Ww+AcVCpWaqnCbkSCHF/MijNEKvX0xNdg6r9zL0KU
+         qe92e5y+NWXljN6mOQxqmvX6NQp1dIqO4qLYVQiQy6Tfgq1N3xqeD9KDhKvzrJ/WuzfA
+         vi1JV5LCE6jE2ygnsy5saK5FPihAqUgJROiECa/djW6YGepKTZ9810Awgh/CbWZRh/O/
+         Gwpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680810671;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EcXs2SGxl8yT2WI08MaUsydieqFeN/OG4gvIutKSaIM=;
+        b=SElaHw4/E277HsaO2+QcmyurXB1HPidXC/qlZ1piW5zPyCrjPOD9KkvRx7f3H8w4tI
+         5HVJaqEvMjM2RzA2GszK0r9lQ48eIrTiTkiCKECsb5NoISOTQnUXkLHfMvcGwuDcFHzL
+         u1VjRafFIy9jU7zv7Fs/A73QlitkSlXixTRVIkto94Cx0Lpmd625vb6gRh9JdDvL1m9M
+         0Ilefga35Z2+NhLn0LMaivWyImUo6pRC6K0Ea/3jdJA5X4y55MMgrwptlV9x9sV5V7Wt
+         dzYWtmgAhSWy/qWFyLBpUGw5ew4niuTz3VC84J71eA50J+vb4oyLuJaLmLOr6ux2t+zH
+         Y63w==
+X-Gm-Message-State: AAQBX9crHJTn+7xAxPdCcEqpr8RcWqd2Sax2sm+x7VsoEtTAJ566TVvf
+        PclKZQ9sTdDhzO4H2tDB2xjZRFTjHRtIXnf6DbE=
+X-Google-Smtp-Source: AKy350YeQOs8GOsdJTBw35OhrEjXDHpv/rUNEqD962WbLnKUZUV5yuiX4L1S+GgeVXz3GaYOeQHh/Q==
+X-Received: by 2002:ac2:48b1:0:b0:4db:513b:6ef4 with SMTP id u17-20020ac248b1000000b004db513b6ef4mr90249lfg.11.1680810671327;
+        Thu, 06 Apr 2023 12:51:11 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id u11-20020ac248ab000000b004dc4af9089bsm390646lfg.231.2023.04.06.12.51.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 12:51:10 -0700 (PDT)
+Message-ID: <18eb5708-bf51-26c3-51a0-70a5069ffdbe@linaro.org>
+Date:   Thu, 6 Apr 2023 21:51:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317175109.3859943-2-grundler@chromium.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V3 5/5] arm64: dts: qcom: ipq9574: Add cpufreq support
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
+References: <20230406070032.22243-1-quic_devipriy@quicinc.com>
+ <20230406070032.22243-6-quic_devipriy@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230406070032.22243-6-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 10:51:09AM -0700, Grant Grundler wrote:
-> From: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> 
-> There are many instances where correctable errors tend to inundate
-> the message buffer. We observe such instances during thunderbolt PCIe
-> tunneling.
-> 
-> It's true that they are mitigated by the hardware and are non-fatal
-> but we shouldn't be spamming the logs with such correctable errors as it
-> confuses other kernel developers less familiar with PCI errors, support
-> staff, and users who happen to look at the logs, hence rate limit them.
-> 
-> A typical example log inside an HP TBT4 dock:
-> [54912.661142] pcieport 0000:00:07.0: AER: Multiple Corrected error received: 0000:2b:00.0
-> [54912.661194] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
-> [54912.661203] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001100/00002000
-> [54912.661211] igc 0000:2b:00.0:    [ 8] Rollover
-> [54912.661219] igc 0000:2b:00.0:    [12] Timeout
-> [54982.838760] pcieport 0000:00:07.0: AER: Corrected error received: 0000:2b:00.0
-> [54982.838798] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
-> [54982.838808] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001000/00002000
-> [54982.838817] igc 0000:2b:00.0:    [12] Timeout
 
-The timestamps don't contribute to understanding the problem, so we
-can omit them.
 
-> This gets repeated continuously, thus inundating the buffer.
+On 6.04.2023 09:00, Devi Priya wrote:
+> Add cpu freq nodes in the device tree to bump cpu frequency above 800MHz.
 > 
-> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-> Signed-off-by: Grant Grundler <grundler@chromium.org>
+> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 > ---
->  drivers/pci/pcie/aer.c | 42 ++++++++++++++++++++++++++++--------------
->  1 file changed, 28 insertions(+), 14 deletions(-)
+>  Changes in V3:
+> 	- No change
 > 
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index cb6b96233967..b592cea8bffe 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -706,8 +706,8 @@ static void __aer_print_error(struct pci_dev *dev,
->  			errmsg = "Unknown Error Bit";
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 58 +++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index 1f9b7529e7ed..cfef87b5fd22 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -6,6 +6,7 @@
+>   * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
 >  
->  		if (info->severity == AER_CORRECTABLE)
-> -			pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
-> -				info->first_error == i ? " (First)" : "");
-> +			pci_info_ratelimited(dev, "   [%2d] %-22s%s\n", i, errmsg,
-> +					     info->first_error == i ? " (First)" : "");
+> +#include <dt-bindings/clock/qcom,apss-ipq.h>
+>  #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+> @@ -37,6 +38,10 @@
+>  			reg = <0x0>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+> +			clock-names = "cpu";
+> +			operating-points-v2 = <&cpu_opp_table>;
+> +			cpu-supply = <&ipq9574_s1>;
+>  		};
+>  
+>  		CPU1: cpu@1 {
+> @@ -45,6 +50,10 @@
+>  			reg = <0x1>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+> +			clock-names = "cpu";
+> +			operating-points-v2 = <&cpu_opp_table>;
+> +			cpu-supply = <&ipq9574_s1>;
+>  		};
+>  
+>  		CPU2: cpu@2 {
+> @@ -53,6 +62,10 @@
+>  			reg = <0x2>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+> +			clock-names = "cpu";
+> +			operating-points-v2 = <&cpu_opp_table>;
+> +			cpu-supply = <&ipq9574_s1>;
+>  		};
+>  
+>  		CPU3: cpu@3 {
+> @@ -61,6 +74,10 @@
+>  			reg = <0x3>;
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+> +			clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+> +			clock-names = "cpu";
+> +			operating-points-v2 = <&cpu_opp_table>;
+> +			cpu-supply = <&ipq9574_s1>;
+>  		};
+>  
+>  		L2_0: l2-cache {
+> @@ -75,6 +92,47 @@
+>  		reg = <0x0 0x40000000 0x0 0x0>;
+>  	};
+>  
+> +	cpu_opp_table: opp-table-cpu {
+This is not sorted properly. It should probably come
+after memory alphabetically ('o' > 'm')
 
-I don't think this is going to reliably work the way we want.  We have
-a bunch of pci_info_ratelimited() calls, and each caller has its own
-ratelimit_state data.  Unless we call pci_info_ratelimited() exactly
-the same number of times for each error, the ratelimit counters will
-get out of sync and we'll end up printing fragments from error A mixed
-with fragments from error B.
-
-I think we need to explicitly manage the ratelimiting ourselves,
-similar to print_hmi_event_info() or print_extlog_rcd().  Then we can
-have a *single* ratelimit_state, and we can check it once to determine
-whether to log this correctable error.
-
->  		else
->  			pci_err(dev, "   [%2d] %-22s%s\n", i, errmsg,
->  				info->first_error == i ? " (First)" : "");
-> @@ -719,7 +719,6 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
->  {
->  	int layer, agent;
->  	int id = ((dev->bus->number << 8) | dev->devfn);
-> -	const char *level;
->  
->  	if (!info->status) {
->  		pci_err(dev, "PCIe Bus Error: severity=%s, type=Inaccessible, (Unregistered Agent ID)\n",
-> @@ -730,14 +729,21 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
->  	layer = AER_GET_LAYER_ERROR(info->severity, info->status);
->  	agent = AER_GET_AGENT(info->severity, info->status);
->  
-> -	level = (info->severity == AER_CORRECTABLE) ? KERN_INFO : KERN_ERR;
-> +	if (info->severity == AER_CORRECTABLE) {
-> +		pci_info_ratelimited(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
-> +				     aer_error_severity_string[info->severity],
-> +				     aer_error_layer[layer], aer_agent_string[agent]);
->  
-> -	pci_printk(level, dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
-> -		   aer_error_severity_string[info->severity],
-> -		   aer_error_layer[layer], aer_agent_string[agent]);
-> +		pci_info_ratelimited(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
-> +				     dev->vendor, dev->device, info->status, info->mask);
-> +	} else {
-> +		pci_err(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
-> +			aer_error_severity_string[info->severity],
-> +			aer_error_layer[layer], aer_agent_string[agent]);
->  
-> -	pci_printk(level, dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
-> -		   dev->vendor, dev->device, info->status, info->mask);
-> +		pci_err(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
-> +			dev->vendor, dev->device, info->status, info->mask);
-> +	}
->  
->  	__aer_print_error(dev, info);
->  
-> @@ -757,11 +763,19 @@ static void aer_print_port_info(struct pci_dev *dev, struct aer_err_info *info)
->  	u8 bus = info->id >> 8;
->  	u8 devfn = info->id & 0xff;
->  
-> -	pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
-> -		 info->multi_error_valid ? "Multiple " : "",
-> -		 aer_error_severity_string[info->severity],
-> -		 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
-> -		 PCI_FUNC(devfn));
-> +	if (info->severity == AER_CORRECTABLE)
-> +		pci_info_ratelimited(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
-> +				     info->multi_error_valid ? "Multiple " : "",
-> +				     aer_error_severity_string[info->severity],
-> +				     pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
-> +				     PCI_FUNC(devfn));
-> +	else
-> +		pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
-> +			 info->multi_error_valid ? "Multiple " : "",
-> +			 aer_error_severity_string[info->severity],
-> +			 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
-> +			 PCI_FUNC(devfn));
+Konrad
+> +		compatible = "operating-points-v2";
+> +		opp-shared;
 > +
->  }
->  
->  #ifdef CONFIG_ACPI_APEI_PCIEAER
-> -- 
-> 2.40.0.rc1.284.g88254d51c5-goog
-> 
+> +		opp-936000000 {
+> +			opp-hz = /bits/ 64 <936000000>;
+> +			opp-microvolt = <725000>;
+> +			clock-latency-ns = <200000>;
+> +		};
+> +
+> +		opp-1104000000 {
+> +			opp-hz = /bits/ 64 <1104000000>;
+> +			opp-microvolt = <787500>;
+> +			clock-latency-ns = <200000>;
+> +		};
+> +
+> +		opp-1416000000 {
+> +			opp-hz = /bits/ 64 <1416000000>;
+> +			opp-microvolt = <862500>;
+> +			clock-latency-ns = <200000>;
+> +		};
+> +
+> +		opp-1488000000 {
+> +			opp-hz = /bits/ 64 <1488000000>;
+> +			opp-microvolt = <925000>;
+> +			clock-latency-ns = <200000>;
+> +		};
+> +
+> +		opp-1800000000 {
+> +			opp-hz = /bits/ 64 <1800000000>;
+> +			opp-microvolt = <987500>;
+> +			clock-latency-ns = <200000>;
+> +		};
+> +
+> +		opp-2208000000 {
+> +			opp-hz = /bits/ 64 <2208000000>;
+> +			opp-microvolt = <1062500>;
+> +			clock-latency-ns = <200000>;
+> +		};
+> +	};
+> +
+>  	firmware {
+>  		scm {
+>  			compatible = "qcom,scm-ipq9574", "qcom,scm";
