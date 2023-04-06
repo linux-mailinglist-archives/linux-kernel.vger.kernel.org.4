@@ -2,117 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18D76D9263
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE1B6D9267
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236118AbjDFJMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S236170AbjDFJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjDFJMf (ORCPT
+        with ESMTP id S229613AbjDFJN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:12:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3FF1713
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:12:18 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 11:12:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680772337;
+        Thu, 6 Apr 2023 05:13:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595C24EED
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680772347;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tKMi4AOpolsZ6hs2KT6abDjYL0q5nXT/MGGIlmbLajk=;
-        b=Qoc/sGlrI/stiYe1y8zpyREHvbjCxM7dChDmkHKtmIEarpnkZyYcy0AhwVdUBJOiV7TirG
-        REGu2jYUuuuEtQl/1KWD/53gBehxHtojJ/+Wg0aR0EufLh0uXHnaJ6QOHZMHNnCkeP1Lw3
-        dlhrfMkhYt7LeTQ8K/PGXlQLlP0iQyC1RnVMOPkBmT03/s72m31LFi1WWi1JPdz7ptGl4P
-        tpAczdLggWKMI03nHdlBYAsgouZxcCMpHWjvm/kJbXiEW3GMUuOcDjRTcFSob0ZLtkxXta
-        QMTMqtT551tzLY4ly6BWVTihwpdrrmo1fw0uD/BcxTU/BM2CvEULYb66cJJlkg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680772337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tKMi4AOpolsZ6hs2KT6abDjYL0q5nXT/MGGIlmbLajk=;
-        b=krsz4s+o2vq3EZ4R7QZ9e/RY1eYBjT6mAEWKBXqRZFfHy4dYV/fvuy+2bMw2eZV9sYxWfI
-        IYkb/roE2cZMSkCA==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     Frederic Weisbecker <frederic@kernel.org>
-cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        bh=Sv2PpChimMYumCFtZaOaAxih1ECUzoRlTNbMO8Dqb/8=;
+        b=Jkwyc4Lq67oa21YjMIPX/DUU6w/tJ4GvV7lGelU5IuqR2GuM4SzO8rfoQqNEcU5JshFyrv
+        T7pbyOMo4yuK20i8FfnmU/R0nFVV8F83btHC+9EybH2hj6sSCfoH9jjRUiTJq02xXUDlfI
+        VY2zoeOF2ywf/qHJGl+7cigF8OtoeMg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-499-bbJHhxB2MTulRR-9lYLWOw-1; Thu, 06 Apr 2023 05:12:22 -0400
+X-MC-Unique: bbJHhxB2MTulRR-9lYLWOw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7FBCA38123B9;
+        Thu,  6 Apr 2023 09:12:21 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 84D22492C14;
+        Thu,  6 Apr 2023 09:12:19 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230405191915.041c2834@kernel.org>
+References: <20230405191915.041c2834@kernel.org> <20230405165339.3468808-1-dhowells@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v5 16/18] timer: Implement the hierarchical pull model
-In-Reply-To: <ZBmwScbfvq5HGSCJ@lothringen>
-Message-ID: <cd53a09a-7ac8-119a-d9cb-d2be48159f9@linutronix.de>
-References: <20230301141744.16063-1-anna-maria@linutronix.de> <20230301141744.16063-17-anna-maria@linutronix.de> <ZBmwScbfvq5HGSCJ@lothringen>
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH net-next v4 00/20] splice, net: Replace sendpage with sendmsg(MSG_SPLICE_PAGES), part 1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3629143.1680772339.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 06 Apr 2023 10:12:19 +0100
+Message-ID: <3629144.1680772339@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Mar 2023, Frederic Weisbecker wrote:
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-> On Wed, Mar 01, 2023 at 03:17:42PM +0100, Anna-Maria Behnsen wrote:
-> > +static bool tmigr_inactive_up(struct tmigr_group *group,
-> > +			      struct tmigr_group *child,
-> > +			      void *ptr)
-> > +{
-> > +	union tmigr_state curstate, newstate;
-> > +	struct tmigr_walk *data = ptr;
-> > +	bool walk_done;
-> > +	u32 childmask;
-> > +
-> > +	childmask = data->childmask;
-> > +	newstate = curstate = data->groupstate;
-> > +
-> > +retry:
-> > +	walk_done = true;
-> > +
-> > +	/* Reset active bit when child is no longer active */
-> > +	if (!data->childstate.active)
-> > +		newstate.active &= ~(u8)childmask;
-> > +
-> > +	if (newstate.migrator == (u8)childmask) {
-> > +		/*
-> > +		 * Find a new migrator for the group, because child group
-> > +		 * is idle!
-> > +		 */
-> > +		if (!data->childstate.active) {
-> > +			unsigned long new_migr_bit, active = newstate.active;
-> > +
-> > +			new_migr_bit = find_first_bit(&active, BIT_CNT);
-> > +
-> > +			/* Changes need to be propagated */
-> > +			walk_done = false;
-> 
-> Do you need to propagate the changes even if you found a new migrator for the
-> group?
+> Thanks for splitting off a smaller series!
+> My day is out of hours so just a trivial comment, in case kbuild bot
+> hasn't pinged you - this appears to break the build on the relatively
+> recently added page_frag_cache in google's vNIC (gve).
 
-No, you shouldn't require the walk then. Will think about it again, fix
-(and test) it.
+Yep.  I've just been fixing that up.
 
-> > +
-> > +			if (new_migr_bit != BIT_CNT)
-> > +				newstate.migrator = BIT(new_migr_bit);
-> > +			else
-> > +				newstate.migrator = TMIGR_NONE;
-> 
-> Thanks.
-> 
+I'll also break off the samples patch and that can go by itself.  Is there=
+ a
+problem with the 32-bit userspace build environment that patchwork is usin=
+g?
+The sample programs that patch adds are all userspace helpers.  It seems t=
+hat
+<features.h> is referencing a file that doesn't exist:
 
-Thanks,
+In file included from /usr/include/features.h:514,
+                 from /usr/include/bits/libc-header-start.h:33,
+                 from /usr/include/stdio.h:27,
+                 from ../samples/net/alg-hash.c:9:
+/usr/include/gnu/stubs.h:7:11: fatal error: gnu/stubs-32.h: No such file o=
+r directory
+    7 | # include <gnu/stubs-32.h>
+      |           ^~~~~~~~~~~~~~~~
+compilation terminated.
 
-	Anna-Maria
+Excerpt from:
+
+https://patchwork.hopto.org/static/nipa/737278/13202278/build_32bit/
+
+https://patchwork.kernel.org/project/netdevbpf/patch/20230405165339.346880=
+8-2-dhowells@redhat.com/
+
+David
 
