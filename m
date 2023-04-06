@@ -2,189 +2,634 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4F06D9C57
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9446D9C71
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbjDFPaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35646 "EHLO
+        id S239800AbjDFPbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjDFPao (ORCPT
+        with ESMTP id S239795AbjDFPbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:30:44 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858C5E61
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:30:43 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336Ei4TH015765;
-        Thu, 6 Apr 2023 15:30:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=H+19+kSVGvgiJNpRwl1wOoFFHyc2RxGqpgefdf+tr2A=;
- b=G5BKTc/o/pOBN1ZmvBfkb9WZWEdpseqdLUWsscuZUrQNWxXuqidq5eU+CtlJ1wPRUDFE
- 56ZxQFu2hZA2F8wzT2oOKEQIPTIPYcBz1LbNQxULowUAFSnoUVBG4Gk/t4BFd2Y4QCPO
- nlzpl21wdR1uusgXWj9tJV6I6bVV+IuXk9eiRbk9iEKmxmeMCbWD48hAHgh1ZUqftqsU
- rRDOD/Jkj4U5lKTH4T9d8eZj1OTtJgqe/PqTWe2ypRdKSM9DsmqcpeB9pGpiEsS0LbY9
- D6rom/jmvRC2Ls49JVY87Dcb0QYWa85+H99vF9BYWKVONX36xa5EYvu35ESmLd569UAA Hw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppbd4385f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Apr 2023 15:30:34 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 336FEJpG018360;
-        Thu, 6 Apr 2023 15:30:33 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2047.outbound.protection.outlook.com [104.47.56.47])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ppt29n084-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Apr 2023 15:30:31 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PGfLFA4yP5aoSYk70mny5ErdQa0ip6Un1Vu2cWHaJh5bW9pxM9k+wg1mQ/2qBZ4Ww09LLdlaJs3lGksYZaIQa9u4dheZdCxTch6w7CFkvxeKcUr2ggRyn/UwdOzOJIcwo0VHZeLS7KM7qbTn3GYShOUAKqx45J1hKzQA75/bRG03DApBtUl2NLTJ24du6MT0i99A5+rGwQgFfCNqMhiac3Sjn2fi5gVRAkzYSrV2G7w6Uc1Vt4/iRnT5W1O8eQLv3CR8ve5+lNX5y8thb0/fXFbZfukDDPyxzGNl6UdDirLiHRCNdv60n1IRugtOzdjdfwnowe8ud42SQT7BhXnEIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H+19+kSVGvgiJNpRwl1wOoFFHyc2RxGqpgefdf+tr2A=;
- b=EM1Jl8czo5AuIALT1wbeJI2/DKTA/a96fs3nl1zlZY8ajlpSm9odfKO5L9Ow8uqZgl+IoXHN2tfEJLkY90YD+fMZTCxwMNPOK4fUtQR1swIMu8bIYAUbxx+M3f0WyB/cW6JWcuhasGpk3sfr739Xb+79iwDTfHBW78SlMNYenaEXw24R+7mGYaBxMB86Qwe5yl1p+9j0VxslA0KMDo8nepEBD8N+ebnsgYa67XDfcdpRPzdz7heeNLcoWtEa/rlqqUc26DtXta4sK48zSe4WR82OsW2DWAYFSHbiq6ltEoQ8ndXfgUTm5xSSLB4HxByiVz0Ap0CVQRAFXpf/ZtoIGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 6 Apr 2023 11:31:13 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA62EA275
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:30:56 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-93abb185e13so17763066b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H+19+kSVGvgiJNpRwl1wOoFFHyc2RxGqpgefdf+tr2A=;
- b=hVwsJcCAdjJg7KYs9m0oJYH4Ie7TUuKSK1VgWbyLL/boYiRgrQYxlfOPeP1tMzpaHK1gn+JhE/ZU7p+3QnbyWRSPw8nGtA2kWz0aG9fZSD56zEpQ5vVwPm2Uqd/JI9XD6ZLoa5EfBpjDGEyeHKaGBlLUhuvqQEi9O+klC6PB6uk=
-Received: from CO1PR10MB4705.namprd10.prod.outlook.com (2603:10b6:303:96::11)
- by DM6PR10MB4252.namprd10.prod.outlook.com (2603:10b6:5:215::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Thu, 6 Apr
- 2023 15:30:18 +0000
-Received: from CO1PR10MB4705.namprd10.prod.outlook.com
- ([fe80::ab8d:2bb:c060:7d73]) by CO1PR10MB4705.namprd10.prod.outlook.com
- ([fe80::ab8d:2bb:c060:7d73%5]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
- 15:30:18 +0000
-Message-ID: <f063cfc8-805e-4d73-4c62-ff1bac4b1ed3@oracle.com>
-Date:   Thu, 6 Apr 2023 11:30:14 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3] sched/numa: Fix divide by zero for
- sysctl_numa_balancing_scan_size.
-Content-Language: en-US
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        peterz@infradead.org, vincent.guittot@linaro.org
-References: <20230404182915.2264557-1-chris.hyser@oracle.com>
- <ZC5tNK50QouEvX7Q@chenyu5-mobl1>
-From:   chris hyser <chris.hyser@oracle.com>
-In-Reply-To: <ZC5tNK50QouEvX7Q@chenyu5-mobl1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR04CA0012.namprd04.prod.outlook.com
- (2603:10b6:610:52::22) To CO1PR10MB4705.namprd10.prod.outlook.com
- (2603:10b6:303:96::11)
+        d=ffwll.ch; s=google; t=1680795055; x=1683387055;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qECDG2CoSD4DGInGZroKktXfB/rFny/+f6C8hC1Pdzk=;
+        b=NJOH73vp30l8eFRUUw/EVbNSvxTY+gGjN4rbxlUXvlsBurVWFit4Xam1t5AEtMP3Xv
+         YrYPzExKKoH217Qu6FoP6mdLK5evn9YTrzMxGfvediF41R1zs0b05oxMQWjFMSHfvPh7
+         NUubrHKrmQbZe+xszpXylmiHb0FiiT2SyD3vA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680795055; x=1683387055;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:mail-followup-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qECDG2CoSD4DGInGZroKktXfB/rFny/+f6C8hC1Pdzk=;
+        b=eamJYc7+GkasFhx2K3kRcmdPQ3i9ICeols91BScx3/R4B1HyFnBB3WRkoG746+LHFa
+         /wrkO8MjbRhGya/IeoQoEdG1ePVCHCzz9wgeOJhL69aFVDT4d3SQ4N/NTtqYorKuPhaB
+         D34P5TeP/S/hMug6TijgdKTl0/uGhjcm6qcY1FTaUi3YjUbJp36KFJy90xY/3a0+vw8A
+         M9baRmHjjuYcfkgAK3x3aoBzfnK3SGxrEDGCDCUxX2T7mQTsBH1VYgVpTiJ9/cmdP2nO
+         Wp+Vnom00Fj4mjjXQfAVLazk7aOS/EA562G8snUOeTChaaaD+YUre/msCfGVNnQ+OjE9
+         yNfA==
+X-Gm-Message-State: AAQBX9dLgiwmz/AEmX76CK5GOrb4A52CU1Q+5SfuT3GiXxzEM0uCcWst
+        ezjlb893qjM9ymAQ9l2ZN5pWog==
+X-Google-Smtp-Source: AKy350aH0QUf5+B5kC2F4exzo+QROi67UYXj90AkVkmAfsVBSZ0YN+o9exAWogH7HPY42uP0TL6raA==
+X-Received: by 2002:a05:6402:1e8e:b0:501:ea97:5192 with SMTP id f14-20020a0564021e8e00b00501ea975192mr5821976edf.4.1680795054718;
+        Thu, 06 Apr 2023 08:30:54 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id d20-20020a50cd54000000b005027dd7c403sm869650edj.66.2023.04.06.08.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 08:30:54 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 17:30:52 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Danilo Krummrich <dakr@redhat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Dave Airlie <airlied@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        andrey.grodzovsky@amd.com, tvrtko.ursulin@linux.intel.com,
+        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
+Message-ID: <ZC7lrOHKCbrbgS3R@phenom.ffwll.local>
+Mail-Followup-To: Asahi Lina <lina@asahilina.net>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Danilo Krummrich <dakr@redhat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Dave Airlie <airlied@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>, andrey.grodzovsky@amd.com,
+        tvrtko.ursulin@linux.intel.com,
+        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
+ <3004a2bf-e725-643e-82af-8a217784e796@redhat.com>
+ <013781a3-5abd-8c66-8a0a-dd36c9c487af@amd.com>
+ <28d10733-b217-7ccc-4b8c-54bdc8249234@amd.com>
+ <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
+ <24fe6e14-0d0a-f874-766d-e8d045d1e80e@asahilina.net>
+ <ZC6ab6LomidehGR3@phenom.ffwll.local>
+ <9500edc9-4e9d-9d64-b444-ea9523779700@asahilina.net>
+ <ZC7LCi0vqFOw3KL5@phenom.ffwll.local>
+ <30534307-24af-b6f8-ea9f-e4264997bf9d@asahilina.net>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4705:EE_|DM6PR10MB4252:EE_
-X-MS-Office365-Filtering-Correlation-Id: aad2e1da-bdec-4837-a7a7-08db36b3d3af
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KIWYI6VaVsOv0yRZJTDCTJLpLo8vfHG6GEQt26j/jdGIhNTrNiOQMOe/37RZv7qJKUDRn/2YW2gbN3mogcW3n1RMYz2F7GaL1dFYMX54nHz3ayy6c66rsnsYSt9lSng7kig7tyfzNIZ+prwbcet6Wo4k6q7dmG9+x8Uysbj7QnWc7b0mLgHc+9riXWHgQrfRJnG9sGYEgPh4oBWO5r6MPG1YYVYlbbhFEsA4sY1T24LTMXTHEyzhssAywEc+v9Kz/1l1b/IUYlrto5lT2NGROerYxfJk+xBqBiZsE7JADYj54iCzZTBEzN5mRuQUl6tHNiJ0zelKE2GNwxAqJlGgpYvHeIyM8N8G2Q+oPl9dQS9W25AsNZQRryjSh+UqFAn78KuUfEaA3RulpLkCasXXz2KrnRFQxKPt4q3RBfFSkar9f/xmuQjQrx/93H0N29luaP3pRr1uNLxOtCrGNYoUcC+Sg49ec/xfBQZFCXZ86PEOZvWFNIBlOTlDVfw3U00v1Jx5cmrbe6ZWY31bLLh7yH6Wy5b7YwNEraKjS1nVl5zZGeEWiHkfqc0Z/e6FhpcghgLiSMOREzycLsk5B7DL2yWODuAzyAhvuOndIqcQSeS53yEMWY9AmgToNPYW2Tebw2B2B+sQBAQnVJdpmUHXFg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4705.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(366004)(376002)(39860400002)(346002)(451199021)(66476007)(66946007)(8676002)(478600001)(41300700001)(66556008)(4326008)(316002)(8936002)(38100700002)(4744005)(6916009)(5660300002)(53546011)(2616005)(6666004)(186003)(6486002)(6506007)(26005)(6512007)(31696002)(86362001)(36756003)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bzRsaCtRYm83WjdWdlJpMzk5eW00OGtQWnl5VmloNDU3UXVxamROeDRMSXRH?=
- =?utf-8?B?RmwzUTAzN3dHQURqbkREdUdNcmxvbU5SeXc1ZlVXWWFYOVRlcU5hcnRsVE9J?=
- =?utf-8?B?QlI0UURNcGx4VURnMFpXdmN4NHpqNTlTQjhVUVFRbUJRVU5rNXp3SFQyM1Ji?=
- =?utf-8?B?SGpSMzVZTmlvWDQvYTZRVzd5RHZVc1B4UWhTb05jc3ZpWEx5R1AzWlJvTnFM?=
- =?utf-8?B?cmxRZUZmZE8rTGdRQjI2Qlp1L0JtTTNmdlJXOTZGTkRRaml4YW5sak85T3dv?=
- =?utf-8?B?bFlrQ3VnRWZqcnYvUlVTL0FnK1pBakp6VjQyTEtWL0ZqS2dvSUdXUTltS1Bl?=
- =?utf-8?B?VW83NE5XcjBMaHh6d2FzYUpSRk95eDlXSEF0b05hNTQzM3NvUkRQNUgwOUc3?=
- =?utf-8?B?UTdXYml5ZzI2Q29mdWY1UVFULzhFd0NjVTBZaitmNDZvTnFXbUhNV1B5c3Zr?=
- =?utf-8?B?VVNlR2drVUl1bkZKSXgwU0hNSEpYOGE5QnVXeGZDK1pYaGxLLzNHQmorOGNz?=
- =?utf-8?B?UzFwcGJtNENWUkZvV29QRlJmL0pJelBuT2s1N2FxeW5aallvUVdvVUJVdk9E?=
- =?utf-8?B?ZGgrbGVHdjFTRzRrMVpWU1ErcXVGQ21jRjcyQTlkdmxiZk1GalpUZ3REYW5Y?=
- =?utf-8?B?SzRVU1V3bmU4b2dKZDZNc3ZYdGZ4RFhoRFozaGpzMGZkV1BYdG1XNTZ1elhi?=
- =?utf-8?B?aUhXczh6bVQwa3RvbWVId05RY2poMklPZ3I4elpvZkxwWGtiRkRUQ3FaS0Zw?=
- =?utf-8?B?MG9pYWZBTnVVZzJkWWlBbjZnT0JXcW1sckxlMmEzSkRlQjUza1paRVVzSHZI?=
- =?utf-8?B?L1RrNFpucDkzK1Fmd3RUWThPb2h5NUd4c2Z1UXI3VHlWMjV6Y2ErQVhtV2VW?=
- =?utf-8?B?Sm1la1RGeWliblNkTVRVU1ladkNDaGdEY3hqZkR3L3o2cWRkVEg4UmJ0WjJx?=
- =?utf-8?B?RVlJRFlqZThNN0lRdmVjUXJmL3l0anU4QzNEVGF0QVlzUnNnMGx2elQ1eFB1?=
- =?utf-8?B?WVFnZUhNN2QxL2xwZEhwSjhZTmZtNmVFNldDMmYyOE9QbUFRd1UwOW96VDRC?=
- =?utf-8?B?aFYycDM1UG8weFhPckZQNmNMYVBjS1g2WmNGcE45aURmWlF0YU9IT083aWow?=
- =?utf-8?B?T05IL1czQ3VRcWRVUUdrZUFwL1N4TTJSQmh4YXVkZkVHdmxqWWNGejZqb3Vs?=
- =?utf-8?B?Y0JtSzBVUHFLbEtHUFo4Rm9KMVY4NGRsU0x5UHpCbWlURTNndjhETlMxNURG?=
- =?utf-8?B?YzRRMWM0dS9URVNkT3RaQTYzdXo4S0JpZ3Bld1FQNTh1dDdwamhNZTkrNFlW?=
- =?utf-8?B?VG51dVdFdkphb0ZkOTZTdUtTTDFDVWg3RHVuSVFBTjFKL3MzYlNidVJ6Y0VP?=
- =?utf-8?B?eVM4aXFlUmVCY2lkajVXV1BTcU1iV0NubGJ5UGt0bzc1TDRTd2creVp2Y3J6?=
- =?utf-8?B?Y0dZV0c2b1FxSjllcVpDVFZGaWdpWkpxV1UyVEJwMTJDbDViZXRsRTNXSnl0?=
- =?utf-8?B?cGhGdWovbUxQSnlyWk9oMXpwZytxRWJZK2NLY01Za2FxdVhkQU9GUUpsaXd0?=
- =?utf-8?B?WTk1M2M3NUFTMWZSek4zaUR2QWJpcG1nUUR4RmJjWlNGZlA2S3puSE0zTjdS?=
- =?utf-8?B?YWJXRzJFQUtiNnFveG5DelRwUmQ0ZnRDR29YL09URjZpYXN3VXdHVEgwaHNt?=
- =?utf-8?B?QzRGaXVJbjBYTFQ4WWQ1WWZVU3luWnAvYnQxcGdEL3FwcTBBaldrdDROZFdW?=
- =?utf-8?B?RjFYYTJmM1FadGoydEZjNG9zZHdBellEdEpqOE5pYWhDSEhMTjYxZ1RjV3h3?=
- =?utf-8?B?SU9UTkRwMW1IL0l1TE0valJuSUFOZkM1dTNVYjcwMzhIWmxrTXduRmhiMFht?=
- =?utf-8?B?dVpnYjJIVmFGaDBncFpvY3B5WVU1ZGk3Z3Rad2lFeTh5TkZPWVVkWGZTZ0pv?=
- =?utf-8?B?KzRkVWFOQ1YwLytLOVdhWGZlT2xtdW0yRjVwZVg5Q3hWWXVlU3pTckNwTW9n?=
- =?utf-8?B?bDh2OFZvZWJpclRpTVJnRUh3dXpaUGFyOHpadWhHbUh0QUlLbzBlRzBvZXl3?=
- =?utf-8?B?blA2dmpJb1ZGYWQyR1FMZTY0UStGQUkwaXlrbW1JanpseWx1ZG1FMS9HbFA4?=
- =?utf-8?B?S3RFRkpETjFTb1FZZmtDaVl6RzZxb0pQZkZ0dXdjaUZnQXpocjV0WERHNUl1?=
- =?utf-8?B?QXc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: va3MWOluo+V53IGVSWnDPgI2XTj7cqZobRU12LOiECx6lkRM46kQb2qgy0UZh3mR+WyVwExpZ56QkIC3uxLQOg8LBtdarnMz6yHRE2Sis7WBSgGFg7+PClla4/EnUCLc7ufrSPSVxJgTGsvdWKdDK6vTezIDQdniD1t5wkyxPrXc2NmnF+l0GPhlkQtHKeIJYlJZtMsTg4t4r1g/CMPzkMVDd3funxuXvfJ56JaWJeppioLs78VbB54JUu3apMiGSk8H1r4WbyN+fVbtYggnZ6SHcMNnxnPNbTP1GhDKzdWw1raz/CQlznrFlGzzLTvcT5YDrFxHWOBAoIahfhcJBjSPafPanuKU64iFvvMDIFCZvRONzfVYk3+QkgabuJ4n4n4Ncr9Q3gn7+tvwauW2WoioEKhAoxhYUAcA3GYt7leBdpXpgJehdIvlWhgqMWpJVeDOdSIlCneqonsAmHsbHePxKtDmTDj+yKFiorfPRkMFz84Uzt+OShLIH/6QyBcZWNFUKh1Pdu8SC+oXzdspVC2gh1SryrI3aZ3H0A7JgZc/nnYRE7J4vKiGO2/rzu1nDzAZIWdDFhwu3W1DZ/X2iFKu0dgZ+rpP0T7CcM/pza1/MSPmU+UphM71Z3zFutsB0xHGvLOj3Co24NM2Aa8mTUwtGl2KNbra1Z5RAT7yI7tnzaa5NUap2/yY7J7nhDzBzEAnQtcP6wSEGzlpwK7RuvEI5/ayElysFqv2AQgUmjUFfSJTCWFrO0WCJDNKGybTYY02w7lyeNsoiV40UNy0Wwal8dpL6ZTab+pKJZA+w2atkb+SyNFc8/ECRI7W/0EM4s7pyIfmYAcQkta2BMZVkWU31Ba3enqL4EMPRXPCrwiBbLRVUw5sKyEKFpcqx8WY
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aad2e1da-bdec-4837-a7a7-08db36b3d3af
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4705.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 15:30:18.3505
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bV4SEbjQtxBqmAx4cOH1LfrMRG+UqRUADLvx2EnUzKwAqgk+NMCM4EAGZdlrab2HJD3Wq8Y3sVK5TjkhwbicLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4252
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_09,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0
- malwarescore=0 adultscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304060138
-X-Proofpoint-ORIG-GUID: 34RAs_hYKmUUu8mKrN_OLd61QsY0DhGl
-X-Proofpoint-GUID: 34RAs_hYKmUUu8mKrN_OLd61QsY0DhGl
-X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <30534307-24af-b6f8-ea9f-e4264997bf9d@asahilina.net>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/23 02:56, Chen Yu wrote:
-> On 2023-04-04 at 14:29:15 -0400, chris hyser wrote:
->> Commit 6419265899d9 ("sched/fair: Fix division by zero
->> sysctl_numa_balancing_scan_size") prevented a divide by zero by using
->> sysctl mechanisms to return EINVAL for a sysctl_numa_balancing_scan_size
->> value of zero. When moved from a sysctl to a debugfs file, this checking
->> was lost.
->>
->> This patch puts zero checking back in place.
->>
-> Maybe add a tag
-> Fixes: 8a99b6833c88 ("sched: Move SCHED_DEBUG sysctl to debugfs")
-
-Yes, you are correct. I should have reviewed the patch submitter doc. 
-Also seems like a Cc: to stable is appropriate.
-
->> Signed-off-by: Chris Hyser <chris.hyser@oracle.com>
+On Thu, Apr 06, 2023 at 11:43:19PM +0900, Asahi Lina wrote:
+> On 06/04/2023 22.37, Daniel Vetter wrote:
+> > On Thu, Apr 06, 2023 at 09:21:47PM +0900, Asahi Lina wrote:
+> > > On 06/04/2023 19.09, Daniel Vetter wrote:
+> > > > On Thu, Apr 06, 2023 at 06:05:11PM +0900, Asahi Lina wrote:
+> > > > > On 06/04/2023 17.27, Daniel Vetter wrote:
+> > > > > > On Thu, 6 Apr 2023 at 10:22, Christian König <christian.koenig@amd.com> wrote:
+> > > > > > > 
+> > > > > > > Am 05.04.23 um 18:09 schrieb Luben Tuikov:
+> > > > > > > > On 2023-04-05 10:05, Danilo Krummrich wrote:
+> > > > > > > > > On 4/4/23 06:31, Luben Tuikov wrote:
+> > > > > > > > > > On 2023-03-28 04:54, Lucas Stach wrote:
+> > > > > > > > > > > Hi Danilo,
+> > > > > > > > > > > 
+> > > > > > > > > > > Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
+> > > > > > > > > > > > Hi all,
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Commit df622729ddbf ("drm/scheduler: track GPU active time per entity")
+> > > > > > > > > > > > tries to track the accumulated time that a job was active on the GPU
+> > > > > > > > > > > > writing it to the entity through which the job was deployed to the
+> > > > > > > > > > > > scheduler originally. This is done within drm_sched_get_cleanup_job()
+> > > > > > > > > > > > which fetches a job from the schedulers pending_list.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Doing this can result in a race condition where the entity is already
+> > > > > > > > > > > > freed, but the entity's newly added elapsed_ns field is still accessed
+> > > > > > > > > > > > once the job is fetched from the pending_list.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > After drm_sched_entity_destroy() being called it should be safe to free
+> > > > > > > > > > > > the structure that embeds the entity. However, a job originally handed
+> > > > > > > > > > > > over to the scheduler by this entity might still reside in the
+> > > > > > > > > > > > schedulers pending_list for cleanup after drm_sched_entity_destroy()
+> > > > > > > > > > > > already being called and the entity being freed. Hence, we can run into
+> > > > > > > > > > > > a UAF.
+> > > > > > > > > > > > 
+> > > > > > > > > > > Sorry about that, I clearly didn't properly consider this case.
+> > > > > > > > > > > 
+> > > > > > > > > > > > In my case it happened that a job, as explained above, was just picked
+> > > > > > > > > > > > from the schedulers pending_list after the entity was freed due to the
+> > > > > > > > > > > > client application exiting. Meanwhile this freed up memory was already
+> > > > > > > > > > > > allocated for a subsequent client applications job structure again.
+> > > > > > > > > > > > Hence, the new jobs memory got corrupted. Luckily, I was able to
+> > > > > > > > > > > > reproduce the same corruption over and over again by just using
+> > > > > > > > > > > > deqp-runner to run a specific set of VK test cases in parallel.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Fixing this issue doesn't seem to be very straightforward though (unless
+> > > > > > > > > > > > I miss something), which is why I'm writing this mail instead of sending
+> > > > > > > > > > > > a fix directly.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Spontaneously, I see three options to fix it:
+> > > > > > > > > > > > 
+> > > > > > > > > > > > 1. Rather than embedding the entity into driver specific structures
+> > > > > > > > > > > > (e.g. tied to file_priv) we could allocate the entity separately and
+> > > > > > > > > > > > reference count it, such that it's only freed up once all jobs that were
+> > > > > > > > > > > > deployed through this entity are fetched from the schedulers pending list.
+> > > > > > > > > > > > 
+> > > > > > > > > > > My vote is on this or something in similar vain for the long term. I
+> > > > > > > > > > > have some hope to be able to add a GPU scheduling algorithm with a bit
+> > > > > > > > > > > more fairness than the current one sometime in the future, which
+> > > > > > > > > > > requires execution time tracking on the entities.
+> > > > > > > > > > Danilo,
+> > > > > > > > > > 
+> > > > > > > > > > Using kref is preferable, i.e. option 1 above.
+> > > > > > > > > I think the only real motivation for doing that would be for generically
+> > > > > > > > > tracking job statistics within the entity a job was deployed through. If
+> > > > > > > > > we all agree on tracking job statistics this way I am happy to prepare a
+> > > > > > > > > patch for this option and drop this one:
+> > > > > > > > > https://lore.kernel.org/all/20230331000622.4156-1-dakr@redhat.com/T/#u
+> > > > > > > > Hmm, I never thought about "job statistics" when I preferred using kref above.
+> > > > > > > > The reason kref is attractive is because one doesn't need to worry about
+> > > > > > > > it--when the last user drops the kref, the release is called to do
+> > > > > > > > housekeeping. If this never happens, we know that we have a bug to debug.
+> > > > > > > 
+> > > > > > > Yeah, reference counting unfortunately have some traps as well. For
+> > > > > > > example rarely dropping the last reference from interrupt context or
+> > > > > > > with some unexpected locks help when the cleanup function doesn't expect
+> > > > > > > that is a good recipe for problems as well.
+> > > > > > > 
+> > > > > > > > Regarding the patch above--I did look around the code, and it seems safe,
+> > > > > > > > as per your analysis, I didn't see any reference to entity after job submission,
+> > > > > > > > but I'll comment on that thread as well for the record.
+> > > > > > > 
+> > > > > > > Reference counting the entities was suggested before. The intentionally
+> > > > > > > avoided that so far because the entity might be the tip of the iceberg
+> > > > > > > of stuff you need to keep around.
+> > > > > > > 
+> > > > > > > For example for command submission you also need the VM and when you
+> > > > > > > keep the VM alive you also need to keep the file private alive....
+> > > > > > 
+> > > > > > Yeah refcounting looks often like the easy way out to avoid
+> > > > > > use-after-free issue, until you realize you've just made lifetimes
+> > > > > > unbounded and have some enourmous leaks: entity keeps vm alive, vm
+> > > > > > keeps all the bo alives, somehow every crash wastes more memory
+> > > > > > because vk_device_lost means userspace allocates new stuff for
+> > > > > > everything.
+> > > > > 
+> > > > > Refcounting everywhere has been working well for us, so well that so far all
+> > > > > the oopses we've hit have been... drm_sched bugs like this one, not anything
+> > > > > in the driver. But at least in Rust you have the advantage that you can't
+> > > > > just forget a decref in a rarely-hit error path (or worse, forget an incref
+> > > > > somewhere important)... ^^
+> > > > > 
+> > > > > > If possible a lifetime design where lifetimes have hard bounds and you
+> > > > > > just borrow a reference under a lock (or some other ownership rule) is
+> > > > > > generally much more solid. But also much harder to design correctly
+> > > > > > :-/
+> > > > > > 
+> > > > > > > Additional to that we have some ugly inter dependencies between tearing
+> > > > > > > down an application (potential with a KILL signal from the OOM killer)
+> > > > > > > and backward compatibility for some applications which render something
+> > > > > > > and quit before the rendering is completed in the hardware.
+> > > > > > 
+> > > > > > Yeah I think that part would also be good to sort out once&for all in
+> > > > > > drm/sched, because i915 has/had the same struggle.
+> > > > > > -Daniel
+> > > > > > 
+> > > > > 
+> > > > > Is this really a thing? I think that's never going to work well for explicit
+> > > > > sync, since the kernel doesn't even know what BOs it has to keep alive for a
+> > > > > job... I guess it could keep the entire file and all of its objects/VMs/etc
+> > > > > alive until all of its submissions complete but... ewww.
+> > > > > 
+> > > > > Our Mesa implementation synchronously waits for all jobs on context destroy
+> > > > > for this reason, but if you just kill the app, yeah, you get faults as
+> > > > > running GPU jobs have BOs yanked out from under them. Kill loops make for a
+> > > > > good way of testing fault handling...
+> > > > 
+> > > > You wind down the entire thing on file close? Like
+> > > > - stop all context
+> > > > - tear down all context
+> > > > - tear down all vm
+> > > > - tear down all obj
+> > > > 
+> > > > Just winding things down in a random order and then letting gpu fault
+> > > > handling sort out the mess doesn't strike me as particularly clean design
+> > > > ...
+> > > The idea is that object drop order generally doesn't matter since things
+> > > that care about other things should own them or hold references to them
+> > > anyway, so the dependency graph of all the resources is encoded directly in
+> > > the type hierarchy instead of having to open-code a "cleanup procedure"...
+> > > which then invariably leads to corner cases when you have to do the same
+> > > thing, or part of it, for error handling.
+> > > 
+> > > This has been working *very* well! It solves the issue of error handling
+> > > since error handling just unwinds whatever was done to that point naturally
+> > > in Rust (? operator), so there's practically no open-coded error handling
+> > > code anywhere. The first time we ran into OOMs (Xonotic with no Mesa texture
+> > > compression support yet, on 8GB machines on max settings...) the whole thing
+> > > just worked. OOM killer went rampant and shmem doesn't account stuff to
+> > > processes properly of course, but all the error paths, allocation errors,
+> > > etc... all of that just worked, first try, across dozens of error paths that
+> > > had never been tested before, not a single oops or deadlock or leak or
+> > > anything in sight. Similarly, yesterday I did manage to run into drm_sched
+> > > failing to create kthreads (the scaling issue Matthew's series fixes)... and
+> > > still, that was fine. That happens on queue creation so it just bubbled up
+> > > to Mesa as a failed ioctl and things kept moving along nicely otherwise. I
+> > > even have nice ergonomic XArray semantics so that you can reserve a new
+> > > slot, allocate some object, then populate it, and if you don't (because you
+> > > errored out in between) it automatically gets freed again without explicit
+> > > cleanup code.
+> > > 
+> > > And it also means that I can encode *firmware* resource dependencies in the
+> > > type system (with Rust lifetimes attached to *GPU* pointers even - it's a
+> > > bit dodgy how it's done but it works well in practice). Since it is
+> > > absolutely critical that the firmware objects respect their lifetimes or
+> > > else the whole thing crashes irrecoverably, this is the only way I feel it's
+> > > been even practical to write this driver and not be a firmware crash mess.
+> > > Of course we still get some crashes due to flaws in how I understand the
+> > > firmware, but it's always things I don't know, not things I accidentally
+> > > messed up in some corner case code path we don't normally hit, since I just
+> > > don't have to think about that as long as the hierarchy is right.
+> > > 
+> > > I actually don't know exactly what precise order things get dropped in for
+> > > this reason! I could find out, and it's predictable in Rust, what I mean is
+> > > that thinking about a total order like that is not necessary for correctness
+> > > as long as I got the ownership right. Off the top of my head though, it goes
+> > > very roughly like this:
+> > > 
+> > > - On File close, all the GEM objects get closed (DRM core does this)
+> > > - This triggers explicit drops of all mappings in those GEM objects owned by
+> > > that File (identified by unique ID, this is the one annoying circular
+> > > reference thing I mentioned in the other thread...). At this point the GPU
+> > > probably faults but we don't care. *
+> > > - The File itself gets dropped, which drops the XArrays for queues and
+> > > (UAPI) VMs
+> > >    - UAPI VMs getting dropped doesn't do much other than unmap a single dummy
+> > > object. The underlying MMU VM is refcounted and jobs hold references. This
+> > > also drops the userspace VM object allocator used for kernel-managed
+> > > allocations, but that too is internally refcounted and won't go away until
+> > > all of its allocations do.
+> > > - Queues get dropped, which mostly drops a bunch of references to things
+> > > that no longer matter, along with the scheduler and scheduler entity.
+> > > - The entity already has a reference to the scheduler in the abstraction (to
+> > > meet the soundness requirement), so the entity necessarily goes first. That
+> > > kills all not yet scheduled jobs, freeing any resources they might use.
+> > > - Then the scheduler gets torn down, and with my other patch that logically
+> > > kills all in-flight jobs, detaching their hardware fences and dropping the
+> > > job objects. This... still doesn't do much other than drop some references
+> > > that we don't care about.
+> > > - At this point, if any jobs are in flight, their firmware objects and all
+> > > of the type hierarchy that goes with them is still alive, as well as the
+> > > firmware queues they're in and the Rust objects representing them, the VMs
+> > > they use, the Events they have been allocated...
+> > > - Jobs complete (successfully or fault), then when complete get popped off
+> > > of the Rust-side queue objects that represent the firmware queues.
+> > > - When any given FW queue is empty, it relinquishes its assigned firmware
+> > > event ID. That causes the event system to drop its owner reference to it,
+> > > which means the queue itself gets dropped (since the UAPI Queue that also
+> > > held a reference is gone). That then also drops a reference to what I call
+> > > the GpuContext.
+> > > - To avoid deadlocks, completed job objects are freed in another thread
+> > > (ugly hack right now, should be done better in the future). Eventually as
+> > > that happens, any resources they reference are dropped, including some
+> > > shared ones that are logically tied to the scheduler/queues, references to
+> > > the MMU VM address space, references to the VM slot that address space is
+> > > assigned to, objects allocated out of user VM space, everything. Refcounts
+> > > everywhere for anything shared, direct ownership of child structures for
+> > > anything that isn't (work buffers, firmware command lists, etc.). I once
+> > > tried to make a slide of the references and pointers involved in just the
+> > > vertex half of a single GPU job and... even just that was quite interesting.
+> > > - When the last job completes, that drops the last reference to the VM slot,
+> > > which means the backing VM is logically detached from the GPU MMU (this is
+> > > lazy though, it's still there in practice).
+> > > - When the last firmware queue is dropped for a logical queue/sched/etc
+> > > (which means no more jobs are running at the GPU for that context), that
+> > > drops the last reference to the GpuContext. That also gets shoved into
+> > > another thread context for cleanup to avoid deadlocks with fault recovery.
+> > > - When that is finally cleaned up, a firmware command is sent to invalidate
+> > > the GpuContext. I'm still figuring out what that does and what the lifetime
+> > > rules are here (this is the only explicit invalidation command that exists),
+> > > but as of yesterday I know that at the very least we need to keep hold of
+> > > any Tiled Vertex Buffer associated with it until after inval, so that now
+> > > has a reference to it that gets dropped after the firmware acknowledges the
+> > > invalidation (unless it's a non-render-capable Queue, then no TVB
+> > > necessary).
+> > > - When the Buffer gets dropped, that frees both its backing memory and
+> > > (virtual) page list structures, which are in user VM space, as well as some
+> > > kernel firmware objects.
+> > > - If things have happened in the order I listed here, those will be the last
+> > > allocations in the two user VM space heap object allocators, so those now
+> > > get dropped, which drops the mappings of their backing GEM objects,
+> > > unmapping them from the MMU VM page tables.
+> > > - Those mappings will now be the last references to the actual MMU VM
+> > > object, so that it gets destroyed (the lazy detach comes into effect here,
+> > > PT base address is removed from the VM context base table, full ASID
+> > > invalidate, etc.), which with it drops the IoPgTable that backs it, which
+> > > frees the page tables.
+> > > - Then finally the GEM objects backing the userspace allocators get dropped
+> > > as well, which will be the last reference to them, so those get freed.
+> > 
+> > Thanks for the write up!
+> > 
+> > Maybe some more fundamental thoughts on this entire endeavour:
+> > 
+> > I think one thing that's causing a lot of friction that in C drivers at
+> > least some of these things are done with implied/borrowed references. If
+> > you want an absolute shocking example, the gpu crash dump sampling for a
+> > driver that does dynamic memory management can be pretty epic:
+> > 
+> > - the timeout handler is guaranteed (well if the driver didn't screw up
+> >    things, which mostly boils down to call drm_sched_stop() before it
+> >    analyzes anything at all wrt gpu hw state) to hold up the drm_job
+> >    completion fence
+> > 
+> > - this fence is (at submit ioctl time) installed into all the dma_resv
+> >    fence containers for the vm (single shared dma_resv for all vm-private obj for
+> >    efficiency, all shareable gem_bo have their own dma_resv)
+> > 
+> > - the memory manager guarantees that it will not free (or even move in the
+> >    case of ttm) the buffer while a fence is unsingalled. ttm does this by
+> >    delaying the free as needed, i915-gem and some of the others did this by
+> >    trying to hold onto extra references. the latter causes way too much
+> >    problems with reference dropping in my experience looking at a decade of
+> >    drivers getting details wrong here.
+> > 
+> > - which means the crash dump handler can have a plain list of gem_bo to
+> >    record, without any references, because they wont go away before it
+> >    finishes.
+> > 
+> > - more fun even, you could directly sample the memory locations at ioctl
+> >    submit time, and even when ttm moves the buffers around in a pipelined
+> >    fashion: your timeout handler wont run before all the jobs to move the
+> >    buffer into the right location have completed, and it will not unblock
+> >    any subsequent move or eviction that's already queued up. Which means
+> >    even the raw memory address will point at the right stuff.
+> > 
+> > This is just one example. drm and the kernel is full of these borrowed
+> > reference tricks with often cross through the entire stack, so rust has to
+> > be able to cope. The sales pitch of rust, and really the reason it's the
+> > first non-C language in linux, is that with the borrow semantics, it can
+> > validate this stuff at compile time, and allow kernel drivers to continue
+> > playing these tricks to outright avoid any and all refcounting needs. If
+> > rust doesn't deliver and we need to have all the refcounting again to make
+> > rust drivers safe I think that'll cast serious doubts on the viability of
+> > rust-in-linux.
 > 
-> Other than that,
-> Tested-by: Chen Yu <yu.c.chen@intel.com>
+> Right, so the thing is Rust can encode *some* borrowed reference semantics
+> at compile time, namely what Rust lifetimes can represent. But you can't
+> encode arbitrarily complex "I can guarantee this is alive right now because
+> reasons A,B,C,D" semantics in the type system. For arbitrarily complex rules
+> like that, you need to either refcount, or use unsafe and raw pointers. For
+> example, in my driver I use raw pointers in the event slot acquisition to
+> point to the actual u32s that hold the event values, because I can guarantee
+> through the semantics of that module that those will always be valid
+> pointers to the live array (and never alias too), even though I can't encode
+> that in the type system. Throwing around refcounted pointers to the whole
+> object there would be silly, so instead I just used unsafe and left a SAFETY
+> comment explaining why it's safe.
 > 
-> thanks,
-> Chenyu
+> In the end, unsafe isn't any worse than C (it's strictly better, you still
+> get the borrow checker and type safety and everything else), so I don't
+> think Rust not being able to solve all of these problems is really a good
+> argument against Rust. The idea, and where Rust really shines, is that even
+> when you have to do this you are *containing* the unsafe code within places
+> where it can be audited and explained. And when the majority of the code is
+> safe, and when you strive to make the interfaces between modules safe, and
+> when you limit the ability of cross-module interactions to break safety (Not
+> eliminate! In abstractions yes, and in userspace Rust this is expected, but
+> within a driver it gets more interesting and I can spend a long time talking
+> about how safety boundaries in drivers are complicated and a bit porous...)
+> you end up reducing the chances of safety bugs by orders of magnitude
+> anyway.
+> 
+> And it worked, right? I have ~128 unsafe{} blocks in the driver and still no
+> oopses in production ^^
+> 
+> But (big but!) the idea with safe Rust abstractions (the stuff in rust/) is
+> that they absolutely do need to be safe (unless marked unsafe, but that
+> sucks...), because then implicitly you are documenting the safety/lifetime
+> requirements in the type system and that's hugely beneficial for common
+> code. It means users of those APIs don't have to think about the internals
+> and safety invariants and all that. Drivers still have to worry about
+> internal safety, but they don't have to worry about messing up the interface
+> with common code. That's also very beneficial for allowing refactoring of
+> that common code without worrying that you'll break users.
+> 
+> So technically we could just give up and mark the drm_sched abstraction
+> unsafe and actually document all of these safety requirements (which is the
+> other side of the coin - if you want to use unsafe, you get to write the
+> docs, lawyer style! That's the rule! No getting by with vague docs with
+> dozens of unexplained corner cases!). But, honestly, I think that would be
+> kind of sad... drm_sched really should have a self-contained, safe API, and
+> I just don't see a good reason why it can't other than it not having been
+> designed with this in mind initially. It was ported out of a driver, and not
+> that long ago, right? That explains a lot, because it means it is probably
+> leaking all of these assumptions from that driver's internal design... and
+> it probably doesn't help that the people maintaining it all seem to be from
+> that particular company either. It's easy to have tunnel vision if you
+> mostly work on one use case...
 
-Thank you. Changes made and sent as v4.
+Nah I don't want to give up. What I expect to happen is that rust
+abstractions will need to be a lot more opionated about how to do certain
+things. And then the abstractions together with the C code provide the
+guarantee that the rust driver is safe.
 
--chrish
+> > Now there's definitely going to be hilarious bugs uncovered on the C side,
+> > and semantics that need to be clarified, but I think enabling scary tricks
+> > like the above one is what'll fundamentally make or break rust in linux.
+> 
+> For the specific case of crash dumps and stop-the-world stuff like that...
+> yeah, those are some of the worst things to fit in otherwise nice Rust
+> designs because they violate layering left and right. I don't have a good
+> answer for how exactly I'd do this in my driver yet. I'm sure it *can* be
+> done, and there's always unsafe if needed, since at that point you're
+> dealing in driver code and that's a lot less contentious than an abstraction
+> being unsafe itself...
+> 
+> My initial plan for FW crash dumps is going to be fairly easy because I only
+> really care about dumping the firmware object arena and maybe actual
+> firmware .data, and that's all GPU-global anyway, and it won't be hard to
+> poke my way into the global allocators to take a snapshot of their backing
+> GEM objects. There's a global alloc lock involved there which is all I need
+> for basic consistency and getting the locking right for allocs as far as
+> deadlock risk is something I need to care about for other reasons anyway. It
+> won't guarantee that nobody else is *writing* to any of that memory while I
+> take a snapshot, but I don't really care about that since it would be rare
+> and should be limited to newly-allocated memory the firmware doesn't yet
+> care about anyway.
 
+So this is were crash dump capturing gets fun. If that lock covers any
+memory allocations, you can't take it in the tdr path.
+
+The simplest way out is to make context crashes permanent and bail out the
+entire crash capturing to a worker (which needs gem bo references) that
+doesn't block anything (so not even guilty/victim reporting to userspace)
+and can take locks and capture things at leasure.
+
+Only works when userspace obeys the promise of not overwriting the memory
+meanwhile, which is what you get for vk_device_lost.
+
+> In the end, nothing stops you from having piles of raw pointer backdoors,
+> having a rule that "this is only used for the crash handler", and then
+> having a couple pages of SAFETY comments in that bit of the code with a big
+> "here be dragons" disclaimer. It won't make that particular chunk of code
+> any less likely to have bugs than the equivalent C code, but at least the
+> rest of the driver isn't affected, and hopefully you can at least avoid
+> unsafe in some subsets of the troublesome part too ^^
+> 
+> There's also a flipside to this though: Who cares if you take extra
+> redundant GEM BO references in the crash handler due to API safety? After
+> all, it's not a perf-sensitive codepath. Of course, if safety causes you to
+> add refcounting at all where none would otherwise be needed, or to have to
+> do more of it in hot paths, or to introduce extra locking that could cause
+> deadlocks that's a different story. But I think the thought process is very
+> different between Rust and C here, when writing drivers. In C, it takes
+> extra work to be safe, so chances are most people won't write defensive code
+> like that even where there is no performance reason not to, since it's
+> outright easier to read code the less safe it is. Rust isn't like that! Most
+> safety is encoded in types (automatic reference counting is a big one here),
+> so it doesn't take any extra effort to be safe, while it usually does to do
+> it unsafely (unsafe {} blocks if nothing else). So then you write safe code
+> by default... which yes, might do some extra refcounting and locking and
+> stuff, but you can always optimize that later, profiler in hand. Once you
+> know you need unsafe for real perf reasons, by all means, and I expect to
+> end up doing a round of profiling in the future and have to poke some holes
+> in things too. But until then... safe is just easier and, well, safer!
+
+The problem with extra refcounting is dropping them. There's endless
+amounts of fun where dropping a kref at the wrong time goes boom (wrong
+context, holding wrong locks). Or then you delay it and userspace gets
+annoyed (task_work for struct file is fun), so just unconditionally
+stuffing everything you free into a worker isn't always the right thing
+either.
+
+And rust makes this extremely easy, all the Drop stuff isn't visible
+anywhere in the code, and you'll never screw up the error paths. So my
+take is a bit that unless you've excluded a borrow based design as
+impossible already, sprinkling Arc<T> all over isn't really solid either.
+
+> > In the end it'll be lots of detail work, and I really hope it all works
+> > out.
+> > 
+> > > I probably got more than one thing wrong there, and there's layers of
+> > > complexity I glossed over, but that's the rough idea ^^
+> > > 
+> > > * If we need to fix this then we're going to need some kind of signal from
+> > > the DRM core that this is happening and it's not normal user-triggered GEM
+> > > closing, and it's going to be interesting... it also means we need some kind
+> > > of mechanism to transfer responsibility over those mappings to all in-flight
+> > > jobs themselves, because normally userspace is strictly responsible for all
+> > > mappings in an explicit sync VM bind style world, and now we're adding a
+> > > special case where we freeze the state of the VM until all in-flight jobs
+> > > are done when the File goes away instead of eagerly freeing things. That's a
+> > > very weird departure from how the whole thing normally works, so if we
+> > > really want that I'm going to have to think of how to do it reasonably. It
+> > > might be easier once we implement the full VM map range tracking which will
+> > > likely flip the VM<->GEM object relationship around a bit.
+> > 
+> > See my other reply for you how can untangle this potentially on the vm_id
+> > subthread. I think in general rust Drop is awesome, but there's cases
+> > where we'll have to be more explicit at unwinding things. At least in the
+> > linux kernel the general consensus is that too much refcounting is a
+> > maintenance disaster because you end up dropping the final reference in
+> > all kinds of really bad places (interrupt handlers, while holding the
+> > wrong locks, holding them too long).
+> 
+> Yeah, that's one I've run into, it's why I have a few places with subtle
+> code to avoid that and more things will need cleaning up too...
+> 
+> This is something that I expect will become Rust compile-time magic in the
+> future though! There's already been talk about being able to prove that
+> things are only ever called from the right execution context. Then if you
+> have a Drop of a reference whose underlying type is not safe to Drop from
+> IRQ context in IRQ context, the compiler complains. It's not clear exactly
+> what this will look like yet, but it's an active topic of discussion. And
+> that's another nice thing about Rust: we can actually help drive the
+> evolution of the language, much faster than with C!
+> 
+> > Somewhat related I also expect that
+> > rust drivers will need to have quite a few manual drop calls to
+> > artificially limit lifetime, because sometimes when you drop things the
+> > wrong way round (e.g. drop the refcount while still having the mutex guard
+> > live) results in deadlocks.
+> 
+> Yup! ^^
+> 
+> drivers/gpu/drm/asahi$ grep -r core::mem::drop | wc -l
+> 17
+> 
+> Rust is magic but it won't magically solve all of our problems!
+> 
+> (I don't think all of those 17 are necessary, some are just places where I
+> wanted to be explicit/safer or bound critical sections more, but a few are
+> definitely there to avoid deadlocks.)
+> 
+> Simple Arc<Mutex<T>> usage isn't a problem though, you can't drop the
+> refcount without dropping the guard first there (lifetimes prevent it). The
+> tricky bit is when you have to call into *another* agent that owns a
+> reference to the same object, after having done something while holding the
+> mutex. Then you really need to drop the guard first.
+
+Yeah it's the cross object/module/crate fun for refcount dropping.
+
+The trouble is that refcount bugs are substantially worse to validate at
+runtime than locking. Locking isn't optional, so generally all you need to
+do is enable lockdep and run through all the codepaths and you're good.
+Sometimes that's a bit too tough and you can insert fake lockdep contexts
+to tie things together like fs_reclaim or dma_fence_signalling, but
+by&large it's not that hard to validate at runtime to a reasonable
+confidence.
+
+Reference dropping otoh isn't, because usually userspace holds onto a
+reference and drops the final reference through a syscall in a very well
+defined place. Now you could just add a fake lockdep context to pretend
+that any kref_put could be the final one, but generally this results in a
+lot of false positives (because of borrowed or implied references
+protecting you from the final reference drop). Which means unless you've
+gone through the trouble of proving that your final kref_put/rust Arc
+drops are never in a bad place (which means pretty much uncovering the
+entire Drop hierarchy mentally in every place) you have some potentially
+really nasty problems at hand.
+
+And unlike rust in C all the _put() calls are at least explicitly staring
+at you and reminding you that you're piling up a mountain that might come
+crashing down in an avalanche :-) Ofc you're also all but guaranteed to
+have screwed up an error path, but that's at least a runtime validation
+solveable problem nowadays with kasan + code coverage checks (not that
+we're any good at it tbh, syzkaller has clearly opinions to the contrary
+here).
+
+> > There's going to be lots of fun here :-)
+> 
+> It's already been fun and I don't expect it to get any less fun ^^
+
+Oh that's for sure.
+
+> 
+> ~~ Lina
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
