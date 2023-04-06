@@ -2,139 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8856D9F62
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9186D9F67
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239939AbjDFSAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
+        id S239978AbjDFSAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDFSAL (ORCPT
+        with ESMTP id S240005AbjDFSAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:00:11 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586A746B3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:00:10 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id lj25so3367790ejb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:00:10 -0700 (PDT)
+        Thu, 6 Apr 2023 14:00:33 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07888A55
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:00:30 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id g187-20020a2520c4000000b00b74680a7904so39527167ybg.15
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680804009;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9Xne4lIPjlc/fTh61AeKasmY2sOq4ClDJX9BFxZXN+E=;
-        b=IdmDahkrTwo+nifjZPEpz7e5zvlQ7bHgdpvqJC9bYCw9ZujTt2u0BfYuFV862T4CW5
-         SBynKw5uQb5mwQe0JX5lB1Bv6vyWcVzG3OPZf0+yvvKFKDoji1ZM/lN6RIa19QSg3ewj
-         dzW8LBa6T7Iyjs/nlCdaj6ZHgXXROs24+T5WIAj3fT7/eKMYauximglQT1KQU0UOpdhI
-         9JrpJvflV3H3dqxV7PJGPdxrqdJ4KYW07UqJPo/eY8bNKmxuwplGbIk1ZKqFTtLZW0v5
-         wtST7FBCKaUi/KzlCpOItXC2TTAUB1Zq1b24UbxSJ6Udd7Cr0biEWm1xxffjXPwBGubi
-         e5Ww==
+        d=google.com; s=20210112; t=1680804030;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VDS5rumLEKu0toA0jNax9C97QASzXEN0xosq/hqUcKk=;
+        b=CLHp/4LQ7cu0IlMz/tUDjOygvHYPKVYiB8FwL4w8bhDtDhIa9dxl9L/Pazrf5jIgT0
+         7MOcr0SeL4N0PlTEL9yM5vGjgimD1/kVH7iYNBjExuacOhNCbjwPjpxa9Kq8JJBkoOYF
+         f5o7f/IcMMUr3SVZjKUhUKc5Q/48j5XKeQ/iD0LDCbpcN95z2fWgPR3fNqUOuId5VUlP
+         C6mJu3ablyiRuVhqwTToK8cP0712xUEksd3cqwnZML8nCFU08V+4cWHRLAGYTLiLiVjQ
+         NFYN0RmgnSOFtJDpS85cryrNBhN+hspZIRDiYkIJCz7PY+QDm2K+2VQahoAHADTUXayu
+         tvMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680804009;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Xne4lIPjlc/fTh61AeKasmY2sOq4ClDJX9BFxZXN+E=;
-        b=766JPUazyX1dSAaKo2Emh+BdgLjC/m4IbiGWOfuw/IC69d4FOjQHmdbh7Nh//eIqhN
-         GIo1t6VMa0gT9lod/pZg0a3D6ksF/PVNhS9KtAffIRzUxcgUdVCeNNYJCLoq4/wsRocH
-         3INajkySsxX4FaLYHyalYW+/VTIwqNX7NSAmHdSUDEYUTGqYsXTzO8Je2T+GFKJYW9aU
-         MHduad+5hMWH43IQvX2Wjv8Q4qfFFDg20BrrBeT3fwRv6x2MkF6F3YTdS/UadRmL3iAw
-         ZkT8NIyJokedy/aAtcdgk2tH90omgj2P22UMrFgJVvGWwvSdNMlEVaJYZ3PCXuRaUK+e
-         pMIQ==
-X-Gm-Message-State: AAQBX9fJcYdGZDdl9MbLlfD6b8Fz/BDl1iFX20nrDgYLP6G/9JP+HEIm
-        MT57PHwOJ3ckoY9VW5FOpDh7GA==
-X-Google-Smtp-Source: AKy350asbxrZB74TExOJyPQOGm7zEWKMo9EeGOdcZrR92f4xLUCHZp4F607ZDh+AjW+gT1VXJSc9rQ==
-X-Received: by 2002:a17:907:6d99:b0:926:8f9:735c with SMTP id sb25-20020a1709076d9900b0092608f9735cmr6678777ejc.32.1680804008791;
-        Thu, 06 Apr 2023 11:00:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id hg18-20020a1709072cd200b0092a59ee224csm1082209ejc.185.2023.04.06.11.00.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:00:08 -0700 (PDT)
-Message-ID: <f6c8586f-a5d1-875f-b2c0-7871112cf1b1@linaro.org>
-Date:   Thu, 6 Apr 2023 20:00:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V2 3/3] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
-Content-Language: en-US
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        kernel <kernel@dh-electronics.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230406154900.6423-1-cniedermaier@dh-electronics.com>
- <20230406154900.6423-3-cniedermaier@dh-electronics.com>
- <5478133e-7772-1db9-3473-1ec86fa2aae2@linaro.org>
- <a7fcfe695623491da96639079eb14c8f@dh-electronics.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a7fcfe695623491da96639079eb14c8f@dh-electronics.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1680804030;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VDS5rumLEKu0toA0jNax9C97QASzXEN0xosq/hqUcKk=;
+        b=WwJXsFP36zM741XiVmjMoBYrhUgvHNWg6VNYxktERIYzA0mgpUPQULqS+j+t3H9g5S
+         A0eTNPaCi2+F1hu0IJRt4azNV2WB27tserd13yc+Qi3K9+AlFtgPiZ35/YON/HAFTEM3
+         cUdwi4oIBnpgwzDAv93YCPNPn6bxfKXrnCD5wEhBDN3VgJxHXPWIZWebqseMzb7Znax3
+         4toFLnNzUfMhVXFG/CgQZKufvw/Pzgv55wvLOk7p0p4ZXsC/wj1MthF26n1CCeiUx5IN
+         WFPaFDdZuQstwslNihLvKvYMaWqI+rCL3PmV745ygI9Wx5dzDvbDuVB97ROL4ijGMPQE
+         91ag==
+X-Gm-Message-State: AAQBX9d4GbstOAvsaJHzhx5UuShPTtncJHGzvRfJoTwpVYkLvmPYUjRk
+        abg0lfu+wD8gpSlRcFCLl2hj5+J+QCo=
+X-Google-Smtp-Source: AKy350aEt/9xw/P6awsqc/MFIc2ugA4jFk9M3SOO/AURFcgzkBTwDYMSeBJvn0v3OnTQA6YMDJf7xqHDExc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:d8d0:0:b0:b6e:d788:eba7 with SMTP id
+ p199-20020a25d8d0000000b00b6ed788eba7mr139746ybg.6.1680804030152; Thu, 06 Apr
+ 2023 11:00:30 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 11:00:28 -0700
+In-Reply-To: <03504796e42badbb39d34b9e99c62ac4c2bb9b6f.camel@intel.com>
+Mime-Version: 1.0
+References: <20230405234556.696927-1-seanjc@google.com> <20230405234556.696927-3-seanjc@google.com>
+ <03504796e42badbb39d34b9e99c62ac4c2bb9b6f.camel@intel.com>
+Message-ID: <ZC8IsP5ehaJXQOnu@google.com>
+Subject: Re: [PATCH 2/2] KVM: VMX: Inject #GP, not #UD, if SGX2 ENCLS leafs
+ are unsupported
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 19:54, Christoph Niedermaier wrote:
-
->>> +++ b/arch/arm/boot/dts/imx6ull-dhcor-maveo-box.dts
->>> @@ -0,0 +1,361 @@
->>> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
->>> +/*
->>> + * Copyright (C) 2023 DH electronics GmbH
->>> + * Copyright (C) 2023 Marantec electronics GmbH
->>> + *
->>> + * DHCOM iMX6ULL variant:
->>> + * DHCR-iMX6ULL-C080-R051-SPI-WBT-I-01LG
->>> + * DHCOR PCB number: 578-200 or newer
->>> + * maveo box PCB number: 525-200 or newer
->>> + */
->>> +
->>> +/dts-v1/;
->>> +
->>> +#include "imx6ull-dhcor-som.dtsi"
->>> +
->>> +/ {
->>> +     model = "DH electronics i.MX6ULL DHCOR on maveo box";
->>> +     compatible = "marantec,imx6ull-dhcor-maveo-box", "dh,imx6ull-dhcor-som",
->>> +                  "fsl,imx6ull";
->>> +
->>> +     aliases {
->>> +             /delete-property/ mmc0; /* Avoid double definitions */
->>
->> I don't understand it. What is "double definition" of aliases?
+On Thu, Apr 06, 2023, Huang, Kai wrote:
+> On Wed, 2023-04-05 at 16:45 -0700, Sean Christopherson wrote:
+> > Per Intel's SDM, unsupported ENCLS leafs result in a #GP, not a #UD.
+> > SGX1 is a special snowflake as the SGX1 flag is used by the CPU as a
+> > "soft" disable, e.g. if software disables machine check reporting, i.e.
+> > having SGX but not SGX1 is effectively "SGX completely unsupported" and
+> > and thus #UDs.
 > 
-> Otherwise I end up like this:
-> mmc0 = &usdhc1;
-> mmc1 = &usdhc2;
-> mmc2 = &usdhc2;
-> 
-> Is "Ensure unique allocation" a better comment here?
-> 
->>
->>> +             /delete-property/ mmc1;
->>> +             mmc2 = &usdhc2; /* eMMC should be mmc2 */
->>
->> Why? How is this labeled on the board (physically or on schematics)? If
->> you answer here "for booting", then the answer is NAK. Don't add
->> software policies to Devicetree.
-> 
-> The name in the schematics is "SD2".
+> If I recall correctly, this is an erratum which can clear SGX1 in CPUID while
+> the SGX flag is still in CPUID?
 
-Answering also to above - then likely the aliases should be dropped from
-SoM. I doubt that Som calls it SD1 and your board SD2...
+Nope, not an erratum, architectural behavior.
 
-Best regards,
-Krzysztof
+> But I am not sure whether this part is relevant to this patch?  Because SDM
+> already says ENCLS causes #UD if SGX1 isn't present.  This patch changes
+> "unsupported leaf" from causing #UD to causing #GP, which is also documented in
+> SDM.
 
+I wanted to capture why SGX1 is different and given special treatment in the SDM.
+I.e. to explain why SGX1 leafs are an exception to the "#GP if leaf unsupported"
+clause.
+
+> > Fixes: 9798adbc04cf ("KVM: VMX: Frame in ENCLS handler for SGX virtualization")
+> > Cc: Binbin Wu <binbin.wu@linux.intel.com>
+> > Cc: Kai Huang <kai.huang@intel.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/vmx/sgx.c | 15 +++++++++------
+> >  1 file changed, 9 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
+> > index f881f6ff6408..1c092ab89c33 100644
+> > --- a/arch/x86/kvm/vmx/sgx.c
+> > +++ b/arch/x86/kvm/vmx/sgx.c
+> > @@ -350,11 +350,12 @@ static int handle_encls_einit(struct kvm_vcpu *vcpu)
+> >  
+> >  static inline bool encls_leaf_enabled_in_guest(struct kvm_vcpu *vcpu, u32 leaf)
+> >  {
+> > -	if (!enable_sgx || !guest_cpuid_has(vcpu, X86_FEATURE_SGX))
+> > -		return false;
+> > -
+> > +	/*
+> > +	 * ENCLS #UDs if SGX1 isn't supported, i.e. this point will be reached
+> 
+> Why #UDs instead of #UD?  Is #UD a verb?
+
+Heh, it is now ;-)  I can reword to something like
+
+	/*
+	 * ENCLS generates a #UD if SGX1 isn't supported ...
+	 */
+
+if my made up grammar is confusing.
+
+> > +	 * if and only if the SGX1 leafs are enabled.
+> > +	 */
+> 
+> Is it better to move "ENCLS #UDs if SGX1 isn't supported" part to ...
+> 
+> >  	if (leaf >= ECREATE && leaf <= ETRACK)
+> > -		return guest_cpuid_has(vcpu, X86_FEATURE_SGX1);
+> > +		return true;
+> >  
+> >  	if (leaf >= EAUG && leaf <= EMODT)
+> >  		return guest_cpuid_has(vcpu, X86_FEATURE_SGX2);
+> > @@ -373,9 +374,11 @@ int handle_encls(struct kvm_vcpu *vcpu)
+> >  {
+> >  	u32 leaf = (u32)kvm_rax_read(vcpu);
+> >  
+> > -	if (!encls_leaf_enabled_in_guest(vcpu, leaf)) {
+> > +	if (!enable_sgx || !guest_cpuid_has(vcpu, X86_FEATURE_SGX) ||
+> > +	    !guest_cpuid_has(vcpu, X86_FEATURE_SGX1)) {
+> >  		kvm_queue_exception(vcpu, UD_VECTOR);
+> 
+> ... above here, where the actual code reside?
+
+My goal was to document why encls_leaf_enabled_in_guest() unconditionally returns
+true for SGX1 leafs, i.e. why it doesn't query X86_FEATURE_SGX1.  I'm definitely
+not opposed to also adding a comment here, but I do want to keep the comment in
+encls_leaf_enabled_in_guest().
