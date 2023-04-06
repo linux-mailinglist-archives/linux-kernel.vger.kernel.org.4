@@ -2,160 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5A56D9795
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C76B6D9788
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjDFNCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S236723AbjDFNC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbjDFNCq (ORCPT
+        with ESMTP id S229568AbjDFNCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:02:46 -0400
-Received: from mail-wr1-x463.google.com (mail-wr1-x463.google.com [IPv6:2a00:1450:4864:20::463])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD501902B
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:02:39 -0700 (PDT)
-Received: by mail-wr1-x463.google.com with SMTP id m2so39443785wrh.6
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:02:39 -0700 (PDT)
+        Thu, 6 Apr 2023 09:02:23 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A7D83E1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:02:22 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id w4so37409087plg.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680786158;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
-        b=nINqXF48TmWh8tUDIa9jsFNlnAshXBVNu6+nFuoPBC32YqKpMNMC7ls2YFFOmEkaXw
-         akdcSOvhOtuymRuQc30aqFrkB1YVDbPeN1cGn36igFJrYri9D1652SMD15zhKPzJtfl8
-         Vj5+fz1doXqLs4MeJpGtXLSdll14RWHnGYOvw=
+        d=bytedance.com; s=google; t=1680786142;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IfVjKlL+j9HlDI7Ywy3orPIREWTrRC6HkOIMTjgyE5A=;
+        b=Qq/l6ip9dMiziIBWzW4ToFmAn29Ri9O4CLmtTYSR9Rz/boVf5FqBfGnqMOcOXdl871
+         OQ7dEnKcBtY3M2meImEZvKvOfNu5wgcXc0gK7l8UePg0fbk2zzDD2tLyswobRChXf9sz
+         A/8E0beNTT2d+D33WGr5dnvPoI3tTfvpEQKVKB7+wLndb6fqivDB9ogculITxgCfgcka
+         VQAp/K5HfnUnuB57LNJBCVU6rDivf48a099xNNbdkQD9gvaSg+HM5hld30/hI+eeqo/y
+         wGBxYExdN2uDvwnfyGVIYgKegzvoh1HRUajMaxoFVUSPb/bCVCJjcd8BHWltUMtqfOF6
+         H+XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680786158;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
-        b=gYwJOt20xpnfJbAHylZTVAYI8lZxSJzA041fyFkVdTb/NmueOem6+Bf2Y5qtO/dIY1
-         3nKtTP8pOiG0R14zL16RkPE6D+F77HbEtieHYxjmQYFEdHTKy7Ky4FD+gQd1MNA+PMBg
-         T2Ue/OF9d1XoPfvYNz+BwKoaKHPj7kvWP9vOHz0sViyDQq3ryWbNA278DABfKKpczGzp
-         q35dOy3qg2U5LjCKkNQjasJMvqeeFV2/RigrlGae1bN1ScRiu/HblU01YG3FoPy+txFB
-         TrdNEupEAyGh+K3YzhK6plf5NnVeELJGZvY9FZdg4zrGEk8/XrapEC47kix+NQ/9iHCJ
-         tBqg==
-X-Gm-Message-State: AAQBX9dP5heYTH62DxkWWQ+YkeWSj0YNEcO/w71Hhe+CB+6ThEJq3lbN
-        zXQKBWC+YjQ+cKMyll+S69FBYxtgUM1ECfF1tMBLCepvvw+m
-X-Google-Smtp-Source: AKy350amCx/ZHN/ecGGK/EGkFHzUbsahyywUB+wgapgCN80VOuOIxFCr8iRxuHuNXV6z4WWbWZU0PIJfcs6h
-X-Received: by 2002:adf:cd82:0:b0:2d8:908c:8fa0 with SMTP id q2-20020adfcd82000000b002d8908c8fa0mr7080509wrj.9.1680786157994;
-        Thu, 06 Apr 2023 06:02:37 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id s3-20020adfeb03000000b002e62dd5b3d6sm65625wrn.3.2023.04.06.06.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 06:02:37 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/3] selftests: xsk: Add tests for 8K and 9K frame sizes
-Date:   Thu,  6 Apr 2023 15:02:05 +0200
-Message-Id: <20230406130205.49996-4-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406130205.49996-1-kal.conley@dectris.com>
-References: <20230406130205.49996-1-kal.conley@dectris.com>
+        d=1e100.net; s=20210112; t=1680786142;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IfVjKlL+j9HlDI7Ywy3orPIREWTrRC6HkOIMTjgyE5A=;
+        b=HJvXMsnJ2pRw2ciDHtLkmEWtD/F4tmH7e/sEIV8AP9iWfF6NaJZ9C+Km40xkzQVZqP
+         j3qzXMZB2svAjkadUxOQvQfBqjR8RLKV82hCFGWJowfjSOFvwV5rXz1ePuSqFFz8teYp
+         AmcwihD9RlnWcTrikhh9xHWGDl7aZ6hPiND5PnzWpUm9NI8Ur8M7imBXj1M0tBcsWYBy
+         JSral1u1F+bzKN684kP92s3g8OyUxB8NO8pXLIIirOJWoakC+ogyMAJzgV4+sKTbJHHh
+         BL5GL8HUJG8bw0bY9CuyHw5wX8TOzksbPz0hkISb3Q5Khmzwq8ihMWzeHiszgOugzyOg
+         Abpg==
+X-Gm-Message-State: AAQBX9ftYYi63t8bqrFC6TBOMHmAogbQe2i3USfdsTJfYhZrAGag1dJx
+        +GGaP+O85DUjiOJQetTmf02qoQ==
+X-Google-Smtp-Source: AKy350ZwFTIV4Y+QNBBDhz/z2ExgzhB65rArbxoEyAk3ePPx4PYa3m3riib4Ts7ft3askmwpj08IDQ==
+X-Received: by 2002:a05:6a20:7b11:b0:d7:34a1:85b9 with SMTP id s17-20020a056a207b1100b000d734a185b9mr2944043pzh.7.1680786141802;
+        Thu, 06 Apr 2023 06:02:21 -0700 (PDT)
+Received: from [10.2.117.253] ([61.213.176.13])
+        by smtp.gmail.com with ESMTPSA id t23-20020aa79397000000b00627eac32b11sm1311597pfe.192.2023.04.06.06.02.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 06:02:21 -0700 (PDT)
+Message-ID: <cc77d706-7baf-951b-13a5-3470c2b1bba9@bytedance.com>
+Date:   Thu, 6 Apr 2023 21:02:17 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: Re: [PATCH v2] mm: oom: introduce cpuset oom
+Content-Language: en-US
+To:     Waiman Long <longman@redhat.com>
+Cc:     rientjes@google.com, linux-kernel@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>, cgroups@vger.kernel.org
+References: <20230404115509.14299-1-ligang.bdlg@bytedance.com>
+ <ZCw0sR6IqYa5Es7Q@dhcp22.suse.cz>
+ <342c1967-8a68-275c-042e-765d5993157c@redhat.com>
+From:   Gang Li <ligang.bdlg@bytedance.com>
+In-Reply-To: <342c1967-8a68-275c-042e-765d5993157c@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests:
-- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-- UNALIGNED_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+On 2023/4/5 01:24, Waiman Long wrote:
+> 
+> You will also need to take cpuset_rwsem to make sure that cpusets are 
+> stable. BTW, the cpuset_cgroup_scan_tasks() name is kind of redundant. I 
+> will suggest you just name it as cpuset_scan_tasks(). Please also add a 
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  2 ++
- 2 files changed, 27 insertions(+)
+mem cgroup oom use `mem_cgroup_scan_tasks`.
+How about keep `cpuset_cgroup_scan_tasks` for naming consistency?
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 7eccf57a0ccc..86797de7fc50 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1841,6 +1841,17 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 8192;
-+		test->ifobj_rx->umem->frame_size = 8192;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_RX_POLL:
- 		test->ifobj_rx->use_poll = true;
- 		test_spec_set_name(test, "POLL_RX");
-@@ -1904,6 +1915,20 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		if (!testapp_unaligned(test))
- 			return;
- 		break;
-+	case TEST_TYPE_UNALIGNED_9K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_9K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 9000;
-+		test->ifobj_rx->umem->frame_size = 9000;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_HEADROOM:
- 		testapp_headroom(test);
- 		break;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index 919327807a4e..7f52f737f5e9 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -69,12 +69,14 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
- 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_RX_POLL,
- 	TEST_TYPE_TX_POLL,
- 	TEST_TYPE_POLL_RXQ_TMOUT,
- 	TEST_TYPE_POLL_TXQ_TMOUT,
- 	TEST_TYPE_UNALIGNED,
-+	TEST_TYPE_UNALIGNED_9K_FRAME,
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
--- 
-2.39.2
+```
+static void select_bad_process(struct oom_control *oc)
+{
+	oc->chosen_points = LONG_MIN;
 
+	if (is_memcg_oom(oc))
+		mem_cgroup_scan_tasks(oc->memcg, oom_evaluate_task, oc);
+	else if (oc->constraint == CONSTRAINT_CPUSET)
+		cpuset_cgroup_scan_tasks(oom_evaluate_task, oc);
+	else {
+		...
+	}
+}
+```
