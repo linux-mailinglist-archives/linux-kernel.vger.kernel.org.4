@@ -2,93 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757976D9BA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CF46D9BDC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239586AbjDFPEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S239668AbjDFPJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239516AbjDFPER (ORCPT
+        with ESMTP id S229485AbjDFPJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:04:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00736A40;
-        Thu,  6 Apr 2023 08:03:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2E38618D3;
-        Thu,  6 Apr 2023 15:03:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17B78C433D2;
-        Thu,  6 Apr 2023 15:03:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680793430;
-        bh=2IEmxNUrt29vTnWXKg7IZkBRsXl0srtJ3bvncLKpcD8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D05IXfIR2sQ2YuySOPjeJd95zplkJ0xgy/6DXBN4VxCoo3NibPkoO5RwrMe+LkICi
-         LozhRtNeKmr3pCsgm2z4ay4ul0v8+6wSBSkPyWVOitFtFUQx8smroMeliae+ayLZbR
-         gCyj5vj9r+E6khchCo++9ET3CHd4RwK4ypLT5/5UyFSZ9VImTkciUKnsl2dODSP7IX
-         dRPPYTtaicmDRW9iYtl2kEMZze6ZYScrl4zpokvs3fFXmRmXn2aLwaomQqTIEAlWeD
-         Z+hUD2lP6Pc8Xl8pfsDpA/OeoCrvwUAhshY4qMNkt/zhOxNIIOtESY6ukwH4WpCwX+
-         YXsChVEjlO2qw==
-Date:   Thu, 6 Apr 2023 17:03:43 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     wenyang.linux@foxmail.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Eric Biggers <ebiggers@google.com>,
-        Christoph Hellwig <hch@lst.de>, Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>, Fu Wei <wefu@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michal Nazarewicz <m.nazarewicz@samsung.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND PATCH v2] eventfd: use
- wait_event_interruptible_locked_irq() helper
-Message-ID: <20230406-hinarbeiten-gebadet-0165cff8d191@brauner>
-References: <tencent_F38839D00FE579A60A97BA24E86AF223DD05@qq.com>
+        Thu, 6 Apr 2023 11:09:29 -0400
+X-Greylist: delayed 183 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 08:09:04 PDT
+Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:df01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E89A49FF;
+        Thu,  6 Apr 2023 08:09:04 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net (mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:5708:0:640:5704:0])
+        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 523C360263;
+        Thu,  6 Apr 2023 18:04:12 +0300 (MSK)
+Received: from den-plotnikov-w.yandex-team.ru (unknown [2a02:6b8:b081:b509::1:20])
+        by mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id 54SddM0OoiE0-BlJ8zXkE;
+        Thu, 06 Apr 2023 18:04:11 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1680793451; bh=uT6P8O/ObGQAv1KfFPSPTzaiH0ko44WcONlGqu7lgcM=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=vVBmP036Ddx8dYBXXWchfwThvZXoPY/JdtPoqqu1z53chZD8mixRIBDEV51FdK1OB
+         cki+wXjp7Sd10zuDF9Ys0vIxjRgEjoB/xYGkhQtT4m4qJlTJFt6YMMgY+Iv6sKYXbF
+         43Z7c5r7SH5IS8tSfIop8fGwuzu1KhvyWjZ+cjas=
+Authentication-Results: mail-nwsmtp-smtp-corp-canary-81.sas.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+From:   Denis Plotnikov <den-plotnikov@yandex-team.ru>
+To:     linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, den-plotnikov@yandex-team.ru,
+        target-devel@vger.kernel.org, varun@chelsio.com,
+        nab@linux-iscsi.org, martin.petersen@oracle.com
+Subject: [PATCH] scsi: target: cxgbit: check skb dequeue result
+Date:   Thu,  6 Apr 2023 18:04:05 +0300
+Message-Id: <20230406150405.300909-1-den-plotnikov@yandex-team.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <tencent_F38839D00FE579A60A97BA24E86AF223DD05@qq.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 07:42:08AM +0800, wenyang.linux@foxmail.com wrote:
-> From: Wen Yang <wenyang.linux@foxmail.com>
-> 
-> wait_event_interruptible_locked_irq was introduced by commit 22c43c81a51e
-> ("wait_event_interruptible_locked() interface"), but older code such as
-> eventfd_{write,read} still uses the open code implementation.
-> Inspired by commit 8120a8aadb20
-> ("fs/timerfd.c: make use of wait_event_interruptible_locked_irq()"), this
-> patch replaces the open code implementation with a single macro call.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-> Reviewed-by: Eric Biggers <ebiggers@google.com>
-> Reviewed-by: Jens Axboe <axboe@kernel.dk>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Dylan Yudaken <dylany@fb.com>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: David Woodhouse <dwmw@amazon.co.uk>
-> Cc: Fu Wei <wefu@redhat.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Michal Nazarewicz <m.nazarewicz@samsung.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
+On a couple of abort packet paths skb dequeuing may end up with
+returning NULL, which, in turn, may end up with further null
+pointer dereference.
 
-Confused... Did you see the earlier reply?
-https://lore.kernel.org/lkml/20230406-kernig-parabel-d12963a4e7fa@brauner
+Fix it by checking the return value of skb dequeuing.
+
+Found by Linux Verification Center(linuxtesting.org) with SVACE.
+
+Fixes: 9730ffcb8957 (cxgbit: add files for cxgbit.ko)
+Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
+---
+ drivers/target/iscsi/cxgbit/cxgbit_cm.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/target/iscsi/cxgbit/cxgbit_cm.c b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
+index 518ded214e74..d43fd761c20a 100644
+--- a/drivers/target/iscsi/cxgbit/cxgbit_cm.c
++++ b/drivers/target/iscsi/cxgbit/cxgbit_cm.c
+@@ -669,6 +669,9 @@ static int cxgbit_send_abort_req(struct cxgbit_sock *csk)
+ 		cxgbit_send_tx_flowc_wr(csk);
+ 
+ 	skb = __skb_dequeue(&csk->skbq);
++	if (!skb)
++		return 0;
++
+ 	cxgb_mk_abort_req(skb, len, csk->tid, csk->txq_idx,
+ 			  csk->com.cdev, cxgbit_abort_arp_failure);
+ 
+@@ -1769,9 +1772,10 @@ static void cxgbit_abort_req_rss(struct cxgbit_sock *csk, struct sk_buff *skb)
+ 		cxgbit_send_tx_flowc_wr(csk);
+ 
+ 	rpl_skb = __skb_dequeue(&csk->skbq);
+-
+-	cxgb_mk_abort_rpl(rpl_skb, len, csk->tid, csk->txq_idx);
+-	cxgbit_ofld_send(csk->com.cdev, rpl_skb);
++	if (!rpl_skb) {
++		cxgb_mk_abort_rpl(rpl_skb, len, csk->tid, csk->txq_idx);
++		cxgbit_ofld_send(csk->com.cdev, rpl_skb);
++	}
+ 
+ 	if (wakeup_thread) {
+ 		cxgbit_queue_rx_skb(csk, skb);
+-- 
+2.25.1
+
