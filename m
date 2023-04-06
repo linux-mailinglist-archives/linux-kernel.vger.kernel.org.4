@@ -2,143 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086C76D96F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D014A6D96F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbjDFMSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S235839AbjDFMTt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 08:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjDFMSv (ORCPT
+        with ESMTP id S229755AbjDFMTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:18:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EAF61B1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680783483;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x1I6xnPQCFgaa8GiBqNBRb9FGr8oj3ORM8xu7RlaLgc=;
-        b=dLT6usFa0POlshGw7eRWDhfMswRRSBzEQh1tv56dezP9wgiGxUEMq0aOVdJ0fCzlGGKjgY
-        t7rby5uy5mXEiz7P/2EwbIAMpia1azcH3yBWlJugjeinSp7XCcbcDzYZK9nwPuHvRMDqZ9
-        yiCP64nEVGbwg4+cwxD1fs4xnazT7wo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-247-XgrpVXFHNnOhM06Sbit5sw-1; Thu, 06 Apr 2023 08:18:00 -0400
-X-MC-Unique: XgrpVXFHNnOhM06Sbit5sw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3F8B8996E2;
-        Thu,  6 Apr 2023 12:17:59 +0000 (UTC)
-Received: from [10.22.9.26] (unknown [10.22.9.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 22F002166B26;
-        Thu,  6 Apr 2023 12:17:59 +0000 (UTC)
-Message-ID: <1f5e2876-8230-32b5-7bd8-99415d079896@redhat.com>
-Date:   Thu, 6 Apr 2023 08:17:58 -0400
+        Thu, 6 Apr 2023 08:19:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C361E61B1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:19:45 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1pkOaJ-0007Oi-3b; Thu, 06 Apr 2023 14:19:23 +0200
+Message-ID: <dc41058a457b737fee8d366c7aa5467ef5156a1a.camel@pengutronix.de>
+Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Danilo Krummrich <dakr@redhat.com>,
+        Dave Airlie <airlied@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        andrey.grodzovsky@amd.com, tvrtko.ursulin@linux.intel.com,
+        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        lina@asahilina.net, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 06 Apr 2023 14:19:20 +0200
+In-Reply-To: <ZC62cxVD5xc31FEL@phenom.ffwll.local>
+References: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
+         <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
+         <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
+         <3004a2bf-e725-643e-82af-8a217784e796@redhat.com>
+         <013781a3-5abd-8c66-8a0a-dd36c9c487af@amd.com>
+         <28d10733-b217-7ccc-4b8c-54bdc8249234@amd.com>
+         <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
+         <9c72c7162da56234addd7083ec774e525a13957c.camel@pengutronix.de>
+         <ZC62cxVD5xc31FEL@phenom.ffwll.local>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/3] cgroup/cpuset: Make cpuset_fork() handle
- CLONE_INTO_CGROUP properly
-Content-Language: en-US
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        gscrivan@redhat.com
-References: <202304061003.e5e0dc9c-yujie.liu@intel.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <202304061003.e5e0dc9c-yujie.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/23 22:51, kernel test robot wrote:
-> Hello,
->
-> kernel test robot noticed "WARNING:suspicious_RCU_usage" on:
->
-> commit: a53ab2ba098e6839db602212831c8b62a38c2956 ("[PATCH 1/3] cgroup/cpuset: Make cpuset_fork() handle CLONE_INTO_CGROUP properly")
-> url: https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/cgroup-cpuset-Make-cpuset_fork-handle-CLONE_INTO_CGROUP-properly/20230331-225527
-> base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git 62bad54b26db8bc98e28749cd76b2d890edb4258
-> patch link: https://lore.kernel.org/all/20230331145045.2251683-2-longman@redhat.com/
-> patch subject: [PATCH 1/3] cgroup/cpuset: Make cpuset_fork() handle CLONE_INTO_CGROUP properly
->
-> in testcase: boot
->
-> compiler: gcc-11
-> test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
->
-> (please refer to attached dmesg/kmsg for entire log/backtrace)
->
->
-> If you fix the issue, kindly add following tag
-> | Reported-by: kernel test robot <yujie.liu@intel.com>
-> | Link: https://lore.kernel.org/oe-lkp/202304061003.e5e0dc9c-yujie.liu@intel.com
->
->
-> [    2.798551][    T2] WARNING: suspicious RCU usage
-> [    2.799473][    T2] 6.3.0-rc4-00162-ga53ab2ba098e #1 Not tainted
-> [    2.799901][    T2] -----------------------------
-> [    2.800551][    T2] include/linux/cgroup.h:437 suspicious rcu_dereference_check() usage!
-> [    2.802044][    T2]
-> [    2.802044][    T2] other info that might help us debug this:
-> [    2.802044][    T2]
-> [    2.803158][    T2]
-> [    2.803158][    T2] rcu_scheduler_active = 1, debug_locks = 1
-> [    2.804024][    T2] 1 lock held by kthreadd/2:
-> [ 2.804851][ T2] #0: ffffffff84c38230 (cgroup_threadgroup_rwsem){.+.+}-{0:0}, at: cgroup_can_fork (kernel/cgroup/cgroup.c:6515)
-> [    2.806112][    T2]
-> [    2.806112][    T2] stack backtrace:
-> [    2.806958][    T2] CPU: 0 PID: 2 Comm: kthreadd Not tainted 6.3.0-rc4-00162-ga53ab2ba098e #1
-> [    2.807537][    T2] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-> [    2.807537][    T2] Call Trace:
-> [    2.807537][    T2]  <TASK>
-> [ 2.807537][ T2] dump_stack_lvl (lib/dump_stack.c:107)
-> [ 2.807537][ T2] lockdep_rcu_suspicious (include/linux/context_tracking.h:153 kernel/locking/lockdep.c:6600)
-> [ 2.807537][ T2] cpuset_fork (include/linux/cgroup.h:437 kernel/cgroup/cpuset.c:240 kernel/cgroup/cpuset.c:3262)
-> [ 2.807537][ T2] cgroup_post_fork (kernel/cgroup/cgroup.c:6635 (discriminator 6))
-> [ 2.807537][ T2] ? cgroup_cancel_fork (kernel/cgroup/cgroup.c:6573)
-> [ 2.807537][ T2] ? mark_held_locks (kernel/locking/lockdep.c:4237)
-> [ 2.807537][ T2] ? lockdep_hardirqs_on_prepare (kernel/locking/lockdep.c:4529)
-> [ 2.807537][ T2] copy_process (kernel/fork.c:2499)
-> [ 2.807537][ T2] ? __cleanup_sighand (kernel/fork.c:2013)
-> [ 2.807537][ T2] ? __lock_acquire (kernel/locking/lockdep.c:186 kernel/locking/lockdep.c:3836 kernel/locking/lockdep.c:5056)
-> [ 2.807537][ T2] kernel_clone (include/linux/random.h:26 kernel/fork.c:2680)
-> [ 2.807537][ T2] ? create_io_thread (kernel/fork.c:2639)
-> [ 2.807537][ T2] ? mark_usage (kernel/locking/lockdep.c:4914)
-> [ 2.807537][ T2] ? finish_task_switch+0x21c/0x910
-> [ 2.807537][ T2] ? __switch_to (arch/x86/include/asm/bitops.h:55 include/asm-generic/bitops/instrumented-atomic.h:29 include/linux/thread_info.h:89 arch/x86/include/asm/fpu/sched.h:65 arch/x86/kernel/process_64.c:623)
-> [ 2.807537][ T2] kernel_thread (kernel/fork.c:2729)
-> [ 2.807537][ T2] ? __ia32_sys_clone3 (kernel/fork.c:2729)
-> [ 2.807537][ T2] ? lock_downgrade (kernel/locking/lockdep.c:5321)
-> [ 2.807537][ T2] ? kthread_complete_and_exit (kernel/kthread.c:331)
-> [ 2.807537][ T2] ? do_raw_spin_unlock (arch/x86/include/asm/atomic.h:29 include/linux/atomic/atomic-instrumented.h:28 include/asm-generic/qspinlock.h:57 kernel/locking/spinlock_debug.c:100 kernel/locking/spinlock_debug.c:140)
-> [ 2.807537][ T2] kthreadd (kernel/kthread.c:400 kernel/kthread.c:746)
-> [ 2.807537][ T2] ? kthread_is_per_cpu (kernel/kthread.c:719)
-> [ 2.807537][ T2] ret_from_fork (arch/x86/entry/entry_64.S:314)
-> [    2.807537][    T2]  </TASK>
->
-It looks like task_cs() can only be used under rcu_read_lock(). I will 
-update the patch to add that.
+Am Donnerstag, dem 06.04.2023 um 14:09 +0200 schrieb Daniel Vetter:
+> On Thu, Apr 06, 2023 at 12:45:12PM +0200, Lucas Stach wrote:
+> > Am Donnerstag, dem 06.04.2023 um 10:27 +0200 schrieb Daniel Vetter:
+> > > On Thu, 6 Apr 2023 at 10:22, Christian König <christian.koenig@amd.com> wrote:
+> > > > 
+> > > > Am 05.04.23 um 18:09 schrieb Luben Tuikov:
+> > > > > On 2023-04-05 10:05, Danilo Krummrich wrote:
+> > > > > > On 4/4/23 06:31, Luben Tuikov wrote:
+> > > > > > > On 2023-03-28 04:54, Lucas Stach wrote:
+> > > > > > > > Hi Danilo,
+> > > > > > > > 
+> > > > > > > > Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
+> > > > > > > > > Hi all,
+> > > > > > > > > 
+> > > > > > > > > Commit df622729ddbf ("drm/scheduler: track GPU active time per entity")
+> > > > > > > > > tries to track the accumulated time that a job was active on the GPU
+> > > > > > > > > writing it to the entity through which the job was deployed to the
+> > > > > > > > > scheduler originally. This is done within drm_sched_get_cleanup_job()
+> > > > > > > > > which fetches a job from the schedulers pending_list.
+> > > > > > > > > 
+> > > > > > > > > Doing this can result in a race condition where the entity is already
+> > > > > > > > > freed, but the entity's newly added elapsed_ns field is still accessed
+> > > > > > > > > once the job is fetched from the pending_list.
+> > > > > > > > > 
+> > > > > > > > > After drm_sched_entity_destroy() being called it should be safe to free
+> > > > > > > > > the structure that embeds the entity. However, a job originally handed
+> > > > > > > > > over to the scheduler by this entity might still reside in the
+> > > > > > > > > schedulers pending_list for cleanup after drm_sched_entity_destroy()
+> > > > > > > > > already being called and the entity being freed. Hence, we can run into
+> > > > > > > > > a UAF.
+> > > > > > > > > 
+> > > > > > > > Sorry about that, I clearly didn't properly consider this case.
+> > > > > > > > 
+> > > > > > > > > In my case it happened that a job, as explained above, was just picked
+> > > > > > > > > from the schedulers pending_list after the entity was freed due to the
+> > > > > > > > > client application exiting. Meanwhile this freed up memory was already
+> > > > > > > > > allocated for a subsequent client applications job structure again.
+> > > > > > > > > Hence, the new jobs memory got corrupted. Luckily, I was able to
+> > > > > > > > > reproduce the same corruption over and over again by just using
+> > > > > > > > > deqp-runner to run a specific set of VK test cases in parallel.
+> > > > > > > > > 
+> > > > > > > > > Fixing this issue doesn't seem to be very straightforward though (unless
+> > > > > > > > > I miss something), which is why I'm writing this mail instead of sending
+> > > > > > > > > a fix directly.
+> > > > > > > > > 
+> > > > > > > > > Spontaneously, I see three options to fix it:
+> > > > > > > > > 
+> > > > > > > > > 1. Rather than embedding the entity into driver specific structures
+> > > > > > > > > (e.g. tied to file_priv) we could allocate the entity separately and
+> > > > > > > > > reference count it, such that it's only freed up once all jobs that were
+> > > > > > > > > deployed through this entity are fetched from the schedulers pending list.
+> > > > > > > > > 
+> > > > > > > > My vote is on this or something in similar vain for the long term. I
+> > > > > > > > have some hope to be able to add a GPU scheduling algorithm with a bit
+> > > > > > > > more fairness than the current one sometime in the future, which
+> > > > > > > > requires execution time tracking on the entities.
+> > > > > > > Danilo,
+> > > > > > > 
+> > > > > > > Using kref is preferable, i.e. option 1 above.
+> > > > > > I think the only real motivation for doing that would be for generically
+> > > > > > tracking job statistics within the entity a job was deployed through. If
+> > > > > > we all agree on tracking job statistics this way I am happy to prepare a
+> > > > > > patch for this option and drop this one:
+> > > > > > https://lore.kernel.org/all/20230331000622.4156-1-dakr@redhat.com/T/#u
+> > > > > Hmm, I never thought about "job statistics" when I preferred using kref above.
+> > > > > The reason kref is attractive is because one doesn't need to worry about
+> > > > > it--when the last user drops the kref, the release is called to do
+> > > > > housekeeping. If this never happens, we know that we have a bug to debug.
+> > > > 
+> > > > Yeah, reference counting unfortunately have some traps as well. For
+> > > > example rarely dropping the last reference from interrupt context or
+> > > > with some unexpected locks help when the cleanup function doesn't expect
+> > > > that is a good recipe for problems as well.
+> > > > 
+> > Fully agreed.
+> > 
+> > > > > Regarding the patch above--I did look around the code, and it seems safe,
+> > > > > as per your analysis, I didn't see any reference to entity after job submission,
+> > > > > but I'll comment on that thread as well for the record.
+> > > > 
+> > > > Reference counting the entities was suggested before. The intentionally
+> > > > avoided that so far because the entity might be the tip of the iceberg
+> > > > of stuff you need to keep around.
+> > > > 
+> > > > For example for command submission you also need the VM and when you
+> > > > keep the VM alive you also need to keep the file private alive....
+> > > 
+> > > Yeah refcounting looks often like the easy way out to avoid
+> > > use-after-free issue, until you realize you've just made lifetimes
+> > > unbounded and have some enourmous leaks: entity keeps vm alive, vm
+> > > keeps all the bo alives, somehow every crash wastes more memory
+> > > because vk_device_lost means userspace allocates new stuff for
+> > > everything.
+> > > 
+> > > If possible a lifetime design where lifetimes have hard bounds and you
+> > > just borrow a reference under a lock (or some other ownership rule) is
+> > > generally much more solid. But also much harder to design correctly
+> > > :-/
+> > > 
+> > The use we are discussing here is to keep the entity alive as long as
+> > jobs from that entity are still active on the HW. While there are no
+> > hard bounds on when a job will get inactive, at least it's not
+> > unbounded. On a crash/fault the job will be removed from the hardware
+> > pretty soon.
+> > 
+> > Well behaved jobs after a application shutdown might take a little
+> > longer, but I don't really see the new problem with keeping the entity
+> > alive? As long as a job is active on the hardware, we can't throw out
+> > the VM or BOs, no difference whether the entity is kept alive or not.
+> > 
+> > Some hardware might have ways to expedite job inactivation by
+> > deactivating scheduling queues, or just taking a fault, but for some HW
+> > we'll just have to wait for the job to finish.
+> 
+> Shouldn't the scheduler's timed_out/tdr logic take care of these? It's
+> probably not good to block in something like the close(drmfd) or process
+> exit() for these, but it's all dma_fence underneath and those _must_
+> singal in finite time no matter what. So shouldn't be a deadlock problem,
+> but might still be a "userspace really doesn't like a big stall there"
+> problem.
 
-Thanks,
-Longman
+I'm not sure if we are talking past each other here. I don't really
+follow where you see the problem here?
 
+If the hardware works as expected and the job is behaving well, it will
+finish in finite time when the HW is done with the job. When the job is
+bad and crashes the HW, sure it will be shot down by the timeout
+handling. Both cases will signal the fences and clean up resources
+eventually.
+
+Keeping the scheduler entity alive is really orthogonal to that. If the
+entity is kept alive until the job is cleaned up we could potentially
+add more common state, like the GPU time tracking, to the entity
+without the risk of use after free.
+
+Regards,
+Lucas
