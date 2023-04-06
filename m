@@ -2,91 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B29AC6DA0F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6565D6DA102
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240010AbjDFTUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        id S240442AbjDFTVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238771AbjDFTUJ (ORCPT
+        with ESMTP id S230075AbjDFTU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:20:09 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E9552D43;
-        Thu,  6 Apr 2023 12:20:08 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1052)
-        id EE920210DF13; Thu,  6 Apr 2023 12:20:07 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EE920210DF13
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1680808807;
-        bh=g2HfS/ZMTKQZRzpItrngBvXapTBkgpdLZhq7xEnI4H8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gT19rQ5YUGAjAckjJCB/pAvlv7LMSA7W2eJCCUnDZLw6nymQQ7XKfe9na6VR9qCQe
-         RTvhfiah+2SlCPK5wxIPIxi0dokTS2UAYdsPK9FZLDtRX+yqU7L0Q1iyPsSI+ylHdJ
-         URlbou6GsI3R9TIJ2NKzT1KZK69XElJ/QWudJfqQ=
-Date:   Thu, 6 Apr 2023 12:20:07 -0700
-From:   Fan Wu <wufan@linux.microsoft.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     corbet@lwn.net, zohar@linux.ibm.com, jmorris@namei.org,
-        serge@hallyn.com, tytso@mit.edu, ebiggers@kernel.org,
-        axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        eparis@redhat.com, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        dm-devel@redhat.com, linux-audit@redhat.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        Deven Bowers <deven.desai@linux.microsoft.com>
-Subject: Re: [RFC PATCH v9 01/16] security: add ipe lsm
-Message-ID: <20230406192007.GA19196@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
- <1675119451-23180-2-git-send-email-wufan@linux.microsoft.com>
- <CAHC9VhTtXC=HMUF8uak-29E__xLN2Kh_znn0xdRbm-GkgqBNiA@mail.gmail.com>
+        Thu, 6 Apr 2023 15:20:58 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC2D3A8E
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:20:56 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5047074939fso2340791a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680808855;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uys/L8O7xZiA+IlXK1BRZhgWN+PypYAepeVXE0xpUtQ=;
+        b=szCtW94vPkczBdTnbR80adOAclPwalJ7BkvQYs3FUajLczbNu1z67JLTUQGR6/2aQn
+         J1nITuCLHCt1OQrHRUUjM6nBcb1htMQ8E0zsdGY61jwWkj7Q2P1E2itcwH+95iZyadDV
+         Gqdy+BdycFICJTw24tVxXSkUPwH0gpVW7qC4vWp/wA1R26EofpsIB5uF0Pd+WU8Jppe/
+         g1BkcWD2bqHxk1HMjgly0N+1xZgn6xPLgMLNZNLTIY0s0q5AizMhkwRTyDA4fimMvSD7
+         pVKgqjz83wkM1Owum969UhhUg4FYbDCzQej6Azc17wvOMnbPZJpmjpa3L0YSYPfbZBup
+         jDNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680808855;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uys/L8O7xZiA+IlXK1BRZhgWN+PypYAepeVXE0xpUtQ=;
+        b=DTvtQV+8VJcGsDHgiyN53lGrjt+86cxJCOnKx6g3JmEU/xsJBB/6D15CCKh7Nt9HZ/
+         PyQ4PKhhnDQ9Ttk5M+hEAoY7ByycXx9/zcWwCUcxk0v0jnyH8AvCVZ5V36J0xysoCHo9
+         4TMj86r0+tdPzpzhfU3eQw7PWpoAS6xSbVK0VbukTx7F3IRFA4zyVGkpcnF3HOC1oJhY
+         fPf02nXbnaC/kyEWCY0TJ0uJO8JVTlreAS2bVDwQ+QnRd0/E9QU3bKDQ3svGIF/NT7jx
+         TZbj+D7ZStbTLMKxC5NOGlS/Wa0cq3KV8JWcbMjfA/he7bhxDyn8xJ1eLeG5tvLuoVDA
+         HNUg==
+X-Gm-Message-State: AAQBX9f0UDJdSnZH0qsi8QTH+A9LN6rgQh77w5N+YYBljWamNisYuAYn
+        yOKiy80KBLAL10Fpoh8fYS+UPw==
+X-Google-Smtp-Source: AKy350aTrwKXuR27E5tLtNwoNoUbzzOwtElN/iIeID0/1vaD7VdGluqPSroZH3isFfJqALCgWgMs8Q==
+X-Received: by 2002:aa7:cd5b:0:b0:4fc:d331:515 with SMTP id v27-20020aa7cd5b000000b004fcd3310515mr5835266edw.5.1680808855209;
+        Thu, 06 Apr 2023 12:20:55 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05640203c600b004fb30fc1dabsm1041933edw.96.2023.04.06.12.20.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 12:20:54 -0700 (PDT)
+Message-ID: <d1feb2c0-98b1-af38-e9c6-432a72b352f1@linaro.org>
+Date:   Thu, 6 Apr 2023 21:20:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhTtXC=HMUF8uak-29E__xLN2Kh_znn0xdRbm-GkgqBNiA@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] hwmon: max31827: add MAX31827 driver
+Content-Language: en-US
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
+        Vincent Tremblay <vincent@vtremblay.dev>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Greg.Schwendimann@infineon.com" <Greg.Schwendimann@infineon.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230406164331.6557-1-daniel.matyas@analog.com>
+ <20230406164331.6557-2-daniel.matyas@analog.com>
+ <20230406164331.6557-3-daniel.matyas@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406164331.6557-3-daniel.matyas@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 02:00:48PM -0500, Paul Moore wrote:
-> On Mon, Jan 30, 2023 at 5:58???PM Fan Wu <wufan@linux.microsoft.com> wrote:
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 8a5c25c20d00..5e27e84763cc 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -10273,6 +10273,11 @@ T:     git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
-> >  F:     security/integrity/ima/
-> >  F:     security/integrity/
-> >
-> > +INTEGRITY POLICY ENFORCEMENT (IPE)
-> > +M:     Fan Wu <wufan@linux.microsoft.com>
-> > +S:     Supported
-> > +F:     security/ipe/
+On 06/04/2023 18:43, Daniel Matyas wrote:
+> MAX31827 is a low-power temperature switch with I2C interface.
 > 
-> You should probably add a mailing list (L:) and source tree URL (T:)
-> to the IPE entry.  You can use the LSM mailing list to start if you
-> like, there are several LSMs that do that today, e.g. Smack, Landlock,
-> etc.  As far as the source tree is concerned, probably the easiest
-> option is a simple GitHub repo, but there are plenty of other choices
-> too.
-> 
-> Both the mailing list and the source URLs can always be updated in the
-> future so don't worry too much about being stuck with either long
-> term.
-> 
-> --
-> paul-moore.com
 
-We do have a github repo, I will add that link in the next version.
+(...)
 
--Fan
+> +
+> +static const struct hwmon_ops max31827_hwmon_ops = {
+> +	.is_visible = max31827_is_visible,
+> +	.read = max31827_read,
+> +	.write = max31827_write,
+> +};
+> +
+> +static const struct hwmon_chip_info max31827_chip_info = {
+> +	.ops = &max31827_hwmon_ops,
+> +	.info = max31827_info,
+> +};
+> +
+> +static int max31827_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct device *hwmon_dev;
+> +	struct max31827_state *st;
+> +	int ret;
+> +
+> +	if (!i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_WORD_DATA))
+> +		return -EOPNOTSUPP;
+> +
+> +	st = devm_kzalloc(dev, sizeof(struct max31827_state), GFP_KERNEL);
+
+sizeof(*...)
+
+> +	if (!st)
+> +		return -ENOMEM;
+> +
+
+
+Best regards,
+Krzysztof
+
