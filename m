@@ -2,146 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDC76D8DAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E18D6D8DA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235080AbjDFCt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 22:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S235044AbjDFCty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 22:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234692AbjDFCth (ORCPT
+        with ESMTP id S231889AbjDFCtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 22:49:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C69AD3A;
-        Wed,  5 Apr 2023 19:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680749204; x=1712285204;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OYFGzpPYLI2q69hmtLhmRnE7jbvoO6JpkJESOEl3xDA=;
-  b=CyabcphvFd/lpg25lY7l0vdTe4qDlNWr2NqJjYhNyMdp4070WZnEJ2Rw
-   rrVj/N/ZsYajjterDP9gY2bt/6giOUng89fsgt1I/U9OHJmP1+X6Ja8Ec
-   9mDHFYOlLApILSUgZG5XfzzHkeJGthMvQ1ztrWuTdOhmDQvEzJ0sUUwL6
-   Z5OAxlicBe9RtBDLeM0H8cizw5/9v4/3kYhcG3EDWSmlzsNUFPfnFCROY
-   9/MEPrkQnTtZSUbriwMXvn0SbLRn/FdwRpoZXHc60xLMVJnVetu/B1jPc
-   BWZNrfvo4uvshgjlP+CPOqPQYdsC4y/AfQldSj3EDggYOugpGwSSyA5tl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="345217309"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="345217309"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 19:46:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="810830733"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="810830733"
-Received: from mike-ilbpg1.png.intel.com ([10.88.227.76])
-  by orsmga004.jf.intel.com with ESMTP; 05 Apr 2023 19:46:37 -0700
-From:   Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, andrew@lunn.ch,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Shahab Vahedi <Shahab.Vahedi@synopsys.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>,
-        Zulkifli Muhammad Husaini <muhammad.husaini.zulkifli@intel.com>,
-        Tan Tee Min <tee.min.tan@intel.com>,
-        hock.leong.kweh@intel.com
-Subject: [RESEND PATCH net 1/1] net: stmmac: check fwnode for phy device before scanning for phy
-Date:   Thu,  6 Apr 2023 10:45:41 +0800
-Message-Id: <20230406024541.3556305-1-michael.wei.hong.sit@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 5 Apr 2023 22:49:36 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D751AD39
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 19:46:42 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id F22DF604EF;
+        Thu,  6 Apr 2023 04:46:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680749200; bh=My+Xx8qnBNE+sWvp8e43sgjINqFil3fDL+5IiLrFkjo=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=g0hBUS/jlVtWeXGqbOagmK6mwl/40AXeRAUll74sk0IiPd7zyu/fAL9qlUrPQqk9u
+         up+OVXYrBfWuFZAWPWeqNdGghsrH/cKr0MZWcJt3TDWml/iOvX19JqUyVhF7EteyCk
+         nrZOAA73f17JZYOA8zOIg3IK5tsHjUQVfz0MINI+rbIlVoi/72SEa/w7Mjq8hi0LBt
+         j//kEp22VMzJJolfBU/Ino9SNhNQBQY3EHnjbzQtVKBN6HxJFZ7QzOpGD77ChUCnJE
+         Arar+Z/qwFYyzUL/asyCE/GXPrNEsL3rANtntYrLllAW4tsOvqHj1X2E8dcsiiCCf7
+         EbOuIGPcsY90g==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id liSTa8_JLyKo; Thu,  6 Apr 2023 04:46:38 +0200 (CEST)
+Received: from [192.168.1.4] (unknown [94.250.188.177])
+        by domac.alu.hr (Postfix) with ESMTPSA id 240C0604ED;
+        Thu,  6 Apr 2023 04:46:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680749198; bh=My+Xx8qnBNE+sWvp8e43sgjINqFil3fDL+5IiLrFkjo=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=byLqwb0MFMv/ibkHpPiYLHWpGeA2w+dSu+7vMMosi/azzjLEqli6ZylFXdJ/F6vem
+         Y4S4c0zGBtpnUdEZWhJ9Rq/fgiSiImYW1TShKfRVPrqeFaCPTv1utjPrag3vpnBzX+
+         +VR0oelcsj6p2zLJ4dj4kn31dJRrFp42Qe11+Bl9w8hLt3RkU9zDFZmobdEegmw91C
+         hRYuehFkF19LA+IjCLG6FDD0tvNqk12VOQAe+aNbaF5huBiOop6BaRmsk0GnFEzPYK
+         QP5g1BLTrt8MXSdUDwV4pdBaNN+2e0iygsvu8WvoZpXDqN7N+Y3t1tKvdJowEtrnh/
+         RUerkibqKKNDw==
+Message-ID: <fbbdc526-308b-32e6-75dd-05543e0a2129@alu.unizg.hr>
+Date:   Thu, 6 Apr 2023 04:46:31 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 2/2] Revert "lib/firmware: fix a memory leak with
+ multiple calls of trigger_batched_requests_store()"
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20230406014324.31171-2-mirsad.todorovac@alu.unizg.hr>
+Content-Language: en-US, hr
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <20230406014324.31171-2-mirsad.todorovac@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.5 required=5.0 tests=AC_FROM_MANY_DOTS,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some DT devices already have phy device configured in the DT/ACPI.
-Current implementation scans for a phy unconditionally even though
-there is a phy listed in the DT/ACPI and already attached.
+On 06. 04. 2023. 03:43, Mirsad Goran Todorovac wrote:
+> This reverts commit d59ff9027c628f0e9be344b28f3576566a274f2f.
+> ---
+>  lib/test_firmware.c | 5 -----
+>  1 file changed, 5 deletions(-)
+> 
+> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+> index 51377b9ab6e3..454992bfdb2a 100644
+> --- a/lib/test_firmware.c
+> +++ b/lib/test_firmware.c
+> @@ -1036,11 +1036,6 @@ ssize_t trigger_batched_requests_async_store(struct device *dev,
+>  
+>  	mutex_lock(&test_fw_mutex);
+>  
+> -	if (test_fw_config->reqs) {
+> -		rc = -EBUSY;
+> -		goto out;
+> -	}
+> -
+>  	test_fw_config->reqs =
+>  		vzalloc(array3_size(sizeof(struct test_batched_req),
+>  				    test_fw_config->num_requests, 2));
 
-We should check the fwnode if there is any phy device listed in
-fwnode and decide whether to scan for a phy to attach to.
+NOTE: This was sent by an accident with the patch sending script.
+Please ignore this erroneous patch.
 
-Fixes: fe2cfbc96803 ("net: stmmac: check if MAC needs to attach to a PHY")
-Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Link: https://lore.kernel.org/lkml/20230403212434.296975-1-martin.blumenstingl@googlemail.com/
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-Tested-by: Shahab Vahedi <shahab@synopsys.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Suggested-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+Best regards,
+Mirsad
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index d41a5f92aee7..7ca9be7bec06 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1134,22 +1134,26 @@ static void stmmac_check_pcs_mode(struct stmmac_priv *priv)
- static int stmmac_init_phy(struct net_device *dev)
- {
- 	struct stmmac_priv *priv = netdev_priv(dev);
-+	struct fwnode_handle *phy_fwnode;
- 	struct fwnode_handle *fwnode;
--	bool phy_needed;
- 	int ret;
- 
-+	if (!phylink_expects_phy(priv->phylink))
-+		return 0;
-+
- 	fwnode = of_fwnode_handle(priv->plat->phylink_node);
- 	if (!fwnode)
- 		fwnode = dev_fwnode(priv->device);
- 
- 	if (fwnode)
--		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
-+		phy_fwnode = fwnode_get_phy_node(fwnode);
-+	else
-+		phy_fwnode = NULL;
- 
--	phy_needed = phylink_expects_phy(priv->phylink);
- 	/* Some DT bindings do not set-up the PHY handle. Let's try to
- 	 * manually parse it
- 	 */
--	if (!fwnode || phy_needed || ret) {
-+	if (!phy_fwnode || IS_ERR(phy_fwnode)) {
- 		int addr = priv->plat->phy_addr;
- 		struct phy_device *phydev;
- 
-@@ -1165,6 +1169,9 @@ static int stmmac_init_phy(struct net_device *dev)
- 		}
- 
- 		ret = phylink_connect_phy(priv->phylink, phydev);
-+	} else {
-+		fwnode_handle_put(phy_fwnode);
-+		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
- 	}
- 
- 	if (!priv->plat->pmt) {
 -- 
-2.34.1
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
+"I see something approaching fast ... Will it be friends with me?"
 
