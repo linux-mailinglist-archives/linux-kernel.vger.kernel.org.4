@@ -2,144 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFFF6D9B08
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1976D9AE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239474AbjDFOrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S239173AbjDFOpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239121AbjDFOrD (ORCPT
+        with ESMTP id S239486AbjDFOo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:47:03 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819FC8A5B;
-        Thu,  6 Apr 2023 07:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680792342; x=1712328342;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=wKLD3ul2fnQNnbci3vu7fUACYJnL7Pb0yr2YSwJ4YfE=;
-  b=A2m8dlFAIZ8suroi3kz8QDGKbyYDtx6flW4MyIOO8hCnDi6IZcZAzOVr
-   inEwSxAJf8yFsQGjOWAOlR2qtYXOeS86METfwccLwYoWY2NjyjV2V4nzA
-   V5raNxMCCt1YiyBuYvL6k1e5y+tRCFlqVjuc7o4CG6FC5u9lOuoq8Vyt9
-   f3DYh7lBx7ZmhIl7MUzwYNGFz72yJWP0OFUbquz7OTE59QsS+/etr4/cf
-   xUQhnhOPSvRf5NDTZ+jPQZv3pLh4rPblHshJPOaNFrRl3jtqHb7Qk2V+s
-   GGvrlu3zqb+zeHBnChL7G84Mu+Ncrf/ovd3G9DEeq0SkpL9UYhKF6o0TT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="326817273"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="326817273"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 07:43:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861424812"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="861424812"
-Received: from akshayph-mobl.amr.corp.intel.com ([10.212.115.108])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 07:43:41 -0700
-Message-ID: <0b95f8b723f50395ee325ff5475e5d5189776928.camel@linux.intel.com>
-Subject: Re: [PATCH v2 12/15] crypto: iaa - Add support for iaa_crypto
- deflate compression algorithm
-From:   Tom Zanussi <tom.zanussi@linux.intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     davem@davemloft.net, fenghua.yu@intel.com, vkoul@kernel.org,
-        dave.jiang@intel.com, tony.luck@intel.com,
-        wajdi.k.feghali@intel.com, james.guilford@intel.com,
-        kanchana.p.sridhar@intel.com, giovanni.cabiddu@intel.com,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Date:   Thu, 06 Apr 2023 09:43:40 -0500
-In-Reply-To: <ZC58JggIXgpJ1tpD@gondor.apana.org.au>
-References: <20230328153535.126223-1-tom.zanussi@linux.intel.com>
-         <20230328153535.126223-13-tom.zanussi@linux.intel.com>
-         <ZC58JggIXgpJ1tpD@gondor.apana.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Thu, 6 Apr 2023 10:44:57 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC22B761
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:44:04 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id g29so1259018lfj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:44:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680792240;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7GoNU+GadKU3QWy/XxC84RJUEWk73D4f2JeVQMiCKdk=;
+        b=BbUoiW8L6w/9wIsJcUDeO4bohDNl4/APFqKc3mJbXYdtAtYDYg8Oyqk2KJ9ItHYdyU
+         OaW5HWGOSeUoVvl11cBS3QLK7a08IckT4NRs5K2wsznr8TqP477NOPZ5u7Zsj0/V0wrW
+         BaJqQih9q03ya5rTy21LwSQkG7dPHTfqp8brhdH4EPgrWHe+S4aTvx7qDudAaZPX/vrG
+         HHdu1XB7oRddVvdrIei3NCTsXobMh7K5WOPN+azBA6YVV/3aad8lw/jHASitOD6hio1v
+         rs7wfq98vEaZTzzq2tGJgEChBNsVREU9Xos0kvNjVkT5XYKFZKcVxC4YXtquk4UFvJEz
+         SNlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680792240;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7GoNU+GadKU3QWy/XxC84RJUEWk73D4f2JeVQMiCKdk=;
+        b=y4U7Wk89azxLPaIdDf5d2tHts8hL+1RRECr2yD+UmdXYEnU+gkgUnJEc2Ka4z19LX/
+         3pUKCv4M1zajtYIR/S+H1wohpgrgcegr4a7kw/ePeoS+iAwh+qU//KJDSuDNa3aEs1Ml
+         6bzik0N1dvFTP9//VXBLXLHQlZIP4GaPBv7j/nzaSnRhN4Z3u4RUk6XvXIGV3qyM5QwG
+         bbUrsfdV4lv2d/VM50sisNajyO734DdGiouSd2hCwxruhSIDEdhuvVGjcg3V/JlkFdQY
+         Gc3Da6BfS62xBlC8UkVBW5dGHdysvjnFho4NYcW6Bg8DZbc+TXV9+xNsZALC8C+Vd0Rd
+         461A==
+X-Gm-Message-State: AAQBX9fbD+XUQSW3bB8VB8HoaTFc9sscpFzXrV6GipMRIywdTc1Fv1pn
+        CK/FOTPEot2jjHA3zDMS0h4X9Q==
+X-Google-Smtp-Source: AKy350aqIKjEC6AQIfwUvpbuilrqhaKUX62eLL1udBptHHLvM+Xc0uqllkudj+V48kd7U8ZGJtMtaw==
+X-Received: by 2002:ac2:5e91:0:b0:4ea:e688:a048 with SMTP id b17-20020ac25e91000000b004eae688a048mr2761195lfq.69.1680792240131;
+        Thu, 06 Apr 2023 07:44:00 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id y10-20020ac2446a000000b004b4b600c093sm289472lfl.92.2023.04.06.07.43.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 07:43:59 -0700 (PDT)
+Message-ID: <fed27bde-f7c7-fae2-de6f-a997587b93b1@linaro.org>
+Date:   Thu, 6 Apr 2023 16:43:55 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFT v2 02/14] clk: qcom: smd-rpm: Add .is_enabled hook
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-2-ae80a325fe94@linaro.org>
+ <20230322030218.7xjrsgt3abqft2y7@ripper>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230322030218.7xjrsgt3abqft2y7@ripper>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
 
-On Thu, 2023-04-06 at 16:00 +0800, Herbert Xu wrote:
-> On Tue, Mar 28, 2023 at 10:35:32AM -0500, Tom Zanussi wrote:
-> >=20
-> > @@ -881,12 +1574,26 @@ static int iaa_crypto_probe(struct idxd_dev
-> > *idxd_dev)
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0rebalance_wq_table();
-> > =C2=A0
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (first_wq) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0iaa_crypto_enabled =3D true;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ret =3D iaa_register_compression_device();
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0if (ret !=3D 0) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0iaa_cr=
-ypto_enabled =3D false;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_db=
-g(dev, "IAA compression device
-> > registration failed\n");
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto e=
-rr_register;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0}
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0pr_info("iaa_crypto now ENABLED\n");
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > +
->=20
-> Sorry for picking on your driver but I've got to start somewhere :)
 
-No problem, thanks for reviewing the code. ;-)
+On 22.03.2023 04:02, Bjorn Andersson wrote:
+> On Wed, Mar 08, 2023 at 10:35:18PM +0100, Konrad Dybcio wrote:
+>> From: Shawn Guo <shawn.guo@linaro.org>
+>>
+>> The RPM clock enabling state can be found with 'enabled' in struct
+>> clk_smd_rpm.  Add .is_enabled hook so that clk_summary in debugfs can
+>> show a correct enabling state for RPM clocks.
+>>
+> 
+> I don't think .is_enabled should be implemented for clocks where the
+> actual state can't be queried.
+> 
+> E.g. should a clock which is is_enabled = false be unprepared during
+> disable_unused? It's already disabled...
+That's true, it sounds silly.
 
->=20
-> A long standing problem shared by almost all crypto drivers is that
-> the hardware removal handling is completely broken.
->=20
-> This is because hardware can be removed at any time, including during
-> a crypto operatin.=C2=A0 So drivers must work carefully around that fact.
->=20
-> Here is a recipe for dealing with this safely:
->=20
-> 1) Never unregister your crypto algorithms, even after the last
-> piece of hardware has been unplugged.=C2=A0 The algorithms should only
-> be unregistered (if they have been registered through the first
-> successful probe call) in the module unload function.
->=20
-> 2) Never free any software state for your hardware without some form
-> of synchronisation with oustanding operations.
->=20
-> Any mechanism would do, for example, you could use a spinlock if the
-> critical path isn't very long.=C2=A0 The operational path would take the
-> lock, check the hardware state, and if present proceed with the
-> operation (but still being prepared to cope if the hardware goes
-> AWAL because even if the driver state is still present the actual
-> hardware may be gone already).
->=20
-> Then the removal path would simply take the spinlock, set a flag
-> indicating the hardware is gone and then you could safely unlock
-> and free your driver states.
->=20
+However, I feel like it's the least painful option, as trying to disable
+a clock that's already actually disabled (read, in hw+RPM, not Linux)
+will not do any harm.
 
-OK, yeah, thanks for pointing this out along with the detailed
-explanation and remedy.  Will take care of this in the next version.
+Not adding this (and by extension not making use of any sort of unused
+clk cleanup) will prevent the system from hitting low power modes and
+SMD RPM is strictly speaking, too dumb to figure out that these clocks
+aren't really consumed.
 
-Tom
-
-> Thanks,
-
+Konrad
+> 
+> Regards,
+> Bjorn
+> 
+>> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+>> [Konrad: rebase]
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/clk/qcom/clk-smd-rpm.c | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>> index 198886c1b6c8..ecacfbc4a16c 100644
+>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>> @@ -424,18 +424,27 @@ static int clk_smd_rpm_enable_scaling(struct qcom_smd_rpm *rpm)
+>>  	return 0;
+>>  }
+>>  
+>> +static int clk_smd_rpm_is_enabled(struct clk_hw *hw)
+>> +{
+>> +	struct clk_smd_rpm *r = to_clk_smd_rpm(hw);
+>> +
+>> +	return r->enabled;
+>> +}
+>> +
+>>  static const struct clk_ops clk_smd_rpm_ops = {
+>>  	.prepare	= clk_smd_rpm_prepare,
+>>  	.unprepare	= clk_smd_rpm_unprepare,
+>>  	.set_rate	= clk_smd_rpm_set_rate,
+>>  	.round_rate	= clk_smd_rpm_round_rate,
+>>  	.recalc_rate	= clk_smd_rpm_recalc_rate,
+>> +	.is_enabled	= clk_smd_rpm_is_enabled,
+>>  };
+>>  
+>>  static const struct clk_ops clk_smd_rpm_branch_ops = {
+>>  	.prepare	= clk_smd_rpm_prepare,
+>>  	.unprepare	= clk_smd_rpm_unprepare,
+>>  	.recalc_rate	= clk_smd_rpm_recalc_rate,
+>> +	.is_enabled	= clk_smd_rpm_is_enabled,
+>>  };
+>>  
+>>  DEFINE_CLK_SMD_RPM_BRANCH_A(bi_tcxo, QCOM_SMD_RPM_MISC_CLK, 0, 19200000);
+>>
+>> -- 
+>> 2.39.2
+>>
