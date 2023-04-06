@@ -2,80 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960756DA0E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFE26DA0EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240487AbjDFTR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
+        id S240551AbjDFTTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240553AbjDFTRX (ORCPT
+        with ESMTP id S240038AbjDFTTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:17:23 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E0F4C3C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:17:21 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id g18so3839710ejj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680808640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ijzbpgNtHL1RkS2L+qjoGrMwmwbEWamTYTlNJO92bs=;
-        b=Ea8n0AeuLrtRFB9IE3jNr3iYzxG4XpMsZIQ1il+1u7bTA6ANlawJvRJ1fnD6PVmVfk
-         AY3fBR/uI7rfX7joRBJ4jHyR5nvtOfgKgRnzqz/JlL82ReVA85m/n/rX47lfZjqk0P2I
-         7mC8Q4H804wmbI/QcMUxKmSP4vQmwafISdzph7ZySbQ8A7w+Yu+Yfkbo9gcrddWBqNdb
-         y9N0b2f0t6+QePuscOelHl1iE8aKAZo43+bUz8xUTE8Di+vMStfbGSgS0a0Zf52AyNGN
-         dXqZQc8ZeAWmemuZUs7Z4R8+hqLHW0By9N6T+3vrDF8fFMsnTUybR0oocjLey//uGApm
-         SmRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680808640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ijzbpgNtHL1RkS2L+qjoGrMwmwbEWamTYTlNJO92bs=;
-        b=wKvCNMMYEjLrpP/O7trGrHEEvPTnxUZlQCVAxHMUjksSoiVrAWEQSUERUHRnM8bnDq
-         bAlWUfcK9T2Dd9Iz+zEzolGRkq6zHGCO/aWzb79oNlFO8RSNq520xqlrs+Pqeu9amZUV
-         phM2Kdia6JdAqjmoOLtgGq3w31qNiMwzT5UOwRZ5EObZRskdqbQVeOmbVLWxBw/ztL2y
-         OVevLjsJR6QtEMWy+RYWu7QvIBwh2rfwNy3bo31MgGp4Fwa2yl9kbnCttjXVjHLg7e2e
-         csSdHsV2MvAV83WyylvUXwMDmoAkeYyRerZmoTaA3btCaPn3N1bZK6RoL+hZ+PyyAMAo
-         i/hA==
-X-Gm-Message-State: AAQBX9eYkxwNZ/tJ1XLvRDJUZGKICo2vCtq+kr3YFIoIq1RFfzNkkT1a
-        ZEjXeGehMkEFg8SpERznr9+0PQ==
-X-Google-Smtp-Source: AKy350b1Xq0EzRAX6tJKE72sTgus/SxFTbGctJTqPR9I03mw5W3opdbMHFF7WuJ33Uw7DbuVPdiSWA==
-X-Received: by 2002:a17:907:c24d:b0:949:b9fa:497a with SMTP id tj13-20020a170907c24d00b00949b9fa497amr3017624ejc.70.1680808639713;
-        Thu, 06 Apr 2023 12:17:19 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id hr15-20020a1709073f8f00b009477ba90a85sm1155808ejc.69.2023.04.06.12.17.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 12:17:19 -0700 (PDT)
-Message-ID: <2d8d417d-0a0b-9a45-a8e0-a3cb116874e5@linaro.org>
-Date:   Thu, 6 Apr 2023 21:17:18 +0200
+        Thu, 6 Apr 2023 15:19:38 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0748A213E;
+        Thu,  6 Apr 2023 12:19:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680808741; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Hp9mo9y/mjafGapyQczZVlad+8CSGNJUpCIF4eDU6EbAyO3uJl0H1GY+a5Yfj9Sjr33xAMV0Xckx9uHojpjgnqqCwVYEvi/njtVlfcXBEiFighZ7Iok6LFW2dz07TTMuUqdwqW/sgq+xb2Dv4OZpizjPKKqdw3itc7wgZ/xjwqE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1680808741; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=lWWci+lrJXVbFfP28Kyr0CNGSZHTByAVqFq1NMWsDvo=; 
+        b=TlZ8hv0cdA/lVQcf58skLejVYg8t1qFdBpwHxkDGwpEGuY5PBr3JNWxXQ/wG88n1I5hfDHof/ZisSB7hF/yTSVdsLawdM1MhcLPd7juK5LXum5PRrR6R7PsD07ZxjYV1Hvse6STVG95GVdSuqo293tHZXQjaWNOlfE4c15a6U/M=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680808741;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=lWWci+lrJXVbFfP28Kyr0CNGSZHTByAVqFq1NMWsDvo=;
+        b=KBDx7bi5RulXnw7eT41euWDN5N0tswvitovUr6nXDxScbhiKn9e2U2oLEZKmdgnT
+        5O5xmLJPrygN86f0Rgq/0Zn3XjMdzdkEgMCl7NQGe4KV3XPR8wpBizn5a+2CZQ92eX6
+        jVgO01ycSRzJ4fppbqB24SghzFe1/HB2gNKOYxM8=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1680808738233794.3345617672512; Thu, 6 Apr 2023 12:18:58 -0700 (PDT)
+Message-ID: <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
+Date:   Thu, 6 Apr 2023 22:18:51 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: hwmon: add MAX31827
+Subject: Re: [PATCH 3/7] dt-bindings: net: dsa: mediatek,mt7530: add port
+ bindings for MT7988
 Content-Language: en-US
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
-        Vincent Tremblay <vincent@vtremblay.dev>,
-        "Greg.Schwendimann@infineon.com" <Greg.Schwendimann@infineon.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230406164331.6557-1-daniel.matyas@analog.com>
- <20230406164331.6557-2-daniel.matyas@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406164331.6557-2-daniel.matyas@analog.com>
-Content-Type: text/plain; charset=UTF-8
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230406080141.22924-1-arinc.unal@arinc9.com>
+ <20230406080141.22924-3-arinc.unal@arinc9.com>
+ <23c8c4b5-baaa-b72b-4103-b415d970acf2@linaro.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <23c8c4b5-baaa-b72b-4103-b415d970acf2@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -86,112 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 18:43, Daniel Matyas wrote:
-> MAX31827 is a low-power temperature switch with I2C interface.
+On 6.04.2023 22:07, Krzysztof Kozlowski wrote:
+> On 06/04/2023 10:01, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> The switch on MT7988 has got only port 6 as a CPU port. The only phy-mode
+>> to be used is internal. Add this.
+>>
+>> Some bindings are incorrect for this switch now, so move them to more
+>> specific places.
+>>
+>> Address the incorrect information of which ports can be used as a user
+>> port. Any port can be used as a user port.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 63 ++++++++++++++-----
+>>   1 file changed, 46 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> index 7045a98d9593..605888ce2bc6 100644
+>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>> @@ -160,22 +160,6 @@ patternProperties:
+>>         "^(ethernet-)?port@[0-9]+$":
+>>           type: object
+>>   
+>> -        properties:
+>> -          reg:
+>> -            description:
+>> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
+>> -              for user ports.
+>> -
+>> -        allOf:
+>> -          - if:
+>> -              required: [ ethernet ]
+>> -            then:
+>> -              properties:
+>> -                reg:
+>> -                  enum:
+>> -                    - 5
+>> -                    - 6
+>> -
 > 
-> The device is a ±1°C accuracy from -40°C to +125°C
-> (12 bits) local temperature switch and sensor with I2C/SM-
-> Bus interface. The combination of small 6-bump wafer-lev-
-> el package (WLP) and high accuracy makes this temper-
-> ature sensor/switch ideal for a wide range of applications.
+> I have doubts that the binding is still maintainable/reviewable. First,
+> why do you need all above patterns after removal of entire contents?
+
+The 'type: object' item is still globally used. I'd have to define that 
+on each definitions, I suppose?
+
 > 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> ---
->  .../bindings/hwmon/adi,max31827.yaml          | 48 +++++++++++++++++++
->  .../devicetree/bindings/trivial-devices.yaml  |  2 +
->  MAINTAINERS                                   |  7 +++
+> Second, amount of if-then-if-then located in existing blocks (not
+> top-level) is quite big. I counted if-then-using defs, where defs has
+> patternProps-patternProps-if-then-if-then-properties.... OMG. :)
 
->  3 files changed, 57 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> new file mode 100644
-> index 000000000000..b6ed2d46a35d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,max31827.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/adi,max31827.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch
+Yup, not much to do if we want to keep the information. I'm still 
+maintaining this though. ¯\_(ツ)_/¯
 
-Where are the compatibles? I expect them in such case to be compatible
-with this 31827.
-
-> +
-> +maintainers:
-> +  - Daniel Matyas <daniel.matyas@analog.com>
-> +
-> +description: |
-> +  Analog Devices MAX31827, MAX31828, MAX31829 Low-Power Temperature Switch with
-> +  I2C Interface
-> +  https://www.analog.com/media/en/technical-documentation/data-sheets/MAX31827-MAX31829.pdf
-
-Missing blank line
-
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max31827
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  vref-supply:
-> +    description:
-> +      Must have values in the interval (1.6V; 3.6V) in order for the device to
-> +      function correctly.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - vref-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        status = "okay";
-
-Drop status
-
-> +        max31827: max31827@42 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Drop also label. You do not use it.
-
-
-> +            compatible = "adi,max31827";
-> +            reg = <0x42>;
-> +            vref-supply = <&reg_vdd>;
-> +        };
-> +    };
-> +...
-> \ No newline at end of file
-
-Patch error to fix.
-
-> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Documentation/devicetree/bindings/trivial-devices.yaml
-> index 6f482a254a1d..7763610b97bc 100644
-> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
-> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
-> @@ -43,6 +43,8 @@ properties:
->            - adi,adp5589
->              # Analog Devices LT7182S Dual Channel 6A, 20V PolyPhase Step-Down Silent Switcher
->            - adi,lt7182s
-> +            # MAX31827 Low-Power Temperature Switch with I2C interface
-> +          - adi,max31827
-
-No need for this.
-
-Best regards,
-Krzysztof
-
+Arınç
