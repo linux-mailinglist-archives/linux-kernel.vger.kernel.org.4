@@ -2,172 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA20B6D947D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15CF6D947F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbjDFKzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
+        id S237380AbjDFKzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjDFKzj (ORCPT
+        with ESMTP id S236736AbjDFKzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:55:39 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2C365B6
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=yURwplSdjGa62e3szWhgSzg84+YzkegGjB1Wwf/yvzQ=; b=ADvU4cjOEkuaJ9UQhCdQ3PGPKK
-        4Yz+nnrh2V3n8CGMkb+c2FWLho3HWy0yBFgaVgkbzQ0LIHDCH/VIvEi4dcoOeq8wUuyy1v+m48eV5
-        mFFColnEC0DyerdDDvsqhKWoLALv+1KsGrpb0MzX6xVLvTTOQ6m+/J/Ve3OSY0bnLeKFO9qQulMaN
-        vqnVhDUQvQy3flxONsxX2Fb8p3YVOTZmy3dvYzZ72uecT6BHVq0fNBoe6MbFxKxyA8U5TldqLAPnM
-        IAa+3CtXzU+eZJ/TOBNv56mZ4ECfhFVM3bdyZVdOHOJqN1C8QODGjwj9RWaTH4RE5JPV/k1i+OLO8
-        aRsmEqOg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkNH9-00AVMd-2T;
-        Thu, 06 Apr 2023 10:55:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 24557300194;
-        Thu,  6 Apr 2023 12:55:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E0782200A7ECE; Thu,  6 Apr 2023 12:55:29 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 12:55:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Pavel Tatashin <pasha.tatashin@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC] tick_sched_timer() is not properly aligned, fixed by chance
-Message-ID: <20230406105529.GB392176@hirez.programming.kicks-ass.net>
-References: <20230406095735.0_14edn3@linutronix.de>
+        Thu, 6 Apr 2023 06:55:47 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196DA7A8D;
+        Thu,  6 Apr 2023 03:55:44 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VfSuMsQ_1680778540;
+Received: from 30.97.49.15(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VfSuMsQ_1680778540)
+          by smtp.aliyun-inc.com;
+          Thu, 06 Apr 2023 18:55:41 +0800
+Message-ID: <589f6665-824f-bf08-3458-d3986d88f7fc@linux.alibaba.com>
+Date:   Thu, 6 Apr 2023 18:55:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230406095735.0_14edn3@linutronix.de>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.0
+Subject: Re: [PATCH 2/3] erofs: convert to use kobject_is_added()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, xiang@kernel.org, chao@kernel.org,
+        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        damien.lemoal@opensource.wdc.com, naohiro.aota@wdc.com,
+        jth@kernel.org, rafael@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20230406093056.33916-1-frank.li@vivo.com>
+ <20230406093056.33916-2-frank.li@vivo.com>
+ <2023040635-duty-overblown-7b4d@gregkh>
+ <cc219a52-e89c-b7e7-5bfd-0124f881a29f@linux.alibaba.com>
+ <2023040654-protrude-unlucky-f164@gregkh>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <2023040654-protrude-unlucky-f164@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 11:57:35AM +0200, Sebastian Andrzej Siewior wrote:
-> With HIGHRES enabled tick_sched_timer() is programmed every jiffy to
-> expire the timer_list timers. This timer is programmed accurate in
-> respect to CLOCK_MONOTONIC so that 0 is the first tick and the next one
-> is 1000/CONFIG_HZ ms later. For HZ=250 every 4 ms and so the us/ns part
-> of the timer is always 0. This can be observed by enabling hrtimer_start
-> events and looking for the tick_sched_timer timer:
-> 
-> | <idle>-0 [009] 137.085041: hrtimer_start: hrtimer=000000002df4f2bc function=tick_sched_timer expires=162784000000 softexpires=162784000000 mode=0xa
-> | <idle>-0 [026] 137.085300: hrtimer_start: hrtimer=00000000b0911b5d function=tick_sched_timer expires=316384000000 softexpires=316384000000 mode=0xa
-> 
-> The lower part (us, ns) is zero. This is important for certain work
-> loads where it is needed to either align with the timer or hide after
-> it.
-> 
-> With commit
-> 	857baa87b6422 ("sched/clock: Enable sched clock early")
-> 
-> merged into v4.19-rc1 this 0 offset is gone. The problematic part is the
-> last hunk of the patch:
-> 
-> |@@ -356,7 +374,7 @@ u64 sched_clock_cpu(int cpu)
-> |                return sched_clock() + __sched_clock_offset;
-> |
-> |        if (unlikely(!sched_clock_running))
-> |-               return 0ull;
-> |+               return sched_clock();
-> |
-> |        preempt_disable_notrace();
-> |        scd = cpu_sdc(cpu);
-> 
-> which returns the sched_clock() without any offset. The gain of this is
-> the high resolution output of the bootlog very early, so we see something
-> like this:
-> |[    0.000000] tsc: Detected 1995.083 MHz processor
-> |[    0.000893] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
-> |[    0.008179] e820: remove [mem 0x000a0000-0x000fffff] usable
-> |[    0.014395] last_pfn = 0xa40000 max_arch_pfn = 0x400000000
-> |[    0.020667] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT
-> |[    0.029822] last_pfn = 0xbe000 max_arch_pfn = 0x400000000
-> |[    0.050770] found SMP MP-table at [mem 0x000fd2a0-0x000fd2af]
-> |[    0.057015] Kernel/User page tables isolation: disabled on command line.
-> |[    0.064452] Using GB pages for direct mapping
-> |[    0.070337] RAMDISK: [mem 0x32d23000-0x35688fff]
-> |[    0.075298] ACPI: Early table checksum verification disabled
-> …
-> |[    1.662577] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
-> |[    1.687317] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x398412f243e, max_idle_ns: 881590620736 ns
-> |[    1.699071] Calibrating delay loop (skipped), value calculated using timer frequency.. 3990.16 BogoMIPS (lpj=7980332)
-> |[    1.703070] pid_max: default: 32768 minimum: 301
-> |[    1.707238] LSM: Security Framework initializing
-> 
-> but the tick_sched_timer() is no longer properly aligned:
-> | <idle>-0 [002] 131.286274: hrtimer_start: hrtimer=000000000b8c5637 function=tick_sched_timer expires=130680348871 softexpires=130680348871 mode=0xa
-> | <idle>-0 [006] 131.286275: hrtimer_start: hrtimer=00000000e08369e4 function=tick_sched_timer expires=317880348871 softexpires=317880348871 mode=0xa
 
-But how ?!? Why does sched_clock() affect the tick_sched_timer() offset?
 
-/me reads on
-
-> instead of 0 we have "348871" here. I consider this as a bug given that
-> this important.
+On 2023/4/6 18:27, Greg KH wrote:
+> On Thu, Apr 06, 2023 at 06:13:05PM +0800, Gao Xiang wrote:
+>> Hi Greg,
+>>
+>> On 2023/4/6 18:03, Greg KH wrote:
+>>> On Thu, Apr 06, 2023 at 05:30:55PM +0800, Yangtao Li wrote:
+>>>> Use kobject_is_added() instead of directly accessing the internal
+>>>> variables of kobject. BTW kill kobject_del() directly, because
+>>>> kobject_put() actually covers kobject removal automatically.
+>>>>
+>>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>>>> ---
+>>>>    fs/erofs/sysfs.c | 3 +--
+>>>>    1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+>>>> index 435e515c0792..daac23e32026 100644
+>>>> --- a/fs/erofs/sysfs.c
+>>>> +++ b/fs/erofs/sysfs.c
+>>>> @@ -240,8 +240,7 @@ void erofs_unregister_sysfs(struct super_block *sb)
+>>>>    {
+>>>>    	struct erofs_sb_info *sbi = EROFS_SB(sb);
+>>>> -	if (sbi->s_kobj.state_in_sysfs) {
+>>>> -		kobject_del(&sbi->s_kobj);
+>>>> +	if (kobject_is_added(&sbi->s_kobj)) {
+>>>
+>>> I do not understand why this check is even needed, I do not think it
+>>> should be there at all as obviously the kobject was registered if it now
+>>> needs to not be registered.
+>>
+>> I think Yangtao sent a new patchset which missed the whole previous
+>> background discussions as below:
+>> https://lore.kernel.org/r/028a1b56-72c9-75f6-fb68-1dc5181bf2e8@linux.alibaba.com
+>>
+>> It's needed because once a syzbot complaint as below:
+>> https://lore.kernel.org/r/CAD-N9QXNx=p3-QoWzk6pCznF32CZy8kM3vvo8mamfZZ9CpUKdw@mail.gmail.com
+>>
+>> I'd suggest including the previous backgrounds at least in the newer patchset,
+>> otherwise it makes me explain again and again...
 > 
-> Then PeterZ had other problems and committed
-> 	776f22913b8e5 ("sched/clock: Make local_clock() noinstr")
+> That would be good, as I do not think this is correct, it should be
+> fixed in a different way, see my response to the zonefs patch in this
+> series as a much simpler method to use.
+
+Yes, but here (sbi->s_kobj) is not a kobject pointer (also at a quick
+glance it seems that zonefs has similar code), and also we couldn't
+just check the sbi is NULL or not here only, since sbi is already
+non-NULL in this path and there are some others in sbi to free in
+other functions.
+
+s_kobj could be changed into a pointer if needed.  I'm all fine with
+either way since as you said, it's a boilerplate filesystem kobject
+logic duplicated from somewhere.  Hopefully Yangtao could help take
+this task since he sent me patches about this multiple times.
+
+Thanks,
+Gao Xiang
+
 > 
-> which is part of v6.3-rc1. The important part here is (again) the last
-> hunk, the local_clock() implementation:
+> thanks,
 > 
-> |noinstr u64 local_clock(void)
-> |{
-> |       u64 clock;
-> |
-> |       if (static_branch_likely(&__sched_clock_stable))
-> |               return sched_clock() + __sched_clock_offset;
-> |
-> |       preempt_disable_notrace();
-> |       clock = sched_clock_local(this_scd());
-> |       preempt_enable_notrace();
-> |
-> |       return clock;
-> |}
-
-And this morning I found:
-
-https://lore.kernel.org/all/20230406040847.569970-1-dev@aaront.org/T/#u
-
-that 'fixes' that :-)
-
-> The tick_sched_timer story is that it uses ktime_get() to set the
-
-But but but, ktime_get() does not use sched_clock(), it has it's own TSC
-reader.
-
-> initial expire time and then always incremented. If the returned value
-> is jiffy-based then it will work as expected. If it has higher precision
-> then the time has to be adjusted since it is not expected.
-> 
-> So, what do we do?
-> - We would need to provide stable patches for v4.19…v6.1 to address the
->   timer issue.
-> 
-> - The high precision timestamps during boot are gone. Is it important to
->   bring that back? Or could that new local_clock() implementation be
->   backported?
-> 
-> - An alternative is to ensure that the time returned by ktime_get() in
->   tick_setup_device() is aligned with zeros.
-
-The last one I think, let me try and figure out how sched_clock()
-behaviour makes a different at all -- this is not making sense.
+> greg k-h
