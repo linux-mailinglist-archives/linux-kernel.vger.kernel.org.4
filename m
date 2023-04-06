@@ -2,75 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AF76D9CFC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170B66D9D06
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239842AbjDFQFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
+        id S239858AbjDFQG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjDFQFL (ORCPT
+        with ESMTP id S229806AbjDFQG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:05:11 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6196286B0;
-        Thu,  6 Apr 2023 09:05:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 0BE7942529;
-        Thu,  6 Apr 2023 16:05:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680797107;
-        bh=W0GosPfDacdVDq1FAyzUHCQaB9zv6PQPmS1vLdHnKQA=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=iAfV7p0T+1eaS8GrScZ1pOIMzHRYAc/lPATW7AAtA9h+sKU5BiWtfPkREufz1HKGs
-         289tD5z3EqWeQmT+Wi/W9zW5tx+pe0yU8FSO9ZwIrl/efPjomrdN9ofSf0GkhDPVq4
-         312c42FtGS43DfHFW3X0m20AvxpuXRHDtE/5LITrVWvAFfqRP076xWGv+NNPrEjuGY
-         5EqW1gBzsw/dAMJFDLBabsvNmBNiKgqTIQUF1s2xQGm1EtvNzVn6gBy8RWTXRkVcYY
-         kSl6RWXG4ypNZ22578cjGOjOaKw9GT2aqWVhytUD/H22QtntuZHq0Mg1Rh0bdJvg9t
-         BQAqcMsvvJInA==
-Message-ID: <d2615710-28c3-2bbb-e0b5-b87eb8d1aa8f@asahilina.net>
-Date:   Fri, 7 Apr 2023 01:04:59 +0900
+        Thu, 6 Apr 2023 12:06:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA4E9EE8;
+        Thu,  6 Apr 2023 09:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=uEPm8dOBZnv4i4WftC68ZDl47ANTw+nTJX9zwRJJnoU=; b=XkVcysRnaHexPtQQr+vU3HjoDA
+        V70/R60nM8HX/CGVLtWMa4ZCFfNpJEa5zRclK2NwiTYMKu+hrYtnxUg06CxAwIw+BLnvJyFmzDViR
+        rMh10UWLdUPwwdjgiAEmKdTKeAI+bVIxCRc7s7VUi+lgtBc2AR8yOjO0y9j0MhnBEchITnauumCmE
+        PHfKDoFTANve/sYDjO2QA63O80nyVjIVttl5ItkZQ5QYn1m+WpvHDQCmnmj0Zq1Deel85nR4YJKiw
+        eUJ62iv7bCMvD1VAXjAkIztqFbB5pEZBw0ybNvqb5PT/Kr3G2Mv5bQdecHFtCrUY5bAMbq2pw+x0n
+        9F4hS02Q==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkS7T-007wQR-0G;
+        Thu, 06 Apr 2023 16:05:51 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        linux-parport@lists.infradead.org
+Subject: [PATCH] parport_pc: don't allow driver for SPARC32
+Date:   Thu,  6 Apr 2023 09:05:48 -0700
+Message-Id: <20230406160548.25721-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RFC 09/18] rust: drm: syncobj: Add DRM Sync Object
- abstraction
-Content-Language: en-US
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-9-917ff5bc80a8@asahilina.net>
- <ZC1qn/VCVpudivh9@phenom.ffwll.local>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <ZC1qn/VCVpudivh9@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,213 +52,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2023 21.33, Daniel Vetter wrote:
-> On Tue, Mar 07, 2023 at 11:25:34PM +0900, Asahi Lina wrote:
->> DRM Sync Objects are a container for a DMA fence, and can be waited on
->> signaled, exported, and imported from userspace. Add a Rust abstraction
->> so Rust DRM drivers can support this functionality.
->>
->> Signed-off-by: Asahi Lina <lina@asahilina.net>
->> ---
->>   rust/bindings/bindings_helper.h |  1 +
->>   rust/helpers.c                  | 19 ++++++++++
->>   rust/kernel/drm/mod.rs          |  1 +
->>   rust/kernel/drm/syncobj.rs      | 77 +++++++++++++++++++++++++++++++++++++++++
->>   4 files changed, 98 insertions(+)
->>
->> diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
->> index 705af292a5b4..b6696011f3a4 100644
->> --- a/rust/bindings/bindings_helper.h
->> +++ b/rust/bindings/bindings_helper.h
->> @@ -12,6 +12,7 @@
->>   #include <drm/drm_gem.h>
->>   #include <drm/drm_gem_shmem_helper.h>
->>   #include <drm/drm_ioctl.h>
->> +#include <drm/drm_syncobj.h>
->>   #include <linux/delay.h>
->>   #include <linux/device.h>
->>   #include <linux/dma-fence.h>
->> diff --git a/rust/helpers.c b/rust/helpers.c
->> index 8e906a7a7d8a..11965b1e2f4e 100644
->> --- a/rust/helpers.c
->> +++ b/rust/helpers.c
->> @@ -20,6 +20,7 @@
->>   
->>   #include <drm/drm_gem.h>
->>   #include <drm/drm_gem_shmem_helper.h>
->> +#include <drm/drm_syncobj.h>
->>   #include <linux/bug.h>
->>   #include <linux/build_bug.h>
->>   #include <linux/device.h>
->> @@ -461,6 +462,24 @@ __u64 rust_helper_drm_vma_node_offset_addr(struct drm_vma_offset_node *node)
->>   }
->>   EXPORT_SYMBOL_GPL(rust_helper_drm_vma_node_offset_addr);
->>   
->> +void rust_helper_drm_syncobj_get(struct drm_syncobj *obj)
->> +{
->> +	drm_syncobj_get(obj);
->> +}
->> +EXPORT_SYMBOL_GPL(rust_helper_drm_syncobj_get);
->> +
->> +void rust_helper_drm_syncobj_put(struct drm_syncobj *obj)
->> +{
->> +	drm_syncobj_put(obj);
->> +}
->> +EXPORT_SYMBOL_GPL(rust_helper_drm_syncobj_put);
->> +
->> +struct dma_fence *rust_helper_drm_syncobj_fence_get(struct drm_syncobj *syncobj)
->> +{
->> +	return drm_syncobj_fence_get(syncobj);
->> +}
->> +EXPORT_SYMBOL_GPL(rust_helper_drm_syncobj_fence_get);
->> +
->>   #ifdef CONFIG_DRM_GEM_SHMEM_HELPER
->>   
->>   void rust_helper_drm_gem_shmem_object_free(struct drm_gem_object *obj)
->> diff --git a/rust/kernel/drm/mod.rs b/rust/kernel/drm/mod.rs
->> index 73fab2dee3af..dae98826edfd 100644
->> --- a/rust/kernel/drm/mod.rs
->> +++ b/rust/kernel/drm/mod.rs
->> @@ -8,3 +8,4 @@ pub mod file;
->>   pub mod gem;
->>   pub mod ioctl;
->>   pub mod mm;
->> +pub mod syncobj;
->> diff --git a/rust/kernel/drm/syncobj.rs b/rust/kernel/drm/syncobj.rs
->> new file mode 100644
->> index 000000000000..10eed05eb27a
->> --- /dev/null
->> +++ b/rust/kernel/drm/syncobj.rs
->> @@ -0,0 +1,77 @@
->> +// SPDX-License-Identifier: GPL-2.0 OR MIT
->> +
->> +//! DRM Sync Objects
->> +//!
->> +//! C header: [`include/linux/drm/drm_syncobj.h`](../../../../include/linux/drm/drm_syncobj.h)
->> +
->> +use crate::{bindings, dma_fence::*, drm, error::Result, prelude::*};
->> +
->> +/// A DRM Sync Object
->> +///
->> +/// # Invariants
->> +/// ptr is a valid pointer to a drm_syncobj and we own a reference to it.
->> +pub struct SyncObj {
->> +    ptr: *mut bindings::drm_syncobj,
->> +}
->> +
->> +impl SyncObj {
->> +    /// Looks up a sync object by its handle for a given `File`.
->> +    pub fn lookup_handle(file: &impl drm::file::GenericFile, handle: u32) -> Result<SyncObj> {
->> +        // SAFETY: The arguments are all valid per the type invariants.
->> +        let ptr = unsafe { bindings::drm_syncobj_find(file.raw() as *mut _, handle) };
-> 
-> Just an aside, but the semantics of this are nasty: You're not allowed to
-> hold any locks while calling this. We have runtime checks for that (if you
-> enable lockdep), but I don't see any way to encode that on the rust side
-> and check it at compile time :-/
+arch/sparc/kernel/ebus.o is only built for SPARC64.
+ns87303_lock is only built for SPARC64.
+arch/sparc/include/asm/parport.h says that it is for sparc64.
+Various documentation on the internet says that ebus is for UltraSPARC
+systems (64-bit).
 
-Oof, yeah, that's not possible today. Maybe in the future though, it's 
-similar to the execution context stuff...
+Therefore don't allow PARPORT_PC to be built for SPARC32.
 
-> 
->> +
->> +        if ptr.is_null() {
->> +            Err(ENOENT)
->> +        } else {
->> +            Ok(SyncObj { ptr })
->> +        }
->> +    }
->> +
->> +    /// Returns the DMA fence associated with this sync object, if any.
->> +    pub fn fence_get(&self) -> Option<Fence> {
->> +        let fence = unsafe { bindings::drm_syncobj_fence_get(self.ptr) };
->> +        if fence.is_null() {
->> +            None
->> +        } else {
->> +            // SAFETY: The pointer is non-NULL and drm_syncobj_fence_get acquired an
->> +            // additional reference.
->> +            Some(unsafe { Fence::from_raw(fence) })
->> +        }
->> +    }
->> +
->> +    /// Replaces the DMA fence with a new one, or removes it if fence is None.
->> +    pub fn replace_fence(&self, fence: Option<&Fence>) {
->> +        unsafe {
->> +            bindings::drm_syncobj_replace_fence(
->> +                self.ptr,
->> +                fence.map_or(core::ptr::null_mut(), |a| a.raw()),
->> +            )
->> +        };
->> +    }
->> +
->> +    /// Adds a new timeline point to the syncobj.
->> +    pub fn add_point(&self, chain: FenceChain, fence: &Fence, point: u64) {
->> +        // SAFETY: All arguments should be valid per the respective type invariants.
->> +        // This takes over the FenceChain ownership.
->> +        unsafe { bindings::drm_syncobj_add_point(self.ptr, chain.into_raw(), fence.raw(), point) };
->> +    }
->> +}
->> +
->> +impl Drop for SyncObj {
->> +    fn drop(&mut self) {
->> +        // SAFETY: We own a reference to this syncobj.
->> +        unsafe { bindings::drm_syncobj_put(self.ptr) };
->> +    }
->> +}
->> +
->> +impl Clone for SyncObj {
->> +    fn clone(&self) -> Self {
->> +        // SAFETY: `ptr` is valid per the type invariant and we own a reference to it.
->> +        unsafe { bindings::drm_syncobj_get(self.ptr) };
-> 
-> So yeah syncobj are refcounted because they're shareable uapi objects (you
-> can pass them around as fd), but that really should be entirely the
-> subsystems business, not for drivers.
-> 
-> This is kinda like drm_file, which is also refcounted (by virtue of
-> hanging of struct file), but the refcounting is entirely handled by the
-> vfs and all drivers get is a borrowed reference, which nicely bounds the
-> lifetime to the callback (which is usually an ioctl handler). I think we
-> want the same semantics for syncobj, because if a driver is hanging onto a
-> syncobj for longer than the ioctl. If my rust understanding is right we'd
-> get that by dropping Clone here and relying on lookup_handle only being
-> able to return stuff that's bound by the drm_file?
+Fixes these build errors on SPARC32:
 
-Yeah, that should work! Lifetimes are perfect for this kind of stuff. I 
-need to test it out and see what the right way to do it is (lifetime 
-parameter or actual reference straight into the drm_syncobj) and see how 
-it fits into the driver but I don't see why it wouldn't work, since I 
-don't hold onto sync objects for longer than the ioctl. Might just need 
-some minor refactoring since the current driver ioctl code wasn't 
-written with lifetimes in mind ^^
+ERROR: modpost: "ebus_dma_irq_enable" [drivers/parport/parport_pc.ko] undefined!
+ERROR: modpost: "ebus_dma_unregister" [drivers/parport/parport_pc.ko] undefined!
+ERROR: modpost: "ebus_dma_register" [drivers/parport/parport_pc.ko] undefined!
+ERROR: modpost: "ns87303_lock" [drivers/parport/parport_pc.ko] undefined!
+ERROR: modpost: "ebus_dma_enable" [drivers/parport/parport_pc.ko] undefined!
+ERROR: modpost: "ebus_dma_prepare" [drivers/parport/parport_pc.ko] undefined!
+ERROR: modpost: "ebus_dma_request" [drivers/parport/parport_pc.ko] undefined!
+ERROR: modpost: "ebus_dma_residue" [drivers/parport/parport_pc.ko] undefined!
 
-> People are talking about drivers holding onto syncobj for longer, but I'm
-> still not sold on the idea that this is any good and doesn't just bend the
-> dma_fence and syncobj rules a bit too much over the breaking point. For
-> kernel drivers it really should be just a different way to lookup and
-> return dma_fence from the ioctl, pretty much matching what you could also
-> do with sync_file (but since syncobj provides generic compat ioctl to
-> convert to/from sync_file drivders only need to handle syncobj).
+Fixes: 66bcd06099bb ("parport_pc: Also enable driver for PCI systems")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc: Maciej W. Rozycki <macro@orcam.me.uk>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: linux-parport@lists.infradead.org
+---
+ drivers/parport/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah, if you think restricting the API for this on the Rust side makes 
-sense it works for me! I'm all for not abstracting features that aren't 
-considered particularly useful/safe/a good idea.
-
-> -Daniel
-> 
-> 
->> +        SyncObj { ptr: self.ptr }
->> +    }
->> +}
->> +
->> +// SAFETY: drm_syncobj operations are internally locked.
->> +unsafe impl Sync for SyncObj {}
->> +unsafe impl Send for SyncObj {}
->>
->> -- 
->> 2.35.1
->>
-> 
-
-~~ Lina
-
+diff -- a/drivers/parport/Kconfig b/drivers/parport/Kconfig
+--- a/drivers/parport/Kconfig
++++ b/drivers/parport/Kconfig
+@@ -42,7 +42,7 @@ if PARPORT
+ 
+ config PARPORT_PC
+ 	tristate "PC-style hardware"
+-	depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390)
++	depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390 && !SPARC32)
+ 	help
+ 	  You should say Y here if you have a PC-style parallel port. All
+ 	  IBM PC compatible computers and some Alphas have PC-style
