@@ -2,63 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156016DA27B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD346DA27A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238795AbjDFURn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S238773AbjDFUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238796AbjDFURl (ORCPT
+        with ESMTP id S238444AbjDFUR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:17:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79A01BD7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:17:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mFpvxPlspeoy9LDmMBY7APXBNJ5e/XNrdXF3NxrNXXw=; b=H2Yp1vNceuOId//xOj47ZDsS60
-        cItSvbsseW0Xs+GWraSBzFA6eRyLU98hf574cFaaV6aVEmEu0ESRbFOXjyUbDTBO5MPA9KfTsJCZ2
-        aE3+f0KTlek19+HRaToSO+/yXAZVtSfHROmNFT11O4up9QsGMne9zuZkmvQlext0W21kTixe0SFKX
-        88+fGh+uMNaVYVpCOoArqfWaIlO4oCmPB6sjoziSMJjL7JB5+YtvyQVBYbgcgMZ2CWAoTctqOQkb0
-        gQIUYaETjrk+c39s/BCFc4vVvomZowbeI0w5NhuYXFDbKHp9FciQMQaQoRG7H/alFIbmQAOTYdGWd
-        gvY3jDCA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pkW2P-0008SQ-2U; Thu, 06 Apr 2023 20:17:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 990DF300202;
-        Thu,  6 Apr 2023 22:16:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7D04F212E36AC; Thu,  6 Apr 2023 22:16:52 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 22:16:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ankur Arora <ankur.a.arora@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
-        willy@infradead.org, mgorman@suse.de, rostedt@goodmis.org,
-        tglx@linutronix.de, vincent.guittot@linaro.org, jon.grimm@amd.com,
-        bharata@amd.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH 8/9] irqentry: define irqentry_exit_allow_resched()
-Message-ID: <20230406201652.GA409443@hirez.programming.kicks-ass.net>
-References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
- <20230403052233.1880567-9-ankur.a.arora@oracle.com>
- <20230405202240.GE365912@hirez.programming.kicks-ass.net>
- <87o7o1lzko.fsf@oracle.com>
- <20230406201359.GC405948@hirez.programming.kicks-ass.net>
+        Thu, 6 Apr 2023 16:17:26 -0400
+Received: from cynthia.allandria.com (cynthia.allandria.com [50.242.82.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FE04493;
+        Thu,  6 Apr 2023 13:17:25 -0700 (PDT)
+Received: from flar by cynthia.allandria.com with local (Exim 4.84_2)
+        (envelope-from <flar@allandria.com>)
+        id 1pkW2s-0007P4-RX; Thu, 06 Apr 2023 13:17:22 -0700
+Date:   Thu, 6 Apr 2023 13:17:22 -0700
+From:   Brad Boyer <flar@allandria.com>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] nubus: Don't list slot resources by default
+Message-ID: <20230406201722.GA28362@allandria.com>
+References: <1296c4d691bba057291246f067c191ef8a88531c.1680667933.git.fthain@linux-m68k.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406201359.GC405948@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <1296c4d691bba057291246f067c191ef8a88531c.1680667933.git.fthain@linux-m68k.org>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,21 +39,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 10:13:59PM +0200, Peter Zijlstra wrote:
-> +void irqentry_exit_cond_resched_tif(void)
-> +{
-> +#ifdef TIF_RESCHED_ALLOW
-> +	if (resched_allowed()) {
-> +		/* Sanity check RCU and thread stack */
-> +		rcu_irq_exit_check_preempt();
-> +		if (IS_ENABLED(CONFIG_DEBUG_ENTRY))
-> +			WARN_ON_ONCE(!on_thread_stack());
-> +		if (need_resched())
-> +			preempt_schedule_irq();
+On Wed, Apr 05, 2023 at 02:12:13PM +1000, Finn Thain wrote:
+> Some Nubus card ROMs contain many slot resources. A single Radius video
+> card produced well over a thousand entries under /proc/bus/nubus/.
+> Populating /proc/bus/nubus/ on a slow machine with several such cards
+> installed takes long enough that the user may think that the system is
+> wedged. All those procfs entries also consume significant RAM though
+> they are not normally needed (except by developers).
+> Omit these resources from /proc/bus/nubus/ by default and add a kernel
+> parameter to enable them when needed.
+> On the test machine, this saved 300 kB and 10 seconds.
+> 
+> Cc: Brad Boyer <flar@allandria.com>
 
-arguably this can simply call raw_irqentry_exit_cond_resched_tif()..
-probably better than duplicating all that again.
+Reviewed-by: Brad Boyer <flar@allandria.com>
 
-> +	}
-> +#endif
-> +}
+> Tested-by: Stan Johnson <userm57@yahoo.com>
+> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+> ---
+> Changed since v3:
+>  - Better commentary.
+> Changed since v2:
+>  - Added commentary.
+>  - Moved declaration to nubus.h.
+> Changed since v1:
+>  - Expanded to cover all slot resources in procfs.
+> ---
+>  drivers/nubus/nubus.c | 13 ++++++++++---
+>  drivers/nubus/proc.c  |  8 ++++----
+>  include/linux/nubus.h |  1 +
+>  3 files changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/nubus/nubus.c b/drivers/nubus/nubus.c
+> index f70ba58dbc55..f0c24d39f837 100644
+> --- a/drivers/nubus/nubus.c
+> +++ b/drivers/nubus/nubus.c
+> @@ -32,6 +32,13 @@
+>  
+>  /* Globals */
+>  
+> +/* The "nubus.populate_procfs" parameter makes slot resources available in
+> + * procfs. It's deprecated and disabled by default because procfs is no longer
+> + * thought to be suitable for that and some board ROMs make it too expensive.
+> + */
+> +bool populate_procfs;
+> +module_param(populate_procfs, bool, 0);
+> +
+>  LIST_HEAD(nubus_func_rsrcs);
+>  
+>  /* Meaning of "bytelanes":
+> @@ -572,9 +579,9 @@ nubus_get_functional_resource(struct nubus_board *board, int slot,
+>  			nubus_proc_add_rsrc(dir.procdir, &ent);
+>  			break;
+>  		default:
+> -			/* Local/Private resources have their own
+> -			   function */
+> -			nubus_get_private_resource(fres, dir.procdir, &ent);
+> +			if (populate_procfs)
+> +				nubus_get_private_resource(fres, dir.procdir,
+> +							   &ent);
+>  		}
+>  	}
+>  
+> diff --git a/drivers/nubus/proc.c b/drivers/nubus/proc.c
+> index 2c320a84fd72..1808accb8214 100644
+> --- a/drivers/nubus/proc.c
+> +++ b/drivers/nubus/proc.c
+> @@ -55,7 +55,7 @@ struct proc_dir_entry *nubus_proc_add_board(struct nubus_board *board)
+>  {
+>  	char name[2];
+>  
+> -	if (!proc_bus_nubus_dir)
+> +	if (!proc_bus_nubus_dir || !populate_procfs)
+>  		return NULL;
+>  	snprintf(name, sizeof(name), "%x", board->slot);
+>  	return proc_mkdir(name, proc_bus_nubus_dir);
+> @@ -72,7 +72,7 @@ struct proc_dir_entry *nubus_proc_add_rsrc_dir(struct proc_dir_entry *procdir,
+>  	char name[9];
+>  	int lanes = board->lanes;
+>  
+> -	if (!procdir)
+> +	if (!procdir || !populate_procfs)
+>  		return NULL;
+>  	snprintf(name, sizeof(name), "%x", ent->type);
+>  	remove_proc_subtree(name, procdir);
+> @@ -157,7 +157,7 @@ void nubus_proc_add_rsrc_mem(struct proc_dir_entry *procdir,
+>  	char name[9];
+>  	struct nubus_proc_pde_data *pded;
+>  
+> -	if (!procdir)
+> +	if (!procdir || !populate_procfs)
+>  		return;
+>  
+>  	snprintf(name, sizeof(name), "%x", ent->type);
+> @@ -176,7 +176,7 @@ void nubus_proc_add_rsrc(struct proc_dir_entry *procdir,
+>  	char name[9];
+>  	unsigned char *data = (unsigned char *)ent->data;
+>  
+> -	if (!procdir)
+> +	if (!procdir || !populate_procfs)
+>  		return;
+>  
+>  	snprintf(name, sizeof(name), "%x", ent->type);
+> diff --git a/include/linux/nubus.h b/include/linux/nubus.h
+> index 392fc6c53e96..50c9145808d1 100644
+> --- a/include/linux/nubus.h
+> +++ b/include/linux/nubus.h
+> @@ -93,6 +93,7 @@ extern struct bus_type nubus_bus_type;
+>  
+>  /* Generic NuBus interface functions, modelled after the PCI interface */
+>  #ifdef CONFIG_PROC_FS
+> +extern bool populate_procfs;
+>  void nubus_proc_init(void);
+>  struct proc_dir_entry *nubus_proc_add_board(struct nubus_board *board);
+>  struct proc_dir_entry *nubus_proc_add_rsrc_dir(struct proc_dir_entry *procdir,
+> -- 
+> 2.37.5
+> 
