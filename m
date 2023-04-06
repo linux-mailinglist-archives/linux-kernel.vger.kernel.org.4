@@ -2,148 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4AE6DA583
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0704B6DA584
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjDFWFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S239323AbjDFWFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239348AbjDFWEx (ORCPT
+        with ESMTP id S239562AbjDFWFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:04:53 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B7CA5CB;
-        Thu,  6 Apr 2023 15:04:51 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336EvpVo016552;
-        Thu, 6 Apr 2023 22:04:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=YA7FDaUoxmNX9BwiqD4hG0qZzclOK6XYTvo5kS7D8b0=;
- b=wpQ+788VbvC0lVz0vkbRKXW/lQdvOOeCCmxwk7NjLZCvFVHO10hmrg7FHKqwVlXwvNO3
- KInYKZo2UoQToNw1iL+AEUOBwbgnPW0wIsEiC7zE2OJ7cv4nYSqQOuSln7FZ/3ypd5hV
- yb6El+7Dj0uN6hlkUNSG0O8SUGOK7A4aJsyE13k81UGI59YO5qY5SKGxekKl/iCaOa4y
- 4XNhbFxdl9Aa7azujtpet7/xuTSv2RF6ND/WsjBWn1jhV1/t0844qNhptpZ3LddM/L6I
- SIH8n/7KjFuZsuS1ZtDHIv5luMoPmbhRvoBg6C+y8VSEy2huXTrmjamon8RuESQN1MYD Xw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppc7u3x1f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Apr 2023 22:04:45 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 336KoArf027512;
-        Thu, 6 Apr 2023 22:04:44 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pptutpde6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Apr 2023 22:04:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lEPIiCS+i/QtpbDByBgTlfzd6ors6o41vrmldy9FYCkroqAvbbB/Ii5U1cxknF5VkPWBHdewxBFreazw0hq4NwEHcfJtaYpJe69mhDcOVOENKmKt5COLyYePp9UJIkbNnXclI5XWZmGuIVHZ1Y199pv3sfCo7iRF5P5fq75lE5X79vvZHYh7Il6+q0tDi5WpgOzpPbnl1tes+Rp2oigOz7Wr9sNH5pCzFdp+ibm8G/K82RugdkNAwS6syqoUPUuQ9FLKnSqLANH+HvMHEhqsW0+hZAuTz2OmgjLGKxncTfq5Z7c3lxGG2Cl0v4rhQmsKZWBAcHrBbnifcgxQv7aDpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YA7FDaUoxmNX9BwiqD4hG0qZzclOK6XYTvo5kS7D8b0=;
- b=n6TUgQ68iu9FRNogAujGo3JKnC7TR5Cn/8icMislXvCBC1UdqppK/BIRZ2PseycR6yFZGTtkNcNwV2JTs0Tgc67nX/UmpuzBLGmVdt9l3jofXfQZv3CipAUkcn5PfcxJ+b5QnwSrJrAVdvSv/LeTdyqAHcx2lARM1eyl7MNYtNQ17DPBOzmanj0MMoHTAnYiB3xIEM5Db9Si2PvsgIuWpND92cGYrJdHpenhul82/ZpFSj1QlJNoKEkm441TnyDdKxh04HjiijSiK97vEv9nQOdi9w1reEqHt0jVV+4E8EnYNYpLNUeH/19lXQ27jbxhc9DABh6+Kq8gN6BihqBLKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 6 Apr 2023 18:05:02 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA00A5CB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:05:01 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id l11so762434qtj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:05:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YA7FDaUoxmNX9BwiqD4hG0qZzclOK6XYTvo5kS7D8b0=;
- b=FVTWIweI8Cxy3kxnQzW91hOm/30oLAjQ8iHX0JB0iwLvgUUFqelfYq7R4/RUUdtV2lYtoYsTKXeM8DcgTbE87JYZJiYNJmX2guubIC8otzZMJ6c1C6buod21KlMuy5xxQ1eOnwRoAFRij6bEwtRLZF8GjysJDZ8YCwPuJSspnp4=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by BLAPR10MB4882.namprd10.prod.outlook.com (2603:10b6:208:30d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.31; Thu, 6 Apr
- 2023 22:04:41 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::8bb9:2bb7:3930:b5da]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::8bb9:2bb7:3930:b5da%7]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
- 22:04:41 +0000
-Date:   Thu, 6 Apr 2023 18:04:37 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/mprotect: Fix do_mprotect_pkey() return on error
-Message-ID: <20230406220437.wiks6gm3k6tt662f@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230406193050.1363476-1-Liam.Howlett@oracle.com>
- <20230406145345.9c5e4c91461cbf42509a92a9@linux-foundation.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406145345.9c5e4c91461cbf42509a92a9@linux-foundation.org>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT1P288CA0027.CANP288.PROD.OUTLOOK.COM (2603:10b6:b01::40)
- To SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+        d=gmail.com; s=20210112; t=1680818698; x=1683410698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=foA3pXnOMEI3cPd0gEtz9FKmZb7kgJDnrVn+KDAiuIc=;
+        b=ghYSPH9xEE45W2qMuxnqlrYh633jNBUmZa7ISrZgxcU8oBUtt/AhavwlWXQru0Pe0h
+         2oZjkcezHe7uxIedRmxQV4zn5RPnVai+24WF3s+LT8FF6KehjmQJhIYlXZKTKB3xKWZx
+         0uS+ed5K7kZvhYjxJmJiK0BWbAYW0pvL46jvyMQy1woXzwJGwxIbHVn1VxtX7ruJ4IMO
+         wOVWBhlic4x2REWr08HMIBZtYMNj53rQImhZat1S+qdlgWnUus0KKYlSbfimL48tNxfh
+         x0kSOnr2KOAs1vNzbap+OzrgGAAMrTNm+x7jpDKKd31zeN34H/BMqtIyadxm7zkXkFr2
+         0TXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680818698; x=1683410698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=foA3pXnOMEI3cPd0gEtz9FKmZb7kgJDnrVn+KDAiuIc=;
+        b=0Nj08dTx0yhMZMVrffclon0phejqAf837CAqZD0cMTFIIAlc3Axbg/M746Lp2U8729
+         tvmPtHdg7bUfbhfi0qqMRbmkRKX1B0M6deuRVT9Y17UATTWU/DIIusaRAWY75Sv3qScq
+         uUXTtYLLr3OnuXGnIgv57Yo3Ooe443X+4FNQJ0Mx4R1ekAmMJaR8E4D7SC9Zr3X1/JMu
+         PubtmG27z1UH7U0EU45fGB6Xx4HpZTpqUPokBOwST02jGA8yxZ9zUP+BGZCgltOmQDtY
+         H4VPrqq9DQ8HpXGw6Gt1lhdfa3qc+NHL3ZYW18KMIQ8/NL3KtkCHXWnPaXGAHMMkFiCJ
+         VaOQ==
+X-Gm-Message-State: AAQBX9fDrD7ivGFh9DccPV6N+9Phvlp0WqXUjFb0Xn/kTAz8x/TxXqGk
+        Qc79dNy2koCWiNeKhUKESfCTme0yt2GMjQ==
+X-Google-Smtp-Source: AKy350YzF8iFwJcF/VTXOXbvV0W9tZlIp66Pz25bETrgsrh8AoY/Pbq3CV6fVAVOPaRyyqMaNasbFQ==
+X-Received: by 2002:ac8:5a8b:0:b0:3e6:6502:16af with SMTP id c11-20020ac85a8b000000b003e6650216afmr649548qtc.40.1680818698555;
+        Thu, 06 Apr 2023 15:04:58 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id dm24-20020a05620a1d5800b00746a7945d87sm786356qkb.52.2023.04.06.15.04.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 15:04:57 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>, kapil.hali@broadcom.com
+Subject: [PATCH v2] scripts/gdb: Print interrupts
+Date:   Thu,  6 Apr 2023 15:04:51 -0700
+Message-Id: <20230406220451.1583239-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|BLAPR10MB4882:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba6313dd-952b-4723-e5fd-08db36eaebd7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fo/vT/l9K1wT5j+RHZUlTyWfekSwPECkbnnK6xUkg9Y6n9dbMM0p2Ih6MAZXeGl39qxvEaKdP97brWxdlIMlAW1Q5TkQ3B/5SshBOzD1nwWn9R/pGr7JLQ328Yoso5uupApSLIYqH4AZdUoFCT36heLGW4au3iyxg7POftUZEi00VeoyBjGFV0wmqoIaOIKqQVZjFBWxmhyBQrEkPFdkTQCY+HWOue5CKHn7ScikXyO4PV6iOMfzzryEE8YXM+Jq4xDa/AoaqLEnaOjS/Q2xwk4DDgOK+gFofGMa5ud4sL2N5vVYT/YgvEkgyRu13kksCaAcMa/E6rSpu4Onbm/VC2p+/Pny9SiRicqfoxOOpbdWQTYij8UNBC89uclhbILHfYuvwZ8SlQrjiq55Kdc6Wqk4CbJb1zTOjseZ7sYchoS04OxIZtTmIVkewhSH6tUmrPavmjo2iuuAJD4jKhy0O1o1Zk5cI9AbkTkHwroWz5jxtKgfSk8c24EjXloBwqKliMRJ9EG+kVrXGWQtfywqpCFbZ1plf1qnmhoT+C7R6J1UbChpQP6RtrnJXlA9DTa9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(346002)(366004)(39860400002)(396003)(376002)(451199021)(83380400001)(6486002)(478600001)(316002)(1076003)(26005)(6506007)(6666004)(9686003)(186003)(33716001)(6512007)(4326008)(5660300002)(38100700002)(2906002)(6916009)(66946007)(86362001)(66556008)(41300700001)(8676002)(66476007)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?25Poy6t76GkxnmFmcvuZW00rPXUdatc1gWFugL3PQez9CXoaA86l0VqfryRV?=
- =?us-ascii?Q?ae/VAHuWHH8fkT90ucEz9cm3IVACzLvNYHRD2abx1HO2slw/gHzmkEh1vFr/?=
- =?us-ascii?Q?FjEvT2vwjV7Lt8vjnCqshcEJKBPTzgjGVJRYHkRXPjpvUnOUS8StgHBSbzox?=
- =?us-ascii?Q?CQEySgJyRQTPo+bqPMzXOs1pXslzjCVmlJRLgfCLv57CJQV+arQq5KWbfc+S?=
- =?us-ascii?Q?SH5Fq04ZSu7Bjk2Y7XZqYFFtiDck4JlLGfgaLjX4zdFU3O7ooPVLYJYR8955?=
- =?us-ascii?Q?w4WMqh9na9ux9zB/dSJV6tIpA3klkMw6cyGRY7VL6F2GQsvUMmdaYyl+5f2U?=
- =?us-ascii?Q?K2JJNJ+woWeZhwN9RWB606hndWwaJ6TcyZMVaTXdvr2e2QM7tzbPvcwBJOjS?=
- =?us-ascii?Q?t+jwrrx8aRIAGXbf8cRQzyRyWVpioPJvcYIcdyQVegggo3k7ZKd6FsGf+hh1?=
- =?us-ascii?Q?BWV/C0UiOT6FvMeCW/aTR64UEdF5Ae+0Mx2NWn2GojYECksFduz/WL4ZndME?=
- =?us-ascii?Q?AOaUbEFsd2FyOCMCxhS4NTE6g7pZ4oQT0Ps0sBp1km76qT70SbhVqkBt9XjY?=
- =?us-ascii?Q?/SLI1gFKtJRySNYOdEr4FYl9XfpM69q6/kkNR1PXgFYg4ShXK80pM46DFdTq?=
- =?us-ascii?Q?lIfmntWhPy7ewkJi3Hu5iMJjKfaQB2ywwq9vudSmewT/sVvzu+h9rVBHmmIG?=
- =?us-ascii?Q?lTd35vwZmJF+C3hWQNcSwBwzQmZeQmMhdtKM2eTMl+wUNiuLit/3+6sXFI5s?=
- =?us-ascii?Q?0HXND514UAcSMkaUX56XSRkMR5VlxKfpJaEExOWaFsADyIpbPrkT50rimh7o?=
- =?us-ascii?Q?GVD0swbRzvStB/XIObLns8rq9awLfXl60XcS5X6ApzbPgaFp91BocQ/PvkJ7?=
- =?us-ascii?Q?/O1efoXy9YQfz3WkGpmwQSA5d8RF9g4VK9NxkZAq+gza41+kcAW7xm6gP/Fa?=
- =?us-ascii?Q?1GJM7fzbbcK1AiBmdjrE5V3hUi3vlGZey07iy1nkZtaFj1kqI8/4glVNCWjG?=
- =?us-ascii?Q?13Doebyyz6fmKFolXzVWGi1bR5BajHDbvV0u7Th0/4aZJ3PvDnMwndHfEArS?=
- =?us-ascii?Q?n2JAifFuRFloCHnXLaU7ubAaJtEK0PRKkWvoC5TFlGg/iLB3FLJI/3RhkA72?=
- =?us-ascii?Q?BK8Nlisv/gfEUZIOgGHSufdG1rz7Woo5OODs783QT1g/LiHdzbssm5wKm/aI?=
- =?us-ascii?Q?51K7Ix9A2SmttrperaHMVD7dVdRXJdvQ/jIz0BXjc0r4lKWUejs/qqhT8riG?=
- =?us-ascii?Q?AeMXTXKxdssU2OLtsY7RcDhASE9b9r/3dnV+zodm2g00auqSRSSvy0BTyboj?=
- =?us-ascii?Q?IjvHp8W7/azA0J4Qk7B4SsnRmPl31ZLQuS5g7b1qZ5n9NgYGTVnJzkMpf8vy?=
- =?us-ascii?Q?S8oJHoIqagj+r+dVm+DdytGbKN5ra3vdbrUnRK5OAno59rSRzoYkRUGbrLdv?=
- =?us-ascii?Q?NkE+vU3buyXjCT+a4KuFlsnulWftuc50pnIWZjhhnIk6h+KSuEHkwhE7sY97?=
- =?us-ascii?Q?dfmCqwTMI2Foyb8jUMj/fD5Swgv5UP4F5KmnK5OnR3be90xbvsDpAyRf+72P?=
- =?us-ascii?Q?J1j8yEfcIzUb3jsBAXoK2oZGTCcvbTOP03ZounLzzVz44o8qOtGBMOD1pfLR?=
- =?us-ascii?Q?gQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: WEA/pb1FvbIYMM/WBeBBsQxx/up6VAopb8eDIPH8banVoj/x+X5z0T+fqpMyMlJxZwfv3W4TZlcZ3oJR1GDz6mTStoZQOiofJjinafbOMVhSzERAzltP357E9lSfiCHuIb4B0dcnjC7Z1gO6DHJh6LRLjna+ayEgUVhl9XQaSvZqpZzvpOVHVSqW2z5BoprGv4UPbxTk/8aWvONxTrtJFvC+OX9L2aEPGuvv9VIZigc69GLrixWjSvDj1+/eyshamqgeNXaPJOLx8c4Er/ugeGN93FGfAYoupc6fBWOt5RcNVE32TYN5oASQGmh7A32hJOKuciPW5S0XmChnrih34XRKu+h2r58U8fB4yWHOvTjfwQvf794Njje4Nne5RGsIa49SBbOUmkShVNouw7FZS9eJ0KV+8CXsBLxqtm/vZ+PvL70fB7j02owns5PYNOTwzKh12qroA12RbQBxsEjxoQqbrWiS5Rja+/qw8kHyB20il9ouuD0X4LWHHyuMpPExaeoR2ZGrdwXBxtQx+FtZ6ED05hJc1r368KSCUPSQ5TrSDsPgVxymcN8dLum3gegfgdRLgrfF7hhD7QPLmJyOJwOyLEnS14g/m95H0wGm6MKsHgAFyNcDsjhGaAg9EdpZQvyuP+Pnyl+ymdmpU9iOfbCPfuYw08K1EihnG0Cx/y8PKfhUc5pSg5qz2RJZoZ+5NCAnzuGUitYxiOcqHSFRneTz9F2W3j4HV42seztvbP87E3Vmx2kwFrM0R3FUN1oJTHB7S1sUjaLwI44xQv6ccJzfiw8xcRJoRSwIENfWC1+TVo7/NPHo+zy/mwMbjr7vIYVUVEqQJ0lkG8jUzwgW1g==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba6313dd-952b-4723-e5fd-08db36eaebd7
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 22:04:41.1179
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dI1Oz0pSUiDJx7631AckZkhIMQXO7mr306OsUbNW306bscqLMXGzJmwli3BsPKWs2XJmDqYDKZBpdtDBcBoNgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4882
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304060195
-X-Proofpoint-ORIG-GUID: F6VNwk1f5u0sRS0NwFp_q6-2xgxQ4hAs
-X-Proofpoint-GUID: F6VNwk1f5u0sRS0NwFp_q6-2xgxQ4hAs
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -151,34 +71,334 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andrew Morton <akpm@linux-foundation.org> [230406 17:53]:
-> On Thu,  6 Apr 2023 15:30:50 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
-> 
-> > When the loop over the VMA is terminated early due to an error, the
-> > return code could be overwritten with ENOMEM.  Fix the return code by
-> > only setting the error on early loop termination when the error is not
-> > set.
-> > 
-> > Fixes: 2286a6914c77 ("mm: change mprotect_fixup to vma iterator")
-> > Cc: <stable@vger.kernel.org>
-> 
-> I do think we should always describe the user-visible effects when
-> proposing a backport.
-> 
-> a) so the -stable maintainers understand why we're recommending the
->    backport and
-> 
-> b) to help some poor soul who is looking at the patch wondering if
->    it will fix his customer's bug report.
+This GDB script prints the interrupts in the system in the same way that
+/proc/interrupts does. This does include the architecture specific part
+done by arch_show_interrupts() for x86, ARM, ARM64 and MIPS. Example
+output from an ARM64 system:
 
-Thanks, I'll keep this in mind.
+(gdb) lx-interruptlist
+           CPU0       CPU1       CPU2       CPU3
+ 10:       3167      1225      1276      2629     GICv2   30 Level     arch_timer
+ 13:          0         0         0         0     GICv2   36 Level     arm-pmu
+ 14:          0         0         0         0     GICv2   37 Level     arm-pmu
+ 15:          0         0         0         0     GICv2   38 Level     arm-pmu
+ 16:          0         0         0         0     GICv2   39 Level     arm-pmu
+ 28:          0         0         0         0  interrupt-controller@8410640    5 Edge      brcmstb-gpio-wake
+ 30:        125         0         0         0     GICv2  128 Level     ttyS0
+ 31:          0         0         0         0  interrupt-controller@8416000    0 Level     mspi_done
+ 32:          0         0         0         0  interrupt-controller@8410640    3 Edge      brcmstb-waketimer
+ 33:          0         0         0         0  interrupt-controller@8418580    8 Edge      brcmstb-waketimer-rtc
+ 34:        872         0         0         0     GICv2  230 Level     brcm_scmi@0
+ 35:          0         0         0         0  interrupt-controller@8410640   10 Edge      8d0f200.usb-phy
+ 37:          0         0         0         0     GICv2   97 Level     PCIe PME
+ 42:          0         0         0         0     GICv2  145 Level     xhci-hcd:usb1
+ 43:         94         0         0         0     GICv2   71 Level     mmc1
+ 44:          0         0         0         0     GICv2   70 Level     mmc0
+IPI0:        23       666       154        98      Rescheduling interrupts
+IPI1:       247      1053      1701       634      Function call interrupts
+IPI2:         0         0         0         0      CPU stop interrupts
+IPI3:         0         0         0         0      CPU stop (for crash dump) interrupts
+IPI4:         0         0         0         0      Timer broadcast interrupts
+IPI5:         7         9         5         0      IRQ work interrupts
+IPI6:         0         0         0         0      CPU wake-up interrupts
+ERR:          0
 
-> 
-> How's this?
-> 
-> : User-visible effects include: attempts to run mprotect() against a special
-> : mapping or with a poorly-aligned hugetlb address should return -EINVAL,
-> : but they presently return -ENOMEM.
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+Changes in v2:
 
-That sounds reasonable, although this isn't an exhaustive list. It could
-be an -EACCESS for multiple reasons, or anything the vm_ops returns.
+- fixed typo in commit message and explained that some architectures do
+  get the output of arch_show_interrupts() to be printed out
+
+ scripts/gdb/linux/constants.py.in |  14 ++
+ scripts/gdb/linux/interrupts.py   | 232 ++++++++++++++++++++++++++++++
+ scripts/gdb/vmlinux-gdb.py        |   1 +
+ 3 files changed, 247 insertions(+)
+ create mode 100644 scripts/gdb/linux/interrupts.py
+
+diff --git a/scripts/gdb/linux/constants.py.in b/scripts/gdb/linux/constants.py.in
+index e484e2e7e4d5..36fd2b145853 100644
+--- a/scripts/gdb/linux/constants.py.in
++++ b/scripts/gdb/linux/constants.py.in
+@@ -15,6 +15,7 @@
+ #include <linux/clk-provider.h>
+ #include <linux/fs.h>
+ #include <linux/hrtimer.h>
++#include <linux/irq.h>
+ #include <linux/mount.h>
+ #include <linux/of_fdt.h>
+ #include <linux/radix-tree.h>
+@@ -57,6 +58,10 @@ LX_VALUE(SB_NODIRATIME)
+ /* linux/htimer.h */
+ LX_GDBPARSED(hrtimer_resolution)
+ 
++/* linux/irq.h */
++LX_GDBPARSED(IRQD_LEVEL)
++LX_GDBPARSED(IRQ_HIDDEN)
++
+ /* linux/mount.h */
+ LX_VALUE(MNT_NOSUID)
+ LX_VALUE(MNT_NODEV)
+@@ -85,3 +90,12 @@ LX_CONFIG(CONFIG_HIGH_RES_TIMERS)
+ LX_CONFIG(CONFIG_NR_CPUS)
+ LX_CONFIG(CONFIG_OF)
+ LX_CONFIG(CONFIG_TICK_ONESHOT)
++LX_CONFIG(CONFIG_GENERIC_IRQ_SHOW_LEVEL)
++LX_CONFIG(CONFIG_X86_LOCAL_APIC)
++LX_CONFIG(CONFIG_SMP)
++LX_CONFIG(CONFIG_X86_THERMAL_VECTOR)
++LX_CONFIG(CONFIG_X86_MCE_THRESHOLD)
++LX_CONFIG(CONFIG_X86_MCE_AMD)
++LX_CONFIG(CONFIG_X86_MCE)
++LX_CONFIG(CONFIG_X86_IO_APIC)
++LX_CONFIG(CONFIG_HAVE_KVM)
+diff --git a/scripts/gdb/linux/interrupts.py b/scripts/gdb/linux/interrupts.py
+new file mode 100644
+index 000000000000..ef478e273791
+--- /dev/null
++++ b/scripts/gdb/linux/interrupts.py
+@@ -0,0 +1,232 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright 2023 Broadcom
++
++import gdb
++
++from linux import constants
++from linux import cpus
++from linux import utils
++from linux import radixtree
++
++irq_desc_type = utils.CachedType("struct irq_desc")
++
++def irq_settings_is_hidden(desc):
++    return desc['status_use_accessors'] & constants.LX_IRQ_HIDDEN
++
++def irq_desc_is_chained(desc):
++    return desc['action'] and desc['action'] == gdb.parse_and_eval("&chained_action")
++
++def irqd_is_level(desc):
++    return desc['irq_data']['common']['state_use_accessors'] & constants.LX_IRQD_LEVEL
++
++def show_irq_desc(prec, irq):
++    text = ""
++
++    desc = radixtree.lookup(gdb.parse_and_eval("&irq_desc_tree"), irq)
++    if desc is None:
++        return text
++
++    desc = desc.cast(irq_desc_type.get_type())
++    if desc is None:
++        return text
++
++    if irq_settings_is_hidden(desc):
++        return text
++
++    any_count = 0
++    if desc['kstat_irqs']:
++        for cpu in cpus.each_online_cpu():
++            any_count += cpus.per_cpu(desc['kstat_irqs'], cpu)
++
++    if (desc['action'] == 0 or irq_desc_is_chained(desc)) and any_count == 0:
++        return text;
++
++    text += "%*d: " % (prec, irq)
++    for cpu in cpus.each_online_cpu():
++        if desc['kstat_irqs']:
++            count = cpus.per_cpu(desc['kstat_irqs'], cpu)
++        else:
++            count = 0
++        text += "%10u" % (count)
++
++    name = "None"
++    if desc['irq_data']['chip']:
++        chip = desc['irq_data']['chip']
++        if chip['name']:
++            name = chip['name'].string()
++        else:
++            name = "-"
++
++    text += "  %8s" % (name)
++
++    if desc['irq_data']['domain']:
++        text += "  %*lu" % (prec, desc['irq_data']['hwirq'])
++    else:
++        text += "  %*s" % (prec, "")
++
++    if constants.LX_CONFIG_GENERIC_IRQ_SHOW_LEVEL:
++        text += " %-8s" % ("Level" if irqd_is_level(desc) else "Edge")
++
++    if desc['name']:
++        text += "-%-8s" % (desc['name'].string())
++
++    """ Some toolchains may not be able to provide information about irqaction """
++    try:
++        gdb.lookup_type("struct irqaction")
++        action = desc['action']
++        if action is not None:
++            text += "  %s" % (action['name'].string())
++            while True:
++                action = action['next']
++                if action is not None:
++                    break
++                if action['name']:
++                    text += ", %s" % (action['name'].string())
++    except:
++        pass
++
++    text += "\n"
++
++    return text
++
++def show_irq_err_count(prec):
++    cnt = utils.gdb_eval_or_none("irq_err_count")
++    text = ""
++    if cnt is not None:
++        text += "%*s: %10u\n" % (prec, "ERR", cnt['counter'])
++    return text
++
++def x86_show_irqstat(prec, pfx, field, desc):
++    irq_stat = gdb.parse_and_eval("&irq_stat")
++    text = "%*s: " % (prec, pfx)
++    for cpu in cpus.each_online_cpu():
++        stat = cpus.per_cpu(irq_stat, cpu)
++        text += "%10u " % (stat[field])
++    text += "  %s\n" % (desc)
++    return text
++
++def x86_show_mce(prec, var, pfx, desc):
++    pvar = gdb.parse_and_eval(var)
++    text = "%*s: " % (prec, pfx)
++    for cpu in cpus.each_online_cpu():
++        text += "%10u " % (cpus.per_cpu(pvar, cpu))
++    text += "  %s\n" % (desc)
++    return text
++
++def x86_show_interupts(prec):
++    text = x86_show_irqstat(prec, "NMI", '__nmi_count', 'Non-maskable interrupts')
++
++    if constants.LX_CONFIG_X86_LOCAL_APIC:
++        text += x86_show_irqstat(prec, "LOC", 'apic_timer_irqs', "Local timer interrupts")
++        text += x86_show_irqstat(prec, "SPU", 'irq_spurious_count', "Spurious interrupts")
++        text += x86_show_irqstat(prec, "PMI", 'apic_perf_irqs', "Performance monitoring interrupts")
++        text += x86_show_irqstat(prec, "IWI", 'apic_irq_work_irqs', "IRQ work interrupts")
++        text += x86_show_irqstat(prec, "RTR", 'icr_read_retry_count', "APIC ICR read retries")
++        if utils.gdb_eval_or_none("x86_platform_ipi_callback") is not None:
++            text += x86_show_irqstat(prec, "PLT", 'x86_platform_ipis', "Platform interrupts")
++
++    if constants.LX_CONFIG_SMP:
++        text += x86_show_irqstat(prec, "RES", 'irq_resched_count', "Rescheduling interrupts")
++        text += x86_show_irqstat(prec, "CAL", 'irq_call_count', "Function call interrupts")
++        text += x86_show_irqstat(prec, "TLB", 'irq_tlb_count', "TLB shootdowns")
++
++    if constants.LX_CONFIG_X86_THERMAL_VECTOR:
++        text += x86_show_irqstat(prec, "TRM", 'irq_thermal_count', "Thermal events interrupts")
++
++    if constants.LX_CONFIG_X86_MCE_THRESHOLD:
++        text += x86_show_irqstat(prec, "THR", 'irq_threshold_count', "Threshold APIC interrupts")
++
++    if constants.LX_CONFIG_X86_MCE_AMD:
++        text += x86_show_irqstat(prec, "DFR", 'irq_deferred_error_count', "Deferred Error APIC interrupts")
++
++    if constants.LX_CONFIG_X86_MCE:
++        text += x86_show_mce(prec, "&mce_exception_count", "MCE", "Machine check exceptions")
++        text == x86_show_mce(prec, "&mce_poll_count", "MCP", "Machine check polls")
++
++    text += show_irq_err_count(prec)
++
++    if constants.LX_CONFIG_X86_IO_APIC:
++        cnt = utils.gdb_eval_or_none("irq_mis_count")
++        if cnt is not None:
++            text += "%*s: %10u\n" % (prec, "MIS", cnt['counter'])
++
++    if constants.LX_CONFIG_HAVE_KVM:
++        text += x86_show_irqstat(prec, "PIN", 'kvm_posted_intr_ipis', 'Posted-interrupt notification event')
++        text += x86_show_irqstat(prec, "NPI", 'kvm_posted_intr_nested_ipis', 'Nested posted-interrupt event')
++        text += x86_show_irqstat(prec, "PIW", 'kvm_posted_intr_wakeup_ipis', 'Posted-interrupt wakeup event')
++
++    return text
++
++def arm_common_show_interrupts(prec):
++    text = ""
++    nr_ipi = utils.gdb_eval_or_none("nr_ipi")
++    ipi_desc = utils.gdb_eval_or_none("ipi_desc")
++    ipi_types = utils.gdb_eval_or_none("ipi_types")
++    if nr_ipi is None or ipi_desc is None or ipi_types is None:
++        return text
++
++    if prec >= 4:
++        sep = " "
++    else:
++        sep = ""
++
++    for ipi in range(nr_ipi):
++        text += "%*s%u:%s" % (prec - 1, "IPI", ipi, sep)
++        desc = ipi_desc[ipi].cast(irq_desc_type.get_type().pointer())
++        if desc == 0:
++            continue
++        for cpu in cpus.each_online_cpu():
++            text += "%10u" % (cpus.per_cpu(desc['kstat_irqs'], cpu))
++        text += "      %s" % (ipi_types[ipi].string())
++        text += "\n"
++    return text
++
++def aarch64_show_interrupts(prec):
++    text = arm_common_show_interrupts(prec)
++    text += "%*s: %10lu\n" % (prec, "ERR", gdb.parse_and_eval("irq_err_count"))
++    return text
++
++def arch_show_interrupts(prec):
++    text = ""
++    if utils.is_target_arch("x86"):
++        text += x86_show_interupts(prec)
++    elif utils.is_target_arch("aarch64"):
++        text += aarch64_show_interrupts(prec)
++    elif utils.is_target_arch("arm"):
++        text += arm_common_show_interrupts(prec)
++    elif utils.is_target_arch("mips"):
++        text += show_irq_err_count(prec)
++    else:
++        raise gdb.GdbError("Unsupported architecture: {}".format(target_arch))
++
++    return text
++
++class LxInterruptList(gdb.Command):
++    """Print /proc/interrupts"""
++
++    def __init__(self):
++        super(LxInterruptList, self).__init__("lx-interruptlist", gdb.COMMAND_DATA)
++
++    def invoke(self, arg, from_tty):
++        nr_irqs = gdb.parse_and_eval("nr_irqs")
++        prec = 3
++        j = 1000
++        while prec < 10 and j <= nr_irqs:
++            prec += 1
++            j *= 10
++
++        gdb.write("%*s" % (prec + 8, ""))
++        for cpu in cpus.each_online_cpu():
++            gdb.write("CPU%-8d" % cpu)
++        gdb.write("\n")
++
++        if utils.gdb_eval_or_none("&irq_desc_tree") is None:
++            return
++
++        for irq in range(nr_irqs):
++            gdb.write(show_irq_desc(prec, irq))
++        gdb.write(arch_show_interrupts(prec))
++
++
++LxInterruptList()
+diff --git a/scripts/gdb/vmlinux-gdb.py b/scripts/gdb/vmlinux-gdb.py
+index 2f57adcf3dff..2a72f91059b5 100644
+--- a/scripts/gdb/vmlinux-gdb.py
++++ b/scripts/gdb/vmlinux-gdb.py
+@@ -42,3 +42,4 @@ else:
+     import linux.device
+     import linux.mm
+     import linux.radixtree
++    import linux.interrupts
+-- 
+2.34.1
+
