@@ -2,117 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D8C6DA3FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD236DA40B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240473AbjDFUqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
+        id S240330AbjDFUtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239801AbjDFUq3 (ORCPT
+        with ESMTP id S240583AbjDFUtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:46:29 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA4C1024E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:43:05 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id b6so21852826ljr.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:43:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680813784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hjYb+JJW8I3O+mIrtvD7Toze9rRPQIAniPP/DyAemws=;
-        b=V0r8ogOPUHVQWm/U05RejhjJjC6dWRxD1yPdyxlOCuku+kCvNxsl4EsRbuIoRTaCQq
-         o+rVWhpvr9te+49j25Ba0s4/Dzo3INZWmUAkGzF+H/QTfX3ueiiAlXlgqqJo2oKKcgeG
-         uyMJoQqNorh2fVv/I/8z+WxVIwcTIj9hLH9/9QQYfRg/K651mJGDH4UpcxiIKyXqx50n
-         YaL+ieyRfxJIB1MhLeAxky1I3pLc2/3Vfyb5c9hDgWYrvCc2sNQ+u+L3ILc/LM8J2Nco
-         SbIvYDBtfghO0ngYUK53m+Rvc2OU9ONK8dXU/eStzZYM9q3b6OjFP3gGKc3qV8S9aTw7
-         JMSQ==
+        Thu, 6 Apr 2023 16:49:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6EFE07D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:45:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680813908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hlliibCO4sNcXALnaTXV8AY6so6PWo4TfdquJ/Ysd8k=;
+        b=OY8islJ1corMLxr2RhFciC73poUWVv6eVbegmDmWTClopB6v/YmvtTJDIhMvGPsviRLXJN
+        D2XVncQ5mpx0Gcc55raG3muAK+RcP0BunUgXUmeP8ThCnIR9UWjVQsJhTffseOJcGLpSFd
+        +ZVuKSuRlOYZy2BSzQGbqMb8rimOAD0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-501-Qv4K233eNY2CRbgl4Uvtyg-1; Thu, 06 Apr 2023 16:45:06 -0400
+X-MC-Unique: Qv4K233eNY2CRbgl4Uvtyg-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-746b617d095so12177685a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:45:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680813784;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hjYb+JJW8I3O+mIrtvD7Toze9rRPQIAniPP/DyAemws=;
-        b=YaR6WjjD6OGVAkLBMIWMX9tKW0lCXlAJW3ffrZnJgSRvkdU5dUL8SExLfppxFuF474
-         6i3m04YPiNtNqETvWl5A2sqztdr6jjRABnt7gSF05JDG+uuReTOXou5Y9zHzD+kOPYN7
-         QWgCw30blGhto2xaoKGCb1FRPe5oSuCNU4jNAq1LkL+EHLPPyXKuSI/08jrnVNbOP8BI
-         zmPwFhffLPjjhluzePY2dq0NU0VTtWuxfjRuwP4NyKWpL/RoW0Lu56SjBb1NQ4Ojz2em
-         +CSMwmCgI/GYR1mJgwReHXPboOD1FKPU4qjE5Y+p0BO6mFleBNWnT0CNMIYkEWqW8l3Z
-         LeXg==
-X-Gm-Message-State: AAQBX9d4MDSkBiOkn5G7cwOKsl+aKhFYlkV95W562JMfYQTbjdk99kDk
-        xOzN5HuKhMRDU8dxc0fhg8g0Bg==
-X-Google-Smtp-Source: AKy350ZJdq9Hh31L8H3mS/MSrbl7fhNNRkQjz0P/GlAc/2GKPBiUxYHvpIMONNiMcHjKx2M1VDl5VQ==
-X-Received: by 2002:a2e:a268:0:b0:2a0:5a99:65d8 with SMTP id k8-20020a2ea268000000b002a05a9965d8mr2390419ljm.18.1680813784266;
-        Thu, 06 Apr 2023 13:43:04 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id k20-20020a2e8894000000b0029f3e2efbb9sm432968lji.90.2023.04.06.13.42.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 13:43:03 -0700 (PDT)
-Message-ID: <955adf22-6b52-652e-0215-efacc9a13799@linaro.org>
-Date:   Thu, 6 Apr 2023 22:42:54 +0200
+        d=1e100.net; s=20210112; t=1680813906; x=1683405906;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hlliibCO4sNcXALnaTXV8AY6so6PWo4TfdquJ/Ysd8k=;
+        b=d1AL1ljsIr6SBVmQz4VgAyZ68abr0c0nQv2O9V/19I1HEya18oMRLSnS5kuPiohCCh
+         agwroVZuuI+ZsQPH1YyNlBU8JAxOWZlBR7t4ybHS+YWMsREHsLjZt8BSp5z96KDxel64
+         MKYn8RYzztlvTvyaubLyWSnrqTtHCHeEzS2x9cvoGThDnsuvEEguvnegGEvHlwJuwRaP
+         SzhS5OzH2Xniap7dJ8jj7iAJ36Psn3WOVAr0HMP9bzOJHn+BqIijtwJFYZKMFBac27aR
+         +bbQa6q9/YfHJ+KNa/id46I2tHJ4ylaft/I9Fvc6lTpfzieg11N5ccM1w7PJPvv6jLYO
+         xBWA==
+X-Gm-Message-State: AAQBX9ePUoOqfDyDpqF8Y2uHrFCwj2ID0Wv94luCvD8d5GZIBA2+qYF3
+        vDA1VbLi4pUzKHp6UIz0BxZPZKUea2ptmaHqh+QalnxYnTwhfU1Yk5zwn12dv/Nm5I8NBeD/Uev
+        TA5a0hPiM2+OVNTtLXUlQSqQY
+X-Received: by 2002:a05:6214:3018:b0:5af:3a13:202d with SMTP id ke24-20020a056214301800b005af3a13202dmr744177qvb.4.1680813905811;
+        Thu, 06 Apr 2023 13:45:05 -0700 (PDT)
+X-Google-Smtp-Source: AKy350Y1KJ4vprLWmq2m/5KZ8L4Bi2Rxr9Vn0WKqzah+7elFypEf8sf0YtUFBzrza/xRbtyRgeE1YQ==
+X-Received: by 2002:a05:6214:3018:b0:5af:3a13:202d with SMTP id ke24-20020a056214301800b005af3a13202dmr744126qvb.4.1680813905342;
+        Thu, 06 Apr 2023 13:45:05 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-40-70-52-229-124.dsl.bell.ca. [70.52.229.124])
+        by smtp.gmail.com with ESMTPSA id lz7-20020a0562145c4700b005dd8b9345d9sm137125qvb.113.2023.04.06.13.45.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 13:45:04 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 16:45:02 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        NeilBrown <neilb@suse.de>, Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v5 2/2] mm: vmscan: refactor reclaim_state helpers
+Message-ID: <ZC8vTi3SlKwnYv5i@x1n>
+References: <20230405185427.1246289-1-yosryahmed@google.com>
+ <20230405185427.1246289-3-yosryahmed@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V3 5/5] arm64: defconfig: Enable ipq6018 apss clock and
- PLL controller
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        dmitry.baryshkov@linaro.org, arnd@arndb.de,
-        geert+renesas@glider.be, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
-References: <20230406061314.10916-1-quic_devipriy@quicinc.com>
- <20230406061314.10916-6-quic_devipriy@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230406061314.10916-6-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230405185427.1246289-3-yosryahmed@google.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Yosry,
 
+On Wed, Apr 05, 2023 at 06:54:27PM +0000, Yosry Ahmed wrote:
 
-On 6.04.2023 08:13, Devi Priya wrote:
-> The PLL and IPQ6018 APSS clock controller are used on several
-> IPQ platforms to clock the CPU. Hence it should be enabled and built-in.
-> 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+[...]
 
-Konrad
->  Changes in V3:
-> 	- No change
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index c82bd89f90364..049e39202e6ce 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -188,18 +188,6 @@ struct scan_control {
+>   */
+>  int vm_swappiness = 60;
+>  
+> -static void set_task_reclaim_state(struct task_struct *task,
+> -				   struct reclaim_state *rs)
+> -{
+> -	/* Check for an overwrite */
+> -	WARN_ON_ONCE(rs && task->reclaim_state);
+> -
+> -	/* Check for the nulling of an already-nulled member */
+> -	WARN_ON_ONCE(!rs && !task->reclaim_state);
+> -
+> -	task->reclaim_state = rs;
+> -}
+> -
+>  LIST_HEAD(shrinker_list);
+>  DECLARE_RWSEM(shrinker_rwsem);
+>  
+> @@ -511,6 +499,59 @@ static bool writeback_throttling_sane(struct scan_control *sc)
+>  }
+>  #endif
+>  
+> +static void set_task_reclaim_state(struct task_struct *task,
+> +				   struct reclaim_state *rs)
+> +{
+> +	/* Check for an overwrite */
+> +	WARN_ON_ONCE(rs && task->reclaim_state);
+> +
+> +	/* Check for the nulling of an already-nulled member */
+> +	WARN_ON_ONCE(!rs && !task->reclaim_state);
+> +
+> +	task->reclaim_state = rs;
+> +}
+
+Nit: I just think such movement not necessary while it loses the "git
+blame" information easily.
+
+Instead of moving this here without major benefit, why not just define
+flush_reclaim_state() right after previous set_task_reclaim_state()?
+
+> +
+> +/*
+> + * flush_reclaim_state(): add pages reclaimed outside of LRU-based reclaim to
+> + * scan_control->nr_reclaimed.
+> + */
+> +static void flush_reclaim_state(struct scan_control *sc,
+> +				struct reclaim_state *rs)
+> +{
+> +	/*
+> +	 * Currently, reclaim_state->reclaimed includes three types of pages
+> +	 * freed outside of vmscan:
+> +	 * (1) Slab pages.
+> +	 * (2) Clean file pages from pruned inodes.
+> +	 * (3) XFS freed buffer pages.
+> +	 *
+> +	 * For all of these cases, we have no way of finding out whether these
+> +	 * pages were related to the memcg under reclaim. For example, a freed
+> +	 * slab page could have had only a single object charged to the memcg
+> +	 * under reclaim. Also, populated inodes are not on shrinker LRUs
+> +	 * anymore except on highmem systems.
+> +	 *
+> +	 * Instead of over-reporting the reclaimed pages in a memcg reclaim,
+> +	 * only count such pages in global reclaim. This prevents unnecessary
+> +	 * retries during memcg charging and false positive from proactive
+> +	 * reclaim (memory.reclaim).
+> +	 *
+> +	 * For uncommon cases were the freed pages were actually significantly
+> +	 * charged to the memcg under reclaim, and we end up under-reporting, it
+> +	 * should be fine. The freed pages will be uncharged anyway, even if
+> +	 * they are not reported properly, and we will be able to make forward
+> +	 * progress in charging (which is usually in a retry loop).
+> +	 *
+> +	 * We can go one step further, and report the uncharged objcg pages in
+> +	 * memcg reclaim, to make reporting more accurate and reduce
+> +	 * under-reporting, but it's probably not worth the complexity for now.
+> +	 */
+> +	if (rs && global_reclaim(sc)) {
+> +		sc->nr_reclaimed += rs->reclaimed;
+> +		rs->reclaimed = 0;
+> +	}
+> +}
+> +
+>  static long xchg_nr_deferred(struct shrinker *shrinker,
+>  			     struct shrink_control *sc)
+>  {
+> @@ -5346,10 +5387,7 @@ static int shrink_one(struct lruvec *lruvec, struct scan_control *sc)
+>  		vmpressure(sc->gfp_mask, memcg, false, sc->nr_scanned - scanned,
+>  			   sc->nr_reclaimed - reclaimed);
+>  
+> -	if (global_reclaim(sc)) {
+> -		sc->nr_reclaimed += current->reclaim_state->reclaimed_slab;
+> -		current->reclaim_state->reclaimed_slab = 0;
+> -	}
+> +	flush_reclaim_state(sc, current->reclaim_state);
+>  
+>  	return success ? MEMCG_LRU_YOUNG : 0;
+>  }
+> @@ -6474,10 +6512,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+>  
+>  	shrink_node_memcgs(pgdat, sc);
+>  
+> -	if (reclaim_state && global_reclaim(sc)) {
+> -		sc->nr_reclaimed += reclaim_state->reclaimed_slab;
+> -		reclaim_state->reclaimed_slab = 0;
+> -	}
+> +	flush_reclaim_state(sc, reclaim_state);
+
+IIUC reclaim_state here still points to current->reclaim_state.  Could it
+change at all?
+
+Is it cleaner to make flush_reclaim_state() taking "sc" only if it always
+references current->reclaim_state?
+
+>  
+>  	/* Record the subtree's reclaim efficiency */
+>  	if (!sc->proactive)
+> -- 
+> 2.40.0.348.gf938b09366-goog
 > 
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 8f24c280dec2..27dc617ec296 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1153,6 +1153,7 @@ CONFIG_QCOM_CLK_APCS_MSM8916=y
->  CONFIG_QCOM_CLK_APCC_MSM8996=y
->  CONFIG_QCOM_CLK_SMD_RPM=y
->  CONFIG_QCOM_CLK_RPMH=y
-> +CONFIG_IPQ_APSS_6018=y
->  CONFIG_IPQ_GCC_5332=y
->  CONFIG_IPQ_GCC_6018=y
->  CONFIG_IPQ_GCC_8074=y
+
+-- 
+Peter Xu
+
