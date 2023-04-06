@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9276DA4B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F5A6DA4BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbjDFVbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S229848AbjDFVcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjDFVbg (ORCPT
+        with ESMTP id S236968AbjDFVcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:31:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931999749;
-        Thu,  6 Apr 2023 14:31:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ECBE63D8C;
-        Thu,  6 Apr 2023 21:31:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B66C4339B;
-        Thu,  6 Apr 2023 21:31:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680816694;
-        bh=HelVz4kZbXm+Rah9vhJsCLUNIR4bUm6nFIAmLLiqkbk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lYTjVd7ywbGnEhbcl/2fL2KfwQuymIsZ12J9dzXUJHlq2XaswYhR83+D5ASKktb3/
-         1RlaEQyMvPpyMrgnCQTfuMEhat2SkkcDZ5rqGxtmshO5Qg92R0+DrE6uGRszPqz9KN
-         iCI874zc0TPXflOIOAgvaTv9q2u/n7IPseMnVuoYp0KVWNIjYp+SfZo6hgxaloibjh
-         cJHgr9ja/hY2Fd/7EwNWHt4iTji/qTjXuGd9YIvFyc4GDim43k8yWJX1YFRpS+DrVu
-         Q49+reVSQKb6UxpQIQnzcb+LMJ9kkj3/G9BCxksEcD6R0T24Rf+OgBnW5TZRpRgvd+
-         Q9Q68OaYKr/1Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 12E164052D; Thu,  6 Apr 2023 18:31:32 -0300 (-03)
-Date:   Thu, 6 Apr 2023 18:31:32 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-sparse@vger.kernel.org" <linux-sparse@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH] tools: Rename __fallthrough to fallthrough
-Message-ID: <ZC86NOtaBPi1lhtI@kernel.org>
-References: <20221125154947.2163498-1-Liam.Howlett@oracle.com>
- <CANiq72ntFXb+ZhBqgBAMu2n8wcgJLZRZC1rmBVvL5m+K1Nhw2w@mail.gmail.com>
- <20230406195830.ieiozetmk7qjllol@revolver>
- <CANiq72=C4OCcbX4C-ap3YTm5Ni6RdskQ67rt4iWs0_1hTe1rkw@mail.gmail.com>
- <ZC81Z4p8WnYtVwFT@kernel.org>
+        Thu, 6 Apr 2023 17:32:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D110C61B0;
+        Thu,  6 Apr 2023 14:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=chn8p8fTTOkPGyLbQXcT8NlPwb7SWv+j2mvpCDHidvg=; b=ASF7PERFMEDzrvNGEmjrCfqpBK
+        yDDmjGou1lNRg0MTqgcURtjEC1azaLAepuxGBEMRxJ0Msj1Phlmp42/EiGPsVT7N+7ANNgNnWNh/G
+        frL5rIllOtdDzgxLeW0VcMYfP9IPmKDUEGvTNE+EFisrPr3h4WPJQwLaCKgphg08X9wRl1ylr/cnb
+        KWNNLUDQMjRKJRS6rm/B0izphz4t24OaxNHA4J5FUmABTYX5wxLPQHBFQGHK5YEPR5h3v6BiyNYOe
+        KmpnWk7BuSPiFzrgUnxkqWbjKHu4U3KugwNciLlCvcdeRtmixHQxaeUVrDI+8KuUjYvHrhEPA/lPZ
+        /DgnalHA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkXD5-008dqf-1l;
+        Thu, 06 Apr 2023 21:31:59 +0000
+Message-ID: <af8d2f99-52f1-ae88-126e-cf90bd6cb3b2@infradead.org>
+Date:   Thu, 6 Apr 2023 14:31:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZC81Z4p8WnYtVwFT@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] parport_pc: don't allow driver for SPARC32
+Content-Language: en-US
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-parport@lists.infradead.org
+References: <20230406160548.25721-1-rdunlap@infradead.org>
+ <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk>
+ <20230406203207.GA1534216@ravnborg.org>
+ <alpine.DEB.2.21.2304062144520.44308@angie.orcam.me.uk>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <alpine.DEB.2.21.2304062144520.44308@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Apr 06, 2023 at 06:11:03PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, Apr 06, 2023 at 10:02:57PM +0200, Miguel Ojeda escreveu:
-> > On Thu, Apr 6, 2023 at 9:58 PM Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
-> > >
-> > > Any chance of this being accepted?  I'm looking to use this in the radix
-> > > test suite and would rather not duplicate code.
-> > 
-> > That would be up to the `tools/perf/` maintainers.
+
+
+On 4/6/23 14:01, Maciej W. Rozycki wrote:
+> Hi Sam,
 > 
-> Thanks, applied,
+>>>  This looks completely wrong to me, any ordinary PCI parallel port card 
+>>> ought just to work as long as you have PCI (S390 is special I'm told).  
+>>> What needs to be done is AFAICT just making `parport_pc_find_nonpci_ports' 
+>>> in arch/sparc/include/asm/parport.h SPARC64-specific, i.e.:
+>>>
+>>> static int parport_pc_find_nonpci_ports(int autoirq, int autodma)
+>>> {
+>>> 	return (IS_ENABLED(CONFIG_SPARC64) &&
+>>> 		platform_driver_register(&ecpp_driver));
+>>> }
+>>>
+>>> or suchlike and let the optimiser get rid of all the unwanted unsupported 
+>>> stuff.
+>>
+>> arch/sparc/include/asm/parport.h is sparc64 specific - and it will
+>> result in the wrong result if it is pulled in for sparc32 builds.
+>> This is what we see today.
+>>
+>> Randy's suggestion is fine, as we avoid building parport support
+>> for sparc32. If someone shows up and need parport support
+>> for sparc32 then we could look into how to enable it.
+>> Until then, we are better helped avoiding building the driver.
+> 
+>  I disagree.  Why artificially prevent perfectly good hardware from 
+> working with a perfectly good driver especially as the fix is just a 
+> trivial exercise?  And I offered a solution.
+> 
+>  I don't have a SPARC toolchain handy or I could even try and build it 
+> (but I'm sure there are many people around who can do it without bending 
+> backwards).
 
-So, I noticed some missing conversions, fixed that, but then when trying
-to test build it with:
-
-	make -C tools/perf build-test
-
-I stumbled on this:
-
-             make_with_gtk2: cd . && make GTK2=1 -j32  DESTDIR=/tmp/tmp.5AP8tPJgiT
-cd . && make GTK2=1 -j32 DESTDIR=/tmp/tmp.5AP8tPJgiT
-  BUILD:   Doing 'make -j32' parallel build
-  HOSTCC  fixdep.o
-  HOSTLD  fixdep-in.o
-<SNIP>
-  CC      trace/beauty/ioctl.o
-In file included from /usr/lib64/glib-2.0/include/glibconfig.h:9,
-                 from /usr/include/glib-2.0/glib/gtypes.h:34,
-                 from /usr/include/glib-2.0/glib/galloca.h:34,
-                 from /usr/include/glib-2.0/glib.h:32,
-                 from /usr/include/glib-2.0/gobject/gbinding.h:30,
-                 from /usr/include/glib-2.0/glib-object.h:24,
-                 from /usr/include/glib-2.0/gio/gioenums.h:30,
-                 from /usr/include/glib-2.0/gio/giotypes.h:30,
-                 from /usr/include/glib-2.0/gio/gio.h:28,
-                 from /usr/include/gtk-2.0/gdk/gdkapplaunchcontext.h:30,
-                 from /usr/include/gtk-2.0/gdk/gdk.h:32,
-                 from /usr/include/gtk-2.0/gtk/gtk.h:32,
-                 from ui/gtk/gtk.h:8,
-                 from ui/gtk/helpline.c:6:
-/usr/include/glib-2.0/glib/gmacros.h:637:28: error: missing ')' after "__has_attribute"
-  637 | #if g_macro__has_attribute(fallthrough)
-      |                            ^~~~~~~~~~~
-In file included from /var/home/acme/git/perf-tools-next/tools/include/linux/compiler_types.h:36,
-                 from /var/home/acme/git/perf-tools-next/tools/include/linux/compiler.h:5,
-                 from /var/home/acme/git/perf-tools-next/tools/include/linux/build_bug.h:5,
-                 from /var/home/acme/git/perf-tools-next/tools/include/linux/kernel.h:8,
-                 from ui/gtk/helpline.c:4:
-/var/home/acme/git/perf-tools-next/tools/include/linux/compiler-gcc.h:16:55: error: missing binary operator before token "("
-   16 | # define fallthrough                    __attribute__((__fallthrough__))
-      |                                                       ^
-/usr/include/glib-2.0/glib/gmacros.h:637:28: note: in expansion of macro ‘fallthrough’
-  637 | #if g_macro__has_attribute(fallthrough)
-      |                            ^~~~~~~~~~~
-  CC      trace/beauty/kcmp.o
-  CC      bench/sched-messaging.o
-  CC      trace/beauty/mount_flags.o
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
 
 
-I'm trying to fix this now...
-
-- Arnaldo
+-- 
+~Randy
