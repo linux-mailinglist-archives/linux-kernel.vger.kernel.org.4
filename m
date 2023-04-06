@@ -2,111 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920196D90C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F806D90CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbjDFHqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58814 "EHLO
+        id S234984AbjDFHun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbjDFHqS (ORCPT
+        with ESMTP id S233551AbjDFHul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:46:18 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C701B0;
-        Thu,  6 Apr 2023 00:46:14 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3366wSKC013882;
-        Thu, 6 Apr 2023 07:46:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=IyEmgHIUX6mQHOFxo3TU81FvsDpncR3Vt/+XHIZJcc0=;
- b=jLyAe9fMXWMM45769fZXZ682Z+QRYXNNcFALPa/KaJumEYelxQ1UeoYi9NbMFhLRgHK5
- npGF+5V/FJfshS4kP40xzkE6+mWhdQ1kxQuJsDP8S40QYCazTlw7kGfRDs1tZ/6pC5CH
- SRIXV09yFfSPaudfrMWOQDpsUlrIvbmIGk6YzXEcViW0t+JRyivQUf35iV9LPTEwJBaE
- pJ2qNVYcQ4/cG8afjA/2Qg8uIW8MaFy37D14VRYCgA1lkhCbkuhehIu9cROYdhawvyLo
- rS0bMJzr8bmSwTdUdAPS+d9cgDmHvKHZXYXvQ/cD24Pnof3E6hC4B6rsmrvbHlTNaUXz Ow== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppbd428fc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Apr 2023 07:46:12 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3367jFkZ037592;
-        Thu, 6 Apr 2023 07:46:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pptjuugdk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Apr 2023 07:46:11 +0000
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3367kBG6013933;
-        Thu, 6 Apr 2023 07:46:11 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3pptjuugd0-1;
-        Thu, 06 Apr 2023 07:46:10 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     error27@gmail.com, kernel-janitors@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH next] scsi: scsi_debug: Fix missing error code in scsi_debug_init()
-Date:   Thu,  6 Apr 2023 00:46:07 -0700
-Message-Id: <20230406074607.3637097-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.40.0
+        Thu, 6 Apr 2023 03:50:41 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2759076A8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:50:40 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-93db98f7b33so83120966b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680767438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=acsxKS8JAme3fiaY0A/7VQXARsXOyYhuyHtw99/eJzY=;
+        b=D+LRcXAPgAjQF1qELH9IoHjo2uLJb20Wlrd57lGAmRpIlD2R2Se2wMyXR42G7HkzRc
+         kQryQxhjcW+8oCmhOGDwNH+AfqyuzWruS/ETU6cOXOB30qSeFWZ/gwFJ4MzbSiOIMKDM
+         o+W+ZQzFZ9ttDVSd7q3KxWZ9kCyDy5KxHg+FX6d3P1dUbuPXPTsa0ij5p4qhY7mkgkv6
+         AChXS1krfUsDa2HxNhgYUo0TMnwbMgw9rA7tnAEVt6KQkDJ0U/yskXzO8CS8M8c/jpE5
+         xhiLmR0NTxzRLcRPLUm0FHcHzKlUzUQdkherUy+82rDZVS8Bnbpfgw11v7NcE/QY3sf9
+         6pIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680767438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=acsxKS8JAme3fiaY0A/7VQXARsXOyYhuyHtw99/eJzY=;
+        b=ohbMSrf9WIbheXF8/AK1JIMNNnqllu7s1Pq87t+lX6/uUopCUfTU4X3bhJH5IJrZpb
+         c/GKn6rI+Z/6p/aVoKNkheirdI+SZ3ubl2T1PqOA4oitheXPXsOx+jHMfbRzYQW4v6bI
+         CAIMAKy6j95h90u1fegKpnTmvY6Z7Ry4yShIClEyzjganS426xBqwfPXW/s1z3Imyezg
+         FV+GeXYL4vMUsXBtgyhtjHK44DR3LhDV+8I/fBXX/NRb5eY2UpAryrIfr9l5tL9HAYvU
+         9rzldnbrm3I9TLEi8XMO92y3iZQyARlzpwDRf3HldMWpVFQD6Yi3e64RjHzKLg9W1oKL
+         aSkg==
+X-Gm-Message-State: AAQBX9eyT1SzEHUR4xjzDh6uPLSIo7zivn2DQAoNQ/dhZnWJ3WzTALvQ
+        SRzl9KD5ChRD7Wsu/zt05auCJg==
+X-Google-Smtp-Source: AKy350Z74im14UBTpQDaKfczphvzBZhLrAWZc+1VzpVIGSWgdepzgVVxlleeas6+L/T8lRwePIcQQg==
+X-Received: by 2002:a05:6402:1001:b0:502:4862:d453 with SMTP id c1-20020a056402100100b005024862d453mr3727333edu.3.1680767438661;
+        Thu, 06 Apr 2023 00:50:38 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id gg4-20020a170906e28400b0092a3b199db8sm442654ejb.186.2023.04.06.00.50.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 00:50:38 -0700 (PDT)
+Message-ID: <d25081e4-69bc-74db-bdf1-5f1f2d2c794d@linaro.org>
+Date:   Thu, 6 Apr 2023 09:50:37 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_02,2023-04-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- phishscore=0 bulkscore=0 mlxscore=0 suspectscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304060068
-X-Proofpoint-ORIG-GUID: RejnskUDGrw5vYzKs-DyvavE5uh8H8w5
-X-Proofpoint-GUID: RejnskUDGrw5vYzKs-DyvavE5uh8H8w5
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 10/10] memory: mtk-smi: mt8365: Add SMI Support
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Yong Wu <yong.wu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230207-iommu-support-v2-0-60d5fa00e4e5@baylibre.com>
+ <20230207-iommu-support-v2-10-60d5fa00e4e5@baylibre.com>
+ <9847bc48-c96c-3599-e876-bcf9ebf1522e@linaro.org>
+ <CAFGrd9pBdaHLGUZHkaz2_XKafyX=dxu9UckQxrphg52EG=A1SQ@mail.gmail.com>
+ <8fc3dd22-79df-32cb-c219-896eda8fa986@linaro.org>
+ <fd24877a-5fae-5434-dc56-61ab35ccd820@baylibre.com>
+ <e38658be-1a2a-bccb-3f30-18f1b031f71d@linaro.org>
+ <25bcaa84-fb29-4343-d046-26e210fc81f4@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <25bcaa84-fb29-4343-d046-26e210fc81f4@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports: drivers/scsi/scsi_debug.c:6996
-	scsi_debug_init() warn: missing error code 'ret'
+On 05/04/2023 16:34, Alexandre Mergnat wrote:
+> 
+> On 05/04/2023 15:54, Krzysztof Kozlowski wrote:
+>> On 05/04/2023 15:06, Alexandre Mergnat wrote:
+>>> On 05/04/2023 13:45, Krzysztof Kozlowski wrote:
+>>>> On 05/04/2023 11:53, Alexandre Mergnat wrote:
+>>>>> Ok, I will move the driver patch before the DTS patches in the next version.
+>>>>>
+>>>> Or do not send it together at all, which might solve your dependency
+>>>> problem. According to your cover letter I cannot take the memory
+>>>> controller bits, so I am waiting for dependencies to hit the mainline.
+>>>> Alternatively I will need pull request with stable tag.
+>>>>
+>>> Ok, I prefer send the driver patch in another serie. That will solve the
+>>> dependency with the DTS a least.
+>> What dependency? Why do you have dependencies between drivers and DTS?
+>> That's a no-go.
+> I probably do something wrong but, that start with this comment [1]:
+> 
+>> I guess we should add a independent "mediatek,mt8365-smi-common".
+> 
+> Then I have added the mt8365 compatible support in the driver instead of using the mt8186 which already supported and used in the v1.
+> I change the binding and DTS to use "mediatek,mt8365-smi-common" only (no more "mediatek,mt8186-smi-common").
+> Maybe "dependency isn't the good word to use in that case.
 
-Although it is unlikely that KMEM_CACHE might fail, but if
-it does then ret might be zero. So to fix this explicitly
-mark ret as "-ENOMEM" and then goto driver_unreg.
+I do not see patch changing existing compatible. Which one is it?
 
-Fixes: 1107c7b24ee3 ("scsi: scsi_debug: Dynamically allocate sdebug_queued_cmd")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-This is from static analysis, Only compile tested.
----
- drivers/scsi/scsi_debug.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+I don't know what is your meaning of dependency then. For all of us,
+dependency means one patch must be applied after another patch. So is
+this the case here? If yes, then why?
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index cf3f58e8f733..f4fa1035a191 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -6992,8 +6992,10 @@ static int __init scsi_debug_init(void)
- 	sdebug_add_host = 0;
- 
- 	queued_cmd_cache = KMEM_CACHE(sdebug_queued_cmd, SLAB_HWCACHE_ALIGN);
--	if (!queued_cmd_cache)
-+	if (!queued_cmd_cache) {
-+		ret = -ENOMEM;
- 		goto driver_unreg;
-+	}
- 
- 	for (k = 0; k < hosts_to_add; k++) {
- 		if (want_store && k == 0) {
--- 
-2.38.1
+> Except for the patch order in the serie (or send the driver in another one), everything is fine or there are others wrong things ?
+
+If this is the question to me, then I am not the maintainer of your
+platform. I am taking only memory controller bits, which look fine and I
+would have already apply them if not the dependency trouble. Soon the
+window for applying will close, BTW. We are almost at RC6.
+
+
+Best regards,
+Krzysztof
 
