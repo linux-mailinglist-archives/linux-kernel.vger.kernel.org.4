@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF6D6DA026
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3F56DA038
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240264AbjDFSpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
+        id S240404AbjDFSqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjDFSpd (ORCPT
+        with ESMTP id S240279AbjDFSqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:45:33 -0400
+        Thu, 6 Apr 2023 14:46:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E5B7A83;
-        Thu,  6 Apr 2023 11:45:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FA87A83;
+        Thu,  6 Apr 2023 11:46:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3E0E64B0D;
-        Thu,  6 Apr 2023 18:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790D8C433D2;
-        Thu,  6 Apr 2023 18:45:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A19564B0D;
+        Thu,  6 Apr 2023 18:46:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC39C433EF;
+        Thu,  6 Apr 2023 18:46:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680806731;
-        bh=I5+cukk26vnLknbH5Toe4jO9okYIGo7RP4YmHcNkaVI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k9p3nfCRGWjjafHcbkGxdjjfrJ/XwY5BSS1v2JPwbZTBExPM6Ym+NfoUZNCk+mDH1
-         16RHTeUK9Szul8wUxrg+NrTUI0WvC+68BBY3yQr1Ohqy9hEYNtv4dYHkZeBKYvMNjf
-         a97PBeMkS57Li+WuERNAC7RW8wwYqjGaiIKij3APDrmEDhFHqmDjkOVAPAIo6bkixi
-         J6L557T5ieTmTczrqofZisYF4s2Imz4WlS+YzJkVFs9QsSH6vZsliA9E8BH4i6b5kk
-         +gSjAP3R8oR/Kiu4S58wmjqvnoK2wYgm+JY271OU+IzRmhdo4Ph4sob0JRaQDNOQ4o
-         SYnCmyHm1OTvQ==
-Date:   Thu, 6 Apr 2023 19:45:25 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Minda Chen <minda.chen@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-pci@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        Kevin Xie <kevin.xie@starfivetech.com>
-Subject: Re: [PATCH v1 1/3] dt-binding: pci: add JH7110 PCIe dt-binding
- documents.
-Message-ID: <20230406-cinema-profile-1bfed00e4a5f@spud>
-References: <20230406111142.74410-1-minda.chen@starfivetech.com>
- <20230406111142.74410-2-minda.chen@starfivetech.com>
- <38bc48bf-7d8c-8ddd-861f-3b7f3d2edce6@linaro.org>
- <20230406-revisit-patchy-a0063d964070@spud>
+        s=k20201202; t=1680806769;
+        bh=ioBTux9TyKxfDLourbPnWQ5D6ISPpHzr8NS+3yBHlTY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=bC0DqFg1Q469ljKPrnDlNud/O/dFS4scOSrf/DNuvFDizr1PmcliZrRe1Z6yUa+rd
+         PK7cLno/SNN5bs4YWswe3GmAkXspVORvC3H7VGoI2IU8CwOuyOM2yePHsOpq6UMYWu
+         DcSere1OmVCG5DudND7Xbe6CBDbqUJKhu6HCeglWzAThoMa5WMZVe4oF7S8ltv/Q4i
+         WHseoGksdyxqHT7MjKTHsEhCjVhuwFxbGHW8PLiFzwI98XVc6f1N+CRJ/bwOEXApOP
+         pinKALRl5k/2P+RNaQlPXml7QizG6QBjGwlqohcEF0QNi5sTj8NqGWDVIt3k4oqDl4
+         TbW6SlS3fAlAw==
+Message-ID: <546145ecbf514c4c1a997abade5f74e65e5b1726.camel@kernel.org>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        amir73il@gmail.com
+Date:   Thu, 06 Apr 2023 14:46:07 -0400
+In-Reply-To: <20230406-wasser-zwanzig-791bc0bf416c@brauner>
+References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
+         <20230406-diffamieren-langhaarig-87511897e77d@brauner>
+         <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
+         <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
+         <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
+         <20230406-wasser-zwanzig-791bc0bf416c@brauner>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FH4TbyZ5TRJ4YHod"
-Content-Disposition: inline
-In-Reply-To: <20230406-revisit-patchy-a0063d964070@spud>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -72,80 +65,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---FH4TbyZ5TRJ4YHod
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 06, 2023 at 07:35:09PM +0100, Conor Dooley wrote:
-> On Thu, Apr 06, 2023 at 08:24:55PM +0200, Krzysztof Kozlowski wrote:
-> > On 06/04/2023 13:11, Minda Chen wrote:
-> > > +
-> > > +  interrupt-controller:
-> > > +    type: object
-> > > +    properties:
-> > > +      '#address-cells':
-> > > +        const: 0
-> > > +
-> > > +      '#interrupt-cells':
-> > > +        const: 1
-> > > +
-> > > +      interrupt-controller: true
-> > > +
-> > > +    required:
-> > > +      - '#address-cells'
-> > > +      - '#interrupt-cells'
-> > > +      - interrupt-controller
-> > > +
-> > > +    additionalProperties: false
-> > > +
-> > > +required:
-> > > +  - reg
-> > > +  - reg-names
-> > > +  - "#interrupt-cells"
+On Thu, 2023-04-06 at 17:01 +0200, Christian Brauner wrote:
+> On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
+> > On Thu, Apr 6, 2023 at 10:20=E2=80=AFAM Stefan Berger <stefanb@linux.ib=
+m.com> wrote:
+> > > On 4/6/23 10:05, Paul Moore wrote:
+> > > > On Thu, Apr 6, 2023 at 6:26=E2=80=AFAM Christian Brauner <brauner@k=
+ernel.org> wrote:
+> > > > > On Wed, Apr 05, 2023 at 01:14:49PM -0400, Stefan Berger wrote:
+> > > > > > Overlayfs fails to notify IMA / EVM about file content modifica=
+tions
+> > > > > > and therefore IMA-appraised files may execute even though their=
+ file
+> > > > > > signature does not validate against the changed hash of the fil=
+e
+> > > > > > anymore. To resolve this issue, add a call to integrity_notify_=
+change()
+> > > > > > to the ovl_release() function to notify the integrity subsystem=
+ about
+> > > > > > file changes. The set flag triggers the re-evaluation of the fi=
+le by
+> > > > > > IMA / EVM once the file is accessed again.
+> > > > > >=20
+> > > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > > > ---
+> > > > > >   fs/overlayfs/file.c       |  4 ++++
+> > > > > >   include/linux/integrity.h |  6 ++++++
+> > > > > >   security/integrity/iint.c | 13 +++++++++++++
+> > > > > >   3 files changed, 23 insertions(+)
+> > > > > >=20
+> > > > > > diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+> > > > > > index 6011f955436b..19b8f4bcc18c 100644
+> > > > > > --- a/fs/overlayfs/file.c
+> > > > > > +++ b/fs/overlayfs/file.c
+> > > > > > @@ -13,6 +13,7 @@
+> > > > > >   #include <linux/security.h>
+> > > > > >   #include <linux/mm.h>
+> > > > > >   #include <linux/fs.h>
+> > > > > > +#include <linux/integrity.h>
+> > > > > >   #include "overlayfs.h"
+> > > > > >=20
+> > > > > >   struct ovl_aio_req {
+> > > > > > @@ -169,6 +170,9 @@ static int ovl_open(struct inode *inode, st=
+ruct file *file)
+> > > > > >=20
+> > > > > >   static int ovl_release(struct inode *inode, struct file *file=
+)
+> > > > > >   {
+> > > > > > +     if (file->f_flags & O_ACCMODE)
+> > > > > > +             integrity_notify_change(inode);
+> > > > > > +
+> > > > > >        fput(file->private_data);
+> > > > > >=20
+> > > > > >        return 0;
+> > > > > > diff --git a/include/linux/integrity.h b/include/linux/integrit=
+y.h
+> > > > > > index 2ea0f2f65ab6..cefdeccc1619 100644
+> > > > > > --- a/include/linux/integrity.h
+> > > > > > +++ b/include/linux/integrity.h
+> > > > > > @@ -23,6 +23,7 @@ enum integrity_status {
+> > > > > >   #ifdef CONFIG_INTEGRITY
+> > > > > >   extern struct integrity_iint_cache *integrity_inode_get(struc=
+t inode *inode);
+> > > > > >   extern void integrity_inode_free(struct inode *inode);
+> > > > > > +extern void integrity_notify_change(struct inode *inode);
+> > > > >=20
+> > > > > I thought we concluded that ima is going to move into the securit=
+y hook
+> > > > > infrastructure so it seems this should be a proper LSM hook?
+> > > >=20
+> > > > We are working towards migrating IMA/EVM to the LSM layer, but ther=
+e
+> > > > are a few things we need to fix/update/remove first; if anyone is
+> > > > curious, you can join the LSM list as we've been discussing some of
+> > > > these changes this week.  Bug fixes like this should probably remai=
+n
+> > > > as IMA/EVM calls for the time being, with the understanding that th=
+ey
+> > > > will migrate over with the rest of IMA/EVM.
+> > > >=20
+> > > > That said, we should give Mimi a chance to review this patch as it =
+is
+> > > > possible there is a different/better approach.  A bit of patience m=
+ay
+> > > > be required as I know Mimi is very busy at the moment.
+> > >=20
+> > > There may be a better approach actually by increasing the inode's i_v=
+ersion,
+> > > which then should trigger the appropriate path in ima_check_last_writ=
+er().
 > >=20
-> > Keep consistent quotes - either ' or "
+> > I'm not the VFS/inode expert here, but I thought the inode's i_version
+> > field was only supposed to be bumped when the inode metadata changed,
+> > not necessarily the file contents, right?
 > >=20
-> > Are you sure this is correct? You have interrupt controller as child no=
-de.
+
+No. The i_version should change any time there is a "deliberate change"
+to the file. That can be to the data or metadata, but it has to be in
+response to some sort of deliberate, observable change -- something that
+would cause an mtime or ctime change.
+
+In practice, the i_version changes whenever the ctime changes, as
+changing the mtime also changes the ctime.
+
+> > That said, overlayfs is a bit different so maybe that's okay, but I
+> > think we would need to hear from the VFS folks if this is acceptable.
 >=20
-> I know existing stuff in-tree is far from a guarantee that it'll be
-> right, but this does at least follow what we've got for PolarFire SoC:
-> Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> Ccing Jeff for awareness since he did the i_version rework a short time a=
+go.
 >=20
-> Both PLDA and both RISC-V w/ a PLIC as the interrupt controller, so in
-> similar waters.
-> This note existed in the original text form binding of the Microchip
-> PCI controller:
-> | +NOTE:
-> | +The core provides a single interrupt for both INTx/MSI messages. So,
-> | +create an interrupt controller node to support 'interrupt-map' DT
-> | +functionality.  The driver will create an IRQ domain for this map, dec=
-ode
-> | +the four INTx interrupts in ISR and route them to this domain.
+> The documentation in include/linux/iversion.h states:
 >=20
-> Given the similarities, I figure the same requirement applies here too.
-> Minda?
+>  * [...] The i_version must
+>  * appear larger to observers if there was an explicit change to the inod=
+e's
+>  * data or metadata since it was last queried.
+>=20
+> what I'm less sure in all of this is why this is called in ovl_release() =
+and
+> whether it's correct to increment the overlayfs inode's i_version.
+>
 
-Further, if, as I currently suspect, there's a lot of commonality here,
-should the binding as well as the driver be split into common pdla bits
-and microchip/starfive specific ones?
+Yeah, not sure what's special about doing this on close(). Seems like
+someone could just hold the file open to prevent triggering the
+remeasurement?
 
-Suppose that's more one for you Krzysztof.
+> The change is done to the inode of the copied up/modified file's inode in=
+ the
+> upper layer. So the i_version should already be incremented when we call =
+into
+> the upper layer usually via vfs_*() methods.
 
-Cheers,
-Conor.
+Correct. As long as IMA is also measuring the upper inode then it seems
+like you shouldn't need to do anything special here.
 
---FH4TbyZ5TRJ4YHod
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC8TRAAKCRB4tDGHoIJi
-0o4HAP9oLXQVzVevvdCu75mB7hfMBZwV2TEh1L+UnBh9GRsElQD+MKt9L6Sie3wm
-Dso18O653hpA0FUvjJEZeW9HslxzfQI=
-=o1Sq
------END PGP SIGNATURE-----
-
---FH4TbyZ5TRJ4YHod--
+What sort of fs are you using for the upper layer?
+--=20
+Jeff Layton <jlayton@kernel.org>
