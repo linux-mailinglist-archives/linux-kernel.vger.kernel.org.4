@@ -2,124 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E7F6D9EAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23B86D9EAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239501AbjDFRXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S239674AbjDFRYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239653AbjDFRXp (ORCPT
+        with ESMTP id S239680AbjDFRYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:23:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5111992;
-        Thu,  6 Apr 2023 10:23:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F74A64A66;
-        Thu,  6 Apr 2023 17:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB393C433EF;
-        Thu,  6 Apr 2023 17:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680801726;
-        bh=6S/67Dpkn+c4teeGqF2QJn7eQBBjGDbIM8p7vVVCfxk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NTePh2R8YK4QR589LdgsFQmSjLP0EBHdg8XVumlvAwpz/tejlY4GsLplKvml5QbN9
-         xcPfIrcbJk4ziO8lQjBcUkX5KEs6cHa37t4bMqLanpw+D4IjaUp1IBuI4g8KeXqr4a
-         zqfuNt0ggbfUr9ycQ+C222ZuUdcFJ+xRmVT526JzDUTYKHc0tUTASbdaRSzEq2fK/A
-         XQDCwMnp1h0I11P5bJOLp58vhTX36tJjl90ydvRfzRuW6ONJ29KBqhQv/e62ciPy4m
-         rDDtXYze7lqPJsqd/YiszMW2g5iA8og6+9YmRVMxAf7s4hxyi4JqCJhlASRcMKUE/y
-         sgunoPx1Ts3fA==
-Date:   Thu, 6 Apr 2023 18:22:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mfd tree
-Message-ID: <6cd5dba5-2241-458d-9791-30d0851eee22@sirena.org.uk>
-References: <20230406120055.11fcfe5b@canb.auug.org.au>
- <20230406073646.GW8371@google.com>
+        Thu, 6 Apr 2023 13:24:08 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981899EDE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:23:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id j22so3126415ejv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680801777;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pnlv8etWHDfNorUk65qXAdIzN+L3opsvh3H3jUNcHsw=;
+        b=BYLJN6tDh8UrgX7aTmSyaWVF3wuYEp0M3OWUZfCyw9+V3TpAkL/abDLE/ARsIEO3hw
+         DDukrYXodPpOdZNJ+PuKgFSjeGjpf8EFVHG2nNkFHukxwRpL+w8OYje/8orxjZvxM9Fq
+         VFYb4oLE1JygyR+OyVYE3tsEjpy7+jOmGc5eNYuDGA68F9VVl43Q944o8By51VO/u5b9
+         OFdEtpa1YJKfbWPiegKM0BwowN9CNwZSJWDNbxlqZ6W+ZC0GPYDs8hoSA9+/Mv9f8OVp
+         eigL1VcMPRltjP4kuCJ9G4cDNpLy1nrLywzbq/p5PIHq034JOIG39LwwvZ7v+arwUJBH
+         /h1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680801777;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pnlv8etWHDfNorUk65qXAdIzN+L3opsvh3H3jUNcHsw=;
+        b=Kwe8b0DIIQ5Gn2bSctBWJXhPNacWewjrUWu8dlywx5EZ+0dDmwtJpJbNbX5gF4u3Eu
+         8HIGsXsqMtVTDScQNYuPfKpJd/fl/PKP3behCT8KHyKz2Uz4rasagTMwjVC9tz202QqM
+         bXAFBVsfdSfbyAuE7jkKp/sYIWVGpxR6yBEe4Tn3xHxwyk0qvDZT30myOFbKXJIPa+AH
+         sTT8h4Z43/4HwQv2I766zGFJ1PoBHLVa+31bWfxYJivOJ9/qG6+6hBEKGurASbAI+A/9
+         A3qdYb8EfLR7d6A20WSFDO1IsQM23AFSEaa/k+f6VSpOsR80MwWAKHnxBoYIoxm2KIOf
+         97Hw==
+X-Gm-Message-State: AAQBX9ddxlzv0TCoF3tKKBvxUXP37r/CKnx1V/mvc6bGqImEiUnPZaBL
+        rm52nqIUcJ6pGWVnezeu7N4vbw==
+X-Google-Smtp-Source: AKy350aOaRNgk/gPQhNnYCku8DyxXboB4R5P/9bz5ow36dWmnyoDqCPEiFAC7OzNoUSeNFKbXPepDg==
+X-Received: by 2002:a17:907:78d2:b0:946:c1d2:8b5d with SMTP id kv18-20020a17090778d200b00946c1d28b5dmr6810809ejc.17.1680801776779;
+        Thu, 06 Apr 2023 10:22:56 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id z5-20020a170906074500b00930569e6910sm1082856ejb.16.2023.04.06.10.22.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 10:22:56 -0700 (PDT)
+Message-ID: <3381fecd-9b83-627f-c408-76fe387a9b5e@linaro.org>
+Date:   Thu, 6 Apr 2023 19:22:55 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YKVx4Er2cI58EMgd"
-Content-Disposition: inline
-In-Reply-To: <20230406073646.GW8371@google.com>
-X-Cookie: Man and wife make one fool.
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/5] dt-bindings: arm: blaize: Add Blaize BLZP1600 SoC
+Content-Language: en-US
+To:     Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "soc@kernel.org" <soc@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        James Cowgill <james.cowgill@blaize.com>,
+        Matt Redfearn <matthew.redfearn@blaize.com>,
+        Neil Jones <neil.jones@blaize.com>
+References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+ <20230406102149.729726-3-nikolaos.pasaloukos@blaize.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406102149.729726-3-nikolaos.pasaloukos@blaize.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/04/2023 12:22, Niko Pasaloukos wrote:
+> Add device tree bindings for the Blaize BLZP1600 CB2
+> development board.
+> 
+> Co-developed-by: James Cowgill <james.cowgill@blaize.com>
+> Signed-off-by: James Cowgill <james.cowgill@blaize.com>
+> Co-developed-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Signed-off-by: Matt Redfearn <matt.redfearn@blaize.com>
+> Co-developed-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Neil Jones <neil.jones@blaize.com>
+> Signed-off-by: Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+> ---
+>  .../devicetree/bindings/arm/blaize.yaml       | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/blaize.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/blaize.yaml b/Documentation/devicetree/bindings/arm/blaize.yaml
+> new file mode 100644
+> index 000000000000..739115ba1fec
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/blaize.yaml
+> @@ -0,0 +1,28 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/blaize.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Blaize Platforms Device Tree Bindings
 
---YKVx4Er2cI58EMgd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If four of people were working on this, I would expect that at least one
+person would point that it's not correct name. Start from recent
+bindings. Drop Device Tree Bindings.
 
-On Thu, Apr 06, 2023 at 08:36:46AM +0100, Lee Jones wrote:
+> +
+> +maintainers:
+> +  - James Cowgill <james.cowgill@blaize.com>
+> +  - Matt Redfearn <matt.redfearn@blaize.com>
+> +  - Neil Jones <neil.jones@blaize.com>
+> +  - Nikolaos Pasaloukos <nikolaos.pasaloukos@blaize.com>
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - description: Blaize BLZP1600 based Boards
+> +        items:
+> +          - enum:
+> +              - blaize,blzp1600-som-cb2
 
-> Applied, squashed and credit given, thanks:
+som is not a board. You miss board compatible or this is a bit misleading.
 
-> Author: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> Date:   Thu Feb 16 22:22:12 2023 +0000
->=20
->     mfd: qcom-pm8008: Convert irq chip to config regs
->=20
->     Replace type and virtual registers, which are both deprecated,
->     with config registers. This also simplifies the driver because
->     IRQ types are set in one place, the set_type_config() callback.
+Best regards,
+Krzysztof
 
-You should need this I think:
-
-The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da65:
-
-  Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/r=
-egmap-set-type-irq-drv-data
-
-for you to fetch changes up to 7697c64b9e4908196f0ae68aa6d423dd40607973:
-
-  regmap: Pass irq_drv_data as a parameter for set_type_config() (2023-04-0=
-5 17:19:24 +0100)
-
-----------------------------------------------------------------
-regmap: Pass irq_drv_data as a parameter for set_type_config()
-
-Allow callbacks to access irq_drv_data.
-
-----------------------------------------------------------------
-William Breathitt Gray (1):
-      regmap: Pass irq_drv_data as a parameter for set_type_config()
-
- drivers/base/regmap/regmap-irq.c | 8 +++++---
- include/linux/regmap.h           | 6 ++++--
- 2 files changed, 9 insertions(+), 5 deletions(-)
-
---YKVx4Er2cI58EMgd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQu/7cACgkQJNaLcl1U
-h9BEmwf5AbbQK6uYa8E2kZr2HbtFWxxPLAkraF+8KZJNPH+WPijZ2H7CWzbXo0D+
-FHOnL/nERJ6NgSxpvUhiZ4Kso79tN9lS3+ER369cqfjOAkduyhRrvfkHWQ0VL7M8
-+X+R2Nbioc0YDx+7ZCkq2rHYlhrTYlyaLPy9aSBel1Upithl5jC0BpE5rTKdx78E
-Won6FP7FCLWp+AIrvXusZJjyJTTlh+VySCiSow1AX057i68h3XJvD3W4wKNQUlgD
-PcUwtNCz7v6q9mE5wO7qrWNKGLw+QLnGOkjpCPUaXNKtjFWUIDjl1TQMJ3wO0loS
-1wp3vU68wfnH0XAKA9SEczFehC2Yyg==
-=2ePA
------END PGP SIGNATURE-----
-
---YKVx4Er2cI58EMgd--
