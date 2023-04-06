@@ -2,160 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3676D956D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15386D9541
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238064AbjDFLdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
+        id S237926AbjDFLch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237903AbjDFLdB (ORCPT
+        with ESMTP id S237770AbjDFLcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:33:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF601985;
-        Thu,  6 Apr 2023 04:32:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5CB564650;
-        Thu,  6 Apr 2023 11:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01FCDC433EF;
-        Thu,  6 Apr 2023 11:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680780731;
-        bh=6nVlqJwBRNC1O9r0E4RzWVTpTGevWx/EOmM2z249EZY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UqcGvugzX4cfXfbQlMrldoKWnCtaXg/g9Wbu6l71EsiA6FvNjHdOc2eRRDqV8HKd4
-         hoUmTpx9r1EDwP6LVaHsokt+eOWdjJL5pmQR472omiuZM5aVyUQk+hAah68Egwt/1t
-         xgu7/27rsghGBAjiTbLRw0FgZHSL2+s5vWSOi7UzFSDoGGyKH9xcs6RwzP6jBhunmp
-         gVwVuWDxfVE6i7wWEZGkM6uwPYWGPBUnRYpd+KmDuB/644NRIajT05eccTGaaXloqP
-         9+nns0UlDYXtVVTzgt+YVCcFYVQtyfb1utVhR1S5QpdL78McQL0SswmP55d1UqNF5S
-         TIfyk8UKidxjg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, Michael Walle <michael@walle.cc>,
-        Sasha Levin <sashal@kernel.org>, tudor.ambarus@linaro.org
-Subject: [PATCH AUTOSEL 6.2 17/17] mtd: spi-nor: fix memory leak when using debugfs_lookup()
-Date:   Thu,  6 Apr 2023 07:31:31 -0400
-Message-Id: <20230406113131.648213-17-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113131.648213-1-sashal@kernel.org>
-References: <20230406113131.648213-1-sashal@kernel.org>
+        Thu, 6 Apr 2023 07:32:18 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6FE9744
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8YyNubASXgqzuAszxAEBZMdUvN7vGFCZr8m0DMH+wl4=; b=Qjge+YxKanAjlN/WTvbJxc46ib
+        bRUwXsrnKAVK6pvWJOKwoBzP/kn1Q0tzUIYdhDoB8a0PI3vwq5RgCAEFA19+aTazBJ3FPrljyvb7G
+        URiksvI1rpfZl2pk/YOglMpZusik2fJqwQsH561oFIdLh1FnTsLjLAIMFiDPl1+/ui2BLPWyxk+K+
+        eJJIUxes7siMIMrIMa+JNvJ3g6Xfd4gpbQHtR87m0Sd4AyfWuYMMolFHRdKt/i3ZFYOO07t2VAoKo
+        YJ62CncxoL7ZjMtFUZhPNAcDmUH48HbXsS3e5RG0GHV1cP/whdvSEnVQt1dl7h8G1hVSFQkoR2UDj
+        m0ICheMg==;
+Received: from [187.36.234.139] (helo=[192.168.1.195])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pkNqN-0080Ca-UI; Thu, 06 Apr 2023 13:31:55 +0200
+Message-ID: <b2cdb1fd-2559-5ae7-7d3c-0706969a85e2@igalia.com>
+Date:   Thu, 6 Apr 2023 08:31:50 -0300
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 0/2] drm/vkms: A couple of trivial cleanups
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Marius Vlad <marius.vlad@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        dri-devel@lists.freedesktop.org
+References: <20230406110235.3092055-1-javierm@redhat.com>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20230406110235.3092055-1-javierm@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi,
 
-[ Upstream commit ec738ca127d07ecac6afae36e2880341ec89150e ]
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To solve this, remove the
-lookup and create the directory on the first device found, and then
-remove it when the module is unloaded.
+for the series.
 
-Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: linux-mtd@lists.infradead.org
-Reviewed-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20230208160230.2179905-1-gregkh@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/mtd/spi-nor/core.c    | 14 +++++++++++++-
- drivers/mtd/spi-nor/core.h    |  2 ++
- drivers/mtd/spi-nor/debugfs.c | 11 ++++++++---
- 3 files changed, 23 insertions(+), 4 deletions(-)
+Thanks for helping to cleanup vkms!
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 2ef2660f58180..4244c6fd98111 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -3344,7 +3344,19 @@ static struct spi_mem_driver spi_nor_driver = {
- 	.remove = spi_nor_remove,
- 	.shutdown = spi_nor_shutdown,
- };
--module_spi_mem_driver(spi_nor_driver);
-+
-+static int __init spi_nor_module_init(void)
-+{
-+	return spi_mem_driver_register(&spi_nor_driver);
-+}
-+module_init(spi_nor_module_init);
-+
-+static void __exit spi_nor_module_exit(void)
-+{
-+	spi_mem_driver_unregister(&spi_nor_driver);
-+	spi_nor_debugfs_shutdown();
-+}
-+module_exit(spi_nor_module_exit);
- 
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Huang Shijie <shijie8@gmail.com>");
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 958cd143c9346..f4246c52a1def 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -714,8 +714,10 @@ static inline struct spi_nor *mtd_to_spi_nor(struct mtd_info *mtd)
- 
- #ifdef CONFIG_DEBUG_FS
- void spi_nor_debugfs_register(struct spi_nor *nor);
-+void spi_nor_debugfs_shutdown(void);
- #else
- static inline void spi_nor_debugfs_register(struct spi_nor *nor) {}
-+static inline void spi_nor_debugfs_shutdown(void) {}
- #endif
- 
- #endif /* __LINUX_MTD_SPI_NOR_INTERNAL_H */
-diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
-index ff895f6758ea1..558ffecf8ae6d 100644
---- a/drivers/mtd/spi-nor/debugfs.c
-+++ b/drivers/mtd/spi-nor/debugfs.c
-@@ -226,13 +226,13 @@ static void spi_nor_debugfs_unregister(void *data)
- 	nor->debugfs_root = NULL;
- }
- 
-+static struct dentry *rootdir;
-+
- void spi_nor_debugfs_register(struct spi_nor *nor)
- {
--	struct dentry *rootdir, *d;
-+	struct dentry *d;
- 	int ret;
- 
--	/* Create rootdir once. Will never be deleted again. */
--	rootdir = debugfs_lookup(SPI_NOR_DEBUGFS_ROOT, NULL);
- 	if (!rootdir)
- 		rootdir = debugfs_create_dir(SPI_NOR_DEBUGFS_ROOT, NULL);
- 
-@@ -247,3 +247,8 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
- 	debugfs_create_file("capabilities", 0444, d, nor,
- 			    &spi_nor_capabilities_fops);
- }
-+
-+void spi_nor_debugfs_shutdown(void)
-+{
-+	debugfs_remove(rootdir);
-+}
--- 
-2.39.2
+Best Regards,
+- Maíra Canal
 
+On 4/6/23 08:02, Javier Martinez Canillas wrote:
+> Hello,
+> 
+> This series contains two trivial cleanups for the vkms driver.
+> 
+> Patch #1 just gets rid of a wrapper helper that wasn't really adding that
+> much value and patch #2 drops the <drm/drm_simple_kms_helper.h> header
+> that was only used to call the drm_simple_encoder_init() function helper.
+> 
+> Best regards,
+> Javier
+> 
+> 
+> Javier Martinez Canillas (2):
+>    drm/vkms: Drop vkms_connector_destroy() wrapper
+>    drm/vkms: Remove <drm/drm_simple_kms_helper.h> include
+> 
+>   drivers/gpu/drm/vkms/vkms_output.c | 15 +++++++--------
+>   1 file changed, 7 insertions(+), 8 deletions(-)
+> 
+> 
+> base-commit: 77d08a2de6a43521f5a02848f11185b6f46af21c
