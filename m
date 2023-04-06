@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411536D907F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B4C6D908A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbjDFHfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S235688AbjDFHgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233391AbjDFHfB (ORCPT
+        with ESMTP id S232896AbjDFHgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:35:01 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2617710CE
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:35:00 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id w9so147157731edc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680766498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mWV91vGp3KB8DWBxH5tjuT3y7/WaE8z67Uw3Mj6Ls1M=;
-        b=UlhekyO+WGUpfIQ+1t1kUBU6d+nEeRRQn/NxwMdOWBzvg1wjajZ6tind6tuWWjnAxk
-         Jv/icsKQDgKtcc7HmvYNyfthRvF52ntmGNwjRzvDdfddetccu51kJBtIEVjFI7gyEOYd
-         H27IMXeb3R0xk3JRy2mqcZfI6hRYspSRYPX9k7rC7QpX5NwzyjuK2VybfYBZlzpMSRdq
-         GoR9BFlEADC4i5YXrfYJlHfvfnRCMsIr1FDuMa0fVhVVNkZw9Luxr4y5TjEN7uVsk43W
-         hUMBJ1auVK+PH00xgQUF452s9/g/tQXPhcw/CfIGHnfm35pQSL0edEQ3pTwN6nuTHuxV
-         HeOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680766498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mWV91vGp3KB8DWBxH5tjuT3y7/WaE8z67Uw3Mj6Ls1M=;
-        b=YRHWk7VfM8Rivh80X8q2HaYwct5UGZ6cyhbmAIOviXSKYxncmgdmzhFZ/29FDmiBbQ
-         zQ03xrJTFSiQTn+U08uzRRBPGksqmqsu1zNEnzzJuVU3cmB1ZjVJWtEaUtR6ojLXsrza
-         UqW7tCLjEHPq+CLUrhDthfBEetnqRuV+x+AWbawqC8sSL0z9HYUrPJSHLujM2asfa3z6
-         12sMYHMJudOKQHQV/sW4fL7fGjkKk2MbGTuNIzfqOiTxfrPCspnKNhOt5k9NAVcdJwLz
-         bBrSCUTQRWdopqRqMqhCuP8agdJk2+J5h6qtDwOJbWT7IFriEFxkCUQfD8IbSK8qiHDo
-         Dzow==
-X-Gm-Message-State: AAQBX9cou0H8S7egZFoospH97kphLlFWYtA8a1GjVi/Dkgj7DWcKX2RL
-        XNJqDo2ix55FG/X31vjwthmP/A==
-X-Google-Smtp-Source: AKy350YpXuEE3IPEGZ9zK9uApXgid2UbUxNFkWO5eN4ck7RMakTxtCoifo/0kKqOo6GsAw2iq7rpQQ==
-X-Received: by 2002:a17:906:9be0:b0:945:5510:2b9f with SMTP id de32-20020a1709069be000b0094555102b9fmr5968705ejc.54.1680766498650;
-        Thu, 06 Apr 2023 00:34:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id xa16-20020a170907b9d000b00948aae5e3d3sm421074ejc.184.2023.04.06.00.34.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 00:34:58 -0700 (PDT)
-Message-ID: <ea0ca421-3fa6-9562-c6ff-399830934931@linaro.org>
-Date:   Thu, 6 Apr 2023 09:34:57 +0200
+        Thu, 6 Apr 2023 03:36:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A16D128;
+        Thu,  6 Apr 2023 00:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TDPAEotj8o6F8kLzXvNoLAs+SKYTvzHm7djobUfwOTc=; b=ApvP7pMC4U3siyul5SjaTyWa8s
+        v7eUodewJat7J5QLzVFcIe/0VkJFso/9SrSZ+I9aoSUw847oj2LMsDMNQDNNgnMjrltgjnC+gSXb+
+        Tv1RJO4gAqlKmS2FLp8naty8VZwSDtUOs29MCbqshfEkY50bflvsq1ZHl8PnfXcMNFPIBU6X3na6N
+        RxkOPtQHR9+eCaKRDEBH+BGtOC/VJunIJhABEGsG5DWAhGExtm1IsQppGmHdEHcWWIgDqHS38Ymac
+        bNqay7jtNBYGWIIPRj3UMxhTad4mB90GxQyJ44cQNntUXHcY1zNhFtQ5k/1DW+4vpnZp5dHDqV+cW
+        elZG3vCg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pkKAB-00HCMt-Kc; Thu, 06 Apr 2023 07:36:07 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0A8843000DC;
+        Thu,  6 Apr 2023 09:36:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E696324C025F1; Thu,  6 Apr 2023 09:36:05 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 09:36:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+Message-ID: <20230406073605.GB386572@hirez.programming.kicks-ass.net>
+References: <20230330224348.1006691-1-davidai@google.com>
+ <20230405080548.GW4253@hirez.programming.kicks-ass.net>
+ <CAGETcx-qgKeUQ60VhvW+hYUY-sMh-wX1G8zSwJUFpJ-u7aU6aA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 0/2] Initial RTD1319 SoC and Realtek PymParticle EVB
- support
-Content-Language: en-US
-To:     =?UTF-8?B?Q1lfSHVhbmdb6buD6Ymm5pmPXQ==?= <cy.huang@realtek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?B?SmFtZXMgVGFpIFvmiLTlv5fls7Bd?= <james.tai@realtek.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-realtek-soc@lists.infradead.org" 
-        <linux-realtek-soc@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <5d644994dd39447cba7ba7027cc856b0@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5d644994dd39447cba7ba7027cc856b0@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGETcx-qgKeUQ60VhvW+hYUY-sMh-wX1G8zSwJUFpJ-u7aU6aA@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 09:18, CY_Huang[黃鉦晏] wrote:
-> Hi Krzysztof,
+On Wed, Apr 05, 2023 at 02:08:43PM -0700, Saravana Kannan wrote:
+
+> Sorry, that was our intention, but had a scripting error. It's been fixed.
 > 
-> This series adds Device Trees for the Realtek RTD1319 SoC and Realtek's
-> PymParticle EVB.
-> 
+> I have a script to use with git send-email's --to-cmd and --cc-cmd
+> option. It uses get_maintainers.pl to figure out who to email, but it
+> gets trickier for a patch series that spans maintainer trees.
 
-Your email threading is broken (does not exist).
+What I do is I simply run get_maintainers.pl against the full series
+diff and CC everybody the same.
 
-Best regards,
-Krzysztof
-
+Then again, I don't use git-send-email, so I've no idea how to use that.
