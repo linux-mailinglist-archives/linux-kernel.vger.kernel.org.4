@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9045E6DA3E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3EC6DA3ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239829AbjDFUog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S240598AbjDFUos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240473AbjDFUoQ (ORCPT
+        with ESMTP id S239651AbjDFUo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:44:16 -0400
+        Thu, 6 Apr 2023 16:44:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16B8D31A;
-        Thu,  6 Apr 2023 13:41:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1ADBD527;
+        Thu,  6 Apr 2023 13:41:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7364864C45;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6839264C58;
+        Thu,  6 Apr 2023 20:41:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D3CC4339C;
         Thu,  6 Apr 2023 20:41:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C86CC4339E;
-        Thu,  6 Apr 2023 20:41:27 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -71,9 +71,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 65/68] hwmon: tmp513: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:40:24 +0200
-Message-Id: <20230406204027.3012532-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 66/68] hwmon: tps23861: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:40:25 +0200
+Message-Id: <20230406204027.3012532-7-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -93,22 +93,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/tmp513.c | 2 +-
+ drivers/hwmon/tps23861.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
-index 7d5f7441aceb..0693eaee054f 100644
---- a/drivers/hwmon/tmp513.c
-+++ b/drivers/hwmon/tmp513.c
-@@ -491,7 +491,7 @@ static umode_t tmp51x_is_visible(const void *_data,
+diff --git a/drivers/hwmon/tps23861.c b/drivers/hwmon/tps23861.c
+index 68c77c493270..85a75f551148 100644
+--- a/drivers/hwmon/tps23861.c
++++ b/drivers/hwmon/tps23861.c
+@@ -341,7 +341,7 @@ static int tps23861_read_string(struct device *dev,
  	return 0;
  }
  
--static const struct hwmon_channel_info *tmp51x_info[] = {
-+static const struct hwmon_channel_info * const tmp51x_info[] = {
+-static const struct hwmon_channel_info *tps23861_info[] = {
++static const struct hwmon_channel_info * const tps23861_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_REGISTER_TZ),
  	HWMON_CHANNEL_INFO(temp,
- 			   HWMON_T_INPUT | HWMON_T_CRIT | HWMON_T_CRIT_ALARM |
- 			   HWMON_T_CRIT_HYST,
 -- 
 2.34.1
 
