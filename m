@@ -2,113 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311326DA262
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5096DA263
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbjDFUMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S237209AbjDFUNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236590AbjDFUMa (ORCPT
+        with ESMTP id S229512AbjDFUNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:12:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E4CE69
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:12:28 -0700 (PDT)
+        Thu, 6 Apr 2023 16:13:14 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68331BD7;
+        Thu,  6 Apr 2023 13:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680811948; x=1712347948;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lnZfiEm0t47fXTNeAj48dJNb8xnqyOJMjzTZLqVN6Iw=;
-  b=FZFZtelsLzSyOMMdGb0K+vuQ4/RnloZuiWb79lugpLFy8WeNtNKsD+rK
-   ESOIe8UpC/nntCm15g8Qrr+NHGWlV9FA7QFxOved84TsWXha258Zf+Mg0
-   4nXQpVucYVtGTTq+rgKAb28/4M+3UbN/mJZwVcS8DeWv5rdytA5lwjtZV
-   TG04HV4+qEkpXXrZMgcyGqiqgjWPMW7+9Qu4jJEgN1uUcDo6t2q6BUz8y
-   BS9GYRjLUZGxedVkZf2lVvGotVAAPzkY3rw2mCqei2Pm/0lZadJizUlpj
-   DJk7oMzgj/1nfkJCuV5xNsoohqzuKsekE83opyClnfIOOKw03Z2ZR090g
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="407955363"
+  t=1680811993; x=1712347993;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=y0M+s4y3ovbRkX8N3nikmS35mC/chKhbtKAptSGAwX8=;
+  b=cI8aJuERLUxWO2guaS/giORrnfMpi2s60/4Dzk2n6PWURWtsnC9VNu4N
+   +i8oPIyGDnBtAm12p+gLA2h5x/aNaFwiQQl94IE9nDODeCy6gUjv4KJ+D
+   sEXICmrlNwFfcGcJ/jpakelXkoLuoZ8eSbUABzSBNGr08lSLjSSHUoTZ9
+   dLuLY6YYTjjhWavdoOaH3LoDjKs439E4sye9BAAkom8+xgY/pZWZXVDNr
+   E7KAuqhTTQu7HqDJg2aSD0kUfkdsqdK84Vt/ihYARV2OWkFkLC7V3be6c
+   M7NTU3ZWeFl/JpdhvdO6ZXkTYNL0FPaaq0noOcwQq7/70g+rVOhuShAQT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="370667298"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="407955363"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 13:12:24 -0700
+   d="scan'208";a="370667298"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 13:13:13 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861528525"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="756456180"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="861528525"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.219.12])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 13:12:24 -0700
-Date:   Thu, 6 Apr 2023 13:12:22 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: octeon: remove typedef declaration for
- cvmx_fau_op_size
-Message-ID: <ZC8nphkEYdrMvRg2@aschofie-mobl2>
-References: <20230405181841.GA6820@koolguy>
+   d="scan'208";a="756456180"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Apr 2023 13:13:12 -0700
+Received: from [10.251.27.208] (kliang2-mobl1.ccr.corp.intel.com [10.251.27.208])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 40D1D58068A;
+        Thu,  6 Apr 2023 13:13:11 -0700 (PDT)
+Message-ID: <8d207ba3-c31e-ccb6-258a-4171df136c9f@linux.intel.com>
+Date:   Thu, 6 Apr 2023 16:13:10 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405181841.GA6820@koolguy>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1 1/5] perf vendor events intel: Update free running
+ alderlake events
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+References: <20230406184638.2632300-1-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230406184638.2632300-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:18:41PM +0200, Dalvin-Ehinoma Noah Aiguobas wrote:
-> Fix checkpatch.pl warning: do not add new typedefs in
-> drivers/staging/octeon/octeon-stubs.h:216
 
-There are a few more of these 'typedef enum' is this file.
-I believe it would be OK to bundle the changes together in one patch.
-Perhaps you are going to come back with additional patches. 
 
-There appears to be an inconsistent style with how the enums are
-actually enumerated in this file.  cvmx_pow_wait_t is esp odd.
-
-Alison
-
+On 2023-04-06 2:46 p.m., Ian Rogers wrote:
+> Fix the PMU name, event code and umask.
 > 
-> Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
+> These updates were generated by:
+> https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
+> with this PR:
+> https://github.com/intel/perfmon/pull/66
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  drivers/staging/octeon/octeon-stubs.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  .../arch/x86/alderlake/uncore-memory.json        | 16 ++++++++++++----
+>  .../arch/x86/alderlaken/uncore-memory.json       | 16 ++++++++++++----
+>  2 files changed, 24 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-> index 3e7b92cd2e35..9f269626b862 100644
-> --- a/drivers/staging/octeon/octeon-stubs.h
-> +++ b/drivers/staging/octeon/octeon-stubs.h
-> @@ -213,12 +213,12 @@ enum cvmx_fau_op_size {
->  	CVMX_FAU_OP_SIZE_64 = 3
->  };
->  
-> -typedef enum {
-> +enum cvmx_spi_mode {
->  	CVMX_SPI_MODE_UNKNOWN = 0,
->  	CVMX_SPI_MODE_TX_HALFPLEX = 1,
->  	CVMX_SPI_MODE_RX_HALFPLEX = 2,
->  	CVMX_SPI_MODE_DUPLEX = 3
-> -} cvmx_spi_mode_t;
-> +};
->  
->  typedef enum {
->  	CVMX_HELPER_INTERFACE_MODE_DISABLED,
-> @@ -1362,7 +1362,7 @@ static inline struct cvmx_wqe *cvmx_pow_work_request_sync(cvmx_pow_wait_t wait)
->  }
->  
->  static inline int cvmx_spi_restart_interface(int interface,
-> -					cvmx_spi_mode_t mode, int timeout)
-> +					enum cvmx_spi_mode mode, int timeout)
->  {
->  	return 0;
->  }
-> -- 
-> 2.25.1
-> 
+> diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
+> index 2ccd9cf96957..ea25bb411f89 100644
+> --- a/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
+> +++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
+> @@ -1,29 +1,37 @@
+>  [
+>      {
+>          "BriefDescription": "Counts every 64B read  request entering the Memory Controller 0 to DRAM (sum of all channels).",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+>          "PublicDescription": "Counts every 64B read request entering the Memory Controller 0 to DRAM (sum of all channels).",
+> -        "Unit": "iMC"
+> +        "UMask": "0x20",
+> +        "Unit": "imc_free_running"
+
+The imc_free_running will give the counter value for both imc0 and imc1.
+
+I think we need "Unit": "imc_free_running_0" here. But I'm not sure if
+the perf tool can handle it.
+
+Thanks,
+Kan
+
+>      },
+>      {
+>          "BriefDescription": "Counts every 64B write request entering the Memory Controller 0 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM.",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+> -        "Unit": "iMC"
+> +        "UMask": "0x30",
+> +        "Unit": "imc_free_running"
+>      },
+>      {
+>          "BriefDescription": "Counts every 64B read request entering the Memory Controller 1 to DRAM (sum of all channels).",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+>          "PublicDescription": "Counts every 64B read entering the Memory Controller 1 to DRAM (sum of all channels).",
+> -        "Unit": "iMC"
+> +        "UMask": "0x20",
+> +        "Unit": "imc_free_running"
+>      },
+>      {
+>          "BriefDescription": "Counts every 64B write request entering the Memory Controller 1 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM.",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+> -        "Unit": "iMC"
+> +        "UMask": "0x30",
+> +        "Unit": "imc_free_running"
+>      },
+>      {
+>          "BriefDescription": "ACT command for a read request sent to DRAM",
+> diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json b/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
+> index 2ccd9cf96957..ea25bb411f89 100644
+> --- a/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
+> +++ b/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
+> @@ -1,29 +1,37 @@
+>  [
+>      {
+>          "BriefDescription": "Counts every 64B read  request entering the Memory Controller 0 to DRAM (sum of all channels).",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+>          "PublicDescription": "Counts every 64B read request entering the Memory Controller 0 to DRAM (sum of all channels).",
+> -        "Unit": "iMC"
+> +        "UMask": "0x20",
+> +        "Unit": "imc_free_running"
+>      },
+>      {
+>          "BriefDescription": "Counts every 64B write request entering the Memory Controller 0 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM.",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+> -        "Unit": "iMC"
+> +        "UMask": "0x30",
+> +        "Unit": "imc_free_running"
+>      },
+>      {
+>          "BriefDescription": "Counts every 64B read request entering the Memory Controller 1 to DRAM (sum of all channels).",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+>          "PublicDescription": "Counts every 64B read entering the Memory Controller 1 to DRAM (sum of all channels).",
+> -        "Unit": "iMC"
+> +        "UMask": "0x20",
+> +        "Unit": "imc_free_running"
+>      },
+>      {
+>          "BriefDescription": "Counts every 64B write request entering the Memory Controller 1 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM.",
+> +        "EventCode": "0xff",
+>          "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
+>          "PerPkg": "1",
+> -        "Unit": "iMC"
+> +        "UMask": "0x30",
+> +        "Unit": "imc_free_running"
+>      },
+>      {
+>          "BriefDescription": "ACT command for a read request sent to DRAM",
