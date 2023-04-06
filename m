@@ -2,118 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AE66D8DB3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8E46D8DB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbjDFCuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 22:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S235226AbjDFCwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 22:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbjDFCuY (ORCPT
+        with ESMTP id S234889AbjDFCvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 22:50:24 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D27F9009;
-        Wed,  5 Apr 2023 19:49:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680749385; x=1712285385;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wNLHlYy6uV4G115SGXQXDrIz1CoHj/OQl8UlKp5dXLs=;
-  b=lEkqMSbTxooxglfJ8+0E9V84q+3C0Ip3/mHcIleCPVEq1kGlwX6ZYV70
-   joo9cZ//RiAtYOd1jI4kJmB6Cl+exBGaIpL+OGBqg77ou4gYWb0B4p65+
-   XN0ba6s+4n4bdzG2p3aVKwRfzYHB5xoPugzkqIeOSEb9pZ4ODAukqPqDV
-   SjPPVk9byVNhICDkMEeP1QOqqYUouIwy5bbzPheL92tGSpqjAaqOJFglq
-   +9gOIZnRrEyL9zffeXbDnvtsSj4M0YP0jM9kVxOvBD2Xxn0hitmBHltdI
-   MqovND55rnh3paZvVzNX8jZ1VeqjI4TDMkC3ckLknTeY8R+bpjflIMe3f
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="370457043"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="370457043"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 19:49:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="1016701974"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="1016701974"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Apr 2023 19:49:40 -0700
-Message-ID: <7312331a-71a1-deea-6d17-bd6d968e87d4@linux.intel.com>
-Date:   Thu, 6 Apr 2023 10:49:50 +0800
+        Wed, 5 Apr 2023 22:51:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C41FAD2C;
+        Wed,  5 Apr 2023 19:51:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84095638A8;
+        Thu,  6 Apr 2023 02:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A1BC433EF;
+        Thu,  6 Apr 2023 02:50:58 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org,
+        Chong Qiao <qiaochong@loongson.cn>
+Subject: [PATCH] LoongArch: module: set section addresses to 0x0
+Date:   Thu,  6 Apr 2023 10:50:36 +0800
+Message-Id: <20230406025036.3022894-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     baolu.lu@linux.intel.com, LKML <linux-kernel@vger.kernel.org>,
-        iommu@lists.linux.dev, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v3 7/7] dmaengine/idxd: Re-enable kernel workqueue under
- DMA API
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
- <20230331231137.1947675-8-jacob.jun.pan@linux.intel.com>
- <ZC1mUKH/03QhkcR9@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <ZC1mUKH/03QhkcR9@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/23 8:15 PM, Jason Gunthorpe wrote:
-> On Fri, Mar 31, 2023 at 04:11:37PM -0700, Jacob Pan wrote:
->>   static void idxd_disable_system_pasid(struct idxd_device *idxd)
->>   {
->> +	struct pci_dev *pdev = idxd->pdev;
->> +	struct device *dev = &pdev->dev;
->> +	struct iommu_domain *domain;
->> +	union gencfg_reg gencfg;
->> +
->> +	domain = iommu_get_domain_for_dev(dev);
->> +	if (!domain || domain->type == IOMMU_DOMAIN_BLOCKED)
->> +		return;
->> +
->> +	iommu_detach_device_pasid(domain, dev, idxd->pasid);
-> This sequence is kinda weird, we shouldn't pass in domain to
-> detach_device_pasid, IMHO. We already know the domain because we store
-> it in an xarray, it just creates weirdness if the user passes in the
-> wrong domain.
+These got*, plt* and .text.ftrace_trampoline sections specified for
+LoongArch have non-zero addressses. Non-zero section addresses in a
+relocatable ELF would confuse GDB when it tries to compute the section
+offsets and it ends up printing wrong symbol addresses. Therefore, set
+them to zero, which mirrors the change in commit 5d8591bc0fbaeb6ded
+("arm64 module: set plt* section addresses to 0x0").
 
-The initial idea was that the driver has a domain and it wants to attach
-the domain to a pasid of the device. During attaching, iommu core will
-save the domain in its xarray.
+Cc: stable@vger.kernel.org
+Signed-off-by: Chong Qiao <qiaochong@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/include/asm/module.lds.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-After use, driver want to detach the domain from the pasid by calling
-iommu_detach_device_pasid(). The iommu core will compare the input
-domain and the one it saved. A warning will be triggered if they are
-different.
+diff --git a/arch/loongarch/include/asm/module.lds.h b/arch/loongarch/include/asm/module.lds.h
+index 438f09d4ccf4..88554f92e010 100644
+--- a/arch/loongarch/include/asm/module.lds.h
++++ b/arch/loongarch/include/asm/module.lds.h
+@@ -2,8 +2,8 @@
+ /* Copyright (C) 2020-2022 Loongson Technology Corporation Limited */
+ SECTIONS {
+ 	. = ALIGN(4);
+-	.got : { BYTE(0) }
+-	.plt : { BYTE(0) }
+-	.plt.idx : { BYTE(0) }
+-	.ftrace_trampoline : { BYTE(0) }
++	.got 0 : { BYTE(0) }
++	.plt 0 : { BYTE(0) }
++	.plt.idx 0 : { BYTE(0) }
++	.ftrace_trampoline 0 : { BYTE(0) }
+ }
+-- 
+2.39.1
 
-	WARN_ON(xa_erase(&group->pasid_array, pasid) != domain);
-
-Logically speaking, @domain for detach_device_pasid is unnecessary,
-because the pasid array is essentially per-device (as we discussed
-before. the pci_enable_pasid() ensures this), although it is currently
-placed in the group structure. In that case, the driver can and should
-own everything about the pasid and domain. The roles of the iommu core
-and the individual driver are only to handle requests of installing or
-withdrawing a domain on/from a device's pasid.
-
-Best regards,
-baolu
