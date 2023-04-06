@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581226DA2E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A586F6DA2EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239705AbjDFUcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S239735AbjDFUcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239450AbjDFUbr (ORCPT
+        with ESMTP id S239620AbjDFUb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:31:47 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E514C9039
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:31:38 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id n21so4219645ejz.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:31:38 -0700 (PDT)
+        Thu, 6 Apr 2023 16:31:58 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360DF9756
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:31:41 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id g18so4213564ejx.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680813097;
+        d=linaro.org; s=google; t=1680813100;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0o/5+RoY1xsbRUDa2AFV0+g4brx+liGdLo6ECyosb9g=;
-        b=e1j2ok3u7VKsR1y6roskcfNxp1+JClKqjk7Csr46nCNqwp+tvujjHQEMIxbTKklgfQ
-         xf1Q+6FoEZZaW0f3QmwUdOlf+txDQNXpyppc7ZPBeyq5F1sEugpq0ioWRrBR/9emC3Qk
-         P0pPSi2jA6Yb5MC3ihtndLjnK427/fl1CpixkdRPS4uuZOXTnJPNT0vYQsShb2NttnKy
-         Qmjsx9Q8X3FnKjQ8PnDQ89IjAC2xYBdayz5zCxdwn3liVhMBr+51fP3qqFdOT03SWUOo
-         jIiHY08xSbx2ArReXkFEzh9RIvmLh3EpyMkqjCofJl85Ziun01chGFqxDu6nxJfbJXsB
-         YXfQ==
+        bh=MMh9pMv1c2N5CZKj6o4hVDzOl36SVdvTrKYi4l5Ys4M=;
+        b=bpvK+tpA6trKtvJrV4DZCtbwNaI1kDImEVeVQL637eqQHty8z4Qq9fSRbGNcHRWRG/
+         FPMf9aY2qxiCS6r+3ssc+K9dV71SFj0TYCnZ2GHj5F16M/z752xuBwB8YxPNXqAuuARn
+         TZrkjmRJ/rQCutKuBNz2TU/i/xu064lmxWLYCKcWS54oyvpm2JboWOLAXeyI8hy8SoVK
+         pjZ3tPar2gZ6Gfrpr+nUYGX2MDmRbgg2z/AKPjwETZd3VjfaMa47TfTd9QpVeKAgh4c7
+         D91heJ9XLjTA52/d2UQYgc+iTqtGkcUYCtjf6kKM9ouXIhYev1rb5rlvfNp/wprEAqHK
+         ip/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680813097;
+        d=1e100.net; s=20210112; t=1680813100;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0o/5+RoY1xsbRUDa2AFV0+g4brx+liGdLo6ECyosb9g=;
-        b=vRWGzoe+bguyhLGav8Idps3hQF3MtXeli+VqMGalTOzDCD7WJ/Pga3XiOQolb7lZRP
-         J94BY9yEuRnBEWPNi3wfOKaoiMMA2O2CBFpsi3tFumJk1Twhk+0KSvux1eVh782stz0G
-         1I91YAkCfg4gNW7rdMA3kZQn/o0mtbXG3fe7+gZYP3xB9cJftfcKPCUzs/CjavGX25AP
-         q/b0o0kwMVy5fp5eaWgC7hMJc//vtfo0FFE9wZkJbqmTt/KYYCaQw2EFX13du13szrmk
-         sWgblTi4FZ72YCVY9xijZ01BAtboFOC3ah95Pym4GVk0QMrwCw3Czws7aOmA1Z0xR8PW
-         EUqQ==
-X-Gm-Message-State: AAQBX9fM+Z3Gyt3MEBKnYY4A3vdvI+QIHFM0JKhozDCQFvoG+h6bp6cs
-        82yHts3AryxjftRV68Gnjby03w==
-X-Google-Smtp-Source: AKy350an67ONjArurlKU83f3QFsUI86J4oBoCp0dWaiAvD+CmcW+xp7O+S3fVmQkXomQA9I3TeWW/w==
-X-Received: by 2002:a17:906:924f:b0:884:9217:4536 with SMTP id c15-20020a170906924f00b0088492174536mr73325ejx.64.1680813097470;
-        Thu, 06 Apr 2023 13:31:37 -0700 (PDT)
+        bh=MMh9pMv1c2N5CZKj6o4hVDzOl36SVdvTrKYi4l5Ys4M=;
+        b=epY+q7E197Jz12f1HvRszj4qKs0DteinG1Z9kS87a+bchxK/XP43O2OjymRy/+DXWO
+         dZutDFEqwHNghNJNgWvnD7TgPXVoOCQjrpCZvBmAc03X6CZ5tRnoGlxr2g7M/qI1cxsP
+         XcgnJYoi6JI7+NJhK6K62Ct4TuNUixSOw0aB5jgvTrKKGK4kgoxO1H2P+Cprx1ylEoM+
+         7MRXoSfj+GGqHChNvWTeCkAz2eYrJqY4rS0NM0Je1bInFGpOqvEA+A53vR0Gec6C4peV
+         oZ4Xun5rwRHIC4Gxer2RjD3tPs2c/gsriAq8rexjTY+yIVyCe0S5xpDhjscGK46q0+mu
+         TY2g==
+X-Gm-Message-State: AAQBX9fVIKI5OKRvge0AWa4eWzTOcjoSHR3b8qgpDXxpDHRv29Z+3Kil
+        +IGihVf/vkL07/QqQG6LZouwyA==
+X-Google-Smtp-Source: AKy350Yud0CdyQeRWD/f32T/icmKifXpYmvMz9y9aU59vYOZT5+tyTqiYLMimp0uRkG+9Xvbh1C6OQ==
+X-Received: by 2002:a17:906:24d7:b0:932:2874:cc5 with SMTP id f23-20020a17090624d700b0093228740cc5mr235929ejb.16.1680813099901;
+        Thu, 06 Apr 2023 13:31:39 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id s4-20020a1709067b8400b0092bea699124sm1210330ejo.106.2023.04.06.13.31.35
+        by smtp.gmail.com with ESMTPSA id s4-20020a1709067b8400b0092bea699124sm1210330ejo.106.2023.04.06.13.31.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 13:31:37 -0700 (PDT)
+        Thu, 06 Apr 2023 13:31:39 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -100,9 +100,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 10/68] hwmon: axi-fan: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:30:05 +0200
-Message-Id: <20230406203103.3011503-11-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 11/68] hwmon: bt1-pvt: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:30:06 +0200
+Message-Id: <20230406203103.3011503-12-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -122,22 +122,31 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/axi-fan-control.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/bt1-pvt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hwmon/axi-fan-control.c b/drivers/hwmon/axi-fan-control.c
-index 6724e0dd3088..5fd136baf1cd 100644
---- a/drivers/hwmon/axi-fan-control.c
-+++ b/drivers/hwmon/axi-fan-control.c
-@@ -394,7 +394,7 @@ static int axi_fan_control_init(struct axi_fan_control_data *ctl,
- 	return ret;
+diff --git a/drivers/hwmon/bt1-pvt.c b/drivers/hwmon/bt1-pvt.c
+index 21ab172774ec..8d402a627306 100644
+--- a/drivers/hwmon/bt1-pvt.c
++++ b/drivers/hwmon/bt1-pvt.c
+@@ -379,7 +379,7 @@ static int pvt_read_alarm(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+ 	return 0;
  }
  
--static const struct hwmon_channel_info *axi_fan_control_info[] = {
-+static const struct hwmon_channel_info * const axi_fan_control_info[] = {
- 	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT),
- 	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_FAULT | HWMON_F_LABEL),
- 	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
+-static const struct hwmon_channel_info *pvt_channel_info[] = {
++static const struct hwmon_channel_info * const pvt_channel_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+ 	HWMON_CHANNEL_INFO(temp,
+@@ -523,7 +523,7 @@ static int pvt_read_alarm(struct pvt_hwmon *pvt, enum pvt_sensor_type type,
+ 	return -EOPNOTSUPP;
+ }
+ 
+-static const struct hwmon_channel_info *pvt_channel_info[] = {
++static const struct hwmon_channel_info * const pvt_channel_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
+ 	HWMON_CHANNEL_INFO(temp,
 -- 
 2.34.1
 
