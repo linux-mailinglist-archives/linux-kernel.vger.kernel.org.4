@@ -2,79 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AA36DA3A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74586DA391
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbjDFUlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240194AbjDFUlQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240188AbjDFUlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 6 Apr 2023 16:41:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D6AAF0D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680813388;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6LXsKr+a/Z33uwWnUodThDv9wbW0mvJrlyH2U+mElvk=;
-        b=NrVU+EEFdSvF0OHZCEVqeT4X8mW9jgycK/pawB24N/kksMm2TagIIwDokmiPQfMTOOGTz/
-        Wn/bLewgrMeiOlUGxcKnJRvcY5zgdd4b9IrAil+Af3HZwBLXWFL4YXvKlRKt2vuUKZO1GK
-        c8EzB6QNOa+9OW2thkGBXil0GwH999g=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-248-tBFO1uY3OjWSmHTn9s6I0w-1; Thu, 06 Apr 2023 16:36:27 -0400
-X-MC-Unique: tBFO1uY3OjWSmHTn9s6I0w-1
-Received: by mail-qk1-f197.google.com with SMTP id s190-20020ae9dec7000000b00746b7fae197so6971550qkf.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:36:27 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240186AbjDFUkv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Apr 2023 16:40:51 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DBFD50D;
+        Thu,  6 Apr 2023 13:36:50 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id r11so40700665wrr.12;
+        Thu, 06 Apr 2023 13:36:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680813386; x=1683405386;
-        h=mime-version:user-agent:content-transfer-encoding:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6LXsKr+a/Z33uwWnUodThDv9wbW0mvJrlyH2U+mElvk=;
-        b=52WBk3pE17nclwIBxbnQ/yROGB8BYwsmSwLQC6v2KQMkRpr2g73CB7GXrwuWKcoTn0
-         GCPrty6q5tYWlu8V1J5SJ3NYqmTkkKm967/Y613g/LQiM/0TiS0NV9/yf7VQeQNXnXCI
-         gGpwKAE0fO69m/njcRRNdBVXTzuHEWc5BOlUT4EFoeWHxRVT4rCeTwEl9eavA0BOLRuV
-         jB/m+7eu7NQxQTY3Zg48W9828AFcssLA0a5jzFXNd0Iinbpa3jdu8QmaFi0hPH6KEwG7
-         HXIPOa3VOjzbI3pjJYdS80D40phH29KiLsyVpuuxfLH6A0NsRjp7CJGAE1Sxiv4FnQ4B
-         mP8Q==
-X-Gm-Message-State: AAQBX9fwa1LBO0VNR8K25YJ8uBqmC0rARI/6CYSgRQBC02MoeERbWNnN
-        ekiWx6DOL3sHrpxjVZR4khZFXlJkEnkl5snJD7HBVb8q+2LSHuBoN///MtkoDtLVJOhRcnn1cjm
-        pNJSECTr7A6S0Ndf9yceGc+fj
-X-Received: by 2002:a05:6214:5011:b0:5e0:2d2a:33c7 with SMTP id jo17-20020a056214501100b005e02d2a33c7mr1134138qvb.17.1680813386442;
-        Thu, 06 Apr 2023 13:36:26 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aMIlr6kOr7QlKmLXQ+/A47WKSK2XBUpbzukLONDGPnJm/66bMRzwwZPj9Vn6QKrcOYSdjPyw==
-X-Received: by 2002:a05:6214:5011:b0:5e0:2d2a:33c7 with SMTP id jo17-20020a056214501100b005e02d2a33c7mr1134098qvb.17.1680813386085;
-        Thu, 06 Apr 2023 13:36:26 -0700 (PDT)
-Received: from ?IPv6:2600:4040:5c62:8200::feb? ([2600:4040:5c62:8200::feb])
-        by smtp.gmail.com with ESMTPSA id u12-20020a0ced2c000000b005dd8b934572sm784208qvq.10.2023.04.06.13.36.25
+        d=1e100.net; s=20210112; t=1680813409; x=1683405409;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=86pSHJQu+AoGkaxYEVcfYHcMCnPQLhP4bpRlqk/CQPk=;
+        b=esBU0mIeX3/U80A+Be/Xnlbgi+ZxM5LJig7psgaRHyVBG52bhOlb1PxS+Exw5DfIL/
+         pweYrFhLGCuyI1F5LILpCH6WVjGhK0QJL9Vv4J2f3LSAmcFM16uG3Wj1B9xxq42oCLmg
+         dA1pdi0v91qdjBkeA9cBKPcd7RYHXbWg4Pdv3Jhsqv0CuFVnrPms9o+cHGfdl/1DlVdK
+         EznsLyS+h1Fyprer61qRqRkK3gArQpw5zuqHsnpalx7I1yGlyPug9I1LNPCLJVOs+Bi6
+         fFi2piarUTojymWRNaj8NCYU29vv317Gn440YJrHXZkn6apc+SJQhML0/2ue5pNlDL+H
+         Pd+w==
+X-Gm-Message-State: AAQBX9fI9w+Yth0or9g6gJdghKrqosm/8vFrCrIo5cvPUxyYfE67fox/
+        M8f47Rqjau1LKOyb/59691xFHIxObSivvg==
+X-Google-Smtp-Source: AKy350b2PIP7mfUQgql8PR056N3jlcv//PoKLuKYmDBs1jORZLHQ/q1XL4oqpFw49Xgt2E27fNJEOQ==
+X-Received: by 2002:a05:6000:100d:b0:2cf:ef9d:16a5 with SMTP id a13-20020a056000100d00b002cfef9d16a5mr8106752wrx.18.1680813408529;
+        Thu, 06 Apr 2023 13:36:48 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id y8-20020adfe6c8000000b002c559843748sm2680167wrm.10.2023.04.06.13.36.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 13:36:25 -0700 (PDT)
-Message-ID: <dc98897a97ba0f7e959dbcb8465ebc522e91dc3a.camel@redhat.com>
-Subject: (Attn. Skeggsb) Re: [PATCH] drm/nouveau/gr/tu102: remove unused
- tu102_gr_load function
-From:   Lyude Paul <lyude@redhat.com>
-To:     Tom Rix <trix@redhat.com>, bskeggs@redhat.com, kherbst@redhat.com,
-        airlied@gmail.com, daniel@ffwll.ch, gsamaiya@nvidia.com
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 06 Apr 2023 16:36:24 -0400
-In-Reply-To: <20230406125102.1952202-1-trix@redhat.com>
-References: <20230406125102.1952202-1-trix@redhat.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 06 Apr 2023 13:36:47 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 20:36:44 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>, kys@microsoft.com,
+        haiyangz@microsoft.com, decui@microsoft.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        mikelley@microsoft.com
+Subject: Re: [PATCH v9 4/5] dt-bindings: bus: VMBus
+Message-ID: <ZC8tXOjT+D4WR2vm@liuwe-devbox-debian-v2>
+References: <1679298460-11855-1-git-send-email-ssengar@linux.microsoft.com>
+ <1679298460-11855-5-git-send-email-ssengar@linux.microsoft.com>
+ <ZC3/2Xf+L3rer9ds@liuwe-devbox-debian-v2>
+ <20230406030316.GA9750@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406030316.GA9750@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,56 +65,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Ben - this patch looks fine to me but I figured I should check before
-giving it the OK: I assume we're not planning on using tu102_gr_load for
-anything in the future? (if we are, do we want to just #if 0 this for the t=
-ime
-being?)
+On Wed, Apr 05, 2023 at 08:03:16PM -0700, Saurabh Singh Sengar wrote:
+> On Wed, Apr 05, 2023 at 11:10:17PM +0000, Wei Liu wrote:
+> > On Mon, Mar 20, 2023 at 12:47:39AM -0700, Saurabh Sengar wrote:
+> > > Add dt-bindings for Hyper-V VMBus.
+> > 
+> > Do you perhaps want to use this as the commit subject line? The original
+> > one looks to be cut off half way.
+> 
+> In the first version of this patch series, I had this as subject line, however
+> 'dt-bindings' was repetetive in subject line hence asked to be dropped by
+> device-tree maintainers.
+> 
+> Ref: https://lore.kernel.org/lkml/f74fe561-dc20-0681-12af-4a4782a060be@linaro.org/
+> 
+> If this subject line looks cut in half, may be we can modify it to:
+> dt-bindings: bus: Add Hyper-V VMBus
 
-On Thu, 2023-04-06 at 08:51 -0400, Tom Rix wrote:
-> smatch reports
-> drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: symbol
->   'tu102_gr_load' was not declared. Should it be static?
->=20
-> This function is not used so remove it.
->=20
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c | 13 -------------
->  1 file changed, 13 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c b/drivers/gpu=
-/drm/nouveau/nvkm/engine/gr/tu102.c
-> index 3b6c8100a242..a7775aa18541 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
-> @@ -206,19 +206,6 @@ tu102_gr_av_to_init_veid(struct nvkm_blob *blob, str=
-uct gf100_gr_pack **ppack)
->  	return gk20a_gr_av_to_init_(blob, 64, 0x00100000, ppack);
->  }
-> =20
-> -int
-> -tu102_gr_load(struct gf100_gr *gr, int ver, const struct gf100_gr_fwif *=
-fwif)
-> -{
-> -	int ret;
-> -
-> -	ret =3D gm200_gr_load(gr, ver, fwif);
-> -	if (ret)
-> -		return ret;
-> -
-> -	return gk20a_gr_load_net(gr, "gr/", "sw_veid_bundle_init", ver, tu102_g=
-r_av_to_init_veid,
-> -				 &gr->bundle_veid);
-> -}
-> -
->  static const struct gf100_gr_fwif
->  tu102_gr_fwif[] =3D {
->  	{  0, gm200_gr_load, &tu102_gr, &gp108_gr_fecs_acr, &gp108_gr_gpccs_acr=
- },
+Okay. Let change the title to this.
 
---=20
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-
+Thanks,
+Wei.
