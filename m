@@ -2,175 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3826D9755
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB97C6D975A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237338AbjDFMwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
+        id S237929AbjDFMxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236599AbjDFMwH (ORCPT
+        with ESMTP id S236599AbjDFMw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:52:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BFD7ED3;
-        Thu,  6 Apr 2023 05:52:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9C2464787;
-        Thu,  6 Apr 2023 12:52:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88E9C433EF;
-        Thu,  6 Apr 2023 12:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680785522;
-        bh=ixYWjGc0xtNsYuWm+X2+VXF5qJytiSRZtYoQruwRDTU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O1lUQWLjwNExM1vKk/1+ubgwdw0ANhzUyl/Z3ccLCZ4ZvXI8wXKxXC5Cm91B8BM1P
-         qDqdiW4Emy62t9f7L21qk3HDnattMb1BJ3CoOeANOPTQlZ6iW7t9WaV8SeLh6ERX+1
-         7DfJOYxPPXE3DcFmBk3G8R8uCMAlUZ0SJ6NvqWVoXRoySzeE3XNp8qH8RANhI13ZTE
-         pBB3c1N5/C+G5QU9lnhaTdLHOcdOxQxf+XxZ1Hv+4wpvI81k1zke5Pz/6V9D0mNs+K
-         jGspEpZFgLJJAwjE/jQS9a2cpsLkjfhS+px5JhZzvPdLLAdAsw8K8RZvTxO2+QGV6n
-         gYxK0Y3GVJIaQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4AFCA4052D; Thu,  6 Apr 2023 09:51:58 -0300 (-03)
-Date:   Thu, 6 Apr 2023 09:51:58 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        Thu, 6 Apr 2023 08:52:59 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E332F7ED0
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:52:56 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id sg7so1129573ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 05:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680785575; x=1683377575;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=IJscOEPUxerIocq5ivhaFnZ1SHI0paGFj+4RY7CI49c=;
+        b=mmi2ytKq+NaQhoDUPRHBUEjRhCCPgZiy7rLgIJXfMFck1daXezUDFfW+f8Ya9qW8Nu
+         77o8Nv8mCPZJVOJ/Mw5IkzQ/lVA8K8pLYcnCheg3aUT4rIjJIAXX7Utgjw5MQqmXLhtW
+         435VTHVUt6RP3++nMGoeLtublMXBqOmF5FEHQb6o99n31lb7S6WZxLIvcTevt83tl6fV
+         cKM/LYDc4weOyCwuDkg3btNjWsl6SyXFBeMGeyFU1GWXKNRtgmCulev2zmpW5HSdx9TQ
+         WDUIoKFjlt3z2DEYShN6woFM3WBqXviuTCQLf58p6eWApFbTnPJA8N2vEAKJbmcOE3wx
+         8r5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680785575; x=1683377575;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IJscOEPUxerIocq5ivhaFnZ1SHI0paGFj+4RY7CI49c=;
+        b=cIxkNYtPTACZmDpnVE++cjaJjJ7yWaB28VFoNVI1KQrqvzU6/MI4GgnAXdVNkTqvmc
+         pdyMaXjEXcASdgTnsM/LP4TjWl8pWBhUfyR1L7CRPXCSfBiJaSnQZv+AQe0EV0/s2mD3
+         HfTNQshcjthxEyTQv6p75wSJ32xvXjtIzL11ZqLz9iMWXLzQQPEmNaubC5L1UOUKf2dV
+         HqRr8bOITEIuzzgW6vkJO/3hDGUsTb6N6A7V1hBywMtm4ejNgdqZLdLk4YSSc2hHL6fD
+         Xcjr+aFPThbm7LH+UnFNnyJ0Fg1uq+8V0qVJv7hkdyQF7LyEj8CyFmCt2Y1xKE8JXZIw
+         pzEQ==
+X-Gm-Message-State: AAQBX9eXEhEYwrzMtOFGGf8MHSBIz/n/7i29YjifvLowAELAU+3U4C2S
+        xNJutu1+rbN0TEKXhN5cWND5rg==
+X-Google-Smtp-Source: AKy350ZjSeUi5W/FMFj8cFd3FZ8IBUmJZCdwJjwrxRaSX9z1B2tETRyepfqtj3cs2LAQGBpYvDx5aA==
+X-Received: by 2002:a17:906:9be2:b0:931:624b:680c with SMTP id de34-20020a1709069be200b00931624b680cmr6404112ejc.29.1680785575139;
+        Thu, 06 Apr 2023 05:52:55 -0700 (PDT)
+Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id rj13-20020a1709076c8d00b00947ccb6150bsm657067ejc.102.2023.04.06.05.52.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 05:52:54 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 12:52:51 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, David Dai <davidai@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v5 00/17] Reference count checker and related fixes
-Message-ID: <ZC7AbtD4E6zWWlUn@kernel.org>
-References: <20230320212248.1175731-1-irogers@google.com>
- <CAP-5=fX4=pUmcFpRZ5xFds1awSr7HSo1F9rH4=D7NJXW9OXXVQ@mail.gmail.com>
- <7443d427-783b-44b6-85e6-5e667bb83a94@intel.com>
- <ZCxvYpeoemPHUmJ4@kernel.org>
- <ZCxyZcnd9/4zjbQZ@kernel.org>
- <527b8bcb-d462-5fff-5310-703b55902a61@intel.com>
- <ZC11tTdXuJR/M8o+@kernel.org>
- <2aaba740-35e4-4a68-2676-63d47898378c@intel.com>
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        kernel-team@android.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [RFC PATCH 0/6] Improve VM DVFS and task placement behavior
+Message-ID: <ZC7Ao1qoNGYXQ9h4@google.com>
+References: <20230330224348.1006691-1-davidai@google.com>
+ <ZCx97IKjsBibjdGc@linux.dev>
+ <86sfdfv0e1.wl-maz@kernel.org>
+ <ZC0n0HRsmNJeJZps@google.com>
+ <CAGETcx_9SdyCQ5UHhjsnV5+X8arhXoZS2NN-mewtPM3oHuZrkw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2aaba740-35e4-4a68-2676-63d47898378c@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGETcx_9SdyCQ5UHhjsnV5+X8arhXoZS2NN-mewtPM3oHuZrkw@mail.gmail.com>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Apr 05, 2023 at 07:25:27PM +0300, Adrian Hunter escreveu:
-> On 5/04/23 16:20, Arnaldo Carvalho de Melo wrote:
-> > Em Wed, Apr 05, 2023 at 11:47:26AM +0300, Adrian Hunter escreveu:
-> >> On 4/04/23 21:54, Arnaldo Carvalho de Melo wrote:
-> >>> Em Tue, Apr 04, 2023 at 03:41:38PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >>>> Em Tue, Apr 04, 2023 at 08:25:41PM +0300, Adrian Hunter escreveu:
-> >>>>> I was wondering if the handling of dynamic data like struct map makes
-> >>>>> any sense at present.  Perhaps someone can reassure me.
+On Wednesday 05 Apr 2023 at 14:07:18 (-0700), Saravana Kannan wrote:
+> On Wed, Apr 5, 2023 at 12:48 AM 'Quentin Perret' via kernel-team
+> > And I concur with all the above as well. Putting this in the kernel is
+> > not an obvious fit at all as that requires a number of assumptions about
+> > the VMM.
+> >
+> > As Oliver pointed out, the guest topology, and how it maps to the host
+> > topology (vcpu pinning etc) is very much a VMM policy decision and will
+> > be particularly important to handle guest frequency requests correctly.
+> >
+> > In addition to that, the VMM's software architecture may have an impact.
+> > Crosvm for example does device emulation in separate processes for
+> > security reasons, so it is likely that adjusting the scheduling
+> > parameters ('util_guest', uclamp, or else) only for the vCPU thread that
+> > issues frequency requests will be sub-optimal for performance, we may
+> > want to adjust those parameters for all the tasks that are on the
+> > critical path.
+> >
+> > And at an even higher level, assuming in the kernel a certain mapping of
+> > vCPU threads to host threads feels kinda wrong, this too is a host
+> > userspace policy decision I believe. Not that anybody in their right
+> > mind would want to do this, but I _think_ it would technically be
+> > feasible to serialize the execution of multiple vCPUs on the same host
+> > thread, at which point the util_guest thingy becomes entirely bogus. (I
+> > obviously don't want to conflate this use-case, it's just an example
+> > that shows the proposed abstraction in the series is not a perfect fit
+> > for the KVM userspace delegation model.)
+> 
+> See my reply to Oliver and Marc. To me it looks like we are converging
+> towards having shared memory between guest, host kernel and VMM and
+> that should address all our concerns.
 
-> >>>>> A struct map can be updated when an MMAP event is processed.  So it
+Hmm, that is not at all my understanding of what has been the most
+important part of the feedback so far: this whole thing belongs to
+userspace.
 
-> >>>> Yes, it can, and the update is made via a new PERF_RECORD_MMAP, right?
+> The guest will see a MMIO device, writing to it will trigger the host
+> kernel to do the basic "set util_guest/uclamp for the vCPU thread that
+> corresponds to the vCPU" and then the VMM can do more on top as/if
+> needed (because it has access to the shared memory too). Does that
+> make sense?
 
-> >>>> So:
+Not really no. I've given examples of why this doesn't make sense for
+the kernel to do this, which still seems to be the case with what you're
+suggesting here.
 
-> >>>> 	perf_event__process_mmap()
-> >>>> 	  machine__process_mmap2_event()
-> >>>> 	    map__new() + thread__insert_map(thread, map)
-> >>>> 	    	maps__fixup_overlappings()
-> >>>> 			maps__insert(thread->maps, map);
+> Even in the extreme example, the stuff the kernel would do would still
+> be helpful, but not sufficient. You can aggregate the
+> util_guest/uclamp and do whatever from the VMM.
+> Technically in the extreme example, you don't need any of this. The
+> normal util tracking of the vCPU thread on the host side would be
+> sufficient.
+>
+> Actually any time we have only 1 vCPU host thread per VM, we shouldn't
+> be using anything in this patch series and not instantiate the guest
+> device at all.
 
-> >>>> Ok, from this point on new samples on ] map->start .. map->end ] will
-> >>>> grab a refcount to this new map in its hist_entry, right?
+> > So +1 from me to move this as a virtual device of some kind. And if the
+> > extra cost of exiting all the way back to userspace is prohibitive (is
+> > it btw?),
+> 
+> I think the "13% increase in battery consumption for games" makes it
+> pretty clear that going to userspace is prohibitive. And that's just
+> one example.
 
-> >>>> When we want to sort by dso we will look at hist_entry->map->dso, etc.
+I beg to differ. We need to understand where these 13% come from in more
+details. Is it really the actual cost of the userspace exit? Or is it
+just that from userspace the only knob you can play with is uclamp and
+that didn't reach the expected level of performance?
 
-> >>> And in 'perf top' we go decaying hist entries, when we delete the
-> >>> hist_entry, drop the reference count to things it holds, that will then
-> >>> be finally deleted when no more hist_entries point to it.
+If that is the userspace exit, then we can work to optimize that -- it's
+a fairly common problem in the virt world, nothing special here.
 
-> >>>>> seems like anything racing with event processing is already broken, and
-> >>>>> reference counting / locking cannot help - unless there is also
-> >>>>> copy-on-write (which there isn't at present)?
-> >  
-> >> So I checked, and struct map *is* copy-on-write in
-> >> maps__fixup_overlappings(), so that should not be a problem.
-> >  
-> >>>>> For struct maps, referencing it while simultaneously processing
-> >>>>> events seems to make even less sense?
-> > 
-> >>>> Can you elaborate some more?
-> >  
-> >> Only that the maps are not necessarily stable e.g. the map that you
-> >> need has been replaced in the meantime.
-> > 
-> > Well, it may be sliced in several or shrunk by new ones overlapping it,
-> > but it if completely disappears, say a new map starts before the one
-> > disappearing and ends after it, then it remains with reference counts if
-> > there are hist_entries (or other data structure) pointing to them,
-> > right?
+And if the issue is the lack of expressiveness in uclamp, then that too
+is something we should work on, but clearly giving vCPU threads more
+'power' than normal host threads is a bit of a red flag IMO. vCPU
+threads must be constrained in the same way that userspace threads are,
+because they _are_ userspace threads.
 
-> >> But upon investigation, the only user at the moment is
-> >> maps__find_ams().  If we kept the removed maps (we used to),
-> >> it might be possible to make maps__find_ams() work correctly
-> >> in any case.
+> > then we can try to work on that. Maybe something a la vhost
+> > can be done to optimize, I'll have a think.
+> >
+> > > The one thing I'd like to understand that the comment seems to imply
+> > > that there is a significant difference in overhead between a hypercall
+> > > and an MMIO. In my experience, both are pretty similar in cost for a
+> > > handling location (both in userspace or both in the kernel). MMIO
+> > > handling is a tiny bit more expensive due to a guaranteed TLB miss
+> > > followed by a walk of the in-kernel device ranges, but that's all. It
+> > > should hardly register.
+> > >
+> > > And if you really want some super-low latency, low overhead
+> > > signalling, maybe an exception is the wrong tool for the job. Shared
+> > > memory communication could be more appropriate.
+> >
+> > I presume some kind of signalling mechanism will be necessary to
+> > synchronously update host scheduling parameters in response to guest
+> > frequency requests, but if the volume of data requires it then a shared
+> > buffer + doorbell type of approach should do.
+> 
+> Part of the communication doesn't need synchronous handling by the
+> host. So, what I said above.
 
-> > Humm, I think I see what you mean, maps__find_ams() is called when we
-> > are annotating a symbol, not when we're processing a sample, so it may
-> > be the case that at the time of annotation the executable that is being
-> > found (its parsing the target IP of a 'call' assembly instruction) was
-> > replaced, is that the case?
- 
-> Yes, that is the possibility
+I've also replied to another message about the scale invariance issue,
+and I'm not convinced the frequency based interface proposed here really
+makes sense. An AMU-like interface is very likely to be superior.
 
-Yeah, this one gets a bit more difficult to support, we would have to
-keep a sub-bucket for each annotation instruction with the ordered by
-timestamp list of maps that were on that location (but then just to
-places that had samples, not to all) and then when add some visual cue
-to that annotation line to mean that it was patched and show the
-original, then the (possibly) various patches and say that samples up to
-N units of time were for some original DSO, then to another (overlapping
-executable map), then to some patching (that we would catch with
-PERF_RECORD_TEXT_POKE for the kernel, right?), etc.
+> > Thinking about it, using SCMI over virtio would implement exactly that.
+> > Linux-as-a-guest already supports it IIRC, so possibly the problem
+> > being addressed in this series could be 'simply' solved using an SCMI
+> > backend in the VMM...
+> 
+> This will be worse than all the options we've tried so far because it
+> has the userspace overhead AND uclamp overhead.
 
-Seems doable, and for most cases would be similar to what we have right
-now, as self-modifying code its not so pervasive (famous last words
-;-)).
+But it doesn't violate the whole KVM userspace delegation model, so we
+should start from there and then optimize further if need be.
 
-- Arnaldo
+Thanks,
+Quentin
