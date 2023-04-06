@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EB46DA655
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24BA6DA657
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjDFXyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 19:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S232677AbjDFXyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 19:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjDFXx6 (ORCPT
+        with ESMTP id S229783AbjDFXyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:53:58 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E496589
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:53:57 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso40428756ybi.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 16:53:57 -0700 (PDT)
+        Thu, 6 Apr 2023 19:54:07 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1FA86B8
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:54:05 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id w5-20020a253005000000b00aedd4305ff2so40822217ybw.13
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 16:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680825237;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FLvfuP/ppd0j0/1co5enb/ElBXDAvYlZqA+xyY4YSI0=;
-        b=MolppwmDeQulqB6WA5Ouco2p4R1r5C2to0lWGjzVHcaM482Z9Z2qbmq3XwcAINxepf
-         FyaqSU8m0jBggXmE0PEFmg75/745IQSTW1x/JZl1X1ca+BqygoxccjIiUW5sJaTul+pI
-         Mr0R69EuJ4DyWwUh7RaKz85Am1dmQyO2HLljVgHDBs8P6NKJW5Uuy1N1FM9hRmTGpzTz
-         5gGbn9h3PSS/32c1fW3inLlYvfwkJYwaWgfzyWMjmHeCzY3jWWdoYvlrrgzbh0mVui5o
-         6xykRwQ7cs6rwi8Yop99ZSCdQBP5Gegw4HU80Uz6m54r9pMMNqepTAzGCewBzg/pTnAi
-         B8yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680825237;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+        d=google.com; s=20210112; t=1680825245;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FLvfuP/ppd0j0/1co5enb/ElBXDAvYlZqA+xyY4YSI0=;
-        b=eHZWw349WZoZdZZ9bbBYVTFDO7EyC11HmglSAJ0W/aKA7NGkCcAv4sNtRh1VFdggAR
-         AEENnFUaMrm2FdqQmFH0SQ3h8FxLFKsz37rtMT6I/ZlaR6pqiIya3s3DDXXt+Umdn8BO
-         Wa9VkIjy3mnnQjEevvDA8wW4vP+g+mv09k3wDghbUjNh22oaC6qD7ppfTmdK3xdlNi2H
-         JTQIx00oqHazR0v/727flAmJbMLa6BUF68jGsWrKZD2887M4ukHw1y87xcKHV9DMSysH
-         EOMynT4bwf5bagep1UIDZCcyIJbSEKlWL+kONlU6MZGhcs3RtxSZtiR00I1hyxNp0hwa
-         IetQ==
-X-Gm-Message-State: AAQBX9dAKiR52f7uzACA8PZxxcxJWlGYKCd5Rm8GgCVz6rU23Vs2nob4
-        CCmpoZiJNhoP3YwQuT8X8+l2Q4AeY4RS
-X-Google-Smtp-Source: AKy350bEziOXF5P1ia/8qPKeLmnd9NJTDiichJKVjV8ga2NYjwK5cvlXgdbsiEmKYbN+0fsk9G4RfaSJi+v4
+        bh=bp+0kGauH45PVjc3VWjYwognO78vVj4/OGXOJwspQyQ=;
+        b=EXZwhgR8QJTtloCPXmEWwfF2YR2plX1tCGVRZjbxKtoPc1N7YxvigbNm1/ztyg1pR7
+         yLY3xOCjXLHdBvmNL2le10w2MgaZbhj/AawS0IHpBuuSsyxCEmVOPWnQ0oUgyzwN6XoZ
+         FVcPp1cuDmJtY1RT9+DmvX3D642B5o9+MrZ8hbh32mzaO8nYuPmMTlisdmaZKeiBbuC1
+         2sAy2KY6cusSlF970zbjH00sLdOSbNSzpn3BfzSf40EXoSgqcuz75grRQcXnHFFoP6zl
+         WA86whl3V9yC0BOWnVO+Rghue3JIPkWRY8M/SMgz6YAKAAdvxaZeawpQqPWWIEcwiQUf
+         LsOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680825245;
+        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bp+0kGauH45PVjc3VWjYwognO78vVj4/OGXOJwspQyQ=;
+        b=tJQ8w96rehoZ42eqh+H6QQppYbWSydsEywCJOmetXuPKLhg4orLC199tDNLmkRrx61
+         arUfJK2CnnQi6eKEyMFJpsMS5FKiQMTjcgV8ESxTeNLhEsoVjxqSX0+HV0qy+BmLwojT
+         6DIlNI7HEbS1uqgxTxHy4zr3izn8rKMiBWuh7Qz0XdoqQtkVNiFe/BMTrn5qka4ESCnh
+         5c3TRyDaA472Hj2wFNKqPMxD+2ISIQD6jp7/n8DZKDvD5KBirZ5uW0hLMrll4RDfXCMj
+         RVVEadxYzw0pLRVZlft89t9oHaFR2mXLOva+Lpo+VblzLyFAuezjQBAV61cqBUcKgkrM
+         ksOg==
+X-Gm-Message-State: AAQBX9eGE8wPXbhYH9licxtFQRg1WKCdCo9pYlUEjWFpBAiHpL8vD95Y
+        Rzq7w0xCa6zbAvMWh5HDz04pSaAFla2Y
+X-Google-Smtp-Source: AKy350b6vHq4dUDdPUjZUgHkkRFRk7OPUnT/d4/J984Mvjfmb35G8z1x/gogfKZwxJBhW5vd0YviFa53/fB3
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:939d:185a:97bb:59ee])
- (user=irogers job=sendgmr) by 2002:a81:b1c4:0:b0:52e:ac97:115f with SMTP id
- p187-20020a81b1c4000000b0052eac97115fmr123710ywh.5.1680825236846; Thu, 06 Apr
- 2023 16:53:56 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 16:52:54 -0700
-Message-Id: <20230406235256.2768773-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a25:d6d6:0:b0:ad2:3839:f49 with SMTP id
+ n205-20020a25d6d6000000b00ad238390f49mr149081ybg.5.1680825244833; Thu, 06 Apr
+ 2023 16:54:04 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 16:52:55 -0700
+In-Reply-To: <20230406235256.2768773-1-irogers@google.com>
+Message-Id: <20230406235256.2768773-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230406235256.2768773-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v1 1/3] perf pmu: Fewer const casts
+Subject: [PATCH v1 2/3] perf pmu: Improve name/comments, avoid a memory allocation
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,50 +80,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct pmu_event has const char*s, only unit needs to be non-const for
-the sake of passing as an out argument to strtod. Reduce the const
-casts from 4 down to 1.
+Improve documentation around perf_pmu_alias pmu_name and on
+functions. Reduce the scope of pmu_uncore_alias_match to just
+file. Rename perf_pmu__valid_suffix to the more revealing
+perf_pmu__match_ignoring_suffix. Add a short-cut to
+perf_pmu__match_ignoring_suffix for PMU names that don't also have a
+socket value, and can therefore avoid a memory allocation.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/pmu.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/perf/util/pmu.c | 27 ++++++++++++++++++++-------
+ tools/perf/util/pmu.h |  8 +++++---
+ 2 files changed, 25 insertions(+), 10 deletions(-)
 
 diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 78a407b42ad1..63a33fcfd42d 100644
+index 63a33fcfd42d..00714f560643 100644
 --- a/tools/perf/util/pmu.c
 +++ b/tools/perf/util/pmu.c
-@@ -338,16 +338,16 @@ static int __perf_pmu__new_alias(struct list_head *list, int dirfd, char *name,
- 	struct perf_pmu_alias *alias;
- 	int ret;
- 	char newval[256];
--	char *long_desc = NULL, *topic = NULL, *unit = NULL, *pmu_name = NULL;
-+	const char *long_desc = NULL, *topic = NULL, *unit = NULL, *pmu_name = NULL;
- 	bool deprecated = false, perpkg = false;
+@@ -668,11 +668,14 @@ __weak const struct pmu_metrics_table *pmu_metrics_table__find(void)
+ 	return perf_pmu__find_metrics_table(NULL);
+ }
  
- 	if (pe) {
--		long_desc = (char *)pe->long_desc;
--		topic = (char *)pe->topic;
--		unit = (char *)pe->unit;
-+		long_desc = pe->long_desc;
-+		topic = pe->topic;
-+		unit = pe->unit;
- 		perpkg = pe->perpkg;
- 		deprecated = pe->deprecated;
--		pmu_name = (char *)pe->pmu;
-+		pmu_name = pe->pmu;
- 	}
+-/*
+- * Suffix must be in form tok_{digits}, or tok{digits}, or same as pmu_name
+- * to be valid.
++/**
++ * perf_pmu__match_ignoring_suffix - Does the pmu_name match tok ignoring any
++ *                                   trailing suffix? The Suffix must be in form
++ *                                   tok_{digits}, or tok{digits}.
++ * @pmu_name: The pmu_name with possible suffix.
++ * @tok: The possible match to pmu_name without suffix.
+  */
+-static bool perf_pmu__valid_suffix(const char *pmu_name, char *tok)
++static bool perf_pmu__match_ignoring_suffix(const char *pmu_name, const char *tok)
+ {
+ 	const char *p;
  
- 	alias = malloc(sizeof(*alias));
-@@ -405,7 +405,7 @@ static int __perf_pmu__new_alias(struct list_head *list, int dirfd, char *name,
- 				desc ? strdup(desc) : NULL;
- 	alias->topic = topic ? strdup(topic) : NULL;
- 	if (unit) {
--		if (perf_pmu__convert_scale(unit, &unit, &alias->scale) < 0)
-+		if (perf_pmu__convert_scale(unit, (char **)&unit, &alias->scale) < 0)
- 			return -1;
- 		snprintf(alias->unit, sizeof(alias->unit), "%s", unit);
- 	}
+@@ -697,11 +700,21 @@ static bool perf_pmu__valid_suffix(const char *pmu_name, char *tok)
+ 	return true;
+ }
+ 
+-bool pmu_uncore_alias_match(const char *pmu_name, const char *name)
++/**
++ * pmu_uncore_alias_match - does name match the PMU name?
++ * @pmu_name: the json struct pmu_event name. This may lack a suffix (which
++ *            matches) or be of the form "socket,pmuname" which will match
++ *            "socketX_pmunameY".
++ * @name: a real full PMU name as from sysfs.
++ */
++static bool pmu_uncore_alias_match(const char *pmu_name, const char *name)
+ {
+ 	char *tmp = NULL, *tok, *str;
+ 	bool res;
+ 
++	if (strchr(pmu_name, ',') == NULL)
++		return perf_pmu__match_ignoring_suffix(name, pmu_name);
++
+ 	str = strdup(pmu_name);
+ 	if (!str)
+ 		return false;
+@@ -728,7 +741,7 @@ bool pmu_uncore_alias_match(const char *pmu_name, const char *name)
+ 
+ 		name = strstr(name, tok);
+ 		if (!name ||
+-		    (!next_tok && !perf_pmu__valid_suffix(name, tok))) {
++		    (!next_tok && !perf_pmu__match_ignoring_suffix(name, tok))) {
+ 			res = false;
+ 			goto out;
+ 		}
+@@ -1939,7 +1952,7 @@ int perf_pmu__match(char *pattern, char *name, char *tok)
+ 	if (fnmatch(pattern, name, 0))
+ 		return -1;
+ 
+-	if (tok && !perf_pmu__valid_suffix(name, tok))
++	if (tok && !perf_pmu__match_ignoring_suffix(name, tok))
+ 		return -1;
+ 
+ 	return 0;
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 32c3a75bca0e..6be75594d11e 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -35,7 +35,7 @@ struct perf_pmu_caps {
+ };
+ 
+ /**
+- * struct perf_pmu - hi
++ * struct perf_pmu
+  */
+ struct perf_pmu {
+ 	/** @name: The name of the PMU such as "cpu". */
+@@ -186,7 +186,10 @@ struct perf_pmu_alias {
+ 	 * default.
+ 	 */
+ 	bool deprecated;
+-	/** @pmu_name: The name copied from struct perf_pmu. */
++	/**
++	 * @pmu_name: The name copied from the json struct pmu_event. This can
++	 * differ from the PMU name as it won't have suffixes.
++	 */
+ 	char *pmu_name;
+ };
+ 
+@@ -238,7 +241,6 @@ void pmu_add_cpu_aliases_table(struct list_head *head, struct perf_pmu *pmu,
+ char *perf_pmu__getcpuid(struct perf_pmu *pmu);
+ const struct pmu_events_table *pmu_events_table__find(void);
+ const struct pmu_metrics_table *pmu_metrics_table__find(void);
+-bool pmu_uncore_alias_match(const char *pmu_name, const char *name);
+ void perf_pmu_free_alias(struct perf_pmu_alias *alias);
+ 
+ int perf_pmu__convert_scale(const char *scale, char **end, double *sval);
 -- 
 2.40.0.577.gac1e443424-goog
 
