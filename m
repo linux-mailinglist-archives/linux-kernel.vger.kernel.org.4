@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE4E6DA3AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C596DA3B2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239801AbjDFUmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S240352AbjDFUmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240337AbjDFUla (ORCPT
+        with ESMTP id S240190AbjDFUlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:41:30 -0400
+        Thu, 6 Apr 2023 16:41:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5DFB45D;
-        Thu,  6 Apr 2023 13:38:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B0FAD18;
+        Thu,  6 Apr 2023 13:38:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC10860F77;
-        Thu,  6 Apr 2023 20:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9211FC433D2;
-        Thu,  6 Apr 2023 20:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680813488;
-        bh=3Cznac5B+3sy6hB9DB3/iijT0kNRLGM0krGAPHIjwzU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XFJOGBaUci1k2qda+64OPr7W9hnUOcTeNhu8CRqtWNtPwUevBZwT16jGG3OVwhyt6
-         AuNgxgN1jYEMc5w6gdtT9yJkiZucj+V/TNA30stBeFypoEk7ngGvA6hqr02fwi5Aez
-         GHIbpj6mPZOr3k79jsZDKz8U4hCkRCsxNRrSyrRO+wsrPoD+BVL8nkL8cgyQi8KOCn
-         dERdf/af6ZVxFtDuA+E7sSDkjuZjomZO80b6DxcjawKGW1SgxcO7nPGGFoR+oMlhid
-         NBMfqT6f5zCbIiEtVmuoanCXWzgnXbMAvqboU/k95P4EGkmZtrMa7LljcY1ea7YzzI
-         TCri2M0SRZ1vg==
-Message-ID: <8353399f-c6de-8da7-78f1-d6a558c462d0@kernel.org>
-Date:   Thu, 6 Apr 2023 22:38:03 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2B5160F77;
+        Thu,  6 Apr 2023 20:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99A21C433D2;
+        Thu,  6 Apr 2023 20:38:25 +0000 (UTC)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Marius Zachmann <mail@mariuszachmann.de>,
+        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonas Malaco <jonas@protocubo.io>,
+        Aleksandr Mezin <mezin.alexander@gmail.com>,
+        Derek John Clark <derekjohn.clark@gmail.com>,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Walle <michael@walle.cc>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Agathe Porte <agathe.porte@nokia.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 50/68] hwmon: peci: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:38:12 +0200
+Message-Id: <20230406203821.3012402-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
+References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V2 3/3] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
-To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        kernel <kernel@dh-electronics.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230406154900.6423-1-cniedermaier@dh-electronics.com>
- <20230406154900.6423-3-cniedermaier@dh-electronics.com>
- <5478133e-7772-1db9-3473-1ec86fa2aae2@linaro.org>
- <a7fcfe695623491da96639079eb14c8f@dh-electronics.com>
- <f6c8586f-a5d1-875f-b2c0-7871112cf1b1@linaro.org>
- <ff95314402a349a5a2998c1b5e2b13a2@dh-electronics.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <ff95314402a349a5a2998c1b5e2b13a2@dh-electronics.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 21:57, Christoph Niedermaier wrote:
->>>>> +     aliases {
->>>>> +             /delete-property/ mmc0; /* Avoid double definitions */
->>>>
->>>> I don't understand it. What is "double definition" of aliases?
->>>
->>> Otherwise I end up like this:
->>> mmc0 = &usdhc1;
->>> mmc1 = &usdhc2;
->>> mmc2 = &usdhc2;
->>>
->>> Is "Ensure unique allocation" a better comment here?
->>>
->>>>
->>>>> +             /delete-property/ mmc1;
->>>>> +             mmc2 = &usdhc2; /* eMMC should be mmc2 */
->>>>
->>>> Why? How is this labeled on the board (physically or on schematics)? If
->>>> you answer here "for booting", then the answer is NAK. Don't add
->>>> software policies to Devicetree.
->>>
->>> The name in the schematics is "SD2".
->>
->> Answering also to above - then likely the aliases should be dropped from
->> SoM. I doubt that Som calls it SD1 and your board SD2...
-> 
-> Maybe I don't quite get it, but the hardware starts counting at 1. The first
-> interface is SD1 and it is used as WiFi. The second one is SD2 which is the
-> eMMC. So with this aliases it should match SD2 to mmc2.
-> Do you want me to delete the aliases in the include file "imx6ull-dhcor-som.dtsi"
+Statically allocated array of pointed to hwmon_channel_info can be made
+const for safety.
 
-Yes, because it incorrectly calls eMMC as mmc1. You said it is SD2, right?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/hwmon/peci/cputemp.c  | 2 +-
+ drivers/hwmon/peci/dimmtemp.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-Best regards,
-Krzysztof
+diff --git a/drivers/hwmon/peci/cputemp.c b/drivers/hwmon/peci/cputemp.c
+index 87d56f0fc888..e5b65a382772 100644
+--- a/drivers/hwmon/peci/cputemp.c
++++ b/drivers/hwmon/peci/cputemp.c
+@@ -447,7 +447,7 @@ static const struct hwmon_ops peci_cputemp_ops = {
+ 	.read = cputemp_read,
+ };
+ 
+-static const struct hwmon_channel_info *peci_cputemp_info[] = {
++static const struct hwmon_channel_info * const peci_cputemp_info[] = {
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   /* Die temperature */
+ 			   HWMON_T_LABEL | HWMON_T_INPUT | HWMON_T_MAX |
+diff --git a/drivers/hwmon/peci/dimmtemp.c b/drivers/hwmon/peci/dimmtemp.c
+index 0a633bda3668..ed968401f93c 100644
+--- a/drivers/hwmon/peci/dimmtemp.c
++++ b/drivers/hwmon/peci/dimmtemp.c
+@@ -300,7 +300,7 @@ static int create_dimm_temp_label(struct peci_dimmtemp *priv, int chan)
+ 	return 0;
+ }
+ 
+-static const struct hwmon_channel_info *peci_dimmtemp_temp_info[] = {
++static const struct hwmon_channel_info * const peci_dimmtemp_temp_info[] = {
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   [0 ... DIMM_NUMS_MAX - 1] = HWMON_T_LABEL |
+ 				HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_CRIT),
+-- 
+2.34.1
 
