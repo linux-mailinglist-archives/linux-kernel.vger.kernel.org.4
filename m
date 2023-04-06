@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE37C6D8F83
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AB86D8F89
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbjDFGe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S235481AbjDFGfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbjDFGeT (ORCPT
+        with ESMTP id S235467AbjDFGfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:34:19 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA1F93C7
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:34:16 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id bt19so25150105pfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680762856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ywRy2NXg/YzPGPsQQtseGk+ykosJNLGdFknAZq9oon8=;
-        b=SAJGqK+/VO4Kto7Td+yYhsLmaOk7HrEBQbs3efgqgCbat5ZLAhp8+7A64Ttj+QL4Ol
-         kMoPp46DeleCcru+sKESaaS4XM8ojsMov4kZwNlNa50x3yChuEl72k/EwiJTJSoZqyvu
-         lQ+tanhKOzHQ57N5CyFVO/lPL4ioc+kZIXfDcRZP2Sn7RoWZZXcu8cVe8uYVotuX+vLH
-         0lTtWjAVgfNB3YW+nlyP+cQ09U3HbvNmVPfL8Lu64z/oi02i4r26PbgHCxm496DzVioK
-         mmTbSN81gjo2RmFNF0vgxkrm3vXkwoTucl/0hout5Ksx3y6KrzCJfT47HD/rPnQjyXcm
-         VBSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680762856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ywRy2NXg/YzPGPsQQtseGk+ykosJNLGdFknAZq9oon8=;
-        b=oUXhtGgUYOHxh+unvmXaZWisOkUAOWCcoeDwvk4N8CMR4tNgQWXwLjEEnu+lM2fYBJ
-         XkGlc/fSbPAbMF/pOyfeIXfm6xMIUbetGIe3IEfG/LlplLzKDLMQ6Vl/qRoJwlZZJi/z
-         HnLVAe7NJnGQSh/spzBd/XpRZIkWZF6wRFai7wY2KjSGpTmu5ypNFh+AyXwuHlasHvg+
-         n4UH4XhC7FC0zsWLzbvGRRI3wqYrNz2rs6UESIuUxqn8B2dTUNSmm9YYg6VD9QO8dAYr
-         RFewg9RDQhAuKXi/Ri9PI/N6rKBI/xWvEGmyqLGx7DuDKF2aMedIlmCRQdt1DKpyWbt/
-         pTAw==
-X-Gm-Message-State: AAQBX9dd6W7p8HSVtyh9MORWEGpvKeJ6jpYd+8c+DrGejhIK9AB5iMxO
-        KzMjokjPQwcqVK2Y3vYi9tdSQYmU5eYjhhwN1UpGnA==
-X-Google-Smtp-Source: AKy350ZIR5QFT05CqoEKBHsSl5AdBctVFfha1iZRBdPWiB2ybG0JLlr1rtZDtUXKC1sPXgDpQ9x/mOpGRV/wttLQXGw=
-X-Received: by 2002:a63:e148:0:b0:503:7bbb:9a77 with SMTP id
- h8-20020a63e148000000b005037bbb9a77mr2897768pgk.8.1680762855762; Wed, 05 Apr
- 2023 23:34:15 -0700 (PDT)
+        Thu, 6 Apr 2023 02:35:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2377193C7;
+        Wed,  5 Apr 2023 23:34:59 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PsWq11TJ7zSkWK;
+        Thu,  6 Apr 2023 14:31:09 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 6 Apr
+ 2023 14:34:56 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <corbet@lwn.net>, <dsahern@kernel.org>,
+        <kuniyu@amazon.com>
+CC:     <netdev@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH net] tcp: restrict net.ipv4.tcp_app_win
+Date:   Thu, 6 Apr 2023 14:34:50 +0800
+Message-ID: <20230406063450.19572-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-References: <20230405093133.1858140-1-badhri@google.com> <56abca17-7240-4bd5-98db-ef48059ff315@rowland.harvard.edu>
-In-Reply-To: <56abca17-7240-4bd5-98db-ef48059ff315@rowland.harvard.edu>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Wed, 5 Apr 2023 23:33:39 -0700
-Message-ID: <CAPTae5KxVj_F_4Z0Dh00C-SvKRgJMfUPFOuoUU5ZDW87WgMRBA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] usb: gadget: udc: core: Invoke usb_gadget_connect
- only when started
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,125 +47,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> No blank line after cc: stable, and put the fixes above your
-signed-off-by line please.
+UBSAN: shift-out-of-bounds in net/ipv4/tcp_input.c:555:23
+shift exponent 255 is too large for 32-bit type 'int'
+CPU: 1 PID: 7907 Comm: ssh Not tainted 6.3.0-rc4-00161-g62bad54b26db-dirty #206
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x136/0x150
+ __ubsan_handle_shift_out_of_bounds+0x21f/0x5a0
+ tcp_init_transfer.cold+0x3a/0xb9
+ tcp_finish_connect+0x1d0/0x620
+ tcp_rcv_state_process+0xd78/0x4d60
+ tcp_v4_do_rcv+0x33d/0x9d0
+ __release_sock+0x133/0x3b0
+ release_sock+0x58/0x1b0
 
-Fixed all commit message related concerns.
+'maxwin' is int, shifting int for 32 or more bits is undefined behaviour.
 
-> Why a global lock?  Shouldn't this be a per-device lock?
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ Documentation/networking/ip-sysctl.rst | 2 ++
+ net/ipv4/sysctl_net_ipv4.c             | 3 +++
+ 2 files changed, 5 insertions(+)
 
-Ack ! Addressed this in V2.
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 87dd1c5283e6..58a78a316697 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -340,6 +340,8 @@ tcp_app_win - INTEGER
+ 	Reserve max(window/2^tcp_app_win, mss) of window for application
+ 	buffer. Value 0 is special, it means that nothing is reserved.
+ 
++	Possible values are [0, 31], inclusive.
++
+ 	Default: 31
+ 
+ tcp_autocorking - BOOLEAN
+diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
+index 0d0cc4ef2b85..40fe70fc2015 100644
+--- a/net/ipv4/sysctl_net_ipv4.c
++++ b/net/ipv4/sysctl_net_ipv4.c
+@@ -25,6 +25,7 @@ static int ip_local_port_range_min[] = { 1, 1 };
+ static int ip_local_port_range_max[] = { 65535, 65535 };
+ static int tcp_adv_win_scale_min = -31;
+ static int tcp_adv_win_scale_max = 31;
++static int tcp_app_win_max = 31;
+ static int tcp_min_snd_mss_min = TCP_MIN_SND_MSS;
+ static int tcp_min_snd_mss_max = 65535;
+ static int ip_privileged_port_min;
+@@ -1198,6 +1199,8 @@ static struct ctl_table ipv4_net_table[] = {
+ 		.maxlen		= sizeof(u8),
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dou8vec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= &tcp_app_win_max,
+ 	},
+ 	{
+ 		.procname	= "tcp_adv_win_scale",
+-- 
+2.34.1
 
-On Wed, Apr 5, 2023 at 6:29=E2=80=AFPM Alan Stern <stern@rowland.harvard.ed=
-u> wrote:
->
-> On Wed, Apr 05, 2023 at 09:31:32AM +0000, Badhri Jagan Sridharan wrote:
-> > usb_udc_connect_control does not check to see if the udc
-> > has already been started. This causes gadget->ops->pullup
-> > to be called through usb_gadget_connect when invoked
-> > from usb_udc_vbus_handler even before usb_gadget_udc_start
-> > is called. Guard this by checking for udc->started in
-> > usb_udc_connect_control before invoking usb_gadget_connect.
-> >
-> > Guarding udc_connect_control, udc->started and udc->vbus
-> > with its own mutex as usb_udc_connect_control_locked
-> > can be simulataneously invoked from different code paths.
-> >
-> > Cc: stable@vger.kernel.org
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > Fixes: 628ef0d273a6 ("usb: udc: add usb_udc_vbus_handler")
->
-> There's a problem with this patch.
->
-> > ---
-> >  drivers/usb/gadget/udc/core.c | 20 ++++++++++++++++----
-> >  1 file changed, 16 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
-e.c
-> > index 3dcbba739db6..890f92cb6344 100644
-> > --- a/drivers/usb/gadget/udc/core.c
-> > +++ b/drivers/usb/gadget/udc/core.c
->
-> > @@ -1140,14 +1145,18 @@ static inline int usb_gadget_udc_start(struct u=
-sb_udc *udc)
-> >  {
-> >       int ret;
-> >
-> > +     mutex_lock(&udc_connect_control_lock);
-> >       if (udc->started) {
-> >               dev_err(&udc->dev, "UDC had already started\n");
-> > +             mutex_unlock(&udc_connect_control_lock);
-> >               return -EBUSY;
-> >       }
-> >
-> >       ret =3D udc->gadget->ops->udc_start(udc->gadget, udc->driver);
-> >       if (!ret)
-> >               udc->started =3D true;
-> > +     usb_udc_connect_control_locked(udc);
-> > +     mutex_unlock(&udc_connect_control_lock);
->
-> You moved the connect_control call up here, into usb_gadget_udc_start().
-
-Have moved it back into gadget_bind_driver.
-
->
-> >       return ret;
-> >  }
-> > @@ -1165,13 +1174,17 @@ static inline int usb_gadget_udc_start(struct u=
-sb_udc *udc)
-> >   */
-> >  static inline void usb_gadget_udc_stop(struct usb_udc *udc)
-> >  {
-> > +     mutex_lock(&udc_connect_control_lock);
-> >       if (!udc->started) {
-> >               dev_err(&udc->dev, "UDC had already stopped\n");
-> > +             mutex_unlock(&udc_connect_control_lock);
-> >               return;
-> >       }
-> >
-> >       udc->gadget->ops->udc_stop(udc->gadget);
-> >       udc->started =3D false;
-> > +     usb_udc_connect_control_locked(udc);
-> > +     mutex_unlock(&udc_connect_control_lock);
-> >  }
-> >
-> >  /**
-> > @@ -1527,7 +1540,6 @@ static int gadget_bind_driver(struct device *dev)
-> >       if (ret)
-> >               goto err_start;
-> >       usb_gadget_enable_async_callbacks(udc);
-> > -     usb_udc_connect_control(udc);
->
-> This is where it used to be.
->
-> The problem is that in the gadget_bind_driver pathway,
-> usb_gadget_enable_async_callbacks() has to run _before_ the gadget
-> connects.  Maybe you can fix this by leaving the function call in its
-> original location and protecting it with the new mutex?
->
-> There may be a similar problem with disconnecting and the
-> gadget_unbind_driver pathway (usb_gadget_disable_async_callbacks() has to
-> run _after_ the disconnect occurs).  I haven't tried to follow the patch
-> in enough detail to see whether that's an issue.
-
-Thanks for explaining what's the expectation here. I have incorporated
-the feedback in v2.
-The new lock now additionally guards  gadget->connect and gadget->deactivat=
-e as
-well. Guarding all with the new lock as they are related to one another.
-I have made sure that the gadget_bind_driver and gadget_unbind_driver
-sequence remains unaltered.
-
->
-> Alan Stern
->
-> >
-> >       kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
-> >       return 0;
-> >
-> > base-commit: d629c0e221cd99198b843d8351a0a9bfec6c0423
-> > --
-> > 2.40.0.348.gf938b09366-goog
-> >
