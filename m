@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8EC6D90E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B936D90EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236164AbjDFH5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S235404AbjDFH7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235974AbjDFH4q (ORCPT
+        with ESMTP id S234581AbjDFH7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:56:46 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602D87EE8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:56:42 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id l15-20020a05600c4f0f00b003ef6d684102so19752026wmq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680767800; x=1683359800;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gNi9s5gsbe8ZjVGEZMnnCOMkzPyfbeqhmcsiMSNwzak=;
-        b=jQB72RF1kU2G9Mv2bjPTvKAtczkjUDgx89Jx/89j+1/m+dfFIidmgc/fnI9OIhxtnF
-         n3D+940jqaQ1dzjmET4xLHOVouKS1Z1nUckKsYvAojjQQ2dp1h74luglG+4tL8u10zNK
-         qvzU/KNnS9ba+bCixZzgRMUoGun3eNMHJh529QG7kdOyLt3jICkEIk+k+xyl3xZcvNWB
-         47KAzshbPJfLtxsANfzznHQbPcOvuv06mGsfJAmNRWx+MoaVJWFvk+zqMFv4WEY5Ulri
-         KpCskKuh1ZZIUIWomPOqBOdbUZyx+lYZVQ0J/IOt8FFOdRjT/2d8tViwzi6W7o7mzlQG
-         8Z3A==
+        Thu, 6 Apr 2023 03:59:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E2883E1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:58:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680767858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=o8Jnf1oxja9yxfnwJ3kNckwJZHzsUpda+/vzVwFHt+Q=;
+        b=O72KPfvwpUc9Tm8XEVyHUbOgqwAZ4gkgKM4/uymfVInXMtaTaxUWfZSNbxHo5XYtb3NZGX
+        41SVpyVfTxOU0DYhDWxCEkyibZ9xHMS81z5XUJb/qP7U9XBWMzPE4p7ee39aqBjh8KTHEb
+        O/SPj9e7iGPXLxUKKKKjiHqfY3BDACY=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-kEZKmAvdOb2iX2nW_NjtGQ-1; Thu, 06 Apr 2023 03:57:36 -0400
+X-MC-Unique: kEZKmAvdOb2iX2nW_NjtGQ-1
+Received: by mail-qv1-f69.google.com with SMTP id pe26-20020a056214495a00b005df3eac4c0bso14462812qvb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:57:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680767800; x=1683359800;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gNi9s5gsbe8ZjVGEZMnnCOMkzPyfbeqhmcsiMSNwzak=;
-        b=qttPiR8uhY01Z3EqWdu1fCzPU0WSCH1z1ueHYwdJOh8Sl4Si6nIdXT7iIybTu/pBx0
-         ZBBtjzURylC4UsTA4BvwaXYgj9tBVSbXYlbSKHYoDZke2stAshV6aX1a/vj4ghojuoUv
-         QyIycKTpjZNMSLb2IxyNRu8cVozpSJg/zHXWn24oTLb8J8f6xNjo7RgN33T4wC9Qxvz9
-         ISo9KSpJKkTApdQEV5FhECgHKOBkdxC2X33P37tpkvp2P8aygacqmBUL+QcDHD+om31+
-         SWiQyrCZXZdY0V6eFtFwmYHJFZmY9vL/shSm1T7zqPUyZP0lF5Q6SByxT50At9OHtro3
-         UfJg==
-X-Gm-Message-State: AAQBX9d8be6hfoG2GZuNrvgvPaIKNt+6tlBRhhUGIxE73uw2L5hLm87e
-        kvt+i9A2Luin0A/9qsbsVkUPZQ==
-X-Google-Smtp-Source: AKy350YJeINcgkSiFHsUzfuZMGAxe7IIkCg1m4Fm0xCZiGLP73LWn332XVr1GUER7zuKnKfgxQKtow==
-X-Received: by 2002:a05:600c:2296:b0:3ed:e4ac:d532 with SMTP id 22-20020a05600c229600b003ede4acd532mr7188353wmf.36.1680767800608;
-        Thu, 06 Apr 2023 00:56:40 -0700 (PDT)
-Received: from baylibre-ThinkPad-T14s-Gen-2i.. (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05600c458f00b003f03d483966sm4572651wmo.44.2023.04.06.00.56.38
+        d=1e100.net; s=20210112; t=1680767855;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o8Jnf1oxja9yxfnwJ3kNckwJZHzsUpda+/vzVwFHt+Q=;
+        b=wV1dENl6dyF6un5NpdKE/YZiTRYIt2SAzApEUcTfsAMSoXvNV+nkzxuAa42K3z7Dk5
+         6k6FTchf0lXmP2Sf+SwMzuJRAg5+p1N/RaPl/I1WkFmWIYIdgZDr7Oq7JlbV1VdKhG1Z
+         AnZH3EJ4UrnEsFvHTR94NmjorgZ0UDfsCvbdKtMmR3Ki317o8zgSBX+g9wz59WtkaCxO
+         hjadeFGWstbMP6l+jmgwA1fXEqqyCG3fzXATtj+YUf3OcExI/vcRK66yVgg3+6yjodV/
+         jjzZvIluwxYaDIJfB9j2t0rcgO7c+f8tT6Xg2/ZPkfsyvwnYuojGtybaKf+tZdHhDs0k
+         qpYw==
+X-Gm-Message-State: AAQBX9dFMehOPS8Le6uQWQZiDpRH/5Vm1p1ErOYWXpjpFTpmKvq/O474
+        5YKSbVROa6Wn08oqmZJn2Vy+VRzzlP/OiBjNdLnp4KWK0KcKPO5C6A2h34rWmdliKSgWvhBVSyG
+        Fex0DhW/X9WcW1de084YQBygc
+X-Received: by 2002:ac8:59ca:0:b0:3db:e078:2886 with SMTP id f10-20020ac859ca000000b003dbe0782886mr9151945qtf.38.1680767855667;
+        Thu, 06 Apr 2023 00:57:35 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YtU54Wqkzwh65tOVrlQK9meeDaoTwSlSqIm7X76SPtVj5Y1hGi9JgQ1K+gkhZliX019qG+6w==
+X-Received: by 2002:ac8:59ca:0:b0:3db:e078:2886 with SMTP id f10-20020ac859ca000000b003dbe0782886mr9151923qtf.38.1680767855405;
+        Thu, 06 Apr 2023 00:57:35 -0700 (PDT)
+Received: from LeoBras.redhat.com ([2804:1b3:a802:2599:3b52:5a:179c:6ae7])
+        by smtp.gmail.com with ESMTPSA id de21-20020a05620a371500b0074a5ffbecd3sm292307qkb.49.2023.04.06.00.57.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 00:56:40 -0700 (PDT)
-From:   Julien Panis <jpanis@baylibre.com>
-To:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com
-Cc:     yi.l.liu@intel.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, prabhakar.csengg@gmail.com,
-        contact@emersion.fr, macro@orcam.me.uk, dsahern@kernel.org,
-        alex.williamson@redhat.com, akrowiak@linux.ibm.com,
-        mark.rutland@arm.com, ye.xingchen@zte.com.cn, ojeda@kernel.org,
-        keescook@chromium.org, me@kloenk.de, mhiramat@kernel.org,
-        milan@mdaverde.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
-        jneanne@baylibre.com
-Subject: [PATCH v6 6/6] samples: Add userspace example for TI TPS6594 PFSM
-Date:   Thu,  6 Apr 2023 09:56:22 +0200
-Message-Id: <20230406075622.8990-7-jpanis@baylibre.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230406075622.8990-1-jpanis@baylibre.com>
-References: <20230406075622.8990-1-jpanis@baylibre.com>
+        Thu, 06 Apr 2023 00:57:34 -0700 (PDT)
+From:   Leonardo Bras <leobras@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Nadav Amit <namit@vmware.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Subject: [RFC PATCH 1/1] smp: Add tracepoints for functions called with smp_call_function*()
+Date:   Thu,  6 Apr 2023 04:57:18 -0300
+Message-Id: <20230406075718.68672-1-leobras@redhat.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,200 +85,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds an example showing how to use PFSM devices
-from a userspace application. The PMIC is armed to be triggered
-by a RTC alarm to execute state transition.
+When running RT workloads in isolated CPUs, many cases of deadline misses
+are caused by remote CPU requests such as smp_call_function*().
 
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
+For those cases, having the names of those functions running around the
+deadline miss moment could help finding a target for the next improvements.
+
+Add tracepoints for acquiring the funtion name & argument before entry and
+after exitting the called function.
+
+Signed-off-by: Leonardo Bras <leobras@redhat.com>
 ---
- samples/Kconfig            |   6 ++
- samples/Makefile           |   1 +
- samples/pfsm/.gitignore    |   2 +
- samples/pfsm/Makefile      |   4 ++
- samples/pfsm/pfsm-wakeup.c | 125 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 138 insertions(+)
- create mode 100644 samples/pfsm/.gitignore
- create mode 100644 samples/pfsm/Makefile
- create mode 100644 samples/pfsm/pfsm-wakeup.c
+ include/trace/events/smp.h | 56 ++++++++++++++++++++++++++++++++++++++
+ kernel/smp.c               | 11 ++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 include/trace/events/smp.h
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 30ef8bd48ba3..f23aa60a74cf 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -253,6 +253,12 @@ config SAMPLE_INTEL_MEI
- 	help
- 	  Build a sample program to work with mei device.
- 
-+config SAMPLE_TPS6594_PFSM
-+	bool "Build example program working with TPS6594 PFSM driver"
-+	depends on HEADERS_INSTALL
-+	help
-+	  Build a sample program to work with PFSM devices.
+diff --git a/include/trace/events/smp.h b/include/trace/events/smp.h
+new file mode 100644
+index 0000000000000..94aae8d71705d
+--- /dev/null
++++ b/include/trace/events/smp.h
+@@ -0,0 +1,56 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM smp
 +
- config SAMPLE_WATCHDOG
- 	bool "watchdog sample"
- 	depends on CC_CAN_LINK
-diff --git a/samples/Makefile b/samples/Makefile
-index 7cb632ef88ee..231e45d7ed70 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -31,6 +31,7 @@ obj-$(CONFIG_VIDEO_PCI_SKELETON)	+= v4l/
- obj-y					+= vfio-mdev/
- subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
- obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
-+obj-$(CONFIG_SAMPLE_TPS6594_PFSM)	+= pfsm/
- subdir-$(CONFIG_SAMPLE_WATCHDOG)	+= watchdog
- subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
- obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
-diff --git a/samples/pfsm/.gitignore b/samples/pfsm/.gitignore
-new file mode 100644
-index 000000000000..f350a030a060
---- /dev/null
-+++ b/samples/pfsm/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+/pfsm-wakeup
-diff --git a/samples/pfsm/Makefile b/samples/pfsm/Makefile
-new file mode 100644
-index 000000000000..213e8d9f5dbc
---- /dev/null
-+++ b/samples/pfsm/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0
-+userprogs-always-y += pfsm-wakeup
++#if !defined(_TRACE_SMP_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_SMP_H
 +
-+userccflags += -I usr/include
-diff --git a/samples/pfsm/pfsm-wakeup.c b/samples/pfsm/pfsm-wakeup.c
-new file mode 100644
-index 000000000000..299dd9e1f607
---- /dev/null
-+++ b/samples/pfsm/pfsm-wakeup.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0
++#include <linux/tracepoint.h>
++#include <linux/smp.h>
++
 +/*
-+ * TPS6594 PFSM userspace example
-+ *
-+ * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-+ *
-+ * This example shows how to use PFSMs from a userspace application,
-+ * on TI j721s2 platform. The PMIC is armed to be triggered by a RTC
-+ * alarm to execute state transition (RETENTION to ACTIVE).
++ * Tracepoints for a function which is called as an effect of smp_call_function.*
 + */
++TRACE_EVENT(smp_call_function_entry,
 +
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <sys/ioctl.h>
-+#include <unistd.h>
++	TP_PROTO(smp_call_func_t func, void *info),
 +
-+#include <linux/rtc.h>
-+#include <linux/tps6594_pfsm.h>
++	TP_ARGS(func, info),
 +
-+#define ALARM_DELTA_SEC 30
++	TP_STRUCT__entry(
++		__field(void *,	func)
++		__field(void *,	info)
++	),
 +
-+#define RTC_A "/dev/rtc0"
++	TP_fast_assign(
++		__entry->func	= func;
++		__entry->info	= info;
++	),
 +
-+#define PMIC_NB 3
-+#define PMIC_A "/dev/pfsm-0-0x48"
-+#define PMIC_B "/dev/pfsm-0-0x4c"
-+#define PMIC_C "/dev/pfsm-2-0x58"
++	TP_printk("function %ps, argument = %p", __entry->func, __entry->info)
++);
 +
-+static const char * const dev_pfsm[] = {PMIC_A, PMIC_B, PMIC_C};
 +
-+int main(int argc, char *argv[])
-+{
-+	int i, ret, fd_rtc, fd_pfsm[PMIC_NB] = { 0 };
-+	struct rtc_time rtc_tm;
-+	struct pmic_state_opt pmic_opt = { 0 };
-+	unsigned long data;
++TRACE_EVENT(smp_call_function_exit,
 +
-+	fd_rtc = open(RTC_A, O_RDONLY);
-+	if (fd_rtc < 0) {
-+		perror("Failed to open RTC device.");
-+		goto out;
-+	}
++	TP_PROTO(smp_call_func_t func, void *info),
 +
-+	for (i = 0 ; i < PMIC_NB ; i++) {
-+		fd_pfsm[i] = open(dev_pfsm[i], O_RDWR);
-+		if (fd_pfsm[i] < 0) {
-+			perror("Failed to open PFSM device.");
-+			goto out;
-+		}
-+	}
++	TP_ARGS(func, info),
 +
-+	/* Read RTC date/time */
-+	ret = ioctl(fd_rtc, RTC_RD_TIME, &rtc_tm);
-+	if (ret < 0) {
-+		perror("Failed to read RTC date/time.");
-+		goto out;
-+	}
-+	printf("Current RTC date/time is %d-%d-%d, %02d:%02d:%02d.\n",
-+	       rtc_tm.tm_mday, rtc_tm.tm_mon + 1, rtc_tm.tm_year + 1900,
-+	       rtc_tm.tm_hour, rtc_tm.tm_min, rtc_tm.tm_sec);
++	TP_STRUCT__entry(
++		__field(void *,	func)
++		__field(void *,	info)
++	),
 +
-+	/* Set RTC alarm to ALARM_DELTA_SEC sec in the future, and check for rollover */
-+	rtc_tm.tm_sec += ALARM_DELTA_SEC;
-+	if (rtc_tm.tm_sec >= 60) {
-+		rtc_tm.tm_sec %= 60;
-+		rtc_tm.tm_min++;
-+	}
-+	if (rtc_tm.tm_min == 60) {
-+		rtc_tm.tm_min = 0;
-+		rtc_tm.tm_hour++;
-+	}
-+	if (rtc_tm.tm_hour == 24)
-+		rtc_tm.tm_hour = 0;
-+	ret = ioctl(fd_rtc, RTC_ALM_SET, &rtc_tm);
-+	if (ret < 0) {
-+		perror("Failed to set RTC alarm.");
-+		goto out;
-+	}
++	TP_fast_assign(
++		__entry->func	= func;
++		__entry->info	= info;
++	),
 +
-+	/* Enable alarm interrupts */
-+	ret = ioctl(fd_rtc, RTC_AIE_ON, 0);
-+	if (ret < 0) {
-+		perror("Failed to enable alarm interrupts.");
-+		goto out;
-+	}
-+	printf("Waiting %d seconds for alarm...\n", ALARM_DELTA_SEC);
++	TP_printk("function %ps with argument = %p", __entry->func, __entry->info)
++);
 +
-+	/*
-+	 * Set RETENTION state with options for PMIC_C/B/A respectively.
-+	 * Since PMIC_A is master, it should be the last one to be configured.
-+	 */
-+	pmic_opt.ddr_retention = 1;
-+	for (i = PMIC_NB - 1 ; i >= 0 ; i--) {
-+		printf("Set RETENTION state for PMIC_%d.\n", i);
-+		sleep(1);
-+		ret = ioctl(fd_pfsm[i], PMIC_SET_RETENTION_STATE, &pmic_opt);
-+		if (ret < 0) {
-+			perror("Failed to set RETENTION state.");
-+			goto out_reset;
-+		}
-+	}
++#endif /* _TRACE_SMP_H */
 +
-+	/* This blocks until the alarm ring causes an interrupt */
-+	ret = read(fd_rtc, &data, sizeof(unsigned long));
-+	if (ret < 0)
-+		perror("Failed to get RTC alarm.");
-+	else
-+		puts("Alarm rang.\n");
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 06a413987a14a..38d8dec28c39c 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -29,6 +29,9 @@
+ #include "smpboot.h"
+ #include "sched/smp.h"
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/smp.h>
 +
-+out_reset:
-+	ioctl(fd_rtc, RTC_AIE_OFF, 0);
-+
-+	/* Set ACTIVE state for PMIC_A */
-+	ioctl(fd_pfsm[0], PMIC_SET_ACTIVE_STATE, 0);
-+
-+out:
-+	for (i = 0 ; i < PMIC_NB ; i++)
-+		if (fd_pfsm[i])
-+			close(fd_pfsm[i]);
-+
-+	if (fd_rtc)
-+		close(fd_rtc);
-+
-+	return 0;
-+}
+ #define CSD_TYPE(_csd)	((_csd)->node.u_flags & CSD_FLAG_TYPE_MASK)
+ 
+ #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
+@@ -517,7 +520,9 @@ static int generic_exec_single(int cpu, struct __call_single_data *csd)
+ 		csd_lock_record(csd);
+ 		csd_unlock(csd);
+ 		local_irq_save(flags);
++		trace_smp_call_function_entry(func, info);
+ 		func(info);
++		trace_smp_call_function_exit(func, info);
+ 		csd_lock_record(NULL);
+ 		local_irq_restore(flags);
+ 		return 0;
+@@ -627,7 +632,9 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
+ 			}
+ 
+ 			csd_lock_record(csd);
++			trace_smp_call_function_entry(func, info);
+ 			func(info);
++			trace_smp_call_function_exit(func, info);
+ 			csd_unlock(csd);
+ 			csd_lock_record(NULL);
+ 		} else {
+@@ -662,7 +669,9 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
+ 
+ 				csd_lock_record(csd);
+ 				csd_unlock(csd);
++				trace_smp_call_function_entry(func, info);
+ 				func(info);
++				trace_smp_call_function_exit(func, info);
+ 				csd_lock_record(NULL);
+ 			} else if (type == CSD_TYPE_IRQ_WORK) {
+ 				irq_work_single(csd);
+@@ -975,7 +984,9 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 		unsigned long flags;
+ 
+ 		local_irq_save(flags);
++		trace_smp_call_function_entry(func, info);
+ 		func(info);
++		trace_smp_call_function_exit(func, info);
+ 		local_irq_restore(flags);
+ 	}
+ 
 -- 
-2.37.3
+2.40.0
 
