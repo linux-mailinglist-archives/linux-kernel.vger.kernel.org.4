@@ -2,78 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C6E6D9491
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612F56D948E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237421AbjDFK7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S237402AbjDFK6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237203AbjDFK7Q (ORCPT
+        with ESMTP id S237403AbjDFK6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:59:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C354B7A8D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680778712;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sMJGZ0wM6SmRKKSmXFuC9u44rhIR7nr561NDFm1Xz2g=;
-        b=ir3cVDDgFPEohc7DGaO1dioMzku1eh5JMJpnlihlz3CZkIFTo1tnXVoJNK47eF1d36j5K2
-        IOHAyUfgpje8uxVdSCmKmKKp2004pXrCUAsdMqLkwE7O1Ybv3tNBmnsFK1urvJbllFXlyu
-        xIa32OrsWXLluuAGYkLWlGHel4gSKyk=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-161-tukkEEXqN42Uff7GRsnCQg-1; Thu, 06 Apr 2023 06:58:23 -0400
-X-MC-Unique: tukkEEXqN42Uff7GRsnCQg-1
-Received: by mail-ej1-f69.google.com with SMTP id vo2-20020a170907a80200b00949175b0b70so60390ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 03:58:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680778702; x=1683370702;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMJGZ0wM6SmRKKSmXFuC9u44rhIR7nr561NDFm1Xz2g=;
-        b=7Jql0BNv6Un0glQeD7pLKH7PfYNVG5U5q+prgeq83upvfr4kgZMagt3gqcb72AAndg
-         82InaB+KKSZq8s8CvdYx2cX/sNQHV87YP+f5JWsBQuF5aSSl9Eg+qAYWF0pTNJyil8+r
-         NaiAGfmyRHPG+D/SYQ+TnkZO6696SAna0bDyBtas0CqCauSATxWmm4s/1R4R6XrRHYPX
-         2slT7+SwYUA+1FRDVP6zhljX5/fxKbchbB86FGegRRSOL1zvUyw0eMUE+uvCUGOjR+wj
-         AMyI5wSno1BRhp5lwv/OgKjtKM3VeGgI15LT4HhwMlpANTeaKWqsJETYIVWRJBCxtexy
-         KCVw==
-X-Gm-Message-State: AAQBX9fmsnwxgJpxzJJRRq3p6oNkH9WaitXT4wYX9fufQTPBZjaypUo+
-        MpM5fPhqJ+lnrZUkZp8xbQvFGF4N5lUqdNYloIbrAs7BrBO6zC7oizUolezcisNIJOl8IGeNaSo
-        dHPpdxWhDa1FAvsiXoiW2yTOqeD2tWBJu
-X-Received: by 2002:a17:906:804b:b0:930:e3a0:8636 with SMTP id x11-20020a170906804b00b00930e3a08636mr5988398ejw.57.1680778701997;
-        Thu, 06 Apr 2023 03:58:21 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aoETtwoyere+ZTuvC9Y59fWPxWtLXznfKvZL7UpexVQFUpgNMKCuF81n0tTrFw+RdIw1B20w==
-X-Received: by 2002:a17:906:804b:b0:930:e3a0:8636 with SMTP id x11-20020a170906804b00b00930e3a08636mr5988389ejw.57.1680778701721;
-        Thu, 06 Apr 2023 03:58:21 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id i17-20020a17090671d100b0092973e209f2sm660173ejk.109.2023.04.06.03.58.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 03:58:21 -0700 (PDT)
-Message-ID: <efcdc3fe-de74-0f0d-d9d5-3249fc1d5d53@redhat.com>
-Date:   Thu, 6 Apr 2023 12:58:20 +0200
+        Thu, 6 Apr 2023 06:58:46 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B4D7AA0;
+        Thu,  6 Apr 2023 03:58:45 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7C3DD5820D0;
+        Thu,  6 Apr 2023 06:58:44 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 06 Apr 2023 06:58:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680778724; x=1680782324; bh=Q2m1kci/EP4IG1lF0MfJfyKUGN/Uk8YX5ZS
+        0D1+MIUk=; b=HXlgZjFU+cAzi8fVYZ3ieEuyXVgmr7WPTsesBy2rLFPMYCKpIyn
+        v12cjlEDMTp1gBJBK2JCL9L+UUdyekKHC7Zl1tPF8XtFF8kTYGeBk+kdwT2QbaId
+        ZgZCmGl/OsQO4k5Q3TP+QZ28CqAoNhT1KAJSG5EWmLq162ZRFYRrnqvsesqU6ruP
+        k8Mwx/EuwvX31/uCswzZjU5vZlvEdDvoR+KGPudBQddh4+XJ/bfqA2lzMl9FqvU2
+        kk6eVKSs4Hv1hVtC5kVpiCnCfu6bdUsfzuH8p2+V8RzUBhOPMHsWIn9++bWngpk+
+        SMC6UJu2JU+X5Jl66ycRCqOeP1JR9RLR4TA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=i3db14652.fm2;
+         t=1680778724; x=1680782324; bh=Q2m1kci/EP4IG1lF0MfJfyKUGN/Uk8YX
+        5ZS0D1+MIUk=; b=RVcPjQRFbdo6hVuCZI4+6tK3Vq86w7l8TLKbX19OqrWM41Wd
+        8JJf26gLcPAJLCXknkmubxbSe4pZC8R3JqWhLJF4OZlv0kK61yD54we5+4b9sm37
+        FVNtqxBLsASydtPAh22nPyBvy6Hxn2rxYb7/eM7kdaBpCkLzE4Y43f62O/YaTdyV
+        f+kalY7a2tPW9tAHSS9bCDewSzXvXf1e/iMXrCJvDMf/Yd1BFWUH8imnbPT6rg6P
+        nYmzHNwinZG3tVpntBg2hhOEGI6JxIHzx+II8OwdNaGX1ORXAoIGK7eGMU645Tk/
+        YeImSalhXU/YAAGAnGNOAZbPTKbKL1qxbbitFQ==
+X-ME-Sender: <xms:46UuZPWWKtHuO5l0LFAk3w3YC-eb_XKzKbYBpAgJmrcIJeHy5omKCA>
+    <xme:46UuZHmAlDonNJjvRk-Sftt76Y_ESVGzz54QnLSbZ2jjThl_0WONtP6l4ip5mt9Pk
+    kfRIbPZP3stG8u0sBY>
+X-ME-Received: <xmr:46UuZLbBk7Hay6gHYKlJ4OPlgPvdhcVxuAqJW6qjZSkky7dPEbtrTWypEQ4T4m6N-dvdrSfiYu-QaaAGPaUwJFqsMoYUrjvd>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeffrghm
+    ihgvnhcunfgvucfoohgrlhcuoegulhgvmhhorghlsehfrghsthhmrghilhdrtghomheqne
+    cuggftrfgrthhtvghrnhepteefiefhieetgfevhfegfeehffetteduieetudfgleetvdff
+    udelveejfefhfeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepughlvghmohgrlhesfhgrshhtmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:46UuZKVqnghzZigo3_xc7UQ8d7BarGx6dTWkv96qclX1YWAI2tbSyA>
+    <xmx:46UuZJlqo6Hc66G0ia8wUIQT7a_n1tQuMzypRSRkkqALEx7eUybdoQ>
+    <xmx:46UuZHd1TBjHAAB_-5sN6JGRoJSXImiE-IkEeBzXS5cHS3azzwOKhg>
+    <xmx:5KUuZPfT1txrBWxq7cLwYw1ahBDxMHmtYr80E9DOWMmcJXDtXSxkXA>
+Feedback-ID: i3db14652:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Apr 2023 06:58:40 -0400 (EDT)
+Message-ID: <d732a8f6-4a0a-d7ff-af9c-f377fefd1283@fastmail.com>
+Date:   Thu, 6 Apr 2023 19:58:38 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] platform/x86: intel-uncore-freq: Add client processors
-Content-Language: en-US, nl
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230330145939.1022261-1-srinivas.pandruvada@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230330145939.1022261-1-srinivas.pandruvada@linux.intel.com>
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/3] zonefs: convert to use kobject_is_added()
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, xiang@kernel.org, chao@kernel.org,
+        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        damien.lemoal@opensource.wdc.com, naohiro.aota@wdc.com,
+        jth@kernel.org, rafael@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20230406093056.33916-1-frank.li@vivo.com>
+ <20230406093056.33916-3-frank.li@vivo.com>
+ <2023040616-armory-unmade-4422@gregkh>
+ <8ca8c138-67fd-73ed-1ce5-c090d49f31e9@fastmail.com>
+ <2023040627-paver-recipient-3713@gregkh>
+From:   Damien Le Moal <dlemoal@fastmail.com>
+In-Reply-To: <2023040627-paver-recipient-3713@gregkh>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,46 +95,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivas,
-
-On 3/30/23 16:59, Srinivas Pandruvada wrote:
-> Make Intel uncore frequency driver support to client processor starting
-> from Alder Lake.
+On 4/6/23 19:26, Greg KH wrote:
+> On Thu, Apr 06, 2023 at 07:13:38PM +0900, Damien Le Moal wrote:
+>> On 4/6/23 19:05, Greg KH wrote:
+>>> On Thu, Apr 06, 2023 at 05:30:56PM +0800, Yangtao Li wrote:
+>>>> Use kobject_is_added() instead of local `s_sysfs_registered` variables.
+>>>> BTW kill kobject_del() directly, because kobject_put() actually covers
+>>>> kobject removal automatically.
+>>>>
+>>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>>>> ---
+>>>>  fs/zonefs/sysfs.c  | 11 +++++------
+>>>>  fs/zonefs/zonefs.h |  1 -
+>>>>  2 files changed, 5 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/fs/zonefs/sysfs.c b/fs/zonefs/sysfs.c
+>>>> index 8ccb65c2b419..f0783bf7a25c 100644
+>>>> --- a/fs/zonefs/sysfs.c
+>>>> +++ b/fs/zonefs/sysfs.c
+>>>> @@ -101,8 +101,6 @@ int zonefs_sysfs_register(struct super_block *sb)
+>>>>  		return ret;
+>>>>  	}
+>>>>  
+>>>> -	sbi->s_sysfs_registered = true;
+>>>
+>>> You know this, why do you need to have a variable tell you this or not?
+>>
+>> If kobject_init_and_add() fails, zonefs_sysfs_register() returns an error and
+>> fill_super will also return that error. vfs will then call kill_super, which
+>> calls zonefs_sysfs_unregister(). For that case, we need to know that we actually
+>> added the kobj.
 > 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Ok, but then why not just 0 out the kobject pointer here instead?  That
+> way you will always know if it's a valid pointer or not and you don't
+> have to rely on some other variable?  Use the one that you have already :)
 
-I assume that this is independent from the
-"[PATCH] platform/x86/intel-uncore-freq: Uncore frequency control via TPMI"
-changes ?
+but sbi->s_kobj is the kobject itself, not a pointer. I can still zero it out in
+case of error to avoid using the added s_sysfs_registered bool. I would need to
+check a field of s_kobj though, which is not super clean and makes the code
+dependent on kobject internals. Not super nice in my opinion, unless I am
+missing something.
 
-(just double checking before I merge this).
-
-Regards,
-
-Hans
-
-
-
-> ---
->  .../platform/x86/intel/uncore-frequency/uncore-frequency.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> And you really don't even need to check anything, just pass in NULL to
+> kobject_del() and friends, it should handle it.>
+>>>> -
+>>>>  	return 0;
+>>>>  }
+>>>>  
+>>>> @@ -110,12 +108,13 @@ void zonefs_sysfs_unregister(struct super_block *sb)
+>>>>  {
+>>>>  	struct zonefs_sb_info *sbi = ZONEFS_SB(sb);
+>>>>  
+>>>> -	if (!sbi || !sbi->s_sysfs_registered)
+>>>
+>>> How can either of these ever be true?  Note, sbi should be passed here
+>>> to this function, not the super block as that is now unregistered from
+>>> the system.  Looks like no one has really tested this codepath that much
+>>> :(
+>>>
+>>>> +	if (!sbi)
+>>>>  		return;
+>>>
+>>> this can not ever be true, right?
+>>
+>> Yes it can, if someone attempt to mount a non zoned device. In that case,
+>> fill_super returns early without setting sb->s_fs_info but vfs still calls
+>> kill_super.
 > 
-> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-> index 00ac7e381441..32e2515ee366 100644
-> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-> @@ -204,6 +204,13 @@ static const struct x86_cpu_id intel_uncore_cpu_ids[] = {
->  	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,	NULL),
->  	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
->  	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, NULL),
->  	{}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, intel_uncore_cpu_ids);
+> But you already had a sbi pointer in the place that this was called, so
+> you "know" if you need to even call into here or not.  You are having to
+> look up the same pointer multiple times in this call chain, there's no
+> need for that.
+
+I am not following here. Either we check that we have sbi here in
+zonefs_sysfs_unregister(), or we conditionally call this function in
+zonefs_kill_super() with a "if (sbi)". Either way, we need to check since sbi
+can be NULL.
+
+> 
+> thanks,
+> 
+> greg k-h
 
