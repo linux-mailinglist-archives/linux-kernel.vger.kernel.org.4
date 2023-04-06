@@ -2,122 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5656D9FB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABDCB6D9FBA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240113AbjDFSX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S240117AbjDFSZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbjDFSX4 (ORCPT
+        with ESMTP id S238918AbjDFSZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:23:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3706C6A6B;
-        Thu,  6 Apr 2023 11:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680805434; x=1712341434;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=rQafWPpN6SSrt4t7Qo2/D4943r4B6SApT9bspraHldI=;
-  b=QpKcGCkv+JlVQ1ubcyv674/0Gjslv/fONM35uyG10HTvI7M79ww71R37
-   +zdU04qNKFuZod5GGAr63QHRwFV9Zp8S2n2ugiN1ro5XHG8Vcz6rh2NvF
-   GWtqt+UL6MfHl5EDQ1c2OaBojEz/jAVMvhylf+aGjad9jfw/9BzPnKhu/
-   uxZmN8PNq9d1/RQmARdPz1ZIR3d14cDe9Rspv1/dot87zjOvX9xIWCaFL
-   vd2/RJ5AlGq2Mih4NWO33hxzoDmgQcfyirOisOJON/e8mzMChSZUzEKwo
-   8uu/Z68HCX8CUqxUSNLMVsc6FmsYd1kfJ3pnmayQ83wkHMsFqGCqN1xyj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="323184546"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="323184546"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:23:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664576653"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="664576653"
-Received: from ticela-az-114.amr.corp.intel.com (HELO [10.251.3.106]) ([10.251.3.106])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:23:46 -0700
-Message-ID: <f26eed88dddcf6c8d2a127f4cdc6aaf740bbfb7d.camel@linux.intel.com>
-Subject: Re: [PATCH mm-unstable RFC 0/5] cgroup: eliminate atomic rstat
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Date:   Thu, 06 Apr 2023 11:23:47 -0700
-In-Reply-To: <20230403220337.443510-1-yosryahmed@google.com>
-References: <20230403220337.443510-1-yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 6 Apr 2023 14:25:01 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E2759FA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:24:59 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id j22so3541929ejv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680805497;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6r4M3/20NCF90WldhYI6dBy2L6b19MPQ4oWqZe9uR0g=;
+        b=xyGvIncYsvAhAnmjZ5hqP918pCTK9mrLNRX9uoc78LE60hSA5ZqTusKtU6yIBNf0Os
+         n8Y5NH+7jPSViCl/GACJFqVwsXsH4hGZxJvKxLSvKSLj6mMiLuG41Cdmdg3TjXn5jt31
+         bmF0EOejvTL0QaUEUEqg4BlKwMo2RnmoZetVTNE0dMfDVtYVeSiwFr1RyX8wC2tIPclC
+         Uq/i34LsemyJo/uk/DEvluDNOqpPu/107PW87lCderC6KhWXV8jQJdEAlyGWCR5Vb9dB
+         NJFttea7l5m8wPZ2b+apoV/0TIgBY0M9pr/A/i/dITy8V0rooegFiQbQ/lxglBAdA174
+         FBZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680805497;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6r4M3/20NCF90WldhYI6dBy2L6b19MPQ4oWqZe9uR0g=;
+        b=AnzeO/oRnPLF4MPJ/mqNnDgpzw1B31kdhwXowsI14T1Q58/RBfVjeaAqEnNlc3qVyx
+         1+0F6sNjQQmXWEG88tQqPCBm5AmLGQhXAxmOMf5jkNQwdycyHGlO7qOBMBadeh62nOp3
+         0YYa/ZGDIdfsy0A7nhBYnA/qMT8dFuD6gKIQYru0U79fXkOVCWjERVfQqTDCtX363tcC
+         byMaGKyhhoAXx8zrzEbGvFPvnPZpoctOAFYN0xVI16UPuq3r7mLD3KxahCpkwceLKEiK
+         mJCOHITIyXkT3hjhpK8B9rapdrMPsDcolBb3lzoHKXHaTH1+kc9/NKwJy/U9tp6hQ/EJ
+         emMw==
+X-Gm-Message-State: AAQBX9cRiQuvgStrQr8B84a1b1A5YOmQoPPWZ4QxQFDn5TD8w1Xi2PUF
+        LHOdviruX99acR4q7eDOOuen+Q==
+X-Google-Smtp-Source: AKy350YYtP7sG8RlXl6/kG7vInHbk81rKWcqMST+cC4JCnS+hlXlOAvk9bgDGOeYBYvYlBFhj6q7ug==
+X-Received: by 2002:a17:907:3f16:b0:8a5:8620:575 with SMTP id hq22-20020a1709073f1600b008a586200575mr9241478ejc.3.1680805497522;
+        Thu, 06 Apr 2023 11:24:57 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id s27-20020a1709060c1b00b009475bd8f441sm1115544ejf.60.2023.04.06.11.24.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 11:24:57 -0700 (PDT)
+Message-ID: <38bc48bf-7d8c-8ddd-861f-3b7f3d2edce6@linaro.org>
+Date:   Thu, 6 Apr 2023 20:24:55 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 1/3] dt-binding: pci: add JH7110 PCIe dt-binding
+ documents.
+Content-Language: en-US
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-pci@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Kevin Xie <kevin.xie@starfivetech.com>
+References: <20230406111142.74410-1-minda.chen@starfivetech.com>
+ <20230406111142.74410-2-minda.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406111142.74410-2-minda.chen@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-03 at 22:03 +0000, Yosry Ahmed wrote:
-> A previous patch series ([1] currently in mm-unstable) changed most
+On 06/04/2023 13:11, Minda Chen wrote:
+> Add PCIe controller driver dt-binding documents
+> for StarFive JH7110 SoC platform.
 
-Can you include the link to [1]?
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching). Missing: 's'
 
-Thanks.
+Subject: drop second/last, redundant "dt-binding documents". The
+"dt-bindings" prefix is already stating that these are bindings and
+documentation.
 
-Tim
+Drop also full stop.
 
-> atomic rstat flushing contexts to become non-atomic. This was done to
-> avoid an expensive operation that scales with # cgroups and # cpus to
-> happen with irqs disabled and scheduling not permitted. There were two
-> remaining atomic flushing contexts after that series. This series tries
-> to eliminate them as well, eliminating atomic rstat flushing completely.
->=20
-> The two remaining atomic flushing contexts are:
-> (a) wb_over_bg_thresh()->mem_cgroup_wb_stats()
-> (b) mem_cgroup_threshold()->mem_cgroup_usage()
->=20
-> For (a), flushing needs to be atomic as wb_writeback() calls
-> wb_over_bg_thresh() with a spinlock held. However, it seems like the
-> call to wb_over_bg_thresh() doesn't need to be protected by that
-> spinlock, so this series proposes a refactoring that moves the call
-> outside the lock criticial section and makes the stats flushing
-> in mem_cgroup_wb_stats() non-atomic.
->=20
-> For (b), flushing needs to be atomic as mem_cgroup_threshold() is called
-> with irqs disabled. We only flush the stats when calculating the root
-> usage, as it is approximated as the sum of some memcg stats (file, anon,
-> and optionally swap) instead of the conventional page counter. This
-> series proposes changing this calculation to use the global stats
-> instead, eliminating the need for a memcg stat flush.
->=20
-> After these 2 contexts are eliminated, we no longer need
-> mem_cgroup_flush_stats_atomic() or cgroup_rstat_flush_atomic(). We can
-> remove them and simplify the code.
->=20
-> Yosry Ahmed (5):
->   writeback: move wb_over_bg_thresh() call outside lock section
->   memcg: flush stats non-atomically in mem_cgroup_wb_stats()
->   memcg: calculate root usage from global state
->   memcg: remove mem_cgroup_flush_stats_atomic()
->   cgroup: remove cgroup_rstat_flush_atomic()
->=20
->  fs/fs-writeback.c          | 16 +++++++----
->  include/linux/cgroup.h     |  1 -
->  include/linux/memcontrol.h |  5 ----
->  kernel/cgroup/rstat.c      | 26 ++++--------------
->  mm/memcontrol.c            | 54 ++++++++------------------------------
->  5 files changed, 27 insertions(+), 75 deletions(-)
->=20
+> 
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> ---
+>  .../bindings/pci/starfive,jh7110-pcie.yaml    | 163 ++++++++++++++++++
+>  1 file changed, 163 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
+> new file mode 100644
+> index 000000000000..fa4829766195
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/starfive,jh7110-pcie.yaml
+> @@ -0,0 +1,163 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/starfive,jh7110-pcie.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JH7110 PCIe 2.0 host controller
+> +
+> +maintainers:
+> +  - Minda Chen <minda.chen@starfivetech.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/pci-bus.yaml#
+> +  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: starfive,jh7110-pcie
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    items:
+> +      - const: reg
+> +      - const: config
+> +
+> +  msi-parent: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    items:
+> +      - const: noc
+> +      - const: tl
+> +      - const: axi_mst0
+> +      - const: apb
+> +
+> +  resets:
+> +    items:
+> +      - description: AXI MST0 reset
+> +      - description: AXI SLAVE reset
+> +      - description: AXI SLAVE0 reset
+> +      - description: PCIE BRIDGE reset
+> +      - description: PCIE CORE reset
+> +      - description: PCIE APB reset
+> +
+> +  reset-names:
+> +    items:
+> +      - const: mst0
+> +      - const: slv0
+> +      - const: slv
+> +      - const: brg
+> +      - const: core
+> +      - const: apb
+> +
+> +  starfive,stg-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      items:
+> +        - description: phandle to System Register Controller stg_syscon node.
+> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for PCIe.
+> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for PCIe.
+> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for PCIe.
+> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for PCIe.
+> +    description:
+> +      The phandle to System Register Controller syscon node and the offset
+> +      of STG_SYSCONSAIF__SYSCFG register for PCIe. Total 4 regsisters offset
+> +      for PCIe.
+> +
+> +  pwren-gpios:
+> +    description: Should specify the GPIO for controlling the PCI bus device power on.
+
+What are these? Different than defined in gpio-consumer-common?
+
+> +    maxItems: 1
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  interrupt-controller:
+> +    type: object
+> +    properties:
+> +      '#address-cells':
+> +        const: 0
+> +
+> +      '#interrupt-cells':
+> +        const: 1
+> +
+> +      interrupt-controller: true
+> +
+> +    required:
+> +      - '#address-cells'
+> +      - '#interrupt-cells'
+> +      - interrupt-controller
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - reg
+> +  - reg-names
+> +  - "#interrupt-cells"
+
+Keep consistent quotes - either ' or "
+
+Are you sure this is correct? You have interrupt controller as child node.
+
+
+> +  - interrupts
+> +  - interrupt-map-mask
+> +  - interrupt-map
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - msi-controller
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    bus {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        pcie0: pcie@2B000000 {
+
+Lowercase hex. Everywhere.
+
+> +            compatible = "starfive,jh7110-pcie";
+> +            #address-cells = <3>;
+> +            #size-cells = <2>;
+> +            #interrupt-cells = <1>;
+> +            reg = <0x0 0x2B000000 0x0 0x1000000>,
+> +                  <0x9 0x40000000 0x0 0x10000000>;
+
+reg (and reg-names and ranges) is always second property.
+
+> +            reg-names = "reg", "config";
+> +            device_type = "pci";
+> +            starfive,stg-syscon = <&stg_syscon 0xc0 0xc4 0x130 0x1b8>;
+> +            bus-range = <0x0 0xff>;
+> +            ranges = <0x82000000  0x0 0x30000000  0x0 0x30000000 0x0 0x08000000>,
+> +                     <0xc3000000  0x9 0x00000000  0x9 0x00000000 0x0 0x40000000>;
+> +            interrupt-parent = <&plic>;
+> +            interrupts = <56>;
+> +            interrupt-map-mask = <0x0 0x0 0x0 0x7>;
+> +            interrupt-map = <0x0 0x0 0x0 0x1 &pcie_intc0 0x1>,
+> +                            <0x0 0x0 0x0 0x2 &pcie_intc0 0x2>,
+> +                            <0x0 0x0 0x0 0x3 &pcie_intc0 0x3>,
+> +                            <0x0 0x0 0x0 0x4 &pcie_intc0 0x4>;
+
+
+Best regards,
+Krzysztof
 
