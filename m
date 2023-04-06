@@ -2,105 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB626DA4B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A536DA4B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbjDFVbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S236387AbjDFVbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbjDFVbI (ORCPT
+        with ESMTP id S233746AbjDFVbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:31:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D886EAF;
-        Thu,  6 Apr 2023 14:31:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89B1064B8F;
-        Thu,  6 Apr 2023 21:31:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 796A1C4339E;
-        Thu,  6 Apr 2023 21:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680816667;
-        bh=Uv3tMKE9Fzx6ToyFtH3AoI5OOQ8Bp2qXHLBUseV7EsA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=a/AJ1JQZs5/i0TV2CAMV0hjhWEuLS/J4Fcd+Y9FG8iYIGxDhdu2BJ3uZX3eal4wUB
-         7LM8bhe3/x2zM/hSSw7Fv+79LLGdZSn1q94KFvCLV0KONHEvMGusbBLl1BzdBUQTXo
-         ujgAjsh/OqUFHVSiTrcSfStKNl7H2fwL/dN02Wku0RlMJIQQT/oqVjDJdElAacAUcn
-         odr55c/X2cDJuiVEkN5hELHWCUWQlcP1ul/4ulYv+dQHJzlRkrWQdwlUZ9XDXloVKu
-         enpvC5/ZxjW1jNSSDc0cX9yPrCJR1Zsix97cgeUvUurBKVga57nD674YRf5UtV1h1P
-         t/ZPysQFEQ9iw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-In-Reply-To: <20230406192811.460888-1-brgl@bgdev.pl>
-References: <20230406192811.460888-1-brgl@bgdev.pl>
-Subject: Re: (subset) [PATCH 0/3] arm64: qcom: add PMIC regulators for
- sa8775p
-Message-Id: <168081666418.315518.2405515023822683417.b4-ty@kernel.org>
-Date:   Thu, 06 Apr 2023 22:31:04 +0100
+        Thu, 6 Apr 2023 17:31:34 -0400
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2443EA27D;
+        Thu,  6 Apr 2023 14:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5lYMx1AJfwdjuXMvx33uKHvBVXBN3hKr68FwdEgC5KY=; b=C4Hkc9uodAPp0nt7zWvcGENzK9
+        yXg8OLttG/vkoj3n8yhB9v9cbmay7wCYj2BOcEc9rtc1SmDo4r4wXqnFtoKmj/doMwwGK3CEzabLv
+        cuSrpFieMIWOOmf3tm3/ffrfm5TvAeTyNS3HxZeuYIILTf4konjQnaA20ITp1m9Tm1ITQnyc3iv4v
+        5IFZbpHa1k4BHVtGAtAS2J6KuLY7RRxxuXng6zNHEptulc8alJhDvhwlIn3gXA3wpEoQwYUWTWrZP
+        jKDLU64zY9LmT1GJy1lzvNRgC+B/09qsF5Fk+WQ2sucaMYc6yI1oQxKTunr95PdmIT1fxkFgA4Qwi
+        etWzcG3w==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <kibi@debian.org>)
+        id 1pkXCY-00CCYR-DM; Thu, 06 Apr 2023 21:31:27 +0000
+Date:   Thu, 6 Apr 2023 23:31:23 +0200
+From:   Cyril Brulebois <kibi@debian.org>
+To:     Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>, Hank Barta <hbarta@gmail.com>
+Subject: Re: [PATCH v1 0/3] PCI: brcmstb: Clkreq# accomodations of downstream
+ device
+Message-ID: <20230406213123.wcztrbmhdpukoby2@mraw.org>
+Organization: Debian
+References: <20230406124625.41325-1-jim2101024@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="huvxf4pce7occ4no"
+Content-Disposition: inline
+In-Reply-To: <20230406124625.41325-1-jim2101024@gmail.com>
+X-Debian-User: kibi
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 06 Apr 2023 21:28:08 +0200, Bartosz Golaszewski wrote:
-> Here are the remaining patches from the big PMIC series that add the DT
-> bindings for RPMH regulators for SA8775P platforms, implement relevant
-> support in the driver and add the regulator nodes to the sa8775p-ride
-> board .dts.
-> 
-> Since the first submission:
-> - the DT bindings now contain the missing supply properties
-> - the ldo8 min voltage has been increased
-> 
-> [...]
 
-Applied to
+--huvxf4pce7occ4no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Hi Jim,
 
-Thanks!
+Jim Quinlan <jim2101024@gmail.com> (2023-04-06):
+> The current driver assumes the downstream devices can provide clkreq# for
+> ASPM.  These commits accomodate devices w/ or w/o clkreq# and also handle
+> L1SS-capable devices.
+>=20
+> The Raspian Linux folks have already been using a PCIe RC property
+> "brcm,enable-l1ss".  These commits use the same property, in a
+> backward-compatible manner, and the implementaion adds more detail and al=
+so
+> automatically identifies devices w/o a clkreq# signal, i.e. most devices
+> plugged into an RPi CM4 IO board.
+>=20
+> Jim Quinlan (3):
+>   dt-bindings: PCI: brcmstb: Add two optional props
+>   PCI: brcmstb: Clkreq# accomodations of downstream device
+>   PCI: brcmstb: Allow setting the completion timeout
+>=20
+>  .../bindings/pci/brcm,stb-pcie.yaml           | 12 +++
+>  drivers/pci/controller/pcie-brcmstb.c         | 93 +++++++++++++++++--
+>  2 files changed, 95 insertions(+), 10 deletions(-)
+>=20
+>=20
+> base-commit: 99ddf2254febae9eab7fb0bcc02c5322243f5c49
 
-[1/3] dt-bindings: regulator: qcom,rpmh: add compatible for pmm8654au RPMH
-      commit: ba0887a6b94ea7f77df1e464aeca45758b4d92c3
-[2/3] regulator: qcom-rpmh: add support for pmm8654au regulators
-      commit: 65f1b1dc0cc90236ed9be3970f4a763e853f3aab
+I've just verified with the exact same hardware as in Bugzilla#217276
+that latest master (v6.3-rc5-137-gf2afccfefe7b) still gets a kernel
+panic at boot, which goes away once those 3 patches are applied. Do you
+need any extra information, log excerpt, or something like that?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Cheers,
+--=20
+Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+D-I release manager -- Release team member -- Freelance Consultant
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+--huvxf4pce7occ4no
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mark
+iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmQvOicACgkQ/5FK8MKz
+VSBVCw/+MGW7YQ5aLMIMlsR3WkQfONllYhPGqTdxSLKft0xScIntkoX19WwNK9sk
+VsMzs461n5ZQQbjJfN9GlKjkPBYOa24nTn0u6Sqa/tDEmBWzvoNSmXut7ak8Dh2t
+4ih/LWqRmqbWlu9zb2dNeJG4w0jWHyeYlKRsoLxAXViH2LpPdHXTq7aBci4rSV7g
+Ui6wTO2FMhv9LPehezB6lFi2HqT18zTQnsZqalFufang4esARaqCKVGGZ6ZQ5ugH
+fW0rI6Ept0CXH5nmFjzP696vGNNrps7HD7RzDFPzY/rOgjbDh6UuyntFW79qIRkY
+k/bV0vTlS0PNkHdKXc2w4eVgIDWDL2QsxsCckOIw4DDtzz/KMcaeIlD5ueuDt16t
+EA3otoIiOMkei/kWKJRb2Z0ow3dDdWW/5P/0JqZc1S6zPO+5KQuhwe1LBfGrnZbL
+KEGU4KBmV6WvkyL9ZDZHP37R3CnD9afe/w6AJWZqNiNKSde0VqPgzSY6cqMwRGPS
+FttoeN9VHMZjesviHdCH0mXiB2c75ihvcsX18eWXSbWHpE7KU6B8aH5ye1zhEw7r
+PdPTBd19gnOlSMYZEAG5q0dVkdsC0ja4mmwL73xAx0kYHHO1Qq5sM3IY3qhi+4T6
+OhYQlKu2FrD1qZkVnugXOIwyragOmlBrSbvHnWOMFcj/d8VK9K0=
+=pyNy
+-----END PGP SIGNATURE-----
 
+--huvxf4pce7occ4no--
