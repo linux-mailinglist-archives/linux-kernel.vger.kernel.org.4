@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890E46D9FC2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510166D9FC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240132AbjDFS0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42354 "EHLO
+        id S239928AbjDFS0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240155AbjDFS0J (ORCPT
+        with ESMTP id S240136AbjDFS01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:26:09 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13A4A258;
-        Thu,  6 Apr 2023 11:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680805563; x=1712341563;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=71j8wA/jyuLPVIohqa23wmw7xUhIc2C3rcA0pSOT7kQ=;
-  b=SwLzY0vIgdnUNoYOiwBiqZYCm7dTXGe9Iodg3/63HWpZmAiYk2brQJDv
-   X2fYKsEyXsEUlvaU6hIniOeTXqbP5Y9rwdyqJeSNhUtnLU3Z7OJsyFw8D
-   jz63OtW0dH8joET+smqIiunQCB3i97Z1UW9+iYXy5lQngL6+4iTY4jsat
-   vdAr2yGTDJ1fO8NCaB131xbxzL2io/p3sgEzGOWtxfVXaDgDx7AQ5xiYp
-   XdEFB2pwfEBSQgKZ4EnmG6j0Jy6kvuqPhwEjs1wgwUrKb5A86SRrkuQ/j
-   gPHcnpFR7xBeVM19OvJTiv/RZy4JkUM8h2BGu3LZyUbLxocUrDgBpi6zJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="370642729"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="370642729"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:26:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="811093631"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="811093631"
-Received: from ticela-az-114.amr.corp.intel.com (HELO [10.251.3.106]) ([10.251.3.106])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:26:02 -0700
-Message-ID: <83b2cb8017b945b2b3d3c9e65a3ba94a510ac20f.camel@linux.intel.com>
-Subject: Re: [PATCH mm-unstable RFC 0/5] cgroup: eliminate atomic rstat
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Yosry Ahmed <yosryahmed@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-mm@kvack.org
-Date:   Thu, 06 Apr 2023 11:26:02 -0700
-In-Reply-To: <CAJD7tkZ5vh5ssDux1LStX9ZivmGmXsFyxfADGJD5AXDaMnGWRQ@mail.gmail.com>
-References: <20230403220337.443510-1-yosryahmed@google.com>
-         <CAJD7tkZ5vh5ssDux1LStX9ZivmGmXsFyxfADGJD5AXDaMnGWRQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 6 Apr 2023 14:26:27 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94BD983FB;
+        Thu,  6 Apr 2023 11:26:23 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 336IQ9Q4005908;
+        Thu, 6 Apr 2023 20:26:09 +0200
+Date:   Thu, 6 Apr 2023 20:26:09 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Mark Brown <broonie@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] tools/nolibc/stdio: Implement vprintf()
+Message-ID: <ZC8OwUPAC4s413jP@1wt.eu>
+References: <20230405-kselftest-nolibc-v2-0-2ac2495814b5@kernel.org>
+ <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405-kselftest-nolibc-v2-1-2ac2495814b5@kernel.org>
+X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-04-03 at 15:04 -0700, Yosry Ahmed wrote:
-> On Mon, Apr 3, 2023 at 3:03=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com=
-> wrote:
-> >=20
-> > A previous patch series ([1] currently in mm-unstable) changed most
->=20
-> .. and I naturally forgot to link this:
-> [1] https://lore.kernel.org/linux-mm/20230330191801.1967435-1-yosryahmed@=
-google.com/
+On Thu, Apr 06, 2023 at 05:19:10PM +0100, Mark Brown wrote:
+> vprintf() is equivalent to vfprintf() to stdout so implement it as a simple
+> wrapper for the existing vfprintf(), allowing us to build kselftest.h.
+> 
+> Suggested-by: Willy Tarreau <w@1wt.eu>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/include/nolibc/stdio.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
+> index 96ac8afc5aee..6cbbb52836a0 100644
+> --- a/tools/include/nolibc/stdio.h
+> +++ b/tools/include/nolibc/stdio.h
+> @@ -273,6 +273,12 @@ int vfprintf(FILE *stream, const char *fmt, va_list args)
+>  	return written;
+>  }
+>  
+> +static __attribute__((unused))
+> +int vprintf(const char *fmt, va_list args)
+> +{
+> +	return vfprintf(stdout, fmt, args);
+> +}
+> +
+>  static __attribute__((unused, format(printf, 2, 3)))
+>  int fprintf(FILE *stream, const char *fmt, ...)
+>  {
 
-Thanks. Saw this after I sent my request for link.
+Perfect, thank you Mark, I'm glad that it simplified the rest of
+your series.
 
-Tim
+Acked-by: Willy Tarreau <w@1wt.eu>
+
+Paul, feel free to directly queue this one for 6.5. If you prefer I
+can as well queue it on my side and send it later, it's just that I
+have exactly zero extra value on top of this one ;-)
+
+Thanks,
+Willy
