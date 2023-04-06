@@ -2,79 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADE96DA228
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524DD6DA22E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238087AbjDFUDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S237421AbjDFUGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237602AbjDFUDT (ORCPT
+        with ESMTP id S229600AbjDFUGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:03:19 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF4D83F6;
-        Thu,  6 Apr 2023 13:03:17 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id 89so28679712uao.0;
-        Thu, 06 Apr 2023 13:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680811397; x=1683403397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A9YviVE4toQnrtzCPO6XOjjEzLVIEKbX+K4ppRd4TZg=;
-        b=GHAtblByljW2ipQbn8M/4ZR0hTZ3zT8TMsAiD8KPNWUH/LxlspKJYQZBHcUQMQXbOT
-         s1uD04wTWGlL6ed+7Q5T3fMZLedG7ZLlnrLdVyuFhQyfjULNf97+9fu1MhoCxqNFk0BT
-         uIr8EznJoOWiF8tg6pILJHNXm0pTJ6yqVN4tMG7KWnh7xu2QFwUdG8DdXQ/NK3PAr9SE
-         9ynCHGOljuvy9GGfinlSLik+ZS+WGxIf26YsKs+4DhOkx64EUettEa7Qdo9vz2c8xVMa
-         jlXRaZ6IKwG3B1msopw/xL37jzNprOUX/ZuepnQ2WPfcOqn9dX8yvke4f4Ulx+lbBFPc
-         dnSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680811397; x=1683403397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A9YviVE4toQnrtzCPO6XOjjEzLVIEKbX+K4ppRd4TZg=;
-        b=HDHEj/rukQaVBwKf/mdcxK3WI2JVSEsUDQSkgSREm3mu76q9vFUKK4pi1zJGaVM0Rd
-         nKpfl0sc1vBsDq8GeIONTBWeFAJfhg4DfInXLsYdCse+EhVnokAeeVNFC4HK7ixz38g8
-         cL+OKnj8PULd1tDOabwMa5bySLxM8SJUiwyaPjl3VKpMR+dFuQB2MfpnilOs+WdkbsH6
-         tTdhSm0EZU52N4RllKYP1SD9PuWMauAyFsZysCm1AiSd3/bhDP1htKHWqsmyq0v/n4wR
-         6fZT5kecx6OaE33MG2hR7dqprh90d4fIdo5/NoiEl5st4YDh7CvYErOwTi9L21/jVsUq
-         mK+w==
-X-Gm-Message-State: AAQBX9eXBKooyeDIHdBekiAhBp5+wx2ZXLtdEHEgQLaSF3kO18cpmfwi
-        mKs5FOISvkClOcjfIvVTqgnW/5kOt6KqPa0513M=
-X-Google-Smtp-Source: AKy350YHD3+dB/WoMTUGvAh8mayipMNsIw5IpvaixWZ6REcZ8LZF53uTV2/6njC+FuE7d+bQnnGbcjCZcT7EVT2Afdo=
-X-Received: by 2002:ab0:7ce:0:b0:68d:6360:77b with SMTP id d14-20020ab007ce000000b0068d6360077bmr7357349uaf.1.1680811396706;
- Thu, 06 Apr 2023 13:03:16 -0700 (PDT)
+        Thu, 6 Apr 2023 16:06:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904CA6A44;
+        Thu,  6 Apr 2023 13:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1680811577; i=hfdevel@gmx.net;
+        bh=67pFJdfqDYYvQBqDd/g8dxqcjx/f2Mnl6F5+9ZBNfIs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=KMPl9gQxCIlie0kF4Jeod5kaBGlVS91Nl0uVxP1B1mTYl9SVhm7G9I94es6xxt55j
+         tewi+7SmHpCpwvxEjtXiwwn3B0UUrs/vUo6gVGYGelz+vUyZ4Iaa9BbJuqs/fyLJg1
+         uSyUIIfIyKbEHZPaiGqmLcO8y41acsHjtnprkGaXtn0NFXK1KwHP/2MSqOuX21k7+N
+         dxg+I9veaO+dNFZo4VZ4MvVUYGNowTmjtZIogTe9Ew2ta81susf7JJiXN0zUq17rKA
+         hZhHABEEJeicE4uiaialVtlpp3HqLhPEKkQjzgrHyjO0E+ZPe6cUTGp+xlVfasdrDW
+         mmgJkhdkmdxuA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [77.33.175.73] ([77.33.175.73]) by web-mail.gmx.net
+ (3c-app-gmx-bap69.server.lan [172.19.172.69]) (via HTTP); Thu, 6 Apr 2023
+ 22:06:17 +0200
 MIME-Version: 1.0
-References: <20230406124625.41325-3-jim2101024@gmail.com> <20230406190953.GA3723665@bhelgaas>
-In-Reply-To: <20230406190953.GA3723665@bhelgaas>
-From:   Jim Quinlan <jim2101024@gmail.com>
-Date:   Thu, 6 Apr 2023 16:03:05 -0400
-Message-ID: <CANCKTBsLuxGq1fBNcasLRuStELSknDGH3C-e+EbKy-rfw4L18Q@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] PCI: brcmstb: Clkreq# accomodations of downstream device
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <trinity-76c5c0b4-a6f7-4679-a1ef-74e745649355-1680811577008@3c-app-gmx-bap69>
+From:   hfdevel@gmx.net
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] [RESEND] ARM: dts: meson8b: correct uart_B and uart_C clock
+ references
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 6 Apr 2023 22:06:17 +0200
+Importance: normal
+Sensitivity: Normal
+X-Priority: 3
+X-Provags-ID: V03:K1:a51ftcmkLmRTtxhKSYJ3QixxCEl3MdhJIa+kXPujRNJiQoHHsMFRQ0pdZ4ArBUwRfqLUy
+ BgQteuF7/dWbrOM4lOe/SmXQJ4s5ealx+JXyU4JsiuS+CSi8IkZX+znjKOpynNErfYFExunP7VDx
+ PhAbTtyGDEQbXEM2qhPsgpLsYdZbfjjXQAlAalEMjeUBonbjR8m4bLg/s4DvafY/f/HBw1pomSH4
+ MMi1qQmzNxdFK4XL/x7KgmTiSM2vLJQ8w9vvSKp4+IS3hPvK0IzoiDkrEJ3Zr/eB9sJemFR5XtvJ
+ Q4=
+UI-OutboundReport: notjunk:1;M01:P0:hezBSe3RdSw=;vFFS5p7owHpyUbL9jwv/mwW2NaV
+ +IOJWekYhxHN7eAa5xWdjrn6zvRKrMci4vpjv5s19rSJ6hgV6uq4xwa703rMsRFFgjeiZQW26
+ PmMX05NlkJDQV/WNIB8ZI9HHSGx1qn4WjpFWiIOcQdGE6u9jsp8lJ54PNeaYCLrHTmzReAtNY
+ oR8tKz8gE2w1V1RrYnZYO9e2WiL3N/AuavKMu817sLKhXkrFZZ7a5eFNZ9FilVQ5EBmhOJKhz
+ 0tJJMF1hfp/nRBushqpprlWZKg9df+585Dj6/xg21kQ4bjx+qELnSgfFV0qlaK0U8z55CzZbl
+ P6g0nLyD0iNXBvdV2I5DkUqshB18B7Atqo62vfQQkvthGj9XOIBCmo1qzUT8GgIU3ow/NOLDi
+ TKfK0yskBkdB6KWG16LuYFbLGtRE7marYkx3GnQMtOW2I62pum1sOOc+Wg9mxhAclEY1Upb/e
+ 8xM4DL8UOuIHcF6cR6EKnXw6JJS1s9zXwtyJm2qfi691LIp486dtrF5BUmdQI/o9y84a4cocL
+ 7q6E53D15aBgQSpSQ0oP9TSQDjz3xAAWqoKSCj/ohB+WRp2BpFKiCWlm7ixDVCLSLxYxMBA3i
+ 4o0/hR+l7ff+ZMVMPDWZmlhXtMarFjax2l3Vkwwy7zy2KzLIGok6IVPTpk/0CqkbYACYMziQA
+ G5yuW7teleXiAh0QY8IhpUg0+Vs6mO4etppIeGHAuTQ1E31dnWkIryByGHNdnHUNTb7yRKunu
+ 0iOH2OSXHaCuWvIYLRg4p4Ak8f50dlMMOZl5R1qFuJV3U3KVRC10LqrWo0merhw1943/pi+A+
+ XuL0s8FrTsx754dSNvAkHiUg==
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,111 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 3:09=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> w=
-rote:
->
-> On Thu, Apr 06, 2023 at 08:46:23AM -0400, Jim Quinlan wrote:
-> > The Broadcom STB/CM PCIe HW core, which is also used in RPi SOCs, may b=
-e
-> > set into three mutually exclusive modes:
-> >
-> >   (a) No clkreq# expected or required, refclk is always available.
-> >   (b) Clkreq# is expected to be driven by downstream device when needed=
-.
-> >   (c) Bidirectional clkreq# for L1SS capable devices.
-> >
-> > Previously, only (b) was supported by the driver, as almost all STB boa=
-rds
-> > operate in this mode.  But now there is interest in activating L1SS pow=
-er
-> > savings from STB customers, and also interest in accomodating mode (a) =
-for
-> > designs such as the RPi CM4 with IO board.
-> >
-> > The HW can tell us when mode (a) mode is needed.  But there is no easy =
-way
-> > to tell if L1SS mode is needed.  Unfortunately, getting this wrong caus=
-es a
-> > panic during boot time.  So we rely on the DT prop "brcm,enable-l1ss" t=
-o
-> > tell us when mode (c) is desired.  This property has already been in
-> > use by Raspian Linux, but this immplementation adds more details and
-> > discerns between (a) and (b) automatically.
-> >
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217276
-> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
->
-> > +      * We have "seen" clkreq# if it is asserted or has been in the pa=
-st.
-> > +      * Note that the CLKREQ_IN_MASK is 1 if clkreq# is asserted.
->
-> "CLKREQ#" to match PCIe spec and comments below.
+Resending this patch with proper subject line, corrected distribution and =
+reference to what the patch fixes. Thanks, Neil and Martin, for your guida=
+nce!
 
-Will do.
->
-> > +     if (l1ss && IS_ENABLED(CONFIG_PCIEASPM)) {
-> > +             /*
-> > +              * Note: This (l1ss) mode may not meet requirement for
-> > +              * Endpoints that require CLKREQ# assertion to clock acti=
-ve
-> > +              * within 400ns.
-> > +              */
-> > +             clkreq_set |=3D PCIE_MISC_HARD_PCIE_HARD_DEBUG_L1SS_ENABL=
-E_MASK;
-> > +             dev_info(pcie->dev, "bi-dir clkreq; l1ss-capable devs onl=
-y\n");
-> > +             dev_info(pcie->dev, "ASPM policy must be set to powersupe=
-rsave\n");
->
-> Seems problematic since L1SS can be enabled/disabled at run-time:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
-ocumentation/ABI/testing/sysfs-bus-pci?id=3Dv6.2#n420
+commit b3b6a88d2347d2ec9075603920e616836cb46750
+Author: Hans-Frieder Vogt <hfdevel@gmx.net>
+Date:   Thu Apr 6 10:21:49 2023 +0200
 
-Yes it is problematic.  AFAICT there are no notifier chain for
-changing modes; you probably don't want me to add one and neither do I
-:-).
-Our HW should shift gears when there is a change the standard L1SS
-control field, but it does not -- more on this below.
+    [PATCH] correct uart_B and uart_C clock references for meson8b
 
->
-> The simplistic answer is to advertise L1SS support if and only if you
-> can safely support it.
-We can only safely support it if we know a priori that (a) the
-downstream device is ASPM capable and (b) the policy is set to
-"power_supersave" and will not be changed.
+with the current device tree for meson8b, uarts B (e.g. available on pins =
+8/10 on Odroid-C1) and C (pins 3/5 on Odroid-C1) do not work, because they=
+ are relying on incorrect clocks.
+This trivial patch changes the references of pclk to the correct CLKID, wh=
+ich allows to use the two uarts.
 
-For (a), I thought about having the RC probe "peek" at the downstream
-devices capabilities, but that would require it to go through the
-capability linked-list.  I have a feeling that would not be approved
-by you folks.
+Fixes: 3375aa77135f ("ARM: dts: meson8b: Fix the UART device-tree schema v=
+alidation")
 
-For (b), there is no way to know at RC probe-time that the policy is
-going to be "power_supersave".  This calculation happens after the RC
-probe exits, and besides, pcie_aspm_get_policy() is a static function.
-And as you mentioned, the ASPM policy may be changed at runtime.
-That is the reason for the "brcm,enable-l1ss" property.
+Signed-off-by: Hans-Frieder Vogt <hfdevel@gmx.net>
+=2D--
+ meson8b.dtsi |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->
-> I don't know why this is an issue for this device but not others.  Is
-> it because there's some problem in the way the board is designed?  Or
-> (after skimming the bugzilla) maybe a problem with the plug-in cards?
-FWIW,  it's  not clear that all of the devices for drivers in
-drivers/pci/controller/  support L1SS -- our driver had no mention of
-ti until now.
+diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dt=
+si
+index d5a3fe21e8e7..25f7c985f9ea 100644
+=2D-- a/arch/arm/boot/dts/meson8b.dtsi
++++ b/arch/arm/boot/dts/meson8b.dtsi
+@@ -740,13 +740,13 @@ &uart_A {
 
-However, I asked the PCIe HW design engineer a question similar to
-yours; i.e. from looking at all of the drivers' code  as well as
-pcie/asmp.c,  there doesn't seem to be any issue wrt  seamlessly
-switching between uni-dir and bi-dir CLKREQ# in response to ASPM
-control settings.  He just answered something on the lines that for
-this design, one has to make a deliberate choice of L1SS or !L1SS and
-stick with it.
+ &uart_B {
+ 	compatible =3D "amlogic,meson8b-uart";
+-	clocks =3D <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
++	clocks =3D <&xtal>, <&clkc CLKID_UART1>, <&clkc CLKID_CLK81>;
+ 	clock-names =3D "xtal", "pclk", "baud";
+ };
 
-Regards,
-Jim Quinlan
-Broadcom STB
-
-
->
-> Bjorn
+ &uart_C {
+ 	compatible =3D "amlogic,meson8b-uart";
+-	clocks =3D <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
++	clocks =3D <&xtal>, <&clkc CLKID_UART2>, <&clkc CLKID_CLK81>;
+ 	clock-names =3D "xtal", "pclk", "baud";
+ };
