@@ -2,193 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621056D9611
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1DE6D95B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238308AbjDFLkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S229588AbjDFLgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238996AbjDFLkQ (ORCPT
+        with ESMTP id S238253AbjDFLfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:40:16 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD0CB47A;
-        Thu,  6 Apr 2023 04:36:32 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id g29so532751lfj.4;
-        Thu, 06 Apr 2023 04:36:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680780934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:dkim-signature:dkim-signature
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hLe2BDpqjmup0y1LPiABk+LzHgKkTNIBWp76zDCcB+4=;
-        b=GIcASHLvXk58zNoEndxSyPxeJSduISNiRK7lWnyq86ivFMxH/4PAdrQOyVXnK3unfq
-         8tpWmJODQuW1eBuHeAF8JSlQXYfYI3LgIESyKi+U/lWEmv4RYoinzZKR5sdLoZoLzTCj
-         GNxuiTQr6Ly+nldPAK6lVvA4ZVHx39c7+3I63uwU8A7mwyTfLlXTj2bv/lRjo7yDfadh
-         P2Ki9a1ztaZyuPQIIPExrlHI5qLIbU5H5bdknMsMBmdEgxRYr6iFyNRK3ffKeYJbXR98
-         sU3eJLUo4SqYB8A88j1iC87kKWEGbtZ+Ej3ceYTa/NqpWBXzqi5C3oHgodLUSCY65kZ6
-         YR0w==
-X-Gm-Message-State: AAQBX9eIj5BOwlWUwXzhvVANVB94xqYmqYBsUg39LO9iKGOMIRbspEMH
-        5/3PJUgQKa451/SMmDVJewFDx/W2UbbVWw==
-X-Google-Smtp-Source: AKy350ZsR7wQELdu0Yp2Ev9AYrRg0/aCfTlocFrwPkX/J8DrIIB5UP0w8paVzkWrOdzVODIGeX3vqQ==
-X-Received: by 2002:ac2:48a1:0:b0:4eb:452d:5bbf with SMTP id u1-20020ac248a1000000b004eb452d5bbfmr2597917lfg.54.1680780934104;
-        Thu, 06 Apr 2023 04:35:34 -0700 (PDT)
-Received: from flawful.org (c-fcf6e255.011-101-6d6c6d3.bbcust.telenor.se. [85.226.246.252])
-        by smtp.gmail.com with ESMTPSA id g13-20020ac2538d000000b004eb41d26d49sm229529lfh.28.2023.04.06.04.35.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 04:35:33 -0700 (PDT)
-Received: by flawful.org (Postfix, from userid 112)
-        id C2B7312A1; Thu,  6 Apr 2023 13:35:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1680780933; bh=preqedR2QZNTaOgvRKfmyWCCDHRysOKE6G/n/oQl2tk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QXZONJlZ0GfO6y8sPyaChIJtM6fJDKJskV+SLPl/UexUPKvDrpbjOZ/jqyelNv28s
-         aAGIS5HV3hKHKkAmcQv/CKNvP2/24akemK/zi6nFBrKEvAFqv+MAnctGOgs7mbOWPL
-         jzcm8vGGgCXy3//izsq53tmSyW8qDOTRJSepm55E=
+        Thu, 6 Apr 2023 07:35:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B867AF0B;
+        Thu,  6 Apr 2023 04:33:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680780826; x=1712316826;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=G6mwBeq8Ai07vU/A23hiLPyRPvHgDuwqgeOaEI7HvtM=;
+  b=aQ8sXSQEdjCOrVmiWzBAeUEQNfhB7hQb4KQ16RDIDNb7IyDhxDphTqdG
+   UvWu2G2MP/VLSFmPWLWgZJxq+0/4JYNBd+WlZPV7fjv5FmryLzLonvjVD
+   HYQciUC5EANRncHhjqAC4/pAfTZDTyg5+2SML+rh3vuWlQFF0EJB9n6hc
+   aRqQ+PKB9tP1jWg/KDgQpRav39CsEAdWiMPVaoO0ydpdISgAtUtzURTgQ
+   A8fGWJX9FoJB4KyWJdZ8ILyIc0lHB4hXn6GvA/tPAtWhf+CUTmk1WbGTh
+   TzTCpqeoHWfX/FfKXY00tudZACt+CXXN5dyY55owDUwCpaNVdsT0AZiJU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="322362844"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="322362844"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 04:32:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="751611021"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="751611021"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2023 04:32:49 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 6 Apr 2023 04:32:49 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 6 Apr 2023 04:32:48 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 6 Apr 2023 04:32:48 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.108)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 6 Apr 2023 04:32:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JwTVXQvTAaHUUIQ7Hiatp48EfACAHMyo+z4K5lLDFkVBkl1LU/93LRu8moWhIDpUh0RTCrHVCyDWtW/dSwkUHpc3r0YEaK+wMD+Pdh6sQ+TVHdSb6wTOBD5Wx+bhdhE1hpd5BTRfTcANoZTEJ5nALRko4o/2yKoOwBGjb/gInE6corxFV2G4CoNgvXRv6N7ExrGtDc+lmMXyhpUfbL9TGL+31QMLbD/6aRner2mAe1HN/bZi7iLmFZYsTckI3W6xpt68WH3y6C55Z+2TTelUGe4VtePNp0nb0sBUI0n5hCvVPzWKjfo9QER9TkNdq8CxG5yPhcMSICr4OTvDsZeMXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RP6t8n8/9G9GwDJrEpdKBk+Ex6GCbOF5IhaurWZq3R8=;
+ b=n4Jwj41536/QOktD77ymYmIEFIhnkRhw0/xM2MzQg3Ve5qPYAwGxNsCdDhuorXcvvKsYl9HEVOt+c9U7Iph8XaPjWHWjjZ02ItuuCUlaC+uhCX7AZ79T1b4r9iT3+xoKihLO46Urrps5OtAdyvHl31cC6oY37dNVownjeQh+Sfc2TPxVQz6OoXwSD019qeH5RqwJNlSm/Y5Kkd0Qr32evuRVr4lPxYBxzDRPuPOS16G4J+aeq+pRFr2QBhWEfEr9bw2zlyjWm3CdH9ashqpkTOAOuXrFSxdzHbaXr8pbs3R/D8txwU9teE5dCWk3R7t0yE4bu5ddnJG2/YERJmiymA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by DM4PR11MB6552.namprd11.prod.outlook.com (2603:10b6:8:8f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.35; Thu, 6 Apr 2023 11:32:47 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::9bf2:9ab9:c6e0:1b2f]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::9bf2:9ab9:c6e0:1b2f%3]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
+ 11:32:46 +0000
+Date:   Thu, 6 Apr 2023 19:32:34 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Yifan Li <yifan2.li@intel.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Subject: Re: [PATCH] PM: hibernate: Do not get block device exclusively in
+ test_resume mode
+Message-ID: <ZC6t0ubwcNekbBr1@chenyu5-mobl1>
+References: <20230401165540.322665-1-yu.c.chen@intel.com>
+ <CAJZ5v0j704JoCPTrDO1jTHwP1+8NVdLk7hym5036uFcfo7YHXQ@mail.gmail.com>
+ <ZC4zMv1SCiUMbcqs@chenyu5-mobl1>
+ <CAJZ5v0j5PWsF6zCCVMRW59WevYLvWiBk82U4MpxqWdFnAcrqrQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0j5PWsF6zCCVMRW59WevYLvWiBk82U4MpxqWdFnAcrqrQ@mail.gmail.com>
+X-ClientProxiedBy: SGBP274CA0001.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::13)
+ To MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|DM4PR11MB6552:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70bc3931-e611-46cd-ae73-08db3692a526
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KvzrUSEvMcDi78x+Vqz1xIGljfx1tNrVm56UgrtfyLWu0QsBYoXj92Nwn10UYBSpCv8v2JYhYeyfNUKfLacMqG9c3nsSnIMARo08BrS1AK40EUL9/VqOgRpeUS/UfIRYUz2sEIx8DMXkp5huOvy5pi2vsHQskPR3z4KMCQ/YX931+EbpMrPTDpGIvVrvC05o4wstQc1Bk7ueWcVis9oEoZxIAlZHgUOhNgE8ByFuCteD/qv42WsG6TlDsZCSCO6QkaI5lxtUGzNTlfPAsyh1fgZeCbrFkTe3xnvKi5X6bWTUy8w2H2zH6/e23l2nBdpsLyccNxTm1J5HKrHk6TmPupxOg9F7Xv+3bhVoaso0VnRo2DwBSJPY5Qh/qOed9QBrAON010vFQDC73fJ61dJH7Azwzn2XmLFWH+G4+SXXgE5rtMixBwY030rHJ4KyiOmpSzBXlppR77kJybONXgbEuu1AawRbNZe1EgSK1tMQmIaIvOIxIB/p6WfhG7vs4kmoSntw/J28j96WRtdmeHZMuR7nKCTipBvxDsp3l+iOXSb4qLyFpwp3zZuOB/Y99qgF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(136003)(376002)(396003)(39860400002)(366004)(451199021)(8676002)(8936002)(5660300002)(6916009)(4326008)(66556008)(66946007)(66476007)(2906002)(33716001)(41300700001)(186003)(83380400001)(53546011)(6486002)(6666004)(9686003)(6506007)(6512007)(86362001)(26005)(38100700002)(54906003)(82960400001)(316002)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eng4L2hIWmJVUHBPZUg2TDJ2WTJYd29DYmVHSFNJZm1iUU9ZY2FneGRTdW9X?=
+ =?utf-8?B?TFBGVWdDQ1Rvb2dURlllTW9JT0UrbUFNVWdoeDc0cmFWT2trTzFtM2hnbFRI?=
+ =?utf-8?B?RWhrSkVDMmNwQW9zVU1CSFVudjd4bWo4RHRyWjE1dDBtV2V2SGkvQzljMWNH?=
+ =?utf-8?B?aTF2U2E2S2lrNzQyVmw2L0ZMZ1NrQ096bUZpczk0ekNOakFCdlluUkNOSGZM?=
+ =?utf-8?B?MXRnS2NvRFlnUjI4MnRQN2t6bXA1MVRFTGpxUExSUUZaS1J1TCtDV1VrZ1hV?=
+ =?utf-8?B?SGtsVWp1dDFiRGFiR3NKRVIrR1A0VEhVRDlkNnltbmo5cEtid1lDU2VicW9m?=
+ =?utf-8?B?TGpQQUN4VjNDalB3emxJNEl1NUNuSUp5OStCWUpZcDU3TVdYOXZxOC9EVFMz?=
+ =?utf-8?B?WUcwQTFEclcwZ1poVVRwMWJaQmp0dEo0OE1RbnlVRHZ3TnlWNDFOdDd5NGMx?=
+ =?utf-8?B?ZHE5MUsxK2k5eU1MTWtxNkxQZjBvNlptTjV4S2t0TmsrelVuRngyMmxJcklz?=
+ =?utf-8?B?Y2szeTB5OWVnWDJrZ084TmhYanhIWjdNcUZoY3poejN1bW0ra3FwT0tWZVdr?=
+ =?utf-8?B?WXpZdFJJb25LK29aVUdMTnZIV0NNbElzd0xnZWp5L2hTbmMwd3Y0ZEpKcG0y?=
+ =?utf-8?B?RG1iTUlweXJabDFaOXI2VU44Vko1V3FKQjNHaVI1ZlZYT2VLcUJyd0hTZVlV?=
+ =?utf-8?B?M2FRUmxvTVBJT2c5SXhrWFFmWVV4dDhleFdyaGZhd0FEb2N1WCsxNjdnUlQ4?=
+ =?utf-8?B?ZjBBNW1sQ005elFqV2FleXZSY3laaUJZUTdmSUl4QUVqa016eVBMOEtFbmxV?=
+ =?utf-8?B?SytmQm9OSmdxU2c2NllJb1FBQTJJbTFlVHU0ZnFhQUJiNjM1Y0pPbVUrNXpN?=
+ =?utf-8?B?VXJkRFozRXgwSHNOWmZTRTljRlFZSGludGVhREc1aUw2WXVGWmcray9VU0xI?=
+ =?utf-8?B?TWk0ZFM0Q0Y0aGUzTlRaTzZncXVOUm9lUHZ1dGlBS3lKMEJmK3l2SkhwNzRk?=
+ =?utf-8?B?ZlF5c0J5d2QvajNROWlHTVpyMmw5aUxmNm5yTzRXcXhoc3hpZ3Z4SUx4b0lR?=
+ =?utf-8?B?ODYvRlRMM0ZiZnJwYVhZbVBOcisvTzhMa09VbktwYkdDU1FPWDZnZDhLZTdP?=
+ =?utf-8?B?eFZKdVFvTUxta0ZUNFFZeHB1RGJCY2VmbTNjb2JrM2dlajRUTkVHT0JaaDNO?=
+ =?utf-8?B?MlNhVHhoUzE1c0hqb1hoQW9jZ2NUT1dTNk5uQi9WYVVjeDlDbUhoRlVBK0xL?=
+ =?utf-8?B?REJucFNQNC83dXpOejgvOCtqNEVjdmNXS3NScTY3djY1aDZoQjlpdkI3Q3Zi?=
+ =?utf-8?B?UlFPRGg2MjNHZUcrQjcvTlJQcmhZMksxOE9IRUY3OVBNS2ZreE1Eb3hYQS96?=
+ =?utf-8?B?TGhldC8vLzdRM0lIR2FBOHpiR0Vxdi8za2k2VWtxZ2o1UTBlaCtKNHY1UG1Y?=
+ =?utf-8?B?c3NUUlRtNERqMkkvM0U2bjlpQU9Sbk9VUFcxZDEyRUVHUDlKQjZ5K1F4TWcr?=
+ =?utf-8?B?TEdEdGw4Vmllc3Ard21rZG1oWWVxYXl5ZWs1WnIxTENuejZUL3NxdUlXeTha?=
+ =?utf-8?B?QTk1MGEwUzBlRmFMYURwY1hrc01VaExhYzEwcUcvN2dEL0oyNk1zQWJMSnVt?=
+ =?utf-8?B?QnhHZlVVek5DcXZQL2RnNUNmbmp3QWR0S3YxbGxja1g4WXFmeWM3ZTl4WHdj?=
+ =?utf-8?B?dmlyRUxCTjZIdk9xbHlHMDMvWU1MaE9aNDh2TUFZUmZBSm12ang0TGwrSXA0?=
+ =?utf-8?B?QlRoYUZzSXhTZVhEVVpWMU41Tjc4a1dKZVl5Mndqci9obzh2ZWkvRzc5YTBK?=
+ =?utf-8?B?V1hpUjhhMm4yeWdYbGlNR25udmVaU0RpdWpRRmdJYzBKcGxySEZVRUt3RldS?=
+ =?utf-8?B?VXJ1dUxGTTI1SENlNm1XaFJaL0ZOWE1SQjNkL0dOMmVsRi9yM2FmNzR4ejlm?=
+ =?utf-8?B?SHhBWEtpdmVuY05WQjkxbG1aSFRHSk1NYThsNnJDaXJGT0N3NFBSNmpWaUt2?=
+ =?utf-8?B?R2RiYm9zUmdnVXUwc0hNb0RwNkE2cHRiWnc1WG5TdVYxVWxkL1JtV0pjMWFt?=
+ =?utf-8?B?MFFjdHZlNzg0VEtIWWRpQkRZQkNSVlJ4SVQ2dHBVYldyWUtPMmQyZmxNSHFG?=
+ =?utf-8?Q?HDG5DYoHcTw5h6ev1A8lpEzad?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70bc3931-e611-46cd-ae73-08db3692a526
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 11:32:46.8878
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yYlhE4uZBeI6S/bQZ0opd6ZMPlM/MyhLFovjObgbxY4o62YeeSJ7qVae4IxK4pVCzwRxw+ZyKobxl0Io2hFauQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6552
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-Received: from x1-carbon.lan (OpenWrt.lan [192.168.1.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by flawful.org (Postfix) with ESMTPSA id 1EA9E69A;
-        Thu,  6 Apr 2023 13:33:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1680780787; bh=preqedR2QZNTaOgvRKfmyWCCDHRysOKE6G/n/oQl2tk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YEsZ+/Af/WlbT+HSw0N1YcUN7htnpOH4BXhKpCf8EcuZ/lLc0NbhnVOt+ckzdFEzs
-         6fY/gmaJfXrSiWMI9IfmIqrkmU9aUUtjiUncXShAn11iuqnC0vR0CeqHvfsLXW1jQI
-         o/HTg47o4TdishwfA7oGwd0g98YzBEEiM1A/F5qE=
-From:   Niklas Cassel <nks@flawful.org>
-To:     Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Damien Le Moal <dlemoal@fastmail.com>,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-block@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>
-Subject: [PATCH v6 02/19] block: introduce ioprio hints
-Date:   Thu,  6 Apr 2023 13:32:31 +0200
-Message-Id: <20230406113252.41211-3-nks@flawful.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113252.41211-1-nks@flawful.org>
-References: <20230406113252.41211-1-nks@flawful.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+On 2023-04-06 at 12:02:01 +0200, Rafael J. Wysocki wrote:
+> On Thu, Apr 6, 2023 at 4:49 AM Chen Yu <yu.c.chen@intel.com> wrote:
+> >
+> > Hi Rafael,
+> > On 2023-04-05 at 20:37:32 +0200, Rafael J. Wysocki wrote:
+> > > On Sat, Apr 1, 2023 at 10:59 AM Chen Yu <yu.c.chen@intel.com> wrote:
+> > > >
+> > > > The system refused to do a test_resume because it found that the
+> > > > swap device has already been taken by someone else. Specificly,
+> > > > the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
+> > > > do this check.
+> > > >
+> > > > Steps to reproduce:
+> > > >  dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo |
+> > > >        awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
+> > > >  mkswap /swapfile
+> > > >  swapon /swapfile
+> > > >  swap-offset /swapfile
+> > > >  echo 34816 > /sys/power/resume_offset
+> > > >  echo test_resume > /sys/power/disk
+> > > >  echo disk > /sys/power/state
+> > > >
+> > > >  PM: Using 3 thread(s) for compression
+> > > >  PM: Compressing and saving image data (293150 pages)...
+> > > >  PM: Image saving progress:   0%
+> > > >  PM: Image saving progress:  10%
+> > > >  ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+> > > >  ata1.00: configured for UDMA/100
+> > > >  ata2: SATA link down (SStatus 0 SControl 300)
+> > > >  ata5: SATA link down (SStatus 0 SControl 300)
+> > > >  ata6: SATA link down (SStatus 0 SControl 300)
+> > > >  ata3: SATA link down (SStatus 0 SControl 300)
+> > > >  ata4: SATA link down (SStatus 0 SControl 300)
+> > > >  PM: Image saving progress:  20%
+> > > >  PM: Image saving progress:  30%
+> > > >  PM: Image saving progress:  40%
+> > > >  PM: Image saving progress:  50%
+> > > >  pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
+> > > >  PM: Image saving progress:  60%
+> > > >  PM: Image saving progress:  70%
+> > > >  PM: Image saving progress:  80%
+> > > >  PM: Image saving progress:  90%
+> > > >  PM: Image saving done
+> > > >  PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
+> > > >  PM: S|
+> > > >  PM: hibernation: Basic memory bitmaps freed
+> > > >  PM: Image not found (code -16)
+> > > >
+> > > > This is because when using the swapfile as the hibernation storage,
+> > > > the block device where the swapfile is located has already been mounted
+> > > > by the OS distribution(usually been mounted as the rootfs). This is not
+> > > > an issue for normal hibernation, because software_resume()->swsusp_check()
+> > > > happens before the block device(rootfs) mount. But it is a problem for the
+> > > > test_resume mode. Because when test_resume happens, the block device has
+> > > > been mounted already.
+> > > >
+> > > > Thus remove the FMODE_EXCL for test_resume mode. This would not be a
+> > > > problem because in test_resume stage, the processes have already been
+> > > > frozen, and the race condition described in
+> > > > Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > > is unlikely to happen.
+> > > >
+> > > > Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > > Reported-by: Yifan Li <yifan2.li@intel.com>
+> > > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > > ---
+> > > >  kernel/power/hibernate.c | 18 +++++++++++-------
+> > > >  kernel/power/power.h     |  2 +-
+> > > >  kernel/power/swap.c      | 10 +++++++---
+> > > >  3 files changed, 19 insertions(+), 11 deletions(-)
+> > > >
+> > > > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > > > index 793c55a2becb..f50456e72f0a 100644
+> > > > --- a/kernel/power/hibernate.c
+> > > > +++ b/kernel/power/hibernate.c
+> > > > @@ -683,22 +683,26 @@ static void power_down(void)
+> > > >                 cpu_relax();
+> > > >  }
+> > > >
+> > > > -static int load_image_and_restore(void)
+> > > > +static int load_image_and_restore(bool safe)
+> > >
+> > > It is not very clear why the argument is called "safe".
+> > >
+> > > Either this needs to be explained in a comment, or I would just call
+> > > it "exclusive" and rework the checks accordingly.
+> > >
+> > OK, I can change it to "exclusive". Pavan proposed to add a global
+> > variable snapshot_testing to indicate that the system is in test_resume mode,
+> > and we can check this flag to decide whether to open the block device
+> > exclusively or not. Then we don't have to add parameter for load_image_and_restore()
+> > nor swsusp_check(). Could you please give advice whether this is applicable?
+> 
+> Well, in that case, why don't you simply check pm_test_level?
+>
+Sorry I overlooked the code, the snapshot_testing is already there.
+I'll change the code accordingly.
 
-IO priorities currently only use 6-bits of the 16-bits ioprio value: the
-3-upper bits are used to define up to 8 priority classes (4 of which are
-valid) and the 3 lower bits of the value are used to define a priority
-level for the real-time and best-effort class.
-
-The remaining 10-bits between the IO priority class and level are
-unused, and in fact, cannot be used by the user as doing so would
-either result in the value being completely ignored, or in an error
-returned by ioprio_check_cap().
-
-Use these 10-bits of an ioprio value to allow a user to specify IO
-hints. An IO hint is defined as a 10-bits value, allowing up to 1023
-different hints to be specified, with the value 0 being reserved as the
-"no hint" case. An IO hint can apply to any IO that specifies a valid
-priority class other than NONE, regardless of the IO priority level
-specified.
-
-To do so, the macros IOPRIO_PRIO_HINT() and IOPRIO_PRIO_VALUE_HINT() are
-introduced in include/uapi/linux/ioprio.h to respectively allow a user
-to get and set a hint in an ioprio value.
-
-To support the ATA and SCSI command duration limits feature, 7 hints
-are defined: IOPRIO_HINT_DEV_DURATION_LIMIT_1 to
-IOPRIO_HINT_DEV_DURATION_LIMIT_7, allowing a user to specify which
-command duration limit descriptor should be applied to the commands
-serving an IO. Specifying these hints has for now no effect whatsoever
-if the target block devices do not support the command duration limits
-feature. However, in the future, block IO schedulers can be modified to
-optimize IO issuing order based on these hints, even for devices that
-do not support the command duration limits feature.
-
-Given that the 7 duration limits hints defined have no effect on any
-block layer component, the actual definition of the duration limits
-implied by these hints remains at the device level.
-
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
- include/uapi/linux/ioprio.h | 49 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
-
-diff --git a/include/uapi/linux/ioprio.h b/include/uapi/linux/ioprio.h
-index 4444b4e4fdad..607c7617b9d2 100644
---- a/include/uapi/linux/ioprio.h
-+++ b/include/uapi/linux/ioprio.h
-@@ -58,4 +58,53 @@ enum {
- #define IOPRIO_NORM	4
- #define IOPRIO_BE_NORM	IOPRIO_NORM
- 
-+/*
-+ * The 10-bits between the priority class and the priority level are used to
-+ * optionally define IO hints for any combination of IO priority class and
-+ * level. Depending on the kernel configuration, IO scheduler being used and
-+ * the target IO device being used, hints can influence how IOs are processed
-+ * without affecting the IO scheduling ordering defined by the IO priority
-+ * class and level.
-+ */
-+#define IOPRIO_HINT_SHIFT		IOPRIO_LEVEL_NR_BITS
-+#define IOPRIO_HINT_NR_BITS		10
-+#define IOPRIO_NR_HINTS			(1 << IOPRIO_HINT_NR_BITS)
-+#define IOPRIO_HINT_MASK		(IOPRIO_NR_HINTS - 1)
-+#define IOPRIO_PRIO_HINT(ioprio)	\
-+	(((ioprio) >> IOPRIO_HINT_SHIFT) & IOPRIO_HINT_MASK)
-+
-+/*
-+ * Alternate macro for IOPRIO_PRIO_VALUE() to define an IO priority with
-+ * a class, level and hint.
-+ */
-+#define IOPRIO_PRIO_VALUE_HINT(class, level, hint)		 \
-+	((((class) & IOPRIO_CLASS_MASK) << IOPRIO_CLASS_SHIFT) | \
-+	 (((hint) & IOPRIO_HINT_MASK) << IOPRIO_HINT_SHIFT) |	 \
-+	 ((level) & IOPRIO_LEVEL_MASK))
-+
-+/*
-+ * IO hints.
-+ */
-+enum {
-+	/* No hint */
-+	IOPRIO_HINT_NONE = 0,
-+
-+	/*
-+	 * Device command duration limits: indicate to the device a desired
-+	 * duration limit for the commands that will be used to process an IO.
-+	 * These will currently only be effective for SCSI and ATA devices that
-+	 * support the command duration limits feature. If this feature is
-+	 * enabled, then the commands issued to the device to process an IO with
-+	 * one of these hints set will have the duration limit index (dld field)
-+	 * set to the value of the hint.
-+	 */
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_1 = 1,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_2 = 2,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_3 = 3,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_4 = 4,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_5 = 5,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_6 = 6,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_7 = 7,
-+};
-+
- #endif /* _UAPI_LINUX_IOPRIO_H */
--- 
-2.39.2
-
+thanks,
+Chenyu 
+> > If yes I can change the code accordingly, otherwise I can change the "safe"
+> > to "exclusive" and add some comments.
