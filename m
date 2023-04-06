@@ -2,74 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94DF6D93F0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83C46D93F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236995AbjDFK0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S236337AbjDFK0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjDFK0t (ORCPT
+        with ESMTP id S236968AbjDFK0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:26:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C16110D5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:26:48 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 17F72222C2;
-        Thu,  6 Apr 2023 10:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680776807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iHBkwLBZGwaLgGrr87Z0n9wG3D2/oks9VJLx3TNXe9I=;
-        b=N4DKmVws4j4Jqslgem6VRlODHl5R7Wb2MD6zNeexXRBIzG9IPsicwH3QR7lubCFJJ9LtGT
-        8RbO73/vjBXGQ29JD3RJ17e6aB8gg5AG2baVgg+VaSmAt9WWYl/5vhDxYp6RpGDqcBGymB
-        BNmKBdzBKL8odi0D4mvT7p4HdzRyhEU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680776807;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iHBkwLBZGwaLgGrr87Z0n9wG3D2/oks9VJLx3TNXe9I=;
-        b=LxPgleVbYK05hcjOotu9KyqbOEHs6LptbCcljzE6/R8032vFpRbxH4+oQE1/TjIhaH+pd3
-        96FC+zsycRueD+DQ==
-Received: from suse.de (unknown [10.163.43.106])
+        Thu, 6 Apr 2023 06:26:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E51510D5;
+        Thu,  6 Apr 2023 03:26:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AC46A2C141;
-        Thu,  6 Apr 2023 10:26:45 +0000 (UTC)
-Date:   Thu, 6 Apr 2023 11:26:43 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, lstoakes@gmail.com,
-        vbabka@suse.cz, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] mm: mlock: use folios_put() in mlock_folio_batch()
-Message-ID: <20230406102643.rjotuba6mofxrs3o@suse.de>
-References: <20230405161854.6931-1-zhengqi.arch@bytedance.com>
- <20230405161854.6931-2-zhengqi.arch@bytedance.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32C5360C98;
+        Thu,  6 Apr 2023 10:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21BA4C433EF;
+        Thu,  6 Apr 2023 10:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680776806;
+        bh=Bsh9tIqIOFj0EL11HwEKb+7UATkQiSzOLRPewqBv8aw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aidUVLAQPrfxqyxIJ8H2KA3Iu3QUlCzSt1mPN2LXJAUinCNhCQr5NOIsC93/jkqT3
+         LMgoBgHx7BDkNBDJfjglJhI+glRVMJuDVKQ98K3XACArPJs4SZXBxgU+WaAWjnfA/0
+         PsjsODrFNVfT/dKlZgVxaQ14zXY1RQo9rPK5RSAE=
+Date:   Thu, 6 Apr 2023 12:26:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Damien Le Moal <dlemoal@fastmail.com>
+Cc:     Yangtao Li <frank.li@vivo.com>, xiang@kernel.org, chao@kernel.org,
+        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        damien.lemoal@opensource.wdc.com, naohiro.aota@wdc.com,
+        jth@kernel.org, rafael@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 3/3] zonefs: convert to use kobject_is_added()
+Message-ID: <2023040627-paver-recipient-3713@gregkh>
+References: <20230406093056.33916-1-frank.li@vivo.com>
+ <20230406093056.33916-3-frank.li@vivo.com>
+ <2023040616-armory-unmade-4422@gregkh>
+ <8ca8c138-67fd-73ed-1ce5-c090d49f31e9@fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405161854.6931-2-zhengqi.arch@bytedance.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <8ca8c138-67fd-73ed-1ce5-c090d49f31e9@fastmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 12:18:54AM +0800, Qi Zheng wrote:
-> Since we have updated mlock to use folios, it's better
-> to call folios_put() instead of calling release_pages()
-> directly.
+On Thu, Apr 06, 2023 at 07:13:38PM +0900, Damien Le Moal wrote:
+> On 4/6/23 19:05, Greg KH wrote:
+> > On Thu, Apr 06, 2023 at 05:30:56PM +0800, Yangtao Li wrote:
+> >> Use kobject_is_added() instead of local `s_sysfs_registered` variables.
+> >> BTW kill kobject_del() directly, because kobject_put() actually covers
+> >> kobject removal automatically.
+> >>
+> >> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> >> ---
+> >>  fs/zonefs/sysfs.c  | 11 +++++------
+> >>  fs/zonefs/zonefs.h |  1 -
+> >>  2 files changed, 5 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/fs/zonefs/sysfs.c b/fs/zonefs/sysfs.c
+> >> index 8ccb65c2b419..f0783bf7a25c 100644
+> >> --- a/fs/zonefs/sysfs.c
+> >> +++ b/fs/zonefs/sysfs.c
+> >> @@ -101,8 +101,6 @@ int zonefs_sysfs_register(struct super_block *sb)
+> >>  		return ret;
+> >>  	}
+> >>  
+> >> -	sbi->s_sysfs_registered = true;
+> > 
+> > You know this, why do you need to have a variable tell you this or not?
 > 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> If kobject_init_and_add() fails, zonefs_sysfs_register() returns an error and
+> fill_super will also return that error. vfs will then call kill_super, which
+> calls zonefs_sysfs_unregister(). For that case, we need to know that we actually
+> added the kobj.
 
-Acked-by: Mel Gorman <mgorman@suse.de>
+Ok, but then why not just 0 out the kobject pointer here instead?  That
+way you will always know if it's a valid pointer or not and you don't
+have to rely on some other variable?  Use the one that you have already :)
 
--- 
-Mel Gorman
-SUSE Labs
+And you really don't even need to check anything, just pass in NULL to
+kobject_del() and friends, it should handle it.
+
+> >> -
+> >>  	return 0;
+> >>  }
+> >>  
+> >> @@ -110,12 +108,13 @@ void zonefs_sysfs_unregister(struct super_block *sb)
+> >>  {
+> >>  	struct zonefs_sb_info *sbi = ZONEFS_SB(sb);
+> >>  
+> >> -	if (!sbi || !sbi->s_sysfs_registered)
+> > 
+> > How can either of these ever be true?  Note, sbi should be passed here
+> > to this function, not the super block as that is now unregistered from
+> > the system.  Looks like no one has really tested this codepath that much
+> > :(
+> > 
+> >> +	if (!sbi)
+> >>  		return;
+> > 
+> > this can not ever be true, right?
+> 
+> Yes it can, if someone attempt to mount a non zoned device. In that case,
+> fill_super returns early without setting sb->s_fs_info but vfs still calls
+> kill_super.
+
+But you already had a sbi pointer in the place that this was called, so
+you "know" if you need to even call into here or not.  You are having to
+look up the same pointer multiple times in this call chain, there's no
+need for that.
+
+thanks,
+
+greg k-h
