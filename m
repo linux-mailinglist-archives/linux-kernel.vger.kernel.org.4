@@ -2,82 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9BC6D9D80
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EBE6D9D8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239301AbjDFQZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
+        id S238614AbjDFQ37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238265AbjDFQZU (ORCPT
+        with ESMTP id S236627AbjDFQ36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:25:20 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1803C22;
-        Thu,  6 Apr 2023 09:25:19 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54c12009c30so36436537b3.9;
-        Thu, 06 Apr 2023 09:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680798319; x=1683390319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4ABhLIEKILe7XTgIgQAZah/jshGbXdlYAiuCyxrHmZg=;
-        b=pIRhLkgM5YW5LNV9EUvHam/4RiGnJ9NnJaq+dN9VZHwwY9WLanS0moz2Lz9gNKSmkk
-         qNlSeKxduwRlsbBKRovd6QoArIIdSEpx0okoyDZjf/v+RaI7XfxeEFKTdPW06cfHhoSA
-         8uVnOjxWFGYo0j/nibJx1AzRmxyUbCVVoh1XVul94lbN1eFK465h+JuOSDWPpohDSdNn
-         yoZjT/bu/4V2HVzgU/tqpIOnudFvEvI5B74QpPi9M8jYF/VRiSZwC5yrfwIU8scvVJuI
-         NuqCtNwKBxZNCaGUPe/myZJKbE+eAoMJIC5oLcZt8u84b2f1cCyHJrQF06tmysfGdOpD
-         D1cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680798319; x=1683390319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ABhLIEKILe7XTgIgQAZah/jshGbXdlYAiuCyxrHmZg=;
-        b=RQDi6vwqsxAhw04zafgEdQFLknh3zK3Y4kNlkivdOWRuKqObyXEEh8Lv3CzA7vwIH5
-         86k7Bcwqhr0kaZlQd9GUA6MU81yAGUFTadS7jY3mkisOHHVvDXnMNKEC0n6oxxPQ/tni
-         IpKwdyrRMCHw9o2OL97y1K+tGEvCKNX25Q+wbyZ0N+YfuiHwENFFhcchakkIBg+Gksc/
-         67GL1dxJNoftIK5BaIgHlheWSKkI878Hk+TOC0bMeep60yzBCSc1Tlh5lJkzmEcsh5MZ
-         4vJ5cm4elvDjWdIpeO9YPFHDuQmPZzqP9bk7Y27Tv/Y7F05FncfoLxoBV0mGzKwFqCWj
-         vp9g==
-X-Gm-Message-State: AAQBX9f1w8ddG1J7Vqkv+3UlLXu3a5toGA4oXyxYDz5dW1yKkKdMebUW
-        WBYhFYbHK7Bt0aad3HKjv6Q+HjN4q6JlQnfvvQY=
-X-Google-Smtp-Source: AKy350avEOQwJl7ioQ83NrAtltKPSplgmEMbcsc0K/1cQFHGbGd45OXAD3JL1IkRRCwoDgtJ+w9iaZaSFLaQ83AyrVA=
-X-Received: by 2002:a05:690c:714:b0:54c:88:64a1 with SMTP id
- bs20-20020a05690c071400b0054c008864a1mr2842085ywb.0.1680798318772; Thu, 06
- Apr 2023 09:25:18 -0700 (PDT)
+        Thu, 6 Apr 2023 12:29:58 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE16276AD;
+        Thu,  6 Apr 2023 09:29:55 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 2805518835E0;
+        Thu,  6 Apr 2023 16:29:44 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 178B125002BB;
+        Thu,  6 Apr 2023 16:29:44 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 0DE709B403E2; Thu,  6 Apr 2023 16:29:44 +0000 (UTC)
+X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
+Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 56BB791201E3;
+        Thu,  6 Apr 2023 16:29:43 +0000 (UTC)
+From:   Hans Schultz <netdev@kapio-technology.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 6/6] selftests: forwarding: add dynamic FDB
+ test
+In-Reply-To: <20230406152443.b3ps4x7e4kz4aes2@skbuf>
+References: <20230318141010.513424-1-netdev@kapio-technology.com>
+ <20230318141010.513424-7-netdev@kapio-technology.com>
+ <ZBgdAo8mxwnl+pEE@shredder> <87a5zzh65p.fsf@kapio-technology.com>
+ <ZCMYbRqd+qZaiHfu@shredder> <874jq22h2u.fsf@kapio-technology.com>
+ <20230330192714.oqosvifrftirshej@skbuf>
+ <871ql5mjjp.fsf@kapio-technology.com>
+ <20230331093732.s6loozkdhehewlm4@skbuf>
+ <87tty1nlb4.fsf@kapio-technology.com>
+ <20230406152443.b3ps4x7e4kz4aes2@skbuf>
+Date:   Thu, 06 Apr 2023 18:26:58 +0200
+Message-ID: <87wn2pj7sd.fsf@kapio-technology.com>
 MIME-Version: 1.0
-References: <20230405175111.5974-1-wedsonaf@gmail.com> <20230405175111.5974-3-wedsonaf@gmail.com>
- <2023040554-promoter-chevron-10b2@gregkh> <2023040509-tamer-clinic-c14c@gregkh>
- <20230405191826.GA365912@hirez.programming.kicks-ass.net> <ZC3YWLmIick4jSSv@wedsonaf-dev>
- <20230405202932.GG365912@hirez.programming.kicks-ass.net> <ZC3cxzpnrnXf/osU@wedsonaf-dev>
- <20230405204942.GH365912@hirez.programming.kicks-ass.net> <f9573e45c6a14644abc6fcd4d3c98897@AcuMS.aculab.com>
- <CANpmjNPrREVGC3Az0T7k_2yr1PJp+E4yURUGUnu9Jb_CShJNHw@mail.gmail.com>
-In-Reply-To: <CANpmjNPrREVGC3Az0T7k_2yr1PJp+E4yURUGUnu9Jb_CShJNHw@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 6 Apr 2023 18:25:07 +0200
-Message-ID: <CANiq72k0zkLO-zO=i_4Lu9P3tKo-dYDaJR--+KCP5jx=qL016Q@mail.gmail.com>
-Subject: Re: [PATCH v2 03/13] rust: lock: introduce `Mutex`
-To:     Marco Elver <elver@google.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,20 +89,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 1:22=E2=80=AFPM Marco Elver <elver@google.com> wrote=
-:
+On Thu, Apr 06, 2023 at 18:24, Vladimir Oltean <olteanv@gmail.com> wrote:
+> On Fri, Mar 31, 2023 at 02:43:11PM +0200, Hans Schultz wrote:
+>> I will as long as the system is as it is with these selftests, just run
+>> single subtests at a time on target, but if I have new phy problems like
+>> the one you have seen I have had before, then testing on target becomes
+>> off limits.
 >
-> For macro to inline function conversions, the most conservative option
-> would be __always_inline. We've also seen things go wrong with
-> "inline" only paired with various kinds of instrumentation.
->
-> Can bindgen deal with "static __always_inline" functions?
+> Please open a dedicated communication channel (separate email thread on
+> netdev@vger.kernel.org) with the appropriate maintainers for the PHY
+> code that is failing for you in To:, and you will get the help that you
+> need to resolve that and to be able to test on the target board.
 
-If you mean the new feature where `bindgen` generates wrappers
-automatically, it seems to handle them given `__always_inline` =3D>
-`inline` which is what I imagine it looks for (I assume it does not
-care about the actual attribute), though I haven't tried to use the
-feature within the kernel yet.
-
-Cheers,
-Miguel
+The errors from the phy I saw in February. Maybe something was fixed in
+the meantime as I did not see the same warning and exception last I
+tried to run the newest kernel on target a little over a week ago.
