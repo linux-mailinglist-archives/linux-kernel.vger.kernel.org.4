@@ -2,213 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C1B6D8FD0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757516D8FD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235745AbjDFGyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
+        id S235404AbjDFGzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235705AbjDFGye (ORCPT
+        with ESMTP id S235705AbjDFGy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:54:34 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5B69EE7;
-        Wed,  5 Apr 2023 23:54:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Au3Lcrs8kS+KRfbkn5wUK8DDRlpiT736znwXh/XFN1Ec2fws2KbQUrduHun3JS7GigZMQYFrFD41A+Z5/cEf/7R7STZbhb9DfswhP5Nq5EuyWpG9UjWcPxM5Y7yKLWUBHLQysSxA4T7au4tQYBJ2L3ABks+VgE4gQDkbrSvWu1MXVp9ttWSBeyhCR1Ev2pBC6kYaV8kwBxhcC6TcLr7Sgh199tnLZp2soI1cbQ3ak+saktkLim4yw/S0gWIbSlHOhP8iVTQl00vG61NT7ITMPnXp9JfxHjy8i+NqfgXHMtzwj+jNWNR9O/teXBABz8/ErJ1HcObRs3UrY5P8bWfu6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=he65cIQQwqLcPUh0K7+4CXQr0jLidhcBa3blMtvOwsw=;
- b=dWpmjhFnDb0rPZvgTWpcKpsTJxvrC46CB3Y+IzmFRDRjRdP6HFABU6p0o38Z62ZMh2SI/rByGLFt6o66SHNeWG0JgnVralPlMQzVJ8laNcIowTzm3hLMThvJOL2G7KaroWlUAhXz2ERADStBtQz0DPIXQXWyWJHAvw48wUoAK8jHlbHxphViNTlphhFsCmtMe8QhmHL1oqdXyWL47uzpenv7IR4ATcvViMbdQruQCAMlaG0wSXKb9lnmDi0reAoIjR/44PweoBrPR36/JQ/SkYkGczeMLQUH6P/uPfvzK1YPNKrU0b9CwH3o/549lUP9KzuVJ7lXrZqDMgZ+fRlVjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=he65cIQQwqLcPUh0K7+4CXQr0jLidhcBa3blMtvOwsw=;
- b=I/02DhrLSPcvhjSP2fNC8o+dSkHM2u7QxC9GiCEumLSQtvvdlLulFTvudngeD/rCOcnne/CQ4oU88ObcJAr70UlyJ1oovJVIRScxDsuf55Jh8LQGBUonc45h5rqZcjGUyEtZVFS0qz/As/nTbyL8W/kD8VDV2/gxVi6GOXrqe9A=
-Received: from DM6PR10CA0006.namprd10.prod.outlook.com (2603:10b6:5:60::19) by
- CH0PR12MB5187.namprd12.prod.outlook.com (2603:10b6:610:ba::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6277.31; Thu, 6 Apr 2023 06:54:20 +0000
-Received: from DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:60:cafe::39) by DM6PR10CA0006.outlook.office365.com
- (2603:10b6:5:60::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.38 via Frontend
- Transport; Thu, 6 Apr 2023 06:54:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT104.mail.protection.outlook.com (10.13.173.232) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6277.31 via Frontend Transport; Thu, 6 Apr 2023 06:54:20 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 6 Apr
- 2023 01:54:20 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 5 Apr
- 2023 23:54:19 -0700
-Received: from xhdakumarma40u.xilinx.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34
- via Frontend Transport; Thu, 6 Apr 2023 01:54:14 -0500
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-To:     <broonie@kernel.org>, <tudor.ambarus@linaro.org>,
-        <pratyush@kernel.org>, <michael@walle.cc>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>
-CC:     <git@amd.com>, <sbinding@opensource.cirrus.com>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <michal.simek@amd.com>, <linux-arm-kernel@lists.infradead.org>,
-        <amitrkcian2002@gmail.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Subject: [PATCH V7 7/7] spi: spi-zynqmp-gqspi: Add parallel memories support in GQSPI driver
-Date:   Thu, 6 Apr 2023 12:23:36 +0530
-Message-ID: <20230406065336.10980-8-amit.kumar-mahapatra@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230406065336.10980-1-amit.kumar-mahapatra@amd.com>
-References: <20230406065336.10980-1-amit.kumar-mahapatra@amd.com>
+        Thu, 6 Apr 2023 02:54:59 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF4AAD09;
+        Wed,  5 Apr 2023 23:54:33 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3366sIPm100035;
+        Thu, 6 Apr 2023 01:54:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1680764058;
+        bh=v+uscHIJUtjNPid3oUE4ixMM5r8S9AuEpMcESFmmVcA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=pZiIO7/CHHfD2BnFwzjGqSO65P7XDMjWiOhReTa4ZoXjJqUD20pildmKCWtrxlLJV
+         hoeisNQjlExLtIVTHSyzk11r5pfXtHPJVCF4+5HSykiyH7tvb5g3Q5Fw3lqlNvi8R8
+         QaulBt3PG5j1awyHQZHvF92jonb2olR8sKOJvC9w=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3366sIaS116965
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 6 Apr 2023 01:54:18 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 6
+ Apr 2023 01:54:18 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 6 Apr 2023 01:54:18 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3366sCca000927;
+        Thu, 6 Apr 2023 01:54:13 -0500
+Message-ID: <86ee5333-6d65-d28b-0dd5-40dfe485d48b@ti.com>
+Date:   Thu, 6 Apr 2023 12:24:12 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT104:EE_|CH0PR12MB5187:EE_
-X-MS-Office365-Filtering-Correlation-Id: 494d67d8-e623-4094-3e07-08db366bbf71
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SpmIKOT9Dohs1NGteojJfhwsZ7ZRG/z9qJJeHytzG6BOOZ6PHYwrD2X8zToWrKs3oyWJNqWCV9xAgVry7V5IFHQP846vwJmoifbYo1TbtiEL1uNiBLyde//dMymOXlx0NpmvPUw2Lnu6NWJREGMSRXzZp8EK01CN7ztwG3a1YY1qNdEkDPug2ZfcI1rucYfuYn7rkjogaqo8Vc87WfFigKbM85u9OV8k2TfIgnHCs9xwTFmihq50brOEzaAux2Os7BbR0fcMLNDx93VkaSvENN9e6OkNah7XWRQgUSvOlb1uAdqAP4x47TakjLj1ObwQ3RDID499Bn8JKAVNZvf6bJCybDbnmlt5F/K4RWkPqcyFcGERpuBUGI/FfppOHOflmzXuWHkPsRpGNV9FNIiAwIaYnZuQlzFxp8y9Ydd268n1z6gAgvEWTlKT9AlUqjDdXwexLoGammNr7Rwf4Ullsk4BARyiRt0HgFcsRJErKv4xJ+oEekD30FWj0RDIJIAFIXHUErMAMguD7kcIsQbsWy7dZMAVAJW7shiKwgmo2a7pK0SIa4J1TdjIIKO1rdyAZiPtYjzzkqDqnQUC/cLGzXjUU7ywiUg7qS+7P60Of5W0twcbgycxYrfjE604pCPF7mDL/ehpOJ6zT4XDb0DKLCZYZ1tWcmuG25SRyvuvrJqCK15vr7h44QujmqFR1BrmkWd5AqEApImcuBAJP/WWe0Rm9K+bS7F5VzmyuLo8qu8eXQIQN5Bz6pMik9xLh213
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(426003)(336012)(47076005)(2616005)(83380400001)(36860700001)(316002)(478600001)(6666004)(110136005)(1076003)(54906003)(26005)(186003)(5660300002)(7416002)(2906002)(40460700003)(36756003)(4326008)(81166007)(70206006)(70586007)(8676002)(356005)(82740400003)(41300700001)(86362001)(82310400005)(40480700001)(8936002)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 06:54:20.3546
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 494d67d8-e623-4094-3e07-08db366bbf71
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5187
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v7 0/4] Introduce PRU platform consumer API
+To:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230404115336.599430-1-danishanwar@ti.com>
+Content-Language: en-US
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <20230404115336.599430-1-danishanwar@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During probe GQSPI driver sets SPI_CONTROLLER_MULTI_CS bit in ctlr->flags
-for notifying SPI core about multi CS capability of the controller.
-In parallel mode the controller can either split the data between both the
-flash or can send the same data to both the flashes, this is determined by
-the STRIPE bit. While sending commands to the flashes the GQSPI driver
-send the same command to both the flashes by resetting the STRIPE bit, but
-while writing/reading data to & from the flash the GQSPI driver splits the
-data evenly between both the flashes by setting the STRIPE bit.
+On 04/04/23 17:23, MD Danish Anwar wrote:
+> Hi All,
+> The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+> or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+> (Programmable Real-Time Units, or PRUs) for program execution.
+> 
+> There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+> driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+> already been merged and can be found under:
+> 1) drivers/soc/ti/pruss.c
+>    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> 2) drivers/irqchip/irq-pruss-intc.c
+>    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+> 3) drivers/remoteproc/pru_rproc.c
+>    Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> 
+> The programmable nature of the PRUs provide flexibility to implement custom
+> peripheral interfaces, fast real-time responses, or specialized data handling.
+> Example of a PRU consumer drivers will be: 
+>   - Software UART over PRUSS
+>   - PRU-ICSS Ethernet EMAC
+> 
+> In order to make usage of common PRU resources and allow the consumer drivers 
+> to configure the PRU hardware for specific usage the PRU API is introduced.
+> 
+> This is the v7 of the old patch series [9].
+> 
 
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
----
- drivers/spi/spi-zynqmp-gqspi.c | 39 +++++++++++++++++++++++++++++++++-
- 1 file changed, 38 insertions(+), 1 deletion(-)
+Hi Mathieu, Can you please review this series. I have addressed comments made
+by you in v5. I have also addressed Simon's comment in v6 and removed redundant
+macros from pruss.h header file.
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index 3d2b92a88e8a..2b2b5c0385fc 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -23,6 +23,7 @@
- #include <linux/spinlock.h>
- #include <linux/workqueue.h>
- #include <linux/spi/spi-mem.h>
-+#include <linux/mtd/spi-nor.h>
- 
- /* Generic QSPI register offsets */
- #define GQSPI_CONFIG_OFST		0x00000100
-@@ -192,6 +193,7 @@ struct qspi_platform_data {
-  * @op_lock:		Operational lock
-  * @speed_hz:          Current SPI bus clock speed in hz
-  * @has_tapdelay:	Used for tapdelay register available in qspi
-+ * @is_parallel:		Used for multi CS support
-  */
- struct zynqmp_qspi {
- 	struct spi_controller *ctlr;
-@@ -214,8 +216,33 @@ struct zynqmp_qspi {
- 	struct mutex op_lock;
- 	u32 speed_hz;
- 	bool has_tapdelay;
-+	bool is_parallel;
- };
- 
-+/**
-+ * zynqmp_gqspi_update_stripe - For GQSPI controller data stripe capabilities
-+ * @op:	Pointer to mem ops
-+ * Return:      Status of the data stripe
-+ *
-+ * Returns true if data stripe need to be enabled, else returns false
-+ */
-+bool zynqmp_gqspi_update_stripe(const struct spi_mem_op *op)
-+{
-+	if (op->cmd.opcode ==  SPINOR_OP_BE_4K ||
-+	    op->cmd.opcode ==  SPINOR_OP_BE_32K ||
-+	    op->cmd.opcode ==  SPINOR_OP_CHIP_ERASE ||
-+	    op->cmd.opcode ==  SPINOR_OP_SE ||
-+	    op->cmd.opcode ==  SPINOR_OP_BE_32K_4B ||
-+	    op->cmd.opcode ==  SPINOR_OP_SE_4B ||
-+	    op->cmd.opcode == SPINOR_OP_BE_4K_4B ||
-+	    op->cmd.opcode ==  SPINOR_OP_WRSR ||
-+	    op->cmd.opcode ==  SPINOR_OP_BRWR ||
-+	    (op->cmd.opcode ==  SPINOR_OP_WRSR2 && !op->addr.nbytes))
-+		return false;
-+
-+	return true;
-+}
-+
- /**
-  * zynqmp_gqspi_read - For GQSPI controller read operation
-  * @xqspi:	Pointer to the zynqmp_qspi structure
-@@ -470,7 +497,14 @@ static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
- 
- 	genfifoentry |= GQSPI_GENFIFO_MODE_SPI;
- 
--	if (qspi->cs_index_mask & GQSPI_SELECT_UPPER_CS) {
-+	if ((qspi->cs_index_mask & GQSPI_SELECT_LOWER_CS) &&
-+	    (qspi->cs_index_mask & GQSPI_SELECT_UPPER_CS)) {
-+		zynqmp_gqspi_selectslave(xqspi,
-+					 GQSPI_SELECT_FLASH_CS_BOTH,
-+					 GQSPI_SELECT_FLASH_BUS_BOTH);
-+		if (!xqspi->is_parallel)
-+			xqspi->is_parallel = true;
-+	} else if (qspi->cs_index_mask & GQSPI_SELECT_UPPER_CS) {
- 		zynqmp_gqspi_selectslave(xqspi,
- 					 GQSPI_SELECT_FLASH_CS_UPPER,
- 					 GQSPI_SELECT_FLASH_BUS_LOWER);
-@@ -1139,6 +1173,8 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
- 	}
- 
- 	if (op->data.nbytes) {
-+		if (xqspi->is_parallel && zynqmp_gqspi_update_stripe(op))
-+			genfifoentry |= GQSPI_GENFIFO_STRIPE;
- 		reinit_completion(&xqspi->data_completion);
- 		if (op->data.dir == SPI_MEM_DATA_OUT) {
- 			xqspi->txbuf = (u8 *)op->data.buf.out;
-@@ -1334,6 +1370,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
- 	ctlr->dev.of_node = np;
- 	ctlr->auto_runtime_pm = true;
-+	ctlr->flags |= SPI_CONTROLLER_MULTI_CS;
- 
- 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
- 	if (ret) {
+> Changes from v6 [9] to v7:
+> *) Addressed Simon's comment on patch 3 of this series and dropped unnecassary
+> macros from the patch.
+> 
+> Changes from v5 [1] to v6:
+> *) Added Reviewed by tags of Roger and Tony to the patches.
+> *) Added Acked by tag of Mathieu to patch 2 of this series.
+> *) Added NULL check for @mux in pruss_cfg_get_gpmux() API.
+> *) Added comment to the pruss_get() function documentation mentioning it is
+> expected the caller will have done a pru_rproc_get() on @rproc.
+> *) Fixed compilation warning "warning: ‘pruss_cfg_update’ defined but not used"
+> in patch 3 by squashing patch 3 [7] and patch 5 [8] of previous revision
+> together. Squashed patch 5 instead of patch 4 with patch 3 because patch 5 uses
+> both read() and update() APIs where as patch 4 only uses update() API.
+> Previously pruss_cfg_read()/update() APIs were intoroduced in patch 3
+> and used in patch 4 and 5. Now these APIs are introduced as well as used in 
+> patch 3.
+> 
+
+
 -- 
-2.17.1
-
+Thanks and Regards,
+Danish.
