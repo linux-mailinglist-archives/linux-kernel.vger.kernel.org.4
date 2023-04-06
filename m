@@ -2,139 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA676DA520
+	by mail.lfdr.de (Postfix) with ESMTP id CFF526DA521
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbjDFV7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S239456AbjDFV7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239478AbjDFV63 (ORCPT
+        with ESMTP id S238890AbjDFV6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:58:29 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B8CB460;
-        Thu,  6 Apr 2023 14:58:22 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pkXc9-0004wy-34;
-        Thu, 06 Apr 2023 23:57:54 +0200
-Date:   Thu, 6 Apr 2023 22:57:51 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH net-next] net: dsa: mt7530: fix port specifications
- for MT7988
-Message-ID: <ZC9AXyuFqa3bqF3Q@makrotopia.org>
-References: <20230406100445.52915-1-arinc.unal@arinc9.com>
- <ZC6n1XAGyZFlxyXx@shell.armlinux.org.uk>
- <e413a182-ce93-5831-09f5-19d34d7f7fcf@arinc9.com>
+        Thu, 6 Apr 2023 17:58:48 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D808B456
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 14:58:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680818315; x=1712354315;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kdKSu0Ilf3scrWldP6tXEaPIfWisiYg96qJ2ydXFqLQ=;
+  b=iPnK82++uVYH8Qszv8redkWJaTMx5yRRmnXyMJkpIhTW6xuX+1eKF1eW
+   HqdnH95MS4I3E+JT6j5VPP0vLKWyPEApLsr0oOqCIoypJXe9NI50uiWU3
+   azbGmubUZK+A6a7pmMbMvCPbrZVDYOu50IROtdCsDqsQPpvNESi7ECcf9
+   Yxk1yI2v6ylWxBoOuwE5XQvYgx2d35cPLCCMjPWPEtaMEsvc3TD/Fi51Q
+   jYlNMA5Y5uRJU46H+8IzNIUQAUE2pJYYao3nGkZLMkA31qsxoVun+bo59
+   P0a9VU8N8M3OIFbHEAfkNDPzi31hbyv77xG0n7oKjiQ3qybpOJP42Adqq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="405667971"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="405667971"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 14:58:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664652583"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="664652583"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.219.12])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 14:58:34 -0700
+Date:   Thu, 6 Apr 2023 14:58:33 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: octeon: remove typedef declaration for
+ cvmx_fau_op_size
+Message-ID: <ZC9AieBk+Z9Sgn/b@aschofie-mobl2>
+References: <20230405181841.GA6820@koolguy>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e413a182-ce93-5831-09f5-19d34d7f7fcf@arinc9.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230405181841.GA6820@koolguy>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 12:43:41AM +0300, Arınç ÜNAL wrote:
-> On 6.04.2023 14:07, Russell King (Oracle) wrote:
-> > On Thu, Apr 06, 2023 at 01:04:45PM +0300, arinc9.unal@gmail.com wrote:
-> > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > 
-> > > On the switch on the MT7988 SoC, there are only 4 PHYs. There's only port 6
-> > > as the CPU port, there's no port 5. Split the switch statement with a check
-> > > to enforce these for the switch on the MT7988 SoC. The internal phy-mode is
-> > > specific to MT7988 so put it for MT7988 only.
-> > > 
-> > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > ---
-> > > 
-> > > Daniel, this is based on the information you provided me about the switch.
-> > > I will add this to my current patch series if it looks good to you.
-> > > 
-> > > Arınç
-> > > 
-> > > ---
-> > >   drivers/net/dsa/mt7530.c | 67 ++++++++++++++++++++++++++--------------
-> > >   1 file changed, 43 insertions(+), 24 deletions(-)
-> > > 
-> > > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> > > index 6fbbdcb5987f..f167fa135ef1 100644
-> > > --- a/drivers/net/dsa/mt7530.c
-> > > +++ b/drivers/net/dsa/mt7530.c
-> > > @@ -2548,7 +2548,7 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
-> > >   	phy_interface_zero(config->supported_interfaces);
-> > >   	switch (port) {
-> > > -	case 0 ... 4: /* Internal phy */
-> > > +	case 0 ... 3: /* Internal phy */
-> > >   		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
-> > >   			  config->supported_interfaces);
-> > >   		break;
-> > > @@ -2710,37 +2710,56 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
-> > >   	struct mt7530_priv *priv = ds->priv;
-> > >   	u32 mcr_cur, mcr_new;
-> > > -	switch (port) {
-> > > -	case 0 ... 4: /* Internal phy */
-> > > -		if (state->interface != PHY_INTERFACE_MODE_GMII &&
-> > > -		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
-> > > -			goto unsupported;
-> > > -		break;
-> > > -	case 5: /* Port 5, a CPU port. */
-> > > -		if (priv->p5_interface == state->interface)
-> > > +	if (priv->id == ID_MT7988) {
-> > > +		switch (port) {
-> > > +		case 0 ... 3: /* Internal phy */
-> > > +			if (state->interface != PHY_INTERFACE_MODE_INTERNAL)
-> > 
-> > How do these end up with PHY_INTERFACE_MODE_INTERNAL ? phylib defaults
-> > to GMII mode without something else being specified in DT.
-> > 
-> > Also note that you should *not* be validating state->interface in the
-> > mac_config() method because it's way too late to reject it - if you get
-> > an unsupported interface here, then that is down to the get_caps()
-> > method being buggy. Only report interfaces in get_caps() that you are
-> > prepared to handle in the rest of the system.
+On Wed, Apr 05, 2023 at 08:18:41PM +0200, Dalvin-Ehinoma Noah Aiguobas wrote:
+> Fix checkpatch.pl warning: do not add new typedefs in
+> drivers/staging/octeon/octeon-stubs.h:216
 > 
-> This is already the case for all three get_caps(). The supported interfaces
-> for each port are properly defined.
+> Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
+> ---
+>  drivers/staging/octeon/octeon-stubs.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> Though mt7988_mac_port_get_caps() clears the config->supported_interfaces
-> bitmap before reporting the supported interfaces. I don't think this is
-> needed as all bits in the bitmap should already be initialized to zero when
-> the phylink_config structure is allocated.
-> 
-> I'm not sure if your suggestion is to make sure the supported interfaces are
-> properly reported on get_caps(), or validate state->interface somewhere
-> else.
+> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
+> index 3e7b92cd2e35..9f269626b862 100644
+> --- a/drivers/staging/octeon/octeon-stubs.h
+> +++ b/drivers/staging/octeon/octeon-stubs.h
+> @@ -213,12 +213,12 @@ enum cvmx_fau_op_size {
+>  	CVMX_FAU_OP_SIZE_64 = 3
+>  };
+>  
+> -typedef enum {
+> +enum cvmx_spi_mode {
+>  	CVMX_SPI_MODE_UNKNOWN = 0,
+>  	CVMX_SPI_MODE_TX_HALFPLEX = 1,
+>  	CVMX_SPI_MODE_RX_HALFPLEX = 2,
+>  	CVMX_SPI_MODE_DUPLEX = 3
+> -} cvmx_spi_mode_t;
+> +};
 
-I think what Russell meant is just there is no point in being overly
-precise about permitted interface modes in mt753x_phylink_mac_config,
-as this function is not meant and called too late to validate the
-validity of the selected interface mode.
+Commit msg says typedef cvmx_fau_op_size was removed, not this one.
 
-You change to mt7988_mac_port_get_caps looks correct to me and doing
-this will already prevent mt753x_phylink_mac_config from ever being
-called on MT7988 for port == 4 as well as and port == 5.
+>  
+>  typedef enum {
+>  	CVMX_HELPER_INTERFACE_MODE_DISABLED,
+> @@ -1362,7 +1362,7 @@ static inline struct cvmx_wqe *cvmx_pow_work_request_sync(cvmx_pow_wait_t wait)
+>  }
+>  
+>  static inline int cvmx_spi_restart_interface(int interface,
+> -					cvmx_spi_mode_t mode, int timeout)
+> +					enum cvmx_spi_mode mode, int timeout)
+>  {
+>  	return 0;
+>  }
+> -- 
+> 2.25.1
+> 
