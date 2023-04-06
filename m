@@ -2,110 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4A56D8D61
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293796D8D68
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 04:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbjDFCUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 22:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S229969AbjDFCYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 22:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjDFCUM (ORCPT
+        with ESMTP id S230497AbjDFCYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 22:20:12 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58036EAF;
-        Wed,  5 Apr 2023 19:20:11 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id z11so24912329pfh.4;
-        Wed, 05 Apr 2023 19:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680747611;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QPttce9mwmXnSVxB26FbEZfZew9OpavH8s0yj1jWAxQ=;
-        b=FFnWjHp1JyVAdpXSYKsLs04rmCn/J2U/vI6DrqybZIScrcKTCtwyhmRW+kbIEPN7ha
-         2tUSl4YGQ/Vjx/kpH03mIbQ62YEkKX7j8RLdbRqvqTXpS8ThznMXKs65Tgvs8u08pTc6
-         mri3CqlPB393s4ENfHkYnZhV0+BmTY3pEIG0qJO/2pr+BPAeSrIKoqUxLb2zhVLrBFgy
-         Cu/JWGzMOCcE9HrzJbDXJiWBJJVYcKztmEyVOR5e/+wh9ARFfFrNSwGlpcUM9Xkf65xR
-         h2RPMjjVmVXjzzRzBq27I0h+V7nNnOJUDEGxfhRnlJhEtZLz0rt12SiFOmiYyVbovT8U
-         uPEA==
+        Wed, 5 Apr 2023 22:24:04 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA14E7ED6
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 19:24:02 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id a19-20020a056e0208b300b003260dffae47so20107996ilt.17
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 19:24:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680747611;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QPttce9mwmXnSVxB26FbEZfZew9OpavH8s0yj1jWAxQ=;
-        b=ClgcBO3COgXZrB5JkAHrXbL3Bjchya4xnJ+aBYqjLQ3u/1nqoCspT45CbTF8lXDl/R
-         7VPHdFN9dF6h/jFmyQbofHqvjE4bV9eU5xsLd1sVjTEQdQSFwgDenCTduqmOiXd3nT6X
-         VtKMpzT96MLcNFmMH5BI5QROZKEPRcvnFIue8ZrV66Izn8es188h89WAO7kzR65BICfq
-         CVrEt7p6ODxGK8jSFoPJSbFlL7CyMGDYDA9LPerpv3N/yD9GVcFrWUf6lMxFPNQGTLFa
-         pnMvnatmvtYXsZ8HwCBQVyRg8Xg/+1BaK+MmOKSb0R8toj4i5CklRW5v2S1sBENFXDjk
-         kgtw==
-X-Gm-Message-State: AAQBX9cMN92jg/L4ahs/UF/ejUQX0yQKrUNpzFng3QbRu3Qc5d8S85+q
-        bfU6JbWeqQk6z16+9o3QCvpKgOoT2DT2W03kX+c=
-X-Google-Smtp-Source: AKy350ah/yAbNH61dTfsbN07VXnYGkfpcj6Q1ghmXf8mxiMvh8fyNX8pjOrxn77qIo7g1qOrHpABjcAD/0nRU8I3M3g=
-X-Received: by 2002:a05:6a00:174f:b0:62a:424b:2af0 with SMTP id
- j15-20020a056a00174f00b0062a424b2af0mr4713798pfc.0.1680747611176; Wed, 05 Apr
- 2023 19:20:11 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680747842; x=1683339842;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2+mKu+ujEdL90lRYA9dnzg2MP3Ci3br+oGe4ZowcyVo=;
+        b=4mEwfQ8ajDEv1Z/D6miaLdbjFpQSRTxHYLXO9HCzL1jLpnoNZmkcAQgqARcQB/IJSl
+         0ElnI71JTPi5fS1qPYe5KhWow1gqqMvn1ixq4Oopq6xJIXe6FFpD8GPVbrr8OK1HGKKu
+         zYaGnZjQRXCqmwrj2HxjJeLT3L/+1B2hIQJuG0AWw0nP6+Gz+We/x5V8IyW0JUh+PXdc
+         1tvxEuokeLGUDYdz9L1qGm9oJdp6QcHDkjYOApfaPLqu5a6dvcmOILRriiRpDWGXE4Ih
+         ccYIrrW7deaKiCfwLQulbo/elJzHz4Lfc9ph3dcFJw/PoTo4Wd8hwNNE1vvXCv8tb1YX
+         FEuw==
+X-Gm-Message-State: AAQBX9czSTXXpZqLUM3Pa3MMQ/rm3wyGz7q47R+0J1L54O+rYjEfwe+q
+        DQLkQOnILalJk4EJxI0qLdhTFPMt3wiQESYR6mbjP6yg3rwM
+X-Google-Smtp-Source: AKy350ZZRAK/3QQ6Z9pkFGX8KPQ+PFWJNZSoRngGCZmHIgNS0GVtfMhBAaFQO8qMnQ8S1eSqjw2T1sKJGi4i1649CG3xTTfkaIJC
 MIME-Version: 1.0
-References: <20230403095200.1391782-1-korantwork@gmail.com> <168063175075.174995.217166777153935864.b4-ty@google.com>
-In-Reply-To: <168063175075.174995.217166777153935864.b4-ty@google.com>
-From:   Xinghui Li <korantwork@gmail.com>
-Date:   Thu, 6 Apr 2023 10:21:20 +0800
-Message-ID: <CAEm4hYV-M1sbboOon_O=eRsk6LEgwog+oUKBpdnAkchs=KMWEw@mail.gmail.com>
-Subject: Re: [PATCH REBASED] KVM: x86: SVM: Fix one redefine issue about VMCB_AVIC_APIC_BAR_MASK
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        mlevitsk@redhat.com, linux-kernel@vger.kernel.org, x86@kernel.org,
-        kvm@vger.kernel.org, Xinghui Li <korantli@tencent.com>
+X-Received: by 2002:a02:856f:0:b0:40b:4e80:f37f with SMTP id
+ g102-20020a02856f000000b0040b4e80f37fmr4662870jai.3.1680747842184; Wed, 05
+ Apr 2023 19:24:02 -0700 (PDT)
+Date:   Wed, 05 Apr 2023 19:24:02 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000172fc905f8a19ab5@google.com>
+Subject: [syzbot] [btrfs?] WARNING in btrfs_commit_transaction (2)
+From:   syzbot <syzbot+dafbca0e20fbc5946925@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 7:44=E2=80=AFAM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> On Mon, 03 Apr 2023 17:52:00 +0800, korantwork@gmail.com wrote:
-> > VMCB_AVIC_APIC_BAR_MASK is defined twice with the same value in svm.h,
-> > which is meaningless. Delete the duplicate one.
->
-> Applied to kvm-x86 svm, thanks!
->
-> In the future, please don't use "PATCH REBASED".  If you're sending a new
-> version of a patch that's been rebased, then the revision number needs to=
- be
-> bumped.  The fact that the only change is that the patch was rebased isn'=
-t
-> relevant as far as versioning is concerned, it's still a new version.  Th=
-e
-> cover letter and/or ignored part of the patch is where the delta between
-> versions should be captured.
->
-> And in this case, there really was no need to send a new version, the ori=
-ginal
-> patch still applies cleanly.  I suspect that the REBASED version was sent=
- as a
-> form of a ping, which again is not the right way to ping a patch/series. =
- If you
-> want to ping, please reply to the original patch.  Unnecessarily sending =
-new
-> versions means more patches to sort through, i.e. makes maintainers lives=
- harder,
-> not easier.
->
-Firstly, I'm so so SORRY to burden you in this way.
-I found the last patch can't be am directly, so I send a new patch
-with the last rebased code.
-I used to believe that this would alleviate your burden, but
-unfortunately, it had the opposite effect.
-Again, sorry for my wrong operation.
+Hello,
 
-Thanks~
+syzbot found the following issue on:
+
+HEAD commit:    00c7b5f4ddc5 Merge tag 'input-for-v6.3-rc4' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=138b98c9c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e626f76ad59b1c14
+dashboard link: https://syzkaller.appspot.com/bug?extid=dafbca0e20fbc5946925
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4738db235f4a/disk-00c7b5f4.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/db62da5dcb6b/vmlinux-00c7b5f4.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1e596cad760c/bzImage-00c7b5f4.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dafbca0e20fbc5946925@syzkaller.appspotmail.com
+
+BTRFS info (device loop5): auto enabling async discard
+BTRFS warning (device loop5: state M): Skipping commit of aborted transaction.
+------------[ cut here ]------------
+BTRFS: Transaction aborted (error -28)
+WARNING: CPU: 0 PID: 28430 at fs/btrfs/transaction.c:1984 cleanup_transaction fs/btrfs/transaction.c:1984 [inline]
+WARNING: CPU: 0 PID: 28430 at fs/btrfs/transaction.c:1984 btrfs_commit_transaction+0x34c6/0x4410 fs/btrfs/transaction.c:2558
+Modules linked in:
+CPU: 0 PID: 28430 Comm: syz-executor.5 Not tainted 6.3.0-rc4-syzkaller-00224-g00c7b5f4ddc5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:cleanup_transaction fs/btrfs/transaction.c:1984 [inline]
+RIP: 0010:btrfs_commit_transaction+0x34c6/0x4410 fs/btrfs/transaction.c:2558
+Code: c8 fe ff ff be 02 00 00 00 e8 f6 c5 ab 00 e9 7e d0 ff ff e8 4c d1 1e fe 8b b5 20 ff ff ff 48 c7 c7 a0 89 94 8a e8 7a 57 e7 fd <0f> 0b c7 85 00 ff ff ff 01 00 00 00 e9 d0 dc ff ff e8 24 d1 1e fe
+RSP: 0018:ffffc900043efa48 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000044ea0001 RCX: ffffc90003c0b000
+RDX: 0000000000040000 RSI: ffffffff814a8037 RDI: 0000000000000001
+RBP: ffffc900043efbc8 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff888044ea0000
+R13: ffff88803479ac60 R14: ffff88803479adc8 R15: ffff888044ea0000
+FS:  00007f69217cb700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002024a030 CR3: 0000000047942000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_set_free_space_cache_v1_active+0x1ae/0x2a0 fs/btrfs/free-space-cache.c:4139
+ btrfs_remount_cleanup fs/btrfs/super.c:1677 [inline]
+ btrfs_remount+0x57b/0x1850 fs/btrfs/super.c:1867
+ legacy_reconfigure+0x119/0x180 fs/fs_context.c:633
+ reconfigure_super+0x40c/0xa30 fs/super.c:956
+ vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+ __do_sys_fsconfig+0xa3a/0xc20 fs/fsopen.c:439
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6920a8c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f69217cb168 EFLAGS: 00000246 ORIG_RAX: 00000000000001af
+RAX: ffffffffffffffda RBX: 00007f6920babf80 RCX: 00007f6920a8c0f9
+RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000004
+RBP: 00007f6920ae7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffe61745aff R14: 00007f69217cb300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
