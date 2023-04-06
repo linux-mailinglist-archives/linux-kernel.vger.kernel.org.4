@@ -2,80 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032B96D97E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39826D97E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238028AbjDFNTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S238276AbjDFNUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238083AbjDFNTe (ORCPT
+        with ESMTP id S238420AbjDFNUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:19:34 -0400
-Received: from mail-ej1-x663.google.com (mail-ej1-x663.google.com [IPv6:2a00:1450:4864:20::663])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E41B59FA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:19:31 -0700 (PDT)
-Received: by mail-ej1-x663.google.com with SMTP id sg7so1333757ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dectris.com; s=google; t=1680787169;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
-        b=RtUe4waOH1uRH6GzLLr3ULwobeBTRIvPi9jWYefgAOEk2cjWDQO7BeHHRy0w5lhx0a
-         2pl+RhTSFHdg5AaiAnN5o1gVK7I375ofrRGojqrx3NcU2kUeHf63vJ3GZ2HDbIhR97BX
-         cPW6nkUcReuAiG/c3lSTnPxbNaqoQqUv/tTVQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787169;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OurEHAluO0z0/iX0xySpGmAc9WM9TpIWEufWnTv6GLE=;
-        b=Aq2uUgcT4vXP0Og9I+xP4xS/85nlHw4HHfrJJu8UnHVl4/2FDM24Bd+sTL4Co1UfWc
-         YgYla3EZ75aCVYqN8+tccZI2h8ZDPha1m5VNZpbJosmgJYOAzkoLg0XZyt+kAs7SFv36
-         njASMXQIQERMK94/Q4mkPx9aZhW9rQX8tDjNW/7Yu48Te4CDsMok6Ijs1AbgzhKywGmc
-         DrIYUfVTUDF7pO5UqeVosqCwg53hB+m8f5rR4sP2hAZT7WzkBjLcnr8rIlQsvHk2a349
-         B2C1b/Aq2vquBDWPbv6iOY9Qe5Rr/BCkl0H0ZCDjxgF7i3TFg+1cZkBDi3QwAX1MVLaC
-         nqqw==
-X-Gm-Message-State: AAQBX9c26h1L4Y46Xm5dDyODnTiCNp18uYuhq7WMuKJ1Yild3GbsREkq
-        kCBlO94RN4ekH1MTbAKGTwT/n0Lv4mxbuxeOWrqKFyhxlYFq
-X-Google-Smtp-Source: AKy350Y3BpqFjLhFsA8Ofyp/tsoaubMqvqG4LLFCCOMAjnpds5X8ALPDuorggWeREk8wrlueBVxKM0qjgzwX
-X-Received: by 2002:a17:906:46c8:b0:932:c1e2:998b with SMTP id k8-20020a17090646c800b00932c1e2998bmr7247124ejs.15.1680787169403;
-        Thu, 06 Apr 2023 06:19:29 -0700 (PDT)
-Received: from fedora.dectris.local (dect-ch-bad-pfw.cyberlink.ch. [62.12.151.50])
-        by smtp-relay.gmail.com with ESMTPS id 7-20020a170906014700b00947de8fa946sm137999ejh.201.2023.04.06.06.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 06:19:29 -0700 (PDT)
-X-Relaying-Domain: dectris.com
-From:   Kal Conley <kal.conley@dectris.com>
-To:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Kal Conley <kal.conley@dectris.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 3/3] selftests: xsk: Add tests for 8K and 9K frame sizes
-Date:   Thu,  6 Apr 2023 15:18:06 +0200
-Message-Id: <20230406131806.51332-4-kal.conley@dectris.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406131806.51332-1-kal.conley@dectris.com>
-References: <20230406131806.51332-1-kal.conley@dectris.com>
+        Thu, 6 Apr 2023 09:20:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0B959F9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:19:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 51F661F895;
+        Thu,  6 Apr 2023 13:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1680787190; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rkvXLNdXFxs9McDSh9bFlpIBz7m5VY5nk/ftztSaY38=;
+        b=YdGpRcvIbzgISIKrb+okuPQFPrrq/h/sDe/XT5RAEQ0gc6xN3Fs5jWGBaKnV5kQLpQ4GXc
+        EIdD+W2APNg3gbDY61EvFr/1qNfHxzZjp9TPMoWETly72IhcmPWKyGjGPPDtgRt5HA5SuE
+        rwCYUS02RncW7n7a2aiCQk7g8U7tad0=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id CF3B92C141;
+        Thu,  6 Apr 2023 13:19:49 +0000 (UTC)
+Date:   Thu, 6 Apr 2023 15:19:46 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: misc: was: Re: [PATCH printk v1 11/18] printk: nobkl: Introduce
+ printer threads
+Message-ID: <ZC7G8godMveXSKMX@alley>
+References: <20230302195618.156940-1-john.ogness@linutronix.de>
+ <20230302195618.156940-12-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230302195618.156940-12-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,78 +57,348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests:
-- RUN_TO_COMPLETION_8K_FRAME_SIZE: frame_size=8192 (aligned)
-- UNALIGNED_9K_FRAME_SIZE: frame_size=9000 (unaligned)
+On Thu 2023-03-02 21:02:11, John Ogness wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> Add the infrastructure to create a printer thread per console along
+> with the required thread function, which is takeover/handover aware.
 
-Signed-off-by: Kal Conley <kal.conley@dectris.com>
----
- tools/testing/selftests/bpf/xskxceiver.c | 25 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.h |  2 ++
- 2 files changed, 27 insertions(+)
+This deserves a more detailed description. It should describe
+the expected behavior of the newly added pieces of the puzzle.
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 7eccf57a0ccc..86797de7fc50 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -1841,6 +1841,17 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_8K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 8192;
-+		test->ifobj_rx->umem->frame_size = 8192;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_RX_POLL:
- 		test->ifobj_rx->use_poll = true;
- 		test_spec_set_name(test, "POLL_RX");
-@@ -1904,6 +1915,20 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		if (!testapp_unaligned(test))
- 			return;
- 		break;
-+	case TEST_TYPE_UNALIGNED_9K_FRAME:
-+		if (!hugepages_present(test->ifobj_tx)) {
-+			ksft_test_result_skip("No 2M huge pages present.\n");
-+			return;
-+		}
-+		test_spec_set_name(test, "UNALIGNED_9K_FRAME_SIZE");
-+		test->ifobj_tx->umem->frame_size = 9000;
-+		test->ifobj_rx->umem->frame_size = 9000;
-+		test->ifobj_tx->umem->unaligned_mode = true;
-+		test->ifobj_rx->umem->unaligned_mode = true;
-+		pkt_stream_replace(test, DEFAULT_PKT_CNT, PKT_SIZE);
-+		test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
-+		testapp_validate_traffic(test);
-+		break;
- 	case TEST_TYPE_HEADROOM:
- 		testapp_headroom(test);
- 		break;
-diff --git a/tools/testing/selftests/bpf/xskxceiver.h b/tools/testing/selftests/bpf/xskxceiver.h
-index 919327807a4e..7f52f737f5e9 100644
---- a/tools/testing/selftests/bpf/xskxceiver.h
-+++ b/tools/testing/selftests/bpf/xskxceiver.h
-@@ -69,12 +69,14 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_8K_FRAME,
- 	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_RX_POLL,
- 	TEST_TYPE_TX_POLL,
- 	TEST_TYPE_POLL_RXQ_TMOUT,
- 	TEST_TYPE_POLL_TXQ_TMOUT,
- 	TEST_TYPE_UNALIGNED,
-+	TEST_TYPE_UNALIGNED_9K_FRAME,
- 	TEST_TYPE_ALIGNED_INV_DESC,
- 	TEST_TYPE_ALIGNED_INV_DESC_2K_FRAME,
- 	TEST_TYPE_UNALIGNED_INV_DESC,
--- 
-2.39.2
+> --- a/kernel/printk/printk_nobkl.c
+> +++ b/kernel/printk/printk_nobkl.c
+> @@ -714,6 +717,14 @@ static bool __cons_try_acquire(struct cons_context *ctxt)
+>  		goto success;
+>  	}
+>  
+> +	/*
+> +	 * A threaded printer context will never spin or perform a
+> +	 * hostile takeover. The atomic writer will wake the thread
+> +	 * when it is done with the important output.
+> +	 */
+> +	if (ctxt->thread)
+> +		return false;
 
+I suggest to remove this optimization. Or replace it with a check
+of the lowest NORMAL priority.
+
+First, it is conceptually questionable. The kthread might actually want to
+take over the lock. It is the preferred context when the system
+works properly.
+
+Second, it is a bit superfluous. The kthread will give up on the next check
+anyway because it is the context with the lowest NORMAL priority.
+
+I guess that this is another relic of the first POC that allowed
+to take over the lock from a context of the same priority.
+
+I though more about passing the lock:
+
+Passing the lock between console contexts of the same priority would
+have basically the same effect as console_trylock_spinning() trick
+in the legacy code. The only motivation would be to reduce
+the risk of softlockups. But it would make sense only in the EMERGENCY
+contexts. There should be only one NORMAL and PANIC contexts.
+
+Also passing the lock between context of the same priority would
+be more complicated with the NOBKL consoles. Some messages (parts)
+might be printed many times when the lock is passed in the middle
+of the record and the new owner always starts from scratch.
+
+> +
+>  	/*
+>  	 * If the active context is on the same CPU then there is
+>  	 * obviously no handshake possible.
+> @@ -871,6 +882,9 @@ static bool __cons_release(struct cons_context *ctxt)
+>  	return true;
+>  }
+>
+
+> +static bool printk_threads_enabled __ro_after_init;
+
+This might deserve a comment when exactly it gets enabled.
+My understanding is that it is set during a boot phase
+when it is safe to create the kthreads.
+
+> +static bool printk_force_atomic __initdata;
+
+I guess that this will be a kernel parameter. But it is not defined in
+this patch. The logic should be introduced together with the parameter.
+
+> +
+>  /**
+>   * cons_release - Release the console after output is done
+>   * @ctxt:	The acquire context that contains the state
+> @@ -1203,6 +1219,243 @@ static int __maybe_unused cons_emit_record(struct cons_write_context *wctxt)
+>  	return cons_seq_try_update(ctxt);
+>  }
+>  
+> +/**
+> + * cons_kthread_should_wakeup - Check whether the printk thread should wakeup
+> + * @con:	Console to operate on
+> + * @ctxt:	The acquire context that contains the state
+> + *		at console_acquire()
+> + *
+> + * Returns: True if the thread should shutdown or if the console is allowed to
+> + * print and a record is available. False otherwise
+> + *
+> + * After the thread wakes up, it must first check if it should shutdown before
+> + * attempting any printing.
+
+I would move this comment right above the kthread_should_stop()
+check. I think that it is a bigger chance to see it there.
+
+> + */
+> +static bool cons_kthread_should_wakeup(struct console *con, struct cons_context *ctxt)
+> +{
+> +	bool is_usable;
+> +	short flags;
+> +	int cookie;
+> +
+> +	if (kthread_should_stop())
+> +		return true;
+> +
+> +	cookie = console_srcu_read_lock();
+> +	flags = console_srcu_read_flags(con);
+> +	is_usable = console_is_usable(con, flags);
+> +	console_srcu_read_unlock(cookie);
+> +
+> +	if (!is_usable)
+> +		return false;
+> +
+> +	/* This reads state and sequence on 64bit. On 32bit only state */
+> +	cons_state_read(con, CON_STATE_CUR, &ctxt->state);
+> +
+> +	/*
+> +	 * Atomic printing is running on some other CPU. The owner
+> +	 * will wake the console thread on unlock if necessary.
+> +	 */
+> +	if (ctxt->state.locked)
+> +		return false;
+> +
+> +	/* Bring the sequence in @ctxt up to date */
+> +	cons_context_set_seq(ctxt);
+
+This name is a bit confusing. It looks like it is setting some state.
+But the primary function is to actually read the value.
+
+Also the function sets both "oldseq" and "newseq". This looks superfluous.
+The caller will need to refresh the values once again after
+cons_try_acquire_lock() once again.
+
+It should be enough to set "oldseq" here and "newseq" in cons_emit_record().
+
+Finally, in an other mail I suggested to move:
+
+    + ctxt.newseq -> xtxt.pmsg.seq
+    + ctxt.oldseq -> ctxt.con_seq		// cache of con->seq
+
+What about renaming the function to something like:
+
+    + cons_context_read_con_seq()
+    + cons_context_refresh_con_seq()
+
+
+> +
+> +	return prb_read_valid(prb, ctxt->oldseq, NULL);
+> +}
+> +
+> +/**
+> + * cons_kthread_func - The printk thread function
+> + * @__console:	Console to operate on
+> + */
+> +static int cons_kthread_func(void *__console)
+> +{
+> +	struct console *con = __console;
+> +	struct cons_write_context wctxt = {
+> +		.ctxt.console	= con,
+> +		.ctxt.prio	= CONS_PRIO_NORMAL,
+> +		.ctxt.thread	= 1,
+> +	};
+> +	struct cons_context *ctxt = &ACCESS_PRIVATE(&wctxt, ctxt);
+> +	unsigned long flags;
+> +	short con_flags;
+> +	bool backlog;
+> +	int cookie;
+> +	int ret;
+> +
+> +	for (;;) {
+> +		atomic_inc(&con->kthread_waiting);
+> +
+> +		/*
+> +		 * Provides a full memory barrier vs. cons_kthread_wake().
+> +		 */
+> +		ret = rcuwait_wait_event(&con->rcuwait,
+> +					 cons_kthread_should_wakeup(con, ctxt),
+> +					 TASK_INTERRUPTIBLE);
+> +
+> +		atomic_dec(&con->kthread_waiting);
+> +
+> +		if (kthread_should_stop())
+> +			break;
+> +
+> +		/* Wait was interrupted by a spurious signal, go back to sleep */
+> +		if (ret)
+> +			continue;
+> +
+> +		for (;;) {
+> +			cookie = console_srcu_read_lock();
+> +
+> +			/*
+> +			 * Ensure this stays on the CPU to make handover and
+> +			 * takeover possible.
+> +			 */
+> +			if (con->port_lock)
+> +				con->port_lock(con, true, &flags);
+> +			else
+> +				migrate_disable();
+> +
+> +			/*
+> +			 * Try to acquire the console without attempting to
+> +			 * take over. If an atomic printer wants to hand
+> +			 * back to the thread it simply wakes it up.
+> +			 */
+> +			if (!cons_try_acquire(ctxt))
+> +				break;
+> +
+> +			con_flags = console_srcu_read_flags(con);
+> +
+> +			if (console_is_usable(con, con_flags)) {
+> +				/*
+> +				 * If the emit fails, this context is no
+> +				 * longer the owner. Abort the processing and
+> +				 * wait for new records to print.
+> +				 */
+> +				if (!cons_emit_record(&wctxt))
+
+Please, rename the function to cons_emit_next_record() to match
+the corresponding console_emit_next_record().
+
+> +					break;
+> +				backlog = ctxt->backlog;
+
+Also please pass the 3rd possible return state via "handover" variable
+to match the semantic of console_emit_next_record().
+
+> +			} else {
+> +				backlog = false;
+> +			}
+> +
+> +			/*
+> +			 * If the release fails, this context was not the
+> +			 * owner. Abort the processing and wait for new
+> +			 * records to print.
+> +			 */
+> +			if (!cons_release(ctxt))
+> +				break;
+> +
+> +			/* Backlog done? */
+> +			if (!backlog)
+> +				break;
+> +
+> +			if (con->port_lock)
+> +				con->port_lock(con, false, &flags);
+> +			else
+> +				migrate_enable();
+> +
+> +			console_srcu_read_unlock(cookie);
+> +
+> +			cond_resched();
+> +		}
+> +		if (con->port_lock)
+> +			con->port_lock(con, false, &flags);
+> +		else
+> +			migrate_enable();
+> +
+> +		console_srcu_read_unlock(cookie);
+> +	}
+> +	return 0;
+> +}
+> +
+> +/**
+> + * cons_kthread_stop - Stop a printk thread
+> + * @con:	Console to operate on
+> + */
+> +static void cons_kthread_stop(struct console *con)
+> +{
+> +	lockdep_assert_console_list_lock_held();
+> +
+> +	if (!con->kthread)
+> +		return;
+
+We need some tricks here to make sure that cons_kthread_wakeup()
+will not longer wake it up:
+
+	con->block_wakeup = true;
+	irq_work_sync(&con->irq_work);
+
+> +	kthread_stop(con->kthread);
+> +	con->kthread = NULL;
+> +
+> +	kfree(con->thread_pbufs);
+> +	con->thread_pbufs = NULL;
+> +}
+> +
+> +/**
+> + * cons_kthread_create - Create a printk thread
+> + * @con:	Console to operate on
+> + *
+> + * If it fails, let the console proceed. The atomic part might
+> + * be usable and useful.
+> + */
+> +void cons_kthread_create(struct console *con)
+> +{
+> +	struct task_struct *kt;
+> +	struct console *c;
+> +
+> +	lockdep_assert_console_list_lock_held();
+> +
+> +	if (!(con->flags & CON_NO_BKL) || !con->write_thread)
+> +		return;
+> +
+> +	if (!printk_threads_enabled || con->kthread)
+> +		return;
+> +
+> +	/*
+> +	 * Printer threads cannot be started as long as any boot console is
+> +	 * registered because there is no way to synchronize the hardware
+> +	 * registers between boot console code and regular console code.
+> +	 */
+> +	for_each_console(c) {
+> +		if (c->flags & CON_BOOT)
+> +			return;
+> +	}
+> +	have_boot_console = false;
+> +
+> +	con->thread_pbufs = kmalloc(sizeof(*con->thread_pbufs), GFP_KERNEL);
+> +	if (!con->thread_pbufs) {
+> +		con_printk(KERN_ERR, con, "failed to allocate printing thread buffers\n");
+> +		return;
+> +	}
+> +
+> +	kt = kthread_run(cons_kthread_func, con, "pr/%s%d", con->name, con->index);
+> +	if (IS_ERR(kt)) {
+> +		con_printk(KERN_ERR, con, "failed to start printing thread\n");
+> +		kfree(con->thread_pbufs);
+> +		con->thread_pbufs = NULL;
+> +		return;
+
+We should make sure that this console will still get flushed either
+in vprintk_emit() or in console_unlock(). I think that it is not
+guaranteed by this patchset.
+
+> +	}
+> +
+> +	con->kthread = kt;
+> +
+> +	/*
+> +	 * It is important that console printing threads are scheduled
+> +	 * shortly after a printk call and with generous runtime budgets.
+> +	 */
+> +	sched_set_normal(con->kthread, -20);
+> +}
+> +
+
+Best Regards,
+Petr
