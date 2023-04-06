@@ -2,81 +2,1519 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AF26D9154
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265EA6D915A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbjDFIRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S235639AbjDFISa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbjDFIRr (ORCPT
+        with ESMTP id S235042AbjDFIS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:17:47 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7E2659A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:17:45 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d5-20020a923605000000b003232594207dso25382817ila.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:17:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680769064; x=1683361064;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2/g4nzehKA+hwiOXEY+4Ds0o+sycPpAKPzUEO7dFZTY=;
-        b=C1yekU9kvDd2EslBTH4CO6xL5M8Cdz1BztbpjOgiZkU014EnSvfvcQW/rmrRlydO3n
-         RtfRIBid1s/FG9EyXzEOmDDBfTsMkDtzxfrqL5x902wfeHUXqXUn2YhMTV50C3/IUCgk
-         PWxT3ehSk1fc/C4/YvHf7rCbWW2IXHvCQg5zfFbff70z+5WOwxCcn+kO5e8JezKgR7mO
-         yHg+8cyVfcLxz8IFM9oAZVXUenlmLJXlpZhD3zkp6MBk69MT60ZW0P67wi1qqiluOMtK
-         lQIqDqejh61Z0qxx2pYJn2I+5GE9YvZAPc4Ke4DPdm9TGaMORW0bxDHeY1yriv2XKrcz
-         XTiQ==
-X-Gm-Message-State: AAQBX9ce5bpOi5Hpn61HkMkeuQP0MfqY88K4RhhcZCZyGtdicpWz9iq4
-        b4KThj4qOodyBpMwHFH9UBhnTXwxVdw+7BKOmpvIlo82cuDU
-X-Google-Smtp-Source: AKy350YuXMCN3QocCYBM4Ie6yRSB5hDHbkj9MYTwMgoZEdNx8Kce4uWD5ZtPX5sfy0HQ6Wo9POC6ezuVnHRaiLstYhnSBNfs/J1v
+        Thu, 6 Apr 2023 04:18:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AB09E
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:18:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04068643D2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:18:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5022C433EF;
+        Thu,  6 Apr 2023 08:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680769102;
+        bh=AIinEhstr9bhjXmAqgJchzLfAEPnpk3fE1yi+/hJzG4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hwliM4aAQTmXFLS7y5wVXnxTNaGWr9Poc7gS5JqnX7lBeLJytPYTsvzngUctMl4Ty
+         cmV4Acuff1ai68OIbW+OiNK4fE8MLfPIo6wYmRYim1dH75nzdX9auBZJag9g/SE7/N
+         lqeZX9ok8pnAFjOl1zKz2T+WGO2Ed1Wt4++VzZ9Y=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-staging@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Jack Schofield <schofija@oregonstate.edu>,
+        Vaibhav Nagare <vnagare@redhat.com>,
+        greybus-dev@lists.linaro.org
+Subject: [PATCH] staging: greybus: drop loopback test files
+Date:   Thu,  6 Apr 2023 10:18:16 +0200
+Message-Id: <2023040613-huntsman-goldsmith-4a41@gregkh>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:9381:0:b0:3a7:e46f:1016 with SMTP id
- z1-20020a029381000000b003a7e46f1016mr4733802jah.0.1680769064789; Thu, 06 Apr
- 2023 01:17:44 -0700 (PDT)
-Date:   Thu, 06 Apr 2023 01:17:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000e6e2205f8a68bea@google.com>
-Subject: [syzbot] Monthly 9p report
-From:   syzbot <syzbot+list4520eff69bc900db1eac@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, ericvh@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.1 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ***
+Lines:  1462
+X-Developer-Signature: v=1; a=openpgp-sha256; l=47057; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=AIinEhstr9bhjXmAqgJchzLfAEPnpk3fE1yi+/hJzG4=; b=owGbwMvMwCRo6H6F97bub03G02pJDCl6Da4WmUpSO18m3kpdNfHLrW3lE/45BrAtfsm4IZftc KsXwz+NjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZjIlhyGBbNXPP2rkxDUbae6 I5Plwo4N8qaVmUBR7bdWF/mllzapfGJ99/x5/ll2H1EA
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello 9p maintainers/developers,
+The greybus loopback test tool does not belong burried down in a
+driver-specific directory.  If it is needed, it should be somewhere
+else, like in the testing directory.  But as the loopback driver is
+probably never going to be merged out of the staging directory, let's
+just delete the test alltogether for now.  If it's needed in the future,
+it can be brought back with a revert.
 
-This is a 30-day syzbot report for the 9p subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/9p
+Also, having an Android.mk file in the kernel source tree breaks some
+Android build systems when trying to build from a read-only source tree,
+the report of which prompted this being a good reason to remove it as
+well.
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 12 issues are still open and 28 have been fixed so far.
-
-Some of the still happening issues:
-
-Crashes Repro Title
-248     Yes   WARNING in inc_nlink (3)
-              https://syzkaller.appspot.com/bug?extid=2b3af42c0644df1e4da9
-124     Yes   BUG: corrupted list in p9_fd_cancelled (2)
-              https://syzkaller.appspot.com/bug?extid=1d26c4ed77bc6c5ed5e6
-108     Yes   WARNING in v9fs_fid_get_acl
-              https://syzkaller.appspot.com/bug?extid=a83dc51a78f0f4cf20da
-
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Alex Elder <elder@kernel.org>
+Cc: Jack Schofield <schofija@oregonstate.edu>
+Cc: Vaibhav Nagare <vnagare@redhat.com>
+Cc: greybus-dev@lists.linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/staging/greybus/tools/.gitignore      |   2 -
+ drivers/staging/greybus/tools/Android.mk      |  10 -
+ drivers/staging/greybus/tools/Makefile        |  33 -
+ drivers/staging/greybus/tools/README.loopback | 198 ----
+ drivers/staging/greybus/tools/lbtest          | 169 ---
+ drivers/staging/greybus/tools/loopback_test.c | 979 ------------------
+ 6 files changed, 1391 deletions(-)
+ delete mode 100644 drivers/staging/greybus/tools/.gitignore
+ delete mode 100644 drivers/staging/greybus/tools/Android.mk
+ delete mode 100644 drivers/staging/greybus/tools/Makefile
+ delete mode 100644 drivers/staging/greybus/tools/README.loopback
+ delete mode 100755 drivers/staging/greybus/tools/lbtest
+ delete mode 100644 drivers/staging/greybus/tools/loopback_test.c
+
+diff --git a/drivers/staging/greybus/tools/.gitignore b/drivers/staging/greybus/tools/.gitignore
+deleted file mode 100644
+index 1fd364aba774..000000000000
+--- a/drivers/staging/greybus/tools/.gitignore
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0-only
+-loopback_test
+diff --git a/drivers/staging/greybus/tools/Android.mk b/drivers/staging/greybus/tools/Android.mk
+deleted file mode 100644
+index fdadbf611757..000000000000
+--- a/drivers/staging/greybus/tools/Android.mk
++++ /dev/null
+@@ -1,10 +0,0 @@
+-LOCAL_PATH:= $(call my-dir)
+-
+-include $(CLEAR_VARS)
+-
+-LOCAL_SRC_FILES:= loopback_test.c
+-LOCAL_MODULE_TAGS := optional
+-LOCAL_MODULE := gb_loopback_test
+-
+-include $(BUILD_EXECUTABLE)
+-
+diff --git a/drivers/staging/greybus/tools/Makefile b/drivers/staging/greybus/tools/Makefile
+deleted file mode 100644
+index a3bbd73171f2..000000000000
+--- a/drivers/staging/greybus/tools/Makefile
++++ /dev/null
+@@ -1,33 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-ifeq ($(strip $(V)), 1)
+-  Q =
+-else
+-  Q = @
+-endif
+-
+-CFLAGS	+= -std=gnu99 -Wall -Wextra -g \
+-	    -D_GNU_SOURCE \
+-	    -Wno-unused-parameter \
+-	    -Wmaybe-uninitialized \
+-	    -Wredundant-decls \
+-	    -Wcast-align \
+-	    -Wsign-compare \
+-	    -Wno-missing-field-initializers \
+-	    -Wno-shift-negative-value
+-
+-CC	:= $(CROSS_COMPILE)gcc
+-
+-TOOLS = loopback_test
+-
+-all: $(TOOLS)
+-
+-%.o: %.c ../greybus_protocols.h
+-	@echo '  TARGET_CC $@'
+-	$(Q)$(CC) $(CFLAGS) -c $< -o $@
+-
+-loopback_%: loopback_%.o
+-	@echo '  TARGET_LD $@'
+-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+-
+-clean::
+-	rm -f *.o $(TOOLS)
+diff --git a/drivers/staging/greybus/tools/README.loopback b/drivers/staging/greybus/tools/README.loopback
+deleted file mode 100644
+index 070a510cbe7c..000000000000
+--- a/drivers/staging/greybus/tools/README.loopback
++++ /dev/null
+@@ -1,198 +0,0 @@
+-
+-
+-        1 - LOOPBACK DRIVER
+-
+-The driver implements the main logic of the loopback test and provides
+-sysfs files to configure the test and retrieve the results.
+-A user could run a test without the need of the test application given
+-that he understands the sysfs interface of the loopback driver.
+-
+-The loopback kernel driver needs to be loaded and at least one module
+-with the loopback feature enabled must be present for the sysfs files to be
+-created and for the loopback test application to be able to run.
+-
+-To load the module:
+-# modprobe gb-loopback
+-
+-
+-When the module is probed,  New files are available on the sysfs
+-directory of the detected loopback device.
+-(typically under "/sys/bus/graybus/devices").
+-
+-Here is a short summary of the sysfs interface files that should be visible:
+-
+-* Loopback Configuration Files:
+-    async - Use asynchronous operations.
+-    iteration_max - Number of tests iterations to perform.
+-    size - payload size of the transfer.
+-    timeout - The number of microseconds to give an individual
+-              asynchronous request before timing out.
+-    us_wait - Time to wait between 2 messages
+-    type - By writing the test type to this file, the test starts.
+-           Valid tests are:
+-             0 stop the test
+-             2 - ping
+-             3 - transfer
+-             4 - sink
+-
+-* Loopback feedback files:
+-    error - number of errors that have occurred.
+-    iteration_count - Number of iterations performed.
+-    requests_completed - Number of requests successfully completed.
+-    requests_timedout - Number of requests that have timed out.
+-    timeout_max - Max allowed timeout
+-    timeout_min - Min allowed timeout.
+-
+-* Loopback result files:
+-    apbridge_unipro_latency_avg
+-    apbridge_unipro_latency_max
+-    apbridge_unipro_latency_min
+-    gpbridge_firmware_latency_avg
+-    gpbridge_firmware_latency_max
+-    gpbridge_firmware_latency_min
+-    requests_per_second_avg
+-    requests_per_second_max
+-    requests_per_second_min
+-    latency_avg
+-    latency_max
+-    latency_min
+-    throughput_avg
+-    throughput_max
+-    throughput_min
+-
+-
+-
+-            2 - LOOPBACK TEST APPLICATION
+-
+-The loopback test application manages and formats the results provided by
+-the loopback kernel module. The purpose of this application
+-is to:
+-    - Start and manage multiple loopback device tests concurrently.
+-    - Calculate the aggregate results for multiple devices.
+-    - Gather and format test results (csv or human readable).
+-
+-The best way to get up to date usage information for the application is
+-usually to pass the "-h" parameter.
+-Here is the summary of the available options:
+-
+- Mandatory arguments
+-   -t     must be one of the test names - sink, transfer or ping
+-   -i     iteration count - the number of iterations to run the test over
+- Optional arguments
+-   -S     sysfs location - location for greybus 'endo' entries default /sys/bus/greybus/devices/
+-   -D     debugfs location - location for loopback debugfs entries default /sys/kernel/debug/gb_loopback/
+-   -s     size of data packet to send during test - defaults to zero
+-   -m     mask - a bit mask of connections to include example: -m 8 = 4th connection -m 9 = 1st and 4th connection etc
+-                 default is zero which means broadcast to all connections
+-   -v     verbose output
+-   -d     debug output
+-   -r     raw data output - when specified the full list of latency values are included in the output CSV
+-   -p     porcelain - when specified printout is in a user-friendly non-CSV format. This option suppresses writing to CSV file
+-   -a     aggregate - show aggregation of all enabled devies
+-   -l     list found loopback devices and exit.
+-   -x     Async - Enable async transfers.
+-   -o     Timeout - Timeout in microseconds for async operations.
+-
+-
+-
+-             3 - REAL WORLD EXAMPLE USAGES
+-
+- 3.1 - Using the driver sysfs files to run a test on a single device:
+-
+-* Run a 1000 transfers of a 100 byte packet. Each transfer is started only
+-after the previous one finished successfully:
+-    echo 0 > /sys/bus/greybus/devices/1-2.17/type
+-    echo 0 > /sys/bus/greybus/devices/1-2.17/async
+-    echo 2000 > /sys/bus/greybus/devices/1-2.17/us_wait
+-    echo 100 > /sys/bus/greybus/devices/1-2.17/size
+-    echo 1000 > /sys/bus/greybus/devices/1-2.17/iteration_max
+-    echo 0 > /sys/bus/greybus/devices/1-2.17/mask
+-    echo 200000 > /sys/bus/greybus/devices/1-2.17/timeout
+-    echo 3 > /sys/bus/greybus/devices/1-2.17/type
+-
+-* Run a 1000 transfers of a 100 byte packet. Transfers are started without
+-waiting for the previous one to finish:
+-    echo 0 > /sys/bus/greybus/devices/1-2.17/type
+-    echo 3 > /sys/bus/greybus/devices/1-2.17/async
+-    echo 0 > /sys/bus/greybus/devices/1-2.17/us_wait
+-    echo 100 > /sys/bus/greybus/devices/1-2.17/size
+-    echo 1000 > /sys/bus/greybus/devices/1-2.17/iteration_max
+-    echo 0 > /sys/bus/greybus/devices/1-2.17/mask
+-    echo 200000 > /sys/bus/greybus/devices/1-2.17/timeout
+-    echo 3 > /sys/bus/greybus/devices/1-2.17/type
+-
+-* Read the results from sysfs:
+-    cat /sys/bus/greybus/devices/1-2.17/requests_per_second_min
+-    cat /sys/bus/greybus/devices/1-2.17/requests_per_second_max
+-    cat /sys/bus/greybus/devices/1-2.17/requests_per_second_avg
+-
+-    cat /sys/bus/greybus/devices/1-2.17/latency_min
+-    cat /sys/bus/greybus/devices/1-2.17/latency_max
+-    cat /sys/bus/greybus/devices/1-2.17/latency_avg
+-
+-    cat /sys/bus/greybus/devices/1-2.17/apbridge_unipro_latency_min
+-    cat /sys/bus/greybus/devices/1-2.17/apbridge_unipro_latency_max
+-    cat /sys/bus/greybus/devices/1-2.17/apbridge_unipro_latency_avg
+-
+-    cat /sys/bus/greybus/devices/1-2.17/gpbridge_firmware_latency_min
+-    cat /sys/bus/greybus/devices/1-2.17/gpbridge_firmware_latency_max
+-    cat /sys/bus/greybus/devices/1-2.17/gpbridge_firmware_latency_avg
+-
+-    cat /sys/bus/greybus/devices/1-2.17/error
+-    cat /sys/bus/greybus/devices/1-2.17/requests_completed
+-    cat /sys/bus/greybus/devices/1-2.17/requests_timedout
+-
+-
+-3.2 - using the test application:
+-
+-* Run a transfer test 10 iterations of size 100 bytes on all available devices
+-    #/loopback_test -t transfer -i 10 -s 100
+-    1970-1-1 0:10:7,transfer,1-4.17,100,10,0,443,509,471.700012,66,1963,2256,2124.600098,293,102776,118088,109318.898438,15312,1620,1998,1894.099976,378,56,57,56.799999,1
+-    1970-1-1 0:10:7,transfer,1-5.17,100,10,0,399,542,463.399994,143,1845,2505,2175.800049,660,92568,125744,107393.296875,33176,1469,2305,1806.500000,836,56,57,56.799999,1
+-
+-
+-* Show the aggregate results of both devices. ("-a")
+-    #/loopback_test -t transfer -i 10 -s 100  -a
+-    1970-1-1 0:10:35,transfer,1-4.17,100,10,0,448,580,494.100006,132,1722,2230,2039.400024,508,103936,134560,114515.703125,30624,1513,1980,1806.900024,467,56,57,57.299999,1
+-    1970-1-1 0:10:35,transfer,1-5.17,100,10,0,383,558,478.600006,175,1791,2606,2115.199951,815,88856,129456,110919.703125,40600,1457,2246,1773.599976,789,56,57,57.099998,1
+-    1970-1-1 0:10:35,transfer,aggregate,100,10,0,383,580,486.000000,197,1722,2606,2077.000000,884,88856,134560,112717.000000,45704,1457,2246,1789.000000,789,56,57,57.000000,1
+-
+-* Example usage of the mask option to select which devices will
+-  run the test (1st, 2nd, or both devices):
+-    # /loopback_test -t transfer -i 10 -s 100 -m 1
+-    1970-1-1 0:11:56,transfer,1-4.17,100,10,0,514,558,544.900024,44,1791,1943,1836.599976,152,119248,129456,126301.296875,10208,1600,1001609,101613.601562,1000009,56,57,56.900002,1
+-    # /loopback_test -t transfer -i 10 -s 100 -m 2
+-    1970-1-1 0:12:0,transfer,1-5.17,100,10,0,468,554,539.000000,86,1804,2134,1859.500000,330,108576,128528,124932.500000,19952,1606,1626,1619.300049,20,56,57,57.400002,1
+-    # /loopback_test -t transfer -i 10 -s 100 -m 3
+-    1970-1-1 0:12:3,transfer,1-4.17,100,10,0,432,510,469.399994,78,1959,2313,2135.800049,354,100224,118320,108785.296875,18096,1610,2024,1893.500000,414,56,57,57.200001,1
+-    1970-1-1 0:12:3,transfer,1-5.17,100,10,0,404,542,468.799988,138,1843,2472,2152.500000,629,93728,125744,108646.101562,32016,1504,2247,1853.099976,743,56,57,57.099998,1
+-
+-* Show output in human readable format ("-p")
+-    # /loopback_test -t transfer -i 10 -s 100 -m 3 -p
+-
+-    1970-1-1 0:12:37
+-    test:                       transfer
+-    path:                       1-4.17
+-    size:                       100
+-    iterations:                 10
+-    errors:                     0
+-    async:                      Disabled
+-    requests per-sec:           min=390, max=547, average=469.299988, jitter=157
+-    ap-throughput B/s:          min=90480 max=126904 average=108762.101562 jitter=36424
+-    ap-latency usec:            min=1826 max=2560 average=2146.000000 jitter=734
+-    apbridge-latency usec:      min=1620 max=1982 average=1882.099976 jitter=362
+-    gpbridge-latency usec:      min=56 max=57 average=57.099998 jitter=1
+-
+-
+-    1970-1-1 0:12:37
+-    test:                       transfer
+-    path:                       1-5.17
+-    size:                       100
+-    iterations:                 10
+-    errors:                     0
+-    async:                      Disabled
+-    requests per-sec:           min=397, max=538, average=461.700012, jitter=141
+-    ap-throughput B/s:          min=92104 max=124816 average=106998.898438 jitter=32712
+-    ap-latency usec:            min=1856 max=2514 average=2185.699951 jitter=658
+-    apbridge-latency usec:      min=1460 max=2296 average=1828.599976 jitter=836
+-    gpbridge-latency usec:      min=56 max=57 average=57.099998 jitter=1
+diff --git a/drivers/staging/greybus/tools/lbtest b/drivers/staging/greybus/tools/lbtest
+deleted file mode 100755
+index 47c481239e98..000000000000
+--- a/drivers/staging/greybus/tools/lbtest
++++ /dev/null
+@@ -1,169 +0,0 @@
+-#!/usr/bin/env python
+-# SPDX-License-Identifier: BSD-3-Clause
+-
+-# Copyright (c) 2015 Google, Inc.
+-# Copyright (c) 2015 Linaro, Ltd.
+-# All rights reserved.
+-#
+-# Redistribution and use in source and binary forms, with or without
+-# modification, are permitted provided that the following conditions are met:
+-# 1. Redistributions of source code must retain the above copyright notice,
+-# this list of conditions and the following disclaimer.
+-# 2. Redistributions in binary form must reproduce the above copyright notice,
+-# this list of conditions and the following disclaimer in the documentation
+-# and/or other materials provided with the distribution.
+-# 3. Neither the name of the copyright holder nor the names of its
+-# contributors may be used to endorse or promote products derived from this
+-# software without specific prior written permission.
+-#
+-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+-# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+-# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+-# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+-# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+-# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-
+-from __future__ import print_function
+-import csv
+-import datetime
+-import sys
+-import time
+-
+-dict = {'ping': '2', 'transfer': '3', 'sink': '4'}
+-verbose = 1
+-
+-def abort():
+-	sys.exit(1)
+-
+-def usage():
+-	print('Usage: looptest TEST SIZE ITERATIONS PATH\n\n'
+-	'  Run TEST for a number of ITERATIONS with operation data SIZE bytes\n'
+-	'  TEST may be \'ping\' \'transfer\' or \'sink\'\n'
+-	'  SIZE indicates the size of transfer <= greybus max payload bytes\n'
+-	'  ITERATIONS indicates the number of times to execute TEST at SIZE bytes\n'
+-	'             Note if ITERATIONS is set to zero then this utility will\n'
+-	'             initiate an infinite (non terminating) test and exit\n'
+-	'             without logging any metrics data\n'
+-	'  PATH indicates the sysfs path for the loopback greybus entries e.g.\n'
+-	'             /sys/bus/greybus/devices/endo0:1:1:1:1/\n'
+-	'Examples:\n'
+-	'  looptest transfer 128 10000\n'
+-	'  looptest ping 0 128\n'
+-	'  looptest sink 2030 32768\n'
+-	.format(sys.argv[0]), file=sys.stderr)
+-
+-	abort()
+-
+-def read_sysfs_int(path):
+-	try:
+-		f = open(path, "r");
+-		val = f.read();
+-		f.close()
+-		return int(val)
+-	except IOError as e:
+-		print("I/O error({0}): {1}".format(e.errno, e.strerror))
+-		print("Invalid path %s" % path)
+-
+-def write_sysfs_val(path, val):
+-	try:
+-		f = open(path, "r+")
+-		f.write(val)
+-		f.close()
+-	except IOError as e:
+-		print("I/O error({0}): {1}".format(e.errno, e.strerror))
+-		print("Invalid path %s" % path)
+-
+-def log_csv(test_name, size, iteration_max, sys_pfx):
+-	# file name will test_name_size_iteration_max.csv
+-	# every time the same test with the same parameters is run we will then
+-	# append to the same CSV with datestamp - representing each test dataset
+-	fname = test_name + '_' + size + '_' + str(iteration_max) + '.csv'
+-
+-	try:
+-		# gather data set
+-		date = str(datetime.datetime.now())
+-		error = read_sysfs_int(sys_pfx + 'error')
+-		request_min = read_sysfs_int(sys_pfx + 'requests_per_second_min')
+-		request_max = read_sysfs_int(sys_pfx + 'requests_per_second_max')
+-		request_avg = read_sysfs_int(sys_pfx + 'requests_per_second_avg')
+-		latency_min = read_sysfs_int(sys_pfx + 'latency_min')
+-		latency_max = read_sysfs_int(sys_pfx + 'latency_max')
+-		latency_avg = read_sysfs_int(sys_pfx + 'latency_avg')
+-		throughput_min = read_sysfs_int(sys_pfx + 'throughput_min')
+-		throughput_max = read_sysfs_int(sys_pfx + 'throughput_max')
+-		throughput_avg = read_sysfs_int(sys_pfx + 'throughput_avg')
+-
+-		# derive jitter
+-		request_jitter = request_max - request_min
+-		latency_jitter = latency_max - latency_min
+-		throughput_jitter = throughput_max - throughput_min
+-
+-		# append data set to file
+-		with open(fname, 'a') as csvf:
+-			row = csv.writer(csvf, delimiter=",", quotechar="'",
+-					quoting=csv.QUOTE_MINIMAL)
+-			row.writerow([date, test_name, size, iteration_max, error,
+-					request_min, request_max, request_avg, request_jitter,
+-					latency_min, latency_max, latency_avg, latency_jitter,
+-					throughput_min, throughput_max, throughput_avg, throughput_jitter])
+-	except IOError as e:
+-		print("I/O error({0}): {1}".format(e.errno, e.strerror))
+-
+-def loopback_run(test_name, size, iteration_max, sys_pfx):
+-	test_id = dict[test_name]
+-	try:
+-		# Terminate any currently running test
+-		write_sysfs_val(sys_pfx + 'type', '0')
+-		# Set parameter for no wait between messages
+-		write_sysfs_val(sys_pfx + 'ms_wait', '0')
+-		# Set operation size
+-		write_sysfs_val(sys_pfx + 'size', size)
+-		# Set iterations
+-		write_sysfs_val(sys_pfx + 'iteration_max', str(iteration_max))
+-		# Initiate by setting loopback operation type
+-		write_sysfs_val(sys_pfx + 'type', test_id)
+-		time.sleep(1)
+-
+-		if iteration_max == 0:
+-			print ("Infinite test initiated CSV won't be logged\n")
+-			return
+-
+-		previous = 0
+-		err = 0
+-		while True:
+-			# get current count bail out if it hasn't changed
+-			iteration_count = read_sysfs_int(sys_pfx + 'iteration_count')
+-			if previous == iteration_count:
+-				err = 1
+-				break
+-			elif iteration_count == iteration_max:
+-				break
+-			previous = iteration_count
+-			if verbose:
+-				print('%02d%% complete %d of %d ' %
+-					(100 * iteration_count / iteration_max,
+-					iteration_count, iteration_max))
+-			time.sleep(1)
+-		if err:
+-			print ('\nError executing test\n')
+-		else:
+-			log_csv(test_name, size, iteration_max, sys_pfx)
+-	except ValueError as ve:
+-		print("Error: %s " % format(e.strerror), file=sys.stderr)
+-		abort()
+-
+-def main():
+-	if len(sys.argv) < 5:
+-		usage()
+-
+-	if sys.argv[1] in dict.keys():
+-		loopback_run(sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4])
+-	else:
+-		usage()
+-if __name__ == '__main__':
+-	main()
+diff --git a/drivers/staging/greybus/tools/loopback_test.c b/drivers/staging/greybus/tools/loopback_test.c
+deleted file mode 100644
+index d7ad51ff60c5..000000000000
+--- a/drivers/staging/greybus/tools/loopback_test.c
++++ /dev/null
+@@ -1,979 +0,0 @@
+-// SPDX-License-Identifier: BSD-3-Clause
+-/*
+- * Loopback test application
+- *
+- * Copyright 2015 Google Inc.
+- * Copyright 2015 Linaro Ltd.
+- */
+-#include <errno.h>
+-#include <fcntl.h>
+-#include <stdio.h>
+-#include <string.h>
+-#include <stdlib.h>
+-#include <stdint.h>
+-#include <poll.h>
+-#include <sys/types.h>
+-#include <time.h>
+-#include <unistd.h>
+-#include <dirent.h>
+-#include <signal.h>
+-
+-#define MAX_NUM_DEVICES 10
+-#define MAX_SYSFS_PREFIX 0x80
+-#define MAX_SYSFS_PATH	0x200
+-#define CSV_MAX_LINE	0x1000
+-#define SYSFS_MAX_INT	0x20
+-#define MAX_STR_LEN	255
+-#define DEFAULT_ASYNC_TIMEOUT 200000
+-
+-struct dict {
+-	char *name;
+-	int type;
+-};
+-
+-static struct dict dict[] = {
+-	{"ping", 2},
+-	{"transfer", 3},
+-	{"sink", 4},
+-	{NULL,}		/* list termination */
+-};
+-
+-struct loopback_results {
+-	float latency_avg;
+-	uint32_t latency_max;
+-	uint32_t latency_min;
+-	uint32_t latency_jitter;
+-
+-	float request_avg;
+-	uint32_t request_max;
+-	uint32_t request_min;
+-	uint32_t request_jitter;
+-
+-	float throughput_avg;
+-	uint32_t throughput_max;
+-	uint32_t throughput_min;
+-	uint32_t throughput_jitter;
+-
+-	float apbridge_unipro_latency_avg;
+-	uint32_t apbridge_unipro_latency_max;
+-	uint32_t apbridge_unipro_latency_min;
+-	uint32_t apbridge_unipro_latency_jitter;
+-
+-	float gbphy_firmware_latency_avg;
+-	uint32_t gbphy_firmware_latency_max;
+-	uint32_t gbphy_firmware_latency_min;
+-	uint32_t gbphy_firmware_latency_jitter;
+-
+-	uint32_t error;
+-};
+-
+-struct loopback_device {
+-	char name[MAX_STR_LEN];
+-	char sysfs_entry[MAX_SYSFS_PATH];
+-	char debugfs_entry[MAX_SYSFS_PATH];
+-	struct loopback_results results;
+-};
+-
+-struct loopback_test {
+-	int verbose;
+-	int debug;
+-	int raw_data_dump;
+-	int porcelain;
+-	int mask;
+-	int size;
+-	int iteration_max;
+-	int aggregate_output;
+-	int test_id;
+-	int device_count;
+-	int list_devices;
+-	int use_async;
+-	int async_timeout;
+-	int async_outstanding_operations;
+-	int us_wait;
+-	int file_output;
+-	int stop_all;
+-	int poll_count;
+-	char test_name[MAX_STR_LEN];
+-	char sysfs_prefix[MAX_SYSFS_PREFIX];
+-	char debugfs_prefix[MAX_SYSFS_PREFIX];
+-	struct timespec poll_timeout;
+-	struct loopback_device devices[MAX_NUM_DEVICES];
+-	struct loopback_results aggregate_results;
+-	struct pollfd fds[MAX_NUM_DEVICES];
+-};
+-
+-struct loopback_test t;
+-
+-/* Helper macros to calculate the aggregate results for all devices */
+-static inline int device_enabled(struct loopback_test *t, int dev_idx);
+-
+-#define GET_MAX(field)							\
+-static int get_##field##_aggregate(struct loopback_test *t)		\
+-{									\
+-	uint32_t max = 0;						\
+-	int i;								\
+-	for (i = 0; i < t->device_count; i++) {				\
+-		if (!device_enabled(t, i))				\
+-			continue;					\
+-		if (t->devices[i].results.field > max)			\
+-			max = t->devices[i].results.field;		\
+-	}								\
+-	return max;							\
+-}									\
+-
+-#define GET_MIN(field)							\
+-static int get_##field##_aggregate(struct loopback_test *t)		\
+-{									\
+-	uint32_t min = ~0;						\
+-	int i;								\
+-	for (i = 0; i < t->device_count; i++) {				\
+-		if (!device_enabled(t, i))				\
+-			continue;					\
+-		if (t->devices[i].results.field < min)			\
+-			min = t->devices[i].results.field;		\
+-	}								\
+-	return min;							\
+-}									\
+-
+-#define GET_AVG(field)							\
+-static int get_##field##_aggregate(struct loopback_test *t)		\
+-{									\
+-	uint32_t val = 0;						\
+-	uint32_t count = 0;						\
+-	int i;								\
+-	for (i = 0; i < t->device_count; i++) {				\
+-		if (!device_enabled(t, i))				\
+-			continue;					\
+-		count++;						\
+-		val += t->devices[i].results.field;			\
+-	}								\
+-	if (count)							\
+-		val /= count;						\
+-	return val;							\
+-}									\
+-
+-GET_MAX(throughput_max);
+-GET_MAX(request_max);
+-GET_MAX(latency_max);
+-GET_MAX(apbridge_unipro_latency_max);
+-GET_MAX(gbphy_firmware_latency_max);
+-GET_MIN(throughput_min);
+-GET_MIN(request_min);
+-GET_MIN(latency_min);
+-GET_MIN(apbridge_unipro_latency_min);
+-GET_MIN(gbphy_firmware_latency_min);
+-GET_AVG(throughput_avg);
+-GET_AVG(request_avg);
+-GET_AVG(latency_avg);
+-GET_AVG(apbridge_unipro_latency_avg);
+-GET_AVG(gbphy_firmware_latency_avg);
+-
+-void abort(void)
+-{
+-	_exit(1);
+-}
+-
+-void usage(void)
+-{
+-	fprintf(stderr, "Usage: loopback_test TEST [SIZE] ITERATIONS [SYSPATH] [DBGPATH]\n\n"
+-	"  Run TEST for a number of ITERATIONS with operation data SIZE bytes\n"
+-	"  TEST may be \'ping\' \'transfer\' or \'sink\'\n"
+-	"  SIZE indicates the size of transfer <= greybus max payload bytes\n"
+-	"  ITERATIONS indicates the number of times to execute TEST at SIZE bytes\n"
+-	"             Note if ITERATIONS is set to zero then this utility will\n"
+-	"             initiate an infinite (non terminating) test and exit\n"
+-	"             without logging any metrics data\n"
+-	"  SYSPATH indicates the sysfs path for the loopback greybus entries e.g.\n"
+-	"          /sys/bus/greybus/devices\n"
+-	"  DBGPATH indicates the debugfs path for the loopback greybus entries e.g.\n"
+-	"          /sys/kernel/debug/gb_loopback/\n"
+-	" Mandatory arguments\n"
+-	"   -t     must be one of the test names - sink, transfer or ping\n"
+-	"   -i     iteration count - the number of iterations to run the test over\n"
+-	" Optional arguments\n"
+-	"   -S     sysfs location - location for greybus 'endo' entries default /sys/bus/greybus/devices/\n"
+-	"   -D     debugfs location - location for loopback debugfs entries default /sys/kernel/debug/gb_loopback/\n"
+-	"   -s     size of data packet to send during test - defaults to zero\n"
+-	"   -m     mask - a bit mask of connections to include example: -m 8 = 4th connection -m 9 = 1st and 4th connection etc\n"
+-	"                 default is zero which means broadcast to all connections\n"
+-	"   -v     verbose output\n"
+-	"   -d     debug output\n"
+-	"   -r     raw data output - when specified the full list of latency values are included in the output CSV\n"
+-	"   -p     porcelain - when specified printout is in a user-friendly non-CSV format. This option suppresses writing to CSV file\n"
+-	"   -a     aggregate - show aggregation of all enabled devices\n"
+-	"   -l     list found loopback devices and exit\n"
+-	"   -x     Async - Enable async transfers\n"
+-	"   -o     Async Timeout - Timeout in uSec for async operations\n"
+-	"   -O     Poll loop time out in seconds(max time a test is expected to last, default: 30sec)\n"
+-	"   -c     Max number of outstanding operations for async operations\n"
+-	"   -w     Wait in uSec between operations\n"
+-	"   -z     Enable output to a CSV file (incompatible with -p)\n"
+-	"   -f     When starting new loopback test, stop currently running tests on all devices\n"
+-	"Examples:\n"
+-	"  Send 10000 transfers with a packet size of 128 bytes to all active connections\n"
+-	"  loopback_test -t transfer -s 128 -i 10000 -S /sys/bus/greybus/devices/ -D /sys/kernel/debug/gb_loopback/\n"
+-	"  loopback_test -t transfer -s 128 -i 10000 -m 0\n"
+-	"  Send 10000 transfers with a packet size of 128 bytes to connection 1 and 4\n"
+-	"  loopback_test -t transfer -s 128 -i 10000 -m 9\n"
+-	"  loopback_test -t ping -s 0 128 -i -S /sys/bus/greybus/devices/ -D /sys/kernel/debug/gb_loopback/\n"
+-	"  loopback_test -t sink -s 2030 -i 32768 -S /sys/bus/greybus/devices/ -D /sys/kernel/debug/gb_loopback/\n");
+-	abort();
+-}
+-
+-static inline int device_enabled(struct loopback_test *t, int dev_idx)
+-{
+-	if (!t->mask || (t->mask & (1 << dev_idx)))
+-		return 1;
+-
+-	return 0;
+-}
+-
+-static void show_loopback_devices(struct loopback_test *t)
+-{
+-	int i;
+-
+-	if (t->device_count == 0) {
+-		printf("No loopback devices.\n");
+-		return;
+-	}
+-
+-	for (i = 0; i < t->device_count; i++)
+-		printf("device[%d] = %s\n", i, t->devices[i].name);
+-}
+-
+-int open_sysfs(const char *sys_pfx, const char *node, int flags)
+-{
+-	int fd;
+-	char path[MAX_SYSFS_PATH];
+-
+-	snprintf(path, sizeof(path), "%s%s", sys_pfx, node);
+-	fd = open(path, flags);
+-	if (fd < 0) {
+-		fprintf(stderr, "unable to open %s\n", path);
+-		abort();
+-	}
+-	return fd;
+-}
+-
+-int read_sysfs_int_fd(int fd, const char *sys_pfx, const char *node)
+-{
+-	char buf[SYSFS_MAX_INT];
+-
+-	if (read(fd, buf, sizeof(buf)) < 0) {
+-		fprintf(stderr, "unable to read from %s%s %s\n", sys_pfx, node,
+-			strerror(errno));
+-		close(fd);
+-		abort();
+-	}
+-	return atoi(buf);
+-}
+-
+-float read_sysfs_float_fd(int fd, const char *sys_pfx, const char *node)
+-{
+-	char buf[SYSFS_MAX_INT];
+-
+-	if (read(fd, buf, sizeof(buf)) < 0) {
+-		fprintf(stderr, "unable to read from %s%s %s\n", sys_pfx, node,
+-			strerror(errno));
+-		close(fd);
+-		abort();
+-	}
+-	return atof(buf);
+-}
+-
+-int read_sysfs_int(const char *sys_pfx, const char *node)
+-{
+-	int fd, val;
+-
+-	fd = open_sysfs(sys_pfx, node, O_RDONLY);
+-	val = read_sysfs_int_fd(fd, sys_pfx, node);
+-	close(fd);
+-	return val;
+-}
+-
+-float read_sysfs_float(const char *sys_pfx, const char *node)
+-{
+-	int fd;
+-	float val;
+-
+-	fd = open_sysfs(sys_pfx, node, O_RDONLY);
+-	val = read_sysfs_float_fd(fd, sys_pfx, node);
+-	close(fd);
+-	return val;
+-}
+-
+-void write_sysfs_val(const char *sys_pfx, const char *node, int val)
+-{
+-	int fd, len;
+-	char buf[SYSFS_MAX_INT];
+-
+-	fd = open_sysfs(sys_pfx, node, O_RDWR);
+-	len = snprintf(buf, sizeof(buf), "%d", val);
+-	if (write(fd, buf, len) < 0) {
+-		fprintf(stderr, "unable to write to %s%s %s\n", sys_pfx, node,
+-			strerror(errno));
+-		close(fd);
+-		abort();
+-	}
+-	close(fd);
+-}
+-
+-static int get_results(struct loopback_test *t)
+-{
+-	struct loopback_device *d;
+-	struct loopback_results *r;
+-	int i;
+-
+-	for (i = 0; i < t->device_count; i++) {
+-		if (!device_enabled(t, i))
+-			continue;
+-
+-		d = &t->devices[i];
+-		r = &d->results;
+-
+-		r->error = read_sysfs_int(d->sysfs_entry, "error");
+-		r->request_min = read_sysfs_int(d->sysfs_entry, "requests_per_second_min");
+-		r->request_max = read_sysfs_int(d->sysfs_entry, "requests_per_second_max");
+-		r->request_avg = read_sysfs_float(d->sysfs_entry, "requests_per_second_avg");
+-
+-		r->latency_min = read_sysfs_int(d->sysfs_entry, "latency_min");
+-		r->latency_max = read_sysfs_int(d->sysfs_entry, "latency_max");
+-		r->latency_avg = read_sysfs_float(d->sysfs_entry, "latency_avg");
+-
+-		r->throughput_min = read_sysfs_int(d->sysfs_entry, "throughput_min");
+-		r->throughput_max = read_sysfs_int(d->sysfs_entry, "throughput_max");
+-		r->throughput_avg = read_sysfs_float(d->sysfs_entry, "throughput_avg");
+-
+-		r->apbridge_unipro_latency_min =
+-			read_sysfs_int(d->sysfs_entry, "apbridge_unipro_latency_min");
+-		r->apbridge_unipro_latency_max =
+-			read_sysfs_int(d->sysfs_entry, "apbridge_unipro_latency_max");
+-		r->apbridge_unipro_latency_avg =
+-			read_sysfs_float(d->sysfs_entry, "apbridge_unipro_latency_avg");
+-
+-		r->gbphy_firmware_latency_min =
+-			read_sysfs_int(d->sysfs_entry, "gbphy_firmware_latency_min");
+-		r->gbphy_firmware_latency_max =
+-			read_sysfs_int(d->sysfs_entry, "gbphy_firmware_latency_max");
+-		r->gbphy_firmware_latency_avg =
+-			read_sysfs_float(d->sysfs_entry, "gbphy_firmware_latency_avg");
+-
+-		r->request_jitter = r->request_max - r->request_min;
+-		r->latency_jitter = r->latency_max - r->latency_min;
+-		r->throughput_jitter = r->throughput_max - r->throughput_min;
+-		r->apbridge_unipro_latency_jitter =
+-			r->apbridge_unipro_latency_max - r->apbridge_unipro_latency_min;
+-		r->gbphy_firmware_latency_jitter =
+-			r->gbphy_firmware_latency_max - r->gbphy_firmware_latency_min;
+-	}
+-
+-	/*calculate the aggregate results of all enabled devices */
+-	if (t->aggregate_output) {
+-		r = &t->aggregate_results;
+-
+-		r->request_min = get_request_min_aggregate(t);
+-		r->request_max = get_request_max_aggregate(t);
+-		r->request_avg = get_request_avg_aggregate(t);
+-
+-		r->latency_min = get_latency_min_aggregate(t);
+-		r->latency_max = get_latency_max_aggregate(t);
+-		r->latency_avg = get_latency_avg_aggregate(t);
+-
+-		r->throughput_min = get_throughput_min_aggregate(t);
+-		r->throughput_max = get_throughput_max_aggregate(t);
+-		r->throughput_avg = get_throughput_avg_aggregate(t);
+-
+-		r->apbridge_unipro_latency_min =
+-			get_apbridge_unipro_latency_min_aggregate(t);
+-		r->apbridge_unipro_latency_max =
+-			get_apbridge_unipro_latency_max_aggregate(t);
+-		r->apbridge_unipro_latency_avg =
+-			get_apbridge_unipro_latency_avg_aggregate(t);
+-
+-		r->gbphy_firmware_latency_min =
+-			get_gbphy_firmware_latency_min_aggregate(t);
+-		r->gbphy_firmware_latency_max =
+-			get_gbphy_firmware_latency_max_aggregate(t);
+-		r->gbphy_firmware_latency_avg =
+-			get_gbphy_firmware_latency_avg_aggregate(t);
+-
+-		r->request_jitter = r->request_max - r->request_min;
+-		r->latency_jitter = r->latency_max - r->latency_min;
+-		r->throughput_jitter = r->throughput_max - r->throughput_min;
+-		r->apbridge_unipro_latency_jitter =
+-			r->apbridge_unipro_latency_max - r->apbridge_unipro_latency_min;
+-		r->gbphy_firmware_latency_jitter =
+-			r->gbphy_firmware_latency_max - r->gbphy_firmware_latency_min;
+-	}
+-
+-	return 0;
+-}
+-
+-int format_output(struct loopback_test *t,
+-		  struct loopback_results *r,
+-		  const char *dev_name,
+-		  char *buf, int buf_len,
+-		  struct tm *tm)
+-{
+-	int len = 0;
+-
+-	memset(buf, 0x00, buf_len);
+-	len = snprintf(buf, buf_len, "%u-%u-%u %u:%u:%u",
+-		       tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
+-		       tm->tm_hour, tm->tm_min, tm->tm_sec);
+-
+-	if (t->porcelain) {
+-		len += snprintf(&buf[len], buf_len - len,
+-			"\n test:\t\t\t%s\n path:\t\t\t%s\n size:\t\t\t%u\n iterations:\t\t%u\n errors:\t\t%u\n async:\t\t\t%s\n",
+-			t->test_name,
+-			dev_name,
+-			t->size,
+-			t->iteration_max,
+-			r->error,
+-			t->use_async ? "Enabled" : "Disabled");
+-
+-		len += snprintf(&buf[len], buf_len - len,
+-			" requests per-sec:\tmin=%u, max=%u, average=%f, jitter=%u\n",
+-			r->request_min,
+-			r->request_max,
+-			r->request_avg,
+-			r->request_jitter);
+-
+-		len += snprintf(&buf[len], buf_len - len,
+-			" ap-throughput B/s:\tmin=%u max=%u average=%f jitter=%u\n",
+-			r->throughput_min,
+-			r->throughput_max,
+-			r->throughput_avg,
+-			r->throughput_jitter);
+-		len += snprintf(&buf[len], buf_len - len,
+-			" ap-latency usec:\tmin=%u max=%u average=%f jitter=%u\n",
+-			r->latency_min,
+-			r->latency_max,
+-			r->latency_avg,
+-			r->latency_jitter);
+-		len += snprintf(&buf[len], buf_len - len,
+-			" apbridge-latency usec:\tmin=%u max=%u average=%f jitter=%u\n",
+-			r->apbridge_unipro_latency_min,
+-			r->apbridge_unipro_latency_max,
+-			r->apbridge_unipro_latency_avg,
+-			r->apbridge_unipro_latency_jitter);
+-
+-		len += snprintf(&buf[len], buf_len - len,
+-			" gbphy-latency usec:\tmin=%u max=%u average=%f jitter=%u\n",
+-			r->gbphy_firmware_latency_min,
+-			r->gbphy_firmware_latency_max,
+-			r->gbphy_firmware_latency_avg,
+-			r->gbphy_firmware_latency_jitter);
+-
+-	} else {
+-		len += snprintf(&buf[len], buf_len - len, ",%s,%s,%u,%u,%u",
+-			t->test_name, dev_name, t->size, t->iteration_max,
+-			r->error);
+-
+-		len += snprintf(&buf[len], buf_len - len, ",%u,%u,%f,%u",
+-			r->request_min,
+-			r->request_max,
+-			r->request_avg,
+-			r->request_jitter);
+-
+-		len += snprintf(&buf[len], buf_len - len, ",%u,%u,%f,%u",
+-			r->latency_min,
+-			r->latency_max,
+-			r->latency_avg,
+-			r->latency_jitter);
+-
+-		len += snprintf(&buf[len], buf_len - len, ",%u,%u,%f,%u",
+-			r->throughput_min,
+-			r->throughput_max,
+-			r->throughput_avg,
+-			r->throughput_jitter);
+-
+-		len += snprintf(&buf[len], buf_len - len, ",%u,%u,%f,%u",
+-			r->apbridge_unipro_latency_min,
+-			r->apbridge_unipro_latency_max,
+-			r->apbridge_unipro_latency_avg,
+-			r->apbridge_unipro_latency_jitter);
+-
+-		len += snprintf(&buf[len], buf_len - len, ",%u,%u,%f,%u",
+-			r->gbphy_firmware_latency_min,
+-			r->gbphy_firmware_latency_max,
+-			r->gbphy_firmware_latency_avg,
+-			r->gbphy_firmware_latency_jitter);
+-	}
+-
+-	printf("\n%s\n", buf);
+-
+-	return len;
+-}
+-
+-static int log_results(struct loopback_test *t)
+-{
+-	int fd, i, len, ret;
+-	struct tm tm;
+-	time_t local_time;
+-	char file_name[MAX_SYSFS_PATH];
+-	char data[CSV_MAX_LINE];
+-
+-	local_time = time(NULL);
+-	tm = *localtime(&local_time);
+-
+-	/*
+-	 * file name will test_name_size_iteration_max.csv
+-	 * every time the same test with the same parameters is run we will then
+-	 * append to the same CSV with datestamp - representing each test
+-	 * dataset.
+-	 */
+-	if (t->file_output && !t->porcelain) {
+-		snprintf(file_name, sizeof(file_name), "%s_%d_%d.csv",
+-			 t->test_name, t->size, t->iteration_max);
+-
+-		fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+-		if (fd < 0) {
+-			fprintf(stderr, "unable to open %s for appending\n", file_name);
+-			abort();
+-		}
+-	}
+-	for (i = 0; i < t->device_count; i++) {
+-		if (!device_enabled(t, i))
+-			continue;
+-
+-		len = format_output(t, &t->devices[i].results,
+-				    t->devices[i].name,
+-				    data, sizeof(data), &tm);
+-		if (t->file_output && !t->porcelain) {
+-			ret = write(fd, data, len);
+-			if (ret == -1)
+-				fprintf(stderr, "unable to write %d bytes to csv.\n", len);
+-		}
+-	}
+-
+-	if (t->aggregate_output) {
+-		len = format_output(t, &t->aggregate_results, "aggregate",
+-				    data, sizeof(data), &tm);
+-		if (t->file_output && !t->porcelain) {
+-			ret = write(fd, data, len);
+-			if (ret == -1)
+-				fprintf(stderr, "unable to write %d bytes to csv.\n", len);
+-		}
+-	}
+-
+-	if (t->file_output && !t->porcelain)
+-		close(fd);
+-
+-	return 0;
+-}
+-
+-int is_loopback_device(const char *path, const char *node)
+-{
+-	char file[MAX_SYSFS_PATH];
+-
+-	snprintf(file, MAX_SYSFS_PATH, "%s%s/iteration_count", path, node);
+-	if (access(file, F_OK) == 0)
+-		return 1;
+-	return 0;
+-}
+-
+-int find_loopback_devices(struct loopback_test *t)
+-{
+-	struct dirent **namelist;
+-	int i, n, ret;
+-	unsigned int dev_id;
+-	struct loopback_device *d;
+-
+-	n = scandir(t->sysfs_prefix, &namelist, NULL, alphasort);
+-	if (n < 0) {
+-		perror("scandir");
+-		ret = -ENODEV;
+-		goto baddir;
+-	}
+-
+-	/* Don't include '.' and '..' */
+-	if (n <= 2) {
+-		ret = -ENOMEM;
+-		goto done;
+-	}
+-
+-	for (i = 0; i < n; i++) {
+-		ret = sscanf(namelist[i]->d_name, "gb_loopback%u", &dev_id);
+-		if (ret != 1)
+-			continue;
+-
+-		if (!is_loopback_device(t->sysfs_prefix, namelist[i]->d_name))
+-			continue;
+-
+-		if (t->device_count == MAX_NUM_DEVICES) {
+-			fprintf(stderr, "max number of devices reached!\n");
+-			break;
+-		}
+-
+-		d = &t->devices[t->device_count++];
+-		snprintf(d->name, MAX_STR_LEN, "gb_loopback%u", dev_id);
+-
+-		snprintf(d->sysfs_entry, MAX_SYSFS_PATH, "%s%s/",
+-			 t->sysfs_prefix, d->name);
+-
+-		snprintf(d->debugfs_entry, MAX_SYSFS_PATH, "%sraw_latency_%s",
+-			 t->debugfs_prefix, d->name);
+-
+-		if (t->debug)
+-			printf("add %s %s\n", d->sysfs_entry, d->debugfs_entry);
+-	}
+-
+-	ret = 0;
+-done:
+-	for (i = 0; i < n; i++)
+-		free(namelist[i]);
+-	free(namelist);
+-baddir:
+-	return ret;
+-}
+-
+-static int open_poll_files(struct loopback_test *t)
+-{
+-	struct loopback_device *dev;
+-	char buf[MAX_SYSFS_PATH + MAX_STR_LEN];
+-	char dummy;
+-	int fds_idx = 0;
+-	int i;
+-
+-	for (i = 0; i < t->device_count; i++) {
+-		dev = &t->devices[i];
+-
+-		if (!device_enabled(t, i))
+-			continue;
+-
+-		snprintf(buf, sizeof(buf), "%s%s", dev->sysfs_entry, "iteration_count");
+-		t->fds[fds_idx].fd = open(buf, O_RDONLY);
+-		if (t->fds[fds_idx].fd < 0) {
+-			fprintf(stderr, "Error opening poll file!\n");
+-			goto err;
+-		}
+-		read(t->fds[fds_idx].fd, &dummy, 1);
+-		t->fds[fds_idx].events = POLLERR | POLLPRI;
+-		t->fds[fds_idx].revents = 0;
+-		fds_idx++;
+-	}
+-
+-	t->poll_count = fds_idx;
+-
+-	return 0;
+-
+-err:
+-	for (i = 0; i < fds_idx; i++)
+-		close(t->fds[i].fd);
+-
+-	return -1;
+-}
+-
+-static int close_poll_files(struct loopback_test *t)
+-{
+-	int i;
+-
+-	for (i = 0; i < t->poll_count; i++)
+-		close(t->fds[i].fd);
+-
+-	return 0;
+-}
+-static int is_complete(struct loopback_test *t)
+-{
+-	int iteration_count;
+-	int i;
+-
+-	for (i = 0; i < t->device_count; i++) {
+-		if (!device_enabled(t, i))
+-			continue;
+-
+-		iteration_count = read_sysfs_int(t->devices[i].sysfs_entry,
+-						 "iteration_count");
+-
+-		/* at least one device did not finish yet */
+-		if (iteration_count != t->iteration_max)
+-			return 0;
+-	}
+-
+-	return 1;
+-}
+-
+-static void stop_tests(struct loopback_test *t)
+-{
+-	int i;
+-
+-	for (i = 0; i < t->device_count; i++) {
+-		if (!device_enabled(t, i))
+-			continue;
+-		write_sysfs_val(t->devices[i].sysfs_entry, "type", 0);
+-	}
+-}
+-
+-static void handler(int sig) { /* do nothing */  }
+-
+-static int wait_for_complete(struct loopback_test *t)
+-{
+-	int number_of_events = 0;
+-	char dummy;
+-	int ret;
+-	int i;
+-	struct timespec *ts = NULL;
+-	struct sigaction sa;
+-	sigset_t mask_old, mask;
+-
+-	sigemptyset(&mask);
+-	sigemptyset(&mask_old);
+-	sigaddset(&mask, SIGINT);
+-	sigprocmask(SIG_BLOCK, &mask, &mask_old);
+-
+-	sa.sa_handler = handler;
+-	sa.sa_flags = 0;
+-	sigemptyset(&sa.sa_mask);
+-	if (sigaction(SIGINT, &sa, NULL) == -1) {
+-		fprintf(stderr, "sigaction error\n");
+-		return -1;
+-	}
+-
+-	if (t->poll_timeout.tv_sec != 0)
+-		ts = &t->poll_timeout;
+-
+-	while (1) {
+-		ret = ppoll(t->fds, t->poll_count, ts, &mask_old);
+-		if (ret <= 0) {
+-			stop_tests(t);
+-			fprintf(stderr, "Poll exit with errno %d\n", errno);
+-			return -1;
+-		}
+-
+-		for (i = 0; i < t->poll_count; i++) {
+-			if (t->fds[i].revents & POLLPRI) {
+-				/* Dummy read to clear the event */
+-				read(t->fds[i].fd, &dummy, 1);
+-				number_of_events++;
+-			}
+-		}
+-
+-		if (number_of_events == t->poll_count)
+-			break;
+-	}
+-
+-	if (!is_complete(t)) {
+-		fprintf(stderr, "Iteration count did not finish!\n");
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+-static void prepare_devices(struct loopback_test *t)
+-{
+-	int i;
+-
+-	/*
+-	 * Cancel any running tests on enabled devices. If
+-	 * stop_all option is given, stop test on all devices.
+-	 */
+-	for (i = 0; i < t->device_count; i++)
+-		if (t->stop_all || device_enabled(t, i))
+-			write_sysfs_val(t->devices[i].sysfs_entry, "type", 0);
+-
+-	for (i = 0; i < t->device_count; i++) {
+-		if (!device_enabled(t, i))
+-			continue;
+-
+-		write_sysfs_val(t->devices[i].sysfs_entry, "us_wait",
+-				t->us_wait);
+-
+-		/* Set operation size */
+-		write_sysfs_val(t->devices[i].sysfs_entry, "size", t->size);
+-
+-		/* Set iterations */
+-		write_sysfs_val(t->devices[i].sysfs_entry, "iteration_max",
+-				t->iteration_max);
+-
+-		if (t->use_async) {
+-			write_sysfs_val(t->devices[i].sysfs_entry, "async", 1);
+-			write_sysfs_val(t->devices[i].sysfs_entry,
+-					"timeout", t->async_timeout);
+-			write_sysfs_val(t->devices[i].sysfs_entry,
+-					"outstanding_operations_max",
+-					t->async_outstanding_operations);
+-		} else {
+-			write_sysfs_val(t->devices[i].sysfs_entry, "async", 0);
+-		}
+-	}
+-}
+-
+-static int start(struct loopback_test *t)
+-{
+-	int i;
+-
+-	/* the test starts by writing test_id to the type file. */
+-	for (i = 0; i < t->device_count; i++) {
+-		if (!device_enabled(t, i))
+-			continue;
+-
+-		write_sysfs_val(t->devices[i].sysfs_entry, "type", t->test_id);
+-	}
+-
+-	return 0;
+-}
+-
+-void loopback_run(struct loopback_test *t)
+-{
+-	int i;
+-	int ret;
+-
+-	for (i = 0; dict[i].name != NULL; i++) {
+-		if (strstr(dict[i].name, t->test_name))
+-			t->test_id = dict[i].type;
+-	}
+-	if (!t->test_id) {
+-		fprintf(stderr, "invalid test %s\n", t->test_name);
+-		usage();
+-		return;
+-	}
+-
+-	prepare_devices(t);
+-
+-	ret = open_poll_files(t);
+-	if (ret)
+-		goto err;
+-
+-	start(t);
+-
+-	ret = wait_for_complete(t);
+-	close_poll_files(t);
+-	if (ret)
+-		goto err;
+-
+-	get_results(t);
+-
+-	log_results(t);
+-
+-	return;
+-
+-err:
+-	printf("Error running test\n");
+-}
+-
+-static int sanity_check(struct loopback_test *t)
+-{
+-	int i;
+-
+-	if (t->device_count == 0) {
+-		fprintf(stderr, "No loopback devices found\n");
+-		return -1;
+-	}
+-
+-	for (i = 0; i < MAX_NUM_DEVICES; i++) {
+-		if (!device_enabled(t, i))
+-			continue;
+-
+-		if (t->mask && !strcmp(t->devices[i].name, "")) {
+-			fprintf(stderr, "Bad device mask %x\n", (1 << i));
+-			return -1;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-int main(int argc, char *argv[])
+-{
+-	int o, ret;
+-	char *sysfs_prefix = "/sys/class/gb_loopback/";
+-	char *debugfs_prefix = "/sys/kernel/debug/gb_loopback/";
+-
+-	memset(&t, 0, sizeof(t));
+-
+-	while ((o = getopt(argc, argv,
+-			   "t:s:i:S:D:m:v::d::r::p::a::l::x::o:O:c:w:z::f::")) != -1) {
+-		switch (o) {
+-		case 't':
+-			snprintf(t.test_name, MAX_STR_LEN, "%s", optarg);
+-			break;
+-		case 's':
+-			t.size = atoi(optarg);
+-			break;
+-		case 'i':
+-			t.iteration_max = atoi(optarg);
+-			break;
+-		case 'S':
+-			snprintf(t.sysfs_prefix, MAX_SYSFS_PREFIX, "%s", optarg);
+-			break;
+-		case 'D':
+-			snprintf(t.debugfs_prefix, MAX_SYSFS_PREFIX, "%s", optarg);
+-			break;
+-		case 'm':
+-			t.mask = atol(optarg);
+-			break;
+-		case 'v':
+-			t.verbose = 1;
+-			break;
+-		case 'd':
+-			t.debug = 1;
+-			break;
+-		case 'r':
+-			t.raw_data_dump = 1;
+-			break;
+-		case 'p':
+-			t.porcelain = 1;
+-			break;
+-		case 'a':
+-			t.aggregate_output = 1;
+-			break;
+-		case 'l':
+-			t.list_devices = 1;
+-			break;
+-		case 'x':
+-			t.use_async = 1;
+-			break;
+-		case 'o':
+-			t.async_timeout = atoi(optarg);
+-			break;
+-		case 'O':
+-			t.poll_timeout.tv_sec = atoi(optarg);
+-			break;
+-		case 'c':
+-			t.async_outstanding_operations = atoi(optarg);
+-			break;
+-		case 'w':
+-			t.us_wait = atoi(optarg);
+-			break;
+-		case 'z':
+-			t.file_output = 1;
+-			break;
+-		case 'f':
+-			t.stop_all = 1;
+-			break;
+-		default:
+-			usage();
+-			return -EINVAL;
+-		}
+-	}
+-
+-	if (!strcmp(t.sysfs_prefix, ""))
+-		snprintf(t.sysfs_prefix, MAX_SYSFS_PREFIX, "%s", sysfs_prefix);
+-
+-	if (!strcmp(t.debugfs_prefix, ""))
+-		snprintf(t.debugfs_prefix, MAX_SYSFS_PREFIX, "%s", debugfs_prefix);
+-
+-	ret = find_loopback_devices(&t);
+-	if (ret)
+-		return ret;
+-	ret = sanity_check(&t);
+-	if (ret)
+-		return ret;
+-
+-	if (t.list_devices) {
+-		show_loopback_devices(&t);
+-		return 0;
+-	}
+-
+-	if (t.test_name[0] == '\0' || t.iteration_max == 0)
+-		usage();
+-
+-	if (t.async_timeout == 0)
+-		t.async_timeout = DEFAULT_ASYNC_TIMEOUT;
+-
+-	loopback_run(&t);
+-
+-	return 0;
+-}
+-- 
+2.40.0
+
