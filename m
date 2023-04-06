@@ -2,178 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465486D985A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7531D6D9871
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237185AbjDFNew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S238691AbjDFNjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237561AbjDFNep (ORCPT
+        with ESMTP id S238699AbjDFNj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:34:45 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F18128;
-        Thu,  6 Apr 2023 06:34:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gtdj5LpLNdjzVdwqUkH9PXKG+nm5lnDIXqnVnXZx6UL09zAsxYkbeaViWqRRrBY26AvWaaAgo9YSGQ/YKe3fbJqbbrxdFFmTI/fU5PgtFqv06H8L2iC4khFax/d5sl08iCjNgr4qadxp7Ii2h3jFq/9i8MboQTpcit09sRk1axk4lNYi5XlmybOx5H0KMCdqP+pmAPy6ZbnIqmQzhHtHVuz5ot1K9c1362h/O0Bgd3Jyx3uxfOqQ1i5pMaSotVOOu3VIZAgiUH4dBVFVnjVUgftbN7sbFW180R4E5pNU9YJZlGONF4UPj0wRshoLf4V8Tgp3N3HZBnDxkLt9jumSCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=71+S1cL3otDgbevTF9NLIuU741odK7pZrN5kbrXfx9I=;
- b=MUhch7GM/LpotM4Z7mPH7f8Mycc6dLB6NDbPWt837RnBHxYXF5NLtdNNCk0JjBRbGFZ1ZqrZ5Rf0Fc9NWrZU7mArZ39vPWHp8RQ4aRHsIXAyyniULZlqkx9dmIIguKdEKqguGDFEzGDWzl1pU8Zk9v+uavQKLK5Iqd6LUdFIr6sBX4iip8YA8sqdrcebCXRaYq39mjv1XklcDdzaLTajl6Crvw4CpbaHFY7Bvqu6+KU0rsD+qF7R4Lvu6QuVp2DpEaidXC5W62tF07yBET9UkQREjQYrNp+rxOubeDGIuwZsHLqPEKzQh5/nasbtWk/YSPKoh+JN0N85gJgiK4h23Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=71+S1cL3otDgbevTF9NLIuU741odK7pZrN5kbrXfx9I=;
- b=hcYmziCKUbBkT/CHr4amm7yAyFzBry+mFqFwdWCnoJLHzjkupV0WfIHpawwJKUplHpaNOMEQCdKxw9ONeRqv+X/AQ7ZsWkEbmGUo8AE5WJik8iWKQJwp8XjY8xoWtypENMHZL4JqH70gGocErkEMNTI4/OKvXaSpLLXHkTM1iqD/LWuhVrWqfj5HqvdXfasCQrEBmLfIM+bW3KA6A78az0jI0bpAtlQQfLOCr1XDrRVK9Lfxlyy/NtemT+4KUmbTYj/1Mi1SjVrMwbHMzwpKJ+cYpuiH96dK6HO0whi3kR9nnTvPUzh/fenPYOtayRoQBZnhidxTv0tbTse+OJpqrA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by CY8PR12MB7266.namprd12.prod.outlook.com (2603:10b6:930:56::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Thu, 6 Apr
- 2023 13:34:41 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::6045:ad97:10b7:62a2%6]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
- 13:34:41 +0000
-Date:   Thu, 6 Apr 2023 10:34:39 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     iommu@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>
-Subject: [GIT PULL] Please pull IOMMUFD subsystem changes
-Message-ID: <ZC7Kb3WmjvooWtLE@nvidia.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VZkN8gI43+DHuB20"
-Content-Disposition: inline
-X-ClientProxiedBy: MN2PR19CA0010.namprd19.prod.outlook.com
- (2603:10b6:208:178::23) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Thu, 6 Apr 2023 09:39:28 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBAB6EAF;
+        Thu,  6 Apr 2023 06:39:10 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4PsjJq5041z49Q2t;
+        Thu,  6 Apr 2023 16:39:07 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1680788348;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=peirEc1GOmb8qAkun43yYGTNjLWb271GaZHpvAeKqZ8=;
+        b=VFq5BGct9PrSOoYPFJcTA+1Hyp7JO8lAq+qCZPusFgE4h2AlRhKFxGwuEfePWFXT719BEa
+        /4AoHmM9xxK5rXK5ygWdXdM19ej9fBJNk2GTRnPFmmImLWnJuzo+JvZjf6M9/5ZzxbocY6
+        1klTuDCD26x/lzmHw0iXpc/H8ubROnHE3VGeX6wGEPQNrjjj+tB5h+7IAxym0HcNuMeGZ4
+        i2xw36YMKkOs2e41nwXCXkq4wXHZbJEU0yPG3OV64F8D7FV3BQSgMow32MPqewG37DNhk6
+        9/zfNpH/cqXR5fSlPDobQ02LY+/k/cYGN1LqhvK8e+pChSB18YgKsF9J9nzphQ==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1680788348; a=rsa-sha256;
+        cv=none;
+        b=snAcvJwgmAwode9IIUT4lVYSG5wR9FfcHDVq0Vc6ZG9Hr/9Isa+utMct/cokoM/nQHKWU2
+        9lqg0B70i+PwjfJssZRITFb795szJlf0FvQJXRgvIdxGLROEMBiUSqAq37PkK9LVLliTJu
+        4VNpbChbqWseEvi7eLMCJcdrMM3QsVNzac35VBzsZZS35sX9FYHSnXBW+E+tlExkvhd44i
+        oIijilkS1YQKMrnk4woTLyGxhBBvtRDW/CsmDknz+DzBNNqkzLGuCHZp9nvqi2ZSSo5x34
+        RtGC7V7ongd0LOiHL5ilHq2baMSIBgxgzx1Z3kdMUVWvljLxCzo6LvdnFqNCiw==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1680788348;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=peirEc1GOmb8qAkun43yYGTNjLWb271GaZHpvAeKqZ8=;
+        b=jKGLgY2OKLMZmMqHjy7MpWhV+sK7F5XvL7j+HXUSCIGGmiZkRE6IkbgUNvPisHGbV0rtnu
+        6YE9jtK+/Vd1Gdpw+dy0cbnqOjgZjQCiqFTFsYi8T2GYO0S5agXp9LLyLsQkA7eDzCVHs8
+        oDrNeB5bXLpDHJrq8puFnYK0ZDCc5XykOOT8zM2KmN5zu9mSzybaUowjbzLgw3qe+0PHrT
+        jr9/UyqXspBkGjcKjNyP3hBdkqQAk673EWnwJKH5pyPlFobMbvXEnHu/3i3JnAEvUEwBtC
+        TZUi3vgrzqS5dwuO4BVMLp1mI5YLK2gK6ie/0YXHiy89+t45NWqj4up5yzJQUg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id C6FCE634C91;
+        Thu,  6 Apr 2023 16:36:25 +0300 (EEST)
+Date:   Thu, 6 Apr 2023 16:36:25 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>, mchehab@kernel.org,
+        kernel@puri.sm, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] media: hi846: fix usage of
+ pm_runtime_get_if_in_use()
+Message-ID: <ZC7K2ZdrxR8w7T5r@valkosipuli.retiisi.eu>
+References: <20230405092904.1129395-1-martin.kepplinger@puri.sm>
+ <20230405092904.1129395-2-martin.kepplinger@puri.sm>
+ <ZC1vJNIGeEu+xi+i@valkosipuli.retiisi.eu>
+ <20230406013338.GK9915@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CY8PR12MB7266:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7fa73777-ccab-4c38-540b-08db36a3acd8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vZ950Xkoi1y2+hk/VplxEJmbg6Bb51M5em6IetY7Ky/RoGIYSJ+P80YqJzcvhdTglU/y4t4TKAcH+b54Fu/DiZmJtFKjGxNwYh98HsS/S7FBdgagd/+4JFxaJnq4V/RYJ3kusWSUeESwFyqwv2jFjJtpBuSXfAk7hmA8QkRy5OPROhTmqMYazAz7mSEoFzvQaZ0aBtC27P6Qv6RNp2UHvhZZCqWRLNeXUzYkTKHbxK7PQA8dnpQ29Eux79owlb3pQfZzs7CHmKx12rxKWmIIfZzBQ3eiKqUIpnyJT5J7Xect9ckuSzGCqMMf2SMt49EXENz/jKF4DIIDJshNu2l0qvt4+mMXmQRMxPqN9DUvWcMKnGVF/AIavHdis6l9eCaMVW2Lw1m6Ax9usN9h3TLIypN72nAGwckWvE19mx+lj6CvKw9n4jLOw+hfW6bBWs5IPvOz0abbBQawSRTjL7CaZBW5h5rY69TEmukOBrLW62+wTeuxRQSUnXK9M78PQ01h1z0GMJ/ZdckbRSbOSwtLQ8DhhfTmSLGe8wJz+3d2F/D3v2oReiOD8CFR1u971VNbixrPdEw7XUNP9y20G9OSHJkc3FK9juFUxOo6Jo2EeaaQS51bN3+H2ztGyIPp+Gc4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(451199021)(2906002)(36756003)(86362001)(6512007)(2616005)(83380400001)(6486002)(186003)(26005)(6506007)(4326008)(66556008)(66476007)(8676002)(6916009)(21480400003)(44144004)(66946007)(316002)(38100700002)(41300700001)(478600001)(5660300002)(8936002)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YUidpTbvyAffv68LFq59Lb65Likd8FoAhyTPmlM75H9digIMhjU9ooLWynB5?=
- =?us-ascii?Q?3sAQcM34pmA4mKLaXItdmLNE5ZyOuEmoDjZO9qaU1zYqdrfgeGkGUZVblQ9W?=
- =?us-ascii?Q?PRD3P1Gk/6VD5nqqwVDbBqSgRkxXaYHOZZBFGrRihpMKK9K4iew1AqOHjM3d?=
- =?us-ascii?Q?MjiLmQk6eZR9z1icJIn6HMBA+AK19qt3Nn+l/CebCqhrsIC9uz/a1OhF+Wv7?=
- =?us-ascii?Q?za7Hw5BxQpHdEGLIEEtXV82tzmWDXkZ6A4XM0W316ZOY5RwVxV4c6+Q0PTQb?=
- =?us-ascii?Q?NNdpnqtaYSOkctRq0pQKaYY4ThHMPq2M3dr5ip6CdDLwR+P7zNS05WSk0yva?=
- =?us-ascii?Q?+ETwZRPDzXZMTGNPDMfmz2RUjJsq0rN4/0mlPqs6g4KvH+sJ6vfi0Nd52wQk?=
- =?us-ascii?Q?5EDoqDONZZATiTSkIePhYV7v69lhEnoK0vEMqvJ1zuLmJOztqzhClQd5xj0G?=
- =?us-ascii?Q?zU8/ZUYgeCqndeEmAAFvJLX5LYM6Dtf+LnMS1lSnIFtnHAdghK0h5gNQA/jc?=
- =?us-ascii?Q?T+tg+C4gPnXMfvz85BXxVPw4f2eX7naMyD5uInlq3ryyD7UxxEQq7FbDjZK1?=
- =?us-ascii?Q?QY6UMwVxubfw9V4S8SuJZFIlsV/GSgupkpFBxV3c1UjLoLBSw4nLsyLGGiYW?=
- =?us-ascii?Q?s16z+JVa22uDvZLYrSxAwiI9PPadNN+CPHcaNEoyk+RH/eB6McEUgA+KDXWo?=
- =?us-ascii?Q?2ly+cClz5ButkmobKsPqPiBmVFjlEMStw5z17g4XCFNptxnLsoauzj7FbTtj?=
- =?us-ascii?Q?ZQYQh78fbiN3UjAn3YZiv7dqR1rG38AW4Bt1VgOPrlxL8s/qeCl0G7N3qR6c?=
- =?us-ascii?Q?Danh8SX1+Wn/jYlczBBXReKmcyHsdPraOtKC5T/txezvu62906xvncVEsw/k?=
- =?us-ascii?Q?K4mvFnzMxxHRKssM4xQQc381uEHl5oIZeUcjxCRKNrFv4B+ykflQYp81ApOW?=
- =?us-ascii?Q?23c83pyaFHs2vt4p3lDWQUmQX3e49puD9Qg3GJgDj/f80ra7LcvkCcZEvO4w?=
- =?us-ascii?Q?H34nn6tH06jQdutC+pwQJiffh71MQTHSY34di6K9vD9j9eMIujj/k5gsol82?=
- =?us-ascii?Q?4f86aP6OpKgrVdhTtWlIK5fP/ISY6Gd/baG+xpS7YUzvWkzPSuL6mR/I+OS1?=
- =?us-ascii?Q?m6RmPLIOd1HvkDsxb4VAQaR+zvT5w35uvD2Bhpb1D1/DT4a2XXZjCwXCvHbu?=
- =?us-ascii?Q?izUGgLj5yuVZQa2rRREo9ygKyxITobHD55eJ1TXaONw6Fk87c9HN8TPkg4cu?=
- =?us-ascii?Q?vTrG5jmVuys7kHg/njre1GgiqniM/f0YeY5F6oDm6HGOTZomX6oIytwz9f1D?=
- =?us-ascii?Q?Ekb+ise3eXJmcAoC2Txst4nvUmDVy9LC3RAFURWlb+gHrQpZffwfYMQwVdex?=
- =?us-ascii?Q?9xsXV7K9a+/GG3+eWP4v4apRjiNmkiSq/xwFgYoBOBlM7fVvsFYSyAil+cxA?=
- =?us-ascii?Q?ByesKaXD9zQf011YQ/ZO4pIE6Rl4bZSGrdLKweeLOVVoC0Juy53ze/LljUda?=
- =?us-ascii?Q?Ep1UHcI3a6spIH5WMATJWVmy5F6Wcb7M0bjijZRxFk6tOaowNFgtoBELULYy?=
- =?us-ascii?Q?ws+vIhUclKtmK8vr5b8J0jHLtTe9EsF/eIbc/eUG?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7fa73777-ccab-4c38-540b-08db36a3acd8
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 13:34:41.2377
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5BkOGs6yJhXYDuNsbY9yxO+hcTiwm+eQKBWoekT+LwhOWnCwq8AXcFGrjkXl8bax
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7266
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406013338.GK9915@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---VZkN8gI43+DHuB20
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Laurent,
 
-Hi Linus,
+On Thu, Apr 06, 2023 at 04:33:38AM +0300, Laurent Pinchart wrote:
+> Hi Sakari,
+> 
+> On Wed, Apr 05, 2023 at 03:52:52PM +0300, Sakari Ailus wrote:
+> > On Wed, Apr 05, 2023 at 11:29:03AM +0200, Martin Kepplinger wrote:
+> > > pm_runtime_get_if_in_use() does not only return nonzero values when
+> > > the device is in use, it can return a negative errno too.
+> > > 
+> > > And especially during resuming from system suspend, when runtime pm
+> > > is not yet up again, this can very well happen. And in such a case
+> > > the subsequent pm_runtime_put() call would result in a refcount underflow!
+> > 
+> > I think this issue should have a more generic solution, it's very difficult
+> > to address this in drivers only with the current APIs.
+> > 
+> > pm_runtime_get_if_in_use() will also return an error if runtime PM is
+> > disabled, so this patch will break the driver for that configuration.
+> 
+> I'm increasingly inclined to depend on CONFIG_PM for all camera sensor
+> drivers.
 
-Three bug fixes that a syzkaller instance found in iommufd. We added
-some selftest coverage for this, but it will come in the merge window
-as it depends on some other selftest changes.
+For what reason? This is the smallest of all problems related to power
+management. Also runtime PM has no-op functions for just this purpose.
 
-I'm pretty happy with this as it shows the selftest setup is allowing
-syzkaller into code paths that would normally be only reached by
-in-kernel VFIO mdev drivers. These are bugs that the normal vGVT and
-S390 vfio-mdev test suites didn't find.
+(Frankly it'd be great if we could make CONFIG_PM go away. So perhaps
+requiring it everywhere is one feasible approach to do that.)
 
-Thanks,
-Jason
+-- 
+Regards,
 
-The following changes since commit 7e364e56293bb98cae1b55fd835f5991c4e96e7d:
-
-  Linux 6.3-rc5 (2023-04-02 14:29:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jgg/iommufd.git tags/for-linus-iommufd
-
-for you to fetch changes up to 13a0d1ae7ee6b438f5537711a8c60cba00554943:
-
-  iommufd: Do not corrupt the pfn list when doing batch carry (2023-04-04 09:10:55 -0300)
-
-----------------------------------------------------------------
-iommufd for 6.3 rc
-
-Three bugs found by syzkaller:
-
- - An invalid VA range can be be put in a pages and eventually trigger
-   WARN_ON, reject it early
-
- - Use of the wrong start index value when doing the complex batch carry
-   scheme
-
- - Wrong store ordering resulting in corrupting data used in a later
-   calculation that corrupted the batch structure during carry
-
-----------------------------------------------------------------
-Jason Gunthorpe (3):
-      iommufd: Check for uptr overflow
-      iommufd: Fix unpinning of pages when an access is present
-      iommufd: Do not corrupt the pfn list when doing batch carry
-
- drivers/iommu/iommufd/pages.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
---VZkN8gI43+DHuB20
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCZC7KbgAKCRCFwuHvBreF
-YW1WAP4iX4G1fZ3EziekDYV2arIi8yW0gYllXeiQrryzYAqKbgEAhskduhzWbV7K
-D2Dri10YxHMgImBg0m08Ix4DYGiEWAI=
-=0NN2
------END PGP SIGNATURE-----
-
---VZkN8gI43+DHuB20--
+Sakari Ailus
