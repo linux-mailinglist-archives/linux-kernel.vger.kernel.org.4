@@ -2,150 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BFD6D94A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D9B6D94AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237482AbjDFLEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
+        id S236757AbjDFLGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236569AbjDFLEn (ORCPT
+        with ESMTP id S229814AbjDFLGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:04:43 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D6A8A7D;
-        Thu,  6 Apr 2023 04:04:23 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-946a769ae5cso101055066b.1;
-        Thu, 06 Apr 2023 04:04:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680779062; x=1683371062;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KITffEh21kVUliy1VoMjvw87Ra13t1dF1yglnrdIiXg=;
-        b=usylqcl/wK/WcBMCB9Hu/nARTEaCavpn8np7neoYl7ECcd2EtGYteDhzELH2v9HJdP
-         V3I2ZjeSUTpSM4HERKvvKyFhczrc+FgRxhfZXxpvPSQk4Yhln+TLijlhXraBs72Ykg6f
-         i7+21elxMtSS/J8WejMVs4oIhQ4PlxquPYUdhsTlXP69CLHvNPh5jmYKjTQSp0sLXLIk
-         VRj+rF+IGLVr3Q6eLbvFeGUl4OMUDsB5lCEXfAlZiFfhIykixbDWahp8GhdGaCMP5JNA
-         Tjrv+xiZRUdm5mUyjWfbuX7Br+eh53wz5xgwBQvcHT4NcF4afCmIWVP4pJryGxPCMkPq
-         gg8Q==
-X-Gm-Message-State: AAQBX9fQ6AXFIes6LE7BHc+miCJBUGyUASVOZ8h/dg8U+sp51LaiA/LK
-        jZvco0tkeGx7tkfmdUGEYfk=
-X-Google-Smtp-Source: AKy350bPuWpFa8lsTNUvA8+kwvxRwcrPzqvVF0WOgFdBH+8jM2uv4ltcv5/bo9+HatYAa9uEjqf0mA==
-X-Received: by 2002:aa7:de8e:0:b0:4fb:395a:6aa4 with SMTP id j14-20020aa7de8e000000b004fb395a6aa4mr4899183edv.31.1680779061830;
-        Thu, 06 Apr 2023 04:04:21 -0700 (PDT)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id 23-20020a508e17000000b00501dac14d7asm617927edw.3.2023.04.06.04.04.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 04:04:21 -0700 (PDT)
-Message-ID: <be836a4f-fc0f-bbcd-636d-4766fdd33c81@kernel.org>
-Date:   Thu, 6 Apr 2023 13:04:16 +0200
+        Thu, 6 Apr 2023 07:06:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4B683E1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680779108;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=td+BBEswkT4Mb/4S7DAP/VC5WRwk8gvP0mM6jBgeP9U=;
+        b=EyLs9GutIqo0UA5faYyRXSxevZLPgo53Ypc331NnGJep2wuMYyEPdIsUfx3rh2Z/CtJCkq
+        dIsbfqtcEq/4Rej/xisi9s1vLaSeAzXxPey0G4k/oYINQKkWdT0LqyNJaYVX5IUPtVds0G
+        utzI0CF3eCOn0HnDTnLYldrVAziQ0Ks=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-vmPiTcpZPp6tXR9wB2LgDA-1; Thu, 06 Apr 2023 07:05:05 -0400
+X-MC-Unique: vmPiTcpZPp6tXR9wB2LgDA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 841F985530F;
+        Thu,  6 Apr 2023 11:05:04 +0000 (UTC)
+Received: from localhost (ovpn-12-86.pek2.redhat.com [10.72.12.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 078251415117;
+        Thu,  6 Apr 2023 11:05:03 +0000 (UTC)
+Date:   Thu, 6 Apr 2023 19:04:59 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v21 2/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <ZC6nWzPuIWOxmvv2@MiWiFi-R3L-srv>
+References: <20230404180326.6890-1-eric.devolder@oracle.com>
+ <20230404180326.6890-3-eric.devolder@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        "H. Peter Anvin" <hpa@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Asit Mallick <asit.k.mallick@intel.com>,
-        Cfir Cohen <cfir@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Kaplan <David.Kaplan@amd.com>,
-        David Rientjes <rientjes@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, x86@kernel.org
-References: <20230403140605.540512-1-jiangshanlai@gmail.com>
- <19035c40-e756-6efd-1c02-b09109fb44c1@intel.com>
- <CAJhGHyBHmC=UXr88GsykO9eUeqJZp59jrCH3ngkFiCxVBW2F3g@mail.gmail.com>
- <3591487f-96ae-3ab7-6ce7-e524a070c9e7@redhat.com>
- <20230406101254.GI386572@hirez.programming.kicks-ass.net>
- <26be2c81-9431-6b43-e3e9-52d7d184750e@kernel.org>
- <20230406104750.GA392176@hirez.programming.kicks-ass.net>
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [RFC PATCH 0/7] x86/entry: Atomic statck switching for IST
-In-Reply-To: <20230406104750.GA392176@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404180326.6890-3-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06. 04. 23, 12:47, Peter Zijlstra wrote:
-> On Thu, Apr 06, 2023 at 12:35:24PM +0200, Jiri Slaby wrote:
->> On 06. 04. 23, 12:12, Peter Zijlstra wrote:
->>> On Tue, Apr 04, 2023 at 07:03:45PM +0200, Paolo Bonzini wrote:
->>>> On 4/4/23 05:17, Lai Jiangshan wrote:
->>>>> The cover letter has 800+ lines of comments.  About 100-300 lines
->>>>> of comments will be moved into the code which would make the diffstat
->>>>> not so appealing.
->>>>
->>>> Removing assembly from arch/x86/entry/ and adding English to Documentation/?
->>>> That's _even more_ appealing. :)
->>>
->>> I *much* prefer in-code comments to random gibberish that's instantly
->>> out of date squirreled away somewhere in an unreadable format in
->>> Documentation/
->>
->> +1 as one can link comments in the code to Documentation easily nowadays.
->> They are sourced and end up in the generated Documentation [1] then. One
->> only needs to type the kernel-doc properly.
+On 04/04/23 at 02:03pm, Eric DeVolder wrote:
+......
+> +static void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+> +{
+> +	struct kimage *image;
+> +
+> +	/* Obtain lock while changing crash information */
+> +	if (!kexec_trylock()) {
+> +		pr_info("kexec_trylock() failed, elfcorehdr may be inaccurate\n");
+> +		return;
+> +	}
+> +
+> +	/* Check kdump is not loaded */
+> +	if (!kexec_crash_image)
+> +		goto out;
+> +
+> +	image = kexec_crash_image;
+> +
+> +	if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+> +		hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+> +		pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
+> +	else
+> +		pr_debug("hp_action %u\n", hp_action);
+
+Seems we passed in the cpu number just for printing here. Wondering why
+we don't print out hot added/removed memory ranges. Is the cpu number
+printing necessary?
+
+> +
+> +	/*
+> +	 * When the struct kimage is allocated, the elfcorehdr_index
+> +	 * is set to -1. Find the segment containing the elfcorehdr,
+> +	 * if not already found. This works for both the kexec_load
+> +	 * and kexec_file_load paths.
+> +	 */
+> +	if (image->elfcorehdr_index < 0) {
+> +		unsigned long mem;
+> +		unsigned char *ptr;
+> +		unsigned int n;
+> +
+> +		for (n = 0; n < image->nr_segments; n++) {
+> +			mem = image->segment[n].mem;
+> +			ptr = kmap_local_page(pfn_to_page(mem >> PAGE_SHIFT));
+> +			if (ptr) {
+> +				/* The segment containing elfcorehdr */
+> +				if (memcmp(ptr, ELFMAG, SELFMAG) == 0)
+> +					image->elfcorehdr_index = (int)n;
+> +				kunmap_local(ptr);
+> +			}
+> +		}
+> +	}
+> +
+> +	if (image->elfcorehdr_index < 0) {
+> +		pr_err("unable to locate elfcorehdr segment");
+> +		goto out;
+> +	}
+> +
+> +	/* Needed in order for the segments to be updated */
+> +	arch_kexec_unprotect_crashkres();
+> +
+> +	/* Differentiate between normal load and hotplug update */
+> +	image->hp_action = hp_action;
+> +
+> +	/* Now invoke arch-specific update handler */
+> +	arch_crash_handle_hotplug_event(image);
+> +
+> +	/* No longer handling a hotplug event */
+> +	image->hp_action = KEXEC_CRASH_HP_NONE;
+> +	image->elfcorehdr_updated = true;
+> +
+> +	/* Change back to read-only */
+> +	arch_kexec_protect_crashkres();
+> +
+> +out:
+> +	/* Release lock now that update complete */
+> +	kexec_unlock();
+> +}
+> +
+> +static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
+> +{
+> +	switch (val) {
+> +	case MEM_ONLINE:
+> +		crash_handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY,
+> +			KEXEC_CRASH_HP_INVALID_CPU);
+> +		break;
+> +
+> +	case MEM_OFFLINE:
+> +		crash_handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY,
+> +			KEXEC_CRASH_HP_INVALID_CPU);
+> +		break;
+> +	}
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block crash_memhp_nb = {
+> +	.notifier_call = crash_memhp_notifier,
+> +	.priority = 0
+> +};
+> +
+> +static int crash_cpuhp_online(unsigned int cpu)
+> +{
+> +	crash_handle_hotplug_event(KEXEC_CRASH_HP_ADD_CPU, cpu);
+> +	return 0;
+> +}
+> +
+> +static int crash_cpuhp_offline(unsigned int cpu)
+> +{
+> +	crash_handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_CPU, cpu);
+> +	return 0;
+> +}
+> +
+> +static int __init crash_hotplug_init(void)
+> +{
+> +	int result = 0;
+> +
+> +	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
+> +		register_memory_notifier(&crash_memhp_nb);
+> +
+> +	if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
+> +		result = cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN,
+> +			"crash/cpuhp", crash_cpuhp_online, crash_cpuhp_offline);
+> +	}
+> +
+> +	return result;
+> +}
+> +
+> +subsys_initcall(crash_hotplug_init);
+> +#endif
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 3d578c6fefee..8296d019737c 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -277,6 +277,12 @@ struct kimage *do_kimage_alloc_init(void)
+>  	/* Initialize the list of unusable pages */
+>  	INIT_LIST_HEAD(&image->unusable_pages);
+>  
+> +#ifdef CONFIG_CRASH_HOTPLUG
+> +	image->hp_action = KEXEC_CRASH_HP_NONE;
+> +	image->elfcorehdr_index = -1;
+> +	image->elfcorehdr_updated = false;
+> +#endif
+> +
+>  	return image;
+>  }
+>  
+> -- 
+> 2.31.1
 > 
-> Urgh, so that kernel doc stuff can defeat its purpose too. Some of that
-> is so heavily formatted it is unreadable gibberish just like
-> Documentation/ :/
-
-Definitely it _can_ defeat the purpose and be heavily formatted.But it 
-doesn't have to. It's like programming in perl.
-
-What I had in mind was e.g. "DOC: TTY Struct Flags":
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/tty.h#n261
-
-Resulting in:
-https://www.kernel.org/doc/html/latest/driver-api/tty/tty_struct.html#tty-struct-flags
-
-Both the source and the result are quite readable, IMO. And the markup 
-in the source is not mandatory, it's only for emphasizing and hyperlinks.
-
-As I wrote, you can link the comment in the code. But definitely you 
-don't have to, if you don't want. I like the linking in Documentation as 
-I can put the pieces from various sources/headers together to one place 
-and build a bigger picture.
-
-> I really detest that whole RST thing, and my solution is to explicitly
-> not write kerneldoc, that way the doc generation stuff doesn't complain
-> and I don't get random drive by patches wrecking the perfectly readable
-> comment.
-
-Sure. Rst _sources_ are not readable, IMO. Only generated man pages or 
-html are.
-
-thanks,
--- 
-js
 
