@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC356D9A7F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8256D9A97
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238653AbjDFOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S239225AbjDFOiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236811AbjDFOfx (ORCPT
+        with ESMTP id S238352AbjDFOid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:35:53 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13298BDFA;
-        Thu,  6 Apr 2023 07:33:21 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id l17so1888579ejp.8;
-        Thu, 06 Apr 2023 07:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680791532;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7NE8LMgRiCIjdbrcrGLtDoTN1MqhIW5n6uRWWiPsxx4=;
-        b=oAd5hS+uRxlGo7MKVZnAUSQOTtoHWyyYHm/pXDAeI1Tte1vDy7MsgcdQUJBu/ktkiP
-         ATEb4RwFRMmLuuWS81gHkksVF7ssGCX2xxbU0LcpZW3jOFY2hDJ1a670yuA+wLlXW/vn
-         EegRngxc4WMbelYLWXk5az66RxHtSgdvfmcMPkw1K7spAnbuUWljjdfgiukj23Ru0LzI
-         75VJbAu1hzZdZxJKb4l82gAhxT2ref9iXmThsgD6GlFgIsX05mSAY9b0VrNKVGArkO1k
-         /7bb+P0eBNGuqgVBOxA8cBVDy2rYH+ZAFu5L9aE4gDHvPP7BUYGcrlDKZPYF78dPKbUK
-         KpXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680791532;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7NE8LMgRiCIjdbrcrGLtDoTN1MqhIW5n6uRWWiPsxx4=;
-        b=W6yo+VRncEW0OrldOnyZjLCjIVv5qkNx9IclDCsQI3drmW7mfkuBdTwXccXi/R2aCK
-         xvc1g3yEEem7Hw8zD4EjI40CQDGYU78tv0uqxGFeuONf67gHhfz0Yi6Nyt1sSjEBRjaZ
-         Pg4DcTa81uVBPtq9JZj1NOwhucZJKpfHZaU80tUTNmdylSJEjNd4FIwGkYBHwQO3ZYUi
-         VWQWw1ClESIyoEBwPPqXGoPDP92GZJ+O67GQarsONi+u6ctx6R+SeQOz2QvK/gl9T/on
-         zMcTAvaW7HMK7t6U2vGt7WFgO/qH7DzqdtRTHFnJuNZAJDS/I2vrNtynhkYZHY/yR0Xy
-         sTeg==
-X-Gm-Message-State: AAQBX9eh8Qalsg9i1385pqNvrJ/EKfd3IzOKzSZYmwP33SaUqDD4f3fO
-        czn0a0VI3e8mIQ6u18a7Mv0=
-X-Google-Smtp-Source: AKy350bgjv21uhcf1/rq5AbSVXwcWWjZ656MGCrxpKOpbqsIx2AfWLsFXOcTOvV+HGXBkw3mMWKAuA==
-X-Received: by 2002:a17:906:2acf:b0:948:b667:e984 with SMTP id m15-20020a1709062acf00b00948b667e984mr6508084eje.27.1680791532591;
-        Thu, 06 Apr 2023 07:32:12 -0700 (PDT)
-Received: from localhost (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id i3-20020a50c3c3000000b004fa012332ecsm846250edf.1.2023.04.06.07.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 07:32:12 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sasha Finkelstein <fnkl.kernel@gmail.com>,
-        - <asahi@lists.linux.dev>, Rob Herring <robh+dt@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Sasha Finkelstein <7d578vix8hzw@opayq.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH RESEND v9 0/5] PWM and keyboard backlight driver for ARM Macs
-Date:   Thu,  6 Apr 2023 16:32:11 +0200
-Message-Id: <168079151921.2015855.16317182688660324415.b4-ty@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230214-fpwm-v9-0-f3094107b16b@gmail.com>
-References: <20230214-fpwm-v9-0-f3094107b16b@gmail.com>
+        Thu, 6 Apr 2023 10:38:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87284CC10;
+        Thu,  6 Apr 2023 07:36:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCCE06478C;
+        Thu,  6 Apr 2023 14:31:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48A63C4339C;
+        Thu,  6 Apr 2023 14:31:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680791494;
+        bh=fS1epBKc6/LIuAlKccrK1+yZRgDIBGUB741ssPvpdOQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SjiLsj18bWuofLs6hhWeLC/lLw/a3iNtZ9wlEueFZEmCpkNlYBNfrW2g/JfGJHGTi
+         vet9hVGN3GV90yUx+3gAa/XNftBN0j39XOMRCSz2X9AIryTOjRKZkau8WazkdAVbKe
+         7jo/OiVuhS8JxGUofx57NN8frKBM2tj4fn33MN5OokPIYjhPFpYfjxIVlje0uFnNYq
+         o+keawWHSe/sdTrcyzxIyVKkwcke3vee+fUSrJSER8RnbtzoGn6X9DOk/pfIaR/jlM
+         ZoF5CIu1w4YilJ9YwXKoTj0fnpznmfu4LCYmI1CVH3mBWnGcBheecAhLYWYKRmVcUM
+         1CooyEc8vqBvg==
+Date:   Thu, 6 Apr 2023 08:32:12 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] wifi: mt76: Replace zero-length array with
+ flexible-array member
+Message-ID: <ZC7X7KCb+JEkPe5D@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 03 Apr 2023 16:19:18 +0200, Sasha Finkelstein wrote:
-> This is the v9 of the patch series to add PWM and keyboard
-> backlight driver for ARM macs.
-> 
-> Changes in v1:
-> Addressing the review comments.
-> 
-> Changes in v2:
-> Added the reviewed-by and acked-by tags.
-> Addressing a review comment.
-> 
-> [...]
+Zero-length arrays are deprecated [1] and have to be replaced by C99
+flexible-array members.
 
-Applied, thanks!
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
+on memcpy() and help to make progress towards globally enabling
+-fstrict-flex-arrays=3 [2]
 
-[1/5] dt-bindings: pwm: Add Apple PWM controller
-      commit: 87a3a3929c710b863c3a288f6b094edc97662858
-[2/5] pwm: Add Apple PWM controller
-      commit: bafbbef85fd788074c27892c2391faf249eb7b29
-[5/5] MAINTAINERS: Add entries for Apple PWM driver
-      commit: de614ac31955fe20f71021fd5f4a9a811e90028f
+Link: https://github.com/KSPP/linux/issues/78 [1]
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [2]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
+diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
+index a5e6ee4daf92..9bf4b4199ee3 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
++++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
+@@ -127,7 +127,7 @@ struct mt76_connac2_mcu_rxd {
+ 	u8 rsv1[2];
+ 	u8 s2d_index;
+ 
+-	u8 tlv[0];
++	u8 tlv[];
+ };
+ 
+ struct mt76_connac2_patch_hdr {
 -- 
-Thierry Reding <thierry.reding@gmail.com>
+2.34.1
+
