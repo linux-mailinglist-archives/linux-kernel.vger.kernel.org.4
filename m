@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B4F6D97B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767906D97BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236968AbjDFNOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S237215AbjDFNPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjDFNOD (ORCPT
+        with ESMTP id S236684AbjDFNP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:14:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6538A66
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QTHB698dR7uenJPbxs0M/yET0QzXTAgV4F89bC1Z42Y=; b=GykI8TnIDa22xMqXTofCZrBOtU
-        Um5fFv0vJeaapQsXxK10FaPiJdzesl9qDnH1c/yealRJ9qZ3QyBSuFQInYLZvE+ft6to2eA6j/hvT
-        2kw8GrqZ7wCDj5BmvRJveMAb2uvNB8a4SQ9M9Hge+GXDMcfY5Egv1n7+GoxwQameXcl2cwPN2/NZB
-        jBWMwu0UqkH9DDF3u66ctfoLln12Z2tazfuC0r6yGKi/k+ZKNL8T6zUfc7dtgf2U9d9nPoBHeWwP+
-        Ah4VVmemSCfUPKM7iYLhIEmDYWqqd6BU6sO02n/QYWoST23wpJgGg5w531r67SQo59/1up9h4BRVJ
-        LEnQMyrA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pkPR2-00HRNK-AO; Thu, 06 Apr 2023 13:13:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA5EF3000DC;
-        Thu,  6 Apr 2023 15:13:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C249A212E36AA; Thu,  6 Apr 2023 15:13:51 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 15:13:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kan.liang@linux.intel.com
-Cc:     mingo@redhat.com, linux-kernel@vger.kernel.org, ak@linux.intel.com,
-        eranian@google.com
-Subject: Re: [PATCH 2/2] perf/x86/intel/ds: Use the size from each PEBS record
-Message-ID: <20230406131351.GL386572@hirez.programming.kicks-ass.net>
-References: <20230328222735.1367829-1-kan.liang@linux.intel.com>
- <20230328222735.1367829-2-kan.liang@linux.intel.com>
+        Thu, 6 Apr 2023 09:15:26 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E8B5FDB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:15:25 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id j1so158412wrb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:15:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680786923;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z8jl2u7ZgIomwOzSs9gTkCTnXd22WXIrlnSqWMsc6pk=;
+        b=kDBn/dmCu985IQTLBWCcwWI4Q9kXEIZSWrO1xFMeJQadLDT4SmbNj2tA7fAkrtBVEx
+         190VkK3IKSdOk7aMZx7xCFQ17vXvjKmyYziqzMMhWweLUjvgVB9szl7TjqmcN/k1BHGH
+         Wl4moR+0SxMj4ggSdodfBomBhH659fuLkjeRgVLewmGkGz9hzH44HXr40SiMWV1wLqX0
+         NNZoziQBeyroM3nmA1mh/FNGhcQPe2xKWjbF1m39mZBBwkduYncrQDySUTdu9QEUrjRg
+         zrojhwYu+SMIaYU30i2GwOA6ne+96eUz6nZHRrDdYjOTJ1th/biVY5IPD2t64JDzwsmS
+         GIPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680786923;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z8jl2u7ZgIomwOzSs9gTkCTnXd22WXIrlnSqWMsc6pk=;
+        b=ozKabMqRAr7XOZ6+hIGNgt3SxLSEpVDBz5tr9gmsKYCt+r041lbC1MIng/07S4jW0w
+         vl7z6MUdZBYqFgOJIn+pwwIPEjw4d+fJFXjo3bW81M8SjQ9xRepMwX8ABBEuCzcj5cek
+         IBD/8ij4zxB/1nibAFFUGp+3MSf1rSBX1liP0DRmUl+y1hHYUbGvAv3px6Xg3bIqKHYq
+         WCo53TKKwYLaWClgOp0Wy6Qv/vCB21xUOP88BopeaKV5j0oY6VSp5S2QN9diLwqUgVvk
+         vqfjxLEGsJH44m4e110SHmtOzWxgqNkq1uEXnbrd9JXQl3rODmBw8aOlCNvvhAtPIvLH
+         Ne3g==
+X-Gm-Message-State: AAQBX9f+IsSvFWXCXfJg5ASFkgw14aPp1M/HG9lE8AtzU268Mb78GSov
+        5KDxvfu4gqd3Z9+QFZcOCm3OHu/itA1mgfO7hBOCgA==
+X-Google-Smtp-Source: AKy350bq2EBTopZZNM0f+YHHQfpscHHsUX8kWBbB0wT9Q3Hobf/OeHI3zi0Ixs6k5NucJt4veM2MPKre5NBx7CjYTLY=
+X-Received: by 2002:a5d:47a7:0:b0:2ee:b548:c64f with SMTP id
+ 7-20020a5d47a7000000b002eeb548c64fmr803994wrb.3.1680786923515; Thu, 06 Apr
+ 2023 06:15:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230328222735.1367829-2-kan.liang@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+References: <20230404115336.599430-1-danishanwar@ti.com> <86ee5333-6d65-d28b-0dd5-40dfe485d48b@ti.com>
+In-Reply-To: <86ee5333-6d65-d28b-0dd5-40dfe485d48b@ti.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 6 Apr 2023 07:15:12 -0600
+Message-ID: <CANLsYkyrvAcVa8VNkbsrxyAC-60fyGYoXVS=fqwLcsMverzNcg@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] Introduce PRU platform consumer API
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,46 +77,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 03:27:35PM -0700, kan.liang@linux.intel.com wrote:
-> From: Kan Liang <kan.liang@linux.intel.com>
-> 
-> The kernel warning for the unexpected PEBS record can also be observed
-> during a context switch, when the below commands are running in parallel
-> for a while on SPR.
-> 
->   while true; do perf record --no-buildid -a --intr-regs=AX -e
->   cpu/event=0xd0,umask=0x81/pp -c 10003 -o /dev/null ./triad; done &
-> 
->   while true; do perf record -o /tmp/out -W -d -e
->   '{ld_blocks.store_forward:period=1000000,
->   MEM_TRANS_RETIRED.LOAD_LATENCY:u:precise=2:ldlat=4}'
->   -c 1037 ./triad; done
->   *The triad program is just the generation of loads/stores.
-> 
-> The current PEBS code assumes that all the PEBS records in the DS buffer
-> have the same size, aka cpuc->pebs_record_size. It's true for the most
-> cases, since the DS buffer is always flushed in every context switch.
-> 
-> However, there is a corner case that breaks the assumption.
-> A system-wide PEBS event with the large PEBS config may be enabled
-> during a context switch. Some PEBS records for the system-wide PEBS may
-> be generated while the old task is sched out but the new one hasn't been
-> sched in yet. When the new task is sched in, the cpuc->pebs_record_size
-> may be updated for the per-task PEBS events. So the existing system-wide
-> PEBS records have a different size from the later PEBS records.
-> 
-> Two methods were considered to fix the issue.
-> One is to flush the DS buffer for the system-wide PEBS right before the
-> new task sched in. It has to be done in the generic code via the
-> sched_task() call back. However, the sched_task() is shared among
-> different ARCHs. The movement may impact other ARCHs, e.g., AMD BRS
-> requires the sched_task() is called after the PMU has started on a
-> ctxswin. The method is dropped.
-> 
-> The other method is implemented here. It doesn't assume that all the
-> PEBS records have the same size any more. The size from each PEBS record
-> is used to parse the record. For the previous platform (PEBS format < 4),
-> which doesn't support adaptive PEBS, there is nothing changed.
+On Thu, 6 Apr 2023 at 00:54, Md Danish Anwar <a0501179@ti.com> wrote:
+>
+> On 04/04/23 17:23, MD Danish Anwar wrote:
+> > Hi All,
+> > The Programmable Real-Time Unit and Industrial Communication Subsystem =
+(PRU-ICSS
+> > or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+> > (Programmable Real-Time Units, or PRUs) for program execution.
+> >
+> > There are 3 foundation components for TI PRUSS subsystem: the PRUSS pla=
+tform
+> > driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of t=
+hem have
+> > already been merged and can be found under:
+> > 1) drivers/soc/ti/pruss.c
+> >    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> > 2) drivers/irqchip/irq-pruss-intc.c
+> >    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc=
+.yaml
+> > 3) drivers/remoteproc/pru_rproc.c
+> >    Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> >
+> > The programmable nature of the PRUs provide flexibility to implement cu=
+stom
+> > peripheral interfaces, fast real-time responses, or specialized data ha=
+ndling.
+> > Example of a PRU consumer drivers will be:
+> >   - Software UART over PRUSS
+> >   - PRU-ICSS Ethernet EMAC
+> >
+> > In order to make usage of common PRU resources and allow the consumer d=
+rivers
+> > to configure the PRU hardware for specific usage the PRU API is introdu=
+ced.
+> >
+> > This is the v7 of the old patch series [9].
+> >
+>
+> Hi Mathieu, Can you please review this series. I have addressed comments =
+made
+> by you in v5. I have also addressed Simon's comment in v6 and removed red=
+undant
+> macros from pruss.h header file.
+>
 
-Same as with the other; why can't we flush the buffer when we reprogram
-the hardware?
+You are pushing me to review your code 19 hours after sending the last
+revision?  Are you serious?
+
+> > Changes from v6 [9] to v7:
+> > *) Addressed Simon's comment on patch 3 of this series and dropped unne=
+cassary
+> > macros from the patch.
+> >
+> > Changes from v5 [1] to v6:
+> > *) Added Reviewed by tags of Roger and Tony to the patches.
+> > *) Added Acked by tag of Mathieu to patch 2 of this series.
+> > *) Added NULL check for @mux in pruss_cfg_get_gpmux() API.
+> > *) Added comment to the pruss_get() function documentation mentioning i=
+t is
+> > expected the caller will have done a pru_rproc_get() on @rproc.
+> > *) Fixed compilation warning "warning: =E2=80=98pruss_cfg_update=E2=80=
+=99 defined but not used"
+> > in patch 3 by squashing patch 3 [7] and patch 5 [8] of previous revisio=
+n
+> > together. Squashed patch 5 instead of patch 4 with patch 3 because patc=
+h 5 uses
+> > both read() and update() APIs where as patch 4 only uses update() API.
+> > Previously pruss_cfg_read()/update() APIs were intoroduced in patch 3
+> > and used in patch 4 and 5. Now these APIs are introduced as well as use=
+d in
+> > patch 3.
+> >
+>
+>
+> --
+> Thanks and Regards,
+> Danish.
