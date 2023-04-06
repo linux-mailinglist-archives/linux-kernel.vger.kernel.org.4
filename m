@@ -2,95 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31856D9874
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765636D9876
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238703AbjDFNmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
+        id S238715AbjDFNnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjDFNmu (ORCPT
+        with ESMTP id S229671AbjDFNnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:42:50 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B04F128
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:42:49 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id l12so39549171wrm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680788567; x=1683380567;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MvtPGAEEf5TLZHXMr3mlEiR7Z7erQF1kYIANEz8VstA=;
-        b=a7QS4va62iGCSO8AyeQAKUdEbvW5VyUXHcLH/y0s4a5baVl4aAvt8g6OLm9jQ4oWIR
-         6kddjq34EN5EVUTJG4qTUje/7ZB6GJtlePXYdwAc1qZqal5+b6+Q84lAmc6nBjmzMGyq
-         7pxLxl7rpYkwygjjP9z6t6BZpU0SXrawKyYXrMTg5p+t+oUdgzugjbYmVzpyE18QT6Cc
-         ZWXEGX8H3iQ2U1BuluqtOoCWOx3BKA2uBnktChNODaA2iuAg7gR3cGW6C6YiIsZDr8MU
-         TsgDwNi9QvLw/WYglmaBYyKdFfOVTxg1haRgZhcxVHoQDd0WLMc50cmykCPz2IExP7wf
-         PA8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680788567; x=1683380567;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MvtPGAEEf5TLZHXMr3mlEiR7Z7erQF1kYIANEz8VstA=;
-        b=NTl4HtZl1uCfdaPU7PPjy++QGkCgZaXw0W7Pc8UQc6t7znw0MGfNOdz1CTVOHQ5AJa
-         3wqVqQ5QmCzJKi4U6aM61Q1Zt1EJQvLHhfnounI06I1fsDWoQ2md1xvQdryS9Vp5pcKc
-         kHt05j9Hc2FQwdjBKW4QJu0/qLGCcnNllbb71QKt2cmWJYCxs4MSfTNDw5H5H2OAdKCN
-         bb7mh34KaeZ95WwSmE5mobrDguvENm8GRxaDNPuY+0WicBi8nie/0cUrW4QyYiqHcIcH
-         CAN+Q6Ru0cpCE2rR/Ypp9MPnWfsYBL6D4tAcKNUNDjQ9om+nao8p/XtuvE2zx8rplDKO
-         83CA==
-X-Gm-Message-State: AAQBX9fq+YyU8lZucwGMIl+TFPxM1mP9aZPUu4WPW71Ad1RGJ3qKohcX
-        EgXoLEentfLwai413XG1Av6EBw==
-X-Google-Smtp-Source: AKy350ayvHxA2H92V7esjNR2IO1UHuMtiS5CK4VR0BsNjHgdgP30iAe4lhqjQt+iNt9THojmW1UyNQ==
-X-Received: by 2002:a5d:4d45:0:b0:2d4:5117:f4b with SMTP id a5-20020a5d4d45000000b002d451170f4bmr4789556wru.26.1680788567342;
-        Thu, 06 Apr 2023 06:42:47 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:6630:ee96:3710:24c8? ([2a05:6e02:1041:c10:6630:ee96:3710:24c8])
-        by smtp.googlemail.com with ESMTPSA id i16-20020a05600c355000b003ede6540190sm5482472wmq.0.2023.04.06.06.42.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 06:42:46 -0700 (PDT)
-Message-ID: <d9ffa8d7-9ab0-bb72-a277-f85790b7439c@linaro.org>
-Date:   Thu, 6 Apr 2023 15:42:45 +0200
+        Thu, 6 Apr 2023 09:43:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F33E44;
+        Thu,  6 Apr 2023 06:43:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27EF564561;
+        Thu,  6 Apr 2023 13:43:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA4EC433D2;
+        Thu,  6 Apr 2023 13:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680788589;
+        bh=URoLRDtsy7mbEea/C3F3239LWhjbKmy4/+amr79krwQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GkGd837mvUOyhT4HBhNRI6A48jM4CuDNbSplt1pzQ9D337ociT1dHBn03gg0xxzql
+         GlNQG8f1XNCdT2va6GT0rmS48IRPzxbSvyMLvcMunESGxKdVnBFdPynd+iqg9oGoHh
+         996AlyVdD92z3hHSeJJ8saxeh3aib5hcxZnXR6QRNeVXf/BLaoXmBPhP2k7ZlsV0jN
+         85RSL0SRG8Kg4A/SDR9QeeaAwnpw23U2M6LJzZaue9c/Mc1iLCCtbGhRnVYyMj4u0J
+         Qu+ja2npSuKDhs8QVqR+QkWininUr2/VviYrG/uvEd5IGUlTK7bq/mDwweXxO+qiii
+         PlqwuS7W5VAIw==
+Date:   Thu, 6 Apr 2023 14:43:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Naresh Solanki <naresh.solanki@9elements.com>,
+        linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-kernel@vger.kernel.org, Sascha Hauer <sha@pengutronix.de>,
+        jerome Neanne <jneanne@baylibre.com>,
+        "Mutanen, Mikko" <Mikko.Mutanen@fi.rohmeurope.com>
+Subject: Re: [PATCH v2 2/3] hwmon: (pmbus/core): Add regulator event support
+Message-ID: <d6a3ca82-7245-45e1-b8ff-a9970671b04f@sirena.org.uk>
+References: <20230328150335.90238-1-Naresh.Solanki@9elements.com>
+ <20230328150335.90238-2-Naresh.Solanki@9elements.com>
+ <c88d3cdd-fb2f-c3ac-a9e8-e49f8e98b811@gmail.com>
+ <17934bff-f728-d57a-c3c8-956634bd48c8@roeck-us.net>
+ <3be67394-6082-1aeb-8a8d-90149217bdc7@gmail.com>
+ <aea044ab-3a83-2369-aff7-5ef153618619@roeck-us.net>
+ <0672fe4d-7293-4374-9186-29b008e5f8a2@sirena.org.uk>
+ <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] clocksource/drivers/timer-imx-gpt: Remove non-DT function
-Content-Language: en-US
-To:     Fabio Estevam <festevam@denx.de>
-Cc:     shawnguo@kernel.org, linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230307124313.708255-1-festevam@denx.de>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230307124313.708255-1-festevam@denx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5rVUboXIZqzB+ntf"
+Content-Disposition: inline
+In-Reply-To: <CANhJrGO3X7pSsMBg6Gtf-q3=_JiCX4Qs=pGudL=etooM2F676g@mail.gmail.com>
+X-Cookie: Man and wife make one fool.
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 13:43, Fabio Estevam wrote:
-> mxc_timer_init() was originally only used by non-DT i.MX platforms.
-> 
-> i.MX has already been converted to be a DT-only platform.
-> 
-> Remove the unused mxc_timer_init() function.
-> 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
-> ---
 
-Applied, thanks
+--5rVUboXIZqzB+ntf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+On Thu, Apr 06, 2023 at 11:00:02AM +0300, Matti Vaittinen wrote:
+> ke 5. huhtik. 2023 klo 18.19 Mark Brown (broonie@kernel.org) kirjoitti:
+> > On Wed, Apr 05, 2023 at 07:18:32AM -0700, Guenter Roeck wrote:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> > > Same situation. I though a regulator driver would notify the regulator subsystem
 
+> I think this notification is not processed by the regulator subsystem.
+> It is just delivered to the consumer driver(s) who have subscribed the
+> notifications.
+
+Right.  The hardware might autonomously do something but there's nothing
+in the framework which will take any action.
+
+> > The theory is that if a consumer detects that the device it's
+> > controlling has bad power then it can take corrective action if there's
+> > some specification mandated error handling (for something like a
+> > standard bus) or risk of hardware damage.
+
+> The problem I see here is that, if the error information itself
+> (severity + notification type) does not 'classify' the error handling
+> - then I don't see how any consumers can do handling unless they are
+> targeted to one specific system only. My original thinking has been
+> that ERROR level notifications are sent only when HW is no longer
+> operable - and consumers are expected to do what-ever protective
+> actions they can, including turning off the faulty regulator. That is
+> why I originally asked about handling the PMBUS errors.
+
+TBH I think if you're at the point where you've got regulator hardware
+flagging problems in most system designs there's serious problems, I'm
+not sure how likely it is that it's worth trying to classify the errors.
+Perhaps there's some systems that frequently flag low level errors
+though.
+
+> > It can also try to avoid
+> > interacting with hardware if that might not work.
+
+> It'd be great to have documentation / specification for sending and/or
+> handling the regulator events. I don't think we currently have such.
+> As far as I understand, the notifications can be picked up by all
+> consumers of a regulator. I am a bit worried about:
+> a) Situations where notification handlers 'collide' by doing 'actions'
+> which are unexpected by other handlers
+
+I'm not sure what you're expecting there?  A device working with itself
+shouldn't disrupt any other users.
+
+> b) Situations where different notification senders send similar
+> severity-level notifications for faults expecting different types of
+> handling.
+
+Like I say I'm not sure how much practical difference it makes to think
+too hard about differentiating the errors.
+
+> Or, is it so that no "generic handling" of these errors is to be
+> expected? Eg, consumers who implement any handling must always be
+> targeted to a very specific system? My thinking has been that the
+> device sending the notification knows the severity of the problem and
+> - for example the REGULATOR_EVENT_REGULATION_OUT is only sent with
+> such severe problems that consumers can try disabling the regulator,
+> whereas the _WARN level notifications may not warrant such action. But
+> again, I don't think we have a specification for this - so this is
+> just my thinking - which may be off.
+
+Do we actually have practical examples of systems sending warnings that
+aren't followed in very short order by more severe errors, notified or
+otherwise?
+
+--5rVUboXIZqzB+ntf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQuzGcACgkQJNaLcl1U
+h9DBAwf/Y7v278IUTTFKtM8zh82+//bnj7JS7CBQUKv8QIdngzKfcbQxj5e99OmG
+O7gl9jLpOUaDIV+6aoyhoW/IL0QQL005SAbO6CcKa9aZIjCxFmXN4OZGA+6QvZam
+E7xFCccQ4+xtTM99xVM8QgpazCreNXj3Gnz4gCvXfW8t7bcAQJhlY/9gV5HYXNLY
+LlcXrsD/mRvHotYutbHQZM0pTUMy54jdxMm2JrrLDweVKomBveRAdaEj4DQRzpEN
+mSVgYm4v0eqbAgC4hKHaHGoPuqFGxb0d7cUY2l5E6O6QlvI3AHUtP9sCyddbH8Iu
+fB7Zl3zI7BNZY0Cf0Ifqh8CaOalJvg==
+=wRrb
+-----END PGP SIGNATURE-----
+
+--5rVUboXIZqzB+ntf--
