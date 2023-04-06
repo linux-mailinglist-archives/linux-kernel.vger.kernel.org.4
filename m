@@ -2,85 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DF16D94BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996776D94CE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235849AbjDFLLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S237537AbjDFLMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjDFLLf (ORCPT
+        with ESMTP id S236782AbjDFLL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:11:35 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD5972A0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:11:34 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-502208f7cb3so123922a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680779493;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DvTlgXTtg2muM6L0bWnwM1nd3k3pfGEtq3SLskOcEH4=;
-        b=Q7sbebb1085YqmJMre2lc3cnUIyqmALLCXpED1jXpDlet+AKsLNF++if93FQRKmy0o
-         DiUYN18JR3m53dV51E6FzIskatHt8r9nUI9TANyhpyf2BZNRpU6Ff7FOhiwNMCdEou7w
-         QDXgKfRjYOFyCloYSJ44VM5YQvngC+yvInI0s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680779493;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DvTlgXTtg2muM6L0bWnwM1nd3k3pfGEtq3SLskOcEH4=;
-        b=HUk1Auzd2hvkfLDqHZmyK8NdYsujChnILcqtYN+Ad5HWnCxMxCg3mEuGWjJgjA61eJ
-         5PcnsOSliKX49UWFIRVOOUYDXv1GQmqyk7uPOrKnmIcO3i9HrRMeOJsiicNgSphVyxO/
-         6++OEaWSjrXF1MrQKsDO+YeKgQ4bDwOxsazcB5IPH3G1XxTzf5EvPbC2rJQgwE/g0JtY
-         BnL6lNxz094dC3LZPygn/RfjrBsGZKyEZS43rwAscjkNDFM69GFomaNvSuebVNKspIJ7
-         dSvehcUVg4+KYEEana7zRK9aYDpW8lDv4eWtI2WUHs53LqRf2HI0jM3gO2UlzId5noqu
-         juig==
-X-Gm-Message-State: AAQBX9fSQ8E2StMDR8ejX0PaNNHfHg2342mu3GERaEi31NwkiMo0gPrD
-        5oaj4ST/sHpgSqBcsTPU6rEjHQ==
-X-Google-Smtp-Source: AKy350auhtgCzPObUrGlRmtHRAgcyfLCC/RuuO9vsiy2uaAlw7Q65OjzJxcLE9tG5F5SmSt+4fIuMA==
-X-Received: by 2002:a17:906:2d7:b0:949:148d:82c0 with SMTP id 23-20020a17090602d700b00949148d82c0mr3456530ejk.6.1680779492975;
-        Thu, 06 Apr 2023 04:11:32 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id mm25-20020a170906cc5900b0093e9fb91837sm680541ejb.76.2023.04.06.04.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 04:11:32 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 13:11:30 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-        Marius Vlad <marius.vlad@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 1/2] drm/vkms: Drop vkms_connector_destroy() wrapper
-Message-ID: <ZC6o4l7tzSIwFTKw@phenom.ffwll.local>
-Mail-Followup-To: Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>,
-        Marius Vlad <marius.vlad@collabora.com>,
-        David Airlie <airlied@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        dri-devel@lists.freedesktop.org
-References: <20230406110235.3092055-1-javierm@redhat.com>
- <20230406110235.3092055-2-javierm@redhat.com>
+        Thu, 6 Apr 2023 07:11:59 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC347EE7;
+        Thu,  6 Apr 2023 04:11:55 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336ATra9030223;
+        Thu, 6 Apr 2023 13:11:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=lNXQl4ZV/6vn7r3pBuZewXxh3tYHi2TdmaJoMqkDndc=;
+ b=30CchlbXohzL5uB7KQeLzo1CHO5Bh8K6Dl4BegGtjo6JcZ1qBrDYI2SVFeGEHThbKXK3
+ oOgleTH1Y8ffgFwDZuhkXyAc/ARlhtZuWEYpFXJJBRQwcDgTYCiIXd4z626ZM7lko5TJ
+ TH+dfe4GYpVHGiXXP8Zf48ogxNfMYQsw5o+zUAfGOAhT4omYDZJZOxz0BoOq2n9fIJr3
+ yn+akJ9Mzg1ytnmIk+bdgfFyB9qLiunWZ4i6x0r+5XJLqQDztkNF0D416MnI1Z78BfGB
+ 9lfETUEMAn5IzK0DhCy9TzWLPROoLo+zYQQ7Dx9fvJVqR2LWypDZj4+ZiBnlUmIIZPo+ 4Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3psv5xrb6u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 13:11:42 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1A61010002A;
+        Thu,  6 Apr 2023 13:11:40 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3596121BF53;
+        Thu,  6 Apr 2023 13:11:40 +0200 (CEST)
+Received: from [10.201.21.178] (10.201.21.178) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Thu, 6 Apr
+ 2023 13:11:37 +0200
+Message-ID: <9c87443a-90e6-52d3-859f-2b2eb057049b@foss.st.com>
+Date:   Thu, 6 Apr 2023 13:11:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406110235.3092055-2-javierm@redhat.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 4/5] remoteproc: stm32: Allow hold boot management by the
+ SCMI reset controller
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>
+References: <20230331154651.3107173-1-arnaud.pouliquen@foss.st.com>
+ <20230331154651.3107173-5-arnaud.pouliquen@foss.st.com>
+ <20230405180143.GD3812912@p14s>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <20230405180143.GD3812912@p14s>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.178]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_05,2023-04-06_01,2023-02-09_01
+X-Spam-Status: No, score=-3.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,52 +80,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:02:34PM +0200, Javier Martinez Canillas wrote:
-> This helper is just a wrapper that calls drm_connector_cleanup(), there's
-> no need to have another level of indirection.
+
+
+On 4/5/23 20:01, Mathieu Poirier wrote:
+> On Fri, Mar 31, 2023 at 05:46:50PM +0200, Arnaud Pouliquen wrote:
+>> The hold boot can be managed by the SCMI controller as a reset.
+>> If the "hold_boot" reset is defined in the device tree, use it.
+>> Else use the syscon controller directly to access to the register.
+>>
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+>> ---
+>>  drivers/remoteproc/stm32_rproc.c | 34 ++++++++++++++++++++++++++------
+>>  1 file changed, 28 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+>> index 4be651e734ee..6b0d8f30a5c7 100644
+>> --- a/drivers/remoteproc/stm32_rproc.c
+>> +++ b/drivers/remoteproc/stm32_rproc.c
+>> @@ -78,6 +78,7 @@ struct stm32_mbox {
+>>  
+>>  struct stm32_rproc {
+>>  	struct reset_control *rst;
+>> +	struct reset_control *hold_boot_rst;
+>>  	struct stm32_syscon hold_boot;
+>>  	struct stm32_syscon pdds;
+>>  	struct stm32_syscon m4_state;
+>> @@ -398,6 +399,14 @@ static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
+>>  	struct stm32_syscon hold_boot = ddata->hold_boot;
+>>  	int val, err;
+>>  
+>> +	if (ddata->hold_boot_rst) {
+>> +		/* Use the SCMI reset controller */
+>> +		if (!hold)
+>> +			return reset_control_deassert(ddata->hold_boot_rst);
+>> +		else
+>> +			return reset_control_assert(ddata->hold_boot_rst);
+>> +	}
+>> +
+>>  	val = hold ? HOLD_BOOT : RELEASE_BOOT;
+>>  
+>>  	err = regmap_update_bits(hold_boot.map, hold_boot.reg,
+>> @@ -693,16 +702,29 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+>>  		dev_info(dev, "wdg irq registered\n");
+>>  	}
+>>  
+>> -	ddata->rst = devm_reset_control_get_by_index(dev, 0);
+>> +	ddata->rst = devm_reset_control_get(dev, "mcu_rst");
 > 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-
-On both patches:
-
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-
-Aside, would be a nice cleanup to move vkms output stuff (crtc and
-connector) over to the drmm_ stuff. The plane already does that.
-
-That should also simplify the multi-output work.
--Daniel
-
-> ---
+> Peng is correct - newer kernels won't be able to boot with older DT.
 > 
->  drivers/gpu/drm/vkms/vkms_output.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+>>  	if (IS_ERR(ddata->rst))
+>>  		return dev_err_probe(dev, PTR_ERR(ddata->rst),
+>>  				     "failed to get mcu_reset\n");
+>>  
+>> -	err = stm32_rproc_get_syscon(np, "st,syscfg-holdboot",
+>> -				     &ddata->hold_boot);
+>> -	if (err) {
+>> -		dev_err(dev, "failed to get hold boot\n");
+>> -		return err;
+>> +	ddata->hold_boot_rst = devm_reset_control_get(dev, "hold_boot");
+>> +	if (IS_ERR(ddata->hold_boot_rst)) {
+>> +		if (PTR_ERR(ddata->hold_boot_rst) == -EPROBE_DEFER)
+>> +			return PTR_ERR(ddata->hold_boot_rst);
+>> +		ddata->hold_boot_rst = NULL;
+>> +	}
+>> +
+>> +	if (!ddata->hold_boot_rst) {Okay, I definitely need to rewrite the patchset.
 > 
-> diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
-> index 991857125bb4..4de6f8ae38be 100644
-> --- a/drivers/gpu/drm/vkms/vkms_output.c
-> +++ b/drivers/gpu/drm/vkms/vkms_output.c
-> @@ -6,14 +6,9 @@
->  #include <drm/drm_probe_helper.h>
->  #include <drm/drm_simple_kms_helper.h>
->  
-> -static void vkms_connector_destroy(struct drm_connector *connector)
-> -{
-> -	drm_connector_cleanup(connector);
-> -}
-> -
->  static const struct drm_connector_funcs vkms_connector_funcs = {
->  	.fill_modes = drm_helper_probe_single_connector_modes,
-> -	.destroy = vkms_connector_destroy,
-> +	.destroy = drm_connector_cleanup,
->  	.reset = drm_atomic_helper_connector_reset,
->  	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
->  	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
-> -- 
-> 2.40.0
+> Why another if() statement?  The code below should be in the above if()...
 > 
+> This patchset is surprizingly confusing for its size.  I suggest paying
+> attention to the changelogs and adding comments in the code.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+I definitely need to rewrite this patchset.
+
+Thanks for all reviewers
+Regards
+Arnaud
+
+> 
+> Thanks,
+> Mathieu
+> 
+>> +		/*
+>> +		 * If the hold boot is not managed by the SCMI reset controller,
+>> +		 * manage it through the syscon controller
+>> +		 */
+>> +		err = stm32_rproc_get_syscon(np, "st,syscfg-holdboot",
+>> +					     &ddata->hold_boot);
+>> +		if (err) {
+>> +			dev_err(dev, "failed to get hold boot\n");
+>> +			return err;
+>> +		}
+>>  	}
+>>  
+>>  	err = stm32_rproc_get_syscon(np, "st,syscfg-pdds", &ddata->pdds);
+>> -- 
+>> 2.25.1
+>>
