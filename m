@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6985D6DA354
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD94E6DA363
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240232AbjDFUf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S240286AbjDFUgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239890AbjDFUew (ORCPT
+        with ESMTP id S239578AbjDFUg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:34:52 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA4B76D
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:32:48 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id k18so3585850lfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:32:48 -0700 (PDT)
+        Thu, 6 Apr 2023 16:36:27 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173FAD51A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:33:34 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id d7so7325979lfj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:33:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680813167;
+        d=linaro.org; s=google; t=1680813212;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sSjbkEzdKUWsxqf6FTHcvALXYuTkKMbJioNVsbzVNEU=;
-        b=qp8NnOfZKpCHKk8L2hKR8i9dYAHN2EZ2svldCyg2eeBIOXlsZSaX6p57jM626kyski
-         67h+ko4l2EL6sIK0WZKj0snJtiIDASo5vYCQZpzBrkU4HbSzQ4aE8NxYEDLg7vtS3mv+
-         8Pw3J/6RemAjrtcML8yEFNMThSXnB3JRjzBjpILjcqeRdq32toDe7vMEUVHvRjc4+OZR
-         jPn6WGJbt3oj9w8Pk2rOR7/qMcQiCasVLUX9TQyDdxW0boGg121S+/C8rXOMbdAd0hhs
-         tztaiEcu5LrcnBHmE390rW95lALNvDQw4D0LEBTRMIMAeHk9oyWvH4t0sGBGAR/l0Iao
-         56Ug==
+        bh=dONEmhUJMhKYFyZCBXcrCjLm9T5FLjoW/K6qSBrVWs8=;
+        b=iXhYZHOsYYYByLIA54EIRN5iC1g9jRD/H4vcAjIRVUNPxfUo6SjOyNgbGDjm5sAiue
+         jubnPKPMjjmxtQDKeS6mmlRhRjIeQSZDA4Rnevei6eELX0UwkBaUiDD2557RfOvIOigA
+         JdOK7tx8C8ejzaAS2c7nWwtYXa5VL0eD9o9LU8aiMDgKiXYeIIzK3EuDFoVOF8EFvdiB
+         gKuF94X6obIasywVx+EVNlehhtOsuqTLkcYMDSE1HXVQBw5WLu7kPOVGuSvG1FrMifII
+         CQPNSnE7Q8gFxF0RqHkN36Ts//vYU5rzFrqjMvRP9VOYZVsjOBO/y/YB32JSEtvlQbnv
+         9gtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680813167;
+        d=1e100.net; s=20210112; t=1680813212;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sSjbkEzdKUWsxqf6FTHcvALXYuTkKMbJioNVsbzVNEU=;
-        b=R4LruXCvXtMkRarHzyz6ezJcfx/rpIsImg1o8WVhn6oyiaa+7k036LFNMSK+SGKIc2
-         90FZvaWvFvyJicxiUpJwb32YdCwGJwaSOSdqWhkRw5QuAbA3ddH/X8sQ1HgpPOgyjQn0
-         SXmHGOZukRqyFMIA1wzo7s+UjBJBsaUziq62/iGQ5VcBChsTAPyH9DQT6+C/56wBJ49E
-         pz9WVgs6BJjEpsHy6IYYEBXCF4WuxynxbAGCfqzjAyijUJT29TeZ7JfWhIDbKgjj5rGL
-         jgwroGr63KKO4/7e9ULHSAiW8ICT0kv+4m130T/lRngdNIvHj6EBvmU8g5j3JbMadj0M
-         7tHg==
-X-Gm-Message-State: AAQBX9faI8Xo3bwyjZciedT1FqrC7PAkqY2UJeUmWoer+srJoLIYxkOr
-        Mcnku+HL9wIsDiJD/sRAwTsW2Nq2lk0mugOaJIw=
-X-Google-Smtp-Source: AKy350YJueL7oZdOLdSHwjpRBL3LiGsVJ4lWEGJEmOWeQiK4kV4iErvQSXFyq9sCNydPmo8t+6MeXw==
-X-Received: by 2002:ac2:46d6:0:b0:4ec:363a:5f17 with SMTP id p22-20020ac246d6000000b004ec363a5f17mr84297lfo.21.1680813167082;
-        Thu, 06 Apr 2023 13:32:47 -0700 (PDT)
+        bh=dONEmhUJMhKYFyZCBXcrCjLm9T5FLjoW/K6qSBrVWs8=;
+        b=nq+tMLqnBtJ+bn7xhUqpk+tuUVGXS94wHV1569YElImiFDasIh0kmjgZWjyYjm8/I2
+         86QLMR2aVdh9xKwbG+Lbw0pb8oLtf6B4gRptXCzLpEjFCRq4/puGzbZYVOPeEdNbEn8R
+         UCQrd+sHogu7Md16z1dttjmBf3QCUwv5HRGPDA3OSuvQuw6vVQcU9gfjGMC5wJ7Ycb2O
+         G2zwQY8vGYjmTExrwmhNoRFZR0I/GwaMZzmg4a+zaJ/HOPNLdmSSGVUYKM4puDzolhZk
+         0CiPJ4hp09Zm38HG+rvwPvyEp3Tl8lZ2uhvUkFuXJKASmhzb+std8koM1wBfWOrk8WvI
+         CRQQ==
+X-Gm-Message-State: AAQBX9fIrsBILqsA/w6wJkMYbs2rtI0np4mr3/p/udC1VWjPsCEW/Tv3
+        4bX4MfjU+yw4eOMBIa7y144nrg==
+X-Google-Smtp-Source: AKy350aK+D04bDPlVQe02bcm3DZA2ygZJUKZhuGRc1v3vQWp0mlWlfT3uHMd/Rqq0oinC0UjePn6Ew==
+X-Received: by 2002:a05:6512:3ca6:b0:4dc:8049:6f36 with SMTP id h38-20020a0565123ca600b004dc80496f36mr1912599lfv.1.1680813212065;
+        Thu, 06 Apr 2023 13:33:32 -0700 (PDT)
 Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id v3-20020ac25923000000b004eaef4b51dasm408338lfi.107.2023.04.06.13.32.43
+        by smtp.gmail.com with ESMTPSA id d13-20020ac24c8d000000b004db3d57c3a8sm405663lfl.96.2023.04.06.13.33.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 13:32:46 -0700 (PDT)
-Message-ID: <57cf27c5-be4e-976e-bc3c-fee046b079e7@linaro.org>
-Date:   Thu, 6 Apr 2023 22:32:38 +0200
+        Thu, 06 Apr 2023 13:33:31 -0700 (PDT)
+Message-ID: <9f4cb333-bea0-0849-e8a6-dd96cb09bdbd@linaro.org>
+Date:   Thu, 6 Apr 2023 22:33:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.1
-Subject: Re: [PATCH v2 7/7] arm64: dts: qcom: sa8775p: add the GPU IOMMU node
+Subject: Re: [PATCH v2 4/5] arm64: dts: qcom: sa8775p: add UFS nodes
 Content-Language: en-US
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-scsi@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230406200723.552644-1-brgl@bgdev.pl>
- <20230406200723.552644-8-brgl@bgdev.pl>
+References: <20230406194703.495836-1-brgl@bgdev.pl>
+ <20230406194703.495836-5-brgl@bgdev.pl>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230406200723.552644-8-brgl@bgdev.pl>
+In-Reply-To: <20230406194703.495836-5-brgl@bgdev.pl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -91,71 +90,85 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6.04.2023 22:07, Bartosz Golaszewski wrote:
+On 6.04.2023 21:47, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Add the GPU IOMMU for sa8775p-based platforms.
+> Add nodes for the UFS and its PHY on sa8775p platforms.
 > 
 > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 36 +++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index f799cb5abb87..f46c1a73abdb 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -7,6 +7,7 @@
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/clock/qcom,rpmh.h>
->  #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
-> +#include <dt-bindings/clock/qcom,sa8775p-gpucc.h>
->  #include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
->  #include <dt-bindings/power/qcom-rpmpd.h>
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> @@ -605,6 +606,41 @@ gpucc: clock-controller@3d90000 {
->  			#power-domain-cells = <1>;
->  		};
->  
-> +		kgsl_smmu: iommu@3da0000 {
-> +			compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
-No "qcom,adreno"? Does this one not support per-process pagetables?
-Do you have a working GPU setup to confirm that?
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
-> +			reg = <0x0 0x03da0000 0x0 0x20000>;
-> +			#iommu-cells = <2>;
-> +			#global-interrupts = <2>;
-> +			dma-coherent;
-> +			power-domains = <&gpucc GPU_CC_CX_GDSC>;
-> +			clocks = <&gcc GCC_GPU_MEMNOC_GFX_CLK>,
-> +				 <&gcc GCC_GPU_SNOC_DVM_GFX_CLK>,
-> +				 <&gpucc GPU_CC_AHB_CLK>,
-> +				 <&gpucc GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK>,
-> +				 <&gpucc GPU_CC_CX_GMU_CLK>,
-> +				 <&gpucc GPU_CC_HUB_CX_INT_CLK>,
-> +				 <&gpucc GPU_CC_HUB_AON_CLK>;
-> +			clock-names = "gcc_gpu_memnoc_gfx_clk",
-> +				      "gcc_gpu_snoc_dvm_gfx_clk",
-> +				      "gpu_cc_ahb_clk",
-> +				      "gpu_cc_hlos1_vote_gpu_smmu_clk",
-> +				      "gpu_cc_cx_gmu_clk",
-> +				      "gpu_cc_hub_cx_int_clk",
-> +				      "gpu_cc_hub_aon_clk";
-> +			interrupts = <GIC_SPI 673 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 674 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 678 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 679 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 680 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 681 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 682 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 683 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 684 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 685 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 686 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 687 IRQ_TYPE_LEVEL_HIGH>;
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 58 +++++++++++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index 2343df7e0ea4..5de0fbbe9752 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -585,6 +585,64 @@ &clk_virt SLAVE_QUP_CORE_1 QCOM_ICC_TAG_ALWAYS>,
+>  			};
+>  		};
+>  
+> +		ufs_mem_hc: ufs@1d84000 {
+> +			compatible = "qcom,sa8775p-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
+> +			reg = <0x0 0x01d84000 0x0 0x3000>;
+> +			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH>;
+> +			phys = <&ufs_mem_phy>;
+> +			phy-names = "ufsphy";
+> +			lanes-per-direction = <2>;
+> +			#reset-cells = <1>;
+> +			resets = <&gcc GCC_UFS_PHY_BCR>;
+> +			reset-names = "rst";
+> +			power-domains = <&gcc UFS_PHY_GDSC>;
+> +			required-opps = <&rpmhpd_opp_nom>;
+> +			iommus = <&apps_smmu 0x100 0x0>;
+> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+> +				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+> +				 <&gcc GCC_UFS_PHY_AHB_CLK>,
+> +				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+> +				 <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
+> +			clock-names = "core_clk",
+> +				      "bus_aggr_clk",
+> +				      "iface_clk",
+> +				      "core_clk_unipro",
+> +				      "ref_clk",
+> +				      "tx_lane0_sync_clk",
+> +				      "rx_lane0_sync_clk",
+> +				      "rx_lane1_sync_clk";
+> +			freq-table-hz = <75000000 300000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<75000000 300000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<0 0>;
+> +			status = "disabled";
 > +		};
 > +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
->  			reg = <0x0 0x0b220000 0x0 0x30000>,
+> +		ufs_mem_phy: phy@1d87000 {
+> +			compatible = "qcom,sa8775p-qmp-ufs-phy";
+> +			reg = <0x0 0x01d87000 0x0 0xe10>;
+> +			/*
+> +			 * Yes, GCC_EDP_REF_CLKREF_EN is correct in qref. It
+> +			 * enables the CXO clock to eDP *and* UFS PHY.
+> +			 */
+> +			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> +				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>,
+> +				 <&gcc GCC_EDP_REF_CLKREF_EN>;
+> +			clock-names = "ref", "ref_aux", "qref";
+> +			power-domains = <&gcc UFS_PHY_GDSC>;
+> +			resets = <&ufs_mem_hc 0>;
+> +			reset-names = "ufsphy";
+> +			#phy-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+>  		tcsr_mutex: hwlock@1f40000 {
+>  			compatible = "qcom,tcsr-mutex";
+>  			reg = <0x0 0x01f40000 0x0 0x20000>;
