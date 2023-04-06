@@ -2,221 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9C76D9BB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB8A6D98EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239620AbjDFPGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S238953AbjDFOFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239577AbjDFPGl (ORCPT
+        with ESMTP id S238926AbjDFOFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:06:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991BAA246
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:06:38 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id by26so2138713ejb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:06:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680793597; x=1683385597;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5T0UiBH8DISDoFRKB709hQFeGJr3JsBuuEYGSQpde9c=;
-        b=BJzxdcn9OpK4VROJmWDyFngYiWYJw61q+0CYvybyICYz4m+ATHkzWY1swrHCukMlzT
-         BrG8ctmrJA0FGtsNx8sJM+d8BHmQk1lWqnIw9plUJZtwc9yikHWCoSV0Av9H9xbYRB6S
-         NmGSPAk9ly0gC2SIddyj8zNLSIUjs4goPuoMBglStpdbDFtSSggJfgrEGldV60LN7wOk
-         hZTEfjF95a3lIJFyZP7SWh3qfXA8zGCwON8WyCJvqy3+5GtJMQfm7jJemnZg/69tv0c/
-         hSxUxMxGdInzKGO8ECrJBcoP/IZOPYGXnoOl4B5Ggq1CIkSvd5zwUr76FqEuNeEEI6kd
-         VREw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680793597; x=1683385597;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5T0UiBH8DISDoFRKB709hQFeGJr3JsBuuEYGSQpde9c=;
-        b=3M1Cm2YXww+trXSeNfhLG5HP13xFSwfx9cG4gbopWOJ6CbWUbRlMPLBHlxgoXcTyLv
-         xK8MVE9W2glxZ1i2cX2C6s3sWvy1fCULjyB0lL+jTCrTXu2SOk+jkd6/efbdnu88Ot8Q
-         qXpZ/xrhWeXYVLpf61E3bsyO4W3cORzM3+82BRfZHFUtqwOZlwvwd47mj+zwOtDoCp3V
-         mfZTIsjRVmq5+rLMxrJJe/bBIWNkvGlcQgIKQSo14FYhByk1SO0TmCk0h/6oSPFFPfZO
-         cBuEPhhj/aMT9mUEXGP6wgpEKm81+wyQ5dpVo4IWA9ONLc6f/6qi4kxa/Apx6TsrzIS4
-         h2WQ==
-X-Gm-Message-State: AAQBX9clLJeYvCSpQkiGWpSc+Vl+Oqofaw2wdPkKUBfPln9FsYIMEdz9
-        VILN/a8EpmMFNHArQQ4AneU=
-X-Google-Smtp-Source: AKy350Y3tOEfHxwSiUHXaDOPCFpeS65Kf1F94RWAc8MK3RPHPJRalnERXkxJyPkBf+948ZBbDba7sA==
-X-Received: by 2002:a17:906:3f86:b0:929:e5a8:63f7 with SMTP id b6-20020a1709063f8600b00929e5a863f7mr5406203ejj.28.1680793597085;
-        Thu, 06 Apr 2023 08:06:37 -0700 (PDT)
-Received: from localhost (h130e.n1.ips.mtn.co.ug. [41.210.147.14])
-        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009476efd5244sm929456ejc.172.2023.04.06.08.06.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 08:06:36 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 17:04:19 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: Re: [PATCH v3 1/2] test_firmware: Fix some racing conditions in
- test_fw_config locking.
-Message-ID: <eb117a50-79ad-4f5a-8ad9-73247107469e@kili.mountain>
-References: <20230406015315.31505-1-mirsad.todorovac@alu.unizg.hr>
+        Thu, 6 Apr 2023 10:05:06 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A9F86AC;
+        Thu,  6 Apr 2023 07:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=92YHTTMfDlN4SnJGHYPEf7ALbRz1gExsNSlQbfCkiJE=; b=VD9zdoH+cdV2/P8HJ83hRBLEjI
+        JpdueSAzOmoj5lCh7T87b9I6gbGuMKT0JVGD26qs0FHKIB3yJoXQe+Y4WcX1wGtdc5Gf3D5swAlSD
+        EXr1mZc5rPBC5shJ4xrHAyWqSOcNkw5tuIyHXQO1g47XKYVj5hQlqd5LcUwNCCAn1cGW9SS3G7uax
+        zmp5ipQM/zPtv02Uri8vdyNZuZVVZGKIWz2E7oa+uuBEOkZHVNccAKz2SL3V1kMqabFQew4XDjGMP
+        UDtpCwd9Y5Asm9kd3xNpC2rhBHIMzw4QpCAoQ3vLq5u1SjJpvC/3lviLAn7JaG9fKetrRHP2MOqLI
+        rQxkw6jQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkQDx-00AXes-0w;
+        Thu, 06 Apr 2023 14:04:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 94388300194;
+        Thu,  6 Apr 2023 16:04:23 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7CEE5212E36AC; Thu,  6 Apr 2023 16:04:23 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 16:04:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com, jannh@google.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <20230406140423.GA386634@hirez.programming.kicks-ass.net>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen>
+ <ZC3P3Ds/BIcpRNGr@tpad>
+ <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+ <ZC69Wmqjdwk+I8kn@tpad>
+ <20230406132928.GM386572@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406015315.31505-1-mirsad.todorovac@alu.unizg.hr>
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230406132928.GM386572@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 03:53:17AM +0200, Mirsad Goran Todorovac wrote:
-> Some functions were called both from locked and unlocked context, so the lock
-> was dropped prematurely, introducing a race condition when deadlock was avoided.
+On Thu, Apr 06, 2023 at 03:29:28PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 09:38:50AM -0300, Marcelo Tosatti wrote:
 > 
-> Having two locks wouldn't assure a race-proof mutual exclusion.
+> > > To actually hit this path you're doing something really dodgy.
+> > 
+> > Apparently khugepaged is using the same infrastructure:
+> > 
+> > $ grep tlb_remove_table khugepaged.c 
+> > 	tlb_remove_table_sync_one();
+> > 	tlb_remove_table_sync_one();
+> > 
+> > So just enabling khugepaged will hit that path.
 > 
-> test_dev_config_update_bool_unlocked(), test_dev_config_update_u8_unlocked()
-> and test_dev_config_update_size_t_unlocked() versions of the functions were
-> introduced to be called from the locked contexts as a workaround without
-> releasing the main driver's lock and causing a race condition, much like putc()
-> and putc_unlocked() in stdio glibc library.
+> Urgh, WTF..
 > 
-> This should guarantee mutual exclusion and prevent any race conditions.
-> 
+> Let me go read that stuff :/
 
-Thanks for figuring this out!  It seems like a good approach to me.
-However, I feel like PATCH 1/1 needs some style changes.
+At the very least the one on collapse_and_free_pmd() could easily become
+a call_rcu() based free.
 
-The question you seem to be dealing with is how consistent to be and how
-much infrastructure to create.  Don't think about that.  Just fix the
-bug in the most minimal way possible and don't worry about being
-consistent.
-
-(Probably the best way to make this consistent is to change the
- test_dev_config_update_XXX functions into a single macro that calls the
- correct kstroXXX function.  Then create a second macro that takes the
- lock and calls the first macro.  But that is a clean up patch and
- unrelated to this bug.)
-
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
-> Cc: Luis Chamberlain <mcgrof@kernel.org> 
-> Cc: Russ Weight <russell.h.weight@intel.com> 
-> Cc: Tianfei zhang <tianfei.zhang@intel.com> 
-> Cc: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr> 
-> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr> 
-> Cc: Zhengchao Shao <shaozhengchao@huawei.com> 
-> Cc: Colin Ian King <colin.i.king@gmail.com> 
-> Cc: linux-kernel@vger.kernel.org 
-> Cc: Takashi Iwai <tiwai@suse.de>
-> Suggested-by: Dan Carpenter <error27@gmail.com>
-> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-> ---
->  lib/test_firmware.c | 52 +++++++++++++++++++++++++++++++++------------
->  1 file changed, 38 insertions(+), 14 deletions(-)
-> 
-> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-> index 05ed84c2fc4c..272af8dc54b0 100644
-> --- a/lib/test_firmware.c
-> +++ b/lib/test_firmware.c
-> @@ -353,16 +353,26 @@ static ssize_t config_test_show_str(char *dst,
->  	return len;
->  }
->  
-> -static int test_dev_config_update_bool(const char *buf, size_t size,
-> +static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
->  				       bool *cfg)
->  {
->  	int ret;
->  
-> -	mutex_lock(&test_fw_mutex);
->  	if (kstrtobool(buf, cfg) < 0)
->  		ret = -EINVAL;
->  	else
->  		ret = size;
-> +
-> +	return ret;
-> +}
-
-This change can be left out completely.
-
-> +
-> +static int test_dev_config_update_bool(const char *buf, size_t size,
-> +				       bool *cfg)
-> +{
-> +	int ret;
-> +
-> +	mutex_lock(&test_fw_mutex);
-> +	ret = test_dev_config_update_bool_unlocked(buf, size, cfg);
->  	mutex_unlock(&test_fw_mutex);
->  
->  	return ret;
-> @@ -373,7 +383,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
->  	return snprintf(buf, PAGE_SIZE, "%d\n", val);
->  }
->  
-> -static int test_dev_config_update_size_t(const char *buf,
-> +static int test_dev_config_update_size_t_unlocked(
-> +					 const char *buf,
->  					 size_t size,
->  					 size_t *cfg)
->  {
-
-Do not rename this function.  Just add a comment that the mutext must be
-held.  Or a WARN_ONCE().
-
-	WARN_ON_ONCE(!mutex_is_locked(&test_fw_mutex));
-
-
-> @@ -384,9 +395,7 @@ static int test_dev_config_update_size_t(const char *buf,
->  	if (ret)
->  		return ret;
->  
-> -	mutex_lock(&test_fw_mutex);
->  	*(size_t *)cfg = new;
-> -	mutex_unlock(&test_fw_mutex);
->  
->  	/* Always return full write size even if we didn't consume all */
->  	return size;
-> @@ -402,6 +411,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
->  	return snprintf(buf, PAGE_SIZE, "%d\n", val);
->  }
->  
-> +static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
-> +{
-> +	u8 val;
-> +	int ret;
-> +
-> +	ret = kstrtou8(buf, 10, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*(u8 *)cfg = val;
-> +
-> +	/* Always return full write size even if we didn't consume all */
-> +	return size;
-> +}
-> +
-
-Just change the test_dev_config_update_u8() to not take the lock.
-Add the comment that the lock must be held.  Change both callers to take
-the lock.
-
-
-Otherwise we end up creating too much duplicate code.
-
->  static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
->  {
->  	u8 val;
-
-regards,
-dan carpenter
-
+I'm not sure I'm following what collapse_huge_page() does just yet.
