@@ -2,86 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6676D9D48
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A276D9D4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239927AbjDFQM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
+        id S239968AbjDFQNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239919AbjDFQMz (ORCPT
+        with ESMTP id S239955AbjDFQNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:12:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CA54C39;
-        Thu,  6 Apr 2023 09:12:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FEBF60F2D;
-        Thu,  6 Apr 2023 16:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B63EC433EF;
-        Thu,  6 Apr 2023 16:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680797574;
-        bh=f0G5GtMX0Vww/OBGVTVkEPr8cy3Z6qlQlEOKio6hNl4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cSVvcg3zFbmG5sAGzQ/ByO5aATJV9Jy3CgKyWjtejL0e0hiHVolxQUjvfrKNbI788
-         58wCx9Mpgl0C1GI/r7cJznw69HenWorG+KLMRmlKkb/2s857HcIPYsucgf9k9cvskb
-         w453mC+m6QV/47w4xpKDw/bunrg11fc7K2Xrg/wFFpSnqKOyalGDl97nR5Lx3lPA0X
-         aAk2iN0TXv8s1aJ0AtfJ5NEEptKr+/m3yru6Fee4i6Chl5evcANy2mJnwoa7RP3Vbj
-         O58JOUv8IVELYUF4WthY5mXEUSbkvlVY6R97TTRNQa1Y4/ttYqGKSXEtKA92v4PL4D
-         ngbfD1b//l7Bg==
-Date:   Thu, 6 Apr 2023 18:12:49 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next 2/3] ksz884x: remove unused #defines
-Message-ID: <ZC7vgRFmqAjGQyss@kernel.org>
-References: <20230405-ksz884x-unused-code-v1-0-a3349811d5ef@kernel.org>
- <20230405-ksz884x-unused-code-v1-2-a3349811d5ef@kernel.org>
- <454a61709e442f717fbde4b0ebb8b4c3fdfb515e.camel@redhat.com>
- <20230406090017.0fc0ae34@kernel.org>
+        Thu, 6 Apr 2023 12:13:10 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FD8A26E
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:13:05 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-93abb185e13so18420266b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1680797584; x=1683389584;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vfjx4v5k+l/m+k+I01SkgtQu9JSM6Qas7cJAMSy1WKg=;
+        b=FGVsLGnGeE0qtVgQqDq4BPwSeaAz1WF5tSkGHuDIkl3Be7JxUUdk4jPZuqR9utDPmM
+         B4jeu9LqyYnob4269auwC1gzJCTyZFtYd0HOfAiD+n9SoRoEhhSRbFUIadqbCko3OKZ+
+         XRdYnyfYRTAM/FeM8iIMoq5cgquy2+B2dvPxQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680797584; x=1683389584;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vfjx4v5k+l/m+k+I01SkgtQu9JSM6Qas7cJAMSy1WKg=;
+        b=qWRt7lAn8FHdKKbqUYo91uXeZcxVFg8uMcIczuNKZJp2x5B/lIiFdzR/Wfnh4Y4xAA
+         7ZUdP7UB6gENdFMKnq27V2JMKGwIsDS/hJjZd+ddRsHYGlNcqEkHHPCDWRCnZQun3Bm9
+         SMcMEtaX72NZ+RJ1U/4z+1quMlAMg8sa/VylRkXt9JhxzrAG7ipAnuh4Pg4VmWPU/TIp
+         YwfMXasuU6Ypvs9uNMckL5CYETPB2VK25RDi2+pJJCVgNmkqY4+O9clcl3pVKAXAWrXy
+         pu5NqBhd6szqfu6bZ+wpNUfV932aOIMXUdGzu1eXTi3SwrhA+Kl/UD0+dog+pl8Vnzyd
+         wDBQ==
+X-Gm-Message-State: AAQBX9de3Ra1Uap0mvHc+5Jc3a2PEoIHyTiZpelJ3YWpgY8b9Z1x3bTv
+        yjD9iK1C7t7ZIEQW1bo2UioJvw==
+X-Google-Smtp-Source: AKy350adRPOHepc4p/aiXqP5G4C815cGF9RqeJGmQvmoul3VRF0NyNNN6MxY7KFP+hx08oWeBDm9og==
+X-Received: by 2002:a17:906:100b:b0:939:5398:768e with SMTP id 11-20020a170906100b00b009395398768emr5972085ejm.7.1680797584091;
+        Thu, 06 Apr 2023 09:13:04 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
+        by smtp.gmail.com with ESMTPSA id fy29-20020a1709069f1d00b0093313f4fc3csm995697ejc.70.2023.04.06.09.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 09:13:03 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 18:13:01 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Asahi Lina <lina@asahilina.net>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 07/18] rust: drm: mm: Add DRM MM
+ Range Allocator abstraction
+Message-ID: <ZC7vjYUnLZqb0FV4@phenom.ffwll.local>
+Mail-Followup-To: Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-7-917ff5bc80a8@asahilina.net>
+ <ZC7T92F7K9XTZPZ1@phenom.ffwll.local>
+ <2a419eff-3566-0aa3-7185-951edde22abb@asahilina.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406090017.0fc0ae34@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <2a419eff-3566-0aa3-7185-951edde22abb@asahilina.net>
+X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 09:00:17AM -0700, Jakub Kicinski wrote:
-> On Thu, 06 Apr 2023 15:37:36 +0200 Paolo Abeni wrote:
-> > On Wed, 2023-04-05 at 10:39 +0200, Simon Horman wrote:
-> > > Remove unused #defines from ksz884x driver.
+On Fri, Apr 07, 2023 at 12:53:47AM +0900, Asahi Lina wrote:
+> On 06/04/2023 23.15, Daniel Vetter wrote:
+> > On Tue, Mar 07, 2023 at 11:25:32PM +0900, Asahi Lina wrote:
+> > > drm_mm provides a simple range allocator, useful for managing virtual
+> > > address ranges. Add a Rust abstraction to expose this module to Rust
+> > > drivers.
 > > > 
-> > > These #defines may have some value in documenting the hardware.
-> > > But that information may be accessed via scm history.  
+> > > Signed-off-by: Asahi Lina <lina@asahilina.net>
 > > 
-> > I personally have a slight preference for keeping these definitions in
-> > the sources (for doc purposes), but it's not a big deal. 
+> > In the cover letter you mentioned the design open about embedded the lock
+> > into the rust wrappers.
 > > 
-> > Any 3rd opinion more then welcome!
+> > I think for a first step that's perfectly fine.
+> > 
+> > Longer term we might want to ramp up some "proof of locking"
+> > infrastructure in Rust, where callers can supply a lock guard and ideally
+> > rust validates at compile time that it's for the right type, and at
+> > runtime (like lockdep) that it's consistent and the callers don't mix up
+> > locks (like using different locks for the same drm_mm allocator).
 > 
-> I had the same reaction, FWIW.
+> That proof-of-lock tuff works in Rust too as far as I know.
 > 
-> Cleaning up unused "code" macros, pure software stuff makes perfect
-> sense. But I feel a bit ambivalent about removing definitions of HW
-> registers and bits.
+> But the general thread safety story in Rust is much simpler, you just use
+> methods that take &mut self when locking is the caller's responsibility.
+> That effectively implies that there can only be one reference that can call
+> those methods at any given time, thanks to the borrow checker. Shared
+> references only give you &self, a locked Mutex upgrades that to &mut self,
+> and that's how you get proof of locking at compile time, through and
+> through, not just for the type but for the specific object.
 
-I guess that it two down-votes for removing the #defines.
+Hm that still has the problem of making sure that you supply the right
+lock (for generic abstractions like drm_mm or drm/sched where the lock is
+supplied by the driver.
 
-Would it be acceptable if I reworked the series to only remove
-the dead code - which would leave only subset of patch 3/3 ?
+Once we have the lock then yeah borrow checker makes sure you can't screw
+up, worst case needs a PhantomData (I guess) as toke of proof to pass
+around the borrowed lifetime (If I got that right from your use of
+PhantomData in the sched wrappers).
 
+> > There's a lot of libraries in the kernel that have this "caller ensures
+> > locking" pattern. drm/sched also has these requirements.
+> 
+> Yup, that all usually maps nicely to &mut self in Rust... except for the
+> issue below.
+> 
+> > There's two other things I'd like to bring up on this patch though, just
+> > because it's a good example. But they're both really general points that
+> > apply for all the rust wrappers.
+> > 
+> > Documentation:
+> > 
+> > In drm we try to document all the interfaces that drivers use with formal
+> > docs. Yes there's some areas that are not great for historical reasons,
+> > but for new stuff and new wrappers we're really trying:
+> > 
+> > - This helps in telling internal (even across .c files or in rust across
+> >    modules within a crate) from stuff drivers access. Sure you have static
+> >    in C or pub in rust, but that doesn't tell you whether it's public all
+> >    the way to drivers.
+> > 
+> > - ideally docs have a short intro section that explains the main concepts
+> >    and links to the main data structures and functions. Just to give
+> >    readers a good starting point to explore.
+> > 
+> > - Linking all the things, so that readers can connect the different parts.
+> >    This is really important in C where e.g. get/put() or any such function
+> >    pairs all needed to be linked together. With rust I'm hoping that
+> >    rustdoc liberally sprinkles links already and we don't have to do this
+> >    as much.
+> > 
+> > - Short explainers for parameters. For rust this also means type
+> >    parameters, for those even simplified examples of how drivers are
+> >    supposed to use them would help a lot in reading docs & understanding
+> >    concepts.
+> > 
+> > - Ideally links from the rust to the sphinx side to linke relevant
+> >    chapters together. Often the bigger explanations are in .rst files with
+> >    DOT graphs (kms has a bunch I've added) or similar, and it doesn't make
+> >    that much sense to duplicate all that on the rust side I guess. But it
+> >    needs to be discoverable.
+> > 
+> > This might be more a discussion topic for the rust people than you
+> > directly. Still needed for the merge-ready patches eventually.
+> 
+> I don't know much about the doc gen stuff on the Rust side so yeah, this is
+> something I need to look into to make it pretty and complete...
+
+From what Miguel has shown I think it's all there already, and the only
+missing pieces are the cross-linking at a chapter level from rustdoc to
+rst and sphinx to rstdoc too ideally. But I think for most rust wrappers
+that will be one link each direction only (e.g. C drm_mm linking to
+kernel::drm::MM and other way round and done). So absolutely no problem if
+that one item is sorted out post merge once rustdoc/kernel-sphinx are
+ready.
+
+> > Refcounting vs borrowing:
+> > 
+> > This is honestly much more the eyebrow raising one than the locking. Very
+> > often on the C side these datastructures all work with borrow semantics,
+> > and you need to explicitly upgrade to a full reference (kref_get or
+> > kref_get_unless_zero, depending whether it's a strong or weak reference)
+> > if you need the object outside of the mutex/lock guard section.
+> > 
+> > Again I think for now it's ok, but the sales pitch of rust is that it
+> > enables borrow lifetime checking with no runtime cost. Plus viz the vm
+> > cleanup example, if you have too many strong backreferences the cleanup
+> > flow gets complicated. And it would suck if rust drivers have to add
+> > complexity like the openrefcount for the vm example simply because we
+> > can't model the borrow semantics well enough to be safe.
+> > 
+> > So not something that's really bad here, but if we need to resort to full
+> > refcounting already for simple datastructures then I'm getting a bit
+> > worried about how well rust will cope with the really nasty borrowed
+> > reference tricks we're playing in other areas.
+> > 
+> > Again more a topic for the rust folks I think than specifically here about
+> > drm_mm wrapping. Just to get things going I think this is fine.
+> 
+> Yeeeeah... this is a *specific* problem. Drop.
+> 
+> The Allocator<T> itself is perfectly safe to implement without any locking,
+> refcounting, or anything. You just make the methods take &mut self (as they
+> already do), the caller can use it with a single reference or wrap it in an
+> Arc<Mutex<T>> and share it, or whatever.
+> 
+> The problem is the Node<A, T>. When you Drop that, it has to go back to the
+> Allocator. But now you're a different object, so no thread safety
+> guarantees. And you need to keep the Allocator alive. So now to make a safe
+> abstraction, you need refcounting and a mutex.
+> 
+> Lifetimes just don't work here, sadly. Not for a useful abstraction.
+> 
+> I'd love to hear from the other Rust folks whether they have any better
+> ideas...
+
+Hm yeah I think I get the gist of the issue. At time of Drop there's no
+allocator reference you can borrow and so you're screwed.
+
+In C we tend to solve that by passing both to the unlink/drop stuff (and
+rust could then ensure that we have legit borrows for both), but I guess
+that just totally wreaks entire wrapper and makes it really rough to use.
+
+> One thing that *can* be done is making the Drop illegal (Rust can't do this
+> "natively" but Linux already has hacks for that, we can make it fail to link
+> if the Drop is ever called). Then you'd have to actively return the Node to
+> the Allocator with a free function. Since Drop is forbidden, and Node is
+> pinned, you'd always have to either return Node objects to the Allocator or
+> leak them. You could drop the Allocator before its nodes, but as far as I
+> know drm_mm can safely handle that (though it will complain), and then due
+> to the previous guarantees the *only* thing you could do with orphan nodes
+> is leak their memory, which is safe.
+> 
+> It would work... but it breaks the whole Rust automagic Drop stuff.
+
+Yeah I think I see the challenge ...
+
+> Thinking about this a bit, I think I want the current mutex/arc semantics
+> for something like a memory allocator (which is one of my primary use cases
+> for drm_mm), since I definitely don't want to be manually returning objects
+> to their allocator all over the place, nor have overarching lifetime
+> requirements that the allocator outlive its objects for safety (that sounds
+> like a can of worms I don't want to open, I'd much rather use a refcount
+> even if I "think" I can prove the lifetime bounds ad-hoc). But for something
+> like a drm_mm that is tracking VA ranges within a VM with all Nodes held
+> internally, maybe I could manage it all internally and have all node
+> destruction be handled via an explicit call into the Allocator.
+
+Yeah I think for gpuva we need to do better, but assuming the gpuva
+library is in C then rust would just need to encode the safety properties
+that (hopefully) the C library guarantees ...
+
+And for any driver that just wants to use some range manager the standard
+wrapping leans heavily on the side of "easy to use".
+
+> Maybe the mm abstraction should offer both options? The extra locking can be
+> implemented in terms of the base unlocked version I think (perhaps with some
+> Deref abuse for ergonomics)... I definitely want to hear more opinions about
+> this from other Rust folks, since there are probably other options I haven't
+> considered...
+
+I don't think we need the more raw/tricky one, at least not until we have
+some serious libraries like gpuva implemented in rust. Or drivers
+reimplementing the gpuva stuff in their driver :-)
+
+> Aside: This, and all the other DRM abstractions, were written before the
+> pin_init stuff from y86 that is in review right now was ready. That may open
+> up more interesting/ergonomic/efficient APIs for some cases, especially
+> where Pin and embedding C types into user objects in some way are involved.
+> So maybe there's room for improvement here. Just a sidenote.
+
+Ah good to know, and yeah that make open some interesting options.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
