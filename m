@@ -2,109 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C862F6D8E63
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5808E6D8E6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234487AbjDFEiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 00:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S234783AbjDFEkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjDFEh6 (ORCPT
+        with ESMTP id S233235AbjDFEkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:37:58 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5439BDE;
-        Wed,  5 Apr 2023 21:37:57 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id h8so146329631ede.8;
-        Wed, 05 Apr 2023 21:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680755876;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=omwjfi+Gdv/8Pb9riMkNMFR9+eIPSxmZH2vSg68TvNU=;
-        b=FFTR7A4oR4L80kBumqZFyw2O4/XnIrSHzSxwvhmllQd5G2JeBy9bX5Cl9cJtO2wYTQ
-         Cg/v31anaKnYETjH/jHFXI4Ob/xhp1cLWJjKSZZXruL7OnxZBh1N+cv1o/KnoVMZgysy
-         XCa92FEM/joC4L8z1hdYW3fz4J5qbBAJOTJ5vLlpM5nTkUNqwgQJVmjQoRP0hUkuPqfW
-         JHwa/YqSq88S+rMLGdHqv/x+RMqtq0MLJobxj42JjFtM22AE08fDn7pJrKwHYUUjDxij
-         LJ9stBmBuEfOlHZOkpbIG40eLipEtybdvg5G0kRUmMG+qsz45cO35g5cKD/FeREDcclJ
-         pJJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680755876;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=omwjfi+Gdv/8Pb9riMkNMFR9+eIPSxmZH2vSg68TvNU=;
-        b=pVoV/lUh2g6LZrneEN4ir0wuWn/YlD92CQ7zHlhF7bMzu9LOdMReFnpmWh5Rov8yIj
-         FjERFXvxFQfn0e9qy4SblesL2yshC54pCOSrWq7GzWHxGiTm6Xf5WeL+1OE8XeH9aEfp
-         a0FaxzrzTNTKrUykMoG4Y2FF+iE6VZ+OV/7va8P7GBOoHjGfO96mIY5ALMMQoxpYDjhV
-         oOMqspjI2ZIJ1JlM26D+MF3HXp+WRsbBHjeL4/2xbysFQV91GVm2UYVtA234ErT6im7C
-         N/HqGiIs/g4AtmFutf9uW4NbjVR4LwgbE8EiVSasot9+6apPP93QCBJyyV2lO/SRnD+p
-         CRuQ==
-X-Gm-Message-State: AAQBX9f7Uz0pAAioDKgsmpDwlqKgUkRjr3FOJXqAFy0Mah31mQhdJV4t
-        LvU/T5oaO5pUZjX50r5GUlw=
-X-Google-Smtp-Source: AKy350ZfPWq0ms6fhEO1YjM1NJsQoqEDPPcwJckn1x5geLZ+tbKysggW6VrKGyp/nMxFg70s6deAyw==
-X-Received: by 2002:a17:906:6d95:b0:927:dfc6:51e6 with SMTP id h21-20020a1709066d9500b00927dfc651e6mr4121578ejt.6.1680755875687;
-        Wed, 05 Apr 2023 21:37:55 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id kf17-20020a17090776d100b009342fe44911sm243299ejc.123.2023.04.05.21.37.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 21:37:55 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 6 Apr 2023 06:37:53 +0200
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     urezki@gmail.com, paulmck@kernel.org, frederic@kernel.org,
-        joel@joelfernandes.org, qiang.zhang1211@gmail.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu/kvfree: Prevents cache growing when the
- backoff_page_cache_fill is set
-Message-ID: <ZC5MoREk30MIt79u@pc636>
-References: <20230406001238.647536-1-qiang1.zhang@intel.com>
+        Thu, 6 Apr 2023 00:40:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D23A86B0;
+        Wed,  5 Apr 2023 21:40:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80E8F642AB;
+        Thu,  6 Apr 2023 04:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C5387C4339B;
+        Thu,  6 Apr 2023 04:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680756018;
+        bh=KovWrG/4iyTPO4xu7Gs3LeZHG6KgCCbmr54VIlegrUQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=gY90QfEHoJe40H32tpkysWMTk6vHwdEd7/oZs6++hzpmKJDdDFH9ZGilq7D+obqle
+         FNgoO8LH0EqwntzS/7mFzLWybCBHlcGTaHyC1jx/CWG93jBtnDd04mYj2Br30cAuFj
+         LyHgXlNxxMVZ7gqS5tV+nUirLLy9J+R+dTdUHtxpVildrKvzVsETyZ64aKXzdWqVkN
+         /kDe7Ci4b//na0+xMmoAM2nIGUd+qapAj/rCavMEv8TGl0rLM94enmTl8JmYIvRuEE
+         gQ7esdvpz2DNdGmi792RuAV4l0/+XB+FRIaFhmc5ataztDRKENmbzIyQ20epE4CQLX
+         gPZlTdIrkMALg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A448FE29F4E;
+        Thu,  6 Apr 2023 04:40:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406001238.647536-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] kallsyms: move module-related functions under
+ correct configs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168075601866.17428.2889245679074422058.git-patchwork-notify@kernel.org>
+Date:   Thu, 06 Apr 2023 04:40:18 +0000
+References: <20230330102001.2183693-1-vmalik@redhat.com>
+In-Reply-To: <20230330102001.2183693-1-vmalik@redhat.com>
+To:     Viktor Malik <vmalik@redhat.com>
+Cc:     bpf@vger.kernel.org, mcgrof@kernel.org, daniel@iogearbox.net,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ast@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, lkp@intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 08:12:38AM +0800, Zqiang wrote:
-> Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
-> executed before kfree_rcu_monitor() to drain page cache, if the bnode
-> structure's->gp_snap has done, the kvfree_rcu_bulk() will fill the
-> page cache again in kfree_rcu_monitor(), this commit add a check
-> for krcp structure's->backoff_page_cache_fill in put_cached_bnode(),
-> if the krcp structure's->backoff_page_cache_fill is set, prevent page
-> cache growing.
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> ---
->  kernel/rcu/tree.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 9cc0a7766fd2..f25430ae1936 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2907,6 +2907,8 @@ static inline bool
->  put_cached_bnode(struct kfree_rcu_cpu *krcp,
->  	struct kvfree_rcu_bulk_data *bnode)
->  {
-> +	if (atomic_read(&krcp->backoff_page_cache_fill))
-> +		return false;
->  	// Check the limit.
->  	if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
->  		return false;
-> -- 
-> 2.32.0
->
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+Hello:
 
---
-Uladzislau Rezki
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Thu, 30 Mar 2023 12:20:01 +0200 you wrote:
+> Functions for searching module kallsyms should have non-empty
+> definitions only if CONFIG_MODULES=y and CONFIG_KALLSYMS=y. Until now,
+> only CONFIG_MODULES check was used for many of these, which may have
+> caused complilation errors on some configs.
+> 
+> This patch moves all relevant functions under the correct configs.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2] kallsyms: move module-related functions under correct configs
+    https://git.kernel.org/bpf/bpf-next/c/34bf93472f8f
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
