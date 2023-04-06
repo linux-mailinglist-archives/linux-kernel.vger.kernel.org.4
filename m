@@ -2,108 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AD16D9D72
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 459CD6D9D78
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238832AbjDFQXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:23:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S238699AbjDFQXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjDFQXD (ORCPT
+        with ESMTP id S229561AbjDFQXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:23:03 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8EA4C16;
-        Thu,  6 Apr 2023 09:22:56 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E6C8F1883A29;
-        Thu,  6 Apr 2023 16:22:52 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id C003425005BD;
-        Thu,  6 Apr 2023 16:22:52 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id A22749B403E2; Thu,  6 Apr 2023 16:22:52 +0000 (UTC)
-X-Screener-Id: e32ae469fa6e394734d05373d3a705875723cf1e
-Received: from fujitsu (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id 0211891201E3;
-        Thu,  6 Apr 2023 16:22:51 +0000 (UTC)
-From:   Hans Schultz <netdev@kapio-technology.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
-        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?Q?Cl=C3=A9ment_L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
- drivers
-In-Reply-To: <20230406152159.zfg6kxuimulnpops@skbuf>
-References: <20230327225933.plm5raegywbe7g2a@skbuf>
- <87ileljfwo.fsf@kapio-technology.com>
- <20230328114943.4mibmn2icutcio4m@skbuf>
- <87cz4slkx5.fsf@kapio-technology.com>
- <20230330124326.v5mqg7do25tz6izk@skbuf>
- <87wn2yxunb.fsf@kapio-technology.com>
- <20230330130936.hxme34qrqwolvpsh@skbuf>
- <875yaimgro.fsf@kapio-technology.com>
- <20230330150752.gdquw5kudtrqgzyz@skbuf>
- <87o7o1ox9h.fsf@kapio-technology.com>
- <20230406152159.zfg6kxuimulnpops@skbuf>
-Date:   Thu, 06 Apr 2023 18:20:05 +0200
-Message-ID: <87zg7lj83u.fsf@kapio-technology.com>
+        Thu, 6 Apr 2023 12:23:47 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E3112D4F;
+        Thu,  6 Apr 2023 09:23:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680798040; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=O1eesfxqteSKiIdr2GdIoTQmvbnxBEZzVbYH3n/Q2TR+HeUHpXtKT0xXSMTLmtn1Pk
+    GarPy6GAiYdRPnxUl5wr7kp9uGNfn6r5QxcKG+9R58bhVnPEHXtr4hQibJ6I5h27V3r5
+    6cwc6G+2KfbNV06tDQY06rzTeYATLLVFpiGhupU3/58lfcYS6pAXayqYzkiNo3t6dKhj
+    VbjYgdsjvJlPCinLVlERgM6GnCTG6zC5LaE53fSp+oNcuDAhfae+9TPLiT9zS+uELpk5
+    dxqcXr7Er5MqehNSC1ph9jr11qk7NzgdBHDnIuEqNWK0In3oEVgURfONSFkEF7j1hVo/
+    D14A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680798040;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Vw4gdqbJKdMok54e8g7DKDgQNtZkkehkhlVi7foHU+g=;
+    b=n5AX6FYxB1JPMablvoSoi7/9F/BPIJOOxTdR2Gx+g4caYY8V4OLbmG+vRGxW7IIefq
+    NB5h3a5fijWwjIpcM1OL7uN0UgYA2QwuFTIrxtpxxhTlkNSClyO1LTiO95YH8qRU6y02
+    +rFuYaYRd5c1h7jlFEbiPe4UGUsuHnag/MzqFyZ2YwGj1MjBWxPuLs8kQkqscctJD1W9
+    n5m1gk15M8rbWwKPJiKqnrPDhS6e4LhwOWNtPmB3zpqbys2FlpP/fPUenDHoEd06xRqN
+    9zGxQo5Xn0qZzd4QT+i/1j+meZUUkN9rm1rZeuF7w5EX5THJ6h53GqPb41YnZ63dXxAr
+    od8w==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680798040;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Vw4gdqbJKdMok54e8g7DKDgQNtZkkehkhlVi7foHU+g=;
+    b=myZG/n3NFrX4nzinQGYqeHFty+m08R2G/NQscAbO5NCbu/ZUIY2Z8XrS84YHee6oqN
+    BJ+3kWqqSExDKFPB2TT8sIxbDj5LnEWrsI0QhSxSDVrQ0ruATAqVAA8unl3rJMEVdmjW
+    AVWzGvtMQJQlbPnaVIldz/cEk6NRY36MIYfgazJfHvNLagYNFdGcRIqT5CPPro5w+soW
+    TncGA8XnB+kGJ3pDbzyNcG8EVK8hIaWWoXll/+2h/3XI3A0X1VtQamaQkQ23hdX8QG+w
+    qr8nKM5pi5yqQLSRDwGP6Nz32maFDhxu22uQRzuO41OOnvRHSLpV9/qj8xLEdKL1hCL5
+    9mpg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1680798040;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Vw4gdqbJKdMok54e8g7DKDgQNtZkkehkhlVi7foHU+g=;
+    b=bofcmuT28wdvr6bdJqminyaXU6o8KqKkU9MyaggOh6qaF00DKPiSMqHaXNiZlG5RWU
+    ve34xN05362IIbTzJ7AQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA+pvh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az36GKeD11
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 6 Apr 2023 18:20:40 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 18:20:34 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        dmitry.baryshkov@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] drivers/thermal/qcom/tsens: Add ability to read and
+ shift-in non-contiguous calibration data
+Message-ID: <ZC7xSG7qVZ7vlOB7@gerhold.net>
+References: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.7 required=5.0 tests=RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406145850.357296-1-bryan.odonoghue@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 18:21, Vladimir Oltean <olteanv@gmail.com> wrote:
-> On Thu, Apr 06, 2023 at 05:17:46PM +0200, Hans Schultz wrote:
->> On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
->> > As a bug fix, stop reporting to switchdev those FDB entries with
->> > BR_FDB_ADDED_BY_USER && !BR_FDB_STATIC. Then, after "net" is merged into
->> > "net-next" next Thursday (the ship has sailed for today), add "bool static"
->> 
->> It is probably too late today (now I have a Debian based VM that can do
->> the selftests), but with this bug fix I have 1) not submitted bug fixes
->> before and 2) it probably needs an appropriate explanation, where I
->> don't know the problem well enough for general switchcores to submit
->> with a suitable text.
->
-> Do you want me to try to submit this change as a bug fix?
+On Thu, Apr 06, 2023 at 03:58:47PM +0100, Bryan O'Donoghue wrote:
+> On MSM8939 the last sensor has calibration data that cannot be extracted in
+> one big read.
+> 
+> Rather than have a lot of MSM8939 specific code this series makes a generic
+> modification to allow any other calibration data that is non-contiguous to
+> be extracted and recovered.
+> 
+> For example s9-p2 takes bits 1-5 from @4b and bit 13 from @4d. The bit from
+> bit13 then becomes the sixth bit in the calibration data.
+> 
+> tsens_s9_p2: s9-p2@4b {
+>     reg = <0x4b 0x1>;
+>     bits = <1 5>;
+> };
+> 
+> tsens_s9_p2_msb: s9-p2-msb@4d {
+>     reg = <0x4d 0x1>;
+>     bits = <13 1>;
+> };
 
-I think that would be fine as you would know the matter best.
+As far as I can tell the sensor with the non-contiguous calibration data
+is the one with hwid=10, so do you mean s10-p2 instead of s9-p2 here?
+
+It's easy to mix up the numbering: Since hwid=4 is missing for MSM8939,
+the sensor 9 in the calibration code downstream (TSENS9_8939_POINT*)
+actually refers to hwid=10. hwid=9 is sensor 8 in the calibration code
+(TSENS8_8939_POINT*).
+
+Sensor hwid=10 was disabled for MSM8939 in the tsens driver because it
+seems unused, only exists on MSM8939 v3.0, and specifically to avoid
+having to handle this non-contiguous calibration data, see commit
+903238a33c11 ("thermal/drivers/tsens: limit num_sensors to 9 for msm8939"):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=903238a33c116edf5f64f7a3fd246e6169cccfa6
+
+> On msm8939 last (hwid=10) sensor was added in the hw revision 3.0.
+> Calibration data for it was placed outside of the main calibration  
+> data blob, so it is not accessible by the current blob-parsing code.
+>
+> Moreover data for the sensor's p2 is not contiguous in the fuses. This
+> makes it hard to use nvmem_cell API to parse calibration data in a
+> generic way.
+>
+> Since the sensor doesn't seem to be actually used by the existing
+> hardware, disable the sensor for now.
+>
+> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for MSM8939")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
+So with sensor hwid=10 disabled, I think this patch series is actually
+not needed? :)
+
+Thanks,
+Stephan
