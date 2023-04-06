@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F556DA1FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4968B6DA203
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238199AbjDFTvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
+        id S238407AbjDFTxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjDFTv2 (ORCPT
+        with ESMTP id S229664AbjDFTxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:51:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE829012;
-        Thu,  6 Apr 2023 12:51:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B80A62CE1;
-        Thu,  6 Apr 2023 19:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75E4C433EF;
-        Thu,  6 Apr 2023 19:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680810686;
-        bh=/s7giKfeSIqZNbsqf9X75JHxU9L9jKT2SkAOoZXyTxQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WdcEZbDAhSV3qRTsIEn4xieYPuVjP7x/zfXStn2g84Ui9Hb+mQ2TKHHiNOXoII8e8
-         Xo2Xl4XziPGlcqjZMkUvovCw1JnOFz8qvw/svxGiTFv2T/plKwUoQmnCCvlfDiBkss
-         PhT4R54hIuXu98K8F1N5fMtLRufzm6YN5e1LksLgTHryki8HxeBE2oflAcHJna6Kea
-         E0o48/Hs5A3jrw7YdkPKpFf1s6LRqOSKz5+yq3ego/ms6u+XPzNXn4ROo1crbD/jGz
-         il6Aey9VwcJNQYnmctWT4R5E60KdNz+GODVw4W5LbqKSwai9TwKTdMdzNWxYQsu2um
-         9mH5Gbtn0AsyA==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] f2fs: fix potential corruption when moving a directory
-Date:   Thu,  6 Apr 2023 12:51:22 -0700
-Message-Id: <20230406195122.3917650-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+        Thu, 6 Apr 2023 15:53:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26BF5253;
+        Thu,  6 Apr 2023 12:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=p8aOV66JPpjAHa0iNDBc0x7MW11SfW/PEWlKFLcuUnA=; b=qhfV3QJ+Bi++LgFLjw1MU3Ape+
+        9SqEg8M7YW5KJpC/tPepuEpFK/8afBBrrRj+t5RDaBVxfAGTCxP393ma7qguwVITELHM9N97V39AP
+        G8gs72J0brcUfm7x5570AGhYvGj1Rmv+7+Vyuk7kuL9FRAjdVT5f1OV5wtJ+5/CgptUUZqhggXBwV
+        xEnEXV7X8fd9EbXVE7hsjZIDuwuKuDnjlZZrkXup1JA/PZI0HWNP0ThgJSwoqxHltAqqD9jeih53Z
+        dhllPfgRK7oVvJ3QNyUpCjubetq1PK3CKYGnaKDotcIAAnv3GVqARrptBaX4tEkmwRF08MNlSN9vh
+        tcu/WMOg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkVfu-008RKE-0Q;
+        Thu, 06 Apr 2023 19:53:38 +0000
+Date:   Thu, 6 Apr 2023 12:53:38 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     jim.cromie@gmail.com
+Cc:     Song Liu <song@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: kmemleaks on ac3b43283923 ("module: replace module_layout with
+ module_memory")
+Message-ID: <ZC8jQmbie6RWVyXo@bombadil.infradead.org>
+References: <CAJfuBxwomDagbdNP-Q6WvzcWsNY0Z2Lu2Yy5aZQ1d9W7Ka1_NQ@mail.gmail.com>
+ <ZCaE71aPvvQ/L05L@bombadil.infradead.org>
+ <CAPhsuW6P5AYVKMk=G1bEUz5PGZKmTJwtgQBmE-P4iAo7dOr5yA@mail.gmail.com>
+ <ZCs6jpo1nYe1Wm08@bombadil.infradead.org>
+ <CAJfuBxzGJvrJo9nTXxZ3xZ7QmdSb6YxBw-bojZjQTpACBeK_sQ@mail.gmail.com>
+ <ZCzWdLOg1i2p1Q67@bombadil.infradead.org>
+ <CAJfuBxw7F5yN=F=i_0ZZ0b2EpWU4T=RXaf13qG9XVq6tG-EGJQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAJfuBxw7F5yN=F=i_0ZZ0b2EpWU4T=RXaf13qG9XVq6tG-EGJQ@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-F2FS has the same issue in ext4_rename causing crash revealed by
-xfstests/generic/707.
+On Wed, Apr 05, 2023 at 09:14:12PM -0600, jim.cromie@gmail.com wrote:
+> On Tue, Apr 4, 2023 at 8:01 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Tue, Apr 04, 2023 at 07:38:41PM -0600, jim.cromie@gmail.com wrote:
+> > > On Mon, Apr 3, 2023 at 2:44 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 
-See also commit 0813299c586b ("ext4: Fix possible corruption when moving a directory")
+<-- my old patch -->
 
-CC: stable@vger.kernel.org
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/namei.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+> this disappearing act is still going on.
+> my script issues no echo clear > kmemleak
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index ad597b417fea..77a71276ecb1 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -995,12 +995,20 @@ static int f2fs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 			goto out;
- 	}
- 
-+	/*
-+	 * Copied from ext4_rename: we need to protect against old.inode
-+	 * directory getting converted from inline directory format into
-+	 * a normal one.
-+	 */
-+	if (S_ISDIR(old_inode->i_mode))
-+		inode_lock_nested(old_inode, I_MUTEX_NONDIR2);
-+
- 	err = -ENOENT;
- 	old_entry = f2fs_find_entry(old_dir, &old_dentry->d_name, &old_page);
- 	if (!old_entry) {
- 		if (IS_ERR(old_page))
- 			err = PTR_ERR(old_page);
--		goto out;
-+		goto out_unlock_old;
- 	}
- 
- 	if (S_ISDIR(old_inode->i_mode)) {
-@@ -1108,6 +1116,9 @@ static int f2fs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 
- 	f2fs_unlock_op(sbi);
- 
-+	if (S_ISDIR(old_inode->i_mode))
-+		inode_unlock(old_inode);
-+
- 	if (IS_DIRSYNC(old_dir) || IS_DIRSYNC(new_dir))
- 		f2fs_sync_fs(sbi->sb, 1);
- 
-@@ -1122,6 +1133,9 @@ static int f2fs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 		f2fs_put_page(old_dir_page, 0);
- out_old:
- 	f2fs_put_page(old_page, 0);
-+out_unlock_old:
-+	if (S_ISDIR(old_inode->i_mode))
-+		inode_unlock(old_inode);
- out:
- 	iput(whiteout);
- 	return err;
--- 
-2.40.0.577.gac1e443424-goog
+So this email is ab it confusing. Because you comment here before the
+new patch.
 
+<-- my new switch statement kmemleak patch to fix the reported leak -->
+
+> sorry for the delay, I was seeing heisen-responses, and several BUGs.
+> a make clean seems to have settled things mostly.
+
+And now here you comment after thew new suggested patch and say it
+seemst to mostly fixed things.
+
+> But in case theres any clues in there,
+
+In where?
+
+> Ive kept the paste-in of 2 BUGs
+> 
+> with
+> f23cd1ffca4b (HEAD) kmemleaks on ac3b43283923 ("module: replace
+> module_layout with module_memory")
+> ac3b43283923 module: replace module_layout with module_memory
+
+The only commit here that makes sense to me is
+
+ac3b43283923 ("module: replace module_layout with module_memory"
+
+Commit f23cd1ffca4b means absolutely nothing to me. I can only guess
+you mean that you've applied my suggested changes with the new switch
+statement?
+
+> heres the 1st run.  cuz it leaked, I reran in another vm, which got
+> different results.
+> I left it overnight doing nothing (laptop slept, vm with it),
+> and it BUG'd on a soft lockup
+> (much later, but the leaktrace does have a timerfd in it)
+> R11 looks poisoned.
+
+<-- some unrelated leak I think -->
+
+> using sh-script posted previously,
+
+I don't recall what that sh-script was.
+
+<-- snip some leaks -->
+
+> Im not sure when I did the make clean, maybe here.
+> it'd be a 'clean' explanation of the BUG struff.
+> I havent seen any today
+
+OK great.
+
+<-- snip some long traces-->
+
+I don't get these long traces if you didn't see any then.
+
+  Luis
