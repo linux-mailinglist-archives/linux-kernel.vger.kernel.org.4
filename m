@@ -2,151 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886996D9FA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2876D9FA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240050AbjDFSQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S240070AbjDFSRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239635AbjDFSQL (ORCPT
+        with ESMTP id S229764AbjDFSRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:16:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F8EB0;
-        Thu,  6 Apr 2023 11:16:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B89D60F7A;
-        Thu,  6 Apr 2023 18:16:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F7BC433EF;
-        Thu,  6 Apr 2023 18:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680804968;
-        bh=trf5F2WX+RYI6ExpB2fYPeUVtOa9b0dLMtB52AZJZ3I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LzuYfVxkj7HHlFc4xhRiXJkc0tcqCtTJr+KYrjvJ8DtKNlFJ//fZcThlZhcDe8YtK
-         uKjxoWLKspclLzKOa+wB5TRAGzh2cneyWwMxwDyR3RB393cWrgq6f/gaIwSZ1nUu4X
-         D66Aj0AUUEBWWRm9v7LQHs2iP4FKWealJ86KyNPyOjs6N3j7E4JZcBTR+aMKA8tfDC
-         bGiNAMBwC/JFrzOTs3mGuJUojowyCSkgxemWZTAXGsNVgSNfjfO0bEd74UJzpBcfXe
-         qrt7HtSpxxQQxv7IPDvIN5B0h3My6+GHf9/MABGY+vaTfi0EYq29SgRjJUDQAM/40V
-         dZ/4BXPWaHaRA==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     fsverity@lists.linux.dev
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Subject: [PATCH v2] fsverity: use WARN_ON_ONCE instead of WARN_ON
-Date:   Thu,  6 Apr 2023 11:15:42 -0700
-Message-Id: <20230406181542.38894-1-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.40.0
+        Thu, 6 Apr 2023 14:17:06 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FABFB0
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:17:05 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-322fc56a20eso397515ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680805024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h70PraPH5+GMWozAhM7JaPVH30CeiE+sjPLouQsdB7g=;
+        b=sV0bNyy9DUoGVmnnZYp++9XpnHtdFFdBIfUu98tiebaRLFSkMDjqsbZX5u2udu69+Y
+         NWdL2QKNoj40V0Xpai63YRAE2NFq4G0ApvL0Seq8uOnnpjOIY98m5/FJ+jA7YQUsLw2T
+         bzb6HqEUDO1i0XQgWyH2SFNkZT6MQ2EpnWsommuVxAol7APb1dh3X74x5lR/fgRFt4ME
+         79KCT3E0JCzB+cinRi4Qww3f1lTq1vV9bb4Z30q6vx0LkuvbZ0QHlv+I7rGhWyShLhya
+         OsM+H88PXCY3o5lUcgSuRGNaDR3mIesOqI117sq4d0NwSFNMRoApUNatSKDXEi4dqi11
+         OyCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680805024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h70PraPH5+GMWozAhM7JaPVH30CeiE+sjPLouQsdB7g=;
+        b=ShHjdwZuHKMh6r8iq+/eOpthG/Nn5msfuT1lU4+eUGLJUlBDWrou+mJVOr1kR2T+va
+         azqL3Y53mSi6qZImOi/btdG4QVHNAtPcR3QdoqzsGlWDwhcTGcx4J97QLt7+Is0KFFpc
+         x65mRHuByK5mPXNPApU++BGXEN6zvR9EKjY0wbgDWKNMz3dqG9lZyobVaxepcRGsx6jM
+         zExd3kpxA6Fa1cxeWqJMXOImU4DOVkFWue9P9gCTa7pQhmiWt0CA/pxje7vIsDvVndo3
+         HTGcu1Mp0xorrwskIKFCOn3fGlA+7eo/Vv78Q5msWIuIIt4y0GzD3sAItd3XwDg72D+9
+         K1Ew==
+X-Gm-Message-State: AAQBX9dIMDYxVNRQ1KCwVahmG6mnnzGO02XPa+p+fgfCPTVhfJ3esTse
+        w2bE/uZdobhicVx3wbRMA8TqiEAC6gVTAn5OftH5pg==
+X-Google-Smtp-Source: AKy350b6bIn2q5v2MiKCNJhNqfrzRDXgyf/sd6L4aQ3P3U8+mlRZqYYT3NQuDmpc3IFVPLht2efOKqjcmlhBOYYVtCY=
+X-Received: by 2002:a05:6e02:1e0a:b0:326:55d0:efad with SMTP id
+ g10-20020a056e021e0a00b0032655d0efadmr20905ila.12.1680805024290; Thu, 06 Apr
+ 2023 11:17:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406144330.1932798-1-leitao@debian.org> <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+In-Reply-To: <ZC7seVq7St6UnKjl@gmail.com>
+From:   Willem de Bruijn <willemb@google.com>
+Date:   Thu, 6 Apr 2023 14:16:24 -0400
+Message-ID: <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+To:     Breno Leitao <leitao@debian.org>
+Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
+        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
+        edumazet@google.com, pabeni@redhat.com, davem@davemloft.net,
+        dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dsahern@kernel.org,
+        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
+        marcelo.leitner@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Thu, Apr 6, 2023 at 11:59=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
+ote:
+>
+> On Thu, Apr 06, 2023 at 11:34:28AM -0400, Willem de Bruijn wrote:
+> > On Thu, Apr 6, 2023 at 10:45=E2=80=AFAM Breno Leitao <leitao@debian.org=
+> wrote:
+> > >
+> > > From: Breno Leitao <leit@fb.com>
+> > >
+> > > This patchset creates the initial plumbing for a io_uring command for
+> > > sockets.
+> > >
+> > > For now, create two uring commands for sockets, SOCKET_URING_OP_SIOCO=
+UTQ
+> > > and SOCKET_URING_OP_SIOCINQ. They are similar to ioctl operations
+> > > SIOCOUTQ and SIOCINQ. In fact, the code on the protocol side itself i=
+s
+> > > heavily based on the ioctl operations.
+> >
+> > This duplicates all the existing ioctl logic of each protocol.
+> >
+> > Can this just call the existing proto_ops.ioctl internally and translat=
+e from/to
+> > io_uring format as needed?
+>
+> This is doable, and we have two options in this case:
+>
+> 1) Create a ioctl core function that does not call `put_user()`, and
+> call it from both the `udp_ioctl` and `udp_uring_cmd`, doing the proper
+> translations. Something as:
+>
+>         int udp_ioctl_core(struct sock *sk, int cmd, unsigned long arg)
+>         {
+>                 int amount;
+>                 switch (cmd) {
+>                 case SIOCOUTQ: {
+>                         amount =3D sk_wmem_alloc_get(sk);
+>                         break;
+>                 }
+>                 case SIOCINQ: {
+>                         amount =3D max_t(int, 0, first_packet_length(sk))=
+;
+>                         break;
+>                 }
+>                 default:
+>                         return -ENOIOCTLCMD;
+>                 }
+>                 return amount;
+>         }
+>
+>         int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+>         {
+>                 int amount =3D udp_ioctl_core(sk, cmd, arg);
+>
+>                 return put_user(amount, (int __user *)arg);
+>         }
+>         EXPORT_SYMBOL(udp_ioctl);
+>
+>
+> 2) Create a function for each "case entry". This seems a bit silly for
+> UDP, but it makes more sense for other protocols. The code will look
+> something like:
+>
+>          int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+>          {
+>                 switch (cmd) {
+>                 case SIOCOUTQ:
+>                 {
+>                         int amount =3D udp_ioctl_siocoutq();
+>                         return put_user(amount, (int __user *)arg);
+>                 }
+>                 ...
+>           }
+>
+> What is the best approach?
 
-As per Linus's suggestion
-(https://lore.kernel.org/r/CAHk-=whefxRGyNGzCzG6BVeM=5vnvgb-XhSeFJVxJyAxAF8XRA@mail.gmail.com),
-use WARN_ON_ONCE instead of WARN_ON.  This barely adds any extra
-overhead, and it makes it so that if any of these ever becomes reachable
-(they shouldn't, but that's the point), the logs can't be flooded.
+A, the issue is that sock->ops->ioctl directly call put_user.
 
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- fs/verity/enable.c       | 4 ++--
- fs/verity/hash_algs.c    | 4 ++--
- fs/verity/open.c         | 2 +-
- include/linux/fsverity.h | 6 +++---
- 4 files changed, 8 insertions(+), 8 deletions(-)
+I was thinking just having sock_uring_cmd call sock->ops->ioctl, like
+sock_do_ioctl.
 
-diff --git a/fs/verity/enable.c b/fs/verity/enable.c
-index 7a0e3a84d370b..541c2a277c5c6 100644
---- a/fs/verity/enable.c
-+++ b/fs/verity/enable.c
-@@ -165,7 +165,7 @@ static int build_merkle_tree(struct file *filp,
- 		}
- 	}
- 	/* The root hash was filled by the last call to hash_one_block(). */
--	if (WARN_ON(buffers[num_levels].filled != params->digest_size)) {
-+	if (WARN_ON_ONCE(buffers[num_levels].filled != params->digest_size)) {
- 		err = -EINVAL;
- 		goto out;
- 	}
-@@ -277,7 +277,7 @@ static int enable_verity(struct file *filp,
- 		fsverity_err(inode, "%ps() failed with err %d",
- 			     vops->end_enable_verity, err);
- 		fsverity_free_info(vi);
--	} else if (WARN_ON(!IS_VERITY(inode))) {
-+	} else if (WARN_ON_ONCE(!IS_VERITY(inode))) {
- 		err = -EINVAL;
- 		fsverity_free_info(vi);
- 	} else {
-diff --git a/fs/verity/hash_algs.c b/fs/verity/hash_algs.c
-index 13fcf31be8441..ea00dbedf756b 100644
---- a/fs/verity/hash_algs.c
-+++ b/fs/verity/hash_algs.c
-@@ -84,9 +84,9 @@ struct fsverity_hash_alg *fsverity_get_hash_alg(const struct inode *inode,
- 	}
- 
- 	err = -EINVAL;
--	if (WARN_ON(alg->digest_size != crypto_ahash_digestsize(tfm)))
-+	if (WARN_ON_ONCE(alg->digest_size != crypto_ahash_digestsize(tfm)))
- 		goto err_free_tfm;
--	if (WARN_ON(alg->block_size != crypto_ahash_blocksize(tfm)))
-+	if (WARN_ON_ONCE(alg->block_size != crypto_ahash_blocksize(tfm)))
- 		goto err_free_tfm;
- 
- 	err = mempool_init_kmalloc_pool(&alg->req_pool, 1,
-diff --git a/fs/verity/open.c b/fs/verity/open.c
-index 9366b441d01ca..52048b7630dcc 100644
---- a/fs/verity/open.c
-+++ b/fs/verity/open.c
-@@ -83,7 +83,7 @@ int fsverity_init_merkle_tree_params(struct merkle_tree_params *params,
- 	params->log_blocks_per_page = PAGE_SHIFT - log_blocksize;
- 	params->blocks_per_page = 1 << params->log_blocks_per_page;
- 
--	if (WARN_ON(!is_power_of_2(params->digest_size))) {
-+	if (WARN_ON_ONCE(!is_power_of_2(params->digest_size))) {
- 		err = -EINVAL;
- 		goto out_err;
- 	}
-diff --git a/include/linux/fsverity.h b/include/linux/fsverity.h
-index 119a3266791fd..e76605d5b36ee 100644
---- a/include/linux/fsverity.h
-+++ b/include/linux/fsverity.h
-@@ -233,18 +233,18 @@ static inline int fsverity_ioctl_read_metadata(struct file *filp,
- static inline bool fsverity_verify_blocks(struct folio *folio, size_t len,
- 					  size_t offset)
- {
--	WARN_ON(1);
-+	WARN_ON_ONCE(1);
- 	return false;
- }
- 
- static inline void fsverity_verify_bio(struct bio *bio)
- {
--	WARN_ON(1);
-+	WARN_ON_ONCE(1);
- }
- 
- static inline void fsverity_enqueue_verify_work(struct work_struct *work)
- {
--	WARN_ON(1);
-+	WARN_ON_ONCE(1);
- }
- 
- #endif	/* !CONFIG_FS_VERITY */
+But that would require those callbacks to return a negative error or
+positive integer, rather than calling put_user. And then move the
+put_user to sock_do_ioctl. Such a change is at least as much code
+change as your series. Though without the ending up with code
+duplication. It also works only if all ioctls only put_user of integer
+size. That's true for TCP, UDP and RAW, but not sure if true more
+broadly.
 
-base-commit: 1238c8b91c5aca6dd13bccb1b4dc716718e7bfac
--- 
-2.40.0
+Another approach may be to pass another argument to the ioctl
+callbacks, whether to call put_user or return the integer and let the
+caller take care of the output to user. This could possibly be
+embedded in the a high-order bit of the cmd, so that it fails on ioctl
+callbacks that do not support this mode.
 
+Of the two approaches you suggest, I find the first preferable.
