@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7382B6D968A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429C56D9691
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237763AbjDFL5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S237638AbjDFL6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238258AbjDFL47 (ORCPT
+        with ESMTP id S238842AbjDFL5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:56:59 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072DDA24F
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:54:24 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id k37so50518533lfv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680782052;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vr7hvDh/glr30Yw4qpt5Kbr2lkI/viKC3PQIzjAY6io=;
-        b=NT0z1D54Jz23Qd8QBqW5y4LUgbLtaQiI1TTTYvzoNpqNjsOnHncu4tIm1w0PLSWfus
-         FcGnKVh4sD4n20MNNi8iHuadPLgpCDZy3tNxNa+3prJ768N6bKVXy5ptvrYhfmmP153M
-         nQT/Rvmq+0VrCWP7UfX/LVCU0QvOlyKPLKiaKC76p+4gyYfBcH048wCc/sJ0dGjmFB12
-         SBH7ATZwDZgnf+2p8rbb5dnINgkFDUZxaevgSsqVaCXU8PiAW0dN9GX/a9MPcCZQT9dy
-         jsjn0PO7g5uIHM+UuOO0VqtmQ9vqvErlM/XEs0HeE7HRYS2ojiPvPbuUXnSNbBXOHhoI
-         tfuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680782052;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vr7hvDh/glr30Yw4qpt5Kbr2lkI/viKC3PQIzjAY6io=;
-        b=Q4B6fxMFN3hl910l+/K6vL0D4GE/s83qfBsfiN5Yq8qXf7w4mFSjH1ebGRw7I+rp0G
-         nUprgFeL6g6ZorJoceq/H7CTExCZ9g+Mm4SpYWbwT7bfM+xDrR2b5V37hSSWXcahfe30
-         DBDqPe812b0ysqgEsUYE5S8p/c40qCHb3+BBmY135S5n4ACpT7vxLDlIYJ0zPWfeLWZ2
-         aZ/JJ7eJ8SdmzRbSz7gqZkGUSaXf0FqMlh6N7RhgS3fOLLXeD9p0OS7UgS4lkkw1QdHX
-         o2d9uWR8wlmqC4Q+HU/6mGoyyivqNtJ3TI3NTEw5j2MyUUNiXpK3Dt3Eh1jksq5miDpP
-         kbPA==
-X-Gm-Message-State: AAQBX9fhSOy518HuqlC9Ql/E8RD1Qp5fLIKcyxhWZVN+8Ih+E0fVu6IQ
-        bCbVMDVs8bYFsEZSrZQE7LU8lA==
-X-Google-Smtp-Source: AKy350YOJBBOhvLdzYhTyarkDYK/pXLiXR2cWg4R6nvYfiOFuIxo3sv/hjwJhsRRoIA0DWwgZVofkQ==
-X-Received: by 2002:ac2:596b:0:b0:4e9:609c:e901 with SMTP id h11-20020ac2596b000000b004e9609ce901mr2444588lfp.21.1680782051848;
-        Thu, 06 Apr 2023 04:54:11 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id q27-20020ac246fb000000b004eb2cc16342sm237513lfo.21.2023.04.06.04.54.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 04:54:11 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Thu, 06 Apr 2023 13:54:05 +0200
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sdm845-polaris: Drop inexistent
- properties
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230406-topic-ath10k_bindings-v2-2-557f884a65d1@linaro.org>
-References: <20230406-topic-ath10k_bindings-v2-0-557f884a65d1@linaro.org>
-In-Reply-To: <20230406-topic-ath10k_bindings-v2-0-557f884a65d1@linaro.org>
-To:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Thu, 6 Apr 2023 07:57:36 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81F21997;
+        Thu,  6 Apr 2023 04:55:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680782105; x=1712318105;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VIF3RAwyUACMZc/6Udu1lMbe/9hsVoCd5YuEoegFWzg=;
+  b=qfF0dsvFkK2QoU6OPgTGGPzNZ29N7jl2TSub201zTmrDd0fbbuOhUrSK
+   bJcXPYju3nsGvxVwinR9inUN9pTqIKcuTebbCDtBWOqeZDjp2Rr2gVHTF
+   VuFoUtWbzv19TlvhaUntmSf+kYgfO32s32hnz+5lFWtLlM0buonJpw5xU
+   A1vn72B+kHNm+mO9gT2d4wdS7KK6iJyuh6BUQysflFAPWH1Jd2AtAQ9yS
+   haf3a656/OA8Q6dmOfOnf7yd+6NDt9XmHqQ20Z1CqS5QtkrqBtcTyBoQ4
+   RjyUP9E4NXZrAtWU7XBtvfWMnwTYJKwCzBX6vBQEJtobT10koc5qlMjez
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,323,1673938800"; 
+   d="asc'?scan'208";a="208441740"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2023 04:54:42 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 6 Apr 2023 04:54:41 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 6 Apr 2023 04:54:38 -0700
+Date:   Thu, 6 Apr 2023 12:54:23 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Minda Chen <minda.chen@starfivetech.com>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680782047; l=826;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=A+cHJo96LANW/mYlLiz68VJ9kDkIsUWUlAaAZ/obM9g=;
- b=JZKiZ4o7YkofUMsu2AgB8TAPweZ+TM2wSK7+a4qVZ4XupOfbVVCCqYRW+YkwYuRfcRV1vwF/Z5lp
- cZVP38w6DVmxGIdjnblGj2CeL8CJgzyfVanJardNzq2u/QMMqRgn
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-pci@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Kevin Xie <kevin.xie@starfivetech.com>,
+        <daire.mcnamara@microchip.com>
+Subject: Re: [PATCH v1 0/3] Add JH7110 PCIe driver support
+Message-ID: <20230406-coming-stuffed-26f89610959c@wendy>
+References: <20230406111142.74410-1-minda.chen@starfivetech.com>
+ <20230406-quench-unharmed-2c11b2617e9f@wendy>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6DiB+R8lixX5OYkj"
+Content-Disposition: inline
+In-Reply-To: <20230406-quench-unharmed-2c11b2617e9f@wendy>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop the qcom,snoc-host-cap-skip-quirk that was never introduced to
-solve schema warnings.
+--6DiB+R8lixX5OYkj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 2 --
- 1 file changed, 2 deletions(-)
+Gah, I never actually CCed Daire. Apologies for the additional email.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-index 1b7fdbae6a2b..56f2d855df78 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-@@ -712,7 +712,5 @@ &wifi {
- 	vdd-1.3-rfa-supply = <&vreg_l17a_1p3>;
- 	vdd-3.3-ch0-supply = <&vreg_l25a_3p3>;
- 	vdd-3.3-ch1-supply = <&vreg_l23a_3p3>;
--
--	qcom,snoc-host-cap-skip-quirk;
- 	status = "okay";
- };
+On Thu, Apr 06, 2023 at 12:47:41PM +0100, Conor Dooley wrote:
+> +CC Daire
+>=20
+> Hey Minda,
+>=20
+> On Thu, Apr 06, 2023 at 07:11:39PM +0800, Minda Chen wrote:
+> > This patchset adds PCIe driver for the StarFive JH7110 SoC.
+> > The patch has been tested on the VisionFive 2 board. The test
+> > devices include M.2 NVMe SSD and Realtek 8169 Ethernet adapter.
+>=20
+> I was talking with Daire last week about some changes he's working on
+> for the microchip driver, and we seemed to recall an off-list email
+> sent to Daire & Bjorn about extracting the common PLDA bits from the
+> pcie-microchip-host driver to be used with an (at that point)
+> unreleased SoC. Perhaps Bjorn has this in his mailbox somewhere still,
+> our corporate mail policy scrubs things from over a year ago & I could
+> not find it.
+>=20
+> I realised that that may actually have been StarFive, and the driver on
+> your GitHub [1] certainly felt very familiar to Daire (he said it was
+> very similar to his earlier revisions of his driver).
+>=20
+> I've not looked at a diff between this and the version you ship on
+> GitHub, but first a quick inspection it mostly just looks like you
+> did s/plda/sifive/ on the file.
+>=20
+> I'm obviously not a PCI maintainer, but if there are common bits between
+> the two drivers, extracting common bits seems like a good idea to me...
+>=20
+> https://github.com/starfive-tech/linux/blob/JH7110_VisionFive2_devel/driv=
+ers/pci/controller/pcie-plda.c
+> >=20
+> > This patchset should be applied after the patchset [1], [2], [3] and[4]:
+> > [1] https://patchwork.kernel.org/project/linux-riscv/cover/202303141244=
+04.117592-1-xingyu.wu@starfivetech.com/
+> > [2] https://lore.kernel.org/all/20230315055813.94740-1-william.qiu@star=
+fivetech.com/
+> > [3] https://patchwork.kernel.org/project/linux-phy/cover/20230315100421=
+=2E133428-1-changhuang.liang@starfivetech.com/
+> > [4] https://patchwork.kernel.org/project/linux-usb/cover/20230406015216=
+=2E27034-1-minda.chen@starfivetech.com/
+>=20
+> How many of the dependencies here are compiletime for the driver & how
+> many of them are just for the dts patch?
+>=20
+> Cheers,
+> Conor.
 
--- 
-2.40.0
 
+
+--6DiB+R8lixX5OYkj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC6y7wAKCRB4tDGHoIJi
+0gN3AQCtoXaVDJRLbEBtu9kNuP3j5MOEWWrcn+EJ7QXQ61DrzgEAmV93dIZ7fkyt
+SbO/ObfnUTym32MCPLClZQbRxcez2Qc=
+=l66h
+-----END PGP SIGNATURE-----
+
+--6DiB+R8lixX5OYkj--
