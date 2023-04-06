@@ -2,126 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6576D94F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633816D94FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237008AbjDFLTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S237183AbjDFLVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237695AbjDFLTl (ORCPT
+        with ESMTP id S235911AbjDFLVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:19:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E55F9029;
-        Thu,  6 Apr 2023 04:19:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3AFA6461B;
-        Thu,  6 Apr 2023 11:19:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E30C433D2;
-        Thu,  6 Apr 2023 11:19:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680779944;
-        bh=ReNRvDX76rkahPbHGeY6Mq+oz43WQ6EdFp4QHSNHf/c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MCS3C4pIZUkUAsBCgmvq1RJjWg0AXNn2hPLc4Psb9cPKgdrUYj0F4S9pmoxk0y/pi
-         jGGjpZYQvEmyxINwKtmblsc/krvAWNcee6CZctCU0LKqfY7hIYw+eSCEK3+uckdkan
-         2AlxiPLdNOCq60pqLOruZWqY41zhDSXnlrPH5jnE=
-Date:   Thu, 6 Apr 2023 13:19:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     Yangtao Li <frank.li@vivo.com>, xiang@kernel.org, chao@kernel.org,
-        huyue2@coolpad.com, jefflexu@linux.alibaba.com,
-        damien.lemoal@opensource.wdc.com, naohiro.aota@wdc.com,
-        jth@kernel.org, rafael@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 2/3] erofs: convert to use kobject_is_added()
-Message-ID: <2023040609-email-squad-25f5@gregkh>
-References: <20230406093056.33916-1-frank.li@vivo.com>
- <20230406093056.33916-2-frank.li@vivo.com>
- <2023040635-duty-overblown-7b4d@gregkh>
- <cc219a52-e89c-b7e7-5bfd-0124f881a29f@linux.alibaba.com>
- <2023040654-protrude-unlucky-f164@gregkh>
- <589f6665-824f-bf08-3458-d3986d88f7fc@linux.alibaba.com>
+        Thu, 6 Apr 2023 07:21:07 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F5693E0
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:20:45 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id b6so30850495vsu.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680780044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Ne77xaqbtLGoxF/3ZhDrpD5vvfWoYyoJmdpcIYFNEQ=;
+        b=k6I0+4BXskzhRAwmd43QNMVzFMrPVNOkbwwXevTPqhk0D8YtPACw3R0r5oUZIcMPVv
+         Y5BUW4ArX1KppvMqptjnxTQn8Eg44+0ZQbizMDjOHAqI9XfPy9ky1Y5/sUTSgx9/3FRG
+         GR5QFc6MPGSsDoUOxRB5gBdVgCLmVxbo9cbOTuympKKj/3m64qK3GAZCfrJM9pQXJcku
+         pvfwlQ1j6C33FTc8uKtsSlENf9ePLJrXjcA1JInY3DAKtB/WJMRZSF/W23COOL1TWHxe
+         TSC2bb+7xWVyX3JOmd+CRHjYYjZg/2CHUVzK5aidd/2lKi4HS6aRnEedqroKaBR6YcFQ
+         KZ2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680780044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Ne77xaqbtLGoxF/3ZhDrpD5vvfWoYyoJmdpcIYFNEQ=;
+        b=Zogokkf9NoIqsTIbCgKyAQ0FO5/3362eioxT67i/xVejwKkmOYFYu9J3VAvxzRI2Vj
+         oDeQSjopv3i6VHK1eNEe4QHlwMzwMcDfdDf1nQtLiu4HgOl7Oqn2+47lCmR/SD0obwez
+         3lWKNPcxKrvzf3JdzRx5UqvhsNJQE0khltcPcYevYONg/jQvetHxlS2QUO4p3eva5M1b
+         z3+ZOdsrTiR9wReOqx0UGNLJUChF0nM4VJbJNgmPBa+r/NGtqGV4jpOeDrJzjTsJsErc
+         LXKqrjkGPj6emAoFtOXLDzxNvRfTbE6miqz2EaaEEfyWP6+m0f4VshlOpkFCrXe+2Ig0
+         MVKg==
+X-Gm-Message-State: AAQBX9eaNQwKOpPfpC83uz3R+hVeExydQScix9iaBttNYkGe3tRfZDzQ
+        OP7CtEm4ljiK0hXMpMd69rGZ3WZwXt/YXHpzEz0jSA==
+X-Google-Smtp-Source: AKy350bXUnbyNurB9zPd2ZQDGbD2zJLY7NQCuR5Vz4KL/7JSPzMrGSkVI2JVi1D35K2mHZB5WX3gQMWRx9D513knC9w=
+X-Received: by 2002:a67:c19a:0:b0:426:b051:1c4 with SMTP id
+ h26-20020a67c19a000000b00426b05101c4mr7770691vsj.0.1680780044683; Thu, 06 Apr
+ 2023 04:20:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <589f6665-824f-bf08-3458-d3986d88f7fc@linux.alibaba.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230328193632.226095-1-brgl@bgdev.pl> <20230328193632.226095-3-brgl@bgdev.pl>
+ <72286603300630b890705c99b42f05a4.sboyd@kernel.org>
+In-Reply-To: <72286603300630b890705c99b42f05a4.sboyd@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 6 Apr 2023 13:20:33 +0200
+Message-ID: <CAMRc=McM1DfCoMmuUYcChFFBG=H1PgZFAWcuxnQsdhRdYrT+yA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] clk: qcom: add the GPUCC driver for sa8775p
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 06:55:40PM +0800, Gao Xiang wrote:
-> 
-> 
-> On 2023/4/6 18:27, Greg KH wrote:
-> > On Thu, Apr 06, 2023 at 06:13:05PM +0800, Gao Xiang wrote:
-> > > Hi Greg,
-> > > 
-> > > On 2023/4/6 18:03, Greg KH wrote:
-> > > > On Thu, Apr 06, 2023 at 05:30:55PM +0800, Yangtao Li wrote:
-> > > > > Use kobject_is_added() instead of directly accessing the internal
-> > > > > variables of kobject. BTW kill kobject_del() directly, because
-> > > > > kobject_put() actually covers kobject removal automatically.
-> > > > > 
-> > > > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > > > > ---
-> > > > >    fs/erofs/sysfs.c | 3 +--
-> > > > >    1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > > 
-> > > > > diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-> > > > > index 435e515c0792..daac23e32026 100644
-> > > > > --- a/fs/erofs/sysfs.c
-> > > > > +++ b/fs/erofs/sysfs.c
-> > > > > @@ -240,8 +240,7 @@ void erofs_unregister_sysfs(struct super_block *sb)
-> > > > >    {
-> > > > >    	struct erofs_sb_info *sbi = EROFS_SB(sb);
-> > > > > -	if (sbi->s_kobj.state_in_sysfs) {
-> > > > > -		kobject_del(&sbi->s_kobj);
-> > > > > +	if (kobject_is_added(&sbi->s_kobj)) {
-> > > > 
-> > > > I do not understand why this check is even needed, I do not think it
-> > > > should be there at all as obviously the kobject was registered if it now
-> > > > needs to not be registered.
-> > > 
-> > > I think Yangtao sent a new patchset which missed the whole previous
-> > > background discussions as below:
-> > > https://lore.kernel.org/r/028a1b56-72c9-75f6-fb68-1dc5181bf2e8@linux.alibaba.com
-> > > 
-> > > It's needed because once a syzbot complaint as below:
-> > > https://lore.kernel.org/r/CAD-N9QXNx=p3-QoWzk6pCznF32CZy8kM3vvo8mamfZZ9CpUKdw@mail.gmail.com
-> > > 
-> > > I'd suggest including the previous backgrounds at least in the newer patchset,
-> > > otherwise it makes me explain again and again...
-> > 
-> > That would be good, as I do not think this is correct, it should be
-> > fixed in a different way, see my response to the zonefs patch in this
-> > series as a much simpler method to use.
-> 
-> Yes, but here (sbi->s_kobj) is not a kobject pointer (also at a quick
-> glance it seems that zonefs has similar code), and also we couldn't
-> just check the sbi is NULL or not here only, since sbi is already
-> non-NULL in this path and there are some others in sbi to free in
-> other functions.
-> 
-> s_kobj could be changed into a pointer if needed.  I'm all fine with
-> either way since as you said, it's a boilerplate filesystem kobject
-> logic duplicated from somewhere.  Hopefully Yangtao could help take
-> this task since he sent me patches about this multiple times.
+On Wed, Mar 29, 2023 at 4:15=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wro=
+te:
+>
+> Quoting Bartosz Golaszewski (2023-03-28 12:36:27)
+> > diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> > index 449bc8314d21..5e1919738aeb 100644
+> > --- a/drivers/clk/qcom/Kconfig
+> > +++ b/drivers/clk/qcom/Kconfig
+> > @@ -437,6 +437,14 @@ config SA_GCC_8775P
+> >           Say Y if you want to use peripheral devices such as UART, SPI=
+,
+> >           I2C, USB, UFS, SDCC, etc.
+> >
+> > +config SA_GPUCC_8775P
+> > +       tristate "SA8775P Graphics clock controller"
+> > +       select SA_GCC_8775P
+>
+> Should select QCOM_GDSC as well.
+>
 
-I made the same mistake with the zonefs code.  If the kobject in this
-structure controls the lifespan of it (which makes it not a pointer, my
-mistake), then that whole memory chunk can't be valid anymore if the
-kobject registering function failed so you need to get rid of it then,
-not later.
+Why if it's already selected indirectly by SA_GCC_8775P? Other GPUCCs
+in here don't select it either.
 
-thanks,
+Bart
 
-greg k-h
+> > +       help
+> > +         Support for the graphics clock controller on SA8775P devices.
+> > +         Say Y if you want to support graphics controller devices and
+> > +         functionality such as 3D graphics.
+> > +
+> >  config SC_GCC_7180
+> >         tristate "SC7180 Global Clock Controller"
+> >         select QCOM_GDSC
+> > diff --git a/drivers/clk/qcom/gpucc-sa8775p.c b/drivers/clk/qcom/gpucc-=
+sa8775p.c
+> > new file mode 100644
+> > index 000000000000..46d73bd0199b
+> > --- /dev/null
+> > +++ b/drivers/clk/qcom/gpucc-sa8775p.c
+> > @@ -0,0 +1,633 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2021-2022, Qualcomm Innovation Center, Inc. All right=
+s reserved.
+> > + * Copyright (c) 2023, Linaro Limited
+> > + */
+> > +
+> > +#include <linux/clk.h>
+>
+> Is this include used? If not, remove it as this is a clk provider and
+> not a clk consumer.
