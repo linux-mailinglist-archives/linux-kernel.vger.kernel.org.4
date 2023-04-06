@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC316D9ABE
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB086D9ABD
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238302AbjDFOmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S239150AbjDFOmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:42:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238541AbjDFOmH (ORCPT
+        with ESMTP id S239000AbjDFOmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:42:07 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698EDBB82
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:40:34 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id b19so29207662oib.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:40:34 -0700 (PDT)
+        Thu, 6 Apr 2023 10:42:09 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DCC9019
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:40:35 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id bi31so29189305oib.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:40:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680792033;
+        d=linaro.org; s=google; t=1680792034;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QwrW8zLdNa13eS+GI7R48Yjhq4tM8k3jsY8GnpkuSw0=;
-        b=ET29C6Lpq8H1bupcLWpddJ6+WJMTZH14dq8GvOLwp89jjim1Y3wOQbN1KqFe/QpqPy
-         be/SeTJYazGAwS7ghu4jp7LrOVKD2d4AaCEbEbnVH9aC9Id6cSyePAk+O3pWcwkdtGP8
-         hX9A1/oeThB47yf06fReeoYujLwL7my+G/S3t/vAOcU1Pko10MoIJGQib395m8yK5eVv
-         JwxDASIU3jjLNyC3fRyxpePBnqpQkss9KO3phn1JTpZXqrFxg6p5h6hc2Nb8FaBvel6A
-         gDTkiNq38ls117KNKCBhztRm5K9vpZQg/Cb/tVj08vooFX9lr00x3FhUWE8llk50q2zc
-         wqrA==
+        bh=/VAaI37UUMqujz98kbcVgbWBFxRUSTxumyIYUkuTwcc=;
+        b=uJVnn/Jfr+TJwzOL9C4qjEv/Uo0+lzKmZ2RFC2vCBh+UeCVjgKNJpI3Mjs9o4xtWtC
+         Kk5X4jO3NKGFNLq2fLzyVmA8etXFiLM/IX+RZ654JQ2GujskNzmlWXUyYKat5OIU+gGy
+         +7xpaWVI0Y6X2O3kG/St+h0N8ofi/2Ml1jSm7fKbIxAoy1hzfsabAFTxoLjUV49pvUiE
+         GW6R3Oc2rv/gtIM5fDbrA1yFeATw5BXz95Lat99blrO2FI4HHMLUcVRXlGhYKnJkoIuD
+         GxJIWxIKuMToCHFe7ngjNaNigsoaHapTzN6pCUfS3IPwNFzTKAGhAfS9/3+Z5yWXgMqk
+         67mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680792033;
+        d=1e100.net; s=20210112; t=1680792034;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QwrW8zLdNa13eS+GI7R48Yjhq4tM8k3jsY8GnpkuSw0=;
-        b=pLgE9Y5M1TwGziS8x64sjYeZCL506enBxKXJ2p3R5qpe7EpvQ4HWkP5XohD6MdgLGx
-         8C6z4+Fk6WfaI+R0f6q8KjrLOwoor3bbZ78S3WPV3u7L6TsFAdlxcMdu2w8LyoSHKxSw
-         5qrK8AeKxdRfyTPUzBx7lpXD43SYOQuPoHpoQkeMKLnjR/jYwyRaOY5fzVwHnixTXB2J
-         QJ54NQEVjmhjRj2nLSyqOBCnEoutYtkGSplVZZ7XEWgbPZiIKyC4MDH8LkkoZtdyorSb
-         /9LyrOESsDpY8vT2CdF8kXqpC0ZZ2aYZk2JiyjpUbCCHwia0rtqpA9faRIix8MaFJoOS
-         0FUg==
-X-Gm-Message-State: AAQBX9c/tlwi6CEfo6UwfTs0GOI4qQQO2xw5SOZnU/GeE/zCHSriCsn6
-        WLeXi/nJfF8bwMII2NFXuWjJDQ==
-X-Google-Smtp-Source: AKy350bCG0vtWtwYel0t3Kxrv4Y3pHI0ty1lJDbA7pUA7EgHrAAKXj9ot3YBX1+UPSmWRV0LbsvSuA==
-X-Received: by 2002:a05:6808:614:b0:387:715e:56b8 with SMTP id y20-20020a056808061400b00387715e56b8mr4773349oih.56.1680792033707;
-        Thu, 06 Apr 2023 07:40:33 -0700 (PDT)
+        bh=/VAaI37UUMqujz98kbcVgbWBFxRUSTxumyIYUkuTwcc=;
+        b=f/MoPXWAvK6rswk0OJufWhUeE1TDwmDn+9xmvRuCks/yLsdtkR3yoausnpviwwOyPy
+         euXRBBb5r5HbdfQFNCifFQRKVDdf7jsCktChPjc01IE5p0jBVdyNFWzO/RncOPpI65ep
+         GH3ctcjqn2RJcUbvuOvSmEsk1Hu8O2ASqoAAlnbW+Kr8KqEHtcyeQ8mQpHZNCaX9ebLg
+         OVv70bnXGCz84ydfxSuM9YCzookuH4bTMnnWxEu7Lgf9pYLhSIMk39Q3PvcmOYsI36jK
+         uAV7nrazKLRgzz7ngQ7ofVOapOypcTa4KbgzWpiZAUzeCGQjc4yQihyqRglwoS/Am0CD
+         ZbsA==
+X-Gm-Message-State: AAQBX9fCZde2oVRoWj/8TyABVOEZiB/ph/251guhXao08BVQrtkJrx/E
+        afwoQPpzOzc0//jfC67BV+OA0kySVEI+JrWIG5en7Q==
+X-Google-Smtp-Source: AKy350b7bQVcppxgdKHQbyzF/mFoW8VEbJHgqp0obT7UjSjkp9f1/A810fJ2G0K0IFYxXUW5yw+PJw==
+X-Received: by 2002:a05:6808:1912:b0:387:1e85:d1ae with SMTP id bf18-20020a056808191200b003871e85d1aemr5819223oib.18.1680792034597;
+        Thu, 06 Apr 2023 07:40:34 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id q7-20020acaf207000000b0037d7f4eb7e8sm726209oih.31.2023.04.06.07.40.32
+        by smtp.gmail.com with ESMTPSA id q7-20020acaf207000000b0037d7f4eb7e8sm726209oih.31.2023.04.06.07.40.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 07:40:33 -0700 (PDT)
+        Thu, 06 Apr 2023 07:40:34 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     Jonathan Cameron <jic23@kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH v5 1/6] iio: addac: stx104: Fix race condition for stx104_write_raw()
-Date:   Thu,  6 Apr 2023 10:40:10 -0400
-Message-Id: <c95c9a77fcef36b2a052282146950f23bbc1ebdc.1680790580.git.william.gray@linaro.org>
+Subject: [PATCH v5 2/6] iio: addac: stx104: Fix race condition when converting analog-to-digital
+Date:   Thu,  6 Apr 2023 10:40:11 -0400
+Message-Id: <2ae5e40eed5006ca735e4c12181a9ff5ced65547.1680790580.git.william.gray@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <cover.1680790580.git.william.gray@linaro.org>
 References: <cover.1680790580.git.william.gray@linaro.org>
@@ -73,65 +73,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The priv->chan_out_states array and actual DAC value can become
-mismatched if stx104_write_raw() is called concurrently. Prevent such a
-race condition by utilizing a mutex.
+The ADC conversion procedure requires several device I/O operations
+performed in a particular sequence. If stx104_read_raw() is called
+concurrently, the ADC conversion procedure could be clobbered. Prevent
+such a race condition by utilizing a mutex.
 
-Fixes: 97a445dad37a ("iio: Add IIO support for the DAC on the Apex Embedded Systems STX104")
+Fixes: 4075a283ae83 ("iio: stx104: Add IIO support for the ADC channels")
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
 Changes in v5: none
 
- drivers/iio/addac/stx104.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/iio/addac/stx104.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/iio/addac/stx104.c b/drivers/iio/addac/stx104.c
-index e45b70aa5bb7..4239aafe42fc 100644
+index 4239aafe42fc..8730b79e921c 100644
 --- a/drivers/iio/addac/stx104.c
 +++ b/drivers/iio/addac/stx104.c
-@@ -15,6 +15,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
-+#include <linux/mutex.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
- 
-@@ -69,10 +70,12 @@ struct stx104_reg {
- 
- /**
-  * struct stx104_iio - IIO device private data structure
-+ * @lock: synchronization lock to prevent I/O race conditions
-  * @chan_out_states:	channels' output states
-  * @reg:		I/O address offset for the device registers
-  */
- struct stx104_iio {
-+	struct mutex lock;
- 	unsigned int chan_out_states[STX104_NUM_OUT_CHAN];
- 	struct stx104_reg __iomem *reg;
- };
-@@ -178,9 +181,12 @@ static int stx104_write_raw(struct iio_dev *indio_dev,
- 			if ((unsigned int)val > 65535)
- 				return -EINVAL;
- 
-+			mutex_lock(&priv->lock);
-+
- 			priv->chan_out_states[chan->channel] = val;
- 			iowrite16(val, &priv->reg->dac[chan->channel]);
- 
-+			mutex_unlock(&priv->lock);
- 			return 0;
+@@ -117,6 +117,8 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
+ 			return IIO_VAL_INT;
  		}
- 		return -EINVAL;
-@@ -351,6 +357,8 @@ static int stx104_probe(struct device *dev, unsigned int id)
  
- 	indio_dev->name = dev_name(dev);
- 
-+	mutex_init(&priv->lock);
++		mutex_lock(&priv->lock);
 +
- 	/* configure device for software trigger operation */
- 	iowrite8(0, &priv->reg->acr);
+ 		/* select ADC channel */
+ 		iowrite8(chan->channel | (chan->channel << 4), &reg->achan);
  
+@@ -127,6 +129,8 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
+ 		while (ioread8(&reg->cir_asr) & BIT(7));
+ 
+ 		*val = ioread16(&reg->ssr_ad);
++
++		mutex_unlock(&priv->lock);
+ 		return IIO_VAL_INT;
+ 	case IIO_CHAN_INFO_OFFSET:
+ 		/* get ADC bipolar/unipolar configuration */
 -- 
 2.39.2
 
