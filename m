@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5B16DA3F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDEF6DA3F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbjDFUpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
+        id S240193AbjDFUpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240496AbjDFUpD (ORCPT
+        with ESMTP id S240406AbjDFUpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:45:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6F3E381;
-        Thu,  6 Apr 2023 13:42:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B45986476F;
-        Thu,  6 Apr 2023 20:42:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63752C4339B;
-        Thu,  6 Apr 2023 20:42:00 +0000 (UTC)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Marius Zachmann <mail@mariuszachmann.de>,
-        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Jean-Marie Verdun <verdun@hpe.com>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Clemens Ladisch <clemens@ladisch.de>,
-        Rudolf Marek <r.marek@assembler.cz>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Jonas Malaco <jonas@protocubo.io>,
-        Aleksandr Mezin <mezin.alexander@gmail.com>,
-        Derek John Clark <derekjohn.clark@gmail.com>,
-        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
-        <samsagax@gmail.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Michael Walle <michael@walle.cc>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Agathe Porte <agathe.porte@nokia.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 68/68] hwmon: w83773g: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:40:27 +0200
-Message-Id: <20230406204027.3012532-9-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
-References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
+        Thu, 6 Apr 2023 16:45:36 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D26AEFB9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:42:29 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 20so41920664lju.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680813747;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oB69DSrkZMHLxeLz+MD4z51xSrPE6ffX9rBh1gZABiE=;
+        b=mkFMzH+BEicrut05oGmaOycHLT6ow6xlh9osbF8WZXs/W06vyUTr+ib1EpUiD8ORKv
+         AUBoW3rtpQQYA56EsLC/v/Mq2pW6aCYUWX0w41U1zg88KDmMcOYa6mZzm+2l15TOYhEc
+         Y4wy2R3Ctaok/GkVQRVRI2VmE80vTgv31Ok33BER/p67mCtgqifqhCmo397Ez8ldKn2l
+         Un0xFSuN6FEPbzMfXN3JGeSmR39LJSqPRihUGv9719QDLRyslQBbUNo48Vh2I+XQkTjU
+         RdTfIb+xAy+d+rRZCEwB3PMzoxUf9FnOAc3Wp219Z4zDmLtY7zvd3dobAV0J1w77r5uk
+         BZUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680813747;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oB69DSrkZMHLxeLz+MD4z51xSrPE6ffX9rBh1gZABiE=;
+        b=YIJHhj6MAYzoouP2WginKB96b0uxeGWRoRjgHT2wuhrmoW9BjCxwkyc5FM3kORfJJY
+         8oGBKDlCGAUtANo6QbbuDI1bUbwzEDG0bZ5uxukVMBCJuFUbB7z+XzK/4awejNmPhiol
+         tlFYk4e7Fk+0JlWOebLavC3JzNA1ir9eIQhQ2MuGeA3n3GjPpcythkk/doSfLBY3QY45
+         BD3E6uWPjVAy2xGKCXicsjuiA5W/XWNnZmVx+f5d3r1IuJXIoqzBacoFx9ZGoVM6bwzD
+         hWCTaQZnlcI/f4XOwXwFKjfJsHRajsoF8hmdq1rv5qIzeu5TyiAs+DeRgZW8akM8SCZv
+         ml3A==
+X-Gm-Message-State: AAQBX9d13PZf8gUgFAU9I7dHjOIOeRoAJYvq/c1VOKfAUQ/UrntUWgwn
+        dahQjnh7HrvlaleGSbd5TuP+HA==
+X-Google-Smtp-Source: AKy350aNMspDMW30urIo3bqf6HZ2PhRAb/JmXga8ppMJl7ItG7FPMh734ib0vh8JP9kGqYGstrXRUg==
+X-Received: by 2002:a2e:980b:0:b0:2a0:202c:93b3 with SMTP id a11-20020a2e980b000000b002a0202c93b3mr3253362ljj.49.1680813747643;
+        Thu, 06 Apr 2023 13:42:27 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id a2-20020a2e8602000000b002a6406c610fsm436118lji.34.2023.04.06.13.42.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 13:42:27 -0700 (PDT)
+Message-ID: <b5260847-d766-dd17-99ce-0646fa2f72b2@linaro.org>
+Date:   Thu, 6 Apr 2023 22:42:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V3 4/5] arm64: dts: qcom: ipq9574: Add support for APSS
+ clock controller
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        dmitry.baryshkov@linaro.org, arnd@arndb.de,
+        geert+renesas@glider.be, nfraprado@collabora.com,
+        broonie@kernel.org, rafal@milecki.pl,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
+References: <20230406061314.10916-1-quic_devipriy@quicinc.com>
+ <20230406061314.10916-5-quic_devipriy@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230406061314.10916-5-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Statically allocated array of pointed to hwmon_channel_info can be made
-const for safety.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/hwmon/w83773g.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/w83773g.c b/drivers/hwmon/w83773g.c
-index 88d11dc5feb9..8dbcd05abd9a 100644
---- a/drivers/hwmon/w83773g.c
-+++ b/drivers/hwmon/w83773g.c
-@@ -233,7 +233,7 @@ static umode_t w83773_is_visible(const void *data, enum hwmon_sensor_types type,
- 	return 0;
- }
- 
--static const struct hwmon_channel_info *w83773_info[] = {
-+static const struct hwmon_channel_info * const w83773_info[] = {
- 	HWMON_CHANNEL_INFO(chip,
- 			   HWMON_C_REGISTER_TZ | HWMON_C_UPDATE_INTERVAL),
- 	HWMON_CHANNEL_INFO(temp,
--- 
-2.34.1
+On 6.04.2023 08:13, Devi Priya wrote:
+> Add the APCS & A73 PLL nodes to support CPU frequency scaling.
+> 
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  Changes in V3:
+> 	- No change
+> 
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index 068c3950dcec..7c820463a79d 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -525,6 +525,24 @@
+>  			timeout-sec = <30>;
+>  		};
+>  
+> +		apcs_glb: mailbox@b111000 {
+> +			compatible = "qcom,ipq9574-apcs-apps-global",
+> +				     "qcom,ipq6018-apcs-apps-global";
+> +			reg = <0x0b111000 0x1000>;
+> +			#clock-cells = <1>;
+> +			clocks = <&a73pll>, <&xo_board_clk>;
+> +			clock-names = "pll", "xo";
+> +			#mbox-cells = <1>;
+> +		};
+> +
+> +		a73pll: clock@b116000 {
+> +			compatible = "qcom,ipq9574-a73pll";
+> +			reg = <0x0b116000 0x40>;
+> +			#clock-cells = <0>;
+> +			clocks = <&xo_board_clk>;
+> +			clock-names = "xo";
+> +		};
+> +
+>  		timer@b120000 {
+>  			compatible = "arm,armv7-timer-mem";
+>  			reg = <0x0b120000 0x1000>;
