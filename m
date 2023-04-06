@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14766D989E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C686D98A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236370AbjDFNw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S229982AbjDFNyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjDFNwX (ORCPT
+        with ESMTP id S229521AbjDFNyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:52:23 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC4559CD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:52:21 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id o20so37855808ljp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680789140;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fi3MbKEX3/1oXOmLA6/02HNxunRbR6J+mBMPZLKnID4=;
-        b=V6Lvgn5UmaJHwGcsdXTIlnxWzrSKyZcw3V2db72LTXKnPOF7k5mYDurVM4PrZBtBzK
-         n5edXOVBy0oZ2KEilqIVEZSplIwyhgICDhNmuENrVHbPlR+Cwf0dQixpyU+66BdCmrJu
-         RyclY0AdpVi5bVaQiwx02gcE6l8/CWQOLWaGgcxai1MHkWLeorJdDTWk/Y/CbfmK9oED
-         xpRDF7mVhrNfwPDcP/IudYw7CGng6u0gUk0zgMbIhohWYoN/TKF25KnNfOVsVYFdzdLq
-         vWW6iHsgO33I1eYzzetlWD8JgiCpTO6SQzwGT4d4q8pSbkv2t4BfuEaBnLHXp1FjhNkz
-         3yHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680789140;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fi3MbKEX3/1oXOmLA6/02HNxunRbR6J+mBMPZLKnID4=;
-        b=FbIJJyELr0i1wnCXOWUptJYfl5NatA6kP0R3qDUWzXnRSnk/H+1YIo/ipeX1fCEvbb
-         rj6FjzXbL4hv5+/dPZNCZuXoslGIvIMc/aBN1Vi+c8vX3vnWPdXptToICIxy5ShI90rH
-         d3hAwxm+Tm/mMlZVm9KdRBptljydKJ/eZ5p+hbYed62HGhFbsueF+Pk19EnUPlod1TMg
-         mXEkuVwwmsAr9XWfDI0zFI56rl4r7JWbWJH2XOtP6S+3Mb/J+Z3MGxhCxrRM+7rcKWet
-         r0xGvWuG3G4Y12dcGSEazFeSsSpm9YoOIFwnMvVaav4fIzni4z9ucoBfGLvGaUZ7eVdK
-         cgVw==
-X-Gm-Message-State: AAQBX9euxZeHoVkNYz350BpThPj5pNEhGkhkC9PuoDRIAkw4h32zwuky
-        uFYMcWKoVGnIBt35FoOtAa/new==
-X-Google-Smtp-Source: AKy350YtOAzeOkwF1HQZlElfqcsFwRMN4c5y60bpJ2y5/F1fIAJg9bOYn481jfAhRCok7/++GyKBXA==
-X-Received: by 2002:a2e:8058:0:b0:29b:aee8:29b3 with SMTP id p24-20020a2e8058000000b0029baee829b3mr3005558ljg.38.1680789139665;
-        Thu, 06 Apr 2023 06:52:19 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id p3-20020a2e9a83000000b0029462e98c07sm295517lji.35.2023.04.06.06.52.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 06:52:19 -0700 (PDT)
-Message-ID: <dfc5797a-784c-0a3e-a290-714fdf356713@linaro.org>
-Date:   Thu, 6 Apr 2023 15:52:17 +0200
+        Thu, 6 Apr 2023 09:54:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0696C7AAC
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:54:07 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkQ3s-0002xV-Ik; Thu, 06 Apr 2023 15:54:00 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkQ3r-009Oe4-CN; Thu, 06 Apr 2023 15:53:59 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pkQ3q-00B44I-5w; Thu, 06 Apr 2023 15:53:58 +0200
+Date:   Thu, 6 Apr 2023 15:53:58 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Lorenz Brun <lorenz@brun.one>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2] pwm: mediatek: support inverted polarity
+Message-ID: <20230406135358.x3et6gvvxqsknfn6@pengutronix.de>
+References: <20230309010410.2106525-1-lorenz@brun.one>
+ <ZC7LaC19YjNwTIi1@orome>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 07/11] arm64: dts: qcom: sm6115: Add Crypto Engine
- support
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org
-References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
- <20230405072836.1690248-8-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230405072836.1690248-8-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rhxflvtrefdf7zep"
+Content-Disposition: inline
+In-Reply-To: <ZC7LaC19YjNwTIi1@orome>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,50 +60,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--rhxflvtrefdf7zep
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 5.04.2023 09:28, Bhupesh Sharma wrote:
-> Add crypto engine (CE) and CE BAM related nodes and definitions to
-> 'sm6115.dtsi'.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Hello Thierry,
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 2a51c938bbcb..ebac026b4cc7 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -650,6 +650,28 @@ usb_hsphy: phy@1613000 {
->  			status = "disabled";
->  		};
->  
-> +		cryptobam: dma-controller@1b04000 {
-> +			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-> +			reg = <0x0 0x01b04000 0x0 0x24000>;
-> +			interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
-> +			#dma-cells = <1>;
-> +			qcom,ee = <0>;
-> +			qcom,controlled-remotely;
-> +			num-channels = <8>;
-> +			qcom,num-ees = <2>;
-> +			iommus = <&apps_smmu 0x94 0x11>,
-> +				 <&apps_smmu 0x96 0x11>;
-> +		};
-> +
-> +		crypto: crypto@1b3a000 {
-> +			compatible = "qcom,sm6115-qce", "qcom,sm8150-qce", "qcom,qce";
-> +			reg = <0x0 0x01b3a000 0x0 0x6000>;
-> +			dmas = <&cryptobam 6>, <&cryptobam 7>;
-> +			dma-names = "rx", "tx";
-> +			iommus = <&apps_smmu 0x94 0x11>,
-> +				 <&apps_smmu 0x96 0x11>;
-> +		};
-> +
->  		qfprom@1b40000 {
->  			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
->  			reg = <0x0 0x01b40000 0x0 0x7000>;
+On Thu, Apr 06, 2023 at 03:38:48PM +0200, Thierry Reding wrote:
+> On Thu, Mar 09, 2023 at 02:04:10AM +0100, Lorenz Brun wrote:
+> > +	 * appear to have the capability to invert the output.
+> > +	 * This means that inverted mode can not be fully supported as the
+> > +	 * waveform will always start with the low period and end with the hi=
+gh
+> > +	 * period. Thus reject non-normal polarity if the shape of the wavefo=
+rm
+> > +	 * matters, i.e. usage_power is not set.
+> > +	 */
+> > +	if (state->polarity !=3D PWM_POLARITY_NORMAL && !state->usage_power)
+> >  		return -EINVAL;
+> > =20
+> >  	if (!state->enabled) {
+> > @@ -213,7 +221,11 @@ static int pwm_mediatek_apply(struct pwm_chip *chi=
+p, struct pwm_device *pwm,
+> >  		return 0;
+> >  	}
+> > =20
+> > -	err =3D pwm_mediatek_config(pwm->chip, pwm, state->duty_cycle, state-=
+>period);
+> > +	duty_cycle =3D state->duty_cycle;
+> > +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED)
+> > +		duty_cycle =3D state->period - state->duty_cycle;
+>=20
+> That's not really what state->usage_power was meant to address.
+
+I don't understand your concern here. I don't like .usage_power, but
+AFAICT this is a legitimite use. With .usage_power =3D true, the lowlevel
+driver is free to shift the phase_offset and even modify the period size
+and the goal is just that the average power-output matches.
+
+Lorenz's patch does exactly this: It even keeps the period and only
+shifts the phase (by period - duty_cycle). If you consider this not
+legitmate, I think we have to improve the docs about .usage_power.
+
+> What's wrong with just reversing the duty cycle in the pwm-fan? If you
+> use DT it's quite trivial to do that by just reversing the entries in
+> your cooling-levels property. Does that not work for you?
+
+That's an option, too. With a different PWM (i.e. one that can do proper
+inverted polarity) Lorenz's solution would be ok, though, right? And the
+pwm-fan only cares about the relative duty_cycle and not the phase
+shift, so setting .usage_power =3D true is fine, too?!
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--rhxflvtrefdf7zep
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmQuzvUACgkQj4D7WH0S
+/k4/Egf+Ox1VxLypTm6cyDNz+uIgbTFzaY+WA5DZQt5FTjYJnYoqqalVgZiTzIUm
+7IhDK/qgyDfmbUf/X4HFNtTIq6cbIpcbWwhFQjpGtx6yaVhs9By8CISv0mCYBjV6
+QHEDQQXNVgjppdqv7jJo0Ivxf4WO7cnoKREQ7atIoxoHBT//qIsWL0GLAG1rs45B
+FUDUod7VU2lWVdOAD/GVeeBcGVyjONuWbEshw0V9rxKoxT39ULRn/GiWv7WUmOa0
+7ZrR0zSgdedKZHgS4mj2i/IdvYV7OWYpEr1BbvmnUZT5BR4KS/kGJ8WhO2ko+g35
+hsWHH/KPjVFc4pv/9yC/CAh2LNkR8w==
+=rRPg
+-----END PGP SIGNATURE-----
+
+--rhxflvtrefdf7zep--
