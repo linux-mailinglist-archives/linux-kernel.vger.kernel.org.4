@@ -2,105 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB8A6D98EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01926D98F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238953AbjDFOFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S238975AbjDFOGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238926AbjDFOFG (ORCPT
+        with ESMTP id S230091AbjDFOGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:05:06 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A9F86AC;
-        Thu,  6 Apr 2023 07:05:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=92YHTTMfDlN4SnJGHYPEf7ALbRz1gExsNSlQbfCkiJE=; b=VD9zdoH+cdV2/P8HJ83hRBLEjI
-        JpdueSAzOmoj5lCh7T87b9I6gbGuMKT0JVGD26qs0FHKIB3yJoXQe+Y4WcX1wGtdc5Gf3D5swAlSD
-        EXr1mZc5rPBC5shJ4xrHAyWqSOcNkw5tuIyHXQO1g47XKYVj5hQlqd5LcUwNCCAn1cGW9SS3G7uax
-        zmp5ipQM/zPtv02Uri8vdyNZuZVVZGKIWz2E7oa+uuBEOkZHVNccAKz2SL3V1kMqabFQew4XDjGMP
-        UDtpCwd9Y5Asm9kd3xNpC2rhBHIMzw4QpCAoQ3vLq5u1SjJpvC/3lviLAn7JaG9fKetrRHP2MOqLI
-        rQxkw6jQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkQDx-00AXes-0w;
-        Thu, 06 Apr 2023 14:04:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 94388300194;
-        Thu,  6 Apr 2023 16:04:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7CEE5212E36AC; Thu,  6 Apr 2023 16:04:23 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 16:04:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
-        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
-        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
-        ardb@kernel.org, juerg.haefliger@canonical.com,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        tony@atomide.com, linus.walleij@linaro.org,
-        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
-        alougovs@redhat.com, jannh@google.com
-Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to CPUs in kernel mode
-Message-ID: <20230406140423.GA386634@hirez.programming.kicks-ass.net>
-References: <20230404134224.137038-1-ypodemsk@redhat.com>
- <20230404134224.137038-4-ypodemsk@redhat.com>
- <ZC1Q7uX4rNLg3vEg@lothringen>
- <ZC1XD/sEJY+zRujE@lothringen>
- <ZC3P3Ds/BIcpRNGr@tpad>
- <20230405195226.GB365912@hirez.programming.kicks-ass.net>
- <ZC69Wmqjdwk+I8kn@tpad>
- <20230406132928.GM386572@hirez.programming.kicks-ass.net>
+        Thu, 6 Apr 2023 10:06:15 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B3B93D2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:05:48 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3D5515C008E;
+        Thu,  6 Apr 2023 10:05:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 06 Apr 2023 10:05:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1680789936; x=
+        1680876336; bh=DAcmnY1Q1z8EU+4I4aVFUF/Azk8umAnJTEKhofKGfzM=; b=z
+        nIKK2kQEolnsPtyMuEMiZcbDaNdp7g3x1rXcOaanfH0X0991cZIHv/07q7QfPtcT
+        BFcJ5LFeAO5Vc7O0RkfpDBl2RSjPCnNv8DZwaJvpMW0XsiOKwBNGi3eiVN3OM/KM
+        DPqN4nR4zQtuRFEbdcijvf4GRVGqyyIfrxFbR2J5qtY6WmHYPjzQ39XC7Y5TmSfi
+        KYZgiY5EAmgnPUwJhrD/QAEU/ajfPvHTodk3CwhTOTbevhndpmNPKhskYlobV7QZ
+        HOZHqxTavpfOtnvB3Mm7NVn9+H8QvYFovsZYT6+KDFTY7at6O9Sp4mS5pkLWxIpu
+        x4mBDBpqipjFoWKQKunoQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680789936; x=1680876336; bh=DAcmnY1Q1z8EU
+        +4I4aVFUF/Azk8umAnJTEKhofKGfzM=; b=EdqRSNNQ75i6Dwcnq3z36VsH6XXk1
+        26oawqdRmVlnEkH0U89u02cg9lMJm9Zj0d22tZnrtgNuo8h4MQXgb6ENa5Lq1/dJ
+        g/SN/h3xIaCqbHk0+5lmCFHhGQJSG2ZgSkjKXd38/2TnN9n/Mmhva5tmd0IIjMkL
+        q4/1tp6YgaRfQZdVAZqxZOfS1MHIbEhXffFAg7lJiuudr1ZjZ1oR+HEzQgj8Wu/z
+        N5zd3Z8FiIOgjycnwiOiU0fkxoOSUmHpqLxFRaV/bl6EjcP4II7/4NNoJKcsUfJ5
+        60y1j349abkNa1uK7OoMmgeU9M0gK9+vsOvEDfT5TQHM9eTAE7MX37zUw==
+X-ME-Sender: <xms:rtEuZJGLdJkxbLbuYRce6TQReIldoxwl07PJ6v1bk200yOVK82Iseg>
+    <xme:rtEuZOXOpbtE5ljmWsWDIXi9RZUmROAxE6dqj21qQEBwcDNjIgf5sGFMh9VLtdb7w
+    uK213Fptp4TEehmQyw>
+X-ME-Received: <xmr:rtEuZLIt9yV6ZxBnIbzobzUUn0aexNUctoCZy2rxvldmNNkpdtsr9RKRS1UkvFcHRfXzG8NUCfrcn9c3Y11RBJQkbl4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfgrkhgr
+    shhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhird
+    hjpheqnecuggftrfgrthhtvghrnhephefhhfettefgkedvieeuffevveeufedtlefhjeei
+    ieetvdelfedtgfefuedukeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
+X-ME-Proxy: <xmx:rtEuZPHMR_7NCFUD9Gq7g3tT0FAlyWzTG0bRhCgeqF67CXZj8Qdj1g>
+    <xmx:rtEuZPWMIu98-FsNyJK_-3i-IcfmRftwPTmGPnPnsgl1wvaK7zQ7nw>
+    <xmx:rtEuZKO-HMXeXKnreKd9xL4Zlz6w4846ca_1zHoktJQMxTNAE1Lj7A>
+    <xmx:sNEuZLrmdD4zAdFm3MDKbezWW_sn2lPC84a6YL6_fmI6oIGvnYN-Og>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Apr 2023 10:05:32 -0400 (EDT)
+Date:   Thu, 6 Apr 2023 23:05:29 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Xu Biang <xubiang@hust.edu.cn>
+Cc:     Clemens Ladisch <clemens@ladisch.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, dzm91@hust.edu.cn,
+        error27@gmail.com, hust-os-kernel-patches@googlegroups.com,
+        Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: firewire-tascam: add missing unwind goto in
+ snd_tscm_stream_start_duplex()
+Message-ID: <20230406140529.GA159563@workstation>
+Mail-Followup-To: Xu Biang <xubiang@hust.edu.cn>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        dzm91@hust.edu.cn, error27@gmail.com,
+        hust-os-kernel-patches@googlegroups.com,
+        Takashi Iwai <tiwai@suse.de>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20230406132801.105108-1-xubiang@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230406132928.GM386572@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230406132801.105108-1-xubiang@hust.edu.cn>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 03:29:28PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 06, 2023 at 09:38:50AM -0300, Marcelo Tosatti wrote:
-> 
-> > > To actually hit this path you're doing something really dodgy.
-> > 
-> > Apparently khugepaged is using the same infrastructure:
-> > 
-> > $ grep tlb_remove_table khugepaged.c 
-> > 	tlb_remove_table_sync_one();
-> > 	tlb_remove_table_sync_one();
-> > 
-> > So just enabling khugepaged will hit that path.
-> 
-> Urgh, WTF..
-> 
-> Let me go read that stuff :/
+Hi,
 
-At the very least the one on collapse_and_free_pmd() could easily become
-a call_rcu() based free.
+On Thu, Apr 06, 2023 at 06:28:01AM -0700, Xu Biang wrote:
+> Smatch Warns:
+> sound/firewire/tascam/tascam-stream.c:493 snd_tscm_stream_start_duplex()
+> warn: missing unwind goto?
+> 
+> The direct return will cause the stream list of "&tscm->domain" unemptied
+> and the session in "tscm" unfinished if amdtp_domain_start() returns with
+> an error.
+> 
+> Fix this by changing the direct return to a goto which will empty the
+> stream list of "&tscm->domain" and finish the session in "tscm".
+> 
+> The snd_tscm_stream_start_duplex() function is called in the prepare
+> callback of PCM. According to "ALSA Kernel API Documentation", the prepare
+> callback of PCM will be called many times at each setup. So, if the
+> "&d->streams" list is not emptied, when the prepare callback is called
+> next time, snd_tscm_stream_start_duplex() will receive -EBUSY from
+> amdtp_domain_add_stream() that tries to add an existing stream to the
+> domain. The error handling code after the "error" label will be executed
+> in this case, and the "&d->streams" list will be emptied. So not emptying
+> the "&d->streams" list will not cause an issue. But it is more efficient
+> and readable to empty it on the first error by changing the direct return
+> to a goto statement.
+> 
+> The session in "tscm" has been begun before amdtp_domain_start(), so it
+> needs to be finished when amdtp_domain_start() fails.
+> 
+> Fixes: c281d46a51e3 ("ALSA: firewire-tascam: support AMDTP domain")
+> Signed-off-by: Xu Biang <xubiang@hust.edu.cn>
+> Reviewed-by: Dan Carpenter <error27@gmail.com>
+> ---
+> Note that this finding is from static analysis and not tested.
+> 
+>  sound/firewire/tascam/tascam-stream.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm not sure I'm following what collapse_huge_page() does just yet.
+Indeed. I overlooked it when posting the patch. The bug exists Linux
+kernel v5.4 or later and the fix should be forward to stable kernels.
+
+Acked-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+
+> diff --git a/sound/firewire/tascam/tascam-stream.c b/sound/firewire/tascam/tascam-stream.c
+> index 53e094cc411f..dfe783d01d7d 100644
+> --- a/sound/firewire/tascam/tascam-stream.c
+> +++ b/sound/firewire/tascam/tascam-stream.c
+> @@ -490,7 +490,7 @@ int snd_tscm_stream_start_duplex(struct snd_tscm *tscm, unsigned int rate)
+>  		// packet is important for media clock recovery.
+>  		err = amdtp_domain_start(&tscm->domain, tx_init_skip_cycles, true, true);
+>  		if (err < 0)
+> -			return err;
+> +			goto error;
+>  
+>  		if (!amdtp_domain_wait_ready(&tscm->domain, READY_TIMEOUT_MS)) {
+>  			err = -ETIMEDOUT;
+> -- 
+> 2.17.1
+
+
+Thanks
+
+Takashi Sakamoto
