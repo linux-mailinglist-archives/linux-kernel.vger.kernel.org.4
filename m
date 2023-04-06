@@ -2,338 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9766D946E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F326D9477
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237369AbjDFKuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S236994AbjDFKvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233619AbjDFKuT (ORCPT
+        with ESMTP id S233619AbjDFKve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:50:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B126E4C05;
-        Thu,  6 Apr 2023 03:50:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A43CA16F8;
-        Thu,  6 Apr 2023 03:51:01 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.20.171])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C0BC3F73F;
-        Thu,  6 Apr 2023 03:50:14 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 11:50:12 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Florent Revest <revest@chromium.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com, lihuafei1@huawei.com
-Subject: Re: [PATCH v6 4/5] arm64: ftrace: Add direct call trampoline samples
- support
-Message-ID: <ZC6j5GCvWuSG9vYe@FVFF77S0Q05N>
-References: <20230405180250.2046566-1-revest@chromium.org>
- <20230405180250.2046566-5-revest@chromium.org>
+        Thu, 6 Apr 2023 06:51:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AC74C05;
+        Thu,  6 Apr 2023 03:51:33 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-189-216.ewe-ip-backbone.de [91.248.189.216])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1638566031C0;
+        Thu,  6 Apr 2023 11:51:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680778292;
+        bh=x3aRxla+DsZNmlA36XqdRv0nclCoMSIM66m0rWdCOno=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Bl6uvRbRN9rcLi0VaAIkIHx9E+RvBNULGoeukOhgfwG4FLRmoshhPEGXJehxT0mxb
+         u2672Aw61Cc/Lyv59X/PhSMgd5N1nmlFpegoVRnUCacQQSCFiMlK/siFXt8HVRC9EU
+         6/PLHJjhjaVxg8WrzrAsjWFWX0G3fQbYCTcI1giPMTynA5r/rkLCKyfVFdX8/3h6GK
+         KFYEz8Fkk+FRQHzpW2gJXUx4M3KjQFSvaBxjdQo/90juFFNscFnhYAR7p6D0X4pgO7
+         JLX75iK4Ix6YH6+fhMO39MqPQPH0GNBoPRHlFdAsPHdjxTDTvv1NIO/a2LGoS8yxlj
+         G8+eWSe2aOKhA==
+Received: by mercury (Postfix, from userid 1000)
+        id 89011106273A; Thu,  6 Apr 2023 12:51:29 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 12:51:29 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv1 1/3] dt-bindings: usb: Add RK3588 OHCI
+Message-ID: <20230406105129.nuv3jcmwl7ugql3q@mercury.elektranox.org>
+References: <20230404145350.45388-1-sebastian.reichel@collabora.com>
+ <20230404145350.45388-2-sebastian.reichel@collabora.com>
+ <15dcd1fa-9adb-6bc2-9f01-454273368002@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gkot42bc7hmuouit"
 Content-Disposition: inline
-In-Reply-To: <20230405180250.2046566-5-revest@chromium.org>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <15dcd1fa-9adb-6bc2-9f01-454273368002@linaro.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:02:49PM +0200, Florent Revest wrote:
-> The ftrace samples need per-architecture trampoline implementations
-> to save and restore argument registers around the calls to
-> my_direct_func* and to restore polluted registers (eg: x30).
-> 
-> These samples also include <asm/asm-offsets.h> which, on arm64, is not
-> necessary and redefines previously defined macros (resulting in
-> warnings) so these includes are guarded by !CONFIG_ARM64.
-> 
-> Signed-off-by: Florent Revest <revest@chromium.org>
 
-These all look good to me. I gave each module a spin in an 8-vCPU VM on an M1
-Macbook Pro with a bunch of other work going on, and all of those worked as
-expected with sensible output in /sys/kernel/tracing/trace, and no noticeable
-failures elsewhere. So:
+--gkot42bc7hmuouit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Tested-by: Mark Rutland <mark.rutland@arm.com>
+Hi Krzysztof,
 
-Mark.
+On Thu, Apr 06, 2023 at 09:45:11AM +0200, Krzysztof Kozlowski wrote:
+> On 04/04/2023 16:53, Sebastian Reichel wrote:
+> > Add compatible for RK3588 OHCI. As far as I know it's fully
+> > compatible with generic-ohci.
+> >=20
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >  .../devicetree/bindings/usb/generic-ohci.yaml  | 18 ++++++++++++++++--
+> >  1 file changed, 16 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/=
+Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > index a9ba7257b884..d84732a100ba 100644
+> > --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > @@ -44,6 +44,7 @@ properties:
+> >                - hpe,gxp-ohci
+> >                - ibm,476gtr-ohci
+> >                - ingenic,jz4740-ohci
+> > +              - rockchip,rk3588-ohci
+> >                - snps,hsdk-v1.0-ohci
+> >            - const: generic-ohci
+> >        - enum:
+> > @@ -68,8 +69,6 @@ properties:
+> >      maxItems: 2
+> > =20
+> >    clocks:
+> > -    minItems: 1
+> > -    maxItems: 3
+>=20
+> The constraints here should stay.
 
-> ---
->  arch/arm64/Kconfig                          |  2 ++
->  samples/ftrace/ftrace-direct-modify.c       | 34 ++++++++++++++++++
->  samples/ftrace/ftrace-direct-multi-modify.c | 40 +++++++++++++++++++++
->  samples/ftrace/ftrace-direct-multi.c        | 24 +++++++++++++
->  samples/ftrace/ftrace-direct-too.c          | 26 ++++++++++++++
->  samples/ftrace/ftrace-direct.c              | 24 +++++++++++++
->  6 files changed, 150 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index f3503d0cc1b8..c2bf28099abd 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -194,6 +194,8 @@ config ARM64
->  		    !CC_OPTIMIZE_FOR_SIZE)
->  	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
->  		if DYNAMIC_FTRACE_WITH_ARGS
-> +	select HAVE_SAMPLE_FTRACE_DIRECT
-> +	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
->  	select HAVE_EFFICIENT_UNALIGNED_ACCESS
->  	select HAVE_FAST_GUP
->  	select HAVE_FTRACE_MCOUNT_RECORD
-> diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
-> index 25fba66f61c0..98d1b7385f08 100644
-> --- a/samples/ftrace/ftrace-direct-modify.c
-> +++ b/samples/ftrace/ftrace-direct-modify.c
-> @@ -2,7 +2,9 @@
->  #include <linux/module.h>
->  #include <linux/kthread.h>
->  #include <linux/ftrace.h>
-> +#ifndef CONFIG_ARM64
->  #include <asm/asm-offsets.h>
-> +#endif
->  
->  extern void my_direct_func1(void);
->  extern void my_direct_func2(void);
-> @@ -96,6 +98,38 @@ asm (
->  
->  #endif /* CONFIG_S390 */
->  
-> +#ifdef CONFIG_ARM64
-> +
-> +asm (
-> +"	.pushsection    .text, \"ax\", @progbits\n"
-> +"	.type		my_tramp1, @function\n"
-> +"	.globl		my_tramp1\n"
-> +"   my_tramp1:"
-> +"	bti	c\n"
-> +"	sub	sp, sp, #16\n"
-> +"	stp	x9, x30, [sp]\n"
-> +"	bl	my_direct_func1\n"
-> +"	ldp	x30, x9, [sp]\n"
-> +"	add	sp, sp, #16\n"
-> +"	ret	x9\n"
-> +"	.size		my_tramp1, .-my_tramp1\n"
-> +
-> +"	.type		my_tramp2, @function\n"
-> +"	.globl		my_tramp2\n"
-> +"   my_tramp2:"
-> +"	bti	c\n"
-> +"	sub	sp, sp, #16\n"
-> +"	stp	x9, x30, [sp]\n"
-> +"	bl	my_direct_func2\n"
-> +"	ldp	x30, x9, [sp]\n"
-> +"	add	sp, sp, #16\n"
-> +"	ret	x9\n"
-> +"	.size		my_tramp2, .-my_tramp2\n"
-> +"	.popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_ARM64 */
-> +
->  static struct ftrace_ops direct;
->  
->  static unsigned long my_tramp = (unsigned long)my_tramp1;
-> diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-> index f72623899602..26956c8fc513 100644
-> --- a/samples/ftrace/ftrace-direct-multi-modify.c
-> +++ b/samples/ftrace/ftrace-direct-multi-modify.c
-> @@ -2,7 +2,9 @@
->  #include <linux/module.h>
->  #include <linux/kthread.h>
->  #include <linux/ftrace.h>
-> +#ifndef CONFIG_ARM64
->  #include <asm/asm-offsets.h>
-> +#endif
->  
->  extern void my_direct_func1(unsigned long ip);
->  extern void my_direct_func2(unsigned long ip);
-> @@ -103,6 +105,44 @@ asm (
->  
->  #endif /* CONFIG_S390 */
->  
-> +#ifdef CONFIG_ARM64
-> +
-> +asm (
-> +"	.pushsection    .text, \"ax\", @progbits\n"
-> +"	.type		my_tramp1, @function\n"
-> +"	.globl		my_tramp1\n"
-> +"   my_tramp1:"
-> +"	bti	c\n"
-> +"	sub	sp, sp, #32\n"
-> +"	stp	x9, x30, [sp]\n"
-> +"	str	x0, [sp, #16]\n"
-> +"	mov	x0, x30\n"
-> +"	bl	my_direct_func1\n"
-> +"	ldp	x30, x9, [sp]\n"
-> +"	ldr	x0, [sp, #16]\n"
-> +"	add	sp, sp, #32\n"
-> +"	ret	x9\n"
-> +"	.size		my_tramp1, .-my_tramp1\n"
-> +
-> +"	.type		my_tramp2, @function\n"
-> +"	.globl		my_tramp2\n"
-> +"   my_tramp2:"
-> +"	bti	c\n"
-> +"	sub	sp, sp, #32\n"
-> +"	stp	x9, x30, [sp]\n"
-> +"	str	x0, [sp, #16]\n"
-> +"	mov	x0, x30\n"
-> +"	bl	my_direct_func2\n"
-> +"	ldp	x30, x9, [sp]\n"
-> +"	ldr	x0, [sp, #16]\n"
-> +"	add	sp, sp, #32\n"
-> +"	ret	x9\n"
-> +"	.size		my_tramp2, .-my_tramp2\n"
-> +"	.popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_ARM64 */
-> +
->  static unsigned long my_tramp = (unsigned long)my_tramp1;
->  static unsigned long tramps[2] = {
->  	(unsigned long)my_tramp1,
-> diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-> index 1547c2c6be02..b2ac90e0c02e 100644
-> --- a/samples/ftrace/ftrace-direct-multi.c
-> +++ b/samples/ftrace/ftrace-direct-multi.c
-> @@ -4,7 +4,9 @@
->  #include <linux/mm.h> /* for handle_mm_fault() */
->  #include <linux/ftrace.h>
->  #include <linux/sched/stat.h>
-> +#ifndef CONFIG_ARM64
->  #include <asm/asm-offsets.h>
-> +#endif
->  
->  extern void my_direct_func(unsigned long ip);
->  
-> @@ -66,6 +68,28 @@ asm (
->  
->  #endif /* CONFIG_S390 */
->  
-> +#ifdef CONFIG_ARM64
-> +
-> +asm (
-> +"	.pushsection	.text, \"ax\", @progbits\n"
-> +"	.type		my_tramp, @function\n"
-> +"	.globl		my_tramp\n"
-> +"   my_tramp:"
-> +"	bti	c\n"
-> +"	sub	sp, sp, #32\n"
-> +"	stp	x9, x30, [sp]\n"
-> +"	str	x0, [sp, #16]\n"
-> +"	mov	x0, x30\n"
-> +"	bl	my_direct_func\n"
-> +"	ldp	x30, x9, [sp]\n"
-> +"	ldr	x0, [sp, #16]\n"
-> +"	add	sp, sp, #32\n"
-> +"	ret	x9\n"
-> +"	.size		my_tramp, .-my_tramp\n"
-> +"	.popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_ARM64 */
->  static struct ftrace_ops direct;
->  
->  static int __init ftrace_direct_multi_init(void)
-> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
-> index 71ed4ee8cb4a..38f6f677f913 100644
-> --- a/samples/ftrace/ftrace-direct-too.c
-> +++ b/samples/ftrace/ftrace-direct-too.c
-> @@ -3,7 +3,9 @@
->  
->  #include <linux/mm.h> /* for handle_mm_fault() */
->  #include <linux/ftrace.h>
-> +#ifndef CONFIG_ARM64
->  #include <asm/asm-offsets.h>
-> +#endif
->  
->  extern void my_direct_func(struct vm_area_struct *vma, unsigned long address,
->  			   unsigned int flags, struct pt_regs *regs);
-> @@ -72,6 +74,30 @@ asm (
->  
->  #endif /* CONFIG_S390 */
->  
-> +#ifdef CONFIG_ARM64
-> +
-> +asm (
-> +"	.pushsection	.text, \"ax\", @progbits\n"
-> +"	.type		my_tramp, @function\n"
-> +"	.globl		my_tramp\n"
-> +"   my_tramp:"
-> +"	bti	c\n"
-> +"	sub	sp, sp, #48\n"
-> +"	stp	x9, x30, [sp]\n"
-> +"	stp	x0, x1, [sp, #16]\n"
-> +"	stp	x2, x3, [sp, #32]\n"
-> +"	bl	my_direct_func\n"
-> +"	ldp	x30, x9, [sp]\n"
-> +"	ldp	x0, x1, [sp, #16]\n"
-> +"	ldp	x2, x3, [sp, #32]\n"
-> +"	add	sp, sp, #48\n"
-> +"	ret	x9\n"
-> +"	.size		my_tramp, .-my_tramp\n"
-> +"	.popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_ARM64 */
-> +
->  static struct ftrace_ops direct;
->  
->  static int __init ftrace_direct_init(void)
-> diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
-> index d81a9473b585..e5312f9c15d3 100644
-> --- a/samples/ftrace/ftrace-direct.c
-> +++ b/samples/ftrace/ftrace-direct.c
-> @@ -3,7 +3,9 @@
->  
->  #include <linux/sched.h> /* for wake_up_process() */
->  #include <linux/ftrace.h>
-> +#ifndef CONFIG_ARM64
->  #include <asm/asm-offsets.h>
-> +#endif
->  
->  extern void my_direct_func(struct task_struct *p);
->  
-> @@ -63,6 +65,28 @@ asm (
->  
->  #endif /* CONFIG_S390 */
->  
-> +#ifdef CONFIG_ARM64
-> +
-> +asm (
-> +"	.pushsection	.text, \"ax\", @progbits\n"
-> +"	.type		my_tramp, @function\n"
-> +"	.globl		my_tramp\n"
-> +"   my_tramp:"
-> +"	bti	c\n"
-> +"	sub	sp, sp, #32\n"
-> +"	stp	x9, x30, [sp]\n"
-> +"	str	x0, [sp, #16]\n"
-> +"	bl	my_direct_func\n"
-> +"	ldp	x30, x9, [sp]\n"
-> +"	ldr	x0, [sp, #16]\n"
-> +"	add	sp, sp, #32\n"
-> +"	ret	x9\n"
-> +"	.size		my_tramp, .-my_tramp\n"
-> +"	.popsection\n"
-> +);
-> +
-> +#endif /* CONFIG_ARM64 */
-> +
->  static struct ftrace_ops direct;
->  
->  static int __init ftrace_direct_init(void)
-> -- 
-> 2.40.0.577.gac1e443424-goog
-> 
+dtbs_check complained about the 4 RK3588 clock entries if this
+stays. That's why I moved them to the condition down below into
+the else branch.
+
+-- Sebastian
+
+--gkot42bc7hmuouit
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQupCsACgkQ2O7X88g7
++prC3xAAh3TAmObHfSQgOxu06NxPtt+duhRILfQCjMBuvM+PEgF5VacsK6ki3wi9
+/1wNZ/bDxPi8t41BJfdOJF6CQ69By5PkwmgpJwJRQpmSU3UKhh46ITHQYdXPQDGV
+FhOhvBDiQmGYsQT4J46qPssYTgcfNv2SQecZj4CFVQ+fUqjASD9jsI5kj9czvg4k
+O4v6kNT3PoPZ0k7KlD9QOAD0XO1wfwgwgnPuXEOMYoOhm5et+ITKYlo2argQw5gO
+vXlamu6+AjA/BWbqVFKrcqxtnAjhdY3uXGJebCmJx5rNSbIRAcuYKo0m7pqiDHyq
+Sds7ovnnfV7TnMsds+g6I/f0NlfKVO5IiRwWCrBvfOpE12nYLvqIT0zyqhxUXcbf
+u/P8Lj1NPvZ5N0XLwCo4NRZBRlUFJ3x/99eRwsf0+x9SuRNsSQWrWohOPMDAfCki
+G5Lj0A2826oG5uM92IjJ3CYfStLIO59o4Y2gM1/RTgnSE1w2wLW+Lf9WXxKkdqiZ
+POhqOdPj3m7b76/F45xA1wVCksAGFXSNM63IPZLyTek4tIGHkAvIaoYgpYTpw48Y
+c4/HM5SHSiZlhlqlon4wKRjQ4klrfJjA8tDkBjgPWeeaHujp+fnONWuRX6FbCkEH
+HWF1DxCe38g3RJZa5Njy0N4/qnF9hJ0wW0G7msUDWdRdB2PjTks=
+=OhJQ
+-----END PGP SIGNATURE-----
+
+--gkot42bc7hmuouit--
