@@ -2,93 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354FA6D9CDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C101F6D9CE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbjDFP7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S239702AbjDFP7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239575AbjDFP7E (ORCPT
+        with ESMTP id S239587AbjDFP7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:59:04 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9A09755;
-        Thu,  6 Apr 2023 08:59:03 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id w133so29403411oib.1;
-        Thu, 06 Apr 2023 08:59:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680796743; x=1683388743;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Oh7h3jMxLokPLKNPs7kQpXzC9xXuYjOjp2sgIXgC2jU=;
-        b=rvbeNofsvZDZLb0ltwxN+lET8hbSlB+dPnBYG8RF4o3SIKPepcCgQWCkFXSvQ+7+C2
-         KdY3O3XYvojYgDgMsQBpXFUkuELNo4seklJgh3neIcijPhREbUr7i1G0t+how6mYuyDT
-         6GqrM6GLicc1r0oSVxV2Yk2IgGAaG4s6IUrNMBhQLlJEc+B7AtNzSJXAyVPxKkXOrFSc
-         XRv4qLk5F4e93hP2u9H56MgBR0dGuT0BpKbkneYcEpB2kqNb/hp5IYp1x8+emHWIqw+v
-         uLaCXwFE2C7DoyMoI3pjXd2HbvnnCqynfvnXhiQxWtz14h95QXJHp5qgthLBEN5nOH/d
-         jdUQ==
-X-Gm-Message-State: AAQBX9ew6QVWoQhBBfKWksjieZuE9lEL0NymtNcHfmt7RNWYyv6aKwUg
-        fT+IxTefBP8+VXkrLnRYrHwHFIYzpg==
-X-Google-Smtp-Source: AKy350arKIELgvEJntEgvZm0kaiU+d+z/2nRm9Qv5wpmftvqcCoU9kxkvuhMhE6BIYSSc7apiG4Jew==
-X-Received: by 2002:a05:6808:5:b0:383:e1f3:fef6 with SMTP id u5-20020a056808000500b00383e1f3fef6mr2910633oic.18.1680796743189;
-        Thu, 06 Apr 2023 08:59:03 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z7-20020aca6707000000b0038755008179sm780181oix.26.2023.04.06.08.59.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 08:59:02 -0700 (PDT)
-Received: (nullmailer pid 3159384 invoked by uid 1000);
-        Thu, 06 Apr 2023 15:59:02 -0000
-Date:   Thu, 6 Apr 2023 10:59:02 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        Patrick Lai <quic_plai@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rao Mandadapu <quic_srivasam@quicinc.com>,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH v2 2/7] dt-bindings: soundwire: qcom: add 16-bit sample
- interval
-Message-ID: <168079674130.3159330.8680786687198930722.robh@kernel.org>
-References: <20230403132503.62090-1-krzysztof.kozlowski@linaro.org>
- <20230403132503.62090-3-krzysztof.kozlowski@linaro.org>
+        Thu, 6 Apr 2023 11:59:39 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684BE93E5;
+        Thu,  6 Apr 2023 08:59:38 -0700 (PDT)
+Received: from [192.168.1.141] ([37.4.248.58]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MqZE0-1qF5wU46Vs-00me6o; Thu, 06 Apr 2023 17:59:19 +0200
+Message-ID: <09926d3d-2f1f-d060-af0f-bbc5b02d3664@i2se.com>
+Date:   Thu, 6 Apr 2023 17:59:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403132503.62090-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 3/3] PCI: brcmstb: Allow setting the completion timeout
+Content-Language: en-US
+To:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230406124625.41325-1-jim2101024@gmail.com>
+ <20230406124625.41325-4-jim2101024@gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20230406124625.41325-4-jim2101024@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:7gXUYGdfhQIK9uebKjhJEUnRpA3eeSFswJBEbOwfcfGijEp9h2x
+ z1lakDXPhXuNg/wRcxexlOKzc5GolTKhAob87T6Gwg6Z/y21LCNnwAykUxJ0NoBgwthlDPE
+ itukKU4n2b14MtSC7Vrh+mCASBh7o0MNPq8SZaV8r5cBwMfpDiy6JEZAtDPbxjFoDq3eSbQ
+ RNq0UWUGiVkVyLijzXWCQ==
+UI-OutboundReport: notjunk:1;M01:P0:aMhb1Zdku4o=;m+dr8A/uTHOyFf6FH5bhby+2p8v
+ nkjmDfcvrOGb7aSnV8OrZG9ftY9fsGeYAjfB6wQEYo92ooHAKTZdfpsWn+lilPFZ4Wp/qZVBw
+ CcfmKpQ6r4i9MgbxKZdBpT161fU/U8dUDziXjtnxGRtEKvMaN4dmZls6+NgGJZ9lAS6eGwdA2
+ kzi+4Oo+EMk3+O9/D67rwKs3N91zTtdKygvLRBvp+/dgl6wgMhckD57QdjPeA8ocXiE2j1Zlx
+ nDAWJZxe7x/vbBs8kB/CsOj2ka1CAAhgwzYwFBs9VZEQ0IbLNt2Jk/Xh4RyfaS1WQB6/enjJc
+ rs5QkeptjwDRPOOYYURy8zGH6CfNoDEtkwJKcgu9fkvbdpbV3Yikw4iOObvJ1Vr7b4zU2tmn9
+ 3uRyVBMv5MR7LRFA+WTIp+YwfxqfMvipJ1dJtRX94j5LYgbopVKiSbSRn8HJvzHZK5+0lKjQL
+ /fL6JwPJNc8Qw6FIX5IDvYFxDUDWf1Biw+fHCrQaiXiN2pv0zfLcGTsf/zqmmTvQ7QR+9iYy2
+ R8GAlcniKzKib0BIwBaI93VsjJflj83hk+Hok3yn0JMi9Aw8zQo4CjS72oK+XJnjSB3jNWW3U
+ FgIv+APsnHCuoWDOEwIfLeVaWUENSuk0U2Fgu65fJ46J5Vz4eKM9SKOVoIhHcWRftG1KkGd2a
+ NsYwqnNorvWc7cAhF8hhCVXBRQdcL548Y1n4CqdtuA==
+X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jim,
 
-On Mon, 03 Apr 2023 15:24:58 +0200, Krzysztof Kozlowski wrote:
-> The port sample interval was always 16-bit, split into low and high
-> bytes.  This split was unnecessary, although harmless for older devices
-> because all of them used only lower byte (so values < 0xff).  With
-> support for Soundwire controller on Qualcomm SM8550 and its devices,
-> both bytes will be used, thus add a new 'qcom,ports-sinterval' property
-> to allow 16-bit sample intervals.
+Am 06.04.23 um 14:46 schrieb Jim Quinlan:
+> Since the STB PCIe HW will cause a CPU abort on a completion timeout abort,
+> we might as well extend the timeout limit.  Further, different devices and
+> systems may requires a larger or smaller amount for L1SS exit.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
 > ---
->  .../bindings/soundwire/qcom,soundwire.yaml    | 22 +++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
+>   drivers/pci/controller/pcie-brcmstb.c | 24 ++++++++++++++++++++++++
+>   1 file changed, 24 insertions(+)
 > 
+> diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> index 129eee7bdbc1..92d78f4dfaae 100644
+> --- a/drivers/pci/controller/pcie-brcmstb.c
+> +++ b/drivers/pci/controller/pcie-brcmstb.c
+> @@ -1080,6 +1080,29 @@ static void brcm_config_clkreq(struct brcm_pcie *pcie)
+>   	writel(clkreq_set, pcie->base + PCIE_MISC_HARD_PCIE_HARD_DEBUG);
+>   }
+>   
+> +static void brcm_config_completion_timeout(struct brcm_pcie *pcie)
+> +{
+> +	/* TIMEOUT register is two registers before RGR1_SW_INIT_1 */
+> +	const unsigned int REG_OFFSET = PCIE_RGR1_SW_INIT_1(pcie) - 8;
+> +	u32 timeout, timeout_msec = 1000;
+> +	u64 tmp64;
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(pcie->np, "brcm,completion-abort-msecs",
+> +				   &timeout_msec);
+> +
+> +	if (ret && ret != -EINVAL)
+> +		dev_err(pcie->dev, "bad 'brcm,completion-abort-msecs' prop\n");
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+i'm not sure about the error behavior. If we want to proceed with 
+defaults in such a case, i would make this a warning and mention the 
+used defaults.
 
+> +
+> +	/* Each unit in timeout register is 1/216,000,000 seconds */
+> +	tmp64 = (u64)216000 * timeout_msec;
+> +
+> +	/* Clamp the requested value before writing it */
+> +	timeout = tmp64 > 0xffffffff ? 0xffffffff : tmp64;
+> +	timeout = timeout < 0xffff ? 0xffff : timeout;
+
+Personally i'm not a huge fan of silently clamping wrong DT values.
+
+Best regards
+
+> +	writel(timeout, pcie->base + REG_OFFSET);
+> +}
+> +
+>   static int brcm_pcie_start_link(struct brcm_pcie *pcie)
+>   {
+>   	struct device *dev = pcie->dev;
+> @@ -1110,6 +1133,7 @@ static int brcm_pcie_start_link(struct brcm_pcie *pcie)
+>   		return -ENODEV;
+>   	}
+>   
+> +	brcm_config_completion_timeout(pcie);
+>   	brcm_config_clkreq(pcie);
+>   
+>   	if (pcie->gen)
