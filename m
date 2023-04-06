@@ -2,175 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AC26D8DDD
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5AB6D8DDE
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbjDFDHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S235213AbjDFDHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235365AbjDFDGX (ORCPT
+        with ESMTP id S235393AbjDFDG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:06:23 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A02CA5F4;
-        Wed,  5 Apr 2023 20:06:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-93434918b67so74450666b.0;
-        Wed, 05 Apr 2023 20:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680750362; x=1683342362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vsfJnbQv1fOILr7h0bAgIUFVdrp0dqf/uXk88iVozVU=;
-        b=fdzPMukRN++ad+IfvQT2tCpcAwD8f5B2FIzxt8Nca6zHP51495NR1M/LHK0FLxhb+g
-         Huwnq0/oI9FvODgNojwZ8BjQPCT/WC01y7koL3KECzaj2Ve5K42GMepgpy8Otfj2gyUI
-         XnfeuC1aLwCrRqENeLmctTAo+Er3a4PsLGIK9qN+Blk9F37x5SsWXq6WbkexHAu8zXWX
-         2FRYeAWwO9kIaaF27l3SXdrEU2DkckN87xz1+Oh27t98ChoU2tg5gfxHlQv4R/Tu9Odm
-         gMu1/A5ldWTmsUXgmL6UiPGwk8xnFr5p71hmSqBfNJhzP8Bk1HSZ4RWco3yyc0GWWXUT
-         d3SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680750362; x=1683342362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vsfJnbQv1fOILr7h0bAgIUFVdrp0dqf/uXk88iVozVU=;
-        b=6EM6Oyb3xvb32Hb3Qqp6qdNmBvMQDVM8NR+MkGEh40C9OdFbAnLwxTejLMwjRE1sQ0
-         YxJLoVUkVJFAMGLWU/sFHUKhVAkZ1QleDK6UIHvF/Aj7LG6z+5P582Ucg4BwYOOloRVe
-         3uyWayyW86UihBwCny2p9KI+WN2u3nPwr1owtaLQkxyN0EqX/nmY46JF3FgP0Zw0QpML
-         KO/zCFah4ZxI5LI9YWJob7GjS9hhAW4bBBnK2oJjs3bktlKwaYBMOP8V2BuQg1poElHw
-         OlrokEdsxS2kSAKHPsm+nC8poOCmMaq9huAQ5I51NyoyGCyRe+T/Dd6yOWDbioZQXQgB
-         XxwQ==
-X-Gm-Message-State: AAQBX9caMnGT9NaYKENr5yR1hvPZ2uUcshuba38lv47WQCKfWcvTcnjA
-        1k4Em5h3MduRM6muM/4/0CFptyLs60VnxeJDITs=
-X-Google-Smtp-Source: AKy350YRdOL0DfdMv6hljZJW9N9hJV3KwR/mdf0tLHg9badvK2eMICeruWTwCNDJZ/gaD32bVehyoT939O4yWbbBINo=
-X-Received: by 2002:a50:aa93:0:b0:4fb:2593:846 with SMTP id
- q19-20020a50aa93000000b004fb25930846mr2271247edc.3.1680750361452; Wed, 05 Apr
- 2023 20:06:01 -0700 (PDT)
+        Wed, 5 Apr 2023 23:06:26 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5BBAD04;
+        Wed,  5 Apr 2023 20:06:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsRGP20nxz4wgv;
+        Thu,  6 Apr 2023 13:06:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680750365;
+        bh=+7JnYdXl4iRYhR/fNbCL6DbEPldREXhma/t+L8lv3Js=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nx9WwZzDcwf8f02O4B1Eo+3/kc7fR4+ptzZdOyJ0xWtJ2BN1fMxGw/Oq14JTz6CaE
+         L8Q7Etru1Qc+P+W6khw3YznWVtBDi0bppM8Bct2Hzl1BjBkhKJhNzHDTHpcm5t+kpD
+         qRUSW9YHeah0KwYMJaYdSj9WJJBiiSya6raaBfjKzFRgNQ6qkjfj/mVzZEI8k/fL/p
+         gxwttRbW7wq+tw5Oy2jR9SPLVS+dLpnvNTnQVlZ/+B7oiaQ60s6OYQueQg+9+78mPm
+         5+Y7pKPewP4FUIRXc/ND8Pv9RYjAtkPxOUqzvU3/eTgyvXceujVFlrXQ13FD6uMtMC
+         LldLzWDgaMU+Q==
+Date:   Thu, 6 Apr 2023 13:06:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     KVM <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Thomas Huth <thuth@redhat.com>
+Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
+Message-ID: <20230406130603.273997ca@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230326092208.13613-1-laoar.shao@gmail.com> <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
- <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com>
- <20230402233740.haxb7lgfavcoe27f@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbBj-+xY5jGLynUrg1GfSftZ+LT5DkADKz_+8+tL2kWMSw@mail.gmail.com>
- <20230403225017.onl5pbp7h2ugclbk@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbDQROKrWe732Qv1CsZwr6nMJN-2y77JW3EuT53D8At+Ow@mail.gmail.com>
- <20230406020656.7v5ongxyon5fr4s7@dhcp-172-26-102-232.dhcp.thefacebook.com> <CALOAHbCEsucGRB+n5hTnPm-HssmB91HD4PFVRhdO=CZnJXfR6A@mail.gmail.com>
-In-Reply-To: <CALOAHbCEsucGRB+n5hTnPm-HssmB91HD4PFVRhdO=CZnJXfR6A@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 5 Apr 2023 20:05:50 -0700
-Message-ID: <CAADnVQ+1VEBHTM5Rm-gx8-bg=tfv=4x+aONhF0bAmBFZG3W8Qg@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Z+Kjzg/rPvU7tRqN1R3suNi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 7:55=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> w=
-rote:
->
-> It seems that I didn't describe the issue clearly.
-> The container doesn't have CAP_SYS_ADMIN, but the CAP_SYS_ADMIN is
-> required to run bpftool,  so the bpftool running in the container
-> can't get the ID of bpf objects or convert IDs to FDs.
-> Is there something that I missed ?
+--Sig_/Z+Kjzg/rPvU7tRqN1R3suNi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Nothing. This is by design. bpftool needs sudo. That's all.
+Hi all,
 
+Today's linux-next merge of the kvm-arm tree got a conflict in:
 
->
-> > > --- a/kernel/bpf/syscall.c
-> > > +++ b/kernel/bpf/syscall.c
-> > > @@ -3705,9 +3705,6 @@ static int bpf_obj_get_next_id(const union bpf_=
-attr *attr,
-> > >         if (CHECK_ATTR(BPF_OBJ_GET_NEXT_ID) || next_id >=3D INT_MAX)
-> > >                 return -EINVAL;
-> > >
-> > > -       if (!capable(CAP_SYS_ADMIN))
-> > > -               return -EPERM;
-> > > -
-> > >         next_id++;
-> > >         spin_lock_bh(lock);
-> > >         if (!idr_get_next(idr, &next_id))
-> > >
-> > > Because the container doesn't have CAP_SYS_ADMIN enabled, while they
-> > > only have CAP_BPF and other required CAPs.
-> > >
-> > > Another possible solution is that we run an agent in the host, and th=
-e
-> > > user in the container who wants to get the bpf objects info in his
-> > > container should send a request to this agent via unix domain socket.
-> > > That is what we are doing now in our production environment.  That
-> > > said, each container has to run a client to get the bpf object fd.
-> >
-> > None of such hacks are necessary. People that debug bpf setups with bpf=
-tool
-> > can always sudo.
-> >
-> > > There are some downsides,
-> > > -  It can't handle pinned bpf programs
-> > >    For pinned programs, the user can get them from the pinned files
-> > > directly, so he can use bpftool in his case, only with some
-> > > complaints.
-> > > -  If the user attached the bpf prog, and then removed the pinned
-> > > file, but didn't detach it.
-> > >    That happened. But this error case can't be handled.
-> > > - There may be other corner cases that it can't fit.
-> > >
-> > > There's a solution to improve it, but we also need to change the
-> > > kernel. That is, we can use the wasted space btf->name.
-> > >
-> > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > index b7e5a55..59d73a3 100644
-> > > --- a/kernel/bpf/btf.c
-> > > +++ b/kernel/bpf/btf.c
-> > > @@ -5542,6 +5542,8 @@ static struct btf *btf_parse(bpfptr_t btf_data,
-> > > u32 btf_data_size,
-> > >                 err =3D -ENOMEM;
-> > >                 goto errout;
-> > >         }
-> > > +       snprintf(btf->name, sizeof(btf->name), "%s-%d-%d", current->c=
-omm,
-> > > +                        current->pid, cgroup_id(task_cgroup(p, cpu_c=
-grp_id)));
-> >
-> > Unnecessary.
-> > comm, pid, cgroup can be printed by bpftool without changing the kernel=
-.
->
-> Some questions,
-> - What if the process exits after attaching the bpf prog and the prog
-> is not auto-detachable?
->   For example, the reuserport bpf prog is not auto-detachable. After
-> pins the reuserport bpf prog, a task can attach it through the pinned
-> bpf file, but if the task forgets to detach it and the pinned file is
-> removed, then it seems there's no way to figure out which task or
-> cgroup this prog belongs to...
+  arch/arm64/kvm/arm.c
 
-you're saying that there is a bpf prog in the kernel without
-corresponding user space ? Meaning no user space process has an FD
-that points to this prog or FD to a map that this prog is using?
-In such a case this is truly kernel bpf prog. It doesn't belong to cgroup.
+between commit:
 
-> - Could you pls. explain in detail how to get comm, pid, or cgroup
-> from a pinned bpffs file?
+  d8708b80fa0e ("KVM: Change return type of kvm_arch_vm_ioctl() to "int"")
 
-pinned bpf prog and no user space holds FD to it?
-It's not part of any cgroup. Nothing to print.
+from the kvm tree and commit:
+
+  e0fc6b21616d ("KVM: arm64: Add vm fd device attribute accessors")
+
+from the kvm-arm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/kvm/arm.c
+index aaa752be3776,4ec888fdd4f7..000000000000
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@@ -220,7 -234,7 +234,8 @@@ int kvm_vm_ioctl_check_extension(struc
+  	case KVM_CAP_VCPU_ATTRIBUTES:
+  	case KVM_CAP_PTP_KVM:
+  	case KVM_CAP_ARM_SYSTEM_SUSPEND:
+ +	case KVM_CAP_IRQFD_RESAMPLE:
++ 	case KVM_CAP_COUNTER_OFFSET:
+  		r =3D 1;
+  		break;
+  	case KVM_CAP_SET_GUEST_DEBUG2:
+@@@ -1440,7 -1475,28 +1476,27 @@@ static int kvm_vm_ioctl_set_device_addr
+  	}
+  }
+ =20
++ static int kvm_vm_has_attr(struct kvm *kvm, struct kvm_device_attr *attr)
++ {
++ 	switch (attr->group) {
++ 	case KVM_ARM_VM_SMCCC_CTRL:
++ 		return kvm_vm_smccc_has_attr(kvm, attr);
++ 	default:
++ 		return -ENXIO;
++ 	}
++ }
++=20
++ static int kvm_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
++ {
++ 	switch (attr->group) {
++ 	case KVM_ARM_VM_SMCCC_CTRL:
++ 		return kvm_vm_smccc_set_attr(kvm, attr);
++ 	default:
++ 		return -ENXIO;
++ 	}
++ }
++=20
+ -long kvm_arch_vm_ioctl(struct file *filp,
+ -		       unsigned int ioctl, unsigned long arg)
+ +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned lon=
+g arg)
+  {
+  	struct kvm *kvm =3D filp->private_data;
+  	void __user *argp =3D (void __user *)arg;
+
+--Sig_/Z+Kjzg/rPvU7tRqN1R3suNi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQuNxsACgkQAVBC80lX
+0Gxkkgf8CkKLR8AuSGIbWV+bE1n+NeVjsa6k0ugcz8f5hzGsf9aqX42s6meXooKk
+Ih2hWUUwi/4ilmGEqMk2IM8ZkYGbHAgsH2GrtzSo2M28shgQUfIO/qLt9D2PZrsh
+y0tg0i6i47iELIASqj8KjWXpnLiq9evWuKDxVHUMMfUXdF5AWvEmOG4qK/wXERNy
+n/G/f7jYpdqF09sUEigKIw6KhP1fu3GIOS30ymr/+Efgp0PJ4Tnb+NVCVSRIdPNB
+qzxkNul6FPVpL9AFaswPny/SwIWV2d6KKhvCzE87RWULlifMrnR5d6qan1SNbpPJ
+yP8BQdwO89+qqwRYihiin8skrbyVdw==
+=gLJS
+-----END PGP SIGNATURE-----
+
+--Sig_/Z+Kjzg/rPvU7tRqN1R3suNi--
