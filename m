@@ -2,78 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C44B6D97D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7566D9754
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237963AbjDFNSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S236387AbjDFMvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237861AbjDFNS0 (ORCPT
+        with ESMTP id S229989AbjDFMvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:18:26 -0400
+        Thu, 6 Apr 2023 08:51:51 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4A47EE7
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:17:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCD111C
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:51:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680787021;
+        s=mimecast20190719; t=1680785468;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rEZb6SaUsngmnCMPg4YGowc9TbgaZEBXr+mRqfM4dbw=;
-        b=MHUVdOi4tqCXzmCjgS0njmlIT/G0c8b0oxOXWvFtyLugfa25BIP10eNqHmEtT5IRHfNCfh
-        b8Dhgg0IjdMzuoan8pISWokeoX3M3v54NbnNG21pZeMNQ79eT7tCr8ylPs9Bh68w6uzZd/
-        MouawzxfU9ZGQs+5lcQO4ONmcU+W510=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-10l_5oWZPX2YbGgfWqkGXw-1; Thu, 06 Apr 2023 09:16:57 -0400
-X-MC-Unique: 10l_5oWZPX2YbGgfWqkGXw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B0A9884EC0;
-        Thu,  6 Apr 2023 13:16:55 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 82F2D2166B26;
-        Thu,  6 Apr 2023 13:16:54 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id A64FC40EB07D7; Thu,  6 Apr 2023 09:49:22 -0300 (-03)
-Date:   Thu, 6 Apr 2023 09:49:22 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
-        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
-        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
-        ardb@kernel.org, juerg.haefliger@canonical.com,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        tony@atomide.com, linus.walleij@linaro.org,
-        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
-        alougovs@redhat.com
-Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to CPUs in kernel mode
-Message-ID: <ZC6/0hRXztNwqXg0@tpad>
-References: <20230404134224.137038-1-ypodemsk@redhat.com>
- <20230404134224.137038-4-ypodemsk@redhat.com>
- <ZC1Q7uX4rNLg3vEg@lothringen>
- <ZC3PUkI7N2uEKy6v@tpad>
- <20230405195457.GC365912@hirez.programming.kicks-ass.net>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=a8vJf32VjBTqhSXC4UaNWwEC2++PydY9gb3nY7Y6vs4=;
+        b=b4sMLHzmMVK7g8LdIS6W1Z4HEMNgYIvsau1uGg1uYRF66/dBu49kwmltEWNF0N1dVfckwQ
+        0Mi+BelRPA8jKCaJzexNWGOdDTGgbf204Ghi33eflG6kPC1gbhzMKhpWj9JIb9ykOMp62i
+        Fy87gqJWME9bQ9iSO6WegjspHre0JMg=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-177-IQjF4ksjNCWek6j9_AsWDw-1; Thu, 06 Apr 2023 08:51:07 -0400
+X-MC-Unique: IQjF4ksjNCWek6j9_AsWDw-1
+Received: by mail-qk1-f198.google.com with SMTP id p63-20020a374242000000b007468eaf866aso8199257qka.17
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 05:51:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680785467;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a8vJf32VjBTqhSXC4UaNWwEC2++PydY9gb3nY7Y6vs4=;
+        b=pRuxH7PumLJ6QPobDT24/1R0JmtcBy4ofAS59KIQtyaEYoR9sXW6oF31EX1CGcDbPW
+         La4ypLteYhkF08tkUfPq3VhvUA54Bv82ERDKFzNqLlRWx/CDgWp6dffxzMQsGTFGxpAW
+         tAFE1Cv28hcFLCknh/pU6unYWLj7vMfE6AlIVEEJXteMbBG1veVPKBKE3nGsPa4ji4Qn
+         vYtbZM4knvZWtnmQCD1HaqlBfo6t8qes0dqsrK3jRjM39wbE9UPx/hAL/jcLNJrOhNNd
+         Z0hmhJKU3+YaZ1CECDbhTxbx0nanzZi2o3Vxhp5xpElexkK1Xxx/CSnhWTsJuvlAyEAr
+         da7Q==
+X-Gm-Message-State: AAQBX9cze4BakS/c9c0RmePb2wFH25HuUB8hVbhpvj1vBfGweqFNeT48
+        lbIRU2gwyqNQ7DpaTq7IsuTV6xG3OaCix84BzSsCQi56w4YaCbR+n49CbrFOaxb4RzDSzrs1Mg/
+        b2cJoZk73a3go3i87PQ1XX6CHdw4vVnFz
+X-Received: by 2002:ad4:5ca6:0:b0:5df:450b:8002 with SMTP id q6-20020ad45ca6000000b005df450b8002mr4830661qvh.31.1680785467007;
+        Thu, 06 Apr 2023 05:51:07 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YSPMv3nhVaAKMIwGcpzI1WXbVj1KNben3bHvDLvNgWUG5IbK0u6ODiRzBeHNfaFX4xk75FiA==
+X-Received: by 2002:ad4:5ca6:0:b0:5df:450b:8002 with SMTP id q6-20020ad45ca6000000b005df450b8002mr4830628qvh.31.1680785466773;
+        Thu, 06 Apr 2023 05:51:06 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id de11-20020ad4584b000000b005dd8b93457csm489252qvb.20.2023.04.06.05.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 05:51:06 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
+        airlied@gmail.com, daniel@ffwll.ch, gsamaiya@nvidia.com
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/nouveau/gr/tu102: remove unused tu102_gr_load function
+Date:   Thu,  6 Apr 2023 08:51:02 -0400
+Message-Id: <20230406125102.1952202-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405195457.GC365912@hirez.programming.kicks-ass.net>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -84,50 +76,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 09:54:57PM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 05, 2023 at 04:43:14PM -0300, Marcelo Tosatti wrote:
-> 
-> > Two points:
-> > 
-> > 1) For a virtualized system, the overhead is not only of executing the
-> > IPI but:
-> > 
-> > 	VM-exit
-> > 	run VM-exit code in host
-> > 	handle IPI
-> > 	run VM-entry code in host
-> > 	VM-entry
-> 
-> I thought we could do IPIs without VMexit these days? 
+smatch reports
+drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: symbol
+  'tu102_gr_load' was not declared. Should it be static?
 
-Yes, IPIs to vCPU (guest context). In this case we can consider
-an IPI to the host pCPU (which requires VM-exit from guest context).
+This function is not used so remove it.
 
-> Also virt... /me walks away.
-> 
-> > 2) Depends on the application and the definition of "occasional".
-> > 
-> > For certain types of applications (for example PLC software or
-> > RAN processing), upon occurrence of an event, it is necessary to
-> > complete a certain task in a maximum amount of time (deadline).
-> 
-> If the application is properly NOHZ_FULL and never does a kernel entry,
-> it will never get that IPI. If it is a pile of shit and does kernel
-> entries while it pretends to be NOHZ_FULL it gets to keep the pieces and
-> no amount of crying will get me to care.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-I suppose its common practice to use certain system calls in latency
-sensitive applications, for example nanosleep. Some examples:
-
-1) cyclictest		(nanosleep)
-2) PLC programs		(nanosleep)
-
-A system call does not necessarily have to take locks, does it ?
-
-Or even if application does system calls, but runs under a VM,
-then you are requiring it to never VM-exit.
-
-This reduces the flexibility of developing such applications.
-
-
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
+index 3b6c8100a242..a7775aa18541 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
+@@ -206,19 +206,6 @@ tu102_gr_av_to_init_veid(struct nvkm_blob *blob, struct gf100_gr_pack **ppack)
+ 	return gk20a_gr_av_to_init_(blob, 64, 0x00100000, ppack);
+ }
+ 
+-int
+-tu102_gr_load(struct gf100_gr *gr, int ver, const struct gf100_gr_fwif *fwif)
+-{
+-	int ret;
+-
+-	ret = gm200_gr_load(gr, ver, fwif);
+-	if (ret)
+-		return ret;
+-
+-	return gk20a_gr_load_net(gr, "gr/", "sw_veid_bundle_init", ver, tu102_gr_av_to_init_veid,
+-				 &gr->bundle_veid);
+-}
+-
+ static const struct gf100_gr_fwif
+ tu102_gr_fwif[] = {
+ 	{  0, gm200_gr_load, &tu102_gr, &gp108_gr_fecs_acr, &gp108_gr_gpccs_acr },
+-- 
+2.27.0
 
