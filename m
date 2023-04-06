@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA206D9EC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DC16D9EE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239864AbjDFRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S239013AbjDFRfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjDFRc4 (ORCPT
+        with ESMTP id S239286AbjDFRey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:32:56 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659447AB9;
-        Thu,  6 Apr 2023 10:32:54 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 3B07585F13;
-        Thu,  6 Apr 2023 19:32:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1680802372;
-        bh=5SiwuVsqj9Oz3FPieNOFQyRy6+MjAAIzlniuZBG3/po=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hYga2HS+VEcpfETfJxhwrR51B2XJ/O2mZ9EA1rCqCubQpSo6F2gSKkp1pNNaypmY8
-         hGNmxSJSH7cH7I9D2I8HTQsDmCcxjOT6juUZAWdvZwQRq/fli8sWZ+7oX6NXl0Z5h/
-         wfE0KhoUGnS0sy2ubRjqRWblyOJoBNMklgs4ntZD/FDtjHj/4xQQOzFqw+5aiifPD1
-         i3oSexZy2CPMmE1lszRSenc3sTZ1IMCkZmo1SHxzokpESeiwnHuIPnACgyPqT0zDU4
-         iUdVd1XVu1rQ6ZfhsoE0RIQw/YAy9SS/a8cNc2m3+PkdLN2GFcX99Ajd4D4Hqaf+NF
-         y43NtRNRNpNiQ==
-Message-ID: <75b02961-bcf9-4af5-4450-cb23a50d5f7b@denx.de>
-Date:   Thu, 6 Apr 2023 19:32:50 +0200
+        Thu, 6 Apr 2023 13:34:54 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A0FA26E
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:34:26 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id 11so3200906ejw.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680802464;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8o3EoZ1JRk710zUyDpdKYa+magSoQJ+Man8QMgiHo6Q=;
+        b=CTi/ZXhL3hOFciRN9KFDq+NfuU4tBzhjNWf1azXXymquM8nG1Sasbb16e5cuVzFi0H
+         xzETDrvvAFIZlA/7B9UXS9u+BMBdAQOjXzdSdT2Ta1vnliqVSrOXQLdnOzytDVYS0Q0c
+         YC7p5f25tQHaE2y6VegCYklQ+ufUwQqX+OsBzUVENuX7z/xPFzN18jZHLFtON6x8AD0E
+         o1CFZv7yDX63QjykmoemK+d+LSiMMeC3rM9JBCrVLVtstlYvetA+yWPVe2ri8ov7RsB0
+         cRY6UterViYwxThApTz2bwwZno7RHwHVbhgPQG7nhgv5ijnBf1uUpQ0qGp+7m9tOHAwF
+         Zo9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680802464;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8o3EoZ1JRk710zUyDpdKYa+magSoQJ+Man8QMgiHo6Q=;
+        b=uvBroETb31RSlmwKwdG69L++ZY4cwSEiMkoPtnF6HXRkJiKGAAHU+B5Mm6tD4R/t34
+         m3pJdbiZ4UZb1rK2O5MWyrhn/+bcEzNSv6OYEeloXM5IvcYtOezpnQWruIOmt7u0MLWu
+         jy5/Va0vQv0wGGWnGJx+PCUTQf0vi6910UUOXQhnVdASLbgf3zAMcH+GqDKibHJUXLYO
+         eXGRICaxqnNDObpIbZN1Gjb50jZuYmHSuzAbs22tdr+KZwNJ8qbUUPX0pqWSty67/0yC
+         rRklC9Q1WKxC/DFUo9/9v8ryr9rSyNvweivOBpFaQb1lx+RtcJ1ORywGGZEIo4fQ7/sd
+         J+3g==
+X-Gm-Message-State: AAQBX9efksH18rTNLFtJUwmZG0+q7ZFGwFg2Pd5r8VykE563FLyhqzN6
+        NFuNWJNrqABSCJHehXEbBC0GaA==
+X-Google-Smtp-Source: AKy350Zbh0P1Aw932RSOPLQD+3BjO5PlqOGIucWLDsJF9mruynrNaAF87yNNnH1iwPMfg7zfaPiMog==
+X-Received: by 2002:a17:906:8a75:b0:931:6921:bdb7 with SMTP id hy21-20020a1709068a7500b009316921bdb7mr6690097ejc.60.1680802463784;
+        Thu, 06 Apr 2023 10:34:23 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id p1-20020a1709060e8100b0092421bf4927sm1072728ejf.95.2023.04.06.10.34.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 10:34:23 -0700 (PDT)
+Message-ID: <0a09e2f4-b3aa-7f23-48b1-743e8f561635@linaro.org>
+Date:   Thu, 6 Apr 2023 19:34:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
+Subject: Re: [PATCH 0/5] Add support for Blaize BLZP1600 SoC
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+To:     Niko Pasaloukos <nikolaos.pasaloukos@blaize.com>,
         "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        kernel <kernel@dh-electronics.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230405160258.46998-1-cniedermaier@dh-electronics.com>
- <20230405160258.46998-2-cniedermaier@dh-electronics.com>
- <05fa147c-116b-59b4-d14b-760bbefd7602@denx.de>
- <e7aa3b3220e148ee96f5a1c361721845@dh-electronics.com>
- <aa947a69-a0bf-50e6-9ff2-770f436d58e2@linaro.org>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <aa947a69-a0bf-50e6-9ff2-770f436d58e2@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     "soc@kernel.org" <soc@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "olof@lixom.net" <olof@lixom.net>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+References: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406102149.729726-1-nikolaos.pasaloukos@blaize.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,39 +86,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/23 18:36, Krzysztof Kozlowski wrote:
-> On 05/04/2023 20:24, Christoph Niedermaier wrote:
->> From: Marek Vasut [mailto:marex@denx.de]
->> Sent: Wednesday, April 5, 2023 6:25 PM
->>> On 4/5/23 18:02, Christoph Niedermaier wrote:
->>>
->>> [...]
->>>
->>>> +/ {
->>>> +     model = "DH electronics i.MX6ULL DHCOR on maveo box";
->>>> +     compatible = "dh,imx6ull-dhcor-maveo-box", "dh,imx6ull-dhcor-som",
->>>> +                  "fsl,imx6ull";
->>>> +
->>>> +     aliases {
->>>> +             /delete-property/ mmc0; /* Avoid double definitions */
->>>> +             /delete-property/ mmc1;
->>>> +             mmc2 = &usdhc2; /* eMMC should be mmc2 */
->>>
->>> Why not mmc0 ?
->>>
->>> Use root=PARTUUID= when booting to avoid any dependency on
->>> root=/dev/mmcblk2pN enumeration.
->>
->> This is due to software interchangeability with the DHCOM
->> i.MX6ULL, where the eMMC is always mmc2.
+On 06/04/2023 12:22, Niko Pasaloukos wrote:
+> Adds basic support for the Blaize BLZP1600 SoC.
+> This SoC contains two cores of Cortex-A53 CPUs, one Blaize
+> Graph Streaming Processor (GSP) and several other IPs.
 > 
-> That's not the reason to have aliases. The number should match numbering
-> in your datasheet/schematics/user-guide, not what your software wants.
-> 
-> Use PARTUUID for SW dependencies.
+> Nikolaos Pasaloukos (5):
+>   dt-bindings: Add Blaize vendor prefix
+>   dt-bindings: arm: blaize: Add Blaize BLZP1600 SoC
+>   dt-bindings: reset: Add binding constants for BLZP1600
+>   dt-bindings: clock: Add binding constants for BLZP1600
+>   arm64: Add initial support for Blaize BLZP1600 CB2
 
-Regarding the PARTUUID, Christoph raised a valid concern I think. These 
-machines can come with A/B update scheme, where the PARTUUID could 
-become identical between two partitions. Or, you can write the same 
-image to both eMMC and SD card. I don't think PARTUUID is the silver 
-bullet solution, but I agree the enumeration is a great solution either.
+You miss maintainers entry. Cc soc@kernel when your submission is ready,
+because now it is too early.
+
+Best regards,
+Krzysztof
+
