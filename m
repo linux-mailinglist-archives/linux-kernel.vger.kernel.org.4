@@ -2,67 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECE26D923B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F77D6D9241
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235374AbjDFJFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S236083AbjDFJGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDFJFU (ORCPT
+        with ESMTP id S229456AbjDFJGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:05:20 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2235B2127
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:05:18 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DF7AF42528;
-        Thu,  6 Apr 2023 09:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680771916;
-        bh=L2mgRFIsiDrq4UmWAD/bAElglOyJx/ilSQqRLQnCbBY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=U4a86YUTEZzifO170+N2QFi7WGWWoj4z4f9W5RP5eHfXd04mqcApRFR+Hz4PPB99o
-         O3u2xVKS12xnUUe/0F0H19BMcXzTnAMDRiUn24sapXXi0+tMICoApZQKTmsaQHZbgr
-         sNIIo2r86gu1R4q1jLB4dhd8Qxv+TJBPa5RQqevScGgc9gzCY7PkaSE1+bGsvkXAu+
-         zy56y4XD4wYshcGbYpQbqcdbycINfy7/Lf5XLhbfnzKBA17Bjfk0406MsjPtxgXAkU
-         1iN/CmlOHt5fw85dMZI+oqOi5VLRpsGoLGvX6WW0gkz/yeRhpvJeHmAjzyoLi1hxiJ
-         cE9eROoHyWoTQ==
-Message-ID: <24fe6e14-0d0a-f874-766d-e8d045d1e80e@asahilina.net>
-Date:   Thu, 6 Apr 2023 18:05:11 +0900
-MIME-Version: 1.0
+        Thu, 6 Apr 2023 05:06:20 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2046.outbound.protection.outlook.com [40.107.212.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C55A2127;
+        Thu,  6 Apr 2023 02:06:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NT2VWGxMTqdCSIA0RO52JXoFXpdpmR7Xh8EqGw3q8cdO9Ep4VBbEKRgkhu9XrmqW6CKshv2s1m/mDLgW8v1nkEx0dEGFHjRg6ZPadU7VhvLQORoDJwyNqk0iWC/hyIHjp3SK1QK+k2LT/5tfNepiCgeDs+1E/nCtKff+pVW+u3QA3Ccl1WNRfn4VydB2/bBl/dCorsR8KLEKVkiKAGPrWGbzygaTqrL0vJOaYkRvPw94OQGu6LQ8MdHio/93dPXFKPMksJMgNaKl3qVkp1IxNEVpd8tY8Q5NubAP1HYKsVesueC3yrPHguwOk2XPIEZ1nkiyl+I2Vrzo4YX8wonPCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lBtzoEQzftDK/D2RmrxlepcWllFg/pXlLWxUystsmkA=;
+ b=Lw2ob66/HEROvGvqQQvcn8F7BwpAb04A5XiQtFXGCIGVqZoe5JNZmg7Frhbg6e8iA4K2OL8MU5zWUuoq00hwhIZK6ugxHpPsv7H50YRfg1L2LbCGGV2CbAg+4W4QdMgvReOPVW2EyN8MWBb5U8PiO34Wn5GK0XMCCMnaj49sk9AhtDBM7RQnJORbQhle0QDZmCxDvvbRUB/msMMvTIaIYKoiTShJvYOBQtRvp54PLai3JdgPwiTy9J7LiBfXMTjUE509vWZZ1Vag+wNiqufQz65xOb3TnIoXtntqeYqu0xJeLwwEqq3rQdcHAabPjfm0CLX3GPXLB4sm+lQ3OnufKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lBtzoEQzftDK/D2RmrxlepcWllFg/pXlLWxUystsmkA=;
+ b=ILMTeYpx0EtB+bvNkhDWNCsmVmmetBncmNr+DD0DYPIGaJrv0DRAK0SGcV73yLpEy2yJwhvll5z+b3+S4fO3AAEMIvy7xH2whQuApv0fsyluuDHUP/8eO3CorYM7mYEix+aU21jeXLxo4zZwAmyPo0Ku5lfkxKlEA5fN6w/q0/4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SN7PR12MB6689.namprd12.prod.outlook.com (2603:10b6:806:273::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Thu, 6 Apr
+ 2023 09:06:14 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4624:dc39:943e:6ae%5]) with mapi id 15.20.6254.035; Thu, 6 Apr 2023
+ 09:06:14 +0000
+Message-ID: <180bd178-e3c0-85e3-785e-fc8a216cf65e@amd.com>
+Date:   Thu, 6 Apr 2023 11:06:08 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [Regression] drm/scheduler: track GPU active time per entity
+Subject: Re: [PATCH] drm/scheduler: Fix UAF in
+ drm_sched_fence_get_timeline_name
 Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     Luben Tuikov <luben.tuikov@amd.com>,
-        Danilo Krummrich <dakr@redhat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Dave Airlie <airlied@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        andrey.grodzovsky@amd.com, tvrtko.ursulin@linux.intel.com,
-        Matthew Brost <matthew.brost@intel.com>, yuq825@gmail.com,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <3e00d8a9-b6c4-8202-4f2d-5a659c61d094@redhat.com>
- <2a84875dde6565842aa07ddb96245b7d939cb4fd.camel@pengutronix.de>
- <8b28151c-f2db-af3f-8dff-87dd5d57417b@amd.com>
- <3004a2bf-e725-643e-82af-8a217784e796@redhat.com>
- <013781a3-5abd-8c66-8a0a-dd36c9c487af@amd.com>
- <28d10733-b217-7ccc-4b8c-54bdc8249234@amd.com>
- <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
-From:   Asahi Lina <lina@asahilina.net>
-In-Reply-To: <CAKMK7uFeeAaG8+1EutgMtmVANTb-acL0faEkJfUp1_35rSjaEg@mail.gmail.com>
+To:     Asahi Lina <lina@asahilina.net>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, asahi@lists.linux.dev
+References: <20230406-scheduler-uaf-1-v1-1-8e5662269d25@asahilina.net>
+ <6b3433ee-0712-f789-51ee-3047ead9bb79@amd.com>
+ <cfbaceae-6d40-a8b3-e449-6473be234d2d@asahilina.net>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <cfbaceae-6d40-a8b3-e449-6473be234d2d@asahilina.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-ClientProxiedBy: FR3P281CA0152.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::6) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|SN7PR12MB6689:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7b1faf12-aeb6-4717-5437-08db367e2c21
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dT8QCU5sEF4FhMWe8Moqn65NPm4yCYUpM/lXkpr8ZVddGjHKldHNxvdXLfj2689d8e5ynhccyxIEc5hRMWuh1KkWgsa3u2iW/M5uqkFU2MpR2hVKG+gNP/oBWYKovSVXP6WIaX5wPTZp1bhrpa5cYktt+O6pojdgWwlv6+u6eSczNkoZ4fuljALU1Ed0XiqhxW2V6iM0HjPn1PbaHYRv/tnaUFbvlEYvs7W7gC3cuSpwZqdWhAiOQQYhoU0bpMFQBySI7fHTT7OL+QKWnEVlEepjmIxRXFmGp+7QfpMdqEiLL16Q72334OIaYdsy9FMsV+us1m7+DcNs9CYRRS0n4Y7YsbDmYjEe4zKXPRMDCg5l+0VIoj8Ad+eCA1ls22HqYLD4YIP4QcQ9jQj38ofUmyHV8MJN+l+drKUNTwkmqcL2Ms6bv0BMdQKIqcLcsYrus3FLmirTyymu7+v+klJeBLRIrdcEhUo+k0DTLeXYnrZRAENriBEMlvZ98qGhq3fjj5KNo//kjQOCaz85rTbjzc+cGsO5sfF1WaNby8eC1Mji5A55AFNEyPvkf7Blb1A2oFtNaexq+RJtgPRcautgFi2LZELHiIOJQwiGzwTsUF6/7r9PiXSh6wxUql1cczutShIL7YGcJuhX7U4xDksalA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(39860400002)(136003)(396003)(451199021)(86362001)(41300700001)(66556008)(6666004)(31696002)(316002)(66476007)(66946007)(36756003)(6486002)(4326008)(110136005)(2616005)(5660300002)(8676002)(8936002)(2906002)(38100700002)(186003)(6512007)(478600001)(66574015)(26005)(83380400001)(6506007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bzBSUGtmTXlHbFE3SDFvK0JCSGpmWVJWTlVRTERyYmxLdXdaRUh5N001YkR4?=
+ =?utf-8?B?T2lQdnhwZkdOWnV5RXFYQnVSK2kyQzFLd3pQVnVPMEZzcXV4cGZLOC9jc3Nz?=
+ =?utf-8?B?Q0FUTTV4UGtWS2lkMTJhKzVuNG9TRUVNeUU3RVNyZ2JwcDF3OUVZTkU5U0M4?=
+ =?utf-8?B?aE5lT0RrRWliQzBuWWltbWExaXVNRWNyM09wUnVVQ0xrc0U0NzBHRU5Ibkln?=
+ =?utf-8?B?ZTJtN01vVGpwdzh5K0FMakp6LzYzbjNGMEhtak54Vng0OTVtbVJVWTRuVWlW?=
+ =?utf-8?B?RUdscHJNbkNlZ1lYU0RwcnZwWlBENWprc3F1NGQyRmVqTGQyNjFKRFFMRGxM?=
+ =?utf-8?B?RFFPVWtGckx5OVZ5YlpWWmFhdFVUVUt0d1QwVk1HdW9wY1U1YkRCQTBpWFFh?=
+ =?utf-8?B?TXpyOG9Rb0lSWUtFKzEvRHYzR2ZVcWZ6VEZwUWllbEdTWFVndlM0aUpnMkpM?=
+ =?utf-8?B?cGk4eEs2THBVYTRVUHh3aVlQdWZwMUJKRVAwZDFwTXVBcHFVQW80NExQMG0r?=
+ =?utf-8?B?aFdndEdQM3BIQ0ZnblI3Y1dEV01XN2VSck9INEUwcTdNT0tVTlFlQmJXbHB1?=
+ =?utf-8?B?SUFLY3VBTXFKYnNhYWZJMlZaZGFRbEVHNGhSdmEzNnhlYm8xM0syZUdwSENR?=
+ =?utf-8?B?aWo1VEd0Y3B4dHBEWm1kUVRPSkEyYjM2NTBncXA0QTBrK1AxUy9ROTFjemxH?=
+ =?utf-8?B?NEpYOGpEdFJtanBjaEJHZG9MUzh5YnJZS25YaWZpdEhLVGRUcWxTNHdyS01y?=
+ =?utf-8?B?dW5pL1pKY3AxbE5iUGRoSVJnbkFZZU1jSmk3U1QyZDRrbnZFZk9OclRaNkMv?=
+ =?utf-8?B?M1g4RGhxUTJEMVd3YnlLOUhMQnloYWpZaWc0TDRDVE9raHExOUxJYUk4MkdL?=
+ =?utf-8?B?enhCU3g2d3dxekZ4bCszSGRCdzlMMC91Zk5IQWdZczRlbjRNZ3oxaHZoVXNW?=
+ =?utf-8?B?UXVDMm9LbTc4ZjdiMjhwVGI2YXpUVmRUQWl4TEFVaXdNYmhoZFVIMHFmLy9k?=
+ =?utf-8?B?eFFNTVVhL2J5OGwrUVRBTjNUdEc1NVlKTU1hVGRVNVM0N0NYTzlTb255RnA4?=
+ =?utf-8?B?SVQ2QXg3RmlmSDAwSkV6ekpsTGlXU1FEMjcveXNCNG9RNXVpUmUzYVp2a0Yy?=
+ =?utf-8?B?TlZOZFF2Y0s5ajBwbFZpdy9HUi9VbWhoSUcrdlRDNWRrVU0ySzI1YlBnRUtn?=
+ =?utf-8?B?KzBFTDFxZjhzRE9laVFsMmdqaGVBT0hkV3dGcXUvdFIxT1BPR3hiZUlROGM2?=
+ =?utf-8?B?MG8vTVk3V0I1OWlTME9sVm1BRFhaL2RjVGhRdlRrZkVSMGdBN3RGb1plY0RI?=
+ =?utf-8?B?Smt1YzlQL3pmdUFrVVRDKzIrakVQd0xzeFBNc1MwL0RPNU1oQXl4Y2JNSzNU?=
+ =?utf-8?B?V1B3YkN0NG5yUEJCMHpLNUJuVXlHMlVVWCtYWGxzaFpTNU1PaE1Kbm1laXI4?=
+ =?utf-8?B?ankrbmRIV25Wci9NdXhSWDdsdk1EKzNlWGIrVFZqUzkvZlVxM3VFRHpVL242?=
+ =?utf-8?B?SEp3SjJCTkM2bmNHRklTT2U4aDRON2hwMTNacVhSaFR0a0dyTHQxRWtEOGtz?=
+ =?utf-8?B?c2IzVGowVi9tY3c2emg2dFlDaWo0QVVTRko1TnEwemZHZlJRdG05T0w3L0tV?=
+ =?utf-8?B?c1R3ZnBHRG1JUUhkMFROQzI4Nm4zdVV5RWsza1dJWWY0Mm1UKzN0eDF1eXV3?=
+ =?utf-8?B?SEhRc3hpUmZXeUNiTklVcFh3WXpUNmhaNnk3djhkYjkrY25Kc0tBbTBvdlpq?=
+ =?utf-8?B?ZnJCOXR1Zk9CcFRiM0pSOFZvKzJWYmFFMG4zMHBmeFd4L0lXbkdBcUQ2b2V1?=
+ =?utf-8?B?T05PVnd2Yld3eEh2TXJkZ3F5ZWViMXdrd1pmUFpvZDhWMmRWNFRLbWZ6T05m?=
+ =?utf-8?B?OHZ5OVoyejltRW9hNWRyTS9uWVdzNU1DR24wcWV2bVZkS1gwUGZHVzV1dER3?=
+ =?utf-8?B?cE1Fakk4UUxidjV1UmIrVnlZZ1FuaVBGa0V1WWZVUkJVWXJUTWMxWlF6Wk1Z?=
+ =?utf-8?B?V2hrWFlMcDFISXJ3Ym8vQmdhdTN2MVRqLzhqS0xISWpCZVJyZExNbVNjUk1m?=
+ =?utf-8?B?cWU1eTBkaDl1emV5TEtub0RmQjNEMGxYemhVQTYybGZhTnRMQWZZaTIvRmJQ?=
+ =?utf-8?Q?CGKVV4cDTI/PIctXDuAgJYYMM?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b1faf12-aeb6-4717-5437-08db367e2c21
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 09:06:13.8438
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: M2gTGOwcUKhYIl+HGwoihHTcBhlAiqBYEMokM02MVO5dqhsYtbHl8aiRyl+gZ+of
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6689
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,126 +131,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 17.27, Daniel Vetter wrote:
-> On Thu, 6 Apr 2023 at 10:22, Christian König <christian.koenig@amd.com> wrote:
+Am 06.04.23 um 10:49 schrieb Asahi Lina:
+> On 06/04/2023 17.29, Christian König wrote:
+>> Am 05.04.23 um 18:34 schrieb Asahi Lina:
+>>> A signaled scheduler fence can outlive its scheduler, since fences are
+>>> independently reference counted.
 >>
->> Am 05.04.23 um 18:09 schrieb Luben Tuikov:
->>> On 2023-04-05 10:05, Danilo Krummrich wrote:
->>>> On 4/4/23 06:31, Luben Tuikov wrote:
->>>>> On 2023-03-28 04:54, Lucas Stach wrote:
->>>>>> Hi Danilo,
->>>>>>
->>>>>> Am Dienstag, dem 28.03.2023 um 02:57 +0200 schrieb Danilo Krummrich:
->>>>>>> Hi all,
->>>>>>>
->>>>>>> Commit df622729ddbf ("drm/scheduler: track GPU active time per entity")
->>>>>>> tries to track the accumulated time that a job was active on the GPU
->>>>>>> writing it to the entity through which the job was deployed to the
->>>>>>> scheduler originally. This is done within drm_sched_get_cleanup_job()
->>>>>>> which fetches a job from the schedulers pending_list.
->>>>>>>
->>>>>>> Doing this can result in a race condition where the entity is already
->>>>>>> freed, but the entity's newly added elapsed_ns field is still accessed
->>>>>>> once the job is fetched from the pending_list.
->>>>>>>
->>>>>>> After drm_sched_entity_destroy() being called it should be safe to free
->>>>>>> the structure that embeds the entity. However, a job originally handed
->>>>>>> over to the scheduler by this entity might still reside in the
->>>>>>> schedulers pending_list for cleanup after drm_sched_entity_destroy()
->>>>>>> already being called and the entity being freed. Hence, we can run into
->>>>>>> a UAF.
->>>>>>>
->>>>>> Sorry about that, I clearly didn't properly consider this case.
->>>>>>
->>>>>>> In my case it happened that a job, as explained above, was just picked
->>>>>>> from the schedulers pending_list after the entity was freed due to the
->>>>>>> client application exiting. Meanwhile this freed up memory was already
->>>>>>> allocated for a subsequent client applications job structure again.
->>>>>>> Hence, the new jobs memory got corrupted. Luckily, I was able to
->>>>>>> reproduce the same corruption over and over again by just using
->>>>>>> deqp-runner to run a specific set of VK test cases in parallel.
->>>>>>>
->>>>>>> Fixing this issue doesn't seem to be very straightforward though (unless
->>>>>>> I miss something), which is why I'm writing this mail instead of sending
->>>>>>> a fix directly.
->>>>>>>
->>>>>>> Spontaneously, I see three options to fix it:
->>>>>>>
->>>>>>> 1. Rather than embedding the entity into driver specific structures
->>>>>>> (e.g. tied to file_priv) we could allocate the entity separately and
->>>>>>> reference count it, such that it's only freed up once all jobs that were
->>>>>>> deployed through this entity are fetched from the schedulers pending list.
->>>>>>>
->>>>>> My vote is on this or something in similar vain for the long term. I
->>>>>> have some hope to be able to add a GPU scheduling algorithm with a bit
->>>>>> more fairness than the current one sometime in the future, which
->>>>>> requires execution time tracking on the entities.
->>>>> Danilo,
->>>>>
->>>>> Using kref is preferable, i.e. option 1 above.
->>>> I think the only real motivation for doing that would be for generically
->>>> tracking job statistics within the entity a job was deployed through. If
->>>> we all agree on tracking job statistics this way I am happy to prepare a
->>>> patch for this option and drop this one:
->>>> https://lore.kernel.org/all/20230331000622.4156-1-dakr@redhat.com/T/#u
->>> Hmm, I never thought about "job statistics" when I preferred using kref above.
->>> The reason kref is attractive is because one doesn't need to worry about
->>> it--when the last user drops the kref, the release is called to do
->>> housekeeping. If this never happens, we know that we have a bug to debug.
+>> Well that is actually not correct. Schedulers are supposed to stay
+>> around until the hw they have been driving is no longer present.
+>
+> But the fences can outlive that. You can GPU render into an imported 
+> buffer, which attaches a fence to it. Then the GPU goes away but the 
+> fence is still attached to the buffer. Then you oops when you cat that 
+> debugfs file...
+
+No, exactly that's the point you wouldn't ops.
+
+>
+> My use case does this way more often (since schedulers are tied to 
+> UAPI objects), which is how I found this, but as far as I can tell 
+> this is already broken for all drivers on unplug/unbind/anything else 
+> that would destroy the schedulers with fences potentially referenced 
+> on separate scanout devices or at any other DMA-BUF consumer.
+
+Even if a GPU is hot plugged the data structures for it should only go 
+away with the last reference, since the scheduler fence is referencing 
+the hw fence and the hw fence in turn is referencing the driver this 
+shouldn't happen.
+
+>
+>> E.g. the reference was scheduler_fence->hw_fence->driver->scheduler.
+>
+> It's up to drivers not to mess that up, since the HW fence has the 
+> same requirements that it can outlive other driver objects, just like 
+> any other fence. That's not something the scheduler has to be 
+> concerned with, it's a driver correctness issue.
+>
+> Of course, in C you have to get it right yourself, while with correct 
+> Rust abstractions will cause your code to fail to compile if you do it 
+> wrong ^^
+>
+> In my particular case, the hw_fence is a very dumb object that has no 
+> references to anything, only an ID and a pending op count. Jobs hold 
+> references to it and decrement it until it signals, not the other way 
+> around. So that object can live forever regardless of whether the rest 
+> of the device is gone.
+
+That is then certainly a bug. This won't work that way, and the timelime 
+name is just the tip of the iceberg here.
+
+The fence reference count needs to keep both the scheduler and driver 
+alive. Otherwise you could for example unload the module and immediately 
+ops because your fence_ops go away.
+
+>
+>> Your use case is now completely different to that and this won't work
+>> any more.
 >>
->> Yeah, reference counting unfortunately have some traps as well. For
->> example rarely dropping the last reference from interrupt context or
->> with some unexpected locks help when the cleanup function doesn't expect
->> that is a good recipe for problems as well.
->>
->>> Regarding the patch above--I did look around the code, and it seems safe,
->>> as per your analysis, I didn't see any reference to entity after job submission,
->>> but I'll comment on that thread as well for the record.
->>
->> Reference counting the entities was suggested before. The intentionally
->> avoided that so far because the entity might be the tip of the iceberg
->> of stuff you need to keep around.
->>
->> For example for command submission you also need the VM and when you
->> keep the VM alive you also need to keep the file private alive....
-> 
-> Yeah refcounting looks often like the easy way out to avoid
-> use-after-free issue, until you realize you've just made lifetimes
-> unbounded and have some enourmous leaks: entity keeps vm alive, vm
-> keeps all the bo alives, somehow every crash wastes more memory
-> because vk_device_lost means userspace allocates new stuff for
-> everything.
+>> This here might just be the first case where that breaks.
+>
+> This bug already exists, it's just a lot rarer for existing use 
+> cases... but either way Xe is doing the same thing I am, so I'm not 
+> the only one here either.
 
-Refcounting everywhere has been working well for us, so well that so far 
-all the oopses we've hit have been... drm_sched bugs like this one, not 
-anything in the driver. But at least in Rust you have the advantage that 
-you can't just forget a decref in a rarely-hit error path (or worse, 
-forget an incref somewhere important)... ^^
+No it doesn't. You just have implemented the references differently than 
+they are supposed to be.
 
-> If possible a lifetime design where lifetimes have hard bounds and you
-> just borrow a reference under a lock (or some other ownership rule) is
-> generally much more solid. But also much harder to design correctly
-> :-/
-> 
->> Additional to that we have some ugly inter dependencies between tearing
->> down an application (potential with a KILL signal from the OOM killer)
->> and backward compatibility for some applications which render something
->> and quit before the rendering is completed in the hardware.
-> 
-> Yeah I think that part would also be good to sort out once&for all in
-> drm/sched, because i915 has/had the same struggle.
-> -Daniel
-> 
+Fixing this one occasion here would mitigate that immediate ops, but 
+doesn't fix the fundamental problem.
 
-Is this really a thing? I think that's never going to work well for 
-explicit sync, since the kernel doesn't even know what BOs it has to 
-keep alive for a job... I guess it could keep the entire file and all of 
-its objects/VMs/etc alive until all of its submissions complete but... ewww.
+Regards,
+Christian.
 
-Our Mesa implementation synchronously waits for all jobs on context 
-destroy for this reason, but if you just kill the app, yeah, you get 
-faults as running GPU jobs have BOs yanked out from under them. Kill 
-loops make for a good way of testing fault handling...
-
-~~ Lina
+>
+> ~~ Lina
+>
 
