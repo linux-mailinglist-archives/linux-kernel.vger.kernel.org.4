@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3B56D9FF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66C26D9FF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240229AbjDFSfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S240233AbjDFSf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240213AbjDFSfl (ORCPT
+        with ESMTP id S240239AbjDFSfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:35:41 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670A683E2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:35:38 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id qb20so3607212ejc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680806137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LRBfuBs8WR3evGR0Ox5esepb+ZZtacne/dKbCY/+uw0=;
-        b=oUIbr+v90hVa39JXi3mXIgC1TeH9PSzaS7EZXT/F1GC6mYdTj06JgmgH66imoWFs9b
-         d18y6Nz0GlpXkPinB/vaWWr75BD3Dbw+T6NBC1rfd7P7xecONruW6oPoBuPn1GPkNMBN
-         FMYLMF6ApOxOJc1U7MEOJxd+dJuENgTGxY6GIKZxqNiYE+bazeQ4vIPmDf2lCu27q5D+
-         Eghn3E3eKZfjMP7MhlQxjieTSCw729zE88FJLmof2bJflrIv114mm53l5VSXpZ+7lw/V
-         l9tZ+UJQjQa9MPpBGjmm9IJkYtaGxxsdC9RWnpptOikl22clNtqPsHC+lMWP1M10tumL
-         hiFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680806137;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LRBfuBs8WR3evGR0Ox5esepb+ZZtacne/dKbCY/+uw0=;
-        b=6fzuRxQg9hwLwsfi/+pervTAqx41Roogidia8edUoqGy1W2qYTGDnqwfFvX/MsJBbT
-         o6YvBybqgdUp+FiRgJd42sB7boooIjaJf/2/ZwWNlNfK8OZm4K23V4RXMD3hgZbjkId+
-         HdGJ3vCWsgnE4wX31B+G8l+2hKFvhKxdwYVO9yYeFabmjSGrUA8x8LmS/hs5JZWMdBzR
-         1qYM7k/ILGqTdeHKVJVxQaITLOlfGC7M8CbVJP9Nt/eoQA55CJs/0iXPMwg02hOZArmn
-         quaHUt/eVIeTrkWSUzp4VgzRRRWsbmkeVuzEleeXexUv7MaqSadMp01Qjt0FqFlerWaf
-         KLXQ==
-X-Gm-Message-State: AAQBX9fKvYYNX/B4TUBB9kNuvRJz7yfJSwtzslG5pY/+TOkAB3iVXejT
-        SY73czE6AAyrOplyT6hsOfxwbw==
-X-Google-Smtp-Source: AKy350ZoCWdFCix4jBb7WjrNvH8yt8NUCimMUaMZqKAsERSMCHUu4hVoNIR0fwoKVcHwJ5dXCjsRlg==
-X-Received: by 2002:a17:906:bfc9:b0:93d:b767:9fea with SMTP id us9-20020a170906bfc900b0093db7679feamr7614503ejb.31.1680806136900;
-        Thu, 06 Apr 2023 11:35:36 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id 22-20020a170906319600b00930525d89e2sm1127806ejy.89.2023.04.06.11.35.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:35:36 -0700 (PDT)
-Message-ID: <ab1b0161-20c2-83eb-e371-e8363547e758@linaro.org>
-Date:   Thu, 6 Apr 2023 20:35:35 +0200
+        Thu, 6 Apr 2023 14:35:52 -0400
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F679EEA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:35:50 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id kUSTpODywxZmMkUSUpEAxX; Thu, 06 Apr 2023 20:35:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=orange.fr;
+        s=t20230301; t=1680806148;
+        bh=UZh5/Mo43daJTwcFuQEwoE2zsf6dokq7Oj4UPELT3is=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=hkPA3xO+BHGLZ6etPEH/S1JPDsOIS02G9QUIuSSJcdqYm4+pOpc/pyD4KZIjZcPyj
+         4du/rkxggd9KUqW/gWqm09dVgVPSGj/G7iT0Z9YDU+rfkGULbOcevZA0eS793pyNm5
+         nBKkFsYu78JEToy/kcAq4CLH28CnQHkwKJQNfE09Q064sVcP0QKpuE4UGBzQorgLMg
+         ghlq6LOfQvN1dJo2ZybQOJaxS6or4aY+2v5cYoVAmlQ0C4a2/YjjDG7QM4Nn+Wn+OU
+         o+9dT/ckL6stPOPhYE4ZgAgrMJzJR+sESSAiDmQvw8BYfk5Q1MbdcOcFFtQ6RLz5aN
+         MSjeRNUkNmrpg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 06 Apr 2023 20:35:48 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <9628fe5d-62c0-b761-967b-357287e99a3e@wanadoo.fr>
+Date:   Thu, 6 Apr 2023 20:35:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: brcmstb: Add two optional props
-Content-Language: en-US
-To:     Jim Quinlan <jim2101024@gmail.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230406124625.41325-1-jim2101024@gmail.com>
- <20230406124625.41325-2-jim2101024@gmail.com>
- <d0bf241b-ead4-94b7-3f03-a26227f9eb58@i2se.com>
- <CANCKTBsLxkPb1ajACkyhJk6J1aB2iwX0oKifHkADG0fFPUqMhQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CANCKTBsLxkPb1ajACkyhJk6J1aB2iwX0oKifHkADG0fFPUqMhQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: RE: [EXTERNAL] Re: [PATCH v10] ASoC: tas2781: Add tas2781 driver
+To:     "Ding, Shenghao" <shenghao-ding@ti.com>,
+        Amadeusz Slawinski <amadeuszx.slawinski@linux.intel.com>
+Cc:     "Lu, Kevin" <kevin-lu@ti.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
+        "Navada Kanyana, Mukund" <navada@ti.com>,
+        Shenghao Ding <13916275206@139.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>
+References: <20230329100107.8181-1-13916275206@139.com>
+ <8d0d0478-1e45-ea52-f1b7-910b747d6282@linux.intel.com>
+ <7a0cfa60e2a244168edd49c3d2f6a2bd@ti.com>
+ <458d7c2f-bcee-9ec3-e955-9661a06a3349@wanadoo.fr>
+ <bbae9e35f2bf4cbcbc78f852041e4b2e@ti.com>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <bbae9e35f2bf4cbcbc78f852041e4b2e@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,81 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 18:58, Jim Quinlan wrote:
-> On Thu, Apr 6, 2023 at 11:39 AM Stefan Wahren <stefan.wahren@i2se.com> wrote:
->>
->> Hi Jim,
->>
->> Am 06.04.23 um 14:46 schrieb Jim Quinlan:
->>> Regarding "brcm,enable-l1ss":
->>>
->>>    The Broadcom STB/CM PCIe HW -- which is also used by RPi SOCs -- requires
->>>    the driver probe to configure one of three clkreq# modes:
->>>
->>>    (a) clkreq# driven by the RC
->>>    (b) clkreq# driven by the EP for ASPM L0s, L1
->>>    (c) bidirectional clkreq#, as used for L1 Substates (L1SS).
->>>
->>>    The HW can tell the difference between (a) and (b), but does not know
->>>    when to configure (c).  Further, the HW will cause a CPU abort on boot if
->>>    guesses wrong regarding the need for (c).  So we introduce the boolean
->>>    "brcm,enable-l1ss" property to indicate that (c) is desired.  This
->>>    property is already present in the Raspian version of Linux, but the
->>>    driver implementaion that will follow adds more details and discerns
->>>    between (a) and (b).
->>>
->>> Regarding "brcm,completion-timeout-msecs"
->>>
->>>    Our HW will cause a CPU abort if the L1SS exit time is longer than the
->>>    completion abort timeout.  We've been asked to make this configurable, so
->>>    we are introducing "brcm,completion-abort-msecs".
->>>
->>> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
->>> ---
->>>   .../devicetree/bindings/pci/brcm,stb-pcie.yaml       | 12 ++++++++++++
->>>   1 file changed, 12 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
->>> index 7e15aae7d69e..ef4ccc05b258 100644
->>> --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
->>> +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
->>> @@ -64,6 +64,18 @@ properties:
->>>
->>>     aspm-no-l0s: true
->>>
->>> +  brcm,enable-l1ss:
->>> +    description: Indicates that the downstream device is L1SS
->>> +      capable and L1SS is desired, e.g. by setting
->>> +      CONFIG_PCIEASPM_POWER_SUPERSAVE=y.  Note that CLKREQ#
->>
->> not sure about this, but maybe we should avoid references to Linux
->> kernel config parameter in a DT binding. Since the driver already gaves
->> warning in case the DT parameter is present, but kernel config doesn't
->> fit, this should be enough.
+Le 05/04/2023 à 13:21, Ding, Shenghao a écrit :
+> Hi Both
+> I wrote a test code to verify the be32_to_cpu & be32_to_cpup,
+> static int __init lkm_init(void)
+> {
+> 	char test_buf[]={0x12, 0x34, 0xab, 0xbc, 0x56, 0x78, 0xef};
+> 	unsigned int *k, p, q;
+> 	int i;
 > 
-> Hello Stefan,
-> I will remove this reference.
->>
->>> +      assertion to clock active must be within 400ns.
->>> +    type: boolean
->>> +
->>> +  brcm,completion-timeout-msecs:
->>> +    description: Number of msecs before completion timeout
->>> +      abort occurs.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>
->> According to the driver at least 0 is not allowed, maybe we should
->> define minimum and maximum here and let dtbs_check take care of invalid
->> values?
-> I'm not sure I follow what you mean about a zero value;  the property
-> may have any value but the driver will clamp it
-> to a minimum of ~30msec.  Regardless, I can add a  "minimum: 30" line
-> to the YAML.
+> 	printk("Hello, Shanghai!\n");
+> 
+> 	for (i = 0; i < 4; i ++) {
+> 		k = (unsigned int *)&test_buf[i];
+> 		p = be32_to_cpup((__be32 *)k);
+> 		q = be32_to_cpu(test_buf[i]);
+> 		printk("%d: *k = 0x%08x p = 0x%08x q = 0x%08x %ld\n",
+> 			i, *k, p, q, sizeof(unsigned int));
+> 	}
+> 	return 0;
+> }
+> The output is:
+> [ 9109.722548] Hello, Shanghai!
+> [ 9109.726287] 0: *k = 0xbcab3412 p = 0x1234abbc q = 0x12000000 4
+> [ 9109.727665] 1: *k = 0x56bcab34 p = 0x34abbc56 q = 0x34000000 4
+> [ 9109.728553] 2: *k = 0x7856bcab p = 0xabbc5678 q = 0xabffffff 4
+> [ 9109.729308] 3: *k = 0xef7856bc p = 0xbc5678ef q = 0xbcffffff 4
+> Apparently, be32_to_cpup's output is what I expected.
+> Looking forward to your comments. Thanks.
 
-If "completion" means Linux completion, then it is not suitable for DT
-and entire property should be removed. If it is something else, then
-explain here and commit msg. So far both refer to some completion...
+Hi,
 
-Best regards,
-Krzysztof
+thanks for the clarification and code sample.
+You are right.
 
+I had in mind that something like: be32_to_cpu((__be32 *)data);
+would make it. (thanks to the cast)
+
+But because of the need of "&" and "[offset]", it would just make the 
+code unnecessarily complex.
+
+I think that your approach is better.
+
+CJ
