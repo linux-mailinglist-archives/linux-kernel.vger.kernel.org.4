@@ -2,404 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CFB6D9273
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502626D9271
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236270AbjDFJPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S236056AbjDFJPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235967AbjDFJPM (ORCPT
+        with ESMTP id S235893AbjDFJPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:15:12 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BEF4EED;
-        Thu,  6 Apr 2023 02:15:10 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q102so36673440pjq.3;
-        Thu, 06 Apr 2023 02:15:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680772509;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ipUTWGxdYRj74U+3DQNtSBrS5nB5CEomlPaYC6O7z0k=;
-        b=pK/TUbF9znkVQNFvKpzD8pRU/hqSACTv3jLy5n+Vt1LkSUM50jTDWJTsTz55PeX/f4
-         ZKkHVHIalzFZnVrmuI2CrAd/hFqi2HP7zk/rSwt8yqMpuYkPRVswuCz+BtACRsB2EfWT
-         n49yDrGrQqSTtyDK7FoW2zjaAjOhbiXOdvCWtXYakbayY5F1ovxk/Zdo6TKVhewBEyBs
-         R/Exit9+ZqDLQpovjLZzH1L6dXnRFA81L8x64l4os+1Rbfu3RnfmT0WfCDe5nKhRdPwt
-         5l0OEkpliXZm3BiHEp2HpaSjFLR0UO6J/DUl2mMQtvyrxogsuwofUcbjQa7zus+Nel3m
-         hnxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680772509;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ipUTWGxdYRj74U+3DQNtSBrS5nB5CEomlPaYC6O7z0k=;
-        b=JCfxDQodRCykYBn0M2U04EsAp+Y70e+I0XwoWAqY6PsP82kmdXK5eexBXMgoWmAMbI
-         aYXCImIO6oD6kA01xGVqsPw+ZI5hXW0YVCHMfQqmJESE9yRXzNUA6TZHWwF64eBoSMlI
-         /ULUfIcIcPZduujji+8cjkvVZKwfvQp1Pv2uf5AMyLL2tPmMZQSKyQ8vR0D8xYJXo219
-         j7copmS5v0LbezgEvAYmpO8ywlMF8s3qfG+D5UDktMKxF46uW5QmLgxmjiIulkJWI5MH
-         8ysTBz/AZK0PSWVh9xMuqNYebIDdF0Y82l6qm6h9zO3G2E+5t/vyYwsJBZASVQ/Pf6Mz
-         Zb0Q==
-X-Gm-Message-State: AAQBX9cmgqmGEtbH3BbfmOWTAnsjZ4EZCkkJCgM1ANq3xooPqWMSEJBZ
-        syD1QIFUbE9OilufkosOo2MKeDjLIfKW/khQ
-X-Google-Smtp-Source: AKy350YoGoW2oRvGjOsx4m02H8L2jRfm606YF08ZFZ+hJKJPrWIpP8pJxUFHyb5P3hCVcz1kIHPC7Q==
-X-Received: by 2002:a17:90b:3907:b0:233:f354:e7df with SMTP id ob7-20020a17090b390700b00233f354e7dfmr10622120pjb.18.1680772509060;
-        Thu, 06 Apr 2023 02:15:09 -0700 (PDT)
-Received: from lunar.aeonazure.com ([182.2.142.228])
-        by smtp.gmail.com with ESMTPSA id nh12-20020a17090b364c00b0023d16f05dd8sm760718pjb.36.2023.04.06.02.15.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 02:15:08 -0700 (PDT)
-From:   Shaun Tancheff <shaun.tancheff@gmail.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>
-Cc:     Shaun Tancheff <shaun.tancheff@hpe.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        cgroups@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] memcg: Default value setting in memcg-v1
-Date:   Thu,  6 Apr 2023 16:14:50 +0700
-Message-Id: <20230406091450.167779-1-shaun.tancheff@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Apr 2023 05:15:11 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95F6171E;
+        Thu,  6 Apr 2023 02:15:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C05E542494;
+        Thu,  6 Apr 2023 09:15:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1680772508;
+        bh=r6QAApmFMXAdCdgmAyhMS45Oy+VssbcgRzqJ53SBDRI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Pk9vO6rDodk/l13WtBwwjNtIsGaY8mnjvwnU3vGDKmwgiTOL35AsH/oVV/FUuho9B
+         +xj12USiFoOD6wXq4SeANC/+55xdP4zmXmUc8BZU1hcTYysfL4Ah3ISTEPV+7ewoT2
+         tJQmj34PAWig7LmmsYoWlKLhcCqRRbRyK/Ejn21MnIZKxd2FgggeKYW+KhtfoZzhTb
+         G7ZQEEfJ3KBUowfebMGuZ5pApei7w3FgdSPMtCkEa2ANtXaqUAgXlXDw5Q6avSgNq6
+         051fbK+MwRVhqVpwDwlpSdB8uCg4rOFWQgpiBo1Z0yVfVXx/TbXitcDnVyfjIzQd1D
+         r181/CGXWNleA==
+Message-ID: <df226249-734e-cb9e-8bc0-1eff625277e0@asahilina.net>
+Date:   Thu, 6 Apr 2023 18:15:04 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/scheduler: Fix UAF in
+ drm_sched_fence_get_timeline_name
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, asahi@lists.linux.dev
+References: <20230406-scheduler-uaf-1-v1-1-8e5662269d25@asahilina.net>
+ <6b3433ee-0712-f789-51ee-3047ead9bb79@amd.com>
+ <cfbaceae-6d40-a8b3-e449-6473be234d2d@asahilina.net>
+ <180bd178-e3c0-85e3-785e-fc8a216cf65e@amd.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <180bd178-e3c0-85e3-785e-fc8a216cf65e@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shaun Tancheff <shaun.tancheff@hpe.com>
+On 06/04/2023 18.06, Christian König wrote:
+> Am 06.04.23 um 10:49 schrieb Asahi Lina:
+>> On 06/04/2023 17.29, Christian König wrote:
+>>> Am 05.04.23 um 18:34 schrieb Asahi Lina:
+>>>> A signaled scheduler fence can outlive its scheduler, since fences are
+>>>> independently reference counted.
+>>>
+>>> Well that is actually not correct. Schedulers are supposed to stay
+>>> around until the hw they have been driving is no longer present.
+>>
+>> But the fences can outlive that. You can GPU render into an imported
+>> buffer, which attaches a fence to it. Then the GPU goes away but the
+>> fence is still attached to the buffer. Then you oops when you cat that
+>> debugfs file...
+> 
+> No, exactly that's the point you wouldn't ops.
+> 
+>>
+>> My use case does this way more often (since schedulers are tied to
+>> UAPI objects), which is how I found this, but as far as I can tell
+>> this is already broken for all drivers on unplug/unbind/anything else
+>> that would destroy the schedulers with fences potentially referenced
+>> on separate scanout devices or at any other DMA-BUF consumer.
+> 
+> Even if a GPU is hot plugged the data structures for it should only go
+> away with the last reference, since the scheduler fence is referencing
+> the hw fence and the hw fence in turn is referencing the driver this
+> shouldn't happen.
 
-Setting min, low and high values with memcg-v1
-provides bennefits for  users that are unable to update
-to memcg-v2.
+So those fences can potentially keep half the driver data structures 
+alive just for existing in a signaled state? That doesn't seem sensible 
+(and it definitely doesn't work for our use case where schedulers can be 
+created and destroyed freely, it could lead to way too much junk 
+sticking around in memory).
 
-Setting min, low and high can be set in memcg-v1
-to apply enough memory pressure to effective throttle
-filesystem I/O without hitting memcg oom.
+>>
+>>> E.g. the reference was scheduler_fence->hw_fence->driver->scheduler.
+>>
+>> It's up to drivers not to mess that up, since the HW fence has the
+>> same requirements that it can outlive other driver objects, just like
+>> any other fence. That's not something the scheduler has to be
+>> concerned with, it's a driver correctness issue.
+>>
+>> Of course, in C you have to get it right yourself, while with correct
+>> Rust abstractions will cause your code to fail to compile if you do it
+>> wrong ^^
+>>
+>> In my particular case, the hw_fence is a very dumb object that has no
+>> references to anything, only an ID and a pending op count. Jobs hold
+>> references to it and decrement it until it signals, not the other way
+>> around. So that object can live forever regardless of whether the rest
+>> of the device is gone.
+> 
+> That is then certainly a bug. This won't work that way, and the timelime
+> name is just the tip of the iceberg here.
+> 
+> The fence reference count needs to keep both the scheduler and driver
+> alive. Otherwise you could for example unload the module and immediately
+> ops because your fence_ops go away.
 
-This can be enabled by setting the sysctl values:
-  vm.memcg_v1_min_default
-  vm.memcg_v1_low_default
-  vm.memcg_v1_high_default
+Yes, I realized the module issue after writing the email. But that's the 
+*only* thing it needs to hold a reference to! Which is much more 
+sensible than keeping a huge chunk of UAPI-adjacent data structures 
+alive for a signaled fence that for all we know might stick around 
+forever attached to some buffer.
 
-When a memory control group is newly crated the
-min, low and high values are set to percent of the
-maximum based on the min, low and high default
-values respectively.
+>>> Your use case is now completely different to that and this won't work
+>>> any more.
+>>>
+>>> This here might just be the first case where that breaks.
+>>
+>> This bug already exists, it's just a lot rarer for existing use
+>> cases... but either way Xe is doing the same thing I am, so I'm not
+>> the only one here either.
+> 
+> No it doesn't. You just have implemented the references differently than
+> they are supposed to be.
+> 
+> Fixing this one occasion here would mitigate that immediate ops, but
+> doesn't fix the fundamental problem.
 
-This resolves an issue with memory pressure when users
-initiate unbounded I/O on various file systems such as
-ext4, XFS and NFS.
+Honestly, at this point I'm starting to doubt whether we want to use 
+drm_scheduler at all, because it clearly wasn't designed for our use 
+case and every time I try to fix something your answer has been "you're 
+using it wrong", and at the same time the practically nonexistent 
+documentation makes it impossible to know how it was actually designed 
+to be used.
 
-Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
----
-v0: Initial hard coded limits by percent.
-v1: Added sysfs access and module parameters for percent values to enable
-v2: Fix 32-bit, remove need for missing __udivdi3
-v3: Added sysctl parameters and documentation
- .../admin-guide/cgroup-v1/memory.rst          | 33 +++++++++
- Documentation/admin-guide/sysctl/vm.rst       | 33 +++++++++
- include/linux/memcontrol.h                    |  5 ++
- kernel/sysctl.c                               | 29 ++++++++
- mm/memcontrol.c                               | 69 ++++++++++++++++++-
- 5 files changed, 168 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v1/memory.rst b/Documentation/admin-guide/cgroup-v1/memory.rst
-index 258e45cc3b2d..4b44e0da49d6 100644
---- a/Documentation/admin-guide/cgroup-v1/memory.rst
-+++ b/Documentation/admin-guide/cgroup-v1/memory.rst
-@@ -70,6 +70,15 @@ Brief summary of control files.
-  memory.memsw.usage_in_bytes	     show current usage for memory+Swap
- 				     (See 5.5 for details)
-  memory.limit_in_bytes		     set/show limit of memory usage
-+ memory.limit_in_bytes.min	     show current memory min setting not present
-+				     on the root control group.
-+				     (See sysctl's vm.memcg_v1_min_default)
-+ memory.limit_in_bytes.low	     show current memory low setting not present
-+				     on the root control group.
-+				     (See sysctl's vm.memcg_v1_low_default)
-+ memory.limit_in_bytes.high	     show current memory low setting not present
-+				     on the root control group.
-+				     (See sysctl's vm.memcg_v1_high_default)
-  memory.memsw.limit_in_bytes	     set/show limit of memory+Swap usage
-  memory.failcnt			     show the number of memory usage hits limits
-  memory.memsw.failcnt		     show the number of memory+Swap hits limits
-@@ -648,6 +657,30 @@ The output format of memory.numa_stat is::
- 
- The "total" count is sum of file + anon + unevictable.
- 
-+5.6 limit_in_bytes.low, min, and high
-+-------------------------------------
-+
-+These read-only values enable viewing the current low, min and high
-+restrictions added to a newly created cgroup when the sysctl vm
-+parameters: vm.memcg_v1_low_default, vm.memcg_v1_min_default,
-+and vm.memcg_v1_high_default are enabled.
-+
-+Example usage:
-+  sudo sysctl -w vm.memcg_v1_min_default=10
-+  sudo sysctl -w vm.memcg_v1_low_default=30
-+  sudo sysctl -w vm.memcg_v1_high_default=80
-+
-+  sudo mkdir /sys/fs/cgroup/memory/restrict
-+  echo 100M | sudo tee /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes
-+  cat /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes.min
-+  2560
-+  cat /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes.low
-+  7680
-+  cat /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes.high
-+  20480
-+  echo $$ | sudo tee /sys/fs/cgroup/memory/restrict/tasks
-+  dd if=/dev/zero of=~/file.bin bs=10M status=progress
-+
- 6. Hierarchy support
- ====================
- 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 988f6a4c8084..87eefa165f92 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -43,6 +43,9 @@ Currently, these files are in /proc/sys/vm:
- - legacy_va_layout
- - lowmem_reserve_ratio
- - max_map_count
-+- memcg_v1_high_default
-+- memcg_v1_low_default
-+- memcg_v1_min_default
- - memory_failure_early_kill
- - memory_failure_recovery
- - min_free_kbytes
-@@ -425,6 +428,36 @@ e.g., up to one or two maps per allocation.
- The default value is 65530.
- 
- 
-+memcg_v1_min_default:
-+=====================
-+
-+This file contains a percentage of the cgroup memory limit used to
-+set the min value of a newly memory cgroup. This value is only used
-+with memory cgroup v1 interface.
-+
-+The default is 0 (disabled). Range is [0, 100].
-+
-+
-+memcg_v1_low_default:
-+=====================
-+
-+This file contains a percentage of the cgroup memory limit used to
-+set the low value of a newly memory cgroup. This value is only used
-+with memory cgroup v1 interface.
-+
-+The default is 0 (disabled). Range is [0, 100].
-+
-+
-+memcg_v1_high_default:
-+======================
-+
-+This file contains a percentage of the cgroup memory limit used to
-+set the high value of a newly memory cgroup. This value is only used
-+with memory cgroup v1 interface.
-+
-+The default is 0 (disabled). Range is [0, 100].
-+
-+
- memory_failure_early_kill:
- ==========================
- 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 85dc9b88ea37..0592b5e19883 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -68,6 +68,11 @@ struct mem_cgroup_id {
- 	refcount_t ref;
- };
- 
-+/* System default memory protection setting */
-+extern int sysctl_memcg_min_default;
-+extern int sysctl_memcg_low_default;
-+extern int sysctl_memcg_high_default;
-+
- /*
-  * Per memcg event counter is incremented at every pagein/pageout. With THP,
-  * it will be incremented by the number of pages. This counter is used
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 1c240d2c99bc..bf923e50e597 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2449,6 +2449,35 @@ static struct ctl_table vm_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
-+#endif
-+#ifdef CONFIG_MEMCG
-+	{
-+		.procname	= "memcg_v1_min_default",
-+		.data		= &sysctl_memcg_min_default,
-+		.maxlen		= sizeof(sysctl_memcg_min_default),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE_HUNDRED,
-+	},
-+	{
-+		.procname	= "memcg_v1_low_default",
-+		.data		= &sysctl_memcg_low_default,
-+		.maxlen		= sizeof(sysctl_memcg_low_default),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE_HUNDRED,
-+	},
-+	{
-+		.procname	= "memcg_v1_high_default",
-+		.data		= &sysctl_memcg_high_default,
-+		.maxlen		= sizeof(sysctl_memcg_high_default),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE_HUNDRED,
-+	},
- #endif
- 	{ }
- };
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 2eee092f8f11..74875178b48b 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -82,6 +82,11 @@ struct mem_cgroup *root_mem_cgroup __read_mostly;
- DEFINE_PER_CPU(struct mem_cgroup *, int_active_memcg);
- EXPORT_PER_CPU_SYMBOL_GPL(int_active_memcg);
- 
-+/* System default memory protection setting */
-+int sysctl_memcg_min_default __read_mostly = 0;
-+int sysctl_memcg_low_default __read_mostly = 0;
-+int sysctl_memcg_high_default __read_mostly = 0;
-+
- /* Socket memory accounting disabled? */
- static bool cgroup_memory_nosocket __ro_after_init;
- 
-@@ -205,6 +210,7 @@ enum res_type {
- 	_MEMSWAP,
- 	_KMEM,
- 	_TCP,
-+	_MEM_V1,
- };
- 
- #define MEMFILE_PRIVATE(x, val)	((x) << 16 | (val))
-@@ -3676,6 +3682,9 @@ enum {
- 	RES_MAX_USAGE,
- 	RES_FAILCNT,
- 	RES_SOFT_LIMIT,
-+	RES_LIMIT_MIN,
-+	RES_LIMIT_LOW,
-+	RES_LIMIT_HIGH,
- };
- 
- static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
-@@ -3686,6 +3695,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
- 
- 	switch (MEMFILE_TYPE(cft->private)) {
- 	case _MEM:
-+	case _MEM_V1:
- 		counter = &memcg->memory;
- 		break;
- 	case _MEMSWAP:
-@@ -3716,6 +3726,12 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
- 		return counter->failcnt;
- 	case RES_SOFT_LIMIT:
- 		return (u64)memcg->soft_limit * PAGE_SIZE;
-+	case RES_LIMIT_MIN:
-+		return (u64)READ_ONCE(memcg->memory.min);
-+	case RES_LIMIT_LOW:
-+		return (u64)READ_ONCE(memcg->memory.low);
-+	case RES_LIMIT_HIGH:
-+		return (u64)READ_ONCE(memcg->memory.high);
- 	default:
- 		BUG();
- 	}
-@@ -3815,6 +3831,34 @@ static int memcg_update_tcp_max(struct mem_cgroup *memcg, unsigned long max)
- 	return ret;
- }
- 
-+static inline void mem_cgroup_v1_set_defaults(struct mem_cgroup *memcg,
-+					      unsigned long nr_pages)
-+{
-+	unsigned long min, low, high;
-+
-+	if (mem_cgroup_is_root(memcg) || PAGE_COUNTER_MAX == nr_pages)
-+		return;
-+
-+	min = READ_ONCE(memcg->memory.min);
-+	low = READ_ONCE(memcg->memory.low);
-+	if (min || low)
-+		return;
-+
-+	if (!min && sysctl_memcg_min_default > 0) {
-+		min = (nr_pages * sysctl_memcg_min_default) / 100;
-+		page_counter_set_min(&memcg->memory, min);
-+	}
-+	if (!low && sysctl_memcg_low_default > 0) {
-+		low = (nr_pages * sysctl_memcg_low_default) / 100;
-+		page_counter_set_low(&memcg->memory, low);
-+	}
-+	high = READ_ONCE(memcg->memory.high);
-+	if (high == PAGE_COUNTER_MAX && sysctl_memcg_high_default) {
-+		high = (nr_pages * sysctl_memcg_high_default) / 100;
-+		page_counter_set_high(&memcg->memory, high);
-+	}
-+}
-+
- /*
-  * The user of this function is...
-  * RES_LIMIT.
-@@ -3838,6 +3882,11 @@ static ssize_t mem_cgroup_write(struct kernfs_open_file *of,
- 			break;
- 		}
- 		switch (MEMFILE_TYPE(of_cft(of)->private)) {
-+		case _MEM_V1:
-+			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
-+			if (!ret)
-+				mem_cgroup_v1_set_defaults(memcg, nr_pages);
-+			break;
- 		case _MEM:
- 			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
- 			break;
-@@ -5000,10 +5049,28 @@ static struct cftype mem_cgroup_legacy_files[] = {
- 	},
- 	{
- 		.name = "limit_in_bytes",
--		.private = MEMFILE_PRIVATE(_MEM, RES_LIMIT),
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT),
- 		.write = mem_cgroup_write,
- 		.read_u64 = mem_cgroup_read_u64,
- 	},
-+	{
-+		.name = "limit_in_bytes.min",
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_MIN),
-+		.read_u64 = mem_cgroup_read_u64,
-+		.flags = CFTYPE_NOT_ON_ROOT,
-+	},
-+	{
-+		.name = "limit_in_bytes.low",
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_LOW),
-+		.read_u64 = mem_cgroup_read_u64,
-+		.flags = CFTYPE_NOT_ON_ROOT,
-+	},
-+	{
-+		.name = "limit_in_bytes.high",
-+		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_HIGH),
-+		.read_u64 = mem_cgroup_read_u64,
-+		.flags = CFTYPE_NOT_ON_ROOT,
-+	},
- 	{
- 		.name = "soft_limit_in_bytes",
- 		.private = MEMFILE_PRIVATE(_MEM, RES_SOFT_LIMIT),
--- 
-2.34.1
+~~ Lina
 
