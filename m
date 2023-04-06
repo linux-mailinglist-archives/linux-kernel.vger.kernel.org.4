@@ -2,140 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D706D9C1C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1676D9C20
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239373AbjDFPVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S239148AbjDFPWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbjDFPV2 (ORCPT
+        with ESMTP id S238257AbjDFPWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:21:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E45A93C5;
-        Thu,  6 Apr 2023 08:21:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7C211C0A;
-        Thu,  6 Apr 2023 08:22:08 -0700 (PDT)
-Received: from [10.2.7.51] (stinger.cambridge.arm.com [10.2.7.51])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ADE653F762;
-        Thu,  6 Apr 2023 08:21:17 -0700 (PDT)
-Message-ID: <a54a4ea0-f9f5-6869-9629-747c3889a1de@arm.com>
-Date:   Thu, 6 Apr 2023 16:21:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 36/65] clk: versatile: sp810: Add a determine_rate hook
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>, Abel Vesa <abelvesa@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        Thu, 6 Apr 2023 11:22:06 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD1B93C5;
+        Thu,  6 Apr 2023 08:22:04 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id l17so2263935ejp.8;
+        Thu, 06 Apr 2023 08:22:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680794523;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W8yHOaVQ4mahqDoWUZZ0X3+twLrUdiCW/OQNIgPHkpM=;
+        b=oZwLocsV6/myf95tPXquC5P3/ayH6gAbBmWdKPVSUnZn6kRTeDqScnnIn5GIxlwbz8
+         nJZGvjOLRNAUgjKN8PXwWDCRcZdQQt4RZRHWNK89ycCHgppu7C7O4ozWDeJaf41K61Uh
+         XCHSLNMP4ONIQjVBXkMf3l59MTq8pFp/jjC78wzeOS3zutEYhIVWmg4bj8p5L5DGPRsg
+         0AOgBoukthw2oMSbXy0UwTa90FzkZqEBtvZJoMFgwYe2I8IudvnqJLxGrI48c+S2ONUQ
+         rMDe4Q+9Kvi+Z/zD00KMVwCpG6F+iLyt51C8aFhkLH0FITM+kp655rE19bJGxaKHTUQ5
+         YXNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680794523;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W8yHOaVQ4mahqDoWUZZ0X3+twLrUdiCW/OQNIgPHkpM=;
+        b=dq7gEHIjrHIK7BpRudtZbASIU7u03qKVr4GfKc4UABdzoQUfS9TcZQEGPkNeSEvp8U
+         UJ6LPGT5yr/sft1wW/khCoKfKkbCwDo3tJ6MqAsjo05MshNUXrjo+s2eC89HTiouOX+N
+         c9pz2F93rkDYPfmxq2R+Mv7w7PTh+ogq3+6odtpjgllEPLq5QORG0IlochvJjGmVKeCo
+         TQ09MpV3DS0vr+NFDPUT57jJPHD1IhckdOvdPF98R7ijwpRAPwZjjkrT+feE3xaBm097
+         BvPvGRwyzuScEHV/DGER8zjZg02oydzMTG6KBIAtlVcWpLG+Uaud6GiyrqIGRpN0pGFv
+         Ji9A==
+X-Gm-Message-State: AAQBX9dhbb6OJEzzy/vhzf5FmSFq8A4yIyewZH7FRklFLNwxCUVJ9+NX
+        K06RgYu6JLY6JaZUG0CgjkA=
+X-Google-Smtp-Source: AKy350YlpYZ/5WyZfEsJM9r0STUEnAAOWTh66kJerlTJdTbxs18L9N8B47hs1vImrQMlTMzWf6mr9A==
+X-Received: by 2002:a17:907:a413:b0:92f:43a2:bf7d with SMTP id sg19-20020a170907a41300b0092f43a2bf7dmr7965899ejc.73.1680794522609;
+        Thu, 06 Apr 2023 08:22:02 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id dd20-20020a1709069b9400b009475bf82935sm937459ejc.31.2023.04.06.08.22.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 08:22:02 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 18:21:59 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Hans Schultz <netdev@kapio-technology.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        "maintainer:MICROCHIP KSZ SERIES ETHERNET SWITCH DRIVER" 
+        <UNGLinuxDriver@microchip.com>, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        alsa-devel@alsa-project.org, linux-mips@vger.kernel.org
-References: <20221018-clk-range-checks-fixes-v3-0-9a1358472d52@cerno.tech>
- <20221018-clk-range-checks-fixes-v3-36-9a1358472d52@cerno.tech>
-From:   Pawel Moll <pawel.moll@arm.com>
-In-Reply-To: <20221018-clk-range-checks-fixes-v3-36-9a1358472d52@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:RENESAS RZ/N1 A5PSW SWITCH DRIVER" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 net-next 2/6] net: dsa: propagate flags down towards
+ drivers
+Message-ID: <20230406152159.zfg6kxuimulnpops@skbuf>
+References: <20230327225933.plm5raegywbe7g2a@skbuf>
+ <87ileljfwo.fsf@kapio-technology.com>
+ <20230328114943.4mibmn2icutcio4m@skbuf>
+ <87cz4slkx5.fsf@kapio-technology.com>
+ <20230330124326.v5mqg7do25tz6izk@skbuf>
+ <87wn2yxunb.fsf@kapio-technology.com>
+ <20230330130936.hxme34qrqwolvpsh@skbuf>
+ <875yaimgro.fsf@kapio-technology.com>
+ <20230330150752.gdquw5kudtrqgzyz@skbuf>
+ <87o7o1ox9h.fsf@kapio-technology.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87o7o1ox9h.fsf@kapio-technology.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2023 11:11, Maxime Ripard wrote:
-> The Versatile sp810 "timerclken" clock implements a mux with a
-> set_parent hook, but doesn't provide a determine_rate implementation.
+On Thu, Apr 06, 2023 at 05:17:46PM +0200, Hans Schultz wrote:
+> On Thu, Mar 30, 2023 at 18:07, Vladimir Oltean <olteanv@gmail.com> wrote:
+> > As a bug fix, stop reporting to switchdev those FDB entries with
+> > BR_FDB_ADDED_BY_USER && !BR_FDB_STATIC. Then, after "net" is merged into
+> > "net-next" next Thursday (the ship has sailed for today), add "bool static"
 > 
-> This is a bit odd, since set_parent() is there to, as its name implies,
-> change the parent of a clock. 
+> It is probably too late today (now I have a Debian based VM that can do
+> the selftests), but with this bug fix I have 1) not submitted bug fixes
+> before and 2) it probably needs an appropriate explanation, where I
+> don't know the problem well enough for general switchcores to submit
+> with a suitable text.
 
-Explanation of this mystery is pretty simple - the original patch:
-
-	commit 6e973d2c438502dcf956e76305258ba7d1c7d1d3
-	Author: Pawel Moll <pawel.moll@arm.com>
-	Date:   Thu Apr 18 18:23:22 2013 +0100
-
-	    clk: vexpress: Add separate SP810 driver
-
-predates introduction of determine_rate to clk_ops...
-
-	commit 71472c0c06cf9a3d1540762ea205654c584e3bc4
-	Author: James Hogan <jhogan@kernel.org>
-	Date:   Mon Jul 29 12:25:00 2013 +0100
-
-	    clk: add support for clock reparent on set_rate
-
-and clearly no one (the author included ;-) bothered to have another
-look at this side of the driver.
-
-> And if it was an oversight, then we are at least explicit about our
-> behavior now and it can be further refined down the line.
-
-It's been one hell of a memory lane trip, but my recollection suggest
-that the main goal of the driver was simply initialisation of the mux
-to select the 1MHz parent, because the other option - 32kHz - just
-didn't make any sense whatsoever. And that would be the case on every
-single platform using SP810 I know (or at least: knew), so it's seems
-to me that making the state permanent, as you're suggesting (or I
-think you're suggesting?) it's the right thing to do.
-
-Thanks!
-
-Paweł
+Do you want me to try to submit this change as a bug fix?
