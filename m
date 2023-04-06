@@ -2,116 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA866D9167
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A97416D916D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235664AbjDFIX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
+        id S235777AbjDFIYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234958AbjDFIXZ (ORCPT
+        with ESMTP id S235805AbjDFIYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:23:25 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0542010FC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6yY7l0LhH0k7pjrVFUW8Mv8NnQNaUV8gs7w0W3YY6DA=; b=VaxrVS3njXraoPYywtixGMcp1y
-        j2aQjwTOOI7JYZDNvWsObgMRKQvGINrYOYr4rLE6eKogI++AEkUTWOlAHDHe6UJxDUaXe1WpZzhwY
-        t7lW5HwxMmKLADUSmIUxcvKL0mQX/3A0SbWtj3sYW/vxEEzicTXA3qOnH+Fo1nhOCKdIbl5ZBy2zd
-        GCCouvgk76nMGawbr/VRL7P1QsYG3luFCf84Rb//Zxt3v8SsuVcHLzZYqb85UDRtJDdkUEenmCexo
-        rmv+HaSMz0F5lWhQ2VTCJDpXfI2g/9eyPb7lhQKe2p50pyJGIGRux/ljBa0+7eRufzLf9cHvrriag
-        qOptZ3Tg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkKtd-00ATEE-2A;
-        Thu, 06 Apr 2023 08:23:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 337BF30008D;
-        Thu,  6 Apr 2023 10:23:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C7F8C24C025F1; Thu,  6 Apr 2023 10:23:04 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 10:23:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ankur Arora <ankur.a.arora@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
-        willy@infradead.org, mgorman@suse.de, rostedt@goodmis.org,
-        tglx@linutronix.de, vincent.guittot@linaro.org, jon.grimm@amd.com,
-        bharata@amd.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH 5/9] x86/clear_pages: add clear_pages()
-Message-ID: <20230406082304.GE386572@hirez.programming.kicks-ass.net>
-References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
- <20230403052233.1880567-6-ankur.a.arora@oracle.com>
+        Thu, 6 Apr 2023 04:24:11 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548AA4C05
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:24:10 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id ew6so147295297edb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680769449;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uKZyvY+7dHlJ0SFNSLUfxjJR8//OCnc5fau2a0KRJKc=;
+        b=go9MxiI7Z7xk0S10Ex0sMu7YsYpXKBbssscZbu6HRqMfHy35joTui0NPa2VPjyiZU8
+         Z5AEzQVSLahVZI5e7SelkvHm3+fhAijFT9KYhPWnG35IEkyDQpyFA9A39JDE4+FHwTNg
+         lnmH/j1tqahCuMgvq/s6kcjpFl6nkSWuyjRUzlqSUBHlce5SKxhWUrg2FdZoLTojHEBo
+         1XtMzhvUTfC0bYNTJHc5/HStHItouoWEyIx+/W/+JSYCIEUo6bjWJc9G7nwSZjNvana9
+         Hz9h5yThn6tOaACBZ+6buySixoF2ft+PPV+1wPBdJ9eRD286CT4McTwKuQD6Y5DsVXb7
+         oEhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680769449;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uKZyvY+7dHlJ0SFNSLUfxjJR8//OCnc5fau2a0KRJKc=;
+        b=sB6O4vwKSNkadzRI/jKr1BNKWAF9JUzmWAu6PxvMrztHu4bidVHyrrcPH8in90xIof
+         FH7q4Q3i/zPpDnHkwzZbJVqMPQTtXdsupH1cAS/wNCNDgWX2+82HJz04VyuWbNClvRfy
+         2XFm9RbViwgev2MunzkoTf/lLzbURfxebI+efpIH+nW6YdpmzxA4xQekPq+xUXb/b0a2
+         UATgjvVGRSnAnk4getTmLvtdzsk+QHgs/KMtVE+wQTZQlOHIjV2hd2WFOF6TFAlonON0
+         j+uu0j11pFlDUxzJvbf8mPKmRsrEw2HZaVAOFFOUu+kcRR8PXhLe4pelv04Lry/2q3+4
+         8B6Q==
+X-Gm-Message-State: AAQBX9fd1VE/Aobv4lp3/Qlo/e4gRs9eLyJ/mBf3zDqSfiItew8aXGiK
+        ZLYPcZMXFksHv4OwPch3vIdS77m69Lapunri4Cs=
+X-Google-Smtp-Source: AKy350ai/gJSvYeqcmjxrfEU+zFFq5U7pYdXX07MHDy9I6+14GxU5F+JmNUDZ1mePI8fd2k/6t7t0g==
+X-Received: by 2002:a17:906:edcb:b0:930:f953:9614 with SMTP id sb11-20020a170906edcb00b00930f9539614mr7109983ejb.1.1680769448837;
+        Thu, 06 Apr 2023 01:24:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id lc18-20020a170906f91200b00928de86245fsm481102ejb.135.2023.04.06.01.24.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 01:24:08 -0700 (PDT)
+Message-ID: <1bb5453b-e464-9b5b-9e47-54a9bed70508@linaro.org>
+Date:   Thu, 6 Apr 2023 10:24:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230403052233.1880567-6-ankur.a.arora@oracle.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/8] regulator: dt-bindings: fcs,fan53555: Add support for
+ RK860X
+To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Joseph Chen <chenjh@rock-chips.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+References: <20230405194721.821536-1-cristian.ciocaltea@collabora.com>
+ <20230405194721.821536-2-cristian.ciocaltea@collabora.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230405194721.821536-2-cristian.ciocaltea@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 02, 2023 at 10:22:29PM -0700, Ankur Arora wrote:
-> Add clear_pages() and define the ancillary clear_user_pages().
+On 05/04/2023 21:47, Cristian Ciocaltea wrote:
+> Add compatibles to support Rockchip RK860X regulators.
 > 
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
->  arch/x86/include/asm/page.h    | 6 ++++++
->  arch/x86/include/asm/page_32.h | 6 ++++++
->  arch/x86/include/asm/page_64.h | 9 +++++++--
->  3 files changed, 19 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
-> index d18e5c332cb9..03e3c69fc427 100644
-> --- a/arch/x86/include/asm/page.h
-> +++ b/arch/x86/include/asm/page.h
-> @@ -28,6 +28,12 @@ static inline void clear_user_page(void *page, unsigned long vaddr,
->  	clear_page(page);
->  }
->  
-> +static inline void clear_user_pages(void *page, unsigned long vaddr,
-> +				    struct page *pg, unsigned int nsubpages)
-> +{
-> +	clear_pages(page, nsubpages);
-> +}
+> RK8600/RK8601 are compatible with Fairchild FAN53555 regulators, while
+> RK8602/RK8603 are a bit different, having a wider voltage selection
+> range.
 
-This seems dodgy, clear_user* has slightly different semantics. It needs
-the access_ok() and stac/clac thing on at the very least.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +
->  static inline void copy_user_page(void *to, void *from, unsigned long vaddr,
->  				  struct page *topage)
->  {
-> diff --git a/arch/x86/include/asm/page_32.h b/arch/x86/include/asm/page_32.h
-> index 580d71aca65a..3523d1150cfc 100644
-> --- a/arch/x86/include/asm/page_32.h
-> +++ b/arch/x86/include/asm/page_32.h
-> @@ -22,6 +22,12 @@ static inline void clear_page(void *page)
->  	memset(page, 0, PAGE_SIZE);
->  }
->  
-> +static inline void clear_pages(void *page, unsigned int nsubpages)
-> +{
-> +	for (int i = 0; i < nsubpages; i++)
-> +		clear_page(page + i * PAGE_SIZE);
+Best regards,
+Krzysztof
 
-cond_resched() ?
-
-> +}
-> +
->  static inline void copy_page(void *to, void *from)
->  {
->  	memcpy(to, from, PAGE_SIZE);
