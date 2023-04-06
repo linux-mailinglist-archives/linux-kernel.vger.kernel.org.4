@@ -2,163 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C7D6D903A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2464E6D903F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbjDFHMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S235950AbjDFHMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235569AbjDFHMT (ORCPT
+        with ESMTP id S235912AbjDFHMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:12:19 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3252E55;
-        Thu,  6 Apr 2023 00:12:17 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 91E2E5C0096;
-        Thu,  6 Apr 2023 03:12:15 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Thu, 06 Apr 2023 03:12:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1680765135; x=1680851535; bh=IHLCbFaBZU/91yw5kszxiEKx+gZnH+tjq4Y
-        W7whSqlQ=; b=ifCm37L0/5FfP5o7BgNK08W2hQLkUugFk1CNrH3YB9Qa6L7/L4X
-        g6pIx1Z9yAidTl69rRsEsNMy8d2/pEeFVMVCr3WghzwjNR/ClH6yfDTrru3E25DQ
-        pRjr8B0AS0qDQrc+O7GDIzTTCkXSSwQP3cjoDYC77Tcjrgfas1Unib7YLmt0ILus
-        iUu1lpBuvYe0EMezQVOxxFx/lBKpDavRJ4EL7Ypctsh68Ko3ylE8WbPc4n7xpVx9
-        0qcfat0eB9qEP9HQglrE+hybwzdai2BU2oOzykF4RuYggsR62gbOihMjNzF9p1vA
-        5kY9RcRS+LedvSCpG3VX/qFzJD9X3uWLWtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1680765135; x=1680851535; bh=IHLCbFaBZU/91yw5kszxiEKx+gZnH+tjq4Y
-        W7whSqlQ=; b=WrvZiGgVOFnTKDCWxuJFTBHt8N/AeSE5z3FRbhBIa7sN46gsa5N
-        guiWdekavibjbMhYD1J3z4mqe8+OtvaLq0I4KiFPNzNuk/a/GJsyExdBCr4ETZyO
-        h/76CjDCUtepGCA86Xfy7coofV1iqBTKal4UkoaeplXzLluztRmQC20KS4Ndeaus
-        VNZUeaNeCV8VHZYMONsv9jNbUuSTG1oFHFHdfVTo1URiPJ8L8kkqiyp9pRQjDipH
-        fAevElt/AGzYSiYS5lGiFPJBc+uR17hpVFYjujC499lc7XOoxhSHufXwWm7piVIy
-        AV9iOfC8ebqMLfubzHlxUqo70Sh3qfreO7g==
-X-ME-Sender: <xms:znAuZO4U5IbX8CQzQqzzH_4PxcAql6S_zxhG7DR2fYxYQbMYEHnj7g>
-    <xme:znAuZH7ZSFFZXLJW3NRRvdTkvQoTHUYqVJQ2QDw14IsMqR0muqtIabdIqJQVIwLV1
-    wGRMEdcd3oLJ1n94-M>
-X-ME-Received: <xmr:znAuZNcm9MphzTrenf1JAx56T4hGpEet7gX00Tr-fFJxMBHfEBcXl0Ca1-Ar8NjGwcPW>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejvddguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:znAuZLIf8Um38yCDigq3NfEJ8zMCVUE-_iqVAEccn6EMqyDtMVCRfQ>
-    <xmx:znAuZCIvgO4l_vb9ZM7nTIEB6wDOu7Jaf3njnDJE-cYwcxY6RKt33w>
-    <xmx:znAuZMw5KydGXL3bON8w0ZszqoT6wuVIMWtHI2lo3lRgw0kJ9IE7Cg>
-    <xmx:z3AuZECSnkJC1VPcrhvgTd2MszZ3G7EGxLvYt7fE0Ft0qDADXH4VQw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Apr 2023 03:12:12 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH v4 0/3] Use dma_default_coherent for devicetree default
- coherency
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230401091531.47412-1-jiaxun.yang@flygoat.com>
-Date:   Thu, 6 Apr 2023 08:12:01 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        mpe@ellerman.id.au, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        iommu@lists.linux.dev
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C51B954E-FA96-450D-BB4F-D8D9D1FFC525@flygoat.com>
-References: <20230401091531.47412-1-jiaxun.yang@flygoat.com>
-To:     Christoph Hellwig <hch@lst.de>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 6 Apr 2023 03:12:41 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBEB9ED2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:12:37 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id er13so105999614edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:12:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680765156;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FTrXatKj0NAmmO1834Hl1S31qH+Qt0j4GCqY89e5gxg=;
+        b=LY4xE+JPncZvDsLtxSZc2wJfU9cG5JbsJL9JC0SDlibUGtjjPIIEvf0ymk4qkFJ/x8
+         qPLEBzGacouN9eVQecazNJ3YmVShLtUvT5MS8l6j/iN9c2tNkp7+PKSkhVeo1V+3aATW
+         kyofd0CDgVcnNbJD217cGLRHW0Mv6KC5LwyIZB/1qHaf3cWfjHxDi79rAT2U9DuY47hJ
+         u3DLKmlHF9w6jiR95Wz4GC9VuN1id0f9D+IzQtcrZ0od3e4BTDMNGbaOKa38fHH8eUgI
+         TZwm9jCvc9mc6Nu/PzPwa6loQ5/Pfaj6bJS4vnIxKwfHfw5w/eL2VcFPWBCccV6oXOlf
+         BvlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680765156;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FTrXatKj0NAmmO1834Hl1S31qH+Qt0j4GCqY89e5gxg=;
+        b=H+8CEOV1wVj8IswpJXyo3OfVpy/QUuOxUtcHqvR76eo4AP4ykwuLPMkVEWfNvFhg/7
+         DEo6GaKftazWwG6f7MRwFQEhTAm35Pwk75jzAC/ZFXbsIHHbMhF/cT0xqrVDNvprx9dE
+         M8ntReiPoFeRAoCtOrClNO9j6ZYfDwnbJe3jVftGIOguGbu2vkSXZrhtTimhThzy0DNw
+         h9pOGkmUVSSY3Sl/dZdX6DiobFsd3hFBCNq7QQtTgrjviWIOO4oUxNGkIRzRjTdo+R2W
+         tCcM4sJYwzlujDfLDzd3OOA9LbIQpXM4h5oTGpTaW2eXC0w8l4ydHp8TKI4wXyxC4A32
+         SUVA==
+X-Gm-Message-State: AAQBX9dLsiGDkrYfCNquJfHtg/35rWmy4pM+P8Azmh6f/w5KnuUqVK6j
+        a9KwjtktT1sx2Qn0dYwB8Qll3Q==
+X-Google-Smtp-Source: AKy350ZgaU+GMer0ZyEBurWw1ctBgB8mGAmG9JAzJg+/84ZM71L8/az6M5NBv6240Dzw1N3+MGzZ2Q==
+X-Received: by 2002:a17:907:9607:b0:930:3916:df19 with SMTP id gb7-20020a170907960700b009303916df19mr7149830ejc.5.1680765156086;
+        Thu, 06 Apr 2023 00:12:36 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id r18-20020a1709063d7200b00934212e973esm394000ejf.198.2023.04.06.00.12.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 00:12:35 -0700 (PDT)
+Message-ID: <6a9f041b-1c35-4691-8451-7119cd05ed17@linaro.org>
+Date:   Thu, 6 Apr 2023 09:12:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: cisco: document the CrayAR
+ compatibles
+Content-Language: en-US
+To:     Daniel Walker <danielwa@cisco.com>, - <xe-linux-external@cisco.com>
+Cc:     Marcin Wierzbicki <mawierzb@cisco.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Walker <dwalker@fifo99.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230405223028.1268141-2-danielwa@cisco.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230405223028.1268141-2-danielwa@cisco.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/04/2023 00:30, Daniel Walker wrote:
+> Describe the compatible properties for the Cisco CrayAR SoC.
+> 
+> Cc: xe-linux-external@cisco.com
+> Cc: Marcin Wierzbicki <mawierzb@cisco.com>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
 
+Please drop the autogenerated scripts/get_maintainer.pl CC-entries from
+commit msg. There is no single need to store automated output of
+get_maintainers.pl in the git log. It can be easily re-created at any
+given time, thus its presence in the git history is redundant and
+obfuscates the log.
 
-> 2023=E5=B9=B44=E6=9C=881=E6=97=A5 10:15=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi all,
->=20
-> This series split out second half of my previous series
-> "[PATCH 0/4] MIPS DMA coherence fixes".
->=20
-> It intends to use dma_default_coherent to determine the default =
-coherency of
-> devicetree probed devices instead of hardcoding it with Kconfig =
-options.
->=20
-> For some MIPS systems, dma_default_coherent is determined with either
-> bootloader or hardware registers in platform initilization code, and =
-devicetree
-> does not explicility specify the coherency of the device, so we need =
-the ability
-> to change the default coherency of devicetree probed devices.
->=20
-> For other platforms that supports noncoherent, dma_default_coherent is =
-a fixed
-> value set by arch code. It's defaulted to false for most archs except =
-RISC-V
-> and powerpc in some cases.
+If you need it for your own patch management purposes, keep it under the
+--- separator.
 
-Ping.
-
-Is there any issue remain in this series?
-
-Thanks
-Jiaxun
-
->=20
-> Thanks
-> - Jiaxun
+> Signed-off-by: Daniel Walker <dwalker@fifo99.com>
 > ---
-> v2:
->  - Add PATCH 1 to help with backporting
->  - Use Kconfig option to set dma_default_coherent=20
->=20
-> v3:
->  - Style fixes
->  - Squash setting ARCH_DMA_DEFAULT_COHERENT into PATCH 4
->  - Setting ARCH_DMA_DEFAULT_COHERENT for PowerPC
->=20
-> v4:
->  - Drop first patch
->=20
-> Jiaxun Yang (3):
->  dma-mapping: Provide a fallback dma_default_coherent
->  dma-mapping: Provide CONFIG_ARCH_DMA_DEFAULT_COHERENT
->  of: address: Always use dma_default_coherent for default coherency
->=20
-> arch/powerpc/Kconfig        | 2 +-
-> arch/riscv/Kconfig          | 2 +-
-> drivers/of/Kconfig          | 4 ----
-> drivers/of/address.c        | 2 +-
-> include/linux/dma-map-ops.h | 2 ++
-> kernel/dma/Kconfig          | 7 +++++++
-> kernel/dma/mapping.c        | 6 +++++-
-> 7 files changed, 17 insertions(+), 8 deletions(-)
->=20
-> --=20
-> 2.39.2 (Apple Git-143)
->=20
+>  .../devicetree/bindings/arm/cisco/crayar.yaml | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/cisco/crayar.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/cisco/crayar.yaml b/Documentation/devicetree/bindings/arm/cisco/crayar.yaml
+> new file mode 100644
+> index 000000000000..0ee4e6313ab0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/cisco/crayar.yaml
+
+How many (or not many) platforms do you expect from Cisco? We mostly
+have one file per SoC manufacturer.
+
+> @@ -0,0 +1,27 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+
+Dual license.
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/cisco/crayar.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cisco CrayAR based Platforms
+> +
+
+Best regards,
+Krzysztof
 
