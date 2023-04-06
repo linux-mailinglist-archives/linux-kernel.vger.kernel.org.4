@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF1F6D9B98
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2806D9B8C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239537AbjDFPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S239447AbjDFPC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239525AbjDFPDM (ORCPT
+        with ESMTP id S239444AbjDFPC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:03:12 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA23D1BCB;
-        Thu,  6 Apr 2023 08:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NvfDt1wEQmP4GbrgT80G40At21xJRS6EHasfhbcOMOE=; b=g9HMgChByDEcqwPRnMmPkqIWgT
-        E9Jo8wK8pTfqUwNGF3RulzK1C+eAF5o0HLXxTCm1aNFPSyeLIz7NBcYvhiL3fWMksBf4GfvKV1nBp
-        R1ktgGzkQffGLNq0EdKUX3JVOd/BZXRVD1HVj5FYNpwkWKn6UfKWr7lyfGZ57eHCE1Ap9OwCdXmRU
-        QFECUvV14SnLI6zo7b+CEQjzYLN1FnZJGuTV5debvwUmU0/EFkTbbdBnK2iYw/w24I6u5ORsR1OjP
-        NvQL1vw1dn0PsW8XZzYt7vrZuKd41B4X/0udSmxG7Wik20e3HITuLf+kHlTq/SOVx9kb+3BucjXbv
-        rrreJmIQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkR7v-00AYJQ-0d;
-        Thu, 06 Apr 2023 15:02:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 184893000DC;
-        Thu,  6 Apr 2023 17:02:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F2B1E212E36AA; Thu,  6 Apr 2023 17:02:13 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 17:02:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
-        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
-        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
-        ardb@kernel.org, juerg.haefliger@canonical.com,
-        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
-        tony@atomide.com, linus.walleij@linaro.org,
-        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
-        alougovs@redhat.com, jannh@google.com
-Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to CPUs in kernel mode
-Message-ID: <20230406150213.GQ386572@hirez.programming.kicks-ass.net>
-References: <20230404134224.137038-1-ypodemsk@redhat.com>
- <20230404134224.137038-4-ypodemsk@redhat.com>
- <ZC1Q7uX4rNLg3vEg@lothringen>
- <ZC1XD/sEJY+zRujE@lothringen>
- <ZC3P3Ds/BIcpRNGr@tpad>
- <20230405195226.GB365912@hirez.programming.kicks-ass.net>
- <ZC69Wmqjdwk+I8kn@tpad>
- <20230406132928.GM386572@hirez.programming.kicks-ass.net>
- <20230406140423.GA386634@hirez.programming.kicks-ass.net>
+        Thu, 6 Apr 2023 11:02:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74795FF
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:02:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1911E64814
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:02:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B5DC433EF;
+        Thu,  6 Apr 2023 15:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680793343;
+        bh=ePbbcCzKS9r71gW4xljY9K1xocoFQhtNCTNZnkhz9Fw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E16PmSu8xAkvKxmjBQnM6YnAY5E8G4P9jX16ZRXVnOOy325o5uiDJOE9Y3NlRWglN
+         rmjSgAOqdfksHmMBRQPvvigioeTLKeEFxa9tweM822ntGCftnL50ixspaD5XDRgy0C
+         Y2zu2Y6cFqsTTK75cgCtcmB+X1KBkbmErHwIeCV2igNT2K5TaOjOiVjCK6flOShfpT
+         J1lJKr9oQcyFbxp09rO3tk1ncLrJQ9XSefZWRLKEtaM2IQmZ0mn5ZNP87pCofIITR2
+         H6CzIg75kfOt00/4YS+IkiD9W3wN22yC9XK48ixRR34t9uCN7EgCkGs2ixcIEuKhdG
+         bZHzvFNKgyiGQ==
+Date:   Thu, 6 Apr 2023 16:02:18 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] arm64/sysreg: Convert HFGITR_EL2 to automatic
+ generation
+Message-ID: <8474042a-d0e3-4316-9740-733c524f2e27@sirena.org.uk>
+References: <20230306-arm64-fgt-reg-gen-v3-0-decba93cbaab@kernel.org>
+ <20230306-arm64-fgt-reg-gen-v3-2-decba93cbaab@kernel.org>
+ <20230406144653.GB11479@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="QtFauvB+KU6YDrML"
 Content-Disposition: inline
-In-Reply-To: <20230406140423.GA386634@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230406144653.GB11479@willie-the-truck>
+X-Cookie: Man and wife make one fool.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 04:04:23PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 06, 2023 at 03:29:28PM +0200, Peter Zijlstra wrote:
-> > On Thu, Apr 06, 2023 at 09:38:50AM -0300, Marcelo Tosatti wrote:
-> > 
-> > > > To actually hit this path you're doing something really dodgy.
-> > > 
-> > > Apparently khugepaged is using the same infrastructure:
-> > > 
-> > > $ grep tlb_remove_table khugepaged.c 
-> > > 	tlb_remove_table_sync_one();
-> > > 	tlb_remove_table_sync_one();
-> > > 
-> > > So just enabling khugepaged will hit that path.
-> > 
-> > Urgh, WTF..
-> > 
-> > Let me go read that stuff :/
-> 
-> At the very least the one on collapse_and_free_pmd() could easily become
-> a call_rcu() based free.
-> 
-> I'm not sure I'm following what collapse_huge_page() does just yet.
 
-DavidH, what do you thikn about reviving Jann's patches here:
+--QtFauvB+KU6YDrML
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-  https://bugs.chromium.org/p/project-zero/issues/detail?id=2365#c1
+On Thu, Apr 06, 2023 at 03:46:54PM +0100, Will Deacon wrote:
+> On Thu, Mar 23, 2023 at 08:44:54PM +0000, Mark Brown wrote:
 
-Those are far more invasive, but afaict they seem to do the right thing.
+> > Automatically generate the Hypervisor Fine-Grained Instruction Trap
+> > Register as per DDI0601 2022-12, currently we only have a definition for
+> > the register name not any of the contents.  No functional change.
+
+> > +Res0	63:61
+> > +Field	60	COSPRCTX
+> > +Field	59	nGCSEPP
+> > +Field	58	nGCSSTR_EL1
+> > +Field	57	nGCSPUSHM_EL1
+
+> These aren't in the Arm ARM afaict ^^^
+
+Yes, as mentioned in the cover letter these are as per DDI0601 2022-12,
+the current at time of posting the patch latest release of the
+architecture XML.  They should appear in the next release of the ARM,
+the XML is updated more frequently.  The XML can be seen on the web
+here:
+
+    https://developer.arm.com/documentation/ddi0601/2022-12/AArch64-Registers/HFGITR-EL2--Hypervisor-Fine-Grained-Instruction-Trap-Register?lang=en
+
+> Can't we generate this file from the architecture xml? That would hopefully
+> avoid typos like this and make review less tedious.
+
+I agree that this seems like a sensible idea however there has
+previously been pushback on the idea of providing tooling to do that,
+and we would want to manually integrate the output of any such tool
+since there are a number of cases where for legacy or usability reasons
+we rename or combine fields.  The cases where we use a Fields block to
+cover identical ELx versions are another issue.
+
+I also note that while the XML is viewable on the web AFAICT the only
+directly downloadable version of the architecture XML available
+externally is in PDF format which is not entirely helpful for this
+purpose.
+
+--QtFauvB+KU6YDrML
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQu3vkACgkQJNaLcl1U
+h9CJqwf9E37f5nijaNcD+W6Jjz0ZLRj6scniKOrr8NRD2ZEQjI8RZzjBvtEuPYY4
+53gOVZK5BPcsf1nFjnIe4Ux88N6x2aQN/yNrD4iSrtP00XE03udNz+23scNk0ZMl
+jZb7Fh+yU4qtdPy49Ex2PXKHOVhtZ1oyRAagv5A2Lq2JIqhO/wjZBZToaCzt6gUS
+QOUr5MS2JlLgrH4TmCw++oaPGTm+YLtJQ+nPc/fJ9r0DGWlyTUiE/bKA7gvQOp2t
+krGH+R1tJCZmG8Xl48wRS/kAhdF9hVd3Q48gdGR0gRC1/8lbrp1QtqKY6ev622xi
+IxICYqvZquX9vFZSnW13i7fahvhOLQ==
+=hTmY
+-----END PGP SIGNATURE-----
+
+--QtFauvB+KU6YDrML--
