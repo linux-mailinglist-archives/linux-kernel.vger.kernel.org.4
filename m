@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C986DA65F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FEF6DA664
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjDFX5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 19:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S236387AbjDFX7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 19:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjDFX5R (ORCPT
+        with ESMTP id S230335AbjDFX7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:57:17 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C449F6EAB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:57:16 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id dw13-20020a17090b094d00b00244a26ca437so888160pjb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 16:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680825436;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xWtfKCd42gFRt+SU/spjs5sWyu1Aw9AdfKUOZ3ovRrU=;
-        b=Zn1rzlV1v+JHO/foeERtaSTLGEHjqFpbzngg2+iJlguDiyf6MvCfJzUDQC/r8yPy38
-         6gxmuka9L/Cd73aQ64l0jbEHqqxTy2/oo8RrtuVDzzuL7CD9RcpWCDQ8fjKE9Ba2Rbk8
-         A+OWuepJjNRfWWxHkaCgZgVXPf3zwV/KVbojul7w3cVpRnTIcgo8vOLGGf6PypoyR+SU
-         m0RjiaIitcwjOVLEHf05RoDJgZdnc7a5IdrXDIK7z1MKhjSCxFal4i76zzmQi6AwAWAm
-         oh+Z0Ja40/4v0MIWKWBDSPqfNWQ33DRyehx9ZbH7TszFSulmZP5iSP4Q4tWJMZxI3wVp
-         8B6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680825436;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xWtfKCd42gFRt+SU/spjs5sWyu1Aw9AdfKUOZ3ovRrU=;
-        b=enFzuZEwvCXjR6fXLCTzEVGcbMCX/gfWv/WYcJuyhUzRMHneTKQNReotT/8p9yLQ7l
-         my86cUhbM3CYUHyarPRpj2IIu+pXx4bdtaf39gb8JzQcHM0f/tNHv4X3heNxqCA8tskU
-         Mj/cveIbq0jpvFSZhNFgoZnXxbxfOUL5XTYCdrEppF6x1vxocRr+/JkkLzemCzkR0zzm
-         yLDVfpS2u19Qq6lZJOCo8ip3m+V/hXOI0zlway8a041j4Bm+f8AXMMYT0V/bNZlnBgeb
-         3/rVRMKs6rr5mktTJ/iCEmd1HaEBYSDDdQdTMe8AdiCoxeuAepCjJmTz2xldQAMsbA85
-         qjlA==
-X-Gm-Message-State: AAQBX9cgJ752ZzoXVGHId7DXOh8hAx9T77r/iB4JjSHIPiSi4op9Amqd
-        cg3aAJ0jven3JFLgNlZ1ebRLtsH0ryA=
-X-Google-Smtp-Source: AKy350YjTQ8Kz0k/3ZQBItKho5r/lj7iwCgCaRWjhu+k2V7uMSiaVuBAMtKx280D5XjV2C4aBDUDRS8ZjWQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:ef96:b0:1a1:fd0d:1bb with SMTP id
- iz22-20020a170902ef9600b001a1fd0d01bbmr298172plb.13.1680825436246; Thu, 06
- Apr 2023 16:57:16 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 16:57:14 -0700
-In-Reply-To: <20230214050757.9623-7-likexu@tencent.com>
-Mime-Version: 1.0
-References: <20230214050757.9623-1-likexu@tencent.com> <20230214050757.9623-7-likexu@tencent.com>
-Message-ID: <ZC9cWnimsXNs8xqv@google.com>
-Subject: Re: [PATCH v4 06/12] KVM: x86/pmu: Make part of the Intel v2 PMU MSRs
- handling x86 generic
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        Thu, 6 Apr 2023 19:59:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B846EAB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 16:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680825519;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LFDqnzDNSLjp3pxSVrwV7aOd+4k4yJ1snm/13Jprst4=;
+        b=MlNeUCwsTOS3pbxTzD/S3/IV6ZUxOTt3ZbYWFCNeZ6gOP2a3WHagfecf/g3u4S8LvVyRN7
+        YBizAK2cb26CRP7wFcPQ59eYvLgfr9W0Rf0As0EVVCBbs4NS8NwzURYOzEIVV8WNBBcwlC
+        GnmKztHXHlgnRHmvs581ci5fLnlq+O8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-QClurESXN1SjjlcoxeaNlw-1; Thu, 06 Apr 2023 19:58:37 -0400
+X-MC-Unique: QClurESXN1SjjlcoxeaNlw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A98785C069;
+        Thu,  6 Apr 2023 23:58:36 +0000 (UTC)
+Received: from localhost (ovpn-12-86.pek2.redhat.com [10.72.12.86])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CC8CD18EC6;
+        Thu,  6 Apr 2023 23:58:34 +0000 (UTC)
+Date:   Fri, 7 Apr 2023 07:58:31 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v21 2/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <ZC9cp5RLyNNx0DMG@MiWiFi-R3L-srv>
+References: <20230404180326.6890-1-eric.devolder@oracle.com>
+ <20230404180326.6890-3-eric.devolder@oracle.com>
+ <ZC6nWzPuIWOxmvv2@MiWiFi-R3L-srv>
+ <80767ccc-ffd4-9cb9-44e4-a8d4f0e13853@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80767ccc-ffd4-9cb9-44e4-a8d4f0e13853@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,32 +70,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On 04/06/23 at 11:10am, Eric DeVolder wrote:
 > 
-> The AMD PerfMonV2 defines three registers similar to part of the Intel
-
-Drop the "The", i.e. just "AMD PerfMonV2 defines ..."
-
-> v2 PMU registers, including the GLOBAL_CTRL, GLOBAL_STATUS and
-> GLOBAL_OVF_CTRL MSRs. For better code reuse, this specific part of
-> the handling can be extracted to make it generic for X86 as a straight
-> code movement.
-
-State what the patch actually does, not what it could do, or what can be done.
-
-> Specifically, move the kvm_pmu_set/get_msr() hanlders of GLOBAL_STATUS,
-
-s/hanlders/handlers
-
-> GLOBAL_CTRL, GLOBAL_OVF_CTRL defined by intel to generic pmu.c and
-
-Intel
-
-> remove the callback function .pmc_is_globally_enabled, which is very
-> helpful to introduce the AMD PerfMonV2 code later.
 > 
-> The new non-prefix pmc_is_globally_enabled() works well as legacy AMD
+> On 4/6/23 06:04, Baoquan He wrote:
+> > On 04/04/23 at 02:03pm, Eric DeVolder wrote:
+> > ......
+> > > +static void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+> > > +{
+> > > +	struct kimage *image;
+> > > +
+> > > +	/* Obtain lock while changing crash information */
+> > > +	if (!kexec_trylock()) {
+> > > +		pr_info("kexec_trylock() failed, elfcorehdr may be inaccurate\n");
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	/* Check kdump is not loaded */
+> > > +	if (!kexec_crash_image)
+> > > +		goto out;
+> > > +
+> > > +	image = kexec_crash_image;
+> > > +
+> > > +	if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+> > > +		hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+> > > +		pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
+> > > +	else
+> > > +		pr_debug("hp_action %u\n", hp_action);
+> > 
+> > Seems we passed in the cpu number just for printing here. Wondering why
+> > we don't print out hot added/removed memory ranges. Is the cpu number
+> > printing necessary?
+> > 
+> Baoquan,
+> 
+> Ah, actually until recently it was used to track the 'offlinecpu' in this
+> function, but tglx pointed out that was un-necessary. That resulted in
+> dropping the code in this function dealing with offlinecpu, leaving this as
+> its only use in this function.
+> 
+> The printing of cpu number is not necessary, but helpful; I use it for debugging.
 
-What prefix?  It was pmc_is_globally_enabled() before and it's pmc_is_globally_enabled()
-now?
+OK, I see. I am not requesting memory range printing, just try to prove
+cpu number printing is not so justified. If it's helpful, I am OK with
+it. Let's see if other people have concern about this.
+
+> 
+> The printing of memory range is also not necessary, but in order to do that,
+> should we choose to do so, requires passing in the memory range to this
+> function. This patch series did do this early on, and by v7 I dropped it at
+> your urging (https://lore.kernel.org/lkml/20220401183040.1624-1-eric.devolder@oracle.com/).
+> At the time, I provided it since I considered this generic infrastructure,
+> but I could not defend it since x86 didn't need it. However, PPC now needs
+> this, and is now carrying this as part of PPC support of CRASH_HOTPLUG (https://lore.kernel.org/linuxppc-dev/20230312181154.278900-6-sourabhjain@linux.ibm.com/T/#u).
+> 
+> If you'd rather I pickup the memory range handling again, I can do that. I
+> think I'd likely change this function to be:
+> 
+>   void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu,
+>      struct memory_notify *mhp);
+> 
+> where on a CPU op the 'cpu' parameter would be valid and 'mhp' NULL, and on a memory op,
+> the 'mhp' would be valid and 'cpu' parameter invalid(0).
+> 
+> I'd likely then stuff these two parameters into struct kimage so that it can
+> be utilized by arch-specific handler, if needed.
+> 
+> And of course, would print out the memory range for debug purposes.
+> 
+> Let me know what you think.
+
