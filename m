@@ -2,154 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A810D6D8EE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 07:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83FD6D8EE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 07:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbjDFFmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 01:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S233501AbjDFFom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 01:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjDFFmy (ORCPT
+        with ESMTP id S229737AbjDFFok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 01:42:54 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2057.outbound.protection.outlook.com [40.107.6.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B70E6A65;
-        Wed,  5 Apr 2023 22:42:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RL5H4Eln5PUQ24luDM7BTdeRjUSKh8ixdzZpRMR75Qi9vfVyyB/QiaZ/+rmRJnw+eYvL4ZB2ZlSGiPALyu0HQPtwc5hobQRl/PfWmsJEUU24VSLG5fcRtbf6+CkzTmtYJ7JtdrNOqw1BZltGs/UlhOC1Qe7krkl9cqaB6rTEPj5V4aL4DRG0cRibCmN9mF7lPNd6u8b+sbbphY84XCmZ5YmQdV7rubqmjIUqXApNC/y4OwzEgzncZKmFPCNusTATs5aa1Pto0DaJVC8emullpgVo6B9LGtdH+y0xBQzOOS89h1xOrCPcBFmLxDIsYI/jg/9wzRjyqdx7C/5D8bqdsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z6r+0CCOR254Jzhyxnnk59OR7PMlP8G3vDcJtx6ELCU=;
- b=lVtpfQv1f3W5rXlN1GH2w9wurY+AwuovjOQdWMtTumkYrlIXKl5k/eg7EdCfphGyosph4i7P1t2N2SSUeqvSjbvvgi85hFsw3tQX6/bQV7FZU1Ddp9qiG+ap4Anb6wOGrMgFPXFnlgB24lTAcsdIxrpIOnMeI+8jplPB116W+6hdrCf0BXC9OuFUnEDulql6+BmTQkesowWXKBArWsNH7kTy3P8RXW6oLiUHDtm+QIfntn2na726XIiMqCkYp7V2x8BOeM9LIUeyOPoQZJVKBI2z1NwN45pc7ts8iNrZMqTlqCa6Z+/GqSbMHAq5YQPgR/XgGhM9MegRUjL4Q4vEkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z6r+0CCOR254Jzhyxnnk59OR7PMlP8G3vDcJtx6ELCU=;
- b=G0tzVNtPxZmtaJm8BXAqY8X6B52kQhm8YVshdfb06qrh2KStI8DbHnnrwJCPa06rJCzdFU8TUnd/wRDyEQfb8i5AAX+Z4JrP4DxfTMEnOZzfiVVCzYK1JbIpaVUld26d4L1T/m4nO4HQWHgj0AUcCLTp8eX90OKb6n182ENLdQaJM9hjyUKbDcpA66L57IiTNS63r15P6oh+0MqgWeo0Z3Evolfl2flKhHQgNDcm6G/8Y0NZga+e2QECPD/WQxPoN3+AHjh+D1AG0ePFBuRvd6VTX+OIqxTyozHPcTQdpWGIpH3mZrjypCzu/dDtnccM+sUdv/yZ9z7P/3kLVsg2rw==
-Received: from AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:517::18)
- by DB8PR10MB3957.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:165::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.14; Thu, 6 Apr
- 2023 05:42:51 +0000
-Received: from AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7268:b477:8203:8c6a]) by AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::7268:b477:8203:8c6a%9]) with mapi id 15.20.6277.028; Thu, 6 Apr 2023
- 05:42:50 +0000
-From:   "Starke, Daniel" <daniel.starke@siemens.com>
-To:     =?iso-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 5/9] tty: n_gsm: add open_error counter to gsm_mux
-Thread-Topic: [PATCH 5/9] tty: n_gsm: add open_error counter to gsm_mux
-Thread-Index: AQHZZ5p2LcMicqjphEaUZsIcVH5ES68dxgrA
-Date:   Thu, 6 Apr 2023 05:42:50 +0000
-Message-ID: <AS4PR10MB58956955D236587153FDDA47E0919@AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM>
-References: <20230405054730.3850-1-daniel.starke@siemens.com>
- <20230405054730.3850-5-daniel.starke@siemens.com>
- <ffacb4a7-7875-445d-a2ab-38c4e595e3bc@linux.intel.com>
-In-Reply-To: <ffacb4a7-7875-445d-a2ab-38c4e595e3bc@linux.intel.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Enabled=true;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SetDate=2023-04-06T05:42:49Z;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Method=Privileged;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Name=restricted;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ActionId=6c2b7a3a-6d88-4abd-9dcb-e006abc17ea0;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ContentBits=0
-document_confidentiality: Restricted
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS4PR10MB5895:EE_|DB8PR10MB3957:EE_
-x-ms-office365-filtering-correlation-id: 5656857f-8962-44c4-dd2e-08db3661c2aa
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pmZQ/dDWiSbSAIoUPAWDvyWFJ3swj7adkMr+tvzYxYbEM+YYWkrBfl9/lrhJRIEYoV1nvpkfKT6g6xir/WaJGShBf6a81KUZfv6VaxpTcqIM335RmsC5kOMeTpoRb4FluSAK4KYDh4d/BAsNLvEqR9nXcsOxC31eY6fm2M7KaF1+oXEilcYzkI+VireeqRcRZj16ksHN4hTeW81MsmisOHoraQiHFANxn9AztN6kDkDFLMpF7GWaJ8m737YI64hobDF26EBDT/4AWYXOuwOk+P+7fYyV7pes/0wKw3qGazD7HpWw2v9T8jiwJgxrW1n0iyrwAtT+alMyGsNqT7JSlMouW3z62uKvtNszgntKdWjfYawTjLbZSLmJn0OIaOwP9JSRImZMjAEgb78ZshwUSSc0Tg0KbxgElKgyoft6B4ruSJqe/piq7SC+w/a07dyv4VQh+geJP2skBTTt+l9LTweArfvcmRC97FkSzjkxrm40rwiYRldY7yHpY5v1icYQGWBxBF7na0pxSZDGr3zsko/mFeQ3P5CkSygui4qezMCKmRbhx8ORGXWkvYz373cOmh5I2lSPyNSGJqPX6RE3hGBuXEuyNsBs5U0sP+Dx4RvDaBny3wp18YP4pvVRD7QX
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(451199021)(2906002)(83380400001)(4744005)(5660300002)(52536014)(8936002)(82960400001)(41300700001)(122000001)(9686003)(38100700002)(186003)(8676002)(4326008)(6916009)(64756008)(66476007)(66946007)(66446008)(76116006)(66556008)(6506007)(7696005)(33656002)(26005)(38070700005)(55016003)(316002)(54906003)(478600001)(86362001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?hB2VFdgsSH7H14VjYG/aDfCRu5KNPY/5xec5gLl6naSMrU2k7khjCJRGyI?=
- =?iso-8859-1?Q?IxAJpO9TsNVYwYlKtIPdrkRrNN7iUwFql4czYmodaajKOEdHZIMatOYmjh?=
- =?iso-8859-1?Q?tRptNTXbBNspfeiaeqI5VQLGr9iRwXm7gnRiQXGEurGoi8fB7IAQZ2GCjm?=
- =?iso-8859-1?Q?JxgMDcvE7RIQ4IU3DLp32rwHNiP/+fI7feHB4zQYQkNO+igrPlmUvkKMbR?=
- =?iso-8859-1?Q?hAZj/Unz4OLxLEsGU17O31NKJRjs313xfoh76dtapE7nT9owgN8yKfLc/M?=
- =?iso-8859-1?Q?IFjRgZNLp0RFJ6AXcFvUFQ18OcWqVfQ+EiV4O/bW2nyJWZr7NqmlYXRArm?=
- =?iso-8859-1?Q?KSlyQQQ59Mw5t21O2Yr64dpsVcy9mtpY2U5kiekrVQ6Sz3jra0X3UWnGqo?=
- =?iso-8859-1?Q?hdWxyHZuhoSuZhppzJTUDw0UViVscv1q93i2HEMwjEvAoR0rq06hUA3DBv?=
- =?iso-8859-1?Q?TzSmsV9c3tJcCS7HrlkseVhSgAjwkwepS/CaO7C0POssHndixqvdU5Rrqz?=
- =?iso-8859-1?Q?aeoVXPUmmLiehCYcGkzzH2FEPPNHGwGm7PxJajfpkapGfItwGd5g6/MhGZ?=
- =?iso-8859-1?Q?LytcVQ4hatWa0jTSE90aJdijaVPCPqVf8mf98xCtonE7U1nhh2MjXydPaJ?=
- =?iso-8859-1?Q?/BH0YJuEx8V/7XOs7VbGa+8fiMpSkit5uASNS/6rU2J4kcQ38kJc4YB5JG?=
- =?iso-8859-1?Q?8J8CvgO5/lyW5TN/wZ+ZtqMc4mekXuQfyBZEz1Lk5pVbbG++yam4t2D/cU?=
- =?iso-8859-1?Q?ALjeQe3XSodaRMVvpYeYKdgJvoLp2FVnX+Et9flsT1Ppq5YX2wFO+czzkU?=
- =?iso-8859-1?Q?zUXHl2l8wTZV7vnw1mbLhLtsDyid/lgXV+huMZ6sVf1auCvY3TR54QPHdo?=
- =?iso-8859-1?Q?ajanT0xu4QyyhXWPc+PRGIcyS55Zz1sroOoNg8g2gP6LIPSOyGSVpM1wZu?=
- =?iso-8859-1?Q?QBHEGM5JzuwlBXi8aJk6woiTgtJGXrqyvWtGxT2+4+sBATqpWnTFb41OGj?=
- =?iso-8859-1?Q?yIIP8ZFdq1/yIyIsYhBso0suaAsEDR1BmWmrOO2jv0HrC+oJYbUsrlo6P1?=
- =?iso-8859-1?Q?W4l7l25Ydf7dErWgWZTLx0NoMPC/ZXpjjsiEPXwleDIVtIaI14otY0LT1n?=
- =?iso-8859-1?Q?BvllsNPQgv9ixReAXQTSm/LbZOLzXrnyPVEYLKrBuQ2FLjWKdz+l4uLHgZ?=
- =?iso-8859-1?Q?Ic/wBlqdToGq+1zHqJUHZOxZGnEjqzoat9cgMJvx4uXWeDdIsSZ+FonUPt?=
- =?iso-8859-1?Q?5ysyNzPi51Me2+xpyv9VbnWZR5A+1B7rkfWdODj7P+ZhVEB/RC9JINpffE?=
- =?iso-8859-1?Q?s3EYUL5/BZ+K+vcZAB5mxic1lWhyRr4NfKdnEeqZ+02UtO2oB6OnSzPbF8?=
- =?iso-8859-1?Q?Xc78NQGLVSt6ycKmfzXamPK1mYT02nKj3Fe4if24pG4vKIrihF1Hv67Nmy?=
- =?iso-8859-1?Q?U9y6MQp9k806wN+fpBRRg8P5QzYiY1v2l77ZrkK7VJEDohBQGNOU4zB5L5?=
- =?iso-8859-1?Q?imzKl1oo8U5jVSPUO+SiGV/B+wK8h75kHyImcXjXDsFppYKFu0WiE0Yptd?=
- =?iso-8859-1?Q?RF5+lR4LDbJ+KxinfzbS7xH290vUnGxbLkHYFF30ONTs6lANHP5/D6EsS9?=
- =?iso-8859-1?Q?E/qfhApOugfiYuvYYzoujr8m5aBIf+IOu2?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 6 Apr 2023 01:44:40 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6B1E57;
+        Wed,  5 Apr 2023 22:44:36 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id bi39so4519285qkb.13;
+        Wed, 05 Apr 2023 22:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680759876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EvQwfvj8sW09bm2ffaurY8lazWy/P7dLqyu/bRtP2zc=;
+        b=mgnSgnKFVTMlcB79EOAEWpjNaxIo8e65mw+PZO9pM0lD0MhTEtHgIkZQJ0YWscS2oj
+         SDvVExAgDJcNhVnm3qMN3x6qFKjv/afkbME/gnQMgNIqxtiKiGRknIEf5bKZK05y+TcT
+         +v/JpxYjMhkDypLl4nAnaQC1Ood7E18Nr5hrd94dhAqOidCgd/OzJ0nsNDirZONe5Tam
+         Zswy7p2/dR4vK6Nua9gzaaGBONktEqugJGU0x9pbpzVM6mbjiytMw/gLwaiITHfy8sqx
+         CpzVgmfB969m68N3Z0vRsWOUN1/LT9M9r16xbslRTDK7JWPCo5G5CI6sv2TqpAC50cWV
+         1MXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680759876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EvQwfvj8sW09bm2ffaurY8lazWy/P7dLqyu/bRtP2zc=;
+        b=7Jxq9M0Kn3BhNm1FDr+C90W+hc3NhpisWW4+3e4Yam9PIBuK8v0BCdPmP6z0oF+WXu
+         HVCznMBoJhOlqjd1CGcEnv4/dY1mSRFNpF4NFQxv4YYfPyM27QR8qk6ZYyI5IGqTmckp
+         MVvMrAbeJHRszzdCY9hqJH8nek2caOkU7jyXOoRADxYvtPyaMIs0D1a9p6Qd5XVTZe/p
+         qFXwtLY9Op7+F48cx2A6gnOA1VG7VVhwhWcNwFLYB/b5tlMO7j3xjwprsC7h5z49bxN0
+         cpM2aJT5dzVix8TvyAFWKlhynZQ/4OhwYuA7YkoBWsigkC80kyDtEbeGZ85cxVQFt7gn
+         bt4Q==
+X-Gm-Message-State: AAQBX9c9gCUohpVKZ5xYPg8CUklOczLHo5OIqpC5tdIO7ro+yKid+7lC
+        7qiR86NzauzwQnn28ngyX95oK3WfHpPPQXgdQQg=
+X-Google-Smtp-Source: AKy350ZrOAcuqxMYB6Ui3QELE+6Awi7lVWoUPCipMI1l5eHt32Nl7TaBiy6K6CKG1ZnVZE4WffF6/cfWPcvLkZHL+gk=
+X-Received: by 2002:a05:620a:2596:b0:746:7857:d28b with SMTP id
+ x22-20020a05620a259600b007467857d28bmr1969342qko.14.1680759875932; Wed, 05
+ Apr 2023 22:44:35 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB5895.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5656857f-8962-44c4-dd2e-08db3661c2aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2023 05:42:50.8506
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TOkLW3w+Qax3vAhs5IsBiggd2+/w6qcW2j2RIyRc08weKhOnQq6yXuv9qktXmwUr/6HAU0YMaBsLglClKeZd3//vllkIB4J5Js97DnEzzf0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3957
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230326092208.13613-1-laoar.shao@gmail.com> <CAPhsuW43EiH0tVKU8s+JwV_V6EBETTDyXsAmMzAftpVtcgLHag@mail.gmail.com>
+ <CALOAHbCqCb3xmSpNe1Qvm75GBY4ZEGrAOHfVJvpZV5t=akTTgQ@mail.gmail.com>
+ <20230402233740.haxb7lgfavcoe27f@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <CALOAHbBj-+xY5jGLynUrg1GfSftZ+LT5DkADKz_+8+tL2kWMSw@mail.gmail.com>
+ <20230403225017.onl5pbp7h2ugclbk@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <CALOAHbDQROKrWe732Qv1CsZwr6nMJN-2y77JW3EuT53D8At+Ow@mail.gmail.com>
+ <20230406020656.7v5ongxyon5fr4s7@dhcp-172-26-102-232.dhcp.thefacebook.com>
+ <CALOAHbCEsucGRB+n5hTnPm-HssmB91HD4PFVRhdO=CZnJXfR6A@mail.gmail.com>
+ <CAADnVQ+1VEBHTM5Rm-gx8-bg=tfv=4x+aONhF0bAmBFZG3W8Qg@mail.gmail.com>
+ <CALOAHbAorooyteDjgs82TtujP4Fwo5hSkh-Z5QhxhV9p7_2mfw@mail.gmail.com> <CAADnVQKr5Y3z9f_Vv49DvRFcN+OF3JaFx_9NgBL58pz+TLq8ig@mail.gmail.com>
+In-Reply-To: <CAADnVQKr5Y3z9f_Vv49DvRFcN+OF3JaFx_9NgBL58pz+TLq8ig@mail.gmail.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Thu, 6 Apr 2023 13:43:59 +0800
+Message-ID: <CALOAHbDdtj1Qd0h1jzXKN4R=_webEVW=sqYfhSFXXsYftyvnKw@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > @@ -1767,6 +1775,7 @@ static void gsm_control_negotiation(struct gsm_mu=
-x *gsm, unsigned int cr,
-> >  	} else {
-> >  		if (debug & DBG_ERRORS)
-> >  			pr_info("%s PN in invalid state\n", __func__);
-> > +		gsm->open_error++;
-> >  	}
->=20
-> I'd use the "rollback" pattern here for all these and goto open_failed;
-> + do the open_error increment there only once.
+On Thu, Apr 6, 2023 at 12:24=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Apr 5, 2023 at 8:22=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com>=
+ wrote:
+> >
+> > On Thu, Apr 6, 2023 at 11:06=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Apr 5, 2023 at 7:55=E2=80=AFPM Yafang Shao <laoar.shao@gmail.=
+com> wrote:
+> > > >
+> > > > It seems that I didn't describe the issue clearly.
+> > > > The container doesn't have CAP_SYS_ADMIN, but the CAP_SYS_ADMIN is
+> > > > required to run bpftool,  so the bpftool running in the container
+> > > > can't get the ID of bpf objects or convert IDs to FDs.
+> > > > Is there something that I missed ?
+> > >
+> > > Nothing. This is by design. bpftool needs sudo. That's all.
+> > >
+> >
+> > Hmm, what I'm trying to do is make bpftool run without sudo.
+>
+> This is not a task that is worth solving.
+>
 
-True, that would be a more elegant way to handle this. However, it does
-more than just adding this counter. Therefore, I would prefer to do this
-in a later cleanup.
+Then the container with CAP_BPF enabled can't even iterate its bpf progs ..=
+.
 
-...
-> In general, the changelog could be more verbose about state machine=20
-> states, message names which imply that the error is happening during=20
-> "opening" phase/state.
+> > > > Some questions,
+> > > > - What if the process exits after attaching the bpf prog and the pr=
+og
+> > > > is not auto-detachable?
+> > > >   For example, the reuserport bpf prog is not auto-detachable. Afte=
+r
+> > > > pins the reuserport bpf prog, a task can attach it through the pinn=
+ed
+> > > > bpf file, but if the task forgets to detach it and the pinned file =
+is
+> > > > removed, then it seems there's no way to figure out which task or
+> > > > cgroup this prog belongs to...
+> > >
+> > > you're saying that there is a bpf prog in the kernel without
+> > > corresponding user space ?
+> >
+> > No, it is corresponding to user space. For example, it may be
+> > corresponding to a socket fd, or a cgroup fd.
+> >
+> > > Meaning no user space process has an FD
+> > > that points to this prog or FD to a map that this prog is using?
+> > > In such a case this is truly kernel bpf prog. It doesn't belong to cg=
+roup.
+> > >
+> >
+> > Even if it is kernel bpf prog, it is created by a process. The user
+> > needs to know which one created it.
+>
+> In some situations it's certainly interesting to know which process
+> loaded a particular program.
+> In many other situations it's irrelevant.
+> For example, the process that loaded a prog could have been moved to a
+> different cgroup.
+> If you want to track the loading you need to install bpf_lsm
+> that monitors prog_load hook and collect that info.
+> It's not the job of the kernel to do it.
+>
 
-I will add a more detailed description.
+Agreed with you that we can add lots of hooks to track every detail of
+the operations.
+But it is not free. More hooks, more overhead.
+If we can change the kernel to make it lightweight, why not...
 
-Best regards,
-Daniel Starke
+> > > > - Could you pls. explain in detail how to get comm, pid, or cgroup
+> > > > from a pinned bpffs file?
+> > >
+> > > pinned bpf prog and no user space holds FD to it?
+> > > It's not part of any cgroup. Nothing to print.
+> >
+> > As I explained above, even if it holds nothing, the user needs to know
+> > the information from it. For example, if it is expected, which one
+> > created it?
+>
+> See the answer above. The kernel has enough hooks already to provide
+> this information to user space. No kernel changes necessary.
+
+
+
+--=20
+Regards
+Yafang
