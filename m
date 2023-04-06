@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB436D9F2D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0BE6D9F34
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240041AbjDFRua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S239408AbjDFRv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjDFRu2 (ORCPT
+        with ESMTP id S239999AbjDFRvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:50:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F3E49CA;
-        Thu,  6 Apr 2023 10:50:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC35960DF4;
-        Thu,  6 Apr 2023 17:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC6DC433EF;
-        Thu,  6 Apr 2023 17:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680803426;
-        bh=N8h/IJ7vQs3LY2UE87u4CYmDFTFt5FQw7xX/wFLkIgg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=CYWUCe4Y7g2BVX5eqHYLV40TSIcXpmdH4Sk4G/5UQah7nSIuPX0mIk9qHOFcwainr
-         JJIaDmhCiTXfkm/Bko05DoxFDDLGIhiRkbkG6IZBvKz8rdugAicvqQX19/ku3bcuTF
-         btcGrs8M1Y+OUp0LRNtjJc/qLztclhUI+xUzAHujP7WAf2XINA67RuCAcZ1o+5Olig
-         MgE+6hoxHQKrhJ8b9dSkcNeGIySzlhcNF+f9XuWlKLgKN7uc5q9aA3ZMAj68nChFkF
-         MxAszt2WtBaFhmCb8c/7/4z4K2IeYhqR387qxGVuJRhuN4gq0znSIyRaWH8JGRcxLJ
-         5+F2ZZsT6zMvg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id CCC4C15404B4; Thu,  6 Apr 2023 10:50:25 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 10:50:25 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Zqiang <qiang1.zhang@intel.com>, frederic@kernel.org,
-        joel@joelfernandes.org, qiang.zhang1211@gmail.com,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] rcu/kvfree: Prevents cache growing when the
- backoff_page_cache_fill is set
-Message-ID: <8da4b48a-820c-461f-9dc0-a5afaf335177@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230406001238.647536-1-qiang1.zhang@intel.com>
- <ZC5MoREk30MIt79u@pc636>
+        Thu, 6 Apr 2023 13:51:25 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3846B4C16
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:51:23 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id h11so44891274lfu.8
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680803481;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=844IQeqGqgxY4Tgvv2/QUZfgyMCjy+UzrXZ6klmnSQI=;
+        b=vEcBWhE/ijFTaoraej8Q9L8cYFUcCJmNRyRjPEx/pZiAzNKiT7CbIUs5Tr10t9/jpO
+         yWKBqyyGvwzL/GJW/sc6nCZH6zsBd/Wt/E9DWBkg8t2fKO3O5QEAoHqq8t8zmiY59BYf
+         as6Dw/i/uVhemfXTYdwJJXYYc3St58RA6R52aMdvrMxw474qy+OkEIXu7U31N/Yxsedd
+         AFLhUyxijYyKa5Ray0y7gz+949EWMy4XnnFHensJAMkd+WtBe94og1PCI83ve8OkS+Ks
+         BqlcVkrZdY5CsAop0p1BbZ8Ozz6gBjyycxc6zQXUHSSufBoDl0x2NJOs4pcMJDmFM99j
+         1/GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680803481;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=844IQeqGqgxY4Tgvv2/QUZfgyMCjy+UzrXZ6klmnSQI=;
+        b=zxF9GMzlwh2fVRC/ziIw3/fncVufxAFoOHJftiFVJVu0M2zm/dPXbvt7mPmV2bX/ot
+         MXG22bM1JF2Df/sHv5axrMhUCMVXu3w+UT8uasR5ua8IJmsDlu5fmI0+XA+kMviLGDzh
+         h/3QiMLkHbddH0pWRgCCi/8M6R381bSz7q3/QVF5pmptIStnxF/oPAlccilxZBGJ7r93
+         iBg6VlqaxNOQUecFYALuu+duosyjajyuz4qHgdsd4YTwZHYmNx59kSm0OfyhiiuNK0ZE
+         y5lxLniH57NXtDBEfm0B5RwvnCgJiceHcT3BbT7GnjKqSObwaRhbaPmay1jXCPPtsSX4
+         0pqQ==
+X-Gm-Message-State: AAQBX9eK3aOFRahpzlM60q8ku4UNB3Mr+CIAs90wKNoj6ewWRdH2hObq
+        D1bQOsWML+SuDMeQeSAbgN9TpA==
+X-Google-Smtp-Source: AKy350bTfAWkRunU4OMi7vWzfciPPwM+geDMw1MB1rys+Kd0FuOlNl5vLPCKQxzgocSvF06wf0of1Q==
+X-Received: by 2002:a05:6512:10ca:b0:4eb:1315:eaea with SMTP id k10-20020a05651210ca00b004eb1315eaeamr1846074lfg.3.1680803481477;
+        Thu, 06 Apr 2023 10:51:21 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id v9-20020a056512048900b004e9cad1cd7csm355142lfq.229.2023.04.06.10.51.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 10:51:21 -0700 (PDT)
+Message-ID: <7476b5ba-426c-3701-c4aa-d3e2db3de112@linaro.org>
+Date:   Thu, 6 Apr 2023 20:51:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC5MoREk30MIt79u@pc636>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm6115p-j606f: Enable ATH10K WiFi
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230406-topic-lenovo_features-v1-0-c73a5180e48e@linaro.org>
+ <20230406-topic-lenovo_features-v1-4-c73a5180e48e@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230406-topic-lenovo_features-v1-4-c73a5180e48e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 06:37:53AM +0200, Uladzislau Rezki wrote:
-> On Thu, Apr 06, 2023 at 08:12:38AM +0800, Zqiang wrote:
-> > Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
-> > executed before kfree_rcu_monitor() to drain page cache, if the bnode
-> > structure's->gp_snap has done, the kvfree_rcu_bulk() will fill the
-> > page cache again in kfree_rcu_monitor(), this commit add a check
-> > for krcp structure's->backoff_page_cache_fill in put_cached_bnode(),
-> > if the krcp structure's->backoff_page_cache_fill is set, prevent page
-> > cache growing.
-> > 
-> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > ---
-> >  kernel/rcu/tree.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index 9cc0a7766fd2..f25430ae1936 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -2907,6 +2907,8 @@ static inline bool
-> >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
-> >  	struct kvfree_rcu_bulk_data *bnode)
-> >  {
-> > +	if (atomic_read(&krcp->backoff_page_cache_fill))
-> > +		return false;
-> >  	// Check the limit.
-> >  	if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
-> >  		return false;
-> > -- 
-> > 2.32.0
-> >
-> Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+On 06/04/2023 18:25, Konrad Dybcio wrote:
+> Enable the onboard QCA Wi-Fi. HW identifiers for reference:
+> qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400e0000
+> 
+> Firmware sources:
+> /vendor/firmware_mnt/image/wlanmdsp.bin -> qcom/.../wlanmdsp.mbn
+> /vendor/firmware_mnt/image/bdwlan.bXX [1] -> [2] -> ath10k/.../board-2.bin
+> [3] -> ath10k/.../firmware-5.bin
+> 
+> Not sure where 3 comes from on the device itself, gotta investigate that..
+> 
+> According to [4], it's called WCN3990_STRAIT.
+> 
+> [1] XX = board_id printed when the file is missing or by your downstream
+> kernel firmware loader in the dmesg; if XX=ff, use bdwlan.bin
 
-Thank you both!
+Since the board_id is 0xff, please add qcom,ath10k-calibration-variant
 
-One question, though.  Might it be better to instead modify the "for"
-loop in fill_page_cache_func() to start at krcp->nr_bkv_objs instead
-of starting at zero?  That way, we still provide a single page under
-low-memory conditions, but provide rcu_min_cached_objs of them if memory
-is plentiful.
+Ideally, could you please send the bdwlan to ath10k for inclusion, see 
+https://wireless.wiki.kernel.org/en/users/drivers/ath10k/boardfiles .
 
-Alternatively, if we really don't want to allow any pages at all under
-low-memory conditions, shouldn't the fill_page_cache_func() set nr_pages
-to zero (instead of the current 1) when the krcp->backoff_page_cache_fill
-flag is set?  This would likely mean also breaking out of that loop if
-krcp->backoff_page_cache_fill was set in the meantime (which happens
-implicitly with Zqiang's patch).
+> 
+> [2] https://github.com/jhugo/linux/blob/5.5rc2_wifi/README
+> [3] https://github.com/kvalo/ath10k-firmware/blob/master/WCN3990/hw1.0/HL3.1/WLAN.HL.3.1-01040-QCAHLSWMTPLZ-1/firmware-5.bin
+> [4] https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/wlan/qca-wifi-host-cmn/-/blob/LA.VENDOR.1.0.r1-20700-WAIPIO.QSSI13.0/hif/src/hif_hw_version.h#L55
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> index 2aac25171dec..4ba8e59a27d8 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
+> @@ -315,6 +315,14 @@ &usb_hsphy {
+>   	status = "okay";
+>   };
+>   
+> +&wifi {
+> +	vdd-0.8-cx-mx-supply = <&pm6125_l8>;
+> +	vdd-1.8-xo-supply = <&pm6125_l16>;
+> +	vdd-1.3-rfa-supply = <&pm6125_l17>;
+> +	vdd-3.3-ch0-supply = <&pm6125_l23>;
+> +	status = "okay";
+> +};
+> +
+>   &xo_board {
+>   	clock-frequency = <19200000>;
+>   };
+> 
 
-Or am I missing something subtle here?
+-- 
+With best wishes
+Dmitry
 
-							Thanx, Paul
