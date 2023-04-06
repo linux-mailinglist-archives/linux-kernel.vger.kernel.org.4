@@ -2,42 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C226D8E1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3CC6D8E1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjDFDwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        id S234957AbjDFDzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbjDFDwp (ORCPT
+        with ESMTP id S231955AbjDFDz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:52:45 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02B73ABC
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:52:43 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VfRGne1_1680753159;
-Received: from 30.97.49.15(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VfRGne1_1680753159)
-          by smtp.aliyun-inc.com;
-          Thu, 06 Apr 2023 11:52:40 +0800
-Message-ID: <028a1b56-72c9-75f6-fb68-1dc5181bf2e8@linux.alibaba.com>
-Date:   Thu, 6 Apr 2023 11:52:39 +0800
+        Wed, 5 Apr 2023 23:55:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2C13ABC;
+        Wed,  5 Apr 2023 20:55:26 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PsSJH60N3zKx16;
+        Thu,  6 Apr 2023 11:52:47 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 6 Apr 2023 11:54:59 +0800
+CC:     <yangyicong@hisilicon.com>, <linuxarm@huawei.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Robert Richter <rric@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Frank Li <Frank.li@nxp.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, <linux-fpga@vger.kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Liang Kan <kan.liang@linux.intel.com>
+Subject: Re: [PATCH 31/32] Documentation: ABI + trace: hisi_ptt: update paths
+ to bus/event_source
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <gregkh@linuxfoundation.org>
+References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+ <20230404134225.13408-32-Jonathan.Cameron@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <d7f016b8-b848-d5de-a785-72e0669e21d2@huawei.com>
+Date:   Thu, 6 Apr 2023 11:54:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] erofs: remove unnecessary kobject_del()
-To:     Yangtao Li <frank.li@vivo.com>, Gao Xiang <xiang@kernel.org>,
-        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20230404142102.13226-1-frank.li@vivo.com>
- <20230404142102.13226-2-frank.li@vivo.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230404142102.13226-2-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20230404134225.13408-32-Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,54 +75,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao,
-
-On 2023/4/4 22:21, Yangtao Li wrote:
-> kobject_put() actually covers kobject removal automatically, which is
-> single stage removal. So it is safe to kill kobject_del() directly.
+On 2023/4/4 21:42, Jonathan Cameron wrote:
+> To allow for assigning a suitable parent to the struct pmu device
+> update the documentation to describe the device via the event_source
+> bus where it will remain accessible.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> For the ABI documention file also rename the file as it is named
+> after the path.
+> 
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Would you mind taking a look at
-commit a942da24abc5 ("fs: erofs: add sanity check for kobject in erofs_unregister_sysfs")
-
-, which could be "git-blame"ed (I'd suggest looking into these
-blame first), and the related discussion was:
-
-https://lore.kernel.org/r/CAD-N9QXNx=p3-QoWzk6pCznF32CZy8kM3vvo8mamfZZ9CpUKdw@mail.gmail.com
-https://lore.kernel.org/r/20220315075152.63789-1-dzm91@hust.edu.cn
-
-TL;DR: I guess it could be fixed as below if kobject_del() could
-be killed safely:
-
-	if (sbi->s_kobj.state_in_sysfs) {
-		kobject_put(&sbi->s_kobj);
-		wait_for_completion(&sbi->s_kobj_unregister);
-	}
-
-Thanks,
-Gao Xiang
-
+Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
 
 > ---
->   fs/erofs/sysfs.c | 7 ++-----
->   1 file changed, 2 insertions(+), 5 deletions(-)
+>  ...i_ptt => sysfs-bus-event_source-devices-hisi_ptt} | 12 ++++++------
+>  Documentation/trace/hisi-ptt.rst                     |  4 ++--
+>  MAINTAINERS                                          |  2 +-
+>  3 files changed, 9 insertions(+), 9 deletions(-)
 > 
-> diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-> index 435e515c0792..c3ba981b4472 100644
-> --- a/fs/erofs/sysfs.c
-> +++ b/fs/erofs/sysfs.c
-> @@ -240,11 +240,8 @@ void erofs_unregister_sysfs(struct super_block *sb)
->   {
->   	struct erofs_sb_info *sbi = EROFS_SB(sb);
->   
-> -	if (sbi->s_kobj.state_in_sysfs) {
-> -		kobject_del(&sbi->s_kobj);
-> -		kobject_put(&sbi->s_kobj);
-> -		wait_for_completion(&sbi->s_kobj_unregister);
-> -	}
-> +	kobject_put(&sbi->s_kobj);
-> +	wait_for_completion(&sbi->s_kobj_unregister);
->   }
->   
->   int __init erofs_init_sysfs(void)
+> diff --git a/Documentation/ABI/testing/sysfs-devices-hisi_ptt b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hisi_ptt
+> similarity index 83%
+> rename from Documentation/ABI/testing/sysfs-devices-hisi_ptt
+> rename to Documentation/ABI/testing/sysfs-bus-event_source-devices-hisi_ptt
+> index 82de6d710266..f2f48f7ce887 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-hisi_ptt
+> +++ b/Documentation/ABI/testing/sysfs-bus-event_source-devices-hisi_ptt
+> @@ -1,4 +1,4 @@
+> -What:		/sys/devices/hisi_ptt<sicl_id>_<core_id>/tune
+> +What:		/sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>/tune
+>  Date:		October 2022
+>  KernelVersion:	6.1
+>  Contact:	Yicong Yang <yangyicong@hisilicon.com>
+> @@ -8,7 +8,7 @@ Description:	This directory contains files for tuning the PCIe link
+>  
+>  		See Documentation/trace/hisi-ptt.rst for more information.
+>  
+> -What:		/sys/devices/hisi_ptt<sicl_id>_<core_id>/tune/qos_tx_cpl
+> +What:		/sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>/tune/qos_tx_cpl
+>  Date:		October 2022
+>  KernelVersion:	6.1
+>  Contact:	Yicong Yang <yangyicong@hisilicon.com>
+> @@ -18,7 +18,7 @@ Description:	(RW) Controls the weight of Tx completion TLPs, which influence
+>  		will return an error, and out of range values will be converted
+>  		to 2. The value indicates a probable level of the event.
+>  
+> -What:		/sys/devices/hisi_ptt<sicl_id>_<core_id>/tune/qos_tx_np
+> +What:		/sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>/tune/qos_tx_np
+>  Date:		October 2022
+>  KernelVersion:	6.1
+>  Contact:	Yicong Yang <yangyicong@hisilicon.com>
+> @@ -28,7 +28,7 @@ Description:	(RW) Controls the weight of Tx non-posted TLPs, which influence
+>  		will return an error, and out of range values will be converted
+>  		to 2. The value indicates a probable level of the event.
+>  
+> -What:		/sys/devices/hisi_ptt<sicl_id>_<core_id>/tune/qos_tx_p
+> +What:		/sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>/tune/qos_tx_p
+>  Date:		October 2022
+>  KernelVersion:	6.1
+>  Contact:	Yicong Yang <yangyicong@hisilicon.com>
+> @@ -38,7 +38,7 @@ Description:	(RW) Controls the weight of Tx posted TLPs, which influence the
+>  		will return an error, and out of range values will be converted
+>  		to 2. The value indicates a probable level of the event.
+>  
+> -What:		/sys/devices/hisi_ptt<sicl_id>_<core_id>/tune/rx_alloc_buf_level
+> +What:		/sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>/tune/rx_alloc_buf_level
+>  Date:		October 2022
+>  KernelVersion:	6.1
+>  Contact:	Yicong Yang <yangyicong@hisilicon.com>
+> @@ -49,7 +49,7 @@ Description:	(RW) Control the allocated buffer watermark for inbound packets.
+>  		will return an error, and out of range values will be converted
+>  		to 2. The value indicates a probable level of the event.
+>  
+> -What:		/sys/devices/hisi_ptt<sicl_id>_<core_id>/tune/tx_alloc_buf_level
+> +What:		/sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>/tune/tx_alloc_buf_level
+>  Date:		October 2022
+>  KernelVersion:	6.1
+>  Contact:	Yicong Yang <yangyicong@hisilicon.com>
+> diff --git a/Documentation/trace/hisi-ptt.rst b/Documentation/trace/hisi-ptt.rst
+> index 4f87d8e21065..d923e09fcbaa 100644
+> --- a/Documentation/trace/hisi-ptt.rst
+> +++ b/Documentation/trace/hisi-ptt.rst
+> @@ -40,7 +40,7 @@ IO dies (SICL, Super I/O Cluster), where there's one PCIe Root
+>  Complex for each SICL.
+>  ::
+>  
+> -    /sys/devices/hisi_ptt<sicl_id>_<core_id>
+> +    /sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>
+>  
+>  Tune
+>  ====
+> @@ -53,7 +53,7 @@ Each event is presented as a file under $(PTT PMU dir)/tune, and
+>  a simple open/read/write/close cycle will be used to tune the event.
+>  ::
+>  
+> -    $ cd /sys/devices/hisi_ptt<sicl_id>_<core_id>/tune
+> +    $ cd /sys/bus/event_source/devices/hisi_ptt<sicl_id>_<core_id>/tune
+>      $ ls
+>      qos_tx_cpl    qos_tx_np    qos_tx_p
+>      tx_path_rx_req_alloc_buf_level
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d8ebab595b2a..75019f62b1df 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9266,7 +9266,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
+>  M:	Jonathan Cameron <jonathan.cameron@huawei.com>
+>  L:	linux-kernel@vger.kernel.org
+>  S:	Maintained
+> -F:	Documentation/ABI/testing/sysfs-devices-hisi_ptt
+> +F:	Documentation/ABI/testing/sysfs-bus-event_source-devices-hisi_ptt
+>  F:	Documentation/trace/hisi-ptt.rst
+>  F:	drivers/hwtracing/ptt/
+>  F:	tools/perf/arch/arm64/util/hisi-ptt.c
+> 
