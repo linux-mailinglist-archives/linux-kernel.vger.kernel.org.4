@@ -2,141 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2AD6D9071
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDB46D9075
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235234AbjDFH3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        id S235156AbjDFHbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjDFH3N (ORCPT
+        with ESMTP id S233235AbjDFHbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:29:13 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C5B76BD;
-        Thu,  6 Apr 2023 00:29:10 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 50A0E1C000B;
-        Thu,  6 Apr 2023 07:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680766149;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3N0MhR4UYPZqjjIJvCfac3PeMhUE3Q3jLEyIQ0jdrco=;
-        b=EUYCN/AWFMTjvujuAKiAKwj/VmBeL/nIoOV0dvYnKt3iBE5JMxuOOT9akAY2HcqPJ3z0nu
-        SlJloGIh0syhJSYVb2Fp1+2jd2/wzh+8PrUC+dx2A9o9oFsPMjpQHvYRsQDQqsOOK5obTi
-        v5jH2wATkipLFNTyV0flAZn/6r0H/Jy5BkCWm8oWoGT4LG/hzEGaI60x8y7tQJNxmNG+mA
-        u/S5tDyZowoNjr1UFuJOkXN1V/jQdph98yrrrcbink3ugR9u6t2x17UZBnqnWk8xLX3M5k
-        d58+/CRAgk4AixYwBOOYVPy7WcyqZ0C9oODAhH78rg+Ua7ObCuZNso1kpo6EWA==
-Date:   Thu, 6 Apr 2023 09:29:06 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Herve Codina <herve.codina@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [RFC PATCH 0/4] Add support for QMC HDLC and PHY
-Message-ID: <20230406092906.658889a2@bootlin.com>
-In-Reply-To: <20230323103154.264546-1-herve.codina@bootlin.com>
-References: <20230323103154.264546-1-herve.codina@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 6 Apr 2023 03:31:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B32EE;
+        Thu,  6 Apr 2023 00:31:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF80461482;
+        Thu,  6 Apr 2023 07:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38FEDC4339B;
+        Thu,  6 Apr 2023 07:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680766281;
+        bh=ETbfyfCMDp3/1UzRk+wb1+5DWlQo/l40rg20m5e16cU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=g+yqaDwXIWwFaaFSp/PkhyUZ4wki+zkdYZxgkWjkg69YT+maDEJCHKU2kZEAipH66
+         moSHtF7o/YUJr24G1pN426d8u5xtTia7en25hlCc0bijtI+SJZcmiamJrhDU19BKa6
+         lOPoYQhW5Ccy1iJaDvZjLogjiH3V48G5QYf8qHy/05HeBeTATj9aredUuXwPIKkRpj
+         CNWLycNWFzIiAEiqS8h7NFZu9bsf8QaQ3wT3kGy1OCegcIHaHL0MU7qoD8QGJvuh0J
+         or4ofV5F3twEEp8grfTAV1WzFvXdrCKlIn9d9hSXeBLPuTQcoxr+2fVUHDV4t0FqK7
+         efMWOV280V5xg==
+Received: by mail-lj1-f175.google.com with SMTP id z42so39771871ljq.13;
+        Thu, 06 Apr 2023 00:31:21 -0700 (PDT)
+X-Gm-Message-State: AAQBX9eCx+BTgYUOLHcp/8mlt1PbYgzz6BqUYUpCXSr9SxHgql2j6Kft
+        CH7yz8sqgmLKhVz64pzbW+dKtKVQyKLCWUfib+E=
+X-Google-Smtp-Source: AKy350bQNM+gUl6oQj2ADMATHsYFHDqbNQfOH6aDOcb3ZHj4ykvfAYvg5QVvyYoQEt59P3U63UrU1cj2BKR2Hk5kNsI=
+X-Received: by 2002:a2e:93c3:0:b0:298:bddc:dbbf with SMTP id
+ p3-20020a2e93c3000000b00298bddcdbbfmr3104529ljh.2.1680766279202; Thu, 06 Apr
+ 2023 00:31:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230406040515.383238-1-jhubbard@nvidia.com>
+In-Reply-To: <20230406040515.383238-1-jhubbard@nvidia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 6 Apr 2023 09:31:07 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHxyntweiq76CdW=ov2_CkEQUbdPekGNDtFp7rBCJJE2w@mail.gmail.com>
+Message-ID: <CAMj1kXHxyntweiq76CdW=ov2_CkEQUbdPekGNDtFp7rBCJJE2w@mail.gmail.com>
+Subject: Re: [PATCH] arm64/mm: don't WARN when alloc/free-ing device private pages
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hello John,
 
-I haven't received any feedback on this RFC.
-Have you had a chance to review it ?
+On Thu, 6 Apr 2023 at 06:05, John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> Although CONFIG_DEVICE_PRIVATE and hmm_range_fault() and related
+> functionality was first developed on x86, it also works on arm64.
+> However, when trying this out on an arm64 system, it turns out that
+> there is a massive slowdown during the setup and teardown phases.
+>
+> This slowdown is due to lots of calls to WARN_ON()'s that are checking
+> for pages that are out of the physical range for the CPU. However,
+> that's a design feature of device private pages: they are specfically
+> chosen in order to be outside of the range of the CPU's true physical
+> pages.
+>
 
-Best regards,
-Hervé
+Currently, the vmemmap region is dimensioned to only cover the PFN
+range that backs the linear map. So the WARN() seems appropriate here:
+you are mapping struct page[] ranges outside of the allocated window,
+and afaict, you might actually wrap around and corrupt the linear map
+at the start of the kernel VA space like this.
 
-On Thu, 23 Mar 2023 11:31:50 +0100
-Herve Codina <herve.codina@bootlin.com> wrote:
 
-> Hi,
-> 
-> I have a system where I need to handle an HDLC interface.
-> 
-> The HDLC data are transferred using a TDM bus on which a PEF2256 is
-> present. The PEF2256 transfers data from/to the TDM bus to/from E1 line.
-> This PEF2256 is also connected to a PowerQUICC SoC for the control path
-> and the TDM is connected to the SoC (QMC component) for the data path.
-> 
-> From the HDLC driver, I need to handle data using the QMC and carrier
-> detection using the PEF2256 (E1 line carrier).
-> 
-> The HDLC driver consider the PEF2256 as a generic PHY.
-> So, the design is the following:
-> 
-> +----------+          +-------------+              +---------+
-> | HDLC drv | <-data-> | QMC channel | <-- TDM -->  | PEF2256 |
-> +----------+          +-------------+              |         | <--> E1
->    ^   +---------+     +---------+                 |         |
->    +-> | Gen PHY | <-> | PEF2256 | <- local bus -> |         |
->        +---------+     | PHY drv |                 +---------+
->                        +---------+
-> 
-> In order to implement this, I had to:
->  1 - Extend the generic PHY API to support get_status() and notification
->      on status change.
->  2 - Introduce a new kind of generic PHY named "basic phy". This PHY
->      familly can provide a link status in the get_status() data.
->  3 - Support the PEF2256 PHY as a "basic phy"
-> 
-> The purpose of this RFC series is to discuss this design.
-> 
-> The QMC driver code is available on linux-next. In this series:
-> - patch 1: driver HDLC using the QMC channel
-> - patch 2: Extend the generic PHY API
-> - patch 3: Use the "basic phy" in the HDLC driver
-> - patch 4: Implement the PEF2256 PHY driver
-> 
-> I did 2 patches for the HDLC driver in order to point the new PHY family
-> usage in the HDLC driver. In the end, these two patches will be squashed
-> and the bindings will be added.
-> 
-> Hope to have some feedback on this proposal.
-> 
-> Best regards,
-> Hervé
-> 
-> Herve Codina (4):
->   net: wan: Add support for QMC HDLC
->   phy: Extend API to support 'status' get and notification
->   net: wan: fsl_qmc_hdlc: Add PHY support
->   phy: lantiq: Add PEF2256 PHY support
-> 
->  drivers/net/wan/Kconfig                 |  12 +
->  drivers/net/wan/Makefile                |   1 +
->  drivers/net/wan/fsl_qmc_hdlc.c          | 558 ++++++++++++++++++++++++
->  drivers/phy/lantiq/Kconfig              |  15 +
->  drivers/phy/lantiq/Makefile             |   1 +
->  drivers/phy/lantiq/phy-lantiq-pef2256.c | 131 ++++++
->  drivers/phy/phy-core.c                  |  88 ++++
->  include/linux/phy/phy-basic.h           |  27 ++
->  include/linux/phy/phy.h                 |  89 +++-
->  9 files changed, 921 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/net/wan/fsl_qmc_hdlc.c
->  create mode 100644 drivers/phy/lantiq/phy-lantiq-pef2256.c
->  create mode 100644 include/linux/phy/phy-basic.h
-> 
+> x86 doesn't have this warning. It only checks that pages are properly
+> aligned. I've shown a comparison below between x86 (which works well)
+> and arm64 (which has these warnings).
+>
+> memunmap_pages()
+>   pageunmap_range()
+>     if (pgmap->type == MEMORY_DEVICE_PRIVATE)
+>       __remove_pages()
+>         __remove_section()
+>           sparse_remove_section()
+>             section_deactivate()
+>               depopulate_section_memmap()
+>                 /* arch/arm64/mm/mmu.c */
+>                 vmemmap_free()
+>                 {
+>                   WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+>                   ...
+>                 }
+>
+>                 /* arch/x86/mm/init_64.c */
+>                 vmemmap_free()
+>                 {
+>                   VM_BUG_ON(!PAGE_ALIGNED(start));
+>                   VM_BUG_ON(!PAGE_ALIGNED(end));
+>                   ...
+>                 }
+>
+> So, the warning is a false positive for this case. Therefore, skip the
+> warning if CONFIG_DEVICE_PRIVATE is set.
+>
 
+I don't think this is a false positive. We'll need to adjust
+VMEMMAP_SIZE to account for this.
+
+
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> cc: <stable@vger.kernel.org>
+> ---
+>  arch/arm64/mm/mmu.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 6f9d8898a025..d5c9b611a8d1 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -1157,8 +1157,10 @@ int __meminit vmemmap_check_pmd(pmd_t *pmdp, int node,
+>  int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>                 struct vmem_altmap *altmap)
+>  {
+> +/* Device private pages are outside of the CPU's physical page range. */
+> +#ifndef CONFIG_DEVICE_PRIVATE
+>         WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+> -
+> +#endif
+>         if (!IS_ENABLED(CONFIG_ARM64_4K_PAGES))
+>                 return vmemmap_populate_basepages(start, end, node, altmap);
+>         else
+> @@ -1169,8 +1171,10 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  void vmemmap_free(unsigned long start, unsigned long end,
+>                 struct vmem_altmap *altmap)
+>  {
+> +/* Device private pages are outside of the CPU's physical page range. */
+> +#ifndef CONFIG_DEVICE_PRIVATE
+>         WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+> -
+> +#endif
+>         unmap_hotplug_range(start, end, true, altmap);
+>         free_empty_tables(start, end, VMEMMAP_START, VMEMMAP_END);
+>  }
+> --
+> 2.40.0
+>
