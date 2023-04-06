@@ -2,84 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CB86D991B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F256DB271
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237736AbjDFOJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S231562AbjDGSF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239037AbjDFOIm (ORCPT
+        with ESMTP id S230112AbjDGSFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:08:42 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8F45B92
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:08:22 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id l17so1707981ejp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680790099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jW9/JTaDylpgeIAJECkEaG5KDiwSixA3SIgLvbU4AaM=;
-        b=Ldvqw71+VNh7tiIc4Z+CvHM5E4lX14+MqS/bwxliBBbEllQmotXyQ5XfnUEEGp2HQY
-         ztGbZZSn94MOcBsnIWgnD52vWIU2B3+rXqpHy58REb6k+o5QnpsPP/mLEGqU1uHId5z4
-         B454ZFZ4TX/JEQ9Th4j7J3bptmCB+wC3Qk7vApbN+hRZNpKyp7uu9Cjr3TQYIKHoBUgj
-         ux2ery45Q/wVCkabLZ18a2xTySnSL+7qT4PwHpRRQj8khOrn+OiD03Hi+UOvMSCYnojY
-         S3Fj/UNROxw2E7+y1nPMRKJKj/dMqKtXo5CTWUrrhUrHojUncvHbJQq8Vy6A7D2rCnFB
-         bkRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680790099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jW9/JTaDylpgeIAJECkEaG5KDiwSixA3SIgLvbU4AaM=;
-        b=1EqsiDrUG+wHFb79r8laAMumniMaerAOZSymmkis4hCv+sQvBCKAtydbnKoIuFtKFg
-         +b9423qRXirwG9Yix4OP+G5HG4rSx/Su7M5B1Ki2Wh5P38qGQ3NEvutKsOcitU7VsfCW
-         lA/8TH7e7vFViPqci6M3b83/CtEdL73NJIKnYVuSkE5sRtpH+hrCI8NIc6F6Q25Mt3IN
-         Z6hbw/lAwi6JhnLTWiXeBmnzztRuJDt3EIMoy2SYoetzPHLXZOtBV2U6UXQFIoP/YFW7
-         z9I4bIDp/2gg5C7lrDa90TaxOrPRO+37vK/9HIL0KlCOnKhFFn+eygxwS043hlDvmUG8
-         Vz0Q==
-X-Gm-Message-State: AAQBX9dwZRJYrYt/OmOtGImA/d1R3HrhCOQBObBHizD/Vn1lB8gVIE6n
-        ZkqxJqONVHWF6g847yAyMWsqGP60SB5+aZsQfGlcoA==
-X-Google-Smtp-Source: AKy350bAFhVGMCwwfVhJTeYwOabUOGX15M4Xne8OZst89OyUnu4BGUc8xSUVle/vqmycb4Kkggnju+5sLAPNViJx+lE=
-X-Received: by 2002:a17:906:af6b:b0:931:6e39:3d0b with SMTP id
- os11-20020a170906af6b00b009316e393d0bmr3399835ejb.15.1680790099297; Thu, 06
- Apr 2023 07:08:19 -0700 (PDT)
+        Fri, 7 Apr 2023 14:05:23 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37B1DBDE1;
+        Fri,  7 Apr 2023 11:05:16 -0700 (PDT)
+Received: from skinsburskii.localdomain (unknown [131.107.1.229])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7C4442121EDA;
+        Fri,  7 Apr 2023 11:05:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7C4442121EDA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680890715;
+        bh=jqPMEV+FDI7tcv/qHYZ6KXuGCsI+ghRVH9o/RSZM9BI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aZoqHveEWZNZW+ETuEQVxjoxpNXdYA5hW8P9qAfEUQC5Noc3iCqNXcoIJUdZtFp6k
+         ZuMTU1uVkizbCkZ2yCmAhdZD9rDP5Y9R9J5SY3mEErXHexEaEo25KhjyqR+t50T5VB
+         atRF0K1IpdYg/tQCAzPD3OFEmEhg7dIwIIkiGVuQ=
+Date:   Thu, 6 Apr 2023 07:07:43 -0700
+From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: Re: [PATCH v4 5/5] x86/hyperv: VTL support for Hyper-V
+Message-ID: <20230406140743.GA1443@skinsburskii.localdomain>
+References: <1680598864-16981-1-git-send-email-ssengar@linux.microsoft.com>
+ <1680598864-16981-6-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20230405185427.1246289-1-yosryahmed@google.com>
- <20230405185427.1246289-2-yosryahmed@google.com> <a8cb406a-70cd-aa47-fdda-50cd0eb8c941@redhat.com>
-In-Reply-To: <a8cb406a-70cd-aa47-fdda-50cd0eb8c941@redhat.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 6 Apr 2023 07:07:42 -0700
-Message-ID: <CAJD7tkbNsLo8Cd0nOm22oxD14GMppPoLNOHx2f8BJZA1wkpWnQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1680598864-16981-6-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-17.4 required=5.0 tests=DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
         USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,182 +55,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for taking a look, David!
+On Tue, Apr 04, 2023 at 02:01:04AM -0700, Saurabh Sengar wrote:
+> Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
+> feature. VSM is a set of hypervisor capabilities and enlightenments
+> offered to host and guest partitions which enable the creation and
+> management of new security boundaries within operating system software.
+> VSM achieves and maintains isolation through VTLs.
+> 
+> Add early initialization for Virtual Trust Levels (VTL). This includes
+> initializing the x86 platform for VTL and enabling boot support for
+> secondary CPUs to start in targeted VTL context. For now, only enable
+> the code for targeted VTL level as 2.
+> 
+> When starting an AP at a VTL other than VTL0, the AP must start directly
+> in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
+> transition sequence that occurs after waking up an AP with SIPI whose
+> vector points to the 16-bit AP startup trampoline code.
+> 
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> ---
+> [V4]
+> - replace initial_stack with current->thread.sp as per recent upstream changes
+> 
+>  arch/x86/hyperv/Makefile        |   1 +
+>  arch/x86/hyperv/hv_vtl.c        | 227 ++++++++++++++++++++++++++++++++
+>  arch/x86/include/asm/mshyperv.h |  10 ++
+>  arch/x86/kernel/cpu/mshyperv.c  |   1 +
+>  4 files changed, 239 insertions(+)
+>  create mode 100644 arch/x86/hyperv/hv_vtl.c
+> 
+> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
+> index 5d2de10809ae..3a1548054b48 100644
+> --- a/arch/x86/hyperv/Makefile
+> +++ b/arch/x86/hyperv/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
+>  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
+> +obj-$(CONFIG_HYPERV_VTL_MODE)	+= hv_vtl.o
+>  
+>  ifdef CONFIG_X86_64
+>  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
+> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+> new file mode 100644
+> index 000000000000..1ba5d3b99b16
+> --- /dev/null
+> +++ b/arch/x86/hyperv/hv_vtl.c
+> @@ -0,0 +1,227 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023, Microsoft Corporation.
+> + *
+> + * Author:
+> + *   Saurabh Sengar <ssengar@microsoft.com>
+> + */
+> +
+> +#include <asm/apic.h>
+> +#include <asm/boot.h>
+> +#include <asm/desc.h>
+> +#include <asm/i8259.h>
+> +#include <asm/mshyperv.h>
+> +#include <asm/realmode.h>
+> +
+> +extern struct boot_params boot_params;
+> +static struct real_mode_header hv_vtl_real_mode_header;
+> +
+> +void __init hv_vtl_init_platform(void)
+> +{
+> +	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
+> +
+> +	x86_init.irqs.pre_vector_init = x86_init_noop;
+> +	x86_init.timers.timer_init = x86_init_noop;
+> +
+> +	x86_platform.get_wallclock = get_rtc_noop;
+> +	x86_platform.set_wallclock = set_rtc_noop;
 
-On Thu, Apr 6, 2023 at 3:31=E2=80=AFAM David Hildenbrand <david@redhat.com>=
- wrote:
->
-> On 05.04.23 20:54, Yosry Ahmed wrote:
-> > We keep track of different types of reclaimed pages through
-> > reclaim_state->reclaimed_slab, and we add them to the reported number
-> > of reclaimed pages.  For non-memcg reclaim, this makes sense. For memcg
-> > reclaim, we have no clue if those pages are charged to the memcg under
-> > reclaim.
-> >
-> > Slab pages are shared by different memcgs, so a freed slab page may hav=
-e
-> > only been partially charged to the memcg under reclaim.  The same goes =
-for
-> > clean file pages from pruned inodes (on highmem systems) or xfs buffer
-> > pages, there is no simple way to currently link them to the memcg under
-> > reclaim.
-> >
-> > Stop reporting those freed pages as reclaimed pages during memcg reclai=
-m.
-> > This should make the return value of writing to memory.reclaim, and may
-> > help reduce unnecessary reclaim retries during memcg charging.  Writing=
- to
-> > memory.reclaim on the root memcg is considered as cgroup_reclaim(), but
-> > for this case we want to include any freed pages, so use the
-> > global_reclaim() check instead of !cgroup_reclaim().
-> >
-> > Generally, this should make the return value of
-> > try_to_free_mem_cgroup_pages() more accurate. In some limited cases (e.=
-g.
-> > freed a slab page that was mostly charged to the memcg under reclaim),
-> > the return value of try_to_free_mem_cgroup_pages() can be underestimate=
-d,
-> > but this should be fine. The freed pages will be uncharged anyway, and =
-we
->
-> Can't we end up in extreme situations where
-> try_to_free_mem_cgroup_pages() returns close to 0 although a huge amount
-> of memory for that cgroup was freed up.
->
-> Can you extend on why "this should be fine" ?
->
-> I suspect that overestimation might be worse than underestimation. (see
-> my comment proposal below)
+Nit: this code is VTL feature and hypevisor specific.
+Defining vtl_get_rtc_noop instead of exporting get_rtc_noop would allow to make
+this series less intrusive to the rest of x86 generic code.
 
-In such extreme scenarios even though try_to_free_mem_cgroup_pages()
-would return an underestimated value, the freed memory for the cgroup
-will be uncharged. try_charge() (and most callers of
-try_to_free_mem_cgroup_pages()) do so in a retry loop, so even if
-try_to_free_mem_cgroup_pages() returns an underestimated value
-charging will succeed the next time around.
+Reviewed-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
 
-The only case where this might be a problem is if it happens in the
-final retry, but I guess we need to be *really* unlucky for this
-extreme scenario to happen. One could argue that if we reach such a
-situation the cgroup will probably OOM soon anyway.
-
->
-> > can charge the memcg the next time around as we usually do memcg reclai=
-m
-> > in a retry loop.
-> >
-> > The next patch performs some cleanups around reclaim_state and adds an
-> > elaborate comment explaining this to the code. This patch is kept
-> > minimal for easy backporting.
-> >
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > Cc: stable@vger.kernel.org
->
-> Fixes: ?
->
-> Otherwise it's hard to judge how far to backport this.
-
-It's hard to judge. The issue has been there for a while, but
-memory.reclaim just made it more user visible. I think we can
-attribute it to per-object slab accounting, because before that any
-freed slab pages in cgroup reclaim would be entirely charged to that
-cgroup.
-
-Although in all fairness, other types of freed pages that use
-reclaim_state->reclaimed_slab cannot be attributed to the cgroup under
-reclaim have been there before that. I guess slab is the most
-significant among them tho, so for the purposes of backporting I
-guess:
-
-Fixes: f2fe7b09a52b ("mm: memcg/slab: charge individual slab objects
-instead of pages")
-
->
-> > ---
-> >
-> > global_reclaim(sc) does not exist in kernels before 6.3. It can be
-> > replaced with:
-> > !cgroup_reclaim(sc) || mem_cgroup_is_root(sc->target_mem_cgroup)
-> >
-> > ---
-> >   mm/vmscan.c | 8 +++++---
-> >   1 file changed, 5 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 9c1c5e8b24b8f..c82bd89f90364 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -5346,8 +5346,10 @@ static int shrink_one(struct lruvec *lruvec, str=
-uct scan_control *sc)
-> >               vmpressure(sc->gfp_mask, memcg, false, sc->nr_scanned - s=
-canned,
-> >                          sc->nr_reclaimed - reclaimed);
-> >
-> > -     sc->nr_reclaimed +=3D current->reclaim_state->reclaimed_slab;
-> > -     current->reclaim_state->reclaimed_slab =3D 0;
->
-> Worth adding a comment like
->
-> /*
->   * Slab pages cannot universally be linked to a single memcg. So only
->   * account them as reclaimed during global reclaim. Note that we might
->   * underestimate the amount of memory reclaimed (but won't overestimate
->   * it).
+> +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
+> +
+> +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
+> +	x86_platform.legacy.rtc = 0;
+> +	x86_platform.legacy.warm_reset = 0;
+> +	x86_platform.legacy.reserve_bios_regions = 0;
+> +	x86_platform.legacy.devices.pnpbios = 0;
+> +}
+> +
+> +static inline u64 hv_vtl_system_desc_base(struct ldttss_desc *desc)
+> +{
+> +	return ((u64)desc->base3 << 32) | ((u64)desc->base2 << 24) |
+> +		(desc->base1 << 16) | desc->base0;
+> +}
+> +
+> +static inline u32 hv_vtl_system_desc_limit(struct ldttss_desc *desc)
+> +{
+> +	return ((u32)desc->limit1 << 16) | (u32)desc->limit0;
+> +}
+> +
+> +typedef void (*secondary_startup_64_fn)(void*, void*);
+> +static void hv_vtl_ap_entry(void)
+> +{
+> +	((secondary_startup_64_fn)secondary_startup_64)(&boot_params, &boot_params);
+> +}
+> +
+> +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
+> +{
+> +	u64 status;
+> +	int ret = 0;
+> +	struct hv_enable_vp_vtl *input;
+> +	unsigned long irq_flags;
+> +
+> +	struct desc_ptr gdt_ptr;
+> +	struct desc_ptr idt_ptr;
+> +
+> +	struct ldttss_desc *tss;
+> +	struct ldttss_desc *ldt;
+> +	struct desc_struct *gdt;
+> +
+> +	u64 rsp = current->thread.sp;
+> +	u64 rip = (u64)&hv_vtl_ap_entry;
+> +
+> +	native_store_gdt(&gdt_ptr);
+> +	store_idt(&idt_ptr);
+> +
+> +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
+> +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
+> +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
+> +
+> +	local_irq_save(irq_flags);
+> +
+> +	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	memset(input, 0, sizeof(*input));
+> +
+> +	input->partition_id = HV_PARTITION_ID_SELF;
+> +	input->vp_index = target_vp_index;
+> +	input->target_vtl.target_vtl = HV_VTL_MGMT;
+> +
+> +	/*
+> +	 * The x86_64 Linux kernel follows the 16-bit -> 32-bit -> 64-bit
+> +	 * mode transition sequence after waking up an AP with SIPI whose
+> +	 * vector points to the 16-bit AP startup trampoline code. Here in
+> +	 * VTL2, we can't perform that sequence as the AP has to start in
+> +	 * the 64-bit mode.
+> +	 *
+> +	 * To make this happen, we tell the hypervisor to load a valid 64-bit
+> +	 * context (most of which is just magic numbers from the CPU manual)
+> +	 * so that AP jumps right to the 64-bit entry of the kernel, and the
+> +	 * control registers are loaded with values that let the AP fetch the
+> +	 * code and data and carry on with work it gets assigned.
+> +	 */
+> +
+> +	input->vp_context.rip = rip;
+> +	input->vp_context.rsp = rsp;
+> +	input->vp_context.rflags = 0x0000000000000002;
+> +	input->vp_context.efer = __rdmsr(MSR_EFER);
+> +	input->vp_context.cr0 = native_read_cr0();
+> +	input->vp_context.cr3 = __native_read_cr3();
+> +	input->vp_context.cr4 = native_read_cr4();
+> +	input->vp_context.msr_cr_pat = __rdmsr(MSR_IA32_CR_PAT);
+> +	input->vp_context.idtr.limit = idt_ptr.size;
+> +	input->vp_context.idtr.base = idt_ptr.address;
+> +	input->vp_context.gdtr.limit = gdt_ptr.size;
+> +	input->vp_context.gdtr.base = gdt_ptr.address;
+> +
+> +	/* Non-system desc (64bit), long, code, present */
+> +	input->vp_context.cs.selector = __KERNEL_CS;
+> +	input->vp_context.cs.base = 0;
+> +	input->vp_context.cs.limit = 0xffffffff;
+> +	input->vp_context.cs.attributes = 0xa09b;
+> +	/* Non-system desc (64bit), data, present, granularity, default */
+> +	input->vp_context.ss.selector = __KERNEL_DS;
+> +	input->vp_context.ss.base = 0;
+> +	input->vp_context.ss.limit = 0xffffffff;
+> +	input->vp_context.ss.attributes = 0xc093;
+> +
+> +	/* System desc (128bit), present, LDT */
+> +	input->vp_context.ldtr.selector = GDT_ENTRY_LDT * 8;
+> +	input->vp_context.ldtr.base = hv_vtl_system_desc_base(ldt);
+> +	input->vp_context.ldtr.limit = hv_vtl_system_desc_limit(ldt);
+> +	input->vp_context.ldtr.attributes = 0x82;
+> +
+> +	/* System desc (128bit), present, TSS, 0x8b - busy, 0x89 -- default */
+> +	input->vp_context.tr.selector = GDT_ENTRY_TSS * 8;
+> +	input->vp_context.tr.base = hv_vtl_system_desc_base(tss);
+> +	input->vp_context.tr.limit = hv_vtl_system_desc_limit(tss);
+> +	input->vp_context.tr.attributes = 0x8b;
+> +
+> +	status = hv_do_hypercall(HVCALL_ENABLE_VP_VTL, input, NULL);
+> +
+> +	if (!hv_result_success(status) &&
+> +	    hv_result(status) != HV_STATUS_VTL_ALREADY_ENABLED) {
+> +		pr_err("HVCALL_ENABLE_VP_VTL failed for VP : %d ! [Err: %#llx\n]",
+> +		       target_vp_index, status);
+> +		ret = -EINVAL;
+> +		goto free_lock;
+> +	}
+> +
+> +	status = hv_do_hypercall(HVCALL_START_VP, input, NULL);
+> +
+> +	if (!hv_result_success(status)) {
+> +		pr_err("HVCALL_START_VP failed for VP : %d ! [Err: %#llx]\n",
+> +		       target_vp_index, status);
+> +		ret = -EINVAL;
+> +	}
+> +
+> +free_lock:
+> +	local_irq_restore(irq_flags);
+> +
+> +	return ret;
+> +}
+> +
+> +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
+> +{
+> +	u64 control;
+> +	u64 status;
+> +	unsigned long irq_flags;
+> +	struct hv_get_vp_from_apic_id_in *input;
+> +	u32 *output, ret;
+> +
+> +	local_irq_save(irq_flags);
+> +
+> +	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	memset(input, 0, sizeof(*input));
+> +	input->partition_id = HV_PARTITION_ID_SELF;
+> +	input->apic_ids[0] = apic_id;
+> +
+> +	output = (u32 *)input;
+> +
+> +	control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_ID_FROM_APIC_ID;
+> +	status = hv_do_hypercall(control, input, output);
+> +	ret = output[0];
+> +
+> +	local_irq_restore(irq_flags);
+> +
+> +	if (!hv_result_success(status)) {
+> +		pr_err("failed to get vp id from apic id %d, status %#llx\n",
+> +		       apic_id, status);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int hv_vtl_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
+> +{
+> +	int vp_id;
+> +
+> +	pr_debug("Bringing up CPU with APIC ID %d in VTL2...\n", apicid);
+> +	vp_id = hv_vtl_apicid_to_vp_id(apicid);
+> +
+> +	if (vp_id < 0) {
+> +		pr_err("Couldn't find CPU with APIC ID %d\n", apicid);
+> +		return -EINVAL;
+> +	}
+> +	if (vp_id > ms_hyperv.max_vp_index) {
+> +		pr_err("Invalid CPU id %d for APIC ID %d\n", vp_id, apicid);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return hv_vtl_bringup_vcpu(vp_id, start_eip);
+> +}
+> +
+> +static int __init hv_vtl_early_init(void)
+> +{
+> +	/*
+> +	 * `boot_cpu_has` returns the runtime feature support,
+> +	 * and here is the earliest it can be used.
+> +	 */
+> +	if (cpu_feature_enabled(X86_FEATURE_XSAVE))
+> +		panic("XSAVE has to be disabled as it is not supported by this module.\n"
+> +			  "Please add 'noxsave' to the kernel command line.\n");
+> +
+> +	real_mode_header = &hv_vtl_real_mode_header;
+> +	apic->wakeup_secondary_cpu_64 = hv_vtl_wakeup_secondary_cpu;
+> +
+> +	return 0;
+> +}
+> +early_initcall(hv_vtl_early_init);
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 71ed240ef66d..de4ad38f7d74 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -19,6 +19,10 @@
 >   */
->
-> but ...
->
-> > +     if (global_reclaim(sc)) {
-> > +             sc->nr_reclaimed +=3D current->reclaim_state->reclaimed_s=
-lab;
-> > +             current->reclaim_state->reclaimed_slab =3D 0;
-> > +     }
-> >
-> >       return success ? MEMCG_LRU_YOUNG : 0;
-> >   }
-> > @@ -6472,7 +6474,7 @@ static void shrink_node(pg_data_t *pgdat, struct =
-scan_control *sc)
-> >
-> >       shrink_node_memcgs(pgdat, sc);
-> >
->
-> ... do we want to factor the add+clear into a simple helper such that we
-> can have above comment there?
->
-> static void cond_account_reclaimed_slab(reclaim_state, sc)
-> {
->         /*
->          * Slab pages cannot universally be linked to a single memcg. So
->          * only account them as reclaimed during global reclaim. Note
->          * that we might underestimate the amount of memory reclaimed
->          * (but won't overestimate it).
->          */
->         if (global_reclaim(sc)) {
->                 sc->nr_reclaimed +=3D reclaim_state->reclaimed_slab;
->                 reclaim_state->reclaimed_slab =3D 0;
->         }
-> }
->
-> Yes, effective a couple LOC more, but still straight-forward for a
-> stable backport
-
-The next patch in the series performs some refactoring and cleanups,
-among which we add a helper called flush_reclaim_state() that does
-exactly that and contains a sizable comment. I left this outside of
-this patch in v5 to make the effective change as small as possible for
-backporting. Looks like it can be confusing tho without the comment.
-
-How about I pull this part to this patch as well for v6?
-
->
-> > -     if (reclaim_state) {
-> > +     if (reclaim_state && global_reclaim(sc)) {
-> >               sc->nr_reclaimed +=3D reclaim_state->reclaimed_slab;
-> >               reclaim_state->reclaimed_slab =3D 0;
-> >       }
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+>  #define HV_IOAPIC_BASE_ADDRESS 0xfec00000
+>  
+> +#define HV_VTL_NORMAL 0x0
+> +#define HV_VTL_SECURE 0x1
+> +#define HV_VTL_MGMT   0x2
+> +
+>  union hv_ghcb;
+>  
+>  DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
+> @@ -276,6 +280,12 @@ static inline u64 hv_get_non_nested_register(unsigned int reg) { return 0; }
+>  #endif /* CONFIG_HYPERV */
+>  
+>  
+> +#ifdef CONFIG_HYPERV_VTL_MODE
+> +void __init hv_vtl_init_platform(void);
+> +#else
+> +static inline void __init hv_vtl_init_platform(void) {}
+> +#endif
+> +
+>  #include <asm-generic/mshyperv.h>
+>  
+>  #endif
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index 5ee02af57dac..5180e3c50184 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -519,6 +519,7 @@ static void __init ms_hyperv_init_platform(void)
+>  
+>  	/* Register Hyper-V specific clocksource */
+>  	hv_init_clocksource();
+> +	hv_vtl_init_platform();
+>  #endif
+>  	/*
+>  	 * TSC should be marked as unstable only after Hyper-V
+> -- 
+> 2.34.1
