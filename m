@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB086DA097
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6916DA099
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjDFTBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S240539AbjDFTBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240422AbjDFTBa (ORCPT
+        with ESMTP id S240424AbjDFTBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:01:30 -0400
-Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599929039
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:01:06 -0700 (PDT)
-Received: by mail-il1-x14a.google.com with SMTP id s1-20020a92ae01000000b0032637be81d1so15770465ilh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:01:06 -0700 (PDT)
+        Thu, 6 Apr 2023 15:01:31 -0400
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EF8A5C9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:01:07 -0700 (PDT)
+Received: by mail-io1-xd4a.google.com with SMTP id g7-20020a056602242700b00758e7dbd0dbso25414962iob.16
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680807665;
+        d=google.com; s=20210112; t=1680807666;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIFZuvNlh3Q7f5viDBmDdFqHrpvMkDaR3sC9sXOJCEg=;
-        b=r6Dgw36L4ye+f7TRQYGeV5tzr0btpwq3zzgs/UuXhg7VhxHkEGdn4IEj/h2PQMM8C7
-         9XrmV58b2OYGBa/Itz+04VD1lyNfP8oKVgBL+a+JqxD9bgvLCoGGT9xlOS7M7FSZhlrL
-         dgPrDoQF1NMokITcEqaqE16eLq+/TyrGqoh7gwe5XUJYnNmAwK+1UyWGWYmy5FrIUyET
-         RBrF9++/dM7QoNSpDAic5FyiBVC0USYGzK5MLgC687r/qXuqx0qG4J/VlJlQEiwErT5K
-         pXhpKWhcW9txjXhgoS8Wh4mQInW++2qbyZT76CeylXl4fLCs7gG2hexuiYdjLRP04I53
-         0URw==
+        bh=Ei4XEWjw7tArTwCoMKhp2ugctsL7jq49nRaYDRBL1Mc=;
+        b=fbhRqzlGZlbPiWZ5IBGIy4z7rckgpL+76StH6hDf38wyBwByXbCIsFAmlVE0cVG5TK
+         HqsTdsJmsOQJn26fMUBbDBhi697JYKpNT9cxQeU2fDWUSLG/eByrdUnKIe23vrDVZxqf
+         ZBP1v4gu3dj1CHb/wtHjIhqoU1bMKJKU3wrEELXyN2gGsZyVLOip7UnrYagQr/ev81xN
+         b3Bd3vKO5r1GVoi09bRFAB8/a7Y+D6JuDR595SthHnsolBMZsbGW92HOBuSfhM/J8OsN
+         ba5cd5hdIpxcz5JXh8vvJQADy3Ad8PB/eaqfwUiX7uO/j4zE7x5OlmQhexuRZ9/HWi41
+         5dOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807665;
+        d=1e100.net; s=20210112; t=1680807666;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIFZuvNlh3Q7f5viDBmDdFqHrpvMkDaR3sC9sXOJCEg=;
-        b=SIqAvB+EmJyYJoLNVPMPNxJPrrHfnKMVo8oGjfaYR7ltMdpzbRjmYO3JyDhyTe4ykZ
-         B7bGSavjJEtTrO+exY0Min4yuf0M/0Cca5Kw6G6u+/TFmDZo1lEFa+zguMKkg3PExBnY
-         IytFY/6nd6CxiLjnh3lOwP0dC+5gEC3vjgxm619AYUZU61+1DRUROUC/M95X5IcQyHE7
-         oXtty7gcjZ0xWVpDurAmYtIT+SRjUPALtQvb4O3UBjhBCapax9cg/fhY6kpoamhnVApO
-         l4qvFYQ9kq7S+rItJ7mFSmJtfc5n30gmJBnkmir/mzk7QPKy/8l5hi/IZ80e6k+mgw4+
-         eHiA==
-X-Gm-Message-State: AAQBX9cvLjgjgLT39Bcwtezk0LAPwuvokdUS3IdCAQFrcU8CPCzJe97y
-        M2Z23DwFMYJgqEIIopTeSrQ2rftD+GHVcKo=
-X-Google-Smtp-Source: AKy350YazP6AHiQUBJHLnELBlt24GFwGrksJ3FmwYx1omjP2DXfHXKkoCpwyla4mFW8rQJlG/AJrwns8MJ8tans=
+        bh=Ei4XEWjw7tArTwCoMKhp2ugctsL7jq49nRaYDRBL1Mc=;
+        b=CL0EC7BaelCRxESnylAzxu3K1VciIDWC1YF7OF+waL52iqhD3hO65vIW7oLDPTnSof
+         SxsKbVLMNyRjjPBhTUYzjGkQG+CxqF8Ootd3WcNJF+CetmAo+9QA0trFEGvgdX++TWXt
+         5D0jrCh9xjh8r+kk0lFSs0LS4GTqeOvF00SBBAnQPGhknk1vflSPURZj8aF9FiP3XeoZ
+         jwJKvX54j0aHOVl8LBSrI0rR7qSCgvSVU367sSiyAeSU1hMOvSzxA4lfPhdZvZkESKCE
+         urrdJliAIWrnLL7Ft+GVats2CnHIEImEpFkyjle7o8K9bZnxowFM9AV7bLVvwBNgqXtA
+         iddA==
+X-Gm-Message-State: AAQBX9fwjzCV4EBwGg4wRxqfpEttKaDlcxcuNF4N3FQ9pLjuH3qeSjtf
+        qd3w8pW0FatRhtigL3R88+lUjgRTG593J7k=
+X-Google-Smtp-Source: AKy350ZZbJ29Gs9P2JWFiLO/pUBF8z9KEDzLtRKohDDgzI4f5p+saGHIi3qNgDRvjyVBK16Y4yqOOCNY933bmd4=
 X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
- (user=allenwebb job=sendgmr) by 2002:a05:6e02:f44:b0:310:9afc:aa6 with SMTP
- id y4-20020a056e020f4400b003109afc0aa6mr6249545ilj.0.1680807665734; Thu, 06
- Apr 2023 12:01:05 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 14:00:27 -0500
+ (user=allenwebb job=sendgmr) by 2002:a02:2a45:0:b0:406:c43f:6320 with SMTP id
+ w66-20020a022a45000000b00406c43f6320mr4089875jaw.0.1680807666582; Thu, 06 Apr
+ 2023 12:01:06 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 14:00:28 -0500
 In-Reply-To: <20230406190030.968972-1-allenwebb@google.com>
 Mime-Version: 1.0
 References: <20221219204619.2205248-1-allenwebb@google.com> <20230406190030.968972-1-allenwebb@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230406190030.968972-9-allenwebb@google.com>
-Subject: [PATCH v10 08/11] build: Add modules.builtin.alias
+Message-ID: <20230406190030.968972-10-allenwebb@google.com>
+Subject: [PATCH v10 09/11] Documentation: Include modules.builtin.alias
 From:   Allen Webb <allenwebb@google.com>
 To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
@@ -71,73 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generate modules.builtin.alias using modpost and install it with the
-modules.
+Update the documentation to include the presense and use case of
+modules.builtin.alias.
 
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 Signed-off-by: Allen Webb <allenwebb@google.com>
 ---
- .gitignore               |  1 +
- Makefile                 |  1 +
- scripts/Makefile.modpost | 15 +++++++++++++++
- 3 files changed, 17 insertions(+)
+ Documentation/kbuild/kbuild.rst | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/.gitignore b/.gitignore
-index 13a7f08a3d73..ddaa622bddac 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -71,6 +71,7 @@ modules.order
- /System.map
- /Module.markers
- /modules.builtin
-+/modules.builtin.alias
- /modules.builtin.modinfo
- /modules.nsdeps
+diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
+index 5202186728b4..b27c66c3ca9e 100644
+--- a/Documentation/kbuild/kbuild.rst
++++ b/Documentation/kbuild/kbuild.rst
+@@ -17,6 +17,13 @@ modules.builtin
+ This file lists all modules that are built into the kernel. This is used
+ by modprobe to not fail when trying to load something builtin.
  
-diff --git a/Makefile b/Makefile
-index a2c310df2145..43dcc1ea5fcf 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1578,6 +1578,7 @@ __modinst_pre:
- 	fi
- 	@sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/modules.order
- 	@cp -f modules.builtin $(MODLIB)/
-+	@cp -f modules.builtin.alias $(MODLIB)/
- 	@cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
- 
- endif # CONFIG_MODULES
-diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index 0980c58d8afc..e3ecc17a7a19 100644
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -15,6 +15,7 @@
- # 2) modpost is then used to
- # 3)  create one <module>.mod.c file per module
- # 4)  create one Module.symvers file with CRC for all exported symbols
-+# 5)  create modules.builtin.alias the aliases for built-in modules
- 
- # Step 3 is used to place certain information in the module's ELF
- # section, including information such as:
-@@ -63,6 +64,20 @@ modpost-args += -T $(MODORDER)
- modpost-deps += $(MODORDER)
- endif
- 
-+ifneq ($(wildcard vmlinux.o),)
-+output-builtin.alias := modules.builtin.alias
-+modpost-args += -b .modules.builtin.alias.in
-+.modules.builtin.alias.in: $(output-symdump)
-+	@# Building $(output-symdump) generates .modules.builtin.alias.in as a
-+	@# side effect.
-+	@[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in vmlinux.o
++modules.builtin.alias
++---------------------
++This file lists all match-id based aliases for modules built into the kernel.
++An example usage of the built-in aliases is to enable software such as
++USBGuard to allow or block devices outside of just the vendor, product, and
++device ID. This enables more flexible security policies in userspace.
 +
-+$(output-builtin.alias): .modules.builtin.alias.in
-+	sort -o $@ $^
-+
-+__modpost: $(output-builtin.alias)
-+endif
-+
- ifeq ($(KBUILD_EXTMOD),)
- 
- # Generate the list of in-tree objects in vmlinux
+ modules.builtin.modinfo
+ -----------------------
+ This file contains modinfo from all modules that are built into the kernel.
 -- 
 2.39.2
 
