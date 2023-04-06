@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766DD6DA598
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C0E6DA59A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236156AbjDFWLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S233559AbjDFWMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjDFWLn (ORCPT
+        with ESMTP id S229672AbjDFWM3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:11:43 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386DEAD08;
-        Thu,  6 Apr 2023 15:11:43 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1a5126f2518so281935ad.1;
-        Thu, 06 Apr 2023 15:11:43 -0700 (PDT)
+        Thu, 6 Apr 2023 18:12:29 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AB4AD12
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:12:28 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id x8so29242585qvr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680819102;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ig2j9q3aAOVCQfCvRLVncYPX5OlaQ38a/pqikiP3erg=;
-        b=OsTTgGfnHHH1TxscBQB9SWado0vEhEMDraf0PVaZq328U+EUc/S/wbqdx5zeaLoUC5
-         ky+5x9sfxc53udkiy+tIlxFZFyZPWz8TufbO//6BoL5/pYB3clDOk5gDupUShJ7H/jFO
-         XW5YlsReCXXbtv8qTp44j1VJeG435rLnoPo4VtyY50hGxb1QeRJxBRQKOvpWD/75Otn+
-         LB4xwbGTQMccvu9Kc7LBq7NlwachtUJzQFIDUGqkz4Pffrtz0gGsBcT6Si/y1GrEVf8M
-         ABU8ojVPC1TxCVwTxLvamidc+pw1DmJU+2MnPfZfUUH9ulWIGG40wUJrYVuKZpXwoJ4W
-         8Gzg==
+        d=gmail.com; s=20210112; t=1680819146; x=1683411146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fW4p3CWRy3YFnZGik37i4u5NW3rO+Fa7QgtRSx1BTMg=;
+        b=iZpgUkNa0YIj8jKueQGxpuVCmhoCMUdJC4OdH80mhlTPYJWq7xHUCoJ9BB02EOYPQW
+         uXo4FMUxNc/t0hoTuLCVOqnYHmshsYkTZLftVPsnpZP6XuxYSJ/sE/rJYHSAuA+HRzNz
+         sl1Ta2N5rM3tX+5tE5xiO1m8lD1ORtX4xIjwbcpXO4WTTE37cGHxbGYw38Tuo/V7SVfd
+         dgxN5wgHk9h8sTY2y7oFaFCbGUOYQwjAKinkPiUOFg0o7jDvF7MB6ToBoEnRlk7ezbYR
+         WVCTPFAH2pF5D/Eofpyrx3pTbPXDjwDZOmRKi0wi7HhNcsqeUm7ltu75RvaCqTjAPaeQ
+         Fdvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680819102;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ig2j9q3aAOVCQfCvRLVncYPX5OlaQ38a/pqikiP3erg=;
-        b=RIdo9D1dHUiQbthtmi10R7kAO0Trb6jIDbNNYKnd5j7pgjqqox1+D9P9BN57IIAuiN
-         NOJGnmMdYZWlBFe23sc24bGJ2iisQrIfHs0ZmFDRNNv4WsYTtb1g5j5cLwbnVIJBMlu5
-         5DR8VMrhHUXP/3IXNS4QVdHTkl7wetLICghI6yyIMoLB9Gac1kxxUv1gNksJMMDUGXNv
-         nagODhxmNmx6eXuhcV071HslTXWnKVHFLi+J7sJI/xKY6d1ILIxnnO7Bul2QlOM02oiW
-         b23cFjZiy1BsfJY45x7/BMJ/RBmTzpGxFDhe2LVMxPNZx6FZnxtLp4mM14AsETbefV+g
-         4OqQ==
-X-Gm-Message-State: AAQBX9erWEEtiegn/qFNHVUllOUEb+9ielQyMFk+UWm8rTrsSvnemUe5
-        JthxnzHgMSg5N0uHitwzk4M=
-X-Google-Smtp-Source: AKy350bb+gVIZ1rG4JJ3Lwm3aJIH0FKn8eOKdwz5o2qclXtCgbefVfJWkWCvM1Ebe1vooe+xyxlNpw==
-X-Received: by 2002:aa7:8f02:0:b0:625:7300:5550 with SMTP id x2-20020aa78f02000000b0062573005550mr303434pfr.31.1680819102651;
-        Thu, 06 Apr 2023 15:11:42 -0700 (PDT)
-Received: from pavilion.. ([2402:e280:218d:82:a082:a1e:6444:f6a5])
-        by smtp.gmail.com with ESMTPSA id t23-20020aa79397000000b00627eac32b11sm1788849pfe.192.2023.04.06.15.11.38
+        d=1e100.net; s=20210112; t=1680819146; x=1683411146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fW4p3CWRy3YFnZGik37i4u5NW3rO+Fa7QgtRSx1BTMg=;
+        b=pxqS1Vd5XvSS59FqkylG8/eJzO1TODWPVlPaGklpeY3E2kCza+EDe6Dh4H1Rs9+BzX
+         mMSibNnE8359Cul71wqmkECK/IkAwI0UnY+wixQxeU3aJCT+YkSdRViYMbUzt6DCOBwg
+         cLm8TnEp1gbtipN/dfjRVrSgWxn+0YXNWduBxczwTG4T+lw2ohC2qNS5oJhGfc56SNfw
+         Zoz9KDM70pnoa1IALRetgtITZJl+ienjxxkedlhxSvujhM/boLxJNKWY+L0OyVc6pf2V
+         nd+Yz6vmODKwKBUuFNpmruL/7QKoRJ4CoF4ttcxFSGoojS1scBud3IOklMGlXBfHWoCH
+         KrcA==
+X-Gm-Message-State: AAQBX9c47p4zuO7z8CTeSKRhc4rmDo36yHFkSkjwvnZT489VT3TJbZf1
+        VfLc6A+fGRrMFlYhqJSSEOPEJBDWCjEEqg==
+X-Google-Smtp-Source: AKy350YbsX+Zgln54c6e8EtJrcPr/tLMcDbMtlA9jS+EHJv813dJ4uwSMlEM08BCSVXqVXEpUH3cXQ==
+X-Received: by 2002:ad4:4eaf:0:b0:5b0:67f3:d91b with SMTP id ed15-20020ad44eaf000000b005b067f3d91bmr1210895qvb.35.1680819146637;
+        Thu, 06 Apr 2023 15:12:26 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id ks15-20020a056214310f00b005dd8b9345e2sm816353qvb.122.2023.04.06.15.12.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 15:11:42 -0700 (PDT)
-From:   Saalim Quadri <danascape@gmail.com>
-To:     broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, danascape@gmail.com,
-        daniel.baluta@nxp.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
-        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, robh+dt@kernel.org
-Subject: Re: [PATCH] ASoC: dt-bindings: wm8523: Convert to dtschema
-Date:   Fri,  7 Apr 2023 03:41:35 +0530
-Message-Id: <20230406221135.4761-1-danascape@gmail.com>
+        Thu, 06 Apr 2023 15:12:25 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Subject: [PATCH RESEND 0/3] scripts/gdb: timerlist fixes
+Date:   Thu,  6 Apr 2023 15:12:14 -0700
+Message-Id: <20230406221217.1585486-1-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2c32b1e0-20f7-4d9f-9dbc-8725562e456e@sirena.org.uk>
-References: <2c32b1e0-20f7-4d9f-9dbc-8725562e456e@sirena.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -75,10 +72,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Andrew,
 
-Having a single file for other manufacturers, wouldn't that might cause issues with finding them?
+Since you have been collecting my patches touching scripts/gdb,
+(re)sending those fixes from Amjad that restore a functional
+"lx-timerlist" scripts.
 
-Kind Regards,
+Thanks!
 
-Saalim
+Amjad Ouled-Ameur (3):
+  scripts/gdb: timerlist: use range instead of xrange
+  scripts/gdb: timerlist: fix rb_node access
+  scripts/gdb: timerlist: convert int chunks to str
+
+ scripts/gdb/linux/timerlist.py | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+-- 
+2.34.1
+
