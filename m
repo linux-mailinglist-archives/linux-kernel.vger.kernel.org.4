@@ -2,82 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0626DA44F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E536DA5A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbjDFVB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S235622AbjDFWQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239785AbjDFVBd (ORCPT
+        with ESMTP id S230440AbjDFWQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:01:33 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63079B766;
-        Thu,  6 Apr 2023 14:01:18 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id E20EB92009C; Thu,  6 Apr 2023 23:01:16 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id DB91C92009B;
-        Thu,  6 Apr 2023 22:01:16 +0100 (BST)
-Date:   Thu, 6 Apr 2023 22:01:16 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Sam Ravnborg <sam@ravnborg.org>
-cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-parport@lists.infradead.org
-Subject: Re: [PATCH] parport_pc: don't allow driver for SPARC32
-In-Reply-To: <20230406203207.GA1534216@ravnborg.org>
-Message-ID: <alpine.DEB.2.21.2304062144520.44308@angie.orcam.me.uk>
-References: <20230406160548.25721-1-rdunlap@infradead.org> <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk> <20230406203207.GA1534216@ravnborg.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Thu, 6 Apr 2023 18:16:20 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1545DE46;
+        Thu,  6 Apr 2023 15:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680819378; x=1712355378;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HEn8cWigHG4poqzmFeTugeaK71IYmmHqaJBZ1COZvc8=;
+  b=ampNyzzMre2RFzSBRJQMhxFUxhZFJQ8qFw18BBRyZ8ZYQfTC+GGc7VIs
+   o1SIUedWrHURxefTJ2eL/BwIeOOXmfie+6VujNnQDmK01fenrCRT8NZ3z
+   9IB/tAr2gabXZ7Ew4d2fN+NRPxF52qdzMP88FATAfL8QOQQ9juz9OxUeJ
+   Kp8Fm+6ITIaVM//Uv6DbePi9daBXTajIGiMaT/fhaj0i35IaY/G4UyQTQ
+   jy4gSiJu8lpeet6LiLHXaZBJCGYIWKuP+D7x3EReU8HXU5TIZFYt7OwYf
+   k/ISxetb8E37ukHt+r5AY3WOy3z+Q477yhO2Q+hzmkooGvBRZJjJpMzbV
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,323,1673938800"; 
+   d="scan'208";a="145937248"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Apr 2023 15:16:18 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 6 Apr 2023 15:16:13 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 6 Apr 2023 15:16:13 -0700
+From:   Kelvin Cao <kelvin.cao@microchip.com>
+To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <logang@deltatee.com>, <george.ge@microchip.com>,
+        <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH v3 0/1] Switchtec Switch DMA Engine Driver
+Date:   Thu, 6 Apr 2023 14:03:22 -0700
+Message-ID: <20230406210323.1018163-1-kelvin.cao@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
+Hi,
 
-> >  This looks completely wrong to me, any ordinary PCI parallel port card 
-> > ought just to work as long as you have PCI (S390 is special I'm told).  
-> > What needs to be done is AFAICT just making `parport_pc_find_nonpci_ports' 
-> > in arch/sparc/include/asm/parport.h SPARC64-specific, i.e.:
-> > 
-> > static int parport_pc_find_nonpci_ports(int autoirq, int autodma)
-> > {
-> > 	return (IS_ENABLED(CONFIG_SPARC64) &&
-> > 		platform_driver_register(&ecpp_driver));
-> > }
-> > 
-> > or suchlike and let the optimiser get rid of all the unwanted unsupported 
-> > stuff.
-> 
-> arch/sparc/include/asm/parport.h is sparc64 specific - and it will
-> result in the wrong result if it is pulled in for sparc32 builds.
-> This is what we see today.
-> 
-> Randy's suggestion is fine, as we avoid building parport support
-> for sparc32. If someone shows up and need parport support
-> for sparc32 then we could look into how to enable it.
-> Until then, we are better helped avoiding building the driver.
+This is v3 of the Switchtec Switch DMA Engine Driver, incorporating
+changes for the v2 review comments.
 
- I disagree.  Why artificially prevent perfectly good hardware from 
-working with a perfectly good driver especially as the fix is just a 
-trivial exercise?  And I offered a solution.
+v3 changes:
+  - Remove some unnecessary memory/variable zeroing
 
- I don't have a SPARC toolchain handy or I could even try and build it 
-(but I'm sure there are many people around who can do it without bending 
-backwards).
+v2 changes:
+  - Move put_device(dma_dev->dev) before kfree(swdma_dev) as dma_dev is
+    part of swdma_dev.
+  - Convert dev_ print calls to pci_ print calls to make the use of
+    print functions consistent within switchtec_dma_create().
+  - Remove some dev_ print calls, which use device pointer as handles,
+    to ensure there's no reference issue when the device is unbound.
+  - Remove unused .driver_data from pci_device_id structure.
 
- NB conversely we have plenty of useless irrelevant stuff presented in 
-configration even if it genuinely makes no sense and won't ever be used 
-for the given platform (e.g. some Intel CPU management stuff shown for 
-RISC-V or even DEC Alpha systems).
+v1:
+The following patch implements a DMAEngine driver to use the DMA
+controller in Switchtec PSX/PFX switchtes. The DMA controller appears as
+a PCI function on the switch upstream port. The DMA function can include
+one or more DMA channels.
 
-  Maciej
+This patchset is based off of v6.3-rc1.
+
+Kelvin Cao (1):
+  dmaengine: switchtec-dma: Introduce Switchtec DMA engine PCI driver
+
+ MAINTAINERS                 |    5 +
+ drivers/dma/Kconfig         |    9 +
+ drivers/dma/Makefile        |    1 +
+ drivers/dma/switchtec_dma.c | 1730 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 1745 insertions(+)
+ create mode 100644 drivers/dma/switchtec_dma.c
+
+-- 
+2.25.1
+
