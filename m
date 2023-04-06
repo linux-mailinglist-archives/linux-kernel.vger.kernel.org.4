@@ -2,63 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116A96DA439
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24076DA446
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236339AbjDFU7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S239397AbjDFVAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240035AbjDFU6p (ORCPT
+        with ESMTP id S238341AbjDFVAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:58:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EB486AC;
-        Thu,  6 Apr 2023 13:58:39 -0700 (PDT)
+        Thu, 6 Apr 2023 17:00:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6E17ED4;
+        Thu,  6 Apr 2023 14:00:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50D2064BDA;
-        Thu,  6 Apr 2023 20:58:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FAEBC4339C;
-        Thu,  6 Apr 2023 20:58:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEAB164CAF;
+        Thu,  6 Apr 2023 21:00:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CBE84C433A4;
+        Thu,  6 Apr 2023 21:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680814718;
-        bh=hPhh8oTx1kYLc913G4HIdxuV/0cdfFWp2HgdjSh+vKE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uExbzvaTeBK8FlkbTfXpl+myDNnYUfc3M+u9y5qwGUKWlFphYo/+osPoZLU/y+oMl
-         muWRLkrK2GuHVwNFIul5kMhjhgkkEoHmutbFJb1n5Ga/MgeVhFG4IpbrQcfXL4li7l
-         kRpeUyrWe2U1g9ehZ3RDwmSzdMy70t1MZCMXsuSufSJjtAY6VQdfSupVK06PkLLn+u
-         POzOU6xTsqPl1C0fARDoPfY8MproJ8TT6C4+mT0hH+2Nppwjm3RLqtJUaKGMXIQpoD
-         3LRmwrvFcLyJ5p9wdRwpfY34JaAu7c43C5E2vpJ1LU5kweXBPdCK6JRYGtZYzK3DCk
-         MDUccGPJH+FmQ==
-From:   Conor Dooley <conor@kernel.org>
-To:     linux-riscv@lists.infradead.org
-Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v1 4/4] serial: make SiFive serial drivers depend on ARCH_ symbols
-Date:   Thu,  6 Apr 2023 21:57:50 +0100
-Message-Id: <20230406-carnival-aspirate-fcf69a30078c@spud>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406-undertake-stowing-50f45b90413a@spud>
-References: <20230406-undertake-stowing-50f45b90413a@spud>
+        s=k20201202; t=1680814820;
+        bh=5GOYcpjCXrTJTg4gv8OrwqfP2Uo8jGUVfVGHDrjSYUw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oQ/jCLtVZSy3w+nB4xPK8VbNRgeq3CUz2oscZfDqMccf24yCRyELlWWMBF4yJsYWq
+         MO6/1Q4/dWxa3xt/hZBYltNKexoAOTm1IS6GrjofVDfw0QR9XcvWCnRz3vMHEZ3VKd
+         a56l0Kp/MWkv6jCEzjH7M/akX38WGLoQH6mjDhqJRvlxXYWQ1eXHymBAEbAkK4/TjQ
+         F5JsliDmJWrcQA5KHX4gZeQYqDUZzkrj435AasPAYy+gBGV7x7jwOJwOpUwCcakLrg
+         UF/nPVoshE5BBmbxM1A315/o+E5fjd17EnUyrym+6kmtKoVOUQiKpGuHJptTtzOGi8
+         wT5vw9TW4Wv6Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AB099E4F156;
+        Thu,  6 Apr 2023 21:00:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1169; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=/uqEAT4mwA891sbEf4x2pVtUF/+D0Dq2ST7GwztNFHQ=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCn6Rl5R2spbv9u90F5UuaaO5erlaZvmnu/cxvSQ9Wjqm wslG1cadpSyMIhxMMiKKbIk3u5rkVr/x2WHc89bmDmsTCBDGLg4BWAiB6sZGW4uq/Y16WEukDZk rKlvKHrFfXKHYWP422dLndbMbSgRmM7wV3K/9/yq1/9j5l+vnZulbCLz9NVmu7Mmq9/7K7892BT MxQwA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Subject: Re: [PATCH v1] Bluetooth: btnxpuart: Deasset UART break before closing
+ serdev device
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <168081482069.2619.17204223621296227564.git-patchwork-notify@kernel.org>
+Date:   Thu, 06 Apr 2023 21:00:20 +0000
+References: <20230403122430.1024235-2-neeraj.sanjaykale@nxp.com>
+In-Reply-To: <20230403122430.1024235-2-neeraj.sanjaykale@nxp.com>
+To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,41 +58,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Hello:
 
-As part of converting RISC-V SOC_FOO symbols to ARCH_FOO to match the
-use of such symbols on other architectures, convert the SiFive serial
-driver Kconfig entries from the SOC_ symbols to ARCH_ instead.
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-I hope you like the message-id Greg ;)
----
- drivers/tty/serial/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon,  3 Apr 2023 17:54:28 +0530 you wrote:
+> This adds a call to ps_wakeup() before closing the serdev device, to
+> de-assert UART break.
+> 
+> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> ---
+>  drivers/bluetooth/btnxpuart.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index 39a0078f54f6..398e5aac2e77 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -951,7 +951,7 @@ config SERIAL_OMAP_CONSOLE
- config SERIAL_SIFIVE
- 	tristate "SiFive UART support"
- 	depends on OF
--	default SOC_SIFIVE || SOC_CANAAN
-+	default ARCH_SIFIVE || ARCH_CANAAN
- 	select SERIAL_CORE
- 	help
- 	  Select this option if you are building a kernel for a device that
-@@ -961,7 +961,7 @@ config SERIAL_SIFIVE
- config SERIAL_SIFIVE_CONSOLE
- 	bool "Console on SiFive UART"
- 	depends on SERIAL_SIFIVE=y
--	default SOC_SIFIVE || SOC_CANAAN
-+	default ARCH_SIFIVE || ARCH_CANAAN
- 	select SERIAL_CORE_CONSOLE
- 	select SERIAL_EARLYCON
- 	help
+Here is the summary with links:
+  - [v1] Bluetooth: btnxpuart: Deasset UART break before closing serdev device
+    https://git.kernel.org/bluetooth/bluetooth-next/c/051711980f5a
+
+You are awesome, thank you!
 -- 
-2.39.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
