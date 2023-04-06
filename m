@@ -2,103 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF6F6D9CE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6192C6D9CE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239587AbjDFQAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
+        id S239812AbjDFQAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239658AbjDFP74 (ORCPT
+        with ESMTP id S239813AbjDFQAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:59:56 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F06A27A
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:59:54 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7283F5C00FB;
-        Thu,  6 Apr 2023 11:59:51 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 06 Apr 2023 11:59:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680796791; x=
-        1680883191; bh=trO8jc03FJLvTQr9TJ/mrkQxrmA3NZ7pQ+cjfH4ljHA=; b=D
-        dqEV9U0jb0GbAcy+Z+YHa9vWqDcOdV11TU5V3txMnnIIP/5vEB/EV2TeqaYRqUp7
-        O+do7wxJwzR7J/3JEqfHu4EgpTMFhEOC/lPN/RWakbh5xgkNK22zvCQ7TPe64fRP
-        9IGy/0C+rB6l954EP+bkQg0WIzCWHx6GyPwQHu3jIRohFqwkpIx1Jc+Nz7IswKxu
-        CL/oYYxIb4os9svlgXjpF4iKyF4f0kYxFuCoHqC2ahtMQe923nFOQBb3DojjpyjN
-        oCX64nG1Gyo1gWIcUTr5y6wWe4wBqJoq6JAcaq4j44DqeMYf0f1HNN5ZcrPnoV4d
-        tzTboTMYUMoD+DS56fbIA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680796791; x=1680883191; bh=trO8jc03FJLvT
-        Qr9TJ/mrkQxrmA3NZ7pQ+cjfH4ljHA=; b=pVWYKPCweySGyFodQ6stjV6Orskps
-        S7oJXvI2shkOWIEovlHJFRiFkQfHb0YTEWY3C2pvDbKp55W17Zas4Jg40lv2Pe+u
-        QOxUbsSeJMhOSG549C1WvdfU8INOnYKan6gTN/HzhhIKn7mRGHnqxCp5/IfyOk2x
-        w4EsV4p49OqaDs6qeA9P+oj0A/mSJQSBrsE8KfSko3HetmPKDEz3aK9ImQ82WBKA
-        nZxOofj9FwGWum+FeFiNdtHRPeEHSuNxdakoG5liGZUzlD+nY/0KarBj1Afo/PLd
-        XiIm11qskilbFiB+NuPDlU2tDmfSGP808fBwBggLNSB3GIEKDD32aqhIQ==
-X-ME-Sender: <xms:d-wuZOGYKRdPR4FbI4wBLuDKAm8j3exKvy9T1tef-ZE7RsJW4NNaZg>
-    <xme:d-wuZPVZcpGEqAapEzOLb6WE1_46iwN6h887z22Zg2NoOLsj_nD1VZzlDMMJyHejC
-    8Yz4CuDKJYIAiFS3Dg>
-X-ME-Received: <xmr:d-wuZILDvgWryvRzbtLcNV4ftpHtlhS2gPs_MA1Cz2ybUprj1_8TDB6zUvjai6lk2Ya7_g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgleefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpeffhedvveeuheeljedtkedtkeeiieekgedtveeu
-    tdejkeevudffudfgveeggfduvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
-    sehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:d-wuZIF2mxK6csJbkXB-3A945w7EesREBPmn9cnIOex7jg2etjySRA>
-    <xmx:d-wuZEUf2fFnY9JHWBwxEmRYym8tSQhcQmta4B-BbQ4a_Iqd8GJVyA>
-    <xmx:d-wuZLPqDDZ5MOd7SMGtP98upclQctmwMR7OxTexonXs5V0Qyo_hSA>
-    <xmx:d-wuZPaUeJMiAOaHvIwALv4LZxdCaqv8_faqo09_L9GQZXMZ5IA9Ig>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Apr 2023 11:59:50 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 311BB109B00; Thu,  6 Apr 2023 18:59:48 +0300 (+03)
-Date:   Thu, 6 Apr 2023 18:59:48 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/mm/iommu/sva: Fix error code for LAM enabling
- failure due to SVA
-Message-ID: <20230406155948.hlhb53xb3plq6sh5@box>
-References: <20230403111020.3136-1-kirill.shutemov@linux.intel.com>
- <20230403111020.3136-2-kirill.shutemov@linux.intel.com>
- <24661bc4-cc95-5c1b-b88d-94d4ce335d0b@intel.com>
+        Thu, 6 Apr 2023 12:00:05 -0400
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56BEA255;
+        Thu,  6 Apr 2023 08:59:59 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id n9-20020a05600c4f8900b003f05f617f3cso4843420wmq.2;
+        Thu, 06 Apr 2023 08:59:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680796798;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1p3sMZGCpasiT36OJM5hrl8J9R7XCrsn2b25UqN7umA=;
+        b=LNn836YTxmXo0efinurArzjpmF7+vl2jReu1KM5bJshwUmh28S4BcqTS6N8hg69Kao
+         025nP5QloMZvtneEfm5oZM3L9D8/prvdrwxWRSLlo5nSvXMzboVBhYNhc/CoMlMsgQQF
+         +cS+5H3hM+lZyiZSgh5ulOXuuL8yglPRPQbQBGpf74ysot4Rja6tjqxr6Gk+FyG0w0bL
+         EYPY04hf5EghONFuxHXsCHu2oelvxNWG/7lDPUZhX0o7x14Clh6Rabt6c9ITdeQcjnsZ
+         iMI+7pbhaULlRAJrEYBYessfp8S6jTT9eBcSGaaSULhqRljs3aBd8U/5pjKYqM2gXI7Z
+         Re5w==
+X-Gm-Message-State: AAQBX9dRC5cOH2aGP24PZAuVCSld2LjO5G3uo0QphYAcVM6wUxSymxhI
+        7HpAoSao71Y9JYIboMp9mfE=
+X-Google-Smtp-Source: AKy350Y9Ny/WkQqGWNqorb2OhpFmtDZ2MMXftYinGLVZrJI6LcJbl/jbnq3d72gl5fbQMCKjRQ0B5Q==
+X-Received: by 2002:a05:600c:22d6:b0:3eb:2da5:e19 with SMTP id 22-20020a05600c22d600b003eb2da50e19mr7649653wmg.27.1680796798137;
+        Thu, 06 Apr 2023 08:59:58 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-020.fbsv.net. [2a03:2880:31ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id c24-20020a7bc858000000b003ef5b011b30sm2007207wml.8.2023.04.06.08.59.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 08:59:57 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 08:59:53 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Willem de Bruijn <willemb@google.com>
+Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
+        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
+        edumazet@google.com, pabeni@redhat.com, davem@davemloft.net,
+        dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, dsahern@kernel.org,
+        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
+        marcelo.leitner@gmail.com
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Message-ID: <ZC7seVq7St6UnKjl@gmail.com>
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <24661bc4-cc95-5c1b-b88d-94d4ce335d0b@intel.com>
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,27 +67,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 08:31:40AM -0700, Dave Hansen wrote:
-> On 4/3/23 04:10, Kirill A. Shutemov wrote:
-> > Normally, LAM and SVA are mutually exclusive. LAM enabling will fail if
-> > SVA is already in use.
-> > 
-> > Correct error code for the failure. EINTR is nonsensical there.
-> > 
-> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > Fixes: 23e5d9ec2bab ("x86/mm/iommu/sva: Make LAM and SVA mutually exclusive")
-> > Reported-by: Dmitry Vyukov <dvyukov@google.com>
+On Thu, Apr 06, 2023 at 11:34:28AM -0400, Willem de Bruijn wrote:
+> On Thu, Apr 6, 2023 at 10:45 AM Breno Leitao <leitao@debian.org> wrote:
+> >
+> > From: Breno Leitao <leit@fb.com>
+> >
+> > This patchset creates the initial plumbing for a io_uring command for
+> > sockets.
+> >
+> > For now, create two uring commands for sockets, SOCKET_URING_OP_SIOCOUTQ
+> > and SOCKET_URING_OP_SIOCINQ. They are similar to ioctl operations
+> > SIOCOUTQ and SIOCINQ. In fact, the code on the protocol side itself is
+> > heavily based on the ioctl operations.
 > 
-> Hi Kirill,
+> This duplicates all the existing ioctl logic of each protocol.
 > 
-> These look fine. But in the future, Link:'s for Reported-by's would be
-> very appreciated if the discussion happened in public.
+> Can this just call the existing proto_ops.ioctl internally and translate from/to
+> io_uring format as needed?
 
-Got it.
+This is doable, and we have two options in this case:
 
-For this one it is:
+1) Create a ioctl core function that does not call `put_user()`, and
+call it from both the `udp_ioctl` and `udp_uring_cmd`, doing the proper
+translations. Something as:
 
-Link: https://lore.kernel.org/all/CACT4Y+YfqSMsZArhh25TESmG-U4jO5Hjphz87wKSnTiaw2Wrfw@mail.gmail.com
+	int udp_ioctl_core(struct sock *sk, int cmd, unsigned long arg)
+	{
+		int amount;
+		switch (cmd) {
+		case SIOCOUTQ: {
+			amount = sk_wmem_alloc_get(sk);
+			break;
+		}
+		case SIOCINQ: {
+			amount = max_t(int, 0, first_packet_length(sk));
+			break;
+		}
+		default:
+			return -ENOIOCTLCMD;
+		}
+		return amount;
+	}
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+	int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+	{
+		int amount = udp_ioctl_core(sk, cmd, arg);
+
+		return put_user(amount, (int __user *)arg);
+	}
+	EXPORT_SYMBOL(udp_ioctl);
+
+
+2) Create a function for each "case entry". This seems a bit silly for
+UDP, but it makes more sense for other protocols. The code will look
+something like:
+
+	 int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+	 {
+		switch (cmd) {
+		case SIOCOUTQ:
+		{
+			int amount = udp_ioctl_siocoutq();
+			return put_user(amount, (int __user *)arg);
+		}
+		...
+	  }
+
+What is the best approach?
+
