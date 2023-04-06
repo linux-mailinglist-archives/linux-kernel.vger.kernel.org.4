@@ -2,275 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CA96D9C99
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC8F6D9C9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239803AbjDFPpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S239808AbjDFPp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239512AbjDFPpl (ORCPT
+        with ESMTP id S239807AbjDFPpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:45:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D54E93E0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:45:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-947a47eb908so72774666b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680795937;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o4s/AMWTHPQ0Z3regicJnZ+4belPQ4UloMO8BfOKLAI=;
-        b=UwgzXrcRFsm3HAZ3tj9A9ayYh9opklvikGWNzA8Zs+rKhFCMFyPJ3nM9Qe0o/WrOnt
-         QGdzJUijU5vlI/c0ZV/2+Pr0ECTnQcPIwR+GS0O90gg/zsWfdQg1FJEg/Wu1PTcSUNMK
-         WssImuOUr7pyYoGsDK49IQmNh66lQt8/KxJ7s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680795937;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o4s/AMWTHPQ0Z3regicJnZ+4belPQ4UloMO8BfOKLAI=;
-        b=V9RIEX1kzcT60B+slJf5p1+fnIOC/HfNt5aq6ASSHt1mC74YAqohPUZAZJAN20qJOQ
-         /xHSQJ9RyBAJ8sk3NsDOE3E4UqXcjzcFlw4TXrWsM/yJPGmaiqOk3vxNIAS2NgOpjrqx
-         KArlwIWe/+m2Mi0pfgZkNOioUg95jRZKa2gn3UC3llvlHtoiZE2Qa3SZotApdU5wRkuD
-         WRD/507oEWlf0yEMFf5SDZgQZM4TYZRo7dgBScGPdOZK6jkX/iTbBzDKMJSLuqphzMRK
-         DcWZOlHIjx6tboeaY/B//TTWwTNrCxPofu9p1LgYwxepS1eYIIwhDIMfea/BejkJNxUU
-         DmPw==
-X-Gm-Message-State: AAQBX9cPJkZ/45ylK3lT5WoCUz//1Fj70zKcqvW1Jn1N+ayeOFy4tYGN
-        wRf0oJV3tRmwWLDMKeIMA1YCbg==
-X-Google-Smtp-Source: AKy350YwqwW1z5k7uN136V0I41uI+PtWwRyr9V7ixGL/0ewgSzzeYzSvJkplfR8X5tYH4vq2nignvA==
-X-Received: by 2002:a17:906:2cd:b0:92f:27c2:13c0 with SMTP id 13-20020a17090602cd00b0092f27c213c0mr5772280ejk.6.1680795937501;
-        Thu, 06 Apr 2023 08:45:37 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id cw10-20020a170906478a00b009486efb9192sm990297ejc.11.2023.04.06.08.45.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 08:45:36 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 17:45:34 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH RFC 07/18] rust: drm: mm: Add DRM MM Range Allocator
- abstraction
-Message-ID: <ZC7pHlLFutMWJF1s@phenom.ffwll.local>
-Mail-Followup-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-7-917ff5bc80a8@asahilina.net>
- <ZC7T92F7K9XTZPZ1@phenom.ffwll.local>
- <CANiq72=E2k7+_cwYw_EjVezk0mWCRqbH4MUjsEmxWgJMh=3AEQ@mail.gmail.com>
+        Thu, 6 Apr 2023 11:45:53 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2094.outbound.protection.outlook.com [40.107.113.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FF9A275;
+        Thu,  6 Apr 2023 08:45:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I2zoJNw4YSgbuKh0yPdEolpqOYgQoJSLAZq12XrcBIylQOCg0lkMgug2Ih3xA8mRHlGdm/aP4zxRMQh6/hRH03YROA6SgKyDsLGu8LwNA3gApRY11fdaNt45l/RoT3++hF7CElaEVgepFVpGZUD3l1K8uuXqRl8xGj1ee6nug5dkRpxLeHkM4mLg1ShPr6U3BDSsS3ZL5WsXszEakly6nv0VJ2L1zyb4b4xFPF+p+/k6jyzjQyk9qs4gbt/JpYWQlf54Akeo4AR07i3xs4kr5/Nlfgn1GiMke8BROBgE3OIZ7GfW5PX6a8sIYiGg8knKHYEromEE6lPIdB2YONaDGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MClja9ixxmnV7+DWsvLyrn5eHfVVH7aGlFdhewNXbKU=;
+ b=ZwCRN/VI/+thk92AwYyCPB+Qee885xkg+ujL/goIAAdNgczGIbSBsjDaQBAuYUxXhE/BQQ9vH9loLH0ELl1UJALNKiq50heRN5DEThogwX+O83lJBq5L60Oo8kybqJv3dFFwaogd5p3f4fT5MtGxPDfFYdQkQ68r1JlKRamdGYCf4Dqc4wVQP4RPv34I8w549apaOTDqg24DpDTy1l+5S124oeBbNfc7jNoqGecAPmGeoUca11pnLayxtMwkRYKx9WSX19p4byh73h8ep/TG7rRL9eq936Qsvg7ROTUe5Pi78uTMataqUR/Ms0bjfEbBBxHDMpNCXG1t/rKBTTvo9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MClja9ixxmnV7+DWsvLyrn5eHfVVH7aGlFdhewNXbKU=;
+ b=GE6VeD5fSGypr5+/41Rewx/V4CeKGcJ5OAauXrfP2FXvyf5n4OwqzLK4tPvPOQGGQJA46NnOvYHo5vLgeop+4idX6B58vXczk1FwUcaATbtGtHSjZ2r3yA/Wx32V8c+86smwvVvcLP1IcpZOWjQftzPtvRJgMSQcHD5ik2M1CBk=
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
+ by TYAPR01MB5595.jpnprd01.prod.outlook.com (2603:1096:404:805a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.31; Thu, 6 Apr
+ 2023 15:45:45 +0000
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8b5:5f09:5a0f:370]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::8b5:5f09:5a0f:370%6]) with mapi id 15.20.6277.030; Thu, 6 Apr 2023
+ 15:45:45 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 6.1 000/177] 6.1.23-rc3 review
+Thread-Topic: [PATCH 6.1 000/177] 6.1.23-rc3 review
+Thread-Index: AQHZZ6XsB09yRDFZHEWlSWgc/7XwL68ebg3g
+Date:   Thu, 6 Apr 2023 15:45:45 +0000
+Message-ID: <TY2PR01MB378839BEF6C3F0AE1FF5F9E2B7919@TY2PR01MB3788.jpnprd01.prod.outlook.com>
+References: <20230405100302.540890806@linuxfoundation.org>
+In-Reply-To: <20230405100302.540890806@linuxfoundation.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYAPR01MB5595:EE_
+x-ms-office365-filtering-correlation-id: a8db3370-32f1-4672-45a0-08db36b5fc52
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eH52MjgGPErzYuCmJHl9IhfLCbNTUITPzNEtHYfl00C+XvNFRceJ+Pc5toCN204+L0YCLto0K9tHs6GNTAGO2laA3MqndbLugvXpXN3aQbrWk0mHx3KCXUA3Hr7fAlCvsI87hvAc6Qsej6sQ+FEl1kduOj/Ups7MZ2VYmqU/hurgmHuQPclOIWbuJuPjCT5lsQxPV4wMK7Zvd91Owk8V2xF1vPJNACy0UiYfxzlsa2v6rpy19a+9uBpDX0ysa0mrmkzg5rOGzVJ78SDbt6tp3YAxQ+KOODhC3UpebEP+e905EjdxqugXXYbkFim0iDkG6vLSqC3Gm9wYc1VWV6UEBZHRGxOMegMyIDByysebGV8/FJc+Zd1s7IudCwD5zbNntAL5bARt9Qu1zDIT0xC6X9Po+Z/yYnAwRTf5E1OKDaMaC0O7nuN3HtPvY87hUMisgXUuyzF9HmebZitxZ4mErSIGmN8w65ik4wg5VwVOolNj87ZltEy73GoKt1aKm+8qA8hyHfLqPgauFyBoGrXdky7jZ7dcXjQ5OGlVkG9+PgfJG80TVPkWQfuqgp1o5IrA2w4xtZarCt6/NN2P8vUVDuqtc/Pfv0O5bE8oAfGJrOsL3Qc4UsWXPheikX+uosTX2L2Wg+CdL9RZ6hy27bBWuw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(136003)(366004)(396003)(451199021)(86362001)(33656002)(38070700005)(110136005)(316002)(76116006)(41300700001)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(966005)(7696005)(54906003)(478600001)(71200400001)(55016003)(5660300002)(8936002)(7416002)(52536014)(2906002)(4744005)(38100700002)(122000001)(186003)(9686003)(6506007)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eC8yV1ZzcE1NK1E4ZlpVSGt4QmxXK09VeGVSS0sxRmpLZzh1elpPR1FPR1Z5?=
+ =?utf-8?B?YWZQclkxU3ZnaG1FOWY3b0hGQkcvdXZaejFleXBTeVdydkhQR2p4U2h1Vlo1?=
+ =?utf-8?B?bHltNmlyRERla0NZU0xjWSs3MitqeTY5a1hyaFJoNjYwOC9Fcnk0NklHeHJ4?=
+ =?utf-8?B?cnRENEJJZmdUU0ZqTHdQWXJDK05Vd0F6eUkxaXNhYmszQThjalBjVnlSZGNI?=
+ =?utf-8?B?bU45UjF4bnZ3Tk1yTjJZTW8vZGRlWm10VWx2UjdSeUxaWHNJb1pib3hYMkhk?=
+ =?utf-8?B?LzREeGVzV2l6Mll6VFVyK0xMb0p4U1B0QllGd0FGUFRTUFpRUFE2U1paVWl5?=
+ =?utf-8?B?SmdLSXFVQmsvVUtMaVdYd250THpvUmVWNUpVUDBoUFBBZEhLNW9Jcm9rQUVk?=
+ =?utf-8?B?MEhDNG1XQVB3TTljV1dtNFozOERTOWR5ZERhUllXajZUOVhMRTYrRVVKUlZT?=
+ =?utf-8?B?QVE3TmRRVEJxY0dqL1duUElHS3VwR01CeTIwSHZNQzQ2djlZSUl2TzZ6cUJy?=
+ =?utf-8?B?bVRnUlU4cGdaVFA3RU84NUQ4b1ZIM1ltdVo2WU85YUlsMXRJNUhxYnRDSjE5?=
+ =?utf-8?B?U2NxNDZHY1NiclBNb3dXdmEzeHJjaktHbTdrSFFDVUNQejU5UGo2eDFQNVRv?=
+ =?utf-8?B?ekx6dC9SSE91R09PU1JVNENzK2dmZ0x6MysvN1JFRDAveFlockJLV0FqOGZm?=
+ =?utf-8?B?dW9lSDUyZUJHNy91OXQrN3BjbUNtbjkvY1c4RzZoMmFYUE9LRmhGOHNWL2V5?=
+ =?utf-8?B?TUZkVHVWRFkxaTFRVk1CMkNpdEViZFZuNkJXUnEzLzhzbTJXajdUSi8xM0tS?=
+ =?utf-8?B?Ukc5V2lqOVFoMmlGdzJGSHBTRktUU052UXRhcEh3enN1bDJqNzFrcjRaMysv?=
+ =?utf-8?B?aDdKaThjbHB6dVRvZ000aDNPZEhVVGF2ZW1KMktQUnhheXE3cUYrUWJEdVhn?=
+ =?utf-8?B?QnAzbmNFckR6aGxmOXozVDBhU0tscTlWUDNyY2FzTE02NGkxbHJJMWlIZEhE?=
+ =?utf-8?B?WkkvNzQ5TVg2UkFKLzMyY1BPSUJnNG5WUkpkQlJ1MHR2eXdLb1B5czE4Tmxx?=
+ =?utf-8?B?ekxsUmtKMnluNk9sQ09VbEFMY2J0Q24zN0hKTUlOdG9WM2x2bDJnL1Yza2tq?=
+ =?utf-8?B?eTJWait3eUVtWnp6QkVvV3p3ekJ3VFV4UE00QkZNYmpmRzg5RDlBNTdCdGJR?=
+ =?utf-8?B?b3kxUmF2NHFaSUtmMkxUQ01uK2VmamgwVGh2c0YwVFRoc2YwV056T21peDZv?=
+ =?utf-8?B?c25Qd2hqMjFFa2h4cWNMd3FJVzQ2djdDSWVWY254ak96dDhyOGcwcTRkOGda?=
+ =?utf-8?B?aFJFcTkzQ1dQdS9MRzlQTGUxWXpGMnB6ZzRLcGpKSFE5eXNuYW5hNzkxcWV4?=
+ =?utf-8?B?TXoyMlZva1R1cXloV3p0aG00VmhIVFdGSlVoSmVZS2tOeGhXRUo0NlVkSGpG?=
+ =?utf-8?B?S205VzBXVFozZnh1TEQ1dzkrRk90Mks3NFUyTVkyMEROMVJLNU9pL3ppTjdy?=
+ =?utf-8?B?MnJ4QkM4Yk5teHFLclIrdWhyOXI2bTRFVWFab1VlcGxreUNpdjRjdGxaMTQ4?=
+ =?utf-8?B?UTBiZERyeVFMeTN6VUdJSUJ2czk4UUVnSlBSZDdWb0N1L3pSdnBzTTVlMUtU?=
+ =?utf-8?B?VG5uRTd6K1ErbVhQSml6aEQ4TFNnZE9YNTVEWFUweUE0eERiZkRwd0xFL0JS?=
+ =?utf-8?B?MWJyZCtpZzFLS1F2MkYrb3NuYkFsd2pSbUczZVJFUDN1UXRiVTJMeWNBbjFy?=
+ =?utf-8?B?aEp6Wk1jeGM1Z0ZvN0xEc2xmMGE4K0JDTmg5YjVDNTZGZitlWDJMUEQzUUhO?=
+ =?utf-8?B?SHIzWThqR1Y0MGpEYUpEYzVMeVorVXl3dE55OEFtNjU0Rkc1QUE2N2tvM2li?=
+ =?utf-8?B?Y3VjenZGL1pXYlJ1dmlJcUF2ZDJqdFhvZ21INnhFYU5lK3g1UllIdWF3czVm?=
+ =?utf-8?B?ajJRL2h2TElBRFFhdnRUSGRlRWIxSGlPQmVsbms1M3ZyMWpWVDhXUXdUc3hp?=
+ =?utf-8?B?d1lmTTFlaVhpRWJmbENSQ1hLbFpCQTFEaStnQkV2UHJzajlIejFicEhSbUVJ?=
+ =?utf-8?B?OTlPZ1Uzdkg4SmxzbUFndVQyWnY5aXBqZjlpcUlaclQ1dU5rcVlCYVJWS3Np?=
+ =?utf-8?B?VkZyc3o5bzhpR1dSZVAxVXVhc0NvMUVvTnlmSWNpWVduc01LTUp1ZmZoSXBY?=
+ =?utf-8?B?ZlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72=E2k7+_cwYw_EjVezk0mWCRqbH4MUjsEmxWgJMh=3AEQ@mail.gmail.com>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8db3370-32f1-4672-45a0-08db36b5fc52
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2023 15:45:45.2858
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GZ8snuK3WsKsQ3LJtznGA5lGOjRIwfQQml1VWv7hzw8epBx4l4+3aujR0p5H+qGuHIq/wlTlI31OQO3742neyXJAMGQqyBTtnE5t27yClRA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB5595
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 05:28:59PM +0200, Miguel Ojeda wrote:
-> On Thu, Apr 6, 2023 at 4:15 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> >
-> > Documentation:
-> >
-> > In drm we try to document all the interfaces that drivers use with formal
-> > docs. Yes there's some areas that are not great for historical reasons,
-> > but for new stuff and new wrappers we're really trying:
-> >
-> > - This helps in telling internal (even across .c files or in rust across
-> >   modules within a crate) from stuff drivers access. Sure you have static
-> >   in C or pub in rust, but that doesn't tell you whether it's public all
-> >   the way to drivers.
-> 
-> I think you may be talking about the value high-level docs here, but
-> just in case, visibility in Rust is flexible enough to expose (or not)
-> APIs to those that you need. In other words, it does tell you (and
-> enforces!) whether it is public all the way to drivers.
-> 
-> There is also the possibility of even more fancy visibility, but so
-> far we just needed `pub(crate)`.
-> 
-> `rustdoc` also shows/hides things as needed, thus the generated docs
-> for the crate should only show what is usable by others.
-> 
-> Then there is the `kernel` crate split, too.
-> 
-> > - ideally docs have a short intro section that explains the main concepts
-> >   and links to the main data structures and functions. Just to give
-> >   readers a good starting point to explore.
-> 
-> Agreed, this is typically done in Rust in the top-level doc comments
-> (module or crate). For the Rust side of the kernel, we are definitely
-> trying to emphasize the quality of the docs, including compile- and
-> runtime-tested examples.
-> 
-> Regarding linking, `rustdoc` already generates a listing with the
-> contents of each crate/module even if there is no other docs. So as
-> long as the short descriptions of the items are good, it may be fairly
-> readable already, e.g. see
-> https://rust-for-linux.github.io/docs/rust/kernel/sync/index.html for
-> an example in our old `rust` branch. But, of course, you can add extra
-> docs at that level too when there are many things or is unclear what
-> should be used.
-> 
-> Also note that, sometimes, the docs we write are in the type, rather
-> than the module, e.g. see the nice examples Wedson wrote for `RBTree`:
-> https://rust-for-linux.github.io/docs/rust/kernel/rbtree/struct.RBTree.html.
-
-Yeah this all looks great and very hyperlinked.
-
-I think the only nit I have is that for types with two or more type
-variables (like the rbtree) what each of them should represent in the top
-intro. I can guess it's <Key, Value> and not the other way round, but
-confirmation takes quite a bit of scrolling to check with the function
-types.
-
-Otherwise I think perfect api docs.
-
-> > - Linking all the things, so that readers can connect the different parts.
-> >   This is really important in C where e.g. get/put() or any such function
-> >   pairs all needed to be linked together. With rust I'm hoping that
-> >   rustdoc liberally sprinkles links already and we don't have to do this
-> >   as much.
-> 
-> If you mean within doc comments, it does! :) It is called "intra-doc
-> links". Basically, you just write something in-between square
-> brackets, and it is able to create the link to the right thing (in
-> most cases, otherwise you can help it more), e.g.
-> 
->     /// Returns a new [`Foo`].
-> 
-> And, of course, for the rest of things that aren't inside comments, it
-> automatically provides links etc.
-> 
-> There has been work on `rustdoc` on getting "Jump to Definition" and
-> similar features to work on the source view, too.
-> 
-> > - Short explainers for parameters. For rust this also means type
-> >   parameters, for those even simplified examples of how drivers are
-> >   supposed to use them would help a lot in reading docs & understanding
-> >   concepts.
-> 
-> For parameters, we are not forcing to write explanations for every
-> parameter (as in providing a list), but rather writing what is
-> actually useful to know (referring to the parameters as needed). So it
-> depends on a case-by-case.
-> 
-> In any case, in general is clearer what parameters are compared to C,
-> due to the stronger typing. Of course, if one uses integers
-> everywhere, it is as confusing as C. But if one has a type, it is
-> easier to tell, plus one may jump with a click into the explanation of
-> that type etc.
-> 
-> Regarding examples, 100% agreed. And not only that, the examples are
-> enforced to be kept up to date by compiling and running them via KUnit
-> (not yet submitted for mainline, but we have been enforcing it for our
-> old `rust` branch for a long time).
-> 
-> > - Ideally links from the rust to the sphinx side to linke relevant
-> >   chapters together. Often the bigger explanations are in .rst files with
-> >   DOT graphs (kms has a bunch I've added) or similar, and it doesn't make
-> >   that much sense to duplicate all that on the rust side I guess. But it
-> >   needs to be discoverable.
-> 
-> Definitely. One next step is having easy-to-write links to the rST
-> docs. For this, a couple years ago I talked with the `rustdoc`
-> maintainers about having a "External references map file" feature, so
-> that we can link rST documents from the Rust docs, including generated
-> C docs too. For instance, ideally we would be able to use the square
-> brackets around a C type and have it work:
-> 
->     /// Exposes the kernel’s [`struct wait_queue_head`] as a condition variable.
-> 
-> Regarding the bigger explanations: we are trying to keep most of the
-> docs close to the Rust code where it makes sense, as
-> module-level/crate-level docs, rather than as rST docs. This has
-> several benefits, like keeping them closer to the code, the linking
-> features, having them organized equally as the code, no need to know
-> whether there is a doc somewhere or not (e.g. if it is, it is near the
-> code), examples are compiled, etc.
-
-Just a quick comment on this, that's the same we do on the C side. Most
-overview chapters are actually DOC: sections pulled in from the code.
-
-What I meant here is that for big overview stuff (like for modesetting how
-the display pipe structures tie together as an example:
-https://dri.freedesktop.org/docs/drm/gpu/drm-kms.html#overview)
-it doesn't make sense to duplicate that in rustdoc once more.
-
-> Of course, sometimes longer-form docs and other documents may not make
-> sense as part of any code in particular, or may be shared across C and
-> Rust, etc., and there it may more sense to use `Documentation/` files
-> instead.
-> 
-> But, in general, the idea is that, compared to C, most of the docs go
-> into the code. To give an idea of the difference: so far, in our old
-> `rust` branch, we only needed a few documents in `Documentation/`
-> (e.g. the Quick Start guide etc.), and everything else went into the
-> code itself.
-
-Maybe drm is the exception, but if you look at our .rst files we also have
-most of our docs in the code:
-
-https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/drm-kms-helpers.rst
-
-The rst files just provide the scaffolding because C dosn't have
-crates/modules hierarchy that would do this for you automatically.
-
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+SGVsbG8gR3JlZywNCg0KPiBGcm9tOiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZv
+dW5kYXRpb24ub3JnPg0KPiBTZW50OiBXZWRuZXNkYXksIEFwcmlsIDUsIDIwMjMgMTE6MDQgQU0N
+Cj4gDQo+IFRoaXMgaXMgdGhlIHN0YXJ0IG9mIHRoZSBzdGFibGUgcmV2aWV3IGN5Y2xlIGZvciB0
+aGUgNi4xLjIzIHJlbGVhc2UuDQo+IFRoZXJlIGFyZSAxNzcgcGF0Y2hlcyBpbiB0aGlzIHNlcmll
+cywgYWxsIHdpbGwgYmUgcG9zdGVkIGFzIGEgcmVzcG9uc2UNCj4gdG8gdGhpcyBvbmUuICBJZiBh
+bnlvbmUgaGFzIGFueSBpc3N1ZXMgd2l0aCB0aGVzZSBiZWluZyBhcHBsaWVkLCBwbGVhc2UNCj4g
+bGV0IG1lIGtub3cuDQo+IA0KPiBSZXNwb25zZXMgc2hvdWxkIGJlIG1hZGUgYnkgRnJpLCAwNyBB
+cHIgMjAyMyAxMDowMjoyNiArMDAwMC4NCj4gQW55dGhpbmcgcmVjZWl2ZWQgYWZ0ZXIgdGhhdCB0
+aW1lIG1pZ2h0IGJlIHRvbyBsYXRlLg0KDQpDSVAgY29uZmlndXJhdGlvbnMgYnVpbHQgYW5kIGJv
+b3RlZCB3aXRoIExpbnV4IDYuMS4yMy1yYzMgKGY4YTdmYTRhOTZiYik6DQpodHRwczovL2dpdGxh
+Yi5jb20vY2lwLXByb2plY3QvY2lwLXRlc3RpbmcvbGludXgtc3RhYmxlLXJjLWNpLy0vcGlwZWxp
+bmVzLzgyODY4NzM1MA0KaHR0cHM6Ly9naXRsYWIuY29tL2NpcC1wcm9qZWN0L2NpcC10ZXN0aW5n
+L2xpbnV4LXN0YWJsZS1yYy1jaS8tL2NvbW1pdHMvbGludXgtNi4xLnkNCg0KVGVzdGVkLWJ5OiBD
+aHJpcyBQYXRlcnNvbiAoQ0lQKSA8Y2hyaXMucGF0ZXJzb24yQHJlbmVzYXMuY29tPg0KDQpLaW5k
+IHJlZ2FyZHMsIENocmlzDQo=
