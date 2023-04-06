@@ -2,142 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3756D98D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4E56D98C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238956AbjDFN6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 09:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37990 "EHLO
+        id S238821AbjDFN5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238924AbjDFN61 (ORCPT
+        with ESMTP id S238867AbjDFN51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 09:58:27 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9935A5EB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:58:08 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id by14so21613895ljb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 06:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680789483;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=veXi6X8hXncoY1cFpYaYdFHnrA4v/kUv68rWDNLT4iU=;
-        b=BCDQiASBk1BGRzDQ5Wdj7XVOd/o+REpjKRxfUPZoShop7Qd4ebGPZ7QQMJSx0EEBWk
-         qQXryNJ3LDNUF7eX3xTG/A0D2gD1dAGIbs87txMkndOIp3UDtLKQGfYeXCqaHZe3EHM6
-         FX50m+DmwME8g7x2XLpL3c+toFkEeTTc1V4n85r1pfasfJtgYYKk7EDbg0qKg6EbkQ3A
-         1kIIz3x40Gp9+EFAxunCq6RghHzTHX+B1Ly5Mid0VRw+J+xmuMCI/pYWjmpuBcmXOucI
-         I9iqewUwfL//cH/UbH2uj3G6WQ10tEbAMtJLoIgTsEuHRemXHPWed6UXHOV3eRHLUG6I
-         wY7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680789483;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=veXi6X8hXncoY1cFpYaYdFHnrA4v/kUv68rWDNLT4iU=;
-        b=ZHsB0zuYxvIaiwDV6l/c2HuKNONyOuRLUKqxZWCebs7aFQScOCGKecGslUTk7ibRNb
-         k9ho2J/Nk8GNMo0LF7l/QdJcrhBFla1lNa1+Om7AGG4LGQwkRZGV4CB9A9ro2LN4OJyp
-         83FOi3Owcv7LMEHersl4KDd49w059T2vxJI+OG5cFHCNyOGXjUwUzuRUHQAqkpeWkjpE
-         yVmN9I5HRbSnyk265aJSmwhMevlDdbz5+hR5SiGvksbuA7MzPaUz8bjzLba+h0OVBce8
-         NMH0/VhmHMHQ+RQEbKCftIOE+NYwdHUitDOUEjVMe1UXTLwkekCyaBP2ZCDYgMWtXKXu
-         GqIw==
-X-Gm-Message-State: AAQBX9fbcDO9AIrboMyRqU9efyCoN9EkCx48pPjIEFk3mGXzgUNsIMCE
-        tX6rIg0d8luaA3QxmZGc+uiBfA==
-X-Google-Smtp-Source: AKy350ZE6dBJy6A2aSVdHV4ceMB49ftIHKNRdbW1HDjL4B1qPI8/x0aA/5cnv+OfOHEmjxhjcDt1Ww==
-X-Received: by 2002:a05:651c:113:b0:2a1:17f8:e904 with SMTP id a19-20020a05651c011300b002a117f8e904mr2745961ljb.4.1680789483178;
-        Thu, 06 Apr 2023 06:58:03 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id v11-20020a2e924b000000b00299ab2475ebsm300064ljg.1.2023.04.06.06.58.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 06:58:02 -0700 (PDT)
-Message-ID: <9ecbea6a-d7bd-0f4d-e94f-dd1130e578c7@linaro.org>
-Date:   Thu, 6 Apr 2023 15:58:00 +0200
+        Thu, 6 Apr 2023 09:57:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442BB83CE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:57:02 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D6544225FF;
+        Thu,  6 Apr 2023 13:57:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1680789420; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JuI7rEXVAd5Io13zAc2gN/AbKEUjXYbUadrLZJs7G7I=;
+        b=WoQVQrTyFaKXRHQ6iNlVrkJacxZ6iPuOSlwv8FUO79mXniCR7F9KJ7FZLAnZMg3XfoJo+D
+        TQbwwjFidMIJu2OaeaYCg5kZdTzt/UU17Pe9/xutwnGcSUh84GxYzy8SXx/iJS2OBbTnQ9
+        tAjLcs8mYcatRmdu3jgboima/pORdq0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1680789420;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JuI7rEXVAd5Io13zAc2gN/AbKEUjXYbUadrLZJs7G7I=;
+        b=oQQ8i5x9muTG5IRPWHI/lZ59dWsyEuxxxsZtmpvMsqc+NcJfWSr5ttQUDlnB7X42A/toTH
+        wtozsY0g9vbLWfCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF57A1351F;
+        Thu,  6 Apr 2023 13:57:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AHP4LazPLmRcGwAAMHmgww
+        (envelope-from <chrubis@suse.cz>); Thu, 06 Apr 2023 13:57:00 +0000
+Date:   Thu, 6 Apr 2023 15:58:12 +0200
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Petr Vorel <pvorel@suse.cz>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        Benjamin Copeland <ben.copeland@linaro.org>,
+        Tudor Cretu <tudor.cretu@arm.com>
+Subject: Re: LTP: list of failures on 32bit and compat mode
+Message-ID: <ZC7P9BgW1CTFAMjB@yuki>
+References: <CA+G9fYtVXsKSbdxcTNiLc8oYRTBOZzWNQRF92daLE58NPbOkFg@mail.gmail.com>
+ <96b67ae8-98dd-40fe-9dde-302e09d12551@app.fastmail.com>
+ <20230406105646.GB1545779@pevik>
+ <7234b8ab-db5c-4f4a-bb9e-ddef9f1a50d3@app.fastmail.com>
+ <20230406124812.GA1589248@pevik>
+ <3c2ba6f9-bea1-4510-8fbb-6521fab74a9d@app.fastmail.com>
+ <20230406131755.GA1608262@pevik>
+ <c2a6d31f-173b-4d08-b377-e31748f33443@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v6 08/11] arm64: dts: qcom: sm8150: Add Crypto Engine
- support
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org
-References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
- <20230405072836.1690248-9-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230405072836.1690248-9-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2a6d31f-173b-4d08-b377-e31748f33443@app.fastmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5.04.2023 09:28, Bhupesh Sharma wrote:
-> Add crypto engine (CE) and CE BAM related nodes and definitions to
-> 'sm8150.dtsi'.
+Hi!
+> > Thanks! I've just searched in musl as well, because it didn't make sense to me
+> > it'd be a code for LTP.
+> >
+> > "to catch the fault on ltp" I wonder if it's not actually musl bug.
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8150.dtsi | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+> No, musl is fine here. The problem is that ltp passes an invalid pointer,
+> expecting to get -EFAULT from the kernel when that faults in
+> copy_to_user().
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index 9491be4a6bf0..c104d0b12dc6 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -2081,6 +2081,28 @@ ufs_mem_phy_lanes: phy@1d87400 {
->  			};
->  		};
->  
-> +		cryptobam: dma-controller@1dc4000 {
-> +			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-> +			reg = <0 0x01dc4000 0 0x24000>;
-> +			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-> +			#dma-cells = <1>;
-> +			qcom,ee = <0>;
-> +			qcom,controlled-remotely;
-> +			iommus = <&apps_smmu 0x514 0x0011>,
-> +				 <&apps_smmu 0x516 0x0011>;
-> +		};
-> +
-> +		crypto: crypto@1dfa000 {
-> +			compatible = "qcom,sm8150-qce", "qcom,qce";
-> +			reg = <0 0x01dfa000 0 0x6000>;
-> +			dmas = <&cryptobam 4>, <&cryptobam 5>;
-> +			dma-names = "rx", "tx";
-> +			iommus = <&apps_smmu 0x514 0x0011>,
-> +				 <&apps_smmu 0x516 0x0011>;
-Downstream uses these (sid, mask) combos:
+> There is nothing wrong with musl sanitizing the data behind that
+> pointer, but then you get a signal instead of the EFAULT error.
 
-qcedev:
-0x0506 0x0011 
-0x0516 0x0011 // equal to 0x506 0x11
+That's actually quite common, usually we fix that by running the test in
+a child and treating SEGFAULT as a PASS.
 
-qcom_cedev_ns_cb:
-0x512 0
-0x518 0
-0x519 0
-0x51f 0
-
-Shouldn't we use them too?
-
-Konrad
-
-> +			interconnects = <&aggre2_noc MASTER_CRYPTO_CORE_0 &mc_virt SLAVE_EBI_CH0>;
-> +			interconnect-names = "memory";
-> +		};
-> +
->  		tcsr_mutex: hwlock@1f40000 {
->  			compatible = "qcom,tcsr-mutex";
->  			reg = <0x0 0x01f40000 0x0 0x20000>;
+-- 
+Cyril Hrubis
+chrubis@suse.cz
