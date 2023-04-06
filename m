@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37F96DA18D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6128F6DA193
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237297AbjDFThx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S237277AbjDFTiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237278AbjDFTht (ORCPT
+        with ESMTP id S237444AbjDFTh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:37:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A9D93EB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:37:44 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680809861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=favdqIENNaDRfSmkC30oxkY4bWGc0KOI6FH54pc0iYU=;
-        b=3VghqapWsLDJImLuOzn1LnT84YNqHwtl2rRs1514BjtBJNJLZbaiQu5DRQ4TfYeTK6MKgN
-        plzcfOwNp/usoKOspMWNn6YJ8zIu39jbdvBG+T1LhV4TWayCgCI3VLe665XeBj4l2ce0tw
-        KkF6i3J1+jht3Cb+r0f5OWNxwN1jWJElUFjCvaUX1ETyBP/DS9DLDn5Mvf1qUyOBmAPzKU
-        HhLVxm+R3IDr9PgKRJF4sxJPM/7zpWDmeGMOAsz/EXXtKKRAlvFhSs14CuxwwQilZS9vP6
-        Ic0Y6P2ayWEItdQGFLgVpnVZ8x9vVij/fPYIh/YvwQ6eNYeqtBA3v+VygsReIQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680809861;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=favdqIENNaDRfSmkC30oxkY4bWGc0KOI6FH54pc0iYU=;
-        b=Hp4yRgQL/ho1lkuOMEDwW1XY2hYyJ7ssQFZW+UhTVH5gjrP5CMiw1qRnK8omoX0V/fwo8A
-        416acZyeyCwo0tAw==
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        Marco Elver <elver@google.com>
-Cc:     syzbot <syzbot+3b14b2ed9b3d06dcaa07@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: WARNING in timer_wait_running
-In-Reply-To: <ZC3z2UhQeXENKvrb@lothringen>
-References: <000000000000566d5405ae2f6f70@google.com>
- <ZC3jDC6R/SGLk5vj@elver.google.com> <ZC3z2UhQeXENKvrb@lothringen>
-Date:   Thu, 06 Apr 2023 21:37:40 +0200
-Message-ID: <87h6tsred7.ffs@tglx>
+        Thu, 6 Apr 2023 15:37:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1104594;
+        Thu,  6 Apr 2023 12:37:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C99E64BD8;
+        Thu,  6 Apr 2023 19:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC7ECC433EF;
+        Thu,  6 Apr 2023 19:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680809876;
+        bh=sgAETLEuXyIGeAXVvg6ePMXon67bHi/EhQO67vdflcc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=cSUN+muBnUrFEcexB+K7gFE6aC4/xJ1eg6rryHWmzL12d1Vfkk0k8unW4RAysOlgF
+         Mb4fG4itkjJj55h8b0zsA3M+0wbZniFEnRpsVIZc57DoZta9e9U4hGtFogWPVyx4EW
+         LIdVzpWUElBQqCQyiDMpMxrEVFj7/AI7T0gYLHnjSIonOouiR+ybUITpdPepA1hdGl
+         vzoy/teWoFY+x9TLi93J9zRFGP/3gMaFPzCjgGeQggmSxy2YiywSzXzzwOlw8c+lYW
+         8HeskIE5Qzpc/KyBwREpsozS4CERAMLp1n9w/Dkiu+Q+9de05rrRRfCoZJCXDi7eEz
+         iPOgvi3rBKtGw==
+Message-ID: <60339e3bd08a18358ac8c8a16dc67c74eb8ba756.camel@kernel.org>
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
+ after writes
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
+        miklos@szeredi.hu, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        amir73il@gmail.com
+Date:   Thu, 06 Apr 2023 15:37:53 -0400
+In-Reply-To: <45a9c575-0b7e-f66a-4765-884865d14b72@linux.ibm.com>
+References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
+         <20230406-diffamieren-langhaarig-87511897e77d@brauner>
+         <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
+         <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
+         <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
+         <20230406-wasser-zwanzig-791bc0bf416c@brauner>
+         <546145ecbf514c4c1a997abade5f74e65e5b1726.camel@kernel.org>
+         <45a9c575-0b7e-f66a-4765-884865d14b72@linux.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06 2023 at 00:19, Frederic Weisbecker wrote:
-> On Wed, Apr 05, 2023 at 11:07:24PM +0200, Marco Elver wrote:
->> Up-to-date warning:
->> 
->>  | WARNING: CPU: 1 PID: 6695 at kernel/time/posix-timers.c:849 timer_wait_running+0x255/0x290 kernel/time/posix-timers.c:849
->> 
->> Why is it wrong for timer_wait_running to be NULL?
->
-> It appears to concern clock_posix_cpu which indeed doesn't implement
-> ->timer_wait_running even though posix_cpu_timer_set() might return
-> TIMER_RETRY if the timer is about to fire.
->
-> Then on RT and if CONFIG_POSIX_CPU_TIMERS_TASK_WORK=y then
-> timer_wait_running() must busy loop waiting for the task to complete
-> the task work.
->
-> We could arrange for doing the same thing as hrtimer_cancel_wait_running()
-> but for posix cpu timers, with taking a similar lock within
-> handle_posix_cpu_timers() that timer_wait_running() could sleep on and
-> inject its PI into.
+On Thu, 2023-04-06 at 15:11 -0400, Stefan Berger wrote:
+>=20
+> On 4/6/23 14:46, Jeff Layton wrote:
+> > On Thu, 2023-04-06 at 17:01 +0200, Christian Brauner wrote:
+> > > On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
+>=20
+> >=20
+> > Correct. As long as IMA is also measuring the upper inode then it seems
+> > like you shouldn't need to do anything special here.
+>=20
+> Unfortunately IMA does not notice the changes. With the patch provided in=
+ the other email IMA works as expected.
+>=20
 
-I have a faint memory that we discussed something like that, but there
-was an issue which completely escaped my memory.
 
-But yes, something like this could work.
+It looks like remeasurement is usually done in ima_check_last_writer.
+That gets called from __fput which is called when we're releasing the
+last reference to the struct file.
 
-Though we should quickly shut this warning up for the !RT case by
-providing an callback which does
+You've hooked into the ->release op, which gets called whenever
+filp_close is called, which happens when we're disassociating the file
+from the file descriptor table.
 
-  WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT);
+So...I don't get it. Is ima_file_free not getting called on your file
+for some reason when you go to close it? It seems like that should be
+handling this.
 
-and let the RT folks deal with it.
+In any case, I think this could use a bit more root-cause analysis.
 
-Thanks,
+> >=20
+> > What sort of fs are you using for the upper layer?
+>=20
+> jffs2:
+>=20
+> /dev/mtdblock4 on /run/initramfs/ro type squashfs (ro,relatime,errors=3Dc=
+ontinue)
+> /dev/mtdblock5 on /run/initramfs/rw type jffs2 (rw,relatime)
+> cow on / type overlay (rw,relatime,lowerdir=3Drun/initramfs/ro,upperdir=
+=3Drun/initramfs/rw/cow,workdir=3Drun/initramfs/rw/work)
+>=20
 
-        tglx
+jffs2 does not have a proper i_version counter, I'm afraid. But, IMA
+should handle that OK (by assuming that it always needs to remeasure
+when there is no i_version counter).
+--=20
+Jeff Layton <jlayton@kernel.org>
