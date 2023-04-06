@@ -2,158 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100C16D9A32
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 487B26D9A76
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239359AbjDFObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S239066AbjDFOfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239124AbjDFOa2 (ORCPT
+        with ESMTP id S237171AbjDFOfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:30:28 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84C88A7E;
-        Thu,  6 Apr 2023 07:30:26 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id n21so1873071ejz.4;
-        Thu, 06 Apr 2023 07:30:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680791425;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wQhUC48C6wHrpynrBLKu6E6JYZ/G69c0U7Fw89TbAAs=;
-        b=kDOOqQM8r/fMLfoKQs/IN3KdhOeZVXq6IKjq+NmpuI3Nbp3GY5P4GDrn2CrByhvDeu
-         EWAjDR4Z8ZleR3HKC1cmY2spstSNnB/Khvo1ymjzcvloNFHtxRAbIjnwJTVxZYQPGMN1
-         OtcrQuOyXUeGpZ3VEGUOs4ttExdXTkEaMaQR6qgqa8eN3F10VX2if5cPh+2yU0EqQ4Af
-         TVBJt0uMI5PD9lPxYuMVhgZMfKOqSSWtYiapQBtwL34qNXbBo8ks54SaYh2d7imYToF0
-         Kn94WYCLs+fdzYrRLGmsM4Q7FT4WnOWjL6Vy/TG3IHNllqFW2+AruAztWe/W0j8qVKCn
-         IEWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680791425;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wQhUC48C6wHrpynrBLKu6E6JYZ/G69c0U7Fw89TbAAs=;
-        b=231je9ypA2ku3FKPqkU0LdCoeYfEqJlGsy15NMi4adaBJVG7QmffpfAdPacTbKDtpd
-         dh3BSUpJBUVJZLNwHOK6pxXKy+eTtdFrOZlV3BPWSsc6CBLr0rHJ0grrpGV8/RNTSQ/W
-         PVeBesj08T1Dt3EvplOfiaY2vsW1JHBLIA2qmIMI+zZQsnzytg/nNJ9yVV2AzfObZc2S
-         OZKdUU1gCsudVsrl8ghk8LHkrvzDxc1NPieYiydtN44GmQN3zeF8r5LFunbLzUJFRkds
-         LeFKbrUPwSGHdDAiFnyyxDmgsM+66ZU5ZCOrjXXH1UbFATP1S6G0K3ylcAxiMpGA6V2d
-         +c3A==
-X-Gm-Message-State: AAQBX9e4yBgguBTYpcAMFXbeZHLUREQ7PeujpKLPqLoONjnGdAMtMSxB
-        yLKKdTLRvG2U8/38tCBAiQc=
-X-Google-Smtp-Source: AKy350aiBqXW2UWscI0vgWKtSbPJl7vSCZnaC+Q+fMor6zOBrfrqrLsRVMdvXTw3ToBjy+9r3IsNzg==
-X-Received: by 2002:a17:906:6d6:b0:8f6:5a70:cccc with SMTP id v22-20020a17090606d600b008f65a70ccccmr6946401ejb.66.1680791425036;
-        Thu, 06 Apr 2023 07:30:25 -0700 (PDT)
-Received: from orome (p200300e41f1c0800f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1c:800:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id dd20-20020a1709069b9400b009475bf82935sm884746ejc.31.2023.04.06.07.30.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 07:30:24 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 16:30:23 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Lorenz Brun <lorenz@brun.one>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2] pwm: mediatek: support inverted polarity
-Message-ID: <ZC7Xf8Wy1x9gnaAY@orome>
-References: <20230309010410.2106525-1-lorenz@brun.one>
- <ZC7LaC19YjNwTIi1@orome>
- <20230406135358.x3et6gvvxqsknfn6@pengutronix.de>
+        Thu, 6 Apr 2023 10:35:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61C5C17B;
+        Thu,  6 Apr 2023 07:32:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE76A648A7;
+        Thu,  6 Apr 2023 14:31:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E99EC433EF;
+        Thu,  6 Apr 2023 14:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680791500;
+        bh=OJh4zaYpUGmBGJnTjRe4Hscxo/UtXSa7youeXVGyH7A=;
+        h=From:Subject:Date:To:Cc:Reply-To:From;
+        b=G7/UhM9cEX9Za3QvbGgTPXOvOjIGcfMCjLue5/uYMJ+G5P90iTGM0dVm/J5P8g518
+         chLyN+8N3CvTfp7898/skBl048pW06ruR+9MNHp8feRxZX8t7MEmg6jETIgQLULPLa
+         wHMHA62pDNMH5bGsPWVzyY5rNXflfwC2m6aW/OLM01cKX8lAA61BhtuefUJGcr0uyv
+         Xo7uvBgQCrWJM2Nn2SF95X9iWtyQTpIpUTcbWtezTJq+PGMWBQzZrou0pfiTAozpsq
+         vmdolafEqNZNH4gQ/c/kvHyLx24v0SYqC9akMzL1blGYPa/x/WJNoKbHaio65LvpPx
+         F1lIXnHYpTyJg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id EFCA6C77B6F;
+        Thu,  6 Apr 2023 14:31:39 +0000 (UTC)
+From:   Michael Riesch via B4 Relay 
+        <devnull+michael.riesch.wolfvision.net@kernel.org>
+Subject: [PATCH RFC 0/4] media: v4l2-ctrls: add controls for complex lens
+ controller devices
+Date:   Thu, 06 Apr 2023 16:31:09 +0200
+Message-Id: <20230406-feature-controls-lens-v1-0-543189a680de@wolfvision.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vTrnEci5s8VqfSaD"
-Content-Disposition: inline
-In-Reply-To: <20230406135358.x3et6gvvxqsknfn6@pengutronix.de>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK3XLmQC/1XNQQrCMBCF4auUWTsYm0TFreAB3IqLJJ3aQEnKT
+ C2F0rubihuXP7yPt4AQRxK4VAswTVFiTiUOuwpC59KLMDaloVa1VkYdsSU3vpkw5DRy7gV7SoL
+ +bO3JNtoY7aBY74TQs0uh2/QP7f/QthuY2jh//x9wv13hua4fXIphSJQAAAA=
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     libcamera-devel@lists.libcamera.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Riesch <michael.riesch@wolfvision.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680791498; l=3101;
+ i=michael.riesch@wolfvision.net; s=20230406; h=from:subject:message-id;
+ bh=OJh4zaYpUGmBGJnTjRe4Hscxo/UtXSa7youeXVGyH7A=;
+ b=6fXSMiSHAibecfHaIrXad2RhBLfWutwmqZTdnbta4uPO56oUCRTsDHvu1zXs4G8HVvItbgfTB
+ rR/pb1r9qehDeEVBAjQrMlQ8BFuiowDdBdmHHo7YYKhWXdXYOiA9T/n
+X-Developer-Key: i=michael.riesch@wolfvision.net; a=ed25519;
+ pk=G03kuYHL670EcdsWaNfVA7KnHWmkSpj98XziQm/hjbk=
+X-Endpoint-Received: by B4 Relay for michael.riesch@wolfvision.net/20230406 with auth_id=38
+X-Original-From: Michael Riesch <michael.riesch@wolfvision.net>
+Reply-To: <michael.riesch@wolfvision.net>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi all,
 
---vTrnEci5s8VqfSaD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch series aims to add support for complex lens controllers in V4L2.
+Complex lens controllers usually feature one focus lens and one (or more)
+zoom lens(es), which are driven by stepper motors. As a consequence, a few
+crucial differences to simple lens controllers (such as voice coil motor
+(VCM) drivers, which are already well supported in V4L2) arise:
 
-On Thu, Apr 06, 2023 at 03:53:58PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> Hello Thierry,
->=20
-> On Thu, Apr 06, 2023 at 03:38:48PM +0200, Thierry Reding wrote:
-> > On Thu, Mar 09, 2023 at 02:04:10AM +0100, Lorenz Brun wrote:
-> > > +	 * appear to have the capability to invert the output.
-> > > +	 * This means that inverted mode can not be fully supported as the
-> > > +	 * waveform will always start with the low period and end with the =
-high
-> > > +	 * period. Thus reject non-normal polarity if the shape of the wave=
-form
-> > > +	 * matters, i.e. usage_power is not set.
-> > > +	 */
-> > > +	if (state->polarity !=3D PWM_POLARITY_NORMAL && !state->usage_power)
-> > >  		return -EINVAL;
-> > > =20
-> > >  	if (!state->enabled) {
-> > > @@ -213,7 +221,11 @@ static int pwm_mediatek_apply(struct pwm_chip *c=
-hip, struct pwm_device *pwm,
-> > >  		return 0;
-> > >  	}
-> > > =20
-> > > -	err =3D pwm_mediatek_config(pwm->chip, pwm, state->duty_cycle, stat=
-e->period);
-> > > +	duty_cycle =3D state->duty_cycle;
-> > > +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED)
-> > > +		duty_cycle =3D state->period - state->duty_cycle;
-> >=20
-> > That's not really what state->usage_power was meant to address.
->=20
-> I don't understand your concern here. I don't like .usage_power, but
-> AFAICT this is a legitimite use. With .usage_power =3D true, the lowlevel
-> driver is free to shift the phase_offset and even modify the period size
-> and the goal is just that the average power-output matches.
->=20
-> Lorenz's patch does exactly this: It even keeps the period and only
-> shifts the phase (by period - duty_cycle). If you consider this not
-> legitmate, I think we have to improve the docs about .usage_power.
+ - Focus and zoom are slow.
 
-I realize that I'm being nitpicky here. Setting usage_power =3D true and
-duty =3D period - duty is a lazy way of achieving what you can easily do
-by adjusting the input duty cycle.
+Compared to a simple VCM driver, which reacts almost instantaneously, the
+stepper motors that control the lens groups may require some time to reach
+their target position. Therefore, the control process in user space needs
+to receive feedback on the current status of each lens group, such as the
+current position and whether or not the lens group is moving. Patch 1/4
+adds volatile and read-only status controls for each lens group.
 
-If you all really want this, then it should go into the core, because
-it's something that can be implemented on basically every single PWM
-controller.
+ - The velocity of focus and zoom can be selected.
 
-Thierry
+In contrast to a simple VCM driver, the stepper motors can move at
+different velocities. Since the produced noise depends on the velocity, the
+control process may want to optimize the chosen velocity. Also, some auto
+focus algorithms use different velocities in different phases (e.g., a
+coarse and fast scan vs. a slow and precise scan). Patch 2/4 adds speed
+controls for the focus lens group and the zoom lens group.
 
---vTrnEci5s8VqfSaD
-Content-Type: application/pgp-signature; name="signature.asc"
+ - Calibration may be required.
 
------BEGIN PGP SIGNATURE-----
+Since moving mechanical parts are involved, calibration is most likely
+necessary. Patch 3/4 introduces controls to control calibration procedures.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmQu134ACgkQ3SOs138+
-s6HdEg//QB1RbC+b2D1fyJp2a/878DZw0Noui4uzQ9hqOvjkcUvly2m9Nt/YPMG3
-LK8yJ8Zmxkytm6YqFHgYwaYZk7vnRL6Cvoo5gVdxlAvsgG+Go/UAEgvMpq5dgnP+
-FO8mZa4P7LKgJe/5sGuZanDrwVt7Xh6Y12RsmiBYcaMkC4fkpyKutR0VRy31KIE4
-qNJP0DozI7wHDyJcdV+AW+2saARDEt+5IRFn/fKjpxx5hp2pIg04OUcelAJEgF6E
-pg16Vs9BAqUYfN+LnqdGqph3+tJR6pvcXLG+uU6o/FgQLTqf3ic1oQca7stRfAH9
-BbqhkkoTzlpOiLvp0S4bzxqOiaFioRnROBppZvNIl85j3NIOSm7NTAzUE3rh/Z9I
-qkn06FT3+Y1R3/NsOKZoQfH0ygm97RdjtQhwWscm0VHIneh165fW8e++dcrBLYCY
-NyYA01We7VONe4m05ycsWzXq3xckZj7T4225MOK/NA2AK2KTNhMUhSqA3T41IEto
-iWBzS9J8azku8jAYj0My5RO7obpymkVX0+ymixsmFVvBW4V7Hd7fPR43eI805Rg9
-OMuh92K+e1XBvgq8nUUuA8pJxmBBkG+Qpz9t1zta55X1hu9LBtSdocZcJtaBr746
-ELWDyZxNNGBTfbmchrp5SIP1zphRDVY3o3wzoKVY4XQewLaDL5g=
-=rBYM
------END PGP SIGNATURE-----
+In the scope of calibration, the relation between the lens positions may be
+fine-tuned. This requires the ability to control the individual lenses and
+gather feedback on their current status. Patch 4/4 introduces a pair of
+controls for five zoom lenses. (Five is a placeholder here. The most
+complex objective we had at hand happened to feature five zoom lenses.)
 
---vTrnEci5s8VqfSaD--
+On the user space side, it is envisaged that libcamera operates the newly
+introduced controls. Please note that no tests with libcamera have been
+carried out yet, the integration will be discussed after the first round of
+feedback to this RFC.
+
+Looking forward to your comments!
+
+---
+Michael Riesch (4):
+      media: v4l2-ctrls: add lens group status controls for zoom and focus
+      media: v4l2-ctrls: add lens group speed controls for zoom and focus
+      media: v4l2-ctrls: add lens calibration controls
+      media: v4l2-ctrls: add controls for individual zoom lenses
+
+ .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 105 +++++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-core.c          |   9 ++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  30 ++++++
+ include/media/v4l2-ctrls.h                         |   2 +
+ include/uapi/linux/v4l2-controls.h                 |  39 ++++++++
+ include/uapi/linux/videodev2.h                     |   2 +
+ 6 files changed, 187 insertions(+)
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230406-feature-controls-lens-b85575d3443a
+
+Best regards,
+-- 
+Michael Riesch <michael.riesch@wolfvision.net>
+
