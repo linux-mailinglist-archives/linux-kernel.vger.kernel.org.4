@@ -2,118 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6211A6DA074
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B299A6DA07C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240316AbjDFS7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S240355AbjDFTBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjDFS7u (ORCPT
+        with ESMTP id S240027AbjDFTBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:59:50 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C09426B2;
-        Thu,  6 Apr 2023 11:59:49 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id n1so20340204ili.10;
-        Thu, 06 Apr 2023 11:59:49 -0700 (PDT)
+        Thu, 6 Apr 2023 15:01:01 -0400
+Received: from mail-il1-x14a.google.com (mail-il1-x14a.google.com [IPv6:2607:f8b0:4864:20::14a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA6486AD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:00:58 -0700 (PDT)
+Received: by mail-il1-x14a.google.com with SMTP id x5-20020a056e021ca500b00327f726c6c0so3261733ill.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680807588; x=1683399588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pUyJ3wxzxoqSuvxPI58fy1Btf6mp8kX94ybQptXUc3Q=;
-        b=YkKIr0GocwTAvB4t/GGojOyjJQrlawJFDeEIq7fgZQ0DqGk5NImD9Go7I7XBAQOfW3
-         eYq5ujzUXkEzVnaC07MyyL2e529FZ81atwYQQLFZ9Kb+a+wpWSJjppzOiN8EPS+O/KpE
-         BZIdqjdajls2tbOYgstJBf3atbMy+dZAgb4WZGEHdwwSQfZENcA19TYYhLdkrxfjAkoK
-         NFptTaCqhJiss0Yd4T/aPtBP7+430FpAK+iFijJgvN9PmOXqKoUmQ6/5tAMRTyiV7QUC
-         2j1LYK4snrCVyLKee25ixG7vc3NoQ5YF0Eio3pnk3FktYwFACXEjuHN16jKqFDhF79mL
-         Pt+A==
+        d=google.com; s=20210112; t=1680807658;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zSA3/1CdFh9tu9Hpp9PWm4akde9aLttLgSqXrwXokdk=;
+        b=OSvpGYy4yGiVdwycb5ysh+iFXTvtWtx8upWKkoCrsKl/cdHIYt20pDqU/zNjC6An+l
+         CutaPev7Hwl3wN3xcmqzvXTmi3UYlf0cvnRY5/EBf8A3LqIKPMUpoNzbV4M6L5U3guvS
+         1dB94T/2NzLtwPLmBAixZvjGzAFBYreZztlTzruBw8lwDtQpVRJg9HDjhIe+N5yEbtim
+         m6Cvz69tp7Z2qYNDnHuGJhq6ww//pIddpTBqj+HemVBibg4JBNDOto3Ro7EdxA4eWcis
+         or6oiARvXQGC6NseMfIS/HYevuZRzPTI0yEpybtjQ1osoGo7M/oTxdXHM6e8IMg2Uz9P
+         LH8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807588; x=1683399588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pUyJ3wxzxoqSuvxPI58fy1Btf6mp8kX94ybQptXUc3Q=;
-        b=jqkJOSuiqzZ0OTtg8usyy3IMWRiBRjybROhJ2Tf6DVeBBsn4F2m89Oo6jAY+MjUJ//
-         CBIuFOyKRkF7dtjVxYa2N9UD7LIeCfQp70iO/WwM5uvXv49JUCZv4S0X972MlQrVEtZK
-         CdH7Awxb5Cq2lsgpP1wg/DzkWWL0dPHL+yoKc1rD6t+HeQ1Cr7d8PZhU7rycGDjuoobq
-         VnXIpP1HvPUh1wu7Sbw+L8r/+VqKH7k/NbzFxN6IVspgr+knzYWzev7mhGJ2EDSK+NjZ
-         94csohZWRHqYrAIUwnQvHAcCgp30c/SlyFWBYHJ6K+kgRRuirRfCe6KcPknQmcZdqPTl
-         ZBCQ==
-X-Gm-Message-State: AAQBX9cBLbvJIkGmAq/fCBXByNKpP1aER3sjjdl5RINx/rGjThVwsWVR
-        I10+DgFQ+beDA3jwcdAii+mjl1EvJ8F5sgDU0So=
-X-Google-Smtp-Source: AKy350bQp4WCCWwuYEVoVmA1ow6eFikyqvIzEhmOaus7gRujSkLUdnIxlEeOdiLBcMiNn18hKyvJs5Bu35ppe0l85QE=
-X-Received: by 2002:a92:c5cf:0:b0:326:4201:2d8c with SMTP id
- s15-20020a92c5cf000000b0032642012d8cmr6810904ilt.1.1680807588655; Thu, 06 Apr
- 2023 11:59:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230330204217.47666-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230330204217.47666-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <ZCu1tFrQCVe2sgNz@infradead.org>
-In-Reply-To: <ZCu1tFrQCVe2sgNz@infradead.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 6 Apr 2023 18:59:22 +0000
-Message-ID: <CA+V-a8sn8ai1h9+D-b2+Uj2xGcPOw95ukFPy=T_jL+EjTuqApQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/6] riscv: mm: dma-noncoherent: Switch using function
- pointers for cache management
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+        d=1e100.net; s=20210112; t=1680807658;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zSA3/1CdFh9tu9Hpp9PWm4akde9aLttLgSqXrwXokdk=;
+        b=O7uqvydNLCv2ZiY32iwe0InD9t9OFEK2BGovtEczKcydVbMFE7IzoCdk8lqfDUhvfR
+         UWiGP5gK4CdqnmTlx4LRMW9Yv6ZO5HHA97iQysIdIu470ycbs/ps7+VReIaBMWUNvKU6
+         WsSxZW2RwhR8j5JeARlWSBeigDlVP+iroY9GrO29xt5BcaFFEWy1ZDy6HpfpDCA26nOZ
+         s9fSJHr+Jufm1RpHUjkbkwq6HDd3uQMltXNkvjGJXn1J4qtsWh+1n4ekrIigJMeBl+5z
+         qf3x2kelNpV7LAt+vn6pUmjpXuefz/D1FaKsimXIMYoV3+Kn0NLGbzv2EqsKMnpA/4Kg
+         tOHw==
+X-Gm-Message-State: AAQBX9dyWWxRLDnbn0cfdQ4ty5rwQ4xmINQXe6U+mAJHozqwh/zvw0UF
+        Nnh9Lln4JlXwPqryH9ysaE/7Rwq5XH9l+ZE=
+X-Google-Smtp-Source: AKy350Zb3KiU0VTyZNkzMslxks92DdL9kS/QwpXsNpZZe8AvnVVrfQ9VwU8xYCdMiKywM1hpLUQ3ziWRcqOhTd8=
+X-Received: from allenwebb.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:12e8])
+ (user=allenwebb job=sendgmr) by 2002:a05:6e02:12ea:b0:310:9d77:6063 with SMTP
+ id l10-20020a056e0212ea00b003109d776063mr6868825iln.5.1680807658032; Thu, 06
+ Apr 2023 12:00:58 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 14:00:19 -0500
+In-Reply-To: <20221219204619.2205248-1-allenwebb@google.com>
+Mime-Version: 1.0
+References: <20221219204619.2205248-1-allenwebb@google.com>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230406190030.968972-1-allenwebb@google.com>
+Subject: [PATCH v10 00/11] Generate modules.builtin.alias from match ids
+From:   Allen Webb <allenwebb@google.com>
+To:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     gregkh@linuxfoundation.org, mcgrof@kernel.org,
+        christophe.leroy@csgroup.eu, nick.alcock@oracle.com,
+        Allen Webb <allenwebb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+Generate modules.builtin.alias from match ids
 
-On Tue, Apr 4, 2023 at 6:29=E2=80=AFAM Christoph Hellwig <hch@infradead.org=
-> wrote:
->
-> On Thu, Mar 30, 2023 at 09:42:12PM +0100, Prabhakar wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Currently, selecting which CMOs to use on a given platform is done usin=
-g
-> > and ALTERNATIVE_X() macro. This was manageable when there were just two
-> > CMO implementations, but now that there are more and more platforms com=
-ing
-> > needing custom CMOs, the use of the ALTERNATIVE_X() macro is unmanageab=
-le.
-> >
-> > To avoid such issues this patch switches to use of function pointers
-> > instead of ALTERNATIVE_X() macro for cache management (the only drawbac=
-k
-> > being performance over the previous approach).
-> >
-> > void (*clean_range)(unsigned long addr, unsigned long size);
-> > void (*inv_range)(unsigned long addr, unsigned long size);
-> > void (*flush_range)(unsigned long addr, unsigned long size);
-> >
->
-> NAK.  Function pointers for somthing high performance as cache
-> maintainance is a complete no-go.
->
-Ok, I will take the ALTERNATIVE() macro route.
+This patch series (v10) generates `modules.builtin.alias` during modpost.
+The goal is for tools like USBGuard to leverage not only modules.aliases
+but also `modules.builtin.aliases` to associate devices with the modules
+that may be bound before deciding to authorize a device or not. This is
+particularly useful in cases when new devices of a particular type
+shouldn't be allowed part of the time like for lock screens.
 
-Cheers,
-Prabhakar
+Also included in this series are added documentation, style fixes and
+fixes for build breakages for built-in modules that relied on
+MODULE_DEVICE_TABLE being a no-op. Some of these were typos in
+device table name that do not need aliases and one ifdef-ed out the
+device table.
+
+---
+
+Generate modules.builtin.alias from match ids
+=============================================
+
+This series (v10) removes the `cc:stable` commit tags since the fixes
+only are needed going forward. It also includes documentation updates
+and unifies the MODULE_DEVICE_TABLE macro for both the builtin and
+module case.
+
+Additionally, rather than fixing the typo-ed device table names the
+commits were updated to drop the broken MODULE_DEVICE_TABLE
+invocations, since they belong to device types that would not benefit
+from the intended purpose of `modules.builtin.alias`.
+
+Note, cover letters were first added in v5.
+
+  RFC (broken patch): https://lore.kernel.org/lkml/CAJzde042-M4UbpNYKw0eDVg4JqYmwmPYSsmgK+kCMTqsi+-2Yw@mail.gmail.com/
+  v1 (missing v1 label): https://lore.kernel.org/lkml/20221111152852.2837363-1-allenwebb@google.com/
+  v2 (missing v2 label): https://lore.kernel.org/lkml/20221128201332.3482092-1-allenwebb@google.com/
+  v3: https://lore.kernel.org/lkml/20221129224313.455862-1-allenwebb@google.com/
+  v4: https://lore.kernel.org/lkml/20221130221447.1202206-1-allenwebb@google.com/
+  v5: https://lore.kernel.org/lkml/20221201211630.101541-1-allenwebb@google.com/
+  v6: https://lore.kernel.org/lkml/20221202224540.1446952-1-allenwebb@google.com/
+  v7: https://lore.kernel.org/lkml/20221216221703.294683-1-allenwebb@google.com/
+  v8: https://lore.kernel.org/lkml/20221219191855.2010466-1-allenwebb@google.com/
+  v9: https://lore.kernel.org/lkml/20221219204619.2205248-1-allenwebb@google.com/
+  v10: This version
+
+Patch series status
+-------------------
+
+This series should be close to ready.
+
+Acknowledgements
+----------------
+
+Thanks to Greg Kroah-Hartman, Christophe Leroy, Luis Chamberlain and the
+other Linux maintainers for being patient with me as I have worked
+through learning the kernel workflow to get this series into a more
+presentable state.
+
+Thanks to Luis Chamberlain for raising the alternative of using kmod to
+address the primary motivation of the patch series.
+
+Thanks to Dmitry Torokhov and Benson Leung for feedback on the
+USB authorization documentation for the driver API.
+
+Also, thanks to Intel's kernel test robot <lkp@intel.com> for catching
+issues that showed up with different kernel configurations.
+
+Allen Webb (11):
+  rockchip-mailbox: Remove unneeded MODULE_DEVICE_TABLE
+  scsi/BusLogic: Always include device id table
+  stmpe-spi: Fix MODULE_DEVICE_TABLE entries
+  module.h: MODULE_DEVICE_TABLE for built-in modules
+  modpost: Track module name for built-in modules
+  modpost: Add -b option for emitting built-in aliases
+  file2alias.c: Implement builtin.alias generation
+  build: Add modules.builtin.alias
+  Documentation: Include modules.builtin.alias
+  Documentation: Update writing_usb_driver for built-in modules
+  Documentation: add USB authorization document to driver-api
+
+ .gitignore                                    |  1 +
+ .../driver-api/usb/authorization.rst          | 71 ++++++++++++++
+ Documentation/driver-api/usb/index.rst        |  1 +
+ .../driver-api/usb/writing_usb_driver.rst     |  3 +
+ Documentation/kbuild/kbuild.rst               |  7 ++
+ Makefile                                      |  1 +
+ drivers/mailbox/rockchip-mailbox.c            |  1 -
+ drivers/mfd/stmpe-spi.c                       |  1 -
+ drivers/scsi/BusLogic.c                       |  2 -
+ include/linux/module.h                        | 36 ++++++--
+ scripts/Makefile.modpost                      | 15 +++
+ scripts/mod/file2alias.c                      | 92 ++++++++++++++-----
+ scripts/mod/modpost.c                         | 30 +++++-
+ scripts/mod/modpost.h                         |  2 +
+ 14 files changed, 229 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/driver-api/usb/authorization.rst
+
+-- 
+2.39.2
+
