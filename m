@@ -2,161 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98536D9279
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18CFB6D9273
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236353AbjDFJPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
+        id S236270AbjDFJPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236296AbjDFJPo (ORCPT
+        with ESMTP id S235967AbjDFJPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:15:44 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB3B55AE;
-        Thu,  6 Apr 2023 02:15:30 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PsbFt4wRyz9v7V0;
-        Thu,  6 Apr 2023 17:06:10 +0800 (CST)
-Received: from [10.81.221.252] (unknown [10.81.221.252])
-        by APP1 (Coremail) with SMTP id LxC2BwBX2AN_jS5k1_z9AQ--.9S2;
-        Thu, 06 Apr 2023 10:15:07 +0100 (CET)
-Message-ID: <841747d7-ab17-2904-ea1d-6adb3d35c711@huaweicloud.com>
-Date:   Thu, 6 Apr 2023 11:14:34 +0200
+        Thu, 6 Apr 2023 05:15:12 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BEF4EED;
+        Thu,  6 Apr 2023 02:15:10 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id q102so36673440pjq.3;
+        Thu, 06 Apr 2023 02:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680772509;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ipUTWGxdYRj74U+3DQNtSBrS5nB5CEomlPaYC6O7z0k=;
+        b=pK/TUbF9znkVQNFvKpzD8pRU/hqSACTv3jLy5n+Vt1LkSUM50jTDWJTsTz55PeX/f4
+         ZKkHVHIalzFZnVrmuI2CrAd/hFqi2HP7zk/rSwt8yqMpuYkPRVswuCz+BtACRsB2EfWT
+         n49yDrGrQqSTtyDK7FoW2zjaAjOhbiXOdvCWtXYakbayY5F1ovxk/Zdo6TKVhewBEyBs
+         R/Exit9+ZqDLQpovjLZzH1L6dXnRFA81L8x64l4os+1Rbfu3RnfmT0WfCDe5nKhRdPwt
+         5l0OEkpliXZm3BiHEp2HpaSjFLR0UO6J/DUl2mMQtvyrxogsuwofUcbjQa7zus+Nel3m
+         hnxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680772509;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ipUTWGxdYRj74U+3DQNtSBrS5nB5CEomlPaYC6O7z0k=;
+        b=JCfxDQodRCykYBn0M2U04EsAp+Y70e+I0XwoWAqY6PsP82kmdXK5eexBXMgoWmAMbI
+         aYXCImIO6oD6kA01xGVqsPw+ZI5hXW0YVCHMfQqmJESE9yRXzNUA6TZHWwF64eBoSMlI
+         /ULUfIcIcPZduujji+8cjkvVZKwfvQp1Pv2uf5AMyLL2tPmMZQSKyQ8vR0D8xYJXo219
+         j7copmS5v0LbezgEvAYmpO8ywlMF8s3qfG+D5UDktMKxF46uW5QmLgxmjiIulkJWI5MH
+         8ysTBz/AZK0PSWVh9xMuqNYebIDdF0Y82l6qm6h9zO3G2E+5t/vyYwsJBZASVQ/Pf6Mz
+         Zb0Q==
+X-Gm-Message-State: AAQBX9cmgqmGEtbH3BbfmOWTAnsjZ4EZCkkJCgM1ANq3xooPqWMSEJBZ
+        syD1QIFUbE9OilufkosOo2MKeDjLIfKW/khQ
+X-Google-Smtp-Source: AKy350YoGoW2oRvGjOsx4m02H8L2jRfm606YF08ZFZ+hJKJPrWIpP8pJxUFHyb5P3hCVcz1kIHPC7Q==
+X-Received: by 2002:a17:90b:3907:b0:233:f354:e7df with SMTP id ob7-20020a17090b390700b00233f354e7dfmr10622120pjb.18.1680772509060;
+        Thu, 06 Apr 2023 02:15:09 -0700 (PDT)
+Received: from lunar.aeonazure.com ([182.2.142.228])
+        by smtp.gmail.com with ESMTPSA id nh12-20020a17090b364c00b0023d16f05dd8sm760718pjb.36.2023.04.06.02.15.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 02:15:08 -0700 (PDT)
+From:   Shaun Tancheff <shaun.tancheff@gmail.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc:     Shaun Tancheff <shaun.tancheff@hpe.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] memcg: Default value setting in memcg-v1
+Date:   Thu,  6 Apr 2023 16:14:50 +0700
+Message-Id: <20230406091450.167779-1-shaun.tancheff@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
- <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
- <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
- <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com>
- <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
- <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
- <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
- <CAHC9VhTO02CGUt0DUUmx=TUYS7Q81fas_Qy5miOFonaye0NEmw@mail.gmail.com>
- <c3751b2b-aa4b-2105-c238-29816bc85607@schaufler-ca.com>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <c3751b2b-aa4b-2105-c238-29816bc85607@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBX2AN_jS5k1_z9AQ--.9S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw4fAr15Ar47KrW5Aw15CFg_yoWrAF47pr
-        y8Ka47KF4DtF1DJrnay3W7W342krZxGr4UWws8Kr4UAF1qqr1xJr1Yyr4YkFn3Xrs7Z3WF
-        vr4jqry3urn8A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UdxhLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4eqGwABsT
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/2023 11:07 PM, Casey Schaufler wrote:
-> On 4/5/2023 1:49 PM, Paul Moore wrote:
->> On Wed, Apr 5, 2023 at 4:43 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->>> On 4/5/2023 12:59 PM, Paul Moore wrote:
->>>> On Wed, Apr 5, 2023 at 5:44 AM Roberto Sassu
->>>> <roberto.sassu@huaweicloud.com> wrote:
->>>>> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
->>>>>> On 4/4/2023 11:54 AM, Paul Moore wrote:
->>>>>>> On Fri, Mar 31, 2023 at 8:33 AM Roberto Sassu
->>>>>>> <roberto.sassu@huaweicloud.com> wrote:
->>>> ..
->>>>
->>>>>>>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
->>>>>>>> index cfcbb748da2..8392983334b 100644
->>>>>>>> --- a/security/smack/smack_lsm.c
->>>>>>>> +++ b/security/smack/smack_lsm.c
->>>>>>>> @@ -52,6 +52,15 @@
->>>>>>>>    #define SMK_RECEIVING  1
->>>>>>>>    #define SMK_SENDING    2
->>>>>>>>
->>>>>>>> +/*
->>>>>>>> + * Smack uses multiple xattrs.
->>>>>>>> + * SMACK64 - for access control, SMACK64EXEC - label for the program,
->>>>>>> I think it would be good to move SMACK64EXEC to its own line; it took
->>>>>>> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set to '4'
->>>>>>> when I only say three comment lines ... ;)
->>>>>>>
->>>>>>>> + * SMACK64MMAP - controls library loading,
->>>>>>>> + * SMACK64TRANSMUTE - label initialization,
->>>>>>>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
->>>>>>>> + */
->>>>>>>> +#define SMACK_INODE_INIT_XATTRS 4
->>>>>>> If smack_inode_init_security() only ever populates a single xattr, and
->>>>>>> that is the only current user of SMACK_INODE_INIT_XATTRS, can we make
->>>>>>> this '1' and shrink the xattr allocation a bit?
->>>>>> If the parent directory is marked with SMACK64_TRANSMUTE, the access
->>>>>> rule allowing the access has the "t" mode, and the object being initialized
->>>>>> is a directory, the new inode should get the SMACK64_TRANSMUTE attribute.
->>>>>> The callers of security_inode_init_security() don't seem to care.
->>>>>> I can't say if the evm code is getting SMACK64_TRANSMUTE or, for that
->>>>>> matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older system
->>>>>> allowed for multiple Smack xattrs, but I'm not clear on exactly how.
->>>>> If you like to set an additional xattr, that would be possible now.
->>>>> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
->>>>> another time and set SMACK64_TRANSMUTE.
->>>>>
->>>>> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
->>>>> EVM would protect SMACK64_TRANSMUTE too.
->>>> Ooookay, but can someone explain to me how either the current, or
->>>> patched, smack_inode_init_security() function can return multiple
->>>> xattrs via the security_inode_init_security() LSM hook?
->>> It can't.
->> I didn't think so.
->>
->> To be really specific, that's what we're talking about with this
->> patch: the number of xattrs that smack_inode_init_security() can
->> return to the LSM hook (and EVM, and the caller ...).  If it's only
->> ever going to be one, I think we can adjust the
->> 'SMACK_INODE_INIT_XATTRS' down to '1' and save ourselves some
->> allocation space.
-> 
-> Does evm have an expectation that mumble_inode_init_security() is
-> going to report all the relevant attributes? It has to be getting
-> them somehow, which leads me to wonder if we might want to extend
-> smack_inode_init_security() to do so. Even if we did, the maximum
-> value would be '2', SMACK64 and SMACK64_TRANSMUTE. Now that would
-> require a whole lot of work in the calling filesystems, as setting
-> the transmute attribute would be moving out of smack_d_instantiate()
-> and into the callers. Or something like that.
+From: Shaun Tancheff <shaun.tancheff@hpe.com>
 
-After changing the inode_init_security hook definition to pass the full 
-xattr array, this is not going to be a problem. EVM sees all xattrs that 
-are going to be set when an inode is created, and adds its own too.
+Setting min, low and high values with memcg-v1
+provides bennefits for  users that are unable to update
+to memcg-v2.
 
-If you have enough information to set security.SMACK_TRANSMUTE64 in 
-smack_inode_init_security(), this patch sets already allows to set both 
-xattrs at the same time. We would just need to call lsm_get_xattr_slot() 
-another time, assuming that we reserve two xattrs.
+Setting min, low and high can be set in memcg-v1
+to apply enough memory pressure to effective throttle
+filesystem I/O without hitting memcg oom.
 
-Roberto
+This can be enabled by setting the sysctl values:
+  vm.memcg_v1_min_default
+  vm.memcg_v1_low_default
+  vm.memcg_v1_high_default
+
+When a memory control group is newly crated the
+min, low and high values are set to percent of the
+maximum based on the min, low and high default
+values respectively.
+
+This resolves an issue with memory pressure when users
+initiate unbounded I/O on various file systems such as
+ext4, XFS and NFS.
+
+Signed-off-by: Shaun Tancheff <shaun.tancheff@hpe.com>
+---
+v0: Initial hard coded limits by percent.
+v1: Added sysfs access and module parameters for percent values to enable
+v2: Fix 32-bit, remove need for missing __udivdi3
+v3: Added sysctl parameters and documentation
+ .../admin-guide/cgroup-v1/memory.rst          | 33 +++++++++
+ Documentation/admin-guide/sysctl/vm.rst       | 33 +++++++++
+ include/linux/memcontrol.h                    |  5 ++
+ kernel/sysctl.c                               | 29 ++++++++
+ mm/memcontrol.c                               | 69 ++++++++++++++++++-
+ 5 files changed, 168 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v1/memory.rst b/Documentation/admin-guide/cgroup-v1/memory.rst
+index 258e45cc3b2d..4b44e0da49d6 100644
+--- a/Documentation/admin-guide/cgroup-v1/memory.rst
++++ b/Documentation/admin-guide/cgroup-v1/memory.rst
+@@ -70,6 +70,15 @@ Brief summary of control files.
+  memory.memsw.usage_in_bytes	     show current usage for memory+Swap
+ 				     (See 5.5 for details)
+  memory.limit_in_bytes		     set/show limit of memory usage
++ memory.limit_in_bytes.min	     show current memory min setting not present
++				     on the root control group.
++				     (See sysctl's vm.memcg_v1_min_default)
++ memory.limit_in_bytes.low	     show current memory low setting not present
++				     on the root control group.
++				     (See sysctl's vm.memcg_v1_low_default)
++ memory.limit_in_bytes.high	     show current memory low setting not present
++				     on the root control group.
++				     (See sysctl's vm.memcg_v1_high_default)
+  memory.memsw.limit_in_bytes	     set/show limit of memory+Swap usage
+  memory.failcnt			     show the number of memory usage hits limits
+  memory.memsw.failcnt		     show the number of memory+Swap hits limits
+@@ -648,6 +657,30 @@ The output format of memory.numa_stat is::
+ 
+ The "total" count is sum of file + anon + unevictable.
+ 
++5.6 limit_in_bytes.low, min, and high
++-------------------------------------
++
++These read-only values enable viewing the current low, min and high
++restrictions added to a newly created cgroup when the sysctl vm
++parameters: vm.memcg_v1_low_default, vm.memcg_v1_min_default,
++and vm.memcg_v1_high_default are enabled.
++
++Example usage:
++  sudo sysctl -w vm.memcg_v1_min_default=10
++  sudo sysctl -w vm.memcg_v1_low_default=30
++  sudo sysctl -w vm.memcg_v1_high_default=80
++
++  sudo mkdir /sys/fs/cgroup/memory/restrict
++  echo 100M | sudo tee /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes
++  cat /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes.min
++  2560
++  cat /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes.low
++  7680
++  cat /sys/fs/cgroup/memory/restrict/memory.limit_in_bytes.high
++  20480
++  echo $$ | sudo tee /sys/fs/cgroup/memory/restrict/tasks
++  dd if=/dev/zero of=~/file.bin bs=10M status=progress
++
+ 6. Hierarchy support
+ ====================
+ 
+diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+index 988f6a4c8084..87eefa165f92 100644
+--- a/Documentation/admin-guide/sysctl/vm.rst
++++ b/Documentation/admin-guide/sysctl/vm.rst
+@@ -43,6 +43,9 @@ Currently, these files are in /proc/sys/vm:
+ - legacy_va_layout
+ - lowmem_reserve_ratio
+ - max_map_count
++- memcg_v1_high_default
++- memcg_v1_low_default
++- memcg_v1_min_default
+ - memory_failure_early_kill
+ - memory_failure_recovery
+ - min_free_kbytes
+@@ -425,6 +428,36 @@ e.g., up to one or two maps per allocation.
+ The default value is 65530.
+ 
+ 
++memcg_v1_min_default:
++=====================
++
++This file contains a percentage of the cgroup memory limit used to
++set the min value of a newly memory cgroup. This value is only used
++with memory cgroup v1 interface.
++
++The default is 0 (disabled). Range is [0, 100].
++
++
++memcg_v1_low_default:
++=====================
++
++This file contains a percentage of the cgroup memory limit used to
++set the low value of a newly memory cgroup. This value is only used
++with memory cgroup v1 interface.
++
++The default is 0 (disabled). Range is [0, 100].
++
++
++memcg_v1_high_default:
++======================
++
++This file contains a percentage of the cgroup memory limit used to
++set the high value of a newly memory cgroup. This value is only used
++with memory cgroup v1 interface.
++
++The default is 0 (disabled). Range is [0, 100].
++
++
+ memory_failure_early_kill:
+ ==========================
+ 
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index 85dc9b88ea37..0592b5e19883 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -68,6 +68,11 @@ struct mem_cgroup_id {
+ 	refcount_t ref;
+ };
+ 
++/* System default memory protection setting */
++extern int sysctl_memcg_min_default;
++extern int sysctl_memcg_low_default;
++extern int sysctl_memcg_high_default;
++
+ /*
+  * Per memcg event counter is incremented at every pagein/pageout. With THP,
+  * it will be incremented by the number of pages. This counter is used
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 1c240d2c99bc..bf923e50e597 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2449,6 +2449,35 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
++#endif
++#ifdef CONFIG_MEMCG
++	{
++		.procname	= "memcg_v1_min_default",
++		.data		= &sysctl_memcg_min_default,
++		.maxlen		= sizeof(sysctl_memcg_min_default),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_HUNDRED,
++	},
++	{
++		.procname	= "memcg_v1_low_default",
++		.data		= &sysctl_memcg_low_default,
++		.maxlen		= sizeof(sysctl_memcg_low_default),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_HUNDRED,
++	},
++	{
++		.procname	= "memcg_v1_high_default",
++		.data		= &sysctl_memcg_high_default,
++		.maxlen		= sizeof(sysctl_memcg_high_default),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE_HUNDRED,
++	},
+ #endif
+ 	{ }
+ };
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 2eee092f8f11..74875178b48b 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -82,6 +82,11 @@ struct mem_cgroup *root_mem_cgroup __read_mostly;
+ DEFINE_PER_CPU(struct mem_cgroup *, int_active_memcg);
+ EXPORT_PER_CPU_SYMBOL_GPL(int_active_memcg);
+ 
++/* System default memory protection setting */
++int sysctl_memcg_min_default __read_mostly = 0;
++int sysctl_memcg_low_default __read_mostly = 0;
++int sysctl_memcg_high_default __read_mostly = 0;
++
+ /* Socket memory accounting disabled? */
+ static bool cgroup_memory_nosocket __ro_after_init;
+ 
+@@ -205,6 +210,7 @@ enum res_type {
+ 	_MEMSWAP,
+ 	_KMEM,
+ 	_TCP,
++	_MEM_V1,
+ };
+ 
+ #define MEMFILE_PRIVATE(x, val)	((x) << 16 | (val))
+@@ -3676,6 +3682,9 @@ enum {
+ 	RES_MAX_USAGE,
+ 	RES_FAILCNT,
+ 	RES_SOFT_LIMIT,
++	RES_LIMIT_MIN,
++	RES_LIMIT_LOW,
++	RES_LIMIT_HIGH,
+ };
+ 
+ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+@@ -3686,6 +3695,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+ 
+ 	switch (MEMFILE_TYPE(cft->private)) {
+ 	case _MEM:
++	case _MEM_V1:
+ 		counter = &memcg->memory;
+ 		break;
+ 	case _MEMSWAP:
+@@ -3716,6 +3726,12 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
+ 		return counter->failcnt;
+ 	case RES_SOFT_LIMIT:
+ 		return (u64)memcg->soft_limit * PAGE_SIZE;
++	case RES_LIMIT_MIN:
++		return (u64)READ_ONCE(memcg->memory.min);
++	case RES_LIMIT_LOW:
++		return (u64)READ_ONCE(memcg->memory.low);
++	case RES_LIMIT_HIGH:
++		return (u64)READ_ONCE(memcg->memory.high);
+ 	default:
+ 		BUG();
+ 	}
+@@ -3815,6 +3831,34 @@ static int memcg_update_tcp_max(struct mem_cgroup *memcg, unsigned long max)
+ 	return ret;
+ }
+ 
++static inline void mem_cgroup_v1_set_defaults(struct mem_cgroup *memcg,
++					      unsigned long nr_pages)
++{
++	unsigned long min, low, high;
++
++	if (mem_cgroup_is_root(memcg) || PAGE_COUNTER_MAX == nr_pages)
++		return;
++
++	min = READ_ONCE(memcg->memory.min);
++	low = READ_ONCE(memcg->memory.low);
++	if (min || low)
++		return;
++
++	if (!min && sysctl_memcg_min_default > 0) {
++		min = (nr_pages * sysctl_memcg_min_default) / 100;
++		page_counter_set_min(&memcg->memory, min);
++	}
++	if (!low && sysctl_memcg_low_default > 0) {
++		low = (nr_pages * sysctl_memcg_low_default) / 100;
++		page_counter_set_low(&memcg->memory, low);
++	}
++	high = READ_ONCE(memcg->memory.high);
++	if (high == PAGE_COUNTER_MAX && sysctl_memcg_high_default) {
++		high = (nr_pages * sysctl_memcg_high_default) / 100;
++		page_counter_set_high(&memcg->memory, high);
++	}
++}
++
+ /*
+  * The user of this function is...
+  * RES_LIMIT.
+@@ -3838,6 +3882,11 @@ static ssize_t mem_cgroup_write(struct kernfs_open_file *of,
+ 			break;
+ 		}
+ 		switch (MEMFILE_TYPE(of_cft(of)->private)) {
++		case _MEM_V1:
++			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
++			if (!ret)
++				mem_cgroup_v1_set_defaults(memcg, nr_pages);
++			break;
+ 		case _MEM:
+ 			ret = mem_cgroup_resize_max(memcg, nr_pages, false);
+ 			break;
+@@ -5000,10 +5049,28 @@ static struct cftype mem_cgroup_legacy_files[] = {
+ 	},
+ 	{
+ 		.name = "limit_in_bytes",
+-		.private = MEMFILE_PRIVATE(_MEM, RES_LIMIT),
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT),
+ 		.write = mem_cgroup_write,
+ 		.read_u64 = mem_cgroup_read_u64,
+ 	},
++	{
++		.name = "limit_in_bytes.min",
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_MIN),
++		.read_u64 = mem_cgroup_read_u64,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "limit_in_bytes.low",
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_LOW),
++		.read_u64 = mem_cgroup_read_u64,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "limit_in_bytes.high",
++		.private = MEMFILE_PRIVATE(_MEM_V1, RES_LIMIT_HIGH),
++		.read_u64 = mem_cgroup_read_u64,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
+ 	{
+ 		.name = "soft_limit_in_bytes",
+ 		.private = MEMFILE_PRIVATE(_MEM, RES_SOFT_LIMIT),
+-- 
+2.34.1
 
