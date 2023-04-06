@@ -2,227 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB9C6D8BEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 02:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D036D8BEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 02:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234526AbjDFAbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 20:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
+        id S234327AbjDFAcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 20:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233903AbjDFAbf (ORCPT
+        with ESMTP id S229756AbjDFAcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 20:31:35 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E729165B9
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 17:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680741093; x=1712277093;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+lPf4kiNx8Mabm0RrArAhUjG1s6SQx28wbwynWS1ASo=;
-  b=gp3Cp+0RpmhcaAdHUt/pUzMEY7BC5PoP12wLawEmlmsxZJ5WdiJyKkjd
-   Q1uhgFIZ+8EAzmYi5u5yPgbpL3t64AkPb4KrbG35nBHpigQBVvn7iz7GC
-   eRU3Pr5whIq/x1g5zCiBipNbW7dVRpLMpNq0fTH3Slh6Ae4A11q6hqc/C
-   ujzERfPi3/0YbFSTfJD+v19mLIqs8OJonHfu+HIbxtHzdrLtt0YGKnHM2
-   XxESgxS11fnlhjQoOwZiKl7PKVPAm7p0eP6nGDJxN5AODixYv/xS+5iV6
-   KKhQlXHwcNO0xd2oMYiGUYIXcQ29pb7j0PAilOC91uhft0to2+O2bqIHu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="342615526"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="342615526"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 17:31:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="751449015"
-X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
-   d="scan'208";a="751449015"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Apr 2023 17:31:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkDXH-000Qw2-09;
-        Thu, 06 Apr 2023 00:31:31 +0000
-Date:   Thu, 06 Apr 2023 08:31:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 81515ecf155a38f3532bf5ddef88d651898df6be
-Message-ID: <642e12c5.nXoLuSugwpLY4WfD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 5 Apr 2023 20:32:33 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380006A41;
+        Wed,  5 Apr 2023 17:32:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsMs76TXVz4wgv;
+        Thu,  6 Apr 2023 10:32:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1680741149;
+        bh=1/M9Rd2F+mKLerjuGEAq0/rt3cV+S/DkP+paMW04Pvo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DMKNVQ/L67mbAZlkhaDMmzNocvdRDbhqsmqZy1tP3nmb4KML3HRMVAPgqSgXHc0ML
+         vkhoN39PtiZiP8KcU6XFvXSYbfqOmjlbFpSMrQJ6kIOdaAB/vfthgxd7yNFyoiA0Lc
+         /UJsIrn7pa34uZ4mDafG8zpApZzJsim0PVY81UqE0Cb0Vp2SDE8xxVYIqFDMSqAc+4
+         Jz23Cek+by0G3jlxLxcSoUpFClmha+KOl+HZHokKeEzUqoS7WHq68YkQ9ttUJitiG0
+         9YljEz1bGfKSXcNrUWFEb62n15Ns9KDIxpZbTDQLIvVRqtHtaS0eT0TVBotwpLPXcf
+         v6wj3fwirmnvw==
+Date:   Thu, 6 Apr 2023 10:32:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Kao <michael.kao@mediatek.com>
+Subject: linux-next: manual merge of the thermal tree with the pm tree
+Message-ID: <20230406103225.1ff571db@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/fhVQ.JNALbM5x83cKJDWn+Q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 81515ecf155a38f3532bf5ddef88d651898df6be  x86/cpu: Add model number for Intel Arrow Lake processor
+--Sig_/fhVQ.JNALbM5x83cKJDWn+Q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-elapsed time: 724m
+Hi all,
 
-configs tested: 147
-configs skipped: 53
+Today's linux-next merge of the thermal tree got a conflict in:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+  drivers/thermal/mediatek/auxadc_thermal.c
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r005-20230403   gcc  
-alpha                randconfig-r016-20230403   gcc  
-alpha                randconfig-r021-20230403   gcc  
-alpha                randconfig-r024-20230403   gcc  
-alpha                randconfig-r026-20230403   gcc  
-alpha                randconfig-r034-20230403   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r001-20230403   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230403   gcc  
-arc                  randconfig-r016-20230403   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                        clps711x_defconfig   gcc  
-arm                     davinci_all_defconfig   clang
-arm                                 defconfig   gcc  
-arm                           imxrt_defconfig   gcc  
-arm                  randconfig-r002-20230405   gcc  
-arm                  randconfig-r021-20230403   clang
-arm                  randconfig-r025-20230405   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230403   clang
-arm64                randconfig-r012-20230403   gcc  
-arm64                randconfig-r015-20230403   gcc  
-arm64                randconfig-r024-20230403   gcc  
-csky         buildonly-randconfig-r002-20230403   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230403   gcc  
-csky                 randconfig-r013-20230403   gcc  
-csky                 randconfig-r035-20230403   gcc  
-hexagon      buildonly-randconfig-r003-20230403   clang
-hexagon      buildonly-randconfig-r006-20230403   clang
-hexagon              randconfig-r006-20230403   clang
-hexagon              randconfig-r012-20230403   clang
-hexagon              randconfig-r024-20230403   clang
-hexagon              randconfig-r024-20230405   clang
-hexagon              randconfig-r025-20230405   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                 randconfig-a012-20230403   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                 randconfig-a014-20230403   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                 randconfig-a016-20230403   gcc  
-i386                 randconfig-r022-20230403   gcc  
-i386                 randconfig-r026-20230403   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r006-20230403   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r001-20230405   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r031-20230403   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r005-20230403   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r014-20230403   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r002-20230404   clang
-mips                 randconfig-r022-20230405   clang
-mips                 randconfig-r024-20230403   clang
-mips                 randconfig-r026-20230403   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230403   gcc  
-nios2                randconfig-r023-20230403   gcc  
-openrisc             randconfig-r034-20230403   gcc  
-openrisc                 simple_smp_defconfig   gcc  
-parisc       buildonly-randconfig-r003-20230403   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r006-20230405   gcc  
-parisc               randconfig-r011-20230403   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r004-20230403   gcc  
-powerpc      buildonly-randconfig-r006-20230403   gcc  
-powerpc                      chrp32_defconfig   gcc  
-powerpc                   currituck_defconfig   gcc  
-powerpc                          g5_defconfig   clang
-powerpc                      pasemi_defconfig   gcc  
-powerpc              randconfig-r005-20230403   clang
-powerpc              randconfig-r013-20230403   gcc  
-powerpc              randconfig-r014-20230403   gcc  
-powerpc              randconfig-r025-20230403   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r001-20230404   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r012-20230403   gcc  
-riscv                randconfig-r014-20230403   gcc  
-riscv                randconfig-r016-20230403   gcc  
-riscv                randconfig-r042-20230403   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r004-20230403   clang
-s390                 randconfig-r044-20230403   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r001-20230403   gcc  
-sh                   randconfig-r003-20230403   gcc  
-sh                   randconfig-r036-20230403   gcc  
-sh                   sh7724_generic_defconfig   gcc  
-sparc        buildonly-randconfig-r001-20230403   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230403   gcc  
-sparc                randconfig-r025-20230403   gcc  
-sparc64      buildonly-randconfig-r002-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230403   clang
-x86_64               randconfig-a002-20230403   clang
-x86_64               randconfig-a003-20230403   clang
-x86_64               randconfig-a004-20230403   clang
-x86_64               randconfig-a005-20230403   clang
-x86_64               randconfig-a006-20230403   clang
-x86_64               randconfig-a011-20230403   gcc  
-x86_64               randconfig-a012-20230403   gcc  
-x86_64               randconfig-a013-20230403   gcc  
-x86_64               randconfig-a014-20230403   gcc  
-x86_64               randconfig-a015-20230403   gcc  
-x86_64               randconfig-a016-20230403   gcc  
-x86_64               randconfig-k001-20230403   gcc  
-x86_64               randconfig-r012-20230403   gcc  
-x86_64               randconfig-r023-20230403   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r005-20230405   gcc  
-xtensa               randconfig-r021-20230403   gcc  
-xtensa               randconfig-r022-20230403   gcc  
+between commit:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+  10debf8c2da8 ("thermal/drivers/mediatek: Add delay after thermal banks in=
+itialization")
+
+from the pm tree and commit:
+
+  ed18ce7b06cc ("thermal/drivers/mediatek: Add delay after thermal banks in=
+itialization")
+
+from the thermal tree.
+
+I fixed it up (it is just a comment difference, so I used the former
+version) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fhVQ.JNALbM5x83cKJDWn+Q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQuExoACgkQAVBC80lX
+0GycMAf+KqbSdx6gmDSlKED0fpWmxVK4SQEupml1/XYvdt4+hNOJmQ+nQz5QaVdY
+YMgUUUR4f7cA1U12nhcLyj3FAQUb+LJGBSHt5TIogSv5P0yH7kdH412kbeTruhBI
+V+sIVjgDzBHX+ydkL+W3GyvhwgEoluiRapejk3DKRFf1DfZ2X7UrwOciEC7NGc9s
+b5r/+YNWx7XaPtDA23wLRr5lxUaYhSTlWhNaY9G4Z2Rzvjb6P6TUohRuku3wNALC
+kOZrNocUohDf8V55um3NSBYy73E4sIEoItssEh6QVMBBLahCSR+Z3DvY7Wm3o6ZJ
+PBvp+6qNdrHCJ/uKlJXPBrYRDWQLaA==
+=UzLV
+-----END PGP SIGNATURE-----
+
+--Sig_/fhVQ.JNALbM5x83cKJDWn+Q--
