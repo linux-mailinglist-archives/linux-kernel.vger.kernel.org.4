@@ -2,197 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8E26D9358
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9946D9360
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbjDFJxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S236500AbjDFJ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236741AbjDFJxb (ORCPT
+        with ESMTP id S236507AbjDFJ4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:53:31 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1027EEA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MdchMn80dJa4PocBmnOEt/k8LLJ1nguoqKvH2E+CHyo=; b=gXBtnxaYY2MBTLZxzde4sRQ2Ac
-        kYZtmn42wu6jC2Qr2GD2EW/PHEfHQAp1+GjJfC0NPWMXAkxWi8NsUFZkrlAcAd1jAYNvSOF6mDQGY
-        aNZWRlED8GJNlAGN/2G0j0WHSPTYIQTQGzxn8HOC3ZSQA/jtAQxM33UKcv75Q+gLsXqBeOJ0S8Rry
-        Q6OxTECiN1nY/rdtdX0fGCLPX9QbhcV/Ypln39jJJ7BM5ad03PVZxcE9X1a7slSkXsYcDz/XiPv8H
-        fXzMaAWNYzDikcGaoqazTeh4FISLwVRQpbVe013f7oY9+zY7SRj1nej6c2LPXKwc/jB4MHrFtb7EW
-        MCrnIW+w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkMH6-00AUV7-2l;
-        Thu, 06 Apr 2023 09:51:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 419E830008D;
-        Thu,  6 Apr 2023 11:51:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0DBAF24C025F1; Thu,  6 Apr 2023 11:51:23 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 11:51:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     linux-kernel@vger.kernel.org, Aaron Lu <aaron.lu@intel.com>
-Subject: Re: [RFC PATCH v3] sched: Fix performance regression introduced by
- mm_cid
-Message-ID: <20230406095122.GF386572@hirez.programming.kicks-ass.net>
-References: <20230405162635.225245-1-mathieu.desnoyers@efficios.com>
- <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
+        Thu, 6 Apr 2023 05:56:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80053A268;
+        Thu,  6 Apr 2023 02:54:02 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3368Q17c022412;
+        Thu, 6 Apr 2023 09:52:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jZgMGdmZaVAzkO0q+pB6WHfwcscuTH1O+8bqLAYLeyc=;
+ b=Zwl4k/j1cjaHvl2by5ChTWp8ZGbwPG+BRgzzQxrt5OgN9o+Rr+X8SetOu7KKn8B5uC27
+ aNd+0FJvUPZs0a52AVNkXZPQTh9j3150AsbL4IJqI/sKfU/mc+vE90prcN6dmtXAPOs6
+ wD/lVXK0ruONC254vvN2wtugU3XIxfAOU3s7Qsy4J7z14QgXVhsJgu5DG2T+cjGPski8
+ 3Z7oZhkBTovHWicnpaDklaxbRe1m9bWva4k9UkGaHxBeOPK4pZzbUpcqRPGeZGeq6TRg
+ WiIO8PH94//HnUeC+1EokYIzpwNqnVUvQVkp0F6CdN/CI3YAToirra3zgIjUmEZml5rt eg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psnmj0uh4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 09:52:47 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3369qlbP009820
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Apr 2023 09:52:47 GMT
+Received: from [10.216.2.94] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 6 Apr 2023
+ 02:52:42 -0700
+Message-ID: <d7d03e81-03d6-b643-a2e6-0867bab7e0ef@quicinc.com>
+Date:   Thu, 6 Apr 2023 15:22:39 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <386a6e32-a746-9eb1-d5ae-e5bedaa8fc75@efficios.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: arm: msm: Add bindings for multi
+ channel DDR in LLCC
+Content-Language: en-US
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
+References: <20230313124040.9463-1-quic_kbajaj@quicinc.com>
+ <20230313124040.9463-3-quic_kbajaj@quicinc.com>
+ <2b3e39b9-ea70-db9b-89f7-09054df363c3@linaro.org>
+ <20230315134814.GA98488@thinkpad>
+ <c8f3499f-d927-6657-c7c6-732ed2222525@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <c8f3499f-d927-6657-c7c6-732ed2222525@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8zsLpEULLto8r0fDRQMYpqpfDWjio-uH
+X-Proofpoint-ORIG-GUID: 8zsLpEULLto8r0fDRQMYpqpfDWjio-uH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_04,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 spamscore=0
+ bulkscore=0 phishscore=0 clxscore=1011 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304060086
+X-Spam-Status: No, score=-3.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 04:37:42PM -0400, Mathieu Desnoyers wrote:
-> On 2023-04-05 12:26, Mathieu Desnoyers wrote:
-> [...]
-> >   #ifdef CONFIG_SCHED_MM_CID
-> > +/*
-> > + * Migration from src cpu. Called from set_task_cpu(). There are no guarantees
-> > + * that the rq lock is held.
-> > + */
-> > +void sched_mm_cid_migrate_from(struct task_struct *t)
-> > +{
-> > +	int src_cid, *src_pcpu_cid, last_mm_cid;
-> > +	struct mm_struct *mm = t->mm;
-> > +	struct rq *src_rq;
-> > +	struct task_struct *src_task;
-> > +
-> > +	if (!mm)
-> > +		return;
-> > +
-> > +	last_mm_cid = t->last_mm_cid;
-> > +	/*
-> > +	 * If the migrated task has no last cid, or if the current
-> > +	 * task on src rq uses the cid, it means the destination cpu
-> > +	 * does not have to reallocate its cid to keep the cid allocation
-> > +	 * compact.
-> > +	 */
-> > +	if (last_mm_cid == -1)
-> > +		return;
-> > +
-> > +	src_rq = task_rq(t);
-> > +	src_pcpu_cid = per_cpu_ptr(mm->pcpu_cid, cpu_of(src_rq));
-> > +	src_cid = READ_ONCE(*src_pcpu_cid);
-> > +
-> > +	if (!mm_cid_is_valid(src_cid) || last_mm_cid != src_cid)
-> > +		return;
-> > +
-> > +	/*
-> > +	 * If we observe an active task using the mm on this rq, it means we
-> > +	 * are not the last task to be migrated from this cpu for this mm, so
-> > +	 * there is no need to clear the src_cid.
-> > +	 */
-> > +	rcu_read_lock();
-> > +	src_task = rcu_dereference(src_rq->curr);
-> > +	if (src_task->mm_cid_active && src_task->mm == mm) {
-> > +		rcu_read_unlock();
-> > +		t->last_mm_cid = -1;
-> > +		return;
-> > +	}
-> > +	rcu_read_unlock();
-> > +
-> > +	/*
-> > +	 * If the source cpu cid is set, and matches the last cid of the
-> > +	 * migrated task, clear the source cpu cid to keep cid allocation
-> > +	 * compact to cover the case where this task is the last task using
-> > +	 * this mm on the source cpu. If there happens to be other tasks left
-> > +	 * on the source cpu using this mm, the next task using this mm will
-> > +	 * reallocate its cid on context switch.
-> > +	 *
-> > +	 * We cannot keep ownership of concurrency ID without runqueue
-> > +	 * lock held when it is not used by a current task, because it
-> > +	 * would lead to allocation of more concurrency ids than there
-> > +	 * are possible cpus in the system. The last_mm_cid is used as
-> > +	 * a hint to conditionally unset the dst cpu cid, keeping
-> > +	 * allocated concurrency ids compact.
-> > +	 */
-> > +	if (cmpxchg(src_pcpu_cid, src_cid, mm_cid_set_lazy_put(src_cid)) != src_cid)
-> > +		return;
-> > +
-> > +	/*
-> > +	 * The implicit barrier after cmpxchg per-mm/cpu cid before loading
-> > +	 * rq->curr->mm matches the scheduler barrier in context_switch()
-> > +	 * between store to rq->curr and load of prev and next task's
-> > +	 * per-mm/cpu cid.
+
+
+On 4/6/2023 2:49 PM, Komal Bajaj wrote:
+> Didn't see my reply on the list, so sending it again.
+> And also I see that the dt patch is already applied.
+
+The reason why you are not seeing your replies at
+
+https://lore.kernel.org/lkml/20230313124040.9463-1-quic_kbajaj@quicinc.com/
+
+is because your reply cc-list contain some invalid domain 
+(codeaurora.org) email id's and any list/email mentioned
+after that would not be getting your emails.
+
+-- Mukesh
+
 > 
-> Thinking about it further, I suspect the transition:
+> Thanks Krzysztof and Manivannan for reviewing the patch.
 > 
->          *   user -> kernel   lazy + mmgrab() active
 > 
-> in context_switch() lacks a memory barrier we need here (it's only an
-> atomic_inc with mmgrab()).
+> On 3/15/2023 7:18 PM, Manivannan Sadhasivam wrote:
+>> On Wed, Mar 15, 2023 at 08:41:21AM +0100, Krzysztof Kozlowski wrote:
+>>> On 13/03/2023 13:40, Komal Bajaj wrote:
+>>>> Add description for additional nodes needed to support
+>>>> mulitple channel DDR configurations in LLCC.
+>>>>
+>>>> Signed-off-by: Komal Bajaj<quic_kbajaj@quicinc.com>
+>>> +Cc Mani,
+>>>
+>> Thanks, Krzysztof!
+>>
+>>> This will conflict with:
+>>> https://lore.kernel.org/all/20230314080443.64635-3-manivannan.sadhasivam@linaro.org/
+>>>
+>>> Please rebase on top of Mani's patches (assuming they are not
+>>> conflicting in principle)
+>>>
+>>>> ---
+>>>>   Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml | 9 +++++++++
+>>>>   1 file changed, 9 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+>>>> index 38efcad56dbd..9a4a76caf490 100644
+>>>> --- a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+>>>> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+>>>> @@ -37,15 +37,24 @@ properties:
+>>>>       items:
+>>> minItems: 2
+>>>
+>>>>         - description: LLCC base register region
+>>>>         - description: LLCC broadcast base register region
+>>>> +      - description: Feature register to decide which LLCC configuration
+>>>> +                     to use, this is optional
+>>>>   
+>>>>     reg-names:
+>>> minItems: 2
+>>>
+>>>>       items:
+>>>>         - const: llcc_base
+>>>>         - const: llcc_broadcast_base
+>>>> +      - const: multi_channel_register
+>> Is this the actual register region or a specific register offset? We generally
+>> try to pass the base address of the region along with the size and use the
+>> offset inside the driver to access any specific registers.
+>>
+>> Thanks,
+>> Mani
 > 
-> The scenario is a transition from user to kernel thread happening
-> concurrently with migrate-from.
+> This is a specific register offset outside the LLCC register region which has the
+> information of number of DDR channel.
 > 
-> Because there is no memory barrier between set rq->curr to a value that
-> has a NULL mm and loading per-mm/cpu cid value in mm_cid_put_lazy() for the
-> prev task, nothing guarantees that the following src_rq->curr rcu
-> dereference here will observe the store.
+>>>>   
+>>>>     interrupts:
+>>>>       maxItems: 1
+>>>>   
+>>>> +  multi-ch-bit-off:
+>>>> +    items:
+>>>> +      - description: Specifies the offset in bits into the multi_channel_register
+>>>> +                     and the number of bits used to decide which LLCC configuration
+>>>> +                     to use
+>>> There are here few issues.
+>>> First, I don't fully understand the property. What is an LLCC
+>>> configuration? Like some fused values?
 > 
-> Or am I missing something ?
-
-OK, so last night I thought it was me needing sleep (which might still
-be the case), but now I'm still not quite getting it. Let me draw a
-picture, perhaps that'll help...
-
-It reads to me like you're treating a barrier as 'makes visible', which
-it never will.
-
-
-CPU0 will run a user task A and switch to a kernel thread K;
-CPU1 will concurrently run sched_mm_cid_migrate_from().
-
-
-	CPU0				CPU1
-
-	.. runs A ..
-
-					if (src_task->mm_cid_active && src_task->mm == mm)
-					  // false, proceed
-
-					cmpxchg(); // set LAZY
-
-	__schedule()
-					(A)
-	  rq->curr = K;
-					(B)
-	  context_switch()
-	    prepare_task_switch()
-	      switch_mm_cid()
-	        cid_put_lazy(prev)
-		cid_get(next)
-            mmgrab(); // user->kernel active_mm
-	    switch_to();
-
-
-
-	.. runs K ..
-
-
-And it is this second compare that can either observe A or K, right?
-That is the locations A or B above. Later doesn't make sense because
-then switch_mm_cid() will have taken care of things.
-
-If A, still false, and we continue to mark UNSET and put.
-If B, we see K, which will not have mm_cid_active set so still false and
-same as above.
-
-What am I missing?
+> There are different configuration for LLCC based on the number of
+> DDR channel it uses. Here, we are basically trying to get information
+> about the same.
+> 
+>>> Second, don't make it a register specific, it will not scale easily to
+>>> any new version of this interface. Although how this should look like
+>>> depends on what is it.
+> 
+> LLCC driver can only get DDR channel information from the register.
+> 
+>>> Third, you need vendor prefix and type (unless this is a generic
+>>> property, but does not look like). Then "items" is probably wrong. Line
+>>> break after "description: "
+> 
+> Noted, will take care of this in the next patchset.
+> 
+> Thanks
+> Komal
+> 
+>>> Best regards,
+>>> Krzysztof
+>>>
+> 
