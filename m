@@ -2,62 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A106D6D971D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ACF6D9720
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237798AbjDFMjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S236934AbjDFMle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237705AbjDFMje (ORCPT
+        with ESMTP id S230032AbjDFMlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:39:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A11A76A9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:39:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 6 Apr 2023 08:41:32 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC55D7A8D;
+        Thu,  6 Apr 2023 05:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HyuEKh43IWrWdzVowQkaLP3FmrQYVn2EQx+OBqF6IKE=; b=OTfNiEwwYqj1eXzVk8GGYFt99j
+        lb9FiQit+vNRBvJWsfnsbh7pdcuhULQzT0jUHTM1oo/wvO7JO86mXApYNvM8CRQvMbH2ZL3TFSwMM
+        LymyCc/40mXnWO1XtiUalA2d9ccxHJeagVSyPV1TvlMErhNnICGgW7WkazHQ0pxK241uOQDEv3pSV
+        sTEOGyBpXMZmPpMn02sdu5EFYV87D1n3ureXfzou3cucKB1kU4MowP4vU8mRFGE5QltsqWthavZXl
+        hw5e23dB3M9XJLhmGx+vAiE+/h6idPF1CzXo+7N1tCWqhVTjfiyq+MaElg5ObfWlwnIt/nMC4sHjz
+        3sTG6jhA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pkOuy-00HQ2r-RR; Thu, 06 Apr 2023 12:40:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A9DF621D4F;
-        Thu,  6 Apr 2023 12:39:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680784771; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=JHyrIVbPNB7wgDLRCmJhp+98W0rDPqjWT9tvoPUCHnI=;
-        b=jipdbAvia+HXc6r9viBxnEjkhkGIgwhRyB2wsYkdQsGS2NhSygt14l/VBJY6LycoEx9I+Y
-        vi+Yh8pWjlBmfkCMmxxVWhBxM6LTmIiDTqv2Z4P//ceIIE7fIo2GKZo8RjZup0FHxsmset
-        xnV+NVatLEpaNu4NCJTzL/b81BYiMeg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680784771;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=JHyrIVbPNB7wgDLRCmJhp+98W0rDPqjWT9tvoPUCHnI=;
-        b=iUsh/0kXcnoJk0kH4BGjy1Km+aov96KXWhFHtN06x+UEjBMYpc00w2HqGGKzPp3Wp53vzU
-        1NiUMdAcYhO6ubCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 86C3B133E5;
-        Thu,  6 Apr 2023 12:39:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id B1fDH4O9LmS4bgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Thu, 06 Apr 2023 12:39:31 +0000
-Date:   Thu, 06 Apr 2023 14:39:31 +0200
-Message-ID: <87pm8htcak.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] sound fixes for 6.3-rc6
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7D26E300194;
+        Thu,  6 Apr 2023 14:40:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5C03D212E36AA; Thu,  6 Apr 2023 14:40:40 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 14:40:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Yicong Yang <yangyicong@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        yangyicong@hisilicon.com, linuxarm@huawei.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Robert Richter <rric@kernel.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Frank Li <Frank.li@nxp.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Liang Kan <kan.liang@linux.intel.com>
+Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
+Message-ID: <20230406124040.GD392176@hirez.programming.kicks-ass.net>
+References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
+ <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
+ <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
+ <20230406111607.00007be5@Huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406111607.00007be5@Huawei.com>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,76 +83,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
 
-please pull sound fixes for v6.3-rc6 from:
+> In the long run I agree it would be good.  Short term there are more instances of
+> struct pmu that don't have parents than those that do (even after this series).
+> We need to figure out what to do about those before adding checks on it being
+> set.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.3-rc6
-
-The topmost commit is f785f5ee968f7045268b8be6b0abc850c4a4277c
-
-----------------------------------------------------------------
-
-sound fixes for 6.3-rc6
-
-The majority of changes here are various fixes for Intel drivers,
-while there is a change in ASoC PCM core for the format constraints.
-In addition, a workaround for HD-audio HDMI regressions and usual
-HD-audio quirks are found.
-
-----------------------------------------------------------------
-
-Andy Chi (1):
-      ALSA: hda/realtek: fix mute/micmute LEDs for a HP ProBook
-
-Duy Nguyen (1):
-      ASoC: da7213.c: add missing pm_runtime_disable()
-
-Eugene Huang (2):
-      ASOC: Intel: sof_sdw: add quirk for Intel 'Rooks County' NUC M15
-      ASoC: Intel: soc-acpi: add table for Intel 'Rooks County' NUC M15
-
-Ge-org Brohammer (1):
-      ASoC: amd: yc: Add DMI entries to support Victus by HP Laptop 16-e1xxx (8A22)
-
-Guennadi Liakhovetski (1):
-      ASoC: SOF: avoid a NULL dereference with unsupported widgets
-
-Hans de Goede (1):
-      ASoC: Intel: bytcr_rt5640: Add quirk for the Acer Iconia One 7 B1-750
-
-Jason Montleon (1):
-      ASoC: hdac_hdmi: use set_stream() instead of set_tdm_slots()
-
-Jeremy Soller (1):
-      ALSA: hda/realtek: Add quirk for Clevo X370SNW
-
-Ranjani Sridharan (1):
-      ASoC: SOF: ipc4: Ensure DSP is in D0I0 during sof_ipc4_set_get_data()
-
-Shengjiu Wang (1):
-      ASoC: soc-pcm: fix hw->formats cleared by soc_pcm_hw_init() for dpcm
-
-Srinivas Kandagatla (1):
-      ASoC: codecs: lpass: fix the order or clks turn off during suspend
-
-Takashi Iwai (1):
-      ALSA: hda/hdmi: Preserve the previous PCM device upon re-enablement
-
----
- sound/pci/hda/patch_hdmi.c                        | 11 +++++++++++
- sound/pci/hda/patch_realtek.c                     |  2 ++
- sound/soc/amd/yc/acp6x-mach.c                     |  7 +++++++
- sound/soc/codecs/da7213.c                         |  6 ++++++
- sound/soc/codecs/hdac_hdmi.c                      | 17 +++++++++++------
- sound/soc/codecs/lpass-rx-macro.c                 |  4 ++--
- sound/soc/codecs/lpass-tx-macro.c                 |  4 ++--
- sound/soc/codecs/lpass-wsa-macro.c                |  4 ++--
- sound/soc/intel/boards/bytcr_rt5640.c             | 12 ++++++++++++
- sound/soc/intel/boards/sof_sdw.c                  | 11 +++++++++++
- sound/soc/intel/common/soc-acpi-intel-adl-match.c | 20 ++++++++++++++++++++
- sound/soc/soc-pcm.c                               |  4 ++++
- sound/soc/sof/ipc4-topology.c                     |  8 ++++++++
- sound/soc/sof/ipc4.c                              |  8 ++++++++
- 14 files changed, 106 insertions(+), 12 deletions(-)
-
+Right, I don't think you've touched *any* of the x86 PMUs for example,
+and getting everybody that boots an x86 kernel a warning isn't going to
+go over well :-)
