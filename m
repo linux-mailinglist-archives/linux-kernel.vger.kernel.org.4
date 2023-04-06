@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF79F6DA3B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9776DA3BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbjDFUm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S240465AbjDFUmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240275AbjDFUlw (ORCPT
+        with ESMTP id S240401AbjDFUmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:41:52 -0400
+        Thu, 6 Apr 2023 16:42:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C33C160;
-        Thu,  6 Apr 2023 13:38:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F981C653;
+        Thu,  6 Apr 2023 13:39:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEECD60FC4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C321560FC4;
+        Thu,  6 Apr 2023 20:38:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9EF4C433A0;
         Thu,  6 Apr 2023 20:38:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B237AC4339E;
-        Thu,  6 Apr 2023 20:38:36 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -71,9 +71,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 51/68] hwmon: powr1220: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:38:13 +0200
-Message-Id: <20230406203821.3012402-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 52/68] hwmon: raspberrypi: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:38:14 +0200
+Message-Id: <20230406203821.3012402-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -93,22 +93,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/powr1220.c | 2 +-
+ drivers/hwmon/raspberrypi-hwmon.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/powr1220.c b/drivers/hwmon/powr1220.c
-index f77dc6db31ac..9cb0c2de5219 100644
---- a/drivers/hwmon/powr1220.c
-+++ b/drivers/hwmon/powr1220.c
-@@ -248,7 +248,7 @@ powr1220_read(struct device *dev, enum hwmon_sensor_types type, u32
- 	return 0;
+diff --git a/drivers/hwmon/raspberrypi-hwmon.c b/drivers/hwmon/raspberrypi-hwmon.c
+index 1650d3b4c26e..65cc52e47db0 100644
+--- a/drivers/hwmon/raspberrypi-hwmon.c
++++ b/drivers/hwmon/raspberrypi-hwmon.c
+@@ -87,7 +87,7 @@ static umode_t rpi_is_visible(const void *_data, enum hwmon_sensor_types type,
+ 	return 0444;
  }
  
--static const struct hwmon_channel_info *powr1220_info[] = {
-+static const struct hwmon_channel_info * const powr1220_info[] = {
+-static const struct hwmon_channel_info *rpi_info[] = {
++static const struct hwmon_channel_info * const rpi_info[] = {
  	HWMON_CHANNEL_INFO(in,
- 			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
- 			   HWMON_I_INPUT | HWMON_I_HIGHEST | HWMON_I_LABEL,
+ 			   HWMON_I_LCRIT_ALARM),
+ 	NULL
 -- 
 2.34.1
 
