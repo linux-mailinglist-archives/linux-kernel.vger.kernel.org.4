@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF816DA01A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2606DA023
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbjDFSnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S240251AbjDFSo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDFSnx (ORCPT
+        with ESMTP id S240288AbjDFSox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:43:53 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3357A83;
-        Thu,  6 Apr 2023 11:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680806631; x=1712342631;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yTc4EfHLqOSKx48trH6VvTg2rSzrs9tBuH+cpg4WIqY=;
-  b=HKIfP9Ve4KzReSHK9XRBmqAnRUgAHQwxKkDV1aLZ57p348OmJ/RHIR+n
-   /qa/6fvqnE95/tR//BIsbC8YvdX6gL88c8wljH9VMrt0D9VHtEjFoeubZ
-   Pa2bEIiT8zW7TIa4s/pUFwerlB8aqcKWaqgaUYfWf3wodBeFdS4C6sXaG
-   6RhnK771X/4H0njiI/OoCY39hM7FLeGlppVPu91NPy124Z5Wpe2aliXrx
-   aiHZ/VzuxAOiVeYh4ZUVCX9MKIPhbKl73YnN6bANYi/ZPQ8z26rq0oeEf
-   r/u4d08nglWkodfMg0zS3x/0KicD7S72fxhcJKzXlr94GFi/yhcdIPeO4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="331452241"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="331452241"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:43:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="830862514"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="830862514"
-Received: from mjjuenem-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.81.95])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 11:43:50 -0700
-Message-ID: <ac5651148d4ab2b243597af9d42fa0e374d810a8.camel@linux.intel.com>
-Subject: Re: [PATCH] platform/x86/intel-uncore-freq: Uncore frequency
- control via TPMI
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 06 Apr 2023 11:43:50 -0700
-In-Reply-To: <9ea89b86-c027-5a73-7ccb-0c3388b31f5f@redhat.com>
-References: <20230328215328.101990-1-srinivas.pandruvada@linux.intel.com>
-         <9ea89b86-c027-5a73-7ccb-0c3388b31f5f@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Thu, 6 Apr 2023 14:44:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0697ED2
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:44:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680806647;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KuWqlFWscCHky7PklpK8/27+L+0fHpmQONWaBu1fu8I=;
+        b=K6OYPsX+ZWiRS9e71T4GOq7A45vrsQ3zFNR/Y1qA0IxhRmDAiF2I+LZw+D9gJlyualB0Uj
+        V4AhkbuA7i+x3Y4EE11/dTRw0Zc00cRP80NG6GrFPa5AFdlIpQqQnSVPntax7P5NaPNd8O
+        7S2ryvXA89oHf9/i3c9N9YivVmjkSok=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-194-h_sci8GkNkOiz3lqrilhGA-1; Thu, 06 Apr 2023 14:44:06 -0400
+X-MC-Unique: h_sci8GkNkOiz3lqrilhGA-1
+Received: by mail-qk1-f199.google.com with SMTP id d187-20020a3768c4000000b00746864b272cso18171338qkc.15
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:44:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680806646;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KuWqlFWscCHky7PklpK8/27+L+0fHpmQONWaBu1fu8I=;
+        b=A/GUu+RinCdNfJTEuCoWjM7XO042fH3XzM5dGZUEpuqHqNdRmCflI4kd7jWrkOyLzF
+         plQztHha03foI72ohUAX0klJVnz5Rj7Opvk25t/b4e4KlguW0RRyQpTB6NSb2Q5+GtUa
+         eoIepw+jrveROubANAuGrW6VcNmCif9mtmU5fRgiKCKOegU4Q64Xu9iouGxsV8bEktjf
+         NaOFw3rEEwD5k3VTSfjsOLCS1xhVaXWyGObVGR/avjOcxH8fGakR65pylfe/14mYTo9t
+         p6D7EhzufjKeKAYmUd3BziUJyTBoouwHuqt8/+cKD+HSBGMZwOxfFiNMYr3qwwavxn4Z
+         73jg==
+X-Gm-Message-State: AAQBX9fvlymRamttj6Y8bkcB7aRmHaXB2OLx6SVRYAch6NF5Ugy7bZP7
+        3CHGqLffRV0UNTtNDMGM7tOei1c7lERrztxa8e4PD6CrB4OEhoFhXniwAilR73+5sQcIBbdYjF9
+        2G5dLc0vb4MFuSPACFf6Y/anB
+X-Received: by 2002:a05:6214:e43:b0:56f:728:19d4 with SMTP id o3-20020a0562140e4300b0056f072819d4mr395410qvc.26.1680806645964;
+        Thu, 06 Apr 2023 11:44:05 -0700 (PDT)
+X-Google-Smtp-Source: AKy350b2ByVQmJQEcdujhQzaXx6wnS67JdUovCAIB/18ORCzUQZUmTu9kF7vDna0IuEg2GJV05SvOw==
+X-Received: by 2002:a05:6214:e43:b0:56f:728:19d4 with SMTP id o3-20020a0562140e4300b0056f072819d4mr395378qvc.26.1680806645607;
+        Thu, 06 Apr 2023 11:44:05 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id c79-20020ae9ed52000000b0074411b03972sm668481qkg.51.2023.04.06.11.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 11:44:05 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        p.zabel@pengutronix.de
+Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] soc: apple: apple-pmgr-pwrstate: set varaiable apple_pmgr_reset_ops storage-class-specifier to static
+Date:   Thu,  6 Apr 2023 14:44:02 -0400
+Message-Id: <20230406184402.1956429-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,234 +76,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+smatch reports
+drivers/soc/apple/apple-pmgr-pwrstate.c:180:32: warning: symbol
+  'apple_pmgr_reset_ops' was not declared. Should it be static?
 
-> > 
+This variable is only used in one file so should be static.
 
-[...]
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/soc/apple/apple-pmgr-pwrstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > The TPMI documentation can be downloaded from:
-> > https://github.com/intel/tpmi_power_management
-> > 
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> 
-> Thanks 3 small remarks below (inline), if you can address those then
-> v2 should be ready for merging.
-Sure. Will send an update.
-
-> 
-> > ---
-> > The fine grain control at cluster level patches are here:
-> > https://github.com/spandruvada/linux-kernel/commit/0d66ea4ff76ea19127f2d207a7e17bb86846ca32
-> > https://github.com/spandruvada/linux-kernel/commit/cb5c2349a58318c04955821d6528cc8015541e65
-> > But not submitting to ease in review process as I posted too many
-> > patches this cycle.
-> 
-> As mentioned before, it helps if you can get fellow Intel folks to
-> review.
-I will add to the next version with reviewed-by and tested-by.
-
-> 
-> >  .../x86/intel/uncore-frequency/Kconfig        |   4 +
-> >  .../x86/intel/uncore-frequency/Makefile       |   2 +
-> >  .../uncore-frequency/uncore-frequency-tpmi.c  | 346
-> > ++++++++++++++++++
-> > 
-
-[...]
-
-> > +/* Information for each power domain */
-> > +struct tpmi_uncore_power_domain_info {
-> > +       void __iomem *uncore_base;
-> 
-> Maybe make this an:
-> 
->         u8 __iomem *uncore_base;
-> 
-> To avoid all the casts below ?
-> 
-> Although I wonder if the casts are necessary at all, AFAIK void *
-> arithmics are the same as u8 * arithmics, so things should work
-> without the casts regardless ?
-> 
-You are right. I already don't cast in SST, I missed this one.
-
-> Still just turning this into a u8 * is probably better.
-I will change to u8*
-
-> > 
-
-[...]
-
-
-> > +               pd_info->uncore_base =
-> > devm_ioremap_resource(&auxdev->dev, res);
-> > +               if (IS_ERR(pd_info->uncore_base)) {
-> > +                       ret = PTR_ERR(pd_info->uncore_base);
-> > +                       pd_info->uncore_base = NULL;
-> 
-> pd_info is part of tpmi_uncore and on error the:
-> 
->         auxiliary_set_drvdata(auxdev, tpmi_uncore);
-> 
-> call is skipped, so pd_info will never be reachable (and should get
-> freed by devm).
-> So AFAICT, there is no need to NULL uncore_base  ?
-
-Correct. Let me think of case when firmware messed up one power domain
-base address (very unlikely as this is goes through several validation
-levels), may be continue to check next power domain instead of return.
-
-> 
-> > +                       goto err_rem_common;
-> > +               }
-> > +
-> > +               /* Check for version and skip this resource if
-> > there is mismatch */
-> > +               header = readq(pd_info->uncore_base);
-> > +               pd_info->ufs_header_ver = header &
-> > UNCORE_GENMASK_VERSION;
-> > +               if (pd_info->ufs_header_ver !=
-> > UNCORE_HEADER_VERSION) {
-> > +                       dev_info(&auxdev->dev, "Uncore: Unsupported
-> > version:%d\n",
-> > +                               pd_info->ufs_header_ver);
-> > +                       continue;
-> > +               }
-> > +
-> > +               /* Get Cluster ID Mask */
-> > +               cluster_mask =
-> > FIELD_GET(UNCORE_LOCAL_FABRIC_CLUSTER_ID_MASK, header);
-> > +               if (!cluster_mask) {
-> > +                       dev_info(&auxdev->dev, "Uncore: Invalid
-> > cluster mask:%x\n", cluster_mask);
-> > +                       continue;
-> > +               }
-> > +
-> > +               /* Find out number of clusters in this resource */
-> > +               mask = 0x01;
-> > +               for (j = 0; j < UNCORE_MAX_CLUSTER_PER_DOMAIN; ++j)
-> > {
-> > +                       if (cluster_mask & mask)
-> > +                               pd_info->cluster_count++;
-> > +                       mask <<= 1;
-> > +               }
-> > +
-> > +               pd_info->cluster_infos = devm_kcalloc(&auxdev->dev,
-> > pd_info->cluster_count,
-> > +                                                     sizeof(struct
-> > tpmi_uncore_cluster_info),
-> > +                                                     GFP_KERNEL);
-> 
-> This devm_kcalloc() call is missing error checking.
-Thanks for pointing.
-
-Thanks,
-Srinivas
-
-> 
-> > +
-> > +               /*
-> > +                * Each byte in the register point to status and
-> > control
-> > +                * registers belonging to cluster id 0-8.
-> > +                */
-> > +               cluster_offset = readq((u8 __iomem *)pd_info-
-> > >uncore_base +
-> > +                                       UNCORE_FABRIC_CLUSTER_OFFSE
-> > T);
-> > +
-> > +               for (j = 0; j < pd_info->cluster_count; ++j) {
-> > +                       struct tpmi_uncore_cluster_info
-> > *cluster_info;
-> > +
-> > +                       /* Get the offset for this cluster */
-> > +                       mask = (cluster_offset &
-> > UNCORE_CLUSTER_OFF_MASK);
-> > +                       /* Offset in QWORD, so change to bytes */
-> > +                       mask <<= 3;
-> > +
-> > +                       cluster_info = &pd_info->cluster_infos[j];
-> > +
-> > +                       cluster_info->cluster_base = (u8 __iomem
-> > *)pd_info->uncore_base + mask;
-> > +
-> > +                       cluster_info->uncore_data.package_id = pkg;
-> > +                       /* There are no dies like Cascade Lake */
-> > +                       cluster_info->uncore_data.die_id = 0;
-> > +
-> > +                       /* Point to next cluster offset */
-> > +                       cluster_offset >>=
-> > UNCORE_MAX_CLUSTER_PER_DOMAIN;
-> > +               }
-> > +       }
-> > +
-> > +       auxiliary_set_drvdata(auxdev, tpmi_uncore);
-> > +
-> > +       tpmi_uncore->root_cluster.uncore_root = tpmi_uncore;
-> > +       tpmi_uncore->root_cluster.uncore_data.package_id = pkg;
-> > +       ret = uncore_freq_add_entry(&tpmi_uncore-
-> > >root_cluster.uncore_data, 0);
-> > +       if (ret)
-> > +               goto err_rem_common;
-> > +
-> > +       return 0;
-> > +
-> > +err_rem_common:
-> > +       uncore_freq_common_exit();
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static int tpmi_uncore_remove(struct auxiliary_device *auxdev)
-> > +{
-> > +       struct tpmi_uncore_struct *tpmi_uncore =
-> > auxiliary_get_drvdata(auxdev);
-> > +
-> > +       uncore_freq_remove_die_entry(&tpmi_uncore-
-> > >root_cluster.uncore_data);
-> > +
-> > +       uncore_freq_common_exit();
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int intel_uncore_probe(struct auxiliary_device *auxdev,
-> > const struct auxiliary_device_id *id)
-> > +{
-> > +       return tpmi_uncore_init(auxdev);
-> > +}
-> > +
-> > +static void intel_uncore_remove(struct auxiliary_device *auxdev)
-> > +{
-> > +       tpmi_uncore_remove(auxdev);
-> > +}
-> > +
-> > +static const struct auxiliary_device_id intel_uncore_id_table[] =
-> > {
-> > +       { .name = "intel_vsec.tpmi-uncore" },
-> > +       {}
-> > +};
-> > +MODULE_DEVICE_TABLE(auxiliary, intel_uncore_id_table);
-> > +
-> > +static struct auxiliary_driver intel_uncore_aux_driver = {
-> > +       .id_table       = intel_uncore_id_table,
-> > +       .remove         = intel_uncore_remove,
-> > +       .probe          = intel_uncore_probe,
-> > +};
-> > +
-> > +module_auxiliary_driver(intel_uncore_aux_driver);
-> > +
-> > +MODULE_IMPORT_NS(INTEL_TPMI);
-> > +MODULE_IMPORT_NS(INTEL_UNCORE_FREQUENCY);
-> > +MODULE_DESCRIPTION("Intel TPMI UFS Driver");
-> > +MODULE_LICENSE("GPL");
-> 
-> 
-> Regards,
-> 
-> Hans
-> 
-> 
+diff --git a/drivers/soc/apple/apple-pmgr-pwrstate.c b/drivers/soc/apple/apple-pmgr-pwrstate.c
+index a3e2bc1d2686..e456f6e04658 100644
+--- a/drivers/soc/apple/apple-pmgr-pwrstate.c
++++ b/drivers/soc/apple/apple-pmgr-pwrstate.c
+@@ -177,7 +177,7 @@ static int apple_pmgr_reset_status(struct reset_controller_dev *rcdev, unsigned
+ 	return !!(reg & APPLE_PMGR_RESET);
+ }
+ 
+-const struct reset_control_ops apple_pmgr_reset_ops = {
++static const struct reset_control_ops apple_pmgr_reset_ops = {
+ 	.assert		= apple_pmgr_reset_assert,
+ 	.deassert	= apple_pmgr_reset_deassert,
+ 	.reset		= apple_pmgr_reset_reset,
+-- 
+2.27.0
 
