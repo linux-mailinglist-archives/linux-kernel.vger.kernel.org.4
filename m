@@ -2,122 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56ED56D907B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 411536D907F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbjDFHdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
+        id S235905AbjDFHfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234792AbjDFHdr (ORCPT
+        with ESMTP id S233391AbjDFHfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:33:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC46B2112
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=MoneTFHNrHm1CvMkTKFe0BpHprRoUxLmWShJckHDj2I=; b=D6963OF3z0C1n3q4u87jm+NYfK
-        WBNoysKn/KLPrVu9EtWRXP3AHuqZBKlwPVYiDKC/vqHVsKVdu4srup98wUTAqEx8/g83uQ4x82j+c
-        /mmitR4Z6VpjkAgcHlIggZHKcnE/E91ONLoYXb9wEpGNP6fMsSS7LmpQKRmfnTtWBbbNkdCLMrDAI
-        jXu8KUR01AIqcbIAh1t4QjSQxzvtzWrF9veXQk3NqTG0vp7QbyMUKIEbmI53u78sx0MDYSAMdy6Zs
-        5hrNxLPHewjYTOhDpQ1cQMq8M/SkV5IRS062GpNqVNkLDQDKDzifnvDlSKVF2/utEfimgSKpVtFgM
-        SbfHWKPw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkK7g-00ASWh-1u;
-        Thu, 06 Apr 2023 07:33:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9FAD63000DC;
-        Thu,  6 Apr 2023 09:33:30 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 660D1200BFC2F; Thu,  6 Apr 2023 09:33:30 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 09:33:30 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     David Dai <davidai@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Saravana Kannan <saravanak@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/6] sched/fair: Add util_guest for tasks
-Message-ID: <20230406073330.GA386572@hirez.programming.kicks-ass.net>
-References: <20230330224348.1006691-1-davidai@google.com>
- <20230330224348.1006691-2-davidai@google.com>
- <20230405081449.GX4253@hirez.programming.kicks-ass.net>
- <CABN1KCLjXpxNak90iowd0iiz9SD8-5n+6S3kEoCKO9NantyXxg@mail.gmail.com>
+        Thu, 6 Apr 2023 03:35:01 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2617710CE
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:35:00 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w9so147157731edc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 00:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680766498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mWV91vGp3KB8DWBxH5tjuT3y7/WaE8z67Uw3Mj6Ls1M=;
+        b=UlhekyO+WGUpfIQ+1t1kUBU6d+nEeRRQn/NxwMdOWBzvg1wjajZ6tind6tuWWjnAxk
+         Jv/icsKQDgKtcc7HmvYNyfthRvF52ntmGNwjRzvDdfddetccu51kJBtIEVjFI7gyEOYd
+         H27IMXeb3R0xk3JRy2mqcZfI6hRYspSRYPX9k7rC7QpX5NwzyjuK2VybfYBZlzpMSRdq
+         GoR9BFlEADC4i5YXrfYJlHfvfnRCMsIr1FDuMa0fVhVVNkZw9Luxr4y5TjEN7uVsk43W
+         hUMBJ1auVK+PH00xgQUF452s9/g/tQXPhcw/CfIGHnfm35pQSL0edEQ3pTwN6nuTHuxV
+         HeOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680766498;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mWV91vGp3KB8DWBxH5tjuT3y7/WaE8z67Uw3Mj6Ls1M=;
+        b=YRHWk7VfM8Rivh80X8q2HaYwct5UGZ6cyhbmAIOviXSKYxncmgdmzhFZ/29FDmiBbQ
+         zQ03xrJTFSiQTn+U08uzRRBPGksqmqsu1zNEnzzJuVU3cmB1ZjVJWtEaUtR6ojLXsrza
+         UqW7tCLjEHPq+CLUrhDthfBEetnqRuV+x+AWbawqC8sSL0z9HYUrPJSHLujM2asfa3z6
+         12sMYHMJudOKQHQV/sW4fL7fGjkKk2MbGTuNIzfqOiTxfrPCspnKNhOt5k9NAVcdJwLz
+         bBrSCUTQRWdopqRqMqhCuP8agdJk2+J5h6qtDwOJbWT7IFriEFxkCUQfD8IbSK8qiHDo
+         Dzow==
+X-Gm-Message-State: AAQBX9cou0H8S7egZFoospH97kphLlFWYtA8a1GjVi/Dkgj7DWcKX2RL
+        XNJqDo2ix55FG/X31vjwthmP/A==
+X-Google-Smtp-Source: AKy350YpXuEE3IPEGZ9zK9uApXgid2UbUxNFkWO5eN4ck7RMakTxtCoifo/0kKqOo6GsAw2iq7rpQQ==
+X-Received: by 2002:a17:906:9be0:b0:945:5510:2b9f with SMTP id de32-20020a1709069be000b0094555102b9fmr5968705ejc.54.1680766498650;
+        Thu, 06 Apr 2023 00:34:58 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id xa16-20020a170907b9d000b00948aae5e3d3sm421074ejc.184.2023.04.06.00.34.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 00:34:58 -0700 (PDT)
+Message-ID: <ea0ca421-3fa6-9562-c6ff-399830934931@linaro.org>
+Date:   Thu, 6 Apr 2023 09:34:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 0/2] Initial RTD1319 SoC and Realtek PymParticle EVB
+ support
+Content-Language: en-US
+To:     =?UTF-8?B?Q1lfSHVhbmdb6buD6Ymm5pmPXQ==?= <cy.huang@realtek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?B?SmFtZXMgVGFpIFvmiLTlv5fls7Bd?= <james.tai@realtek.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-realtek-soc@lists.infradead.org" 
+        <linux-realtek-soc@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <5d644994dd39447cba7ba7027cc856b0@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5d644994dd39447cba7ba7027cc856b0@realtek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABN1KCLjXpxNak90iowd0iiz9SD8-5n+6S3kEoCKO9NantyXxg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 03:54:08PM -0700, David Dai wrote:
-> On Wed, Apr 5, 2023 at 1:14 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
+On 06/04/2023 09:18, CY_Huang[黃鉦晏] wrote:
+> Hi Krzysztof,
 > 
-> Hi Peter,
+> This series adds Device Trees for the Realtek RTD1319 SoC and Realtek's
+> PymParticle EVB.
 > 
-> Appreciate your time,
-> 
-> > On Thu, Mar 30, 2023 at 03:43:36PM -0700, David Dai wrote:
-> > > @@ -499,6 +509,7 @@ struct sched_avg {
-> > >       unsigned long                   load_avg;
-> > >       unsigned long                   runnable_avg;
-> > >       unsigned long                   util_avg;
-> > > +     unsigned long                   util_guest;
-> > >       struct util_est                 util_est;
-> > >  } ____cacheline_aligned;
-> > >
-> >
-> > Yeah, no... you'll have to make room first.
-> >
-> 
-> I’m not sure what you mean. Do you mean making room by reducing
-> another member in the same struct? If so, which member would be a good
-> fit to shorten? Or do you mean something else entirely?
 
-Yeah, as you can see below, this structure is completely filling up the
-cacheline already so there's no room for another member. I've not looked
-at this in detail in a little while so I'm not at all sure what would be
-the easiest way to free up space.
+Your email threading is broken (does not exist).
 
-Going by the rest of the discusion is seems this is the least of your
-problems though.
+Best regards,
+Krzysztof
 
-> > struct sched_avg {
-> >         /* typedef u64 -> __u64 */ long long unsigned int     last_update_time;          /*     0     8 */
-> >         /* typedef u64 -> __u64 */ long long unsigned int     load_sum;                  /*     8     8 */
-> >         /* typedef u64 -> __u64 */ long long unsigned int     runnable_sum;              /*    16     8 */
-> >         /* typedef u32 -> __u32 */ unsigned int               util_sum;                  /*    24     4 */
-> >         /* typedef u32 -> __u32 */ unsigned int               period_contrib;            /*    28     4 */
-> >         long unsigned int          load_avg;                                             /*    32     8 */
-> >         long unsigned int          runnable_avg;                                         /*    40     8 */
-> >         long unsigned int          util_avg;                                             /*    48     8 */
-> >         struct util_est {
-> >                 unsigned int       enqueued;                                             /*    56     4 */
-> >                 unsigned int       ewma;                                                 /*    60     4 */
-> >         } __attribute__((__aligned__(8)))util_est __attribute__((__aligned__(8))); /*    56     8 */
-> >
-> >         /* size: 64, cachelines: 1, members: 9 */
-> >         /* forced alignments: 1 */
-> > } __attribute__((__aligned__(64)));
-> >
-> >
