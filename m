@@ -2,170 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD1B6D96E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7526D96E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237519AbjDFMPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S236621AbjDFMQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238366AbjDFMO5 (ORCPT
+        with ESMTP id S229568AbjDFMQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:14:57 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A614EE8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:14:55 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PsgMg5Vb1z17MMg;
-        Thu,  6 Apr 2023 20:11:27 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 6 Apr 2023 20:14:53 +0800
-Subject: Re: [PATCH 1/2] ubi: fix slab-out-of-bounds in
- ubi_eba_get_ldesc+0xfb/0x130
-To:     ZhaoLong Wang <wangzhaolong1@huawei.com>, <richard@nod.at>,
-        <miquel.raynal@bootlin.com>, <vigneshr@ti.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20230406071331.1247429-1-wangzhaolong1@huawei.com>
- <20230406071331.1247429-2-wangzhaolong1@huawei.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <cdb047f0-c071-3263-0167-e9bce852b5d5@huawei.com>
-Date:   Thu, 6 Apr 2023 20:14:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Thu, 6 Apr 2023 08:16:32 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5AD1985;
+        Thu,  6 Apr 2023 05:16:31 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id y7so8065331ljp.2;
+        Thu, 06 Apr 2023 05:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680783389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0IfIB4CgIdoIIyXodu7HUJudyaeFt7PNR1j2STXboWE=;
+        b=PjE3VN5vfjmZFoDCyQEwJuXQ0gv0EVAHbkR592M7oJgfk5tP52f9uALKeZFQtsQzlv
+         Ek2FBKrbZ1v50Ohaedqkb+z+8UzctChMReeSUsjiLrivLemhhedyiaOTnI3IKMdt5x9v
+         7RUaJ7jcuOJSEzCFpTpEupGnsVUJgzYjx2GZc8e1+5OxUP0PE7jgK5NCLY/1XrT20KAS
+         hXEqlxDQgj3E74u0N1hWMtdKCVh9qRT/1rBlsNJQul6K5Fg8985eVb1j/j1h0UHiK3F0
+         oz9OvYu7+QxbrJJsKqF98A2j6i3CxQWnnynBr/vTfai+HcUCdqklCNRdaItoAge999Vd
+         JD3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680783389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0IfIB4CgIdoIIyXodu7HUJudyaeFt7PNR1j2STXboWE=;
+        b=ERQELMBURc5cusBqrHLEb3B2+om0rxVWy2iC+MhTHtAN8u1ptMqbfCyclFlzXPoJSa
+         2EkUujN5sN6MntSznp8BRxk0hIhybq3qba1RGBHfrumfiaH4dF29bgEGQ2iRgHD1Lkk2
+         kR//Y2KkzGK1Nhzx9wg3S+WCS2yLfGK3w5XV2y2APokPZZrFJ1VXzRdgbkxncdNrtL+9
+         StCJTdJwJTlNQsCd8tKRGuOmeWjf03ogydOBC1aKm92Yxy0vBKvoBvft5n4QxD0U0QiM
+         CDD3p3YQlgl3RPzVU5EA/U4o4U8jMTdZmiG30w7EHEAg9gn/FhntSGMV4hyOOCgqXhrk
+         LOTg==
+X-Gm-Message-State: AAQBX9d+IUFDwlE5L/eN27vX3N4WXiY3emsXZAygt0zEUmZDxKolDsOU
+        HvD1T1lFi/KIYKzCefcR66Q=
+X-Google-Smtp-Source: AKy350a3IBC4RwraPM9UF5oE/Awqo6H8CELQGyhpe0qn8vIXsHJaGDKlfV6QnFSy4SWBCiaGx6prGw==
+X-Received: by 2002:a2e:86da:0:b0:2a6:16b5:c65b with SMTP id n26-20020a2e86da000000b002a616b5c65bmr3093359ljj.46.1680783388982;
+        Thu, 06 Apr 2023 05:16:28 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id y6-20020a2e9786000000b00295a8d1ecc7sm263634lji.18.2023.04.06.05.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 05:16:28 -0700 (PDT)
+Message-ID: <fa046d58-a7ee-c205-7162-a1c2914b58df@gmail.com>
+Date:   Thu, 6 Apr 2023 15:16:27 +0300
 MIME-Version: 1.0
-In-Reply-To: <20230406071331.1247429-2-wangzhaolong1@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: leds: ROHM BD2606MVV LED driver
+Content-Language: en-US, en-GB
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     pavel@ucw.cz, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hns@goldelico.com
+References: <20230406060825.103187-1-andreas@kemnade.info>
+ <20230406060825.103187-2-andreas@kemnade.info>
+ <f73050b7-3f86-0dcd-5e43-d8a9258afcae@gmail.com>
+ <20230406133357.45e48bd3@aktux>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230406133357.45e48bd3@aktux>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI,
-> From: Guo Xuenan <guoxuenan@huawei.com>
+On 4/6/23 14:33, Andreas Kemnade wrote:
+> Hi Matti,
 > 
-> When using ioctl interface to resize ubi volume, ubi_resize_volume will
-> resize eba table first, but not change vol->reserved_pebs in the same
-> atomic context which may cause concurrency access eba table.
+> On Thu, 6 Apr 2023 11:32:42 +0300
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 > 
-> For example, When user do shrink ubi volume A calling ubi_resize_volume,
-> while the other thread is writing (volume B) and triggering wear-leveling,
-> which may calling ubi_write_fastmap, under these circumstances, KASAN may
-> report: slab-out-of-bounds in ubi_eba_get_ldesc+0xfb/0x130.
-> 
-[...]
-> diff --git a/drivers/mtd/ubi/vmt.c b/drivers/mtd/ubi/vmt.c
-> index 2c867d16f89f..97294def01eb 100644
-> --- a/drivers/mtd/ubi/vmt.c
-> +++ b/drivers/mtd/ubi/vmt.c
-> @@ -408,6 +408,7 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
->   	struct ubi_device *ubi = vol->ubi;
->   	struct ubi_vtbl_record vtbl_rec;
->   	struct ubi_eba_table *new_eba_tbl = NULL;
-> +	struct ubi_eba_table *old_eba_tbl = NULL;
->   	int vol_id = vol->vol_id;
->   
->   	if (ubi->ro_mode)
-> @@ -453,10 +454,13 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
->   			err = -ENOSPC;
->   			goto out_free;
->   		}
-> +
->   		ubi->avail_pebs -= pebs;
->   		ubi->rsvd_pebs += pebs;
->   		ubi_eba_copy_table(vol, new_eba_tbl, vol->reserved_pebs);
-> -		ubi_eba_replace_table(vol, new_eba_tbl);
-> +		old_eba_tbl = vol->eba_tbl;
-> +		vol->eba_tbl = new_eba_tbl;
-> +		vol->reserved_pebs = reserved_pebs;
->   		spin_unlock(&ubi->volumes_lock);
->   	}
->   
-> @@ -471,7 +475,9 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
->   		ubi->avail_pebs -= pebs;
->   		ubi_update_reserved(ubi);
->   		ubi_eba_copy_table(vol, new_eba_tbl, reserved_pebs);
-> -		ubi_eba_replace_table(vol, new_eba_tbl);
-> +		old_eba_tbl = vol->eba_tbl;
-> +		vol->eba_tbl = new_eba_tbl;
-> +		vol->reserved_pebs = reserved_pebs;
->   		spin_unlock(&ubi->volumes_lock);
->   	}
->   
-> @@ -493,7 +499,6 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
->   	if (err)
->   		goto out_acc;
->   
-> -	vol->reserved_pebs = reserved_pebs;
->   	if (vol->vol_type == UBI_DYNAMIC_VOLUME) {
->   		vol->used_ebs = reserved_pebs;
->   		vol->last_eb_bytes = vol->usable_leb_size;
-> @@ -501,19 +506,24 @@ int ubi_resize_volume(struct ubi_volume_desc *desc, int reserved_pebs)
->   			(long long)vol->used_ebs * vol->usable_leb_size;
->   	}
->   
-> +	/* destroy old table */
-> +	ubi_eba_destroy_table(old_eba_tbl);
->   	ubi_volume_notify(ubi, vol, UBI_VOLUME_RESIZED);
->   	self_check_volumes(ubi);
->   	return err;
->   
->   out_acc:
-> +	spin_lock(&ubi->volumes_lock);
-> +	vol->reserved_pebs = reserved_pebs - pebs;
->   	if (pebs > 0) {
-> -		spin_lock(&ubi->volumes_lock);
->   		ubi->rsvd_pebs -= pebs;
->   		ubi->avail_pebs += pebs;
-> -		spin_unlock(&ubi->volumes_lock);
-> +		ubi_eba_copy_table(vol, old_eba_tbl, vol->reserved_pebs);
-> +	} else {
-> +		ubi_eba_copy_table(vol, old_eba_tbl, reserved_pebs);
->   	}
-> -	return err;
-> -
-> +	vol->eba_tbl = old_eba_tbl;
-> +	spin_unlock(&ubi->volumes_lock);
->   out_free:
->   	ubi_eba_destroy_table(new_eba_tbl);
->   	return err;
-> 
+>> Hi Andreas,
+>>
+>> Thanks for the patch! Adding new support for devices is Much Appreciated!
+>>
+>> On 4/6/23 09:08, Andreas Kemnade wrote:
+>>> Document ROHM BD2606MVV LED driver devicetree bindings.
+>>>
+>>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+>>> ---
+>>>    .../bindings/leds/rohm,bd2606mvv.yaml         | 76 +++++++++++++++++++
+>>>    1 file changed, 76 insertions(+)
+>>>    create mode 100644 Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml b/Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
+>>> new file mode 100644
+>>> index 0000000000000..6d4ddd8d31162
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/leds/rohm,bd2606mvv.yaml
+>>> @@ -0,0 +1,76 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/leds/rohm,bd2606mvv.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: BD2606MVV LED controller
+>>> +
+>>> +maintainers:
+>>> +  - Andreas Kemnade <andreas@kemnade.info>
+>>> +
+>>> +description:
+>>> +  The BD2606 MVV is a programmable LED controller connected via I2C that can
+>>> +  drive 6 separate lines. Each of them can be individually switched on and off
+>>> +  but the brightness setting is shared between two of them.
+>>
+>> Maybe add a link to data-sheet?
+>> https://fscdn.rohm.com/en/products/databook/datasheet/ic/power/led_driver/bd2606mvv_1-e.pdf
+>>
+> Maybe also (because it has the register description):
+> https://fscdn.rohm.com/en/products/databook/applinote/ic/power/led_driver/bd2606mvv_tsb_001_ug-e.pdf
 
+I think both documents do contain the register description. Well, the 
+eval board user-guide seems to contain the IC information as well as the 
+eval board information so I am fine with either of these.
 
-Besides that, it's better to protect 'vol->eba_tbl->entries' assignment 
-like:
-diff --git a/drivers/mtd/ubi/eba.c b/drivers/mtd/ubi/eba.c
-index 403b79d6efd5..5ae0c1bc6f41 100644
---- a/drivers/mtd/ubi/eba.c
-+++ b/drivers/mtd/ubi/eba.c
-@@ -1450,7 +1450,9 @@ int ubi_eba_copy_leb(struct ubi_device *ubi, int 
-from, int to,
-         }
+Yours,
+	-- Matti
 
-         ubi_assert(vol->eba_tbl->entries[lnum].pnum == from);
-+       spin_lock(&ubi->volumes_lock);
-         vol->eba_tbl->entries[lnum].pnum = to;
-+       spin_unlock(&ubi->volumes_lock);
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-  out_unlock_buf:
-         mutex_unlock(&ubi->buf_mutex);
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-Otherwise, a race between wear_leveling_work and shrinking volume could 
-happen:
-
-  ubi_resize_volume         wear_leveling_worker
-   ubi_eba_copy_table(vol, new_eba_tbl, reserved_pebs);
-                               vol->eba_tbl->entries[lnum].pnum = to; // 
-update old eba_tbl
-   vol->eba_tbl = new_eba_tbl
