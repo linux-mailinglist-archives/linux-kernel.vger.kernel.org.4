@@ -2,149 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5AB6D8DDE
+	by mail.lfdr.de (Postfix) with ESMTP id D7F826D8DDF
 	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235213AbjDFDHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S235262AbjDFDHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbjDFDG0 (ORCPT
+        with ESMTP id S235408AbjDFDG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:06:26 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5BBAD04;
-        Wed,  5 Apr 2023 20:06:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsRGP20nxz4wgv;
-        Thu,  6 Apr 2023 13:06:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1680750365;
-        bh=+7JnYdXl4iRYhR/fNbCL6DbEPldREXhma/t+L8lv3Js=;
-        h=Date:From:To:Cc:Subject:From;
-        b=nx9WwZzDcwf8f02O4B1Eo+3/kc7fR4+ptzZdOyJ0xWtJ2BN1fMxGw/Oq14JTz6CaE
-         L8Q7Etru1Qc+P+W6khw3YznWVtBDi0bppM8Bct2Hzl1BjBkhKJhNzHDTHpcm5t+kpD
-         qRUSW9YHeah0KwYMJaYdSj9WJJBiiSya6raaBfjKzFRgNQ6qkjfj/mVzZEI8k/fL/p
-         gxwttRbW7wq+tw5Oy2jR9SPLVS+dLpnvNTnQVlZ/+B7oiaQ60s6OYQueQg+9+78mPm
-         5+Y7pKPewP4FUIRXc/ND8Pv9RYjAtkPxOUqzvU3/eTgyvXceujVFlrXQ13FD6uMtMC
-         LldLzWDgaMU+Q==
-Date:   Thu, 6 Apr 2023 13:06:03 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     KVM <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Thomas Huth <thuth@redhat.com>
-Subject: linux-next: manual merge of the kvm-arm tree with the kvm tree
-Message-ID: <20230406130603.273997ca@canb.auug.org.au>
+        Wed, 5 Apr 2023 23:06:27 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2360900A
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:06:26 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id cu4so27621668qvb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 20:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680750386; x=1683342386;
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UOeBIQkfyU+qsb7iIPWyZcajPEmOkYJng1DKgvioxsg=;
+        b=JXTIzUx0NzRub7RfjnLTXzSQP/KtlOU4gBJAf3TDu2lFlEXnkjgTWJAx4JSe5skTL6
+         EH5r/kVg0bAX+gfnnuVsKbXE20ibNuIHJjosZK9RSPH3oQg3PloizykW89HiC0NVtemw
+         eW+z8gFqBq21FfKhzTz1sQsLR4gf3/Vbc7FtcOmQZcRc6IuuXHa94bbYErDQ5BwL8tJC
+         Lxed/7CUe8+bZNgLh/NsuXnjDrU0baMNnp9417A+Vts4hOAu/3AbfF2EsHhYtP4MVNkl
+         qYCgBLNU0BxkHG3jhGWzy7Zjv3d+Y+qlqktw8Q9UTb8Yvus1BcHAgRiQhn57hVdHGGLZ
+         1iew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680750386; x=1683342386;
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UOeBIQkfyU+qsb7iIPWyZcajPEmOkYJng1DKgvioxsg=;
+        b=BmpPXZnaqULjR/dqeaTytIuGhUVMn0U95PShsPvTbyoVMZgE+Hrh2yZfZSvmkSBvna
+         iVTbIKbn22EzSG/5tVBSe5lQl8lq7fVTqym1XjQ5c4l19zttluxxqAIzDPv+rS79iLyk
+         YHgSFVLWBbd9c/Qv+bf55Vrl2f2qPGJH42ty1QoRuEMujF8Oku6qTDZP88CIYPBDssH4
+         0MlEodtdELgLmbcnQeZsmmM58Boh0ZfSRZTkzI9tEFVBL4IklSeYR7hJPUrZnbO63/wy
+         cnweAmDpQf8F98UodpQ2S5AfPNQwvPa3vgEMC4jxnubkjhuLB7QhXH378rU1G5kQgthH
+         BxkA==
+X-Gm-Message-State: AAQBX9dfPX0zat05V+IVR4AbeQWjp7qBiAsKRdSGI/a1dB3nldwwwrlY
+        WaCtm7SiUZzTW/hjhfjvy97jcXuIaOs/Gg==
+X-Google-Smtp-Source: AKy350bLz3ijR+pGaEa3wVXJMQjLo8O/8o2uST/ZMvMcSky7qpCFH7uKA8cBCXt7poJV2zANanMxzg==
+X-Received: by 2002:ad4:5e88:0:b0:5a3:85dd:ecce with SMTP id jl8-20020ad45e88000000b005a385ddeccemr2489377qvb.8.1680750385906;
+        Wed, 05 Apr 2023 20:06:25 -0700 (PDT)
+Received: from Gentoo ([191.96.227.90])
+        by smtp.gmail.com with ESMTPSA id lx2-20020a0562145f0200b005dd8b9345aasm185567qvb.66.2023.04.05.20.06.24
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 20:06:25 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 08:36:09 +0530
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     LinuxKernel <linux-kernel@vger.kernel.org>
+Subject: testing...
+Message-ID: <ZC43Ieg2Fu6vN7lH@Gentoo>
+Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        LinuxKernel <linux-kernel@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Z+Kjzg/rPvU7tRqN1R3suNi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="L4KEEe+aQCG8J1Uc"
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Z+Kjzg/rPvU7tRqN1R3suNi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+--L4KEEe+aQCG8J1Uc
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+testing...
+--
+Thanks,
+Bhaskar
 
-  arch/arm64/kvm/arm.c
+"Here's looking at you kid"-- Casablanca
+https://about.me/unixbhaskar
 
-between commit:
-
-  d8708b80fa0e ("KVM: Change return type of kvm_arch_vm_ioctl() to "int"")
-
-from the kvm tree and commit:
-
-  e0fc6b21616d ("KVM: arm64: Add vm fd device attribute accessors")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/kvm/arm.c
-index aaa752be3776,4ec888fdd4f7..000000000000
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@@ -220,7 -234,7 +234,8 @@@ int kvm_vm_ioctl_check_extension(struc
-  	case KVM_CAP_VCPU_ATTRIBUTES:
-  	case KVM_CAP_PTP_KVM:
-  	case KVM_CAP_ARM_SYSTEM_SUSPEND:
- +	case KVM_CAP_IRQFD_RESAMPLE:
-+ 	case KVM_CAP_COUNTER_OFFSET:
-  		r =3D 1;
-  		break;
-  	case KVM_CAP_SET_GUEST_DEBUG2:
-@@@ -1440,7 -1475,28 +1476,27 @@@ static int kvm_vm_ioctl_set_device_addr
-  	}
-  }
- =20
-+ static int kvm_vm_has_attr(struct kvm *kvm, struct kvm_device_attr *attr)
-+ {
-+ 	switch (attr->group) {
-+ 	case KVM_ARM_VM_SMCCC_CTRL:
-+ 		return kvm_vm_smccc_has_attr(kvm, attr);
-+ 	default:
-+ 		return -ENXIO;
-+ 	}
-+ }
-+=20
-+ static int kvm_vm_set_attr(struct kvm *kvm, struct kvm_device_attr *attr)
-+ {
-+ 	switch (attr->group) {
-+ 	case KVM_ARM_VM_SMCCC_CTRL:
-+ 		return kvm_vm_smccc_set_attr(kvm, attr);
-+ 	default:
-+ 		return -ENXIO;
-+ 	}
-+ }
-+=20
- -long kvm_arch_vm_ioctl(struct file *filp,
- -		       unsigned int ioctl, unsigned long arg)
- +int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned lon=
-g arg)
-  {
-  	struct kvm *kvm =3D filp->private_data;
-  	void __user *argp =3D (void __user *)arg;
-
---Sig_/Z+Kjzg/rPvU7tRqN1R3suNi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--L4KEEe+aQCG8J1Uc
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQuNxsACgkQAVBC80lX
-0Gxkkgf8CkKLR8AuSGIbWV+bE1n+NeVjsa6k0ugcz8f5hzGsf9aqX42s6meXooKk
-Ih2hWUUwi/4ilmGEqMk2IM8ZkYGbHAgsH2GrtzSo2M28shgQUfIO/qLt9D2PZrsh
-y0tg0i6i47iELIASqj8KjWXpnLiq9evWuKDxVHUMMfUXdF5AWvEmOG4qK/wXERNy
-n/G/f7jYpdqF09sUEigKIw6KhP1fu3GIOS30ymr/+Efgp0PJ4Tnb+NVCVSRIdPNB
-qzxkNul6FPVpL9AFaswPny/SwIWV2d6KKhvCzE87RWULlifMrnR5d6qan1SNbpPJ
-yP8BQdwO89+qqwRYihiin8skrbyVdw==
-=gLJS
+iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmQuNyEACgkQsjqdtxFL
+KRV8hAf+KzuSZr5x35kpRevgX9zfOwfmJIOtK0ivmThxgZOBOeAObtxPv2qO4j1/
+oh3hVvJShFpZayfKHK76xZh+P4kEtvVwLiWluFDx9ZES/Ou8Ibqo1mJKPL0xomqH
+FXEFTUQwmX4797inclTOXkYuKoHoEykX0lKtXdrBsgLp8UiB29DO9/9f8TR6Z5tc
+BpbURLMKtOM0T2G59dvwcj0q2+3zooMi6UCTvW9SiLV9AOVCs5tHosbR3LI3uFN/
+CG6r3distRz9hWc13WHx5XmEng/pWcyYngVZNaNv+GUHAKMTQrOskiYoifrZGgqj
+8kOH8I4QeJn2rZkaFsrwXAwjr5Xqvw==
+=7myq
 -----END PGP SIGNATURE-----
 
---Sig_/Z+Kjzg/rPvU7tRqN1R3suNi--
+--L4KEEe+aQCG8J1Uc--
