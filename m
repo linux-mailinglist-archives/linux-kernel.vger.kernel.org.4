@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AB66D8E93
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D296D8E9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 07:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbjDFEyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 00:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
+        id S234737AbjDFFBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 01:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbjDFEyy (ORCPT
+        with ESMTP id S233603AbjDFFBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:54:54 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7227ED6
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 21:54:53 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id r14so22597054oiw.12
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 21:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680756892;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PGtoUwPGBpmlv9+vpAugLrWk/J13volzq8zGjx82L7M=;
-        b=IvSF5SJ0sLhz9XIRVFre13nJxs00fqPfoxW0Uq8YnDx36fuW/B1N4w/jRg55qmMkMf
-         WUVicic1WvdWmou340YTG9sF1pzp5U/ZdexGe5pqVjIIjRynYunThEwNn/v5yuHcBHoL
-         OT3mWJWtJcBW7QZsTUWc7VjHrIqkxBhSfKr547BwZrP2k75ENDz46PbL3vGLO/I+Mkqw
-         1WA+4OwjyuwUm3s1s7Ihm1XXV3sw9tt7FjJjQWb40ZT89h0dM+uJG9luDswuVp+Jo+zG
-         uNydSHA1Yvps5ErrAbeG8TGZYdIfWPDS/i6dpBWz5lvEPRyPE+7793RIETTRb2fo5n4d
-         V2gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680756892;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PGtoUwPGBpmlv9+vpAugLrWk/J13volzq8zGjx82L7M=;
-        b=cgS8uykLWSEr4+zqh4uK+hElazM6POHngs3OJA0uqwLdto77bQ4oYkATQgmWkmDjTr
-         bfxCTRyUc5Mv7QUn/Ak7K/JyGZdE13Pk24FGBT/TgCKryWOeIOqJZA9pgm0x3eoBDcig
-         ln21Ud0F982f722TSrfVmmMAAfqzREj3phEIfHfysEskWbtpzBb/bIvUyDbFA2AiES7a
-         yzvUXiz1kYaKAFBbezdqZP1GLz13uk8cQXfdFcKQw5Bzdya2dU0xadcRhABnCeyJZhu9
-         UZ9M8d2BFM4So/XQ7YrMjtOgpRxsA99VF+tz+Oml3bgv89MnKzUq8kZtRH8J05XDUNA5
-         /X4Q==
-X-Gm-Message-State: AAQBX9ferxT7LdtQhqULuQ5SogYSgJuCCvHSI43sxBYMEExdfpl6EIrw
-        v3cAQ5Lymq8HbeayXZyH6K0=
-X-Google-Smtp-Source: AKy350aVl1/hvYDjIZ77u5pcJIMU/voMJ34PTLXoAlwF/ALRM2+6QMBpzPo2Gw9Mub4b77YZFiXn7g==
-X-Received: by 2002:aca:2112:0:b0:386:c4f0:4f78 with SMTP id 18-20020aca2112000000b00386c4f04f78mr4019628oiz.28.1680756892464;
-        Wed, 05 Apr 2023 21:54:52 -0700 (PDT)
-Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id p10-20020acad80a000000b003898bec0e01sm285775oig.17.2023.04.05.21.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 21:54:52 -0700 (PDT)
-From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: [PATCH] driver core: update comments in device_rename()
-Date:   Thu,  6 Apr 2023 01:54:35 -0300
-Message-Id: <20230406045435.19452-1-wedsonaf@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 6 Apr 2023 01:01:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1759B8A6F;
+        Wed,  5 Apr 2023 22:01:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 905DC6432C;
+        Thu,  6 Apr 2023 05:01:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1ACC433EF;
+        Thu,  6 Apr 2023 05:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680757304;
+        bh=XN/KRAdjSBdeqgfcMqrTsnTfe3Vagj/AOgBnYovfOyE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A87TQ/3nKu7dpkq29cB6AZUxd0BatdWJoOS/V+abIZyKjUJt3UGdQSOc0G+Tqps1x
+         4/awB5hY3qpUgQ+ASW+2u6M5LsP2YSWU6hiLUPIadfU72iw06YHioY21KbEuxL8lYM
+         QfhNdjKdR4Orqi8JhtfA3UiCbq49QLF9797gHYKU=
+Date:   Thu, 6 Apr 2023 07:01:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Saravana Kannan <saravanak@google.com>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Fabio Estevam <festevam@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH v3] treewide: Fix probing of devices in DT overlays
+Message-ID: <ZC5SNLY6kw_BXjM6@kroah.com>
+References: <e1fa546682ea4c8474ff997ab6244c5e11b6f8bc.1680182615.git.geert+renesas@glider.be>
+ <168072737082.449372.6122824582508382689.robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168072737082.449372.6122824582508382689.robh@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wedson Almeida Filho <walmeida@microsoft.com>
+On Wed, Apr 05, 2023 at 03:42:52PM -0500, Rob Herring wrote:
+> 
+> On Thu, 30 Mar 2023 15:26:13 +0200, Geert Uytterhoeven wrote:
+> > When loading a DT overlay that creates a device, the device is not
+> > probed, unless the DT overlay is unloaded and reloaded again.
+> > 
+> > After the recent refactoring to improve fw_devlink, it no longer depends
+> > on the "compatible" property to identify which device tree nodes will
+> > become struct devices.   fw_devlink now picks up dangling consumers
+> > (consumers pointing to descendent device tree nodes of a device that
+> > aren't converted to child devices) when a device is successfully bound
+> > to a driver.  See __fw_devlink_pickup_dangling_consumers().
+> > 
+> > However, during DT overlay, a device's device tree node can have
+> > sub-nodes added/removed without unbinding/rebinding the driver.  This
+> > difference in behavior between the normal device instantiation and
+> > probing flow vs. the DT overlay flow has a bunch of implications that
+> > are pointed out elsewhere[1].  One of them is that the fw_devlink logic
+> > to pick up dangling consumers is never exercised.
+> > 
+> > This patch solves the fw_devlink issue by marking all DT nodes added by
+> > DT overlays with FWNODE_FLAG_NOT_DEVICE (fwnode that won't become
+> > device), and by clearing the flag when a struct device is actually
+> > created for the DT node.  This way, fw_devlink knows not to have
+> > consumers waiting on these newly added DT nodes, and to propagate the
+> > dependency to an ancestor DT node that has the corresponding struct
+> > device.
+> > 
+> > Based on a patch by Saravana Kannan, which covered only platform and spi
+> > devices.
+> > 
+> > [1] https://lore.kernel.org/r/CAGETcx_bkuFaLCiPrAWCPQz+w79ccDp6=9e881qmK=vx3hBMyg@mail.gmail.com
+> > 
+> > Fixes: 4a032827daa89350 ("of: property: Simplify of_link_to_phandle()")
+> > Link: https://lore.kernel.org/r/CAGETcx_+rhHvaC_HJXGrr5_WAd2+k5f=rWYnkCZ6z5bGX-wj4w@mail.gmail.com
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Acked-by: Mark Brown <broonie@kernel.org>
+> > Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+> > ---
+> > v3:
+> >   - Add Acked-by,
+> >   - s/instantiate/probe/,
+> >   - Improve commit description,
+> >   - Add comment before clearing FWNODE_FLAG_NOT_DEVICE,
+> > 
+> > v2:
+> >   - Add Acked-by,
+> >   - Drop RFC.
+> > ---
+> >  drivers/bus/imx-weim.c    | 6 ++++++
+> >  drivers/i2c/i2c-core-of.c | 5 +++++
+> >  drivers/of/dynamic.c      | 1 +
+> >  drivers/of/platform.c     | 5 +++++
+> >  drivers/spi/spi.c         | 5 +++++
+> >  5 files changed, 22 insertions(+)
+> > 
+> 
+> Applied, thanks!
 
-Document that some subsystems are still going to use device_rename for
-the time being, so it is not a good idea to assume it's not used. Also
-remove mentions of a plan to stop renaming net devices.
+Oops, I thought I had to take this.  I'll go drop it from my tree...
 
-Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
----
- drivers/base/core.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+thanks,
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 6878dfcbf0d6..95d414074f92 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -4383,9 +4383,12 @@ EXPORT_SYMBOL_GPL(device_destroy);
-  * on the same device to ensure that new_name is valid and
-  * won't conflict with other devices.
-  *
-- * Note: Don't call this function.  Currently, the networking layer calls this
-- * function, but that will change.  The following text from Kay Sievers offers
-- * some insight:
-+ * Note: given that some subsystems (networking and infiniband) use this
-+ * function, with no immediate plans for this to change, we cannot assume or
-+ * require that this function not be called at all.
-+ *
-+ * However, if you're writing new code, do not call this function. The following
-+ * text from Kay Sievers offers some insight:
-  *
-  * Renaming devices is racy at many levels, symlinks and other stuff are not
-  * replaced atomically, and you get a "move" uevent, but it's not easy to
-@@ -4399,13 +4402,6 @@ EXPORT_SYMBOL_GPL(device_destroy);
-  * kernel device renaming. Besides that, it's not even implemented now for
-  * other things than (driver-core wise very simple) network devices.
-  *
-- * We are currently about to change network renaming in udev to completely
-- * disallow renaming of devices in the same namespace as the kernel uses,
-- * because we can't solve the problems properly, that arise with swapping names
-- * of multiple interfaces without races. Means, renaming of eth[0-9]* will only
-- * be allowed to some other name than eth[0-9]*, for the aforementioned
-- * reasons.
-- *
-  * Make up a "real" name in the driver before you register anything, or add
-  * some other attributes for userspace to find the device, or use udev to add
-  * symlinks -- but never rename kernel devices later, it's a complete mess. We
--- 
-2.34.1
-
+greg k-h
