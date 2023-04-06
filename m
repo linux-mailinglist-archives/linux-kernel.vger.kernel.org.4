@@ -2,268 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23756D947A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA20B6D947D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236708AbjDFKyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
+        id S237315AbjDFKzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbjDFKy3 (ORCPT
+        with ESMTP id S229710AbjDFKzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:54:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B2E55B3
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680778421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pi28H7Ys3ragZ0WvGPlL8+NvRPjRFBU0lR+sJE70dXU=;
-        b=VF7Fi54cVws/vAkLj1UDmYvSdzF1ub90SDK7/3RVN0uoW4q1u3B6MFvTejIc+wInYP+ld1
-        FJ84bqqgpx7ZxYD5E+etYx8yBx2DvQW6QYQFf4ssXABLzZgsRbk+U2xlvS1HguPZFU6bFG
-        rQ86c3XTj+rKvmakTCkOLjZ0B9FjGOc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-83-B_Fa_D0rMMuFbI4FO9khqw-1; Thu, 06 Apr 2023 06:53:40 -0400
-X-MC-Unique: B_Fa_D0rMMuFbI4FO9khqw-1
-Received: by mail-ej1-f69.google.com with SMTP id 22-20020a170906011600b0093d7f81fd04so56108eje.19
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 03:53:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680778418; x=1683370418;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pi28H7Ys3ragZ0WvGPlL8+NvRPjRFBU0lR+sJE70dXU=;
-        b=VMirnBkHxsl7Pxs78tCe23gOuKrM0Ug+ByXEzCnp29AavB/MI451EeMz8FcSq5ICVu
-         GTTLb2SofnZa9Uk4Ua8DAWJYx+WtLmqra26i0gn8GdWQQuziSdDEWIGuHkvlPoGo/UaN
-         yapJ2uXIIkyN4g9SwsmXzP6QrZ9dcUq4rnJ5xdn9XScDoLpcBgtjf+Qx+NV24McYrugD
-         EMjwIaYSLq/sMx26rnpikVGZ4ylum3bOl1rnmkSebgvmOsGgtwfcdWrTS/JZiYdEQ2bv
-         vcBepJJKyGUQAYHXy9FEZhQvNNi6Ox/qwtYGMP01F6EUxWu+6dfWtsAbklpVCIiS+0Fd
-         s5AA==
-X-Gm-Message-State: AAQBX9fZlY6JIz64G+n2nnYTsRbS+jmJYAfyfg/4C0yt4mCar175HmBi
-        5jsFEjehPBvchVjzObsuSGdRxmA3buR82ahpDTTT5vA0mUamKqNEINf30Wiof3bSAEYl+10L+Xz
-        QIK5wpmLQSadgQVaaHMKyT4ZTMJHmZwnU
-X-Received: by 2002:a17:906:4d8c:b0:8b1:88aa:46da with SMTP id s12-20020a1709064d8c00b008b188aa46damr6227543eju.48.1680778418654;
-        Thu, 06 Apr 2023 03:53:38 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZZfiP5eeuklEaQrdVVrA6BqszwkvZHtgP4NZZiG+OQJj261ImPta+swxAFCoNIv5pmoPKVJQ==
-X-Received: by 2002:a17:906:4d8c:b0:8b1:88aa:46da with SMTP id s12-20020a1709064d8c00b008b188aa46damr6227525eju.48.1680778418309;
-        Thu, 06 Apr 2023 03:53:38 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id gs22-20020a170906f19600b00947d49ec819sm660247ejb.22.2023.04.06.03.53.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 03:53:37 -0700 (PDT)
-Message-ID: <c5455226-1d51-1d3d-0b67-78a0473a9e8c@redhat.com>
-Date:   Thu, 6 Apr 2023 12:53:37 +0200
+        Thu, 6 Apr 2023 06:55:39 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B2C365B6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=yURwplSdjGa62e3szWhgSzg84+YzkegGjB1Wwf/yvzQ=; b=ADvU4cjOEkuaJ9UQhCdQ3PGPKK
+        4Yz+nnrh2V3n8CGMkb+c2FWLho3HWy0yBFgaVgkbzQ0LIHDCH/VIvEi4dcoOeq8wUuyy1v+m48eV5
+        mFFColnEC0DyerdDDvsqhKWoLALv+1KsGrpb0MzX6xVLvTTOQ6m+/J/Ve3OSY0bnLeKFO9qQulMaN
+        vqnVhDUQvQy3flxONsxX2Fb8p3YVOTZmy3dvYzZ72uecT6BHVq0fNBoe6MbFxKxyA8U5TldqLAPnM
+        IAa+3CtXzU+eZJ/TOBNv56mZ4ECfhFVM3bdyZVdOHOJqN1C8QODGjwj9RWaTH4RE5JPV/k1i+OLO8
+        aRsmEqOg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkNH9-00AVMd-2T;
+        Thu, 06 Apr 2023 10:55:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 24557300194;
+        Thu,  6 Apr 2023 12:55:30 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E0782200A7ECE; Thu,  6 Apr 2023 12:55:29 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 12:55:29 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Pavel Tatashin <pasha.tatashin@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC] tick_sched_timer() is not properly aligned, fixed by chance
+Message-ID: <20230406105529.GB392176@hirez.programming.kicks-ass.net>
+References: <20230406095735.0_14edn3@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFCv3 1/1] platform/x86: Add virtual PMC driver used for S2Idle
-Content-Language: en-US, nl
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>, linux-kernel@vger.kernel.org
-Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
-        zide.chen@intel.corp-partner.google.com, seanjc@google.com,
-        upstream@semihalf.com, markgross@kernel.org, dtor@google.com,
-        mario.limonciello@amd.com, linux-pm@vger.kernel.org,
-        x86@kernel.org, platform-driver-x86@vger.kernel.org,
-        rafael@kernel.org
-References: <20230213100921.268770-1-jaz@semihalf.com>
- <20230213100921.268770-2-jaz@semihalf.com>
- <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAH76GKOHMtwE7rLTPKUZJ_7xUUdHmHnGyZOsh8pFWoHCiWQynw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230406095735.0_14edn3@linutronix.de>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Grzegorz,
-
-On 3/29/23 14:33, Grzegorz Jaszczyk wrote:
-> Hi Hans,
+On Thu, Apr 06, 2023 at 11:57:35AM +0200, Sebastian Andrzej Siewior wrote:
+> With HIGHRES enabled tick_sched_timer() is programmed every jiffy to
+> expire the timer_list timers. This timer is programmed accurate in
+> respect to CLOCK_MONOTONIC so that 0 is the first tick and the next one
+> is 1000/CONFIG_HZ ms later. For HZ=250 every 4 ms and so the us/ns part
+> of the timer is always 0. This can be observed by enabling hrtimer_start
+> events and looking for the tick_sched_timer timer:
 > 
-> Do you think that this RFC is in good enough state to start the ACPI
-> ID registration process so after it will be completed we could land
-> this solution? Or maybe we could land it (of course if there are no
-> other remarks) even before and adjust if needed?
-
-I see from the links in the cover-letter that most of
-the previous discussion has happened on the linux-pm list
-and I believe that the linux-pm folks are in a better place
-to answer this question then I am.
-
-I have no objections against the suggested approach,
-but I don't really feel that it is my call to make if
-we should move forward with this.
-
-Regards,
-
-Hans
-
-
-
-> pon., 13 lut 2023 o 11:11 Grzegorz Jaszczyk <jaz@semihalf.com> napisał(a):
->>
->> Virtual PMC driver is meant for the guest VMs for the S2Idle
->> notification. Its purpose is to register S2Idle dev ops check handler,
->> which will evaluate ACPI _DSM just before the guest enters S2Idle power
->> state.
->>
->> This allows to trap on MMIO access done as a consequence of _DSM
->> evaluation and therefore notify the VMM about the guest entering S2Idle
->> state.
->>
->> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
->> ---
->> Changelog v1..v2:
->> - Take advantage of acpi_s2idle_dev_ops's check() instead of notify()
->>
->> Changelog v2..v3:
->> - Add MODULE_LICENSE
->> - Remove "amd" prefixes
->> - Be more verbose in VIRT_PMC config description and make it
->>   HYPERVISOR_GUEST dependent
->> - Add extra check ensuring that DSM method supports ACPI_VIRT_PMC_NOTIFY function
->> ---
->>  drivers/platform/x86/Kconfig    |  7 +++
->>  drivers/platform/x86/Makefile   |  3 ++
->>  drivers/platform/x86/virt_pmc.c | 83 +++++++++++++++++++++++++++++++++
->>  3 files changed, 93 insertions(+)
->>  create mode 100644 drivers/platform/x86/virt_pmc.c
->>
->> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
->> index 5692385e2d26..837ce201b68b 100644
->> --- a/drivers/platform/x86/Kconfig
->> +++ b/drivers/platform/x86/Kconfig
->> @@ -1099,6 +1099,13 @@ config WINMATE_FM07_KEYS
->>           buttons below the display. This module adds an input device
->>           that delivers key events when these buttons are pressed.
->>
->> +config VIRT_PMC
->> +       tristate "Virtual Power Management Controller"
->> +       depends on ACPI && SUSPEND && HYPERVISOR_GUEST
->> +       help
->> +         The Virtual PMC driver is meant for the guest VMs and its main
->> +         purpose is to notify about guest entering s2idle state.
->> +
->>  endif # X86_PLATFORM_DEVICES
->>
->>  config P2SB
->> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
->> index 1d3d1b02541b..c4d3056cf4ea 100644
->> --- a/drivers/platform/x86/Makefile
->> +++ b/drivers/platform/x86/Makefile
->> @@ -129,6 +129,9 @@ obj-$(CONFIG_INTEL_SCU_WDT)         += intel_scu_wdt.o
->>  obj-$(CONFIG_INTEL_SCU_IPC_UTIL)       += intel_scu_ipcutil.o
->>  obj-$(CONFIG_X86_INTEL_LPSS)           += pmc_atom.o
->>
->> +# Virtual PMC
->> +obj-$(CONFIG_VIRT_PMC)                 += virt_pmc.o
->> +
->>  # Siemens Simatic Industrial PCs
->>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)      += simatic-ipc.o
->>
->> diff --git a/drivers/platform/x86/virt_pmc.c b/drivers/platform/x86/virt_pmc.c
->> new file mode 100644
->> index 000000000000..a5966bb9048f
->> --- /dev/null
->> +++ b/drivers/platform/x86/virt_pmc.c
->> @@ -0,0 +1,83 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Virtual Power Management Controller Driver
->> + *
->> + * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
->> + */
->> +
->> +#include <linux/acpi.h>
->> +#include <linux/platform_device.h>
->> +
->> +#define ACPI_VIRT_PMC_DSM_UUID "9ea49ba3-434a-49a6-be30-37cc55c4d397"
->> +#define ACPI_VIRT_PMC_NOTIFY 1
->> +
->> +static acpi_handle virt_pmc_handle;
->> +
->> +static void virt_pmc_s2idle_notify(void)
->> +{
->> +       union acpi_object *out_obj;
->> +       guid_t dsm_guid;
->> +
->> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
->> +
->> +       out_obj = acpi_evaluate_dsm(virt_pmc_handle, &dsm_guid,
->> +                                       0, ACPI_VIRT_PMC_NOTIFY, NULL);
->> +
->> +       acpi_handle_debug(virt_pmc_handle, "_DSM function %u evaluation %s\n",
->> +                         ACPI_VIRT_PMC_NOTIFY, out_obj ? "successful" : "failed");
->> +
->> +       ACPI_FREE(out_obj);
->> +}
->> +
->> +static struct acpi_s2idle_dev_ops pmc_s2idle_dev_ops = {
->> +       .check = virt_pmc_s2idle_notify,
->> +};
->> +
->> +static int virt_pmc_probe(struct platform_device *pdev)
->> +{
->> +       int err = 0;
->> +       guid_t dsm_guid;
->> +
->> +       virt_pmc_handle = ACPI_HANDLE(&pdev->dev);
->> +
->> +       guid_parse(ACPI_VIRT_PMC_DSM_UUID, &dsm_guid);
->> +
->> +       if (!acpi_check_dsm(virt_pmc_handle, &dsm_guid, 0,
->> +                           1 << ACPI_VIRT_PMC_NOTIFY)) {
->> +               dev_err(&pdev->dev, "DSM method doesn't support ACPI_VIRT_PMC_NOTIFY\n");
->> +               return -ENODEV;
->> +       }
->> +
->> +       err = acpi_register_lps0_dev(&pmc_s2idle_dev_ops);
->> +       if (err)
->> +               dev_err(&pdev->dev, "failed to register LPS0 sleep handler\n");
->> +
->> +       return err;
->> +}
->> +
->> +static int virt_pmc_remove(struct platform_device *pdev)
->> +{
->> +       acpi_unregister_lps0_dev(&pmc_s2idle_dev_ops);
->> +
->> +       return 0;
->> +}
->> +
->> +static const struct acpi_device_id virt_pmc_acpi_ids[] = {
->> +       {"HYPE0001", 0}, /* _HID for XXX Power Engine, _CID PNP0D80*/
->> +       { }
->> +};
->> +MODULE_DEVICE_TABLE(acpi, virt_pmc_acpi_ids);
->> +
->> +static struct platform_driver virt_pmc_driver = {
->> +       .driver = {
->> +               .name = "virtual_pmc",
->> +               .acpi_match_table = ACPI_PTR(virt_pmc_acpi_ids),
->> +       },
->> +       .probe = virt_pmc_probe,
->> +       .remove = virt_pmc_remove,
->> +};
->> +
->> +module_platform_driver(virt_pmc_driver);
->> +
->> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("Virtual PMC Driver");
->> --
->> 2.39.1.581.gbfd45094c4-goog
->>
+> | <idle>-0 [009] 137.085041: hrtimer_start: hrtimer=000000002df4f2bc function=tick_sched_timer expires=162784000000 softexpires=162784000000 mode=0xa
+> | <idle>-0 [026] 137.085300: hrtimer_start: hrtimer=00000000b0911b5d function=tick_sched_timer expires=316384000000 softexpires=316384000000 mode=0xa
 > 
+> The lower part (us, ns) is zero. This is important for certain work
+> loads where it is needed to either align with the timer or hide after
+> it.
+> 
+> With commit
+> 	857baa87b6422 ("sched/clock: Enable sched clock early")
+> 
+> merged into v4.19-rc1 this 0 offset is gone. The problematic part is the
+> last hunk of the patch:
+> 
+> |@@ -356,7 +374,7 @@ u64 sched_clock_cpu(int cpu)
+> |                return sched_clock() + __sched_clock_offset;
+> |
+> |        if (unlikely(!sched_clock_running))
+> |-               return 0ull;
+> |+               return sched_clock();
+> |
+> |        preempt_disable_notrace();
+> |        scd = cpu_sdc(cpu);
+> 
+> which returns the sched_clock() without any offset. The gain of this is
+> the high resolution output of the bootlog very early, so we see something
+> like this:
+> |[    0.000000] tsc: Detected 1995.083 MHz processor
+> |[    0.000893] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+> |[    0.008179] e820: remove [mem 0x000a0000-0x000fffff] usable
+> |[    0.014395] last_pfn = 0xa40000 max_arch_pfn = 0x400000000
+> |[    0.020667] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT
+> |[    0.029822] last_pfn = 0xbe000 max_arch_pfn = 0x400000000
+> |[    0.050770] found SMP MP-table at [mem 0x000fd2a0-0x000fd2af]
+> |[    0.057015] Kernel/User page tables isolation: disabled on command line.
+> |[    0.064452] Using GB pages for direct mapping
+> |[    0.070337] RAMDISK: [mem 0x32d23000-0x35688fff]
+> |[    0.075298] ACPI: Early table checksum verification disabled
+> …
+> |[    1.662577] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+> |[    1.687317] clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x398412f243e, max_idle_ns: 881590620736 ns
+> |[    1.699071] Calibrating delay loop (skipped), value calculated using timer frequency.. 3990.16 BogoMIPS (lpj=7980332)
+> |[    1.703070] pid_max: default: 32768 minimum: 301
+> |[    1.707238] LSM: Security Framework initializing
+> 
+> but the tick_sched_timer() is no longer properly aligned:
+> | <idle>-0 [002] 131.286274: hrtimer_start: hrtimer=000000000b8c5637 function=tick_sched_timer expires=130680348871 softexpires=130680348871 mode=0xa
+> | <idle>-0 [006] 131.286275: hrtimer_start: hrtimer=00000000e08369e4 function=tick_sched_timer expires=317880348871 softexpires=317880348871 mode=0xa
 
+But how ?!? Why does sched_clock() affect the tick_sched_timer() offset?
+
+/me reads on
+
+> instead of 0 we have "348871" here. I consider this as a bug given that
+> this important.
+> 
+> Then PeterZ had other problems and committed
+> 	776f22913b8e5 ("sched/clock: Make local_clock() noinstr")
+> 
+> which is part of v6.3-rc1. The important part here is (again) the last
+> hunk, the local_clock() implementation:
+> 
+> |noinstr u64 local_clock(void)
+> |{
+> |       u64 clock;
+> |
+> |       if (static_branch_likely(&__sched_clock_stable))
+> |               return sched_clock() + __sched_clock_offset;
+> |
+> |       preempt_disable_notrace();
+> |       clock = sched_clock_local(this_scd());
+> |       preempt_enable_notrace();
+> |
+> |       return clock;
+> |}
+
+And this morning I found:
+
+https://lore.kernel.org/all/20230406040847.569970-1-dev@aaront.org/T/#u
+
+that 'fixes' that :-)
+
+> The tick_sched_timer story is that it uses ktime_get() to set the
+
+But but but, ktime_get() does not use sched_clock(), it has it's own TSC
+reader.
+
+> initial expire time and then always incremented. If the returned value
+> is jiffy-based then it will work as expected. If it has higher precision
+> then the time has to be adjusted since it is not expected.
+> 
+> So, what do we do?
+> - We would need to provide stable patches for v4.19…v6.1 to address the
+>   timer issue.
+> 
+> - The high precision timestamps during boot are gone. Is it important to
+>   bring that back? Or could that new local_clock() implementation be
+>   backported?
+> 
+> - An alternative is to ensure that the time returned by ktime_get() in
+>   tick_setup_device() is aligned with zeros.
+
+The last one I think, let me try and figure out how sched_clock()
+behaviour makes a different at all -- this is not making sense.
