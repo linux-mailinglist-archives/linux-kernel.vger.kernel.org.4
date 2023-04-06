@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555726DA3BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22336DA3D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239780AbjDFUmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:42:39 -0400
+        id S240457AbjDFUnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:43:23 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240397AbjDFUmG (ORCPT
+        with ESMTP id S240330AbjDFUmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:42:06 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF82C66C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:38:58 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id e9so26609025ljq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680813536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ev5hN9s8w8JulYzATwh7JsfqAzOtHOwmwJARepKyeMw=;
-        b=uNfdk0aordhm2U+uez5lxiSDLS/E8esBnea+IgMtiNchJog0+I5Qz1K0nQtDN04f0W
-         MvantI/obc5ZeUBW4v0d+LJrObwS/cKin/EJ1uXiRzdu3JcoZ0jYcCPenmIXGDcnEZqA
-         PaI+jIV0JhEsBjb6pI1VHbdnkYx+pcmJjozykULCEc4qwzTWsyI85O+rLgLhIMYaPbt2
-         NDMJxAJ+Hv6+2/LxAhehu5kEL/eae6SskCFlAZK5RI1BGWjd7OE+fqTjqzerPB8D9kuv
-         dF31PDSKQCBGFCpbyQlKkH75wPzmrc7c1bhzng4lxeqDWm4muX6ThgyBmO8tAHi6Le8M
-         d/BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680813536;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ev5hN9s8w8JulYzATwh7JsfqAzOtHOwmwJARepKyeMw=;
-        b=rokuXyAfMtT3qN5JawtioeRZrdkKubNk16n9aY6zs6AwjJwUg0pEC6lKLJeysXMmmL
-         lfJ9gOPpOH1o5QsL5PqnN+o2h22GYt2OQshRmvfhS3Y0kNrCjHx9v/KFh/RC0NZ8VA8k
-         JZCZ3sYXxfskVKiWKhFNPAOwuxi0t+6wzprJ/mr9dYVGhbWsH4ZUp0P2XX7P0chDbv8v
-         8bA3Wx7OCNuwxZTixFYUD88th3bfSCrdyypZbYZprvtyE/9GvRB4Fw3SxRrcORMWVe0V
-         ENXpCR8aCWa8CYilqK8WLJzwpnLk7UMb1AYqK5+RK3toDjtavdxA6mdptC/6dBB4YmSE
-         KV4Q==
-X-Gm-Message-State: AAQBX9cMq4FAgF5AembVzwxZ/6XEeuEaoMQnQDp1L/XWd9TiruV4KDuG
-        yv+ae6m5LYt4RxevbvCMhuAbHg==
-X-Google-Smtp-Source: AKy350aLZqM5dDvzHdfZEM/juTBxRGBJKWn1U+UKEnBo8v9epMrGGWEy59cQT9Ueb/raFbSaz2xtIg==
-X-Received: by 2002:a2e:a408:0:b0:29c:44f1:c1df with SMTP id p8-20020a2ea408000000b0029c44f1c1dfmr2944844ljn.41.1680813536458;
-        Thu, 06 Apr 2023 13:38:56 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id z4-20020a2e8404000000b002a483f01d9csm428053ljg.85.2023.04.06.13.38.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 13:38:56 -0700 (PDT)
-Message-ID: <ae04df79-10d6-6a38-715b-8f00e8764d85@linaro.org>
-Date:   Thu, 6 Apr 2023 22:38:51 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V3 2/5] clk: qcom: apss-ipq-pll: Add support for IPQ9574
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        dmitry.baryshkov@linaro.org, arnd@arndb.de,
-        geert+renesas@glider.be, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thu, 6 Apr 2023 16:42:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0021BA260;
+        Thu,  6 Apr 2023 13:40:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54E7F64C39;
+        Thu,  6 Apr 2023 20:40:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B771BC433EF;
+        Thu,  6 Apr 2023 20:40:31 +0000 (UTC)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Marius Zachmann <mail@mariuszachmann.de>,
+        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Jonas Malaco <jonas@protocubo.io>,
+        Aleksandr Mezin <mezin.alexander@gmail.com>,
+        Derek John Clark <derekjohn.clark@gmail.com>,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Walle <michael@walle.cc>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Agathe Porte <agathe.porte@nokia.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
-References: <20230406061314.10916-1-quic_devipriy@quicinc.com>
- <20230406061314.10916-3-quic_devipriy@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230406061314.10916-3-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 60/68] hwmon: sy7636a: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:40:19 +0200
+Message-Id: <20230406204027.3012532-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
+References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Statically allocated array of pointed to hwmon_channel_info can be made
+const for safety.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/hwmon/sy7636a-hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 6.04.2023 08:13, Devi Priya wrote:
-> Add the compatible and configuration values for A73 Huayra PLL found
-> on IPQ9574.
-> 
-> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+diff --git a/drivers/hwmon/sy7636a-hwmon.c b/drivers/hwmon/sy7636a-hwmon.c
+index 6dd9c2a0f0e0..ed110884786b 100644
+--- a/drivers/hwmon/sy7636a-hwmon.c
++++ b/drivers/hwmon/sy7636a-hwmon.c
+@@ -52,7 +52,7 @@ static const struct hwmon_ops sy7636a_hwmon_ops = {
+ 	.read = sy7636a_read,
+ };
+ 
+-static const struct hwmon_channel_info *sy7636a_info[] = {
++static const struct hwmon_channel_info * const sy7636a_info[] = {
+ 	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+ 	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+ 	NULL
+-- 
+2.34.1
 
-Konrad
->  Changes in V3:
-> 	- Updated the subject and aligned the commit message
-> 
->  drivers/clk/qcom/apss-ipq-pll.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/apss-ipq-pll.c b/drivers/clk/qcom/apss-ipq-pll.c
-> index cf4f0d340cbf..ce28d882ee78 100644
-> --- a/drivers/clk/qcom/apss-ipq-pll.c
-> +++ b/drivers/clk/qcom/apss-ipq-pll.c
-> @@ -111,6 +111,18 @@ static const struct alpha_pll_config ipq8074_pll_config = {
->  	.test_ctl_hi_val = 0x4000,
->  };
->  
-> +static const struct alpha_pll_config ipq9574_pll_config = {
-> +	.l = 0x3b,
-> +	.config_ctl_val = 0x200d4828,
-> +	.config_ctl_hi_val = 0x6,
-> +	.early_output_mask = BIT(3),
-> +	.aux2_output_mask = BIT(2),
-> +	.aux_output_mask = BIT(1),
-> +	.main_output_mask = BIT(0),
-> +	.test_ctl_val = 0x0,
-> +	.test_ctl_hi_val = 0x4000,
-> +};
-> +
->  struct apss_pll_data {
->  	int pll_type;
->  	struct clk_alpha_pll *pll;
-> @@ -135,6 +147,12 @@ static struct apss_pll_data ipq6018_pll_data = {
->  	.pll_config = &ipq6018_pll_config,
->  };
->  
-> +static struct apss_pll_data ipq9574_pll_data = {
-> +	.pll_type = CLK_ALPHA_PLL_TYPE_HUAYRA,
-> +	.pll = &ipq_pll_huayra,
-> +	.pll_config = &ipq9574_pll_config,
-> +};
-> +
->  static const struct regmap_config ipq_pll_regmap_config = {
->  	.reg_bits		= 32,
->  	.reg_stride		= 4,
-> @@ -180,6 +198,7 @@ static const struct of_device_id apss_ipq_pll_match_table[] = {
->  	{ .compatible = "qcom,ipq5332-a53pll", .data = &ipq5332_pll_data },
->  	{ .compatible = "qcom,ipq6018-a53pll", .data = &ipq6018_pll_data },
->  	{ .compatible = "qcom,ipq8074-a53pll", .data = &ipq8074_pll_data },
-> +	{ .compatible = "qcom,ipq9574-a73pll", .data = &ipq9574_pll_data },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, apss_ipq_pll_match_table);
