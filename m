@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0576DA3D2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB31E6DA3D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbjDFUnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S240428AbjDFUnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239966AbjDFUmU (ORCPT
+        with ESMTP id S240366AbjDFUmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:42:20 -0400
+        Thu, 6 Apr 2023 16:42:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CF659EA;
-        Thu,  6 Apr 2023 13:39:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C555C19D;
+        Thu,  6 Apr 2023 13:40:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0121E62C36;
-        Thu,  6 Apr 2023 20:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53B61C4339E;
-        Thu,  6 Apr 2023 20:39:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55E0164C39;
+        Thu,  6 Apr 2023 20:40:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02BC3C4339C;
+        Thu,  6 Apr 2023 20:39:56 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -71,9 +71,9 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 57/68] hwmon: sl28cpld: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:38:19 +0200
-Message-Id: <20230406203821.3012402-8-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 58/68] hwmon: smpro: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:38:20 +0200
+Message-Id: <20230406203821.3012402-9-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
@@ -93,22 +93,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/sl28cpld-hwmon.c | 2 +-
+ drivers/hwmon/smpro-hwmon.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/sl28cpld-hwmon.c b/drivers/hwmon/sl28cpld-hwmon.c
-index 9ce4899a81a5..e020f25c9300 100644
---- a/drivers/hwmon/sl28cpld-hwmon.c
-+++ b/drivers/hwmon/sl28cpld-hwmon.c
-@@ -67,7 +67,7 @@ static int sl28cpld_hwmon_read(struct device *dev,
- 	return 0;
+diff --git a/drivers/hwmon/smpro-hwmon.c b/drivers/hwmon/smpro-hwmon.c
+index a76c49dd8438..d320adbd47f4 100644
+--- a/drivers/hwmon/smpro-hwmon.c
++++ b/drivers/hwmon/smpro-hwmon.c
+@@ -385,7 +385,7 @@ static umode_t smpro_is_visible(const void *data, enum hwmon_sensor_types type,
+ 	return 0444;
  }
  
--static const struct hwmon_channel_info *sl28cpld_hwmon_info[] = {
-+static const struct hwmon_channel_info * const sl28cpld_hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT),
- 	NULL
- };
+-static const struct hwmon_channel_info *smpro_info[] = {
++static const struct hwmon_channel_info * const smpro_info[] = {
+ 	HWMON_CHANNEL_INFO(temp,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL,
+ 			   HWMON_T_INPUT | HWMON_T_LABEL | HWMON_T_CRIT,
 -- 
 2.34.1
 
