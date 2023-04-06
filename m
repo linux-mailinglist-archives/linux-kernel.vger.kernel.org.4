@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A966DA12A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354A16DA130
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjDFT2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S235437AbjDFT22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjDFT2X (ORCPT
+        with ESMTP id S230005AbjDFT2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:28:23 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6185243
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:28:21 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r11so40558545wrr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:28:21 -0700 (PDT)
+        Thu, 6 Apr 2023 15:28:24 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0186455BD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:28:22 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id y14so40603934wrq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:28:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680809300;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hpBPje+E9IHKDOf6McIJVFqUlSNm+Dji5ABUuGNbQm8=;
-        b=1dP+fXcLTJtFMNU4hcK5CosFll30DXs3LLqUQIfQNcS3ViTrdC9Z764eN2iGXGIpYd
-         s0TPB0rCHcDigWHyRKzxg6gdEM0zQeG52hx86WgLE/SFmBv/R14oKr32HHYZrOiXw5aV
-         8utbG48IzeWlWJWm1WOVVy3v/+7o9+ZqlguAyZ06/WkU5xsP3+/b/jp5Y97AOXVR23XJ
-         MGvj5jNKM/XGnTj3mKyzV0rg8sTN8SthwBs9IKUDLn1Gb52qGEQJhLXOms4QW+a+/U94
-         wzkPc9kYfzKom9STA6NcYHNXJ18kmKihmCdriQVvbjH2mXdJUgpYBaWgawPM+oPtV9ew
-         hPLA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680809301;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TovaMoNXmH9olijKp9TzGAILwIizt6Ev5VA4GI6JW9U=;
+        b=sn2YJQMZ57QrO/ByEheQoj+2yMet1GIGkI+xIJHZMiDrSF06mW+ZLZ8okC8x35PZox
+         rnGpTvzfsWQ9lxbMRw21uHIlWNQReAMzp4lhdj8m7AwEI7P5iVuxctBBANxag7zBRDG2
+         Xz/pTtcVGpMDu2bvH1kYKJXyVGoXWi55KJycnpeeV5dL7kiKJutHP+boBfQEErgZTv2C
+         iuJYRcIF0fTcTMewRVVH6sDNwSD+9OHq2Q4bnHozoM3O2U7Zmt4GgjjaLwvkQdyyrV7G
+         s+q4FjBES5MkFwyafeWEPYwpB0H3c89driolMepgNCPxEioQCAnARKXEzK6iAlimRbc3
+         2qGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680809300;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hpBPje+E9IHKDOf6McIJVFqUlSNm+Dji5ABUuGNbQm8=;
-        b=1m9KK4pASQwdj1G5B5rvCBhfKRoqNQbekgoGI4gvQP2whfp6PLixsCPLVqC6gkiwZy
-         k6BX7GdgIrYTMyrskU7ZRVUF0TWKVPcE8NVro/Zq20GX2+Ii9+ZB8NKC1Jq00gg+pMdV
-         CRCSonTPMY5bt95SeQPAGTzGDWTG9t1EJ6GLsfgvhw+ucO3Pbo5wB8VU2YeKXgBFe+A2
-         /OY0t3G+58xdPlhyBt0cvX6JH3d+Be15dEx4l9rUcDn5u9VbimOf941jICwpn5qvLK9t
-         JSy8pu5gfW/3xbFxst8T8gZHzUqIkxRrtVcVe4mgeKFnNSjNEMRVdwobn5QvLbI7n4xm
-         nOwA==
-X-Gm-Message-State: AAQBX9cwMXklEDlnp0Rl+kVjsf1Lkd0RmdY8PgxVW3/r63J5F3VrEvLD
-        nENilQ3jXUFpopD+kwOPQArifg==
-X-Google-Smtp-Source: AKy350Z8k7YKBSY9G4TVblTTGXSKyJ6Chr47NOE4k1PvRNox0TtyffoasuVO3CpoN0a6VUMw30VJ5Q==
-X-Received: by 2002:adf:ebca:0:b0:2de:bb7c:ea16 with SMTP id v10-20020adfebca000000b002debb7cea16mr6833992wrn.37.1680809300142;
-        Thu, 06 Apr 2023 12:28:20 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680809301;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TovaMoNXmH9olijKp9TzGAILwIizt6Ev5VA4GI6JW9U=;
+        b=zUo+RCKpPwTMIKfVe5kiFUd3wjH/9uu7Re660MK7hm5vUC7f9Usw0c2u0PVl5/e19l
+         tre/Vaa4vqt+xYcW9bDldV/BAui0QOybSigkOiawmwZfgzrqvtKto5XIVtyGC1i2EOBo
+         Tzec00jXNxoEkdG2PNCw+zoT8odm+onoTXOy8z1fxSKL/yz27OAhVRc3KwXsavYJKK1Z
+         tFT+Bn93BFLbvUk0RRvESSMjEelxczo3l8HPyyOWYEM105u7gkLutR2KkzEKqcwgwF75
+         ybcMOk/UQZDzhD2Iw3JjQghp8pDyWQBRo4CU86i8OQvgd7YsJirS/C5/E4XBKad4RVR+
+         0h5A==
+X-Gm-Message-State: AAQBX9cTejnsKyZs1qphvTkBLnsroOxjSCheqZoWMVKfy0HPFq1wJU/5
+        hXRENZxUB80axBVnZfwYURAwLw==
+X-Google-Smtp-Source: AKy350YX0pmv5BdbpIbsSq+hglTSaqFhVo6RZPYoJcU5bh1J1HOt1vUe93bXOpq3F+RvuOQ2KWbBOg==
+X-Received: by 2002:adf:e841:0:b0:2df:7c0a:df33 with SMTP id d1-20020adfe841000000b002df7c0adf33mr7468485wrn.30.1680809301359;
+        Thu, 06 Apr 2023 12:28:21 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:4793:cb9a:340b:2f72])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfe74b000000b002d89e113691sm2489321wrn.52.2023.04.06.12.28.19
+        by smtp.gmail.com with ESMTPSA id c11-20020adfe74b000000b002d89e113691sm2489321wrn.52.2023.04.06.12.28.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 12:28:19 -0700 (PDT)
+        Thu, 06 Apr 2023 12:28:20 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,10 +61,12 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH 0/3] arm64: qcom: add PMIC regulators for sa8775p
-Date:   Thu,  6 Apr 2023 21:28:08 +0200
-Message-Id: <20230406192811.460888-1-brgl@bgdev.pl>
+Subject: [PATCH 1/3] dt-bindings: regulator: qcom,rpmh: add compatible for pmm8654au RPMH
+Date:   Thu,  6 Apr 2023 21:28:09 +0200
+Message-Id: <20230406192811.460888-2-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230406192811.460888-1-brgl@bgdev.pl>
+References: <20230406192811.460888-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -77,25 +80,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Here are the remaining patches from the big PMIC series that add the DT
-bindings for RPMH regulators for SA8775P platforms, implement relevant
-support in the driver and add the regulator nodes to the sa8775p-ride
-board .dts.
+Add the compatible for the pmm8654au RPMH regulators present on the
+sa8775p-ride development board.
 
-Since the first submission:
-- the DT bindings now contain the missing supply properties
-- the ldo8 min voltage has been increased
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ .../bindings/regulator/qcom,rpmh-regulator.yaml | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Bartosz Golaszewski (3):
-  dt-bindings: regulator: qcom,rpmh: add compatible for pmm8654au RPMH
-  regulator: qcom-rpmh: add support for pmm8654au regulators
-  arm64: dts: qcom: sa8775p-ride: add PMIC regulators
-
- .../regulator/qcom,rpmh-regulator.yaml        |  17 ++
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts     | 233 ++++++++++++++++++
- drivers/regulator/qcom-rpmh-regulator.c       |  55 +++++
- 3 files changed, 305 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+index 7002d2654382..f879ccbb3767 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+@@ -80,6 +80,7 @@ properties:
+       - qcom,pmg1110-rpmh-regulators
+       - qcom,pmi8998-rpmh-regulators
+       - qcom,pmm8155au-rpmh-regulators
++      - qcom,pmm8654au-rpmh-regulators
+       - qcom,pmr735a-rpmh-regulators
+       - qcom,pmx55-rpmh-regulators
+       - qcom,pmx65-rpmh-regulators
+@@ -247,6 +248,22 @@ allOf:
+       patternProperties:
+         "^vdd-s([1-9]|10)-supply$": true
+ 
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,pmm8654au-rpmh-regulators
++    then:
++      properties:
++        vdd-l1-supply: true
++        vdd-l2-l3-supply: true
++        vdd-l4-supply: true
++        vdd-l5-supply: true
++        vdd-l6-l7-supply: true
++        vdd-l8-l9-supply: true
++      patternProperties:
++        "^vdd-s[1-9]-supply$": true
++
+   - if:
+       properties:
+         compatible:
 -- 
 2.37.2
 
