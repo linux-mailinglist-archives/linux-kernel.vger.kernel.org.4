@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7196DA288
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75B66DA28A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239196AbjDFUV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S239080AbjDFUVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238977AbjDFUVE (ORCPT
+        with ESMTP id S238997AbjDFUVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Apr 2023 16:21:04 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D1993E4
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:21:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D718682
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680812462; x=1712348462;
+  t=1680812463; x=1712348463;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=7BReSg2zsB5y0pHQ7AAJ8Y7mGqv5oVtV05dcWb8L9Pw=;
-  b=N6rjBtfx65jWcCQmdQg2ssaKQfkguwVN4wsZi4TXcALhVZtpef6g+FVp
-   iLebNQ2VJHiC2/Q9AuySYVZKTMRfpbhxQpFQU+sKPIg3NzJBX3DQHal2U
-   BY2bpMOLc+ccxhbqUANIZvKWK0pmTEanH8Uj9VafZRymRshds2gSs/PjW
-   kHPIe/rgjAWtySDEj5Q2Rwmc+VffbaFxceR2MTqKQgWRBQUipmAECz5jT
-   T4Oy7q9KssoFsoVy4hoU81gtN/EwYoYB6B32SA4JATRd+AZxdJfYe0WcK
-   9C0GhEQ2geELryEYBDauu2HO+1tTIH8wKRcAF5A+efuwetvozuF3Zpg+e
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="407957793"
+  bh=LI6j+fWI4GyL7Vr5d8KoqGYjiaZDwv2WCmJ19LNApco=;
+  b=P7cwiUTZpZJLYuY0FcwYW9EOS2i/6hIpJrbghqVyMW1QRySAuPA0byVK
+   5OkuFgnhx+HrQhNZnWA+hGzWS5u8QZjjvESVV7TFZgif1ErBRuIQeC2xp
+   DWWilvEZY9DYgeseiFMEXzf5bruKcb4tey9mkozCUEuB5FHQ7Z7trOWbm
+   WYCIuZHUats4rrrgHtc80DauTWO8f6tTHsF3Uu5BENfKqcM67z+QB/o7v
+   rGmmCAn9tZVoedqg3JloxLO5mj2v6wll1BQREKpyj21SqLy5fuD5yKJQB
+   FV1b4UuG0sKFnDGUfhHVFtF0YnFZ1HpSPhgh9x0qXqxXZJDAD0eXQeHcD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="407957805"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="407957793"
+   d="scan'208";a="407957805"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 13:21:01 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 13:21:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861529894"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861529901"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="861529894"
+   d="scan'208";a="861529901"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
   by orsmga005.jf.intel.com with ESMTP; 06 Apr 2023 13:21:01 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v4 09/12] sched/topology: Remove SHARED_CHILD from ASYM_PACKING
-Date:   Thu,  6 Apr 2023 13:31:45 -0700
-Message-Id: <20230406203148.19182-10-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v4 10/12] x86/sched: Remove SD_ASYM_PACKING from the SMT domain flags
+Date:   Thu,  6 Apr 2023 13:31:46 -0700
+Message-Id: <20230406203148.19182-11-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
@@ -74,21 +74,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only x86 and Power7 use ASYM_PACKING. They use it differently.
-
-Power7 has cores of equal priority, but the SMT siblings of a core have
-different priorities. Parent scheduling domains do not need (nor have) the
-ASYM_PACKING flag. SHARED_CHILD is not needed. Using SHARED_PARENT would
-cause the topology debug code to complain.
-
-X86 has cores of different priority, but all the SMT siblings of the core
-have equal priority. It needs ASYM_PACKING at the MC level, but not at the
-SMT level (it also needs it at upper levels if they have scheduling groups
-of different priority). Removing ASYM_PACKING from the SMT domain causes
-the topology debug code to complain.
-
-Remove SHARED_CHILD for now. We still need a topology check that satisfies
-both architectures.
+There is no difference between any of the SMT siblings of a physical core.
+Do not do asym_packing load balancing at this level.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -104,39 +91,33 @@ Cc: Valentin Schneider <vschneid@redhat.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 Tested-by: Zhang Rui <rui.zhang@intel.com>
-Suggested-by: Valentin Schneider <vschneid@redhat.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v3:
- * Removed spurious space.
+ * None
 
 Changes since v2:
- * Introduced this patch.
+ * None
 
 Changes since v1:
- * N/A
+ * Introduced this patch.
 ---
- include/linux/sched/sd_flags.h | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ arch/x86/kernel/smpboot.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
-index 57bde66d95f7..fad77b5172e2 100644
---- a/include/linux/sched/sd_flags.h
-+++ b/include/linux/sched/sd_flags.h
-@@ -132,12 +132,9 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
- /*
-  * Place busy tasks earlier in the domain
-  *
-- * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
-- *               up, but currently assumed to be set from the base domain
-- *               upwards (see update_top_cache_domain()).
-  * NEEDS_GROUPS: Load balancing flag.
-  */
--SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
-+SD_FLAG(SD_ASYM_PACKING, SDF_NEEDS_GROUPS)
- 
- /*
-  * Prefer to place tasks in a sibling domain
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index 851477f7d728..cf7f42189e86 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -552,7 +552,7 @@ static int x86_core_flags(void)
+ #ifdef CONFIG_SCHED_SMT
+ static int x86_smt_flags(void)
+ {
+-	return cpu_smt_flags() | x86_sched_itmt_flags();
++	return cpu_smt_flags();
+ }
+ #endif
+ #ifdef CONFIG_SCHED_CLUSTER
 -- 
 2.25.1
 
