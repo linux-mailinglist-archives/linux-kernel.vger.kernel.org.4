@@ -2,156 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5246D9ADC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8406D9ADF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239385AbjDFOnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43156 "EHLO
+        id S239213AbjDFOoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238669AbjDFOne (ORCPT
+        with ESMTP id S237735AbjDFOnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:43:34 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF69A5F8;
-        Thu,  6 Apr 2023 07:42:42 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PskWP4spGz9xqnc;
-        Thu,  6 Apr 2023 22:33:21 +0800 (CST)
-Received: from [10.48.151.63] (unknown [10.48.151.63])
-        by APP2 (Coremail) with SMTP id GxC2BwA3AFc62i5ki__8AQ--.42S2;
-        Thu, 06 Apr 2023 15:42:13 +0100 (CET)
-Message-ID: <15d9dab3-379b-c62c-dd52-a810abe6985d@huaweicloud.com>
-Date:   Thu, 6 Apr 2023 16:42:00 +0200
+        Thu, 6 Apr 2023 10:43:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A01C5
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680792128;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gj/7YiiNEEJ4+hsVKCJkj1HvadHLyL0uUxvEtZRASmc=;
+        b=MFH7ILfxbxZqwO0kUF9n0x6w2yOBze1MxGq/VEeatz4ioSpLISS87DxB3FDvicAARR+9QA
+        s51Ge5pm9TdLPJglEADJtgBgdA4ozmMs2yKsILr6cyhqVmd86lXUWM4E+u/lLbT2p3E3tI
+        QkYVLP3BjATwNTZLVt1NF8ymBEekAZo=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-21-VDLEM4zzNR28FmzVQ0vglw-1; Thu, 06 Apr 2023 10:42:07 -0400
+X-MC-Unique: VDLEM4zzNR28FmzVQ0vglw-1
+Received: by mail-wr1-f71.google.com with SMTP id e15-20020adfa44f000000b002d7ea9d6ef0so4937644wra.8
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:42:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680792126; x=1683384126;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gj/7YiiNEEJ4+hsVKCJkj1HvadHLyL0uUxvEtZRASmc=;
+        b=jw90hN/W24tC+aS/lKqA0aUb5wuAkVlr516y1uMZoVnYCXfRS+cTWHwFPiqrzVeXWe
+         X2BE5TVu76uhrebtxhlAWe+O9xZocpuYWMl6r+8NT7AVE7OxDHnemg/YG75VVWbR+SLc
+         gDd/993wU9g9Koexi2C1P4Yznsam5RUra+5QZpbLql8gMqesc5bCTGaoEVDuGkMdyZ4T
+         aV8CT+g3YLy6q7/5e9i96ViPj3+Q0U1mvY61x+P9CEg8NacZpInE1ybXVWVeAcKrDgku
+         uyTmQUZFgvDqQmJnzsAQXy3HnDpxoX2PDCtcsWcSdDy/U7br06qrZD5jttuiNeqlY4Gr
+         Jijw==
+X-Gm-Message-State: AAQBX9d4cWvt6OjO3ComxTM+kVTgHWdtDEaJHzjYBUQy9dIJTj4ooc7u
+        iAXRDJes2m2458PordQgZYv7yGzMPMa95vSkCnD8sDOZUT16uTOTPXW52J6NzAibtaWg6YQTDPG
+        GfMld2oqeYeNKSQqbUKYE1p8g
+X-Received: by 2002:adf:edd1:0:b0:2cf:e436:f722 with SMTP id v17-20020adfedd1000000b002cfe436f722mr7362230wro.64.1680792125937;
+        Thu, 06 Apr 2023 07:42:05 -0700 (PDT)
+X-Google-Smtp-Source: AKy350aYtbTmofQf/bI+zulYGKU6rzEaLaSQD1iMgTDT9wELk7OW8105qv2TVrk0E+k02OOZTiYupA==
+X-Received: by 2002:adf:edd1:0:b0:2cf:e436:f722 with SMTP id v17-20020adfedd1000000b002cfe436f722mr7362204wro.64.1680792125568;
+        Thu, 06 Apr 2023 07:42:05 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id m8-20020adffe48000000b002c55521903bsm1942945wrs.51.2023.04.06.07.42.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 07:42:04 -0700 (PDT)
+Message-ID: <1654e2d5-5a32-a253-e335-0ee42f69f5ef@redhat.com>
+Date:   Thu, 6 Apr 2023 16:42:02 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 2/2] swiotlb: Fix slot alignment checks
-To:     Kelsey Steele <kelseysteele@linux.microsoft.com>,
-        Petr Tesa????k <petr@tesarici.cz>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        Dexuan-Linux Cui <dexuan.linux@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Jianxiong Gao <jxgao@google.com>,
-        David Stevens <stevensd@chromium.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-References: <cover.1679382779.git.petr.tesarik.ext@huawei.com>
- <c90887e4d75344abe219cc5e12f7c6dab980cfce.1679382779.git.petr.tesarik.ext@huawei.com>
- <CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com>
- <CO1PR21MB13320305E02BA121623213DABF939@CO1PR21MB1332.namprd21.prod.outlook.com>
- <20230405064019.6258ebb3@meshulam.tesarici.cz>
- <SA1PR21MB1335C5F774195F2C3431BF93BF909@SA1PR21MB1335.namprd21.prod.outlook.com>
- <20230405072801.05bb94ef@meshulam.tesarici.cz>
- <20230405075034.3c36bb77@meshulam.tesarici.cz>
- <20230406045204.GA20027@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
 Content-Language: en-US
-From:   Petr Tesarik <petrtesarik@huaweicloud.com>
-In-Reply-To: <20230406045204.GA20027@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com, jannh@google.com
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com> <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen> <ZC3P3Ds/BIcpRNGr@tpad>
+ <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+ <ZC69Wmqjdwk+I8kn@tpad>
+ <20230406132928.GM386572@hirez.programming.kicks-ass.net>
+ <20230406140423.GA386634@hirez.programming.kicks-ass.net>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+In-Reply-To: <20230406140423.GA386634@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwA3AFc62i5ki__8AQ--.42S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxurW5GF4UZw1kCw1kZrWkZwb_yoW5GFWfpF
-        WSya1qkF4DJry8tw12y3srta12q345Gr1UXr1rK34Skrn8KFn5JryUKrWj9asxKr4fWa10
-        vr4jqFW3tFy5JaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UdxhLUUUUU=
-X-CM-SenderInfo: hshw23xhvd2x3n6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kelsey,
-
-On 4/6/2023 6:52 AM, Kelsey Steele wrote:
-> On Wed, Apr 05, 2023 at 07:50:34AM +0200, Petr Tesa????k wrote:
->> On Wed, 5 Apr 2023 07:32:06 +0200
->> Petr Tesa????k <petr@tesarici.cz> wrote:
+On 06.04.23 16:04, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 03:29:28PM +0200, Peter Zijlstra wrote:
+>> On Thu, Apr 06, 2023 at 09:38:50AM -0300, Marcelo Tosatti wrote:
 >>
->>> On Wed, 5 Apr 2023 05:11:42 +0000
->>> Dexuan Cui <decui@microsoft.com> wrote:
+>>>> To actually hit this path you're doing something really dodgy.
 >>>
->>>>> From: Petr Tesa????k <petr@tesarici.cz>
->>>>> Sent: Tuesday, April 4, 2023 9:40 PM    
->>>>>>> ...
->>>>>>> Hi Petr, this patch has gone into the mainline:
->>>>>>> 0eee5ae10256 ("swiotlb: fix slot alignment checks")
->>>>>>>
->>>>>>> Somehow it breaks Linux VMs on Hyper-V: a regular VM with
->>>>>>> swiotlb=force or a confidential VM (which uses swiotlb) fails to boot.
->>>>>>> If I revert this patch, everything works fine.  
->>>>>>
->>>>>> The log is pasted below. Looks like the SCSI driver hv_storvsc fails to
->>>>>> detect the disk capacity:    
->>>>>
->>>>> The first thing I can imagine is that there are in fact no (free) slots
->>>>> in the SWIOTLB which match the alignment constraints, so the map
->>>>> operation fails. However, this would result in a "swiotlb buffer is
->>>>> full" message in the log, and I can see no such message in the log
->>>>> excerpt you have posted.
->>>>>
->>>>> Please, can you check if there are any "swiotlb" messages preceding the
->>>>> first error message?
->>>>>
->>>>> Petr T    
->>>>
->>>> There is no "swiotlb buffer is full" error.
->>>>
->>>> The hv_storvsc driver (drivers/scsi/storvsc_drv.c) calls scsi_dma_map(),
->>>> which doesn't return -ENOMEM when the failure happens.  
+>>> Apparently khugepaged is using the same infrastructure:
 >>>
->>> I see...
+>>> $ grep tlb_remove_table khugepaged.c
+>>> 	tlb_remove_table_sync_one();
+>>> 	tlb_remove_table_sync_one();
 >>>
->>> Argh, you're right. This is a braino. The alignment mask is in fact an
->>> INVERTED mask, i.e. it masks off bits that are not relevant for the
->>> alignment. The more strict alignment needed the more bits must be set,
->>> so the individual alignment constraints must be combined with an OR
->>> instead of an AND.
->>>
->>> Can you apply the following change and check if it fixes the issue?
+>>> So just enabling khugepaged will hit that path.
 >>
->> Actually, this will not work either. The mask is used to mask off both
->> high address bits and low address bits (below swiotlb slot granularity).
+>> Urgh, WTF..
 >>
->> What should help is this:
->>
+>> Let me go read that stuff :/
 > 
-> Hi Petr, 
+> At the very least the one on collapse_and_free_pmd() could easily become
+> a call_rcu() based free.
 > 
-> The suggested fix on this patch boots for me and initially looks ok,
-> though when I start to use git commands I get flooded with "swiotlb
-> buffer is full" messages and my session becomes unusable. This is on WSL
-> which uses Hyper-V.
+> I'm not sure I'm following what collapse_huge_page() does just yet.
 
-Roberto noticed that my initial quick fix left iotlb_align_mask
-uninitialized. As a result, high address bits are set randomly, and if
-they do not match actual swiotlb addresses, allocations may fail with
-"swiotlb buffer is full". I fixed it in the patch that I have just posted.
+It wants to replace a leaf page table by a THP (Transparent Huge Page 
+mapped by a PMD). So we want to rip out a leaf page table while other 
+code (GUP-fast) might still be walking it. In contrast to freeing the 
+page table, we put it into a list where it can be reuse when having to 
+PTE-map a THP again.
 
-HTH
-Petr T
+Now, similar to after freeing the page table, someone else could reuse 
+that page table and modify it.
+
+If we have GUP-fast walking the page table while that is happening, 
+we're in trouble. So we have to make sure GUP-fast is done before 
+enqueuing the now-free page table.
+
+That's why the tlb_remove_table_sync_one() was recently added (by Jann 
+IIRC).
+
+-- 
+Thanks,
+
+David / dhildenb
 
