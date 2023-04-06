@@ -2,110 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9776DA04F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB846DA04A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240288AbjDFSs5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 14:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240521AbjDFSsY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240522AbjDFSsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 6 Apr 2023 14:48:24 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CFCBDD8;
-        Thu,  6 Apr 2023 11:47:55 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id sg7so3670676ejc.9;
-        Thu, 06 Apr 2023 11:47:55 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240419AbjDFSsC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 6 Apr 2023 14:48:02 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C08BAD14
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:47:41 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 20so41656885lju.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:47:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680806859;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CvX4uOfDerQJEiGG++jroZtpgDOEVq0GfGUeYaZgx8s=;
+        b=v/BHjuwL/W3yJBdECVyZD7LaGC2CHy6gj97JcJ1wRz6HR7EGBNJiesD6gj2KAxn405
+         4yoggUPu/hRFqvwE1f5LoC+RFlJ5dcA2LPPqFYy3Xm40pfpLErANR7IyOUzRZkMQFGgR
+         qkB0WSmLlfY6DR4qxRHWy26PLkyFRI8zfI7rDm5XSj/rn7Fb81WN4MkdbweK2IDIx4Qd
+         vhGwjPCAaU9oFw2XI1SNhQinhVmzDznr5ZFXax3hAQDtu7kjphS6Ubef4RMenMlW9wmB
+         71LhHubgOBlC3yk3poATD3A1rcraA33UjizvcWeE2ZKnrHfwH5F8D+VO2mhamUSTaMP1
+         xHaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680806858;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X4jRBHVfxgd+JT9UVreLLErHTyZCuz18QSEV4mFOIkQ=;
-        b=InXbHioYHWlvl/G3VAAqJegJELLT5rQ6pkkt7J/7nVl4yKxe9f3vOG8tOMYBah5B6w
-         xbix92NfikTfyLTXgT2qftp5hNmsNNXN/VnZrvKx0VFExYxjgeTE2D7lg3Mn3hVR/XbY
-         /cb1I0IsQjz9r0s4+rni2OslJEP5bl/Q00f4XzKccTOxq7GHVDISzQEvyHQ4mom1uLTZ
-         KPFLrkMD0sTBPx+Uhap6kYKQLPZts14DTK6SOLWzectKsRPXpg+9EtIE2/EjpGd+W8EN
-         84vQhBmPntPUFzTBlMh0HJB4Iw6iAQ6Jgxizkgc7w3ofP6kThjCxq3uIKBleseziWRRS
-         sYsQ==
-X-Gm-Message-State: AAQBX9e2sIt+2Ersg4ePXP9y+C22Di969maFSMqxLGw3gM5TLG8vzx9w
-        V8C8IEi6GyEVzpLm24KKR5R0Se5wgKRisiM9l/g=
-X-Google-Smtp-Source: AKy350YPsdcxvCg4deshFZnM74wm0klT6PPQimXSIdAeXq/d+BizHedGmZ+YEm9sTp5GnxySPCZun6L5K/fHSriW+/o=
-X-Received: by 2002:a17:906:73d8:b0:939:a51a:dc30 with SMTP id
- n24-20020a17090673d800b00939a51adc30mr5153717ejl.2.1680806857947; Thu, 06 Apr
- 2023 11:47:37 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680806859;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CvX4uOfDerQJEiGG++jroZtpgDOEVq0GfGUeYaZgx8s=;
+        b=rOjOaRTeJc60znXgqdh2t4JP+8lrmeirjOJD3pM08wTRqznKm07ZMTzcLwV5e+NhCS
+         52CwMjmJjzXl7Amm5LG5zo4uGpHX36Z6Jzws4scOD7XTelsvmnxZHkipQmmcEuwhyy3Q
+         2ARDLAiyaLOWggUJ7Y/NamMrQWRUcy2eiaTmdwKmp8V6UwrFt6j/XHFz+5U2AK9v6VG/
+         TytD38Po1pz96kq/FCuUmX4vBaC7tleZa+v+N8p824gtECaD0nO0GyZhUyyESrhfgsmF
+         7D/kqqzrdXxtkInVUJp19vUg3qM+DQj6OJzodCoAUT+h+WGEdTYcZZi5CZ56yKVsKUhf
+         AE+w==
+X-Gm-Message-State: AAQBX9cQ+J54NltrqAFqnQ8BhBOOsifeIIgF4+P1g4P4VfM6m1eLqJug
+        TQ5uxQDx6zCTw/XqT3qbnEFTFg==
+X-Google-Smtp-Source: AKy350ZUVNs5nFG3t5xqZrgCAwKWlrsZSt1QoIp3BKwXk/yZf4HiXWPS5g61CaPCGdZgatLUoCDl3g==
+X-Received: by 2002:a2e:2e14:0:b0:298:b365:81c with SMTP id u20-20020a2e2e14000000b00298b365081cmr3420662lju.15.1680806858779;
+        Thu, 06 Apr 2023 11:47:38 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id h2-20020a2e3a02000000b002a618eb72b1sm388878lja.98.2023.04.06.11.47.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 11:47:38 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Thu, 06 Apr 2023 20:47:28 +0200
+Subject: [PATCH v3] dt-bindings: iommu: Convert QCOM IOMMU to YAML
 MIME-Version: 1.0
-References: <ab323c72-61f9-9ac6-48ce-366f62e82091@linaro.org>
- <3e64e6b2-7c3f-d149-2f7d-6c41be4c4d14@linaro.org> <CAJZ5v0ji6SxrgiMRMwNDwGspxifo0FSi3d5+2O02SKM_q_OaFA@mail.gmail.com>
- <CAJZ5v0iNbA0rt3QyaFA7ved19yK8-nabyJi7yCfbnVKQaMPCmA@mail.gmail.com>
- <c230ab3a-9cc3-e989-1e49-7d38be471a5c@linaro.org> <CAJZ5v0i95D_duiEnBiTgCSGTJ9_q7VYmb9y8O6yuPQ7Yp=BD3Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i95D_duiEnBiTgCSGTJ9_q7VYmb9y8O6yuPQ7Yp=BD3Q@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Apr 2023 20:47:26 +0200
-Message-ID: <CAJZ5v0jhK431LMObxQ2seNGGQEPd2tQHhRmbeWG1b=yzSO6gKA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v6.4-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yang Li <yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230406-topic-qciommu-v3-1-aa0e4f018191@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAL8TL2QC/32NTQ7CIBgFr2JYi+HPUl15D+MCKLRf0kKFlmia3
+ l3anQtdzktm3oKSjWATuh4WFG2GBMEX4McDMp3yrcXQFEaMME4EqfAURjD4aSAMw4ylkZQ3tnb
+ uYlFxtEoW66i86Yrl574v4xitg9d+cn8U7iBNIb73z0y39Vc+U0wx4Y5KSaUSQt568CqGU4gt2
+ lKZ/dVZ0XV9FrJiTDMlvvR1XT+O3BT7/wAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1680806855; l=7713;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=trP7jAYihw9MB02Y8nwMb0R/A9JM9SNGCT+bkmwUPqM=;
+ b=Y0D4lt4ge+lgZeQV4osnobm6mkMdSo1ILo+BXILaH/IS8ilbLXb/r0c+rxjZGMVCaV7AUIBTtzA0
+ s7x+3GmoBCm+UPTiyPdJT1F+ERPpMi9uBPXmOEAw2iLVHlidGsVC
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 9:06 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Apr 5, 2023 at 9:03 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 05/04/2023 20:48, Rafael J. Wysocki wrote:
-> > > On Wed, Apr 5, 2023 at 8:39 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >>
-> > >> On Wed, Apr 5, 2023 at 8:32 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> > >>>
-> > >>>
-> > >>> Hi Rafael,
-> > >>>
-> > >>> just a gentle reminder
-> > >>
-> > >> This is in my linux-next branch, I'll merge it into thermal tomorrow.
-> > >>
-> > >>>   because more material will come in the next days
-> > >>
-> > >> So why can't it wait?
-> > >
-> > > BTW, I get a merge conflict in
-> > > drivers/thermal/mediatek/auxadc_thermal.c on an attempt to merge
-> > > thermal/linux-next into my linux-next branch.
-> >
-> > Ah?
-> >
-> > I did an update and rebased thermal/linux-next on top of
-> > linux-pm/thermal without conflict
-> >
-> > Is it possible you have a change in a different branch conflicting with it ?
->
-> It is not impossible, but quite unlikely.
->
-> I'll see what's going on tomorrow.
+Convert the Qualcomm IOMMU bindings to YAML.
 
-Confirmed, thermal/linux-next merges on top of the current
-linux-pm/thermal (just pushed out) without conflicts.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+v2 -> v3:
+- Add additionalProperties:false & required for ctx subnodes
+- Drop the IOMMU consumer device from the DT example
 
-There is a conflict between linux-pm/bleeding-edge and
-thermal/bleeding-edge, but it's easy to resolve.
+v2: https://lore.kernel.org/r/20230406-topic-qciommu-v2-1-b8547622b2a4@linaro.org
 
-Thanks!
+v1 -> v2:
+- Include missing header
+- pad the addresses to 8 hex digits
+- add 'reg' to the mdp device
+
+v1: https://lore.kernel.org/r/20230406-topic-qciommu-v1-1-03f17717a447@linaro.org
+---
+ .../devicetree/bindings/iommu/qcom,iommu.txt       | 122 ---------------------
+ .../devicetree/bindings/iommu/qcom,iommu.yaml      | 113 +++++++++++++++++++
+ 2 files changed, 113 insertions(+), 122 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt b/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
+deleted file mode 100644
+index e6cecfd360eb..000000000000
+--- a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
++++ /dev/null
+@@ -1,122 +0,0 @@
+-* QCOM IOMMU v1 Implementation
+-
+-Qualcomm "B" family devices which are not compatible with arm-smmu have
+-a similar looking IOMMU but without access to the global register space,
+-and optionally requiring additional configuration to route context irqs
+-to non-secure vs secure interrupt line.
+-
+-** Required properties:
+-
+-- compatible       : Should be one of:
+-
+-                        "qcom,msm8916-iommu"
+-                        "qcom,msm8953-iommu"
+-
+-                     Followed by "qcom,msm-iommu-v1".
+-
+-- clock-names      : Should be a pair of "iface" (required for IOMMUs
+-                     register group access) and "bus" (required for
+-                     the IOMMUs underlying bus access).
+-
+-- clocks           : Phandles for respective clocks described by
+-                     clock-names.
+-
+-- #address-cells   : must be 1.
+-
+-- #size-cells      : must be 1.
+-
+-- #iommu-cells     : Must be 1.  Index identifies the context-bank #.
+-
+-- ranges           : Base address and size of the iommu context banks.
+-
+-- qcom,iommu-secure-id  : secure-id.
+-
+-- List of sub-nodes, one per translation context bank.  Each sub-node
+-  has the following required properties:
+-
+-  - compatible     : Should be one of:
+-        - "qcom,msm-iommu-v1-ns"  : non-secure context bank
+-        - "qcom,msm-iommu-v1-sec" : secure context bank
+-  - reg            : Base address and size of context bank within the iommu
+-  - interrupts     : The context fault irq.
+-
+-** Optional properties:
+-
+-- reg              : Base address and size of the SMMU local base, should
+-                     be only specified if the iommu requires configuration
+-                     for routing of context bank irq's to secure vs non-
+-                     secure lines.  (Ie. if the iommu contains secure
+-                     context banks)
+-
+-
+-** Examples:
+-
+-	apps_iommu: iommu@1e20000 {
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		#iommu-cells = <1>;
+-		compatible = "qcom,msm8916-iommu", "qcom,msm-iommu-v1";
+-		ranges = <0 0x1e20000 0x40000>;
+-		reg = <0x1ef0000 0x3000>;
+-		clocks = <&gcc GCC_SMMU_CFG_CLK>,
+-			 <&gcc GCC_APSS_TCU_CLK>;
+-		clock-names = "iface", "bus";
+-		qcom,iommu-secure-id = <17>;
+-
+-		// mdp_0:
+-		iommu-ctx@4000 {
+-			compatible = "qcom,msm-iommu-v1-ns";
+-			reg = <0x4000 0x1000>;
+-			interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+-		};
+-
+-		// venus_ns:
+-		iommu-ctx@5000 {
+-			compatible = "qcom,msm-iommu-v1-sec";
+-			reg = <0x5000 0x1000>;
+-			interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+-		};
+-	};
+-
+-	gpu_iommu: iommu@1f08000 {
+-		#address-cells = <1>;
+-		#size-cells = <1>;
+-		#iommu-cells = <1>;
+-		compatible = "qcom,msm8916-iommu", "qcom,msm-iommu-v1";
+-		ranges = <0 0x1f08000 0x10000>;
+-		clocks = <&gcc GCC_SMMU_CFG_CLK>,
+-			 <&gcc GCC_GFX_TCU_CLK>;
+-		clock-names = "iface", "bus";
+-		qcom,iommu-secure-id = <18>;
+-
+-		// gfx3d_user:
+-		iommu-ctx@1000 {
+-			compatible = "qcom,msm-iommu-v1-ns";
+-			reg = <0x1000 0x1000>;
+-			interrupts = <GIC_SPI 241 IRQ_TYPE_LEVEL_HIGH>;
+-		};
+-
+-		// gfx3d_priv:
+-		iommu-ctx@2000 {
+-			compatible = "qcom,msm-iommu-v1-ns";
+-			reg = <0x2000 0x1000>;
+-			interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
+-		};
+-	};
+-
+-	...
+-
+-	venus: video-codec@1d00000 {
+-		...
+-		iommus = <&apps_iommu 5>;
+-	};
+-
+-	mdp: mdp@1a01000 {
+-		...
+-		iommus = <&apps_iommu 4>;
+-	};
+-
+-	gpu@1c00000 {
+-		...
+-		iommus = <&gpu_iommu 1>, <&gpu_iommu 2>;
+-	};
+diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml b/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
+new file mode 100644
+index 000000000000..d9fabdf930d9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iommu/qcom,iommu.yaml
+@@ -0,0 +1,113 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iommu/qcom,iommu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Technologies legacy IOMMU implementations
++
++maintainers:
++  - Konrad Dybcio <konrad.dybcio@linaro.org>
++
++description: |
++  Qualcomm "B" family devices which are not compatible with arm-smmu have
++  a similar looking IOMMU, but without access to the global register space
++  and optionally requiring additional configuration to route context IRQs
++  to non-secure vs secure interrupt line.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - qcom,msm8916-iommu
++          - qcom,msm8953-iommu
++      - const: qcom,msm-iommu-v1
++
++  clocks:
++    items:
++      - description: Clock required for IOMMU register group access
++      - description: Clock required for underlying bus access
++
++  clock-names:
++    items:
++      - const: iface
++      - const: bus
++
++  power-domains:
++    maxItems: 1
++
++  reg:
++    maxItems: 1
++
++  ranges: true
++
++  qcom,iommu-secure-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      The SCM secure ID of the IOMMU instance.
++
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 1
++
++  '#iommu-cells':
++    const: 1
++
++patternProperties:
++  "^iommu-ctx@[0-9a-f]+$":
++    type: object
++    additionalProperties: false
++    properties:
++      compatible:
++        enum:
++          - qcom,msm-iommu-v1-ns
++          - qcom,msm-iommu-v1-sec
++
++      interrupts:
++        maxItems: 1
++
++      reg:
++        maxItems: 1
++
++    required:
++      - compatible
++      - interrupts
++      - reg
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - ranges
++  - '#address-cells'
++  - '#size-cells'
++  - '#iommu-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,gcc-msm8916.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    apps_iommu: iommu@1e20000 {
++      compatible = "qcom,msm8916-iommu", "qcom,msm-iommu-v1";
++      reg = <0x01ef0000 0x3000>;
++      clocks = <&gcc GCC_SMMU_CFG_CLK>,
++               <&gcc GCC_APSS_TCU_CLK>;
++      clock-names = "iface", "bus";
++      qcom,iommu-secure-id = <17>;
++      #address-cells = <1>;
++      #size-cells = <1>;
++      #iommu-cells = <1>;
++      ranges = <0 0x01e20000 0x40000>;
++
++      /* mdp_0: */
++      iommu-ctx@4000 {
++        compatible = "qcom,msm-iommu-v1-ns";
++        reg = <0x4000 0x1000>;
++        interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
++      };
++    };
+
+---
+base-commit: 8417c8f5007bf4567ccffda850a3157c7d905f67
+change-id: 20230406-topic-qciommu-7c713de8ff9e
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
