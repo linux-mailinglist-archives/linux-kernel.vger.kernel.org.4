@@ -2,103 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093D36DA40A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6985D6DA354
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240620AbjDFUtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S240232AbjDFUf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240617AbjDFUtS (ORCPT
+        with ESMTP id S239890AbjDFUew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:49:18 -0400
-X-Greylist: delayed 964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Apr 2023 13:48:15 PDT
-Received: from mailrelay4-1.pub.mailoutpod2-cph3.one.com (mailrelay4-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:403::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F1C83D0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:48:15 -0700 (PDT)
+        Thu, 6 Apr 2023 16:34:52 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EA4B76D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:32:48 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id k18so3585850lfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 13:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=l8/6w9klaVvdwp2WTXDf2J1p95kDaCAQ65h0eknmbVc=;
-        b=rCSQ1WK8yn0jNOJRpqDzuIIvZlrRTbguNr7fODRef03Cb8ib689XUFyCFhWA4VUI/LWMZIG4EehPz
-         lBuJLCBe9F6Dv55trN1ow76zqsW0wknQfuhuiyJfzWqvE33d1N++8riH+FrRkY00oYP117gIeIqM4Z
-         uWe7PFmEr53NBwNHvceBQAwmQsycJLlXYW5SLv4eSc5Np2Ie+95aEKZJeuHaLz5BI65DdPDLOr7lex
-         qK0IUU4kdgEO7Jvq8P5jKQVr8ePqR54oMqBPj5o6JtRwyI4eghJOaR41eg5tWfAo7zPGYSka1Y2ioO
-         DbxYY/I+vaaVeJnWIvwemsP3+FxO/Sw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed2;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=l8/6w9klaVvdwp2WTXDf2J1p95kDaCAQ65h0eknmbVc=;
-        b=q9Lz+UdHCdnOHDwXE3ZhFiDI6u3IY3PaglloPegr138WLG2XG9Kn4PkExvzhkqabLyuJYHTziGoGh
-         hlfiZsLAA==
-X-HalOne-ID: 19321619-d4ba-11ed-9908-592bb1efe9dc
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay4 (Halon) with ESMTPSA
-        id 19321619-d4ba-11ed-9908-592bb1efe9dc;
-        Thu, 06 Apr 2023 20:32:09 +0000 (UTC)
-Date:   Thu, 6 Apr 2023 22:32:07 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-parport@lists.infradead.org
-Subject: Re: [PATCH] parport_pc: don't allow driver for SPARC32
-Message-ID: <20230406203207.GA1534216@ravnborg.org>
-References: <20230406160548.25721-1-rdunlap@infradead.org>
- <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk>
+        d=linaro.org; s=google; t=1680813167;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sSjbkEzdKUWsxqf6FTHcvALXYuTkKMbJioNVsbzVNEU=;
+        b=qp8NnOfZKpCHKk8L2hKR8i9dYAHN2EZ2svldCyg2eeBIOXlsZSaX6p57jM626kyski
+         67h+ko4l2EL6sIK0WZKj0snJtiIDASo5vYCQZpzBrkU4HbSzQ4aE8NxYEDLg7vtS3mv+
+         8Pw3J/6RemAjrtcML8yEFNMThSXnB3JRjzBjpILjcqeRdq32toDe7vMEUVHvRjc4+OZR
+         jPn6WGJbt3oj9w8Pk2rOR7/qMcQiCasVLUX9TQyDdxW0boGg121S+/C8rXOMbdAd0hhs
+         tztaiEcu5LrcnBHmE390rW95lALNvDQw4D0LEBTRMIMAeHk9oyWvH4t0sGBGAR/l0Iao
+         56Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680813167;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sSjbkEzdKUWsxqf6FTHcvALXYuTkKMbJioNVsbzVNEU=;
+        b=R4LruXCvXtMkRarHzyz6ezJcfx/rpIsImg1o8WVhn6oyiaa+7k036LFNMSK+SGKIc2
+         90FZvaWvFvyJicxiUpJwb32YdCwGJwaSOSdqWhkRw5QuAbA3ddH/X8sQ1HgpPOgyjQn0
+         SXmHGOZukRqyFMIA1wzo7s+UjBJBsaUziq62/iGQ5VcBChsTAPyH9DQT6+C/56wBJ49E
+         pz9WVgs6BJjEpsHy6IYYEBXCF4WuxynxbAGCfqzjAyijUJT29TeZ7JfWhIDbKgjj5rGL
+         jgwroGr63KKO4/7e9ULHSAiW8ICT0kv+4m130T/lRngdNIvHj6EBvmU8g5j3JbMadj0M
+         7tHg==
+X-Gm-Message-State: AAQBX9faI8Xo3bwyjZciedT1FqrC7PAkqY2UJeUmWoer+srJoLIYxkOr
+        Mcnku+HL9wIsDiJD/sRAwTsW2Nq2lk0mugOaJIw=
+X-Google-Smtp-Source: AKy350YJueL7oZdOLdSHwjpRBL3LiGsVJ4lWEGJEmOWeQiK4kV4iErvQSXFyq9sCNydPmo8t+6MeXw==
+X-Received: by 2002:ac2:46d6:0:b0:4ec:363a:5f17 with SMTP id p22-20020ac246d6000000b004ec363a5f17mr84297lfo.21.1680813167082;
+        Thu, 06 Apr 2023 13:32:47 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id v3-20020ac25923000000b004eaef4b51dasm408338lfi.107.2023.04.06.13.32.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 13:32:46 -0700 (PDT)
+Message-ID: <57cf27c5-be4e-976e-bc3c-fee046b079e7@linaro.org>
+Date:   Thu, 6 Apr 2023 22:32:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk>
-X-Spam-Status: No, score=1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 7/7] arm64: dts: qcom: sa8775p: add the GPU IOMMU node
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230406200723.552644-1-brgl@bgdev.pl>
+ <20230406200723.552644-8-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230406200723.552644-8-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maciej,
 
-On Thu, Apr 06, 2023 at 08:49:50PM +0100, Maciej W. Rozycki wrote:
-> On Thu, 6 Apr 2023, Randy Dunlap wrote:
+
+On 6.04.2023 22:07, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> > arch/sparc/kernel/ebus.o is only built for SPARC64.
-> > ns87303_lock is only built for SPARC64.
-> > arch/sparc/include/asm/parport.h says that it is for sparc64.
-> > Various documentation on the internet says that ebus is for UltraSPARC
-> > systems (64-bit).
-> > 
-> > Therefore don't allow PARPORT_PC to be built for SPARC32.
+> Add the GPU IOMMU for sa8775p-based platforms.
 > 
->  This looks completely wrong to me, any ordinary PCI parallel port card 
-> ought just to work as long as you have PCI (S390 is special I'm told).  
-> What needs to be done is AFAICT just making `parport_pc_find_nonpci_ports' 
-> in arch/sparc/include/asm/parport.h SPARC64-specific, i.e.:
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 36 +++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
-> static int parport_pc_find_nonpci_ports(int autoirq, int autodma)
-> {
-> 	return (IS_ENABLED(CONFIG_SPARC64) &&
-> 		platform_driver_register(&ecpp_driver));
-> }
-> 
-> or suchlike and let the optimiser get rid of all the unwanted unsupported 
-> stuff.
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index f799cb5abb87..f46c1a73abdb 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -7,6 +7,7 @@
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/clock/qcom,rpmh.h>
+>  #include <dt-bindings/clock/qcom,sa8775p-gcc.h>
+> +#include <dt-bindings/clock/qcom,sa8775p-gpucc.h>
+>  #include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> @@ -605,6 +606,41 @@ gpucc: clock-controller@3d90000 {
+>  			#power-domain-cells = <1>;
+>  		};
+>  
+> +		kgsl_smmu: iommu@3da0000 {
+> +			compatible = "qcom,sa8775p-smmu-500", "qcom,smmu-500", "arm,mmu-500";
+No "qcom,adreno"? Does this one not support per-process pagetables?
+Do you have a working GPU setup to confirm that?
 
-arch/sparc/include/asm/parport.h is sparc64 specific - and it will
-result in the wrong result if it is pulled in for sparc32 builds.
-This is what we see today.
-
-Randy's suggestion is fine, as we avoid building parport support
-for sparc32. If someone shows up and need parport support
-for sparc32 then we could look into how to enable it.
-Until then, we are better helped avoiding building the driver.
-
-Hence, my ack on the patch from Randy.
-
-	Sam
+Konrad
+> +			reg = <0x0 0x03da0000 0x0 0x20000>;
+> +			#iommu-cells = <2>;
+> +			#global-interrupts = <2>;
+> +			dma-coherent;
+> +			power-domains = <&gpucc GPU_CC_CX_GDSC>;
+> +			clocks = <&gcc GCC_GPU_MEMNOC_GFX_CLK>,
+> +				 <&gcc GCC_GPU_SNOC_DVM_GFX_CLK>,
+> +				 <&gpucc GPU_CC_AHB_CLK>,
+> +				 <&gpucc GPU_CC_HLOS1_VOTE_GPU_SMMU_CLK>,
+> +				 <&gpucc GPU_CC_CX_GMU_CLK>,
+> +				 <&gpucc GPU_CC_HUB_CX_INT_CLK>,
+> +				 <&gpucc GPU_CC_HUB_AON_CLK>;
+> +			clock-names = "gcc_gpu_memnoc_gfx_clk",
+> +				      "gcc_gpu_snoc_dvm_gfx_clk",
+> +				      "gpu_cc_ahb_clk",
+> +				      "gpu_cc_hlos1_vote_gpu_smmu_clk",
+> +				      "gpu_cc_cx_gmu_clk",
+> +				      "gpu_cc_hub_cx_int_clk",
+> +				      "gpu_cc_hub_aon_clk";
+> +			interrupts = <GIC_SPI 673 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 674 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 678 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 679 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 680 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 681 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 682 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 683 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 684 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 685 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 686 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 687 IRQ_TYPE_LEVEL_HIGH>;
+> +		};
+> +
+>  		pdc: interrupt-controller@b220000 {
+>  			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
+>  			reg = <0x0 0x0b220000 0x0 0x30000>,
