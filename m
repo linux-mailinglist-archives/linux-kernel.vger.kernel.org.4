@@ -2,61 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCE46D8C8E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE5E6D8C94
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbjDFBMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
+        id S234407AbjDFBNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 21:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234421AbjDFBLu (ORCPT
+        with ESMTP id S232000AbjDFBN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:11:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596D883F8
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:11:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PsNk25QrBz4xGK;
-        Thu,  6 Apr 2023 11:11:22 +1000 (AEST)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230329220337.141295-1-robh@kernel.org>
-References: <20230329220337.141295-1-robh@kernel.org>
-Subject: Re: [PATCH v3] powerpc: Use of_address_to_resource()
-Message-Id: <168074339920.3678997.2450286833611581238.b4-ty@ellerman.id.au>
-Date:   Thu, 06 Apr 2023 11:09:59 +1000
-MIME-Version: 1.0
+        Wed, 5 Apr 2023 21:13:28 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F457AB3;
+        Wed,  5 Apr 2023 18:13:02 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id x8-20020a9d3788000000b0069f922cd5ceso20009410otb.12;
+        Wed, 05 Apr 2023 18:13:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680743516;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ufRr1P5zgDydxR7b/xl15Olfy3++TXWLHdwr3z6Hl80=;
+        b=juccscYiNNkT9BFQUjnLnuQGbKPijjmG3LwEB7dvp8gL1gTwcS7S935mAnroJhc/0w
+         JP0wm57PWNWwsjjjTyH2R54UwhDhp7C88AnEn4C8rKrPfXWuG/mV132m6qap1ReR3lEY
+         Gukh95gcIJUpNm2xsV7u96DHYTofXCBjKTUYW4w8i5AdebPPmGdENW9NJjJ0FGwwrYw7
+         c1rTqqL2FaPV8F2nOZ1OkXLJ1js6d2Dkv8xoLmT+DgLto09KAdEm/zbr4x+Et/sSmiPL
+         llzAafMUaJ3QpV9avWudKz0CyM8pwm/CbffJ6SdzCoPjl9vWjCOtB2Hbl74ki7hdXCDu
+         ye2A==
+X-Gm-Message-State: AAQBX9dnc6vkoL11b9XDyKbsHBteaWJVxDjLkgmIzBgmoha/uFm0edzW
+        7yAXBfddhmHJIv+MrVXhDw==
+X-Google-Smtp-Source: AKy350bjf3FJ5xVtkh5VmxXCJxAvfdFKyyINw/vI2AsMAiyk9L0BlsBlKjgXXhCYTQPz2uIVnTTHIw==
+X-Received: by 2002:a9d:65d1:0:b0:69f:1c2c:8f8c with SMTP id z17-20020a9d65d1000000b0069f1c2c8f8cmr3847278oth.25.1680743516609;
+        Wed, 05 Apr 2023 18:11:56 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y19-20020a056830209300b0069fb749271bsm193458otq.15.2023.04.05.18.11.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 18:11:56 -0700 (PDT)
+Received: (nullmailer pid 1305711 invoked by uid 1000);
+        Thu, 06 Apr 2023 01:11:55 -0000
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Saalim Quadri <danascape@gmail.com>
+Cc:     devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        daniel.baluta@nxp.com, robh+dt@kernel.org, broonie@kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com
+In-Reply-To: <20230405200341.4911-1-danascape@gmail.com>
+References: <20230405200341.4911-1-danascape@gmail.com>
+Message-Id: <168074344623.1301612.621743725976519280.robh@kernel.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: wm8904: Convert to dtschema
+Date:   Wed, 05 Apr 2023 20:11:55 -0500
+X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 29 Mar 2023 17:03:36 -0500, Rob Herring wrote:
-> Replace open coded reading of "reg" or of_get_address()/
-> of_translate_address() calls with a single call to
-> of_address_to_resource().
+
+On Thu, 06 Apr 2023 01:33:41 +0530, Saalim Quadri wrote:
+> Convert the WM8904 audio CODEC bindings to DT schema
 > 
+> Signed-off-by: Saalim Quadri <danascape@gmail.com>
+> ---
+>  .../devicetree/bindings/sound/wlf,wm8904.yaml | 66 +++++++++++++++++++
+>  .../devicetree/bindings/sound/wm8904.txt      | 33 ----------
+>  2 files changed, 66 insertions(+), 33 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/sound/wlf,wm8904.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/sound/wm8904.txt
 > 
 
-Applied to powerpc/next.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-[1/1] powerpc: Use of_address_to_resource()
-      https://git.kernel.org/powerpc/c/2500763dd3db37fad94d9b506907c59c2f5e97c6
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-cheers
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230405200341.4911-1-danascape@gmail.com
+
+
+audio-codec@1a: Unevaluated properties are not allowed ('AVDD-supply', 'CPVDD-supply', 'DBVDD-supply', 'DCVDD-supply', 'MICVDD-supply' were unexpected)
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dtb
+	arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dtb
+
