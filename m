@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D006D9DA2
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF616D9DA4
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238985AbjDFQic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S239435AbjDFQij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238461AbjDFQia (ORCPT
+        with ESMTP id S239027AbjDFQif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:38:30 -0400
+        Thu, 6 Apr 2023 12:38:35 -0400
 Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9777ABC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:38:29 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id sg7so2825435ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:38:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECD9977F
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:38:34 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id sg7so2826057ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:38:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680799108;
+        d=linaro.org; s=google; t=1680799113;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=T7beKVksHh0nuqXKI8x1Oe0LmhdDO/0yuJWUU6Y7ML8=;
-        b=ixzSfaKnVl4Zry5hvhbU9WS+HySfFiNR4HSiiatv9wN9W8vloLPgDru/SOOH/YLhA5
-         hasOv1T3gLTGi6tfchaKhOYr0lEMze7UyXyOeXVqhdN06OP5JhQn+Ur6EOXtHMFcE92z
-         apU3SBocjFebi9NM8IJJmY0YQzK+rSOMHSgND9n+nYq/du5mcnjId2XCXFtgQE3PtmoT
-         Pte540fEURgy0GHLw/vabbw7wjFCQnA/9zgFk1v8WTtiu/Xt2AM3xLYLwwB2aIZxDt9f
-         ubbf17Z3Z0pLO1Ag4ArsSZbdgRxcLEpnKOKKEEQEXcE6h+QIhC9K1Y7zgQ96jDTogQsE
-         Gduw==
+        bh=OWDcJ97FBFl4hgq5OIfJLSKl2wEKzI1QT0yr2K4Znq0=;
+        b=Fc0NYTJhxNCIycKuaHx871vbDcmCb2OqHdnPGEljFbriQiWpw0JegRVZ5TANfwqjyz
+         sZrhpt1isg5mXafdzTWWjhh/HL2N9+gHUDFBgLbCu6mNxSztgWAQp4TVOJg8WZPEg8nR
+         YUmjjBbZ7CdTDBFKFlUXfw4DYf03HqjY2Pl13dN2f4Oxoe8iciebvDy9LmhsOos/MVrV
+         8vZ4shuaAIfWyJvy5SuPBi3egDIVk7t+FHhVBvLMqZ+L3j1EPqRd2USXDe0M5TGpRJCI
+         qkCUZpXdkBuLmzxhr+tpC3d7ql/BgeI0oEbDBhuQxWLzAkNt8jbp1FJZ5+1eh9bOkcPL
+         5HfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680799108;
+        d=1e100.net; s=20210112; t=1680799113;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7beKVksHh0nuqXKI8x1Oe0LmhdDO/0yuJWUU6Y7ML8=;
-        b=hKVgZ0StvqN3HhcL+7rde76+ymZTlSoe5qWcM1v5tQM5bOKh+b3meIaWc0NFcRN64W
-         KAnAikYcu9MU0pF9kyVlOZZONMFO/6MZ4ImpEL4R2ZnlwMakwr/BGZqd3EcCd904Tez9
-         2TejvI1bMQzI7dV1vmVV5Vug0o39ZN04qJscupQyKv1IcVFEx2y6yy6Tb28wpH4HvU7y
-         ykUltXAW/dPDqrSifRBjvjuZm1B/EeaUKcBd9xLl0wmsdQtaYvyw8YARzEYo0bjO7ds/
-         5hneCVaYy2MEpf5vUp0s3cmqBa95DAQaoLk6YIoO09pal92WMzfr+Z7gSzrOhxYsxF8b
-         4yfQ==
-X-Gm-Message-State: AAQBX9dlpIHE2Tm+JxWsGjfNyTpt1leSAD1xJx+ag0z+5LPVdPytBjRy
-        DmpqTxOOU+k6kHWOPPqpsMg6BA==
-X-Google-Smtp-Source: AKy350a/1Ikxa58vdjDR4zcjMubuTa657E4gklxEi9I2kxSttoORXIf0C4IE81YUPBA3UZ9oTG3oQQ==
-X-Received: by 2002:a17:906:5383:b0:939:4c86:d47b with SMTP id g3-20020a170906538300b009394c86d47bmr6915462ejo.19.1680799107771;
-        Thu, 06 Apr 2023 09:38:27 -0700 (PDT)
+        bh=OWDcJ97FBFl4hgq5OIfJLSKl2wEKzI1QT0yr2K4Znq0=;
+        b=7yKJD4dL0s+oLDkEfVym4+pAGalzIZ2RcUMyl4/UDori0AVUOazncCjUqw3E0dWAoo
+         oMijSifSOgqlx2k/dj/jxzojSuzhH64Pg3s1atHAY1fCq0n/oy+0gb01fyFDcnShzJIu
+         sY0bdC615Az+IqF+5N5cdmjaw2IFTZNNeVXATsrSC5Ja8Kh7vraBtqa/BSf3mPTPbMB1
+         cqm8pRXyi0CSjlLb9igBDQMMBCj+NIaGMcDKHkHVgsRtazgsHWa3NuY/fhIYIRpOhIIO
+         t1PtQPQWZAfZXH3nuXbXGhu8bAt4UKfS3Bfu0AWGFtYjSQXa3Er/J2tbLz9A6ryAnT0o
+         7Kcg==
+X-Gm-Message-State: AAQBX9eHB5E0bHtIQCQGA4U2iDnzCligiMmYlpw/FSZY4lYWl9XxxbvB
+        JDIunUUrvaXWTyWEunZ/JEu/DQ==
+X-Google-Smtp-Source: AKy350aS0NEwtDEBHk40rYZEAEjF2aRpnkTgWNwXWWFdGehYULwO3FfJ2tZdOw08E+5EhCOmWpY/Jg==
+X-Received: by 2002:a17:906:5a73:b0:862:c1d5:ea1b with SMTP id my51-20020a1709065a7300b00862c1d5ea1bmr7110646ejc.8.1680799113564;
+        Thu, 06 Apr 2023 09:38:33 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id h3-20020a1709067cc300b00947f4e2b2b5sm999938ejp.127.2023.04.06.09.38.26
+        by smtp.gmail.com with ESMTPSA id oz8-20020a1709077d8800b0093120a11a5dsm1019971ejc.92.2023.04.06.09.38.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 09:38:27 -0700 (PDT)
-Message-ID: <94ebc965-e4c4-496c-5642-da6f6cff7b3e@linaro.org>
-Date:   Thu, 6 Apr 2023 18:38:26 +0200
+        Thu, 06 Apr 2023 09:38:33 -0700 (PDT)
+Message-ID: <a8234f66-d214-ee46-2455-a1ad8650bd26@linaro.org>
+Date:   Thu, 6 Apr 2023 18:38:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH V2 1/3] dt-bindings: Add Marantec vendor prefix
+Subject: Re: [PATCH V2 2/3] dt-bindings: arm: fsl: Add Marantec maveo box as a
+ DHCOR i.MX6ULL SoM based board
 Content-Language: en-US
 To:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
         linux-arm-kernel@lists.infradead.org
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Marek Vasut <marex@denx.de>, Fabio Estevam <festevam@denx.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        NXP Linux Team <linux-imx@nxp.com>,
+        kernel@dh-electronics.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20230406154900.6423-1-cniedermaier@dh-electronics.com>
+ <20230406154900.6423-2-cniedermaier@dh-electronics.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406154900.6423-1-cniedermaier@dh-electronics.com>
+In-Reply-To: <20230406154900.6423-2-cniedermaier@dh-electronics.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -79,18 +84,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 06/04/2023 17:48, Christoph Niedermaier wrote:
-> Add vendor prefix for Marantec electronics GmbH.
+> Add Marantec maveo box. The system is used to get a smart conntection
+> to a door drive. The core of this system is a soldered i.MX6ULL DHCOR
+> SoM from DH electronics.
 > 
 > Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 > ---
 > Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: Fabio Estevam <festevam@denx.de>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> To: linux-arm-kernel@lists.infradead.org
-> ---
 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
