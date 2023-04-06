@@ -2,248 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD326D9BF4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F07C6D9BF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239718AbjDFPP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        id S239708AbjDFPQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238190AbjDFPPu (ORCPT
+        with ESMTP id S239327AbjDFPPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:15:50 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFA87EC9;
-        Thu,  6 Apr 2023 08:15:45 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-177b78067ffso42688284fac.7;
-        Thu, 06 Apr 2023 08:15:45 -0700 (PDT)
+        Thu, 6 Apr 2023 11:15:51 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B635B1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:15:49 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-32676c41887so179615ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1680794149; x=1683386149;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=SwJW32HUFSbqacbI3jOYaRioynoa1z7c5AASJQnUm6c=;
+        b=GvmgjgBD4LulrBVpSC5amslG0BBPCGKVBR7FhBqYrndx1/k+0sFZDZZHOdkDD6SlgH
+         KPBfljwfJxJEWvJpv6O8jjgVZ0boFHWffI8E2/MAbvOLwM0JecZth9o7aNF4q2K3E053
+         hUEwGV+R7NVA1tZATFl5I6zvmMjBk3cTSFzaQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680794145;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DaH4L1i/JuWu0RboKl6tYhjCF4zs4iv94Q8hNFPaJg4=;
-        b=Ni32ixHq/ooPoHREelgq4e9FUcf0mKIMeRT8G2bvQcJlNUt2xwHCmJphM/teKS1Dhp
-         myRr1PKo/U8frsVp+kBUJvVa3P/gittQWykcxS9SzDNQA2fcbzBhWdPOgjMeuEmqaEAk
-         d+DDv0Q7fnMr9UgqI2VZHopEIbUorZa9aDWlqThoyts8wUb1HK2D4eA0pxqm2pT0G749
-         Qgv82Qg6M5ig7hSMRUkWVG6N+dOmknGZOhelcgxjMJ8i7Uw5fzmYZ1zO4HNFsFE5B1DV
-         9UqgpHF+ll3Vzwr+TPYiXYWSgTLB0iHrCmrPbsJIa0B3i3zSHApqSz99UYdrXrDZVa8x
-         HTlw==
-X-Gm-Message-State: AAQBX9duozU6YGZ9aA5e/2bhg+idMq9njIK3RFfmvp1H9nnx6L5JZp4d
-        x/37r4hgfXxsIkedvkSl4g==
-X-Google-Smtp-Source: AKy350ab6kYansrJ3l5RjxAfs2sJ/EBZU6O1HI4iQMiG6ufcJX2X+MYT39U+pMtntzqTGpOBuRaX9Q==
-X-Received: by 2002:a05:6871:14d:b0:17a:f6df:7f21 with SMTP id z13-20020a056871014d00b0017af6df7f21mr5346178oab.2.1680794144957;
-        Thu, 06 Apr 2023 08:15:44 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f11-20020a9d7b4b000000b0069d602841e7sm755208oto.72.2023.04.06.08.15.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 08:15:44 -0700 (PDT)
-Received: (nullmailer pid 3114304 invoked by uid 1000);
-        Thu, 06 Apr 2023 15:15:43 -0000
-Date:   Thu, 6 Apr 2023 10:15:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>, Marek Vasut <marex@denx.de>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Lyude Paul <lyude@redhat.com>, devicetree@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
-        chrome-platform@lists.linux.dev,
-        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org, Allen Chen <allen.chen@ite.com.tw>
-Subject: Re: [PATCH v15 08/10] dt-bindings: display: bridge: it6505: Add
- mode-switch support
-Message-ID: <20230406151543.GA3098002-robh@kernel.org>
-References: <20230331091145.737305-1-treapking@chromium.org>
- <20230331091145.737305-9-treapking@chromium.org>
+        d=1e100.net; s=20210112; t=1680794149; x=1683386149;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SwJW32HUFSbqacbI3jOYaRioynoa1z7c5AASJQnUm6c=;
+        b=bFcfuQoio8dnLPqTWyHl3pbr5sDZcaPotuAvUu6hB6YmppZmALRyTDXFZTXT0FxeXp
+         8R1/LAdmzevGVBsBBgO3M437ujicaBHdc2YzJxvAS33w6XOXA0guCsjKtw7rjgVScjc/
+         ZmpcQYptqUj+Dd1UwahNjawnerks07TeTFSUmLZayu9NfZCuOIp9tyc9VvIyYf9q/I3F
+         gNyJVZf1DPw9g4rNQhkSro9CHnZI2ZUw6IOe9AQRZza0vK9A6r6y+makUr7qPs9HdmGD
+         Wezj4HhX6xo7OXxr++cFXobYxR3tiYH8lA55JErDcY2igryKPqiO3ELsxlHsf/mLneu1
+         F9XQ==
+X-Gm-Message-State: AAQBX9ekr+ajJdMppYBpheHIUtn+JFyBKtiQbqv7ZzPv9qZUWi94fKAA
+        ugOgAjpGdraMTTYVaMiFd14AAw==
+X-Google-Smtp-Source: AKy350ZFYtq3itkV7pt++ykJ6TvKH9zWdY2BYB6Oydx8wrWAbdaW3sJoy4u9iqNBqZd9SAgoepzs5w==
+X-Received: by 2002:a05:6e02:bee:b0:319:5431:5d5b with SMTP id d14-20020a056e020bee00b0031954315d5bmr2916208ilu.1.1680794149015;
+        Thu, 06 Apr 2023 08:15:49 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id r18-20020a92c5b2000000b00327392e5504sm380937ilt.68.2023.04.06.08.15.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 08:15:48 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------jCZDOs020xNWwUSNqV6tT9Up"
+Message-ID: <f9f22f65-3151-6361-871b-a4a119fde11d@linuxfoundation.org>
+Date:   Thu, 6 Apr 2023 09:15:47 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230331091145.737305-9-treapking@chromium.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tuananhlfc@gmail.com
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 6.3-rc6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 05:11:43PM +0800, Pin-yen Lin wrote:
-> ITE IT6505 can be used in systems to switch the DP traffic between
-> two downstreams, which can be USB Type-C DisplayPort alternate mode
-> lane or regular DisplayPort output ports.
-> 
-> Update the binding to accommodate this usage by introducing a
-> data-lanes and a mode-switch property on endpoints.
-> 
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> 
-> ---
-> 
-> (no changes since v12)
-> 
-> Changes in v12:
-> - Fixed the schema of "data-lanes" property for it6505
-> - Reworded the description of the mode-switch property
-> 
-> Changes in v11:
-> - Updated the description of the endpoints in the bindings
-> - Referenced video-interfaces.yaml instead for the endpoints binding
-> - Removed duplicated definitions from inherited schema
-> 
-> Changes in v9:
-> - Fixed subject prefix again
-> - Changed the naming of the example node for it6505
-> 
-> Changes in v8:
-> - Updated bindings for data-lanes property
-> - Fixed subject prefix
-> 
-> Changes in v7:
-> - Fixed issues reported by dt_binding_check.
-> - Updated the schema and the example dts for data-lanes.
-> - Changed to generic naming for the example dts node.
-> 
-> Changes in v6:
-> - Remove switches node and use endpoints and data-lanes property to
->   describe the connections.
-> 
->  .../bindings/display/bridge/ite,it6505.yaml   | 101 +++++++++++++++---
->  1 file changed, 88 insertions(+), 13 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> index c9a882ee6d98..348b02f26041 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/ite,it6505.yaml
-> @@ -75,22 +75,49 @@ properties:
->        port@1:
->          $ref: /schemas/graph.yaml#/$defs/port-base
->          unevaluatedProperties: false
-> -        description: Video port for DP output
-> +        description:
-> +          Video port for DP output. Each endpoint connects to a video output
-> +          downstream, and the "data-lanes" property is used to describe the pin
-> +          connections. 0, 1, 2, 3 in "data-lanes" maps to TX0, TX1, TX2, TX3,
-> +          respectively.
->  
-> -        properties:
-> -          endpoint:
-> -            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> +
-> +        patternProperties:
-> +          "^endpoint@[01]$":
-> +            $ref: /schemas/media/video-interfaces.yaml#
->              unevaluatedProperties: false
->  
->              properties:
-> +              reg: true
-> +
-> +              remote-endpoint: true
+This is a multi-part message in MIME format.
+--------------jCZDOs020xNWwUSNqV6tT9Up
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-You don't need to list these 2.
+Hi Linus,
 
-> +
->                data-lanes:
-> -                minItems: 1
-> -                uniqueItems: true
-> -                items:
-> -                  - enum: [ 0, 1 ]
-> -                  - const: 1
-> -                  - const: 2
-> -                  - const: 3
-> +                oneOf:
-> +                  - items:
-> +                      - enum: [0, 3]
+Please pull the following Kselftest fixes update for Linux 6.3-rc6.
 
-Only lane 1 wasn't valid? If so, mention that in the commit message.
+This Kselftest fixes update for Linux 6.3-rc6 consists of one single
+fix to mount_setattr_test build failure.
 
-> +
-> +                  - items:
-> +                      - const: 0
-> +                      - const: 1
-> +
-> +                  - items:
-> +                      - const: 3
-> +                      - const: 2
-> +
-> +                  - items:
-> +                      - const: 0
-> +                      - const: 1
-> +                      - const: 2
-> +                      - const: 3
+diff is attached.
 
-Isn't this the default if 'data-lanes' is omitted.
+thanks,
+-- Shuah
 
-> +
-> +              mode-switch:
-> +                type: boolean
-> +                description: Serves as Type-C mode switch if present.
-> +
-> +            required:
-> +              - reg
-> +              - remote-endpoint
+----------------------------------------------------------------
+The following changes since commit 05107edc910135d27fe557267dc45be9630bf3dd:
 
-required can be dropped.
+   selftests: sigaltstack: fix -Wuninitialized (2023-03-20 17:28:31 -0600)
 
->  
->      required:
->        - port@0
-> @@ -102,7 +129,6 @@ required:
->    - pwr18-supply
->    - interrupts
->    - reset-gpios
-> -  - extcon
->    - ports
->  
->  additionalProperties: false
-> @@ -139,8 +165,11 @@ examples:
->                  };
->  
->                  port@1 {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
->                      reg = <1>;
-> -                    it6505_out: endpoint {
-> +                    it6505_out: endpoint@0 {
-> +                        reg = <0>;
->                          remote-endpoint = <&dp_in>;
->                          data-lanes = <0 1>;
->                      };
-> @@ -148,3 +177,49 @@ examples:
->              };
->          };
->      };
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
+are available in the Git repository at:
 
-Why do we need a whole new example? Just extend the existing example 
-with new properties/nodes.
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.3-rc6
 
-Rob
+for you to fetch changes up to f1594bc676579133a3cd906d7d27733289edfb86:
+
+   selftests mount: Fix mount_setattr_test builds failed (2023-03-31 09:18:45 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-6.3-rc6
+
+This Kselftest fixes update for Linux 6.3-rc6 consists of one single
+fix to mount_setattr_test build failure.
+
+----------------------------------------------------------------
+Anh Tuan Phan (1):
+       selftests mount: Fix mount_setattr_test builds failed
+
+  tools/testing/selftests/mount_setattr/mount_setattr_test.c | 1 +
+  1 file changed, 1 insertion(+)
+----------------------------------------------------------------
+--------------jCZDOs020xNWwUSNqV6tT9Up
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-6.3-rc6.diff"
+Content-Disposition: attachment; filename="linux-kselftest-fixes-6.3-rc6.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21vdW50X3NldGF0dHIvbW91
+bnRfc2V0YXR0cl90ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tb3VudF9zZXRh
+dHRyL21vdW50X3NldGF0dHJfdGVzdC5jCmluZGV4IDU4MjY2OWNhMzhlOS4uYzZhOGM3MzJi
+ODAyIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tb3VudF9zZXRhdHRy
+L21vdW50X3NldGF0dHJfdGVzdC5jCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21v
+dW50X3NldGF0dHIvbW91bnRfc2V0YXR0cl90ZXN0LmMKQEAgLTE4LDYgKzE4LDcgQEAKICNp
+bmNsdWRlIDxncnAuaD4KICNpbmNsdWRlIDxzdGRib29sLmg+CiAjaW5jbHVkZSA8c3RkYXJn
+Lmg+CisjaW5jbHVkZSA8bGludXgvbW91bnQuaD4KIAogI2luY2x1ZGUgIi4uL2tzZWxmdGVz
+dF9oYXJuZXNzLmgiCiAK
+
+--------------jCZDOs020xNWwUSNqV6tT9Up--
