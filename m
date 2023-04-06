@@ -2,94 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26AB46DA4D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E136DA4D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 23:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237645AbjDFVlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 17:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
+        id S237830AbjDFVle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 17:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjDFVk5 (ORCPT
+        with ESMTP id S230348AbjDFVlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 17:40:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164DD83DC;
-        Thu,  6 Apr 2023 14:40:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A608464A29;
-        Thu,  6 Apr 2023 21:40:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC6EBC433D2;
-        Thu,  6 Apr 2023 21:40:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680817256;
-        bh=LgnSIae7YGJHWtRuO7WL6nEoJG1bzMYjwFvmJ5IZleE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IgGHUTg9VrD+1cioqRvBRzw/M2FQRPieZPpJuKJGgUZ2+SBxZd4qdaqd3wAmDmvUE
-         9fFeU0ULIVQO9VKEi4KOoRxmLb3twtZ5eHfL76p13z8Kjs8OCHxBxRfIr3/qHi/5mo
-         I9oKfoSTAvndZzT0qRZewRi65cpmawjl/13vQNNbf/7Lk79tnEuXVcR7+RTZCzW0dU
-         EuHYKRkQcCFxHkmUzmgZmkDUva3AmSuF8Npj7g7OF5TwdPZkbMt+LV8+6vMz0joSUc
-         lU3GvoIPFxcoS93EgsKYoclTKxkSbwQry2QXRk/vaSZ2+H58shP40h7G1wNFG9rrgl
-         XkAK2WvJ80+lw==
-Date:   Thu, 6 Apr 2023 16:40:54 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI/P2PDMA: Fix the comments on pci_p2pmem_find_many()
-Message-ID: <20230406214054.GA3741302@bhelgaas>
+        Thu, 6 Apr 2023 17:41:32 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC69F83DC;
+        Thu,  6 Apr 2023 14:41:29 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pkXMB-0004rF-36;
+        Thu, 06 Apr 2023 23:41:24 +0200
+Date:   Thu, 6 Apr 2023 22:41:18 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-i2c@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sam Shih <sam.shih@mediatek.com>
+Subject: [PATCH 0/2] i2c: i2c-mt65xx: add support for MT7981
+Message-ID: <cover.1680817105.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230329024731.5604-1-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 10:47:31AM +0800, Cai Huoqing wrote:
-> Remove pci_p2pmem_dma() reference,
-> because pci_p2pmem_dma() method is not existed.
-> 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Add support for the I2C units found in the MediaTek MT7981 and MT7988
+SoCs. Just like other recent MediaTek I2C units that also uses v3
+register offsets (which differ from v2 only by OFFSET_SLAVE_ADDR being
+0x94 instead of 0x4).
 
-Applied with following subject/commit log to pci/p2pdma for v6.4, thanks!
+Corresponding patch in MediaTek's SDK:
+https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/472dc5cf11d4359cb3e3f80577dba22df0696e43/target/linux/mediatek/patches-5.4/0901-i2c-busses-add-mt7981-support.patch
 
-    PCI/P2PDMA: Fix pci_p2pmem_find_many() kernel-doc
+Changes since v1:
+ * add missing commit description
+ * add link to patch in MediaTek's SDK to cover letter
 
-    Remove reference to pci_p2pmem_dma(), which has never existed.
+Daniel Golle (2):
+  i2c: mediatek: add support for MT7981 SoC
+  dt-bindings: i2c: i2c-mt65xx: add binding for MT7981 SoC
 
-> ---
-> v2->v3:
->   Update commit log-pci_p2pmem_dma() method is not existed.
-> 
-> v2 link:
->   https://lore.kernel.org/lkml/20230328110610.3824-1-cai.huoqing@linux.dev/
-> 
->  drivers/pci/p2pdma.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-> index 9e8205572830..6cd98ffca198 100644
-> --- a/drivers/pci/p2pdma.c
-> +++ b/drivers/pci/p2pdma.c
-> @@ -746,8 +746,7 @@ EXPORT_SYMBOL_GPL(pci_has_p2pmem);
->  
->  /**
->   * pci_p2pmem_find_many - find a peer-to-peer DMA memory device compatible with
-> - *	the specified list of clients and shortest distance (as determined
-> - *	by pci_p2pmem_dma())
-> + *	the specified list of clients and shortest distance
->   * @clients: array of devices to check (NULL-terminated)
->   * @num_clients: number of client devices in the list
->   *
-> -- 
-> 2.34.1
-> 
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml         |  1 +
+ drivers/i2c/busses/i2c-mt65xx.c                     | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
+
+
+base-commit: e134c93f788fb93fd6a3ec3af9af850a2048c7e6
+-- 
+2.40.0
+
