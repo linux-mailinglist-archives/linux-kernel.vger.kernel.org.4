@@ -2,70 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930196D9B37
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB3D6D9B46
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239522AbjDFOwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S239116AbjDFOw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238100AbjDFOwM (ORCPT
+        with ESMTP id S239203AbjDFOwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:52:12 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B168B778
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:51:14 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id j13so37462422pjd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680792672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4IukBswUItQA0MwJ6mr8lJHmbvkt98zOHJDlzuZ9xc8=;
-        b=iRJlt1CJvMm9eA18RMsi4Pd2vmqTpZST7WKy5PYRQriAE6O/3yD7tZ46f159yNbdWd
-         sWkHmJyRT1QPOpKg1FKIakni2SeNhFvE47g04BKr12DCIKMh5ntJ8Bhq++/2LSXORGQk
-         81N2B5tvbHSyGgxcdDOX6g+f+n/1cRHK2LWyUferpNf/DBOa02WAou5MUpMmVmafqLT5
-         X0hpmy3pNW832fIRF8gT3xx7WlcPuwgoseI7QevKWW1jDeRF0C3XA6YUMBdgE0HE/zEH
-         CFK2P57NKeaxPyOJZPLj/9/XBA61NM442z53Dnz6jwJ/G0q1piRk0XHrxw84/n75W0mq
-         CEsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680792672;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4IukBswUItQA0MwJ6mr8lJHmbvkt98zOHJDlzuZ9xc8=;
-        b=TBa7aqQoqyX/Pnc7ZtkHVzp315nJNV5FrLZjiN4ueH0rUv1MHiNMhwXWZeeemAnotF
-         jyFFyPabsgDulVhgWybLNLaZwoXrA48sPxeIFmI6U+b12eUv4y+2Rr7m/VaBP4qwEX2A
-         vIXQ1kxItNDDY0T2y/a/A5u2FXV4DX/O+Kk1c48X/IzFTUO2pYyofjYeXe3QjcYdetD2
-         m9+SHQjtaJu5ODRnL2NGrg38XOHhI8GWPb8idLlMFmRweGPBbVUsZciTUoMyB1WYqwZu
-         IcFah0fXxKAVeEbZuHez6nC16d5KeMMjR5Lioo1MYiMtUSIEJPqcHC9usdOuh2WlSa6c
-         LijQ==
-X-Gm-Message-State: AAQBX9fctR8ucUdrn6PEug4+oQYGMjqeYBn4SdIFnTFQN1/o++5ih/wD
-        6D73Xu8p22I5HB/bCG9cgA574A==
-X-Google-Smtp-Source: AKy350bKD/N614XCLXav3ebLsFXgDjtshr3+E7sESXsbgXqxHi+VsF3jJtgjKaWQ49jOjPijP3JTtA==
-X-Received: by 2002:a17:903:11d1:b0:19f:1c64:c9d8 with SMTP id q17-20020a17090311d100b0019f1c64c9d8mr12440320plh.14.1680792672041;
-        Thu, 06 Apr 2023 07:51:12 -0700 (PDT)
-Received: from localhost.localdomain ([2409:8a28:e63:f500:18d3:10f7:2e64:a1a7])
-        by smtp.gmail.com with ESMTPSA id i4-20020a170902eb4400b0019ca68ef7c3sm1487398pli.74.2023.04.06.07.51.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 07:51:11 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     axboe@kernel.dk, tj@kernel.org
-Cc:     paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-block@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v2 3/3] blk-cgroup: delete cpd_init_fn of blkcg_policy
-Date:   Thu,  6 Apr 2023 22:50:50 +0800
-Message-Id: <20230406145050.49914-4-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230406145050.49914-1-zhouchengming@bytedance.com>
-References: <20230406145050.49914-1-zhouchengming@bytedance.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        Thu, 6 Apr 2023 10:52:31 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA0793CB;
+        Thu,  6 Apr 2023 07:51:38 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id C99D82B06973;
+        Thu,  6 Apr 2023 10:51:35 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Apr 2023 10:51:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1680792695; x=1680799895; bh=Pv
+        VeZJF1LUSrqLOZVN7G2amPFlD1uKLgk4hVw/5gFkk=; b=SAvTW0KPiUiO6nJkgF
+        hXZ6OppFeDIVldU5nH5Nk87ZkoYm0QSz5etEIyB9L3eiPRe38qOn7Yay2vgGarg1
+        5sJwAO+fTphyJMnizGXGMZA7MS5VH44wwWkJ1MrHruWcMBzAdQsbwr/HG8Ar2/6h
+        ssfgDaEh1nygQh/jhR37h09WkE3hI3ETItSeiXNozl3KXDBURktHhmDVxZ7Wdzy/
+        n7mzlrgcvLLYYl4GB0Jixsnnu33HHsW0S8bOvegaRFpXUzyUpg1Wrf+HHQe3JHm6
+        yvJTSISUw4ZJyAl6RHWKH0+KTevm+bV6eZ5nm+FcceTSwKUlPuUP8ZQUE6Rf/952
+        Fm7A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680792695; x=1680799895; bh=PvVeZJF1LUSrq
+        LOZVN7G2amPFlD1uKLgk4hVw/5gFkk=; b=JPS0WnF6RsH6+Xmuz649TIwf6ULqn
+        iR7dqMhGcWUzrcWDkP1wJOBg+pHwmqt0HjkWV3uYIx/iYEHGdo34iUw0sMt7lXAF
+        TCiFGvS91OUTZmU8mGXL1ZAIYc+2wcAVLuiGns+9hZ9Q3u+wIDdzJwLYP/GBb0jY
+        PipBM8nu/zuG+9luvqZ8Jihpwj/glGEHTGAsmTUO/OhJ+2KiMp2ZX3fbsikDkl9X
+        CYmcVn5Qz5pgqlithu+GeIWG615/DhpktzMk+iHq+vbMD1i48CEcdpePaPEsYSg+
+        /NqG6gY4RjzahVDTu3l6p6nPXr1gPCO41q3EMcyeoONEMlvZajqF4chSg==
+X-ME-Sender: <xms:dtwuZISp_urJ8m5y_mrgBVrKzfVtV7jyqafaPhhnLlaMLrxVu-zOdQ>
+    <xme:dtwuZFzhYOAHcjhP_UJhiFjuMOrAhWGolGLd007OLGuh7HLcDq44kr2pBY-nRsouX
+    s_u4XRoQiKraC7XyvE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:dtwuZF306BOOE6te4r8pL4BLeM6iLePYsvNvQT3RmqPvhsiPWIJBkw>
+    <xmx:dtwuZMAFW_bz-t7uH1fIUNzgL7C4poUL5vgpabFNXqjqsotT3NYUJg>
+    <xmx:dtwuZBi3L7XVmnFUihWDoER0dw0JdG93uknsbqbi8fYB_9UR12Cn-w>
+    <xmx:d9wuZKZ3_VssJzan2b5oOIi7ZSLdwGBHtiVEVQK6f1B3PNR-RJRUt7wGRy0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D73D5B6009B; Thu,  6 Apr 2023 10:51:34 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <cfa36e9a-7e19-4c43-b9b4-1ae4f9ef51c3@app.fastmail.com>
+In-Reply-To: <20230406143019.6709-10-tzimmermann@suse.de>
+References: <20230406143019.6709-1-tzimmermann@suse.de>
+ <20230406143019.6709-10-tzimmermann@suse.de>
+Date:   Thu, 06 Apr 2023 16:51:14 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Daniel Vetter" <daniel.vetter@ffwll.ch>,
+        "Helge Deller" <deller@gmx.de>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH v2 09/19] arch/mips: Implement <asm/fb.h> with generic helpers
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,83 +95,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-blkcg_policy cpd_init_fn() is used to just initialize some default
-fields of policy data, which is enough to do in cpd_alloc_fn().
+On Thu, Apr 6, 2023, at 16:30, Thomas Zimmermann wrote:
+> Replace the architecture's fb_is_primary_device() with the generic
+> one from <asm-generic/fb.h>. No functional changes.
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-This patch delete the only user bfq_cpd_init(), and remove cpd_init_fn
-from blkcg_policy.
+I think you should at least mention that the existing
+fb_pgprotect() function is probably incorrect and should
+be replaced with the generic version.
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Acked-by: Tejun Heo <tj@kernel.org>
----
- block/bfq-cgroup.c | 10 ++--------
- block/blk-cgroup.c |  4 ----
- block/blk-cgroup.h |  1 -
- 3 files changed, 2 insertions(+), 13 deletions(-)
+For reference, the fb_pgprotect function using pgprot_uncached()
+was introduced in 2.6.22 along with all the other ones, but
+the pgprot_writecombine function was only added in commit
+4b050ba7a66c ("MIPS: pgtable.h: Implement the pgprot_writecombine
+function for MIPS") for 3.18.
 
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index a2ab5dd58068..74f7d051665b 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -497,14 +497,9 @@ static struct blkcg_policy_data *bfq_cpd_alloc(gfp_t gfp)
- 	bgd = kzalloc(sizeof(*bgd), gfp);
- 	if (!bgd)
- 		return NULL;
--	return &bgd->pd;
--}
- 
--static void bfq_cpd_init(struct blkcg_policy_data *cpd)
--{
--	struct bfq_group_data *d = cpd_to_bfqgd(cpd);
--
--	d->weight = CGROUP_WEIGHT_DFL;
-+	bgd->weight = CGROUP_WEIGHT_DFL;
-+	return &bgd->pd;
- }
- 
- static void bfq_cpd_free(struct blkcg_policy_data *cpd)
-@@ -1300,7 +1295,6 @@ struct blkcg_policy blkcg_policy_bfq = {
- 	.legacy_cftypes		= bfq_blkcg_legacy_files,
- 
- 	.cpd_alloc_fn		= bfq_cpd_alloc,
--	.cpd_init_fn		= bfq_cpd_init,
- 	.cpd_free_fn		= bfq_cpd_free,
- 
- 	.pd_alloc_fn		= bfq_pd_alloc,
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index f663178f3a19..5fa77f32a52b 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -1289,8 +1289,6 @@ blkcg_css_alloc(struct cgroup_subsys_state *parent_css)
- 		blkcg->cpd[i] = cpd;
- 		cpd->blkcg = blkcg;
- 		cpd->plid = i;
--		if (pol->cpd_init_fn)
--			pol->cpd_init_fn(cpd);
- 	}
- 
- 	spin_lock_init(&blkcg->lock);
-@@ -1645,8 +1643,6 @@ int blkcg_policy_register(struct blkcg_policy *pol)
- 			blkcg->cpd[pol->plid] = cpd;
- 			cpd->blkcg = blkcg;
- 			cpd->plid = pol->plid;
--			if (pol->cpd_init_fn)
--				pol->cpd_init_fn(cpd);
- 		}
- 	}
- 
-diff --git a/block/blk-cgroup.h b/block/blk-cgroup.h
-index 073488b9c7a0..6794157ea1eb 100644
---- a/block/blk-cgroup.h
-+++ b/block/blk-cgroup.h
-@@ -174,7 +174,6 @@ struct blkcg_policy {
- 
- 	/* operations */
- 	blkcg_pol_alloc_cpd_fn		*cpd_alloc_fn;
--	blkcg_pol_init_cpd_fn		*cpd_init_fn;
- 	blkcg_pol_free_cpd_fn		*cpd_free_fn;
- 
- 	blkcg_pol_alloc_pd_fn		*pd_alloc_fn;
--- 
-2.39.2
-
+     Arnd
