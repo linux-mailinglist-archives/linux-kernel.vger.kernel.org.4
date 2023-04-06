@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C436DA044
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CDE6DA045
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240432AbjDFSru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S240293AbjDFSsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240284AbjDFSre (ORCPT
+        with ESMTP id S240347AbjDFSrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:47:34 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D4883FB
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:47:04 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-536a4eba107so401640847b3.19
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:47:04 -0700 (PDT)
+        Thu, 6 Apr 2023 14:47:43 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B6AAF2D
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:47:20 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id m6-20020a056902118600b00aeb1e3dbd1bso39268722ybu.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680806823;
+        d=google.com; s=20210112; t=1680806830;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=k/0nHxbotCT8dbFt0p7GPjUQKOzRCh5+0p+ZWZ3h0Fk=;
-        b=DgWRzBpSWywqnvAFYgG7g0KrVc/wlwY/xgGdqzP5JVBxGqlYmticwxZVDQdazwXLDZ
-         pf/m6ztJ1SwP4kd2choPU+FKgtb5IShnSqTop3sUAt5fADfFjVHoc6dRZoL7jjWdZwcP
-         kqfA0Zj9hBTsDbFq8N1xk2YqqvpNKBZFHDD1GJTqURg00FTpOynVLuuADXgJXJug/Pfn
-         0kmpI0oKrLEJw3eXpcP0JKyDDBh5lfT5OqdAXsAMHQfejk79TfqHsi0x/4n1uK/992CM
-         74Oe3OjSd4pDqIPaYL2hP26SCqYPxvHm2oKHMnPo2KL6iPejGoPG1Uah9Rd7m11PVZFA
-         Df5Q==
+        bh=fjcXbmaXHW+VU6K8Dkm01tSQekJd5NJ+0JkdzAIWERs=;
+        b=oW14Xqbe/tLEdB0kF2YQU4jkNGPXFQDF0+Z6vw0A0pKomEwi4PUqxaGQZNKBx5TS4+
+         N4D2jEH8+YmGrwBcrkOaNBl8gai4smWU9nB6a/VYFfYMD4CBtx1FRGcgkbK2i119QB2T
+         d7xAUUqbqOgL2hVOjfd7HuLVK8D4sxjtvahw31EXvzPkwp7HOnN0FzGp49swr7gNQFqT
+         MRDJcKIDZ2kPvkEmbQWZxCukNclA7wGJ5iP6UomdVhAfb9DXvvuEDpJ7BQTTXzAkWPsc
+         mu+/FlLJRzXwPZgSB7F1Rv75lP01oeCz3lgROw5ZMOUxL6DORcw5Hlt6JjdJYDUdZapC
+         vFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680806823;
+        d=1e100.net; s=20210112; t=1680806830;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k/0nHxbotCT8dbFt0p7GPjUQKOzRCh5+0p+ZWZ3h0Fk=;
-        b=BgM1U/n/hVLQGfsDc4XWn1rxozViQwvW4nPjj+M6pr1ltpcy0bww05lcBl4f+aM1II
-         x4ds50zzjqdmqzcVOn4cjGkBz2zHYF27kwYSZP5XiypXnxXysQaxldt/ngGUV2rp+Y9L
-         /k62O04tO/uJZdo2sGskYXMsTCKQn4/GwDuTRynuOfWhpKayWAWXS9T5y6iD/dc3CBIW
-         6gmsD+P3qsrqm0AvmRy6D1PigfazBiYpK548MtKwTVKvzyc45jvoXUQhjt9+zJH3OLau
-         hcRg09RE8Eg1R3N6fxMcN2t7s2+Y4Urgl8TJN85jAvj8p5otezVtRxl3SLvExMK0zEev
-         cRFg==
-X-Gm-Message-State: AAQBX9eWFJk03m7Todr3kGQoTONQCOaaAg7UIp3Gc2JMC7TCZXibygmq
-        Lp7fkEM4Y1iU/hxBwAE3xOLCDBsq8Sfo
-X-Google-Smtp-Source: AKy350YCcPwgkvhGp/jftcBgm75eC9nxRRAT0JlNfxHxSjrEXBtzEJMthUCTaZZ4gdMrrnREVtqta0sFnQ7C
+        bh=fjcXbmaXHW+VU6K8Dkm01tSQekJd5NJ+0JkdzAIWERs=;
+        b=YbX8oUHNJzA7uRIO3YZ0uUcWPAiocSTEJLDWuaBsxnz73IljY9qqTVOiUcafS41neW
+         aQDt4zJqyp79RvrsbbHtRzNhnCLDKUnG2lvhYJM2bYTqQNq1bCzoPUHnZlQISJh4/MCA
+         2EHKuHd/9Zs4istpoqYwNeTaRgpGCAiAYu6pl3eHRs9lmrs+38KUOXDae5DrwvcbTtJy
+         C8J8pMhenixogUSt6PyS2xjLGTYp4Dqi9KLSJQWhldr4W3UmoJhI0Wo6aoW+UvLH7lkA
+         IlY8EzWPeyMweokoZx3TX60DLDEJ93G+iuL93a+99AJGjhi/6uMgK1EKhdI0cX2JUcUY
+         ZvVg==
+X-Gm-Message-State: AAQBX9fXzABVU9EWWd8hGc7OYTu87uTKdq9knxgtWi3QTxIDMV8jv9xZ
+        plFqBMz/klCUwGPcArmEiDkl8Ra/eLGo
+X-Google-Smtp-Source: AKy350bSz/1DLrOrFFbxQSoBFBftUVZIwNmbMqxgB8kS3lR3spLMt3qlQdEqrN8j4hY2AuISlcrGNOAGXYGn
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:939d:185a:97bb:59ee])
- (user=irogers job=sendgmr) by 2002:a25:d416:0:b0:b8c:692:3e07 with SMTP id
- m22-20020a25d416000000b00b8c06923e07mr228031ybf.10.1680806823121; Thu, 06 Apr
- 2023 11:47:03 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 11:46:35 -0700
+ (user=irogers job=sendgmr) by 2002:a25:d6c9:0:b0:b46:4a5e:3651 with SMTP id
+ n192-20020a25d6c9000000b00b464a5e3651mr244823ybg.9.1680806830609; Thu, 06 Apr
+ 2023 11:47:10 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 11:46:36 -0700
 In-Reply-To: <20230406184638.2632300-1-irogers@google.com>
-Message-Id: <20230406184638.2632300-2-irogers@google.com>
+Message-Id: <20230406184638.2632300-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230406184638.2632300-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v1 2/5] perf vendor events intel: Update free running icelakex events
+Subject: [PATCH v1 3/5] perf vendor events intel: Correct knightslanding
+ memory topic
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -77,8 +78,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the PMU names, event code and umask. Remove UNC_IIO_BANDWIDTH_OUT
-events that aren't supported.
+Correct the memory topic of events for the imc related PMUs.
 
 These updates were generated by:
 https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
@@ -87,169 +87,101 @@ https://github.com/intel/perfmon/pull/66
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../arch/x86/icelakex/uncore-memory.json      |  4 +-
- .../arch/x86/icelakex/uncore-other.json       | 84 ++++++-------------
- 2 files changed, 30 insertions(+), 58 deletions(-)
+ .../x86/knightslanding/uncore-memory.json     | 38 +++++++++++++++++++
+ .../arch/x86/knightslanding/uncore-other.json | 36 ------------------
+ 2 files changed, 38 insertions(+), 36 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/x86/knightslanding/uncore-memory.json
 
-diff --git a/tools/perf/pmu-events/arch/x86/icelakex/uncore-memory.json b/tools/perf/pmu-events/arch/x86/icelakex/uncore-memory.json
-index 66bb4538c6f2..814d9599474d 100644
---- a/tools/perf/pmu-events/arch/x86/icelakex/uncore-memory.json
-+++ b/tools/perf/pmu-events/arch/x86/icelakex/uncore-memory.json
-@@ -106,9 +106,11 @@
-     },
-     {
-         "BriefDescription": "Free running counter that increments for the Memory Controller",
-+        "EventCode": "0xff",
-         "EventName": "UNC_M_CLOCKTICKS_FREERUN",
+diff --git a/tools/perf/pmu-events/arch/x86/knightslanding/uncore-memory.json b/tools/perf/pmu-events/arch/x86/knightslanding/uncore-memory.json
+new file mode 100644
+index 000000000000..47da947b1a6e
+--- /dev/null
++++ b/tools/perf/pmu-events/arch/x86/knightslanding/uncore-memory.json
+@@ -0,0 +1,38 @@
++[
++    {
++        "BriefDescription": "CAS All",
++        "EventCode": "0x03",
++        "EventName": "UNC_M_CAS_COUNT.ALL",
++        "PerPkg": "1",
++        "UMask": "0x3",
++        "Unit": "iMC_DCLK"
++    },
++    {
++        "BriefDescription": "CAS Reads",
++        "EventCode": "0x03",
++        "EventName": "UNC_M_CAS_COUNT.RD",
++        "PerPkg": "1",
++        "UMask": "0x1",
++        "Unit": "iMC_DCLK"
++    },
++    {
++        "BriefDescription": "CAS Writes",
++        "EventCode": "0x03",
++        "EventName": "UNC_M_CAS_COUNT.WR",
++        "PerPkg": "1",
++        "UMask": "0x2",
++        "Unit": "iMC_DCLK"
++    },
++    {
++        "BriefDescription": "DCLK count",
++        "EventName": "UNC_M_D_CLOCKTICKS",
++        "PerPkg": "1",
++        "Unit": "iMC_DCLK"
++    },
++    {
++        "BriefDescription": "UCLK count",
++        "EventName": "UNC_M_U_CLOCKTICKS",
++        "PerPkg": "1",
++        "Unit": "iMC_UCLK"
++    }
++]
+diff --git a/tools/perf/pmu-events/arch/x86/knightslanding/uncore-other.json b/tools/perf/pmu-events/arch/x86/knightslanding/uncore-other.json
+index 491cb37ddab0..fc85e0c95318 100644
+--- a/tools/perf/pmu-events/arch/x86/knightslanding/uncore-other.json
++++ b/tools/perf/pmu-events/arch/x86/knightslanding/uncore-other.json
+@@ -3621,41 +3621,5 @@
          "PerPkg": "1",
--        "Unit": "iMC"
-+        "UMask": "0x10",
-+        "Unit": "imc_free_running"
-     },
-     {
-         "BriefDescription": "DRAM Precharge All Commands",
-diff --git a/tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json b/tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json
-index b1d29877c141..8210e286eec1 100644
---- a/tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json
-+++ b/tools/perf/pmu-events/arch/x86/icelakex/uncore-other.json
-@@ -9859,99 +9859,67 @@
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART0_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x20",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART1_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x21",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART2_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x22",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART3_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x23",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART4_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x24",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART5_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x25",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART6_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x26",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_BANDWIDTH_IN.PART7_FREERUN",
-         "PerPkg": "1",
--        "Unit": "IIO"
+         "UMask": "0x4",
+         "Unit": "M2PCIe"
 -    },
 -    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART0_FREERUN",
+-        "BriefDescription": "CAS All",
+-        "EventCode": "0x03",
+-        "EventName": "UNC_M_CAS_COUNT.ALL",
 -        "PerPkg": "1",
--        "Unit": "IIO"
+-        "UMask": "0x3",
+-        "Unit": "iMC_DCLK"
 -    },
 -    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART1_FREERUN",
+-        "BriefDescription": "CAS Reads",
+-        "EventCode": "0x03",
+-        "EventName": "UNC_M_CAS_COUNT.RD",
 -        "PerPkg": "1",
--        "Unit": "IIO"
+-        "UMask": "0x1",
+-        "Unit": "iMC_DCLK"
 -    },
 -    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART2_FREERUN",
+-        "BriefDescription": "CAS Writes",
+-        "EventCode": "0x03",
+-        "EventName": "UNC_M_CAS_COUNT.WR",
 -        "PerPkg": "1",
--        "Unit": "IIO"
+-        "UMask": "0x2",
+-        "Unit": "iMC_DCLK"
 -    },
 -    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART3_FREERUN",
+-        "BriefDescription": "DCLK count",
+-        "EventName": "UNC_M_D_CLOCKTICKS",
 -        "PerPkg": "1",
--        "Unit": "IIO"
+-        "Unit": "iMC_DCLK"
 -    },
 -    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART4_FREERUN",
+-        "BriefDescription": "UCLK count",
+-        "EventName": "UNC_M_U_CLOCKTICKS",
 -        "PerPkg": "1",
--        "Unit": "IIO"
--    },
--    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART5_FREERUN",
--        "PerPkg": "1",
--        "Unit": "IIO"
--    },
--    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART6_FREERUN",
--        "PerPkg": "1",
--        "Unit": "IIO"
--    },
--    {
--        "BriefDescription": "Free running counter that increments for every 32 bytes of data sent from the IO agent to the SOC",
--        "EventName": "UNC_IIO_BANDWIDTH_OUT.PART7_FREERUN",
--        "PerPkg": "1",
--        "Unit": "IIO"
-+        "UMask": "0x27",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "Clockticks of the integrated IO (IIO) traffic controller",
-@@ -9963,10 +9931,12 @@
-     },
-     {
-         "BriefDescription": "Free running counter that increments for IIO clocktick",
-+        "EventCode": "0xff",
-         "EventName": "UNC_IIO_CLOCKTICKS_FREERUN",
-         "PerPkg": "1",
-         "PublicDescription": "Free running counter that increments for integrated IO (IIO) traffic controller clockticks",
--        "Unit": "IIO"
-+        "UMask": "0x10",
-+        "Unit": "iio_free_running"
-     },
-     {
-         "BriefDescription": "PCIe Completion Buffer Inserts : All Ports",
+-        "Unit": "iMC_UCLK"
+     }
+ ]
 -- 
 2.40.0.577.gac1e443424-goog
 
