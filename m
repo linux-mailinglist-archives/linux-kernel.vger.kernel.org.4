@@ -2,167 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5795F6D8FAD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C1E6D8FBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235604AbjDFGo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S235656AbjDFGwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235582AbjDFGoy (ORCPT
+        with ESMTP id S235613AbjDFGwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:44:54 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B8E9010
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:44:26 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o2so36684419plg.4
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:44:26 -0700 (PDT)
+        Thu, 6 Apr 2023 02:52:41 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3849033
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:52:39 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c01480e3cso27387207b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:52:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680763466;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SSjUHXD/LhQIUTlrHWLn8aPqnhEOO0fsMY11nZErJaU=;
-        b=Eg7Yqnn4G9oMXexxUoM/skvv1nV3exncgdctUmXMUhrI98ZIk16yls+gARhO8JvqkA
-         ZSAmHo05g48CW/7rTVKO792cIZUUUOfO7Q9A4lUU3lvUthG07h357LhZ/eIA0IphcBRz
-         OzNxB5ZGNaYHVw4I5IdOSDQ6fVn1c8k9kOJFKuC0EjayXBcFhFBIq3G1oW6hpKgsvJWj
-         Sy9SAXr3AoBlO0KeWNgeg09b4E038fLpbQZvOYz5qRewqLb42gDIC2Bw7Y/jcoeBMFyN
-         c3XSQhqDl1qOdnfndb6R/k/mH5H+cRTBZ3bx7bLG+uXcbCmOW173w+QOg6/V8BFRW317
-         rf+A==
+        d=google.com; s=20210112; t=1680763959;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9nm1xQP5/CZTYWyFSei8uHNISktYFNWv+Clu34MqVSI=;
+        b=aF4o0ID3B8PG82DEAzeXoAcnPn1WF9QIuD7OyY1P2NqOM2Dh9v/NE2dz82JzAm2DFr
+         Ap+MaCgzmrtRHJC4qKdqBZOE7jD/tQgasQ+zXPaV10HdXO0rC1ui/jhA60SQn4KeIF8W
+         v9UvAumeG4rSnAFaOSQMWLRbjyo5rVJJlPsjfT+xjiC96sTvuTHbAV7dxgFVETkoymhP
+         eDrXMV4iDw+pge6SOnzc9N6hH5oYOHgRhfohIsya/rrRRvUB7isrvmSrIiT0WutCRyTZ
+         2HWVNLEloX00o86nLmQpgXk2Fx5MXyQ8IW9Uig/Q2aEtdJC1yZaPIPq5eu2xQH666dzM
+         g61Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680763466;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SSjUHXD/LhQIUTlrHWLn8aPqnhEOO0fsMY11nZErJaU=;
-        b=42VEe6ysllf7gX439o5Eej8Y9aU1rK9qCzSuZO8WWmRnEx/TMI/z0tngxYfT9wgRSQ
-         kWsnSuXspL4vOkmJcSMF96BNT8dulVz18xFTVCDDPOdCOjMlkmtFjW5OzJjpVT1/CABN
-         64/jfuUpVr30/zDbtY/D9sgYOwvyMwToqwNO+nI4jvtGFwI8KwGJ8ktinNi8O5bLnENd
-         67PhK2t6RQLiUAWjMfJTI/6X6+ZtfXwpq5MPxYqBXwlYouYIJheSU1lh0cBoT08jH3Yb
-         jTegTXoYcaMddIiqHM1WAHCqRFZTW+xB9+pVk6WhkF6necjonWki307bnHLylUXZSz5Q
-         fkag==
-X-Gm-Message-State: AAQBX9drUUwfKtsnEbxd7ZrwbA9P7kUZdhYwjMrqn8NL1xg08QtJV5M5
-        18Sr6YEXBE74NwAX971TltjLiA==
-X-Google-Smtp-Source: AKy350ZNSIKVSomOilm8SpcpzLPoBU9cBCbEIa9c2inY+bAqNAYv7vv+BPyMs8GrRvuYUO6lgRT8iw==
-X-Received: by 2002:a17:90b:3ec4:b0:237:5a3c:e86c with SMTP id rm4-20020a17090b3ec400b002375a3ce86cmr10170522pjb.24.1680763466351;
-        Wed, 05 Apr 2023 23:44:26 -0700 (PDT)
-Received: from C02G87K0MD6R.bytedance.net ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id p13-20020a17090a348d00b002348d711ebbsm496882pjb.16.2023.04.05.23.44.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 23:44:25 -0700 (PDT)
-From:   Hao Jia <jiahao.os@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>,
-        Phil Auld <pauld@redhat.com>
-Subject: [PATCH v4] sched/core: Adapt WARN_DOUBLE_CLOCK machinery for core-sched
-Date:   Thu,  6 Apr 2023 14:44:15 +0800
-Message-Id: <20230406064415.17110-1-jiahao.os@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680763959;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9nm1xQP5/CZTYWyFSei8uHNISktYFNWv+Clu34MqVSI=;
+        b=WDo7BHJ2i6dKgzHrV0yrAaOSH/DRyvDr3s5bYxu/igEYmadS2qSCCe9bvlOBWxcSYm
+         j18qwYTDy+xgjp1gXNY8apI5TtmoaR1UflG51NLSkpZpLB2sSCXtUrCPoCBTQHPDIqxx
+         oTpbo1ZblPHhNs1GzH0jCnPvw2r/qj8cuRybgKq7vtztp+ECTl8VnqTxJM8JwwS1b/nK
+         ti/Hs+IC8NzRp45Df/yqsUdiPXWfewaAfjkmzSIx5RwxxZV9osBS9i2EKX0Yj6gIf94d
+         3nRPDDTbFway3l2tdW2sf/Mpll0+xUYxZF1Qg3KnfEhEVv3QQ4pRtkHK2QjO/BjHfe+v
+         gEyw==
+X-Gm-Message-State: AAQBX9cCZVpFXMyAxRazynPvLJH40It5JKy+EK5RxsfII2Uxsv9CSjWt
+        HpdE3MEkx7mnv/5+46NR7HvKeUiI+wrX
+X-Google-Smtp-Source: AKy350bQ4nVxm9pm1EMUTqmjPalcWhGurSYQoufT2eKUEZbCulj7gZYb3C05jpRER3BtDbL4Fhf0v9y+EwUo
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:713a:ed0b:3d14:a4da])
+ (user=irogers job=sendgmr) by 2002:a25:cb03:0:b0:b8b:fd23:5028 with SMTP id
+ b3-20020a25cb03000000b00b8bfd235028mr179977ybg.3.1680763959081; Wed, 05 Apr
+ 2023 23:52:39 -0700 (PDT)
+Date:   Wed,  5 Apr 2023 23:52:23 -0700
+Message-Id: <20230406065224.2553640-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
+Subject: [PATCH v3 1/2] perf pmu: Make parser reentrant
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Rob Herring <robh@kernel.org>, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When sched_core_enabled(), we sometimes need to call update_rq_clock()
-to update the rq clock of sibling CPUs on the same core, before that we
-need to clear RQCF_UPDATED of rq->clock_update_flags to avoid the
-WARN_DOUBLE_CLOCK warning. Because at this time the rq->clock_update_flags
-of sibling CPUs may be RQCF_UPDATED. If sched_core_enabled(), we will get
-a core-wide rq->lock, so at this point we can safely clear RQCF_UPDATED of
-rq->clock_update_flags of all CPUs on this core to avoid the
-WARN_DOUBLE_CLOCK warning.
+By default bison uses global state for compatibility with yacc. Make
+the parser reentrant so that it may be used in asynchronous and
+multithreaded situations.
 
-We sometimes use rq_pin_lock() and raw_spin_rq_lock() separately,
-For example newidle_balance() and _double_lock_balance(). We will
-temporarily give up core-wide rq->lock, and then use raw_spin_rq_lock()
-to reacquire core-wide rq->lock without rq_pin_lock(), so We can not
-clear RQCF_UPDATED of rq->clock_update_flags of other cpus on the
-same core in rq_pin_lock().
-
-Steps to reproduce:
-1. Enable CONFIG_SCHED_DEBUG and CONFIG_SCHED_CORE when compiling
-   the kernel
-2. echo 1 > /sys/kernel/debug/clear_warn_once
-   echo "WARN_DOUBLE_CLOCK" > /sys/kernel/debug/sched/features
-3. Run the linux/tools/testing/selftests/sched/cs_prctl_test test
-
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-Reviewed-by: Phil Auld <pauld@redhat.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
 ---
-v3->v4:
- - Replace "core wide" with "core-wide" everywhere.
- - Add "Reviewed-by: Phil Auld <pauld@redhat.com>".
- [v3] https://lore.kernel.org/all/20230330035827.16937-1-jiahao.os@bytedance.com
+ tools/perf/util/pmu.c | 26 ++++++++++++++++++++------
+ tools/perf/util/pmu.h |  2 +-
+ tools/perf/util/pmu.l | 17 ++++++++++++-----
+ tools/perf/util/pmu.y |  5 ++++-
+ 4 files changed, 37 insertions(+), 13 deletions(-)
 
-v2->v3:
- - Modify the function name to sched_core_clear_rqcf_updated,
-   and add function comments.
- - Modify commit information.
- [v2] https://lore.kernel.org/all/20230215073927.97802-1-jiahao.os@bytedance.com
-
-v1->v2:
- - Adapt WARN_DOUBLE_CLOCK machinery for core-sched instead of clearing
-   WARN_DOUBLE_CLOCK warning one by one.
- - Modify commit information
- [v1] https://lore.kernel.org/all/20221206070550.31763-1-jiahao.os@bytedance.com
-
- kernel/sched/core.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0d18c3969f90..c6e2c79152ef 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -429,11 +429,32 @@ void sched_core_put(void)
- 		schedule_work(&_work);
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 78a407b42ad1..96ef317bac41 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -24,6 +24,8 @@
+ #include "evsel.h"
+ #include "pmu.h"
+ #include "pmus.h"
++#include "pmu-bison.h"
++#include "pmu-flex.h"
+ #include "parse-events.h"
+ #include "print-events.h"
+ #include "header.h"
+@@ -57,9 +59,6 @@ struct perf_pmu_format {
+ 	struct list_head list;
+ };
+ 
+-int perf_pmu_parse(struct list_head *list, char *name);
+-extern FILE *perf_pmu_in;
+-
+ static bool hybrid_scanned;
+ 
+ static struct perf_pmu *perf_pmu__find2(int dirfd, const char *name);
+@@ -81,6 +80,8 @@ int perf_pmu__format_parse(int dirfd, struct list_head *head)
+ 	while (!ret && (evt_ent = readdir(format_dir))) {
+ 		char *name = evt_ent->d_name;
+ 		int fd;
++		void *scanner;
++		FILE *file;
+ 
+ 		if (!strcmp(name, ".") || !strcmp(name, ".."))
+ 			continue;
+@@ -91,9 +92,22 @@ int perf_pmu__format_parse(int dirfd, struct list_head *head)
+ 		if (fd < 0)
+ 			break;
+ 
+-		perf_pmu_in = fdopen(fd, "r");
+-		ret = perf_pmu_parse(head, name);
+-		fclose(perf_pmu_in);
++		file = fdopen(fd, "r");
++		if (!file) {
++			close(fd);
++			break;
++		}
++
++		ret = perf_pmu_lex_init(&scanner);
++		if (ret) {
++			fclose(file);
++			break;
++		}
++
++		perf_pmu_set_in(file, scanner);
++		ret = perf_pmu_parse(head, name, scanner);
++		perf_pmu_lex_destroy(scanner);
++		fclose(file);
+ 	}
+ 
+ 	closedir(format_dir);
+diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+index 32c3a75bca0e..d53618c65c92 100644
+--- a/tools/perf/util/pmu.h
++++ b/tools/perf/util/pmu.h
+@@ -206,7 +206,7 @@ int perf_pmu__check_alias(struct perf_pmu *pmu, struct list_head *head_terms,
+ 			  struct perf_pmu_info *info);
+ struct list_head *perf_pmu__alias(struct perf_pmu *pmu,
+ 				  struct list_head *head_terms);
+-void perf_pmu_error(struct list_head *list, char *name, char const *msg);
++void perf_pmu_error(struct list_head *list, char *name, void *scanner, char const *msg);
+ 
+ int perf_pmu__new_format(struct list_head *list, char *name,
+ 			 int config, unsigned long *bits);
+diff --git a/tools/perf/util/pmu.l b/tools/perf/util/pmu.l
+index 58b4926cfaca..67b247be693b 100644
+--- a/tools/perf/util/pmu.l
++++ b/tools/perf/util/pmu.l
+@@ -1,4 +1,6 @@
+ %option prefix="perf_pmu_"
++%option reentrant
++%option bison-bridge
+ 
+ %{
+ #include <stdlib.h>
+@@ -6,16 +8,21 @@
+ #include "pmu.h"
+ #include "pmu-bison.h"
+ 
+-static int value(int base)
++char *perf_pmu_get_text(yyscan_t yyscanner);
++YYSTYPE *perf_pmu_get_lval(yyscan_t yyscanner);
++
++static int value(yyscan_t scanner, int base)
+ {
++	YYSTYPE *yylval = perf_pmu_get_lval(scanner);
++	char *text = perf_pmu_get_text(scanner);
+ 	long num;
+ 
+ 	errno = 0;
+-	num = strtoul(perf_pmu_text, NULL, base);
++	num = strtoul(text, NULL, base);
+ 	if (errno)
+ 		return PP_ERROR;
+ 
+-	perf_pmu_lval.num = num;
++	yylval->num = num;
+ 	return PP_VALUE;
  }
  
-+/*
-+ * Now, we have obtained a core-wide rq->lock, then we need to clear
-+ * RQCF_UPDATED of rq->clock_update_flags of the sibiling CPU
-+ * on this core to avoid the WARN_DOUBLE_CLOCK warning.
-+ */
-+static inline void sched_core_clear_rqcf_updated(struct rq *rq)
-+{
-+#ifdef CONFIG_SCHED_DEBUG
-+	const struct cpumask *smt_mask;
-+	int i;
-+
-+	if (rq->core_enabled) {
-+		smt_mask = cpu_smt_mask(rq->cpu);
-+		for_each_cpu(i, smt_mask) {
-+			if (rq->cpu != i)
-+				cpu_rq(i)->clock_update_flags &= (RQCF_REQ_SKIP|RQCF_ACT_SKIP);
-+		}
-+	}
-+#endif
-+}
- #else /* !CONFIG_SCHED_CORE */
+@@ -25,7 +32,7 @@ num_dec         [0-9]+
  
- static inline void sched_core_enqueue(struct rq *rq, struct task_struct *p) { }
- static inline void
- sched_core_dequeue(struct rq *rq, struct task_struct *p, int flags) { }
-+static inline void sched_core_clear_rqcf_updated(struct rq *rq) { }
+ %%
  
- #endif /* CONFIG_SCHED_CORE */
+-{num_dec}	{ return value(10); }
++{num_dec}	{ return value(yyscanner, 10); }
+ config		{ return PP_CONFIG; }
+ -		{ return '-'; }
+ :		{ return ':'; }
+@@ -35,7 +42,7 @@ config		{ return PP_CONFIG; }
  
-@@ -548,6 +569,7 @@ void raw_spin_rq_lock_nested(struct rq *rq, int subclass)
- 		if (likely(lock == __rq_lockp(rq))) {
- 			/* preempt_count *MUST* be > 1 */
- 			preempt_enable_no_resched();
-+			sched_core_clear_rqcf_updated(rq);
- 			return;
- 		}
- 		raw_spin_unlock(lock);
+ %%
+ 
+-int perf_pmu_wrap(void)
++int perf_pmu_wrap(void *scanner __maybe_unused)
+ {
+ 	return 1;
+ }
+diff --git a/tools/perf/util/pmu.y b/tools/perf/util/pmu.y
+index e675d79a0274..dff4e892ac4d 100644
+--- a/tools/perf/util/pmu.y
++++ b/tools/perf/util/pmu.y
+@@ -1,6 +1,8 @@
+-
++%define api.pure full
+ %parse-param {struct list_head *format}
+ %parse-param {char *name}
++%parse-param {void *scanner}
++%lex-param {void* scanner}
+ 
+ %{
+ 
+@@ -78,6 +80,7 @@ PP_VALUE
+ 
+ void perf_pmu_error(struct list_head *list __maybe_unused,
+ 		    char *name __maybe_unused,
++		    void *scanner __maybe_unused,
+ 		    char const *msg __maybe_unused)
+ {
+ }
 -- 
-2.37.0
+2.40.0.348.gf938b09366-goog
 
