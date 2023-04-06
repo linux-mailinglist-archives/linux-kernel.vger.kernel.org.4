@@ -2,171 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0263A6D9206
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE9B6D920E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235423AbjDFIxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
+        id S235374AbjDFIzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDFIxL (ORCPT
+        with ESMTP id S229456AbjDFIy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:53:11 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA6190;
-        Thu,  6 Apr 2023 01:53:09 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PsZyn0004z4f3wQs;
-        Thu,  6 Apr 2023 16:53:04 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDn4R9wiC5kaAUNGQ--.21136S3;
-        Thu, 06 Apr 2023 16:53:06 +0800 (CST)
-Subject: Re: [PATCH -next 1/6] Revert "md: unlock mddev before reap
- sync_thread in action_store"
-To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Guoqing Jiang <guoqing.jiang@linux.dev>, logang@deltatee.com,
-        pmenzel@molgen.mpg.de, agk@redhat.com, snitzer@kernel.org,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        Marc Smith <msmith626@gmail.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230322064122.2384589-1-yukuai1@huaweicloud.com>
- <20230322064122.2384589-2-yukuai1@huaweicloud.com>
- <2c2599ec-ac35-6494-aedf-93ecca1969ee@linux.dev>
- <d1d27b2a-96ec-319e-4690-64e781c9a473@huaweicloud.com>
- <b91ae03a-14d5-11eb-8ec7-3ed91ff2c59e@linux.dev>
- <31e7f59e-579a-7812-632d-059ed0a6d441@huaweicloud.com>
- <3fc2a539-e4cc-e057-6cf0-da7b3953be6e@linux.dev>
- <3aa073e9-5145-aae2-2201-5ba48c09c693@huaweicloud.com>
- <CAPhsuW7c2b4yYbwNcqKW+TBL=QYEzchnVQ4pDLBT-xoBoTvQmg@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <9d92a862-e728-5493-52c0-abc634eb6e97@huaweicloud.com>
-Date:   Thu, 6 Apr 2023 16:53:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 6 Apr 2023 04:54:57 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8904EFD;
+        Thu,  6 Apr 2023 01:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680771296; x=1712307296;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=tJfFHPm9i1fzbZEp/ixaVYXgigXd7OgTQ2sNSQUecIw=;
+  b=UEGt3W0kpZKMlsSUtC9W5kXVtd/hGKO/kcc0YER15aT5hGH2awbr56uJ
+   sPoZyxsjyQljUAt34BoxbYNqh8CFmA8bUhjaj4FmYvlbE3DzdG3Fn61dd
+   spqn+LYfjko0P0EkWnGsuwcnhnopxvVZdC07mZ/zkp2mZjFaAKqLZatd0
+   LBJELwdaZGVeLz1YJ0EyvxGeTUIfp58x+4LFKwUIlso4Rr6pufLJvYLYN
+   TOU333PPemU8WnztjyOpHsYjuoWsWN5bkD4y6K5e0EuQbaLD0Zr0i+d7m
+   GgSvMwLN1GLm+mpJri+ph8XGlS8s/D7P5J4ZN0rfsfj5K6PVGMR7Yy3R4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="345282613"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="345282613"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 01:54:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="798246432"
+X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
+   d="scan'208";a="798246432"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Apr 2023 01:54:55 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 6 Apr 2023 01:54:55 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 6 Apr 2023 01:54:54 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 6 Apr 2023 01:54:54 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 6 Apr 2023 01:54:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DIg+ib8LtagG1amkS53w+zPQWxC3t81TePekU+5J3mKLYnm5otC7Zk7lN+IGew2lfjp9fxTUlNlTY2KUg8Nz4fgT+FO0zZT6Z8epFFr5uc+JzvkLFDHNmKXDbHhjcp0w6p7Yz9Y3jq+7EuWNU9tZ1+PfJVjEG9SpnKJOnMaEhkWcMd17AO0BhCKm0Vx+RaEL5aX+65BybAJ2+05Qrj3XfJB9CF+QR0jQUHidc5WQdMfsIb4aoI8yrMPr0ySagIy8/qYRSp+0jSJ6vWLIM9S8EOGfXx0R6QbzmBQIEIk1LxvVcwX81mf4G2SRnbN2WROwCJAPUYAHbLWuFaUdxBVPmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tJfFHPm9i1fzbZEp/ixaVYXgigXd7OgTQ2sNSQUecIw=;
+ b=VAvR3HCNIY7tNvkkqthLkAXJ1kyRyXGC6jHEB1ImW/KxzUnnVZ7KfJaTnx0eDgWzi11lzCs2xv2TkaYzG0cWa3pU8QM6eRok+P5loFPM3CxnNlRdUR/019W4Ey9j72yv5HpGgr2LLO0rMBwQ/pTZixfeSzZ8EZK+1ye1P+Gyoc9SXLXkVeI9rkvGdtoCP6SXmaQNvNnDHpS+a42SiEdJvi2WZe2xdHOzESRAO2eFUQK6GRu/VHHoaXpO2HcdfO1zBS3OaqrncA+nJPXqd1sxRi+P0N6mRyggGnvI9Wd0YRxQOJwRU3cXgN0GQ3eaGlyz2MLJbbsD6GSQuEK6dFYGlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by CH3PR11MB7391.namprd11.prod.outlook.com (2603:10b6:610:151::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.34; Thu, 6 Apr
+ 2023 08:54:52 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::f403:a0a2:e468:c1e9]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::f403:a0a2:e468:c1e9%5]) with mapi id 15.20.6254.033; Thu, 6 Apr 2023
+ 08:54:52 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>
+Subject: Re: [PATCH 1/2] KVM: VMX: Inject #GP on ENCLS if vCPU has paging
+ disabled (CR0.PG==0)
+Thread-Topic: [PATCH 1/2] KVM: VMX: Inject #GP on ENCLS if vCPU has paging
+ disabled (CR0.PG==0)
+Thread-Index: AQHZaBjTnv3Xw4rSL0WDrKfMqYpF1K8d+rGA
+Date:   Thu, 6 Apr 2023 08:54:52 +0000
+Message-ID: <082ff217ecb7633ef4c1363bfd27a20f8afcbe0c.camel@intel.com>
+References: <20230405234556.696927-1-seanjc@google.com>
+         <20230405234556.696927-2-seanjc@google.com>
+In-Reply-To: <20230405234556.696927-2-seanjc@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|CH3PR11MB7391:EE_
+x-ms-office365-filtering-correlation-id: 58c79758-db45-485d-4589-08db367c95fc
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Da9rMEySdH6LHhnx0ZdsfOirfehrbjBui7a8hShcDllthKqizFT7lCyLhF6b4M841VjroPxYMsMvcLM60xbyXZxlbTJg66AGPdJC8wO3ulNk6+VqOpUBiaVZhdRParpfAcOXA6/b3hcAOkjdb4P1fAT7vPU/ab7mF85rOWSwTCJ/wPiZdTMJePc7sgMc6lWcSZu9tsx3l36gJH0c0rewsAB4YJwZ3FXSWiEX+Tpxh5Yg6kX0Ef0D4WuPkBvE8ApP8gxsnYXFkf+OTLSZpUl38DbuiLmViLwOpNEypXVqNjNzPCM+b6aTyCun/ydSIAfkv+YAdgY+dn+4atLEFQhaAx8JAEBjTm8IuBNkSw72ZtcTUYojd575enNFEephUWpz7WzW/IrYeo/H4Ow7HRWmNRWqrQlJjPUkCQ8YSlhYl+hS7z+mNOtTOPpbF4+QD9XrDmdrmI09PhEwPOtg+rbzaATxnVbW4XkiVRgSCaEEtcXOUZ09xrgb+KKqoZnIuatVBXB1wtx41mXLdhAQlj3B/gW9G+pRZKD0bGaXR7dbXIJBAFqs8206wimo05ICjPwJ2ZWtAh3KCUYkKydZ3Ig73RzxxrB4zQNJXNMKjSMka/5Rk2I7LbGW4OFgLLioh6SI
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(366004)(39860400002)(346002)(136003)(451199021)(186003)(41300700001)(2616005)(66446008)(91956017)(64756008)(66556008)(66476007)(4326008)(66946007)(8676002)(76116006)(71200400001)(2906002)(36756003)(38100700002)(6486002)(122000001)(86362001)(38070700005)(82960400001)(83380400001)(110136005)(5660300002)(8936002)(316002)(54906003)(478600001)(6512007)(6506007)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MlhnVWx4dkdWaVB0d0V1WnVUczI5UmtIZ0FxQVhGRUk3MXNwNkswWFVHMzRB?=
+ =?utf-8?B?ZDg4RmhCVTZzZlpsSm0xZVV3SmNHeTAxZk5iSEg0UTlvOE5DVHZTNS9pbU5s?=
+ =?utf-8?B?Sm03cUZhVXFJa29IZXNwTytwVW5oUWNRUUIvRi80d29Vcko3QXVxWkViVHF5?=
+ =?utf-8?B?OEpocTNiTEYyelV3OGhpeXVMbXBqZXIvUFUvTld2TkMrRStaOWZ0M00wWjMr?=
+ =?utf-8?B?R0loNkJZMkdwZllXbmNPYmlEZUNZbUJ1N21mZWlnUml0MXV5RW9jekFsNHJ4?=
+ =?utf-8?B?dEtmZDZDVXdYWm9QUlI5M2pWOWJ3Q21mMmRuTi91bWxZTG9Mb3I3Vm9TbGRw?=
+ =?utf-8?B?NEl1Nis2cWg1eHp4bktzM2RwTENpa05uR3EwL05ObzUyQ284Nk53RS9jM0Fy?=
+ =?utf-8?B?YktsTDFjVHhIaWFETDl3TzVxNlU1OVRQNldZR1AyNDhEeWFjcnBNUGE4UG1Q?=
+ =?utf-8?B?WCt5dDZSeFpqeTZzeDZ6NHZYZ1NBWk1TdWZ6eVdIa0NPa2xaK1puZmlZZlJr?=
+ =?utf-8?B?SzZZS01OWEIxZUFUMmJzNUJ4T1RmTS8rSXdiU2VGNDdBblVjTUE1aWRON1Jw?=
+ =?utf-8?B?OFE4QkVkSFJidWh3Z1dNaThGRGU5RjVzM3J6bkF5RU90ZmhHZ3daOXk5T1Uv?=
+ =?utf-8?B?UHdGL1FIdWlWQldDOE53UjJ3dkY4QXhWczZWamR3WWFmeHFmdEF3VGZIaDFk?=
+ =?utf-8?B?ZlV3b2t3N1U5Mk1ERnV6dDZFVVFFS2dEa3EvR0taY2JnL3JZTEJWSnpHc3lJ?=
+ =?utf-8?B?RkxXSm9iblQ5aThTbTA2WUUzSmZaeTVkdjVTMFcxVTA4TE4rWXREZ2wzK1FM?=
+ =?utf-8?B?K2ZkVlhkNTRpaDdESEQzMTBKSU5KbUNUQ3hKRi9pdlJpTk1YZmpYNVU5eEk3?=
+ =?utf-8?B?OGZvTE4rOVFBWEVRRk9MQzZjNGVYbFJiUytrMFN5eU1RbG5ySXJ4K2p3Mmdm?=
+ =?utf-8?B?WHFmbjArb2JnT2JaUEJGc2VOckVpbWVWZnF6NEtUZ0RyV0toVmxzdWNwQkNT?=
+ =?utf-8?B?L1N5YW40dTU0N0FhUjhHaUJlVlBITUxieWRsTlVlOVRINHkrTFJQNlRuUjlO?=
+ =?utf-8?B?VUdEV1BoYW84VDEvd2wra3IwYlg2RjBBVFN3WlpjNWp6TSs4aHNac1h2RU5w?=
+ =?utf-8?B?UTVaNE1iK2w0bHZ0UmNzbldaOXVabjZZaDNoT3dZaFZ0bUNNWFQvYVd2b3Bw?=
+ =?utf-8?B?bDVwMDkzOEgrMlRheDg4OGRSTyttWGRxMWpxVHR4MTZJcWdzUFNHNUVocnlR?=
+ =?utf-8?B?anllVytUeFNhaityNW4xZHBTY3VtdXA2NEJObnZoanNhc2Q3NURKVSsrc2FR?=
+ =?utf-8?B?dnZEOGtsUGFsZnMyOFhDa3I0V1Jla0ZDY1FLVkFiRU9idkR5R2l4SEIrRGpC?=
+ =?utf-8?B?U0R5YkVLMlVpNkE3TDA5QlhMejZsR2c1aFRnaHBoWGhkZHFZSmFNeCtEdU1x?=
+ =?utf-8?B?U1NKbkdGWkpibkoxS0RBVllhWVJYUEovWWJXQ1YvR2RjMUNybXhNTng4RWpz?=
+ =?utf-8?B?alpoWFZ0Z2poclFoV3ozU25saTA3ck91RGZUZ2ltSDV1UVd0c3g4SUp0YzRt?=
+ =?utf-8?B?dXAxY1hyU3BGdVFLOWdYN2J4dXcwMElnb2tpc2RDN216WFdrM3gzWDlvNnFW?=
+ =?utf-8?B?djdQVHBFSStXQk9qYWlUTFkvajJkTVpGdXRrNHVmdWlUeDZPTlVUQVY0WmJz?=
+ =?utf-8?B?cGsvbE1vQ2RiR2c1azBGRHBOTytwbmV1MXJ1eTZhSmh3RGo0c0N4K3BtVlpR?=
+ =?utf-8?B?dzJsQ1dUam9FZGRMeXJxTDhiaXkya1U2bzZ1NEhrWmVuVG82TU1BTjduVXJS?=
+ =?utf-8?B?Nmd5b01QZFppcXlaMFEvVEpVV2F3MENacHNCR25vdExZOUJnaUh4OGNsamNr?=
+ =?utf-8?B?clNVbXg4akVYRnFWMDJPUm1XcHhLWGFvUy9lYVJCclVDUVJ2M1FMVkxOV005?=
+ =?utf-8?B?MzdBZkpHVFhTbTBCSVMyRlQ2UEgrWkpxUWIwRDVKcm9IUFVXQjljS1huUjhM?=
+ =?utf-8?B?Zko4QjJPa29CY01BcjhFSWx6b1FBRFJvbVJkOFZLS3JWRzh0QWpqeDE1M0ZS?=
+ =?utf-8?B?THFKcWlkVjJFWEprWkRxcXVMY09zQnUzMitsWlJjVHFMcnNnQjQ3Tko0RlNL?=
+ =?utf-8?Q?vH73779ToJ0SArTt36NDb692N?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A91F758E828D2E4D9D706B8DB7609036@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <CAPhsuW7c2b4yYbwNcqKW+TBL=QYEzchnVQ4pDLBT-xoBoTvQmg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDn4R9wiC5kaAUNGQ--.21136S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFy3AFWDur13WF13XF4UXFb_yoW5uFy7pa
-        yxK3WUKr4DAr42ya42qw1IqayFvr4jqryUWryrJFyxG3s8KrW7tryjkF1UCFWDZrn7Cw4j
-        va1rtFZ3ZFWqv3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58c79758-db45-485d-4589-08db367c95fc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Apr 2023 08:54:52.2976
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cydHqDmG/iFKJt0jFq0zgdsfZ1zyfSAlW8SzvKpl/LfafQN8WKqzT9mNpe/RNbsyQ88zdNQHtIECCwpOJtw+CQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7391
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/03/29 7:58, Song Liu 写道:
-> On Wed, Mar 22, 2023 at 11:32 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/03/23 11:50, Guoqing Jiang 写道:
->>
->>> Combined your debug patch with above steps. Seems you are
->>>
->>> 1. add delay to action_store, so it can't get lock in time.
->>> 2. echo "want_replacement"**triggers md_check_recovery which can grab lock
->>>       to start sync thread.
->>> 3. action_store finally hold lock to clear RECOVERY_RUNNING in reap sync
->>> thread.
->>> 4. Then the new added BUG_ON is invoked since RECOVERY_RUNNING is cleared
->>>       in step 3.
->>
->> Yes, this is exactly what I did.
->>
->>> sync_thread can be interrupted once MD_RECOVERY_INTR is set which means
->>> the RUNNING
->>> can be cleared, so I am not sure the added BUG_ON is reasonable. And
->>> change BUG_ON
->>
->> I think BUG_ON() is reasonable because only md_reap_sync_thread can
->> clear it, md_do_sync will exit quictly if MD_RECOVERY_INTR is set, but
->> md_do_sync should not see that MD_RECOVERY_RUNNING is cleared, otherwise
->> there is no gurantee that only one sync_thread can be in progress.
->>
->>> like this makes more sense to me.
->>>
->>> +BUG_ON(!test_bit(MD_RECOVERY_RUNNING, &mddev->recovery) &&
->>> +!test_bit(MD_RECOVERY_INTR, &mddev->recovery));
->>
->> I think this can be reporduced likewise, md_check_recovery clear
->> MD_RECOVERY_INTR, and new sync_thread triggered by echo
->> "want_replacement" won't set this bit.
->>
->>>
->>> I think there might be racy window like you described but it should be
->>> really small, I prefer
->>> to just add a few lines like this instead of revert and introduce new
->>> lock to resolve the same
->>> issue (if it is).
->>
->> The new lock that I add in this patchset is just try to synchronize idle
->> and forzen from action_store（patch 3), I can drop it if you think this
->> is not necessary.
->>
->> The main changes is patch 4, new lines is not much and I really don't
->> like to add new flags unless we have to, current code is already hard
->> to understand...
->>
->> By the way, I'm concerned that drop the mutex to unregister sync_thread
->> might not be safe, since the mutex protects lots of stuff, and there
->> might exist other implicit dependencies.
->>
->>>
->>> TBH, I am reluctant to see the changes in the series, it can only be
->>> considered
->>> acceptable with conditions:
->>>
->>> 1. the previous raid456 bug can be fixed in this way too, hopefully Marc
->>> or others
->>>       can verify it.
->>> 2. pass all the tests in mdadm
-> 
-> AFAICT, this set looks like a better solution for this problem. But I agree
-> that we need to make sure it fixes the original bug. mdadm tests are not
-> in a very good shape at the moment. I will spend more time to look into
-> these tests.
-
-While I'm working on another thread to protect md_thread with rcu, I
-found that this patch has other defects that can cause null-ptr-
-deference in theory where md_unregister_thread(&mddev->sync_thread) can
-concurrent with other context to access sync_thread, for example:
-
-t1: md_set_readonly             t2: action_store
-                                 md_unregister_thread
-                                 // 'reconfig_mutex' is not held
-// 'reconfig_mutex' is held by caller
-if (mddev->sync_thread)
-                                  thread = *threadp
-                                  *threadp = NULL
-  wake_up_process(mddev->sync_thread->tsk)
-  // null-ptr-deference
-
-So, I think this revert will make more sence. 😉
-
-Thanks,
-Kuai
-
+T24gV2VkLCAyMDIzLTA0LTA1IGF0IDE2OjQ1IC0wNzAwLCBTZWFuIENocmlzdG9waGVyc29uIHdy
+b3RlOg0KPiBJbmplY3QgYSAjR1Agd2hlbiBlbXVsYXRpbmcvZm9yd2FyZGluZyBhIHZhbGlkIEVO
+Q0xTIGxlYWYgaWYgdGhlIHZDUFUgaGFzDQo+IHBhZ2luZyBkaXNhYmxlZCwgZS5nLiBpZiBLVk0g
+aXMgaW50ZXJjZXB0aW5nIEVDUkVBVEUgdG8gZW5mb3JjZSBhZGRpdGlvbmFsDQo+IHJlc3RyaWN0
+aW9ucy4gIFRoZSBwc2V1ZG9jb2RlIGluIHRoZSBTRE0gbGlzdHMgYWxsICNHUCB0cmlnZ2Vycywg
+aW5jbHVkaW5nDQo+IENSMC5QRz0wLCBhcyBiZWluZyBjaGVja2VkIGFmdGVyIHRoZSBFTkxDUy1l
+eGl0aW5nIGNoZWNrcywgaS5lLiB0aGUNCj4gVk0tRXhpdCB3aWxsIG9jY3VyIGJlZm9yZSB0aGUg
+Q1BVIHBlcmZvcm1zIHRoZSBDUjAuUEcgY2hlY2suDQo+IA0KPiBGaXhlczogNzAyMTBjMDQ0YjRl
+ICgiS1ZNOiBWTVg6IEFkZCBTR1ggRU5DTFNbRUNSRUFURV0gaGFuZGxlciB0byBlbmZvcmNlIENQ
+VUlEIHJlc3RyaWN0aW9ucyIpDQo+IENjOiBCaW5iaW4gV3UgPGJpbmJpbi53dUBsaW51eC5pbnRl
+bC5jb20+DQo+IENjOiBLYWkgSHVhbmcgPGthaS5odWFuZ0BpbnRlbC5jb20+DQo+IFNpZ25lZC1v
+ZmYtYnk6IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW5qY0Bnb29nbGUuY29tPg0KDQpSZXZpZXdl
+ZC1ieTogS2FpIEh1YW5nIDxrYWkuaHVhbmdAaW50ZWwuY29tPg0KDQo+IC0tLQ0KPiAgYXJjaC94
+ODYva3ZtL3ZteC9zZ3guYyB8IDIgKy0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
+KSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2t2bS92bXgvc2d4
+LmMgYi9hcmNoL3g4Ni9rdm0vdm14L3NneC5jDQo+IGluZGV4IGFhNTNjOTgwMzRiZi4uZjg4MWY2
+ZmY2NDA4IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni9rdm0vdm14L3NneC5jDQo+ICsrKyBiL2Fy
+Y2gveDg2L2t2bS92bXgvc2d4LmMNCj4gQEAgLTM3NSw3ICszNzUsNyBAQCBpbnQgaGFuZGxlX2Vu
+Y2xzKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSkNCj4gIA0KPiAgCWlmICghZW5jbHNfbGVhZl9lbmFi
+bGVkX2luX2d1ZXN0KHZjcHUsIGxlYWYpKSB7DQo+ICAJCWt2bV9xdWV1ZV9leGNlcHRpb24odmNw
+dSwgVURfVkVDVE9SKTsNCj4gLQl9IGVsc2UgaWYgKCFzZ3hfZW5hYmxlZF9pbl9ndWVzdF9iaW9z
+KHZjcHUpKSB7DQo+ICsJfSBlbHNlIGlmICghc2d4X2VuYWJsZWRfaW5fZ3Vlc3RfYmlvcyh2Y3B1
+KSB8fCAhaXNfcGFnaW5nKHZjcHUpKSB7DQo+ICAJCWt2bV9pbmplY3RfZ3AodmNwdSwgMCk7DQo+
+ICAJfSBlbHNlIHsNCj4gIAkJaWYgKGxlYWYgPT0gRUNSRUFURSkNCj4gLS0gDQo+IDIuNDAuMC4z
+NDguZ2Y5MzhiMDkzNjYtZ29vZw0KPiANCg0K
