@@ -2,141 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3791F6DA042
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A70E66DA043
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbjDFSrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S240107AbjDFSrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240270AbjDFSql (ORCPT
+        with ESMTP id S240270AbjDFSra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:46:41 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BBCAD12
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:46:31 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id n21so3671846ejz.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:46:31 -0700 (PDT)
+        Thu, 6 Apr 2023 14:47:30 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F55BB9A
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:46:56 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 205-20020a2503d6000000b00b7411408308so39246431ybd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680806790;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MgXJOn+WAZ47Cl6o8tPQjAABd5Itwae5J4f0B3wQsNo=;
-        b=mpk5TuobYbvWtl+C6R4wLIUF/Hc35fhvJv5TThEYojiqCz6ARENF8am1xXOuZlBYxm
-         V+6OxdoIfOdTAgqPVOUimNaPdocS5O4zRTVeblGEk1pwGG+A5Ll9Z0+GMr4FIQnkrZRu
-         0/PZYhI5ncokLTLlZMZsjgAR83yvo/Cl41eXvIZL8FiFyqSaPwlnZtBVEyP7y4TGSXyD
-         CwQUxZWYrAz/nqcGyNb7arm7sQnHGYylg8XxmOoEQZj5FNrfeGlq/y4pNvgz5po9kVPw
-         lXbiLUi4G3AGzHqsJvBViVK8Q+XZhkHsJKFXr/y9GMlu3eqZ0nyX4cAby5wnHmGAn5CC
-         zTEQ==
+        d=google.com; s=20210112; t=1680806815;
+        h=content-transfer-encoding:to:from:subject:mime-version:message-id
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bgbBef+rgcSx3D3j+g4z4teFI/QK+Um57kHM0es9MZw=;
+        b=EryOl5EMERMfEO1w6B54WypRukMWHpiG4caNtol/REm0LzYQaM6tLPJTl5OCTCfN4e
+         1Ia1/dh9EHbQ8mCabb2LFL7WnqV/eTAOGSjhIwv4GsPRUK/G0MW26vszEz+151VMDDKd
+         p5CWBx6TF5pSbSD/iysCRCQQ9hxnVsvpL2bqMOVU/ezBxO+Z4mg+TrvzwEMTZeqkk3GW
+         M7ESge8DywwNHDvd9541JqMuL9LEzX6dcyJe5wdBtuRTiBKChoOK1pzxBra3MvVf9XZN
+         qOdiOP/87xSezWmbt1MprqLtKdWjllKB1LFU4RovYD58jvEUZfyT/8W2AVuxkeyx9pOt
+         +1JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680806790;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MgXJOn+WAZ47Cl6o8tPQjAABd5Itwae5J4f0B3wQsNo=;
-        b=RbKHq0aDPKBJqkgnYJeopY+yxNFAN/gSHRYneovPZZ/M86FUWWerbp22lVaQtPzFJk
-         7SjSngl5b0ZBHmilYnXl/SJNU1pOQJAUC+EkcGDThBDbfz9OiNibmUoqMLL2DeWPP60r
-         sK5kI8LwC5NKRiygk9wvrMKFXBQvF/XXE+5ViesYygNdXvrq35fXP+QHv2ZILJp3d9wu
-         ofkxexdtQUBzZ1s9TJnVn3oukyMPrEkhxDJBqeBKpUO/jebgJlFXVT3aV2cAAonztQyX
-         gC9261Xuf9OQiqJg2a1xM1Bbb6EfIQmlxfQn6FqtL3AStJT48tvxHYP65i2ZSr9IIA1A
-         bD+Q==
-X-Gm-Message-State: AAQBX9d/alt2oSPheotBXH8tHHi1sDnyGunv80KkHIk0DAaWTP0iDgG8
-        MUaFjk3fLye1ES491ib9q1tD8w==
-X-Google-Smtp-Source: AKy350ahKqk/eVseprVd25UAxkAp8OgeoVUzsVGX0BSATs/dsK1+2sIuMzxutuwaNHjcCfphm9gnJw==
-X-Received: by 2002:a17:906:c005:b0:947:55ce:1217 with SMTP id e5-20020a170906c00500b0094755ce1217mr6864670ejz.73.1680806789884;
-        Thu, 06 Apr 2023 11:46:29 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id p14-20020a1709061b4e00b00930a4e5b46bsm1108835ejg.211.2023.04.06.11.46.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:46:29 -0700 (PDT)
-Message-ID: <37d04794-d790-fd7c-9f34-901955083874@linaro.org>
-Date:   Thu, 6 Apr 2023 20:46:28 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v6 1/2] dt-bindings: omap: Convert omap.txt to yaml
-Content-Language: en-US
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        tony@atomide.com, afd@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-References: <20230405161908.4312-1-andreas@kemnade.info>
- <20230405161908.4312-2-andreas@kemnade.info>
- <eb4cf82d-f523-d5af-be18-25c37678a95a@linaro.org>
- <7f43953c-d326-f517-d896-cbb060d8092a@linaro.org>
- <20230406203548.152ae065@aktux>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406203548.152ae065@aktux>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1680806815;
+        h=content-transfer-encoding:to:from:subject:mime-version:message-id
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bgbBef+rgcSx3D3j+g4z4teFI/QK+Um57kHM0es9MZw=;
+        b=bD1zD7T2mJUZpUALmnHd1mwWNli8JxubshOsmKVZhFjb/XMXwv55LGsNCiNvRjNHm3
+         2GtGEgjHN4lL1/GlSPedEz4kMy/FvuUydrqu259EB5XLWLA7GhELlHpuRg7XEr+q7wi8
+         SJ3bbbf9EoI+O6cQhSh5tV2yFlEwHOyEb4/QEuqm7mWRvZ8KKDHMPcnEZCAvbhaYQ764
+         BRz9aAE3FAHKPYQuLcb0znQF6d8+4xMc1QXY0WAg3pXJ5aXVuLhJVrrTX7X6g5BOGhmf
+         6eIMsBulR5ymomR+7cwv1RsHEUwPJhItcXVt+Kwn8FPoLhtI1AmLM+5YIWmRjGM7X1ap
+         cbnQ==
+X-Gm-Message-State: AAQBX9dTB6wLDIvK9b9ENPYSAi5Bl88i8n/85mjnZbQe48fnoVyTnexa
+        FxRzhYFviLVJDnsinxj8DJN+UsHgxhJh
+X-Google-Smtp-Source: AKy350ZPxRIWgQpSFolIb05xhQVaJFwanIhAtjpLiDp/LTXrl43O66Kx/umQ4ok1pLk2BDvNywu9s7ld5+8h
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:939d:185a:97bb:59ee])
+ (user=irogers job=sendgmr) by 2002:a05:6902:909:b0:a27:3ecc:ffe7 with SMTP id
+ bu9-20020a056902090900b00a273eccffe7mr2782013ybb.3.1680806815269; Thu, 06 Apr
+ 2023 11:46:55 -0700 (PDT)
+Date:   Thu,  6 Apr 2023 11:46:34 -0700
+Message-Id: <20230406184638.2632300-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Subject: [PATCH v1 1/5] perf vendor events intel: Update free running
+ alderlake events
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 20:35, Andreas Kemnade wrote:
-> On Thu, 6 Apr 2023 10:36:36 +0200
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 06/04/2023 10:32, Krzysztof Kozlowski wrote:
->>> On 05/04/2023 18:19, Andreas Kemnade wrote:  
->>>> From: Andrew Davis <afd@ti.com>
->>>>
->>>> Convert omap.txt to yaml.
->>>>  
->>>
->>>   
->>>> +      - description: TI AM43 SoC based platforms
->>>> +        items:
->>>> +          - enum:
->>>> +              - compulab,am437x-cm-t43
->>>> +              - ti,am437x-gp-evm
->>>> +              - ti,am437x-idk-evm
->>>> +              - ti,am437x-sk-evm
->>>> +          - pattern: '^ti,am4372[26789]$'
->>>> +          - const: ti,am43
->>>> +
->>>> +      - description: TI AM57 SoC based platforms
->>>> +        items:
->>>> +          - enum:
->>>> +              - beagle,am5729-beagleboneai
->>>> +              - compulab,cl-som-am57x
->>>> +              - ti,am5718-idk
->>>> +              - ti,am5728-idk
->>>> +              - ti,am5748-idk
->>>> +          - pattern: '^ti,am57[0124][689]$'  
->>>
->>> I don't think my comments were resolved. I asked if it is possible to
->>> make a board called "ti,am5718-idk" with "ti,am5749" or with "ti,am5708"?  
->>
->> Hm, I cannot find my concern, so maybe it never left my outbox. Anyway,
->> it looks like you allow here many incorrect patterns and combinations.
->>
-> You had concerns about the "dra" stuff for the same valid reasons.
+Fix the PMU name, event code and umask.
 
-Yes, but also about this. So again:
-is "ti,am5718-idk" with "ti,am5749" correct?
+These updates were generated by:
+https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
+with this PR:
+https://github.com/intel/perfmon/pull/66
 
-> 
->>>
->>> What's more, you dropped several variations and compatibles against
->>> original binding (all the "dra") and it is not explained in commit msg
->>> at all.  
->>
->> All changes against original bindings should be explained.
->>
-> ... which I then just decided not to convert but keep as is in the text file
-> because there were no comments hints about it more than a month since the first
-> version was sent so thought that it has to be resolved later.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ .../arch/x86/alderlake/uncore-memory.json        | 16 ++++++++++++----
+ .../arch/x86/alderlaken/uncore-memory.json       | 16 ++++++++++++----
+ 2 files changed, 24 insertions(+), 8 deletions(-)
 
-But you partially remove them - see AM5728 IDK.
-
-Best regards,
-Krzysztof
+diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json b/=
+tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
+index 2ccd9cf96957..ea25bb411f89 100644
+--- a/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
++++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
+@@ -1,29 +1,37 @@
+ [
+     {
+         "BriefDescription": "Counts every 64B read  request entering the M=
+emory Controller 0 to DRAM (sum of all channels).",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+         "PublicDescription": "Counts every 64B read request entering the M=
+emory Controller 0 to DRAM (sum of all channels).",
+-        "Unit": "iMC"
++        "UMask": "0x20",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "Counts every 64B write request entering the M=
+emory Controller 0 to DRAM (sum of all channels). Each write request counts=
+ as a new request incrementing this counter. However, same cache line write=
+ requests (both full and partial) are combined to a single 64 byte data tra=
+nsfer to DRAM.",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+-        "Unit": "iMC"
++        "UMask": "0x30",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "Counts every 64B read request entering the Me=
+mory Controller 1 to DRAM (sum of all channels).",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+         "PublicDescription": "Counts every 64B read entering the Memory Co=
+ntroller 1 to DRAM (sum of all channels).",
+-        "Unit": "iMC"
++        "UMask": "0x20",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "Counts every 64B write request entering the M=
+emory Controller 1 to DRAM (sum of all channels). Each write request counts=
+ as a new request incrementing this counter. However, same cache line write=
+ requests (both full and partial) are combined to a single 64 byte data tra=
+nsfer to DRAM.",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+-        "Unit": "iMC"
++        "UMask": "0x30",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "ACT command for a read request sent to DRAM",
+diff --git a/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json b=
+/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
+index 2ccd9cf96957..ea25bb411f89 100644
+--- a/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
++++ b/tools/perf/pmu-events/arch/x86/alderlaken/uncore-memory.json
+@@ -1,29 +1,37 @@
+ [
+     {
+         "BriefDescription": "Counts every 64B read  request entering the M=
+emory Controller 0 to DRAM (sum of all channels).",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+         "PublicDescription": "Counts every 64B read request entering the M=
+emory Controller 0 to DRAM (sum of all channels).",
+-        "Unit": "iMC"
++        "UMask": "0x20",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "Counts every 64B write request entering the M=
+emory Controller 0 to DRAM (sum of all channels). Each write request counts=
+ as a new request incrementing this counter. However, same cache line write=
+ requests (both full and partial) are combined to a single 64 byte data tra=
+nsfer to DRAM.",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+-        "Unit": "iMC"
++        "UMask": "0x30",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "Counts every 64B read request entering the Me=
+mory Controller 1 to DRAM (sum of all channels).",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+         "PublicDescription": "Counts every 64B read entering the Memory Co=
+ntroller 1 to DRAM (sum of all channels).",
+-        "Unit": "iMC"
++        "UMask": "0x20",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "Counts every 64B write request entering the M=
+emory Controller 1 to DRAM (sum of all channels). Each write request counts=
+ as a new request incrementing this counter. However, same cache line write=
+ requests (both full and partial) are combined to a single 64 byte data tra=
+nsfer to DRAM.",
++        "EventCode": "0xff",
+         "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
+         "PerPkg": "1",
+-        "Unit": "iMC"
++        "UMask": "0x30",
++        "Unit": "imc_free_running"
+     },
+     {
+         "BriefDescription": "ACT command for a read request sent to DRAM",
+--=20
+2.40.0.577.gac1e443424-goog
 
