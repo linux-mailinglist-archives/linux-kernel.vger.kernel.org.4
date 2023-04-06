@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5A46D9B94
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113776D9B9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239509AbjDFPDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S239570AbjDFPDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239224AbjDFPDJ (ORCPT
+        with ESMTP id S239539AbjDFPDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:03:09 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0269EE8;
-        Thu,  6 Apr 2023 08:02:53 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-17786581fe1so42607708fac.10;
-        Thu, 06 Apr 2023 08:02:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680793372;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vp1soVVgJyw7DnWbzvcH5jF90UmIZzV8nwXox1Hq290=;
-        b=s7ntz7VxPQ5Ywn7puNbzIRAU5U2VD5GsL7Xu+FH91u7vNI1NSJeESFM5Be4NVgA+fH
-         WGHctQdMGZpkX/45mrUylQRWkC5PjcHQtSHlzZgM54gv10zWv3PL7GUyN8c5mJLSaH54
-         1tbyQXIjDe53wfT7d3ydsHRIjsmzj1p/5s287YlHw28W0ebJjFW4rkcZlKpwSAxHt6vv
-         K3ImF1HZhJmRF+h9sZ+9FnqQpVIkoZ5GbX+f/UoZ16imXYWtXoDrqY4LDLg8YAbiuYIq
-         q0T5HuAP/GJ0dfAS/lDlhNft5tnE5TpsruMTZNuxw47nmAcgL/0dN2se8vukckCeOvJh
-         icmA==
-X-Gm-Message-State: AAQBX9fmh5ameTDNHwtpf3bfIC/6u2vKHU3SdC3uP1Wn9DHBBmxnTtbV
-        UEPkoHVTd+1ZMYiIcKInGA==
-X-Google-Smtp-Source: AKy350bG6JhGJke1pSMmP0FQ4u2Wm3qy4H0yHiRyJP2owCnbwM5OJZWiY+LLo5dEFcfAHuQILcINEg==
-X-Received: by 2002:a05:6870:9622:b0:177:9b62:6b87 with SMTP id d34-20020a056870962200b001779b626b87mr5747647oaq.20.1680793372513;
-        Thu, 06 Apr 2023 08:02:52 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e24-20020a05683013d800b006a3842a32b6sm785254otq.42.2023.04.06.08.02.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 08:02:51 -0700 (PDT)
-Received: (nullmailer pid 3092563 invoked by uid 1000);
-        Thu, 06 Apr 2023 15:02:50 -0000
-Date:   Thu, 6 Apr 2023 10:02:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     kunit-dev@googlegroups.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kselftest@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        patches@lists.linux.dev,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH v3 07/11] dt-bindings: kunit: Add fixed rate clk consumer
- test
-Message-ID: <168079336912.3092485.14820569065582293049.robh@kernel.org>
-References: <20230327222159.3509818-1-sboyd@kernel.org>
- <20230327222159.3509818-8-sboyd@kernel.org>
+        Thu, 6 Apr 2023 11:03:21 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F355FF9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:02:58 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 17:02:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680793376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k4mX9pv4PeCziBc3ElC9iuNaE7psMZGOtyWMk2UJfUM=;
+        b=Dd3oTTDAAEBR0gIEM2tvELYgko/BhbWD3wHap6BJwYFmZAKgYEqSAB209WZ5HE9spNTedg
+        4bIVa+tMQNFnNO5wrPGBN8Rgu3rAFTXbU8mInHXHuHbxZFbBnsWhHnJEUTTH3K6tvLdOIc
+        8JbJTNY9NuC1aCKh5ehQqoTgMTfOkxGU7FWZIqHq53n2Zp1CVas+ax7aMtdEx2nLBjMA/x
+        vLiwcEFOZP3f++OMDhXiyp4sMCnsDZtzkMpa4zX0G4LG6HwDA5JN6S6xfcnEVLt5Huresc
+        Rc6BPS/W31CEgzQTpv7kSs4Ob08Jwjn3dcxNo6m6WbnnCkyOzix/rYro2gEExQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680793376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k4mX9pv4PeCziBc3ElC9iuNaE7psMZGOtyWMk2UJfUM=;
+        b=bG/3HaHhLZS+nMqzShx8r2s3C3KbjSJUvqx30RLz7iiemuXtOD180NqSv4JkgA1C/TfIyg
+        +prlnR1JAVsI4xDw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Pavel Tatashin <pasha.tatashin@oracle.com>
+Subject: Re: [RFC] tick_sched_timer() is not properly aligned, fixed by chance
+Message-ID: <20230406150254.ZrawA2Y-@linutronix.de>
+References: <20230406095735.0_14edn3@linutronix.de>
+ <20230406105529.GB392176@hirez.programming.kicks-ass.net>
+ <87mt3lqnde.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230327222159.3509818-8-sboyd@kernel.org>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87mt3lqnde.ffs@tglx>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 27 Mar 2023 15:21:55 -0700, Stephen Boyd wrote:
-> Describe a binding for a device that consumes a fixed rate clk in DT so
-> that a KUnit test can get the clk registered by of_fixed_clk_setup() and
-> test that it is setup properly.
+On 2023-04-06 13:08:29 [+0200], Thomas Gleixner wrote:
+> On Thu, Apr 06 2023 at 12:55, Peter Zijlstra wrote:
+> > On Thu, Apr 06, 2023 at 11:57:35AM +0200, Sebastian Andrzej Siewior wrote:
+> >
+> >> The tick_sched_timer story is that it uses ktime_get() to set the
+> >
+> > But but but, ktime_get() does not use sched_clock(), it has it's own TSC
+> > reader.
 > 
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->  .../bindings/test/test,clk-fixed-rate.yaml    | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/test/test,clk-fixed-rate.yaml
+> Correct and at that point during early boot the clocksource which feeds
+> ktime_get() should be jiffies and not some other random clocksource.
 > 
+> Sebastian, can you please evaluate which clocksource is used for
+> ktime_get() at the point where the first clock event device is set up?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The first one added is hpet. It points to "jiffies" as name and
+jiffies_read() as ->read().
 
+Before the change/ with PeterZ change I get from ktime_get() for
+base/nsec something like:
+|[    0.004000] tick_next_period Name: jiffies jiffies_read+0x0/0x10
+|[    0.004000] tick_next_period base/nsec: -401771248 405771248
+|[    0.004000] tick_next_period hpet 4000000
+
+base/nsec is different on each boot but it always ends up with 4000000.
+With the optimisation, ktime_get() is:
+| [    1.179079] tick_next_period base/nsec: 647439581 518613145
+| [    1.179646] tick_next_period hpet 1166052726
+
+so something is using it during init. And this is
+	read_persistent_wall_and_boot_offset()
+
+> Thanks,
+> 
+>         tglx
+> 
+Sebastian
