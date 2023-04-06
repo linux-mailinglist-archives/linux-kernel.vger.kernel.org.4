@@ -2,121 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DAE6D8E04
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4326D8E41
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbjDFDhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S235030AbjDFENH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233361AbjDFDh2 (ORCPT
+        with ESMTP id S233641AbjDFEND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:37:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D01A7AA5;
-        Wed,  5 Apr 2023 20:37:27 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PsRt90MNrzSqlF;
-        Thu,  6 Apr 2023 11:33:37 +0800 (CST)
-Received: from [10.174.178.46] (10.174.178.46) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 6 Apr 2023 11:36:48 +0800
-Subject: Re: [PATCH] ubifs: remove unnecessary kobject_del()
-To:     Yangtao Li <frank.li@vivo.com>, Richard Weinberger <richard@nod.at>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ext4@vger.kernel.org>, <tytso@mit.edu>, <jack@suse.com>,
-        yangerkun <yangerkun@huawei.com>
-References: <20230405130747.66006-1-frank.li@vivo.com>
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-Message-ID: <828681d9-153f-2499-baa6-9a5e782be586@huawei.com>
-Date:   Thu, 6 Apr 2023 11:36:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Thu, 6 Apr 2023 00:13:03 -0400
+X-Greylist: delayed 1820 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 05 Apr 2023 21:13:00 PDT
+Received: from mail-17766.188.com (mail-17766.188.com [123.58.177.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A0B710C1;
+        Wed,  5 Apr 2023 21:12:59 -0700 (PDT)
+Received: from localhost.localdomain (unknown [119.3.119.19])
+        by smtp1 (Coremail) with SMTP id EGZ4CgDH_7iPPy5k_4q3AQ--.4828S2;
+        Thu, 06 Apr 2023 11:42:08 +0800 (CST)
+From:   Chen Aotian <chenaotian@188.com>
+To:     pablo@netfilter.org
+Cc:     kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chen Aotian <chenaotian@188.com>
+Subject: [PATCH] netfilter: nf_tables: Modify nla_memdup's flag to GFP_KERNEL_ACCOUNT
+Date:   Thu,  6 Apr 2023 11:41:44 +0800
+Message-Id: <20230406034144.1511-1-chenaotian@188.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20230405130747.66006-1-frank.li@vivo.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.46]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: EGZ4CgDH_7iPPy5k_4q3AQ--.4828S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZrykKFykGF45Ar48ZFyDAwb_yoW3ZwbEka
+        4vqr40krWrJrZFqr1rJ3yqyrySgay8Z3WS9a4fZFZ0yayrGw409FZ7XF1rZan8Ww4UA3W5
+        Z3sFqF1DJw4jkjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnfR6UUUUUU==
+X-Originating-IP: [119.3.119.19]
+X-CM-SenderInfo: xfkh0tprwlt0a6rymhhfrp/1tbiARdJiVeMiQV6hgABs8
+X-Spam-Status: No, score=0.0 required=5.0 tests=FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yangtao
-> kobject_put() actually covers kobject removal automatically, which is
-> single stage removal. So it is safe to kill kobject_del() directly.
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   fs/ubifs/sysfs.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/fs/ubifs/sysfs.c b/fs/ubifs/sysfs.c
-> index 1c958148bb87..1ffdc3c9b340 100644
-> --- a/fs/ubifs/sysfs.c
-> +++ b/fs/ubifs/sysfs.c
-> @@ -130,7 +130,6 @@ int ubifs_sysfs_register(struct ubifs_info *c)
->   
->   void ubifs_sysfs_unregister(struct ubifs_info *c)
->   {
-> -	kobject_del(&c->kobj);
->   	kobject_put(&c->kobj);
->   	wait_for_completion(&c->kobj_unregister);
->   
-> 
+For memory alloc that store user data from nla[NFTA_OBJ_USERDATA], 
+use GFP_KERNEL_ACCOUNT is more suitable.
 
-This patch looks harmless at the view of ubifs, kobject_cleanup() 
-finally invokes __kobject_del and releases parent just like 
-kobject_del() does. A difference is that the releasing sequence of 
-kobj's parent is put after releasing kobj.
+Signed-off-by: Chen Aotian <chenaotian@188.com>
+---
+ net/netfilter/nf_tables_api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-About the use case of kobject_del(), we may refer to other filesystems' 
-implementations, eg. ext4_put_super(). Firstly ext4_unregister_sysfs() 
-removes all sysfs interfaces, then jbd2_journal_destroy() destroys 
-sbi->s_journal, finally sbi->s_kobj is released. Here kobject_del() 
-stops user accessing sbi->s_journal by sysfs interface 
-journal_task£¬because sbi->s_journal will be released soon before 
-kobject_put().
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 6004d4b24..cd52109e6 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -7052,7 +7052,7 @@ static int nf_tables_newobj(struct sk_buff *skb, const struct nfnl_info *info,
+ 	}
+ 
+ 	if (nla[NFTA_OBJ_USERDATA]) {
+-		obj->udata = nla_memdup(nla[NFTA_OBJ_USERDATA], GFP_KERNEL);
++		obj->udata = nla_memdup(nla[NFTA_OBJ_USERDATA], GFP_KERNEL_ACCOUNT);
+ 		if (obj->udata == NULL)
+ 			goto err_userdata;
+ 
+-- 
+2.25.1
 
-I think we should still reserve the 'redundant' kobject_del(), removing 
-it won't bring any performance improvement.
-
-BTW, in ext4_put_super(), flush_stashed_error_work(which could access 
-sbi->s_kobj) is flushed after kobject removed. is it okay to replace 
-kobject_del(&sbi->s_kobj) with kobject_put(&sbi->s_kobj)?
-
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index a22417d113ca..9e3744099d1e 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1296,8 +1296,6 @@ static void ext4_put_super(struct super_block *sb)
-          * Now that we are completely done shutting down the
-          * superblock, we need to actually destroy the kobject.
-          */
--       kobject_put(&sbi->s_kobj);
--       wait_for_completion(&sbi->s_kobj_unregister);
-         if (sbi->s_chksum_driver)
-                 crypto_free_shash(sbi->s_chksum_driver);
-         kfree(sbi->s_blockgroup_lock);
-diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
-index 12d6252e3e22..be92a09bb8a0 100644
---- a/fs/ext4/sysfs.c
-+++ b/fs/ext4/sysfs.c
-@@ -562,7 +562,8 @@ void ext4_unregister_sysfs(struct super_block *sb)
-
-         if (sbi->s_proc)
-                 remove_proc_subtree(sb->s_id, ext4_proc_root);
--       kobject_del(&sbi->s_kobj);
-+       kobject_put(&sbi->s_kobj);
-+       wait_for_completion(&sbi->s_kobj_unregister);
-  }
-
-  int __init ext4_init_sysfs(void)
