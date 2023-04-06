@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C706DA5B4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6321F6DA5BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236830AbjDFWZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S238049AbjDFWZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjDFWZP (ORCPT
+        with ESMTP id S238521AbjDFWZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:25:15 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA9D76BF
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:25:14 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id z19so38737612plo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680819914; x=1683411914;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g1AjHf2kCvIdLeYFh5xT+QDV5+o6aZpVh3ZQromHqS0=;
-        b=s3vxtsDPoSXlMifI4rs+/vS/5nH+8PhwE9xs9s2dgUzHr8Wd3iRtFg3A8X9ZOMc66B
-         DDWHb/HSBO6gvjMvYXddd2ncUcHdon4UINWwRxDu/DSlHq7aLz0YDSpzGjy8NubKQ2s1
-         GedeUwwhCURiLXGy9Pxq6czCKovsxRc09laMA9ZvWQwov+ZavxiPAU5CL4CISipg3LEr
-         fMH1kDRJSjjZmUubc2XGwOX0HMdwZylp3slecMV9+YfDhnsA3/2ABFqjoUTfrfpy8mZb
-         pE8p3K/8k07JlB5CbT8c9Ofk3I0XP0L0P12C9kC4arPcCY0hJCOrLiE8Q8S2hOKn/zmD
-         y8PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680819914; x=1683411914;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g1AjHf2kCvIdLeYFh5xT+QDV5+o6aZpVh3ZQromHqS0=;
-        b=mRD93DXELg09behCdKDVEvPVYqgSJ2rnRDGd1Rc0kQolJZC0rAL04cLmUvYmHCSxQ/
-         ZJRHvLRdBP8rcXNLD9GfT1KvrNrjZGR+1jDiY7XXityiORP4LFqQiyE7Aqj9javkp4Pf
-         mmaC/X1OayzDhRf38/6qVYqQxPr0dNgoiRXM0NMge+gJ2Olt3dSUGLONT9CayYUTPq90
-         ptKd69t1K7h3GPmQZWRs5jtDMuHmvIfOX8YK4+/pdj1okZYXyF1juSW3ddV2qOE/hfch
-         nzAqyjW3F9JYoi60OTj7VSXtyMipoxmZ98kh89c19a1eM0W+34GdYw9FDpYvVvF/9u07
-         Nr1w==
-X-Gm-Message-State: AAQBX9doRTprgg5hKX6u7JL76PP1VoLuC9oVRs27UjoiB1DVixRcO7i1
-        VR34dhH36tEtyOy5kTI5orm48Bg+TlCJFyuq3SNMrg==
-X-Google-Smtp-Source: AKy350b4MSYhRrQppF3SFeUUd2Wqh3mvfTH0sbdW7A7SJ35ELwO/9HCnaPp1HV1GdJEDIqfIeIepgzvIq/pDoig2y14=
-X-Received: by 2002:a17:90a:a004:b0:23d:3b06:ee13 with SMTP id
- q4-20020a17090aa00400b0023d3b06ee13mr64109pjp.1.1680819914155; Thu, 06 Apr
- 2023 15:25:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-3-drosen@google.com>
- <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com>
-In-Reply-To: <CAEf4BzakRfffU9+wLBNfhBi1dKxs03ibopJsMyEF6JAM-QJWjw@mail.gmail.com>
-From:   Daniel Rosenberg <drosen@google.com>
-Date:   Thu, 6 Apr 2023 15:25:02 -0700
-Message-ID: <CA+PiJmRZHKn4GyDu7NbWc612=ovgM7jODKSD76CSW0gbjzDfzg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bpf: Allow NULL buffers in bpf_dynptr_slice(_rw)
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        Thu, 6 Apr 2023 18:25:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5476AA5EA;
+        Thu,  6 Apr 2023 15:25:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E58DC60B4A;
+        Thu,  6 Apr 2023 22:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A7B5C4339C;
+        Thu,  6 Apr 2023 22:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1680819921;
+        bh=POcrBfS5KWYTL3150CQlbiuXIeiUWyNtp77r2d/bEKw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z9GcPeDky5bXJIS5FPZvkZRQLwPX1vosICtCydDasYwnvWQAHXcgHSRK94G7k3PyW
+         HCI+J1rY2pqaZR9VS+XlL7EuXxjy53E3Gg0xsLg+hNRHLWr7FeHfb5GHkFiKaQEVyb
+         3aR95I7JT6+jddfjG4EZUQKBvbOGbwAw95KQD6hY=
+Date:   Thu, 6 Apr 2023 15:25:19 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Yosry Ahmed <yosryahmed@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] mm: vmscan: ignore non-LRU-based reclaim in
+ memcg reclaim
+Message-Id: <20230406152519.b57c4fb4da75e0b5142de2b0@linux-foundation.org>
+In-Reply-To: <a8cb406a-70cd-aa47-fdda-50cd0eb8c941@redhat.com>
+References: <20230405185427.1246289-1-yosryahmed@google.com>
+        <20230405185427.1246289-2-yosryahmed@google.com>
+        <a8cb406a-70cd-aa47-fdda-50cd0eb8c941@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,71 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 2:09=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> should we always reject NULL even for SKB/XDP or only when the buffer
-> *would be* required? If the latter, we could use bpf_dynptr_slice()
-> with NULL buf to say "only return pointer if no byte copying is
-> required". As opposed to bpf_dynptr_data(), where I think we always
-> fail for SKB/XDP, because we are not sure whether users are aware of
-> this need to copy bytes. Here, users are aware, but chose to prevent
-> copying.
->
-> WDYT?
->
+On Thu, 6 Apr 2023 12:30:56 +0200 David Hildenbrand <david@redhat.com> wrote:
 
-I think Passing NULL here should signal that you're quite okay with it
-failing instead of copying. We could limit this to just local/ringbuf
-types, but that seems like an unneeded restriction, particularly if
-you're operating on some section of an skb/xdp buffer that you know
-will always be contiguous.
-I adjusted xdp for that. The adjustment would be similar for skb, I
-just didn't do that since it was another layer of indirection deep and
-hadn't looked through all of those use cases. Though it should be fine
-to just reject when the buffer would have been needed, since all users
-currently provide one.
-I agree that allowing that same behavior for dnyptr_data would be more
-likely to cause confusion. Blocking the copy on dynprt_slice is much
-more explicit.
+> Otherwise it's hard to judge how far to backport this.
 
->
-> would this work correctly if someone passes a non-null buffer with too
-> small size? Can you please add a test for this use case.
->
+The case for backporting sounded rather unconvincing to me, which is
+why I'm still sitting on the v4 series.
 
-Yes, that's one of the tests that's missing there. Once I get my build
-situation sorted I'll add more tests. The behavior for a non-null
-buffer should be unchanged by this patch.
+What are your thoughts on the desirability of a backport?
 
-> Also, I feel like for cases where we allow a NULL buffer, we need to
-> explicitly check that the register is a *known* NULL (SCALAR=3D0
-> basically). And also in that case the size of the buffer probably
-> should be enforced to zero, not just be allowed to be any value.
->
+It makes sense to design the forthcoming v6 series for backportability,
+so that even if we decide "no", others can still take it easily if they
+wish to.
 
-We absolutely should check that the pointer in question is NULL before
-ignoring the size check. I think I'm accomplishing that by ignoring
-__opt when reg->umax_value > 0 in is_kfunc_arg_optional. Is that the
-wrong check? Perhaps I should check var_off =3D=3D tnum_const(0) instead.
-
-We can't enforce the size being zero in this case because the size is
-doing double duty. It's both the length of the requested area of
-access into the dnyptr, and the size of the buffer that it might copy
-that data into. If we don't provide a buffer, then it doesn't make
-sense to check that buffer's size. The size does still apply to the
-returned pointer though. Within the kfunc, it just needs to check for
-null before copying dynptr data, as well as the regular enforcement of
-length against the dynprt/offset.
-
-> it's scary to just ignore some error, tbh, the number of error
-> conditions can grow overtime and we'll be masking them with this
-> is_kfunc_arg_optional() override. Let's be strict and explicit here.
->
-It would probably make more sense to check is_kfunc_arg_optional and
-skip the size check altogether. Either way we're just relying on
-runtime checks against the dynptr at that point. If the buffer is
-known null and optional, we don't care what the relationship between
-the buffer and the size is, just that size and the dynptr. __szk
-already takes care of it being a constant. This doesn't affect the
-return buffer size.
