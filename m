@@ -2,71 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205186D9D3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1586A6D9D44
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239949AbjDFQHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
+        id S239953AbjDFQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239951AbjDFQHk (ORCPT
+        with ESMTP id S239951AbjDFQKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:07:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4E586B0;
-        Thu,  6 Apr 2023 09:07:19 -0700 (PDT)
-Received: from workpc.. (109-252-119-170.nat.spd-mgts.ru [109.252.119.170])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7A95A66031D2;
-        Thu,  6 Apr 2023 17:07:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680797234;
-        bh=2LGtU0pJUE3a/3duS9Vh1FoAGcCC8Le26Q5vq5urikI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FUcbSMVcgc77GSMrqGVNkMhvFwZrSGNzJ698IQQ1N3WW5XQazwplcZjVab4Dhy528
-         m5HxUf/9rOU2FLKhwrW67htcu162jochjWYkBRmA+QTVzhrnn6rJ3u4lfv3Uycup4j
-         1sd9LzAtcJI7QaRU6krnptZJUaF07uBSbFDVxjeJYIwTp/MuFPWzhxlPUWNG9Kfqxi
-         8f98/oUvPjZNJxsjUuf0HI+PLu4GqPHd2h8KrU2CfmLjYi7NwBIOWxpTZWB5rzMDbj
-         fpBU90QCHbraRJM2RJ4yBsfLAS0+BrwY+ZjKEYwiimWBwR95KiLAWOeAWzlYWVxqMM
-         dY7Wi3cK2lIwQ==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <jstultz@google.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v2 7/7] drm/shmem-helper: Switch to reservation lock
-Date:   Thu,  6 Apr 2023 19:06:37 +0300
-Message-Id: <20230406160637.541702-8-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406160637.541702-1-dmitry.osipenko@collabora.com>
-References: <20230406160637.541702-1-dmitry.osipenko@collabora.com>
+        Thu, 6 Apr 2023 12:10:17 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00BB9755;
+        Thu,  6 Apr 2023 09:10:15 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336FUGuc022381;
+        Thu, 6 Apr 2023 16:10:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=5693Cus/qNkpiZCTVWnDxSRruDb522wM3A9d/ufocEY=;
+ b=a0vPK1CWe4oF+DTsn+HfjKC0918cphhV44BtzPxwJbb3PUWDSYDndFZzlqgLc2qfc35+
+ jaK29SoWG3gm55LyD6ndn7hyFChG1aU+5yP52bHgjMLXQcHTLiIn395QxMbaDcFgSpeq
+ XN+7Tfv1veTyzi1ath376YlimK/a6ye5geAYHfAu9yuB1TiwC7hIMrCC+Y2bZtCT6MBD
+ xWJrETMZ962a4R5W9uscpMQU9OkIk6w8cLC/9on9mX1rQEY6zFyxMSSy5qb3kF1Ozwka
+ Hb9VZVPe0YAuLkhsUa2phjjEYFtyZaMHyclXmPf21+CCn508fO1tXyHmizNsNTXyMm4i 9Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pt03sagy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 16:10:10 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 336FqLBM010942;
+        Thu, 6 Apr 2023 16:10:10 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pt03sagwm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 16:10:10 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 336FeUo6028006;
+        Thu, 6 Apr 2023 16:10:08 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3ppc88jahp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 16:10:08 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 336GA6IO16450106
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Apr 2023 16:10:07 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D086458059;
+        Thu,  6 Apr 2023 16:10:06 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E585D5805E;
+        Thu,  6 Apr 2023 16:10:05 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Apr 2023 16:10:05 +0000 (GMT)
+Message-ID: <a95f62ed-8b8a-38e5-e468-ecbde3b221af@linux.ibm.com>
+Date:   Thu, 6 Apr 2023 12:10:05 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
+ writes
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Christian Brauner <brauner@kernel.org>, zohar@linux.ibm.com,
+        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        amir73il@gmail.com
+References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
+ <20230406-diffamieren-langhaarig-87511897e77d@brauner>
+ <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
+ <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
+ <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: MV4lEkvse16aqDIDhTP18FyS6RFkpIMQ
+X-Proofpoint-ORIG-GUID: nxsYdAQTmibWu6xHKkQlJ-xBymrZVnNT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_09,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0
+ clxscore=1015 priorityscore=1501 mlxscore=0 mlxlogscore=999
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304060143
+X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,661 +102,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace all drm-shmem locks with a GEM reservation lock. This makes locks
-consistent with dma-buf locking convention where importers are responsible
-for holding reservation lock for all operations performed over dma-bufs,
-preventing deadlock between dma-buf importers and exporters.
 
-Suggested-by: Daniel Vetter <daniel@ffwll.ch>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/gpu/drm/drm_gem_shmem_helper.c        | 208 ++++++++----------
- drivers/gpu/drm/lima/lima_gem.c               |   8 +-
- drivers/gpu/drm/panfrost/panfrost_drv.c       |   7 +-
- .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   6 +-
- drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
- include/drm/drm_gem_shmem_helper.h            |  14 +-
- 6 files changed, 114 insertions(+), 148 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index 4ea6507a77e5..395942ca36fe 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -88,8 +88,6 @@ __drm_gem_shmem_create(struct drm_device *dev, size_t size, bool private)
- 	if (ret)
- 		goto err_release;
- 
--	mutex_init(&shmem->pages_lock);
--	mutex_init(&shmem->vmap_lock);
- 	INIT_LIST_HEAD(&shmem->madv_list);
- 
- 	if (!private) {
-@@ -141,11 +139,13 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
- 
--	drm_WARN_ON(obj->dev, shmem->vmap_use_count);
--
- 	if (obj->import_attach) {
- 		drm_prime_gem_destroy(obj, shmem->sgt);
- 	} else {
-+		dma_resv_lock(shmem->base.resv, NULL);
-+
-+		drm_WARN_ON(obj->dev, shmem->vmap_use_count);
-+
- 		if (shmem->sgt) {
- 			dma_unmap_sgtable(obj->dev->dev, shmem->sgt,
- 					  DMA_BIDIRECTIONAL, 0);
-@@ -154,18 +154,18 @@ void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem)
- 		}
- 		if (shmem->pages)
- 			drm_gem_shmem_put_pages(shmem);
--	}
- 
--	drm_WARN_ON(obj->dev, shmem->pages_use_count);
-+		drm_WARN_ON(obj->dev, shmem->pages_use_count);
-+
-+		dma_resv_unlock(shmem->base.resv);
-+	}
- 
- 	drm_gem_object_release(obj);
--	mutex_destroy(&shmem->pages_lock);
--	mutex_destroy(&shmem->vmap_lock);
- 	kfree(shmem);
- }
- EXPORT_SYMBOL_GPL(drm_gem_shmem_free);
- 
--static int drm_gem_shmem_get_pages_locked(struct drm_gem_shmem_object *shmem)
-+static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
- 	struct page **pages;
-@@ -197,35 +197,16 @@ static int drm_gem_shmem_get_pages_locked(struct drm_gem_shmem_object *shmem)
- }
- 
- /*
-- * drm_gem_shmem_get_pages - Allocate backing pages for a shmem GEM object
-+ * drm_gem_shmem_put_pages - Decrease use count on the backing pages for a shmem GEM object
-  * @shmem: shmem GEM object
-  *
-- * This function makes sure that backing pages exists for the shmem GEM object
-- * and increases the use count.
-- *
-- * Returns:
-- * 0 on success or a negative error code on failure.
-+ * This function decreases the use count and puts the backing pages when use drops to zero.
-  */
--int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
-+void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
--	int ret;
--
--	drm_WARN_ON(obj->dev, obj->import_attach);
--
--	ret = mutex_lock_interruptible(&shmem->pages_lock);
--	if (ret)
--		return ret;
--	ret = drm_gem_shmem_get_pages_locked(shmem);
--	mutex_unlock(&shmem->pages_lock);
--
--	return ret;
--}
--EXPORT_SYMBOL(drm_gem_shmem_get_pages);
- 
--static void drm_gem_shmem_put_pages_locked(struct drm_gem_shmem_object *shmem)
--{
--	struct drm_gem_object *obj = &shmem->base;
-+	dma_resv_assert_held(shmem->base.resv);
- 
- 	if (drm_WARN_ON_ONCE(obj->dev, !shmem->pages_use_count))
- 		return;
-@@ -243,20 +224,25 @@ static void drm_gem_shmem_put_pages_locked(struct drm_gem_shmem_object *shmem)
- 			  shmem->pages_mark_accessed_on_put);
- 	shmem->pages = NULL;
- }
-+EXPORT_SYMBOL(drm_gem_shmem_put_pages);
- 
--/*
-- * drm_gem_shmem_put_pages - Decrease use count on the backing pages for a shmem GEM object
-- * @shmem: shmem GEM object
-- *
-- * This function decreases the use count and puts the backing pages when use drops to zero.
-- */
--void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
-+static int drm_gem_shmem_pin_locked(struct drm_gem_shmem_object *shmem)
-+{
-+	int ret;
-+
-+	dma_resv_assert_held(shmem->base.resv);
-+
-+	ret = drm_gem_shmem_get_pages(shmem);
-+
-+	return ret;
-+}
-+
-+static void drm_gem_shmem_unpin_locked(struct drm_gem_shmem_object *shmem)
- {
--	mutex_lock(&shmem->pages_lock);
--	drm_gem_shmem_put_pages_locked(shmem);
--	mutex_unlock(&shmem->pages_lock);
-+	dma_resv_assert_held(shmem->base.resv);
-+
-+	drm_gem_shmem_put_pages(shmem);
- }
--EXPORT_SYMBOL(drm_gem_shmem_put_pages);
- 
- /**
-  * drm_gem_shmem_pin - Pin backing pages for a shmem GEM object
-@@ -271,10 +257,17 @@ EXPORT_SYMBOL(drm_gem_shmem_put_pages);
- int drm_gem_shmem_pin(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
-+	int ret;
- 
- 	drm_WARN_ON(obj->dev, obj->import_attach);
- 
--	return drm_gem_shmem_get_pages(shmem);
-+	ret = dma_resv_lock_interruptible(shmem->base.resv, NULL);
-+	if (ret)
-+		return ret;
-+	ret = drm_gem_shmem_pin_locked(shmem);
-+	dma_resv_unlock(shmem->base.resv);
-+
-+	return ret;
- }
- EXPORT_SYMBOL(drm_gem_shmem_pin);
- 
-@@ -291,12 +284,29 @@ void drm_gem_shmem_unpin(struct drm_gem_shmem_object *shmem)
- 
- 	drm_WARN_ON(obj->dev, obj->import_attach);
- 
--	drm_gem_shmem_put_pages(shmem);
-+	dma_resv_lock(shmem->base.resv, NULL);
-+	drm_gem_shmem_unpin_locked(shmem);
-+	dma_resv_unlock(shmem->base.resv);
- }
- EXPORT_SYMBOL(drm_gem_shmem_unpin);
- 
--static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem,
--				     struct iosys_map *map)
-+/*
-+ * drm_gem_shmem_vmap - Create a virtual mapping for a shmem GEM object
-+ * @shmem: shmem GEM object
-+ * @map: Returns the kernel virtual address of the SHMEM GEM object's backing
-+ *       store.
-+ *
-+ * This function makes sure that a contiguous kernel virtual address mapping
-+ * exists for the buffer backing the shmem GEM object. It hides the differences
-+ * between dma-buf imported and natively allocated objects.
-+ *
-+ * Acquired mappings should be cleaned up by calling drm_gem_shmem_vunmap().
-+ *
-+ * Returns:
-+ * 0 on success or a negative error code on failure.
-+ */
-+int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
-+		       struct iosys_map *map)
- {
- 	struct drm_gem_object *obj = &shmem->base;
- 	int ret = 0;
-@@ -312,6 +322,8 @@ static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem,
- 	} else {
- 		pgprot_t prot = PAGE_KERNEL;
- 
-+		dma_resv_assert_held(shmem->base.resv);
-+
- 		if (shmem->vmap_use_count++ > 0) {
- 			iosys_map_set_vaddr(map, shmem->vaddr);
- 			return 0;
-@@ -346,45 +358,30 @@ static int drm_gem_shmem_vmap_locked(struct drm_gem_shmem_object *shmem,
- 
- 	return ret;
- }
-+EXPORT_SYMBOL(drm_gem_shmem_vmap);
- 
- /*
-- * drm_gem_shmem_vmap - Create a virtual mapping for a shmem GEM object
-+ * drm_gem_shmem_vunmap - Unmap a virtual mapping for a shmem GEM object
-  * @shmem: shmem GEM object
-- * @map: Returns the kernel virtual address of the SHMEM GEM object's backing
-- *       store.
-- *
-- * This function makes sure that a contiguous kernel virtual address mapping
-- * exists for the buffer backing the shmem GEM object. It hides the differences
-- * between dma-buf imported and natively allocated objects.
-+ * @map: Kernel virtual address where the SHMEM GEM object was mapped
-  *
-- * Acquired mappings should be cleaned up by calling drm_gem_shmem_vunmap().
-+ * This function cleans up a kernel virtual address mapping acquired by
-+ * drm_gem_shmem_vmap(). The mapping is only removed when the use count drops to
-+ * zero.
-  *
-- * Returns:
-- * 0 on success or a negative error code on failure.
-+ * This function hides the differences between dma-buf imported and natively
-+ * allocated objects.
-  */
--int drm_gem_shmem_vmap(struct drm_gem_shmem_object *shmem,
--		       struct iosys_map *map)
--{
--	int ret;
--
--	ret = mutex_lock_interruptible(&shmem->vmap_lock);
--	if (ret)
--		return ret;
--	ret = drm_gem_shmem_vmap_locked(shmem, map);
--	mutex_unlock(&shmem->vmap_lock);
--
--	return ret;
--}
--EXPORT_SYMBOL(drm_gem_shmem_vmap);
--
--static void drm_gem_shmem_vunmap_locked(struct drm_gem_shmem_object *shmem,
--					struct iosys_map *map)
-+void drm_gem_shmem_vunmap(struct drm_gem_shmem_object *shmem,
-+			  struct iosys_map *map)
- {
- 	struct drm_gem_object *obj = &shmem->base;
- 
- 	if (obj->import_attach) {
- 		dma_buf_vunmap(obj->import_attach->dmabuf, map);
- 	} else {
-+		dma_resv_assert_held(shmem->base.resv);
-+
- 		if (drm_WARN_ON_ONCE(obj->dev, !shmem->vmap_use_count))
- 			return;
- 
-@@ -397,26 +394,6 @@ static void drm_gem_shmem_vunmap_locked(struct drm_gem_shmem_object *shmem,
- 
- 	shmem->vaddr = NULL;
- }
--
--/*
-- * drm_gem_shmem_vunmap - Unmap a virtual mapping for a shmem GEM object
-- * @shmem: shmem GEM object
-- * @map: Kernel virtual address where the SHMEM GEM object was mapped
-- *
-- * This function cleans up a kernel virtual address mapping acquired by
-- * drm_gem_shmem_vmap(). The mapping is only removed when the use count drops to
-- * zero.
-- *
-- * This function hides the differences between dma-buf imported and natively
-- * allocated objects.
-- */
--void drm_gem_shmem_vunmap(struct drm_gem_shmem_object *shmem,
--			  struct iosys_map *map)
--{
--	mutex_lock(&shmem->vmap_lock);
--	drm_gem_shmem_vunmap_locked(shmem, map);
--	mutex_unlock(&shmem->vmap_lock);
--}
- EXPORT_SYMBOL(drm_gem_shmem_vunmap);
- 
- static int
-@@ -447,24 +424,24 @@ drm_gem_shmem_create_with_handle(struct drm_file *file_priv,
-  */
- int drm_gem_shmem_madvise(struct drm_gem_shmem_object *shmem, int madv)
- {
--	mutex_lock(&shmem->pages_lock);
-+	dma_resv_assert_held(shmem->base.resv);
- 
- 	if (shmem->madv >= 0)
- 		shmem->madv = madv;
- 
- 	madv = shmem->madv;
- 
--	mutex_unlock(&shmem->pages_lock);
--
- 	return (madv >= 0);
- }
- EXPORT_SYMBOL(drm_gem_shmem_madvise);
- 
--void drm_gem_shmem_purge_locked(struct drm_gem_shmem_object *shmem)
-+void drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem)
- {
- 	struct drm_gem_object *obj = &shmem->base;
- 	struct drm_device *dev = obj->dev;
- 
-+	dma_resv_assert_held(shmem->base.resv);
-+
- 	drm_WARN_ON(obj->dev, !drm_gem_shmem_is_purgeable(shmem));
- 
- 	dma_unmap_sgtable(dev->dev, shmem->sgt, DMA_BIDIRECTIONAL, 0);
-@@ -472,7 +449,7 @@ void drm_gem_shmem_purge_locked(struct drm_gem_shmem_object *shmem)
- 	kfree(shmem->sgt);
- 	shmem->sgt = NULL;
- 
--	drm_gem_shmem_put_pages_locked(shmem);
-+	drm_gem_shmem_put_pages(shmem);
- 
- 	shmem->madv = -1;
- 
-@@ -488,17 +465,6 @@ void drm_gem_shmem_purge_locked(struct drm_gem_shmem_object *shmem)
- 
- 	invalidate_mapping_pages(file_inode(obj->filp)->i_mapping, 0, (loff_t)-1);
- }
--EXPORT_SYMBOL(drm_gem_shmem_purge_locked);
--
--bool drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem)
--{
--	if (!mutex_trylock(&shmem->pages_lock))
--		return false;
--	drm_gem_shmem_purge_locked(shmem);
--	mutex_unlock(&shmem->pages_lock);
--
--	return true;
--}
- EXPORT_SYMBOL(drm_gem_shmem_purge);
- 
- /**
-@@ -551,7 +517,7 @@ static vm_fault_t drm_gem_shmem_fault(struct vm_fault *vmf)
- 	/* We don't use vmf->pgoff since that has the fake offset */
- 	page_offset = (vmf->address - vma->vm_start) >> PAGE_SHIFT;
- 
--	mutex_lock(&shmem->pages_lock);
-+	dma_resv_lock(shmem->base.resv, NULL);
- 
- 	if (page_offset >= num_pages ||
- 	    drm_WARN_ON_ONCE(obj->dev, !shmem->pages) ||
-@@ -563,7 +529,7 @@ static vm_fault_t drm_gem_shmem_fault(struct vm_fault *vmf)
- 		ret = vmf_insert_pfn(vma, vmf->address, page_to_pfn(page));
- 	}
- 
--	mutex_unlock(&shmem->pages_lock);
-+	dma_resv_unlock(shmem->base.resv);
- 
- 	return ret;
- }
-@@ -575,7 +541,7 @@ static void drm_gem_shmem_vm_open(struct vm_area_struct *vma)
- 
- 	drm_WARN_ON(obj->dev, obj->import_attach);
- 
--	mutex_lock(&shmem->pages_lock);
-+	dma_resv_lock(shmem->base.resv, NULL);
- 
- 	/*
- 	 * We should have already pinned the pages when the buffer was first
-@@ -585,7 +551,7 @@ static void drm_gem_shmem_vm_open(struct vm_area_struct *vma)
- 	if (!drm_WARN_ON_ONCE(obj->dev, !shmem->pages_use_count))
- 		shmem->pages_use_count++;
- 
--	mutex_unlock(&shmem->pages_lock);
-+	dma_resv_unlock(shmem->base.resv);
- 
- 	drm_gem_vm_open(vma);
- }
-@@ -595,7 +561,10 @@ static void drm_gem_shmem_vm_close(struct vm_area_struct *vma)
- 	struct drm_gem_object *obj = vma->vm_private_data;
- 	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
- 
-+	dma_resv_lock(shmem->base.resv, NULL);
- 	drm_gem_shmem_put_pages(shmem);
-+	dma_resv_unlock(shmem->base.resv);
-+
- 	drm_gem_vm_close(vma);
- }
- 
-@@ -633,7 +602,10 @@ int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_area_struct
- 		return ret;
- 	}
- 
-+	dma_resv_lock(shmem->base.resv, NULL);
- 	ret = drm_gem_shmem_get_pages(shmem);
-+	dma_resv_unlock(shmem->base.resv);
-+
- 	if (ret)
- 		return ret;
- 
-@@ -699,7 +671,7 @@ static struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_
- 
- 	drm_WARN_ON(obj->dev, obj->import_attach);
- 
--	ret = drm_gem_shmem_get_pages_locked(shmem);
-+	ret = drm_gem_shmem_get_pages(shmem);
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-@@ -721,7 +693,7 @@ static struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_
- 	sg_free_table(sgt);
- 	kfree(sgt);
- err_put_pages:
--	drm_gem_shmem_put_pages_locked(shmem);
-+	drm_gem_shmem_put_pages(shmem);
- 	return ERR_PTR(ret);
- }
- 
-@@ -746,11 +718,11 @@ struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem)
- 	int ret;
- 	struct sg_table *sgt;
- 
--	ret = mutex_lock_interruptible(&shmem->pages_lock);
-+	ret = dma_resv_lock_interruptible(shmem->base.resv, NULL);
- 	if (ret)
- 		return ERR_PTR(ret);
- 	sgt = drm_gem_shmem_get_pages_sgt_locked(shmem);
--	mutex_unlock(&shmem->pages_lock);
-+	dma_resv_unlock(shmem->base.resv);
- 
- 	return sgt;
- }
-diff --git a/drivers/gpu/drm/lima/lima_gem.c b/drivers/gpu/drm/lima/lima_gem.c
-index 10252dc11a22..4f9736e5f929 100644
---- a/drivers/gpu/drm/lima/lima_gem.c
-+++ b/drivers/gpu/drm/lima/lima_gem.c
-@@ -34,7 +34,7 @@ int lima_heap_alloc(struct lima_bo *bo, struct lima_vm *vm)
- 
- 	new_size = min(new_size, bo->base.base.size);
- 
--	mutex_lock(&bo->base.pages_lock);
-+	dma_resv_lock(bo->base.base.resv, NULL);
- 
- 	if (bo->base.pages) {
- 		pages = bo->base.pages;
-@@ -42,7 +42,7 @@ int lima_heap_alloc(struct lima_bo *bo, struct lima_vm *vm)
- 		pages = kvmalloc_array(bo->base.base.size >> PAGE_SHIFT,
- 				       sizeof(*pages), GFP_KERNEL | __GFP_ZERO);
- 		if (!pages) {
--			mutex_unlock(&bo->base.pages_lock);
-+			dma_resv_unlock(bo->base.base.resv);
- 			return -ENOMEM;
- 		}
- 
-@@ -56,13 +56,13 @@ int lima_heap_alloc(struct lima_bo *bo, struct lima_vm *vm)
- 		struct page *page = shmem_read_mapping_page(mapping, i);
- 
- 		if (IS_ERR(page)) {
--			mutex_unlock(&bo->base.pages_lock);
-+			dma_resv_unlock(bo->base.base.resv);
- 			return PTR_ERR(page);
- 		}
- 		pages[i] = page;
- 	}
- 
--	mutex_unlock(&bo->base.pages_lock);
-+	dma_resv_unlock(bo->base.base.resv);
- 
- 	ret = sg_alloc_table_from_pages(&sgt, pages, i, 0,
- 					new_size, GFP_KERNEL);
-diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-index bbada731bbbd..d9dda6acdfac 100644
---- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-@@ -407,6 +407,10 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
- 
- 	bo = to_panfrost_bo(gem_obj);
- 
-+	ret = dma_resv_lock_interruptible(bo->base.base.resv, NULL);
-+	if (ret)
-+		goto out_put_object;
-+
- 	mutex_lock(&pfdev->shrinker_lock);
- 	mutex_lock(&bo->mappings.lock);
- 	if (args->madv == PANFROST_MADV_DONTNEED) {
-@@ -444,7 +448,8 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
- out_unlock_mappings:
- 	mutex_unlock(&bo->mappings.lock);
- 	mutex_unlock(&pfdev->shrinker_lock);
--
-+	dma_resv_unlock(bo->base.base.resv);
-+out_put_object:
- 	drm_gem_object_put(gem_obj);
- 	return ret;
- }
-diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-index bf0170782f25..6a71a2555f85 100644
---- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-@@ -48,14 +48,14 @@ static bool panfrost_gem_purge(struct drm_gem_object *obj)
- 	if (!mutex_trylock(&bo->mappings.lock))
- 		return false;
- 
--	if (!mutex_trylock(&shmem->pages_lock))
-+	if (!dma_resv_trylock(shmem->base.resv))
- 		goto unlock_mappings;
- 
- 	panfrost_gem_teardown_mappings_locked(bo);
--	drm_gem_shmem_purge_locked(&bo->base);
-+	drm_gem_shmem_purge(&bo->base);
- 	ret = true;
- 
--	mutex_unlock(&shmem->pages_lock);
-+	dma_resv_unlock(shmem->base.resv);
- 
- unlock_mappings:
- 	mutex_unlock(&bo->mappings.lock);
-diff --git a/drivers/gpu/drm/panfrost/panfrost_mmu.c b/drivers/gpu/drm/panfrost/panfrost_mmu.c
-index 666a5e53fe19..0679df57f394 100644
---- a/drivers/gpu/drm/panfrost/panfrost_mmu.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_mmu.c
-@@ -443,6 +443,7 @@ static int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as,
- 	struct panfrost_gem_mapping *bomapping;
- 	struct panfrost_gem_object *bo;
- 	struct address_space *mapping;
-+	struct drm_gem_object *obj;
- 	pgoff_t page_offset;
- 	struct sg_table *sgt;
- 	struct page **pages;
-@@ -465,15 +466,16 @@ static int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as,
- 	page_offset = addr >> PAGE_SHIFT;
- 	page_offset -= bomapping->mmnode.start;
- 
--	mutex_lock(&bo->base.pages_lock);
-+	obj = &bo->base.base;
-+
-+	dma_resv_lock(obj->resv, NULL);
- 
- 	if (!bo->base.pages) {
- 		bo->sgts = kvmalloc_array(bo->base.base.size / SZ_2M,
- 				     sizeof(struct sg_table), GFP_KERNEL | __GFP_ZERO);
- 		if (!bo->sgts) {
--			mutex_unlock(&bo->base.pages_lock);
- 			ret = -ENOMEM;
--			goto err_bo;
-+			goto err_unlock;
- 		}
- 
- 		pages = kvmalloc_array(bo->base.base.size >> PAGE_SHIFT,
-@@ -481,9 +483,8 @@ static int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as,
- 		if (!pages) {
- 			kvfree(bo->sgts);
- 			bo->sgts = NULL;
--			mutex_unlock(&bo->base.pages_lock);
- 			ret = -ENOMEM;
--			goto err_bo;
-+			goto err_unlock;
- 		}
- 		bo->base.pages = pages;
- 		bo->base.pages_use_count = 1;
-@@ -491,7 +492,6 @@ static int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as,
- 		pages = bo->base.pages;
- 		if (pages[page_offset]) {
- 			/* Pages are already mapped, bail out. */
--			mutex_unlock(&bo->base.pages_lock);
- 			goto out;
- 		}
- 	}
-@@ -502,14 +502,11 @@ static int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as,
- 	for (i = page_offset; i < page_offset + NUM_FAULT_PAGES; i++) {
- 		pages[i] = shmem_read_mapping_page(mapping, i);
- 		if (IS_ERR(pages[i])) {
--			mutex_unlock(&bo->base.pages_lock);
- 			ret = PTR_ERR(pages[i]);
- 			goto err_pages;
- 		}
- 	}
- 
--	mutex_unlock(&bo->base.pages_lock);
--
- 	sgt = &bo->sgts[page_offset / (SZ_2M / PAGE_SIZE)];
- 	ret = sg_alloc_table_from_pages(sgt, pages + page_offset,
- 					NUM_FAULT_PAGES, 0, SZ_2M, GFP_KERNEL);
-@@ -528,6 +525,8 @@ static int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as,
- 	dev_dbg(pfdev->dev, "mapped page fault @ AS%d %llx", as, addr);
- 
- out:
-+	dma_resv_unlock(obj->resv);
-+
- 	panfrost_gem_mapping_put(bomapping);
- 
- 	return 0;
-@@ -536,6 +535,8 @@ static int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as,
- 	sg_free_table(sgt);
- err_pages:
- 	drm_gem_shmem_put_pages(&bo->base);
-+err_unlock:
-+	dma_resv_unlock(obj->resv);
- err_bo:
- 	panfrost_gem_mapping_put(bomapping);
- 	return ret;
-diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
-index 5994fed5e327..20ddcd799df9 100644
---- a/include/drm/drm_gem_shmem_helper.h
-+++ b/include/drm/drm_gem_shmem_helper.h
-@@ -26,11 +26,6 @@ struct drm_gem_shmem_object {
- 	 */
- 	struct drm_gem_object base;
- 
--	/**
--	 * @pages_lock: Protects the page table and use count
--	 */
--	struct mutex pages_lock;
--
- 	/**
- 	 * @pages: Page table
- 	 */
-@@ -65,11 +60,6 @@ struct drm_gem_shmem_object {
- 	 */
- 	struct sg_table *sgt;
- 
--	/**
--	 * @vmap_lock: Protects the vmap address and use count
--	 */
--	struct mutex vmap_lock;
--
- 	/**
- 	 * @vaddr: Kernel virtual address of the backing memory
- 	 */
-@@ -109,7 +99,6 @@ struct drm_gem_shmem_object {
- struct drm_gem_shmem_object *drm_gem_shmem_create(struct drm_device *dev, size_t size);
- void drm_gem_shmem_free(struct drm_gem_shmem_object *shmem);
- 
--int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem);
- void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem);
- int drm_gem_shmem_pin(struct drm_gem_shmem_object *shmem);
- void drm_gem_shmem_unpin(struct drm_gem_shmem_object *shmem);
-@@ -128,8 +117,7 @@ static inline bool drm_gem_shmem_is_purgeable(struct drm_gem_shmem_object *shmem
- 		!shmem->base.dma_buf && !shmem->base.import_attach;
- }
- 
--void drm_gem_shmem_purge_locked(struct drm_gem_shmem_object *shmem);
--bool drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem);
-+void drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem);
- 
- struct sg_table *drm_gem_shmem_get_sg_table(struct drm_gem_shmem_object *shmem);
- struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem);
--- 
-2.39.2
+On 4/6/23 10:36, Paul Moore wrote:
+> On Thu, Apr 6, 2023 at 10:20 AM Stefan Berger <stefanb@linux.ibm.com> wrote:
+>> On 4/6/23 10:05, Paul Moore wrote:
+>>> On Thu, Apr 6, 2023 at 6:26 AM Christian Brauner <brauner@kernel.org> wrote:
+>>>> On Wed, Apr 05, 2023 at 01:14:49PM -0400, Stefan Berger wrote:
+>>>>> Overlayfs fails to notify IMA / EVM about file content modifications
+>>>>> and therefore IMA-appraised files may execute even though their file
+>>>>> signature does not validate against the changed hash of the file
+>>>>> anymore. To resolve this issue, add a call to integrity_notify_change()
+>>>>> to the ovl_release() function to notify the integrity subsystem about
+>>>>> file changes. The set flag triggers the re-evaluation of the file by
+>>>>> IMA / EVM once the file is accessed again.
+>>>>>
+>>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>>> ---
+>>>>>    fs/overlayfs/file.c       |  4 ++++
+>>>>>    include/linux/integrity.h |  6 ++++++
+>>>>>    security/integrity/iint.c | 13 +++++++++++++
+>>>>>    3 files changed, 23 insertions(+)
+>>>>>
+>>>>> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+>>>>> index 6011f955436b..19b8f4bcc18c 100644
+>>>>> --- a/fs/overlayfs/file.c
+>>>>> +++ b/fs/overlayfs/file.c
+>>>>> @@ -13,6 +13,7 @@
+>>>>>    #include <linux/security.h>
+>>>>>    #include <linux/mm.h>
+>>>>>    #include <linux/fs.h>
+>>>>> +#include <linux/integrity.h>
+>>>>>    #include "overlayfs.h"
+>>>>>
+>>>>>    struct ovl_aio_req {
+>>>>> @@ -169,6 +170,9 @@ static int ovl_open(struct inode *inode, struct file *file)
+>>>>>
+>>>>>    static int ovl_release(struct inode *inode, struct file *file)
+>>>>>    {
+>>>>> +     if (file->f_flags & O_ACCMODE)
+>>>>> +             integrity_notify_change(inode);
+>>>>> +
+>>>>>         fput(file->private_data);
+>>>>>
+>>>>>         return 0;
+>>>>> diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+>>>>> index 2ea0f2f65ab6..cefdeccc1619 100644
+>>>>> --- a/include/linux/integrity.h
+>>>>> +++ b/include/linux/integrity.h
+>>>>> @@ -23,6 +23,7 @@ enum integrity_status {
+>>>>>    #ifdef CONFIG_INTEGRITY
+>>>>>    extern struct integrity_iint_cache *integrity_inode_get(struct inode *inode);
+>>>>>    extern void integrity_inode_free(struct inode *inode);
+>>>>> +extern void integrity_notify_change(struct inode *inode);
+>>>>
+>>>> I thought we concluded that ima is going to move into the security hook
+>>>> infrastructure so it seems this should be a proper LSM hook?
+>>>
+>>> We are working towards migrating IMA/EVM to the LSM layer, but there
+>>> are a few things we need to fix/update/remove first; if anyone is
+>>> curious, you can join the LSM list as we've been discussing some of
+>>> these changes this week.  Bug fixes like this should probably remain
+>>> as IMA/EVM calls for the time being, with the understanding that they
+>>> will migrate over with the rest of IMA/EVM.
+>>>
+>>> That said, we should give Mimi a chance to review this patch as it is
+>>> possible there is a different/better approach.  A bit of patience may
+>>> be required as I know Mimi is very busy at the moment.
+>>
+>> There may be a better approach actually by increasing the inode's i_version,
+>> which then should trigger the appropriate path in ima_check_last_writer().
+> 
+> I'm not the VFS/inode expert here, but I thought the inode's i_version
+> field was only supposed to be bumped when the inode metadata changed,
+> not necessarily the file contents, right?
+> 
+> That said, overlayfs is a bit different so maybe that's okay, but I
+> think we would need to hear from the VFS folks if this is acceptable.
+> 
 
+Exactly.
+
+In ima_check_last_writer() I want to trigger the code path with iint->flags &= ...
+
+
+
+	if (atomic_read(&inode->i_writecount) == 1) {
+		update = test_and_clear_bit(IMA_UPDATE_XATTR,
+					    &iint->atomic_flags);
+		if (!IS_I_VERSION(inode) ||
+		    !inode_eq_iversion(inode, iint->version) ||
+		    (iint->flags & IMA_NEW_FILE)) {
+			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
+			iint->measured_pcrs = 0;
+			if (update)
+				ima_update_xattr(iint, file);
+		}
+	}
+
+
+This patch here resolves it for my use case and triggers the expected code paths when
+ima_file_free() -> ima_check_last_writer() is called because then the i_version is seen
+as having been modified.
+
+diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+index 6011f955436b..1dfe5e7bfe1c 100644
+--- a/fs/overlayfs/file.c
++++ b/fs/overlayfs/file.c
+@@ -13,6 +13,7 @@
+  #include <linux/security.h>
+  #include <linux/mm.h>
+  #include <linux/fs.h>
++#include <linux/iversion.h>
+  #include "overlayfs.h"
+
+  struct ovl_aio_req {
+@@ -408,6 +409,8 @@ static ssize_t ovl_write_iter(struct kiocb *iocb, struct iov_iter *iter)
+                 if (ret != -EIOCBQUEUED)
+                         ovl_aio_cleanup_handler(aio_req);
+         }
++       if (ret > 0)
++               inode_maybe_inc_iversion(inode, false);
+  out:
+         revert_creds(old_cred);
+  out_fdput:
+
+
+
+I have been testing this in a OpenBMC/Yocto environment where overlayfs is used as
+root filesystem with the lower filesystem being a squashfs.
+
+Regards,
+    Stefan
