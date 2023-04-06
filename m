@@ -2,137 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D886D9F9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886996D9FA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240029AbjDFSPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S240050AbjDFSQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240050AbjDFSPK (ORCPT
+        with ESMTP id S239635AbjDFSQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:15:10 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5825C86A8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:15:08 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id 11so3473287ejw.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:15:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680804906;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6oBB6rYPRVsTiSqqWKemxM9/0vuuZy9SiI096Y0Oy3U=;
-        b=m1S+okcxwXDcJYBb7Lp3dofmFYmwovcO2X/wgdvcL8kbt2JVauvprB0QAmRCqwxiyL
-         UXlNijZLRP/XscA8vLwob+y8S5X3FCxMAkmm+hhkNhbpYLwpILGB4YbmmJTisTbf6ihP
-         QVRH3HkDVgCZ521TGazpen8lA9T8oxAD1vLfTMu3v/I0lmc/bxO86gW/iGT/UwMyi4YP
-         bGc2sRQs9mCyfyTOKUauMT0uZOtaLCTD/Jr6oDMrd/crowXK8QGB/HUaFz3rfx9fEfsi
-         DYOoIPl+DHc3bVnOf9+6E1X9i7ai53CgylTrusfALg3EsUP4ukMWXKXOZZ8XM9RUZNCN
-         n3KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680804906;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6oBB6rYPRVsTiSqqWKemxM9/0vuuZy9SiI096Y0Oy3U=;
-        b=kT/ffu+GLLd2DtgL48Tucvf7q5usTg0UywHibjMQQIf2mFeCeTIHxJZ5oZ9RcEJOnz
-         BAEKIp1ANZgZiybGWtZPueRdy9ONb8lhOh6HYnd1oi7lsm9d95lZBPdrZ6FlazKVMklp
-         qGJ/PkEBw+PAA1bepDclmsfe/dMX/7JQR1tw1bV/493+iKs5+Gr5hQIyAJWu983JXtM7
-         vrlmXPdXeR10jSe6ygIUVs2r0IPlLiRTn9gF00TO5HVFjyJHS9cXBFpkE1tCgORbYwQG
-         IZauQjK7G2gCyqC/vfssgZek4jmNgtqBoT/nkvgmv3X3On1pIULmv4eLkK6Ue2mbJDB6
-         bisg==
-X-Gm-Message-State: AAQBX9dovgCV1ZLEpuuS9FD8v1n1VDpeSURPWW033KpLJruCoDLOSWz9
-        L9/S6f6qL66J0s/A+O0sNRpzbw==
-X-Google-Smtp-Source: AKy350YGb4hztmcQTJNpcO2q5BKDY7104we4V4xx/57nKA31ObFU4Fdll08/Ztl8jTR6gFFDG8x52w==
-X-Received: by 2002:a17:906:2559:b0:947:55ad:dd00 with SMTP id j25-20020a170906255900b0094755addd00mr6862795ejb.26.1680804906625;
-        Thu, 06 Apr 2023 11:15:06 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id cw10-20020a170906478a00b009486efb9192sm1133427ejc.11.2023.04.06.11.15.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:15:06 -0700 (PDT)
-Message-ID: <16bf1f2e-474d-f2ce-a1c9-2f6a089199d5@linaro.org>
-Date:   Thu, 6 Apr 2023 20:15:05 +0200
+        Thu, 6 Apr 2023 14:16:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F8EB0;
+        Thu,  6 Apr 2023 11:16:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B89D60F7A;
+        Thu,  6 Apr 2023 18:16:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F7BC433EF;
+        Thu,  6 Apr 2023 18:16:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680804968;
+        bh=trf5F2WX+RYI6ExpB2fYPeUVtOa9b0dLMtB52AZJZ3I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LzuYfVxkj7HHlFc4xhRiXJkc0tcqCtTJr+KYrjvJ8DtKNlFJ//fZcThlZhcDe8YtK
+         uKjxoWLKspclLzKOa+wB5TRAGzh2cneyWwMxwDyR3RB393cWrgq6f/gaIwSZ1nUu4X
+         D66Aj0AUUEBWWRm9v7LQHs2iP4FKWealJ86KyNPyOjs6N3j7E4JZcBTR+aMKA8tfDC
+         bGiNAMBwC/JFrzOTs3mGuJUojowyCSkgxemWZTAXGsNVgSNfjfO0bEd74UJzpBcfXe
+         qrt7HtSpxxQQxv7IPDvIN5B0h3My6+GHf9/MABGY+vaTfi0EYq29SgRjJUDQAM/40V
+         dZ/4BXPWaHaRA==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     fsverity@lists.linux.dev
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chaitanya Kulkarni <kch@nvidia.com>
+Subject: [PATCH v2] fsverity: use WARN_ON_ONCE instead of WARN_ON
+Date:   Thu,  6 Apr 2023 11:15:42 -0700
+Message-Id: <20230406181542.38894-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 8/8] regulator: fan53555: Add support for RK860X
-Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Joseph Chen <chenjh@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-References: <20230406171806.948290-1-cristian.ciocaltea@collabora.com>
- <20230406171806.948290-9-cristian.ciocaltea@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406171806.948290-9-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 19:18, Cristian Ciocaltea wrote:
-> Extend the existing fan53555 driver to support the Rockchip RK860X
-> regulators.
-> 
-> RK8600/RK8601 are pretty similar to the FAN53555 regulators.
-> 
-> RK8602/RK8603 are a bit different, having a wider output voltage
-> selection range, from 0.5 V to 1.5 V in 6.25 mV steps. They also use
-> additional VSEL0/VSEL1 registers for the voltage selector, but the
-> enable and mode bits are still located in the original FAN53555 specific
-> VSEL0/VSEL1 registers.
-> 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> ---
->  drivers/regulator/fan53555.c | 121 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 118 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/regulator/fan53555.c b/drivers/regulator/fan53555.c
-> index acf14ba7aaa6..130f3dbe9840 100644
-> --- a/drivers/regulator/fan53555.c
-> +++ b/drivers/regulator/fan53555.c
-> @@ -26,6 +26,9 @@
->  #define FAN53555_VSEL0		0x00
->  #define FAN53555_VSEL1		0x01
->  
-> +#define RK8602_VSEL0		0x06
-> +#define RK8602_VSEL1		0x07
-> +
->  #define TCS4525_VSEL0		0x11
->  #define TCS4525_VSEL1		0x10
->  #define TCS4525_TIME		0x13
-> @@ -55,6 +58,7 @@
->  
->  #define FAN53555_NVOLTAGES	64	/* Numbers of voltages */
->  #define FAN53526_NVOLTAGES	128
-> +#define RK8602_NVOLTAGES	160
->  
->  #define TCS_VSEL0_MODE		BIT(7)
->  #define TCS_VSEL1_MODE		BIT(6)
-> @@ -64,6 +68,8 @@
->  enum fan53555_vendor {
->  	FAN53526_VENDOR_FAIRCHILD = 0,
->  	FAN53555_VENDOR_FAIRCHILD,
-> +	FAN53555_VENDOR_ROCKCHIP,	/* RK8600, RK8601 */
-> +	RK8602_VENDOR_ROCKCHIP,		/* RK8602, RK8603 */
+From: Eric Biggers <ebiggers@google.com>
 
+As per Linus's suggestion
+(https://lore.kernel.org/r/CAHk-=whefxRGyNGzCzG6BVeM=5vnvgb-XhSeFJVxJyAxAF8XRA@mail.gmail.com),
+use WARN_ON_ONCE instead of WARN_ON.  This barely adds any extra
+overhead, and it makes it so that if any of these ever becomes reachable
+(they shouldn't, but that's the point), the logs can't be flooded.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ fs/verity/enable.c       | 4 ++--
+ fs/verity/hash_algs.c    | 4 ++--
+ fs/verity/open.c         | 2 +-
+ include/linux/fsverity.h | 6 +++---
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/fs/verity/enable.c b/fs/verity/enable.c
+index 7a0e3a84d370b..541c2a277c5c6 100644
+--- a/fs/verity/enable.c
++++ b/fs/verity/enable.c
+@@ -165,7 +165,7 @@ static int build_merkle_tree(struct file *filp,
+ 		}
+ 	}
+ 	/* The root hash was filled by the last call to hash_one_block(). */
+-	if (WARN_ON(buffers[num_levels].filled != params->digest_size)) {
++	if (WARN_ON_ONCE(buffers[num_levels].filled != params->digest_size)) {
+ 		err = -EINVAL;
+ 		goto out;
+ 	}
+@@ -277,7 +277,7 @@ static int enable_verity(struct file *filp,
+ 		fsverity_err(inode, "%ps() failed with err %d",
+ 			     vops->end_enable_verity, err);
+ 		fsverity_free_info(vi);
+-	} else if (WARN_ON(!IS_VERITY(inode))) {
++	} else if (WARN_ON_ONCE(!IS_VERITY(inode))) {
+ 		err = -EINVAL;
+ 		fsverity_free_info(vi);
+ 	} else {
+diff --git a/fs/verity/hash_algs.c b/fs/verity/hash_algs.c
+index 13fcf31be8441..ea00dbedf756b 100644
+--- a/fs/verity/hash_algs.c
++++ b/fs/verity/hash_algs.c
+@@ -84,9 +84,9 @@ struct fsverity_hash_alg *fsverity_get_hash_alg(const struct inode *inode,
+ 	}
+ 
+ 	err = -EINVAL;
+-	if (WARN_ON(alg->digest_size != crypto_ahash_digestsize(tfm)))
++	if (WARN_ON_ONCE(alg->digest_size != crypto_ahash_digestsize(tfm)))
+ 		goto err_free_tfm;
+-	if (WARN_ON(alg->block_size != crypto_ahash_blocksize(tfm)))
++	if (WARN_ON_ONCE(alg->block_size != crypto_ahash_blocksize(tfm)))
+ 		goto err_free_tfm;
+ 
+ 	err = mempool_init_kmalloc_pool(&alg->req_pool, 1,
+diff --git a/fs/verity/open.c b/fs/verity/open.c
+index 9366b441d01ca..52048b7630dcc 100644
+--- a/fs/verity/open.c
++++ b/fs/verity/open.c
+@@ -83,7 +83,7 @@ int fsverity_init_merkle_tree_params(struct merkle_tree_params *params,
+ 	params->log_blocks_per_page = PAGE_SHIFT - log_blocksize;
+ 	params->blocks_per_page = 1 << params->log_blocks_per_page;
+ 
+-	if (WARN_ON(!is_power_of_2(params->digest_size))) {
++	if (WARN_ON_ONCE(!is_power_of_2(params->digest_size))) {
+ 		err = -EINVAL;
+ 		goto out_err;
+ 	}
+diff --git a/include/linux/fsverity.h b/include/linux/fsverity.h
+index 119a3266791fd..e76605d5b36ee 100644
+--- a/include/linux/fsverity.h
++++ b/include/linux/fsverity.h
+@@ -233,18 +233,18 @@ static inline int fsverity_ioctl_read_metadata(struct file *filp,
+ static inline bool fsverity_verify_blocks(struct folio *folio, size_t len,
+ 					  size_t offset)
+ {
+-	WARN_ON(1);
++	WARN_ON_ONCE(1);
+ 	return false;
+ }
+ 
+ static inline void fsverity_verify_bio(struct bio *bio)
+ {
+-	WARN_ON(1);
++	WARN_ON_ONCE(1);
+ }
+ 
+ static inline void fsverity_enqueue_verify_work(struct work_struct *work)
+ {
+-	WARN_ON(1);
++	WARN_ON_ONCE(1);
+ }
+ 
+ #endif	/* !CONFIG_FS_VERITY */
+
+base-commit: 1238c8b91c5aca6dd13bccb1b4dc716718e7bfac
+-- 
+2.40.0
 
