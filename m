@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7E96D8F4A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E27E6D8F4C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbjDFGUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
+        id S235188AbjDFGU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbjDFGUn (ORCPT
+        with ESMTP id S232605AbjDFGUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:20:43 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D2AB4
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:20:42 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3e390e23f83so393621cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:20:42 -0700 (PDT)
+        Thu, 6 Apr 2023 02:20:54 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E58A93CC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:20:53 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id 89so27253983uao.0
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:20:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680762041;
+        d=chromium.org; s=google; t=1680762052;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XNGMbrDwFYJ2bOBmCKlUarMLiXvKBcI+GvaUwNOu/10=;
-        b=UwMH43JLsXXYRH1gRLlt3/1i/R+ZeYv0+334jNNi7FkNfTmRyW1BZljCqqhniRgGbg
-         EpyouwgfnZ58LQbiubJlvGmTcmtlL/NbHPlEP+e3IK9lqAWUWHHFdb5LCtT872XHZn5M
-         vRpFfC23IMtKGdxqDbq9m06QO3yLEVbQAL7FhLQ+ZTHDw72pYEpVnXUoMwe67zkGrkIT
-         CADvS5ppGaQKcyzHNDErCXFl6wWmxJBlwKrJM+BowTQqIGDml0rduspUHVTw1crujaqF
-         fr/QjMx3kYdC7IODO4Lr4l3wr682sVzV/ahNX1quWL8PbbT2/aAA032FLBRNohVHCw/5
-         eJWg==
+        bh=7Kz8SNhi1cpYQJqD/AT3lCWMWGthZUaWRueclcoldFw=;
+        b=mPvWNRiVsTupIoec66q+0JGs7s/4YhEwZZ04g/jmghXnDUFI/6nyTIM1XQon4YhQ+d
+         sUeW9y2q+BiIUCu5oCuJ39jm6hTaGPLWUN9o/Hyw+LUaoZQ6CaysXslzfjHm/cOGUY3J
+         luBsHTXmU8iyVg2z19eX9ALbgMcoSCgUvfohw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680762041;
+        d=1e100.net; s=20210112; t=1680762052;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XNGMbrDwFYJ2bOBmCKlUarMLiXvKBcI+GvaUwNOu/10=;
-        b=V/Qn9mJRpNmLCKyke6+usJzHDZIhHkNlEaGHvcM/isvze0YEI1Q08o44sduRhy/9TR
-         ZXhM22sLtvlTeKFwE+ZRxxClRd90nKSGzi9IS4QlfjHq+IE49rRQUJMEwt5gpS1m1uEG
-         SCgOaPoM9D/fCXFS7pTp4Ir3aPgvBitPMEgPsuN6A7DiGLcsjT21cA4k/YHrrPNmXEkv
-         cD01URXmUSAFI4agZXBYkBxm9D2bxvTqF6KJO1FgFutM7aemARCczMAGp0xZJbgjGlQm
-         K7TQZ7IUac9J6Nec9n461kcaixIfyAoZxW3jCQkQSZQ171eLhaj5a4cyU0PObqMOj/Uk
-         ysGQ==
-X-Gm-Message-State: AAQBX9dc1GfxDJgo5jLHFrrTv8HtvKX4rJdAbFSRqGQ+Nn+Wg+WDY85X
-        z6pgXzB5Uz1krdh7S4ZvckMjzDmvImcmB0v5kD0Y1w==
-X-Google-Smtp-Source: AKy350Y55tL3xvY7BT+sgruCRqe/1Q5XoFK5pXPKNuiMse5ClFsCfzotPvwr9sztlZh6EQWtfHnm+l588nbgxfIZz5I=
-X-Received: by 2002:ac8:7e96:0:b0:3e6:7702:b87 with SMTP id
- w22-20020ac87e96000000b003e677020b87mr170767qtj.7.1680762041485; Wed, 05 Apr
- 2023 23:20:41 -0700 (PDT)
+        bh=7Kz8SNhi1cpYQJqD/AT3lCWMWGthZUaWRueclcoldFw=;
+        b=JBezwc98n1kuXC1CQNFivYT9FRVhxI58QTlNb22TEsmAKePdxEZSbkkX1isRQKZsBR
+         6D9Cbl1/9pjW6gNenz7Mb6z5UUnO0i8X87772eqgkI/YhqoL6f6oPVqPcBWFS21vr6Qu
+         mRioccoXMGG+cGBK9YC6YaqrSpHVDU6uK45r5u5yyOCefq8pA86CmTcmJRLLi5AgKiwW
+         9leiX7M9bRq/bUk3SFEDQxMNlSqbttqTbn9uSUNX7zTCgMSnc2k7fPuj+lbPS3W0YU8r
+         snByRrjfa4jUb6YHcVs6IqIYugC++jOpndh+nyfn3xMqikmvA2MjWw84oLeEpNwd4WPY
+         4Xcg==
+X-Gm-Message-State: AAQBX9fFT7n/XyqL4XfeW5B0YeiuIUDjJlIaGBCgfMDvVX9WFsfyFJ6Y
+        uwvzAyae1dXD85vZjvS/GD1f+G2k6pNGbI5yp4nK/g==
+X-Google-Smtp-Source: AKy350Yp2FIaz+ilkqlK7ibx9rFilAky16tPkK48Dbsh+GzGOd0UvkGhSb+M4eo0JEvts5cE5ZH/AYrK9lJqHNhSarI=
+X-Received: by 2002:a9f:3110:0:b0:68a:a9d:13f5 with SMTP id
+ m16-20020a9f3110000000b0068a0a9d13f5mr6292638uab.1.1680762052315; Wed, 05 Apr
+ 2023 23:20:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230404133630.1985739-1-irogers@google.com> <ZC3mz+Ge9WGG8/t5@krava>
-In-Reply-To: <ZC3mz+Ge9WGG8/t5@krava>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 5 Apr 2023 23:20:29 -0700
-Message-ID: <CAP-5=fXaDXu+LttGZyWzU0aj__ruc8PLyBTME+dpFNCaRwxprw@mail.gmail.com>
-Subject: Re: [PATCH v2] perf pmu: Make parser reentrant
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Rob Herring <robh@kernel.org>, Leo Yan <leo.yan@linaro.org>,
-        German Gomez <german.gomez@arm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com> <20230404104800.301150-6-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230404104800.301150-6-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 6 Apr 2023 14:20:41 +0800
+Message-ID: <CAGXv+5HTPd_2r0Bb2nY94gUwWzpn_wvU_ZMYu6u9hWBeaVzrwA@mail.gmail.com>
+Subject: Re: [PATCH v3 5/9] drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
+        daniel@ffwll.ch, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,182 +70,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 2:23=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrote=
-:
+On Tue, Apr 4, 2023 at 6:48=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> On Tue, Apr 04, 2023 at 06:36:30AM -0700, Ian Rogers wrote:
-> > By default bison uses global state for compatibility with yacc. Make
-> > the parser reentrant so that it may be used in asynchronous and
-> > multithreaded situations.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/pmu.c | 24 ++++++++++++++++++------
-> >  tools/perf/util/pmu.h |  2 +-
-> >  tools/perf/util/pmu.l | 17 ++++++++++++-----
-> >  tools/perf/util/pmu.y |  5 ++++-
-> >  4 files changed, 35 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> > index 78a407b42ad1..f603cdabf797 100644
-> > --- a/tools/perf/util/pmu.c
-> > +++ b/tools/perf/util/pmu.c
-> > @@ -24,6 +24,8 @@
-> >  #include "evsel.h"
-> >  #include "pmu.h"
-> >  #include "pmus.h"
-> > +#include "pmu-bison.h"
-> > +#include "pmu-flex.h"
-> >  #include "parse-events.h"
-> >  #include "print-events.h"
-> >  #include "header.h"
-> > @@ -57,9 +59,6 @@ struct perf_pmu_format {
-> >       struct list_head list;
-> >  };
-> >
-> > -int perf_pmu_parse(struct list_head *list, char *name);
-> > -extern FILE *perf_pmu_in;
-> > -
-> >  static bool hybrid_scanned;
-> >
-> >  static struct perf_pmu *perf_pmu__find2(int dirfd, const char *name);
-> > @@ -81,6 +80,8 @@ int perf_pmu__format_parse(int dirfd, struct list_hea=
-d *head)
-> >       while (!ret && (evt_ent =3D readdir(format_dir))) {
-> >               char *name =3D evt_ent->d_name;
-> >               int fd;
-> > +             void *scanner;
-> > +             FILE *file;
-> >
-> >               if (!strcmp(name, ".") || !strcmp(name, ".."))
-> >                       continue;
-> > @@ -91,9 +92,20 @@ int perf_pmu__format_parse(int dirfd, struct list_he=
-ad *head)
-> >               if (fd < 0)
-> >                       break;
-> >
-> > -             perf_pmu_in =3D fdopen(fd, "r");
-> > -             ret =3D perf_pmu_parse(head, name);
-> > -             fclose(perf_pmu_in);
-> > +             file =3D fdopen(fd, "r");
-> > +             if (!file)
-> > +                     break;
+> Change logging from drm_{err,info}() to dev_{err,info}() in functions
+> mtk_dp_aux_transfer() and mtk_dp_aux_do_transfer(): this will be
+> essential to avoid getting NULL pointer kernel panics if any kind
+> of error happens during AUX transfers happening before the bridge
+> is attached.
 >
-> hum, do we potentially leak fd in here?
+> This may potentially start happening in a later commit implementing
+> aux-bus support, as AUX transfers will be triggered from the panel
+> driver (for EDID) before the mtk-dp bridge gets attached, and it's
+> done in preparation for the same.
 >
-> jirka
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dp.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek=
+/mtk_dp.c
+> index ac21eca0e20e..19b145cf2e05 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+> @@ -849,7 +849,7 @@ static int mtk_dp_aux_do_transfer(struct mtk_dp *mtk_=
+dp, bool is_read, u8 cmd,
+>                 u32 phy_status =3D mtk_dp_read(mtk_dp, MTK_DP_AUX_P0_3628=
+) &
+>                                  AUX_RX_PHY_STATE_AUX_TX_P0_MASK;
+>                 if (phy_status !=3D AUX_RX_PHY_STATE_AUX_TX_P0_RX_IDLE) {
+> -                       drm_err(mtk_dp->drm_dev,
+> +                       dev_err(mtk_dp->dev,
+>                                 "AUX Rx Aux hang, need SW reset\n");
+>                         return -EIO;
+>                 }
+> @@ -2061,7 +2061,7 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_au=
+x *mtk_aux,
+>                 is_read =3D true;
+>                 break;
+>         default:
+> -               drm_err(mtk_aux->drm_dev, "invalid aux cmd =3D %d\n",
+> +               dev_err(mtk_dp->dev, "invalid aux cmd =3D %d\n",
+>                         msg->request);
+>                 ret =3D -EINVAL;
+>                 goto err;
+> @@ -2077,7 +2077,7 @@ static ssize_t mtk_dp_aux_transfer(struct drm_dp_au=
+x *mtk_aux,
+>                                              to_access);
+>
+>                 if (ret) {
+> -                       drm_info(mtk_dp->drm_dev,
+> +                       dev_info(mtk_dp->dev,
+>                                  "Failed to do AUX transfer: %d\n", ret);
 
-Agreed. Will fix in v3.
+This part no longer applies cleanly due to
 
-Thanks,
-Ian
+    drm/mediatek: dp: Change the aux retries times when receiving AUX_DEFER
 
-> > +
-> > +             ret =3D perf_pmu_lex_init(&scanner);
-> > +             if (ret) {
-> > +                     fclose(file);
-> > +                     break;
-> > +             }
-> > +
-> > +             perf_pmu_set_in(file, scanner);
-> > +             ret =3D perf_pmu_parse(head, name, scanner);
-> > +             perf_pmu_lex_destroy(scanner);
-> > +             fclose(file);
-> >       }
-> >
-> >       closedir(format_dir);
-> > diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-> > index 32c3a75bca0e..d53618c65c92 100644
-> > --- a/tools/perf/util/pmu.h
-> > +++ b/tools/perf/util/pmu.h
-> > @@ -206,7 +206,7 @@ int perf_pmu__check_alias(struct perf_pmu *pmu, str=
-uct list_head *head_terms,
-> >                         struct perf_pmu_info *info);
-> >  struct list_head *perf_pmu__alias(struct perf_pmu *pmu,
-> >                                 struct list_head *head_terms);
-> > -void perf_pmu_error(struct list_head *list, char *name, char const *ms=
-g);
-> > +void perf_pmu_error(struct list_head *list, char *name, void *scanner,=
- char const *msg);
-> >
-> >  int perf_pmu__new_format(struct list_head *list, char *name,
-> >                        int config, unsigned long *bits);
-> > diff --git a/tools/perf/util/pmu.l b/tools/perf/util/pmu.l
-> > index 58b4926cfaca..67b247be693b 100644
-> > --- a/tools/perf/util/pmu.l
-> > +++ b/tools/perf/util/pmu.l
-> > @@ -1,4 +1,6 @@
-> >  %option prefix=3D"perf_pmu_"
-> > +%option reentrant
-> > +%option bison-bridge
-> >
-> >  %{
-> >  #include <stdlib.h>
-> > @@ -6,16 +8,21 @@
-> >  #include "pmu.h"
-> >  #include "pmu-bison.h"
-> >
-> > -static int value(int base)
-> > +char *perf_pmu_get_text(yyscan_t yyscanner);
-> > +YYSTYPE *perf_pmu_get_lval(yyscan_t yyscanner);
-> > +
-> > +static int value(yyscan_t scanner, int base)
-> >  {
-> > +     YYSTYPE *yylval =3D perf_pmu_get_lval(scanner);
-> > +     char *text =3D perf_pmu_get_text(scanner);
-> >       long num;
-> >
-> >       errno =3D 0;
-> > -     num =3D strtoul(perf_pmu_text, NULL, base);
-> > +     num =3D strtoul(text, NULL, base);
-> >       if (errno)
-> >               return PP_ERROR;
-> >
-> > -     perf_pmu_lval.num =3D num;
-> > +     yylval->num =3D num;
-> >       return PP_VALUE;
-> >  }
-> >
-> > @@ -25,7 +32,7 @@ num_dec         [0-9]+
-> >
-> >  %%
-> >
-> > -{num_dec}    { return value(10); }
-> > +{num_dec}    { return value(yyscanner, 10); }
-> >  config               { return PP_CONFIG; }
-> >  -            { return '-'; }
-> >  :            { return ':'; }
-> > @@ -35,7 +42,7 @@ config              { return PP_CONFIG; }
-> >
-> >  %%
-> >
-> > -int perf_pmu_wrap(void)
-> > +int perf_pmu_wrap(void *scanner __maybe_unused)
-> >  {
-> >       return 1;
-> >  }
-> > diff --git a/tools/perf/util/pmu.y b/tools/perf/util/pmu.y
-> > index e675d79a0274..dff4e892ac4d 100644
-> > --- a/tools/perf/util/pmu.y
-> > +++ b/tools/perf/util/pmu.y
-> > @@ -1,6 +1,8 @@
-> > -
-> > +%define api.pure full
-> >  %parse-param {struct list_head *format}
-> >  %parse-param {char *name}
-> > +%parse-param {void *scanner}
-> > +%lex-param {void* scanner}
-> >
-> >  %{
-> >
-> > @@ -78,6 +80,7 @@ PP_VALUE
-> >
-> >  void perf_pmu_error(struct list_head *list __maybe_unused,
-> >                   char *name __maybe_unused,
-> > +                 void *scanner __maybe_unused,
-> >                   char const *msg __maybe_unused)
-> >  {
-> >  }
-> > --
-> > 2.40.0.348.gf938b09366-goog
-> >
+Also I think all these calls could be collapsed into one line?
+
+ChenYu
+
+>                         goto err;
+>                 }
+> --
+> 2.40.0
+>
