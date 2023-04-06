@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B23F6D9DD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFBD6D9DD5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239056AbjDFQrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S239611AbjDFQrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238800AbjDFQrh (ORCPT
+        with ESMTP id S239220AbjDFQrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:47:37 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F9D83F6;
-        Thu,  6 Apr 2023 09:47:15 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id w13so18113321oik.2;
-        Thu, 06 Apr 2023 09:47:15 -0700 (PDT)
+        Thu, 6 Apr 2023 12:47:51 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9507ED8;
+        Thu,  6 Apr 2023 09:47:36 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id f14so15938007oiw.10;
+        Thu, 06 Apr 2023 09:47:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680799634; x=1683391634;
+        d=1e100.net; s=20210112; t=1680799656; x=1683391656;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4YfchWdjXjTn0JuMSZJ2W3hFarimqnpUe1TA/nvAeH0=;
-        b=Nr+Hk4/yBcnjr5gelZAsXPVGITPa6HQnH2hrIx8yXHxQl0mX2WofaTIqaqqk2Mna87
-         M51Ees3k4Ryd+Eed1SWzIkCOe8ewQ+LnzrIZ1L4KCjKPEmULp6BfF711DVRVaUhMmMax
-         SfVrQrbm9mtC4V1oRxplLtCwFOKv98IC/MlV1brJ+JT+gJ4LR5jZeVMr6DwJEDtKhqsK
-         HLOwHALGsF4zJqK0Ng6Bl9jrMBn12/h6LaCBAV7R99omtO3JGZ69aw6ENqiKPKxFgClj
-         a+o2Z614rgGCKFOs8x+2sklz0lRBpYhZvfyk24wwv0WX4VPaM9ighsusB0ujGIBYHUW1
-         tHUA==
-X-Gm-Message-State: AAQBX9cQNwB+2971hV55EfiB95dGb/Anbl9pae/Mu/2+3plAo+3DnoO9
-        FzkIKUjGRAt7YtKEOMwyVw==
-X-Google-Smtp-Source: AKy350bbuaIAoZEiwjlysJa0+efhJhrgeaPw7tJOM4quQaWsEDJyjqAZugMjUjS4tmDtQcileK3kag==
-X-Received: by 2002:a05:6808:257:b0:387:1b0f:c03d with SMTP id m23-20020a056808025700b003871b0fc03dmr4863580oie.28.1680799634503;
-        Thu, 06 Apr 2023 09:47:14 -0700 (PDT)
+        bh=goftEu/oL/56f1SzPdGbJy2Za/7DOnQGB7Rg7sScybg=;
+        b=zc/Vyqo/bkKvPLMEjJZUx/V7wr+1GD6UGDAXm368dlk4KDVkFUqkwqyKMC96+ckgba
+         pPjmTaST3+oEVsfvSS99zJ+fUpu8OwEFV6e316ZKclZAh9CUStFS0DfF/EKqdxy2x+le
+         7getFhTGV5Qtl5QS9IvQqX47jZpyo99fYqiGT8sBgho1TEvdASBaDVwVXYZ1FUe5CEgP
+         YeOrLz8mjK33Xedt1M1TQfbvuCHrFzDi0o/GDFu98gwBvanWqUIy76KCP/oxV64Pjv+l
+         LT5KralIj4QRcHYpIMj/q/hdBMJ7i5u6fPb33ORSwqRHXhsBbkzy6BoHTknmXU/Hbx5v
+         OiEA==
+X-Gm-Message-State: AAQBX9cw5CJWxU0Koa1PhPv22KMXPX4OtrSvIDyfBHcvKqzuaFpRyjas
+        XzgN0epnK6scZITeATXAxg==
+X-Google-Smtp-Source: AKy350Yon2Li5QLhuLgTOLq8dbTiEim2m/ZmXxUprhFvPZtz4VV5R+lfSjreM2TmT/a9JHFtn1qfnQ==
+X-Received: by 2002:a05:6808:984:b0:383:e301:1795 with SMTP id a4-20020a056808098400b00383e3011795mr3720625oic.4.1680799656216;
+        Thu, 06 Apr 2023 09:47:36 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bj22-20020a056808199600b0038733b00a5fsm856210oib.10.2023.04.06.09.47.13
+        by smtp.gmail.com with ESMTPSA id p10-20020acad80a000000b003898bec0e01sm860605oig.17.2023.04.06.09.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 09:47:14 -0700 (PDT)
-Received: (nullmailer pid 3282311 invoked by uid 1000);
-        Thu, 06 Apr 2023 16:47:13 -0000
-Date:   Thu, 6 Apr 2023 11:47:13 -0500
+        Thu, 06 Apr 2023 09:47:35 -0700 (PDT)
+Received: (nullmailer pid 3282908 invoked by uid 1000);
+        Thu, 06 Apr 2023 16:47:35 -0000
+Date:   Thu, 6 Apr 2023 11:47:35 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Abraham I <kishon@ti.com>, Yuti Amonkar <yamonkar@cadence.com>,
-        linux-phy@lists.infradead.org,
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
         Kishon Vijay Abraham I <kishon@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>,
+        Abraham I <kishon@ti.com>,
         Swapnil Jakhade <sjakhade@cadence.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/5] dt-bindings: phy: cadence-torrent: drop
+        devicetree@vger.kernel.org, Yuti Amonkar <yamonkar@cadence.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 4/5] dt-bindings: phy: ti,phy-j721e-wiz: drop
  assigned-clocks
-Message-ID: <168079962419.3282109.11445334016801468789.robh@kernel.org>
+Message-ID: <168079965469.3282835.8696594614789018779.robh@kernel.org>
 References: <20230404190115.546973-1-krzysztof.kozlowski@linaro.org>
- <20230404190115.546973-2-krzysztof.kozlowski@linaro.org>
+ <20230404190115.546973-4-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230404190115.546973-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230404190115.546973-4-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -71,16 +70,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 04 Apr 2023 21:01:12 +0200, Krzysztof Kozlowski wrote:
+On Tue, 04 Apr 2023 21:01:14 +0200, Krzysztof Kozlowski wrote:
 > The meta schema from DT schema already defines assigned-clocks, so there
 > is no need for device schema to mention it at all.  There are also no
 > benefits of having it here and a board could actually need more of clock
 > assignments than the schema allows.
 > 
+> Keep however the assigned-clocks in children nodes, as apparently their
+> proper parenting is required.
+> 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 6 ------
->  1 file changed, 6 deletions(-)
+>  .../devicetree/bindings/phy/ti,phy-j721e-wiz.yaml    | 12 ------------
+>  1 file changed, 12 deletions(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
