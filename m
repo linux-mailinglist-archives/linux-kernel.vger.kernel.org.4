@@ -2,84 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5460F6D9FC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A68C6D9FCA
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240111AbjDFS0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
+        id S239471AbjDFS1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240136AbjDFS0g (ORCPT
+        with ESMTP id S240182AbjDFS1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:26:36 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF03893D8
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:26:29 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id k18so3224788lfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:26:29 -0700 (PDT)
+        Thu, 6 Apr 2023 14:27:09 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A3BAD34;
+        Thu,  6 Apr 2023 11:26:56 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id i6so47157767ybu.8;
+        Thu, 06 Apr 2023 11:26:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680805588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VrPZiBBEPnTeAG4ijDo3nsObeCJTrwIJDTUCNITg5iI=;
-        b=CqY6xF+cOM6sbxvjz1Ff7fcQTniOYKz25DBG6qwejTmMEtsmz5R30IcQ4sXU09agqz
-         P2PmuH6Zw2bKIlZNN6pfWhu8qqUxSJLAvzstuk0VDd9a90kRfEe2y3Ik22OCGmhp2uHV
-         qModnBJcJBhDhgSwuY5jGg+eLZ4iDFenf1vxh/bGXh9z+V8icUiD9i5qAT/VXwbu7flL
-         0KZIFha7SMukx/q98vET3mn+TYaju71P93US6xA8xhFUfIfhX8gZPoiCqVs9APcBPung
-         hX3ctOJ+/HYMko8xKotKi0hFQXT2S9ekgcGnI/ptduyfF+3ahLqbNXocC5t04IHUe9Me
-         q0nQ==
+        d=gmail.com; s=20210112; t=1680805616;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iHBcWCBEezCxpjKUtj3H1oZtv2uNUGbL/M+axm69yCo=;
+        b=qccvgOU1dEgpCacMFpysZZuRBctwb2yBaV5krfvpQGwqlFQTNpjXyk+DrPrAzf6HrE
+         7gh4vTQ3aepzO3zcPPAfkvPkE1GukxjbRpAnxhJeGUaxffagmC4oIJnEmn3Hj6spvO92
+         KyVoMWY02IVAFBxYC1unpyWPXrohqUp7LMsXc72IH502k+H79FEBN3J3GZXtZXarg2KZ
+         9NQeiPpsEXV49dDgVfjsOuti0pzAgx5kAxUJ+Xgc89uMhRIEx1nkZERcy3yzTMKb7L6B
+         WCGfai9EUg35VR8aSflOPLGmorb6ksKroudnLqKNRd5mP1n986VViAw50t0nVLjPWRSu
+         ze6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680805588;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VrPZiBBEPnTeAG4ijDo3nsObeCJTrwIJDTUCNITg5iI=;
-        b=IdgELzOhm0U9x3zcoi6o8k76AByDdyoIWC3rRVqhV1Bvr+mjQt5axUxame5xMpwwgQ
-         RI47gdjAvQw8I8vblMFmzlOCv1wvUQxGlnseoGEYmTQlVCMpIcW9ki0OwTrwOUYfNWA0
-         C15NSbRSKzvqMUNPuTK9nyUEKwuLo3ehusSnXz0vPPJ0c84xMhbjZxHtAh2ZDHj3eN/D
-         SaxxuaMf8XmOX/RvocW6+hhs6AYKT5FitLFOLHEoIIqM4ACqTWs8kyIxUd+BMBqBwxCO
-         DAsf0IzfnnqsuJGb4qf8tp/VrvSsNjbyucN07RBedmQ3SQx8NJ2D6F/RRwg6jBTwUEiR
-         NYog==
-X-Gm-Message-State: AAQBX9eYzilg6xJb9AhxcZCMSsBz7w9Z+oYJKROB83SjtbRAR06DHPCk
-        xhsP4QyS15znbH1+LOM72YMpcQ==
-X-Google-Smtp-Source: AKy350Zoz7gSPFtYZOf28QyZRifSrImimrPXqKp3I11ff3EWM5EclgyEAjZIR1qhjTDNBFSIbmszqQ==
-X-Received: by 2002:ac2:43d7:0:b0:4eb:3b7c:233 with SMTP id u23-20020ac243d7000000b004eb3b7c0233mr18951lfl.16.1680805587873;
-        Thu, 06 Apr 2023 11:26:27 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id w26-20020a05651204da00b004e88a166eb6sm368106lfq.46.2023.04.06.11.26.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:26:27 -0700 (PDT)
-Message-ID: <8c818f95-b4a4-658f-701d-3151afdd5179@linaro.org>
-Date:   Thu, 6 Apr 2023 20:26:20 +0200
+        d=1e100.net; s=20210112; t=1680805616;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iHBcWCBEezCxpjKUtj3H1oZtv2uNUGbL/M+axm69yCo=;
+        b=VZWKX9yGJ5TuLV7NRHvDOXFRYI2ePSdT9McMt++PpOh7q3HriH9QghRYoaAnMplUrZ
+         JBCDRl4ha4mwU9MNQ1zqC//4mxrU61ggOizIUpC4rqa3bQksk7XwEozEhtdUbRJ8Yf1E
+         GiK0PCI3ZX6e0OVtGMGpkcQFjbguyMFFTaJHNUR1XT/x00x+X4m3n1yUnjMU1yNGaOg4
+         EAbF12rBZY8N2sj5zgB4rO2C7oISC2LP45AuDGMkpcI3V/ffYKLkua2eLMcAEA7T9BnH
+         FOk3I4DJx1J1p78A+crP1CUDdqM3FX+552vNhFqcepspfrODZNyZN2S9TmdiYO42c45D
+         WZww==
+X-Gm-Message-State: AAQBX9f4fpv+aG5T2OIU9DPAIBGwqbM3aa/Cl6f0av36Z7DLIzLfa6Ey
+        8QvV4eZFEphNdTanRuG67b7UfZCmRpuvYqv1KUQ=
+X-Google-Smtp-Source: AKy350YUcNuZ9sKwCppNWDnT95OSPxh1dOTPG9d/r34oqKOvx4+uhd6QdvFwWkQwWkmr2xagSuBcnOEtHR7bAt3WOU0=
+X-Received: by 2002:a25:7390:0:b0:b6e:d788:eba4 with SMTP id
+ o138-20020a257390000000b00b6ed788eba4mr57282ybc.6.1680805615758; Thu, 06 Apr
+ 2023 11:26:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: Convert ATH10K to YAML
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
- <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
- <223892d0-9b1b-9459-dec1-574875f7c1c6@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <223892d0-9b1b-9459-dec1-574875f7c1c6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230405201416.395840-1-daniel.almeida@collabora.com>
+ <20230405201416.395840-3-daniel.almeida@collabora.com> <c2ebdc61-6aff-ab64-a0cb-e2170edfa689@gmail.com>
+In-Reply-To: <c2ebdc61-6aff-ab64-a0cb-e2170edfa689@gmail.com>
+From:   Wedson Almeida Filho <wedsonaf@gmail.com>
+Date:   Thu, 6 Apr 2023 15:26:48 -0300
+Message-ID: <CANeycqrG-t56KHJta1UTc9d8OHGvRnmjdW1g2swfkX5feaXoQw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] rust: virtio: add virtio support
+To:     Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc:     Daniel Almeida <daniel.almeida@collabora.com>, ojeda@kernel.org,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,135 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 6 Apr 2023 at 11:22, Martin Rodriguez Reboredo
+<yakoyoku@gmail.com> wrote:
+>
+> On 4/5/23 17:14, Daniel Almeida wrote:
+> > This patch adds virtIO support to the rust crate. This includes the
+> > capability to create a virtIO driver (through the module_virtio_driver
+> > macro and the respective Driver trait) as well as initial virtqueue
+> > support.
+> >
+> > A sample virtIO module is included for conveninence.
+> >
+> > Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
+> > ---
+> >  rust/bindings/bindings_helper.h |   3 +
+> >  rust/helpers.c                  |  25 +++
+> >  rust/kernel/lib.rs              |   2 +
+> >  rust/kernel/virtio.rs           | 261 ++++++++++++++++++++++++++++++++
+> >  rust/kernel/virtio/virtqueue.rs | 126 +++++++++++++++
+> >  samples/rust/Kconfig            |  10 ++
+> >  samples/rust/Makefile           |   1 +
+> >  samples/rust/rust_virtio.rs     | 195 ++++++++++++++++++++++++
+> >  8 files changed, 623 insertions(+)
+> >  create mode 100644 rust/kernel/virtio.rs
+> >  create mode 100644 rust/kernel/virtio/virtqueue.rs
+> >  create mode 100644 samples/rust/rust_virtio.rs
+>
+> IMO this should be split further. If I were to suggest I'd say to do it
+> as following.
+>
+> - virtio bindings
+> - virtqueue bindings
+> - sample virtio module
+>
+> This way the size of each commit would be more amenable to reviews.
 
+Yes, I agree with Martin's suggestion.
 
-On 6.04.2023 19:15, Krzysztof Kozlowski wrote:
-> On 06/04/2023 14:55, Konrad Dybcio wrote:
->> Convert the ATH10K bindings to YAML.
->>
->> Dropped properties that are absent at the current state of mainline:
->> - qcom,msi_addr
->> - qcom,msi_base
->>
->> qcom,coexist-support and qcom,coexist-gpio-pin do very little and should
->> be reconsidered on the driver side, especially the latter one.
->>
->> Somewhat based on the ath11k bindings.
-> 
-> 
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,ipq4019-wifi
->> +    then:
->> +      properties:
->> +        interrupts:
->> +          minItems: 17
->> +          maxItems: 17
->> +
->> +        interrupt-names:
->> +          minItems: 17
-> 
-> Drop minItems (the number of items is defined by listing them below, as
-> you did).
-OK
+Daniel, please split this further.
 
-> 
->> +          items:
->> +            - const: msi0
->> +            - const: msi1
->> +            - const: msi2
->> +            - const: msi3
->> +            - const: msi4
->> +            - const: msi5
->> +            - const: msi6
->> +            - const: msi7
->> +            - const: msi8
->> +            - const: msi9
->> +            - const: msi10
->> +            - const: msi11
->> +            - const: msi12
->> +            - const: msi13
->> +            - const: msi14
->> +            - const: msi15
->> +            - const: legacy
->> +
->> +        clocks:
->> +          items:
->> +            - description: Wi-Fi command clock
->> +            - description: Wi-Fi reference clock
->> +            - description: Wi-Fi RTC clock
->> +
->> +        clock-names:
->> +          items:
->> +            - const: wifi_wcss_cmd
->> +            - const: wifi_wcss_ref
->> +            - const: wifi_wcss_rtc
->> +
->> +      required:
->> +        - clocks
->> +        - clock-names
->> +        - interrupts
->> +        - interrupt-names
->> +        - resets
->> +        - reset-names
->> +
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            enum:
->> +              - qcom,wcn3990-wifi
->> +
->> +    then:
->> +      properties:
->> +        clocks:
->> +          minItems: 1
->> +          items:
->> +            - description: XO reference clock
->> +            - description: Qualcomm Debug Subsystem clock
->> +
->> +        clock-names:
->> +          minItems: 1
->> +          items:
->> +            - const: cxo_ref_clk_pin
->> +            - const: qdss
->> +
->> +        interrupts:
->> +          items:
->> +            - description: CE0
->> +            - description: CE1
->> +            - description: CE2
->> +            - description: CE3
->> +            - description: CE4
->> +            - description: CE5
->> +            - description: CE6
->> +            - description: CE7
->> +            - description: CE8
->> +            - description: CE9
->> +            - description: CE10
->> +            - description: CE11
-> 
-> What about interrupt-names here? If they are not expected, then just
-> interrupt-names: false
-They obviously wouldn't hurt, but they're unused on the driver side:
-
-for (i = 0; i < CE_COUNT; i++) {
-		ret = platform_get_irq(ar_snoc->dev, i);
-
-So I will forbid them.
-
-Konrad
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+Cheers,
+-Wedson
