@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265B86DA282
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851FA6DA283
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239025AbjDFUVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S239054AbjDFUVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbjDFUVA (ORCPT
+        with ESMTP id S238914AbjDFUVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:21:00 -0400
+        Thu, 6 Apr 2023 16:21:01 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1BB7EFA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:20:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A7D7290
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 13:21:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680812459; x=1712348459;
+  t=1680812460; x=1712348460;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=DdFRQkiOjc9Y6S0ceyG8yplXHl7TzxjliO+zita68pM=;
-  b=V1xkXA1D4qHei/wsZmBn1jP+GEvLeuA8DwI4wM+baonF34R+2KGzWFEx
-   Onk/nEgOIkFsM6CanCWyRw/Y7Qv+/2feuaeeDvfoWD3KuBrYTYw+08Y96
-   I97uKpwDkAxd1pz3t+ryItKU7g+x0vAXey8ESPASnUMyG7drzBc/AMfyI
-   l3lfxARz6oyIk4ompYrCuPz6P9DZ27F19o+cbhD5blOxwIo1Dg6nyovkC
-   AUrnUAD5nBFG8M191pLyZ4BVjYc8ODfo9pm1K9XjxxbAqjrUq4U+kNrqS
-   pSoO3ml1FPrmb2w1jZayiyV2EJgi2BgxT4W0petDl7tbZ07t+HUnG0/jf
+  bh=T7YcPvoqJl/ysW/iYHGXA37dyyCN2NzIcKZ5yP9G8sU=;
+  b=Pwwu+MM57QSWnnkKuzR7wqcvhgM1pSQnPweIv3w0PiD+rlmYmnQKnX2R
+   O9mOAEpSzKQRQEsUiA6lDlXMde2KXQIrYx/JIQjuN3zr6XLBaj8Q10iqz
+   1yomnnF0AQdFRzxNuRiEyZqE0xifMuO3EN5prc5KYI2/qvvgCpol8zep/
+   mdJVUB056L+FN/pL9iSZR7IIGe4bR/vqjo6iqe1vOOsdKBzP1JDbptsn0
+   F/X4Ir0Mtxv2RufhkqZolAUFb04T++QBoc7nzIlIUJHCJiurCCnpTJ5xp
+   lEeObK5iKiTf4b/+baCBg0RLkzu3BbijgiOm/y2O4kGn32BvvHTH5IFQY
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="407957706"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="407957718"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="407957706"
+   d="scan'208";a="407957718"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 13:20:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861529869"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="861529872"
 X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="861529869"
+   d="scan'208";a="861529872"
 Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2023 13:20:57 -0700
+  by orsmga005.jf.intel.com with ESMTP; 06 Apr 2023 13:20:58 -0700
 From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
@@ -58,9 +58,9 @@ Cc:     Ricardo Neri <ricardo.neri@intel.com>,
         linux-kernel@vger.kernel.org,
         Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: [PATCH v4 02/12] sched/fair: Only do asym_packing load balancing from fully idle SMT cores
-Date:   Thu,  6 Apr 2023 13:31:38 -0700
-Message-Id: <20230406203148.19182-3-ricardo.neri-calderon@linux.intel.com>
+Subject: [PATCH v4 03/12] sched/fair: Simplify asym_packing logic for SMT cores
+Date:   Thu,  6 Apr 2023 13:31:39 -0700
+Message-Id: <20230406203148.19182-4-ricardo.neri-calderon@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
 References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
@@ -74,13 +74,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When balancing load between cores, all the SMT siblings of the destination
-CPU, if any, must be idle. Otherwise, pulling new tasks degrades the
-throughput of the busy SMT siblings. The overall throughput of the system
-remains the same.
+Callers of asym_smt_can_pull_tasks() check the idle state of the
+destination CPU and its SMT siblings, if any. No extra checks are needed
+in such function.
 
-When balancing load within an SMT core this consideration is not relevant.
-Follow the priorities that hardware indicates.
+Since SMT cores divide capacity among its siblings, priorities only really
+make sense if only one sibling is active. This is true for SMT2, SMT4,
+SMT8, etc. Do not use asym_packing load balance for this case. Instead,
+let find_busiest_group() handle imbalances.
+
+When balancing non-SMT cores or at higher scheduling domains (e.g.,
+between MC scheduling groups), continue using priorities.
 
 Cc: Ben Segall <bsegall@google.com>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -96,146 +100,89 @@ Cc: Valentin Schneider <vschneid@redhat.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 Tested-by: Zhang Rui <rui.zhang@intel.com>
-Suggested-by: Valentin Schneider <vschneid@redhat.com>
+Reviewed-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 ---
 Changes since v3:
- * Improved the logic to determine whether CPU priority should be followed.
-   Also, wrapped this logic in a helper function. (Vincent G./ Peter)
- * Used sched_smt_active() to avoid pointless calls of is_core_idle().
-   (Dietmar)
- * Ensure that the core is idle in asym_active_balance(). (Tim)
- * Used sched_use_asym_prio() to check for fully idle SMT cores in
-   sched_asym().
- * Removed check for fully idle core inside asym_smt_can_pull_tasks().
-   Now such condition is verified outside the function.
+ * Dropped checks for a destination SMT core.
+ * Limited the check of a single busy CPU to SMT cores. This fixes a bug
+   when balancing between MC scheduling groups of different priority.
 
 Changes since v2:
- * Introduced this patch.
+ * Updated documentation of the function to reflect the new behavior.
+   (Dietmar)
 
 Changes since v1:
- * N/A
+ * Reworded commit message and inline comments for clarity.
+ * Stated that this changeset does not impact SMT4 or SMT8.
 ---
- kernel/sched/fair.c | 60 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 44 insertions(+), 16 deletions(-)
+ kernel/sched/fair.c | 33 ++++++++++++---------------------
+ 1 file changed, 12 insertions(+), 21 deletions(-)
 
 diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 57c106fa721d..ec7ddbfd1136 100644
+index ec7ddbfd1136..b6bbe0300635 100644
 --- a/kernel/sched/fair.c
 +++ b/kernel/sched/fair.c
-@@ -9273,6 +9273,29 @@ group_type group_classify(unsigned int imbalance_pct,
- 	return group_has_spare;
- }
- 
-+/**
-+ * sched_use_asym_prio - Check whether asym_packing priority must be used
-+ * @sd:		The scheduling domain of the load balancing
-+ * @cpu:	A CPU
-+ *
-+ * Always use CPU priority when balancing load between SMT siblings. When
-+ * balancing load between cores, it is not sufficient that @cpu is idle. Only
-+ * use CPU priority if the whole core is idle.
-+ *
-+ * Returns: True if the priority of @cpu must be followed. False otherwise.
-+ */
-+static bool sched_use_asym_prio(struct sched_domain *sd, int cpu)
-+{
-+#ifdef CONFIG_SCHED_SMT
-+	if (!sched_smt_active())
-+		return true;
-+
-+	return sd->flags & SD_SHARE_CPUCAPACITY || is_core_idle(cpu);
-+#else
-+	return true;
-+#endif
-+}
-+
- /**
-  * asym_smt_can_pull_tasks - Check whether the load balancing CPU can pull tasks
-  * @dst_cpu:	Destination CPU of the load balancing
-@@ -9283,6 +9306,9 @@ group_type group_classify(unsigned int imbalance_pct,
-  * Check the state of the SMT siblings of both @sds::local and @sg and decide
-  * if @dst_cpu can pull tasks.
-  *
-+ * This function must be called only if all the SMT siblings of @dst_cpu are
-+ * idle, if any.
-+ *
-  * If @dst_cpu does not have SMT siblings, it can pull tasks if two or more of
+@@ -9313,12 +9313,9 @@ static bool sched_use_asym_prio(struct sched_domain *sd, int cpu)
   * the SMT siblings of @sg are busy. If only one CPU in @sg is busy, pull tasks
   * only if @dst_cpu has higher priority.
-@@ -9292,8 +9318,7 @@ group_type group_classify(unsigned int imbalance_pct,
-  * Bigger imbalances in the number of busy CPUs will be dealt with in
-  * update_sd_pick_busiest().
   *
-- * If @sg does not have SMT siblings, only pull tasks if all of the SMT siblings
-- * of @dst_cpu are idle and @sg has lower priority.
-+ * If @sg does not have SMT siblings, only pull tasks if @sg has lower priority.
+- * If both @dst_cpu and @sg have SMT siblings, and @sg has exactly one more
+- * busy CPU than @sds::local, let @dst_cpu pull tasks if it has higher priority.
+- * Bigger imbalances in the number of busy CPUs will be dealt with in
+- * update_sd_pick_busiest().
+- *
+- * If @sg does not have SMT siblings, only pull tasks if @sg has lower priority.
++ * When dealing with SMT cores, only use priorities if the SMT core has exactly
++ * one busy sibling. find_busiest_group() will handle bigger imbalances in the
++ * number of busy CPUs.
   *
   * Return: true if @dst_cpu can pull tasks, false otherwise.
   */
-@@ -9341,15 +9366,8 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
- 		return false;
+@@ -9327,12 +9324,10 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
+ 				    struct sched_group *sg)
+ {
+ #ifdef CONFIG_SCHED_SMT
+-	bool local_is_smt, sg_is_smt;
++	bool local_is_smt;
+ 	int sg_busy_cpus;
+ 
+ 	local_is_smt = sds->local->flags & SD_SHARE_CPUCAPACITY;
+-	sg_is_smt = sg->flags & SD_SHARE_CPUCAPACITY;
+-
+ 	sg_busy_cpus = sgs->group_weight - sgs->idle_cpus;
+ 
+ 	if (!local_is_smt) {
+@@ -9353,21 +9348,17 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
+ 		return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
  	}
  
--	/*
--	 * @sg does not have SMT siblings. Ensure that @sds::local does not end
--	 * up with more than one busy SMT sibling and only pull tasks if there
--	 * are not busy CPUs (i.e., no CPU has running tasks).
--	 */
--	if (!sds->local_stat.sum_nr_running)
--		return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+-	/* @dst_cpu has SMT siblings. */
 -
--	return false;
-+	/* If we are here @dst_cpu has SMT siblings and are also idle. */
-+	return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+-	if (sg_is_smt) {
+-		int local_busy_cpus = sds->local->group_weight -
+-				      sds->local_stat.idle_cpus;
+-		int busy_cpus_delta = sg_busy_cpus - local_busy_cpus;
+-
+-		if (busy_cpus_delta == 1)
+-			return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
+-
++	/*
++	 * If we are here @dst_cpu has SMT siblings and are also idle.
++	 *
++	 * CPU priorities does not make sense for SMT cores with more than one
++	 * busy sibling.
++	 */
++	if (group->flags & SD_SHARE_CPUCAPACITY && sg_busy_cpus != 1)
+ 		return false;
+-	}
+ 
+-	/* If we are here @dst_cpu has SMT siblings and are also idle. */
+ 	return sched_asym_prefer(dst_cpu, sg->asym_prefer_cpu);
++
  #else
  	/* Always return false so that callers deal with non-SMT cases. */
  	return false;
-@@ -9360,7 +9378,11 @@ static inline bool
- sched_asym(struct lb_env *env, struct sd_lb_stats *sds,  struct sg_lb_stats *sgs,
- 	   struct sched_group *group)
- {
--	/* Only do SMT checks if either local or candidate have SMT siblings */
-+	/* Ensure that the whole local core is idle, if applicable. */
-+	if (!sched_use_asym_prio(env->sd, env->dst_cpu))
-+		return false;
-+
-+	/* Only do SMT checks if either local or candidate have SMT siblings. */
- 	if ((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
- 	    (group->flags & SD_SHARE_CPUCAPACITY))
- 		return asym_smt_can_pull_tasks(env->dst_cpu, sds, sgs, group);
-@@ -10565,11 +10587,13 @@ static inline bool
- asym_active_balance(struct lb_env *env)
- {
- 	/*
--	 * ASYM_PACKING needs to force migrate tasks from busy but
--	 * lower priority CPUs in order to pack all tasks in the
--	 * highest priority CPUs.
-+	 * ASYM_PACKING needs to force migrate tasks from busy but lower
-+	 * priority CPUs in order to pack all tasks in the highest priority
-+	 * CPUs. When done between cores, do it only if the whole core if the
-+	 * whole core is idle.
- 	 */
- 	return env->idle != CPU_NOT_IDLE && (env->sd->flags & SD_ASYM_PACKING) &&
-+	       sched_use_asym_prio(env->sd, env->dst_cpu) &&
- 	       sched_asym_prefer(env->dst_cpu, env->src_cpu);
- }
- 
-@@ -11304,9 +11328,13 @@ static void nohz_balancer_kick(struct rq *rq)
- 		 * When ASYM_PACKING; see if there's a more preferred CPU
- 		 * currently idle; in which case, kick the ILB to move tasks
- 		 * around.
-+		 *
-+		 * When balancing betwen cores, all the SMT siblings of the
-+		 * preferred CPU must be idle.
- 		 */
- 		for_each_cpu_and(i, sched_domain_span(sd), nohz.idle_cpus_mask) {
--			if (sched_asym_prefer(i, cpu)) {
-+			if (sched_use_asym_prio(sd, i) &&
-+			    sched_asym_prefer(i, cpu)) {
- 				flags = NOHZ_STATS_KICK | NOHZ_BALANCE_KICK;
- 				goto unlock;
- 			}
 -- 
 2.25.1
 
