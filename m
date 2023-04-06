@@ -2,141 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005316D91EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531A06D91F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236185AbjDFIsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S236210AbjDFIt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbjDFIsT (ORCPT
+        with ESMTP id S234663AbjDFIt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:48:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EC94ED2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:48:18 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pkLH4-0001xA-6k; Thu, 06 Apr 2023 10:47:18 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1pkLGz-0004Sj-1e; Thu, 06 Apr 2023 10:47:13 +0200
-Date:   Thu, 6 Apr 2023 10:47:13 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Radu Pirea <radu-nicolae.pirea@oss.nxp.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-        Keyur Chudgar <keyur@os.amperecomputing.com>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 06/12] net: phy: add phy_device_atomic_register helper
-Message-ID: <20230406084713.qcnuutobu54pn3ht@pengutronix.de>
-References: <20230405-net-next-topic-net-phy-reset-v1-0-7e5329f08002@pengutronix.de>
- <20230405-net-next-topic-net-phy-reset-v1-6-7e5329f08002@pengutronix.de>
- <ad0b0d90-04bf-457c-9bdf-a747d66871b5@lunn.ch>
- <20230405152225.tu3wmbcvchuugs5u@pengutronix.de>
- <a5a4e735-7b24-4933-b431-f36305689a79@lunn.ch>
- <20230405194353.pwuk7e6rxnha3uqi@pengutronix.de>
- <34e22343-fb11-4a85-bade-492fcbcfb436@lunn.ch>
+        Thu, 6 Apr 2023 04:49:26 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E784ED2;
+        Thu,  6 Apr 2023 01:49:23 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id B3E3042494;
+        Thu,  6 Apr 2023 08:49:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1680770962;
+        bh=ggui/OxqvP63DzMm5qyXgF7uzlNIBbSwugFjqlei62I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ZeyPidK4cXdxOVmtY7dDfxefJlBru4dsyuAwR0SdSKuUn0qf8JQuKuM8iMZHAD0+s
+         nW6AJwRR6BQMhkOk2/unsVeCWPBQisrsZyt262i9KhjOAu6ylsglGv+hmnJeCJQnSq
+         C1YWodRkWstWcNpGA8by8wYAjXUG3XdZDia06Bq58tPnH+JM2nFJG2cQ05TCTxcfba
+         4JNMtI7SWdYUAbCUPxWMRTxMjYfjkaor8HY1Fvu6E+2GKJOg+QWFQ/o6drzHThzG6y
+         /SujIjVBgZhmXDyeZ+POd24kWtrk5+T5t+IVuSHIKmAnkrPIW5hGnxgLhLKNXM7pKb
+         BBoNaYbAQLGbQ==
+Message-ID: <cfbaceae-6d40-a8b3-e449-6473be234d2d@asahilina.net>
+Date:   Thu, 6 Apr 2023 17:49:17 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34e22343-fb11-4a85-bade-492fcbcfb436@lunn.ch>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] drm/scheduler: Fix UAF in
+ drm_sched_fence_get_timeline_name
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, asahi@lists.linux.dev
+References: <20230406-scheduler-uaf-1-v1-1-8e5662269d25@asahilina.net>
+ <6b3433ee-0712-f789-51ee-3047ead9bb79@amd.com>
+From:   Asahi Lina <lina@asahilina.net>
+In-Reply-To: <6b3433ee-0712-f789-51ee-3047ead9bb79@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-04-05, Andrew Lunn wrote:
-> > Currently we have one API which creates/allocates the 'struct
-> > phy_device' and intialize the state which is:
-> >    - phy_device_create()
-> > 
-> > This function requests a driver based on the phy_id/c45_ids. The ID have
-> > to come from somewhere if autodection is used. For autodetection case
-> >    - get_phy_device()
-> > 
-> > is called. This function try to access the phy without taken possible
-> > hardware dependencies into account. These dependecies can be reset-lines
-> > (in my case), clocks, supplies, ...
-> > 
-> > For taking fwnode (and possible dependencies) into account fwnode_mdio.c
-> > was written which provides two helpers:
-> >    - fwnode_mdiobus_register_phy()
-> >    - fwnode_mdiobus_phy_device_register().
-> > 
-> > The of_mdio.c and of_mdiobus_register_phy() is just a wrapper around
-> > fwnode_mdiobus_register_phy().
+On 06/04/2023 17.29, Christian König wrote:
+> Am 05.04.23 um 18:34 schrieb Asahi Lina:
+>> A signaled scheduler fence can outlive its scheduler, since fences are
+>> independently reference counted.
 > 
-> It seems to me that the real problem is that mdio_device_reset() takes
-> an mdio_device. mdiobus_register_gpiod() and mdiobus_register_reset()
-> also take an mdio_device. These are the functions you want to call
-> before calling of_mdiobus_register_phy() in __of_mdiobus_register() to
-> ensure the PHY is out of reset. But you don't have an mdio_device yet.
+> Well that is actually not correct. Schedulers are supposed to stay
+> around until the hw they have been driving is no longer present.
 
-Of course, this was the problem as well and therefore I did the split in
-the first two patches, to differentiate between allocation and init.
+But the fences can outlive that. You can GPU render into an imported 
+buffer, which attaches a fence to it. Then the GPU goes away but the 
+fence is still attached to the buffer. Then you oops when you cat that 
+debugfs file...
 
-> So i think a better solution is to refactor this code. Move the
-> resources into a structure of their own, and make that a member of
-> mdio_device.
+My use case does this way more often (since schedulers are tied to UAPI 
+objects), which is how I found this, but as far as I can tell this is 
+already broken for all drivers on unplug/unbind/anything else that would 
+destroy the schedulers with fences potentially referenced on separate 
+scanout devices or at any other DMA-BUF consumer.
 
-Sorry I can't follow you here, I did the refactoring already to
-differentiate between phy_device_alloc() and phy_device_init(). The
-parse and registration happen in between, like you descriped below. I
-didn't changed/touched the mdio_device and phy_device structs since
-those structs are very open and can be adapted by every driver.
+> E.g. the reference was scheduler_fence->hw_fence->driver->scheduler.
 
-> You can create a stack version of this resource structure
-> in __of_mdiobus_register(), parse DT to fill it out by calling
-> mdiobus_register_gpiod() and mdiobus_register_reset() taking this new
-> structure, take it out of reset by calling mdio_device_reset(), and
-> then call of_mdiobus_register_phy(). If a PHY is found, copy the
-> values in the resulting mdio_device. If not, release the resources.
+It's up to drivers not to mess that up, since the HW fence has the same 
+requirements that it can outlive other driver objects, just like any 
+other fence. That's not something the scheduler has to be concerned 
+with, it's a driver correctness issue.
 
-It is not just the reset, my approach would be the ground work for
-adding support of other resources to, which are not handled yet. e.g.
-phy-supply, clocks, pwdn-lines, ... With my approach it is far easier of
-adding this 
+Of course, in C you have to get it right yourself, while with correct 
+Rust abstractions will cause your code to fail to compile if you do it 
+wrong ^^
 
-> Doing it like this means there is no API change.
+In my particular case, the hw_fence is a very dumb object that has no 
+references to anything, only an ID and a pending op count. Jobs hold 
+references to it and decrement it until it signals, not the other way 
+around. So that object can live forever regardless of whether the rest 
+of the device is gone.
 
-Why is it that important? All users of the current fwnode API are
-changed and even better, they are replaced in a 2:1 ratio. The new API
-is the repaired version of the fwnode API which is already used by ACPI
-and OF to register a phy_device. For all non-ACPI/OF users the new API
-provides a way to allocate/identify and register a new phy within a
-single call.
+> Your use case is now completely different to that and this won't work
+> any more.
+> 
+> This here might just be the first case where that breaks.
 
-Regards,
-  Marco
+This bug already exists, it's just a lot rarer for existing use cases... 
+but either way Xe is doing the same thing I am, so I'm not the only one 
+here either.
+
+~~ Lina
+
