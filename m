@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999B16D93AC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EA76D9334
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235962AbjDFKGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S236887AbjDFJtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236815AbjDFKG0 (ORCPT
+        with ESMTP id S237032AbjDFJsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:06:26 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20872D44;
-        Thu,  6 Apr 2023 03:05:43 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3369josj079803;
-        Thu, 6 Apr 2023 04:45:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680774350;
-        bh=t/3ZUQarijZAKO8+8ZuwWq+2OTot5xhmxiGIBn1cxqI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=pLbmpBrGL+wlLRDDzljR38CK8N/xPRwKSrzPTo31dni/5NJ7wm4oTKj1HkX0Ba9Ok
-         SPtgzMZ/72EM1NFQZtweHtYkqSSiyle+TIBF9BzS04qYo2pWdI/1S2S8xORqxvtlLD
-         Z1L/HwqggMsiORamNUkeJ/OlgzzYWRx7C5sCwlaw=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3369jode007315
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 6 Apr 2023 04:45:50 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 6
- Apr 2023 04:45:50 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 6 Apr 2023 04:45:49 -0500
-Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3369jl0g018625;
-        Thu, 6 Apr 2023 04:45:47 -0500
-Message-ID: <ccc179f9-1279-9b3a-04ef-0107ad0592d0@ti.com>
-Date:   Thu, 6 Apr 2023 15:15:46 +0530
+        Thu, 6 Apr 2023 05:48:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EAA9EE2;
+        Thu,  6 Apr 2023 02:46:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A584A64509;
+        Thu,  6 Apr 2023 09:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B22C433EF;
+        Thu,  6 Apr 2023 09:45:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680774359;
+        bh=CNnljoUNyOiCQnpEpUjEBMYYwt8hw2OqgmnQ53lJJC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NO4KxgWW4fGaPj/jgCTdne5zTkmD5p5XSq8odegv2hTDIN/+Gx/hpw686wJ2vJzt7
+         dThSxxFMxxBYdfBZ93TM3nfZyuEoi3I0NZHSLTo6SaqR8RxxjSJ4+xVUb6R4n8Qbon
+         GLYOO6EQQpJr6x7794UnkMjbDvkz/flUyRCXjk6FHck+y0PL1EgOy4HFQFTDEMqmkl
+         iKmrWRC6JsPXFyJN4tb8IekF1NjUDg+0qKMJNTSoVk8mV0MZVYn6KqvBxgROg6j8VO
+         TAbrbZJQUyQi3wL8C99KaZlaVKV0Xy106X4QSyidFU0RfdMaTf3HEUuxxV4cgcD6KT
+         hE6QQEdsCIS7w==
+Date:   Thu, 6 Apr 2023 11:45:53 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        gscrivan@redhat.com
+Subject: Re: [PATCH 1/3] cgroup/cpuset: Make cpuset_fork() handle
+ CLONE_INTO_CGROUP properly
+Message-ID: <20230406-vernommen-kurieren-e75f4ee6ea96@brauner>
+References: <20230331145045.2251683-1-longman@redhat.com>
+ <20230331145045.2251683-2-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2-main: Enable support for SDR104
- speed mode
-To:     Bhavya Kapoor <b-kapoor@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <nm@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <d-dhyani@ti.com>
-References: <20230404091245.336732-1-b-kapoor@ti.com>
-Content-Language: en-US
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230404091245.336732-1-b-kapoor@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230331145045.2251683-2-longman@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04/04/23 14:42, Bhavya Kapoor wrote:
-> Remove sdhci-caps-mask to enable support for SDR104 speed mode for
-> SD card in J721S2 SoC.
+On Fri, Mar 31, 2023 at 10:50:43AM -0400, Waiman Long wrote:
+> By default, the clone(2) syscall spawn a child process into the same
+> cgroup as its parent. With the use of the CLONE_INTO_CGROUP flag
+> introduced by commit ef2c41cf38a7 ("clone3: allow spawning processes
+> into cgroups"), the child will be spawned into a different cgroup which
+> is somewhat similar to writing the child's tid into "cgroup.threads".
 > 
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> The current cpuset_fork() method does not properly handle the
+> CLONE_INTO_CGROUP case where the cpuset of the child may be different
+> from that of its parent.  Update the cpuset_fork() method to treat the
+> CLONE_INTO_CGROUP case similar to cpuset_attach().
+> 
+> Since the newly cloned task has not been running yet, its actual
+> memory usage isn't known. So it is not necessary to make change to mm
+> in cpuset_fork().
+> 
+> Fixes: ef2c41cf38a7 ("clone3: allow spawning processes into cgroups")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
 
-Your commit message doesn't explain why?
-Why was this disabled initalially and why is it okay to enable this now?
-
-If disabling SDR104 was a bug, please add Fixes:
-
->  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index 8915132efcc1..95c6151ed10c 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -400,8 +400,6 @@ main_sdhci1: mmc@4fb0000 {
->  		ti,clkbuf-sel = <0x7>;
->  		ti,trm-icp = <0x8>;
->  		dma-coherent;
-> -		/* Masking support for SDR104 capability */
-> -		sdhci-caps-mask = <0x00000003 0x00000000>;
->  	};
->  
->  	main_navss: bus@30000000 {
-
--- 
-Regards
-Vignesh
+Just two nits. I think this needs a Cc stable and it would be nice if
+you could give Giuseppe a "Reported-by".
