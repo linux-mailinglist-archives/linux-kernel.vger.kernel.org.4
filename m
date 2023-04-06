@@ -2,223 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B916D8E73
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A8D6D8E76
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234863AbjDFEoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 00:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45986 "EHLO
+        id S235042AbjDFEoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234526AbjDFEoV (ORCPT
+        with ESMTP id S234940AbjDFEoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:44:21 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1C472A3;
-        Wed,  5 Apr 2023 21:44:19 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id h8so146353338ede.8;
-        Wed, 05 Apr 2023 21:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680756258;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xjmsZjVp+RHs53GtXmmi/MP0iaPYipjPhPYHzuWzSjY=;
-        b=cshu7b59hlBuIgkp7jFp8eXASNV+7N8rZcktacOvUJtMb+N4yNXilVLl+b4JadkAPT
-         3zmaYCH/aerIPEjWpptkuPOsuWenQI+7oHuBMhVVECRo/yf29sLGO6y9S8CkiwiXN06/
-         QtI7ZdJ4Pddwy2dn/c4BAzZr233KsI78UamYnKHtiOKRN7k7gpaGE8no9TFETtjmc9M1
-         rMESFHm8pc7F9a/hpKjH9CGdS54PhJTxauaAcoG2zkqX51oo1T4L2tsBScnCswtn4Bz8
-         AU9Oo82AUAGRFBQzq2bLuaw0+f5Pg6OITfMeVsnGRlEk2kd7GKdU8r7yp45YwTlj4vwt
-         QhoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680756258;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xjmsZjVp+RHs53GtXmmi/MP0iaPYipjPhPYHzuWzSjY=;
-        b=PLOrkX8dhAxFyWMpMIJLXtaIsaxCBf+SltpwN4fE/jHPCSN0+PDU9ONQ4UDhdr4eO3
-         IOWgANP3kvPdpxVeBJDTLeNDpLe3+XRQJAV0Do20XBKERQVzjb0wXr2soU3JaEeHcrpd
-         if7u/DHWo48p/1YiEVuY5l3OX5SqTrjIdL1DO/ZiAJwCRNAFKtMxJU+0agO1mhzhmpEm
-         VOu652pJ9ZRExeFGAkBYySX2PuM5cZT997izi/dPlxHN7O7IpEzEI6Wxmlz2YeqxPyop
-         ck0MxZ2viYKz8vrtTkN9ALUThfKBkFqLXhGc8qp5zNwIloArcFxNDWSk7aYHQu2X/Qdi
-         zaMw==
-X-Gm-Message-State: AAQBX9dtx2Z+zNZw3y5OLCfUWaBsyEDXwpmZW06dXEFVImNCIVIOAnLV
-        CA/M5ZsljLxPVR99XIKmN3M=
-X-Google-Smtp-Source: AKy350ZN437sTJUSZ6gY/twKBNbJVaGx2wJWaBVDCkFWctWhRKgKIoe51BdBQHlPGw7uf+ri69vFdg==
-X-Received: by 2002:a17:906:b88a:b0:92e:b1dd:cff2 with SMTP id hb10-20020a170906b88a00b0092eb1ddcff2mr4552948ejb.28.1680756258204;
-        Wed, 05 Apr 2023 21:44:18 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id i17-20020a17090671d100b0092973e209f2sm254503ejk.109.2023.04.05.21.44.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 21:44:17 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 6 Apr 2023 06:44:15 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     =?utf-8?B?5Luj5a2Q5Li6IChaaXdlaSBEYWkp?= <Ziwei.Dai@unisoc.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "urezki@gmail.com" <urezki@gmail.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
-        "josh@joshtriplett.org" <josh@joshtriplett.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?546L5Y+MIChTaHVhbmcgV2FuZyk=?= <shuang.wang@unisoc.com>,
-        =?utf-8?B?6L6b5L6d5YehIChZaWZhbiBYaW4p?= <Yifan.Xin@unisoc.com>,
-        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>,
-        =?utf-8?B?6Zer5a2m5paHIChYdWV3ZW4gWWFuKQ==?= 
-        <Xuewen.Yan@unisoc.com>,
-        =?utf-8?B?54mb5b+X5Zu9IChaaGlndW8gTml1KQ==?= 
-        <Zhiguo.Niu@unisoc.com>,
-        =?utf-8?B?6buE5pyd6ZizIChaaGFveWFuZyBIdWFuZyk=?= 
-        <zhaoyang.huang@unisoc.com>
-Subject: Re: =?utf-8?B?562U5aSNOiBbUEFUQ0ggVjJdIHJj?=
- =?utf-8?Q?u=3A_Make_sure_new_krc?= =?utf-8?Q?p?= free business is handled
- after the wanted rcu grace period.
-Message-ID: <ZC5OHyre9C/lDuno@pc636>
-References: <1680266529-28429-1-git-send-email-ziwei.dai@unisoc.com>
- <CAEXW_YR5MZhHuDsMVEB8A=80k3sjecp-yTXNLv6XCaq9h2JH2A@mail.gmail.com>
- <CAEXW_YRtV7pAYR-UyVNNsgPJ2dmBGrV+DkNROOivXj3MChDgGw@mail.gmail.com>
- <a1e006af-c935-4246-a239-669debb4717d@paulmck-laptop>
- <94c28b46617e46d1804a397a54f9fd8d@BJMBX01.spreadtrum.com>
- <6ff4eb09-13df-403f-ba4a-c5abb0f3fa8f@paulmck-laptop>
+        Thu, 6 Apr 2023 00:44:38 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF7E9ED8;
+        Wed,  5 Apr 2023 21:44:33 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: lina@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 93DFC4245E;
+        Thu,  6 Apr 2023 04:44:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1680756271;
+        bh=3ATn2J/vFlxbAJnulfzHHynd+iDH6ftF3NoRMRHpd10=;
+        h=Date:Subject:To:References:From:Cc:In-Reply-To;
+        b=FRbmxLHhRTWqrN/GypKdRiUsgh9NYpncpVBbLlPDfLlj91fKVeulR6Db7qEvbctc/
+         bDA1i26jPfonskgiaBpg5IKqNBmPdrzjYcW+pGVgNjc3HmUCo8TiejCmT36elq90//
+         1nveTSM3znRqSb5WBokJazPOZUAabEeLwcUCARuDLfE8POgzOu4uT+pGCKKOsCyDzU
+         gLH+/vBFGNhfMfmYhLpja9wISm7Wa2/wF1CyYGM1P7Q187CBKvak0P9P/vBfFt7HeV
+         b0QeK2jkPmmNU0NKWVZxyojAqfWXQLvZT7ota3vOZysTLXquMi8zVegLgmicRywF7c
+         CZO4+Twgg3FXw==
+Message-ID: <8d28f1d3-14b0-78c5-aa16-e81e2a8a3685@asahilina.net>
+Date:   Thu, 6 Apr 2023 13:44:22 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6ff4eb09-13df-403f-ba4a-c5abb0f3fa8f@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH RFC 18/18] drm/asahi: Add the Asahi driver for Apple AGX
+ GPUs
+Content-Language: en-US
+To:     David Airlie <airlied@gmail.com>
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-18-917ff5bc80a8@asahilina.net>
+ <ZC2HtBOaoUAzVCVH@phenom.ffwll.local>
+From:   Asahi Lina <lina@asahilina.net>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+In-Reply-To: <ZC2HtBOaoUAzVCVH@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 08:46:15PM -0700, Paul E. McKenney wrote:
-> On Thu, Apr 06, 2023 at 01:38:09AM +0000, 代子为 (Ziwei Dai) wrote:
-> > 
-> > 
-> > > -----邮件原件-----
-> > > 发件人: Paul E. McKenney <paulmck@kernel.org>
-> > > 发送时间: 2023年4月6日 2:46
-> > > 收件人: Joel Fernandes <joel@joelfernandes.org>
-> > > 抄送: 代子为 (Ziwei Dai) <Ziwei.Dai@unisoc.com>; urezki@gmail.com; frederic@kernel.org; quic_neeraju@quicinc.com;
-> > > josh@joshtriplett.org; rostedt@goodmis.org; mathieu.desnoyers@efficios.com; jiangshanlai@gmail.com; rcu@vger.kernel.org;
-> > > linux-kernel@vger.kernel.org; 王双 (Shuang Wang) <shuang.wang@unisoc.com>; 辛依凡 (Yifan Xin) <Yifan.Xin@unisoc.com>; 王科
-> > > (Ke Wang) <Ke.Wang@unisoc.com>; 闫学文 (Xuewen Yan) <Xuewen.Yan@unisoc.com>; 牛志国 (Zhiguo Niu)
-> > > <Zhiguo.Niu@unisoc.com>; 黄朝阳 (Zhaoyang Huang) <zhaoyang.huang@unisoc.com>
-> > > 主题: Re: [PATCH V2] rcu: Make sure new krcp free business is handled after the wanted rcu grace period.
-> > > 
-> > > 
-> > > 注意: 这封邮件来自于外部。除非你确定邮件内容安全，否则不要点击任何链接和附件。
-> > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the
-> > > sender and know the content is safe.
-> > > 
-> > > 
-> > > 
-> > > On Wed, Apr 05, 2023 at 02:12:02PM -0400, Joel Fernandes wrote:
-> > > > On Wed, Apr 5, 2023 at 1:39 PM Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > > >
-> > > > > On Fri, Mar 31, 2023 at 8:43 AM Ziwei Dai <ziwei.dai@unisoc.com> wrote:
-> > > > > >
-> > > > > > In kfree_rcu_monitor(), new free business at krcp is attached to
-> > > > > > any free channel at krwp. kfree_rcu_monitor() is responsible to
-> > > > > > make sure new free business is handled after the rcu grace period.
-> > > > > > But if there is any none-free channel at krwp already, that means
-> > > > > > there is an on-going rcu work, which will cause the
-> > > > > > kvfree_call_rcu()-triggered free business is done before the wanted rcu grace period ends.
-> > > > > >
-> > > > > > This commit ignore krwp which has non-free channel at
-> > > > > > kfree_rcu_monitor(), to fix the issue that kvfree_call_rcu() loses effectiveness.
-> > > > > >
-> > > > > > Below is the css_set obj "from_cset" use-after-free case caused by
-> > > > > > kvfree_call_rcu() losing effectiveness.
-> > > > > > CPU 0 calls rcu_read_lock(), then use "from_cset", then hard irq
-> > > > > > comes, the task is schedule out.
-> > > > > > CPU 1 calls kfree_rcu(cset, rcu_head), willing to free "from_cset" after new gp.
-> > > > > > But "from_cset" is freed right after current gp end. "from_cset" is reallocated.
-> > > > > > CPU 0 's task arrives back, references "from_cset"'s member, which causes crash.
-> > > > > >
-> > > > > > CPU 0                                   CPU 1
-> > > > > > count_memcg_event_mm()
-> > > > > > |rcu_read_lock()  <---
-> > > > > > |mem_cgroup_from_task()
-> > > > > >  |// css_set_ptr is the "from_cset" mentioned on CPU 1
-> > > > > > |css_set_ptr = rcu_dereference((task)->cgroups)  |// Hard irq
-> > > > > > comes, current task is scheduled out.
-> > > > > >
-> > > > > >                                         cgroup_attach_task()
-> > > > > >                                         |cgroup_migrate()
-> > > > > >                                         |cgroup_migrate_execute()
-> > > > > >                                         |css_set_move_task(task, from_cset, to_cset, true)
-> > > > > >                                         |cgroup_move_task(task, to_cset)
-> > > > > >                                         |rcu_assign_pointer(.., to_cset)
-> > > > > >                                         |...
-> > > > > >                                         |cgroup_migrate_finish()
-> > > > > >                                         |put_css_set_locked(from_cset)
-> > > > > >                                         |from_cset->refcount return 0
-> > > > > >                                         |kfree_rcu(cset, rcu_head) // means to free from_cset after new gp
-> > > > > >                                         |add_ptr_to_bulk_krc_lock()
-> > > > > >
-> > > > > > |schedule_delayed_work(&krcp->monitor_work, ..)
-> > > > > >
-> > > > > >                                         kfree_rcu_monitor()
-> > > > > >                                         |krcp->bulk_head[0]'s work attached to krwp->bulk_head_free[]
-> > > > > >                                         |queue_rcu_work(system_wq, &krwp->rcu_work)
-> > > > > >                                         |if rwork->rcu.work is not in WORK_STRUCT_PENDING_BIT state,
-> > > > > >                                         |call_rcu(&rwork->rcu,
-> > > > > > rcu_work_rcufn) <--- request a new gp
-> > > > > >
-> > > > > >                                         // There is a perious call_rcu(.., rcu_work_rcufn)
-> > > > > >                                         // gp end, rcu_work_rcufn() is called.
-> > > > > >                                         rcu_work_rcufn()
-> > > > > >                                         |__queue_work(..,
-> > > > > > rwork->wq, &rwork->work);
-> > > > > >
-> > > > > >                                         |kfree_rcu_work()
-> > > > > >                                         |krwp->bulk_head_free[0] bulk is freed before new gp end!!!
-> > > > > >                                         |The "from_cset" is freed before new gp end.
-> > > > > >
-> > > > > > // the task is scheduled in after many ms.
-> > > > > >  |css_set_ptr->subsys[(subsys_id) <--- Caused kernel crash, because css_set_ptr is freed.
-> > > > > >
-> > > > > > v2: Use helper function instead of inserted code block at kfree_rcu_monitor().
-> > > > > >
-> > > > > > Fixes: c014efeef76a ("rcu: Add multiple in-flight batches of
-> > > > > > kfree_rcu() work")
-> > > > > > Signed-off-by: Ziwei Dai <ziwei.dai@unisoc.com>
-> > > > >
-> > > > > Please update the fixes tag to:
-> > > > > 5f3c8d620447 ("rcu/tree: Maintain separate array for vmalloc ptrs")
-> > > >
-> > > > Vlad pointed out in another thread that the fix is actually to 34c881745549.
-> > > >
-> > > > So just to be sure, it could be updated to:
-> > > > Fixes: 34c881745549 ("rcu: Support kfree_bulk() interface in
-> > > > kfree_rcu()")
-> > > > Fixes: 5f3c8d620447 ("rcu/tree: Maintain separate array for vmalloc
-> > > > ptrs")
-> > > 
-> > > Ziwei Dai, does this change in Fixes look good to you?
-> > > 
-> > > If so, I will update the commit log in this commit that I am planning to submit into v6.3.  It is strictly speaking not a v6.3 regression,
-> > > but it is starting to show up in the wild and the patch is contained enough to be considered an urgent fix.
-> > > 
-> > >                                                         Thanx, Paul
-> > 
-> > Hi Paul, it looks good to me and thanks!
+On 05/04/2023 23.37, Daniel Vetter wrote:
+> On Tue, Mar 07, 2023 at 11:25:43PM +0900, Asahi Lina wrote:
+>> +/// A generic monotonically incrementing ID used to uniquely identify object instances within the
+>> +/// driver.
+>> +pub(crate) struct ID(AtomicU64);
+>> +
+>> +impl ID {
+>> +    /// Create a new ID counter with a given value.
+>> +    fn new(val: u64) -> ID {
+>> +        ID(AtomicU64::new(val))
+>> +    }
+>> +
+>> +    /// Fetch the next unique ID.
+>> +    pub(crate) fn next(&self) -> u64 {
+>> +        self.0.fetch_add(1, Ordering::Relaxed)
+>> +    }
+>> +}
 > 
-> Thank you, and I will fix on my next rebase.
+> Continuing the theme of me commenting on individual things, I stumbled
+> over this because I noticed that there's a lot of id based lookups where I
+> don't expect them, and started chasing.
 > 
-After heavy testing over night i do not see that any warnings
-are triggered:
+> - For ids use xarray, not atomic counters. Yes I know dma_fence timelines
+>    gets this wrong, this goes back to an innocent time where we didn't
+>    allocate more than one timeline per engine, and no one fixed it since
+>    then. Yes u64 should be big enough for everyone :-/
+> 
+> - Attaching ID spaces to drm_device is also not great. drm is full of
+>    these mistakes. Much better if their per drm_file and so private to each
+>    client.
+> 
+> - They shouldn't be used for anything else than uapi id -> kernel object
+>    lookup at the beginning of ioctl code, and nowhere else. At least from
+>    skimming it seems like these are used all over the driver codebase,
+>    which does freak me out. At least on the C side that's a clear indicator
+>    for a refcount/lockin/data structure model that's not thought out at
+>    all.
+> 
+> What's going on here, what do I miss?
 
-Tested-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+These aren't UAPI IDs, they are driver-internal IDs (the UAPI IDs do use 
+xarray and are per-File). Most of them are just for debugging, so that 
+when I enable full debug spam I have some way to correlate different 
+things that are happening together (this subset of interleaved log lines 
+relate to the same submission). Basically just object names that are 
+easier to read (and less of a security leak) than pointers and 
+guaranteed not to repeat. You could get rid of most of them and it 
+wouldn't affect the driver design, it just makes it very hard to see 
+what's going on with debug logs ^^;
 
---
-Uladzislau Rezki
+There are only two that are ever used for non-debugging purposes: the VM 
+ID, and the File ID. Both are per-device global IDs attached to the VMs 
+(not the UAPI VM objects, but rather the underlyng MMU address space 
+managers they represent, including the kernel-internal ones) and to 
+Files themselves. They are used for destroying GEM objects: since the 
+objects are also device-global across multiple clients, I need a way to 
+do things like "clean up all mappings for this File" or "clean up all 
+mappings for this VM". There's an annoying circular reference between 
+GEM objects and their mappings, which is why this is explicitly coded 
+out in destroy paths instead of naturally happening via Drop semantics 
+(without that cleanup code, the circular reference leaks it).
+
+So e.g. when a File does a GEM close or explicitly asks for all mappings 
+of an object to be removed, it goes out to the (possibly shared) GEM 
+object and tells it to drop all mappings marked as owned by that unique 
+File ID. When an explicit "unmap all in VM" op happens, it asks the GEM 
+object to drop all mappings for that underlying VM ID. Similarly, when a 
+UAPI VM object is dropped (in the Drop impl, so both explicitly and when 
+the whole File/xarray is dropped and such), that does an explicit unmap 
+of a special dummy object it owns which would otherwise leak since it is 
+not tracked as a GEM object owned by that File and therefore not handled 
+by GEM closing. And again along the same lines, the allocators in 
+alloc.rs explicitly destroy the mappings for their backing GEM objects 
+on Drop. All this is due to that annoying circular reference between VMs 
+and GEM objects that I'm not sure how to fix.
+
+Note that if I *don't* do this (or forget to do it somewhere) the 
+consequence is just that we leak memory, and if you try to destroy the 
+wrong IDs somehow the worst that can happen is you unmap things you 
+shouldn't and fault the GPU (or, in the kernel or kernel-managed user VM 
+cases, potentially the firmware). Rust safety guarantees still keep 
+things from going entirely off the rails within the kernel, since 
+everything that matters is reference counted (which is why these 
+reference cycles are possible at all).
+
+This all started when I was looking at the panfrost driver for 
+reference. It does the same thing except it uses actual pointers to the 
+owning entities instead of IDs, and pointer comparison (see 
+panfrost_gem_close). Of course you could try do that in Rust too 
+(literally storing and comparing raw pointers that aren't owned 
+references), but then you're introducing a Pin<> requirement on those 
+objects to make their addresses stable and it feels way more icky and 
+error-prone than unique IDs (since addresses can be reused). panfrost 
+only has a single mmu (what I call the raw VM) per File while I have an 
+arbitrary number, which is why I end up with the extra 
+distinction/complexity of both File and VM IDs, but the concept is the same.
+
+Some of this is going to be refactored when I implement arbitrary VM 
+range mapping/unmapping, which would be a good time to improve this... 
+but is there something particularly wrong/broken about the way I'm doing 
+it now that I missed? I figured unique u64 IDs would be a pretty safe 
+way to identify entities and cleanup the mappings when needed.
+
+~~ Lina
+
