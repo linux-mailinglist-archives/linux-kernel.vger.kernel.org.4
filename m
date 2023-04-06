@@ -2,132 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025066D971A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B92B6D97C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 15:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237326AbjDFMit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S237284AbjDFNRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 09:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjDFMir (ORCPT
+        with ESMTP id S229817AbjDFNRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:38:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366CF76A9;
-        Thu,  6 Apr 2023 05:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6G0PeHjBucaMpcTqS+MbmLttXP4X+8vdHS54iSMHEkE=; b=pocCnMFjveWReclFnOvNIHXaFy
-        3GrG9RU1yLbNQTlpqnucYYV6Vo765+4G1vrs+PrS2z6+TblszZYRJ0sAu9sAolqPHY8Tp8KAhAx4r
-        oiWVOzNoX/o/MUudT1aKAAs0W8mSmuV5tz0uUB76tbxk8uF8Dc6OZ728w1kpE3i8o+u/GJAXDJYtC
-        oVXXOKLTsGSCzdjzmTQbivx8VQ2VymC+L+sxhHMvJd6L4TX5oxAtAITYIbtut0ZzqL2LVmIkmxa2U
-        3PUdMvlbPRNC9SfEdWT8zsC2K/IBJQQxdtLcWHsBft4T43Qj0OBiFHHMshHhOO5qBZIAb4+XkKIh5
-        Vf6HDY5A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pkOsI-00HPw3-BW; Thu, 06 Apr 2023 12:37:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 11D04300194;
-        Thu,  6 Apr 2023 14:37:55 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 903182CB641A9; Thu,  6 Apr 2023 14:37:55 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 14:37:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        "H. Peter Anvin" <hpa@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Asit Mallick <asit.k.mallick@intel.com>,
-        Cfir Cohen <cfir@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Kaplan <David.Kaplan@amd.com>,
-        David Rientjes <rientjes@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Juergen Gross <jgross@suse.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mike Stunes <mstunes@vmware.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Luck <tony.luck@intel.com>, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, x86@kernel.org
-Subject: Re: [RFC PATCH 0/7] x86/entry: Atomic statck switching for IST
-Message-ID: <20230406123755.GC392176@hirez.programming.kicks-ass.net>
-References: <20230403140605.540512-1-jiangshanlai@gmail.com>
- <19035c40-e756-6efd-1c02-b09109fb44c1@intel.com>
- <CAJhGHyBHmC=UXr88GsykO9eUeqJZp59jrCH3ngkFiCxVBW2F3g@mail.gmail.com>
- <3591487f-96ae-3ab7-6ce7-e524a070c9e7@redhat.com>
- <20230406101254.GI386572@hirez.programming.kicks-ass.net>
- <26be2c81-9431-6b43-e3e9-52d7d184750e@kernel.org>
- <20230406104750.GA392176@hirez.programming.kicks-ass.net>
- <be836a4f-fc0f-bbcd-636d-4766fdd33c81@kernel.org>
+        Thu, 6 Apr 2023 09:17:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3313559FA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 06:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680787018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LyLWq4qOx1xU0bxV6bHK7gb5g8imneWyvQWEYXMsdJw=;
+        b=COG5BabD9J5sU2n6dBrFzLjHIRP5NC6tQDE167skwBSAq3NwYkmiC/8ghPoyxHThRqLQ0w
+        bk8MmQnbQYF4pU8CR1jrDQx+OoqMMF5oryqAteLMhyS1miX1GNXBl8J3fPZaVdQ3jzgdpU
+        xs9EIaeA5tBryfqM6cSZZwhGUBnhDbw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-LTw34yIZO-qtviR3tWXTcA-1; Thu, 06 Apr 2023 09:16:57 -0400
+X-MC-Unique: LTw34yIZO-qtviR3tWXTcA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2EF4B857F81;
+        Thu,  6 Apr 2023 13:16:55 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 86155C1602C;
+        Thu,  6 Apr 2023 13:16:54 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 8BB9E41306EC9; Thu,  6 Apr 2023 09:38:50 -0300 (-03)
+Date:   Thu, 6 Apr 2023 09:38:50 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <ZC69Wmqjdwk+I8kn@tpad>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen>
+ <ZC3P3Ds/BIcpRNGr@tpad>
+ <20230405195226.GB365912@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <be836a4f-fc0f-bbcd-636d-4766fdd33c81@kernel.org>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:04:16PM +0200, Jiri Slaby wrote:
-
-> Definitely it _can_ defeat the purpose and be heavily formatted.But it
-> doesn't have to. It's like programming in perl.
+On Wed, Apr 05, 2023 at 09:52:26PM +0200, Peter Zijlstra wrote:
+> On Wed, Apr 05, 2023 at 04:45:32PM -0300, Marcelo Tosatti wrote:
+> > On Wed, Apr 05, 2023 at 01:10:07PM +0200, Frederic Weisbecker wrote:
+> > > On Wed, Apr 05, 2023 at 12:44:04PM +0200, Frederic Weisbecker wrote:
+> > > > On Tue, Apr 04, 2023 at 04:42:24PM +0300, Yair Podemsky wrote:
+> > > > > +	int state = atomic_read(&ct->state);
+> > > > > +	/* will return true only for cpus in kernel space */
+> > > > > +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
+> > > > > +}
+> > > > 
+> > > > Also note that this doesn't stricly prevent userspace from being interrupted.
+> > > > You may well observe the CPU in kernel but it may receive the IPI later after
+> > > > switching to userspace.
+> > > > 
+> > > > We could arrange for avoiding that with marking ct->state with a pending work bit
+> > > > to flush upon user entry/exit but that's a bit more overhead so I first need to
+> > > > know about your expectations here, ie: can you tolerate such an occasional
+> > > > interruption or not?
+> > > 
+> > > Bah, actually what can we do to prevent from that racy IPI? Not much I fear...
+> > 
+> > Use a different mechanism other than an IPI to ensure in progress
+> > __get_free_pages_fast() has finished execution.
+> > 
+> > Isnt this codepath slow path enough that it can use
+> > synchronize_rcu_expedited?
 > 
-> What I had in mind was e.g. "DOC: TTY Struct Flags":
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/tty.h#n261
+> To actually hit this path you're doing something really dodgy.
 
- * TTY_THROTTLED
- *	Driver input is throttled. The ldisc should call
- *	:c:member:`tty_driver.unthrottle()` in order to resume reception when
- *	it is ready to process more data (at threshold min).
+Apparently khugepaged is using the same infrastructure:
 
-That whole :c:member:'tty_driver.unthrottle()' is an abomination and
-has no place in a comment.
+$ grep tlb_remove_table khugepaged.c 
+	tlb_remove_table_sync_one();
+	tlb_remove_table_sync_one();
 
-> Resulting in:
-> https://www.kernel.org/doc/html/latest/driver-api/tty/tty_struct.html#tty-struct-flags
-> 
-> Both the source and the result are quite readable, IMO. And the markup in
-> the source is not mandatory, it's only for emphasizing and hyperlinks.
-> 
-> As I wrote, you can link the comment in the code. But definitely you don't
-> have to, if you don't want. I like the linking in Documentation as I can put
-> the pieces from various sources/headers together to one place and build a
-> bigger picture.
-> 
-> > I really detest that whole RST thing, and my solution is to explicitly
-> > not write kerneldoc, that way the doc generation stuff doesn't complain
-> > and I don't get random drive by patches wrecking the perfectly readable
-> > comment.
-> 
-> Sure. Rst _sources_ are not readable, IMO. Only generated man pages or html
-> are.
+So just enabling khugepaged will hit that path.
 
-But code comments are read in a text editor, not a browser. Hence all
-the markup is counter productive.
-
-Why would you go read something in a browser if you have the code right
-there in a text editor?
