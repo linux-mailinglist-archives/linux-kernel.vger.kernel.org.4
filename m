@@ -2,216 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53A66D9CF4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1036D9CF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbjDFQDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S239823AbjDFQEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjDFQDO (ORCPT
+        with ESMTP id S229806AbjDFQET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:03:14 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9B44C16;
-        Thu,  6 Apr 2023 09:03:13 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-17aceccdcf6so42792712fac.9;
-        Thu, 06 Apr 2023 09:03:13 -0700 (PDT)
+        Thu, 6 Apr 2023 12:04:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31929773
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680797020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nhE+sw2nPXqC1UJ8AXPzZyQsVdsNsrouSAWZ5kkzANM=;
+        b=dWws3ReVzaf1vuJLdCY8Y8YDsdV6j5W90zazengWjjtfrxrMsym80MBtH/+3Gaq/Ynd04F
+        +7AbQkm0N4aWGnWEi/5dDl52SqVBbOEw5PUasPAksp333kCd10hmkh/4koO1bXIVQOfISM
+        3BuIZZZFv8SD+YCzzkLeCaQHfFT+GrU=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-240-wWM0zfQGPaqtdJojOinElg-1; Thu, 06 Apr 2023 12:03:39 -0400
+X-MC-Unique: wWM0zfQGPaqtdJojOinElg-1
+Received: by mail-ej1-f71.google.com with SMTP id hy11-20020a1709068a6b00b0093994122eddso436944ejc.17
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:03:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680796992; x=1683388992;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lefJRHrqvcl4m8vvYyVqVDAjvfb85dfjLk6rh9rm9wc=;
-        b=X3rZhLRRXDoaSfYUj3x3JecbkoTRlEdr3QpEwlxTuXEaQyfGKFOGZydnIo48mf8TmK
-         VPBkmBLt1UFSsQqF9CT3I8qxdPBEh8wLeJp0YTuWl3KFhFvTQERgEYKOERh9S6b2jTOz
-         SpWYhfokF0mgNPfK60wDo8HU9lsrXkaG0CSnFhiiRdyR9Xb8KxWJ8ozFXQi6mFF01Zbt
-         ScxCd6kN1NIR8ZAI5dQwBgmA2OGTTje8r5xv1r47KqBds/xX0V4ZGQfGHGqawlAPoEn2
-         6K44THa5wjfiP9FrnW6i6yC8pJpH5Bx8P7EWjsyOa62eohGY2J6BRR07zYptFdLY/o12
-         bZBg==
-X-Gm-Message-State: AAQBX9dNfAywfgg7yQH/umd4Ow4K+ND2ICHFwSBAlWkYBnbKjCfLOLfO
-        pN3St7QeVtNre6MJaS+Kx68gc3KNRA==
-X-Google-Smtp-Source: AKy350ZrZmUBZENCzrSlM1I16WFc/0oXgEc2lz1Ire2HnTTfoAQcnbdCuriXeqU8jaOxoHh8K0BruA==
-X-Received: by 2002:a05:6870:2482:b0:16e:8ce5:b94 with SMTP id s2-20020a056870248200b0016e8ce50b94mr6187514oaq.43.1680796992219;
-        Thu, 06 Apr 2023 09:03:12 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s190-20020acaa9c7000000b003896df086b0sm812415oie.15.2023.04.06.09.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 09:03:11 -0700 (PDT)
-Received: (nullmailer pid 3170577 invoked by uid 1000);
-        Thu, 06 Apr 2023 16:03:10 -0000
-Date:   Thu, 6 Apr 2023 11:03:10 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Om Parikh <hack3r-0m@proton.me>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Olof Johansson <olof@lixom.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to DT
- schema
-Message-ID: <20230406160310.GA3159522-robh@kernel.org>
-References: <20230403004138.326482-1-hack3r-0m@proton.me>
- <20230404022015.754177-1-hack3r-0m@proton.me>
+        d=1e100.net; s=20210112; t=1680797018;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nhE+sw2nPXqC1UJ8AXPzZyQsVdsNsrouSAWZ5kkzANM=;
+        b=4ypp6541i/zo4uNJhUrtTwF0H5L/eUrG9YlY0e8TnNJIXCDcZTE+Z3aCBq80najmyJ
+         pMe6yumI7+nA9/NykmKA21NTfPb25drQJDh13rcysxvlReqOp2cuwZQjrfrvagubzK6K
+         mv/BM50l9LuLDqt9RC6MF8TX9rb/X3vNoPEXGcS3ussEn0ov5Up8LTxp6S0LAY/0Z8YC
+         RdIvEWqxoQW29JAxM0neaLfso8Q5gRmDUkDfX+gCJwBnhtBJI/dAAUMNipSvRpGEkf2e
+         q5++pad2cAxKWzalos4anymJogWwDRY1ODwj+tDYZ8s2ELf71A/Ungd/j6veJAzBzkMw
+         OzXQ==
+X-Gm-Message-State: AAQBX9cPbKvT6Ae+1J2tpMIFgr5kLq3fIWyZb2gYsYKfP+i8MahIFlld
+        jE706KbkSBLAQy9bMD/hVDQg++JjurXTkkLj7EuB1YOougJpPEghIcs+g1uWzy9dzTSulZlsJ4/
+        hBhw96Vqao82XPPvJ01B53lamyGXEOUm85IHnA2fC
+X-Received: by 2002:a17:907:7f0b:b0:8b1:7569:b526 with SMTP id qf11-20020a1709077f0b00b008b17569b526mr3699965ejc.11.1680797017899;
+        Thu, 06 Apr 2023 09:03:37 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bj25JTqlPH4xO7mSRLb2uiNpfWZQ6CHwGpry0pz+NotDKptf776qNa/IjvZu9utWI9ekaWvAw2s40+5EjYFv8=
+X-Received: by 2002:a17:907:7f0b:b0:8b1:7569:b526 with SMTP id
+ qf11-20020a1709077f0b00b008b17569b526mr3699956ejc.11.1680797017538; Thu, 06
+ Apr 2023 09:03:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404022015.754177-1-hack3r-0m@proton.me>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230404084701.2791683-1-ryasuoka@redhat.com> <e51e9fb1-ad5c-5cf8-fa04-4e3a10023739@sandeen.net>
+In-Reply-To: <e51e9fb1-ad5c-5cf8-fa04-4e3a10023739@sandeen.net>
+From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
+Date:   Fri, 7 Apr 2023 01:03:26 +0900
+Message-ID: <CAHpthZrcegPXhti5tDdb=_nwafWnU-FXmtc6aRU7juowMpOnUQ@mail.gmail.com>
+Subject: Re: [PATCH] xfs: Use for_each_perag() to iterate all available AGs
+To:     Eric Sandeen <sandeen@sandeen.net>
+Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 02:21:36AM +0000, Om Parikh wrote:
-> Makes alphascale-asm9260 dt bindings adhere to the dt json-schema
-> by replacing txt file with yaml file.
-> 
-> Signed-off-by: Om Parikh <hack3r-0m@proton.me>
-> ---
->  .../watchdog/alphascale,asm9260-wdt.yaml      | 73 +++++++++++++++++++
->  .../bindings/watchdog/alphascale-asm9260.txt  | 35 ---------
->  2 files changed, 73 insertions(+), 35 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml
-> new file mode 100644
-> index 000000000000..ceee5f086e4a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Alphascale asm9260 Watchdog timer
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +maintainers:
-> +  - Oleksij Rempel <linux@rempel-privat.de>
-> +  - Olof Johansson <olof@lixom.net>
+Eric,
 
-I'm not sure how you came up with Olof for this, but you should drop 
-him.
+I failed to reply to you since I got some mistakes.
+Let me re-send my reply just in case.
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - alphascale,asm9260-wdt
+Thank you for reviewing my requests.
 
-const: alphascale,asm9260-wdt
+> Can you explain what goes wrong if it is zero? Is there a test for this?
+>
+> If it's a general problem, what if the other 2 callers pass in the variable
+> start_agno with a value of 0?
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: source clock, used for tick counter
-> +      - description: ahb gate
-> +
-> +  clock-names:
-> +    items:
-> +      - const: mod
-> +      - const: ahb
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    items:
-> +      - description: phandle pointing to the system reset controller with line
-> +                     index for the watchdog.
+Sorry I couldn't prepare any tests to confirm what happens if it is zero
+because it is a kind of general problem.
 
-Not really a useful description. Just 'maxItems: 1' is fine.
+IIUC, passing zero to for_each_perag_wrap() is not problematic.
 
-> +
-> +  reset-names:
-> +    items:
-> +      - const: wdt_rst
-> +
-> +  timeout-sec: true
-> +
-> +  alphascale,mode:
-> +    description: to specify the reset mode of operation
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    enum: [hw, sw, debug]
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/alphascale,asm9260.h>
-> +    watchdog0: watchdog@80048000 {
-> +      compatible = "alphascale,asm9260-wdt";
-> +      reg = <0x80048000 0x10>;
-> +      clocks = <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
-> +      clock-names = "mod", "ahb";
-> +      interrupts = <55>;
-> +      timeout-sec = <30>;
-> +      alphascale,mode = "hw";
-> +    };
-> diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-> deleted file mode 100644
-> index 75b265a04047..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-> +++ /dev/null
-> @@ -1,35 +0,0 @@
-> -Alphascale asm9260 Watchdog timer
-> -
-> -Required properties:
-> -
-> -- compatible : should be "alphascale,asm9260-wdt".
-> -- reg : Specifies base physical address and size of the registers.
-> -- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
-> -- clock-names : should be set to
-> -	"mod" - source for tick counter.
-> -	"ahb" - ahb gate.
-> -- resets : phandle pointing to the system reset controller with
-> -	line index for the watchdog.
-> -- reset-names : should be set to "wdt_rst".
-> -
-> -Optional properties:
-> -- timeout-sec : shall contain the default watchdog timeout in seconds,
-> -	if unset, the default timeout is 30 seconds.
-> -- alphascale,mode : three modes are supported
-> -	"hw" - hw reset (default).
-> -	"sw" - sw reset.
-> -	"debug" - no action is taken.
-> -
-> -Example:
-> -
-> -watchdog0: watchdog@80048000 {
-> -	compatible = "alphascale,asm9260-wdt";
-> -	reg = <0x80048000 0x10>;
-> -	clocks = <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
-> -	clock-names = "mod", "ahb";
-> -	interrupts = <55>;
-> -	resets = <&rst WDT_RESET>;
-> -	reset-names = "wdt_rst";
-> -	timeout-sec = <30>;
-> -	alphascale,mode = "hw";
-> -};
-> -- 
-> 2.40.0
-> 
-> 
+As the comment describes, this macro iterates all AG from start_agno through
+wrap_agno, then wrap to restart_agno, and then iterates again toward to
+start_agno - 1. It looks like some issue occurs when start_agno is zero.
+However, for_each_perag_wrap() actually won't wrap if start_agno is zero.
+
+static inline struct xfs_perag *
+xfs_perag_next_wrap(
+struct xfs_perag *pag,
+xfs_agnumber_t *agno,
+xfs_agnumber_t stop_agno,
+xfs_agnumber_t restart_agno,
+xfs_agnumber_t wrap_agno)
+{
+struct xfs_mount *mp = pag->pag_mount;
+
+*agno = pag->pag_agno + 1;
+xfs_perag_rele(pag);
+while (*agno != stop_agno) {
+if (*agno >= wrap_agno) {
+if (restart_agno >= stop_agno) <<<--- HERE
+break;
+*agno = restart_agno;
+}
+
+pag = xfs_perag_grab(mp, *agno);
+if (pag)
+return pag;
+(*agno)++;
+}
+return NULL;
+}
+
+/*
+* Iterate all AGs from start_agno through wrap_agno, then restart_agno through
+* (start_agno - 1).
+*/
+#define for_each_perag_wrap_range(mp, start_agno, restart_agno,
+wrap_agno, agno, pag) \
+for ((agno) = (start_agno), (pag) = xfs_perag_grab((mp), (agno)); \
+(pag) != NULL; \
+(pag) = xfs_perag_next_wrap((pag), &(agno), (start_agno), \
+(restart_agno), (wrap_agno)))
+...
+#define for_each_perag_wrap_at(mp, start_agno, wrap_agno, agno, pag) \
+for_each_perag_wrap_range((mp), (start_agno), 0, (wrap_agno), (agno), (pag))
+...
+#define for_each_perag_wrap(mp, start_agno, agno, pag) \
+for_each_perag_wrap_at((mp), (start_agno), (mp)->m_sb.sb_agcount, \
+(agno), (pag))
+
+OTOH, since we have already a for_each_perag() macro, which just iterates all AG
+from 0 and doesn't wrap, I think it is simpler to use for_earch_perag().
+
+Regards,
+Ryosuke
+
