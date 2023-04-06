@@ -2,154 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2624E6D9386
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1936D938A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236928AbjDFKCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:02:41 -0400
+        id S236898AbjDFKDF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 06:03:05 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236471AbjDFKCY (ORCPT
+        with ESMTP id S236476AbjDFKCj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:02:24 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAB52D44;
-        Thu,  6 Apr 2023 03:01:41 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4dd9da1c068so494140e87.0;
-        Thu, 06 Apr 2023 03:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680775299;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jD09oc1p3GE1KfBGdCsMW1hPcGKRBlTNFuXfntk8i7w=;
-        b=LaOOGjH9D5EyoPRtf56olfEC03Rn/Z+kT/2G60G8CKc9qn0V0YogntvwiN9IjLq5KG
-         yQmYok4Vcs4tfRCf5O36xBGaprYrDVhCMolhNLFtdLyX/tHT5paGEftO4r0fYe+3Dix4
-         /oizT6gf0uRfagQz3unUi8ZyRwDXAcyTR8FZ67IaE83Xh4I0+icZR5KBBhBmtwJKKMlx
-         F9Gtxu1ZeLMR/NCYmLJoehy8D3uQm0Iyrorye/O2M7SShrbcWJ5I2QH2OjRwjsdezo+z
-         yYiqmmZz6n3Yhmb+Z4l5XotOX2p/8VhgQDYCR0Gza5UzllftkfhcxJkJfIE4UrtWEl4J
-         7dxQ==
+        Thu, 6 Apr 2023 06:02:39 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7B87ED2;
+        Thu,  6 Apr 2023 03:02:15 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id cw23so26794ejb.12;
+        Thu, 06 Apr 2023 03:02:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680775299;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680775334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jD09oc1p3GE1KfBGdCsMW1hPcGKRBlTNFuXfntk8i7w=;
-        b=vV5CnNgy+elGl7LUXFhrimcK6HK51k0igazWCn9LU5JfK3TnhqHKhQkm7CAw39zeqr
-         pKlfpIPLmIC3lKqYW8HDM9t7UTec4NMKFT0IEHfN1piM3BIJPgDvDBgvu1hRvDB5d6fT
-         /YDYk2MiASQlxvU+B5vQ4ULb93UkGDnLkskFH1GRQSVACMIvSiQy8K8CvErMFtHpfWYV
-         QQN6tLGZdD+OVkFEjGaoxD4C8K7NpO+Bkn7dn55mL1wLLno0jLS3WHqj12ZpDqP5mfjg
-         T+/ssgom3cLo1D3x+/mriWAfR5fRhMiMVIUmYkLl35FLeUU2F/Bzo3Wk3p4Ws+X2AAIN
-         dqtg==
-X-Gm-Message-State: AAQBX9fHnR8RrGuAdDgZPfwAfWqNOuo3vAiNNUgP6s+Iq6b5c5IJaV+7
-        tSW5wSEHET4pUpAjaS1QgIk=
-X-Google-Smtp-Source: AKy350Ygr9+VHcZszjIOQd1qvo6t1oPQUn6GWglIregwGdmytnOM9fgRw3TiItoQJkLDcOqdWp2/sw==
-X-Received: by 2002:a05:651c:1a0c:b0:295:a024:f3e2 with SMTP id by12-20020a05651c1a0c00b00295a024f3e2mr1897664ljb.5.1680775299435;
-        Thu, 06 Apr 2023 03:01:39 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id z14-20020a2e9b8e000000b00298a81f5d70sm214859lji.136.2023.04.06.03.01.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 03:01:39 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 13:01:19 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] KVM: x86: SGX vs. XCR0 cleanups
-Message-ID: <20230406130119.000011fe.zhi.wang.linux@gmail.com>
-In-Reply-To: <ZC4qF90l77m3X1Ir@google.com>
-References: <20230405005911.423699-1-seanjc@google.com>
-        <d0af618169ebc17722e7019ca620ec22ee0b49c3.camel@intel.com>
-        <ZC4qF90l77m3X1Ir@google.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        bh=/IeCwi9+3jSL1nb4jEHqH6GkeCus1uyB0RiSCcDwhPI=;
+        b=GpYFAZvt43qQh/7pYICkFAtADru3JiyKL7fuP6GJV0VuQh4y6JKBjgiUAiXDI24TM7
+         Ck6F6Mgje2kI10mVDLbnLd7P+ciUDglvpcfran19e7AFgpVZkMVOLQbWkRSHyOa0eSVb
+         IwU3WBv+4ZMTUWLEAm5Qeldkzg/9t7umuSsdcPgSMm7MIaDyH0Vw0xzOwi1KdR7vCtO4
+         atcsN42Znf8mlXB4xhDMg+/9uCew76oTdih8m+EagAzhlKxozw9dEgs5Cv5QSwWPp4LN
+         3OakdPSyUNHDgQvTbPhl1PfEbFZ1Y6nb9pW8sbxl+5ZBGRxelelFGre6Wp6IX/Bzy1mo
+         nf8w==
+X-Gm-Message-State: AAQBX9faGMrKo5HCcNcERYccA8Bph5FTOwsDTNyq90aE8P4hsCG3pKg+
+        k+TVRk4JyR9lLCJKltugDB3oZoFaJyinGfGM6g59ts6f
+X-Google-Smtp-Source: AKy350aevNmeeVnSdZHM6/cq3n2nSTXTAkl8tU6AAI8yhSRPn6cYfYENtrPMGZ3MdMHz51Aca8LLPVgkXTfsHfPWE7g=
+X-Received: by 2002:a17:907:8c17:b0:931:6921:bdbb with SMTP id
+ ta23-20020a1709078c1700b009316921bdbbmr2076614ejc.2.1680775333753; Thu, 06
+ Apr 2023 03:02:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230401165540.322665-1-yu.c.chen@intel.com> <CAJZ5v0j704JoCPTrDO1jTHwP1+8NVdLk7hym5036uFcfo7YHXQ@mail.gmail.com>
+ <ZC4zMv1SCiUMbcqs@chenyu5-mobl1>
+In-Reply-To: <ZC4zMv1SCiUMbcqs@chenyu5-mobl1>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 6 Apr 2023 12:02:01 +0200
+Message-ID: <CAJZ5v0j5PWsF6zCCVMRW59WevYLvWiBk82U4MpxqWdFnAcrqrQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Do not get block device exclusively in
+ test_resume mode
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Ye Bin <yebin10@huawei.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yifan Li <yifan2.li@intel.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 5 Apr 2023 19:10:40 -0700
-Sean Christopherson <seanjc@google.com> wrote:
+On Thu, Apr 6, 2023 at 4:49 AM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> Hi Rafael,
+> On 2023-04-05 at 20:37:32 +0200, Rafael J. Wysocki wrote:
+> > On Sat, Apr 1, 2023 at 10:59 AM Chen Yu <yu.c.chen@intel.com> wrote:
+> > >
+> > > The system refused to do a test_resume because it found that the
+> > > swap device has already been taken by someone else. Specificly,
+> > > the swsusp_check()->blkdev_get_by_dev(FMODE_EXCL) is supposed to
+> > > do this check.
+> > >
+> > > Steps to reproduce:
+> > >  dd if=/dev/zero of=/swapfile bs=$(cat /proc/meminfo |
+> > >        awk '/MemTotal/ {print $2}') count=1024 conv=notrunc
+> > >  mkswap /swapfile
+> > >  swapon /swapfile
+> > >  swap-offset /swapfile
+> > >  echo 34816 > /sys/power/resume_offset
+> > >  echo test_resume > /sys/power/disk
+> > >  echo disk > /sys/power/state
+> > >
+> > >  PM: Using 3 thread(s) for compression
+> > >  PM: Compressing and saving image data (293150 pages)...
+> > >  PM: Image saving progress:   0%
+> > >  PM: Image saving progress:  10%
+> > >  ata1: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+> > >  ata1.00: configured for UDMA/100
+> > >  ata2: SATA link down (SStatus 0 SControl 300)
+> > >  ata5: SATA link down (SStatus 0 SControl 300)
+> > >  ata6: SATA link down (SStatus 0 SControl 300)
+> > >  ata3: SATA link down (SStatus 0 SControl 300)
+> > >  ata4: SATA link down (SStatus 0 SControl 300)
+> > >  PM: Image saving progress:  20%
+> > >  PM: Image saving progress:  30%
+> > >  PM: Image saving progress:  40%
+> > >  PM: Image saving progress:  50%
+> > >  pcieport 0000:00:02.5: pciehp: Slot(0-5): No device found
+> > >  PM: Image saving progress:  60%
+> > >  PM: Image saving progress:  70%
+> > >  PM: Image saving progress:  80%
+> > >  PM: Image saving progress:  90%
+> > >  PM: Image saving done
+> > >  PM: hibernation: Wrote 1172600 kbytes in 2.70 seconds (434.29 MB/s)
+> > >  PM: S|
+> > >  PM: hibernation: Basic memory bitmaps freed
+> > >  PM: Image not found (code -16)
+> > >
+> > > This is because when using the swapfile as the hibernation storage,
+> > > the block device where the swapfile is located has already been mounted
+> > > by the OS distribution(usually been mounted as the rootfs). This is not
+> > > an issue for normal hibernation, because software_resume()->swsusp_check()
+> > > happens before the block device(rootfs) mount. But it is a problem for the
+> > > test_resume mode. Because when test_resume happens, the block device has
+> > > been mounted already.
+> > >
+> > > Thus remove the FMODE_EXCL for test_resume mode. This would not be a
+> > > problem because in test_resume stage, the processes have already been
+> > > frozen, and the race condition described in
+> > > Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > is unlikely to happen.
+> > >
+> > > Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+> > > Reported-by: Yifan Li <yifan2.li@intel.com>
+> > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > ---
+> > >  kernel/power/hibernate.c | 18 +++++++++++-------
+> > >  kernel/power/power.h     |  2 +-
+> > >  kernel/power/swap.c      | 10 +++++++---
+> > >  3 files changed, 19 insertions(+), 11 deletions(-)
+> > >
+> > > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > > index 793c55a2becb..f50456e72f0a 100644
+> > > --- a/kernel/power/hibernate.c
+> > > +++ b/kernel/power/hibernate.c
+> > > @@ -683,22 +683,26 @@ static void power_down(void)
+> > >                 cpu_relax();
+> > >  }
+> > >
+> > > -static int load_image_and_restore(void)
+> > > +static int load_image_and_restore(bool safe)
+> >
+> > It is not very clear why the argument is called "safe".
+> >
+> > Either this needs to be explained in a comment, or I would just call
+> > it "exclusive" and rework the checks accordingly.
+> >
+> OK, I can change it to "exclusive". Pavan proposed to add a global
+> variable snapshot_testing to indicate that the system is in test_resume mode,
+> and we can check this flag to decide whether to open the block device
+> exclusively or not. Then we don't have to add parameter for load_image_and_restore()
+> nor swsusp_check(). Could you please give advice whether this is applicable?
 
-> On Wed, Apr 05, 2023, Huang, Kai wrote:
-> > On Tue, 2023-04-04 at 17:59 -0700, Sean Christopherson wrote:
-> > > *** WARNING *** ABI breakage.
-> > > 
-> > > Stop adjusting the guest's CPUID info for the allowed XFRM (a.k.a. XCR0)
-> > > for SGX enclaves.  Past me didn't understand the roles and responsibilities
-> > > between userspace and KVM with respect to CPUID leafs, i.e. I thought I was
-> > > being helpful by having KVM adjust the entries.
-> > 
-> > Actually I am not clear about this topic.
-> > 
-> > So the rule is KVM should never adjust CPUID entries passed from userspace?
-> 
-> Yes, except for true runtime entries where a CPUID leaf is dynamic based on other
-> CPU state, e.g. CR4 bits, MISC_ENABLES in the MONITOR/MWAIT case, etc.
-> 
-> > What if the userspace passed the incorrect CPUID entries?  Should KVM sanitize
-> > those CPUID entries to ensure there's no insane configuration?  My concern is if
-> > we allow guest to be created with insane CPUID configurations, the guest can be
-> > confused and behaviour unexpectedly.
-> 
-> It is userspace's responsibility to provide a sane, correct setup.  The one
-> exception is that KVM rejects KVM_SET_CPUID{2} if userspace attempts to define an
-> unsupported virtual address width, the argument being that a malicious userspace
-> could attack KVM by coercing KVM into stuff a non-canonical address into e.g. a
-> VMCS field.
-> 
-> The reason for KVM punting to userspace is that it's all but impossible to define
-> what is/isn't sane.  A really good example would be an alternative we (Google)
-> considered for the "smaller MAXPHYADDR" fiasco, the underlying problem being that
-> migrating a vCPU with MAXPHYADDR=46 to a system with MAXPHYADDR=52 will incorrectly
-> miss reserved bit #PFs.
-> 
-> Rather than teach KVM to try and deal with smaller MAXPHYADDRs, an idea we considered
-> was to instead enumerate guest.MAXPHYADDR=52 on platforms with host.MAXPHYADDR=46 in
-> anticipation of eventual migration.  So long as userspace doesn't actually enumerate
-> memslots in the illegal address space, KVM would be able to treat such accesses as
-> emulated MMIO, and would only need to intercept #PF(RSVD).
-> 
-> Circling back to "what's sane", enumerating guest.MAXPHYADDR > host.MAXPHYADDR
-> definitely qualifies as insane since it really can't work correctly, but in our
-> opinion it was far superior to running with allow_smaller_maxphyaddr=true.
-> 
-> And sane is not the same thing as architecturally legal.  AMX is a good example
-> of this.  It's _technically_ legal to enumerate support for XFEATURE_TILE_CFG but
-> not XFEATURE_TILE_DATA in CPUID, but illegal to actually try to enable TILE_CFG
-> in XCR0 without also enabling TILE_DATA.  KVM should arguably reject CPUID configs
-> with TILE_CFG but not TILE_DATA, and vice versa, but then KVM is rejecting a 100%
-> architecturally valid, if insane, CPUID configuration.  Ditto for nearly all of
-> the VMX control bits versus their CPUID counterparts.
-> 
-> And sometimes there are good reasons to run a VM with a truly insane configuration,
-> e.g. for testing purposes.
-> 
-> TL;DR: trying to enforce "sane" CPUID/feature configuration is a gigantic can of worms.
+Well, in that case, why don't you simply check pm_test_level?
 
-Interesting point. I was digging the CPUID virtualization OF TDX/SNP.
-It would be nice to have a conclusion of what is "sane" and what is the
-proper role for KVM, as firmware/TDX module is going to validate the "sane"
-CPUID.
-
-TDX/SNP requires the CPUID to be pre-configured and validated before creating
-a CC guest. (It is done via TDH.MNG.INIT in TDX and inserting a CPUID page in
-SNP_LAUNCH_UPDATE in SNP).
-
-IIUC according to what you mentioned, KVM should be treated like "CPUID box"
-for QEMU and the checks in KVM is only to ensure the requirements of a chosen
-one is literally possible and correct. KVM should not care if the combination, the usage of the chosen ones is insane or not, which gives QEMU flexibility.
-
-As the valid CPUIDs have been decided when creating a CC guest, what should be
-the proper behavior (basically any new checks?) of KVM for the later
-SET_CPUID2? My gut feeling is KVM should know the "CPUID box" is reduced
-at least, because some KVM code paths rely on guest CPUID configuration.
+> If yes I can change the code accordingly, otherwise I can change the "safe"
+> to "exclusive" and add some comments.
