@@ -2,120 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511266D9076
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56ED56D907B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235711AbjDFHbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
+        id S235691AbjDFHdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235697AbjDFHbp (ORCPT
+        with ESMTP id S234792AbjDFHdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:31:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6311C76BD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:31:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3224016F8;
-        Thu,  6 Apr 2023 00:32:26 -0700 (PDT)
-Received: from [192.168.1.12] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 616F83F73F;
-        Thu,  6 Apr 2023 00:31:39 -0700 (PDT)
-Message-ID: <43d05005-052e-dd32-cf1e-17c569ebe2d9@arm.com>
-Date:   Thu, 6 Apr 2023 09:31:24 +0200
+        Thu, 6 Apr 2023 03:33:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC46B2112
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=MoneTFHNrHm1CvMkTKFe0BpHprRoUxLmWShJckHDj2I=; b=D6963OF3z0C1n3q4u87jm+NYfK
+        WBNoysKn/KLPrVu9EtWRXP3AHuqZBKlwPVYiDKC/vqHVsKVdu4srup98wUTAqEx8/g83uQ4x82j+c
+        /mmitR4Z6VpjkAgcHlIggZHKcnE/E91ONLoYXb9wEpGNP6fMsSS7LmpQKRmfnTtWBbbNkdCLMrDAI
+        jXu8KUR01AIqcbIAh1t4QjSQxzvtzWrF9veXQk3NqTG0vp7QbyMUKIEbmI53u78sx0MDYSAMdy6Zs
+        5hrNxLPHewjYTOhDpQ1cQMq8M/SkV5IRS062GpNqVNkLDQDKDzifnvDlSKVF2/utEfimgSKpVtFgM
+        SbfHWKPw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkK7g-00ASWh-1u;
+        Thu, 06 Apr 2023 07:33:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9FAD63000DC;
+        Thu,  6 Apr 2023 09:33:30 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 660D1200BFC2F; Thu,  6 Apr 2023 09:33:30 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 09:33:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Dai <davidai@google.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Saravana Kannan <saravanak@google.com>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/6] sched/fair: Add util_guest for tasks
+Message-ID: <20230406073330.GA386572@hirez.programming.kicks-ass.net>
+References: <20230330224348.1006691-1-davidai@google.com>
+ <20230330224348.1006691-2-davidai@google.com>
+ <20230405081449.GX4253@hirez.programming.kicks-ass.net>
+ <CABN1KCLjXpxNak90iowd0iiz9SD8-5n+6S3kEoCKO9NantyXxg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] cacheinfo: Check cache properties are present in DT
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandre Ghiti <alex@ghiti.fr>
-References: <20230327115953.788244-1-pierre.gondois@arm.com>
- <20230327115953.788244-3-pierre.gondois@arm.com>
- <20230404-hatred-swimmer-6fecdf33b57a@spud>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20230404-hatred-swimmer-6fecdf33b57a@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABN1KCLjXpxNak90iowd0iiz9SD8-5n+6S3kEoCKO9NantyXxg@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Conor,
+On Wed, Apr 05, 2023 at 03:54:08PM -0700, David Dai wrote:
+> On Wed, Apr 5, 2023 at 1:14 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> 
+> Hi Peter,
+> 
+> Appreciate your time,
+> 
+> > On Thu, Mar 30, 2023 at 03:43:36PM -0700, David Dai wrote:
+> > > @@ -499,6 +509,7 @@ struct sched_avg {
+> > >       unsigned long                   load_avg;
+> > >       unsigned long                   runnable_avg;
+> > >       unsigned long                   util_avg;
+> > > +     unsigned long                   util_guest;
+> > >       struct util_est                 util_est;
+> > >  } ____cacheline_aligned;
+> > >
+> >
+> > Yeah, no... you'll have to make room first.
+> >
+> 
+> I’m not sure what you mean. Do you mean making room by reducing
+> another member in the same struct? If so, which member would be a good
+> fit to shorten? Or do you mean something else entirely?
 
-On 4/4/23 21:29, Conor Dooley wrote:
-> Hey Pierre,
-> 
-> On Mon, Mar 27, 2023 at 01:59:50PM +0200, Pierre Gondois wrote:
->> If a Device Tree (DT) is used, the presence of cache properties is
->> assumed. Not finding any is not considered. For arm64 platforms,
->> cache information can be fetched from the clidr_el1 register.
->> Checking whether cache information is available in the DT
->> allows to switch to using clidr_el1.
->>
->> init_of_cache_level()
->> \-of_count_cache_leaves()
->> will assume there a 2 cache leaves (L1 data/instruction caches), which
->> can be different from clidr_el1 information.
->>
->> cache_setup_of_node() tries to read cache properties in the DT.
->> If there are none, this is considered a success. Knowing no
->> information was available would allow to switch to using clidr_el1.
->>
-> 
-> Alex reported seeing a bunch of messages in his boot log in QEMU since
-> -rc1 which appears to be the fault of, as far as I can tell, e0df442ee49
-> ("cacheinfo: Check 'cache-unified' property to count cache leaves")
-> like:
-> cacheinfo: Unable to detect cache hierarchy for CPU N
-> 
-> The RISC-V QEMU virt machine doesn't define any cache properties of any
-> sort in the dtb, and unlike the arm64 virt machine I tried (a72) doesn't
-> have some registers that cache info is discoverable from.
-> When we call of_count_cache_leaves() from init_of_cache_level() and
-> there are of course no reasons to increment leaves, we hit the return 2
-> case you mention above, setting num_leaves to 2.
-> 
-> As you mention, when we hit cache_setup_of_node(), levels is not going
-> to be set to one, so we trigger the condition (this_leaf->level != 1)
-> and, as there are no cache nodes, break out of the loop without
-> incrementing index. Index is therefore less than 2, and thus we return
-> -ENOENT.
-> This is of course propagated back out to detect_cache_attributes() and
-> triggers the "Unable to detect..." printout :(
-> 
-> With this patch(set), the spurious error prints go away, but we are left
-> with a "Early cacheinfo failed, ret = -22" which will need to be fixed.
-> 
-> So I think this also needs to be:
-> Fixes: de0df442ee49 ("cacheinfo: Check 'cache-unified' property to count cache leaves")
-> 
-> Probably also needs a:
-> Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> since he's found an actual, rather than theoretical, problem!
+Yeah, as you can see below, this structure is completely filling up the
+cacheline already so there's no room for another member. I've not looked
+at this in detail in a little while so I'm not at all sure what would be
+the easiest way to free up space.
 
-Ok yes indeed, I will do this and the other comments you made,
+Going by the rest of the discusion is seems this is the least of your
+problems though.
 
-Regards,
-Pierre
-
-> 
-> Cheers,
-> Conor.
-> 
+> > struct sched_avg {
+> >         /* typedef u64 -> __u64 */ long long unsigned int     last_update_time;          /*     0     8 */
+> >         /* typedef u64 -> __u64 */ long long unsigned int     load_sum;                  /*     8     8 */
+> >         /* typedef u64 -> __u64 */ long long unsigned int     runnable_sum;              /*    16     8 */
+> >         /* typedef u32 -> __u32 */ unsigned int               util_sum;                  /*    24     4 */
+> >         /* typedef u32 -> __u32 */ unsigned int               period_contrib;            /*    28     4 */
+> >         long unsigned int          load_avg;                                             /*    32     8 */
+> >         long unsigned int          runnable_avg;                                         /*    40     8 */
+> >         long unsigned int          util_avg;                                             /*    48     8 */
+> >         struct util_est {
+> >                 unsigned int       enqueued;                                             /*    56     4 */
+> >                 unsigned int       ewma;                                                 /*    60     4 */
+> >         } __attribute__((__aligned__(8)))util_est __attribute__((__aligned__(8))); /*    56     8 */
+> >
+> >         /* size: 64, cachelines: 1, members: 9 */
+> >         /* forced alignments: 1 */
+> > } __attribute__((__aligned__(64)));
+> >
+> >
