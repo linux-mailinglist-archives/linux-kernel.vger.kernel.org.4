@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAA06D9F6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F1C6D9F80
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbjDFSDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
+        id S239767AbjDFSHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239490AbjDFSDl (ORCPT
+        with ESMTP id S229764AbjDFSHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:03:41 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A9526BA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:03:40 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id sg7so3395912ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:03:40 -0700 (PDT)
+        Thu, 6 Apr 2023 14:07:48 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6A82D43
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:07:47 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id j22so3433200ejv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680804218;
+        d=linaro.org; s=google; t=1680804465;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ivjKih8jFIj8/KL96EOvzPUwa2sZHHiEqT0P1qAVkao=;
-        b=AU2ZJcssSzxK5DbJhNIPGcdHDbSz/oeMYaCRqbXnpf7PztQyv0k0ltX3gi60NNbpVd
-         xV13dWQxrO4JrXMc5guRdLtj6zG1BLpW9gtqgQDnb6yQqse1lPAoNFi/f3n/Vhox5n+u
-         EthavbVxj8dhvQ9RQOLkupbjiBiCjBkVI4o3dLf91rBhnevcx+Jzue9Tdbk4Msz9/q3o
-         DfbG76a7ggmGRxG/Fgn/xYyGP+l8QCLmILUok/+RFG5hZaE7zB5nykslwdBXIDioNzAz
-         OWR+zvIwPEuR1iKcwbv5Qir2sERV7I3TfsLK7+jzBhwde7E9c1MCSECp4OYBhIqgnEHy
-         SovA==
+        bh=1weO9qyyCQy8+b4IcRBkB70UCGhmywO6NJQrtwS0SGI=;
+        b=Q39KSHVK0vW4i5Ni8OS1x1qezXczm35jO/kx/LP48M/yhIJzxCsjlEkGkpPsBZrkdu
+         6KzuKgQrC6cGI46YZBIvBAz05m7Byijj31TWFGRrOGmJZg6AS/nfYc8j5wRnkZB+ixHT
+         lFFMw0oOfjoYDKfQEkE3xHvbtU5dqfFqKLULKu4HhJ4Y1SJJBemueE8xAzsPtrAliZuW
+         jkl0cYlfZSsnFzcXtZlOKWEkGOFlToS+hK+aVsnF/4Xv9xceCGGPgIPHlvMy0gTdqZih
+         VZqacRRlgRvOeOeMTeCDyD/H4o9AHH2XYkdqqmn72aS0I5JxZWlPt/G67JdARodtQVq6
+         uVIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680804218;
+        d=1e100.net; s=20210112; t=1680804465;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ivjKih8jFIj8/KL96EOvzPUwa2sZHHiEqT0P1qAVkao=;
-        b=AimXbc+WcVMlot1d0+cc6BQh27Lv9W65RTbD0mw5DvPqVwgcRcwZq2G+Qrw/L6vi3P
-         4TIcJ14P5sEQ1xFb0sU2cjaKHS9FxlHjBafmchSF7jfxjJyhSs+DC3sBXVuTQjwMehbq
-         hUE1gCVUv9BUXHxUo2rKz3enktJNWoY7Huc7G2gRjbWqcYDvUQyJ681QqsNn0uGvtlj7
-         qLanGoa09E4VOrS4fkNoBu3ORAMh1heiBmlU20WbpLnJmI7+LcqWtHrlDhaqzhuDQZ2H
-         1lVkNNHkdqbNLpEzGCcZYw2RZTlBKRqaB1O1zDXI4O6Q6RbJs4ceyYAGUY8a/5tcFtfM
-         LyJw==
-X-Gm-Message-State: AAQBX9ct8IvuVajSfeRwygyKlzs8ulKOInnk1LLh4Rw2/p2V1OcHMN6D
-        Gl1x2/HGLzFNjl7FJR1FW/757hqdrDYhWnvpfCs=
-X-Google-Smtp-Source: AKy350ZfQNTkhRRqeuIMbmp0+NPAWZSvSxhmvagYoW2u4iVxlsfCba97WdCNnvjiNqgVTAJYdVOTEw==
-X-Received: by 2002:a17:906:74d9:b0:92f:924b:e8f4 with SMTP id z25-20020a17090674d900b0092f924be8f4mr8247971ejl.4.1680804218607;
-        Thu, 06 Apr 2023 11:03:38 -0700 (PDT)
+        bh=1weO9qyyCQy8+b4IcRBkB70UCGhmywO6NJQrtwS0SGI=;
+        b=YDrTk7mo14wlsh23mViJbtkr9ima1K5jmdeTg5BTFLbLM3T57KmL4/1BBW1VlEIIOs
+         scUZaaap4h703H1y2w7wA6rm790mjZIktPExL1JsJAXBAH5ytdLno4cJt0PCq4zJYJHm
+         fIAcFD5YpYJDQBXR8j1a30hMbD8SFmpp+fy+HyaBLw5z3L9ISepbTXKZXkefq8WMjYE+
+         49khwj5aWMNlwjiDAEvijOy1KqhmZMacJd5JmFLo3XAzTDQtQ/jlHmRCS277uuMfmuih
+         UQDf+RcsZ38MxolETUh+zhheDMtMUGvrVk9ZMzqBI235XhoXioL69TTcmEaMLDpbVLKp
+         YJwg==
+X-Gm-Message-State: AAQBX9f2v/rgypvD4uTKxxIOep72o85alIf7UyE2QUT6tygsm/+hpM6j
+        dTxD/Mbt/aiptEJpfItVfkx4GkvOqhkFZoZeD/E=
+X-Google-Smtp-Source: AKy350aHt9yU8Ez/wQQLBkXXBqBOR8IO147QPcgI9LDFf7/LZvdMbuHrlfbxBzBf2DPp21fb0ciawA==
+X-Received: by 2002:a17:906:f897:b0:8b1:7eba:de5 with SMTP id lg23-20020a170906f89700b008b17eba0de5mr6211680ejb.10.1680804465711;
+        Thu, 06 Apr 2023 11:07:45 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id ta14-20020a1709078c0e00b00949c02dcf10sm1101798ejc.6.2023.04.06.11.03.37
+        by smtp.gmail.com with ESMTPSA id r7-20020a50c007000000b005021d210899sm1022641edb.23.2023.04.06.11.07.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:03:38 -0700 (PDT)
-Message-ID: <46301ba1-16d0-8d7e-712b-c52aef52c576@linaro.org>
-Date:   Thu, 6 Apr 2023 20:03:37 +0200
+        Thu, 06 Apr 2023 11:07:45 -0700 (PDT)
+Message-ID: <cc5ee0e5-5cc7-bf80-68cc-2d38b1118c6d@linaro.org>
+Date:   Thu, 6 Apr 2023 20:07:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] ARM: dts: imx6ull-dhcor: Add Marantec maveo box
+Subject: Re: [PATCH v2] dt-bindings: iommu: Convert QCOM IOMMU to YAML
 Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        kernel <kernel@dh-electronics.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230405160258.46998-1-cniedermaier@dh-electronics.com>
- <20230405160258.46998-2-cniedermaier@dh-electronics.com>
- <05fa147c-116b-59b4-d14b-760bbefd7602@denx.de>
- <e7aa3b3220e148ee96f5a1c361721845@dh-electronics.com>
- <aa947a69-a0bf-50e6-9ff2-770f436d58e2@linaro.org>
- <75b02961-bcf9-4af5-4450-cb23a50d5f7b@denx.de>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230406-topic-qciommu-v2-1-b8547622b2a4@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <75b02961-bcf9-4af5-4450-cb23a50d5f7b@denx.de>
+In-Reply-To: <20230406-topic-qciommu-v2-1-b8547622b2a4@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -89,49 +82,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 19:32, Marek Vasut wrote:
-> On 4/6/23 18:36, Krzysztof Kozlowski wrote:
->> On 05/04/2023 20:24, Christoph Niedermaier wrote:
->>> From: Marek Vasut [mailto:marex@denx.de]
->>> Sent: Wednesday, April 5, 2023 6:25 PM
->>>> On 4/5/23 18:02, Christoph Niedermaier wrote:
->>>>
->>>> [...]
->>>>
->>>>> +/ {
->>>>> +     model = "DH electronics i.MX6ULL DHCOR on maveo box";
->>>>> +     compatible = "dh,imx6ull-dhcor-maveo-box", "dh,imx6ull-dhcor-som",
->>>>> +                  "fsl,imx6ull";
->>>>> +
->>>>> +     aliases {
->>>>> +             /delete-property/ mmc0; /* Avoid double definitions */
->>>>> +             /delete-property/ mmc1;
->>>>> +             mmc2 = &usdhc2; /* eMMC should be mmc2 */
->>>>
->>>> Why not mmc0 ?
->>>>
->>>> Use root=PARTUUID= when booting to avoid any dependency on
->>>> root=/dev/mmcblk2pN enumeration.
->>>
->>> This is due to software interchangeability with the DHCOM
->>> i.MX6ULL, where the eMMC is always mmc2.
->>
->> That's not the reason to have aliases. The number should match numbering
->> in your datasheet/schematics/user-guide, not what your software wants.
->>
->> Use PARTUUID for SW dependencies.
+On 06/04/2023 13:58, Konrad Dybcio wrote:
+> Convert the Qualcomm IOMMU bindings to YAML.
 > 
-> Regarding the PARTUUID, Christoph raised a valid concern I think. These 
-> machines can come with A/B update scheme, where the PARTUUID could 
-> become identical between two partitions. Or, you can write the same 
-> image to both eMMC and SD card. I don't think PARTUUID is the silver 
-> bullet solution, but I agree the enumeration is a great solution either.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> v1 -> v2:
 
-If you remove other aliases it means it comes only with emmc, right? One
-storage. Then any A/B means you have two partitions. Two partitions will
-have different PARTUUID as partition number is there. You can also use
-PARTLABEL=root_a (root_b). That's BTW easy way to switch between A/B
-partitions.
+Thank you for your patch. There is something to discuss/improve.
+
+> +
+> +patternProperties:
+> +  "^iommu-ctx@[0-9a-f]+$":
+> +    type: object
+
+On this level:
+additionalProperties: false
+
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - qcom,msm-iommu-v1-ns
+> +          - qcom,msm-iommu-v1-sec
+> +
+> +      interrupts:
+> +        maxItems: 1
+> +
+> +      reg:
+> +        maxItems: 1
+
+On this level:
+    required:
+      - compatible
+      - interrupts
+      - reg
+
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - ranges
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +  - '#iommu-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-msm8916.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    apps_iommu: iommu@1e20000 {
+> +      compatible = "qcom,msm8916-iommu", "qcom,msm-iommu-v1";
+> +      reg = <0x01ef0000 0x3000>;
+> +      clocks = <&gcc GCC_SMMU_CFG_CLK>,
+> +               <&gcc GCC_APSS_TCU_CLK>;
+> +      clock-names = "iface", "bus";
+> +      qcom,iommu-secure-id = <17>;
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +      #iommu-cells = <1>;
+> +      ranges = <0 0x01e20000 0x40000>;
+> +
+> +      /* mdp_0: */
+> +      iommu-ctx@4000 {
+> +        compatible = "qcom,msm-iommu-v1-ns";
+> +        reg = <0x4000 0x1000>;
+> +        interrupts = <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+> +      };
+> +    };
+> +
+> +    mdp: mdp@1a01000 {
+> +      reg = <0x01a01000 0x1000>;
+> +      iommus = <&apps_iommu 4>;
+
+Drop mdp node. Consumers should not be in provider bindings.
+
+
 
 Best regards,
 Krzysztof
