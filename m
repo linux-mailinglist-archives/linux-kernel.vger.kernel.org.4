@@ -2,111 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D326D917A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B856D917D
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236016AbjDFI0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
+        id S235958AbjDFI0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235905AbjDFI0J (ORCPT
+        with ESMTP id S235635AbjDFI0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:26:09 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5FF7AB2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:26:02 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-83-D1tdxv4cNzaW0ds0adK_fQ-1; Thu, 06 Apr 2023 09:25:59 +0100
-X-MC-Unique: D1tdxv4cNzaW0ds0adK_fQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 6 Apr
- 2023 09:25:57 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 6 Apr 2023 09:25:57 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dave Hansen' <dave.hansen@intel.com>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>
-Subject: RE: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Thread-Topic: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Thread-Index: AQHZZ9zo4aQfYkHe8kGrF8tSkNZCGa8d8QYA
-Date:   Thu, 6 Apr 2023 08:25:57 +0000
-Message-ID: <5c10520ac747430cb421badcb293c706@AcuMS.aculab.com>
-References: <20230405141710.3551-1-ubizjak@gmail.com>
- <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-In-Reply-To: <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 6 Apr 2023 04:26:43 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F4E4C05
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:26:42 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D2DB566031BB;
+        Thu,  6 Apr 2023 09:26:40 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680769601;
+        bh=oav4Q570+IEqHszuEMrP/J+ZVB35sBCGUh4o0TPxawM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ai2Nd2YO8SxMM8/ddeAPkrdFMoD9kv3YFuruuXcJoU4pioQJAjxuWLunBQm8OHtvg
+         CEVHsiOPZQqmQszmzYO3GFGgwU6hGEzLfaPVLxPHtr6mLZiwhpqhktR/7i4QViRcLs
+         +LhTwZFKXMsTDlnDX10dsLft1tKLnaJurc9ZlZp+w/HpdytqmIroTGMN5HIJkIz7ub
+         PEkvXvSsuDIbVrdl9+qNGWzHKyV+ooIzfu9j6DdtJ2evtHUm/w8IS836F5VLM8Jq7p
+         kGYXH29+uxtbILPM0IByxVUG3lSZzdOh7uhY6Pwr2/wmuy9/LNfv9E91NNXz6fvhpX
+         WJiqXMgl638Jg==
+Message-ID: <17342952-ce6b-a473-4bf0-f96a49d13632@collabora.com>
+Date:   Thu, 6 Apr 2023 10:26:38 +0200
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 2/9] drm/mediatek: dp: Move AUX and panel poweron/off
+ sequence to function
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
+        daniel@ffwll.ch, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
+ <20230404104800.301150-3-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5FrUPUg_SsRz6LrW_K_C7By2tSCQ9W_MNJr8XCOcn7gLA@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5FrUPUg_SsRz6LrW_K_C7By2tSCQ9W_MNJr8XCOcn7gLA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDUgQXByaWwgMjAyMyAxNzozNw0KPiANCj4gT24g
-NC81LzIzIDA3OjE3LCBVcm9zIEJpemphayB3cm90ZToNCj4gPiBBZGQgZ2VuZXJpYyBhbmQgdGFy
-Z2V0IHNwZWNpZmljIHN1cHBvcnQgZm9yIGxvY2Fseyw2NH1fdHJ5X2NtcHhjaGcNCj4gPiBhbmQg
-d2lyZSB1cCBzdXBwb3J0IGZvciBhbGwgdGFyZ2V0cyB0aGF0IHVzZSBsb2NhbF90IGluZnJhc3Ry
-dWN0dXJlLg0KPiANCj4gSSBmZWVsIGxpa2UgSSdtIG1pc3Npbmcgc29tZSBjb250ZXh0Lg0KPiAN
-Cj4gV2hhdCBhcmUgdGhlIGFjdHVhbCBlbmQgdXNlciB2aXNpYmxlIGVmZmVjdHMgb2YgdGhpcyBz
-ZXJpZXM/ICBJcyB0aGVyZSBhDQo+IG1lYXN1cmFibGUgZGVjcmVhc2UgaW4gcGVyZiBvdmVyaGVh
-ZD8gIFdoeSBnbyB0byBhbGwgdGhpcyB0cm91YmxlIGZvcg0KPiBwZXJmPyAgV2hvIGVsc2Ugd2ls
-bCB1c2UgbG9jYWxfdHJ5X2NtcHhjaGcoKT8NCg0KSSdtIGFzc3VtaW5nIHRoZSBsb2NhbF94eHgg
-b3BlcmF0aW9ucyBvbmx5IGhhdmUgdG8gYmUgc2F2ZSB3cnQgaW50ZXJydXB0cz8NCk9uIHg4NiBp
-dCBpcyBwb3NzaWJsZSB0aGF0IGFuIGFsdGVybmF0ZSBpbnN0cnVjdGlvbiBzZXF1ZW5jZQ0KdGhh
-dCBkb2Vzbid0IHVzZSBhIGxvY2tlZCBpbnN0cnVjdGlvbiBtYXkgYWN0dWFsbHkgYmUgZmFzdGVy
-IQ0KDQpBbHRob3VnaCwgbWF5YmUsIGFueSBraW5kIG9mIGxvY2tlZCBjbXB4Y2hnIGp1c3QgbmVl
-ZHMgdG8gZW5zdXJlDQp0aGUgY2FjaGUgbGluZSBpc24ndCAnc3RvbGVuJywgc28gYXBhcnQgZnJv
-bSBwb3NzaWJsZSBzbGlnaHQNCmRlbGF5cyBvbiBhbm90aGVyIGNwdSB0aGF0IGdldHMgYSBjYWNo
-ZSBtaXNzIGZvciB0aGUgbGluZSBpbg0KYWxsIG1ha2VzIGxpdHRsZSBkaWZmZXJlbmNlLg0KVGhl
-IGNhY2hlIGxpbmUgbWlzcyBjb3N0cyBhIGxvdCBhbnl3YXksIGxpbmUgYm91bmNpbmcgbW9yZQ0K
-YW5kIGlzIGJlc3QgYXZvaWRlZC4NClNvIGlzIHRoZXJlIGFjdHVhbGx5IG11Y2ggb2YgYSBiZW5l
-Zml0IGF0IGFsbD8NCg0KQ2xlYXJseSB0aGUgdHJ5X2NtcHhjaGcgaGVscCAtIGJ1dCB0aGF0IGlz
-IGEgZGlmZmVyZW50IGlzc3VlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExh
-a2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQs
-IFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Il 06/04/23 10:20, Chen-Yu Tsai ha scritto:
+> On Tue, Apr 4, 2023 at 6:48 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Everytime we run bridge detection and/or EDID read we run a poweron
+>> and poweroff sequence for both the AUX and the panel; moreover, this
+>> is also done when enabling the bridge in the .atomic_enable() callback.
+>>
+>> Move this power on/off sequence to a new mtk_dp_aux_panel_poweron()
+>> function as to commonize it.
+>> Note that, before this commit, in mtk_dp_bridge_atomic_enable() only
+>> the AUX was getting powered on but the panel was left powered off if
+>> the DP cable wasn't plugged in while now we unconditionally send a D0
+>> request and this is done for two reasons:
+>>   - First, whether this request fails or not, it takes the same time
+>>     and anyway the DP hardware won't produce any error (or, if it
+>>     does, it's ignorable because it won't block further commands)
+>>   - Second, training the link between a sleeping/standby/unpowered
+>>     display makes little sense.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   drivers/gpu/drm/mediatek/mtk_dp.c | 76 ++++++++++++-------------------
+>>   1 file changed, 30 insertions(+), 46 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_dp.c b/drivers/gpu/drm/mediatek/mtk_dp.c
+>> index 84f82cc68672..76ea94167531 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_dp.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_dp.c
+>> @@ -1253,6 +1253,29 @@ static void mtk_dp_audio_mute(struct mtk_dp *mtk_dp, bool mute)
+>>                             val[2], AU_TS_CFG_DP_ENC0_P0_MASK);
+>>   }
+>>
+>> +static void mtk_dp_aux_panel_poweron(struct mtk_dp *mtk_dp, bool pwron)
+>> +{
+>> +       if (pwron) {
+>> +               /* power on aux */
+>> +               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+>> +                                  DP_PWR_STATE_BANDGAP_TPLL_LANE,
+>> +                                  DP_PWR_STATE_MASK);
+>> +
+>> +               /* power on panel */
+>> +               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D0);
+>> +               usleep_range(2000, 5000);
+>> +       } else {
+>> +               /* power off panel */
+>> +               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D3);
+>> +               usleep_range(2000, 3000);
+>> +
+>> +               /* power off aux */
+>> +               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+>> +                                  DP_PWR_STATE_BANDGAP_TPLL,
+>> +                                  DP_PWR_STATE_MASK);
+>> +       }
+>> +}
+>> +
+>>   static void mtk_dp_power_enable(struct mtk_dp *mtk_dp)
+>>   {
+>>          mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_RESET_AND_PROBE,
+>> @@ -1937,16 +1960,9 @@ static enum drm_connector_status mtk_dp_bdg_detect(struct drm_bridge *bridge)
+>>          if (!mtk_dp->train_info.cable_plugged_in)
+>>                  return ret;
+>>
+>> -       if (!enabled) {
+>> -               /* power on aux */
+>> -               mtk_dp_update_bits(mtk_dp, MTK_DP_TOP_PWR_STATE,
+>> -                                  DP_PWR_STATE_BANDGAP_TPLL_LANE,
+>> -                                  DP_PWR_STATE_MASK);
+>> +       if (!enabled)
+>> +               mtk_dp_aux_panel_poweron(mtk_dp, true);
+>>
+>> -               /* power on panel */
+>> -               drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D0);
+> 
+> I suspect the original code was somewhat wrong already? We shouldn't need
+> to pull the panel out of standby just for HPD or reading EDID.
+> 
+> This driver probably needs a lot more cleanup. :/
+> 
+
+I believe the same... but I wanted to play safe, as I don't know if there's any
+panel in particular that requires such quirk...
+
+Angelo
+
 
