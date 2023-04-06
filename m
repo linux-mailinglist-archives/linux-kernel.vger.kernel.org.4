@@ -2,92 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00066D9224
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E68C6D921F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbjDFI6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S235689AbjDFI5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbjDFI6A (ORCPT
+        with ESMTP id S232038AbjDFI5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:58:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304404EFD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680771437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=srqW/Zc6uyMlDdpAQsQE29ZbVva96BUjEhTIphyrjK4=;
-        b=cGQLijeXAwaotJj8sYX2LMskkFkIkr0eszku0KHVQ4S7g+hUwbxR9s5zDdfqtWsPskx+wV
-        Wl3vjgkWz9It10d0Thgc9uhwJ5Iv+SccvwhxE6aJH9wj8Gv5qP25ucnGtPiHS8iKklHFUK
-        pn9Ks1D8XIfUYa3Aq9F8hd3UY5uDa+c=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-369-GZ9du5cUODaWtjuHfClx0g-1; Thu, 06 Apr 2023 04:57:16 -0400
-X-MC-Unique: GZ9du5cUODaWtjuHfClx0g-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3e1522cf031so13678221cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:57:16 -0700 (PDT)
+        Thu, 6 Apr 2023 04:57:20 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C49459E0;
+        Thu,  6 Apr 2023 01:57:18 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id c9so39486468lfb.1;
+        Thu, 06 Apr 2023 01:57:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680771436;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CoK3kb7m7fTAFVkR0FS6x9DdwthE8Uj94ral71JPOqI=;
+        b=kyW2J61noloIIbRJIusGs+T1IlQHOEcas4vUIJZ4fQVaLm50S5YnqYtU52ZIC9+y+F
+         5CKf+u5pAGU2sAQXVHv1Za/V9/p56wVOsv0BxEjKYYrlzACYEiL3YypfA4ZpHQZJPVLX
+         NrO9BbdwlCUJunEkxm2NHEqKvQJ3pkP0NJCLGoFGxzRKuX+Ec/K6WU5QySPYDngeEHKX
+         grNoSNCJ6QiQhpFEGUP4Q9H6iWkeWvBQ8U93Qk+o7Zq3U637Y8OZDf6laqcoBDIQBgGK
+         6Ibs8yenK8nU7e+lsKDwgJwYc0BED7osWFNfxqCwx5neaKkn05oXX8MT0u7fHDU1vZy1
+         mycQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680771435;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=srqW/Zc6uyMlDdpAQsQE29ZbVva96BUjEhTIphyrjK4=;
-        b=uX3WfgVFhw5YS1Qd5IsKWYS3lDY/qDruvgF8ygOJsJl5ckVrr9siH4Jh0/rM7GlBV1
-         Q83a0irOHpNzoi/laoPWrGUT0nHp+LnYvhRSWLGAkk5+nSLWIDnlfborvuGNYI2Ueizd
-         28QYxWlhfwo56svdE8+//XDZiujNrozneYtaUal0TWWPcaEabQUfqw6KulUXB8Ov5aRb
-         v3V840jRBaevMy2QLZ2jD945MHH8XNujC98SxYYkxO8tRhQZ9Yg7Rb/2zl1MWvtKZNGN
-         NOxS8Wh9a/MpzdGpnSiQhdoKedeMpCj66ud7xZ9gVgzKgWDfHxgwk7672Ecd99ciUajA
-         ry8Q==
-X-Gm-Message-State: AAQBX9cbv8Ec7uVA+6ffcGPEoHY+XbH9Rpjoes3b3wsRTEpE+U++O7l7
-        WdZX13IawSqalI/CWzmORstCdNBhybrw3UxSWAWRwFsBTsrlCkSXRgq26qok5wQffU6bTrstBzj
-        Y0KOz6YTs/e8RnUF1B7KsXwY3WSKIf9PCMK4=
-X-Received: by 2002:a05:622a:1815:b0:3e4:eb39:eb8b with SMTP id t21-20020a05622a181500b003e4eb39eb8bmr11113087qtc.5.1680771435683;
+        d=1e100.net; s=20210112; t=1680771436;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CoK3kb7m7fTAFVkR0FS6x9DdwthE8Uj94ral71JPOqI=;
+        b=I4hVljl/K5VSytXasymOGck+FXwtwEil65famWUy3NSm/Bkd189o9K1hM1p81Hjo0M
+         ACeB1osc23wGWTqHJ1R+7Gl3byxvvMLLS+z/9bGH2wxNDoqZQ6bRORY5fXs6cPd91d4A
+         7KRl8OGyfIg9tUZomlN9ZlaVY/gDrVJLTUWTOIn+5yBAYSTS8F/9yQZXjbw3MLRFynt6
+         SxQj4DoAxQjrjT3iyvVgxYaH015RfZD+YugLN57GdTuKiwcUj/TTOWyhVYb4Re0DCqH6
+         /A9OQaFVbQ7vW21Adrm+SLT62Y3nqyeNgx5+hZ3rLqBjB/QmbeEbjhA4+SNGAnOqiar2
+         7RAg==
+X-Gm-Message-State: AAQBX9e/S2qIq6cO68F6MthUh6udywJB28n7/8Gz1qgCABOJURhylVud
+        4diKEN8+6ABNmGr3xy7tmCqm1ZloCyw=
+X-Google-Smtp-Source: AKy350bv5RELtybtuJlHUXuCedWUnQJpEKIC7x1IzvBn6SgP/EHKJLiWeGCue1yVdcfap4rC9BsXIA==
+X-Received: by 2002:ac2:4ac2:0:b0:4eb:13ff:6ca7 with SMTP id m2-20020ac24ac2000000b004eb13ff6ca7mr2428922lfp.16.1680771436114;
+        Thu, 06 Apr 2023 01:57:16 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id l28-20020ac24a9c000000b004e9c983a007sm174661lfp.289.2023.04.06.01.57.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Thu, 06 Apr 2023 01:57:15 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bzXKpcq5d/id+6ZQprS3naXkWcpRtP62YORjWExdv5Im2GPPasqjiU0Vii9Sx8y+GhdWYImw==
-X-Received: by 2002:a05:622a:1815:b0:3e4:eb39:eb8b with SMTP id t21-20020a05622a181500b003e4eb39eb8bmr11113044qtc.5.1680771435377;
-        Thu, 06 Apr 2023 01:57:15 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-227-151.dyn.eolo.it. [146.241.227.151])
-        by smtp.gmail.com with ESMTPSA id 15-20020a05620a040f00b0073b8512d2dbsm318849qkp.72.2023.04.06.01.57.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 01:57:15 -0700 (PDT)
-Message-ID: <d9f969cfc020a29a4ad74d3726c1fc322f8eb9a8.camel@redhat.com>
-Subject: Re: [PATCH net-next v3 12/12] net: stmmac: dwmac-qcom-ethqos: Add
- EMAC3 support
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, bhupesh.sharma@linaro.org, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        mturquette@baylibre.com, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
-Date:   Thu, 06 Apr 2023 10:57:08 +0200
-In-Reply-To: <20230403165229.4jhpo2xs7tuclekw@halaney-x13s>
-References: <20230331214549.756660-1-ahalaney@redhat.com>
-         <20230403165229.4jhpo2xs7tuclekw@halaney-x13s>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+Message-ID: <7d8c558f-0d21-91ed-ecd0-cac079d366ee@gmail.com>
+Date:   Thu, 6 Apr 2023 11:57:15 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US, en-GB
+To:     Andreas Kemnade <andreas@kemnade.info>, pavel@ucw.cz,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hns@goldelico.com
+References: <20230406060825.103187-1-andreas@kemnade.info>
+ <20230406060825.103187-3-andreas@kemnade.info>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH 2/2] leds: bd2606mvv: Driver for the Rohm 6 Channel i2c
+ LED driver
+In-Reply-To: <20230406060825.103187-3-andreas@kemnade.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,140 +79,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Andreas,
 
-On Mon, 2023-04-03 at 11:52 -0500, Andrew Halaney wrote:
-> @@ -327,9 +370,17 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqo=
-s *ethqos)
->  			      RGMII_CONFIG2_RX_PROG_SWAP,
->  			      RGMII_IO_MACRO_CONFIG2);
-> =20
-> -		/* Set PRG_RCLK_DLY to 57 for 1.8 ns delay */
-> -		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
-> -			      57, SDCC_HC_REG_DDR_CONFIG);
-> +		/* PRG_RCLK_DLY =3D TCXO period * TCXO_CYCLES_CNT / 2 * RX delay ns,
-> +		 * in practice this becomes PRG_RCLK_DLY =3D 52 * 4 / 2 * RX delay ns
-> +		 */
-> +		if (ethqos->has_emac3)
-> +			/* 0.9 ns */
-> +			rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
-> +				      115, SDCC_HC_REG_DDR_CONFIG);
-> +		else
-> +			/* 1.8 ns */
-> +			rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
-> +				      57, SDCC_HC_REG_DDR_CONFIG);
+Overall a nice and clean driver with a good explanation of shared 
+brightness. Just some minor things.
 
-The only (very minor) comment I have is that AFAIK the preferred style
-for the above block is:=20
-
-		if (ethqos->has_emac3) {
-			/* 0.9 ns */
-			rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_RCLK_DLY,
-				      115, SDCC_HC_REG_DDR_CONFIG);
-		} else {
-			...
-
-due to the comment presence this should be threaded as a multi-line stateme=
-nt.
-(even if checkpatch does not complain).
-
-Cheers,
-
-Paolo
-
->  			      SDCC_HC_REG_DDR_CONFIG);
-> @@ -355,8 +406,15 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqo=
-s *ethqos)
->  			      BIT(6), RGMII_IO_MACRO_CONFIG);
->  		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
->  			      0, RGMII_IO_MACRO_CONFIG2);
-> -		rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-> -			      0, RGMII_IO_MACRO_CONFIG2);
+On 4/6/23 09:08, Andreas Kemnade wrote:
+> The device provides 6 channels which can be individually
+> turned off and on but groups of two channels share a common brightness
+> register.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>   drivers/leds/Kconfig          |  11 +++
+>   drivers/leds/Makefile         |   1 +
+>   drivers/leds/leds-bd2606mvv.c | 145 ++++++++++++++++++++++++++++++++++
+>   3 files changed, 157 insertions(+)
+>   create mode 100644 drivers/leds/leds-bd2606mvv.c
+> 
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index 9dbce09eabacf..cc4eadbb2542e 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -551,6 +551,17 @@ config LEDS_REGULATOR
+>   	help
+>   	  This option enables support for regulator driven LEDs.
+>   
+> +config LEDS_BD2606MVV
+> +	tristate "LED driver for BD2606MVV"
+> +	depends on LEDS_CLASS
+> +	depends on I2C
+> +	select REGMAP_I2C
+> +	help
+> +	  This option enables support for BD2606MVV LED driver chips
+> +	  accessed via the I2C bus. It supports setting brightness, with
+> +	  the limitiation that there are groups of two channels sharing
+> +	  a brightness setting, but not the on/off setting.
 > +
-> +		if (ethqos->has_emac3)
-> +			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-> +				      RGMII_CONFIG2_RX_PROG_SWAP,
-> +				      RGMII_IO_MACRO_CONFIG2);
-> +		else
-> +			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-> +				      0, RGMII_IO_MACRO_CONFIG2);
+>   config LEDS_BD2802
+>   	tristate "LED driver for BD2802 RGB LED"
+>   	depends on LEDS_CLASS
+> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+> index d30395d11fd84..c07d1512c745a 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -17,6 +17,7 @@ obj-$(CONFIG_LEDS_ARIEL)		+= leds-ariel.o
+>   obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
+>   obj-$(CONFIG_LEDS_BCM6328)		+= leds-bcm6328.o
+>   obj-$(CONFIG_LEDS_BCM6358)		+= leds-bcm6358.o
+> +obj-$(CONFIG_LEDS_BD2606MVV)		+= leds-bd2606mvv.o
+>   obj-$(CONFIG_LEDS_BD2802)		+= leds-bd2802.o
+>   obj-$(CONFIG_LEDS_BLINKM)		+= leds-blinkm.o
+>   obj-$(CONFIG_LEDS_CLEVO_MAIL)		+= leds-clevo-mail.o
+> diff --git a/drivers/leds/leds-bd2606mvv.c b/drivers/leds/leds-bd2606mvv.c
+> new file mode 100644
+> index 0000000000000..47ddd016bae3f
+> --- /dev/null
+> +++ b/drivers/leds/leds-bd2606mvv.c
+> @@ -0,0 +1,145 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Andreas Kemnade
+
+Could add a link to data-sheet here.
+
+> + */
 > +
->  		/* Write 0x5 to PRG_RCLK_DLY_CODE */
->  		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_CODE,
->  			      (BIT(29) | BIT(27)), SDCC_HC_REG_DDR_CONFIG);
-> @@ -389,8 +447,13 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqo=
-s *ethqos)
->  			      RGMII_IO_MACRO_CONFIG);
->  		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
->  			      0, RGMII_IO_MACRO_CONFIG2);
-> -		rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-> -			      0, RGMII_IO_MACRO_CONFIG2);
-> +		if (ethqos->has_emac3)
-> +			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-> +				      RGMII_CONFIG2_RX_PROG_SWAP,
-> +				      RGMII_IO_MACRO_CONFIG2);
-> +		else
-> +			rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-> +				      0, RGMII_IO_MACRO_CONFIG2);
->  		/* Write 0x5 to PRG_RCLK_DLY_CODE */
->  		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_CODE,
->  			      (BIT(29) | BIT(27)), SDCC_HC_REG_DDR_CONFIG);
-> @@ -433,6 +496,17 @@ static int ethqos_configure(struct qcom_ethqos *ethq=
-os)
->  	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_PDN,
->  		      SDCC_DLL_CONFIG_PDN, SDCC_HC_REG_DLL_CONFIG);
-> =20
-> +	if (ethqos->has_emac3) {
-> +		if (ethqos->speed =3D=3D SPEED_1000) {
-> +			rgmii_writel(ethqos, 0x1800000, SDCC_TEST_CTL);
-> +			rgmii_writel(ethqos, 0x2C010800, SDCC_USR_CTL);
-> +			rgmii_writel(ethqos, 0xA001, SDCC_HC_REG_DLL_CONFIG2);
-> +		} else {
-> +			rgmii_writel(ethqos, 0x40010800, SDCC_USR_CTL);
-> +			rgmii_writel(ethqos, 0xA001, SDCC_HC_REG_DLL_CONFIG2);
-> +		}
+> +#include <linux/i2c.h>
+> +#include <linux/leds.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +
+> +#define BD2606_MAX_LEDS 6
+> +#define BD2606_MAX_BRIGHTNESS 63
+> +#define BD2606_REG_PWRCNT 3
+> +#define ldev_to_led(c)	container_of(c, struct bd2606mvv_led, ldev)
+> +
+> +struct bd2606mvv_led {
+> +	bool active;
+
+I didn't spot where this 'active' was used?
+
+> +	unsigned int led_no;
+> +	struct led_classdev ldev;
+> +	struct bd2606mvv_priv *priv;
+> +};
+> +
+> +struct bd2606mvv_priv {
+> +	struct bd2606mvv_led leds[BD2606_MAX_LEDS];
+> +	struct regmap *regmap;
+> +};
+> +
+> +static int
+> +bd2606mvv_brightness_set(struct led_classdev *led_cdev,
+> +		      enum led_brightness brightness)
+> +{
+> +	struct bd2606mvv_led *led = ldev_to_led(led_cdev);
+> +	struct bd2606mvv_priv *priv = led->priv;
+> +	int err;
+> +
+> +	if (brightness == 0) {
+> +		return regmap_update_bits(priv->regmap,
+> +					  BD2606_REG_PWRCNT,
+> +					  1 << led->led_no,
+> +					  0);
+> +	}
+
+could drop the brackets.
+
+> +
+> +	/* shared brightness register */
+> +	err = regmap_write(priv->regmap, led->led_no / 2,
+> +			   brightness);
+> +	if (err)
+> +		return err;
+> +
+> +	return regmap_update_bits(priv->regmap,
+> +				  BD2606_REG_PWRCNT,
+> +				  1 << led->led_no,
+> +				  1 << led->led_no);
+> +}
+> +
+> +static const struct regmap_config bd2606mvv_regmap = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = 0x3,
+> +};
+> +
+> +static int bd2606mvv_probe(struct i2c_client *client)
+> +{
+> +	struct device_node *np, *child;
+
+Is it possible to only use the fwnode? I think the more generic fwnode_* 
+is preferred over of_*.
+
+> +	struct device *dev = &client->dev;
+> +	struct bd2606mvv_priv *priv;
+> +	int err, count, reg;
+> +
+> +	np = dev_of_node(dev);
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	count = of_get_available_child_count(np);
+> +	if (!count || count > BD2606_MAX_LEDS)
+> +		return -EINVAL;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->regmap = devm_regmap_init_i2c(client, &bd2606mvv_regmap);
+> +	if (IS_ERR(priv->regmap)) {
+> +		err = PTR_ERR(priv->regmap);
+> +		dev_err(dev, "Failed to allocate register map: %d\n", err);
+> +		return err;
 > +	}
 > +
->  	/* Clear DLL_RST */
->  	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_DLL_RST, 0,
->  		      SDCC_HC_REG_DLL_CONFIG);
-> @@ -452,7 +526,9 @@ static int ethqos_configure(struct qcom_ethqos *ethqo=
-s)
->  			      SDCC_HC_REG_DLL_CONFIG);
-> =20
->  		/* Set USR_CTL bit 26 with mask of 3 bits */
-> -		rgmii_updatel(ethqos, GENMASK(26, 24), BIT(26), SDCC_USR_CTL);
-> +		if (!ethqos->has_emac3)
-> +			rgmii_updatel(ethqos, GENMASK(26, 24), BIT(26),
-> +				      SDCC_USR_CTL);
-> =20
->  		/* wait for DLL LOCK */
->  		do {
-> @@ -547,6 +623,7 @@ static int qcom_ethqos_probe(struct platform_device *=
-pdev)
->  	ethqos->por =3D data->por;
->  	ethqos->num_por =3D data->num_por;
->  	ethqos->rgmii_config_loopback_en =3D data->rgmii_config_loopback_en;
-> +	ethqos->has_emac3 =3D data->has_emac3;
-> =20
->  	ethqos->rgmii_clk =3D devm_clk_get(&pdev->dev, "rgmii");
->  	if (IS_ERR(ethqos->rgmii_clk)) {
-> @@ -566,6 +643,7 @@ static int qcom_ethqos_probe(struct platform_device *=
-pdev)
->  	plat_dat->fix_mac_speed =3D ethqos_fix_mac_speed;
->  	plat_dat->dump_debug_regs =3D rgmii_dump;
->  	plat_dat->has_gmac4 =3D 1;
-> +	plat_dat->dwmac4_addrs =3D &data->dwmac4_addrs;
->  	plat_dat->pmt =3D 1;
->  	plat_dat->tso_en =3D of_property_read_bool(np, "snps,tso");
->  	if (of_device_is_compatible(np, "qcom,qcs404-ethqos"))
-> @@ -603,6 +681,7 @@ static int qcom_ethqos_remove(struct platform_device =
-*pdev)
-> =20
->  static const struct of_device_id qcom_ethqos_match[] =3D {
->  	{ .compatible =3D "qcom,qcs404-ethqos", .data =3D &emac_v2_3_0_data},
-> +	{ .compatible =3D "qcom,sc8280xp-ethqos", .data =3D &emac_v3_0_0_data},
->  	{ .compatible =3D "qcom,sm8150-ethqos", .data =3D &emac_v2_1_0_data},
->  	{ }
->  };
+> +	i2c_set_clientdata(client, priv);
+> +
+
+The IC seems to have an enable pin. I think you might add the 
+enable-gpio in dt-bindings and try to (optionally) get and enable it here.
+
+> +	for_each_available_child_of_node(np, child) {
+> +		struct bd2606mvv_led *led;
+> +		struct led_init_data init_data = {};
+> +
+> +		init_data.fwnode = of_fwnode_handle(child);
+> +
+> +		err = of_property_read_u32(child, "reg", &reg);
+> +		if (err) {
+> +			of_node_put(child);
+> +			return err;
+> +		}
+> +		if (reg < 0 || reg >= BD2606_MAX_LEDS ||
+> +		    priv->leds[reg].active) {
+> +			of_node_put(child);
+> +			return -EINVAL;
+> +		}
+> +		led = &priv->leds[reg];
+> +
+> +		led->active = true;
+> +		led->priv = priv;
+> +		led->led_no = reg;
+> +		led->ldev.brightness_set_blocking = bd2606mvv_brightness_set;
+> +		led->ldev.max_brightness = BD2606_MAX_BRIGHTNESS;
+> +		err = devm_led_classdev_register_ext(dev, &led->ldev,
+> +						     &init_data);
+> +		if (err < 0) {
+> +			of_node_put(child);
+> +			return dev_err_probe(dev, err,
+> +					     "couldn't register LED %s\n",
+> +					     led->ldev.name);
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id __maybe_unused of_bd2606mvv_leds_match[] = {
+> +	{ .compatible = "rohm,bd2606mvv", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, of_bd2606mvv_leds_match);
+> +
+> +static struct i2c_driver bd2606mvv_driver = {
+> +	.driver   = {
+> +		.name    = "leds-bd2606mvv",
+> +		.of_match_table = of_match_ptr(of_bd2606mvv_leds_match),
+> +	},
+> +	.probe_new = bd2606mvv_probe,
+> +};
+> +
+> +module_i2c_driver(bd2606mvv_driver);
+> +
+> +MODULE_AUTHOR("Andreas Kemnade <andreas@kemnade.info>");
+> +MODULE_DESCRIPTION("BD2606 LED driver");
+> +MODULE_LICENSE("GPL");
+
+Yours,
+	-- Matti
+
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
