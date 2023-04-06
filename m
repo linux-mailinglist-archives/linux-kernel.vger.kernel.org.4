@@ -2,143 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CB86D9916
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CB86D991B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 16:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238571AbjDFOIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 10:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S237736AbjDFOJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 10:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239083AbjDFOIS (ORCPT
+        with ESMTP id S239037AbjDFOIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 10:08:18 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05389A265
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:07:55 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id q191so6510168pgq.7
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:07:55 -0700 (PDT)
+        Thu, 6 Apr 2023 10:08:42 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8F45B92
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 07:08:22 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id l17so1707981ejp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 07:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680790072;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RteKmS59a4b/Livq4/wTXxuwKDD1ND5d5F3gxwIyVvg=;
-        b=Xi3N3uf5n3HG7rl/sNskFtGj1RNofGb3+2wBADR7noNd2P3L+/v5dDNKnxMStYdMnj
-         NEYr2YAdH5+MN38JsQ1GAHSpVut9UxJYLIQlcIuZ3CdbJ9UURnL+ADLY6to4zriy3UgC
-         16A/zTS6wa8pTSKoo69bDSVzXZa5V9JpbnsyAtamv0TnVUpyK2Wef9r2rkPMCF818edF
-         yDXKxyvpUUJih4Qcxxjn+BmfscliDE7YOENd6IgoDwB1I/skvbWfzOuxOERCnXGT8BHn
-         wm6YTG5qt76L52qMmUJx7AVmzDJqXWxiPM9LitnIXvabsmN0HDVwVfGXdKGtzfZlGOO0
-         mK5Q==
+        d=google.com; s=20210112; t=1680790099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jW9/JTaDylpgeIAJECkEaG5KDiwSixA3SIgLvbU4AaM=;
+        b=Ldvqw71+VNh7tiIc4Z+CvHM5E4lX14+MqS/bwxliBBbEllQmotXyQ5XfnUEEGp2HQY
+         ztGbZZSn94MOcBsnIWgnD52vWIU2B3+rXqpHy58REb6k+o5QnpsPP/mLEGqU1uHId5z4
+         B454ZFZ4TX/JEQ9Th4j7J3bptmCB+wC3Qk7vApbN+hRZNpKyp7uu9Cjr3TQYIKHoBUgj
+         ux2ery45Q/wVCkabLZ18a2xTySnSL+7qT4PwHpRRQj8khOrn+OiD03Hi+UOvMSCYnojY
+         S3Fj/UNROxw2E7+y1nPMRKJKj/dMqKtXo5CTWUrrhUrHojUncvHbJQq8Vy6A7D2rCnFB
+         bkRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680790072;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RteKmS59a4b/Livq4/wTXxuwKDD1ND5d5F3gxwIyVvg=;
-        b=Qhsp8rmmPVH5CbqGl7N6o29q+bN+LPAOH0LcVYtaUjmywXEHQeZjTDz3MqRGm53Xsn
-         /KpSbd5+ZyoOKj+CVzkjEzS+SKDBVLb5GjWGwQbMWdp1wcLoMfVtsUx5fgCULvAsS6Hf
-         oBXKBWwHBLgahhIspXKy7rnIcdkln8afQV0TqNKG+thjgK4olb1s6AjG0jWK4MOLOh9k
-         YVnjzg3kqh/5r8FSEGwiif8gV1lvLRX7uHEZ/td69Abxms8AoTQLIVHwqnDsMVshM/HZ
-         hUzkNgaipG4uBJCdbljIoQ8GnGYVpNB6yu91Ir4KLIfwbBvAMB2hpT1MyN1u4T7MIiEL
-         nCkw==
-X-Gm-Message-State: AAQBX9f1xhN6Bmkdj0Ca7nwfUNPj8CV4T4sAt7ubSaQGgfnTdXhsy/rX
-        qE1Jk9wEB5y3nv/k+t88st6m+qgZpL8r2D+LK5pJZg==
-X-Google-Smtp-Source: AKy350YoVVmnwmCMwUMTWP2nqTW4bt4E5fTltvq1au01bIxYuEWJDJK6lNIfy0Guy3dt3kbmzskK2BuZHqzBgMrbr5Q=
-X-Received: by 2002:a05:6a00:2313:b0:593:fcfb:208b with SMTP id
- h19-20020a056a00231300b00593fcfb208bmr5391071pfh.3.1680790072028; Thu, 06 Apr
- 2023 07:07:52 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680790099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jW9/JTaDylpgeIAJECkEaG5KDiwSixA3SIgLvbU4AaM=;
+        b=1EqsiDrUG+wHFb79r8laAMumniMaerAOZSymmkis4hCv+sQvBCKAtydbnKoIuFtKFg
+         +b9423qRXirwG9Yix4OP+G5HG4rSx/Su7M5B1Ki2Wh5P38qGQ3NEvutKsOcitU7VsfCW
+         lA/8TH7e7vFViPqci6M3b83/CtEdL73NJIKnYVuSkE5sRtpH+hrCI8NIc6F6Q25Mt3IN
+         Z6hbw/lAwi6JhnLTWiXeBmnzztRuJDt3EIMoy2SYoetzPHLXZOtBV2U6UXQFIoP/YFW7
+         z9I4bIDp/2gg5C7lrDa90TaxOrPRO+37vK/9HIL0KlCOnKhFFn+eygxwS043hlDvmUG8
+         Vz0Q==
+X-Gm-Message-State: AAQBX9dwZRJYrYt/OmOtGImA/d1R3HrhCOQBObBHizD/Vn1lB8gVIE6n
+        ZkqxJqONVHWF6g847yAyMWsqGP60SB5+aZsQfGlcoA==
+X-Google-Smtp-Source: AKy350bAFhVGMCwwfVhJTeYwOabUOGX15M4Xne8OZst89OyUnu4BGUc8xSUVle/vqmycb4Kkggnju+5sLAPNViJx+lE=
+X-Received: by 2002:a17:906:af6b:b0:931:6e39:3d0b with SMTP id
+ os11-20020a170906af6b00b009316e393d0bmr3399835ejb.15.1680790099297; Thu, 06
+ Apr 2023 07:08:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230406022249.2501-1-seanwang1@Lenovo.com>
-In-Reply-To: <20230406022249.2501-1-seanwang1@Lenovo.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Thu, 6 Apr 2023 15:07:41 +0100
-Message-ID: <CAJ9a7VhgytZMUtgq7cJFzCDkbqu1krSO4xrubHe0sL1LrWUBrQ@mail.gmail.com>
-Subject: Re: [PATCH] coresight: etm4x: add AMBA id for Cortex-A510
-To:     Sean Wang <seanwang1@lenovo.com>
-Cc:     asherbai@lenovo.com, mathieu.poirier@linaro.org,
-        suzuki.poulose@arm.com, leo.yan@linaro.org,
-        alexander.shishkin@linux.intel.com, janetliu@lenovo.com,
-        Coresight ML <coresight@lists.linaro.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230405185427.1246289-1-yosryahmed@google.com>
+ <20230405185427.1246289-2-yosryahmed@google.com> <a8cb406a-70cd-aa47-fdda-50cd0eb8c941@redhat.com>
+In-Reply-To: <a8cb406a-70cd-aa47-fdda-50cd0eb8c941@redhat.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 6 Apr 2023 07:07:42 -0700
+Message-ID: <CAJD7tkbNsLo8Cd0nOm22oxD14GMppPoLNOHx2f8BJZA1wkpWnQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] mm: vmscan: ignore non-LRU-based reclaim in memcg reclaim
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Xu <peterx@redhat.com>, NeilBrown <neilb@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Chinner <david@fromorbit.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Thanks for taking a look, David!
 
-Please also post to all the relevant lists when submitting a patch, as
-defined in ./scripts/get_maintainer.pl
+On Thu, Apr 6, 2023 at 3:31=E2=80=AFAM David Hildenbrand <david@redhat.com>=
+ wrote:
+>
+> On 05.04.23 20:54, Yosry Ahmed wrote:
+> > We keep track of different types of reclaimed pages through
+> > reclaim_state->reclaimed_slab, and we add them to the reported number
+> > of reclaimed pages.  For non-memcg reclaim, this makes sense. For memcg
+> > reclaim, we have no clue if those pages are charged to the memcg under
+> > reclaim.
+> >
+> > Slab pages are shared by different memcgs, so a freed slab page may hav=
+e
+> > only been partially charged to the memcg under reclaim.  The same goes =
+for
+> > clean file pages from pruned inodes (on highmem systems) or xfs buffer
+> > pages, there is no simple way to currently link them to the memcg under
+> > reclaim.
+> >
+> > Stop reporting those freed pages as reclaimed pages during memcg reclai=
+m.
+> > This should make the return value of writing to memory.reclaim, and may
+> > help reduce unnecessary reclaim retries during memcg charging.  Writing=
+ to
+> > memory.reclaim on the root memcg is considered as cgroup_reclaim(), but
+> > for this case we want to include any freed pages, so use the
+> > global_reclaim() check instead of !cgroup_reclaim().
+> >
+> > Generally, this should make the return value of
+> > try_to_free_mem_cgroup_pages() more accurate. In some limited cases (e.=
+g.
+> > freed a slab page that was mostly charged to the memcg under reclaim),
+> > the return value of try_to_free_mem_cgroup_pages() can be underestimate=
+d,
+> > but this should be fine. The freed pages will be uncharged anyway, and =
+we
+>
+> Can't we end up in extreme situations where
+> try_to_free_mem_cgroup_pages() returns close to 0 although a huge amount
+> of memory for that cgroup was freed up.
+>
+> Can you extend on why "this should be fine" ?
+>
+> I suspect that overestimation might be worse than underestimation. (see
+> my comment proposal below)
 
+In such extreme scenarios even though try_to_free_mem_cgroup_pages()
+would return an underestimated value, the freed memory for the cgroup
+will be uncharged. try_charge() (and most callers of
+try_to_free_mem_cgroup_pages()) do so in a retry loop, so even if
+try_to_free_mem_cgroup_pages() returns an underestimated value
+charging will succeed the next time around.
 
-On Thu, 6 Apr 2023 at 03:23, Sean Wang <seanwang1@lenovo.com> wrote:
+The only case where this might be a problem is if it happens in the
+final retry, but I guess we need to be *really* unlucky for this
+extreme scenario to happen. One could argue that if we reach such a
+situation the cgroup will probably OOM soon anyway.
+
 >
-> From: Sean Wang <seanwang1@lenovo.com>
+> > can charge the memcg the next time around as we usually do memcg reclai=
+m
+> > in a retry loop.
+> >
+> > The next patch performs some cleanups around reclaim_state and adds an
+> > elaborate comment explaining this to the code. This patch is kept
+> > minimal for easy backporting.
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > Cc: stable@vger.kernel.org
 >
-> Add AMBA UCI id to support Cortex-A510
+> Fixes: ?
 >
-> Signed-off-by: Sean Wang <seanwang1@lenovo.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> Otherwise it's hard to judge how far to backport this.
+
+It's hard to judge. The issue has been there for a while, but
+memory.reclaim just made it more user visible. I think we can
+attribute it to per-object slab accounting, because before that any
+freed slab pages in cgroup reclaim would be entirely charged to that
+cgroup.
+
+Although in all fairness, other types of freed pages that use
+reclaim_state->reclaimed_slab cannot be attributed to the cgroup under
+reclaim have been there before that. I guess slab is the most
+significant among them tho, so for the purposes of backporting I
+guess:
+
+Fixes: f2fe7b09a52b ("mm: memcg/slab: charge individual slab objects
+instead of pages")
+
 >
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index 1ea8f173cca0..702704cf4f1f 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -2186,6 +2186,15 @@ static struct amba_cs_uci_id uci_id_etm4[] = {
+> > ---
+> >
+> > global_reclaim(sc) does not exist in kernels before 6.3. It can be
+> > replaced with:
+> > !cgroup_reclaim(sc) || mem_cgroup_is_root(sc->target_mem_cgroup)
+> >
+> > ---
+> >   mm/vmscan.c | 8 +++++---
+> >   1 file changed, 5 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 9c1c5e8b24b8f..c82bd89f90364 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -5346,8 +5346,10 @@ static int shrink_one(struct lruvec *lruvec, str=
+uct scan_control *sc)
+> >               vmpressure(sc->gfp_mask, memcg, false, sc->nr_scanned - s=
+canned,
+> >                          sc->nr_reclaimed - reclaimed);
+> >
+> > -     sc->nr_reclaimed +=3D current->reclaim_state->reclaimed_slab;
+> > -     current->reclaim_state->reclaimed_slab =3D 0;
+>
+> Worth adding a comment like
+>
+> /*
+>   * Slab pages cannot universally be linked to a single memcg. So only
+>   * account them as reclaimed during global reclaim. Note that we might
+>   * underestimate the amount of memory reclaimed (but won't overestimate
+>   * it).
+>   */
+>
+> but ...
+>
+> > +     if (global_reclaim(sc)) {
+> > +             sc->nr_reclaimed +=3D current->reclaim_state->reclaimed_s=
+lab;
+> > +             current->reclaim_state->reclaimed_slab =3D 0;
+> > +     }
+> >
+> >       return success ? MEMCG_LRU_YOUNG : 0;
+> >   }
+> > @@ -6472,7 +6474,7 @@ static void shrink_node(pg_data_t *pgdat, struct =
+scan_control *sc)
+> >
+> >       shrink_node_memcgs(pgdat, sc);
+> >
+>
+> ... do we want to factor the add+clear into a simple helper such that we
+> can have above comment there?
+>
+> static void cond_account_reclaimed_slab(reclaim_state, sc)
+> {
+>         /*
+>          * Slab pages cannot universally be linked to a single memcg. So
+>          * only account them as reclaimed during global reclaim. Note
+>          * that we might underestimate the amount of memory reclaimed
+>          * (but won't overestimate it).
+>          */
+>         if (global_reclaim(sc)) {
+>                 sc->nr_reclaimed +=3D reclaim_state->reclaimed_slab;
+>                 reclaim_state->reclaimed_slab =3D 0;
 >         }
->  };
+> }
 >
-> +static struct amba_cs_uci_id uci_id_ete[] = {
-> +       {
-> +               /*  ETE UCI data */
-> +               .devarch        = ETM_DEVARCH_ETE_ARCH,
-> +               .devarch_mask   = ETM_DEVARCH_ID_MASK,
-> +               .devtype        = 0x00000013,
-> +       }
-> +};
-> +
->  static void clear_etmdrvdata(void *info)
->  {
->         int cpu = *(int *)info;
-> @@ -2264,6 +2273,7 @@ static const struct amba_id etm4_ids[] = {
->         CS_AMBA_UCI_ID(0x000cc0af, uci_id_etm4),/* Marvell ThunderX2 */
->         CS_AMBA_UCI_ID(0x000b6d01, uci_id_etm4),/* HiSilicon-Hip08 */
->         CS_AMBA_UCI_ID(0x000b6d02, uci_id_etm4),/* HiSilicon-Hip09 */
-> +       CS_AMBA_UCI_ID(0x000bbd46, uci_id_ete),/* Cortex-A510 */
->         {},
->  };
+> Yes, effective a couple LOC more, but still straight-forward for a
+> stable backport
+
+The next patch in the series performs some refactoring and cleanups,
+among which we add a helper called flush_reclaim_state() that does
+exactly that and contains a sizable comment. I left this outside of
+this patch in v5 to make the effective change as small as possible for
+backporting. Looks like it can be confusing tho without the comment.
+
+How about I pull this part to this patch as well for v6?
+
+>
+> > -     if (reclaim_state) {
+> > +     if (reclaim_state && global_reclaim(sc)) {
+> >               sc->nr_reclaimed +=3D reclaim_state->reclaimed_slab;
+> >               reclaim_state->reclaimed_slab =3D 0;
+> >       }
 >
 > --
-> 2.34.1
+> Thanks,
 >
-
-I do not believe that this is needed. ETE is architecturally required
-to implement the system instructions interface to the ETE trace
-registers, and memory mapped access to the ETE from the PE is removed
-by the specification
-
-Your board .dts should declare ETE with the compatible
-"arm,embedded-trace-extension", and the system instruction platform
-driver will be initialised, which does not require the AMBA matching
-IDs.
-
-If your solution does have the optional APB interface to the ETE we
-would expect this to be used by any external debug system and not by
-self hosted trace in the linux kernel.
-
-Regards
-
-
-Mike
-
---
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+> David / dhildenb
+>
