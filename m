@@ -2,115 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7566D9754
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3826D9755
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbjDFMvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S237338AbjDFMwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjDFMvv (ORCPT
+        with ESMTP id S236599AbjDFMwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:51:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCD111C
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 05:51:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680785468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=a8vJf32VjBTqhSXC4UaNWwEC2++PydY9gb3nY7Y6vs4=;
-        b=b4sMLHzmMVK7g8LdIS6W1Z4HEMNgYIvsau1uGg1uYRF66/dBu49kwmltEWNF0N1dVfckwQ
-        0Mi+BelRPA8jKCaJzexNWGOdDTGgbf204Ghi33eflG6kPC1gbhzMKhpWj9JIb9ykOMp62i
-        Fy87gqJWME9bQ9iSO6WegjspHre0JMg=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-177-IQjF4ksjNCWek6j9_AsWDw-1; Thu, 06 Apr 2023 08:51:07 -0400
-X-MC-Unique: IQjF4ksjNCWek6j9_AsWDw-1
-Received: by mail-qk1-f198.google.com with SMTP id p63-20020a374242000000b007468eaf866aso8199257qka.17
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 05:51:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680785467;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a8vJf32VjBTqhSXC4UaNWwEC2++PydY9gb3nY7Y6vs4=;
-        b=pRuxH7PumLJ6QPobDT24/1R0JmtcBy4ofAS59KIQtyaEYoR9sXW6oF31EX1CGcDbPW
-         La4ypLteYhkF08tkUfPq3VhvUA54Bv82ERDKFzNqLlRWx/CDgWp6dffxzMQsGTFGxpAW
-         tAFE1Cv28hcFLCknh/pU6unYWLj7vMfE6AlIVEEJXteMbBG1veVPKBKE3nGsPa4ji4Qn
-         vYtbZM4knvZWtnmQCD1HaqlBfo6t8qes0dqsrK3jRjM39wbE9UPx/hAL/jcLNJrOhNNd
-         Z0hmhJKU3+YaZ1CECDbhTxbx0nanzZi2o3Vxhp5xpElexkK1Xxx/CSnhWTsJuvlAyEAr
-         da7Q==
-X-Gm-Message-State: AAQBX9cze4BakS/c9c0RmePb2wFH25HuUB8hVbhpvj1vBfGweqFNeT48
-        lbIRU2gwyqNQ7DpaTq7IsuTV6xG3OaCix84BzSsCQi56w4YaCbR+n49CbrFOaxb4RzDSzrs1Mg/
-        b2cJoZk73a3go3i87PQ1XX6CHdw4vVnFz
-X-Received: by 2002:ad4:5ca6:0:b0:5df:450b:8002 with SMTP id q6-20020ad45ca6000000b005df450b8002mr4830661qvh.31.1680785467007;
-        Thu, 06 Apr 2023 05:51:07 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YSPMv3nhVaAKMIwGcpzI1WXbVj1KNben3bHvDLvNgWUG5IbK0u6ODiRzBeHNfaFX4xk75FiA==
-X-Received: by 2002:ad4:5ca6:0:b0:5df:450b:8002 with SMTP id q6-20020ad45ca6000000b005df450b8002mr4830628qvh.31.1680785466773;
-        Thu, 06 Apr 2023 05:51:06 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id de11-20020ad4584b000000b005dd8b93457csm489252qvb.20.2023.04.06.05.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 05:51:06 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
-        airlied@gmail.com, daniel@ffwll.ch, gsamaiya@nvidia.com
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/nouveau/gr/tu102: remove unused tu102_gr_load function
-Date:   Thu,  6 Apr 2023 08:51:02 -0400
-Message-Id: <20230406125102.1952202-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 6 Apr 2023 08:52:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BFD7ED3;
+        Thu,  6 Apr 2023 05:52:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9C2464787;
+        Thu,  6 Apr 2023 12:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88E9C433EF;
+        Thu,  6 Apr 2023 12:52:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680785522;
+        bh=ixYWjGc0xtNsYuWm+X2+VXF5qJytiSRZtYoQruwRDTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O1lUQWLjwNExM1vKk/1+ubgwdw0ANhzUyl/Z3ccLCZ4ZvXI8wXKxXC5Cm91B8BM1P
+         qDqdiW4Emy62t9f7L21qk3HDnattMb1BJ3CoOeANOPTQlZ6iW7t9WaV8SeLh6ERX+1
+         7DfJOYxPPXE3DcFmBk3G8R8uCMAlUZ0SJ6NvqWVoXRoySzeE3XNp8qH8RANhI13ZTE
+         pBB3c1N5/C+G5QU9lnhaTdLHOcdOxQxf+XxZ1Hv+4wpvI81k1zke5Pz/6V9D0mNs+K
+         jGspEpZFgLJJAwjE/jQS9a2cpsLkjfhS+px5JhZzvPdLLAdAsw8K8RZvTxO2+QGV6n
+         gYxK0Y3GVJIaQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4AFCA4052D; Thu,  6 Apr 2023 09:51:58 -0300 (-03)
+Date:   Thu, 6 Apr 2023 09:51:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v5 00/17] Reference count checker and related fixes
+Message-ID: <ZC7AbtD4E6zWWlUn@kernel.org>
+References: <20230320212248.1175731-1-irogers@google.com>
+ <CAP-5=fX4=pUmcFpRZ5xFds1awSr7HSo1F9rH4=D7NJXW9OXXVQ@mail.gmail.com>
+ <7443d427-783b-44b6-85e6-5e667bb83a94@intel.com>
+ <ZCxvYpeoemPHUmJ4@kernel.org>
+ <ZCxyZcnd9/4zjbQZ@kernel.org>
+ <527b8bcb-d462-5fff-5310-703b55902a61@intel.com>
+ <ZC11tTdXuJR/M8o+@kernel.org>
+ <2aaba740-35e4-4a68-2676-63d47898378c@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2aaba740-35e4-4a68-2676-63d47898378c@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: symbol
-  'tu102_gr_load' was not declared. Should it be static?
+Em Wed, Apr 05, 2023 at 07:25:27PM +0300, Adrian Hunter escreveu:
+> On 5/04/23 16:20, Arnaldo Carvalho de Melo wrote:
+> > Em Wed, Apr 05, 2023 at 11:47:26AM +0300, Adrian Hunter escreveu:
+> >> On 4/04/23 21:54, Arnaldo Carvalho de Melo wrote:
+> >>> Em Tue, Apr 04, 2023 at 03:41:38PM -0300, Arnaldo Carvalho de Melo escreveu:
+> >>>> Em Tue, Apr 04, 2023 at 08:25:41PM +0300, Adrian Hunter escreveu:
+> >>>>> I was wondering if the handling of dynamic data like struct map makes
+> >>>>> any sense at present.  Perhaps someone can reassure me.
 
-This function is not used so remove it.
+> >>>>> A struct map can be updated when an MMAP event is processed.  So it
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c | 13 -------------
- 1 file changed, 13 deletions(-)
+> >>>> Yes, it can, and the update is made via a new PERF_RECORD_MMAP, right?
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
-index 3b6c8100a242..a7775aa18541 100644
---- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c
-@@ -206,19 +206,6 @@ tu102_gr_av_to_init_veid(struct nvkm_blob *blob, struct gf100_gr_pack **ppack)
- 	return gk20a_gr_av_to_init_(blob, 64, 0x00100000, ppack);
- }
+> >>>> So:
+
+> >>>> 	perf_event__process_mmap()
+> >>>> 	  machine__process_mmap2_event()
+> >>>> 	    map__new() + thread__insert_map(thread, map)
+> >>>> 	    	maps__fixup_overlappings()
+> >>>> 			maps__insert(thread->maps, map);
+
+> >>>> Ok, from this point on new samples on ] map->start .. map->end ] will
+> >>>> grab a refcount to this new map in its hist_entry, right?
+
+> >>>> When we want to sort by dso we will look at hist_entry->map->dso, etc.
+
+> >>> And in 'perf top' we go decaying hist entries, when we delete the
+> >>> hist_entry, drop the reference count to things it holds, that will then
+> >>> be finally deleted when no more hist_entries point to it.
+
+> >>>>> seems like anything racing with event processing is already broken, and
+> >>>>> reference counting / locking cannot help - unless there is also
+> >>>>> copy-on-write (which there isn't at present)?
+> >  
+> >> So I checked, and struct map *is* copy-on-write in
+> >> maps__fixup_overlappings(), so that should not be a problem.
+> >  
+> >>>>> For struct maps, referencing it while simultaneously processing
+> >>>>> events seems to make even less sense?
+> > 
+> >>>> Can you elaborate some more?
+> >  
+> >> Only that the maps are not necessarily stable e.g. the map that you
+> >> need has been replaced in the meantime.
+> > 
+> > Well, it may be sliced in several or shrunk by new ones overlapping it,
+> > but it if completely disappears, say a new map starts before the one
+> > disappearing and ends after it, then it remains with reference counts if
+> > there are hist_entries (or other data structure) pointing to them,
+> > right?
+
+> >> But upon investigation, the only user at the moment is
+> >> maps__find_ams().  If we kept the removed maps (we used to),
+> >> it might be possible to make maps__find_ams() work correctly
+> >> in any case.
+
+> > Humm, I think I see what you mean, maps__find_ams() is called when we
+> > are annotating a symbol, not when we're processing a sample, so it may
+> > be the case that at the time of annotation the executable that is being
+> > found (its parsing the target IP of a 'call' assembly instruction) was
+> > replaced, is that the case?
  
--int
--tu102_gr_load(struct gf100_gr *gr, int ver, const struct gf100_gr_fwif *fwif)
--{
--	int ret;
--
--	ret = gm200_gr_load(gr, ver, fwif);
--	if (ret)
--		return ret;
--
--	return gk20a_gr_load_net(gr, "gr/", "sw_veid_bundle_init", ver, tu102_gr_av_to_init_veid,
--				 &gr->bundle_veid);
--}
--
- static const struct gf100_gr_fwif
- tu102_gr_fwif[] = {
- 	{  0, gm200_gr_load, &tu102_gr, &gp108_gr_fecs_acr, &gp108_gr_gpccs_acr },
--- 
-2.27.0
+> Yes, that is the possibility
 
+Yeah, this one gets a bit more difficult to support, we would have to
+keep a sub-bucket for each annotation instruction with the ordered by
+timestamp list of maps that were on that location (but then just to
+places that had samples, not to all) and then when add some visual cue
+to that annotation line to mean that it was patched and show the
+original, then the (possibly) various patches and say that samples up to
+N units of time were for some original DSO, then to another (overlapping
+executable map), then to some patching (that we would catch with
+PERF_RECORD_TEXT_POKE for the kernel, right?), etc.
+
+Seems doable, and for most cases would be similar to what we have right
+now, as self-modifying code its not so pervasive (famous last words
+;-)).
+
+- Arnaldo
