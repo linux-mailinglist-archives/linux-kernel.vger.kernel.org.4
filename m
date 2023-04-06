@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633816D94FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0C56D94FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237183AbjDFLVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S237394AbjDFLWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235911AbjDFLVH (ORCPT
+        with ESMTP id S237300AbjDFLWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:21:07 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F5693E0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:20:45 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id b6so30850495vsu.12
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:20:45 -0700 (PDT)
+        Thu, 6 Apr 2023 07:22:08 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B515A5FE1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:22:06 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id o10so9063169iou.5
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680780044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Ne77xaqbtLGoxF/3ZhDrpD5vvfWoYyoJmdpcIYFNEQ=;
-        b=k6I0+4BXskzhRAwmd43QNMVzFMrPVNOkbwwXevTPqhk0D8YtPACw3R0r5oUZIcMPVv
-         Y5BUW4ArX1KppvMqptjnxTQn8Eg44+0ZQbizMDjOHAqI9XfPy9ky1Y5/sUTSgx9/3FRG
-         GR5QFc6MPGSsDoUOxRB5gBdVgCLmVxbo9cbOTuympKKj/3m64qK3GAZCfrJM9pQXJcku
-         pvfwlQ1j6C33FTc8uKtsSlENf9ePLJrXjcA1JInY3DAKtB/WJMRZSF/W23COOL1TWHxe
-         TSC2bb+7xWVyX3JOmd+CRHjYYjZg/2CHUVzK5aidd/2lKi4HS6aRnEedqroKaBR6YcFQ
-         KZ2Q==
+        d=google.com; s=20210112; t=1680780126;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwWZXY+TxuCVvQw9ER2qw2mWXQ6bYR1k+mishI1l8Ss=;
+        b=RlX/Lik6GGvAOPVCqjVn1pOFGgcDXsPn5yrZ2ndXAB5RBLZT1xBeGkkcvXGfzOMVly
+         UZcRepZbWPcqunSFc3X1orce1AF/i/vuZimB/u7uHDGsjQfAA3MLFPbPxMMdqEDTYKXM
+         6Y1a7oaa+yAP2DYpX/9IIPFNke0oJPm7+hVhu5ZV7l7t6H6vey0WAtxp/DAQsYuEiAMS
+         Dg7eIfAMyzOZDfgoTjgnLux2YkCZWilcxBty+/5YRO7LfVzuvTUTpw7amD9zd3M5m1Ye
+         Wk94sz6vBN1uYgKlWhicdrjVAZQHpaDQW7R6wV2nbdepbxFQ7qbe1CcW4Anq7QMPVr1t
+         V7vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680780044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Ne77xaqbtLGoxF/3ZhDrpD5vvfWoYyoJmdpcIYFNEQ=;
-        b=Zogokkf9NoIqsTIbCgKyAQ0FO5/3362eioxT67i/xVejwKkmOYFYu9J3VAvxzRI2Vj
-         oDeQSjopv3i6VHK1eNEe4QHlwMzwMcDfdDf1nQtLiu4HgOl7Oqn2+47lCmR/SD0obwez
-         3lWKNPcxKrvzf3JdzRx5UqvhsNJQE0khltcPcYevYONg/jQvetHxlS2QUO4p3eva5M1b
-         z3+ZOdsrTiR9wReOqx0UGNLJUChF0nM4VJbJNgmPBa+r/NGtqGV4jpOeDrJzjTsJsErc
-         LXKqrjkGPj6emAoFtOXLDzxNvRfTbE6miqz2EaaEEfyWP6+m0f4VshlOpkFCrXe+2Ig0
-         MVKg==
-X-Gm-Message-State: AAQBX9eaNQwKOpPfpC83uz3R+hVeExydQScix9iaBttNYkGe3tRfZDzQ
-        OP7CtEm4ljiK0hXMpMd69rGZ3WZwXt/YXHpzEz0jSA==
-X-Google-Smtp-Source: AKy350bXUnbyNurB9zPd2ZQDGbD2zJLY7NQCuR5Vz4KL/7JSPzMrGSkVI2JVi1D35K2mHZB5WX3gQMWRx9D513knC9w=
-X-Received: by 2002:a67:c19a:0:b0:426:b051:1c4 with SMTP id
- h26-20020a67c19a000000b00426b05101c4mr7770691vsj.0.1680780044683; Thu, 06 Apr
- 2023 04:20:44 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680780126;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QwWZXY+TxuCVvQw9ER2qw2mWXQ6bYR1k+mishI1l8Ss=;
+        b=V9eDIL1EPUAS/MdzhzNfIaJywnl0HkjlZqi/MiqRkWh7pPM8xcwUbRT7xvmNCUDSPJ
+         wCe0s0CusyHV6JTtGVCCvGeYdGPQYOGvBtdqmkJlN0P8wnrDUshE9LbpdGuFSxJ5bt+V
+         GpIq1Xq9DW0E8XI0r+o9nzzPS4DD7Sx4GV1bY8juQnhQYpkDhLPx0VUzB6QwhImqnFxw
+         WCFlbGq/Muho1reJhmFXIyromaudhd5uarwNvRdnXTu1zQtXxCI9JBTjNpU0GHOzCO8s
+         MLGUdGWLxeUUE7u/SwEqhp/S2i0qH4RkD53PLVSNjFt3rv/yDSihI5ErY6qAKX+BKS4Q
+         Hr+g==
+X-Gm-Message-State: AAQBX9fSdE8Qg8F2v5mrzPs5KL7vAWWW5x0d1sDkSeiZ4e/hql66M7ca
+        Ga1A4lUanbgDhZ2mM7VQO0+rHoBdB8selujZ6BKQPA==
+X-Google-Smtp-Source: AKy350Zvmnq8gmH5AW1nwTXvMA2qCTMjIU5URKpyHQ1wLmhJiwJr0e6/NwgwyfdU2AqPU3ZP7BMkI/Ypj0L2kD1huNo=
+X-Received: by 2002:a6b:7803:0:b0:71b:5cd7:fcd9 with SMTP id
+ j3-20020a6b7803000000b0071b5cd7fcd9mr6538150iom.20.1680780125984; Thu, 06 Apr
+ 2023 04:22:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230328193632.226095-1-brgl@bgdev.pl> <20230328193632.226095-3-brgl@bgdev.pl>
- <72286603300630b890705c99b42f05a4.sboyd@kernel.org>
-In-Reply-To: <72286603300630b890705c99b42f05a4.sboyd@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 6 Apr 2023 13:20:33 +0200
-Message-ID: <CAMRc=McM1DfCoMmuUYcChFFBG=H1PgZFAWcuxnQsdhRdYrT+yA@mail.gmail.com>
-Subject: Re: [PATCH 2/7] clk: qcom: add the GPUCC driver for sa8775p
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230405175111.5974-1-wedsonaf@gmail.com> <20230405175111.5974-3-wedsonaf@gmail.com>
+ <2023040554-promoter-chevron-10b2@gregkh> <2023040509-tamer-clinic-c14c@gregkh>
+ <20230405191826.GA365912@hirez.programming.kicks-ass.net> <ZC3YWLmIick4jSSv@wedsonaf-dev>
+ <20230405202932.GG365912@hirez.programming.kicks-ass.net> <ZC3cxzpnrnXf/osU@wedsonaf-dev>
+ <20230405204942.GH365912@hirez.programming.kicks-ass.net> <f9573e45c6a14644abc6fcd4d3c98897@AcuMS.aculab.com>
+In-Reply-To: <f9573e45c6a14644abc6fcd4d3c98897@AcuMS.aculab.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 6 Apr 2023 13:21:28 +0200
+Message-ID: <CANpmjNPrREVGC3Az0T7k_2yr1PJp+E4yURUGUnu9Jb_CShJNHw@mail.gmail.com>
+Subject: Re: [PATCH v2 03/13] rust: lock: introduce `Mutex`
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 4:15=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wro=
-te:
+On Thu, 6 Apr 2023 at 10:38, David Laight <David.Laight@aculab.com> wrote:
 >
-> Quoting Bartosz Golaszewski (2023-03-28 12:36:27)
-> > diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> > index 449bc8314d21..5e1919738aeb 100644
-> > --- a/drivers/clk/qcom/Kconfig
-> > +++ b/drivers/clk/qcom/Kconfig
-> > @@ -437,6 +437,14 @@ config SA_GCC_8775P
-> >           Say Y if you want to use peripheral devices such as UART, SPI=
-,
-> >           I2C, USB, UFS, SDCC, etc.
+> From: Peter Zijlstra
+> > Sent: 05 April 2023 21:50
 > >
-> > +config SA_GPUCC_8775P
-> > +       tristate "SA8775P Graphics clock controller"
-> > +       select SA_GCC_8775P
+> > On Wed, Apr 05, 2023 at 05:40:39PM -0300, Wedson Almeida Filho wrote:
+> ...
+> > > So the situation is improved in that we don't need to manually write (and
+> > > commit) the helpers. It may improve further in the future if we get better
+> > > integration of the languages.
+> >
+> > But yeah, feel free to convert macros to inline functions where the
+> > difference is moot. There is indeed no real reason for mutex_lock() to
+> > not be an inline function in that case.
 >
-> Should select QCOM_GDSC as well.
->
+> mutex_lock() is probably ok.
+> But there are cases where gcc generates much better code
+> for #defines than for inline functions.
+> Almost certainly because the front end gets to optimise
+> #defines, but inlines are done much later on.
 
-Why if it's already selected indirectly by SA_GCC_8775P? Other GPUCCs
-in here don't select it either.
+For macro to inline function conversions, the most conservative option
+would be __always_inline. We've also seen things go wrong with
+"inline" only paired with various kinds of instrumentation.
 
-Bart
-
-> > +       help
-> > +         Support for the graphics clock controller on SA8775P devices.
-> > +         Say Y if you want to support graphics controller devices and
-> > +         functionality such as 3D graphics.
-> > +
-> >  config SC_GCC_7180
-> >         tristate "SC7180 Global Clock Controller"
-> >         select QCOM_GDSC
-> > diff --git a/drivers/clk/qcom/gpucc-sa8775p.c b/drivers/clk/qcom/gpucc-=
-sa8775p.c
-> > new file mode 100644
-> > index 000000000000..46d73bd0199b
-> > --- /dev/null
-> > +++ b/drivers/clk/qcom/gpucc-sa8775p.c
-> > @@ -0,0 +1,633 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) 2021-2022, Qualcomm Innovation Center, Inc. All right=
-s reserved.
-> > + * Copyright (c) 2023, Linaro Limited
-> > + */
-> > +
-> > +#include <linux/clk.h>
->
-> Is this include used? If not, remove it as this is a clk provider and
-> not a clk consumer.
+Can bindgen deal with "static __always_inline" functions?
