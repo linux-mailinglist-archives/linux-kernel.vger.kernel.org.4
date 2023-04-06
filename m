@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F066D9E2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE196D9E33
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239925AbjDFRIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S239902AbjDFRKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjDFRIu (ORCPT
+        with ESMTP id S229518AbjDFRKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:08:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6901A83F2;
-        Thu,  6 Apr 2023 10:08:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07547649B3;
-        Thu,  6 Apr 2023 17:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CBEC433EF;
-        Thu,  6 Apr 2023 17:08:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680800928;
-        bh=1B1sR1zgH1Xw7J4RVXwXydm6RpI/xuxwQ0JKdZa9ZfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wJTj3+bpSdYGnEZdPQ24xH1ZlnIUwErVNzn8xF0c2H/eorEakxi/FWD9BM1Ba1PoL
-         hXZ/veihjgi0oxxvQQOVmZNjTEz5+K2k1QZt4SwwLTdywEnkVz/0bdXgB+hLQwbEEF
-         YPbpZQFV10T6m8wAIk3VpSBqFwn66yObRxEeTqxM=
-Date:   Thu, 6 Apr 2023 19:08:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Yicong Yang <yangyicong@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, yangyicong@hisilicon.com,
-        linuxarm@huawei.com, Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
-Message-ID: <2023040610-morbidly-supermom-e81c@gregkh>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
- <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
- <20230406111607.00007be5@Huawei.com>
- <20230406124040.GD392176@hirez.programming.kicks-ass.net>
- <20230406174445.0000235c@Huawei.com>
+        Thu, 6 Apr 2023 13:10:02 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EAB83F2;
+        Thu,  6 Apr 2023 10:10:00 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id q27so28811513oiw.0;
+        Thu, 06 Apr 2023 10:10:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680801000; x=1683393000;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aznOVjaPJTvuXKx1gmzX1wmBBoPOixwVKU/ceJyrGsk=;
+        b=Vbr6Un3XAa1weLdqNkvXUSffebCUdacMfBv/HpDkhSjusZnG5H82+Sq4pLQPZTniw1
+         CyaQA8uX3Qhlfhp+D757Vlrln8zvRzPbTlybMem3gW63EZi66C07MKUjqiHoqpwE9KP7
+         uzu37hn9jVeWEKqiRK9ZmBV093A+i+5mb4psR5LRkpzarpGsra96Z274ApOMe3agtnxI
+         s72UBIurS+FKBxqvZFUXq8YFhljz253Ayi+QWfyPmfzpWQ+RKC0NWuGOAtDKmfa+QbU3
+         y3zdj7z8JUDkZ9A10nLgrjIHlYpM80hynvrh3UdHr6rFnGnkxfUhPUxtIv0yFUajSR/A
+         pcCA==
+X-Gm-Message-State: AAQBX9cI5Fw3QraHNQO/Pd7uVSxb9Zq33zFdnWa3IwBB8rqMD+Ma3ro+
+        MdK+46Pjq67vRkWe0fp/916Ex4yMyQ==
+X-Google-Smtp-Source: AKy350aJ6h65ENKDGuv6javi5hpdIYx3FtFdawgKK8IQG5QLN2+FWPP1Sks4yTp40K/P+Ldr/TLnNQ==
+X-Received: by 2002:aca:1a09:0:b0:387:3239:61fa with SMTP id a9-20020aca1a09000000b00387323961famr4415278oia.30.1680800998716;
+        Thu, 06 Apr 2023 10:09:58 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k9-20020acaba09000000b00387367989d7sm878253oif.23.2023.04.06.10.09.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 10:09:58 -0700 (PDT)
+Received: (nullmailer pid 3363580 invoked by uid 1000);
+        Thu, 06 Apr 2023 17:09:57 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406174445.0000235c@Huawei.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-wireless@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        ath10k@lists.infradead.org, Bjorn Andersson <andersson@kernel.org>
+In-Reply-To: <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
+References: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
+ <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
+Message-Id: <168080086267.3336076.3393733023108971913.robh@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: Convert ATH10K to YAML
+Date:   Thu, 06 Apr 2023 12:09:57 -0500
+X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 05:44:45PM +0100, Jonathan Cameron wrote:
-> On Thu, 6 Apr 2023 14:40:40 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
-> > 
-> > > In the long run I agree it would be good.  Short term there are more instances of
-> > > struct pmu that don't have parents than those that do (even after this series).
-> > > We need to figure out what to do about those before adding checks on it being
-> > > set.  
-> > 
-> > Right, I don't think you've touched *any* of the x86 PMUs for example,
-> > and getting everybody that boots an x86 kernel a warning isn't going to
-> > go over well :-)
-> > 
-> 
-> It was tempting :) "Warning: Parentless PMU: try a different architecture."
-> 
-> I'd love some inputs on what the x86 PMU devices parents should be?
-> CPU counters in general tend to just spin out of deep in the architecture code.
-> 
-> My overall favorite is an l2 cache related PMU that is spun up in
-> arch/arm/kernel/irq.c init_IRQ()
-> 
-> I'm just not going to try and figure out why...
 
-Why not change the api to force a parent to be passed in?  And if one
-isn't, we make it a "virtual" device and throw it in the class for them?
+On Thu, 06 Apr 2023 14:55:44 +0200, Konrad Dybcio wrote:
+> Convert the ATH10K bindings to YAML.
+> 
+> Dropped properties that are absent at the current state of mainline:
+> - qcom,msi_addr
+> - qcom,msi_base
+> 
+> qcom,coexist-support and qcom,coexist-gpio-pin do very little and should
+> be reconsidered on the driver side, especially the latter one.
+> 
+> Somewhat based on the ath11k bindings.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/net/wireless/qcom,ath10k.txt          | 215 -------------
+>  .../bindings/net/wireless/qcom,ath10k.yaml         | 357 +++++++++++++++++++++
+>  2 files changed, 357 insertions(+), 215 deletions(-)
+> 
 
-thanks,
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-greg k-h
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org
+
+
+wifi@0,0: reg: [[65536, 0, 0, 0, 0], [50397200, 0, 0, 0, 2097152]] is too long
+	arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet-dumo.dtb
+
+wifi@18800000: 'qcom,snoc-host-cap-skip-quirk' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dtb
+
