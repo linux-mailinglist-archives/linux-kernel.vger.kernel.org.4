@@ -2,44 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0AB86D8F89
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAFB6D8F8E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbjDFGfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S235511AbjDFGg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbjDFGfB (ORCPT
+        with ESMTP id S235208AbjDFGgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:35:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2377193C7;
-        Wed,  5 Apr 2023 23:34:59 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PsWq11TJ7zSkWK;
-        Thu,  6 Apr 2023 14:31:09 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 6 Apr
- 2023 14:34:56 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <corbet@lwn.net>, <dsahern@kernel.org>,
-        <kuniyu@amazon.com>
-CC:     <netdev@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH net] tcp: restrict net.ipv4.tcp_app_win
-Date:   Thu, 6 Apr 2023 14:34:50 +0800
-Message-ID: <20230406063450.19572-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Thu, 6 Apr 2023 02:36:25 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E33B30CD
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:36:24 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c18so36643739ple.11
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680762984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MR2uGYHr2XQbgshfGo1SsPwfCbCQRjTFchS5WzXQOLA=;
+        b=H/HUkMo7yH5xEcRprfpCq1CqZA9KAccmnFbceZgLqgyQbLuPaUxBeXB0a3xrn/shNg
+         2I8HZivgJ5n3vx6lPdOAXC4SLALjyH0VJ7cR4zsqyaTsLuktp7g4r0YoyDhbse9dZ3X8
+         Kxg8L3kCd2Z1suUT/NgCi/Xhi7U6lp1sfnvo0cR2UX6X2nm4DpYGUb+P+II+sbQ0UlLO
+         XSXIOjBQlnRDgD71KZrIBcky4EjfA4n5BSZkt8c9ko9/KuUTdPRq9QGdMZx28PcCYId8
+         euEPhMgFvwTq3085sGkFmQnpnl9NQgvXQU5efE3J0AvEvPZcm8lFUmGVJHEXWJq9bSRQ
+         V6tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680762984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MR2uGYHr2XQbgshfGo1SsPwfCbCQRjTFchS5WzXQOLA=;
+        b=NNtDUS0Etn9QRQpzPUTy9AtTNTa6VDBPX/ACtem7zmDIZ64+mYkGeYtIBb7b2SQy61
+         KQ56it9OfN5phLhfNvbsC5nitqcZEZWwnXyIIQk+9nBCHx/wtfLoTIgTtTNaGaIIPJz5
+         xroEeLm5OmoReLy7WYlHU4o8UL8ERrI1wxwYu8BaVXXUhy6Tajpa3xKxyL0WBOdkYyf5
+         +gUIAjzlbNWJJBWis02gHIuLZwcnW9SLkxCt7jZXGTCk1fm2Rf6mYlGaH9X7/MKEvaqj
+         25dfBXicdFyjodiqnraGkprMQemlFa6I8r2S9BUGwgD295p2JWgxJ2o/gF9VRGQG9fDE
+         aRRg==
+X-Gm-Message-State: AAQBX9ciivI1Xem0QW99c7esdcFrIVNy+Cl6oP9DrgpFLNbFOEtg5OF2
+        AgpuaDuJQzWqZ2ydToLQLtVC24DQl0zW6X50Vw9VRg==
+X-Google-Smtp-Source: AKy350aPiL+zgLH4gl35YK6hGGynFK4yB18/TWgTYP+MlgMHiKYq5bgjFyNA1/UaczkXb0Y4XiIwg3ElKi2TTWDCzqM=
+X-Received: by 2002:a17:902:b693:b0:1a1:8f72:e9b with SMTP id
+ c19-20020a170902b69300b001a18f720e9bmr3407891pls.7.1680762983590; Wed, 05 Apr
+ 2023 23:36:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230405093133.1858140-1-badhri@google.com> <20230405093133.1858140-2-badhri@google.com>
+ <2023040520-corned-recluse-d191@gregkh>
+In-Reply-To: <2023040520-corned-recluse-d191@gregkh>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Wed, 5 Apr 2023 23:35:47 -0700
+Message-ID: <CAPTae5KoAP6E5ReVX4auco6ctS0jLAhNmknTosJvWvhcp4GO7g@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] usb: gadget: udc: core: Prevent redundant calls to pullup
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stern@rowland.harvard.edu, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
+        balbi@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,63 +74,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UBSAN: shift-out-of-bounds in net/ipv4/tcp_input.c:555:23
-shift exponent 255 is too large for 32-bit type 'int'
-CPU: 1 PID: 7907 Comm: ssh Not tainted 6.3.0-rc4-00161-g62bad54b26db-dirty #206
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0x136/0x150
- __ubsan_handle_shift_out_of_bounds+0x21f/0x5a0
- tcp_init_transfer.cold+0x3a/0xb9
- tcp_finish_connect+0x1d0/0x620
- tcp_rcv_state_process+0xd78/0x4d60
- tcp_v4_do_rcv+0x33d/0x9d0
- __release_sock+0x133/0x3b0
- release_sock+0x58/0x1b0
+On Wed, Apr 5, 2023 at 10:16=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Wed, Apr 05, 2023 at 09:31:33AM +0000, Badhri Jagan Sridharan wrote:
+> > usb_gadget_connect calls gadget->ops->pullup without
+> > checking whether gadget->connected was previously set.
+> > Make this symmetric to usb_gadget_disconnect by returning
+> > early if gadget->connected is already set.
+> >
+> > Cc: stable@vger.kernel.org
+> >
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > Fixes: 5a1da544e572 ("usb: gadget: core: do not try to disconnect gadge=
+t if it is not connected")
+>
+> Same changelog comment as before.
+Thanks for the feedback Greg ! Have fixed it in v2.
 
-'maxwin' is int, shifting int for 32 or more bits is undefined behaviour.
+>
+> > ---
+> >  drivers/usb/gadget/udc/core.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
+e.c
+> > index 890f92cb6344..7eeaf7dbb350 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -708,6 +708,9 @@ int usb_gadget_connect(struct usb_gadget *gadget)
+> >               goto out;
+> >       }
+> >
+> > +     if (gadget->connected)
+> > +             goto out;
+> > +
+>
+> What prevents this connected value from changing right after you check
+> this?
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- Documentation/networking/ip-sysctl.rst | 2 ++
- net/ipv4/sysctl_net_ipv4.c             | 3 +++
- 2 files changed, 5 insertions(+)
+Nothing in V1 :) However, in v2, the newly introduced mutex guards
+gadget->connected
+as well.
 
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index 87dd1c5283e6..58a78a316697 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -340,6 +340,8 @@ tcp_app_win - INTEGER
- 	Reserve max(window/2^tcp_app_win, mss) of window for application
- 	buffer. Value 0 is special, it means that nothing is reserved.
- 
-+	Possible values are [0, 31], inclusive.
-+
- 	Default: 31
- 
- tcp_autocorking - BOOLEAN
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 0d0cc4ef2b85..40fe70fc2015 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -25,6 +25,7 @@ static int ip_local_port_range_min[] = { 1, 1 };
- static int ip_local_port_range_max[] = { 65535, 65535 };
- static int tcp_adv_win_scale_min = -31;
- static int tcp_adv_win_scale_max = 31;
-+static int tcp_app_win_max = 31;
- static int tcp_min_snd_mss_min = TCP_MIN_SND_MSS;
- static int tcp_min_snd_mss_max = 65535;
- static int ip_privileged_port_min;
-@@ -1198,6 +1199,8 @@ static struct ctl_table ipv4_net_table[] = {
- 		.maxlen		= sizeof(u8),
- 		.mode		= 0644,
- 		.proc_handler	= proc_dou8vec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= &tcp_app_win_max,
- 	},
- 	{
- 		.procname	= "tcp_adv_win_scale",
--- 
-2.34.1
-
+>
+> thanks,
+>
+> greg k-h
