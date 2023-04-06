@@ -2,127 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0CE6D9445
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D71E6D944C
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 12:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237289AbjDFKiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 06:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S237278AbjDFKmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 06:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjDFKiu (ORCPT
+        with ESMTP id S229820AbjDFKmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 06:38:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE2D658B
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1wHLLFE2QFwDBIfIUAqICmklIECQ19tL+sJ9zzq91lA=; b=tH5KuBJV78ov6Xi73+RWhMOcRz
-        4EGlzTXvfyoyxDK1TwpZK1t3IoxYWxMZAcMMkZGRBh0bKN//l/JNZc2kQKH1f/W8HrA0pNGF/1hxF
-        gwOGyysfs22+Upo8UF6Cjq5Ik/SxitLCwizhhEnUmW9R6v6NfY2cv3r4CUpkYjbl8+UZ3Ol+GFmQ4
-        TvvCbeUEzB8y9Ly+nWbTQ1NU7ix4CEjjF5U1AN/TbBn5oQQvuFuhCQpEMrcgO5XIE8IahISPQtbg1
-        D9GISnO8ao5xixzqwv1joHd7E5FKXsX3hk3AcCelUkrM2/FNqgMvn7bjZr5t12aCaNtb0OdnyTWur
-        CwgUGZWA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pkN0t-00HKfj-8f; Thu, 06 Apr 2023 10:38:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 887D730008D;
-        Thu,  6 Apr 2023 12:38:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6816920B6A7D6; Thu,  6 Apr 2023 12:38:41 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 12:38:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Peter Oskolkov <posk@google.com>
-Cc:     tglx@linutronix.de, bsegall@google.com,
-        linux-kernel@vger.kernel.org, pjt@google.com, posk@posk.io,
-        joshdon@google.com
-Subject: Re: UMCG - how should we proceed? Should we?
-Message-ID: <20230406103841.GJ386572@hirez.programming.kicks-ass.net>
-References: <20230328210754.2745989-1-posk@google.com>
+        Thu, 6 Apr 2023 06:42:11 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6AD55A6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 03:42:09 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id i7so34153wrc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 03:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680777728;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a8Mk2+M+U9U1xk16bRh97zwUqHu1UtyYZDh+G+w+1wM=;
+        b=S9E4ffHpTrMCmTUFaoE6tY973cu3dLiVs4FDF9xvtEPlP6y883pKSM4p1hKNIINB8H
+         W277mpy9cyECkz/icqew52I6QR6v0oXp9cxrY+RvvATbHh7+qSy7A1NuHU1UNScUq8GN
+         f97pYwKU1i5QgJjUC/VQket7mFseXHQ3Y5gBe5k09g2WWWm7kL4SiqdILk+Ei2MmLAj+
+         diYVf8yPBz6lFokScHeg7RpBekWkj/eRYOrD35bH7jJDum9N+UyUfHMeux4CqRPxeToZ
+         Vudp/bfRVkm0r5zx0nZoeEDd7njEQ8COqI6Bmc4hii3jNYH2nrxkvsIg/sy1gO+KL/n4
+         ZGuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680777728;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a8Mk2+M+U9U1xk16bRh97zwUqHu1UtyYZDh+G+w+1wM=;
+        b=nq6JXmr+2O6IvwB1b6NRQi7MzuUGkz2rofEYG0oW7Z8W/36qAgRkPegobdn+873IBn
+         V/cXWguBAPTVLaUYgeZzgMVTuUfW/MTXg7Rz4oJtyzpzxZKfYQN1rnSVZIbqQyG4l5b4
+         5xfMKeNInORErYLHfCF9ZVipj/Bs3S4otAxQSqDelqfcheQVy5kPQ0EddJhB8yZ2gpjI
+         fzjh0pqNZK6n9rTKArJqjIiXteRBTApT+j5zbEMOnofNFuIYqQ9ek6BaRWD6g9xzKNMu
+         sbWAbU6631kG8oCEThzHf+u+EcJ37rt2IyVZ/PUeaMm6NP+k9EEA6yaavM3mFPBL6PHb
+         pV6Q==
+X-Gm-Message-State: AAQBX9eJy/hOtUD1vNgKyv7sGmB2D2qhuy8ImwQGy+tw8780Q/i88QGp
+        LGyaD8QxXoMtx5K512w6RnMlbjyUD19v4wlKuiB16g==
+X-Google-Smtp-Source: AKy350aq0OJh81T/etD7LG2qv0Q1LqIijAii8+j63yC/7EHOiROcCBBivJWAFwGh4QB276iwIsbe3g==
+X-Received: by 2002:adf:ef03:0:b0:2e4:ff71:1c8e with SMTP id e3-20020adfef03000000b002e4ff711c8emr5922589wro.68.1680777727577;
+        Thu, 06 Apr 2023 03:42:07 -0700 (PDT)
+Received: from krava (cpc137424-wilm3-2-0-cust276.1-4.cable.virginm.net. [82.23.5.21])
+        by smtp.gmail.com with ESMTPSA id h7-20020a5d5487000000b002e707102a02sm1369494wrv.101.2023.04.06.03.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 03:42:07 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 6 Apr 2023 12:42:05 +0200
+To:     kernel test robot <lkp@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: Re: tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:131:14:
+ warning: no previous prototype for 'bpf_testmod_fentry_test1'
+Message-ID: <ZC6h/b2N/u/d4XbT@krava>
+References: <202304060622.P2hBPE4g-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230328210754.2745989-1-posk@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <202304060622.P2hBPE4g-lkp@intel.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 28, 2023 at 02:07:54PM -0700, Peter Oskolkov wrote:
-> Hi Peter!
+On Thu, Apr 06, 2023 at 07:03:39AM +0800, kernel test robot wrote:
+> Hi Jiri,
 > 
-> TL;DR: which approach, if any, should a UMCG implementation in the mainline kernel use?
+> FYI, the error/warning still remains.
 > 
-> Details:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   99ddf2254febae9eab7fb0bcc02c5322243f5c49
+> commit: fee356ede980b6c2c8db612e18b25738356d6744 selftests/bpf: Add bpf_testmod_fentry_* functions
+> date:   5 months ago
+> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+> reproduce:
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fee356ede980b6c2c8db612e18b25738356d6744
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout fee356ede980b6c2c8db612e18b25738356d6744
+>         make O=/tmp/kselftest headers
+>         make O=/tmp/kselftest -C tools/testing/selftests
 > 
-> We are rolling out internally a UMCG implementation copied below (with some
-> boilerplate omitted), so I would like to restart our discussion on the topic.
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202304060622.P2hBPE4g-lkp@intel.com/
 > 
-> The implementation below is different from what we had earlier
-> (https://lore.kernel.org/lkml/20220120155517.066795336@infradead.org/)
-> in that it keeps UMCG state in the kernel rather than TLS.
+> All warnings (new ones prefixed by >>):
+
+sry I can't reproduce 
+
+it looks like bpf_testmod is not compiled by default with -Wmissing-prototypes,
+when I add it I can see those warnings, but it does not seem to be enabled by
+default
+
+jirka
+
+
 > 
-> While having UMCG state in TLS is _much_ better, as it makes state synchronization
-> between the userspace and the kernel much simpler, the whole page pinning
-> machinery in the link above looked very scary, honestly.
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:32:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_1' [-Wmissing-prototypes]
+>       32 | bpf_testmod_test_struct_arg_1(struct bpf_testmod_struct_arg_2 a, int b, int c) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:38:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_2' [-Wmissing-prototypes]
+>       38 | bpf_testmod_test_struct_arg_2(int a, struct bpf_testmod_struct_arg_2 b, int c) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:44:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_3' [-Wmissing-prototypes]
+>       44 | bpf_testmod_test_struct_arg_3(int a, int b, struct bpf_testmod_struct_arg_2 c) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:50:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_4' [-Wmissing-prototypes]
+>       50 | bpf_testmod_test_struct_arg_4(struct bpf_testmod_struct_arg_1 a, int b,
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:57:1: warning: no previous prototype for 'bpf_testmod_test_struct_arg_5' [-Wmissing-prototypes]
+>       57 | bpf_testmod_test_struct_arg_5(void) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:63:1: warning: no previous prototype for 'bpf_testmod_test_mod_kfunc' [-Wmissing-prototypes]
+>       63 | bpf_testmod_test_mod_kfunc(int i)
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:81:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_user_1' [-Wmissing-prototypes]
+>       81 | bpf_testmod_test_btf_type_tag_user_1(struct bpf_testmod_btf_type_tag_1 __user *arg) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:89:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_user_2' [-Wmissing-prototypes]
+>       89 | bpf_testmod_test_btf_type_tag_user_2(struct bpf_testmod_btf_type_tag_2 *arg) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:94:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_percpu_1' [-Wmissing-prototypes]
+>       94 | bpf_testmod_test_btf_type_tag_percpu_1(struct bpf_testmod_btf_type_tag_1 __percpu *arg) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:99:1: warning: no previous prototype for 'bpf_testmod_test_btf_type_tag_percpu_2' [-Wmissing-prototypes]
+>       99 | bpf_testmod_test_btf_type_tag_percpu_2(struct bpf_testmod_btf_type_tag_3 *arg) {
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:103:14: warning: no previous prototype for 'bpf_testmod_loop_test' [-Wmissing-prototypes]
+>      103 | noinline int bpf_testmod_loop_test(int n)
+>          |              ^~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:115:30: warning: no previous prototype for 'bpf_testmod_return_ptr' [-Wmissing-prototypes]
+>      115 | __weak noinline struct file *bpf_testmod_return_ptr(int arg)
+>          |                              ^~~~~~~~~~~~~~~~~~~~~~
+> >> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:131:14: warning: no previous prototype for 'bpf_testmod_fentry_test1' [-Wmissing-prototypes]
+>      131 | noinline int bpf_testmod_fentry_test1(int a)
+>          |              ^~~~~~~~~~~~~~~~~~~~~~~~
+> >> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:136:14: warning: no previous prototype for 'bpf_testmod_fentry_test2' [-Wmissing-prototypes]
+>      136 | noinline int bpf_testmod_fentry_test2(int a, u64 b)
+>          |              ^~~~~~~~~~~~~~~~~~~~~~~~
+> >> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:141:14: warning: no previous prototype for 'bpf_testmod_fentry_test3' [-Wmissing-prototypes]
+>      141 | noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
+>          |              ^~~~~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:149:1: warning: no previous prototype for 'bpf_testmod_test_read' [-Wmissing-prototypes]
+>      149 | bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+>          | ^~~~~~~~~~~~~~~~~~~~~
+>    tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:200:1: warning: no previous prototype for 'bpf_testmod_test_write' [-Wmissing-prototypes]
+>      200 | bpf_testmod_test_write(struct file *file, struct kobject *kobj,
+>          | ^~~~~~~~~~~~~~~~~~~~~~
 > 
-> So if we are going to ever have something like UMCG in the mainline kernel, we need
-> to figure out the approach to use: the TLS-based one, something similar
-> to what we have now internally (details below), or something else. Or none at all...
 > 
-> While I would very much prefer to have it done your way (state in TLS), the page pinning
-> business was too much for me. If you can figure out a way to do it cleanly and reliably, great!
-
-A few quick notes without having looked at the patch...
-
-> The main differences between what you had in the TLS patchset and what is below:
-
-(note that in the end the per-task UMCG info thing didn't *need* to be
-TLS, although it is a logical place to put it)
-
-> - per worker/server state not in TLS but in task_struct
-> - we keep a list of idle workers and a list of idle servers in mm
-
-How much of a scalability fail is that? Mathieu and me are currently
-poking at a rseq/cid regression due to large multi thread contention on
-mm data.
-
-But yeah, I think this was one of the open issues we still had; with the
-other implementation -- I seem to have a half finished patch for an
-idle_server list.
-
-> - worker wake events are delivered not to servers which ran the workers earlier,
->   but to idle servers from the idle server list
-
-Provided there is one I take it; very easy to run out of idle things.
-Also, what if you want to explicitly manage placement, can you still
-direct the wakeup?
-
-> - worker preemption happens not via a syscall (umcg_kick) but by hooking
->   into sched_tick
-
-sched_tick would render it somewhat unsuitable for RT
-workloads/schedulers where you might need more immediate preemption.
-
-> None of the differences above are deal breakers; again, if the TLS/page pinning
-> approach is viable, we will gladly use it.
-
-Urgh, so yeah.. I meant to go look at the whole UMCG thing again with an
-eye specifically at inter-process support.
-
-I'm hoping inter-process UMCG can be used to implement custom libpthread
-that would allow running most of userspace under a custom UMCG scheduler
-and obviate the need for this horrible piece of shit eBPF sched thing.
-
-But I keep getting side-tracked with other stuff :/ I'll try and bump
-this stuff up the todo list.
+> vim +/bpf_testmod_fentry_test1 +131 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+> 
+>    130	
+>  > 131	noinline int bpf_testmod_fentry_test1(int a)
+>    132	{
+>    133		return a + 1;
+>    134	}
+>    135	
+>  > 136	noinline int bpf_testmod_fentry_test2(int a, u64 b)
+>    137	{
+>    138		return a + b;
+>    139	}
+>    140	
+>  > 141	noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
+>    142	{
+>    143		return a + b + c;
+>    144	}
+>    145	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
