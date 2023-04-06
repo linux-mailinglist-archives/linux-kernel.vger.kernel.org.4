@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E614A6D9E98
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085BB6D9EA1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240133AbjDFRUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S240071AbjDFRVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240066AbjDFRUB (ORCPT
+        with ESMTP id S239928AbjDFRVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:20:01 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD269ECC;
-        Thu,  6 Apr 2023 10:19:34 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5416698e889so752556017b3.2;
-        Thu, 06 Apr 2023 10:19:34 -0700 (PDT)
+        Thu, 6 Apr 2023 13:21:10 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3683F83C3
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:20:02 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id sg7so3099706ejc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:20:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680801573; x=1683393573;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zs6V4xSX9ZlfsxZNTadcJVx+Wo1UCjoit8XXqPB91Bs=;
-        b=hynWLQyHnbgidmV91dL/pTn/bQ6Fvwdl16G4bV7a0cfNjLvqbo7ZJezWtT71601dZj
-         vyA53QTaqOyxJna1YPWAZZEarfelzHGrcBwBimALxU7yhWeWk2u2q2xxUwbzmAYpGGK6
-         Y7i6BYF3GFekGu174zZNzsSmnCBetspFUWvpNWr/Ek6eEcl2orfm5riHIUZvohNa2NoT
-         THQ115gs41K86a86xhzjbrzfSumTJSSyT9oie6SH1KzNCEs2IgJqB2q9tj4cAvVE7IIp
-         jujKfsP6+1HzIQ6+/CMRmw7bh3ZuHnygqXkvlaIM0YxkRlYY1rMhipDTo33w14rQtZ70
-         /DYw==
+        d=gmail.com; s=20210112; t=1680801600; x=1683393600;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3uUKW6dzuBcxiv7wPFPlh8AowQu6NgUDOohsGPsRqc=;
+        b=ZNnjoRSA8C4ZUWBDwwSK4LmnYcrDpdogkx9nP+8KF6c320nxYGztaz6TDB6Dsjqkm4
+         ccgfzCvbaHMmAlRxMUCr3xuShpm9/QKykpwAE8ROW51UabKnTIILVt8qX6ZcJno0lxky
+         9xeVAP6ecNVK8VGVUTMQNedb3VD/43s+jiKnBRv6QWB8PlWCBxn2cfGCCCIb5KgvpuSp
+         6LBraGJa64PNgHiOZ9L34rxVwUklDh/2DRL9P0K0PEGLWRSSv26etIsV7SQYzAmESvDf
+         rZoemeliwLysUhEIt5RCsQd/m1XHZ4fAV6t9CDyKsuNJgpNpEYya0sfAMs6ASP1ItCZQ
+         H9Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680801573; x=1683393573;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zs6V4xSX9ZlfsxZNTadcJVx+Wo1UCjoit8XXqPB91Bs=;
-        b=ImHam+Cmz5wL8Wxjg47hGpz6y80IQtpZVETOtkajKg5EQw3VBgC2bVapar/uRrdpRa
-         jEQhhnuixOn6nVQQULiB4yV9MBP7YJc4Uw2GaAW4ZC7eiUHeGN+4R2Fzkm7Dx0LI57AB
-         Cy4/mKK0DqiV1IwVJRaPnAC7rPlllTtm3mNROGZGc1cRK0zN4Nk8oDHDsJYMAkB54TMc
-         FI1QNvDrr//YFgl5Qkx0CO5FtXO44M1yd70mw3NkKQTc5v60KbQRLsNLTPC27T1iMxX3
-         KLz+shuUgyTRV05Nl4BowKOcx5Pr1XBHd474I+xRwCSMVoyiaufkwxCJwTXCrV6piRg9
-         RfAA==
-X-Gm-Message-State: AAQBX9eDKd4BGCiqBcOkM0QwaHJwp2iAsMPeaZtSqW3qJ+Un27k93PfP
-        TizfptgFuKGqpfTXwmdlzCoY/pegwxckbf6abuM=
-X-Google-Smtp-Source: AKy350a/mqrWTiqYdMMX1Vw+SbgVv8dxMUMkHCqZprPzSXoQ/vKHSQZbDVIf1wpejJDyAA0MT4Wjf5VqY2/qxGwAVQw=
-X-Received: by 2002:a81:c642:0:b0:546:63a:6e23 with SMTP id
- q2-20020a81c642000000b00546063a6e23mr6185709ywj.0.1680801572930; Thu, 06 Apr
- 2023 10:19:32 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680801600; x=1683393600;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M3uUKW6dzuBcxiv7wPFPlh8AowQu6NgUDOohsGPsRqc=;
+        b=6Ce3isC8zY3ydf3rd/KLCD+VA7/G0mxgC0Lmrm40Sv0bFhN8CVGw9BAebxYRg0zxeF
+         yG7yywd5N8CLbQalkSX9HI/kvwxztWtEk5n9tse/F0Y3DYjV8G8LY5r0DIjoUjRsti5B
+         S3QMHPMifF25RQQCNykwLdDJnYkDKgYP06nBFaVfF56x4khzCvFUiBH77v45ckitcxLp
+         kS8iCMvjy+87vR8xD1SN1TkY9sCjh3AFRnukSkPgkUQLAV0FVx3RLPUXy7vQFW4YJxAP
+         n04AmUKu5LVvRKOP7jcle6nlJgmZI1YpBEz6kTA0A42DGD9SJIYXVNuEhJaJi7FCllPl
+         nadw==
+X-Gm-Message-State: AAQBX9cUfYrdSjEcxrfak6q/LdWzRk3EBl9XxeVDUFvLM3XtXYyQ57aE
+        IetzrgOx/DjbKqGbzNsq9BU=
+X-Google-Smtp-Source: AKy350ZCfyM5SOtfesc+qhalcrjMtsxx6jFR13Rhm/qVNJRtMoNKH+wOa0M+HbZUj7qNsLdXb0nIHQ==
+X-Received: by 2002:a17:906:4555:b0:932:3d1b:b69d with SMTP id s21-20020a170906455500b009323d1bb69dmr6836311ejq.47.1680801600276;
+        Thu, 06 Apr 2023 10:20:00 -0700 (PDT)
+Received: from andrea (host-79-22-3-90.retail.telecomitalia.it. [79.22.3.90])
+        by smtp.gmail.com with ESMTPSA id mf21-20020a170906cb9500b009495cfe446esm1050570ejb.223.2023.04.06.10.19.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 10:19:59 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 19:19:43 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Leonardo Bras <leobras@redhat.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/2] Deduplicating RISCV cmpxchg.h macros
+Message-ID: <ZC7/LzV53KsZ/cSn@andrea>
+References: <20230406082018.70367-1-leobras@redhat.com>
 MIME-Version: 1.0
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-7-917ff5bc80a8@asahilina.net> <ZC7T92F7K9XTZPZ1@phenom.ffwll.local>
- <CANiq72=E2k7+_cwYw_EjVezk0mWCRqbH4MUjsEmxWgJMh=3AEQ@mail.gmail.com> <ZC7pHlLFutMWJF1s@phenom.ffwll.local>
-In-Reply-To: <ZC7pHlLFutMWJF1s@phenom.ffwll.local>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 6 Apr 2023 19:19:21 +0200
-Message-ID: <CANiq72=JOtZ7cc+FDxUY+HUEccRjXp=3gjbM04kwBiFR=Ew2-g@mail.gmail.com>
-Subject: Re: [PATCH RFC 07/18] rust: drm: mm: Add DRM MM Range Allocator abstraction
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-Cc:     Daniel Vetter <daniel@ffwll.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406082018.70367-1-leobras@redhat.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -93,55 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 5:45=E2=80=AFPM Daniel Vetter <daniel@ffwll.ch> wrot=
-e:
->
-> Yeah this all looks great and very hyperlinked.
->
-> I think the only nit I have is that for types with two or more type
-> variables (like the rbtree) what each of them should represent in the top
-> intro. I can guess it's <Key, Value> and not the other way round, but
-> confirmation takes quite a bit of scrolling to check with the function
-> types.
+On Thu, Apr 06, 2023 at 05:20:17AM -0300, Leonardo Bras wrote:
+> While studying riscv's cmpxchg.h file, I got really interested in
+> understanding how RISCV asm implemented the different versions of
+> {cmp,}xchg.
+> 
+> When I understood the pattern, it made sense for me to remove the
+> duplications and create macros to make it easier to understand what exactly
+> changes between the versions: Instruction sufixes & barriers.
+> 
+> Thanks!
+> Leo
+> 
+> Changes since RFCv3:
+> - Squashed the 6 original patches in 2: one for cmpxchg and one for xchg
+> https://lore.kernel.org/all/20230404163741.2762165-1-leobras@redhat.com/
+> 
+> Changes since RFCv2:
+> - Fixed  macros that depend on having a local variable with a magic name
+> - Previous cast to (long) is now only applied on 4-bytes cmpxchg
+> https://lore.kernel.org/all/20230321074249.2221674-1-leobras@redhat.com/
+> 
+> Changes since RFCv1:
+> - Fixed patch 4/6 suffix from 'w.aqrl' to '.w.aqrl', to avoid build error
+> https://lore.kernel.org/all/20230318080059.1109286-1-leobras@redhat.com/
+> 
+> Leonardo Bras (2):
+>   riscv/cmpxchg: Deduplicate cmpxchg() asm and macros
+>   riscv/cmpxchg: Deduplicate xchg() asm functions
+> 
+>  arch/riscv/include/asm/cmpxchg.h | 319 +++++++------------------------
+>  1 file changed, 67 insertions(+), 252 deletions(-)
 
-Yeah, that is fair. Personally I prefer more descriptive names when
-there are several or they have a special/asymmetric role.
+LGTM.  AFAICT, this would need to be rebased, cf. e.g.
 
-> Otherwise I think perfect api docs.
+  a8596dda1fbf7e ("arch: rename all internal names __xchg to __arch_xchg")
 
-Glad you like it!
+from the tip tree.
 
-> Just a quick comment on this, that's the same we do on the C side. Most
-> overview chapters are actually DOC: sections pulled in from the code.
->
-> What I meant here is that for big overview stuff (like for modesetting ho=
-w
-> the display pipe structures tie together as an example:
-> https://dri.freedesktop.org/docs/drm/gpu/drm-kms.html#overview)
-> it doesn't make sense to duplicate that in rustdoc once more.
-
-Yeah, definitely, if it is already somewhere else for C, we shouldn't
-duplicate it (that is what I meant by the "shared across C and Rust"
-exception).
-
-> Maybe drm is the exception, but if you look at our .rst files we also hav=
-e
-> most of our docs in the code:
->
-> https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/drm-kms-helpe=
-rs.rst
->
-> The rst files just provide the scaffolding because C dosn't have
-> crates/modules hierarchy that would do this for you automatically.
-
-Sorry, I was talking in general in the kernel. That
-`drm-kms-helpers.rst` looks great.
-
-From a quick grep, I think you are indeed one of the big users of
-`DOC: `, which indeed map closely to what you would do in Rust without
-the scaffolding need.
-
-So I think you will like writing docs in Rust :)
-
-Cheers,
-Miguel
+  Andrea
