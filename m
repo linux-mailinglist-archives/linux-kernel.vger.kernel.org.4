@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4AD6D8CD7
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470EA6D8CD9
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234648AbjDFBk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
+        id S234696AbjDFBka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 21:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbjDFBkX (ORCPT
+        with ESMTP id S232683AbjDFBk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:40:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC4465A9;
-        Wed,  5 Apr 2023 18:40:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E2896422A;
-        Thu,  6 Apr 2023 01:40:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B69C433EF;
-        Thu,  6 Apr 2023 01:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680745221;
-        bh=JOshdqDasYx+VJ9V4GEhYO25QyIsnPmsnfB8panfAZ0=;
+        Wed, 5 Apr 2023 21:40:28 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507187EC0;
+        Wed,  5 Apr 2023 18:40:27 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (fp76f193f3.tkyc206.ap.nuro.jp [118.241.147.243])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E49AE905;
+        Thu,  6 Apr 2023 03:40:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1680745225;
+        bh=3gqmu4KgxgYFuJy5DilzdfPDlIkPg8yygx/h/5xSCu4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hRab9knx16g2wEazV2BAeeL26/fwLPN3rb/U/M93+PQoH24dIOo15JCtXr0ZH9ybh
-         70hfkNPrOWIZ3ioL8dPn6xFNnaFty/CHumTz7MbOiv1i9fRF5Q2haiaKZqV2ms7GqU
-         8mK+2cLG2DONyrJdVgFIsxNtgR7bWZDhsfLxTFIctNjxjY/buU7MDlnTt6aVD8xlO1
-         T0BM0t97S2p/uKDRm1OswRuHNhEokUlahg3tBjAR6QY5k+QYfJjZJuVSDbDDTHourR
-         cFcaDXtrX0caNJXc9ycCr28uBnSHQML0puryKskL3ZDvxD+6H4uhEjkayrmf27kiH9
-         1Gc/rZhHbpclw==
-Date:   Thu, 6 Apr 2023 09:40:13 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>, gregkh@linuxfoundation.org
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Xu Yang <xu.yang_2@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, Jun Li <jun.li@nxp.com>
-Subject: Re: [PATCH V7 10/10] ARM64: dts: imx7ulp: update usb compatible
-Message-ID: <20230406014013.GJ11367@dragon>
-References: <20230322052504.2629429-1-peng.fan@oss.nxp.com>
- <20230322052504.2629429-11-peng.fan@oss.nxp.com>
- <20230405130649.GA11367@dragon>
- <DU0PR04MB94178755C624BCBE25D8073C88919@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        b=DQr3ojnssfSQ8mE18DBh0lp66rrAFfpo0cDHvOAXYN0qPOHyi4XWJZHt3v7Wf4nDx
+         TvxcyCgUh89NxDA5D/BmPG3GXuSddCK9rnWW5xubAtvzJBDM/O6BDZfmfSKmixgWzj
+         UlER7+GWwJxVhWmQImI6iiQr/ohFpOrEm9qrQzDE=
+Date:   Thu, 6 Apr 2023 04:40:32 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jayesh Choudhary <j-choudhary@ti.com>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org, jonas@kwiboo.se, jernej.skrabec@gmail.com,
+        airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sam@ravnborg.org,
+        jani.nikula@intel.com, tzimmermann@suse.de, javierm@redhat.com,
+        ville.syrjala@linux.intel.com, r-ravikumar@ti.com,
+        lyude@redhat.com, alexander.deucher@amd.com, sjakhade@cadence.com,
+        yamonkar@cadence.com, a-bhatia1@ti.com,
+        tomi.valkeinen@ideasonboard.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: drm/bridge: Add no-hpd property
+Message-ID: <20230406014032.GN9915@pendragon.ideasonboard.com>
+References: <20230405142440.191939-1-j-choudhary@ti.com>
+ <20230405142440.191939-2-j-choudhary@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DU0PR04MB94178755C624BCBE25D8073C88919@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230405142440.191939-2-j-choudhary@ti.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:18:43AM +0000, Peng Fan wrote:
-> Hi Shawn,
+Hi Jayesh,
+
+Thank you for the patch.
+
+On Wed, Apr 05, 2023 at 07:54:39PM +0530, Jayesh Choudhary wrote:
+> From: Rahul T R <r-ravikumar@ti.com>
 > 
-> > Subject: Re: [PATCH V7 10/10] ARM64: dts: imx7ulp: update usb compatible
-> > 
-> > On Wed, Mar 22, 2023 at 01:25:04PM +0800, Peng Fan (OSS) wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > Per binding doc, update the compatible
-> > >
-> > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > 
-> > ARM: dts: imx7ulp: ...
-> > 
-> > Fixed it up and applied all DTS patches.
-> [Peng Fan] 
+> The mhdp bridge can work without its HPD pin hooked up to the connector,
+> but the current bridge driver throws an error when hpd line is not
+> connected to the connector. For such cases, we need an indication for
+> no-hpd, using which we can bypass the hpd detection and instead use the
+> auxiliary channels connected to the DP connector to confirm the
+> connection.
+> So add no-hpd property to the bindings, to disable hpd when not
+> connected or unusable.
 > 
-> Thanks for the fix. But I think Greg already applied the patchset.
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+>  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> index c2b369456e4e..3a6c6d837593 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> @@ -57,6 +57,12 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  cdns,no-hpd:
+> +    type: boolean
+> +    description:
+> +      Set if the HPD line on the bridge isn't hooked up to anything or is
+> +      otherwise unusable.
 
-Okay, I will drop them from my tree, but ...
+I'm fine with the non connected part, but concerned with "otherwise
+unusable". It's very vague and could thus be abused. Do you have
+particular use cases in mind for this ? If so, restricting this to those
+use cases, or at least giving examples, would help.
 
-Greg,
+> +
+>    ports:
+>      $ref: /schemas/graph.yaml#/properties/ports
+>  
 
-May I suggest a couple of things on the future process?
+-- 
+Regards,
 
-- Could you leave i.MX DTS patches to me, so that we can avoid potential
-  merge conflicts?
-
-- Would you update your patch robot to reply the applying message to all
-  recipients, so that everyone knows the status?
-
-Shawn
+Laurent Pinchart
