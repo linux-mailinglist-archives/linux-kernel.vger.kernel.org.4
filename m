@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92206D9F88
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D45B6D9F8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239899AbjDFSJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S239653AbjDFSMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 14:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjDFSJS (ORCPT
+        with ESMTP id S239209AbjDFSMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:09:18 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE5E35B1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:09:16 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-4fa3c484814so1485613a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:09:16 -0700 (PDT)
+        Thu, 6 Apr 2023 14:12:03 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23ADF35B1
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:11:59 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9188b85a615so158194366b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:11:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680804555; x=1683396555;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8nhffWdZlth4aByLd785lLkc7TK3WnZSx3/zqQGno3Y=;
-        b=W8oH7nV8HbmomwaVlLY+U6C8kYrR7qztrDla7H829oR8o2FH6jc6yXKYctYvg5BePb
-         +4H5wXihQ+nwRQzW9GMoSxvQoefRXAHDX5GPYevnSK21Bfl45srkbQvOf0t8jB3r59e0
-         BiJQKt3YsoAuhBfT2/CUfWyTcGPFF/Db6EWwKgj3DatXplS3QvxJjf26slZFOWcnEW2S
-         VNwThrUl0q8qlENYvbs8KEo8mti3K+DuE8KfPo7LFRfq76k5zC3tmvLDBx9MIL1hwTGu
-         rtGHCfba1ZFXhiaOCrqOrNKFAQDg+HtHqID/FawCqfNxXHLqzxMuf2j65zSeACUW8cNg
-         A8TA==
+        d=linaro.org; s=google; t=1680804717;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3dlTAcrGsySRcdvFlIEAdlxMvmki5beeXo1X6M8HUAI=;
+        b=ybTaZYswIsB9kSiA+qHwOr2M6THedSXWNg2r1upNnTvDoVNgMlDyMeGCLzsO7NNSm6
+         5Cbh4D6zo1IKDuSlTU6JS1uORX1e/PB/3o9+C1v+264VOB9eSh0muVWSbw3FFTFW12g2
+         GZ6m29idMJqugoOdxtHeMseWxZcqPEDx/gCsq3Hy6qDZws8+fKQiDtnVlaAWkR78AJ5K
+         Fh40ASSh5pyV3a/j+tbiH4ETWy2LV5j1/aCT2KIsh0LNizCC91bSpHSzkC9vHqXxMK4G
+         oAXf0HXPO+mLSw7AfzTrVxjSTaSbS/mmQwCEvVTeUYdWSbehQHq5eveV+QS9HaeIDDRd
+         jsPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680804555; x=1683396555;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20210112; t=1680804717;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8nhffWdZlth4aByLd785lLkc7TK3WnZSx3/zqQGno3Y=;
-        b=CmnhnCHVivHyBTjsDLalqXJkFwaHcA2OVF8Ewh0NhdHUSsaGw8WHA+j8pxMJP7wjeS
-         GI9YNSg1ME9Dh4RXDn9NDG9or5AMUTsRyiCnZ2SC17dnm2onLSzd1fVK9n+Vy/0VnUFv
-         t6O7djnO/8v5TNjs8pu3Aezzx30yJ4Rlj0ZbxE1ERnx/pSxpwJo+qSmOvzTeFENqxTTh
-         bepwkLA2kmMjmcysv+znPIa2T7m6PPQVAsDHNHZlhVvA3GWS7Gjapvx6J/9diLY+bNLw
-         emh9jM6xG7bG1KwdriX+x0xqSLoN3ZFbzs/+FTcixEBjSvYZ2p/aRykkFKbcVmHFhWu7
-         tajg==
-X-Gm-Message-State: AAQBX9fG41omWrFprc9TtiHVAy6/7cSywH5dlfsAEw/UUsyd6cc5AX3W
-        pZCSsdjWZE1PzKSSdifSVcG5skQ4haMGXwfOe+8=
-X-Google-Smtp-Source: AKy350bZZYV8kPEAXzzDcCal2Ql53oij736lzsbchUYOl/HyckYyfe4+MfkNepBiObN5lelbS6mPlxcoP07Dt+tKFkc=
-X-Received: by 2002:a50:d716:0:b0:502:6d4b:40f5 with SMTP id
- t22-20020a50d716000000b005026d4b40f5mr212923edi.7.1680804555150; Thu, 06 Apr
- 2023 11:09:15 -0700 (PDT)
+        bh=3dlTAcrGsySRcdvFlIEAdlxMvmki5beeXo1X6M8HUAI=;
+        b=vBx8TTE6OIrp8LKe5noVa2Y5jnYwnoeg0TfW0XpMo0GW1Sxg8MHapJGoSp3Tsz0cCN
+         CHhu/gtJ/jWVvwZFFAS6LAFctgKhpJD9ZlvI8hGR1uq1UfoSDqQX+QiYBwa5Jze2BYFw
+         8XFMlVlOrQFgqv9CMFGu0jCBXCWQ/uvNw0xZ2xNCaLkDSNYLHF9Tz4y4xce5D8U6lDro
+         ZbpZ10eYlPhEban7qOHQOuU/rmzOPwmD2Gbhpzbqvu1CHX7SYdKZhn1eezBc8/YXTEHf
+         dxDRQkroq8Bq/VLMwQmLsQuQbrn/6wrmXXE9k3PTe9HAxhUx4Wrb+NYuQhkOtqqWL62G
+         rmig==
+X-Gm-Message-State: AAQBX9eg60W016mpghVxj6rABdBNCn7tmA4nsz15WDek8mRFxNZeuUav
+        oq1jW4AlygpqA6kKArBE8uSHYA==
+X-Google-Smtp-Source: AKy350YLeBw/Rt+uWm89BvbtIXmourGOXrTNPTJjVC12cxrxUYgvhnCNlbiIHz0DWz4hq8Sh7Nrwfw==
+X-Received: by 2002:a05:6402:59:b0:502:61d8:233b with SMTP id f25-20020a056402005900b0050261d8233bmr484101edu.19.1680804717562;
+        Thu, 06 Apr 2023 11:11:57 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
+        by smtp.gmail.com with ESMTPSA id x102-20020a50baef000000b004af73333d6esm1024556ede.53.2023.04.06.11.11.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 11:11:57 -0700 (PDT)
+Message-ID: <284f1538-dfe3-8d54-d20f-b47365283e74@linaro.org>
+Date:   Thu, 6 Apr 2023 20:11:56 +0200
 MIME-Version: 1.0
-Received: by 2002:a17:907:97d6:b0:947:d885:520a with HTTP; Thu, 6 Apr 2023
- 11:09:14 -0700 (PDT)
-Reply-To: elenajyak@gmail.com
-From:   "Miss.Elena Yak" <airportauthorityp.bf@gmail.com>
-Date:   Thu, 6 Apr 2023 18:09:14 +0000
-Message-ID: <CAGVeOqx6v+7AE2FtNiz42Dyix-gEZJH+=wL3BKRaQdOa8fMihQ@mail.gmail.com>
-Subject: Re:Good Day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52c listed in]
-        [list.dnswl.org]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [airportauthorityp.bf[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH] dt-bindings: arm: amlogic: add C3 bindings
+Content-Language: en-US
+To:     Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+References: <20230406081627.4083103-1-kelvin.zhang@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230406081627.4083103-1-kelvin.zhang@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear Friend,
-My name is Miss Elena Yak, I am looking for good relationship I got
-your E-mail address/profile through my internet search and I have
-something very important to discuss with you. However please do reply
-me through my email address,(elenajyak@gmail.com)is to tell you more
-about me and my pictures. It is my pleasure to have you as a friend,
-Thank you so much and God bless you, bye! Your friend Miss. Elena Yak.
+On 06/04/2023 10:16, Kelvin Zhang wrote:
+> Document the new C3 SoC/board device tree bindings.
+> 
+> C3 is an advanced edge AI processor designed for smart IP camera
+> applications, which does not belong to Meson series.
+> 
+> Therefore, modify the title field accordingly.
+> 
+> Signed-off-by: Kelvin Zhang <kelvin.zhang@amlogic.com>
+> ---
+>  Documentation/devicetree/bindings/arm/amlogic.yaml | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
+> index 274ee0890312..ade730f35519 100644
+> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
+> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/arm/amlogic.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Amlogic MesonX
+> +title: Amlogic SoC based Platforms
+>  
+>  maintainers:
+>    - Kevin Hilman <khilman@baylibre.com>
+> @@ -211,6 +211,13 @@ properties:
+>                - amlogic,aq222
+>            - const: amlogic,s4
+>  
+> +      - description: Boards with the Amlogic C3 C302X/C308L SoC
+> +        items:
+> +          - enum:
+> +              - amlogic,aw409
+> +              - amlogic,aw419
+> +          - const: amlogic,c3
+
+Try to keep some order, e.g. between a and s.
+
+Best regards,
+Krzysztof
+
