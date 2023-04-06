@@ -2,122 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAAFB6D8F8E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD5B6D8F97
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235511AbjDFGg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        id S233497AbjDFGhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235208AbjDFGgZ (ORCPT
+        with ESMTP id S235272AbjDFGho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:36:25 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E33B30CD
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:36:24 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c18so36643739ple.11
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680762984;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MR2uGYHr2XQbgshfGo1SsPwfCbCQRjTFchS5WzXQOLA=;
-        b=H/HUkMo7yH5xEcRprfpCq1CqZA9KAccmnFbceZgLqgyQbLuPaUxBeXB0a3xrn/shNg
-         2I8HZivgJ5n3vx6lPdOAXC4SLALjyH0VJ7cR4zsqyaTsLuktp7g4r0YoyDhbse9dZ3X8
-         Kxg8L3kCd2Z1suUT/NgCi/Xhi7U6lp1sfnvo0cR2UX6X2nm4DpYGUb+P+II+sbQ0UlLO
-         XSXIOjBQlnRDgD71KZrIBcky4EjfA4n5BSZkt8c9ko9/KuUTdPRq9QGdMZx28PcCYId8
-         euEPhMgFvwTq3085sGkFmQnpnl9NQgvXQU5efE3J0AvEvPZcm8lFUmGVJHEXWJq9bSRQ
-         V6tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680762984;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MR2uGYHr2XQbgshfGo1SsPwfCbCQRjTFchS5WzXQOLA=;
-        b=NNtDUS0Etn9QRQpzPUTy9AtTNTa6VDBPX/ACtem7zmDIZ64+mYkGeYtIBb7b2SQy61
-         KQ56it9OfN5phLhfNvbsC5nitqcZEZWwnXyIIQk+9nBCHx/wtfLoTIgTtTNaGaIIPJz5
-         xroEeLm5OmoReLy7WYlHU4o8UL8ERrI1wxwYu8BaVXXUhy6Tajpa3xKxyL0WBOdkYyf5
-         +gUIAjzlbNWJJBWis02gHIuLZwcnW9SLkxCt7jZXGTCk1fm2Rf6mYlGaH9X7/MKEvaqj
-         25dfBXicdFyjodiqnraGkprMQemlFa6I8r2S9BUGwgD295p2JWgxJ2o/gF9VRGQG9fDE
-         aRRg==
-X-Gm-Message-State: AAQBX9ciivI1Xem0QW99c7esdcFrIVNy+Cl6oP9DrgpFLNbFOEtg5OF2
-        AgpuaDuJQzWqZ2ydToLQLtVC24DQl0zW6X50Vw9VRg==
-X-Google-Smtp-Source: AKy350aPiL+zgLH4gl35YK6hGGynFK4yB18/TWgTYP+MlgMHiKYq5bgjFyNA1/UaczkXb0Y4XiIwg3ElKi2TTWDCzqM=
-X-Received: by 2002:a17:902:b693:b0:1a1:8f72:e9b with SMTP id
- c19-20020a170902b69300b001a18f720e9bmr3407891pls.7.1680762983590; Wed, 05 Apr
- 2023 23:36:23 -0700 (PDT)
+        Thu, 6 Apr 2023 02:37:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3C63ABC
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:37:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680763063; x=1712299063;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZZ27Lj8H3UQN/3q/JehddrVhRscsN3kEKOBwazKeWFo=;
+  b=WpwzhOsUle5aZSHFisG2hNMGm94oyp8++/bWg4UYn74E3GCJ/x8oewme
+   9XW2OOpLVsqeylxsyozOWqCiPPhxKigRZQ0r5H7/6oq4nliLq8WCNoDSk
+   nxhQVDTjNosNun0rehpSLnZ2GFH8hEDca/Dp8lQcH+YbY0nYv+YKkri27
+   CdNBJoqe5gbKZxTh80ocnak592g3xh8x46U8IUrTfvoUkmi/dvMreV1+3
+   14eoeOzXO91PfV6DbSY6np3VM1CcH+cRlxXcAPhycj9UrxYmCIz7CyiG0
+   vurz9713Y5DdbmchDuufiTViIuaQvYMXMU/VCKk0QDcV7WHymMMdHC2PQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="323033973"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="323033973"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2023 23:37:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="680544281"
+X-IronPort-AV: E=Sophos;i="5.98,322,1673942400"; 
+   d="scan'208";a="680544281"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2023 23:37:41 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pkJFc-000R8J-1q;
+        Thu, 06 Apr 2023 06:37:40 +0000
+Date:   Thu, 06 Apr 2023 14:36:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cpu] BUILD SUCCESS
+ 36168bc061b4368ad19e82b06a6463c95d3bb9a7
+Message-ID: <642e6888.wmDmg9bNVdljYTZv%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20230405093133.1858140-1-badhri@google.com> <20230405093133.1858140-2-badhri@google.com>
- <2023040520-corned-recluse-d191@gregkh>
-In-Reply-To: <2023040520-corned-recluse-d191@gregkh>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Wed, 5 Apr 2023 23:35:47 -0700
-Message-ID: <CAPTae5KoAP6E5ReVX4auco6ctS0jLAhNmknTosJvWvhcp4GO7g@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] usb: gadget: udc: core: Prevent redundant calls to pullup
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stern@rowland.harvard.edu, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, peter.chen@freescale.com,
-        balbi@ti.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 10:16=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Wed, Apr 05, 2023 at 09:31:33AM +0000, Badhri Jagan Sridharan wrote:
-> > usb_gadget_connect calls gadget->ops->pullup without
-> > checking whether gadget->connected was previously set.
-> > Make this symmetric to usb_gadget_disconnect by returning
-> > early if gadget->connected is already set.
-> >
-> > Cc: stable@vger.kernel.org
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > Fixes: 5a1da544e572 ("usb: gadget: core: do not try to disconnect gadge=
-t if it is not connected")
->
-> Same changelog comment as before.
-Thanks for the feedback Greg ! Have fixed it in v2.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cpu
+branch HEAD: 36168bc061b4368ad19e82b06a6463c95d3bb9a7  x86/cpu: Add Xeon Emerald Rapids to list of CPUs that support PPIN
 
->
-> > ---
-> >  drivers/usb/gadget/udc/core.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/cor=
-e.c
-> > index 890f92cb6344..7eeaf7dbb350 100644
-> > --- a/drivers/usb/gadget/udc/core.c
-> > +++ b/drivers/usb/gadget/udc/core.c
-> > @@ -708,6 +708,9 @@ int usb_gadget_connect(struct usb_gadget *gadget)
-> >               goto out;
-> >       }
-> >
-> > +     if (gadget->connected)
-> > +             goto out;
-> > +
->
-> What prevents this connected value from changing right after you check
-> this?
+elapsed time: 728m
 
-Nothing in V1 :) However, in v2, the newly introduced mutex guards
-gadget->connected
-as well.
+configs tested: 34
+configs skipped: 97
 
->
-> thanks,
->
-> greg k-h
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230403   clang
+i386                 randconfig-a002-20230403   clang
+i386                 randconfig-a003-20230403   clang
+i386                 randconfig-a004-20230403   clang
+i386                 randconfig-a005-20230403   clang
+i386                 randconfig-a006-20230403   clang
+i386                 randconfig-a011-20230403   gcc  
+i386                 randconfig-a012-20230403   gcc  
+i386                 randconfig-a013-20230403   gcc  
+i386                 randconfig-a014-20230403   gcc  
+i386                 randconfig-a015-20230403   gcc  
+i386                 randconfig-a016-20230403   gcc  
+i386                 randconfig-r021-20230403   gcc  
+i386                 randconfig-r023-20230403   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230403   clang
+x86_64               randconfig-a002-20230403   clang
+x86_64               randconfig-a003-20230403   clang
+x86_64               randconfig-a004-20230403   clang
+x86_64               randconfig-a005-20230403   clang
+x86_64               randconfig-a006-20230403   clang
+x86_64               randconfig-a011-20230403   gcc  
+x86_64               randconfig-a012-20230403   gcc  
+x86_64               randconfig-a013-20230403   gcc  
+x86_64               randconfig-a014-20230403   gcc  
+x86_64               randconfig-a015-20230403   gcc  
+x86_64               randconfig-a016-20230403   gcc  
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
