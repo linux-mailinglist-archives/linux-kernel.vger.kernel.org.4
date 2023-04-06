@@ -2,77 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D8D6D9CBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADBF6D9CC2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 17:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239272AbjDFPwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 11:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S239356AbjDFPwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 11:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239210AbjDFPwF (ORCPT
+        with ESMTP id S239304AbjDFPwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 11:52:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEE2A5DA
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:52:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 170DF649A9
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:52:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5F1C433AA;
-        Thu,  6 Apr 2023 15:52:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680796323;
-        bh=ERS1YpeepvOufPE8Rdz1Grvp76972MyDOg7BR8UNQH0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m5sKgSdESXxXeIfaXRdTQ7WKSN4j4U9lF3eo8SCMvGLIkWaSyDc03Ae5wYPHRT7lL
-         pHbjw8j7EsEmcVUM0XSJX3TpUtBsmt3i4r4B6kpTLictPJQjoMvX3n8cj2McKPBz4g
-         lPa16cp/kHoDHoL1CjYtOQAM5WR7qc9/lbiqfB5q3+9Ir0vKQSHzsY0nRYpaFhX7Dj
-         QsRoefiwYtCkPmGXzWXZEM5OfbE/3qkyWqbYN2Mfv0fpgp5YeVXw1ZPOQOSoQ50lIS
-         t/lV66sjwdK6eAycGY/Osxj9YGQFNjBu2dBvBslLsIWuGUZzdan5+8SVCMNABNN3FG
-         Dehl3jR8umgNg==
-From:   Will Deacon <will@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     catalin.marinas@arm.com, kernel-team@android.com,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf/arm-cmn: Validate cycles events fully
-Date:   Thu,  6 Apr 2023 16:51:50 +0100
-Message-Id: <168079367146.1637504.4760001819973823388.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <3124e8c276a1f513c1a415dc839ca4181b3c8bc8.1680522545.git.robin.murphy@arm.com>
-References: <3124e8c276a1f513c1a415dc839ca4181b3c8bc8.1680522545.git.robin.murphy@arm.com>
+        Thu, 6 Apr 2023 11:52:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D57C9750
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 08:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680796318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rXGtO/ZmgcxJ+0cLf6d2t80Dy16O6Eu74rSJdt26LEE=;
+        b=ZkW7pc7pNo/dlO7QBx4P32TuqKNP8zf6eEJ6IE+1MdR8tveiAxWthyFotoyaCz2nXi1AjD
+        Wq879Vg8C58sG8tm0ZJlSf4zc6PSGWMXY5Jv451m9F817dX5u5JC21NRrkXeeVtI5KcRNc
+        xm8qfY1u2GWD9bmjhlgcxS7Tzfj4iMg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-524-798Z72DyOoGc3W-ykB1URA-1; Thu, 06 Apr 2023 11:51:57 -0400
+X-MC-Unique: 798Z72DyOoGc3W-ykB1URA-1
+Received: by mail-wm1-f72.google.com with SMTP id bg33-20020a05600c3ca100b003ef6d684105so16160730wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 08:51:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680796316; x=1683388316;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rXGtO/ZmgcxJ+0cLf6d2t80Dy16O6Eu74rSJdt26LEE=;
+        b=5zJAuB/T0oZCLfjBFE94Z1y2CgUcEyQ9HGqadyKxrmvTBlwc/q8tUidBiXr6wnKSLk
+         UZ5/FlOxDUkdBRpmdF1s7kLXyDlYtA7bk1OsnyG5N5J7enWS5jSBCWMcz6XiLErCmvMe
+         jUDYiFqqPdwQhSU2a/VnCuKkY34fPECf/69USngyUQ/3BlJuK3J+Y88HgJZoR7g0xZoV
+         H/mwYvGZ8WKcylZr5IlGRmvTUVM2Vsz4xeLXSVNvsTzyEN0+Wvdkueb8GMgJGO+bGfJe
+         sWcAlzY7rg/NLIdp3uwVqIUy0yFy0FK9aHzxhmo1e59qTG6mb252C3Mfb6Ck3VNaBD6y
+         cDCA==
+X-Gm-Message-State: AAQBX9ddHlxYmNp2SFz1Hu2LjuKCwADwHviyxwl9kr0EHC1H3yzs4G2x
+        fZqS2u7HmckDusiXUjnG07t1oeNDORFV6VSWJqJaAp+ms1oZB4PP8bKKS6YJzbUWnLE/3XhioPF
+        xrTm1lr2+JgY4hPhXxpJnI/W5
+X-Received: by 2002:a5d:4b48:0:b0:2c5:5349:22c1 with SMTP id w8-20020a5d4b48000000b002c5534922c1mr4313685wrs.5.1680796315812;
+        Thu, 06 Apr 2023 08:51:55 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ay4SJLqt5fA44R22zdeLYwjok7IPAqD9HIjt6I2uRSHvro/TvSjV0I+pG8tJTj7AgJtBYNWg==
+X-Received: by 2002:a5d:4b48:0:b0:2c5:5349:22c1 with SMTP id w8-20020a5d4b48000000b002c5534922c1mr4313662wrs.5.1680796315457;
+        Thu, 06 Apr 2023 08:51:55 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c705:6300:a8be:c1ad:41a1:2bf7? (p200300cbc7056300a8bec1ad41a12bf7.dip0.t-ipconnect.de. [2003:cb:c705:6300:a8be:c1ad:41a1:2bf7])
+        by smtp.gmail.com with ESMTPSA id l13-20020a5d668d000000b002e61e002943sm2031659wru.116.2023.04.06.08.51.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 08:51:54 -0700 (PDT)
+Message-ID: <248392c0-52d1-d09d-75ec-9e930435c053@redhat.com>
+Date:   Thu, 6 Apr 2023 17:51:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com, jannh@google.com,
+        Yang Shi <shy828301@gmail.com>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com> <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen> <ZC3P3Ds/BIcpRNGr@tpad>
+ <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+ <ZC69Wmqjdwk+I8kn@tpad>
+ <20230406132928.GM386572@hirez.programming.kicks-ass.net>
+ <20230406140423.GA386634@hirez.programming.kicks-ass.net>
+ <20230406150213.GQ386572@hirez.programming.kicks-ass.net>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+In-Reply-To: <20230406150213.GQ386572@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 3 Apr 2023 12:49:05 +0100, Robin Murphy wrote:
-> DTC cycle count events don't have anything to validate or initialise in
-> themselves, but we should not forget to still validate their whole group
-> context. Otherwise, we may fail to correctly reject a contrived group
-> containing an impossible number of cycles events.
+On 06.04.23 17:02, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 04:04:23PM +0200, Peter Zijlstra wrote:
+>> On Thu, Apr 06, 2023 at 03:29:28PM +0200, Peter Zijlstra wrote:
+>>> On Thu, Apr 06, 2023 at 09:38:50AM -0300, Marcelo Tosatti wrote:
+>>>
+>>>>> To actually hit this path you're doing something really dodgy.
+>>>>
+>>>> Apparently khugepaged is using the same infrastructure:
+>>>>
+>>>> $ grep tlb_remove_table khugepaged.c
+>>>> 	tlb_remove_table_sync_one();
+>>>> 	tlb_remove_table_sync_one();
+>>>>
+>>>> So just enabling khugepaged will hit that path.
+>>>
+>>> Urgh, WTF..
+>>>
+>>> Let me go read that stuff :/
+>>
+>> At the very least the one on collapse_and_free_pmd() could easily become
+>> a call_rcu() based free.
+>>
+>> I'm not sure I'm following what collapse_huge_page() does just yet.
 > 
+> DavidH, what do you thikn about reviving Jann's patches here:
+> 
+>    https://bugs.chromium.org/p/project-zero/issues/detail?id=2365#c1
+> 
+> Those are far more invasive, but afaict they seem to do the right thing.
 > 
 
-Applied to will (for-next/perf), thanks!
+I recall seeing those while discussed on security@kernel.org. What we 
+currently have was (IMHO for good reasons) deemed better to fix the 
+issue, especially when caring about backports and getting it right.
 
-[1/1] perf/arm-cmn: Validate cycles events fully
-      https://git.kernel.org/will/c/23b2fd839489
+The alternative that was discussed in that context IIRC was to simply 
+allocate a fresh page table, place the fresh page table into the list 
+instead, and simply free the old page table (then using common machinery).
 
-Cheers,
+TBH, I'd wish (and recently raised) that we could just stop wasting 
+memory on page tables for THPs that are maybe never going to get 
+PTE-mapped ... and eventually just allocate on demand (with some 
+caching?) and handle the places where we're OOM and cannot PTE-map a THP 
+in some descend way.
+
+... instead of trying to figure out how to deal with these page tables 
+we cannot free but have to special-case simply because of GUP-fast.
+
 -- 
-Will
+Thanks,
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+David / dhildenb
+
