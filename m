@@ -2,102 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0D26D8F48
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7E96D8F4A
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbjDFGTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
+        id S235130AbjDFGUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjDFGTM (ORCPT
+        with ESMTP id S232605AbjDFGUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:19:12 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46B59019
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:19:11 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5463f2d3223so207478547b3.14
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:19:11 -0700 (PDT)
+        Thu, 6 Apr 2023 02:20:43 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D2AB4
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 23:20:42 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3e390e23f83so393621cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 23:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680761951;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/f7k2pCQfyKc9i/c1APoOdFbnqMktgzwaYI9MvzI7I=;
-        b=HC1tvqen+SYVHhiRrMODrf/6S8bdwKpI+yt4teqebTIbY0JBmRRXhr20JjZXktd3I4
-         F66rfE2Is4Qu9p1TfNS5iCUeIomqVNB5B9pfoUwHBcCe+jCtE7iHW5NSO/+DU9mThwEk
-         9snHuN8YGSee2wvz2Idm7U2+wqV2Qy6ssaFNI2sxaEpMba45OPyqNDWImo6Sc/5k2KUf
-         9YeX2q7D783NI+HlWIJdrk66Ki4oVoLI+Yut4ZYAW8I5mOz/EnuJviU0CWGco3MFDl4j
-         LamLj+bt8zhJrkna8q8FVBQVM9Y7sh9ay6CfAJm7DUKZTK1obcEHq/hZzxoh66/Oqtdg
-         FuNQ==
+        d=google.com; s=20210112; t=1680762041;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XNGMbrDwFYJ2bOBmCKlUarMLiXvKBcI+GvaUwNOu/10=;
+        b=UwMH43JLsXXYRH1gRLlt3/1i/R+ZeYv0+334jNNi7FkNfTmRyW1BZljCqqhniRgGbg
+         EpyouwgfnZ58LQbiubJlvGmTcmtlL/NbHPlEP+e3IK9lqAWUWHHFdb5LCtT872XHZn5M
+         vRpFfC23IMtKGdxqDbq9m06QO3yLEVbQAL7FhLQ+ZTHDw72pYEpVnXUoMwe67zkGrkIT
+         CADvS5ppGaQKcyzHNDErCXFl6wWmxJBlwKrJM+BowTQqIGDml0rduspUHVTw1crujaqF
+         fr/QjMx3kYdC7IODO4Lr4l3wr682sVzV/ahNX1quWL8PbbT2/aAA032FLBRNohVHCw/5
+         eJWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680761951;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/f7k2pCQfyKc9i/c1APoOdFbnqMktgzwaYI9MvzI7I=;
-        b=zKQAIsDzG29sYX0VBXon2Pf2mbb1bkLbW4077S/pidUqrYWQNETfVaA8WbHcHgBUnc
-         4r2VpdVyMEDIEVnYDl4+bAB54LraCKcvir8Ijm6U/YFKPq3VKx3SP3+u9+lSrqwX0Srk
-         AilZ67UCQTPBUqxYI8TGU0DljAXu7kmKznstKgnCjyNW9xNrjL3EKmuxblWWgDwurbLS
-         LpGxd6Abe623IejApa+RdUjoJXfGlorm5XqtNP1/c3PsszSX/vOUrKqM37/lrLvDKwvB
-         75NMLIA0fppNPYhQMt5wVwBRwle9yrmdbuInfmRx5pi4Fv5b/7u/RwrdAKprDL0ccSLh
-         OXhg==
-X-Gm-Message-State: AAQBX9c5c45QiG/KZVS6+FiNZMFqXo2U8Q8CTGmdvrED96WjK1mJqN/v
-        8J74wOT6X/V4iHolKpcNL6AltuvNwp8=
-X-Google-Smtp-Source: AKy350Z27oP6FQknZlBJY3VEEuuN5Fbe6TE3Go6ZF49WVR2vlInKkeeEI2A8kAjBmcEm+hNGu+IRXRCtHaY=
-X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a25:cf88:0:b0:b8b:f1ac:9c6c with SMTP id
- f130-20020a25cf88000000b00b8bf1ac9c6cmr1399315ybg.3.1680761950871; Wed, 05
- Apr 2023 23:19:10 -0700 (PDT)
-Date:   Thu,  6 Apr 2023 06:19:05 +0000
-In-Reply-To: <20230406061905.2460827-1-badhri@google.com>
-Mime-Version: 1.0
-References: <20230406061905.2460827-1-badhri@google.com>
-X-Mailer: git-send-email 2.40.0.348.gf938b09366-goog
-Message-ID: <20230406061905.2460827-2-badhri@google.com>
-Subject: [PATCH v1 2/2] usb: gadget: udc: core: Prevent redundant calls to pullup
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+        d=1e100.net; s=20210112; t=1680762041;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XNGMbrDwFYJ2bOBmCKlUarMLiXvKBcI+GvaUwNOu/10=;
+        b=V/Qn9mJRpNmLCKyke6+usJzHDZIhHkNlEaGHvcM/isvze0YEI1Q08o44sduRhy/9TR
+         ZXhM22sLtvlTeKFwE+ZRxxClRd90nKSGzi9IS4QlfjHq+IE49rRQUJMEwt5gpS1m1uEG
+         SCgOaPoM9D/fCXFS7pTp4Ir3aPgvBitPMEgPsuN6A7DiGLcsjT21cA4k/YHrrPNmXEkv
+         cD01URXmUSAFI4agZXBYkBxm9D2bxvTqF6KJO1FgFutM7aemARCczMAGp0xZJbgjGlQm
+         K7TQZ7IUac9J6Nec9n461kcaixIfyAoZxW3jCQkQSZQ171eLhaj5a4cyU0PObqMOj/Uk
+         ysGQ==
+X-Gm-Message-State: AAQBX9dc1GfxDJgo5jLHFrrTv8HtvKX4rJdAbFSRqGQ+Nn+Wg+WDY85X
+        z6pgXzB5Uz1krdh7S4ZvckMjzDmvImcmB0v5kD0Y1w==
+X-Google-Smtp-Source: AKy350Y55tL3xvY7BT+sgruCRqe/1Q5XoFK5pXPKNuiMse5ClFsCfzotPvwr9sztlZh6EQWtfHnm+l588nbgxfIZz5I=
+X-Received: by 2002:ac8:7e96:0:b0:3e6:7702:b87 with SMTP id
+ w22-20020ac87e96000000b003e677020b87mr170767qtj.7.1680762041485; Wed, 05 Apr
+ 2023 23:20:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230404133630.1985739-1-irogers@google.com> <ZC3mz+Ge9WGG8/t5@krava>
+In-Reply-To: <ZC3mz+Ge9WGG8/t5@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 5 Apr 2023 23:20:29 -0700
+Message-ID: <CAP-5=fXaDXu+LttGZyWzU0aj__ruc8PLyBTME+dpFNCaRwxprw@mail.gmail.com>
+Subject: Re: [PATCH v2] perf pmu: Make parser reentrant
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Rob Herring <robh@kernel.org>, Leo Yan <leo.yan@linaro.org>,
+        German Gomez <german.gomez@arm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-usb_gadget_connect calls gadget->ops->pullup without
-checking whether gadget->connected was previously set.
-Make this symmetric to usb_gadget_disconnect by returning
-early if gadget->connected is already set.
+On Wed, Apr 5, 2023 at 2:23=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Tue, Apr 04, 2023 at 06:36:30AM -0700, Ian Rogers wrote:
+> > By default bison uses global state for compatibility with yacc. Make
+> > the parser reentrant so that it may be used in asynchronous and
+> > multithreaded situations.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/pmu.c | 24 ++++++++++++++++++------
+> >  tools/perf/util/pmu.h |  2 +-
+> >  tools/perf/util/pmu.l | 17 ++++++++++++-----
+> >  tools/perf/util/pmu.y |  5 ++++-
+> >  4 files changed, 35 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> > index 78a407b42ad1..f603cdabf797 100644
+> > --- a/tools/perf/util/pmu.c
+> > +++ b/tools/perf/util/pmu.c
+> > @@ -24,6 +24,8 @@
+> >  #include "evsel.h"
+> >  #include "pmu.h"
+> >  #include "pmus.h"
+> > +#include "pmu-bison.h"
+> > +#include "pmu-flex.h"
+> >  #include "parse-events.h"
+> >  #include "print-events.h"
+> >  #include "header.h"
+> > @@ -57,9 +59,6 @@ struct perf_pmu_format {
+> >       struct list_head list;
+> >  };
+> >
+> > -int perf_pmu_parse(struct list_head *list, char *name);
+> > -extern FILE *perf_pmu_in;
+> > -
+> >  static bool hybrid_scanned;
+> >
+> >  static struct perf_pmu *perf_pmu__find2(int dirfd, const char *name);
+> > @@ -81,6 +80,8 @@ int perf_pmu__format_parse(int dirfd, struct list_hea=
+d *head)
+> >       while (!ret && (evt_ent =3D readdir(format_dir))) {
+> >               char *name =3D evt_ent->d_name;
+> >               int fd;
+> > +             void *scanner;
+> > +             FILE *file;
+> >
+> >               if (!strcmp(name, ".") || !strcmp(name, ".."))
+> >                       continue;
+> > @@ -91,9 +92,20 @@ int perf_pmu__format_parse(int dirfd, struct list_he=
+ad *head)
+> >               if (fd < 0)
+> >                       break;
+> >
+> > -             perf_pmu_in =3D fdopen(fd, "r");
+> > -             ret =3D perf_pmu_parse(head, name);
+> > -             fclose(perf_pmu_in);
+> > +             file =3D fdopen(fd, "r");
+> > +             if (!file)
+> > +                     break;
+>
+> hum, do we potentially leak fd in here?
+>
+> jirka
 
-Cc: stable@vger.kernel.org
+Agreed. Will fix in v3.
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-Fixes: 5a1da544e572 ("usb: gadget: core: do not try to disconnect gadget if it is not connected")
----
- drivers/usb/gadget/udc/core.c | 3 +++
- 1 file changed, 3 insertions(+)
+Thanks,
+Ian
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 890f92cb6344..7eeaf7dbb350 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -708,6 +708,9 @@ int usb_gadget_connect(struct usb_gadget *gadget)
- 		goto out;
- 	}
- 
-+	if (gadget->connected)
-+		goto out;
-+
- 	if (gadget->deactivated) {
- 		/*
- 		 * If gadget is deactivated we only save new state.
--- 
-2.40.0.348.gf938b09366-goog
-
+> > +
+> > +             ret =3D perf_pmu_lex_init(&scanner);
+> > +             if (ret) {
+> > +                     fclose(file);
+> > +                     break;
+> > +             }
+> > +
+> > +             perf_pmu_set_in(file, scanner);
+> > +             ret =3D perf_pmu_parse(head, name, scanner);
+> > +             perf_pmu_lex_destroy(scanner);
+> > +             fclose(file);
+> >       }
+> >
+> >       closedir(format_dir);
+> > diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> > index 32c3a75bca0e..d53618c65c92 100644
+> > --- a/tools/perf/util/pmu.h
+> > +++ b/tools/perf/util/pmu.h
+> > @@ -206,7 +206,7 @@ int perf_pmu__check_alias(struct perf_pmu *pmu, str=
+uct list_head *head_terms,
+> >                         struct perf_pmu_info *info);
+> >  struct list_head *perf_pmu__alias(struct perf_pmu *pmu,
+> >                                 struct list_head *head_terms);
+> > -void perf_pmu_error(struct list_head *list, char *name, char const *ms=
+g);
+> > +void perf_pmu_error(struct list_head *list, char *name, void *scanner,=
+ char const *msg);
+> >
+> >  int perf_pmu__new_format(struct list_head *list, char *name,
+> >                        int config, unsigned long *bits);
+> > diff --git a/tools/perf/util/pmu.l b/tools/perf/util/pmu.l
+> > index 58b4926cfaca..67b247be693b 100644
+> > --- a/tools/perf/util/pmu.l
+> > +++ b/tools/perf/util/pmu.l
+> > @@ -1,4 +1,6 @@
+> >  %option prefix=3D"perf_pmu_"
+> > +%option reentrant
+> > +%option bison-bridge
+> >
+> >  %{
+> >  #include <stdlib.h>
+> > @@ -6,16 +8,21 @@
+> >  #include "pmu.h"
+> >  #include "pmu-bison.h"
+> >
+> > -static int value(int base)
+> > +char *perf_pmu_get_text(yyscan_t yyscanner);
+> > +YYSTYPE *perf_pmu_get_lval(yyscan_t yyscanner);
+> > +
+> > +static int value(yyscan_t scanner, int base)
+> >  {
+> > +     YYSTYPE *yylval =3D perf_pmu_get_lval(scanner);
+> > +     char *text =3D perf_pmu_get_text(scanner);
+> >       long num;
+> >
+> >       errno =3D 0;
+> > -     num =3D strtoul(perf_pmu_text, NULL, base);
+> > +     num =3D strtoul(text, NULL, base);
+> >       if (errno)
+> >               return PP_ERROR;
+> >
+> > -     perf_pmu_lval.num =3D num;
+> > +     yylval->num =3D num;
+> >       return PP_VALUE;
+> >  }
+> >
+> > @@ -25,7 +32,7 @@ num_dec         [0-9]+
+> >
+> >  %%
+> >
+> > -{num_dec}    { return value(10); }
+> > +{num_dec}    { return value(yyscanner, 10); }
+> >  config               { return PP_CONFIG; }
+> >  -            { return '-'; }
+> >  :            { return ':'; }
+> > @@ -35,7 +42,7 @@ config              { return PP_CONFIG; }
+> >
+> >  %%
+> >
+> > -int perf_pmu_wrap(void)
+> > +int perf_pmu_wrap(void *scanner __maybe_unused)
+> >  {
+> >       return 1;
+> >  }
+> > diff --git a/tools/perf/util/pmu.y b/tools/perf/util/pmu.y
+> > index e675d79a0274..dff4e892ac4d 100644
+> > --- a/tools/perf/util/pmu.y
+> > +++ b/tools/perf/util/pmu.y
+> > @@ -1,6 +1,8 @@
+> > -
+> > +%define api.pure full
+> >  %parse-param {struct list_head *format}
+> >  %parse-param {char *name}
+> > +%parse-param {void *scanner}
+> > +%lex-param {void* scanner}
+> >
+> >  %{
+> >
+> > @@ -78,6 +80,7 @@ PP_VALUE
+> >
+> >  void perf_pmu_error(struct list_head *list __maybe_unused,
+> >                   char *name __maybe_unused,
+> > +                 void *scanner __maybe_unused,
+> >                   char const *msg __maybe_unused)
+> >  {
+> >  }
+> > --
+> > 2.40.0.348.gf938b09366-goog
+> >
