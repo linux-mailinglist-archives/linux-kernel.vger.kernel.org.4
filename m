@@ -2,202 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74E86D9F3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E291D6D9F47
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239398AbjDFRwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
+        id S239956AbjDFRxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239839AbjDFRwj (ORCPT
+        with ESMTP id S240113AbjDFRx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:52:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5710459CD;
-        Thu,  6 Apr 2023 10:52:37 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336DxS7F024197;
-        Thu, 6 Apr 2023 17:52:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0BWS4aJo5OPnytay8j8RYFB66wHzTKt45A6CYGH+KtU=;
- b=TypBm2M5BdGSgjbWEwG+JDXIIlQ15MDu1A+x8PyDAoaspgSdQD3WF+TdZA6NeELjGL6Z
- sD7IJefF8ETwTLn63ZnWejF/vpbb7QmtLjmZ4iDjZtR1vvrP0KoWF18dEzhTAI2Jmoo3
- rxAgh2yXcwsH0LMMGxXAbPJlhvUYOAW/i76IZIVS6+FjvXlCQd8fBFFT+CMxTf4tMTKf
- vAVITYOnbCIbTxqOm/vHn11YmmiRlbtOzD6jHL1IkgHMCYuQnuN9jqmqU5rF/HUWSpLf
- GkK53FUxsAynlrnVH98JiSRqlbYBWJh/y1xwt+VboJiNSAbpJkahRLnm9hk7konm+tBa GA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psv4dh3mx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 17:52:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 336HqWAf030720
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Apr 2023 17:52:32 GMT
-Received: from [10.110.8.106] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 6 Apr 2023
- 10:52:31 -0700
-Message-ID: <c1cac217-e655-916b-2889-4f389f73c6f4@quicinc.com>
-Date:   Thu, 6 Apr 2023 10:52:30 -0700
+        Thu, 6 Apr 2023 13:53:28 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2093.outbound.protection.outlook.com [40.107.215.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B382AD03;
+        Thu,  6 Apr 2023 10:53:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=loAI7Syg3ij6yHw/FCU47KtDiv8zsq/BGqFExNSDvG4YUdainoFpXFHmTOtijSd5wUc9uom8YmpKgx//Bl7Rn/vWMzlwpUqmPbej5Y7/UOGE0J6KQsh4Y1GnBVZSGCIsFX8FBl+OSFwi8IfqTM+TjtR68cGv6lz6eXdj8Pp2YvE3F4/EHBeTERkIaANLEdUFsgT5i7Zzzk/8kQc9mKvayDEC9vL4kQTFIJzH89UWWtS1b9GbBwhYKkmsdfITjHSDRjjp3xqm7sYF8zxlg8i5wGVJOGyfVvCMm9XSbCxOC8ehy531IKX2aGODC66CczfjZ1pL4Vs2KupES1yPcLNEyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Hvdgo3q2wtfhSX6j55NnXnxWVi567KxzvFAQDdxw0o4=;
+ b=IG5qiYcnW4HYCcRZcj9CjKXYg5+Gsz10Y1BpKLK5yjN82bnXKGIJZolSzm6SQvbe51RlTxsHW9oiw4h/jeAsRcH8qC/1nYwFyvxDJ5fhlhhUoEZq6f26CEy1/vhdmc2RM+IzEsAy8xwXbFPNa8Ruhv2xR+73slXaiOg/5AaR/bRDWojvl1QsxdBpchWk80UMxnOKS8OSmjXPv/difnmE4xqgYGf07RN+IvRNPVHgn63oBP5VSvmgwNfb3rEcii1P7+0pGhC3wlmqD80lVvWTu5Lw+5yqpc0n/vKDOiqVuoADREYI2LIXEdm6QA5u+WCqp+JmglFA7Y/lC3ybm+fwuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hvdgo3q2wtfhSX6j55NnXnxWVi567KxzvFAQDdxw0o4=;
+ b=QMV0CdKdWYIXCJFdyNmQcX0sPsJGYDg7ZX6epLiqllZdsw9UtsEJ11qevvJbBS7mh8tG1paHAaN2kL9Kqb1DeA/U0s4J1zrMV9Kt/qgRYu9NtR1BXWs7Q2HlQbL/G/1PAIQK/SfSvhRyoQFuptjLB9fl8wsMZ2cSzfkMypfQQCB0wyt1EBX9R1ciWO7ZupLeHpMl7jOmUh87ZBkROhHgcDpoM05g+d77mOFHLLAocm+fyXRPDr4jrbard8V4z/QyrxkBr+bkggs3jhYubdq07gM22LAc+BF2ePxHhTJ50NsAhu0FuULvcBy/UrY8XtIxeF7dLQQeS3VAI/wuFxZaSA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4012.apcprd06.prod.outlook.com (2603:1096:4:f9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.37; Thu, 6 Apr
+ 2023 17:53:10 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::a3a1:af8e:be1e:437c%6]) with mapi id 15.20.6277.031; Thu, 6 Apr 2023
+ 17:53:10 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     gregkh@linuxfoundation.org
+Cc:     chao@kernel.org, damien.lemoal@opensource.wdc.com,
+        frank.li@vivo.com, huyue2@coolpad.com, jefflexu@linux.alibaba.com,
+        jth@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        naohiro.aota@wdc.com, rafael@kernel.org, xiang@kernel.org
+Subject: Re: [PATCH 2/3] erofs: convert to use kobject_is_added()
+Date:   Fri,  7 Apr 2023 01:52:59 +0800
+Message-Id: <20230406175259.37978-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <2023040602-stack-overture-d418@gregkh>
+References: <2023040602-stack-overture-d418@gregkh>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0093.apcprd02.prod.outlook.com
+ (2603:1096:4:90::33) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v4 1/1] soc: qcom: mdt_loader: Enhance split binary
- detection
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>
-References: <20230404175417.31185-1-quic_gokukris@quicinc.com>
- <20230404190510.dvsmkroyvu6437rb@ripper>
-From:   Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
-In-Reply-To: <20230404190510.dvsmkroyvu6437rb@ripper>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: HFCXUGC0YTmapxqc6SKmHW4snTHa0aeF
-X-Proofpoint-ORIG-GUID: HFCXUGC0YTmapxqc6SKmHW4snTHa0aeF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_10,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304060157
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4012:EE_
+X-MS-Office365-Filtering-Correlation-Id: e5d01177-a988-4ebd-f7e8-08db36c7c889
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +lgatNWkdv5Vl0LfZPks2lpSFBiO8IDpBLxG9MRpnxXF29YIb+8JND+KYjmEVi1PFDUDhv2M6vJGZb15MYJgoyRzMqsoydN6QQHexFO5Zf9smMymBy+dffONWa+xXosMbtVbWBBWR0aoOG/SoqylWquThJL0JnBv1eTVeqdKMjCzL5N7D3HSu50YIgQPkyxRK6WpLGVt3QYLNd6OFwhd2E2LQnN/C2sr7YFXnJ5e9lUGCRXABWL6vDOrkl0w9DPU1bQLD46GAZu4WS9XXRlfVd09OPQSrh8zcWYLF4kTk2nrFEhmX+V7sfKbj9Py6+vT47Zs3f5MNL29Z7IYiz7LCvt/dlxJxd3uRLs0cC6LjY7fd+xJ6uXv5IJX6rzRqaFzGXxGO1P9ERV7VdosT+nrLVeIBaOCtyMyUzt5yR3vqPymdfexm39A/rI+gGCC2x/gwY2q29S8WeMZc0az6Ynj/tLzsmU7r2x1zmI3Ged03lfdGraDh7OM7GKx6bLiLLEpYdmrHJtNoS/Xxc77PMZ0JTWSzfr7l4VOUysxkp459EfY8QKvtoQo7IULdnWETcGlXiUdGE/0fnWCfX0wGgo3C1DiA+w0pey3IPcNmwWLA0W3+YQTGKSxG26QNprSMO6e
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(346002)(396003)(376002)(136003)(451199021)(83380400001)(38350700002)(36756003)(86362001)(38100700002)(478600001)(316002)(6486002)(4744005)(41300700001)(8936002)(5660300002)(52116002)(7416002)(6916009)(4326008)(8676002)(2906002)(66476007)(66946007)(66556008)(186003)(2616005)(26005)(1076003)(6666004)(6506007)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+HFSpdJbwX0JTjvK9VVVjMABFJd5TckprXlj8oyfZyxhjCNWzDkW3526CrPb?=
+ =?us-ascii?Q?7oYSdCQAYRTHbnPMjAN7u0hYNHmxK48XQYx+tdNwk3w3SeQBFPXWR5IHadEC?=
+ =?us-ascii?Q?pLlsT1lXRww6/89hk9H9ycIsT+GEG/uswlv/R+ZPlJWxHAriBHxgqjsh2r9n?=
+ =?us-ascii?Q?vIdW0Z5Hlpcn5oMbCGyi3QtCXkkuWQMJ8fj6DhkBZshdUWkQpP82o/q+BTkn?=
+ =?us-ascii?Q?9VJJFcLQk7qHtdNRxrLA9UFVgloTeimjOlsHpv1XfZx6Zqxc32LytP2ZRKFH?=
+ =?us-ascii?Q?33BBVvT37XazUZYaP/FwiTSV6KWo+p7o67AsQekgKX8kkvUPJweW65jjY4Zv?=
+ =?us-ascii?Q?531lFMRSUDTrNd47L28G4zpzAfePaX05RmzNSquajE5dJMVhmT3OpA/yJBDm?=
+ =?us-ascii?Q?Fe1f92qZDxHw3FE/mv95I6t4BEJc7T2Vi/cpmtAppkIz+/2jI7q7vFP1I2pv?=
+ =?us-ascii?Q?3GRAYM3BZT71vfmiyySOiA6DmMVE9CxFKaDql+mS0UHri8BmJFvfu66QDqCK?=
+ =?us-ascii?Q?D7zmzr5JW22mf71JG8nz5+y+d7xMSP4dmlR/19B8tRNVj6Skl2MR4lDobEjk?=
+ =?us-ascii?Q?ejdcLNOjlVaXzBxiVcQu6dsNqTzAlvrQtA5dgBehzp3aPiOdUc3qQrzUXYGd?=
+ =?us-ascii?Q?A02yKkMW1FoV10FFZs77cyGmDlq3dXXJRNsjP3UVsYiWbRO0CRBMBLThQ4nr?=
+ =?us-ascii?Q?nuFOvoiZK+zujDFiopHXqadWgfEHA2ODa21PZ9+VjlWjt/CKX+Hu++sj63Gw?=
+ =?us-ascii?Q?8XIkayY0iUOeA0z70UalrbE134u4IX2uCxG/o2pV4TqmWkAbA5wmzvMyjPux?=
+ =?us-ascii?Q?VXGx2BBGnL9/+Q2vUHF4W36er/3FDp13o50cb7hq68CTLfIMTORWNoOf3L6X?=
+ =?us-ascii?Q?rH0FAt6Xkd+yEZYLDX8+3iRUdquwBWx8pK1zHDpCQIAWamQ0YhXShPsm1R+M?=
+ =?us-ascii?Q?jDj5MO2thXcX7F+6t+1E3QA6UhGSYHyKk72dm7oCvLMWndFO7YilfEBuhyu5?=
+ =?us-ascii?Q?hNxMgwqXRpQDbNPz8ThUp/yYM6H3PHjISOQ2MsN9kXxx7VSn7p7CJ2Z9uDOj?=
+ =?us-ascii?Q?VfkTxM9UKTr0RKIaLuHyKaDBZaHUHAcrrQ4fM3I0Hp0TcZRBmAt3sPOS4SsX?=
+ =?us-ascii?Q?CSIgggtdk8M2W1+WDzCvEYTUPOwQTQV3j5zeyMemXTHhbc/z2IdThjWxIpju?=
+ =?us-ascii?Q?BYBPD8H0U1NUvmb3Eo9r8oSiBXRQjeg4pbp1JhGkYrwZ2sH2UIIQvcWNUPPz?=
+ =?us-ascii?Q?aPHdSpO/aAcKW3dNf/AINH0/kXIzmqoSvyVZ7aGL1yDfvyQkNjIRRiT2PMQt?=
+ =?us-ascii?Q?j6osEhqSE5XhregRz6D6ym2I0GJADQ/Y3qSl79GKQbIoRxvepNcIljmrh0RZ?=
+ =?us-ascii?Q?dbvHLXs8ZHUQ5VH15Vk5VSmyc3LhxecsSxwzNDfyN3EDi7Pm6qZxXpohnfKJ?=
+ =?us-ascii?Q?iP869LvT2pa6HaxZ8LchoqekZpAABM6KjEhkdpjtwFVnfaSmhSN+4bHNsQ59?=
+ =?us-ascii?Q?SDPf+Lr/xwLmY77Iaqf/TmmBK4F1ouOufD43MPXlh/5dY7kgh1XVaarfPBna?=
+ =?us-ascii?Q?St0dSg9b/Aupf/UaQmYvpNA1hDfYL8pnVq6Dv8vI?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5d01177-a988-4ebd-f7e8-08db36c7c889
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 17:53:10.0122
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kkDCxcZhhq4matg7v9OBhItQVLelhKXCv4plZQcyeOeQ/5SZQJQdUQ3Bd5WLeb8PINvhJctCJPDNIaWgXjRrNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4012
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Greg,
 
-	
-On 4/4/2023 12:05 PM, Bjorn Andersson wrote:
-> On Tue, Apr 04, 2023 at 10:54:17AM -0700, Gokul krishna Krishnakumar wrote:
->> It may be that the offset of the first program header lies inside the mdt's
->> filesize, in this case the loader would incorrectly assume that the bins
->> were not split. The loading would then continue on to fail for split bins.
-> 
-> What does "continue on to fail for split bins" actually mean? In what
-> way does it fail?
-> Authentication fails in the firmware for the split bins because the 
-current conditional check do not go through the entire mdt file for a 
-given firmware.
+> That isn't going to work, and as proof of that, the release callback
+> should be a simple call to kfree(), NOT as a completion notification
+> which then something else will go off and free the memory here.  That
+> implies that there are multiple reference counting structures happening
+> on the same structure, which is not ok.
 
-Thanks,
-Gokul
->> This change updates the logic used by the mdt loader to understand whether
->> the firmware images are split or not. It figures this out by checking if
->> each programs header's segment lies within the file or not.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-> 
-> The first S-o-b should be that of the author (unless Co-developed-by)
-> and in [1] you're the author and Melody provide her S-o-b to certify
-> the origin of her contribution.
-> 
->> ---
->> V4 addresses the comments from V3.
-> 
-> That's nice, but not very helpful. Please spell out what you changed.
-> 
+The release() function did nothing inside, but we need to wait asynchronously...
 
->>
->> V3 is separated out from [1] and includes
->> changes addressing comments from that patch set.
->>
->> [1] https://lore.kernel.org/all/20230306231202.12223-5-quic_molvera@quicinc.com/
->> ---
->>   drivers/soc/qcom/mdt_loader.c | 27 +++++++++++++++++++++++++--
->>   1 file changed, 25 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
->> index 33dd8c315eb7..9270992728d4 100644
->> --- a/drivers/soc/qcom/mdt_loader.c
->> +++ b/drivers/soc/qcom/mdt_loader.c
->> @@ -258,6 +258,26 @@ int qcom_mdt_pas_init(struct device *dev, const struct firmware *fw,
->>   }
->>   EXPORT_SYMBOL_GPL(qcom_mdt_pas_init);
->>   
->> +static bool qcom_mdt_bins_are_split(const struct firmware *fw, const char* fw_name)
->> +{
->> +	const struct elf32_phdr *phdrs;
->> +	const struct elf32_hdr *ehdr;
->> +	uint64_t seg_start, seg_end;
->> +	int i;
->> +
->> +	ehdr = (struct elf32_hdr *)fw->data;
->> +	phdrs = (struct elf32_phdr *)(ehdr + 1);
->> +
->> +	for (i = 0; i < ehdr->e_phnum; i++) {
->> +		seg_start = phdrs[i].p_offset;
->> +		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
->> +		if (seg_start > fw->size || seg_end > fw->size)
->> +			return true;
->> +	}
->> +
->> +	return false;
->> +}
->> +
->>   static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->>   			   const char *fw_name, int pas_id, void *mem_region,
->>   			   phys_addr_t mem_phys, size_t mem_size,
->> @@ -270,6 +290,7 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->>   	phys_addr_t min_addr = PHYS_ADDR_MAX;
->>   	ssize_t offset;
->>   	bool relocate = false;
->> +	bool is_split;
->>   	void *ptr;
->>   	int ret = 0;
->>   	int i;
->> @@ -277,6 +298,8 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->>   	if (!fw || !mem_region || !mem_phys || !mem_size)
->>   		return -EINVAL;
->>   
->> +
-> 
-> Double empty lines here?
-> 
->> +	is_split = qcom_mdt_bins_are_split(fw, fw_name);
->>   	ehdr = (struct elf32_hdr *)fw->data;
->>   	phdrs = (struct elf32_phdr *)(ehdr + 1);
->>   
->> @@ -330,8 +353,8 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
->>   
->>   		ptr = mem_region + offset;
->>   
->> -		if (phdr->p_filesz && phdr->p_offset < fw->size &&
->> -		    phdr->p_offset + phdr->p_filesz <= fw->size) {
->> +
->> +		if (phdr->p_filesz && !is_split) {
-> 
-> This looks much better now, thanks.
-> 
-> Regards,
-> Bjorn
-> 
->>   			/* Firmware is large enough to be non-split */
->>   			if (phdr->p_offset + phdr->p_filesz > fw->size) {
->>   				dev_err(dev, "file %s segment %d would be truncated\n",
->> -- 
->> 2.39.2
->>
+Can we directly export the kobject_cleanup(kobj) interface so that
+kobj_type->release() doesn't have to do anything?
+
+If do it, the use of init_completion, wait_for_completion, etc. will no longer be needed.
+
+> OR we pull it out of the structure and just let it hang off as a separate
+> structure (i.e. a pointer to something else.)
+
+Make something like sbi->s_kobj a pointer instead of data embedded in sbi?
+When kobject_init_and_add fails, call kobject_put(sbi->s_kobj), and assign
+sbi->s_kobj = NULL at the same time?
+
+Thx,
+Yangtao
