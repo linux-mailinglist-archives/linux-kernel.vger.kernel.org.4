@@ -2,139 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B760C6D9DEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE466D9DEF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239342AbjDFQu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S239731AbjDFQvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjDFQu5 (ORCPT
+        with ESMTP id S229975AbjDFQvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:50:57 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A1390
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:50:56 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id j22so2909020ejv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680799855;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nEEb0vXytaBgAhoyEGLzDTpUDIw1OoDVMgFbGhAvTic=;
-        b=v14Uw7nAprto8hu0UwH0MFBkncJz2aZvs0CZMm6NdA5+eXKapEN+DWTXa3ULa8BO+T
-         SWA0WdOcwPevgnX+QT5WKlktDwQKsdabbTeQM7QW3z0XwjSeNTWKmyTFhAUC0h9XKOFp
-         F/sIYWEOFr1+0VpOa85F9TWRNrSKmgD34ALDFUW9q2LY6BhWBBpv5d0sG5haG8reBI3F
-         984AfM59O4KeGA0pptlo8K1fgZ87bPD/wYO3IWHrtwn2B48ZXS2DAzTxegTt1hhgOsFi
-         LpqouiEbctCJtlpzxDJ4spxnKpSQgYGFucp52y0N6bz+yPec3imAOkAIT8EDEc/THZQO
-         g8gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680799855;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nEEb0vXytaBgAhoyEGLzDTpUDIw1OoDVMgFbGhAvTic=;
-        b=kHh3/fAScEc8Win60LJ83gLjun1qno2aXF/u9SQf2ST2B3dzaT+GDUXeD7TS8PnJwZ
-         jGuQDnv8Ine/RjP1J9YmH4iGkaAwEa6R+MPt38vG8bNk0zOgQ638nB0s3rI9ymJL78e/
-         yXkye4IuxPFWycSleIPJdLro+vttSoCBnHjLZPp01QNvPRMTtBqpgvaQTubwrBajlggh
-         WPFoVJd2kH3d55JNdYbBpFCCwle9MSGHqxirMEhKCEYgkVYrvA2ZV7RMpYnMaGBQsQY/
-         qisqBCb2ykYlW591uWTfjzZtSzcobhq+KaTU12zUTg0ymY689FDgsf8JiKbwbcgiT/Av
-         G+mg==
-X-Gm-Message-State: AAQBX9eJB2uv+gEf7iCangrooHOVsXh+HY5iJXLJr33kYMpg0WMW0tQz
-        r/2a3vNEJTQ5l6VGCkJsuWkVxA==
-X-Google-Smtp-Source: AKy350abJmna6VO/eI3M82NE0QQxWsSYaexna7WKmbO3/KMHw+XgFPJZgIvoURuqm/Gyx18Kj1dWDg==
-X-Received: by 2002:a17:906:14c9:b0:931:41af:8ecb with SMTP id y9-20020a17090614c900b0093141af8ecbmr6916726ejc.49.1680799854808;
-        Thu, 06 Apr 2023 09:50:54 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170906848900b00947a97a42f2sm1025704ejx.103.2023.04.06.09.50.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 09:50:54 -0700 (PDT)
-Message-ID: <14634180-aca9-a3e9-d1af-dfaca77b42ee@linaro.org>
-Date:   Thu, 6 Apr 2023 18:50:53 +0200
+        Thu, 6 Apr 2023 12:51:01 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BA512D;
+        Thu,  6 Apr 2023 09:50:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680799857; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Ezge/2AnwPX5r7ux3WkH950by4dkB1CzEVgkZxD5lzsm/GEJP7G+LrDOnwz0SDkYap
+    YB1UOEYWnNknQ7yw7LnXQ6vKXDFhGPsyIDlV3Z28ZMojPHTGkgcT+Tv7WyaModxOQ1O/
+    cKPtAk4gSDi6YyohyNfVFgn0k/shO+7YJZq0+Ze0DUPWGVXjH7SPStilp/vyc+IMNe7g
+    EMnRUXbRUxN7YJ4cG8ZrJbt9t3P39WueVKk+6GHHg00Sgg3PQC7QYTZRVXxzXCBYKmxO
+    OBdyAU0NVa4vyZUdC9WHf6x06c/u0F0rkrOWebUJm5P09/Rj9XdF+QYwAT+mWP2bXynW
+    /qtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1680799857;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Po4jB73TIWWBeTAu+d62FJCT3IfHXN2fw64y3NL8YUc=;
+    b=aV395fsbPeYRwUiAwjsP9tuMnca0N+9XkG0nOVroT8iyyugokDE3mH+x6p55jt9Y7S
+    4gs0lygo01KNrnh7G76A6h/Q+AjLTmrEcKRWxufV5muGWrYtmaOSE468AoTkWJZ6u0KC
+    dKi4h5i4dcHuUZ6qh7FTmIxVhjxuOkskFFeu6J+wuejoy4Am8q42h1u8a+Miq0AmgR/g
+    ylSu/JDAkgWP673L/wdZlmZnzsVIU1CSaDsQA0KwQfmV5Z4rAulKoYTsuZeDBUXCvKUC
+    d09csuP+s2YuDC/7n9xaon5Z2fGS4t4rxcZjHTr8uBTewqHAv1tHnsMH7LRsMPMqmxSh
+    kikA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1680799857;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Po4jB73TIWWBeTAu+d62FJCT3IfHXN2fw64y3NL8YUc=;
+    b=n3MYu7GrIGkxlvVqFPJH9wiGavr8VtfgcBaEL4ygpW/VdHgqSS5BE1wpOmYuKFajAJ
+    U+KOozF+HPNq88s6NiiQff+h49P54dvj6aT9bT1Jom3LmwA4ylfKhbfNts4Lcr4R8h/C
+    d4U8KDRzhJd5zmDEDUEP4E24UFg1ZBpa6L25y61KSGrdgm5WbZtgSjjduuItbac02RHX
+    QqlyGGY5rnWCvyHKOBq16q3H7SIC5iqbC4H81GVRx6/kZ5YTQoSa1iRKwu6ST4uziOfn
+    Yq6gdVk1irxPaytGQrclRn5B1kYuabXGhfR0nOHEXF0YYO0AApWbUedcRw7OWzsJgyEj
+    Tc1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1680799857;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=Po4jB73TIWWBeTAu+d62FJCT3IfHXN2fw64y3NL8YUc=;
+    b=CHwxO3gV/nAVL2Pzv8pVYh8O+4Rxm0O01IA+AJdV+FikoTfdTpbdJg8/8I1ILYbAYe
+    gpfdaZOg9GBTuKeK1BBw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA+pvh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az36GovD50
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 6 Apr 2023 18:50:57 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 18:50:55 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v8 5/5] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
+Message-ID: <ZC74b5yR2PF2_sYy@gerhold.net>
+References: <20230330153222.2875121-1-bryan.odonoghue@linaro.org>
+ <20230330153222.2875121-6-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: cisco: document the CrayAR
- compatibles
-Content-Language: en-US
-To:     "Daniel Walker (danielwa)" <danielwa@cisco.com>
-Cc:     "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>,
-        "Marcin Wierzbicki -X (mawierzb - GLOBALLOGIC INC at Cisco)" 
-        <mawierzb@cisco.com>, Rob Herring <robh+dt@kernel.org>,
-        Daniel Walker <dwalker@fifo99.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230405223028.1268141-2-danielwa@cisco.com>
- <6a9f041b-1c35-4691-8451-7119cd05ed17@linaro.org>
- <20230406151512.GL40472@zorba>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406151512.GL40472@zorba>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330153222.2875121-6-bryan.odonoghue@linaro.org>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 17:15, Daniel Walker (danielwa) wrote:
-> On Thu, Apr 06, 2023 at 09:12:34AM +0200, Krzysztof Kozlowski wrote:
->> On 06/04/2023 00:30, Daniel Walker wrote:
->>> Describe the compatible properties for the Cisco CrayAR SoC.
->>>
->>> Cc: xe-linux-external@cisco.com
->>> Cc: Marcin Wierzbicki <mawierzb@cisco.com>
->>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Cc: Rob Herring <robh+dt@kernel.org>
->>
->> Please drop the autogenerated scripts/get_maintainer.pl CC-entries from
->> commit msg. There is no single need to store automated output of
->> get_maintainers.pl in the git log. It can be easily re-created at any
->> given time, thus its presence in the git history is redundant and
->> obfuscates the log.
->>
->> If you need it for your own patch management purposes, keep it under the
->> --- separator.
->  
-> I added these, so it's not script output. I can move them under the separator.
-> The reason for that was to make sure people who commented get Cc'd.
-
-So read my message again. There is no reason to add these entries for
-people who are listed as maintainers, because you are supposed to CC
-maintainers always.
-
+On Thu, Mar 30, 2023 at 04:32:22PM +0100, Bryan O'Donoghue wrote:
+> Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
 > 
->>> Signed-off-by: Daniel Walker <dwalker@fifo99.com>
->>> ---
->>>  .../devicetree/bindings/arm/cisco/crayar.yaml | 27 +++++++++++++++++++
->>>  1 file changed, 27 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/arm/cisco/crayar.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/arm/cisco/crayar.yaml b/Documentation/devicetree/bindings/arm/cisco/crayar.yaml
->>> new file mode 100644
->>> index 000000000000..0ee4e6313ab0
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/arm/cisco/crayar.yaml
->>
->> How many (or not many) platforms do you expect from Cisco? We mostly
->> have one file per SoC manufacturer.
+> Tulip is paired with:
 > 
-> We have two SoC's one called CrayAR and another called Craw. I've submitted the
-> Craw dts file before , but I've not resubmitted it. Under Craw I think we have
-> at least two, but more likely five variations. CrayAR we have one variation with
-> at least one more planned.
+> - wcn3660
+> - smb1360 battery charger
+> - 720p Truly NT35521 Panel
 > 
-> So we would plan over time to add two dtsi files and three to four dts files to
-> this directory. Then more over time.
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 184 ++++++++++++++++++
+>  2 files changed, 185 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 31e0ac97fc088..3f8321ecb7e5f 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -30,6 +30,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> new file mode 100644
+> index 0000000000000..cb47bb2413a7c
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> @@ -0,0 +1,184 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022-2023, Bryan O'Donoghue.
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8939.dtsi"
+> +#include "msm8939-pm8916.dtsi"
+> +#include <dt-bindings/arm/qcom,ids.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +
+> +/ {
+> +	model = "Sony Xperia M4 Aqua";
+> +	compatible = "sony,kanuti-tulip", "qcom,msm8939";
+> +
+> +	qcom,board-id = <QCOM_BOARD_ID_MTP 0>;
+> +	qcom,msm-id = <QCOM_ID_MSM8939 0>, <QCOM_ID_MSM8939 0x30000>;
+> +
+> +	aliases {
+> +		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
+> +		mmc1 = &sdhc_2; /* SDC2 SD card slot */
+> +		serial0 = &blsp1_uart2;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	usb_id: usb-id {
+> +		compatible = "linux,extcon-usb-gpio";
+> +		id-gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-0 = <&usb_id_default>;
+> +		pinctrl-names = "default";
+> +	};
+> +};
+> +
+> +&mdss {
+> +	status = "okay";
+> +};
+> +
+> +&tlmm {
+> +	usb_id_default: usb-id-default-state {
+> +		pins = "gpio110";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <8>;
+> +	};
+> +};
 
-So just keep them in one file maybe.
+FWIW the node order seems wrong here (m -> t -> p).
 
-Best regards,
-Krzysztof
+> +
+> +&pronto {
+> +	status = "okay";
+> +
+> +	iris {
+> +		compatible = "qcom,wcn3660";
+> +	};
+> +};
+> +
+> [...]
+> +&sdhc_1 {
+> +	pinctrl-0 = <&sdc1_default_state>;
+> +	pinctrl-1 = <&sdc1_sleep_state>;
+> +	pinctrl-names = "default", "sleep";
+> +	status = "okay";
+> +};
+> +
+> +&sdhc_2 {
+> +	pinctrl-0 = <&sdc2_default_state>;
+> +	pinctrl-1 = <&sdc2_sleep_state>;
+> +	pinctrl-names = "default", "sleep";
+> +	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
+> +	status = "okay";
+> +};
+> +
+> +&usb {
+> +	dr_mode = "device";
+> +	extcon = <&usb_id>, <&usb_id>;
+> +	status = "okay";
+> +};
+> +
 
+Hm is there a special reason for forcing dr_mode = "device" here?
+If the USB ID GPIO works properly you should be in device mode all the
+time unless you plug in an USB OTG adapter. Seems a bit strange.
+
+Thanks,
+Stephan
