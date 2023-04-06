@@ -2,167 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDB46D9075
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511266D9076
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235156AbjDFHbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
+        id S235711AbjDFHbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233235AbjDFHbX (ORCPT
+        with ESMTP id S235697AbjDFHbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 03:31:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B32EE;
-        Thu,  6 Apr 2023 00:31:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF80461482;
-        Thu,  6 Apr 2023 07:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38FEDC4339B;
-        Thu,  6 Apr 2023 07:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680766281;
-        bh=ETbfyfCMDp3/1UzRk+wb1+5DWlQo/l40rg20m5e16cU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g+yqaDwXIWwFaaFSp/PkhyUZ4wki+zkdYZxgkWjkg69YT+maDEJCHKU2kZEAipH66
-         moSHtF7o/YUJr24G1pN426d8u5xtTia7en25hlCc0bijtI+SJZcmiamJrhDU19BKa6
-         lOPoYQhW5Ccy1iJaDvZjLogjiH3V48G5QYf8qHy/05HeBeTATj9aredUuXwPIKkRpj
-         CNWLycNWFzIiAEiqS8h7NFZu9bsf8QaQ3wT3kGy1OCegcIHaHL0MU7qoD8QGJvuh0J
-         or4ofV5F3twEEp8grfTAV1WzFvXdrCKlIn9d9hSXeBLPuTQcoxr+2fVUHDV4t0FqK7
-         efMWOV280V5xg==
-Received: by mail-lj1-f175.google.com with SMTP id z42so39771871ljq.13;
-        Thu, 06 Apr 2023 00:31:21 -0700 (PDT)
-X-Gm-Message-State: AAQBX9eCx+BTgYUOLHcp/8mlt1PbYgzz6BqUYUpCXSr9SxHgql2j6Kft
-        CH7yz8sqgmLKhVz64pzbW+dKtKVQyKLCWUfib+E=
-X-Google-Smtp-Source: AKy350bQNM+gUl6oQj2ADMATHsYFHDqbNQfOH6aDOcb3ZHj4ykvfAYvg5QVvyYoQEt59P3U63UrU1cj2BKR2Hk5kNsI=
-X-Received: by 2002:a2e:93c3:0:b0:298:bddc:dbbf with SMTP id
- p3-20020a2e93c3000000b00298bddcdbbfmr3104529ljh.2.1680766279202; Thu, 06 Apr
- 2023 00:31:19 -0700 (PDT)
+        Thu, 6 Apr 2023 03:31:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6311C76BD
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 00:31:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3224016F8;
+        Thu,  6 Apr 2023 00:32:26 -0700 (PDT)
+Received: from [192.168.1.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 616F83F73F;
+        Thu,  6 Apr 2023 00:31:39 -0700 (PDT)
+Message-ID: <43d05005-052e-dd32-cf1e-17c569ebe2d9@arm.com>
+Date:   Thu, 6 Apr 2023 09:31:24 +0200
 MIME-Version: 1.0
-References: <20230406040515.383238-1-jhubbard@nvidia.com>
-In-Reply-To: <20230406040515.383238-1-jhubbard@nvidia.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 6 Apr 2023 09:31:07 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHxyntweiq76CdW=ov2_CkEQUbdPekGNDtFp7rBCJJE2w@mail.gmail.com>
-Message-ID: <CAMj1kXHxyntweiq76CdW=ov2_CkEQUbdPekGNDtFp7rBCJJE2w@mail.gmail.com>
-Subject: Re: [PATCH] arm64/mm: don't WARN when alloc/free-ing device private pages
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/3] cacheinfo: Check cache properties are present in DT
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Radu Rendec <rrendec@redhat.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
         linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Alexandre Ghiti <alex@ghiti.fr>
+References: <20230327115953.788244-1-pierre.gondois@arm.com>
+ <20230327115953.788244-3-pierre.gondois@arm.com>
+ <20230404-hatred-swimmer-6fecdf33b57a@spud>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20230404-hatred-swimmer-6fecdf33b57a@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello John,
+Hello Conor,
 
-On Thu, 6 Apr 2023 at 06:05, John Hubbard <jhubbard@nvidia.com> wrote:
->
-> Although CONFIG_DEVICE_PRIVATE and hmm_range_fault() and related
-> functionality was first developed on x86, it also works on arm64.
-> However, when trying this out on an arm64 system, it turns out that
-> there is a massive slowdown during the setup and teardown phases.
->
-> This slowdown is due to lots of calls to WARN_ON()'s that are checking
-> for pages that are out of the physical range for the CPU. However,
-> that's a design feature of device private pages: they are specfically
-> chosen in order to be outside of the range of the CPU's true physical
-> pages.
->
+On 4/4/23 21:29, Conor Dooley wrote:
+> Hey Pierre,
+> 
+> On Mon, Mar 27, 2023 at 01:59:50PM +0200, Pierre Gondois wrote:
+>> If a Device Tree (DT) is used, the presence of cache properties is
+>> assumed. Not finding any is not considered. For arm64 platforms,
+>> cache information can be fetched from the clidr_el1 register.
+>> Checking whether cache information is available in the DT
+>> allows to switch to using clidr_el1.
+>>
+>> init_of_cache_level()
+>> \-of_count_cache_leaves()
+>> will assume there a 2 cache leaves (L1 data/instruction caches), which
+>> can be different from clidr_el1 information.
+>>
+>> cache_setup_of_node() tries to read cache properties in the DT.
+>> If there are none, this is considered a success. Knowing no
+>> information was available would allow to switch to using clidr_el1.
+>>
+> 
+> Alex reported seeing a bunch of messages in his boot log in QEMU since
+> -rc1 which appears to be the fault of, as far as I can tell, e0df442ee49
+> ("cacheinfo: Check 'cache-unified' property to count cache leaves")
+> like:
+> cacheinfo: Unable to detect cache hierarchy for CPU N
+> 
+> The RISC-V QEMU virt machine doesn't define any cache properties of any
+> sort in the dtb, and unlike the arm64 virt machine I tried (a72) doesn't
+> have some registers that cache info is discoverable from.
+> When we call of_count_cache_leaves() from init_of_cache_level() and
+> there are of course no reasons to increment leaves, we hit the return 2
+> case you mention above, setting num_leaves to 2.
+> 
+> As you mention, when we hit cache_setup_of_node(), levels is not going
+> to be set to one, so we trigger the condition (this_leaf->level != 1)
+> and, as there are no cache nodes, break out of the loop without
+> incrementing index. Index is therefore less than 2, and thus we return
+> -ENOENT.
+> This is of course propagated back out to detect_cache_attributes() and
+> triggers the "Unable to detect..." printout :(
+> 
+> With this patch(set), the spurious error prints go away, but we are left
+> with a "Early cacheinfo failed, ret = -22" which will need to be fixed.
+> 
+> So I think this also needs to be:
+> Fixes: de0df442ee49 ("cacheinfo: Check 'cache-unified' property to count cache leaves")
+> 
+> Probably also needs a:
+> Reported-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> since he's found an actual, rather than theoretical, problem!
 
-Currently, the vmemmap region is dimensioned to only cover the PFN
-range that backs the linear map. So the WARN() seems appropriate here:
-you are mapping struct page[] ranges outside of the allocated window,
-and afaict, you might actually wrap around and corrupt the linear map
-at the start of the kernel VA space like this.
+Ok yes indeed, I will do this and the other comments you made,
 
+Regards,
+Pierre
 
-> x86 doesn't have this warning. It only checks that pages are properly
-> aligned. I've shown a comparison below between x86 (which works well)
-> and arm64 (which has these warnings).
->
-> memunmap_pages()
->   pageunmap_range()
->     if (pgmap->type == MEMORY_DEVICE_PRIVATE)
->       __remove_pages()
->         __remove_section()
->           sparse_remove_section()
->             section_deactivate()
->               depopulate_section_memmap()
->                 /* arch/arm64/mm/mmu.c */
->                 vmemmap_free()
->                 {
->                   WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
->                   ...
->                 }
->
->                 /* arch/x86/mm/init_64.c */
->                 vmemmap_free()
->                 {
->                   VM_BUG_ON(!PAGE_ALIGNED(start));
->                   VM_BUG_ON(!PAGE_ALIGNED(end));
->                   ...
->                 }
->
-> So, the warning is a false positive for this case. Therefore, skip the
-> warning if CONFIG_DEVICE_PRIVATE is set.
->
-
-I don't think this is a false positive. We'll need to adjust
-VMEMMAP_SIZE to account for this.
-
-
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> cc: <stable@vger.kernel.org>
-> ---
->  arch/arm64/mm/mmu.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index 6f9d8898a025..d5c9b611a8d1 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -1157,8 +1157,10 @@ int __meminit vmemmap_check_pmd(pmd_t *pmdp, int node,
->  int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->                 struct vmem_altmap *altmap)
->  {
-> +/* Device private pages are outside of the CPU's physical page range. */
-> +#ifndef CONFIG_DEVICE_PRIVATE
->         WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
-> -
-> +#endif
->         if (!IS_ENABLED(CONFIG_ARM64_4K_PAGES))
->                 return vmemmap_populate_basepages(start, end, node, altmap);
->         else
-> @@ -1169,8 +1171,10 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->  void vmemmap_free(unsigned long start, unsigned long end,
->                 struct vmem_altmap *altmap)
->  {
-> +/* Device private pages are outside of the CPU's physical page range. */
-> +#ifndef CONFIG_DEVICE_PRIVATE
->         WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
-> -
-> +#endif
->         unmap_hotplug_range(start, end, true, altmap);
->         free_empty_tables(start, end, VMEMMAP_START, VMEMMAP_END);
->  }
-> --
-> 2.40.0
->
+> 
+> Cheers,
+> Conor.
+> 
