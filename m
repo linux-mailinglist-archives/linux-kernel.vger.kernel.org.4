@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BEB36D8E4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053526D8E5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235180AbjDFEYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 00:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
+        id S234663AbjDFEfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235176AbjDFEYb (ORCPT
+        with ESMTP id S231696AbjDFEe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:24:31 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB8A8A55
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 21:24:29 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id u97so2835211ybi.10
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 21:24:29 -0700 (PDT)
+        Thu, 6 Apr 2023 00:34:56 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5973083E4
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 21:34:55 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id n14so37056769qta.10
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 21:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680755068;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=puK3a92VIcFR8DZUjfLY5Zthlc/h1NJaguZIqRU5ZbY=;
-        b=srUDOS282koby+W1c0YzjdnoDWiEEWYMzkc/fjye5dgJk54gJ/v/y7E8z/k6z3P99d
-         1glIIM0OoCKuZ9gwIDMAlaywSn6mhTVPfLXvB6oRdgyTjYQKiYX4BGnq7YdBX1BrSzd5
-         ckNqpBmXr1+/uFkONj5Wou+ecdZPSVRNq8gXK8oNb2C9WqzkJMWFmp6Mim+PfPTCQR3X
-         crPRmuuyPa3QDOAFdU56qHmllr3aR4s6wp1MjcBfu2p90QvIPK0eyhYWO+6aOy16pr0I
-         Wg4JGwWR6uV8CcQypeRIEHZCOwiGvu8Y5oCXJlJ3lpTkrsHOdxo7PwU2rJK+ymoOpuxI
-         YDaw==
+        d=gmail.com; s=20210112; t=1680755694; x=1683347694;
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bqFvIMuXG6qy2oIHQp9Me/HQZXKmC9KtKVOs/l6KpIs=;
+        b=XPo5v/9pkxFa3dQ+GxqN77+yhdLPmc7mBegfNoaFyY/G7+x0vod5ULdyoYIkqYQFdY
+         z3DJgcH+PmNu6TrbBKPxLiMKOG7+/yDMLWMJz7mKUVq+tCXn1GL2O7gL4jjECYs/cz40
+         qzUjc5y7Bqzeenki/N2ykIq4FYk3o16LdM8tH3oB40SfQvSvV+6egSkWZzm15v+Ttfx1
+         Sa8U4aAzHj96mjIxFblhixy7sStCpWbrPrkLGOX+BmGJ0gWLgWc6LnRRBVYHU4LE9RG5
+         WkBd6uUSlod9hMkQe54dw6AqmTH3QAE30LquBLIKm3CaSk5RGKTXx8UDPfuNFoBEfpSd
+         H4Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680755068;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=puK3a92VIcFR8DZUjfLY5Zthlc/h1NJaguZIqRU5ZbY=;
-        b=hCys0DMrHAjHT6PDhqf/1tI1l9hD8UyZVtzbiolEl96nlafgTjssbvGLrbedRY9MVh
-         NMyJ+24zmmJfawtC100cXf4RO2ZK7cwl457z2ZwcSZua+XtN4kWVJNTyNJBf+kO/2bVa
-         XJFIZaeUErJFYFPZnHReih6wWHzCLFu87jgrnYgTeDfe/Ebs+wuNfwjQHCpl8GQwF3OP
-         Y/vOXgfLSmDt8KrIoQtmXmlOd2DP7q0tlcX1RBKVALGkpwCBVx5v8AkF2gAWF86M5KA3
-         z+ZFm+th6j7hJlAPBF3p2YMXGAFgTEoppXJHP+lupZPKfjgCBzitWu9cl8zmEVD9inqt
-         nG5g==
-X-Gm-Message-State: AAQBX9fcm6UzrCixmyG4FfmIu3fSFH1BBXMVOM/KkY5nEmNw0DhVs48O
-        H/2gUcyjoMdhShhMvBFoscLXs/qwM9FmpuNPYpGr
-X-Google-Smtp-Source: AKy350YtLXFfQ6EkwnXCDrgRQ7fIlVpSETrEO79HYvdZzc/YmdZp9lagOsgoajysFV+BmlG7zUAiGU4T0y3VYN74whQ=
-X-Received: by 2002:a25:ccc4:0:b0:b73:caa7:f06f with SMTP id
- l187-20020a25ccc4000000b00b73caa7f06fmr1203173ybf.5.1680755068599; Wed, 05
- Apr 2023 21:24:28 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680755694; x=1683347694;
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bqFvIMuXG6qy2oIHQp9Me/HQZXKmC9KtKVOs/l6KpIs=;
+        b=TuxxuDt7PPJyYuLTjq16yQURQ1gSTpxzvufe6Lp1IVXBXp0xkVTpIsF/bjpNBBSd8j
+         SmKxiDz75+76U/uOo+AUba2m87q/jW0ASYQFOuzD3lrQUF9MslaHMl0J6CmndRa4F8NL
+         PLimx/xgK6mW2lPIGagyR9sgxNF/zldUKB7cw8ITR12rt6sbRAQoiV5KlainS4mTIkK+
+         dyCI3WiSl1nTyflOk9EU1KF6qXFjoCpwJwWJeOxIVrEIRekb+KFkH9TqQb8kTLwJdL3+
+         qEmpDrViNNH54O5TRJWuEaZe3LdMwsioNJTdXYCDbD6huyUatRbK2haKnNSRTe7H04Vb
+         wu+Q==
+X-Gm-Message-State: AAQBX9eHhGwQnV7zDGtRqc98LpHK/vJPkpMQKaciRHwIeHJ6n7JuCLjH
+        OUEvcwcaUshXoerfVUUDnFjDizHc1QyWJg==
+X-Google-Smtp-Source: AKy350Ymx2SX0kjN7sDlJyB4Ro6eCpf3Q7bkkF3N9/vNlESG3wt4MQk3dhVJFS+ytPOjDZ8C6sMmww==
+X-Received: by 2002:a05:622a:104c:b0:3e3:5f85:631b with SMTP id f12-20020a05622a104c00b003e35f85631bmr9325916qte.66.1680755694175;
+        Wed, 05 Apr 2023 21:34:54 -0700 (PDT)
+Received: from Gentoo ([191.96.227.90])
+        by smtp.gmail.com with ESMTPSA id o14-20020ac8554e000000b003e4dab0776esm166681qtr.40.2023.04.05.21.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 21:34:53 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 10:04:37 +0530
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     LinuxKernel <linux-kernel@vger.kernel.org>
+Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Subject: testing for mail address if not blocked by spamaasain rule 
+Message-ID: <ZC5L3RgDqQzOIZGR@Gentoo>
+Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        LinuxKernel <linux-kernel@vger.kernel.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20230405185650.239f9721f066aa480e83d543@linux-foundation.org>
- <20230405172524.e25b62e1c548a95564b1d324@linux-foundation.org>
- <20230406000854.25764-1-jaewon31.kim@samsung.com> <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
- <CGME20230406000841epcas1p3630010a770682be0f1d540a448f3e00e@epcms1p2>
- <20230406021712epcms1p216f274040d25d18380668ffbfa809c48@epcms1p2> <20230405200923.9b0dca2165ef3335a0f6b112@linux-foundation.org>
-In-Reply-To: <20230405200923.9b0dca2165ef3335a0f6b112@linux-foundation.org>
-From:   John Stultz <jstultz@google.com>
-Date:   Wed, 5 Apr 2023 21:24:17 -0700
-Message-ID: <CANDhNCq+mhhXjW7huYoQwUq18sRCcn6HjbPqh7mU9KrGyKeLfA@mail.gmail.com>
-Subject: Re: [PATCH v2] dma-buf/heaps: system_heap: Avoid DoS by limiting
- single allocations to half of all memory
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     jaewon31.kim@samsung.com,
-        "tjmercier@google.com" <tjmercier@google.com>,
-        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="a1aF/u+D1xWd3u2Y"
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,73 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 8:09=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
-> On Thu, 06 Apr 2023 11:17:12 +0900 Jaewon Kim <jaewon31.kim@samsung.com> =
-wrote:
->
-> > >> +       if (len / PAGE_SIZE > totalram_pages())
-> > >> +               return ERR_PTR(-ENOMEM);
-> > >
-> > >We're catering for a buggy caller here, aren't we?  Are such large
-> > >requests ever reasonable?
-> > >
-> > >How about we decide what's the largest reasonable size and do a
-> > >WARN_ON(larger-than-that), so the buggy caller gets fixed?
-> >
-> > Yes we're considering a buggy caller. I thought even totalram_pages() /=
- 2 in
-> > the old ion system is also unreasonable. To avoid the /2, I changed it =
-to
-> > totalram_pages() though.
-> >
-> > Because userspace can request that size repeately, I think WARN_ON() ma=
-y be
-> > called to too often, so that it would fill the kernel log buffer.
->
-> Oh geeze.  I trust that userspace needs elevated privileges of some form?
->
-> If so, then spamming dmesg isn't an issue - root can do much worse than
-> that.
->
-> > Even we think WARN_ON_ONCE rather than WARN_ON, the buggy point is not =
-kernel
-> > layer. Unlike page fault mechanism, this dma-buf system heap gets the s=
-ize from
-> > userspace, and it is allowing unlimited size. I think we can't fix the =
-buggy
-> > user space with the kernel warning log. So I think warning is not enoug=
-h,
-> > and we need a safeguard in kernel layer.
->
-> I really dislike that ram/2 thing - it's so arbitrary, hence is surely
-> wrong for all cases.  Is there something more thoughtful we can do?
 
-Just for context, here's the old commit that added this to ION:
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3Dc9e8440eca61298ecccbb27f53036124a7a3c6c8
+--a1aF/u+D1xWd3u2Y
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-I think the consideration was that allocations larger than half of
-memory are likely due to erroneously "negative" size values.
+testing ...please stand by
+--
+Thanks,
+Bhaskar
 
-My memory is foggy on any discussions from that time, but I imagine
-the thinking was treating the value as if it were signed and error out
-immediately on negative values, but rather than just capping at 2gb on
-32bit systems, one could scale it to half of the system memory size,
-as that seemed an appropriate border of "obviously wrong".
+"Here's looking at you kid"-- Casablanca
+https://about.me/unixbhaskar
 
-And the reason why I think folks wanted to avoid just warning and
-continuing with the allocation, is that these large allocations would
-bog the system down badly before it failed, so failing quickly was a
-benefit as the system was still responsive and able to be used to
-collect logs and debug the issue.
+--a1aF/u+D1xWd3u2Y
+Content-Type: application/pgp-signature; name="signature.asc"
 
-When you say "decide what's the largest reasonable size", I think it
-is difficult as with the variety of RAM sizes and buffer sizes I don't
-think there's a fixed limit. Systems with more ram will use larger
-buffers for image/video capture buffers.  And yes, you're right that
-ram/2-1 in a single allocation is just as broken, but I'm not sure how
-to establish a better guard rail.
+-----BEGIN PGP SIGNATURE-----
 
-thanks
--john
+iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmQuS90ACgkQsjqdtxFL
+KRU4hwgAvM1Mqq5H7o+ZJhcz3ZONJmIzHYq8oLEYqdvfuhSkaq9KKDKzEh413CXd
+6A5EkVeyw+pdli2WGlNjk1lc1fMB+4G+qxYfOfawX8qVex5VgzaBJLWjM24smQAk
+Q9ERBeUcA6+2hXm1dWpeOG7o2v8dXXbewx7t2XYhiIsn2Ke7wsIzBPkt99jnrrE7
+xIn4lYDEnrScP7iioyEYU1Ic/FSHcwOjlMFLZc9Fygg2E4i80PfwvHb3job51RWB
+nCXKv/HUJn2v0/tSjGD3Pl5ewUH9outlNWEqo4Yk6/+YV9scUybNYT12uTMsNprU
+OwRqyJrED2PPTc1QLFxqs04/kyD4ng==
+=PzMp
+-----END PGP SIGNATURE-----
+
+--a1aF/u+D1xWd3u2Y--
