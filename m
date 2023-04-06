@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A716D9E15
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AFE6D9E19
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239834AbjDFQ6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S238100AbjDFQ7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237927AbjDFQ6p (ORCPT
+        with ESMTP id S239769AbjDFQ7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:58:45 -0400
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736A783E2;
-        Thu,  6 Apr 2023 09:58:44 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id l12so40158821wrm.10;
-        Thu, 06 Apr 2023 09:58:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680800323; x=1683392323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 6 Apr 2023 12:59:14 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F405C86AD;
+        Thu,  6 Apr 2023 09:59:11 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id 89so28344342uao.0;
+        Thu, 06 Apr 2023 09:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680800351; x=1683392351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v/I9XQ5BsNrfqYkDP7sT9gRtY/AQlvWI8OQc8Brk7LM=;
-        b=zs0iuV4FCIg/zR54pwT8B15pG4EkVp7KDxDPIkgErkSt8SopXj8QK869de+nqFqTQo
-         J+JPeieX0UBzrZdSHt95krESwLBLy/N4XvMqxlja+imYPHtcV+Ni12X4B53MzwYzR4OE
-         2KkPdkiNxSDB7eqoJ8bzawD97m3zuM2cpROZsTwl34kNrKPLBiUjbk3TOv9tRqT1kkDD
-         yZ0NPpCkypT4ChJ/V3yg71KVphl6WLF+bqZ0X8OuPUeaZOdOwcSxQRrjCmmbYTzs1MTB
-         KmWLukTxanBYRuJHo4EpDjiueak95guXvDjc3OSNsfKeL2G33Y+PSagdy38Tz4jYaLtp
-         dilg==
-X-Gm-Message-State: AAQBX9fbAcZz47D/CQgodEXxJ8qUApsOeboSixO3vPFBSNI1Kdtrw4LU
-        wPGwXwf/EEPHk3q1f+lPIcw=
-X-Google-Smtp-Source: AKy350aictw9XxlMZA5bKLdEZ9LU1B6Eevsf0qglj8Mo0H6pA185jjoWKCIE1jTQqvy7y9kwv7gS2A==
-X-Received: by 2002:a5d:5550:0:b0:2ef:9837:6b2b with SMTP id g16-20020a5d5550000000b002ef98376b2bmr408195wrw.21.1680800322724;
-        Thu, 06 Apr 2023 09:58:42 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-026.fbsv.net. [2a03:2880:31ff:1a::face:b00c])
-        by smtp.gmail.com with ESMTPSA id h7-20020a05600c350700b003ee9f396dcesm5858206wmq.30.2023.04.06.09.58.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 09:58:42 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 09:58:40 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
-        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
-        edumazet@google.com, pabeni@redhat.com, davem@davemloft.net,
-        dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dsahern@kernel.org,
-        willemdebruijn.kernel@gmail.com, matthieu.baerts@tessares.net,
-        marcelo.leitner@gmail.com
-Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
-Message-ID: <ZC76QH97yFsx9e7y@gmail.com>
-References: <20230406144330.1932798-1-leitao@debian.org>
- <ZC72UKx/sA4syPfK@kbusch-mbp.dhcp.thefacebook.com>
+        bh=gzgZMjmyilDK0vxgLwTlV9yeH+l2cEpSp2Bl21notZo=;
+        b=o75whDe28ydpvkPSg6h/vGRc1PGHvKrIZtllG9FsuE0Uw1i9ETcfxIWiY+bbMRHreQ
+         rzj20icFhtnbMRNEiJLHz1dDk1EnM5UXuEWKd7sTvvOIbj5nlZt10ol8nc5FI+7Gue3t
+         zbHmT8VXdkW0AO89t21TH0p6KNqnxkx4Y2rL/+eWcsUuaWHC4Eo47go7cwsE/d8IoCDn
+         7eMMvvhjkhnQRYekTICP2N4K3BykA6GS8ulmj2dAXxUIGzdEF8yN8cNMFqmJZYYUNzIn
+         hi3ckYk/7LdG2Q8LKPo4nIfdiOS0g1R9mL8P2Pufh4smUjTPDIRFMaVOPrk8ahd1Hy3f
+         SOZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680800351; x=1683392351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gzgZMjmyilDK0vxgLwTlV9yeH+l2cEpSp2Bl21notZo=;
+        b=ljKSNK9fymwXC8rZVb8GpgyIUEUlQi2Ci6MZPETRNf9QLw6m7dR0z1KVHXIJ9CsBQ4
+         I98KeljJiA54uURVN+MXYDMDureJAy1X1SI57cW43HSpcj6IhHiT/2WN6zT6Q3pJEGiD
+         EZGWV3ef6LqaLW+N5HJOpwM+4+cxXaEVFFiV1n4WINl9ZSQLKhbJdVUO1en5LjfmpZpX
+         kBntPltZtHu0u1szXCsLRByQveURGpY6GXDHo2mLCmZqu4YS4ATl8q5kdUzbg7Ss26s6
+         lecZOjm/iousTM4v+CB5bVSDmdvSgQqPmY9oJpn44Zt7RijGuprLODYcr8a3z8gDHGTX
+         npVQ==
+X-Gm-Message-State: AAQBX9drB6i+Ghq9YNoMC9q5bF5UPaYvhv+CsG0Y8cIhja29WGTQYqsL
+        85kbprZhbTyfzfuUbPnsjDxeZXKJCJZCks7AAB4=
+X-Google-Smtp-Source: AKy350ZecX1xLXmTv4dqWxVP4QUFmOl+H6LGKFNRot6c2VPicJ/IwXePNfjoY5oXZsDeU/SzuynbQGg3j0Z0qRaeWd0=
+X-Received: by 2002:a9f:305c:0:b0:68a:5c52:7f2b with SMTP id
+ i28-20020a9f305c000000b0068a5c527f2bmr6999125uab.1.1680800350908; Thu, 06 Apr
+ 2023 09:59:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC72UKx/sA4syPfK@kbusch-mbp.dhcp.thefacebook.com>
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230406124625.41325-1-jim2101024@gmail.com> <20230406124625.41325-2-jim2101024@gmail.com>
+ <d0bf241b-ead4-94b7-3f03-a26227f9eb58@i2se.com>
+In-Reply-To: <d0bf241b-ead4-94b7-3f03-a26227f9eb58@i2se.com>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Thu, 6 Apr 2023 12:58:59 -0400
+Message-ID: <CANCKTBsLxkPb1ajACkyhJk6J1aB2iwX0oKifHkADG0fFPUqMhQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: brcmstb: Add two optional props
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +87,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Keith,
+On Thu, Apr 6, 2023 at 11:39=E2=80=AFAM Stefan Wahren <stefan.wahren@i2se.c=
+om> wrote:
+>
+> Hi Jim,
+>
+> Am 06.04.23 um 14:46 schrieb Jim Quinlan:
+> > Regarding "brcm,enable-l1ss":
+> >
+> >    The Broadcom STB/CM PCIe HW -- which is also used by RPi SOCs -- req=
+uires
+> >    the driver probe to configure one of three clkreq# modes:
+> >
+> >    (a) clkreq# driven by the RC
+> >    (b) clkreq# driven by the EP for ASPM L0s, L1
+> >    (c) bidirectional clkreq#, as used for L1 Substates (L1SS).
+> >
+> >    The HW can tell the difference between (a) and (b), but does not kno=
+w
+> >    when to configure (c).  Further, the HW will cause a CPU abort on bo=
+ot if
+> >    guesses wrong regarding the need for (c).  So we introduce the boole=
+an
+> >    "brcm,enable-l1ss" property to indicate that (c) is desired.  This
+> >    property is already present in the Raspian version of Linux, but the
+> >    driver implementaion that will follow adds more details and discerns
+> >    between (a) and (b).
+> >
+> > Regarding "brcm,completion-timeout-msecs"
+> >
+> >    Our HW will cause a CPU abort if the L1SS exit time is longer than t=
+he
+> >    completion abort timeout.  We've been asked to make this configurabl=
+e, so
+> >    we are introducing "brcm,completion-abort-msecs".
+> >
+> > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> > ---
+> >   .../devicetree/bindings/pci/brcm,stb-pcie.yaml       | 12 +++++++++++=
++
+> >   1 file changed, 12 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b=
+/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> > index 7e15aae7d69e..ef4ccc05b258 100644
+> > --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> > @@ -64,6 +64,18 @@ properties:
+> >
+> >     aspm-no-l0s: true
+> >
+> > +  brcm,enable-l1ss:
+> > +    description: Indicates that the downstream device is L1SS
+> > +      capable and L1SS is desired, e.g. by setting
+> > +      CONFIG_PCIEASPM_POWER_SUPERSAVE=3Dy.  Note that CLKREQ#
+>
+> not sure about this, but maybe we should avoid references to Linux
+> kernel config parameter in a DT binding. Since the driver already gaves
+> warning in case the DT parameter is present, but kernel config doesn't
+> fit, this should be enough.
 
-On Thu, Apr 06, 2023 at 10:41:52AM -0600, Keith Busch wrote:
-> On Thu, Apr 06, 2023 at 07:43:26AM -0700, Breno Leitao wrote:
-> > This patchset creates the initial plumbing for a io_uring command for
-> > sockets.
-> > 
-> > For now, create two uring commands for sockets, SOCKET_URING_OP_SIOCOUTQ
-> > and SOCKET_URING_OP_SIOCINQ. They are similar to ioctl operations
-> > SIOCOUTQ and SIOCINQ. In fact, the code on the protocol side itself is
-> > heavily based on the ioctl operations.
-> 
-> Do you have asynchronous operations in mind for a future patch? The io_uring
-> command infrastructure makes more sense for operations that return EIOCBQUEUED,
-> otherwise it doesn't have much benefit over ioctl.
+Hello Stefan,
+I will remove this reference.
+>
+> > +      assertion to clock active must be within 400ns.
+> > +    type: boolean
+> > +
+> > +  brcm,completion-timeout-msecs:
+> > +    description: Number of msecs before completion timeout
+> > +      abort occurs.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+>
+> According to the driver at least 0 is not allowed, maybe we should
+> define minimum and maximum here and let dtbs_check take care of invalid
+> values?
+I'm not sure I follow what you mean about a zero value;  the property
+may have any value but the driver will clamp it
+to a minimum of ~30msec.  Regardless, I can add a  "minimum: 30" line
+to the YAML.
 
-I think this brings value even for synchronos operations, such as, you
-can just keep using io_uring operations on network operations, other
-than, using some io_uring operations and then doing a regular ioctl(2).
-So, it improves the user experience.
-
-The other benefit is calling several operations at a single io_uring
-submit. It means you can save several syscalls and getting the same work
-done.
-
->  
-> > In order to test this code, I created a liburing test, which is
-> > currently located at [1], and I will create a pull request once we are
-> > good with this patch.
-> > 
-> > I've also run test/io_uring_passthrough to make sure the first patch
-> > didn't regressed the NVME passthrough path.
-> > 
-> > This patchset is a RFC for two different reasons:
-> >   * It changes slighlty on how IO uring command operates. I.e, we are
-> >     now passing the whole SQE to the io_uring_cmd callback (instead of
-> >     an opaque buffer). This seems to be more palatable instead of
-> >     creating some custom structure just to fit small parameters, as in
-> >     SOCKET_URING_OP_SIOC{IN,OUT}Q. Is this OK?
-> 
-> I think I'm missing something from this series. Where is the io_uring_cmd
-> change to point to the sqe?
-
-My bad, the patch was not part of the patchset. I've just submitted it
-under the same RFC cover letter now.
-
-Here is the link, if it helps:
-
-https://lkml.org/lkml/2023/4/6/990
-
-
+Thanks,
+Jim Quinlan
+Broadcom STB
+>
+> Best regards
+>
+> > +
+> >     brcm,scb-sizes:
+> >       description: u64 giving the 64bit PCIe memory
+> >         viewport size of a memory controller.  There may be up to
