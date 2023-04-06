@@ -2,151 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E35B6DA061
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646C26DA067
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 20:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240149AbjDFSzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 14:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
+        id S240259AbjDFS4X convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 14:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240137AbjDFSyy (ORCPT
+        with ESMTP id S239786AbjDFS4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 14:54:54 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A5886A5
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 11:54:52 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id 11so3714252ejw.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 11:54:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680807291;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GDe1sENHqqI/d/KCYB866ORqPLaZkKZCUTL+XlVCWbo=;
-        b=GrEl3QNbr2/uGDQCngerqAbT5bLfc3Oi/elT80KjhVGsTIWcS68iCzgd6AIdBIRERf
-         HYUDsB+topW4/Q+7irLZP6nqRsXRYwNykBW5UCU0cX3MJ9y6K4jlTuo6yK++CkY8EFEi
-         r6WEdLlqPwG2BzpizhLACUbmBY+M4CExpBqXKkSEHmRP1ABRTtCUlhZChB19NeUA7rCN
-         qJ01j5LiaZHrnep3fdBdi/lPQkold1m+9vq7SU+odeUJ+lA2Otc/UZrSKHWKgqUYDXBW
-         FNCjFb2F9euUCFsDc6lXIptHsFLlRxIoNkQ9WaF0ZBwyKe/5lgpSQX3IrNXvkKLnxw+z
-         yk8Q==
+        Thu, 6 Apr 2023 14:56:19 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2559039;
+        Thu,  6 Apr 2023 11:56:17 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id g18so3723274ejx.7;
+        Thu, 06 Apr 2023 11:56:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680807291;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GDe1sENHqqI/d/KCYB866ORqPLaZkKZCUTL+XlVCWbo=;
-        b=cPQz+h/3PuIrc/nnyEMlO9Dh0alV62efBU+N/N/xw0NBnFW+5lXmW+v5ulSTnYsWj0
-         5jfQIqdisuauBIxC6B5N1cyXqZ46QtoaihmjCc+LWMfR4pkUSZ41Ya/Y//mTMpf8pkJl
-         Q3tztjdOkjaUQFja+5NUY3zlpamfiOoRCy3mw1pKcOmsN7Q2YOrCCtpvfRUaw/JnSScT
-         5GihPuPajAHmdXP7ZtvB0Ewzeuh4jM0mkqKRkbbTaes5qqqstrfxS7FQ2JiG2WneUPGN
-         HAcJ9LyUYSwy2gAZ9mwwRSDWEXuB1iNuBKvZycAORELjHhy9fFKqRIZSKI7Ebbc2b+64
-         XsXg==
-X-Gm-Message-State: AAQBX9f5IqNDd/AbiAERWDN6GZrG6IcuqDcC3VGkqh3YiN30UY4FcAqC
-        eMdIgmRVOPguJfcCdDdMhHELpA==
-X-Google-Smtp-Source: AKy350ajwH+Cn7PtrIjxFg1bz46Gzc/hHXKaVxIUMBaYwk71/qH7AUYBzRT+hwieHQjP5df2rvE1rA==
-X-Received: by 2002:a17:906:2e86:b0:931:b4d3:fc7f with SMTP id o6-20020a1709062e8600b00931b4d3fc7fmr7688208eji.30.1680807291091;
-        Thu, 06 Apr 2023 11:54:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id p7-20020a170906838700b009484e17e7f5sm1135463ejx.100.2023.04.06.11.54.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 11:54:50 -0700 (PDT)
-Message-ID: <b6eb826a-2379-d799-24f4-ea7375e0e636@linaro.org>
-Date:   Thu, 6 Apr 2023 20:54:49 +0200
+        d=1e100.net; s=20210112; t=1680807376;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GEDpzpwkdqfhFP/l/6sXm+y2yJSiLZZYXAjgzwTJOBs=;
+        b=GDlLdDlSQbNiLnFVm4JxjQMX9RMjDUUhgGrHHonW9lRrB0ofKc7mIkhPnP/qY4UNJJ
+         cy8PW3k/x810yHsL/n+7mtO8sXKVHNQVGx+lwS5PoPMsaDLjMf3TwQPs4hnKae3SDd2f
+         4WRpdY1vJSgD/YWSM6wZSboJyUSzjlaOEnNuR2HO5FeirSDOVf8lFG1mug+F11GfVkMx
+         Vr46pibwSGRXn6JQQl8q6//FoKpNc3/0gFQJfalcfhwPUiJ4VD7WFQmDdp7Vas8Nt6Nt
+         F6y/Ux7cDPchYWO+/IlxMYnqY2UJkYua2qpvO5dj7bP3HoB5zcrUwEXfAiit9nA7OU6R
+         vPWA==
+X-Gm-Message-State: AAQBX9f0g9LgT4npSda3srYPsT3WhGhL/Rnsgadonf3BBI3kb3Yq7BVw
+        XVDmpyImLitmqAuxaEuLCBGfboDvktNWwYGsE7qiwd3ScSM=
+X-Google-Smtp-Source: AKy350ZPtxgdFNbkE7L7jiTI8uCvV0sp0NYQC5OkT2/2pLMSELS/yH3WjhuSBlqbV/D5LJBazrjoLKwBj6/6GSTwHa4=
+X-Received: by 2002:a17:907:96a5:b0:946:a095:b314 with SMTP id
+ hd37-20020a17090796a500b00946a095b314mr3678555ejc.2.1680807375859; Thu, 06
+ Apr 2023 11:56:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 1/3] dt-bindings: PCI: brcmstb: Add two optional props
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230406124625.41325-1-jim2101024@gmail.com>
- <20230406124625.41325-2-jim2101024@gmail.com>
- <ebde318b-53be-6779-4f0c-a614c01a0b0a@linaro.org>
- <9e98496b-73a0-78a5-e890-7d7e4be1f469@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9e98496b-73a0-78a5-e890-7d7e4be1f469@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230331165336.1047102-1-srinivas.pandruvada@linux.intel.com>
+ <CAJZ5v0jocwROiayCpkp2CrmOFrBSShO5zPicWZQzaM+rj_25zg@mail.gmail.com>
+ <221ff60648e0e76920cb5054e9cfb98ec77612b1.camel@linux.intel.com>
+ <CAJZ5v0gSfNpPx_6daiHSrzozeqU7iMnErbMhD6fBU9w3EtYhJw@mail.gmail.com> <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
+In-Reply-To: <a32bbd493a8d9decc275c327d40e15985e11b0be.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 6 Apr 2023 20:56:04 +0200
+Message-ID: <CAJZ5v0j2KG9+ozSkHZ9uiBca9c0tG8Nz_QH7w=DkwkChmJbp0w@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/intel/int340x: Add DLVR support
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 20:53, Florian Fainelli wrote:
-> On 4/6/23 11:34, Krzysztof Kozlowski wrote:
->> On 06/04/2023 14:46, Jim Quinlan wrote:
->>> Regarding "brcm,enable-l1ss":
->>>
->>>    The Broadcom STB/CM PCIe HW -- which is also used by RPi SOCs -- requires
->>>    the driver probe to configure one of three clkreq# modes:
->>>
->>>    (a) clkreq# driven by the RC
->>>    (b) clkreq# driven by the EP for ASPM L0s, L1
->>>    (c) bidirectional clkreq#, as used for L1 Substates (L1SS).
->>>
->>>    The HW can tell the difference between (a) and (b), but does not know
->>>    when to configure (c).  Further, the HW will cause a CPU abort on boot if
->>>    guesses wrong regarding the need for (c).  So we introduce the boolean
->>>    "brcm,enable-l1ss" property to indicate that (c) is desired.  This
->>>    property is already present in the Raspian version of Linux, but the
->>>    driver implementaion that will follow adds more details and discerns
->>>    between (a) and (b).
->>>
->>> Regarding "brcm,completion-timeout-msecs"
->>>
->>>    Our HW will cause a CPU abort if the L1SS exit time is longer than the
->>>    completion abort timeout.  We've been asked to make this configurable, so
->>>    we are introducing "brcm,completion-abort-msecs".
->>>
->>> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
->>> ---
->>>   .../devicetree/bindings/pci/brcm,stb-pcie.yaml       | 12 ++++++++++++
->>>   1 file changed, 12 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
->>> index 7e15aae7d69e..ef4ccc05b258 100644
->>> --- a/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
->>> +++ b/Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
->>> @@ -64,6 +64,18 @@ properties:
->>>   
->>>     aspm-no-l0s: true
->>>   
->>> +  brcm,enable-l1ss:
->>> +    description: Indicates that the downstream device is L1SS
->>> +      capable and L1SS is desired, e.g. by setting
->>> +      CONFIG_PCIEASPM_POWER_SUPERSAVE=y.  Note that CLKREQ#
->>
->> How does CONFIG_PCIEASPM_POWER_SUPERSAVE apply to *BSD?
-> 
-> In other words, there should be no OS/Linux specific comments in a 
-> Device Tree binding, which would be a friendlier and nicer way of 
-> providing the same feedback.
+On Tue, Apr 4, 2023 at 7:55 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Tue, 2023-04-04 at 18:46 +0200, Rafael J. Wysocki wrote:
+> > On Tue, Apr 4, 2023 at 6:39 PM srinivas pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > > On Mon, 2023-04-03 at 20:37 +0200, Rafael J. Wysocki wrote:
+> > > > On Fri, Mar 31, 2023 at 6:53 PM Srinivas Pandruvada
+> > > > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > > >
+> > > > > Add support for DLVR (Digital Linear Voltage Regulator)
+> > > > > attributes,
+> > > > > which can be used to control RFIM.
+> > > > > Here instead of "fivr" another directory "dlvr" is created with
+> > > > > DLVR
+> > > > > attributes:
+> > > > >
+> > > > > /sys/bus/pci/devices/0000:00:04.0/dlvr
+> > > > > ├── dlvr_freq_mhz
+> > > > > ├── dlvr_freq_select
+> > > > > ├── dlvr_hardware_rev
+> > > > > ├── dlvr_pll_busy
+> > > > > ├── dlvr_rfim_enable
+> > > > > └── dlvr_spread_spectrum_pct
+> > > > >
+> > > > > Attributes
+> > > > > dlvr_freq_mhz (RO):
+> > > > > Current DLVR PLL frequency in MHz.
+> > > > >
+> > > > > dlvr_freq_select (RW):
+> > > > > Sets DLVR PLL clock frequency.
+> > > > >
+> > > > > dlvr_hardware_rev (RO):
+> > > > > DLVR hardware revision.
+> > > > >
+> > > > > dlvr_pll_busy (RO):
+> > > > > PLL can't accept frequency change when set.
+> > > > >
+> > > > > dlvr_rfim_enable (RW):
+> > > > > 0: Disable RF frequency hopping, 1: Enable RF frequency
+> > > > > hopping.
+> > > > >
+> > > > > dlvr_spread_spectrum_pct (RW)
+> > > > > A write to this register updates the DLVR spread spectrum
+> > > > > percent
+> > > > > value.
+> > > >
+> > > > How is this attribute going to be used by user space in practice?
+> > >
+> > > Spread spectrum percent helps to reduce the DLVR clock noise to
+> > > meet
+> > > regulatory compliance. This spreading % increases bandwidth of
+> > > signal
+> > > transmission and hence reduces the effects of interference, noise,
+> > > and
+> > > signal fading.
+> >
+> > The above information should be added to the documentation I think.
+> >
+> > Still, I would like to know when user space is going to write to it
+> > and how it is going to find out what value to write.
+> As specified in the
+> https://docs.kernel.org/driver-api/thermal/intel_dptf.html
+> This is all related to reduce interference with WiFi radio frequencies.
 
-I want to give also the answer also why there should be no OS/Linux
-specific comments, so the reader can stop a bit and think about it :)
+So the first two paragraphs in the "DPTF Processor thermal RFIM
+interface" section need to be updated to mention/cover DLVR.  Then, it
+will all be clear (at least AFAIAC).
 
-Best regards,
-Krzysztof
+> The algorithm should be read current dlvr_freq_mhz,
+> dlvr_spread_spectrum_pct, current WiFi frequency (channel has a fix
+> freq), find the error in WiFi frame error rates (From WiFi module), and
+> do small adjustment +- to dlvr_freq. While changing the dlvr
+> frequencies you may induce more interference so you spread the signal
+> to reduce S/N ratio using this percent knob.
+>
+> >
+> > > > Also should it be split like the frequency one (for consistency)?
+> > >
+> > > This is a RW field and is applied immediately unlike frequency,
+> > > where
+> > > it is two step process. First you specify and enable and then see
+> > > the
+> > > effect. So they are two fields.
+> >
+> > I was talking about dlvr_freq_mhz (RO) and dlvr_freq_select (RW).
+> > I'm
+> > not sure how the above is related to them TBH.
+> The frequency is the base signal to which interference must be reduced.
+> A good explanation for this technique
+> https://www.eetimes.com/tutorial-on-spread-spectrum-technology/
 
+Yes, I know what "spread spectrum" means.
