@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4349A6DA0C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FB06DA0C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240500AbjDFTMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40854 "EHLO
+        id S240435AbjDFTMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240403AbjDFTMg (ORCPT
+        with ESMTP id S240333AbjDFTMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Apr 2023 15:12:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7CA83D1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:12:34 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E44A93C9;
+        Thu,  6 Apr 2023 12:12:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7100862CEC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 19:12:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D81ECC433EF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7622462D38;
+        Thu,  6 Apr 2023 19:12:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DACF9C4339B;
         Thu,  6 Apr 2023 19:12:33 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pkV28-001EXN-2S;
+        id 1pkV28-001EY1-39;
         Thu, 06 Apr 2023 15:12:32 -0400
-Message-ID: <20230406191058.652785135@goodmis.org>
+Message-ID: <20230406191232.794410178@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Thu, 06 Apr 2023 15:10:58 -0400
+Date:   Thu, 06 Apr 2023 15:10:59 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [for-linus][PATCH 0/2] tracing: A few more updates to 6.3
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, <ast@kernel.org>, <daniel@iogearbox.net>,
+        Zheng Yejian <zhengyejian1@huawei.com>
+Subject: [for-linus][PATCH 1/2] ftrace: Fix issue that direct->addr not restored in
+ modify_ftrace_direct()
+References: <20230406191058.652785135@goodmis.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,27 +50,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some more tracing fixes for 6.3:
+From: Zheng Yejian <zhengyejian1@huawei.com>
 
-- Reset direct->addr back to its original value on error in updating
-  the direct trampoline code.
+Syzkaller report a WARNING: "WARN_ON(!direct)" in modify_ftrace_direct().
 
-- Make lastcmd_mutex static.
+Root cause is 'direct->addr' was changed from 'old_addr' to 'new_addr' but
+not restored if error happened on calling ftrace_modify_direct_caller().
+Then it can no longer find 'direct' by that 'old_addr'.
 
+To fix it, restore 'direct->addr' to 'old_addr' explicitly in error path.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace/urgent
+Link: https://lore.kernel.org/linux-trace-kernel/20230330025223.1046087-1-zhengyejian1@huawei.com
 
-Head SHA1: 31c683967174b487939efaf65e41f5ff1404e141
+Cc: stable@vger.kernel.org
+Cc: <mhiramat@kernel.org>
+Cc: <mark.rutland@arm.com>
+Cc: <ast@kernel.org>
+Cc: <daniel@iogearbox.net>
+Fixes: 8a141dd7f706 ("ftrace: Fix modify_ftrace_direct.")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/ftrace.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-
-Steven Rostedt (Google) (1):
-      tracing/synthetic: Make lastcmd_mutex static
-
-Zheng Yejian (1):
-      ftrace: Fix issue that 'direct->addr' not restored in modify_ftrace_direct()
-
-----
- kernel/trace/ftrace.c             | 15 +++++++++------
- kernel/trace/trace_events_synth.c |  2 +-
- 2 files changed, 10 insertions(+), 7 deletions(-)
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 0feea145bb29..c67bcc89a771 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -5667,12 +5667,15 @@ int modify_ftrace_direct(unsigned long ip,
+ 		ret = 0;
+ 	}
+ 
+-	if (unlikely(ret && new_direct)) {
+-		direct->count++;
+-		list_del_rcu(&new_direct->next);
+-		synchronize_rcu_tasks();
+-		kfree(new_direct);
+-		ftrace_direct_func_count--;
++	if (ret) {
++		direct->addr = old_addr;
++		if (unlikely(new_direct)) {
++			direct->count++;
++			list_del_rcu(&new_direct->next);
++			synchronize_rcu_tasks();
++			kfree(new_direct);
++			ftrace_direct_func_count--;
++		}
+ 	}
+ 
+  out_unlock:
+-- 
+2.39.2
