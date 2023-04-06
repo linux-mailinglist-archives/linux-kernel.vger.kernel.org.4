@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F7A6DA60C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C216DA60F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 01:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238472AbjDFXAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 19:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S239411AbjDFXCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 19:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjDFXAn (ORCPT
+        with ESMTP id S229732AbjDFXB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 19:00:43 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82669213D;
-        Thu,  6 Apr 2023 16:00:42 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-944bd1d58easo143596666b.0;
-        Thu, 06 Apr 2023 16:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680822041; x=1683414041;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pi05o+/wIqfjwsC6Ux6SGoxSck3jhlcodGAJhg+oXBk=;
-        b=JSziECDRBB8uStmFPZbr/gNNDgw3wZBhvaXD14g6jmvJLfOmDr8Dm34YnGR6LHzx1f
-         ntG9Rwg5k4ZEKxdwadSN4L+qQcTkRUNU68kn9tN1F2OcKtHjPtitYGQR2qsN56DM40J/
-         jejCtQtuoVnVgoDRauMOX5lFMOmJNNnT/BWSP1uSMrMeN6ybkIYu8AqV5kpLNrCyHum5
-         SDPYYdJSKxWe7ZoW8O18D0QlDmqPrnIIPYitH9P/PLXVmGsek389cp0b3p/JnjMylu7r
-         SQfIO2vVx/Kr9Eo/4cCcU8rcGSYXKpn4VT5J35yxuzS+DWO/t2JOBk/E8IjZ+lSXnJmB
-         fcjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680822041; x=1683414041;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pi05o+/wIqfjwsC6Ux6SGoxSck3jhlcodGAJhg+oXBk=;
-        b=10Rc2nZnuBHEQ8r7OaB3QDVuX0yTognNqNungQmWo2u809v0xZ2X0IMbDM3Vfqq6U2
-         gscQzuQ/VPZNrt7d5TjINKEo+vGns4RiTcfmTCx1Zvl2VlKWWGvUCQgu2cmnRM1ZwpcY
-         4M43RTGGx1oBwLCbT+GTvmhyqgc8YAToIdQ71AaJ1cgQzI/BQOs7J4vo10ZokCW3yJgN
-         L9GHvRinOHRZedvOEF34+w4jxOHsIYxaTFdPKuoGAYJNLwmSUL4Qkolps1tJ3DYy9kUg
-         GzNZruV76+wJr3nSxC4cNW0Sy9CBFufVYiOWQbdiNrye9BVM5EodBOGuTKF86LxOiK50
-         p8XA==
-X-Gm-Message-State: AAQBX9ct7jiyqoLRfDw65M8DIMqbz/YhlFPvyEnpLu0MRiC+YEoX+fiM
-        0eRvznFZms6SN6lk1/wsezqaZPuCMsVNgwQWUXLFnSpMzyc=
-X-Google-Smtp-Source: AKy350bh45yYwqVphkeJknQlcNpvKbWeT11aOvhLw9J5VHA3SrUw/lO64P13Dl9Eo7kpYpBL/zD+0J3JKoF48QwyqNc=
-X-Received: by 2002:a50:d6da:0:b0:502:148d:9e1e with SMTP id
- l26-20020a50d6da000000b00502148d9e1emr550905edj.3.1680822040777; Thu, 06 Apr
- 2023 16:00:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230405225246.1327344-1-brho@google.com>
-In-Reply-To: <20230405225246.1327344-1-brho@google.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 6 Apr 2023 16:00:29 -0700
-Message-ID: <CAADnVQJ7tG-b_+F7HnrhJ0e-p=PkvymHfQPWybVO2icSiV84aw@mail.gmail.com>
-Subject: Re: bpf: ensure all memory is initialized in bpf_get_current_comm
-To:     Barret Rhoden <brho@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 6 Apr 2023 19:01:59 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18602A3;
+        Thu,  6 Apr 2023 16:01:58 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336MRxvo013858;
+        Thu, 6 Apr 2023 23:01:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
+ date : message-id; s=corp-2022-7-12;
+ bh=QYrH7mgx9goRgDjZnqA63zjuyrkGvo4AdK4TauLX8A8=;
+ b=yh3NYsUNBCzx4Q8vjpGLqFRWbYQ5hFX50BLsXK9/Uu9UVlREaO9zmtHBpd62mWwKNsGP
+ c9ApWwfJzcG1EmXGV2OkMBQTroGMtt/3wITD98lNZsn4LzO56DPy47qtUQ5eVtoCI3sN
+ suG7bmYEEwyu951tHNqHTl9a4+uzNVZYlAWSjrtf4qVy2GPYXVQcN/7gO3o2CckN2+M/
+ luIG0rr/RzAd3czsh9hufvo5Yl4UKHP88qJtCUajemi7yt745+beXEH6r+Gkrs01rH0J
+ GtRFZAYMALVSDs4oJ0j6t9C/0P0lNkS9mQH21ToI78pK95dP0nxrHVYaBAvYD8LBR2ZS 7w== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3ppbd442q2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Apr 2023 23:01:34 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 336KlH5P009090;
+        Thu, 6 Apr 2023 23:01:33 GMT
+Received: from brm-x62-16.us.oracle.com (brm-x62-16.us.oracle.com [10.80.150.37])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ppt3kqpt4-1;
+        Thu, 06 Apr 2023 23:01:33 +0000
+From:   Jane Chu <jane.chu@oracle.com>
+To:     dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        dave.jiang@intel.com, ira.weiny@intel.com, willy@infradead.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v2] dax: enable dax fault handler to report VM_FAULT_HWPOISON
+Date:   Thu,  6 Apr 2023 17:01:27 -0600
+Message-Id: <20230406230127.716716-1-jane.chu@oracle.com>
+X-Mailer: git-send-email 2.18.4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_12,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304060200
+X-Proofpoint-ORIG-GUID: nMaMTcFEj8i5h-91hzIIjnDqo_X59Jn0
+X-Proofpoint-GUID: nMaMTcFEj8i5h-91hzIIjnDqo_X59Jn0
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 3:53=E2=80=AFPM Barret Rhoden <brho@google.com> wrot=
-e:
->
-> BPF helpers that take an ARG_PTR_TO_UNINIT_MEM must ensure that all of
-> the memory is set, including beyond the end of the string.
->
-> Signed-off-by: Barret Rhoden <brho@google.com>
+When dax fault handler fails to provision the fault page due to
+hwpoison, it returns VM_FAULT_SIGBUS which lead to a sigbus delivered
+to userspace with .si_code BUS_ADRERR.  Channel dax backend driver's
+detection on hwpoison to the filesystem to provide the precise reason
+for the fault.
 
-The patch looks fine, but please rebase to bpf-next and resubmit
-with [PATCH bpf-next] subj, so it goes through BPF CI.
+Signed-off-by: Jane Chu <jane.chu@oracle.com>
+---
+ drivers/nvdimm/pmem.c | 2 +-
+ fs/dax.c              | 2 +-
+ include/linux/mm.h    | 2 ++
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-See Documentation/bpf/bpf_devel_QA.rst
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index ceea55f621cc..46e094e56159 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -260,7 +260,7 @@ __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
+ 		long actual_nr;
+ 
+ 		if (mode != DAX_RECOVERY_WRITE)
+-			return -EIO;
++			return -EHWPOISON;
+ 
+ 		/*
+ 		 * Set the recovery stride is set to kernel page size because
+diff --git a/fs/dax.c b/fs/dax.c
+index 3e457a16c7d1..c93191cd4802 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -1456,7 +1456,7 @@ static loff_t dax_iomap_iter(const struct iomap_iter *iomi,
+ 
+ 		map_len = dax_direct_access(dax_dev, pgoff, PHYS_PFN(size),
+ 				DAX_ACCESS, &kaddr, NULL);
+-		if (map_len == -EIO && iov_iter_rw(iter) == WRITE) {
++		if (map_len == -EHWPOISON && iov_iter_rw(iter) == WRITE) {
+ 			map_len = dax_direct_access(dax_dev, pgoff,
+ 					PHYS_PFN(size), DAX_RECOVERY_WRITE,
+ 					&kaddr, NULL);
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 1f79667824eb..e4c974587659 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3217,6 +3217,8 @@ static inline vm_fault_t vmf_error(int err)
+ {
+ 	if (err == -ENOMEM)
+ 		return VM_FAULT_OOM;
++	else if (err == -EHWPOISON)
++		return VM_FAULT_HWPOISON;
+ 	return VM_FAULT_SIGBUS;
+ }
+ 
+-- 
+2.18.4
+
