@@ -2,83 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FEF6D912D
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2556D9130
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbjDFIHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:07:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        id S235967AbjDFIIQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 6 Apr 2023 04:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235156AbjDFIHs (ORCPT
+        with ESMTP id S235362AbjDFIIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:07:48 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071346592;
-        Thu,  6 Apr 2023 01:07:43 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3366DHAE013854;
-        Thu, 6 Apr 2023 08:07:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jJZpK+4LUoxPvabfOSLEoyNinN7S5mTg5CwsNL84xjw=;
- b=kjMe/+F1hIyFVsZ4CQ4oUcT4396yvvvQOup5kUw2Fuspq+FctwzusRsKtVLHnHymHIJO
- mPA3TrUFWzxnMVXV+nSNnVw1QQa9B4I49rKmlChHrWG8pqjf/Dr5s1oV1/xHWW0oSIMH
- N0Gpz1K5dcGIMZugzk9FggIXLjgDci5HLOCjbbdhpUPXtx7Ur17wwiLlrDtTUAn73YkC
- S+M4bQ4fYqq9dMLDkfGuUK/bcY/JrOGPCy6zSPF2tn4Xs+O+4cRYJqghvPQ5RSVi0UJL
- FqsdsEnXIk7yCyBqb1C7KW+87K9+nKac+QyFR94xFH++zdW8kHVDBF7MxOVB8P6v/8oN Tg== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psmyx0nmv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 08:07:30 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33687TA3003418
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Apr 2023 08:07:29 GMT
-Received: from [10.216.2.94] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 6 Apr 2023
- 01:07:25 -0700
-Message-ID: <62fb952e-ffb9-763c-4e4b-4601c017ad26@quicinc.com>
-Date:   Thu, 6 Apr 2023 13:37:22 +0530
+        Thu, 6 Apr 2023 04:08:12 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4B276A2;
+        Thu,  6 Apr 2023 01:08:05 -0700 (PDT)
+X-UUID: b4669bca74a7479dadfa37950b52ee1c-20230406
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.22,REQID:ba70d2e6-2463-4a45-b37d-48337af9ce67,IP:15,
+        URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-INFO: VERSION:1.1.22,REQID:ba70d2e6-2463-4a45-b37d-48337af9ce67,IP:15,UR
+        L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:-5
+X-CID-META: VersionHash:120426c,CLOUDID:361462b5-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:230405224612O8VQCV4R,BulkQuantity:12,Recheck:0,SF:24|17|19|44|102,TC
+        :nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: b4669bca74a7479dadfa37950b52ee1c-20230406
+Received: from node4.com.cn [(39.156.73.12)] by mailgw
+        (envelope-from <gehao@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 520909029; Thu, 06 Apr 2023 16:08:00 +0800
+Received: from node4.com.cn (localhost [127.0.0.1])
+        by node4.com.cn (NSMail) with SMTP id C37BB16002C00;
+        Thu,  6 Apr 2023 16:07:59 +0800 (CST)
+X-ns-mid: postfix-642E7DDF-72898429
+Received: from [172.20.12.78] (unknown [172.20.12.78])
+        by node4.com.cn (NSMail) with ESMTPA id 9CE4A16002C00;
+        Thu,  6 Apr 2023 08:07:58 +0000 (UTC)
+Message-ID: <67e08770-7f58-159d-437c-5d3432bf6847@kylinos.cn>
+Date:   Thu, 6 Apr 2023 16:07:58 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next] net: qrtr: correct types of trace event
- parameters
-Content-Language: en-US
-To:     Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     Manivannan Sadhasivam <mani@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-References: <20230402-qrtr-trace-types-v1-1-92ad55008dd3@kernel.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230402-qrtr-trace-types-v1-1-92ad55008dd3@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: h48KRiHCC5-6Cb2kepEKb3Fo2hcERqYP
-X-Proofpoint-ORIG-GUID: h48KRiHCC5-6Cb2kepEKb3Fo2hcERqYP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_03,2023-04-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 impostorscore=0 adultscore=0 clxscore=1011 mlxlogscore=999
- bulkscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304060071
-X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RESEND PATCH] kvm/selftests: Close opened file descriptor in
+ stable_tsc_check_supported()
+From:   Hao Ge <gehao@kylinos.cn>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, shuah@kernel.org, dmatlack@google.com,
+        coltonlewis@google.com, vipinsh@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gehao618@163.com
+References: <20230405101350.259000-1-gehao@kylinos.cn>
+ <ZC2JrJwKM3KrgNgm@google.com>
+ <c9db67ee-4a0b-dc62-f507-c4a654fc9656@kylinos.cn>
+In-Reply-To: <c9db67ee-4a0b-dc62-f507-c4a654fc9656@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,113 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sorry for bother yours, the computer has updated some configurations,
+
+causing an issue with the email name,so correct it.
 
 
-On 4/3/2023 9:13 PM, Simon Horman wrote:
-> The arguments passed to the trace events are of type unsigned int,
-> however the signature of the events used __le32 parameters.
-> 
-> I may be missing the point here, but sparse flagged this and it
-> does seem incorrect to me.
-> 
->    net/qrtr/ns.c: note: in included file (through include/trace/trace_events.h, include/trace/define_trace.h, include/trace/events/qrtr.h):
->    ./include/trace/events/qrtr.h:11:1: warning: cast to restricted __le32
->    ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
->    ./include/trace/events/qrtr.h:11:1: warning: restricted __le32 degrades to integer
->    ... (a lot more similar warnings)
->    net/qrtr/ns.c:115:47:    expected restricted __le32 [usertype] service
->    net/qrtr/ns.c:115:47:    got unsigned int service
->    net/qrtr/ns.c:115:61: warning: incorrect type in argument 2 (different base types)
->    ... (a lot more similar warnings)
-> 
-> Fixes: dfddb54043f0 ("net: qrtr: Add tracepoint support")
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
-> v1
-> * Drop RFC designation
-> * Add Fixes and Reviewed-by tags
-> * Target at 'net-next' (not sure if that is correct)
-> 
-> RFC
-> * Link: https://lore.kernel.org/r/20230402-qrtr-trace-types-v1-1-da062d368e74@kernel.org
-> ---
->   include/trace/events/qrtr.h | 33 ++++++++++++++++++---------------
->   1 file changed, 18 insertions(+), 15 deletions(-)
-> 
-> diff --git a/include/trace/events/qrtr.h b/include/trace/events/qrtr.h
-> index b1de14c3bb93..441132c67133 100644
-> --- a/include/trace/events/qrtr.h
-> +++ b/include/trace/events/qrtr.h
-> @@ -10,15 +10,16 @@
->   
->   TRACE_EVENT(qrtr_ns_service_announce_new,
->   
-> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
-> +	TP_PROTO(unsigned int service, unsigned int instance,
-> +		 unsigned int node, unsigned int port),
->   
->   	TP_ARGS(service, instance, node, port),
->   
->   	TP_STRUCT__entry(
-> -		__field(__le32, service)
-> -		__field(__le32, instance)
-> -		__field(__le32, node)
-> -		__field(__le32, port)
-> +		__field(unsigned int, service)
-> +		__field(unsigned int, instance)
-> +		__field(unsigned int, node)
-> +		__field(unsigned int, port)
->   	),
->   
->   	TP_fast_assign(
-> @@ -36,15 +37,16 @@ TRACE_EVENT(qrtr_ns_service_announce_new,
->   
->   TRACE_EVENT(qrtr_ns_service_announce_del,
->   
-> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
-> +	TP_PROTO(unsigned int service, unsigned int instance,
-> +		 unsigned int node, unsigned int port),
->   
->   	TP_ARGS(service, instance, node, port),
->   
->   	TP_STRUCT__entry(
-> -		__field(__le32, service)
-> -		__field(__le32, instance)
-> -		__field(__le32, node)
-> -		__field(__le32, port)
-> +		__field(unsigned int, service)
-> +		__field(unsigned int, instance)
-> +		__field(unsigned int, node)
-> +		__field(unsigned int, port)
->   	),
->   
->   	TP_fast_assign(
-> @@ -62,15 +64,16 @@ TRACE_EVENT(qrtr_ns_service_announce_del,
->   
->   TRACE_EVENT(qrtr_ns_server_add,
->   
-> -	TP_PROTO(__le32 service, __le32 instance, __le32 node, __le32 port),
-> +	TP_PROTO(unsigned int service, unsigned int instance,
-> +		 unsigned int node, unsigned int port),
->   
->   	TP_ARGS(service, instance, node, port),
->   
->   	TP_STRUCT__entry(
-> -		__field(__le32, service)
-> -		__field(__le32, instance)
-> -		__field(__le32, node)
-> -		__field(__le32, port)
-> +		__field(unsigned int, service)
-> +		__field(unsigned int, instance)
-> +		__field(unsigned int, node)
-> +		__field(unsigned int, port)
+On 4/6/23 10:56, gehao@kylinos.cn wrote:
+> 在 4/5/23 22:46, Sean Christopherson 写道:
+>
+>> This is not a RESEND, it is a new version.  From 
+>> Documentation/process/submitting-patches.rst:
+>>
+>>    Don't add "RESEND" when you are submitting a modified version of your
+>>    patch or patch series - "RESEND" only applies to resubmission of a
+>>    patch or patch series which have not been modified in any way from 
+>> the
+>>    previous submission.
+>>
+>> And the "in any way" really does mean in _any_ way.  E.g. if a patch 
+>> is rebased,
+>> the version needs to be bumped.  RESEND should only ever be used when 
+>> sending
+>> literally the same patch/email file, e.g. if something went awry in 
+>> the delivery
+>> of the email, or you forgot to Cc the right people, tec.
+>>
+>> On Wed, Apr 05, 2023, Hao Ge wrote:
+>>> Close the "current_clocksource" file descriptor before
+>> Wrap closer to ~75 chars, wrapping at ~55 is too aggressive.
+>>
+>>> returning or exiting from stable_tsc_check_supported()
+>>> in vmx_nested_tsc_scaling_test
+>>
+>> Vipin provided his Reviewed-by, that should have been captured here.  
+>> Please read
+>> through Documentation/process/submitting-patches.rst, guidance on 
+>> "using" the
+>> various tags is also provided there.  And if you have time, pretty 
+>> much all of
+>> Documentation/process/ is worth reading.
+>>
+>> No need to send a new version, all of this is easy to fixup when 
+>> applying.
+>
+> Thank you for your guidance,this has been very helpful to me for 
+> submitting
+>
+> patches.
+>
+>
+Thanks
 
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Best Regards
 
--- Mukesh
+Hao
 
->   	),
->   
->   	TP_fast_assign(
-> 
