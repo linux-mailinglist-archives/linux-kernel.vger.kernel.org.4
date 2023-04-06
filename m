@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81AC6DA38E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0314B6DA396
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240313AbjDFUk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
+        id S239077AbjDFUlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240744AbjDFUkf (ORCPT
+        with ESMTP id S240239AbjDFUkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:40:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67CABDD9;
-        Thu,  6 Apr 2023 13:36:40 -0700 (PDT)
+        Thu, 6 Apr 2023 16:40:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C670D53A;
+        Thu,  6 Apr 2023 13:36:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 723A9648E2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E49B644AD;
+        Thu,  6 Apr 2023 20:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FA7C433D2;
         Thu,  6 Apr 2023 20:36:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355BFC433EF;
-        Thu,  6 Apr 2023 20:36:29 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -71,16 +71,16 @@ To:     Jean Delvare <jdelvare@suse.com>,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 44/68] hwmon: mlxreg: constify pointers to hwmon_channel_info
-Date:   Thu,  6 Apr 2023 22:35:25 +0200
-Message-Id: <20230406203530.3012191-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 45/68] hwmon: nct7904: constify pointers to hwmon_channel_info
+Date:   Thu,  6 Apr 2023 22:35:26 +0200
+Message-Id: <20230406203530.3012191-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,22 +93,22 @@ const for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwmon/mlxreg-fan.c | 2 +-
+ drivers/hwmon/nct7904.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/mlxreg-fan.c b/drivers/hwmon/mlxreg-fan.c
-index 96017cc8da7e..c2a96468c9b4 100644
---- a/drivers/hwmon/mlxreg-fan.c
-+++ b/drivers/hwmon/mlxreg-fan.c
-@@ -285,7 +285,7 @@ static char *mlxreg_fan_name[] = {
- 	"mlxreg_fan3",
- };
+diff --git a/drivers/hwmon/nct7904.c b/drivers/hwmon/nct7904.c
+index ecc5db0011a3..007bae4c7028 100644
+--- a/drivers/hwmon/nct7904.c
++++ b/drivers/hwmon/nct7904.c
+@@ -803,7 +803,7 @@ static int nct7904_detect(struct i2c_client *client,
+ 	return 0;
+ }
  
--static const struct hwmon_channel_info *mlxreg_fan_hwmon_info[] = {
-+static const struct hwmon_channel_info * const mlxreg_fan_hwmon_info[] = {
- 	HWMON_CHANNEL_INFO(fan,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
- 			   HWMON_F_INPUT | HWMON_F_FAULT,
+-static const struct hwmon_channel_info *nct7904_info[] = {
++static const struct hwmon_channel_info * const nct7904_info[] = {
+ 	HWMON_CHANNEL_INFO(in,
+ 			   /* dummy, skipped in is_visible */
+ 			   HWMON_I_INPUT | HWMON_I_MIN | HWMON_I_MAX |
 -- 
 2.34.1
 
