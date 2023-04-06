@@ -2,68 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03936D9E63
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E614A6D9E98
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbjDFRTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        id S240133AbjDFRUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239919AbjDFRTR (ORCPT
+        with ESMTP id S240066AbjDFRUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:19:17 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6319FAF25
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:18:57 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id e9so26095514ljq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:18:57 -0700 (PDT)
+        Thu, 6 Apr 2023 13:20:01 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD269ECC;
+        Thu,  6 Apr 2023 10:19:34 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5416698e889so752556017b3.2;
+        Thu, 06 Apr 2023 10:19:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680801535; x=1683393535;
+        d=gmail.com; s=20210112; t=1680801573; x=1683393573;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IaGAlDLSR+aHsW2smFb3KG3pD9Eh4aLC1jMNuxnZFSY=;
-        b=XTMaXZ1V8zmHc8+mIKS3SkaPRadrPm56sChFwyZuqtTsaRv8aSvY3fRFIgLC3IGW4v
-         oqSmZYiMOuwej8Wi9YcEwP54lKqJ8pgG4Ir6XV4ObE6qCPAxU/tklP30zZ+oQLeIGXI/
-         bG7sxNTzpI3imi03NH2SfvBWAtgeLlXLrC2dfhISCiVQvqGyckjLcyBkDtYgAVLye7bf
-         YLnSmrn9FYBPzvSFH3ZQKkl81nS9aC86798UaBZWsO+UdQ3SNmij9K2rJZGCb5/2K7Rt
-         PZWJCmZcmpPPnLwaTZuGJABI3BIWmPEVNKtGR2YIl5ubD2GI5iP1sMU2tm2L4csJLTDG
-         223g==
+        bh=zs6V4xSX9ZlfsxZNTadcJVx+Wo1UCjoit8XXqPB91Bs=;
+        b=hynWLQyHnbgidmV91dL/pTn/bQ6Fvwdl16G4bV7a0cfNjLvqbo7ZJezWtT71601dZj
+         vyA53QTaqOyxJna1YPWAZZEarfelzHGrcBwBimALxU7yhWeWk2u2q2xxUwbzmAYpGGK6
+         Y7i6BYF3GFekGu174zZNzsSmnCBetspFUWvpNWr/Ek6eEcl2orfm5riHIUZvohNa2NoT
+         THQ115gs41K86a86xhzjbrzfSumTJSSyT9oie6SH1KzNCEs2IgJqB2q9tj4cAvVE7IIp
+         jujKfsP6+1HzIQ6+/CMRmw7bh3ZuHnygqXkvlaIM0YxkRlYY1rMhipDTo33w14rQtZ70
+         /DYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680801535; x=1683393535;
+        d=1e100.net; s=20210112; t=1680801573; x=1683393573;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IaGAlDLSR+aHsW2smFb3KG3pD9Eh4aLC1jMNuxnZFSY=;
-        b=Z5Bf+0yPgBobnLX2+hsKnqc3Vu1zcJlhiZ20IpcJI8pRgoc5CBbYT16qVOuQtjmL8u
-         81ZaSdjqr2PW3jnrjtyvegwz1I3I2mTgsBOc61nWodYxfvNzBOgG4lh0T8VimqH/4OfP
-         qjErbMCsuJIDN4olJTwemXtCqoTDDkgi6WR9DB2Da9xbALe9qKkjdCz8RHGawzi8bV4T
-         SYqSRPYlAG2sAnzE9s7bXtCeq5hUzsP93s4teN7xF/HfK6e3WHe3fOaJp282AhaoFUhA
-         OpNonhbQxCtc53NHtjzwPP+GnQFj+5K3CyqNj9Gq2eZiJe464K6anIe73Yl6eQCFBsnj
-         zudA==
-X-Gm-Message-State: AAQBX9flSeWwk2tIfKVKaPyloVAPGIGUtQ1aQ4scfxgqsqR0KskV740w
-        W1kvFRAPpevk8OpVmJFc6pUYkc3koqQ1hpoU3A7baErdjFqcs7/XZg4=
-X-Google-Smtp-Source: AKy350a2Xlu3bRoxw/GVmzSe40J3Bx9kLzH7nAcK8tpZgusEHcsEawexdzXn8jxrH51E3GZvXyc95xx1CF7Zblrg1V4=
-X-Received: by 2002:a2e:2e0d:0:b0:2a1:d819:f0ae with SMTP id
- u13-20020a2e2e0d000000b002a1d819f0aemr3697401lju.9.1680801534715; Thu, 06 Apr
- 2023 10:18:54 -0700 (PDT)
+        bh=zs6V4xSX9ZlfsxZNTadcJVx+Wo1UCjoit8XXqPB91Bs=;
+        b=ImHam+Cmz5wL8Wxjg47hGpz6y80IQtpZVETOtkajKg5EQw3VBgC2bVapar/uRrdpRa
+         jEQhhnuixOn6nVQQULiB4yV9MBP7YJc4Uw2GaAW4ZC7eiUHeGN+4R2Fzkm7Dx0LI57AB
+         Cy4/mKK0DqiV1IwVJRaPnAC7rPlllTtm3mNROGZGc1cRK0zN4Nk8oDHDsJYMAkB54TMc
+         FI1QNvDrr//YFgl5Qkx0CO5FtXO44M1yd70mw3NkKQTc5v60KbQRLsNLTPC27T1iMxX3
+         KLz+shuUgyTRV05Nl4BowKOcx5Pr1XBHd474I+xRwCSMVoyiaufkwxCJwTXCrV6piRg9
+         RfAA==
+X-Gm-Message-State: AAQBX9eDKd4BGCiqBcOkM0QwaHJwp2iAsMPeaZtSqW3qJ+Un27k93PfP
+        TizfptgFuKGqpfTXwmdlzCoY/pegwxckbf6abuM=
+X-Google-Smtp-Source: AKy350a/mqrWTiqYdMMX1Vw+SbgVv8dxMUMkHCqZprPzSXoQ/vKHSQZbDVIf1wpejJDyAA0MT4Wjf5VqY2/qxGwAVQw=
+X-Received: by 2002:a81:c642:0:b0:546:63a:6e23 with SMTP id
+ q2-20020a81c642000000b00546063a6e23mr6185709ywj.0.1680801572930; Thu, 06 Apr
+ 2023 10:19:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230328210754.2745989-1-posk@google.com> <20230406103841.GJ386572@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230406103841.GJ386572@hirez.programming.kicks-ass.net>
-From:   Peter Oskolkov <posk@google.com>
-Date:   Thu, 6 Apr 2023 10:18:43 -0700
-Message-ID: <CAPNVh5eNEBu+gcex9pAej-_YN3zMKkG+rruXhopqS6EaG-izVQ@mail.gmail.com>
-Subject: Re: UMCG - how should we proceed? Should we?
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     tglx@linutronix.de, bsegall@google.com,
-        linux-kernel@vger.kernel.org, pjt@google.com, posk@posk.io,
-        joshdon@google.com
+References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
+ <20230307-rust-drm-v1-7-917ff5bc80a8@asahilina.net> <ZC7T92F7K9XTZPZ1@phenom.ffwll.local>
+ <CANiq72=E2k7+_cwYw_EjVezk0mWCRqbH4MUjsEmxWgJMh=3AEQ@mail.gmail.com> <ZC7pHlLFutMWJF1s@phenom.ffwll.local>
+In-Reply-To: <ZC7pHlLFutMWJF1s@phenom.ffwll.local>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 6 Apr 2023 19:19:21 +0200
+Message-ID: <CANiq72=JOtZ7cc+FDxUY+HUEccRjXp=3gjbM04kwBiFR=Ew2-g@mail.gmail.com>
+Subject: Re: [PATCH RFC 07/18] rust: drm: mm: Add DRM MM Range Allocator abstraction
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Asahi Lina <lina@asahilina.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Karol Herbst <kherbst@redhat.com>,
+        Ella Stanforth <ella@iglunix.org>,
+        Faith Ekstrand <faith.ekstrand@collabora.com>,
+        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
+Cc:     Daniel Vetter <daniel@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,130 +93,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 3:38=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
-> wrote:
+On Thu, Apr 6, 2023 at 5:45=E2=80=AFPM Daniel Vetter <daniel@ffwll.ch> wrot=
+e:
 >
-> On Tue, Mar 28, 2023 at 02:07:54PM -0700, Peter Oskolkov wrote:
-> > Hi Peter!
-> >
-> > TL;DR: which approach, if any, should a UMCG implementation in the main=
-line kernel use?
-> >
-> > Details:
-> >
-> > We are rolling out internally a UMCG implementation copied below (with =
-some
-> > boilerplate omitted), so I would like to restart our discussion on the =
-topic.
-> >
-> > The implementation below is different from what we had earlier
-> > (https://lore.kernel.org/lkml/20220120155517.066795336@infradead.org/)
-> > in that it keeps UMCG state in the kernel rather than TLS.
-> >
-> > While having UMCG state in TLS is _much_ better, as it makes state sync=
-hronization
-> > between the userspace and the kernel much simpler, the whole page pinni=
-ng
-> > machinery in the link above looked very scary, honestly.
-> >
-> > So if we are going to ever have something like UMCG in the mainline ker=
-nel, we need
-> > to figure out the approach to use: the TLS-based one, something similar
-> > to what we have now internally (details below), or something else. Or n=
-one at all...
-> >
-> > While I would very much prefer to have it done your way (state in TLS),=
- the page pinning
-> > business was too much for me. If you can figure out a way to do it clea=
-nly and reliably, great!
+> Yeah this all looks great and very hyperlinked.
 >
-> A few quick notes without having looked at the patch...
->
-> > The main differences between what you had in the TLS patchset and what =
-is below:
->
-> (note that in the end the per-task UMCG info thing didn't *need* to be
-> TLS, although it is a logical place to put it)
+> I think the only nit I have is that for types with two or more type
+> variables (like the rbtree) what each of them should represent in the top
+> intro. I can guess it's <Key, Value> and not the other way round, but
+> confirmation takes quite a bit of scrolling to check with the function
+> types.
 
-Yes, of course. By "TLS" here I mean in userspace per task. Just
-easier to type "TLS" than "a per-task userspace area similar to
-rseq"...
+Yeah, that is fair. Personally I prefer more descriptive names when
+there are several or they have a special/asymmetric role.
 
->
-> > - per worker/server state not in TLS but in task_struct
-> > - we keep a list of idle workers and a list of idle servers in mm
->
-> How much of a scalability fail is that? Mathieu and me are currently
-> poking at a rseq/cid regression due to large multi thread contention on
-> mm data.
+> Otherwise I think perfect api docs.
 
-Our main use case is having a small number of servers and a single
-cross-server queue/scheduler in the userspace, not per-server
-queues/schedulers, so doing a couple of instructions (adding tasks to
-an SLL) under a spinlock does not seem to be an issue; if it becomes
-an issue, we can always switch to lock-free SLLs.
+Glad you like it!
 
+> Just a quick comment on this, that's the same we do on the C side. Most
+> overview chapters are actually DOC: sections pulled in from the code.
 >
-> But yeah, I think this was one of the open issues we still had; with the
-> other implementation -- I seem to have a half finished patch for an
-> idle_server list.
->
-> > - worker wake events are delivered not to servers which ran the workers=
- earlier,
-> >   but to idle servers from the idle server list
->
-> Provided there is one I take it; very easy to run out of idle things.
-> Also, what if you want to explicitly manage placement, can you still
-> direct the wakeup?
+> What I meant here is that for big overview stuff (like for modesetting ho=
+w
+> the display pipe structures tie together as an example:
+> https://dri.freedesktop.org/docs/drm/gpu/drm-kms.html#overview)
+> it doesn't make sense to duplicate that in rustdoc once more.
 
-As I mentioned above, we don't have per-server queues/schedulers, so
-we didn't need to direct wakeups to specific servers. Again, our model
-is if we have M servers and N workers, and M workers are running (i.e.
-no idle servers), waking a server when a blocked worker wakes means
-either preempting a running worker or grabbing an additional CPU; none
-of these options fit our model well.
+Yeah, definitely, if it is already somewhere else for C, we shouldn't
+duplicate it (that is what I meant by the "shared across C and Rust"
+exception).
 
-Doing it in a more flexible and scalable way to accommodate per-server
-queues/scheduling and RT scheduling would be great, of course, but I
-suspect the implementation will be more complex; and we definitely
-would like to stick to the principle "userspace cannot have more
-running tasks/threads than there are servers" (background stuff
-excluded, of course; but scheduling code is very much "foreground").
+> Maybe drm is the exception, but if you look at our .rst files we also hav=
+e
+> most of our docs in the code:
+>
+> https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/drm-kms-helpe=
+rs.rst
+>
+> The rst files just provide the scaffolding because C dosn't have
+> crates/modules hierarchy that would do this for you automatically.
 
->
-> > - worker preemption happens not via a syscall (umcg_kick) but by hookin=
-g
-> >   into sched_tick
->
-> sched_tick would render it somewhat unsuitable for RT
-> workloads/schedulers where you might need more immediate preemption.
+Sorry, I was talking in general in the kernel. That
+`drm-kms-helpers.rst` looks great.
 
-Yes; on the other hand, having preemption only via a syscall
-(umcg_kick) means the userspace should be tracking all running
-workers, juggling timers, etc.; and the same unresolved question of
-needing extra CPUs do to all this (who will kick workers from the
-userspace if they occupy all allocated CPUs?); using sched_tick is
-much simpler and does not require extra concurrency/cpus. Maybe we can
-have it both ways: an explicit umcg_kick() for RT use cases and
-"regular" tick-based preemption?
+From a quick grep, I think you are indeed one of the big users of
+`DOC: `, which indeed map closely to what you would do in Rust without
+the scaffolding need.
 
->
-> > None of the differences above are deal breakers; again, if the TLS/page=
- pinning
-> > approach is viable, we will gladly use it.
->
-> Urgh, so yeah.. I meant to go look at the whole UMCG thing again with an
-> eye specifically at inter-process support.
->
-> I'm hoping inter-process UMCG can be used to implement custom libpthread
-> that would allow running most of userspace under a custom UMCG scheduler
-> and obviate the need for this horrible piece of shit eBPF sched thing.
->
-> But I keep getting side-tracked with other stuff :/ I'll try and bump
-> this stuff up the todo list.
+So I think you will like writing docs in Rust :)
 
-In-process vs cross-process userspace scheduling are two
-different/distinct use cases for us, and doing them separately means
-they can be worked on by different people in parallel (i.e. done
-faster). Can this all be done as one thing that addresses both use
-cases? Probably yes; the question is how long will it take?
+Cheers,
+Miguel
