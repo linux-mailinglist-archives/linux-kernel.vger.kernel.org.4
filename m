@@ -2,98 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CE16D8F75
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CBE6D8F7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235405AbjDFGcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S235440AbjDFGeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 02:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235411AbjDFGcO (ORCPT
+        with ESMTP id S234698AbjDFGeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:32:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4E39012;
-        Wed,  5 Apr 2023 23:32:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F02CF62BD3;
-        Thu,  6 Apr 2023 06:32:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01E3C433D2;
-        Thu,  6 Apr 2023 06:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680762731;
-        bh=mrVMi9ItADs5lRaa8AhkduPiL3Eq0avtJIAJj0gI7ig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XT8jMJ1XiECcNN72+tAGjMk7omT2tmZuErDNNPte4WWUua/LrIUC5Fz5Qnrx+Z/0w
-         UEkNOCCzfNvR8ZGxVcPOCvkQXh3kWhO2YaBa2Be3S6N8ZHUvROfGNuY9r3i4nu/KmE
-         IuyWqxb27V9Sr0QKKkZKMjsLn/uvH9h4in/dXNSuh9EXIIBMQ0AoUROJtGUlwgP+5Q
-         h7VtcNInDtxYJwRr+VDKGnyVt3rtxTcyNSWMCzlE3H9Lfa5DVSgNjHTBHXGmTyWeSr
-         d5kOiJllkN878qCjYTSSQDQvaS3zxnUSdYaWSB09BAMXxAWPqSW+g0tRzHH6HdCLSJ
-         U1r9gO9j8QhVQ==
-Date:   Thu, 6 Apr 2023 08:32:00 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] i2c: mlxbf: Use readl_poll_timeout_atomic() for
- polling
-Message-ID: <ZC5nYIliBHxj1DpF@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Khalil Blaiech <kblaiech@nvidia.com>,
-        Asmaa Mnebhi <asmaa@nvidia.com>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230405125643.42398-1-andriy.shevchenko@linux.intel.com>
+        Thu, 6 Apr 2023 02:34:02 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5409B30CD;
+        Wed,  5 Apr 2023 23:34:01 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id le6so36638151plb.12;
+        Wed, 05 Apr 2023 23:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680762841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bXYyia8veGY8STLiF3slmavJjZFmlm+w/hngDTjzZY0=;
+        b=R3afHJBQ4HnkOUoJoR35NQQA3c1NoPaMxqm7+3AtPILkORwlkuH+DE6sRjsTyhAEc3
+         qzqM6Wqt28kmoQYchcEpKGGjgzimzjbbacSZMoNBnf0RkA2xnG6SDCXv7jurAllddcu4
+         /VrvbZfTXpCVvw3fZ/uvAq+HCU2ypmD40cFymwABMUwwkT+oVskc2Ha0wxsjNc89wNsM
+         RUb9zGC8l16pPRufdk9dz/xYsMEmH6b30B7naRNcfMBzu2i/7OzweOwRkw9jyMW21Rr8
+         ExwvFS73g6p6bH/Xb79DrQ+ZQObMhMgRFvSr2nuSw9BqQx1azWgkgkhzuqbDUomgWsLF
+         THVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680762841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bXYyia8veGY8STLiF3slmavJjZFmlm+w/hngDTjzZY0=;
+        b=q1FBmIDFkS7DnAVB77kdbVABG9ysbj4qxkHi4qKubDbtkwJCfJmef1DuLuo29uwYl+
+         xhtwwg8ASzdtoc8n8C1v+JyR4EubHGXIsH+owHt1xwu3aPku1+8vtaq170erCDcAy6NF
+         qxEgVuKmJsxNdytkBb9mUovFehK6eNiZX3CAxAKxrricl5XbebxdE1u1tRwZxNsgnGr9
+         7HS2gwflQFuVxg/C/KXhc2DrQYWm87Ioc6j/n4dSjZ8wDqWBZm2jmi0lnqanP/CBFFvI
+         fqrGYhmqhMK3F9aRnfXlvloPGwQMl4lrBQRgCgTYx1gSXCJSFQ+C7Ilbmcbx3hMrbu1/
+         rQAw==
+X-Gm-Message-State: AAQBX9eALFLxWBl+1qNmqbyTQJ8+THSs39aCIK/GQjqycavaFfzB8tAN
+        MFae42kt7/3NYIvM6n831IQ=
+X-Google-Smtp-Source: AKy350Y6jJgwLrz2fyYPXQEcJzECbnqI4olEBQaCgpQ7EdrF4tZ3/YyrtiUOSpt6L+zA9+DGxPjTcw==
+X-Received: by 2002:a17:902:da86:b0:19f:31c5:1848 with SMTP id j6-20020a170902da8600b0019f31c51848mr10481523plx.27.1680762840754;
+        Wed, 05 Apr 2023 23:34:00 -0700 (PDT)
+Received: from localhost.localdomain ([218.66.91.195])
+        by smtp.gmail.com with ESMTPSA id kp6-20020a170903280600b00192fe452e17sm595896plb.162.2023.04.05.23.33.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Apr 2023 23:34:00 -0700 (PDT)
+From:   xiaoshoukui <xiaoshoukui@gmail.com>
+To:     dsterba@suse.cz
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiaoshoukui@ruijie.com.cn, xiaoshoukui <xiaoshoukui@gmail.com>
+Subject: [PATCH] btrfs: ioctl: fix assertion compatible sets when cocurrently adding multiple devices
+Date:   Thu,  6 Apr 2023 02:32:55 -0400
+Message-Id: <20230406063255.126375-1-xiaoshoukui@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wQ/uxqoF42HFNEs1"
-Content-Disposition: inline
-In-Reply-To: <20230405125643.42398-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ASSERT in btrfs_exclop_balance should also check for NONE and
+BALANCE_PAUSED status.
 
---wQ/uxqoF42HFNEs1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Scenario 1: With exclusive_operation state == BTRFS_EXCLOP_NONE.
+Cocurrently adding multiple devices to the same mount point and
+btrfs_exclop_finish executed finish before assertion in
+btrfs_exclop_balance, exclusive_operation will changed to
+BTRFS_EXCLOP_NONE state which lead to assertion failed:
+fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE ||
+fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD,
+in fs/btrfs/ioctl.c:456
+Call Trace:
+ <TASK>
+ btrfs_exclop_balance+0x13c/0x310
+ ? memdup_user+0xab/0xc0
+ ? PTR_ERR+0x17/0x20
+ btrfs_ioctl_add_dev+0x2ee/0x320
+ btrfs_ioctl+0x9d5/0x10d0
+ ? btrfs_ioctl_encoded_write+0xb80/0xb80
+ __x64_sys_ioctl+0x197/0x210
+ do_syscall_64+0x3c/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-On Wed, Apr 05, 2023 at 03:56:43PM +0300, Andy Shevchenko wrote:
-> Convert the usage of an open-coded custom tight poll while loop
-> with the provided readl_poll_timeout_atomic() macro.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Scenario 2: With exclusive_operation state == BTRFS_EXCLOP_BALANCE_PAUSED.
+Cocurrently adding multiple devices to the same mount point and
+btrfs_exclop_balance executed finish before the latter thread execute
+assertion in btrfs_exclop_balance, exclusive_operation will changed to
+BTRFS_EXCLOP_BALANCE_PAUSED state which lead to assertion failed:
+fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE ||
+fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD ||
+fs_info->exclusive_operation == BTRFS_EXCLOP_NONE,
+fs/btrfs/ioctl.c:458
+Call Trace:
+ <TASK>
+ btrfs_exclop_balance+0x240/0x410
+ ? memdup_user+0xab/0xc0
+ ? PTR_ERR+0x17/0x20
+ btrfs_ioctl_add_dev+0x2ee/0x320
+ btrfs_ioctl+0x9d5/0x10d0
+ ? btrfs_ioctl_encoded_write+0xb80/0xb80
+ __x64_sys_ioctl+0x197/0x210
+ do_syscall_64+0x3c/0xb0
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Applied to for-next, thanks!
+Analyzed-by: xiaoshoukui <xiaoshoukui@ruijie.com.cn>
+Link: https://lore.kernel.org/linux-btrfs/20230404191042.GE19619@suse.cz/T/#t
+Signed-off-by: xiaoshoukui <xiaoshoukui@ruijie.com.cn>
+---
+ fs/btrfs/ioctl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index a0ef1a1784c7..7df80b37bc44 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -454,7 +454,9 @@ void btrfs_exclop_balance(struct btrfs_fs_info *fs_info,
+ 	case BTRFS_EXCLOP_BALANCE_PAUSED:
+ 		spin_lock(&fs_info->super_lock);
+ 		ASSERT(fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE ||
+-		       fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD);
++		       fs_info->exclusive_operation == BTRFS_EXCLOP_DEV_ADD ||
++		       fs_info->exclusive_operation == BTRFS_EXCLOP_NONE ||
++		       fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE_PAUSED);
+ 		fs_info->exclusive_operation = BTRFS_EXCLOP_BALANCE_PAUSED;
+ 		spin_unlock(&fs_info->super_lock);
+ 		break;
+-- 
+2.20.1
 
---wQ/uxqoF42HFNEs1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQuZ10ACgkQFA3kzBSg
-KbaqLg//fWX65SX7kU/8rJRFAyue0/0Pt4+/sEu68vYWODd5sr2fmUwOWiBbVkjU
-TOWfrNI6J8SzjR/dqTfHP5+bmiPeg9wvLdszjBRX+ISBQC1+UfWZIrxHKYAmSgJH
-38pWvUfquM3pe/LT+7FivZtZMojuFa7jyEibTnZxkha0vLw+UVZPyKm6ojcPVDaG
-+DdlnB0CPrTNXxF0/65Ao8ksDWpP0spiAGMpvXMdozgPcY9ggoURsZ+NiOi1WKCY
-VTph6lhrpKcAJZ/tObpA5vUwm/uJwKHdbYb0uePiy/RAQF5Cs7FE6UlnKCXjf6Ow
-paMj8qX6MC+iiCDUHl8hA/PqHPCkUJeu0UTUo14OS41l3sZakZPQIrn6UWgFatKC
-RKAmzXO6r7WSLOIDMSn2TwCBQhK+tMlTOn6jYLHw9nm9q3x4BtPznP9n6SD3CAdI
-YytjE0EH1mqaZLQQTPzWgIGkFsP+72ZKbp9LUz1wmjjU/Cya4sCXkqqYHL95LKu6
-q3CCWMW3Ts0Xkw53oYKE8ssakkbPlWVZQELQBKoha0sBfERvyrM9ugBtpypC9opD
-3GU37zaTbVZ+/f/C/u2fqAdS5hWwsfsOQ10nEEKwzfhQFJN6Ezqjr89I2lXHpxYX
-xkRuTbl/KmrlyARShoR1++ouTks3n/Lnb0ePEr+frgKFjjte2I4=
-=f4P3
------END PGP SIGNATURE-----
-
---wQ/uxqoF42HFNEs1--
