@@ -2,81 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1622A6D8FE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 08:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45CD6D8FF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235495AbjDFG6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 02:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
+        id S234767AbjDFHB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234923AbjDFG6n (ORCPT
+        with ESMTP id S235873AbjDFHBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 02:58:43 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43140DE;
-        Wed,  5 Apr 2023 23:58:43 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso42048841pjb.0;
-        Wed, 05 Apr 2023 23:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680764323;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pjE1y6DkcSyhBXk4ShnrpQHXjNrs31wVH2hslBoMcec=;
-        b=pLMEf0HOaZ8z/9lmwlxlMapKlCYhOCsrfTosTAEhZXsz8a05gzvkP8pe611RvWvbx3
-         a+D9Ozdl55bTmnZ74z0BBF7jMmsPLkT/COwVgyKe1JvXAiKHHRphfHnQvRHltC4y3U9l
-         oXiYFX4Jq1D41OBsvYWKtpUPoTj2pwFQPYxGGQ9/n+rlJODoYH/knvrVnDyB9xI44jNx
-         i/q27EAPVBdPSmHU/36J604JN4nYJGYtVS871Sdv943jyOb2nNdS3WrV+8grVuTJgJkH
-         PhSw11nnHFJUnoxhYmzTPHDCj4mgV7LM/40SRt1NIgr7jDdodLI1Ha4ZqmOri5DmOu1/
-         Ct0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680764323;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pjE1y6DkcSyhBXk4ShnrpQHXjNrs31wVH2hslBoMcec=;
-        b=oPaQEMjffX1NRftEP6nujt1DTqBcZjbYbGJFGwWnD3aNsGBhffWOM5AF7vz6a5XLj+
-         p2VfkDXIHKd7IHYgfSv+uNy49ow7NUKAfGbDh5GyD+eRcePlo+xuKvwrDGWrxAGZwhXj
-         WVvVoOleVVd4lHTZJ3dLh6TBma0G09FOc/hS7KTZNc672ffFZRd9a/ev51bVzlrU3Fhp
-         LgmGfUuoX/WCeqb3pDC5Lqz6f06GFozsUAS7TmsVIT26J5DE8o/vNo8NqtaYYqWTjm1T
-         9xm9SLNGtKS1pHbI856uVlDF5HhB5o8wr8cLsTU20cpUc/RF3wZ8GYb5hs4WjXOJpLLn
-         w+HA==
-X-Gm-Message-State: AAQBX9dUr4s7xnTV52uBQUZWLLHaEinOY/3xOpZNvc3ZJBl3bj+uGlcG
-        E0BDERoqNUZacZ2n9Kg4x/A=
-X-Google-Smtp-Source: AKy350ZNPecxCSnNkknXBjksweulZ6KB7rxOeSJJ8GhitTGHC6nm9rjhuv4kXWuwelvgT0Srpsw/Yg==
-X-Received: by 2002:a05:6a20:c4aa:b0:d9:4c19:fe6a with SMTP id eo42-20020a056a20c4aa00b000d94c19fe6amr2166630pzb.9.1680764322791;
-        Wed, 05 Apr 2023 23:58:42 -0700 (PDT)
-Received: from localhost.localdomain ([218.66.91.195])
-        by smtp.gmail.com with ESMTPSA id i16-20020aa78b50000000b0062d35807d3asm556291pfd.28.2023.04.05.23.58.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 23:58:41 -0700 (PDT)
-From:   xiaoshoukui <xiaoshoukui@gmail.com>
-To:     dsterba@suse.cz
-Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiaoshoukui@ruijie.com.cn
-Subject: Re: [PATCH] btrfs: ioctl: fix inaccurate determination of exclusive_operation
-Date:   Thu,  6 Apr 2023 02:58:36 -0400
-Message-Id: <20230406065836.126457-1-xiaoshoukui@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230404191042.GE19619@suse.cz>
-References: <20230404191042.GE19619@suse.cz>
+        Thu, 6 Apr 2023 03:01:14 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3299EA5F5;
+        Thu,  6 Apr 2023 00:00:57 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3366S7Xi019083;
+        Thu, 6 Apr 2023 07:00:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=eHJw8CHh4+/6PLUlX9ualJ18zAlphh0+gkGDJjdWpKI=;
+ b=miU9887+0SKTSE24eJI0VnL4qbhCE0HC8+41ocaFTb53YCc5yYQPUekSB3i6Q33DhTMZ
+ IywdNQH+Zh5KKT9n52+hs4aS2CqG/Jul0EDNsx/pY00a+66qvMWG0L5ORuHAEwT7BTFm
+ qzc18Ps58ZLkMxGJMsYc51D8gU55OYa0DSrsZQ+uceieeZeNrmG27eUDT6H8oXPzK9qb
+ 9AO6MUHqJYLiyUo4BjDqjb45lMOnHjDV7cgIlICbwj5h4b/o7jyr2c7Os4JkZ27mCqbo
+ 5C9/Bcz4BhcMAbDbleufQ92B/+xt1HgFTGTXpVnYbs1LFt1TVut3n4N6K6e7Y8kzEjgl NQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psr2605dp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 07:00:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 33670qWM020720
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Apr 2023 07:00:52 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 6 Apr 2023 00:00:46 -0700
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_ipkumar@quicinc.com>
+Subject: [PATCH V3 0/5] Add regulator support for IPQ9574 SoC
+Date:   Thu, 6 Apr 2023 12:30:27 +0530
+Message-ID: <20230406070032.22243-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 4_rB9I6VXwT2chJZ8cS9MB1H_rvvEf3q
+X-Proofpoint-ORIG-GUID: 4_rB9I6VXwT2chJZ8cS9MB1H_rvvEf3q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_02,2023-04-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=433
+ malwarescore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
+ spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304060061
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Please send a fix with the analysis you dit and add the relevant parts
-> of stack traces. The reproducer would be good to have in fstests, for
-> the changelog please describe the conditions that could trigger the
-> assertion, the reproducer itself is too long. Thanks.
+IPQ9574 SoC uses the PMIC MP5496 and SMPA1 regulator for APSS voltage scaling.
+This patch series adds support for the same and also enables the RPM 
+communication over the RPMSG framework.
 
-Already posted the fix patch in a new thread. Thanks for your advice on
-reproducer program. It will take some time to refactor it to fstests testcase.
+DTS patch depends on the below series
+https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
+
+[V3]:
+	- Dropped PATCH [1/6] dt-bindings: soc: qcom: smd-rpm: Add IPQ9574 compatible
+	  as it is available in linux-next/master
+	- Dropped PATCH [4/6] regulator: qcom_smd: Add support to define the bootup voltage
+	  and updated the nominal voltage in the Board DT as discussed
+	- Splitted the board DT changes to a separate patch as suggested
+	- Detailed change logs are added to the respective patches
+[V2]:
+	https://lore.kernel.org/linux-arm-msm/20230217142030.16012-1-quic_devipriy@quicinc.com/
+	- Reordered the patches to have the bindings and driver changes
+	  in place before the device tree support
+	- Dropped the 'soc: qcom: smd-rpm: Add IPQ9574 compatible' since
+	  it is already part of the linux-next/master
+	- Detailed change log is added to the respective patches
+[V1]:
+	https://lore.kernel.org/linux-arm-msm/20230113150310.29709-1-quic_devipriy@quicinc.com/
+
+Devi Priya (5):
+  regulator: qcom_smd: Add s1 sub-node to mp5496 regulator
+  regulator: qcom_smd: Add MP5496 S1 regulator
+  arm64: dts: qcom: ipq9574: Add RPM related nodes
+  arm64: dts: qcom: ipq9574: Add SMPA1 regulator node
+  arm64: dts: qcom: ipq9574: Add cpufreq support
+
+ .../regulator/qcom,smd-rpm-regulator.yaml     |  2 +-
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   | 19 +++++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 75 +++++++++++++++++++
+ drivers/regulator/qcom_smd-regulator.c        | 10 +++
+ 4 files changed, 105 insertions(+), 1 deletion(-)
+
+
+base-commit: 8417c8f5007bf4567ccffda850a3157c7d905f67
+-- 
+2.17.1
+
