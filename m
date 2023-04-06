@@ -2,135 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2950F6D94AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC3B6D94AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbjDFLHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S237111AbjDFLHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjDFLHU (ORCPT
+        with ESMTP id S236987AbjDFLHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:07:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF6DE0
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680779193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LSpYEks1T5f1HgeKXvgnDWGtTBs8ltEecfJ6Ag+UgLU=;
-        b=WuYmFnb4aaDlLnQAwIrUUhLTR6eEwE4vokKPWLColy+//AUamCCUyxIH4oNx/Uci+7rE3q
-        RFuHUBvBYF6SOAXDphESKnKq+tqq7Sg3GBbYbF8T5WJmdP8mqARIVtnbvXONTnePJBCnjr
-        ttdxdw44GCTm61OIUGbsKCzfUKuZARM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-jJolPkiZMh25d-WtlECE3g-1; Thu, 06 Apr 2023 07:06:27 -0400
-X-MC-Unique: jJolPkiZMh25d-WtlECE3g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 12FAF3C0ED6C;
-        Thu,  6 Apr 2023 11:06:26 +0000 (UTC)
-Received: from localhost (ovpn-12-86.pek2.redhat.com [10.72.12.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1D3171121314;
-        Thu,  6 Apr 2023 11:06:23 +0000 (UTC)
-Date:   Thu, 6 Apr 2023 19:06:19 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v21 0/7] crash: Kernel handling of CPU and memory hot
- un/plug
-Message-ID: <ZC6nq13EDIrK1XFe@MiWiFi-R3L-srv>
-References: <20230404180326.6890-1-eric.devolder@oracle.com>
+        Thu, 6 Apr 2023 07:07:34 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A607A9D;
+        Thu,  6 Apr 2023 04:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=29DiQcJ+NesR4bzlrgSGDb6JnN91qFQawEIe6tNxYUo=; b=BaTEkyAhdN5dw6cCUs02xo/plw
+        WLCS1AwOw7Zev1BLZKXfHyhlnjjP4ozYoeSUWRONWbmN0kba+V79CUy1Jbd7mClSdQvOmm+DeKbF9
+        QOgTs7KK1c0Y1EvvPS9742xOwiQ+ehUMnp9kMAfP6KIc6NCR7kwM+lsRFHvBII9EYFbKGZqnuVvpk
+        WsRwArejLCyVoakKWoeGXIFdfT2za2hfvRhiJfZaz0u5hp+5h6b6SWAdw9AOGikDrBObt7z+PXTfe
+        jazufLNrIJMXtIDEZSWaGiw3XZ2UHf2CnxFB1+BRLVDOySv5sNwEVGNnVEVoHmEt5FTgJ3o4LFSnS
+        /rlKe9rQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46406)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pkNSN-0006ry-9H; Thu, 06 Apr 2023 12:07:07 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pkNSH-0007R0-4o; Thu, 06 Apr 2023 12:07:01 +0100
+Date:   Thu, 6 Apr 2023 12:07:01 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [RFC PATCH net-next] net: dsa: mt7530: fix port specifications
+ for MT7988
+Message-ID: <ZC6n1XAGyZFlxyXx@shell.armlinux.org.uk>
+References: <20230406100445.52915-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230404180326.6890-1-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230406100445.52915-1-arinc.unal@arinc9.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/23 at 02:03pm, Eric DeVolder wrote:
-> Once the kdump service is loaded, if changes to CPUs or memory occur,
-> either by hot un/plug or off/onlining, the crash elfcorehdr must also
-> be updated.
+On Thu, Apr 06, 2023 at 01:04:45PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> The elfcorehdr describes to kdump the CPUs and memory in the system,
-> and any inaccuracies can result in a vmcore with missing CPU context
-> or memory regions.
+> On the switch on the MT7988 SoC, there are only 4 PHYs. There's only port 6
+> as the CPU port, there's no port 5. Split the switch statement with a check
+> to enforce these for the switch on the MT7988 SoC. The internal phy-mode is
+> specific to MT7988 so put it for MT7988 only.
 > 
-> The current solution utilizes udev to initiate an unload-then-reload
-> of the kdump image (eg. kernel, initrd, boot_params, purgatory and
-> elfcorehdr) by the userspace kexec utility. In the original post I
-> outlined the significant performance problems related to offloading
-> this activity to userspace.
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
 > 
-> This patchset introduces a generic crash handler that registers with
-> the CPU and memory notifiers. Upon CPU or memory changes, from either
-> hot un/plug or off/onlining, this generic handler is invoked and
-> performs important housekeeping, for example obtaining the appropriate
-> lock, and then invokes an architecture specific handler to do the
-> appropriate elfcorehdr update.
+> Daniel, this is based on the information you provided me about the switch.
+> I will add this to my current patch series if it looks good to you.
 > 
-> Note the description in patch 'crash: change crash_prepare_elf64_headers()
-> to for_each_possible_cpu()' and 'x86/crash: optimize CPU changes' that
-> enables further optimizations related to CPU plug/unplug/online/offline
-> performance of elfcorehdr updates.
+> Arınç
 > 
-> In the case of x86_64, the arch specific handler generates a new
-> elfcorehdr, and overwrites the old one in memory; thus no involvement
-> with userspace needed.
+> ---
+>  drivers/net/dsa/mt7530.c | 67 ++++++++++++++++++++++++++--------------
+>  1 file changed, 43 insertions(+), 24 deletions(-)
 > 
-> To realize the benefits/test this patchset, one must make a couple
-> of minor changes to userspace:
-> 
->  - Prevent udev from updating kdump crash kernel on hot un/plug changes.
->    Add the following as the first lines to the RHEL udev rule file
->    /usr/lib/udev/rules.d/98-kexec.rules:
-> 
->    # The kernel updates the crash elfcorehdr for CPU and memory changes
->    SUBSYSTEM=="cpu", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
->    SUBSYSTEM=="memory", ATTRS{crash_hotplug}=="1", GOTO="kdump_reload_end"
-> 
->    With this changeset applied, the two rules evaluate to false for
->    CPU and memory change events and thus skip the userspace
->    unload-then-reload of kdump.
-> 
->  - Change to the kexec_file_load for loading the kdump kernel:
->    Eg. on RHEL: in /usr/bin/kdumpctl, change to:
->     standard_kexec_args="-p -d -s"
->    which adds the -s to select kexec_file_load() syscall.
-> 
-> This kernel patchset also supports kexec_load() with a modified kexec
-> userspace utility. A working changeset to the kexec userspace utility
-> is posted to the kexec-tools mailing list here:
-> 
->  http://lists.infradead.org/pipermail/kexec/2022-October/026032.html
-> 
-> To use the kexec-tools patch, apply, build and install kexec-tools,
-> then change the kdumpctl's standard_kexec_args to replace the -s with
-> --hotplug. The removal of -s reverts to the kexec_load syscall and
-> the addition of --hotplug invokes the changes put forth in the
-> kexec-tools patch.
+> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+> index 6fbbdcb5987f..f167fa135ef1 100644
+> --- a/drivers/net/dsa/mt7530.c
+> +++ b/drivers/net/dsa/mt7530.c
+> @@ -2548,7 +2548,7 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
+>  	phy_interface_zero(config->supported_interfaces);
+>  
+>  	switch (port) {
+> -	case 0 ... 4: /* Internal phy */
+> +	case 0 ... 3: /* Internal phy */
+>  		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+>  			  config->supported_interfaces);
+>  		break;
+> @@ -2710,37 +2710,56 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>  	struct mt7530_priv *priv = ds->priv;
+>  	u32 mcr_cur, mcr_new;
+>  
+> -	switch (port) {
+> -	case 0 ... 4: /* Internal phy */
+> -		if (state->interface != PHY_INTERFACE_MODE_GMII &&
+> -		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
+> -			goto unsupported;
+> -		break;
+> -	case 5: /* Port 5, a CPU port. */
+> -		if (priv->p5_interface == state->interface)
+> +	if (priv->id == ID_MT7988) {
+> +		switch (port) {
+> +		case 0 ... 3: /* Internal phy */
+> +			if (state->interface != PHY_INTERFACE_MODE_INTERNAL)
 
-Other than the nitpick in patch 2, this series looks good to me.
+How do these end up with PHY_INTERFACE_MODE_INTERNAL ? phylib defaults
+to GMII mode without something else being specified in DT.
 
-Acked-by: Baoquan He <bhe@redhat.com>
+Also note that you should *not* be validating state->interface in the
+mac_config() method because it's way too late to reject it - if you get
+an unsupported interface here, then that is down to the get_caps()
+method being buggy. Only report interfaces in get_caps() that you are
+prepared to handle in the rest of the system.
 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
