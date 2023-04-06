@@ -2,224 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1AB6D8E14
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B3F6D8E18
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233641AbjDFDru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
+        id S234812AbjDFDuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbjDFDrs (ORCPT
+        with ESMTP id S234703AbjDFDuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:47:48 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0287A7EEA
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:47:47 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id m6-20020a4ae846000000b0053b9059edd5so5991809oom.3
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 20:47:46 -0700 (PDT)
+        Wed, 5 Apr 2023 23:50:35 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9175259E3
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:50:32 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j13so36116281pjd.1
+        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 20:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1680752866; x=1683344866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YOQyXiF6H32qjkbnMHBLAnQGR5UU6PO5KDbekZHdUSo=;
-        b=HJTZeaB3FWyeKAWAaoBXmGAq3xziEUF0GuRnpfvm6j4J4qHmlC76aYg3Sby0RPiigC
-         nIxmToYWBSZn6qx8L0udvCx/Zj/VeP3MB3xREKMduoBAY/ws2ndZKtY7hh7AuUlVmnCu
-         i5eHBVnyZe877m6WyTMryR806FB5XFZsWRx5sXP0BSSDDIa+2Ol5RgXw8zFpWp4/dkcJ
-         J60mskmq1TPD0JSqGqrFzFV1kjwJ3Uw8l4i/qaV9AsX5ngf78v32HDqkz1NwxvT9lomI
-         aOYlqLKIDEq3dqH1FmJHRK87ICzOfor25rbAvuzC1Ry2KdPbNaDn21jRpkxLsHKL3etx
-         Yzkw==
+        d=google.com; s=20210112; t=1680753032;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6DFgxHVSoi7qhEpk5u+BdsarAdP4qAWg3XCiTncAEZ8=;
+        b=P2gR2qVRdK7Ckxs6pVpTZbDbdDHtA/td2Fwn67o7qF1KaamtjwPe+pFeFgGI4xfL1x
+         LMBRX64kKMNSVX48fVqhkkDQSkjv2zvQXa6zmIc2CIMt+JUzws+w/NOUwNmWcEw7XY6t
+         uiX6VPmuHTwl7QOGQZKCmmPbS4oxjY7x9uktKGg7GmSAaaZ8PG2uIt7TwqXt7WdAd9Yq
+         Oj8VB0P4MqCbLiZA2s/FrB9ywQUq4FrYUqsW91uI6AZXAiRehv+6Ln5E0Hl1eXwKUwrL
+         0z7I011Aw0HNBemvxn3IcSuKmNjHUNO4hfM5EiC112Ukru05dxUF6z/GZbmsXjzNg1YT
+         JSFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680752866; x=1683344866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YOQyXiF6H32qjkbnMHBLAnQGR5UU6PO5KDbekZHdUSo=;
-        b=ekb9QyciTMmtFGTKsQvz3eH7WXx/XLutRvKAWB3QOhe7p9m02XnLWw6QgAsvEx7lC9
-         ZmIKPzWHZtDLj+wgtT871gNeAHuUJZU+az/Qfg/E4VlmfIGfxgFep0F9xSscjQAO2Okg
-         ueBXEKpFytmZQkUpGLOCdksxY67/+jqWEWayxcWfujqNb10EFLRM5gJWDweG7LDTxGOP
-         bS6Io78AQyd0K9PT1gzN2oic3PEuwXn4kSFp1qD5OPY6qagR5Bb2xrSpHIJw2lxOQalr
-         LzLJpPS5aJtK7uW4/xKjliVxKvWuZoszMNDGiYDPogVEXIu/Q5gzbV4BO4gV/BZgH0lh
-         u2HA==
-X-Gm-Message-State: AAQBX9fkGycTlsdfM+QIPL69VDA1pyp/yRLgF05D3wNxtvVEqGiW5ZfI
-        eqw9U5TRw8nX6ZDSE0TshZDBcQ==
-X-Google-Smtp-Source: AKy350ZkL5S/RfJe6PTFOfG3x5lJGeLEQLGO93kjuxHnHTjvtMezmwr1ISkQU/V4CeeOWnC/nvBXXA==
-X-Received: by 2002:a4a:414c:0:b0:538:4d29:30cb with SMTP id x73-20020a4a414c000000b005384d2930cbmr4467173ooa.8.1680752866306;
-        Wed, 05 Apr 2023 20:47:46 -0700 (PDT)
-Received: from sunil-laptop ([106.51.83.242])
-        by smtp.gmail.com with ESMTPSA id w127-20020a4a5d85000000b00525398a1144sm88871ooa.32.2023.04.05.20.47.38
+        d=1e100.net; s=20210112; t=1680753032;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6DFgxHVSoi7qhEpk5u+BdsarAdP4qAWg3XCiTncAEZ8=;
+        b=ftWdWr9tgRupEzPhj2BiAUdM/VpGezEturoJXwiJ5/fAbu11Tbz47IAEQf530+CGk4
+         5Ejm7Ri36vcVmmJfbfSb2JudawpNQY0tYrp2szZEcJXmXKFT6B9+DYLsBDoNknEzXpQS
+         vuJL4p39GXA3EshUCPVotIBtizQ8E2hliKCMtNlxmDmUPeaXp8W5rdbl4T82Hu3Y/NB+
+         HoYl6j8TzdZPsY/N3AfROXh1moTO/DPU2xlnfE7kG75lsOheasRlSbf+PJBaJH+o3xWf
+         uSvdowWhgQt77hMjF3J6shRyxTlZMmpZjkSHBKDMNRqCIySm3v0RUjw4QffkxAf6CT/Z
+         Zjvw==
+X-Gm-Message-State: AAQBX9e1KLfWWyeQs6LXHjaQy6ItH2dsHkQFG9On7NfWwgmF3hpmYsQu
+        yADcpS91wQzrcscEI3lUrMuyLA==
+X-Google-Smtp-Source: AKy350YfFfed8valzu4kVHfFuJe0ofxdRZFg4bBa9riHFH1xCIb/InFmM+bkl6j7Y73AIi6QZzDoHw==
+X-Received: by 2002:a17:902:d510:b0:1a1:b8ff:5552 with SMTP id b16-20020a170902d51000b001a1b8ff5552mr11075791plg.6.1680753031634;
+        Wed, 05 Apr 2023 20:50:31 -0700 (PDT)
+Received: from google.com (41.183.143.34.bc.googleusercontent.com. [34.143.183.41])
+        by smtp.gmail.com with ESMTPSA id d22-20020a170902b71600b0019cb6222698sm265444pls.266.2023.04.05.20.50.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Apr 2023 20:47:46 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 09:17:34 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Marc Zyngier <maz@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH V4 15/23] irqchip/riscv-intc: Add ACPI support
-Message-ID: <ZC5A1oBOhOn4R0tm@sunil-laptop>
-References: <20230404182037.863533-1-sunilvl@ventanamicro.com>
- <20230404182037.863533-16-sunilvl@ventanamicro.com>
- <qxftlofleo2bpyqa5lyshiluc5cd37u4hljn4bh7noxv7g5pno@ldvh6gkyrlzu>
+        Wed, 05 Apr 2023 20:50:31 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 09:20:21 +0530
+From:   Ajay Agarwal <ajayagarwal@google.com>
+To:     William McVicker <willmcvicker@google.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sajid Dalvi <sdalvi@google.com>,
+        Han Jingoo <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>, kernel-team@android.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
+Message-ID: <ZC5Bfa2N0aWo0o0l@google.com>
+References: <ZC12lN9Cs0QlPhVh@lpieralisi>
+ <20230405182753.GA3626483@bhelgaas>
+ <ZC3Ev7qnUDdG0cFd@google.com>
+ <ZC3Kw4AYiMKY7nCR@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <qxftlofleo2bpyqa5lyshiluc5cd37u4hljn4bh7noxv7g5pno@ldvh6gkyrlzu>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZC3Kw4AYiMKY7nCR@google.com>
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 05:48:47PM +0200, Andrew Jones wrote:
-> On Tue, Apr 04, 2023 at 11:50:29PM +0530, Sunil V L wrote:
-> > Add support for initializing the RISC-V INTC driver on ACPI
-> > platforms.
+On Wed, Apr 05, 2023 at 12:23:47PM -0700, William McVicker wrote:
+> On 04/05/2023, William McVicker wrote:
+> > On 04/05/2023, Bjorn Helgaas wrote:
+> > > On Wed, Apr 05, 2023 at 03:24:36PM +0200, Lorenzo Pieralisi wrote:
+> > > > On Thu, Mar 16, 2023 at 06:05:02PM -0500, Sajid Dalvi wrote:
+> > > > > On Tue, Feb 28, 2023 at 10:36 PM Sajid Dalvi <sdalvi@google.com> wrote:
+> > > > > >
+> > > > > > Thanks for your review Jingoo.
+> > > > > > Sajid
+> > > > > >
+> > > > > > On Tue, Feb 28, 2023 at 4:04 PM Han Jingoo <jingoohan1@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
+> > > > > > > >
+> > > > > > > > In dw_pcie_host_init() regardless of whether the link has been started
+> > > > > > > > or not, the code waits for the link to come up. Even in cases where
+> > > > > > > > start_link() is not defined the code ends up spinning in a loop for 1
+> > > > > > > > second. Since in some systems dw_pcie_host_init() gets called during
+> > > > > > > > probe, this one second loop for each pcie interface instance ends up
+> > > > > > > > extending the boot time.
+> > > > > > > >
+> > > > > > > > Call trace when start_link() is not defined:
+> > > > > > > > dw_pcie_wait_for_link << spins in a loop for 1 second
+> > > > > > > > dw_pcie_host_init
+> > > > > > > >
+> > > > > > > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> > > > > > >
+> > > > > > > (CC'ed Krzysztof Kozlowski)
+> > > > > > >
+> > > > > > > Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> > > > > > >
+> > > > > > > It looks good to me. I also checked the previous thread.
+> > > > > > > I agree with Krzysztof's opinion that we should include
+> > > > > > > only hardware-related features into DT.
+> > > > > > > Thank you.
+> > > > > > >
+> > > > > > > Best regards,
+> > > > > > > Jingoo Han
+> > > > > > >
+> > > > > > > > ---
+> > > > > > > >  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
+> > > > > > > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > > > > index 9952057c8819..9709f69f173e 100644
+> > > > > > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > > > > @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+> > > > > > > >                 ret = dw_pcie_start_link(pci);
+> > > > > > > >                 if (ret)
+> > > > > > > >                         goto err_remove_edma;
+> > > > > > > > -       }
+> > > > > > > >
+> > > > > > > > -       /* Ignore errors, the link may come up later */
+> > > > > > > > -       dw_pcie_wait_for_link(pci);
+> > > > > > > > +               /* Ignore errors, the link may come up later */
+> > > > > > > > +               dw_pcie_wait_for_link(pci);
+> > > > > > > > +       }
+> > > > > > > >
+> > > > > > > >         bridge->sysdata = pp;
+> > > > > > > >
+> > > > > > > > --
+> > > > > > > > 2.39.2.722.g9855ee24e9-goog
+> > > > > > > >
+> > > > > 
+> > > > > @bhelgaas Can this be picked up in your tree:
+> > > > >  https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/
+> > > > 
+> > > > This patch seems fine to me. The question I have though is why the
+> > > > *current* code is written the way it is. Perhaps it is just the way
+> > > > it is, I wonder whether this change can trigger a regression though.
+> > > 
+> > > The new code will look basically like this:
+> > > 
+> > >   if (!dw_pcie_link_up(pci)) {
+> > >     dw_pcie_start_link(pci);
+> > >     dw_pcie_wait_for_link(pci);
+> > >   }
+> > > 
+> > > If the link is already up by the time we get here, this change means
+> > > we won't get this message emitted by dw_pcie_wait_for_link():
+> > > 
+> > >   dev_info(pci->dev, "PCIe Gen.%u x%u link up\n", ...)
+> > > 
+> > > I don't know how important that is, but I bet somebody cares about it.
+> > > 
+> > > From the commit log, I expected the patch to do something based on
+> > > whether ->start_link() was defined, but there really isn't a direct
+> > > connection, so maybe the log could be refined.
+> > > 
+> > > Bjorn
+> > > 
+> > > -- 
+> > > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> > > 
 > > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  drivers/irqchip/irq-riscv-intc.c | 74 ++++++++++++++++++++++++++------
-> >  1 file changed, 61 insertions(+), 13 deletions(-)
+> > After taking a deeper dive into this patch, I found that [1] changes the
+> > original intent which was to skip the call to dw_pcie_wait_for_link()
+> > when pci->ops->start_link is NULL. I talked to Sajid offline and he
+> > agreed we should put back the start_link NULL check. The updated patch
+> > should look like this:
 > > 
-> > diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-> > index f229e3e66387..6b476fa356c0 100644
-> > --- a/drivers/irqchip/irq-riscv-intc.c
-> > +++ b/drivers/irqchip/irq-riscv-intc.c
-> > @@ -6,6 +6,7 @@
-> >   */
-> >  
-> >  #define pr_fmt(fmt) "riscv-intc: " fmt
-> > +#include <linux/acpi.h>
-> >  #include <linux/atomic.h>
-> >  #include <linux/bits.h>
-> >  #include <linux/cpu.h>
-> > @@ -112,6 +113,30 @@ static struct fwnode_handle *riscv_intc_hwnode(void)
-> >  	return intc_domain->fwnode;
-> >  }
-> >  
-> > +static int __init riscv_intc_init_common(struct fwnode_handle *fn)
-> > +{
-> > +	int rc;
-> > +
-> > +	intc_domain = irq_domain_create_linear(fn, BITS_PER_LONG,
-> > +					       &riscv_intc_domain_ops, NULL);
-> > +	if (!intc_domain) {
-> > +		pr_err("unable to add IRQ domain\n");
-> > +		return -ENXIO;
-> > +	}
-> > +
-> > +	rc = set_handle_irq(&riscv_intc_irq);
-> > +	if (rc) {
-> > +		pr_err("failed to set irq handler\n");
-> > +		return rc;
-> > +	}
-> > +
-> > +	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> > +
-> > +	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int __init riscv_intc_init(struct device_node *node,
-> >  				  struct device_node *parent)
-> >  {
-> > @@ -133,24 +158,47 @@ static int __init riscv_intc_init(struct device_node *node,
-> >  	if (riscv_hartid_to_cpuid(hartid) != smp_processor_id())
-> >  		return 0;
-> >  
-> > -	intc_domain = irq_domain_add_linear(node, BITS_PER_LONG,
-> > -					    &riscv_intc_domain_ops, NULL);
-> > -	if (!intc_domain) {
-> > -		pr_err("unable to add IRQ domain\n");
-> > -		return -ENXIO;
-> > -	}
-> > -
-> > -	rc = set_handle_irq(&riscv_intc_irq);
-> > +	rc = riscv_intc_init_common(of_node_to_fwnode(node));
-> >  	if (rc) {
-> > -		pr_err("failed to set irq handler\n");
-> > +		pr_err("failed to initialize INTC\n");
+> >   if (!dw_pcie_link_up(pci) && pci->ops && pci->ops->start_link) {
+> >     ret = dw_pcie_start_link(pci);
+> >     if (ret)
+> >       goto err_free_msi;
+> >     dw_pcie_wait_for_link(pci);
+> >   }
+> > 
+> > 
+> > ...which will ensure that we don't call dw_pcie_wait_for_link() when
+> > pci->ops->start_link is NULL.
+> > 
+> > With regards to the log, I think there are 2 ways to solve this:
+> > 
+> > 1) We could also call dw_pcie_wait_for_link() in a new else if
+> >    dw_pcie_link_up() returns 1.
+> > 2) We could add this to the top of dw_pcie_wait_for_link() and leave the
+> >    code as is:
+> > 
+> >    if (!pci->ops || !pci->ops->start_link)
+> >      return 0;
+> > 
+> > I kind of like (2) since that solves both Sajid's original issue and
+> > will keep the original log.
+> > 
+> > [1] https://lore.kernel.org/all/20220624143428.8334-14-Sergey.Semin@baikalelectronics.ru/
+> > 
+> > Regards,
+> > Will
 > 
-> The ACPI version doesn't output this error when riscv_intc_init_common()
-> fails. It should probably be consistent. Either removing it here, if the
-> errors output within riscv_intc_init_common() are sufficient, or adding
-> it to the ACPI version.
+> Below is what I'm thinking will do the job. I verified on a Pixel 6
+> (which doesn't have start_link() defined) that we don't have the 1
+> second wait from dw_pcie_wait_for_link() during probe.
 > 
-> >  		return rc;
-> >  	}
-> >  
-> > -	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
-> > -
-> > -	pr_info("%d local interrupts mapped\n", BITS_PER_LONG);
-> > -
-> >  	return 0;
-> >  }
-> >  
-> >  IRQCHIP_DECLARE(riscv, "riscv,cpu-intc", riscv_intc_init);
-> > +
-> > +#ifdef CONFIG_ACPI
-> > +
-> > +static int __init riscv_intc_acpi_init(union acpi_subtable_headers *header,
-> > +				       const unsigned long end)
-> > +{
-> > +	int rc;
-> > +	struct fwnode_handle *fn;
-> > +	struct acpi_madt_rintc *rintc;
-> > +
-> > +	rintc = (struct acpi_madt_rintc *)header;
-> > +
-> > +	/*
-> > +	 * The ACPI MADT will have one INTC for each CPU (or HART)
-> > +	 * so riscv_intc_acpi_init() function will be called once
-> > +	 * for each INTC. We only do INTC initialization
-> > +	 * for the INTC belonging to the boot CPU (or boot HART).
-> > +	 */
-> > +	if (riscv_hartid_to_cpuid(rintc->hart_id) != smp_processor_id())
-> > +		return 0;
-> > +
-> > +	fn = irq_domain_alloc_named_fwnode("RISCV-INTC");
-> > +	if (!fn) {
-> > +		pr_err("unable to allocate INTC FW node\n");
-> > +		return -ENOMEM;
-> > +	}
-> > +
-> > +	rc = riscv_intc_init_common(fn);
-> > +	return rc;
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 8e33e6e59e68..1bf04324ad2d 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -648,13 +648,16 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
+>  {
+>  	u32 offset, val;
+>  	int retries;
+> +	int link_up = dw_pcie_link_up(pci);
+>  
+> -	/* Check if the link is up or not */
+> -	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
+> -		if (dw_pcie_link_up(pci))
+> -			break;
+> +	if (!link_up && !(pci->ops && pci->ops->start_link))
+> +		return 0;
+There is a problem with this approach. A platform driver could enable
+link training internally, i.e., it does not have the start_link() pointer
+defined. Then it could call `dw_pcie_wait_for_link` to wait for the link
+to come up. (See pcie-intel-gw.c for an example of such a platform).
+Your logic will end up regressing this driver by exiting early.
+>  
+> +	/* Check if the link is up or not */
+> +	for (retries = 0; !link_up && retries < LINK_WAIT_MAX_RETRIES; retries++) {
+>  		usleep_range(LINK_WAIT_USLEEP_MIN, LINK_WAIT_USLEEP_MAX);
+> +
+> +		link_up = dw_pcie_link_up(pci);
+>  	}
+>  
+>  	if (retries >= LINK_WAIT_MAX_RETRIES) {
 > 
-> nit: If we don't add the error message here, then rc can be removed and we
-> can just do
-> 
->   return riscv_intc_init_common(fn);
-> 
-> And, if we remove the error above, then we reduce the return there too.
-> 
-Make sense. Thanks!. Will update in next revision.
-
-Thanks,
-Sunil
+The problem of the log is still not solved for a platform which could
+have the link up by default, i.e., it does not need to explicitly enable
+link training.
