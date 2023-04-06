@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A276D9D4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B3A6D9D55
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 18:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbjDFQNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 12:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
+        id S239932AbjDFQRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 12:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239955AbjDFQNK (ORCPT
+        with ESMTP id S239639AbjDFQRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 12:13:10 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FD8A26E
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:13:05 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-93abb185e13so18420266b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 09:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680797584; x=1683389584;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vfjx4v5k+l/m+k+I01SkgtQu9JSM6Qas7cJAMSy1WKg=;
-        b=FGVsLGnGeE0qtVgQqDq4BPwSeaAz1WF5tSkGHuDIkl3Be7JxUUdk4jPZuqR9utDPmM
-         B4jeu9LqyYnob4269auwC1gzJCTyZFtYd0HOfAiD+n9SoRoEhhSRbFUIadqbCko3OKZ+
-         XRdYnyfYRTAM/FeM8iIMoq5cgquy2+B2dvPxQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680797584; x=1683389584;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vfjx4v5k+l/m+k+I01SkgtQu9JSM6Qas7cJAMSy1WKg=;
-        b=qWRt7lAn8FHdKKbqUYo91uXeZcxVFg8uMcIczuNKZJp2x5B/lIiFdzR/Wfnh4Y4xAA
-         7ZUdP7UB6gENdFMKnq27V2JMKGwIsDS/hJjZd+ddRsHYGlNcqEkHHPCDWRCnZQun3Bm9
-         SMcMEtaX72NZ+RJ1U/4z+1quMlAMg8sa/VylRkXt9JhxzrAG7ipAnuh4Pg4VmWPU/TIp
-         YwfMXasuU6Ypvs9uNMckL5CYETPB2VK25RDi2+pJJCVgNmkqY4+O9clcl3pVKAXAWrXy
-         pu5NqBhd6szqfu6bZ+wpNUfV932aOIMXUdGzu1eXTi3SwrhA+Kl/UD0+dog+pl8Vnzyd
-         wDBQ==
-X-Gm-Message-State: AAQBX9de3Ra1Uap0mvHc+5Jc3a2PEoIHyTiZpelJ3YWpgY8b9Z1x3bTv
-        yjD9iK1C7t7ZIEQW1bo2UioJvw==
-X-Google-Smtp-Source: AKy350adRPOHepc4p/aiXqP5G4C815cGF9RqeJGmQvmoul3VRF0NyNNN6MxY7KFP+hx08oWeBDm9og==
-X-Received: by 2002:a17:906:100b:b0:939:5398:768e with SMTP id 11-20020a170906100b00b009395398768emr5972085ejm.7.1680797584091;
-        Thu, 06 Apr 2023 09:13:04 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id fy29-20020a1709069f1d00b0093313f4fc3csm995697ejc.70.2023.04.06.09.13.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 09:13:03 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 18:13:01 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 07/18] rust: drm: mm: Add DRM MM
- Range Allocator abstraction
-Message-ID: <ZC7vjYUnLZqb0FV4@phenom.ffwll.local>
-Mail-Followup-To: Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-7-917ff5bc80a8@asahilina.net>
- <ZC7T92F7K9XTZPZ1@phenom.ffwll.local>
- <2a419eff-3566-0aa3-7185-951edde22abb@asahilina.net>
+        Thu, 6 Apr 2023 12:17:17 -0400
+Received: from sonic305-8.consmr.mail.bf2.yahoo.com (sonic305-8.consmr.mail.bf2.yahoo.com [74.6.133.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBC9C7
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 09:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680797835; bh=VuSERGq4d+Cfe8sCq/lVtoww/oUbwbdKqqQ64i5D7LE=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=CsZM3TfsFQb7BNQgiB/R9kYXLI4Q2KKUe9O9pONITa1Dx+4yOTGTRTKpQ446oHSdudyl0+JADNfEqGgygI9f2Pm34+rCj2P+WjSIVpf2mVoy4z0L4yAgmJazkEmQXyBK5ftOECMulXkgn68LXi0pMiJAiMidP9hz3z+S39wbNliwxB3nN/OGViHW/D3C8U7dTQySEP1QB0ikfvsYBbr0kQ2hFjLjYmEn27YL8OcKXlQfw93drrHiXkrQ2KYMSFU3IQDYMTnJRpvDB/by4+0quD9/FZQzBpclu4WcnavOD1XptAMxhJVsXeu6RrtvH5+ziDnJ9KdXG3qxxqZqc02cJA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1680797835; bh=v7+6uJ/gTTHM32UIrDPLnkqewRfrVmpO9kVwo6uf8Ae=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=DX9NxAD4QaVMT6cTyZN5NRiifiNAypC1h5aP7OLFADPjqRcxUDCyVF3icU093dfGYG1rpWtyH0kymCyMP2J3yFVD93Bfsy0D4PXNNAc2lJ2HW2zuGny55ZZzcgwR3xy74dTTBIcdeLXoktX2Pc9piBaUC/Nw0iR77iaUmeWvJDazg2IRz7D+eNM/itt2MCEFZqwnoDAcy8zuIswtJ0qKcAbdQnfRVqMt/NmX3TtKGYRM0Gut/9wQRaA9Pat8QFXvz/SHdBj9sQ94ErYfntak5udtYEnAE44ZaxQs/GmjNjPZzC9ORJZcjc0Bv9NDE3TANAkhhNrdWo+qvu9UTmjIRw==
+X-YMail-OSG: tUl9KEgVM1nZI52wCWlixedTkWjoD82z33IB7eYk.U.gLbKfV00IOSqzvK0IKoj
+ G3ge29ww6dMqQd_DL3lZh2GQUwNkQjIg1dxxbB3QOtPeMZ5kP4TLxyonjCa9JGqZsrLYZdTB1WZD
+ xriXzcbUzYX_aHD_WxwVQ783Y28dDq80HY1MiUTQInClC4N2_O4_lxcY9ZkygdCATm4tZHs9Ts..
+ sd51Z_yQ7n32roXV8qE46ezdc3wD3cjnYWMmD.MFWrH4tQQvrTPFvMYgCrxiNx7N2mm7LIW2nd2k
+ GwGI0ETmkMEKEQkMueJz0njns11ZG50ti9Bu4lZmHG9rpz2pqREQU.jqqYJGKsckrtfBE7OcV3hv
+ nUDu78ugyve1Uf37Dqe2l.GoRuwEJnbcco4W8C..79Jdcwth5G2ikiCfIZhvqGJ7DnxIbLPqJkb5
+ ku1H5q.Z8CX7zDcHGfUIa27p.SXe6OBBQmFZB3DPKmpGshvOlTenY_Nc9jpYgRTh9yvDrdJvT3sA
+ pj.vIXfraVL.Q0G6s2xkvXY69xrnqxUSyDIkARl8ckbdZ2dGJtPZe12z36RLS.ZDrauDO7wD0Abf
+ u.v7ooL4zzY8zbGlhZebQ.1AiXDPtUMSmvhz76KxDRhbwQlqVeUK9fkvgp3N4EPpFw05nVOHNKUj
+ WNVzUKUWLXjI2P05JQ6q1ZLBNiBhpeDUzPlFvfLcBCoJZABD7CxAiyuWtaSKjDgO5_0yg4v3wLZr
+ kwuhN2YhiM0w.xd4Y0LG4md0TQtt50bjXTM92hr2sAqlRNzPjKKCgIRCn_VElhaND08YOIMpSC3y
+ huSQgyj0.XHRFJEdkkTrPrnZW4zOQUixljoICU73WmPyZy2TL.bANJ5L_pqtvggKXE2TV7J7SjOD
+ MrVF.XhIpSkVoULX4JBYjeHVuqDAJjx_EQIE7cLDg6SssE5_xgeZB11ERI7U9FPWiANKxjjOwWDf
+ BDavf94W3izvMHPAGMlj2jOH5OyUqloJr6pjDYRawTqb4J94fJHQqzZ62xtSA24NfgCnrXXN132v
+ z.75vIBpXqWmAM2pvdkOWebMt9DemPfVoLxso6HOuw49bYUwBgXznRJ_rGjR3Qd8FAkoa8GNTLqx
+ zyFTD2Zu_y9qD5fqUGSzA475juGX7AjwYSArdfA.P3z6G7KIbeMi8p6TlU8JPNKJjVZ_j466PWMy
+ jTp7XfhA2ch9LTMN_eEG4fsrSN4G.R1WUTpCVWVUoJ9jLgW18GYUb2SstccyUuloZ_P3_gIYSprO
+ zYoFnJbot9PgRepf8.XjUE2X7UO84O.QiLKtdPnYM5lEm93J5DRF7o6feNAphPGkkAepjKozmEPJ
+ iSm0V2Tb.QR3C1hoQpqtFZQ_ipDfpfj140ItI8w9cmqFW.tjSSXZ.CU0dKXIXhvGaf1i62lRgxlU
+ TfHXUB7vBZobFxop2lMEFqLnKoNv.vVUvIflnH0GHxyM1z0TI1hslusOc7bmj1DUXyKsIKaFcgeb
+ v_d5ltbqCMIK2m31AfxFNu4RDiO9pkhbW0W4.5AkESY.Y5QkwbpZpjc7Ydogu_M5n5HhAQcSxlYq
+ azCQ65opt4hTxncUJXBToKLelbu0_IB8z22kUTulktDRp_kg2pVwp3QXRMQA47jZ8Qm1K8SDt6fr
+ oVmuyT9GjQVK_8bAuV0Xt.jsD2yvuMiDJZDuE8juy4yNg9Dg4Fx7AEtrujLggWPoWMj_C.DAatMA
+ TtjL3z.7POVPurCd_c8O0hbwJqNhTs1zEhuD07rcAQTN8Jz1SkLEjwOxvWodWOM5nW_oVXEcccNb
+ BN8YfHKqbfuuZcRd3exnLLnr3t_2lA7skqny7gH6okQTPFiRhs0cx8RsDcVwlnl3VsN027SnMz2F
+ BOsVqMMtGaPd72OF4XQzR9PGuX8WI9L3F8kLtxRWgEvQB9q57SynSDtBvglRRaj0S3bFuZ.Q6zZR
+ JaKou5M9syXv7pU1JTbWwh0iYgj2ruFMFSvp7ToscTvcbPuwUEU4yL.1yCwtgUmWrjUt0ZjoncmJ
+ WrNbwsNajw86RaVWWM.h_vCIVbZoTrlfIacRxKBPRCfKMbOS6u8sGizS0Jkc4hXfgnQ_i09JIXr4
+ wMlVWD1iSOt9GbpzqruE8raC5UBH3UsrQb2b9XEVgh54Rk79.QIpdT1fqhZVUhB1b50LNLOdMAKz
+ QYEXi3ZqlHsSPZOgaYWW7CDPSSzUMCUwUa.DdYql2GOml3wcrPXNEPUpWH2HUcWWje23W6EVGutF
+ sirSNvz1SqsikKqYxTAetEMUZp2ri303tGVy7tw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: a5a8ccf3-a3b9-4c0d-b117-55a4932d35a3
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Thu, 6 Apr 2023 16:17:15 +0000
+Received: by hermes--production-ne1-7dbd98dd99-nn8pc (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 24a7d9931c2812c4db7376cbcf2cd759;
+          Thu, 06 Apr 2023 16:17:08 +0000 (UTC)
+Message-ID: <733a7896-0b0e-f86f-0068-0285d646d563@schaufler-ca.com>
+Date:   Thu, 6 Apr 2023 09:17:05 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a419eff-3566-0aa3-7185-951edde22abb@asahilina.net>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
+ inode_init_security hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Paul Moore <paul@paul-moore.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, reiserfs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
+ <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
+ <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
+ <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com>
+ <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
+ <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
+ <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
+ <CAHC9VhTO02CGUt0DUUmx=TUYS7Q81fas_Qy5miOFonaye0NEmw@mail.gmail.com>
+ <c3751b2b-aa4b-2105-c238-29816bc85607@schaufler-ca.com>
+ <841747d7-ab17-2904-ea1d-6adb3d35c711@huaweicloud.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <841747d7-ab17-2904-ea1d-6adb3d35c711@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,199 +96,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 12:53:47AM +0900, Asahi Lina wrote:
-> On 06/04/2023 23.15, Daniel Vetter wrote:
-> > On Tue, Mar 07, 2023 at 11:25:32PM +0900, Asahi Lina wrote:
-> > > drm_mm provides a simple range allocator, useful for managing virtual
-> > > address ranges. Add a Rust abstraction to expose this module to Rust
-> > > drivers.
-> > > 
-> > > Signed-off-by: Asahi Lina <lina@asahilina.net>
-> > 
-> > In the cover letter you mentioned the design open about embedded the lock
-> > into the rust wrappers.
-> > 
-> > I think for a first step that's perfectly fine.
-> > 
-> > Longer term we might want to ramp up some "proof of locking"
-> > infrastructure in Rust, where callers can supply a lock guard and ideally
-> > rust validates at compile time that it's for the right type, and at
-> > runtime (like lockdep) that it's consistent and the callers don't mix up
-> > locks (like using different locks for the same drm_mm allocator).
-> 
-> That proof-of-lock tuff works in Rust too as far as I know.
-> 
-> But the general thread safety story in Rust is much simpler, you just use
-> methods that take &mut self when locking is the caller's responsibility.
-> That effectively implies that there can only be one reference that can call
-> those methods at any given time, thanks to the borrow checker. Shared
-> references only give you &self, a locked Mutex upgrades that to &mut self,
-> and that's how you get proof of locking at compile time, through and
-> through, not just for the type but for the specific object.
+On 4/6/2023 2:14 AM, Roberto Sassu wrote:
+> On 4/5/2023 11:07 PM, Casey Schaufler wrote:
+>> On 4/5/2023 1:49 PM, Paul Moore wrote:
+>>> On Wed, Apr 5, 2023 at 4:43 PM Casey Schaufler
+>>> <casey@schaufler-ca.com> wrote:
+>>>> On 4/5/2023 12:59 PM, Paul Moore wrote:
+>>>>> On Wed, Apr 5, 2023 at 5:44 AM Roberto Sassu
+>>>>> <roberto.sassu@huaweicloud.com> wrote:
+>>>>>> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
+>>>>>>> On 4/4/2023 11:54 AM, Paul Moore wrote:
+>>>>>>>> On Fri, Mar 31, 2023 at 8:33 AM Roberto Sassu
+>>>>>>>> <roberto.sassu@huaweicloud.com> wrote:
+>>>>> ..
+>>>>>
+>>>>>>>>> diff --git a/security/smack/smack_lsm.c
+>>>>>>>>> b/security/smack/smack_lsm.c
+>>>>>>>>> index cfcbb748da2..8392983334b 100644
+>>>>>>>>> --- a/security/smack/smack_lsm.c
+>>>>>>>>> +++ b/security/smack/smack_lsm.c
+>>>>>>>>> @@ -52,6 +52,15 @@
+>>>>>>>>>    #define SMK_RECEIVING  1
+>>>>>>>>>    #define SMK_SENDING    2
+>>>>>>>>>
+>>>>>>>>> +/*
+>>>>>>>>> + * Smack uses multiple xattrs.
+>>>>>>>>> + * SMACK64 - for access control, SMACK64EXEC - label for the
+>>>>>>>>> program,
+>>>>>>>> I think it would be good to move SMACK64EXEC to its own line;
+>>>>>>>> it took
+>>>>>>>> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set
+>>>>>>>> to '4'
+>>>>>>>> when I only say three comment lines ... ;)
+>>>>>>>>
+>>>>>>>>> + * SMACK64MMAP - controls library loading,
+>>>>>>>>> + * SMACK64TRANSMUTE - label initialization,
+>>>>>>>>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
+>>>>>>>>> + */
+>>>>>>>>> +#define SMACK_INODE_INIT_XATTRS 4
+>>>>>>>> If smack_inode_init_security() only ever populates a single
+>>>>>>>> xattr, and
+>>>>>>>> that is the only current user of SMACK_INODE_INIT_XATTRS, can
+>>>>>>>> we make
+>>>>>>>> this '1' and shrink the xattr allocation a bit?
+>>>>>>> If the parent directory is marked with SMACK64_TRANSMUTE, the
+>>>>>>> access
+>>>>>>> rule allowing the access has the "t" mode, and the object being
+>>>>>>> initialized
+>>>>>>> is a directory, the new inode should get the SMACK64_TRANSMUTE
+>>>>>>> attribute.
+>>>>>>> The callers of security_inode_init_security() don't seem to care.
+>>>>>>> I can't say if the evm code is getting SMACK64_TRANSMUTE or, for
+>>>>>>> that
+>>>>>>> matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older
+>>>>>>> system
+>>>>>>> allowed for multiple Smack xattrs, but I'm not clear on exactly
+>>>>>>> how.
+>>>>>> If you like to set an additional xattr, that would be possible now.
+>>>>>> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
+>>>>>> another time and set SMACK64_TRANSMUTE.
+>>>>>>
+>>>>>> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
+>>>>>> EVM would protect SMACK64_TRANSMUTE too.
+>>>>> Ooookay, but can someone explain to me how either the current, or
+>>>>> patched, smack_inode_init_security() function can return multiple
+>>>>> xattrs via the security_inode_init_security() LSM hook?
+>>>> It can't.
+>>> I didn't think so.
+>>>
+>>> To be really specific, that's what we're talking about with this
+>>> patch: the number of xattrs that smack_inode_init_security() can
+>>> return to the LSM hook (and EVM, and the caller ...).  If it's only
+>>> ever going to be one, I think we can adjust the
+>>> 'SMACK_INODE_INIT_XATTRS' down to '1' and save ourselves some
+>>> allocation space.
+>>
+>> Does evm have an expectation that mumble_inode_init_security() is
+>> going to report all the relevant attributes? It has to be getting
+>> them somehow, which leads me to wonder if we might want to extend
+>> smack_inode_init_security() to do so. Even if we did, the maximum
+>> value would be '2', SMACK64 and SMACK64_TRANSMUTE. Now that would
+>> require a whole lot of work in the calling filesystems, as setting
+>> the transmute attribute would be moving out of smack_d_instantiate()
+>> and into the callers. Or something like that.
+>
+> After changing the inode_init_security hook definition to pass the
+> full xattr array, this is not going to be a problem. EVM sees all
+> xattrs that are going to be set when an inode is created, and adds its
+> own too.
+>
+> If you have enough information to set security.SMACK_TRANSMUTE64 in
+> smack_inode_init_security(),
 
-Hm that still has the problem of making sure that you supply the right
-lock (for generic abstractions like drm_mm or drm/sched where the lock is
-supplied by the driver.
+I think there's enough information to do that. I'm going to have to look
+at your patch more closely.
 
-Once we have the lock then yeah borrow checker makes sure you can't screw
-up, worst case needs a PhantomData (I guess) as toke of proof to pass
-around the borrowed lifetime (If I got that right from your use of
-PhantomData in the sched wrappers).
-
-> > There's a lot of libraries in the kernel that have this "caller ensures
-> > locking" pattern. drm/sched also has these requirements.
-> 
-> Yup, that all usually maps nicely to &mut self in Rust... except for the
-> issue below.
-> 
-> > There's two other things I'd like to bring up on this patch though, just
-> > because it's a good example. But they're both really general points that
-> > apply for all the rust wrappers.
-> > 
-> > Documentation:
-> > 
-> > In drm we try to document all the interfaces that drivers use with formal
-> > docs. Yes there's some areas that are not great for historical reasons,
-> > but for new stuff and new wrappers we're really trying:
-> > 
-> > - This helps in telling internal (even across .c files or in rust across
-> >    modules within a crate) from stuff drivers access. Sure you have static
-> >    in C or pub in rust, but that doesn't tell you whether it's public all
-> >    the way to drivers.
-> > 
-> > - ideally docs have a short intro section that explains the main concepts
-> >    and links to the main data structures and functions. Just to give
-> >    readers a good starting point to explore.
-> > 
-> > - Linking all the things, so that readers can connect the different parts.
-> >    This is really important in C where e.g. get/put() or any such function
-> >    pairs all needed to be linked together. With rust I'm hoping that
-> >    rustdoc liberally sprinkles links already and we don't have to do this
-> >    as much.
-> > 
-> > - Short explainers for parameters. For rust this also means type
-> >    parameters, for those even simplified examples of how drivers are
-> >    supposed to use them would help a lot in reading docs & understanding
-> >    concepts.
-> > 
-> > - Ideally links from the rust to the sphinx side to linke relevant
-> >    chapters together. Often the bigger explanations are in .rst files with
-> >    DOT graphs (kms has a bunch I've added) or similar, and it doesn't make
-> >    that much sense to duplicate all that on the rust side I guess. But it
-> >    needs to be discoverable.
-> > 
-> > This might be more a discussion topic for the rust people than you
-> > directly. Still needed for the merge-ready patches eventually.
-> 
-> I don't know much about the doc gen stuff on the Rust side so yeah, this is
-> something I need to look into to make it pretty and complete...
-
-From what Miguel has shown I think it's all there already, and the only
-missing pieces are the cross-linking at a chapter level from rustdoc to
-rst and sphinx to rstdoc too ideally. But I think for most rust wrappers
-that will be one link each direction only (e.g. C drm_mm linking to
-kernel::drm::MM and other way round and done). So absolutely no problem if
-that one item is sorted out post merge once rustdoc/kernel-sphinx are
-ready.
-
-> > Refcounting vs borrowing:
-> > 
-> > This is honestly much more the eyebrow raising one than the locking. Very
-> > often on the C side these datastructures all work with borrow semantics,
-> > and you need to explicitly upgrade to a full reference (kref_get or
-> > kref_get_unless_zero, depending whether it's a strong or weak reference)
-> > if you need the object outside of the mutex/lock guard section.
-> > 
-> > Again I think for now it's ok, but the sales pitch of rust is that it
-> > enables borrow lifetime checking with no runtime cost. Plus viz the vm
-> > cleanup example, if you have too many strong backreferences the cleanup
-> > flow gets complicated. And it would suck if rust drivers have to add
-> > complexity like the openrefcount for the vm example simply because we
-> > can't model the borrow semantics well enough to be safe.
-> > 
-> > So not something that's really bad here, but if we need to resort to full
-> > refcounting already for simple datastructures then I'm getting a bit
-> > worried about how well rust will cope with the really nasty borrowed
-> > reference tricks we're playing in other areas.
-> > 
-> > Again more a topic for the rust folks I think than specifically here about
-> > drm_mm wrapping. Just to get things going I think this is fine.
-> 
-> Yeeeeah... this is a *specific* problem. Drop.
-> 
-> The Allocator<T> itself is perfectly safe to implement without any locking,
-> refcounting, or anything. You just make the methods take &mut self (as they
-> already do), the caller can use it with a single reference or wrap it in an
-> Arc<Mutex<T>> and share it, or whatever.
-> 
-> The problem is the Node<A, T>. When you Drop that, it has to go back to the
-> Allocator. But now you're a different object, so no thread safety
-> guarantees. And you need to keep the Allocator alive. So now to make a safe
-> abstraction, you need refcounting and a mutex.
-> 
-> Lifetimes just don't work here, sadly. Not for a useful abstraction.
-> 
-> I'd love to hear from the other Rust folks whether they have any better
-> ideas...
-
-Hm yeah I think I get the gist of the issue. At time of Drop there's no
-allocator reference you can borrow and so you're screwed.
-
-In C we tend to solve that by passing both to the unlink/drop stuff (and
-rust could then ensure that we have legit borrows for both), but I guess
-that just totally wreaks entire wrapper and makes it really rough to use.
-
-> One thing that *can* be done is making the Drop illegal (Rust can't do this
-> "natively" but Linux already has hacks for that, we can make it fail to link
-> if the Drop is ever called). Then you'd have to actively return the Node to
-> the Allocator with a free function. Since Drop is forbidden, and Node is
-> pinned, you'd always have to either return Node objects to the Allocator or
-> leak them. You could drop the Allocator before its nodes, but as far as I
-> know drm_mm can safely handle that (though it will complain), and then due
-> to the previous guarantees the *only* thing you could do with orphan nodes
-> is leak their memory, which is safe.
-> 
-> It would work... but it breaks the whole Rust automagic Drop stuff.
-
-Yeah I think I see the challenge ...
-
-> Thinking about this a bit, I think I want the current mutex/arc semantics
-> for something like a memory allocator (which is one of my primary use cases
-> for drm_mm), since I definitely don't want to be manually returning objects
-> to their allocator all over the place, nor have overarching lifetime
-> requirements that the allocator outlive its objects for safety (that sounds
-> like a can of worms I don't want to open, I'd much rather use a refcount
-> even if I "think" I can prove the lifetime bounds ad-hoc). But for something
-> like a drm_mm that is tracking VA ranges within a VM with all Nodes held
-> internally, maybe I could manage it all internally and have all node
-> destruction be handled via an explicit call into the Allocator.
-
-Yeah I think for gpuva we need to do better, but assuming the gpuva
-library is in C then rust would just need to encode the safety properties
-that (hopefully) the C library guarantees ...
-
-And for any driver that just wants to use some range manager the standard
-wrapping leans heavily on the side of "easy to use".
-
-> Maybe the mm abstraction should offer both options? The extra locking can be
-> implemented in terms of the base unlocked version I think (perhaps with some
-> Deref abuse for ergonomics)... I definitely want to hear more opinions about
-> this from other Rust folks, since there are probably other options I haven't
-> considered...
-
-I don't think we need the more raw/tricky one, at least not until we have
-some serious libraries like gpuva implemented in rust. Or drivers
-reimplementing the gpuva stuff in their driver :-)
-
-> Aside: This, and all the other DRM abstractions, were written before the
-> pin_init stuff from y86 that is in review right now was ready. That may open
-> up more interesting/ergonomic/efficient APIs for some cases, especially
-> where Pin and embedding C types into user objects in some way are involved.
-> So maybe there's room for improvement here. Just a sidenote.
-
-Ah good to know, and yeah that make open some interesting options.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+> this patch sets already allows to set both xattrs at the same time. We
+> would just need to call lsm_get_xattr_slot() another time, assuming
+> that we reserve two xattrs.
+>
+> Roberto
+>
