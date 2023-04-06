@@ -2,164 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB406D929A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05B66D92A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236370AbjDFJX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
+        id S236117AbjDFJ0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233391AbjDFJX5 (ORCPT
+        with ESMTP id S233391AbjDFJ0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:23:57 -0400
-Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:df01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD6F3A9E;
-        Thu,  6 Apr 2023 02:23:54 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-main-34.sas.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-34.sas.yp-c.yandex.net [IPv6:2a02:6b8:c08:19a8:0:640:4e87:0])
-        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 68E5F602AF;
-        Thu,  6 Apr 2023 12:23:52 +0300 (MSK)
-Received: from [IPV6:2a02:6b8:b081:b504::1:9] (unknown [2a02:6b8:b081:b504::1:9])
-        by mail-nwsmtp-smtp-corp-main-34.sas.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id nNM3QE0OluQ0-KY8768Iu;
-        Thu, 06 Apr 2023 12:23:51 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1680773031; bh=KJfF7t9AjiWjMeD41d7nPe3pA8fTgHIR4sqnkzECg9o=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=hidYdy4UwRZAkB2iKVLtbbjtOaWj6ZaRLd7fvMPdGGXjExlX282wW7wtZ5A5d/JTk
-         cbW2ioNuakg6AT/5/ZfIWdqE5jVg3yEtZ5ZDC9IdZ7a/MMzgwpaI+j3z69jErUgWgK
-         sPcU44l1fN/8hci82M7e/WL0ZkyRN553vzB/P4gk=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-34.sas.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-Message-ID: <32f18da1-eeb9-3cd6-398d-77f76596b7c3@yandex-team.ru>
-Date:   Thu, 6 Apr 2023 12:23:49 +0300
+        Thu, 6 Apr 2023 05:26:11 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CBB65B6
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:26:09 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id fi11so24236561edb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 02:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680773167; x=1683365167;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=puMz2ATJiXG9YrgWF8JgMsdrOIv8QlsIusgDqJEDrJA=;
+        b=O6rPtkSjq80CK4k/eo64pD/whuk5SVDaynqfg+tA7L5UNaHn/qHgR/eP1tRxNlIKyR
+         pRUgI1FZclp+oTpNodxu843L263RGfA/HCTmxncmvAL7ayYSCGwKQwTW47E00luMxflE
+         na9BTs+maql8CibxkXXB5sbVE7JtxhlpiTxeAk8ATNaUkUo8jx3gmlS/knROk7NBUzGB
+         qpvhplIBfRy6pLrtiqlxacM3YWer2kCnWU8TingwNNcV7+SS2QWxVCxn7DDZDYR1R/8S
+         RNqn8rjwuQfCq9zVQ8l7HFIm6BYDe23WFr3BHBa5biLaieom8UXmb12Db1AtYpf837Jq
+         z7gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680773167; x=1683365167;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=puMz2ATJiXG9YrgWF8JgMsdrOIv8QlsIusgDqJEDrJA=;
+        b=pTdqOlGyf4Jcn5ElCZqBCZ9HpV9ECFlJMS1udpyKqoeKH7Ysoi9iWmF/eKptjmsT+X
+         QEhsMPK6DYnyF+ZEkq/kQFLqovvAAIht7iLonjH3yd60O1s+4LV7zM/BDvyb6KO+xcDV
+         vdN3kD1a+OuGZCMIhyIFVU7g+sIZmPx2oJaOHrJI4RGc5N1EasORoWdx4xiRJ1fERiWO
+         OkmFnIxfs4PfHTdvNjaOKG5AY7MYAfa+ljqQrE7f+Ybf91Qge1AJlm5G+AYvVL5Br9b+
+         Vnmi7l2FeMiYOiPnmM4XDr0BrLFGv0XqjgOqW6b9XcS7ke71RY/P9eevehOMPiy64/3r
+         xg7g==
+X-Gm-Message-State: AAQBX9d1VI7guZScHos91vwKreAUiQYx6LdNGtrFVDxwOuZFbM/kiEoS
+        5rP6RVNobgEq2UAsQGN3vncUyA==
+X-Google-Smtp-Source: AKy350Z7osDqV+tGsqFumKfzrCUxBMuoAwbvUkpMeHy/RSpSPlaqGyT1vCOvmCNDMZ7ZX/x7iVYEBQ==
+X-Received: by 2002:a17:907:9723:b0:92f:8324:e3b7 with SMTP id jg35-20020a170907972300b0092f8324e3b7mr5178587ejc.37.1680773167364;
+        Thu, 06 Apr 2023 02:26:07 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id re9-20020a170906d8c900b0093dbb008281sm557039ejb.130.2023.04.06.02.26.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 02:26:06 -0700 (PDT)
+Date:   Thu, 6 Apr 2023 12:26:05 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Android Kernel Team <kernel-team@android.com>
+Subject: Re: [PATCH v3 0/4] Allow genpd providers to power off domains on
+ sync state
+Message-ID: <ZC6QLZOldOLNaCSg@linaro.org>
+References: <20230327193829.3756640-1-abel.vesa@linaro.org>
+ <CAGETcx9f1p2esfyzyfU04EAB1FXh=d9-U81DaGyZNjL_Vti3oQ@mail.gmail.com>
+ <ZCVyBuKMvDV0gQPW@linaro.org>
+ <CAGETcx-mxzzZ_FU6Agju9gMhFOEDhY6Rj78BnvAVJjNtZhif=w@mail.gmail.com>
+ <ZCZolyDL/awnt73K@linaro.org>
+ <CAPDyKFprQwBfya-TpaVJfn82LgM9N_iE8npO9r-HzAyJXpb-hQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] qlcnic: check pci_reset_function result
-To:     Simon Horman <simon.horman@corigine.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shshaikh@marvell.com, manishc@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-References: <ZC1x57v1JdUyK7aG@corigine.com>
- <20230405193708.GA3632282@bhelgaas> <ZC5uyOt7mevNyS6f@corigine.com>
-Content-Language: en-US
-From:   Denis Plotnikov <den-plotnikov@yandex-team.ru>
-In-Reply-To: <ZC5uyOt7mevNyS6f@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPDyKFprQwBfya-TpaVJfn82LgM9N_iE8npO9r-HzAyJXpb-hQ@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23-04-05 16:11:18, Ulf Hansson wrote:
+> Abel, Saravana,
+> 
+> On Fri, 31 Mar 2023 at 06:59, Abel Vesa <abel.vesa@linaro.org> wrote:
+> >
+> > On 23-03-30 12:50:44, Saravana Kannan wrote:
+> > > On Thu, Mar 30, 2023 at 4:27 AM Abel Vesa <abel.vesa@linaro.org> wrote:
+> > > >
+> > > > On 23-03-27 17:17:28, Saravana Kannan wrote:
+> > > > > On Mon, Mar 27, 2023 at 12:38 PM Abel Vesa <abel.vesa@linaro.org> wrote:
+> > > > > >
+> > > > > > There have been already a couple of tries to make the genpd "disable
+> > > > > > unused" late initcall skip the powering off of domains that might be
+> > > > > > needed until later on (i.e. until some consumer probes). The conclusion
+> > > > > > was that the provider could return -EBUSY from the power_off callback
+> > > > > > until the provider's sync state has been reached. This patch series tries
+> > > > > > to provide a proof-of-concept that is working on Qualcomm platforms.
+> > > > >
+> > > > > I'm giving my thoughts in the cover letter instead of spreading it
+> > > > > around all the patches so that there's context between the comments.
+> > > > >
+> > > > > 1) Why can't all the logic in this patch series be implemented at the
+> > > > > framework level? And then allow the drivers to opt into this behavior
+> > > > > by setting the sync_state() callback.
+> > > > >
+> > > > > That way, you can land it only for QC drivers by setting up
+> > > > > sync_state() callback only for QC drivers, but actually have the same
+> > > > > code function correctly for non-QC drivers too. And then once we have
+> > > > > this functionality working properly for QC drivers for one kernel
+> > > > > version (or two), we'll just have the framework set the device's
+> > > > > driver's sync_state() if it doesn't have one already.
+> > > >
+> > > > I think Ulf has already NACK'ed that approach here:
+> > > > [1] https://lore.kernel.org/lkml/CAPDyKFon35wcQ+5kx3QZb-awN_S_q8y1Sir-G+GoxkCvpN=iiA@mail.gmail.com/
+> > >
+> > > I would have NACK'ed that too because that's an incomplete fix. As I
+> > > said further below, the fix needs to be at the aggregation level where
+> > > you aggregate all the current consumer requests. In there, you need to
+> > > add in the "state at boot" input that gets cleared out after a
+> > > sync_state() call is received for that power domain.
+> > >
+> >
+> > So, just to make sure I understand your point. You would rather have the
+> > genpd_power_off check if 'state at boot' is 'on' and return busy and
+> > then clear then, via a generic genpd sync state you would mark 'state at
+> > boot' as 'off' and queue up a power off request for each PD from there.
+> > And as for 'state at boot' it would check the enable bit through
+> > provider.
+> >
+> > Am I right so far?
+> 
+> I am not sure I completely follow what you are suggesting here.
 
-On 06.04.2023 10:03, Simon Horman wrote:
-> On Wed, Apr 05, 2023 at 02:37:08PM -0500, Bjorn Helgaas wrote:
->> On Wed, Apr 05, 2023 at 03:04:39PM +0200, Simon Horman wrote:
->>> On Mon, Apr 03, 2023 at 01:58:49PM +0300, Denis Plotnikov wrote:
->>>> On 31.03.2023 20:52, Simon Horman wrote:
->>>>> On Fri, Mar 31, 2023 at 11:06:05AM +0300, Denis Plotnikov wrote:
->>>>>> Static code analyzer complains to unchecked return value.
->>>>>> It seems that pci_reset_function return something meaningful
->>>>>> only if "reset_methods" is set.
->>>>>> Even if reset_methods isn't used check the return value to avoid
->>>>>> possible bugs leading to undefined behavior in the future.
->>>>>>
->>>>>> Signed-off-by: Denis Plotnikov <den-plotnikov@yandex-team.ru>
->>>>> nit: The tree this patch is targeted at should be designated, probably
->>>>>        net-next, so the '[PATCH net-next]' in the subject.
->>>>>
->>>>>> ---
->>>>>>    drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c | 4 +++-
->>>>>>    1 file changed, 3 insertions(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
->>>>>> index 87f76bac2e463..39ecfc1a1dbd0 100644
->>>>>> --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
->>>>>> +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_ctx.c
->>>>>> @@ -628,7 +628,9 @@ int qlcnic_fw_create_ctx(struct qlcnic_adapter *dev)
->>>>>>    	int i, err, ring;
->>>>>>    	if (dev->flags & QLCNIC_NEED_FLR) {
->>>>>> -		pci_reset_function(dev->pdev);
->>>>>> +		err = pci_reset_function(dev->pdev);
->>>>>> +		if (err && err != -ENOTTY)
->>>>> Are you sure about the -ENOTTY part?
->>>>>
->>>>> It seems odd to me that an FLR would be required but reset is not supported.
->>>> No, I'm not sure. My logic is: if the reset method isn't set than
->>>> pci_reset_function() returns -ENOTTY so treat that result as ok.
->>>> pci_reset_function may return something different than -ENOTTY only if
->>>> pci_reset_fn_methods[m].reset_fn is set.
->>> I see your reasoning: -ENOTTY means nothing happened, and probably that is ok.
->>> I think my main question is if that can ever happen.
->>> If that is unknown, then I think this conservative approach makes sense.
->> The commit log mentions "reset_methods", which I don't think is really
->> relevant here because reset_methods is an internal implementation
->> detail.  The point is that pci_reset_function() returns 0 if it was
->> successful and a negative value if it failed.
->>
->> If the driver thinks the device needs to be reset, ignoring any
->> negative return value seems like a mistake because the device was not
->> reset.
->>
->> If the reset is required for a firmware update to take effect, maybe a
->> diagnostic would be helpful if it fails, e.g., the other "Adapter
->> initialization failed.  Please reboot" messages.
->>
->> "QLCNIC_NEED_FLR" suggests that the driver expects an FLR (as opposed
->> to other kinds of reset).  If the driver knows that all qlcnic devices
->> support FLR, it could use pcie_flr() directly.
->>
->> pci_reset_function() does have the possibility that the reset works on
->> some devices but not all.  Secondary Bus Reset fails if there are
->> other functions on the same bus, e.g., a multi-function device.  And
->> there's some value in doing the reset the same way in all cases.
->>
->> So I would suggest something like:
->>
->>    if (dev->flags & QLCNIC_NEED_FLR) {
->>      err = pcie_flr(dev->pdev);
->>      if (err) {
->>        dev_err(&pdev->dev, "Adapter reset failed (%d). Please reboot\n", err);
->>        return err;
->>      }
->>      dev->flags &= ~QLCNIC_NEED_FLR;
->>    }
->>
->> Or, if there are qlcnic devices that don't support FLR:
->>
->>    if (dev->flags & QLCNIC_NEED_FLR) {
->>      err = pci_reset_function(dev->pdev);
->>      if (err) {
->>        dev_err(&pdev->dev, "Adapter reset failed (%d). Please reboot\n", err);
->>        return err;
->>      }
->>      dev->flags &= ~QLCNIC_NEED_FLR;
->>    }
-> Thanks Bjorn,
->
-> that is very helpful.
->
-> I think that in order to move to option #1 some information would be needed
-> from those familiar with the device(s). As it is a more invasive change -
-> pci_reset_function -> pcie_flr.
->
-> So my feeling is that, in lieu of such feedback, option #2 is a good
-> improvement on the current code.
->
-> OTOH, this driver is 'Supported' as opposed to 'Maintained'.
-> So perhaps we can just use our best judgement and go for option #1.
+Please have a look at this:
+https://git.kernel.org/pub/scm/linux/kernel/git/abelvesa/linux.git/commit/?h=qcom/genpd/ignore_unused_until_sync_state&id=4f9e6140dfe77884012383f8ba2140cadb62ca4a
 
-So, it looks like option #2 is the safest choice as we do reset only if 
-FLR is needed (when pci_reset_function() makes sense)
+Keep in mind that is WIP for now. Once I have something, I'll post it on
+mailing list. Right now, there is a missing piece mentioned in that
+commit message.
 
-If all agree with that I'll re-send the path
+> 
+> Although, let me point out that there is no requirement from the genpd
+> API point of view, that the provider needs to be a driver. This means
+> that the sync_state callback may not even be applicable for all genpd
+> providers.
 
+Yes, I'm considering that case too.
 
+> 
+> In other words, it looks to me that we may need some new genpd helper
+> functions, no matter what. More importantly, it looks like we need an
+> opt-in behaviour, unless we can figure out a common way for genpd to
+> understand whether the sync_state thing is going to be applicable or
+> not. Maybe Saravana has some ideas around this?
+> 
+> Note that, I don't object to extending genpd to be more clever and to
+> share common code, of course. We could, for example, make
+> genpd_power_off() to bail out earlier, rather than calling the
+> ->power_off() callback and waiting for it to return -EBUSY. Both of
+> you have pointed this out to me, in some of the earlier
+> replies/discussions too.
+
+The above link basically does this. I hope this is what Saravana has in
+mind as well.
+
+> 
+> >
+> > > > And suggested this new approach that this patch series proposes.
+> > > > (Unless I missunderstood his point)
+> > > >
+> > > > >
+> > > > > 2) sync_state() is not just about power on/off. It's also about the
+> > > > > power domain level. Can you handle that too please?
+> > > >
+> > > > Well, this patchset only tries to delay the disabling of unused power
+> > > > domains until all consumers have had a chance to probe. So we use sync
+> > > > state only to queue up a power-off request to make sure those unused
+> > > > ones get disabled.
+> > >
+> > > Sure, but the design is completely unusable for a more complete
+> > > sync_state() behavior. I'm okay if you want to improve the
+> > > sync_state() behavior in layers, but don't do it in a way where the
+> > > current design will definitely not work for what you want to add in
+> > > the future.
+> >
+> > But you would still be OK with the qcom_cc sync state wrapper, I guess,
+> > right? Your concern is only about the sync state callback being not
+> > genpd generic one, AFAIU.
+> >
+> > >
+> > > > >
+> > > > > 3) In your GDSC drivers, it's not clear to me if you are preventing
+> > > > > power off until sync_state() only for GDSCs that were already on at
+> > > > > boot. So if an off-at-boot GDSC gets turned on, and then you attempt
+> > > > > to turn it off before all its consumers have probed, it'll fail to
+> > > > > power it off even though that wasn't necessary?
+> > > >
+> > > > I think we can circumvent looking at a GDSC by knowing it there was ever
+> > > > a power on request since boot. I'll try to come up with something in the
+> > > > new version.
+> > >
+> > > Please no. There's nothing wrong with reading the GDSC values. Please
+> > > read them and don't turn on GDSC's that weren't on at boot.
+> >
+> > Sorry for the typos above, I basically said that for this concern of
+> > yours, we can add the 'state at boot' thing you mentioned above by
+> > looking at the GDSC (as in reading reg).
+> >
+> > >
+> > > Otherwise you are making it a hassle for the case where there is a
+> > > consumer without a driver for a GDSC that was off at boot. You are now
+> > > forcing the use of timeouts or writing to state_synced file. Those
+> > > should be absolute last resorts, but you are making that a requirement
+> > > with your current implementation. If you implement it correctly by
+> > > reading the GDSC register, things will "just work". And it's not even
+> > > hard to do.
+> > >
+> > > NACK'ed until this is handled correctly.
+> > >
+> > > >
+> > > > >
+> > > > > 4) The returning -EBUSY when a power off is attempted seems to be
+> > > > > quite wasteful. The framework will go through the whole sequence of
+> > > > > trying to power down, send the notifications and then fail and then
+> > > > > send the undo notifications. Combined with point (2) I think this can
+> > > > > be handled better at the aggregation level in the framework to avoid
+> > > > > even going that far into the power off sequence.
+> > > >
+> > > > Again, have a look at [1] (above).
+> > >
+> > > See my reply above. If you do it properly at the framework level, this
+> > > can be done in a clean way and will work for all power domains.
+> > >
+> > > -Saravana
+> > >
+> > > >
+> > > > Ulf, any thoughts on this 4th point?
+> 
+> Please, see my reply above.
+> 
+> [...]
+> 
+> Kind regards
+> Uffe
