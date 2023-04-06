@@ -2,207 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616A46D9E48
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542DE6D9E51
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239054AbjDFRPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53552 "EHLO
+        id S239070AbjDFRSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238096AbjDFRPc (ORCPT
+        with ESMTP id S229518AbjDFRSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:15:32 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6FB72BC
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 10:15:28 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5002e950e23so1271313a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 10:15:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680801326;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6/acLh4KOig99xCm/V9WrFZvIgzSBqVUp64UT391SRw=;
-        b=JIwo5ZGRMeYyE/7IQxTnC3A+fotsrn9neIdNq6E4NRFpsndyz0JehvXFSIylJBK8ub
-         LoTdXHdIv2pb2QHJk08i423+1ZXsWKfwfXardNdMMYqjl8XGrTBflzMzgYxYb8Dq8cZY
-         wmFzjrSzL7x8l6aUC8Q4BP2jrAE/YIwbG/XNaUI+kc4U0I8JRag7J4iMb9aYymowQB4C
-         IUMSUOHYgOMSvXKup2jBydbq1nnvIb4coRAOpHIxHHhYUfJPfZczqErwZQwFsbNvUrlg
-         8WAFrQaSH9sYi2CpuOlwjZ0y97RysFZID/bdh+9H5ozb+Xki4QUP1xWCMvxjMZPB/Qv0
-         SMdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680801326;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6/acLh4KOig99xCm/V9WrFZvIgzSBqVUp64UT391SRw=;
-        b=v854l0bmlb1Z3Vvb+BmPrn1Elfz/hKt50eULWjXldwaTl6ltTx+tqhQlXQFKVkkrbK
-         WWS+yFI9cZgpIWNZGQhckE0kKzm1ms/Lf7iUzNwNDk55EJqiVOlMEVxa3zK/FS/VbUGk
-         GWi6fmuGrj0jvTqfecAi722blqeyl5e8iiMSo+l3gnz1lN0FGPbmuPzQQrLSQRkixkCN
-         tJDgW+mX12cfFMa3s5uRlS+Gr5P4r0yw4j1P6paaxbXqJ5tGqT5Ml8aE6BSBjOFOsNz8
-         f9+icbZrfnGu4q/c7Yl9UBst1a9//XB4CzmjEj2bZb6BxTpg9W5GIl86isPN3kqh6f+g
-         CoDQ==
-X-Gm-Message-State: AAQBX9fIdQowjCyqPDX1fGjc212KE4UMInayeYjRK5zUNFzpXpERbFyQ
-        CVzhAJfHYHai4WLIcms4Ssb9wg==
-X-Google-Smtp-Source: AKy350bE/vnELTyryVtVPyEHqcyqo0/nGsw5Ao9XOGbN+UWCla4cqusv78f8aqXGcfYpdxMYmQ7eyw==
-X-Received: by 2002:a05:6402:611:b0:502:4c82:9b4d with SMTP id n17-20020a056402061100b005024c829b4dmr347667edv.15.1680801326585;
-        Thu, 06 Apr 2023 10:15:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id k30-20020a508ade000000b005024aff3bb5sm965527edk.80.2023.04.06.10.15.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 10:15:26 -0700 (PDT)
-Message-ID: <223892d0-9b1b-9459-dec1-574875f7c1c6@linaro.org>
-Date:   Thu, 6 Apr 2023 19:15:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: Convert ATH10K to YAML
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Thu, 6 Apr 2023 13:18:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288BA4C08;
+        Thu,  6 Apr 2023 10:18:12 -0700 (PDT)
+Received: from localhost (unknown [188.27.34.213])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8EFE366031C8;
+        Thu,  6 Apr 2023 18:18:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680801490;
+        bh=2AfLYbNSjfZV3YG3Ai3MasSQj9DQevx49CcK7v80Dvo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=W+or+1/PaZ75ACKxUhiQGDStPhwVkMVgQOg/sgIjdggf3wOoesYySOA5vOMTGoHgK
+         eAsWWmkH0SWvqsQ7ERV+KpRWprDkw/GgDPqmIMRkVITyNzaJW2kSUBykfCrNsaNrV8
+         fCrFOkF+fJwPnWo57yuf5bAmBU0mrtNCSIkEzbEFQXCDDKp81/elsPclGNZz0CqP/p
+         FtwPcci4pVNqtyc75CMW6DENLP1AGuCET4iec+WB12AsHPR8wgnzOJeSOuNb3ETFUu
+         mwWTCTsJT0xhyWulm6LwNPetqPEqsQsYa/L3xT7y7pszKBYLRg+ttZ9Z16HMWLNWms
+         x2HFHr9ADc1vg==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
- <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406-topic-ath10k_bindings-v3-1-00895afc7764@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Heiko Stuebner <heiko@sntech.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Joseph Chen <chenjh@rock-chips.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v2 0/8] Add support for Rockchip RK860X regulators
+Date:   Thu,  6 Apr 2023 20:17:58 +0300
+Message-Id: <20230406171806.948290-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 14:55, Konrad Dybcio wrote:
-> Convert the ATH10K bindings to YAML.
-> 
-> Dropped properties that are absent at the current state of mainline:
-> - qcom,msi_addr
-> - qcom,msi_base
-> 
-> qcom,coexist-support and qcom,coexist-gpio-pin do very little and should
-> be reconsidered on the driver side, especially the latter one.
-> 
-> Somewhat based on the ath11k bindings.
+This patch series introduces support for the Rockchip RK860X regulators, 
+while also providing a few fixes and improvements to the existing fan53555 
+driver.
 
+RK8600/RK8601 are fully compatible with the FAN53555 regulators.
 
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,ipq4019-wifi
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          minItems: 17
-> +          maxItems: 17
-> +
-> +        interrupt-names:
-> +          minItems: 17
+RK8602/RK8603 are a bit different, having a wider output voltage
+selection range, from 0.5 V to 1.5 V in 6.25 mV steps. They are used 
+in the Rock 5B board to power the ARM Cortex-A76 cores and the NPU.
 
-Drop minItems (the number of items is defined by listing them below, as
-you did).
+Changes in v2:
+ - Dropped the rk8601 and rk8603 entries from the device_id arrays 
+   in PATCH 8/8 and updated the bindings accordingly in PATCH 1/8,
+   per Krzysztof's review
+ - v1: https://lore.kernel.org/lkml/20230405194721.821536-1-cristian.ciocaltea@collabora.com/
 
-> +          items:
-> +            - const: msi0
-> +            - const: msi1
-> +            - const: msi2
-> +            - const: msi3
-> +            - const: msi4
-> +            - const: msi5
-> +            - const: msi6
-> +            - const: msi7
-> +            - const: msi8
-> +            - const: msi9
-> +            - const: msi10
-> +            - const: msi11
-> +            - const: msi12
-> +            - const: msi13
-> +            - const: msi14
-> +            - const: msi15
-> +            - const: legacy
-> +
-> +        clocks:
-> +          items:
-> +            - description: Wi-Fi command clock
-> +            - description: Wi-Fi reference clock
-> +            - description: Wi-Fi RTC clock
-> +
-> +        clock-names:
-> +          items:
-> +            - const: wifi_wcss_cmd
-> +            - const: wifi_wcss_ref
-> +            - const: wifi_wcss_rtc
-> +
-> +      required:
-> +        - clocks
-> +        - clock-names
-> +        - interrupts
-> +        - interrupt-names
-> +        - resets
-> +        - reset-names
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,wcn3990-wifi
-> +
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 1
-> +          items:
-> +            - description: XO reference clock
-> +            - description: Qualcomm Debug Subsystem clock
-> +
-> +        clock-names:
-> +          minItems: 1
-> +          items:
-> +            - const: cxo_ref_clk_pin
-> +            - const: qdss
-> +
-> +        interrupts:
-> +          items:
-> +            - description: CE0
-> +            - description: CE1
-> +            - description: CE2
-> +            - description: CE3
-> +            - description: CE4
-> +            - description: CE5
-> +            - description: CE6
-> +            - description: CE7
-> +            - description: CE8
-> +            - description: CE9
-> +            - description: CE10
-> +            - description: CE11
+Cristian Ciocaltea (8):
+  regulator: dt-bindings: fcs,fan53555: Add support for RK860X
+  regulator: fan53555: Explicitly include bits header
+  regulator: fan53555: Fix wrong TCS_SLEW_MASK
+  regulator: fan53555: Remove unused *_SLEW_SHIFT definitions
+  regulator: fan53555: Make use of the bit macros
+  regulator: fan53555: Improve vsel_mask computation
+  regulator: fan53555: Use dev_err_probe
+  regulator: fan53555: Add support for RK860X
 
-What about interrupt-names here? If they are not expected, then just
-interrupt-names: false
+ .../bindings/regulator/fcs,fan53555.yaml      |  22 +-
+ drivers/regulator/fan53555.c                  | 203 ++++++++++++++----
+ 2 files changed, 172 insertions(+), 53 deletions(-)
 
-
-
-Best regards,
-Krzysztof
+-- 
+2.40.0
 
