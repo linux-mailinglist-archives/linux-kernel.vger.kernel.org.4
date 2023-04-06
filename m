@@ -2,90 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4206D96FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6FA6D96FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbjDFMYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 08:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S237685AbjDFM0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjDFMYB (ORCPT
+        with ESMTP id S229744AbjDFM0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 08:24:01 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DBA6EB6;
-        Thu,  6 Apr 2023 05:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680783840; x=1712319840;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6+2sIEevEKNZMYLg0cPtMs/Yvde/43gIMbaSm6f5SwM=;
-  b=GVm1JjjsJ1oKFl2VrMvAr1I40uXeM8eHpLbiVeUR8qHZx9ZV9RRthv2u
-   /jzsdf0yda8Jbv1IdG4mPRslck+aJUgXgmipOZ3slYL/yF6EfuU+RRmB1
-   q+UN6Mx4gkSIz3Yvp3uzo1d8rUrH0SzNCJhGtdY+z21HF3ljZmBLtJqr1
-   PbCFaJ/bGx2MxjNz2GQoehCAl9dgu7jPAqGOGahjd9OVQuZ7aosFh5lyx
-   W74Lfm9u0e8ea3qJkDoDIZbc+ahnC3thSUimq7MPJkG5fWs55ecHG1YAS
-   iE895m7DR11irCd1GP/g8PEKsBAgszfpf+1bDoptZ8VV41qtGAo2RwhRd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="405508410"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="405508410"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 05:24:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="830719341"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="830719341"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.31.177]) ([10.255.31.177])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 05:23:55 -0700
-Message-ID: <448c24d8-60d2-3881-171c-863b240ebdf1@linux.intel.com>
-Date:   Thu, 6 Apr 2023 20:23:53 +0800
+        Thu, 6 Apr 2023 08:26:30 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B8F6EB6;
+        Thu,  6 Apr 2023 05:26:28 -0700 (PDT)
+Received: from dggpeml500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Psgf36vJrzKwrC;
+        Thu,  6 Apr 2023 20:23:55 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500010.china.huawei.com
+ (7.185.36.155) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 6 Apr
+ 2023 20:26:25 +0800
+From:   Xin Liu <liuxin350@huawei.com>
+To:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>
+CC:     <bpf@vger.kernel.org>, <hsinweih@uci.edu>,
+        <linux-kernel@vger.kernel.org>, <yanan@huawei.com>,
+        <wuchangye@huawei.com>, <xiesongyang@huawei.com>,
+        <kongweibin2@huawei.com>, <liuxin350@huawei.com>,
+        <zhangmingyi5@huawei.com>
+Subject: [PATCH bpf-next] bpf, sockmap: fix deadlocks in the sockhash and sockmap
+Date:   Thu, 6 Apr 2023 20:26:22 +0800
+Message-ID: <20230406122622.109978-1-liuxin350@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH v3 0/7] Re-enable IDXD kernel workqueue under DMA API
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org
-References: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230331231137.1947675-1-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500010.china.huawei.com (7.185.36.155)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacob,
+When huang uses sched_switch tracepoint, the tracepoint
+does only one thing in the mounted ebpf program, which
+deletes the fixed elements in sockhash ([0])
 
-On 2023/4/1 7:11, Jacob Pan wrote:
-> Jacob Pan (7):
->    iommu/vt-d: Use non-privileged mode for all PASIDs
->    iommu/vt-d: Remove PASID supervisor request support
+It seems that elements in sockhash are rarely actively
+deleted by users or ebpf program. Therefore, we do not
+pay much attention to their deletion. Compared with hash
+maps, sockhash only provides spin_lock_bh protection.
+This causes it to appear to have self-locking behavior
+in the interrupt context.
 
-Above two patches are vt-d cleanups after
+  [0]:https://lore.kernel.org/all/CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com/
 
-942fd5435dcc iommu: Remove SVM_FLAG_SUPERVISOR_MODE support
+Reported-by: Hsin-Wei Hung <hsinweih@uci.edu>
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Xin Liu <liuxin350@huawei.com>
+---
+ net/core/sock_map.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-I will queue them as vt-d updates for v6.4 if no objection.
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 7c189c2e2fbf..66305b7bf8b7 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -414,8 +414,9 @@ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
+ {
+ 	struct sock *sk;
+ 	int err = 0;
++	unsigned long flags;
+ 
+-	raw_spin_lock_bh(&stab->lock);
++	raw_spin_lock_irqsave(&stab->lock, flags);
+ 	sk = *psk;
+ 	if (!sk_test || sk_test == sk)
+ 		sk = xchg(psk, NULL);
+@@ -425,7 +426,7 @@ static int __sock_map_delete(struct bpf_stab *stab, struct sock *sk_test,
+ 	else
+ 		err = -EINVAL;
+ 
+-	raw_spin_unlock_bh(&stab->lock);
++	raw_spin_unlock_irqrestore(&stab->lock, flags);
+ 	return err;
+ }
+ 
+@@ -932,11 +933,12 @@ static long sock_hash_delete_elem(struct bpf_map *map, void *key)
+ 	struct bpf_shtab_bucket *bucket;
+ 	struct bpf_shtab_elem *elem;
+ 	int ret = -ENOENT;
++	unsigned long flags;
+ 
+ 	hash = sock_hash_bucket_hash(key, key_size);
+ 	bucket = sock_hash_select_bucket(htab, hash);
+ 
+-	raw_spin_lock_bh(&bucket->lock);
++	raw_spin_lock_irqsave(&bucket->lock, flags);
+ 	elem = sock_hash_lookup_elem_raw(&bucket->head, hash, key, key_size);
+ 	if (elem) {
+ 		hlist_del_rcu(&elem->node);
+@@ -944,7 +946,7 @@ static long sock_hash_delete_elem(struct bpf_map *map, void *key)
+ 		sock_hash_free_elem(htab, elem);
+ 		ret = 0;
+ 	}
+-	raw_spin_unlock_bh(&bucket->lock);
++	raw_spin_unlock_irqrestore(&bucket->lock, flags);
+ 	return ret;
+ }
+ 
+-- 
+2.33.0
 
-Best regards,
-baolu
