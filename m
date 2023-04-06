@@ -2,321 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2016D9E61
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2296A6D9E69
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 19:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240014AbjDFRTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 13:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56178 "EHLO
+        id S240039AbjDFRTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 13:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239520AbjDFRS7 (ORCPT
+        with ESMTP id S239939AbjDFRTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 13:18:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814F79ED2;
-        Thu,  6 Apr 2023 10:18:36 -0700 (PDT)
-Received: from localhost (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2D01B66031EE;
-        Thu,  6 Apr 2023 18:18:35 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680801515;
-        bh=xfQ/7UvlTEZNT/nG8uJjsoHa3zrmCqKaD8nZ/sO9yw8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cC1hbJmBRiPzHXy/VJ3ilY8S2BWATdTMQ/D4yw0gbl7nsElNOW8mYbRMAmjrF5PHj
-         accV9rYFxUwzB+MkOAcyN5mjF4Aya+QN9c9HU4N1id5m4K6nr7pNUESV1wEfDFyNxN
-         uufmvjL1dAXUUWHf2HB+wqFB+fRNvqFhZswwnubuK8wfJ9ozbLLiWmQQTwr+uiMZIw
-         ZFROdwQvMgrBZqZansWbgpdjJ5IWCsL7KDzUSZ/DSy3fJgRCsbkSed8JdE5Ev4+V7l
-         DKxxFPG99NhSDHgZZCb7eLikFj3ET7O+GCm4CggVmW+UEt9+uIc5C7iWLnAgXEJHy2
-         ARjbUsZ+n+VKA==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Joseph Chen <chenjh@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH v2 8/8] regulator: fan53555: Add support for RK860X
-Date:   Thu,  6 Apr 2023 20:18:06 +0300
-Message-Id: <20230406171806.948290-9-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230406171806.948290-1-cristian.ciocaltea@collabora.com>
-References: <20230406171806.948290-1-cristian.ciocaltea@collabora.com>
+        Thu, 6 Apr 2023 13:19:31 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2050.outbound.protection.outlook.com [40.107.220.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE73B450;
+        Thu,  6 Apr 2023 10:19:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cWZ9IXSnOtB7IVgjmfaT/PK53dmmqJmFmHZlCK+9jey5J9svUSGOOC9w8oMZO5t6TfJBTXA+VvHr6vZhJrsi4QYM50ryRPsCBIgWq4EvuO2mk4jpIfJOj1nNsPF4icQ62kh8caP/giw/EEJdsH7f9ro/LmPQ+w/h+xBUPJWJth0ARuJtsZ548DztDOysPm9XSGMZDfYvV+Fq9ZY/MFPQ/AzOE78hZbeMKC873mYWWMzx8tyllEUecdiymC72tfggsPoE8tIIieDkVdLy+hbkYxlnd9bAMbIojRwLerkm2wZvS77RNbsgToFiI3NlSDd0h6wSoCO+Wene2QR0PWcoVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hhWNfg93DvHV7aiZLnirtWk0mA7iojAi2aTm+kONSik=;
+ b=mvofTtF3kkc7fkxCUFus3f+uJDS8LWRxgkkNN0BVroysufNjHIFiy9feBADYZOLkZ7//Fo2EPSeSv/eygfa9Q7h554GylVPH/GY4bRy7v/HCXO5Rm9hUKWjD6M3fauYdAf1+jHC17ZYyIwf1M0JjrlYEbicSwRBU+yMk1yyzVA23c4hnYOBQyYc+9mRyf1uo8twe+3qErxbCPrrafR7E+nISTDwll0SUFR4u61lmoST5bM3yHQMqgmj3RNrTvI/InVdOFEFE9f+dwvm8sErgWg6XtvvXxz3pSuy1GedEAQ5iVcGkKKqiLwz6bJ/3giunaGNCbwyTcGkva29joSXwAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hhWNfg93DvHV7aiZLnirtWk0mA7iojAi2aTm+kONSik=;
+ b=UynJvfTr9HzzM4gYmElCuRC9gieHlKAvKzeKPRj0/zTMDrEkZ1QoKKFx3kt77ARLkif2XK773uCG3ADydBBpd5opC4iTGeOwviypVkZxBCTdyux52r5OcJ+IZqB2FgH7laK55lyVnFzhqyyzqsfc/HnDYvRB6MUAQ0OrAitQAmv9o+rgxYRypGkigeewSuH01ELEmKgI1diFGrdogI2IU7hghvgWJdJs9nRBvGYX/Q7/BtgttkiHNclEjONGzDMwrPovY1d0013r//nfc7uvv6COKhSbP/hsiBiJz+W/g6dZlJfZIH18WkcWQ7L1uvY20PqGtKwjzVce4RZWsekddg==
+Received: from DM6PR13CA0031.namprd13.prod.outlook.com (2603:10b6:5:bc::44) by
+ DM6PR12MB5024.namprd12.prod.outlook.com (2603:10b6:5:20a::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.35; Thu, 6 Apr 2023 17:18:52 +0000
+Received: from DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:bc:cafe::33) by DM6PR13CA0031.outlook.office365.com
+ (2603:10b6:5:bc::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.18 via Frontend
+ Transport; Thu, 6 Apr 2023 17:18:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT033.mail.protection.outlook.com (10.13.172.221) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.33 via Frontend Transport; Thu, 6 Apr 2023 17:18:52 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 6 Apr 2023
+ 10:18:39 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 6 Apr 2023
+ 10:18:39 -0700
+Received: from dipenp.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Thu, 6 Apr 2023 10:18:39 -0700
+From:   Dipen Patel <dipenp@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linus.walleij@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <robh+dt@kernel.org>, <timestamp@lists.linux.dev>,
+        <krzysztof.kozlowski+dt@linaro.org>, <brgl@bgdev.pl>,
+        <corbet@lwn.net>, <gregkh@linuxfoundation.org>
+CC:     Dipen Patel <dipenp@nvidia.com>
+Subject: [V5 00/10] Add Tegra234 HTE support
+Date:   Thu, 6 Apr 2023 10:18:27 -0700
+Message-ID: <20230406171837.11206-1-dipenp@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT033:EE_|DM6PR12MB5024:EE_
+X-MS-Office365-Filtering-Correlation-Id: aac2d335-46fd-4aa9-88de-08db36c2fe8f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hL6piCaib1Uq9fuFe3DUhKzlfZZviI9Sp3Roe+tAdfJGW9ElZC90oGEDZUixxwWLJMWjJhtEZncCDcnlt4XObi3PdBGnXlhLThdz9sRKpROLFXqPBxWVhE5oWHcktTRId5O7YQId1orLn0o5pgw4Yz0HGChply7RLsgSiGAme0XXrN7RvCgscRakDIuhmtCRGd6j392H9HglDrONf0GdhV0dtGgn1gvo0yL+8V8HeZqsfx2wCElu9tcgEVPgcgp8doxfopFc1jaYl0NpJ5y/qvLJuyCfCxwAh4OVEaJ6m+IXzZ78l2Bod0iUs/tpPXj0bOTCovCwWyvadJY99Bib6FfXHI7B9XaTdN48XvUfYZV0L1TNQu3KsZ9OrUnthHnAE5NW+BjL/75HLZxne4e8nYdFR8H1sSC8OgJKv7Un7c3D0MUqEW8CghxFstA9yJWBgie+w5UU5bOX9uJ9fCaJmHNNrggPfaM7k6azdZQuPQWgQtDHIZWNgHnaBjDgGrNrIBniL+naSfuE6sNgCEA71nQMJs6qf2I/DFG8im7azKJKj84Umv8EAc3qn0o1AaSMmbF0K0/AQCU7TH4NqapDg8OPmdHtdwgEAS81fkrUWER+1MMOneoZvOegCQBVWeQhejB2YYm3Wy8Td/iD0ApwWTZ87Z0hHlmfoliQUJ7p89xR5u4yVtctQl64o+rKueEYPblTzeSc+YGZ6Rqa3Ens8XLLa7i3MFnnmG3263bu4sMB+Q0NeKudjhdaUWm46Il4re7OXMZN2xGO/VHN+0tIuCFkoAyUagbiyhnRRQEwnQUeYm3y+GUwhRe9dDH6Bt3e
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(376002)(451199021)(40470700004)(46966006)(36840700001)(426003)(2616005)(336012)(47076005)(36860700001)(82740400003)(83380400001)(7696005)(478600001)(186003)(26005)(110136005)(6666004)(1076003)(107886003)(40480700001)(5660300002)(40460700003)(36756003)(4326008)(2906002)(41300700001)(8676002)(356005)(7636003)(70206006)(7416002)(86362001)(70586007)(8936002)(921005)(82310400005)(316002)(2101003)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 17:18:52.3869
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aac2d335-46fd-4aa9-88de-08db36c2fe8f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB5024
+X-Spam-Status: No, score=0.8 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the existing fan53555 driver to support the Rockchip RK860X
-regulators.
+This patch series mainly adds support for the Tegra234 HTE provider. In
+addition, it addresses dt binding comments which prompted code
+changes in the existing HTE provider driver without breaking the
+Tegra194 provider. The comments raised concern how existing code
+retrieves gpio controller node
+(the node is used to help namespace conversion between HTE and GPIOLIB).
+To help simplify that process, new DT property is suggested which adds
+gpio controller node in the HTE provider binding as phandle property. To
+conlude this patch series:
+- adds Tegra234 HTE provider
+- modifies existing provider code to address new dt binding for Tegra234
+without breaking it for the Tegra194 chip.
 
-RK8600/RK8601 are pretty similar to the FAN53555 regulators.
+The V1 patch series:
+- Adds tegra Tegra234 HTE(timestamp) provider supports.
+- Updates MAINTAINERS file for git tree, mail list fields.
+- Updates devicetree and API documentations.
+- Enables HTE subsystem, Tegra194 and Tegra234 HTE providers
+by default in arm64 defconfig and dts files.
 
-RK8602/RK8603 are a bit different, having a wider output voltage
-selection range, from 0.5 V to 1.5 V in 6.25 mV steps. They also use
-additional VSEL0/VSEL1 registers for the voltage selector, but the
-enable and mode bits are still located in the original FAN53555 specific
-VSEL0/VSEL1 registers.
+The V2 patch series:
+- Changes in dt bindings to remove slices property
+- Adds nvidia,gpio-controller dt property
+- Add GTE node for the Tegra234
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- drivers/regulator/fan53555.c | 121 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 118 insertions(+), 3 deletions(-)
+The V3 patch series:
+- Re-arranged patches to have dt bindings first before its usage
+- Addressed review comments regarding dt bindings
 
-diff --git a/drivers/regulator/fan53555.c b/drivers/regulator/fan53555.c
-index acf14ba7aaa6..130f3dbe9840 100644
---- a/drivers/regulator/fan53555.c
-+++ b/drivers/regulator/fan53555.c
-@@ -26,6 +26,9 @@
- #define FAN53555_VSEL0		0x00
- #define FAN53555_VSEL1		0x01
- 
-+#define RK8602_VSEL0		0x06
-+#define RK8602_VSEL1		0x07
-+
- #define TCS4525_VSEL0		0x11
- #define TCS4525_VSEL1		0x10
- #define TCS4525_TIME		0x13
-@@ -55,6 +58,7 @@
- 
- #define FAN53555_NVOLTAGES	64	/* Numbers of voltages */
- #define FAN53526_NVOLTAGES	128
-+#define RK8602_NVOLTAGES	160
- 
- #define TCS_VSEL0_MODE		BIT(7)
- #define TCS_VSEL1_MODE		BIT(6)
-@@ -64,6 +68,8 @@
- enum fan53555_vendor {
- 	FAN53526_VENDOR_FAIRCHILD = 0,
- 	FAN53555_VENDOR_FAIRCHILD,
-+	FAN53555_VENDOR_ROCKCHIP,	/* RK8600, RK8601 */
-+	RK8602_VENDOR_ROCKCHIP,		/* RK8602, RK8603 */
- 	FAN53555_VENDOR_SILERGY,
- 	FAN53526_VENDOR_TCS,
- };
-@@ -87,6 +93,14 @@ enum {
- 	FAN53555_CHIP_ID_08 = 8,
- };
- 
-+enum {
-+	RK8600_CHIP_ID_08 = 8,		/* RK8600, RK8601 */
-+};
-+
-+enum {
-+	RK8602_CHIP_ID_10 = 10,		/* RK8602, RK8603 */
-+};
-+
- enum {
- 	TCS4525_CHIP_ID_12 = 12,
- };
-@@ -117,6 +131,8 @@ struct fan53555_device_info {
- 	/* Voltage setting register */
- 	unsigned int vol_reg;
- 	unsigned int sleep_reg;
-+	unsigned int en_reg;
-+	unsigned int sleep_en_reg;
- 	/* Voltage range and step(linear) */
- 	unsigned int vsel_min;
- 	unsigned int vsel_step;
-@@ -159,7 +175,7 @@ static int fan53555_set_suspend_enable(struct regulator_dev *rdev)
- {
- 	struct fan53555_device_info *di = rdev_get_drvdata(rdev);
- 
--	return regmap_update_bits(rdev->regmap, di->sleep_reg,
-+	return regmap_update_bits(rdev->regmap, di->sleep_en_reg,
- 				  VSEL_BUCK_EN, VSEL_BUCK_EN);
- }
- 
-@@ -167,7 +183,7 @@ static int fan53555_set_suspend_disable(struct regulator_dev *rdev)
- {
- 	struct fan53555_device_info *di = rdev_get_drvdata(rdev);
- 
--	return regmap_update_bits(rdev->regmap, di->sleep_reg,
-+	return regmap_update_bits(rdev->regmap, di->sleep_en_reg,
- 				  VSEL_BUCK_EN, 0);
- }
- 
-@@ -317,6 +333,50 @@ static int fan53555_voltages_setup_fairchild(struct fan53555_device_info *di)
- 	return 0;
- }
- 
-+static int fan53555_voltages_setup_rockchip(struct fan53555_device_info *di)
-+{
-+	/* Init voltage range and step */
-+	switch (di->chip_id) {
-+	case RK8600_CHIP_ID_08:
-+		di->vsel_min = 712500;
-+		di->vsel_step = 12500;
-+		break;
-+	default:
-+		dev_err(di->dev,
-+			"Chip ID %d not supported!\n", di->chip_id);
-+		return -EINVAL;
-+	}
-+	di->slew_reg = FAN53555_CONTROL;
-+	di->slew_mask = CTL_SLEW_MASK;
-+	di->ramp_delay_table = slew_rates;
-+	di->n_ramp_values = ARRAY_SIZE(slew_rates);
-+	di->vsel_count = FAN53555_NVOLTAGES;
-+
-+	return 0;
-+}
-+
-+static int rk8602_voltages_setup_rockchip(struct fan53555_device_info *di)
-+{
-+	/* Init voltage range and step */
-+	switch (di->chip_id) {
-+	case RK8602_CHIP_ID_10:
-+		di->vsel_min = 500000;
-+		di->vsel_step = 6250;
-+		break;
-+	default:
-+		dev_err(di->dev,
-+			"Chip ID %d not supported!\n", di->chip_id);
-+		return -EINVAL;
-+	}
-+	di->slew_reg = FAN53555_CONTROL;
-+	di->slew_mask = CTL_SLEW_MASK;
-+	di->ramp_delay_table = slew_rates;
-+	di->n_ramp_values = ARRAY_SIZE(slew_rates);
-+	di->vsel_count = RK8602_NVOLTAGES;
-+
-+	return 0;
-+}
-+
- static int fan53555_voltages_setup_silergy(struct fan53555_device_info *di)
- {
- 	/* Init voltage range and step */
-@@ -377,6 +437,7 @@ static int fan53555_device_setup(struct fan53555_device_info *di,
- 	switch (di->vendor) {
- 	case FAN53526_VENDOR_FAIRCHILD:
- 	case FAN53555_VENDOR_FAIRCHILD:
-+	case FAN53555_VENDOR_ROCKCHIP:
- 	case FAN53555_VENDOR_SILERGY:
- 		switch (pdata->sleep_vsel_id) {
- 		case FAN53555_VSEL_ID_0:
-@@ -391,6 +452,27 @@ static int fan53555_device_setup(struct fan53555_device_info *di,
- 			dev_err(di->dev, "Invalid VSEL ID!\n");
- 			return -EINVAL;
- 		}
-+		di->sleep_en_reg = di->sleep_reg;
-+		di->en_reg = di->vol_reg;
-+		break;
-+	case RK8602_VENDOR_ROCKCHIP:
-+		switch (pdata->sleep_vsel_id) {
-+		case FAN53555_VSEL_ID_0:
-+			di->sleep_reg = RK8602_VSEL0;
-+			di->vol_reg = RK8602_VSEL1;
-+			di->sleep_en_reg = FAN53555_VSEL0;
-+			di->en_reg = FAN53555_VSEL1;
-+			break;
-+		case FAN53555_VSEL_ID_1:
-+			di->sleep_reg = RK8602_VSEL1;
-+			di->vol_reg = RK8602_VSEL0;
-+			di->sleep_en_reg = FAN53555_VSEL1;
-+			di->en_reg = FAN53555_VSEL0;
-+			break;
-+		default:
-+			dev_err(di->dev, "Invalid VSEL ID!\n");
-+			return -EINVAL;
-+		}
- 		break;
- 	case FAN53526_VENDOR_TCS:
- 		switch (pdata->sleep_vsel_id) {
-@@ -406,6 +488,8 @@ static int fan53555_device_setup(struct fan53555_device_info *di,
- 			dev_err(di->dev, "Invalid VSEL ID!\n");
- 			return -EINVAL;
- 		}
-+		di->sleep_en_reg = di->sleep_reg;
-+		di->en_reg = di->vol_reg;
- 		break;
- 	default:
- 		dev_err(di->dev, "vendor %d not supported!\n", di->vendor);
-@@ -427,10 +511,23 @@ static int fan53555_device_setup(struct fan53555_device_info *di,
- 		}
- 		break;
- 	case FAN53555_VENDOR_FAIRCHILD:
-+	case FAN53555_VENDOR_ROCKCHIP:
- 	case FAN53555_VENDOR_SILERGY:
- 		di->mode_reg = di->vol_reg;
- 		di->mode_mask = VSEL_MODE;
- 		break;
-+	case RK8602_VENDOR_ROCKCHIP:
-+		di->mode_mask = VSEL_MODE;
-+
-+		switch (pdata->sleep_vsel_id) {
-+		case FAN53555_VSEL_ID_0:
-+			di->mode_reg = FAN53555_VSEL1;
-+			break;
-+		case FAN53555_VSEL_ID_1:
-+			di->mode_reg = FAN53555_VSEL0;
-+			break;
-+		}
-+		break;
- 	case FAN53526_VENDOR_TCS:
- 		di->mode_reg = TCS4525_COMMAND;
- 
-@@ -456,6 +553,12 @@ static int fan53555_device_setup(struct fan53555_device_info *di,
- 	case FAN53555_VENDOR_FAIRCHILD:
- 		ret = fan53555_voltages_setup_fairchild(di);
- 		break;
-+	case FAN53555_VENDOR_ROCKCHIP:
-+		ret = fan53555_voltages_setup_rockchip(di);
-+		break;
-+	case RK8602_VENDOR_ROCKCHIP:
-+		ret = rk8602_voltages_setup_rockchip(di);
-+		break;
- 	case FAN53555_VENDOR_SILERGY:
- 		ret = fan53555_voltages_setup_silergy(di);
- 		break;
-@@ -481,7 +584,7 @@ static int fan53555_regulator_register(struct fan53555_device_info *di,
- 	rdesc->ops = &fan53555_regulator_ops;
- 	rdesc->type = REGULATOR_VOLTAGE;
- 	rdesc->n_voltages = di->vsel_count;
--	rdesc->enable_reg = di->vol_reg;
-+	rdesc->enable_reg = di->en_reg;
- 	rdesc->enable_mask = VSEL_BUCK_EN;
- 	rdesc->min_uV = di->vsel_min;
- 	rdesc->uV_step = di->vsel_step;
-@@ -531,6 +634,12 @@ static const struct of_device_id __maybe_unused fan53555_dt_ids[] = {
- 	}, {
- 		.compatible = "fcs,fan53555",
- 		.data = (void *)FAN53555_VENDOR_FAIRCHILD
-+	}, {
-+		.compatible = "rockchip,rk8600",
-+		.data = (void *)FAN53555_VENDOR_ROCKCHIP
-+	}, {
-+		.compatible = "rockchip,rk8602",
-+		.data = (void *)RK8602_VENDOR_ROCKCHIP
- 	}, {
- 		.compatible = "silergy,syr827",
- 		.data = (void *)FAN53555_VENDOR_SILERGY,
-@@ -637,6 +746,12 @@ static const struct i2c_device_id fan53555_id[] = {
- 	}, {
- 		.name = "fan53555",
- 		.driver_data = FAN53555_VENDOR_FAIRCHILD
-+	}, {
-+		.name = "rk8600",
-+		.driver_data = FAN53555_VENDOR_ROCKCHIP
-+	}, {
-+		.name = "rk8602",
-+		.driver_data = RK8602_VENDOR_ROCKCHIP
- 	}, {
- 		.name = "syr827",
- 		.driver_data = FAN53555_VENDOR_SILERGY
+The V4 patch series:
+- Logically divides dt binding and tegra HTE provider patches from v3
+- Maintains backward compatibilty for the Tegra194
+
+The V5 patch series:
+- Reflect review comments for the patch
+"dt-bindings: timestamp: Add nvidia,gpio-controller"
+- Documentation changes including renaming of the file
+
+Dipen Patel (10):
+  MAINTAINERS: Add HTE/timestamp subsystem details
+  dt-bindings: timestamp: Add Tegra234 support
+  dt-bindings: timestamp: Deprecate nvidia,slices property
+  dt-bindings: timestamp: Add nvidia,gpio-controller
+  arm64: tegra: Add Tegra234 GTE nodes
+  hte: Re-phrase tegra API document
+  hte: Add Tegra234 provider
+  hte: Deprecate nvidia,slices property
+  hte: handle nvidia,gpio-controller property
+  gpio: tegra186: Add Tegra234 hte support
+
+ .../timestamp/nvidia,tegra194-hte.yaml        |  76 +++++++-
+ Documentation/driver-api/hte/index.rst        |   2 +-
+ .../hte/{tegra194-hte.rst => tegra-hte.rst}   |  33 ++--
+ MAINTAINERS                                   |   3 +
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |  17 ++
+ drivers/gpio/gpio-tegra186.c                  |   1 +
+ drivers/hte/hte-tegra194-test.c               |   2 +-
+ drivers/hte/hte-tegra194.c                    | 167 ++++++++++++++++--
+ 8 files changed, 262 insertions(+), 39 deletions(-)
+ rename Documentation/driver-api/hte/{tegra194-hte.rst => tegra-hte.rst} (50%)
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
-2.40.0
+2.17.1
 
