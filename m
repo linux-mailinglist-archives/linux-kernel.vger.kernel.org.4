@@ -2,108 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA4B6DA5CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FC16DA5D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 00:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239013AbjDFW12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 18:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S235622AbjDFW3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 18:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjDFW10 (ORCPT
+        with ESMTP id S238485AbjDFW3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 18:27:26 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30EA7EC6;
-        Thu,  6 Apr 2023 15:27:25 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 336L1kNm024134;
-        Thu, 6 Apr 2023 22:27:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=tp0ZMX9fedTeOqsKlgu0LboxYUsAYjzLrcmCZQUaefg=;
- b=JoBzb4Vv6GrgeKf8CrIrIir+Oz6TANBZOl20nyPiZH4PsxcKYB3Uq08D/vl9of7q1PwH
- eSS+mLbLN4L1OMRKRr2zRgbnDHBlu08WQBTirVHhIj7EopC1mKMyl3V4zbEB+e1ogoYC
- IPziTaddarFtOB1jdqTq9Bz7zPLK4VH647CfCONpzYYB0KdWZhFAVbnd1trkWgf6jEaG
- ItxItv1Jtybvb5PjnBCUNfIUcNiwdX/V0EGz4auJkssi/RSA22VyCojFppR+kh2naxRu
- sOYWGr82A0N47aVhkbzZB6G2FsDUW4OH4dqeHZX7aOjEtpCXGh/IYLEAyg7MoOftwHiF sQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3psta9uer1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 22:27:20 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 336MRKm5016417;
-        Thu, 6 Apr 2023 22:27:20 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3psta9ueqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 22:27:20 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 336MDCe7016957;
-        Thu, 6 Apr 2023 22:27:19 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma01dal.us.ibm.com (PPS) with ESMTPS id 3ppc89c37y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Apr 2023 22:27:18 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 336MRH8A7864842
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 6 Apr 2023 22:27:17 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C9A715803F;
-        Thu,  6 Apr 2023 22:27:17 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EBBF58061;
-        Thu,  6 Apr 2023 22:27:17 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  6 Apr 2023 22:27:17 +0000 (GMT)
-Message-ID: <b78a9cd9-f3ab-3834-991c-3c15590dcbd8@linux.ibm.com>
-Date:   Thu, 6 Apr 2023 18:27:16 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after
- writes
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
-        miklos@szeredi.hu, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        amir73il@gmail.com
-References: <20230405171449.4064321-1-stefanb@linux.ibm.com>
- <20230406-diffamieren-langhaarig-87511897e77d@brauner>
- <CAHC9VhQsnkLzT7eTwVr-3SvUs+mcEircwztfaRtA+4ZaAh+zow@mail.gmail.com>
- <a6c6e0e4-047f-444b-3343-28b71ddae7ae@linux.ibm.com>
- <CAHC9VhQyWa1OnsOvoOzD37EmDnESfo4Rxt2eCSUgu+9U8po-CA@mail.gmail.com>
- <20230406-wasser-zwanzig-791bc0bf416c@brauner>
- <546145ecbf514c4c1a997abade5f74e65e5b1726.camel@kernel.org>
- <45a9c575-0b7e-f66a-4765-884865d14b72@linux.ibm.com>
- <60339e3bd08a18358ac8c8a16dc67c74eb8ba756.camel@kernel.org>
- <d61ed13b-0fd2-0283-96d2-0ff9c5e0a2f9@linux.ibm.com>
- <4f739cc6847975991874d56ef9b9716c82cf62a3.camel@kernel.org>
- <7d8f05e26dc7152dfad771dfc867dec145aa054b.camel@kernel.org>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <7d8f05e26dc7152dfad771dfc867dec145aa054b.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: L000C40uecQVektj65LivkFRw4HDW1oS
-X-Proofpoint-ORIG-GUID: nAcuqTFzyn3mas3y2tFBMlAeYKDG1jyw
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 6 Apr 2023 18:29:47 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9929767
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 15:29:46 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-242cb01a788so357101a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 15:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1680820186; x=1683412186;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7k4qsFqiHaAzNp6afujXpgmsXu2FPMDvZlLtZE20tc4=;
+        b=1y4uhP9vs2w603pMlq/oT5QHMF+3601WSDLcMR0D0p5ucvKWV5W9ltQHO+vzcccDcb
+         Mv7gaJO/9eNxKNzE85QCG+3tYiTxdLOrHbtJ91h4fKrPZMlYFBDTN5EUKdQBOoq70Wyz
+         USEXLDfHilRgWN1P+9DDPgA+Ynp5i89CS7nyjO0C/CsXJNMiiDVbWQzGSKMuZoaLyPo/
+         FKABeF/ywAFSgZmHct5AbaxeShHCVxXewaaSFQ5sdHb8kyiw2Jk6Do9a8fg5kY96Li2a
+         Io9111MNXsldf+UePoNHDy5t5xmU54/Kp3PBsdGrjy/CmCF3aPOjhe8slqkrjd1yScOq
+         DgaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680820186; x=1683412186;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7k4qsFqiHaAzNp6afujXpgmsXu2FPMDvZlLtZE20tc4=;
+        b=l1Fxz0JBhTmk0zob/naCwAO2/YJVpQ1pJMRiPvkZ+tTMlh+piIoVahv8h95vhOCzGu
+         aJV3Mx136uayctgUOKkHd17Y+Cq84e1O4Lc3bQRPxB8394sMUolUVSUO+QTTCYHwiDqo
+         VcdMyljDixe7HZaHtX0YD2Gt8+EX1mUdBmMV//rvl9D/nwiaj0JAFY0liRXSJbWPQ+t1
+         7G3kTB+gSRQRF3JS/RVCl3UUu7buV672K2lAc50KxUQ9VInNzb2RYfNL7b5ugcXeRogj
+         SEW2QkvQRmaHqhh+1wSuYRPAra/AQFm/hzQehtd0t1XSV7VqsPuJskLyodJJqzMI8a8H
+         OIDw==
+X-Gm-Message-State: AAQBX9fX+FC9q0IHuBYLrHGy72jOZI0fow6AanYQqZVUV+GHHsw59TYl
+        wH51eW0NJ/nb3RXYGdUOttuNNg==
+X-Google-Smtp-Source: AKy350bN+48xlZ2wTnEU3QC1ywsQFykc+qHdijNBklHvZGPnhieRd9+bURJ8OZdfBNF65SQ1jcC2RQ==
+X-Received: by 2002:a17:90a:e386:b0:240:cf04:c997 with SMTP id b6-20020a17090ae38600b00240cf04c997mr159190pjz.2.1680820185747;
+        Thu, 06 Apr 2023 15:29:45 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ji2-20020a170903324200b001a21a593008sm1807328plb.306.2023.04.06.15.29.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 15:29:45 -0700 (PDT)
+Message-ID: <b3817e92-80ca-8eea-ebdd-f2172f3390c8@kernel.dk>
+Date:   Thu, 6 Apr 2023 16:29:43 -0600
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-06_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 clxscore=1015 phishscore=0 spamscore=0 adultscore=0
- lowpriorityscore=0 malwarescore=0 suspectscore=0 mlxscore=0
- mlxlogscore=999 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2303200000 definitions=main-2304060194
-X-Spam-Status: No, score=-2.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] block: don't set GD_NEED_PART_SCAN if scan partition
+ failed
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, ming.lei@redhat.com,
+        jack@suse.cz, hch@infradead.org
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+ <20230322035926.1791317-1-yukuai1@huaweicloud.com>
+ <42cfedca-f233-4d7e-f43b-4b5dd0c97e9e@huaweicloud.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <42cfedca-f233-4d7e-f43b-4b5dd0c97e9e@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,65 +79,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/6/23 18:04, Jeff Layton wrote:
-> On Thu, 2023-04-06 at 17:24 -0400, Jeff Layton wrote:
->> On Thu, 2023-04-06 at 16:22 -0400, Stefan Berger wrote:
->>>
->>> On 4/6/23 15:37, Jeff Layton wrote:
->>>> On Thu, 2023-04-06 at 15:11 -0400, Stefan Berger wrote:
->>>>>
->>>>> On 4/6/23 14:46, Jeff Layton wrote:
->>>>>> On Thu, 2023-04-06 at 17:01 +0200, Christian Brauner wrote:
->>>>>>> On Thu, Apr 06, 2023 at 10:36:41AM -0400, Paul Moore wrote:
->>>>>
->>>>>>
->>>>>> Correct. As long as IMA is also measuring the upper inode then it seems
->>>>>> like you shouldn't need to do anything special here.
->>>>>
->>>>> Unfortunately IMA does not notice the changes. With the patch provided in the other email IMA works as expected.
->>>>>
->>>>
->>>>
->>>> It looks like remeasurement is usually done in ima_check_last_writer.
->>>> That gets called from __fput which is called when we're releasing the
->>>> last reference to the struct file.
->>>>
->>>> You've hooked into the ->release op, which gets called whenever
->>>> filp_close is called, which happens when we're disassociating the file
->>>> from the file descriptor table.
->>>>
->>>> So...I don't get it. Is ima_file_free not getting called on your file
->>>> for some reason when you go to close it? It seems like that should be
->>>> handling this.
->>>
->>> I would ditch the original proposal in favor of this 2-line patch shown here:
->>>
->>> https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
->>>
->>>
+On 4/5/23 9:42 PM, Yu Kuai wrote:
+> Hi, Jens!
+> 
+> 在 2023/03/22 11:59, Yu Kuai 写道:
+>> From: Yu Kuai <yukuai3@huawei.com>
 >>
->> Ok, I think I get it. IMA is trying to use the i_version from the
->> overlayfs inode.
+>> Currently if disk_scan_partitions() failed, GD_NEED_PART_SCAN will still
+>> set, and partition scan will be proceed again when blkdev_get_by_dev()
+>> is called. However, this will cause a problem that re-assemble partitioned
+>> raid device will creat partition for underlying disk.
 >>
->> I suspect that the real problem here is that IMA is just doing a bare
->> inode_query_iversion. Really, we ought to make IMA call
->> vfs_getattr_nosec (or something like it) to query the getattr routine in
->> the upper layer. Then overlayfs could just propagate the results from
->> the upper layer in its response.
+>> Test procedure:
 >>
->> That sort of design may also eventually help IMA work properly with more
->> exotic filesystems, like NFS or Ceph.
+>> mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
+>> sgdisk -n 0:0:+100MiB /dev/md0
+>> blockdev --rereadpt /dev/sda
+>> blockdev --rereadpt /dev/sdb
+>> mdadm -S /dev/md0
+>> mdadm -A /dev/md0 /dev/sda /dev/sdb
 >>
+>> Test result: underlying disk partition and raid partition can be
+>> observed at the same time
 >>
+>> Note that this can still happen in come corner cases that
+>> GD_NEED_PART_SCAN can be set for underlying disk while re-assemble raid
+>> device.
 >>
 > 
-> Maybe something like this? It builds for me but I haven't tested it. It
-> looks like overlayfs already should report the upper layer's i_version
-> in getattr, though I haven't tested that either:
+> Can you apply this patch?
+
+None of them apply to my for-6.4/block branch...
+
+-- 
+Jens Axboe
 
 
-Thank you! I will give it a try once I am back.
-
-     Stefan
