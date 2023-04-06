@@ -2,130 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B836D8CE5
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D330D6D8CE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjDFBoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S234742AbjDFBo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 21:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjDFBoT (ORCPT
+        with ESMTP id S234734AbjDFBoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:44:19 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EC5729B
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:44:18 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id kp6-20020a170903280600b001a2945a7fdeso11004878plb.18
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 18:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680745458;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nTPfjpgA3erDSbYpkgBCYkjxSYD+XUjNQEHsXiG0Ado=;
-        b=rjiwYtQc2XVnUnURMfXmp10Rdjx/q7NfkW0lnKOJ1N5Qe3Xd2XxkuQocScnAS5/68M
-         Ku32PCSyX3qyIYxlMTYvmHvv1hg7VTNCctGhJz5QaHxoUqEOMh6+LvmqsPBAt9paXQ8k
-         jLI8Lp+MAYdvSupKLWamScXEqgLcsvyXj5o3psl5e0BaQPiASxdXh6SM++IQlZPh8Oc2
-         49VlUH1KZ4qrKq/ZYLTZDB9xJ/mnZI2An1JFeATGJFJBmgrE7U7gkFMH8aBy5bLaHyO5
-         qUMZAi+BgY+WSvKI+gMEcRyJLfsQLbCDz460GxFQe3NiEi0MYN3UZ9zMKkxxWLE8ABYt
-         Snyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680745458;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nTPfjpgA3erDSbYpkgBCYkjxSYD+XUjNQEHsXiG0Ado=;
-        b=s0wPGoOpzWx6fWcEhr0Oa7w/uzsOnbBjpSmpco5VQI8k5eotMEyWgvf43W+spw9sB+
-         EksDaWBJepQ78YEhzl/6GwM9ynxGW8Vlb7H/8zpcv8DJKodxdQCfKjXR21oY9LBDm2zW
-         xdyJOxHQr/IXSeeRzptz6KwrnXFfKYbVC4AF9AelSxIfG/M/9iY9QZQnCYZHbl0+XWwP
-         9UaDYMx9uhszBVw3ASMO69qutRq8+2IxubCOe8fEVeDwEpEAYOpCpSDUzqYP0OBewh93
-         pGULsv6QB5vAqtnSf6h6OW1t3fGu3YFHNm2hc3AXETy5MefzG0MQYX6aDJAWL4+EE7sp
-         GAQg==
-X-Gm-Message-State: AAQBX9cvoE9vmPUqWp8j+UHlHAXGOyEAykR7OPhB+pnI3QjksZqxd1zk
-        DdMafFtvvdyodkuNSMuWOUxP4qxx6ME=
-X-Google-Smtp-Source: AKy350bLceE6E4UW5DCYCj4bMZDaoNcGo6GuS54kTIy2ncNEOSGqQw7f/KhyJ4331C3TYXU1F/+fIsEfymY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1483:b0:625:f78a:56f with SMTP id
- v3-20020a056a00148300b00625f78a056fmr2704007pfu.3.1680745457753; Wed, 05 Apr
- 2023 18:44:17 -0700 (PDT)
-Date:   Wed, 5 Apr 2023 18:44:16 -0700
-In-Reply-To: <626179c54707297736158da89ee634705cd6d62f.camel@intel.com>
+        Wed, 5 Apr 2023 21:44:25 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8AB883CE
+        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:44:22 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230406014420epoutp01955e8de19fcd3b6a0348997b335046ac~TNRdhkWLY0914509145epoutp01R
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:44:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230406014420epoutp01955e8de19fcd3b6a0348997b335046ac~TNRdhkWLY0914509145epoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680745460;
+        bh=qZFeenoZbfGPR/OPIHqYvDFEdzYQ1bBGy2vJuSOpMn8=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=N9q4WXFCHRnDfAB6CZ+dafR/+ogFIqDG97WzCDQRSygL1oZdQaOvTlFvqDp2wHns3
+         SBwc8VKYBDfcFMQzFjignlajBZJn9ux/ZQJ6g3hg33YRv4cnB3gt43FT25MECYa6Ks
+         sAwanJg9+FYvb9YxF7YHn+V4DsJykDUEOC+3qy8Q=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20230406014419epcas1p39e0e8ae9a1093cfffd9825551ea3b1e8~TNRc5RY_t1876618766epcas1p3v;
+        Thu,  6 Apr 2023 01:44:19 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.38.242]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4PsPS330tGz4x9Q6; Thu,  6 Apr
+        2023 01:44:19 +0000 (GMT)
+X-AuditID: b6c32a35-00ffd7000000d8eb-b0-642e23f3aa84
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        91.FD.55531.3F32E246; Thu,  6 Apr 2023 10:44:19 +0900 (KST)
 Mime-Version: 1.0
-References: <20230405005911.423699-1-seanjc@google.com> <20230405005911.423699-2-seanjc@google.com>
- <626179c54707297736158da89ee634705cd6d62f.camel@intel.com>
-Message-ID: <ZC4j37H2+2945xxb@google.com>
-Subject: Re: [PATCH 1/3] KVM: VMX: Don't rely _only_ on CPUID to enforce XCR0
- restrictions for ECREATE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: RE: [PATCH v2] dma-buf/heaps: system_heap: Avoid DoS by limiting
+ single allocations to half of all memory
+Reply-To: jaewon31.kim@samsung.com
+Sender: Jaewon Kim <jaewon31.kim@samsung.com>
+From:   Jaewon Kim <jaewon31.kim@samsung.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     "jstultz@google.com" <jstultz@google.com>,
+        "tjmercier@google.com" <tjmercier@google.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jaewon31.kim@gmail.com" <jaewon31.kim@gmail.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20230405172524.e25b62e1c548a95564b1d324@linux-foundation.org>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be@epcms1p3>
+Date:   Thu, 06 Apr 2023 10:44:19 +0900
+X-CMS-MailID: 20230406014419epcms1p3f285b6e3fdbb1457db1bcbaab9e863be
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKJsWRmVeSWpSXmKPExsWy7bCmru5nZb0Ug5e7xCzmrF/DZvHykKbF
+        wod3mS1Wb/K16N48k9Gi9/0rJos/JzayWVzeNYfN4t6a/6wWr78tY7Y4dfczu8W79V/YHHg8
+        Dr95z+yx99sCFo+ds+6yeyzYVOqxaVUnm8emT5PYPe5c28PmcWLGbxaPvi2rGD0+b5IL4IrK
+        tslITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBulpJoSwx
+        pxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BWoFecmFtcmpeul5daYmVoYGBkClSYkJ2x
+        ZNpS1oLTshVzv01lbGC8J97FyMkhIWAicXLpC+YuRi4OIYEdjBLXz21n62Lk4OAVEJT4u0MY
+        xBQWKJGYvFsBpFxIQEni7I8r7CC2sICuRFP3ahYQm01AW+L9gkmsILYIUHzV811gI5kFDjJL
+        nLw2mQliF6/EjPanLBC2tMT25VsZQWxOAW+Jz7Oms0HERSVurn7LDmO/PzafEcIWkWi9d5YZ
+        whaUePBzNyPMnD/Hn0P1Fkss63wAtatGYsW5VVBxc4mGtyvBbF4BX4m2ZWvADmURUJXYvHkS
+        1BwXiYmz1oH1MgvIS2x/O4cZ5HdmAU2J9bv0IUoUJXb+nssI80rDxt/s6GxmAT6Jd197WGHi
+        O+Y9gTpHTaLl2VeouIzE33/PWCcwKs1CBPQsJItnISxewMi8ilEstaA4Nz212LDAEB63yfm5
+        mxjB6VfLdAfjxLcf9A4xMnEwHmKU4GBWEuFV7dJKEeJNSaysSi3Kjy8qzUktPsRoCvTyRGYp
+        0eR8YAbIK4k3NLE0MDEzMrEwtjQ2UxLn/fJUO0VIID2xJDU7NbUgtQimj4mDU6qB6VjPTYbz
+        wQmi9ovrjmyu3d/1oKFCb6JZ06fQjTcP93Vd35jzz/bjorcdp/ad1POcViLNuuhQ0f1/Sbea
+        BATvX9nUvlbslOPMb/M2PPe5mTxHZ9anc1abT69RYZQ48HOtz9x8/jwN5WNxOst4xI52nVK+
+        af31yXTn3lt7Uy7a2M/e4flxMsuuXWHsr1nqDHpZOfdM2ilfzF8TdKrU6a6J2vosY3MFnqaF
+        PzpnF22UjP9gbfFIpOtHxY3sW4+kT/hFWLw/I/+Yfyuj51utWf7sc56rv9N/3pV428HsqUFH
+        5J5lm28d1OVImmpcMWnDtpvHFhxduWfVIucLa3/v/K9wl8N8FUf5waPtz/7euKY0c8dEJZbi
+        jERDLeai4kQAmxZkXEgEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230406000841epcas1p3630010a770682be0f1d540a448f3e00e
+References: <20230405172524.e25b62e1c548a95564b1d324@linux-foundation.org>
+        <20230406000854.25764-1-jaewon31.kim@samsung.com>
+        <CGME20230406000841epcas1p3630010a770682be0f1d540a448f3e00e@epcms1p3>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023, Huang, Kai wrote:
-> On Tue, 2023-04-04 at 17:59 -0700, Sean Christopherson wrote:
-> > Explicitly check the vCPU's supported XCR0 when determining whether or not
-> > the XFRM for ECREATE is valid.  Checking CPUID works because KVM updates
-> > guest CPUID.0x12.1 to restrict the leaf to a subset of the guest's allowed
-> > XCR0, but that is rather subtle and KVM should not modify guest CPUID
-> > except for modeling true runtime behavior (allowed XFRM is most definitely
-> > not "runtime" behavior).
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kvm/vmx/sgx.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
-> > index aa53c98034bf..362a31b19b0e 100644
-> > --- a/arch/x86/kvm/vmx/sgx.c
-> > +++ b/arch/x86/kvm/vmx/sgx.c
-> > @@ -175,7 +175,8 @@ static int __handle_encls_ecreate(struct kvm_vcpu *vcpu,
-> >  	    (u32)attributes & ~sgx_12_1->eax ||
-> >  	    (u32)(attributes >> 32) & ~sgx_12_1->ebx ||
-> >  	    (u32)xfrm & ~sgx_12_1->ecx ||
-> > -	    (u32)(xfrm >> 32) & ~sgx_12_1->edx) {
-> > +	    (u32)(xfrm >> 32) & ~sgx_12_1->edx ||
-> > +	    xfrm & ~vcpu->arch.guest_supported_xcr0) {
-> 
-> Perhaps this change is needed even without patch 2?
-> 
-> This is because when CPUID 0xD doesn't exist, guest_supported_xcr0 is 0.  But
-> when CPUID 0xD doesn't exist, IIUC currently KVM doesn't clear SGX in CPUID, and
-> sgx_12_1->ecx is always set to 0x3.
+>On Thu,  6 Apr 2023 09:08:54 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+>
+>> Normal free:212600kB min:7664kB low:57100kB high:106536kB
+>>   reserved_highatomic:4096KB active_anon:276kB inactive_anon:180kB
+>>   active_file:1200kB inactive_file:0kB unevictable:2932kB
+>>   writepending:0kB present:4109312kB managed:3689488kB mlocked:2932kB
+>>   pagetables:13600kB bounce:0kB free_pcp:0kB local_pcp:0kB
+>>   free_cma:200844kB
+>> Out of memory and no killable processes...
+>> Kernel panic - not syncing: System is deadlocked on memory
+>> 
+>> An OoM panic was reported, there were only native processes which are
+>> non-killable as OOM_SCORE_ADJ_MIN.
+>> 
+>> After looking into the dump, I've found the dma-buf system heap was
+>> trying to allocate a huge size. It seems to be a signed negative value.
+>> 
+>> dma_heap_ioctl_allocate(inline)
+>>     |  heap_allocation = 0xFFFFFFC02247BD38 -> (
+>>     |    len = 0xFFFFFFFFE7225100,
+>> 
+>> Actually the old ion system heap had policy which does not allow that
+>> huge size with commit c9e8440eca61 ("staging: ion: Fix overflow and list
+>> bugs in system heap"). We need this change again. Single allocation
+>> should not be bigger than half of all memory.
+>> 
+>> ...
+>>
+>> --- a/drivers/dma-buf/heaps/system_heap.c
+>> +++ b/drivers/dma-buf/heaps/system_heap.c
+>> @@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+>>  	struct page *page, *tmp_page;
+>>  	int i, ret = -ENOMEM;
+>>  
+>> +	if (len / PAGE_SIZE > totalram_pages() / 2)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>
+>This seems so random.  Why ram/2 rather than ram/3 or 17*ram/35?
 
-Hrm, that's a bug in this patch.  Drat.  More below.
+Hello
 
-> __handle_encls_ereate() doesn't check CPUID 0xD either, so w/o above explicit
-> check xfrm against guest_supported_xcr0, it seems guest can successfully run
-> ECREATE when it doesn't have CPUID 0xD?
+Thank you for your comment.
 
-ECREATE doesn't have a strict dependency on CPUID 0xD or XSAVE.  This exact scenario
-is called out in the SDM:
+I just took the change from the old ion driver code, and actually I thought the
+half of all memory is unrealistic. It could be unwanted size like negative,
+or too big size which incurs slowness or OoM panic.
 
-  Legal values for SECS.ATTRIBUTES.XFRM conform to these requirements:
-    * XFRM[1:0] must be set to 0x3.
-    * If the processor does support XSAVE, XFRM must contain a value that would
-      be legal if loaded into XCR0.
-    * If the processor does not support XSAVE, or if the system software has not
-      enabled XSAVE, then XFRM[63:2] must be zero.
+>
+>Better behavior would be to try to allocate what the caller asked
+>for and if that doesn't work out, fail gracefully after freeing the
+>partial allocations which have been performed thus far.  If dma_buf
+>is changed to do this then that change is useful in many scenarios other
+>than this crazy corner case.
 
-So the above needs to be either
+I think you would like __GFP_RETRY_MAYFAIL. Actually T.J. Mercier recommended
+earlier, here's what we discussed.
+https://lore.kernel.org/linux-mm/20230331005140epcms1p1ac5241f02f645e9dbc29626309a53b24@epcms1p1/
 
-	xfrm & ~(vcpu->arch.guest_supported_xcr0 | XFEATURE_MASK_FPSSE)
+I just worried about a case in which we need oom kill to get more memory but
+let me change my mind. That case seems to be rare. I think now it's time when
+we need to make a decision and not to allow oom kill for dma-buf system heap
+allocations.
 
-or
+But I still want to block that huge size over ram. For an unavailabe size,
+I think, we don't have to do memory reclaim or killing processes, and we can
+avoid freezing screen in user perspecitve.
 
-	(xfrm & ~XFEATURE_MASK_FPSSE & ~vcpu->arch.guest_supported_xcr0)
+This is eventually what I want. Can we check totalram_pages and and apply
+__GFP_RETRY_MAYFAIL?
 
+--- a/drivers/dma-buf/heaps/system_heap.c
++++ b/drivers/dma-buf/heaps/system_heap.c
+@@ -41,7 +41,7 @@ struct dma_heap_attachment {
+        bool mapped;
+ };
+ 
+-#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP)
++#define LOW_ORDER_GFP (GFP_HIGHUSER | __GFP_ZERO | __GFP_COMP | __GFP_RETRY_MAYFAIL)
+ #define MID_ORDER_GFP (LOW_ORDER_GFP | __GFP_NOWARN)
+ #define HIGH_ORDER_GFP  (((GFP_HIGHUSER | __GFP_ZERO | __GFP_NOWARN \
+                                | __GFP_NORETRY) & ~__GFP_RECLAIM) \
+@@ -351,6 +351,9 @@ static struct dma_buf *system_heap_allocate(struct dma_heap *heap,
+        struct page *page, *tmp_page;
+        int i, ret = -ENOMEM;
+ 
++       if (len / PAGE_SIZE > totalram_pages())
++               return ERR_PTR(-ENOMEM);
++
 
-I think I prefer the first one as I find it slightly more obvious that FP+SSE are
-allowed in addition to the XCR0 bits.
+BR
+Jaewon Kim
