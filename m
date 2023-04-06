@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469F66D9058
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A656D9057
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 09:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbjDFHTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 03:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
+        id S235838AbjDFHTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 03:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbjDFHTb (ORCPT
+        with ESMTP id S235515AbjDFHTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 6 Apr 2023 03:19:31 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0247F1FD2;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A9B76BA;
         Thu,  6 Apr 2023 00:19:29 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3367IR5c8008202, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3367IVe14010477, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3367IR5c8008202
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3367IVe14010477
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 6 Apr 2023 15:18:27 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+        Thu, 6 Apr 2023 15:18:31 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
  RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 6 Apr 2023 15:18:47 +0800
+ 15.1.2375.32; Thu, 6 Apr 2023 15:18:51 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 6 Apr 2023 15:18:46 +0800
+ 15.1.2375.7; Thu, 6 Apr 2023 15:18:49 +0800
 Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
  RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Thu, 6 Apr 2023 15:18:46 +0800
+ 15.01.2375.007; Thu, 6 Apr 2023 15:18:49 +0800
 From:   =?utf-8?B?Q1lfSHVhbmdb6buD6Ymm5pmPXQ==?= <cy.huang@realtek.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 CC:     Rob Herring <robh+dt@kernel.org>,
@@ -43,18 +43,18 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         "linux-realtek-soc@lists.infradead.org" 
         <linux-realtek-soc@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 0/2] Initial RTD1319 SoC and Realtek PymParticle EVB support
-Thread-Topic: [PATCH v2 0/2] Initial RTD1319 SoC and Realtek PymParticle EVB
- support
-Thread-Index: AdloUWFHnoi4nqZjQxCI6ksHRb9dMg==
-Date:   Thu, 6 Apr 2023 07:18:46 +0000
-Message-ID: <5d644994dd39447cba7ba7027cc856b0@realtek.com>
+Subject: [PATCH v2 1/2] dt-bindings: arm: realtek: Add Realtek Pym Particles EVB
+Thread-Topic: [PATCH v2 1/2] dt-bindings: arm: realtek: Add Realtek Pym
+ Particles EVB
+Thread-Index: AdloU4/GDmEWulC4QJGLhzkiNceBNg==
+Date:   Thu, 6 Apr 2023 07:18:49 +0000
+Message-ID: <cc3c64023eb847ed86554971de2dbf39@realtek.com>
 Accept-Language: zh-TW, en-US
 Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [172.21.190.137]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
 x-kse-antispam-interceptor-info: fallback
 x-kse-antivirus-interceptor-info: fallback
 Content-Type: text/plain; charset="utf-8"
@@ -73,23 +73,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQpUaGlzIHNlcmllcyBhZGRzIERldmljZSBUcmVlcyBmb3IgdGhlIFJl
-YWx0ZWsgUlREMTMxOSBTb0MgYW5kIFJlYWx0ZWsncw0KUHltUGFydGljbGUgRVZCLg0KDQp2MS0t
-PnYyOg0KKiBQdXQgc3RyaW5nIGluIGFscGhhYmV0aWNhbCBvcmRlcg0KdjE6DQoqIFJURDEzMTkg
-U29DIGFuZCBSZWFsdGVrIFB5bVBhcnRpY2xlIEVWQg0KDQpDYzogUm9iIEhlcnJpbmcgPHJvYmgr
-ZHRAa2VybmVsLm9yZz4NCkNjOiBKYW1lcyBUYWkgPGphbWVzLnRhaUByZWFsdGVrLmNvbT4NCkNj
-OiBBbmRyZWFzIEbDpHJiZXIgPGFmYWVyYmVyQHN1c2UuZGU+DQpDYzogS3J6eXN6dG9mIEtvemxv
-d3NraSA8a3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnPg0KQ2M6IGxpbnV4LWFybS1r
-ZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZw0KQ2M6IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3Jn
-DQpDYzogbGludXgtcmVhbHRlay1zb2NAbGlzdHMuaW5mcmFkZWFkLm9yZw0KQ2M6IGxpbnV4LWtl
-cm5lbEB2Z2VyLmtlcm5lbC5vcmcNCg0KY3kuaHVhbmcgKDIpOg0KICBkdC1iaW5kaW5nczogYXJt
-OiByZWFsdGVrOiBBZGQgUmVhbHRlayBQeW0gUGFydGljbGVzIEVWQg0KICBhcm02NDogZHRzOiBy
-ZWFsdGVrOiBBZGQgUlREMTMxOSBTb0MgYW5kIFJlYWx0ZWsgUHltIFBhcnRpY2xlcyBFVkINCg0K
-IC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9yZWFsdGVrLnlhbWwgICAgICB8ICAgNiArDQog
-YXJjaC9hcm02NC9ib290L2R0cy9yZWFsdGVrL01ha2VmaWxlICAgICAgICAgIHwgICAyICsNCiAu
-Li4vYm9vdC9kdHMvcmVhbHRlay9ydGQxMzE5LXB5bXBhcnRpY2xlcy5kdHMgfCAgMjggKysNCiBh
-cmNoL2FybTY0L2Jvb3QvZHRzL3JlYWx0ZWsvcnRkMTN4eC5kdHNpICAgICAgfCAzNDYgKysrKysr
-KysrKysrKysrKysrDQogNCBmaWxlcyBjaGFuZ2VkLCAzODIgaW5zZXJ0aW9ucygrKQ0KIGNyZWF0
-ZSBtb2RlIDEwMDY0NCBhcmNoL2FybTY0L2Jvb3QvZHRzL3JlYWx0ZWsvcnRkMTMxOS1weW1wYXJ0
-aWNsZXMuZHRzDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGFyY2gvYXJtNjQvYm9vdC9kdHMvcmVhbHRl
-ay9ydGQxM3h4LmR0c2kNCg0KLS0NCjIuMzkuMA0K
+RGVmaW5lIGEgY29tcGF0aWJsZSBzdHJpbmcgZm9yIFJlYWx0ZWsgUlREMTMxOSBQeW0gUGFydGlj
+bGVzIGV2YWwgYm9hcmQuDQoNClNpZ25lZC1vZmYtYnk6IGN5Lmh1YW5nIDxjeS5odWFuZ0ByZWFs
+dGVrLmNvbT4NCi0tLQ0KIHYxLS0+djI6DQogKiBQdXQgc3RyaW5nIGluIGFscGhhYmV0aWNhbCBv
+cmRlcg0KIFYxOg0KICogUlREMTMxOSBTb0MgYW5kIFJlYWx0ZWsgUHltUGFydGljbGUgRVZCDQoN
+CiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL3JlYWx0ZWsueWFtbCB8IDYg
+KysrKysrDQogMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKQ0KDQpkaWZmIC0tZ2l0IGEv
+RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9yZWFsdGVrLnlhbWwgYi9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL3JlYWx0ZWsueWFtbA0KaW5kZXggZGRk
+OWE4NTA5OWU5Li44ZDRlOTJlOWViNGIgMTAwNjQ0DQotLS0gYS9Eb2N1bWVudGF0aW9uL2Rldmlj
+ZXRyZWUvYmluZGluZ3MvYXJtL3JlYWx0ZWsueWFtbA0KKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL2FybS9yZWFsdGVrLnlhbWwNCkBAIC01NSw2ICs1NSwxMiBAQCBwcm9w
+ZXJ0aWVzOg0KICAgICAgICAgICAgICAgLSByZWFsdGVrLG1qb2xuaXIgIyBSZWFsdGVrIE1qb2xu
+aXIgRVZCDQogICAgICAgICAgIC0gY29uc3Q6IHJlYWx0ZWsscnRkMTYxOQ0KDQorICAgICAgIyBS
+VEQxMzE5IFNvQyBiYXNlZCBib2FyZHMNCisgICAgICAtIGl0ZW1zOg0KKyAgICAgICAgICAtIGVu
+dW06DQorICAgICAgICAgICAgICAtIHJlYWx0ZWsscHltLXBhcnRpY2xlcyAjIFJlYWx0ZWsgUHlt
+LXBhcnRpY2xlcyBFVkINCisgICAgICAgICAgLSBjb25zdDogcmVhbHRlayxydGQxMzE5DQorDQog
+YWRkaXRpb25hbFByb3BlcnRpZXM6IHRydWUNCg0KIC4uLg0KLS0NCjIuMzkuMA0K
