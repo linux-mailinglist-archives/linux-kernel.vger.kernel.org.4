@@ -2,136 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B97BB6D9171
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015946D9174
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 10:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235716AbjDFIZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 04:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S235904AbjDFIZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 04:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbjDFIZO (ORCPT
+        with ESMTP id S235868AbjDFIZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 04:25:14 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843011BD
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:25:13 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id fi11so23898439edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 01:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680769512;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E4F+7d3J1d8Tojpr35OzJKNgJHvYHx+anZ0eoB7h8gw=;
-        b=UHf+wRDzmZllhHH6nZ3fb1iqeWhdx6IvpJSSY0dlcz6jjviXma8CLDNRME4kFl+kz/
-         uzIkZ4m07E2asHciVv2XZz6XCUga53m4L9STnttVv2MPHXf2TI2o8/kj2LOUbtoAyslU
-         KH3um78Z9Ns8tf1Zj6TsEE5skLe5OPvVt52RCSC67BNI2mGyiSu3MoDxaLqPESE1bO36
-         AYat1rmQF8ZlEVMjOpC+OWxnJRbr6zEIHjv7oNNyHZDhSKWggERub3nSuxTGJy0T8deG
-         v/pqOUxe/3Wpkvp3G+9dHhDhY6WpoM0JjtgPtDKe8RQRhGSNfJvb2sAHG4dpF5pBTE6V
-         CjQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680769512;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E4F+7d3J1d8Tojpr35OzJKNgJHvYHx+anZ0eoB7h8gw=;
-        b=s93GQiRojZng7qVMjdpCxrFT96IMAGPBqkL+3jXXoxoOoUJgRPwRMCQNFIf7O8HVLf
-         27o8j8T2AAUovXf55cStU86tDNKULby3NkO9GUbBeyhfx5hE6DF/yVxJc5I3BF2hBo3s
-         NfJmzFwRNfaWtP1HHvnwpVt+xUB5QHCsheY4kqS8nzJNhYsrjsAIpo4FY9/vZRSHQ3Rc
-         C2B1Gloz3lJo1Au1JVnxYxOzhfPolPhHYofFBDgkVgXwcxGOpwiP9K3UYcZ3uUB2LO5J
-         xusB3+PnO2Fg0fIPyW+ZhQuZwXQWtJufiXcCs8sJAbqqhqr4En2nUA4iwRDWUTYHga6i
-         Rf/w==
-X-Gm-Message-State: AAQBX9enp0rjmmwGVKQhMbE/XCXQAqktMoWkMwE27tk7wMbGTV0goWx6
-        okuJ6ZPuUXFc0LrU5q6g9CTx8uTi6j1eBOqQ/tM=
-X-Google-Smtp-Source: AKy350Zh5RCJaVNCZk4j+Q0sSNrwnXyD1MaiZ+wEhn3fiWt8bz5ky4TlulnxqZXbiWyVfs/0ZvbrDw==
-X-Received: by 2002:a17:906:4893:b0:947:3bfc:4c84 with SMTP id v19-20020a170906489300b009473bfc4c84mr5324289ejq.23.1680769512017;
-        Thu, 06 Apr 2023 01:25:12 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed? ([2a02:810d:15c0:828:49e6:bb8c:a05b:c4ed])
-        by smtp.gmail.com with ESMTPSA id c19-20020a1709060fd300b00931baabe36csm495422ejk.63.2023.04.06.01.25.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 01:25:11 -0700 (PDT)
-Message-ID: <4115e47e-b64b-391a-493c-701c8de0565b@linaro.org>
-Date:   Thu, 6 Apr 2023 10:25:10 +0200
+        Thu, 6 Apr 2023 04:25:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF84D7282
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 01:25:27 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 97A4D66031BB;
+        Thu,  6 Apr 2023 09:25:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680769526;
+        bh=HGttVBIYMIvKIIUpkbznYW0QnoXaVAXMe4WzNLSPBLg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Xt6rgnD63RGe7sgBPSqFUIKo+/Wp12HvHWXjcq0oagnHoaTyrJpBsIrGdR9ejX7X2
+         Zy/LQrBTPstDPFCHaeyPUByuYSiOIwzZxUxfypMTRo7ew7GncNH1h227Nkhwh8BxQ0
+         vatX+S0llKIGpW8GNdmzR1sFBHfy7cXg53CWIa//hQ4UWoGarJwh2/ti1qdk5ZpxCk
+         +ZGBqgCBlpoOGslTiHXyHDda4/K02De1P0Eoxs6M7LqZV/cwTWSj40oL3CMHhcjBRH
+         IXv21/TzheL7l3hAGYbV/ErNVgBOFpN7Dq7ijehYfhzbqku1VM3niOmhp+TQgb1Eo6
+         hiKxBqKiVX46w==
+Message-ID: <46a65c4b-4407-d19a-0e4b-6ceab97d8e64@collabora.com>
+Date:   Thu, 6 Apr 2023 10:25:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 8/8] regulator: fan53555: Add support for RK860X
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 0/9] MediaTek DisplayPort: support eDP and aux-bus
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@gmail.com,
+        daniel@ffwll.ch, matthias.bgg@gmail.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+References: <20230404104800.301150-1-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5FEEkMg+SY7ZkSHN2G9jtT6TBiN9MadZmYGMX_uVi5=gQ@mail.gmail.com>
 Content-Language: en-US
-To:     Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Joseph Chen <chenjh@rock-chips.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@collabora.com
-References: <20230405194721.821536-1-cristian.ciocaltea@collabora.com>
- <20230405194721.821536-9-cristian.ciocaltea@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230405194721.821536-9-cristian.ciocaltea@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5FEEkMg+SY7ZkSHN2G9jtT6TBiN9MadZmYGMX_uVi5=gQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2023 21:47, Cristian Ciocaltea wrote:
-> Extend the existing fan53555 driver to support the Rockchip RK860X
-> regulators.
+Il 06/04/23 09:20, Chen-Yu Tsai ha scritto:
+> On Tue, Apr 4, 2023 at 6:48 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Changes in v3:
+>>   - Added DPTX AUX block initialization before trying to communicate
+>>     to stop relying on the bootloader keeping it initialized before
+>>     booting Linux.
+>>   - Fixed commit description for patch [09/09] and removed commented
+>>     out code (that slipped from dev phase.. sorry!).
+>>
+>> This series adds "real" support for eDP in the mtk-dp DisplayPort driver.
+>>
+>> Explaining the "real":
+>> Before this change, the DisplayPort driver did support eDP to some
+>> extent, but it was treating it entirely like a regular DP interface
+>> which is partially fine, after all, embedded DisplayPort *is* actually
+>> DisplayPort, but there might be some differences to account for... and
+>> this is for both small performance improvements and, more importantly,
+>> for correct functionality in some systems.
+>>
+>> Functionality first:
+>>
+>> One of the common differences found in various boards implementing eDP
+>> and machines using an eDP panel is that many times the HPD line is not
+>> connected. This *must* be accounted for: at startup, this specific IP
+>> will raise a HPD interrupt (which should maybe be ignored... as it does
+>> not appear to be a "real" event...) that will make the eDP panel to be
+>> detected and to actually work but, after a suspend-resume cycle, there
+>> will be no HPD interrupt (as there's no HPD line in my case!) producing
+>> a functionality issue - specifically, the DP Link Training fails because
+>> the panel doesn't get powered up, then it stays black and won't work
+>> until rebooting the machine (or removing and reinserting the module I
+>> think, but I haven't tried that).
+>>
+>> Now for.. both:
+>> eDP panels are *e*DP because they are *not* removable (in the sense that
+>> you can't unplug the cable without disassembling the machine, in which
+>> case, the machine shall be powered down..!): this (correct) assumption
+>> makes us able to solve some issues and to also gain a little performance
+>> during PM operations.
+>>
+>> What was done here is:
+>>   - Caching the EDID if the panel is eDP: we're always going to read the
+>>     same data everytime, so we can just cache that (as it's small enough)
+>>     shortening PM resume times for the eDP driver instance;
+>>   - Always return connector_status_connected if it's eDP: non-removable
+>>     means connector_status_disconnected can't happen during runtime...
+>>     this also saves us some time and even power, as we won't have to
+>>     perform yet another power cycle of the HW;
+>>   - Added aux-bus support!
+>>     This makes us able to rely on panel autodetection from the EDID,
+>>     avoiding to add more and more panel timings to panel-edp and, even
+>>     better, allowing to use one panel node in devicetrees for multiple
+>>     variants of the same machine since, at that point, it's not important
+>>     to "preventively know" what panel we have (eh, it's autodetected...!).
+>>
+>> This was tested on a MT8195 Cherry Tomato Chromebook (panel-edp on aux-bus)
+>>
+>>
+>> P.S.: For your own testing commodity, here's a reference devicetree:
+>> &edp_tx {
+>>          status = "okay";
+>>
+>>          pinctrl-names = "default";
+>>          pinctrl-0 = <&edptx_pins_default>;
+>>
+>>          ports {
+>>                  #address-cells = <1>;
+>>                  #size-cells = <0>;
+>>
+>>                  port@0 {
+>>                          reg = <0>;
+>>                          edp_in: endpoint {
+>>                                  remote-endpoint = <&dp_intf0_out>;
+>>                          };
+>>                  };
+>>
+>>                  port@1 {
+>>                          reg = <1>;
+>>                          edp_out: endpoint {
+>>                                  data-lanes = <0 1 2 3>;
+>>                                  remote-endpoint = <&panel_in>;
+>>                          };
+>>                  };
+>>          };
+>>
+>>          aux-bus {
+>>                  panel: panel {
+>>                          compatible = "edp-panel";
+>>                          power-supply = <&pp3300_disp_x>;
+>>                          backlight = <&backlight_lcd0>;
+>>                          port {
+>>                                  panel_in: endpoint {
+>>                                          remote-endpoint = <&edp_out>;
+>>                                  };
+>>                          };
+>>                  };
+>>          };
+>> };
+>>
+>> AngeloGioacchino Del Regno (9):
+>>    drm/mediatek: dp: Cache EDID for eDP panel
+>>    drm/mediatek: dp: Move AUX and panel poweron/off sequence to function
+>>    drm/mediatek: dp: Always return connected status for eDP in .detect()
+>>    drm/mediatek: dp: Always set cable_plugged_in at resume for eDP panel
+>>    drm/mediatek: dp: Change logging to dev for mtk_dp_aux_transfer()
+>>    drm/mediatek: dp: Enable event interrupt only when bridge attached
+>>    drm/mediatek: dp: Use devm variant of drm_bridge_add()
+>>    drm/mediatek: dp: Move AUX_P0 setting to
+>>      mtk_dp_initialize_aux_settings()
+>>    drm/mediatek: dp: Add support for embedded DisplayPort aux-bus
 > 
-> RK8600/RK8601 are fully compatible with FAN53555 regulators.
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 > 
+> on MT8195 Tomato: eDP panel works if the display panel regulator is always
+> on. External DP works.
+> 
+> Maybe it has something to do with the driver not supporting .wait_hpd_asserted
+> and not using a GPIO for HPD?
 
-> @@ -531,6 +634,18 @@ static const struct of_device_id __maybe_unused fan53555_dt_ids[] = {
->  	}, {
->  		.compatible = "fcs,fan53555",
->  		.data = (void *)FAN53555_VENDOR_FAIRCHILD
-> +	}, {
-> +		.compatible = "rockchip,rk8600",
-> +		.data = (void *)FAN53555_VENDOR_ROCKCHIP
-> +	}, {
-> +		.compatible = "rockchip,rk8601",
-> +		.data = (void *)FAN53555_VENDOR_ROCKCHIP
-> +	}, {
-> +		.compatible = "rockchip,rk8602",
-> +		.data = (void *)RK8602_VENDOR_ROCKCHIP
-> +	}, {
-> +		.compatible = "rockchip,rk8603",
-> +		.data = (void *)RK8602_VENDOR_ROCKCHIP
->  	}, {
->  		.compatible = "silergy,syr827",
->  		.data = (void *)FAN53555_VENDOR_SILERGY,
-> @@ -637,6 +752,18 @@ static const struct i2c_device_id fan53555_id[] = {
->  	}, {
->  		.name = "fan53555",
->  		.driver_data = FAN53555_VENDOR_FAIRCHILD
-> +	}, {
-> +		.name = "rk8600",
-> +		.driver_data = FAN53555_VENDOR_ROCKCHIP
-> +	}, {
-> +		.name = "rk8601",
-> +		.driver_data = FAN53555_VENDOR_ROCKCHIP
+Even before this change I couldn't get the panel to reliably work without keeping 
+the regulator always on (just to point out that I'm not introducing regressions).
 
-Why do you need this entry match data if it is the same as rk8600?
+I am already trying to understand why this happens... and I'm still researching...
+but there's what I've seen for now:
+  * Set the panel regulator as regulator-boot-on;
+  * Boot: edp-panel will correctly read the EDID, then will run the PM suspend
+    handler
+  * mtk-dp's .get_edid() callback gets called but, at that time, edp-panel will
+    still be suspended (PM resume handler didn't get called)
+    * Regulator is still down
+  * Failure.
 
-> +	}, {
-> +		.name = "rk8602",
-> +		.driver_data = RK8602_VENDOR_ROCKCHIP
-> +	}, {
-> +		.name = "rk8603",
-> +		.driver_data = RK8602_VENDOR_ROCKCHIP
+That's not right and probably the .get_edid() callback in mtk-dp has an abuse:
+there, mtk_dp_parse_capabilities() gets called, which performs initialization
+of some variables for DP link training (essential to get the DP going!).
 
-Why do you need this entry match data if it is the same as rk8602?
+The question that I am making to myself is whether I should move that elsewhere,
+if so, what's the right place (making me able to remove the DRM_BRIDGE_OP_EDID
+bridge flag when eDP + aux-bus), or if I should leave that and make sure that the
+panel-edp's resume callback is called before .get_edid() from mtk-dp gets called.
 
-Best regards,
-Krzysztof
+That can get done in a separated series (or single patch?)... so that if we get
+this one picked sooner than later, we can start upstreaming the panel nodes in
+the Cherry devicetrees and only remove the regulator-always-on later.
 
+Thoughts?
+
+Cheers,
+Angelo
