@@ -2,184 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A8D6D8E76
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB656D8E8F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 06:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235042AbjDFEoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 00:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
+        id S234767AbjDFEwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 00:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234940AbjDFEoi (ORCPT
+        with ESMTP id S234656AbjDFEwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 00:44:38 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF7E9ED8;
-        Wed,  5 Apr 2023 21:44:33 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: lina@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 93DFC4245E;
-        Thu,  6 Apr 2023 04:44:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1680756271;
-        bh=3ATn2J/vFlxbAJnulfzHHynd+iDH6ftF3NoRMRHpd10=;
-        h=Date:Subject:To:References:From:Cc:In-Reply-To;
-        b=FRbmxLHhRTWqrN/GypKdRiUsgh9NYpncpVBbLlPDfLlj91fKVeulR6Db7qEvbctc/
-         bDA1i26jPfonskgiaBpg5IKqNBmPdrzjYcW+pGVgNjc3HmUCo8TiejCmT36elq90//
-         1nveTSM3znRqSb5WBokJazPOZUAabEeLwcUCARuDLfE8POgzOu4uT+pGCKKOsCyDzU
-         gLH+/vBFGNhfMfmYhLpja9wISm7Wa2/wF1CyYGM1P7Q187CBKvak0P9P/vBfFt7HeV
-         b0QeK2jkPmmNU0NKWVZxyojAqfWXQLvZT7ota3vOZysTLXquMi8zVegLgmicRywF7c
-         CZO4+Twgg3FXw==
-Message-ID: <8d28f1d3-14b0-78c5-aa16-e81e2a8a3685@asahilina.net>
-Date:   Thu, 6 Apr 2023 13:44:22 +0900
+        Thu, 6 Apr 2023 00:52:06 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2868E7AA4;
+        Wed,  5 Apr 2023 21:52:05 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1131)
+        id 88284210DEFC; Wed,  5 Apr 2023 21:52:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 88284210DEFC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680756724;
+        bh=mdW5uItNtDtJNCgm+oI/5HO2zGI9+DE/FTkk+TWdNw0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rZSIGp3aFHSy/LkqaHbMeb+lvu332Pe0GbceJCQHppGXx5ByltR5byJQoDZjeDcxN
+         PRuTDtTB5Ex8gCKqzqqNZwUuXWi1SGHtZW/HYbS5qbpa1W7qgJ45my6iDznDBBE2KF
+         IonL4kHtP1THeXLQbxfFK1qj74n1EHnV3/2+0ojM=
+Date:   Wed, 5 Apr 2023 21:52:04 -0700
+From:   Kelsey Steele <kelseysteele@linux.microsoft.com>
+To:     Petr Tesa????k <petr@tesarici.cz>
+Cc:     Dexuan Cui <decui@microsoft.com>,
+        Dexuan-Linux Cui <dexuan.linux@gmail.com>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Jianxiong Gao <jxgao@google.com>,
+        David Stevens <stevensd@chromium.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Subject: Re: [PATCH v1 2/2] swiotlb: Fix slot alignment checks
+Message-ID: <20230406045204.GA20027@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <cover.1679382779.git.petr.tesarik.ext@huawei.com>
+ <c90887e4d75344abe219cc5e12f7c6dab980cfce.1679382779.git.petr.tesarik.ext@huawei.com>
+ <CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com>
+ <CO1PR21MB13320305E02BA121623213DABF939@CO1PR21MB1332.namprd21.prod.outlook.com>
+ <20230405064019.6258ebb3@meshulam.tesarici.cz>
+ <SA1PR21MB1335C5F774195F2C3431BF93BF909@SA1PR21MB1335.namprd21.prod.outlook.com>
+ <20230405072801.05bb94ef@meshulam.tesarici.cz>
+ <20230405075034.3c36bb77@meshulam.tesarici.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RFC 18/18] drm/asahi: Add the Asahi driver for Apple AGX
- GPUs
-Content-Language: en-US
-To:     David Airlie <airlied@gmail.com>
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-18-917ff5bc80a8@asahilina.net>
- <ZC2HtBOaoUAzVCVH@phenom.ffwll.local>
-From:   Asahi Lina <lina@asahilina.net>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-In-Reply-To: <ZC2HtBOaoUAzVCVH@phenom.ffwll.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405075034.3c36bb77@meshulam.tesarici.cz>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2023 23.37, Daniel Vetter wrote:
-> On Tue, Mar 07, 2023 at 11:25:43PM +0900, Asahi Lina wrote:
->> +/// A generic monotonically incrementing ID used to uniquely identify object instances within the
->> +/// driver.
->> +pub(crate) struct ID(AtomicU64);
->> +
->> +impl ID {
->> +    /// Create a new ID counter with a given value.
->> +    fn new(val: u64) -> ID {
->> +        ID(AtomicU64::new(val))
->> +    }
->> +
->> +    /// Fetch the next unique ID.
->> +    pub(crate) fn next(&self) -> u64 {
->> +        self.0.fetch_add(1, Ordering::Relaxed)
->> +    }
->> +}
+On Wed, Apr 05, 2023 at 07:50:34AM +0200, Petr Tesa????k wrote:
+> On Wed, 5 Apr 2023 07:32:06 +0200
+> Petr Tesa????k <petr@tesarici.cz> wrote:
 > 
-> Continuing the theme of me commenting on individual things, I stumbled
-> over this because I noticed that there's a lot of id based lookups where I
-> don't expect them, and started chasing.
+> > On Wed, 5 Apr 2023 05:11:42 +0000
+> > Dexuan Cui <decui@microsoft.com> wrote:
+> > 
+> > > > From: Petr Tesa????k <petr@tesarici.cz>
+> > > > Sent: Tuesday, April 4, 2023 9:40 PM    
+> > > > > > ...
+> > > > > > Hi Petr, this patch has gone into the mainline:
+> > > > > > 0eee5ae10256 ("swiotlb: fix slot alignment checks")
+> > > > > >
+> > > > > > Somehow it breaks Linux VMs on Hyper-V: a regular VM with
+> > > > > > swiotlb=force or a confidential VM (which uses swiotlb) fails to boot.
+> > > > > > If I revert this patch, everything works fine.  
+> > > > >
+> > > > > The log is pasted below. Looks like the SCSI driver hv_storvsc fails to
+> > > > > detect the disk capacity:    
+> > > > 
+> > > > The first thing I can imagine is that there are in fact no (free) slots
+> > > > in the SWIOTLB which match the alignment constraints, so the map
+> > > > operation fails. However, this would result in a "swiotlb buffer is
+> > > > full" message in the log, and I can see no such message in the log
+> > > > excerpt you have posted.
+> > > > 
+> > > > Please, can you check if there are any "swiotlb" messages preceding the
+> > > > first error message?
+> > > > 
+> > > > Petr T    
+> > > 
+> > > There is no "swiotlb buffer is full" error.
+> > > 
+> > > The hv_storvsc driver (drivers/scsi/storvsc_drv.c) calls scsi_dma_map(),
+> > > which doesn't return -ENOMEM when the failure happens.  
+> > 
+> > I see...
+> > 
+> > Argh, you're right. This is a braino. The alignment mask is in fact an
+> > INVERTED mask, i.e. it masks off bits that are not relevant for the
+> > alignment. The more strict alignment needed the more bits must be set,
+> > so the individual alignment constraints must be combined with an OR
+> > instead of an AND.
+> > 
+> > Can you apply the following change and check if it fixes the issue?
 > 
-> - For ids use xarray, not atomic counters. Yes I know dma_fence timelines
->    gets this wrong, this goes back to an innocent time where we didn't
->    allocate more than one timeline per engine, and no one fixed it since
->    then. Yes u64 should be big enough for everyone :-/
+> Actually, this will not work either. The mask is used to mask off both
+> high address bits and low address bits (below swiotlb slot granularity).
 > 
-> - Attaching ID spaces to drm_device is also not great. drm is full of
->    these mistakes. Much better if their per drm_file and so private to each
->    client.
+> What should help is this:
+>
+
+Hi Petr, 
+
+The suggested fix on this patch boots for me and initially looks ok,
+though when I start to use git commands I get flooded with "swiotlb
+buffer is full" messages and my session becomes unusable. This is on WSL
+which uses Hyper-V.
+
+I noticed today these same warnings appear when I build kernels while
+running a 6.1 kernel (i.e. 6.1.21). I couldn't reproduce these messages
+on a 5.15 kernel and before applying this patch, I've only been able to
+get the "swiotlb buffer is full" messages to appear during the kernel
+builds and there's a slight delay caused.. I haven't had a chance to bisect
+yet to find out more. Should a working version of this patch help to
+resolve the warnings vs adding more or should I be looking elsewhere? I
+included a small chunk of my log below.
+
+Please let me know if there's anything else I can supply to help out. I
+appreciate your time and help!
+
+-Kelsey
+
+
+[  123.951630] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: swiotlb
+buffer is full (sz: 65536 bytes), total 32768 (slots), used 0 (slots)
+[  128.451717] swiotlb_tbl_map_single: 74 callbacks suppressed
+[  128.451723] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: swiotlb
+buffer is full (sz: 65536 bytes), total 32768 (slots), used 0 (slots)
+[  128.511736] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: swiotlb
+buffer is full (sz: 65536 bytes), total 32768 (slots), used 0 (slots)
+[  128.571704] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: swiotlb
+buffer is full (sz: 65536 bytes), total 32768 (slots), used 0 (slots)
+[  128.631713] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: swiotlb
+buffer is full (sz: 65536 bytes), total 32768 (slots), used 0 (slots)
+[  128.691625] hv_storvsc fd1d2cbd-ce7c-535c-966b-eb5f811c95f0: swiotlb
+buffer is full (sz: 65536 bytes), total 32768 (slots), used 0 (slots)
+
+
+ 
+> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> index 5b919ef832b6..c924e53d679e 100644
+> --- a/kernel/dma/swiotlb.c
+> +++ b/kernel/dma/swiotlb.c
+> @@ -622,8 +622,7 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
+>  	dma_addr_t tbl_dma_addr =
+>  		phys_to_dma_unencrypted(dev, mem->start) & boundary_mask;
+>  	unsigned long max_slots = get_max_slots(boundary_mask);
+> -	unsigned int iotlb_align_mask =
+> -		dma_get_min_align_mask(dev) & ~(IO_TLB_SIZE - 1);
+> +	unsigned int iotlb_align_mask;
+>  	unsigned int nslots = nr_slots(alloc_size), stride;
+>  	unsigned int offset = swiotlb_align_offset(dev, orig_addr);
+>  	unsigned int index, slots_checked, count = 0, i;
+> @@ -639,8 +638,9 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
+>  	 * allocations.
+>  	 */
+>  	if (alloc_size >= PAGE_SIZE)
+> -		iotlb_align_mask &= PAGE_MASK;
+> -	iotlb_align_mask &= alloc_align_mask;
+> +		iotlb_align_mask |= ~PAGE_MASK;
+> +	iotlb_align_mask |= alloc_align_mask | dma_get_min_align_mask(dev);
+> +	iotlb_align_mask &= ~(IO_TLB_SIZE - 1);
+>  
+>  	/*
+>  	 * For mappings with an alignment requirement don't bother looping to
 > 
-> - They shouldn't be used for anything else than uapi id -> kernel object
->    lookup at the beginning of ioctl code, and nowhere else. At least from
->    skimming it seems like these are used all over the driver codebase,
->    which does freak me out. At least on the C side that's a clear indicator
->    for a refcount/lockin/data structure model that's not thought out at
->    all.
-> 
-> What's going on here, what do I miss?
-
-These aren't UAPI IDs, they are driver-internal IDs (the UAPI IDs do use 
-xarray and are per-File). Most of them are just for debugging, so that 
-when I enable full debug spam I have some way to correlate different 
-things that are happening together (this subset of interleaved log lines 
-relate to the same submission). Basically just object names that are 
-easier to read (and less of a security leak) than pointers and 
-guaranteed not to repeat. You could get rid of most of them and it 
-wouldn't affect the driver design, it just makes it very hard to see 
-what's going on with debug logs ^^;
-
-There are only two that are ever used for non-debugging purposes: the VM 
-ID, and the File ID. Both are per-device global IDs attached to the VMs 
-(not the UAPI VM objects, but rather the underlyng MMU address space 
-managers they represent, including the kernel-internal ones) and to 
-Files themselves. They are used for destroying GEM objects: since the 
-objects are also device-global across multiple clients, I need a way to 
-do things like "clean up all mappings for this File" or "clean up all 
-mappings for this VM". There's an annoying circular reference between 
-GEM objects and their mappings, which is why this is explicitly coded 
-out in destroy paths instead of naturally happening via Drop semantics 
-(without that cleanup code, the circular reference leaks it).
-
-So e.g. when a File does a GEM close or explicitly asks for all mappings 
-of an object to be removed, it goes out to the (possibly shared) GEM 
-object and tells it to drop all mappings marked as owned by that unique 
-File ID. When an explicit "unmap all in VM" op happens, it asks the GEM 
-object to drop all mappings for that underlying VM ID. Similarly, when a 
-UAPI VM object is dropped (in the Drop impl, so both explicitly and when 
-the whole File/xarray is dropped and such), that does an explicit unmap 
-of a special dummy object it owns which would otherwise leak since it is 
-not tracked as a GEM object owned by that File and therefore not handled 
-by GEM closing. And again along the same lines, the allocators in 
-alloc.rs explicitly destroy the mappings for their backing GEM objects 
-on Drop. All this is due to that annoying circular reference between VMs 
-and GEM objects that I'm not sure how to fix.
-
-Note that if I *don't* do this (or forget to do it somewhere) the 
-consequence is just that we leak memory, and if you try to destroy the 
-wrong IDs somehow the worst that can happen is you unmap things you 
-shouldn't and fault the GPU (or, in the kernel or kernel-managed user VM 
-cases, potentially the firmware). Rust safety guarantees still keep 
-things from going entirely off the rails within the kernel, since 
-everything that matters is reference counted (which is why these 
-reference cycles are possible at all).
-
-This all started when I was looking at the panfrost driver for 
-reference. It does the same thing except it uses actual pointers to the 
-owning entities instead of IDs, and pointer comparison (see 
-panfrost_gem_close). Of course you could try do that in Rust too 
-(literally storing and comparing raw pointers that aren't owned 
-references), but then you're introducing a Pin<> requirement on those 
-objects to make their addresses stable and it feels way more icky and 
-error-prone than unique IDs (since addresses can be reused). panfrost 
-only has a single mmu (what I call the raw VM) per File while I have an 
-arbitrary number, which is why I end up with the extra 
-distinction/complexity of both File and VM IDs, but the concept is the same.
-
-Some of this is going to be refactored when I implement arbitrary VM 
-range mapping/unmapping, which would be a good time to improve this... 
-but is there something particularly wrong/broken about the way I'm doing 
-it now that I missed? I figured unique u64 IDs would be a pretty safe 
-way to identify entities and cleanup the mappings when needed.
-
-~~ Lina
-
+> Petr T
