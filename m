@@ -2,74 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D596D8E01
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DAE6D8E04
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 05:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235269AbjDFDeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 23:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
+        id S235188AbjDFDhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 5 Apr 2023 23:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjDFDeM (ORCPT
+        with ESMTP id S233361AbjDFDh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 23:34:12 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4732F7AAD
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 20:34:11 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id h8so146104610ede.8
-        for <linux-kernel@vger.kernel.org>; Wed, 05 Apr 2023 20:34:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680752049;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bd9oC+qN9vojxTpZDloVHGiCls3SDiZuksEePnvnriY=;
-        b=mwwUZVUUVuiprHOjTaypIoPHuXOIzi9AU0bJtbdFPvdDAo7ZrxTjz8eSbtv/lKOygE
-         e67aPag1RobFOi1LTAy3+x6PLJeAfBxh6PDAevqSK1JHcKTH1oXnTh3Nrwyc1B00LpF9
-         z54Y+bPT0pu9OCxBt6LhoM9c26oxKO8iqKhyKN4HJVest/KfmPZYlBuV5pi00vr3FCij
-         jlMqkDi9AWBNuORR7Qgj62Ya3/b0mFQW4FYqrEGLCllOuQDPGCCdBpQ8iD4JqGkyVAKk
-         DHVIRRLau0SeT3gteid40i4l6hMvz6FC63CilTd8RuKOQ0o64bMkviOl2QiXD0X3zrrA
-         sy1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680752049;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bd9oC+qN9vojxTpZDloVHGiCls3SDiZuksEePnvnriY=;
-        b=KMe6MZfrawF2xTRigzvZN8aDVV9kxIJ5zWo1akCDOTXaYNBXdJzBaSfhikDQ+LXyap
-         X46EzTVhNz/d/ULc9gzjZLCLKF6jQkGhkIQ8NkdolVHGIE/fxt/tUatqVPIz7tSu+iC+
-         8ARIQRfi6BbXgPyBMyi9Hn2auioEtffd4rgGXi/ZKSI/57zsMzEwT+qXLw3ScSuh3Bc4
-         fccVFfEuYJ0jHdQ4sVrjrgZeGMu65e0ye/j7H57FGv0SvTyqGEAtuye/ASQXloqwbbZc
-         NpfWyhBu64VJz/hWX22HohKSPKkNKZEIIVZ1RsZxuygDdm54g7bHFm0RwqJluxuwbxrI
-         H1Hw==
-X-Gm-Message-State: AAQBX9eMKWEcrzI1CWo+zGzbol7DapRH6fZ/Fh99d/0+N2xtAqBApgXe
-        iWJgG9Rtvvaio2x0cK0dQ+bqPm4DH8UNENfqAzU=
-X-Google-Smtp-Source: AKy350bGCs2NA2eVi6adpMCdimswma0gdUd1x/zSedsoRbjq+nAlN4i1RpfbQTwXq5304aRmN9pfdmP4UukZU9h4ZgY=
-X-Received: by 2002:a17:907:318b:b0:946:f965:4d9c with SMTP id
- xe11-20020a170907318b00b00946f9654d9cmr2882829ejb.1.1680752049130; Wed, 05
- Apr 2023 20:34:09 -0700 (PDT)
+        Wed, 5 Apr 2023 23:37:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D01A7AA5;
+        Wed,  5 Apr 2023 20:37:27 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PsRt90MNrzSqlF;
+        Thu,  6 Apr 2023 11:33:37 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 6 Apr 2023 11:36:48 +0800
+Subject: Re: [PATCH] ubifs: remove unnecessary kobject_del()
+To:     Yangtao Li <frank.li@vivo.com>, Richard Weinberger <richard@nod.at>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ext4@vger.kernel.org>, <tytso@mit.edu>, <jack@suse.com>,
+        yangerkun <yangerkun@huawei.com>
+References: <20230405130747.66006-1-frank.li@vivo.com>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <828681d9-153f-2499-baa6-9a5e782be586@huawei.com>
+Date:   Thu, 6 Apr 2023 11:36:47 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Received: by 2002:a98:d894:0:b0:1bd:7ecd:c851 with HTTP; Wed, 5 Apr 2023
- 20:34:08 -0700 (PDT)
-Reply-To: AvaSmith62567@gmail.com
-From:   Dr Ava Smith <atminstruction@gmail.com>
-Date:   Wed, 5 Apr 2023 20:34:08 -0700
-Message-ID: <CAGNbUyGixinGF1YskhnHu7kg5VzxkrQ_0S35VtASMaZ8DmD4Mw@mail.gmail.com>
-Subject: From Dr Ava Smith
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+In-Reply-To: <20230405130747.66006-1-frank.li@vivo.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.7 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear
-My name is Dr Ava Smith,a medical doctor from United States.
-I have Dual citizenship which is English and French.
-I will share pictures and more details about me as soon as i get
-a response from you
-Thanks
-Ava
+Hi, Yangtao
+> kobject_put() actually covers kobject removal automatically, which is
+> single stage removal. So it is safe to kill kobject_del() directly.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>   fs/ubifs/sysfs.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/fs/ubifs/sysfs.c b/fs/ubifs/sysfs.c
+> index 1c958148bb87..1ffdc3c9b340 100644
+> --- a/fs/ubifs/sysfs.c
+> +++ b/fs/ubifs/sysfs.c
+> @@ -130,7 +130,6 @@ int ubifs_sysfs_register(struct ubifs_info *c)
+>   
+>   void ubifs_sysfs_unregister(struct ubifs_info *c)
+>   {
+> -	kobject_del(&c->kobj);
+>   	kobject_put(&c->kobj);
+>   	wait_for_completion(&c->kobj_unregister);
+>   
+> 
+
+This patch looks harmless at the view of ubifs, kobject_cleanup() 
+finally invokes __kobject_del and releases parent just like 
+kobject_del() does. A difference is that the releasing sequence of 
+kobj's parent is put after releasing kobj.
+
+About the use case of kobject_del(), we may refer to other filesystems' 
+implementations, eg. ext4_put_super(). Firstly ext4_unregister_sysfs() 
+removes all sysfs interfaces, then jbd2_journal_destroy() destroys 
+sbi->s_journal, finally sbi->s_kobj is released. Here kobject_del() 
+stops user accessing sbi->s_journal by sysfs interface 
+journal_task£¬because sbi->s_journal will be released soon before 
+kobject_put().
+
+I think we should still reserve the 'redundant' kobject_del(), removing 
+it won't bring any performance improvement.
+
+BTW, in ext4_put_super(), flush_stashed_error_work(which could access 
+sbi->s_kobj) is flushed after kobject removed. is it okay to replace 
+kobject_del(&sbi->s_kobj) with kobject_put(&sbi->s_kobj)?
+
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index a22417d113ca..9e3744099d1e 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1296,8 +1296,6 @@ static void ext4_put_super(struct super_block *sb)
+          * Now that we are completely done shutting down the
+          * superblock, we need to actually destroy the kobject.
+          */
+-       kobject_put(&sbi->s_kobj);
+-       wait_for_completion(&sbi->s_kobj_unregister);
+         if (sbi->s_chksum_driver)
+                 crypto_free_shash(sbi->s_chksum_driver);
+         kfree(sbi->s_blockgroup_lock);
+diff --git a/fs/ext4/sysfs.c b/fs/ext4/sysfs.c
+index 12d6252e3e22..be92a09bb8a0 100644
+--- a/fs/ext4/sysfs.c
++++ b/fs/ext4/sysfs.c
+@@ -562,7 +562,8 @@ void ext4_unregister_sysfs(struct super_block *sb)
+
+         if (sbi->s_proc)
+                 remove_proc_subtree(sb->s_id, ext4_proc_root);
+-       kobject_del(&sbi->s_kobj);
++       kobject_put(&sbi->s_kobj);
++       wait_for_completion(&sbi->s_kobj_unregister);
+  }
+
+  int __init ext4_init_sysfs(void)
