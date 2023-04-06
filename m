@@ -2,113 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6526D9693
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707266D969F
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 14:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238238AbjDFL7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S237969AbjDFMAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 08:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237801AbjDFL67 (ORCPT
+        with ESMTP id S236785AbjDFMAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:58:59 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF0AD17
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 04:55:59 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-947a47eb908so69206366b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 04:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1680782157;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oMDNQu1XzLS5jMXdeJJxT4z+oXW0t1tuPCxJshT2ALg=;
-        b=N5oQP3trdu5pC1JrmFTjX9Nd7vIym5cFs0ob/3XH2wTkuemsHHFm0uVeXV+bsxLdfv
-         YaZyukmqvg13LwinhJHWhbpQOLTCN92J89IsjsuiHFR/Xp+biwvfIMk+tRAv/N63p/Oj
-         dZ/AxheqPi+ffW9mGcRNf9Nxyhvm+rJTTap9A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680782157;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMDNQu1XzLS5jMXdeJJxT4z+oXW0t1tuPCxJshT2ALg=;
-        b=NtZrQLNOkQfKf6oyt3fKh5wwdZVFgXXYTy+xXOke+qoKO2aIHGsJEnQa4qtgEeAbuV
-         I9rdeleA7rPxEb3NgeKpP3JbkE7BgaC37qrjb9bQKVxIF7vhT/HiaSFHgHg8mFN/iAxQ
-         kvgfERLv4x/WxDCOa94n5FvyHzJLafJJ3clEdHYfGO8qvbcncl4XpIaiwLZRogzeqe1Z
-         N0gUZaWqRZxDkbtUqs+sljALHo1TaRSBcfY5H7dFE5Q6Ifszh1VoOrorweOXaCL+gccE
-         kRkyUWOK/8zEMBugEgehUie04rTU8fdOjmZj45iDndfjSzoqJuR2Mdq8QeuHp2J2fwob
-         pq5g==
-X-Gm-Message-State: AAQBX9eqbHi1iUzSSOp+/QMKI/O+9F3yH4oQ08FqZY674aF8GL8+A4Lm
-        IOGQKt9XPfi4MTYi1+n6Sx6DNA==
-X-Google-Smtp-Source: AKy350ZOxZo4QQ3mtTdEBkJo/LXRvuTs1QCISStGn2WK9B8ac8jui8PsnQYOH6+5h0nWhBZXUsWKLA==
-X-Received: by 2002:a17:906:114:b0:947:f415:db23 with SMTP id 20-20020a170906011400b00947f415db23mr5899622eje.1.1680782157452;
-        Thu, 06 Apr 2023 04:55:57 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-33.fiber7.init7.net. [212.51.149.33])
-        by smtp.gmail.com with ESMTPSA id gl25-20020a170906e0d900b0092d16623eeasm713482ejb.138.2023.04.06.04.55.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 04:55:57 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 13:55:54 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 18/18] drm/asahi: Add the Asahi
- driver for Apple AGX GPUs
-Message-ID: <ZC6zSnB6pSELiy+I@phenom.ffwll.local>
-Mail-Followup-To: Asahi Lina <lina@asahilina.net>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
- <20230307-rust-drm-v1-18-917ff5bc80a8@asahilina.net>
- <ZC2HtBOaoUAzVCVH@phenom.ffwll.local>
- <8d28f1d3-14b0-78c5-aa16-e81e2a8a3685@asahilina.net>
+        Thu, 6 Apr 2023 08:00:33 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E94CA5EA;
+        Thu,  6 Apr 2023 04:57:54 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33651gm9015184;
+        Thu, 6 Apr 2023 11:57:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=1yteelog3Wl7kwUh4NMc2dyQp6RkZQkjQy5qXHC4OPs=;
+ b=H7z+6UOU+jaSvC+xYGQfhcR6gJMRhVmjD/X6wzMthCir6ZuUktiGQrQUOIhpYC+Z1nCz
+ w5FGUhI9s4Ma8FYHwBP53oZSITK6OdvkemEuGhj0fCDcq9FYlWC/0t+mTZ0pwxwRUOhp
+ bFpUeNXRuzatytUGj1E2XshvX3vC4vf1z2cERc2U2LsB2ukcSczuibLh+Cnnt0sM6IHY
+ xpnOJhSeA7MblWdlNgXgdXKV28+BcOzEK3/OiXnxEBDG7yFbGHKUB94uq5yVk72Musc+
+ lSqBmllr4jKDcjzge6Oujc+r0FlfbZrOEeg0i0AbQMPB8dZLbeKwv/6cvS1KftavS3Sl /Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ps8h0ar84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 06 Apr 2023 11:57:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 336BvpAg005206
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 6 Apr 2023 11:57:51 GMT
+Received: from hu-tnimkar-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 6 Apr 2023 04:57:48 -0700
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+To:     <andersson@kernel.org>, <agross@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_lsrao@quicinc.com>, <quic_mkshah@quicinc.com>,
+        <abel.vesa@linaro.org>, Tushar Nimkar <quic_tnimkar@quicinc.com>
+Subject: [PATCH] soc: qcom: rpmh-rsc: Support RSC v3 minor versions
+Date:   Thu, 6 Apr 2023 17:27:32 +0530
+Message-ID: <20230406115732.9293-1-quic_tnimkar@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d28f1d3-14b0-78c5-aa16-e81e2a8a3685@asahilina.net>
-X-Operating-System: Linux phenom 6.1.0-7-amd64 
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DzVQL5mav8pmZ2SNF7m-JKzADzxYKEyC
+X-Proofpoint-ORIG-GUID: DzVQL5mav8pmZ2SNF7m-JKzADzxYKEyC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_06,2023-04-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 adultscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ priorityscore=1501 clxscore=1011 mlxscore=0 spamscore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304060104
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,197 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 01:44:22PM +0900, Asahi Lina wrote:
-> On 05/04/2023 23.37, Daniel Vetter wrote:
-> > On Tue, Mar 07, 2023 at 11:25:43PM +0900, Asahi Lina wrote:
-> > > +/// A generic monotonically incrementing ID used to uniquely identify object instances within the
-> > > +/// driver.
-> > > +pub(crate) struct ID(AtomicU64);
-> > > +
-> > > +impl ID {
-> > > +    /// Create a new ID counter with a given value.
-> > > +    fn new(val: u64) -> ID {
-> > > +        ID(AtomicU64::new(val))
-> > > +    }
-> > > +
-> > > +    /// Fetch the next unique ID.
-> > > +    pub(crate) fn next(&self) -> u64 {
-> > > +        self.0.fetch_add(1, Ordering::Relaxed)
-> > > +    }
-> > > +}
-> > 
-> > Continuing the theme of me commenting on individual things, I stumbled
-> > over this because I noticed that there's a lot of id based lookups where I
-> > don't expect them, and started chasing.
-> > 
-> > - For ids use xarray, not atomic counters. Yes I know dma_fence timelines
-> >    gets this wrong, this goes back to an innocent time where we didn't
-> >    allocate more than one timeline per engine, and no one fixed it since
-> >    then. Yes u64 should be big enough for everyone :-/
-> > 
-> > - Attaching ID spaces to drm_device is also not great. drm is full of
-> >    these mistakes. Much better if their per drm_file and so private to each
-> >    client.
-> > 
-> > - They shouldn't be used for anything else than uapi id -> kernel object
-> >    lookup at the beginning of ioctl code, and nowhere else. At least from
-> >    skimming it seems like these are used all over the driver codebase,
-> >    which does freak me out. At least on the C side that's a clear indicator
-> >    for a refcount/lockin/data structure model that's not thought out at
-> >    all.
-> > 
-> > What's going on here, what do I miss?
-> 
-> These aren't UAPI IDs, they are driver-internal IDs (the UAPI IDs do use
-> xarray and are per-File). Most of them are just for debugging, so that when
-> I enable full debug spam I have some way to correlate different things that
-> are happening together (this subset of interleaved log lines relate to the
-> same submission). Basically just object names that are easier to read (and
-> less of a security leak) than pointers and guaranteed not to repeat. You
-> could get rid of most of them and it wouldn't affect the driver design, it
-> just makes it very hard to see what's going on with debug logs ^^;
-> 
-> There are only two that are ever used for non-debugging purposes: the VM ID,
-> and the File ID. Both are per-device global IDs attached to the VMs (not the
-> UAPI VM objects, but rather the underlyng MMU address space managers they
-> represent, including the kernel-internal ones) and to Files themselves. They
-> are used for destroying GEM objects: since the objects are also
-> device-global across multiple clients, I need a way to do things like "clean
-> up all mappings for this File" or "clean up all mappings for this VM".
-> There's an annoying circular reference between GEM objects and their
-> mappings, which is why this is explicitly coded out in destroy paths instead
-> of naturally happening via Drop semantics (without that cleanup code, the
-> circular reference leaks it).
-> 
-> So e.g. when a File does a GEM close or explicitly asks for all mappings of
-> an object to be removed, it goes out to the (possibly shared) GEM object and
-> tells it to drop all mappings marked as owned by that unique File ID. When
-> an explicit "unmap all in VM" op happens, it asks the GEM object to drop all
-> mappings for that underlying VM ID. Similarly, when a UAPI VM object is
-> dropped (in the Drop impl, so both explicitly and when the whole File/xarray
-> is dropped and such), that does an explicit unmap of a special dummy object
-> it owns which would otherwise leak since it is not tracked as a GEM object
-> owned by that File and therefore not handled by GEM closing. And again along
-> the same lines, the allocators in alloc.rs explicitly destroy the mappings
-> for their backing GEM objects on Drop. All this is due to that annoying
-> circular reference between VMs and GEM objects that I'm not sure how to fix.
-> 
-> Note that if I *don't* do this (or forget to do it somewhere) the
-> consequence is just that we leak memory, and if you try to destroy the wrong
-> IDs somehow the worst that can happen is you unmap things you shouldn't and
-> fault the GPU (or, in the kernel or kernel-managed user VM cases,
-> potentially the firmware). Rust safety guarantees still keep things from
-> going entirely off the rails within the kernel, since everything that
-> matters is reference counted (which is why these reference cycles are
-> possible at all).
-> 
-> This all started when I was looking at the panfrost driver for reference. It
-> does the same thing except it uses actual pointers to the owning entities
-> instead of IDs, and pointer comparison (see panfrost_gem_close). Of course
-> you could try do that in Rust too (literally storing and comparing raw
-> pointers that aren't owned references), but then you're introducing a Pin<>
-> requirement on those objects to make their addresses stable and it feels way
-> more icky and error-prone than unique IDs (since addresses can be reused).
-> panfrost only has a single mmu (what I call the raw VM) per File while I
-> have an arbitrary number, which is why I end up with the extra
-> distinction/complexity of both File and VM IDs, but the concept is the same.
-> 
-> Some of this is going to be refactored when I implement arbitrary VM range
-> mapping/unmapping, which would be a good time to improve this... but is
-> there something particularly wrong/broken about the way I'm doing it now
-> that I missed? I figured unique u64 IDs would be a pretty safe way to
-> identify entities and cleanup the mappings when needed.
+RSC v3 register offsets are same for all minor versions of v3. Fix a
+minor version check to pick correct offsets for all v3 minor versions.
 
-Ok, some attempt at going through the vm_id/file_id stuff. Extremely
-high-level purely informed by having read too many drivers:
+Fixes: 40482e4f7364 ("soc: qcom: rpmh-rsc: Add support for RSC v3 register offsets")
+Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
+---
+ drivers/soc/qcom/rpmh-rsc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-First on the drm_file/struct file/file_id. This is the uapi interface
-object, and it's refcounted in the vfs, but that's entirely the vfs'
-business and none of the driver (or even subsystem). Once userspace has
-done the final close() the file is gone, there's no way to ever get
-anything meaningfully out of it because userspace dropped it. So if the
-driver has any kind of backpointer to that's a design bug, because in all
-the place you might want to care (ioctl, fdinfo for schedu stats, any
-other file_operations callback) the vfs ensures it stays alive during the
-callback and you essentially have a borrowed reference.
-
-I've seen a lot of drivers try to make clever backpointings to stuff
-that's essentially tied to the drm_file, and I've not found a single case
-that made sense. iow, file_id as a lookup thingie needs to go. In
-principle it's the same argument I've made already for the syncobj rust
-wrappers. For specific uses I guess I need some rust reading help, but
-from your description it sounds like the vm_id is much more the core
-piece.
-
-So for that we have the gpu ctx -> vm -> gem_bos chain of reference. Now
-on the C side if you have a modern driver that uses the
-vm_bind/unbind/gpuva manager approach, the reference counts go in that
-single direction only, anything else is essentially borrowed references
-under protection of a mutex/lock or similar thing (for e.g. going from the
-bo to the vm for eviction).
-
-In addition to the above chain the xarray in the drm_file also holds
-references to each of these. So far so good, in the drm_file ->postclose
-callback you just walk the xarrays and drop all the references, and
-everything gets cleaned up, at least in the C world.
-
-Aside: I'm ignoring the entire sched/job/gpu-ctx side because that's a
-separate can of worms and big other threads floating around already.
-
-But if either due to the uabi being a bit more legacy, or Rust requiring
-that the backpointers are reference-counted from the gem_bo->vma->vm and
-can't follow borrow semantics (afaiui the usual linux list_head pattern of
-walking the list under a lock giving you a borrowed reference for each
-element doesn't work too well in rust?) then that's not a problem, you can
-still all clean it out:
-
-- The key bit is that your vm struct needs both a refcount like kref and
-  a separate open count. Each gpu ctx and the xarray for vm objects in
-  drm_file hold _both_ the kref and the open refcount (in rust the open
-  refcount implies the Arc or things go sideways).
-
-- the other key bit is that drm_file ->postclose does _not_ have simple
-  Drop semantics, it's more explicit.
-
-- in the drm_file lastclose you first walk all the gpu ctx. The simplest
-  semantics is that close() synchronously tears down all leftover gpu ctx,
-  i.e. you unload them from the gpu. Details are under a lot of discussion
-  in the various scheduler threads, but essentially this should ensure
-  that the gpu ctx destruction completely removes all references to the
-  ctx. If instead you have the legacy problem of apps expecting that
-  rendering continues even if they called exit() before it finishes, then
-  it gets more messy. I have no idea whether that's still a problem for
-  new drivers or can be avoided.
-
-- Next up you do the same thing for the vm xarray (which drops both the
-  kref an open refcounts).
-
-- At this point there might still be a ton of vm objects around with
-  elevated kref. Except not, because at this point the open refcount of
-  each vm should have dropped to zero. When that happens the vm object
-  itself is still alive, plus even better for rust, you are in the
-  vm_close(vm) function call so you have a full borrowed reference to
-  that. Which means you can walk the entire address space and unmap
-  everything explicit. Which should get rid of any gem_bo->vma->vm
-  backpointers you have lying around.
-
-- At that point all your vm objects are gone too, because the kref managed
-  backpointers are gone.
-
-- You walk the xarray of gem_bo (well the drm subsystem does that for
-  you), which cleans out the reamining references to gem_bo. Only the
-  gem_bo which are shared with other process or have a dma_buf will
-  survive, like they should.
-
-No leak, no funky driver-internal vm_id based lookup, and with rust we
-should even be able to guarantee you never mix up Arc<Vm> with OpenRef<Vm>
-(or however that exactly works in rust types, I have not much real clue).
-
-If you have any other functional needs for vm_id then I guess I need to go
-through them, but they should be all fixable.
--Daniel
+diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+index 0f8b2249f889..f93544f6d796 100644
+--- a/drivers/soc/qcom/rpmh-rsc.c
++++ b/drivers/soc/qcom/rpmh-rsc.c
+@@ -1073,7 +1073,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+ 	drv->ver.minor = rsc_id & (MINOR_VER_MASK << MINOR_VER_SHIFT);
+ 	drv->ver.minor >>= MINOR_VER_SHIFT;
+ 
+-	if (drv->ver.major == 3 && drv->ver.minor == 0)
++	if (drv->ver.major == 3 && drv->ver.minor >= 0)
+ 		drv->regs = rpmh_rsc_reg_offset_ver_3_0;
+ 	else
+ 		drv->regs = rpmh_rsc_reg_offset_ver_2_7;
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.17.1
 
