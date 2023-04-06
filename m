@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077BC6DA41A
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C4B6DA41E
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 22:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237106AbjDFUzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 16:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S237659AbjDFU4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 16:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjDFUzh (ORCPT
+        with ESMTP id S229569AbjDFU4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 16:55:37 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1364ED6;
-        Thu,  6 Apr 2023 13:55:36 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id qb20so4337932ejc.6;
-        Thu, 06 Apr 2023 13:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680814535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZH+Py50y9vo4DMUtUbK/cR4JBKneDucbAHS4uMgQV/Q=;
-        b=KRVuosrjlXoDxku6toLdouLKwUM658atx1aVXMcmtkqbiSm752xfpO6UFVT8mxCkWH
-         wrhehxhP0Fw5WOSD5/gFPXvUijBJkpkHZqTNFQdebJUuhsJEhmPhALa4iUAKTyfK3qnJ
-         NL5/EpePbdo6U4N1m1g1nNj6Clqm8O6RjgwEAuqGhGmZGZjZIFZEJI0x0m5V9GpQO65D
-         Xo6FyvT7NV59g7JsJrfAhdqqyFDRBHqxHYE2EDy7MYIY8azcs4gpOPVRdZ1sJMxDgW41
-         XVdsbTZTcBjrT/PgCnd0YuNMhxCJGu/WI2mvzwUIfsINc+V+NWbarY8+JQWjp3OJ4OeA
-         UDoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680814535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZH+Py50y9vo4DMUtUbK/cR4JBKneDucbAHS4uMgQV/Q=;
-        b=ZCOhSookSbSuTeiS+vPMMLyUfyPbCuQIDIFysemkYTh8SYDAgiF0YBP8giwKmDHCAf
-         Bpl2fP7iE6eWzLS+KViohtyDNWsxflt/ec5Xo9cPbIZX5l2UgEHas/E8avuGabFDH7F4
-         JARmyfakyatjF9nICcuXElsi9qR7zKSm8kDBo928vj7pTAk4veO76/TFpPEbvp8r8/GY
-         SQQbV3VF4m0VGzhYt/TnNZCOpiWnJLUP/oeLmUWQjpUG3kRggbYcyJQCwHd12+9hM1Y3
-         X6C6Sybxv5IZtI0eEzPdKZspF88LSbHrS7lcXBt5qNLbATjbTJi53JLAbvEF8pHKtGae
-         3GlA==
-X-Gm-Message-State: AAQBX9c64NE42675bQjsmpS8wcygT5VCZG2Rntwd2wATBWMYAD0ji8Iy
-        lz+yNF8T/te6dMduFS+c9hSlEk2Goy0+QO25rZyT7Ra2
-X-Google-Smtp-Source: AKy350Y3+FEZ1Cg0ihoX86pgJJmcQhD/cHfq/fxhWNZ0zwmWBiZiTjY0deSWjnSKZKcRks3NmRLLHqbsRPfLxe752OU=
-X-Received: by 2002:a17:906:1ec7:b0:949:8e10:31c1 with SMTP id
- m7-20020a1709061ec700b009498e1031c1mr96576ejj.5.1680814534863; Thu, 06 Apr
- 2023 13:55:34 -0700 (PDT)
+        Thu, 6 Apr 2023 16:56:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6704ED6;
+        Thu,  6 Apr 2023 13:56:31 -0700 (PDT)
+Date:   Thu, 06 Apr 2023 20:56:29 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680814590;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YjBvEYxvpoeX2vPb3Ms2POZwrN+eVBkKCaru7XNe9yQ=;
+        b=omVAmUwnm8OA3akiYZAjbE48QfH+Kda2Li0M1rtO2Hd+Z5Slrsr4ejMRigY4fFlksK2fOg
+        +6Q9pfhqi4+mBpsq219Esmok7x7zNKnU3sD1ZoKiSxrpeyrlDuHoB8n+z9cErOtg95t+k2
+        A3DxCVPy1Y9q4Da+AmeIZzMY4ZVJF3dXNg8h1Bw0Mr74wl+LBtb/pu+UyUOuYLxTIvFO60
+        ldb+G2CRMq4GlTDb378p24lwCMUAS6aTtzD/f629MAnY2e2neW1d63Hi2Sko7PM8C4y1k0
+        FZnNUKUE/PV44hDPs6DJm6ZOy0VhWfTAaj1xF1IN3IzUHMgJigSa5Gp+3qnh0w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680814590;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YjBvEYxvpoeX2vPb3Ms2POZwrN+eVBkKCaru7XNe9yQ=;
+        b=S3Esd2nKhGlgqSmT91zLCrJ/rFcFrWmtgD+DLVd8tu5VrJZhPDNCakL2YmjNBYDRueMM96
+        eZNDNJwAO3LYpVDQ==
+From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/mm/iommu/sva: Fix error code for LAM enabling
+ failure due to SVA
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <CACT4Y+YfqSMsZArhh25TESmG-U4jO5Hjphz87wKSnTiaw2Wrfw@mail.gmail.com>
+References: <CACT4Y+YfqSMsZArhh25TESmG-U4jO5Hjphz87wKSnTiaw2Wrfw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230406004018.1439952-1-drosen@google.com> <20230406004018.1439952-2-drosen@google.com>
-In-Reply-To: <20230406004018.1439952-2-drosen@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 6 Apr 2023 13:55:23 -0700
-Message-ID: <CAEf4BzbyX3i6k5eL6D-5enU+u58nVn_fK28zNBJ4w_Vm-+RiMQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] bpf: verifier: Accept dynptr mem as mem in helpers
-To:     Daniel Rosenberg <drosen@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <168081458969.404.10805285525053802154.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 5:40=E2=80=AFPM Daniel Rosenberg <drosen@google.com>=
- wrote:
->
-> This allows using memory retrieved from dynptrs with helper functions
-> that accept ARG_PTR_TO_MEM. For instance, results from bpf_dynptr_data
-> can be passed along to bpf_strncmp.
->
-> Signed-off-by: Daniel Rosenberg <drosen@google.com>
-> ---
+The following commit has been merged into the x86/mm branch of tip:
 
-I think patches like this should be targeted against bpf-next, so for
-next revision please send them against bpf-next tree.
+Commit-ID:     fca1fdd2b0a6fcd491ec520afac80bc72b4c811e
+Gitweb:        https://git.kernel.org/tip/fca1fdd2b0a6fcd491ec520afac80bc72b4c811e
+Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+AuthorDate:    Mon, 03 Apr 2023 14:10:19 +03:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 06 Apr 2023 13:44:58 -07:00
 
->  kernel/bpf/verifier.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 56f569811f70..20beab52812a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7164,12 +7164,16 @@ static int check_reg_type(struct bpf_verifier_env=
- *env, u32 regno,
->          * ARG_PTR_TO_MEM + MAYBE_NULL is compatible with PTR_TO_MEM and =
-PTR_TO_MEM + MAYBE_NULL,
->          * but ARG_PTR_TO_MEM is compatible only with PTR_TO_MEM but NOT =
-with PTR_TO_MEM + MAYBE_NULL
->          *
-> +        * ARG_PTR_TO_MEM is compatible with PTR_TO_MEM that is tagged wi=
-th a dynptr type.
-> +        *
->          * Therefore we fold these flags depending on the arg_type before=
- comparison.
->          */
->         if (arg_type & MEM_RDONLY)
->                 type &=3D ~MEM_RDONLY;
->         if (arg_type & PTR_MAYBE_NULL)
->                 type &=3D ~PTR_MAYBE_NULL;
-> +       if (base_type(arg_type) =3D=3D ARG_PTR_TO_MEM)
-> +               type &=3D ~DYNPTR_TYPE_FLAG_MASK;
+x86/mm/iommu/sva: Fix error code for LAM enabling failure due to SVA
 
-Something feels off here. Can you paste a bit of verifier log for the
-failure you were getting. And let's have a selftest for this situation
-as well.
+Normally, LAM and SVA are mutually exclusive. LAM enabling will fail if
+SVA is already in use.
 
-ARG_PTR_TO_MEM shouldn't be qualified with the DYNPTR_TYPE flag, it's
-just memory, there is no need to know what type of dynptr it was
-derived from. So if that happens, the problem is somewhere else. Let's
-root cause and fix that. Having a selftest that demonstrates the
-problem will help with that.
+Correct error code for the failure. EINTR is nonsensical there.
 
+Fixes: 23e5d9ec2bab ("x86/mm/iommu/sva: Make LAM and SVA mutually exclusive")
+Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
+Link: https://lore.kernel.org/all/CACT4Y+YfqSMsZArhh25TESmG-U4jO5Hjphz87wKSnTiaw2Wrfw@mail.gmail.com
+Link: https://lore.kernel.org/all/20230403111020.3136-2-kirill.shutemov%40linux.intel.com
+---
+ arch/x86/kernel/process_64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->         if (meta->func_id =3D=3D BPF_FUNC_kptr_xchg && type & MEM_ALLOC)
->                 type &=3D ~MEM_ALLOC;
-> --
-> 2.40.0.577.gac1e443424-goog
->
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index b46924c..bc2ac56 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -758,7 +758,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
+ 
+ 	if (mm_valid_pasid(mm) &&
+ 	    !test_bit(MM_CONTEXT_FORCE_TAGGED_SVA, &mm->context.flags))
+-		return -EINTR;
++		return -EINVAL;
+ 
+ 	if (mmap_write_lock_killable(mm))
+ 		return -EINTR;
