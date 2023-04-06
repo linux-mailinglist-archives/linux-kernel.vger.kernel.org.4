@@ -2,157 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AAC6D924C
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92476D9245
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 11:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236210AbjDFJJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 05:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S235967AbjDFJIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 05:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233581AbjDFJI4 (ORCPT
+        with ESMTP id S233581AbjDFJI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 05:08:56 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EA019D;
-        Thu,  6 Apr 2023 02:08:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Psb6J4Y4nz9xFGh;
-        Thu,  6 Apr 2023 16:59:36 +0800 (CST)
-Received: from [10.81.221.252] (unknown [10.81.221.252])
-        by APP1 (Coremail) with SMTP id LxC2BwA3l+L_iy5kl_j9AQ--.11S2;
-        Thu, 06 Apr 2023 10:08:30 +0100 (CET)
-Message-ID: <4d5b98a2-64a0-2126-08de-64a8c4b46884@huaweicloud.com>
-Date:   Thu, 6 Apr 2023 11:08:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v10 2/4] security: Allow all LSMs to provide xattrs for
- inode_init_security hook
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Paul Moore <paul@paul-moore.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230331123221.3273328-1-roberto.sassu@huaweicloud.com>
- <20230331123221.3273328-3-roberto.sassu@huaweicloud.com>
- <CAHC9VhSbGdij6xz9D49my37kD9qYrBmh2x7=cNFFDL2dZ=EZTw@mail.gmail.com>
- <5dbb9430-1e26-ec12-26a2-3718c84e33c2@schaufler-ca.com>
- <7549b624-421e-30b9-ca99-de42929354c7@huaweicloud.com>
- <CAHC9VhTsSUM6_g5+ZOqZ=P6307hCAJW+-xEc4fKQcymPs5pYjQ@mail.gmail.com>
- <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
-Content-Language: en-US
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <83ddfcb9-b4a6-71b4-a20c-62f484c8e040@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 6 Apr 2023 05:08:28 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2129.outbound.protection.outlook.com [40.107.117.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9564D83
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 02:08:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U9YyCxr4m8wvaNz2aMqzg164bWqcxVUmJUrt56gw+zH2g9DCVR0se7bhTo1woVboiG+buqCPjm+kWi+D4PoMjcrbY1SUBJqSEo2mHa8FjB6eW/hUvKew+xEpmegQpGWZGvBuzIVEPVTvYOdtwaH0HqFC1S6DJXSSJANeW2BO51+LuDPVJ9tbE/QyB7zbpR1rVOm1Kwed902vZm1+7FINlKiL6tOd3p71e1PZjgTpJhy390SZJ02vEBLtJFy+pZpbXF4HvMI4LHp6As/+zmMkrlMoalwo3X/yb/B4Dvit21HHo1ka6rtmQCftGg4RYwCBZ+SXhdWwnxC1k0qw9G2QsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3gNkgn5Dhn7nDeVCPPldJ99/DwNjrqWATiDop0xHxys=;
+ b=cuT6yrFhCX7l8kASxCEFbY8ZpmZm1umKONvQwweYH9Xe2OXboSHskj+hnewoXFq14a2gZy4puvw070/l+QjfiqHNBTmKZrHuOtO52p0FLaZD6rDuifVzhc6E/ptqafEtwch9a7A+9fttF6qu+ebP6A6IkEuBvp5ASuP5Eh4dnE7gr9IgwDsmdDeSM5OetZvs3VFIKW2Y+W6aTrd8JVkAErhlV9DNdpBFixhGCEEaMAEjQdGD81DMhwmkMURlCR+gXgYp3URbwoZMQ3Do7APX2jQLcoIoRFc4mllmpAKFrCp3vLDgjbfu1XK8SKWpC1es6L54QNLpv+zQOX8IV469FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3gNkgn5Dhn7nDeVCPPldJ99/DwNjrqWATiDop0xHxys=;
+ b=evLyFQiRLvL4RMjh54MV/g0Nby27FNXQ+yWK0BUxjQqYmxBEaw8CyMHZ85EHfTIGYOn85d/WG9WDyuRCPGQGg6QCSeJQMekB1+tIQXp0w4s//zkj0LTYscQS5erQseJfJV7ZVpUomaZlR9Q9mybsU6WAs5OgpaIyL0N28jfexdSWPRRWwT64v41g6pWwCLZ2d8/jwyE0ukcqw7+penFLOAcIGQSe4soeni64tqhzt+k1EbvDG2W6ELwm7AtT+HwNkymW3ZZHAwzduc6fjmIldSrbsSuE5zeGkI9Jbf7TQxo4bbawC1m2vKERCQ0VgOmkubeV8Q/BKvYfx3+phQ1kiA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
+ by SEYPR06MB5086.apcprd06.prod.outlook.com (2603:1096:101:56::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.33; Thu, 6 Apr
+ 2023 09:08:23 +0000
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::16db:8a6e:6861:4bb]) by TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::16db:8a6e:6861:4bb%5]) with mapi id 15.20.6277.031; Thu, 6 Apr 2023
+ 09:08:23 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     frank.li@vivo.com, chengzhihao1@huawei.com
+Cc:     linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        richard@nod.at
+Subject: Re: [PATCH] ubifs: remove unnecessary kobject_del()
+Date:   Thu,  6 Apr 2023 17:08:13 +0800
+Message-Id: <20230406090813.24111-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230405130747.66006-1-frank.li@vivo.com>
+References: <20230405130747.66006-1-frank.li@vivo.com>
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwA3l+L_iy5kl_j9AQ--.11S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF48Jr18tw1xCw4UGw45ZFb_yoW5Kw1rpF
-        ykKa47tr4DtF1UJr9aya17Wa429rW3GF4UWws8Kr18ZF1qqr1xJr1Ykr4Y9rnxXr4xArna
-        qrWqqr9xurn0v37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
-        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-        7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4eqDwABsH
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0180.apcprd04.prod.outlook.com
+ (2603:1096:4:14::18) To TYZPR06MB5275.apcprd06.prod.outlook.com
+ (2603:1096:400:1f5::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|SEYPR06MB5086:EE_
+X-MS-Office365-Filtering-Correlation-Id: 29561f3c-c3ea-4f55-9b4c-08db367e791f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zOkRkxB5XqRAhPVr7YMZuV7woj8S5CMzJ4clY1ZRuTHu91LpnBj1eGMbjkxS7nVn+Vc47O8kTvu7FIzlBYNqwWsnU1Ya17ekp3Ia6QH54z1VgtdaD7mMU84qJjSG428Q9pDTKvYCOJNPjl5Pzs3gAfQ2ARTYlgin2nO7iRvSgFNpGHiRvnK9BVl8rVbxf/DoZcFVpb7Mw5b35a3JdFeY9PUROhooqB+ZW4u2lwi9FRxgjqq6VoE9/VsUKwilvuY8G+j+Uyeud1gZKhah7p/3syZN2+865tuwRrcn2jMgt3yuGFX8+PgEQ5X+KXJ2ailbEKcjyU5jxIuWBScW/JoKJ0dM8pKdmKON99R7UyVDvAt0bHy0JOjF/QW1/Ds8eFNPoeZQMsgJl8/2zsNnmfBcEdm/zDl8yQzoM0BkSPiVxCmeGBISIBPFXgxcjH8JVFEtnCVD8PjQ4Xk+jmSzA4+5Qy9ZLwFzZe8Q9q9e0FgRuxlICFHTLkwKe7K/j9D/GKuxo4rkkAYl6TbdvrtKHTK6PRntC1tM6GpAhjXjR1S+Kmk2+uQy9vwXORzbFFSuaTTv29uw1j2fWHpe5LbwhMYuijwZeLD2CY+01KZAEaAh2LsYRljjMfrxVG9Je+cTZQPU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(366004)(451199021)(52116002)(26005)(6666004)(66946007)(36756003)(6506007)(2616005)(316002)(1076003)(4326008)(41300700001)(478600001)(8676002)(38100700002)(6486002)(66556008)(66476007)(38350700002)(6512007)(558084003)(2906002)(86362001)(5660300002)(8936002)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I50nUcYcR3uomZdTsop5yG8/PdVvs1Qz1CbGjw5VGH5dioqZl5sEpZ81ds2X?=
+ =?us-ascii?Q?IaUzb/BTEF8Mr/P6UGi03ZVzjkYMzPZtwKEhBjDbCHXrmac42F8w+j433l4K?=
+ =?us-ascii?Q?5dEKltSc3gMvwv+4uwX/Ubkjbvjmax3/3X73RDptBvWVvycURrRfRQdL3H0v?=
+ =?us-ascii?Q?a9UGJzmDkc1g1PD7Mf1lTggFRP6Zsz+hnRUmhxlFJI4MEoEHQkNJbF3NUpdc?=
+ =?us-ascii?Q?dMHhgU/ItUic1OwegAbdn6Ru4gUPW0xBjqoW1TSOd863KgoFw1E0g4IAjC6B?=
+ =?us-ascii?Q?lOLkny6hF9YRCGyUQEXSQu32GjKybsEs1HmN9JVjrDsTkjr/LZjjREMtU/Z9?=
+ =?us-ascii?Q?RrC9IM8viPk5MuPmzsUiSF4o4q21uHjVs/QFB64d0NAWGqeRx63mn8d1vEo7?=
+ =?us-ascii?Q?/yZGeZFl+nVXiw59MqwLkMCIUcPmxhLsymYt4mFFNVMEJNDQhgTpFA4gUUjl?=
+ =?us-ascii?Q?mL4rm28H+OVdhXMwWgyo83+9kcjzHa4Cc9cZQcGTotiEbeAqI0dU5wpKp04f?=
+ =?us-ascii?Q?sH7yGYlyXK0EQQBnLrzJpNOgVOw6FLFTsHmnr6BM5DUGXtp5NCDt7rvDbgHR?=
+ =?us-ascii?Q?aXLTRiET7ZGV6xK2gQwA7/kuATZOR2rylz2o37OG3cPkGdYg7fmL/5m2MnJQ?=
+ =?us-ascii?Q?YGbLxpJdSzjEwYGcDqW68O+HqATi966mXTeQdObtH2LeG6USdXVUSrGAVWJC?=
+ =?us-ascii?Q?lWZFzL2SsSX4P0ArXrQsbTA3nhIoiFgfIVlDWvh58GcJAjaVmIWKJYU7UHsw?=
+ =?us-ascii?Q?IG/WEGHLESAo2KwApFvUX3guh1xuTnMxMDjnKa4E5utNa0u1z4HUwuXXBXdB?=
+ =?us-ascii?Q?FpXxQWAbaWYbwDIrctKsLGWuS+fg7PtWn5nhaxsBVu4hS8+D7cXz71zSK1Cc?=
+ =?us-ascii?Q?JCsZ9n1KGgC7+Nj3YkvROu75qMt1JDdvAy/kluVemkORYpkAy90miZFq+fYU?=
+ =?us-ascii?Q?5F577QrQ1FhEc52J0MA3tf10zqw0kHk64q6Dm6ebDrI7N13bPyr9nAhSjPHh?=
+ =?us-ascii?Q?FwXqLM0vsbBKzyNoQN/PwK9MtpnMa8NSpWADlj0wdbYskFLubfIbs4LE5AuG?=
+ =?us-ascii?Q?SH9pYAH5avr1As/qKiJanlEHM6PEMNrx1B9kuRiyv3lIQPXhDU2UPQV7VTaV?=
+ =?us-ascii?Q?jpjMEnL83Hhcu1AMCST5gRy/CPpd2bQDx/Z0I3BTxnMVBR4txgFtNPtxEHBn?=
+ =?us-ascii?Q?WH4iZHoF2TGMbJ/LUzrBIdtzFMVRtI62DyosmQjt/QoD9cNm61o6abjzffnT?=
+ =?us-ascii?Q?jNjkM97mYwVo6y4ohbNF5K2qIsNX8QTxyn8nZGnjYn85UYpDcJmk3+iNRFGv?=
+ =?us-ascii?Q?UId0KGxYN9+0R9GAer3o7ecYrrC1GSVeBpt1XGzMNfT9pKmsteW4B70BJKRk?=
+ =?us-ascii?Q?jVRh3AWWS9vZ4X5MKQ55d6ohjna39EN831eYpxaPGPRpqZgQ5IandTOjSINx?=
+ =?us-ascii?Q?yko+zg4focpv900Idr3y/BMCc/tBv5mUHCqzmgfLzHrpjVt+ij3Z6yTeq6zD?=
+ =?us-ascii?Q?5esZiVNaBCrg12DCicHUFsXgm6c1GY4K3C9zJawmFb/xnmpOPZm9Wglqcvv8?=
+ =?us-ascii?Q?Ge7HU0zy87At4Jg15PDfPe/UdTK8gIJxLCoAL+bY?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29561f3c-c3ea-4f55-9b4c-08db367e791f
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2023 09:08:23.2170
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Pj5fkt9bMB2z9423ukN4/NQtOkCeCy69bcGabkFvsi3JRkxbWtvLdHxgBC/5UtS6HjcQ7UblIPWC+DufTCgQ4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5086
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/2023 10:43 PM, Casey Schaufler wrote:
-> On 4/5/2023 12:59 PM, Paul Moore wrote:
->> On Wed, Apr 5, 2023 at 5:44 AM Roberto Sassu
->> <roberto.sassu@huaweicloud.com> wrote:
->>> On 4/5/2023 4:08 AM, Casey Schaufler wrote:
->>>> On 4/4/2023 11:54 AM, Paul Moore wrote:
->>>>> On Fri, Mar 31, 2023 at 8:33 AM Roberto Sassu
->>>>> <roberto.sassu@huaweicloud.com> wrote:
->> ..
->>
->>>>>> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
->>>>>> index cfcbb748da2..8392983334b 100644
->>>>>> --- a/security/smack/smack_lsm.c
->>>>>> +++ b/security/smack/smack_lsm.c
->>>>>> @@ -52,6 +52,15 @@
->>>>>>    #define SMK_RECEIVING  1
->>>>>>    #define SMK_SENDING    2
->>>>>>
->>>>>> +/*
->>>>>> + * Smack uses multiple xattrs.
->>>>>> + * SMACK64 - for access control, SMACK64EXEC - label for the program,
->>>>> I think it would be good to move SMACK64EXEC to its own line; it took
->>>>> me a minute to figure out why SMACK_INODE_INIT_XATTRS was set to '4'
->>>>> when I only say three comment lines ... ;)
->>>>>
->>>>>> + * SMACK64MMAP - controls library loading,
->>>>>> + * SMACK64TRANSMUTE - label initialization,
->>>>>> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT
->>>>>> + */
->>>>>> +#define SMACK_INODE_INIT_XATTRS 4
->>>>> If smack_inode_init_security() only ever populates a single xattr, and
->>>>> that is the only current user of SMACK_INODE_INIT_XATTRS, can we make
->>>>> this '1' and shrink the xattr allocation a bit?
->>>> If the parent directory is marked with SMACK64_TRANSMUTE, the access
->>>> rule allowing the access has the "t" mode, and the object being initialized
->>>> is a directory, the new inode should get the SMACK64_TRANSMUTE attribute.
->>>> The callers of security_inode_init_security() don't seem to care.
->>>> I can't say if the evm code is getting SMACK64_TRANSMUTE or, for that
->>>> matter, SMACK64_EXEC and SMACK64_MMAP, some other way. The older system
->>>> allowed for multiple Smack xattrs, but I'm not clear on exactly how.
->>> If you like to set an additional xattr, that would be possible now.
->>> Since we reserve multiple xattrs, we can call lsm_get_xattr_slot()
->>> another time and set SMACK64_TRANSMUTE.
->>>
->>> I think, if the kernel config has CONFIG_EVM_EXTRA_SMACK_XATTRS set,
->>> EVM would protect SMACK64_TRANSMUTE too.
->> Ooookay, but can someone explain to me how either the current, or
->> patched, smack_inode_init_security() function can return multiple
->> xattrs via the security_inode_init_security() LSM hook?
-> 
-> It can't.
-> 
->>    I'm hoping
->> I'm missing something really obvious, but I can only see a single
->> Smack xattr being returned ...
-> 
-> Smack is setting the transmute attribute in smack_d_instantiate().
-> The exec and mmap attributes are always set explicitly.
-> 
-> I don't know how the "extra" Smack attributes were obtained by evm
-> before, and I haven't been looking at how they're doing it now.
-> I have assumed that CONFIG_EVM_EXTRA_SMACK_XATTRS does something
-> meaningful.
+> I think we should still reserve the 'redundant' kobject_del(),
+> removing it won't bring any performance improvement.
 
-EVM has a list of xattrs to protect. Without 
-CONFIG_EVM_EXTRA_SMACK_XATTRS, EVM protects only security.SMACK64. With 
-it, also the other Smack xattrs.
+Since it's redundant, why not to remove it.
 
-EVM calculates the HMAC of xattrs from that list at inode creation time 
-(during the execution of security_inode_init_security(), after other 
-LSMs) and during set/remove xattrs operations on the VFS.
-
-Currently, Smack provides only security.SMACK64, so I agree with Paul 
-that we should reserve as many xattr as we use. If in the future, we add 
-security.SMACK_TRANSMUTE64, we can increase the number of reserved 
-xattrs to 2.
-
-Roberto
-
+Thx,
+Yangtao
