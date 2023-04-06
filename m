@@ -2,160 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6E66D9584
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621056D9611
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 13:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236679AbjDFLe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 07:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
+        id S238308AbjDFLkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 07:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238085AbjDFLdx (ORCPT
+        with ESMTP id S238996AbjDFLkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 07:33:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D021AA5D6;
-        Thu,  6 Apr 2023 04:32:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 123346464C;
-        Thu,  6 Apr 2023 11:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C49AC433A4;
-        Thu,  6 Apr 2023 11:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680780769;
-        bh=lSOBpUnFu9VK1D1fFEX3s0tqrCknH4atbNI6skVNVjY=;
+        Thu, 6 Apr 2023 07:40:16 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD0CB47A;
+        Thu,  6 Apr 2023 04:36:32 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id g29so532751lfj.4;
+        Thu, 06 Apr 2023 04:36:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680780934;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:dkim-signature:dkim-signature
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hLe2BDpqjmup0y1LPiABk+LzHgKkTNIBWp76zDCcB+4=;
+        b=GIcASHLvXk58zNoEndxSyPxeJSduISNiRK7lWnyq86ivFMxH/4PAdrQOyVXnK3unfq
+         8tpWmJODQuW1eBuHeAF8JSlQXYfYI3LgIESyKi+U/lWEmv4RYoinzZKR5sdLoZoLzTCj
+         GNxuiTQr6Ly+nldPAK6lVvA4ZVHx39c7+3I63uwU8A7mwyTfLlXTj2bv/lRjo7yDfadh
+         P2Ki9a1ztaZyuPQIIPExrlHI5qLIbU5H5bdknMsMBmdEgxRYr6iFyNRK3ffKeYJbXR98
+         sU3eJLUo4SqYB8A88j1iC87kKWEGbtZ+Ej3ceYTa/NqpWBXzqi5C3oHgodLUSCY65kZ6
+         YR0w==
+X-Gm-Message-State: AAQBX9eIj5BOwlWUwXzhvVANVB94xqYmqYBsUg39LO9iKGOMIRbspEMH
+        5/3PJUgQKa451/SMmDVJewFDx/W2UbbVWw==
+X-Google-Smtp-Source: AKy350ZsR7wQELdu0Yp2Ev9AYrRg0/aCfTlocFrwPkX/J8DrIIB5UP0w8paVzkWrOdzVODIGeX3vqQ==
+X-Received: by 2002:ac2:48a1:0:b0:4eb:452d:5bbf with SMTP id u1-20020ac248a1000000b004eb452d5bbfmr2597917lfg.54.1680780934104;
+        Thu, 06 Apr 2023 04:35:34 -0700 (PDT)
+Received: from flawful.org (c-fcf6e255.011-101-6d6c6d3.bbcust.telenor.se. [85.226.246.252])
+        by smtp.gmail.com with ESMTPSA id g13-20020ac2538d000000b004eb41d26d49sm229529lfh.28.2023.04.06.04.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 04:35:33 -0700 (PDT)
+Received: by flawful.org (Postfix, from userid 112)
+        id C2B7312A1; Thu,  6 Apr 2023 13:35:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
+        t=1680780933; bh=preqedR2QZNTaOgvRKfmyWCCDHRysOKE6G/n/oQl2tk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XzzNv0IY13mLchZSFuYrIR3OP/k8RrF6sGBSMyO+tPshHpjD9w3/IwoDBmKXvcbpQ
-         nkX0aDkbqS6/PbX5kgFTvjVt8Guac7gtwyAhvzpzbFQV/C5aqlpcHAlXMvzCo0fMFH
-         Wc/0ZB5VVL1f7JBjlx1SZWaD8spypccdC1P0x8LLsGqAPu17BNT7eSpO0KxU6NN2EL
-         QgXtboraXgYOb7pMb7QhskD4iSvzs2DGMfOf6jF19VqinN9dryrD6H9vpFAmC7vp7x
-         cyuafDG/DewESvrAeQqnkv4yBtA9Bp2BuSyxU61AEDy/uIGO/Vez8sgDk31qp9gLlM
-         rncsLKPvyxSVA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, Michael Walle <michael@walle.cc>,
-        Sasha Levin <sashal@kernel.org>, tudor.ambarus@linaro.org
-Subject: [PATCH AUTOSEL 6.1 17/17] mtd: spi-nor: fix memory leak when using debugfs_lookup()
-Date:   Thu,  6 Apr 2023 07:32:11 -0400
-Message-Id: <20230406113211.648424-17-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230406113211.648424-1-sashal@kernel.org>
-References: <20230406113211.648424-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        b=QXZONJlZ0GfO6y8sPyaChIJtM6fJDKJskV+SLPl/UexUPKvDrpbjOZ/jqyelNv28s
+         aAGIS5HV3hKHKkAmcQv/CKNvP2/24akemK/zi6nFBrKEvAFqv+MAnctGOgs7mbOWPL
+         jzcm8vGGgCXy3//izsq53tmSyW8qDOTRJSepm55E=
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Received: from x1-carbon.lan (OpenWrt.lan [192.168.1.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by flawful.org (Postfix) with ESMTPSA id 1EA9E69A;
+        Thu,  6 Apr 2023 13:33:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
+        t=1680780787; bh=preqedR2QZNTaOgvRKfmyWCCDHRysOKE6G/n/oQl2tk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YEsZ+/Af/WlbT+HSw0N1YcUN7htnpOH4BXhKpCf8EcuZ/lLc0NbhnVOt+ckzdFEzs
+         6fY/gmaJfXrSiWMI9IfmIqrkmU9aUUtjiUncXShAn11iuqnC0vR0CeqHvfsLXW1jQI
+         o/HTg47o4TdishwfA7oGwd0g98YzBEEiM1A/F5qE=
+From:   Niklas Cassel <nks@flawful.org>
+To:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Damien Le Moal <dlemoal@fastmail.com>,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-block@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>
+Subject: [PATCH v6 02/19] block: introduce ioprio hints
+Date:   Thu,  6 Apr 2023 13:32:31 +0200
+Message-Id: <20230406113252.41211-3-nks@flawful.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230406113252.41211-1-nks@flawful.org>
+References: <20230406113252.41211-1-nks@flawful.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit ec738ca127d07ecac6afae36e2880341ec89150e ]
+IO priorities currently only use 6-bits of the 16-bits ioprio value: the
+3-upper bits are used to define up to 8 priority classes (4 of which are
+valid) and the 3 lower bits of the value are used to define a priority
+level for the real-time and best-effort class.
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To solve this, remove the
-lookup and create the directory on the first device found, and then
-remove it when the module is unloaded.
+The remaining 10-bits between the IO priority class and level are
+unused, and in fact, cannot be used by the user as doing so would
+either result in the value being completely ignored, or in an error
+returned by ioprio_check_cap().
 
-Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>
-Cc: linux-mtd@lists.infradead.org
-Reviewed-by: Michael Walle <michael@walle.cc>
-Link: https://lore.kernel.org/r/20230208160230.2179905-1-gregkh@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Use these 10-bits of an ioprio value to allow a user to specify IO
+hints. An IO hint is defined as a 10-bits value, allowing up to 1023
+different hints to be specified, with the value 0 being reserved as the
+"no hint" case. An IO hint can apply to any IO that specifies a valid
+priority class other than NONE, regardless of the IO priority level
+specified.
+
+To do so, the macros IOPRIO_PRIO_HINT() and IOPRIO_PRIO_VALUE_HINT() are
+introduced in include/uapi/linux/ioprio.h to respectively allow a user
+to get and set a hint in an ioprio value.
+
+To support the ATA and SCSI command duration limits feature, 7 hints
+are defined: IOPRIO_HINT_DEV_DURATION_LIMIT_1 to
+IOPRIO_HINT_DEV_DURATION_LIMIT_7, allowing a user to specify which
+command duration limit descriptor should be applied to the commands
+serving an IO. Specifying these hints has for now no effect whatsoever
+if the target block devices do not support the command duration limits
+feature. However, in the future, block IO schedulers can be modified to
+optimize IO issuing order based on these hints, even for devices that
+do not support the command duration limits feature.
+
+Given that the 7 duration limits hints defined have no effect on any
+block layer component, the actual definition of the duration limits
+implied by these hints remains at the device level.
+
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/mtd/spi-nor/core.c    | 14 +++++++++++++-
- drivers/mtd/spi-nor/core.h    |  2 ++
- drivers/mtd/spi-nor/debugfs.c | 11 ++++++++---
- 3 files changed, 23 insertions(+), 4 deletions(-)
+ include/uapi/linux/ioprio.h | 49 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index cda57cb863089..75e694791d8d9 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -3272,7 +3272,19 @@ static struct spi_mem_driver spi_nor_driver = {
- 	.remove = spi_nor_remove,
- 	.shutdown = spi_nor_shutdown,
- };
--module_spi_mem_driver(spi_nor_driver);
+diff --git a/include/uapi/linux/ioprio.h b/include/uapi/linux/ioprio.h
+index 4444b4e4fdad..607c7617b9d2 100644
+--- a/include/uapi/linux/ioprio.h
++++ b/include/uapi/linux/ioprio.h
+@@ -58,4 +58,53 @@ enum {
+ #define IOPRIO_NORM	4
+ #define IOPRIO_BE_NORM	IOPRIO_NORM
+ 
++/*
++ * The 10-bits between the priority class and the priority level are used to
++ * optionally define IO hints for any combination of IO priority class and
++ * level. Depending on the kernel configuration, IO scheduler being used and
++ * the target IO device being used, hints can influence how IOs are processed
++ * without affecting the IO scheduling ordering defined by the IO priority
++ * class and level.
++ */
++#define IOPRIO_HINT_SHIFT		IOPRIO_LEVEL_NR_BITS
++#define IOPRIO_HINT_NR_BITS		10
++#define IOPRIO_NR_HINTS			(1 << IOPRIO_HINT_NR_BITS)
++#define IOPRIO_HINT_MASK		(IOPRIO_NR_HINTS - 1)
++#define IOPRIO_PRIO_HINT(ioprio)	\
++	(((ioprio) >> IOPRIO_HINT_SHIFT) & IOPRIO_HINT_MASK)
 +
-+static int __init spi_nor_module_init(void)
-+{
-+	return spi_mem_driver_register(&spi_nor_driver);
-+}
-+module_init(spi_nor_module_init);
++/*
++ * Alternate macro for IOPRIO_PRIO_VALUE() to define an IO priority with
++ * a class, level and hint.
++ */
++#define IOPRIO_PRIO_VALUE_HINT(class, level, hint)		 \
++	((((class) & IOPRIO_CLASS_MASK) << IOPRIO_CLASS_SHIFT) | \
++	 (((hint) & IOPRIO_HINT_MASK) << IOPRIO_HINT_SHIFT) |	 \
++	 ((level) & IOPRIO_LEVEL_MASK))
 +
-+static void __exit spi_nor_module_exit(void)
-+{
-+	spi_mem_driver_unregister(&spi_nor_driver);
-+	spi_nor_debugfs_shutdown();
-+}
-+module_exit(spi_nor_module_exit);
- 
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Huang Shijie <shijie8@gmail.com>");
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index d18dafeb020ab..00bf0d0e955a0 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -709,8 +709,10 @@ static inline struct spi_nor *mtd_to_spi_nor(struct mtd_info *mtd)
- 
- #ifdef CONFIG_DEBUG_FS
- void spi_nor_debugfs_register(struct spi_nor *nor);
-+void spi_nor_debugfs_shutdown(void);
- #else
- static inline void spi_nor_debugfs_register(struct spi_nor *nor) {}
-+static inline void spi_nor_debugfs_shutdown(void) {}
- #endif
- 
- #endif /* __LINUX_MTD_SPI_NOR_INTERNAL_H */
-diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
-index df76cb5de3f93..5f56b23205d8b 100644
---- a/drivers/mtd/spi-nor/debugfs.c
-+++ b/drivers/mtd/spi-nor/debugfs.c
-@@ -226,13 +226,13 @@ static void spi_nor_debugfs_unregister(void *data)
- 	nor->debugfs_root = NULL;
- }
- 
-+static struct dentry *rootdir;
++/*
++ * IO hints.
++ */
++enum {
++	/* No hint */
++	IOPRIO_HINT_NONE = 0,
 +
- void spi_nor_debugfs_register(struct spi_nor *nor)
- {
--	struct dentry *rootdir, *d;
-+	struct dentry *d;
- 	int ret;
- 
--	/* Create rootdir once. Will never be deleted again. */
--	rootdir = debugfs_lookup(SPI_NOR_DEBUGFS_ROOT, NULL);
- 	if (!rootdir)
- 		rootdir = debugfs_create_dir(SPI_NOR_DEBUGFS_ROOT, NULL);
- 
-@@ -247,3 +247,8 @@ void spi_nor_debugfs_register(struct spi_nor *nor)
- 	debugfs_create_file("capabilities", 0444, d, nor,
- 			    &spi_nor_capabilities_fops);
- }
++	/*
++	 * Device command duration limits: indicate to the device a desired
++	 * duration limit for the commands that will be used to process an IO.
++	 * These will currently only be effective for SCSI and ATA devices that
++	 * support the command duration limits feature. If this feature is
++	 * enabled, then the commands issued to the device to process an IO with
++	 * one of these hints set will have the duration limit index (dld field)
++	 * set to the value of the hint.
++	 */
++	IOPRIO_HINT_DEV_DURATION_LIMIT_1 = 1,
++	IOPRIO_HINT_DEV_DURATION_LIMIT_2 = 2,
++	IOPRIO_HINT_DEV_DURATION_LIMIT_3 = 3,
++	IOPRIO_HINT_DEV_DURATION_LIMIT_4 = 4,
++	IOPRIO_HINT_DEV_DURATION_LIMIT_5 = 5,
++	IOPRIO_HINT_DEV_DURATION_LIMIT_6 = 6,
++	IOPRIO_HINT_DEV_DURATION_LIMIT_7 = 7,
++};
 +
-+void spi_nor_debugfs_shutdown(void)
-+{
-+	debugfs_remove(rootdir);
-+}
+ #endif /* _UAPI_LINUX_IOPRIO_H */
 -- 
 2.39.2
 
