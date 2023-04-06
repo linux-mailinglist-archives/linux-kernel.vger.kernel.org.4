@@ -2,93 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FDA6DA204
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:54:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EAE6DA208
+	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 21:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238444AbjDFTyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 15:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S238485AbjDFTzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 15:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbjDFTyS (ORCPT
+        with ESMTP id S230007AbjDFTzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 15:54:18 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00AD5253
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680810858; x=1712346858;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dBwR6d65NhaZa59aMDdtZHdCzTe7JiUQkdICsAhmmks=;
-  b=f8BKbrF70WSMAyIec5QLqEMfJ5RGbQ6NYsMbCZSpTPTrKX8OAd2KsKHI
-   4JjK+mD9j9pvPRRoxmO1Lv5VGOOdIc4LTGkYEEOmkpXqWg0tV/IzjJAyx
-   iin+b6/aTTBgDJ+nLFyi6fHCVO8pAmKXs1xoXgN9H4V7/0YGv6AvUHKdB
-   fLUQS7Ob/fhMMRQlphckBEVEZyWN2gknpG3iZ6Zqhbe2LqlXt1cKbM6UV
-   CvNQfcel/mk9LxKVk50KZmPDVKW5KIGOe/N4zBPfYhTtm+fzQ63awq4lI
-   7+bwBpQsDURX1Y1hBrZgEQFkhu/N2Nqc3FwoUJOcMh3vHN02zTQsA7LIS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="341572506"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="341572506"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 12:54:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="664620036"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="664620036"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.219.12])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 12:54:12 -0700
-Date:   Thu, 6 Apr 2023 12:54:10 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] staging: rtl8192e: Remove unused local variable
- irq_line
-Message-ID: <ZC8jYs/m47SeKkuZ@aschofie-mobl2>
-References: <cover.1680729715.git.philipp.g.hortmann@gmail.com>
- <6ec702e12cb30501fc81693a71a96b238bf09ea0.1680729716.git.philipp.g.hortmann@gmail.com>
+        Thu, 6 Apr 2023 15:55:47 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EB659DA
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 12:55:46 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id k37so52289626lfv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 12:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680810944;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4e1AWlyBcKR3I5ILtwI72cSCBL6y95j52yQauXVOOT4=;
+        b=Zsrv5K3FHfPUlnAL4tM0QO4XO4TcKMRkr6dlWxS3c689yhPdxiv74jcFDVkZ/++FKe
+         Aj9rESwM+6elJgC6xmYnmx1pRuK/0fw3XztXgJa281VLTq5j2Cg2YErERSatkX7MknPS
+         qXDl72lYtrqkcnYCGlrsF2g5gNn+f6dppe53A9CdTl7rg2ciKvWHgTivf5mKhBl+J00A
+         41rRghCUuxyfYQ7tEQqY/CjKpPf5vPU4PQXifwkN8C5gsmr0+L1eDxuEQbGykLLHnD8Z
+         +83e5LvqHRdu6/jEnC01Ej0zCF71Z8DF7ZJovx2c39KdQtWXoZiFoVbfBulzAoikmHmb
+         T+tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680810944;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4e1AWlyBcKR3I5ILtwI72cSCBL6y95j52yQauXVOOT4=;
+        b=1MoonhKtvNRIe7Pi8oDwDiKh/9YvzmrCLMVFzKjRCkzRg9xaoDCvVE7xGyxgj/+lxp
+         f3KX8bPieyxNHQQdmyevHg42GMG0c91/foxtQLjKCApajo//dlX4q9y4485pXDjIvA8x
+         9jEKdfi9Gowt3s4YgCn0IOXnK8PT6gmg3vj6ixhvyzcEWEkjMRhHQw891+yL79ba8cCK
+         zzDtLKP+Q4XIv3n3GTBiJQO5oZdU3ljETcxTc/hvbwhcNGxM5ui/filo6JPcjnvJiEz7
+         ORT80TO6ybO6rK1WmbmL/xQj6OkCb02+iR136+D4lsgrZGapDIl5rNUm1n5843WVhAQZ
+         fTtQ==
+X-Gm-Message-State: AAQBX9fYP+Y76PVVahLpcqARZX0+L1M8A2KwoFcNeLE+5gnz17pOOrk4
+        bidHSu3sBi196fpGTHgYsC2t1Q==
+X-Google-Smtp-Source: AKy350YHCUi8OdmwLOFkttGbLhbPMWeS/ZJvAxLuiglxSYenCnEaHo3KOjeTDn8ks4gRqkuYUnVILA==
+X-Received: by 2002:ac2:54a5:0:b0:4eb:e7f:945 with SMTP id w5-20020ac254a5000000b004eb0e7f0945mr50291lfk.41.1680810944382;
+        Thu, 06 Apr 2023 12:55:44 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id b6-20020a056512218600b004b5480edf67sm393504lft.36.2023.04.06.12.55.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Apr 2023 12:55:43 -0700 (PDT)
+Message-ID: <3ce9b5ec-8b02-537a-c663-c849e80cab66@linaro.org>
+Date:   Thu, 6 Apr 2023 21:55:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ec702e12cb30501fc81693a71a96b238bf09ea0.1680729716.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: mpm: Pass MSG
+ RAM slice through phandle
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
+ <20230328-topic-msgram_mpm-v2-1-e24a48e57f0d@linaro.org>
+ <168069726278.2356075.14351594478003012447.robh@kernel.org>
+ <20230405134727.GA2461305-robh@kernel.org>
+ <1e6e2590-ac78-400b-35ce-321d5e52f385@linaro.org>
+ <9df12111-ec84-c4f7-fbcb-bccaef91b048@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <9df12111-ec84-c4f7-fbcb-bccaef91b048@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 11:48:20PM +0200, Philipp Hortmann wrote:
-> Remove unused local variable irq_line.
 
-This does more than just remove the unused variable.
 
+On 6.04.2023 19:45, Krzysztof Kozlowski wrote:
+> On 05/04/2023 15:49, Konrad Dybcio wrote:
+>>
+>>
+>> On 5.04.2023 15:47, Rob Herring wrote:
+>>> On Wed, Apr 05, 2023 at 07:22:40AM -0500, Rob Herring wrote:
+>>>>
+>>>> On Wed, 05 Apr 2023 12:48:34 +0200, Konrad Dybcio wrote:
+>>>>> Due to the wild nature of the Qualcomm RPM Message RAM, we can't really
+>>>>> use 'reg' to point to the MPM's slice of Message RAM without cutting into
+>>>>> an already-defined RPM MSG RAM node used for GLINK and SMEM.
+>>>>>
+>>>>> Document passing the register space as a slice of SRAM through the
+>>>>> qcom,rpm-msg-ram property. This also makes 'reg' deprecated.
+>>>>>
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>> ---
+>>>>>  .../devicetree/bindings/interrupt-controller/qcom,mpm.yaml   | 12 +++++++++---
+>>>>>  1 file changed, 9 insertions(+), 3 deletions(-)
+>>>>>
+>>>>
+>>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>>
+>>>> yamllint warnings/errors:
+>>>>
+>>>> dtschema/dtc warnings/errors:
+>>>> Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.example.dts:22.35-38.11: Warning (node_name_vs_property_name): /example-0/interrupt-controller: node name and property name conflict
+>>>
+>>> Looks like this is colliding with the example template which has to 
+>>> craft an interrupt provider for 'interrupts' properties. Either adding a 
+>>> parent node or using interrupts-extended instead should work-around it.
+>> Check the devicetree-org issue linked in the cover letter, please!
+>>
+>> I suppose wrapping it in a parent node could work as a temporary
+>> measure, but since it belongs outside /soc, I'd have to make up
+>> a bogus simple-bus, I think.
 > 
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-> ---
->  drivers/staging/rtl8192e/rtl8192e/rtl_pci.c | 2 --
->  1 file changed, 2 deletions(-)
+> I don't think your issue in dtschema is accurate. As Rob suggested, you
+> need wrapping node.
+I don't really know what kind.. I can add something like:
+
+rpm {
+	compatible = "qcom,rpm", "simple-mfd";
+
+	mpm: interrupt-controller {
+	...
+};
+
+And then only introduce a very simple YAML for "qcom,rpm"
+describing what it is and documenting the compatible.
+
+Or I can push it under rpm-requests{}.
+
+Konrad
 > 
-> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-> index 0bc3e013001e..1c3ccd2aabc3 100644
-> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_pci.c
-> @@ -33,11 +33,9 @@ bool rtl92e_check_adapter(struct pci_dev *pdev, struct net_device *dev)
->  	struct r8192_priv *priv = (struct r8192_priv *)rtllib_priv(dev);
->  	u16 device_id;
->  	u8  revision_id;
-> -	u16 irq_line;
->  
->  	device_id = pdev->device;
->  	revision_id = pdev->revision;
-> -	pci_read_config_word(pdev, 0x3C, &irq_line);
->  
->  	priv->card_8192 = NIC_8192E;
->  
-> -- 
-> 2.40.0
+> Best regards,
+> Krzysztof
 > 
