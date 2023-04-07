@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C4C6DA824
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 06:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256556DA836
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 06:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjDGEHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 00:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
+        id S232724AbjDGES1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 00:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjDGEHc (ORCPT
+        with ESMTP id S229460AbjDGESZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 00:07:32 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4F259F9;
-        Thu,  6 Apr 2023 21:07:30 -0700 (PDT)
+        Fri, 7 Apr 2023 00:18:25 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ED06E82;
+        Thu,  6 Apr 2023 21:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680840450; x=1712376450;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7C/GtLnvGaUf0LTn+dJO3q6KCE+5wcx6XCokPeAFBSs=;
-  b=W/t4nKcFTgT8OMp5vk2ZW15XUg26k9oMX/5kioGkYRGnbFrhNUnX52QL
-   +qcHPPhs/tPArsklIqv71pfLLSAOAfZHzGy4UQ0B5g+7F+dtIFSWIqdy9
-   RX7YpDVEk70eMbl9Vy/C2a5AArBim1mdehq0ZMr19tonJnLpGb6SDGu8+
-   djAumsOlivnGQBwff5ftRfsSNmxM31LHUv3fLgXhcxh+xn/0tkAUiNMc6
-   qoCZs0foO2qEozvPID9fOkGteIDzIad7N6ceowiZBJ5XGMg+jwv/o1r6J
-   crXxtxhQBUHCIWT2oXwAK0O7PDghydFVgzvbRw7WFaX3MY+l9incQhG3P
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="326993443"
+  t=1680841103; x=1712377103;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ekxp0L5o4T/umW2SdmmjzuIKE+tbQjNFU4sFWmsyjeA=;
+  b=Eujz/mfLBBuvRjGsqnijVxDlmzjvtAFG/UVfeyAjy6LKbRQXgInRP906
+   tPlXwnBjkNaBXXPOyD8GapJseFNP+wc7lU+ib7ebxOH+O5uNj7xjaEUSe
+   5PaRAnvsWSVwhMiDRtjfyAD62Qph7266oblzxM5+H3a5yMgK8iWOFQdrW
+   k637elqCSK0gI0j56fS75Z63vYpfODMOi9e19Tep5UwrjVCbmZ3fWDHwo
+   fWw4R6QzLwyjin66yO/TFrNpnE8AaO3oORiP1/GJjpHtGBik2BAuiEZWZ
+   rtIsl9QyTcDMamXKRG5dU2s7dx6H6h8xtryS+4vGzVgoDsYuG4PHC73nf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="331566864"
 X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="326993443"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 21:07:29 -0700
+   d="scan'208";a="331566864"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 21:18:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="751903619"
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="798581236"
 X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="751903619"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2023 21:07:27 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkdNm-000S6Q-0A;
-        Fri, 07 Apr 2023 04:07:26 +0000
-Date:   Fri, 7 Apr 2023 12:07:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     xiaolinkui <xiaolinkui@126.com>,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
-        leon@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linkui Xiao <xiaolinkui@kylinos.cn>
-Subject: Re: [PATCH] RDMA/hfi: add a judgment on the availability of cpumask
-Message-ID: <202304071125.xK1fezQ1-lkp@intel.com>
-References: <20230404030525.24020-1-xiaolinkui@126.com>
+   d="scan'208";a="798581236"
+Received: from feng-clx.sh.intel.com ([10.238.200.228])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Apr 2023 21:18:18 -0700
+From:   Feng Tang <feng.tang@intel.com>
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Joe Mario <jmario@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>, dave.hansen@intel.com,
+        ying.huang@intel.com, andi.kleen@intel.com,
+        Feng Tang <feng.tang@intel.com>
+Subject: [PATCH v4] Documentation: Add document for false sharing
+Date:   Fri,  7 Apr 2023 12:12:35 +0800
+Message-Id: <20230407041235.37886-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404030525.24020-1-xiaolinkui@126.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,263 +70,280 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi xiaolinkui,
+When doing performance tuning or debugging performance regressions,
+more and more cases are found to be related to false sharing [1][2][3],
+and the situation can be worse for newer platforms with hundreds of
+CPUs. There are already many commits in current kernel specially
+for mitigating the performance degradation due to false sharing.
 
-kernel test robot noticed the following build warnings:
+False sharing could harm the performance silently without being
+noticed, due to reasons like:
+* data members of a big data structure randomly sitting together
+  in one cache line
+* global data of small size are linked compactly together
 
-[auto build test WARNING on rdma/for-next]
-[also build test WARNING on linus/master v6.3-rc5 next-20230406]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So it's better to make a simple document about the normal pattern
+of false sharing, basic ways to mitigate it and call out to
+developers to pay attention during code-writing.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/xiaolinkui/RDMA-hfi-add-a-judgment-on-the-availability-of-cpumask/20230404-113847
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
-patch link:    https://lore.kernel.org/r/20230404030525.24020-1-xiaolinkui%40126.com
-patch subject: [PATCH] RDMA/hfi: add a judgment on the availability of cpumask
-config: x86_64-randconfig-a003-20220117 (https://download.01.org/0day-ci/archive/20230407/202304071125.xK1fezQ1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/206c6fc9aa5afd354f4201216ca8c2c0057fb49d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review xiaolinkui/RDMA-hfi-add-a-judgment-on-the-availability-of-cpumask/20230404-113847
-        git checkout 206c6fc9aa5afd354f4201216ca8c2c0057fb49d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/infiniband/hw/hfi1/
+[ Many thanks to Dave Hansen, Ying Huang, Tim Chen, Julie Du and
+  Yu Chen for their contributions ]
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304071125.xK1fezQ1-lkp@intel.com/
+[1]. https://lore.kernel.org/lkml/20220619150456.GB34471@xsang-OptiPlex-9020/
+[2]. https://lore.kernel.org/lkml/20201102091543.GM31092@shao2-debian/
+[3]. https://lore.kernel.org/lkml/20230307125538.818862491@linutronix.de/
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
+---
+Changelog:
 
-   In file included from include/asm-generic/bug.h:5,
-                    from arch/x86/include/asm/bug.h:87,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/percpu.h:5,
-                    from include/linux/arch_topology.h:9,
-                    from include/linux/topology.h:30,
-                    from drivers/infiniband/hw/hfi1/affinity.c:6:
-   drivers/infiniband/hw/hfi1/affinity.c: In function 'hfi1_get_proc_affinity':
->> drivers/infiniband/hw/hfi1/affinity.c:1050:30: warning: the address of 'diff' will always evaluate as 'true' [-Waddress]
-    1050 |         if (!ret || unlikely(!diff))
-         |                              ^
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
->> drivers/infiniband/hw/hfi1/affinity.c:1053:30: warning: the address of 'hw_thread_mask' will always evaluate as 'true' [-Waddress]
-    1053 |         if (!ret || unlikely(!hw_thread_mask))
-         |                              ^
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
->> drivers/infiniband/hw/hfi1/affinity.c:1056:30: warning: the address of 'available_mask' will always evaluate as 'true' [-Waddress]
-    1056 |         if (!ret || unlikely(!available_mask))
-         |                              ^
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
->> drivers/infiniband/hw/hfi1/affinity.c:1059:30: warning: the address of 'intrs_mask' will always evaluate as 'true' [-Waddress]
-    1059 |         if (!ret || unlikely(!intrs_mask))
-         |                              ^
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
+  since v3:
+  * Refine wording and fix typo (Tim Chen)
+  * Add Reviewed-by tag from Shakeel Butt
+
+  since v2:
+  * Add code sample about reducing write to atomic_t (Bagas Sanjaya)
+  * Add a link of a latest false sharing optimization in networking
+    subsystem to commit log
+
+  since v1:
+  * Refine the wording and grammer (Bagas Sanjaya)
+  * Add Reviewed-by tag from Randy Dunlap
+  * Fix a line wrap problem for 'make htmldocs'
+
+  since RFC:
+  * Reword paragraphs with grammar issues; fixes many format and
+    typo issues (Randy Dunlap)
 
 
-vim +1050 drivers/infiniband/hw/hfi1/affinity.c
+ .../kernel-hacking/false-sharing.rst          | 206 ++++++++++++++++++
+ Documentation/kernel-hacking/index.rst        |   1 +
+ 2 files changed, 207 insertions(+)
+ create mode 100644 Documentation/kernel-hacking/false-sharing.rst
 
-   995	
-   996	int hfi1_get_proc_affinity(int node)
-   997	{
-   998		int cpu = -1, ret, i;
-   999		struct hfi1_affinity_node *entry;
-  1000		cpumask_var_t diff, hw_thread_mask, available_mask, intrs_mask;
-  1001		const struct cpumask *node_mask,
-  1002			*proc_mask = current->cpus_ptr;
-  1003		struct hfi1_affinity_node_list *affinity = &node_affinity;
-  1004		struct cpu_mask_set *set = &affinity->proc;
-  1005	
-  1006		/*
-  1007		 * check whether process/context affinity has already
-  1008		 * been set
-  1009		 */
-  1010		if (current->nr_cpus_allowed == 1) {
-  1011			hfi1_cdbg(PROC, "PID %u %s affinity set to CPU %*pbl",
-  1012				  current->pid, current->comm,
-  1013				  cpumask_pr_args(proc_mask));
-  1014			/*
-  1015			 * Mark the pre-set CPU as used. This is atomic so we don't
-  1016			 * need the lock
-  1017			 */
-  1018			cpu = cpumask_first(proc_mask);
-  1019			cpumask_set_cpu(cpu, &set->used);
-  1020			goto done;
-  1021		} else if (current->nr_cpus_allowed < cpumask_weight(&set->mask)) {
-  1022			hfi1_cdbg(PROC, "PID %u %s affinity set to CPU set(s) %*pbl",
-  1023				  current->pid, current->comm,
-  1024				  cpumask_pr_args(proc_mask));
-  1025			goto done;
-  1026		}
-  1027	
-  1028		/*
-  1029		 * The process does not have a preset CPU affinity so find one to
-  1030		 * recommend using the following algorithm:
-  1031		 *
-  1032		 * For each user process that is opening a context on HFI Y:
-  1033		 *  a) If all cores are filled, reinitialize the bitmask
-  1034		 *  b) Fill real cores first, then HT cores (First set of HT
-  1035		 *     cores on all physical cores, then second set of HT core,
-  1036		 *     and, so on) in the following order:
-  1037		 *
-  1038		 *     1. Same NUMA node as HFI Y and not running an IRQ
-  1039		 *        handler
-  1040		 *     2. Same NUMA node as HFI Y and running an IRQ handler
-  1041		 *     3. Different NUMA node to HFI Y and not running an IRQ
-  1042		 *        handler
-  1043		 *     4. Different NUMA node to HFI Y and running an IRQ
-  1044		 *        handler
-  1045		 *  c) Mark core as filled in the bitmask. As user processes are
-  1046		 *     done, clear cores from the bitmask.
-  1047		 */
-  1048	
-  1049		ret = zalloc_cpumask_var(&diff, GFP_KERNEL);
-> 1050		if (!ret || unlikely(!diff))
-  1051			goto done;
-  1052		ret = zalloc_cpumask_var(&hw_thread_mask, GFP_KERNEL);
-> 1053		if (!ret || unlikely(!hw_thread_mask))
-  1054			goto free_diff;
-  1055		ret = zalloc_cpumask_var(&available_mask, GFP_KERNEL);
-> 1056		if (!ret || unlikely(!available_mask))
-  1057			goto free_hw_thread_mask;
-  1058		ret = zalloc_cpumask_var(&intrs_mask, GFP_KERNEL);
-> 1059		if (!ret || unlikely(!intrs_mask))
-  1060			goto free_available_mask;
-  1061	
-  1062		mutex_lock(&affinity->lock);
-  1063		/*
-  1064		 * If we've used all available HW threads, clear the mask and start
-  1065		 * overloading.
-  1066		 */
-  1067		_cpu_mask_set_gen_inc(set);
-  1068	
-  1069		/*
-  1070		 * If NUMA node has CPUs used by interrupt handlers, include them in the
-  1071		 * interrupt handler mask.
-  1072		 */
-  1073		entry = node_affinity_lookup(node);
-  1074		if (entry) {
-  1075			cpumask_copy(intrs_mask, (entry->def_intr.gen ?
-  1076						  &entry->def_intr.mask :
-  1077						  &entry->def_intr.used));
-  1078			cpumask_or(intrs_mask, intrs_mask, (entry->rcv_intr.gen ?
-  1079							    &entry->rcv_intr.mask :
-  1080							    &entry->rcv_intr.used));
-  1081			cpumask_or(intrs_mask, intrs_mask, &entry->general_intr_mask);
-  1082		}
-  1083		hfi1_cdbg(PROC, "CPUs used by interrupts: %*pbl",
-  1084			  cpumask_pr_args(intrs_mask));
-  1085	
-  1086		cpumask_copy(hw_thread_mask, &set->mask);
-  1087	
-  1088		/*
-  1089		 * If HT cores are enabled, identify which HW threads within the
-  1090		 * physical cores should be used.
-  1091		 */
-  1092		if (affinity->num_core_siblings > 0) {
-  1093			for (i = 0; i < affinity->num_core_siblings; i++) {
-  1094				find_hw_thread_mask(i, hw_thread_mask, affinity);
-  1095	
-  1096				/*
-  1097				 * If there's at least one available core for this HW
-  1098				 * thread number, stop looking for a core.
-  1099				 *
-  1100				 * diff will always be not empty at least once in this
-  1101				 * loop as the used mask gets reset when
-  1102				 * (set->mask == set->used) before this loop.
-  1103				 */
-  1104				cpumask_andnot(diff, hw_thread_mask, &set->used);
-  1105				if (!cpumask_empty(diff))
-  1106					break;
-  1107			}
-  1108		}
-  1109		hfi1_cdbg(PROC, "Same available HW thread on all physical CPUs: %*pbl",
-  1110			  cpumask_pr_args(hw_thread_mask));
-  1111	
-  1112		node_mask = cpumask_of_node(node);
-  1113		hfi1_cdbg(PROC, "Device on NUMA %u, CPUs %*pbl", node,
-  1114			  cpumask_pr_args(node_mask));
-  1115	
-  1116		/* Get cpumask of available CPUs on preferred NUMA */
-  1117		cpumask_and(available_mask, hw_thread_mask, node_mask);
-  1118		cpumask_andnot(available_mask, available_mask, &set->used);
-  1119		hfi1_cdbg(PROC, "Available CPUs on NUMA %u: %*pbl", node,
-  1120			  cpumask_pr_args(available_mask));
-  1121	
-  1122		/*
-  1123		 * At first, we don't want to place processes on the same
-  1124		 * CPUs as interrupt handlers. Then, CPUs running interrupt
-  1125		 * handlers are used.
-  1126		 *
-  1127		 * 1) If diff is not empty, then there are CPUs not running
-  1128		 *    non-interrupt handlers available, so diff gets copied
-  1129		 *    over to available_mask.
-  1130		 * 2) If diff is empty, then all CPUs not running interrupt
-  1131		 *    handlers are taken, so available_mask contains all
-  1132		 *    available CPUs running interrupt handlers.
-  1133		 * 3) If available_mask is empty, then all CPUs on the
-  1134		 *    preferred NUMA node are taken, so other NUMA nodes are
-  1135		 *    used for process assignments using the same method as
-  1136		 *    the preferred NUMA node.
-  1137		 */
-  1138		cpumask_andnot(diff, available_mask, intrs_mask);
-  1139		if (!cpumask_empty(diff))
-  1140			cpumask_copy(available_mask, diff);
-  1141	
-  1142		/* If we don't have CPUs on the preferred node, use other NUMA nodes */
-  1143		if (cpumask_empty(available_mask)) {
-  1144			cpumask_andnot(available_mask, hw_thread_mask, &set->used);
-  1145			/* Excluding preferred NUMA cores */
-  1146			cpumask_andnot(available_mask, available_mask, node_mask);
-  1147			hfi1_cdbg(PROC,
-  1148				  "Preferred NUMA node cores are taken, cores available in other NUMA nodes: %*pbl",
-  1149				  cpumask_pr_args(available_mask));
-  1150	
-  1151			/*
-  1152			 * At first, we don't want to place processes on the same
-  1153			 * CPUs as interrupt handlers.
-  1154			 */
-  1155			cpumask_andnot(diff, available_mask, intrs_mask);
-  1156			if (!cpumask_empty(diff))
-  1157				cpumask_copy(available_mask, diff);
-  1158		}
-  1159		hfi1_cdbg(PROC, "Possible CPUs for process: %*pbl",
-  1160			  cpumask_pr_args(available_mask));
-  1161	
-  1162		cpu = cpumask_first(available_mask);
-  1163		if (cpu >= nr_cpu_ids) /* empty */
-  1164			cpu = -1;
-  1165		else
-  1166			cpumask_set_cpu(cpu, &set->used);
-  1167	
-  1168		mutex_unlock(&affinity->lock);
-  1169		hfi1_cdbg(PROC, "Process assigned to CPU %d", cpu);
-  1170	
-  1171		free_cpumask_var(intrs_mask);
-  1172	free_available_mask:
-  1173		free_cpumask_var(available_mask);
-  1174	free_hw_thread_mask:
-  1175		free_cpumask_var(hw_thread_mask);
-  1176	free_diff:
-  1177		free_cpumask_var(diff);
-  1178	done:
-  1179		return cpu;
-  1180	}
-  1181	
-
+diff --git a/Documentation/kernel-hacking/false-sharing.rst b/Documentation/kernel-hacking/false-sharing.rst
+new file mode 100644
+index 000000000000..122b0e124656
+--- /dev/null
++++ b/Documentation/kernel-hacking/false-sharing.rst
+@@ -0,0 +1,206 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=============
++False Sharing
++=============
++
++What is False Sharing
++=====================
++False sharing is related with cache mechanism of maintaining the data
++coherence of one cache line stored in multiple CPU's caches; then
++academic definition for it is in [1]_. Consider a struct with a
++refcount and a string::
++
++	struct foo {
++		refcount_t refcount;
++		...
++		char name[16];
++	} ____cacheline_internodealigned_in_smp;
++
++Member 'refcount'(A) and 'name'(B) _share_ one cache line like below::
++
++                +-----------+                     +-----------+
++                |   CPU 0   |                     |   CPU 1   |
++                +-----------+                     +-----------+
++               /                                        |
++              /                                         |
++             V                                          V
++         +----------------------+             +----------------------+
++         | A      B             | Cache 0     | A       B            | Cache 1
++         +----------------------+             +----------------------+
++                             |                  |
++  ---------------------------+------------------+-----------------------------
++                             |                  |
++                           +----------------------+
++                           |                      |
++                           +----------------------+
++              Main Memory  | A       B            |
++                           +----------------------+
++
++'refcount' is modified frequently, but 'name' is set once at object
++creation time and is never modified.  When many CPUs access 'foo' at
++the same time, with 'refcount' being only bumped by one CPU frequently
++and 'name' being read by other CPUs, all those reading CPUs have to
++reload the whole cache line over and over due to the 'sharing', even
++though 'name' is never changed.
++
++There are many real-world cases of performance regressions caused by
++false sharing.  One of these is a rw_semaphore 'mmap_lock' inside
++mm_struct struct, whose cache line layout change triggered a
++regression and Linus analyzed in [2]_.
++
++There are two key factors for a harmful false sharing:
++
++* A global datum accessed (shared) by many CPUs
++* In the concurrent accesses to the data, there is at least one write
++  operation: write/write or write/read cases.
++
++The sharing could be from totally unrelated kernel components, or
++different code paths of the same kernel component.
++
++
++False Sharing Pitfalls
++======================
++Back in time when one platform had only one or a few CPUs, hot data
++members could be purposely put in the same cache line to make them
++cache hot and save cacheline/TLB, like a lock and the data protected
++by it.  But for recent large system with hundreds of CPUs, this may
++not work when the lock is heavily contended, as the lock owner CPU
++could write to the data, while other CPUs are busy spinning the lock.
++
++Looking at past cases, there are several frequently occurring patterns
++for false sharing:
++
++* lock (spinlock/mutex/semaphore) and data protected by it are
++  purposely put in one cache line.
++* global data being put together in one cache line. Some kernel
++  subsystems have many global parameters of small size (4 bytes),
++  which can easily be grouped together and put into one cache line.
++* data members of a big data structure randomly sitting together
++  without being noticed (cache line is usually 64 bytes or more),
++  like 'mem_cgroup' struct.
++
++Following 'mitigation' section provides real-world examples.
++
++False sharing could easily happen unless they are intentionally
++checked, and it is valuable to run specific tools for performance
++critical workloads to detect false sharing affecting performance case
++and optimize accordingly.
++
++
++How to detect and analyze False Sharing
++========================================
++perf record/report/stat are widely used for performance tuning, and
++once hotspots are detected, tools like 'perf-c2c' and 'pahole' can
++be further used to detect and pinpoint the possible false sharing
++data structures.  'addr2line' is also good at decoding instruction
++pointer when there are multiple layers of inline functions.
++
++perf-c2c can capture the cache lines with most false sharing hits,
++decoded functions (line number of file) accessing that cache line,
++and in-line offset of the data. Simple commands are::
++
++  $ perf c2c record -ag sleep 3
++  $ perf c2c report --call-graph none -k vmlinux
++
++When running above during testing will-it-scale's tlb_flush1 case,
++perf reports something like::
++
++  Total records                     :    1658231
++  Locked Load/Store Operations      :      89439
++  Load Operations                   :     623219
++  Load Local HITM                   :      92117
++  Load Remote HITM                  :        139
++
++  #----------------------------------------------------------------------
++      4        0     2374        0        0        0  0xff1100088366d880
++  #----------------------------------------------------------------------
++    0.00%   42.29%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff81373b7b         0       231       129     5312        64  [k] __mod_lruvec_page_state    [kernel.vmlinux]  memcontrol.h:752   1
++    0.00%   13.10%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff81374718         0       226        97     3551        64  [k] folio_lruvec_lock_irqsave  [kernel.vmlinux]  memcontrol.h:752   1
++    0.00%   11.20%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff812c29bf         0       170       136      555        64  [k] lru_add_fn                 [kernel.vmlinux]  mm_inline.h:41     1
++    0.00%    7.62%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff812c3ec5         0       175       108      632        64  [k] release_pages              [kernel.vmlinux]  mm_inline.h:41     1
++    0.00%   23.29%    0.00%    0.00%    0.00%   0x10     1       1  0xffffffff81372d0a         0       234       279     1051        64  [k] __mod_memcg_lruvec_state   [kernel.vmlinux]  memcontrol.c:736   1
++
++A nice introduction for perf-c2c is [3]_.
++
++'pahole' decodes data structure layouts delimited in cache line
++granularity.  Users can match the offset in perf-c2c output with
++pahole's decoding to locate the exact data members.  For global
++data, users can search the data address in System.map.
++
++
++Possible Mitigations
++====================
++False sharing does not always need to be mitigated.  False sharing
++mitigations should balance performance gains with complexity and
++space consumption.  Sometimes, lower performance is OK, and it's
++unnecessary to hyper-optimize every rarely used data structure or
++a cold data path.
++
++False sharing hurting performance cases are seen more frequently with
++core count increasing.  Because of these detrimental effects, many
++patches have been proposed across variety of subsystems (like
++networking and memory management) and merged.  Some common mitigations
++(with examples) are:
++
++* Separate hot global data in its own dedicated cache line, even if it
++  is just a 'short' type. The downside is more consumption of memory,
++  cache line and TLB entries.
++
++  - Commit 91b6d3256356 ("net: cache align tcp_memory_allocated, tcp_sockets_allocated")
++
++* Reorganize the data structure, separate the interfering members to
++  different cache lines.  One downside is it may introduce new false
++  sharing of other members.
++
++  - Commit 802f1d522d5f ("mm: page_counter: re-layout structure to reduce false sharing")
++
++* Replace 'write' with 'read' when possible, especially in loops.
++  Like for some global variable, use compare(read)-then-write instead
++  of unconditional write. For example, use::
++
++	if (!test_bit(XXX))
++		set_bit(XXX);
++
++  instead of directly "set_bit(XXX);", similarly for atomic_t data::
++
++	if (atomic_read(XXX) == AAA)
++		atomic_set(XXX, BBB);
++
++  - Commit 7b1002f7cfe5 ("bcache: fixup bcache_dev_sectors_dirty_add() multithreaded CPU false sharing")
++  - Commit 292648ac5cf1 ("mm: gup: allow FOLL_PIN to scale in SMP")
++
++* Turn hot global data to 'per-cpu data + global data' when possible,
++  or reasonably increase the threshold for syncing per-cpu data to
++  global data, to reduce or postpone the 'write' to that global data.
++
++  - Commit 520f897a3554 ("ext4: use percpu_counters for extent_status cache hits/misses")
++  - Commit 56f3547bfa4d ("mm: adjust vm_committed_as_batch according to vm overcommit policy")
++
++Surely, all mitigations should be carefully verified to not cause side
++effects.  To avoid introducing false sharing when coding, it's better
++to:
++
++* Be aware of cache line boundaries
++* Group mostly read-only fields together
++* Group things that are written at the same time together
++* Separate frequently read and frequently written fields on
++  different cache lines.
++
++and better add a comment stating the false sharing consideration.
++
++One note is, sometimes even after a severe false sharing is detected
++and solved, the performance may still have no obvious improvement as
++the hotspot switches to a new place.
++
++
++Miscellaneous
++=============
++One open issue is that kernel has an optional data structure
++randomization mechanism, which also randomizes the situation of cache
++line sharing of data members.
++
++
++.. [1] https://en.wikipedia.org/wiki/False_sharing
++.. [2] https://lore.kernel.org/lkml/CAHk-=whoqV=cX5VC80mmR9rr+Z+yQ6fiQZm36Fb-izsanHg23w@mail.gmail.com/
++.. [3] https://joemario.github.io/blog/2016/09/01/c2c-blog/
+diff --git a/Documentation/kernel-hacking/index.rst b/Documentation/kernel-hacking/index.rst
+index f53027652290..79c03bac99a2 100644
+--- a/Documentation/kernel-hacking/index.rst
++++ b/Documentation/kernel-hacking/index.rst
+@@ -9,3 +9,4 @@ Kernel Hacking Guides
+ 
+    hacking
+    locking
++   false-sharing
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
