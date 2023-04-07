@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F66F6DA921
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 08:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851CA6DA909
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 08:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbjDGGys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 02:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
+        id S232245AbjDGGnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 02:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjDGGyq (ORCPT
+        with ESMTP id S229441AbjDGGnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 02:54:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F1D17ED3;
-        Thu,  6 Apr 2023 23:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680850485; x=1712386485;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O6E6owGrMJFj88FaaF7QG/CD6iTO8b8i6HJZ/FX+014=;
-  b=XI2DiuJLhPuLb9Z3c6loIo49t/cwLVNIruJd8TMBzYD5D5IocKJ4kv4s
-   Sks/VPyYjzXERchKH3ssP20eD095Zc+X7Pz9Lae1ybSBKoDOBlztQQBEN
-   88OXwZP+lIC3o75VT/ElPGHsjS+X1++z/hQ/InYoLtck9OVj+VDjmkhEX
-   s/iPvk9ltgfubPSrMy9fWI0jQC/sqqvU6rLiQ0kNxQvxEYs+OVtYkQCsY
-   PK+/AVA//evLKuAxP+C320HINSnTGN4sZF42fQ+Bx+psnkhmhdc7T9dnT
-   hvzCHref9tRHQ6K0R3PoYW4yy09z+EPVxbd6UqrwXnGYlTZ71XTWwZ/rJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="405755644"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="405755644"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:54:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="831097172"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="831097172"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Apr 2023 23:54:31 -0700
-Date:   Fri, 7 Apr 2023 14:42:51 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
-        linuxarm@huawei.com, Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: Re: [PATCH 29/32] fpga: dfl: Assign parent for event_source device
-Message-ID: <ZC+7a/hUe1qpUsDv@yilunxu-OptiPlex-7050>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-30-Jonathan.Cameron@huawei.com>
+        Fri, 7 Apr 2023 02:43:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933B95B88;
+        Thu,  6 Apr 2023 23:43:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29FCF64F09;
+        Fri,  7 Apr 2023 06:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8241EC433EF;
+        Fri,  7 Apr 2023 06:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680849815;
+        bh=smTCBFIGHrjUaej+WC9aX2FlcE+64sY4UeW5a0kKAIw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bFbZEIl0PqlT4iE55biHBcvpvPjEhQGGSAMrUC78/UBrOsEWT9pmV/UfDW1BtB3iC
+         kfETtlc7+y2g93BkQb8T9mJdf2cNkOJUgdANbXEWojEkiX6rM3WRBpZinYj04r57gm
+         XsALMDaZ5s2w9bIoayALpkirMbkBYieIaWXaCyc5Spp7h4kA5/0kVhi2ldW+f4tqNs
+         tgv9H4YEf4cBQqSGvAZar82oOBLL3rNECvKpOxMOtPzodxltp9QU+i9pQ13DX+tKel
+         mZgRrBXOQ3i5EqFWKGxVQPYI2OK1uLZY3I5VDm9k9q80St+DSJUlELDLuIblA9/TLc
+         dwDUcscjUxhJA==
+Message-ID: <68d22a80-663c-104a-c51c-496fa1a29d00@kernel.org>
+Date:   Fri, 7 Apr 2023 08:43:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404134225.13408-30-Jonathan.Cameron@huawei.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] ASoC: dt-bindings: wm8523: Convert to dtschema
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Saalim Quadri <danascape@gmail.com>, lgirdwood@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        daniel.baluta@nxp.com, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230405203419.5621-1-danascape@gmail.com>
+ <2dc882b7-d09f-dfa0-67a1-3f9e6f1ac457@linaro.org>
+ <2c32b1e0-20f7-4d9f-9dbc-8725562e456e@sirena.org.uk>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <2c32b1e0-20f7-4d9f-9dbc-8725562e456e@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-04 at 14:42:22 +0100, Jonathan Cameron wrote:
-> Currently the PMU device appears directly under /sys/devices/
-> Only root busses should appear there, so instead assign the pmu->dev
-> parent to be the Platform device.
+On 06/04/2023 22:26, Mark Brown wrote:
+> On Thu, Apr 06, 2023 at 07:38:19PM +0200, Krzysztof Kozlowski wrote:
 > 
-> Link: https://lore.kernel.org/linux-cxl/ZCLI9A40PJsyqAmq@kroah.com/
-> Cc: Wu Hao <hao.wu@intel.com>
-> Cc: Tom Rix <trix@redhat.com>
-> Cc: linux-fpga@vger.kernel.org
-> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> Please squash all your three WM bindings (wm8711, wm8580 and wm8523)
+>> into one binding, if they are the same. Probably other WM from your
+>> previous submissions as well. We really do not need binding per each of
+>> this simple codecs. If they ever need to grow, then we can split them.
+> 
+> At a minimum all of these devices should have separate regulator
+> specifications should they ever grow regulator support (and ideally
+> would have regulators specified in the binding from the get go).
 
-Reviewed-by: Xu Yilun <yilun.xu@intel.com>
+Good point. The bindings are incomplete that's why they look so similar.
+Therefore maybe we should not merge them, just like we do not add
+non-trivial-devices to trivial-devices schema, just because device is
+incomplete.
 
-> ---
->  drivers/fpga/dfl-fme-perf.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/fpga/dfl-fme-perf.c b/drivers/fpga/dfl-fme-perf.c
-> index 7422d2bc6f37..2d59f1c620b1 100644
-> --- a/drivers/fpga/dfl-fme-perf.c
-> +++ b/drivers/fpga/dfl-fme-perf.c
-> @@ -912,6 +912,7 @@ static int fme_perf_pmu_register(struct platform_device *pdev,
->  
->  	fme_perf_setup_hardware(priv);
->  
-> +	pmu->parent =		&pdev->dev;
->  	pmu->task_ctx_nr =	perf_invalid_context;
->  	pmu->attr_groups =	fme_perf_groups;
->  	pmu->attr_update =	fme_perf_events_groups;
-> -- 
-> 2.37.2
-> 
+> There's also no reason to restrict simple CODECs to a particular
+> manufacturer...
+
+True, we could extend it to other brands.
+
+Best regards,
+Krzysztof
+
