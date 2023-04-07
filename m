@@ -2,152 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA5C6DB00B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404DC6DB00F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240459AbjDGQB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S240635AbjDGQBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240271AbjDGQBW (ORCPT
+        with ESMTP id S240638AbjDGQBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:01:22 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6508B451
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:01:17 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a508c1333cso999885ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:01:17 -0700 (PDT)
+        Fri, 7 Apr 2023 12:01:45 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81FBBB92
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:01:32 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id l1-20020a170903244100b001a0468b4afcso24488403pls.12
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:01:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680883277;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1Uez3TXMrT2npohTcaUYZfKhTFgEr4nUA9RHREMDAI=;
-        b=XV1AWys35Q8M+z9Awh9qIXAKt3InWnPR8JVYfu4ywKURVkg+6nOl2WkYEtowGo08eb
-         ox6d6+WNsaZeia5ZY27kThubyPKCgxwp0dGwahMqL5X3TiyvtnvUhFUoRep53qmR1Sl6
-         RrO2PkFU5bEujD19FaPqGpgxPGUGqpClK36dcgh4fqWJjrh9HNlZEsF52P4wmeI55X+H
-         66LAOF73Rfj4PpFzQXXndBWo0TVeEz9LUsNZ+54XkEqWNlOibvjNeZJQqKo40Ty6sHp0
-         rGLkcETJj/AfZm0m/vp52FAh1tctF/GODM3vLjOZIjXGyXVxxEgPQpOzWpqaMG63FXIN
-         FVBQ==
+        d=google.com; s=20210112; t=1680883291;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ArkFzgGmWr5GIWIb5S26dnAG6/MRvelBkLMc+Gk1DCI=;
+        b=b1x6wuN8SB2jxdh5jqkPjFSPwNKAuuWDG6iq4r0w3QQ/c5uBQxAUffbz7fBkpbziRs
+         lMJRpn1M2y6+OlEjiNm3RbYpHz87fmdsm1jcQrsUaK7jsdHCMBrQjEVfhZbS2K8FL1xC
+         BjOOsJBZ/EzEfpR405ay040NT0E7n++jFFtxki7qpx43vYV/QX7b+IUkqPqVe7tcsl+y
+         celfLgTwE59cPCrG6hNTC32U/dCV/eE9guxjTQaSprpdU+4l2Qni1vJVQi9P8OgA5p5x
+         zskClbiyAR4JdPnZE4oZ6VhsZg2eDSH7aRqCaxCbL86DuP6LI+TvES+S+ZRH9wBMef7s
+         QYqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680883277;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=N1Uez3TXMrT2npohTcaUYZfKhTFgEr4nUA9RHREMDAI=;
-        b=h2IR3XGZBxUcTb49ra22q2ush0xw8mPyOhDGf8U5GbityebX9XQiNvB2VzFDa98c4K
-         1xq7qW7hixY9dZjSkfLjCqaZljvvRW0eaLR/CheBvR8VEvN+1m03FRQn7+m644o4dfhY
-         vvXTYL/VAB1P+xlK+51XW20h2PYpM/h3Dr/Iu36Sr2R57B+qd3YHu75ZpP5wA0HC6S8S
-         cFYUeGgKi5n87DMIWkRg45Vja/XENtwEr0msU2y9hbz6zD6ZRGy0IMkOTOYKut4xnY3d
-         akhTiFsI6sRFzV6YLQ4kFSI4r7lxHXw8Vwqo3rNRQeKqXow6lwdqFdC0UoeyAiCFmo/t
-         JpQg==
-X-Gm-Message-State: AAQBX9c8wuZpZ76fgQV4fLyeAF0NnpbMovGG2Lg3L44B5r6VDt0rIBUu
-        tA2DWfCs3Kwr62Av5l2E2PYVYQ==
-X-Google-Smtp-Source: AKy350ab2Po7AEL6zrXZ7DUwTatEwwhjKdorVTUMiwVWZB6L9JgmUhz21TiUxbPEGkl9xzmQzgV8pg==
-X-Received: by 2002:a62:4ecd:0:b0:627:f659:a771 with SMTP id c196-20020a624ecd000000b00627f659a771mr2487474pfb.12.1680883276930;
-        Fri, 07 Apr 2023 09:01:16 -0700 (PDT)
-Received: from [10.4.75.112] ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id n8-20020a63f808000000b0051416609fb7sm2752389pgh.61.2023.04.07.09.01.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 09:01:16 -0700 (PDT)
-Message-ID: <1a6c00f5-1e92-ecf7-f296-503ca89e4220@bytedance.com>
-Date:   Sat, 8 Apr 2023 00:01:05 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: Re: [PATCH v2 0/2] Fix failure to access u32* argument of tracked
- function
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
-        shuah@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com, zhouchengming@bytedance.com
-References: <20230407084608.62296-1-zhoufeng.zf@bytedance.com>
- <ZC/jd2gN3kJ+tPWF@krava> <5a996423-8876-a1e1-9bf1-3af3ba309c1a@bytedance.com>
-In-Reply-To: <5a996423-8876-a1e1-9bf1-3af3ba309c1a@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1680883291;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ArkFzgGmWr5GIWIb5S26dnAG6/MRvelBkLMc+Gk1DCI=;
+        b=hhCmgYdvQpurXgXQWuClqHuR/P3LRoXKpjIkO5MmqhjV4Lq5MS0JK/yhtiHINc+pWV
+         4EqsTuQYuApKXMVbjy8WNvmjHKAPi2R5naUslMSR/unPbfqVXq6TopX9W8ySt2DwKE6D
+         fOsbtXSYAUjF+OLzt9p4P/XKARp2YxntsbZEbxrYrXUHQCankNkbAGCLl2trcAeuAdA9
+         7ciPR2cJO4YW1eA1F6dn1xVBGN7g+IbnxIBtlzTcOHfipYcbJmt+0ttxrUSRFISXZ6Ny
+         /w3t/+tTuGBSkezRUEEZATovevNOrlAEfNINUO9xf5Pz0cNPihTQ/nsLcs0XqF25m/ZT
+         ofVg==
+X-Gm-Message-State: AAQBX9cUF1PU0bPIoVamjkAb6ExSkAtsVgX1jpDTU0RnpZAe522Hy4/Y
+        k3FIERq+hmEOAumSH7CKGk2sESsBzDE=
+X-Google-Smtp-Source: AKy350a1DofUs4VOJFEpf/Bjl29q9TIoQByxl0Ghis+7csRXJ+eNPnFAcI7+ZZ3vVziDU2S9rTWGWVfcWWc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:cf90:b0:244:a6e7:bb6c with SMTP id
+ i16-20020a17090acf9000b00244a6e7bb6cmr760824pju.8.1680883291507; Fri, 07 Apr
+ 2023 09:01:31 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 09:01:29 -0700
+In-Reply-To: <ZDAeuL2fz1aEW6rz@debian.me>
+Mime-Version: 1.0
+References: <20230407093147.3646597-1-kconsul@linux.vnet.ibm.com> <ZDAeuL2fz1aEW6rz@debian.me>
+Message-ID: <ZDA+WdiqB2931xHB@google.com>
+Subject: Re: [PATCH] KVM: PPC: BOOK3S: book3s_hv_nested.c: improve branch
+ prediction for k.alloc
+From:   Sean Christopherson <seanjc@google.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/4/7 18:49, Feng Zhou 写道:
-> 在 2023/4/7 17:33, Jiri Olsa 写道:
->> On Fri, Apr 07, 2023 at 04:46:06PM +0800, Feng zhou wrote:
->>> From: Feng Zhou<zhoufeng.zf@bytedance.com>
->>>
->>> When access traced function arguments with type is u32*, bpf 
->>> verifier failed.
->>> Because u32 have typedef, needs to skip modifier. Add 
->>> btf_type_is_modifier in
->>> is_int_ptr. Add a selftest to check it.
->>>
->>> Feng Zhou (2):
->>>    bpf/btf: Fix is_int_ptr()
->>>    selftests/bpf: Add test to access u32 ptr argument in tracing 
->>> program
->> hi,
->> it breaks several tests in test_progs suite:
->>
->> #11/36   bpf_iter/link-iter:FAIL
->> #11      bpf_iter:FAIL
->> test_dummy_st_ops_attach:FAIL:dummy_st_ops_load unexpected error: -13
->> #63/1    dummy_st_ops/dummy_st_ops_attach:FAIL
->> test_dummy_init_ret_value:FAIL:dummy_st_ops_load unexpected error: -13
->> #63/2    dummy_st_ops/dummy_init_ret_value:FAIL
->> test_dummy_init_ptr_arg:FAIL:dummy_st_ops_load unexpected error: -13
->> #63/3    dummy_st_ops/dummy_init_ptr_arg:FAIL
->> test_dummy_multiple_args:FAIL:dummy_st_ops_load unexpected error: -13
->> #63/4    dummy_st_ops/dummy_multiple_args:FAIL
->> test_dummy_sleepable:FAIL:dummy_st_ops_load unexpected error: -13
->> #63/5    dummy_st_ops/dummy_sleepable:FAIL
->> #63      dummy_st_ops:FAIL
->> test_fentry_fexit:FAIL:fentry_skel_load unexpected error: -13
->> #69      fentry_fexit:FAIL
->> test_fentry_test:FAIL:fentry_skel_load unexpected error: -13
->> #70      fentry_test:FAIL
->>
->> jirka
->>
->
-> I tried it, and it did cause the test to fail. Bpfverify reported an 
-> error,
-> 'R1 invalid mem access'scalar', let me confirm the reason.
+On Fri, Apr 07, 2023, Bagas Sanjaya wrote:
+> On Fri, Apr 07, 2023 at 05:31:47AM -0400, Kautuk Consul wrote:
+> > I used the unlikely() macro on the return values of the k.alloc
+> > calls and found that it changes the code generation a bit.
+> > Optimize all return paths of k.alloc calls by improving
+> > branch prediction on return value of k.alloc.
 
-I used btf_type_skip_modifiers，but did not delete
-the previous "t = btf_type_by_id (btf, t- > type);"
-resulting in some testcases failing. I will send a
-v3 nextweek, thank you for your suggestion.
+Nit, this is improving code generation, not branch prediction.
 
+> What about below?
+> 
+> "Improve branch prediction on kmalloc() and kzalloc() call by using
+> unlikely() macro to optimize their return paths."
 
->>> Changelog:
->>> v1->v2: Addressed comments from Martin KaFai Lau
->>> - Add a selftest.
->>> - use btf_type_skip_modifiers.
->>> Some details in here:
->>> https://lore.kernel.org/all/20221012125815.76120-1-zhouchengming@bytedance.com/ 
->>>
->>>
->>>   kernel/bpf/btf.c                                    |  5 ++---
->>>   net/bpf/test_run.c                                  |  8 +++++++-
->>>   .../testing/selftests/bpf/verifier/btf_ctx_access.c | 13 
->>> +++++++++++++
->>>   3 files changed, 22 insertions(+), 4 deletions(-)
->>>
->>> -- 
->>> 2.20.1
->>>
->
-
+Another nit, using unlikely() doesn't necessarily provide a measurable optimization.
+As above, it does often improve code generation for the happy path, but that doesn't
+always equate to improved performance, e.g. if the CPU can easily predict the branch
+and/or there is no impact on the cache footprint.
