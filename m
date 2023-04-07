@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03396DB6C9
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D992C6DB6CA
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjDGXFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
+        id S229567AbjDGXF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjDGXFP (ORCPT
+        with ESMTP id S229561AbjDGXFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:05:15 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4EDE058
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:04:58 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 184-20020a2515c1000000b009419f64f6afso172917ybv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:04:58 -0700 (PDT)
+        Fri, 7 Apr 2023 19:05:25 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4394FE059
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:05:07 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id f66-20020a255145000000b00b714602d43fso43848673ybb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:05:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680908698;
+        d=google.com; s=20210112; t=1680908706;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LHqrX260PO2JkpWJuoXDRgjLDyiCkFPZ68iFLvLZDs8=;
-        b=QzSpvDgl+t+i9S/CkRfiiAMgvlnZ6ypV7F5TOBau3PvNW/UX7uixEfLMg/DSYliGwV
-         CGyfN7/kMC4v3mDaKSvJ7sOQgQyzAd2pxYRMzam4z2+syqawxUEfBman1czTTILxtpWR
-         dxMjn49ZA6aQXea5KkesIIIQ4/+3yKW/dVnCXIuulnQWZSTADQxWXHZ7q3nYEenMKRjh
-         MHDgNVjg5O0I1i2pGk3VAD5pOM/bKzUW1BKIgVxMQEeFBjmBQvZyhA/3rnKsqkk5em1T
-         APDEpuH/Rs6DE6w64Q2z7WpaTIUHow06Z/rjYk2vK2e2iG+hmjnaWmaRj5IEJThhHEJg
-         gEkA==
+        bh=/9OxK9O+214Ftf+emLqWQX0BdscBsNuKoaQhFz4awdI=;
+        b=LIOvfvs+TGmGTVeJEWXBv464qGMyynjYkPyh9q1i4FcTu+BbqB14qBQYVxZo/idxYT
+         MwwOZ9Q9cfrvg35DFin1M4Mku/iF6o1hY8v24+8D/pLnNgGz+Phk9dMxdPp4EBF/3R3m
+         Q2kbsBxhikq0RgsMSemv9AuKVs/zXZw1Zeii/vtYjsKWL65jHp0yo5rtb8q2WqtYooNZ
+         wlRpmTDg6cZnaFMm+ysN8/e56b1ItP1O0lsFJimB2dQy3UyCTb2lTR/4MKzO/cxyvxPu
+         Se1YG/EPWFvI+7XogijDDmBo+azmNIZ8ugvLk3qvwppfe9iKewMAnF+CTJvqknXKRAUA
+         gCfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680908698;
+        d=1e100.net; s=20210112; t=1680908706;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LHqrX260PO2JkpWJuoXDRgjLDyiCkFPZ68iFLvLZDs8=;
-        b=zMY7ETgDLhsOE+r4K3N0Mtwj10Hzu0ZY9cJsVUOkCCrahm/77NoE2lZA8TYban0H5M
-         chydJOjnHPT5sQOKejmVut1UpYWBRAgCTZNg76uDDFDInggOP8qfbZMU0GzZ/aV0K111
-         HxSC91s+i/IUEpcJdSXXsDj7m0jUxmIke3BU8Xgt+8bQSInbOhMwkUnRxGQxi7d67GFd
-         29J/GP7ek7G1szj/Tc6ui2zHpOdRDm3vVTtd/+GJxRVqSAel/aRTj+VlVlcuGgZL1bj0
-         snl1osHkKwD8W7hPc/ulbJ3C2rsoWJ9AmONUA5t9dVdxOt/jVr3YFzjWZbvf0hxivg3T
-         zkHw==
-X-Gm-Message-State: AAQBX9d+W7biu4Qbl1AYOK2La091cfJM3cxng1edLyhm2q7zFqE70kxr
-        1LmnS1nnGBFfWMOG9JdlmaDnVxpcUpyF
-X-Google-Smtp-Source: AKy350bsaq7YNWCyHx3ZoTz6f+AuEqUr7ENZRW4bxFc5TVdE01kfhXQLY38FXD+bu3CPLsgjbSdSpF0VmgBP
+        bh=/9OxK9O+214Ftf+emLqWQX0BdscBsNuKoaQhFz4awdI=;
+        b=jFd+b6meKUaOg1s08TWQ2xeJzXy1e+DhHe6VuQ3BEVc6NVSXyToMi6Hj/f9oE9kkcL
+         DW9he3vGvTbomLwgExiAF5Be6IX8bZqUBufEn2kFJQfFsQPyr+de78B0ND4qrTnxDfyB
+         X1w4bV/ETD1H6pj6Wm6jSISfTZj5O285arfNeWbEM6G2u67UtioGsw0/d5WqcDEhoP23
+         XV8VzCytaPWyAk1nMgtGbkG5Z1nu3FFCYfVJe90DreO99QXdynCAGwGLc57/Xu2Zf2Q7
+         HXKTl1niMMLxcWeTjHFgmxiQeB1fyAe5K8fnqjCh69bUQj+P+XOJrPSNhHnax6IwVhS/
+         12qQ==
+X-Gm-Message-State: AAQBX9c95pJXh4CQfC8GWcGqe/Zj19tsKbKxMtESIyZIZGPWx7BZ/gm1
+        z40AeJfSnPtSyvc9rCNqXY3aarizqD+u
+X-Google-Smtp-Source: AKy350bqU/u3LkAM2Zl5P0gS5bWJTxR36K5/ojhBUTzBLhsfw+rRpaGZFuULjQPUqBp12wO0Dl7A0Tnbef8+
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b240:9cdf:7861:b23e])
- (user=irogers job=sendgmr) by 2002:a81:e401:0:b0:54c:19a6:480 with SMTP id
- r1-20020a81e401000000b0054c19a60480mr1775683ywl.4.1680908697786; Fri, 07 Apr
- 2023 16:04:57 -0700 (PDT)
-Date:   Fri,  7 Apr 2023 16:04:03 -0700
+ (user=irogers job=sendgmr) by 2002:a81:eb12:0:b0:545:1d7f:acbf with SMTP id
+ n18-20020a81eb12000000b005451d7facbfmr84341ywm.10.1680908706095; Fri, 07 Apr
+ 2023 16:05:06 -0700 (PDT)
+Date:   Fri,  7 Apr 2023 16:04:04 -0700
 In-Reply-To: <20230407230405.2931830-1-irogers@google.com>
-Message-Id: <20230407230405.2931830-4-irogers@google.com>
+Message-Id: <20230407230405.2931830-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20230407230405.2931830-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v7 3/5] perf namespaces: Add reference count checking
+Subject: [PATCH v7 4/5] perf maps: Add reference count checking.
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -100,366 +100,373 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add reference count checking controlled by REFCNT_CHECKING ifdef. The
-reference count checking interposes an allocated pointer between the
-reference counted struct on a get and frees the pointer on a put.
-Accesses after a put cause faults and use after free, missed puts are
-caughts as leaks and double puts are double frees.
+Add reference count checking to make sure of good use of get and put.
+Add and use accessors to reduce RC_CHK clutter.
 
-This checking helped resolve a memory leak and use after free:
-https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
+The only significant issue was in tests/thread-maps-share.c where
+reference counts were released in the reverse order to acquisition,
+leading to a use after put. This was fixed by reversing the put order.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-inject.c  |   2 +-
- tools/perf/util/annotate.c   |   2 +-
- tools/perf/util/dso.c        |   2 +-
- tools/perf/util/dsos.c       |   2 +-
- tools/perf/util/namespaces.c | 132 ++++++++++++++++++++---------------
- tools/perf/util/namespaces.h |   3 +-
- tools/perf/util/symbol.c     |   2 +-
- 7 files changed, 83 insertions(+), 62 deletions(-)
+ tools/perf/tests/thread-maps-share.c     | 29 ++++++-------
+ tools/perf/util/machine.c                |  2 +-
+ tools/perf/util/maps.c                   | 53 +++++++++++++-----------
+ tools/perf/util/maps.h                   | 17 ++++----
+ tools/perf/util/symbol.c                 | 13 +++---
+ tools/perf/util/unwind-libdw.c           |  2 +-
+ tools/perf/util/unwind-libunwind-local.c |  2 +-
+ tools/perf/util/unwind-libunwind.c       |  2 +-
+ 8 files changed, 64 insertions(+), 56 deletions(-)
 
-diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-index fd2b38458a5d..fe6ddcf7fb1e 100644
---- a/tools/perf/builtin-inject.c
-+++ b/tools/perf/builtin-inject.c
-@@ -632,7 +632,7 @@ static int dso__read_build_id(struct dso *dso)
- 	else if (dso->nsinfo) {
- 		char *new_name;
+diff --git a/tools/perf/tests/thread-maps-share.c b/tools/perf/tests/thread-maps-share.c
+index 84edd82c519e..dfe51b21bd7d 100644
+--- a/tools/perf/tests/thread-maps-share.c
++++ b/tools/perf/tests/thread-maps-share.c
+@@ -43,12 +43,12 @@ static int test__thread_maps_share(struct test_suite *test __maybe_unused, int s
+ 			leader && t1 && t2 && t3 && other);
  
--		new_name = filename_with_chroot(dso->nsinfo->pid,
-+		new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
- 						dso->long_name);
- 		if (new_name && filename__read_build_id(new_name, &dso->bid) > 0)
- 			dso->has_build_id = true;
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index 55f2e3a7577e..a29b94078dae 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -1691,7 +1691,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ 	maps = leader->maps;
+-	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&maps->refcnt), 4);
++	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(maps)->refcnt), 4);
  
- 		mutex_lock(&dso->lock);
- 		if (access(filename, R_OK) && errno == ENOENT && dso->nsinfo) {
--			char *new_name = filename_with_chroot(dso->nsinfo->pid,
-+			char *new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
- 							      filename);
- 			if (new_name) {
- 				strlcpy(filename, new_name, filename_size);
-diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-index e36b418df2c6..6c4129598f5d 100644
---- a/tools/perf/util/dso.c
-+++ b/tools/perf/util/dso.c
-@@ -515,7 +515,7 @@ static int __open_dso(struct dso *dso, struct machine *machine)
- 		if (errno != ENOENT || dso->nsinfo == NULL)
- 			goto out;
+ 	/* test the maps pointer is shared */
+-	TEST_ASSERT_VAL("maps don't match", maps == t1->maps);
+-	TEST_ASSERT_VAL("maps don't match", maps == t2->maps);
+-	TEST_ASSERT_VAL("maps don't match", maps == t3->maps);
++	TEST_ASSERT_VAL("maps don't match", RC_CHK_ACCESS(maps) == RC_CHK_ACCESS(t1->maps));
++	TEST_ASSERT_VAL("maps don't match", RC_CHK_ACCESS(maps) == RC_CHK_ACCESS(t2->maps));
++	TEST_ASSERT_VAL("maps don't match", RC_CHK_ACCESS(maps) == RC_CHK_ACCESS(t3->maps));
  
--		new_name = filename_with_chroot(dso->nsinfo->pid, name);
-+		new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid, name);
- 		if (!new_name)
- 			goto out;
+ 	/*
+ 	 * Verify the other leader was created by previous call.
+@@ -71,25 +71,26 @@ static int test__thread_maps_share(struct test_suite *test __maybe_unused, int s
+ 	machine__remove_thread(machine, other_leader);
  
-diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
-index 2bd23e4cf19e..53b989072ec5 100644
---- a/tools/perf/util/dsos.c
-+++ b/tools/perf/util/dsos.c
-@@ -91,7 +91,7 @@ bool __dsos__read_build_ids(struct list_head *head, bool with_hits)
- 			have_build_id	  = true;
- 			pos->has_build_id = true;
- 		} else if (errno == ENOENT && pos->nsinfo) {
--			char *new_name = filename_with_chroot(pos->nsinfo->pid,
-+			char *new_name = filename_with_chroot(RC_CHK_ACCESS(pos->nsinfo)->pid,
- 							      pos->long_name);
+ 	other_maps = other->maps;
+-	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&other_maps->refcnt), 2);
++	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(other_maps)->refcnt), 2);
  
- 			if (new_name && filename__read_build_id(new_name,
-diff --git a/tools/perf/util/namespaces.c b/tools/perf/util/namespaces.c
-index dd536220cdb9..8a3b7bd27b19 100644
---- a/tools/perf/util/namespaces.c
-+++ b/tools/perf/util/namespaces.c
-@@ -60,7 +60,7 @@ void namespaces__free(struct namespaces *namespaces)
- 	free(namespaces);
+-	TEST_ASSERT_VAL("maps don't match", other_maps == other_leader->maps);
++	TEST_ASSERT_VAL("maps don't match",
++			RC_CHK_ACCESS(other_maps) == RC_CHK_ACCESS(other_leader->maps));
+ 
+ 	/* release thread group */
+-	thread__put(leader);
+-	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&maps->refcnt), 3);
+-
+-	thread__put(t1);
+-	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&maps->refcnt), 2);
++	thread__put(t3);
++	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(maps)->refcnt), 3);
+ 
+ 	thread__put(t2);
+-	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&maps->refcnt), 1);
++	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(maps)->refcnt), 2);
+ 
+-	thread__put(t3);
++	thread__put(t1);
++	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(maps)->refcnt), 1);
++
++	thread__put(leader);
+ 
+ 	/* release other group  */
+ 	thread__put(other_leader);
+-	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&other_maps->refcnt), 1);
++	TEST_ASSERT_EQUAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(other_maps)->refcnt), 1);
+ 
+ 	thread__put(other);
+ 
+diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+index 25738775834e..2d9ce6966238 100644
+--- a/tools/perf/util/machine.c
++++ b/tools/perf/util/machine.c
+@@ -435,7 +435,7 @@ static struct thread *findnew_guest_code(struct machine *machine,
+ 		return NULL;
+ 
+ 	/* Assume maps are set up if there are any */
+-	if (thread->maps->nr_maps)
++	if (RC_CHK_ACCESS(thread->maps)->nr_maps)
+ 		return thread;
+ 
+ 	host_thread = machine__find_thread(host_machine, -1, pid);
+diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
+index 5afed53ea0b4..567952587247 100644
+--- a/tools/perf/util/maps.c
++++ b/tools/perf/util/maps.c
+@@ -12,13 +12,13 @@
+ 
+ static void maps__init(struct maps *maps, struct machine *machine)
+ {
+-	maps->entries = RB_ROOT;
++	RC_CHK_ACCESS(maps)->entries = RB_ROOT;
+ 	init_rwsem(maps__lock(maps));
+-	maps->machine = machine;
+-	maps->last_search_by_name = NULL;
+-	maps->nr_maps = 0;
+-	maps->maps_by_name = NULL;
+-	refcount_set(&maps->refcnt, 1);
++	RC_CHK_ACCESS(maps)->machine = machine;
++	RC_CHK_ACCESS(maps)->last_search_by_name = NULL;
++	RC_CHK_ACCESS(maps)->nr_maps = 0;
++	RC_CHK_ACCESS(maps)->maps_by_name = NULL;
++	refcount_set(&RC_CHK_ACCESS(maps)->refcnt, 1);
  }
  
--static int nsinfo__get_nspid(struct nsinfo *nsi, const char *path)
-+static int nsinfo__get_nspid(pid_t *tgid, pid_t *nstgid, bool *in_pidns, const char *path)
- {
- 	FILE *f = NULL;
- 	char *statln = NULL;
-@@ -74,19 +74,18 @@ static int nsinfo__get_nspid(struct nsinfo *nsi, const char *path)
- 	while (getline(&statln, &linesz, f) != -1) {
- 		/* Use tgid if CONFIG_PID_NS is not defined. */
- 		if (strstr(statln, "Tgid:") != NULL) {
--			nsi->tgid = (pid_t)strtol(strrchr(statln, '\t'),
--						     NULL, 10);
--			nsi->nstgid = nsinfo__tgid(nsi);
-+			*tgid = (pid_t)strtol(strrchr(statln, '\t'), NULL, 10);
-+			*nstgid = *tgid;
- 		}
+ static void __maps__free_maps_by_name(struct maps *maps)
+@@ -29,8 +29,8 @@ static void __maps__free_maps_by_name(struct maps *maps)
+ 	for (unsigned int i = 0; i < maps__nr_maps(maps); i++)
+ 		map__put(maps__maps_by_name(maps)[i]);
  
- 		if (strstr(statln, "NStgid:") != NULL) {
- 			nspid = strrchr(statln, '\t');
--			nsi->nstgid = (pid_t)strtol(nspid, NULL, 10);
-+			*nstgid = (pid_t)strtol(nspid, NULL, 10);
- 			/*
- 			 * If innermost tgid is not the first, process is in a different
- 			 * PID namespace.
- 			 */
--			nsi->in_pidns = (statln + sizeof("NStgid:") - 1) != nspid;
-+			*in_pidns = (statln + sizeof("NStgid:") - 1) != nspid;
- 			break;
- 		}
- 	}
-@@ -121,8 +120,8 @@ int nsinfo__init(struct nsinfo *nsi)
- 	 * want to switch as part of looking up dso/map data.
- 	 */
- 	if (old_stat.st_ino != new_stat.st_ino) {
--		nsi->need_setns = true;
--		nsi->mntns_path = newns;
-+		RC_CHK_ACCESS(nsi)->need_setns = true;
-+		RC_CHK_ACCESS(nsi)->mntns_path = newns;
- 		newns = NULL;
- 	}
+-	zfree(&maps->maps_by_name);
+-	maps->nr_maps_allocated = 0;
++	zfree(&RC_CHK_ACCESS(maps)->maps_by_name);
++	RC_CHK_ACCESS(maps)->nr_maps_allocated = 0;
+ }
  
-@@ -132,13 +131,26 @@ int nsinfo__init(struct nsinfo *nsi)
- 	if (snprintf(spath, PATH_MAX, "/proc/%d/status", nsinfo__pid(nsi)) >= PATH_MAX)
+ static int __maps__insert(struct maps *maps, struct map *map)
+@@ -71,7 +71,7 @@ int maps__insert(struct maps *maps, struct map *map)
+ 	if (err)
  		goto out;
  
--	rv = nsinfo__get_nspid(nsi, spath);
-+	rv = nsinfo__get_nspid(&RC_CHK_ACCESS(nsi)->tgid, &RC_CHK_ACCESS(nsi)->nstgid,
-+			       &RC_CHK_ACCESS(nsi)->in_pidns, spath);
+-	++maps->nr_maps;
++	++RC_CHK_ACCESS(maps)->nr_maps;
  
- out:
- 	free(newns);
- 	return rv;
- }
+ 	if (dso && dso->kernel) {
+ 		struct kmap *kmap = map__kmap(map);
+@@ -88,7 +88,7 @@ int maps__insert(struct maps *maps, struct map *map)
+ 	 * inserted map and resort.
+ 	 */
+ 	if (maps__maps_by_name(maps)) {
+-		if (maps__nr_maps(maps) > maps->nr_maps_allocated) {
++		if (maps__nr_maps(maps) > RC_CHK_ACCESS(maps)->nr_maps_allocated) {
+ 			int nr_allocate = maps__nr_maps(maps) * 2;
+ 			struct map **maps_by_name = realloc(maps__maps_by_name(maps),
+ 							    nr_allocate * sizeof(map));
+@@ -99,8 +99,8 @@ int maps__insert(struct maps *maps, struct map *map)
+ 				goto out;
+ 			}
  
-+static struct nsinfo *nsinfo__alloc(void)
-+{
-+	struct nsinfo *res;
-+	RC_STRUCT(nsinfo) *nsi;
-+
-+	nsi = calloc(1, sizeof(*nsi));
-+	if (ADD_RC_CHK(res, nsi))
-+		refcount_set(&nsi->refcnt, 1);
-+
-+	return res;
-+}
-+
- struct nsinfo *nsinfo__new(pid_t pid)
- {
- 	struct nsinfo *nsi;
-@@ -146,22 +158,21 @@ struct nsinfo *nsinfo__new(pid_t pid)
- 	if (pid == 0)
- 		return NULL;
- 
--	nsi = calloc(1, sizeof(*nsi));
--	if (nsi != NULL) {
--		nsi->pid = pid;
--		nsi->tgid = pid;
--		nsi->nstgid = pid;
--		nsi->need_setns = false;
--		nsi->in_pidns = false;
--		/* Init may fail if the process exits while we're trying to look
--		 * at its proc information.  In that case, save the pid but
--		 * don't try to enter the namespace.
--		 */
--		if (nsinfo__init(nsi) == -1)
--			nsi->need_setns = false;
-+	nsi = nsinfo__alloc();
-+	if (!nsi)
-+		return NULL;
- 
--		refcount_set(&nsi->refcnt, 1);
--	}
-+	RC_CHK_ACCESS(nsi)->pid = pid;
-+	RC_CHK_ACCESS(nsi)->tgid = pid;
-+	RC_CHK_ACCESS(nsi)->nstgid = pid;
-+	RC_CHK_ACCESS(nsi)->need_setns = false;
-+	RC_CHK_ACCESS(nsi)->in_pidns = false;
-+	/* Init may fail if the process exits while we're trying to look at its
-+	 * proc information. In that case, save the pid but don't try to enter
-+	 * the namespace.
-+	 */
-+	if (nsinfo__init(nsi) == -1)
-+		RC_CHK_ACCESS(nsi)->need_setns = false;
- 
- 	return nsi;
- }
-@@ -173,21 +184,21 @@ struct nsinfo *nsinfo__copy(const struct nsinfo *nsi)
- 	if (nsi == NULL)
- 		return NULL;
- 
--	nnsi = calloc(1, sizeof(*nnsi));
--	if (nnsi != NULL) {
--		nnsi->pid = nsinfo__pid(nsi);
--		nnsi->tgid = nsinfo__tgid(nsi);
--		nnsi->nstgid = nsinfo__nstgid(nsi);
--		nnsi->need_setns = nsinfo__need_setns(nsi);
--		nnsi->in_pidns = nsinfo__in_pidns(nsi);
--		if (nsi->mntns_path) {
--			nnsi->mntns_path = strdup(nsi->mntns_path);
--			if (!nnsi->mntns_path) {
--				free(nnsi);
--				return NULL;
--			}
-+	nnsi = nsinfo__alloc();
-+	if (!nnsi)
-+		return NULL;
-+
-+	RC_CHK_ACCESS(nnsi)->pid = nsinfo__pid(nsi);
-+	RC_CHK_ACCESS(nnsi)->tgid = nsinfo__tgid(nsi);
-+	RC_CHK_ACCESS(nnsi)->nstgid = nsinfo__nstgid(nsi);
-+	RC_CHK_ACCESS(nnsi)->need_setns = nsinfo__need_setns(nsi);
-+	RC_CHK_ACCESS(nnsi)->in_pidns = nsinfo__in_pidns(nsi);
-+	if (RC_CHK_ACCESS(nsi)->mntns_path) {
-+		RC_CHK_ACCESS(nnsi)->mntns_path = strdup(RC_CHK_ACCESS(nsi)->mntns_path);
-+		if (!RC_CHK_ACCESS(nnsi)->mntns_path) {
-+			nsinfo__put(nnsi);
-+			return NULL;
+-			maps->maps_by_name = maps_by_name;
+-			maps->nr_maps_allocated = nr_allocate;
++			RC_CHK_ACCESS(maps)->maps_by_name = maps_by_name;
++			RC_CHK_ACCESS(maps)->nr_maps_allocated = nr_allocate;
  		}
--		refcount_set(&nnsi->refcnt, 1);
- 	}
+ 		maps__maps_by_name(maps)[maps__nr_maps(maps) - 1] = map__get(map);
+ 		__maps__sort_by_name(maps);
+@@ -122,15 +122,15 @@ void maps__remove(struct maps *maps, struct map *map)
+ 	struct map_rb_node *rb_node;
  
- 	return nnsi;
-@@ -195,51 +206,60 @@ struct nsinfo *nsinfo__copy(const struct nsinfo *nsi)
+ 	down_write(maps__lock(maps));
+-	if (maps->last_search_by_name == map)
+-		maps->last_search_by_name = NULL;
++	if (RC_CHK_ACCESS(maps)->last_search_by_name == map)
++		RC_CHK_ACCESS(maps)->last_search_by_name = NULL;
  
- static void nsinfo__delete(struct nsinfo *nsi)
- {
--	zfree(&nsi->mntns_path);
--	free(nsi);
-+	if (nsi) {
-+		WARN_ONCE(refcount_read(&RC_CHK_ACCESS(nsi)->refcnt) != 0,
-+			"nsinfo refcnt unbalanced\n");
-+		zfree(&RC_CHK_ACCESS(nsi)->mntns_path);
-+		RC_CHK_FREE(nsi);
-+	}
+ 	rb_node = maps__find_node(maps, map);
+ 	assert(rb_node->map == map);
+ 	__maps__remove(maps, rb_node);
+ 	if (maps__maps_by_name(maps))
+ 		__maps__free_maps_by_name(maps);
+-	--maps->nr_maps;
++	--RC_CHK_ACCESS(maps)->nr_maps;
+ 	up_write(maps__lock(maps));
  }
  
- struct nsinfo *nsinfo__get(struct nsinfo *nsi)
+@@ -162,33 +162,38 @@ bool maps__empty(struct maps *maps)
+ 
+ struct maps *maps__new(struct machine *machine)
  {
--	if (nsi)
--		refcount_inc(&nsi->refcnt);
--	return nsi;
-+	struct nsinfo *result;
-+
-+	if (RC_CHK_GET(result, nsi))
-+		refcount_inc(&RC_CHK_ACCESS(nsi)->refcnt);
+-	struct maps *maps = zalloc(sizeof(*maps));
++	struct maps *res;
++	RC_STRUCT(maps) *maps = zalloc(sizeof(*maps));
+ 
+-	if (maps != NULL)
+-		maps__init(maps, machine);
++	if (ADD_RC_CHK(res, maps))
++		maps__init(res, machine);
+ 
+-	return maps;
++	return res;
+ }
+ 
+ void maps__delete(struct maps *maps)
+ {
+ 	maps__exit(maps);
+ 	unwind__finish_access(maps);
+-	free(maps);
++	RC_CHK_FREE(maps);
+ }
+ 
+ struct maps *maps__get(struct maps *maps)
+ {
+-	if (maps)
+-		refcount_inc(&maps->refcnt);
++	struct maps *result;
+ 
+-	return maps;
++	if (RC_CHK_GET(result, maps))
++		refcount_inc(&RC_CHK_ACCESS(maps)->refcnt);
 +
 +	return result;
  }
  
- void nsinfo__put(struct nsinfo *nsi)
+ void maps__put(struct maps *maps)
  {
--	if (nsi && refcount_dec_and_test(&nsi->refcnt))
-+	if (nsi && refcount_dec_and_test(&RC_CHK_ACCESS(nsi)->refcnt))
- 		nsinfo__delete(nsi);
+-	if (maps && refcount_dec_and_test(&maps->refcnt))
++	if (maps && refcount_dec_and_test(&RC_CHK_ACCESS(maps)->refcnt))
+ 		maps__delete(maps);
 +	else
-+		RC_CHK_PUT(nsi);
++		RC_CHK_PUT(maps);
  }
  
- bool nsinfo__need_setns(const struct nsinfo *nsi)
- {
--        return nsi->need_setns;
-+	return RC_CHK_ACCESS(nsi)->need_setns;
- }
- 
- void nsinfo__clear_need_setns(struct nsinfo *nsi)
- {
--        nsi->need_setns = false;
-+	RC_CHK_ACCESS(nsi)->need_setns = false;
- }
- 
- pid_t nsinfo__tgid(const struct nsinfo  *nsi)
- {
--        return nsi->tgid;
-+	return RC_CHK_ACCESS(nsi)->tgid;
- }
- 
- pid_t nsinfo__nstgid(const struct nsinfo  *nsi)
- {
--        return nsi->nstgid;
-+	return RC_CHK_ACCESS(nsi)->nstgid;
- }
- 
- pid_t nsinfo__pid(const struct nsinfo  *nsi)
- {
--        return nsi->pid;
-+	return RC_CHK_ACCESS(nsi)->pid;
- }
- 
- pid_t nsinfo__in_pidns(const struct nsinfo  *nsi)
- {
--        return nsi->in_pidns;
-+	return RC_CHK_ACCESS(nsi)->in_pidns;
- }
- 
- void nsinfo__mountns_enter(struct nsinfo *nsi,
-@@ -256,7 +276,7 @@ void nsinfo__mountns_enter(struct nsinfo *nsi,
- 	nc->oldns = -1;
- 	nc->newns = -1;
- 
--	if (!nsi || !nsi->need_setns)
-+	if (!nsi || !RC_CHK_ACCESS(nsi)->need_setns)
- 		return;
- 
- 	if (snprintf(curpath, PATH_MAX, "/proc/self/ns/mnt") >= PATH_MAX)
-@@ -270,7 +290,7 @@ void nsinfo__mountns_enter(struct nsinfo *nsi,
- 	if (oldns < 0)
- 		goto errout;
- 
--	newns = open(nsi->mntns_path, O_RDONLY);
-+	newns = open(RC_CHK_ACCESS(nsi)->mntns_path, O_RDONLY);
- 	if (newns < 0)
- 		goto errout;
- 
-@@ -339,9 +359,9 @@ int nsinfo__stat(const char *filename, struct stat *st, struct nsinfo *nsi)
- 
- bool nsinfo__is_in_root_namespace(void)
- {
--	struct nsinfo nsi;
-+	pid_t tgid = 0, nstgid = 0;
-+	bool in_pidns = false;
- 
--	memset(&nsi, 0x0, sizeof(nsi));
--	nsinfo__get_nspid(&nsi, "/proc/self/status");
--	return !nsi.in_pidns;
-+	nsinfo__get_nspid(&tgid, &nstgid, &in_pidns, "/proc/self/status");
-+	return !in_pidns;
- }
-diff --git a/tools/perf/util/namespaces.h b/tools/perf/util/namespaces.h
-index 567829262c42..8c0731c6cbb7 100644
---- a/tools/perf/util/namespaces.h
-+++ b/tools/perf/util/namespaces.h
-@@ -13,6 +13,7 @@
- #include <linux/perf_event.h>
- #include <linux/refcount.h>
+ struct symbol *maps__find_symbol(struct maps *maps, u64 addr, struct map **mapp)
+diff --git a/tools/perf/util/maps.h b/tools/perf/util/maps.h
+index bde3390c7096..0af4b7e42fca 100644
+--- a/tools/perf/util/maps.h
++++ b/tools/perf/util/maps.h
+@@ -8,6 +8,7 @@
+ #include <stdbool.h>
  #include <linux/types.h>
+ #include "rwsem.h"
 +#include <internal/rc_check.h>
  
- #ifndef HAVE_SETNS_SUPPORT
- int setns(int fd, int nstype);
-@@ -29,7 +30,7 @@ struct namespaces {
- struct namespaces *namespaces__new(struct perf_record_namespaces *event);
- void namespaces__free(struct namespaces *namespaces);
+ struct ref_reloc_sym;
+ struct machine;
+@@ -32,7 +33,7 @@ struct map *maps__find(struct maps *maps, u64 addr);
+ 	for (map = maps__first(maps), next = map_rb_node__next(map); map; \
+ 	     map = next, next = map_rb_node__next(map))
  
--struct nsinfo {
-+DECLARE_RC_STRUCT(nsinfo) {
- 	pid_t			pid;
- 	pid_t			tgid;
- 	pid_t			nstgid;
+-struct maps {
++DECLARE_RC_STRUCT(maps) {
+ 	struct rb_root      entries;
+ 	struct rw_semaphore lock;
+ 	struct machine	 *machine;
+@@ -65,38 +66,38 @@ void maps__put(struct maps *maps);
+ 
+ static inline struct rb_root *maps__entries(struct maps *maps)
+ {
+-	return &maps->entries;
++	return &RC_CHK_ACCESS(maps)->entries;
+ }
+ 
+ static inline struct machine *maps__machine(struct maps *maps)
+ {
+-	return maps->machine;
++	return RC_CHK_ACCESS(maps)->machine;
+ }
+ 
+ static inline struct rw_semaphore *maps__lock(struct maps *maps)
+ {
+-	return &maps->lock;
++	return &RC_CHK_ACCESS(maps)->lock;
+ }
+ 
+ static inline struct map **maps__maps_by_name(struct maps *maps)
+ {
+-	return maps->maps_by_name;
++	return RC_CHK_ACCESS(maps)->maps_by_name;
+ }
+ 
+ static inline unsigned int maps__nr_maps(const struct maps *maps)
+ {
+-	return maps->nr_maps;
++	return RC_CHK_ACCESS(maps)->nr_maps;
+ }
+ 
+ #ifdef HAVE_LIBUNWIND_SUPPORT
+ static inline void *maps__addr_space(struct maps *maps)
+ {
+-	return maps->addr_space;
++	return RC_CHK_ACCESS(maps)->addr_space;
+ }
+ 
+ static inline const struct unwind_libunwind_ops *maps__unwind_libunwind_ops(const struct maps *maps)
+ {
+-	return maps->unwind_libunwind_ops;
++	return RC_CHK_ACCESS(maps)->unwind_libunwind_ops;
+ }
+ #endif
+ 
 diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 91ebf93e0c20..639343d5577c 100644
+index 639343d5577c..6993b51b9416 100644
 --- a/tools/perf/util/symbol.c
 +++ b/tools/perf/util/symbol.c
-@@ -1963,7 +1963,7 @@ int dso__load(struct dso *dso, struct map *map)
+@@ -2097,8 +2097,8 @@ static int map__groups__sort_by_name_from_rbtree(struct maps *maps)
+ 	up_read(maps__lock(maps));
+ 	down_write(maps__lock(maps));
  
- 		is_reg = is_regular_file(name);
- 		if (!is_reg && errno == ENOENT && dso->nsinfo) {
--			char *new_name = filename_with_chroot(dso->nsinfo->pid,
-+			char *new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
- 							      name);
- 			if (new_name) {
- 				is_reg = is_regular_file(new_name);
+-	maps->maps_by_name = maps_by_name;
+-	maps->nr_maps_allocated = maps__nr_maps(maps);
++	RC_CHK_ACCESS(maps)->maps_by_name = maps_by_name;
++	RC_CHK_ACCESS(maps)->nr_maps_allocated = maps__nr_maps(maps);
+ 
+ 	maps__for_each_entry(maps, rb_node)
+ 		maps_by_name[i++] = map__get(rb_node->map);
+@@ -2133,11 +2133,12 @@ struct map *maps__find_by_name(struct maps *maps, const char *name)
+ 
+ 	down_read(maps__lock(maps));
+ 
+-	if (maps->last_search_by_name) {
+-		const struct dso *dso = map__dso(maps->last_search_by_name);
++
++	if (RC_CHK_ACCESS(maps)->last_search_by_name) {
++		const struct dso *dso = map__dso(RC_CHK_ACCESS(maps)->last_search_by_name);
+ 
+ 		if (strcmp(dso->short_name, name) == 0) {
+-			map = maps->last_search_by_name;
++			map = RC_CHK_ACCESS(maps)->last_search_by_name;
+ 			goto out_unlock;
+ 		}
+ 	}
+@@ -2157,7 +2158,7 @@ struct map *maps__find_by_name(struct maps *maps, const char *name)
+ 		map = rb_node->map;
+ 		dso = map__dso(map);
+ 		if (strcmp(dso->short_name, name) == 0) {
+-			maps->last_search_by_name = map;
++			RC_CHK_ACCESS(maps)->last_search_by_name = map;
+ 			goto out_unlock;
+ 		}
+ 	}
+diff --git a/tools/perf/util/unwind-libdw.c b/tools/perf/util/unwind-libdw.c
+index 9565f9906e5d..bdccfc511b7e 100644
+--- a/tools/perf/util/unwind-libdw.c
++++ b/tools/perf/util/unwind-libdw.c
+@@ -230,7 +230,7 @@ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+ 	struct unwind_info *ui, ui_buf = {
+ 		.sample		= data,
+ 		.thread		= thread,
+-		.machine	= thread->maps->machine,
++		.machine	= RC_CHK_ACCESS(thread->maps)->machine,
+ 		.cb		= cb,
+ 		.arg		= arg,
+ 		.max_stack	= max_stack,
+diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+index f9a52af48de4..83dd79dcd597 100644
+--- a/tools/perf/util/unwind-libunwind-local.c
++++ b/tools/perf/util/unwind-libunwind-local.c
+@@ -677,7 +677,7 @@ static int _unwind__prepare_access(struct maps *maps)
+ {
+ 	void *addr_space = unw_create_addr_space(&accessors, 0);
+ 
+-	maps->addr_space = addr_space;
++	RC_CHK_ACCESS(maps)->addr_space = addr_space;
+ 	if (!addr_space) {
+ 		pr_err("unwind: Can't create unwind address space.\n");
+ 		return -ENOMEM;
+diff --git a/tools/perf/util/unwind-libunwind.c b/tools/perf/util/unwind-libunwind.c
+index 4378daaafcd3..b54968e6a4e4 100644
+--- a/tools/perf/util/unwind-libunwind.c
++++ b/tools/perf/util/unwind-libunwind.c
+@@ -14,7 +14,7 @@ struct unwind_libunwind_ops __weak *arm64_unwind_libunwind_ops;
+ 
+ static void unwind__register_ops(struct maps *maps, struct unwind_libunwind_ops *ops)
+ {
+-	maps->unwind_libunwind_ops = ops;
++	RC_CHK_ACCESS(maps)->unwind_libunwind_ops = ops;
+ }
+ 
+ int unwind__prepare_access(struct maps *maps, struct map *map, bool *initialized)
 -- 
 2.40.0.577.gac1e443424-goog
 
