@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33146DAFD3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1D86DAFCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231289AbjDGPoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 11:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
+        id S231831AbjDGPlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 11:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjDGPoC (ORCPT
+        with ESMTP id S229469AbjDGPlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 11:44:02 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBADB6A74
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 08:44:00 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id g5-20020a25a485000000b009419f64f6afso42277174ybi.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 08:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680882240;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QrSg/BMPAE5SgDyFLe+GJWATUYwVq9m/07ZFQV/pgIM=;
-        b=j/46f7Pl8wPRiRdY9mZIKmKorvJRsWxM2uow0fs/iOJN7PnoWGLpQN1kTuWYrIX9nE
-         CQJ9n6Hl3gtws74pFy0LGjxZyHFHAear1v0aBJThlXJTFVKzX9/m2WIOZ+1Ou0ljlTzS
-         pKvjgT0AmesclVv1iijOl/fXBribr9mWtlv1KpKiMEX+fFpverhnC183z0uDVGkhbsmI
-         Tq/knJ93xsBS50femZFIMUEOHWbB6geNc8m+nbii/D0h7HAvvjOxi35TheB/XuBoOEzn
-         mC63zcBQOlMSa5c88tFwU4uf/FTU+soUp6tgrPagh9LsOsXC95c+lT0rRl0SBZxJr3uc
-         xHWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680882240;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QrSg/BMPAE5SgDyFLe+GJWATUYwVq9m/07ZFQV/pgIM=;
-        b=d5rh0xB3x5D37qztnSj4azKBBh9X7MMYMlLdHaVN6KbzuHR6k4C6CsCTZZDg8iK8mQ
-         123FoxOZZ7rG7l5LYTggnqVpO15H9rLbMPJKOr9CqY0of8AuslE8hH3FC49Oy4ng3ro8
-         KyHFX7hL6Dh76ZB4WCjV9feMi2NArYDgI/ETSRq66IV/GjfiReZ1hLZB0YtXWxkBkZTs
-         gaQatZPLESSUGXvtiUJi4UQVGyGZoQ9QDb4Q1iFT+D/MTpRzBn1ghDh/QkZl6nDbXKaf
-         V8LQ+Q/tzdwrDWqmU64MTweLRVw+Zp0fTroTTrXH2UfeKSlEiql+Q3/uMNxqxSfiaADU
-         fYRQ==
-X-Gm-Message-State: AAQBX9c7nM1zflFlB1zkZFSaPIjq/BxKcPk4Bw8kT9SYpKTloRzlresP
-        2SIZ/dd2BJ3HI5DkAJjRlw0AvZpngsE=
-X-Google-Smtp-Source: AKy350bCLbRNGmyqxLryHU0Q5arxfdImdLoRNJrYAw+YMmFrtssq2sKnFPiTtLp4/SYbtscSIBmxG26bnno=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ad09:0:b0:544:8ac7:2608 with SMTP id
- l9-20020a81ad09000000b005448ac72608mr1293296ywh.6.1680882240229; Fri, 07 Apr
- 2023 08:44:00 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 08:43:58 -0700
-In-Reply-To: <37a18b89-c0c3-4c88-7f07-072573ac0c92@gmail.com>
-Mime-Version: 1.0
-References: <20230214050757.9623-1-likexu@tencent.com> <20230214050757.9623-6-likexu@tencent.com>
- <ZC9Zqn/+J5vaXKfo@google.com> <37a18b89-c0c3-4c88-7f07-072573ac0c92@gmail.com>
-Message-ID: <ZDA6PrzUR2rsrCQI@google.com>
-Subject: Re: [PATCH v4 05/12] KVM: x86/pmu: Error when user sets the
- GLOBAL_STATUS reserved bits
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 7 Apr 2023 11:41:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB25E8A72;
+        Fri,  7 Apr 2023 08:41:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 466BD6121D;
+        Fri,  7 Apr 2023 15:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB0AC433D2;
+        Fri,  7 Apr 2023 15:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680882105;
+        bh=0TH7wao0u0XHYRas2C6c5JKYGQoZXugn+nq3+N4xTJk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mPzV60c1UwAVMfNfbVy+e73ZkApGMgI0fINmSiICLkTrG0kedj+gAsbihCIGgLkGp
+         DY+Zwd0haHBBiTu/VLN0HuGGMvYsuHwk+1eosEdCfDOg/L9nXsa9ZqYyf/afsVZ39K
+         HfenXNdWQhJ5L6w0qeqrB+YY/LCKKciwE1QLAuXvbbCIGoIZ4m4UZhNK5Nh04eV4l8
+         DTiPPszubCoToxejLfmHSkVrnt0+AScVDDg4YOapAmoX7NRV84rpNBrQRBVKVHjsSw
+         8jvtW0niDXS6uqs7DDs6xmrJ+Cybs+M9GXFyFdBQMnsTOQkspBqV4UAftUjCkqeQ84
+         MhVDemxnuQHTA==
+Date:   Fri, 7 Apr 2023 08:44:35 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: Re: [PATCH V2 0/3] soc: qcom: boot_stats: Add driver support for
+ boot_stats
+Message-ID: <20230407154435.2wzrld365p3dcabd@ripper>
+References: <cover.1680874520.git.quic_schowdhu@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1680874520.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023, Like Xu wrote:
-> On 7/4/2023 7:45 am, Sean Christopherson wrote:
-> > On Tue, Feb 14, 2023, Like Xu wrote:
-> > > From: Like Xu <likexu@tencent.com>
-> > > 
-> > > If the user space sets reserved bits when restoring the MSR_CORE_
-> > > PERF_GLOBAL_STATUS register, these bits will be accidentally returned
-> > > when the guest runs a read access to this register, and cannot be cleared
-> > > up inside the guest, which makes the guest's PMI handler very confused.
-> > 
-> > The changelog needs to state what the patch actually does.
-> > 
-> > > Signed-off-by: Like Xu <likexu@tencent.com>
-> > > ---
-> > >   arch/x86/kvm/vmx/pmu_intel.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> > > index 904f832fc55d..aaea25d2cae8 100644
-> > > --- a/arch/x86/kvm/vmx/pmu_intel.c
-> > > +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> > > @@ -397,7 +397,7 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-> > >   			reprogram_fixed_counters(pmu, data);
-> > >   		break;
-> > >   	case MSR_CORE_PERF_GLOBAL_STATUS:
-> > > -		if (!msr_info->host_initiated)
-> > > +		if (!msr_info->host_initiated || (data & pmu->global_ovf_ctrl_mask))
-> > 
-> > This is wrong.  Bits 60:58 are reserved in IA32_PERF_GLOBAL_OVF_CTRL, but are
-> > ASCI, CTR_FREEZE, and LBR_FREEZE respectively in MSR_CORE_PERF_GLOBAL_STATUS.
+On Fri, Apr 07, 2023 at 07:34:34PM +0530, Souradeep Chowdhury wrote:
+> Qualcomm's proprietary Android boot-loaders capture boot time
+> stats, like the time when the bootloader started execution and at what
+> point the bootloader handed over control to the kernel etc. in the IMEM
+> region. This information is captured in a specific format by this driver
+> by mapping a structure to the IMEM memory region and then accessing the
+> members of the structure to print the information. This information is
+> useful in verifying if existing boot KPIs have regressed or not.
+> A sample log in SM8450(waipio) device is as follows:-
 > 
-> CTR_FREEZE and LBR_FREEZE are only required for the guest CPUID.0AH: EAX[7:0]>3.
-> PMU support (ASCI bit) for guest SGX isn't supported either.
+> KPI: Pre ABL Time = 3s
+> KPI: ABL Time = 14s
+> KPI: Kernel MPM timestamp = 890206
 > 
-> So for now, reusing pmu->global_ovf_ctrl_mask here is effective enough.
+> The Module Power Manager(MPM) sleep counter starts ticking at the PBL
+> stage and the timestamp generated by the sleep counter is logged by
+> the Qualcomm proprietary bootloader(ABL) at two points-> First when it
+> starts execution which is logged here as "Pre ABL Time" and the second
+> when it is about to load the kernel logged as "ABL Time". Both these
+> values are read up by the driver from IMEM region and printed as above.
+> The current sleep counter timestamp is also logged by the driver.
+> 
+> Changes in V2
+> 
+> *Implemented comments on version 1 of the patch
 
-And "good enough for now" is exactly how we end up with bugs, especially when
-"good enough" relies on assumptions that aren't well documented.
+This doesn't give a particular good indication of what you actually
+changed. So please spell it out going forward.
+
+Thanks,
+Bjorn
+
+> 
+> *Changed the boot_stats driver to module_platform_driver
+> 
+> *Dropped the DT binding for mpm sleep counter
+> 
+> Souradeep Chowdhury (3):
+>   dt-bindings: sram: qcom,imem: Add Boot Stat region within IMEM
+>   soc: qcom: boot_stat: Add Driver Support for Boot Stats
+>   MAINTAINERS: Add the entry for boot_stats driver support
+> 
+>  .../devicetree/bindings/sram/qcom,imem.yaml        | 21 +++++
+>  MAINTAINERS                                        |  6 ++
+>  drivers/soc/qcom/Kconfig                           |  7 ++
+>  drivers/soc/qcom/Makefile                          |  1 +
+>  drivers/soc/qcom/boot_stats.c                      | 95 ++++++++++++++++++++++
+>  5 files changed, 130 insertions(+)
+>  create mode 100644 drivers/soc/qcom/boot_stats.c
+> 
+> -- 
+> 2.7.4
+> 
