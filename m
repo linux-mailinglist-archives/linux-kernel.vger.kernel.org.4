@@ -2,147 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4686DAAA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C926DAA9F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240342AbjDGJII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 05:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        id S231890AbjDGJHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240568AbjDGJH4 (ORCPT
+        with ESMTP id S240497AbjDGJHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:07:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B1093C4
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680858431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AXnKb64GaarQGbssPkA34biCMXryXalt9+iVZ6jvN4s=;
-        b=Ot5D5RYq7PkZswQgQ+AU0N7hDq0IMY2nUmoXAP5N5W/6vlFTpIRcNWIskIa0fpTCiTtEuF
-        j7pL02EMNdu6CV+oXPfBKlaaTOSvyDJmzTsQHdt/dkDnke3w5zoeZ4tnyiaZyb/215GHZs
-        yxOh705cD1pIUd1hoFxzog2QmNLFhDU=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-8-0_s5caN0NCajon4ICdulFQ-1; Fri, 07 Apr 2023 05:07:10 -0400
-X-MC-Unique: 0_s5caN0NCajon4ICdulFQ-1
-Received: by mail-ej1-f70.google.com with SMTP id h20-20020a1709070b1400b009333eaeb2b3so1350126ejl.12
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 02:07:10 -0700 (PDT)
+        Fri, 7 Apr 2023 05:07:23 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B07A5FB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:07:19 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-949062abf62so210290366b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 02:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680858438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6BxRk1PJc+XW+qEn8Ij5zM9MBUl9XatvAPXfsp+KF0k=;
+        b=nkw+ddycbW5GjtdYGmkun62fRdFQENsmzY6BQjEiOlj8CA7TBenBvvXCinnKeAVPnW
+         e3WureIZ4KLMhI/pJRQaDe7kvwwjrRtW3RLdcLBm2604TpgQLsn5FBK3s4XG2IxOfxwV
+         qhiX67+b7XRHjv5s////3QhTRmAkz3WgSplFukprZLA/nFDKK3TSPWBVR5eonu9kO7fN
+         Irm9/TTEtC/nyGuzI5xnvumhfqfGUUNf3JiZLwkS8SZZGV+cV8944LvYPQFwYv2bYB9d
+         taRWaETWQxS88AOebWZD2RNJx9gFFMQgKMJJu7LoS+4tiAaFmEqgpP3cNs/2NDjd+1bH
+         EiYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680858429; x=1683450429;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AXnKb64GaarQGbssPkA34biCMXryXalt9+iVZ6jvN4s=;
-        b=XvmBtiseDcT1W8Xiomd2tMIGAAd4FMn7/IDgMQ7dlv7jiLcBl1CVnCyg/sDPvKfzg7
-         9XUpMnLAUErYK981QgKaCkpvl7UDPBzpN1G5V2bFyPqvbRsTL+ap6S5d0kcESbDz4Juz
-         L8/BepoI3KOZ13cFXbZLBMyDG623zLsk7ew+X+fKgtoOG4+oF/jDt0SPGunQf3+P5Efi
-         tpwtnCLnKyxOk+kfseaL5ZG8a9TC+WBsWtOjF3XeMjtIKiu4jazXAMjCR4gajJ3IBKMp
-         o3hF52ArykEu/oPQjDt/esU7Qs0Vp+nBZyWHAqGrzGpuQaHip7OQ+Q1NWTtYTxkL3hhg
-         TVYQ==
-X-Gm-Message-State: AAQBX9fsl+MXjGYD2lMoFpUr6jPhl65N2sONc01lFZ3+Q/qWI2oQsgSp
-        KNvGhp6xQz6Q/ySuJJ4odflzwi8YS0f56yW7v1qW5kpzm7IFldZaBZKrd10DDCu2qIeGRXXtUzA
-        l/Z7ynyhjhF1zshvnxhtMfHUwRZ9qChXuKt3DoZyhQc3CvUqXqsB70w==
-X-Received: by 2002:a17:907:6e88:b0:947:556e:ed3 with SMTP id sh8-20020a1709076e8800b00947556e0ed3mr830053ejc.11.1680858429275;
-        Fri, 07 Apr 2023 02:07:09 -0700 (PDT)
-X-Google-Smtp-Source: AKy350YdOW0qwj1qb7BHdZwRKNc+uSWFl5YKzWm+tNRh3geJ6Es3NIN2HONYXvWtvhcS3IPu9hjnamNynUhTpWPOJpM=
-X-Received: by 2002:a17:907:6e88:b0:947:556e:ed3 with SMTP id
- sh8-20020a1709076e8800b00947556e0ed3mr830039ejc.11.1680858428873; Fri, 07 Apr
- 2023 02:07:08 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680858438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6BxRk1PJc+XW+qEn8Ij5zM9MBUl9XatvAPXfsp+KF0k=;
+        b=Z2D8b/0yM7prlhpTSwm244CaduEYZy63c1tsZX6XZ9Du8n/2oTP5E6qtYV4f6hxXLS
+         I7FuLR0la6Dprv5lon9fRA8+QiYBznPSvqYI1JAjA/CoNt9rA3Al5xfdrejN3NaQMEPm
+         T1v21DW+T/UnUad12ko31wu2/wvGv4dbdYt7BacSy7RprdQSvlZ4LY9oqRfzOx9SfEiH
+         y/z4kDlN+oqAIxCduhUrcwvPnhWF7c+E1DThm7BNzNMkIrxLzDGCIDaSHa6Ogi2TL3n9
+         3NF9JfLxPZst3W3kXupi5uAxlESwrvwdBb1GHwhQUVcm0wbnVg61WM/ZeHVxc+YuRSnK
+         hr+w==
+X-Gm-Message-State: AAQBX9f3kZ9kA4zLypVoq8chpk3UvSTq6efU6E0GeAd+4ckPiM7l612l
+        odPbcN+a2OSIy9i3vDfKvCpBaw==
+X-Google-Smtp-Source: AKy350Yp72jRlPW6PS3fGi3S7qmBR7ADa8EpkJ1qdw9IUSi7baFQV7muxP54AqpFgd65vqFrgqsC4w==
+X-Received: by 2002:a50:fb8b:0:b0:4fd:29a1:6a58 with SMTP id e11-20020a50fb8b000000b004fd29a16a58mr2318193edq.19.1680858437893;
+        Fri, 07 Apr 2023 02:07:17 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:14a3:366:3172:3c37? ([2a02:810d:15c0:828:14a3:366:3172:3c37])
+        by smtp.gmail.com with ESMTPSA id b20-20020a056402351400b004bf5981ef3dsm1619711edd.94.2023.04.07.02.07.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 02:07:17 -0700 (PDT)
+Message-ID: <951841d3-59a4-fa86-5b45-46afdb2942dd@linaro.org>
+Date:   Fri, 7 Apr 2023 11:07:16 +0200
 MIME-Version: 1.0
-References: <20230404084701.2791683-1-ryasuoka@redhat.com> <20230405010403.GO3223426@dread.disaster.area>
- <CAHpthZoWRWS2bXFDQrB+iOz7AA_ZLGJKmytHjN582VaWQ_TRwg@mail.gmail.com> <20230405230415.GT3223426@dread.disaster.area>
-In-Reply-To: <20230405230415.GT3223426@dread.disaster.area>
-From:   Ryosuke Yasuoka <ryasuoka@redhat.com>
-Date:   Fri, 7 Apr 2023 18:06:57 +0900
-Message-ID: <CAHpthZrvhqh8O1HO7U_jVnaq9R9Ur=Yq2eWzjWfNx3ryDbnGPA@mail.gmail.com>
-Subject: Re: [PATCH] xfs: Use for_each_perag() to iterate all available AGs
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/7] dt-bindings: net: dsa: mediatek,mt7530: add port
+ bindings for MT7988
+Content-Language: en-US
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230406080141.22924-1-arinc.unal@arinc9.com>
+ <20230406080141.22924-3-arinc.unal@arinc9.com>
+ <23c8c4b5-baaa-b72b-4103-b415d970acf2@linaro.org>
+ <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dave,
+On 06/04/2023 21:18, Arınç ÜNAL wrote:
+> On 6.04.2023 22:07, Krzysztof Kozlowski wrote:
+>> On 06/04/2023 10:01, arinc9.unal@gmail.com wrote:
+>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>
+>>> The switch on MT7988 has got only port 6 as a CPU port. The only phy-mode
+>>> to be used is internal. Add this.
+>>>
+>>> Some bindings are incorrect for this switch now, so move them to more
+>>> specific places.
+>>>
+>>> Address the incorrect information of which ports can be used as a user
+>>> port. Any port can be used as a user port.
+>>>
+>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>> ---
+>>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 63 ++++++++++++++-----
+>>>   1 file changed, 46 insertions(+), 17 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>> index 7045a98d9593..605888ce2bc6 100644
+>>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+>>> @@ -160,22 +160,6 @@ patternProperties:
+>>>         "^(ethernet-)?port@[0-9]+$":
+>>>           type: object
+>>>   
+>>> -        properties:
+>>> -          reg:
+>>> -            description:
+>>> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
+>>> -              for user ports.
+>>> -
+>>> -        allOf:
+>>> -          - if:
+>>> -              required: [ ethernet ]
+>>> -            then:
+>>> -              properties:
+>>> -                reg:
+>>> -                  enum:
+>>> -                    - 5
+>>> -                    - 6
+>>> -
+>>
+>> I have doubts that the binding is still maintainable/reviewable. First,
+>> why do you need all above patterns after removal of entire contents?
+> 
+> The 'type: object' item is still globally used. I'd have to define that 
+> on each definitions, I suppose?
 
-> On Thu, Apr 6, 2023 at 8:04=E2=80=AFAM Dave Chinner <david@fromorbit.com>=
- wrote:
-> >
-> > On Wed, Apr 05, 2023 at 05:04:14PM +0900, Ryosuke Yasuoka wrote:
-> > > Dave,
-> > >
-> > > Thank you for reviewing my requests.
-> > >
-> > > > > for_each_perag_wrap() doesn't expect 0 as 2nd arg.
-> > > > > To iterate all the available AGs, just use for_each_perag() inste=
-ad.
-> > > >
-> > > > Thanks, Ryosuke-san. IIUC, this is a fix for the recent sysbot
-> > > > reported filestreams oops regression?
-> > > >
-> > > > Can you include the context of the failure it reported (i.e. the
-> > > > trace from the oops), and the 'reported-by' tag for the syzbot
-> > > > report?
-> > > >
-> > > > It should probably also include a 'Fixes: bd4f5d09cc93 ("xfs:
-> > > > refactor the filestreams allocator pick functions")' tag as well.
-> > >
-> > > No. my request is in the same code area where syzbot bug was reported=
-,
-> > > but it might not be relevant. A kernel applying my patch got the same=
- Oops.
-> > >
-> > > I'm indeed checking the syzbot's bug and I realized that this small b=
-ug fix
-> > > is not related to it based on my tests. Thus I sent the patch
-> > > as a separate one.
-> > >
-> > > > While this will definitely avoid the oops, I don't think it is quit=
-e
-> > > > right. If we want to iterate all AGs, then we should be starting th=
-e
-> > > > iteration at AG 0, not start_agno. i.e.
-> > > >
-> > > > +                       for_each_perag(args->mp, 0, args->pag)
-> > >
-> > > I agree with your proposal because it is more direct.
-> > > However, as the current for_each_perag() macro always assigns 0 to (a=
-gno),
-> > > it will cause compilation errors.
-> >
-> > Yup, I didn't compile test my suggestion - i just quickly wrote it
-> > down to demonstrate what I was thinking. I expect that you have
-> > understood that using for_each_perag() was what I was suggesting is
-> > used, not that the sample code I wrote is exactly correct. IOWs,
-> >
-> >                 for_each_perag(args->mp, start_agno, args->pag)
-> >
-> > would have worked, even though the code does not do what it looks
-> > like it should from the context of start_agno. Which means this
-> > would be better:
-> >
-> >                 start_agno =3D 0;
-> >                 for_each_perag_from(args->mp, start_agno, args->pag)
-> >
-> > because it directly documents the value we are iterating from.
+Doesn't it come from dsa.yaml/dsa-port.yaml schema?
 
-OK. I'll update my patch, run a compile test, and then send again as a
-v2 another thread
+> 
+>>
+>> Second, amount of if-then-if-then located in existing blocks (not
+>> top-level) is quite big. I counted if-then-using defs, where defs has
+>> patternProps-patternProps-if-then-if-then-properties.... OMG. :)
+> 
+> Yup, not much to do if we want to keep the information. I'm still 
+> maintaining this though. ¯\_(ツ)_/¯
 
+Maybe it should be split into few bindings sharing common part.
 
-Thank you for reviewing.
-Ryosuke
+Best regards,
+Krzysztof
 
