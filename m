@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBE76DB392
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13FC6DB372
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234331AbjDGSva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
+        id S232292AbjDGSuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbjDGSu4 (ORCPT
+        with ESMTP id S233834AbjDGSt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:50:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05044EFA9;
-        Fri,  7 Apr 2023 11:49:26 -0700 (PDT)
+        Fri, 7 Apr 2023 14:49:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9976BE076;
+        Fri,  7 Apr 2023 11:48:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 961EA6124E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC982611E2;
+        Fri,  7 Apr 2023 18:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8339BC433A1;
         Fri,  7 Apr 2023 18:48:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADDCC433EF;
-        Fri,  7 Apr 2023 18:48:22 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -43,16 +43,16 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 30/40] dt-bindings: pinctrl: qcom,sdx65-tlmm: simplify with unevaluatedProperties
-Date:   Fri,  7 Apr 2023 20:45:36 +0200
-Message-Id: <20230407184546.161168-30-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 31/40] dt-bindings: pinctrl: qcom,sm6115-tlmm: simplify with unevaluatedProperties
+Date:   Fri,  7 Apr 2023 20:45:37 +0200
+Message-Id: <20230407184546.161168-31-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
 References: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,14 +66,14 @@ set provided by qcom,tlmm-common.yaml schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml   | 10 +---------
+ .../devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml  | 10 +---------
  1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
-index 89c5562583d1..2ef793ae4038 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-tlmm.yaml
-@@ -47,6 +47,7 @@ $defs:
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
+index 29325483cd2b..871df54f69a2 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sm6115-tlmm.yaml
+@@ -53,6 +53,7 @@ $defs:
        Pinctrl node's client devices use subnodes for desired pin configuration.
        Client device subnodes use below standard properties.
      $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
@@ -81,9 +81,9 @@ index 89c5562583d1..2ef793ae4038 100644
  
      properties:
        pins:
-@@ -111,18 +112,9 @@ $defs:
-                 qspi_cs, ssbi2, ssbi1, mss_lte, qspi_clk, qspi0, qspi1, qspi2, qspi3,
-                 gpio ]
+@@ -85,18 +86,9 @@ $defs:
+                 uim2_present, uim2_reset, usb_phy, vfr_1, vsense_trigger,
+                 wlan1_adc0, elan1_adc1 ]
  
 -      bias-pull-down: true
 -      bias-pull-up: true
