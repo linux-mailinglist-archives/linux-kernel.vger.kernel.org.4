@@ -2,73 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF2D6DA81A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 05:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EA56DA81D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 05:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjDGDr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 23:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S230290AbjDGDyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 23:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjDGDr4 (ORCPT
+        with ESMTP id S230039AbjDGDyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 23:47:56 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D061E63
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 20:47:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-244a2cac6b7so140694a91.0
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 20:47:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680839250; x=1683431250;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=77QxDKdE2rjdmn5UavlvJ+dKYEVB2yFZDow3mJT0z7c=;
-        b=XfexivY5m3FSANbetslsNJ+QLsk4IrinL45EjlgFtAJmtIvriFj4eVpciikknhMwps
-         i6TdeOAZoX2/3eRfKd7zPB2yAF93MaBZgNbYgD8wxw6QhN3a1nRIoBWzpzCxB6ZP/8Ka
-         yot4Godu5GPYfZ46OicDi32tswE1GIbefXxeN6orUgUq6EMKXbC2P0O/5jwgzhBiEtfj
-         grY3VyLzK7MZb7BIg2BBLefU4BVXolQsDwBvseRI1R61yhQnOF4HIx/o9EYfdQgoruqI
-         Cbje8MG37ssUWsp6KuGQ0vKQJh1cMYIsUsZmXiF3kog2Iaiu2ZfkZMgZagqeqoMAsi4y
-         +UKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680839250; x=1683431250;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=77QxDKdE2rjdmn5UavlvJ+dKYEVB2yFZDow3mJT0z7c=;
-        b=dA//2MzAlpIlOSsGJMULrMYgyafftxtYirpzHqrwSVMkjKJenKTCJNOET7GHPRdr4i
-         WpHQeVUztBD/nG+5f+1ymib/WIg3rYxFNnxM9lQ0po7eNbu90FZrWx3GuNRJNMm0jmq3
-         Pweh5WYe+wAuXBFCEVkSfM56YF6YaSbs5jHeMUlSsktRVzltaQXVx0ele2iKcNKARogU
-         z8OHOfDJ1v3vSvwa2CfJdm1wjsOsmaUJAyYAO08mksG8WcOH/8NX6GyGVUQ0/G+GmgF5
-         wrENPQrWobGYWzQ9sDB8C1oK8EtAGxSErUYZFxe0nFFgi3ViP17T3IOIk3WFhxIHsAMU
-         8zyQ==
-X-Gm-Message-State: AAQBX9edVJqe9oOi1DA+DkgHOFNNBd6Rq7tL5N8xfHHtSGgF+KBV/SMj
-        nXbQaXWboRT1+YJdUod6Fa1QFA==
-X-Google-Smtp-Source: AKy350aYHI6zM5Gxa268/qZ5FZHaU0AQ+7MHkgj4I8Wwr1Xqz54mRQpeqvaKrIvRzU8No0j7ekRpYw==
-X-Received: by 2002:a17:903:2285:b0:19d:2a3:f019 with SMTP id b5-20020a170903228500b0019d02a3f019mr1289012plh.1.1680839250020;
-        Thu, 06 Apr 2023 20:47:30 -0700 (PDT)
-Received: from [10.70.252.135] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id jf17-20020a170903269100b001a4edbabad3sm2051740plb.230.2023.04.06.20.47.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 20:47:29 -0700 (PDT)
-Message-ID: <58d0903b-0081-6a0a-e199-b90af19eb6a2@bytedance.com>
-Date:   Fri, 7 Apr 2023 11:47:23 +0800
+        Thu, 6 Apr 2023 23:54:47 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0255B4C2F;
+        Thu,  6 Apr 2023 20:54:45 -0700 (PDT)
+Received: from 544c38f4e6dd.us-east4-c.c.codatalab-user-runtimes.internal (152.111.245.35.bc.googleusercontent.com [35.245.111.152])
+        (user=iccccc@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 3373r0ch004804-3373r0ci004804
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Fri, 7 Apr 2023 11:53:08 +0800
+From:   Haoyi Liu <iccccc@hust.edu.cn>
+To:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     hust-os-kernel-patches@googlegroups.com, yalongz@hust.edu.cn,
+        error27@gmail.com, Haoyi Liu <iccccc@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] net/ipv6: silence 'passing zero to ERR_PTR()' warning
+Date:   Fri,  7 Apr 2023 03:50:58 +0000
+Message-Id: <20230407035058.8373-1-iccccc@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH 0/2] some fixes and cleanups for x86
-Content-Language: en-US
-To:     peterz@infradead.org, keescook@chromium.org, jpoimboe@kernel.org,
-        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
-        tglx@linutronix.de, rostedt@goodmis.org
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20230330081552.54178-1-zhengqi.arch@bytedance.com>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <20230330081552.54178-1-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: iccccc@hust.edu.cn
+X-Spam-Status: No, score=1.0 required=5.0 tests=HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,32 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Smatch complains that if xfrm_lookup() returns NULL then this does a
+weird thing with "err":
 
-On 2023/3/30 16:15, Qi Zheng wrote:
-> Hi all,
-> 
-> This series uses arch_stack_walk() to fix false positives of KASAN and
-> avoid open-coding of unwind logic.
+    net/ ipv6/ icmp.c:411 icmpv6_route_lookup()
+    warn: passing zero to ERR_PTR()
 
-Gentle ping. Any comments or suggestions? :)
+Just return "dst2" directly instead of assigning it to"dst" and then
+looking up the value of "err".  No functional change.
 
-> 
-> This series is based on next-20230330.
-> 
-> Comments and suggestions are welcome.
-> 
-> Thanks,
-> Qi
-> 
-> Qi Zheng (2):
->    x86: make profile_pc() use arch_stack_walk()
->    x86: make __get_wchan() use arch_stack_walk()
-> 
->   arch/x86/kernel/process.c | 22 ++++++++++++----------
->   arch/x86/kernel/time.c    | 36 +++++++++++++++++-------------------
->   2 files changed, 29 insertions(+), 29 deletions(-)
-> 
+Signed-off-by: Haoyi Liu <iccccc@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+The issue is found by static analysis, and the patch is remains untested.
+---
+ net/ipv6/icmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+index 1f53f2a74480..a5e77acead89 100644
+--- a/net/ipv6/icmp.c
++++ b/net/ipv6/icmp.c
+@@ -395,7 +395,7 @@ static struct dst_entry *icmpv6_route_lookup(struct net *net,
+ 	dst2 = xfrm_lookup(net, dst2, flowi6_to_flowi(&fl2), sk, XFRM_LOOKUP_ICMP);
+ 	if (!IS_ERR(dst2)) {
+ 		dst_release(dst);
+-		dst = dst2;
++		return dst2;
+ 	} else {
+ 		err = PTR_ERR(dst2);
+ 		if (err == -EPERM) {
 -- 
-Thanks,
-Qi
+2.25.1
+
