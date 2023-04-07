@@ -2,181 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B685B6DAE27
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CAE6DADCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:39:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241048AbjDGNn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
+        id S240790AbjDGNjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240860AbjDGNnB (ORCPT
+        with ESMTP id S240615AbjDGNjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:43:01 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED4ACA1B;
-        Fri,  7 Apr 2023 06:41:13 -0700 (PDT)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 719891BF204;
-        Fri,  7 Apr 2023 13:40:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680874850;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gc8l6qtXSnrFlk83xwvHATKpE7tMAjwTQAQNjt+1tQw=;
-        b=fC1TpAhwZZt+EtV0y51iBiKPwhBi2gWkUpG6Rc9tPlU/wddynCkOq/Ikivssb9Xv8IbpYP
-        FTMzYq9PWbjuT+uFOT3xFgoMpVRmG2PWWlUw4d+Tm5t+63AHiwDeepzl8L1ZesLsrLLIrH
-        ecNsJGifuBKIBcG31Knj0pdZG7bY2VWNslSvrOqr2dgTxPiNvXfQ6yp/6yIKTC5amstCss
-        ERFZTklo8vbXPOTX+c+l554QP1P47etYRtOnItmJY8FaDV1vUHVOtq1DXfQ7mHmIWx/EB4
-        Bqjr3Vmhq9BOGAg0gbaFxfCW6HmLJr++EJRkfRboekERi73svUc+C/5f9LpsxQ==
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     linux-tegra@vger.kernel.org
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: [PATCH v5 19/20] staging: media: tegra-video: add H/V flip controls
-Date:   Fri,  7 Apr 2023 15:38:51 +0200
-Message-Id: <20230407133852.2850145-20-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230407133852.2850145-1-luca.ceresoli@bootlin.com>
-References: <20230407133852.2850145-1-luca.ceresoli@bootlin.com>
+        Fri, 7 Apr 2023 09:39:24 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46367AD2E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:39:23 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id d17so42319604wrb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1680874761;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pox4hvdMwzxEobjiq290toIe3b0t8usEe650+0u+Rkg=;
+        b=ZELFjg9WHzt/arTjAjKKvyySu5ONgaSZ+0S3cyIQc2j4Qq/f0BLAAGclCrkCKlWlr2
+         hSz0peJcWTM/CkU4HKAQTSt77ObxTa3d4Ab0+WHo6+/3HzIyzVupEcPMfvrD6EPPD0jh
+         rWbtbQaOrSXfHdGkte1OpIX07IZGyQksPVW6A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680874761;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pox4hvdMwzxEobjiq290toIe3b0t8usEe650+0u+Rkg=;
+        b=qToxJXHDZ/bT81OJTs6eVk7jH8Ip3S3SMnzrITHSyfd98kWStESp4iNnTN/YCIqD5a
+         k6eRpqhSH/kVR9CXm0Ukhsorf561D0szlhBGSJSD7gUJZTvtxU8DCh+dtkiOwdchrXc/
+         6Xfykp81fHS/zIwdyGlfn94XKbisNg3NIeGK+eJpTtpH3c4+WfwXNBKbgraGtMzASCta
+         AmPKpnRZfftoG4KuI0qP3BrljCP+Q5fSA+o4n3DuXtl13/HiSG3jBKuSAoQU5EjOy56l
+         k3bsLkcEUOvUoeYW/9BuVUbYKttQ+mvN5Yf5jdSeNctUL94+wr3Y9kD4SPOLxAvpV2D7
+         xGdg==
+X-Gm-Message-State: AAQBX9dp5LWWblYrPBxvVBZdwUm/kOvha5bJpNl9eVoDF9972BAlm3NJ
+        2FlymJqVurAY8Yl+Uz6vYOtsGw==
+X-Google-Smtp-Source: AKy350a0UCYaceM9euTsVoBonxjejDxiif/4/UKk8+FVs5IYVRLNpkmJw3Y3EugOWrGkfhUApH8PBg==
+X-Received: by 2002:a5d:494f:0:b0:2e4:e489:c679 with SMTP id r15-20020a5d494f000000b002e4e489c679mr1374917wrs.10.1680874761530;
+        Fri, 07 Apr 2023 06:39:21 -0700 (PDT)
+Received: from workstation.ehrig.io (p4fdbfbb0.dip0.t-ipconnect.de. [79.219.251.176])
+        by smtp.gmail.com with ESMTPSA id m13-20020a056000180d00b002efac42ff35sm2380188wrh.37.2023.04.07.06.39.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 06:39:20 -0700 (PDT)
+From:   Christian Ehrig <cehrig@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     cehrig@cloudflare.com, kernel-team@cloudflare.com,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        David Vernet <void@manifault.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Kaixi Fan <fankaixi.li@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, netdev@vger.kernel.org,
+        Paul Chaignon <paul@isovalent.com>, Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v3 0/3] Add FOU support for externally controlled ipip devices
+Date:   Fri,  7 Apr 2023 15:38:52 +0200
+Message-Id: <cover.1680874078.git.cehrig@cloudflare.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tegra20 can do horizontal and vertical image flip, but Tegra210 cannot
-(either the hardware, or this driver).
+This patch set adds support for using FOU or GUE encapsulation with
+an ipip device operating in collect-metadata mode and a set of kfuncs
+for controlling encap parameters exposed to a BPF tc-hook.
 
-In preparation to adding Tegra20 support, add a flag in struct tegra_vi_soc
-so the generic vi.c code knows whether the flip controls should be added or
-not.
+BPF tc-hooks allow us to read tunnel metadata (like remote IP addresses)
+in the ingress path of an externally controlled tunnel interface via
+the bpf_skb_get_tunnel_{key,opt} bpf-helpers. Packets can then be
+redirected to the same or a different externally controlled tunnel
+interface by overwriting metadata via the bpf_skb_set_tunnel_{key,opt}
+helpers and a call to bpf_redirect. This enables us to redirect packets
+between tunnel interfaces - and potentially change the encapsulation
+type - using only a single BPF program.
 
-Also provide a generic implementation that simply sets two flags in the
-channel struct. The Tegra20 implementation will enable flipping at stream
-start based on those flags.
+Today this approach works fine for a couple of tunnel combinations.
+For example: redirecting packets between Geneve and GRE interfaces or
+GRE and plain ipip interfaces. However, redirecting using FOU or GUE is
+not supported today. The ip_tunnel module does not allow us to egress
+packets using additional UDP encapsulation from an ipip device in
+collect-metadata mode.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Patch 1 lifts this restriction by adding a struct ip_tunnel_encap to
+the tunnel metadata. It can be filled by a new BPF kfunc introduced
+in Patch 2 and evaluated by the ip_tunnel egress path. This will allow
+us to use FOU and GUE encap with externally controlled ipip devices.
+
+Patch 2 introduces two new BPF kfuncs: bpf_skb_{set,get}_fou_encap.
+These helpers can be used to set and get UDP encap parameters from the
+BPF tc-hook doing the packet redirect.
+
+Patch 3 adds BPF tunnel selftests using the two kfuncs.
 
 ---
+v3:
+ - Integrate selftest into test_progs (Alexei)
+v2:
+ - Fixes for checkpatch.pl
+ - Fixes for kernel test robot
 
-Changed in v5:
- - Fixed typo in comment
+Christian Ehrig (3):
+  ipip,ip_tunnel,sit: Add FOU support for externally controlled ipip
+    devices
+  bpf,fou: Add bpf_skb_{set,get}_fou_encap kfuncs
+  selftests/bpf: Test FOU kfuncs for externally controlled ipip devices
 
-Changed in v4:
- - Added review tags
+ include/net/fou.h                             |   2 +
+ include/net/ip_tunnels.h                      |  28 ++--
+ net/ipv4/Makefile                             |   2 +-
+ net/ipv4/fou_bpf.c                            | 119 ++++++++++++++
+ net/ipv4/fou_core.c                           |   5 +
+ net/ipv4/ip_tunnel.c                          |  22 ++-
+ net/ipv4/ipip.c                               |   1 +
+ net/ipv6/sit.c                                |   2 +-
+ .../selftests/bpf/prog_tests/test_tunnel.c    | 153 +++++++++++++++++-
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 117 ++++++++++++++
+ 10 files changed, 432 insertions(+), 19 deletions(-)
+ create mode 100644 net/ipv4/fou_bpf.c
 
-No changes in v3
-No changes in v2
----
- drivers/staging/media/tegra-video/vi.c | 14 +++++++++++++-
- drivers/staging/media/tegra-video/vi.h |  8 ++++++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/tegra-video/vi.c b/drivers/staging/media/tegra-video/vi.c
-index 5ab24977ec46..39e9df895ede 100644
---- a/drivers/staging/media/tegra-video/vi.c
-+++ b/drivers/staging/media/tegra-video/vi.c
-@@ -30,7 +30,7 @@
- #include "vi.h"
- #include "video.h"
- 
--#define MAX_CID_CONTROLS		1
-+#define MAX_CID_CONTROLS		3
- 
- /**
-  * struct tegra_vi_graph_entity - Entity in the video graph
-@@ -910,6 +910,12 @@ static int vi_s_ctrl(struct v4l2_ctrl *ctrl)
- 	case V4L2_CID_TEGRA_SYNCPT_TIMEOUT_RETRY:
- 		chan->syncpt_timeout_retry = ctrl->val;
- 		break;
-+	case V4L2_CID_HFLIP:
-+		chan->hflip = ctrl->val;
-+		break;
-+	case V4L2_CID_VFLIP:
-+		chan->vflip = ctrl->val;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -981,6 +987,12 @@ static int tegra_channel_setup_ctrl_handler(struct tegra_vi_channel *chan)
- 		v4l2_ctrl_handler_free(&chan->ctrl_handler);
- 		return ret;
- 	}
-+
-+	if (chan->vi->soc->has_h_v_flip) {
-+		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_HFLIP, 0, 1, 1, 0);
-+		v4l2_ctrl_new_std(&chan->ctrl_handler, &vi_ctrl_ops, V4L2_CID_VFLIP, 0, 1, 1, 0);
-+	}
-+
- #endif
- 
- 	/* setup the controls */
-diff --git a/drivers/staging/media/tegra-video/vi.h b/drivers/staging/media/tegra-video/vi.h
-index cadf80b742a8..778c0ec475ab 100644
---- a/drivers/staging/media/tegra-video/vi.h
-+++ b/drivers/staging/media/tegra-video/vi.h
-@@ -74,6 +74,7 @@ struct tegra_vi_ops {
-  * @hw_revision: VI hw_revision
-  * @vi_max_channels: supported max streaming channels
-  * @vi_max_clk_hz: VI clock max frequency
-+ * @has_h_v_flip: the chip can do H and V flip, and the driver implements it
-  */
- struct tegra_vi_soc {
- 	const struct tegra_video_format *video_formats;
-@@ -83,6 +84,7 @@ struct tegra_vi_soc {
- 	u32 hw_revision;
- 	unsigned int vi_max_channels;
- 	unsigned int vi_max_clk_hz;
-+	bool has_h_v_flip:1;
- };
- 
- /**
-@@ -172,6 +174,9 @@ struct tegra_vi {
-  * @tpg_fmts_bitmap: a bitmap for supported TPG formats
-  * @pg_mode: test pattern generator mode (disabled/direct/patch)
-  * @notifier: V4L2 asynchronous subdevs notifier
-+ *
-+ * @hflip: Horizontal flip is enabled
-+ * @vflip: Vertical flip is enabled
-  */
- struct tegra_vi_channel {
- 	struct list_head list;
-@@ -222,6 +227,9 @@ struct tegra_vi_channel {
- 	enum tegra_vi_pg_mode pg_mode;
- 
- 	struct v4l2_async_notifier notifier;
-+
-+	bool hflip:1;
-+	bool vflip:1;
- };
- 
- /**
 -- 
-2.34.1
+2.39.2
 
