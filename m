@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB076DAEE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F8F6DAEE4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239568AbjDGOgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 10:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
+        id S240692AbjDGOhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 10:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjDGOgj (ORCPT
+        with ESMTP id S229601AbjDGOhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 10:36:39 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A29D6EAB;
-        Fri,  7 Apr 2023 07:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1680878185; i=hfdevel@gmx.net;
-        bh=XJ0Yc4cr0JnDef9Jw24TvKlWj64iwV/S922I5QT4uoY=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=rs8NppMMZWYrmjQSdvRBwBZj5M4YGBcXXaAnwFHdSulaEqq4LsEVPx0phkBBoKjqY
-         105Vak7bST17BsoywdH3G3UEGfjRckP3kLCFlQhyqAGqk1Ez937C5JNk6NWRFndiUE
-         pfYl5EZRLCUl6GvSnh1TFIznr4upDQZa6hfCvm+KA3BMHFwhirUeNou9x1tr7p7VW1
-         R86BkYbASp1+NpbV+lLuL+4v5XA6eX3FWq2hXioYUJObJsf9qtGkC0iJt3usOOIRuD
-         TZRgSMWq+jWc7OCWOXgS/cIClG7HUcRlvqjMtATOJsRLfNfZSkbUzxvFs2sL+YqmvI
-         xpZbx50ybThPg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [77.33.175.73] ([77.33.175.73]) by web-mail.gmx.net
- (3c-app-gmx-bap55.server.lan [172.19.172.125]) (via HTTP); Fri, 7 Apr 2023
- 16:36:25 +0200
-MIME-Version: 1.0
-Message-ID: <trinity-bf20bcb9-790b-4ab9-99e3-0831ef8257f4-1680878185420@3c-app-gmx-bap55>
-From:   hfdevel@gmx.net
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        neil.armstrong@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ARM: dts: meson8b: correct uart_B and uart_C clock
- references
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 7 Apr 2023 16:36:25 +0200
-Importance: normal
-Sensitivity: Normal
-X-Priority: 3
-X-Provags-ID: V03:K1:zyvGPj6hqLDunDW98Qsb8UOVKhijpOy22cS5iLkrBlCZFle/h5hyf7T6xFmm6uJ+/CHQc
- hIV2yxHj1PQKJ4enNouXhSLdBH/x2M1jy4srq+POvRP6HhzUiPLxQ8h0JMqQ3Kf9QgGqhEKWNoJP
- eJfe8idCDGeTM2e3zk2SrhjvFIvGvTkfpceWy/xEUJuahkM5h2OEkXIbwVJYtkxGZbTQ0iBqj1s/
- WPcYq933K3VfXckkK5Tv77Z1KKYnXEcDl804ismx78ue9yLX+o0e5syy8ZIUGx3ezlU1lhy5BB3X
- oY=
-UI-OutboundReport: notjunk:1;M01:P0:25iDbh0m2mo=;pmEOWd/uz3CFqVgh6DJH4C0YOB5
- 9OFw2C85CfDcB9beW7ALHLVfH/9PJN12EaDSIATpIJhjxMPVDF43khA2FJX6GXCe7IaH687EX
- o3YCOOtOkwPydfP27Sm6TTsTf+XL6v4yGNWyeNfRE3QiKepBEq4SyLQBIZEJfDDwjDC90q8Jb
- fJtnDn1zQW/R6LQDxxmrMooIyV3XNgwlYMt/rECnwLRz8cQ2slcvSPl3fmUGS7bMiWxNwCGvS
- RObhE1hDOC0NJGMd6gY2pU+TqfSksH9tgtzUQZ+SfqPvhnCsgdwc1ka7fFwWp/hBhXXIhV93l
- IZWaVyG+CPIeF5QWZvs/TbRRsC8AGzz42BzFobtU0G60mA7UZ/miPE7ltuImqzOW+uUB6xAI/
- f2dqEdMkjAw7y4y5aw1hWnvVmoXBu9lWLPxufzqpuhKXTEhOIb2CBG7Qx7TSTQbSLOUGR6baa
- iQa4qGg5eXiE6hJ8jOgCx1a6bHW8M7Vo49QJd4b2htsPsMRsWwlfNJDVLHm5qc0VVg3n2niPE
- nzhaXw8hCEiKvQgNcA50t2pYuYXtjmv8vsAxA9YCAk1Wmp7Ks/vfGBKPldEltye4SkNVyjIsS
- iDh0gckJJfy5BByKZB09SfI+OqGglmWwNLuTbyJ8hQgXl1/lJEMHhyYxUW6ahAH0CeHjikFkw
- NHbps0jh6Q4M0gsWTZyTA2RNX3jjthZbQNla5ORlLnxFAZuWaiQKDOFhZNpqPiWRxWImvCXyz
- AqWyvvZtnHyhvk31qg+2bguEtNUAE0Ta4ptTgMPOX9eA8k6Wr9EdAVqKN1ssLcLUkRPRw/sGm
- 0QXV4vfm4MwgunnXurKsbb9Q==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Fri, 7 Apr 2023 10:37:52 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E07A6EB7
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 07:37:52 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id c2-20020a170903234200b001a0aecba4e1so24412987plh.16
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 07:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680878272;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2EwAMOSvWuuwRSNJO5ZSdr/2f2DfQGzc1eG+hKypIp4=;
+        b=WjN4KNyY0Wp7LdDdLA6dLmhjkc6qQZflpUdRC+sLqOT1ejDVl/h0ZB6Tmz22bWSoyd
+         SQFGBIBVhTTMArZmaUaaTOo8+EAq1bu1KIDQJFABQQ1bRlhURlz1jASWJyLLKysSDRI8
+         nuATGhfSVn7QSTW5n+zd3MihWaxCTp31Vm3oT3iMSEaxh2w2HoOr5StPSMGO1lE9mzFd
+         s7kebEBG+cVzTnHvsldADj+aN94oV6sPqdwVnE46exttGjGTsDRPZeB5WN8cu+dkrap+
+         8D3To06woowy82vMmR0lTyS82Elin9JJuMDsb+1Kq1cqLlssJJP9uZL9JT3bKADgCQyf
+         a7Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680878272;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2EwAMOSvWuuwRSNJO5ZSdr/2f2DfQGzc1eG+hKypIp4=;
+        b=RkyH3p2+D0VWOoE9kqvTG8J/Z6vn0vpQMRCi63mmnXxwT5FxaPlWfPQfdf6NOHB7Wg
+         /ahwVg4GQfUQEqthQQOM7zc56m6Z1dbtvbYil/r2/AC2AdOaIIqKRG7/nYEJmBtAue80
+         Hofyx8FSodPFEdNwnVuA2/v716jhTmx6symbe3DjMQtgTpe9SxW+T7WTKWLqHyRwT5Zc
+         yr6sPJ7K3WBu3i3RsRdi74Po0sCUwE+JMAKWUt2eemSUhkW7WbW96gn/P/U6U6ycN7hb
+         INc+o1Xo8ewruL0avKCyDhC9CuRq1HxSUp+WPH5Rsuy9N/kZN9vwxgDbHHGn4QSjFE0D
+         kQPw==
+X-Gm-Message-State: AAQBX9cnQ3Y2OgK76Nvkf9F2zauSwcBZW9Jem6xMlAMH3xDHebqrFp6p
+        BOccfunKzypQs9vacLRyNmwjklsz/NU=
+X-Google-Smtp-Source: AKy350a/8THxQSb2D0BIt2HszEXg8D/pIxoaIL3MPoOkRezNC4zYbJoii46ZiQblx+HPftOhwMrSzr3GeLY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:d2cb:b0:1a2:401f:6dae with SMTP id
+ n11-20020a170902d2cb00b001a2401f6daemr920418plc.4.1680878271830; Fri, 07 Apr
+ 2023 07:37:51 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 07:37:50 -0700
+In-Reply-To: <7c57fa4e-de52-867f-6ad9-1afa705245cc@gmail.com>
+Mime-Version: 1.0
+References: <20230310113349.31799-1-likexu@tencent.com> <7c57fa4e-de52-867f-6ad9-1afa705245cc@gmail.com>
+Message-ID: <ZDAqvvH/Ag8TBIhR@google.com>
+Subject: Re: [PATCH v2] KVM: x86/pmu/misc: Fix a typo on kvm_pmu_request_counter_reprogam()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,38 +67,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the current device tree for meson8b, uarts B (e.g. available on pins
-8/10 on Odroid-C1) and C (pins 3/5 on Odroid-C1) do not work, because they
-are relying on incorrect clocks. Change the references of pclk to the
-correct CLKID, to allow use of the two uarts.
+On Fri, Apr 07, 2023, Like Xu wrote:
+> Sean, would you pick this up ?
 
-Fixes: 3375aa77135f ("ARM: dts: meson8b: Fix the UART device-tree schema v=
-alidation")
-Signed-off-by: Hans-Frieder Vogt <hfdevel@gmx.net>
-=2D--
-v1->v2: Addressed review comments with respect to patch style.
-
- meson8b.dtsi |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dt=
-si
-index d5a3fe21e8e7..25f7c985f9ea 100644
-=2D-- a/arch/arm/boot/dts/meson8b.dtsi
-+++ b/arch/arm/boot/dts/meson8b.dtsi
-@@ -740,13 +740,13 @@ &uart_A {
-
- &uart_B {
- 	compatible =3D "amlogic,meson8b-uart";
--	clocks =3D <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clocks =3D <&xtal>, <&clkc CLKID_UART1>, <&clkc CLKID_CLK81>;
- 	clock-names =3D "xtal", "pclk", "baud";
- };
-
- &uart_C {
- 	compatible =3D "amlogic,meson8b-uart";
--	clocks =3D <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-+	clocks =3D <&xtal>, <&clkc CLKID_UART2>, <&clkc CLKID_CLK81>;
- 	clock-names =3D "xtal", "pclk", "baud";
- };
-
+Heh, ya, this one and Aaron's series are sitting in my local tree, just didn't
+quite get to 'em yesterday.
