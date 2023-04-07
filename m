@@ -2,135 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C816DAFE9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A776DAFEC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbjDGPyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 11:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S231693AbjDGP5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 11:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDGPyS (ORCPT
+        with ESMTP id S229469AbjDGP5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 11:54:18 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3356EAB;
-        Fri,  7 Apr 2023 08:54:17 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-17fcc07d6c4so31977957fac.8;
-        Fri, 07 Apr 2023 08:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680882857; x=1683474857;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Utrmt87/lvg+g4etr9fQILoL0w88HzDoqi2Ru46qUPk=;
-        b=o0/qFzatw0XuLbTEw8yp/m0U6CXUDcz+urrbqYGJmooStr83eR6WkSY1dJS/6Sw8IF
-         KrOgDS9KzsLU/0UfYPvA17xjNnyadU7o5N0AiMWy1CP0EXvlEzKhpfwkaSLK3rskO/gp
-         nzUiH3CSXqwuPOngsBh0ZTdjySRkvwB1zLA0sKLMP24uku2YZNXRWRmJdtJVGCwAtRsj
-         fkOgVWi4kB/9vMeivU++xLY7m2trwrUQOLpub20sSurOu5sDXxvy1QOpkp0ekb9cKKyr
-         DnxdQlgYO/29SONMNHp7xGzBLfCMACJpwLTnWZtbqg+kUCIT8Wum8tlAPhTuGhB+k/HP
-         C3qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680882857; x=1683474857;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Utrmt87/lvg+g4etr9fQILoL0w88HzDoqi2Ru46qUPk=;
-        b=rnR4MLw2s9vBueiBSU2UcM9fNsSP2CqfgIpVCdqbzS7QgYIWfhuZvOfVJo7qXVsZ3X
-         cBR4Q47k8Ti2mFJF1HAdV98/Zz9EjfaePV1ufpql8wLv1vKde8WL9deQXNT0dnzruuYC
-         zCWfSyO0i3TD6sYB8oEPQPi/Ry97eV7nlQrBOwc5ficslsn81VNYy2T6dOO9yicL9lwA
-         oDVXo72aW83VAfRAcSIABRLYkmwkhqhGoG+v2xuRqtwJFlgG5DHJkjEI7oDzBhe7oMP/
-         8xe1vwx1Oz2hLXu856ipyywpzkAoq2S+hE7gfCozWAPk+7PDMncKHOoE+QUQbbNabXW2
-         rYwQ==
-X-Gm-Message-State: AAQBX9fz5f9QFPj6oSKWPtM3vGQMozDyD5vSrLT/JmChpiovP5keti1q
-        x4GfMvf904cojwRTuqQUkEo=
-X-Google-Smtp-Source: AKy350Ysoe57s+DVzestQ+7uGRw8gyaZbfkee61FtumTVTC1uLb7QV3bmoGrOM3yH6TZuRduLJXrIw==
-X-Received: by 2002:a05:6870:4799:b0:177:9789:b0ad with SMTP id c25-20020a056870479900b001779789b0admr4484677oaq.22.1680882857044;
-        Fri, 07 Apr 2023 08:54:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bd16-20020a056871b31000b0016e8726f0d4sm1763309oac.3.2023.04.07.08.54.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 08:54:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 08:54:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] hwmon: (asus-ec-sensors) add ROG STRIX Z390-F GAMING
-Message-ID: <9a224c5a-adca-4802-b7d8-4b743ec47e76@roeck-us.net>
-References: <20230405224339.358675-1-eugene.shalygin@gmail.com>
- <20230405224339.358675-3-eugene.shalygin@gmail.com>
+        Fri, 7 Apr 2023 11:57:51 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A784B6EB7;
+        Fri,  7 Apr 2023 08:57:50 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337Esl68031504;
+        Fri, 7 Apr 2023 15:57:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=pdQyPeL8PLRJLtK4NoOm2t41du0/gRjqTNHbuqp88bY=;
+ b=HVJttcdsoX65xfcxg4NtvIE6VLNDRDxTliBtTCuaTFiEIebzd2Y7ds80piQ+b2oq4TOC
+ KiYHx4KCleBgIGY07sV6Ii/9AjcAAOnyr9VN66gy1YuhXOI6ucBn8o3bFagkh8a+6P0B
+ g6nwJo9swjnxI67Y6jdGOqS9ItOXHdsalmzxCXbpbSfveT+/RRqe4Z5+xBfmM2kQWI9f
+ E+ZNZ/PfYyklTvUfIK3ULijqxNc/RVaashfFWuiEsgvTUuvKX+EVLcvE53Yr0oWHQZY9
+ puMbROD7RCQlssshLOMiCv/0A6hctkU8LQiPp3VozlboWU7DNTBuNwrpB8VEkjx/95CU LQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptb9whb3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 15:57:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337FvkEu006940
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 7 Apr 2023 15:57:46 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 7 Apr 2023 08:57:40 -0700
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+Subject: [PATCH V4 0/5] Add regulator support for IPQ9574 SoC
+Date:   Fri, 7 Apr 2023 21:27:22 +0530
+Message-ID: <20230407155727.20615-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230405224339.358675-3-eugene.shalygin@gmail.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -QvzJblJ0jUdWJTsDXOfsyyaHr7Lu-DX
+X-Proofpoint-ORIG-GUID: -QvzJblJ0jUdWJTsDXOfsyyaHr7Lu-DX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_10,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
+ mlxlogscore=456 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304070146
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 12:43:39AM +0200, Eugene Shalygin wrote:
-> The definition comes from a LHM PR [1], and the mutex path from
-> the ACPI dump, kindly provided by the PR author [2]
-> 
-> [1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/1031
-> [2] https://github.com/zeule/asus-ec-sensors/issues/36
-> 
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
+IPQ9574 SoC uses the PMIC MP5496 and SMPA1 regulator for APSS voltage scaling.
+This patch series adds support for the same and also enables the RPM 
+communication over the RPMSG framework.
 
-Applied.
+DTS patch depends on the below series
+https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
 
-Thanks,
-Guenter
+[V4]:
+	- Detailed change logs are added to the respective patches
+[V3]:
+	https://lore.kernel.org/linux-arm-msm/20230406070032.22243-1-quic_devipriy@quicinc.com/
+	- Dropped PATCH [1/6] dt-bindings: soc: qcom: smd-rpm: Add IPQ9574 compatible
+	  as it is available in linux-next/master
+	- Dropped PATCH [4/6] regulator: qcom_smd: Add support to define the bootup voltage
+	  and updated the nominal voltage in the Board DT as discussed
+	- Splitted the board DT changes to a separate patch as suggested
+	- Detailed change logs are added to the respective patches
+[V2]:
+	https://lore.kernel.org/linux-arm-msm/20230217142030.16012-1-quic_devipriy@quicinc.com/
+	- Reordered the patches to have the bindings and driver changes
+	  in place before the device tree support
+	- Dropped the 'soc: qcom: smd-rpm: Add IPQ9574 compatible' since
+	  it is already part of the linux-next/master
+	- Detailed change log is added to the respective patches
+[V1]:
+	https://lore.kernel.org/linux-arm-msm/20230113150310.29709-1-quic_devipriy@quicinc.com/
 
-> ---
->  Documentation/hwmon/asus_ec_sensors.rst |  1 +
->  drivers/hwmon/asus-ec-sensors.c         | 10 ++++++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/hwmon/asus_ec_sensors.rst b/Documentation/hwmon/asus_ec_sensors.rst
-> index f1c9b1e11268..c92c1d3839e4 100644
-> --- a/Documentation/hwmon/asus_ec_sensors.rst
-> +++ b/Documentation/hwmon/asus_ec_sensors.rst
-> @@ -22,6 +22,7 @@ Supported boards:
->   * ROG STRIX X570-E GAMING WIFI II
->   * ROG STRIX X570-F GAMING
->   * ROG STRIX X570-I GAMING
-> + * ROG STRIX Z390-F GAMING
->   * ROG STRIX Z690-A GAMING WIFI D4
->   * ROG ZENITH II EXTREME
->   * ROG ZENITH II EXTREME ALPHA
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 594fe7241111..e5be0cf472fc 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -408,6 +408,14 @@ static const struct ec_board_info board_info_strix_x570_i_gaming = {
->  	.family = family_amd_500_series,
->  };
->  
-> +static const struct ec_board_info board_info_strix_z390_f_gaming = {
-> +	.sensors = SENSOR_TEMP_CHIPSET | SENSOR_TEMP_VRM |
-> +		SENSOR_TEMP_T_SENSOR |
-> +		SENSOR_FAN_CPU_OPT,
-> +	.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
-> +	.family = family_intel_300_series,
-> +};
-> +
->  static const struct ec_board_info board_info_strix_z690_a_gaming_wifi_d4 = {
->  	.sensors = SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM,
->  	.mutex_path = ASUS_HW_ACCESS_MUTEX_RMTW_ASMX,
-> @@ -473,6 +481,8 @@ static const struct dmi_system_id dmi_table[] = {
->  					&board_info_strix_x570_f_gaming),
->  	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX X570-I GAMING",
->  					&board_info_strix_x570_i_gaming),
-> +	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z390-F GAMING",
-> +					&board_info_strix_z390_f_gaming),
->  	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG STRIX Z690-A GAMING WIFI D4",
->  					&board_info_strix_z690_a_gaming_wifi_d4),
->  	DMI_EXACT_MATCH_ASUS_BOARD_NAME("ROG ZENITH II EXTREME",
+Devi Priya (5):
+  regulator: qcom_smd: Add s1 sub-node to mp5496 regulator
+  regulator: qcom_smd: Add MP5496 S1 regulator
+  arm64: dts: qcom: ipq9574: Add RPM related nodes
+  arm64: dts: qcom: ipq9574: Add SMPA1 regulator node
+  arm64: dts: qcom: ipq9574: Add cpufreq support
+
+ .../regulator/qcom,smd-rpm-regulator.yaml     |  2 +-
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   | 19 +++++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 75 +++++++++++++++++++
+ drivers/regulator/qcom_smd-regulator.c        |  5 +-
+ 4 files changed, 98 insertions(+), 3 deletions(-)
+
+-- 
+2.17.1
+
