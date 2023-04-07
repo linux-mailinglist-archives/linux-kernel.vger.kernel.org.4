@@ -2,68 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8E06DA8D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 08:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B096DA8D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 08:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233479AbjDGGSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 02:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        id S233763AbjDGGVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 02:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjDGGSi (ORCPT
+        with ESMTP id S229844AbjDGGVF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 02:18:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F13197;
-        Thu,  6 Apr 2023 23:18:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2AE560FA9;
-        Fri,  7 Apr 2023 06:18:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBF7FC4339B;
-        Fri,  7 Apr 2023 06:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680848317;
-        bh=PkUkc3BxGY08e5rKE6FcXGqmMgAN6jFXJmjAdt2/kNM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=osdZjFbBHEtChPItfYS8FeJjike3PRGZdD7nSd7mHn55EhxyKj7ysh5K8oPyKTerl
-         44u81tzYhXuE7rzRw6ZhL4LdT0AWF+eF4NUL9lPRedfvC82vj157xhOylR4H7mJQBs
-         UcfYAA/ekXQ2rc/+85DU3yGgQtSckQJC0tLr7aM1eq9WG7yywgU5QbGnnABL8UikzM
-         t9m27fzWWlj8ZjCVGqUVOxlACcHd5Hl4GfLfcq6Yyexmq8lzWyr3a3ZQau31avXblm
-         iw5kSi4+m09LsN7wz7rJ3UpboUflwFo8mPrZiiL5d8GyZQNvpurNJGVNknU8o/C4yf
-         PUuNVMnpowlFg==
-Date:   Fri, 7 Apr 2023 08:18:33 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-crypto@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Held Felix <Felix.Held@amd.com>,
-        linux-kernel@vger.kernel.org,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Grzegorz Bernacki <gjb@semihalf.com>
-Subject: Re: [PATCH v8 0/6] Use CCP driver to handle PSP I2C arbitration
-Message-ID: <ZC+1ufdj8WYixQsM@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, linux-crypto@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Held Felix <Felix.Held@amd.com>,
-        linux-kernel@vger.kernel.org, Mark Hasemeyer <markhas@chromium.org>,
-        Grzegorz Bernacki <gjb@semihalf.com>
-References: <20230403183216.3493-1-mario.limonciello@amd.com>
- <ZC5pxORLN+SF/91S@sai>
- <82ef9505-f8ae-36d0-fdeb-9bfc92aec557@amd.com>
+        Fri, 7 Apr 2023 02:21:05 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7F1197;
+        Thu,  6 Apr 2023 23:21:02 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 159DD24E338;
+        Fri,  7 Apr 2023 14:21:00 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Apr
+ 2023 14:21:00 +0800
+Received: from [192.168.60.111] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Apr
+ 2023 14:20:59 +0800
+Message-ID: <56003fe8-ec87-672e-6bb2-a574b741be77@starfivetech.com>
+Date:   Fri, 7 Apr 2023 14:20:59 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5nOnx0Jc9l74hNuL"
-Content-Disposition: inline
-In-Reply-To: <82ef9505-f8ae-36d0-fdeb-9bfc92aec557@amd.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/9] media: dt-bindings: Add bindings for JH7110 Camera
+ Subsystem
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        "Todor Tomov" <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Ezequiel Garcia" <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230331121826.96973-1-jack.zhu@starfivetech.com>
+ <20230331121826.96973-2-jack.zhu@starfivetech.com>
+ <20230404043949.GJ16648@pendragon.ideasonboard.com>
+Content-Language: en-US
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+In-Reply-To: <20230404043949.GJ16648@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,40 +67,213 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---5nOnx0Jc9l74hNuL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
+On 2023/4/4 12:39, Laurent Pinchart wrote:
+> Hi Jack,
+> 
+> Thank you for the patch.
+> 
+> On Fri, Mar 31, 2023 at 08:18:18PM +0800, Jack Zhu wrote:
+>> Add the bindings documentation for Starfive JH7110 Camera Subsystem
+>> which is used for handing image sensor data.
+>> 
+>> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+>> ---
+>>  .../bindings/media/starfive,jh7110-camss.yaml | 159 ++++++++++++++++++
+>>  MAINTAINERS                                   |   7 +
+>>  2 files changed, 166 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>> new file mode 100644
+>> index 000000000000..0235c70e7793
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>> @@ -0,0 +1,159 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Starfive SoC CAMSS ISP
+>> +
+>> +maintainers:
+>> +  - Jack Zhu <jack.zhu@starfivetech.com>
+>> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+>> +
+>> +description:
+>> +  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC. It
+>> +  consists of a VIN controller (Video In Controller, a top-level control until)
+>> +  and an ISP.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-camss
+>> +
+>> +  reg:
+>> +    maxItems: 2
+>> +
+>> +  reg-names:
+>> +    items:
+>> +      - const: syscon
+>> +      - const: isp
+>> +
+>> +  clocks:
+>> +    maxItems: 7
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: apb_func
+>> +      - const: wrapper_clk_c
+>> +      - const: dvp_inv
+>> +      - const: axiwr
+>> +      - const: mipi_rx0_pxl
+>> +      - const: ispcore_2x
+>> +      - const: isp_axi
+>> +
+>> +  resets:
+>> +    maxItems: 6
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: wrapper_p
+>> +      - const: wrapper_c
+>> +      - const: axird
+>> +      - const: axiwr
+>> +      - const: isp_top_n
+>> +      - const: isp_top_axi
+>> +
+>> +  power-domains:
+>> +    items:
+>> +      - description: JH7110 ISP Power Domain Switch Controller.
+>> +
+>> +  interrupts:
+>> +    maxItems: 4
+>> +
+>> +  ports:
+>> +    $ref: /schemas/graph.yaml#/properties/ports
+>> +
+>> +    properties:
+>> +      port@0:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        unevaluatedProperties: false
+>> +        description:
+>> +          Input port for receiving DVP data.
+>> +
+>> +        properties:
+>> +          endpoint:
+>> +            $ref: video-interfaces.yaml#
+>> +            unevaluatedProperties: false
+>> +
+>> +      port@1:
+>> +        $ref: /schemas/graph.yaml#/properties/port
+>> +        unevaluatedProperties: false
+>> +        description:
+>> +          Input port for receiving CSI data.
+>> +
+>> +        properties:
+>> +          endpoint:
+>> +            $ref: video-interfaces.yaml#
+>> +            unevaluatedProperties: false
+>> +
+>> +    required:
+>> +      - port@1
+> 
+> Both ports should be required. It's fine to have unconnected ports (that
+> is, without any endpoint child node), but the ports should always be
+> present if they exist in the hardware.
+> 
 
-> > How should this go upstream, i.e. are there dependencies? Shall I pick
-> > the I2C patches or is it better if all goes via the crypto tree?
-> >=20
-> IMO it's better to go through the crypto tree.=C2=A0 There are dependenci=
-es
-> in the crypto part from the earlier series that was merged.
+Thank you for your comments.
+OK, I will add port@0.
 
-Ok, fine with me. I acked the I2C patches. Thanks for the heads up.
-
-
---5nOnx0Jc9l74hNuL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQvtbkACgkQFA3kzBSg
-KbYilg//b/7oRyaFxSoYypW8qZWg9NazCHaTiYpl8oPfrkrDTH3KGB7/TdHX4zCt
-lmVf9f0hZPJdOmvJk0SwmKNvcZUIgk/lEi2fxUAUaVPjRWM7qfh7Hn5OBSuXafRm
-oJZ7rNgR2pT4rL5HwDn4sdLMQaVLAYR9TgxqKX9zjcA9yTsHidTs9WnlzzB9fwSi
-k36Gw+AdUZDySzAr8GplP9n0BA4CUcJ2zNW5x3+3VJ/eM/Iq7aTiEDyC6z2sm5bM
-G7DNfoXvIWzWFH8hp4/Nee8NemLNEIqw0STVKhhfRO9LnlMSZGTVktTywi4J/SVa
-+xah/GFpZ1DNQQJ/Atgi2qv/tnK3X7uK3Wl3ZRMiS3gIxnqp79hP72NRxWYQMMbK
-EygnaMvZgwZ/ulRoBVYnYFH0dP6CrItSqD99IMssuFYfX6sDUO7m52wsXFLcoGNr
-PskEmTLtASyjG738ty77bjalo6oAFWAvCuRPY5KGMOjIP74452lpOhdC0BKyBi0B
-gt9sD9uwx8/jxQK4zB1V9OZYTISxFG4A624O+CuhXH9qAq95JNYwHhPW92EXkcqC
-BqgU2E7TelqVt4WfU3//4RMId0OAjmr0IkJJGXmQa8YFTpKjhUeSYSZytgTuPLf3
-/DUxDn4iMQtQGfGvLiAh9vLtf0UwsVOHkyR65BFJg/g8JI0jIIg=
-=GnBm
------END PGP SIGNATURE-----
-
---5nOnx0Jc9l74hNuL--
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - reg-names
+>> +  - clocks
+>> +  - clock-names
+>> +  - resets
+>> +  - reset-names
+>> +  - power-domains
+>> +  - interrupts
+>> +  - ports
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    isp@19840000 {
+>> +        compatible = "starfive,jh7110-camss";
+>> +        reg = <0x19840000 0x10000>,
+>> +              <0x19870000 0x30000>;
+>> +        reg-names = "syscon", "isp";
+>> +        clocks = <&ispcrg 0>,
+>> +                 <&ispcrg 13>,
+>> +                 <&ispcrg 2>,
+>> +                 <&ispcrg 12>,
+>> +                 <&ispcrg 1>,
+>> +                 <&syscrg 51>,
+>> +                 <&syscrg 52>;
+>> +        clock-names = "apb_func",
+>> +                      "wrapper_clk_c",
+>> +                      "dvp_inv",
+>> +                      "axiwr",
+>> +                      "mipi_rx0_pxl",
+>> +                      "ispcore_2x",
+>> +                      "isp_axi";
+>> +        resets = <&ispcrg 0>,
+>> +                 <&ispcrg 1>,
+>> +                 <&ispcrg 10>,
+>> +                 <&ispcrg 11>,
+>> +                 <&syscrg 41>,
+>> +                 <&syscrg 42>;
+>> +        reset-names = "wrapper_p",
+>> +                      "wrapper_c",
+>> +                      "axird",
+>> +                      "axiwr",
+>> +                      "isp_top_n",
+>> +                      "isp_top_axi";
+>> +        power-domains = <&pwrc 5>;
+>> +        interrupts = <92>, <87>, <88>, <90>;
+>> +
+>> +        ports {
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +            port@0 {
+>> +                reg = <0>;
+>> +                vin_from_sc2235: endpoint {
+>> +                    remote-endpoint = <&sc2235_to_vin>;
+>> +                };
+>> +            };
+>> +
+>> +            port@1 {
+>> +                reg = <1>;
+>> +                vin_from_csi2rx: endpoint {
+>> +                    remote-endpoint = <&csi2rx_to_vin>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index b6c811326355..f7165371c56d 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19908,6 +19908,13 @@ M:	Ion Badulescu <ionut@badula.org>
+>>  S:	Odd Fixes
+>>  F:	drivers/net/ethernet/adaptec/starfire*
+>>  
+>> +STARFIVE CAMERA SUBSYSTEM DRIVER
+>> +M:	Jack Zhu <jack.zhu@starfivetech.com>
+>> +M:	Changhuang Liang <changhuang.liang@starfivetech.com>
+>> +L:	linux-media@vger.kernel.org
+>> +S:	Maintained
+>> +F:	Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>> +
+>>  STARFIVE DEVICETREES
+>>  M:	Emil Renner Berthing <kernel@esmil.dk>
+>>  S:	Maintained
+> 
