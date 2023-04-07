@@ -2,608 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150BE6DB3EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2C56DB3F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjDGTI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 15:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
+        id S229845AbjDGTMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 15:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbjDGTIw (ORCPT
+        with ESMTP id S229524AbjDGTMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 15:08:52 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2875B88;
-        Fri,  7 Apr 2023 12:08:43 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337EsEPq007242;
-        Fri, 7 Apr 2023 19:08:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=8k0WzWkS/ryCzEtumObJ8RGxRbP/FX0NVn3A6ij6UxI=;
- b=OOGPbs3BGaYw/KhlqdqdVWm0JsxFoXltVIU1NHRE8C7JVroLXujBjUQeDsdJXNAb4M5T
- fDEJNknfFI/xRazJ8PpnTIlsfnvy1f7z50FS1GS58+vFTofqJ9EVVQ2XCKZ3U5NT3JUM
- hcprJ07K8Usmy6HZJghGQgIrYaJ55vnaAH17+/Sc6uf7tiGgNCs2/k7VVStUHcgZsbwP
- rbsCTggkgKlh2wsH3Px86OKPUQcKD7ggM1OXQ407aG/W6IrrJpNTUR8kHHRKTPWhY4TP
- BGzola3+FLwAImjjsuO4N8+rgIUv/mTqkwjd+5QcTg0ycboy2xX5+gH5AhvGOXo5YHFI FQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptcrn1nm6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 19:08:06 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337J85Iu017421
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Apr 2023 19:08:05 GMT
-Received: from hu-johmoo-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 7 Apr 2023 12:08:05 -0700
-From:   John Moon <quic_johmoo@quicinc.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Nicolas Schier" <nicolas@fjasle.eu>
-CC:     John Moon <quic_johmoo@quicinc.com>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        <kernel-team@android.com>, <libabigail@sourceware.org>,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>
-Subject: [PATCH v4 RESEND 2/2] docs: dev-tools: Add UAPI checker documentation
-Date:   Fri, 7 Apr 2023 12:07:54 -0700
-Message-ID: <20230407190754.20994-3-quic_johmoo@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230407190754.20994-1-quic_johmoo@quicinc.com>
-References: <20230407190754.20994-1-quic_johmoo@quicinc.com>
+        Fri, 7 Apr 2023 15:12:00 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724B35B83
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 12:11:58 -0700 (PDT)
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 365923F238
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 19:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1680894717;
+        bh=w6xTUwQ3JL7AvAeCA6lcpSlPVx3TyBza2dRcNivqo/k=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=V09WM05KMadk5jPYZRF8Zp3N1T4Ba4NhnBZSzIm1ZNZVu4PeeAffPVn48HqX4ZYdb
+         btf0y5q/Fpenyx+shrUTyS3/zR2tlYUtr6mI1s7MBnwxo4MTjWJh0XNh1j/CCaLSP3
+         BF3U91VCi2XDhR2Ap397l+sZh/XW9YcWrZfR7rwDZWg5az3/rEWR4nOIxHsUTswipX
+         5A58z/ByRXrZ74LkNQfSdW9zy+YjVEj0CyNuR8H7IZdrg/zD/FifAy/LI6vgPL0JOA
+         x2M1jwoOA8fCSk1JYuIVjMM7b0ngE3nbqVf/uaM+LC2Oi5PBzn3cfSPoUfPJyOpxVv
+         Got0FOntRTQIA==
+Received: by mail-qv1-f72.google.com with SMTP id r4-20020ad44044000000b005ad0ce58902so19623392qvp.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 12:11:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680894716;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w6xTUwQ3JL7AvAeCA6lcpSlPVx3TyBza2dRcNivqo/k=;
+        b=WgyaC/OnpusfrPiRGDfxP7EiqnfX8WzhH9mtZLMBNiURs1wfhEYFZjrY7aDRkfqn+e
+         0NWhcQl768uls3yZ7PW0VDp9k/1xtaQvqkmEc23jKCT52uG6zDfUZp9OHEb6Q8fsfEu2
+         6Xv7IYgxNQG+PVAH6wwGzSQwhpvJYCo9sCNFQxUCIvWXVbTxC+YiCod7teAbI0tOvLeK
+         a6XEmO0Ky6xD94jUZQOOtTqFhte79mF3/xyIiGVBr8E3XftP2BDtvMXb+8tSlg3/EYF/
+         xjaZMc7UeVq+Q7zG3UaVssFomjIvE+aewvOlz58K/cZZVEW8eX1r8poK7lPjvQpVa1uq
+         gABw==
+X-Gm-Message-State: AAQBX9ct4uS9V59nC3g7WJK+xc4PaVTYE9cMM2ZsBnr/Mb3pMcnnTUnz
+        k02kova+exNUAVRttDGP4iLmGafWH9/meC0Vad2BdtPh9JsJZwHmgzUsm4WiXYSS9/a8H4yqSpz
+        2enSCF/W/kd4U4D/6VF/nwAzZ5H3w24X8ch9oDQ5flq4bYLyd3jJO3pTL4A==
+X-Received: by 2002:a05:620a:c4a:b0:74a:505:b63 with SMTP id u10-20020a05620a0c4a00b0074a05050b63mr836691qki.13.1680894715952;
+        Fri, 07 Apr 2023 12:11:55 -0700 (PDT)
+X-Google-Smtp-Source: AKy350akTeL9NyHSRBDye11honkl0p1F6cIXhHlvcXrcqMlPixNImXisSpl2Slzdm3cA1mQNRRPWrLRSKj0ZaKgvZ9I=
+X-Received: by 2002:a05:620a:c4a:b0:74a:505:b63 with SMTP id
+ u10-20020a05620a0c4a00b0074a05050b63mr836684qki.13.1680894715666; Fri, 07 Apr
+ 2023 12:11:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: NjGOUITEASRFNifFulXX62-WQJx8506H
-X-Proofpoint-GUID: NjGOUITEASRFNifFulXX62-WQJx8506H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304070172
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230407110356.8449-1-samin.guo@starfivetech.com> <20230407110356.8449-6-samin.guo@starfivetech.com>
+In-Reply-To: <20230407110356.8449-6-samin.guo@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Fri, 7 Apr 2023 21:11:39 +0200
+Message-ID: <CAJM55Z9jCdPASsk+fw_j+9QH3+Kj28tpCA4PgW_nB_ce7qWL8w@mail.gmail.com>
+Subject: Re: [-net-next v11 5/6] net: stmmac: Add glue layer for StarFive
+ JH7110 SoC
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Pedro Moreira <pmmoreir@synopsys.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add detailed documentation for scripts/check-uapi.sh.
+On Fri, 7 Apr 2023 at 13:05, Samin Guo <samin.guo@starfivetech.com> wrote:
+>
+> This adds StarFive dwmac driver support on the StarFive JH7110 SoC.
+>
+> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> ---
+>  MAINTAINERS                                   |   1 +
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+>  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 123 ++++++++++++++++++
+>  4 files changed, 137 insertions(+)
+>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6b6b67468b8f..46b366456cee 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19910,6 +19910,7 @@ M:      Emil Renner Berthing <kernel@esmil.dk>
+>  M:     Samin Guo <samin.guo@starfivetech.com>
+>  S:     Maintained
+>  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+> +F:     drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+>
+>  STARFIVE JH7100 CLOCK DRIVERS
+>  M:     Emil Renner Berthing <kernel@esmil.dk>
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> index f77511fe4e87..5f5a997f21f3 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
+>           for the stmmac device driver. This driver is used for
+>           arria5 and cyclone5 FPGA SoCs.
+>
+> +config DWMAC_STARFIVE
+> +       tristate "StarFive dwmac support"
+> +       depends on OF && (ARCH_STARFIVE || COMPILE_TEST)
+> +       select MFD_SYSCON
+> +       default m if ARCH_STARFIVE
+> +       help
+> +         Support for ethernet controllers on StarFive RISC-V SoCs
+> +
+> +         This selects the StarFive platform specific glue layer support for
+> +         the stmmac device driver. This driver is used for StarFive JH7110
+> +         ethernet controller.
+> +
+>  config DWMAC_STI
+>         tristate "STi GMAC support"
+>         default ARCH_STI
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> index 057e4bab5c08..8738fdbb4b2d 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+> @@ -23,6 +23,7 @@ obj-$(CONFIG_DWMAC_OXNAS)     += dwmac-oxnas.o
+>  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)        += dwmac-qcom-ethqos.o
+>  obj-$(CONFIG_DWMAC_ROCKCHIP)   += dwmac-rk.o
+>  obj-$(CONFIG_DWMAC_SOCFPGA)    += dwmac-altr-socfpga.o
+> +obj-$(CONFIG_DWMAC_STARFIVE)   += dwmac-starfive.o
+>  obj-$(CONFIG_DWMAC_STI)                += dwmac-sti.o
+>  obj-$(CONFIG_DWMAC_STM32)      += dwmac-stm32.o
+>  obj-$(CONFIG_DWMAC_SUNXI)      += dwmac-sunxi.o
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> new file mode 100644
+> index 000000000000..4963d4008485
+> --- /dev/null
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+> @@ -0,0 +1,123 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * StarFive DWMAC platform driver
+> + *
+> + * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
+> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+> + *
+> + */
+> +
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include "stmmac_platform.h"
+> +
+> +struct starfive_dwmac {
+> +       struct device *dev;
+> +       struct clk *clk_tx;
+> +};
+> +
+> +static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
+> +{
+> +       struct starfive_dwmac *dwmac = priv;
+> +       unsigned long rate;
+> +       int err;
+> +
+> +       rate = clk_get_rate(dwmac->clk_tx);
 
-Signed-off-by: John Moon <quic_johmoo@quicinc.com>
-Acked-by: Nick Desaulniers <ndesaulniers@google.com>
----
-    - Removed references to "-m" mode
-    - Updated script outputs
-    - Added example of UAPI removal via Kbuild
+Hi Samin,
 
- Documentation/dev-tools/checkuapi.rst | 479 ++++++++++++++++++++++++++
- Documentation/dev-tools/index.rst     |   1 +
- 2 files changed, 480 insertions(+)
- create mode 100644 Documentation/dev-tools/checkuapi.rst
+I'm not sure why you added this line in this revision. If it's just to
+not call clk_set_rate on the uninitialized rate, I'd much rather you
+just returned early and don't call clk_set_rate at all in case of
+errors.
 
-diff --git a/Documentation/dev-tools/checkuapi.rst b/Documentation/dev-tools/checkuapi.rst
-new file mode 100644
-index 000000000000..c67598d03cdb
---- /dev/null
-+++ b/Documentation/dev-tools/checkuapi.rst
-@@ -0,0 +1,479 @@
-+.. SPDX-License-Identifier: GPL-2.0-only
-+
-+============
-+UAPI Checker
-+============
-+
-+The UAPI checker (``scripts/check-uapi.sh``) is a shell script which checks
-+UAPI header files for userspace backwards-compatibility across the git tree.
-+
-+The script can produce false positives in some cases, so developers are
-+encouraged to use their best judgement when interpreting the results. Please
-+refer to kernel documentation on the topic of IOCTL stability for more
-+information (Documentation/process/botching-up-ioctls.rst).
-+
-+Options
-+=======
-+
-+This section will describe the options ``check-uapi.sh`` can be run with.
-+
-+Usage::
-+
-+    check-uapi.sh [-b BASE_REF] [-p PAST_REF] [-j N] [-l ERROR_LOG] [-q] [-v]
-+
-+Available options::
-+
-+    -b BASE_REF    Base git reference to use for comparison. If unspecified or empty,
-+                   will use any dirty changes in tree to UAPI files. If there are no
-+                   dirty changes, HEAD will be used.
-+    -p PAST_REF    Compare BASE_REF to PAST_REF (e.g. -p v6.1). If unspecified or empty,
-+                   will use BASE_REF^1. Must be an ancestor of BASE_REF. Only headers
-+                   that exist on PAST_REF will be checked for compatibility.
-+    -j JOBS        Number of checks to run in parallel (default: number of CPU cores).
-+    -l ERROR_LOG   Write error log to file (default: no error log is generated).
-+    -q             Quiet operation (suppress all stdout, still print stderr).
-+    -v             Verbose operation (print more information about each header being checked).
-+
-+Environmental args::
-+
-+    ABIDIFF  Custom path to abidiff binary
-+    CC       C compiler (default is "gcc")
-+    ARCH     Target architecture of C compiler (default is host arch)
-+
-+Exit codes::
-+
-+    0) Success
-+    1) ABI difference detected
-+    2) Prerequisite not met
-+    3) Compilation error
-+
-+Examples
-+========
-+
-+Basic Usage
-+-----------
-+
-+First, let's try making a change to a UAPI header file that obviously won't
-+break userspace::
-+
-+    cat << 'EOF' | patch -l -p1
-+    --- a/include/uapi/linux/acct.h
-+    +++ b/include/uapi/linux/acct.h
-+    @@ -21,7 +21,9 @@
-+     #include <asm/param.h>
-+     #include <asm/byteorder.h>
-+
-+    -/*
-+    +#define FOO
-+    +
-+    +/*
-+      *  comp_t is a 16-bit "floating" point number with a 3-bit base 8
-+      *  exponent and a 13-bit fraction.
-+      *  comp2_t is 24-bit with 5-bit base 2 exponent and 20 bit fraction
-+    diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-+    EOF
-+
-+Now, let's use the script to validate::
-+
-+    % ./scripts/check-uapi.sh
-+    Installing sanitized UAPI headers from dirty tree... OK
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between HEAD and dirty tree
-+    All 906 UAPI headers compatible with x86 appear to be backwards compatible
-+
-+Let's add another change that *would* break userspace::
-+
-+    cat << 'EOF' | patch -l -p1
-+    --- a/include/uapi/linux/bpf.h  2023-02-28 13:32:36.505591077 -0800
-+    +++ b/include/uapi/linux/bpf.h  2023-02-28 13:32:57.033494020 -0800
-+    @@ -73,7 +73,7 @@
-+            __u8    dst_reg:4;      /* dest register */
-+            __u8    src_reg:4;      /* source register */
-+            __s16   off;            /* signed offset */
-+    -       __s32   imm;            /* signed immediate constant */
-+    +       __u32   imm;            /* unsigned immediate constant */
-+     };
-+
-+     /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-+    EOF
-+
-+The script should catch this incompatibility::
-+
-+    % ./scripts/check-uapi.sh
-+    Installing sanitized UAPI headers from dirty tree... OK
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between HEAD and dirty tree
-+    !!! ABI differences detected in include/linux/bpf.h from HEAD -> dirty tree !!!
-+
-+        [C] 'struct bpf_insn' changed:
-+          type size hasn't changed
-+          1 data member change:
-+            type of '__s32 imm' changed:
-+              typedef name changed from __s32 to __u32 at int-ll64.h:27:1
-+              underlying type 'int' changed:
-+                type name changed from 'int' to 'unsigned int'
-+                type size hasn't changed
-+
-+    Header file diff (after headers_install):
-+    --- HEAD/include/linux/bpf.h    2023-03-24 16:34:58.901204604 -0700
-+    +++ dirty/include/linux/bpf.h   2023-03-24 16:34:56.973213331 -0700
-+    @@ -73,7 +73,7 @@
-+            __u8    dst_reg:4;      /* dest register */
-+            __u8    src_reg:4;      /* source register */
-+            __s16   off;            /* signed offset */
-+    -       __s32   imm;            /* signed immediate constant */
-+    +       __u32   imm;            /* unsigned immediate constant */
-+     };
-+
-+     /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-+
-+    error - 1/906 UAPI headers compatible with x86 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+The script finds the ABI breakage and reports it (along with a diff of the
-+offending file).
-+
-+Let's commit the breaking change, then commit the good change::
-+
-+    % git commit -m 'Breaking UAPI change' include/uapi/linux/bpf.h
-+    [detached HEAD f758e574663a] Breaking UAPI change
-+     1 file changed, 1 insertion(+), 1 deletion(-)
-+    % git commit -m 'Innocuous UAPI change' include/uapi/linux/acct.h
-+    [detached HEAD 2e87df769081] Innocuous UAPI change
-+     1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+Now, let's run the script again with no arguments::
-+
-+    % ./scripts/check-uapi.sh
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Installing sanitized UAPI headers from HEAD^1... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between HEAD^1 and HEAD
-+
-+It doesn't catch any breaking change because, by default, it only compares
-+``HEAD`` to ``HEAD^1``. The breaking change was committed on ``HEAD~2``. If we
-+wanted the search scope to go back further, we'd have to use the ``-p`` option
-+to pass a different past reference to compare to. In this case, let's pass
-+``-p HEAD~2`` to the script so it checks UAPI changes between ``HEAD~2`` and
-+``HEAD``::
-+
-+    % ./scripts/check-uapi.sh -p HEAD~2
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Installing sanitized UAPI headers from HEAD~2... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between HEAD~2 and HEAD
-+    !!! ABI differences detected in include/linux/bpf.h from HEAD~2 -> HEAD !!!
-+
-+        [C] 'struct bpf_insn' changed:
-+          type size hasn't changed
-+          1 data member change:
-+            type of '__s32 imm' changed:
-+              typedef name changed from __s32 to __u32 at int-ll64.h:27:1
-+              underlying type 'int' changed:
-+                type name changed from 'int' to 'unsigned int'
-+                type size hasn't changed
-+
-+    Header file diff (after headers_install):
-+    --- HEAD~2/include/linux/bpf.h  2023-03-24 16:42:53.999065836 -0700
-+    +++ HEAD/include/linux/bpf.h    2023-03-24 16:42:53.307068936 -0700
-+    @@ -73,7 +73,7 @@
-+            __u8    dst_reg:4;      /* dest register */
-+            __u8    src_reg:4;      /* source register */
-+            __s16   off;            /* signed offset */
-+    -       __s32   imm;            /* signed immediate constant */
-+    +       __u32   imm;            /* unsigned immediate constant */
-+     };
-+
-+     /* Key of an a BPF_MAP_TYPE_LPM_TRIE entry */
-+
-+    error - 1/906 UAPI headers compatible with x86 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+Alternatively, we could have also ran with ``-b HEAD~``. This would set the
-+base reference to ``HEAD~`` so then the script would compare it to ``HEAD~^1``.
-+
-+
-+Architecture-specific Headers
-+-----------------------------
-+
-+Consider this change::
-+
-+    cat << 'EOF' | patch -l -p1
-+    --- a/arch/arm64/include/uapi/asm/sigcontext.h
-+    +++ b/arch/arm64/include/uapi/asm/sigcontext.h
-+    @@ -70,6 +70,7 @@ struct sigcontext {
-+     struct _aarch64_ctx {
-+            __u32 magic;
-+            __u32 size;
-+    +       __u32 new_var;
-+     };
-+
-+     #define FPSIMD_MAGIC   0x46508001
-+    EOF
-+
-+This is a change to an arm64-specific UAPI header file. In this example, I'm
-+running the script from an x86 machine with an x86 compiler, so by default,
-+the script only works with x86-compatible UAPI header files::
-+
-+    % ./scripts/check-uapi.sh
-+    Installing sanitized UAPI headers from dirty tree... OK
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Restoring current tree state... OK
-+    No changes to UAPI headers were applied between HEAD and dirty tree
-+
-+With an x86 compiler, we can't check header files in ``arch/arm64``, so the
-+script doesn't even try.
-+
-+If we want to check the header file, we'll have to use an arm64 compiler and
-+set ``ARCH`` accordingly::
-+
-+    % CC=aarch64-linux-gnu-gcc ARCH=arm64 ./scripts/check-uapi.sh
-+    Installing sanitized UAPI headers from dirty tree... OK
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between HEAD and dirty tree
-+    !!! ABI differences detected in include/asm/sigcontext.h from HEAD -> dirty tree !!!
-+
-+        [C] 'struct _aarch64_ctx' changed:
-+          type size changed from 64 to 96 (in bits)
-+          1 data member insertion:
-+            '__u32 new_var', at offset 64 (in bits) at sigcontext.h:73:1
-+        --- snip ---
-+
-+    Header file diff (after headers_install):
-+    --- HEAD/include/asm/sigcontext.h       2023-03-24 16:45:48.850281831 -0700
-+    +++ dirty/include/asm/sigcontext.h      2023-03-24 16:45:46.922290483 -0700
-+    @@ -70,6 +70,7 @@
-+     struct _aarch64_ctx {
-+            __u32 magic;
-+            __u32 size;
-+    +       __u32 new_var;
-+     };
-+
-+     #define FPSIMD_MAGIC   0x46508001
-+
-+    error - 1/878 UAPI headers compatible with arm64 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+We can see with ``ARCH`` and ``CC`` set properly for the file, the ABI change
-+is reported properly. Also notice that the total number of UAPI header files
-+checked by the script changes. This is because the number of headers installed
-+for arm64 platforms is different than x86.
-+
-+Cross-Dependency Breakages
-+--------------------------
-+
-+Consider this change::
-+
-+    cat << 'EOF' | patch -l -p1
-+    --- a/include/uapi/linux/types.h
-+    +++ b/include/uapi/linux/types.h
-+    @@ -52,7 +52,7 @@ typedef __u32 __bitwise __wsum;
-+     #define __aligned_be64 __be64 __attribute__((aligned(8)))
-+     #define __aligned_le64 __le64 __attribute__((aligned(8)))
-+
-+    -typedef unsigned __bitwise __poll_t;
-+    +typedef unsigned short __bitwise __poll_t;
-+
-+     #endif /*  __ASSEMBLY__ */
-+     #endif /* _UAPI_LINUX_TYPES_H */
-+    EOF
-+
-+Here, we're changing a ``typedef`` in ``types.h``. This doesn't break a UAPI in
-+``types.h``, but other UAPIs in the tree may break due to this change::
-+
-+    % ./scripts/check-uapi.sh
-+    Installing sanitized UAPI headers from dirty tree... OK
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between HEAD and dirty tree
-+    !!! ABI differences detected in include/linux/eventpoll.h from HEAD -> dirty tree !!!
-+
-+        [C] 'struct epoll_event' changed:
-+          type size changed from 96 to 80 (in bits)
-+          2 data member changes:
-+            type of '__poll_t events' changed:
-+              underlying type 'unsigned int' changed:
-+                type name changed from 'unsigned int' to 'unsigned short int'
-+                type size changed from 32 to 16 (in bits)
-+            '__u64 data' offset changed from 32 to 16 (in bits) (by -16 bits)
-+
-+    include/linux/eventpoll.h did not change between HEAD and dirty tree...
-+    It's possible a change to one of the headers it includes caused this error:
-+    #include <linux/fcntl.h>
-+    #include <linux/types.h>
-+
-+    error - 1/906 UAPI headers compatible with x86 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+Note that the script noticed the failing header file did not change, so it
-+assumes one of its includes must have caused the breakage. Indeed, we can see
-+``linux/types.h`` is used from ``eventpoll.h``.
-+
-+UAPI Header Removals
-+--------------------
-+
-+Consider this change::
-+
-+    cat << 'EOF' | patch -l -p1
-+    diff --git a/include/uapi/asm-generic/Kbuild b/include/uapi/asm-generic/Kbuild
-+    index ebb180aac74e..a9c88b0a8b3b 100644
-+    --- a/include/uapi/asm-generic/Kbuild
-+    +++ b/include/uapi/asm-generic/Kbuild
-+    @@ -31,6 +31,6 @@ mandatory-y += stat.h
-+     mandatory-y += statfs.h
-+     mandatory-y += swab.h
-+     mandatory-y += termbits.h
-+    -mandatory-y += termios.h
-+    +#mandatory-y += termios.h
-+     mandatory-y += types.h
-+     mandatory-y += unistd.h
-+    EOF
-+
-+This script removes a UAPI header file from the install list. Let's run the
-+script::
-+
-+    % ./scripts/check-uapi.sh
-+    Installing sanitized UAPI headers from dirty tree... OK
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from HEAD... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between HEAD and dirty tree
-+    error - UAPI header include/asm/termios.h was incorrectly removed
-+    error - 1/906 UAPI headers compatible with x86 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+Removing a UAPI header is considered a breaking change and the script will flag
-+it as such.
-+
-+Checking Historic UAPI Compatibility
-+------------------------------------
-+
-+You can use the ``-b`` and ``-p`` options to examine different chunks of your
-+git tree. For example, to check all changed UAPI header files between tags
-+v6.0 and v6.1, you'd run::
-+
-+    % ./scripts/check-uapi.sh -b v6.1 -p v6.0
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from v6.1... OK
-+    Installing sanitized UAPI headers from v6.0... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between v6.0 and v6.1
-+    --- snip ---
-+    error - 90/907 UAPI headers compatible with x86 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+Note: before v5.3, a header file needed by the script is not present, so the
-+script is unable to check changes before then.
-+
-+You'll notice that the script detected many UAPI changes that are not
-+backwards compatible. Knowing that kernel UAPIs are supposed to be stable
-+forever, this is an alarming result. This brings us to the next section: false
-+positives.
-+
-+False Positives
-+===============
-+
-+The UAPI checker is very aggressive in detecting ABI changes, so some false
-+positives may appear. For example, if you check all UAPI headers between v6.0
-+and v6.1, many breakages will be flagged. Run the following::
-+
-+    ./scripts/check-uapi.sh -b v6.1 -p v6.0 -l abi_error_log.txt
-+
-+The errors will be logged to ``abi_error_log.txt``. Here, we'll find examples
-+of several types of false positives.
-+
-+Enum Expansion
-+--------------
-+
-+::
-+
-+    !!! ABI differences detected in include/uapi/linux/openvswitch.h from v6.0 -> v6.1 !!!
-+
-+        [C] 'enum ovs_datapath_attr' changed:
-+          type size hasn't changed
-+          1 enumerator insertion:
-+            'ovs_datapath_attr::OVS_DP_ATTR_IFINDEX' value '9'
-+          1 enumerator change:
-+            'ovs_datapath_attr::__OVS_DP_ATTR_MAX' from value '9' to '10' at openvswitch.h.current:85:1
-+
-+In this case, an enum was expanded. Consequently, the "MAX" value was
-+incremented. This is not considered a breaking change because it's assumed
-+userspace programs are using the MAX value in a sane fashion.
-+
-+Expanding Into Reserved/Padding Fields
-+--------------------------------------
-+
-+::
-+
-+    !!! ABI differences detected in include/uapi/linux/perf_event.h from v6.0 -> v6.1 !!!
-+
-+        [C] 'struct perf_branch_entry' changed:
-+          type size hasn't changed
-+          3 data member insertions:
-+            '__u64 spec', at offset 152 (in bits) at perf_event.h.current:1420:1
-+            '__u64 new_type', at offset 154 (in bits) at perf_event.h.current:1421:1
-+            '__u64 priv', at offset 158 (in bits) at perf_event.h.current:1422:1
-+          1 data member change:
-+            '__u64 reserved' offset changed from 152 to 161 (in bits) (by +9 bits)
-+
-+In this case, a reserved field was expanded into. Previously, the reserved
-+field occupied 40 bits in the struct. After the change, three new members
-+were added that took up 9 bits, so the size of the reserved field was
-+reduced to 31.
-+
-+As the size of the struct did not change and none of the fields a userspace
-+program could have been using were removed/changed/relocated, this change is
-+not considered breaking.
-+
-+Removals For Refactoring or Deprecation
-+---------------------------------------
-+
-+Sometimes drivers for very old hardware are removed, such as in this example::
-+
-+    % ./scripts/check-uapi.sh -b ba47652ba655
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from ba47652ba655... OK
-+    Installing sanitized UAPI headers from ba47652ba655^1... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between ba47652ba655^1 and ba47652ba655
-+    error - UAPI header include/linux/meye.h was incorrectly removed
-+    error - 1/910 UAPI headers compatible with x86 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+Another example::
-+
-+    % ./scripts/check-uapi.sh -b f40eb99897af
-+    Saving current tree state... OK
-+    Installing sanitized UAPI headers from f40eb99897af... OK
-+    Installing sanitized UAPI headers from f40eb99897af^1... OK
-+    Restoring current tree state... OK
-+    Checking changes to UAPI headers between f40eb99897af^1 and f40eb99897af
-+    error - UAPI header include/linux/pktcdvd.h was incorrectly removed
-+    error - 1/906 UAPI headers compatible with x86 appear _not_ to be backwards compatible
-+    error - UAPI header ABI check failed
-+
-+While technically not false positives, the script will always flag removals.
-+
-+Other times, refactoring may drive a removal, but have no impact on userspace.
-+For example, d759be8953fe. This change is before v5.3, so cannot be checked by
-+the script. This is a true false positive as userspace was not impacted but the
-+script flagged the change nonetheless.
-+
-+Summary
-+-------
-+
-+There may be other examples of false positives that are not listed here.
-+
-+In the future, as tooling improves, we may be able to filter out more of these
-+false positives. In any case, use your best judgement (and ideally a unit test
-+in userspace) to make sure your UAPI changes are backwards-compatible!
-diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
-index 6b0663075dc0..0876f5a2cf55 100644
---- a/Documentation/dev-tools/index.rst
-+++ b/Documentation/dev-tools/index.rst
-@@ -34,6 +34,7 @@ Documentation/dev-tools/testing-overview.rst
-    kselftest
-    kunit/index
-    ktap
-+   checkuapi
+> +
+> +       switch (speed) {
+> +       case SPEED_1000:
+> +               rate = 125000000;
+> +               break;
+> +       case SPEED_100:
+> +               rate = 25000000;
+> +               break;
+> +       case SPEED_10:
+> +               rate = 2500000;
+> +               break;
+> +       default:
+> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
+> +               break;
 
+That is skip the clk_get_rate above and just change this break to a return.
 
- .. only::  subproject and html
---
-2.17.1
-
+> +       }
+> +
+> +       err = clk_set_rate(dwmac->clk_tx, rate);
+> +       if (err)
+> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
+> +}
+> +
+> +static int starfive_dwmac_probe(struct platform_device *pdev)
+> +{
+> +       struct plat_stmmacenet_data *plat_dat;
+> +       struct stmmac_resources stmmac_res;
+> +       struct starfive_dwmac *dwmac;
+> +       struct clk *clk_gtx;
+> +       int err;
+> +
+> +       err = stmmac_get_platform_resources(pdev, &stmmac_res);
+> +       if (err)
+> +               return dev_err_probe(&pdev->dev, err,
+> +                                    "failed to get resources\n");
+> +
+> +       plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+> +       if (IS_ERR(plat_dat))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(plat_dat),
+> +                                    "dt configuration failed\n");
+> +
+> +       dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
+> +       if (!dwmac)
+> +               return -ENOMEM;
+> +
+> +       dwmac->clk_tx = devm_clk_get_enabled(&pdev->dev, "tx");
+> +       if (IS_ERR(dwmac->clk_tx))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
+> +                                    "error getting tx clock\n");
+> +
+> +       clk_gtx = devm_clk_get_enabled(&pdev->dev, "gtx");
+> +       if (IS_ERR(clk_gtx))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(clk_gtx),
+> +                                    "error getting gtx clock\n");
+> +
+> +       /* Generally, the rgmii_tx clock is provided by the internal clock,
+> +        * which needs to match the corresponding clock frequency according
+> +        * to different speeds. If the rgmii_tx clock is provided by the
+> +        * external rgmii_rxin, there is no need to configure the clock
+> +        * internally, because rgmii_rxin will be adaptively adjusted.
+> +        */
+> +       if (!device_property_read_bool(&pdev->dev, "starfive,tx-use-rgmii-clk"))
+> +               plat_dat->fix_mac_speed = starfive_dwmac_fix_mac_speed;
+> +
+> +       dwmac->dev = &pdev->dev;
+> +       plat_dat->bsp_priv = dwmac;
+> +       plat_dat->dma_cfg->dche = true;
+> +
+> +       err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+> +       if (err) {
+> +               stmmac_remove_config_dt(pdev, plat_dat);
+> +               return err;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id starfive_dwmac_match[] = {
+> +       { .compatible = "starfive,jh7110-dwmac" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, starfive_dwmac_match);
+> +
+> +static struct platform_driver starfive_dwmac_driver = {
+> +       .probe  = starfive_dwmac_probe,
+> +       .remove = stmmac_pltfr_remove,
+> +       .driver = {
+> +               .name = "starfive-dwmac",
+> +               .pm = &stmmac_pltfr_pm_ops,
+> +               .of_match_table = starfive_dwmac_match,
+> +       },
+> +};
+> +module_platform_driver(starfive_dwmac_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
+> +MODULE_AUTHOR("Emil Renner Berthing <kernel@esmil.dk>");
+> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
