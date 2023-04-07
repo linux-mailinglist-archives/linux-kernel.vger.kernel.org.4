@@ -2,170 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE7D6DB1B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2EE6DB1B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjDGRg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S229776AbjDGRgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjDGRg4 (ORCPT
+        with ESMTP id S229452AbjDGRgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:36:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BF3B752
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680888969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=girDT/3e1iBfq8YfqylLYXxjOSDey8dBT/Mp5wOCRPk=;
-        b=UviER/VAxClIrkOFWwi9D7NCrDBJUvSROYGQ1n1GlbcD3eYK1ZOU55gCuQNHuZQd7oCPBA
-        JznFj4COT3R6x9pfeprrM/aulUQ+gm53e1u/jv5P/gz7RMZPP0GyNwyvZmHMypdEjhAkeZ
-        /gUD83rvSyfJu+sX1GkRajd71gGS5+s=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-623-G1ISPKNXMzyhUhaLRVQkNA-1; Fri, 07 Apr 2023 13:36:08 -0400
-X-MC-Unique: G1ISPKNXMzyhUhaLRVQkNA-1
-Received: by mail-ot1-f70.google.com with SMTP id f23-20020a056830205700b006a1d2e5b085so8623720otp.14
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:36:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680888967;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Fri, 7 Apr 2023 13:36:43 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFF8B45E
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:36:42 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id q20so15800926pfs.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680889002; x=1683481002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=girDT/3e1iBfq8YfqylLYXxjOSDey8dBT/Mp5wOCRPk=;
-        b=JY46bEha/4hJKckiuDjWrI2VvsjroOV9bY3S76rXuyGmlmEd4ZfhNUqV+uYnlSHMHX
-         ObJqq+eGLRB7s9NIEodkWnE/enQeW7i+m+NA1aCt6Kj5EhzDoT8rh7O/IyShN6KyIFLh
-         pFLxqyrFu3F1zPMVB4xfPxif/OB0X7CTtyOUwT7ajGImhqqtLFMFdwCAgOJAWt3jS9zg
-         dL46zP4veb9reVCM+WS9a4nHOR00W4QG3V+ZGGKZt8hfEMOK3iafjESQ7nWdw861aAvj
-         PZf2yvmWUrtcHXuFIUkIfNp9bhAyVJWKhchebpsgfOqV0uZJm9O7BmG2/PMT16cx3nZq
-         4jTw==
-X-Gm-Message-State: AAQBX9ea4eQwe9bD8DuUT0KLfZzn1DyAUuZLHtf6Ca7RwTej19fXUiP8
-        oBwo0rbGaiOdN85R/8c8onoycEJK5nWFZPFdTLUHs5Sq0e4Su16qlNX/G3+8Q7Gc5pN7HgiUUG5
-        J5GP6LlLRO7HSdtmOQiKkHFsB
-X-Received: by 2002:a05:6870:b690:b0:17f:8da0:ce51 with SMTP id cy16-20020a056870b69000b0017f8da0ce51mr1898777oab.13.1680888967272;
-        Fri, 07 Apr 2023 10:36:07 -0700 (PDT)
-X-Google-Smtp-Source: AKy350aTgPrp2NCi7zwwA49Thy6Fhgfj8/rEUQEZAp6wz3jWRG4d8C8CLe9Z0+wJS8A8Vn22KfosIA==
-X-Received: by 2002:a05:6870:b690:b0:17f:8da0:ce51 with SMTP id cy16-20020a056870b69000b0017f8da0ce51mr1898768oab.13.1680888966976;
-        Fri, 07 Apr 2023 10:36:06 -0700 (PDT)
-Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id an19-20020a056871b19300b00183fbbe8cdfsm1294396oac.31.2023.04.07.10.36.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 10:36:06 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 12:36:03 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, mturquette@baylibre.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        richardcochran@gmail.com, linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com, echanude@redhat.com
-Subject: Re: [PATCH net-next v3 09/12] net: stmmac: dwmac4: Allow platforms
- to specify some DMA/MTL offsets
-Message-ID: <20230407173603.lyj5fjox23uhn2gb@halaney-x13s>
-References: <20230331214549.756660-1-ahalaney@redhat.com>
- <20230331214549.756660-10-ahalaney@redhat.com>
- <ZChGswjgAOkT0jvY@corigine.com>
+        bh=EKQ/0jGnOo/TaPpGUaml4IRy69MNIBKloNhJZjKlyT0=;
+        b=KD6ZnfzfidIvC2otpuKywoCEsPFpclOlyGbsChbiRW+NoHLgvlIIgbDR4G+StlGoIH
+         70V+Xb3tH88TdmFrqGplFBGXqlCuzUxbpiYDRXsLBoXwoTz2W/3cDhHDXwaLaBxXrYgF
+         HoyNSRrWgdMunOUk6NYADKkEMctFlUeJ1Iki7CFRPojkLCxojNZhXIY4q/yC9rhMflBI
+         HVPtR1t3cZu8XwM35jE6pq6TIb9CglNvwwY1HkADONdXRkNJsKn9yWoPfVIRjtounOsv
+         vbp2pu43LZzeofyFbChgOgo1nVZLGY29Dl835qQC8chqq9E88SUh/NyYFrzZxEKcCFHk
+         R1hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680889002; x=1683481002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EKQ/0jGnOo/TaPpGUaml4IRy69MNIBKloNhJZjKlyT0=;
+        b=moXKmq+98if9TGCT2kMP72uM0bJjmr53L9U+F2CuCxLJfjwMQfnMi50xk32YOcHBLw
+         tDay0MStDsnDjGBFoNizggj+EmVvocFLgRrR2HkEHeMte4gbQU7EeiTQGsx6I+Rb9G1L
+         cbylH6GdoEq753qxmSzOd3K8ZGm8I1SLlUPpGL+S3uR723TIpmL1Dll7MNEmavnkZvsE
+         9ixVi8SkCRLi5OcYB8KYlpykCr4ta5Lc7LkuIBbYmzeQaBF0Ers8dmNNWcmL1F1+MFoe
+         oYwdvG1hNmvL4y0YATmVc0JzK3HmthjnyH6lZVX1Sp7ExoLsnbTfz9fKEI53+Vy1rynv
+         8poA==
+X-Gm-Message-State: AAQBX9eCUymak+QqbBnxN8XtCtljyAlqZjTMWuNov7qmxx4rqa5DqIbX
+        uSF9H4ap4Bl88Rb5bMayOX/WDxmhKJRuX6oXyE28KQ==
+X-Google-Smtp-Source: AKy350aSeVgPhP3/iHKIqEYixpWTIqJFHUyWjp2+JIS3RbQGz3Zhh/BGeX+aSZcOD/B9rL3bBeCHzbu+p557vPjtJzU=
+X-Received: by 2002:a65:578e:0:b0:513:a488:f05f with SMTP id
+ b14-20020a65578e000000b00513a488f05fmr620379pgr.1.1680889001970; Fri, 07 Apr
+ 2023 10:36:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZChGswjgAOkT0jvY@corigine.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230318133952.1684907-1-trix@redhat.com>
+In-Reply-To: <20230318133952.1684907-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 10:36:30 -0700
+Message-ID: <CAKwvOdk=TGUTJMN1Am6EayVd1M9NRy_SwpUQBFWCb=+5KyMeXQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/kmb: remove unused set_test_mode_src_osc_freq_target_low,hi_bits
+ functions
+To:     Tom Rix <trix@redhat.com>
+Cc:     anitha.chrisanthus@intel.com, edmund.j.dea@intel.com,
+        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 01, 2023 at 04:58:59PM +0200, Simon Horman wrote:
-> On Fri, Mar 31, 2023 at 04:45:46PM -0500, Andrew Halaney wrote:
-> > Some platforms have dwmac4 implementations that have a different
-> > address space layout than the default, resulting in the need to define
-> > their own DMA/MTL offsets.
-> > 
-> > Extend the functions to allow a platform driver to indicate what its
-> > addresses are, overriding the defaults.
-> > 
-> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> > ---
-> > 
-> > This patch (and the prior patch) are replacements for
-> > https://lore.kernel.org/netdev/20230320204153.21736840@kernel.org/
-> > as was requested. Hopefully I was understanding the intent correctly :)
-> > 
-> > I'm pretty sure further refinement will be requested for this one, but
-> > it is the best I could come up with myself! Specifically some of the
-> > naming, dealing with spacing in some older spots of dwmac4,
-> > where the addresses should live in the structure hierarchy, etc are
-> > things I would not be surprised to have to rework if this is still
-> > preferred over the wrapper approach.
-> > 
-> > Changes since v2:
-> >     * New, replacing old wrapper approach
-> > 
-> >  drivers/net/ethernet/stmicro/stmmac/dwmac4.h  |  91 ++++++++--
-> >  .../net/ethernet/stmicro/stmmac/dwmac4_core.c |  36 ++--
-> >  .../net/ethernet/stmicro/stmmac/dwmac4_dma.c  | 157 ++++++++++--------
-> >  .../net/ethernet/stmicro/stmmac/dwmac4_dma.h  |  51 +++---
-> >  .../net/ethernet/stmicro/stmmac/dwmac4_lib.c  |  67 +++++---
-> >  include/linux/stmmac.h                        |  19 +++
-> >  6 files changed, 279 insertions(+), 142 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4.h b/drivers/net/ethernet/stmicro/stmmac/dwmac4.h
-> > index ccd49346d3b3..a0c0ee1dc13f 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac4.h
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4.h
-> > @@ -336,14 +336,23 @@ enum power_event {
-> >  
-> >  #define MTL_CHAN_BASE_ADDR		0x00000d00
-> >  #define MTL_CHAN_BASE_OFFSET		0x40
-> > -#define MTL_CHANX_BASE_ADDR(x)		(MTL_CHAN_BASE_ADDR + \
-> > -					(x * MTL_CHAN_BASE_OFFSET))
-> > -
-> > -#define MTL_CHAN_TX_OP_MODE(x)		MTL_CHANX_BASE_ADDR(x)
-> > -#define MTL_CHAN_TX_DEBUG(x)		(MTL_CHANX_BASE_ADDR(x) + 0x8)
-> > -#define MTL_CHAN_INT_CTRL(x)		(MTL_CHANX_BASE_ADDR(x) + 0x2c)
-> > -#define MTL_CHAN_RX_OP_MODE(x)		(MTL_CHANX_BASE_ADDR(x) + 0x30)
-> > -#define MTL_CHAN_RX_DEBUG(x)		(MTL_CHANX_BASE_ADDR(x) + 0x38)
-> > +#define MTL_CHANX_BASE_ADDR(addrs, x)  \
-> > +({ \
-> > +	const struct dwmac4_addrs *__addrs = addrs; \
-> > +	const u32 __x = x; \
-> > +	u32 __addr; \
-> > +	if (__addrs) \
-> > +		__addr = __addrs->mtl_chan + (__x * __addrs->mtl_chan_offset); \
-> > +	else \
-> > +		__addr = MTL_CHAN_BASE_ADDR + (__x * MTL_CHAN_BASE_OFFSET); \
-> > +	__addr; \
-> > +})
-> 
-> Could this and similar macros added by this patch be functions?
-> From my pov a benefit would be slightly more type safety.
-> And as a bonus there wouldn't be any need to handle aliasing of input.
-> 
+On Sat, Mar 18, 2023 at 6:39=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/gpu/drm/kmb/kmb_dsi.c:822:2: error: unused function
+>   'set_test_mode_src_osc_freq_target_low_bits' [-Werror,-Wunused-function=
+]
+>         set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_ds=
+i,
+>         ^
+> drivers/gpu/drm/kmb/kmb_dsi.c:834:2: error: unused function
+>   'set_test_mode_src_osc_freq_target_hi_bits' [-Werror,-Wunused-function]
+>         set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi=
+,
+>         ^
+> These static functions are not used, so remove them.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Sure, to be honest I'll be much more comfortable coding that up anyways.
-I don't do a ton of macro programming and had to refamiliarize myself of
-the pitfalls that comes with it when doing this.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
+>  drivers/gpu/drm/kmb/kmb_dsi.c | 28 ----------------------------
+>  1 file changed, 28 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/kmb/kmb_dsi.c b/drivers/gpu/drm/kmb/kmb_dsi.=
+c
+> index cf7cf0b07541..ed99b14375aa 100644
+> --- a/drivers/gpu/drm/kmb/kmb_dsi.c
+> +++ b/drivers/gpu/drm/kmb/kmb_dsi.c
+> @@ -818,34 +818,6 @@ static void test_mode_send(struct kmb_dsi *kmb_dsi, =
+u32 dphy_no,
+>         }
+>  }
+>
+> -static inline void
+> -       set_test_mode_src_osc_freq_target_low_bits(struct kmb_dsi *kmb_ds=
+i,
+> -                                                  u32 dphy_no,
+> -                                                  u32 freq)
+> -{
+> -       /* Typical rise/fall time=3D166, refer Table 1207 databook,
+> -        * sr_osc_freq_target[7:0]
+> -        */
+> -       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES,
+> -                      (freq & 0x7f));
+> -}
+> -
+> -static inline void
+> -       set_test_mode_src_osc_freq_target_hi_bits(struct kmb_dsi *kmb_dsi=
+,
+> -                                                 u32 dphy_no,
+> -                                                 u32 freq)
+> -{
+> -       u32 data;
+> -
+> -       /* Flag this as high nibble */
+> -       data =3D ((freq >> 6) & 0x1f) | (1 << 7);
+> -
+> -       /* Typical rise/fall time=3D166, refer Table 1207 databook,
+> -        * sr_osc_freq_target[11:7]
+> -        */
+> -       test_mode_send(kmb_dsi, dphy_no, TEST_CODE_SLEW_RATE_DDL_CYCLES, =
+data);
+> -}
+> -
+>  static void mipi_tx_get_vco_params(struct vco_params *vco)
+>  {
+>         int i;
+> --
+> 2.27.0
+>
+
+
+--=20
 Thanks,
-Andrew
-
+~Nick Desaulniers
