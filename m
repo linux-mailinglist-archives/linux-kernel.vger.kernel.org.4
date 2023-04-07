@@ -2,257 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24686DB106
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DBB6DB10A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjDGQyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S229816AbjDGQ5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjDGQye (ORCPT
+        with ESMTP id S229570AbjDGQ5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:54:34 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB2DC144;
-        Fri,  7 Apr 2023 09:54:31 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id q16so55132785lfe.10;
-        Fri, 07 Apr 2023 09:54:31 -0700 (PDT)
+        Fri, 7 Apr 2023 12:57:51 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4AE61A5;
+        Fri,  7 Apr 2023 09:57:50 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id ld14so1520218qvb.13;
+        Fri, 07 Apr 2023 09:57:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680886470; x=1683478470;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ktJMg05n6GOaL8XM13kdY9cBe1CBvoQ4/ZC5LzH85fg=;
-        b=f0TrzevfBLxSt7EtNx1NswbcVI+uXpO+wx857eRHxEghtlgrIPS0QIcDfCls53NBmt
-         kgPgq3IH3wbq2LNoBNAD6xPhVeAl6lk8npvjMvsJhJ76JOlpENcTAf9zbGDNSUgC3VZu
-         2rztPrkoopcmgT8dVLwUbVJJC5gaFIoYNfG+6Uy7nNU2yZ1gm1S8q9d7SsPa3S3B3m4v
-         Q0LKT4t+e/IYYW+EvWus0VCcLLwxz/wNuJGLGUZOCdmDV/EybBlVRqEMF86QeCErJ7/0
-         LuX1fh5gQHqtfz2EmF2UcriJhaxj7mP2C6lkR/4doXw3jJ6ZQbuTKb2rXNPe7Mx9pIfY
-         jkEg==
+        d=gmail.com; s=20210112; t=1680886669;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o+EC9oSqo+HSTysdaLl9MdTGNN+XyvYFDHraMGNwzHo=;
+        b=KAFsJ88KqYSuxae/wmpNfoMXlas7mSPVg8du6CvORQjqNZSSfmg/gJmR0aSHYNqOej
+         xUCyV7ghNU/pu5rKHl5CK7JAzupwOhro1oHui6dXT8nv5iBvJNuPiX2XCe/u0C1Sfwt+
+         Dmtz1MrBIFdBpodPvmmapP1SAwb5Xlb2XJzmr0aLMfqq3z4z9DvfVNRtpfrN0trsOavb
+         nmBeKzzO9MEr1boanB4ojnuNJDi9E+NgAqIlWXnm5YxmuUeUxOurftf8+aLXzwk4tuNZ
+         JgtT/B1BxH0uKKmC/mYjb/wY4PhBDw+silSWAAdiNn4Q+XKpGOZjUbWWZzge1nhvS2EE
+         6S7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680886470; x=1683478470;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ktJMg05n6GOaL8XM13kdY9cBe1CBvoQ4/ZC5LzH85fg=;
-        b=JxcH421rZJIvLaf/KEKwYA+pgwGTC3lDNJNGlHQSA0iV3q/EjxZdfvSEF7KU3U4iX4
-         OzpuTPZE/ySxxObvZgEEnVtbF7AUQQwxP/U0V3S6HD40I1//DZOM4VWAPSTibWpVs0Xg
-         18EK/ygOBezOzkEqCnVQAy3z1nN4hx5QnYY2nw8nvl0Y7RqH+VxtxyqQC5jQJ7BUxW2x
-         O1SGcFtUxG4nShjFr/5dHytyLgvO3XJmgj2wX15jkEA7RggVfky+tTxzBCBY3iLjCaTQ
-         xmRN/0W+pICRru/1ux/L5r0x/jZSg6PZfzTAtwqVYxZTo2vYflRiFOE/kdnYB89vIkO7
-         /5SA==
-X-Gm-Message-State: AAQBX9eKYu1mXNexKOapbGQ8SrFaiG4p6pLtpV+GVCpAzgMtazQG9Nn+
-        SzHqqoQ/kqXSLOwTjob3NCBep/G3BUJAdQ==
-X-Google-Smtp-Source: AKy350ZGRmKJUxe3n4Dx2SocA+O69ZU6/K6EwbwWEmZlz2dKGLV0EMlhlxtX2TtHoiyEuF0H+uvk8w==
-X-Received: by 2002:ac2:50c3:0:b0:4eb:1048:1285 with SMTP id h3-20020ac250c3000000b004eb10481285mr910839lfm.47.1680886469664;
-        Fri, 07 Apr 2023 09:54:29 -0700 (PDT)
-Received: from localhost.localdomain (byy157.neoplus.adsl.tpnet.pl. [83.30.44.157])
-        by smtp.gmail.com with ESMTPSA id c3-20020ac25303000000b004db297957e8sm781712lfh.305.2023.04.07.09.54.26
+        d=1e100.net; s=20210112; t=1680886669;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o+EC9oSqo+HSTysdaLl9MdTGNN+XyvYFDHraMGNwzHo=;
+        b=XcwKqtQ+WFEH6BbqIlj07dZoAhY86y4dxI3LjJv/gKIGCOvAI5dukIZ0mJ5nrKfffn
+         LJ4xrcYxTFK6f5GQ2LGJbVpQ5kBUD9nni7QFIeLlCvlkglklxw1HyDT/tnKI+6x5SvQe
+         EganWA4/NMA0MJpOLcSvO177pve8PzV+hN492g4qd9NEynmuslI2eip19y7A1aXzBH/q
+         9fRWQMqZUA2GGKRFpNq2oLhRe5DOY+m5bmlQ52s24rlHLp8j/jABCU6YRr5EWtb9lN+/
+         29mqSo2LLN81v7l5pHh+E2pJkgYAIkBqfH90pegbhRIVkv0UTI3T5eRdulyBdf2KbuIP
+         kN3g==
+X-Gm-Message-State: AAQBX9cYhtrm/riMDj+Utt7leOhZa7cNX2ipakUIxCPp8iMNq2udf1wL
+        LaUMLxJTtj2CX24wWu2j713JhWSFpmk=
+X-Google-Smtp-Source: AKy350YHDMgNvgTK9CT41wGDurKn6+YzqMaaNnr4pZILaC4amGknZRiPUSNd+P7UXpyjnCZiToUQqQ==
+X-Received: by 2002:a05:6214:2a49:b0:5bf:370e:f446 with SMTP id jf9-20020a0562142a4900b005bf370ef446mr6635631qvb.17.1680886669126;
+        Fri, 07 Apr 2023 09:57:49 -0700 (PDT)
+Received: from penguin ([205.220.129.30])
+        by smtp.gmail.com with ESMTPSA id kl14-20020a056214518e00b005dd8b9345absm1454622qvb.67.2023.04.07.09.57.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 09:54:29 -0700 (PDT)
-From:   Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: MSM8953: Add lpass nodes
-Date:   Fri,  7 Apr 2023 18:53:44 +0200
-Message-Id: <20230407165345.42800-4-a39.skl@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230407165345.42800-1-a39.skl@gmail.com>
-References: <20230407165345.42800-1-a39.skl@gmail.com>
+        Fri, 07 Apr 2023 09:57:48 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 09:57:12 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     "jingle.wu" <jingle.wu@emc.com.tw>
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        phoenix@emc.com.tw, josh.chen@emc.com.tw, dave.wang@emc.com.tw
+Subject: Re: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit functions.
+Message-ID: <ZDBKwo4UMUm+TSnj@penguin>
+References: <20230320011456.986321-1-jingle.wu@emc.com.tw>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320011456.986321-1-jingle.wu@emc.com.tw>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for remoteproc, smp2p and smsm in preparation
-for audio support on this platform.
+Hi Jingle,
 
-Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
----
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 141 ++++++++++++++++++++++++++
- 1 file changed, 141 insertions(+)
+On Mon, Mar 20, 2023 at 09:14:56AM +0800, jingle.wu wrote:
+> Add inhibit/uninhibit functions.
+> 
+> Signed-off-by: Jingle.wu <jingle.wu@emc.com.tw>
+> ---
+>  drivers/input/mouse/elan_i2c_core.c | 86 +++++++++++++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+> 
+> diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
+> index 5f0d75a45c80..b7100945c9cc 100644
+> --- a/drivers/input/mouse/elan_i2c_core.c
+> +++ b/drivers/input/mouse/elan_i2c_core.c
+> @@ -329,6 +329,89 @@ static int elan_initialize(struct elan_tp_data *data, bool skip_reset)
+>  	return error;
+>  }
+>  
+> +static int elan_reactivate(struct elan_tp_data *data)
+> +{
+> +	struct device *dev = &data->client->dev;
+> +	int ret;
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index 257b1946372c..855595cbb09b 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -6,6 +6,9 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
-+#include <dt-bindings/soc/qcom,apr.h>
-+#include <dt-bindings/sound/qcom,q6afe.h>
-+#include <dt-bindings/sound/qcom,q6asm.h>
- #include <dt-bindings/thermal/thermal.h>
- 
- / {
-@@ -326,6 +329,30 @@ rpmpd_opp_turbo: opp9 {
- 		};
- 	};
- 
-+	smp2p-adsp {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <443>, <429>;
-+
-+		interrupts = <GIC_SPI 291 IRQ_TYPE_EDGE_RISING>;
-+
-+		mboxes = <&apcs 10>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <2>;
-+
-+		smp2p_adsp_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		smp2p_adsp_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
- 	smp2p-modem {
- 		compatible = "qcom,smp2p";
- 		qcom,smem = <435>, <428>;
-@@ -1532,6 +1559,120 @@ frame@b128000 {
- 				status = "disabled";
- 			};
- 		};
-+
-+		lpass: remoteproc@c200000 {
-+			compatible = "qcom,msm8953-adsp-pil";
-+			reg = <0x0c200000 0x100>;
-+
-+			interrupts-extended = <&intc 0 293 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&smp2p_adsp_in 3 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog", "fatal", "ready",
-+					  "handover", "stop-ack";
-+			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
-+			clock-names = "xo";
-+
-+			power-domains = <&rpmpd MSM8953_VDDCX>;
-+			power-domain-names = "cx";
-+
-+			memory-region = <&adsp_fw_mem>;
-+
-+			qcom,smem-states = <&smp2p_adsp_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			status = "disabled";
-+
-+			smd-edge {
-+				interrupts = <GIC_SPI 289 IRQ_TYPE_EDGE_RISING>;
-+
-+				label = "lpass";
-+				mboxes = <&apcs 8>;
-+				qcom,smd-edge = <1>;
-+				qcom,remote-pid = <2>;
-+
-+				apr {
-+					compatible = "qcom,apr-v2";
-+					qcom,smd-channels = "apr_audio_svc";
-+					qcom,apr-domain = <APR_DOMAIN_ADSP>;
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					q6core: service@3 {
-+						reg = <APR_SVC_ADSP_CORE>;
-+						compatible = "qcom,q6core";
-+					};
-+
-+					q6afe: service@4 {
-+						compatible = "qcom,q6afe";
-+						reg = <APR_SVC_AFE>;
-+						q6afedai: dais {
-+							compatible = "qcom,q6afe-dais";
-+							#address-cells = <1>;
-+							#size-cells = <0>;
-+							#sound-dai-cells = <1>;
-+
-+							dai@16 {
-+								reg = <PRIMARY_MI2S_RX>;
-+								qcom,sd-lines = <0 1>;
-+							};
-+							dai@20 {
-+								reg = <TERTIARY_MI2S_TX>;
-+								qcom,sd-lines = <0 1>;
-+							};
-+							dai@127 {
-+								reg = <QUINARY_MI2S_RX>;
-+								qcom,sd-lines = <0>;
-+							};
-+						};
-+
-+						q6afecc: clock-controller {
-+							compatible = "qcom,q6afe-clocks";
-+							#clock-cells = <2>;
-+						};
-+					};
-+
-+					q6asm: service@7 {
-+						compatible = "qcom,q6asm";
-+						reg = <APR_SVC_ASM>;
-+						q6asmdai: dais {
-+							compatible = "qcom,q6asm-dais";
-+							#address-cells = <1>;
-+							#size-cells = <0>;
-+							#sound-dai-cells = <1>;
-+
-+							dai@0 {
-+								reg = <0>;
-+								direction = <Q6ASM_DAI_RX>;
-+							};
-+							dai@1 {
-+								reg = <1>;
-+								direction = <Q6ASM_DAI_TX>;
-+							};
-+							dai@2 {
-+								reg = <2>;
-+								direction = <Q6ASM_DAI_RX>;
-+							};
-+							dai@3 {
-+								reg = <3>;
-+								direction = <Q6ASM_DAI_RX>;
-+								is-compress-dai;
-+							};
-+						};
-+					};
-+
-+					q6adm: service@8 {
-+						compatible = "qcom,q6adm";
-+						reg = <APR_SVC_ADM>;
-+						q6routing: routing {
-+							compatible = "qcom,q6adm-routing";
-+							#sound-dai-cells = <0>;
-+						};
-+					};
-+				};
-+			};
-+		};
- 	};
- 
- 	thermal-zones {
+Please call this variable and other similar ones "error".
+
+> +
+> +	ret = elan_set_power(data, true);
+> +	if (ret)
+> +		dev_err(dev, "failed to restore power: %d\n", ret);
+> +
+> +	ret = data->ops->sleep_control(data->client, false);
+> +	if (ret) {
+> +		dev_err(dev,
+> +			"failed to wake device up: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return ret;
+
+return 0;
+
+> +}
+> +
+> +static void elan_inhibit(struct input_dev *input_dev)
+> +{
+> +	struct elan_tp_data *data = input_get_drvdata(input_dev);
+> +	struct i2c_client *client = data->client;
+> +	int ret;
+> +
+> +	if (data->in_fw_update)
+> +		return;
+
+Simply and silently ignoring inhibit request is not great. Can we wait
+for firmware update to complete?
+
+> +
+> +	dev_dbg(&client->dev, "inhibiting\n");
+> +	/*
+> +	 * We are taking the mutex to make sure sysfs operations are
+> +	 * complete before we attempt to bring the device into low[er]
+> +	 * power mode.
+> +	 */
+> +	ret = mutex_lock_interruptible(&data->sysfs_mutex);
+> +	if (ret)
+> +		return;
+> +
+> +	disable_irq(client->irq);
+> +
+> +	ret = elan_set_power(data, false);
+> +	if (ret)
+> +		enable_irq(client->irq);
+> +
+> +	mutex_unlock(&data->sysfs_mutex);
+> +
+> +}
+> +
+> +static void elan_close(struct input_dev *input_dev)
+> +{
+> +	if ((input_dev->users) && (!input_dev->inhibited))
+> +		elan_inhibit(input_dev);
+
+I am not sure why you need these checks. Input core will only call
+input_dev->close() when device is powered up st (i.e. it is not inhibited
+and there are users of it) and when either:
+
+- there is inhibit request or
+- the last user is letting go of the device
+
+Similarly elan_open() will be called when first user opens device if
+device is not inhibited, or when request to uninhibit comes for
+inhibited device that has users.
+
+But you need to make sure you start in a low power state.
+
+Thanks.
+
 -- 
-2.25.1
-
+Dmitry
