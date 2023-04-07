@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCB06DAA46
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED0F6DAA49
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240006AbjDGIhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
+        id S235839AbjDGIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239978AbjDGIhI (ORCPT
+        with ESMTP id S233146AbjDGIiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:37:08 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1540A6EAB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:36:49 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id 18so6947169ejo.13
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 01:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680856607;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XHSNmp7SMG0lrPLl4FoS04Pn0k06DM3nkel0fhy8S6I=;
-        b=Y+C+ULbsml8lP/9KuITu37jbMIR3cQ3ePn66AI8gqoWVPcWrkiJY0Xa5/L6WGTM/Sw
-         yXWUNAQ1RR40eJBG65Du6qL8Sl1el8LAuiunk02cFC+7mhyFlDTHR3GSL+Z/LJPgV2ZS
-         pI8rL9xJjR7hrI0xMV/sDituxY0hQ59R8wd421XC+jHtMkF3EbJHcV/8HeDTSrDX6YgV
-         JPCXgRhZc6ZKJQO0b+YpGC2fr7zXl49/8H7z8EmbIY1tRSSYhw44yUPeSL/oU7FWgEZA
-         tcXWCx5GLFhLNfn0OssWL9P1OzHYAssG/UznLUw/ZXGozRiBObhWSAzEqDGkNbykfgbx
-         eE9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680856607;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XHSNmp7SMG0lrPLl4FoS04Pn0k06DM3nkel0fhy8S6I=;
-        b=ce9Gm+sRNKefRWqZ4aFM7ihH3SMyRD0DEexRY7KZWJmZdbQFqvlluKX0SzlvCVz/8O
-         RJBtSwYA70j4XzKqBI8HgNzHG+YEf4OFhL0vLffgpakA9JJkM0f0gLxpyMMz79B6+MYW
-         un8bk++oB7X70gasxxwvUfR1WyIYPAEG4UR7j1Pa6BAiXPjnvXq7s4poq5BslWVu4caJ
-         4j0J8fkWKhVgcoO1bTCetFfeQyhxb2HvAq5ynXWIHKZChNO0EfIrECsBWLjnhGY3l/wR
-         +8L2oZyPWljzOaD4NZtZg0SOl2YrZAGjoOEAWdQdPCIExP+PgXQxZIOSQeyLuR7iKGWb
-         sW6w==
-X-Gm-Message-State: AAQBX9fX9ppHVshesuAGq3TKlheNRsAxygPK7iYolGDiX/mhv+jaBzSk
-        mfOrz2O/37lQM48QJqDKRm1nrw==
-X-Google-Smtp-Source: AKy350YppXdVXmmSPqTDg+9apafRJyLRTwt34FsDVmaVa+DPxzzk6jQ+f210ptRaWN1NbFN73cr/8Q==
-X-Received: by 2002:a17:907:8e8d:b0:8f0:143d:ee34 with SMTP id tx13-20020a1709078e8d00b008f0143dee34mr1218902ejc.1.1680856607523;
-        Fri, 07 Apr 2023 01:36:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:14a3:366:3172:3c37? ([2a02:810d:15c0:828:14a3:366:3172:3c37])
-        by smtp.gmail.com with ESMTPSA id k6-20020a17090646c600b00949173bdad1sm1801199ejs.213.2023.04.07.01.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 01:36:47 -0700 (PDT)
-Message-ID: <d626f476-3236-676d-b25d-87b71520219b@linaro.org>
-Date:   Fri, 7 Apr 2023 10:36:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dt-bindings: i2c: i2c-mt65xx: add binding for MT7981
- SoC
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-i2c@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        Fri, 7 Apr 2023 04:38:08 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A25746BF;
+        Fri,  7 Apr 2023 01:38:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bvMeT
+        VYjDyKEP8ZQMTHGrWbs6rZELtxOvEXtr+caOtg=; b=Y48temyT0/21qJteKk2rk
+        s1ByLfixQXhq8XSvWsoiN7b3/nmJdRfFjA2EczXHyZ68Iz1ihOin55DaQWJC+WG4
+        BoMA96tUeD1WHi60zS8ZuBgtBqDLVKw+dpgTJVyy5fbfCDWZzL4r3Hj2+ooM7akC
+        fSEjcmv8P/KyzKvgV24lq0=
+Received: from ubuntu.localdomain (unknown [115.156.140.143])
+        by zwqz-smtp-mta-g1-4 (Coremail) with SMTP id _____wCnrdpS1i9kggMuAw--.20049S4;
+        Fri, 07 Apr 2023 16:37:39 +0800 (CST)
+From:   Xinyi Hou <Y_Ashley@163.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Sam Shih <sam.shih@mediatek.com>
-References: <cover.1680817105.git.daniel@makrotopia.org>
- <31957e15116027afd154f0d91e799028e2400bb2.1680817105.git.daniel@makrotopia.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <31957e15116027afd154f0d91e799028e2400bb2.1680817105.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Xinyi Hou <Y_Ashley@163.com>, Dongliang Mu <dzm91@hust.edu.cn>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] clk: mediatek: clk-mt7986-infracfg: delete the code related to 'base'
+Date:   Fri,  7 Apr 2023 16:37:28 +0800
+Message-Id: <20230407083729.31498-1-Y_Ashley@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCnrdpS1i9kggMuAw--.20049S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZF47Wry3uw48Zw48Xr4xWFg_yoWkWFX_Zr
+        s5ur97Zr17KF4kGr47Wwn2vF9rtFs3Zr97Z3WYywn8JFyxKa1rJr1vqa95Aw47Ww4Svry5
+        Jrn7Kry7CF4rZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRLF4EPUUUUU==
+X-Originating-IP: [115.156.140.143]
+X-CM-SenderInfo: p1bd2xxoh1qiywtou0bp/1tbiShRKxGI0XrQwOgAAsm
+X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 23:41, Daniel Golle wrote:
-> Add binding documentation for the I2C controllers found in the
-> MediaTek MT7981 SoC.
+In clk_mt7986_infracfg_probe(), 'base' is allocated but never used,
+either not released on both success failure path.
 
-Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
-is already stating that these are bindings.
+Fix this by deleting 'base' and the code related to it.
 
-Bindings come before patches using them.
+Signed-off-by: Xinyi Hou <Y_Ashley@163.com>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
 
-BTW, I did not get previous patch at all, but your cover letter suggests
-these are compatible.
+ drivers/clk/mediatek/clk-mt7986-infracfg.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/clk/mediatek/clk-mt7986-infracfg.c b/drivers/clk/mediatek/clk-mt7986-infracfg.c
+index e80c92167c8f..76b32f3a16b2 100644
+--- a/drivers/clk/mediatek/clk-mt7986-infracfg.c
++++ b/drivers/clk/mediatek/clk-mt7986-infracfg.c
+@@ -174,16 +174,9 @@ static int clk_mt7986_infracfg_probe(struct platform_device *pdev)
+ 	struct clk_hw_onecell_data *clk_data;
+ 	struct device_node *node = pdev->dev.of_node;
+ 	int r;
+-	void __iomem *base;
+ 	int nr = ARRAY_SIZE(infra_divs) + ARRAY_SIZE(infra_muxes) +
+ 		 ARRAY_SIZE(infra_clks);
+ 
+-	base = of_iomap(node, 0);
+-	if (!base) {
+-		pr_err("%s(): ioremap failed\n", __func__);
+-		return -ENOMEM;
+-	}
+-
+ 	clk_data = mtk_alloc_clk_data(nr);
+ 
+ 	if (!clk_data)
+-- 
+2.25.1
 
