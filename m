@@ -2,216 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A9E6DAABC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1076DAABF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239769AbjDGJQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 05:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
+        id S240385AbjDGJS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjDGJQb (ORCPT
+        with ESMTP id S230265AbjDGJSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:16:31 -0400
+        Fri, 7 Apr 2023 05:18:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F7372BC;
-        Fri,  7 Apr 2023 02:16:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52337EC9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:18:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BB3360F1B;
-        Fri,  7 Apr 2023 09:16:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D83C433EF;
-        Fri,  7 Apr 2023 09:16:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EC5765008
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:18:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B756FC433D2;
+        Fri,  7 Apr 2023 09:18:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680858988;
-        bh=GzznED6tySsGDwb5au4VoNSJsg0rXZvn+Uxk9Vxo2kU=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=KWOJ/imF23ImDcT3NALRq2ogyUAq2NfiEPKOqIgypHGLoX3M9n81SkRvTPzgEV5sW
-         g9XAB6PLfYQIoi5sBynmsX7GH/Zp8ZWOQ1s0V2bjSO4rsq2ou/cxBBm1RrUdz0k3V2
-         WqC0BezqIJI0dMDX8yeqWuoCKtoVs3pLghYyCrrWgdAYzVwpMPJQwe53saAICmHxq3
-         Q4Q/FuiWn2DIVx1T+A0hanF6c/IzEnVx+tlQpIecu6FVG7f1Cr9etwpZnEdGZt9pu0
-         HngDF0bFYIExmCOpaSKah141DT8pYH7GMpYECE0q61YY0AnUfd3TBhakdPSNeSXqgR
-         yixqrKXyej9uQ==
-Message-ID: <083041fc-d8e9-d5c5-adc1-d6095db22fd7@kernel.org>
-Date:   Fri, 7 Apr 2023 11:16:24 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dt-bindings: input: cirrus,cs40l26: Add bindings
-Content-Language: en-US
-To:     Fred Treven <fred.treven@cirrus.com>, ben.bright@cirrus.com,
-        james.ogletree@cirrus.com, dmitry.torokhov@gmail.com,
-        robh+dt@kernel.org, krzystztof.kozlowski+dt@linaro.org,
-        patches@opensource.cirrus.com, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Add devicetree bindings for CS40L26 driver>
- <1680819613-29256-1-git-send-email-fred.treven@cirrus.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <1680819613-29256-1-git-send-email-fred.treven@cirrus.com>
+        s=k20201202; t=1680859102;
+        bh=t1HngjIuZmsVjaSi1ERJkFnYtnt1+8LcEfGzDanZnlY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dvw+b+Ik0YfZdd9ze6DES2vlT1y6yTrBRHDPLvhVZiXLyfbMJhFr+aTAhEPPtxPg8
+         0YK2VY9xMpEopJYbt40wD1NHwZ1yK/AJ8IQ0i+0hkh00wpC0sd3Y1b0vidPofz7LMD
+         TPU3o7Q9aMOGWn4+ZxyCdlzuyolV1UiFm0Otu0fiU2CTnHsJ5JYzRlpJoTWhqg3Q5a
+         WVryz2yk+D/6UpdEp64uxoRZrXlw2kjDGgu35I5glR6UnGw56AcnLqJl3+6gYYFjRh
+         OJN+5LoC/98v4ZFfeTmnzcbp0w4YPu1n6rIXhoCFV+Ac1Chp5HROt44xjOPP/EiN72
+         1VKfdfQmFIZgw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pkiEe-006ehG-Fr;
+        Fri, 07 Apr 2023 10:18:20 +0100
+Date:   Fri, 07 Apr 2023 10:18:20 +0100
+Message-ID: <86lej4uk2r.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Radu Rendec <rrendec@redhat.com>
+Cc:     Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        pali@kernel.org, Brian Masney <bmasney@redhat.com>
+Subject: Re: irqdomain API: how to set affinity of parent irq of chained irqs?
+In-Reply-To: <d1166229fdead30fcbf3c2bd88ca1bd4ebffbce9.camel@redhat.com>
+References: <20220502102137.764606ee@thinkpad>
+        <87mtg0i8m8.wl-maz@kernel.org>
+        <20220502174559.78f5cbc0@dellmb>
+        <87fslr7ygl.wl-maz@kernel.org>
+        <d1166229fdead30fcbf3c2bd88ca1bd4ebffbce9.camel@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rrendec@redhat.com, kabel@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de, pali@kernel.org, bmasney@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2023 00:20, Fred Treven wrote:
-> Add devicetree bindings for CS40L26 driver.
+Hi Radu,
 
-I appreciate the try to write my name manually, but there is no need to
-struggle. :) You will just make a mistake.
+On Fri, 07 Apr 2023 00:56:40 +0100,
+Radu Rendec <rrendec@redhat.com> wrote:
+>=20
+> Hello Marc, Marek,
+>=20
+> On Tue, 2022-05-03 at 10:32 +0100, Marc Zyngier wrote:
+> > On Mon, 02 May 2022 16:45:59 +0100,
+> > Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+> > >=20
+> > > On Mon, 02 May 2022 10:31:11 +0100
+> > > Marc Zyngier <maz@kernel.org> wrote:
+> > >=20
+> > > > On Mon, 02 May 2022 09:21:37 +0100,
+> > > > Marek Beh=C3=BAn <kabel@kernel.org> wrote:
+> > > > >=20
+> > > > > Dear Marc, Thomas,
+> > > > >=20
+> > > > > we have encountered the following problem that can hopefully be p=
+ut
+> > > > > some light onto: What is the intended way to set affinity (and po=
+ssibly
+> > > > > other irq attributes) of parent IRQ of chained IRQs, when using t=
+he
+> > > > > irqdomain API?=C2=A0=20
+> > > >=20
+> > > > Simples: you can't. What sense does it make to change the affinity =
+of
+> > > > the parent interrupt, given that its fate is tied to *all* of the
+> > > > other interrupts that are muxed to it?
+> > >=20
+> > > Dear Marc,
+> > >=20
+> > > thank you for your answer. Still:
+> > >=20
+> > > What about when we want to set the same affinity for all the chained
+> > > interrupts?
+> > >=20
+> > > Example: on Armada 385 there are 4 PCIe controllers. Each controller
+> > > has one interrupt from which we trigger chained interrupts. We would
+> > > like to configure each controller to trigger interrupt (and thus all
+> > > chained interrupts in the domain) on different CPU core.
+> > >=20
+> > > Moreover we would really like to do this in runtime, through sysfs,
+> > > depending on for example whether there are cards plugged in the PCIe
+> > > ports.
+> > >=20
+> > > Maybe there should be some mechanism to allow to change affinity for
+> > > whole irqdomain, or something?
+> >=20
+> > Should? Maybe. But not for an irqdomain (which really doesn't have
+> > anything to do with interrupt affinity).
+> >=20
+> > What you may want is a new sysfs interface that would allow a parent
+> > interrupt affinity being changed, but also exposing to userspace all
+> > the interrupts this affects *at the same time*. something like:
+> >=20
+> > /sys/kernel/irq/42/smp_affinity_list
+> > /sys/kernel/irq/42/muxed_irqs/
+> > /sys/kernel/irq/42/muxed_irqs/56 -> ../../56
+> > /sys/kernel/irq/42/muxed_irqs/57 -> ../../57
+> >=20
+> > The main issues are that:
+> >=20
+> > - we don't really track the muxing information in any of the data
+> > =C2=A0 structures, so you can't just walk a short list and generate this
+> > =C2=A0 information. You'd need to build the topology information at
+> > =C2=A0 allocation time (or fish it out at runtime, but that's likely a
+> > =C2=A0 pain).
+> >=20
+> > - sysfs doesn't deal with affinities at all. procfs does, but adding
+> > =C2=A0 more crap there is frowned upon.
+> >=20
+> > - it *must* be a new interface. You can't repurpose the existing one,
+> > =C2=A0 as something like irqbalance would be otherwise be massively
+> > =C2=A0 confused by seeing interrupts moving around behind its back.
+> >=20
+> > - conversely, you'll need to teach irqbalance how to deal with this
+> > =C2=A0 new interface.
+> >=20
+> > - this needs to be safe against CPU hotplug. It probably already is,
+> > =C2=A0 but nobody ever tested it, given that userspace can't interact w=
+ith
+> > =C2=A0 these interrupts at the moment.
+>=20
+> Are you aware of any work being done (or having been done) in this
+> area? Thanks in advance!
+>=20
+> My colleagues and I are looking into picking this up and implementing
+> the new sysfs interface and the related irqbalance changes, and we are
+> currently evaluating the level of effort. Obviously, we would like to
+> avoid any effort duplication.
 
-Just copy-paste or use scripts/get_maintainers.pl.
-You can automate everything with something like:
-https://github.com/krzk/tools/blob/master/linux/.bash_aliases_linux#L91
+I don't think anyone ever tried it (it's far easier to just moan about
+it than to do anything useful). But if you want to start looking into
+that, that'd be great.
 
-> 
-> Signed-off-by: Fred Treven <fred.treven@cirrus.com>
-> ---
->  .../devicetree/bindings/input/cs40l26.yaml         | 92 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 93 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/cs40l26.yaml
+One of my concern is that allowing affinity changes for chained
+interrupt may uncover issues in existing drivers, so it would have to
+be an explicit buy-in for any chained irqchip. That's probably not too
+hard to achieve anyway given that you'll need some new infrastructure
+to track the muxed interrupts.
 
-Filename matching compatible, so you need vendor-prefix.
+Hopefully this will result in something actually happening! ;-)
 
-> 
-> diff --git a/Documentation/devicetree/bindings/input/cs40l26.yaml b/Documentation/devicetree/bindings/input/cs40l26.yaml
-> new file mode 100644
-> index 000000000000..1036a374baa0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/cs40l26.yaml
-> @@ -0,0 +1,92 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/cs40l26.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cirrus Logic CS40L26 Boosted Haptic Amplifier
-> +
-> +maintainers:
-> +  - Fred Treven <fred.treven@cirrus.com>
-> +
-> +description:
-> +  CS40L26 is a Boosted Haptic Driver with Integrated DSP and Waveform Memory
-> +  with Advanced Closed Loop Algorithms and LRA protection
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cirrus,cs40l26a
-> +      - cirrus,cs40l26b
-> +      - cirrus,cs40l27a
-> +      - cirrus,cs40l27b
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description:
-> +      Property describing the interrupt line the devices /ALERT pin is connected to.
-> +      The device only has one interrupt source.
+Cheers,
 
-Drop description - it is almost useless. You could just mention ALERT pin.
+	M.
 
-> +
-> +  VA-supply:
-> +    description: Regulator for VA analog voltage
-> +
-> +  VP-supply:
-> +    description: Regulator for VP peak voltage
-> +
-> +  cirrus,bst-ipk-microamp:
-> +    description:
-> +      Maximum amount of current that can be drawn by the device's boost
-> +      converter in uA. Accepted values are between 1600000 uA and 4800000 uA in
-> +      50000 uA increments.
-> +    minimum: 1600000
-> +    maximum: 4800000
-> +    default: 4500000
-
-Isn't this property of regulator? Why do you need it here?
-
-> +
-> +  cirrus,bst-ctl-microvolt:
-> +    description:
-> +      Maximum target voltage to which the class H algorithm may increase the
-> +      VBST supply, expressed in uV. Valid values range from 2550000 to 11000000
-> +      (inclusive) in steps of 50000. If this value is specified as zero or VP
-> +      rises above this value, VBST is bypassed to VP. If this value is omitted,
-> +      the maximum target voltage remains at 11 V.
-
-Don't repeat constraints in free form text - drop last sentence.
-
-> +    minimum: 2550000
-> +    maximum: 11000000
-> +    default: 11000000
-> +
-> +  cirrus,bst-exploratory-mode-disable:
-> +    description:
-> +      Disable boost exploratory mode if this boolean is present in the
-> +      devicetree. 
-
-Don't explain how DT works. Explain how hardware works instead.
-
-> Boost exploratory mode allows the device to overshoot
-> +      the set peak current limit. This has potential to damage the boost
-> +      inductor. Disabling this mode will prevent this from happening; it will
-> +      also prevent the device from detecting boost inductor short errors.
-> +      (Default) Enabled
-
-Why this is suitable for DT? Why would anyone need to disable it per board?
-
-> +    type: boolean
-> +
-> +
-
-Just one blank line.
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      cs40l26: cs40l26@58 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-> +        compatible = "cirrus,cs40l26a";
-> +        reg = <0x58>;
-> +        interrupt-parent = <&gpio0>;
-> +        interrupts = <57 8>;
-
-If 8 is interrupt flag, use appropriate define.
-
-> +        reset-gpios = <&gpio0 54 0>;
-
-Same for GPIO flag.
-
-> +        VA-supply = <&dummy_vreg>;
-> +        VP-supply = <&dummy_vreg>;
-> +        cirrus,bst-ctl-microvolt = <2600000>; // Max boost voltage = 2.6V
-> +        cirrus,bst-ipk-microamp = <1650000>; // Max boost current = 1.65A
-> +        cirrus,bst-exploratory-mode-disabled; // Disable exploratory mode
-
-The comments are not useful - they copy the property. Instead you could
-explain WHY. Or just drop the comments.
-
->  
-
-Best regards,
-Krzysztof
-
+--=20
+Without deviation from the norm, progress is not possible.
