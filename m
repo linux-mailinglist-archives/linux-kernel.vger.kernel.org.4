@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA8B6DAA80
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A066DAA87
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240278AbjDGI5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45160 "EHLO
+        id S232757AbjDGJBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbjDGI5J (ORCPT
+        with ESMTP id S230173AbjDGJBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:57:09 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE1EA5CB;
-        Fri,  7 Apr 2023 01:57:07 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id o11so39565357ple.1;
-        Fri, 07 Apr 2023 01:57:07 -0700 (PDT)
+        Fri, 7 Apr 2023 05:01:09 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C5483F0
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:01:08 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54c0c86a436so85570507b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 02:01:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680857827; x=1683449827;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gpAcJUBZnPRe6gVW7efqQAtGabyC/Y11dXostFs84j4=;
-        b=gLnkbJy6vCxNcSx0/K8fZShwl5sL9ieZFfkqJrE4xPkeFw6MA+zxEbkEkVlfJtmIOk
-         IofcB+gFPxc4fBacN8KQrLDCxWqA8uhUduggQ07Ar+zvnTKSxM2/b7l1ddEvM5Ldl4BH
-         k8j49KONMc/sxCPWAPGP2za0R4HV4yaIO+/ELgCChCYBT4lgV9WBJok9wrHWt1oQCzGd
-         cK/Z+zLE5Br4hsKGnz+Bh7Dc833/1llMX/wTBDka562sWC7TGB2hRMliI4Axx5TL+WZ6
-         mbAg099iNBg2Sa5aq0oln9h540Y+jzT1GnH24ivEJaMOMv6GZnhcj6tM+eQwVp1A9N8X
-         +SBg==
+        d=google.com; s=20210112; t=1680858067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gD0fLioRJ4bazZO1d+c33FChVf79wAvXK8pl+WtkfeU=;
+        b=DYWxHIJcV2w529JGlIVbdQMEkhLczL6gZM1mn89BX+zTRqRtQMReGglMWAAbvx8HF/
+         ap+nYnfUDhyEUnDoFlyKtBpJMQh/J5l8v3FS9NiwT36mU0xz/eNrUq5+RegeK2KfHh/y
+         Yrfb+SfhuMdO1Hau68nAvXBDWctayYdzaK2Caa+ngx31UV1n4c75Q0HoVzwQhnL2ajEb
+         aSJ/3AVh9fqjIar5P1cikM+uVpeuDzIVBW5BEmDQdbKumykhIw/UldaCqIypTLr5iSKh
+         UeYfm04jU50PGmTOCM24y138Sr3AL0mnvWmM5+mEyR7oNe7DmVpVtOUDl2AId4xJOBOy
+         q5QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680857827; x=1683449827;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gpAcJUBZnPRe6gVW7efqQAtGabyC/Y11dXostFs84j4=;
-        b=0LlFJv0+4g0KIfHCHc9fVGuyzP+UBvcILcFeDClEOCfO2h83nKmFlpxXf4x1qTM5IA
-         Cnz6eFpntr1NW+qWzYFv9AaA9s/c/8wBKTuAE9TZyCpiA7Lvgn4ydfIM42QcSsF81s9l
-         6OpEKHpubKz0UyyQup5XKhEZriuE0oDdFDssu76GZvg8YRzEzlkE4xKbF1KyRO11G0Hi
-         u/UXC9/Lt/DuN90GrdLK9Rc3LUemjGg/6sh1q4YpYqLCO5FnxLmZ8/Y3b8QRe9tbVQ+/
-         wH5yHiMbcUYVIMVMEGNLBWrw99WDAEvLLOIiCH+KQBvhSDBWDoiJh1PHulv5CHKuQk3m
-         +XLA==
-X-Gm-Message-State: AAQBX9eAWlnyzilBebUB3VNl1kkMnEUO6/5seQdHy6PwPcNB6CDZc6bq
-        jj8RF0toAxam2K2ETdrGKn0=
-X-Google-Smtp-Source: AKy350be/ScJbmO+Mg+B6KUTaSAdUbcioZ7BsNYOR88ApxU9erwMf6iOUpf+/7vkW7V9nlQFUkvSzQ==
-X-Received: by 2002:a05:6a20:4c9a:b0:cb:7958:7071 with SMTP id fq26-20020a056a204c9a00b000cb79587071mr2128294pzb.19.1680857826847;
-        Fri, 07 Apr 2023 01:57:06 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id u12-20020a62ed0c000000b0062e23e81b24sm2568860pfh.114.2023.04.07.01.57.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 01:57:05 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: [PATCH V2] KVM: x86/pmu: Disable vPMU if EVENTSEL_GUESTONLY bit doesn't exist
-Date:   Fri,  7 Apr 2023 16:56:46 +0800
-Message-Id: <20230407085646.24809-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.40.0
+        d=1e100.net; s=20210112; t=1680858067;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gD0fLioRJ4bazZO1d+c33FChVf79wAvXK8pl+WtkfeU=;
+        b=agLomXbARbYJCck/zG7zLYm+V16GZBaI7HOkQo1zIgak+kvddKplGxxID4XcdvmvIk
+         suCgzd9QW9yQPXoOKXglSw2XaGhSo9WwD+FzSxdDwjIOSLv3wopqT+CzPv+qkXwvvKmJ
+         adwq6djrwKiXkUj7B4DvNSKAKo6FEjAcPpjpKT6iUFYIr+ATfuQmMELJINeU/kH3CgWU
+         327y/mDUC6sJap1SZjLFikkZtSf5b7JbOxlNbsWybOOjWgBE9D7xCi3R/UK6E313brAx
+         /yjqlLdn/UfE+xIKbxm7p97jYcQGMyKOkN/j+lndXZUt0oUkHrrX+9rOC/E4VWtB7OWv
+         f16Q==
+X-Gm-Message-State: AAQBX9en800VMM8rhZpTPEx5bMDszh68osRuQfPkV5puNf0GXH4ZoLtf
+        5QASuG+71WyvLaensqtRnLbvFA79tawhm64//7AhqA==
+X-Google-Smtp-Source: AKy350Yxg2b6wSZ2snsqKErnGlzzj1eiPLnWXdgU0QkFXUYiaeMq74SlzwtZB7bYGApHKdW0uByFstVrYrDcEYR16qQ=
+X-Received: by 2002:a81:ae52:0:b0:541:a17f:c77d with SMTP id
+ g18-20020a81ae52000000b00541a17fc77dmr656749ywk.10.1680858066675; Fri, 07 Apr
+ 2023 02:01:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230407035058.8373-1-iccccc@hust.edu.cn>
+In-Reply-To: <20230407035058.8373-1-iccccc@hust.edu.cn>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 7 Apr 2023 11:00:55 +0200
+Message-ID: <CANn89i+FFu3Rz8KgMw-hn=jPcv9AJfQKuAgUyfzVMwACLQMUSA@mail.gmail.com>
+Subject: Re: [PATCH net-next] net/ipv6: silence 'passing zero to ERR_PTR()' warning
+To:     Haoyi Liu <iccccc@hust.edu.cn>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        hust-os-kernel-patches@googlegroups.com, yalongz@hust.edu.cn,
+        error27@gmail.com, Dongliang Mu <dzm91@hust.edu.cn>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,66 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Fri, Apr 7, 2023 at 5:54=E2=80=AFAM Haoyi Liu <iccccc@hust.edu.cn> wrote=
+:
+>
+> Smatch complains that if xfrm_lookup() returns NULL then this does a
+> weird thing with "err":
+>
+>     net/ ipv6/ icmp.c:411 icmpv6_route_lookup()
+>     warn: passing zero to ERR_PTR()
+>
+> Just return "dst2" directly instead of assigning it to"dst" and then
+> looking up the value of "err".  No functional change.
+>
+> Signed-off-by: Haoyi Liu <iccccc@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+> The issue is found by static analysis, and the patch is remains untested.
+> ---
+>  net/ipv6/icmp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+> index 1f53f2a74480..a5e77acead89 100644
+> --- a/net/ipv6/icmp.c
+> +++ b/net/ipv6/icmp.c
+> @@ -395,7 +395,7 @@ static struct dst_entry *icmpv6_route_lookup(struct n=
+et *net,
+>         dst2 =3D xfrm_lookup(net, dst2, flowi6_to_flowi(&fl2), sk, XFRM_L=
+OOKUP_ICMP);
+>         if (!IS_ERR(dst2)) {
+>                 dst_release(dst);
+> -               dst =3D dst2;
+> +               return dst2;
+>         } else {
+>                 err =3D PTR_ERR(dst2);
+>                 if (err =3D=3D -EPERM) {
+> --
+> 2.25.1
+>
 
-Unlike Intel's MSR atomic_switch mechanism, AMD supports guest pmu
-basic counter feature by setting the GUESTONLY bit on the host, so the
-presence or absence of this bit determines whether vPMU is emulatable
-(e.g. in nested virtualization). Since on AMD, writing reserved bits of
-EVENTSEL register does not bring #GP, KVM needs to update the global
-enable_pmu value by checking the persistence of this GUESTONLY bit.
+Please cleanup this thing, this is a maze of returns, gotos, and
+unnecessary 'else's
 
-Cc: Ravi Bangoria <ravi.bangoria@amd.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
----
-V1:
-https://lore.kernel.org/kvm/20230307113819.34089-1-likexu@tencent.com
-V1 -> V2 Changelog:
-- Preemption needs to be disabled to ensure a stable CPU; (Sean)
-- KVM should be restoring the original value too; (Sean)
-- Disable vPMU once guest_only mode is not supported; (Sean)
-- Appreciate any better way to probe for GUESTONLY support;
+Thanks.
 
- arch/x86/kvm/svm/svm.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+index 1f53f2a74480c0b8433204b567e7f98ad1216ad6..c76861f1ff6e4ee12d2686c1d13=
+5b24595989dfa
+100644
+--- a/net/ipv6/icmp.c
++++ b/net/ipv6/icmp.c
+@@ -395,14 +395,12 @@ static struct dst_entry
+*icmpv6_route_lookup(struct net *net,
+        dst2 =3D xfrm_lookup(net, dst2, flowi6_to_flowi(&fl2), sk,
+XFRM_LOOKUP_ICMP);
+        if (!IS_ERR(dst2)) {
+                dst_release(dst);
+-               dst =3D dst2;
+-       } else {
+-               err =3D PTR_ERR(dst2);
+-               if (err =3D=3D -EPERM) {
+-                       dst_release(dst);
+-                       return dst2;
+-               } else
+-                       goto relookup_failed;
++               return dst2;
++       }
++       err =3D PTR_ERR(dst2);
++       if (err =3D=3D -EPERM) {
++               dst_release(dst);
++               return dst2;
+        }
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 7584eb85410b..1ab885596510 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4884,6 +4884,20 @@ static __init void svm_adjust_mmio_mask(void)
- 	kvm_mmu_set_mmio_spte_mask(mask, mask, PT_WRITABLE_MASK | PT_USER_MASK);
- }
- 
-+static __init bool pmu_has_guestonly_mode(void)
-+{
-+	u64 original, value;
-+
-+	preempt_disable();
-+	rdmsrl(MSR_F15H_PERF_CTL0, original);
-+	wrmsrl(MSR_F15H_PERF_CTL0, AMD64_EVENTSEL_GUESTONLY);
-+	rdmsrl(MSR_F15H_PERF_CTL0, value);
-+	wrmsrl(MSR_F15H_PERF_CTL0, original);
-+	preempt_enable();
-+
-+	return value == AMD64_EVENTSEL_GUESTONLY;
-+}
-+
- static __init void svm_set_cpu_caps(void)
- {
- 	kvm_set_cpu_caps();
-@@ -4928,6 +4942,9 @@ static __init void svm_set_cpu_caps(void)
- 	    boot_cpu_has(X86_FEATURE_AMD_SSBD))
- 		kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
- 
-+	/* Probe for AMD64_EVENTSEL_GUESTONLY support */
-+	enable_pmu &= pmu_has_guestonly_mode();
-+
- 	/* AMD PMU PERFCTR_CORE CPUID */
- 	if (enable_pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
- 		kvm_cpu_cap_set(X86_FEATURE_PERFCTR_CORE);
-
-base-commit: 649bccd7fac98225525c79cf4b1cecc4bafdfc54
--- 
-2.40.0
-
+ relookup_failed:
