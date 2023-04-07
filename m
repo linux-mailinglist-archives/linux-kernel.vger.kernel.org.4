@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C197E6DB520
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D156B6DB523
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjDGUUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 16:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S231129AbjDGUU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 16:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjDGUUK (ORCPT
+        with ESMTP id S231231AbjDGUUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 16:20:10 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A190FC66B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:20:04 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-632389f445cso1050b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:20:04 -0700 (PDT)
+        Fri, 7 Apr 2023 16:20:18 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93FBC65F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:20:07 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54bfc4e0330so79098737b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680898804; x=1683490804;
+        d=google.com; s=20210112; t=1680898807; x=1683490807;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GgRFXdpbsewXFN8nfe13N4oAoHTkIOTXjaNF6DLenHQ=;
-        b=bUPKu4nhvU6AIpMyXIiHt43tbAVl8CQ5zUEZSFuYtVCkd015VQ7DKPwcFXmkmH17As
-         lVLq79uj/NQdWNkY26hN2EggIFXZpzKO7MNJr65yXQcHcpHpQeTfnrxw50qg9C4gx8RL
-         iy6eCReaQSIdPkYWlJzdeM1yXiqFLrTJzBWQ+KyLOH2z0fuAXahHqDM3ShgTW6UQ8eiS
-         71szTjXJlV/MBpQ6pN2g2pLgUqRonwbez8iewZcmNKFaJDdvBEolIbXNt2Ioa/Qw1pE1
-         lRrvA7nz+YB0FqnzFEDqCWuFkMZ4mLINvwECc8AohsUCtkcFdtPYhDRkIHP8oomf5Drr
-         OrxA==
+        bh=gDOIz19mFLXVjh2KEN4BbSPwap6txMB8kY9CE7752rg=;
+        b=reXZKVgJAcUhKBFqAhAfXZIMQul2LNsezKlEEoHtiLFTJvynT88LRPnZVM8H43my2O
+         0AdWQfw3AEOAoOIF7B7AWJxVFSFD/w3Q2pEfhk9TLSFsHjsMCNwDjt1nToC3Erq9lXvB
+         g1LbxQEVzYJTdlQ5MYz5hDc9P8gRoRV3iaOFlg0OdPEkY2HKDJ8CNZ5ywg2KOO/iF5t6
+         lVplsBeH6uvx9ev0WzAiyQG3vF+n90o7T5CR+YbfiXxyMGTfkTZG4CFGpeaqYlO+IJif
+         dO3yYbv3bKl2jMrlV2SrXMEB8JHo/vfYywtDCcW7wAKIKF7yN3CbU+qRkgehxk1sT0AX
+         eQgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680898804; x=1683490804;
+        d=1e100.net; s=20210112; t=1680898807; x=1683490807;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GgRFXdpbsewXFN8nfe13N4oAoHTkIOTXjaNF6DLenHQ=;
-        b=ueetEMczomD0UuiVggyZQPxVo68R856gQTmBsBtQMaWpyKGumQKiXT2yJVYKeRTUAj
-         W/CQKFg9UoEzeBvovagQrE5yKKkOr2puXs6PxB8HBJqzzNgtbKdpSAbRRP7CBBr2BoMW
-         xtHayZUdTx8goELwswX9of0D4wLQN9yFzbnKDYC4YKhAc2npLL9qHPyElC1zWJ/3iTfI
-         6YlJhg2x6O+ZfyxQF8eJE3CWLfon0muvO9g9o95ONU06rmRjlaAOF+x47iURMupl2XvP
-         28r+S3C0q9ozl4i8f95aLDWLCerCWUI8zUiTNHIwyKQmuYJjUCXXj3J8R4sV/JVLRMGY
-         xwag==
-X-Gm-Message-State: AAQBX9cl0rlbJXVfIxStr//f3QoBqz3J31SGRsLEzHCYOIPFKnM5xfCu
-        KPjmlAhFfzbw8LzOoTCf7wAWOKaBQw==
-X-Google-Smtp-Source: AKy350YGEe2C15q4jyE6p1UWvUniafEfLkgm3j9s60Y8u1yQ+nOtXj2Cpevyz/K7PO+ujyOfnnjwJVut0g==
+        bh=gDOIz19mFLXVjh2KEN4BbSPwap6txMB8kY9CE7752rg=;
+        b=7JnEeDrobtxT7XUksu4yoXsn8s+3qK9fTEQymgEIjbh3vbTWZvWX2Q9uihCi6oCBB8
+         oj5m7e9rU+aWgvxf2ThTUWE9Vwlda1XfO98XPUiBz5X489kG7lcsw7KYepgbWm1lOxW1
+         8AxMNnrxWf4Fdt9ljYWkvE2F143n8xHw/MnuSJRVEjK4aFhDIrhJfQozgFxt8gpr9zAP
+         S7qa5KRkLAlDB+nGhIJLgKsfJ44E+zivoG6/zRVImGI9Nl6hiyADXqxox2xf0B9eGwqs
+         DgnFmZ2wkHTRRzrdsyrkh7sNRLzYm592GlYoSZtPmBAbotBK789krz9u/kMGTBtMcBNS
+         amEQ==
+X-Gm-Message-State: AAQBX9eaNlf3CYb4IAKUd3DnLvKeJdWBF8btMQxmnBD61pydccvdmeVf
+        VoAxVi5czxKowqb+Lx6I1/OFjEGMkA==
+X-Google-Smtp-Source: AKy350bhhE80rWXZROApfO8xLPaZj9ts5o8abPpaSzK+xmA5azXLcrO5jVnu2rk1aXyBf4QNsfLxthLxYg==
 X-Received: from sagi.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:241b])
- (user=sagis job=sendgmr) by 2002:a05:6a00:2d20:b0:627:d4fa:6a9c with SMTP id
- fa32-20020a056a002d2000b00627d4fa6a9cmr1663271pfb.6.1680898803826; Fri, 07
- Apr 2023 13:20:03 -0700 (PDT)
-Date:   Fri,  7 Apr 2023 20:19:19 +0000
+ (user=sagis job=sendgmr) by 2002:a05:6902:909:b0:a27:3ecc:ffe7 with SMTP id
+ bu9-20020a056902090900b00a273eccffe7mr5158014ybb.3.1680898807168; Fri, 07 Apr
+ 2023 13:20:07 -0700 (PDT)
+Date:   Fri,  7 Apr 2023 20:19:20 +0000
 In-Reply-To: <20230407201921.2703758-1-sagis@google.com>
 Mime-Version: 1.0
 References: <20230407201921.2703758-1-sagis@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230407201921.2703758-4-sagis@google.com>
-Subject: [RFC PATCH 3/5] KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
+Message-ID: <20230407201921.2703758-5-sagis@google.com>
+Subject: [RFC PATCH 4/5] KVM: TDX: Implement moving private pages between 2 TDs
 From:   Sagi Shahar <sagis@google.com>
 To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -78,144 +78,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This should mostly match the logic in sev_vm_move_enc_context_from.
+Added functionality for moving the private EPT table from one TD to a
+new one.
+
+This function moves the root of the private EPT table and overwrite
+the root of the destination.
 
 Signed-off-by: Sagi Shahar <sagis@google.com>
 ---
- arch/x86/kvm/vmx/main.c    | 10 +++++++
- arch/x86/kvm/vmx/tdx.c     | 56 ++++++++++++++++++++++++++++++++++++++
- arch/x86/kvm/vmx/tdx.h     |  2 ++
- arch/x86/kvm/vmx/x86_ops.h |  5 ++++
- 4 files changed, 73 insertions(+)
+ arch/x86/kvm/mmu.h         |  2 +
+ arch/x86/kvm/mmu/mmu.c     | 60 +++++++++++++++++++++++++++++
+ arch/x86/kvm/mmu/tdp_mmu.c | 77 +++++++++++++++++++++++++++++++++++---
+ arch/x86/kvm/mmu/tdp_mmu.h |  3 ++
+ 4 files changed, 137 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-index 5b64fe5404958..9d5d0ac465bf6 100644
---- a/arch/x86/kvm/vmx/main.c
-+++ b/arch/x86/kvm/vmx/main.c
-@@ -979,6 +979,14 @@ static int vt_vcpu_mem_enc_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
- 	return tdx_vcpu_ioctl(vcpu, argp);
+diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+index d10b08eeaefee..09bae7fe18a12 100644
+--- a/arch/x86/kvm/mmu.h
++++ b/arch/x86/kvm/mmu.h
+@@ -120,6 +120,8 @@ void kvm_mmu_unload(struct kvm_vcpu *vcpu);
+ void kvm_mmu_free_obsolete_roots(struct kvm_vcpu *vcpu);
+ void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu);
+ void kvm_mmu_sync_prev_roots(struct kvm_vcpu *vcpu);
++int kvm_mmu_move_private_pages_from(struct kvm_vcpu *vcpu,
++				    struct kvm_vcpu *src_vcpu);
+ 
+ static inline int kvm_mmu_reload(struct kvm_vcpu *vcpu)
+ {
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index a35f2e7f9bc70..1acc9338323da 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3789,6 +3789,66 @@ static int mmu_first_shadow_root_alloc(struct kvm *kvm)
+ 	return r;
  }
  
-+static int vt_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
++int kvm_mmu_move_private_pages_from(struct kvm_vcpu *vcpu,
++				    struct kvm_vcpu *src_vcpu)
 +{
-+	if (!is_td(kvm))
-+		return -ENOTTY;
++	struct kvm_mmu *mmu = vcpu->arch.mmu;
++	struct kvm_mmu *src_mmu = src_vcpu->arch.mmu;
++	gfn_t gfn_shared = kvm_gfn_shared_mask(vcpu->kvm);
++	hpa_t private_root_hpa, shared_root_hpa;
++	int r = -EINVAL;
 +
-+	return tdx_vm_move_enc_context_from(kvm, source_fd);
++	// Hold locks for both src and dst. Always take the src lock first.
++	write_lock(&src_vcpu->kvm->mmu_lock);
++	write_lock(&vcpu->kvm->mmu_lock);
++
++	if (!gfn_shared)
++		goto out_unlock;
++
++	WARN_ON_ONCE(!is_tdp_mmu_active(vcpu));
++	WARN_ON_ONCE(!is_tdp_mmu_active(src_vcpu));
++
++	r = mmu_topup_memory_caches(vcpu, !vcpu->arch.mmu->root_role.direct);
++	if (r)
++		goto out_unlock;
++
++	/*
++	 * The private root is moved from the src to the dst and is marked as
++	 * invalid in the src.
++	 */
++	private_root_hpa = kvm_tdp_mmu_move_private_pages_from(vcpu, src_vcpu);
++	if (private_root_hpa == INVALID_PAGE) {
++		/*
++		 * This likely means that the private root was already moved by
++		 * another vCPU.
++		 */
++		private_root_hpa = kvm_tdp_mmu_get_vcpu_root_hpa_no_alloc(vcpu, true);
++		if (private_root_hpa == INVALID_PAGE) {
++			r = -EINVAL;
++			goto out_unlock;
++		}
++	}
++
++	mmu->private_root_hpa = private_root_hpa;
++	src_mmu->private_root_hpa = INVALID_PAGE;
++
++	/*
++	 * The shared root is allocated normally and is not moved from the src.
++	 */
++	shared_root_hpa = kvm_tdp_mmu_get_vcpu_root_hpa(vcpu, false);
++	mmu->root.hpa = shared_root_hpa;
++
++	kvm_mmu_load_pgd(vcpu);
++	static_call(kvm_x86_flush_tlb_current)(vcpu);
++
++out_unlock:
++	write_unlock(&vcpu->kvm->mmu_lock);
++	write_unlock(&src_vcpu->kvm->mmu_lock);
++
++	return r;
 +}
++EXPORT_SYMBOL(kvm_mmu_move_private_pages_from);
 +
- #define VMX_REQUIRED_APICV_INHIBITS		       \
- (						       \
-        BIT(APICV_INHIBIT_REASON_DISABLE)|	       \
-@@ -1141,6 +1149,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
- 	.dev_mem_enc_ioctl = tdx_dev_ioctl,
- 	.mem_enc_ioctl = vt_mem_enc_ioctl,
- 	.vcpu_mem_enc_ioctl = vt_vcpu_mem_enc_ioctl,
-+
-+	.vm_move_enc_context_from = vt_move_enc_context_from,
- };
- 
- struct kvm_x86_init_ops vt_init_ops __initdata = {
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index 8af7e4e81c860..0999a6d827c99 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -2826,3 +2826,59 @@ int __init tdx_init(void)
- 		INIT_LIST_HEAD(&per_cpu(associated_tdvcpus, cpu));
- 	return 0;
+ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_mmu *mmu = vcpu->arch.mmu;
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 327dee4f6170e..685528fdc0ad6 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -296,6 +296,23 @@ static void tdp_mmu_init_sp(struct kvm_mmu_page *sp, tdp_ptep_t sptep,
+ 	trace_kvm_mmu_get_page(sp, true);
  }
-+
-+static __always_inline bool tdx_guest(struct kvm *kvm)
+ 
++static struct kvm_mmu_page *
++kvm_tdp_mmu_get_vcpu_root_no_alloc(struct kvm_vcpu *vcpu, union kvm_mmu_page_role role)
 +{
-+	struct kvm_tdx *tdx_kvm = to_kvm_tdx(kvm);
++	struct kvm *kvm = vcpu->kvm;
++	struct kvm_mmu_page *root;
 +
-+	return tdx_kvm->finalized;
-+}
++	lockdep_assert_held_read(&kvm->mmu_lock);
 +
-+static int tdx_migrate_from(struct kvm *dst, struct kvm *src)
-+{
-+	return -EINVAL;
-+}
-+
-+int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
-+{
-+	struct kvm_tdx *dst_tdx = to_kvm_tdx(kvm);
-+	struct file *src_kvm_file;
-+	struct kvm_tdx *src_tdx;
-+	struct kvm *src_kvm;
-+	int ret;
-+
-+	src_kvm_file = fget(source_fd);
-+	if (!file_is_kvm(src_kvm_file)) {
-+		ret = -EBADF;
-+		goto out_fput;
-+	}
-+	src_kvm = src_kvm_file->private_data;
-+	src_tdx = to_kvm_tdx(src_kvm);
-+
-+	ret = pre_move_enc_context_from(kvm, src_kvm,
-+					&dst_tdx->migration_in_progress,
-+					&src_tdx->migration_in_progress);
-+	if (ret)
-+		goto out_fput;
-+
-+	if (tdx_guest(kvm) || !tdx_guest(src_kvm)) {
-+		ret = -EINVAL;
-+		goto out_post;
++	for_each_tdp_mmu_root(kvm, root, kvm_mmu_role_as_id(role)) {
++		if (root->role.word == role.word &&
++		    kvm_tdp_mmu_get_root(root))
++			return root;
 +	}
 +
-+	ret = tdx_migrate_from(kvm, src_kvm);
-+	if (ret)
-+		goto out_post;
-+
-+	kvm_vm_dead(src_kvm);
-+	ret = 0;
-+
-+out_post:
-+	post_move_enc_context_from(kvm, src_kvm,
-+				 &dst_tdx->migration_in_progress,
-+				 &src_tdx->migration_in_progress);
-+out_fput:
-+	if (src_kvm_file)
-+		fput(src_kvm_file);
-+	return ret;
++	return NULL;
 +}
-diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-index 71818c5001862..21b7e710be1fd 100644
---- a/arch/x86/kvm/vmx/tdx.h
-+++ b/arch/x86/kvm/vmx/tdx.h
-@@ -24,6 +24,8 @@ struct kvm_tdx {
- 	atomic_t tdh_mem_track;
- 
- 	u64 tsc_offset;
 +
-+	atomic_t migration_in_progress;
- };
+ static struct kvm_mmu_page *kvm_tdp_mmu_get_vcpu_root(struct kvm_vcpu *vcpu,
+ 						      bool private)
+ {
+@@ -311,11 +328,9 @@ static struct kvm_mmu_page *kvm_tdp_mmu_get_vcpu_root(struct kvm_vcpu *vcpu,
+ 	 */
+ 	if (private)
+ 		kvm_mmu_page_role_set_private(&role);
+-	for_each_tdp_mmu_root(kvm, root, kvm_mmu_role_as_id(role)) {
+-		if (root->role.word == role.word &&
+-		    kvm_tdp_mmu_get_root(root))
+-			goto out;
+-	}
++	root = kvm_tdp_mmu_get_vcpu_root_no_alloc(vcpu, role);
++	if (!!root)
++		goto out;
  
- union tdx_exit_reason {
-diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-index d049e0c72ed0c..275f5d75e9bf1 100644
---- a/arch/x86/kvm/vmx/x86_ops.h
-+++ b/arch/x86/kvm/vmx/x86_ops.h
-@@ -187,6 +187,8 @@ int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp);
- void tdx_flush_tlb(struct kvm_vcpu *vcpu);
- int tdx_sept_tlb_remote_flush(struct kvm *kvm);
- void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level);
-+
-+int tdx_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd);
- #else
- static inline int tdx_init(void) { return 0; };
- static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -ENOSYS; }
-@@ -241,6 +243,9 @@ static inline int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { ret
- static inline void tdx_flush_tlb(struct kvm_vcpu *vcpu) {}
- static inline int tdx_sept_tlb_remote_flush(struct kvm *kvm) { return 0; }
- static inline void tdx_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level) {}
-+
-+static inline int tdx_vm_move_enc_context_from(struct kvm *kvm, u
-+					       nsigned int source_fd) { return -EOPNOTSUPP; }
- #endif
+ 	root = tdp_mmu_alloc_sp(vcpu, role);
+ 	tdp_mmu_init_sp(root, NULL, 0);
+@@ -330,6 +345,58 @@ static struct kvm_mmu_page *kvm_tdp_mmu_get_vcpu_root(struct kvm_vcpu *vcpu,
+ 	return root;
+ }
  
- #if defined(CONFIG_INTEL_TDX_HOST) && defined(CONFIG_KVM_SMM)
++hpa_t kvm_tdp_mmu_move_private_pages_from(struct kvm_vcpu *vcpu,
++					  struct kvm_vcpu *src_vcpu)
++{
++	union kvm_mmu_page_role role = vcpu->arch.mmu->root_role;
++	struct kvm *kvm = vcpu->kvm;
++	struct kvm *src_kvm = src_vcpu->kvm;
++	struct kvm_mmu_page *private_root = NULL;
++	struct kvm_mmu_page *root;
++	s64 num_private_pages, old;
++
++	lockdep_assert_held_write(&vcpu->kvm->mmu_lock);
++	lockdep_assert_held_write(&src_vcpu->kvm->mmu_lock);
++
++	/* Find the private root of the source. */
++	kvm_mmu_page_role_set_private(&role);
++	for_each_tdp_mmu_root(src_kvm, root, kvm_mmu_role_as_id(role)) {
++		if (root->role.word == role.word) {
++			private_root = root;
++			break;
++		}
++	}
++	if (!private_root)
++		return INVALID_PAGE;
++
++	/* Remove the private root from the src kvm and add it to dst kvm. */
++	list_del_rcu(&private_root->link);
++	list_add_rcu(&private_root->link, &kvm->arch.tdp_mmu_roots);
++
++	num_private_pages = atomic64_read(&src_kvm->arch.tdp_private_mmu_pages);
++	old = atomic64_cmpxchg(&kvm->arch.tdp_private_mmu_pages, 0,
++			       num_private_pages);
++	/* The destination VM should have no private pages at this point. */
++	WARN_ON(old);
++	atomic64_set(&src_kvm->arch.tdp_private_mmu_pages, 0);
++
++	return __pa(private_root->spt);
++}
++
++hpa_t kvm_tdp_mmu_get_vcpu_root_hpa_no_alloc(struct kvm_vcpu *vcpu, bool private)
++{
++	struct kvm_mmu_page *root;
++	union kvm_mmu_page_role role = vcpu->arch.mmu->root_role;
++
++	if (private)
++		kvm_mmu_page_role_set_private(&role);
++	root = kvm_tdp_mmu_get_vcpu_root_no_alloc(vcpu, role);
++	if (!root)
++		return INVALID_PAGE;
++
++	return __pa(root->spt);
++}
++
+ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu, bool private)
+ {
+ 	return __pa(kvm_tdp_mmu_get_vcpu_root(vcpu, private)->spt);
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
+index 3ae3c3b8642ac..0e9d38432673d 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.h
++++ b/arch/x86/kvm/mmu/tdp_mmu.h
+@@ -11,6 +11,9 @@ int kvm_mmu_init_tdp_mmu(struct kvm *kvm);
+ void kvm_mmu_uninit_tdp_mmu(struct kvm *kvm);
+ 
+ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu, bool private);
++hpa_t kvm_tdp_mmu_get_vcpu_root_hpa_no_alloc(struct kvm_vcpu *vcpu, bool private);
++hpa_t kvm_tdp_mmu_move_private_pages_from(struct kvm_vcpu *vcpu,
++					  struct kvm_vcpu *src_vcpu);
+ 
+ __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm_mmu_page *root)
+ {
 -- 
 2.40.0.348.gf938b09366-goog
 
