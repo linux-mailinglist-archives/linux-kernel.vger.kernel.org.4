@@ -2,101 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521C76DB5C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8DC6DB5CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjDGV3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
+        id S230394AbjDGVaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjDGV3f (ORCPT
+        with ESMTP id S229523AbjDGVaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:29:35 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93332BBA1
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:29:34 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id j14-20020a17090a7e8e00b002448c0a8813so4403435pjl.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:29:34 -0700 (PDT)
+        Fri, 7 Apr 2023 17:30:15 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BB4BDC2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:30:14 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54bfe7a161eso80087047b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680902974; x=1683494974;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=R5pwr73HER5r5lm/I7kdT2UE3HZ2H2e0ixPC/w+bENg=;
-        b=TyiLNpWgGovqrFVmfzECFC7Gk1j92Xl2ejkRbjqSSGDDfPU2EDGKQmqPbFcYdNGzlo
-         DIgVYiIKZ1LzU+N/0jSZOr50kHUbXvQQyvuTt9gY4Vkb9bHKhUZoy7NUzBHPV5nzi9d7
-         I0cTHKUC8O+iuCmsfk3WiRvNYgmHdWFNWA0+Y=
+        d=google.com; s=20210112; t=1680903014;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vYPq8AwRA75JijczTkRxvHK/tBvZRTY57s49oX1Ykp8=;
+        b=JjSKyK0ghI+n2n6WkYs7pBEEv8CzmM+vM2buKnh+R5NxM7drEiKARST7GbiMEgE314
+         l6ZC/Zqj4HzHf5Il2W/nNyTBA4ycRyQmKIK9+qs87IBAE0xhJBbqaATnMjPw8j3y7wlF
+         7Lbpm421K4NIqVP3uBBNmehy2TCppOgM0yIzvbYcm15KGrrBRhHu0xyW1Sn4ou7GGE7w
+         OqrlvIdJpkXifjBnnAr+h1BHTbJ1CMTzNOaclraIv5vjT1mEV8I2ickin3JdpvbweJ0v
+         veZjR6qA9Le6HA7A7Yb/iadrQtgCJfLW4hb5Y0NsgNkWgbpgKGgflRaRPzMAhKyTFAIH
+         d4LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680902974; x=1683494974;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R5pwr73HER5r5lm/I7kdT2UE3HZ2H2e0ixPC/w+bENg=;
-        b=qJQkQ8b42xcEbbMxhPFcjwW3XyjTdZ4Ns4ESOr0uiY+GqLlqXbIEBdx8mJpeMHxk8g
-         qzQ+PaPNZt+wOfkAFoouY3NEnC8wksoMADzrcK0Yliz1SxciIg9NIqeIETtfjk4P6MHX
-         uO/R37Z/B9GQotmQHd5tLHjslMFBtCVt3Fe1oCHnhLBDryEKlCMZcKZjJ+fC6izGMMlA
-         v8dI9cb0Vr8WAo5E5Mn3G3R7AzuEEpfBYXksI0PzmeucWc/slK2RZHKxXLSQrMCQ9iWX
-         fBk1/qh2q7Tdsizy3eMadSgYmACWcnjvSzs0P9NLAOUrPr7ZIwzzzXViGZaSfVOcDz2C
-         CP8w==
-X-Gm-Message-State: AAQBX9eP10EXMQ8n3EAXVFqyl9YzrTSdx4biQEPMQoiL6qLe9Q9fHo23
-        Yxzjah/UKk9VLnXbgYk3rwu/Kg==
-X-Google-Smtp-Source: AKy350bkJqjesu+PiSv3njS1SWT7qA2WhEHH6Qjh9s4Mv7FijOL5LsPmld/9LG6eb2QVgr6dn6/HSg==
-X-Received: by 2002:a05:6a20:ba83:b0:e3:763e:555 with SMTP id fb3-20020a056a20ba8300b000e3763e0555mr3840921pzb.57.1680902974075;
-        Fri, 07 Apr 2023 14:29:34 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:cad1:6cfe:57e6:8f81])
-        by smtp.gmail.com with ESMTPSA id s21-20020a056a00195500b006243e706195sm3443390pfk.196.2023.04.07.14.29.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 14:29:33 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] pinctrl: qcom: Add "and" to PIN_CONFIG_INPUT_ENABLE comment
-Date:   Fri,  7 Apr 2023 14:29:14 -0700
-Message-Id: <20230407142859.1.Ia5d70e320b60d6707c6182879097708e49b8b519@changeid>
+        d=1e100.net; s=20210112; t=1680903014;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vYPq8AwRA75JijczTkRxvHK/tBvZRTY57s49oX1Ykp8=;
+        b=q9ci3E6Q/JEE8uaE1t4T9nPVvXk4U5DVlDkMXXvX6UmoC47QLTrHmrPVVWzFCh8OVt
+         vmZKcbB09F39KhGSAzM9fxxLg9fKgJxacQzj+x8bccCmtxMBFE3TJO07wXiY8EOptpKu
+         wSf76O+nVh7VeIhd07VEBcv6oeer980JXyaRXqrZnFml+3tjrtT5okcOwNT1L8md2fbF
+         nYkxdoqEEenqr4jzXrqSHDFIzCBgjNGCTD0gxyC5Sx+1QAorIfTz85zQ+/18dG7uRJtS
+         gg2VQ/sSeCe8xqrYfGMMlwdV02e/wlFuOscxtWvYGQaRr1kx9eDxDy3MUtHW9znMRV1Q
+         xSFw==
+X-Gm-Message-State: AAQBX9eY5Nr50Wzo0WYqbFkuu5k7XwXyvdKlwm9rTkIZmeY61xq8bpPi
+        Clz56ehxKMGl8sA7h3txqAfZudDj8KY=
+X-Google-Smtp-Source: AKy350bf+tpG54R4vH4SX+ilY39rfLPWmhUntcHYl3m11DWx9xyhqhzc5f9mglEiIxcO+L/1cxDUiRXEe4E=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:cad1:0:b0:b78:4788:525b with SMTP id
+ a200-20020a25cad1000000b00b784788525bmr2581462ybg.0.1680903014011; Fri, 07
+ Apr 2023 14:30:14 -0700 (PDT)
+Date:   Fri,  7 Apr 2023 14:30:06 -0700
+In-Reply-To: <20230310113349.31799-1-likexu@tencent.com>
+Mime-Version: 1.0
+References: <20230310113349.31799-1-likexu@tencent.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+Message-ID: <168090262913.941979.18246241626899412092.b4-ty@google.com>
+Subject: Re: [PATCH v2] KVM: x86/pmu/misc: Fix a typo on kvm_pmu_request_counter_reprogam()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment recently added talking about PIN_CONFIG_INPUT_ENABLE is
-clearly missing the word "and". Comments live forever, so let's fix
-it.
+On Fri, 10 Mar 2023 19:33:49 +0800, Like Xu wrote:
+> Fix a "reprogam" typo in the kvm_pmu_request_counter_reprogam(), which
+> should be fixed earlier to follow the meaning of {pmc_}reprogram_counter().
 
-Fixes: e49eabe3e13f ("pinctrl: qcom: Support OUTPUT_ENABLE; deprecate INPUT_ENABLE")
-Reported-by: Stephen Boyd <swboyd@chromium.org>
-Link: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/4409769/comment/9a1d5def_e1e71db7/
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+Applied to kvm-x86 pmu, thanks!
 
- drivers/pinctrl/qcom/pinctrl-msm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1/1] KVM: x86/pmu/misc: Fix a typo on kvm_pmu_request_counter_reprogam()
+      https://github.com/kvm-x86/linux/commit/4fa5843d81fd
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
-index 65a172786ae0..c5f52d4f7781 100644
---- a/drivers/pinctrl/qcom/pinctrl-msm.c
-+++ b/drivers/pinctrl/qcom/pinctrl-msm.c
-@@ -517,7 +517,7 @@ static int msm_config_group_set(struct pinctrl_dev *pctldev,
- 			 * The points above, explain why this _should_ be a
- 			 * no-op. However, for historical reasons and to
- 			 * support old device trees, we'll violate the docs
--			 * still affect the output.
-+			 * and still affect the output.
- 			 *
- 			 * It should further be noted that this old historical
- 			 * behavior actually overrides arg to 0. That means
--- 
-2.40.0.577.gac1e443424-goog
-
+--
+https://github.com/kvm-x86/linux/tree/next
+https://github.com/kvm-x86/linux/tree/fixes
