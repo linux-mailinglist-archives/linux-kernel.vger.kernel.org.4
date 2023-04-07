@@ -2,120 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9F26DAFAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C9F6DAFAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjDGP3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 11:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S232467AbjDGPbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 11:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjDGP3q (ORCPT
+        with ESMTP id S232333AbjDGPbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 11:29:46 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9026A5A;
-        Fri,  7 Apr 2023 08:29:45 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17aeb49429eso45993767fac.6;
-        Fri, 07 Apr 2023 08:29:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680881384; x=1683473384;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W6QmnGy4Q8kGJSQkc03Hd5Fyd7ynCqj61KvTIEzBUaQ=;
-        b=pQd/tPiKlYZC+eNmpJyCjegxQ87sdjhxl2Tz4XT2lAGislqXeYGCJv/ZaA1yUHwJe6
-         nySGv9m0vAstXY/OHApR3OE9D2XiEAIsSQB/WcXh5wfY4Tvijp6nRA15k4320IUsBhNT
-         U1qnAImGcl5qZrdZaroG24nPT0aXOltyMtPwIfCCF0+u0GVPzgbMYk8CZTGEneVh7YtO
-         BCSMXgBWeAgCW9fUZSMaKUfZ2JT+yVuduVdijqY0iLaNC+7zdlTaRw02H+CLUvPLk8SW
-         lJpBCbZ2OzSaBfegb4xTNZ1sK7C78IzMdcTbx660NEFA97+FcJWIKJpWy12V3cfmKmhZ
-         A+9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680881384; x=1683473384;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W6QmnGy4Q8kGJSQkc03Hd5Fyd7ynCqj61KvTIEzBUaQ=;
-        b=LHfb3hzll2OjwLvLu6Fl335BZGfSnZiBCynJ/1bbg3KrgbbqjewD5EwN1rzHxWlyqr
-         NtBxKHU+1W9a42lNSdipGOd/SjVuwPkvlxgGXNAHjDoR9xjX4lr3L757OZ36lEM9+EC4
-         NbEnyqVxFSwuOI9bsO66aUxmmGsWI726xP2hhUTB+SkW+bubBgHL4upGLpFaxLhRcDLp
-         lq0Kum9VOr7jGgCQjbcPbs7Smsb1Iu2Ahu5bQRHnOiLSDJI/4YRoFLmKSoSkMJV376N3
-         o/+DpXHmBjxjBBKyR58K6h3933fxGGtseSmxN28AZ0ztJycbRbnAkugy7woAIp7u9D6v
-         Hkpw==
-X-Gm-Message-State: AAQBX9fAmmpbPf7e6ruKq87vM9/Nh81OChu6uBAFuptTZSHYyw1O53+U
-        ak8f8hWhagUwyNTdqhU4VI0qzPHOCbA=
-X-Google-Smtp-Source: AKy350Y7vPsy3E2Sc+Xg9CgybjXGySasdsV2+qnJsJf2t2y5sNE3Y+N7PoJ613x774ZIbeLHw8pteA==
-X-Received: by 2002:a05:6870:548d:b0:180:be0e:299f with SMTP id f13-20020a056870548d00b00180be0e299fmr1725438oan.0.1680881384199;
-        Fri, 07 Apr 2023 08:29:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u4-20020a4a9e84000000b00524faf3d2d7sm1710179ook.41.2023.04.07.08.29.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 08:29:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 08:29:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: hwmon: drop Agathe Porte
-Message-ID: <b3c1bab7-bc57-4fde-ac5d-11d638d74c89@roeck-us.net>
-References: <20230406204750.3017850-1-krzysztof.kozlowski@linaro.org>
+        Fri, 7 Apr 2023 11:31:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94846A5A
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 08:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680881420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5eE8zuLKcMzLpL2FtuAWtdIO+Pdjkebtgu24Aa6llV4=;
+        b=iK2cqat/1HxdjEPmCY/4Iz8jN3u9tMlB34biFOIjmeYkhesgel5aDWszvfvh7FAaW1kgFi
+        OMem8TpMlRtk1EsfikgTIiCS944ZxkM2MGqlMFHS0hb5o5cct7hLKrZbB1wvvqG+KIz+1x
+        Rro8E4+bpVsH8GOcLhhBqQz2IRjKRIA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-383-xkHeZsBvO8SGG0fWPLnAlw-1; Fri, 07 Apr 2023 11:30:15 -0400
+X-MC-Unique: xkHeZsBvO8SGG0fWPLnAlw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2870C8996E2;
+        Fri,  7 Apr 2023 15:30:15 +0000 (UTC)
+Received: from [10.22.33.209] (unknown [10.22.33.209])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6A12B2166B30;
+        Fri,  7 Apr 2023 15:30:14 +0000 (UTC)
+Message-ID: <89853ab9-7759-11bf-f751-28ce81a4f02e@redhat.com>
+Date:   Fri, 7 Apr 2023 11:30:14 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230406204750.3017850-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 3/3] cgroup/cpuset: Allow only one active attach operation
+ per cpuset
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        gscrivan@redhat.com
+References: <20230331145045.2251683-1-longman@redhat.com>
+ <20230331145045.2251683-4-longman@redhat.com>
+ <20230406-haselnuss-baumhaus-83dc05f869df@brauner>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230406-haselnuss-baumhaus-83dc05f869df@brauner>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 10:47:50PM +0200, Krzysztof Kozlowski wrote:
-> Mails to Agathe Porte bounce ("550 5.4.1 Recipient address rejected:
-> Access denied. AS(201806281)").
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+On 4/6/23 05:44, Christian Brauner wrote:
+> On Fri, Mar 31, 2023 at 10:50:45AM -0400, Waiman Long wrote:
+>> The current cpuset code uses the global cpuset_attach_old_cs variable
+>> to store the old cpuset value between consecutive cpuset_can_attach()
+>> and cpuset_attach() calls. Since a caller of cpuset_can_attach() may
+>> not need to hold the global cgroup_threadgroup_rwsem, parallel cpuset
+>> attach operations are possible.
+>>
+>> When there are concurrent cpuset attach operations in progress,
+>> cpuset_attach() may fetch the wrong value from cpuset_attach_old_cs
+>> causing incorrect result.  To avoid this problem while still allowing
+>> certain level of parallelism, drop cpuset_attach_old_cs and use a
+>> per-cpuset attach_old_cs value. Also restrict to at most one active
+>> attach operation per cpuset to avoid corrupting the value of the
+>> per-cpuset attach_old_cs value.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   kernel/cgroup/cpuset.c | 19 ++++++++++++++-----
+>>   1 file changed, 14 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 2367de611c42..3f925c261513 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -198,6 +198,8 @@ struct cpuset {
+>>   
+>>   	/* Handle for cpuset.cpus.partition */
+>>   	struct cgroup_file partition_file;
+>> +
+>> +	struct cpuset *attach_old_cs;
+>>   };
+>>   
+>>   /*
+>> @@ -2456,22 +2458,27 @@ static int fmeter_getrate(struct fmeter *fmp)
+>>   	return val;
+>>   }
+>>   
+>> -static struct cpuset *cpuset_attach_old_cs;
+>> -
+>>   /* Called by cgroups to determine if a cpuset is usable; cpuset_rwsem held */
+>>   static int cpuset_can_attach(struct cgroup_taskset *tset)
+>>   {
+>>   	struct cgroup_subsys_state *css;
+>> -	struct cpuset *cs;
+>> +	struct cpuset *cs, *oldcs;
+>>   	struct task_struct *task;
+>>   	int ret;
+>>   
+>>   	/* used later by cpuset_attach() */
+>> -	cpuset_attach_old_cs = task_cs(cgroup_taskset_first(tset, &css));
+>> +	oldcs = task_cs(cgroup_taskset_first(tset, &css));
+>>   	cs = css_cs(css);
+>>   
+>>   	percpu_down_write(&cpuset_rwsem);
+>>   
+>> +	/*
+>> +	 * Only one cpuset attach operation is allowed for each cpuset.
+>> +	 */
+>> +	ret = -EBUSY;
+>> +	if (cs->attach_in_progress)
+>> +		goto out_unlock;
+> That'll mean CLONE_INTO_CGROUP becomes even more interestig because it
+> isn't subject to this restriction in contrast to fork()+migrate, right?
 
-Applied.
+This patch is not related to the CLONE_INTO_CGROUP. In fact, I have 
+dropped that in latter version.
 
-Thanks,
-Guenter
+Cheers,
+Longman
 
-> 
-> Changes since v1:
-> 1. Update also bindings.
-> ---
->  Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml | 2 +-
->  MAINTAINERS                                            | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> index e7493e25a7d2..f9c00cbb2806 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TMP464 and TMP468 temperature sensors
->  
->  maintainers:
-> -  - Agathe Porte <agathe.porte@nokia.com>
-> +  - Guenter Roeck <linux@roeck-us.net>
->  
->  description: |
->    ±0.0625°C Remote and Local temperature sensor
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 99b665e85f0a..7f0b8076f144 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21173,7 +21173,6 @@ F:	Documentation/hwmon/tmp401.rst
->  F:	drivers/hwmon/tmp401.c
->  
->  TMP464 HARDWARE MONITOR DRIVER
-> -M:	Agathe Porte <agathe.porte@nokia.com>
->  M:	Guenter Roeck <linux@roeck-us.net>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
