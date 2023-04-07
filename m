@@ -2,38 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD926DA806
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 05:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFABC6DA819
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 05:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239384AbjDGDmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 23:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S232919AbjDGDp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 23:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjDGDmR (ORCPT
+        with ESMTP id S229495AbjDGDpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 23:42:17 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2147ABC;
-        Thu,  6 Apr 2023 20:42:14 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VfVAT1-_1680838919;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VfVAT1-_1680838919)
-          by smtp.aliyun-inc.com;
-          Fri, 07 Apr 2023 11:42:10 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] net: fddi: skfp: rmt: Clean up some inconsistent indenting
-Date:   Fri,  7 Apr 2023 11:41:57 +0800
-Message-Id: <20230407034157.61276-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 6 Apr 2023 23:45:55 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FCCE63;
+        Thu,  6 Apr 2023 20:45:51 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 761F524E1B6;
+        Fri,  7 Apr 2023 11:45:39 +0800 (CST)
+Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Apr
+ 2023 11:45:39 +0800
+Received: from [192.168.125.108] (183.27.97.179) by EXMBX171.cuchost.com
+ (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Apr
+ 2023 11:45:38 +0800
+Message-ID: <548b4d0f-447a-23a9-0e58-3d6c80cb8e3b@starfivetech.com>
+Date:   Fri, 7 Apr 2023 11:45:37 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v1 1/3] dt-binding: pci: add JH7110 PCIe dt-binding
+ documents.
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-pci@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Kevin Xie <kevin.xie@starfivetech.com>
+References: <20230406111142.74410-1-minda.chen@starfivetech.com>
+ <20230406111142.74410-2-minda.chen@starfivetech.com>
+ <38bc48bf-7d8c-8ddd-861f-3b7f3d2edce6@linaro.org>
+ <20230406-revisit-patchy-a0063d964070@spud>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <20230406-revisit-patchy-a0063d964070@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.179]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX171.cuchost.com
+ (172.16.6.91)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,34 +72,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No functional modification involved.
 
-drivers/net/fddi/skfp/rmt.c:236 rmt_fsm() warn: if statement not indented.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4736
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/net/fddi/skfp/rmt.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 2023/4/7 2:35, Conor Dooley wrote:
+> On Thu, Apr 06, 2023 at 08:24:55PM +0200, Krzysztof Kozlowski wrote:
+>> On 06/04/2023 13:11, Minda Chen wrote:
+>> > +
+>> > +  interrupt-controller:
+>> > +    type: object
+>> > +    properties:
+>> > +      '#address-cells':
+>> > +        const: 0
+>> > +
+>> > +      '#interrupt-cells':
+>> > +        const: 1
+>> > +
+>> > +      interrupt-controller: true
+>> > +
+>> > +    required:
+>> > +      - '#address-cells'
+>> > +      - '#interrupt-cells'
+>> > +      - interrupt-controller
+>> > +
+>> > +    additionalProperties: false
+>> > +
+>> > +required:
+>> > +  - reg
+>> > +  - reg-names
+>> > +  - "#interrupt-cells"
+>> 
+>> Keep consistent quotes - either ' or "
+>> 
+>> Are you sure this is correct? You have interrupt controller as child node.
+> 
+> I know existing stuff in-tree is far from a guarantee that it'll be
+> right, but this does at least follow what we've got for PolarFire SoC:
+> Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> 
+> Both PLDA and both RISC-V w/ a PLIC as the interrupt controller, so in
+> similar waters.
+> This note existed in the original text form binding of the Microchip
+> PCI controller:
+> | +NOTE:
+> | +The core provides a single interrupt for both INTx/MSI messages. So,
+> | +create an interrupt controller node to support 'interrupt-map' DT
+> | +functionality.  The driver will create an IRQ domain for this map, decode
+> | +the four INTx interrupts in ISR and route them to this domain.
+> 
+> Given the similarities, I figure the same requirement applies here too.
+> Minda?
+> 
+> Cheers,
+> Conor.
 
-diff --git a/drivers/net/fddi/skfp/rmt.c b/drivers/net/fddi/skfp/rmt.c
-index 37a89675dbeb..314623650a84 100644
---- a/drivers/net/fddi/skfp/rmt.c
-+++ b/drivers/net/fddi/skfp/rmt.c
-@@ -234,9 +234,9 @@ static void rmt_fsm(struct s_smc *smc, int cmd)
- 		if (smc->r.rm_join) {
- 			smc->r.sm_ma_avail = TRUE ;
- 			if (smc->mib.m[MAC0].fddiMACMA_UnitdataEnable)
--			smc->mib.m[MAC0].fddiMACMA_UnitdataAvailable = TRUE ;
--				else
--			smc->mib.m[MAC0].fddiMACMA_UnitdataAvailable = FALSE ;
-+				smc->mib.m[MAC0].fddiMACMA_UnitdataAvailable = TRUE;
-+			else
-+				smc->mib.m[MAC0].fddiMACMA_UnitdataAvailable = FALSE;
- 		}
- 		DB_RMTN(1, "RMT : RING UP");
- 		RS_CLEAR(smc,RS_NORINGOP) ;
--- 
-2.20.1.7.g153144c
-
+Yes, Thanks very much.
