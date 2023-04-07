@@ -2,35 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C706DACB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041D56DACB1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjDGMrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 08:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S232378AbjDGMqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 08:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239298AbjDGMrI (ORCPT
+        with ESMTP id S229609AbjDGMqm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 08:47:08 -0400
+        Fri, 7 Apr 2023 08:46:42 -0400
 Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de [80.67.18.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332777D9E;
-        Fri,  7 Apr 2023 05:47:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E17540F6;
+        Fri,  7 Apr 2023 05:46:41 -0700 (PDT)
 Received: from [92.206.161.29] (helo=note-book.lan)
         by smtprelay04.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <git@apitzsch.eu>)
-        id 1pklTD-0002cY-Rx; Fri, 07 Apr 2023 14:45:35 +0200
+        id 1pklTE-0002cY-Ac; Fri, 07 Apr 2023 14:45:36 +0200
 From:   =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Subject: [PATCH v2 0/2] Input: atmel_mxt_ts - support capacitive keys
-Date:   Fri, 07 Apr 2023 14:44:23 +0200
-Message-Id: <20230407-atmel_keys-v2-0-92446a4343cb@apitzsch.eu>
+Date:   Fri, 07 Apr 2023 14:44:24 +0200
+Subject: [PATCH v2 1/2] dt-bindings: input: atmel,maxtouch: add
+ linux,keycodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIACcQMGQC/0WNyw7CIBBFf8WwlobSUtSV/2GMGXBaJtpHGDRq0
- 3+XunF5cnPOnQVjJGRx2Mwi4pOYxiGD3m6EDzB0KOmaWWilK1UrKyH1eL/c8M3SQr33jWusdVp
- kwQGjdBEGH1alB04Y12GK2NLr93I6Z27j2MsUIsK/rbXVyqjKFOXOmFKWsqN0hInSh30o8CGW5
- QvEhNlprgAAAA==
+Message-Id: <20230407-atmel_keys-v2-1-92446a4343cb@apitzsch.eu>
+References: <20230407-atmel_keys-v2-0-92446a4343cb@apitzsch.eu>
+In-Reply-To: <20230407-atmel_keys-v2-0-92446a4343cb@apitzsch.eu>
 To:     Nick Dyer <nick@shmanahar.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -54,27 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for touch keys found in some Atmel touch controller
-configurations.
+In some configurations the touch controller can support the touch keys.
+Document the linux,keycodes property that enables those keys and
+specifies the keycodes that should be used to report the key events.
 
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: André Apitzsch <git@apitzsch.eu>
 ---
-Changes in v2:
-  * Added A-b, R-b tags
+ Documentation/devicetree/bindings/input/atmel,maxtouch.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
----
-André Apitzsch (2):
-      dt-bindings: input: atmel,maxtouch: add linux,keycodes
-      Input: atmel_mxt_ts - support capacitive keys
+diff --git a/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml b/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml
+index 3ec579d63570..c40799355ed7 100644
+--- a/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml
++++ b/Documentation/devicetree/bindings/input/atmel,maxtouch.yaml
+@@ -14,6 +14,9 @@ description: |
+   Atmel maXTouch touchscreen or touchpads such as the mXT244
+   and similar devices.
+ 
++allOf:
++  - $ref: input.yaml#
++
+ properties:
+   compatible:
+     const: atmel,maxtouch
+@@ -60,6 +63,10 @@ properties:
+       or experiment to determine which bit corresponds to which input. Use
+       KEY_RESERVED for unused padding values.
+ 
++  linux,keycodes:
++    minItems: 1
++    maxItems: 8
++
+   atmel,wakeup-method:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description: |
 
- .../devicetree/bindings/input/atmel,maxtouch.yaml  |  7 ++
- drivers/input/touchscreen/atmel_mxt_ts.c           | 85 ++++++++++++++++++++++
- 2 files changed, 92 insertions(+)
----
-base-commit: f2afccfefe7be1f7346564fe619277110d341f9b
-change-id: 20230407-atmel_keys-7a49c6b677b2
-
-Best regards,
 -- 
-André Apitzsch <git@apitzsch.eu>
+2.40.0
 
