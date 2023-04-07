@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCBF6DAE6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586936DAE73
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239878AbjDGNz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S240507AbjDGN40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240731AbjDGNzG (ORCPT
+        with ESMTP id S240372AbjDGN4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:55:06 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F58B744
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:53:20 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id lj25so8551111ejb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:53:20 -0700 (PDT)
+        Fri, 7 Apr 2023 09:56:08 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBA9C64D
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:54:51 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id g18so8580866ejx.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:54:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680875589;
+        d=linaro.org; s=google; t=1680875690;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1zzdPXrbK3r5iDo1cwu4EdwqJS32y505PzVqOYCGBbc=;
-        b=UbiNnjwZwxnedFj6AMxEnsLewBIyusqJ+pRg2zUfgAUP+9+IbJgjCusXno8RBWcLbf
-         +n3jfGpNxiX9Iqxq9iEO57kbXH7Vt+5ijSQNaDRLVb51EWC59yDUoriIA7QgUXGVw+xe
-         MRKWiIRyMhcP7s54bF3znrbHuNlInbn95jaWsBt5SyuuLNnlajnPyAyah9oQ09AsskcR
-         KKy8pEVrKwZ+aStSBKJXBAbcgKbD7Bpf5kU4Ypq09GvQIsXh9xi64lFWef9pg408DQpt
-         ODHoR4moK36yLtNZwbLH+oMydv5czXUK7vZHMMQnH0Ugj6amn7+jdIEJ4but/68mmYbK
-         73og==
+        bh=Z7FTPX9Ju7GmAgjcDYxdZDyYzlJ85mJ0hqTCjsyYPI0=;
+        b=HPKISelYuNXOtYDOrGIjk8NHp4cUw9dQCG5o1GF3ufBPKmYN7KVSDUNW/2usLe40wP
+         Elu9wVVZvVEpq67qEz3vmxq6CaNUJBdeftRBEwXadD4b9yn0hazfCkiYZESExWDhut4n
+         wkV16Ai8Vk8As/nsAu7cH0ujK7dozO5aDOK4OYXFHW/zCjGXstwqUwUxHwVVmKCICYOY
+         azS3H59A7H+zfKUGqMjiRp1l8rPubGDMuGXo4Faad7XmFM0zD9SX4L7YMVAzdoOjDHZe
+         97pfJqPNSZ7fbfugNwIFnp6/8zRUD0Bowh86U/MWpuGLW7C7fJNrhog+cXEMLRfZLTfu
+         HquA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680875589;
+        d=1e100.net; s=20210112; t=1680875690;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1zzdPXrbK3r5iDo1cwu4EdwqJS32y505PzVqOYCGBbc=;
-        b=tYGWxKBvRxVuO8Yty+JfEZ7THw0gELVcJyLRjMw3R+ydghyEMOXrIYFfbeo6hf88Qe
-         izEmhQp3oLh1onwJIM/1vJgRwH92+p4zag9CBLPB/rFJqHnA85w8pvV0vYTrM9fsaL4m
-         3wWUh24pBiCYKYGro7TsES20N04mGLWzyf7K9o2IELOk6NLYytI8pBj3DWUz/Bo70zpG
-         zHVWNp8Q1FaNWhtFq/4ofkJjHNVlmbeB8Jk72snckkRyxRkFXuYi5eJP+/xXeewBuS0j
-         2d9pQia1IBYMkErcHpiM0SGFuIBnI1ONRBUA2E57lri/Ri7bHFTCfoMsYw91ZR5kMROY
-         scHg==
-X-Gm-Message-State: AAQBX9fWz5+BeSkQQUWSlCQYGfhmmKV/ZEG6kRKBnkJm3kwYjKHkmn+B
-        7eTNeoyFQKMaVwDDh1Tg6X3a8Q==
-X-Google-Smtp-Source: AKy350bgxm5X7doDqO5jZ4QBplTmI32AzFdYcvps4r4ECqjPKsPGQmcXk//k49UgIs1zxSsywQVKfg==
-X-Received: by 2002:a17:906:b81a:b0:930:d17b:959b with SMTP id dv26-20020a170906b81a00b00930d17b959bmr3059761ejb.22.1680875589321;
-        Fri, 07 Apr 2023 06:53:09 -0700 (PDT)
+        bh=Z7FTPX9Ju7GmAgjcDYxdZDyYzlJ85mJ0hqTCjsyYPI0=;
+        b=Qh/wY0S0DC2+KHBKA/9kgbL5jLSIJLUKBlrXKF17K7KAquL/Y7PvYQ/pHMD6INlGKg
+         GRzwPsA2SKYJG5M+DupzVfTH6DCMy3iPYNPutE7k0fUdptHwsAayals1Wusm9nrqx5Tt
+         K8PrZ7SpNmBhAyhW0oGqGI3qlw4OEzt/r56bi9TrqvYK5lVAmvI1FBKcfk/nxFLCgyuZ
+         r28RShD0RUFTf2Nrea5pJ95/wtK4+s4zqvh5X3Sk1K2YH8Oixi6zQb0ghpqLnvYvWY47
+         wYvbx5JJXpoxulOtyOBcAQXi6FXiTRB31aFVmk4LQMwEV+bnUS7OoKjAKYUy8cwiabzS
+         CDZg==
+X-Gm-Message-State: AAQBX9ciyIrFg6GpllSlFb7O0kxhGv+ghIny1L/SJmZHGXY6CZjdSnZa
+        OhC5g7W4tfnubhe8qyO9MPRbcg==
+X-Google-Smtp-Source: AKy350bUmMuAScmNGeU57eVjulCp+98MfRo7bnqNioK6xLYZ+8wTTK533rjf/LBE4RJGAUIEBF7tvw==
+X-Received: by 2002:a17:906:7c58:b0:92f:f655:cc78 with SMTP id g24-20020a1709067c5800b0092ff655cc78mr2521191ejp.53.1680875690428;
+        Fri, 07 Apr 2023 06:54:50 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
-        by smtp.gmail.com with ESMTPSA id hb18-20020a170907161200b0093344ef3764sm2074829ejc.57.2023.04.07.06.53.08
+        by smtp.gmail.com with ESMTPSA id oz8-20020a1709077d8800b0093120a11a5dsm2098513ejc.92.2023.04.07.06.54.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 06:53:08 -0700 (PDT)
-Message-ID: <19f5a3c6-b699-868e-65cd-fb66732d3c4b@linaro.org>
-Date:   Fri, 7 Apr 2023 15:53:07 +0200
+        Fri, 07 Apr 2023 06:54:50 -0700 (PDT)
+Message-ID: <8a625ea7-f20f-3ae0-7eb5-9c1fe4b94b34@linaro.org>
+Date:   Fri, 7 Apr 2023 15:54:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 3/6] dt-bindings: usb: dwc3: Allow dma-ranges
+Subject: Re: [PATCH 6/6] arm64: dts: qcom: sdm845-oneplus: Fix speaker GPIO
+ node
 Content-Language: en-US
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -75,9 +76,9 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         linux-media@vger.kernel.org, linux-remoteproc@vger.kernel.org
 References: <20230407-topic-msm_dtb-v1-0-6efb4196f51f@linaro.org>
- <20230407-topic-msm_dtb-v1-3-6efb4196f51f@linaro.org>
+ <20230407-topic-msm_dtb-v1-6-6efb4196f51f@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407-topic-msm_dtb-v1-3-6efb4196f51f@linaro.org>
+In-Reply-To: <20230407-topic-msm_dtb-v1-6-6efb4196f51f@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -91,16 +92,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 07/04/2023 15:28, Konrad Dybcio wrote:
-> Allow the common dma-ranges property to silence warning like this:
-> 
-> qcom/sc7280-herobrine-evoker.dtb: usb@a6f8800: 'dma-ranges' does not
-> match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+> Drop the unnecessary mux{} level to make dtbs check happy.
 > 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 
-It would be nice to see here explanation why dma-ranges should be added.
-If DTS has it incorrectly, it might not be valid reason to add to the
-binding.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
