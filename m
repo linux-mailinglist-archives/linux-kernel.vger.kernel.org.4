@@ -2,240 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536BA6DA7B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159466DA7B2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239087AbjDGCZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 22:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S231223AbjDGCZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 22:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjDGCZX (ORCPT
+        with ESMTP id S231270AbjDGCZe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 22:25:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1161A7DB6
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 19:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680834273;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=X3UzrBK11k5Mylgi6OpJengikN36MitOuwwGfpZwOEM=;
-        b=XOWspXHAdr66iK8V+C1EZAJZPMzpxOzMoE7KiIOKeX1gI3VrheZALINv3rP4OZPuYvGTHP
-        rxt3yndc/zCQLpWkOKBL9PDVCMmztTnLDK82iuaePoPo5FQ7O539kjnbssQvPl/d3520EP
-        oHYe9WROHkZ6Z9dsjwziNmu6Scy2UJ4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-269-Ka9gAEOsOFWGEx1xR6srcg-1; Thu, 06 Apr 2023 22:24:29 -0400
-X-MC-Unique: Ka9gAEOsOFWGEx1xR6srcg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A085C3C01DFB;
-        Fri,  7 Apr 2023 02:24:28 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-86.pek2.redhat.com [10.72.12.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E37D5492C14;
-        Fri,  7 Apr 2023 02:24:23 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, horms@kernel.org,
-        thunder.leizhen@huawei.com, John.p.donnelly@oracle.com,
-        will@kernel.org, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, Baoquan He <bhe@redhat.com>
-Subject: [PATCH v5] arm64: kdump: simplify the reservation behaviour of crashkernel=,high
-Date:   Fri,  7 Apr 2023 10:24:19 +0800
-Message-Id: <20230407022419.19412-1-bhe@redhat.com>
+        Thu, 6 Apr 2023 22:25:34 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628197ECB
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 19:25:33 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id s12so36105146qtx.11
+        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 19:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680834332; x=1683426332;
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LVV8yTepfl334PGqSY1ZvgAce+MifxI6ei+eam7TFTc=;
+        b=X26V2cSRSIu8hrjYe55v/CTLuQmuVLt5RVJHz3Z/itbf5SuGOfAF+Kpw14UHLrGKVM
+         ujKhLXk5B6bFm9XKpbQrsQjowLPCv9eG+X5jqQ1GoqVzu02p/ogIDIt2nOsJF5hDY/9l
+         dSOIL0zyef0QU9xcQzuzVYpmrQ9jlgf2l2E2JuSKO17Pdlg9BgcNq6ulvrXDxABgo5o6
+         LF38f0LB1lfDq09eo88uhGDJM4sTpJGuIKYWBwvcZbgp6dCYK/b6xH6u/7+DoVU2rxhH
+         XW1QnWsiTNrQBAnmmlxlzoyiPJH/RP/k6l5xDgIZ3ZDzdr26unz/aE4pttjTd6AniJFa
+         gJ5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680834332; x=1683426332;
+        h=content-disposition:mime-version:mail-followup-to:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LVV8yTepfl334PGqSY1ZvgAce+MifxI6ei+eam7TFTc=;
+        b=eC8meHblzKgEX3tSejQM8kKBKhM+12ERRyGpFWUbYCCjnhrotSeEOfHlNvJWKMBYyt
+         /iu5vFnNF+9bx5I7MmDIjEuxt/wCwyiKAeclDbwTEveAkjqRU2mqZ67pLJLH2QrCpn32
+         YFasSpQvHaDm97+5dXAEqnMM05dGDGZcWSYGY5bqDgL+a+EK8wvFTHb9q11nmafwriYm
+         grNfzsmMu24jwkjvOYl3/xMMY9/gQR4M6Aavoze8Ja8ElsYLHZ12vv8+8jzdhMp7+24h
+         61XdzTlKxCRVZqG8V93rIE3u7xqHUtgQwIwwog6UZuyijz4oMYf2IeZPwCxhi02D0GMT
+         0dvA==
+X-Gm-Message-State: AAQBX9fc1Chv7rt97k0FCso1jXb/qMAMfgD7W3P7FFL3E3EDxToJP1Dz
+        Fx/AMYusVdusj+b8pvxxTrV3wCZF7z/FVQ==
+X-Google-Smtp-Source: AKy350ZH55MIc+2c9/Fsc3yEjirR67OI+cXgWbzPE8H4N80714T6wm3COsbKLYZzVfwSy9pZUkFP5A==
+X-Received: by 2002:a05:622a:11c3:b0:3e3:9199:d27 with SMTP id n3-20020a05622a11c300b003e391990d27mr1748650qtk.53.1680834332153;
+        Thu, 06 Apr 2023 19:25:32 -0700 (PDT)
+Received: from Gentoo ([191.96.227.146])
+        by smtp.gmail.com with ESMTPSA id 69-20020a370548000000b00748448d9a7dsm942190qkf.106.2023.04.06.19.25.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 19:25:31 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 07:55:12 +0530
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     LinuxKernel <linux-kernel@vger.kernel.org>
+Subject: Still testing ...please bear with me..
+Message-ID: <ZC9/CKOJJnZigbOF@Gentoo>
+Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        LinuxKernel <linux-kernel@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BMx4XUMxzR4GQr3t"
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
-suitable memory region top down. If the 'xM' of crashkernel high memory
-is reserved from high memory successfully, it will try to reserve
-crashkernel low memory later accoringly. Otherwise, it will try to search
-low memory area for the 'xM' suitable region. Please see the details in
-Documentation/admin-guide/kernel-parameters.txt.
 
-While we observed an unexpected case where a reserved region crosses the
-high and low meomry boundary. E.g on a system with 4G as low memory end,
-user added the kernel parameters like: 'crashkernel=512M,high', it could
-finally have [4G-126M, 4G+386M], [1G, 1G+128M] regions in running kernel.
-The crashkernel high region crossing low and high memory boudary will bring
-issues:
+--BMx4XUMxzR4GQr3t
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-1) For crashkernel=x,high, if getting crashkernel high region across
-low and high memory boundary, then user will see two memory regions in
-low memory, and one memory region in high memory. The two crashkernel
-low memory regions are confusing as shown in above example.
+what's going on????
+--
+Thanks,
+Bhaskar
 
-2) If people explicityly specify "crashkernel=x,high crashkernel=y,low"
-and y <= 128M, when crashkernel high region crosses low and high memory
-boundary and the part of crashkernel high reservation below boundary is
-bigger than y, the expected crahskernel low reservation will be skipped.
-But the expected crashkernel high reservation is shrank and could not
-satisfy user space requirement.
+"Here's looking at you kid"-- Casablanca
+https://about.me/unixbhaskar
 
-3) The crossing boundary behaviour of crahskernel high reservation is
-different than x86 arch. On x86_64, the low memory end is 4G fixedly,
-and the memory near 4G is reserved by system, e.g for mapping firmware,
-pci mapping, so the crashkernel reservation crossing boundary never happens.
-From distros point of view, this brings inconsistency and confusion. Users
-need to dig into x86 and arm64 system details to find out why.
+--BMx4XUMxzR4GQr3t
+Content-Type: application/pgp-signature; name="signature.asc"
 
-For kernel itself, the impact of issue 3) could be slight. While issue
-1) and 2) cause actual impact because it brings obscure semantics and
-behaviour to crashkernel=,high reservation.
+-----BEGIN PGP SIGNATURE-----
 
-Here, for crashkernel=xM,high, search the high memory for the suitable
-region only in high memory. If failed, try reserving the suitable
-region only in low memory. Like this, the crashkernel high region will
-only exist in high memory, and crashkernel low region only exists in low
-memory. The reservation behaviour for crashkernel=,high is clearer and
-simpler.
+iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmQvfwgACgkQsjqdtxFL
+KRViTwf+O7c/x5Aks/8821MZbVAjzwEfbTX6wH1DKUZ6HPw9QVIT7lF8DoozpWIU
+86xcDL4rUF9xxKxVhEcm7PFZ3JZr9qLKOjwYkjy8Mz96Duq2SJwmCzTXCwFPNQMp
+ztPc86omn9n31H7PiPUImEJdQ/Ep98pTjDr+e+lC3P63GSE2SGegbbzEAXCtkPVC
+atabGCMGrYFU5XRPkA9uSbBdkJEfZozfZWfct+r6nbwjCp8bBFJOiCReklfz12Hk
+fTTk4vYruDS/OuiChHWqWToPTyp5tOXIWfzZRroflOcyt/al/AlnfsGS9uM87TeD
+Dpb65JSn8zvuU5+UbNuTOk+m7rTu3w==
+=z5s9
+-----END PGP SIGNATURE-----
 
-Note: RPi4 has different zone ranges than normal memory. Its DMA zone is
-0~1G, and DMA32 zone is 1G~4G if CONFIG_ZONE_DMA|DMA32 are enabled by
-default. The low memory end is 1G in order to validate all devices, high
-memory starts at 1G memory. However, for being consistent with normla
-arm64 system, its low memory end is still 1G, while reserving crashkernel
-high memory from 4G if crashkernel=size,high specified. This will remove
-confusion.
-
-With above change applied, summary of arm64 crashkernel reservation range:
-1)
-RPi4(zone DMA:0~1G; DMA32:1G~4G):
- crashkernel=size
-  0~1G: low memory | 1G~top: high memory
-
- crashkernel=size,high
-  0~1G: low memory | 4G~top: high memory
-
-2)
-Other normal system:
- crashkernel=size
- crashkernel=size,high
-  0~4G: low memory | 4G~top: high memory
-
-3)
-Systems w/o zone DMA|DMA32
- crashkernel=size
- crashkernel=size,high
-  0~top: low memory
-
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
- arch/arm64/mm/init.c | 44 ++++++++++++++++++++++++++++++++++----------
- 1 file changed, 34 insertions(+), 10 deletions(-)
-
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 66e70ca47680..307263c01292 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -69,6 +69,7 @@ phys_addr_t __ro_after_init arm64_dma_phys_limit;
- 
- #define CRASH_ADDR_LOW_MAX		arm64_dma_phys_limit
- #define CRASH_ADDR_HIGH_MAX		(PHYS_MASK + 1)
-+#define CRASH_HIGH_SEARCH_BASE		SZ_4G
- 
- #define DEFAULT_CRASH_KERNEL_LOW_SIZE	(128UL << 20)
- 
-@@ -101,12 +102,13 @@ static int __init reserve_crashkernel_low(unsigned long long low_size)
-  */
- static void __init reserve_crashkernel(void)
- {
--	unsigned long long crash_base, crash_size;
--	unsigned long long crash_low_size = 0;
-+	unsigned long long crash_base, crash_size, search_base;
- 	unsigned long long crash_max = CRASH_ADDR_LOW_MAX;
-+	unsigned long long crash_low_size = 0;
- 	char *cmdline = boot_command_line;
--	int ret;
- 	bool fixed_base = false;
-+	bool high = false;
-+	int ret;
- 
- 	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
- 		return;
-@@ -129,7 +131,9 @@ static void __init reserve_crashkernel(void)
- 		else if (ret)
- 			return;
- 
-+		search_base = CRASH_HIGH_SEARCH_BASE;
- 		crash_max = CRASH_ADDR_HIGH_MAX;
-+		high = true;
- 	} else if (ret || !crash_size) {
- 		/* The specified value is invalid */
- 		return;
-@@ -140,31 +144,51 @@ static void __init reserve_crashkernel(void)
- 	/* User specifies base address explicitly. */
- 	if (crash_base) {
- 		fixed_base = true;
-+		search_base = crash_base;
- 		crash_max = crash_base + crash_size;
- 	}
- 
- retry:
- 	crash_base = memblock_phys_alloc_range(crash_size, CRASH_ALIGN,
--					       crash_base, crash_max);
-+					       search_base, crash_max);
- 	if (!crash_base) {
- 		/*
--		 * If the first attempt was for low memory, fall back to
--		 * high memory, the minimum required low memory will be
--		 * reserved later.
-+		 * For crashkernel=size[KMG]@offset[KMG], print out failure
-+		 * message if can't reserve the specified region.
- 		 */
--		if (!fixed_base && (crash_max == CRASH_ADDR_LOW_MAX)) {
-+		if (fixed_base) {
-+			pr_warn("crashkernel reservation failed - memory is in use.\n");
-+			return;
-+		}
-+
-+		/*
-+		 * For crashkernel=size[KMG], if the first attempt was for
-+		 * low memory, fall back to high memory, the minimum required
-+		 * low memory will be reserved later.
-+		 */
-+		if (!high && crash_max == CRASH_ADDR_LOW_MAX) {
- 			crash_max = CRASH_ADDR_HIGH_MAX;
-+			search_base = CRASH_ADDR_LOW_MAX;
- 			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
- 			goto retry;
- 		}
- 
-+		/*
-+		 * For crashkernel=size[KMG],high, if the first attempt was
-+		 * for high memory, fall back to low memory.
-+		 */
-+		if (high && crash_max == CRASH_ADDR_HIGH_MAX) {
-+			crash_max = CRASH_ADDR_LOW_MAX;
-+			search_base = 0;
-+			goto retry;
-+		}
- 		pr_warn("cannot allocate crashkernel (size:0x%llx)\n",
- 			crash_size);
- 		return;
- 	}
- 
--	if ((crash_base > CRASH_ADDR_LOW_MAX - crash_low_size) &&
--	     crash_low_size && reserve_crashkernel_low(crash_low_size)) {
-+	if ((crash_base >= CRASH_ADDR_LOW_MAX) && crash_low_size &&
-+	     reserve_crashkernel_low(crash_low_size)) {
- 		memblock_phys_free(crash_base, crash_size);
- 		return;
- 	}
--- 
-2.34.1
-
+--BMx4XUMxzR4GQr3t--
