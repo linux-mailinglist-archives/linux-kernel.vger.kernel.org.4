@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C926DAA9F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FBD6DAAA3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231890AbjDGJHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 05:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S240283AbjDGJIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240497AbjDGJHX (ORCPT
+        with ESMTP id S240559AbjDGJHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:07:23 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B07A5FB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:07:19 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-949062abf62so210290366b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 02:07:19 -0700 (PDT)
+        Fri, 7 Apr 2023 05:07:54 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9925DAD13
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:07:50 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id 11so7078676ejw.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 02:07:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680858438;
+        d=linaro.org; s=google; t=1680858469;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6BxRk1PJc+XW+qEn8Ij5zM9MBUl9XatvAPXfsp+KF0k=;
-        b=nkw+ddycbW5GjtdYGmkun62fRdFQENsmzY6BQjEiOlj8CA7TBenBvvXCinnKeAVPnW
-         e3WureIZ4KLMhI/pJRQaDe7kvwwjrRtW3RLdcLBm2604TpgQLsn5FBK3s4XG2IxOfxwV
-         qhiX67+b7XRHjv5s////3QhTRmAkz3WgSplFukprZLA/nFDKK3TSPWBVR5eonu9kO7fN
-         Irm9/TTEtC/nyGuzI5xnvumhfqfGUUNf3JiZLwkS8SZZGV+cV8944LvYPQFwYv2bYB9d
-         taRWaETWQxS88AOebWZD2RNJx9gFFMQgKMJJu7LoS+4tiAaFmEqgpP3cNs/2NDjd+1bH
-         EiYg==
+        bh=9gmZaXoh5OynzC86VaTh4Y6BvZrzd/QsKcjbYpPnZc0=;
+        b=Xz8iLJoj3e6atCdL3Uvpx3dUFJKuQsv2GH4wcE8UI1rl0GJXVuGqUZSpj/tONGDCPj
+         u8p85UbDTJ+HLqeJw/YnZ4faLPx8LKpc5WxqDRLvWk4Dm2L4FADqlBBqPrBu1wi3SYbE
+         VWTQxTC/mD01K1EMTJjuUX+c+d9o3V18k4jh9u2v4RPghw4ULoS0s0mnPxMUe79FszTG
+         i/V4jO5WXAVR45hsrXNpPVrlhEDYZgMlwW14UpvVRRneT11I4dIY0LQb5/6mivQg2wCs
+         nSCdNOjcDV+yKsQl2QK9+Glg+KHIL5XRN0dDAlWrj9Arx16pzha2SfsFfWN15bz7gFC1
+         mkpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680858438;
+        d=1e100.net; s=20210112; t=1680858469;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6BxRk1PJc+XW+qEn8Ij5zM9MBUl9XatvAPXfsp+KF0k=;
-        b=Z2D8b/0yM7prlhpTSwm244CaduEYZy63c1tsZX6XZ9Du8n/2oTP5E6qtYV4f6hxXLS
-         I7FuLR0la6Dprv5lon9fRA8+QiYBznPSvqYI1JAjA/CoNt9rA3Al5xfdrejN3NaQMEPm
-         T1v21DW+T/UnUad12ko31wu2/wvGv4dbdYt7BacSy7RprdQSvlZ4LY9oqRfzOx9SfEiH
-         y/z4kDlN+oqAIxCduhUrcwvPnhWF7c+E1DThm7BNzNMkIrxLzDGCIDaSHa6Ogi2TL3n9
-         3NF9JfLxPZst3W3kXupi5uAxlESwrvwdBb1GHwhQUVcm0wbnVg61WM/ZeHVxc+YuRSnK
-         hr+w==
-X-Gm-Message-State: AAQBX9f3kZ9kA4zLypVoq8chpk3UvSTq6efU6E0GeAd+4ckPiM7l612l
-        odPbcN+a2OSIy9i3vDfKvCpBaw==
-X-Google-Smtp-Source: AKy350Yp72jRlPW6PS3fGi3S7qmBR7ADa8EpkJ1qdw9IUSi7baFQV7muxP54AqpFgd65vqFrgqsC4w==
-X-Received: by 2002:a50:fb8b:0:b0:4fd:29a1:6a58 with SMTP id e11-20020a50fb8b000000b004fd29a16a58mr2318193edq.19.1680858437893;
-        Fri, 07 Apr 2023 02:07:17 -0700 (PDT)
+        bh=9gmZaXoh5OynzC86VaTh4Y6BvZrzd/QsKcjbYpPnZc0=;
+        b=fgG+X6wJWp/E3jjxbQUbxAw9uz8eqrGtyG8NLGp+tuD7vViQ6jfkjVKbUL6vej3pQz
+         2w7LGanH8dyaRcW0niI0YliHmgjXoiA0KHAnk9oA1ZXmaRfEXcuAXn1bqYi/8aZ/5VPf
+         /Db3VoipndjZfDH+GHeWRFF4DL0DGKT5G6q2/FOLAihA7KDRcygPtdcBMHcy5fZyAWaw
+         VOjFzM2BFe4u4CclHkU4XYJt5jzX2sSH5+iljyK/dX78v156QBmRjfFX9/yI3YgN2hB/
+         G65Oc1+IXDDtHe7LnwjTBKR8ya7GXeJ2YAue5/D4mXvboArWUYa6xP+sxfsbPXy+ZBgb
+         v3jw==
+X-Gm-Message-State: AAQBX9eArQW8zXCbXennEgnooE4lS2fB9P7YPOJHImKRo6t3SRnQJO+V
+        eevL8xcbpeBZZoO0/t7917WSyA==
+X-Google-Smtp-Source: AKy350bMxNw13TzLGoIgRzK5ovfvLEWUmmgDUnmQBPIUls264bsoQ74I1vJcA7PJ/i7xcVI2UzdWtQ==
+X-Received: by 2002:a17:906:39d3:b0:8de:502e:2061 with SMTP id i19-20020a17090639d300b008de502e2061mr1172023eje.3.1680858469115;
+        Fri, 07 Apr 2023 02:07:49 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:14a3:366:3172:3c37? ([2a02:810d:15c0:828:14a3:366:3172:3c37])
-        by smtp.gmail.com with ESMTPSA id b20-20020a056402351400b004bf5981ef3dsm1619711edd.94.2023.04.07.02.07.16
+        by smtp.gmail.com with ESMTPSA id lf24-20020a170906ae5800b00933d64cd447sm1826425ejb.121.2023.04.07.02.07.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 02:07:17 -0700 (PDT)
-Message-ID: <951841d3-59a4-fa86-5b45-46afdb2942dd@linaro.org>
-Date:   Fri, 7 Apr 2023 11:07:16 +0200
+        Fri, 07 Apr 2023 02:07:48 -0700 (PDT)
+Message-ID: <e716d33d-bd39-3f84-3e2e-18cfaf0439cd@linaro.org>
+Date:   Fri, 7 Apr 2023 11:07:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 3/7] dt-bindings: net: dsa: mediatek,mt7530: add port
- bindings for MT7988
+Subject: Re: [PATCH 5/7] dt-bindings: net: dsa: mediatek,mt7530: disallow
+ reset without mediatek,mcm
 Content-Language: en-US
 To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Andrew Lunn <andrew@lunn.ch>,
+        arinc9.unal@gmail.com, Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -80,11 +80,11 @@ Cc:     erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
 References: <20230406080141.22924-1-arinc.unal@arinc9.com>
- <20230406080141.22924-3-arinc.unal@arinc9.com>
- <23c8c4b5-baaa-b72b-4103-b415d970acf2@linaro.org>
- <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
+ <20230406080141.22924-5-arinc.unal@arinc9.com>
+ <d5769d8f-29f3-063e-0562-487b1b509d3c@linaro.org>
+ <194d3bad-c30a-df07-5fab-3264f739c599@arinc9.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5b3a10ff-e960-1c6e-3482-cb25200c83c6@arinc9.com>
+In-Reply-To: <194d3bad-c30a-df07-5fab-3264f739c599@arinc9.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -97,68 +97,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 21:18, Arınç ÜNAL wrote:
-> On 6.04.2023 22:07, Krzysztof Kozlowski wrote:
+On 06/04/2023 21:19, Arınç ÜNAL wrote:
+> On 6.04.2023 22:08, Krzysztof Kozlowski wrote:
 >> On 06/04/2023 10:01, arinc9.unal@gmail.com wrote:
 >>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 >>>
->>> The switch on MT7988 has got only port 6 as a CPU port. The only phy-mode
->>> to be used is internal. Add this.
+>>> The resets and reset-names properties are used only if mediatek,mcm is
+>>> used. Set them to false if mediatek,mcm is not used.
 >>>
->>> Some bindings are incorrect for this switch now, so move them to more
->>> specific places.
->>>
->>> Address the incorrect information of which ports can be used as a user
->>> port. Any port can be used as a user port.
+>>> Remove now unnecessary 'reset-names: false' from MT7988.
 >>>
 >>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 >>> ---
->>>   .../bindings/net/dsa/mediatek,mt7530.yaml     | 63 ++++++++++++++-----
->>>   1 file changed, 46 insertions(+), 17 deletions(-)
+>>>   .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml         | 5 ++++-
+>>>   1 file changed, 4 insertions(+), 1 deletion(-)
 >>>
 >>> diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> index 7045a98d9593..605888ce2bc6 100644
+>>> index 9d99f7303453..3fd953b1453e 100644
 >>> --- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
 >>> +++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
->>> @@ -160,22 +160,6 @@ patternProperties:
->>>         "^(ethernet-)?port@[0-9]+$":
->>>           type: object
+>>> @@ -282,6 +282,10 @@ allOf:
+>>>         required:
+>>>           - resets
+>>>           - reset-names
+>>> +    else:
+>>> +      properties:
+>>> +        resets: false
+>>> +        reset-names: false
 >>>   
->>> -        properties:
->>> -          reg:
->>> -            description:
->>> -              Port address described must be 5 or 6 for CPU port and from 0 to 5
->>> -              for user ports.
->>> -
->>> -        allOf:
->>> -          - if:
->>> -              required: [ ethernet ]
->>> -            then:
->>> -              properties:
->>> -                reg:
->>> -                  enum:
->>> -                    - 5
->>> -                    - 6
->>> -
+>>>     - dependencies:
+>>>         interrupt-controller: [ interrupts ]
+>>> @@ -324,7 +328,6 @@ allOf:
+>>>         properties:
+>>>           gpio-controller: false
+>>>           mediatek,mcm: false
+>>> -        reset-names: false
 >>
->> I have doubts that the binding is still maintainable/reviewable. First,
->> why do you need all above patterns after removal of entire contents?
+>> I don't see such hunk in linux-next.
 > 
-> The 'type: object' item is still globally used. I'd have to define that 
-> on each definitions, I suppose?
+> This was added very recently so it's only on net-next at the moment.
 
-Doesn't it come from dsa.yaml/dsa-port.yaml schema?
+OK, I was checking one few days old.
 
-> 
->>
->> Second, amount of if-then-if-then located in existing blocks (not
->> top-level) is quite big. I counted if-then-using defs, where defs has
->> patternProps-patternProps-if-then-if-then-properties.... OMG. :)
-> 
-> Yup, not much to do if we want to keep the information. I'm still 
-> maintaining this though. ¯\_(ツ)_/¯
-
-Maybe it should be split into few bindings sharing common part.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
