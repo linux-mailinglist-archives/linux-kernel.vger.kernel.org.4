@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED596DB290
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F976DB293
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjDGSMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57364 "EHLO
+        id S231164AbjDGSNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjDGSM1 (ORCPT
+        with ESMTP id S229658AbjDGSNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:12:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B06AD38;
-        Fri,  7 Apr 2023 11:12:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D1CD6537B;
-        Fri,  7 Apr 2023 18:12:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B12C433EF;
-        Fri,  7 Apr 2023 18:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680891146;
-        bh=8TqxDvlOab8Vyg/3GCA+wbxFSTJBIH20PGcbx7cGego=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oOx8IsLH/tejlqd/prM/5eyW8dt9iE01YDizIoyu7T0J4Dfa3MI6IQ5V/+wvR/Krw
-         dj7ACDI6/KEZ/jhZy9MyyV6N3y98AWCnzZ2bNxSibVNRuDPboQzRJsJyLV633995Jk
-         8wwpKCfVr/KN0YEBXP9ed+LFR5cO24SO05EBubCaIPd3reLB4ncB2TDqIW5GMzgMFp
-         Tolhb+NivywPi4emIEQQQX9EO/hb8960RHmmwkviUCuKoxZRnJoFTFhMrtlK72KXJi
-         bWYTN3X+Zk4tlDMHi7NzxlU4zR2zmeVvEraKvULHJkW1RLPZKr/sIyb2u6k1gWDjtb
-         2/2Dk1g5037NQ==
-Date:   Fri, 7 Apr 2023 11:12:23 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: Re: [PATCH 3/3] kbuild: do not create intermediate *.tar for tar
- packages
-Message-ID: <20230407181223.GD1018455@dev-arch.thelio-3990X>
-References: <20230407101629.1298051-1-masahiroy@kernel.org>
- <20230407101629.1298051-3-masahiroy@kernel.org>
+        Fri, 7 Apr 2023 14:13:06 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8D0420F;
+        Fri,  7 Apr 2023 11:13:05 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337CMGeF012601;
+        Fri, 7 Apr 2023 20:12:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=F0o+B3Jxb3/uk+z8z/TkZpS2JFK+X2n8RM237B5Z72s=;
+ b=bqgkoPZvUyir/9JcBxPvKJggAKC9PUuKLgNeIkclpMXM0GLtrtPN6cxMiCfkhJWlXCmJ
+ ropCFJSTtStST82JiZPewnaKLFQNJdTASQ1c0UuWQ16chif+3rrAukGVwbQ1ZFYdZSNC
+ O/gwQRqohI8PHDEFd8/JmHOTCA+7v0czgWSVMiEyc3iJRIkT2HbKGDvCAUy/4Ts+AOxD
+ NcuS3i4UvnymrAJtOHqZZMhgtATXoamD4VZiGUJE2T72FljMT1p9cL5AvbhJUKYN/7lP
+ pAktTMoCVdAp7ppgGumZgovQMr3lsY85Rc8FFyLzHPahrfS+1Ox5Y/mkbEIXZdY7Srxr Jg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pteygu39y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 20:12:51 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 82C1210002A;
+        Fri,  7 Apr 2023 20:12:50 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7BB7024C44C;
+        Fri,  7 Apr 2023 20:12:50 +0200 (CEST)
+Received: from localhost (10.48.0.157) by SHFDAG1NODE3.st.com (10.75.129.71)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 7 Apr
+ 2023 20:12:50 +0200
+From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH] dt-bindings: mfd: stm32: Fix STM32F4 DT include file
+Date:   Fri, 7 Apr 2023 20:12:43 +0200
+Message-ID: <20230407201235.1.I483a676579cc7e3ac07e1db649091553743fecc8@changeid>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407101629.1298051-3-masahiroy@kernel.org>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.157]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_11,2023-04-06_03,2023-02-09_01
+X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 07:16:29PM +0900, Masahiro Yamada wrote:
-> Commit 05e96e96a315 ("kbuild: use git-archive for source package
-> creation") split the compression as a separate step to factor out
-> the common build rules.
-> 
-> With the previous commit, we got back to the situation where
-> compressed source tarballs are created by a single rule.
-> There is no reason to keep the separate compression rules.
-> 
-> Generate the comressed tar packages directly.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Minor cosmetic change, aligned with file in U-Boot:
+- remove extra space
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+---
 
-> ---
-> 
->  scripts/Makefile.package | 27 +++++++++------------------
->  1 file changed, 9 insertions(+), 18 deletions(-)
-> 
-> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> index 7707975f729b..e0e18d7dfbd5 100644
-> --- a/scripts/Makefile.package
-> +++ b/scripts/Makefile.package
-> @@ -2,7 +2,6 @@
->  # Makefile for the different targets used to generate full packages of a kernel
->  
->  include $(srctree)/scripts/Kbuild.include
-> -include $(srctree)/scripts/Makefile.lib
->  
->  KERNELPATH := kernel-$(subst -,_,$(KERNELRELEASE))
->  KBUILD_PKG_ROOTCMD ?="fakeroot -u"
-> @@ -27,21 +26,6 @@ fi ; \
->  tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
->  	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
->  
-> -# tarball compression
-> -# ---------------------------------------------------------------------------
-> -
-> -%.tar.gz: %.tar
-> -	$(call cmd,gzip)
-> -
-> -%.tar.bz2: %.tar
-> -	$(call cmd,bzip2)
-> -
-> -%.tar.xz: %.tar
-> -	$(call cmd,xzmisc)
-> -
-> -%.tar.zst: %.tar
-> -	$(call cmd,zstd)
-> -
->  # Git
->  # ---------------------------------------------------------------------------
->  
-> @@ -153,10 +137,17 @@ tar-install: FORCE
->  	$(Q)$(MAKE) -f $(srctree)/Makefile
->  	+$(Q)$(srctree)/scripts/package/buildtar $@
->  
-> +compress-tar.gz  = -I "$(KGZIP)"
-> +compress-tar.bz2 = -I "$(KBZIP2)"
-> +compress-tar.xz  = -I "$(XZ)"
-> +compress-tar.zst = -I "$(ZSTD)"
-> +
->  quiet_cmd_tar = TAR     $@
-> -      cmd_tar = cd $<; tar cf ../$@ --owner=root --group=root --sort=name *
-> +      cmd_tar = cd $<; tar cf ../$@ $(compress-tar$(suffix $@)) --owner=root --group=root --sort=name *
-> +
-> +dir-tarballs := $(addprefix linux-$(KERNELRELEASE)-$(ARCH), .tar .tar.gz .tar.bz2 .tar.xz .tar.zst)
->  
-> -linux-$(KERNELRELEASE)-$(ARCH).tar: tar-install
-> +$(dir-tarballs): tar-install
->  	$(call cmd,tar)
->  
->  PHONY += dir-pkg
-> -- 
-> 2.37.2
-> 
+ include/dt-bindings/mfd/stm32f4-rcc.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/dt-bindings/mfd/stm32f4-rcc.h b/include/dt-bindings/mfd/stm32f4-rcc.h
+index 309e8c79f27b..36448a5619a1 100644
+--- a/include/dt-bindings/mfd/stm32f4-rcc.h
++++ b/include/dt-bindings/mfd/stm32f4-rcc.h
+@@ -34,7 +34,6 @@
+ #define STM32F4_AHB1_RESET(bit) (STM32F4_RCC_AHB1_##bit + (0x10 * 8))
+ #define STM32F4_AHB1_CLOCK(bit) (STM32F4_RCC_AHB1_##bit)
+ 
+-
+ /* AHB2 */
+ #define STM32F4_RCC_AHB2_DCMI	0
+ #define STM32F4_RCC_AHB2_CRYP	4
+-- 
+2.25.1
+
