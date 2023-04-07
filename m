@@ -2,133 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50486DB219
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D04196DB21B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjDGRxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
+        id S229882AbjDGRx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjDGRxC (ORCPT
+        with ESMTP id S229546AbjDGRxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:53:02 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD725597
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:53:01 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y2so26947949pfw.9
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680889980; x=1683481980;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KYBbdfYMz/vjcXkNGYT26LJaYJDJYJgOQo589rbtS2s=;
-        b=DqKYdsHfDx8zdLJVjdTiTFTABvHWdnCrcEmv1w5HVb7vZJgYb9t4uDuX/Cr9FthsY+
-         sNlQf5412FR4vITwMaeTaoKN8vXOBxK5I09sKXDtFLOCDcucYYJqntHqjO3K/idXejnx
-         mpjwZtwsKYITG3OUusv3MCa9zgiWgd4qcE93WnOc5b19hJYSRsJv9ND+hyeP42g88eNa
-         4M5aWWIG7t2lc67vCrkzFbzHfaMpEH2orbYitLkGcLjlPGiRbePJKxB3XQzuoavzhYGq
-         dWt2ylU++nmF7XJzcfQQHXSf1nOsa4/z1PObYwy+i3A5Vf3jwiWGU3HMphpiMtUKlzUK
-         V5Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680889980; x=1683481980;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KYBbdfYMz/vjcXkNGYT26LJaYJDJYJgOQo589rbtS2s=;
-        b=OcgXBvVe7Kd/gv6bT1mpUFMYgwXoZKEeH2BadAqnPGUX6lttzh2D74ayeUEG/ZPaCO
-         kWHMzj667ZiAWm6me+HmbsmiFv8Rr2qleuLlKla6aMMD5ghd+TqHCpNHZviDDOjYSQYQ
-         3SYayPoNaD/t7pDzvBNKQ7MxJFLxZVR2yPC5ULpiWt83XvrKQYGNjJdJagGb2cPPJdyK
-         ttGsD0DWpHRlR/xMeDC4OmNPA8by95HkryVMtQatCqY1IDTAS2bR5gCB284JGVUNCunE
-         pOPKqIwR/PhAXf4RKEWHBmxtV9iV5O0k+XC3HFyvSLlqk7MwQvgBhDMAAqNuFGlJTwA4
-         N8/A==
-X-Gm-Message-State: AAQBX9cZAGnZLp2hdzM14n3/qn86KHF9XU21r88SIDY4mCLjt+7PoAPo
-        k3O7rfzrwjgBUfNiDCC663e7cyeRh1Dbjm6tVD01/g==
-X-Google-Smtp-Source: AKy350a+v8VTeVHFSzQqt9MX7OgojFeGTP3VMzP+2ISQI5Bm8J3rb6li0V3ygg9UHvL/3/kvKvVCidFCyNNRg0JU/is=
-X-Received: by 2002:a65:5b43:0:b0:50f:5f89:2a9d with SMTP id
- y3-20020a655b43000000b0050f5f892a9dmr671939pgr.1.1680889980187; Fri, 07 Apr
- 2023 10:53:00 -0700 (PDT)
+        Fri, 7 Apr 2023 13:53:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BFCBBAB;
+        Fri,  7 Apr 2023 10:53:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9760A61224;
+        Fri,  7 Apr 2023 17:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44C8C433EF;
+        Fri,  7 Apr 2023 17:53:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680890001;
+        bh=WDnPJrUPigMG4kgGFxEWGDX8QIBiZEaMWytf2/KBaNw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jhp47INhV14wk/HBh87pOS4Egghqrpl9vNTbseUTx+J0gIw3blwBF7wOey8f6748o
+         7Gpb8iJv62wr4dbl6aJi8G+3/edYS8dUXpHLHuxGw/kXra0sWHMzsMq/9O1UBi0P25
+         /qXAiHyk48fo3bYM/oNaRoTZVgA4WI1dRKSMWgrW+2bev8bAKA7K36UPaQ+t8HULD6
+         6ef1tI7wSW5/jwc1GsCoZspNMLYfiC8Ssbq6Q8eVEGcsiuCKd0ZeW0PtNq/S7xlVFc
+         ipd0EXrUi1FN4aEkENO0MV1hrQK06wICo08ApLocQhgN/nR9bRDSLJU7PXFrEGiCsQ
+         DwdjEIgR5zk0g==
+Date:   Fri, 7 Apr 2023 10:53:18 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Eric Curtin <ecurtin@redhat.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Neal Gompa <neal@gompa.dev>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+Message-ID: <20230407175318.GA1018455@dev-arch.thelio-3990X>
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
 MIME-Version: 1.0
-References: <20230325134503.1335510-1-trix@redhat.com>
-In-Reply-To: <20230325134503.1335510-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Apr 2023 10:52:49 -0700
-Message-ID: <CAKwvOdng_wH8qKnnGN=VpUhLK9q6wyc7sZKO7ORt-3QOKVP_nw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: remove unused matching_stream_ptrs variable
-To:     Jimmy.Kizito@amd.com
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, nathan@kernel.org, Jun.Lei@amd.com,
-        wenjing.liu@amd.com, Cruise.Hung@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jimmy, can you review?
+On Fri, Apr 07, 2023 at 09:05:17AM +0200, Andrea Righi wrote:
+> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> to enable RUST.
+> 
+> With this constraint we don't need is_rust_module.sh anymore, because
+> 'pahole --lang_exclude=rust' already has the capability to exclude Rust
+> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> isn't used as well.
+> 
+> In any case is_rust_module.sh is obsolete and we can just drop it.
+> 
+> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 
-The change LGTM; but I'm not sure if there was something else intended here=
-.
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-On Sat, Mar 25, 2023 at 6:45=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c:625:6: er=
-ror:
->   variable 'matching_stream_ptrs' set but not used [-Werror,-Wunused-but-=
-set-variable]
->         int matching_stream_ptrs =3D 0;
->             ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c b/driv=
-ers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-> index 41198c729d90..30c0644d4418 100644
-> --- a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-> +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
-> @@ -622,7 +622,6 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_s=
-tate *state)
->         int i, j;
->         uint8_t valid_count =3D 0;
->         uint8_t dig_stream_count =3D 0;
-> -       int matching_stream_ptrs =3D 0;
->         int eng_ids_per_ep_id[MAX_PIPES] =3D {0};
->         int ep_ids_per_eng_id[MAX_PIPES] =3D {0};
->         int valid_bitmap =3D 0;
-> @@ -645,9 +644,7 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc_s=
-tate *state)
->                 struct link_enc_assignment assignment =3D state->res_ctx.=
-link_enc_cfg_ctx.link_enc_assignments[i];
->
->                 if (assignment.valid) {
-> -                       if (assignment.stream =3D=3D state->streams[i])
-> -                               matching_stream_ptrs++;
-> -                       else
-> +                       if (assignment.stream !=3D state->streams[i])
->                                 valid_stream_ptrs =3D false;
->                 }
->         }
-> --
-> 2.27.0
->
+>  rust/macros/module.rs     |  2 +-
+>  scripts/Makefile.modfinal |  2 --
+>  scripts/is_rust_module.sh | 16 ----------------
+>  3 files changed, 1 insertion(+), 19 deletions(-)
+>  delete mode 100755 scripts/is_rust_module.sh
+> 
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index a7e363c2b044..608406f33a70 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+>              /// Used by the printing macros, e.g. [`info!`].
+>              const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
+>  
+> -            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
+> +            /// The \"Rust loadable module\" mark.
+>              //
+>              // This may be best done another way later on, e.g. as a new modinfo
+>              // key or a new section. For the moment, keep it simple.
 
+It seems like this whole section can be dropped? I only see
+__IS_RUST_MODULE used in scripts/is_rust_module.sh, as the comment
+states.
 
---=20
-Thanks,
-~Nick Desaulniers
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+x> index 4703f652c009..e6f8fa3c9b8d 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -41,8 +41,6 @@ quiet_cmd_btf_ko = BTF [M] $@
+>        cmd_btf_ko = 							\
+>  	if [ ! -f vmlinux ]; then					\
+>  		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+> -	elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then 		\
+> -		printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
+>  	else								\
+>  		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+>  		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
+> diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
+> deleted file mode 100755
+> index 28b3831a7593..000000000000
+> --- a/scripts/is_rust_module.sh
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -#
+> -# is_rust_module.sh module.ko
+> -#
+> -# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
+> -
+> -set -e
+> -
+> -# Using the `16_` prefix ensures other symbols with the same substring
+> -# are not picked up (even if it would be unlikely). The last part is
+> -# used just in case LLVM decides to use the `.` suffix.
+> -#
+> -# In the future, checking for the `.comment` section may be another
+> -# option, see https://github.com/rust-lang/rust/pull/97550.
+> -${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
+> -- 
+> 2.39.2
+> 
