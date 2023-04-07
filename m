@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198216DB35E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28C16DB35D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjDGStF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S233204AbjDGStK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbjDGSsS (ORCPT
+        with ESMTP id S232862AbjDGSsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:48:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F2EC66D;
-        Fri,  7 Apr 2023 11:47:46 -0700 (PDT)
+        Fri, 7 Apr 2023 14:48:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2188CC1F;
+        Fri,  7 Apr 2023 11:47:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86E53645EB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C26EA64D63;
+        Fri,  7 Apr 2023 18:47:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7007AC433A4;
         Fri,  7 Apr 2023 18:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51580C433A1;
-        Fri,  7 Apr 2023 18:47:41 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -43,16 +43,16 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 22/40] dt-bindings: pinctrl: qcom,sc7180-tlmm: simplify with unevaluatedProperties
-Date:   Fri,  7 Apr 2023 20:45:28 +0200
-Message-Id: <20230407184546.161168-22-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 23/40] dt-bindings: pinctrl: qcom,sc7280-tlmm: simplify with unevaluatedProperties
+Date:   Fri,  7 Apr 2023 20:45:29 +0200
+Message-Id: <20230407184546.161168-23-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
 References: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,19 +66,19 @@ set provided by qcom,tlmm-common.yaml schema.
 
 This also fixes warnings like:
 
-  c7180-trogdor-coachz-r1.dtb: pinctrl@3500000: qspi-sleep-state: 'oneOf' conditional failed, one must be fixed:
+  sc7280-herobrine-evoker.dtb: pinctrl@f100000: qspi-sleep-state: 'oneOf' conditional failed, one must be fixed:
     'output-disable' does not match any of the regexes: 'pinctrl-[0-9]+'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/pinctrl/qcom,sc7180-pinctrl.yaml         | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml        | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-index f33792a1af6c..573e459b1c44 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7180-pinctrl.yaml
-@@ -59,6 +59,7 @@ $defs:
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
+index 36502173cb79..368d44ff5468 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
+@@ -62,6 +62,7 @@ $defs:
        Pinctrl node's client devices use subnodes for desired pin configuration.
        Client device subnodes use below standard properties.
      $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
@@ -86,12 +86,13 @@ index f33792a1af6c..573e459b1c44 100644
  
      properties:
        pins:
-@@ -100,19 +101,9 @@ $defs:
-                 _V_GPIO, _V_PPS_IN, _V_PPS_OUT, vsense_trigger, wlan1_adc0,
-                 wlan1_adc1, wlan2_adc0, wlan2_adc1 ]
+@@ -110,20 +111,9 @@ $defs:
+                 uim1_clk, uim1_data, uim1_present, uim1_reset, usb2phy_ac,
+                 usb_phy, vfr_0, vfr_1, vsense_trigger ]
  
 -      bias-pull-down: true
 -      bias-pull-up: true
+-      bias-bus-hold: true
 -      bias-disable: true
 -      drive-strength: true
 -      input-enable: true
