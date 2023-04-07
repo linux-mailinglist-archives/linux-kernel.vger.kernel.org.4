@@ -2,106 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF436DA7CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A806DA7D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjDGCqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 22:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S236387AbjDGCqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 22:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239329AbjDGCqX (ORCPT
+        with ESMTP id S239956AbjDGCqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 22:46:23 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AEB83D1
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 19:46:21 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54196bfcd5fso402778507b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 19:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680835581;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUz0udxJSncClIXfXpDEBX9ECoOtSVVpf/KdMJ7vysQ=;
-        b=Wt0oTZn2fcVjC7J7ao1RrEACmnskuXW5Y7RH57Bg0T+h9jBUlNoupAWUyDyLfTW/pN
-         WEd44/ggQ2SzaO14FiShx/WghxIFA4ZvwSSwzHeVlSyTQ1gxSXBbh2sLYU4F2izjb8QN
-         D6fUQFjaTQYfUYkHVbNHCdW8Kk2NZT/ZDf8oB12Ro5L8pv0U5Qd/VIUtWhF/EWflY0aG
-         S3fb37isoWdDMd07xuEl++VVRtp8HXfdt3nJJpsdbncr2egeat7GJH/mpqAySzq9iv3b
-         I1PUThLbYl4RNWQqFx3znDP9jE20Cxne92rT6P44z6cwwITtEnKAL3ebacl9O1Atzcie
-         HPDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680835581;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUz0udxJSncClIXfXpDEBX9ECoOtSVVpf/KdMJ7vysQ=;
-        b=thhW6HQ7NDeGjUsuXj1cVSi8RipoojICdmUvNGG32T4VJc2DK9uHJeo2UtpgrqqAtP
-         tXMwK+n/6BOei0uRo7sLULRB5savIN68nZZicQh+eek0FE227Q/15jEJHOyia48FuzzI
-         EoBa1FJXJxnW4ZdWpyESzjA5qEWLVKBLgncWqC/CIyZWxuTFU7ucF5k9HmaEtLt8hwV+
-         Kve0gDLXiQmbGcb2987Ed37WNJ32kHu+GB1kt+BQjxepORCAckg+6vQ9vnJ/p7399T/s
-         wSGyOAR81jhIsZlnyqe6NpjqUs4bL6f5Ok1163SK1Td4dWH5h/1wYf/AtpwWy+IgQW0c
-         LruQ==
-X-Gm-Message-State: AAQBX9dE9lBNDbBINPd3lIRNMicFExEUKVWhYhjXcRsiN7dg3mEBCW4y
-        p8LWvk8TSYhe23WvRnvFGkX0DT7RcTU=
-X-Google-Smtp-Source: AKy350Y1ZkusZZ/d+V9apvkNKAvkrhEIZbqxRghfGTgTfVypjt2VIPRyggOZ5HCkwgUmnfW9u0i18xl3aMI=
-X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a05:690c:72c:b0:52f:184a:da09 with SMTP id
- bt12-20020a05690c072c00b0052f184ada09mr355489ywb.2.1680835581211; Thu, 06 Apr
- 2023 19:46:21 -0700 (PDT)
-Date:   Fri,  7 Apr 2023 02:46:16 +0000
-In-Reply-To: <20230407024616.2883701-1-badhri@google.com>
-Mime-Version: 1.0
-References: <20230407024616.2883701-1-badhri@google.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230407024616.2883701-2-badhri@google.com>
-Subject: [PATCH v3 2/2] usb: gadget: udc: core: Prevent redundant calls to pullup
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        colin.i.king@gmail.com, xuetao09@huawei.com,
-        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
-        peter.chen@freescale.com, balbi@ti.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 6 Apr 2023 22:46:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0F586B9;
+        Thu,  6 Apr 2023 19:46:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AF74649C7;
+        Fri,  7 Apr 2023 02:46:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D3BC433EF;
+        Fri,  7 Apr 2023 02:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680835599;
+        bh=z5raEhmwE/FPqsbIHeHBjLdFu5XYEI5PD+vRQ68Ne5o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MfOo5PBrJYHuTa/yG7BB0n1I3I9sUOu9Y6dWTjcbxtOZtXsNAXjpG74O5NrjaA+1/
+         Iih0i1zeEK1PLmsUS70CkXSeww/TGnH2MovprKGwb34L9nYc3ud+xHHFVpTsePdh9p
+         QYd5n+cEpHyWH6/YgCSI+6AhJiYNxOa+Kjjbl7mMgBset7cwzOH4ttHzb7D7eySjh3
+         lKGc0KvKf+oiaT9kTGd/6qyMQUYhp+QXRYUjDYndZFwfbUioa9oJM+3/y2fKE0DAu4
+         gRZ6Mifp3mWco0V5QN37mVrqYwBOxhr/zlcneXraaHKKZtN+VPoo5G8MvoDDEPHcA1
+         nntgo5i4qxqnA==
+Message-ID: <e576f6fe-d1f3-93cd-cb94-c0ae115299d8@kernel.org>
+Date:   Thu, 6 Apr 2023 20:46:38 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 0/5] add initial io_uring_cmd support for sockets
+Content-Language: en-US
+To:     Willem de Bruijn <willemb@google.com>,
+        Breno Leitao <leitao@debian.org>
+Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
+        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
+        edumazet@google.com, pabeni@redhat.com, davem@davemloft.net,
+        dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, willemdebruijn.kernel@gmail.com,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com
+References: <20230406144330.1932798-1-leitao@debian.org>
+ <CA+FuTSeKpOJVqcneCoh_4x4OuK1iE0Tr6f3rSNrQiR-OUgjWow@mail.gmail.com>
+ <ZC7seVq7St6UnKjl@gmail.com>
+ <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <CA+FuTSf9LEhzjBey_Nm_-vN0ZjvtBSQkcDWS+5uBnLmr8Qh5uA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-usb_gadget_connect calls gadget->ops->pullup without checking whether
-gadget->connected was previously set. Make this symmetric to
-usb_gadget_disconnect by returning early if gadget->connected is
-already set.
+On 4/6/23 12:16 PM, Willem de Bruijn wrote:
+> On Thu, Apr 6, 2023 at 11:59 AM Breno Leitao <leitao@debian.org> wrote:
+>>
+>> On Thu, Apr 06, 2023 at 11:34:28AM -0400, Willem de Bruijn wrote:
+>>> On Thu, Apr 6, 2023 at 10:45 AM Breno Leitao <leitao@debian.org> wrote:
+>>>>
+>>>> From: Breno Leitao <leit@fb.com>
+>>>>
+>>>> This patchset creates the initial plumbing for a io_uring command for
+>>>> sockets.
+>>>>
+>>>> For now, create two uring commands for sockets, SOCKET_URING_OP_SIOCOUTQ
+>>>> and SOCKET_URING_OP_SIOCINQ. They are similar to ioctl operations
+>>>> SIOCOUTQ and SIOCINQ. In fact, the code on the protocol side itself is
+>>>> heavily based on the ioctl operations.
+>>>
+>>> This duplicates all the existing ioctl logic of each protocol.
+>>>
+>>> Can this just call the existing proto_ops.ioctl internally and translate from/to
+>>> io_uring format as needed?
+>>
+>> This is doable, and we have two options in this case:
+>>
+>> 1) Create a ioctl core function that does not call `put_user()`, and
+>> call it from both the `udp_ioctl` and `udp_uring_cmd`, doing the proper
+>> translations. Something as:
+>>
+>>         int udp_ioctl_core(struct sock *sk, int cmd, unsigned long arg)
+>>         {
+>>                 int amount;
+>>                 switch (cmd) {
+>>                 case SIOCOUTQ: {
+>>                         amount = sk_wmem_alloc_get(sk);
+>>                         break;
+>>                 }
+>>                 case SIOCINQ: {
+>>                         amount = max_t(int, 0, first_packet_length(sk));
+>>                         break;
+>>                 }
+>>                 default:
+>>                         return -ENOIOCTLCMD;
+>>                 }
+>>                 return amount;
+>>         }
+>>
+>>         int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+>>         {
+>>                 int amount = udp_ioctl_core(sk, cmd, arg);
+>>
+>>                 return put_user(amount, (int __user *)arg);
+>>         }
+>>         EXPORT_SYMBOL(udp_ioctl);
+>>
+>>
+>> 2) Create a function for each "case entry". This seems a bit silly for
+>> UDP, but it makes more sense for other protocols. The code will look
+>> something like:
+>>
+>>          int udp_ioctl(struct sock *sk, int cmd, unsigned long arg)
+>>          {
+>>                 switch (cmd) {
+>>                 case SIOCOUTQ:
+>>                 {
+>>                         int amount = udp_ioctl_siocoutq();
+>>                         return put_user(amount, (int __user *)arg);
+>>                 }
+>>                 ...
+>>           }
+>>
+>> What is the best approach?
+> 
+> A, the issue is that sock->ops->ioctl directly call put_user.
+> 
+> I was thinking just having sock_uring_cmd call sock->ops->ioctl, like
+> sock_do_ioctl.
+> 
+> But that would require those callbacks to return a negative error or
+> positive integer, rather than calling put_user. And then move the
+> put_user to sock_do_ioctl. Such a change is at least as much code
+> change as your series. Though without the ending up with code
+> duplication. It also works only if all ioctls only put_user of integer
+> size. That's true for TCP, UDP and RAW, but not sure if true more
+> broadly.
+> 
+> Another approach may be to pass another argument to the ioctl
+> callbacks, whether to call put_user or return the integer and let the
+> caller take care of the output to user. This could possibly be
+> embedded in the a high-order bit of the cmd, so that it fails on ioctl
+> callbacks that do not support this mode.
+> 
+> Of the two approaches you suggest, I find the first preferable.
 
-Cc: stable@vger.kernel.org
-Fixes: 5a1da544e572 ("usb: gadget: core: do not try to disconnect gadget if it is not connected")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-Changes since v2:
-* none
-Changes since v1:
-* Fixed commit message comments.
----
- drivers/usb/gadget/udc/core.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 3eb5d4e392db..7e9ce872451e 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -702,6 +702,9 @@ int usb_gadget_connect_locked(struct usb_gadget *gadget) __must_hold(&gadget->ud
- 		goto out;
- 	}
- 
-+	if (gadget->connected)
-+		goto out;
-+
- 	if (gadget->deactivated || !gadget->udc->started) {
- 		/*
- 		 * If gadget is deactivated we only save new state.
--- 
-2.40.0.577.gac1e443424-goog
-
+The first approach sounds better to me and it would be good to avoid
+io_uring details in the networking code (ie., cmd->sqe->cmd_op).
