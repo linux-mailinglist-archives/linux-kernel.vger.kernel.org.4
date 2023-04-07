@@ -2,77 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5186DB085
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9CC6DB087
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbjDGQYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S229826AbjDGQZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjDGQXw (ORCPT
+        with ESMTP id S229802AbjDGQZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:23:52 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9DBBB5
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:23:48 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id d3so21582307ybu.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680884625; x=1683476625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HRsDrLkJSi5dpaXKk+z5BAwMDpasj80dVc8aix8QPCQ=;
-        b=Y7M/kTwQ5lNHgNqBfWEIszgGGW5eI54Bvv0/EmjKPCaQYVCbAg8tHbPBO44wIcAdXf
-         rntVJuX+edKeAEkjR9SjuJvSLcgDh6TQUKw6ZLR7Zu/WB7zanr9DoUk9/pQxjDr9mxLB
-         /Vjzd//WOtV3hgR9j9Tt8s28Zu7IzlD9D1O7M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680884625; x=1683476625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HRsDrLkJSi5dpaXKk+z5BAwMDpasj80dVc8aix8QPCQ=;
-        b=ySX7oIX3HED7bB3R+JRk4h6qmpj1vkomakAYJqx2xcoSc3QK6KqKXUWLya7mZclLgd
-         +WpzienxcNP9CaAafKGYcQrzbz92bbWyj6w4uLNcXWwF8otPthIETX/MRQlNxcnYCchH
-         SuxKXnJGOoikqTl4VtyyXYPilrKzPXqBM7pe6UCCyip4hyvF3A9xE5lshdb67arnOFff
-         gtga6ILPud2NoqREbwlW+i7wqGHjaeh3WIQvty+moTDVUnXVJVpsOeHJW9+QMwuwtJT/
-         OXmv+ai+u8TDfVlA8Mo7jt51HndRtPWMrmQB1I2LMK0DGqyKGXRUcASvVTL8xK0l7Bzr
-         tnUA==
-X-Gm-Message-State: AAQBX9d3JHDmu7M1CufE2QX3Xt+v4dGxYtsO4P6PRqZAhzo3F+OZ0jvv
-        j1xsi1fs5YFYA9yz51K1J9sutMMCxILQq4KYbqg=
-X-Google-Smtp-Source: AKy350ZXCqiNNjbp8/Y+5Mvxenh5H9Eeqk08gaqKcik68MKxsYS4gZ6UCXo0Iesyated/KutrRKqXw==
-X-Received: by 2002:a25:b19f:0:b0:b67:40a3:7975 with SMTP id h31-20020a25b19f000000b00b6740a37975mr3433530ybj.35.1680884625059;
-        Fri, 07 Apr 2023 09:23:45 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id p14-20020a25420e000000b00b8c073a90cdsm729501yba.14.2023.04.07.09.23.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 09:23:44 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id d3so21582142ybu.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:23:43 -0700 (PDT)
-X-Received: by 2002:a25:6c07:0:b0:b8b:eea7:525b with SMTP id
- h7-20020a256c07000000b00b8beea7525bmr2049650ybc.7.1680884623153; Fri, 07 Apr
- 2023 09:23:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230407151423.59993-1-nikita@trvn.ru> <20230407151423.59993-5-nikita@trvn.ru>
-In-Reply-To: <20230407151423.59993-5-nikita@trvn.ru>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 7 Apr 2023 09:23:31 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UCJoz1E4wErJawQjpBRiXw0C0-J4TTWO1+uRiDsdzSUg@mail.gmail.com>
-Message-ID: <CAD=FV=UCJoz1E4wErJawQjpBRiXw0C0-J4TTWO1+uRiDsdzSUg@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] arm64: dts: qcom: Add Acer Aspire 1
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        quic_srivasam@quicinc.com, judyhsiao@chromium.org,
-        mka@chromium.org, cros-qcom-dts-watchers@chromium.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+        Fri, 7 Apr 2023 12:25:04 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7788E10D5;
+        Fri,  7 Apr 2023 09:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680884700; x=1712420700;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=UdZpjdryUrxp9AY6HOyp5Zb+xOyjH1Eqar6XM28UtSA=;
+  b=cf27FdpSuI5XhkotjOlVAGin/1pQ1yo1JpwAdwN5yOG72GI9OZpvTdjb
+   ccPWylDXYbki3oMk3F3TIH8Sbl7N5NiQwGHEgCy1ELPXE+fL89jQwKnlC
+   gIAt+2AOJDedcEEqF54pGJ8riLsUuwQgwplS+Pg2QNg/M3hfI2esHrj5E
+   a6fs0ikxN7463uNqBv26aIFhBhYeB7awCOm6r2k2l+VyzIH2tUyVUQdj/
+   mhSHRgiO2wa4H1qB/u8ADIBDcN2SuavpAq3lfW88gr09lhLBb6lRGmhqa
+   k3jVurcl048j+OYVCefFaFLkGXF1txZ1YD7vYtoaojOmter3rzMdQhjsX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="343026836"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="343026836"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 09:24:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="861830704"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="861830704"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga005.jf.intel.com with ESMTP; 07 Apr 2023 09:24:59 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 7 Apr 2023 09:24:59 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 7 Apr 2023 09:24:58 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 7 Apr 2023 09:24:58 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 7 Apr 2023 09:24:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ByKbmQVKpaW9/YrazmKVY6QC74OfZAOHD+g16D+QpRRl4VZI3DG3I+Yi4jEhHZ+Hwc72KQdDzdB8pWf0mcHiRCAQ31jQPIb9ynUmdgLfPaNqF9uHG5JJRGWpBvTfH2n6YA4T0XkstVUbksZHk8L5QnlUb04n2m6JR7ComoMZkaQcTGqNC1W/gOBdiZTdmc5isa7grRAK2crICSFRgJfgzHVKehTSY8hcIIC2R7BRG/AVEgE4mw9bBO2/dvaTPjXau98MWw2Q+GrYX1Mya1zVtBcLAj9HQ4UnjfI4UtyOhS1dvuX/0i+uHrYPJoi+M8GGSFzEYZLasedoOI3MAS5ebg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gLSS85CFdex1qHbFaj/HrVe19Uh1FWDMRCXJgvgDeaw=;
+ b=RdCJAiC5SzmGwouHAp8NCPwrpvnyhsAmxh1VdQ++ax7iN5XbYASuXY+v+qu2lTJHjqzxqOfbhjvLdgU/tCFVBxVZuG9MiJ2s+/gxQ7ClSJGOK8rxO3kgJHefkhhBCjJ7CpLUOc0quI+nM9nrt1I9ixDo/oLO4nIfzCCBaqL2zKkmfDCaYt8D2DjTRWozjaZiTIlj//hVV3WowKwLI1/reFKpXuqCaPtDmWtxQdkM8EnnxOLfiQluBS1+mnPJ/M9hNMp/lUMlnkjUDTiAO/actEQIYvz8Z3HvNGYwWwQo4+0dfp0CJ1OLWbKkaWNqj3c7YW6PgzpE7xEB9OwHctXBtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW4PR11MB6763.namprd11.prod.outlook.com (2603:10b6:303:20b::7)
+ by PH7PR11MB6649.namprd11.prod.outlook.com (2603:10b6:510:1a7::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.34; Fri, 7 Apr
+ 2023 16:24:55 +0000
+Received: from MW4PR11MB6763.namprd11.prod.outlook.com
+ ([fe80::ea27:a8a0:3e6:db89]) by MW4PR11MB6763.namprd11.prod.outlook.com
+ ([fe80::ea27:a8a0:3e6:db89%6]) with mapi id 15.20.6277.031; Fri, 7 Apr 2023
+ 16:24:55 +0000
+Message-ID: <8ccfac25-678e-3e75-553f-a263bdbfaacd@intel.com>
+Date:   Fri, 7 Apr 2023 09:24:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH] fpga: dfl-fme: constify pointers to hwmon_channel_info
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>
+References: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
+From:   Russ Weight <russell.h.weight@intel.com>
+In-Reply-To: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW4PR03CA0089.namprd03.prod.outlook.com
+ (2603:10b6:303:b6::34) To MW4PR11MB6763.namprd11.prod.outlook.com
+ (2603:10b6:303:20b::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW4PR11MB6763:EE_|PH7PR11MB6649:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ed7ecae-efa1-474d-dea8-08db37849f34
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uBHs+sA2bApXmN5cVVyCX8kZGc1NIftLzsZxxa3qq5deoHxWKleGsNNDB7auwnl6FeZDuL8am8QrmL+gLxbC9k4Uitqf7QgY1ur2Xxb8U7Ev65PgaX38/RxzlCPlTIOu+p26QjXiAVd9007jgWDUcqAyNsfGFqZKYnx9WRwndIVsA28/FQpB9213qD5/lOV/pkYWmFQNzH6KwPFz0FkMOU3ygvWe0sSCuUHZLXsppIZZOXwpafsZi5Tkoz+xpksJ6MAqIPyu0bmh06ovBkiWf9+twm/oFWHqyI1h/wWPVqKhten94tpxgtMJBLO/UPGXAUzXJrF3+q/qCwA/26xfzOYXC5qjHccYecZxkTP4WACz1mtiyarR3vTVzo0Svz4FaC6zWFRXQHTB7YyEwtfAMgHctV8MOpXOcjlY9C1VvJr5cmsxrgA4oAdRxOdEmpG/JoFSCH+KMLqG8lBhMlPMTZ+8XV4Uox4wcWXZL4ritfvPZHAZyRP6uRjkCzMp2m9TevZ7/FXtLvfky5brn2KEMRJBLsg4oVvradTgi2zVj5/+ptVMKSBTUsmztfovdKt36po5GwzqjVQV5cNC3E2myPjmKQ9JZqdgiqvNVyos8t0SrgncHR4U/sNgg6tFWi+CV4NgiqBxDOoJa8LF+l2jIA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB6763.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(136003)(346002)(376002)(396003)(451199021)(86362001)(31696002)(36756003)(26005)(186003)(6506007)(6512007)(53546011)(2906002)(83380400001)(2616005)(478600001)(4326008)(66946007)(66556008)(8676002)(66476007)(316002)(110136005)(54906003)(5660300002)(31686004)(6486002)(41300700001)(966005)(8936002)(38100700002)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cUE3N3E4ZWJ4d2pvazFIWkxqYkwzL202K1NIdVMyUk5oWlMrL3U1cituT2Rr?=
+ =?utf-8?B?Wm1mZE1odExxenBJZ3dEblJFbEh6MHBUTE0wU0dZVjk4MjFac0RJNWhjQmVY?=
+ =?utf-8?B?Sk9DbXRPZ3RaUDJTMUNjSzdlV0ZySXIyOWVoOXZxSkFXeVJROTRqK1BlaTRW?=
+ =?utf-8?B?UktoaFFwT1Jxa2hwc3hxczVMb2p6dko2cEFVSkhqUHYycVN5K3lmNnZpQzJM?=
+ =?utf-8?B?TER1cVQyN0ljZ2ZzMUVJSXZ0U1UwT1Q5bkEwUUlFY0VVVUtaVUhITlhGWVV2?=
+ =?utf-8?B?NTJCb3BPMkl1ZTRhNWtDdVlxMkhYNzJSSXludWZVa3JISGVMTk9OcVgyMGtD?=
+ =?utf-8?B?am9VVEIzclJMZ3VtaUhFWlZrYTBXSk5uYzI3M2ZGRFhqeTZIS1ZOSGFOalZE?=
+ =?utf-8?B?YTVwVGdGUFM1dzNWUU1reXZrc1JBYWYyM3M0NlNHODFJMTN3N0dNV1RnS2w5?=
+ =?utf-8?B?TmpPbjcwakdEYVljVUxDUk9VQ0UyMG1BaHlmUGJLOElwcXdNdWNrOXVvNFBR?=
+ =?utf-8?B?MmZ6NHJScjRXNnV2UE5udWFSbDA5Y043U2F3NVpTYlBzMW9sT2EvbXd2MFM2?=
+ =?utf-8?B?Y0UwK1RwaTN0VU0rM0llcEphOEZ1TDN6dEVxU2pmcHFKd1RVV0VNVktsOVJW?=
+ =?utf-8?B?QUZNVjVGamJJbXlHdGQ2NnBTazg5ZkxjQUZTd25YWkxwcytyVFQ0VmxIK1dm?=
+ =?utf-8?B?SFhkUnpaZVZETS96dTV1eDhnVkxvT2NZUEk3QmQ2azU3dVk1MFAzZXhqZ2VU?=
+ =?utf-8?B?VDQ0SUd6MGY1WXhMendIaXNUWitJVGs4bkhzWmd1SHlqendWbjZhQS9adk51?=
+ =?utf-8?B?WHNMZkRVTTRQYnllY1ZHdHhJSW9ZR3BkOEdiNEhkOHZjZ0NVMFdJTnJWUkVy?=
+ =?utf-8?B?WXQ3WU5LZDdKOE1zTEQrOUhlZDYvRGJIcCt3QVNJaTRJRU1WV2pYU1NVcWdZ?=
+ =?utf-8?B?UzlwMlZ4SHMvQUtuQVhDMDk3Nkh2TFpzUXRWZVMvT2VERDZML2M0TEpGTW5k?=
+ =?utf-8?B?a0tJREJFRkpiNk5yNkEzZEZZYlVoUDJDOTI5R0RuOWhNM3AzcE1LK2RUNlQ2?=
+ =?utf-8?B?K0lLZG8zRDl1b2tnN2MxSkRiM1RVNnhMR0M4b1hjOHpyZE5FSU5LTG16allX?=
+ =?utf-8?B?N3dlNjBXWkUyWW9KVk9uelY4WUpZNmVvY2RtK1h3KzFKeEYxNVI5Q3Q3VEhi?=
+ =?utf-8?B?ZlZwRnY4ZytVSHQzM2d0cGdzODhWazNodGVTdjdkeGxUdWFxd2VEWHZ4V3lp?=
+ =?utf-8?B?QXBMa0RDN0FDRW15NUNxMlFRWkhFOXA1eDd6SHg3OHNVM0ZKb2FGRUNqekRD?=
+ =?utf-8?B?cS81YllVSGVqcnRnU1RVdXVvWUFXRmhTSS94aWxWdHF5b1l3MHNCckRFeDVo?=
+ =?utf-8?B?RjBCdEpla1Q3WTY5UnpKT2tmZlFVbkY4N2FwVC9QcWNiWjFFWlIwdW1idERl?=
+ =?utf-8?B?K0JlZS9LZXZOODdZUFV5N1JUUUxLVGVKQWJNaFlHNVVvTDcyeXpOUFpjYTMv?=
+ =?utf-8?B?YUMxekVOTEZDcENYNjM3UHI1ajd2RStZM1ZCSXFSYjhITGR4Unh1aTlJSktj?=
+ =?utf-8?B?bmlhYjU5cXhqVXpXeGVSR3NNYk56a0pXaFlZblI5aFdDRENvT2NZNlo5TVlr?=
+ =?utf-8?B?RzgzNmJqY0xneG50dlVHZUg5blNKaEJERlRjSXdhUjhIc0tlK01LUHZiNjdr?=
+ =?utf-8?B?eFM5QnAxWGM2UE1lOE4wY3A4WFY3VklHcUQ4ZFlWOEEvZy9obnVHVndVMWFB?=
+ =?utf-8?B?VGlHdmNpd1drT0pGL3JvbzVUQ3RJZVFaZ0FvYmV0WkxTL1dNcE1aZUNOQnNS?=
+ =?utf-8?B?L1FJUTFyT2FuSFBYNGxZVmhwOWFIWXBSNmtjQlFJcUxpUm14ei9jQi9OZEhu?=
+ =?utf-8?B?b2M0WXVOeUFka2lKQTcxQ2J1eTlENFJFMFRjcllsYWMxVW1yTnJxOFNMbmVl?=
+ =?utf-8?B?bWZWclBSak54Z05rSnhxdnhZWGxwU3p2azBqY0VpemM0Vm02M3cyREg2SU5E?=
+ =?utf-8?B?VHBTakNORGx5QlIyT3JJVnNhNU1hWEN1MEJ0THhNR2I1djFSRGFZTzF1cE9U?=
+ =?utf-8?B?M3dCR29hRzBLbWUvMzZ3bmtKYmhDR1dmMHpMek9nOXBBb2R3b045NXRTbkhI?=
+ =?utf-8?B?RkZPMEgwQlFWbDFwaExMQXhhUXZsYTA5TEc5SlRlVXVoWHIxQXpmVklTbkRN?=
+ =?utf-8?B?alE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ed7ecae-efa1-474d-dea8-08db37849f34
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB6763.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2023 16:24:55.1376
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gv+SEZ3eDsaFy9xbov+j9/2wbl6C8P6XXVoHmzexPiz3Iz66r6GzHLnYwxcrJGC2B67rEKD/z9pgRIdVHyW8fDwJ7ZhFREmeFOB2AIoQ1IE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6649
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,117 +166,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+ 
+On 4/7/23 08:01, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
 
-I didn't do too thorough of a review, but I noticed your comment about
-the panel power and took a look...
-
-On Fri, Apr 7, 2023 at 8:14=E2=80=AFAM Nikita Travkin <nikita@trvn.ru> wrot=
-e:
+Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >
-> +       reg_lcm_3p3: panel-regulator {
-> +               compatible =3D "regulator-fixed";
-> +               regulator-name =3D "lcm_3p3";
-> +               regulator-min-microvolt =3D <3300000>;
-> +               regulator-max-microvolt =3D <3300000>;
-> +
-> +               /*
-> +                * HACK: Display fails with
-> +                *
-> +                * *ERROR* Unexpected max rate (0x0); assuming 5.4 GHz
-> +                * *ERROR* Link training failed, link is off (-5)
-> +                *
-> +                * if the power to the panel was ever cut
-> +                */
-> +               regulator-always-on;
+> ---
+>
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+>
+> Therefore I propose this should also go via hwmon tree.
+>
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
+>  drivers/fpga/dfl-fme-main.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+> index 77ea04d4edbe..bcb5d34b3b82 100644
+> --- a/drivers/fpga/dfl-fme-main.c
+> +++ b/drivers/fpga/dfl-fme-main.c
+> @@ -265,7 +265,7 @@ static const struct hwmon_ops thermal_hwmon_ops = {
+>  	.read = thermal_hwmon_read,
+>  };
+>  
+> -static const struct hwmon_channel_info *thermal_hwmon_info[] = {
+> +static const struct hwmon_channel_info * const thermal_hwmon_info[] = {
+>  	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_EMERGENCY |
+>  				 HWMON_T_MAX   | HWMON_T_MAX_ALARM |
+>  				 HWMON_T_CRIT  | HWMON_T_CRIT_ALARM),
+> @@ -465,7 +465,7 @@ static const struct hwmon_ops power_hwmon_ops = {
+>  	.write = power_hwmon_write,
+>  };
+>  
+> -static const struct hwmon_channel_info *power_hwmon_info[] = {
+> +static const struct hwmon_channel_info * const power_hwmon_info[] = {
+>  	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT |
+>  				  HWMON_P_MAX   | HWMON_P_MAX_ALARM |
+>  				  HWMON_P_CRIT  | HWMON_P_CRIT_ALARM),
 
-I'm curious if `off-on-delay-us =3D <500000>;` would help you avoid the
-hack. The eDP driver should already enforce stuff like this but I
-think in some esoteric -EPROBE_DEFER cases it can end up violating
-things. Any chance that's what you hit?
-
-Oh, or maybe it's HPD. See below. Even if it's HPD, having an
-'off-on-delay-us' specified here isn't a bad idea.
-
-> +&i2c10 {
-> +       clock-frequency =3D <400000>;
-> +       status =3D "okay";
-> +
-> +       sn65dsi86_bridge: bridge@2c {
-> +               compatible =3D "ti,sn65dsi86";
-> +               reg =3D <0x2c>;
-> +               gpio-controller;
-> +               #gpio-cells =3D <2>;
-> +               #pwm-cells =3D <1>;
-> +
-> +               interrupt-parent =3D <&tlmm>;
-> +               interrupts =3D <11 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +               enable-gpios =3D <&tlmm 51 GPIO_ACTIVE_HIGH>;
-> +               suspend-gpios =3D <&tlmm 22 GPIO_ACTIVE_LOW>;
-> +
-> +               pinctrl-0 =3D <&bridge_en_default>,
-> +                           <&edp_bridge_irq_default>,
-> +                           <&bridge_suspend_default>;
-> +               pinctrl-names =3D "default";
-> +
-> +               vpll-supply =3D <&reg_brij_1p8>;
-> +               vccio-supply =3D <&reg_brij_1p8>;
-> +               vcca-supply =3D <&reg_brij_1p2>;
-> +               vcc-supply =3D <&reg_brij_1p2>;
-> +
-> +               clocks =3D <&rpmhcc RPMH_LN_BB_CLK3>;
-> +               clock-names =3D "refclk";
-
-You want "no-hpd;" here somewhere. See below.
-
-
-> +
-> +               ports {
-> +                       #address-cells =3D <1>;
-> +                       #size-cells =3D <0>;
-> +
-> +                       port@0 {
-> +                               reg =3D <0>;
-> +
-> +                               sn65dsi86_in: endpoint {
-> +                                       remote-endpoint =3D <&dsi0_out>;
-> +                               };
-> +                       };
-> +
-> +                       port@1 {
-> +                               reg =3D <1>;
-> +
-> +                               sn65dsi86_out: endpoint {
-> +                                       data-lanes =3D <0 1>;
-> +                                       remote-endpoint =3D <&panel_in_ed=
-p>;
-> +                               };
-> +                       };
-> +               };
-> +
-> +               aux-bus {
-> +                       panel: panel {
-> +                               compatible =3D "edp-panel";
-> +                               power-supply =3D <&reg_lcm_3p3>;
-> +                               backlight =3D <&backlight>;
-
-I think you want:
-
-no-hpd;
-hpd-absent-delay-ms =3D <200>;
-
-...and yes, you end up with "no-hpd" in both the panel node and the
-ti-sn65dsi86 node. See sdm845-cheza.
-
-HPD might very well be hooked up on your board, but the current Linux
-ti-sn65dsi86 driver does not look at its own HPD line because it's
-actually slower than just pretending that HPD isn't there. On trogdor
-boards we ended up routing HPD to a GPIO.
-
-I guess your other option would be to implement HPD support in
-ti-sn65dsi86. That would probably be an overall slower boot for you,
-but is technically more correct. In the past people have posted up
-patches to get ti-sn65dsi86 working as a full DP port and they added
-HPD support for that, but none of those patch series ever go to the
-point of landing...
