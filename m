@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8046DA8DF
+	by mail.lfdr.de (Postfix) with ESMTP id A5C196DA8DE
 	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 08:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238420AbjDGGYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 02:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S237645AbjDGGYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 02:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjDGGYP (ORCPT
+        with ESMTP id S229844AbjDGGYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 7 Apr 2023 02:24:15 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE8A93F9;
-        Thu,  6 Apr 2023 23:24:13 -0700 (PDT)
-X-UUID: ce3d5e24d50c11edb6b9f13eb10bd0fe-20230407
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9F65B88;
+        Thu,  6 Apr 2023 23:24:12 -0700 (PDT)
+X-UUID: ce615356d50c11eda9a90f0bb45854f4-20230407
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=fFgSXku1gJ5kM0KbL7xUA6gFtwXSCJvnf202HNaLfRM=;
-        b=rnC1+BvGH7pi2poqB3Pa4F/tOnqYttCaqb3+7/xsvG36EWB9Kpsl0kWX6ro5b+0+2NhAr2fMnh7ENULsOU8sGJDyYSyuIPNJiuAamQFqo6G64I1eRPldPN0YTD9g93oQ812nOWqq0ZNBCH6hvnYrrtw6a9b3UCalQCK+DafOoGs=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xW7rObnpHmg+Kkkakq6fYS9mESeSNCPOez4HHlcH09g=;
+        b=QgtaEcaCbPfCoo0nN+YQ1z2b4CO2UTMRYFYtPjWpSS0zsGTqgZS6ym4xHto1gYazTn7vMdZ3vsZRj6AXKJ5CaomusDWDkv6HC5dzcxAzsEl1k7xMqCjErNs0I3mU1XtMPKdJga+uENEsMrVncDCUpdfpXDpIcvRV64hhc4Qz4HQ=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:368ec8b2-ed87-4880-89bd-ef0f10cf7ec2,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:120426c,CLOUDID:39cd9b2a-564d-42d9-9875-7c868ee415ec,B
+X-CID-O-INFO: VERSION:1.1.22,REQID:0e8d5c8f-4af1-459b-b9b9-98f770200a7c,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:120426c,CLOUDID:2fcd9b2a-564d-42d9-9875-7c868ee415ec,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0,NGT
 X-CID-BAS: 0,NGT,0,_
-X-UUID: ce3d5e24d50c11edb6b9f13eb10bd0fe-20230407
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+X-UUID: ce615356d50c11eda9a90f0bb45854f4-20230407
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 449092663; Fri, 07 Apr 2023 14:24:09 +0800
+        with ESMTP id 1328904044; Fri, 07 Apr 2023 14:24:09 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 7 Apr 2023 14:24:08 +0800
+ 15.2.1118.25; Fri, 7 Apr 2023 14:24:09 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
  15.2.1118.25 via Frontend Transport; Fri, 7 Apr 2023 14:24:08 +0800
@@ -54,10 +54,12 @@ CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Tianping Fang <tianping.fang@mediatek.com>
-Subject: [PATCH v2 1/2] dt-bindings: usb: mtk-xhci: add an optional frame count clock
-Date:   Fri, 7 Apr 2023 14:24:05 +0800
-Message-ID: <20230407062406.12575-1-chunfeng.yun@mediatek.com>
+Subject: [PATCH v2 2/2] usb: xhci-mtk: add optional frame count clock
+Date:   Fri, 7 Apr 2023 14:24:06 +0800
+Message-ID: <20230407062406.12575-2-chunfeng.yun@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230407062406.12575-1-chunfeng.yun@mediatek.com>
+References: <20230407062406.12575-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -72,36 +74,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add optional clock 'frmcnt_ck' used on 4nm or advanced process SoC
+Add optional clock frmcnt_ck used on 4nm or advanced process SoC
 
 Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
-v2: based the patch:
-    https://patchwork.kernel.org/project/linux-mediatek/patch/20230403191850.374839-1-krzysztof.kozlowski@linaro.org/
+v2: no changes
 ---
- Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/host/xhci-mtk.c | 1 +
+ drivers/usb/host/xhci-mtk.h | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-index 1b0dfaa6b3dd..f2f926cf4039 100644
---- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-+++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
-@@ -77,6 +77,7 @@ properties:
-       - description: Mcu bus clock for register access
-       - description: DMA bus clock for data transfer
-       - description: controller clock
-+      - description: frame count clock
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index f7cbb08fc506..90cf40d6d0c3 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -398,6 +398,7 @@ static int xhci_mtk_clks_get(struct xhci_hcd_mtk *mtk)
+ 	clks[2].id = "ref_ck";
+ 	clks[3].id = "mcu_ck";
+ 	clks[4].id = "dma_ck";
++	clks[5].id = "frmcnt_ck";
  
-   clock-names:
-     minItems: 1
-@@ -86,6 +87,7 @@ properties:
-       - const: mcu_ck
-       - const: dma_ck
-       - const: xhci_ck
-+      - const: frmcnt_ck
+ 	return devm_clk_bulk_get_optional(mtk->dev, BULK_CLKS_NUM, clks);
+ }
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index 1174a510dd38..faaaf05e36ce 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -15,7 +15,7 @@
  
-   phys:
-     description:
+ #include "xhci.h"
+ 
+-#define BULK_CLKS_NUM	5
++#define BULK_CLKS_NUM	6
+ #define BULK_VREGS_NUM	2
+ 
+ /* support at most 64 ep, use 32 size hash table */
 -- 
 2.18.0
 
