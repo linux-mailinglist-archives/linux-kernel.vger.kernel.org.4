@@ -2,78 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30EBC6DB681
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C966DB684
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjDGWf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42098 "EHLO
+        id S230316AbjDGWgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 18:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDGWf5 (ORCPT
+        with ESMTP id S229915AbjDGWgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:35:57 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A32CA1A;
-        Fri,  7 Apr 2023 15:35:54 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337LbUgi030608;
-        Fri, 7 Apr 2023 22:35:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GLPTOTfwSYH4/Oiye4DOEFwrubn3rrjGIYd6rskQ6hg=;
- b=KP8y2ONQGKZIohtcbcVh6KPVfIHsKls4n73O1Gmoyn+jXcsKhCjNN0UUEzz1IaJ1CJCG
- JtfLveRlbq2v9G3yWxa5W/i6Sbl6OAkN41l0kLGYvOYEYfQ5pYXzOLrnNpNXwMM7ohjg
- ySJ61ktiB3JYW1kZeFnjXm6MEtrSbn/2Atjd7BI9boOgNbgfPdpObhIsSNNpGyxHsLRH
- DfGPzbvDkVqknAepsmPU9w80s/jrVg5gQrT+PsCM7jeJ+CNlMR5tTDauDmgL6ATmI6NF
- qQbNeUJmI9H9SAzOdzfQQ23B2mqWoukN4Sx2o3mXQ4hLQnSqJYJg/BnXBjg2CJ7kINU+ Nw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptgpk1jc5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 22:35:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337MZpeC027751
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Apr 2023 22:35:51 GMT
-Received: from [10.110.34.31] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 7 Apr 2023
- 15:35:50 -0700
-Message-ID: <58305f4d-fbcb-44cc-053c-d30f4ca082e7@quicinc.com>
-Date:   Fri, 7 Apr 2023 15:35:49 -0700
+        Fri, 7 Apr 2023 18:36:36 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660DCA1A
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 15:36:33 -0700 (PDT)
+Date:   Fri, 07 Apr 2023 22:36:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680906990; x=1681166190;
+        bh=IIaZmpCFpkxGjU/FsPVtL5bPNI0nYH0A3NRltRJW1jE=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=faFNPbuU86mssQA+UYJ0/mFqkfEQH8bDgCQ0h0DKMs0fAfZOS4qCKYpbjmu6LUZBJ
+         u165IgfMeME1zAySeqpSdI5nbYam9DCT7MNfvP3zYhrbwFaK3wXdrozqpf3iYcF5PD
+         JxkJJzZsZ/1LmQzzhl3OQjwJ9zpKEDzRTfbTytmEyGPlZUgOFqaoi4ncgyCZfFxHPD
+         RKr1xIslwLRlRTsu8NjObVNMl9WcVVROnzN29OTdHmiwHnpBVt6FNh26sezknrqWcu
+         43P0za3NiiSO458kdN6vG7cYtl2PxBFx4KzCG5P68iC1tqvbktS1Yf1xurl+U32C6l
+         qpd71mE42segw==
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        rust-for-linux@vger.kernel.org
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 10/13] rust: introduce `current`
+Message-ID: <d5e55c0f-ed6e-19ee-4bb7-58c8fdad8e29@protonmail.com>
+In-Reply-To: <20230405175111.5974-10-wedsonaf@gmail.com>
+References: <20230405175111.5974-1-wedsonaf@gmail.com> <20230405175111.5974-10-wedsonaf@gmail.com>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/2] rpmsg: glink: Wait for intent after intent request
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230327144617.3134175-1-quic_bjorande@quicinc.com>
-From:   Chris Lew <quic_clew@quicinc.com>
-In-Reply-To: <20230327144617.3134175-1-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ctf5nHn8wnafu-MSPyw-OvmjotHfcvYA
-X-Proofpoint-GUID: ctf5nHn8wnafu-MSPyw-OvmjotHfcvYA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_14,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- clxscore=1015 lowpriorityscore=0 spamscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 mlxscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304070204
-X-Spam-Status: No, score=-2.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,22 +57,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 05.04.23 19:51, Wedson Almeida Filho wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> This allows Rust code to get a reference to the current task without
+> having to increment the refcount, but still guaranteeing memory safety.
+>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> ---
+> v1 -> v2: Make `current` a macro to prevent it from escaping the caller
+>
+>   rust/helpers.c         |  6 +++
+>   rust/kernel/prelude.rs |  2 +
+>   rust/kernel/task.rs    | 93 +++++++++++++++++++++++++++++++++++++++++-
+>   3 files changed, 100 insertions(+), 1 deletion(-)
+>
+> diff --git a/rust/helpers.c b/rust/helpers.c
+> index 58a194042c86..96441744030e 100644
+> --- a/rust/helpers.c
+> +++ b/rust/helpers.c
+> @@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r=
+)
+>   }
+>   EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
+>
+> +struct task_struct *rust_helper_get_current(void)
+> +{
+> +=09return current;
+> +}
+> +EXPORT_SYMBOL_GPL(rust_helper_get_current);
+> +
+>   void rust_helper_get_task_struct(struct task_struct *t)
+>   {
+>   =09get_task_struct(t);
+> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+> index fcdc511d2ce8..c28587d68ebc 100644
+> --- a/rust/kernel/prelude.rs
+> +++ b/rust/kernel/prelude.rs
+> @@ -36,3 +36,5 @@ pub use super::error::{code::*, Error, Result};
+>   pub use super::{str::CStr, ThisModule};
+>
+>   pub use super::init::{InPlaceInit, Init, PinInit};
+> +
+> +pub use super::current;
+> diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+> index 8d7a8222990f..468387a5f7eb 100644
+> --- a/rust/kernel/task.rs
+> +++ b/rust/kernel/task.rs
+> @@ -5,7 +5,17 @@
+>   //! C header: [`include/linux/sched.h`](../../../../include/linux/sched=
+.h).
+>
+>   use crate::bindings;
+> -use core::{cell::UnsafeCell, ptr};
+> +use core::{cell::UnsafeCell, marker::PhantomData, ops::Deref, ptr};
+> +
+> +/// Returns the currently running task.
+> +#[macro_export]
+> +macro_rules! current {
+> +    () =3D> {
+> +        // SAFETY: Deref + addr-of below create a temporary `TaskRef` th=
+at cannot outlive the
+> +        // caller.
+> +        unsafe { &*$crate::task::Task::current() }
+> +    };
+> +}
+>
+>   /// Wraps the kernel's `struct task_struct`.
+>   ///
+> @@ -13,6 +23,42 @@ use core::{cell::UnsafeCell, ptr};
+>   ///
+>   /// Instances of this type are always ref-counted, that is, a call to `=
+get_task_struct` ensures
+>   /// that the allocation remains valid at least until the matching call =
+to `put_task_struct`.
+> +///
+> +/// # Examples
+> +///
+> +/// The following is an example of getting the PID of the current thread=
+ with zero additional cost
+> +/// when compared to the C version:
+> +///
+> +/// ```
+> +/// let pid =3D current!().pid();
+> +/// ```
+> +///
+> +/// Getting the PID of the current process, also zero additional cost:
+> +///
+> +/// ```
+> +/// let pid =3D current!().group_leader().pid();
+> +/// ```
+> +///
+> +/// Getting the current task and storing it in some struct. The referenc=
+e count is automatically
+> +/// incremented when creating `State` and decremented when it is dropped=
+:
+> +///
+> +/// ```
+> +/// use kernel::{task::Task, types::ARef};
+> +///
+> +/// struct State {
+> +///     creator: ARef<Task>,
+> +///     index: u32,
+> +/// }
+> +///
+> +/// impl State {
+> +///     fn new() -> Self {
+> +///         Self {
+> +///             creator: current!().into(),
+> +///             index: 0,
+> +///         }
+> +///     }
+> +/// }
+> +/// ```
+>   #[repr(transparent)]
+>   pub struct Task(pub(crate) UnsafeCell<bindings::task_struct>);
+>
+> @@ -25,6 +71,24 @@ unsafe impl Sync for Task {}
+>   type Pid =3D bindings::pid_t;
+>
+>   impl Task {
+> +    /// Returns a task reference for the currently executing task/thread=
+.
+> +    ///
 
+Add a link to the `current!` macro as a safe version of this function.
 
-On 3/27/2023 7:46 AM, Bjorn Andersson wrote:
-> When written it was assumed that upon requesting an intent, the intent
-> would arrive followed by an intent request acknowledgement. But this is
-> not always the case, in which case the current implementation would
-> request yet another intent and when that is acknowledged find the first
-> received intent - if the remote didn't run out of memory and failed the
-> second request...
-> 
-> Bjorn Andersson (2):
->    rpmsg: glink: Transition intent request signaling to wait queue
->    rpmsg: glink: Wait for intent, not just request ack
-> 
->   drivers/rpmsg/qcom_glink_native.c | 37 ++++++++++++++++++++++---------
->   1 file changed, 26 insertions(+), 11 deletions(-)
-> 
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that the returned [`TaskRef`] doesn't outliv=
+e the current task/thread.
+> +    pub unsafe fn current<'a>() -> TaskRef<'a> {
+> +        // SAFETY: Just an FFI call with no additional safety requiremen=
+ts.
+> +        let ptr =3D unsafe { bindings::get_current() };
+> +
+> +        TaskRef {
+> +            // SAFETY: If the current thread is still running, the curre=
+nt task is valid. Given
+> +            // that `TaskRef` is not `Send`, we know it cannot be transf=
+erred to another thread
+> +            // (where it could potentially outlive the caller).
+> +            task: unsafe { &*ptr.cast() },
+> +            _not_send: PhantomData,
+> +        }
+> +    }
+> +
+>       /// Returns the group leader of the given task.
+>       pub fn group_leader(&self) -> &Task {
+>           // SAFETY: By the type invariant, we know that `self.0` is vali=
+d.
+> @@ -69,3 +133,30 @@ unsafe impl crate::types::AlwaysRefCounted for Task {
+>           unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
+>       }
+>   }
+> +
+> +/// A wrapper for a shared reference to [`Task`] that isn't [`Send`].
+> +///
+> +/// We make this explicitly not [`Send`] so that we can use it to repres=
+ent the current thread
+> +/// without having to increment/decrement the task's reference count.
+> +///
+> +/// # Invariants
+> +///
+> +/// The wrapped [`Task`] remains valid for the lifetime of the object.
+> +pub struct TaskRef<'a> {
+> +    task: &'a Task,
+> +    _not_send: PhantomData<*mut ()>,
+> +}
+> +
+> +impl Deref for TaskRef<'_> {
+> +    type Target =3D Task;
+> +
+> +    fn deref(&self) -> &Self::Target {
+> +        self.task
+> +    }
+> +}
+> +
+> +impl From<TaskRef<'_>> for crate::types::ARef<Task> {
+> +    fn from(t: TaskRef<'_>) -> Self {
+> +        t.deref().into()
+> +    }
+> +}
 
-Reviewed-by: Chris Lew <quic_clew@quicinc.com>
+Maybe we can hide this struct and return an `impl Deref<Target =3D Task>`
+in `Task::current` instead (it will still be `!Send`)? Users do not
+really need to see this implementation detail.
+
+--
+Cheers,
+Benno
+
+> --
+> 2.34.1
+>
+
