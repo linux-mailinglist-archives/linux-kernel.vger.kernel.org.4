@@ -2,150 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A646DAEA9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0A06DAEA6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbjDGOPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 10:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S233102AbjDGOOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 10:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240100AbjDGOOw (ORCPT
+        with ESMTP id S231211AbjDGOOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 10:14:52 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1536E95;
-        Fri,  7 Apr 2023 07:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=R4TH8iF3XRJ1DlarsE3NhkPLoUGzWdq0m7N8occ5vGM=; b=qfkEn4cpxPYcnc/95fxARsn6kI
-        zpeKmQ0mwVKakCrF1WP0MnojedLNPejElAIifeijWYvYqjdQZTh60gwiU0Xsy2Ap2RGQay0bQcUiy
-        dxMAKj5eXZTpqTBy81xujjnLuNvcS+U+6pm7Q33vb32HQDNLy8D9RKY5TOcInHbQItWE=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pkmrM-009jDL-2x; Fri, 07 Apr 2023 16:14:36 +0200
-Date:   Fri, 7 Apr 2023 16:14:36 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH net] net: phy: nxp-c45-tja11xx: disable port and global
- interrupts
-Message-ID: <47d0347d-02a1-48a3-8553-d6ab2be731e8@lunn.ch>
-References: <20230406095546.74351-1-radu-nicolae.pirea@oss.nxp.com>
+        Fri, 7 Apr 2023 10:14:48 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6C56E95
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 07:14:46 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id z8so379514lfb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 07:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680876885;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LitglThuTVOTiVOaOmHnsqwO/XYwRjfJqpIXvqvwqNw=;
+        b=cAJLA9st/am2ROtRBIB70zu0nglMvAOV3tEd1HC7g3HQTdqzeVP6KEr48jA56VgUXa
+         KkJI7AZfrd5ROqX9VFNupGEpR10zXacKOp5mMY9f7a9R3GsOJaD4AmAgvw0bauwySmIj
+         Ds/tKOGM5BzZOnDKSg+JU9vEbCnTLAaLtKhlcmJxrk1+MGVZciLb5GCJcqngWOG2Xe2j
+         hyBvQft9VXg+87mF6/xYLDeC6AzeE8oAqPkWloaluS73LMS+5T8p0brCWML14lbdQ/v1
+         vkqzR7Vn5HoZSrtgml9w6Dm8e44P7dktx/lHy0A1qrgzeNB6ddJI8U5w+im7sjZTuO0l
+         7xfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680876885;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LitglThuTVOTiVOaOmHnsqwO/XYwRjfJqpIXvqvwqNw=;
+        b=Q7WqE6kF+Feex7Gxt0TwGQN3TEjEeZoANINi/1C20fV7MYPZUP2PjD4/2c5cYpP5bd
+         w8tvwfJYDh02mv0sWa/6Tzi9XZ60/yUl9OiHMRHZd61XYTzecojX4TVyjCJ5y6Bc/qON
+         AkvkI4SQKpMB2iLP9Bp+vjSlbtt7WQhR2u3TN1ophEiYQyTCa3nSU4CuBwX/yHEFluQ3
+         l8aHmOvCE14oE/MOtf/0/ysu6rqD52YOWRY14EzLehJf3IYrRazcwjVB/24OVu5lha5p
+         b2emzvQWIaqHe9Z81hl1B2qN1wqBgrBcey1uVlSi64Sv6VW8BMK6txO1eaDUpnTWh2qo
+         X3YQ==
+X-Gm-Message-State: AAQBX9ef5pgWxi2u+aid0EUQgkX3wnuFz9uSB0mAKXpCgbuiLKEySItI
+        kE4XGuVkzuBZZ5tyJB5FYYtG7A==
+X-Google-Smtp-Source: AKy350acqruf2IioEOZZ0qADTAJUPgXe5AxpKHhOF2m+bdEf90YFET55+2fUJcuLINdva0c6Z0S0zA==
+X-Received: by 2002:a05:6512:49c:b0:4e9:5f8e:315a with SMTP id v28-20020a056512049c00b004e95f8e315amr568818lfq.65.1680876885096;
+        Fri, 07 Apr 2023 07:14:45 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id 27-20020ac2485b000000b004db0d97b053sm719656lfy.137.2023.04.07.07.14.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 07:14:44 -0700 (PDT)
+Message-ID: <d9a641ca-9db4-f566-0abf-9cfd7b6f4cfc@linaro.org>
+Date:   Fri, 7 Apr 2023 17:14:44 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406095546.74351-1-radu-nicolae.pirea@oss.nxp.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v6 1/2] dt-bindings: phy: qcom,qmp-usb: Drop legacy
+ bindings and move to newer one (SM6115 & QCM2290)
+Content-Language: en-GB
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-phy@lists.infradead.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, kishon@kernel.org, vkoul@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230407061122.2036838-1-bhupesh.sharma@linaro.org>
+ <20230407061122.2036838-2-bhupesh.sharma@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230407061122.2036838-2-bhupesh.sharma@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 12:55:46PM +0300, Radu Pirea (OSS) wrote:
-> Disabling only the link event irq is not enough to disable the
-> interrupts. PTP will still be able to generate interrupts.
+On 07/04/2023 09:11, Bhupesh Sharma wrote:
+> 'qcom,msm8996-qmp-usb3-phy.yaml' defines bindings for several PHYs
+> which predate USB -> USB+DP migration. Since SM6115 and QCM2290
+> nodes for USB QMP phy are being added to dtsi files by followup patches,
+> move these bindings instead to the newer style
+> 'qcom,sc8280xp-qmp-usb3-uni-phy.yaml' file.
 > 
-> The interrupts are organised in a tree on the C45 TJA11XX PHYs. To
-> completely disable the interrupts, they are disable from the top of the
-> interrupt tree.
-> 
-> Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
-> CC: stable@vger.kernel.org # 5.15+
-> Signed-off-by: Radu Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
-> ---
->  drivers/net/phy/nxp-c45-tja11xx.c | 22 ++++++++++++++++------
->  1 file changed, 16 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
-> index 029875a59ff8..ce718a5865a4 100644
-> --- a/drivers/net/phy/nxp-c45-tja11xx.c
-> +++ b/drivers/net/phy/nxp-c45-tja11xx.c
-> @@ -31,6 +31,10 @@
->  #define DEVICE_CONTROL_CONFIG_GLOBAL_EN	BIT(14)
->  #define DEVICE_CONTROL_CONFIG_ALL_EN	BIT(13)
->  
-> +#define VEND1_PORT_IRQ_ENABLES		0x0072
-> +#define PORT1_IRQ			BIT(1)
-> +#define GLOBAL_IRQ			BIT(0)
+> Since no device trees use these bindings presently, so we have no ABI breakages
+> with this patch.
 
-I find the PORT1 confusing there, it suggests there is a port0? What
-is port0? There is no other reference to numbered ports in the driver.
+NAK. Please follow, what is the difference between the old and new 
+bindings. I would not have asked you to move yaml from the old to the 
+new bindings file.
 
-> -static bool nxp_c45_poll_txts(struct phy_device *phydev)
-> +static bool nxp_c45_poll(struct phy_device *phydev)
->  {
->  	return phydev->irq <= 0;
->  }
+-- 
+With best wishes
+Dmitry
 
-Maybe as a new patch, but phy_interrupt_is_valid() can be used here.
-
-Maybe also extend the commit message to include a comment that
-functions names are changed to reflect that all interrupts are now
-disabled, not just _txts interrupts. Otherwise this rename might be
-considered an unrelated change.
-
-> @@ -448,7 +452,7 @@ static void nxp_c45_process_txts(struct nxp_c45_phy *priv,
->  static long nxp_c45_do_aux_work(struct ptp_clock_info *ptp)
->  {
->  	struct nxp_c45_phy *priv = container_of(ptp, struct nxp_c45_phy, caps);
-> -	bool poll_txts = nxp_c45_poll_txts(priv->phydev);
-> +	bool poll_txts = nxp_c45_poll(priv->phydev);
->  	struct skb_shared_hwtstamps *shhwtstamps_rx;
->  	struct ptp_clock_event event;
->  	struct nxp_c45_hwts hwts;
-> @@ -699,7 +703,7 @@ static void nxp_c45_txtstamp(struct mii_timestamper *mii_ts,
->  		NXP_C45_SKB_CB(skb)->header = ptp_parse_header(skb, type);
->  		skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
->  		skb_queue_tail(&priv->tx_queue, skb);
-> -		if (nxp_c45_poll_txts(priv->phydev))
-> +		if (nxp_c45_poll(priv->phydev))
->  			ptp_schedule_worker(priv->ptp_clock, 0);
->  		break;
->  	case HWTSTAMP_TX_OFF:
-> @@ -772,7 +776,7 @@ static int nxp_c45_hwtstamp(struct mii_timestamper *mii_ts,
->  				 PORT_PTP_CONTROL_BYPASS);
->  	}
->  
-> -	if (nxp_c45_poll_txts(priv->phydev))
-> +	if (nxp_c45_poll(priv->phydev))
->  		goto nxp_c45_no_ptp_irq;
->  
->  	if (priv->hwts_tx)
-> @@ -892,10 +896,12 @@ static int nxp_c45_config_intr(struct phy_device *phydev)
->  {
->  	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
->  		return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
-> -					VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-> +					VEND1_PORT_IRQ_ENABLES,
-> +					PORT1_IRQ | GLOBAL_IRQ);
->  	else
->  		return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
-> -					  VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-> +					  VEND1_PORT_IRQ_ENABLES,
-> +					  PORT1_IRQ | GLOBAL_IRQ);
->  }
->  
->  static irqreturn_t nxp_c45_handle_interrupt(struct phy_device *phydev)
-> @@ -1290,6 +1296,10 @@ static int nxp_c45_config_init(struct phy_device *phydev)
->  	phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_PORT_FUNC_ENABLES,
->  			 PTP_ENABLE);
->  
-> +	if (!nxp_c45_poll(phydev))
-> +		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
-> +				 VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
-> +
-
-It seems odd to be touching interrupt configuration outside of
-nxp_c45_config_intr(). Is there a reason this cannot be part of
-phydev->interrupts == PHY_INTERRUPT_ENABLED ?
-
-	Andrew
