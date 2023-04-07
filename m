@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD976DB74E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFB56DB751
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjDGXha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S230326AbjDGXhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjDGXhX (ORCPT
+        with ESMTP id S230200AbjDGXhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:37:23 -0400
+        Fri, 7 Apr 2023 19:37:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A666A46BF;
-        Fri,  7 Apr 2023 16:37:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6ABE195;
+        Fri,  7 Apr 2023 16:37:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EA0265566;
-        Fri,  7 Apr 2023 23:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C485C4339B;
-        Fri,  7 Apr 2023 23:37:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A33865573;
+        Fri,  7 Apr 2023 23:37:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD0BFC433EF;
+        Fri,  7 Apr 2023 23:37:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680910641;
-        bh=FOXCW/zphYI/51GfnzbTQHLm8zgVNLqpFZslAr81/iI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=t3S0sTKCvu6a0ySNGMsqtMtsr1R787jPGTnozuoP2ilKjXMqOYdN00/87aU/unXvG
-         ZpUp0jz2Z/pi31FeNIE2JyrAd5fZKfpWpsjkZThhFDbnfKjk4lZrlrVGm5LjS+Ry7x
-         Di0/DDScVtshvAHXQR5H6HNciHcegL11vh0uuGh28t8Z3aXDUIT9W/TI29gDszcox7
-         NKicRh4nhAdfu6Q0I3vC+iOA0jLnO+M3P9ByorA+EDJMARlTsyXoZnMR1X/v1xK2Sk
-         2LQye/dYJO2zuigKmU29ASErzeDlTWHZFeu0fhxG7CLicdsqOykqd+/f7leoBfwIEJ
-         H+ZDz696uPNLw==
+        s=k20201202; t=1680910642;
+        bh=qxLOQAYL/rKYkW1O5vcLJ0Kauj0wkLn2NCdQ8YKUeJc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=b0TiDUSibHIubmybzDVTCErKopxm8t3+h46BrdMI9G7hI7tKHCZRUqiRj0AqaS6bi
+         r9dYVzjdg3zLmYvoCOsS2MKeRMI1r3wNBxoqgnXDUMNDYxOhvNLlBvelLNy2Rj9+dC
+         5HI9t0capkVL929bPm3JKO19/ZzfexCgJTXb2hOgsCX9xLxLm+yQj94LupRMrYGG1v
+         p2g6gKD+iWDBab1e8hGkjJlpELORwR6i8Npu4/mu4OV4osAxfEP+OhyFuE50rxylaD
+         vuECS8oQibBNz2YBajIJzMg7X4d/4Y2xysqs+d0EydjOi9kd9nCJjRSuqnGz+Y2i7i
+         LlSVZ14oQfPVA==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     linux-arm-msm@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -40,12 +40,13 @@ To:     linux-arm-msm@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH] arm64: dts: qcom: sdm630: move DSI opp-table out of DSI node
-Date:   Fri,  7 Apr 2023 16:40:06 -0700
-Message-Id: <168091080212.2759405.7366551160237003375.b4-ty@kernel.org>
+Cc:     Patrick Lai <quic_plai@quicinc.com>
+Subject: Re: [PATCH v3] arm64: dts: qcom: sm8550: add Soundwire controllers
+Date:   Fri,  7 Apr 2023 16:40:07 -0700
+Message-Id: <168091080212.2759405.18025554204311427981.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230407192605.168666-1-krzysztof.kozlowski@linaro.org>
-References: <20230407192605.168666-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230405061129.143553-1-krzysztof.kozlowski@linaro.org>
+References: <20230405061129.143553-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,17 +59,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Apr 2023 21:26:05 +0200, Krzysztof Kozlowski wrote:
-> The DSI OPP table on SDM630 is used by one DSI0, but on SDM660 is shared
-> by two nodes (DSI0 and DSI1), thus it should be rather in top-level, not
-> in DSI0.
+On Wed, 5 Apr 2023 08:11:29 +0200, Krzysztof Kozlowski wrote:
+> Add nodes for LPASS Soundwire v2.0.0 controllers.  Use labels with
+> indices matching downstream DTS, to make any comparisons easier.
 > 
 > 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sdm630: move DSI opp-table out of DSI node
-      commit: a9e76cf1146b4911b14c102f5237e28abbbccfef
+[1/1] arm64: dts: qcom: sm8550: add Soundwire controllers
+      commit: 61b006389bb7af6da29be4b1c2b93708ffe383a4
 
 Best regards,
 -- 
