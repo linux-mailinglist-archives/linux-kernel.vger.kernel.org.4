@@ -2,127 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EC16DB1F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466FB6DB19D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjDGRmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S229598AbjDGR3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjDGRm1 (ORCPT
+        with ESMTP id S229446AbjDGR3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:42:27 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2086.outbound.protection.outlook.com [40.107.22.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C008AB740;
-        Fri,  7 Apr 2023 10:42:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NEHFqtbvusqoZBHOHn7/d/4Ei6nFCt2s8BFLMPkA2IeHO9riKAS/EIsrIV0uqlvJSjAIY7LzKcYZIy7MJldi95Mdad6i35i+8vtxfwgKaii/f4jmAlvufxhsPuSYwS1eFAHI1NGTIlsGgyn+R9JshTR6quCFPcijmML4GDIANvSRYXgT76nyyyEBRepZ1HvAE5iUMJ0Jm3F2+ioTNCGuNrBBhRWgPkUj9+RvcoGe3/3exisCeDnX5ACZ7uFeeUjd83C/IEUqIUSmp5RC5Y8GtNlG0V+aSyBq/uj1RGbHlECAgtcrKXWzSMaziD6z6Nq0jXETRSjZLu3+FSwjy6B9KA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ufm+avF7yr2dZsayGwmZElxpxGwyK6e/FxCvFQWuQAA=;
- b=kt30KNPvxU74EnFplLwLTfe4kfW5Jtu8Yn2pe3sRo/5g4bqOAm7WQUz1aFCiKxHCR03bRz3r6FpjZikWEwcTtTi9NYgGhg8ztVecof4376AKVd+j+MMSBM0qzGU7X3z1iotkaYkLsYQhA5vyu51g5lK78apjwJX7V0VbZPIMSnyWNxGqKEAWTyZO/5PA2vHR4Lo03IM1s7bqxCzKtPfHoDGyyytcEJ48mCvtpB2d6eZDvo5rCPtbMftYLQ5Y2JX3I1lDMhnuqt6VOYl+RJiv3tLuNHZoprkr+Ejbwp9XL6J+PviGcwYJhX8QRbxmFEs1q3Eu1aJ25/+Fgs9z/cgugQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ufm+avF7yr2dZsayGwmZElxpxGwyK6e/FxCvFQWuQAA=;
- b=GE9Dqdsh9F5tAgNiJhFNfI4GF6HJweNKtLBGNrOkZUpNLOkNmhBYU8BbeOmvTtdblEfqGOPr64msVJPjbp3ZSnh6w71D6gCXvYe2cB0+81plpAJ6D+Kd048EXZl4+KMOsEq/+hDov0TxquCSwYFQdXUb7C8HddQbsZbiirNr0ng=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by PAXPR04MB8944.eurprd04.prod.outlook.com (2603:10a6:102:20f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Fri, 7 Apr
- 2023 17:42:15 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::9701:b3b3:e698:e733]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::9701:b3b3:e698:e733%7]) with mapi id 15.20.6277.034; Fri, 7 Apr 2023
- 17:42:14 +0000
-Message-ID: <104c1190-cd18-d7c9-7b27-af367ac539bb@oss.nxp.com>
-Date:   Fri, 7 Apr 2023 20:42:12 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH net] net: phy: nxp-c45-tja11xx: add remove callback
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230406095904.75456-1-radu-nicolae.pirea@oss.nxp.com>
- <cf1dd1a9-2e2d-473e-89f0-8e2c51226dfe@lunn.ch>
-From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-In-Reply-To: <cf1dd1a9-2e2d-473e-89f0-8e2c51226dfe@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM8P189CA0009.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:218::14) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Fri, 7 Apr 2023 13:29:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9D1A5FA;
+        Fri,  7 Apr 2023 10:29:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BACF6522F;
+        Fri,  7 Apr 2023 17:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DC2CC433EF;
+        Fri,  7 Apr 2023 17:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680888544;
+        bh=HM8yc0g7zGvNrkwC2ClMGSBe7mAsX0QqDan2d5P6KwY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rd/h7GqijfTNutX8NAo+CaMU+YWQ1znP5am7XaLwcvHwBjwp65GehhJpoeBLMo9iT
+         IoRsGhuBJnpH7OOruHRJqz+yon7jcUhgXG51r0kNxVthRwCiVx40u8s2l37kPefVrJ
+         8e05txpqmETRLafFloQJmCDjzBJLYgizstLIqxUiZb9BNjrTIRPPQ5nyvvlpWD5ZKX
+         K94moDNpTMTUN8oM8ivZdZgXiYDmHq2HWj1NOh141VCBL/moDD4JyO5y106xI09p93
+         3YkfTCfy8P5fwFqNh2dIHzavvdfgW5WfUDjlZRel+Owl6YyXjZHch0XuqUdI7U/F29
+         7uO2ZIVSCY+EA==
+Date:   Fri, 7 Apr 2023 18:44:20 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] iio: dac: mcp4922: get and enable vdd regulator
+Message-ID: <20230407184420.1cd54af0@jic23-huawei>
+In-Reply-To: <20230405140114.99011-3-frattaroli.nicolas@gmail.com>
+References: <20230405140114.99011-1-frattaroli.nicolas@gmail.com>
+        <20230405140114.99011-3-frattaroli.nicolas@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|PAXPR04MB8944:EE_
-X-MS-Office365-Filtering-Correlation-Id: a666fb68-869c-4951-97dd-08db378f6c9b
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C2IlY7zlOcJreX1szA3yFkBYuUHG7rZvdM5FsiiAGppy7nDBbYkpY+46liv3TRLBeMM2Qa8bNqXgCMPVjC+hLvroV0zyobUW4rtoOclJDIcu1bTklQGDT+KjrUBy8PlBHGerFxBtHQ/WR4D9fNdhf0f63LWXUmWJHX+Oia3WcZAHD85z+qfSqlPl8iLAB7CvENTuuBi0S5LuEZHSLVbUPiAnVZfuHzWKr8pTw3fv0kdF4YAVpbJR5RB2MYlfIOraUHx4zrSE76hToSeZHSSIrjxqu8uNxikCtVtyLo+G7EfqOIxKQCqEN6ujgT8okwuPKuRagGm4ctXG4yPM7c5okG+V4hReoxAx/PFKkcEgAxYBuJTGQkakBtVTlKD8GnO8XTIbP9c98AaMnayYQ3LPIih8TrT6Yg2GX40UXNki7JdpLJu7ptOO17CnfM9hCfUUdOJGhetuLBkS3pJ75r/y18XjLfakPgMupwB+ppAdUi4w7Oe91aS8v0Msav+U432k7imR2gsllAuuQwYctutTL0sXiLpJBCmEVAUKziWSSOzVOdrSioD1j9+ZO/zSe42JumMxczkW8fMOmnpvThl+1nK8XqdMSSJSQdww7MjAinpSnXgaS2Uzm8yOI448uMWD/z76CULodhh3W5Frr9Zzuw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199021)(478600001)(316002)(53546011)(6512007)(6506007)(26005)(186003)(6486002)(2906002)(5660300002)(66476007)(41300700001)(66946007)(6916009)(4326008)(8936002)(8676002)(7416002)(66556008)(38100700002)(86362001)(31696002)(83380400001)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QVZnK3JEYmdUZEN2VFI2bEZ1eUQ4WjFpejlUWkxHTmdJTEYwL3AxYnpNM3lH?=
- =?utf-8?B?ZGE3QkFxaEIvaHNzUTRzVDB0SDFGYzFWTEphNVBiR3kwYnVuQnRlamIrS2tS?=
- =?utf-8?B?cWVTQVM1aUNBZllxWVBNUDFqSGhvZi9ONTdWWEU3ZFVDd2JFOWc0T0Q3ZFox?=
- =?utf-8?B?a1hKQ1V4MHcxbTZzUWhkUHEzdHh5OGEyME9kWitMMlRBdjUzK3R4Tk9GQ01J?=
- =?utf-8?B?emIyR1poU0tlNkFhNlJBbmg5eDJvN0hRdUlpWVlEMlB0NWVMK0ZramljbHQ2?=
- =?utf-8?B?VHZvRnVwRzhCUTBNOVhsd3p1bi9PZk5ibEl0S3JZakNQb2RVRjcrZk5peTBh?=
- =?utf-8?B?a0U0OUgzcUV5aDlsMmlKaVRJYlQ0ZnZvZ2k0SlBZdzIrWXAwTGFQTGl4NlJC?=
- =?utf-8?B?WDBMZ2IrOFhQcmVCcXNQQlRiTTFpMmtYZlZFcHhYQXpPVG1rdUV0bVlXM0pj?=
- =?utf-8?B?a2JYU0FjODZhMXRWMll4cjVUcU1pYjJ0ZmR0QjU4cHYyUjlFNjBOekNQN2Fv?=
- =?utf-8?B?Sm9qNmgrWndsdmd5d3JKdmc1TTNDRG5sa1Y1S1JWM05wT3NpU1RGWm9BOXZL?=
- =?utf-8?B?VmlUanRSeStiUXdOSThicFJnSmJuTW13T3lwRnBHKzd6MVVGRnRQTG9rZmhi?=
- =?utf-8?B?MUhlY00rejhqVmY0dUZRS2lKa2pmVGkyUDNvL3JYZEsrajlHbTVUQ2JtQmZS?=
- =?utf-8?B?bjE0clBVeWh4b055bHZnL0JZT1ljWFMxck03RlJKQUREa2tQaTl4ZWsyd0ZI?=
- =?utf-8?B?eVhJSFFyWitwRW43ZDBRamY3MC9BYUdXekFKS2lxa0lOREx0WHVFQVlOanNu?=
- =?utf-8?B?OHNjZHJUNC9kMHVLR2RwZnRLTjNaZmkzdDU0bjdzMmRJamN3bVBCQ1NGQjRP?=
- =?utf-8?B?TFMyR0MwUkpucjFKR0RCSzN0QXQwSGpvbTB1elNzMkRDMEFMU0E5UUIrR1N1?=
- =?utf-8?B?UW1MUEZ2OHJUQnZtR3hqYUE5ellPYjZYZWNGdllDUXU5Y1FCU2g1MXlMOUdN?=
- =?utf-8?B?UHBENUZyQnFPMmxDSFJjeThzY2xmUmNRazFpUWN1QldDdEZpWGV3YUYveVlO?=
- =?utf-8?B?ODVpQ3ZOcVZBcGdmbGt6dVh1R2VoR1VNeTlQZW1SdTdXWmFEVExIOXRTa05h?=
- =?utf-8?B?blJmZ1hjdnU0Q0tJa2gxTFlxYk41MTg0RVQvSmNvWWNObldHNFRZSnhNOTRG?=
- =?utf-8?B?U1hQMnRleGRoRDhudUUxbENMb2NuUTBQYzBIZkFJWkxhUGJhZ3NNeU1XM1BC?=
- =?utf-8?B?RVBBM2lFQmdvMFhLMkhjTVE3R3RQbEFTYzBHaGoyVld6UTRTOEVSZ09XaEdQ?=
- =?utf-8?B?RVhQYnNya2NKemhqK0N4Qjk0WDBjT1Y3aGNXT0xNVmowaU1OY1FTL1BQT3Bu?=
- =?utf-8?B?MUJBdWF1VzM3djI3UkRtTFgxSWdObDRPMEFHd05HM2NXWk40QVNTK3M3TkU1?=
- =?utf-8?B?WU5NNWQwcVlYMWwvdDIwVkhzUndYaDd1Zm9tYS8zNlh2RmJ0Y09abmJVbFE5?=
- =?utf-8?B?dDZheW5BUm1ONjg5SGRQZ1pFc1RGQ3VLQ21NaC9KbFpQVG1Cc28rUEVvN0Vy?=
- =?utf-8?B?NXJHY0VnaFlQdEJuRGYrcmNEd1d4a0FnU0hGcjJUR2tpUjR3emc5NlJYRlZh?=
- =?utf-8?B?TkJzTXJmSkRMemNMeWpUcmNyNFdsbWFoU2FETmErNmNsU25ZUE80T2ZRQWZv?=
- =?utf-8?B?cm5jYVMrRVFMclFDNXZ3UWJaNmJ0UDJhRnlES21CTFJyWVF5K0JnczlCTGZ4?=
- =?utf-8?B?M3dxK1NFM0RMTHNxNTJpNWE2aTBUL051M3dJODBFVGlGbUJXVmEyTCtCQXpB?=
- =?utf-8?B?SHpBck1hTnFoTE9ISnZ1S0I0ZlRMQ0Q5Y3NzNVFSbDlCRGkwYWJqam5DQy9y?=
- =?utf-8?B?M0dna3ZSRDFlamxxU0tBVHM4RWpydm9FWVFFbXBYMnh0Q09LbGlTS2dVQkYw?=
- =?utf-8?B?SmI4K2R0STR2UkFvaFJQa2VKREtWcldNSVgvRWJSV1VETVJXbENXdzlHc0I0?=
- =?utf-8?B?K2x6dU00YWVDc3hrZ3c2U1VOUy8xVjZhUy9ndnFicm94a012UWJWZ093bWhM?=
- =?utf-8?B?emFMK1dkNGJrN3lteTNMNnMwT0RIU0VtZWc2c1Nkam1acFVTMmdOdm45UHBi?=
- =?utf-8?B?cUMwRk5HTUFIYjg1K1pSRXZQNmNRNWZqVDZLcCt6bGFBaHM1L0hkL0JzdlEw?=
- =?utf-8?B?Rnc9PQ==?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a666fb68-869c-4951-97dd-08db378f6c9b
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2023 17:42:14.7656
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3BzcsKT29pG9mJmPZEXSkpjBB9ccLHWnl+LANNJd6cZgYcE8+X99wqCi+/QuXIWQs3TkJqq3WsvyPHWESdg+LSMZ14pWwZFvUR3l5FsQdwc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8944
-X-Spam-Status: No, score=-2.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,43 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed,  5 Apr 2023 16:01:12 +0200
+Nicolas Frattaroli <frattaroli.nicolas@gmail.com> wrote:
 
-
-On 07.04.2023 17:20, Andrew Lunn wrote:
-> On Thu, Apr 06, 2023 at 12:59:04PM +0300, Radu Pirea (OSS) wrote:
->> Unregister PTP clock when the driver is removed.
->> Purge the RX and TX skb queues.
->>
->> Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
->> CC: stable@vger.kernel.org # 5.15+
->> Signed-off-by: Radu Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
->> ---
->>   drivers/net/phy/nxp-c45-tja11xx.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
->> index 5813b07242ce..27738d1ae9ea 100644
->> --- a/drivers/net/phy/nxp-c45-tja11xx.c
->> +++ b/drivers/net/phy/nxp-c45-tja11xx.c
->> @@ -1337,6 +1337,17 @@ static int nxp_c45_probe(struct phy_device *phydev)
->>   	return ret;
->>   }
->>   
->> +static void nxp_c45_remove(struct phy_device *phydev)
->> +{
->> +	struct nxp_c45_phy *priv = phydev->priv;
->> +
->> +	if (priv->ptp_clock)
->> +		ptp_clock_unregister(priv->ptp_clock);
->> +
->> +	skb_queue_purge(&priv->tx_queue);
->> +	skb_queue_purge(&priv->rx_queue);
+> The MCP4922 family of chips has a vdd power input, which we
+> model in our device tree binding for it. The driver should get
+> and enable the vdd regulator as is appropriate.
 > 
-> Do you need to disable interrupts? I suppose the real question is, is
-> it guaranteed phy_disconnect() is called before the driver is removed?
-The MAC driver should call phy_disconnect() when it is removed. Also, 
-the user should not be able to remove the PHY driver if is in uses.
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 
-Radu P.
+If, before doing this you add a patch using devm for all the
+unwinding currently being done by hand in remove() you can
+simplify this further use devm_regulator_get_enable()
+(Note you can only do that for this regulator as we never touch it
+ after enable - more complex handling needed for the vref one as
+ described in review of patch 4.)
+
+That conversion patch is pretty simple, so whilst I don't like asking
+people to implement extra features, in this case the simplifications
+to what you are doing here make that precusor work justified
+
+Jonathan
+
+
+> ---
+>  drivers/iio/dac/mcp4922.c | 24 ++++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
 > 
->     Andrew
+> diff --git a/drivers/iio/dac/mcp4922.c b/drivers/iio/dac/mcp4922.c
+> index da4327624d45..0b9458cbbcff 100644
+> --- a/drivers/iio/dac/mcp4922.c
+> +++ b/drivers/iio/dac/mcp4922.c
+> @@ -31,6 +31,7 @@ struct mcp4922_state {
+>  	unsigned int value[MCP4922_NUM_CHANNELS];
+>  	unsigned int vref_mv;
+>  	struct regulator *vref_reg;
+> +	struct regulator *vdd_reg;
+>  	u8 mosi[2] __aligned(IIO_DMA_MINALIGN);
+>  };
+>  
+> @@ -148,10 +149,23 @@ static int mcp4922_probe(struct spi_device *spi)
+>  	if (ret < 0) {
+>  		dev_err(&spi->dev, "Failed to read vref regulator: %d\n",
+>  				ret);
+> -		goto error_disable_reg;
+> +		goto error_disable_vref_reg;
+>  	}
+>  	state->vref_mv = ret / 1000;
+>  
+> +	state->vdd_reg = devm_regulator_get(&spi->dev, "vdd");
+> +	if (IS_ERR(state->vdd_reg)) {
+> +		ret = dev_err_probe(&spi->dev, PTR_ERR(state->vdd_reg),
+> +				    "vdd regulator not specified\n");
+> +		goto error_disable_vref_reg;
+> +	}
+> +	ret = regulator_enable(state->vdd_reg);
+> +	if (ret) {
+> +		dev_err(&spi->dev, "Failed to enable vdd regulator: %d\n",
+> +			ret);
+> +		goto error_disable_vref_reg;
+> +	}
+> +
+>  	spi_set_drvdata(spi, indio_dev);
+>  	id = spi_get_device_id(spi);
+>  	indio_dev->info = &mcp4922_info;
+> @@ -167,12 +181,13 @@ static int mcp4922_probe(struct spi_device *spi)
+>  	if (ret) {
+>  		dev_err(&spi->dev, "Failed to register iio device: %d\n",
+>  				ret);
+> -		goto error_disable_reg;
+> +		goto error_disable_vdd_reg;
+>  	}
+>  
+>  	return 0;
+> -
+> -error_disable_reg:
+> +error_disable_vdd_reg:
+> +	regulator_disable(state->vdd_reg);
+> +error_disable_vref_reg:
+>  	regulator_disable(state->vref_reg);
+>  
+>  	return ret;
+> @@ -185,6 +200,7 @@ static void mcp4922_remove(struct spi_device *spi)
+>  
+>  	iio_device_unregister(indio_dev);
+>  	state = iio_priv(indio_dev);
+> +	regulator_disable(state->vdd_reg);
+>  	regulator_disable(state->vref_reg);
+>  }
+>  
+
