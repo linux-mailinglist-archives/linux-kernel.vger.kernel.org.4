@@ -2,61 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261F96DAC0D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEE96DAC11
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240705AbjDGLFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
+        id S240617AbjDGLHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240590AbjDGLFb (ORCPT
+        with ESMTP id S240686AbjDGLHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:05:31 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F4EBBAF;
-        Fri,  7 Apr 2023 04:04:22 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pkjt1-000226-29;
-        Fri, 07 Apr 2023 13:04:08 +0200
-Date:   Fri, 7 Apr 2023 12:04:04 +0100
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH net-next] net: dsa: mt7530: fix port specifications
- for MT7988
-Message-ID: <ZC_4pAxKbnpnyoUF@makrotopia.org>
-References: <20230406100445.52915-1-arinc.unal@arinc9.com>
- <ZC6n1XAGyZFlxyXx@shell.armlinux.org.uk>
- <e413a182-ce93-5831-09f5-19d34d7f7fcf@arinc9.com>
- <ZC9AXyuFqa3bqF3Q@makrotopia.org>
- <0cdb0504-bc1e-c255-a7d2-4dd96bd8e6e3@arinc9.com>
- <ZC_iPfl5R-_4zOZg@makrotopia.org>
- <574460f4-5e22-3154-809d-42ca7aa53c1b@arinc9.com>
- <62376d69-6878-783e-c022-7c952b222b37@arinc9.com>
+        Fri, 7 Apr 2023 07:07:30 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C090CB756;
+        Fri,  7 Apr 2023 04:07:10 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3378A503022330;
+        Fri, 7 Apr 2023 11:06:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Igk0t6Unw6nnffxVVMel2n1Fllq19+7lPu1A4Ed8kL8=;
+ b=OyCsYjZr97oB0TNIjHPW9c5Te/pIigWcVCTTla7UI5rEeJN1etZ9NOM+JURHZKo5V9jK
+ eEb8LT0DdtJIbvLW1yowB4j7JcsqIyta/KLN4jg33tubReEcxMM/JluqxuiMtEDUPeFJ
+ xSwFNtY7TmlgoFrAIe/ih09+FZMLZrmrqTjGgjKd2ZMwA/TIX5TG6egXnIiZ125D8es4
+ GjecEkd0FhpZ6bep6KnwP4npmSavEQUkHvSk2evicCeoHf7Ze55PG+vojioiKvZjV5Hs
+ yEjbOTRywu438TSDIWJQrg5dCvjKVmSWVZUC+o+LZ9bj6A35wUn3Vzea6qp0353b2Oyx pg== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ptaqv0pmx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 11:06:34 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 337Ahkcf030740;
+        Fri, 7 Apr 2023 11:06:33 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ppc86up0y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 11:06:33 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 337B6UxW17892068
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Apr 2023 11:06:30 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CBCE20049;
+        Fri,  7 Apr 2023 11:06:30 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3CDF220043;
+        Fri,  7 Apr 2023 11:06:29 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.66.68])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  7 Apr 2023 11:06:29 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 16:36:26 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] ext4: treat stripe in block unit
+Message-ID: <ZC/5MpJrKxzxMTl6@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230321161220.418652-1-shikemeng@huaweicloud.com>
+ <20230321161220.418652-6-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <62376d69-6878-783e-c022-7c952b222b37@arinc9.com>
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230321161220.418652-6-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PW0tHlCwIloTnLnFxXPG2ep9xmLZ_wpG
+X-Proofpoint-ORIG-GUID: PW0tHlCwIloTnLnFxXPG2ep9xmLZ_wpG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_06,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 suspectscore=0 adultscore=0 priorityscore=1501 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304070100
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,183 +83,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 01:50:54PM +0300, Arınç ÜNAL wrote:
-> On 7.04.2023 13:46, Arınç ÜNAL wrote:
-> > On 7.04.2023 12:28, Daniel Golle wrote:
-> > > On Fri, Apr 07, 2023 at 11:56:08AM +0300, Arınç ÜNAL wrote:
-> > > > On 7.04.2023 00:57, Daniel Golle wrote:
-> > > > > On Fri, Apr 07, 2023 at 12:43:41AM +0300, Arınç ÜNAL wrote:
-> > > > > > On 6.04.2023 14:07, Russell King (Oracle) wrote:
-> > > > > > > On Thu, Apr 06, 2023 at 01:04:45PM +0300,
-> > > > > > > arinc9.unal@gmail.com wrote:
-> > > > > > > > From: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > > > > > > 
-> > > > > > > > On the switch on the MT7988 SoC, there are only
-> > > > > > > > 4 PHYs. There's only port 6
-> > > > > > > > as the CPU port, there's no port 5. Split the
-> > > > > > > > switch statement with a check
-> > > > > > > > to enforce these for the switch on the MT7988
-> > > > > > > > SoC. The internal phy-mode is
-> > > > > > > > specific to MT7988 so put it for MT7988 only.
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> > > > > > > > ---
-> > > > > > > > 
-> > > > > > > > Daniel, this is based on the information you
-> > > > > > > > provided me about the switch.
-> > > > > > > > I will add this to my current patch series if it looks good to you.
-> > > > > > > > 
-> > > > > > > > Arınç
-> > > > > > > > 
-> > > > > > > > ---
-> > > > > > > >     drivers/net/dsa/mt7530.c | 67
-> > > > > > > > ++++++++++++++++++++++++++--------------
-> > > > > > > >     1 file changed, 43 insertions(+), 24 deletions(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> > > > > > > > index 6fbbdcb5987f..f167fa135ef1 100644
-> > > > > > > > --- a/drivers/net/dsa/mt7530.c
-> > > > > > > > +++ b/drivers/net/dsa/mt7530.c
-> > > > > > > > @@ -2548,7 +2548,7 @@ static void
-> > > > > > > > mt7988_mac_port_get_caps(struct dsa_switch *ds,
-> > > > > > > > int port,
-> > > > > > > >         phy_interface_zero(config->supported_interfaces);
-> > > > > > > >         switch (port) {
-> > > > > > > > -    case 0 ... 4: /* Internal phy */
-> > > > > > > > +    case 0 ... 3: /* Internal phy */
-> > > > > > > >             __set_bit(PHY_INTERFACE_MODE_INTERNAL,
-> > > > > > > >                   config->supported_interfaces);
-> > > > > > > >             break;
-> > > > > > > > @@ -2710,37 +2710,56 @@
-> > > > > > > > mt753x_phylink_mac_config(struct dsa_switch *ds,
-> > > > > > > > int port, unsigned int mode,
-> > > > > > > >         struct mt7530_priv *priv = ds->priv;
-> > > > > > > >         u32 mcr_cur, mcr_new;
-> > > > > > > > -    switch (port) {
-> > > > > > > > -    case 0 ... 4: /* Internal phy */
-> > > > > > > > -        if (state->interface != PHY_INTERFACE_MODE_GMII &&
-> > > > > > > > -            state->interface != PHY_INTERFACE_MODE_INTERNAL)
-> > > > > > > > -            goto unsupported;
-> > > > > > > > -        break;
-> > > > > > > > -    case 5: /* Port 5, a CPU port. */
-> > > > > > > > -        if (priv->p5_interface == state->interface)
-> > > > > > > > +    if (priv->id == ID_MT7988) {
-> > > > > > > > +        switch (port) {
-> > > > > > > > +        case 0 ... 3: /* Internal phy */
-> > > > > > > > +            if (state->interface != PHY_INTERFACE_MODE_INTERNAL)
-> > > > > > > 
-> > > > > > > How do these end up with PHY_INTERFACE_MODE_INTERNAL
-> > > > > > > ? phylib defaults
-> > > > > > > to GMII mode without something else being specified in DT.
-> > > > > > > 
-> > > > > > > Also note that you should *not* be validating state->interface in the
-> > > > > > > mac_config() method because it's way too late to
-> > > > > > > reject it - if you get
-> > > > > > > an unsupported interface here, then that is down to the get_caps()
-> > > > > > > method being buggy. Only report interfaces in get_caps() that you are
-> > > > > > > prepared to handle in the rest of the system.
-> > > > > > 
-> > > > > > This is already the case for all three get_caps(). The
-> > > > > > supported interfaces
-> > > > > > for each port are properly defined.
-> > > > > > 
-> > > > > > Though mt7988_mac_port_get_caps() clears the
-> > > > > > config->supported_interfaces
-> > > > > > bitmap before reporting the supported interfaces. I
-> > > > > > don't think this is
-> > > > > > needed as all bits in the bitmap should already be
-> > > > > > initialized to zero when
-> > > > > > the phylink_config structure is allocated.
-> > > > > > 
-> > > > > > I'm not sure if your suggestion is to make sure the
-> > > > > > supported interfaces are
-> > > > > > properly reported on get_caps(), or validate
-> > > > > > state->interface somewhere
-> > > > > > else.
-> > > > > 
-> > > > > I think what Russell meant is just there is no point in being overly
-> > > > > precise about permitted interface modes in mt753x_phylink_mac_config,
-> > > > > as this function is not meant and called too late to validate the
-> > > > > validity of the selected interface mode.
-> > > > > 
-> > > > > You change to mt7988_mac_port_get_caps looks correct to me and doing
-> > > > > this will already prevent mt753x_phylink_mac_config from ever being
-> > > > > called on MT7988 for port == 4 as well as and port == 5.
-> > > > 
-> > > > Ah, thanks for pointing this out Daniel. I see
-> > > > ds->ops->phylink_get_caps()
-> > > > is run right before phylink_create() on dsa_port_phylink_create(), as it
-> > > > should get the capabilities before creating an instance.
-> > > > 
-> > > > Should I remove phy_interface_zero(config->supported_interfaces);
-> > > > mt7988_mac_port_get_caps()? I'd prefer to do identical
-> > > > operations on each
-> > > > get_caps(), if there's no apparent reason for this to be on
-> > > > mt7988_mac_port_get_caps().
-> > > 
-> > > Yes, sounds sane to me, please do so.
-> > > 
-> > > Also we could make .mac_port_config optional, as for MT7988 we actually
-> > > won't need it at all:
-> > > 
-> > > diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> > > index e4bb5037d3525..5efcb9897eb18 100644
-> > > --- a/drivers/net/dsa/mt7530.c
-> > > +++ b/drivers/net/dsa/mt7530.c
-> > > @@ -2653,17 +2653,6 @@ static bool mt753x_is_mac_port(u32 port)
-> > >       return (port == 5 || port == 6);
-> > >   }
-> > > -static int
-> > > -mt7988_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
-> > > -          phy_interface_t interface)
-> > > -{
-> > > -    if (dsa_is_cpu_port(ds, port) &&
-> > > -        interface == PHY_INTERFACE_MODE_INTERNAL)
-> > > -        return 0;
-> > > -
-> > > -    return -EINVAL;
-> > > -}
-> > > -
-> > >   static int
-> > >   mt7531_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
-> > >             phy_interface_t interface)
-> > > @@ -2704,6 +2693,9 @@ mt753x_mac_config(struct dsa_switch *ds, int
-> > > port, unsigned int mode,
-> > >   {
-> > >       struct mt7530_priv *priv = ds->priv;
-> > > +    if (!priv->info->mac_port_config)
-> > > +        return 0;
-> > > +
-> > >       return priv->info->mac_port_config(ds, port, mode,
-> > > state->interface);
-> > >   }
-> > > @@ -3157,7 +3149,6 @@ const struct mt753x_info mt753x_table[] = {
-> > >           .pad_setup = mt7988_pad_setup,
-> > >           .cpu_port_config = mt7988_cpu_port_config,
-> > >           .mac_port_get_caps = mt7988_mac_port_get_caps,
-> > > -        .mac_port_config = mt7988_mac_config,
-> > >       },
-> > >   };
-> > >   EXPORT_SYMBOL_GPL(mt753x_table);
-> > > @@ -3186,8 +3177,7 @@ mt7530_probe_common(struct mt7530_priv *priv)
-> > >        */
-> > >       if (!priv->info->sw_setup || !priv->info->pad_setup ||
-> > >           !priv->info->phy_read_c22 || !priv->info->phy_write_c22 ||
-> > > -        !priv->info->mac_port_get_caps ||
-> > > -        !priv->info->mac_port_config)
-> > > +        !priv->info->mac_port_get_caps)
-> > 
-> > Why split the sanity check? Isn't just removing mt7988_mac_config() and
-> > .mac_port_config = mt7988_mac_config enough?
+On Wed, Mar 22, 2023 at 12:12:17AM +0800, Kemeng Shi wrote:
+> Stripe is misused in block unit and in cluster unit in different code
+> paths. User awared of stripe maybe not awared of bigalloc feature, so
+> treat stripe only in block unit to fix this.
+> Besides, it's hard to get stripe aligned blocks (start and length are both
+> aligned with stripe) if stripe is not aligned with cluster, just disable
+> stripe and alert user in this case to simpfy the code and avoid
+> unecessary work to get stripe aligned blocks which likely to be failed.
 > 
-> Nevermind, it is necessary. I confused the return logic. This looks good to
-> me. Should I take this to my current series? It will conflict with sanity
-> check changes as I also remove pad_setup from there.
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-Yes please do so, I will review and test the whole series all together then
-later today.
+Nice fixes, and I agree that we can disable stripes if it is not aligned
+with cluster. There are anyways some gaps in our stripe support eg the
+normalization logic doesnt even take stripesize into account when
+determining the goal length.
 
-Thank you!
+Anyways, for this patch feel free to add:
 
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 
-Daniel
+Regards,
+ojaswin
+
+> ---
+>  fs/ext4/mballoc.c | 18 +++++++++++-------
+>  fs/ext4/super.c   | 13 +++++++++++++
+>  2 files changed, 24 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 9a40e165e7d2..b963111eeec6 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -2178,7 +2178,8 @@ int ext4_mb_find_by_goal(struct ext4_allocation_context *ac,
+>  			     ac->ac_g_ex.fe_len, &ex);
+>  	ex.fe_logical = 0xDEADFA11; /* debug value */
+>  
+> -	if (max >= ac->ac_g_ex.fe_len && ac->ac_g_ex.fe_len == sbi->s_stripe) {
+> +	if (max >= ac->ac_g_ex.fe_len &&
+> +	    ac->ac_g_ex.fe_len == EXT4_B2C(sbi, sbi->s_stripe)) {
+>  		ext4_fsblk_t start;
+>  
+>  		start = ext4_grp_offs_to_block(ac->ac_sb, &ex);
+> @@ -2343,7 +2344,7 @@ void ext4_mb_scan_aligned(struct ext4_allocation_context *ac,
+>  	struct ext4_free_extent ex;
+>  	ext4_fsblk_t first_group_block;
+>  	ext4_fsblk_t a;
+> -	ext4_grpblk_t i;
+> +	ext4_grpblk_t i, stripe;
+>  	int max;
+>  
+>  	BUG_ON(sbi->s_stripe == 0);
+> @@ -2355,10 +2356,12 @@ void ext4_mb_scan_aligned(struct ext4_allocation_context *ac,
+>  	do_div(a, sbi->s_stripe);
+>  	i = (a * sbi->s_stripe) - first_group_block;
+>  
+> +	stripe = EXT4_B2C(sbi, sbi->s_stripe);
+> +	i = EXT4_B2C(sbi, i);
+>  	while (i < EXT4_CLUSTERS_PER_GROUP(sb)) {
+>  		if (!mb_test_bit(i, bitmap)) {
+> -			max = mb_find_extent(e4b, i, sbi->s_stripe, &ex);
+> -			if (max >= sbi->s_stripe) {
+> +			max = mb_find_extent(e4b, i, stripe, &ex);
+> +			if (max >= stripe) {
+>  				ac->ac_found++;
+>  				ex.fe_logical = 0xDEADF00D; /* debug value */
+>  				ac->ac_b_ex = ex;
+> @@ -2366,7 +2369,7 @@ void ext4_mb_scan_aligned(struct ext4_allocation_context *ac,
+>  				break;
+>  			}
+>  		}
+> -		i += sbi->s_stripe;
+> +		i += stripe;
+>  	}
+>  }
+>  
+> @@ -2727,7 +2730,8 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+>  			if (cr == 0)
+>  				ext4_mb_simple_scan_group(ac, &e4b);
+>  			else if (cr == 1 && sbi->s_stripe &&
+> -					!(ac->ac_g_ex.fe_len % sbi->s_stripe))
+> +				 !(ac->ac_g_ex.fe_len %
+> +				 EXT4_B2C(sbi, sbi->s_stripe)))
+>  				ext4_mb_scan_aligned(ac, &e4b);
+>  			else
+>  				ext4_mb_complex_scan_group(ac, &e4b);
+> @@ -3441,7 +3445,7 @@ int ext4_mb_init(struct super_block *sb)
+>  	 */
+>  	if (sbi->s_stripe > 1) {
+>  		sbi->s_mb_group_prealloc = roundup(
+> -			sbi->s_mb_group_prealloc, sbi->s_stripe);
+> +			sbi->s_mb_group_prealloc, EXT4_B2C(sbi, sbi->s_stripe));
+>  	}
+>  
+>  	sbi->s_locality_groups = alloc_percpu(struct ext4_locality_group);
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index f226f8ab469b..0a5bf375df5c 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -5231,6 +5231,19 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+>  		goto failed_mount3;
+>  
+>  	sbi->s_stripe = ext4_get_stripe_size(sbi);
+> +	/*
+> +	 * It's hard to get stripe aligned blocks if stripe is not aligned with
+> +	 * cluster, just disable stripe and alert user to simpfy code and avoid
+> +	 * stripe aligned allocation which will rarely successes.
+> +	 */
+> +	if (sbi->s_stripe > 0 && sbi->s_cluster_ratio > 1 &&
+> +	    sbi->s_stripe % sbi->s_cluster_ratio != 0) {
+> +		ext4_msg(sb, KERN_WARNING,
+> +			 "stripe (%lu) is not aligned with cluster size (%u), "
+> +			 "stripe is disabled",
+> +			 sbi->s_stripe, sbi->s_cluster_ratio);
+> +		sbi->s_stripe = 0;
+> +	}
+>  	sbi->s_extent_max_zeroout_kb = 32;
+>  
+>  	/*
+> -- 
+> 2.30.0
+> 
