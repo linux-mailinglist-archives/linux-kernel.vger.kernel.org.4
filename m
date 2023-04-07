@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2166DB72F
+	by mail.lfdr.de (Postfix) with ESMTP id 4122C6DB72E
 	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbjDGXdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:33:05 -0400
+        id S230086AbjDGXdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:33:08 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjDGXdA (ORCPT
+        with ESMTP id S230013AbjDGXdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:33:00 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E1F46BF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:32:59 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1a526495c3bso58435ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:32:59 -0700 (PDT)
+        Fri, 7 Apr 2023 19:33:02 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D6A27B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:33:01 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54ee17afd6eso1006357b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:33:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680910379;
+        d=google.com; s=20210112; t=1680910381;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=tX6CHwqi/+vmAQd+dDGZvcYGjpDNB6U9rI2y1SgCLzw=;
-        b=RLzZoZSEkChrmMCPyzSpJD0n7OXG3YTfsqfzcbpwWeuBNjcXghAd1GPxNF2dBSM95T
-         MZVmw2W5OIhJkicZCCx9GyxPygEc5yjfPd53kEqF8EZ8fAVF2dMpv2T+/TOGe1MLlE4f
-         8+nTWr7oZLD1NvwZ2MtMeQmLByizaUHQEv/PYwM8wQJZ4HgKMATa2iR2KJikY6EPkz/l
-         7qXw1fH6XUkewjscrAfl1tqyedbr8Xhji+gWZxZt4E5NgUOd//MTwZrOuAn5oBfoUIoi
-         YioelxJ9i1FChJ4Ra7nSiubcpLS4Kf2w8anZe2xsByMn6PHmdK8nmXRoZBRXWJOSsHbG
-         yyDQ==
+        bh=29DoY8Y1qdOHbQr7Smx+ml+g3M6SNjpQzRfMcm5ydbU=;
+        b=MiFxIUgbCYIWHfUESe4fCpAY4485JgxuhEl+NmRNHaPMr3jwbY5Nkh7AGnPbfr2dpY
+         S2xIsM0P3ui5BsaMmPWushLpdF68/jofg47hR2KoOG6J8v5JD8Em6w0blIYRcV9ftfAe
+         JDJb1rSklENmtsjFH0gNg+HIunh2Mt8N4twrWW2HZ1m4CM1ISVdIHd6MB2ju9lDnVnpg
+         mEzaJsG6adLsBLKhJVWJ5OxeP4z1j/p1FWJwnzs0Oa2wjidMNdrNqoP0kOOUJT9gwWfJ
+         nLx7cvfiTdpkl17WLgTrBj9G9KNVXfebYloujXKCJpub0aRQXdCLuhIrwiFupdU/sqOx
+         k/Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680910379;
+        d=1e100.net; s=20210112; t=1680910381;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tX6CHwqi/+vmAQd+dDGZvcYGjpDNB6U9rI2y1SgCLzw=;
-        b=Jr08GjpP2UYkTYBxsIk5FYYR5KDFKh777sk7d3/6wPlUdBdN1pIXx+qIv+DMWFOBhe
-         QcX6FDVuEcN4CAJmQ4BlJNBKZudz7EveI15AwIT4Mzvr0XkUM+vrGMUNtkoYKDdZM4eL
-         t9TZKyA5qRozcKRaweaxGTDJelcpb8y6hMDc1jCW8BFdsiBr+6zJQGbK+h/JqOlxvQei
-         T8n07UKMMQW7KSytsiwJ/xaddQ06JT3zBemwujQJTj0TZSoI8nPp2zdrDM9DrH8z3ac9
-         u6zYFvqs4PVSLO3FH5sYHjvwbNxkA8Zmsvu7+OPw/yJ8dOGiQA/K14fzb/nxlBI4DOhi
-         3Osw==
-X-Gm-Message-State: AAQBX9diOfVTqqU96h2/n35+RqjgK5SmJ8npNY2ZN46bl5sPyAc8Z0w8
-        kJlMB85BpY8LXaoKE3skQEHGfkMbvW8=
-X-Google-Smtp-Source: AKy350ZGq+TQ7AlXgBYJyAMCF0BuViAvumLgn7XWPmozlegCdHMqWepTb3jR1sXsT7XitimErc5F4qNdd6g=
+        bh=29DoY8Y1qdOHbQr7Smx+ml+g3M6SNjpQzRfMcm5ydbU=;
+        b=gyBHyagRLbbjxwarz1dXlirWw4P67o9ZXl+C0CY67nnO3EIQUEbytCERa7x+qF2MGy
+         GS7gGoNNqF66lSafVY/P6FYzYyu+6PM17DFx8oRBEuYQLyj9GiN7pgGbugxh5EfnWkGH
+         dFh+ZxMyF5USPs6BRgTYSbCW4ocN6tQ3ZvcNapBFwyQcpIw+jiamYTt8yW7Ce+VDGNaP
+         IZRbM8Qh32thnGlUhlYwbZFO2mYLi6p/XiFQALHkYjrE/AYTmx+FB4NiNXk2KUp/JgK2
+         8LjvXQwqorZ3MF9ZUAxESDM5E8EDvlJEETiDFPW+a8R0Dajpteqx51Tn8JSx4nGq4bVD
+         /sSg==
+X-Gm-Message-State: AAQBX9dZbadplsEJwrtFELEAQY/x3ZddDywWbKIKwOYRA6uJQyrDPzk/
+        /HIrhgsYye1ECJ7Bjbtfv3LLc/5SaPI=
+X-Google-Smtp-Source: AKy350aqL2ZMekVnvF+rIk7Pq5lInsvesMWd0PTyGqxS5bzhCQNJzMWGVCS94FaEZmTm+SHqy9ULVBJSFQM=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1354:b0:62d:e8f1:edbf with SMTP id
- k20-20020a056a00135400b0062de8f1edbfmr1967544pfu.5.1680910379429; Fri, 07 Apr
- 2023 16:32:59 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a81:430d:0:b0:541:9063:8e9e with SMTP id
+ q13-20020a81430d000000b0054190638e9emr1883364ywa.2.1680910381152; Fri, 07 Apr
+ 2023 16:33:01 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  7 Apr 2023 16:32:49 -0700
+Date:   Fri,  7 Apr 2023 16:32:50 -0700
 In-Reply-To: <20230407233254.957013-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230407233254.957013-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230407233254.957013-2-seanjc@google.com>
-Subject: [PATCH v4 1/6] KVM: selftests: Add a common helper for the PMU event
- filter guest code
+Message-ID: <20230407233254.957013-3-seanjc@google.com>
+Subject: [PATCH v4 2/6] KVM: selftests: Add helpers for PMC asserts in PMU
+ event filter test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -74,80 +74,122 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Aaron Lewis <aaronlewis@google.com>
 
-Split out the common parts of the Intel and AMD guest code in the PMU
-event filter test into a helper function.  This is in preparation for
-adding additional counters to the test.
+Add helper macros to consolidate the asserts that a PMC is/isn't counting
+(branch) instructions retired.  This will make it easier to add additional
+asserts related to counting instructions later on.
 
 No functional changes intended.
 
 Signed-off-by: Aaron Lewis <aaronlewis@google.com>
+[sean: add "INSTRUCTIONS", massage changelog]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../kvm/x86_64/pmu_event_filter_test.c        | 29 ++++++++++++-------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ .../kvm/x86_64/pmu_event_filter_test.c        | 52 ++++++++++---------
+ 1 file changed, 27 insertions(+), 25 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-index 1f60dfae69e0..a00a9d6ea41e 100644
+index a00a9d6ea41e..9b53e02a0565 100644
 --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-@@ -100,6 +100,15 @@ static void check_msr(uint32_t msr, uint64_t bits_to_flip)
- 		GUEST_SYNC(0);
+@@ -244,14 +244,27 @@ static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_filter *f,
+ 	return f;
  }
  
-+static uint64_t run_and_measure_loop(uint32_t msr_base)
-+{
-+	uint64_t branches_retired = rdmsr(msr_base + 0);
++#define ASSERT_PMC_COUNTING_INSTRUCTIONS(count)						\
++do {											\
++	if (count != NUM_BRANCHES)							\
++		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",	\
++			__func__, count, NUM_BRANCHES);					\
++	TEST_ASSERT(count, "Allowed PMU event is not counting.");			\
++} while (0)
 +
-+	__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
++#define ASSERT_PMC_NOT_COUNTING_INSTRUCTIONS(count)					\
++do {											\
++	if (count)									\
++		pr_info("%s: Branch instructions retired = %lu (expected 0)\n",		\
++			__func__, count);						\
++	TEST_ASSERT(!count, "Disallowed PMU Event is counting");			\
++} while (0)
 +
-+	return rdmsr(msr_base + 0) - branches_retired;
-+}
-+
- static void intel_guest_code(void)
+ static void test_without_filter(struct kvm_vcpu *vcpu)
  {
- 	check_msr(MSR_CORE_PERF_GLOBAL_CTRL, 1);
-@@ -108,16 +117,15 @@ static void intel_guest_code(void)
- 	GUEST_SYNC(1);
+ 	uint64_t count = run_vcpu_to_sync(vcpu);
  
- 	for (;;) {
--		uint64_t br0, br1;
-+		uint64_t count;
- 
- 		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
- 		wrmsr(MSR_P6_EVNTSEL0, ARCH_PERFMON_EVENTSEL_ENABLE |
- 		      ARCH_PERFMON_EVENTSEL_OS | INTEL_BR_RETIRED);
--		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 1);
--		br0 = rdmsr(MSR_IA32_PMC0);
--		__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
--		br1 = rdmsr(MSR_IA32_PMC0);
--		GUEST_SYNC(br1 - br0);
-+		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0x1);
-+
-+		count = run_and_measure_loop(MSR_IA32_PMC0);
-+		GUEST_SYNC(count);
- 	}
+-	if (count != NUM_BRANCHES)
+-		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",
+-			__func__, count, NUM_BRANCHES);
+-	TEST_ASSERT(count, "Allowed PMU event is not counting");
++	ASSERT_PMC_COUNTING_INSTRUCTIONS(count);
  }
  
-@@ -133,15 +141,14 @@ static void amd_guest_code(void)
- 	GUEST_SYNC(1);
+ static uint64_t test_with_filter(struct kvm_vcpu *vcpu,
+@@ -269,12 +282,9 @@ static void test_amd_deny_list(struct kvm_vcpu *vcpu)
  
- 	for (;;) {
--		uint64_t br0, br1;
-+		uint64_t count;
- 
- 		wrmsr(MSR_K7_EVNTSEL0, 0);
- 		wrmsr(MSR_K7_EVNTSEL0, ARCH_PERFMON_EVENTSEL_ENABLE |
- 		      ARCH_PERFMON_EVENTSEL_OS | AMD_ZEN_BR_RETIRED);
--		br0 = rdmsr(MSR_K7_PERFCTR0);
--		__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
--		br1 = rdmsr(MSR_K7_PERFCTR0);
--		GUEST_SYNC(br1 - br0);
+ 	f = create_pmu_event_filter(&event, 1, KVM_PMU_EVENT_DENY, 0);
+ 	count = test_with_filter(vcpu, f);
+-
+ 	free(f);
+-	if (count != NUM_BRANCHES)
+-		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",
+-			__func__, count, NUM_BRANCHES);
+-	TEST_ASSERT(count, "Allowed PMU event is not counting");
 +
-+		count = run_and_measure_loop(MSR_K7_PERFCTR0);
-+		GUEST_SYNC(count);
- 	}
++	ASSERT_PMC_COUNTING_INSTRUCTIONS(count);
  }
  
+ static void test_member_deny_list(struct kvm_vcpu *vcpu)
+@@ -283,10 +293,8 @@ static void test_member_deny_list(struct kvm_vcpu *vcpu)
+ 	uint64_t count = test_with_filter(vcpu, f);
+ 
+ 	free(f);
+-	if (count)
+-		pr_info("%s: Branch instructions retired = %lu (expected 0)\n",
+-			__func__, count);
+-	TEST_ASSERT(!count, "Disallowed PMU Event is counting");
++
++	ASSERT_PMC_NOT_COUNTING_INSTRUCTIONS(count);
+ }
+ 
+ static void test_member_allow_list(struct kvm_vcpu *vcpu)
+@@ -295,10 +303,8 @@ static void test_member_allow_list(struct kvm_vcpu *vcpu)
+ 	uint64_t count = test_with_filter(vcpu, f);
+ 
+ 	free(f);
+-	if (count != NUM_BRANCHES)
+-		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",
+-			__func__, count, NUM_BRANCHES);
+-	TEST_ASSERT(count, "Allowed PMU event is not counting");
++
++	ASSERT_PMC_COUNTING_INSTRUCTIONS(count);
+ }
+ 
+ static void test_not_member_deny_list(struct kvm_vcpu *vcpu)
+@@ -310,10 +316,8 @@ static void test_not_member_deny_list(struct kvm_vcpu *vcpu)
+ 	remove_event(f, AMD_ZEN_BR_RETIRED);
+ 	count = test_with_filter(vcpu, f);
+ 	free(f);
+-	if (count != NUM_BRANCHES)
+-		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",
+-			__func__, count, NUM_BRANCHES);
+-	TEST_ASSERT(count, "Allowed PMU event is not counting");
++
++	ASSERT_PMC_COUNTING_INSTRUCTIONS(count);
+ }
+ 
+ static void test_not_member_allow_list(struct kvm_vcpu *vcpu)
+@@ -325,10 +329,8 @@ static void test_not_member_allow_list(struct kvm_vcpu *vcpu)
+ 	remove_event(f, AMD_ZEN_BR_RETIRED);
+ 	count = test_with_filter(vcpu, f);
+ 	free(f);
+-	if (count)
+-		pr_info("%s: Branch instructions retired = %lu (expected 0)\n",
+-			__func__, count);
+-	TEST_ASSERT(!count, "Disallowed PMU Event is counting");
++
++	ASSERT_PMC_NOT_COUNTING_INSTRUCTIONS(count);
+ }
+ 
+ /*
 -- 
 2.40.0.577.gac1e443424-goog
 
