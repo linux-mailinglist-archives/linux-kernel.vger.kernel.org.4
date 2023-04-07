@@ -2,115 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D669C6DAA7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6D56DAA7E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239906AbjDGIyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S240120AbjDGI5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjDGIyo (ORCPT
+        with ESMTP id S231962AbjDGI44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:54:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59F59B;
-        Fri,  7 Apr 2023 01:54:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A30061055;
-        Fri,  7 Apr 2023 08:54:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA56C433EF;
-        Fri,  7 Apr 2023 08:54:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680857682;
-        bh=EvA6NlZ91K5IE11Qbj4sH4qqEtPca3tMfVWSQYjOy2A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KYcRe90vJBmgZDk8WX2B03GdBkIJFC5DBlP9VgWOsTNpmM3Q9OSey6MhDvrJH1DiC
-         Q77Y0KB5RvKe16Rctbo8naMajPOW+XnM9WvnkGRcMfD4HWNM04T9ar3zgyd1CfZiGS
-         DUCaZ5Gk2FYEv01y7XEPSLfAKVj0JtJY0a1TUs7HRty/K/pQTR8PudGG6EMyc38Oe3
-         h1ARV9YMIazMG1eJ2flkOQAo8o433T1zq4VvrBkDjQqCgvH3Ffq8pf55johrWeSyXX
-         ogvCbklSdbgjMBV0GNiojB2qyMvW7LRrzH0MspCZPg8LjkXfAXD1lWs+VJb6gakpr3
-         0uNIbfq0Az9aw==
-From:   guoren@kernel.org
-To:     guoren@kernel.org
-Cc:     linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] csky: mmu: Prevent spurious page faults
-Date:   Fri,  7 Apr 2023 04:54:34 -0400
-Message-Id: <20230407085434.348938-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Fri, 7 Apr 2023 04:56:56 -0400
+Received: from sender3-op-o19.zoho.com (sender3-op-o19.zoho.com [136.143.184.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E9759C0;
+        Fri,  7 Apr 2023 01:56:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1680857776; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=eD69UV6FPb4trZ36yZvjLrKJ9AWyosoQhjtqjUMLAzzzJAE/QK5kQ7EzeeIxWeg9fymLzRy6fMmzAj6y9EuVzGrurJyA4lWyXN0jgLQ2IWzGCsxYo0a+JEdjGwHdQeeU+Pdsz4Dess8WAnp8D3/Q4k0g4ns8N08ERC1nEj2/qxo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1680857776; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=t/T0BOX3OWxKWtq3g05V2OS56Io+k4y+U0rdJrf/+0I=; 
+        b=Nb47N+jiUNJmWv8kZ0wBDCvxQ9JXeo+Qu4CUHF/m1RAkTrkK/GbmpDgZDaiWDFfQhuzVjCMLGk/xOQFKFXXwiFp9avNSEzqgXxfokqsiOrP1/8iiO6jQCU/gtHa6Dzlu4nVxFwV/bzRHdiiYWBMy/7qcx3IUBb8/luVzssDe4I4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1680857776;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=t/T0BOX3OWxKWtq3g05V2OS56Io+k4y+U0rdJrf/+0I=;
+        b=dChtzAJAi+XsyVA+GqMRyBispyY5jJwjjzm5/HDkNGyZ4k1MhT+P0l/NPqvUienH
+        7+QISm9ra76eeXgpMWVChHTYHv7t1lDgXE83HGfGjWl+GJKDcf0YHWTF1z8urB7JmZX
+        s+2mqPNU3856lAi6dZax96EIjXpeljcHGjktVcaw=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 168085777521561.24779880982169; Fri, 7 Apr 2023 01:56:15 -0700 (PDT)
+Message-ID: <0cdb0504-bc1e-c255-a7d2-4dd96bd8e6e3@arinc9.com>
+Date:   Fri, 7 Apr 2023 11:56:08 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH net-next] net: dsa: mt7530: fix port specifications
+ for MT7988
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230406100445.52915-1-arinc.unal@arinc9.com>
+ <ZC6n1XAGyZFlxyXx@shell.armlinux.org.uk>
+ <e413a182-ce93-5831-09f5-19d34d7f7fcf@arinc9.com>
+ <ZC9AXyuFqa3bqF3Q@makrotopia.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <ZC9AXyuFqa3bqF3Q@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On 7.04.2023 00:57, Daniel Golle wrote:
+> On Fri, Apr 07, 2023 at 12:43:41AM +0300, Arınç ÜNAL wrote:
+>> On 6.04.2023 14:07, Russell King (Oracle) wrote:
+>>> On Thu, Apr 06, 2023 at 01:04:45PM +0300, arinc9.unal@gmail.com wrote:
+>>>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>
+>>>> On the switch on the MT7988 SoC, there are only 4 PHYs. There's only port 6
+>>>> as the CPU port, there's no port 5. Split the switch statement with a check
+>>>> to enforce these for the switch on the MT7988 SoC. The internal phy-mode is
+>>>> specific to MT7988 so put it for MT7988 only.
+>>>>
+>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>> ---
+>>>>
+>>>> Daniel, this is based on the information you provided me about the switch.
+>>>> I will add this to my current patch series if it looks good to you.
+>>>>
+>>>> Arınç
+>>>>
+>>>> ---
+>>>>    drivers/net/dsa/mt7530.c | 67 ++++++++++++++++++++++++++--------------
+>>>>    1 file changed, 43 insertions(+), 24 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+>>>> index 6fbbdcb5987f..f167fa135ef1 100644
+>>>> --- a/drivers/net/dsa/mt7530.c
+>>>> +++ b/drivers/net/dsa/mt7530.c
+>>>> @@ -2548,7 +2548,7 @@ static void mt7988_mac_port_get_caps(struct dsa_switch *ds, int port,
+>>>>    	phy_interface_zero(config->supported_interfaces);
+>>>>    	switch (port) {
+>>>> -	case 0 ... 4: /* Internal phy */
+>>>> +	case 0 ... 3: /* Internal phy */
+>>>>    		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+>>>>    			  config->supported_interfaces);
+>>>>    		break;
+>>>> @@ -2710,37 +2710,56 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
+>>>>    	struct mt7530_priv *priv = ds->priv;
+>>>>    	u32 mcr_cur, mcr_new;
+>>>> -	switch (port) {
+>>>> -	case 0 ... 4: /* Internal phy */
+>>>> -		if (state->interface != PHY_INTERFACE_MODE_GMII &&
+>>>> -		    state->interface != PHY_INTERFACE_MODE_INTERNAL)
+>>>> -			goto unsupported;
+>>>> -		break;
+>>>> -	case 5: /* Port 5, a CPU port. */
+>>>> -		if (priv->p5_interface == state->interface)
+>>>> +	if (priv->id == ID_MT7988) {
+>>>> +		switch (port) {
+>>>> +		case 0 ... 3: /* Internal phy */
+>>>> +			if (state->interface != PHY_INTERFACE_MODE_INTERNAL)
+>>>
+>>> How do these end up with PHY_INTERFACE_MODE_INTERNAL ? phylib defaults
+>>> to GMII mode without something else being specified in DT.
+>>>
+>>> Also note that you should *not* be validating state->interface in the
+>>> mac_config() method because it's way too late to reject it - if you get
+>>> an unsupported interface here, then that is down to the get_caps()
+>>> method being buggy. Only report interfaces in get_caps() that you are
+>>> prepared to handle in the rest of the system.
+>>
+>> This is already the case for all three get_caps(). The supported interfaces
+>> for each port are properly defined.
+>>
+>> Though mt7988_mac_port_get_caps() clears the config->supported_interfaces
+>> bitmap before reporting the supported interfaces. I don't think this is
+>> needed as all bits in the bitmap should already be initialized to zero when
+>> the phylink_config structure is allocated.
+>>
+>> I'm not sure if your suggestion is to make sure the supported interfaces are
+>> properly reported on get_caps(), or validate state->interface somewhere
+>> else.
+> 
+> I think what Russell meant is just there is no point in being overly
+> precise about permitted interface modes in mt753x_phylink_mac_config,
+> as this function is not meant and called too late to validate the
+> validity of the selected interface mode.
+> 
+> You change to mt7988_mac_port_get_caps looks correct to me and doing
+> this will already prevent mt753x_phylink_mac_config from ever being
+> called on MT7988 for port == 4 as well as and port == 5.
 
-C-SKY MMU would pre-fetch invalid pte entries, and it could work with
-flush_tlb_fix_spurious_fault, but the additional page fault exceptions
-would reduce performance. So flushing the entry of the TLB would prevent
-the following spurious page faults. Here is the test code:
+Ah, thanks for pointing this out Daniel. I see 
+ds->ops->phylink_get_caps() is run right before phylink_create() on 
+dsa_port_phylink_create(), as it should get the capabilities before 
+creating an instance.
 
-define DATA_LEN  4096
-define COPY_NUM  (504*100)
+Should I remove phy_interface_zero(config->supported_interfaces); 
+mt7988_mac_port_get_caps()? I'd prefer to do identical operations on 
+each get_caps(), if there's no apparent reason for this to be on 
+mt7988_mac_port_get_caps().
 
-unsigned char src[DATA_LEN*COPY_NUM] = {0};
-unsigned char dst[DATA_LEN*COPY_NUM] = {0};
-
-unsigned char func_src[DATA_LEN*COPY_NUM] = {0};
-unsigned char func_dst[DATA_LEN*COPY_NUM] = {0};
-
-void main(void)
-{
-	int j;
-	for (j = 0; j < COPY_NUM; j++)
-		memcpy(&dst[j*DATA_LEN], &src[j*DATA_LEN], 4);
-}
-
-perf stat -e page-faults ./main.elf
-
-The amount of page fault traps would be reduced in half with the patch.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/csky/abiv1/cacheflush.c | 2 ++
- arch/csky/abiv2/cacheflush.c | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
-index fb91b069dc69..6f38cc7944e1 100644
---- a/arch/csky/abiv1/cacheflush.c
-+++ b/arch/csky/abiv1/cacheflush.c
-@@ -40,6 +40,8 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
- 	unsigned long pfn = pte_pfn(*ptep);
- 	struct page *page;
- 
-+	flush_tlb_page(vma, addr);
-+
- 	if (!pfn_valid(pfn))
- 		return;
- 
-diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
-index 39c51399dd81..ff39c897c820 100644
---- a/arch/csky/abiv2/cacheflush.c
-+++ b/arch/csky/abiv2/cacheflush.c
-@@ -12,6 +12,8 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
- 	unsigned long addr;
- 	struct page *page;
- 
-+	flush_tlb_page(vma, address);
-+
- 	if (!pfn_valid(pte_pfn(*pte)))
- 		return;
- 
--- 
-2.36.1
-
+Arınç
