@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4FC6DB5DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6E16DB5E1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjDGVq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S230316AbjDGVrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDGVqY (ORCPT
+        with ESMTP id S229724AbjDGVr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:46:24 -0400
+        Fri, 7 Apr 2023 17:47:28 -0400
 Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0005AC178
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:46:22 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id e9so29347663ljq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:46:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603CCC178
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:47:26 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q14so44612324ljm.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:47:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680903981;
+        d=chromium.org; s=google; t=1680904044;
         h=cc:to:subject:message-id:date:user-agent:from:references
          :in-reply-to:mime-version:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MZgziCzrlnZ1KMQngzHso1b66A2bwnxe6r27PGoDf30=;
-        b=M1ElGxSdslOWrChiUFsekSQMA8P7KQRV0fcTWd/bFeNsaSyG23XXQH+saSYXouolNo
-         F1xvqZNMgC+qKsKO1kmV7pbZHeBmlWY1owLhjmw7XmxFyOEDeuM+U0KtmmOzXrfTn57k
-         jeT7WMiLF9O8hKv9v2lvPBh1VX5cliB48mI7o=
+        bh=QKr1VFdANaH910gTqIuF+QQoeNNCvbMtK24RJzAeJ1s=;
+        b=BERlpGeiqyFM0KnKvmiUU8mdGnHlblFPFC9arB92MIKu/seqPM4ZnZ+MjWIffcIQ70
+         6nPyThcFs0Y78oeP9UgGSbD2pf7HcmqNZsT/SdCz5Ye+azz5dajvX/5PxgoJCBPCtu3v
+         G+EIWBDM5fL18cgxwDPF6NQRIZQNPX68rprMQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680903981;
+        d=1e100.net; s=20210112; t=1680904044;
         h=cc:to:subject:message-id:date:user-agent:from:references
          :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MZgziCzrlnZ1KMQngzHso1b66A2bwnxe6r27PGoDf30=;
-        b=rs4cDkuZxm6gNBgPm8QuJUjOoMoLQqZxxyeklDqW/gQmYArmE1MjTKMli1iB2dPaQQ
-         I9Cy5pTDu9iDLWOIiDVRh3+XmBXK6Hxi0lkvaiFJqstbryTA6Q/D/hmw4ks9JaO6uEpd
-         nFx+uY/5TiL+p9D0XM6Sou1yfIFZirTxW/l1gm5efjIEWt7kXAC2xF/ZyjMqm5bBpuJO
-         gSuXLrs4/x/RfWkoFzRmroALLz7vH1Nzd+8vSRHnQZ4LmbxOT2UtURGaNAG4BEfBizsi
-         v71EWF07mrtI+nJiYtpx9XpzDrfdG3ThNdZZejUXh1ztaNOD6ozACbkIzpFpflUkkFs3
-         BhZA==
-X-Gm-Message-State: AAQBX9ccAnFunJ9BP8zpO6wqHZHXjMRsIJtz1BevggakWe4QLw2vHz/s
-        6ZBXqRe7VbatUiC89xaOSZvy3gd64x6u6VTRhJg4JA==
-X-Google-Smtp-Source: AKy350aqpjHi+SDJccBKfvG/HJ3MWImHDy3IF4CAPi73MJzymMzb0Ph0h2JD0VQkHHuADHARS5N4fBsPp1edjxNJTxA=
-X-Received: by 2002:a2e:8006:0:b0:2a6:de0:79af with SMTP id
- j6-20020a2e8006000000b002a60de079afmr929528ljg.10.1680903981221; Fri, 07 Apr
- 2023 14:46:21 -0700 (PDT)
+        bh=QKr1VFdANaH910gTqIuF+QQoeNNCvbMtK24RJzAeJ1s=;
+        b=b57ar188/3w8IqkkaRK06dG8AFhEtdKoDGyaaMS/zPvHhbYyYDiM83X8j8dKH4z5Ds
+         nZA2K5wVkFG6mA2RaUsIUhkhasNqz/Gn/bWEZ7RYVm3IuwGO7vNolTfCN8RbXQ+I/4H3
+         kovq5trrMp7ChkHe5SwA07nJWydnqU8A+Gc8Mu19sDy/NfOaPY6xkEjs3a75TuZF8JET
+         iDAXm1sdH2SjW+aEPbslCzgrmqTexTX/9gWAJahjj/c0SqQGaKTsaLC37Z8adl4yEz+i
+         1zEzVH21WpGaRiuoR0IAS21ytRoHzDwqqLXHsLzy3rULYD0s+Gc5JMpLN4SSs63AHFEu
+         WFSA==
+X-Gm-Message-State: AAQBX9e0vegdSKWmEOCUWPBh2dK09bMQ3Cl4B7p+w9Hlp7Bca4dyRW2h
+        Il/ZJ9/r4neNX98gNupdS7odAmzOfdqWAKW7h9umQQ==
+X-Google-Smtp-Source: AKy350ZkmDyMUF2lwovyh7fmUX0Xqi/7P8gpx4vAUkL98n181sdNQCjwfzR/32ySpWV+vBM0DQ4nXhrXJTY5+W6hCOQ=
+X-Received: by 2002:a2e:be9d:0:b0:298:b378:961f with SMTP id
+ a29-20020a2ebe9d000000b00298b378961fmr1072284ljr.0.1680904044665; Fri, 07 Apr
+ 2023 14:47:24 -0700 (PDT)
 Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 7 Apr 2023 14:46:20 -0700
+ HTTPREST; Fri, 7 Apr 2023 14:47:24 -0700
 MIME-Version: 1.0
-In-Reply-To: <20230329143317.RFC.v2.2.I30d8e1ca10cfbe5403884cdd192253a2e063eb9e@changeid>
-References: <20230329143317.RFC.v2.1.I4e9d433ea26360c06dd1381d091c82bb1a4ce843@changeid>
- <20230329143317.RFC.v2.2.I30d8e1ca10cfbe5403884cdd192253a2e063eb9e@changeid>
+In-Reply-To: <20230407142859.1.Ia5d70e320b60d6707c6182879097708e49b8b519@changeid>
+References: <20230407142859.1.Ia5d70e320b60d6707c6182879097708e49b8b519@changeid>
 From:   Stephen Boyd <swboyd@chromium.org>
 User-Agent: alot/0.10
-Date:   Fri, 7 Apr 2023 14:46:20 -0700
-Message-ID: <CAE-0n53Eb1BeDPmjBycXUaQAF4ppiAM6UDWje_jiB9GAmR8MMw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 2/2] regulator: core: Avoid lockdep reports when
- resolving supplies
+Date:   Fri, 7 Apr 2023 14:47:24 -0700
+Message-ID: <CAE-0n534cJ-=WdE81oDfGHS=6i5CsW5M8UgYZKrUxLeuO3a9aQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: qcom: Add "and" to PIN_CONFIG_INPUT_ENABLE comment
 To:     Douglas Anderson <dianders@chromium.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        David Collins <quic_collinsd@quicinc.com>,
-        David Collins <collinsd@codeaurora.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
@@ -75,118 +72,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Douglas Anderson (2023-03-29 14:33:54)
-> diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-> index 9a13240f3084..08726bc0da9d 100644
-> --- a/drivers/regulator/core.c
-> +++ b/drivers/regulator/core.c
-> @@ -207,6 +207,78 @@ static void regulator_unlock(struct regulator_dev *rdev)
->         mutex_unlock(&regulator_nesting_mutex);
->  }
+Quoting Douglas Anderson (2023-04-07 14:29:14)
+> The comment recently added talking about PIN_CONFIG_INPUT_ENABLE is
+> clearly missing the word "and". Comments live forever, so let's fix
+> it.
 >
-> +/**
-> + * regulator_lock_two - lock two regulators
-> + * @rdev1:             first regulator
-> + * @rdev2:             second regulator
-> + * @ww_ctx:            w/w mutex acquire context
-> + *
-> + * Locks both rdevs using the regulator_ww_class.
-> + */
-> +static void regulator_lock_two(struct regulator_dev *rdev1,
-> +                              struct regulator_dev *rdev2,
-> +                              struct ww_acquire_ctx *ww_ctx)
-> +{
-> +       struct regulator_dev *tmp;
-> +       int ret;
-> +
-> +       ww_acquire_init(ww_ctx, &regulator_ww_class);
-> +
-> +       /* Try to just grab both of them */
-> +       ret = regulator_lock_nested(rdev1, ww_ctx);
-> +       WARN_ON(ret);
-> +       ret = regulator_lock_nested(rdev2, ww_ctx);
-> +       if (ret != -EDEADLOCK) {
-> +               WARN_ON(ret);
-> +               goto exit;
-> +       }
+> Fixes: e49eabe3e13f ("pinctrl: qcom: Support OUTPUT_ENABLE; deprecate INPUT_ENABLE")
+> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> Link: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/4409769/comment/9a1d5def_e1e71db7/
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
 
-I think this would be clearer if we had two local variable pointers
-
-	struct regulator_dev *held, *contended;
-
-	held = rdev1;
-	contended = rdev2;
-
-> +
-> +       while (true) {
-> +               /*
-> +                * Start of loop: rdev1 was locked and rdev2 was contended.
-> +                * Need to unlock rdev1, slowly lock rdev2, then try rdev1
-> +                * again.
-> +                */
-> +               regulator_unlock(rdev1);
-
-		regulator_unlock(held);
-
-> +
-> +               ww_mutex_lock_slow(&rdev2->mutex, ww_ctx);
-> +               rdev2->ref_cnt++;
-> +               rdev2->mutex_owner = current;
-> +               ret = regulator_lock_nested(rdev1, ww_ctx);
-
-		ww_mutex_lock_slow(&contended->mutex, ww_ctx);
-		contended->ref_cnt++;
-		contended->mutex_owner = current;
-		swap(held, contended);
-		ret = regulator_lock_nested(contended, ww_ctx);
-		if (ret != -EDEADLOCK) {
-
-> +                       WARN_ON(ret);
-> +                       break;
-> +               }
-> +       }
-> +
-> +exit:
-> +       ww_acquire_done(ww_ctx);
-> +}
-> +
-> @@ -1627,8 +1699,8 @@ static int set_machine_constraints(struct regulator_dev *rdev)
->
->  /**
->   * set_supply - set regulator supply regulator
-> - * @rdev: regulator name
-
-It certainly wasn't the name :)
-
-> - * @supply_rdev: supply regulator name
-> + * @rdev: regulator (locked)
-> + * @supply_rdev: supply regulator (locked))
->   *
->   * Called by platform initialisation code to set the supply regulator for this
->   * regulator. This ensures that a regulators supply will also be enabled by the
-[...]
-> @@ -2190,7 +2263,9 @@ struct regulator *_regulator_get(struct device *dev, const char *id,
->                 return regulator;
->         }
->
-> +       regulator_lock(rdev);
->         regulator = create_regulator(rdev, dev, id);
-> +       regulator_unlock(rdev);
-
-I'm sad that we're now locking the entire time create_regulator() is
-called. Can that be avoided? I see that create_regulator() publishes the
-consumer on the consumer_list, but otherwise I don't think it needs to
-hold the regulator lock. It goes on to call debugfs code after
-allocating memory. After this patch, we're going to be holding the lock
-for that regulator across debugfs APIs. I suspect that may lead to more
-problems later on because the time we hold the lock is extremely wide
-now.
-
-Of course, we were already holding the child regulator's lock for the
-supply, because that's what this patch is fixing in
-regulator_resolve_supply(). I'm just nervous that we're holding the lock
-for a much wider time now. Maybe we can have create_regulator() return
-the regulator and add a new function like add_regulator_consumer() that
-does the list modification? Then we can make create_regulator() do
-everything without holding a lock and have a very short time where the
-new function locks two regulator locks and does the linkage.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
