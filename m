@@ -2,116 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287C26DA96E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE6D6DA973
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjDGH21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 03:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S231470AbjDGHfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 03:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjDGH2Z (ORCPT
+        with ESMTP id S232559AbjDGHez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 03:28:25 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FBD5FC8;
-        Fri,  7 Apr 2023 00:28:23 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id j14-20020a17090a7e8e00b002448c0a8813so3231794pjl.0;
-        Fri, 07 Apr 2023 00:28:23 -0700 (PDT)
+        Fri, 7 Apr 2023 03:34:55 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D149ED1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 00:34:53 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-93db98f7b33so136155566b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 00:34:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680852503; x=1683444503;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l2enqQvuEs1jYv2cwpWUDVKN/fRcPw2O9o6eoDaRdt0=;
-        b=KhwFxcGG4g7RlR122IkmT1IlsVUesqVNVIODpiIRvDKuOhdDJhN4y7uKAqPb30ghZx
-         e5+gjkREGAJfM4FqTRH2udw8h5qzmrEoxvmGSN9kc7Lq0Qxc+CwubJML5K7Ay/VD5gLa
-         zMJ3Ky1X8u8M7mx/GWbltUonK5RbMno/GghQERVc5UNlf6zXMF+opx9dFLI0fngfIo1W
-         zRjaAljNwuwE6jQY9r1Bz4fpifRpTFeI4/l/Bvs1Alkkgq+fcfwUPnB0RTrqtObJYLCL
-         BuAtiuAKdYIkyQ9nILyxVG2jKhtNh8uE7ID6P54bbtTPGKBbNn3wsQMydHO4ZW0Tcy8L
-         U1cA==
+        d=google.com; s=20210112; t=1680852892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xufJewXyhNV91ceoQQRbqkfFuhj5XUSD9386rC0IB28=;
+        b=gDMbr9D7tJfW5EhGD1TauIK78v+jZ7HUY7e7xfnLQhu1bEnuRBb0SqZjJ51+UqnBdc
+         QrABNaCBE42IvweCIbz+OmT7FfcD6fDU31Aj8En6ELtBabJM0gTH+lLXGmKH/DZRtp+P
+         FfNP2yFQVIMY0xfUglALIrdcxAM40WZgLRaKlFjvmvF8nzE0LpLZqVSTArizOpK6o86n
+         F59MbAyWPqLUz1onQKYeDGol9W6HmV3j24HnaNBKgFUPpu5qPJSUTORcD+uWZSzrhoJH
+         Gft2x4kLBBdmGR32hJdvvPnUqtQCfIryMpFtmCWIgxEzTKwurrEKiBUVgyu4XHizGsur
+         iMhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680852503; x=1683444503;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l2enqQvuEs1jYv2cwpWUDVKN/fRcPw2O9o6eoDaRdt0=;
-        b=ZCvwaUCF/rEvt2ovvdLazyu8KswVXaV0B7U68zsqrM1Rc+zsMiT1L7zal95enGOSbB
-         R2yNJCCGSYvTwqKKsrpO5NKjKnhwBj9lgeyI2hELzWkjzSvOZInc/54mKrNiHpuESrQK
-         xivRTynNtB/XxGuP/mWXL6IV9j8TwzWZCUx8wX/mSSWoTz2TXJ3GveTAxjanytZH7CyD
-         8UnATH/WJNi2JKyOX4ImkkuyJs0L9mnXGDbqE+iKhj5esVdCw5YkH3tn4ixPRunAcY6Z
-         SSvjLRdElSn9SMMj2RpHcAYWPfTOoN/zhzs/FXfmEXktSC+H3LYJiFVPOAGEpi6BD7X5
-         uX8w==
-X-Gm-Message-State: AAQBX9ev/k/JfZUjUSlBoFk72BSkHYyi+Om0cai3SFi/CCLd/CEWC5ad
-        3Cu2QfDcmJMwON24RSYxjIk=
-X-Google-Smtp-Source: AKy350aB5h3K3mJFKmvyWVJCPTARcbItlhboNrx5bWEIZN334+N6iEC8aNb0GLNCROQxzCmBkVMZ0A==
-X-Received: by 2002:a05:6a20:3b84:b0:db:b960:d319 with SMTP id b4-20020a056a203b8400b000dbb960d319mr2023093pzh.12.1680852502802;
-        Fri, 07 Apr 2023 00:28:22 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id 25-20020aa79119000000b005ac419804d3sm2380632pfh.186.2023.04.07.00.28.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 00:28:22 -0700 (PDT)
-Message-ID: <9697a5b9-0396-c90e-1fbf-cc14d1af55ca@gmail.com>
-Date:   Fri, 7 Apr 2023 15:28:14 +0800
+        d=1e100.net; s=20210112; t=1680852892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xufJewXyhNV91ceoQQRbqkfFuhj5XUSD9386rC0IB28=;
+        b=eaZIR+E0FbcgxAFnGZINLSZI8V8x5NR9LGluul5r6ztM/ihxEUDQBk0N5zFOVPsE5m
+         4TWZEr+g8eRB7hMI1mATKlNMakg6f1DIWxX4d05/ASkppT8JnDwdyUxy+Bd7CjVpODAt
+         S+Lumf8utn+/DOzHEEDO3LB841avNtuzWup3sE4UlQ98JEOBosYNzF/17Ofr4oNAFOYS
+         xgVnsAquSy+3M3pLJ1b4dS3XW7Dsu58QeiP6YVlxERkoZ+IUWKyMyETCOJuUNR8GsW/G
+         JYQWOs06Kp8pWnbPcfOT/RxSGz+KToilh+zwniokff/mBVFmYtYGBeJxfV7cgph0Qnr9
+         tErQ==
+X-Gm-Message-State: AAQBX9dOOoSQLppfCukGogFYfqmSYvr2Aa8MDJkCBg5TJy7nCg0Dxjw4
+        GbwEOrqCpYMHKN92MoCXGp50x7bbzYlxmTEGtZ7TMw==
+X-Google-Smtp-Source: AKy350bF8961SbdQkzvhhN/J2V2TxAtpP2NJYlX5JDDN+lnoULk6K/VoRyybz83rRM6Adk8ORW5BfMtw4ISKJ9e8OKk=
+X-Received: by 2002:a50:d716:0:b0:502:6d4b:40f5 with SMTP id
+ t22-20020a50d716000000b005026d4b40f5mr997137edi.7.1680852891875; Fri, 07 Apr
+ 2023 00:34:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH v4 00/12] KVM: x86: Add AMD Guest PerfMonV2 PMU support
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230214050757.9623-1-likexu@tencent.com>
- <168083228231.867070.5028004042976729728.b4-ty@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <168083228231.867070.5028004042976729728.b4-ty@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
+ <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com> <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
+ <8a837998-604f-a871-729e-aa274a621481@collabora.com>
+In-Reply-To: <8a837998-604f-a871-729e-aa274a621481@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Fri, 7 Apr 2023 09:34:40 +0200
+Message-ID: <CABb0KFEBqAMWWpAeBfqzA4JrHo3yLyaT0rqKTUn28O0hE+szBA@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/2023 10:02 am, Sean Christopherson wrote:
-> On Tue, 14 Feb 2023 13:07:45 +0800, Like Xu wrote:
->> Starting with Zen4, core PMU on AMD platforms such as Genoa and
->> Ryzen-7000 will support PerfMonV2, and it is also compatible with
->> legacy PERFCTR_CORE behavior and msr addresses.
->>
->> If you don't have access to the hardware specification, the commits
->> d6d0c7f681fd..7685665c390d for host perf can also bring a quick
->> overview. Its main change is the addition of three msr's equivalent
->> to Intel V2, namely global_ctrl, global_status, global_status_clear.
->>
->> [...]
-> 
-> Applied 1-3 to kvm-x86 pmu.  Note, I grabbed my full version of patch 2 that
-> also converts the "get" path.
-> 
-> My apologies for not reviewing this earlier in the cycle.  I need to pivot to
-> TDX+SNP stuff "soon", so AMD v2 support will likely miss 6.4, but I'll prioritize
-> reviewing and merging support in 6.5.
+On Thu, 6 Apr 2023 at 23:04, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 4/7/23 1:00=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+[...]
+> >>>> +               cur->len +=3D n_pages;
+> >>>> +               p->found_pages +=3D n_pages;
+> >>>> +
+> >>>> +               if (p->max_pages && (p->found_pages =3D=3D p->max_pa=
+ges))
+> >>>> +                       return PM_SCAN_FOUND_MAX_PAGES;
+> >>>> +
+> >>>> +               return 0;
+> >>>> +       }
+> >>>> +
+> >>>> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
+> >>>
+> >>> It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
+> >>> have vec_len =3D=3D 0 here, then we'd not fit the entry in the usersp=
+ace
+> >>> buffer anyway. Am I missing something?
+> >> No. I'd explained it with diagram last time:
+> >> https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@colla=
+bora.com
+> >>
+> >> I'll add a concise comment here.
+> >
+> > So it seems, but I think the code changed a bit and maybe could be
+> > simplified now? Since p->vec_len =3D=3D 0 is currently not valid, the
+> > field could count only the entries available in p->vec[] -- IOW: not
+> > include p->cur in the count.
+> I see. But this'll not work as we need to count p->cur to don't go above
+> the maximum count, p->vec_size.
 
-Thanks for your review time.
+You can subtract 1 from p->vec_size before the page walk to account
+for the buffer in `cur`.
 
-Since the biggest points of discussion so far is around
-	[PATCH v4 11/12] KVM: x86/svm/pmu: Add AMD PerfMonV2 support,
-so once the proposal on that part is confirmed by you, V5 is already in sight.
+[...]
+> >>>> +static inline int pagemap_scan_deposit(struct pagemap_scan_private =
+*p,
+> >>>> +                                      struct page_region __user *ve=
+c,
+> >>>> +                                      unsigned long *vec_index)
+> >>>
+> >>> ..._deposit() is used only in single place - please inline.
+> >> It is already inline.
+> >
+> > Sorry. I mean: please paste the code in place of the single call.
+> I've made it a separate function to make the code look better in the call=
+er
+> function and logically easier to understand. This function is ugly.
+> do_pagemap_scan() is also already very long function with lots of things
+> happening. If you still insist, I'll remove this function.
 
-> 
-> Thanks!
-> 
-> [01/12] KVM: x86/pmu: Rename pmc_is_enabled() to pmc_is_globally_enabled()
->          https://github.com/kvm-x86/linux/commit/cdd2fbf6360e
-> [02/12] KVM: VMX: Refactor intel_pmu_{g,}set_msr() to align with other helpers
->          https://github.com/kvm-x86/linux/commit/8bca8c5ce40b
-> [03/12] KVM: x86/pmu: Rewrite reprogram_counters() to improve performance
->          https://github.com/kvm-x86/linux/commit/649bccd7fac9
-> 
-> --
-> https://github.com/kvm-x86/linux/tree/next
-> https://github.com/kvm-x86/linux/tree/fixes
+Please do remove - it will make the copy to userspace code all neatly toget=
+her.
+
+[...]
+> >>>> +                */
+> >>>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
+> >>>> +                   ((end - start < HPAGE_SIZE) ||
+> >>>> +                    (p->max_pages &&
+> >>>> +                     (p->max_pages - p->found_pages) < n_pages))) {
+> >>>> +
+> >>>> +                       split_huge_pmd(vma, pmd, start);
+> >>>> +                       goto process_smaller_pages;
+> >>>> +               }
+> >>>> +
+> >>>> +               if (p->max_pages &&
+> >>>> +                   p->found_pages + n_pages > p->max_pages)
+> >>>> +                       n_pages =3D p->max_pages - p->found_pages;
+> >>>> +
+> >>>> +               ret =3D pagemap_scan_output(is_written, is_file, is_=
+present,
+> >>>> +                                         is_swap, p, start, n_pages=
+);
+> >>>> +               if (ret < 0)
+> >>>> +                       return ret;
+> >
+> > So let's simplify this:
+> >
+> > if (p->max_pages && n_pages > max_pages - found_pages)
+> >   n_pages =3D max_pages - found_pages;
+> >
+> > if (is_written && DO_WP && n_pages !=3D HPAGE_SIZE / PAGE_SIZE) {
+> >   split_thp();
+> >   goto process_smaller_pages;
+> > }
+> Clever!! This looks very sleek.
+>
+> >
+> > BTW, THP handling could be extracted to a function that would return
+> > -EAGAIN if it has split the page or it wasn't a THP -- and that would
+> > mean `goto process_smaller_pages`.
+> Other functions in this file handle the THP in this same way. So it feels
+> like more intuitive that we follow to same pattern in this file.
+
+I'll leave it to you. Extracting THP support would avoid a goto and
+#ifdef inside a function, though (and make the function smaller).
+
+> >>>> +       /*
+> >>>> +        * Allocate smaller buffer to get output from inside the pag=
+e walk
+> >>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size c=
+hunks. As
+> >>>> +        * we want to return output to user in compact form where no=
+ two
+> >>>> +        * consecutive regions should be continuous and have the sam=
+e flags.
+> >>>> +        * So store the latest element in p.cur between different wa=
+lks and
+> >>>> +        * store the p.cur at the end of the walk to the user buffer=
+.
+> >>>> +        */
+> >>>> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_region=
+),
+> >>>> +                             GFP_KERNEL);
+> >>>> +       if (!p.vec)
+> >>>> +               return -ENOMEM;
+> >>>> +
+> >>>> +       walk_start =3D walk_end =3D start;
+> >>>> +       while (walk_end < end && !ret) {
+> >>>
+> >>> The loop will stop if a previous iteration returned ENOSPC (and the
+> >>> error will be lost) - is it intended?
+> >> It is intentional. -ENOSPC means that the user buffer is full even tho=
+ugh
+> >> there was more memory to walk over. We don't treat this error. So when
+> >> buffer gets full, we stop walking over further as user buffer has gott=
+en
+> >> full and return as success.
+> >
+> > Thanks. What's the difference between -ENOSPC and
+> > PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (code
+> > flow).
+> -ENOSPC --> user buffer has been filled completely
+> PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer may
+>                             still have more space
+
+What is the difference in code behaviour when those two cases are
+compared? (I'd expect none.)
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
