@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5683A6DADA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218B96DADAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjDGNbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S231293AbjDGNh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240804AbjDGNbY (ORCPT
+        with ESMTP id S229704AbjDGNhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:31:24 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDC7AF12;
-        Fri,  7 Apr 2023 06:31:07 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id A858AF1003;
-        Fri,  7 Apr 2023 06:31:06 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hROvoePqLQxn; Fri,  7 Apr 2023 06:31:05 -0700 (PDT)
-Message-ID: <cb0c1ad7e00523a43ce6ad73a79e7e396c4b52aa.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1680874265; bh=T7vpFXDNomoCxY8qP+17WW148a4mIe6W7ti0M3g0XQw=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=WMrhcl6hfx+3B4ON96J3a1E7qDIbPZ0wYZNIKS6fJ/RSG2OyJxB6hAuS+8VhQ42v3
-         iGcaMqa5YsJMBOcr0tWV7a/yh531u/ZSMgvw0eKQUSaZNtjsWqjSFiwvCbwYAR5Xmp
-         h/sKubetDvcysQ7s8Rm9heCNh+2xiuRe8fOfXdFVIx7LzYVwxH51Z9alu0QAD7A8G+
-         EWnyjuf66Iej12/D+vrbS3A0KlxnqsNs9ubA9y3dmcbP8epbHBtix+XBUGUdDC7/55
-         Ss3kjfmq9WJS18LG6p1soUSbGh+q3iA0LbMqGihSPRkviaAv7t+jR4XJd3xrFJf8Qw
-         machgJap3C/6A==
-Subject: Re: [PATCH v1 1/2] media: hi846: fix usage of
- pm_runtime_get_if_in_use()
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
-        kernel@puri.sm, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Fri, 07 Apr 2023 15:31:02 +0200
-In-Reply-To: <ZC1vJNIGeEu+xi+i@valkosipuli.retiisi.eu>
-References: <20230405092904.1129395-1-martin.kepplinger@puri.sm>
-         <20230405092904.1129395-2-martin.kepplinger@puri.sm>
-         <ZC1vJNIGeEu+xi+i@valkosipuli.retiisi.eu>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Fri, 7 Apr 2023 09:37:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13246B7
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680874628;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=aIvmfG2D4lMXQvYk341nc+hYEXy66ytDTxFyh3hTIFM=;
+        b=XvLoVRpyjwLY8+y5uPyJ/uzuB+i6cCWsxui06Z5K6YQyiYWXgTryu3mIUofGrTyEMtNtyH
+        4r7ijow1qNyyt+qe4+5cSui/56JZQlUuEqDhmgvMO+i7khmTWiGReU9wLnGoAjGuolmJ5/
+        Z1cGs5vq7yhmQFWhtHuEfT9qKNn6+CA=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-658-umMy1kCeMZylci8LyQmRug-1; Fri, 07 Apr 2023 09:37:05 -0400
+X-MC-Unique: umMy1kCeMZylci8LyQmRug-1
+Received: by mail-qt1-f197.google.com with SMTP id f2-20020ac87f02000000b003e6372b917dso16841946qtk.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:37:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680874625; x=1683466625;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aIvmfG2D4lMXQvYk341nc+hYEXy66ytDTxFyh3hTIFM=;
+        b=wjB/40hNb1Pj9UNjTJLVFPME9xQMq3NtOiQORTwzsFLf18XCwaOOv2i7T1KUiBPZL2
+         mHBgT0Ay4dEesQn/K+iBj2X10uXlYgo4DcpqJ4QSVS1TI2YcueyxzQcLshp2LfDxUMYo
+         IfM9BZlUbpvKyhSzRNZMuTsllW+wROCIvWoFZvUJxZyh8Y4IL4EQ9KPbyzCGGdkwX3/5
+         LDaJ/26CpoSNRO6I/d6L9Zc4/5y/s3KuUK54F7g+RLMDot8wbVFR9CpFFWSWDz3Qx7j+
+         OIJi3JPNUxJYl6M18HGkxioOjfCWS4nctLBZynKQPQvV+Ptqif/TQAgEfyFtkwL4KNQv
+         dqQw==
+X-Gm-Message-State: AAQBX9fwlfPtQCC0V3puNRHsJ4RUxAh/UCp9cw//RNAGc3F1Gc55FcGB
+        7x0PIu3CbvCQedZPW0ezuP2uSbY+48m2HU2HZaWybeBXVJ82WSKitVUzRAMhcVfTNqtlLBLuxCn
+        VNSiMoIsuKSxeA2Swd1IE0HQb
+X-Received: by 2002:a05:6214:21aa:b0:5a5:9297:21b2 with SMTP id t10-20020a05621421aa00b005a5929721b2mr3148621qvc.21.1680874624748;
+        Fri, 07 Apr 2023 06:37:04 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YAYMwT2wYKup442yHZBqo2BdAdAw1o1pmJYgAzO/7ubEP4yOwY4XvBBvM3cXQjkygfMrvgUA==
+X-Received: by 2002:a05:6214:21aa:b0:5a5:9297:21b2 with SMTP id t10-20020a05621421aa00b005a5929721b2mr3148598qvc.21.1680874624509;
+        Fri, 07 Apr 2023 06:37:04 -0700 (PDT)
+Received: from step1.redhat.com ([5.77.69.107])
+        by smtp.gmail.com with ESMTPSA id h2-20020ad45442000000b005dd8b9345e0sm1332899qvt.120.2023.04.07.06.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 06:37:03 -0700 (PDT)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     Alvaro Karsz <alvaro.karsz@solid-run.com>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Eugenio=20P=C3=A9rez=20Martin?= <eperezma@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH 0/2] vdpa_sim_blk: support shared backend
+Date:   Fri,  7 Apr 2023 15:36:56 +0200
+Message-Id: <20230407133658.66339-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.39.2
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 05.04.2023 um 15:52 +0300 schrieb Sakari Ailus:
-> Hi Martin,
-> 
-> On Wed, Apr 05, 2023 at 11:29:03AM +0200, Martin Kepplinger wrote:
-> > pm_runtime_get_if_in_use() does not only return nonzero values when
-> > the device is in use, it can return a negative errno too.
-> > 
-> > And especially during resuming from system suspend, when runtime pm
-> > is not yet up again, this can very well happen. And in such a case
-> > the subsequent pm_runtime_put() call would result in a refcount
-> > underflow!
-> 
-> I think this issue should have a more generic solution, it's very
-> difficult
-> to address this in drivers only with the current APIs.
-> 
-> pm_runtime_get_if_in_use() will also return an error if runtime PM is
-> disabled, so this patch will break the driver for that configuration.
+This series is mainly for testing live migration between 2 vdpa_sim_blk
+devices.
 
-ok but the driver is currently broken for any *other* error returned by
-pm_runtime_get_if_in_use() (than the runtime-PM disabled error).
+The first patch is preparation and moves the buffer allocation into devices,
+the second patch adds the `shared_buffer_mutex` parameter to vdpa_sim_blk to
+use the same ramdisk for all devices.
 
-The execution-path during system-resume I'm interested in gets -EAGAIN
-here. Would it be ok for you if I'd return early only for that one
-error only here?
+Tested with QEMU v8.0.0-rc2 in this way:
 
+modprobe vhost_vdpa
+modprobe vdpa_sim_blk shared_backend=true
 
-> 
-> > 
-> > Fix it by correctly using pm_runtime_get_if_in_use().
-> > 
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> >  drivers/media/i2c/hi846.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/media/i2c/hi846.c b/drivers/media/i2c/hi846.c
-> > index 5b5ea5425e984..0b0eda2e223cd 100644
-> > --- a/drivers/media/i2c/hi846.c
-> > +++ b/drivers/media/i2c/hi846.c
-> > @@ -1544,7 +1544,7 @@ static int hi846_set_ctrl(struct v4l2_ctrl
-> > *ctrl)
-> >                                          exposure_max);
-> >         }
-> >  
-> > -       if (!pm_runtime_get_if_in_use(&client->dev))
-> > +       if (pm_runtime_get_if_in_use(&client->dev) <= 0)
-> >                 return 0;
-> >  
-> >         switch (ctrl->id) {
-> 
+vdpa dev add mgmtdev vdpasim_blk name blk0
+vdpa dev add mgmtdev vdpasim_blk name blk1
 
+qemu-system-x86_64 -m 512M -smp 2 -M q35,accel=kvm,memory-backend=mem \
+  -object memory-backend-file,share=on,id=mem,size="512M",mem-path="/dev/shm"
+  ...
+  -blockdev node-name=drive_src1,driver=virtio-blk-vhost-vdpa,path=/dev/vhost-vdpa-1,cache.direct=on \
+  -device virtio-blk-pci,id=src1,bootindex=2,drive=drive_src1 \
+  -incoming tcp:0:3333
+
+qemu-system-x86_64 -m 512M -smp 2 -M q35,accel=kvm,memory-backend=mem \
+  -object memory-backend-file,share=on,id=mem,size="512M",mem-path="/dev/shm"
+  ...
+  -blockdev node-name=drive_src1,driver=virtio-blk-vhost-vdpa,path=/dev/vhost-vdpa-0,cache.direct=on \
+  -device virtio-blk-pci,id=src1,bootindex=2,drive=drive_src1
+
+(qemu) migrate -d tcp:0:3333
+
+Stefano Garzarella (2):
+  vdpa_sim: move buffer allocation in the devices
+  vdpa_sim_blk: support shared backend
+
+ drivers/vdpa/vdpa_sim/vdpa_sim.h     |  3 +-
+ drivers/vdpa/vdpa_sim/vdpa_sim.c     |  7 +--
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 83 +++++++++++++++++++++++++---
+ drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 28 +++++++---
+ 4 files changed, 100 insertions(+), 21 deletions(-)
+
+-- 
+2.39.2
 
