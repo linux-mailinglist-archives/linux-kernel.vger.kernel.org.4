@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937256DB1FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705D76DB266
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjDGRqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
+        id S231499AbjDGSEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjDGRqI (ORCPT
+        with ESMTP id S231293AbjDGSEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:46:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D22B468;
-        Fri,  7 Apr 2023 10:46:06 -0700 (PDT)
+        Fri, 7 Apr 2023 14:04:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D159EC140
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:03:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3988640E6;
-        Fri,  7 Apr 2023 17:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19A3CC433D2;
-        Fri,  7 Apr 2023 17:46:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 276C660DCE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 18:03:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A212BC433EF;
+        Fri,  7 Apr 2023 18:03:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680889565;
-        bh=KdK0eVnuC80p42y/A+nIcCrO0YdAb30rb+T1OZFDDbI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n3GPu2KVJUymwpTk49GnUnMsxD8Ynaxmvn7NDktG5RS0cQcfi3nZ1pP6YJAf4DkhU
-         nJ3EuJfgvu2+6dlaWL7/jjoOE6XjvW6T95CthzjJqbCRw6FB28UTulZ07Cl7m5OY6Y
-         VJeQqn+xeTO7geE0hHV5onHvHexmbQ7IBC/NDEOMaQipRFCXpCZlKSL1Wp8JSyqe4p
-         taSbI8Lu6mm2hJE/8LzZFxSgtM8R60xg2RMy0c8hiddw9Edp37r1VT3tdSwYyp42q1
-         +MDbx8wE4bgqsTxxHW1zTy38vJ9FL2Qncp3QFrprN1A7kr30aiJNSMkZWuZ89CDG7J
-         FtB5but9LbwBg==
-Date:   Fri, 7 Apr 2023 19:01:21 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Nuno =?UTF-8?B?U8Oh?= <noname.nuno@gmail.com>
-Cc:     Tom Rix <trix@redhat.com>, lars@metafoo.de,
-        angelo.dureghello@timesys.com, linux-iio@vger.kernel.org,
+        s=k20201202; t=1680890616;
+        bh=zeLvM+wG9Reg7GPWHX1rrEptBgIOs976gIhZ41Bbdos=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bOGgaZo+OHVpjw84ut+dKEBX8kFMCYoAYvoqWCKJ+4sKeUDzoTpJFXWmNWDitx7Fz
+         az/TmAIhaqK17Oq6C8Bg/3lHyHo9y8gco3TEVPnUjZH1tyucUpvdp2ILqKtfPrIwxm
+         QnRv47iEtUSkXPWdL/GAlDpOPu07hs6MQcowF7tYX2ohpph3bbxrVIqbnr3Hsy56NO
+         uK1YxKGwuZY6n36JWZOQquc5nKAJwrYfX5mtk7QXlms/euEEbz+c1a8MFZFQgJ6dZo
+         dVf764QB+0TmW9RpbsMPNaA7inIOik2tT7UU3PO4JQmlKMm+rBHt8NxlmNQhWIY9L/
+         aI7IapTui+ybg==
+Date:   Fri, 7 Apr 2023 21:03:24 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: dac: set varaiable max5522_channels
- storage-class-specifier to static
-Message-ID: <20230407190121.7dfb598c@jic23-huawei>
-In-Reply-To: <ee03cecef9139720a9818aa434dd34ae433d8e9d.camel@gmail.com>
-References: <20230404013828.1914523-1-trix@redhat.com>
-        <ee03cecef9139720a9818aa434dd34ae433d8e9d.camel@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+Subject: Re: [PATCH] mm-treewide-redefine-max_order-sanely-fix.txt
+Message-ID: <ZDBa7HWZK69dKKzH@kernel.org>
+References: <9460377a-38aa-4f39-ad57-fb73725f92db@roeck-us.net>
+ <20230406072529.vupqyrzqnhyozeyh@box.shutemov.name>
+ <83e6bc46-dfc0-0e95-e69c-5b996af1e50b@roeck-us.net>
+ <20230406151015.yndcm24fyxitvqyc@box.shutemov.name>
+ <ZC82N4sP5xE63kl4@kernel.org>
+ <20230406154423.20a991bbdd47630fc38d94e8@linux-foundation.org>
+ <20230407124054.27iiers6o36pdfei@box.shutemov.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407124054.27iiers6o36pdfei@box.shutemov.name>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,26 +60,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 04 Apr 2023 08:43:32 +0200
-Nuno S=C3=A1 <noname.nuno@gmail.com> wrote:
+On Fri, Apr 07, 2023 at 03:40:54PM +0300, Kirill A. Shutemov wrote:
+> On Thu, Apr 06, 2023 at 03:44:23PM -0700, Andrew Morton wrote:
+> > On Fri, 7 Apr 2023 00:14:31 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+> > 
+> > > > > Shouldn't that be
+> > > > > 		else
+> > > > > 			order = 0;
+> > > > > ?
+> > > > 
+> > > > +Mike.
+> > > > 
+> > > > No. start == 0 is MAX_ORDER-aligned. We want to free the pages in the
+> > > > largest chunks alignment allows.
+> > > 
+> > > Right. Before the changes to MAX_ORDER it was
+> > > 
+> > > 		order = min(MAX_ORDER - 1UL, __ffs(start));
+> > > 
+> > > which would evaluate to 10.
+> > > 
+> > > I'd just prefer the comment to include the explanation about why we choose
+> > > MAX_ORDER for start == 0. Say
+> > > 
+> > > 	/*
+> > > 	 * __ffs() behaviour is undefined for 0 and we want to free the
+> > > 	 * pages in the largest chunks alignment allows, so set order to
+> > > 	 * MAX_ORDER when start == 0
+> > > 	 */
+> > 
+> > Meanwhile I'd like to fix "various boot failures (hang) on arm targets"
+> > in -next, so I queued up Kirill's informal fix for now.
+> 
+> Here's my variant of the fix up with more vervose comments.
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 7911224b1ed3..381e36ac9e4d 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2043,7 +2043,16 @@ static void __init __free_pages_memory(unsigned long start, unsigned long end)
+>  	int order;
+>  
+>  	while (start < end) {
+> -		order = min_t(int, MAX_ORDER, __ffs(start));
+> +		/*
+> +		 * Free the pages in the largest chunks alignment allows.
+> +		 *
+> +		 * __ffs() behaviour is undefined for 0. start == 0 is
+> +		 * MAX_ORDER-aligned, Set order to MAX_ORDER for the case.
 
-> On Mon, 2023-04-03 at 21:38 -0400, Tom Rix wrote:
-> > smatch reports
-> > drivers/iio/dac/max5522.c:55:28: warning: symbol
-> > =C2=A0 'max5522_channels' was not declared. Should it be static?
-> >=20
-> > This variable is only used in one file so it should be static.
-> >=20
-> > Signed-off-by: Tom Rix <trix@redhat.com>
-> > --- =20
->=20
-> Reviewed-by: Nuno Sa <nuno.sa@analog.com>
->=20
->=20
+                                      ^ small s
+otherwise feel free to add
 
-Applied to the togreg branch of iio.git (pushed out initially as testing)
-with tweak in patch title to fix "variable"
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-Thanks,
+> +		 */
+> +		if (start)
+> +			order = min_t(int, MAX_ORDER, __ffs(start));
+> +		else
+> +			order = MAX_ORDER;
+>  
+>  		while (start + (1UL << order) > end)
+>  			order--;
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index c8f0a8c2d049..8e0fa209d533 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -605,7 +605,18 @@ static void online_pages_range(unsigned long start_pfn, unsigned long nr_pages)
+>  	 * this and the first chunk to online will be pageblock_nr_pages.
+>  	 */
+>  	for (pfn = start_pfn; pfn < end_pfn;) {
+> -		int order = min_t(int, MAX_ORDER, __ffs(pfn));
+> +		int order;
+> +
+> +		/*
+> +		 * Free to online pages in the largest chunks alignment allows.
+> +		 *
+> +		 * __ffs() behaviour is undefined for 0. start == 0 is
+> +		 * MAX_ORDER-aligned, Set order to MAX_ORDER for the case.
+> +		 */
+> +		if (pfn)
+> +			order = min_t(int, MAX_ORDER, __ffs(pfn));
+> +		else
+> +			order = MAX_ORDER;
+>  
+>  		(*online_page_callback)(pfn_to_page(pfn), order);
+>  		pfn += (1UL << order);
+> -- 
+>   Kiryl Shutsemau / Kirill A. Shutemov
 
-Jonathan
+-- 
+Sincerely yours,
+Mike.
