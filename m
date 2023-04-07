@@ -2,301 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B5956DAB95
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429CC6DAB97
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjDGKor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36664 "EHLO
+        id S239298AbjDGKpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbjDGKop (ORCPT
+        with ESMTP id S231459AbjDGKpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:44:45 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B95D8A6B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:44:41 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTP id 337AgViW016377;
-        Fri, 7 Apr 2023 18:42:32 +0800 (+08)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 7 Apr 2023 18:42:28 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
-Subject: [RFC PATCH] mm: introduce defer free for cma
-Date:   Fri, 7 Apr 2023 18:42:11 +0800
-Message-ID: <1680864131-4675-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Fri, 7 Apr 2023 06:45:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F3C86A8;
+        Fri,  7 Apr 2023 03:45:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 419FA61015;
+        Fri,  7 Apr 2023 10:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A828CC433EF;
+        Fri,  7 Apr 2023 10:45:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680864340;
+        bh=muu+JIlK5fHa6J8PR8unxJYJv48OaEoAfH6LrCt/btI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=A8zTIcVawhMgzhWmdn9y9FiYTrsAEZ1bCKWm6xiV1xDE7k9AayjLPQI9QL//zFsWT
+         E1RZvo2e3ezfVF4y+pUX3VtQYtKC6PFJJ7T2ByKjJGudRmfK+Jl0xsmlZvEqjtEBXm
+         cv7JZfA359wqpeKUC0mgfvY0bGMkkFA+eK13VeH4wqLkSyFvJ3udTiDCfdGs0vws43
+         GB8+6FX8fk/WJUM9Uq7XOzL6xZncdPW3pGH6P80dOcMm1TUTroQgm+M683GFqz3j3M
+         grlY2iThEVbkMZOD60oLbG2dQgcSTFFJbwEQ8mbbljIo/vbmsI75dvCPMY/K8pocU8
+         ktOE0aRSjVzGw==
+Received: by mail-lj1-f169.google.com with SMTP id b6so23151417ljr.1;
+        Fri, 07 Apr 2023 03:45:40 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fzkw3w84OYWyMqttOVjkpRbD+NwDyKYvQBRHAHgxMYy4P8TYCL
+        xY6G/jazBkbr+BW0NclNJQb1obEUni3WMSuvdDQ=
+X-Google-Smtp-Source: AKy350bOLCKKqmE65Wr+ZeKb7BWxqw9i1ccVmclFMyLlJMcKQiRf/sSWiDlgIgpyMW36rAKF11wKzbpx9XMEfpl5Dg4=
+X-Received: by 2002:a2e:a307:0:b0:2a5:f850:c356 with SMTP id
+ l7-20020a2ea307000000b002a5f850c356mr461087lje.2.1680864338726; Fri, 07 Apr
+ 2023 03:45:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 337AgViW016377
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406040515.383238-1-jhubbard@nvidia.com> <CAMj1kXHxyntweiq76CdW=ov2_CkEQUbdPekGNDtFp7rBCJJE2w@mail.gmail.com>
+ <a421b96a-ed4b-ae7d-2fe9-ed5f5f8deacf@nvidia.com>
+In-Reply-To: <a421b96a-ed4b-ae7d-2fe9-ed5f5f8deacf@nvidia.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 7 Apr 2023 12:45:27 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGtFyugzi9MZW=4_oVTy==eAF6283fwvX9fdZhO98ZA3g@mail.gmail.com>
+Message-ID: <CAMj1kXGtFyugzi9MZW=4_oVTy==eAF6283fwvX9fdZhO98ZA3g@mail.gmail.com>
+Subject: Re: [PATCH] arm64/mm: don't WARN when alloc/free-ing device private pages
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+On Fri, 7 Apr 2023 at 02:13, John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> On 4/6/23 00:31, Ard Biesheuvel wrote:
+> > Hello John,
+> >
+> > On Thu, 6 Apr 2023 at 06:05, John Hubbard <jhubbard@nvidia.com> wrote:
+> >>
+> >> Although CONFIG_DEVICE_PRIVATE and hmm_range_fault() and related
+> >> functionality was first developed on x86, it also works on arm64.
+> >> However, when trying this out on an arm64 system, it turns out that
+> >> there is a massive slowdown during the setup and teardown phases.
+> >>
+> >> This slowdown is due to lots of calls to WARN_ON()'s that are checking
+> >> for pages that are out of the physical range for the CPU. However,
+> >> that's a design feature of device private pages: they are specfically
+> >> chosen in order to be outside of the range of the CPU's true physical
+> >> pages.
+> >>
+>
+> Hi Ard,
+>
+> Thank you for looking at this so soon, I've been working on filling
+> in some details and studying what you said.
+>
+> By the way, to address an implicit question from Andrew on the other
+> thread, the reason that this slows things down is due to a loop in
+> __add_pages() that repeatedly calls through to vmemmap_populate(),
+> like this:
+>
+> device driver setup: allocate struct pages for the device (GPU)
+>     memremap_pages(pagemap.type = MEMORY_DEVICE_PRIVATE)
+>         pagemap_range()
+>         __add_pages() /* device private case does this */
+>             for (; pfn < end_pfn; pfn += cur_nr_pages) {
+>                 /* this loops 125 times on an x86 test machine: */
+>                 sparse_add_section()
+>                     section_activate()
+>                         populate_section_memmap()
+>                             __populate_section_memmap()
+>                                 vmemmap_populate()
+>
+> >
+> > Currently, the vmemmap region is dimensioned to only cover the PFN
+> > range that backs the linear map. So the WARN() seems appropriate here:
+> > you are mapping struct page[] ranges outside of the allocated window,
+> > and afaict, you might actually wrap around and corrupt the linear map
+> > at the start of the kernel VA space like this.
+> >
+>
+> Well...it's only doing a partial hotplug of these pages, just enough to get
+> ZONE_DEVICE to work. As I understand it so far, only the struct pages
+> themselves are ever accessed, not any mappings.
+>
 
-Continues page blocks are expensive for the system. Introducing defer free
-mechanism to buffer some which make the allocation easier. The shrinker will
-ensure the page block can be reclaimed when there is memory pressure.
+That is what I am talking about - the struct pages are allocated in a
+region that is reserved for something else.
 
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- mm/cma.c | 166 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- mm/cma.h |  11 +++++
- 2 files changed, 174 insertions(+), 3 deletions(-)
+Maybe an example helps here:
 
-diff --git a/mm/cma.c b/mm/cma.c
-index 4a978e0..ad67ae5 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -153,6 +153,20 @@ static int __init cma_init_reserved_areas(void)
- }
- core_initcall(cma_init_reserved_areas);
- 
-+static unsigned long cma_free_get(struct cma *cma)
-+{
-+	unsigned long used;
-+	unsigned long val;
-+
-+	spin_lock_irq(&cma->lock);
-+	/* pages counter is smaller than sizeof(int) */
-+	used = bitmap_weight(cma->bitmap, (int)cma_bitmap_maxno(cma));
-+	val = cma->count - (u64)used << cma->order_per_bit;
-+	spin_unlock_irq(&cma->lock);
-+
-+	return val;
-+}
-+
- void __init cma_reserve_pages_on_error(struct cma *cma)
- {
- 	cma->reserve_pages_on_error = true;
-@@ -411,6 +425,46 @@ static void cma_debug_show_areas(struct cma *cma)
- static inline void cma_debug_show_areas(struct cma *cma) { }
- #endif
- 
-+static int cma_defer_area_fetch(struct cma *cma, unsigned long pfn,
-+		unsigned long count)
-+{
-+	struct cma_defer_free_area *area;
-+	unsigned long new_pfn;
-+	int ret = -1;
-+
-+	if (!atomic64_read(&cma->defer_count))
-+		return ret;
-+	if (count <= atomic64_read(&cma->defer_count)) {
-+		spin_lock_irq(&cma->lock);
-+		list_for_each_entry(area, &cma->defer_free, list) {
-+			/*area found for given pfn and count*/
-+			if (pfn >= area->pfn && count <= area->count) {
-+				list_del(&area->list);
-+				/*set bits for allocated pfn*/
-+				bitmap_set(cma->bitmap, pfn - cma->base_pfn, count);
-+				kfree(area);
-+				atomic64_sub(count, &cma->defer_count);
-+				/*release the rest pfn to cma*/
-+				if (!list_empty(&cma->defer_free) && (pfn == area->pfn)) {
-+					new_pfn = pfn + count;
-+					cma_release(cma, pfn_to_page(new_pfn), area->count - count);
-+				}
-+				ret = 0;
-+				spin_unlock_irq(&cma->lock);
-+				return ret;
-+			}
-+		}
-+	}
-+	/*no area found, release all to buddy*/
-+	list_for_each_entry(area, &cma->defer_free, list) {
-+		list_del(&area->list);
-+		free_contig_range(area->pfn, area->count);
-+		cma_clear_bitmap(cma, area->pfn, area->count);
-+		kfree(area);
-+	}
-+	spin_unlock_irq(&cma->lock);
-+	return ret;
-+}
- /**
-  * cma_alloc() - allocate pages from contiguous area
-  * @cma:   Contiguous memory region for which the allocation is performed.
-@@ -469,9 +523,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 		spin_unlock_irq(&cma->lock);
- 
- 		pfn = cma->base_pfn + (bitmap_no << cma->order_per_bit);
-+
- 		mutex_lock(&cma_mutex);
--		ret = alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
--				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0));
-+		/*search for defer area first*/
-+		ret = cma_defer_area_fetch(cma, pfn, count) ? alloc_contig_range(pfn, pfn + count, MIGRATE_CMA,
-+				     GFP_KERNEL | (no_warn ? __GFP_NOWARN : 0)) : 0;
- 		mutex_unlock(&cma_mutex);
- 		if (ret == 0) {
- 			page = pfn_to_page(pfn);
-@@ -556,6 +612,8 @@ bool cma_release(struct cma *cma, const struct page *pages,
- 		 unsigned long count)
- {
- 	unsigned long pfn;
-+	unsigned long flags;
-+	struct cma_defer_free_area *defer_area;
- 
- 	if (!cma_pages_valid(cma, pages, count))
- 		return false;
-@@ -566,7 +624,21 @@ bool cma_release(struct cma *cma, const struct page *pages,
- 
- 	VM_BUG_ON(pfn + count > cma->base_pfn + cma->count);
- 
--	free_contig_range(pfn, count);
-+	if (cma->batch) {
-+		defer_area = kmalloc(sizeof(struct cma_defer_free_area), GFP_KERNEL);
-+		if (defer_area) {
-+			defer_area->pfn = pfn;
-+			defer_area->count = count;
-+			spin_lock_irqsave(&cma->lock, flags);
-+			list_add(&defer_area->list, &cma->defer_free);
-+			atomic64_add(count, &cma->defer_count);
-+			spin_unlock_irqrestore(&cma->lock, flags);
-+			cma_clear_bitmap(cma, pfn, count);
-+			return true;
-+		}
-+	}
-+	else
-+		free_contig_range(pfn, count);
- 	cma_clear_bitmap(cma, pfn, count);
- 	trace_cma_release(cma->name, pfn, pages, count);
- 
-@@ -586,3 +658,91 @@ int cma_for_each_area(int (*it)(struct cma *cma, void *data), void *data)
- 
- 	return 0;
- }
-+
-+static unsigned long cma_defer_free_count(struct shrinker *shrinker,
-+					struct shrink_control *sc)
-+{
-+	struct cma *cma = container_of(shrinker, struct cma, shrinker);
-+	unsigned long val;
-+
-+	val = atomic64_read(&cma->defer_count);
-+	return val;
-+}
-+
-+static unsigned long cma_defer_free_scan(struct shrinker *shrinker,
-+					struct shrink_control *sc)
-+{
-+	struct cma *cma = container_of(shrinker, struct cma, shrinker);
-+	unsigned long to_scan;
-+	struct cma_defer_free_area *area;
-+	unsigned long new_pfn;
-+	unsigned long defer_count;
-+
-+	if (sc->nr_to_scan < cma->batch)
-+		return 0;
-+
-+	to_scan = cma->batch - sc->nr_to_scan;
-+	defer_count = atomic64_read(&cma->defer_count);
-+	spin_lock_irq(&cma->lock);
-+
-+	/*free all node*/
-+	if (to_scan >= defer_count) {
-+		list_for_each_entry(area, &cma->defer_free, list) {
-+			list_del(&area->list);
-+			free_contig_range(area->pfn, area->count);
-+			cma_clear_bitmap(cma, area->pfn, area->count);
-+			kfree(area);
-+		}
-+		atomic64_set(&cma->defer_count, 0);
-+		return defer_count;
-+	}
-+
-+	list_for_each_entry(area, &cma->defer_free, list) {
-+		if (to_scan <= area->count) {
-+			list_del(&area->list);
-+			free_contig_range(area->pfn, area->count);
-+			cma_clear_bitmap(cma, area->pfn, area->count);
-+			kfree(area);
-+			atomic64_sub(to_scan, &cma->defer_count);
-+			/*release the rest pfn to cma*/
-+			if (!list_empty(&cma->defer_free)) {
-+				new_pfn = area->pfn + to_scan;
-+				cma_release(cma, pfn_to_page(new_pfn), area->count - to_scan);
-+			}
-+			break;
-+		}
-+		else {
-+			list_del(&area->list);
-+			free_contig_range(area->pfn, area->count);
-+			cma_clear_bitmap(cma, area->pfn, area->count);
-+			kfree(area);
-+			to_scan = to_scan - atomic64_read(&cma->defer_count);
-+			/*release the rest pfn to cma*/
-+			if (!list_empty(&cma->defer_free)) {
-+				new_pfn = area->pfn + to_scan;
-+				cma_release(cma, pfn_to_page(new_pfn), area->count - to_scan);
-+			}
-+			continue;
-+		}
-+	}
-+	spin_unlock_irq(&cma->lock);
-+	return 0;
-+}
-+
-+static struct shrinker cma_shrinker = {
-+	.count_objects = cma_defer_free_count,
-+	.scan_objects = cma_defer_free_scan,
-+	.seeks = 0,
-+};
-+static int __init cma_init(void)
-+{
-+	int ret = -1;
-+	ret = prealloc_shrinker(&cma_shrinker, "cma-shadow");
-+	if (ret)
-+		goto err;
-+	register_shrinker_prepared(&cma_shrinker);
-+	ret = 0;
-+err:
-+	return ret;
-+}
-+module_init(cma_init);
-diff --git a/mm/cma.h b/mm/cma.h
-index 88a0595..e1e3e2f 100644
---- a/mm/cma.h
-+++ b/mm/cma.h
-@@ -4,6 +4,7 @@
- 
- #include <linux/debugfs.h>
- #include <linux/kobject.h>
-+#include <linux/shrinker.h>
- 
- struct cma_kobject {
- 	struct kobject kobj;
-@@ -31,6 +32,16 @@ struct cma {
- 	struct cma_kobject *cma_kobj;
- #endif
- 	bool reserve_pages_on_error;
-+	struct list_head defer_free;
-+	atomic64_t defer_count;
-+	unsigned long batch;
-+	struct shrinker shrinker;
-+};
-+
-+struct cma_defer_free_area {
-+	unsigned long pfn;
-+	unsigned long count;
-+	struct list_head list;
- };
- 
- extern struct cma cma_areas[MAX_CMA_AREAS];
--- 
-1.9.1
+When running the 39-bit VA kernel build on a AMD Seatte board, we will
+have (assuming sizeof(struct page) == 64)
 
+memstart_addr := 0x80_0000_0000
+
+PAGE_OFFSET := 0xffff_ff80_0000_0000
+
+VMEMMAP_SHIFT := 6
+VMEMMAP_START := 0xffff_fffe_0000_0000
+VMEMMAP_SIZE := 0x1_0000_0000
+
+pfn_to_page() conversions are based on ordinary array indexing
+involving vemmap[], where vmemmap is defined as
+
+#define vmemmap \
+    ((struct page *)VMEMMAP_START - (memstart_addr >> PAGE_SHIFT))
+
+So the PFN associated with the first usable DRAM address is
+0x800_0000, and pfn_to_page(0x800_0000) will return VMEMMAP_START.
+
+pfn_to_page(x) for any x < 0x800_0000 will produce a kernel VA that
+points into the vmalloc area, and may conflict with the kernel
+mapping, modules mappings, per-CPU mappings, IO mappings, etc etc.
+
+pfn_to_page(x) for values 0xc00_0000 < x < 0x1000_0000 will produce a
+kernel VA that points outside the region set aside for the vmemmap.
+This region is currently unused, but that will likely change soon.
+
+pfn_to_page(x) for any x >= 0x1000_0000 will wrap around and produce a
+bogus address in the user range.
+
+The bottom line is that the VMEMMAP region is dimensioned to cover
+system memory only, i.e., what can be covered by the kernel direct
+map. If you want to allocate struct pages for thing that are not
+system memory, you will need to enlarge the VMEMMAP region, and ensure
+that request_mem_region() produces a region that is covered by it.
+
+This is going to be tricky with LPA2, because there, the 4k pages
+configuration already uses up half of the vmalloc region to cover the
+linear map, so we have to consider this carefully.
+
+
+> More below:
+>
+> ...
+> >>                 /* arch/x86/mm/init_64.c */
+> >>                 vmemmap_free()
+> >>                 {
+> >>                   VM_BUG_ON(!PAGE_ALIGNED(start));
+> >>                   VM_BUG_ON(!PAGE_ALIGNED(end));
+> >>                   ...
+> >>                 }
+> >>
+> >> So, the warning is a false positive for this case. Therefore, skip the
+> >> warning if CONFIG_DEVICE_PRIVATE is set.
+> >>
+> >
+> > I don't think this is a false positive. We'll need to adjust
+> > VMEMMAP_SIZE to account for this.
+> >
+>
+> Looking at the (new to me) arm64 code for this, VMEMMAP_SIZE is only
+> ever used to calculate VMEMMAP_END, which in turn is used for the
+> WARN_ON()'s in question, plus as the "ceiling" arg to free_empty_tables().
+>
+> It seems Mostly Harmless. How would you feel about changing it to a
+> WARN_ON_ONCE() as Andrew suggested? That would completely fix the
+> user-visible symptoms:
+>
+
+Actually, it should be a hard error, given the above.
+
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index 6f9d8898a025..82d4205af9f2 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -1157,7 +1157,7 @@ int __meminit vmemmap_check_pmd(pmd_t *pmdp, int node,
+>  int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>                 struct vmem_altmap *altmap)
+>  {
+> -       WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+> +       WARN_ON_ONCE((start < VMEMMAP_START) || (end > VMEMMAP_END));
+>
+>         if (!IS_ENABLED(CONFIG_ARM64_4K_PAGES))
+>                 return vmemmap_populate_basepages(start, end, node, altmap);
+> @@ -1169,7 +1169,7 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  void vmemmap_free(unsigned long start, unsigned long end,
+>                 struct vmem_altmap *altmap)
+>  {
+> -       WARN_ON((start < VMEMMAP_START) || (end > VMEMMAP_END));
+> +       WARN_ON_ONCE((start < VMEMMAP_START) || (end > VMEMMAP_END));
+>
+>         unmap_hotplug_range(start, end, true, altmap);
+>         free_empty_tables(start, end, VMEMMAP_START, VMEMMAP_END);
+>
+>
+>
+> thanks,
+> --
+> John Hubbard
+> NVIDIA
+>
