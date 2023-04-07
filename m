@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28C16DB35D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156066DB362
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbjDGStK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S232943AbjDGStT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbjDGSsY (ORCPT
+        with ESMTP id S232085AbjDGSsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:48:24 -0400
+        Fri, 7 Apr 2023 14:48:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2188CC1F;
-        Fri,  7 Apr 2023 11:47:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AD2CA31;
+        Fri,  7 Apr 2023 11:47:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C26EA64D63;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DDCED653F8;
+        Fri,  7 Apr 2023 18:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7144C433EF;
         Fri,  7 Apr 2023 18:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7007AC433A4;
-        Fri,  7 Apr 2023 18:47:46 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -43,9 +43,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 23/40] dt-bindings: pinctrl: qcom,sc7280-tlmm: simplify with unevaluatedProperties
-Date:   Fri,  7 Apr 2023 20:45:29 +0200
-Message-Id: <20230407184546.161168-23-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 24/40] dt-bindings: pinctrl: qcom,sc8180x-tlmm: simplify with unevaluatedProperties
+Date:   Fri,  7 Apr 2023 20:45:30 +0200
+Message-Id: <20230407184546.161168-24-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
 References: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
@@ -64,20 +64,15 @@ All Qualcomm SoC Top Level Mode Multiplexer pin controllers have similar
 capabilities regarding pin properties, thus we can just accept entire
 set provided by qcom,tlmm-common.yaml schema.
 
-This also fixes warnings like:
-
-  sc7280-herobrine-evoker.dtb: pinctrl@f100000: qspi-sleep-state: 'oneOf' conditional failed, one must be fixed:
-    'output-disable' does not match any of the regexes: 'pinctrl-[0-9]+'
-
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/pinctrl/qcom,sc7280-pinctrl.yaml        | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ .../bindings/pinctrl/qcom,sc8180x-tlmm.yaml           | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-index 36502173cb79..368d44ff5468 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc7280-pinctrl.yaml
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sc8180x-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sc8180x-tlmm.yaml
+index 0ace55c9868e..b086a5184235 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,sc8180x-tlmm.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sc8180x-tlmm.yaml
 @@ -62,6 +62,7 @@ $defs:
        Pinctrl node's client devices use subnodes for desired pin configuration.
        Client device subnodes use below standard properties.
@@ -86,14 +81,13 @@ index 36502173cb79..368d44ff5468 100644
  
      properties:
        pins:
-@@ -110,20 +111,9 @@ $defs:
-                 uim1_clk, uim1_data, uim1_present, uim1_reset, usb2phy_ac,
-                 usb_phy, vfr_0, vfr_1, vsense_trigger ]
+@@ -102,19 +103,9 @@ $defs:
+                 usb0_phy, usb1_phy, usb2phy_ac, vfr_1, vsense_trigger,
+                 wlan1_adc, wlan2_adc, wmss_reset ]
  
+-      bias-disable: true
 -      bias-pull-down: true
 -      bias-pull-up: true
--      bias-bus-hold: true
--      bias-disable: true
 -      drive-strength: true
 -      input-enable: true
 -      output-high: true
@@ -104,9 +98,9 @@ index 36502173cb79..368d44ff5468 100644
  
 -    additionalProperties: false
 -
- allOf:
-   - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
- 
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
 -- 
 2.34.1
 
