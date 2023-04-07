@@ -2,205 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A0C6DB5C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521C76DB5C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjDGVZE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 17:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S230135AbjDGV3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjDGVZC (ORCPT
+        with ESMTP id S229524AbjDGV3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:25:02 -0400
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C64BB80;
-        Fri,  7 Apr 2023 14:25:00 -0700 (PDT)
-Received: by mail-ua1-f45.google.com with SMTP id bh10so1341626uab.13;
-        Fri, 07 Apr 2023 14:25:00 -0700 (PDT)
+        Fri, 7 Apr 2023 17:29:35 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93332BBA1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:29:34 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id j14-20020a17090a7e8e00b002448c0a8813so4403435pjl.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:29:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680902974; x=1683494974;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R5pwr73HER5r5lm/I7kdT2UE3HZ2H2e0ixPC/w+bENg=;
+        b=TyiLNpWgGovqrFVmfzECFC7Gk1j92Xl2ejkRbjqSSGDDfPU2EDGKQmqPbFcYdNGzlo
+         DIgVYiIKZ1LzU+N/0jSZOr50kHUbXvQQyvuTt9gY4Vkb9bHKhUZoy7NUzBHPV5nzi9d7
+         I0cTHKUC8O+iuCmsfk3WiRvNYgmHdWFNWA0+Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680902700; x=1683494700;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k612bZuPeU9BYYEiReSh/KaPrQNbIQVI8+7Ue/dHlFU=;
-        b=ZqCe5YuRynpr+udmNt/axrpRzStIpDI4/vuDE9MZVg5AJGPoe9yTIdqes+Yu2sAOao
-         MW953jGSWaGMyIXVQ/P6j+jg3lSj5Jc2iGAR26ov3ma8Ugu6bLTgzGaO2OIX/bFJ5Il4
-         Vqfqv43Mx9Kf8eeSNTu7ZBPKa8ZrmDng1r/cP3Ng2CoVa/nF0WPrmmK3poKEqj29y71s
-         8NUixi6A0gAuUjhkYnJ86DJzlkxspmcxm1BfI723/ZOqvIopL0+CcJ/9rqYzSSMF6nQg
-         T+lbIGpLfIpiWCN6VYKoFlRIEzxzBMampo+RML7EAvqiKMRMp33e7eoQdurW6TU7gNLD
-         TNow==
-X-Gm-Message-State: AAQBX9feiibzwawY2wf6jB2NhpobTTBh6QO9X0gqi1gflaL4s3G3OOiu
-        YAIse+teZTzmaEZGWnf5bn2CVhIWEwOR/rWZGoU=
-X-Google-Smtp-Source: AKy350Ztw9uDm2glyrJJxBO3yMwYpJO9lysNj8tnHY/ST6zgmXq6QhkOPKrkFUDWOk3/MCDYavbbH5kswQQ6NfBJFuc=
-X-Received: by 2002:a05:6122:a09:b0:431:eb68:41b with SMTP id
- 9-20020a0561220a0900b00431eb68041bmr1412113vkn.11.1680902699507; Fri, 07 Apr
- 2023 14:24:59 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680902974; x=1683494974;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R5pwr73HER5r5lm/I7kdT2UE3HZ2H2e0ixPC/w+bENg=;
+        b=qJQkQ8b42xcEbbMxhPFcjwW3XyjTdZ4Ns4ESOr0uiY+GqLlqXbIEBdx8mJpeMHxk8g
+         qzQ+PaPNZt+wOfkAFoouY3NEnC8wksoMADzrcK0Yliz1SxciIg9NIqeIETtfjk4P6MHX
+         uO/R37Z/B9GQotmQHd5tLHjslMFBtCVt3Fe1oCHnhLBDryEKlCMZcKZjJ+fC6izGMMlA
+         v8dI9cb0Vr8WAo5E5Mn3G3R7AzuEEpfBYXksI0PzmeucWc/slK2RZHKxXLSQrMCQ9iWX
+         fBk1/qh2q7Tdsizy3eMadSgYmACWcnjvSzs0P9NLAOUrPr7ZIwzzzXViGZaSfVOcDz2C
+         CP8w==
+X-Gm-Message-State: AAQBX9eP10EXMQ8n3EAXVFqyl9YzrTSdx4biQEPMQoiL6qLe9Q9fHo23
+        Yxzjah/UKk9VLnXbgYk3rwu/Kg==
+X-Google-Smtp-Source: AKy350bkJqjesu+PiSv3njS1SWT7qA2WhEHH6Qjh9s4Mv7FijOL5LsPmld/9LG6eb2QVgr6dn6/HSg==
+X-Received: by 2002:a05:6a20:ba83:b0:e3:763e:555 with SMTP id fb3-20020a056a20ba8300b000e3763e0555mr3840921pzb.57.1680902974075;
+        Fri, 07 Apr 2023 14:29:34 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:cad1:6cfe:57e6:8f81])
+        by smtp.gmail.com with ESMTPSA id s21-20020a056a00195500b006243e706195sm3443390pfk.196.2023.04.07.14.29.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 14:29:33 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pinctrl: qcom: Add "and" to PIN_CONFIG_INPUT_ENABLE comment
+Date:   Fri,  7 Apr 2023 14:29:14 -0700
+Message-Id: <20230407142859.1.Ia5d70e320b60d6707c6182879097708e49b8b519@changeid>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
 MIME-Version: 1.0
-References: <20230407055212.2701635-1-changbin.du@huawei.com> <20230407055212.2701635-3-changbin.du@huawei.com>
-In-Reply-To: <20230407055212.2701635-3-changbin.du@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 7 Apr 2023 14:24:48 -0700
-Message-ID: <CAM9d7cgQF5n1umb6P3-KtYcmzF+gg0SR2JFjGXK3nR=Qr_bJbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] perf: script: add new output field 'dsoff' to
- print dso offset
-To:     Changbin Du <changbin.du@huawei.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hui Wang <hw.huiwang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Changbin,
+The comment recently added talking about PIN_CONFIG_INPUT_ENABLE is
+clearly missing the word "and". Comments live forever, so let's fix
+it.
 
-On Thu, Apr 6, 2023 at 10:53 PM Changbin Du <changbin.du@huawei.com> wrote:
->
-> This adds a new 'dsoff' field to print dso offset for resolved symbols,
-> and the offset is appended to dso name.
->
-> Default output:
-> $ perf script
->        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1)
->
-> Display 'dsoff' field:
-> $ perf script -F +dsoff
->        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so+0x1c4b5)
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
->        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
->        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1+0x68d0)
->        ls 2695501 3011030.487019:     500000 cycles:  ffffffff992a6db0 [unknown] ([unknown])
->
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> ---
->  tools/perf/Documentation/perf-script.txt | 2 +-
->  tools/perf/builtin-script.c              | 5 +++++
->  tools/perf/util/evsel_fprintf.c          | 6 ++++++
->  tools/perf/util/evsel_fprintf.h          | 1 +
->  4 files changed, 13 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
-> index 777a0d8ba7d1..ff9a52e44688 100644
-> --- a/tools/perf/Documentation/perf-script.txt
-> +++ b/tools/perf/Documentation/perf-script.txt
-> @@ -130,7 +130,7 @@ OPTIONS
->  -F::
->  --fields::
->          Comma separated list of fields to print. Options are:
-> -        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, addr, symoff,
-> +        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, dsoff, addr, symoff,
->          srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
->          brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
->          phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index a792214d1af8..ccc409893c4b 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -133,6 +133,7 @@ enum perf_output_field {
->         PERF_OUTPUT_VCPU            = 1ULL << 38,
->         PERF_OUTPUT_CGROUP          = 1ULL << 39,
->         PERF_OUTPUT_RETIRE_LAT      = 1ULL << 40,
-> +       PERF_OUTPUT_DSOFF           = 1ULL << 41,
->  };
->
->  struct perf_script {
-> @@ -174,6 +175,7 @@ struct output_option {
->         {.str = "ip",    .field = PERF_OUTPUT_IP},
->         {.str = "sym",   .field = PERF_OUTPUT_SYM},
->         {.str = "dso",   .field = PERF_OUTPUT_DSO},
-> +       {.str = "dsoff", .field = PERF_OUTPUT_DSOFF},
->         {.str = "addr",  .field = PERF_OUTPUT_ADDR},
->         {.str = "symoff", .field = PERF_OUTPUT_SYMOFFSET},
->         {.str = "srcline", .field = PERF_OUTPUT_SRCLINE},
-> @@ -574,6 +576,9 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
->         if (PRINT_FIELD(DSO))
->                 output[type].print_ip_opts |= EVSEL__PRINT_DSO;
->
-> +       if (PRINT_FIELD(DSOFF))
-> +               output[type].print_ip_opts |= EVSEL__PRINT_DSOFF;
+Fixes: e49eabe3e13f ("pinctrl: qcom: Support OUTPUT_ENABLE; deprecate INPUT_ENABLE")
+Reported-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/4409769/comment/9a1d5def_e1e71db7/
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-What if the user gives 'dsoff' without 'dso'.  Better to set the
-EVSEL__PRINT_DSO as well?
+ drivers/pinctrl/qcom/pinctrl-msm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Namhyung
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
+index 65a172786ae0..c5f52d4f7781 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+@@ -517,7 +517,7 @@ static int msm_config_group_set(struct pinctrl_dev *pctldev,
+ 			 * The points above, explain why this _should_ be a
+ 			 * no-op. However, for historical reasons and to
+ 			 * support old device trees, we'll violate the docs
+-			 * still affect the output.
++			 * and still affect the output.
+ 			 *
+ 			 * It should further be noted that this old historical
+ 			 * behavior actually overrides arg to 0. That means
+-- 
+2.40.0.577.gac1e443424-goog
 
-> +
->         if (PRINT_FIELD(SYMOFFSET))
->                 output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
->
-> diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
-> index 1fb8044d402e..ae8333772c76 100644
-> --- a/tools/perf/util/evsel_fprintf.c
-> +++ b/tools/perf/util/evsel_fprintf.c
-> @@ -116,6 +116,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
->         int print_ip = print_opts & EVSEL__PRINT_IP;
->         int print_sym = print_opts & EVSEL__PRINT_SYM;
->         int print_dso = print_opts & EVSEL__PRINT_DSO;
-> +       int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
->         int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
->         int print_oneline = print_opts & EVSEL__PRINT_ONELINE;
->         int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
-> @@ -174,6 +175,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
->                         if (print_dso && (!sym || !sym->inlined)) {
->                                 printed += fprintf(fp, " (");
->                                 printed += map__fprintf_dsoname(map, fp);
-> +                               if (print_dsoff && map && map->dso)
-> +                                       printed += fprintf(fp, "+0x%lx", addr);
->                                 printed += fprintf(fp, ")");
->                         }
->
-> @@ -209,6 +212,7 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
->         int print_ip = print_opts & EVSEL__PRINT_IP;
->         int print_sym = print_opts & EVSEL__PRINT_SYM;
->         int print_dso = print_opts & EVSEL__PRINT_DSO;
-> +       int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
->         int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
->         int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
->         int print_unknown_as_addr = print_opts & EVSEL__PRINT_UNKNOWN_AS_ADDR;
-> @@ -237,6 +241,8 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
->                 if (print_dso) {
->                         printed += fprintf(fp, " (");
->                         printed += map__fprintf_dsoname(al->map, fp);
-> +                       if (print_dsoff && al->map && al->map->dso)
-> +                               printed += fprintf(fp, "+0x%lx", al->addr);
->                         printed += fprintf(fp, ")");
->                 }
->
-> diff --git a/tools/perf/util/evsel_fprintf.h b/tools/perf/util/evsel_fprintf.h
-> index 3093d096c29f..c8a9fac2f2dd 100644
-> --- a/tools/perf/util/evsel_fprintf.h
-> +++ b/tools/perf/util/evsel_fprintf.h
-> @@ -26,6 +26,7 @@ int evsel__fprintf(struct evsel *evsel, struct perf_attr_details *details, FILE
->  #define EVSEL__PRINT_UNKNOWN_AS_ADDR   (1<<6)
->  #define EVSEL__PRINT_CALLCHAIN_ARROW   (1<<7)
->  #define EVSEL__PRINT_SKIP_IGNORED      (1<<8)
-> +#define EVSEL__PRINT_DSOFF             (1<<9)
->
->  struct addr_location;
->  struct perf_event_attr;
-> --
-> 2.25.1
->
