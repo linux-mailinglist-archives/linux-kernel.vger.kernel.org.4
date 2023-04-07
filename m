@@ -2,157 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02F76DA932
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BAE6DA931
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239421AbjDGHDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 03:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S238839AbjDGHCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 03:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239268AbjDGHC5 (ORCPT
+        with ESMTP id S238453AbjDGHCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 03:02:57 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3B99743
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 00:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680850967; x=1712386967;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RpeddnkgOglW0cqyrivk5LaIXkhzsZ2FkrbBBAcTbSg=;
-  b=N3//QhOiE+6D3rYZv/4D21tEvzfBm4NJDQSDT4fpqMgZCLbTVZc//Fla
-   vq1Ti8tEzFrwSeOW13TKVjth9usdABmGK76qVdJhzvrXl7kI1RYzredLs
-   wZb7j+WxunvXIddHOgffA88eG+4pAzCUfW6GtUKrL14uTTbiXR5x9vOFU
-   +6gkHEVvbvhIThwqILnNsdxyRzQoXi0p29LZ3/B0EN7rmh6b/59JPDwfn
-   cNj1kVJ1Lxsq+3yTFdB+pVLS1SnaO+ITFYZWKaElAbwacxqaH+CNFotec
-   3cxBA107qdGIOw/jIDGSpsaX1iLkM+Mq+6ZS3dtP05VjTvMSWKCYwTK9U
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="340429464"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="340429464"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 00:02:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="776761559"
-X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
-   d="scan'208";a="776761559"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 Apr 2023 00:02:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkg7D-000SDq-2Z;
-        Fri, 07 Apr 2023 07:02:31 +0000
-Date:   Fri, 7 Apr 2023 15:02:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified bound
- 6 equals destination size
-Message-ID: <202304071552.CeeIBr5P-lkp@intel.com>
+        Fri, 7 Apr 2023 03:02:43 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872FD83D1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 00:02:40 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l10-20020a05600c1d0a00b003f04bd3691eso9856103wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 00:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680850959; x=1683442959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yDRZJb+gw9WKl+q/YP3+9vfEWrdxXYb08xE3KjrncwY=;
+        b=TlUNuHXhE7dkX3ma2znO7zdAacJiO27ghArmpkXlH8c3ATv+KBTc8LUhyVrkypI+mP
+         0zQlggzvEemyf2P17MWTNYZVT5pEmY7G8l0KpU4b0QsyPvMfMJZshCs5c4HdBgpV6MQP
+         XN2grzseW68CfcpULpwxh3ynO/USV/6im6FxHW40/svQL+ApI5uK1eCRpcAHn1PqPRYE
+         iwww25egOIvVPfxbt4pMX674CTKLbiVEO/0Ip1e+6ahSlHwFQkQF7naCFmxlgJCIHPZU
+         6QypBjxTNvF8oRGQexdGN9PM2UNsP9cuq6GQxZBhFfnm80WY+czp/4FjLGOZC9ZJW9dw
+         8zbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680850959; x=1683442959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yDRZJb+gw9WKl+q/YP3+9vfEWrdxXYb08xE3KjrncwY=;
+        b=dqCMbqLLWjWrvvcFJ3bknp6OjtnHvDSZuPIENW16jv++iBCAjjINvnZB4h+EMMcp51
+         ryajmNY9lPsBPqZBjwrtN7pKLk1AhTw+xN4bWF21R2AeKeN1gdZQXORK2KSEBNiCA4l7
+         XGNL611cxLi//RkZb5I4lUvFveVsfndHMEa7Jrge5ypX5wRKc6otGtWju4f0V5BMJyi3
+         nqFlG/QOf8/0YB5kIqtYkWScheFrBtvbpKY6995pd0AbNDWQqYR+142F8jTJohoAvcSE
+         N9iJyiavGn9Z/cM7l2nutphEzfl0K0Fu0W3jHJd5fRyyyeq+IHJa5P14Gq2qkUsQnE5Z
+         W90A==
+X-Gm-Message-State: AAQBX9edGDqzymgZ3mw8ut5N8E0TdDL7NoISYRZLLpN1YuETY//7cuPi
+        wvcNZ+Kae5LqK5i1N+dN7+VtCQ==
+X-Google-Smtp-Source: AKy350Yf7cZzWZgOSGchAXM9/7IoYqhc4Z0zpcrhQUgBsDYEyMpw3OS/oAAO8/EgLIduuLczRZdj6g==
+X-Received: by 2002:a05:600c:2202:b0:3ee:289a:3c3a with SMTP id z2-20020a05600c220200b003ee289a3c3amr566623wml.30.1680850958894;
+        Fri, 07 Apr 2023 00:02:38 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id i42-20020a05600c4b2a00b003f0321c22basm7224793wmp.12.2023.04.07.00.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 00:02:38 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 10:02:36 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v5 4/6] scsi: ufs: ufs-qcom: Switch to the new ICE API
+Message-ID: <ZC/ADOlol2XO7ACL@linaro.org>
+References: <20230403200530.2103099-1-abel.vesa@linaro.org>
+ <20230403200530.2103099-5-abel.vesa@linaro.org>
+ <20230406201634.GA20288@sol.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230406201634.GA20288@sol.localdomain>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On 23-04-06 13:16:34, Eric Biggers wrote:
+> Hi Abel,
+> 
+> On Mon, Apr 03, 2023 at 11:05:28PM +0300, Abel Vesa wrote:
+> > Now that there is a new dedicated ICE driver, drop the ufs-qcom-ice and
+> > use the new ICE api provided by the Qualcomm soc driver ice. The platforms
+> > that already have ICE support will use the API as library since there will
+> > not be a devicetree node, but instead they have reg range. In this case,
+> > the of_qcom_ice_get will return an ICE instance created for the consumer's
+> > device. But if there are platforms that do not have ice reg in the
+> > consumer devicetree node and instead provide a dedicated ICE devicetree
+> > node, the of_qcom_ice_get will look up the device based on qcom,ice
+> > property and will get the ICE instance registered by the probe function
+> > of the ice driver.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> 
+> This is still silent about how the ICE clock behavior is being changed.
 
-FYI, the error/warning still remains.
+Right, I'll add the some more info into the commit message about the
+clock being handled by the ICE driver.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f2afccfefe7be1f7346564fe619277110d341f9b
-commit: 8f9e0a52810dd83406c768972d022c37e7a18f1f ACPI: Don't build ACPICA with '-Os'
-date:   2 months ago
-config: x86_64-sof-customedconfig-fuzz-defconfig (https://download.01.org/0day-ci/archive/20230407/202304071552.CeeIBr5P-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f9e0a52810dd83406c768972d022c37e7a18f1f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8f9e0a52810dd83406c768972d022c37e7a18f1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> 
+> I'm still trying to understand all this myself, so please bear with me, but my
+> understanding is that the UFS clocks can be disabled even while the host
+> controller is runtime-resumed.  This is called "clock gating" in the code.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304071552.CeeIBr5P-lkp@intel.com/
+The ICE clock is now being controlled by the new driver.
+> 
+> Before, the ICE clock was just listed as one of the UFS clocks.  So, it was just
+> managed like the other UFS clocks.
+> 
+> Now, it appears that the ICE clock is always enabled while the host controller
+> is runtime-resumed.  So, this patch removes support for gating of the ICE clock.
 
-All errors (new ones prefixed by >>):
+I just tested this and it works as expected, which is:
 
-   drivers/acpi/acpica/tbfind.c: In function 'acpi_tb_find_table':
->> drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified bound 6 equals destination size [-Werror=stringop-truncation]
-      60 |         strncpy(header.oem_id, oem_id, ACPI_OEM_ID_SIZE);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/acpi/acpica/tbfind.c:61:9: error: 'strncpy' specified bound 8 equals destination size [-Werror=stringop-truncation]
-      61 |         strncpy(header.oem_table_id, oem_table_id, ACPI_OEM_TABLE_ID_SIZE);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+ICE clock gets enable on qcom_ice_create (via *clk_get*_enabled) and
+then, on the runtime suspend of the UFS, the qcom_ice_suspend is called
+which will disable the clock. Then, every time UFS runtime
+resumes/suspends the clock gets enabled/disabled.
 
+Hope that makes sense.
 
-vim +/strncpy +60 drivers/acpi/acpica/tbfind.c
+Let me know if you think I'm missing something here.
 
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  16  
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  17  /*******************************************************************************
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  18   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  19   * FUNCTION:    acpi_tb_find_table
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  20   *
-ba494beeaa69bc drivers/acpi/acpica/tbfind.c Bob Moore 2012-07-12  21   * PARAMETERS:  signature           - String with ACPI table signature
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  22   *              oem_id              - String with the table OEM ID
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  23   *              oem_table_id        - String with the OEM Table ID
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  24   *              table_index         - Where the table index is returned
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  25   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  26   * RETURN:      Status and table index
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  27   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  28   * DESCRIPTION: Find an ACPI table (in the RSDT/XSDT) that matches the
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  29   *              Signature, OEM ID and OEM Table ID. Returns an index that can
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  30   *              be used to get the table header or entire table.
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  31   *
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  32   ******************************************************************************/
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  33  acpi_status
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  34  acpi_tb_find_table(char *signature,
-67a119f990063f drivers/acpi/tables/tbfind.c Bob Moore 2008-06-10  35  		   char *oem_id, char *oem_table_id, u32 *table_index)
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  36  {
-ac0f06ebb815da drivers/acpi/acpica/tbfind.c Lv Zheng  2016-09-07  37  	acpi_status status = AE_OK;
-47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  38  	struct acpi_table_header header;
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  39  	u32 i;
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  40  
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  41  	ACPI_FUNCTION_TRACE(tb_find_table);
-f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  42  
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  43  	/* Validate the input table signature */
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  44  
-6a0df32c22fdfc drivers/acpi/acpica/tbfind.c Bob Moore 2016-05-05  45  	if (!acpi_ut_valid_nameseg(signature)) {
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  46  		return_ACPI_STATUS(AE_BAD_SIGNATURE);
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  47  	}
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  48  
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  49  	/* Don't allow the OEM strings to be too long */
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  50  
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  51  	if ((strlen(oem_id) > ACPI_OEM_ID_SIZE) ||
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  52  	    (strlen(oem_table_id) > ACPI_OEM_TABLE_ID_SIZE)) {
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  53  		return_ACPI_STATUS(AE_AML_STRING_LIMIT);
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  54  	}
-9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  55  
-47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  56  	/* Normalize the input strings */
-47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  57  
-4fa4616e279df8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-07-01  58  	memset(&header, 0, sizeof(struct acpi_table_header));
-a3ce7a8e0dd9ba drivers/acpi/acpica/tbfind.c Bob Moore 2019-04-08  59  	ACPI_COPY_NAMESEG(header.signature, signature);
-4fa4616e279df8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-07-01 @60  	strncpy(header.oem_id, oem_id, ACPI_OEM_ID_SIZE);
-
-:::::: The code at line 60 was first introduced by commit
-:::::: 4fa4616e279df89baeb36287bbee83ab272edaed ACPICA: De-macroize calls to standard C library functions
-
-:::::: TO: Bob Moore <robert.moore@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> Is that intended?
+> 
+> - Eric
