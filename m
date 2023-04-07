@@ -2,131 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A856C6DAB56
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915346DAB59
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240367AbjDGKQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S240375AbjDGKRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjDGKQm (ORCPT
+        with ESMTP id S240356AbjDGKRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:16:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C565493EA;
-        Fri,  7 Apr 2023 03:16:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AC5864F13;
-        Fri,  7 Apr 2023 10:16:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1803FC4339E;
-        Fri,  7 Apr 2023 10:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680862600;
-        bh=CKzFfekVaBNvU9m5gXHN+n1Z/uYMoDtKwhblrUGGlII=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lRrp1yO24AlnRDuPIVq6WBifDugBAX4NldgVCmGVHQ0GVCrgYk2spE6wlSIBFVTE7
-         YEwgtU/VYoKcYI5wFQWHpq19+QqG7GsJ2yBV5ZyuNW1oZT5cJTyW0ab4Gz63kegS0W
-         UQVm/2xbDcyno0ABSqUh87ju+087QkMj2IY5zbZN2pKf1EmqC4F5FGEf5T7wiNR/mr
-         kEw3W4LlAv1hJ38+yTnuyzHI01w0mYMwd5HrarCL3fSujux+LC0M3SZPt70atR+u0H
-         uFVXWUktlIKhzxb04dARYtFrwIN7vEUQ7wGmsME1D72RHtNwIkcVO0Ad5xZ40o3E6N
-         euy3A8P6Blraw==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH 3/3] kbuild: do not create intermediate *.tar for tar packages
-Date:   Fri,  7 Apr 2023 19:16:29 +0900
-Message-Id: <20230407101629.1298051-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230407101629.1298051-1-masahiroy@kernel.org>
-References: <20230407101629.1298051-1-masahiroy@kernel.org>
+        Fri, 7 Apr 2023 06:17:47 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5777AA5D5
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:17:43 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id cu36so36533794vsb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 03:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680862662;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TJW7sjmt72lT4THQdV19MmnknlXVp7PoQh7cB3OqPYY=;
+        b=jnGv+3Q0/ypEtmm6X3pNlnXEMcGwKFvjuf52+wL+W/15S/SbHwwxL7snWXSx2ZMcyd
+         6X2jZ+UohYyCXx6q3gXIynsdIhtDalp2/WxYE8GH6k6CSdcabQmoKY5N5Njq6EPpwGdr
+         3JVsuMf3MgITC80eRMRnRkYGNcB8zvVwcpAvWHeBJR3udlO9v+HEUJokoqySztuadKHe
+         aSa6ZlWfSZEUem3GnaphCOZdg49TyOaLwsrejP4j/vKrCDCt0U32RUVpvlNnNUoK6YkN
+         10S2f+5akG5+F+pJavU0t3hNU0T9BnfvnVkCJpl4iAzy4lbUBVY6MpcIqJ+pRepL2Cff
+         tHMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680862662;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TJW7sjmt72lT4THQdV19MmnknlXVp7PoQh7cB3OqPYY=;
+        b=G5cJswcDBBSSXQ0pHKqMyptbi0gPvpZhc+ngbDfd0WDCSG8urWSDTEPL6+zq4cj4wO
+         1SaaelePq1ibtXiP+397mKo6VEKVZeLF2B4tiLH7H+reB/FkP1XWnFO1OJ79HQsR0T3q
+         GP/VpJBlQigziVWggxGPXB1eMZ2ALNylA6weWRHS0zKoDQYf9Mwh7aXov0GRpZGtPFZP
+         YaJCXYvfzPi3vpW0uBAU0vTcFP0sM+t8fRdtF/CWhMNAaPIzYXHTeUnSxQnmw2HZAqp3
+         5L4bTYOhEZxwCkBsY/9K9/D/y/DZjp19h6OvAoxjGvFdtGNgJj3ZtqI06vgl1L+9B5g2
+         xnng==
+X-Gm-Message-State: AAQBX9eh9cUHOVCnMo0dkt+tFsamXevwlG17Du+S9BVuyNKV7cFDXyxK
+        5PF4eLasg52sOTG/9Hc3Ajwv3ZWpvnnbTyoMFoykiQ==
+X-Google-Smtp-Source: AKy350YGf9gRAbDU82M96Lkvun1+ExRRdByoOp3KUflpS6XIF+nnu1nuldu7mfH9yV/jIEaz63lE0m2JlFfbHYE6vZs=
+X-Received: by 2002:a67:d48d:0:b0:411:b4c2:c6c0 with SMTP id
+ g13-20020a67d48d000000b00411b4c2c6c0mr873553vsj.0.1680862662472; Fri, 07 Apr
+ 2023 03:17:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1680708357.git.william.gray@linaro.org> <20e15cd3afae80922b7e0577c7741df86b3390c5.1680708357.git.william.gray@linaro.org>
+ <50d8ee72-9b5c-4abc-a230-2aeb6eddf03e@sirena.org.uk>
+In-Reply-To: <50d8ee72-9b5c-4abc-a230-2aeb6eddf03e@sirena.org.uk>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 7 Apr 2023 12:17:31 +0200
+Message-ID: <CAMRc=Mc0HcMnuBqsN7ReNB5JTWR0C4FbMRRM9S7kqhW5otP5WA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/3] regmap: Pass irq_drv_data as a parameter for set_type_config()
+To:     Mark Brown <broonie@kernel.org>
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        techsupport@winsystems.com, pdemetrotion@winsystems.com,
+        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 05e96e96a315 ("kbuild: use git-archive for source package
-creation") split the compression as a separate step to factor out
-the common build rules.
+On Thu, Apr 6, 2023 at 7:23=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
+>
+> On Wed, Apr 05, 2023 at 11:45:42AM -0400, William Breathitt Gray wrote:
+> > Allow the struct regmap_irq_chip set_type_config() callback to access
+> > irq_drv_data by passing it as a parameter.
+>
+> The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9da=
+65:
+>
+>   Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
+>
+> are available in the Git repository at:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags=
+/regmap-set-type-irq-drv-data
+>
+> for you to fetch changes up to 7697c64b9e4908196f0ae68aa6d423dd40607973:
+>
+>   regmap: Pass irq_drv_data as a parameter for set_type_config() (2023-04=
+-05 17:19:24 +0100)
+>
+> ----------------------------------------------------------------
+> regmap: Pass irq_drv_data as a parameter for set_type_config()
+>
+> Allow callbacks to access irq_drv_data.
+>
+> ----------------------------------------------------------------
+> William Breathitt Gray (1):
+>       regmap: Pass irq_drv_data as a parameter for set_type_config()
+>
+>  drivers/base/regmap/regmap-irq.c | 8 +++++---
+>  include/linux/regmap.h           | 6 ++++--
+>  2 files changed, 9 insertions(+), 5 deletions(-)
 
-With the previous commit, we got back to the situation where
-compressed source tarballs are created by a single rule.
-There is no reason to keep the separate compression rules.
+Pulled Mark's tag and applied the two remaining patches, thanks!
 
-Generate the comressed tar packages directly.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/Makefile.package | 27 +++++++++------------------
- 1 file changed, 9 insertions(+), 18 deletions(-)
-
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index 7707975f729b..e0e18d7dfbd5 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -2,7 +2,6 @@
- # Makefile for the different targets used to generate full packages of a kernel
- 
- include $(srctree)/scripts/Kbuild.include
--include $(srctree)/scripts/Makefile.lib
- 
- KERNELPATH := kernel-$(subst -,_,$(KERNELRELEASE))
- KBUILD_PKG_ROOTCMD ?="fakeroot -u"
-@@ -27,21 +26,6 @@ fi ; \
- tar -I $(KGZIP) -c $(RCS_TAR_IGNORE) -f $(2).tar.gz \
- 	--transform 's:^:$(2)/:S' $(TAR_CONTENT) $(3)
- 
--# tarball compression
--# ---------------------------------------------------------------------------
--
--%.tar.gz: %.tar
--	$(call cmd,gzip)
--
--%.tar.bz2: %.tar
--	$(call cmd,bzip2)
--
--%.tar.xz: %.tar
--	$(call cmd,xzmisc)
--
--%.tar.zst: %.tar
--	$(call cmd,zstd)
--
- # Git
- # ---------------------------------------------------------------------------
- 
-@@ -153,10 +137,17 @@ tar-install: FORCE
- 	$(Q)$(MAKE) -f $(srctree)/Makefile
- 	+$(Q)$(srctree)/scripts/package/buildtar $@
- 
-+compress-tar.gz  = -I "$(KGZIP)"
-+compress-tar.bz2 = -I "$(KBZIP2)"
-+compress-tar.xz  = -I "$(XZ)"
-+compress-tar.zst = -I "$(ZSTD)"
-+
- quiet_cmd_tar = TAR     $@
--      cmd_tar = cd $<; tar cf ../$@ --owner=root --group=root --sort=name *
-+      cmd_tar = cd $<; tar cf ../$@ $(compress-tar$(suffix $@)) --owner=root --group=root --sort=name *
-+
-+dir-tarballs := $(addprefix linux-$(KERNELRELEASE)-$(ARCH), .tar .tar.gz .tar.bz2 .tar.xz .tar.zst)
- 
--linux-$(KERNELRELEASE)-$(ARCH).tar: tar-install
-+$(dir-tarballs): tar-install
- 	$(call cmd,tar)
- 
- PHONY += dir-pkg
--- 
-2.37.2
-
+Bart
