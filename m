@@ -2,99 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5A66DABDA
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367686DABD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjDGK5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
+        id S231334AbjDGK5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbjDGK5d (ORCPT
+        with ESMTP id S236651AbjDGK4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:57:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCE4B752
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680864897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=k0rU9qN6OXQn9VhfokzgjZmLQQ8B6AgUhbS5Fy6LXPg=;
-        b=dNmWxebckJ2Wz3yzoCHTHVvZhJJSMWDvm9AO6xlBKt0t8PMr/udzAVDY4nfocrvK1LOBba
-        dfGpiFg43IcR3Vi3vRawUSNRWHG87Wba1Pe/BRsFXBaqd4HWG5c5GRFAWoOkVDhJKuscQ5
-        89a/jHcWVwFBPOx/d+t2z5DTSzcQKxs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-572-9EvhxzGcNRiZxncQPdGlMA-1; Fri, 07 Apr 2023 06:54:56 -0400
-X-MC-Unique: 9EvhxzGcNRiZxncQPdGlMA-1
-Received: by mail-wm1-f71.google.com with SMTP id n11-20020a05600c3b8b00b003f04739b77aso9381363wms.9
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 03:54:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680864894;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0rU9qN6OXQn9VhfokzgjZmLQQ8B6AgUhbS5Fy6LXPg=;
-        b=oPLMoWkDfYHm6ilTnoLAzBCrukSNpPXRGbGMpv3r88WGcF08KtFwiMVxwUfZOfqW5O
-         XNBEuOe72XXcu6O45dWbbU3vnLqBYi9qSlZeQTWI7ArRZKf25s7pRaiz8DEi5S2gwFfG
-         T0nDy1ZWtMziikQG8xxoPPrIFvQOTTwEXMCZNcLiNEcjC545KdUAIePZtWpceGYYl5nk
-         LYzLlWiPI8VHLkZSHfFZHn+h7mxDhi8i/HvMUJ//Fk/dsOATPJIzH45t8y+ILwiIQHwx
-         YX/TuutWjytSpvpflLo/1coyUg41Epo6FJHnkUhtUlBg04corfmWg7YGjOdRQfNVCTej
-         a9jA==
-X-Gm-Message-State: AAQBX9dY6/+LKPa1DciGGId6qtA1KV6LwF55Orx2BXYGCbb+pEc7SFJW
-        P1gL6k4im1jCQSYEIj6b7ZFtyJCxAAxKlnhiUiD3eWZ68hDJCJZRsepEexUZiQcyG0paG6EXaJQ
-        zh/W9Xy4wU6u5tcPl8ROHWPFkOoRmITenrO6ctH/nU/S+hAhg6/3qf7B1h8+WsTvviQE9G4dz7H
-        zIaA==
-X-Received: by 2002:a5d:4311:0:b0:2ce:9fb8:b560 with SMTP id h17-20020a5d4311000000b002ce9fb8b560mr1214138wrq.8.1680864894772;
-        Fri, 07 Apr 2023 03:54:54 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Zz1WAl1pBgluIyvHAQ7Jass36PS67oNBouOPMJdAbw2ewAZH/Tiop2wAnpCorp5JLSJO7M/A==
-X-Received: by 2002:a5d:4311:0:b0:2ce:9fb8:b560 with SMTP id h17-20020a5d4311000000b002ce9fb8b560mr1214127wrq.8.1680864894384;
-        Fri, 07 Apr 2023 03:54:54 -0700 (PDT)
-Received: from redhat.com ([2a06:c701:742d:fd00:c847:221d:9254:f7ce])
-        by smtp.gmail.com with ESMTPSA id t16-20020a05600c451000b003ef66c89af0sm11411742wmo.0.2023.04.07.03.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 03:54:53 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 06:54:51 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH] dma-api-howto: typo fix
-Message-ID: <af1505348a67981f63ccff4e3c3d45b686cda43f.1680864874.git.mst@redhat.com>
+        Fri, 7 Apr 2023 06:56:47 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAA96A74
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:55:38 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id A361B14B53E;
+        Fri,  7 Apr 2023 12:55:36 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1680864936; bh=U8kPN4Yj0CIndWrR4OoPEKQkLAq9ITd7QDh5nTQuHtI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=wlWRwK7E//70YUYlOiwmvCLQ+JUVE6Fecr684ItS5b31MS7o3Fk8ZHf53PJTKqdcC
+         CuG+OubZdMklUrQKPzOGGQj0pkv954uO/GphHHlEwMpYIIsBzLcUWWPisoI16u8WI6
+         jesicsj6oI5VzUsprC2gRHMF3ISVM+UzaoPfIfQZeA6P8CvzXZnp2CEDA9N+Ksm0BI
+         dOCN8Tc7wTBjvpw94EqBmH13XRq+8TMlmYfmhCPeW+CpCOEJ+mvMdJyJpIJV1Vch0M
+         fgSS+T2G0mSrEsi0sESZ37tLnaapUrabxcXQzdMQL5GlO4p6hI+8traPSm7KU/wY3l
+         5jpj9hPwuBhOA==
+Date:   Fri, 7 Apr 2023 12:55:35 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        decui@microsoft.com, tiala@microsoft.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] swiotlb: Track and report io_tlb_used high water
+ mark in debugfs
+Message-ID: <20230407125535.476350d4@meshulam.tesarici.cz>
+In-Reply-To: <1680324300-124563-1-git-send-email-mikelley@microsoft.com>
+References: <1680324300-124563-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stumbled upon a typo while reading the doc, here's a fix.
+On Fri, 31 Mar 2023 21:45:00 -0700
+Michael Kelley <mikelley@microsoft.com> wrote:
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
- Documentation/core-api/dma-api-howto.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> swiotlb currently reports the total number of slabs and the instantaneous
+> in-use slabs in debugfs. But with increased usage of swiotlb for all I/O
+> in Confidential Computing (coco) VMs, it has become difficult to know
+> how much memory to allocate for swiotlb bounce buffers, either via the
+> automatic algorithm in the kernel or by specifying a value on the
+> kernel boot line. The current automatic algorithm generously allocates
+> swiotlb bounce buffer memory, and may be wasting significant memory in
+> many use cases.
+> 
+> To support better understanding of swiotlb usage, add tracking of the
+> the high water mark usage of the default swiotlb bounce buffer memory
+> pool. Report the high water mark in debugfs along with the other swiotlb
+> metrics.  Allow the high water mark to be reset to zero at runtime by
+> writing to it.
+> 
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+> Changes in v3:
+> * Do high water mark accounting only when CONFIG_DEBUG_FS=y. As
+>   as a result, add back the mem_used() function for the "swiotlb
+>   buffer is full" error message. [Christoph -- I didn't hear back
+>   whether this approach addresses your concern about one additional
+>   atomic operation when slots are allocated and again when freed. I've
+>   gone ahead with this new version, and we can obviously have further
+>   discussion.]
+> 
+> * Remove unnecessary u64 casts. [Christoph Hellwig]
+> 
+> * Track slot usage and the high water mark only for io_tlb_default_mem.
+>   Previous versions incorrectly included per-device pools. [Petr Tesarik]
+> 
+> Changes in v2:
+> * Only reset the high water mark to zero when the specified new value
+>   is zero, to prevent confusion about the ability to reset to some
+>   other value [Dexuan Cui]
+> 
+>  kernel/dma/swiotlb.c | 41 ++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 40 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+> index d3d6be0..6587a3d 100644
+> --- a/kernel/dma/swiotlb.c
+> +++ b/kernel/dma/swiotlb.c
+> @@ -76,6 +76,9 @@ struct io_tlb_slot {
+>  static unsigned long default_nslabs = IO_TLB_DEFAULT_SIZE >> IO_TLB_SHIFT;
+>  static unsigned long default_nareas;
+>  
+> +static atomic_long_t total_used = ATOMIC_LONG_INIT(0);
+> +static atomic_long_t used_hiwater = ATOMIC_LONG_INIT(0);
+> +
+>  /**
+>   * struct io_tlb_area - IO TLB memory area descriptor
+>   *
+> @@ -594,6 +597,7 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
+>  	unsigned long flags;
+>  	unsigned int slot_base;
+>  	unsigned int slot_index;
+> +	unsigned long old_hiwater, new_used;
+>  
+>  	BUG_ON(!nslots);
+>  	BUG_ON(area_index >= mem->nareas);
+> @@ -663,6 +667,17 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
+>  		area->index = 0;
+>  	area->used += nslots;
+>  	spin_unlock_irqrestore(&area->lock, flags);
+> +
+> +	if (IS_ENABLED(CONFIG_DEBUG_FS) && mem == &io_tlb_default_mem) {
 
-diff --git a/Documentation/core-api/dma-api-howto.rst b/Documentation/core-api/dma-api-howto.rst
-index 828846804e25..72f6cdb6be1c 100644
---- a/Documentation/core-api/dma-api-howto.rst
-+++ b/Documentation/core-api/dma-api-howto.rst
-@@ -185,7 +185,7 @@ device struct of your device is embedded in the bus-specific device struct of
- your device.  For example, &pdev->dev is a pointer to the device struct of a
- PCI device (pdev is a pointer to the PCI device struct of your device).
- 
--These calls usually return zero to indicated your device can perform DMA
-+These calls usually return zero to indicate your device can perform DMA
- properly on the machine given the address mask you provided, but they might
- return an error if the mask is too small to be supportable on the given
- system.  If it returns non-zero, your device cannot perform DMA properly on
--- 
-MST
+Yes, this works fine now, but why are total_used and used_hiwater
+global variables? If you make them fields in struct io_tlb_mem
+(possibly guarded with #ifdef CONFIG_DEBUG_FS), you can get rid of the
+check. Of course, in instances other than io_tlb_default_mem these
+fields would not be exported to userspace through debugfs, but if really
+needed, I can at least find them in a crash dump (or read them through
+/proc/kcore).
 
+Petr T
