@@ -2,261 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14896DACAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8F76DACB5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230492AbjDGMpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 08:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
+        id S233426AbjDGMq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 08:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjDGMpn (ORCPT
+        with ESMTP id S232606AbjDGMqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 08:45:43 -0400
-Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de [80.67.18.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FED40F6;
-        Fri,  7 Apr 2023 05:45:39 -0700 (PDT)
-Received: from [92.206.161.29] (helo=note-book.lan)
-        by smtprelay04.ispgateway.de with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <git@apitzsch.eu>)
-        id 1pklTE-0002cY-O8; Fri, 07 Apr 2023 14:45:36 +0200
-From:   =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-Date:   Fri, 07 Apr 2023 14:44:25 +0200
-Subject: [PATCH v2 2/2] Input: atmel_mxt_ts - support capacitive keys
+        Fri, 7 Apr 2023 08:46:54 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DBAD02;
+        Fri,  7 Apr 2023 05:46:50 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso18725824otv.6;
+        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680871610; x=1683463610;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
+        b=PnjN0Q3tykVW8UtftVm7wAXYCY0sHkDutOu46Z5WOJvciTHyr9GgP3o5jPpu0TH9mx
+         2de22563QodepzobSaq7qmDvZJSaynTQIqqW4RS/SwpGcHebMzsaA7oHn3wwW4HLvMgS
+         ECMnv05+ZSxLlw/7aruZSq93ynHFKDLPmavwIWP60k/kXx9DMJL+ZUxeiC//DH9Tk/Qi
+         PtJGPFgzA6TDGupFnp3Mib60ieivq0s24xZpkZrpFa1tnvPOfiq0w+aPpm+MS1Cjb5Q1
+         ewcmU6fAeRE/ZpWvVFKkiUoOmOFjPNR5rHm6gqBdhhUHkpZqrH8iLe9D7o7nsIAqWxuh
+         8k3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680871610; x=1683463610;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
+        b=CS8hx1CBLioOmlAjYN9GHI2MEszOIBHQQu87ebRdFB3dXV0A4Ytd7zln666rufMRwx
+         GFoVpWbIQRscKb6q6RG/wuQJE1XLm7cCtWFXsbLK0l4+JFlLju8ubzJhVjdKv6uJhJYs
+         Nm+O2G8QoBBbKbW2uDMgYEnm3BoRj8iG9Q21/ijTnOoSqP3zexmYa7Q9cjgC2hggQk7/
+         4rlSjKxca2kSaWBEWPgNkMNTuwlxLBwb1cDoqeI9KG9igclP7F8wP6np2G+M1gdx8Onw
+         kEx1aiCmt/4EVkJdtsG0c3gpHgivAQLqiWiAdao/d62Jx6CxiWB2YOhJ5XMvGR+twZM4
+         DH5A==
+X-Gm-Message-State: AAQBX9fI0l5YEZo6mrq7r+qIlNw0KKsvEd76v4aaGn3x6uGiOJgXH/zN
+        ll06tJh+GeWrMdg3v/zAEW16OnuXp+g=
+X-Google-Smtp-Source: AKy350buYaLh+KrmXZBo0/Wm/s1AM5CYsV+B4+BDSnrmL3bR9QqWEkb4sIeE5zhomhkFx9ka+WDYiA==
+X-Received: by 2002:a9d:6c0c:0:b0:68b:d61c:168f with SMTP id f12-20020a9d6c0c000000b0068bd61c168fmr953370otq.11.1680871610135;
+        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d16-20020a9d5e10000000b006a305c68617sm1664872oti.53.2023.04.07.05.46.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 05:46:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <27bafe2b-6fc0-2e5c-8c4e-99ed74caa5d6@roeck-us.net>
+Date:   Fri, 7 Apr 2023 05:46:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230407-atmel_keys-v2-2-92446a4343cb@apitzsch.eu>
-References: <20230407-atmel_keys-v2-0-92446a4343cb@apitzsch.eu>
-In-Reply-To: <20230407-atmel_keys-v2-0-92446a4343cb@apitzsch.eu>
-To:     Nick Dyer <nick@shmanahar.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
-X-Mailer: b4 0.12.2
-X-Df-Sender: YW5kcmVAYXBpdHpzY2guZXU=
-X-Spam-Status: No, score=0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Yang Ling <gnaygnil@gmail.com>
+References: <20230407110025.516405-1-keguang.zhang@gmail.com>
+ <20230407110025.516405-3-keguang.zhang@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230407110025.516405-3-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for touch keys found in some Atmel touch controller
-configurations.
+On 4/7/23 04:00, Keguang Zhang wrote:
+> This patch adds the of_match_table to enable DT support
+> of Loongson-1 watchdog driver.
+> And modify the parameter of devm_clk_get() accordingly.
+> 
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> ---
+>   drivers/watchdog/loongson1_wdt.c | 12 +++++++++++-
+>   1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
+> index bb3d075c0633..c2694222ea86 100644
+> --- a/drivers/watchdog/loongson1_wdt.c
+> +++ b/drivers/watchdog/loongson1_wdt.c
+> @@ -5,6 +5,7 @@
+>   
+>   #include <linux/clk.h>
+>   #include <linux/module.h>
+> +#include <linux/mod_devicetable.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/watchdog.h>
+>   #include <loongson1.h>
+> @@ -100,7 +101,7 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
+>   	if (IS_ERR(drvdata->base))
+>   		return PTR_ERR(drvdata->base);
+>   
+> -	drvdata->clk = devm_clk_get(dev, pdev->name);
+> +	drvdata->clk = devm_clk_get(dev, NULL);
+>   	if (IS_ERR(drvdata->clk))
+>   		return PTR_ERR(drvdata->clk);
+>   
+> @@ -142,10 +143,19 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
+>   	return 0;
+>   }
+>   
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id ls1x_wdt_dt_ids[] = {
+> +	{ .compatible = "loongson,ls1x-wdt", },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ls1x_wdt_dt_ids);
+> +#endif
+> +
+>   static struct platform_driver ls1x_wdt_driver = {
+>   	.probe = ls1x_wdt_probe,
+>   	.driver = {
+>   		.name = "ls1x-wdt",
+> +		.of_match_table = ls1x_wdt_dt_ids,
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: André Apitzsch <git@apitzsch.eu>
----
- drivers/input/touchscreen/atmel_mxt_ts.c | 85 ++++++++++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+If CONFIG_OF=n, this would result in a missing symbol.
 
-diff --git a/drivers/input/touchscreen/atmel_mxt_ts.c b/drivers/input/touchscreen/atmel_mxt_ts.c
-index 996bf434e1cb..eb368dd1abf0 100644
---- a/drivers/input/touchscreen/atmel_mxt_ts.c
-+++ b/drivers/input/touchscreen/atmel_mxt_ts.c
-@@ -55,6 +55,7 @@
- #define MXT_TOUCH_KEYARRAY_T15		15
- #define MXT_TOUCH_PROXIMITY_T23		23
- #define MXT_TOUCH_PROXKEY_T52		52
-+#define MXT_TOUCH_PTC_KEYS_T97		97
- #define MXT_PROCI_GRIPFACE_T20		20
- #define MXT_PROCG_NOISE_T22		22
- #define MXT_PROCI_ONETOUCH_T24		24
-@@ -326,9 +327,13 @@ struct mxt_data {
- 	u16 T71_address;
- 	u8 T9_reportid_min;
- 	u8 T9_reportid_max;
-+	u8 T15_reportid_min;
-+	u8 T15_reportid_max;
- 	u16 T18_address;
- 	u8 T19_reportid;
- 	u16 T44_address;
-+	u8 T97_reportid_min;
-+	u8 T97_reportid_max;
- 	u8 T100_reportid_min;
- 	u8 T100_reportid_max;
- 
-@@ -344,6 +349,9 @@ struct mxt_data {
- 	u32 *t19_keymap;
- 	unsigned int t19_num_keys;
- 
-+	u32 *t15_keymap;
-+	unsigned int t15_num_keys;
-+
- 	enum mxt_suspend_mode suspend_mode;
- 
- 	u32 wakeup_method;
-@@ -375,6 +383,7 @@ static bool mxt_object_readable(unsigned int type)
- 	case MXT_TOUCH_KEYARRAY_T15:
- 	case MXT_TOUCH_PROXIMITY_T23:
- 	case MXT_TOUCH_PROXKEY_T52:
-+	case MXT_TOUCH_PTC_KEYS_T97:
- 	case MXT_TOUCH_MULTITOUCHSCREEN_T100:
- 	case MXT_PROCI_GRIPFACE_T20:
- 	case MXT_PROCG_NOISE_T22:
-@@ -891,6 +900,25 @@ static void mxt_proc_t9_message(struct mxt_data *data, u8 *message)
- 	data->update_input = true;
- }
- 
-+static void mxt_proc_t15_messages(struct mxt_data *data, u8 *message)
-+{
-+	struct input_dev *input_dev = data->input_dev;
-+	unsigned long keystates = get_unaligned_le32(&message[2]);
-+	int key;
-+
-+	for (key = 0; key < data->t15_num_keys; key++) {
-+		input_report_key(input_dev, data->t15_keymap[key],
-+			!!(keystates & BIT(key)));
-+	}
-+
-+	data->update_input = true;
-+}
-+
-+static void mxt_proc_t97_messages(struct mxt_data *data, u8 *message)
-+{
-+	mxt_proc_t15_messages(data, message);
-+}
-+
- static void mxt_proc_t100_message(struct mxt_data *data, u8 *message)
- {
- 	struct device *dev = &data->client->dev;
-@@ -1017,6 +1045,12 @@ static int mxt_proc_message(struct mxt_data *data, u8 *message)
- 	} else if (report_id >= data->T9_reportid_min &&
- 		   report_id <= data->T9_reportid_max) {
- 		mxt_proc_t9_message(data, message);
-+	} else if (report_id >= data->T15_reportid_min &&
-+		   report_id <= data->T15_reportid_max) {
-+		mxt_proc_t15_messages(data, message);
-+	} else if (report_id >= data->T97_reportid_min &&
-+		   report_id <= data->T97_reportid_max) {
-+		mxt_proc_t97_messages(data, message);
- 	} else if (report_id >= data->T100_reportid_min &&
- 		   report_id <= data->T100_reportid_max) {
- 		mxt_proc_t100_message(data, message);
-@@ -1689,9 +1723,13 @@ static void mxt_free_object_table(struct mxt_data *data)
- 	data->T71_address = 0;
- 	data->T9_reportid_min = 0;
- 	data->T9_reportid_max = 0;
-+	data->T15_reportid_min = 0;
-+	data->T15_reportid_max = 0;
- 	data->T18_address = 0;
- 	data->T19_reportid = 0;
- 	data->T44_address = 0;
-+	data->T97_reportid_min = 0;
-+	data->T97_reportid_max = 0;
- 	data->T100_reportid_min = 0;
- 	data->T100_reportid_max = 0;
- 	data->max_reportid = 0;
-@@ -1764,6 +1802,10 @@ static int mxt_parse_object_table(struct mxt_data *data,
- 						object->num_report_ids - 1;
- 			data->num_touchids = object->num_report_ids;
- 			break;
-+		case MXT_TOUCH_KEYARRAY_T15:
-+			data->T15_reportid_min = min_id;
-+			data->T15_reportid_max = max_id;
-+			break;
- 		case MXT_SPT_COMMSCONFIG_T18:
- 			data->T18_address = object->start_address;
- 			break;
-@@ -1773,6 +1815,10 @@ static int mxt_parse_object_table(struct mxt_data *data,
- 		case MXT_SPT_GPIOPWM_T19:
- 			data->T19_reportid = min_id;
- 			break;
-+		case MXT_TOUCH_PTC_KEYS_T97:
-+			data->T97_reportid_min = min_id;
-+			data->T97_reportid_max = max_id;
-+			break;
- 		case MXT_TOUCH_MULTITOUCHSCREEN_T100:
- 			data->multitouch = MXT_TOUCH_MULTITOUCHSCREEN_T100;
- 			data->T100_reportid_min = min_id;
-@@ -2050,6 +2096,7 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 	int error;
- 	unsigned int num_mt_slots;
- 	unsigned int mt_flags = 0;
-+	int i;
- 
- 	switch (data->multitouch) {
- 	case MXT_TOUCH_MULTI_T9:
-@@ -2095,6 +2142,10 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 	input_dev->open = mxt_input_open;
- 	input_dev->close = mxt_input_close;
- 
-+	input_dev->keycode = data->t15_keymap;
-+	input_dev->keycodemax = data->t15_num_keys;
-+	input_dev->keycodesize = sizeof(data->t15_keymap[0]);
-+
- 	input_set_capability(input_dev, EV_KEY, BTN_TOUCH);
- 
- 	/* For single touch */
-@@ -2162,6 +2213,12 @@ static int mxt_initialize_input_device(struct mxt_data *data)
- 				     0, 255, 0, 0);
- 	}
- 
-+	/* For T15 and T97 Key Array */
-+	if (data->T15_reportid_min || data->T97_reportid_min) {
-+		for (i = 0; i < data->t15_num_keys; i++)
-+			input_set_capability(input_dev, EV_KEY, data->t15_keymap[i]);
-+	}
-+
- 	input_set_drvdata(input_dev, data);
- 
- 	error = input_register_device(input_dev);
-@@ -3080,8 +3137,10 @@ static void mxt_input_close(struct input_dev *dev)
- static int mxt_parse_device_properties(struct mxt_data *data)
- {
- 	static const char keymap_property[] = "linux,gpio-keymap";
-+	static const char buttons_property[] = "linux,keycodes";
- 	struct device *dev = &data->client->dev;
- 	u32 *keymap;
-+	u32 *buttonmap;
- 	int n_keys;
- 	int error;
- 
-@@ -3111,6 +3170,32 @@ static int mxt_parse_device_properties(struct mxt_data *data)
- 		data->t19_num_keys = n_keys;
- 	}
- 
-+	if (device_property_present(dev, buttons_property)) {
-+		n_keys = device_property_count_u32(dev, buttons_property);
-+		if (n_keys <= 0) {
-+			error = n_keys < 0 ? n_keys : -EINVAL;
-+			dev_err(dev, "invalid/malformed '%s' property: %d\n",
-+				buttons_property, error);
-+			return error;
-+		}
-+
-+		buttonmap = devm_kmalloc_array(dev, n_keys, sizeof(*buttonmap),
-+					       GFP_KERNEL);
-+		if (!buttonmap)
-+			return -ENOMEM;
-+
-+		error = device_property_read_u32_array(dev, buttons_property,
-+						       buttonmap, n_keys);
-+		if (error) {
-+			dev_err(dev, "failed to parse '%s' property: %d\n",
-+				buttons_property, error);
-+			return error;
-+		}
-+
-+		data->t15_keymap = buttonmap;
-+		data->t15_num_keys = n_keys;
-+	}
-+
- 	return 0;
- }
- 
-
--- 
-2.40.0
+Guenter
 
