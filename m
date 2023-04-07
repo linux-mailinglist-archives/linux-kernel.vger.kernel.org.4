@@ -2,134 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3464A6DA968
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783F16DA969
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbjDGHYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 03:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S231680AbjDGHYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 03:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239225AbjDGHYV (ORCPT
+        with ESMTP id S230141AbjDGHYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 03:24:21 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90793A5D3
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 00:24:19 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5024a8f116aso1748668a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 00:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680852258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kshOPFJfjBG6SX0RPJIED8tn+j6nke6HbR8Ev65KzHg=;
-        b=e9YSrHu8QfotxaTp0VSJrOYN8lvoaNBzYB1yE1FND2Mew00Kvx1zEtD8Kmu57MKHsr
-         F18FA4woc2StB2z5UQnQh/yb4pesTpJIk139MbLhz3VxRcvTngFFfZ++pa7hOc4NB9Kr
-         PXR2G38oHc2SfmP+aKPAex1cJJGAPhA52Cudtv4juAil5pWu7QV4r4UQkhJXcxJFz4CS
-         IK2+PO1U0GlT4ewKtSDc0GIUP/DyWZqGpOtMoGA4OUlqMZQo4DTHiPxnEfi2ZP5UAyd9
-         EBZnlZKv+FfeSeZxDXJtEe+by7dpmrkvLCxJdX0u56z4aAJGt+S77YFrDqxoWVRt5NQk
-         hrHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680852258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kshOPFJfjBG6SX0RPJIED8tn+j6nke6HbR8Ev65KzHg=;
-        b=fa3rWijdGliIrimsruvelZwH0JixJEqjwaJytmQGUgKLH+LMevMFXgaWXfRHUrXbI2
-         U8QunZD22uMBvSnk+RQtIN9gFtrLTd/zAS5YJQO7eYtBzEg1I/bnhkCmNaaXqEpCG1Pm
-         bndkM+zgcLBx8MJYB73PqeN6sg2FdnFlvhh+xjnaKpy69DnGuSenRx2zdn79Mzwq0LvK
-         fypLzEDPv7aOUxKhJbG0dwdePEXbIbuED60HnM+HCkgBFJaikZ2qvgEu41poNbQsMykU
-         67CJfrESWHXH2+Itde/SPC5x87VbpL2jvWNb5sN16m50rSqWYCSmGjl/tPm0ZCtUHiue
-         b8Ww==
-X-Gm-Message-State: AAQBX9dJS3dd3flGDTpg0XIm3hTNTl0ji6EW+NQ6o0LK25k7bM4bS0Rd
-        ZaS4T10shMARrPqDpSeqe6Hoc7J07fPqFmvNOLsx97SulbQzCZ0G4O5KiC80
-X-Google-Smtp-Source: AKy350Z+HM2JQIElrXH+tranSxHGmwPxG7Kcw1s9qWFBSYaElU2RfJUIJoVCyc7GhnBwrECWa+fSX/N0dWNEYF5+JpE=
-X-Received: by 2002:a50:cd01:0:b0:501:d3a2:b4ae with SMTP id
- z1-20020a50cd01000000b00501d3a2b4aemr470507edi.7.1680852246994; Fri, 07 Apr
- 2023 00:24:06 -0700 (PDT)
+        Fri, 7 Apr 2023 03:24:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A72AF03
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 00:24:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD778649FE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 07:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4CBC433D2;
+        Fri,  7 Apr 2023 07:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680852267;
+        bh=pkE0yg4NEsMuY424B1fUDMze2BcBYrIeATbsW/86JnA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LNd969JNzM5FebmOsH14UhkV6Hp5vlAM2+Ll8YCDKvW6AUpJJYYhI3e1XVN3O40WU
+         RGDDgSmVPokcztw9uY/Xk/BuJOo/MlgCNeUdihHSK1cvYSNzSmg+DAaf6/xnzCPu+U
+         74cqx8RBL9PxWPEhLV8sat9ibwSKnALyEgBLh/Gu5xkaQDz18iEYc1ILEdoDrsQyio
+         sumO5Hcvk48snpOHVoMu+koGejKj2zMdwEdVZYJM/MUoRAC1XToUkuYFhQdVplU/G0
+         9aHZKB1ZqTxOWnXaaU2eifHV3wjVAfAAk5adtcjUSm/klv5S+RCIcueMi388iokMm6
+         /0AJPEqGjb9kw==
+Date:   Fri, 7 Apr 2023 00:24:25 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
+Subject: lkdtm_UNSET_SMEP() with IBT
+Message-ID: <20230407072425.zfsy272vk46agno4@treble>
 MIME-Version: 1.0
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
- <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com>
-In-Reply-To: <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Fri, 7 Apr 2023 09:23:55 +0200
-Message-ID: <CABb0KFF+sKSv7jdxBbXpt5A2WO83tKb9viq-kKurXN_e1VcFhQ@mail.gmail.com>
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Apr 2023 at 23:12, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 4/7/23 1:12=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> > [...]
-> >> --- a/fs/proc/task_mmu.c
-> >> +++ b/fs/proc/task_mmu.c
-> > [...]
-> >> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
-> >> +                                 unsigned long end, struct mm_walk *w=
-alk)
-> >> +{
-[...]
-> >> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> >> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
-> >> +       if (ptl) {
-> > [...]
-> >> +               return ret;
-> >> +       }
-> >> +process_smaller_pages:
-> >> +       if (pmd_trans_unstable(pmd))
-> >> +               return 0;
-> >
-> > Why pmd_trans_unstable() is needed here and not only after split_huge_p=
-md()?
-> I'm not entirely sure. But the idea is if THP is unstable, we should
-> return. As it doesn't seem like after splitting THP can be unstable, we
-> should not check it. Do you agree with the following?
+Hi Kees,
 
-The description of pmd_trans_unstable() [1] seems to indicate that it
-is needed only after split_huge_pmd().
+I'm seeing the following warning:
 
-[1] https://elixir.bootlin.com/linux/v6.3-rc5/source/include/linux/pgtable.=
-h#L1394
+  vmlinux.o: warning: objtool: lkdtm_UNSET_SMEP+0xe1: relocation to !ENDBR: native_write_cr4+0x40
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+The warning seems legit, lkdtm_UNSET_SMEP() is calling to the middle of
+native_write_c4() which isn't going to have an ENDBR64.
+
+The 0x40 offset comes from the MOV_CR4_DEPTH bounds check in the for
+loop.  The compiler optimized the integer comparison into a pointer
+comparison.
+
+Some possible fixes:
+
+- Skip the pinning verification test if cpu_feature_enabled(X86_FEATURE_IBT).
+
+  That prevents the actual IBT violation, but it still doesn't make
+  objtool happy.  Maybe there's some way to restructure the code to keep
+  the compiler from generating that relocation to the MOV_CR4_DEPTH
+  offset.
+
+  I suppose we could add a special case in objtool to silence this
+  particular warning, though we try to avoid that type of thing.
+
+- Build-disable the pinning test if CONFIG_X86_KERNEL_IBT.  This may
+  be overly broad, CONFIG_X86_KERNEL_IBT is enabled by default but many
+  CPUs don't support it.
+
+- Prefix the CR4 write with an ENDBR64 in native_write_c4(), if
+  CONFIG_X86_KERNEL_IBT && CONFIG_LKDTM.
+
+Thoughts?
+
+-- 
+Josh
