@@ -2,286 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D2C6DB598
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367DB6DB5A4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjDGVBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S231386AbjDGVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjDGVA5 (ORCPT
+        with ESMTP id S231366AbjDGVBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:00:57 -0400
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBBFBB95
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:00:52 -0700 (PDT)
-Date:   Fri, 07 Apr 2023 21:00:33 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680901250; x=1681160450;
-        bh=4IoVoYHk/m+r33Ey5oyqbrK9BhCHBjy9lr54Zr+fTow=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=IXMpZwoCjpN56q0H8V5aJJNlFIIONima/PlYClX/FGZGwy/6tUK448uAMF/t9SkWJ
-         ErUVMCKnAhx2VLFz4N1feeMkYu7vtOEGexEK0JrfzA6V9QHT4sx4qBo3lR78V5R8IU
-         J7I5SC3j+9iZV0oTBnfrB1kP0SAGPPYv1TWGzsFLPzekD0JMDGHonBnk8LrZP/A8oa
-         RQE4eo21OOk+LptJ38zz2Auq10KQFwcgL/ATZr5k8z/sgzgxPayU7mH5tCm7PW9EIp
-         nClnf9XCZGw3cJnkv3am/ukoOIqXBB0AM4WK1HNCiebJerdT+ljwuT5v1BgjGXF19g
-         5qLoKi2q0qTiw==
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        rust-for-linux@vger.kernel.org
-From:   Benno Lossin <y86-dev@protonmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Fri, 7 Apr 2023 17:01:50 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFEA283FB;
+        Fri,  7 Apr 2023 14:01:40 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id B238E92009C; Fri,  7 Apr 2023 23:01:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id AB65592009B;
+        Fri,  7 Apr 2023 22:01:38 +0100 (BST)
+Date:   Fri, 7 Apr 2023 22:01:38 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Sam Ravnborg <sam@ravnborg.org>
+cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
         linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: Re: [PATCH v2 13/13] rust: sync: introduce `LockedBy`
-Message-ID: <68b859ca-f67b-07dd-c5c7-7f8884e5b9f1@protonmail.com>
-In-Reply-To: <20230405175111.5974-13-wedsonaf@gmail.com>
-References: <20230405175111.5974-1-wedsonaf@gmail.com> <20230405175111.5974-13-wedsonaf@gmail.com>
-Feedback-ID: 40624463:user:proton
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-parport@lists.infradead.org
+Subject: Re: [PATCH] parport_pc: don't allow driver for SPARC32
+In-Reply-To: <20230407200313.GA1655046@ravnborg.org>
+Message-ID: <alpine.DEB.2.21.2304072142290.62619@angie.orcam.me.uk>
+References: <20230406160548.25721-1-rdunlap@infradead.org> <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk> <20230406203207.GA1534216@ravnborg.org> <alpine.DEB.2.21.2304062144520.44308@angie.orcam.me.uk> <20230407200313.GA1655046@ravnborg.org>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05.04.23 19:51, Wedson Almeida Filho wrote:
-> From: Wedson Almeida Filho <walmeida@microsoft.com>
->
-> This allows us to have data protected by a lock despite not being
-> wrapped by it. Access is granted by providing evidence that the lock is
-> held by the caller.
->
-> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
-> ---
-> v1 -> v2: Added build_assert to rule out zero-sized types
->
->   rust/kernel/sync.rs           |   2 +
->   rust/kernel/sync/lock.rs      |   2 +-
->   rust/kernel/sync/locked_by.rs | 128 ++++++++++++++++++++++++++++++++++
->   3 files changed, 131 insertions(+), 1 deletion(-)
->   create mode 100644 rust/kernel/sync/locked_by.rs
->
-> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-> index d6dd0e2c1678..f8edb6d0d794 100644
-> --- a/rust/kernel/sync.rs
-> +++ b/rust/kernel/sync.rs
-> @@ -10,10 +10,12 @@ use crate::types::Opaque;
->   mod arc;
->   mod condvar;
->   pub mod lock;
-> +mod locked_by;
->
->   pub use arc::{Arc, ArcBorrow, UniqueArc};
->   pub use condvar::CondVar;
->   pub use lock::{mutex::Mutex, spinlock::SpinLock};
-> +pub use locked_by::LockedBy;
->
->   /// Represents a lockdep class. It's a wrapper around C's `lock_class_k=
-ey`.
->   #[repr(transparent)]
-> diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-> index f52ba9ab1b70..51c996ca2109 100644
-> --- a/rust/kernel/sync/lock.rs
-> +++ b/rust/kernel/sync/lock.rs
-> @@ -111,7 +111,7 @@ pub struct Lock<T: ?Sized, B: Backend> {
->       _pin: PhantomPinned,
->
->       /// The data protected by the lock.
-> -    data: UnsafeCell<T>,
-> +    pub(crate) data: UnsafeCell<T>,
->   }
->
->   // SAFETY: `Lock` can be transferred across thread boundaries iff the d=
-ata it protects can.
-> diff --git a/rust/kernel/sync/locked_by.rs b/rust/kernel/sync/locked_by.r=
-s
-> new file mode 100644
-> index 000000000000..191e37d804e5
-> --- /dev/null
-> +++ b/rust/kernel/sync/locked_by.rs
-> @@ -0,0 +1,128 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! A wrapper for data protected by a lock that does not wrap it.
-> +
-> +use super::{lock::Backend, lock::Lock};
-> +use core::{cell::UnsafeCell, ptr};
-> +
-> +/// Allows access to some data to be serialised by a lock that does not =
-wrap it.
-> +///
-> +/// In most cases, data protected by a lock is wrapped by the appropriat=
-e lock type, e.g.,
-> +/// [`super::Mutex`] or [`super::SpinLock`]. [`LockedBy`] is meant for c=
-ases when this is not
-> +/// possible. For example, if a container has a lock and some data in th=
-e contained elements needs
-> +/// to be protected by the same lock.
-> +///
-> +/// [`LockedBy`] wraps the data in lieu of another locking primitive, an=
-d only allows access to it
-> +/// when the caller shows evidence that the 'external' lock is locked.
-> +///
+On Fri, 7 Apr 2023, Sam Ravnborg wrote:
 
-Maybe add that the `access`/`access_mut` functions panic when the supplied
-external value is not the correct one.
+> > > Randy's suggestion is fine, as we avoid building parport support
+> > > for sparc32. If someone shows up and need parport support
+> > > for sparc32 then we could look into how to enable it.
+> > > Until then, we are better helped avoiding building the driver.
+> > 
+> >  I disagree.  Why artificially prevent perfectly good hardware from 
+> > working with a perfectly good driver especially as the fix is just a 
+> > trivial exercise?  And I offered a solution.
+> 
+> There is no sparc32 with a PC style parallel port, so the parport_pc
+> have no value for a sparc32 machine.
 
-> +/// # Examples
-> +///
-> +/// The following is an example for illustrative purposes: `InnerDirecto=
-ry::bytes_used` is an
-> +/// aggregate of all `InnerFile::bytes_used` and must be kept consistent=
-; so we wrap `InnerFile` in
-> +/// a `LockedBy` so that it shares a lock with `InnerDirectory`. This al=
-lows us to enforce at
-> +/// compile-time that access to `InnerFile` is only granted when an `Inn=
-erDirectory` is also
-> +/// locked; we enforce at run time that the right `InnerDirectory` is lo=
-cked.
-> +///
-> +/// ```
-> +/// use kernel::sync::{LockedBy, Mutex};
-> +///
-> +/// struct InnerFile {
-> +///     bytes_used: u64,
-> +/// }
-> +///
-> +/// struct File {
-> +///     _ino: u32,
-> +///     inner: LockedBy<InnerFile, InnerDirectory>,
-> +/// }
-> +///
-> +/// struct InnerDirectory {
-> +///     /// The sum of the bytes used by all files.
-> +///     bytes_used: u64,
-> +///     _files: Vec<File>,
-> +/// }
-> +///
-> +/// struct Directory {
-> +///     _ino: u32,
-> +///     inner: Mutex<InnerDirectory>,
-> +/// }
-> +///
-> +/// /// Prints `bytes_used` from both the directory and file.
-> +/// fn print_bytes_used(dir: &Directory, file: &File) {
-> +///     let guard =3D dir.inner.lock();
-> +///     let inner_file =3D file.inner.access(&guard);
-> +///     pr_info!("{} {}", guard.bytes_used, inner_file.bytes_used);
-> +/// }
-> +///
-> +/// /// Increments `bytes_used` for both the directory and file.
-> +/// fn inc_bytes_used(dir: &Directory, file: &File) {
-> +///     let mut guard =3D dir.inner.lock();
-> +///     guard.bytes_used +=3D 10;
-> +///
-> +///     let file_inner =3D file.inner.access_mut(&mut guard);
-> +///     file_inner.bytes_used +=3D 10;
-> +/// }
-> +///
-> +/// /// Creates a new file.
-> +/// fn new_file(ino: u32, dir: &Directory) -> File {
-> +///     File {
-> +///         _ino: ino,
-> +///         inner: LockedBy::new(&dir.inner, InnerFile { bytes_used: 0 }=
-),
-> +///     }
-> +/// }
-> +/// ```
-> +pub struct LockedBy<T: ?Sized, U: ?Sized> {
-> +    owner: *const U,
-> +    data: UnsafeCell<T>,
-> +}
-> +
-> +// SAFETY: `LockedBy` can be transferred across thread boundaries iff th=
-e data it protects can.
-> +unsafe impl<T: ?Sized + Send, U: ?Sized> Send for LockedBy<T, U> {}
-> +
-> +// SAFETY: `LockedBy` serialises the interior mutability it provides, so=
- it is `Sync` as long as the
-> +// data it protects is `Send`.
-> +unsafe impl<T: ?Sized + Send, U: ?Sized> Sync for LockedBy<T, U> {}
-> +
-> +impl<T, U: ?Sized> LockedBy<T, U> {
-> +    /// Constructs a new instance of [`LockedBy`].
-> +    ///
-> +    /// It stores a raw pointer to the owner that is never dereferenced.=
- It is only used to ensure
-> +    /// that the right owner is being used to access the protected data.=
- If the owner is freed, the
-> +    /// data becomes inaccessible; if another instance of the owner is a=
-llocated *on the same
-> +    /// memory location*, the data becomes accessible again: none of thi=
-s affects memory safety
-> +    /// because in any case at most one thread (or CPU) can access the p=
-rotected data at a time.
-> +    pub fn new(owner: &Lock<U, impl Backend>, data: T) -> Self {
+ There are PC-style PCI (and PCIe) parallel ports in the form of option 
+cards being sold; I have one in my RISC-V machine (and I had to go through 
+the hassle of figuring out why the heck I am not able to select the driver 
+in configuration; a situation analogous to what Randy's change wants to 
+arrange).  You can plug one into any machine that has PCI slots and my 
+understanding from Linux Kconfig files is there are such 32-bit SPARC 
+machines in existence or the dependency on PCI wouldn't offer the driver.  
+Otherwise just don't enable CONFIG_PCI for 32-bit SPARC.
 
-I think it would be sensible to also do the ZST check here, then it will
-fail immediately on construction (but also keep the other location, as it
-does not add any runtime cost).
+ Apologies if I wasn't clear enough with my reasoning, although I think 
+the lone presence of the PCI dependency in Kconfig ought have to make it 
+clear.
 
-Also, I think you should mention in the documentation that ZSTs are not
-supported. And it would be good to have an explaining comment on the
-`build_assert!` why we disallow ZSTs here.
+> The sparc32 machines have the parport_sunbpp driver for their parallel
+> port.
 
-> +        Self {
-> +            owner: owner.data.get(),
-> +            data: UnsafeCell::new(data),
-> +        }
-> +    }
-> +}
-> +
-> +impl<T: ?Sized, U> LockedBy<T, U> {
-> +    /// Returns a reference to the protected data when the caller provid=
-es evidence (via a
-> +    /// reference) that the owner is locked.
+ That's an onboard device or an SBus option card though, right?
 
-Maybe add a `# Panic` section, also for `access_mut`.
+> An alternative fix, and better I think, would be to audit all archs
+> and let the relevant ones select ARCH_MIGHT_HAVE_PC_PARPORT, so we
+> avoided the ugly "|| (PCI && !S390 && !SPARC32)" case for PARPORT_PC.
 
---
-Cheers,
-Benno
+ It's only S390 that is special in that it has a limited set of specially 
+crafted PCI options it can ever support (or so I am told; something about 
+the firmware or suchlike).
 
-> +    pub fn access<'a>(&'a self, owner: &'a U) -> &'a T {
-> +        crate::build_assert!(core::mem::size_of::<U>() > 0);
-> +        if !ptr::eq(owner, self.owner) {
-> +            panic!("mismatched owners");
-> +        }
-> +
-> +        // SAFETY: `owner` is evidence that the owner is locked.
-> +        unsafe { &*self.data.get() }
-> +    }
-> +
-> +    /// Returns a mutable reference to the protected data when the calle=
-r provides evidence (via a
-> +    /// mutable owner) that the owner is locked mutably.
-> +    ///
-> +    /// Showing a mutable reference to the owner is sufficient because w=
-e know no other references
-> +    /// can exist to it.
-> +    pub fn access_mut<'a>(&'a self, owner: &'a mut U) -> &'a mut T {
-> +        crate::build_assert!(core::mem::size_of::<U>() > 0);
-> +        if !ptr::eq(owner, self.owner) {
-> +            panic!("mismatched owners");
-> +        }
-> +
-> +        // SAFETY: `owner` is evidence that there is only one reference =
-to the owner.
-> +        unsafe { &mut *self.data.get() }
-> +    }
-> +}
-> --
-> 2.34.1
->
+ Any other platform that has PCI slots will handle PC-style PCI parallel 
+port option cards just fine, as long as it supports PCI I/O read/write 
+commands (some systems such as POWER9 machines don't; Niklas Schnelle has 
+been recently working on a generic way to exclude drivers for devices that 
+require PCI port I/O from being offered with systems that have no support 
+for PCI port I/O).
 
+ Let me know if you find anything here unclear or have any other questions 
+or comments.
+
+  Maciej
