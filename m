@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5256DAC7E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CD06DAC80
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240591AbjDGMEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 08:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S240605AbjDGMEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 08:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240247AbjDGMEA (ORCPT
+        with ESMTP id S240615AbjDGMEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 08:04:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275D683CD;
-        Fri,  7 Apr 2023 05:03:59 -0700 (PDT)
+        Fri, 7 Apr 2023 08:04:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C91683F0;
+        Fri,  7 Apr 2023 05:04:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B654760F87;
-        Fri,  7 Apr 2023 12:03:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B44C4339B;
-        Fri,  7 Apr 2023 12:03:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C64D611DA;
+        Fri,  7 Apr 2023 12:04:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD1AC433EF;
+        Fri,  7 Apr 2023 12:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680869038;
-        bh=hj8WZn4fsaNVXzouph4VuJoSDtm/pAjQ+hGj5NXmwD0=;
+        s=k20201202; t=1680869061;
+        bh=HUoYspjdbgbF+auGyH8Dkb8DfJn7/2ux/sbLEBn5Zw0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cBXLq4fagWKRTewxo4p5y+yltMfue1gHv9h6Rhkf+kT90l5ObTPyf5Q+HxCMGQAsM
-         1WP18Sp/Ya3w+QiZ4Uku4/jcrSyIhhTDl6GoeWbpZfrxfYH144zC7BdFXcOmN3Bs8l
-         ixgsTZd59XKKamoXJiCD5OBzTnOMIL4T96AiI38v7Ttj3fY3eZPYH/jj8zcKKxqUjw
-         yZoR54HGahnG32BUoRdGl3XUEBDexCXzAufgslwOsGCS+z+ydlK/+dWroXXTzS6rYo
-         BzhTRRDstfoWaFx2kUjdCg3egxn1cf8mY8FaYa/WqcsUV2RCUa8bxxeEYIVS0jpejz
-         CO8A+lDkofXZw==
-Date:   Fri, 7 Apr 2023 14:03:52 +0200
+        b=s4vlYCLyUDl8dCY3ktLig+sybIAlBRK9ce9MbL/snbo3irp+sdTZybezHP6b/ECEZ
+         zjvwEud9PeYQYlmLJB+VaRFOt1uuhvdgNrRU4O+vsegGJj19CST4EBGEM389CLx7UK
+         37rCQOlfDwk6BGhYeC2SYhpzgORnKoqYzAZcBZ/NwQNc7qGrJkFBclaF5YcwQAKB5Q
+         yBiRCp0YKBfc/rX4/8R0fPqE4zs5kCiBNjrvDT+vEziSfT+OuG7zW8gDTLvCgz/+Ax
+         ECF3eTIEYv2OMc0uaVFZ8gtNFlVSKOJFXQThA3d/CKxgDI7BtnUQrLnQWQJLXW2MJX
+         efgysCmqU06zw==
+Date:   Fri, 7 Apr 2023 14:04:15 +0200
 From:   Simon Horman <horms@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Chen Jiahao <chenjiahao16@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+To:     Chen Jiahao <chenjiahao16@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         kexec@lists.infradead.org, linux-doc@vger.kernel.org,
         paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, bjorn@rivosinc.com,
-        alex@ghiti.fr, akpm@linux-foundation.org, atishp@rivosinc.com,
-        bhe@redhat.com, thunder.leizhen@huawei.com
-Subject: Re: [PATCH -next v3 1/2] riscv: kdump: Implement
- crashkernel=X,[high,low]
-Message-ID: <ZDAGqL6CZGrL499u@kernel.org>
+        conor.dooley@microchip.com, guoren@kernel.org, heiko@sntech.de,
+        bjorn@rivosinc.com, alex@ghiti.fr, akpm@linux-foundation.org,
+        atishp@rivosinc.com, bhe@redhat.com, thunder.leizhen@huawei.com
+Subject: Re: [PATCH -next v3 2/2] docs: kdump: Update the crashkernel
+ description for riscv
+Message-ID: <ZDAGv7dMyirW9aqd@kernel.org>
 References: <20230406220206.3067006-1-chenjiahao16@huawei.com>
- <20230406220206.3067006-2-chenjiahao16@huawei.com>
- <CAJF2gTRtj=-XONv3cMZFd+qCtqUQqYZo5Lv7cgQbkGKTB0j7yg@mail.gmail.com>
+ <20230406220206.3067006-3-chenjiahao16@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJF2gTRtj=-XONv3cMZFd+qCtqUQqYZo5Lv7cgQbkGKTB0j7yg@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230406220206.3067006-3-chenjiahao16@huawei.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,21 +59,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 05:06:24PM +0800, Guo Ren wrote:
-> On Thu, Apr 6, 2023 at 10:06 PM Chen Jiahao <chenjiahao16@huawei.com> wrote:
-> >
-> > On riscv, the current crash kernel allocation logic is trying to
-> > allocate within 32bit addressible memory region by default, if
-> > failed, try to allocate without 4G restriction.
-> >
-> > In need of saving DMA zone memory while allocating a relatively large
-> > crash kernel region, allocating the reserved memory top down in
-> > high memory, without overlapping the DMA zone, is a mature solution.
-> > Here introduce the parameter option crashkernel=X,[high,low].
-> >
-> > One can reserve the crash kernel from high memory above DMA zone range
-> > by explicitly passing "crashkernel=X,high"; or reserve a memory range
-> > below 4G with "crashkernel=X,low".
-> Asked-by: Guo Ren <guoren@kernel.org>
+On Fri, Apr 07, 2023 at 06:02:06AM +0800, Chen Jiahao wrote:
+> Now "crashkernel=" parameter on riscv has been updated to support
+> crashkernel=X,[high,low]. Through which we can reserve memory region
+> above/within 32bit addressible DMA zone.
+> 
+> Here update the parameter description accordingly.
+> 
+> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
 
-Perhaps 'Acked-by' :)
+Reviewed-by: Simon Horman <horms@kernel.org>
+
