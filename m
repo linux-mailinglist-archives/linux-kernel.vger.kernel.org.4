@@ -2,135 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02146DB5C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF526DB5C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjDGVTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+        id S230089AbjDGVV6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 17:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjDGVTM (ORCPT
+        with ESMTP id S229667AbjDGVV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:19:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC09776
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:19:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680902349; x=1712438349;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FdIw7BOKsAFqhvkAR/laTcmM9g+qgDHYW9oZNi2xqqg=;
-  b=AIHVdd2eJQLdyvJgffgusmnJpMWrm39kHutn8IMGwC+f6PQRvohx1VYR
-   LoF4ZjD6YpO3L7Dj5/12YnVwYTF7+tom5MkCHfR/cPIZx0lKrLJIxZ78B
-   A4A5IWiVnn4624QQviXocz1TPHNXx9bu8zfxm8K7gtJSjyXlQ0b01UEDf
-   FZyggOdqGIiinqgK+pmDJKP2DBtQcIIZHCAmUHpt4rEV29BVrS1zTcKoF
-   vyn3otfEP85WgDzEmBPSepz3nDoRkE8B4VvFGgolkGLxuGYB36qQy2uaj
-   eVSxVi8+cLINcMPLewv1fnoWqXD4Wsoyu+z9yFvWtG1eQLfNpjcmaRest
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="370905859"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="370905859"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 14:19:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811516496"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="811516496"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2023 14:19:06 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pktU9-000Stm-2z;
-        Fri, 07 Apr 2023 21:19:05 +0000
-Date:   Sat, 8 Apr 2023 05:18:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: vmlinux.o: warning: objtool: xen_hypercall_iret+0x0: RET before
- UNTRAIN
-Message-ID: <202304080538.j5G6h1AB-lkp@intel.com>
+        Fri, 7 Apr 2023 17:21:56 -0400
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F148B752;
+        Fri,  7 Apr 2023 14:21:55 -0700 (PDT)
+Received: by mail-ua1-f41.google.com with SMTP id p91so13321206uap.1;
+        Fri, 07 Apr 2023 14:21:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680902514; x=1683494514;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+chuPFNNrrKiFi5g5/MT+Goo0tel/zcQRxopfzjdJDA=;
+        b=zL4ZSsGGWeOe+fcJKPolHCa8ZVclWa6MbxpIxCKEc7LZZjbHyl2SdiAwzJq/9mEASM
+         i2JRd4wZgD8G3X/rGtBZRcR48GcVynuxaI2hDrRRJlujlcj3P0xl0WU2l0TnF2EkXLRT
+         CgT5VUfdN17pE1DbIYJXC2Xp1Nt330/1Va7izodHgBggW/xA8J3VyAM+PUOODn/NpKbN
+         O2PUqx3YjS65h0tvSHRd5yoGZJch/+3SVdK0wkiwFgl//qU7YPX3STxMwUSYCbDjzDEl
+         AQu9UY4uSFGC3MlPqEyZief63Jxjn2UrmCOMDRQPSwKapsZqlqsF3QFCkQUQDZ+Z64ey
+         xMHQ==
+X-Gm-Message-State: AAQBX9f5bh0/DYfhT4+bW+kPyWnS1i8OFjZlv4GH/dIZrykfRQNmJY4V
+        pVHzrP9WTbBulovz0Ag4xFeqUCbGsEtnOMtKq2g=
+X-Google-Smtp-Source: AKy350Z85M+JNyYExxdEQuOQYgEw6rJYfNjgo/0JNjhyYmukBarkvWbGysp4Aa8xsP4U0w3MkH+mlhrew1Wb8LZDcEo=
+X-Received: by 2002:a1f:28d8:0:b0:43c:5b5a:6c22 with SMTP id
+ o207-20020a1f28d8000000b0043c5b5a6c22mr53578vko.13.1680902514324; Fri, 07 Apr
+ 2023 14:21:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CAM9d7cjrkWdg18wTA_tRch8oN0YUEy3ZJ2mhrYtk23iLqd1XPw@mail.gmail.com>
+ <20230406025329.1888-1-laihangliang1@huawei.com>
+In-Reply-To: <20230406025329.1888-1-laihangliang1@huawei.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 7 Apr 2023 14:21:43 -0700
+Message-ID: <CAM9d7cgK-P5KuDy7hkAR4j7oB4ydE6Mw3KexqgwPPhJF6MKtXQ@mail.gmail.com>
+Subject: Re: [PATCH v2] perf top: expand the range of multithreaded phase
+To:     Hangliang Lai <laihangliang1@huawei.com>
+Cc:     acme@kernel.org, adrian.hunter@intel.com,
+        alexander.shishkin@linux.intel.com, brauner@kernel.org,
+        hewenliang4@huawei.com, irogers@google.com, jolsa@kernel.org,
+        linfeilong@huawei.com, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, liuwenyu7@huawei.com,
+        mark.rutland@arm.com, mingo@redhat.com, yeyunfeng@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Hello,
 
-FYI, the error/warning still remains.
+On Wed, Apr 5, 2023 at 7:54 PM Hangliang Lai <laihangliang1@huawei.com> wrote:
+>
+> In __cmd_top, perf_set_multithreaded is used to enable pthread_rwlock, thus
+> donw_read and down_write can work to handle concurrency problems. Then top
+> use perf_set_singlethreaded and switch to single threaded phase, assuming
+> that no thread concurrency will happen later.
+> However, a UAF problem could occur in perf top in single threaded phase,
+> The concurrent procedure is like this:
+> display_thread                              process_thread
+> --------------                              --------------
+> thread__comm_len
+>   -> thread__comm_str
+>     -> __thread__comm_str(thread)
+>                                             thread__delete
+>                                              -> comm__free
+>                                               -> comm_str__put
+>                                                -> zfree(&cs->str)
+>     -> thread->comm_len = strlen(comm);
+> Since in single thread phase, perf_singlethreaded is true, down_read and
+> down_write can not work to avoid concurrency problems.
+> This patch put perf_set_singlethreaded to the function tail to expand the
+> multithreaded phase range, make display_thread and process_thread run
+> safe.
+>
+> Signed-off-by: Hangliang Lai  <laihangliang1@huawei.com>
+> Reviewed-by: Yunfeng Ye <yeyunfeng@huawei.com>
+> ---
+> v1 -> v2
+>  - Since perf top is always multi-threaded, remove top->nr_threads_synthesize judgment.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f2afccfefe7be1f7346564fe619277110d341f9b
-commit: a09a6e2399ba0595c3042b3164f3ca68a3cff33e objtool: Add entry UNRET validation
-date:   10 months ago
-config: x86_64-randconfig-a012-20221205 (https://download.01.org/0day-ci/archive/20230408/202304080538.j5G6h1AB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a09a6e2399ba0595c3042b3164f3ca68a3cff33e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a09a6e2399ba0595c3042b3164f3ca68a3cff33e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Not always, the synthesis can run in a single thread.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304080538.j5G6h1AB-lkp@intel.com/
+>
+>  tools/perf/builtin-top.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+> index d4b5b02bab73..a18db1ee87fa 100644
+> --- a/tools/perf/builtin-top.c
+> +++ b/tools/perf/builtin-top.c
+> @@ -1242,8 +1242,7 @@ static int __cmd_top(struct perf_top *top)
+>         if (perf_session__register_idle_thread(top->session) < 0)
+>                 return ret;
+>
+> -       if (top->nr_threads_synthesize > 1)
+> -               perf_set_multithreaded();
+> +       perf_set_multithreaded();
 
-All warnings (new ones prefixed by >>):
+I think this part should be kept as is.
 
-   ld: warning: arch/x86/lib/retpoline.o: missing .note.GNU-stack section implies executable stack
-   ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-   vmlinux.o: warning: objtool: cdce925_regmap_i2c_write+0xdb: stack state mismatch: cfa1=4+120 cfa2=5+40
->> vmlinux.o: warning: objtool: xen_hypercall_iret+0x0: RET before UNTRAIN
+>
+>         init_process_thread(top);
+>
+> @@ -1273,9 +1272,6 @@ static int __cmd_top(struct perf_top *top)
+>                                     top->evlist->core.threads, true, false,
+>                                     top->nr_threads_synthesize);
+>
+> -       if (top->nr_threads_synthesize > 1)
+> -               perf_set_singlethreaded();
 
+Here you can make it multi-threaded unconditionally.
 
-objdump-func vmlinux.o xen_hypercall_iret:
-0000 00000000000002e0 <xen_hypercall_iret>:
-0000      2e0:	c3                   	ret
-0001      2e1:	cc                   	int3
-0002      2e2:	cc                   	int3
-0003      2e3:	cc                   	int3
-0004      2e4:	cc                   	int3
-0005      2e5:	cc                   	int3
-0006      2e6:	cc                   	int3
-0007      2e7:	cc                   	int3
-0008      2e8:	cc                   	int3
-0009      2e9:	cc                   	int3
-000a      2ea:	cc                   	int3
-000b      2eb:	cc                   	int3
-000c      2ec:	cc                   	int3
-000d      2ed:	cc                   	int3
-000e      2ee:	cc                   	int3
-000f      2ef:	cc                   	int3
-0010      2f0:	cc                   	int3
-0011      2f1:	cc                   	int3
-0012      2f2:	cc                   	int3
-0013      2f3:	cc                   	int3
-0014      2f4:	cc                   	int3
-0015      2f5:	cc                   	int3
-0016      2f6:	cc                   	int3
-0017      2f7:	cc                   	int3
-0018      2f8:	cc                   	int3
-0019      2f9:	cc                   	int3
-001a      2fa:	cc                   	int3
-001b      2fb:	cc                   	int3
-001c      2fc:	cc                   	int3
-001d      2fd:	cc                   	int3
-001e      2fe:	cc                   	int3
-001f      2ff:	cc                   	int3
+Thanks,
+Namhyung
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> -
+>         if (perf_hpp_list.socket) {
+>                 ret = perf_env__read_cpu_topology_map(&perf_env);
+>                 if (ret < 0) {
+> @@ -1352,6 +1348,9 @@ static int __cmd_top(struct perf_top *top)
+>  out_join_thread:
+>         cond_signal(&top->qe.cond);
+>         pthread_join(thread_process, NULL);
+> +
+> +       perf_set_singlethreaded();
+> +
+>         return ret;
+>  }
+>
+> --
+> 2.33.0
+>
