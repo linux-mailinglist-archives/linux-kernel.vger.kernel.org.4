@@ -2,96 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5456DAB2C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF366DAB32
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240211AbjDGKAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S240240AbjDGKEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDGKAh (ORCPT
+        with ESMTP id S240136AbjDGKER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:00:37 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1961A86A6;
-        Fri,  7 Apr 2023 03:00:36 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id g29so4033340lfj.4;
-        Fri, 07 Apr 2023 03:00:36 -0700 (PDT)
+        Fri, 7 Apr 2023 06:04:17 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CCF4C3F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:04:16 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-500298a69a0so1987007a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 03:04:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680861634;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k9Uv4dBullqwaEvWpSMa741x7XB8RZ1FWzbpdovf4yI=;
-        b=pdMRUv6nowvbax6f/6dhM8UbNt4LZ9EMpl0SnhFs692TIuzByIW6pdMWdUuy8wZsfl
-         4S0QnVlUE4bFlbW1RXb8Twe6JW4SaUD2Bri6gvdwfBkIhLfL1IcTWX/ZfCE7HZlChjgy
-         Of062T3yqn6N+k6kcyD5tqdfnFbQpM3XqZ6Al0ov2qStjpLMlUQSgGodRNyLgYCiwl5p
-         o6Q5uBB65W3pKS/Hr6yn7o++rwNSJQr3Lep8r8FJGaxLWdZoyslOypBQlliUR/FhklXW
-         nrgkpr13EmUshyRRtVzJz7LS2Ec132LvU/2fXlehjgsYieaanCT8Qcf4Z64kI+JnlbNP
-         l2DA==
+        d=google.com; s=20210112; t=1680861855;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vPQGp8DUY8W9IGUTHTlsTXZsaE+QtLNfRWEOu4cQss8=;
+        b=VWJjsNJosuq2jvCi47QZbfxKB/4eNXh3nr0Y6k4rsHO9NBcxy+RZaO3tpu1IPvC9R1
+         r4AyoWtsTC6mZOIFGNcugTFYaMOchIV6Xbh3rJtnw3TSFW3jH1dxAjTv5rIj4uQ+9cVe
+         6ReCOw8pNkNXZS62YMs4h0zXIeR8H0U0Fex+fln5fUvo1GfYD6EyCdCdYeQ5/674V1uY
+         Fv+nzRUdJq+IibYOLQyvan2jw4MdwXDFZgjBcDZdrCALqelePxYd5BtNox7YpB5AFNG8
+         pwSUXFXY11LmyfLHhQ2MzIEwizQ0xVEILd3tpmxkWYcD5he/q9xGbxzcDh2OR3Joug5U
+         iBTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680861634;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k9Uv4dBullqwaEvWpSMa741x7XB8RZ1FWzbpdovf4yI=;
-        b=QDXxumFfiSQNAFnjLRng444vdGdfX+/t6WjFapDaccITAUaw1T219wBUXPnWABR7bH
-         /HEu2mOpCrLgZIx8DH81pkE9pjxa/0VyE2Dt/a4frN/uWW87Z4rl0W0RvGunVp2gl/+e
-         OYnlK9dnK92BP/Yv/VPTTYHD1xMLybqjscNqei8dKyF0mse1Tyac8vSaWVUsgdnNGyUx
-         9S5Po2F85ZeHy68xrnb4bjtVtMPODoUymHBVEbmcnWdVQClUk3ZA5JLLGPdibRlXQybR
-         lsNNnvvEro4VlxfS4saa7ksznh9zHB0bFqT8ieX8GAqz7Sffvfmh3xZCJTItcRVQ2571
-         PyLQ==
-X-Gm-Message-State: AAQBX9e8IhpvvylugipPrZTxK0Cmh4TXcxuda6qIIafsaRMBSgnjVmPG
-        doVT6O0DBCq03mFuH5N2JLC049dqdDQ=
-X-Google-Smtp-Source: AKy350b0KhClS9yLNLFOtzH8aMqtUdI47E+vaOk918E/fzp7OoFi6BercWVHoUaKx+XLT/Yhs8KDjw==
-X-Received: by 2002:ac2:4a81:0:b0:4eb:336c:f10 with SMTP id l1-20020ac24a81000000b004eb336c0f10mr536517lfp.57.1680861634047;
-        Fri, 07 Apr 2023 03:00:34 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id q7-20020ac24a67000000b004eb3b752e10sm622858lfp.133.2023.04.07.03.00.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 03:00:33 -0700 (PDT)
-Message-ID: <4fed5a73-74f1-4101-bbdb-b319f6435060@gmail.com>
-Date:   Fri, 7 Apr 2023 13:00:32 +0300
+        d=1e100.net; s=20210112; t=1680861855;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vPQGp8DUY8W9IGUTHTlsTXZsaE+QtLNfRWEOu4cQss8=;
+        b=8N0gMk0K8MTroaVcPrwJKCF2y6za7rXMzxhgPq6rYjK6cfDtb0cvPiaSE7qAPsFuJu
+         /VygGWdswc0ZTAyOJW8VVpwzl/LkIswsqmlunStwVjVgo4HfmeLcmCgHJ+TcIf7MT9KH
+         mC8oGJWVnXoKg2HouDLHjRhThZ3+dTC7F0RE2wicyG4rayD+Exm0nj38D4jO9pC2QC/9
+         +cmXbuMBcUtSjQLTB5FaHGxtlHX9zu9BpopScDfgvgdtEgPAvM0uF5WmqYmwnOLXAbhN
+         JZzdE+oI/DIlCnLQRlhDxncMo/H0C+/dx13lybi/SKgeWQcTFfxuO9KiY9TN4j+fotQi
+         kPsA==
+X-Gm-Message-State: AAQBX9f7JB6HV4nvpFfS9ipsN1y0GCE+b1znJEh4hRyzXlXN8tZWFOi6
+        WG0tjcn4tCk+UjeCUm6ryxIiBVjMHugGfe/STdXGNg==
+X-Google-Smtp-Source: AKy350bmDKnskEhSU/k39PBr/b5AfSt9nDX3ik+DWAn0sMFTB4UltL1+/LRu/rfJnj85LVDre3Mnnq/y6fQ4tMnM3bY=
+X-Received: by 2002:a50:d55a:0:b0:504:7857:d739 with SMTP id
+ f26-20020a50d55a000000b005047857d739mr1000696edj.7.1680861854780; Fri, 07 Apr
+ 2023 03:04:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: leds: ROHM BD2606MVV LED driver
-Content-Language: en-US, en-GB
-To:     Andreas Kemnade <andreas@kemnade.info>, pavel@ucw.cz,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230407050803.170773-1-andreas@kemnade.info>
- <20230407050803.170773-2-andreas@kemnade.info>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230407050803.170773-2-andreas@kemnade.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
+ <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com> <CABb0KFF+sKSv7jdxBbXpt5A2WO83tKb9viq-kKurXN_e1VcFhQ@mail.gmail.com>
+ <c535ce4a-d7da-1ce2-9883-7cefb6dd88a2@collabora.com>
+In-Reply-To: <c535ce4a-d7da-1ce2-9883-7cefb6dd88a2@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Fri, 7 Apr 2023 12:04:03 +0200
+Message-ID: <CABb0KFE8pn+VORr8c=HWzKzJ5L5ZBRZMg2Q1dEZGU9gLqGZNLQ@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 08:08, Andreas Kemnade wrote:
-> Document ROHM BD2606MVV LED driver devicetree bindings.
-> 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+On Fri, 7 Apr 2023 at 11:35, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 4/7/23 12:23=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Thu, 6 Apr 2023 at 23:12, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> On 4/7/23 1:12=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>> [...]
+> >>>> --- a/fs/proc/task_mmu.c
+> >>>> +++ b/fs/proc/task_mmu.c
+> >>> [...]
+> >>>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+> >>>> +                                 unsigned long end, struct mm_walk =
+*walk)
+> >>>> +{
+> > [...]
+> >>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >>>> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
+> >>>> +       if (ptl) {
+> >>> [...]
+> >>>> +               return ret;
+> >>>> +       }
+> >>>> +process_smaller_pages:
+> >>>> +       if (pmd_trans_unstable(pmd))
+> >>>> +               return 0;
+> >>>
+> >>> Why pmd_trans_unstable() is needed here and not only after split_huge=
+_pmd()?
+> >> I'm not entirely sure. But the idea is if THP is unstable, we should
+> >> return. As it doesn't seem like after splitting THP can be unstable, w=
+e
+> >> should not check it. Do you agree with the following?
+> >
+> > The description of pmd_trans_unstable() [1] seems to indicate that it
+> > is needed only after split_huge_pmd().
+> >
+> > [1] https://elixir.bootlin.com/linux/v6.3-rc5/source/include/linux/pgta=
+ble.h#L1394
+> Sorry, yeah pmd_trans_unstable() is need after split. But it is also need=
+ed
+> in normal case when ptl is NULL to rule out the case if pmd is unstable
+> before performing operation on normal pages:
+>
+> ptl =3D pmd_trans_huge_lock(pmd, vma);
+> if (ptl) {
+> ...
+> }
+> if (pmd_trans_unstable(pmd))
+>         return 0;
+>
+> This file has usage examples of pmd_trans_unstable():
+>
+> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L634
+> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1195
+> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1543
+> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1887
+>
+> So we are good with what we have in this patch.
 
-FWIW:
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Shouldn't we signal ACTION_AGAIN then in order to call .pte_hole?
 
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Best Regards
+Micha=C5=82 Miros=C5=82aw
