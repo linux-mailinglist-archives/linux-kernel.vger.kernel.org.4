@@ -2,133 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E966DB44F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B426DB453
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjDGThO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 15:37:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S230211AbjDGThu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 15:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjDGThJ (ORCPT
+        with ESMTP id S230383AbjDGThs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 15:37:09 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB2C59D5
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 12:37:06 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id c9so45176457lfb.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 12:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680896225;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DdfpGVYiIH49UkIzv2GHvV1XFU18RQJaEQNhzCtq13M=;
-        b=SUsmQp2SAqGZcCP8dwzO8b5RWoOCShD5HGQZ8kh2bmRsn8kPulNesx8rOH8iaS2ZoA
-         gM/IrQAEbbGzbs1UxXjonexmSc8JGBEvKUiNrQPAkb2ipIP8ejk6DLU308UWeg3ES+sL
-         mDR1loVbl7pjOOcbltu71B+qi9wFO+A4B70DMNKl+ERuYCSCOef8vGZP/gx2xkFIOwk4
-         g/mXQ4QXgYGRS4ERI7THLQm087iCuwNG+NvsWaaP/1O0xDZI8DHkbO+w14HUM5Rimhyz
-         9MClG9nh/GF4f3lRrwlSiXFz4eIHnHD8CvSIcKGXlgUbDypr1CXeQsOw+N6R9xuOUCJ/
-         rsag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680896225;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdfpGVYiIH49UkIzv2GHvV1XFU18RQJaEQNhzCtq13M=;
-        b=fO80iQrkEayxXHlthtexMhW1dm7mFLJsZli33yWYlZV2chxUoGAiez52Ht7zVHw+FC
-         Uqd8FQMpyyOXK4fs9QDxpXKUXyK1oYg6JmelaJJp+Gl6TwNsA0thDeP9ZqoDgFI486Cr
-         Pgv9da1p0bnVoyJvQv0XyRLXhCxflRuKibiKWcPFA8rqvFMNxZQgHJRwjvrbc5zKS/SU
-         witHbWx/amGrN4N+XEBH0CpbrZaRN4mr2/6BhncLQ5xg4gQz5Yg7kzm//avSQmJX7ynK
-         orTk0d6VnOfRmuTIEo02ygWcJxQi5nRn3IuS4TZQXTEAaX9QcOfDBeUHxsIRxMNk0VLa
-         x8DA==
-X-Gm-Message-State: AAQBX9eWpCwAeg47nfuG+dehNW+wdKWE2+Uy6UcYUeJ/5KoRAhAWgF5W
-        hbSF82ZH7JDwVbuYLtAChOyNZg==
-X-Google-Smtp-Source: AKy350ZQ15H7KLZBjASa/i2jAVoikKumGXTpFkE8mHSl+jgIfK82QhNHdBDxJkLugnfG+uWiRsjymg==
-X-Received: by 2002:a19:5503:0:b0:4d8:8273:ec with SMTP id n3-20020a195503000000b004d8827300ecmr833199lfe.20.1680896224936;
-        Fri, 07 Apr 2023 12:37:04 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id i13-20020a056512006d00b004e83edd8ce8sm840581lfo.196.2023.04.07.12.37.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 12:37:04 -0700 (PDT)
-Message-ID: <db168415-74b0-c83e-248a-a70b1c9b71b7@linaro.org>
-Date:   Fri, 7 Apr 2023 21:37:01 +0200
+        Fri, 7 Apr 2023 15:37:48 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB2059CD;
+        Fri,  7 Apr 2023 12:37:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680896266; x=1712432266;
+  h=message-id:subject:from:to:cc:date:
+   content-transfer-encoding:mime-version;
+  bh=weBJwIjqEna6+z89gcYkPRC8lEijMlTfTNZaTTEeeNk=;
+  b=ULexbXs8ina2XkzNhvlstejSAcRnKPfA0vHMqpnDZiymrDl2e2PUWdAC
+   Rgjz//UoI073PV8IppJWdjVrSA7Qw3xbR2ZOfsUYlor4zxXAp+/DCbkCC
+   7nUyq0CJ3X2ntDYDplZRAW8HhRbOZ5lmEgB3B2SmHuqUnuZoMv/x1nL9J
+   8qdQDh96aKXeL9sMAqhp59CuiczvMFFQvRK9NhDw07uDbdW4vcz6QCMD/
+   TLZQUQTJGkoUf+J3aaxveS8ZHlvB3yWu6aPM/TXGHQ6kqC1F/5nYnfeIh
+   xRB5bNk0VV5JFL5aE0JIbbqeTesc7SOLiZ1qxJowt6Uf4eWgRkjJosyTr
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="429341155"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="429341155"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 12:37:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="756819847"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="756819847"
+Received: from bjcleere-mobl2.amr.corp.intel.com ([10.212.83.122])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 12:37:45 -0700
+Message-ID: <37694343f8b89dc0469d4a1718dad8f5f8c765bd.camel@linux.intel.com>
+Subject: [PATCH] crypto: ixp4xx - Remove COMPILE_TEST from Kconfig
+ dependencies
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     clabbe@baylibre.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Date:   Fri, 07 Apr 2023 14:37:44 -0500
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V4 4/5] arm64: dts: qcom: ipq9574: Add SMPA1 regulator
- node
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com
-References: <20230407155727.20615-1-quic_devipriy@quicinc.com>
- <20230407155727.20615-5-quic_devipriy@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230407155727.20615-5-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+COMPILE_TEST was added during the move to drivers/crypto/intel/ but
+shouldn't have been as it triggers a build bug when not compiled by
+the target compiler.  So remove it to match the original.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304061846.G6cpPXiQ-lkp@intel=
+.com/
+Signed-off-by: Tom Zanussi <tom.zanussi@linux.intel.com>
+---
+ drivers/crypto/intel/ixp4xx/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/intel/ixp4xx/Kconfig b/drivers/crypto/intel/ixp=
+4xx/Kconfig
+index af3cc5688328..4cfb1e37f45b 100644
+--- a/drivers/crypto/intel/ixp4xx/Kconfig
++++ b/drivers/crypto/intel/ixp4xx/Kconfig
+@@ -1,6 +1,6 @@
+ config CRYPTO_DEV_IXP4XX
+ 	tristate "Driver for IXP4xx crypto hardware acceleration"
+-	depends on (ARCH_IXP4XX || COMPILE_TEST) && IXP4XX_QMGR && IXP4XX_NPE
++	depends on ARCH_IXP4XX && IXP4XX_QMGR && IXP4XX_NPE
+ 	select CRYPTO_AES
+ 	select CRYPTO_DES
+ 	select CRYPTO_ECB
+--=20
+2.34.1
 
 
-On 7.04.2023 17:57, Devi Priya wrote:
-> Add support for SMPA1 regulator node in IPQ9574.
-> 
-> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  Changes in V4:
-> 	- Updated the comment as suggested by konrad
-> 	  s/Updating/Update
-> 	  s/725000uV/725mV
-> 
->  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> index 3ae38cf327ea..bdc1434fbe67 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-> @@ -44,6 +44,25 @@
->  	};
->  };
->  
-> +&rpm_requests {
-> +	regulators {
-> +		compatible = "qcom,rpm-mp5496-regulators";
-> +
-> +		ipq9574_s1: s1 {
-> +		/*
-> +		 * During kernel bootup, the SoC runs at 800MHz with 875mV set by the bootloaders.
-> +		 * During regulator registration, kernel not knowing the initial voltage,
-> +		 * considers it as zero and brings up the regulators with minimum supported voltage.
-> +		 * Update the regulator-min-microvolt with SVS voltage of 725mV so that
-> +		 * the regulators are brought up with 725mV which is sufficient for all the
-> +		 * corner parts to operate at 800MHz
-> +		 */
-> +			regulator-min-microvolt = <725000>;
-> +			regulator-max-microvolt = <1075000>;
-> +		};
-> +	};
-> +};
-> +
->  &pcie1_phy {
->  	status = "okay";
->  };
