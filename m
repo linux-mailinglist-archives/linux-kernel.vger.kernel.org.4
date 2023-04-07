@@ -2,207 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8AB6DAD20
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024AA6DAD22
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjDGNIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        id S231588AbjDGNJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjDGNIi (ORCPT
+        with ESMTP id S232213AbjDGNJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:08:38 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C735590
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:08:36 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id y69so5579385ybe.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680872916; x=1683464916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XLLVgeqbEDeqTFPI4P39tQQxxRUKPGk2hxPwWtx7KaE=;
-        b=XN9SbYQd3XpeqF2Z0PQ7esBc1Gl7JYH957ZcK4vzDgrc5a9oooVC9gq29yPtGtcCfa
-         4jF9UDhJVY30Lg+Lu67gkWQgQkbbDE5W6XM+v1atHBlSadRPW93TQuaf2Ee2fkTw9Txx
-         3dyUKpRyCDZc5beDgMniaBTbFrEioazA8YZZiYMeLDN60BOe7ShNR7fSCNsrT9n5KqA1
-         TMbUwhS7u9yqeMRGxRb8MzJtg7qFAMw1ctou6vCxO/jNZ8UFwr0ScM0YN/qQ7uV5beja
-         GFr0U/dHBQ5JtaLVPsMHyOoQYdID/sBLTIhDcGGkXYWbYkfm2jnCvWlgbu2+NLsO171K
-         a+oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680872916; x=1683464916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XLLVgeqbEDeqTFPI4P39tQQxxRUKPGk2hxPwWtx7KaE=;
-        b=0vl7qfKvkXIbBm+6nzAFnOUywR2+y+yClD1WdppCtlwMsmYJjewKcGSKQ6T/8U/UZX
-         fe76wu7BmtLxkq3iedp3DztyXff3ePbzzZR3jmSmK3t6jDyowWL570Gb+eRdWBUtZJqs
-         l5D17mHfcjpJ2NQJGyRmRXa+kpdXeXxGrnb0JRrxoCgiKUDsYD8segQY9JPMvj2DKPYA
-         2OgzFYp8vKEMitGhCO8HeFelM9Ul6iLsxlp8Fmf/7gSlc5qSVn32242D3qakfgAyPixU
-         5pxMPpjimKBsjC3Ru5hM/kdoUOHjUMNKwjtJUoCYeyxfxbVNwEUHSKgmFphDX4JU93Ca
-         T2GA==
-X-Gm-Message-State: AAQBX9e1J2GXMvKyPlMiycOVsF01HuFepDypg4w923A4Zk5gMGaHfEQ4
-        pxac/Bmhl0pP9ehAey3jYeds9rBX9EEB33QBClPHYw==
-X-Google-Smtp-Source: AKy350YLZihMhzB+mdd71bZKDJZvF/AIGIyRY1E58MdNGmy1VpnHnj4VC2+IDSkQ7AmfGY7ZYm4clBM+wIUjda9dog0=
-X-Received: by 2002:a25:d958:0:b0:b75:3fd4:1b31 with SMTP id
- q85-20020a25d958000000b00b753fd41b31mr1807164ybg.1.1680872915732; Fri, 07 Apr
- 2023 06:08:35 -0700 (PDT)
+        Fri, 7 Apr 2023 09:09:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BB35590;
+        Fri,  7 Apr 2023 06:09:55 -0700 (PDT)
+Date:   Fri, 07 Apr 2023 13:09:52 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680872993;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JkVxDgCZzaUHhuVaWEGGlfuqQmfyNAV5VnpdsyyVXF4=;
+        b=QhFAC6uWupGXMnLQYOhBBBp30bECDy3o7IgZq7CWdbmrqzkMH3sDcv2eGNNQxUTavq5yFB
+        c/DPc0Ak8enL8w0B6sev8g6kq2r0lxQDlgPFhSkzSe3/gzbQApbqmLuxfZGXOTLF14uELN
+        ArNbRFHjoTAQ3AmyL0/5tEg4dzOzg8TsOVs6+TFWnfVqiJC/dFkVXiPQ2St4BhXduT+285
+        G0XlDtQQUMm/BEmxtZZwarT7/2OUttIARZgKxBsSlqKgCCD3SmJ4Kg6jg3SarLgXiDL+u4
+        S2V/F/Up7vH9g00ONrO6dAuC3/YVhp4ANYe2EIcJbVJlTYvCUceuEtAQsPSa9w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680872993;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JkVxDgCZzaUHhuVaWEGGlfuqQmfyNAV5VnpdsyyVXF4=;
+        b=3iaIQXeoUyME4d97qa1Y6BcsvrFyaBEDU2ElgIBjgap2VjSbY+wY2a8BkSdfiuh4RFDq3c
+        bsvGqFZAN7XIQrBw==
+From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/apic] x86/apic: Fix atomic update of offset in
+ reserve_eilvt_offset()
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230227160917.107820-1-ubizjak@gmail.com>
+References: <20230227160917.107820-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-References: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
-In-Reply-To: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Fri, 7 Apr 2023 15:08:24 +0200
-Message-ID: <CAFGrd9pV8Zk-4M3gPRYBSqqG7dTA6bri4LV2ZcfKyTZN6STsmA@mail.gmail.com>
-Subject: Re: [PATCH v5 00/12] Improve the MT8365 SoC and EVK board support
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        catalin.marinas@arm.com, Will Deacon <will@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <168087299261.404.3541260516013039940.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ To: Catalin Marinas <catalin.marinas@arm.com>
-+ To: Will Deacon <will@kernel.org>
+The following commit has been merged into the x86/apic branch of tip:
 
-Sorry for the noise.
+Commit-ID:     f96fb2df3eb31ede1b34b0521560967310267750
+Gitweb:        https://git.kernel.org/tip/f96fb2df3eb31ede1b34b0521560967310267750
+Author:        Uros Bizjak <ubizjak@gmail.com>
+AuthorDate:    Mon, 27 Feb 2023 17:09:17 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Fri, 07 Apr 2023 14:34:24 +02:00
 
-Regards,
-Alexandre
+x86/apic: Fix atomic update of offset in reserve_eilvt_offset()
 
-Le ven. 7 avr. 2023 =C3=A0 14:59, Alexandre Mergnat <amergnat@baylibre.com>=
- a =C3=A9crit :
->
-> This commits are based on the Fabien Parent <fparent@baylibre.com> work.
->
-> The purpose of this series is to add the following HWs / IPs support for
-> the mt8365-evk board:
-> - Watchdog
-> - Power Management Integrated Circuit "PMIC" wrapper
-> - MT6357 PMIC
-> - MultiMediaCard "MMC" & Secure Digital "SD" controller
-> - USB controller
-> - Ethernet MAC controller
->
-> Add CPU Freq & IDLE support for this board.
->
-> This series depends to anothers which add support for MT8365 EVK board
-> [1], add the MT8365 I2C support [2] (both are currently applied) and
-> finally the pinctrl binding cleanup [3].
->
-> =3D=3D=3D Build:
->
-> To test this serie, cherry-pick patches from the dependent series ([1],[2=
-],[3])
-> and the applied patches from this serie (documented in the "Changes" belo=
-w).
-> Be carefull, the pinctrl serie [3] is rebased to linusw/linux-pinctrl,
-> cherry-pick will not be straightforward.
-> Finally, cherry-pick this serie.
->
-> You can also take my branch [4] which have all the needed patches
-> retrieved from the instructions above.
->
-> Use the arm64 defconfig to make the build.
->
-> Regards,
-> Alex
->
-> [1]: https://lore.kernel.org/all/20230309213501.794764-1-bero@baylibre.co=
-m/
-> [2]: https://lore.kernel.org/all/20221122-mt8365-i2c-support-v6-0-e1009c8=
-afd53@baylibre.com/
-> [3]: https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v3-0-6f=
-56d5c7a8de@baylibre.com/
-> [4]: https://gitlab.baylibre.com/baylibre/mediatek/bsp/linux/-/commits/am=
-ergnat/i350-evk-board-support
->
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
-> Changes in v5:
-> - Add patches to build the MT6357 regulator driver and MTK PMIC keys by d=
-efault
-> - Remove "dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add drive streng=
-th property"
->   patch from this serie and add it to the pinctrl serie [3]
-> - Link to v4: https://lore.kernel.org/r/20230203-evk-board-support-v4-0-5=
-cffe66a38c0@baylibre.com
->
-> Changes in v4:
-> - Remove v3 applied patch from the serie:
->   - arm64: dts: mediatek: add ethernet support for mt8365 SoC
->   - arm64: dts: mediatek: add mmc support for mt8365 SoC
->   - arm64: dts: mediatek: add mt6357 device-tree
->   - arm64: dts: mediatek: add pwrap support to mt8365 SoC
->   - arm64: dts: mediatek: Increase the size BL31 reserved memory
-> - Drop "arm64: dts: mediatek: fix systimer properties" which is done [1]
-> - Fix style, typo and re-order properties.
-> - Use interrupts-extended for the PMIC node.
-> - Link to v3: https://lore.kernel.org/r/20230203-evk-board-support-v3-0-0=
-003e80e0095@baylibre.com
->
-> Changes in v3:
-> - Remove v2 applied patch from the serie:
->   - dt-bindings: mmc: mediatek,mtk-sd: add mt8365
-> - Add trailers and simply resend.
-> - Link to v2: https://lore.kernel.org/r/20230203-evk-board-support-v2-0-6=
-ec7cdb10ccf@baylibre.com
->
-> ---
-> Alexandre Mergnat (10):
->       arm64: defconfig: enable MT6357 regulator
->       arm64: defconfig: enable Mediatek PMIC key
->       dt-bindings: watchdog: mediatek,mtk-wdt: add mt8365
->       arm64: dts: mediatek: add watchdog support for mt8365 SoC
->       arm64: dts: mediatek: add mt6357 PMIC support for  mt8365-evk
->       arm64: dts: mediatek: add mmc support for mt8365-evk
->       arm64: dts: mediatek: add usb controller support for mt8365-evk
->       arm64: dts: mediatek: add ethernet support for mt8365-evk
->       arm64: dts: mediatek: add OPP support for mt8365 SoC
->       arm64: dts: mediatek: add cpufreq support for mt8365-evk
->
-> Amjad Ouled-Ameur (1):
->       arm64: dts: mediatek: Add CPU Idle support
->
-> Fabien Parent (1):
->       arm64: dts: mediatek: set vmc regulator as always on
->
->  .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   1 +
->  arch/arm64/boot/dts/mediatek/mt8365-evk.dts        | 249 +++++++++++++++=
-++++++
->  arch/arm64/boot/dts/mediatek/mt8365.dtsi           | 142 ++++++++++++
->  arch/arm64/configs/defconfig                       |   3 +
->  4 files changed, 395 insertions(+)
-> ---
-> base-commit: 4f2a499a344b36ebb325e610265452ea88541116
-> change-id: 20230203-evk-board-support-d5b7a839ed7b
->
-> Best regards,
-> --
-> Alexandre Mergnat <amergnat@baylibre.com>
->
+The detection of atomic update failure in reserve_eilvt_offset() is
+not correct. The value returned by atomic_cmpxchg() should be compared
+to the old value from the location to be updated.
+
+If these two are the same, then atomic update succeeded and
+"eilvt_offsets[offset]" location is updated to "new" in an atomic way.
+
+Otherwise, the atomic update failed and it should be retried with the
+value from "eilvt_offsets[offset]" - exactly what atomic_try_cmpxchg()
+does in a correct and more optimal way.
+
+Fixes: a68c439b1966c ("apic, x86: Check if EILVT APIC registers are available (AMD only)")
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230227160917.107820-1-ubizjak@gmail.com
+---
+ arch/x86/kernel/apic/apic.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index 20d9a60..7705571 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -422,10 +422,9 @@ static unsigned int reserve_eilvt_offset(int offset, unsigned int new)
+ 		if (vector && !eilvt_entry_is_changeable(vector, new))
+ 			/* may not change if vectors are different */
+ 			return rsvd;
+-		rsvd = atomic_cmpxchg(&eilvt_offsets[offset], rsvd, new);
+-	} while (rsvd != new);
++	} while (!atomic_try_cmpxchg(&eilvt_offsets[offset], &rsvd, new));
+ 
+-	rsvd &= ~APIC_EILVT_MASKED;
++	rsvd = new & ~APIC_EILVT_MASKED;
+ 	if (rsvd && rsvd != vector)
+ 		pr_info("LVT offset %d assigned for vector 0x%02x\n",
+ 			offset, rsvd);
