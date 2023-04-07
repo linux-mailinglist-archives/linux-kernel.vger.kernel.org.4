@@ -2,75 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3E96DAB43
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205AA6DAB44
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240412AbjDGKKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
+        id S230518AbjDGKLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240395AbjDGKKh (ORCPT
+        with ESMTP id S229863AbjDGKLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:10:37 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB504C3F;
-        Fri,  7 Apr 2023 03:10:35 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id o3so861709lfd.12;
-        Fri, 07 Apr 2023 03:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680862233;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AV2F4DSz+hAoPsBNchYpKP8BCe+dN7CqxHM1THS5IQ0=;
-        b=jtcPqo9Nzp/sRPesvPFdYJrtzFvHqBua33jYxPt9ouLKx6u8j/8spna48t0xnQOsCs
-         C6ullEloa94nBjloYClYwfHGx4VOB41ES/Iw5dpeiMGKVriYSDOV4toQ4fKnF6G/J8On
-         w7Yz6OpWm7dtIXxvSmR8Bo+MAxOOFjCA8LeTsznTA2fx1KNgu+N2JH5eMFAHqhW8R3EJ
-         ATZMTxiUkcESt7T7ZX3OOtIlQv10WgWdS+Hs8//oNxPOx9C1iZ4uUIbKweZJoPRJOelh
-         nT3D2M8GgjFsR4eIf2qihwDMJkB6u2P3d7PqcIQ4Xc+SsY767/6mAJEpO7YlMtN2kgWU
-         H9Vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680862233;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AV2F4DSz+hAoPsBNchYpKP8BCe+dN7CqxHM1THS5IQ0=;
-        b=gFuxh/fGkN+AeBJuYXFhOHY+LzWFSoLY8Rz2mCjrDalpjwrm8yVhRkXFeNHO6vINKt
-         NyKkhFRUrBLSdlxrZ0zbHCBgqsMzOOxXP0cyl/JXJXouJE0SGPWdS5vh9ROWYjkZd53t
-         CaKRWUjH3rJ6n/ZyHyofu1J24+aDNusq8NucwAEOtXPW0umPFexjvek0037/n60wJscI
-         01c/FjDj1gUGQvn4FxDoAr5x62KSn5G2CFnSiI8aeeEtUhXGKJafOPpyCtP2MZioi4r1
-         L+PaVqwADPfUGYih22U8fXrDPDfoJvuWgY7JuQ5m5jNSPQKXmsIoZt4Y8NICslxT9Z3O
-         d9pA==
-X-Gm-Message-State: AAQBX9dgcNS2Drm7xZjLiV9INxS4LPMxHLkTl0vTegFvdfFcAh+K4/JX
-        0QDRn8+mKAjUvPBi2TwGofs6dG5Ua7g=
-X-Google-Smtp-Source: AKy350br/Td7o2c/LAJhdK5O38l6fhc+mxteoTiiKRQb3dpdqHGT4CokLccW1bx7vT5KcfJZWFttPA==
-X-Received: by 2002:a05:6512:3885:b0:4ea:f526:5bee with SMTP id n5-20020a056512388500b004eaf5265beemr648395lft.11.1680862233175;
-        Fri, 07 Apr 2023 03:10:33 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id h26-20020a19701a000000b004e1b880ba20sm630423lfc.292.2023.04.07.03.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 03:10:32 -0700 (PDT)
-Message-ID: <1f6b470d-7740-8b0f-6c1d-a4a986d1c0c8@gmail.com>
-Date:   Fri, 7 Apr 2023 13:10:32 +0300
+        Fri, 7 Apr 2023 06:11:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E064B9004
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:11:08 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3379AmLD011830;
+        Fri, 7 Apr 2023 10:11:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=G51SlimsysdJU5GnlmLLgt2RhClRMkcc8o6TRS4K/0E=;
+ b=Wf4r6pJ0jIn3cQTTxf9eciZawRfTUu2d1bhUWpU4idiyl13qnis8BpGy7+A0qlQRF6ze
+ MpGoGV8TTUl4XpADYmeWjoJzpgwZ1AgmawxYvJ7dVNgr8MSgcJvK9dOYcwz5QO6E2/2U
+ WQ4Evzi/9I7xQCMDl+nu2paWu66bY4sgj2A1kSDSM1zVeRkv6fXpvlzVOGgMNFEYWlo6
+ GN5HJf9oXHqlwNh6hBQmJJmkxkj9aVCDle6ed6Q3/Gki+0Uj7kL9R7y4USbmvpbeP4z1
+ GGKi+Ggvd/3stdl6kGjFoJUHcVARLQRoFbJSUyQG3N+caNrewZuVROCIw+nOFmZo6YRN BA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ptcagdtj7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 10:11:02 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 337A8050007466;
+        Fri, 7 Apr 2023 10:11:01 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ptcagdthc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 10:11:01 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 336FTlia015703;
+        Fri, 7 Apr 2023 10:10:59 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3ppc874w2b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 10:10:59 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 337AAuiA3998388
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Apr 2023 10:10:56 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0ED720067;
+        Fri,  7 Apr 2023 10:10:56 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E46E20065;
+        Fri,  7 Apr 2023 10:10:55 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.171.71.120])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  7 Apr 2023 10:10:55 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 13:10:53 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH 12/29] selftests/mm: Create uffd-common.[ch]
+Message-ID: <ZC/sLe7/PSL098Tq@linux.ibm.com>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160720.3107021-1-peterx@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/2] leds: bd2606mvv: Driver for the Rohm 6 Channel i2c
- LED driver
-Content-Language: en-US, en-GB
-To:     Andreas Kemnade <andreas@kemnade.info>, pavel@ucw.cz,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230407050803.170773-1-andreas@kemnade.info>
- <20230407050803.170773-3-andreas@kemnade.info>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230407050803.170773-3-andreas@kemnade.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330160720.3107021-1-peterx@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kMnuP4zdJ8EnDMbXVgIxC9oFHN25ebHe
+X-Proofpoint-GUID: 4956bpKZ-3Krxj87g6M5TiY4T-adVsv4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_06,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 mlxlogscore=840 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304070093
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,99 +97,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 08:08, Andreas Kemnade wrote:
-> The device provides 6 channels which can be individually
-> turned off and on but groups of two channels share a common brightness
-> register.
+On Thu, Mar 30, 2023 at 12:07:20PM -0400, Peter Xu wrote:
+> Move common utility functions into uffd-common.[ch] files from the original
+> userfaultfd.c.  This prepares for a split of userfaultfd.c into two tests:
+> one to only cover the old but powerful stress test, the other one covers
+> all the functional tests.
 > 
-> Limitation: The GPIO to enable the device is not used yet.
+> This movement is kind of a brute-force effort for now, with light touch-ups
+> but nothing should really change.  There's chances to optimize more, but
+> let's leave that for later.
 > 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
 > ---
->   drivers/leds/Kconfig          |  11 +++
->   drivers/leds/Makefile         |   1 +
->   drivers/leds/leds-bd2606mvv.c | 143 ++++++++++++++++++++++++++++++++++
->   3 files changed, 155 insertions(+)
->   create mode 100644 drivers/leds/leds-bd2606mvv.c
+>  tools/testing/selftests/mm/Makefile      |   2 +
+>  tools/testing/selftests/mm/uffd-common.c | 611 ++++++++++++++++++++
+>  tools/testing/selftests/mm/uffd-common.h | 117 ++++
+>  tools/testing/selftests/mm/userfaultfd.c | 694 +----------------------
+>  4 files changed, 731 insertions(+), 693 deletions(-)
+>  create mode 100644 tools/testing/selftests/mm/uffd-common.c
+>  create mode 100644 tools/testing/selftests/mm/uffd-common.h
 > 
-> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-> index 9dbce09eabacf..cc4eadbb2542e 100644
-> --- a/drivers/leds/Kconfig
-> +++ b/drivers/leds/Kconfig
-> @@ -551,6 +551,17 @@ config LEDS_REGULATOR
->   	help
->   	  This option enables support for regulator driven LEDs.
->   
-> +config LEDS_BD2606MVV
-> +	tristate "LED driver for BD2606MVV"
-> +	depends on LEDS_CLASS
-> +	depends on I2C
-> +	select REGMAP_I2C
-> +	help
-> +	  This option enables support for BD2606MVV LED driver chips
-> +	  accessed via the I2C bus. It supports setting brightness, with
-> +	  the limitiation that there are groups of two channels sharing
-> +	  a brightness setting, but not the on/off setting.
-> +
->   config LEDS_BD2802
->   	tristate "LED driver for BD2802 RGB LED"
->   	depends on LEDS_CLASS
-> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-> index d30395d11fd84..c07d1512c745a 100644
-> --- a/drivers/leds/Makefile
-> +++ b/drivers/leds/Makefile
-> @@ -17,6 +17,7 @@ obj-$(CONFIG_LEDS_ARIEL)		+= leds-ariel.o
->   obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
->   obj-$(CONFIG_LEDS_BCM6328)		+= leds-bcm6328.o
->   obj-$(CONFIG_LEDS_BCM6358)		+= leds-bcm6358.o
-> +obj-$(CONFIG_LEDS_BD2606MVV)		+= leds-bd2606mvv.o
->   obj-$(CONFIG_LEDS_BD2802)		+= leds-bd2802.o
->   obj-$(CONFIG_LEDS_BLINKM)		+= leds-blinkm.o
->   obj-$(CONFIG_LEDS_CLEVO_MAIL)		+= leds-clevo-mail.o
-> diff --git a/drivers/leds/leds-bd2606mvv.c b/drivers/leds/leds-bd2606mvv.c
-> new file mode 100644
-> index 0000000000000..808100e50487c
-> --- /dev/null
-> +++ b/drivers/leds/leds-bd2606mvv.c
-> @@ -0,0 +1,143 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 Andreas Kemnade
-> + *
-> + * Datasheet:
-> + * https://fscdn.rohm.com/en/products/databook/datasheet/ic/power/led_driver/bd2606mvv_1-e.pdf
-> + */
-> +
-> +#include <linux/i2c.h>
-> +#include <linux/leds.h>
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +
-> +#define BD2606_MAX_LEDS 6
-> +#define BD2606_MAX_BRIGHTNESS 63
-> +#define BD2606_REG_PWRCNT 3
-> +#define ldev_to_led(c)	container_of(c, struct bd2606mvv_led, ldev)
-> +
-> +struct bd2606mvv_led {
-> +	bool active;
-
-I still think having this 'active' here for the whole lifetime of the 
-driver is a bit misleading. This, however, is a minor thing. With or 
-without the 'active' removed from the private data:
-
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-
-Yours,
-	-- Matti
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Sincerely yours,
+Mike.
