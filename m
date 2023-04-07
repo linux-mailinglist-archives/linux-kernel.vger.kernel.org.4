@@ -2,243 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE6D6DA973
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0216DA991
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjDGHfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 03:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S232715AbjDGHvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 03:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbjDGHez (ORCPT
+        with ESMTP id S230194AbjDGHvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 03:34:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D149ED1
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 00:34:53 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-93db98f7b33so136155566b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 00:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680852892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xufJewXyhNV91ceoQQRbqkfFuhj5XUSD9386rC0IB28=;
-        b=gDMbr9D7tJfW5EhGD1TauIK78v+jZ7HUY7e7xfnLQhu1bEnuRBb0SqZjJ51+UqnBdc
-         QrABNaCBE42IvweCIbz+OmT7FfcD6fDU31Aj8En6ELtBabJM0gTH+lLXGmKH/DZRtp+P
-         FfNP2yFQVIMY0xfUglALIrdcxAM40WZgLRaKlFjvmvF8nzE0LpLZqVSTArizOpK6o86n
-         F59MbAyWPqLUz1onQKYeDGol9W6HmV3j24HnaNBKgFUPpu5qPJSUTORcD+uWZSzrhoJH
-         Gft2x4kLBBdmGR32hJdvvPnUqtQCfIryMpFtmCWIgxEzTKwurrEKiBUVgyu4XHizGsur
-         iMhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680852892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xufJewXyhNV91ceoQQRbqkfFuhj5XUSD9386rC0IB28=;
-        b=eaZIR+E0FbcgxAFnGZINLSZI8V8x5NR9LGluul5r6ztM/ihxEUDQBk0N5zFOVPsE5m
-         4TWZEr+g8eRB7hMI1mATKlNMakg6f1DIWxX4d05/ASkppT8JnDwdyUxy+Bd7CjVpODAt
-         S+Lumf8utn+/DOzHEEDO3LB841avNtuzWup3sE4UlQ98JEOBosYNzF/17Ofr4oNAFOYS
-         xgVnsAquSy+3M3pLJ1b4dS3XW7Dsu58QeiP6YVlxERkoZ+IUWKyMyETCOJuUNR8GsW/G
-         JYQWOs06Kp8pWnbPcfOT/RxSGz+KToilh+zwniokff/mBVFmYtYGBeJxfV7cgph0Qnr9
-         tErQ==
-X-Gm-Message-State: AAQBX9dOOoSQLppfCukGogFYfqmSYvr2Aa8MDJkCBg5TJy7nCg0Dxjw4
-        GbwEOrqCpYMHKN92MoCXGp50x7bbzYlxmTEGtZ7TMw==
-X-Google-Smtp-Source: AKy350bF8961SbdQkzvhhN/J2V2TxAtpP2NJYlX5JDDN+lnoULk6K/VoRyybz83rRM6Adk8ORW5BfMtw4ISKJ9e8OKk=
-X-Received: by 2002:a50:d716:0:b0:502:6d4b:40f5 with SMTP id
- t22-20020a50d716000000b005026d4b40f5mr997137edi.7.1680852891875; Fri, 07 Apr
- 2023 00:34:51 -0700 (PDT)
+        Fri, 7 Apr 2023 03:51:44 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FE95B83;
+        Fri,  7 Apr 2023 00:51:42 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3377codq012393;
+        Fri, 7 Apr 2023 09:51:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=JZQ9ebk0VsNr3bmE9JHa8crYpwLrWBU1DloiIHkXoPc=;
+ b=LATOAoa6VAv2sIlM+tG5p8SCCPc4K8iKdJp918Z0eSEhRFkDt1YH18iBa5sck1l+33rf
+ cDQcHCFQF43sray9y1qxFdISoxpjSP/5yOhVMmBOFiBdytWdqCBl27HKdjs35gtPfW8n
+ A5ONJu1TGJl02KSkQWCt0jUNmNEQpWKdSVhEYYnvh+JhTckINgJn08EDdd/PkrRQEjxH
+ SDqA00tBDGHPh0bDgNyKq4yqmPtVw9ECW4fNq1JrlWisyeioRctkcXqf0fHxvURU+CTG
+ qohwj3RtootheEg6yzbL2IVgS9yqjAsGFlN2lNGccEzIF4bl/4AdAe10DLTr12ZBcnKc xQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pteygr23x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:51:27 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 61B49100113;
+        Fri,  7 Apr 2023 09:42:23 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5AB5E216EFD;
+        Fri,  7 Apr 2023 09:42:23 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 7 Apr
+ 2023 09:42:23 +0200
+Message-ID: <ae67208f-7e04-5d53-9b7d-77bf4547a790@foss.st.com>
+Date:   Fri, 7 Apr 2023 09:42:22 +0200
 MIME-Version: 1.0
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
- <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com> <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
- <8a837998-604f-a871-729e-aa274a621481@collabora.com>
-In-Reply-To: <8a837998-604f-a871-729e-aa274a621481@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Fri, 7 Apr 2023 09:34:40 +0200
-Message-ID: <CABb0KFEBqAMWWpAeBfqzA4JrHo3yLyaT0rqKTUn28O0hE+szBA@mail.gmail.com>
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] ARM: stm32: add initial documentation for STM32MP151
+Content-Language: en-US
+To:     Roan van Dijk <roan@protonic.nl>, <corbet@lwn.net>
+CC:     <mcoquelin.stm32@gmail.com>, <linux-doc@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230330091613.1445734-1-roan@protonic.nl>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230330091613.1445734-1-roan@protonic.nl>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_04,2023-04-06_03,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 6 Apr 2023 at 23:04, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 4/7/23 1:00=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-[...]
-> >>>> +               cur->len +=3D n_pages;
-> >>>> +               p->found_pages +=3D n_pages;
-> >>>> +
-> >>>> +               if (p->max_pages && (p->found_pages =3D=3D p->max_pa=
-ges))
-> >>>> +                       return PM_SCAN_FOUND_MAX_PAGES;
-> >>>> +
-> >>>> +               return 0;
-> >>>> +       }
-> >>>> +
-> >>>> +       if (!p->vec_index || ((p->vec_index + 1) < p->vec_len)) {
-> >>>
-> >>> It looks that `if (p->vec_index < p->vec_len)` is enough here - if we
-> >>> have vec_len =3D=3D 0 here, then we'd not fit the entry in the usersp=
-ace
-> >>> buffer anyway. Am I missing something?
-> >> No. I'd explained it with diagram last time:
-> >> https://lore.kernel.org/all/3c8d9ea0-1382-be0c-8dd2-d490eedd3b55@colla=
-bora.com
-> >>
-> >> I'll add a concise comment here.
-> >
-> > So it seems, but I think the code changed a bit and maybe could be
-> > simplified now? Since p->vec_len =3D=3D 0 is currently not valid, the
-> > field could count only the entries available in p->vec[] -- IOW: not
-> > include p->cur in the count.
-> I see. But this'll not work as we need to count p->cur to don't go above
-> the maximum count, p->vec_size.
+Hi Roan
 
-You can subtract 1 from p->vec_size before the page walk to account
-for the buffer in `cur`.
+On 3/30/23 11:16, Roan van Dijk wrote:
+> This patch adds initial documentation of STM32MP151 microprocessor (MPU)
+> based on Arm Cortex-A7.
+> 
+> Signed-off-by: Roan van Dijk <roan@protonic.nl>
+> ---
+> 
 
-[...]
-> >>>> +static inline int pagemap_scan_deposit(struct pagemap_scan_private =
-*p,
-> >>>> +                                      struct page_region __user *ve=
-c,
-> >>>> +                                      unsigned long *vec_index)
-> >>>
-> >>> ..._deposit() is used only in single place - please inline.
-> >> It is already inline.
-> >
-> > Sorry. I mean: please paste the code in place of the single call.
-> I've made it a separate function to make the code look better in the call=
-er
-> function and logically easier to understand. This function is ugly.
-> do_pagemap_scan() is also already very long function with lots of things
-> happening. If you still insist, I'll remove this function.
 
-Please do remove - it will make the copy to userspace code all neatly toget=
-her.
 
-[...]
-> >>>> +                */
-> >>>> +               if (is_written && PM_SCAN_OP_IS_WP(p) &&
-> >>>> +                   ((end - start < HPAGE_SIZE) ||
-> >>>> +                    (p->max_pages &&
-> >>>> +                     (p->max_pages - p->found_pages) < n_pages))) {
-> >>>> +
-> >>>> +                       split_huge_pmd(vma, pmd, start);
-> >>>> +                       goto process_smaller_pages;
-> >>>> +               }
-> >>>> +
-> >>>> +               if (p->max_pages &&
-> >>>> +                   p->found_pages + n_pages > p->max_pages)
-> >>>> +                       n_pages =3D p->max_pages - p->found_pages;
-> >>>> +
-> >>>> +               ret =3D pagemap_scan_output(is_written, is_file, is_=
-present,
-> >>>> +                                         is_swap, p, start, n_pages=
-);
-> >>>> +               if (ret < 0)
-> >>>> +                       return ret;
-> >
-> > So let's simplify this:
-> >
-> > if (p->max_pages && n_pages > max_pages - found_pages)
-> >   n_pages =3D max_pages - found_pages;
-> >
-> > if (is_written && DO_WP && n_pages !=3D HPAGE_SIZE / PAGE_SIZE) {
-> >   split_thp();
-> >   goto process_smaller_pages;
-> > }
-> Clever!! This looks very sleek.
->
-> >
-> > BTW, THP handling could be extracted to a function that would return
-> > -EAGAIN if it has split the page or it wasn't a THP -- and that would
-> > mean `goto process_smaller_pages`.
-> Other functions in this file handle the THP in this same way. So it feels
-> like more intuitive that we follow to same pattern in this file.
+Applied on stm32-next.
 
-I'll leave it to you. Extracting THP support would avoid a goto and
-#ifdef inside a function, though (and make the function smaller).
+Thanks.
+Alex
 
-> >>>> +       /*
-> >>>> +        * Allocate smaller buffer to get output from inside the pag=
-e walk
-> >>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size c=
-hunks. As
-> >>>> +        * we want to return output to user in compact form where no=
- two
-> >>>> +        * consecutive regions should be continuous and have the sam=
-e flags.
-> >>>> +        * So store the latest element in p.cur between different wa=
-lks and
-> >>>> +        * store the p.cur at the end of the walk to the user buffer=
-.
-> >>>> +        */
-> >>>> +       p.vec =3D kmalloc_array(p.vec_len, sizeof(struct page_region=
-),
-> >>>> +                             GFP_KERNEL);
-> >>>> +       if (!p.vec)
-> >>>> +               return -ENOMEM;
-> >>>> +
-> >>>> +       walk_start =3D walk_end =3D start;
-> >>>> +       while (walk_end < end && !ret) {
-> >>>
-> >>> The loop will stop if a previous iteration returned ENOSPC (and the
-> >>> error will be lost) - is it intended?
-> >> It is intentional. -ENOSPC means that the user buffer is full even tho=
-ugh
-> >> there was more memory to walk over. We don't treat this error. So when
-> >> buffer gets full, we stop walking over further as user buffer has gott=
-en
-> >> full and return as success.
-> >
-> > Thanks. What's the difference between -ENOSPC and
-> > PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (code
-> > flow).
-> -ENOSPC --> user buffer has been filled completely
-> PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer may
->                             still have more space
+> v2:
+>   - Adds stm32mp151 to index.rst
+> 
+>   Documentation/arm/index.rst                   |  1 +
+>   .../arm/stm32/stm32mp151-overview.rst         | 36 +++++++++++++++++++
+>   2 files changed, 37 insertions(+)
+>   create mode 100644 Documentation/arm/stm32/stm32mp151-overview.rst
+> 
+> diff --git a/Documentation/arm/index.rst b/Documentation/arm/index.rst
+> index ae42fe886f0d..056ac11372af 100644
+> --- a/Documentation/arm/index.rst
+> +++ b/Documentation/arm/index.rst
+> @@ -58,6 +58,7 @@ SoC-specific documents
+>      stm32/stm32f769-overview
+>      stm32/stm32f429-overview
+>      stm32/stm32mp13-overview
+> +   stm32/stm32mp151-overview
+>      stm32/stm32mp157-overview
+>      stm32/stm32-dma-mdma-chaining
+>   
+> diff --git a/Documentation/arm/stm32/stm32mp151-overview.rst b/Documentation/arm/stm32/stm32mp151-overview.rst
+> new file mode 100644
+> index 000000000000..f42a2ac309c0
+> --- /dev/null
+> +++ b/Documentation/arm/stm32/stm32mp151-overview.rst
+> @@ -0,0 +1,36 @@
+> +===================
+> +STM32MP151 Overview
+> +===================
+> +
+> +Introduction
+> +------------
+> +
+> +The STM32MP151 is a Cortex-A MPU aimed at various applications.
+> +It features:
+> +
+> +- Single Cortex-A7 application core
+> +- Standard memories interface support
+> +- Standard connectivity, widely inherited from the STM32 MCU family
+> +- Comprehensive security support
+> +
+> +More details:
+> +
+> +- Cortex-A7 core running up to @800MHz
+> +- FMC controller to connect SDRAM, NOR and NAND memories
+> +- QSPI
+> +- SD/MMC/SDIO support
+> +- Ethernet controller
+> +- ADC/DAC
+> +- USB EHCI/OHCI controllers
+> +- USB OTG
+> +- I2C, SPI busses support
+> +- Several general purpose timers
+> +- Serial Audio interface
+> +- LCD-TFT controller
+> +- DCMIPP
+> +- SPDIFRX
+> +- DFSDM
+> +
+> +:Authors:
+> +
+> +- Roan van Dijk <roan@protonic.nl>
 
-What is the difference in code behaviour when those two cases are
-compared? (I'd expect none.)
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
