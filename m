@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE046DAB21
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C997D6DAB24
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239661AbjDGJ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 05:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S240024AbjDGJ6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbjDGJ44 (ORCPT
+        with ESMTP id S229437AbjDGJ6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:56:56 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CA37ECB;
-        Fri,  7 Apr 2023 02:56:53 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id bx10so24765678ljb.8;
-        Fri, 07 Apr 2023 02:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680861411;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IMmt0J7ORv2kNOivTrzHCNzDsNn+ORI7SQCDfabUQlQ=;
-        b=eNPnkVGvBbGr9Btxvn/s9UijDefC/i/wn3RTw621S4TZ5aZ0BfwJNXwW4fy2AylBQ4
-         RP8Yy6IKobIQrGZClMZumuo4PM7YX5n84HpT7Bn665/AHIXRoe2yONpfxMGUlfjXOFog
-         1H/fY3/qfzNFw1AC1JbXxf3Tu0CmG3/6sqKd119Cd22sTotw7zkk0MzzxGRwcy16whfR
-         sg+KRqXXd7x/d8mrXUJge4mhBXIgdwWnLV8zo3cdHAR10l1FXUUBTftONJgzrTKeh37m
-         LCK731eIzVgbZld3/Np9RXN44ukaWvEDgg0btTzFAIqhGxEYw3sHlmy/nqIT4xthpONi
-         LIRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680861411;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IMmt0J7ORv2kNOivTrzHCNzDsNn+ORI7SQCDfabUQlQ=;
-        b=UO5O7MeqmxYige3sW+ATSE3mZ99j+NwLHluo2nx57ndNjRsVYwkzGCYfQTMGw8BwuT
-         C9zG8kR09fHonW6UOGhad+VHyQvoNe8BWX7GzJ5uWAlBjh5eQrmfWcqm+iFjUPHbwmYI
-         qWaAMDhr8N+UhLcBFg5amemrFhePH6aBpib9sje6mLPCrMSigMawd8eZHzB7Npxucevl
-         fINlQahiqqGtjt9dISp38QNf+JWllymDNXGAfuFqsbGSqoK/6EBIoND2GCucu1tnOXHM
-         aUkGz/NGEt7U+6MaTQiNmmd52NV4QxLZrnCU1Ns6g8S4CLSqWsVgl9ib3GUdfLLBBlzs
-         bXbQ==
-X-Gm-Message-State: AAQBX9eDXRDhJzZDRT9sjWwJ2dcU5+mPzBcURgB9FUu2bfCwNHovm9Iv
-        WlTfnuNpmv2/NwuJsopaJ9k4ZRTolXI=
-X-Google-Smtp-Source: AKy350adYwZ2tMS6/aINbpRHWU2upOjKpcv+V0eiAolEaez7cReLwzPlmEqDWjL60giadZTX9sxsCA==
-X-Received: by 2002:a2e:9a90:0:b0:295:ba22:360 with SMTP id p16-20020a2e9a90000000b00295ba220360mr524428lji.42.1680861411435;
-        Fri, 07 Apr 2023 02:56:51 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id v12-20020a2e9f4c000000b00295a583a20bsm722163ljk.74.2023.04.07.02.56.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 02:56:51 -0700 (PDT)
-Message-ID: <fafac053-6009-562e-8e29-ee6435a3c8d1@gmail.com>
-Date:   Fri, 7 Apr 2023 12:56:50 +0300
+        Fri, 7 Apr 2023 05:58:17 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F247ED8;
+        Fri,  7 Apr 2023 02:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1680861496; x=1712397496;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OMm49nZx3reFlxHU+RGccvmujRLFyp4/7YbOx3zlUNA=;
+  b=C5WeISoVVs+ht6KPdcOBieIh6LnFdpIxnpXS96nJ5Gu+P/unGxyd+caA
+   JCu9ERFSHnHwetrW4IKApZFRYgAf85gzRmISKlvRHKnjLA041M/BSDjUE
+   cDHEIq9Z7H9dI6yMpn9MJtuYCvdMwBDZiwhvjHkKu+r2se/QgFJCYgLdB
+   3diIRsCTCFtImSUVPnYLjVKvsmo8TRz4aEXdKQZGKGgyTM3Q4pbHBSHeR
+   1bTi3UfoBSrI1CTWWljROym0jga7r9E80tvgdfrSxhl3rjCSlLp1Gxq3P
+   i3NpNW5n51sAENDDerdR/45daO4zlcmy8yyGAGNqZADmdsOIvNh1qHE5P
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,326,1673938800"; 
+   d="asc'?scan'208";a="145992168"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Apr 2023 02:58:13 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 7 Apr 2023 02:58:13 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 7 Apr 2023 02:58:10 -0700
+Date:   Fri, 7 Apr 2023 10:57:55 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Minda Chen <minda.chen@starfivetech.com>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-pci@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Kevin Xie <kevin.xie@starfivetech.com>,
+        <daire.mcnamara@microchip.com>
+Subject: Re: [PATCH v1 0/3] Add JH7110 PCIe driver support
+Message-ID: <20230407-splatter-greyhound-edc706148337@wendy>
+References: <20230406111142.74410-1-minda.chen@starfivetech.com>
+ <20230406-quench-unharmed-2c11b2617e9f@wendy>
+ <20230406-coming-stuffed-26f89610959c@wendy>
+ <d9dde509-8923-a930-4c82-4bc8bd78ed0d@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     pavel@ucw.cz, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hns@goldelico.com
-References: <20230406060825.103187-1-andreas@kemnade.info>
- <20230406060825.103187-3-andreas@kemnade.info>
- <7d8c558f-0d21-91ed-ecd0-cac079d366ee@gmail.com>
- <20230406214539.59dfaac7@aktux>
-Content-Language: en-US, en-GB
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH 2/2] leds: bd2606mvv: Driver for the Rohm 6 Channel i2c
- LED driver
-In-Reply-To: <20230406214539.59dfaac7@aktux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Jlip8xfO52SkZiZp"
+Content-Disposition: inline
+In-Reply-To: <d9dde509-8923-a930-4c82-4bc8bd78ed0d@starfivetech.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,66 +81,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/6/23 22:45, Andreas Kemnade wrote:
-> On Thu, 6 Apr 2023 11:57:15 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
-> [...]
-> 
->>
->>> + */
->>> +
->>> +#include <linux/i2c.h>
->>> +#include <linux/leds.h>
->>> +#include <linux/module.h>
->>> +#include <linux/of.h>
->>> +#include <linux/of_device.h>
->>> +#include <linux/regmap.h>
->>> +#include <linux/slab.h>
->>> +
->>> +#define BD2606_MAX_LEDS 6
->>> +#define BD2606_MAX_BRIGHTNESS 63
->>> +#define BD2606_REG_PWRCNT 3
->>> +#define ldev_to_led(c)	container_of(c, struct bd2606mvv_led, ldev)
->>> +
->>> +struct bd2606mvv_led {
->>> +	bool active;
->>
->> I didn't spot where this 'active' was used?
->>
-> [..]
-> 
->>> +		if (reg < 0 || reg >= BD2606_MAX_LEDS ||
->>> +		    priv->leds[reg].active) {
-> 
-> here
-> 
->>> +			of_node_put(child);
->>> +			return -EINVAL;
->>> +		}
->>> +		led = &priv->leds[reg];
->>> +
->>> +		led->active = true;
-> 
-> and here
+--Jlip8xfO52SkZiZp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Oh, right. So, if I read this correctly, "active" is only used in the 
-probe for checking if same 'reg' is given for mone than one LEDs.
+Hey Minda,
 
-If the 'active' is not used after probe then I'd prefer limiting the 
-life-time to probe. Perhaps drop this from the allocated private data 
-and just take it from the stack and let it go when probe is done?
+On Fri, Apr 07, 2023 at 10:32:51AM +0800, Minda Chen wrote:
+> On 2023/4/6 19:54, Conor Dooley wrote:
+> > On Thu, Apr 06, 2023 at 12:47:41PM +0100, Conor Dooley wrote:
+> >> On Thu, Apr 06, 2023 at 07:11:39PM +0800, Minda Chen wrote:
+> >> > This patchset adds PCIe driver for the StarFive JH7110 SoC.
+> >> > The patch has been tested on the VisionFive 2 board. The test
+> >> > devices include M.2 NVMe SSD and Realtek 8169 Ethernet adapter.
+> >>=20
+> >> I was talking with Daire last week about some changes he's working on
+> >> for the microchip driver, and we seemed to recall an off-list email
+> >> sent to Daire & Bjorn about extracting the common PLDA bits from the
+> >> pcie-microchip-host driver to be used with an (at that point)
+> >> unreleased SoC. Perhaps Bjorn has this in his mailbox somewhere still,
+> >> our corporate mail policy scrubs things from over a year ago & I could
+> >> not find it.
+> >>
+> >> I realised that that may actually have been StarFive, and the driver on
+> >> your GitHub [1] certainly felt very familiar to Daire (he said it was
+> >> very similar to his earlier revisions of his driver).
+> >>=20
+> >> I've not looked at a diff between this and the version you ship on
+> >> GitHub, but first a quick inspection it mostly just looks like you
+> >> did s/plda/sifive/ on the file.
+> >>=20
+> >> I'm obviously not a PCI maintainer, but if there are common bits betwe=
+en
+> >> the two drivers, extracting common bits seems like a good idea to me...
 
-This is a minor thing but if there will be other reason(s) to re-spin, 
-then this might be changed?
+> Thanks. It is pleasure to using same common codes. Does common bits chang=
+es
+> will upstream soon?
 
-Yours,
-	-- Matti
+I don't quite get what you mean. We've got some changes that are in
+progress here:
+https://lore.kernel.org/linux-pci/20230111125323.1911373-1-daire.mcnamara@m=
+icrochip.com/
+We've been quiet there for a while, but Daire's back looking into Robin's
+comments in there about the range parsing/window setup at the moment.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+I'm not sure if that's what you mean though, since you said "common
+bits" & Daire was doing that work in a world where there was no jh7110
+driver in the mix.
+Extracting common bits would be part of the process of adding a new
+driver, as I don't think there's any real reason to do so without
+another in-tree user.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+> And I see there are many difference between pcie-microchip-host and our c=
+odes.
 
+Right. I'd expect there to be a fair difference between our integrations
+of the IP, and therefore there'll be a bunch of non-shareable bits.
+
+You need the stg,syscon & phy bits, and the clock/reset handling is
+clearly different too.
+
+> >> https://github.com/starfive-tech/linux/blob/JH7110_VisionFive2_devel/d=
+rivers/pci/controller/pcie-plda.c
+
+I had a bit of a read through this again today with Daire to check what
+the differences actually are and it *looked* like the main,
+non-implementation related, differences were the extra "event" domain
+that was created to simplify the driver & the bottom half interrupt
+handling.
+That all came out of the review process, so it's likely that some of the
+same requests would be made of you by the PCI maintainers anyway.
+
+As an aside, you should probably run checkpatch --strict on this
+submission, there's a rake of coding style "issues" in the new code
+you've added.
+
+Cheers,
+Conor.
+
+--Jlip8xfO52SkZiZp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZC/pFwAKCRB4tDGHoIJi
+0vDrAQCzfjkmLgmto/G84NJvLmBRLa1PWCSIuMVxr3sAxUVWcQD9GoHqqTaYnFzv
+/J7frufpjB6/uXpEKzEcprsEZSWfPQc=
+=NyKG
+-----END PGP SIGNATURE-----
+
+--Jlip8xfO52SkZiZp--
