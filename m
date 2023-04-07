@@ -2,108 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4628B6DB00A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA5C6DB00B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240216AbjDGQBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S240459AbjDGQB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234258AbjDGQBI (ORCPT
+        with ESMTP id S240271AbjDGQBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:01:08 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE937ED0;
-        Fri,  7 Apr 2023 09:01:05 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-17786581fe1so46049426fac.10;
-        Fri, 07 Apr 2023 09:01:05 -0700 (PDT)
+        Fri, 7 Apr 2023 12:01:22 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6508B451
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:01:17 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a508c1333cso999885ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680883264; x=1683475264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ASAeBSNnC1XcMqJAI1nUTNDXuUf0iWiJJfczB0jpDRA=;
-        b=jpGPJ79fabE0r2BTRbZ/VPG0XWRygNaQo+K6uyoyjDD3iY61BXNWRRTvpSs7kHV4bc
-         3grH4Q0KybYQa+stKQs6VeJO8R4e3uJld0rEp5w8in4BeGFLkONMKLOMFBreXtvdgbY3
-         iaizZVSKU5InYoKEFW+oTiYD8N1Sw3x0e+MfCB/iXmh4FVUO0fHWiMBHhPMbthz7rpTD
-         /0znfU9Om6fZjHjYyn0KMkZjrq0/tVPRsNBcxF2hUq0pbH/ETKm6pDMoB8/KOAJc8cUO
-         FsoLS9MDFZmqWAm75Ijb0Xi7feK3OiDTIDbw6k58/q7rUnvRBnAAVImf8Jt6PIF1xtAY
-         57NQ==
+        d=bytedance.com; s=google; t=1680883277;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N1Uez3TXMrT2npohTcaUYZfKhTFgEr4nUA9RHREMDAI=;
+        b=XV1AWys35Q8M+z9Awh9qIXAKt3InWnPR8JVYfu4ywKURVkg+6nOl2WkYEtowGo08eb
+         ox6d6+WNsaZeia5ZY27kThubyPKCgxwp0dGwahMqL5X3TiyvtnvUhFUoRep53qmR1Sl6
+         RrO2PkFU5bEujD19FaPqGpgxPGUGqpClK36dcgh4fqWJjrh9HNlZEsF52P4wmeI55X+H
+         66LAOF73Rfj4PpFzQXXndBWo0TVeEz9LUsNZ+54XkEqWNlOibvjNeZJQqKo40Ty6sHp0
+         rGLkcETJj/AfZm0m/vp52FAh1tctF/GODM3vLjOZIjXGyXVxxEgPQpOzWpqaMG63FXIN
+         FVBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680883264; x=1683475264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ASAeBSNnC1XcMqJAI1nUTNDXuUf0iWiJJfczB0jpDRA=;
-        b=gfTsfiv/9wpCwZmET2iFEjUVe8DmaFcsWCEu0VlJv8Fh7E6hPzNEDuzxHdc7/m73rM
-         q0DZFlAjkGgKlKZJSt3xMMnRcCWFiFkVDIobrQRK7az77P+CZv01XENyPu91iWaBY5aR
-         7nEARzYrBExOVr+C7RaiDVkqtQBJ1gft9Gp55HGRSdvxSe/GePqCKGr7/ciEnJWaoDzE
-         4GeUM5zGii/GF5u33GVHZBflWw6JP3pM82k+FUil1AqlZDAqiO31jMMcjl3FwdWkW6T3
-         JfG74Bnbtx+h0xTvkrPI7uWNSnS8s+AwojyT0o/+KdMVsr5fnxKTI4gvUh07+ed6pBBM
-         H3bg==
-X-Gm-Message-State: AAQBX9fNAKQDWCiesL6XIikj6JrNdI+aaly18S9y12Vgp0op/H7fzKXM
-        2Lv8Gr/R6Wkd3iUrY1kQjSs=
-X-Google-Smtp-Source: AKy350bY/E21EphtCUqVzMzqQrXuyd3FE9CdvfaSWCm/wLBecOOLMYGPTAhoPHSC7I9fkts8dTDu8Q==
-X-Received: by 2002:a05:6870:6589:b0:184:c8c:d05d with SMTP id fp9-20020a056870658900b001840c8cd05dmr1439812oab.56.1680883264571;
-        Fri, 07 Apr 2023 09:01:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id tw11-20020a056871490b00b0017eb6cc4609sm1708190oab.39.2023.04.07.09.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 09:01:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 09:01:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        peter.ganzhorn@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] hwmon: (coretemp) Delete an obsolete comment
-Message-ID: <02cbffad-7f61-491e-a67b-8cc22a65881a@roeck-us.net>
-References: <20230330103346.6044-1-rui.zhang@intel.com>
- <20230330103346.6044-2-rui.zhang@intel.com>
+        d=1e100.net; s=20210112; t=1680883277;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=N1Uez3TXMrT2npohTcaUYZfKhTFgEr4nUA9RHREMDAI=;
+        b=h2IR3XGZBxUcTb49ra22q2ush0xw8mPyOhDGf8U5GbityebX9XQiNvB2VzFDa98c4K
+         1xq7qW7hixY9dZjSkfLjCqaZljvvRW0eaLR/CheBvR8VEvN+1m03FRQn7+m644o4dfhY
+         vvXTYL/VAB1P+xlK+51XW20h2PYpM/h3Dr/Iu36Sr2R57B+qd3YHu75ZpP5wA0HC6S8S
+         cFYUeGgKi5n87DMIWkRg45Vja/XENtwEr0msU2y9hbz6zD6ZRGy0IMkOTOYKut4xnY3d
+         akhTiFsI6sRFzV6YLQ4kFSI4r7lxHXw8Vwqo3rNRQeKqXow6lwdqFdC0UoeyAiCFmo/t
+         JpQg==
+X-Gm-Message-State: AAQBX9c8wuZpZ76fgQV4fLyeAF0NnpbMovGG2Lg3L44B5r6VDt0rIBUu
+        tA2DWfCs3Kwr62Av5l2E2PYVYQ==
+X-Google-Smtp-Source: AKy350ab2Po7AEL6zrXZ7DUwTatEwwhjKdorVTUMiwVWZB6L9JgmUhz21TiUxbPEGkl9xzmQzgV8pg==
+X-Received: by 2002:a62:4ecd:0:b0:627:f659:a771 with SMTP id c196-20020a624ecd000000b00627f659a771mr2487474pfb.12.1680883276930;
+        Fri, 07 Apr 2023 09:01:16 -0700 (PDT)
+Received: from [10.4.75.112] ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id n8-20020a63f808000000b0051416609fb7sm2752389pgh.61.2023.04.07.09.01.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 09:01:16 -0700 (PDT)
+Message-ID: <1a6c00f5-1e92-ecf7-f296-503ca89e4220@bytedance.com>
+Date:   Sat, 8 Apr 2023 00:01:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330103346.6044-2-rui.zhang@intel.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: Re: [PATCH v2 0/2] Fix failure to access u32* argument of tracked
+ function
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mykolal@fb.com,
+        shuah@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, yangzhenze@bytedance.com,
+        wangdongdong.6@bytedance.com, zhouchengming@bytedance.com
+References: <20230407084608.62296-1-zhoufeng.zf@bytedance.com>
+ <ZC/jd2gN3kJ+tPWF@krava> <5a996423-8876-a1e1-9bf1-3af3ba309c1a@bytedance.com>
+In-Reply-To: <5a996423-8876-a1e1-9bf1-3af3ba309c1a@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 06:33:46PM +0800, Zhang Rui wrote:
-> The refinement of tjmax value retrieved from MSR_IA32_TEMPERATURE_TARGET
-> has been changed for several times.
-> 
-> Now, the raw value from MSR is used without refinement. Thus remove the
-> obsolete comment.
-> 
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+在 2023/4/7 18:49, Feng Zhou 写道:
+> 在 2023/4/7 17:33, Jiri Olsa 写道:
+>> On Fri, Apr 07, 2023 at 04:46:06PM +0800, Feng zhou wrote:
+>>> From: Feng Zhou<zhoufeng.zf@bytedance.com>
+>>>
+>>> When access traced function arguments with type is u32*, bpf 
+>>> verifier failed.
+>>> Because u32 have typedef, needs to skip modifier. Add 
+>>> btf_type_is_modifier in
+>>> is_int_ptr. Add a selftest to check it.
+>>>
+>>> Feng Zhou (2):
+>>>    bpf/btf: Fix is_int_ptr()
+>>>    selftests/bpf: Add test to access u32 ptr argument in tracing 
+>>> program
+>> hi,
+>> it breaks several tests in test_progs suite:
+>>
+>> #11/36   bpf_iter/link-iter:FAIL
+>> #11      bpf_iter:FAIL
+>> test_dummy_st_ops_attach:FAIL:dummy_st_ops_load unexpected error: -13
+>> #63/1    dummy_st_ops/dummy_st_ops_attach:FAIL
+>> test_dummy_init_ret_value:FAIL:dummy_st_ops_load unexpected error: -13
+>> #63/2    dummy_st_ops/dummy_init_ret_value:FAIL
+>> test_dummy_init_ptr_arg:FAIL:dummy_st_ops_load unexpected error: -13
+>> #63/3    dummy_st_ops/dummy_init_ptr_arg:FAIL
+>> test_dummy_multiple_args:FAIL:dummy_st_ops_load unexpected error: -13
+>> #63/4    dummy_st_ops/dummy_multiple_args:FAIL
+>> test_dummy_sleepable:FAIL:dummy_st_ops_load unexpected error: -13
+>> #63/5    dummy_st_ops/dummy_sleepable:FAIL
+>> #63      dummy_st_ops:FAIL
+>> test_fentry_fexit:FAIL:fentry_skel_load unexpected error: -13
+>> #69      fentry_fexit:FAIL
+>> test_fentry_test:FAIL:fentry_skel_load unexpected error: -13
+>> #70      fentry_test:FAIL
+>>
+>> jirka
+>>
+>
+> I tried it, and it did cause the test to fail. Bpfverify reported an 
+> error,
+> 'R1 invalid mem access'scalar', let me confirm the reason.
 
-Applied.
+I used btf_type_skip_modifiers，but did not delete
+the previous "t = btf_type_by_id (btf, t- > type);"
+resulting in some testcases failing. I will send a
+v3 nextweek, thank you for your suggestion.
 
-Thanks,
-Guenter
 
-> ---
->  drivers/hwmon/coretemp.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-> index fe3d4d0dcbed..eba94f68585a 100644
-> --- a/drivers/hwmon/coretemp.c
-> +++ b/drivers/hwmon/coretemp.c
-> @@ -282,10 +282,6 @@ static int get_tjmax(struct temp_data *tdata, struct device *dev)
->  			dev_warn(dev, "Unable to read TjMax from CPU %u\n", tdata->cpu);
->  	} else {
->  		val = (eax >> 16) & 0xff;
-> -		/*
-> -		 * If the TjMax is not plausible, an assumption
-> -		 * will be used
-> -		 */
->  		if (val)
->  			return val * 1000;
->  	}
+>>> Changelog:
+>>> v1->v2: Addressed comments from Martin KaFai Lau
+>>> - Add a selftest.
+>>> - use btf_type_skip_modifiers.
+>>> Some details in here:
+>>> https://lore.kernel.org/all/20221012125815.76120-1-zhouchengming@bytedance.com/ 
+>>>
+>>>
+>>>   kernel/bpf/btf.c                                    |  5 ++---
+>>>   net/bpf/test_run.c                                  |  8 +++++++-
+>>>   .../testing/selftests/bpf/verifier/btf_ctx_access.c | 13 
+>>> +++++++++++++
+>>>   3 files changed, 22 insertions(+), 4 deletions(-)
+>>>
+>>> -- 
+>>> 2.20.1
+>>>
+>
+
