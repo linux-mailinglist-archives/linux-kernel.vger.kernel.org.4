@@ -2,108 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 757A56DAC68
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CA56DAC73
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbjDGL4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S240464AbjDGL7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbjDGL4o (ORCPT
+        with ESMTP id S239298AbjDGL7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:56:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1FE49CE
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680868558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=n4yjwe4G2G9/env2LGiwcE/Ce2F1TWlNc2OcCX0hL4A=;
-        b=a5engY+r6qnupqwzHEPKsiXwj+2L5t8UaMdtpT3SRBTZJqlwyu0L8Upm9nrLtCSEYh60Io
-        jldgCuISSf/67zAig1nRazklabmbGpmkuu0VS0akHsMMN2n6QBHMtT+S51ZAtdHCsQBRyz
-        1+p1ddNM6GHOChSDpgcgYtvaUFIsPYE=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-140-GzVVEtp-PrC71oXPTBSlMA-1; Fri, 07 Apr 2023 07:55:57 -0400
-X-MC-Unique: GzVVEtp-PrC71oXPTBSlMA-1
-Received: by mail-qt1-f200.google.com with SMTP id a19-20020a05622a02d300b003e4ecb5f613so23212605qtx.21
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:55:57 -0700 (PDT)
+        Fri, 7 Apr 2023 07:59:21 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED8783F2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:59:19 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id z42so43300608ljq.13
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:59:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680868758;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wyNciRuuESIaKZEY8Qa86obLOtLCt19xSQ+LjBWVyjQ=;
+        b=x6t4GkePT4JZJ8ZgtSOSGs26QhXMjRbSyqg/eMVLLWn4zVRxKrxl5K/BgF+DrHZuds
+         s0jW3zyiwUl/LnZAih0GzV/X/1Yps9wU0ws51V8XXiC7LGAh/g4dxNtNwLdb15crQUc0
+         UwR7GcC+qebSayaEPaFwBe8FBh3Jko6hrhaUwDVm2EhKHm5yURJALcbFXl+dAbNGkZDO
+         c+jEhsEZG1Iq/c/pZdsOrQFyym9+iodZUZXLoUP4tecBl+dCpf2kwvZr3saMHm9UgPNV
+         9fBa1sIS11zPyUf5IQC1zSYK/oeWeRX+S/84SWlAYY4BYvnmtQQasWB1j3bKyB6kujM3
+         8JDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680868557;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n4yjwe4G2G9/env2LGiwcE/Ce2F1TWlNc2OcCX0hL4A=;
-        b=IoILu1cFcs6eDMOs4lPVsAZBTX/aOohRdpXYET68JziJZ5jgesIGL8WMDZpQebw8GR
-         S4JHGif0aqWP7SVgTp5jc/ExwkUAZutMt3D113hgKssUgOy8+CMppXRBAgLaUVw1BIBC
-         zIdmrcn0OOtsTcEV0+MSLheittM7jtCP0WlSooxOuP5bWFANCh4XSet3rK35OePYpRV8
-         IHkupo1Ch6wdRX/HOMFnD3+No9bQF6aWYciWG9a87DswqRjoU5oFVoRskPSAUbsLr2qp
-         ADwtNvimJPy6tjJF3MXO/yabizZXh6/mukIffl+h4WjxepxXBjOJE1OYMPtfKKE2nhSL
-         4ozw==
-X-Gm-Message-State: AAQBX9dARkV++Jj76O3tWXylNnO5U54vV/TXFOCfYjYNwS7GYVExIkAr
-        GOt81+d1Jg9STJVenuH5A/d2YhcGq2FwQcB+d8hpcHliwslVO7xb3NpiF79LEfp0VZl+3XpfMfy
-        4nBj0DiPA/MM/cYpsT5hATBeM
-X-Received: by 2002:a05:622a:1646:b0:3bf:b70b:7804 with SMTP id y6-20020a05622a164600b003bfb70b7804mr3553525qtj.25.1680868556851;
-        Fri, 07 Apr 2023 04:55:56 -0700 (PDT)
-X-Google-Smtp-Source: AKy350bl0Z3EzCJjIcLXRO1sAvzdukxxqrzrxNB4Iggt9a8A/nFDAbH/D/tViLjUBbsmcHprRWWaUQ==
-X-Received: by 2002:a05:622a:1646:b0:3bf:b70b:7804 with SMTP id y6-20020a05622a164600b003bfb70b7804mr3553498qtj.25.1680868556613;
-        Fri, 07 Apr 2023 04:55:56 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id t186-20020a3746c3000000b00746ae84ea6csm1256321qka.3.2023.04.07.04.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 04:55:56 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, colin.i.king@gmail.com,
-        fshao@chromium.org, jiaxin.yu@mediatek.com,
-        allen-kh.cheng@mediatek.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] ASoC: mediatek: mt8186: set variable aud_pinctrl to static
-Date:   Fri,  7 Apr 2023 07:55:53 -0400
-Message-Id: <20230407115553.1968111-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20210112; t=1680868758;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wyNciRuuESIaKZEY8Qa86obLOtLCt19xSQ+LjBWVyjQ=;
+        b=cWrhB88dNtcTasD+DyFgCnGxwpAuZuwjeLlRcAY9HeM0mSyAN+7Moocmc+SJVBdinY
+         gslAPmCR4Gy0YHbGlGTPQDMSwv6ngDLAzNH5fuwi2V+s+Bj2tGVsgrBv1fYghn8it76j
+         022es8ox4KaL29KTsxSjWZ/6lZFMvCoXH2prLQZW/j+w2l5vI9e442WCVMhSaHvRif27
+         uYejQ2pBKv7TDmIlWkUGIZbrvxS0vV/LWBDJ8Hj1rjmJDYMF7UusiNa2EULg5u3Ot9qY
+         AMdfq/7XNlEMiAw8oHf2Pn7TJAMdJW54omqOANjtGZTDJyYYTdZqr8kr9EW5uFmpy5su
+         i1rQ==
+X-Gm-Message-State: AAQBX9dOuoxyJx2cJcXQfNJflx2bSPTahnN0F/AP72I3ltcpJekUgbZW
+        GVMciWeQIjI4eH1YPx31cXla2g==
+X-Google-Smtp-Source: AKy350Y/DseiDOs/iuLqIXCJWd8Opwq/gvW1OI6u7YlYkagveYzVKg33OhOzFmfNjp8MwWfARVgJ4A==
+X-Received: by 2002:a05:651c:ba5:b0:2a6:13f:5f6c with SMTP id bg37-20020a05651c0ba500b002a6013f5f6cmr419351ljb.5.1680868757969;
+        Fri, 07 Apr 2023 04:59:17 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id b8-20020a2e9888000000b0029571d505a1sm774904ljj.80.2023.04.07.04.59.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 04:59:17 -0700 (PDT)
+Message-ID: <de8d228f-36b9-e35e-2f08-880c96a39267@linaro.org>
+Date:   Fri, 7 Apr 2023 13:59:15 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH V3 5/5] arm64: dts: qcom: ipq9574: Add cpufreq support
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
+References: <20230406070032.22243-1-quic_devipriy@quicinc.com>
+ <20230406070032.22243-6-quic_devipriy@quicinc.com>
+ <18eb5708-bf51-26c3-51a0-70a5069ffdbe@linaro.org>
+ <c1d916f0-514e-5ad8-d474-4d6fa9842364@quicinc.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <c1d916f0-514e-5ad8-d474-4d6fa9842364@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-sound/soc/mediatek/mt8186/mt8186-afe-gpio.c:14:16: warning: symbol
-  'aud_pinctrl' was not declared. Should it be static?
 
-This variable is only used in one file so should be static.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- sound/soc/mediatek/mt8186/mt8186-afe-gpio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 7.04.2023 06:53, Devi Priya wrote:
+> 
+> 
+> On 4/7/2023 1:21 AM, Konrad Dybcio wrote:
+>>
+>>
+>> On 6.04.2023 09:00, Devi Priya wrote:
+>>> Add cpu freq nodes in the device tree to bump cpu frequency above 800MHz.
+>>>
+>>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>>> ---
+>>>   Changes in V3:
+>>>     - No change
+>>>
+>>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 58 +++++++++++++++++++++++++++
+>>>   1 file changed, 58 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>> index 1f9b7529e7ed..cfef87b5fd22 100644
+>>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>> @@ -6,6 +6,7 @@
+>>>    * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>>>    */
+>>>   +#include <dt-bindings/clock/qcom,apss-ipq.h>
+>>>   #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+>>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>>   #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+>>> @@ -37,6 +38,10 @@
+>>>               reg = <0x0>;
+>>>               enable-method = "psci";
+>>>               next-level-cache = <&L2_0>;
+>>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>>> +            clock-names = "cpu";
+>>> +            operating-points-v2 = <&cpu_opp_table>;
+>>> +            cpu-supply = <&ipq9574_s1>;
+>>>           };
+>>>             CPU1: cpu@1 {
+>>> @@ -45,6 +50,10 @@
+>>>               reg = <0x1>;
+>>>               enable-method = "psci";
+>>>               next-level-cache = <&L2_0>;
+>>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>>> +            clock-names = "cpu";
+>>> +            operating-points-v2 = <&cpu_opp_table>;
+>>> +            cpu-supply = <&ipq9574_s1>;
+>>>           };
+>>>             CPU2: cpu@2 {
+>>> @@ -53,6 +62,10 @@
+>>>               reg = <0x2>;
+>>>               enable-method = "psci";
+>>>               next-level-cache = <&L2_0>;
+>>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>>> +            clock-names = "cpu";
+>>> +            operating-points-v2 = <&cpu_opp_table>;
+>>> +            cpu-supply = <&ipq9574_s1>;
+>>>           };
+>>>             CPU3: cpu@3 {
+>>> @@ -61,6 +74,10 @@
+>>>               reg = <0x3>;
+>>>               enable-method = "psci";
+>>>               next-level-cache = <&L2_0>;
+>>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
+>>> +            clock-names = "cpu";
+>>> +            operating-points-v2 = <&cpu_opp_table>;
+>>> +            cpu-supply = <&ipq9574_s1>;
+>>>           };
+>>>             L2_0: l2-cache {
+>>> @@ -75,6 +92,47 @@
+>>>           reg = <0x0 0x40000000 0x0 0x0>;
+>>>       };
+>>>   +    cpu_opp_table: opp-table-cpu {
+>> This is not sorted properly. It should probably come
+>> after memory alphabetically ('o' > 'm')
+>>
+> Yes, But I see that opp-table-cpu node is already placed after
+> memory@40000000
 
-diff --git a/sound/soc/mediatek/mt8186/mt8186-afe-gpio.c b/sound/soc/mediatek/mt8186/mt8186-afe-gpio.c
-index 20b9f5d810ec..f12e91cc4fcf 100644
---- a/sound/soc/mediatek/mt8186/mt8186-afe-gpio.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-afe-gpio.c
-@@ -11,7 +11,7 @@
- #include "mt8186-afe-common.h"
- #include "mt8186-afe-gpio.h"
- 
--struct pinctrl *aud_pinctrl;
-+static struct pinctrl *aud_pinctrl;
- 
- enum mt8186_afe_gpio {
- 	MT8186_AFE_GPIO_CLK_MOSI_OFF,
--- 
-2.27.0
+Oh you're right, the diff doesn't really show that very
+well and I didn't notice..
 
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>> Konrad
+>>> +        compatible = "operating-points-v2";
+>>> +        opp-shared;
+>>> +
+>>> +        opp-936000000 {
+>>> +            opp-hz = /bits/ 64 <936000000>;
+>>> +            opp-microvolt = <725000>;
+>>> +            clock-latency-ns = <200000>;
+>>> +        };
+>>> +
+>>> +        opp-1104000000 {
+>>> +            opp-hz = /bits/ 64 <1104000000>;
+>>> +            opp-microvolt = <787500>;
+>>> +            clock-latency-ns = <200000>;
+>>> +        };
+>>> +
+>>> +        opp-1416000000 {
+>>> +            opp-hz = /bits/ 64 <1416000000>;
+>>> +            opp-microvolt = <862500>;
+>>> +            clock-latency-ns = <200000>;
+>>> +        };
+>>> +
+>>> +        opp-1488000000 {
+>>> +            opp-hz = /bits/ 64 <1488000000>;
+>>> +            opp-microvolt = <925000>;
+>>> +            clock-latency-ns = <200000>;
+>>> +        };
+>>> +
+>>> +        opp-1800000000 {
+>>> +            opp-hz = /bits/ 64 <1800000000>;
+>>> +            opp-microvolt = <987500>;
+>>> +            clock-latency-ns = <200000>;
+>>> +        };
+>>> +
+>>> +        opp-2208000000 {
+>>> +            opp-hz = /bits/ 64 <2208000000>;
+>>> +            opp-microvolt = <1062500>;
+>>> +            clock-latency-ns = <200000>;
+>>> +        };
+>>> +    };
+>>> +
+>>>       firmware {
+>>>           scm {
+>>>               compatible = "qcom,scm-ipq9574", "qcom,scm";
+> Best Regards,
+> Devi Priya
