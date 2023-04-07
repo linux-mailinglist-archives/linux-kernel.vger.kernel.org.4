@@ -2,348 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256556DA836
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 06:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166206DA82E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 06:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbjDGES1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 00:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S231919AbjDGENJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 00:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjDGESZ (ORCPT
+        with ESMTP id S229460AbjDGENG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 00:18:25 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ED06E82;
-        Thu,  6 Apr 2023 21:18:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680841103; x=1712377103;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ekxp0L5o4T/umW2SdmmjzuIKE+tbQjNFU4sFWmsyjeA=;
-  b=Eujz/mfLBBuvRjGsqnijVxDlmzjvtAFG/UVfeyAjy6LKbRQXgInRP906
-   tPlXwnBjkNaBXXPOyD8GapJseFNP+wc7lU+ib7ebxOH+O5uNj7xjaEUSe
-   5PaRAnvsWSVwhMiDRtjfyAD62Qph7266oblzxM5+H3a5yMgK8iWOFQdrW
-   k637elqCSK0gI0j56fS75Z63vYpfODMOi9e19Tep5UwrjVCbmZ3fWDHwo
-   fWw4R6QzLwyjin66yO/TFrNpnE8AaO3oORiP1/GJjpHtGBik2BAuiEZWZ
-   rtIsl9QyTcDMamXKRG5dU2s7dx6H6h8xtryS+4vGzVgoDsYuG4PHC73nf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="331566864"
-X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="331566864"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 21:18:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="798581236"
-X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="798581236"
-Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Apr 2023 21:18:18 -0700
-From:   Feng Tang <feng.tang@intel.com>
-To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Joe Mario <jmario@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>, dave.hansen@intel.com,
-        ying.huang@intel.com, andi.kleen@intel.com,
-        Feng Tang <feng.tang@intel.com>
-Subject: [PATCH v4] Documentation: Add document for false sharing
-Date:   Fri,  7 Apr 2023 12:12:35 +0800
-Message-Id: <20230407041235.37886-1-feng.tang@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 7 Apr 2023 00:13:06 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88E1855A6;
+        Thu,  6 Apr 2023 21:13:05 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1131)
+        id E53BD20B83F9; Thu,  6 Apr 2023 21:13:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E53BD20B83F9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680840784;
+        bh=S7cYlRUmpxutG5DWPkMCJGfQpuc+T1LziF0NxcTNJKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cl4TcWnkFl4En1BraZZAgTsJnwTM25vRyZGkrb+vgteeLKExFITar9is2gKdzWEYq
+         acy/LCOnTA6uuLw3xdB7l0Puz3wpIhGNn2+kKoAK9iJ1D5rUiHdCscw9eklAtnMQKi
+         qIMrNJJxyE58hiASuZgy1Xa1FfetFaHxAqACY7CE=
+Date:   Thu, 6 Apr 2023 21:13:04 -0700
+From:   Kelsey Steele <kelseysteele@linux.microsoft.com>
+To:     Petr Tesarik <petrtesarik@huaweicloud.com>
+Cc:     Petr Tesa????k <petr@tesarici.cz>,
+        Dexuan Cui <decui@microsoft.com>,
+        Dexuan-Linux Cui <dexuan.linux@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Jianxiong Gao <jxgao@google.com>,
+        David Stevens <stevensd@chromium.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        open list <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+Subject: Re: [PATCH v1 2/2] swiotlb: Fix slot alignment checks
+Message-ID: <20230407041304.GA28729@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <cover.1679382779.git.petr.tesarik.ext@huawei.com>
+ <c90887e4d75344abe219cc5e12f7c6dab980cfce.1679382779.git.petr.tesarik.ext@huawei.com>
+ <CAA42JLa1y9jJ7BgQvXeUYQh-K2mDNHd2BYZ4iZUz33r5zY7oAQ@mail.gmail.com>
+ <CO1PR21MB13320305E02BA121623213DABF939@CO1PR21MB1332.namprd21.prod.outlook.com>
+ <20230405064019.6258ebb3@meshulam.tesarici.cz>
+ <SA1PR21MB1335C5F774195F2C3431BF93BF909@SA1PR21MB1335.namprd21.prod.outlook.com>
+ <20230405072801.05bb94ef@meshulam.tesarici.cz>
+ <20230405075034.3c36bb77@meshulam.tesarici.cz>
+ <20230406045204.GA20027@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <15d9dab3-379b-c62c-dd52-a810abe6985d@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15d9dab3-379b-c62c-dd52-a810abe6985d@huaweicloud.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When doing performance tuning or debugging performance regressions,
-more and more cases are found to be related to false sharing [1][2][3],
-and the situation can be worse for newer platforms with hundreds of
-CPUs. There are already many commits in current kernel specially
-for mitigating the performance degradation due to false sharing.
+On Thu, Apr 06, 2023 at 04:42:00PM +0200, Petr Tesarik wrote:
+> Hi Kelsey,
+> 
+> On 4/6/2023 6:52 AM, Kelsey Steele wrote:
+> > On Wed, Apr 05, 2023 at 07:50:34AM +0200, Petr Tesa????k wrote:
+> >> On Wed, 5 Apr 2023 07:32:06 +0200
+> >> Petr Tesa????k <petr@tesarici.cz> wrote:
+> >>
+> >>> On Wed, 5 Apr 2023 05:11:42 +0000
+> >>> Dexuan Cui <decui@microsoft.com> wrote:
+> >>>
+> >>>>> From: Petr Tesa????k <petr@tesarici.cz>
+> >>>>> Sent: Tuesday, April 4, 2023 9:40 PM    
+> >>>>>>> ...
+> >>>>>>> Hi Petr, this patch has gone into the mainline:
+> >>>>>>> 0eee5ae10256 ("swiotlb: fix slot alignment checks")
+> >>>>>>>
+> >>>>>>> Somehow it breaks Linux VMs on Hyper-V: a regular VM with
+> >>>>>>> swiotlb=force or a confidential VM (which uses swiotlb) fails to boot.
+> >>>>>>> If I revert this patch, everything works fine.  
+> >>>>>>
+> >>>>>> The log is pasted below. Looks like the SCSI driver hv_storvsc fails to
+> >>>>>> detect the disk capacity:    
+> >>>>>
+> >>>>> The first thing I can imagine is that there are in fact no (free) slots
+> >>>>> in the SWIOTLB which match the alignment constraints, so the map
+> >>>>> operation fails. However, this would result in a "swiotlb buffer is
+> >>>>> full" message in the log, and I can see no such message in the log
+> >>>>> excerpt you have posted.
+> >>>>>
+> >>>>> Please, can you check if there are any "swiotlb" messages preceding the
+> >>>>> first error message?
+> >>>>>
+> >>>>> Petr T    
+> >>>>
+> >>>> There is no "swiotlb buffer is full" error.
+> >>>>
+> >>>> The hv_storvsc driver (drivers/scsi/storvsc_drv.c) calls scsi_dma_map(),
+> >>>> which doesn't return -ENOMEM when the failure happens.  
+> >>>
+> >>> I see...
+> >>>
+> >>> Argh, you're right. This is a braino. The alignment mask is in fact an
+> >>> INVERTED mask, i.e. it masks off bits that are not relevant for the
+> >>> alignment. The more strict alignment needed the more bits must be set,
+> >>> so the individual alignment constraints must be combined with an OR
+> >>> instead of an AND.
+> >>>
+> >>> Can you apply the following change and check if it fixes the issue?
+> >>
+> >> Actually, this will not work either. The mask is used to mask off both
+> >> high address bits and low address bits (below swiotlb slot granularity).
+> >>
+> >> What should help is this:
+> >>
+> > 
+> > Hi Petr, 
+> > 
+> > The suggested fix on this patch boots for me and initially looks ok,
+> > though when I start to use git commands I get flooded with "swiotlb
+> > buffer is full" messages and my session becomes unusable. This is on WSL
+> > which uses Hyper-V.
+> 
+> Roberto noticed that my initial quick fix left iotlb_align_mask
+> uninitialized. As a result, high address bits are set randomly, and if
+> they do not match actual swiotlb addresses, allocations may fail with
+> "swiotlb buffer is full". I fixed it in the patch that I have just posted.
+> 
+> HTH
+> Petr T
 
-False sharing could harm the performance silently without being
-noticed, due to reasons like:
-* data members of a big data structure randomly sitting together
-  in one cache line
-* global data of small size are linked compactly together
+I pulled the patches from dma-mapping after your fix got applied and
+everything appears ok and goes back to the way it was; so no other
+errors to report. :) Unfortunately still getting the "swiotlb buffer is
+full" messages during kernel builds, though that was happening before
+your patches hit.
 
-So it's better to make a simple document about the normal pattern
-of false sharing, basic ways to mitigate it and call out to
-developers to pay attention during code-writing.
+Thanks so much, Petr!
 
-[ Many thanks to Dave Hansen, Ying Huang, Tim Chen, Julie Du and
-  Yu Chen for their contributions ]
-
-[1]. https://lore.kernel.org/lkml/20220619150456.GB34471@xsang-OptiPlex-9020/
-[2]. https://lore.kernel.org/lkml/20201102091543.GM31092@shao2-debian/
-[3]. https://lore.kernel.org/lkml/20230307125538.818862491@linutronix.de/
-
-Signed-off-by: Feng Tang <feng.tang@intel.com>
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
----
-Changelog:
-
-  since v3:
-  * Refine wording and fix typo (Tim Chen)
-  * Add Reviewed-by tag from Shakeel Butt
-
-  since v2:
-  * Add code sample about reducing write to atomic_t (Bagas Sanjaya)
-  * Add a link of a latest false sharing optimization in networking
-    subsystem to commit log
-
-  since v1:
-  * Refine the wording and grammer (Bagas Sanjaya)
-  * Add Reviewed-by tag from Randy Dunlap
-  * Fix a line wrap problem for 'make htmldocs'
-
-  since RFC:
-  * Reword paragraphs with grammar issues; fixes many format and
-    typo issues (Randy Dunlap)
-
-
- .../kernel-hacking/false-sharing.rst          | 206 ++++++++++++++++++
- Documentation/kernel-hacking/index.rst        |   1 +
- 2 files changed, 207 insertions(+)
- create mode 100644 Documentation/kernel-hacking/false-sharing.rst
-
-diff --git a/Documentation/kernel-hacking/false-sharing.rst b/Documentation/kernel-hacking/false-sharing.rst
-new file mode 100644
-index 000000000000..122b0e124656
---- /dev/null
-+++ b/Documentation/kernel-hacking/false-sharing.rst
-@@ -0,0 +1,206 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=============
-+False Sharing
-+=============
-+
-+What is False Sharing
-+=====================
-+False sharing is related with cache mechanism of maintaining the data
-+coherence of one cache line stored in multiple CPU's caches; then
-+academic definition for it is in [1]_. Consider a struct with a
-+refcount and a string::
-+
-+	struct foo {
-+		refcount_t refcount;
-+		...
-+		char name[16];
-+	} ____cacheline_internodealigned_in_smp;
-+
-+Member 'refcount'(A) and 'name'(B) _share_ one cache line like below::
-+
-+                +-----------+                     +-----------+
-+                |   CPU 0   |                     |   CPU 1   |
-+                +-----------+                     +-----------+
-+               /                                        |
-+              /                                         |
-+             V                                          V
-+         +----------------------+             +----------------------+
-+         | A      B             | Cache 0     | A       B            | Cache 1
-+         +----------------------+             +----------------------+
-+                             |                  |
-+  ---------------------------+------------------+-----------------------------
-+                             |                  |
-+                           +----------------------+
-+                           |                      |
-+                           +----------------------+
-+              Main Memory  | A       B            |
-+                           +----------------------+
-+
-+'refcount' is modified frequently, but 'name' is set once at object
-+creation time and is never modified.  When many CPUs access 'foo' at
-+the same time, with 'refcount' being only bumped by one CPU frequently
-+and 'name' being read by other CPUs, all those reading CPUs have to
-+reload the whole cache line over and over due to the 'sharing', even
-+though 'name' is never changed.
-+
-+There are many real-world cases of performance regressions caused by
-+false sharing.  One of these is a rw_semaphore 'mmap_lock' inside
-+mm_struct struct, whose cache line layout change triggered a
-+regression and Linus analyzed in [2]_.
-+
-+There are two key factors for a harmful false sharing:
-+
-+* A global datum accessed (shared) by many CPUs
-+* In the concurrent accesses to the data, there is at least one write
-+  operation: write/write or write/read cases.
-+
-+The sharing could be from totally unrelated kernel components, or
-+different code paths of the same kernel component.
-+
-+
-+False Sharing Pitfalls
-+======================
-+Back in time when one platform had only one or a few CPUs, hot data
-+members could be purposely put in the same cache line to make them
-+cache hot and save cacheline/TLB, like a lock and the data protected
-+by it.  But for recent large system with hundreds of CPUs, this may
-+not work when the lock is heavily contended, as the lock owner CPU
-+could write to the data, while other CPUs are busy spinning the lock.
-+
-+Looking at past cases, there are several frequently occurring patterns
-+for false sharing:
-+
-+* lock (spinlock/mutex/semaphore) and data protected by it are
-+  purposely put in one cache line.
-+* global data being put together in one cache line. Some kernel
-+  subsystems have many global parameters of small size (4 bytes),
-+  which can easily be grouped together and put into one cache line.
-+* data members of a big data structure randomly sitting together
-+  without being noticed (cache line is usually 64 bytes or more),
-+  like 'mem_cgroup' struct.
-+
-+Following 'mitigation' section provides real-world examples.
-+
-+False sharing could easily happen unless they are intentionally
-+checked, and it is valuable to run specific tools for performance
-+critical workloads to detect false sharing affecting performance case
-+and optimize accordingly.
-+
-+
-+How to detect and analyze False Sharing
-+========================================
-+perf record/report/stat are widely used for performance tuning, and
-+once hotspots are detected, tools like 'perf-c2c' and 'pahole' can
-+be further used to detect and pinpoint the possible false sharing
-+data structures.  'addr2line' is also good at decoding instruction
-+pointer when there are multiple layers of inline functions.
-+
-+perf-c2c can capture the cache lines with most false sharing hits,
-+decoded functions (line number of file) accessing that cache line,
-+and in-line offset of the data. Simple commands are::
-+
-+  $ perf c2c record -ag sleep 3
-+  $ perf c2c report --call-graph none -k vmlinux
-+
-+When running above during testing will-it-scale's tlb_flush1 case,
-+perf reports something like::
-+
-+  Total records                     :    1658231
-+  Locked Load/Store Operations      :      89439
-+  Load Operations                   :     623219
-+  Load Local HITM                   :      92117
-+  Load Remote HITM                  :        139
-+
-+  #----------------------------------------------------------------------
-+      4        0     2374        0        0        0  0xff1100088366d880
-+  #----------------------------------------------------------------------
-+    0.00%   42.29%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff81373b7b         0       231       129     5312        64  [k] __mod_lruvec_page_state    [kernel.vmlinux]  memcontrol.h:752   1
-+    0.00%   13.10%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff81374718         0       226        97     3551        64  [k] folio_lruvec_lock_irqsave  [kernel.vmlinux]  memcontrol.h:752   1
-+    0.00%   11.20%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff812c29bf         0       170       136      555        64  [k] lru_add_fn                 [kernel.vmlinux]  mm_inline.h:41     1
-+    0.00%    7.62%    0.00%    0.00%    0.00%    0x8     1       1  0xffffffff812c3ec5         0       175       108      632        64  [k] release_pages              [kernel.vmlinux]  mm_inline.h:41     1
-+    0.00%   23.29%    0.00%    0.00%    0.00%   0x10     1       1  0xffffffff81372d0a         0       234       279     1051        64  [k] __mod_memcg_lruvec_state   [kernel.vmlinux]  memcontrol.c:736   1
-+
-+A nice introduction for perf-c2c is [3]_.
-+
-+'pahole' decodes data structure layouts delimited in cache line
-+granularity.  Users can match the offset in perf-c2c output with
-+pahole's decoding to locate the exact data members.  For global
-+data, users can search the data address in System.map.
-+
-+
-+Possible Mitigations
-+====================
-+False sharing does not always need to be mitigated.  False sharing
-+mitigations should balance performance gains with complexity and
-+space consumption.  Sometimes, lower performance is OK, and it's
-+unnecessary to hyper-optimize every rarely used data structure or
-+a cold data path.
-+
-+False sharing hurting performance cases are seen more frequently with
-+core count increasing.  Because of these detrimental effects, many
-+patches have been proposed across variety of subsystems (like
-+networking and memory management) and merged.  Some common mitigations
-+(with examples) are:
-+
-+* Separate hot global data in its own dedicated cache line, even if it
-+  is just a 'short' type. The downside is more consumption of memory,
-+  cache line and TLB entries.
-+
-+  - Commit 91b6d3256356 ("net: cache align tcp_memory_allocated, tcp_sockets_allocated")
-+
-+* Reorganize the data structure, separate the interfering members to
-+  different cache lines.  One downside is it may introduce new false
-+  sharing of other members.
-+
-+  - Commit 802f1d522d5f ("mm: page_counter: re-layout structure to reduce false sharing")
-+
-+* Replace 'write' with 'read' when possible, especially in loops.
-+  Like for some global variable, use compare(read)-then-write instead
-+  of unconditional write. For example, use::
-+
-+	if (!test_bit(XXX))
-+		set_bit(XXX);
-+
-+  instead of directly "set_bit(XXX);", similarly for atomic_t data::
-+
-+	if (atomic_read(XXX) == AAA)
-+		atomic_set(XXX, BBB);
-+
-+  - Commit 7b1002f7cfe5 ("bcache: fixup bcache_dev_sectors_dirty_add() multithreaded CPU false sharing")
-+  - Commit 292648ac5cf1 ("mm: gup: allow FOLL_PIN to scale in SMP")
-+
-+* Turn hot global data to 'per-cpu data + global data' when possible,
-+  or reasonably increase the threshold for syncing per-cpu data to
-+  global data, to reduce or postpone the 'write' to that global data.
-+
-+  - Commit 520f897a3554 ("ext4: use percpu_counters for extent_status cache hits/misses")
-+  - Commit 56f3547bfa4d ("mm: adjust vm_committed_as_batch according to vm overcommit policy")
-+
-+Surely, all mitigations should be carefully verified to not cause side
-+effects.  To avoid introducing false sharing when coding, it's better
-+to:
-+
-+* Be aware of cache line boundaries
-+* Group mostly read-only fields together
-+* Group things that are written at the same time together
-+* Separate frequently read and frequently written fields on
-+  different cache lines.
-+
-+and better add a comment stating the false sharing consideration.
-+
-+One note is, sometimes even after a severe false sharing is detected
-+and solved, the performance may still have no obvious improvement as
-+the hotspot switches to a new place.
-+
-+
-+Miscellaneous
-+=============
-+One open issue is that kernel has an optional data structure
-+randomization mechanism, which also randomizes the situation of cache
-+line sharing of data members.
-+
-+
-+.. [1] https://en.wikipedia.org/wiki/False_sharing
-+.. [2] https://lore.kernel.org/lkml/CAHk-=whoqV=cX5VC80mmR9rr+Z+yQ6fiQZm36Fb-izsanHg23w@mail.gmail.com/
-+.. [3] https://joemario.github.io/blog/2016/09/01/c2c-blog/
-diff --git a/Documentation/kernel-hacking/index.rst b/Documentation/kernel-hacking/index.rst
-index f53027652290..79c03bac99a2 100644
---- a/Documentation/kernel-hacking/index.rst
-+++ b/Documentation/kernel-hacking/index.rst
-@@ -9,3 +9,4 @@ Kernel Hacking Guides
- 
-    hacking
-    locking
-+   false-sharing
--- 
-2.34.1
-
+Cheers, 
+Kelsey. 
