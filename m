@@ -2,115 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96ED6DAA10
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826266DAA13
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbjDGI1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S233807AbjDGI3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232430AbjDGI1p (ORCPT
+        with ESMTP id S231765AbjDGI3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:27:45 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA028A6D
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:27:43 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id g18so6902155ejj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 01:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680856062;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EOxBeWYxQ8XZ4tdMHB/PL/AFlnITgyGbSOH6JFHFiqs=;
-        b=dR9Ryb8hOtnrXIAs9iDm0N8f9QOg9UZSiYHrUWZcqnVpq9BM6hK/hf/5LwG3x2k2D0
-         tx6GSsTPdttJCW3EKDfg7S1N+uvHU14Y+6/EsV8Z/7MxMRdCMwzP6XRlqJ9B214k5gjL
-         LwvZ84LH/I3SYBg68618sjbnR45zKKFlvdypr7H8gc6VO9BReT3HoNYAh83BRKu279jl
-         yvZGR9HzDOn2KA56l03rvnEBeAMhWQK6EI7xgpxyx3HfoXwcfMV6LloffDgl4kzLV8F7
-         iZI8oejGZyj/pXyujjj1xlIxwLAIhGM8i2HxYko5oSHgV8lNuCeuVGZh7lXLFTtXteVG
-         iPGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680856062;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EOxBeWYxQ8XZ4tdMHB/PL/AFlnITgyGbSOH6JFHFiqs=;
-        b=NtUgd/OlseRN0dktQitvcJEWihyiEN/JRT9Uo9vdV8fmWo1ewYWxlBx3gTJaV+80U7
-         pCL+4IdOz7kr2LjsafJ3heqhIf4SJigcWBGk11deUsuunSYLCvAcE9pt3MncC+OC+Yma
-         UoBEAA28Gdb/nO/9UJ8O90MfxsGkvVaK2Y5GzQhM0lDYxX4BIujNq/nYu+hMciIsTeuT
-         PJRE+1MFDTDkvn2ypGsmjp6ls8ZMJEhD5gn/uaKBS+8UaXdN2z5K2rE3EqmuJukAFaJV
-         kaPL8yDjVvtkNq1gElZuumsVOJjxT20nVWunrOxa4LevCp19GEnJNsQTLpiutxtnNJ6E
-         JxCA==
-X-Gm-Message-State: AAQBX9c6nZs66r6AwVWkzR4Q3VAgrG6jTiX/5CjcALmOhp7fRFazhIh4
-        Un8LYrz6X+fx10/07DUKybtm1w==
-X-Google-Smtp-Source: AKy350Y2IAv/DaY8eKeXOsM95YhNdt0YYyfsH8iC5W7cYwp+ow3Up8CZkleLoYpRRgptZ5G5IGH1ug==
-X-Received: by 2002:a17:906:9f0f:b0:947:9dd3:d750 with SMTP id fy15-20020a1709069f0f00b009479dd3d750mr1791844ejc.64.1680856062043;
-        Fri, 07 Apr 2023 01:27:42 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:14a3:366:3172:3c37? ([2a02:810d:15c0:828:14a3:366:3172:3c37])
-        by smtp.gmail.com with ESMTPSA id jg17-20020a170907971100b009316783c92csm1832281ejc.12.2023.04.07.01.27.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 01:27:41 -0700 (PDT)
-Message-ID: <f52524da-719b-790f-ad2c-0c3f313d9fe9@linaro.org>
-Date:   Fri, 7 Apr 2023 10:27:40 +0200
+        Fri, 7 Apr 2023 04:29:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16607DBF
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:29:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ED5763641
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 08:29:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74625C433D2
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 08:29:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680856183;
+        bh=mceKYfe3OlxIRPrWB6m+8AOI7KWE5Odi9G47oheQy3A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jkw5O6xj6lKXlR6zeH0ys+o1mu9SnWfQSgudS6P9B6egH/asPZnBKgsWHBrCU4iUF
+         jYW1fw0fPs4WTD0nimXrzeu8NqHHd/G2Tz4xLFr0HzbYgOqxiUptHtLs4vTm/erQQc
+         3eRC5HWqDLKTRIcDeAD97aySW0RufvBV43DCG9kzgd3CMRpC0GZ3j4MrnvcCY6u3X4
+         5TFwNUTr/KVAjQgIe2qi7uMlQf9z4WLFGsFIbJpLQG1ZvFnCIiaEvwtfF07Ua2Mhf0
+         tQrO8M+D/EPVvfjVAoYRpiDbTajG9b/I+2MNFsSd8hzGHOYLkRPzsKCF5nnN+dYTND
+         B3LMFFrF84aUg==
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-947cd8b2de3so207885266b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 01:29:43 -0700 (PDT)
+X-Gm-Message-State: AAQBX9elq+SJH//qExXaA/+UEra/OmRIxkVolulyO2TZ7hxC/hMjERCv
+        IELCBy+Tz4i0TJMlx6DhEI9ka6s4m/2U1xBzP+A=
+X-Google-Smtp-Source: AKy350ZG4EI7GkW98iu0RUZB518+GcvQXizchxGFAj132/1v6rFvLDZaZhI3mejmSsLVo5M4uwyqRpRqUw8kZRJnisk=
+X-Received: by 2002:aa7:c747:0:b0:4ac:b687:f57e with SMTP id
+ c7-20020aa7c747000000b004acb687f57emr1875288eds.1.1680856181705; Fri, 07 Apr
+ 2023 01:29:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: pm7250b: make SID configurable
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230407-pm7250b-sid-v1-0-fc648478cc25@fairphone.com>
- <20230407-pm7250b-sid-v1-2-fc648478cc25@fairphone.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407-pm7250b-sid-v1-2-fc648478cc25@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230406082018.70367-1-leobras@redhat.com> <20230406082018.70367-2-leobras@redhat.com>
+In-Reply-To: <20230406082018.70367-2-leobras@redhat.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 7 Apr 2023 16:29:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQOs8ossWXtGMAvk1xRmUnFXub31ETBYLs5oxrdBGVL2Q@mail.gmail.com>
+Message-ID: <CAJF2gTQOs8ossWXtGMAvk1xRmUnFXub31ETBYLs5oxrdBGVL2Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/2] riscv/cmpxchg: Deduplicate cmpxchg() asm and macros
+To:     Leonardo Bras <leobras@redhat.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2023 09:45, Luca Weiss wrote:
-> Like other Qualcomm PMICs the PM7250B can be used on different addresses
-> on the SPMI bus. Use similar defines like the PMK8350 to make this
-> possible.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+On Thu, Apr 6, 2023 at 4:20=E2=80=AFPM Leonardo Bras <leobras@redhat.com> w=
+rote:
+>
+> In this header every cmpxchg define (_relaxed, _acquire, _release,
+> vanilla) contain it's own asm file, both for 4-byte variables an 8-byte
+> variables, on a total of 8 versions of mostly the same asm.
+>
+> This is usually bad, as it means any change may be done in up to 8
+> different places.
+>
+> Unify those versions by creating a new define with enough parameters to
+> generate any version of the previous 8.
+>
+> Then unify the result under a more general define, and simplify
+> arch_cmpxchg* generation
+>
+> (This did not cause any change in generated asm)
+>
+> Signed-off-by: Leonardo Bras <leobras@redhat.com>
 > ---
->  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
->  1 file changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> index daa6f1d30efa..eeb476edc79a 100644
-> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> @@ -7,6 +7,15 @@
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/spmi/spmi.h>
->  
-> +/* This PMIC can be configured to be at different SIDs */
-> +#ifndef PM7250B_SID
-> +	#define PM7250B_SID 2
+>  arch/riscv/include/asm/cmpxchg.h | 184 ++++++-------------------------
+>  1 file changed, 36 insertions(+), 148 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cm=
+pxchg.h
+> index 12debce235e52..f88fae357071c 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -163,51 +163,23 @@
+>   * store NEW in MEM.  Return the initial value in MEM.  Success is
+>   * indicated by comparing RETURN with OLD.
+>   */
+> -#define __cmpxchg_relaxed(ptr, old, new, size)                         \
+> -({                                                                     \
+> -       __typeof__(ptr) __ptr =3D (ptr);                                 =
+ \
+> -       __typeof__(*(ptr)) __old =3D (old);                              =
+ \
+> -       __typeof__(*(ptr)) __new =3D (new);                              =
+ \
+> -       __typeof__(*(ptr)) __ret;                                       \
+> -       register unsigned int __rc;                                     \
+> -       switch (size) {                                                 \
+> -       case 4:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       "0:     lr.w %0, %2\n"                          \
+> -                       "       bne  %0, %z3, 1f\n"                     \
+> -                       "       sc.w %1, %z4, %2\n"                     \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" ((long)__old), "rJ" (__new)              \
+> -                       : "memory");                                    \
+> -               break;                                                  \
+> -       case 8:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       "0:     lr.d %0, %2\n"                          \
+> -                       "       bne %0, %z3, 1f\n"                      \
+> -                       "       sc.d %1, %z4, %2\n"                     \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" (__old), "rJ" (__new)                    \
+> -                       : "memory");                                    \
+> -               break;                                                  \
+> -       default:                                                        \
+> -               BUILD_BUG();                                            \
+> -       }                                                               \
+> -       __ret;                                                          \
+> -})
+>
+> -#define arch_cmpxchg_relaxed(ptr, o, n)                                 =
+       \
+> +#define ____cmpxchg(lr_sfx, sc_sfx, prepend, append, r, rc, p, co, o, n)=
+\
+>  ({                                                                     \
+> -       __typeof__(*(ptr)) _o_ =3D (o);                                  =
+ \
+> -       __typeof__(*(ptr)) _n_ =3D (n);                                  =
+ \
+> -       (__typeof__(*(ptr))) __cmpxchg_relaxed((ptr),                   \
+> -                                       _o_, _n_, sizeof(*(ptr)));      \
+> +       __asm__ __volatile__ (                                          \
+> +               prepend                                                 \
+> +               "0:     lr" lr_sfx " %0, %2\n"                          \
+> +               "       bne  %0, %z3, 1f\n"                             \
+> +               "       sc" sc_sfx " %1, %z4, %2\n"                     \
+> +               "       bnez %1, 0b\n"                                  \
+> +               append                                                  \
+> +               "1:\n"                                                  \
+> +               : "=3D&r" (r), "=3D&r" (rc), "+A" (*(p))                 =
+   \
+> +               : "rJ" (co o), "rJ" (n)                                 \
+> +               : "memory");                                            \
+>  })
+>
+> -#define __cmpxchg_acquire(ptr, old, new, size)                         \
+> +#define ___cmpxchg(ptr, old, new, size, sc_sfx, prepend, append)       \
+>  ({                                                                     \
+>         __typeof__(ptr) __ptr =3D (ptr);                                 =
+ \
+>         __typeof__(*(ptr)) __old =3D (old);                              =
+ \
+> @@ -216,28 +188,12 @@
+>         register unsigned int __rc;                                     \
+>         switch (size) {                                                 \
+>         case 4:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       "0:     lr.w %0, %2\n"                          \
+> -                       "       bne  %0, %z3, 1f\n"                     \
+> -                       "       sc.w %1, %z4, %2\n"                     \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       RISCV_ACQUIRE_BARRIER                           \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" ((long)__old), "rJ" (__new)              \
+> -                       : "memory");                                    \
+> +               ____cmpxchg(".w", ".w" sc_sfx, prepend, append,         \
+> +                           __ret, __rc, __ptr, (long), __old, __new);  \
+>                 break;                                                  \
+>         case 8:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       "0:     lr.d %0, %2\n"                          \
+> -                       "       bne %0, %z3, 1f\n"                      \
+> -                       "       sc.d %1, %z4, %2\n"                     \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       RISCV_ACQUIRE_BARRIER                           \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" (__old), "rJ" (__new)                    \
+> -                       : "memory");                                    \
+> +               ____cmpxchg(".d", ".d" sc_sfx, prepend, append,         \
+> +                           __ret, __rc, __ptr, /**/, __old, __new);    \
+>                 break;                                                  \
+>         default:                                                        \
+>                 BUILD_BUG();                                            \
+> @@ -245,105 +201,37 @@
+>         __ret;                                                          \
+>  })
+>
+> -#define arch_cmpxchg_acquire(ptr, o, n)                                 =
+       \
+> +#define __cmpxchg_relaxed(ptr, old, new, size)                         \
+> +       ___cmpxchg(ptr, old, new, size, "", "", "")
+> +
+> +#define _arch_cmpxchg(order, ptr, o, n)                                 =
+       \
+>  ({                                                                     \
+>         __typeof__(*(ptr)) _o_ =3D (o);                                  =
+ \
+>         __typeof__(*(ptr)) _n_ =3D (n);                                  =
+ \
+> -       (__typeof__(*(ptr))) __cmpxchg_acquire((ptr),                   \
+> -                                       _o_, _n_, sizeof(*(ptr)));      \
+> +       (__typeof__(*(ptr))) __cmpxchg ## order((ptr), _o_, _n_,        \
+> +                                               sizeof(*(ptr)));        \
+>  })
+>
+> +#define arch_cmpxchg_relaxed(ptr, o, n)                                 =
+       \
+> +       _arch_cmpxchg(_relaxed, ptr, o, n)
+> +
+> +#define __cmpxchg_acquire(ptr, old, new, size)                         \
+> +       ___cmpxchg(ptr, old, new, size, "", "", RISCV_ACQUIRE_BARRIER)
+> +
+> +#define arch_cmpxchg_acquire(ptr, o, n)                                 =
+       \
+> +       _arch_cmpxchg(_acquire, ptr, o, n)
+> +
+>  #define __cmpxchg_release(ptr, old, new, size)                         \
+> -({                                                                     \
+> -       __typeof__(ptr) __ptr =3D (ptr);                                 =
+ \
+> -       __typeof__(*(ptr)) __old =3D (old);                              =
+ \
+> -       __typeof__(*(ptr)) __new =3D (new);                              =
+ \
+> -       __typeof__(*(ptr)) __ret;                                       \
+> -       register unsigned int __rc;                                     \
+> -       switch (size) {                                                 \
+> -       case 4:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       RISCV_RELEASE_BARRIER                           \
+> -                       "0:     lr.w %0, %2\n"                          \
+> -                       "       bne  %0, %z3, 1f\n"                     \
+> -                       "       sc.w %1, %z4, %2\n"                     \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" ((long)__old), "rJ" (__new)              \
+> -                       : "memory");                                    \
+> -               break;                                                  \
+> -       case 8:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       RISCV_RELEASE_BARRIER                           \
+> -                       "0:     lr.d %0, %2\n"                          \
+> -                       "       bne %0, %z3, 1f\n"                      \
+> -                       "       sc.d %1, %z4, %2\n"                     \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" (__old), "rJ" (__new)                    \
+> -                       : "memory");                                    \
+> -               break;                                                  \
+> -       default:                                                        \
+> -               BUILD_BUG();                                            \
+> -       }                                                               \
+> -       __ret;                                                          \
+> -})
+> +       ___cmpxchg(ptr, old, new, size, "", RISCV_RELEASE_BARRIER, "")
+>
+>  #define arch_cmpxchg_release(ptr, o, n)                                 =
+       \
+> -({                                                                     \
+> -       __typeof__(*(ptr)) _o_ =3D (o);                                  =
+ \
+> -       __typeof__(*(ptr)) _n_ =3D (n);                                  =
+ \
+> -       (__typeof__(*(ptr))) __cmpxchg_release((ptr),                   \
+> -                                       _o_, _n_, sizeof(*(ptr)));      \
+> -})
+> +       _arch_cmpxchg(_release, ptr, o, n)
+>
+>  #define __cmpxchg(ptr, old, new, size)                                 \
+> -({                                                                     \
+> -       __typeof__(ptr) __ptr =3D (ptr);                                 =
+ \
+> -       __typeof__(*(ptr)) __old =3D (old);                              =
+ \
+> -       __typeof__(*(ptr)) __new =3D (new);                              =
+ \
+> -       __typeof__(*(ptr)) __ret;                                       \
+> -       register unsigned int __rc;                                     \
+> -       switch (size) {                                                 \
+> -       case 4:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       "0:     lr.w %0, %2\n"                          \
+> -                       "       bne  %0, %z3, 1f\n"                     \
+> -                       "       sc.w.rl %1, %z4, %2\n"                  \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       "       fence rw, rw\n"                         \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" ((long)__old), "rJ" (__new)              \
+> -                       : "memory");                                    \
+> -               break;                                                  \
+> -       case 8:                                                         \
+> -               __asm__ __volatile__ (                                  \
+> -                       "0:     lr.d %0, %2\n"                          \
+> -                       "       bne %0, %z3, 1f\n"                      \
+> -                       "       sc.d.rl %1, %z4, %2\n"                  \
+> -                       "       bnez %1, 0b\n"                          \
+> -                       "       fence rw, rw\n"                         \
+> -                       "1:\n"                                          \
+> -                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> -                       : "rJ" (__old), "rJ" (__new)                    \
+> -                       : "memory");                                    \
+> -               break;                                                  \
+> -       default:                                                        \
+> -               BUILD_BUG();                                            \
+> -       }                                                               \
+> -       __ret;                                                          \
+> -})
+> +       ___cmpxchg(ptr, old, new, size, ".rl", "", "    fence rw, rw\n")
+>
+>  #define arch_cmpxchg(ptr, o, n)                                         =
+       \
+> -({                                                                     \
+> -       __typeof__(*(ptr)) _o_ =3D (o);                                  =
+ \
+> -       __typeof__(*(ptr)) _n_ =3D (n);                                  =
+ \
+> -       (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
+> -                                      _o_, _n_, sizeof(*(ptr)));       \
+> -})
+> +       _arch_cmpxchg(, ptr, o, n)
+>
+>  #define arch_cmpxchg_local(ptr, o, n)                                  \
+>         (__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+> --
+> 2.40.0
+>
+One patch is much easier to review :)
 
-Drop indentation, although anyway I am against this. Please don't bring
-new patterns of this at least till we settle previous discussion.
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-https://lore.kernel.org/linux-arm-msm/46658cbb-fff5-e98b-fdad-88fa683a9c75@linaro.org/
-
-
-Best regards,
-Krzysztof
-
+--=20
+Best Regards
+ Guo Ren
