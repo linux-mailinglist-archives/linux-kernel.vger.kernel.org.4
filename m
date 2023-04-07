@@ -2,116 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9975A6DB12E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63776DB0C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjDGRJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S229765AbjDGQlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjDGRJK (ORCPT
+        with ESMTP id S229758AbjDGQlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:09:10 -0400
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2BFA5D5;
-        Fri,  7 Apr 2023 10:09:07 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id BE7D77E0AE8;
-        Fri,  7 Apr 2023 17:09:06 +0000 (UTC)
-Received: from pdx1-sub0-mail-a273.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 1691F7E1A96;
-        Fri,  7 Apr 2023 17:09:05 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1680887345; a=rsa-sha256;
-        cv=none;
-        b=0w37L2Bp273EsmJVRJNc6UPN+x7CvTtGXOa4DFAllCAZ9injSJyAopNK7er+OZ8JbKzNgn
-        EYcllsOi9sIH8ppuYFb5BLNM4F7bSJBiIHYHNTL1XxJ3r90YjWJTZLN+e1dJfsAx7BBj5Y
-        ih/D10HAWMISKTrn4as5+tAZMFtt+4DxjS5I7omG8rWJHWfsdWNMuTmw/KmUbATyf/cNNi
-        W/EFR69xmkzxjpRUDxDdDR2uL5AX3CAU7gK0jpzQdpWmIoVQMsSp5heRdBSK5RYBm84oge
-        sIzZWr8vKNloWrMzVu10eW9Sy3fZRZOjuAAxePrbwkG7eKrzC9h51A0qJj3l9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1680887345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=d2aUmo3rJ5lUkyAT4XLlxLCXaIv9eNhVcZKrxYHkXcw=;
-        b=mnQhqKK/vQTY9D8KzLGz4Fa9Y42Jn57E4bieQHL7kXil9Dzjd4swkoCqBlkoFHkEvIp2nJ
-        vKasn1W8zS25r7zKFSwFc/UWgyLSf1Hy7l8vZizbBp3lptbziYWx4CqI7c4J8pXDIcpSAc
-        w4LXGr1ooPhICB3dJateM6BifeQp84zMNYQrj+w5B3UytR6eDwvqA+7XnzuVR4w9SVW4DX
-        RZ9CyhJ5uqPc2lP/AW4czS/ECFfIjG+Ed7YIGuFb4BjER2wBqCy9iWjmgSc1GvPQT25gqk
-        2OCAL8Am95HXnyGsVGhBomN3kduHgXH+jWevl3ZglStd6TExAr8BF9OQ3y2jJA==
-ARC-Authentication-Results: i=1;
-        rspamd-5468d68f6d-5m8fq;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Glossy-Tasty: 353cd12f2cd8c1c0_1680887346628_3090312142
-X-MC-Loop-Signature: 1680887346628:900449146
-X-MC-Ingress-Time: 1680887346628
-Received: from pdx1-sub0-mail-a273.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.125.42.176 (trex/6.7.2);
-        Fri, 07 Apr 2023 17:09:06 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a273.dreamhost.com (Postfix) with ESMTPSA id 4PtPwb2lCpz3j;
-        Fri,  7 Apr 2023 10:09:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1680887344;
-        bh=d2aUmo3rJ5lUkyAT4XLlxLCXaIv9eNhVcZKrxYHkXcw=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=CHai2nVUs4T3eWku5z1nVgcCeVv8k4vtDKkM9mYh5UiUMQsnRXwPFPwFQRKCPNkSz
-         RH4xNiIQFym6iIHvHRzU9u56moQONzB16F+nnS4PQO90jbpUo+cWy5/KvAnFnJGf0h
-         7gz+Zr6EKGKhjP5Z3g0jqhgsqp5CYB8SPuTcvhQwzRNa2seVv6mnwcCb5akdT2iU5z
-         8rbXMta7LFkn28gDkO163GZ31eWeotkUh0XE4TZbAS4uTqf8vjOBiE9Yao7xRQUJy6
-         0tP80nSn1tCNzuWaSp4WNxNLLNV5jI5ZhdgLKCNrPfuYNWiBAGQD38o9w+4jvKZalp
-         QFqarLb5LSUhg==
-Date:   Fri, 7 Apr 2023 09:38:17 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     david@redhat.com, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v2 1/2] Change DEFINE_SEMAPHORE() to take a number
- argument
-Message-ID: <20230407163817.laev7h7mxwtz72fh@offworld>
-Mail-Followup-To: Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-References: <20230405203505.1343562-1-mcgrof@kernel.org>
- <20230405203505.1343562-2-mcgrof@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+        Fri, 7 Apr 2023 12:41:14 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2089.outbound.protection.outlook.com [40.107.6.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA81835A6;
+        Fri,  7 Apr 2023 09:41:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XdweRw0m8JKo5/Ynr8yKE0JlYjMyFtq/WCYr8xY7TYFjdVFeQ+JlJUeZJbBvRT/fq4c+UL975z8hDHtyD+/dmq95THw9u89POH7WD577Zg6T0tCxPAil04b86lkQg3NH6ZuQV0g4tuSXZwDMjjq+R76aHhU8y2PIuBAi4CdNAwgLIGBSZVsXYJhr2QsfZvnhh3CHAMmUta3MpZqRzwe7r8WEU/jZnvtkcF0jyxyFZstGJpdEpUszIXtsLCo4hs/Fi3HfyJTwWFLxLvgiajlKxefn9V7SR13Dmqd7z4SQToCq74b9bkcwEIFC5/cKN/oSflOzG8GBUZ70xlYz9n2aCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a4EdMQWn6E0krw7yvU/75t01nwGa6GX88k/uQ3YeiGc=;
+ b=MRXClJ2UVY8Imh3Ud3WifEI+Ysjv3Ke75L33vqjNojHDwSYmmES2+xxuqQbDgJlUZQNCmD6YYQ1BWHimApZReAappfnoZub4yDXy3MemWOWmSUKAFUFSCHf9Gmq1aqdnujubwXfIMbklxYNcSVm6ar2rbGayWcG7HAPCZockOp4xCOv/735ISGKfB5KFQfT0t6NHxGZN0CkQcRwLxlxqDg3h+KbiH0EbC+DYAiOvltgrKOZrhCMP7yyzYZoScLiUzPL4kwu9nn0d1MWecGUnxoHuFTUKMc/UAhZUoKMK/4xSBuzSjtZBPZrGg3cyHy4fslP6fx6IbqlCEyu1a5clXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a4EdMQWn6E0krw7yvU/75t01nwGa6GX88k/uQ3YeiGc=;
+ b=i1Binl0szAYzEVXZcSxtw8razXbkE+akmm7r+7RQNXfhuxhtz8RgP85vpKUEtFqNvMSy5g6GI3GzTnx2ij0ZRelwDT1KfovOZ9+Qpm1bQ4BQeFnGwVKlDCO8T7agfq77McpQFE8J7nZiWpEF2uROSjbnNFng8fVgax6tD7+q4n4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by PA4PR04MB7773.eurprd04.prod.outlook.com (2603:10a6:102:cd::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.33; Fri, 7 Apr
+ 2023 16:41:08 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::55b1:d2dd:4327:912b]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::55b1:d2dd:4327:912b%5]) with mapi id 15.20.6277.033; Fri, 7 Apr 2023
+ 16:41:08 +0000
+Date:   Fri, 7 Apr 2023 19:41:03 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        linux-kernel@vger.kernel.org, Ferenc Fejes <fejes@inf.elte.hu>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v4 net-next 6/9] net/sched: mqprio: allow per-TC user
+ input of FP adminStatus
+Message-ID: <20230407164103.vstxn2fmswno3ker@skbuf>
+References: <20230403103440.2895683-1-vladimir.oltean@nxp.com>
+ <20230403103440.2895683-7-vladimir.oltean@nxp.com>
+ <CAM0EoMn9iwTBUW-OaK2sDtTS-PO2_nGLuvGmrqY5n8HYEdt7XQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405203505.1343562-2-mcgrof@kernel.org>
-User-Agent: NeoMutt/20220429
+In-Reply-To: <CAM0EoMn9iwTBUW-OaK2sDtTS-PO2_nGLuvGmrqY5n8HYEdt7XQ@mail.gmail.com>
+X-ClientProxiedBy: AM0P190CA0023.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:208:190::33) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PA4PR04MB7773:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92d09b8c-c4d6-46be-fdc4-08db3786e338
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: crpLQP6IUSsBcNRk5NaBN3AI/Mz+K7yiIfR9lmRXwdeNDPerL4jSzopqhLNNIsvuYnQR05ened5/vGL7lYb7+/d7/TBZQjize6gEY0JB4Apo5zxdUElqUlUXdi2wrK3hRTttaqJBMT740SuJ9cfCiV/4OzYt91Wbt9LD66FYiI2BTSlTOpqvqNW6xbyP8lH2n6IWni765ED8bO2Kuh4j2SUJjSwBHdcNbNoUhTnpk+I3n2pwBo+3Oplz3OOQQRZ3KHBV/o7AhRSY79U0K/XroxSGfJZsKcASLft8mtgQH9tyMcoz2ktDO21T8cU8ESq5jriQdd+nluTXEmVr7/C93W3QQ13eJGv8u2sWc05lsILal2zdTFH9gB57M5t5sp10D1OR2Y3kUXztonMI3JA1VqS32e/KnC+swZPE9lMPWvhvdnGfpzPfXgDtIbBwAmcsG1jqHF0QOd6VtHnY2/ctGYd3uwxwjsXAOtXWVWSQEuIFh2Sx64cCRs+iLYlo/VErDy/+wfClwYFTINi8hH6cQaw553Z68CJnDjwLEeCsqQcnQvox5pEzZQf/tE6YCNeQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199021)(8936002)(83380400001)(1076003)(478600001)(6486002)(6666004)(26005)(186003)(54906003)(6506007)(33716001)(6512007)(9686003)(316002)(7416002)(44832011)(2906002)(5660300002)(38100700002)(4326008)(66556008)(66476007)(6916009)(41300700001)(66946007)(86362001)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hic+wfzMA6hfetVDDgQnqQEKS0tVfeJMTkDZt22qS3tM60UML38Zb3mcd66P?=
+ =?us-ascii?Q?IrqMleh2zNvks6QzNYw1pPXmEbbB1zVyLjAGqcc7lnMj8bzTCtU3DhcJNT+0?=
+ =?us-ascii?Q?3npglBQjL/YTcnL9/4zn1tnHFQtXPAYxCXbEIloZLMSk6CWPdaF0Ze1B4LN0?=
+ =?us-ascii?Q?DzWYuovYjuZ/DvmGY3DeJw7GPeC908AX441ocwl/emRXp5NIrLpybFS9WOig?=
+ =?us-ascii?Q?uPLV86l3NkaVpy4p3aL/bNdA903eiVC8BrnZgsl3JLNkfQuAR80Ebc8mGwdZ?=
+ =?us-ascii?Q?FpteeA+KOUVyQ8rlVnGW9AYMJMgq8QJmnMAqMjVPqIVjPl6+knXLmhznJcpd?=
+ =?us-ascii?Q?hl8g2bp9zooInp9VWTu3M6T2I79/hp3Z+dvrfPzyYU5Ls4mNbSW3JR7g7IYM?=
+ =?us-ascii?Q?PgvHXslrpoCgWf+7Mnhf+F/oNITnngM3WSqcwMApHV9RrJedxqeJglOAyFij?=
+ =?us-ascii?Q?jwiHqd65oAgj859EjBhTnQ4dFqtljXUszKlxD9pPRmZAS/vvgoV80q39SjXf?=
+ =?us-ascii?Q?dMaF8QSIqgquaOr5QgOUX8y2qdadYYadiXY4ppCKy1Pzp9Z4FNa4XHnyk7xp?=
+ =?us-ascii?Q?IKfTPE/Egdv8NsBdZnXu0Kw1vFTGYIIbZsdfOOmBvjHKSjMXD2kCgDI3UfaV?=
+ =?us-ascii?Q?YNY89hDFRDw/EDOWjJCFHG3vCSArkrQ7G+fCYQRyLx9ZhtqN67EmeTh2CKeh?=
+ =?us-ascii?Q?ralY4nVCk5xk5RuuFbCpR4e3lvXhVbzAu1HnhalRBSE8gkU3uylV5dH8l4eC?=
+ =?us-ascii?Q?o6pXHztbXgBpr+YykbtNH0IkCLEE2v0IpvesawbczBoi7Z5GCqFf3xqdJXVH?=
+ =?us-ascii?Q?YlU10aBC1Moz1pdCu0Ml9mtxf24j+U4BMMYFC4vqaloKlS4yH2mZ7qUaaSfK?=
+ =?us-ascii?Q?OBw1kfACTepGFfGq0uDcSVafYSaz0tDkbhONZp3uHTiq//k+n1rxrYSqkwtl?=
+ =?us-ascii?Q?0DgjyhUxn/mnQ09t2gmLdk4nGBLCAC/lTRSKCTYvhOIrI0DhuTx8IiyAdCJz?=
+ =?us-ascii?Q?e1u+RqvUxqvqt0Q/IWXEilcqlz6ScxzMe2/7c9gTuDdIF+OxTFLA14cNNeXa?=
+ =?us-ascii?Q?sBCGvQTSnnTkKEZQ/9d3QfNUBNPP7uAvlXlb1/UyZP6ZjGllAK17gGspEHnz?=
+ =?us-ascii?Q?XLuj09F8VFZxRzwmy4t7nDwXuJUEwZwNlTf35nJ75eOwrsG7PIqe+foJ3s9h?=
+ =?us-ascii?Q?mhfoli0WAzEV5Sjp6+RpvU3DB9i5EKzhN5Pq12U0orfiTAwSiUQ/fWwj2Q0G?=
+ =?us-ascii?Q?WrilimBODOz1vbiFDxoBZ7D2j7JhorT7q3fNqryzcm6G4io2cIrj0E/aWxbB?=
+ =?us-ascii?Q?w6eaCNJBX+Mkd6EbpFSJq5Im8UzwpBKoGJ1Cw5mGruSJTllVjzUY68k+Fpbb?=
+ =?us-ascii?Q?kwFBLycAlHlNKc9SPF9HIbfSVOwpcTZOdIlKGgB1jOihYyWJiif5i5NbljSG?=
+ =?us-ascii?Q?WNP7sqelPxfP1DkZiniRVlkIJuEjuL9Jr/MhO/gdrXNP6Tc1Zxfx9aNIUc2V?=
+ =?us-ascii?Q?h/vfN4VDalTevN9+KC6VSIleR0IUFnuY3D3Ibn/8IigBzXCLbOw5haBa5l9S?=
+ =?us-ascii?Q?6jCqpzLLpZMoM/+tUkCerHdE9LCQg5jFJfBBS7ysbf7MOAKV1IT5ZZjo+kKO?=
+ =?us-ascii?Q?cQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92d09b8c-c4d6-46be-fdc4-08db3786e338
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2023 16:41:08.1983
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TxWB8TmUCXFYSb/F4Y5knPFsXSfxQa3WMhjdcjoCPB3PXQIW00HdcAuJQyv0hXBoFQsMp6OoqghYK79TLDWXBQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7773
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,214 +137,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 05 Apr 2023, Luis Chamberlain wrote:
+On Fri, Apr 07, 2023 at 12:22:26PM -0400, Jamal Hadi Salim wrote:
+> > +enum {
+> > +       TC_FP_EXPRESS = 1,
+> > +       TC_FP_PREEMPTIBLE = 2,
+> > +};
+> 
+> Suggestion: Add a MAX to this enum (as is traditionally done)..
 
->From: Peter Zijlstra <peterz@infradead.org>
->
->Fundamentally semaphores are a counted primitive, but
->DEFINE_SEMAPHORE() does not expose this and explicitly creates a
->binary semaphore.
->
->Change DEFINE_SEMAPHORE() to take a number argument and use that in the
->few places that open-coded it using __SEMAPHORE_INITIALIZER().
+Max what? This doesn't count anything, it just expresses whether the
+quality of one traffic class, from the Frame Preemption standard's
+perspective, is express or preemptible...
 
-No big deal considering the changelog is small, but I would have expected
-just for __SEMAPHORE_INITIALIZER() to be used in the next patch, instead
-of changing DEFINE_SEMAPHORE, which users just need because of the mutex
-api restrictions.
+> > @@ -145,13 +149,94 @@ static int mqprio_parse_opt(struct net_device *dev, struct tc_mqprio_qopt *qopt,
+> >         return 0;
+> >  }
+> >
+> > +static const struct
+> > +nla_policy mqprio_tc_entry_policy[TCA_MQPRIO_TC_ENTRY_MAX + 1] = {
+> > +       [TCA_MQPRIO_TC_ENTRY_INDEX]     = NLA_POLICY_MAX(NLA_U32,
+> > +                                                        TC_QOPT_MAX_QUEUE),
+> 
+> And use it here...
 
->
->Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->[mcgrof: add some tribal knowledge about why some folks prefer
-> binary sempahores over mutexes]
->Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Where? Above or below the comment? I think you mean below (for the
+policy of TCA_MQPRIO_TC_ENTRY_FP)?
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+> Out of curiosity, could you have more that 16 queues in this spec? I
+> noticed 802.1p mentioned somewhere (typically 3 bits).
 
->---
-> arch/mips/cavium-octeon/setup.c                       |  2 +-
-> arch/x86/kernel/cpu/intel.c                           |  2 +-
-> drivers/firmware/efi/runtime-wrappers.c               |  2 +-
-> drivers/firmware/efi/vars.c                           |  2 +-
-> drivers/macintosh/adb.c                               |  2 +-
-> drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c      |  2 +-
-> drivers/platform/x86/intel/ifs/sysfs.c                |  2 +-
-> drivers/scsi/esas2r/esas2r_ioctl.c                    |  2 +-
-> .../vc04_services/interface/vchiq_arm/vchiq_arm.c     |  2 +-
-> include/linux/semaphore.h                             | 11 +++++++++--
-> kernel/printk/printk.c                                |  2 +-
-> net/rxrpc/call_object.c                               |  6 ++----
-> 12 files changed, 21 insertions(+), 16 deletions(-)
->
->diff --git a/arch/mips/cavium-octeon/setup.c b/arch/mips/cavium-octeon/setup.c
->index a71727f7a608..c5561016f577 100644
->--- a/arch/mips/cavium-octeon/setup.c
->+++ b/arch/mips/cavium-octeon/setup.c
->@@ -72,7 +72,7 @@ extern void pci_console_init(const char *arg);
-> static unsigned long long max_memory = ULLONG_MAX;
-> static unsigned long long reserve_low_mem;
->
->-DEFINE_SEMAPHORE(octeon_bootbus_sem);
->+DEFINE_SEMAPHORE(octeon_bootbus_sem, 1);
-> EXPORT_SYMBOL(octeon_bootbus_sem);
->
-> static struct octeon_boot_descriptor *octeon_boot_desc_ptr;
->diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
->index 291d4167fab8..12bad63822f0 100644
->--- a/arch/x86/kernel/cpu/intel.c
->+++ b/arch/x86/kernel/cpu/intel.c
->@@ -1177,7 +1177,7 @@ static const struct {
-> static struct ratelimit_state bld_ratelimit;
->
-> static unsigned int sysctl_sld_mitigate = 1;
->-static DEFINE_SEMAPHORE(buslock_sem);
->+static DEFINE_SEMAPHORE(buslock_sem, 1);
->
-> #ifdef CONFIG_PROC_SYSCTL
-> static struct ctl_table sld_sysctls[] = {
->diff --git a/drivers/firmware/efi/runtime-wrappers.c b/drivers/firmware/efi/runtime-wrappers.c
->index 1fba4e09cdcf..a400c4312c82 100644
->--- a/drivers/firmware/efi/runtime-wrappers.c
->+++ b/drivers/firmware/efi/runtime-wrappers.c
->@@ -158,7 +158,7 @@ void efi_call_virt_check_flags(unsigned long flags, const char *call)
->  * none of the remaining functions are actually ever called at runtime.
->  * So let's just use a single lock to serialize all Runtime Services calls.
->  */
->-static DEFINE_SEMAPHORE(efi_runtime_lock);
->+static DEFINE_SEMAPHORE(efi_runtime_lock, 1);
->
-> /*
->  * Expose the EFI runtime lock to the UV platform
->diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
->index bd75b87f5fc1..bfc5fa6aa47b 100644
->--- a/drivers/firmware/efi/vars.c
->+++ b/drivers/firmware/efi/vars.c
->@@ -21,7 +21,7 @@
-> /* Private pointer to registered efivars */
-> static struct efivars *__efivars;
->
->-static DEFINE_SEMAPHORE(efivars_lock);
->+static DEFINE_SEMAPHORE(efivars_lock, 1);
->
-> static efi_status_t check_var_size(bool nonblocking, u32 attributes,
->				   unsigned long size)
->diff --git a/drivers/macintosh/adb.c b/drivers/macintosh/adb.c
->index 23bd0c77ac1a..56599515d51a 100644
->--- a/drivers/macintosh/adb.c
->+++ b/drivers/macintosh/adb.c
->@@ -80,7 +80,7 @@ static struct adb_driver *adb_controller;
-> BLOCKING_NOTIFIER_HEAD(adb_client_list);
-> static int adb_got_sleep;
-> static int adb_inited;
->-static DEFINE_SEMAPHORE(adb_probe_mutex);
->+static DEFINE_SEMAPHORE(adb_probe_mutex, 1);
-> static int sleepy_trackpad;
-> static int autopoll_devs;
-> int __adb_probe_sync;
->diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
->index 5d1e4fe335aa..5a105bab4387 100644
->--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
->+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c
->@@ -298,7 +298,7 @@ const u32 dmae_reg_go_c[] = {
->
-> /* Global resources for unloading a previously loaded device */
-> #define BNX2X_PREV_WAIT_NEEDED 1
->-static DEFINE_SEMAPHORE(bnx2x_prev_sem);
->+static DEFINE_SEMAPHORE(bnx2x_prev_sem, 1);
-> static LIST_HEAD(bnx2x_prev_list);
->
-> /* Forward declaration */
->diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
->index ee636a76b083..4c3c642ee19a 100644
->--- a/drivers/platform/x86/intel/ifs/sysfs.c
->+++ b/drivers/platform/x86/intel/ifs/sysfs.c
->@@ -13,7 +13,7 @@
->  * Protects against simultaneous tests on multiple cores, or
->  * reloading can file while a test is in progress
->  */
->-static DEFINE_SEMAPHORE(ifs_sem);
->+static DEFINE_SEMAPHORE(ifs_sem, 1);
->
-> /*
->  * The sysfs interface to check additional details of last test
->diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
->index e003d923acbf..055d2e87a2c8 100644
->--- a/drivers/scsi/esas2r/esas2r_ioctl.c
->+++ b/drivers/scsi/esas2r/esas2r_ioctl.c
->@@ -56,7 +56,7 @@ dma_addr_t esas2r_buffered_ioctl_addr;
-> u32 esas2r_buffered_ioctl_size;
-> struct pci_dev *esas2r_buffered_ioctl_pcid;
->
->-static DEFINE_SEMAPHORE(buffered_ioctl_semaphore);
->+static DEFINE_SEMAPHORE(buffered_ioctl_semaphore, 1);
-> typedef int (*BUFFERED_IOCTL_CALLBACK)(struct esas2r_adapter *,
->				       struct esas2r_request *,
->				       struct esas2r_sg_context *,
->diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
->index cddcd3c596c9..1a656fdc9445 100644
->--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
->+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
->@@ -149,7 +149,7 @@ static char *g_fragments_base;
-> static char *g_free_fragments;
-> static struct semaphore g_free_fragments_sema;
->
->-static DEFINE_SEMAPHORE(g_free_fragments_mutex);
->+static DEFINE_SEMAPHORE(g_free_fragments_mutex, 1);
->
-> static int
-> vchiq_blocking_bulk_transfer(struct vchiq_instance *instance, unsigned int handle, void *data,
->diff --git a/include/linux/semaphore.h b/include/linux/semaphore.h
->index 6694d0019a68..2d6aa3fd7861 100644
->--- a/include/linux/semaphore.h
->+++ b/include/linux/semaphore.h
->@@ -25,8 +25,15 @@ struct semaphore {
->	.wait_list	= LIST_HEAD_INIT((name).wait_list),		\
-> }
->
->-#define DEFINE_SEMAPHORE(name)	\
->-	struct semaphore name = __SEMAPHORE_INITIALIZER(name, 1)
->+/*
->+ * There is a big difference between a binary semaphore and a mutex.
->+ * You cannot call mutex_unlock() from IRQ context because it takes an
->+ * internal mutex spin_lock in a non-IRQ-safe manner. Both try_lock()
->+ * and unlock() can be called from IRQ context. A mutex must also be
->+ * released in the same context that locked it.
->+ */
->+#define DEFINE_SEMAPHORE(_name, _n)	\
->+	struct semaphore _name = __SEMAPHORE_INITIALIZER(_name, _n)
->
-> static inline void sema_init(struct semaphore *sem, int val)
-> {
->diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
->index fd0c9f913940..76987aaa5a45 100644
->--- a/kernel/printk/printk.c
->+++ b/kernel/printk/printk.c
->@@ -89,7 +89,7 @@ static DEFINE_MUTEX(console_mutex);
->  * console_sem protects updates to console->seq and console_suspended,
->  * and also provides serialization for console printing.
->  */
->-static DEFINE_SEMAPHORE(console_sem);
->+static DEFINE_SEMAPHORE(console_sem, 1);
-> HLIST_HEAD(console_list);
-> EXPORT_SYMBOL_GPL(console_list);
-> DEFINE_STATIC_SRCU(console_srcu);
->diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
->index e9f1f49d18c2..3e5cc70884dd 100644
->--- a/net/rxrpc/call_object.c
->+++ b/net/rxrpc/call_object.c
->@@ -40,10 +40,8 @@ const char *const rxrpc_call_completions[NR__RXRPC_CALL_COMPLETIONS] = {
->
-> struct kmem_cache *rxrpc_call_jar;
->
->-static struct semaphore rxrpc_call_limiter =
->-	__SEMAPHORE_INITIALIZER(rxrpc_call_limiter, 1000);
->-static struct semaphore rxrpc_kernel_call_limiter =
->-	__SEMAPHORE_INITIALIZER(rxrpc_kernel_call_limiter, 1000);
->+static DEFINE_SEMAPHORE(rxrpc_call_limiter, 1000);
->+static DEFINE_SEMAPHORE(rxrpc_kernel_call_limiter, 1000);
->
-> void rxrpc_poke_call(struct rxrpc_call *call, enum rxrpc_call_poke_trace what)
-> {
->--
->2.39.2
->
+"This spec" is IEEE 802.1Q :) It doesn't say how many "queues" (struct
+netdev_queue) there are, and this UAPI doesn't work with those, either.
+The standard defines 8 priority values, groupable in (potentially fewer)
+traffic classes. Linux liked to extend the number of traffic classes to
+16 (and the skb->priority values are arbitrarily large IIUC) and this is
+where that number 16 came from. The number of 16 traffic classes still
+allows for more than 16 TXQs though.
+
+> Lead up question: if the max is 16 then can preemptible_tcs for example be u32?
+
+I don't understand this question, sorry. preemptible_tcs is declared as
+"unsigned long", which IIUC is at least 32-bit.
+
+> 
+> > +       [TCA_MQPRIO_TC_ENTRY_FP]        = NLA_POLICY_RANGE(NLA_U32,
+> > +                                                          TC_FP_EXPRESS,
+> > +                                                          TC_FP_PREEMPTIBLE),
