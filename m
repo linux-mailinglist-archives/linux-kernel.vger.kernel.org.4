@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB216DB2EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C12D6DB2E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjDGSgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S231976AbjDGSeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjDGSgv (ORCPT
+        with ESMTP id S231868AbjDGSeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:36:51 -0400
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0B093C8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:36:49 -0700 (PDT)
-Received: from localhost (88-113-24-128.elisa-laajakaista.fi [88.113.24.128])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id 260eab40-d573-11ed-abf4-005056bdd08f;
-        Fri, 07 Apr 2023 21:36:46 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Fri, 7 Apr 2023 21:36:45 +0300
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Michael Walle <michael@walle.cc>,
-        "Sahin, Okan" <Okan.Sahin@analog.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Fri, 7 Apr 2023 14:34:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E21A279;
+        Fri,  7 Apr 2023 11:34:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F9F66531D;
+        Fri,  7 Apr 2023 18:34:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53D14C433D2;
+        Fri,  7 Apr 2023 18:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680892441;
+        bh=hfcFjImYkaoNK57mAMP077eellND4IKRA635mra2rE0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OZJcgklmTtlVvE5nhA3PKL4+tVnFI7COhkarip5Hrg5yjnjMg0+svTfWGpf9XolRc
+         G2fVjLxXihgg0xYu1STx8JkuXSdAm2pFEx5/h7izadsOA9IMpwZPoab4ueJyeGDeud
+         b9ngJL86HhCA9rR3pw1LzanUp8j+f/V0Qc8Ix+JMIvBiwiSJZVlf/LsbCeD176bvpl
+         xvgh6JhvaALvy9hSYdedIEY2H35Qui9k3CHA4IttHJwojY2Zbiv6xBXeK9yx3QpHwN
+         4mVhtnRmiqAdorgsdmhcgmGDxokOQDWW5yhc11ZjRFV2CWEtc30sh1ELxjvwx1MGy5
+         drK+a1Jwet56Q==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andy Gross <agross@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] gpio: ds4520: Add ADI DS4520 Regulator Support
-Message-ID: <ZDBivYlwJ6zgaFTg@surfacebook>
-References: <20230327130010.8342-1-okan.sahin@analog.com>
- <20230327130010.8342-3-okan.sahin@analog.com>
- <CACRpkda5G5b+At5s1WFudpQBQ6LDQxhE3fZj7eBhkZ=thvnQhg@mail.gmail.com>
- <MN2PR03MB51682210CADA6E33FB99052CE7939@MN2PR03MB5168.namprd03.prod.outlook.com>
- <CACRpkdZJA0DyzgLxm9HFeHO03rqNUff=avuV=VrGuJkkOg6wNQ@mail.gmail.com>
- <25e1fda4b6df2d10444d7eca3cd0e387@walle.cc>
- <CACRpkdYKEid8-0-7sBECNgSyW3kMRCsv3DeBVUzxo4z6p+Grnw@mail.gmail.com>
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     ath10k@lists.infradead.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH v3 0/2] ATH10K YAML conversion
+Date:   Fri,  7 Apr 2023 11:36:46 -0700
+Message-Id: <168089260339.2666024.1798307335025317148.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
+References: <20230406-topic-ath10k_bindings-v3-0-00895afc7764@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdYKEid8-0-7sBECNgSyW3kMRCsv3DeBVUzxo4z6p+Grnw@mail.gmail.com>
-X-Spam-Status: No, score=3.2 required=5.0 tests=DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Apr 07, 2023 at 03:48:25PM +0200, Linus Walleij kirjoitti:
-> On Wed, Apr 5, 2023 at 3:57 PM Michael Walle <michael@walle.cc> wrote:
+On Thu, 06 Apr 2023 14:55:43 +0200, Konrad Dybcio wrote:
+> v2 -> v3:
+> - Ran dt_binding_check explicitly to uncover an issue with the
+>   example - I had 2 levels of wifi-firmware{}.. Fixed that..
 > 
-> > OTOH I'm not sure the driver is doing it correctly, because it also
-> > seems to switch the pullup resisters together with the direction.
-> > I'm not sure that is correct. So there might be just one register
-> > involved after all and the GPIO_REGMAP should work again.
+> I hope you folks don't mind me resending so quickly, but it was a
+> trivial issue. Patch 2 unchanged.
 > 
-> I'm pretty sure that should be in the .set_config() callback.
-> 
-> > Also, according to the datasheet this has some nv memory (to set the
-> > initial state of the GPIOs [?]). So it should really be a multi-function
-> > device. I'm not sure if this has to be considered right from the
-> > beginning or if the device support can start with GPIO only and later
-> > be transitioned to a full featured MFD (probably with nvmem support).
-> 
-> That's a bit of a soft definition.
-> 
-> If the chip is *only* doing GPIO and nvram it can be a GPIO-only
-> device I think.
-> 
-> The precedent is a ton of ethernet drivers with nvram for storing
-> e.g. the MAC address. We don't make all of those into MFDs,
-> as the nvram is closely tied to the one and only function of the
-> block.
+> [...]
 
-I agree with Linus. This should be part of the actual (main) driver for
-the chip as many do (like USB to serial adapters that have GPIO capability).
-Also this code lacks of proper locking and has style issues.
+Applied, thanks!
 
+[2/2] arm64: dts: qcom: sdm845-polaris: Drop inexistent properties
+      commit: fbc3a1df2866608ca43e7e6d602f66208a5afd88
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Bjorn Andersson <andersson@kernel.org>
