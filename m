@@ -2,136 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284CB6DB0BE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CC76DB0C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjDGQgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S229765AbjDGQhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjDGQgb (ORCPT
+        with ESMTP id S229546AbjDGQhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:36:31 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2068.outbound.protection.outlook.com [40.107.247.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDD0B468;
-        Fri,  7 Apr 2023 09:36:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GQQyrLsw163YLDFx7V5w2IvUKlBYf+ZTnfo59pOh1tDkmTC3dYussMlVKHWWaZK7wquiZ6DRJtn9TESL5f9LXBsb7FuoBLzWDj5EFgFXM6hA0StsIYH58nr1pY9Zm1f8jjxhgCLZxg0ZhNeJHfkMEMgs/RUwUrhwBhD1jkv5H/qqgQFI5BKyxNjNXmTjKqDLF6HyNcvj/yL2oWdjKHuL3Iduac/LBhw2+GTzjjnJLm9OPTQi9cNEe/MM4pV6xmfI+ShMuuK/2X6MtC02oq3Z/mWNoZ0jb4kxNFqBFeirgmWlQS6ZiyvZznFzuBWh6qAyBtNmKPCZUq0Ajj2/b/Ph8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+MII7TvrCbxbp2oiWaDoWMmxj7WVcLOrT7UMnoibtjU=;
- b=k7UnQCdTLlJtL09ujIO6WdFBQIQbXyJaXQiU75VJY9hLdxq1JoeHIzjYzbs+GrFOKOmt9gF2rNTIQlGIhet4HkH9kckeMWGt6LYBzF5PEQgr7sb5WD8OBrsPCChNwRRe0wF/ixRkfhtaBiZKTsHsQwwu4UErv+CJodsHKFUtH/xxWcLC/rxZvrKLsiJceoEFQIrcTurDumBTu89jhbJzHBFLX5cH1x2jE4ngnVHX+6ACg/bp1z+7f2qRGqMXMh5quh3XC9OfMVJWVWTssQWoizXsYoSWQlxW37JLUFNYqZ14Eo78l9t1rgfXKNeKu4XJ1OZGpgu9X856eLDUp2CAqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=solid-run.com; dmarc=pass action=none
- header.from=solid-run.com; dkim=pass header.d=solid-run.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=solidrn.onmicrosoft.com; s=selector1-solidrn-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+MII7TvrCbxbp2oiWaDoWMmxj7WVcLOrT7UMnoibtjU=;
- b=AtWzgL37T/TK/uSZl3PKoxUvkoPCczMG5ngqB7J2aNbt6y+8zwkYk9sC2IJRGv07zskBCNHEWVA/Yl14JTE78NVR3Eb2cRdKM8QJ8Ug2R9YBxg81+CW5w0fkNZh3X5BtXpuX9CUyEK62c0Z4iEIsMa7y8xUutkfCz4pePfOGTmM=
-Received: from AM0PR04MB4723.eurprd04.prod.outlook.com (2603:10a6:208:c0::20)
- by PAXPR04MB9667.eurprd04.prod.outlook.com (2603:10a6:102:242::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.31; Fri, 7 Apr
- 2023 16:36:27 +0000
-Received: from AM0PR04MB4723.eurprd04.prod.outlook.com
- ([fe80::54c9:6706:9dc6:d977]) by AM0PR04MB4723.eurprd04.prod.outlook.com
- ([fe80::54c9:6706:9dc6:d977%5]) with mapi id 15.20.6277.029; Fri, 7 Apr 2023
- 16:36:27 +0000
-From:   Alvaro Karsz <alvaro.karsz@solid-run.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH] vdpa: solidrun: constify pointers to hwmon_channel_info
-Thread-Topic: [PATCH] vdpa: solidrun: constify pointers to hwmon_channel_info
-Thread-Index: AQHZaWHdTHheYNHw2U+NzKt917d6YK8gClkL
-Date:   Fri, 7 Apr 2023 16:36:26 +0000
-Message-ID: <AM0PR04MB4723F78E9F09E82842CE4776D4969@AM0PR04MB4723.eurprd04.prod.outlook.com>
-References: <20230407150130.79917-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407150130.79917-1-krzysztof.kozlowski@linaro.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=solid-run.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR04MB4723:EE_|PAXPR04MB9667:EE_
-x-ms-office365-filtering-correlation-id: 46c3426a-43ec-40e8-19cf-08db37863baf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Wi2yJPdfkoxbyeO2bueXzi1DGeb9MTzqnDJRfQIEa3JLwlT4EQxlsN4TuSHN9DzQE03I8gE6D5O2+Ua50GKmfFC61FaI6SuvEjsIiSmv8wsmJeM2wMDFfVFfLOZkPJOUD+sHoYeQVR88qQaQrMs+KqxGWawzgj+8r+UND99ayDa0WDjRhrQnXtwyp/7SEGw9/13XY3Fvzx73EvZWV9PLA0vGMtVoIA1isck+xcBkBvIBJPu0PEvyWhG9JTGXUwCkQZAL+ES4mk/F3t96bGeLK4lsSkbyEmjYUzHQ14Xc+luWN6LKCVb/+TpqJlZJcEd3Nzi/nswsbjhGmIVBAqsBCQ5VxlMyVPKo0K/n3dLu7lgdthueh6bX/EtEXd2sTcSF526CrZGRwnNfWmHKA90RCEHDsUAP4GXNdJBq9Jb42K5xkuZtR92D2OZgRECypqCEotGrXKqc8LMZR0VoCQztHqBx1NhOwYOIm6eEPxAya4Nxn0i9EZ5+XUaxQpuCxz/rNFJngeHlJVSwAt2WoZlBIZGnZCZgyuMSSwc+IbZxHc+CVZl3AnIb3W2FWb/JFKkYgoHmLSlap3WqtoB0F2mfStSuPMgkmQBuXGq4/ZibkELcJJOhQSGMUOxZoiPls+pA
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB4723.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(346002)(396003)(39830400003)(376002)(451199021)(558084003)(33656002)(86362001)(91956017)(76116006)(41300700001)(71200400001)(66946007)(316002)(38070700005)(110136005)(54906003)(478600001)(4326008)(7696005)(66556008)(66476007)(66446008)(64756008)(55016003)(8676002)(2906002)(8936002)(44832011)(5660300002)(52536014)(186003)(38100700002)(122000001)(9686003)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?YI1D7Wz7gTjBZs2OM+A05lxqSPYoyzfVhLZTCoEyRbAGFN2UZWZPgLpnEB?=
- =?iso-8859-1?Q?okfztxT5nmiIXcpHK2SZbhv4lh/jBlUB71AbcwJzdpVSDbAcxGm3c44nDu?=
- =?iso-8859-1?Q?F4nn+2zzqhItbEo5hIpdXmoPo/gK351fSEDex5pY3PbJEqLvV5G1uVYZ3+?=
- =?iso-8859-1?Q?BP8bMeuDapj/pfkI99f0u8f61VEOlWR/suxh+VdZ7H+Fda38mLJ+hV6ji4?=
- =?iso-8859-1?Q?fYfLpFpmAdTD3ygVU0f/6m236LM6qgSGXjPDm1sR42TIzAXu2P+M2RU5pd?=
- =?iso-8859-1?Q?nKqki15csm2oFu8urO88axbk64POFDde0Fr4yPK/xwkk6s6mrekb0MgnAA?=
- =?iso-8859-1?Q?Y3IA/DYZyZPGoFMK4Y1qKe304zOHBTCT2tqZqGdCzV6NtDwbMyGxFOgWFe?=
- =?iso-8859-1?Q?Qmn7JTDeC41AOB7/kuEgpL6N5JmBeU0mqG8tOW6ZU1ygG6o6QbMN8kQfpI?=
- =?iso-8859-1?Q?fITKeAV7Bf5TCrg/FJeESsnqKJ3DomFISfki82yGdyPrhjvQfyeTI6X9Jv?=
- =?iso-8859-1?Q?9j4dtzL6t6aOJyj4eim0cCKioYNjk8lNOlbmaDw6SUcB70Rkn63qaYpjfT?=
- =?iso-8859-1?Q?aN8HzWEwGAq4Q7Ojg4dZojQnyXqiFKQhQvlwKhXNyUKffmdfxMyn6MHpgq?=
- =?iso-8859-1?Q?HWy5VeFaOae2xvMw00Zon6UWLYI6F0XSQB4JGF3us9iSAXTLvroiWEQmWU?=
- =?iso-8859-1?Q?99lmKicVEfsnySjjRIjWgD/N9xFTlHU1LpdtyJsRpYO/q7BMoEA9Dq/hkz?=
- =?iso-8859-1?Q?yNbIBDcrRGSV/ORdrj+KM6jevAAkkHvRGK6MhhJpQCxG+Pvv+hMSPH9x81?=
- =?iso-8859-1?Q?WYWiwt2BMZcHR0RYWJ0dL+zi4QOYij3PM/OqfHa9ATVWs6NgPHSlVoRAZ7?=
- =?iso-8859-1?Q?HW25fQj+u3hEq3G72PJvvXV4H2EHf1TwuPUux7Vty3Fr0pX7L4ZistxqFV?=
- =?iso-8859-1?Q?KjkHvDDBZsdk+AlMnBcR9YV0cusnly04Ws/UOJlcIavcFqb7jqMP2NctRN?=
- =?iso-8859-1?Q?hglufVN9SYl5gICOSDQVlmxVNQKsEfsUNC496fYmPo3CedvY/sYkafE3nE?=
- =?iso-8859-1?Q?rKTABoJ2jY/lq8VMC1uiBJLSnSFqZ3PMledUfRTsYAjHCiHH2y66Tzmmvk?=
- =?iso-8859-1?Q?AdAd5P2lPLoes3NfJgFSPDfmFzZSa1wLTYAXgZs6Ztv2K6u26lh4AVkh3H?=
- =?iso-8859-1?Q?wkc0pmjMzUkAdjBIKVbIVx1MRzrtqHrTy3Ou8i9kkp2dECyuauXqeKISah?=
- =?iso-8859-1?Q?ipk+pNFE8bUNqDSUA1lY3bDzthJ1FXA0Tne9wtriSMriyGImxxwKYlnUO0?=
- =?iso-8859-1?Q?LdzFZpnJUhqjOeYCDUMRNxSJsD6u2aNrxQZA0bCA6dsRbuRCZUPFPe4s8Q?=
- =?iso-8859-1?Q?VH9IgB4Ixl4W9IDVhQehIAcFjg0syM4PLzFFy4FNKHbM4HTA25j3XDP3Ew?=
- =?iso-8859-1?Q?TaNEae7dL4EpLumgDhpnH+0IKEZGgO80JekynBjo8WAyvCprRF0kOvJPBT?=
- =?iso-8859-1?Q?O4mzoTC2XoSTTb3zri3hxuzGYKpMCxUh62euY0xVqxr32FdbhE9y70NgyX?=
- =?iso-8859-1?Q?/Ja0yAZqVWVcZXQr2sehsnxBOG+AibD4cAgQCXr8sSi5TmYFy0Q5n8TuI8?=
- =?iso-8859-1?Q?k43yDqlcEAdKbDAs7dN5Hu8+d9vka0hhOA+VExwSqcLoQeEjoH+6zXrgbB?=
- =?iso-8859-1?Q?tS1aQWOO1bgUG4v8f8syP8lok9hzBzPGObM9cfet?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 7 Apr 2023 12:37:11 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB91BBDF1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:36:50 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id d11-20020a056e020c0b00b00326156e3a8bso22314945ile.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:36:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680885410; x=1683477410;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nplfd14bvjlVkVD4YGNhodAVpFm+bek0gQyvwM51NR0=;
+        b=PQhhl/nNrZlacewTjl+irLO7uJ+INbaOiO5WGDODcwsUPTI4YG0WBZME5r6EieRPPg
+         QG26FgHGpeE44+wU6hWLzLrXfGG/UMZlUkbwdwmEWJjEQw60wLxZroP9bid4q3gMwNLg
+         TFDRWtwtyDFsnCpBh0sPr8t5KC/CJ45cFS4M8WL1dwBrxKaateDvpqfyXqlNnH3DIZPS
+         d/zyAc9UhpiG2q5bdpOQ4QgMQm6TfEvxbCjwXAEU7rPk60AVaKvkwac+VJ93tB6OfWVj
+         KE4PETHr8xeQdzc6S1XX2q2itljPqrLq9tUxNIf2/482JF3xNm4g3SBJFsi3o4yBgVIK
+         28Bg==
+X-Gm-Message-State: AAQBX9ctK/hLFAbuEJ94Mpu4BsHkwY4geGAe5Nv8sEK7m58S2Tvn/NuP
+        UBAw3yUn/MaNDcuPidiNDznMRRyjL4JnIvilLJNsElN+Aro+
+X-Google-Smtp-Source: AKy350Ypwj/ORNJEGLLCVhuTTM1jykqC3q048BwD2lOYvlDa+PTCUlHT9+a6a/qs4tbnzXfXtCHLEEOo+dBDrK9BkFUSaGqaExJz
 MIME-Version: 1.0
-X-OriginatorOrg: solid-run.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB4723.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46c3426a-43ec-40e8-19cf-08db37863baf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2023 16:36:26.9023
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a4a8aaf3-fd27-4e27-add2-604707ce5b82
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LP4aX0GmYxpiU0rkoiIce98zdnO9nx7JpDobFn5ifLRG0OiUpoYY6Ck7BNVj8Y2W5uDm7df0yz0y5ObaK5UOaJLOs5SUheTTavEQZj7sUOw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9667
-X-Spam-Status: No, score=1.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Received: by 2002:a02:b105:0:b0:3f6:e3c2:d4bd with SMTP id
+ r5-20020a02b105000000b003f6e3c2d4bdmr616460jah.0.1680885409999; Fri, 07 Apr
+ 2023 09:36:49 -0700 (PDT)
+Date:   Fri, 07 Apr 2023 09:36:49 -0700
+In-Reply-To: <000000000000c93feb05f87e24ad@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c573b305f8c1a189@google.com>
+Subject: Re: [syzbot] [mm?] KASAN: slab-use-after-free Read in mas_next_entry
+From:   syzbot <syzbot+a7c1ec5b1d71ceaa5186@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.7 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Statically allocated array of pointed to hwmon_channel_info can be made=
-=0A=
-> const for safety.=0A=
-> =0A=
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>=0A=
-> =0A=
-=0A=
-Thanks!=0A=
-=0A=
-Reviewed-by: Alvaro Karsz <alvaro.karsz@solid-run.com>=
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    f2afccfefe7b Merge tag 'net-6.3-rc6-2' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1642b49bc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d3500b143c204867
+dashboard link: https://syzkaller.appspot.com/bug?extid=a7c1ec5b1d71ceaa5186
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1033df79c80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/4c6e0baeb7c2/disk-f2afccfe.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/82431f1611cf/vmlinux-f2afccfe.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/82e1059905ee/bzImage-f2afccfe.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a7c1ec5b1d71ceaa5186@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in mas_safe_min lib/maple_tree.c:727 [inline]
+BUG: KASAN: slab-use-after-free in mas_next_nentry lib/maple_tree.c:4664 [inline]
+BUG: KASAN: slab-use-after-free in mas_next_entry+0x12b3/0x1690 lib/maple_tree.c:4760
+Read of size 8 at addr ffff8880782e0440 by task syz-executor.3/5331
+
+CPU: 0 PID: 5331 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00137-gf2afccfefe7b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
+ print_report mm/kasan/report.c:430 [inline]
+ kasan_report+0x11c/0x130 mm/kasan/report.c:536
+ mas_safe_min lib/maple_tree.c:727 [inline]
+ mas_next_nentry lib/maple_tree.c:4664 [inline]
+ mas_next_entry+0x12b3/0x1690 lib/maple_tree.c:4760
+ mas_find+0x7d/0x200 lib/maple_tree.c:6025
+ vma_find include/linux/mm.h:736 [inline]
+ __do_sys_set_mempolicy_home_node+0x1ef/0x480 mm/mempolicy.c:1524
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f730dc8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f730ea05168 EFLAGS: 00000246 ORIG_RAX: 00000000000001c2
+RAX: ffffffffffffffda RBX: 00007f730ddabf80 RCX: 00007f730dc8c169
+RDX: 0000000000000000 RSI: 0000000000003000 RDI: 0000000020ffd000
+RBP: 00007f730dce7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f730decfb1f R14: 00007f730ea05300 R15: 0000000000022000
+ </TASK>
+
+Allocated by task 5335:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x7f/0x90 mm/kasan/common.c:328
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ kmem_cache_alloc_bulk+0x424/0x860 mm/slub.c:4034
+ mt_alloc_bulk lib/maple_tree.c:164 [inline]
+ mas_alloc_nodes+0x276/0x8a0 lib/maple_tree.c:1263
+ mas_node_count_gfp lib/maple_tree.c:1318 [inline]
+ mas_preallocate+0x1bb/0x360 lib/maple_tree.c:5717
+ vma_iter_prealloc mm/internal.h:972 [inline]
+ __split_vma+0x1b7/0x810 mm/mmap.c:2177
+ do_vmi_align_munmap+0x34a/0xf60 mm/mmap.c:2320
+ do_vmi_munmap+0x26e/0x2c0 mm/mmap.c:2452
+ mmap_region+0x1ee/0x2620 mm/mmap.c:2500
+ do_mmap+0x831/0xf60 mm/mmap.c:1364
+ vm_mmap_pgoff+0x1af/0x280 mm/util.c:542
+ ksys_mmap_pgoff+0x41f/0x5a0 mm/mmap.c:1410
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 5331:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:521
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ kmem_cache_free_bulk.part.0+0x20c/0x680 mm/slub.c:3905
+ mt_free_bulk lib/maple_tree.c:169 [inline]
+ mas_destroy+0x3e0/0x650 lib/maple_tree.c:5771
+ mas_store_prealloc+0xf0/0x150 lib/maple_tree.c:5702
+ vma_iter_store mm/internal.h:1013 [inline]
+ vma_complete+0xad9/0x1170 mm/mmap.c:572
+ __split_vma+0x523/0x810 mm/mmap.c:2214
+ split_vma+0xc6/0x110 mm/mmap.c:2242
+ mbind_range+0x4d2/0x760 mm/mempolicy.c:829
+ __do_sys_set_mempolicy_home_node+0x323/0x480 mm/mempolicy.c:1546
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff8880782e0400
+ which belongs to the cache maple_node of size 256
+The buggy address is located 64 bytes inside of
+ freed 256-byte region [ffff8880782e0400, ffff8880782e0500)
+
+The buggy address belongs to the physical page:
+page:ffffea0001e0b800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x782e0
+head:ffffea0001e0b800 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff8880124cd000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 1, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 5335, tgid 5329 (syz-executor.3), ts 114724293643, free_ts 114618496841
+ prep_new_page mm/page_alloc.c:2553 [inline]
+ get_page_from_freelist+0x1190/0x2e20 mm/page_alloc.c:4326
+ __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:5592
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x390 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __kmem_cache_alloc_bulk mm/slub.c:3952 [inline]
+ kmem_cache_alloc_bulk+0x270/0x860 mm/slub.c:4027
+ mt_alloc_bulk lib/maple_tree.c:164 [inline]
+ mas_alloc_nodes+0x276/0x8a0 lib/maple_tree.c:1263
+ mas_node_count_gfp lib/maple_tree.c:1318 [inline]
+ mas_preallocate+0x1bb/0x360 lib/maple_tree.c:5717
+ vma_iter_prealloc mm/internal.h:972 [inline]
+ __split_vma+0x1b7/0x810 mm/mmap.c:2177
+ do_vmi_align_munmap+0x34a/0xf60 mm/mmap.c:2320
+ do_vmi_munmap+0x26e/0x2c0 mm/mmap.c:2452
+ mmap_region+0x1ee/0x2620 mm/mmap.c:2500
+ do_mmap+0x831/0xf60 mm/mmap.c:1364
+ vm_mmap_pgoff+0x1af/0x280 mm/util.c:542
+ ksys_mmap_pgoff+0x41f/0x5a0 mm/mmap.c:1410
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1454 [inline]
+ free_pcp_prepare+0x5d5/0xa50 mm/page_alloc.c:1504
+ free_unref_page_prepare mm/page_alloc.c:3388 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3483
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook mm/slab.h:769 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x17c/0x3b0 mm/slub.c:3476
+ __mpol_dup+0x76/0x390 mm/mempolicy.c:2407
+ mpol_dup include/linux/mempolicy.h:88 [inline]
+ vma_replace_policy mm/mempolicy.c:773 [inline]
+ mbind_range+0x132/0x760 mm/mempolicy.c:839
+ __do_sys_set_mempolicy_home_node+0x323/0x480 mm/mempolicy.c:1546
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff8880782e0300: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880782e0380: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8880782e0400: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                           ^
+ ffff8880782e0480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880782e0500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
