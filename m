@@ -2,190 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67966DA9FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C3E6DA9FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjDGIYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S231537AbjDGIYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjDGIYU (ORCPT
+        with ESMTP id S231422AbjDGIYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:24:20 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833006EAB;
-        Fri,  7 Apr 2023 01:24:18 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id ja10so39501616plb.5;
-        Fri, 07 Apr 2023 01:24:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680855858; x=1683447858;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4qApLz7WDCv18vydgjE+EOqQlINQHyff3Bn8mgcG6t8=;
-        b=lF4Lgfll6ID6Hu3nVqXXXxs4jNjfq9xtZ0JJuU/J8wyXORhGYRHdXchL73SdjaaQoF
-         qre0hPaPbI5Q1UND1R6nXAg8iq74ZRNakYOwQ2aV+MLf+7N79ZSEkbifcFqbOKxD1rpl
-         mnhMa5XXqsvrL6ddTGQtE+LQ1BdGJrBodl412how/aosm9yGF/8Am75gu0j2Pq2GvR9u
-         tcMHzF2014uS5ihsD8AIw+Yq39zWyMi7V8O/VD62O7c9LDhKwm7CxvK4rhr1gFB9bckn
-         JsmWrnD+KjJaIM60DvdR85L+NVB5rslJ7EcPqwiks7Y5KuPuOJuI6XajL3MTK4oKYbeN
-         Riqg==
-X-Gm-Message-State: AAQBX9fg3W1NRdcMaVh7pdGUx8fHsF/BBQJC2gy7LZ2y/Tgr2w7IAXEp
-        mc0kgezl5UGzB3AraP4nGHjbwCxkWjXLuQ==
-X-Google-Smtp-Source: AKy350bqI+k6OGtQYINR/AKVLWq+RlcWiaMVg+3EIvH82fBA3BBSXvQQUr5KkQWXmwhDiDXIhv+4lg==
-X-Received: by 2002:a05:6a20:2d94:b0:e4:c9f7:d280 with SMTP id bf20-20020a056a202d9400b000e4c9f7d280mr2135416pzb.58.1680855857715;
-        Fri, 07 Apr 2023 01:24:17 -0700 (PDT)
-Received: from snowbird (136-24-99-118.cab.webpass.net. [136.24.99.118])
-        by smtp.gmail.com with ESMTPSA id j24-20020a170902759800b0019ef86c2574sm2457632pll.270.2023.04.07.01.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 01:24:17 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 01:24:15 -0700
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
-Message-ID: <ZC/TL2/gLre0B4xH@snowbird>
-References: <20230329202148.71107-1-dennis@kernel.org>
- <ZCTOMVjW+pnZVGsQ@snowbird>
- <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com>
- <ZCclEE6Qw3on7/eO@snowbird>
- <CAPDyKFqc33gUYXpY==jbNrOiba2_xUYLs-bv0RTYYU5d8T0VBA@mail.gmail.com>
+        Fri, 7 Apr 2023 04:24:34 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031A06EAB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:24:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id C107F604F6;
+        Fri,  7 Apr 2023 10:24:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680855867; bh=aSptWe2x+JTH/1bmiifexMg4polrb/x5sg/MEgptsF8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RMXF/8AQXfqhvPMyFaP0XuvjIR8Zrlp5anMq87prqgOf8JQ373DwxW3mOqK0X7rAo
+         yOH0yYTaVDK1Kp4o75ir0li5nSfvUM6FR/846xBZjdrJaF0KgXk9KELrNdLJtBg8w6
+         MpF+Eyyf46kbfV4DgNf9/N7fVf6pDuP2A/bwhoXLDRUeC5tX5FFt7lfQU/j13KRNWf
+         G0vbQ3r8NwgXr2EcelAH2yRbIHKPIOd6NO3iUrtH+oWkUnsKHR/7dSYwP7I2ALLAqO
+         6Z/urqpuOoYmsNAseHbAdaqjCS0FVYG0Yj8VzpXLwN4WCJaWmwvnFCS3yiL1JDTIXL
+         HPXqY19HmjJgQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id d3joQPErXc0a; Fri,  7 Apr 2023 10:24:25 +0200 (CEST)
+Received: from [10.0.1.26] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id C795F604F5;
+        Fri,  7 Apr 2023 10:24:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1680855865; bh=aSptWe2x+JTH/1bmiifexMg4polrb/x5sg/MEgptsF8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=i6WLs71aqn9B3iqJhb2LV1q4tSd4O0UfW89fZ2as+xwy691dHfXqw2SuIGgMsF5kd
+         WAkJUNwRfJUh3G43Fe73yQkrlqZcsuAmb+JDE1kOjApPZge/SQp5/fe75wEdFmVpCG
+         6kxq7W5M/zdbl1MuRhwVilvPwS3oqI9YVdhrUBtaQT3PupB4ZX35lU7ILYLj0Z28WD
+         tlhuzRwmvhRi94GeakgzKj/Fancc6i/Yyb7hIU6SyT7lQfh10HwjynXrWahQijHsKn
+         GkrSiTqsfkwu6HpMLiuv/t5j/NDOqGaWwmlKF2WwwFlmGmmsoW2iwRPhGa7MzZ1JhD
+         SR1XY8PfkIP2Q==
+Message-ID: <1f07fd79-b7db-9bd5-f281-8ba1ca71e195@alu.unizg.hr>
+Date:   Fri, 7 Apr 2023 10:24:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqc33gUYXpY==jbNrOiba2_xUYLs-bv0RTYYU5d8T0VBA@mail.gmail.com>
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3 1/2] test_firmware: Fix some racing conditions in
+ test_fw_config locking.
+Content-Language: en-US, hr
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+References: <20230406015315.31505-1-mirsad.todorovac@alu.unizg.hr>
+ <eb117a50-79ad-4f5a-8ad9-73247107469e@kili.mountain>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <eb117a50-79ad-4f5a-8ad9-73247107469e@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 03, 2023 at 11:50:41AM +0200, Ulf Hansson wrote:
-> On Fri, 31 Mar 2023 at 20:23, Dennis Zhou <dennis@kernel.org> wrote:
-> >
-> > Hi Ulf,
-> >
-> > On Fri, Mar 31, 2023 at 02:43:10PM +0200, Ulf Hansson wrote:
-> > > On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
-> > > >
-> > > > When using dm-verity with a data partition on an emmc device, dm-verity
-> > > > races with the discovery of attached emmc devices. This is because mmc's
-> > > > probing code sets up the host data structure then a work item is
-> > > > scheduled to do discovery afterwards. To prevent this race on init,
-> > > > let's inline the first call to detection, __mm_scan(), and let
-> > > > subsequent detect calls be handled via the workqueue.
-> > >
-> > > In principle, I don't mind the changes in $subject patch, as long as
-> > > it doesn't hurt the overall initialization/boot time. Especially, we
-> > > may have more than one mmc-slot being used, so this needs to be well
-> > > tested.
-> > >
-> >
-> > I unfortunately don't have a device with multiple mmcs available. Is
-> > this something you could help me with?
+On 6.4.2023. 16:04, Dan Carpenter wrote:
+> On Thu, Apr 06, 2023 at 03:53:17AM +0200, Mirsad Goran Todorovac wrote:
+>> Some functions were called both from locked and unlocked context, so the lock
+>> was dropped prematurely, introducing a race condition when deadlock was avoided.
+>>
+>> Having two locks wouldn't assure a race-proof mutual exclusion.
+>>
+>> test_dev_config_update_bool_unlocked(), test_dev_config_update_u8_unlocked()
+>> and test_dev_config_update_size_t_unlocked() versions of the functions were
+>> introduced to be called from the locked contexts as a workaround without
+>> releasing the main driver's lock and causing a race condition, much like putc()
+>> and putc_unlocked() in stdio glibc library.
+>>
+>> This should guarantee mutual exclusion and prevent any race conditions.
+>>
 > 
-> Yes, I can help to test. Allow me a few days to see what I can do.
+> Thanks for figuring this out!  It seems like a good approach to me.
+> However, I feel like PATCH 1/1 needs some style changes.
 > 
-> Note that, just having one eMMC and one SD card should work too. It
-> doesn't have to be multiple eMMCs.
+> The question you seem to be dealing with is how consistent to be and how
+> much infrastructure to create.  Don't think about that.  Just fix the
+> bug in the most minimal way possible and don't worry about being
+> consistent.
 > 
-> >
-> > > Although, more importantly, I fail to understand how this is going to
-> > > solve the race condition. Any I/O request to an eMMC or SD requires
-> > > the mmc block device driver to be up and running too, which is getting
-> > > probed from a separate module/driver that's not part of mmc_rescan().
-> >
-> > I believe the call chain is something like this:
-> >
-> > __mmc_rescan()
-> >     mmc_rescan_try_freq()
-> >         mmc_attach_mmc()
-> >             mmc_add_card()
-> >                 device_add()
-> >                     bus_probe_device()
-> >                         mmc_blk_probe()
-> >
-> > The initial calling of this is the host probe. So effectively if there
-> > is a card attached, we're inlining the device_add() call for the card
-> > attached rather than waiting for the workqueue item to kick off.
-> >
-> > dm is a part of late_initcall() while mmc is a module_init(), when built
-> > in becoming a device_initcall(). So this solves a race via the initcall
-> > chain. In the current state, device_initcall() finishes and we move onto
-> > the late_initcall() phase. But now, dm is racing with the workqueue to
-> > init the attached emmc device.
+> (Probably the best way to make this consistent is to change the
+>   test_dev_config_update_XXX functions into a single macro that calls the
+>   correct kstroXXX function.  Then create a second macro that takes the
+>   lock and calls the first macro.  But that is a clean up patch and
+>   unrelated to this bug.)
 > 
-> You certainly have a point!
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Luis Chamberlain <mcgrof@kernel.org>
+>> Cc: Russ Weight <russell.h.weight@intel.com>
+>> Cc: Tianfei zhang <tianfei.zhang@intel.com>
+>> Cc: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> Cc: Zhengchao Shao <shaozhengchao@huawei.com>
+>> Cc: Colin Ian King <colin.i.king@gmail.com>
+>> Cc: linux-kernel@vger.kernel.org
+>> Cc: Takashi Iwai <tiwai@suse.de>
+>> Suggested-by: Dan Carpenter <error27@gmail.com>
+>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> ---
+>>   lib/test_firmware.c | 52 +++++++++++++++++++++++++++++++++------------
+>>   1 file changed, 38 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+>> index 05ed84c2fc4c..272af8dc54b0 100644
+>> --- a/lib/test_firmware.c
+>> +++ b/lib/test_firmware.c
+>> @@ -353,16 +353,26 @@ static ssize_t config_test_show_str(char *dst,
+>>   	return len;
+>>   }
+>>   
+>> -static int test_dev_config_update_bool(const char *buf, size_t size,
+>> +static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
+>>   				       bool *cfg)
+>>   {
+>>   	int ret;
+>>   
+>> -	mutex_lock(&test_fw_mutex);
+>>   	if (kstrtobool(buf, cfg) < 0)
+>>   		ret = -EINVAL;
+>>   	else
+>>   		ret = size;
+>> +
+>> +	return ret;
+>> +}
 > 
-> This should work when the mmc blk module is built-in. Even if that
-> doesn't solve the entire problem, it should be a step in the right
-> direction.
+> This change can be left out completely.
 > 
-> I will give it some more thinking and run some tests at my side, then
-> I will get back to you again.
+>> +
+>> +static int test_dev_config_update_bool(const char *buf, size_t size,
+>> +				       bool *cfg)
+>> +{
+>> +	int ret;
+>> +
+>> +	mutex_lock(&test_fw_mutex);
+>> +	ret = test_dev_config_update_bool_unlocked(buf, size, cfg);
+>>   	mutex_unlock(&test_fw_mutex);
+>>   
+>>   	return ret;
+>> @@ -373,7 +383,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
+>>   	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+>>   }
+>>   
+>> -static int test_dev_config_update_size_t(const char *buf,
+>> +static int test_dev_config_update_size_t_unlocked(
+>> +					 const char *buf,
+>>   					 size_t size,
+>>   					 size_t *cfg)
+>>   {
 > 
+> Do not rename this function.  Just add a comment that the mutext must be
+> held.  Or a WARN_ONCE().
+> 
+> 	WARN_ON_ONCE(!mutex_is_locked(&test_fw_mutex));
+> 
+> 
+>> @@ -384,9 +395,7 @@ static int test_dev_config_update_size_t(const char *buf,
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	mutex_lock(&test_fw_mutex);
+>>   	*(size_t *)cfg = new;
+>> -	mutex_unlock(&test_fw_mutex);
+>>   
+>>   	/* Always return full write size even if we didn't consume all */
+>>   	return size;
+>> @@ -402,6 +411,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
+>>   	return snprintf(buf, PAGE_SIZE, "%d\n", val);
+>>   }
+>>   
+>> +static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
+>> +{
+>> +	u8 val;
+>> +	int ret;
+>> +
+>> +	ret = kstrtou8(buf, 10, &val);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	*(u8 *)cfg = val;
+>> +
+>> +	/* Always return full write size even if we didn't consume all */
+>> +	return size;
+>> +}
+>> +
+> 
+> Just change the test_dev_config_update_u8() to not take the lock.
+> Add the comment that the lock must be held.  Change both callers to take
+> the lock.
+> 
+> 
+> Otherwise we end up creating too much duplicate code.
+> 
+>>   static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+>>   {
+>>   	u8 val;
+> 
+> regards,
+> dan carpenter
 
-Hi Ulf, is there an update on testing with this patch?
+Hi Mr. Carpenter,
 
-Thanks,
-Dennis
+Thank you for your review.
 
-> Kind regards
-> Uffe
-> 
-> > >
-> > > >
-> > > > Signed-off-by: Dennis Zhou <dennis@kernel.org>
-> > > > ---
-> > > > Sigh.. fix missing static declaration.
-> > > >
-> > > >  drivers/mmc/core/core.c | 15 +++++++++++----
-> > > >  1 file changed, 11 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> > > > index 368f10405e13..fda7ee57dee3 100644
-> > > > --- a/drivers/mmc/core/core.c
-> > > > +++ b/drivers/mmc/core/core.c
-> > > > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
-> > > >  }
-> > > >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
-> > > >
-> > > > -void mmc_rescan(struct work_struct *work)
-> > > > +static void __mmc_rescan(struct mmc_host *host)
-> > > >  {
-> > > > -       struct mmc_host *host =
-> > > > -               container_of(work, struct mmc_host, detect.work);
-> > > >         int i;
-> > > >
-> > > >         if (host->rescan_disable)
-> > > > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
-> > > >                 mmc_schedule_delayed_work(&host->detect, HZ);
-> > > >  }
-> > > >
-> > > > +void mmc_rescan(struct work_struct *work)
-> > > > +{
-> > > > +       struct mmc_host *host =
-> > > > +               container_of(work, struct mmc_host, detect.work);
-> > > > +
-> > > > +       __mmc_rescan(host);
-> > > > +}
-> > > > +
-> > > >  void mmc_start_host(struct mmc_host *host)
-> > > >  {
-> > > >         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
-> > > > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
-> > > >         }
-> > > >
-> > > >         mmc_gpiod_request_cd_irq(host);
-> > > > -       _mmc_detect_change(host, 0, false);
-> > > > +       host->detect_change = 1;
-> > > > +       __mmc_rescan(host);
-> > > >  }
-> > > >
-> > > >  void __mmc_stop_host(struct mmc_host *host)
-> > > > --
-> > > > 2.40.0
-> > > >
+I will proceed according to your guidelines and issue the next version of the
+patch set.
+
+But I cannot promise it will be before the holidays - I do not want to make
+the gods angry either ;-)
+
+I cannot promise to try smart macros or inline functions with smart function
+parameters just yet.
+
+I would consider the real success if I hunt down the remaining leak and races
+in this driver. Despite being considered a less important one.
+
+As you have previously asserted, it is not a real security issue with a CVE,
+however, for completeness sake I would like to see these problems fixed.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
+
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
