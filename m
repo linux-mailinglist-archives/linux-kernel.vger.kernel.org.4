@@ -2,95 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420D46DB5FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647E16DB5FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbjDGV6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
+        id S231484AbjDGV7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjDGV62 (ORCPT
+        with ESMTP id S231379AbjDGV7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:58:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F365D5FF0;
-        Fri,  7 Apr 2023 14:58:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE1F64EED;
-        Fri,  7 Apr 2023 21:58:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E93C433D2;
-        Fri,  7 Apr 2023 21:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680904706;
-        bh=Kky6fJPSS3fQg9xwbpyADTyHvnHtrXZw1E7q8+0lSHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jMq+eRhYUo8b7ZIuDm9IlmLcmcMOFybDxyvm0r68LsgBtuUS1Uw0JOWscxHCTYUPt
-         y7KH6nij12EhQSWjV6Y12N+3/FUQ9Ji/5whn0hfT2mNwFeFWjWQ8EiNFxkwpkhVhiI
-         l8/q1XvONiu9/20W+mger9Q6C/pwwaXuMdrYJphGW5jDqKnXqnR+F4YL4sDzF5cCPW
-         XymX7VnyH8+hl/f0oejtYx3Q5IMJyxPNZ8GZUKSeGLvNGEQ9EpZY1IhC9e5fOSptzQ
-         SKuN+Fk29G7uLn+e6TWEbYTSRwNRxzIgiJK5z2xfkQ2+u/udwrjegWVkEnF9JABYKE
-         4pNflFR1QkWgA==
-Date:   Fri, 7 Apr 2023 14:58:24 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-hardening@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] ubsan: remove cc-option test for UBSAN_TRAP
-Message-ID: <20230407215824.GA1524475@dev-arch.thelio-3990X>
-References: <20230407215406.768464-1-ndesaulniers@google.com>
+        Fri, 7 Apr 2023 17:59:38 -0400
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A307ED0
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:59:36 -0700 (PDT)
+Date:   Fri, 07 Apr 2023 21:59:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680904774; x=1681163974;
+        bh=/4akTJdCic2QY2I7m0VwCcocwGvSRK4Skfpuoyu1kww=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=uU2Fx9cUTnwZVafX317cac7uuUYBszjxUHcrXR0M/49VMnpHsIFWvicKQmUXyGfGw
+         yo3iax0MkyH3ttcV2HgFBhzSdV+hnBij/umqs9nXUQwapzsGIPEL+XrcdVJFvZNN+9
+         WxcFazU6mh/WXaa3swlfQnNMUgVATSAZT6HKxjKi1GmnUdgWc/OYG+sA+uN7ST6NbY
+         s/Fr1U1SwkmObE7e8g2aq+LBX9GHUTc4u81/FUDQu4wzjktFYqYJElNc9DGcWirqvK
+         aT5++lwop2chx993BQyfLsVnjKejfP25T4LXza0rkQRyS6uZWkxsKrRylQZovUxLx0
+         ld8n//87XrniA==
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        rust-for-linux@vger.kernel.org
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: Re: [PATCH v2 08/13] rust: introduce `ARef`
+Message-ID: <236fe27d-ce0c-88e0-6830-f4079ef23a87@protonmail.com>
+In-Reply-To: <20230405175111.5974-8-wedsonaf@gmail.com>
+References: <20230405175111.5974-1-wedsonaf@gmail.com> <20230405175111.5974-8-wedsonaf@gmail.com>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407215406.768464-1-ndesaulniers@google.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 02:54:06PM -0700, Nick Desaulniers wrote:
-> -fsanitize-undefined-trap-on-error has been supported since GCC 5.1 and
-> Clang 3.2.  The minimum supported version of these according to
-> Documentation/process/changes.rst is 5.1 and 11.0.0 respectively. Drop
-> this cc-option check.
-> 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-As an aside, we should really consider having some standard format of
-comment around cc-option checks so that we can easily remove them when
-they become stale...
-
+On 05.04.23 19:51, Wedson Almeida Filho wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> This is an owned reference to an object that is always ref-counted. This
+> is meant to be used in wrappers for C types that have their own ref
+> counting functions, for example, tasks, files, inodes, dentries, etc.
+>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 > ---
-> Masahiro, Kees: get_maintainer.pl leaves much to be desired for this
-> file. Can one of you please pick this up?
-> 
->  lib/Kconfig.ubsan | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index fd15230a703b..0e7ad0782399 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -15,7 +15,6 @@ if UBSAN
->  config UBSAN_TRAP
->  	bool "On Sanitizer warnings, abort the running kernel code"
->  	depends on !COMPILE_TEST
-> -	depends on $(cc-option, -fsanitize-undefined-trap-on-error)
->  	help
->  	  Building kernels with Sanitizer features enabled tends to grow
->  	  the kernel size by around 5%, due to adding all the debugging
-> -- 
-> 2.40.0.577.gac1e443424-goog
-> 
+> v1 -> v2: No changes
+>
+>   rust/kernel/types.rs | 107 +++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 107 insertions(+)
+>
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index dbfae9bb97ce..b071730253c7 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+> @@ -6,8 +6,10 @@ use crate::init::{self, PinInit};
+>   use alloc::boxed::Box;
+>   use core::{
+>       cell::UnsafeCell,
+> +    marker::PhantomData,
+>       mem::MaybeUninit,
+>       ops::{Deref, DerefMut},
+> +    ptr::NonNull,
+>   };
+>
+>   /// Used to transfer ownership to and from foreign (non-Rust) languages=
+.
+> @@ -295,6 +297,111 @@ opaque_init_funcs! {
+>       "Rust" manual_init4(arg1: A1, arg2: A2, arg3: A3, arg4: A4);
+>   }
+>
+> +/// Types that are _always_ reference counted.
+> +///
+> +/// It allows such types to define their own custom ref increment and de=
+crement functions.
+> +/// Additionally, it allows users to convert from a shared reference `&T=
+` to an owned reference
+> +/// [`ARef<T>`].
+> +///
+> +/// This is usually implemented by wrappers to existing structures on th=
+e C side of the code. For
+> +/// Rust code, the recommendation is to use [`Arc`](crate::sync::Arc) to=
+ create reference-counted
+> +/// instances of a type.
+> +///
+> +/// # Safety
+> +///
+> +/// Implementers must ensure that increments to the reference count keep=
+ the object alive in memory
+> +/// at least until matching decrements are performed.
+> +///
+> +/// Implementers must also ensure that all instances are reference-count=
+ed. (Otherwise they
+> +/// won't be able to honour the requirement that [`AlwaysRefCounted::inc=
+_ref`] keep the object
+> +/// alive.)
+> +pub unsafe trait AlwaysRefCounted {
+> +    /// Increments the reference count on the object.
+> +    fn inc_ref(&self);
+> +
+> +    /// Decrements the reference count on the object.
+> +    ///
+> +    /// Frees the object when the count reaches zero.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that there was a previous matching increment=
+ to the reference count,
+> +    /// and that the object is no longer used after its reference count =
+is decremented (as it may
+> +    /// result in the object being freed), unless the caller owns anothe=
+r increment on the refcount
+> +    /// (e.g., it calls [`AlwaysRefCounted::inc_ref`] twice, then calls
+> +    /// [`AlwaysRefCounted::dec_ref`] once).
+> +    unsafe fn dec_ref(obj: NonNull<Self>);
+> +}
+> +
+> +/// An owned reference to an always-reference-counted object.
+> +///
+> +/// The object's reference count is automatically decremented when an in=
+stance of [`ARef`] is
+> +/// dropped. It is also automatically incremented when a new instance is=
+ created via
+> +/// [`ARef::clone`].
+> +///
+> +/// # Invariants
+> +///
+> +/// The pointer stored in `ptr` is non-null and valid for the lifetime o=
+f the [`ARef`] instance. In
+> +/// particular, the [`ARef`] instance owns an increment on the underlyin=
+g object's reference count.
+> +pub struct ARef<T: AlwaysRefCounted> {
+> +    ptr: NonNull<T>,
+> +    _p: PhantomData<T>,
+> +}
+> +
+> +impl<T: AlwaysRefCounted> ARef<T> {
+> +    /// Creates a new instance of [`ARef`].
+> +    ///
+> +    /// It takes over an increment of the reference count on the underly=
+ing object.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that the reference count was incremented at =
+least once, and that they
+> +    /// are properly relinquishing one increment. That is, if there is o=
+nly one increment, callers
+> +    /// must not use the underlying object anymore -- it is only safe to=
+ do so via the newly
+> +    /// created [`ARef`].
+
+I think you should also mention that the pointee at `ptr` must live
+at least until this `ARef` decides to decrement the refcount.
+Otherwise I would interpret the docs as written to allow you to give
+a pointer to the stack and then free the backing storage and then
+continue to use the `ARef`.
+
+--
+Cheers,
+Benno
+
+> +    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
+> +        // INVARIANT: The safety requirements guarantee that the new ins=
+tance now owns the
+> +        // increment on the refcount.
+> +        Self {
+> +            ptr,
+> +            _p: PhantomData,
+> +        }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Clone for ARef<T> {
+> +    fn clone(&self) -> Self {
+> +        self.inc_ref();
+> +        // SAFETY: We just incremented the refcount above.
+> +        unsafe { Self::from_raw(self.ptr) }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Deref for ARef<T> {
+> +    type Target =3D T;
+> +
+> +    fn deref(&self) -> &Self::Target {
+> +        // SAFETY: The type invariants guarantee that the object is vali=
+d.
+> +        unsafe { self.ptr.as_ref() }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> From<&T> for ARef<T> {
+> +    fn from(b: &T) -> Self {
+> +        b.inc_ref();
+> +        // SAFETY: We just incremented the refcount above.
+> +        unsafe { Self::from_raw(NonNull::from(b)) }
+> +    }
+> +}
+> +
+> +impl<T: AlwaysRefCounted> Drop for ARef<T> {
+> +    fn drop(&mut self) {
+> +        // SAFETY: The type invariants guarantee that the `ARef` owns th=
+e reference we're about to
+> +        // decrement.
+> +        unsafe { T::dec_ref(self.ptr) };
+> +    }
+> +}
+> +
+>   /// A sum type that always holds either a value of type `L` or `R`.
+>   pub enum Either<L, R> {
+>       /// Constructs an instance of [`Either`] containing a value of type=
+ `L`.
+> --
+> 2.34.1
+>
+
