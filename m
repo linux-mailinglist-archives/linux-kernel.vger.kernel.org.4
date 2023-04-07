@@ -2,748 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D716DAB5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52366DAB68
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240482AbjDGKSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
+        id S230189AbjDGKV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240427AbjDGKSo (ORCPT
+        with ESMTP id S231617AbjDGKVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:18:44 -0400
-Received: from mx0b-0039f301.pphosted.com (mx0b-0039f301.pphosted.com [148.163.137.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBB486A6;
-        Fri,  7 Apr 2023 03:18:41 -0700 (PDT)
-Received: from pps.filterd (m0174682.ppops.net [127.0.0.1])
-        by mx0b-0039f301.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3377AcPO012311;
-        Fri, 7 Apr 2023 10:18:31 GMT
-Received: from eur03-dba-obe.outbound.protection.outlook.com (mail-dbaeur03lp2173.outbound.protection.outlook.com [104.47.51.173])
-        by mx0b-0039f301.pphosted.com (PPS) with ESMTPS id 3pt36rt822-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 10:18:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NExFDFrZZfv/RNR7g1cZsBvIMNoDkgwqnvvts1U+Fds7gfdk5bck6u41Oqp2PpQvfQ5jSBcOoDrAEtVmxFnL4IJ4X9Ql0u4N1wka7YbMU044iyz5BlTKAPsAWPG1qlw8qksorKsefjt9hTVIuKp6ZCfO5PMUTlvno6pJY2yAd3hN8pvlZALaxUgosDZY8YhOI302TuLz1XlPL5YDT6ASLMwDaHyTCmtUiguL3WW89qo8EkKFuqQUljbJwnkJHhNhua4HiLKxA8EqkaFujFPWg3F/H69l6J7TaphED6U8vXkhVvwBMmue6NGzVXNmFu7wFT3PMPpvWusvt6NzLowocg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KBNBzaR1XfDVGvLRPVP10xhV/ix0pCzxaXwqE3L1fhM=;
- b=GHC0w/FW9u/nEcFPXbsz9XUOPz0u7SRbh0wOJDl7eE34gbdFwfZDzF30k9dqzD6D174NLSZUEZ+uEJLyquY/70yvblEMyEDuu10Dcrha6Gi6paqgLeGTu/5rt1+wTyalifvHLzz5Sv8S8SJWdwVGO+AOFgPs9pT6PI/vKEf1bkRuatrW84GzukBMjIgGo+1SaND8FPnymNAUX/T+OSTF4lQDYSL5WlzcABKGgV9CJ3MkiImpUJJdihcQEpWylC+NvcIZExwZ0l7fK4mvPF1eRyLA8n2+F4YmPugisxU3T0uptTgF41Zbvp79JU/4vDdqxcJOb94QzREGnXEGismrcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
- dkim=pass header.d=epam.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KBNBzaR1XfDVGvLRPVP10xhV/ix0pCzxaXwqE3L1fhM=;
- b=EjbFiV1YaIPY9Zbe4Y+RtpKlw1qC+BUb6g0yokFHB54L2i51Wv3Q1B8ekEFaHzx8CEjBhwsIa6HET3FfjG8XkSJeGNvy+Veom5hU3QUUCOxjkUxdrXN5Xft2Rhph8gED5gLDrHdCFb/xccTbHCt4AASwFZiyRuWXv2R9858D1b6ddHvbMXvy9k6ypGKD4pUxAAZY4B/W5xwa23wl+krZ8iaimrQla0bsHYkFxYhG6jK0mBACiwCwQ4tiEEj2jdW2tK/LW0/LHs5MhYg86FRXqq1qUF9r1Ux8V3ydTql9pGKPnlqXVtrvfWI0T1LZ/nsbWHam4VtQiC0bOWrSCEZGFA==
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
- by DU0PR03MB8743.eurprd03.prod.outlook.com (2603:10a6:10:3ca::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.34; Fri, 7 Apr
- 2023 10:18:28 +0000
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::bcf5:cd14:fd35:1300]) by PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::bcf5:cd14:fd35:1300%9]) with mapi id 15.20.6277.033; Fri, 7 Apr 2023
- 10:18:27 +0000
-From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-To:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>
-CC:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-Subject: [RFC v1 2/2] pinctrl: Implementation of the generic scmi-pinctrl
- driver
-Thread-Topic: [RFC v1 2/2] pinctrl: Implementation of the generic scmi-pinctrl
- driver
-Thread-Index: AQHZaTpLEGNMTFeGtkiPcS7WtixCbw==
-Date:   Fri, 7 Apr 2023 10:18:27 +0000
-Message-ID: <6ac2f85213c3e79de7daabe9ca3a5f471cf8d370.1680793130.git.oleksii_moisieiev@epam.com>
-References: <cover.1680793130.git.oleksii_moisieiev@epam.com>
-In-Reply-To: <cover.1680793130.git.oleksii_moisieiev@epam.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PA4PR03MB7136:EE_|DU0PR03MB8743:EE_
-x-ms-office365-filtering-correlation-id: c3a291d2-2545-4efa-4853-08db37516df2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CF0DJD3w6lVOBiv7J5bTH1t/8mb1HfbGYJbykuzAUMr8Fk1q7Dx14CkhVszClhtwT7vNPeLk/RXV57BC5dW+nLz5T2nsOYcCgKNsG2p2uM6pbQOWXaT+czgo/sENKP7XN6/JqxkiKRIXcBNNhoS2GxuQ4amdWYV847TRy+ZNm/0WZwpzFOdmZejeVjZPH3ud/yjJtLjN4aQ43V/FfcYtC2FoDWibDip5kuTAapmr9WOxa8Etrtf6PW8/44GWef66Y5PbLHU6zgFpcItihN3RTPhjCLOqFgA1c6dPjGNtB2CadEbS9H29f2IOl19bj47EBK8NfggEqgu+5VYr2PpGeUwqJ8a0u99owmbuKH035o7AMqsrdYNRo1KlR0q6t24OTDDk6qL+K3w4cJ9jDDmbqW5KW+am++NQwmNEiK9S7cS37du9RTDlzCtSrP1qf8g6KvrbyNJLRR1+FstPAhPUFjWcVPdbk763DIX+TsuC9zZV2v18ztCx8COfUrj+blK75cfFPbDaF7m6lR3ldiGuq+1hHY6KcWHBYie582sqdom1S5O1gdBr6xBAOEAnK4wXl87Zy3sA2z3YjR1lMlzmXaBYyqn/se36/YuIEuEYs0GrDLq/JJQfFkin/Dj2eJTwmvszzfVmNrTc7y1ftvCBig==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(346002)(376002)(39860400002)(451199021)(316002)(6512007)(6506007)(186003)(83380400001)(26005)(30864003)(54906003)(122000001)(5660300002)(2906002)(2616005)(6486002)(38100700002)(8936002)(38070700005)(71200400001)(86362001)(41300700001)(36756003)(4326008)(6916009)(8676002)(64756008)(66446008)(66556008)(66946007)(76116006)(66476007)(91956017)(478600001)(41533002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?p/oQb8vh4zOqcpZFN32cA4x9G21ulG3xh74ToT6sm5kzUGurTEpbnE6pIh?=
- =?iso-8859-1?Q?ikpHhfnCCwMz02HL8OAlVXvlfswPUwdG2saWgiZFuQ04lf3FubpXrCQefG?=
- =?iso-8859-1?Q?vVTUCR4pAMovJgptJPD7QHv694spAs8SCiPyCGT/FrLYzMcdzCasQmc1FB?=
- =?iso-8859-1?Q?LgbfK/duF8iXAvpT6rGl9GJWdDaLRSvHFbtVvzqvbWu/2n5kr3j/X5H+hU?=
- =?iso-8859-1?Q?WXic4uHyt/l31CzLIxTcjhxc/wTyil11A+8/46n7SGzypixyy/NKHbVFAq?=
- =?iso-8859-1?Q?YmERGpLbbkVKQWV2L+0EVmdiHdvhZvURwxePpL3uRmpyhq6VDjU2uqEzw1?=
- =?iso-8859-1?Q?1I7OMjDbP5/BNgUb1L76LNwxXbe3rBOS8YyAM1kge6X2zSWGalf0rFMltM?=
- =?iso-8859-1?Q?rE5k+feLnOXbD/0RTxWYAV2tT0l5xwCPGTPQ7CQ9tYQRZGBiePi74Ab0qN?=
- =?iso-8859-1?Q?MhDBxq9MLVmQURRdUXiibfmFEtCkm2O/ypkzL+S2XwGlntL8USZa35dHFt?=
- =?iso-8859-1?Q?6+O84AdUav8G9itYOMGzz6bD5awRm9aYdQGS7WvEccrhLjrhFbQqgNhgdc?=
- =?iso-8859-1?Q?wMJ52Q2ARJnAmLaBI8WdFQQdlNoSFyw1Yu8CuIimK2xBEhrIO1gW6qzmSm?=
- =?iso-8859-1?Q?rjIjK8Cball+3x5JrbTj5bopM7nEj2d3G1ubdf7rdZZ3ioerfVsSr/3MXS?=
- =?iso-8859-1?Q?zdDnu5lPkzui2rgr9PIqEZGWSyg8Zh3RdmqogVXhH52YyRZ+/GVkenDJ6a?=
- =?iso-8859-1?Q?mvOGIJ4Wua/oDz5tWuk6sHeRmi+iyCkBiDXQNSH0g7a4WPwM4ePdSuvGoW?=
- =?iso-8859-1?Q?S4NiqfSGW2blR3XHlfCa4d+0SWYFH//pIsm132GAY1iJfRVYxjHFB0OnDp?=
- =?iso-8859-1?Q?o9Y9IjGdj39lP+b2LlYlszekTwwcoiXSmyY6J+jol5rA6UNNj3J77RXTOC?=
- =?iso-8859-1?Q?1Q3B9Aywt8WjY21SZQIhnCgA0x8esPmmYDtoFWrUh15I/GahcDhW+rqZt/?=
- =?iso-8859-1?Q?nAWZCPqvdYkZJO8ftUuiySURYnJGXRTpLBMpI0AElNoOJ69E1El+6bvU3E?=
- =?iso-8859-1?Q?M/+NZouBk2vRF7gxIwD3/H9DumuDBi8/1UWj8z6gYSAQu7llUEt68QGsNA?=
- =?iso-8859-1?Q?EP37Pwmd74IEEGZwPss66snG0HTLdIF9oZnIikzodrT+yy7q1F6MNGnlJq?=
- =?iso-8859-1?Q?7t9DOZqTUYWeyZeHrTruKe/GPnFZLheJxI+Qb2IBJl52Z116lIh/8RdOUJ?=
- =?iso-8859-1?Q?hdTWswCJZTAcJ3w4CGJmSwq0uV+rkyAd+rKjCt5kHahq6Wig2kD6C4oRRY?=
- =?iso-8859-1?Q?hy5Oyko/JGh/asws9uk3f/5y6Jg84ihq9tr1I0BVVQ96rU17QDdvXZ7efA?=
- =?iso-8859-1?Q?fEFnFnrVq7MinBskBYBj0cQiKBjK/2PIPKHmg7zOdzmvA3SHI4bL4V1vPZ?=
- =?iso-8859-1?Q?Jf0ojo/TmsuerJwJWjGd+CaYjnYMk1uZ5r2RSlon+bHxnM1MVKokvYsnFO?=
- =?iso-8859-1?Q?Mic8lDIkn1ZZPU3tEQ5rG0XCZT/qi5/CbaCUBTpoe74moTDAh8Zs2+l7wc?=
- =?iso-8859-1?Q?Dcg24DPzyIR9qp/7vAOFFnusfmFPlSl17qVRSGc2S8EGFyufkrOf9FxkKi?=
- =?iso-8859-1?Q?2Yy7xoMXSO/rZr2DK7RO9spfz1smqdz04puLj1w2Bum5SIUVvkLLg+Ig?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 7 Apr 2023 06:21:23 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E8D86A6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:21:20 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id by26so7418734ejb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 03:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680862879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GO1ajaNIRSPjols2zAhbsFXjLC+4bF7M3IO4JjE3HbQ=;
+        b=nK2k4cMC1wDMjCT5ebZroxOi1/s8YMYQsP08rYWyS/eZNfqXLJIY88sgzEJeXKUB5g
+         KDsNbB0fuxxJIbI0/P6g2MOBnNizs4frd9CiIqbal6AKs67CI1Jygv/sMJRbGUKEXdVW
+         /cqfR2yH1jcbmR3S94CHaCFz4FT6whKSSt8SClEkUPjfnlOHPaGghVsdox71+KgaSgZF
+         gIQItYq8SgXG7bFWutD0S5QE6u6JWzRR+A3bFbXiIixPEJ5h+GvBDcLmI1RF+8RL4iza
+         wDR4ofMxGKNlpOfm5vNCntbD+WOum9J2J/GjXBnX2Ul0nVUPTDLSaSFwoWOTDAPVoxv5
+         +bfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680862879;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GO1ajaNIRSPjols2zAhbsFXjLC+4bF7M3IO4JjE3HbQ=;
+        b=akedHYWu2bO/nnA0gjjBVVEsZKeC5/PAhJMjmkbgBdwje5UphkbsKnyInBx0w0dmab
+         dvxw7szHc8h5CYbrQbKu/4XmdmTlnSITBnhkgapeeqSnUqRNRTb/+dzFsgGG8NH3VUs/
+         KtCAQYHbRInCwqqAP1tQ4doAfsPtUS3k/KVPtfkMIoj/2iSQvB6QWiLwUX+Z92iaNG2E
+         Up1cR2QI5l/8iUJCSqvo1E9rKyEE+wof4mgCfl6630CthpV2mMMBqCg3keZjS7igei8G
+         lTo86NGBdWGdzzshdCw1J8X5u6oH/zmad+qpHscsIzEoGspw3NmrEDCo/5FtrwOq6TW0
+         lQ6g==
+X-Gm-Message-State: AAQBX9frssR+wTEVJhqRpzkIhgbT05P06B+PZkiK+TZPHZrZ8l7Hfiwj
+        BKemCgGoPjU424efBQcbTPGSGIQ9nY+/gF35xEFwew==
+X-Google-Smtp-Source: AKy350bvzEIr/SO34y5o+ffSKQZtvqWb/dpv9GQJ1koPxh4EQrX/wAAF+awbIaQ3DzRrBwpjfbxpD2+PY74M10EC75s=
+X-Received: by 2002:a17:906:f198:b0:8e5:411d:4d09 with SMTP id
+ gs24-20020a170906f19800b008e5411d4d09mr867922ejb.15.1680862878985; Fri, 07
+ Apr 2023 03:21:18 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: epam.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3a291d2-2545-4efa-4853-08db37516df2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2023 10:18:27.8310
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MBqhJxwW/ulM5IwYxcQddap5laQ3TPYTFM6/DdrLeSyQJo8w2X2ZXFHn6nZrwSFAHLeCFxGV8JY8q01aGEJsegYtbkT9BRWle2wgXPOLD8g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR03MB8743
-X-Proofpoint-GUID: RawWp8wFUAxQ3Bdvk6Ab86MseESYR3Jl
-X-Proofpoint-ORIG-GUID: RawWp8wFUAxQ3Bdvk6Ab86MseESYR3Jl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_06,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- spamscore=0 impostorscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
- phishscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304070095
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406074005.1784728-1-usama.anjum@collabora.com>
+ <20230406074005.1784728-3-usama.anjum@collabora.com> <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
+ <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com> <CABb0KFF+sKSv7jdxBbXpt5A2WO83tKb9viq-kKurXN_e1VcFhQ@mail.gmail.com>
+ <c535ce4a-d7da-1ce2-9883-7cefb6dd88a2@collabora.com> <CABb0KFE8pn+VORr8c=HWzKzJ5L5ZBRZMg2Q1dEZGU9gLqGZNLQ@mail.gmail.com>
+ <b3e4d688-b96f-7c44-a6be-375d44263c85@collabora.com>
+In-Reply-To: <b3e4d688-b96f-7c44-a6be-375d44263c85@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Fri, 7 Apr 2023 12:21:07 +0200
+Message-ID: <CABb0KFE=zevnsxk7U726efu8gg=9dpGyDLAwL0ShS2ZygQVhMA@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-scmi-pinctrl driver implements pinctrl driver interface and using
-SCMI protocol to redirect messages from pinctrl subsystem SDK to
-SCP firmware, which does the changes in HW.
-
-This setup expects SCP firmware (or similar system, such as ATF)
-to be installed on the platform, which implements pinctrl driver
-for the specific platform.
-
-SCMI-Pinctrl driver should be configured from the device-tree and uses
-generic device-tree mappings for the configuration.
-
-Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
----
- MAINTAINERS                    |   1 +
- drivers/pinctrl/Makefile       |   1 +
- drivers/pinctrl/pinctrl-scmi.c | 555 +++++++++++++++++++++++++++++++++
- 3 files changed, 557 insertions(+)
- create mode 100644 drivers/pinctrl/pinctrl-scmi.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index abc543fd7544..f7559b3b5967 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16966,6 +16966,7 @@ M:	Oleksii Moisieiev <oleksii_moisieiev@epam.com>
- L:	linux-arm-kernel@lists.infradead.org
- S:	Maintained
- F:	drivers/firmware/arm_scmi/pinctrl.c
-+F:	drivers/pinctrl/pinctrl-scmi.c
-=20
- SYSTEM RESET/SHUTDOWN DRIVERS
- M:	Sebastian Reichel <sre@kernel.org>
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index f53933b2ff02..163fe8a06878 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -47,6 +47,7 @@ obj-$(CONFIG_PINCTRL_INGENIC)	+=3D pinctrl-ingenic.o
- obj-$(CONFIG_PINCTRL_RK805)	+=3D pinctrl-rk805.o
- obj-$(CONFIG_PINCTRL_OCELOT)	+=3D pinctrl-ocelot.o
- obj-$(CONFIG_PINCTRL_EQUILIBRIUM)   +=3D pinctrl-equilibrium.o
-+obj-$(CONFIG_PINCTRL_SCMI)	+=3D pinctrl-scmi.o
-=20
- obj-y				+=3D actions/
- obj-$(CONFIG_ARCH_ASPEED)	+=3D aspeed/
-diff --git a/drivers/pinctrl/pinctrl-scmi.c b/drivers/pinctrl/pinctrl-scmi.=
-c
-new file mode 100644
-index 000000000000..9b0e884a2829
---- /dev/null
-+++ b/drivers/pinctrl/pinctrl-scmi.c
-@@ -0,0 +1,555 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * System Control and Power Interface (SCMI) Protocol based clock driver
-+ *
-+ * Copyright (C) 2021 EPAM.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/of.h>
-+#include <linux/module.h>
-+#include <linux/pinctrl/machine.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinconf-generic.h>
-+#include <linux/pinctrl/pinctrl.h>
-+#include <linux/pinctrl/pinmux.h>
-+#include <linux/scmi_protocol.h>
-+#include <linux/slab.h>
-+
-+#include "pinctrl-utils.h"
-+#include "core.h"
-+#include "pinconf.h"
-+
-+#define DRV_NAME "scmi-pinctrl"
-+
-+struct scmi_pinctrl_funcs {
-+	unsigned int num_groups;
-+	const char **groups;
-+};
-+
-+struct scmi_pinctrl {
-+	struct device *dev;
-+	struct scmi_handle *handle;
-+	struct pinctrl_dev *pctldev;
-+	struct pinctrl_desc pctl_desc;
-+	struct scmi_pinctrl_funcs *functions;
-+	unsigned int nr_functions;
-+	char **groups;
-+	unsigned int nr_groups;
-+	struct pinctrl_pin_desc *pins;
-+	unsigned int nr_pins;
-+};
-+
-+static int pinctrl_scmi_get_groups_count(struct pinctrl_dev *pctldev)
-+{
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	return handle->pinctrl_ops->get_groups_count(handle);
-+}
-+
-+static const char *pinctrl_scmi_get_group_name(struct pinctrl_dev *pctldev=
+On Fri, 7 Apr 2023 at 12:15, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 4/7/23 3:04=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Fri, 7 Apr 2023 at 11:35, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >> On 4/7/23 12:23=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Thu, 6 Apr 2023 at 23:12, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>>> On 4/7/23 1:12=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
+> >>>>> <usama.anjum@collabora.com> wrote:
+> >>>>> [...]
+> >>>>>> --- a/fs/proc/task_mmu.c
+> >>>>>> +++ b/fs/proc/task_mmu.c
+> >>>>> [...]
+> >>>>>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start=
 ,
-+					       unsigned int selector)
-+{
-+	int ret;
-+	const char *name;
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return NULL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return NULL;
-+
-+	handle =3D pmx->handle;
-+
-+	ret =3D handle->pinctrl_ops->get_group_name(handle, selector, &name);
-+	if (ret) {
-+		dev_err(pmx->dev, "get name failed with err %d", ret);
-+		return NULL;
-+	}
-+
-+	return name;
-+}
-+
-+static int pinctrl_scmi_get_group_pins(struct pinctrl_dev *pctldev,
-+				       unsigned int selector,
-+				       const unsigned int **pins,
-+				       unsigned int *num_pins)
-+{
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	return handle->pinctrl_ops->get_group_pins(handle, selector,
-+						   pins, num_pins);
-+}
-+
-+static void pinctrl_scmi_pin_dbg_show(struct pinctrl_dev *pctldev,
-+				      struct seq_file *s,
-+				      unsigned int offset)
-+{
-+	seq_puts(s, DRV_NAME);
-+}
-+
-+#ifdef CONFIG_OF
-+static int pinctrl_scmi_dt_node_to_map(struct pinctrl_dev *pctldev,
-+				       struct device_node *np_config,
-+				       struct pinctrl_map **map,
-+				       u32 *num_maps)
-+{
-+	return pinconf_generic_dt_node_to_map(pctldev, np_config, map,
-+					      num_maps, PIN_MAP_TYPE_INVALID);
-+}
-+
-+static void pinctrl_scmi_dt_free_map(struct pinctrl_dev *pctldev,
-+				     struct pinctrl_map *map, u32 num_maps)
-+{
-+	kfree(map);
-+}
-+
-+#endif /* CONFIG_OF */
-+
-+static const struct pinctrl_ops pinctrl_scmi_pinctrl_ops =3D {
-+	.get_groups_count =3D pinctrl_scmi_get_groups_count,
-+	.get_group_name =3D pinctrl_scmi_get_group_name,
-+	.get_group_pins =3D pinctrl_scmi_get_group_pins,
-+	.pin_dbg_show =3D pinctrl_scmi_pin_dbg_show,
-+#ifdef CONFIG_OF
-+	.dt_node_to_map =3D pinctrl_scmi_dt_node_to_map,
-+	.dt_free_map =3D pinctrl_scmi_dt_free_map,
-+#endif
-+};
-+
-+static int pinctrl_scmi_get_functions_count(struct pinctrl_dev *pctldev)
-+{
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	return handle->pinctrl_ops->get_functions_count(handle);
-+}
-+
-+static const char *pinctrl_scmi_get_function_name(struct pinctrl_dev *pctl=
-dev,
-+						  unsigned int selector)
-+{
-+	int ret;
-+	const char *name;
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return NULL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return NULL;
-+
-+	handle =3D pmx->handle;
-+
-+	ret =3D handle->pinctrl_ops->get_function_name(handle, selector, &name);
-+	if (ret) {
-+		dev_err(pmx->dev, "get name failed with err %d", ret);
-+		return NULL;
-+	}
-+
-+	return name;
-+}
-+
-+static int pinctrl_scmi_get_function_groups(struct pinctrl_dev *pctldev,
-+					    unsigned int selector,
-+					    const char * const **groups,
-+					    unsigned int * const num_groups)
-+{
-+	const unsigned int *group_ids;
-+	int ret, i;
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle || !groups || !num_groups)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	if ((selector < pmx->nr_functions)
-+		&& (pmx->functions[selector].num_groups)) {
-+		*groups =3D (const char * const *)pmx->functions[selector].groups;
-+		*num_groups =3D pmx->functions[selector].num_groups;
-+		return 0;
-+	}
-+
-+	ret =3D handle->pinctrl_ops->get_function_groups(handle, selector,
-+						       &pmx->functions[selector].num_groups,
-+						       &group_ids);
-+	if (ret) {
-+		dev_err(pmx->dev, "Unable to get function groups, err %d", ret);
-+		return ret;
-+	}
-+
-+	*num_groups =3D pmx->functions[selector].num_groups;
-+	if (!*num_groups)
-+		return -EINVAL;
-+
-+	pmx->functions[selector].groups =3D
-+		devm_kmalloc_array(pmx->dev, *num_groups,
-+			sizeof(*pmx->functions[selector].groups),
-+			GFP_KERNEL | __GFP_ZERO);
-+	if (!pmx->functions[selector].groups)
-+		return -ENOMEM;
-+
-+	for (i =3D 0; i < *num_groups; i++) {
-+		pmx->functions[selector].groups[i]
-+			=3D pinctrl_scmi_get_group_name(pmx->pctldev,
-+						      group_ids[i]);
-+		if (!pmx->functions[selector].groups[i]) {
-+			ret =3D -ENOMEM;
-+			goto error;
-+		}
-+	}
-+
-+	*groups =3D (const char * const *)pmx->functions[selector].groups;
-+
-+	return 0;
-+
-+error:
-+	kfree(pmx->functions[selector].groups);
-+
-+	return ret;
-+}
-+
-+static int pinctrl_scmi_func_set_mux(struct pinctrl_dev *pctldev,
-+				     unsigned int selector, unsigned int group)
-+{
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	return handle->pinctrl_ops->set_mux(handle, selector, group);
-+}
-+
-+static int pinctrl_scmi_request(struct pinctrl_dev *pctldev,
-+				unsigned int offset)
-+{
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	return handle->pinctrl_ops->request_pin(handle, offset);
-+}
-+
-+static int pinctrl_scmi_free(struct pinctrl_dev *pctldev, unsigned int off=
-set)
-+{
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	return handle->pinctrl_ops->free_pin(handle, offset);
-+}
-+
-+static const struct pinmux_ops pinctrl_scmi_pinmux_ops =3D {
-+	.request =3D pinctrl_scmi_request,
-+	.free =3D pinctrl_scmi_free,
-+	.get_functions_count =3D pinctrl_scmi_get_functions_count,
-+	.get_function_name =3D pinctrl_scmi_get_function_name,
-+	.get_function_groups =3D pinctrl_scmi_get_function_groups,
-+	.set_mux =3D pinctrl_scmi_func_set_mux,
-+};
-+
-+static int pinctrl_scmi_pinconf_get(struct pinctrl_dev *pctldev,
-+				    unsigned int _pin,
-+				    unsigned long *config)
-+{
-+	const struct scmi_handle *handle;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle || !config)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	return handle->pinctrl_ops->get_config(handle, _pin, (u32 *)config);
-+}
-+
-+static int pinctrl_scmi_pinconf_set(struct pinctrl_dev *pctldev,
-+				    unsigned int _pin,
-+				    unsigned long *configs,
-+				    unsigned int num_configs)
-+{
-+	const struct scmi_handle *handle;
-+	int i, ret;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle || !configs || num_configs =3D=3D 0)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	for (i =3D 0; i < num_configs; i++) {
-+		ret =3D handle->pinctrl_ops->set_config(handle, _pin, configs[i]);
-+		if (ret) {
-+			dev_err(pmx->dev, "Error parsing config %ld\n",
-+				configs[i]);
-+			break;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static int pinctrl_scmi_pinconf_group_set(struct pinctrl_dev *pctldev,
-+					  unsigned int group,
-+					  unsigned long *configs,
-+					  unsigned int num_configs)
-+{
-+	const struct scmi_handle *handle;
-+	int i, ret;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!pctldev)
-+		return -EINVAL;
-+
-+	pmx =3D pinctrl_dev_get_drvdata(pctldev);
-+
-+	if (!pmx || !pmx->handle || !configs || num_configs =3D=3D 0)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	for (i =3D 0; i < num_configs; i++) {
-+		ret =3D handle->pinctrl_ops->set_config_group(handle, group,
-+							    configs[i]);
-+		if (ret) {
-+			dev_err(pmx->dev, "Error parsing config =3D %ld",
-+				configs[i]);
-+			break;
-+		}
-+	}
-+
-+	return ret;
-+};
-+
-+static const struct pinconf_ops pinctrl_scmi_pinconf_ops =3D {
-+	.is_generic =3D true,
-+	.pin_config_get =3D pinctrl_scmi_pinconf_get,
-+	.pin_config_set =3D pinctrl_scmi_pinconf_set,
-+	.pin_config_group_set =3D pinctrl_scmi_pinconf_group_set,
-+	.pin_config_config_dbg_show =3D pinconf_generic_dump_config,
-+};
-+
-+static int pinctrl_scmi_get_pins(struct scmi_pinctrl *pmx,
-+				 unsigned int *nr_pins,
-+				 const struct pinctrl_pin_desc **pins)
-+{
-+	int ret, i;
-+	struct scmi_handle *handle;
-+
-+	if (!pmx)
-+		return -EINVAL;
-+
-+	handle =3D pmx->handle;
-+
-+	if (!handle || !pins || !nr_pins)
-+		return -EINVAL;
-+
-+	if (pmx->nr_pins) {
-+		*pins =3D pmx->pins;
-+		*nr_pins =3D pmx->nr_pins;
-+		return 0;
-+	}
-+
-+	*nr_pins =3D handle->pinctrl_ops->get_pins_count(handle);
-+
-+	pmx->nr_pins =3D *nr_pins;
-+	pmx->pins =3D devm_kmalloc_array(pmx->dev, *nr_pins, sizeof(*pmx->pins),
-+				       GFP_KERNEL);
-+	if (!pmx->pins)
-+		return -ENOMEM;
-+
-+	for (i =3D 0; i < *nr_pins; i++) {
-+		pmx->pins[i].number =3D i;
-+		ret =3D handle->pinctrl_ops->get_pin_name(handle, i,
-+							&pmx->pins[i].name);
-+		if (ret) {
-+			dev_err(pmx->dev, "Can't get name for pin %d: rc %d",
-+				i, ret);
-+			goto err;
-+		}
-+	}
-+
-+	*pins =3D pmx->pins;
-+	dev_dbg(pmx->dev, "got pins %d", *nr_pins);
-+
-+	return 0;
-+ err:
-+	kfree(pmx->pins);
-+	pmx->nr_pins =3D 0;
-+
-+	return ret;
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] =3D {
-+	{ SCMI_PROTOCOL_PINCTRL, "pinctrl" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static int scmi_pinctrl_probe(struct scmi_device *sdev)
-+{
-+	int ret;
-+	struct scmi_pinctrl *pmx;
-+
-+	if (!sdev || !sdev->handle)
-+		return -EINVAL;
-+
-+	pmx =3D devm_kzalloc(&sdev->dev, sizeof(*pmx), GFP_KERNEL);
-+	if (!pmx)
-+		return -ENOMEM;
-+
-+	pmx->handle =3D sdev->handle;
-+	if (!pmx->handle) {
-+		ret =3D -ENOMEM;
-+		goto clean;
-+	}
-+
-+	pmx->dev =3D &sdev->dev;
-+	pmx->pctl_desc.name =3D DRV_NAME;
-+	pmx->pctl_desc.owner =3D THIS_MODULE;
-+	pmx->pctl_desc.pctlops =3D &pinctrl_scmi_pinctrl_ops;
-+	pmx->pctl_desc.pmxops =3D &pinctrl_scmi_pinmux_ops;
-+	pmx->pctl_desc.confops =3D &pinctrl_scmi_pinconf_ops;
-+
-+	ret =3D pinctrl_scmi_get_pins(pmx, &pmx->pctl_desc.npins,
-+				    &pmx->pctl_desc.pins);
-+	if (ret)
-+		goto clean;
-+
-+	ret =3D devm_pinctrl_register_and_init(&sdev->dev, &pmx->pctl_desc, pmx,
-+					     &pmx->pctldev);
-+	if (ret) {
-+		dev_err(&sdev->dev, "could not register: %i\n", ret);
-+		goto clean;
-+	}
-+
-+	pmx->nr_functions =3D pinctrl_scmi_get_functions_count(pmx->pctldev);
-+	pmx->nr_groups =3D pinctrl_scmi_get_groups_count(pmx->pctldev);
-+
-+	if (pmx->nr_functions) {
-+		pmx->functions =3D
-+			devm_kmalloc_array(&sdev->dev, pmx->nr_functions,
-+					   sizeof(*pmx->functions),
-+					   GFP_KERNEL | __GFP_ZERO);
-+		if (!pmx->functions) {
-+			ret =3D -ENOMEM;
-+			goto clean;
-+		}
-+	}
-+
-+	if (pmx->nr_groups) {
-+		pmx->groups =3D
-+			devm_kmalloc_array(&sdev->dev, pmx->nr_groups,
-+					   sizeof(*pmx->groups),
-+					   GFP_KERNEL | __GFP_ZERO);
-+		if (!pmx->groups) {
-+			ret =3D -ENOMEM;
-+			goto clean;
-+		}
-+	}
-+
-+	return pinctrl_enable(pmx->pctldev);
-+
-+clean:
-+	if (pmx) {
-+		kfree(pmx->functions);
-+		kfree(pmx->groups);
-+	}
-+
-+	kfree(pmx);
-+
-+	return ret;
-+}
-+
-+static struct scmi_driver scmi_pinctrl_driver =3D {
-+	.name =3D DRV_NAME,
-+	.probe =3D scmi_pinctrl_probe,
-+	.id_table =3D scmi_id_table,
-+};
-+module_scmi_driver(scmi_pinctrl_driver);
-+
-+MODULE_AUTHOR("Oleksii Moisieiev <oleksii_moisieiev@epam.com>");
-+MODULE_DESCRIPTION("ARM SCMI pin controller driver");
-+MODULE_LICENSE("GPL v2");
---=20
-2.25.1
+> >>>>>> +                                 unsigned long end, struct mm_wal=
+k *walk)
+> >>>>>> +{
+> >>> [...]
+> >>>>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> >>>>>> +       ptl =3D pmd_trans_huge_lock(pmd, vma);
+> >>>>>> +       if (ptl) {
+> >>>>> [...]
+> >>>>>> +               return ret;
+> >>>>>> +       }
+> >>>>>> +process_smaller_pages:
+> >>>>>> +       if (pmd_trans_unstable(pmd))
+> >>>>>> +               return 0;
+> >>>>>
+> >>>>> Why pmd_trans_unstable() is needed here and not only after split_hu=
+ge_pmd()?
+> >>>> I'm not entirely sure. But the idea is if THP is unstable, we should
+> >>>> return. As it doesn't seem like after splitting THP can be unstable,=
+ we
+> >>>> should not check it. Do you agree with the following?
+> >>>
+> >>> The description of pmd_trans_unstable() [1] seems to indicate that it
+> >>> is needed only after split_huge_pmd().
+> >>>
+> >>> [1] https://elixir.bootlin.com/linux/v6.3-rc5/source/include/linux/pg=
+table.h#L1394
+> >> Sorry, yeah pmd_trans_unstable() is need after split. But it is also n=
+eeded
+> >> in normal case when ptl is NULL to rule out the case if pmd is unstabl=
+e
+> >> before performing operation on normal pages:
+> >>
+> >> ptl =3D pmd_trans_huge_lock(pmd, vma);
+> >> if (ptl) {
+> >> ...
+> >> }
+> >> if (pmd_trans_unstable(pmd))
+> >>         return 0;
+> >>
+> >> This file has usage examples of pmd_trans_unstable():
+> >>
+> >> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L6=
+34
+> >> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1=
+195
+> >> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1=
+543
+> >> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1=
+887
+> >>
+> >> So we are good with what we have in this patch.
+> >
+> > Shouldn't we signal ACTION_AGAIN then in order to call .pte_hole?
+> I'm not sure. I've not done research on it if we need to signal
+> ACTION_AGAIN as this function pagemap_scan_pmd_entry() mimics how
+> pagemap_pmd_range() handles reads to the pagemap file. pagemap_pmd_range(=
+)
+> isn't doing anything if pmd is unstable. Hence we also not doing anything=
+.
+
+Doesn't this mean that if we scan a file-backed vma we would miss
+non-present parts of the mapping in the output?
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
