@@ -2,137 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8F76DACB5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A266DACBC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233426AbjDGMq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 08:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S235839AbjDGMuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 08:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjDGMqy (ORCPT
+        with ESMTP id S230082AbjDGMuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 08:46:54 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DBAD02;
-        Fri,  7 Apr 2023 05:46:50 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso18725824otv.6;
-        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
+        Fri, 7 Apr 2023 08:50:21 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA3E61B2;
+        Fri,  7 Apr 2023 05:50:20 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m6-20020a05600c3b0600b003ee6e324b19so25165946wms.1;
+        Fri, 07 Apr 2023 05:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680871610; x=1683463610;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
-        b=PnjN0Q3tykVW8UtftVm7wAXYCY0sHkDutOu46Z5WOJvciTHyr9GgP3o5jPpu0TH9mx
-         2de22563QodepzobSaq7qmDvZJSaynTQIqqW4RS/SwpGcHebMzsaA7oHn3wwW4HLvMgS
-         ECMnv05+ZSxLlw/7aruZSq93ynHFKDLPmavwIWP60k/kXx9DMJL+ZUxeiC//DH9Tk/Qi
-         PtJGPFgzA6TDGupFnp3Mib60ieivq0s24xZpkZrpFa1tnvPOfiq0w+aPpm+MS1Cjb5Q1
-         ewcmU6fAeRE/ZpWvVFKkiUoOmOFjPNR5rHm6gqBdhhUHkpZqrH8iLe9D7o7nsIAqWxuh
-         8k3Q==
+        d=gmail.com; s=20210112; t=1680871819;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PvJDsmC2qYd1pgQ85lBs960eVGMLB3x0B1T+4QHFB/Q=;
+        b=or7WakKRtDQDG/fo28VWWqQ07MrMmoabczFnS36b+Yv6/y2tULbns4a+2N+gTqVBXc
+         BGw/C7SSv9esONmfQEAH8t8CiBBHYzU/725u/zfpeIqD87qN7w8FOkQsyamZbQC2Q8Ay
+         p0Hb+asWzOzTdnTxhTwIZGsEJs3HcInQzDFJd5bvel6mc0MswbuKG7n8D1LiTG/a4wj9
+         rGbbl81d393pX3y/1rZCSUmO3dQEfCWywNUlW0eZNf1jEwYZHlOn5oi+h4pEvMNoGcy3
+         kZNc1koD34agwDKSTG2GqqzB7w+9KKdjRB+lO5fJcjkk0PcgcxtC3/wNv0kHf90ixWcg
+         cP2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680871610; x=1683463610;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680871819;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
-        b=CS8hx1CBLioOmlAjYN9GHI2MEszOIBHQQu87ebRdFB3dXV0A4Ytd7zln666rufMRwx
-         GFoVpWbIQRscKb6q6RG/wuQJE1XLm7cCtWFXsbLK0l4+JFlLju8ubzJhVjdKv6uJhJYs
-         Nm+O2G8QoBBbKbW2uDMgYEnm3BoRj8iG9Q21/ijTnOoSqP3zexmYa7Q9cjgC2hggQk7/
-         4rlSjKxca2kSaWBEWPgNkMNTuwlxLBwb1cDoqeI9KG9igclP7F8wP6np2G+M1gdx8Onw
-         kEx1aiCmt/4EVkJdtsG0c3gpHgivAQLqiWiAdao/d62Jx6CxiWB2YOhJ5XMvGR+twZM4
-         DH5A==
-X-Gm-Message-State: AAQBX9fI0l5YEZo6mrq7r+qIlNw0KKsvEd76v4aaGn3x6uGiOJgXH/zN
-        ll06tJh+GeWrMdg3v/zAEW16OnuXp+g=
-X-Google-Smtp-Source: AKy350buYaLh+KrmXZBo0/Wm/s1AM5CYsV+B4+BDSnrmL3bR9QqWEkb4sIeE5zhomhkFx9ka+WDYiA==
-X-Received: by 2002:a9d:6c0c:0:b0:68b:d61c:168f with SMTP id f12-20020a9d6c0c000000b0068bd61c168fmr953370otq.11.1680871610135;
-        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d16-20020a9d5e10000000b006a305c68617sm1664872oti.53.2023.04.07.05.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 05:46:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <27bafe2b-6fc0-2e5c-8c4e-99ed74caa5d6@roeck-us.net>
-Date:   Fri, 7 Apr 2023 05:46:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        bh=PvJDsmC2qYd1pgQ85lBs960eVGMLB3x0B1T+4QHFB/Q=;
+        b=4Giqpm5qatGYrl5eH4aNYotwMC6HxmfzPCF53fkosQTQ3t7iEbUf/5qeL0t1jUaD2D
+         MUxBgi/mgDhUh4fbgrB9ZNpO5hRcoRGWXyAea6TlqFqmnMUV5uXEx+FAJaUQ7HFxjSV5
+         ZSMqLJk3bf37wEWMFoayUmhoDFLQzer6jrM+WoQnPZjD2EJavn5U3ZA5dhZGPeBz/J0c
+         W1nLgdpkxK4fcMaX3AJFPngC8DRrLPXp2UUvYqFpeh1Bw+/KUKpwMX759PJrlySmuktx
+         1dZbYDFBTXR7f9OTuRkP5c1NaK++SzKTLpwO/YNI9uPsJ9FbNXBZXhjgSkhUhckkreux
+         JOFg==
+X-Gm-Message-State: AAQBX9fnP+kY28GxioG2xIKUgO5aTUZrRndtBxWmMQ+kr2CdiaoqBJex
+        Nbe0LRyXQFaU4uC8PT96v0S2vG/UYjVMEw==
+X-Google-Smtp-Source: AKy350Y38LWAG0Pi4Cy7ceE+yBoIdK/XagcUtp+HxL2q1jU0J/A1wR05OD7xPN4j1W40G6jbzPlkQg==
+X-Received: by 2002:a05:600c:2296:b0:3ed:358e:c1c2 with SMTP id 22-20020a05600c229600b003ed358ec1c2mr1164737wmf.18.1680871819058;
+        Fri, 07 Apr 2023 05:50:19 -0700 (PDT)
+Received: from arinc9-PC.lan ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b003f0652084b8sm8176596wms.20.2023.04.07.05.50.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 05:50:18 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yang Ling <gnaygnil@gmail.com>
-References: <20230407110025.516405-1-keguang.zhang@gmail.com>
- <20230407110025.516405-3-keguang.zhang@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230407110025.516405-3-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 1/7] dt-bindings: net: dsa: mediatek,mt7530: correct brand name
+Date:   Fri,  7 Apr 2023 15:50:03 +0300
+Message-Id: <20230407125008.42474-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 04:00, Keguang Zhang wrote:
-> This patch adds the of_match_table to enable DT support
-> of Loongson-1 watchdog driver.
-> And modify the parameter of devm_clk_get() accordingly.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->   drivers/watchdog/loongson1_wdt.c | 12 +++++++++++-
->   1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-> index bb3d075c0633..c2694222ea86 100644
-> --- a/drivers/watchdog/loongson1_wdt.c
-> +++ b/drivers/watchdog/loongson1_wdt.c
-> @@ -5,6 +5,7 @@
->   
->   #include <linux/clk.h>
->   #include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
->   #include <linux/platform_device.h>
->   #include <linux/watchdog.h>
->   #include <loongson1.h>
-> @@ -100,7 +101,7 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->   	if (IS_ERR(drvdata->base))
->   		return PTR_ERR(drvdata->base);
->   
-> -	drvdata->clk = devm_clk_get(dev, pdev->name);
-> +	drvdata->clk = devm_clk_get(dev, NULL);
->   	if (IS_ERR(drvdata->clk))
->   		return PTR_ERR(drvdata->clk);
->   
-> @@ -142,10 +143,19 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id ls1x_wdt_dt_ids[] = {
-> +	{ .compatible = "loongson,ls1x-wdt", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ls1x_wdt_dt_ids);
-> +#endif
-> +
->   static struct platform_driver ls1x_wdt_driver = {
->   	.probe = ls1x_wdt_probe,
->   	.driver = {
->   		.name = "ls1x-wdt",
-> +		.of_match_table = ls1x_wdt_dt_ids,
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-If CONFIG_OF=n, this would result in a missing symbol.
+The brand name is MediaTek, change it to that.
 
-Guenter
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Acked-by: Daniel Golle <daniel@makrotopia.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+index e532c6b795f4..6df995478275 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/net/dsa/mediatek,mt7530.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Mediatek MT7530 and MT7531 Ethernet Switches
++title: MediaTek MT7530 and MT7531 Ethernet Switches
+ 
+ maintainers:
+   - Arınç ÜNAL <arinc.unal@arinc9.com>
+-- 
+2.37.2
 
