@@ -2,76 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739CA6DB6E4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCA56DB6EF
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjDGXJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S229742AbjDGXLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbjDGXI7 (ORCPT
+        with ESMTP id S229454AbjDGXLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:08:59 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81746CC15;
-        Fri,  7 Apr 2023 16:08:48 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id f67-20020a9d03c9000000b0069faa923e7eso12933otf.10;
-        Fri, 07 Apr 2023 16:08:48 -0700 (PDT)
+        Fri, 7 Apr 2023 19:11:16 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DE3CA22
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:11:10 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso2606284pjs.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:11:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680908928; x=1683500928;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=84uyga1UcEJzw2o6D1LdCRflqQX8YB1/p6sRRZOfoCQ=;
-        b=opf81paUqQ2D5+9WF8Msy245U/iAG1na/QaHTd8YIg1D7UuEHauGDWpBscRcGNNTXl
-         s3NZ24QHgxrwudqYnm01FKRxLLf9pl5j5Ya9pebl3bd7FPt0+Z9oBYX6Z4j595sbZwHu
-         dJldv/i1GPrlFJ3GTSYNgcp2X2Wv4g9bGyLL+aC+au36AZ6pTHRaOGg2tZsMr31P5q+8
-         mx5MToRMFZmiMpWtVzSWjChzaNBCz132k3grjywy7qTx8clrKwX1M5z2WAidagvOd7NG
-         qWBSNyu8KuEDPQSb5Rj09pS3FNl3s/e70/3Xjuk2rV86VzkGw//uOaiAJAMUzBYdEvyh
-         505w==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1680909070; x=1683501070;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rocRuzEBIvz/WJE6JRALdje/n5RMMD8SqL7OOf3w8UA=;
+        b=bSyFeUK2s/cbL4N3XEY21Oky33cnHHSeqr65+TI6idzeev3fVhrk7/ceIaDaugZA9r
+         pioYtG61oiFqvED2GoFc4YqJaoLpkiNwBnlBAGyBAQiJCK57Lz6MjK1n1U1lHFzWUJvz
+         Lkil9Fvjdot12d7MOatulLPBTz3acxVEPJlTdQSKkUhovfXWJWjSnNPJnk5avD9/xT1A
+         kREG2lBpdBDBJGWjEelv+Jg3kuoO9S/Q/w9PVBz7jQ93NbSGFhLGfQhJ5QYH0d4dAU3F
+         zISqWk5BvpFbbtXHm65RbhFmEd37CoHjoPWXTxmg1KQBzgMl1FTHBI0ucoutC/pLlFK5
+         dLaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680908928; x=1683500928;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680909070; x=1683501070;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=84uyga1UcEJzw2o6D1LdCRflqQX8YB1/p6sRRZOfoCQ=;
-        b=jzrGNljfRq51UFrEC9pXSGfgDawUxgMHPy8QTjN8k8u8jPl+QiQPBQPI1pNi8826u0
-         ZtwPI/u+06IvQ+t7zenhuvcbmHwn3s/aHT+U/Tzoqxgrt2tDnZRkwYR7fkhZ/IkK5dcA
-         hAr/Gw6ozkZ3nCK3ZauXtZqB+TTPNNdXKKeEnhgnQqk1bVYYE1bez8K2kyltJZjUD2CR
-         CG9YzJABFfOd4mTG1cY5qp+H+YFfDAyc0t4bxKrrQALMGPoFUZbzsuGRzc/pSGT9G7Vo
-         VkhrgVN2jNVOpNBO2x1bLrdQgHefll6SFxO3S1INJ9WenmyVxZ2LDBErTt1FcN/GNq+S
-         MfKA==
-X-Gm-Message-State: AAQBX9dZoYPyG3w1QNh2YWDleIviKVE/lGNG0MiDZtmg0vY7X+dp/fhi
-        FlId3QOOLizv9bdFB08TNog=
-X-Google-Smtp-Source: AKy350bMisLqnaf4YRzu0sLHIWpFiEEUXxHRCa1tZel+/05klrHif8HD+uHfp5mj9GWLHBf3bDSilQ==
-X-Received: by 2002:a9d:6c57:0:b0:694:567f:a87b with SMTP id g23-20020a9d6c57000000b00694567fa87bmr1566570otq.10.1680908927830;
-        Fri, 07 Apr 2023 16:08:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t21-20020a0568301e3500b0069f1774cde8sm2030295otr.71.2023.04.07.16.08.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 16:08:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0e41f48f-229d-389f-1dec-7230f13e1600@roeck-us.net>
-Date:   Fri, 7 Apr 2023 16:08:45 -0700
+        bh=rocRuzEBIvz/WJE6JRALdje/n5RMMD8SqL7OOf3w8UA=;
+        b=YKwa6ouPRbnnMazZe9BTs2oHLAv5PqB5nFZ5NY71z5mVuQs2xdDE7yt2UEXKC2u8mt
+         U2FslWLYQNmWSjbg604FKx0XwRfPfjJRKSvz739/02jJNY+iOyqQsq1a7wKdg/U3zDsQ
+         d5CUYTTMGCSlHCzOLh3AzscHqqWKFnlRvCYRdzWdcaIM1Zpws9lpSqJuExj/VN3vEegz
+         2pE6FiXcInfQUldTVPhvNOGCYW2wyePEiE0kMFHZaVwdqHawUqzBDkl6RZwpBHWAqoej
+         Xv2/+lS8dTiAWC9dAu7qAhZNrsNB6+O4OilScUsm3G51YLaRkaCl142cl+fuZVpXc7vk
+         TQ5g==
+X-Gm-Message-State: AAQBX9fYb9yvIhTexjeysiuJ7LbghTSTR5Xwe1HmEMuqQAWXRfrA0xvO
+        77mhG0xTKDeGMapKfAS0vqSScQ==
+X-Google-Smtp-Source: AKy350Y5i+h1yHva73VwDp0Oc4DjyjVhD+PWIs2OnwnJsGLEOJtWc6IabUoQm5VwnlHHMNAO/wtiew==
+X-Received: by 2002:a17:903:234c:b0:1a1:9787:507d with SMTP id c12-20020a170903234c00b001a19787507dmr3835653plh.3.1680909069797;
+        Fri, 07 Apr 2023 16:11:09 -0700 (PDT)
+Received: from evan.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id r5-20020a170902be0500b001a076568da9sm3361526pls.216.2023.04.07.16.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 16:11:09 -0700 (PDT)
+From:   Evan Green <evan@rivosinc.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     slewis@rivosinc.com, heiko@sntech.de,
+        Conor Dooley <conor@kernel.org>, vineetg@rivosinc.com,
+        Evan Green <evan@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Bresticker <abrestic@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Celeste Liu <coelacanthus@outlook.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jann Horn <jannh@google.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Samuel Holland <samuel@sholland.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v6 0/6] RISC-V Hardware Probing User Interface
+Date:   Fri,  7 Apr 2023 16:10:57 -0700
+Message-Id: <20230407231103.2622178-1-evan@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] fpga: dfl-fme: constify pointers to hwmon_channel_info
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-References: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,57 +98,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 08:01, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointed to hwmon_channel_info can be made
-> const for safety.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> This depends on hwmon core patch:
-> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
-> 
-> Therefore I propose this should also go via hwmon tree.
 
-I am not going to apply patches for 10+ subsystems through the hwmon tree.
-This can only result in chaos. The dependent patch is available at
+There's been a bunch of off-list discussions about this, including at
+Plumbers.  The original plan was to do something involving providing an
+ISA string to userspace, but ISA strings just aren't sufficient for a
+stable ABI any more: in order to parse an ISA string users need the
+version of the specifications that the string is written to, the version
+of each extension (sometimes at a finer granularity than the RISC-V
+releases/versions encode), and the expected use case for the ISA string
+(ie, is it a U-mode or M-mode string).  That's a lot of complexity to
+try and keep ABI compatible and it's probably going to continue to grow,
+as even if there's no more complexity in the specifications we'll have
+to deal with the various ISA string parsing oddities that end up all
+over userspace.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
+Instead this patch set takes a very different approach and provides a set
+of key/value pairs that encode various bits about the system.  The big
+advantage here is that we can clearly define what these mean so we can
+ensure ABI stability, but it also allows us to encode information that's
+unlikely to ever appear in an ISA string (see the misaligned access
+performance, for example).  The resulting interface looks a lot like
+what arm64 and x86 do, and will hopefully fit well into something like
+ACPI in the future.
 
-or wait until after the next commit window to apply this patch.
+The actual user interface is a syscall, with a vDSO function in front of
+it. The vDSO function can answer some queries without a syscall at all,
+and falls back to the syscall for cases it doesn't have answers to.
+Currently we prepopulate it with an array of answers for all keys and
+a CPU set of "all CPUs". This can be adjusted as necessary to provide
+fast answers to the most common queries.
 
-Thanks,
-Guenter
+An example series in glibc exposing this syscall and using it in an
+ifunc selector for memcpy can be found at [1].
 
-> 
-> Cc: Jean Delvare <jdelvare@suse.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-hwmon@vger.kernel.org
-> ---
->   drivers/fpga/dfl-fme-main.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
-> index 77ea04d4edbe..bcb5d34b3b82 100644
-> --- a/drivers/fpga/dfl-fme-main.c
-> +++ b/drivers/fpga/dfl-fme-main.c
-> @@ -265,7 +265,7 @@ static const struct hwmon_ops thermal_hwmon_ops = {
->   	.read = thermal_hwmon_read,
->   };
->   
-> -static const struct hwmon_channel_info *thermal_hwmon_info[] = {
-> +static const struct hwmon_channel_info * const thermal_hwmon_info[] = {
->   	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_EMERGENCY |
->   				 HWMON_T_MAX   | HWMON_T_MAX_ALARM |
->   				 HWMON_T_CRIT  | HWMON_T_CRIT_ALARM),
-> @@ -465,7 +465,7 @@ static const struct hwmon_ops power_hwmon_ops = {
->   	.write = power_hwmon_write,
->   };
->   
-> -static const struct hwmon_channel_info *power_hwmon_info[] = {
-> +static const struct hwmon_channel_info * const power_hwmon_info[] = {
->   	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT |
->   				  HWMON_P_MAX   | HWMON_P_MAX_ALARM |
->   				  HWMON_P_CRIT  | HWMON_P_CRIT_ALARM),
+I was asked about the performance delta between this and something like
+sysfs. I created a small test program [2] and ran it on a Nezha D1
+Allwinner board. Doing each operation 100000 times and dividing, these
+operations take the following amount of time:
+ - open()+read()+close() of /sys/kernel/cpu_byteorder: 3.8us
+ - access("/sys/kernel/cpu_byteorder", R_OK): 1.3us
+ - riscv_hwprobe() vDSO and syscall: .0094us
+ - riscv_hwprobe() vDSO with no syscall: 0.0091us
+
+These numbers get farther apart if we query multiple keys, as sysfs will
+scale linearly with the number of keys, where the dedicated syscall
+stays the same. To frame these numbers, I also did a tight
+fork/exec/wait loop, which I measured as 4.8ms. So doing 4
+open/read/close operations is a delta of about 0.3%, versus a single vDSO
+call is a delta of essentially zero.
+
+[1] https://patchwork.ozlabs.org/project/glibc/list/?series=343050
+[2] https://pastebin.com/x84NEKaS
+
+Changes in v6:
+ - Remove spurious blank line (Conorbot)
+ - Update copyrights (Paul)
+ - Update copyrights (Paul)
+ - Wrap init_hwprobe_vdso_data() in CONFIG_MMU to fix nommu build break
+   (Conorbot)
+ - Update copyrights (Paul)
+
+Changes in v5:
+ - Added tags
+ - Fixed misuse of ISA_EXT_c as bitmap, changed to use
+   riscv_isa_extension_available() (Heiko, Conor)
+ - Document the alternatives approach in the commit message (Conor and
+   Heiko).
+ - Fix __init call warnings by making probe_vendor_features() and
+   thead_feature_probe_func() __init_or_module.
+ - Fixed compat vdso compilation failure (lkp).
+
+Changes in v4:
+ - Used real types in syscall prototypes (Arnd)
+ - Fixed static line break in do_riscv_hwprobe() (Conor)
+ - Added newlines between documentation lists (Conor)
+ - Crispen up size types to size_t, and cpu indices to int (Joe)
+ - Fix copy_from_user() return logic bug (found via kselftests!)
+ - Add __user to SYSCALL_DEFINE() to fix warning
+ - More newlines in BASE_BEHAVIOR_IMA documentation (Conor)
+ - Add newlines to CPUPERF_0 documentation (Conor)
+ - Add UNSUPPORTED value (Conor)
+ - Switched from DT to alternatives-based probing (Rob)
+ - Crispen up cpu index type to always be int (Conor)
+ - Fixed selftests commit description, no more tiny libc (Mark Brown)
+ - Fixed selftest syscall prototype types to match v4.
+ - Added a prototype to fix -Wmissing-prototype warning (lkp@intel.com)
+ - Fixed rv32 build failure (lkp@intel.com)
+ - Make vdso prototype match syscall types update
+
+Changes in v3:
+ - Updated copyright date in cpufeature.h
+ - Fixed typo in cpufeature.h comment (Conor)
+ - Refactored functions so that kernel mode can query too, in
+   preparation for the vDSO data population.
+ - Changed the vendor/arch/imp IDs to return a value of -1 on mismatch
+   rather than failing the whole call.
+ - Const cpumask pointer in hwprobe_mid()
+ - Embellished documentation WRT cpu_set and the returned values.
+ - Renamed hwprobe_mid() to hwprobe_arch_id() (Conor)
+ - Fixed machine ID doc warnings, changed elements to c:macro:.
+ - Completed dangling unistd.h comment (Conor)
+ - Fixed line breaks and minor logic optimization (Conor).
+ - Use riscv_cached_mxxxid() (Conor)
+ - Refactored base ISA behavior probe to allow kernel probing as well,
+   in prep for vDSO data initialization.
+ - Fixed doc warnings in IMA text list, use :c:macro:.
+ - Have hwprobe_misaligned return int instead of long.
+ - Constify cpumask pointer in hwprobe_misaligned()
+ - Fix warnings in _PERF_O list documentation, use :c:macro:.
+ - Move include cpufeature.h to misaligned patch.
+ - Fix documentation mismatch for RISCV_HWPROBE_KEY_CPUPERF_0 (Conor)
+ - Use for_each_possible_cpu() instead of NR_CPUS (Conor)
+ - Break early in misaligned access iteration (Conor)
+ - Increase MISALIGNED_MASK from 2 bits to 3 for possible UNSUPPORTED future
+   value (Conor)
+ - Introduced vDSO function
+
+Changes in v2:
+ - Factored the move of struct riscv_cpuinfo to its own header
+ - Changed the interface to look more like poll(). Rather than supplying
+   key_offset and getting back an array of values with numerically
+   contiguous keys, have the user pre-fill the key members of the array,
+   and the kernel will fill in the corresponding values. For any key it
+   doesn't recognize, it will set the key of that element to -1. This
+   allows usermode to quickly ask for exactly the elements it cares
+   about, and not get bogged down in a back and forth about newer keys
+   that older kernels might not recognize. In other words, the kernel
+   can communicate that it doesn't recognize some of the keys while
+   still providing the data for the keys it does know.
+ - Added a shortcut to the cpuset parameters that if a size of 0 and
+   NULL is provided for the CPU set, the kernel will use a cpu mask of
+   all online CPUs. This is convenient because I suspect most callers
+   will only want to act on a feature if it's supported on all CPUs, and
+   it's a headache to dynamically allocate an array of all 1s, not to
+   mention a waste to have the kernel loop over all of the offline bits.
+ - Fixed logic error in if(of_property_read_string...) that caused crash
+ - Include cpufeature.h in cpufeature.h to avoid undeclared variable
+   warning.
+ - Added a _MASK define
+ - Fix random checkpatch complaints
+ - Updated the selftests to the new API and added some more.
+ - Fixed indentation, comments in .S, and general checkpatch complaints.
+
+Evan Green (6):
+  RISC-V: Move struct riscv_cpuinfo to new header
+  RISC-V: Add a syscall for HW probing
+  RISC-V: hwprobe: Add support for RISCV_HWPROBE_BASE_BEHAVIOR_IMA
+  RISC-V: hwprobe: Support probing of misaligned access performance
+  selftests: Test the new RISC-V hwprobe interface
+  RISC-V: Add hwprobe vDSO function and data
+
+ Documentation/riscv/hwprobe.rst               |  86 +++++++
+ Documentation/riscv/index.rst                 |   1 +
+ arch/riscv/Kconfig                            |   1 +
+ arch/riscv/errata/thead/errata.c              |  10 +
+ arch/riscv/include/asm/alternative.h          |   5 +
+ arch/riscv/include/asm/cpufeature.h           |  23 ++
+ arch/riscv/include/asm/hwprobe.h              |  13 +
+ arch/riscv/include/asm/syscall.h              |   4 +
+ arch/riscv/include/asm/vdso/data.h            |  17 ++
+ arch/riscv/include/asm/vdso/gettimeofday.h    |   8 +
+ arch/riscv/include/uapi/asm/hwprobe.h         |  37 +++
+ arch/riscv/include/uapi/asm/unistd.h          |   9 +
+ arch/riscv/kernel/alternative.c               |  19 ++
+ arch/riscv/kernel/compat_vdso/Makefile        |   2 +-
+ arch/riscv/kernel/cpu.c                       |   8 +-
+ arch/riscv/kernel/cpufeature.c                |   3 +
+ arch/riscv/kernel/smpboot.c                   |   1 +
+ arch/riscv/kernel/sys_riscv.c                 | 228 +++++++++++++++++-
+ arch/riscv/kernel/vdso.c                      |   6 -
+ arch/riscv/kernel/vdso/Makefile               |   4 +
+ arch/riscv/kernel/vdso/hwprobe.c              |  52 ++++
+ arch/riscv/kernel/vdso/sys_hwprobe.S          |  15 ++
+ arch/riscv/kernel/vdso/vdso.lds.S             |   3 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/riscv/Makefile        |  58 +++++
+ .../testing/selftests/riscv/hwprobe/Makefile  |  10 +
+ .../testing/selftests/riscv/hwprobe/hwprobe.c |  90 +++++++
+ .../selftests/riscv/hwprobe/sys_hwprobe.S     |  12 +
+ 28 files changed, 712 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/riscv/hwprobe.rst
+ create mode 100644 arch/riscv/include/asm/cpufeature.h
+ create mode 100644 arch/riscv/include/asm/hwprobe.h
+ create mode 100644 arch/riscv/include/asm/vdso/data.h
+ create mode 100644 arch/riscv/include/uapi/asm/hwprobe.h
+ create mode 100644 arch/riscv/kernel/vdso/hwprobe.c
+ create mode 100644 arch/riscv/kernel/vdso/sys_hwprobe.S
+ create mode 100644 tools/testing/selftests/riscv/Makefile
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/Makefile
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/hwprobe.c
+ create mode 100644 tools/testing/selftests/riscv/hwprobe/sys_hwprobe.S
+
+-- 
+2.25.1
 
