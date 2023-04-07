@@ -2,149 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377BD6DB767
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076EC6DB778
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 02:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjDGX6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S229665AbjDHAAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 20:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjDGX6e (ORCPT
+        with ESMTP id S229459AbjDGX76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:58:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38405BB96;
-        Fri,  7 Apr 2023 16:58:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A3364C8F;
-        Fri,  7 Apr 2023 23:58:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC3AC433EF;
-        Fri,  7 Apr 2023 23:58:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680911911;
-        bh=rYZ2xlKwjcs//lx+4b1WY8Qxb6BZXFCn8T7hyocxDIM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ORh6EGV9lgAIW8DnUhNuNEw3ch/WwPL3QlLV8/XlSsfDp/FfqsLwqsAfxxVaq4+Ga
-         SxQjoTYw3g7Q9AcrgScjO+Ir/kjZj/zvNoKFWuNHn3BTLx7PK3VNPLRrQSVWhEhICY
-         ffiATOMWjroNLfO+UOvQn4zLPdnTHG7HP/OfqyERfwf6AEOmRgTvYHo8HbkLT8f7Lv
-         Sz4oENR7rfEbEW307DffbTHSIRH6DvmH4tioAYewtLnWbRSWVmgF9aeCVDDVXJVnlq
-         n9dZt1mDqQA08RmPuzrgG7Teq+kZ88GzNUwNWIPlMvJ4GxwDzwDbOaNE738Sl8utJ7
-         EYDHMFvkAEcXw==
-Date:   Fri, 7 Apr 2023 18:58:29 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "You-Sheng Yang (vicamo)" <vicamo.yang@canonical.com>
-Cc:     Nirmal Patel <nirmal.patel@linux.intel.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keith Busch <kbusch@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Korneliusz Osmenda <korneliuszo@gmail.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: Re: [PATCH] PCI: vmd: guard device addition and removal
-Message-ID: <20230407235829.GA3834716@bhelgaas>
+        Fri, 7 Apr 2023 19:59:58 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F8FBB96;
+        Fri,  7 Apr 2023 16:59:57 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id z9so94624ybs.9;
+        Fri, 07 Apr 2023 16:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680911997; x=1683503997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mGZafIXu1oZoLrFZaJuaTlQovGr7le+3cdq/cC4fsMs=;
+        b=mVY1J6nlfbu/iYNUUB1czpzlhOwb6wotQJWPnqexv2JfgOnhKeRX/F+x4jXLi4KF4T
+         u5xIxlRTrqStnOiox2EguzbvIiDwEd8bQ8owcaDQeXZd9bVw7BgD4FlfQmdQvaR8lTQ0
+         mtjFdli66KAO9crZx1LlPIcO+bVH4674rJE6gG+7Pg9ZI84IdnHA8Sk8foPtKdqgZiCn
+         Wk7LMnTUMXIcM0dj+S40slHKAXaq/vP0jokBTgo/7dLNggylJuApVWHPCxgRIWshDvXm
+         n7lpCF9BHx+UCQnJC64VpxS2/y8hIdOpyiByxo4jj46wiSmlm2HaG7HAG0PxzUdBSEX+
+         pFCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680911997; x=1683503997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mGZafIXu1oZoLrFZaJuaTlQovGr7le+3cdq/cC4fsMs=;
+        b=dS+2UYZxyzZKEEnlO1npA9Lsr4Zu3NRindkPxHPkvW9EWZzpQBtEkM60QML7NT811I
+         GrQuZQ0cdmGmDHCG1bMX8TH3zmXbYDnqvkwlVICC0jyDlAxIK43tvJmKy3b7KKawkbKO
+         LkoSo0uT8GmOM39hz3sCn4qomXIBeVQrcuBgMStKE8F/c5Tt+Fvkjm6BPIko90MmdEd9
+         dPGXZ98D4fKiLNww4vMVFaXVh81mEmCFGKnWnKaGchupRnAa2VQjBfEbuBBszeNHyA53
+         +dKhVQEPJauYoEuOAt9LjxI5K0hMVlz0FOL3arfHGeIVSKCJaIwSoGthZqqq2DtkM0Aj
+         B+VQ==
+X-Gm-Message-State: AAQBX9eucAJ3hEzQifXPc6dFerZXuWkyYlEMdIr7eqMK/81jY8B60GDm
+        7RJNXR5OlYvBCcAqMg11PNdJwrEh1F1GhsrbF0o=
+X-Google-Smtp-Source: AKy350ZpczCV/ZtLHhbbuXp2lBGHxIpWYiQmG6s+QUOx8PqHwoFw68K8f5Hrb4p88m8kd/Us5psKv5+ktMAeBr1z4Tg=
+X-Received: by 2002:a25:df47:0:b0:b8e:ce2d:290a with SMTP id
+ w68-20020a25df47000000b00b8ece2d290amr337491ybg.11.1680911996813; Fri, 07 Apr
+ 2023 16:59:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313173733.1815277-1-vicamo.yang@canonical.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <CANiq72k4cOEOykgUhgqaXPC7xhX2EoC8c4sr1oFEhKMfEdi=wA@mail.gmail.com>
+ <20230121052507.885734-1-varmavinaym@gmail.com> <CAK7LNAT1p=ykc1yruvzRiYthCAuXNcLq9461Mdgz95Z39_MYxQ@mail.gmail.com>
+ <ZAdYIMYAwsOwErIl@nvrarch> <CANiq72=mg3LEdqaiy+4VDn67-C++Fyz21gefns_EvgUwGfPCTQ@mail.gmail.com>
+In-Reply-To: <CANiq72=mg3LEdqaiy+4VDn67-C++Fyz21gefns_EvgUwGfPCTQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Sat, 8 Apr 2023 01:59:45 +0200
+Message-ID: <CANiq72kD_ESDSh-gVmUS18HtVmkY=bgxkR7Wo=OiwfMyyD8EFw@mail.gmail.com>
+Subject: Re: [PATCH v2] scripts: `make rust-analyzer` for out-of-tree modules
+To:     Vinay Varma <varmavinaym@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>, alicef@alicef.me,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Korneliusz, Alexander]
+On Tue, Mar 7, 2023 at 8:55=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> No problem -- thanks!
+>
+> Note that we may need a rebase after
+> https://lore.kernel.org/rust-for-linux/20230307120736.75492-1-nmi@metaspa=
+ce.dk/
+> (or equivalent) lands in `rust-fixes`. So perhaps wait for that, then
+> rebase (especially if we go with the EAFP style), and then others may
+> want to give it a spin for a re-test.
+>
+> When you rebase, please consider putting `f"{name}.o"` inside the
+> function to avoid repetition, and perhaps consider inverting the
+> condition to avoid indenting the file further (and reducing the diff).
+> It makes the "Skip ..." comment more understandable (otherwise, you
+> may want to change the comment to "Only process ..." or similar
+> instead of using "Skip ...").
 
-On Tue, Mar 14, 2023 at 01:37:33AM +0800, You-Sheng Yang (vicamo) wrote:
-> VMD may fail to create sysfs entries while `pci_rescan_bus()` called in
-> some other drivers like t7xx wwan driver:
-> 
->   sysfs: cannot create duplicate filename '/devices/.../resource0'
->   Call Trace:
->    <TASK>
->    sysfs_warn_dup.cold+0x17/0x34
->    sysfs_add_bin_file_mode_ns+0xc0/0xf0
->    sysfs_create_bin_file+0x6d/0xb0
->    pci_create_attr+0x117/0x260
->    pci_create_resource_files+0x6b/0x150
->    pci_create_sysfs_dev_files+0x18/0x30
->    pci_bus_add_device+0x30/0x80
->    pci_bus_add_devices+0x31/0x80
->    pci_bus_add_devices+0x5b/0x80
->    vmd_enable_domain.constprop.0+0x6b7/0x880 [vmd]
->    vmd_probe+0x16d/0x193 [vmd]
+The EAFP style change landed in `rust-fixes` at
+https://github.com/Rust-for-Linux/linux/commit/5c7548d5a25306dcdb97689479be=
+81cacc8ce596.
 
-This is a long-standing issue, and I would *love* to nail it, but this
-doesn't feel like the right solution to me.  What's unique about vmd
-here?
-
-I guess maybe it's similar to the situation Korneliusz and Alexander
-ran into at [1]?
-
-And why is t7xx called out specifically here?  This is a pretty
-generic sysfs attribute issue and it doesn't *seem* like t7xx should
-be special in that respect.  Oooh, maybe it's the fact that there's a
-t7xx patch [2] coming that adds pci_rescan_bus() there?
-
-Krzysztof has converted a lot of the sysfs files to static attributes,
-e.g.,
-
-  506140f9c06b ("PCI/sysfs: Convert "index", "acpi_index", "label" to static attributes")
-  d93f8399053d ("PCI/sysfs: Convert "vpd" to static attribute")
-  f42c35ea3b13 ("PCI/sysfs: Convert "reset" to static attribute")
-  527139d738d7 ("PCI/sysfs: Convert "rom" to static attribute")
-  e1d3f3268b0e ("PCI/sysfs: Convert "config" to static attribute")
-
-I think that's the *best* approach since the sysfs infrastructure
-already prevents races here.  But these last few files are more
-difficult to convert, so we've been kind of stalled on them.
-
-Bjorn
-
-[1] https://lore.kernel.org/r/20230316091540.494366-1-alexander.stein@ew.tq-group.com
-[2] https://lore.kernel.org/linux-pci/20230124204543.550d88e3@kernel.org/
-
-> Fixes: 185a383ada2e ("x86/PCI: Add driver for Intel Volume Management Device (VMD)")
-> Signed-off-by: You-Sheng Yang (vicamo) <vicamo.yang@canonical.com>
-> ---
->  drivers/pci/controller/vmd.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index 769eedeb8802..f050991bd1e9 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -838,9 +838,13 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  	pci_add_resource_offset(&resources, &vmd->resources[1], offset[0]);
->  	pci_add_resource_offset(&resources, &vmd->resources[2], offset[1]);
->  
-> +	pci_lock_rescan_remove();
-> +
->  	vmd->bus = pci_create_root_bus(&vmd->dev->dev, vmd->busn_start,
->  				       &vmd_ops, sd, &resources);
->  	if (!vmd->bus) {
-> +		pci_unlock_rescan_remove();
-> +
->  		pci_free_resource_list(&resources);
->  		vmd_remove_irq_domain(vmd);
->  		return -ENODEV;
-> @@ -893,6 +897,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  
->  	vmd_acpi_end();
->  
-> +	pci_unlock_rescan_remove();
-> +
->  	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
->  			       "domain"), "Can't create symlink to domain\n");
->  	return 0;
-> -- 
-> 2.39.2
-> 
+Cheers,
+Miguel
