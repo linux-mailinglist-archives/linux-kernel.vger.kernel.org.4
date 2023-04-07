@@ -2,232 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302566DAD1B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8AB6DAD20
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbjDGNFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S231266AbjDGNIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbjDGNFt (ORCPT
+        with ESMTP id S230135AbjDGNIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:05:49 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C921CF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:05:48 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id l10-20020a05600c1d0a00b003f04bd3691eso10274217wms.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:05:47 -0700 (PDT)
+        Fri, 7 Apr 2023 09:08:38 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C735590
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:08:36 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id y69so5579385ybe.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:08:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680872746;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q65I8oJNkk5OeaspjtyS5YaULgJm8HOY8RaqcBgw9yM=;
-        b=W7/GLKKOXuw/+Aud8XTnR6E0qxxLEsg8YDxPsknmJttZZnNJ1oudkNTmggjMzPFTpo
-         71H6PZO0ZuYLkTqR9HTAvNGsU0DQeOqHliUUenbeRehy/ZMoiypicqMD2PFKBEkLy1Sa
-         ru6S/EbyP+XdSXV+J7zriQTj2SVP4TfabGz7BWZkevm5fs5i2akII8sRkZD4E9UGKHMD
-         ulEO/tbQa2S19OFXvZsgJKMMUHvwA1pz51GCHQVBSFGudsCNG6KfVCny8imT2U9k9e/E
-         fOn7VIAu/SKuKGwa3XNJSAfLClamkHscxib/JzIHI0mm2ruJig7R2/hkI3gFFq48dvXs
-         hDvw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680872916; x=1683464916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XLLVgeqbEDeqTFPI4P39tQQxxRUKPGk2hxPwWtx7KaE=;
+        b=XN9SbYQd3XpeqF2Z0PQ7esBc1Gl7JYH957ZcK4vzDgrc5a9oooVC9gq29yPtGtcCfa
+         4jF9UDhJVY30Lg+Lu67gkWQgQkbbDE5W6XM+v1atHBlSadRPW93TQuaf2Ee2fkTw9Txx
+         3dyUKpRyCDZc5beDgMniaBTbFrEioazA8YZZiYMeLDN60BOe7ShNR7fSCNsrT9n5KqA1
+         TMbUwhS7u9yqeMRGxRb8MzJtg7qFAMw1ctou6vCxO/jNZ8UFwr0ScM0YN/qQ7uV5beja
+         GFr0U/dHBQ5JtaLVPsMHyOoQYdID/sBLTIhDcGGkXYWbYkfm2jnCvWlgbu2+NLsO171K
+         a+oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680872746;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q65I8oJNkk5OeaspjtyS5YaULgJm8HOY8RaqcBgw9yM=;
-        b=v8PmW5sfofSTec6SpUzRcf027gD+70VqRSxI936VwFzVpwicjM6DLgk3Kl15LJhn9G
-         vqBXi6T4eZxK/P1pfYOfo2fvCcYaACeJsdJdVwPVybiYoMyJ/BiPDV4Ytn5CiqPQvuqU
-         0/Nmu+AZvY86Q7vGWzGOTUuBpLbNkqr2deaFrMmf7RqDrqGA8acXLdra5rwRGBIAaiJu
-         tL5Zh0iWdXd8XMU/5saNTMNY3peClrj/aeN8+xueqz0HorkmERFxaQ62sRFR9rlSOhBl
-         PG+t8mezCoerGS285iSXlStwVD5RmW6Jd23ykopYmaZsNpo0Y0MCSyySo6LjpoDN5iVF
-         HEKw==
-X-Gm-Message-State: AAQBX9d8RfWpZC1IndcFHoKv/aSGtYhclhEdHT/alcE4ZGr9PdHSiCQr
-        4COJ25AK6aWccts9bwjmywg3CbGsBA==
-X-Google-Smtp-Source: AKy350ZHfRTS94vuajAxTUng211GRem8ZbX9yAqH+g9GfuHv6BJ7Clo6VEHHux/SkPMc12lfcsvJeA==
-X-Received: by 2002:a1c:7409:0:b0:3dc:5b88:e6dd with SMTP id p9-20020a1c7409000000b003dc5b88e6ddmr1243588wmc.10.1680872746341;
-        Fri, 07 Apr 2023 06:05:46 -0700 (PDT)
-Received: from koolguy (dslb-002-205-192-117.002.205.pools.vodafone-ip.de. [2.205.192.117])
-        by smtp.gmail.com with ESMTPSA id fc9-20020a05600c524900b003f046ad52efsm8434226wmb.31.2023.04.07.06.05.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 06:05:45 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 15:05:43 +0200
-From:   Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: octeon: remove typedef declaration for enums
-Message-ID: <20230407130543.GA32964@koolguy>
+        d=1e100.net; s=20210112; t=1680872916; x=1683464916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XLLVgeqbEDeqTFPI4P39tQQxxRUKPGk2hxPwWtx7KaE=;
+        b=0vl7qfKvkXIbBm+6nzAFnOUywR2+y+yClD1WdppCtlwMsmYJjewKcGSKQ6T/8U/UZX
+         fe76wu7BmtLxkq3iedp3DztyXff3ePbzzZR3jmSmK3t6jDyowWL570Gb+eRdWBUtZJqs
+         l5D17mHfcjpJ2NQJGyRmRXa+kpdXeXxGrnb0JRrxoCgiKUDsYD8segQY9JPMvj2DKPYA
+         2OgzFYp8vKEMitGhCO8HeFelM9Ul6iLsxlp8Fmf/7gSlc5qSVn32242D3qakfgAyPixU
+         5pxMPpjimKBsjC3Ru5hM/kdoUOHjUMNKwjtJUoCYeyxfxbVNwEUHSKgmFphDX4JU93Ca
+         T2GA==
+X-Gm-Message-State: AAQBX9e1J2GXMvKyPlMiycOVsF01HuFepDypg4w923A4Zk5gMGaHfEQ4
+        pxac/Bmhl0pP9ehAey3jYeds9rBX9EEB33QBClPHYw==
+X-Google-Smtp-Source: AKy350YLZihMhzB+mdd71bZKDJZvF/AIGIyRY1E58MdNGmy1VpnHnj4VC2+IDSkQ7AmfGY7ZYm4clBM+wIUjda9dog0=
+X-Received: by 2002:a25:d958:0:b0:b75:3fd4:1b31 with SMTP id
+ q85-20020a25d958000000b00b753fd41b31mr1807164ybg.1.1680872915732; Fri, 07 Apr
+ 2023 06:08:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
+In-Reply-To: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Fri, 7 Apr 2023 15:08:24 +0200
+Message-ID: <CAFGrd9pV8Zk-4M3gPRYBSqqG7dTA6bri4LV2ZcfKyTZN6STsmA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/12] Improve the MT8365 SoC and EVK board support
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        catalin.marinas@arm.com, Will Deacon <will@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix checkpatch.pl warning for enums in drivers/staging/octeon/octeon-stubs.h:
-cvmx_helper_interface_mode_t,
-cvmx_spi_mode_t,
-cvmx_pow_wait_t,
-cvmx_pko_lock_t,
-cvmx_pko_status_t
++ To: Catalin Marinas <catalin.marinas@arm.com>
++ To: Will Deacon <will@kernel.org>
 
-Change typedef cvmx_helper_interface_mode_t to
-enum cvmx_helper_interface_mode in ethernet.c
+Sorry for the noise.
 
-Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
----
- drivers/staging/octeon/ethernet.c     |  2 +-
- drivers/staging/octeon/octeon-stubs.h | 50 +++++++++++++++------------
- 2 files changed, 29 insertions(+), 23 deletions(-)
+Regards,
+Alexandre
 
-diff --git a/drivers/staging/octeon/ethernet.c b/drivers/staging/octeon/ethernet.c
-index 9eee28f2940c..023b107e077a 100644
---- a/drivers/staging/octeon/ethernet.c
-+++ b/drivers/staging/octeon/ethernet.c
-@@ -798,7 +798,7 @@ static int cvm_oct_probe(struct platform_device *pdev)
- 
- 	num_interfaces = cvmx_helper_get_number_of_interfaces();
- 	for (interface = 0; interface < num_interfaces; interface++) {
--		cvmx_helper_interface_mode_t imode =
-+		enum cvmx_helper_interface_mode imode =
- 		    cvmx_helper_interface_get_mode(interface);
- 		int num_ports = cvmx_helper_ports_on_interface(interface);
- 		int port;
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 3e7b92cd2e35..3d613dc725e8 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -213,14 +213,14 @@ enum cvmx_fau_op_size {
- 	CVMX_FAU_OP_SIZE_64 = 3
- };
- 
--typedef enum {
-+enum cvmx_spi_mode {
- 	CVMX_SPI_MODE_UNKNOWN = 0,
- 	CVMX_SPI_MODE_TX_HALFPLEX = 1,
- 	CVMX_SPI_MODE_RX_HALFPLEX = 2,
- 	CVMX_SPI_MODE_DUPLEX = 3
--} cvmx_spi_mode_t;
-+};
- 
--typedef enum {
-+enum cvmx_helper_interface_mode {
- 	CVMX_HELPER_INTERFACE_MODE_DISABLED,
- 	CVMX_HELPER_INTERFACE_MODE_RGMII,
- 	CVMX_HELPER_INTERFACE_MODE_GMII,
-@@ -231,20 +231,20 @@ typedef enum {
- 	CVMX_HELPER_INTERFACE_MODE_PICMG,
- 	CVMX_HELPER_INTERFACE_MODE_NPI,
- 	CVMX_HELPER_INTERFACE_MODE_LOOP,
--} cvmx_helper_interface_mode_t;
-+};
- 
--typedef enum {
-+enum cvmx_pow_wait {
- 	CVMX_POW_WAIT = 1,
- 	CVMX_POW_NO_WAIT = 0,
--} cvmx_pow_wait_t;
-+};
- 
--typedef enum {
-+enum cvmx_pko_lock {
- 	CVMX_PKO_LOCK_NONE = 0,
- 	CVMX_PKO_LOCK_ATOMIC_TAG = 1,
- 	CVMX_PKO_LOCK_CMD_QUEUE = 2,
--} cvmx_pko_lock_t;
-+};
- 
--typedef enum {
-+enum cvmx_pko_status {
- 	CVMX_PKO_SUCCESS,
- 	CVMX_PKO_INVALID_PORT,
- 	CVMX_PKO_INVALID_QUEUE,
-@@ -252,7 +252,7 @@ typedef enum {
- 	CVMX_PKO_NO_MEMORY,
- 	CVMX_PKO_PORT_ALREADY_SETUP,
- 	CVMX_PKO_CMD_QUEUE_INIT_ERROR
--} cvmx_pko_status_t;
-+};
- 
- enum cvmx_pow_tag_type {
- 	CVMX_POW_TAG_TYPE_ORDERED   = 0L,
-@@ -1257,15 +1257,17 @@ static inline int octeon_is_simulation(void)
- 	return 1;
- }
- 
--static inline void cvmx_pip_get_port_status(uint64_t port_num, uint64_t clear,
-+static inline void cvmx_pip_get_port_status(uint64_t port_num,
-+					    uint64_t clear,
- 					    cvmx_pip_port_status_t *status)
- { }
- 
--static inline void cvmx_pko_get_port_status(uint64_t port_num, uint64_t clear,
-+static inline void cvmx_pko_get_port_status(uint64_t port_num,
-+					    uint64_t clear,
- 					    cvmx_pko_port_status_t *status)
- { }
- 
--static inline cvmx_helper_interface_mode_t cvmx_helper_interface_get_mode(int
-+static inline enum cvmx_helper_interface_mode cvmx_helper_interface_get_mode(int
- 								   interface)
- {
- 	return 0;
-@@ -1342,11 +1344,11 @@ static inline unsigned int cvmx_get_core_num(void)
- }
- 
- static inline void cvmx_pow_work_request_async_nocheck(int scr_addr,
--						       cvmx_pow_wait_t wait)
-+						       enum cvmx_pow_wait wait)
- { }
- 
- static inline void cvmx_pow_work_request_async(int scr_addr,
--					       cvmx_pow_wait_t wait)
-+					       enum cvmx_pow_wait wait)
- { }
- 
- static inline struct cvmx_wqe *cvmx_pow_work_response_async(int scr_addr)
-@@ -1356,13 +1358,14 @@ static inline struct cvmx_wqe *cvmx_pow_work_response_async(int scr_addr)
- 	return wqe;
- }
- 
--static inline struct cvmx_wqe *cvmx_pow_work_request_sync(cvmx_pow_wait_t wait)
-+static inline struct cvmx_wqe *cvmx_pow_work_request_sync(enum cvmx_pow_wait wait)
- {
- 	return (void *)(unsigned long)wait;
- }
- 
- static inline int cvmx_spi_restart_interface(int interface,
--					cvmx_spi_mode_t mode, int timeout)
-+					     enum cvmx_spi_mode mode,
-+					     int timeout)
- {
- 	return 0;
- }
-@@ -1380,13 +1383,16 @@ static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interfac
- 	return r;
- }
- 
--static inline void cvmx_pko_send_packet_prepare(uint64_t port, uint64_t queue,
--						cvmx_pko_lock_t use_locking)
-+static inline void cvmx_pko_send_packet_prepare(uint64_t port,
-+						uint64_t queue,
-+						enum cvmx_pko_lock use_locking)
- { }
- 
--static inline cvmx_pko_status_t cvmx_pko_send_packet_finish(uint64_t port,
--		uint64_t queue, union cvmx_pko_command_word0 pko_command,
--		union cvmx_buf_ptr packet, cvmx_pko_lock_t use_locking)
-+static inline enum cvmx_pko_status cvmx_pko_send_packet_finish(uint64_t port,
-+							    uint64_t queue,
-+							    union cvmx_pko_command_word0 pko_command,
-+							    union cvmx_buf_ptr packet,
-+							    enum cvmx_pko_lock use_locking)
- {
- 	return 0;
- }
--- 
-2.25.1
-
+Le ven. 7 avr. 2023 =C3=A0 14:59, Alexandre Mergnat <amergnat@baylibre.com>=
+ a =C3=A9crit :
+>
+> This commits are based on the Fabien Parent <fparent@baylibre.com> work.
+>
+> The purpose of this series is to add the following HWs / IPs support for
+> the mt8365-evk board:
+> - Watchdog
+> - Power Management Integrated Circuit "PMIC" wrapper
+> - MT6357 PMIC
+> - MultiMediaCard "MMC" & Secure Digital "SD" controller
+> - USB controller
+> - Ethernet MAC controller
+>
+> Add CPU Freq & IDLE support for this board.
+>
+> This series depends to anothers which add support for MT8365 EVK board
+> [1], add the MT8365 I2C support [2] (both are currently applied) and
+> finally the pinctrl binding cleanup [3].
+>
+> =3D=3D=3D Build:
+>
+> To test this serie, cherry-pick patches from the dependent series ([1],[2=
+],[3])
+> and the applied patches from this serie (documented in the "Changes" belo=
+w).
+> Be carefull, the pinctrl serie [3] is rebased to linusw/linux-pinctrl,
+> cherry-pick will not be straightforward.
+> Finally, cherry-pick this serie.
+>
+> You can also take my branch [4] which have all the needed patches
+> retrieved from the instructions above.
+>
+> Use the arm64 defconfig to make the build.
+>
+> Regards,
+> Alex
+>
+> [1]: https://lore.kernel.org/all/20230309213501.794764-1-bero@baylibre.co=
+m/
+> [2]: https://lore.kernel.org/all/20221122-mt8365-i2c-support-v6-0-e1009c8=
+afd53@baylibre.com/
+> [3]: https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v3-0-6f=
+56d5c7a8de@baylibre.com/
+> [4]: https://gitlab.baylibre.com/baylibre/mediatek/bsp/linux/-/commits/am=
+ergnat/i350-evk-board-support
+>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+> Changes in v5:
+> - Add patches to build the MT6357 regulator driver and MTK PMIC keys by d=
+efault
+> - Remove "dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add drive streng=
+th property"
+>   patch from this serie and add it to the pinctrl serie [3]
+> - Link to v4: https://lore.kernel.org/r/20230203-evk-board-support-v4-0-5=
+cffe66a38c0@baylibre.com
+>
+> Changes in v4:
+> - Remove v3 applied patch from the serie:
+>   - arm64: dts: mediatek: add ethernet support for mt8365 SoC
+>   - arm64: dts: mediatek: add mmc support for mt8365 SoC
+>   - arm64: dts: mediatek: add mt6357 device-tree
+>   - arm64: dts: mediatek: add pwrap support to mt8365 SoC
+>   - arm64: dts: mediatek: Increase the size BL31 reserved memory
+> - Drop "arm64: dts: mediatek: fix systimer properties" which is done [1]
+> - Fix style, typo and re-order properties.
+> - Use interrupts-extended for the PMIC node.
+> - Link to v3: https://lore.kernel.org/r/20230203-evk-board-support-v3-0-0=
+003e80e0095@baylibre.com
+>
+> Changes in v3:
+> - Remove v2 applied patch from the serie:
+>   - dt-bindings: mmc: mediatek,mtk-sd: add mt8365
+> - Add trailers and simply resend.
+> - Link to v2: https://lore.kernel.org/r/20230203-evk-board-support-v2-0-6=
+ec7cdb10ccf@baylibre.com
+>
+> ---
+> Alexandre Mergnat (10):
+>       arm64: defconfig: enable MT6357 regulator
+>       arm64: defconfig: enable Mediatek PMIC key
+>       dt-bindings: watchdog: mediatek,mtk-wdt: add mt8365
+>       arm64: dts: mediatek: add watchdog support for mt8365 SoC
+>       arm64: dts: mediatek: add mt6357 PMIC support for  mt8365-evk
+>       arm64: dts: mediatek: add mmc support for mt8365-evk
+>       arm64: dts: mediatek: add usb controller support for mt8365-evk
+>       arm64: dts: mediatek: add ethernet support for mt8365-evk
+>       arm64: dts: mediatek: add OPP support for mt8365 SoC
+>       arm64: dts: mediatek: add cpufreq support for mt8365-evk
+>
+> Amjad Ouled-Ameur (1):
+>       arm64: dts: mediatek: Add CPU Idle support
+>
+> Fabien Parent (1):
+>       arm64: dts: mediatek: set vmc regulator as always on
+>
+>  .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   1 +
+>  arch/arm64/boot/dts/mediatek/mt8365-evk.dts        | 249 +++++++++++++++=
+++++++
+>  arch/arm64/boot/dts/mediatek/mt8365.dtsi           | 142 ++++++++++++
+>  arch/arm64/configs/defconfig                       |   3 +
+>  4 files changed, 395 insertions(+)
+> ---
+> base-commit: 4f2a499a344b36ebb325e610265452ea88541116
+> change-id: 20230203-evk-board-support-d5b7a839ed7b
+>
+> Best regards,
+> --
+> Alexandre Mergnat <amergnat@baylibre.com>
+>
