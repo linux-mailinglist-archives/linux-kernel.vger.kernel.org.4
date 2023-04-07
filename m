@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1EC6DAAB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F25B46DAAB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240529AbjDGJOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 05:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S232884AbjDGJPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240451AbjDGJOI (ORCPT
+        with ESMTP id S230265AbjDGJPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:14:08 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFDC900C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:14:07 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id v14-20020a05600c470e00b003f06520825fso4089542wmo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 02:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680858846; x=1683450846;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9gvRZGzZ81MG5/Kz7opKkMvHNkqBqpdFUorIdo7o5i0=;
-        b=xGMUQH8iksEJ8YfExMZNgPR/bg8PQl8w/Qm3p8yAoOnLfxp/qQHfGQsT7zA9DBCMSa
-         jbVc6ldqKsbilNojY7mVUwQOcmpV7IFk2IMmFtZmw0oXXhfmMiiKj+Svt0+c5zn6wBQB
-         HOcZDsR8aaTwLFrCGep6le0PhA48SsKqumaZMAjGYgih4RB6DiFppRcn+lXy9dFzrCN7
-         OWC8bBzY/UKtiAXRrZgytyfiOe3Fb197ke50mBbVfBZFcnHfNjxHXMt59eOPktEMUrmY
-         gx5ndQcbxpALYm6Zll5QpoMuPa7HfllcLlIezWoYtOR/nihABCkNrAhNccj2ys2pjJXH
-         0KIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680858846; x=1683450846;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9gvRZGzZ81MG5/Kz7opKkMvHNkqBqpdFUorIdo7o5i0=;
-        b=m/8FVAWayV1eR6nae/XpOAk74vJENzIV4ZQRyQlilVcOrqF1q+Nfm0yOd0qsIAmg8R
-         ZDkxr2pHGAljUO9U6HmJDlsTxnuYz7VxsHsE4h9JswA5HpQ/e+bdBlesIkN6gB7FBead
-         vRJUBg3yeSk/1MKlkNJzatkrHBP2mSMF5mzkPQEVEmxzA2Y7Xn3jj8teCTXM7pgtKKaC
-         TiystUu7B3RowXc1FL3wmSjGwv9EYATMKUX81Y3gCsC8MhDIzxfjd4pNez3bvrCXIMxk
-         41bIUhz6XVKBojRUt960zn27Yel7v8AFNOQLxv0Ji9ELr5UaH7kID/8ZH6HLrrS4Ch0P
-         dCrg==
-X-Gm-Message-State: AAQBX9cYzjMhddc78nOsM4Y84PWNegNxL9qKZh2AwgyBSMNxE2Hh3vaD
-        hfrVIWf2AjPDU9h1FsbF+ucpVg==
-X-Google-Smtp-Source: AKy350ZRrTOfycKW9wpb1ySxaW2Z852gPkXpKIHM/8ZPrQgUAJnMq62jSsj7nPudOUhDoiebI/srKQ==
-X-Received: by 2002:a1c:f719:0:b0:3ed:9212:b4fe with SMTP id v25-20020a1cf719000000b003ed9212b4femr793548wmh.0.1680858846111;
-        Fri, 07 Apr 2023 02:14:06 -0700 (PDT)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id k22-20020a7bc416000000b003f04f0c5a6fsm4026429wmi.26.2023.04.07.02.14.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 02:14:05 -0700 (PDT)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Fri, 07 Apr 2023 11:13:53 +0200
-Subject: [PATCH v2 3/3] dt-bindings: memory-controllers: mediatek,smi-larb:
- add mt8365
+        Fri, 7 Apr 2023 05:15:47 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3C672BC
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:15:46 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3377sxV1029707;
+        Fri, 7 Apr 2023 09:15:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=av/IY3P1zzXzR7h4VkjVut4y3NlmAbfx6HeaCY4p0V0=;
+ b=igOyc1xZfqDxqdsHroxiLyEVx+K7QSfa/09h8oZb6L/ifYLHLhjJXGpvV8iAHZt0h1I1
+ vMhlrELYAguwnhG8sd3wi8nVD4LtWvGTK71Yup4YOuVwGjtuv14eZOD5vUcgKZJN5GWw
+ aOZvrquhBNBCst2iiPcPwaPlTe/Tg3ifS41VCj+iM+2MJJGgDo/jVjfRxyN7ZwBuG/B/
+ YQOQf2Y81sBowS748Gs1ZlaEaVojFTOc6dHT8jTaS3emgsAJpmwI8ofVJEeql8SIrwpI
+ 90V3rh6BXovGelb1RjnHnKEWo2cjD80ME7w78GVl42r968uZ67cWDhlic4WGe7DS1B3d Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ptf6w1k3g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:15:41 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3378kuqX015952;
+        Fri, 7 Apr 2023 09:15:40 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ptf6w1k2k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:15:40 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3378Cx0I012243;
+        Fri, 7 Apr 2023 09:15:38 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3ppc86unqa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:15:38 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3379FZdM43254492
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Apr 2023 09:15:35 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E20520040;
+        Fri,  7 Apr 2023 09:15:35 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6043420043;
+        Fri,  7 Apr 2023 09:15:34 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.171.71.120])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  7 Apr 2023 09:15:34 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 12:15:32 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH 03/29] selftests/mm: Dump a summary in run_vmtests.sh
+Message-ID: <ZC/fNPD+5F7qQHLC@linux.ibm.com>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160646.3106903-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230407-smi-driver-v2-3-8da6683cdb5c@baylibre.com>
-References: <20230407-smi-driver-v2-0-8da6683cdb5c@baylibre.com>
-In-Reply-To: <20230407-smi-driver-v2-0-8da6683cdb5c@baylibre.com>
-To:     Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Alexandre Mergnat <amergnat@baylibre.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=951; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=dRVBiL9RiPJX/FXqDzKoQWbHskXPf7KJD11X+Bn//b4=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkL97ZGgOc4pIupSNVBNwzWquNMS9nseDM+yjJIvB1
- +Dfza6GJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZC/e2QAKCRArRkmdfjHURWJED/
- 0bCm/8nQsFGhHGeEqIxX9hTkSaIRJOb4F/1r9lSCfquAUx8xV4ArzZu/AmQad0YBbYjSLKtRe6syP/
- nAe+u/8rzKqcb7mITsPUtQ9r2LMHkePwwzRIbiTvm5aw9XTLkK7tHZjqFFlzMfp/DqurdTXTO37TIK
- 4jbFYUguWI33kDHvQfjdSc1rq94IALcD7uCqhNiHjEq7lfJdReZ4SX/u97liUieDv4edDlLJPcQcI3
- I34rW2fZU6ETMVozsRDysD/NPq8Ux+jvmxAa4cS6b30rbfwb00+68iCtc4jS307LUEXAc4Odb1LPlj
- /3LH9BtyzuVsNdN+d+ByjPsrV947p5cklLP/MoSaC3Z08VYIaghcLRd4KJIy76UtHn1n5HcPvl4W6C
- ZiQfr2ycl0TK7m7QtkrH9SB/9pVUFTFSOQhCPyqMnx4X5r/RZUAtn+bVzNI0cP6tg37MLvUiCNsj0x
- wCHjFrhEFKDmbT5nUUniLI+6xMIk6T8cJg8EyEb7moE6KsZe+GSD1/yQHrZzb/sXm/D7pMLiMEjPJ9
- Lh7RqARBb280RhjDGrHVnNWs0+82lfRk16xGlp7oYtd7StIOIWX837WGbNlyxHhJGS90f+QVlmnavh
- 2SXS+01KaySmjWKmMF7GNZs9XxHMYMZf0Ukd8mYDfXlFtKkapnhdvNPf36Dg==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330160646.3106903-1-peterx@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: NyuORKZ6F8ZIY4UPWE-N_qniRzsovmwH
+X-Proofpoint-ORIG-GUID: fRtjOagwoy-TZ_ms7eYGWBofnx3RY6DU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_05,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ priorityscore=1501 phishscore=0 suspectscore=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=859 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304070084
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,30 +97,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding description for mediatek,mt8365-smi-larb
+On Thu, Mar 30, 2023 at 12:06:46PM -0400, Peter Xu wrote:
+> Dump a summary after running whatever test specified.  Useful for human
+> runners to identify any kind of failures (besides exit code).
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- .../devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml     | 4 ++++
- 1 file changed, 4 insertions(+)
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-index 5f4ac3609887..aee7f6cf1300 100644
---- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-@@ -34,6 +34,10 @@ properties:
-           - const: mediatek,mt7623-smi-larb
-           - const: mediatek,mt2701-smi-larb
- 
-+      - items:
-+          - const: mediatek,mt8365-smi-larb
-+          - const: mediatek,mt8186-smi-larb
-+
-   reg:
-     maxItems: 1
- 
+> ---
+>  tools/testing/selftests/mm/run_vmtests.sh | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index c0f93b668c0c..9cc33984aa9f 100644
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -5,6 +5,9 @@
+>  # Kselftest framework requirement - SKIP code is 4.
+>  ksft_skip=4
+> 
+> +count_pass=0
+> +count_fail=0
+> +count_skip=0
+>  exitcode=0
+> 
+>  usage() {
+> @@ -149,11 +152,14 @@ run_test() {
+>  		"$@"
+>  		local ret=$?
+>  		if [ $ret -eq 0 ]; then
+> +			count_pass=$(( $count_pass + 1 ))
+>  			echo "[PASS]"
+>  		elif [ $ret -eq $ksft_skip ]; then
+> +			count_skip=$(( $count_skip + 1 ))
+>  			echo "[SKIP]"
+>  			exitcode=$ksft_skip
+>  		else
+> +			count_fail=$(( $count_fail + 1 ))
+>  			echo "[FAIL]"
+>  			exitcode=1
+>  		fi
+> @@ -279,4 +285,6 @@ CATEGORY="soft_dirty" run_test ./soft-dirty
+>  # COW tests
+>  CATEGORY="cow" run_test ./cow
+> 
+> +echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}"
+> +
+>  exit $exitcode
+> -- 
+> 2.39.1
+> 
 
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
