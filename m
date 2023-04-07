@@ -2,73 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F8F6DAEE4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646446DAEE5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240692AbjDGOhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 10:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S239077AbjDGOkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 10:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjDGOhw (ORCPT
+        with ESMTP id S229601AbjDGOkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 10:37:52 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E07A6EB7
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 07:37:52 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id c2-20020a170903234200b001a0aecba4e1so24412987plh.16
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 07:37:52 -0700 (PDT)
+        Fri, 7 Apr 2023 10:40:21 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF198F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 07:40:19 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id p34so24143772wms.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 07:40:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680878272;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2EwAMOSvWuuwRSNJO5ZSdr/2f2DfQGzc1eG+hKypIp4=;
-        b=WjN4KNyY0Wp7LdDdLA6dLmhjkc6qQZflpUdRC+sLqOT1ejDVl/h0ZB6Tmz22bWSoyd
-         SQFGBIBVhTTMArZmaUaaTOo8+EAq1bu1KIDQJFABQQ1bRlhURlz1jASWJyLLKysSDRI8
-         nuATGhfSVn7QSTW5n+zd3MihWaxCTp31Vm3oT3iMSEaxh2w2HoOr5StPSMGO1lE9mzFd
-         s7kebEBG+cVzTnHvsldADj+aN94oV6sPqdwVnE46exttGjGTsDRPZeB5WN8cu+dkrap+
-         8D3To06woowy82vMmR0lTyS82Elin9JJuMDsb+1Kq1cqLlssJJP9uZL9JT3bKADgCQyf
-         a7Tg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680878418; x=1683470418;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9cH7jELgJCXu/RRISlpcug386tFiALgZQ6ITifiCmrQ=;
+        b=aj+RfnVjkR+cWy1ftcRXiKAugpLJS2h680OOCRjrq3gkvR91QYKptTzamm76EWbj5d
+         FGfGD1bLI84Yl07AE5os/1N8Ximz7b8wKpZi3Pyh7AERMwZQyvC8VQSmYlHOgUsjhH38
+         nBteZRn3WKC6h8ds9NBYKUJzUkqFO6dmKe3sryaVBZhJk3qjzfq/TtpdKGkrgYJxvK/7
+         V6WhOeoLxSxxTymTL1Eq/HoI02fsDhhupGCVtfop3YqeraRFeOmC4Xlim+D+B4HgXfY9
+         1PusmjanfwHSPXWjR58/Js5lHxbr4LyhhDjuW8Z5/Lf58j+3BQyB2ltQX1D5d6s345hd
+         n36A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680878272;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2EwAMOSvWuuwRSNJO5ZSdr/2f2DfQGzc1eG+hKypIp4=;
-        b=RkyH3p2+D0VWOoE9kqvTG8J/Z6vn0vpQMRCi63mmnXxwT5FxaPlWfPQfdf6NOHB7Wg
-         /ahwVg4GQfUQEqthQQOM7zc56m6Z1dbtvbYil/r2/AC2AdOaIIqKRG7/nYEJmBtAue80
-         Hofyx8FSodPFEdNwnVuA2/v716jhTmx6symbe3DjMQtgTpe9SxW+T7WTKWLqHyRwT5Zc
-         yr6sPJ7K3WBu3i3RsRdi74Po0sCUwE+JMAKWUt2eemSUhkW7WbW96gn/P/U6U6ycN7hb
-         INc+o1Xo8ewruL0avKCyDhC9CuRq1HxSUp+WPH5Rsuy9N/kZN9vwxgDbHHGn4QSjFE0D
-         kQPw==
-X-Gm-Message-State: AAQBX9cnQ3Y2OgK76Nvkf9F2zauSwcBZW9Jem6xMlAMH3xDHebqrFp6p
-        BOccfunKzypQs9vacLRyNmwjklsz/NU=
-X-Google-Smtp-Source: AKy350a/8THxQSb2D0BIt2HszEXg8D/pIxoaIL3MPoOkRezNC4zYbJoii46ZiQblx+HPftOhwMrSzr3GeLY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:d2cb:b0:1a2:401f:6dae with SMTP id
- n11-20020a170902d2cb00b001a2401f6daemr920418plc.4.1680878271830; Fri, 07 Apr
- 2023 07:37:51 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 07:37:50 -0700
-In-Reply-To: <7c57fa4e-de52-867f-6ad9-1afa705245cc@gmail.com>
-Mime-Version: 1.0
-References: <20230310113349.31799-1-likexu@tencent.com> <7c57fa4e-de52-867f-6ad9-1afa705245cc@gmail.com>
-Message-ID: <ZDAqvvH/Ag8TBIhR@google.com>
-Subject: Re: [PATCH v2] KVM: x86/pmu/misc: Fix a typo on kvm_pmu_request_counter_reprogam()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680878418; x=1683470418;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9cH7jELgJCXu/RRISlpcug386tFiALgZQ6ITifiCmrQ=;
+        b=Tq2rpCsvVWkka1gBkl0tdjB7rsBzcBlw3AbAublzsH9XLI4SEGW/7OHR4znt9kHoEh
+         uXDEr3G+BffwQnmFP4hGXt1daJnl/BYFMAnCXj/157hQ7phpCBAcWzMBo+1uPP2vy0QO
+         EItH1bq9lRLjGMSEdAx1QV8XuDqwcYSTSqyNXvIdm15WeBQrYZ5l6Sxds16PFBiHFdKR
+         /NRWuVZiQ9Yz9F1jizJTbV0aZe3suFRCW0S86PAPJFrZvvDuXpOvulnnIDhqcnFwCZ88
+         c64ooNdDg6gRbTsDSiOaI9O3MApsMVG2M8+VBHHkFkmXvu0R57+ytw3rMAp57+rbbBWd
+         /rAQ==
+X-Gm-Message-State: AAQBX9dnKDXTEXFREoCAyKlC0upiHjgMKdyTP96kMn34wewXsq91Xeaj
+        Klz+0xzSCqv/WVvWR9g2V0HEnw==
+X-Google-Smtp-Source: AKy350aHDxXpozWYR420g8dzLnTqXcG9nzS5zG/r1/ISiuBOsA4YBwyK7Ojw0m7k4W7g+0ZVwpZDLw==
+X-Received: by 2002:a7b:ce10:0:b0:3ef:6ae7:8994 with SMTP id m16-20020a7bce10000000b003ef6ae78994mr1583180wmc.22.1680878417896;
+        Fri, 07 Apr 2023 07:40:17 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id g6-20020a05600c4ec600b003edc4788fa0sm8784116wmq.2.2023.04.07.07.40.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 07:40:17 -0700 (PDT)
+Message-ID: <7eb4c0b9-a00e-8de5-65dd-7a44c0ec2c3a@baylibre.com>
+Date:   Fri, 7 Apr 2023 16:40:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] soc: mediatek: Kconfig: Add MTK_CMDQ dependency to
+ MTK_MMSYS
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, matthias.bgg@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230403093304.276418-1-angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230403093304.276418-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023, Like Xu wrote:
-> Sean, would you pick this up ?
+On 03/04/2023 11:33, AngeloGioacchino Del Regno wrote:
+> The mtk-mmsys and mutex drivers do have a dependency on MTK_CMDQ,
+> even though both can work with *or* without it: since CMDQ support
+> can be enabled either as module or as built-in, it is necessary to
+> add a depends rule in Kconfig, so that we disallow building both
+> mtk-mmsys and mtk-mutex as built-in if mtk-cmdq-helper is built as
+> a module, otherwise obvious linker issues appear.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+> 
+> This has no Fixes tag because the commit that can produce the issue that gets
+> prevented in this commit is already in the maintainer's tree.
+> 
+>   drivers/soc/mediatek/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
+> index d6b83a5508ca..a88cf04fc803 100644
+> --- a/drivers/soc/mediatek/Kconfig
+> +++ b/drivers/soc/mediatek/Kconfig
+> @@ -76,6 +76,7 @@ config MTK_MMSYS
+>   	tristate "MediaTek MMSYS Support"
+>   	default ARCH_MEDIATEK
+>   	depends on HAS_IOMEM
+> +	depends on MTK_CMDQ || MTK_CMDQ=n
+>   	help
+>   	  Say yes here to add support for the MediaTek Multimedia
+>   	  Subsystem (MMSYS).
 
-Heh, ya, this one and Aaron's series are sitting in my local tree, just didn't
-quite get to 'em yesterday.
+Hi Angelo
+
+I guess it should also be done for DRM_MEDIATEK, if I refer to the lsmod 
+result:
+
+Module                  Size  Used by
+mtk_cmdq_helper        20480  1 mediatek_drm
+mtk_cmdq_mailbox       20480  1 mtk_cmdq_helper
+
+Or is it maybe enough to protect the call of the dependent driver with 
+IS_REACHABLE or IS_ENABLED helpers ?
+
+What do you think ?
+
+Regards,
+Alexandre
+
