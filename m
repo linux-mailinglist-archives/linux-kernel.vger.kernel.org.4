@@ -2,142 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2506DB2B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C746DB2BC
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjDGSVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S230322AbjDGSXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDGSVo (ORCPT
+        with ESMTP id S229536AbjDGSXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:21:44 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F4FBC
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:21:43 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id ja10so40616406plb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 11:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680891703; x=1683483703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6ZdRaKow9MiJw77AIs6HNE5L6Bt+Axun0Z6165dll/w=;
-        b=o3WtKycKtV542XSaicFZz0CZ/dev938aAn+qeeNOY8WRyHVIze4YnJcFgiiCsWaJxV
-         Ajd71OA0ng3Iisqa/ZJw1jna4z9PJi5fh7kAxvyGHi1kAoeLTxecd7HJsNnkjtM/ct+x
-         emcM3MoywW3r3eCx1wcYy4wWI2bv+DS9v1sL47O7H1elmMk597W7oAgHNauc5/iOBFpH
-         6Wnov6/4+cfjUr6gNj+wyBLCt4+2Xk9D7yEQQESblpkSTIwBCJElhNz6OS5Rj33wpnKO
-         cnOUzmdDfEz++ahqDKTY62TN4cPZL+eaoeUJJFSxTblMU2G2LmxcljBt5McsPw1BoSWu
-         m72g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680891703; x=1683483703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ZdRaKow9MiJw77AIs6HNE5L6Bt+Axun0Z6165dll/w=;
-        b=s7U1wdip+8YJZG6u/THnoW1PkTA/Wr4qWOyCm4VzruFHN9bUqo6sviMovqe645+scL
-         M2N92ZVrB4Ui+ErNSNI1cDlCfTrBxTCslCDhr+Gimu5To8bSBgRdFl1+w3YQ6nTe3RIQ
-         Rxa9aZnwOmpo1x+v5rXpnI9GxjZQpY+kOfsFVvdZ9hZsXEWb1xZuJwH3B/t/ScNZBmbZ
-         eXS/+8Z9GRtEQrNs9e6k/8Yw8mQBnR/w1YQkFevA84FKvk60GFbj6WYCURrfkL/aI4U9
-         ImbKIVLzhLAq3nW0AbggeMFpElrrCpEExADdTjeRZrceOuRDhX1jaS64egeMENZL7E2E
-         0RCA==
-X-Gm-Message-State: AAQBX9d8N4++KB8CYyO6RvTkO71G3HRd8yYqx2o4C8GzEiDdVo7Tmx9U
-        NuqOsVT25uOcUM989UZPutWm7Zn2aBmL/5MoJKHie6DKb7gun3KZQn7Opg==
-X-Google-Smtp-Source: AKy350bi6/Eqyz2r683FnPvRwH6NTPyo8wV2nEG2rf8+C/NqkAczhLhuqlNMO7AwVBgrZzZVxiS/kkIt6VR0vqaeXZs=
-X-Received: by 2002:a17:902:da85:b0:19f:2aa4:b1e5 with SMTP id
- j5-20020a170902da8500b0019f2aa4b1e5mr1212280plx.2.1680891702918; Fri, 07 Apr
- 2023 11:21:42 -0700 (PDT)
+        Fri, 7 Apr 2023 14:23:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E5B4227
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680891786; x=1712427786;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DydUZtz/GhGz8ydOChRYHR+rrl4V0bkzfHEu5HgIPzI=;
+  b=W1M3bBmdIHl8mEjVFHzcuUd9GlZsJFi6HPVGfENYo2F17TCE3FfHuZFQ
+   3ogB7Uh/BQgpxtkYF3zd5FTbXZIA3M4fV7SbDaoIhOoMOi1B8zhkuxAHh
+   TTco3xLA4hphcpZk62bdNqqGRhf6dYaeEggBDQ4YrSmgBDmoyYl99WMfR
+   y+fETZxh3rjpnQ3HX7BWAHEXIiY2zAjarhO7MpusxU5I13E7StFog6z7C
+   plYJm/6hv/fjvpv5Ldro9uOl5w2rFlVQA366Lc/Cp6IHJprKpVulXsVSL
+   Nxu4jpMeQ3q4RO5RNTnJZQ7XgrzYbOCYootMIwzl3RIHTVn39/eN5hAEX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="343050186"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="343050186"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:23:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="756803347"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="756803347"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Apr 2023 11:23:04 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pkqji-000Smc-0R;
+        Fri, 07 Apr 2023 18:22:58 +0000
+Date:   Sat, 8 Apr 2023 02:22:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jingbo Xu <jefflexu@linux.alibaba.com>, xiang@kernel.org,
+        chao@kernel.org, huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] erofs: enable long extended attribute name prefixes
+Message-ID: <202304080206.t45iYSop-lkp@intel.com>
+References: <20230407141710.113882-8-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230331172423.1860083-1-trix@redhat.com>
-In-Reply-To: <20230331172423.1860083-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Apr 2023 11:21:31 -0700
-Message-ID: <CAKwvOdkoYTVYeN9G-YB5ADq1Lt35d265pJHCOcy-Ro-22PFM4Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/qxl: remove unused num_relocs variable
-To:     Tom Rix <trix@redhat.com>
-Cc:     airlied@redhat.com, kraxel@redhat.com, airlied@gmail.com,
-        daniel@ffwll.ch, nathan@kernel.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        fziglio@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407141710.113882-8-jefflexu@linux.alibaba.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 10:24=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpu/drm/qxl/qxl_ioctl.c:149:14: error: variable
->   'num_relocs' set but not used [-Werror,-Wunused-but-set-variable]
->         int i, ret, num_relocs;
->                     ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+Hi Jingbo,
 
-Thanks for the patch!
-Fixes: 74d9a6335dce ("drm/qxl: Simplify cleaning qxl processing command")
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+kernel test robot noticed the following build errors:
 
-That commit should also have removed the label out_free_bos IMO since
-having two labels for the same statement is a code smell.  Tom, do you
-mind sending a v2 with that folded in?
+[auto build test ERROR on xiang-erofs/dev-test]
+[also build test ERROR on xiang-erofs/dev]
+[cannot apply to xiang-erofs/fixes linus/master v6.3-rc5 next-20230406]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> ---
->  drivers/gpu/drm/qxl/qxl_ioctl.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/qxl/qxl_ioctl.c b/drivers/gpu/drm/qxl/qxl_io=
-ctl.c
-> index 30f58b21372a..3422206d59d4 100644
-> --- a/drivers/gpu/drm/qxl/qxl_ioctl.c
-> +++ b/drivers/gpu/drm/qxl/qxl_ioctl.c
-> @@ -146,7 +146,7 @@ static int qxl_process_single_command(struct qxl_devi=
-ce *qdev,
->         struct qxl_release *release;
->         struct qxl_bo *cmd_bo;
->         void *fb_cmd;
-> -       int i, ret, num_relocs;
-> +       int i, ret;
->         int unwritten;
->
->         switch (cmd->type) {
-> @@ -201,7 +201,6 @@ static int qxl_process_single_command(struct qxl_devi=
-ce *qdev,
->         }
->
->         /* fill out reloc info structs */
-> -       num_relocs =3D 0;
->         for (i =3D 0; i < cmd->relocs_num; ++i) {
->                 struct drm_qxl_reloc reloc;
->                 struct drm_qxl_reloc __user *u =3D u64_to_user_ptr(cmd->r=
-elocs);
-> @@ -231,7 +230,6 @@ static int qxl_process_single_command(struct qxl_devi=
-ce *qdev,
->                         reloc_info[i].dst_bo =3D cmd_bo;
->                         reloc_info[i].dst_offset =3D reloc.dst_offset + r=
-elease->release_offset;
->                 }
-> -               num_relocs++;
->
->                 /* reserve and validate the reloc dst bo */
->                 if (reloc.reloc_type =3D=3D QXL_RELOC_TYPE_BO || reloc.sr=
-c_handle) {
-> --
-> 2.27.0
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Jingbo-Xu/erofs-keep-meta-inode-into-erofs_buf/20230407-221839
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev-test
+patch link:    https://lore.kernel.org/r/20230407141710.113882-8-jefflexu%40linux.alibaba.com
+patch subject: [PATCH 7/7] erofs: enable long extended attribute name prefixes
+config: x86_64-randconfig-a005-20230403 (https://download.01.org/0day-ci/archive/20230408/202304080206.t45iYSop-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8cd5bbc6f857d54388099c30c3e3a48fdb15c283
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jingbo-Xu/erofs-keep-meta-inode-into-erofs_buf/20230407-221839
+        git checkout 8cd5bbc6f857d54388099c30c3e3a48fdb15c283
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080206.t45iYSop-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/erofs/super.c:394:7: error: no member named 'xattr_prefix_start' in 'struct erofs_sb_info'
+           sbi->xattr_prefix_start = le32_to_cpu(dsb->xattr_prefix_start);
+           ~~~  ^
+>> fs/erofs/super.c:395:7: error: no member named 'xattr_prefix_count' in 'struct erofs_sb_info'
+           sbi->xattr_prefix_count = dsb->xattr_prefix_count;
+           ~~~  ^
+   2 errors generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +394 fs/erofs/super.c
+
+   333	
+   334	static int erofs_read_superblock(struct super_block *sb)
+   335	{
+   336		struct erofs_sb_info *sbi;
+   337		struct erofs_buf buf = __EROFS_BUF_INITIALIZER;
+   338		struct erofs_super_block *dsb;
+   339		void *data;
+   340		int ret;
+   341	
+   342		data = erofs_read_metabuf(&buf, sb, 0, EROFS_KMAP);
+   343		if (IS_ERR(data)) {
+   344			erofs_err(sb, "cannot read erofs superblock");
+   345			return PTR_ERR(data);
+   346		}
+   347	
+   348		sbi = EROFS_SB(sb);
+   349		dsb = (struct erofs_super_block *)(data + EROFS_SUPER_OFFSET);
+   350	
+   351		ret = -EINVAL;
+   352		if (le32_to_cpu(dsb->magic) != EROFS_SUPER_MAGIC_V1) {
+   353			erofs_err(sb, "cannot find valid erofs superblock");
+   354			goto out;
+   355		}
+   356	
+   357		sbi->blkszbits  = dsb->blkszbits;
+   358		if (sbi->blkszbits < 9 || sbi->blkszbits > PAGE_SHIFT) {
+   359			erofs_err(sb, "blkszbits %u isn't supported", sbi->blkszbits);
+   360			goto out;
+   361		}
+   362		if (dsb->dirblkbits) {
+   363			erofs_err(sb, "dirblkbits %u isn't supported", dsb->dirblkbits);
+   364			goto out;
+   365		}
+   366	
+   367		sbi->feature_compat = le32_to_cpu(dsb->feature_compat);
+   368		if (erofs_sb_has_sb_chksum(sbi)) {
+   369			ret = erofs_superblock_csum_verify(sb, data);
+   370			if (ret)
+   371				goto out;
+   372		}
+   373	
+   374		ret = -EINVAL;
+   375		if (!check_layout_compatibility(sb, dsb))
+   376			goto out;
+   377	
+   378		sbi->sb_size = 128 + dsb->sb_extslots * EROFS_SB_EXTSLOT_SIZE;
+   379		if (sbi->sb_size > PAGE_SIZE - EROFS_SUPER_OFFSET) {
+   380			erofs_err(sb, "invalid sb_extslots %u (more than a fs block)",
+   381				  sbi->sb_size);
+   382			goto out;
+   383		}
+   384		sbi->primarydevice_blocks = le32_to_cpu(dsb->blocks);
+   385		sbi->meta_blkaddr = le32_to_cpu(dsb->meta_blkaddr);
+   386	#ifdef CONFIG_EROFS_FS_XATTR
+   387		sbi->xattr_blkaddr = le32_to_cpu(dsb->xattr_blkaddr);
+   388	#endif
+   389		sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
+   390		sbi->root_nid = le16_to_cpu(dsb->root_nid);
+   391		sbi->packed_nid = le64_to_cpu(dsb->packed_nid);
+   392		sbi->inos = le64_to_cpu(dsb->inos);
+   393	
+ > 394		sbi->xattr_prefix_start = le32_to_cpu(dsb->xattr_prefix_start);
+ > 395		sbi->xattr_prefix_count = dsb->xattr_prefix_count;
+   396	
+   397		sbi->build_time = le64_to_cpu(dsb->build_time);
+   398		sbi->build_time_nsec = le32_to_cpu(dsb->build_time_nsec);
+   399	
+   400		memcpy(&sb->s_uuid, dsb->uuid, sizeof(dsb->uuid));
+   401	
+   402		ret = strscpy(sbi->volume_name, dsb->volume_name,
+   403			      sizeof(dsb->volume_name));
+   404		if (ret < 0) {	/* -E2BIG */
+   405			erofs_err(sb, "bad volume name without NIL terminator");
+   406			ret = -EFSCORRUPTED;
+   407			goto out;
+   408		}
+   409	
+   410		/* parse on-disk compression configurations */
+   411		if (erofs_sb_has_compr_cfgs(sbi))
+   412			ret = erofs_load_compr_cfgs(sb, dsb);
+   413		else
+   414			ret = z_erofs_load_lz4_config(sb, dsb, NULL, 0);
+   415		if (ret < 0)
+   416			goto out;
+   417	
+   418		/* handle multiple devices */
+   419		ret = erofs_scan_devices(sb, dsb);
+   420	
+   421		if (erofs_sb_has_ztailpacking(sbi))
+   422			erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
+   423		if (erofs_is_fscache_mode(sb))
+   424			erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
+   425		if (erofs_sb_has_fragments(sbi))
+   426			erofs_info(sb, "EXPERIMENTAL compressed fragments feature in use. Use at your own risk!");
+   427		if (erofs_sb_has_dedupe(sbi))
+   428			erofs_info(sb, "EXPERIMENTAL global deduplication feature in use. Use at your own risk!");
+   429	out:
+   430		erofs_put_metabuf(&buf);
+   431		return ret;
+   432	}
+   433	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
