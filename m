@@ -2,160 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C59C6DB73D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAC56DB744
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjDGXgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S230160AbjDGXhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjDGXgw (ORCPT
+        with ESMTP id S229720AbjDGXhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:36:52 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7698CA27B;
-        Fri,  7 Apr 2023 16:36:51 -0700 (PDT)
-Received: from [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895] (unknown [IPv6:2804:14d:72b4:8284:32a8:8167:f815:2895])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 7 Apr 2023 19:37:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AA8C66B;
+        Fri,  7 Apr 2023 16:37:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dwlsalmeida)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6C54B6603133;
-        Sat,  8 Apr 2023 00:36:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680910610;
-        bh=U92h6mBorkK2GfO57Y3hQxwoW1sYUwbwLA36Ut5C1Po=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=mBwiG5b5MVsT1PirCzrJr2STC4IIeHt1bhofLwHTCr/kvUCMvCDpcQGlw1PlvrbH8
-         EgBMjRKPPx7+ViGjF2UfdApetygAq2YEiDu8ZmnfAovOS4frAise1umLMZHxwzEiKe
-         0GGiAmjfKvzgYmp8Rff3scuTrB3VoNeOZ+S2LN0rabAHOL9kiBtAkSiHCvU3jLEoay
-         n6AtxJMhhdeOI9kyswCfbuKsoRgGLcxkwUkR40UDyrL40V9l/Brs3vEGlH3s5CBxsm
-         TX3Flg16U0lFFutLi6/JDnhgNwqs/TvWxTP0xbSl2L5tcLuDmcyECEstGM5oIQt3NK
-         n+fVGlrwH0FqQ==
-Message-ID: <f8b738940f2502e582acb59229d419825c9a1ffb.camel@collabora.com>
-Subject: Re: [PATCH v2 2/2] rust: virtio: add virtio support
-From:   Daniel Almeida <daniel.almeida@collabora.com>
-To:     Wedson Almeida Filho <wedsonaf@gmail.com>
-Cc:     ojeda@kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Date:   Fri, 07 Apr 2023 20:36:35 -0300
-In-Reply-To: <CANeycqoh+ePXODJ57UT1UdhHDgzDXr=KoQEo7HiSDJDHha2dsQ@mail.gmail.com>
-References: <20230405201416.395840-1-daniel.almeida@collabora.com>
-         <20230405201416.395840-3-daniel.almeida@collabora.com>
-         <CANeycqoh+ePXODJ57UT1UdhHDgzDXr=KoQEo7HiSDJDHha2dsQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D5C265569;
+        Fri,  7 Apr 2023 23:37:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F83EC433D2;
+        Fri,  7 Apr 2023 23:37:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680910639;
+        bh=CnGXvD8rCX992q5WEVr+sstDQgDU+kc91sEVP9dsAa4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=i5XlKoHcfVfMl9Z2fYOXGrfKzlYdaTSkjQR35SHNx3u0J3acfkOqy9iPA1qwvz1C5
+         8f7YiWfK4O+/vzMOzFY879ZPUsDsrhUMb2pOvCT4rFSAgRNlRgkgY0eH7dq3AhksnX
+         WvE0EX5mJvO17UJx+vHLvNNaSo04Io7JxBai5VulE0J6pIVqohCetGEUpxbo2ERUnX
+         f0VH61MpWBv1WUZ5USHgiuSZvtTbUZPqPlVEdooojU5LGOLQamdY0zlGFaUrxA8Hwi
+         T4jfPOaB5jkKpQ9w5UHZrXcHMYxWAGCgNFD4wvEk2eMgykVDtFsyFL+y/vZoU7sc6U
+         v5f5JYrwJXunw==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-hardening@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Tab P11 features
+Date:   Fri,  7 Apr 2023 16:40:04 -0700
+Message-Id: <168091080212.2759405.12118976491725806960.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230406-topic-lenovo_features-v2-0-625d7cb4a944@linaro.org>
+References: <20230406-topic-lenovo_features-v2-0-625d7cb4a944@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wedson, Martin,
+On Fri, 07 Apr 2023 21:54:40 +0200, Konrad Dybcio wrote:
+> v1 -> v2:
+> - Add ftrace-size and drop no-map under pstore [1/4]
+> - Add qcom,ath10k-calibration-variant [4/4]
+> - Pick up rbs
+> 
+> v1: https://lore.kernel.org/r/20230406-topic-lenovo_features-v1-0-c73a5180e48e@linaro.org
+> 
+> [...]
 
-First of all, thanks for the review.
+Applied, thanks!
 
+[1/4] arm64: dts: qcom: sm6115-j606f: Add ramoops node
+      commit: 8b0ac59c2da69aaf8e65c6bd648a06b755975302
+[2/4] arm64: dts: qcom: sm6115: Add RMTFS
+      commit: ecc61a207d0fad45ba991e0ce0273382b20bb226
+[3/4] arm64: dts: qcom: sm6115p-j606f: Enable remoteprocs
+      commit: 7584284537c2a82227ed2ea359b2c53f28e6abbf
+[4/4] arm64: dts: qcom: sm6115p-j606f: Enable ATH10K WiFi
+      commit: 137e5c267232c89b2284ea44229545d4820bcb26
 
-> > +=C2=A0=C2=A0=C2=A0 /// VirtIO driver remove.
-> > +=C2=A0=C2=A0=C2=A0 ///
-> > +=C2=A0=C2=A0=C2=A0 /// Called when a virtio device is removed.
-> > +=C2=A0=C2=A0=C2=A0 /// Implementers should prepare the device for comp=
-lete
-> > removal here.
-> > +=C2=A0=C2=A0=C2=A0 ///
-> > +=C2=A0=C2=A0=C2=A0 /// In particular, implementers must ensure no buff=
-ers are
-> > left over in the
-> > +=C2=A0=C2=A0=C2=A0 /// virtqueues in use by calling [`virtqueue::get_b=
-uf()`]
-> > until `None` is
-> > +=C2=A0=C2=A0=C2=A0 /// returned.
->=20
-> What happens if implementers don't do this?
->=20
-> If this is a safety requirement, we need to find a different way to
-> enforce it.
->=20
-> >=20
-
-This is the worst part of this patch by far, unfortunately. If one
-doesn't do this, then s/he will leak the `data` field passed in through
-into_foreign() here:
-
-
-
-> +        // SAFETY: `self.ptr` is valid as per the type invariant.
-> +        let res =3D unsafe {
-> +            bindings::virtqueue_add_sgs(
-> +                self.ptr,
-> +                sgs.as_mut_ptr(),
-> +                num_out as u32,
-> +                num_in as u32,
-> +                data.into_foreign() as _,
-> +                gfp,
-> +            )
-> +        };
-> +
-
-Note the comment here:
-
-
-> +            // SAFETY: if there is a buffer token, it came from
-> +            // `into_foreign()` as called in `add_sgs()`.
-> +            <T::PrivateData as ForeignOwnable>::from_foreign(buf)
-
-
-To be honest, I tried coming up with something clever to solve this,
-but couldn't. Ideally this should happen when this function is called:
-
-> +    extern "C" fn remove_callback(virtio_device: *mut
-bindings::virtio_device) {
-
-
-But I did not find a way to iterate over the the `vqs` member from the
-Rust side, i.e.:
-
-```
-
-struct virtio_device {
-	int index;
-	bool failed;
-	bool config_enabled;
-	bool config_change_pending;
-	spinlock_t config_lock;
-	spinlock_t vqs_list_lock; /* Protects VQs list access */
-	struct device dev;
-	struct virtio_device_id id;
-	const struct virtio_config_ops *config;
-	const struct vringh_config_ops *vringh_config;
-	struct list_head vqs; <------------------
-```
-
-Is there any wrappers over list_for_each_entry(), etc, to be used from
-Rust? If so, I could not find them.
-
-Doing this cleanup from Virtqueue::Drop() is not an option either:
-since we wrap over a pointer owned by the kernel, there's no guarantee
-that the actual virtqueue is going away when drop is called on the
-wrapper. In fact, this is never the case, as virtqueues are deleted
-through this call:
-
-
-> +void rust_helper_virtio_del_vqs(struct virtio_device *vdev)
-> +{
-> +       vdev->config->del_vqs(vdev);
-> +}
-> +
-
-
-
-Suggestions welcome,
-
--- Daniel
-
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
