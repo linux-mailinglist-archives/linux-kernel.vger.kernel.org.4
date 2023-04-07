@@ -2,136 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8783D6DB492
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED2A6DB494
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjDGTzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 15:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S231600AbjDGTza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 15:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbjDGTyy (ORCPT
+        with ESMTP id S231588AbjDGTzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 15:54:54 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DABA27B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 12:54:53 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id y20so55691794lfj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 12:54:53 -0700 (PDT)
+        Fri, 7 Apr 2023 15:55:23 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E161B752
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 12:55:11 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id y35so24954636pgl.4
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 12:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680897292;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UnW6A28IKcreFUAfuKike2SwwSqJ7t/qMOojsEiWd3o=;
-        b=MwmFmghBv6y4HhNOaxXFNNuzkqK19RmVnmxCLV9ziJFoBJj36Uyj22QNGse8V10FED
-         Ycn7rsZiJL7XOKtpf2EWV4qpPMfUhdv759rK9a2kBagd+9O0MfW2SvdgHXF+DUTidvs6
-         0NuHdJn3tVfqdpCDpOulLjBicpoCTzr3Z76kGINvmk9J8UjgMozQcjVmuJe1r162BW8k
-         xPPpd9R1EejUZmmFLIXV0Fs3gJ58IpJjXaP2QB7wdOKDHWeyecXoDyo9R5jEoEolHS/L
-         9TsgTijFoz1ncDgN4P1a1yY63cg2NdIvwe9c3BJ1gmk8w49kPK3Pyl/XcLIrZN90ocYf
-         MEJA==
+        d=google.com; s=20210112; t=1680897310; x=1683489310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yRLvMBwRYgN9rZY0Zb0vSfDSDaMTw9OUufeYYmz/skw=;
+        b=f6eYkrEter++NUKtxdaDLcQojieZL0r8jOl193HqrIPectcDZHEEPA9f34LkHDW4dP
+         P53I9XvbApz+JAM6RyIEZmBddB+MR4UL6Y+75sl3sjuV+Mh0p8sSp8FRJVoy4bnn2QA9
+         jPEYwxlaF9ooPwy+8HJoYrjt0LocOcCedEiJq/KY46LD17Q4GoG7cnevh+D8wxdzbVfY
+         PLASeXnpdF6KyXWVwt+pMpLbMYosAlhCx24xg7zs8lPP9a5qQPE/uUll9ajaFEJOM6Ae
+         yRHxhmMbIBvMqx2e04olr1L5CCWAQsjyzCyXRGaRC4G30bBEAXw3y46p3M3q6+GY1Rnx
+         VquA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680897292;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680897310; x=1683489310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UnW6A28IKcreFUAfuKike2SwwSqJ7t/qMOojsEiWd3o=;
-        b=Smukj6oo2RQqj+jn+wJI24OsIECZ/zYsvYkK9tduF9GDST/CHYyW6rvP7m1aWZKKIn
-         1WtcMr/6nB+JEHLBjPwVAA7fATisDgSAtCti1FsPDwXnzm35xxKrA2vLJsdO1PI8l4EX
-         9sN2rLNne0UI2ukiwUSM+uweITlJtNEzmq5XQvr+1EWkNYuYo2D93Z20ceZ7PT6ceK+2
-         uFKqa12tl4Ar8lhxnYMHQB92ZnW22vP/pvHnmIWvhi+HJwtRGTq9uT87Crbc3DDv2tdc
-         hFftr4uYZEkM9qJoa6N7NWALMUY7om/u4XO+JYxG49PGRMFywLAuku6ZTZQaI1pF9e7H
-         bn6A==
-X-Gm-Message-State: AAQBX9dvMug2za8oUQlc0rGcBCLKJyVchs55JlsWbZVeakwRrOKvuxax
-        VNy2Ij75MEjiHLMxC5MuNOGy0A==
-X-Google-Smtp-Source: AKy350ZZhBTnloXL3RG6GqwZQd81A/jMWiVaAxZ9A4Rr9J2WSc8pzQlD5NC/nIpe1C+nfs6cMJsEPw==
-X-Received: by 2002:ac2:5f0f:0:b0:4eb:13ff:6ca7 with SMTP id 15-20020ac25f0f000000b004eb13ff6ca7mr918254lfq.16.1680897292119;
-        Fri, 07 Apr 2023 12:54:52 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id u5-20020ac248a5000000b004d856fe5121sm839981lfg.194.2023.04.07.12.54.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 12:54:51 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 07 Apr 2023 21:54:44 +0200
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sm6115p-j606f: Enable ATH10K WiFi
+        bh=yRLvMBwRYgN9rZY0Zb0vSfDSDaMTw9OUufeYYmz/skw=;
+        b=uOSaQrh0g/3hOb4Lv1P+eKTHkTgzdhPQ9Rg2VivaG35EDgDETz3TrIZ+UQfL9rQT7P
+         WftEmeRUHT8vnrzvBcuh32I7TifauF7DmmNLABbAhtdVG7Wk/9iETDMsvHWjIpNGkq7N
+         UP0o5BJMFOvFuRGnucG1Z0TaUiAjiP17sEBUvS5cum+cMmoakwfe53Qz8QsKYj0kHIxN
+         RI0n6vWJ0JiI8IwAfJr4n+o/UxRgaATh5st2AwrHqfchlPAEBm1oHtfRp7kQpUy0Z9AB
+         DSoXmC0L5K8QQnN0P11N1h5aNnOuRr36u7Xydt2OIJMP+Y0VuaPGiPHam8XPhyU5Xzdz
+         ApKQ==
+X-Gm-Message-State: AAQBX9fwHxYgMjiWR7L9lsHJn8U9hz0zb6hLfy1dokVXX42vsc+GdyqW
+        5THHxcpJ+4qySqOI6kNKWdXmnbNZ/y3Edo0i+6pA+w==
+X-Google-Smtp-Source: AKy350Zdn9kJpAE9Iql9IWBE7I7HcL96ooTIkSJ6p3oPGATAQjzlKAHto1RtQSOBZZ2ouYHs2x095vPSxO+sue+Ce+I=
+X-Received: by 2002:a65:6201:0:b0:4fc:2058:fa29 with SMTP id
+ d1-20020a656201000000b004fc2058fa29mr685882pgv.1.1680897309863; Fri, 07 Apr
+ 2023 12:55:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230406-topic-lenovo_features-v2-4-625d7cb4a944@linaro.org>
-References: <20230406-topic-lenovo_features-v2-0-625d7cb4a944@linaro.org>
-In-Reply-To: <20230406-topic-lenovo_features-v2-0-625d7cb4a944@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1680897283; l=1763;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=b3Zu3ZZnDQhyKIftWOiLA89iYJJNHGbq+oJ3wY2oUSk=;
- b=eVPsQfPvLHPeKGN8di7rL5TOwfLtMuC4wjd3d03xaNYMEJ9N8wylr+p90aUi7lfQEjG2NeH+8QY4
- XrznSAhtCYgwlrLVRl/DbslgdBrm3qdA/s64o9xWOM3fnCnTixe/
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230401170117.1580840-1-masahiroy@kernel.org> <20230403144758.GA3460665@dev-arch.thelio-3990X>
+In-Reply-To: <20230403144758.GA3460665@dev-arch.thelio-3990X>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 12:54:58 -0700
+Message-ID: <CAKwvOd=3LoK7_qSijzk6Ww265LMDOk2-gQ-k9r0RwvENLi9JBA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: clang: do not use CROSS_COMPILE for target triple
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Fangrui Song <maskray@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the onboard QCA Wi-Fi. HW identifiers for reference:
-qmi chip_id 0x320 chip_family 0x4001 board_id 0xff soc_id 0x400e0000
+On Mon, Apr 3, 2023 at 7:48=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Sun, Apr 02, 2023 at 02:01:17AM +0900, Masahiro Yamada wrote:
+> > The target triple is overridden by the user-supplied CROSS_COMPILE,
+> > but I do not see a good reason to support it. Users can use a new
+> > architecture without adding CLANG_TARGET_FLAGS_*, but that would be
+> > a rare case.
+> >
+> > Use the hard-coded and deterministic target triple all the time.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> I know of one bug where the value of '--target' matters:
+>
+> https://github.com/ClangBuiltLinux/linux/issues/1244
+>
+> This was fixed in LLVM 12.0.0. We are not testing this in our CI though,
+> so we would not get bit by this (we could bump the minimum supported
+> version of LLVM to 12.0.0 for this, we have talked recently about doing
+> it for other reasons).
+>
+> I guess I cannot really think of a good reason not to do this aside from
+> that; the target triple should only affect code generation, rather than
+> tool selection (i.e., this does not take away the ability to use a
+> custom set of binutils with clang).
+>
+> However, Nick is currently OOO and I would like his opinion voiced
+> before we commit to this. Consider this a tentative:
 
-Firmware sources:
-/vendor/firmware_mnt/image/wlanmdsp.bin -> qcom/.../wlanmdsp.mbn
-/vendor/firmware_mnt/image/bdwlan.bXX [1] -> [2] -> ath10k/.../board-2.bin
-[3] -> ath10k/.../firmware-5.bin
+Yeah, nothing I could think of; at this point CROSS_COMPILE is only
+necessary for LLVM_IAS=3D0 builds and s390 (since LLD lacks s390
+support) IIUC.
 
-Not sure where 3 comes from on the device itself, gotta investigate that..
+A user is more likely to adjust the --target for the host, which they
+can do via USERCFLAGS or USERLDFLAGS, but not for the target.  I don't
+think the gnu vs musl for the target triple makes a difference; we
+might even be able to omit that part of the triple but I haven't
+grepped through LLVM sources to see if that would result in
+differences for codegen.
 
-According to [4], it's called WCN3990_STRAIT.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[1] XX = board_id printed when the file is missing or by your downstream
-kernel firmware loader in the dmesg; if XX=ff, use bdwlan.bin
+>
+> Acked-by: Nathan Chancellor <nathan@kernel.org>
+>
+> > ---
+> >
+> >  scripts/Makefile.clang | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 70b354fa1cb4..9076cc939e87 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -13,15 +13,11 @@ CLANG_TARGET_FLAGS_x86            :=3D x86_64-linux=
+-gnu
+> >  CLANG_TARGET_FLAGS_um                :=3D $(CLANG_TARGET_FLAGS_$(SUBAR=
+CH))
+> >  CLANG_TARGET_FLAGS           :=3D $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> >
+> > -ifeq ($(CROSS_COMPILE),)
+> >  ifeq ($(CLANG_TARGET_FLAGS),)
+> > -$(error Specify CROSS_COMPILE or add '--target=3D' option to scripts/M=
+akefile.clang)
+> > +$(error add '--target=3D' option to scripts/Makefile.clang)
+> >  else
+> >  CLANG_FLAGS  +=3D --target=3D$(CLANG_TARGET_FLAGS)
+> > -endif # CLANG_TARGET_FLAGS
+> > -else
+> > -CLANG_FLAGS  +=3D --target=3D$(notdir $(CROSS_COMPILE:%-=3D%))
+> > -endif # CROSS_COMPILE
+> > +endif
+> >
+> >  ifeq ($(LLVM_IAS),0)
+> >  CLANG_FLAGS  +=3D -fno-integrated-as
+> > --
+> > 2.37.2
+> >
 
-[2] https://github.com/jhugo/linux/blob/5.5rc2_wifi/README
-[3] https://github.com/kvalo/ath10k-firmware/blob/master/WCN3990/hw1.0/HL3.1/WLAN.HL.3.1-01040-QCAHLSWMTPLZ-1/firmware-5.bin
-[4] https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/wlan/qca-wifi-host-cmn/-/blob/LA.VENDOR.1.0.r1-20700-WAIPIO.QSSI13.0/hif/src/hif_hw_version.h#L55
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-index bc232deb802b..ea3340d31110 100644
---- a/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-+++ b/arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts
-@@ -315,6 +315,15 @@ &usb_hsphy {
- 	status = "okay";
- };
- 
-+&wifi {
-+	vdd-0.8-cx-mx-supply = <&pm6125_l8>;
-+	vdd-1.8-xo-supply = <&pm6125_l16>;
-+	vdd-1.3-rfa-supply = <&pm6125_l17>;
-+	vdd-3.3-ch0-supply = <&pm6125_l23>;
-+	qcom,ath10k-calibration-variant = "Lenovo_P11";
-+	status = "okay";
-+};
-+
- &xo_board {
- 	clock-frequency = <19200000>;
- };
-
--- 
-2.40.0
-
+--=20
+Thanks,
+~Nick Desaulniers
