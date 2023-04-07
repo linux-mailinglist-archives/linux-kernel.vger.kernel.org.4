@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E73C6DAC2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1430E6DAC2A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240624AbjDGLXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
+        id S240607AbjDGLXL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 07:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240619AbjDGLXU (ORCPT
+        with ESMTP id S240260AbjDGLXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:23:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6F15277
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680866552;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hH4U311j/Jsqa/Lz2ki1vR6iZrMlUESpjPBImXUbiAE=;
-        b=RYL74NdujvmcjyibmRDgZrTVcH0MyuaC2gEz6QFmyOsA3I6r10GRDFyxrLSjmX9WdBG4Ck
-        +w2y9N4JQlrFBexQZnCzqC2oTaN0neTSi2/ggvW4OfnhR4soCnYg1Mz6xGjyPDJ0CECU+2
-        BreuPWXkEKMfOBMyTBm8ngDS57uRZro=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-517-2Zf7pP39O7ehxmlvKZKOAg-1; Fri, 07 Apr 2023 07:22:31 -0400
-X-MC-Unique: 2Zf7pP39O7ehxmlvKZKOAg-1
-Received: by mail-wr1-f71.google.com with SMTP id bn9-20020a056000060900b002cfe8493fe6so5181489wrb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:22:30 -0700 (PDT)
+        Fri, 7 Apr 2023 07:23:09 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F41D5FC8;
+        Fri,  7 Apr 2023 04:23:08 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-93434918b67so144120766b.0;
+        Fri, 07 Apr 2023 04:23:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680866549;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hH4U311j/Jsqa/Lz2ki1vR6iZrMlUESpjPBImXUbiAE=;
-        b=MSXd1ua5++zXzLxrmtdwHi+veovCxs6MZvTIGvCEZUjvcoiP5+W2uSJEdbva/j47fD
-         4hHHWlCSUi9Mz6Lxx5AQl08KQ+BrNoK8Qxm4Jyg+gEyeR7cdjwF7gclShEur+CUk17Vz
-         CE+QAwwre0DIjrlo3FwbH+O3GqVlwNyKUsmclc/aRmu/3MEIkI7+vDy+xEQEz/jBQYZm
-         qiVJc3pH/W4GVo9VpIAMNk9dDZgmm5rMT3dCm02wnLdW6nA6S9OcJuIkT/96ZDfnzMsR
-         dzmTgmvZ5gHJrkCnxhRMsl1MazjzPWsdPHKLCqpXoTgiroO1I/P1cJvlP0ICxKC+wkXR
-         nT5g==
-X-Gm-Message-State: AAQBX9c34LS8hyl1kDsekDSxaVVNuMfNyCEL66Wh3U1c/qvW0AnLA1ak
-        eR9X5WNS0p6nGmMBPHDE6K2O3QTj08/TqB/R+3wunMqq3ySxv8oksIsW1e98ITBG58zGKBiNuTz
-        XIoDdv/DAoLYAR5txOgFh11aeqOd7IjSJFRJOeO/K+dKtkRXBabUaSw+plrCzM3JT6leWQplw2b
-        GzB+WV68I7
-X-Received: by 2002:adf:fb83:0:b0:2c5:5a65:79a0 with SMTP id a3-20020adffb83000000b002c55a6579a0mr1266519wrr.53.1680866549728;
-        Fri, 07 Apr 2023 04:22:29 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZoXdyDFp/08AQ2n3ydTt4/RdllFrwf07aFzR19kGeao0DxT1onEBIG3ePDCokvXC+kvLlMVQ==
-X-Received: by 2002:adf:fb83:0:b0:2c5:5a65:79a0 with SMTP id a3-20020adffb83000000b002c55a6579a0mr1266495wrr.53.1680866549380;
-        Fri, 07 Apr 2023 04:22:29 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id t5-20020a5d6905000000b002efb4f2d240sm258556wru.87.2023.04.07.04.22.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 04:22:29 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        =?utf-8?Q?Ma=C3=ADra?= Canal <mcanal@igalia.com>,
-        Marius Vlad <marius.vlad@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 0/2] drm/vkms: A couple of trivial cleanups
-In-Reply-To: <20230406110235.3092055-1-javierm@redhat.com>
-References: <20230406110235.3092055-1-javierm@redhat.com>
-Date:   Fri, 07 Apr 2023 13:22:28 +0200
-Message-ID: <87wn2o6iob.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20210112; t=1680866587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H22T/yjbIlv40VndTuYM1BBNLs0U+57UTH8G/Ew4gkE=;
+        b=GTMxNU/diEWkCtEBWPAtaA7RzHM+kNXBwrTFJSU/gw8soImtql0akZ+sIxAigjc5QI
+         ffFU+83Eiu8n+VqPR+MBnglt/JQbV4gromJLe4znHZMGaSpBULTWKupA6Z0dG7E8EILD
+         P4lx3xPsAs47ub2qIPvD3LSpwPUpxoXF0DQhFc30IatsVl5fVpxMO+ImF+VTRVu2fJFf
+         yoO4oENmr3/71HsZMClN8h0kICWwjBQEPxGLQM3zZxDM/TasaJUB9g3FInmW2DYEQ3iw
+         zEJ6mB/NCpfEegAA/CQuYVsaXTtPWWwVQv1GOVWMm/w3ofYY5Io9FMjznrzgyeHQOOQP
+         olrg==
+X-Gm-Message-State: AAQBX9cFz8ERoEgbE3zBW0cd1xjpt/H7OAi6JH3ImNkYR8Lf0mV8LdUu
+        O35GgJCK/xE3ZEJaeSa8pwdZsmIMIwvzhclmc2Z3/oDF
+X-Google-Smtp-Source: AKy350bKkBb+ciOaOKgeVGyVXNHKVDb6UJJ3PWrBU+Bs7qJeaNH5l+o6jCCdOc5eZWP0WfJWJUyKamkqN1MtaEjOvXI=
+X-Received: by 2002:a50:a6d5:0:b0:4fb:2593:846 with SMTP id
+ f21-20020a50a6d5000000b004fb25930846mr1283693edc.3.1680866587032; Fri, 07 Apr
+ 2023 04:23:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <8c788b8029b3a11f012915dad6154e7cc481f997.1680563899.git.viresh.kumar@linaro.org>
+In-Reply-To: <8c788b8029b3a11f012915dad6154e7cc481f997.1680563899.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 7 Apr 2023 13:22:55 +0200
+Message-ID: <CAJZ5v0h0d3pidPC8iK2LA36nVJEHXY_2et8G0fjjVnpbyGy5+Q@mail.gmail.com>
+Subject: Re: [PATCH V2] cpufreq: drivers with target_index() must set freq_table
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Yajun Deng <yajun.deng@linux.dev>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Javier Martinez Canillas <javierm@redhat.com> writes:
+On Tue, Apr 4, 2023 at 1:39 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Since the cpufreq core directly uses freq_table, for cpufreq drivers
+> that set their target_index() callback, make it mandatory for them to
+> set the same.
+>
+> Since this is set per policy and normally from policy->init(), do this
+> from cpufreq_table_validate_and_sort() which gets called right after
+> ->init().
+>
+> Reported-by: Yajun Deng <yajun.deng@linux.dev>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> V2: Move declaration to cpufreq.h.
+>
+>  drivers/cpufreq/cpufreq.c    | 5 +++++
+>  drivers/cpufreq/freq_table.c | 7 ++++++-
+>  include/linux/cpufreq.h      | 1 +
+>  3 files changed, 12 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 6d8fd3b8dcb5..09131c54703f 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -73,6 +73,11 @@ static inline bool has_target(void)
+>         return cpufreq_driver->target_index || cpufreq_driver->target;
+>  }
+>
+> +bool has_target_index(void)
+> +{
+> +       return !!cpufreq_driver->target_index;
+> +}
+> +
+>  /* internal prototypes */
+>  static unsigned int __cpufreq_get(struct cpufreq_policy *policy);
+>  static int cpufreq_init_governor(struct cpufreq_policy *policy);
+> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> index 90bfc27ed1ba..c4d4643b6ca6 100644
+> --- a/drivers/cpufreq/freq_table.c
+> +++ b/drivers/cpufreq/freq_table.c
+> @@ -355,8 +355,13 @@ int cpufreq_table_validate_and_sort(struct cpufreq_policy *policy)
+>  {
+>         int ret;
+>
+> -       if (!policy->freq_table)
+> +       if (!policy->freq_table) {
+> +               /* Freq table must be passed by drivers with target_index() */
+> +               if (has_target_index())
+> +                       return -EINVAL;
+> +
+>                 return 0;
+> +       }
+>
+>         ret = cpufreq_frequency_table_cpuinfo(policy, policy->freq_table);
+>         if (ret)
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 65623233ab2f..541013487a0e 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -237,6 +237,7 @@ bool cpufreq_supports_freq_invariance(void);
+>  struct kobject *get_governor_parent_kobj(struct cpufreq_policy *policy);
+>  void cpufreq_enable_fast_switch(struct cpufreq_policy *policy);
+>  void cpufreq_disable_fast_switch(struct cpufreq_policy *policy);
+> +bool has_target_index(void);
+>  #else
+>  static inline unsigned int cpufreq_get(unsigned int cpu)
+>  {
+> --
 
-> Hello,
->
-> This series contains two trivial cleanups for the vkms driver.
->
-> Patch #1 just gets rid of a wrapper helper that wasn't really adding that
-> much value and patch #2 drops the <drm/drm_simple_kms_helper.h> header
-> that was only used to call the drm_simple_encoder_init() function helper.
->
-> Best regards,
-> Javier
->
->
-> Javier Martinez Canillas (2):
->   drm/vkms: Drop vkms_connector_destroy() wrapper
->   drm/vkms: Remove <drm/drm_simple_kms_helper.h> include
->
-
-Pushed to drm-misc (drm-misc-next). Thanks!
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Applied as 6.4 material, thanks!
