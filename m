@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EE16DB514
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6996DB518
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjDGURS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 16:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
+        id S229983AbjDGURh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 16:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjDGURP (ORCPT
+        with ESMTP id S230089AbjDGURd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 16:17:15 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B74C66C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:16:59 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id o2so40846045plg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:16:59 -0700 (PDT)
+        Fri, 7 Apr 2023 16:17:33 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6300BC66C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:17:22 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id br6so55683883lfb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680898619; x=1683490619;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GENUw9PqHBdUQEL7FlbS+wdO3dyU6tn18qubnwix7jU=;
-        b=EaZapur5N7xnNq/YZo/eVlN61WzPv9HAnkbWBMyfaGhZ/0gJWIlsiyBVHWxzhdaw1t
-         R72R8SmNCfn7gOE3iA3IHUCRcbAhGdJeVPIls4cJLB0T7xnifBLTjxGwcaOsvhJNJjI+
-         l7hNO+bW2f7jkalZpw4AgJ3knwDIHaHVEouKYGvexkGYcX+HfBZ4SCS4piD0U6/Vq4WK
-         Mrr/ENhyEAyAZ3NGN1F+7exOIEN/OdgXkkifBZ+3wTF9MEgxikWSqb18Why1CqmTTPtH
-         eMA2SSTXI6uONKq0K2JOwTHAUu8YZZgEKzwE/KtMm2vjPpmSEy4nuAC8cchlsU9vl8VE
-         HaXA==
+        d=linaro.org; s=google; t=1680898640;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t1Dozau9Cfq9VYaMqEkVJAHlGg5EPFMV8ybCE21m3s4=;
+        b=UolUM2z0Wpfky7Un5OucPfkBEOdsVm1Ssn36f5GawY6zPNERQejvKqaz6qgAipqlAa
+         ot0uvIKN+3DbX643XKOk3diLo9BDHlUV8ssCmM8hkWRC3maxIH72tY5T/fdR4ti8We8/
+         +adignQsho73jcfInhXv3Y1XLJS3xyN8pnY2ZEiHuoqqS4cyeHOyj93d7pqVpjdvxyop
+         mI3T0Jt3WCeHTUrO08x7rO2/DFJ6MAPvYNfq5ICcmeHyh8k9EvWLK2tASVjXreNnITHj
+         ZwsQZVxyPwmm34EjJbiiBoJS1aj77pSBSO3ZhkaFkRh+u1AEYQSXMxQ0vG2GBW4LITp2
+         hyfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680898619; x=1683490619;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GENUw9PqHBdUQEL7FlbS+wdO3dyU6tn18qubnwix7jU=;
-        b=TKOWpI3eYlH3vVMy9la33WM3EckjJ67zQtqCrLpNLul/wBSb5JpK2g16y9QvepSlvD
-         Shq1UrMsEUUaX+75QcQ1V1TjQjONTGI2CFSWKUuAclMhv/Fq4z+sDqdfxOoTJLlcXbi4
-         UOzpl7MTn9f0U+wZfPArjvfBoeFohE2D9gG8hofA54T/YiDcPXL1dW8zSmHwsyEY01S6
-         3hWXHFiGbe3UgSNLC82Kic/MqtsxDqIeNj8DDkKRQmuhjNkSllD8plF6I9OOcbdrxFnY
-         RXX4XoMEwfTqH+JoahltIzcV7FFcXzsEgZZuW8AMnm3ydDAAmyAd+3sAS3doZm3uZDhE
-         dkiw==
-X-Gm-Message-State: AAQBX9eWio6r3MucR7F3OJRjTjWATRBx1hsxKUX3Eipea3WS03T/mF8/
-        4twrC6n5+mB8cZT2W6PyvIk8BWqapuwtJMUqQYwQ3Q==
-X-Google-Smtp-Source: AKy350ZCS9oS/E6rHTOEUBGi//7qEXg87vIrCUZNJ2ntFTukuiOYoRT5fpPKSGoUDyQro9/0w5iXN2I+1adj/vXTVZs=
-X-Received: by 2002:a17:902:7c10:b0:1a2:8871:b42a with SMTP id
- x16-20020a1709027c1000b001a28871b42amr1293738pll.2.1680898618741; Fri, 07 Apr
- 2023 13:16:58 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680898640;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t1Dozau9Cfq9VYaMqEkVJAHlGg5EPFMV8ybCE21m3s4=;
+        b=m9+R1+b9xmjgpWMNh4a5vz344Jvnaxy5D3QyRR4pVM/OrBLqCK9iWqLfhEl7pMZ4K/
+         K4dXwEGjNvGtwWUV1fdX1k+rLfRlRaCx/3jQ+SM1P6Nn4eAJ2wPesZDOhop64MIfX4xX
+         TR2iEXFxD44EtjV1Q4h4z52XEpFuXXcDVJKCsOT931sEZ2SbbbyLFIkROjnloRb5OMYe
+         8r5YKhYPK8rUeLQR+htyRz3N3ten6Ihxg+Bz9YwMNssG2pHnWHEmNdebZ0mz1HeJad6S
+         NWlA+WKKEskJlAz+W14pSqOZxKnXEMdG6T+jSs6QfRGkkB5FCyenvLBwriQr1J6V3uMk
+         OyPQ==
+X-Gm-Message-State: AAQBX9fOKQYQU8taX4qjZxH21DDDo75ibNScZFGSxRF/xmDN2YHPDk3r
+        RI0no+Y2s/3oA5BqL2ZVLkMfDA==
+X-Google-Smtp-Source: AKy350Z2JIekhTaqs1ClXrFa4SIlxWK9pWuzvd4Kdy8PeMZb0+IMYtMfKBSGlsY6ENxMpNpmx3raUg==
+X-Received: by 2002:a19:7418:0:b0:4db:3a92:2c85 with SMTP id v24-20020a197418000000b004db3a922c85mr761822lfe.67.1680898640661;
+        Fri, 07 Apr 2023 13:17:20 -0700 (PDT)
+Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
+        by smtp.gmail.com with ESMTPSA id w1-20020ac24421000000b004eb51cf49d0sm854624lfl.306.2023.04.07.13.17.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 13:17:20 -0700 (PDT)
+Message-ID: <422abc8b-5c01-238b-7793-212597dbffc8@linaro.org>
+Date:   Fri, 7 Apr 2023 22:17:18 +0200
 MIME-Version: 1.0
-References: <20230308115243.82592-1-masahiroy@kernel.org> <20230308115243.82592-5-masahiroy@kernel.org>
-In-Reply-To: <20230308115243.82592-5-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Apr 2023 13:16:47 -0700
-Message-ID: <CAKwvOdnu8Z2wTDG+R515t+ZkaVC=b7dV8g0agwvhw3BiBBePNg@mail.gmail.com>
-Subject: Re: [PATCH 5/8] scripts/kallsyms: move compiler-generated symbol
- patterns to mksysmap
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH RFT v2 01/14] dt-bindings: clock: qcom,rpmcc: Add a way to
+ enable unused clock cleanup
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
+ <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
+ <20230316225803.GA4036689-robh@kernel.org>
+ <62533d5a-f39a-0806-b4d9-932e2af6beef@linaro.org>
+ <5601e0edc19dc03d0fc516f9ffe4d1aa.sboyd@kernel.org>
+ <2a379401-fe87-9e30-5449-513dd23c52f5@linaro.org>
+In-Reply-To: <2a379401-fe87-9e30-5449-513dd23c52f5@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,181 +87,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 3:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> scripts/kallsyms.c maintains compiler-generated symbols, but we end up
-> with something similar in scripts/mksysmap to avoid the "Inconsistent
-> kallsyms data" error. For example, commit c17a2538704f ("mksysmap: Fix
-> the mismatch of 'L0' symbols in System.map").
->
-> They were separately maintained prior to commit 94ff2f63d6a3 ("kbuild:
-> reuse mksysmap output for kallsyms").
->
-> Now that scripts/kallsyms.c parses the output of scripts/mksysmap,
-> it makes more sense to collect all the ignored patterns to mksysmap.
-
-Cool, thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/kallsyms.c | 59 ----------------------------------------------
->  scripts/mksysmap   | 43 +++++++++++++++++++++++++++++++++
->  2 files changed, 43 insertions(+), 59 deletions(-)
->
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index e572fda6fe42..97d514c0fc8f 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -102,65 +102,6 @@ static char *sym_name(const struct sym_entry *s)
->
->  static bool is_ignored_symbol(const char *name, char type)
->  {
-> -       /* Symbol names that exactly match to the following are ignored.*=
-/
-> -       static const char * const ignored_symbols[] =3D {
-> -               "_SDA_BASE_",           /* ppc */
-> -               "_SDA2_BASE_",          /* ppc */
-> -               NULL
-> -       };
-> -
-> -       /* Symbol names that begin with the following are ignored.*/
-> -       static const char * const ignored_prefixes[] =3D {
-> -               "__efistub_",           /* arm64 EFI stub namespace */
-> -               "__kvm_nvhe_$",         /* arm64 local symbols in non-VHE=
- KVM namespace */
-> -               "__kvm_nvhe_.L",        /* arm64 local symbols in non-VHE=
- KVM namespace */
-> -               "__AArch64ADRPThunk_",  /* arm64 lld */
-> -               "__ARMV5PILongThunk_",  /* arm lld */
-> -               "__ARMV7PILongThunk_",
-> -               "__ThumbV7PILongThunk_",
-> -               "__LA25Thunk_",         /* mips lld */
-> -               "__microLA25Thunk_",
-> -               "__kcfi_typeid_",       /* CFI type identifiers */
-> -               NULL
-> -       };
-> -
-> -       /* Symbol names that end with the following are ignored.*/
-> -       static const char * const ignored_suffixes[] =3D {
-> -               "_from_arm",            /* arm */
-> -               "_from_thumb",          /* arm */
-> -               "_veneer",              /* arm */
-> -               NULL
-> -       };
-> -
-> -       /* Symbol names that contain the following are ignored.*/
-> -       static const char * const ignored_matches[] =3D {
-> -               ".long_branch.",        /* ppc stub */
-> -               ".plt_branch.",         /* ppc stub */
-> -               NULL
-> -       };
-> -
-> -       const char * const *p;
-> -
-> -       for (p =3D ignored_symbols; *p; p++)
-> -               if (!strcmp(name, *p))
-> -                       return true;
-> -
-> -       for (p =3D ignored_prefixes; *p; p++)
-> -               if (!strncmp(name, *p, strlen(*p)))
-> -                       return true;
-> -
-> -       for (p =3D ignored_suffixes; *p; p++) {
-> -               int l =3D strlen(name) - strlen(*p);
-> -
-> -               if (l >=3D 0 && !strcmp(name + l, *p))
-> -                       return true;
-> -       }
-> -
-> -       for (p =3D ignored_matches; *p; p++) {
-> -               if (strstr(name, *p))
-> -                       return true;
-> -       }
-> -
->         if (type =3D=3D 'u' || type =3D=3D 'n')
->                 return true;
->
-> diff --git a/scripts/mksysmap b/scripts/mksysmap
-> index 1efd61ee0bac..d8ad6ff69320 100755
-> --- a/scripts/mksysmap
-> +++ b/scripts/mksysmap
-> @@ -36,6 +36,28 @@ ${NM} -n ${1} | sed >${2} -e "
->  # local labels, .LBB, .Ltmpxxx, .L__unnamed_xx, .LASANPC, etc.
->  / \.L/d
->
-> +# arm64 EFI stub namespace
-> +/ __efistub_/d
-> +
-> +# arm64 local symbols in non-VHE KVM namespace
-> +/ __kvm_nvhe_\$/d
-> +/ __kvm_nvhe_\.L/d
-> +
-> +# arm64 lld
-> +/ __AArch64ADRPThunk_/d
-> +
-> +# arm lld
-> +/ __ARMV5PILongThunk_/d
-> +/ __ARMV7PILongThunk_/d
-> +/ __ThumbV7PILongThunk_/d
-> +
-> +# mips lld
-> +/ __LA25Thunk_/d
-> +/ __microLA25Thunk_/d
-> +
-> +# CFI type identifiers
-> +/ __kcfi_typeid_/d
-> +
->  # CRC from modversions
->  / __crc_/d
->
-> @@ -45,6 +67,15 @@ ${NM} -n ${1} | sed >${2} -e "
->  # EXPORT_SYMBOL (namespace)
->  / __kstrtabns_/d
->
-> +# ----------------------------------------------------------------------=
------
-> +# Ignored suffixes
-> +#  (do not forget '$' after each pattern)
-> +
-> +# arm
-> +/_from_arm$/d
-> +/_from_thumb$/d
-> +/_veneer$/d
-> +
->  # ----------------------------------------------------------------------=
------
->  # Ignored symbols (exact match)
->  #  (do not forget a space before and '$' after each pattern)
-> @@ -52,6 +83,18 @@ ${NM} -n ${1} | sed >${2} -e "
->  # for LoongArch?
->  / L0$/d
->
-> +# ppc
-> +/ _SDA_BASE_$/d
-> +/ _SDA2_BASE_$/d
-> +
-> +# ----------------------------------------------------------------------=
------
-> +# Ignored patterns
-> +#  (symbols that contain the pattern are ignored)
-> +
-> +# ppc stub
-> +/\.long_branch\./d
-> +/\.plt_branch\./d
-> +
->  # ----------------------------------------------------------------------=
------
->  # Ignored kallsyms symbols
->  #
-> --
-> 2.34.1
->
 
 
---=20
-Thanks,
-~Nick Desaulniers
+On 6.04.2023 16:44, Konrad Dybcio wrote:
+> 
+> 
+> On 17.03.2023 19:20, Stephen Boyd wrote:
+>> Quoting Konrad Dybcio (2023-03-16 17:31:34)
+>>>
+>>> On 16.03.2023 23:58, Rob Herring wrote:
+>>>> On Wed, Mar 08, 2023 at 10:35:17PM +0100, Konrad Dybcio wrote:
+>>>>>  
+>>>>> +  qcom,clk-disable-unused:
+>>>>> +    type: boolean
+>>>>> +    description:
+>>>>> +      Indicates whether unused RPM clocks can be shut down with the common
+>>>>> +      unused clock cleanup. Requires a functional interconnect driver.
+>>>>
+>>>> I don't think this should be QCom specific. Come up with something 
+>>>> common (which will probably have some debate). 
+>>> Generally the opposite (ignoring unused clocks during the cleanup) is
+>>> the thing you need to opt into.
+>>>
+>>> I can however see how (especially with the focus on not breaking things
+>>> for older DTs) somebody else may also decide to only allow them to be
+>>> cleaned up conditionally (by marking the clocks that were enabled earlier
+>>> as enabled in Linux OR not addding clk.flags |= CLK_IGNORE_UNUSED) as we
+>>> do here.
+>>>
+>>> Stephen, Rob, would `clk-disable-unused` be a fitting generic property
+>>> name for that? Should we also think about `clk-ignore-unused` as a
+>>> clock-controller-specific alternative to the CCF-wide clk_ignore_unused
+>>> cmdline?
+>>>
+>>
+>> There are multiple threads on the list about disabling unused clks.
+>> Moving the decision to disable unused clks to a DT property is yet
+>> another approach. I'd rather not do that, because it really isn't
+>> describing the hardware configuration. If anything, I'd expect the
+>> property to be describing which clks are enabled by the firmware and
+>> then leave the decision to disable them because they're unused up to the
+>> software.
+> After some more thinking, I realized that this could be made opt-in
+> simply with driver_data..
+> 
+> WDYT?
+..on a re-evaluation, obviously not a great idea.. Old DTBs will not
+be happy about that.
+
+Konrad
+> 
+> Konrad
