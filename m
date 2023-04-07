@@ -2,55 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BE26DAC47
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504DE6DAC4C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbjDGLke convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 07:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S239768AbjDGLkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDGLkc (ORCPT
+        with ESMTP id S229437AbjDGLku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:40:32 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6840959EA;
-        Fri,  7 Apr 2023 04:40:31 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id jw24so7813076ejc.3;
-        Fri, 07 Apr 2023 04:40:31 -0700 (PDT)
+        Fri, 7 Apr 2023 07:40:50 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F157683
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:40:44 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54c12009c30so78496467b3.9
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680867643; x=1683459643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bhp1D4MU620tEuYfWwD9BEmVsWgqQus92qBJwjtxDro=;
+        b=fFvwxikqEAeHJ1MyF6Mjcy5mzl2OJh63dIxaAB2Eh3YcjM/Owu5lHKJFBUE6cx53n5
+         ge0hlhxbz5JCzOGC7sqHExwugQIn4P86tbebsNoAdBAAZk2t+4qGBnT3jA9uveXp3r3L
+         bhnpYubAipVh0F7oIPpqBSXO3s1J/fsCFbJYA3V8qR9HtOW6umbqHOrD/IH0kF9hou+9
+         Rgcn2cuompVeamLBt3NAPLr1/jiDxRJVX8kZyxeZphYp1Dmme4IHcxzSlWV2WvMAVLUm
+         hTBdY3mZ3//C/vmRayZFAwxnXHagHtuuxkHBEuV0mhQCaMg+UxDguJHFP45fw1kaLBiA
+         Ukxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680867630;
+        d=1e100.net; s=20210112; t=1680867643; x=1683459643;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=owpG5rT95/qTePvvHQtyxBU+QgYYNRhwqWGHnVy5pPc=;
-        b=17Q8T0LO/H5LNBLh2tliB5try5iJiVLC4rG/IxVj48Y7mNz+3fdL73lcvJJVb0r58B
-         qhKNRyo6ji1QwI4Z+Cxt5p7/qNdAdvFdXGqViwtyi/M64GdLjONPtLjpk0dRUM9WqiCJ
-         0DBuWb3DvrDtCRVaWSa0fFM7US1Yx4emvMuwCics8ePaaiRLr8w2Tmjtr/uzUQ1oL6g/
-         EIYM0cdmrMxuE1+ntEbkqvJGei7qTFg8g/B+48C+7B9QX23s5LORaGhAOy8+wtmwcVSv
-         8xNOo1+NCQEjn4OYjnce/O6qmrRE3khOdrivMsgcPHCod6zOZC/2oFR6YZrUFQ1KxH0d
-         Zy5g==
-X-Gm-Message-State: AAQBX9eNVUv6bLfHEm6v8TCu9t0k+732HBhRq5jZqU9/jyaHGf9iYl4d
-        ttHn3DwwLFugeZNrfwzR88o0Dd2jAoHXwUnDKDs=
-X-Google-Smtp-Source: AKy350ZjGzOw5+xf8+nFnZEZMnPPhgWN7ACdSS23qJ51hDW1ZPT2ScX8LYt0s1+e43xfImS2ZlnqrkVY8N+Bsfd7ffY=
-X-Received: by 2002:a17:906:802:b0:8b1:3298:c587 with SMTP id
- e2-20020a170906080200b008b13298c587mr1005588ejd.2.1680867629669; Fri, 07 Apr
- 2023 04:40:29 -0700 (PDT)
+        bh=bhp1D4MU620tEuYfWwD9BEmVsWgqQus92qBJwjtxDro=;
+        b=ufO2kqAEkxo2tuFVaUM39462GfgWrRsmpXxeoX9jSWeabUoZV9TEiWmRlJkK3nJCee
+         +OMdWZmBWtve2QnZE7wmwSp3nop2+KfQ/1r08Ynfa/wr7lrBA4pqSAcuyRdtKaQqDLYT
+         dGNmq6GPC7bJliDudngO3kfnaDbP/r7c5MKHLbONxxCZE5dU1pTphkvUTVB+ttcxmR8C
+         v192M19DpA2a2g45UmdToyIzaYGAuqQHrJzRzKQdRvvkK2KCics4nznDe9Mfix8fmR2H
+         yrD9MG25WhkHPnspHuq5O/jwXoSlVkHenzgxKUnWUUGCAB8+abuMuXgt9FMlOUgvHc1W
+         NjMw==
+X-Gm-Message-State: AAQBX9cr2kuTuAeMyUjMCMUQ4IOuSZYG2i578+/mwILETchvqgB3vQe9
+        wCQWfMq5UzLsILup8WMUqcxNmD9Wzst05LY2fWD30Q==
+X-Google-Smtp-Source: AKy350YoGyPsHOTAa1wet0tacy28TuEIoDXiA/LQepBDm7Xcz7qo6pPhP3CKaVtCoIyN9Fqb7B2gwVZJiToE8OVA9L8=
+X-Received: by 2002:a81:a783:0:b0:545:7143:2940 with SMTP id
+ e125-20020a81a783000000b0054571432940mr1022815ywh.0.1680867643596; Fri, 07
+ Apr 2023 04:40:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316153841.3666-1-rui.zhang@intel.com> <20230316153841.3666-8-rui.zhang@intel.com>
-In-Reply-To: <20230316153841.3666-8-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 7 Apr 2023 13:40:18 +0200
-Message-ID: <CAJZ5v0igEHBKkYU3eDfET1giR6xoNsYVxBycuxD_+QZiGW68nA@mail.gmail.com>
-Subject: Re: [PATCH 07/15] powercap/intel_rapl: Change primitive order
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
-        srinivas.pandruvada@intel.com
+References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com>
+ <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com> <CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com>
+In-Reply-To: <CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Fri, 7 Apr 2023 13:40:32 +0200
+Message-ID: <CAFGrd9ox3BftUxPai8WhWgf5UefTwnqnLsdo8kUHMYphB7nOTA@mail.gmail.com>
+Subject: Re: [PATCH v4 02/11] dt-bindings: pinctrl: mediatek,mt8365-pinctrl:
+ add drive strength property
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,70 +88,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 4:42 PM Zhang Rui <rui.zhang@intel.com> wrote:
+Le mar. 4 avr. 2023 =C3=A0 15:55, Linus Walleij <linus.walleij@linaro.org> =
+a =C3=A9crit :
 >
-> Move POWER_LIMIT1/POWER_LIMIT2/POWER_LIMIT4 to the beginning of enum
-> rapl_primitives so that they can be reused to represent different Power
-> Limits.
+> On Fri, Mar 31, 2023 at 7:55=E2=80=AFPM Alexandre Mergnat <amergnat@bayli=
+bre.com> wrote:
+>
+> > This SoC is able to drive the following output current:
+> > - 2 mA
+> > - 4 mA
+> > - 6 mA
+> > - 8 mA
+> > - 10 mA
+> > - 12 mA
+> > - 14 mA
+> > - 16 mA
+> >
+> > Then drive-strength property is set with enum to reflect its HW capabil=
+ity.
+> >
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>
+> This patch does not apply to my devel branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/=
+log/?h=3Ddevel
+>
+> Can you please rebase and resend?
 
-The meaning of the above is a bit unclear without reverse engineering
-the rest of the series.
+According to your suggestion on the other serie [1], I rebased this
+patch and added it to the other serie [2] to simplify the process
 
-> No functional change.
->
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/powercap/intel_rapl_common.c | 4 ++--
->  include/linux/intel_rapl.h           | 5 +++--
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 9e29e56f4900..3a8940d3bec8 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -631,14 +631,14 @@ static u64 rapl_unit_xlate(struct rapl_domain *rd, enum unit_type type,
->
->  static struct rapl_primitive_info rpis_default[NR_RAPL_PRIMITIVES] = {
->         /* name, mask, shift, msr index, unit divisor */
-> -       [ENERGY_COUNTER] = PRIMITIVE_INFO_INIT(ENERGY_COUNTER, ENERGY_STATUS_MASK, 0,
-> -                           RAPL_DOMAIN_REG_STATUS, ENERGY_UNIT, 0),
->         [POWER_LIMIT1] = PRIMITIVE_INFO_INIT(POWER_LIMIT1, POWER_LIMIT1_MASK, 0,
->                             RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
->         [POWER_LIMIT2] = PRIMITIVE_INFO_INIT(POWER_LIMIT2, POWER_LIMIT2_MASK, 32,
->                             RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
->         [POWER_LIMIT4] = PRIMITIVE_INFO_INIT(POWER_LIMIT4, POWER_LIMIT4_MASK, 0,
->                                 RAPL_DOMAIN_REG_PL4, POWER_UNIT, 0),
-> +       [ENERGY_COUNTER] = PRIMITIVE_INFO_INIT(ENERGY_COUNTER, ENERGY_STATUS_MASK, 0,
-> +                           RAPL_DOMAIN_REG_STATUS, ENERGY_UNIT, 0),
->         [FW_LOCK] = PRIMITIVE_INFO_INIT(FW_LOCK, POWER_LOW_LOCK, 31,
->                             RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
->         [PL1_ENABLE] = PRIMITIVE_INFO_INIT(PL1_ENABLE, POWER_LIMIT1_ENABLE, 15,
-> diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-> index 1648923f694d..856b739fd194 100644
-> --- a/include/linux/intel_rapl.h
-> +++ b/include/linux/intel_rapl.h
-> @@ -37,10 +37,10 @@ enum rapl_domain_reg_id {
->  struct rapl_domain;
->
->  enum rapl_primitives {
-> -       ENERGY_COUNTER,
->         POWER_LIMIT1,
->         POWER_LIMIT2,
->         POWER_LIMIT4,
-> +       ENERGY_COUNTER,
->         FW_LOCK,
->
->         PL1_ENABLE,             /* power limit 1, aka long term */
-> @@ -75,7 +75,8 @@ struct rapl_domain_data {
->         unsigned long timestamp;
->  };
->
-> -#define NR_POWER_LIMITS (3)
-> +#define NR_POWER_LIMITS        (POWER_LIMIT4 + 1)
-> +
->  struct rapl_power_limit {
->         struct powercap_zone_constraint *constraint;
->         int prim_id;            /* primitive ID used to enable */
-> --
-> 2.25.1
->
+Regards,
+Alexandre
+
+[1]: https://lore.kernel.org/all/CACRpkdYndXqTXrTakwv1mbvJBs-tG+pjOpLLCgS9c=
+rE0aBj0jA@mail.gmail.com/
+[2]: https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v3-0-6f56=
+d5c7a8de@baylibre.com/
