@@ -2,153 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705D76DB266
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9266DB26C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231499AbjDGSEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S231572AbjDGSFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbjDGSEI (ORCPT
+        with ESMTP id S231453AbjDGSFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:04:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D159EC140
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:03:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 276C660DCE
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 18:03:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A212BC433EF;
-        Fri,  7 Apr 2023 18:03:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680890616;
-        bh=zeLvM+wG9Reg7GPWHX1rrEptBgIOs976gIhZ41Bbdos=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bOGgaZo+OHVpjw84ut+dKEBX8kFMCYoAYvoqWCKJ+4sKeUDzoTpJFXWmNWDitx7Fz
-         az/TmAIhaqK17Oq6C8Bg/3lHyHo9y8gco3TEVPnUjZH1tyucUpvdp2ILqKtfPrIwxm
-         QnRv47iEtUSkXPWdL/GAlDpOPu07hs6MQcowF7tYX2ohpph3bbxrVIqbnr3Hsy56NO
-         uK1YxKGwuZY6n36JWZOQquc5nKAJwrYfX5mtk7QXlms/euEEbz+c1a8MFZFQgJ6dZo
-         dVf764QB+0TmW9RpbsMPNaA7inIOik2tT7UU3PO4JQmlKMm+rBHt8NxlmNQhWIY9L/
-         aI7IapTui+ybg==
-Date:   Fri, 7 Apr 2023 21:03:24 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm-treewide-redefine-max_order-sanely-fix.txt
-Message-ID: <ZDBa7HWZK69dKKzH@kernel.org>
-References: <9460377a-38aa-4f39-ad57-fb73725f92db@roeck-us.net>
- <20230406072529.vupqyrzqnhyozeyh@box.shutemov.name>
- <83e6bc46-dfc0-0e95-e69c-5b996af1e50b@roeck-us.net>
- <20230406151015.yndcm24fyxitvqyc@box.shutemov.name>
- <ZC82N4sP5xE63kl4@kernel.org>
- <20230406154423.20a991bbdd47630fc38d94e8@linux-foundation.org>
- <20230407124054.27iiers6o36pdfei@box.shutemov.name>
+        Fri, 7 Apr 2023 14:05:15 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4209C646;
+        Fri,  7 Apr 2023 11:05:09 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id bx42so16033355oib.6;
+        Fri, 07 Apr 2023 11:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680890709; x=1683482709;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
+        b=pFSH4am2cfu0NpsQdFED1amUu7I+RuyiHsbwrU+dPzLVXwtV9eJjTOTNA8rB+tvZI5
+         6yQHEe/c7Zzm+G/C4TuH/sTU4qAG74F/+xMq+qsj+Zr6t5ndmOBPab+1itwy13NA9DAb
+         FykOKF7xIBqBc8mKZ4mXesIVc5L49vcvbXj5rmRayQD80K+pc+tkHHvzbQYyrouyUz3E
+         LBPoLVoL0Hmb3ErTKlQ/JDnpl0b2H4LT+Kdlr+Zq50Aj7iLFVSFy1PQYccnnrD6xCPhF
+         +mFYc6dhjKLpKL1JwMNwA17PX9Exv1rgUohrM3T8keLOwm2RXgKvwCQatBLYTjHxmJ3I
+         vi9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680890709; x=1683482709;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
+        b=xx8/04IVuwEMkQRq+N8gJ4VI7V5SBJN9eZqffcY1NuedDZp0w7hRP43WcPf/jd1FVI
+         PYNZM/RiHXgVyAb81/T9bOqjw+R7EQfi/41StH+Uvt88d4+B6vbn/M/8VwBeRCXzxXU2
+         96XTzqwYRxTwFtmN2n/b7BdXoiMNlXAaoNYcaX8Entk05vqngZtaEAwcoz/ZhpI/Jtpx
+         e9WhA7Q/aZpI5B26cF3ObYkYdZ0HUBuUnnXbkzJqRH5WJuMVZFWBp/cyTRcxJTIDlyBq
+         FAsokthjnKvLAegfZb1nPv9sxN/KzU0OeDmAmU3+zGxyrGKT67Jv3QMCSH77oH9H74IF
+         jchA==
+X-Gm-Message-State: AAQBX9f6DpqJnLDHc+3Cm6HI2YftChwUZs74BE5jhx8RheG5xLVL0Rev
+        64eBdEfs5opuq+KMyxi/bgg=
+X-Google-Smtp-Source: AKy350avvLjqWh3OYQY55XilU6JN/EcZ//jxqILAkddASItdct3Il6r91YjXbWqCZs0vshJmWWX86g==
+X-Received: by 2002:aca:1e1a:0:b0:386:e3f8:2c6b with SMTP id m26-20020aca1e1a000000b00386e3f82c6bmr1152904oic.11.1680890708884;
+        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a6-20020a056808120600b003874631e249sm1899179oil.36.2023.04.07.11.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 7 Apr 2023 11:05:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH 1/8] net: netronome: constify pointers to
+ hwmon_channel_info
+Message-ID: <3a0391e7-21f6-432a-9872-329e298e1582@roeck-us.net>
+References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
+ <20230407084745.3aebbc9d@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230407124054.27iiers6o36pdfei@box.shutemov.name>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230407084745.3aebbc9d@kernel.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 03:40:54PM +0300, Kirill A. Shutemov wrote:
-> On Thu, Apr 06, 2023 at 03:44:23PM -0700, Andrew Morton wrote:
-> > On Fri, 7 Apr 2023 00:14:31 +0300 Mike Rapoport <rppt@kernel.org> wrote:
-> > 
-> > > > > Shouldn't that be
-> > > > > 		else
-> > > > > 			order = 0;
-> > > > > ?
-> > > > 
-> > > > +Mike.
-> > > > 
-> > > > No. start == 0 is MAX_ORDER-aligned. We want to free the pages in the
-> > > > largest chunks alignment allows.
-> > > 
-> > > Right. Before the changes to MAX_ORDER it was
-> > > 
-> > > 		order = min(MAX_ORDER - 1UL, __ffs(start));
-> > > 
-> > > which would evaluate to 10.
-> > > 
-> > > I'd just prefer the comment to include the explanation about why we choose
-> > > MAX_ORDER for start == 0. Say
-> > > 
-> > > 	/*
-> > > 	 * __ffs() behaviour is undefined for 0 and we want to free the
-> > > 	 * pages in the largest chunks alignment allows, so set order to
-> > > 	 * MAX_ORDER when start == 0
-> > > 	 */
-> > 
-> > Meanwhile I'd like to fix "various boot failures (hang) on arm targets"
-> > in -next, so I queued up Kirill's informal fix for now.
+On Fri, Apr 07, 2023 at 08:47:45AM -0700, Jakub Kicinski wrote:
+> On Fri,  7 Apr 2023 16:59:04 +0200 Krzysztof Kozlowski wrote:
+> > This depends on hwmon core patch:
+> > https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
 > 
-> Here's my variant of the fix up with more vervose comments.
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 7911224b1ed3..381e36ac9e4d 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -2043,7 +2043,16 @@ static void __init __free_pages_memory(unsigned long start, unsigned long end)
->  	int order;
->  
->  	while (start < end) {
-> -		order = min_t(int, MAX_ORDER, __ffs(start));
-> +		/*
-> +		 * Free the pages in the largest chunks alignment allows.
-> +		 *
-> +		 * __ffs() behaviour is undefined for 0. start == 0 is
-> +		 * MAX_ORDER-aligned, Set order to MAX_ORDER for the case.
+> That patch should have been put on a stable branch we can pull
+> and avoid any conflict risks... Next time?
 
-                                      ^ small s
-otherwise feel free to add
+Yes, and I don't feel comfortable applying all those patches through
+the hwmon tree since I have zero means to test them.
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+I created a stable branch at
 
-> +		 */
-> +		if (start)
-> +			order = min_t(int, MAX_ORDER, __ffs(start));
-> +		else
-> +			order = MAX_ORDER;
->  
->  		while (start + (1UL << order) > end)
->  			order--;
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index c8f0a8c2d049..8e0fa209d533 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -605,7 +605,18 @@ static void online_pages_range(unsigned long start_pfn, unsigned long nr_pages)
->  	 * this and the first chunk to online will be pageblock_nr_pages.
->  	 */
->  	for (pfn = start_pfn; pfn < end_pfn;) {
-> -		int order = min_t(int, MAX_ORDER, __ffs(pfn));
-> +		int order;
-> +
-> +		/*
-> +		 * Free to online pages in the largest chunks alignment allows.
-> +		 *
-> +		 * __ffs() behaviour is undefined for 0. start == 0 is
-> +		 * MAX_ORDER-aligned, Set order to MAX_ORDER for the case.
-> +		 */
-> +		if (pfn)
-> +			order = min_t(int, MAX_ORDER, __ffs(pfn));
-> +		else
-> +			order = MAX_ORDER;
->  
->  		(*online_page_callback)(pfn_to_page(pfn), order);
->  		pfn += (1UL << order);
-> -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
+git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
 
--- 
-Sincerely yours,
-Mike.
+Feel free to use it.
+
+Guenter
