@@ -2,121 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC216DB69E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D236DB6A2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjDGWk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
+        id S231251AbjDGWmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 18:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjDGWku (ORCPT
+        with ESMTP id S230365AbjDGWmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:40:50 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8349DCC23;
-        Fri,  7 Apr 2023 15:40:46 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337MeC6E023478;
-        Fri, 7 Apr 2023 22:40:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bI/wZP7ubTjCdHoQXeZS5R4X8U4Eh+xW5LDQQWeAzvw=;
- b=iNuq+OOEHuLKFivUAqE7GI0gY20XA4SlbCYhl6fpSZBrNK7a95QlBHoHdJcxLkPiXyq4
- XkledpZT3cNk1lyKRVNQX6yKdKlx8tpQe5puFeEm7fM/mNkvN+k0aJGOOz4hb59WNKXG
- 9XKVAhrUclkM9O4cOGBFyvioG989UPmhEB4IQ66zY/2Z+UmSXPMC6bY0l9EWEVT0OTox
- qH+94WaFbrs84ffi45xXA9Aoy49ecvbzVlOhm0dNjrnerWoqIf8LnP5Gv5pN2eMYFXJF
- tRspnHmCdCeEyjWjE1K8HXIb2Jl0VY79JDgYOJcqQejEbRLTCa9jjoCF6T/k8PltHzFn gQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psv4dmbu5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 22:40:40 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337Mednk032525
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Apr 2023 22:40:39 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 7 Apr 2023 15:40:38 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v2 3/3] usb: dwc3: gadget: Execute gadget stop after halting the controller
-Date:   Fri, 7 Apr 2023 15:40:25 -0700
-Message-ID: <20230407224025.22315-4-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230407224025.22315-1-quic_wcheng@quicinc.com>
-References: <20230407224025.22315-1-quic_wcheng@quicinc.com>
+        Fri, 7 Apr 2023 18:42:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77290D30D;
+        Fri,  7 Apr 2023 15:41:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D79716544F;
+        Fri,  7 Apr 2023 22:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFACC433D2;
+        Fri,  7 Apr 2023 22:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680907304;
+        bh=oU9YWGke34o2CXW/4PVaF6b6aPeOElbQjqDUFQFrfvE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=acEZK0S69gp0XtPgWqLPemetud9eCJPg+TSfmnr1MSU4qTXi/pUD4SwPyZtpb6Erl
+         1dBXqYh8QwIQKbFtSc+/WNjMneaEAOkPIB1axXbaB7+lrHpD9DvEgQE7B5YWEsHM5H
+         sa01jPj7TXUNEPRQx8FtBtwcefZmvrBMp1daJDOjgJ0Ta0couT4LyhuOJIOZAO1Vdh
+         tp6WD2C7pKwyOIOkz+NYVxyshtkZB5V0tmINZ5ikufmfW+DiVELeMelCiApKffyeCA
+         xuFw+/o9Dto4Lw9akYx97/Uol1B3iH5AIZ8WJ77hfaZKw/DoyHeSpBMmZaaYM4iiUc
+         CA8sh2aMn0/2w==
+Date:   Fri, 7 Apr 2023 17:41:42 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     "Natu, Mahesh" <mahesh.natu@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
+ error recovery
+Message-ID: <20230407224142.GA3829056@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CVG6L4uznfyjBYkr0cg9LmP7ve9qeDrW
-X-Proofpoint-ORIG-GUID: CVG6L4uznfyjBYkr0cg9LmP7ve9qeDrW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_14,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- malwarescore=0 spamscore=0 mlxlogscore=619 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304070204
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc7cc268-f614-beaf-da5a-a4db9137c38a@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not call gadget stop until the poll for controller halt is
-completed.  DEVTEN is cleared as part of gadget stop, so the intention to
-allow ep0 events to continue while waiting for controller halt is not
-happening.
+On Fri, Apr 07, 2023 at 03:19:32PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> On 4/7/23 9:46 AM, Bjorn Helgaas wrote:
+> > On Thu, Apr 06, 2023 at 10:31:20PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> >> On 4/6/23 3:21 PM, Bjorn Helgaas wrote:
+> >>> On Thu, Apr 06, 2023 at 02:52:02PM -0700, Sathyanarayanan Kuppuswamy wrote:
+> >>>> On 4/6/23 2:07 PM, Bjorn Helgaas wrote:
+> >>>>> On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
+> >>>>>> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
+> >>>>>> OS owns AER") adds support to clear error status in the Device Status
+> >>>>>> Register(DEVSTA) only if OS owns the AER support. But this change
+> >>>>>> breaks the requirement of the EDR feature which requires OS to cleanup
+> >>>>>> the error registers even if firmware owns the control of AER support.
 
-Fixes: c96683798e27 ("usb: dwc3: ep0: Don't prepare beyond Setup stage")
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+> ...
+> > An EDR notification is issued on a bus device that is still present,
+> > i.e., a DPC port or parent, but child devices have been disconnected
+> > (ACPI v6.3, sec 5.6.6).
+> 
+> IMO, instead of bus device, we can call it as root port or down stream
+> port. Please check the PCI firmware specification, r3.3, section 4.3.13.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 91768f1bdbaf..9715de8e99bc 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2566,7 +2566,6 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	 * bit.
- 	 */
- 	dwc3_stop_active_transfers(dwc);
--	__dwc3_gadget_stop(dwc);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	/*
-@@ -2596,7 +2595,19 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	 * remaining event generated by the controller while polling for
- 	 * DSTS.DEVCTLHLT.
- 	 */
--	return dwc3_gadget_run_stop(dwc, false, false);
-+	ret = dwc3_gadget_run_stop(dwc, false, false);
-+
-+	/*
-+	 * Stop the gadget after controller is halted, so that if needed, the
-+	 * events to update EP0 state can still occur while the run/stop
-+	 * routine polls for the halted state.  DEVTEN is cleared as part of
-+	 * gadget stop.
-+	 */
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	__dwc3_gadget_stop(dwc);
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+
-+	return ret;
- }
- 
- static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+Yeah, that makes sense.  I just used the "bus device" language because
+that's what's in the ACPI spec.  But I think the PCI terms would
+probably be more helpful here.  And I'll cite the r6.5 spec instead of
+v6.3.
+
+> Firmware may wish to issue Error Disconnect Recover notification on a port
+> that is parent of the port that experienced the containment event.
+> 
+> So it is either a downstream port or a root port.
+
+Right.
+
+> > That box *does* suggest clearing the port error status before bringing
+> > the port out of DPC, and we're doing it in the opposite order:
+> > 
+> >   edr_handle_event(pdev)
+> >     edev = acpi_dpc_port_get(pdev)
+> >     # Both pdev and edev are present; pdev is same as edev or a
+> >     # parent of edev; children of edev are disconnected
+> >     dpc_process_error(edev)
+> >     pcie_do_recovery(edev, dpc_reset_link)
+> >       if (state == pci_channel_io_frozen)
+> >         dpc_reset_link                  # (reset_subordinates)
+> >           pci_write_config_word(PCI_EXP_DPC_STATUS_TRIGGER) # exit DPC
+> >       if (AER native)
+> >         pcie_clear_device_status(edev)
+> >           clear PCI_EXP_DEVSTA          # doesn't happen
+> >     if (PCI_ERS_RESULT_RECOVERED)
+> >       pcie_clear_device_status
+> >         clear PCI_EXP_DEVSTA            # added by this patch
+> > 
+> > Does it matter?  I dunno, but I don't *think* so.  We really don't
+> > care about the value of PCI_EXP_DEVSTA anywhere except
+> > pci_wait_for_pending_transaction(), which isn't applicable here.  And
+> > I don't think the fact that it probably has an Error Detected bit set
+> > when exiting DPC is a problem.
+> 
+> Agree that it is not a fatal issue. But leaving the stale error state
+> is something that needs to be fixed.
+
+Definitely agree we should clear the stale state.  I just meant that I
+don't think it matters that we clear the status *after* exiting DPC,
+instead of clearing it before exiting DPC as shown in the flowchart.
+
+Bjorn
