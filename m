@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8F976DB293
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7B36DB29C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjDGSNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S229524AbjDGSOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjDGSNG (ORCPT
+        with ESMTP id S231488AbjDGSOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:13:06 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8D0420F;
-        Fri,  7 Apr 2023 11:13:05 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337CMGeF012601;
-        Fri, 7 Apr 2023 20:12:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=F0o+B3Jxb3/uk+z8z/TkZpS2JFK+X2n8RM237B5Z72s=;
- b=bqgkoPZvUyir/9JcBxPvKJggAKC9PUuKLgNeIkclpMXM0GLtrtPN6cxMiCfkhJWlXCmJ
- ropCFJSTtStST82JiZPewnaKLFQNJdTASQ1c0UuWQ16chif+3rrAukGVwbQ1ZFYdZSNC
- O/gwQRqohI8PHDEFd8/JmHOTCA+7v0czgWSVMiEyc3iJRIkT2HbKGDvCAUy/4Ts+AOxD
- NcuS3i4UvnymrAJtOHqZZMhgtATXoamD4VZiGUJE2T72FljMT1p9cL5AvbhJUKYN/7lP
- pAktTMoCVdAp7ppgGumZgovQMr3lsY85Rc8FFyLzHPahrfS+1Ox5Y/mkbEIXZdY7Srxr Jg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pteygu39y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 20:12:51 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 82C1210002A;
-        Fri,  7 Apr 2023 20:12:50 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7BB7024C44C;
-        Fri,  7 Apr 2023 20:12:50 +0200 (CEST)
-Received: from localhost (10.48.0.157) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 7 Apr
- 2023 20:12:50 +0200
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH] dt-bindings: mfd: stm32: Fix STM32F4 DT include file
-Date:   Fri, 7 Apr 2023 20:12:43 +0200
-Message-ID: <20230407201235.1.I483a676579cc7e3ac07e1db649091553743fecc8@changeid>
-X-Mailer: git-send-email 2.25.1
+        Fri, 7 Apr 2023 14:14:11 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F752C646
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:14:07 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso2083437pjs.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 11:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680891247; x=1683483247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iR5vun52tcsHLu1HJ14aemGaEMgXlWM8Oo3dvfzO2C0=;
+        b=pVC015NAFlm36VYuUzCVo7FdrkP9+B47UDv1WQ1JPnMH/MjAtw3BfDGoGD3UvUBZjC
+         aMC9N8wJZ/c5RfgQZldgZ48Zg5D/Up2C0Orm7M+3bUN/lT3bpUZQpfF+QQ3v06aqkJ3B
+         yv1VUtMc3cQdGv1TX+i81BtOLFy78JMXUxY0L8GRuZGZTUD2DWHR15kXfHR27IfYHP5h
+         b3/IKGz8GhmAtVFbYtPYtIaO8WNxuS6rmizR23p3tycGPLnEHn9rwo30JDEff6qXAeIC
+         yRe8434Ae3ve7S7J+JIO6mrEJOorbPE3mhC205z91p0k0+dbPSy/YTMW4uWIbBR29DXW
+         EtzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680891247; x=1683483247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iR5vun52tcsHLu1HJ14aemGaEMgXlWM8Oo3dvfzO2C0=;
+        b=o6QlaEzzQj8F7jYRIGTOUu/jgpEmFPV+/0d7B2ev/QbDgLDM/3RSIxEQJ2g1oScpQe
+         o9gwYqNTMaRZYrt12zvxdFb7JKXKSPGe2gju9OpufvNi1BbtIvcB2zjROYOu69mOhIn0
+         BLv0ebGcPGvg7O8JTn8NMB9PYR0Bl2iNb4ioaNhcK/gfqj5lzMwevje+gxB21h2o+KwQ
+         QhlCqf8oDGZ2pVcclLqlIVUcLMjRzLyeWRrNape7rY8WN1aNwufsnGqvabsokSI+lpn2
+         cPHOlFB/4MAnDVytTdsl3WHnJGoeJ/v+HG0ef6nUiMy5oCOi4Q/23PtfEdRwWdZsgt1d
+         DC+g==
+X-Gm-Message-State: AAQBX9fxgkHNmWzxjR6WoqWfwwlvLfOU5tnfvBBH4y6qpQNhBTUhJa9Q
+        YOvrJTj5/KOsnhjdyebc39fsQ/FLll3zO9NNd2LrBQ==
+X-Google-Smtp-Source: AKy350aU/IB5VaFU/u0WokhO/SJsHANiJN00OQm3BFmMJ5+gRJY7lFGGFFaR/6e05KbtL6SErczy8rwQ7E/M0c3HNSw=
+X-Received: by 2002:a17:90b:3641:b0:244:987c:a873 with SMTP id
+ nh1-20020a17090b364100b00244987ca873mr822309pjb.7.1680891246608; Fri, 07 Apr
+ 2023 11:14:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_11,2023-04-06_03,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230331001208.1846731-1-trix@redhat.com>
+In-Reply-To: <20230331001208.1846731-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 11:13:55 -0700
+Message-ID: <CAKwvOdmBu_foPCtXBNoA+ZDd-kU4X5-c65NVJb-MSrgoMKNJxw@mail.gmail.com>
+Subject: Re: [PATCH] bus: fsl-mc: remove unused free_count variable
+To:     Tom Rix <trix@redhat.com>
+Cc:     stuyoder@gmail.com, laurentiu.tudor@nxp.com, nathan@kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minor cosmetic change, aligned with file in U-Boot:
-- remove extra space
+On Thu, Mar 30, 2023 at 5:12=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/bus/fsl-mc/fsl-mc-allocator.c:560:6: error: variable
+>   'free_count' set but not used [-Werror,-Wunused-but-set-variable]
+>         int free_count =3D 0;
+>             ^
+> This variable is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
----
+Thanks for the patch!
 
- include/dt-bindings/mfd/stm32f4-rcc.h | 1 -
- 1 file changed, 1 deletion(-)
+Fixes: commit d8e026a44919 ("staging: fsl-mc: remove some superfluous WARN_=
+ONs")
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/include/dt-bindings/mfd/stm32f4-rcc.h b/include/dt-bindings/mfd/stm32f4-rcc.h
-index 309e8c79f27b..36448a5619a1 100644
---- a/include/dt-bindings/mfd/stm32f4-rcc.h
-+++ b/include/dt-bindings/mfd/stm32f4-rcc.h
-@@ -34,7 +34,6 @@
- #define STM32F4_AHB1_RESET(bit) (STM32F4_RCC_AHB1_##bit + (0x10 * 8))
- #define STM32F4_AHB1_CLOCK(bit) (STM32F4_RCC_AHB1_##bit)
- 
--
- /* AHB2 */
- #define STM32F4_RCC_AHB2_DCMI	0
- #define STM32F4_RCC_AHB2_CRYP	4
--- 
-2.25.1
+Check out
+commit 364069556901 ("staging: fsl-mc: move resource pool init/cleanup
+into allocator")
+to see the original logic.
 
+> ---
+>  drivers/bus/fsl-mc/fsl-mc-allocator.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc/f=
+sl-mc-allocator.c
+> index dced427ca8ba..f1351237a9d5 100644
+> --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> @@ -557,12 +557,9 @@ static void fsl_mc_cleanup_resource_pool(struct fsl_=
+mc_device *mc_bus_dev,
+>         struct fsl_mc_bus *mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+>         struct fsl_mc_resource_pool *res_pool =3D
+>                                         &mc_bus->resource_pools[pool_type=
+];
+> -       int free_count =3D 0;
+>
+> -       list_for_each_entry_safe(resource, next, &res_pool->free_list, no=
+de) {
+> -               free_count++;
+> +       list_for_each_entry_safe(resource, next, &res_pool->free_list, no=
+de)
+>                 devm_kfree(&mc_bus_dev->dev, resource);
+> -       }
+>  }
+>
+>  void fsl_mc_cleanup_all_resource_pools(struct fsl_mc_device *mc_bus_dev)
+> --
+> 2.27.0
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
