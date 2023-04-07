@@ -2,225 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7456DB5D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A0E6DB5D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjDGVkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
+        id S230359AbjDGVmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDGVke (ORCPT
+        with ESMTP id S229539AbjDGVmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:40:34 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B54BBA6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:40:32 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id f188so31701784ybb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680903631; x=1683495631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vdqeypLdeZy5Pw+OePubCqs35FYO2gFErqIeJGhxJpQ=;
-        b=ZSwsypCndkNbHiRgIvnilV+q+5NvrXqB0Q+KexWLRVBZ5TQywZEhyBpq5ceFcoml20
-         Jwq8LRiyNdeGwc/hekLVC8yme8O7cPXFJ/eIuz7YJVXB1wvaoqvtpxNIVEZgV8NYvUoF
-         I/1WBFg7OGqcWcAnIGxruh55gh032yHBuu7OKMUjSUJPGWMLlgJfrcy7I/iYB7YN25zq
-         f+8FPLnfqCTmXAJI63NpdNf2Pd2mBwitztlS+zd69g5HSMdz4e98eNBVRRcKXSSS5UVN
-         RcFFuIwjax5b2O21NbrVKbl/nxQqOTU0PcE6RWmhtcTZ8LD/Nee3x3Qus9o5piVrF6Of
-         EiNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680903631; x=1683495631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vdqeypLdeZy5Pw+OePubCqs35FYO2gFErqIeJGhxJpQ=;
-        b=FeVNVd3JR/hdvEWIRxEGOTpVwFsCSsK+vDh2irBKIVgzAFatNtkCrHvo8KRNFOoTb7
-         eCKU0L08ebhM8zdcmf77nQW7YSOIuxbVanyRpLIQP1Kq9Tpga8UYvQObb+0lC9Mth23w
-         yt6M4NP4qZdUc1509u3thTQm2GwzveLlBnInnGZ02aj9bhqBkAVp0SRq5qYGlu/woCO7
-         g/W8G9QfNZL8cVYPmy5+8mK4Ry9BPRf8kSiWRZkVOVPI0haHWi0x8mxs4Bp77IdA1XWQ
-         T7J9QqXFWemngDfOyhbqFRBQpWNFyq5fjvHr6n2r48pjk6Y7qbYy5h0EjP8Zb5Lqp2aQ
-         zMuA==
-X-Gm-Message-State: AAQBX9d/ULfBwqRNOHlUy+aL1uidhvlG9QoQuEFQHIo5JF1DialZZStY
-        cGXtK0FGaHrUiLbV6bnCxon34R2yIxUYe/INvnCtxQ==
-X-Google-Smtp-Source: AKy350boNNoanJqFs2LgfEj0xnxKGIDS5WnPRfv1kFZkGMahUmCQT/4a4ZZCYW+3Y1u7mRk4dHUrdB8zOSOlHUXrX+A=
-X-Received: by 2002:a25:6c07:0:b0:b8b:eea7:525b with SMTP id
- h7-20020a256c07000000b00b8beea7525bmr2495945ybc.7.1680903631291; Fri, 07 Apr
- 2023 14:40:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230403103440.2895683-1-vladimir.oltean@nxp.com>
- <20230403103440.2895683-7-vladimir.oltean@nxp.com> <CAM0EoMn9iwTBUW-OaK2sDtTS-PO2_nGLuvGmrqY5n8HYEdt7XQ@mail.gmail.com>
- <20230407164103.vstxn2fmswno3ker@skbuf> <CAM0EoM=go4RNohHpt6Z9wFk0AU81gJY3puBTUOC6F0xMocJouQ@mail.gmail.com>
- <20230407193056.3rklegrgmn2yecuu@skbuf>
-In-Reply-To: <20230407193056.3rklegrgmn2yecuu@skbuf>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 7 Apr 2023 17:40:20 -0400
-Message-ID: <CAM0EoM=miaB=xjp1vyPSfxLO3dBmBq4Loo7Mb=RZ5KuxHrwQaA@mail.gmail.com>
-Subject: Re: [PATCH v4 net-next 6/9] net/sched: mqprio: allow per-TC user
- input of FP adminStatus
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        linux-kernel@vger.kernel.org, Ferenc Fejes <fejes@inf.elte.hu>,
-        Simon Horman <simon.horman@corigine.com>
+        Fri, 7 Apr 2023 17:42:13 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE52BBA6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1680903728;
+        bh=N11iNEj2chynP21eWZ21gOdewyzfyjq67gakjvMjDv4=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=so243AGbOwcjhsthxzo0bUPWCSAEwDTAL5ifG0rV5ya+ufpfSv0FuxXCJuBu8D5SA
+         1l2fIH1EilfXm6ZE+PkIJRm8N8vWay0bD8aJGn/lq6f7qkwjIn5XRT6l2i4+I/DxAd
+         /MHBnYEi6mvoSkP5uHI+rji2jfC3ND1qmWaXKOwY=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 6788612802D4;
+        Fri,  7 Apr 2023 17:42:08 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id 9w6ksplEjQaT; Fri,  7 Apr 2023 17:42:08 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1680903728;
+        bh=N11iNEj2chynP21eWZ21gOdewyzfyjq67gakjvMjDv4=;
+        h=Message-ID:Subject:From:To:Date:From;
+        b=so243AGbOwcjhsthxzo0bUPWCSAEwDTAL5ifG0rV5ya+ufpfSv0FuxXCJuBu8D5SA
+         1l2fIH1EilfXm6ZE+PkIJRm8N8vWay0bD8aJGn/lq6f7qkwjIn5XRT6l2i4+I/DxAd
+         /MHBnYEi6mvoSkP5uHI+rji2jfC3ND1qmWaXKOwY=
+Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BE44512802AD;
+        Fri,  7 Apr 2023 17:42:07 -0400 (EDT)
+Message-ID: <255a80b21248110095a4e3a6c993183f1046a4b2.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 6.3-rc5
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 07 Apr 2023 17:42:04 -0400
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 3:31=E2=80=AFPM Vladimir Oltean <olteanv@gmail.com> =
-wrote:
->
-> On Fri, Apr 07, 2023 at 02:49:01PM -0400, Jamal Hadi Salim wrote:
-> > On Fri, Apr 7, 2023 at 12:41=E2=80=AFPM Vladimir Oltean <vladimir.oltea=
-n@nxp.com> wrote:
-> > > On Fri, Apr 07, 2023 at 12:22:26PM -0400, Jamal Hadi Salim wrote:
-> > > > > +enum {
-> > > > > +       TC_FP_EXPRESS =3D 1,
-> > > > > +       TC_FP_PREEMPTIBLE =3D 2,
-> > > > > +};
-> > > >
-> > > > Suggestion: Add a MAX to this enum (as is traditionally done)..
-> > >
-> > > Max what? This doesn't count anything, it just expresses whether the
-> > > quality of one traffic class, from the Frame Preemption standard's
-> > > perspective, is express or preemptible...
-> > >
-> > > > > @@ -145,13 +149,94 @@ static int mqprio_parse_opt(struct net_devi=
-ce *dev, struct tc_mqprio_qopt *qopt,
-> > > > >         return 0;
-> > > > >  }
-> > > > >
-> > > > > +static const struct
-> > > > > +nla_policy mqprio_tc_entry_policy[TCA_MQPRIO_TC_ENTRY_MAX + 1] =
-=3D {
-> > > > > +       [TCA_MQPRIO_TC_ENTRY_INDEX]     =3D NLA_POLICY_MAX(NLA_U3=
-2,
-> > > > > +                                                        TC_QOPT_=
-MAX_QUEUE),
-> > > >
-> > > > And use it here...
-> > >
-> > > Where? Above or below the comment? I think you mean below (for the
-> > > policy of TCA_MQPRIO_TC_ENTRY_FP)?
-> >
-> > That was what I meant. I misread that code thinking it was a nested
-> > TLV range check. If it is only going to be those two specific values,
-> > I understand - but then wondering why you need a u32; wouldnt a u8 be
-> > sufficient?
->
-> I believe netlink isn't exactly optimized for passing small values; the
-> netlink attributes are going to be aligned to NLA_ALIGNTO (4) anyway,
-> so it's not like this is going to save space or something. Also, there's
-> a policy restricting the maximum, so arbitrarily large values cannot be
-> passed now, but could be passed later if needed. I did not see any good
-> enough reason to close that door.
->
-> > The only reason you would need a MAX is if it is possible that new
-> > values greater than TC_FP_PREEMPTIBLE showing up in the future.
->
-> Even if someone wants to add TC_FP_KINDA_PREEMPTIBLE =3D 3 and
-> TC_FP_PREEMPTIBLE_WITH_STRIPES =3D 4 in the future, I'm still not sure ho=
-w
-> a MAX definition exported by the kernel is going to help them?
->
-> I mean, about the only thing that it would avoid is that I wouldn't be
-> changing the policy definition, but that's rather minor and doesn't
-> justify exporting something to UAPI?
+Four small fixes, all in drivers.  They're all one or two lines except
+for the ufs one, but that's a simple revert of a previous feature.
 
-Yes, it is minor (and usually minor things generate the most emails;->).
-I may be misunderstanding what you mean by "doesnt justify exporting
-something to UAPI"  - those definitions are part of uapi and are
-already
-being exported.
+The patch is available here:
 
-> The changed MAX value is only a
-> property of the kernel headers that the application is compiled with -
-> it doesn't give the capability of the running kernel.
->
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Maybe I am missing something or not communicating effectively. What i
-am suggesting is something very trivial:
+The short changelog is:
 
-enum {
-TC_FP_EXPRESS =3D 1,
-TC_FP_PREEMPTIBLE =3D 2,
-TC_FP_MAX
-};
+Adrien Thierry (1):
+      scsi: Revert "scsi: ufs: core: Initialize devfreq synchronously"
 
- [TCA_MQPRIO_TC_ENTRY_FP] =3D NLA_POLICY_RANGE(NLA_U32,
-    TC_FP_EXPRESS,
-    TC_FP_MAX),
+Li Zetao (1):
+      scsi: qla2xxx: Fix memory leak in qla2x00_probe_one()
 
-And in a newer revision with TC_FP_PREEMPTIBLE_WITH_STRIPES:
+Ranjan Kumar (1):
+      scsi: mpi3mr: Handle soft reset in progress fault code (0xF002)
 
-enum {
-TC_FP_EXPRESS =3D 1,
-TC_FP_PREEMPTIBLE =3D 2,
-TC_FP_PREEMPTIBLE_WITH_STRIPES =3D 3,
-TC_FP_MAX
-};
-etc.
+Zhong Jinghua (1):
+      scsi: iscsi_tcp: Check that sock is valid before iscsi_set_param()
 
-Saves you one line in a patch for when TC_FP_PREEMPTIBLE_WITH_STRIPES shows=
- up.
+And the diffstat:
 
-> To see whether TC_FP_PREEMPTIBLE_WITH_STRIPES is supported, the
-> application would have to try it and see if it fails. Which is also the
-> case right now with TC_FP_PREEMPTIBLE.
+ drivers/scsi/iscsi_tcp.c        |  3 +--
+ drivers/scsi/mpi3mr/mpi3mr_fw.c |  2 +-
+ drivers/scsi/qla2xxx/qla_os.c   |  1 +
+ drivers/ufs/core/ufshcd.c       | 47 ++++++++++++++---------------------------
+ include/ufs/ufshcd.h            |  1 -
+ 5 files changed, 19 insertions(+), 35 deletions(-)
 
-You may be referring to the combination of  iproute2/kernel.
-In all cases, NLA_POLICY_RANGE will take care of rejecting something
-out of bound.
+With full diff below.
 
-> > > > Lead up question: if the max is 16 then can preemptible_tcs for exa=
-mple be u32?
-> > >
-> > > I don't understand this question, sorry. preemptible_tcs is declared =
-as
-> > > "unsigned long", which IIUC is at least 32-bit.
-> >
-> > I meant: if you only had 16 possible values, meaning 16 bits are
-> > sufficient, (although i may be misunderstanding the goal of those
-> > bits) why not be explicit and use the proper type/size?
->
-> If you think it's valuable to change the type of preemptible_tcs from
-> unsigned long to u16 and that's a more "proper" type, I can do so.
+James
 
-No, no, it is a matter of taste and opinion. You may have noticed,
-trivial stuff like this gets the most comments and reviews normally(we
-just spent like 4-5 emails on this?). Poteto/potato: IOW, if i was to
-do it i would have used a u16 or u32 because i feel it would be more
-readable. I would have used NLA_U8 because i felt it is more fitting
-and i would have used a max value because it would save me one line in
-a patch in the future. I think weve spent enough electrons on this - I
-defer to you.
+---
 
-cheers,
-jamal
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index c76f82fb8b63..15f452908926 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -771,13 +771,12 @@ static int iscsi_sw_tcp_conn_set_param(struct iscsi_cls_conn *cls_conn,
+ 		iscsi_set_param(cls_conn, param, buf, buflen);
+ 		break;
+ 	case ISCSI_PARAM_DATADGST_EN:
+-		iscsi_set_param(cls_conn, param, buf, buflen);
+-
+ 		mutex_lock(&tcp_sw_conn->sock_lock);
+ 		if (!tcp_sw_conn->sock) {
+ 			mutex_unlock(&tcp_sw_conn->sock_lock);
+ 			return -ENOTCONN;
+ 		}
++		iscsi_set_param(cls_conn, param, buf, buflen);
+ 		tcp_sw_conn->sendpage = conn->datadgst_en ?
+ 			sock_no_sendpage : tcp_sw_conn->sock->ops->sendpage;
+ 		mutex_unlock(&tcp_sw_conn->sock_lock);
+diff --git a/drivers/scsi/mpi3mr/mpi3mr_fw.c b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+index a565817aa56d..d109a4ceb72b 100644
+--- a/drivers/scsi/mpi3mr/mpi3mr_fw.c
++++ b/drivers/scsi/mpi3mr/mpi3mr_fw.c
+@@ -2526,7 +2526,7 @@ static void mpi3mr_watchdog_work(struct work_struct *work)
+ 		mrioc->unrecoverable = 1;
+ 		goto schedule_work;
+ 	case MPI3_SYSIF_FAULT_CODE_SOFT_RESET_IN_PROGRESS:
+-		return;
++		goto schedule_work;
+ 	case MPI3_SYSIF_FAULT_CODE_CI_ACTIVATION_RESET:
+ 		reset_reason = MPI3MR_RESET_FROM_CIACTIV_FAULT;
+ 		break;
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index bee1b8a82020..d0cdbfe771a9 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -3617,6 +3617,7 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ probe_failed:
+ 	qla_enode_stop(base_vha);
+ 	qla_edb_stop(base_vha);
++	vfree(base_vha->scan.l);
+ 	if (base_vha->gnl.l) {
+ 		dma_free_coherent(&ha->pdev->dev, base_vha->gnl.size,
+ 				base_vha->gnl.l, base_vha->gnl.ldma);
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 37e178a9ac47..70b112038792 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -1409,13 +1409,6 @@ static int ufshcd_devfreq_target(struct device *dev,
+ 	struct ufs_clk_info *clki;
+ 	unsigned long irq_flags;
+ 
+-	/*
+-	 * Skip devfreq if UFS initialization is not finished.
+-	 * Otherwise ufs could be in a inconsistent state.
+-	 */
+-	if (!smp_load_acquire(&hba->logical_unit_scan_finished))
+-		return 0;
+-
+ 	if (!ufshcd_is_clkscaling_supported(hba))
+ 		return -EINVAL;
+ 
+@@ -8399,6 +8392,22 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ 	if (ret)
+ 		goto out;
+ 
++	/* Initialize devfreq after UFS device is detected */
++	if (ufshcd_is_clkscaling_supported(hba)) {
++		memcpy(&hba->clk_scaling.saved_pwr_info.info,
++			&hba->pwr_info,
++			sizeof(struct ufs_pa_layer_attr));
++		hba->clk_scaling.saved_pwr_info.is_valid = true;
++		hba->clk_scaling.is_allowed = true;
++
++		ret = ufshcd_devfreq_init(hba);
++		if (ret)
++			goto out;
++
++		hba->clk_scaling.is_enabled = true;
++		ufshcd_init_clk_scaling_sysfs(hba);
++	}
++
+ 	ufs_bsg_probe(hba);
+ 	ufshpb_init(hba);
+ 	scsi_scan_host(hba->host);
+@@ -8670,12 +8679,6 @@ static void ufshcd_async_scan(void *data, async_cookie_t cookie)
+ 	if (ret) {
+ 		pm_runtime_put_sync(hba->dev);
+ 		ufshcd_hba_exit(hba);
+-	} else {
+-		/*
+-		 * Make sure that when reader code sees UFS initialization has finished,
+-		 * all initialization steps have really been executed.
+-		 */
+-		smp_store_release(&hba->logical_unit_scan_finished, true);
+ 	}
+ }
+ 
+@@ -10316,30 +10319,12 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+ 	 */
+ 	ufshcd_set_ufs_dev_active(hba);
+ 
+-	/* Initialize devfreq */
+-	if (ufshcd_is_clkscaling_supported(hba)) {
+-		memcpy(&hba->clk_scaling.saved_pwr_info.info,
+-			&hba->pwr_info,
+-			sizeof(struct ufs_pa_layer_attr));
+-		hba->clk_scaling.saved_pwr_info.is_valid = true;
+-		hba->clk_scaling.is_allowed = true;
+-
+-		err = ufshcd_devfreq_init(hba);
+-		if (err)
+-			goto rpm_put_sync;
+-
+-		hba->clk_scaling.is_enabled = true;
+-		ufshcd_init_clk_scaling_sysfs(hba);
+-	}
+-
+ 	async_schedule(ufshcd_async_scan, hba);
+ 	ufs_sysfs_add_nodes(hba->dev);
+ 
+ 	device_enable_async_suspend(dev);
+ 	return 0;
+ 
+-rpm_put_sync:
+-	pm_runtime_put_sync(dev);
+ free_tmf_queue:
+ 	blk_mq_destroy_queue(hba->tmf_queue);
+ 	blk_put_queue(hba->tmf_queue);
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 25aab8ec4f86..431c3afb2ce0 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -979,7 +979,6 @@ struct ufs_hba {
+ 	struct completion *uic_async_done;
+ 
+ 	enum ufshcd_state ufshcd_state;
+-	bool logical_unit_scan_finished;
+ 	u32 eh_flags;
+ 	u32 intr_mask;
+ 	u16 ee_ctrl_mask;
+
