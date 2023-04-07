@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735E56DAF20
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B567E6DAF2B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240528AbjDGPCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 11:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60800 "EHLO
+        id S240690AbjDGPCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 11:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbjDGPBo (ORCPT
+        with ESMTP id S237449AbjDGPCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 11:01:44 -0400
+        Fri, 7 Apr 2023 11:02:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C40C15E;
-        Fri,  7 Apr 2023 08:01:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A439BB9A;
+        Fri,  7 Apr 2023 08:01:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 837BA64FFF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D13866509A;
+        Fri,  7 Apr 2023 15:00:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C026C4339B;
         Fri,  7 Apr 2023 15:00:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C88BC433D2;
-        Fri,  7 Apr 2023 15:00:37 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
@@ -37,10 +37,12 @@ To:     Jani Nikula <jani.nikula@linux.intel.com>,
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Jean Delvare <jdelvare@suse.com>,
         Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Subject: [PATCH 1/2] drm/i915: constify pointers to hwmon_channel_info
-Date:   Fri,  7 Apr 2023 17:00:30 +0200
-Message-Id: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/2] drm/nouveau: constify pointers to hwmon_channel_info
+Date:   Fri,  7 Apr 2023 17:00:31 +0200
+Message-Id: <20230407150031.79749-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
+References: <20230407150031.79749-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
@@ -68,31 +70,22 @@ Cc: Jean Delvare <jdelvare@suse.com>
 Cc: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-hwmon@vger.kernel.org
 ---
- drivers/gpu/drm/i915/i915_hwmon.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/nouveau/nouveau_hwmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_hwmon.c b/drivers/gpu/drm/i915/i915_hwmon.c
-index 596dd2c07010..87b527a54272 100644
---- a/drivers/gpu/drm/i915/i915_hwmon.c
-+++ b/drivers/gpu/drm/i915/i915_hwmon.c
-@@ -267,7 +267,7 @@ static const struct attribute_group *hwm_groups[] = {
- 	NULL
- };
+diff --git a/drivers/gpu/drm/nouveau/nouveau_hwmon.c b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+index e844be49e11e..db30a4c2cd4d 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_hwmon.c
++++ b/drivers/gpu/drm/nouveau/nouveau_hwmon.c
+@@ -211,7 +211,7 @@ static const struct attribute_group temp1_auto_point_sensor_group = {
  
--static const struct hwmon_channel_info *hwm_info[] = {
-+static const struct hwmon_channel_info * const hwm_info[] = {
- 	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT),
- 	HWMON_CHANNEL_INFO(power, HWMON_P_MAX | HWMON_P_RATED_MAX | HWMON_P_CRIT),
- 	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
-@@ -275,7 +275,7 @@ static const struct hwmon_channel_info *hwm_info[] = {
- 	NULL
- };
+ #define N_ATTR_GROUPS   3
  
--static const struct hwmon_channel_info *hwm_gt_info[] = {
-+static const struct hwmon_channel_info * const hwm_gt_info[] = {
- 	HWMON_CHANNEL_INFO(energy, HWMON_E_INPUT),
- 	NULL
- };
+-static const struct hwmon_channel_info *nouveau_info[] = {
++static const struct hwmon_channel_info * const nouveau_info[] = {
+ 	HWMON_CHANNEL_INFO(chip,
+ 			   HWMON_C_UPDATE_INTERVAL),
+ 	HWMON_CHANNEL_INFO(temp,
 -- 
 2.34.1
 
