@@ -2,200 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8897D6DAFC4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4066DAFC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjDGPhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 11:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S231758AbjDGPir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 11:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjDGPhF (ORCPT
+        with ESMTP id S230140AbjDGPip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 11:37:05 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215CEA5D5
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 08:37:04 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d10-20020a170903230a00b001a524305b14so16331plh.16
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 08:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680881823;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtRo2WFL21oaAHbFrfR4Ddw4J5LButNKMmHMmvec6E8=;
-        b=fQ525XCgqO4r0Jd2ckX2rwmiwgXMlDh7YnhmFOVXtAmjvVC6fFfBt8giGMo2oJsOoD
-         d/dXG2J+bNOwxczTF84vIYIDodoZ6ZbrIV8pv6Q/eHP24Q8xDZNf1ATkqZLiYK0zxGlC
-         RxvpvRq0hljcpfrsWQsuUCTuMzt7ICLtbt6ndrL/Vxroft6EmGwcsosMxebxN1fWG2Zc
-         ifYPZAIEBsOBjVAT8wB1vAYk53XyRpsDASnET4K12S632fLTX8F5M8N7P7GoCjGaHMto
-         CTZ11jIMuZn5mBtj1in2moL/unXbqv7A6gHbDc5jrgyzxbQVZDxwLZK0jWpPri0HxPHj
-         4zNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680881823;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtRo2WFL21oaAHbFrfR4Ddw4J5LButNKMmHMmvec6E8=;
-        b=RYs0JR4MM1tNiT1Vy1zdw8TjpF+cCK5weGGgM1lY1xchyu3fkDOGAE8h9ls3ibBE9w
-         /WhZ2WbrxQALfEOiwOGxsGFbL2NhlDDlkJMKBWAXQUsplPUR9kTABS5p45+DuMRUvXBQ
-         7kLqPpHhM7UFKcOBsGRXKwzOqljaRbepIEQujz3LTg9bCaV7hBGBXJZquwyrhfP4sEDi
-         4ZWWBAyle7kiSv0Wy5O4q+9+X8GZi0eY8Ja2zI0ZVZcKLiZz2Fyty+ZqkJ+wWkeyjMWo
-         MmNf1Aqee4S5dTsAeJQusIxgZUBwp+gj+zOT03ECh2liosjexZ3tsZrw+uQZH+mAXgBQ
-         c63A==
-X-Gm-Message-State: AAQBX9fsherfHedtFH3+EmsLXsxRijEd4YxIXltnmpciwFvTctcq0nIQ
-        9BcH3/fCRzDq8GJ3WLTs9PIM9Z8DJxc=
-X-Google-Smtp-Source: AKy350Z3PPXr0IyjDAwL0vaSoIYe+f/X8hPe0wn9swtrsKv8G52cCL84ZV69CuXp5ijMAgL0OjYQmsSkEwU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:7787:b0:1a1:b3bb:cd5e with SMTP id
- o7-20020a170902778700b001a1b3bbcd5emr917936pll.9.1680881823661; Fri, 07 Apr
- 2023 08:37:03 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 08:37:02 -0700
-In-Reply-To: <20230407085646.24809-1-likexu@tencent.com>
-Mime-Version: 1.0
-References: <20230407085646.24809-1-likexu@tencent.com>
-Message-ID: <ZDA4nsyAku9B2/58@google.com>
-Subject: Re: [PATCH V2] KVM: x86/pmu: Disable vPMU if EVENTSEL_GUESTONLY bit
- doesn't exist
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ravi Bangoria <ravi.bangoria@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 7 Apr 2023 11:38:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBCD8A73;
+        Fri,  7 Apr 2023 08:38:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4873464BC8;
+        Fri,  7 Apr 2023 15:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D739EC433EF;
+        Fri,  7 Apr 2023 15:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680881922;
+        bh=kX8EO6zTETUVRE37+CMCYz+UhugNtYZVCG7LxiOVkPs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SfUgfB5t90kPbdSva6zhOWTwICyFqP+HQGXmFdZIoMTLKSVpo60AXtU9y0HweuzWm
+         W/9r7Rhi3Gu/pH5RJNrdnef3/6XnxDgTozTH6XPoijaoeJqd3W27U4RaNZ2rtinvDr
+         +/OMRTpDD6kXiTdXe9qmV7lTor6g7GvgN8V2VkdgqCdsMnsP/exkh2vwoJVuNNACqP
+         VZcBUWeCzUizjaatMEfIIOBawxEWd/jqGPARHNgS5yyZVBZe0yG1c5Jbn8JEuyjrkD
+         fGoM+4ZyMeXkrGtbOQasDzJkV6R6+dhAhMGNeA7SP2Fye4fTU7EqACJ35eH4mHOkIz
+         W7Zx0mn8SwYMw==
+Date:   Fri, 7 Apr 2023 08:41:32 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: Re: [PATCH V2 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
+ Stats
+Message-ID: <20230407154132.dpguz24f6rukyujq@ripper>
+References: <cover.1680874520.git.quic_schowdhu@quicinc.com>
+ <5eeeb46e9b3f61656a37cb77c2ad6a04e383c16d.1680874520.git.quic_schowdhu@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5eeeb46e9b3f61656a37cb77c2ad6a04e383c16d.1680874520.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On Fri, Apr 07, 2023 at 07:34:36PM +0530, Souradeep Chowdhury wrote:
+> All of Qualcomm's proprietary Android boot-loaders capture boot time
+> stats, like the time when the bootloader started execution and at what
+> point the bootloader handed over control to the kernel etc. in the IMEM
+> region. This information is captured in a specific format by this driver
+> by mapping a structure to the IMEM memory region and then accessing the
+> members of the structure to print the information. This information is
+> useful in verifying if the existing boot KPIs have regressed or not.
+> A sample log in SM8450(waipio) device is as follows:-
 > 
-> Unlike Intel's MSR atomic_switch mechanism, AMD supports guest pmu
-> basic counter feature by setting the GUESTONLY bit on the host, so the
-> presence or absence of this bit determines whether vPMU is emulatable
-> (e.g. in nested virtualization). Since on AMD, writing reserved bits of
-> EVENTSEL register does not bring #GP, KVM needs to update the global
-> enable_pmu value by checking the persistence of this GUESTONLY bit.
+> KPI: Pre ABL Time = 3s
+> KPI: ABL Time = 14s
 
-This is looking more and more like a bug fix, i.e. needs a Fixes:, no?
+Why are these in whole seconds?
 
-> Cc: Ravi Bangoria <ravi.bangoria@amd.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
+> KPI: Kernel MPM timestamp = 890206
+
+And why is this presented in cycles?
+
+> 
+> The Module Power Manager(MPM) sleep counter starts ticking at the PBL
+> stage and the timestamp generated by the sleep counter is logged by
+> the Qualcomm proprietary bootloader(ABL) at two points-> First when it
+> starts execution which is logged here as "Pre ABL Time" and the second
+> when it is about to load the kernel logged as "ABL Time". Both are
+> logged in the unit of seconds.
+
+We have a policy to not taint the kernel log with "useless" information,
+for kernel developers this seems to add no value and for end users
+there's no benefit to this.
+
+> The current kernel timestamp is
+> printed by the boot_stats driver as well.
+> 
+
+Why?
+
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 > ---
-> V1:
-> https://lore.kernel.org/kvm/20230307113819.34089-1-likexu@tencent.com
-> V1 -> V2 Changelog:
-> - Preemption needs to be disabled to ensure a stable CPU; (Sean)
-> - KVM should be restoring the original value too; (Sean)
-> - Disable vPMU once guest_only mode is not supported; (Sean)
-
-Please respond to my questions, don't just send a new version.  When I asked
-
- : Why does lack of AMD64_EVENTSEL_GUESTONLY disable the PMU, but if and only if
- : X86_FEATURE_PERFCTR_CORE?  E.g. why does the behavior not also apply to legacy
- : perfmon support?
-
-I wanted an actual answer because I genuinely do not know what the correct
-behavior is.
-
-> - Appreciate any better way to probe for GUESTONLY support;
-
-Again, wait for discussion in previous versions to resolve before posting a new
-version.  If your answer is "not as far as I know", that's totally fine, but
-sending a new version without responding makes it unnecessarily difficult to
-track down your "answer".  E.g. instead of seeing a very direct "I don't know",
-I had to discover that answer by finding a hint buried in the ignored section of
-a new patch.
-
->  arch/x86/kvm/svm/svm.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+>  drivers/soc/qcom/Kconfig      |  7 ++++
+>  drivers/soc/qcom/Makefile     |  1 +
+>  drivers/soc/qcom/boot_stats.c | 95 +++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 103 insertions(+)
+>  create mode 100644 drivers/soc/qcom/boot_stats.c
 > 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 7584eb85410b..1ab885596510 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4884,6 +4884,20 @@ static __init void svm_adjust_mmio_mask(void)
->  	kvm_mmu_set_mmio_spte_mask(mask, mask, PT_WRITABLE_MASK | PT_USER_MASK);
->  }
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index d11bda2..2cfdbb7 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -79,6 +79,13 @@ config QCOM_DCC
+>  	  driver provides interface to configure DCC block and read back
+>  	  captured data from DCC's internal SRAM.
 >  
-> +static __init bool pmu_has_guestonly_mode(void)
+> +config QCOM_BOOTSTAT
+> +	tristate "Qualcomm Technologies, Boot Stat driver"
+> +	depends on ARCH_QCOM || COMPILE_TEST
+> +	help
+> +	  This option enables driver for boot stats. Boot stat driver prints
+> +	  the kernel bootloader information by accessing the imem region.
+> +
+>  config QCOM_KRYO_L2_ACCESSORS
+>  	bool
+>  	depends on ARCH_QCOM && ARM64 || COMPILE_TEST
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 3b92c6c..8a9d995 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -5,6 +5,7 @@ obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
+>  obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
+>  obj-$(CONFIG_QCOM_CPR)		+= cpr.o
+>  obj-$(CONFIG_QCOM_DCC) += dcc.o
+> +obj-$(CONFIG_QCOM_BOOTSTAT) += boot_stats_new.o
+
+Most other entries here are sorted alphabetically.
+
+>  obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
+>  obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
+>  obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
+> diff --git a/drivers/soc/qcom/boot_stats.c b/drivers/soc/qcom/boot_stats.c
+> new file mode 100644
+> index 0000000..080e820
+> --- /dev/null
+> +++ b/drivers/soc/qcom/boot_stats.c
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2013-2019, 2021 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define MPM_COUNTER_FREQ 32768
+> +
+> +/**
+> + *  struct boot_stats - timestamp information related to boot stats
+> + *  @bootloader_start:  Time for the starting point of the abl bootloader
+> + *  @bootloader_end:    Time when the kernel starts loading from abl bootloader
+> + */
+> +struct boot_stats {
+> +	u32 bootloader_start;
+> +	u32 bootloader_end;
+
+bootloader != abl
+
+> +} __packed;
+> +
+> +struct boot_stats __iomem *boot_stats;
+> +void __iomem *mpm_counter_base;
+
+Why are these non-static global variables?
+
+> +
+> +static void print_boot_stats(void)
 > +{
-> +	u64 original, value;
+> +	u32 pre_abl_time = readl_relaxed(&boot_stats->bootloader_start) / MPM_COUNTER_FREQ;
+> +	u32 abl_time = readl_relaxed(&boot_stats->bootloader_end) / MPM_COUNTER_FREQ;
 > +
-> +	preempt_disable();
-> +	rdmsrl(MSR_F15H_PERF_CTL0, original);
+> +	pr_info("KPI: Pre ABL Time = %us\n", pre_abl_time);
+> +	pr_info("KPI: ABL Time = %us\n", abl_time);
+> +	pr_info("KPI: Kernel MPM timestamp = %u\n", readl_relaxed(mpm_counter_base));
 
-What guarantees this MSR actually exists?  In v1, it was guarded by enable_pmu=%true,
-but that's longer the case.  And KVM does
+This number is completely dependent on link order and other things in
+happening in the kernel, so what trust do you give in this number going
+up or down?
 
-	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
-		if (!guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
-			return NULL;
+As above, why is this presented in ticks?
 
-which very strongly suggests this MSR doesn't exist if the CPU supports only the
-"legacy" PMU.
-
-> +	wrmsrl(MSR_F15H_PERF_CTL0, AMD64_EVENTSEL_GUESTONLY);
-> +	rdmsrl(MSR_F15H_PERF_CTL0, value);
-> +	wrmsrl(MSR_F15H_PERF_CTL0, original);
-> +	preempt_enable();
-> +
-> +	return value == AMD64_EVENTSEL_GUESTONLY;
 > +}
 > +
->  static __init void svm_set_cpu_caps(void)
->  {
->  	kvm_set_cpu_caps();
-> @@ -4928,6 +4942,9 @@ static __init void svm_set_cpu_caps(void)
->  	    boot_cpu_has(X86_FEATURE_AMD_SSBD))
->  		kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
->  
-> +	/* Probe for AMD64_EVENTSEL_GUESTONLY support */
+> +static int boot_stats_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *np_mpm2;
+> +	struct device *boot_stat = &pdev->dev;
+> +
+> +	boot_stats = of_iomap(boot_stat->of_node->child, 0);
 
-I've said this several times recently: use comments to explain _why_ and to call
-out subtleties.  The code quite obviously is probing for guest-only support, what's
-not obvious is why guest-only support is mandatory for vPMU support.  It may be
-obvious to you, but pease try to view all of this code from the perspective of
-someone who has only passing knowledge of the various components, i.e. doesn't
-know the gory details of exactly what KVM supports.
+You can't just do ->child here, what if boot stats isn't the first item
+in the list?
 
-Poking around, I see that pmc_reprogram_counter() unconditionally does
+> +	if (!boot_stats)
+> +		return dev_err_probe(&pdev->dev, -ENOMEM,
+> +					"failed to map imem region\n");
+> +
+> +	np_mpm2 = of_find_compatible_node(NULL, NULL,
+> +					  "qcom,mpm2-sleep-counter");
+> +	if (!np_mpm2) {
+> +		return dev_err_probe(&pdev->dev, -EINVAL,
+> +				     "failed to get the counter node\n");
+> +	}
+> +
+> +	if (of_get_address(np_mpm2, 0, NULL, NULL)) {
+> +		mpm_counter_base = of_iomap(np_mpm2, 0);
 
-	.exclude_host = 1,
+Isn't this region going to be also accessed by some sleep stats driver?
 
-and amd_core_hw_config()
+> +		if (!mpm_counter_base) {
+> +			return dev_err_probe(&pdev->dev, -ENOMEM,
+> +					     "failed to map the counter\n");
+> +		}
+> +	}
+> +	print_boot_stats();
 
-	if (event->attr.exclude_host && event->attr.exclude_guest)
-		/*
-		 * When HO == GO == 1 the hardware treats that as GO == HO == 0
-		 * and will count in both modes. We don't want to count in that
-		 * case so we emulate no-counting by setting US = OS = 0.
-		 */
-		event->hw.config &= ~(ARCH_PERFMON_EVENTSEL_USR |
-				      ARCH_PERFMON_EVENTSEL_OS);
-	else if (event->attr.exclude_host)
-		event->hw.config |= AMD64_EVENTSEL_GUESTONLY;
-	else if (event->attr.exclude_guest)
-		event->hw.config |= AMD64_EVENTSEL_HOSTONLY;
+You're done with your platform_device, and your two ioremap regions
+here. But you're holding on to those 10kb of memory for the rest of the
+systems runtime.
 
-and so something like this seems appropriate
+> +
+> +	return 0;
+> +}
+> +
+> +static int boot_stats_remove(struct platform_device *pdev)
+> +{
+> +	iounmap(boot_stats);
+> +	iounmap(mpm_counter_base);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id boot_stats_dt_match[] = {
+> +	{ .compatible = "qcom,sm8450-imem" },
 
-	/*
-	 * KVM requires guest-only event support in order to isolate guest PMCs
-	 * from host PMCs.  SVM doesn't provide a way to atomically load MSRs
-	 * on VMRUN, and manually adjusting counts before/after VMRUN is not
-	 * accurate enough to properly virtualize a PMU.
-	 */
+You're binding to the root imem node, rather than your boot stats child
+node.
 
-But now I'm really confused, because if I'm reading the code correctly, perf
-invokes amd_core_hw_config() for legacy PMUs, i.e. even if PERFCTR_CORE isn't
-supported.  And the APM documents the host/guest bits only for "Core Performance
-Event-Select Registers".
+How about just exposing the boot stats imem region to userspace, through
+debugfs or similar and then you can have a userspace tool that digs out
+and reports this information when profiling is relevant?
 
-So either (a) GUESTONLY isn't supported on legacy CPUs and perf is relying on AMD
-CPUs ignoring reserved bits or (b) GUESTONLY _is_ supported on legacy PMUs and
-pmu_has_guestonly_mode() is checking the wrong MSR when running on older CPUs.
+Regards,
+Bjorn
 
-And if (a) is true, then how on earth does KVM support vPMU when running on a
-legacy PMU?  Is vPMU on AMD just wildly broken?  Am I missing something?
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, boot_stats_dt_match);
+> +
+> +static struct platform_driver boot_stat_driver = {
+> +	.probe  = boot_stats_probe,
+> +	.remove = boot_stats_remove,
+> +	.driver = {
+> +		.name = "qcom-boot-stats",
+> +		.of_match_table = boot_stats_dt_match,
+> +	},
+> +};
+> +module_platform_driver(boot_stat_driver);
+> +
+> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. Boot Stat driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.7.4
+> 
