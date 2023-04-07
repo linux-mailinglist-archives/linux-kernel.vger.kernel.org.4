@@ -2,185 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09EF6DB190
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4780E6DB195
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjDGRZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S229786AbjDGR0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDGRZD (ORCPT
+        with ESMTP id S229587AbjDGR0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:25:03 -0400
-Received: from out-31.mta1.migadu.com (out-31.mta1.migadu.com [95.215.58.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F990900C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:25:01 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1680888297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=u30W7AR1i+lPslof+MOW+Ij1BbWjGMHUEZjyEHXtkfg=;
-        b=ZglPLjwp5dQ30NRFJ5xPIaSWmPIsFGtCyiPAcxvv7Cw3lfvTe2gS+oNbnzc0y7FnEQUPNw
-        0q09CMj1qjlSr3k2772qQkeW9aXU1RO1R26y7tjPXvrn8p7Kdcjxu6xyLRqJmBMqoPY0n9
-        Y+rxErT4dh3ku+NwONBVdOnjUd1Au74=
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Rafal Ozieblo <rafalo@cadence.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH net] net: macb: fix a memory corruption in extended buffer descriptor mode
-Date:   Fri,  7 Apr 2023 10:24:02 -0700
-Message-Id: <20230407172402.103168-1-roman.gushchin@linux.dev>
+        Fri, 7 Apr 2023 13:26:00 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029C093E0;
+        Fri,  7 Apr 2023 10:25:56 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id l26-20020a05600c1d1a00b003edd24054e0so1134096wms.4;
+        Fri, 07 Apr 2023 10:25:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680888354; x=1683480354;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JQsQ9Zw7IbWQc2rh3cEQR+IFQYyiCQZXokEd/GwNUOc=;
+        b=qRkTArCFKWAe3zxQN/2e+Zn29UENFbLlC2WAoelDOVWuT/NHV+7LCGaNyZb5tU56jp
+         TKVoaOgeWsYZ1g13XDKXkrbXoVszr1Pz8kABh3jOqhV5ei23HFo1aX7BQBxeoGOBE/Wj
+         PDnG8vKYQMkh0Mo/06Fw69MEg8/oiLnpJY4LfqKg7oxFtsaVrXvr28mewsw3enPZ+qkO
+         3kmvSOcUquHfQ3OR3jfJgdae/EiYLz67ehOlvob+oH9Hloll0f/DC1/kVQhLAferdZn5
+         xM7KSDkmGX8ut5OMgvCyymwljwVd7UfcbA6DR670d7s1fca5xA0RgEKSde87u8zd8qfL
+         gcDg==
+X-Gm-Message-State: AAQBX9c5HmjKifxKMEHYEjC6/3885sA4/KBCld+X150EDaOEsXsv842D
+        RbNEM43wPa6v0x+FFa9u2HJiayJUk4U56A==
+X-Google-Smtp-Source: AKy350ZLX6smnGsi+/7TKk0y7cQLzI27vPnVy+7SecbHmpQbmfDPzPhts/gwd8Rpo7+hbchSvgQuGg==
+X-Received: by 2002:a05:600c:cc6:b0:3f0:3070:f4ea with SMTP id fk6-20020a05600c0cc600b003f03070f4eamr1712259wmb.11.1680888354281;
+        Fri, 07 Apr 2023 10:25:54 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id w24-20020a05600c099800b003ee74c25f12sm8835123wmp.35.2023.04.07.10.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 10:25:53 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 17:25:49 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: Re: [PATCH v4 1/5] x86/init: Make get/set_rtc_noop() public
+Message-ID: <ZDBSHTEISe5rAHqn@liuwe-devbox-debian-v2>
+References: <1680598864-16981-1-git-send-email-ssengar@linux.microsoft.com>
+ <1680598864-16981-2-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1680598864-16981-2-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For quite some time we were chasing a bug which looked like a sudden
-permanent failure of networking and mmc on some of our devices.
-The bug was very sensitive to any software changes and even more to
-any kernel debug options.
+On Tue, Apr 04, 2023 at 02:01:00AM -0700, Saurabh Sengar wrote:
+> Make get/set_rtc_noop() to be public so that they can be used
+> in other modules as well.
+> 
+> Co-developed-by: Tianyu Lan <tiala@microsoft.com>
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> Reviewed-by: Wei Liu <wei.liu@kernel.org>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>  arch/x86/include/asm/x86_init.h | 2 ++
+>  arch/x86/kernel/x86_init.c      | 4 ++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
+> index acc20ae4079d..88085f369ff6 100644
+> --- a/arch/x86/include/asm/x86_init.h
+> +++ b/arch/x86/include/asm/x86_init.h
+> @@ -330,5 +330,7 @@ extern void x86_init_uint_noop(unsigned int unused);
+>  extern bool bool_x86_init_noop(void);
+>  extern void x86_op_int_noop(int cpu);
+>  extern bool x86_pnpbios_disabled(void);
+> +extern int set_rtc_noop(const struct timespec64 *now);
+> +extern void get_rtc_noop(struct timespec64 *now);
+>  
+>  #endif
+> diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
+> index 95be3831df73..d82f4fa2f1bf 100644
+> --- a/arch/x86/kernel/x86_init.c
+> +++ b/arch/x86/kernel/x86_init.c
+> @@ -33,8 +33,8 @@ static int __init iommu_init_noop(void) { return 0; }
+>  static void iommu_shutdown_noop(void) { }
+>  bool __init bool_x86_init_noop(void) { return false; }
+>  void x86_op_int_noop(int cpu) { }
+> -static __init int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
+> -static __init void get_rtc_noop(struct timespec64 *now) { }
+> +int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
+> +void get_rtc_noop(struct timespec64 *now) { }
 
-Finally we got a setup where the problem was reproducible with
-CONFIG_DMA_API_DEBUG=y and it revealed the issue with the rx dma:
+I just had a second thought on this -- do you really need to drop the
+__init annotation for these two functions?
 
-[   16.992082] ------------[ cut here ]------------
-[   16.996779] DMA-API: macb ff0b0000.ethernet: device driver tries to free DMA memory it has not allocated [device address=0x0000000875e3e244] [size=1536 bytes]
-[   17.011049] WARNING: CPU: 0 PID: 85 at kernel/dma/debug.c:1011 check_unmap+0x6a0/0x900
-[   17.018977] Modules linked in: xxxxx
-[   17.038823] CPU: 0 PID: 85 Comm: irq/55-8000f000 Not tainted 5.4.0 #28
-[   17.045345] Hardware name: xxxxx
-[   17.049528] pstate: 60000005 (nZCv daif -PAN -UAO)
-[   17.054322] pc : check_unmap+0x6a0/0x900
-[   17.058243] lr : check_unmap+0x6a0/0x900
-[   17.062163] sp : ffffffc010003c40
-[   17.065470] x29: ffffffc010003c40 x28: 000000004000c03c
-[   17.070783] x27: ffffffc010da7048 x26: ffffff8878e38800
-[   17.076095] x25: ffffff8879d22810 x24: ffffffc010003cc8
-[   17.081407] x23: 0000000000000000 x22: ffffffc010a08750
-[   17.086719] x21: ffffff8878e3c7c0 x20: ffffffc010acb000
-[   17.092032] x19: 0000000875e3e244 x18: 0000000000000010
-[   17.097343] x17: 0000000000000000 x16: 0000000000000000
-[   17.102647] x15: ffffff8879e4a988 x14: 0720072007200720
-[   17.107959] x13: 0720072007200720 x12: 0720072007200720
-[   17.113261] x11: 0720072007200720 x10: 0720072007200720
-[   17.118565] x9 : 0720072007200720 x8 : 000000000000022d
-[   17.123869] x7 : 0000000000000015 x6 : 0000000000000098
-[   17.129173] x5 : 0000000000000000 x4 : 0000000000000000
-[   17.134475] x3 : 00000000ffffffff x2 : ffffffc010a1d370
-[   17.139778] x1 : b420c9d75d27bb00 x0 : 0000000000000000
-[   17.145082] Call trace:
-[   17.147524]  check_unmap+0x6a0/0x900
-[   17.151091]  debug_dma_unmap_page+0x88/0x90
-[   17.155266]  gem_rx+0x114/0x2f0
-[   17.158396]  macb_poll+0x58/0x100
-[   17.161705]  net_rx_action+0x118/0x400
-[   17.165445]  __do_softirq+0x138/0x36c
-[   17.169100]  irq_exit+0x98/0xc0
-[   17.172234]  __handle_domain_irq+0x64/0xc0
-[   17.176320]  gic_handle_irq+0x5c/0xc0
-[   17.179974]  el1_irq+0xb8/0x140
-[   17.183109]  xiic_process+0x5c/0xe30
-[   17.186677]  irq_thread_fn+0x28/0x90
-[   17.190244]  irq_thread+0x208/0x2a0
-[   17.193724]  kthread+0x130/0x140
-[   17.196945]  ret_from_fork+0x10/0x20
-[   17.200510] ---[ end trace 7240980785f81d6f ]---
+Thanks,
+Wei.
 
-[  237.021490] ------------[ cut here ]------------
-[  237.026129] DMA-API: exceeded 7 overlapping mappings of cacheline 0x0000000021d79e7b
-[  237.033886] WARNING: CPU: 0 PID: 0 at kernel/dma/debug.c:499 add_dma_entry+0x214/0x240
-[  237.041802] Modules linked in: xxxxx
-[  237.061637] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         5.4.0 #28
-[  237.068941] Hardware name: xxxxx
-[  237.073116] pstate: 80000085 (Nzcv daIf -PAN -UAO)
-[  237.077900] pc : add_dma_entry+0x214/0x240
-[  237.081986] lr : add_dma_entry+0x214/0x240
-[  237.086072] sp : ffffffc010003c30
-[  237.089379] x29: ffffffc010003c30 x28: ffffff8878a0be00
-[  237.094683] x27: 0000000000000180 x26: ffffff8878e387c0
-[  237.099987] x25: 0000000000000002 x24: 0000000000000000
-[  237.105290] x23: 000000000000003b x22: ffffffc010a0fa00
-[  237.110594] x21: 0000000021d79e7b x20: ffffffc010abe600
-[  237.115897] x19: 00000000ffffffef x18: 0000000000000010
-[  237.121201] x17: 0000000000000000 x16: 0000000000000000
-[  237.126504] x15: ffffffc010a0fdc8 x14: 0720072007200720
-[  237.131807] x13: 0720072007200720 x12: 0720072007200720
-[  237.137111] x11: 0720072007200720 x10: 0720072007200720
-[  237.142415] x9 : 0720072007200720 x8 : 0000000000000259
-[  237.147718] x7 : 0000000000000001 x6 : 0000000000000000
-[  237.153022] x5 : ffffffc010003a20 x4 : 0000000000000001
-[  237.158325] x3 : 0000000000000006 x2 : 0000000000000007
-[  237.163628] x1 : 8ac721b3a7dc1c00 x0 : 0000000000000000
-[  237.168932] Call trace:
-[  237.171373]  add_dma_entry+0x214/0x240
-[  237.175115]  debug_dma_map_page+0xf8/0x120
-[  237.179203]  gem_rx_refill+0x190/0x280
-[  237.182942]  gem_rx+0x224/0x2f0
-[  237.186075]  macb_poll+0x58/0x100
-[  237.189384]  net_rx_action+0x118/0x400
-[  237.193125]  __do_softirq+0x138/0x36c
-[  237.196780]  irq_exit+0x98/0xc0
-[  237.199914]  __handle_domain_irq+0x64/0xc0
-[  237.204000]  gic_handle_irq+0x5c/0xc0
-[  237.207654]  el1_irq+0xb8/0x140
-[  237.210789]  arch_cpu_idle+0x40/0x200
-[  237.214444]  default_idle_call+0x18/0x30
-[  237.218359]  do_idle+0x200/0x280
-[  237.221578]  cpu_startup_entry+0x20/0x30
-[  237.225493]  rest_init+0xe4/0xf0
-[  237.228713]  arch_call_rest_init+0xc/0x14
-[  237.232714]  start_kernel+0x47c/0x4a8
-[  237.236367] ---[ end trace 7240980785f81d70 ]---
-
-Lars was fast to find an explanation: according to the datasheet
-bit 2 of the rx buffer descriptor entry has a different meaning in the
-extended mode:
-  Address [2] of beginning of buffer, or
-  in extended buffer descriptor mode (DMA configuration register [28] = 1),
-  indicates a valid timestamp in the buffer descriptor entry.
-
-The macb driver didn't mask this bit while getting an address and it
-eventually caused a memory corruption and a dma failure.
-
-The problem is resolved by extending the MACB_RX_WADDR_SIZE
-in the extended mode.
-
-Fixes: 7b4296148066 ("net: macb: Add support for PTP timestamps in DMA descriptors")
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-Co-developed-by: Lars-Peter Clausen <lars@metafoo.de>
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
----
- drivers/net/ethernet/cadence/macb.h | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
-index c1fc91c97cee..1b330f7cfc09 100644
---- a/drivers/net/ethernet/cadence/macb.h
-+++ b/drivers/net/ethernet/cadence/macb.h
-@@ -826,8 +826,13 @@ struct macb_dma_desc_ptp {
- #define MACB_RX_USED_SIZE			1
- #define MACB_RX_WRAP_OFFSET			1
- #define MACB_RX_WRAP_SIZE			1
-+#ifdef MACB_EXT_DESC
-+#define MACB_RX_WADDR_OFFSET			3
-+#define MACB_RX_WADDR_SIZE			29
-+#else
- #define MACB_RX_WADDR_OFFSET			2
- #define MACB_RX_WADDR_SIZE			30
-+#endif
- 
- #define MACB_RX_FRMLEN_OFFSET			0
- #define MACB_RX_FRMLEN_SIZE			12
--- 
-2.40.0
-
+>  
+>  static __initconst const struct of_device_id of_cmos_match[] = {
+>  	{ .compatible = "motorola,mc146818" },
+> -- 
+> 2.34.1
+> 
