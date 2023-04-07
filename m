@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7976DB6CC
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B146DB6CF
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjDGXGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S229652AbjDGXHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjDGXGB (ORCPT
+        with ESMTP id S229561AbjDGXHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:06:01 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F66E07B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:05:32 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id s93-20020a17090a2f6600b0024670ac71caso141403pjd.4
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:05:32 -0700 (PDT)
+        Fri, 7 Apr 2023 19:07:07 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88698E1A2;
+        Fri,  7 Apr 2023 16:06:37 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso47051209fac.12;
+        Fri, 07 Apr 2023 16:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680908732; x=1683500732;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=T+Aq5EGpv0TdcyR3mJ0rG0U8bcZUTZ5BKGaHK0JrYVc=;
-        b=joThEOBHVXoPtxtwqaFrm5dG382oUEuC1Z7udKCQMpKFT/BWvfI6nQPyjLU1LUL3te
-         mBpw/CtuNM6bTwwDxWFVQdel2qstpt+P+m0KSEjKzA9E3PppJLphsjyrfJ5wk4ihmOml
-         TvxpslPz0hEt4peTxtTYvBgcR4ns/Xv53JrIA4P71lrj4d3hUW7HgxVuTeOugl/9aWHw
-         5P4p+m3t/xDpCLHV/HmizJ+/zeD6yq+8GlycZd+pdDDku7Nu7TF3T8m1rGCuzJBXPBvZ
-         TuPavi2Mt4Led/cG7CKvhPJy1AYMopuj+yb4W7zxIq9/TUAKGi5gTCFR02m4UWbKeQ+b
-         KNmg==
+        d=gmail.com; s=20210112; t=1680908791; x=1683500791;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=IX63rEBC8yST4gwErZr+yYucTJmibL48v0X7LDgsSeI=;
+        b=k/OjhypfQ8SVpBAlqt9pNtAyNUPLbSyLPiBTFTv8uzeYVarnyyQYc3vS396YJOyz/k
+         w5pXWPKcaa/hDcjVlynRjZEujcmVfArwxlBrlvkctAX7OI53qTL44FoiqpLxLFaBiMjL
+         pgb94hKz2gJOLmvvWR/w9/8lYDevHpFJo/f1Pievnkw+FYImwzMVusWKbfj7C6Pf6xWX
+         GOJJgUhJdMbUeIvGeCBZ50MVXToe7W3Nujr10pBm6tYTSohmq3tnR//2inkBRpM28NVO
+         YxlW97raG2g9raDCHn0T2y05KxtJ0odDh9xdJJIQaiUR8Q8Kb0/UGnGcpUGxcjUzPPWi
+         5Jmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680908732; x=1683500732;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T+Aq5EGpv0TdcyR3mJ0rG0U8bcZUTZ5BKGaHK0JrYVc=;
-        b=CRzXcqWfOToiR1iju53KK9GnGckRXyGBdlxi9z3TnIV0rPJnaNPttUlvWqfBqLSLJu
-         ZyKcTh0mUinO8vS6TgKNv/yKfmDfWKVgsReEqbhI/zU6HVZu1D4EWuHdA1Xv0YfeYGyj
-         4jkJaSl+fRmg2+txni+pdkbn+7ZJDvuMQH8UfduBQr/SWTfof+mdUZeUEAxg2PXMl8NU
-         JRKtkqK7pWhlGiFP5VQkitjdDHh1R2P0qC+7f8ltyNn4ffYZKq5K3tt4IlF/ATWpssUq
-         6+V0DfsnJ/ToH0jcAYlCQt7+5qmBoyy2/lxMO1dioAYeSZgQOWr8X3E7/NbyA/1wrZ6X
-         LCqQ==
-X-Gm-Message-State: AAQBX9fkPmmIPDLdjDmHm6SXWMU1TitQWyYqSpT1bMNsvjREMBTQTBh7
-        cloV40ePnmvCI9UEbHXt6ZgDqjKq7rRdbXbeuoqA+2jiukzn/j2H4ywVwglxxEpKg/QtFe9rNT8
-        NgukkxPLa4Ob94oIVEc80roYToLaFRyRBNmTePZ0sWWQZ/vXoL+RsYwJPI0t8yneoZCxSTUk=
-X-Google-Smtp-Source: AKy350Yj18hj/bhFg7Ob768bL9JlrO2l4hoCellvR18Ea82ZFABDTbikdhH6gftC1NNZaAAneg89KZd0wMGH
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a63:58e:0:b0:50b:e80f:caff with SMTP id
- 136-20020a63058e000000b0050be80fcaffmr3764515pgf.0.1680908731909; Fri, 07 Apr
- 2023 16:05:31 -0700 (PDT)
-Date:   Fri,  7 Apr 2023 23:05:26 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230407230526.1685443-1-jstultz@google.com>
-Subject: [RESEND x4][PATCH v3] trace: Add trace points for tasklet entry/exit
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        d=1e100.net; s=20210112; t=1680908791; x=1683500791;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IX63rEBC8yST4gwErZr+yYucTJmibL48v0X7LDgsSeI=;
+        b=se1zUwp31BakflexBW6heNysnr5rEa/7Dgeqtu26cWQhrd+ydnYwN6zBn9nHwpjzja
+         UbcYVnWxPLJAP257azSZaNkJHZAQQE8Q0E7DLzkyp+Lrvm2WYtL4qHn9spn7BTJcH4oE
+         yLrnUOL3G/3qLop+FfBjvmhlSy1pGg442gLRzVSbx6rsjht8upMgKRDXi1qS89qv/2Kq
+         PlYvMrk3UBcVakfN3CTMEIX/J0oBX/F9h6XrrO5rtqHUTA+F/FLTEMfk31tsOI8sssXw
+         o4R/RDqDgqNGnYV1IxD5MEiBJeMA+EOPIA41Qb5+FmvrRpIPjFfYwsuWIAC6FLLYP3zh
+         P5Xw==
+X-Gm-Message-State: AAQBX9fwx5WtWJ9K6d9vSMk+il1SOJbMqQLAuCicigghWsS374im74oc
+        zAx2x01/pAuu6IgtG4JgMiqEW6hteDs=
+X-Google-Smtp-Source: AKy350ZOJ2Vc6ZERDWBz4XYhpAziCXkGoVQVZfpeHosNQaPExTS0rpW4+JmPDsBMkPcJuwN4JtA7DQ==
+X-Received: by 2002:a05:6870:f104:b0:180:3225:b33b with SMTP id k4-20020a056870f10400b001803225b33bmr2352149oac.34.1680908791249;
+        Fri, 07 Apr 2023 16:06:31 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v5-20020a0568301bc500b006a2fd720f82sm2086120ota.7.2023.04.07.16.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 16:06:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b88f2a0b-41fc-0cf7-5088-64edcd9dd927@roeck-us.net>
+Date:   Fri, 7 Apr 2023 16:06:28 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] power: supply: hwmon: constify pointers to
+ hwmon_channel_info
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
+ <20230407221250.xt2e7yuj62rlotkd@mercury.elektranox.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230407221250.xt2e7yuj62rlotkd@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,146 +81,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+On 4/7/23 15:12, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Fri, Apr 07, 2023 at 05:03:26PM +0200, Krzysztof Kozlowski wrote:
+>> Statically allocated array of pointed to hwmon_channel_info can be
+>> made const for safety.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>> This depends on hwmon core patch:
+>> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+>>
+>> Therefore I propose this should also go via hwmon tree.
+>>
 
-Tasklets are supposed to finish their work quickly and
-should not block the current running process, but it is not
-guaranteed that. Currently softirq_entry/exit can be used to
-know total tasklets execution time, but not helpful to track
-individual tasklet's execution time. With that we can't find
-any culprit tasklet function, which is taking more time.
+I am not going to apply patches for 10+ subsystems through the hwmon tree.
+This can only result in chaos. The dependent patch is available at
 
-Add tasklet_entry/exit trace point support to track
-individual tasklet execution.
+git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
 
-Trivial usage example:
-   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_entry/enable
-   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_exit/enable
-   # cat /sys/kernel/debug/tracing/trace
- # tracer: nop
- #
- # entries-in-buffer/entries-written: 4/4   #P:4
- #
- #                                _-----=> irqs-off/BH-disabled
- #                               / _----=> need-resched
- #                              | / _---=> hardirq/softirq
- #                              || / _--=> preempt-depth
- #                              ||| / _-=> migrate-disable
- #                              |||| /     delay
- #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
- #              | |         |   |||||     |         |
-           <idle>-0       [003] ..s1.   314.011428: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.011432: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.017369: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
-           <idle>-0       [003] ..s1.   314.017371: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+or wait until after the next commit window to apply this patch.
 
-This patch has been carried in the Android tree for awhile
-so I wanted to submit it for review upstream. Feedback would
-be appreciated!
+Thanks,
+Guenter
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: kernel-team@android.com
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
-[elavila: Port to android-mainline]
-Signed-off-by: J. Avila <elavila@google.com>
-[jstultz: Rebased to upstream, cut unused trace points, added
- comments for the tracepoints, reworded commit]
-Signed-off-by: John Stultz <jstultz@google.com>
----
-"Helloooooo..." he yelled into the void.
-v2:
-* Added tasklet pointer to the trace event as suggested by Steven
-v3:
-* Minor tweak to commit to show usage and output example
----
- include/trace/events/irq.h | 47 ++++++++++++++++++++++++++++++++++++++
- kernel/softirq.c           |  9 ++++++--
- 2 files changed, 54 insertions(+), 2 deletions(-)
-
-diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
-index eeceafaaea4c..a07b4607b663 100644
---- a/include/trace/events/irq.h
-+++ b/include/trace/events/irq.h
-@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
- 	TP_ARGS(vec_nr)
- );
- 
-+DECLARE_EVENT_CLASS(tasklet,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func),
-+
-+	TP_STRUCT__entry(
-+		__field(	void *,	tasklet)
-+		__field(	void *,	func)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->tasklet = t;
-+		__entry->func = func;
-+	),
-+
-+	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
-+);
-+
-+/**
-+ * tasklet_entry - called immediately before the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_entry,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
-+/**
-+ * tasklet_exit - called immediately after the tasklet is run
-+ * @t: tasklet pointer
-+ * @func: tasklet callback or function being run
-+ *
-+ * Used to find individual tasklet execution time
-+ */
-+DEFINE_EVENT(tasklet, tasklet_exit,
-+
-+	TP_PROTO(struct tasklet_struct *t, void *func),
-+
-+	TP_ARGS(t, func)
-+);
-+
- #endif /*  _TRACE_IRQ_H */
- 
- /* This part must be outside protection */
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index c8a6913c067d..1b725510dd0f 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
- 		if (tasklet_trylock(t)) {
- 			if (!atomic_read(&t->count)) {
- 				if (tasklet_clear_sched(t)) {
--					if (t->use_callback)
-+					if (t->use_callback) {
-+						trace_tasklet_entry(t, t->callback);
- 						t->callback(t);
--					else
-+						trace_tasklet_exit(t, t->callback);
-+					} else {
-+						trace_tasklet_entry(t, t->func);
- 						t->func(t->data);
-+						trace_tasklet_exit(t, t->func);
-+					}
- 				}
- 				tasklet_unlock(t);
- 				continue;
--- 
-2.40.0.577.gac1e443424-goog
+>> Cc: Jean Delvare <jdelvare@suse.com>
+>> Cc: Guenter Roeck <linux@roeck-us.net>
+>> Cc: linux-hwmon@vger.kernel.org
+>> ---
+> 
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> 
+> -- Sebastian
+> 
+>>   drivers/power/supply/power_supply_hwmon.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/supply/power_supply_hwmon.c
+>> index a48aa4afb828..c97893d4c25e 100644
+>> --- a/drivers/power/supply/power_supply_hwmon.c
+>> +++ b/drivers/power/supply/power_supply_hwmon.c
+>> @@ -293,7 +293,7 @@ static const struct hwmon_ops power_supply_hwmon_ops = {
+>>   	.read_string	= power_supply_hwmon_read_string,
+>>   };
+>>   
+>> -static const struct hwmon_channel_info *power_supply_hwmon_info[] = {
+>> +static const struct hwmon_channel_info * const power_supply_hwmon_info[] = {
+>>   	HWMON_CHANNEL_INFO(temp,
+>>   			   HWMON_T_LABEL     |
+>>   			   HWMON_T_INPUT     |
+>> -- 
+>> 2.34.1
+>>
 
