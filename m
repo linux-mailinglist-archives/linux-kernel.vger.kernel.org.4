@@ -2,92 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FF26DB5D0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7456DB5D3
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjDGVe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S230060AbjDGVkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjDGVe1 (ORCPT
+        with ESMTP id S229567AbjDGVke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:34:27 -0400
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878952715
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:34:25 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3f080fdb924so2465e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:34:25 -0700 (PDT)
+        Fri, 7 Apr 2023 17:40:34 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B54BBA6
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:40:32 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id f188so31701784ybb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680903631; x=1683495631;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vdqeypLdeZy5Pw+OePubCqs35FYO2gFErqIeJGhxJpQ=;
+        b=ZSwsypCndkNbHiRgIvnilV+q+5NvrXqB0Q+KexWLRVBZ5TQywZEhyBpq5ceFcoml20
+         Jwq8LRiyNdeGwc/hekLVC8yme8O7cPXFJ/eIuz7YJVXB1wvaoqvtpxNIVEZgV8NYvUoF
+         I/1WBFg7OGqcWcAnIGxruh55gh032yHBuu7OKMUjSUJPGWMLlgJfrcy7I/iYB7YN25zq
+         f+8FPLnfqCTmXAJI63NpdNf2Pd2mBwitztlS+zd69g5HSMdz4e98eNBVRRcKXSSS5UVN
+         RcFFuIwjax5b2O21NbrVKbl/nxQqOTU0PcE6RWmhtcTZ8LD/Nee3x3Qus9o5piVrF6Of
+         EiNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680903264; x=1683495264;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Datt06y6QOn3vVdQaOHrLIlblRQOgkrxQaZSIY+FYG0=;
-        b=wtSCevor2na2EU+0BL4aP5lAXeMl8Pz6E8mAU3SufailvvJ7u5Fx1SDVz7Yd8RMfWu
-         qbJ99JQmqSwmPdx9lFwluvembSeDi/zQpbNoJW577vSFH1QYIfBRKnUwKuDf7aSHxA4k
-         pAGX8g1Knr/ag9FIIoNSmkVUZq6XJbjHKyHmLCpES1pfUJmM3wfSaeYs+b9qfpmFIZlR
-         7+yx12UuebP2wWsFMdWZZ0w9KNZXRYS4eWtNIF9FoMRZFWeIesX7bBjd23hSVAOiGW5U
-         MbPTblooWs2OZCoC+I4ZkdhhWLcRcNLzMeB+xkR6pfNKIY1p95adOYppPYzazmmLB5zX
-         PlcQ==
-X-Gm-Message-State: AAQBX9ezxvxmllaPCWrjEL9S+hnhohhpnrjdldPLzNqtbn69cW+FyZow
-        pJh4J5ZTWBBgrABYr4gjD1s=
-X-Google-Smtp-Source: AKy350baUMxCZkE2nsZcNtWR9Nkg/ifoAdbJKZh8R8Xpz+6OML1wgprg9hWp45VmnR6Dx/XJWz8FAg==
-X-Received: by 2002:a05:600c:1ca4:b0:3ed:d2ae:9adb with SMTP id k36-20020a05600c1ca400b003edd2ae9adbmr562659wms.0.1680903263903;
-        Fri, 07 Apr 2023 14:34:23 -0700 (PDT)
-Received: from [10.100.102.14] (85.65.206.11.dynamic.barak-online.net. [85.65.206.11])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05600c450600b003ee2a0d49dbsm9694305wmo.25.2023.04.07.14.34.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 14:34:23 -0700 (PDT)
-Message-ID: <ab82c5fd-03d6-683d-2c8a-1b71b940d94a@grimberg.me>
-Date:   Sat, 8 Apr 2023 00:34:22 +0300
+        d=1e100.net; s=20210112; t=1680903631; x=1683495631;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vdqeypLdeZy5Pw+OePubCqs35FYO2gFErqIeJGhxJpQ=;
+        b=FeVNVd3JR/hdvEWIRxEGOTpVwFsCSsK+vDh2irBKIVgzAFatNtkCrHvo8KRNFOoTb7
+         eCKU0L08ebhM8zdcmf77nQW7YSOIuxbVanyRpLIQP1Kq9Tpga8UYvQObb+0lC9Mth23w
+         yt6M4NP4qZdUc1509u3thTQm2GwzveLlBnInnGZ02aj9bhqBkAVp0SRq5qYGlu/woCO7
+         g/W8G9QfNZL8cVYPmy5+8mK4Ry9BPRf8kSiWRZkVOVPI0haHWi0x8mxs4Bp77IdA1XWQ
+         T7J9QqXFWemngDfOyhbqFRBQpWNFyq5fjvHr6n2r48pjk6Y7qbYy5h0EjP8Zb5Lqp2aQ
+         zMuA==
+X-Gm-Message-State: AAQBX9d/ULfBwqRNOHlUy+aL1uidhvlG9QoQuEFQHIo5JF1DialZZStY
+        cGXtK0FGaHrUiLbV6bnCxon34R2yIxUYe/INvnCtxQ==
+X-Google-Smtp-Source: AKy350boNNoanJqFs2LgfEj0xnxKGIDS5WnPRfv1kFZkGMahUmCQT/4a4ZZCYW+3Y1u7mRk4dHUrdB8zOSOlHUXrX+A=
+X-Received: by 2002:a25:6c07:0:b0:b8b:eea7:525b with SMTP id
+ h7-20020a256c07000000b00b8beea7525bmr2495945ybc.7.1680903631291; Fri, 07 Apr
+ 2023 14:40:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] nvme: fix double blk_mq_complete_request for timeout
- request with low probability
-Content-Language: en-US
-To:     Keith Busch <kbusch@kernel.org>, Lei Lei2 Yin <yinlei2@lenovo.com>
-Cc:     "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "cybeyond@foxmail.com" <cybeyond@foxmail.com>
-References: <PS1PR03MB4939C825BD5D9A135AA0EB9188919@PS1PR03MB4939.apcprd03.prod.outlook.com>
- <ZDBvTS1j26d3392/@kbusch-mbp.dhcp.thefacebook.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <ZDBvTS1j26d3392/@kbusch-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230403103440.2895683-1-vladimir.oltean@nxp.com>
+ <20230403103440.2895683-7-vladimir.oltean@nxp.com> <CAM0EoMn9iwTBUW-OaK2sDtTS-PO2_nGLuvGmrqY5n8HYEdt7XQ@mail.gmail.com>
+ <20230407164103.vstxn2fmswno3ker@skbuf> <CAM0EoM=go4RNohHpt6Z9wFk0AU81gJY3puBTUOC6F0xMocJouQ@mail.gmail.com>
+ <20230407193056.3rklegrgmn2yecuu@skbuf>
+In-Reply-To: <20230407193056.3rklegrgmn2yecuu@skbuf>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Fri, 7 Apr 2023 17:40:20 -0400
+Message-ID: <CAM0EoM=miaB=xjp1vyPSfxLO3dBmBq4Loo7Mb=RZ5KuxHrwQaA@mail.gmail.com>
+Subject: Re: [PATCH v4 net-next 6/9] net/sched: mqprio: allow per-TC user
+ input of FP adminStatus
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        linux-kernel@vger.kernel.org, Ferenc Fejes <fejes@inf.elte.hu>,
+        Simon Horman <simon.horman@corigine.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 7, 2023 at 3:31=E2=80=AFPM Vladimir Oltean <olteanv@gmail.com> =
+wrote:
+>
+> On Fri, Apr 07, 2023 at 02:49:01PM -0400, Jamal Hadi Salim wrote:
+> > On Fri, Apr 7, 2023 at 12:41=E2=80=AFPM Vladimir Oltean <vladimir.oltea=
+n@nxp.com> wrote:
+> > > On Fri, Apr 07, 2023 at 12:22:26PM -0400, Jamal Hadi Salim wrote:
+> > > > > +enum {
+> > > > > +       TC_FP_EXPRESS =3D 1,
+> > > > > +       TC_FP_PREEMPTIBLE =3D 2,
+> > > > > +};
+> > > >
+> > > > Suggestion: Add a MAX to this enum (as is traditionally done)..
+> > >
+> > > Max what? This doesn't count anything, it just expresses whether the
+> > > quality of one traffic class, from the Frame Preemption standard's
+> > > perspective, is express or preemptible...
+> > >
+> > > > > @@ -145,13 +149,94 @@ static int mqprio_parse_opt(struct net_devi=
+ce *dev, struct tc_mqprio_qopt *qopt,
+> > > > >         return 0;
+> > > > >  }
+> > > > >
+> > > > > +static const struct
+> > > > > +nla_policy mqprio_tc_entry_policy[TCA_MQPRIO_TC_ENTRY_MAX + 1] =
+=3D {
+> > > > > +       [TCA_MQPRIO_TC_ENTRY_INDEX]     =3D NLA_POLICY_MAX(NLA_U3=
+2,
+> > > > > +                                                        TC_QOPT_=
+MAX_QUEUE),
+> > > >
+> > > > And use it here...
+> > >
+> > > Where? Above or below the comment? I think you mean below (for the
+> > > policy of TCA_MQPRIO_TC_ENTRY_FP)?
+> >
+> > That was what I meant. I misread that code thinking it was a nested
+> > TLV range check. If it is only going to be those two specific values,
+> > I understand - but then wondering why you need a u32; wouldnt a u8 be
+> > sufficient?
+>
+> I believe netlink isn't exactly optimized for passing small values; the
+> netlink attributes are going to be aligned to NLA_ALIGNTO (4) anyway,
+> so it's not like this is going to save space or something. Also, there's
+> a policy restricting the maximum, so arbitrarily large values cannot be
+> passed now, but could be passed later if needed. I did not see any good
+> enough reason to close that door.
+>
+> > The only reason you would need a MAX is if it is possible that new
+> > values greater than TC_FP_PREEMPTIBLE showing up in the future.
+>
+> Even if someone wants to add TC_FP_KINDA_PREEMPTIBLE =3D 3 and
+> TC_FP_PREEMPTIBLE_WITH_STRIPES =3D 4 in the future, I'm still not sure ho=
+w
+> a MAX definition exported by the kernel is going to help them?
+>
+> I mean, about the only thing that it would avoid is that I wouldn't be
+> changing the policy definition, but that's rather minor and doesn't
+> justify exporting something to UAPI?
 
->> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
->> index 53ef028596c6..c1cc384f4f3e 100644
->> --- a/drivers/nvme/host/core.c
->> +++ b/drivers/nvme/host/core.c
->> @@ -450,8 +450,8 @@ bool nvme_cancel_request(struct request *req, void *data)
->>   	dev_dbg_ratelimited(((struct nvme_ctrl *) data)->device,
->>   				"Cancelling I/O %d", req->tag);
->>   
->> -	/* don't abort one completed request */
->> -	if (blk_mq_request_completed(req))
->> +	/* don't abort one completed or idle request */
->> +	if (blk_mq_rq_state(req) != MQ_RQ_IN_FLIGHT)
->>   		return true;
-> 
-> I was suspicious about this path too, and had the same change long ago, but
-> shelved it when I couldn't produce any errors there. But the change makes sense
-> to me!
-> 
-> Reviewed-by: Keith Busch <kbusch@kernel.org>
+Yes, it is minor (and usually minor things generate the most emails;->).
+I may be misunderstanding what you mean by "doesnt justify exporting
+something to UAPI"  - those definitions are part of uapi and are
+already
+being exported.
 
-We need to change nvmf_complete_timed_out_request() too.
+> The changed MAX value is only a
+> property of the kernel headers that the application is compiled with -
+> it doesn't give the capability of the running kernel.
+>
 
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Maybe I am missing something or not communicating effectively. What i
+am suggesting is something very trivial:
+
+enum {
+TC_FP_EXPRESS =3D 1,
+TC_FP_PREEMPTIBLE =3D 2,
+TC_FP_MAX
+};
+
+ [TCA_MQPRIO_TC_ENTRY_FP] =3D NLA_POLICY_RANGE(NLA_U32,
+    TC_FP_EXPRESS,
+    TC_FP_MAX),
+
+And in a newer revision with TC_FP_PREEMPTIBLE_WITH_STRIPES:
+
+enum {
+TC_FP_EXPRESS =3D 1,
+TC_FP_PREEMPTIBLE =3D 2,
+TC_FP_PREEMPTIBLE_WITH_STRIPES =3D 3,
+TC_FP_MAX
+};
+etc.
+
+Saves you one line in a patch for when TC_FP_PREEMPTIBLE_WITH_STRIPES shows=
+ up.
+
+> To see whether TC_FP_PREEMPTIBLE_WITH_STRIPES is supported, the
+> application would have to try it and see if it fails. Which is also the
+> case right now with TC_FP_PREEMPTIBLE.
+
+You may be referring to the combination of  iproute2/kernel.
+In all cases, NLA_POLICY_RANGE will take care of rejecting something
+out of bound.
+
+> > > > Lead up question: if the max is 16 then can preemptible_tcs for exa=
+mple be u32?
+> > >
+> > > I don't understand this question, sorry. preemptible_tcs is declared =
+as
+> > > "unsigned long", which IIUC is at least 32-bit.
+> >
+> > I meant: if you only had 16 possible values, meaning 16 bits are
+> > sufficient, (although i may be misunderstanding the goal of those
+> > bits) why not be explicit and use the proper type/size?
+>
+> If you think it's valuable to change the type of preemptible_tcs from
+> unsigned long to u16 and that's a more "proper" type, I can do so.
+
+No, no, it is a matter of taste and opinion. You may have noticed,
+trivial stuff like this gets the most comments and reviews normally(we
+just spent like 4-5 emails on this?). Poteto/potato: IOW, if i was to
+do it i would have used a u16 or u32 because i feel it would be more
+readable. I would have used NLA_U8 because i felt it is more fitting
+and i would have used a max value because it would save me one line in
+a patch in the future. I think weve spent enough electrons on this - I
+defer to you.
+
+cheers,
+jamal
