@@ -2,86 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEC16DABA4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CB46DABAB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240613AbjDGKuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S240293AbjDGKut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjDGKu3 (ORCPT
+        with ESMTP id S240624AbjDGKun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:50:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7CB49DB;
-        Fri,  7 Apr 2023 03:50:27 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [119.155.57.40])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 88EE466031A4;
-        Fri,  7 Apr 2023 11:50:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680864625;
-        bh=P8yF/E8G1GvIUrwOi1mexCebBBHEtFanTu2WunsLvz4=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=jwsJ0V8HH/MiLKUqPJXwtPH6Cl83QV0xaT69QVX8eGPFiWvWj8onH2k5LGYcN4h8w
-         XfloZVX9ALnP7RHZEPNb2uxErVmxGpCvgPU1ffnVok7cBtsgxlQ35pcDL2nAFMJi8P
-         GwqeZprQyFMOK2RDiGC8gLvsUEiYqpZF/AFsPUvY5/2Gj95lm0KzBA1IbaJ7vXJxIu
-         kxb21+y0GPZ3FQs4IastwAuTWZMp57lfLSQPC8yf/TE3oW12EX2SvQ8B3JpsSLmHhv
-         qjWxUWksyd9RvWdjYnAT+MoupIMjYuGVrfL+QEJfXraDttUg/ZVa7FUi1pVrqXzUDR
-         m0yoRpQKaxJ2g==
-Message-ID: <2992d40c-ddac-ed5f-ca80-8d3fc08b10e6@collabora.com>
-Date:   Fri, 7 Apr 2023 15:50:14 +0500
+        Fri, 7 Apr 2023 06:50:43 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362FD4C17
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:50:41 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id l10-20020a05600c1d0a00b003f04bd3691eso10112680wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 03:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680864639; x=1683456639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=06TnYBdo9T2x70dl6lUY38eRXb4b9fDtFg6W0E/jF9s=;
+        b=wYDrtmyCUeuPHoQ+a+L+bYIKD5tVHF0T4I7wDqd7k8R9pfkM+J9OhoQDyESXnzz1iz
+         k3ooh1VU2Q8gW2TSMLRlbtghkI19sy19ypdWoc+Omxxem6YZuXrgCPFr2LGsUITxWliE
+         +zBT3kCgH6wuumOU7JtR9EXz8g2jSMCePAMrqaI2lCCSey7kNVinVsK5dKZLfyxYqxVp
+         gySoNb8rDY/w1WGiu9q8a23DHmXgXkXf7veY050tTyaiF3nf+/mROPMw7MS6i60JLSEW
+         pbhVwVkWGBoCGj+2wJv+zy42hiGSIYRliEDZRZysa98BQX7OD7u+MFN7XB7Gr72FM0OU
+         A2QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680864639; x=1683456639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=06TnYBdo9T2x70dl6lUY38eRXb4b9fDtFg6W0E/jF9s=;
+        b=lFSlGCesMnavzD2puzZ55wUlAd646cSeaxxw4USvpwOu3LiSOyDJ4OCQxxMcVWdIiy
+         jZozyCNWrcWSAjqSORio0KjIXM/CRkEVuBtkoEyIgGGUh9QPmEFTqXHrl+LRpZ1PNaED
+         y4h2eU/FUFJeB3Bab/BrRg6gWTgkVNLF/yJGjBDPdWvMkZUKQxJGfZ+YI60jnercy+8K
+         q7ePDA1WFYKn3XusyOZ9Irw9bvCaOlFnKg6yQ4o5b+ivoj1XNQ1lsbn4a7wMEZAeafy1
+         MPQwoDS4m3oxSlYQQSE93otuxgDj7eTSa1OauFB89SX8I959BVAU45iCeSnev2I6lMj7
+         9IgQ==
+X-Gm-Message-State: AAQBX9ewRGLruZAlXxc+HMyy86QJWLbx1T94Ym3k8X4uUb5xpTfOLU4b
+        E8IddgDNkP5JEduX7PyZMfg1Rg==
+X-Google-Smtp-Source: AKy350ZwCtSoQjiiwA1Djng0xz4M3/ZbNCZlAcTQ8nHuWoyebrI7lbwqlVuy6DqJem2lF9sXrcoJ7A==
+X-Received: by 2002:a05:600c:2285:b0:3ee:ed5:6115 with SMTP id 5-20020a05600c228500b003ee0ed56115mr1076006wmf.19.1680864639120;
+        Fri, 07 Apr 2023 03:50:39 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id i16-20020a05600c355000b003ede6540190sm8131909wmq.0.2023.04.07.03.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 03:50:38 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH v6 0/6] Add dedicated Qcom ICE driver
+Date:   Fri,  7 Apr 2023 13:50:23 +0300
+Message-Id: <20230407105029.2274111-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com>
- <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
- <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com>
- <CABb0KFF+sKSv7jdxBbXpt5A2WO83tKb9viq-kKurXN_e1VcFhQ@mail.gmail.com>
- <c535ce4a-d7da-1ce2-9883-7cefb6dd88a2@collabora.com>
- <CABb0KFE8pn+VORr8c=HWzKzJ5L5ZBRZMg2Q1dEZGU9gLqGZNLQ@mail.gmail.com>
- <b3e4d688-b96f-7c44-a6be-375d44263c85@collabora.com>
- <CABb0KFE=zevnsxk7U726efu8gg=9dpGyDLAwL0ShS2ZygQVhMA@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFE=zevnsxk7U726efu8gg=9dpGyDLAwL0ShS2ZygQVhMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,82 +85,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 3:21 PM, Michał Mirosław wrote:
-> On Fri, 7 Apr 2023 at 12:15, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> On 4/7/23 3:04 PM, Michał Mirosław wrote:
->>> On Fri, 7 Apr 2023 at 11:35, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>> On 4/7/23 12:23 PM, Michał Mirosław wrote:
->>>>> On Thu, 6 Apr 2023 at 23:12, Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
->>>>>> On 4/7/23 1:12 AM, Michał Mirosław wrote:
->>>>>>> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
->>>>>>> <usama.anjum@collabora.com> wrote:
->>>>>>> [...]
->>>>>>>> --- a/fs/proc/task_mmu.c
->>>>>>>> +++ b/fs/proc/task_mmu.c
->>>>>>> [...]
->>>>>>>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->>>>>>>> +                                 unsigned long end, struct mm_walk *walk)
->>>>>>>> +{
->>>>> [...]
->>>>>>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->>>>>>>> +       ptl = pmd_trans_huge_lock(pmd, vma);
->>>>>>>> +       if (ptl) {
->>>>>>> [...]
->>>>>>>> +               return ret;
->>>>>>>> +       }
->>>>>>>> +process_smaller_pages:
->>>>>>>> +       if (pmd_trans_unstable(pmd))
->>>>>>>> +               return 0;
->>>>>>>
->>>>>>> Why pmd_trans_unstable() is needed here and not only after split_huge_pmd()?
->>>>>> I'm not entirely sure. But the idea is if THP is unstable, we should
->>>>>> return. As it doesn't seem like after splitting THP can be unstable, we
->>>>>> should not check it. Do you agree with the following?
->>>>>
->>>>> The description of pmd_trans_unstable() [1] seems to indicate that it
->>>>> is needed only after split_huge_pmd().
->>>>>
->>>>> [1] https://elixir.bootlin.com/linux/v6.3-rc5/source/include/linux/pgtable.h#L1394
->>>> Sorry, yeah pmd_trans_unstable() is need after split. But it is also needed
->>>> in normal case when ptl is NULL to rule out the case if pmd is unstable
->>>> before performing operation on normal pages:
->>>>
->>>> ptl = pmd_trans_huge_lock(pmd, vma);
->>>> if (ptl) {
->>>> ...
->>>> }
->>>> if (pmd_trans_unstable(pmd))
->>>>         return 0;
->>>>
->>>> This file has usage examples of pmd_trans_unstable():
->>>>
->>>> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L634
->>>> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1195
->>>> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1543
->>>> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1887
->>>>
->>>> So we are good with what we have in this patch.
->>>
->>> Shouldn't we signal ACTION_AGAIN then in order to call .pte_hole?
->> I'm not sure. I've not done research on it if we need to signal
->> ACTION_AGAIN as this function pagemap_scan_pmd_entry() mimics how
->> pagemap_pmd_range() handles reads to the pagemap file. pagemap_pmd_range()
->> isn't doing anything if pmd is unstable. Hence we also not doing anything.
-> 
-> Doesn't this mean that if we scan a file-backed vma we would miss
-> non-present parts of the mapping in the output?
-I'm trying to mimic the same information through ioctl which is attained by
-reading the file. We'll only miss the unstable VMA here. I'm don't know
-about how often the PMD is unstable and its effects.
+As both SDCC and UFS drivers use the ICE with duplicated implementation,
+while none of the currently supported platforms make use concomitantly
+of the same ICE IP block instance, the new SM8550 allows both UFS and
+SDCC to do so. In order to support such scenario, there is a need for
+a unified implementation and a devicetree node to be shared between
+both types of storage devices. So lets drop the duplicate implementation
+of the ICE from both SDCC and UFS and make it a dedicated (soc) driver.
 
+For now, only SM8550 has been added to support the new approach. This
+also involves adding support for HW version 4.x.
 
-> 
-> Best Regards
-> Michał Mirosław
+The v5 is here:
+https://lore.kernel.org/all/20230403200530.2103099-1-abel.vesa@linaro.org/
+
+Changes since v5:
+ * See each individual patch for changelogs.
+
+Changes since v4:
+ * dropped the SDHCI dt-bindings patch as it will be added along
+   with the first use of qcom,ice property from an SDHCI DT node
+
+Abel Vesa (6):
+  dt-bindings: crypto: Add Qualcomm Inline Crypto Engine
+  dt-bindings: ufs: qcom: Add ICE phandle
+  soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
+  scsi: ufs: ufs-qcom: Switch to the new ICE API
+  mmc: sdhci-msm: Switch to the new ICE API
+  arm64: dts: qcom: sm8550: Add the Inline Crypto Engine node
+
+ .../crypto/qcom,inline-crypto-engine.yaml     |  42 ++
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  26 ++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |   9 +
+ drivers/mmc/host/Kconfig                      |   2 +-
+ drivers/mmc/host/sdhci-msm.c                  | 223 +++--------
+ drivers/soc/qcom/Kconfig                      |   4 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/ice.c                        | 366 ++++++++++++++++++
+ drivers/ufs/host/Kconfig                      |   2 +-
+ drivers/ufs/host/Makefile                     |   4 +-
+ drivers/ufs/host/ufs-qcom-ice.c               | 244 ------------
+ drivers/ufs/host/ufs-qcom.c                   |  99 ++++-
+ drivers/ufs/host/ufs-qcom.h                   |  32 +-
+ include/soc/qcom/ice.h                        |  37 ++
+ 14 files changed, 637 insertions(+), 454 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
+ create mode 100644 drivers/soc/qcom/ice.c
+ delete mode 100644 drivers/ufs/host/ufs-qcom-ice.c
+ create mode 100644 include/soc/qcom/ice.h
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.34.1
+
