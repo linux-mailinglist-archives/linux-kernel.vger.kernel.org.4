@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A656DB715
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285506DB719
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjDGXS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
+        id S229743AbjDGXVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjDGXSZ (ORCPT
+        with ESMTP id S229457AbjDGXVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:18:25 -0400
+        Fri, 7 Apr 2023 19:21:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517EA7281;
-        Fri,  7 Apr 2023 16:18:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF3B7ED0;
+        Fri,  7 Apr 2023 16:21:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAA5B65549;
-        Fri,  7 Apr 2023 23:18:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2081C4339B;
-        Fri,  7 Apr 2023 23:18:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB36564A2C;
+        Fri,  7 Apr 2023 23:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92007C433EF;
+        Fri,  7 Apr 2023 23:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680909503;
-        bh=qoSDQlNAO9HlyDhpcAu/76kmVbZ/kZk22io2phDTpCs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=kQ4oQ2xPrBZMBLe0xsM5NJivyOpeeKs8qhAZO/z1eurygENADg9v6LcYSY6IGk9iE
-         pK0rn34xe2e0p8HHaQ5dTpAC0F0QqMkOk89c62um+nU9bxM6VSi33IG+yGNej9SI+6
-         tlN5snen6qsg14M0SQKdeF7q8orkSSyyQyYlwjCdiTi40eBhPAJf3jy6eDGvor6He3
-         MITyrcHp97TeaQaL42tnHjSh2MpLSSqzTqTyQCTYQi25iNcofUZVgJagUq9ShBQwe9
-         m80o5rYQDbC+yygs1rdaOO3WeguRs4LnEuFya2D07wi916bCQ9IgpXdTwfeKUsGI8b
-         SZHkaKlSRVkyQ==
-Date:   Fri, 7 Apr 2023 18:18:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     LeoLiu-oc <LeoLiu-oc@zhaoxin.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
-        tony.luck@intel.com, bp@alien8.de, robert.moore@intel.com,
-        ying.huang@intel.com, rdunlap@infradead.org, bhelgaas@google.com,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devel@acpica.org,
-        CobeChen@zhaoxin.com, TonyWWang@zhaoxin.com, ErosZhang@zhaoxin.com,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Li, Ming" <ming4.li@intel.com>
-Subject: Re: [PATCH v2 0/5] Parse the PCIe AER and set to relevant registers
-Message-ID: <20230407231821.GA3831711@bhelgaas>
+        s=k20201202; t=1680909681;
+        bh=GR8ZHhZhrWLr8Jm6fEQrZIKxqS1sTyT0Tzdp4I7epEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fEwtIYaw7cjDKNLJtyxb1V9S9w87KlRmoLbJbhzd4IPYOed2hd2iLyrfoRJ04cRUy
+         q3Q1xDiGjPyThljSwASVEoEVXPX9HtejY+xkJqWPc8sDGAz0A/JcaQ2rRtJtEguYmF
+         ACvFFegwTDPN9APkiMH8vPTOwhF2Q+j7YjGwbTWW484mjBAnu3Kjh8SzmKID8FaIyb
+         GfBUL99QphgLyOUe6Ed6j39SLR3FX1pdhlm/GiPrb69vfNwwfj6AJQDQQvWS+qusAM
+         QCYBbUVHQvwAFcZnqi8M2RSNZ2qv8RH/IMCqSDg0vxA5qdDdDWM5Mxld4hHRYsbxXp
+         vat39tzq4gaJw==
+Date:   Fri, 7 Apr 2023 16:21:18 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com, live-patching@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH modules-next v10 00/13] kallsyms: reliable
+ symbol->address lookup with /proc/kallmodsyms
+Message-ID: <20230407232118.o2x5lakfgyzy56gz@treble>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221115031115.1666464-1-LeoLiu-oc@zhaoxin.com>
+In-Reply-To: <20221205163157.269335-1-nick.alcock@oracle.com>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -59,38 +59,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Sathy, Ming, since they commented on the previous version]
-
-On Tue, Nov 15, 2022 at 11:11:15AM +0800, LeoLiu-oc wrote:
-> From: leoliu-oc <leoliu-oc@zhaoxin.com>
+On Mon, Dec 05, 2022 at 04:31:44PM +0000, Nick Alcock wrote:
+> The whole point of symbols is that their names are unique: you can look up a
+> symbol and get back a unique address, and vice versa.  Alas, because
+> /proc/kallsyms (rightly) reports all symbols, even hidden ones, it does not
+> really satisfy this requirement.  Large numbers of symbols are duplicated
+> many times (just search for __list_del_entry!), and while usually these are
+> just out-of-lined things defined in header files and thus all have the same
+> implementation, it does make it needlessly hard to figure out which one is
+> which in stack dumps, when tracing, and such things.  Some configuration
+> options make things much worse: my test make allyesconfig runs introduced
+> thousands of text symbols named _sub_I_65535_1, one per compiler-generated
+> object file, and it was fairly easy to make them appear in ftrace output.
 > 
-> According to the sec 18.3.2.4, 18.3.2.5 and 18.3.2.6 in ACPI r6.5, the
-> register values form HEST PCI Express AER Structure should be written to
-> relevant PCIe Device's AER Capabilities. So the purpose of the patch set
-> is to extract register values from HEST PCI Express AER structures and
-> program them into AER Capabilities. Refer to the ACPI Spec r6.5 for a more
-> detailed description.
+> Right now the kernel has no way at all to tell such symbols apart, and nor
+> has the user: their address differs and that's all.  Which module did they
+> come from?  Which object file?  We don't know.  Figuring out which is which
+> when tracing needs a combination of guesswork and luck, and if there are
+> thousands of them that's not a pleasant prospect.  In discussions at LPC it
+> became clear that this is not just annoying me but Steve Rostedt and others,
+> so it's probably desirable to fix this.
+> 
+> It turns out that the linker, and the kernel build system, can be made to
+> give us everything we need to resolve this once and for all.  This series
+> provides a new /proc/kallmodsyms which is like /proc/kallsyms except that it
+> annotates every (textual) symbol which comes from a built-in kernel module
+> with the module's name, in square brackets: if a symbol is used by multiple
+> modules, it gets [multiple] [names]; if a symbol is still ambiguous it gets
+> a cut-down {object file name}; the combination of symbol, [module] [names]
+> and {object file name} is unique (with one minor exception: the arm64 nvhe
+> module is pre-linked with ld -r, causing all symbols in it to appear to come
+> from the same object file: if it was reworked to use thin archives this
+> problem would go away).
 
-I wasn't involved in this part of the ACPI spec, and I don't
-understand how this is intended to work.
+Hi Nick,
 
-I see that this series extracts AER mask, severity, and control
-information from the ACPI HEST table and uses it to configure PCIe
-devices as they are enumerated.
+Sorry for jumping in late on an old patch set.  I just saw the LWN
+article about the MODULE_LICENSE() patches and I have some comments
+about duplicate symbols and a question about the motivation for this
+patch set.
 
-What I don't understand is how this relates to ownership of the AER
-capability as negotiated by the _OSC method.  Firmware can configure
-the AER capability itself, and if it retains control of the AER
-capability, the OS can't write to it (with the exception of clearing
-EDR error status), so this wouldn't be necessary.
+For livepatch we have a solution for disambiguating duplicate local
+symbols called "sympos".  It works (for now) but there are some cases
+(like LTO) where it falls apart and it may not be the best long term
+solution.
 
-If the OS owns the AER capability, I assume it gets to decide for
-itself how to configure AER, no matter what the ACPI HEST says.
+The function granularity KASLR (fgkaslr) patches proposed a potentially
+better option: use the GNU linker -zunique_symbols flag which renames
+all duplicates to have unique names across the entire linked object.
 
-Maybe this is intended for the case where firmware retains AER
-ownership but the OS uses native hotplug (pciehp), and this is a way
-for the OS to configure new devices as the firmware expects?  But in
-that case, we still have the problem that the OS can't write to the
-AER capability to do this configuration.
+There are other components which also struggle with duplicate symbols:
+ftrace, kprobes, BPF, etc.  It would be good to come up with a kallsyms
+solution that works for everybody.
 
-Bjorn
+Anyway, I was nodding along with the above cover letter until I got to
+the third paragraph.
+
+A "built-in kernel module" is not actually a module, as it's built in to
+vmlinux.  I suspect the point is that if you rebuild with a different
+config, it might become a module.  But many other changes could also
+occur with a changed config, including changed inlining decisions and
+GCC IPA optimization function renaming, in which case the symbol might
+no longer exist with the new config.
+
+Also I'm confused what it means for a symbol to be "used by multiple
+modules".  If the same TU or inline symbol is linked into two modules,
+it will be loaded twice at two different addresses, and the
+implementations could even differ.
+
+It sounds like there are two problems being conflated:
+
+  1) how to uniquely identify symbols in the current kernel
+
+     For this, all we really need is file+sym.
+
+     Or, enable -zunique-symbols in the linker.
+
+  2) how to uniquely identify symbols across multiple kernels/configs
+
+     This seems much trickier, as much can change across kernels and
+     configs, including compiler inlining and naming decisions, not to
+     mention actual code changes.
+
+The problems are related, but distinct.
+
+#2 seems significantly harder to implement properly.
+
+Would solving #1 give you most of what you need?
+
+Based on the difficulty of #2, it really needs a proper justification.
+I didn't see that in either of the patch sets.
+
+Can you share more details about what specific problem needs solved and
+why?  And how this would be used?  Examples would be helpful.
+
+The article linked to this brief explanation [1], but that doesn't
+clarify why "distinct notation used by users for things in named
+modules" would be important.
+
+Is there a reason the user can't just use whatever notation is
+appropriate for their specific kernel?  Or, once we have #1, couldn't
+tooling do an intermediate translation?
+
+[1] https://lwn.net/ml/linux-kernel/87h6z5wqlk.fsf@esperi.org.uk/
+
+-- 
+Josh
