@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A91D6DB6C8
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03396DB6C9
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbjDGXEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
+        id S229539AbjDGXFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjDGXEw (ORCPT
+        with ESMTP id S229532AbjDGXFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:04:52 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9263EE075
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:04:47 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54ee0b7dbdbso1190047b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:04:47 -0700 (PDT)
+        Fri, 7 Apr 2023 19:05:15 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4EDE058
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:04:58 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 184-20020a2515c1000000b009419f64f6afso172917ybv.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:04:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680908686;
+        d=google.com; s=20210112; t=1680908698;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RC3j3MvNSqhqdahKk5GatyUi9kpNiFRU0Tiq11OGY9U=;
-        b=Y1Nid9cu5o8F0X5Lt9SXjJRrDmEBlQjT5SO/SCKWFG08EyI3kd6QIPs8bmj8k2nRpl
-         n3p9KSo3TD4yJHIaBiQZI1Dyx4lnFDnl3TCH6m/4bCo7Iw3qMaZCbIC+bctdoTe4+Isg
-         D3P9+mxTRyhJHdce3ollbCapl3cc5APJFxnnyaXoh9GF+zGPoTX/HtE7At3MfuIi5V0U
-         VeoZlsYLZvVQuS3XttvuPjyF5kJ6uP+zrwlutwK8vVbPAjXNgqSV8UikPzqGCzIHk3hs
-         3RWJmzu2Nm9ZBf0FQa7jWvk31gkvo2wS46v7SBo2/K87frh4TAUZwIXjZwdMBWKA90ip
-         leaQ==
+        bh=LHqrX260PO2JkpWJuoXDRgjLDyiCkFPZ68iFLvLZDs8=;
+        b=QzSpvDgl+t+i9S/CkRfiiAMgvlnZ6ypV7F5TOBau3PvNW/UX7uixEfLMg/DSYliGwV
+         CGyfN7/kMC4v3mDaKSvJ7sOQgQyzAd2pxYRMzam4z2+syqawxUEfBman1czTTILxtpWR
+         dxMjn49ZA6aQXea5KkesIIIQ4/+3yKW/dVnCXIuulnQWZSTADQxWXHZ7q3nYEenMKRjh
+         MHDgNVjg5O0I1i2pGk3VAD5pOM/bKzUW1BKIgVxMQEeFBjmBQvZyhA/3rnKsqkk5em1T
+         APDEpuH/Rs6DE6w64Q2z7WpaTIUHow06Z/rjYk2vK2e2iG+hmjnaWmaRj5IEJThhHEJg
+         gEkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680908686;
+        d=1e100.net; s=20210112; t=1680908698;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RC3j3MvNSqhqdahKk5GatyUi9kpNiFRU0Tiq11OGY9U=;
-        b=MR9qT0Kis4LbJ42TvDxYyw9HHioduaEiM4NnIYG57WNDmhWepsq0PTtCZX9v/Xy6OI
-         OgDbByS7PKwFJ9vjF/+ffm9Nz0tmTiV4hyf7bpC8qdqJXBFbsttrZ1cnJhIJJUYa5Qtj
-         xenOiv7i+u7SRuxjd01IfZHlzVFkkhhtju3O00xndG9KWCGOniDsDjnzwjGjWki702hF
-         LdJi/C5XmkQHCs4WE9DHQ/CQAR5nM5kzTI6RDiReoxFJpvD4jlOFT/qURyz9ATsU7mRO
-         +7CoFoGpd6PoA51J16ykYfX5yCep/xdUu8G1QlZOza7SdHrJtSCQztqadK7oXJkvfrxV
-         RMiw==
-X-Gm-Message-State: AAQBX9dFhsSRIke62v5UnugQbbFC8rLUni4q/4cFw0MTK6TkTRfeU3zE
-        KQfwh92AkFxg9n7sAnm81NGRFJwTV0Xk
-X-Google-Smtp-Source: AKy350aCF00VS1Uj2dO3alss4KgHHM1xpvEYJZpEu4+XLdkm7rX/Q7JW60ovWVL1Q+ARAuLpnfU5WxkvsZr7
+        bh=LHqrX260PO2JkpWJuoXDRgjLDyiCkFPZ68iFLvLZDs8=;
+        b=zMY7ETgDLhsOE+r4K3N0Mtwj10Hzu0ZY9cJsVUOkCCrahm/77NoE2lZA8TYban0H5M
+         chydJOjnHPT5sQOKejmVut1UpYWBRAgCTZNg76uDDFDInggOP8qfbZMU0GzZ/aV0K111
+         HxSC91s+i/IUEpcJdSXXsDj7m0jUxmIke3BU8Xgt+8bQSInbOhMwkUnRxGQxi7d67GFd
+         29J/GP7ek7G1szj/Tc6ui2zHpOdRDm3vVTtd/+GJxRVqSAel/aRTj+VlVlcuGgZL1bj0
+         snl1osHkKwD8W7hPc/ulbJ3C2rsoWJ9AmONUA5t9dVdxOt/jVr3YFzjWZbvf0hxivg3T
+         zkHw==
+X-Gm-Message-State: AAQBX9d+W7biu4Qbl1AYOK2La091cfJM3cxng1edLyhm2q7zFqE70kxr
+        1LmnS1nnGBFfWMOG9JdlmaDnVxpcUpyF
+X-Google-Smtp-Source: AKy350bsaq7YNWCyHx3ZoTz6f+AuEqUr7ENZRW4bxFc5TVdE01kfhXQLY38FXD+bu3CPLsgjbSdSpF0VmgBP
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b240:9cdf:7861:b23e])
- (user=irogers job=sendgmr) by 2002:a25:cc47:0:b0:b77:97d9:f096 with SMTP id
- l68-20020a25cc47000000b00b7797d9f096mr2739532ybf.10.1680908686591; Fri, 07
- Apr 2023 16:04:46 -0700 (PDT)
-Date:   Fri,  7 Apr 2023 16:04:02 -0700
+ (user=irogers job=sendgmr) by 2002:a81:e401:0:b0:54c:19a6:480 with SMTP id
+ r1-20020a81e401000000b0054c19a60480mr1775683ywl.4.1680908697786; Fri, 07 Apr
+ 2023 16:04:57 -0700 (PDT)
+Date:   Fri,  7 Apr 2023 16:04:03 -0700
 In-Reply-To: <20230407230405.2931830-1-irogers@google.com>
-Message-Id: <20230407230405.2931830-3-irogers@google.com>
+Message-Id: <20230407230405.2931830-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230407230405.2931830-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v7 2/5] perf cpumap: Add reference count checking
+Subject: [PATCH v7 3/5] perf namespaces: Add reference count checking
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -100,466 +100,366 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enabled when REFCNT_CHECKING is defined. The change adds a memory
-allocated pointer that is interposed between the reference counted
-cpu map at a get and freed by a put. The pointer replaces the original
-perf_cpu_map struct, so use of the perf_cpu_map via APIs remains
-unchanged. Any use of the cpu map without the API requires two versions,
-handled via the RC_CHK_ACCESS macro.
+Add reference count checking controlled by REFCNT_CHECKING ifdef. The
+reference count checking interposes an allocated pointer between the
+reference counted struct on a get and frees the pointer on a put.
+Accesses after a put cause faults and use after free, missed puts are
+caughts as leaks and double puts are double frees.
 
-This change is intended to catch:
- - use after put: using a cpumap after you have put it will cause a
-   segv.
- - unbalanced puts: two puts for a get will result in a double free
-   that can be captured and reported by tools like address sanitizer,
-   including with the associated stack traces of allocation and frees.
- - missing puts: if a put is missing then the get turns into a memory
-   leak that can be reported by leak sanitizer, including the stack
-   trace at the point the get occurs.
+This checking helped resolve a memory leak and use after free:
+https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/Makefile                  |  2 +-
- tools/lib/perf/cpumap.c                  | 94 +++++++++++++-----------
- tools/lib/perf/include/internal/cpumap.h |  4 +-
- tools/perf/tests/cpumap.c                |  4 +-
- tools/perf/util/cpumap.c                 | 40 +++++-----
- tools/perf/util/pmu.c                    |  8 +-
- 6 files changed, 81 insertions(+), 71 deletions(-)
+ tools/perf/builtin-inject.c  |   2 +-
+ tools/perf/util/annotate.c   |   2 +-
+ tools/perf/util/dso.c        |   2 +-
+ tools/perf/util/dsos.c       |   2 +-
+ tools/perf/util/namespaces.c | 132 ++++++++++++++++++++---------------
+ tools/perf/util/namespaces.h |   3 +-
+ tools/perf/util/symbol.c     |   2 +-
+ 7 files changed, 83 insertions(+), 62 deletions(-)
 
-diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-index d8cad124e4c5..3a9b2140aa04 100644
---- a/tools/lib/perf/Makefile
-+++ b/tools/lib/perf/Makefile
-@@ -188,7 +188,7 @@ install_lib: libs
- 		cp -fpR $(LIBPERF_ALL) $(DESTDIR)$(libdir_SQ)
+diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+index fd2b38458a5d..fe6ddcf7fb1e 100644
+--- a/tools/perf/builtin-inject.c
++++ b/tools/perf/builtin-inject.c
+@@ -632,7 +632,7 @@ static int dso__read_build_id(struct dso *dso)
+ 	else if (dso->nsinfo) {
+ 		char *new_name;
  
- HDRS := bpf_perf.h core.h cpumap.h threadmap.h evlist.h evsel.h event.h mmap.h
--INTERNAL_HDRS := cpumap.h evlist.h evsel.h lib.h mmap.h threadmap.h xyarray.h
-+INTERNAL_HDRS := cpumap.h evlist.h evsel.h lib.h mmap.h rc_check.h threadmap.h xyarray.h
+-		new_name = filename_with_chroot(dso->nsinfo->pid,
++		new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
+ 						dso->long_name);
+ 		if (new_name && filename__read_build_id(new_name, &dso->bid) > 0)
+ 			dso->has_build_id = true;
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index 55f2e3a7577e..a29b94078dae 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1691,7 +1691,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
  
- INSTALL_HDRS_PFX := $(DESTDIR)$(prefix)/include/perf
- INSTALL_HDRS := $(addprefix $(INSTALL_HDRS_PFX)/, $(HDRS))
-diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
-index 6cd0be7c1bb4..56eed1ac80d9 100644
---- a/tools/lib/perf/cpumap.c
-+++ b/tools/lib/perf/cpumap.c
-@@ -10,16 +10,16 @@
- #include <ctype.h>
- #include <limits.h>
+ 		mutex_lock(&dso->lock);
+ 		if (access(filename, R_OK) && errno == ENOENT && dso->nsinfo) {
+-			char *new_name = filename_with_chroot(dso->nsinfo->pid,
++			char *new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
+ 							      filename);
+ 			if (new_name) {
+ 				strlcpy(filename, new_name, filename_size);
+diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+index e36b418df2c6..6c4129598f5d 100644
+--- a/tools/perf/util/dso.c
++++ b/tools/perf/util/dso.c
+@@ -515,7 +515,7 @@ static int __open_dso(struct dso *dso, struct machine *machine)
+ 		if (errno != ENOENT || dso->nsinfo == NULL)
+ 			goto out;
  
--static struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus)
-+struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus)
+-		new_name = filename_with_chroot(dso->nsinfo->pid, name);
++		new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid, name);
+ 		if (!new_name)
+ 			goto out;
+ 
+diff --git a/tools/perf/util/dsos.c b/tools/perf/util/dsos.c
+index 2bd23e4cf19e..53b989072ec5 100644
+--- a/tools/perf/util/dsos.c
++++ b/tools/perf/util/dsos.c
+@@ -91,7 +91,7 @@ bool __dsos__read_build_ids(struct list_head *head, bool with_hits)
+ 			have_build_id	  = true;
+ 			pos->has_build_id = true;
+ 		} else if (errno == ENOENT && pos->nsinfo) {
+-			char *new_name = filename_with_chroot(pos->nsinfo->pid,
++			char *new_name = filename_with_chroot(RC_CHK_ACCESS(pos->nsinfo)->pid,
+ 							      pos->long_name);
+ 
+ 			if (new_name && filename__read_build_id(new_name,
+diff --git a/tools/perf/util/namespaces.c b/tools/perf/util/namespaces.c
+index dd536220cdb9..8a3b7bd27b19 100644
+--- a/tools/perf/util/namespaces.c
++++ b/tools/perf/util/namespaces.c
+@@ -60,7 +60,7 @@ void namespaces__free(struct namespaces *namespaces)
+ 	free(namespaces);
+ }
+ 
+-static int nsinfo__get_nspid(struct nsinfo *nsi, const char *path)
++static int nsinfo__get_nspid(pid_t *tgid, pid_t *nstgid, bool *in_pidns, const char *path)
  {
--	struct perf_cpu_map *cpus = malloc(sizeof(*cpus) + sizeof(struct perf_cpu) * nr_cpus);
--
--	if (cpus != NULL) {
-+	struct perf_cpu_map *result;
-+	RC_STRUCT(perf_cpu_map) *cpus =
-+		malloc(sizeof(*cpus) + sizeof(struct perf_cpu) * nr_cpus);
-+	if (ADD_RC_CHK(result, cpus)) {
- 		cpus->nr = nr_cpus;
- 		refcount_set(&cpus->refcnt, 1);
--
+ 	FILE *f = NULL;
+ 	char *statln = NULL;
+@@ -74,19 +74,18 @@ static int nsinfo__get_nspid(struct nsinfo *nsi, const char *path)
+ 	while (getline(&statln, &linesz, f) != -1) {
+ 		/* Use tgid if CONFIG_PID_NS is not defined. */
+ 		if (strstr(statln, "Tgid:") != NULL) {
+-			nsi->tgid = (pid_t)strtol(strrchr(statln, '\t'),
+-						     NULL, 10);
+-			nsi->nstgid = nsinfo__tgid(nsi);
++			*tgid = (pid_t)strtol(strrchr(statln, '\t'), NULL, 10);
++			*nstgid = *tgid;
+ 		}
+ 
+ 		if (strstr(statln, "NStgid:") != NULL) {
+ 			nspid = strrchr(statln, '\t');
+-			nsi->nstgid = (pid_t)strtol(nspid, NULL, 10);
++			*nstgid = (pid_t)strtol(nspid, NULL, 10);
+ 			/*
+ 			 * If innermost tgid is not the first, process is in a different
+ 			 * PID namespace.
+ 			 */
+-			nsi->in_pidns = (statln + sizeof("NStgid:") - 1) != nspid;
++			*in_pidns = (statln + sizeof("NStgid:") - 1) != nspid;
+ 			break;
+ 		}
  	}
--	return cpus;
-+	return result;
- }
- 
- struct perf_cpu_map *perf_cpu_map__dummy_new(void)
-@@ -27,7 +27,7 @@ struct perf_cpu_map *perf_cpu_map__dummy_new(void)
- 	struct perf_cpu_map *cpus = perf_cpu_map__alloc(1);
- 
- 	if (cpus)
--		cpus->map[0].cpu = -1;
-+		RC_CHK_ACCESS(cpus)->map[0].cpu = -1;
- 
- 	return cpus;
- }
-@@ -35,23 +35,30 @@ struct perf_cpu_map *perf_cpu_map__dummy_new(void)
- static void cpu_map__delete(struct perf_cpu_map *map)
- {
- 	if (map) {
--		WARN_ONCE(refcount_read(&map->refcnt) != 0,
-+		WARN_ONCE(refcount_read(&RC_CHK_ACCESS(map)->refcnt) != 0,
- 			  "cpu_map refcnt unbalanced\n");
--		free(map);
-+		RC_CHK_FREE(map);
+@@ -121,8 +120,8 @@ int nsinfo__init(struct nsinfo *nsi)
+ 	 * want to switch as part of looking up dso/map data.
+ 	 */
+ 	if (old_stat.st_ino != new_stat.st_ino) {
+-		nsi->need_setns = true;
+-		nsi->mntns_path = newns;
++		RC_CHK_ACCESS(nsi)->need_setns = true;
++		RC_CHK_ACCESS(nsi)->mntns_path = newns;
+ 		newns = NULL;
  	}
+ 
+@@ -132,13 +131,26 @@ int nsinfo__init(struct nsinfo *nsi)
+ 	if (snprintf(spath, PATH_MAX, "/proc/%d/status", nsinfo__pid(nsi)) >= PATH_MAX)
+ 		goto out;
+ 
+-	rv = nsinfo__get_nspid(nsi, spath);
++	rv = nsinfo__get_nspid(&RC_CHK_ACCESS(nsi)->tgid, &RC_CHK_ACCESS(nsi)->nstgid,
++			       &RC_CHK_ACCESS(nsi)->in_pidns, spath);
+ 
+ out:
+ 	free(newns);
+ 	return rv;
  }
  
- struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map)
++static struct nsinfo *nsinfo__alloc(void)
++{
++	struct nsinfo *res;
++	RC_STRUCT(nsinfo) *nsi;
++
++	nsi = calloc(1, sizeof(*nsi));
++	if (ADD_RC_CHK(res, nsi))
++		refcount_set(&nsi->refcnt, 1);
++
++	return res;
++}
++
+ struct nsinfo *nsinfo__new(pid_t pid)
  {
--	if (map)
--		refcount_inc(&map->refcnt);
--	return map;
-+	struct perf_cpu_map *result;
-+
-+	if (RC_CHK_GET(result, map))
-+		refcount_inc(&RC_CHK_ACCESS(map)->refcnt);
-+
-+	return result;
- }
+ 	struct nsinfo *nsi;
+@@ -146,22 +158,21 @@ struct nsinfo *nsinfo__new(pid_t pid)
+ 	if (pid == 0)
+ 		return NULL;
  
- void perf_cpu_map__put(struct perf_cpu_map *map)
+-	nsi = calloc(1, sizeof(*nsi));
+-	if (nsi != NULL) {
+-		nsi->pid = pid;
+-		nsi->tgid = pid;
+-		nsi->nstgid = pid;
+-		nsi->need_setns = false;
+-		nsi->in_pidns = false;
+-		/* Init may fail if the process exits while we're trying to look
+-		 * at its proc information.  In that case, save the pid but
+-		 * don't try to enter the namespace.
+-		 */
+-		if (nsinfo__init(nsi) == -1)
+-			nsi->need_setns = false;
++	nsi = nsinfo__alloc();
++	if (!nsi)
++		return NULL;
+ 
+-		refcount_set(&nsi->refcnt, 1);
+-	}
++	RC_CHK_ACCESS(nsi)->pid = pid;
++	RC_CHK_ACCESS(nsi)->tgid = pid;
++	RC_CHK_ACCESS(nsi)->nstgid = pid;
++	RC_CHK_ACCESS(nsi)->need_setns = false;
++	RC_CHK_ACCESS(nsi)->in_pidns = false;
++	/* Init may fail if the process exits while we're trying to look at its
++	 * proc information. In that case, save the pid but don't try to enter
++	 * the namespace.
++	 */
++	if (nsinfo__init(nsi) == -1)
++		RC_CHK_ACCESS(nsi)->need_setns = false;
+ 
+ 	return nsi;
+ }
+@@ -173,21 +184,21 @@ struct nsinfo *nsinfo__copy(const struct nsinfo *nsi)
+ 	if (nsi == NULL)
+ 		return NULL;
+ 
+-	nnsi = calloc(1, sizeof(*nnsi));
+-	if (nnsi != NULL) {
+-		nnsi->pid = nsinfo__pid(nsi);
+-		nnsi->tgid = nsinfo__tgid(nsi);
+-		nnsi->nstgid = nsinfo__nstgid(nsi);
+-		nnsi->need_setns = nsinfo__need_setns(nsi);
+-		nnsi->in_pidns = nsinfo__in_pidns(nsi);
+-		if (nsi->mntns_path) {
+-			nnsi->mntns_path = strdup(nsi->mntns_path);
+-			if (!nnsi->mntns_path) {
+-				free(nnsi);
+-				return NULL;
+-			}
++	nnsi = nsinfo__alloc();
++	if (!nnsi)
++		return NULL;
++
++	RC_CHK_ACCESS(nnsi)->pid = nsinfo__pid(nsi);
++	RC_CHK_ACCESS(nnsi)->tgid = nsinfo__tgid(nsi);
++	RC_CHK_ACCESS(nnsi)->nstgid = nsinfo__nstgid(nsi);
++	RC_CHK_ACCESS(nnsi)->need_setns = nsinfo__need_setns(nsi);
++	RC_CHK_ACCESS(nnsi)->in_pidns = nsinfo__in_pidns(nsi);
++	if (RC_CHK_ACCESS(nsi)->mntns_path) {
++		RC_CHK_ACCESS(nnsi)->mntns_path = strdup(RC_CHK_ACCESS(nsi)->mntns_path);
++		if (!RC_CHK_ACCESS(nnsi)->mntns_path) {
++			nsinfo__put(nnsi);
++			return NULL;
+ 		}
+-		refcount_set(&nnsi->refcnt, 1);
+ 	}
+ 
+ 	return nnsi;
+@@ -195,51 +206,60 @@ struct nsinfo *nsinfo__copy(const struct nsinfo *nsi)
+ 
+ static void nsinfo__delete(struct nsinfo *nsi)
  {
--	if (map && refcount_dec_and_test(&map->refcnt))
--		cpu_map__delete(map);
-+	if (map) {
-+		if (refcount_dec_and_test(&RC_CHK_ACCESS(map)->refcnt))
-+			cpu_map__delete(map);
-+		else
-+			RC_CHK_PUT(map);
+-	zfree(&nsi->mntns_path);
+-	free(nsi);
++	if (nsi) {
++		WARN_ONCE(refcount_read(&RC_CHK_ACCESS(nsi)->refcnt) != 0,
++			"nsinfo refcnt unbalanced\n");
++		zfree(&RC_CHK_ACCESS(nsi)->mntns_path);
++		RC_CHK_FREE(nsi);
 +	}
  }
  
- static struct perf_cpu_map *cpu_map__default_new(void)
-@@ -68,7 +75,7 @@ static struct perf_cpu_map *cpu_map__default_new(void)
- 		int i;
- 
- 		for (i = 0; i < nr_cpus; ++i)
--			cpus->map[i].cpu = i;
-+			RC_CHK_ACCESS(cpus)->map[i].cpu = i;
- 	}
- 
- 	return cpus;
-@@ -94,15 +101,16 @@ static struct perf_cpu_map *cpu_map__trim_new(int nr_cpus, const struct perf_cpu
- 	int i, j;
- 
- 	if (cpus != NULL) {
--		memcpy(cpus->map, tmp_cpus, payload_size);
--		qsort(cpus->map, nr_cpus, sizeof(struct perf_cpu), cmp_cpu);
-+		memcpy(RC_CHK_ACCESS(cpus)->map, tmp_cpus, payload_size);
-+		qsort(RC_CHK_ACCESS(cpus)->map, nr_cpus, sizeof(struct perf_cpu), cmp_cpu);
- 		/* Remove dups */
- 		j = 0;
- 		for (i = 0; i < nr_cpus; i++) {
--			if (i == 0 || cpus->map[i].cpu != cpus->map[i - 1].cpu)
--				cpus->map[j++].cpu = cpus->map[i].cpu;
-+			if (i == 0 ||
-+			    RC_CHK_ACCESS(cpus)->map[i].cpu != RC_CHK_ACCESS(cpus)->map[i - 1].cpu)
-+				RC_CHK_ACCESS(cpus)->map[j++].cpu = RC_CHK_ACCESS(cpus)->map[i].cpu;
- 		}
--		cpus->nr = j;
-+		RC_CHK_ACCESS(cpus)->nr = j;
- 		assert(j <= nr_cpus);
- 	}
- 	return cpus;
-@@ -263,20 +271,20 @@ struct perf_cpu perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx)
- 		.cpu = -1
- 	};
- 
--	if (cpus && idx < cpus->nr)
--		return cpus->map[idx];
-+	if (cpus && idx < RC_CHK_ACCESS(cpus)->nr)
-+		return RC_CHK_ACCESS(cpus)->map[idx];
- 
- 	return result;
- }
- 
- int perf_cpu_map__nr(const struct perf_cpu_map *cpus)
+ struct nsinfo *nsinfo__get(struct nsinfo *nsi)
  {
--	return cpus ? cpus->nr : 1;
-+	return cpus ? RC_CHK_ACCESS(cpus)->nr : 1;
+-	if (nsi)
+-		refcount_inc(&nsi->refcnt);
+-	return nsi;
++	struct nsinfo *result;
++
++	if (RC_CHK_GET(result, nsi))
++		refcount_inc(&RC_CHK_ACCESS(nsi)->refcnt);
++
++	return result;
  }
  
- bool perf_cpu_map__empty(const struct perf_cpu_map *map)
+ void nsinfo__put(struct nsinfo *nsi)
  {
--	return map ? map->map[0].cpu == -1 : true;
-+	return map ? RC_CHK_ACCESS(map)->map[0].cpu == -1 : true;
+-	if (nsi && refcount_dec_and_test(&nsi->refcnt))
++	if (nsi && refcount_dec_and_test(&RC_CHK_ACCESS(nsi)->refcnt))
+ 		nsinfo__delete(nsi);
++	else
++		RC_CHK_PUT(nsi);
  }
  
- int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu)
-@@ -287,10 +295,10 @@ int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu)
- 		return -1;
- 
- 	low = 0;
--	high = cpus->nr;
-+	high = RC_CHK_ACCESS(cpus)->nr;
- 	while (low < high) {
- 		int idx = (low + high) / 2;
--		struct perf_cpu cpu_at_idx = cpus->map[idx];
-+		struct perf_cpu cpu_at_idx = RC_CHK_ACCESS(cpus)->map[idx];
- 
- 		if (cpu_at_idx.cpu == cpu.cpu)
- 			return idx;
-@@ -316,7 +324,9 @@ struct perf_cpu perf_cpu_map__max(const struct perf_cpu_map *map)
- 	};
- 
- 	// cpu_map__trim_new() qsort()s it, cpu_map__default_new() sorts it as well.
--	return map->nr > 0 ? map->map[map->nr - 1] : result;
-+	return RC_CHK_ACCESS(map)->nr > 0
-+		? RC_CHK_ACCESS(map)->map[RC_CHK_ACCESS(map)->nr - 1]
-+		: result;
- }
- 
- /** Is 'b' a subset of 'a'. */
-@@ -324,15 +334,15 @@ bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu
+ bool nsinfo__need_setns(const struct nsinfo *nsi)
  {
- 	if (a == b || !b)
- 		return true;
--	if (!a || b->nr > a->nr)
-+	if (!a || RC_CHK_ACCESS(b)->nr > RC_CHK_ACCESS(a)->nr)
- 		return false;
+-        return nsi->need_setns;
++	return RC_CHK_ACCESS(nsi)->need_setns;
+ }
  
--	for (int i = 0, j = 0; i < a->nr; i++) {
--		if (a->map[i].cpu > b->map[j].cpu)
-+	for (int i = 0, j = 0; i < RC_CHK_ACCESS(a)->nr; i++) {
-+		if (RC_CHK_ACCESS(a)->map[i].cpu > RC_CHK_ACCESS(b)->map[j].cpu)
- 			return false;
--		if (a->map[i].cpu == b->map[j].cpu) {
-+		if (RC_CHK_ACCESS(a)->map[i].cpu == RC_CHK_ACCESS(b)->map[j].cpu) {
- 			j++;
--			if (j == b->nr)
-+			if (j == RC_CHK_ACCESS(b)->nr)
- 				return true;
- 		}
- 	}
-@@ -362,27 +372,27 @@ struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
- 		return perf_cpu_map__get(other);
- 	}
+ void nsinfo__clear_need_setns(struct nsinfo *nsi)
+ {
+-        nsi->need_setns = false;
++	RC_CHK_ACCESS(nsi)->need_setns = false;
+ }
  
--	tmp_len = orig->nr + other->nr;
-+	tmp_len = RC_CHK_ACCESS(orig)->nr + RC_CHK_ACCESS(other)->nr;
- 	tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
- 	if (!tmp_cpus)
- 		return NULL;
+ pid_t nsinfo__tgid(const struct nsinfo  *nsi)
+ {
+-        return nsi->tgid;
++	return RC_CHK_ACCESS(nsi)->tgid;
+ }
  
- 	/* Standard merge algorithm from wikipedia */
- 	i = j = k = 0;
--	while (i < orig->nr && j < other->nr) {
--		if (orig->map[i].cpu <= other->map[j].cpu) {
--			if (orig->map[i].cpu == other->map[j].cpu)
-+	while (i < RC_CHK_ACCESS(orig)->nr && j < RC_CHK_ACCESS(other)->nr) {
-+		if (RC_CHK_ACCESS(orig)->map[i].cpu <= RC_CHK_ACCESS(other)->map[j].cpu) {
-+			if (RC_CHK_ACCESS(orig)->map[i].cpu == RC_CHK_ACCESS(other)->map[j].cpu)
- 				j++;
--			tmp_cpus[k++] = orig->map[i++];
-+			tmp_cpus[k++] = RC_CHK_ACCESS(orig)->map[i++];
- 		} else
--			tmp_cpus[k++] = other->map[j++];
-+			tmp_cpus[k++] = RC_CHK_ACCESS(other)->map[j++];
- 	}
+ pid_t nsinfo__nstgid(const struct nsinfo  *nsi)
+ {
+-        return nsi->nstgid;
++	return RC_CHK_ACCESS(nsi)->nstgid;
+ }
  
--	while (i < orig->nr)
--		tmp_cpus[k++] = orig->map[i++];
-+	while (i < RC_CHK_ACCESS(orig)->nr)
-+		tmp_cpus[k++] = RC_CHK_ACCESS(orig)->map[i++];
+ pid_t nsinfo__pid(const struct nsinfo  *nsi)
+ {
+-        return nsi->pid;
++	return RC_CHK_ACCESS(nsi)->pid;
+ }
  
--	while (j < other->nr)
--		tmp_cpus[k++] = other->map[j++];
-+	while (j < RC_CHK_ACCESS(other)->nr)
-+		tmp_cpus[k++] = RC_CHK_ACCESS(other)->map[j++];
- 	assert(k <= tmp_len);
+ pid_t nsinfo__in_pidns(const struct nsinfo  *nsi)
+ {
+-        return nsi->in_pidns;
++	return RC_CHK_ACCESS(nsi)->in_pidns;
+ }
  
- 	merged = cpu_map__trim_new(k, tmp_cpus);
-diff --git a/tools/lib/perf/include/internal/cpumap.h b/tools/lib/perf/include/internal/cpumap.h
-index 35dd29642296..6c01bee4d048 100644
---- a/tools/lib/perf/include/internal/cpumap.h
-+++ b/tools/lib/perf/include/internal/cpumap.h
-@@ -4,6 +4,7 @@
+ void nsinfo__mountns_enter(struct nsinfo *nsi,
+@@ -256,7 +276,7 @@ void nsinfo__mountns_enter(struct nsinfo *nsi,
+ 	nc->oldns = -1;
+ 	nc->newns = -1;
  
+-	if (!nsi || !nsi->need_setns)
++	if (!nsi || !RC_CHK_ACCESS(nsi)->need_setns)
+ 		return;
+ 
+ 	if (snprintf(curpath, PATH_MAX, "/proc/self/ns/mnt") >= PATH_MAX)
+@@ -270,7 +290,7 @@ void nsinfo__mountns_enter(struct nsinfo *nsi,
+ 	if (oldns < 0)
+ 		goto errout;
+ 
+-	newns = open(nsi->mntns_path, O_RDONLY);
++	newns = open(RC_CHK_ACCESS(nsi)->mntns_path, O_RDONLY);
+ 	if (newns < 0)
+ 		goto errout;
+ 
+@@ -339,9 +359,9 @@ int nsinfo__stat(const char *filename, struct stat *st, struct nsinfo *nsi)
+ 
+ bool nsinfo__is_in_root_namespace(void)
+ {
+-	struct nsinfo nsi;
++	pid_t tgid = 0, nstgid = 0;
++	bool in_pidns = false;
+ 
+-	memset(&nsi, 0x0, sizeof(nsi));
+-	nsinfo__get_nspid(&nsi, "/proc/self/status");
+-	return !nsi.in_pidns;
++	nsinfo__get_nspid(&tgid, &nstgid, &in_pidns, "/proc/self/status");
++	return !in_pidns;
+ }
+diff --git a/tools/perf/util/namespaces.h b/tools/perf/util/namespaces.h
+index 567829262c42..8c0731c6cbb7 100644
+--- a/tools/perf/util/namespaces.h
++++ b/tools/perf/util/namespaces.h
+@@ -13,6 +13,7 @@
+ #include <linux/perf_event.h>
  #include <linux/refcount.h>
- #include <perf/cpumap.h>
+ #include <linux/types.h>
 +#include <internal/rc_check.h>
  
- /**
-  * A sized, reference counted, sorted array of integers representing CPU
-@@ -12,7 +13,7 @@
-  * gaps if CPU numbers were used. For events associated with a pid, rather than
-  * a CPU, a single dummy map with an entry of -1 is used.
-  */
--struct perf_cpu_map {
-+DECLARE_RC_STRUCT(perf_cpu_map) {
- 	refcount_t	refcnt;
- 	/** Length of the map array. */
- 	int		nr;
-@@ -24,6 +25,7 @@ struct perf_cpu_map {
- #define MAX_NR_CPUS	2048
- #endif
+ #ifndef HAVE_SETNS_SUPPORT
+ int setns(int fd, int nstype);
+@@ -29,7 +30,7 @@ struct namespaces {
+ struct namespaces *namespaces__new(struct perf_record_namespaces *event);
+ void namespaces__free(struct namespaces *namespaces);
  
-+struct perf_cpu_map *perf_cpu_map__alloc(int nr_cpus);
- int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu);
- bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b);
+-struct nsinfo {
++DECLARE_RC_STRUCT(nsinfo) {
+ 	pid_t			pid;
+ 	pid_t			tgid;
+ 	pid_t			nstgid;
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index 91ebf93e0c20..639343d5577c 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -1963,7 +1963,7 @@ int dso__load(struct dso *dso, struct map *map)
  
-diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
-index 3150fc1fed6f..d6f77b676d11 100644
---- a/tools/perf/tests/cpumap.c
-+++ b/tools/perf/tests/cpumap.c
-@@ -68,7 +68,7 @@ static int process_event_cpus(struct perf_tool *tool __maybe_unused,
- 	TEST_ASSERT_VAL("wrong nr",  perf_cpu_map__nr(map) == 2);
- 	TEST_ASSERT_VAL("wrong cpu", perf_cpu_map__cpu(map, 0).cpu == 1);
- 	TEST_ASSERT_VAL("wrong cpu", perf_cpu_map__cpu(map, 1).cpu == 256);
--	TEST_ASSERT_VAL("wrong refcnt", refcount_read(&map->refcnt) == 1);
-+	TEST_ASSERT_VAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(map)->refcnt) == 1);
- 	perf_cpu_map__put(map);
- 	return 0;
- }
-@@ -94,7 +94,7 @@ static int process_event_range_cpus(struct perf_tool *tool __maybe_unused,
- 	TEST_ASSERT_VAL("wrong nr",  perf_cpu_map__nr(map) == 256);
- 	TEST_ASSERT_VAL("wrong cpu", perf_cpu_map__cpu(map, 0).cpu == 1);
- 	TEST_ASSERT_VAL("wrong cpu", perf_cpu_map__max(map).cpu == 256);
--	TEST_ASSERT_VAL("wrong refcnt", refcount_read(&map->refcnt) == 1);
-+	TEST_ASSERT_VAL("wrong refcnt", refcount_read(&RC_CHK_ACCESS(map)->refcnt) == 1);
- 	perf_cpu_map__put(map);
- 	return 0;
- }
-diff --git a/tools/perf/util/cpumap.c b/tools/perf/util/cpumap.c
-index 5e564974fba4..22453893105f 100644
---- a/tools/perf/util/cpumap.c
-+++ b/tools/perf/util/cpumap.c
-@@ -77,9 +77,9 @@ static struct perf_cpu_map *cpu_map__from_entries(const struct perf_record_cpu_m
- 			 * otherwise it would become 65535.
- 			 */
- 			if (data->cpus_data.cpu[i] == (u16) -1)
--				map->map[i].cpu = -1;
-+				RC_CHK_ACCESS(map)->map[i].cpu = -1;
- 			else
--				map->map[i].cpu = (int) data->cpus_data.cpu[i];
-+				RC_CHK_ACCESS(map)->map[i].cpu = (int) data->cpus_data.cpu[i];
- 		}
- 	}
- 
-@@ -107,7 +107,7 @@ static struct perf_cpu_map *cpu_map__from_mask(const struct perf_record_cpu_map_
- 
- 		perf_record_cpu_map_data__read_one_mask(data, i, local_copy);
- 		for_each_set_bit(cpu, local_copy, 64)
--			map->map[j++].cpu = cpu + cpus_per_i;
-+		        RC_CHK_ACCESS(map)->map[j++].cpu = cpu + cpus_per_i;
- 	}
- 	return map;
- 
-@@ -124,11 +124,11 @@ static struct perf_cpu_map *cpu_map__from_range(const struct perf_record_cpu_map
- 		return NULL;
- 
- 	if (data->range_cpu_data.any_cpu)
--		map->map[i++].cpu = -1;
-+		RC_CHK_ACCESS(map)->map[i++].cpu = -1;
- 
- 	for (int cpu = data->range_cpu_data.start_cpu; cpu <= data->range_cpu_data.end_cpu;
- 	     i++, cpu++)
--		map->map[i].cpu = cpu;
-+		RC_CHK_ACCESS(map)->map[i].cpu = cpu;
- 
- 	return map;
- }
-@@ -160,16 +160,13 @@ size_t cpu_map__fprintf(struct perf_cpu_map *map, FILE *fp)
- 
- struct perf_cpu_map *perf_cpu_map__empty_new(int nr)
- {
--	struct perf_cpu_map *cpus = malloc(sizeof(*cpus) + sizeof(int) * nr);
-+	struct perf_cpu_map *cpus = perf_cpu_map__alloc(nr);
- 
- 	if (cpus != NULL) {
- 		int i;
- 
--		cpus->nr = nr;
- 		for (i = 0; i < nr; i++)
--			cpus->map[i].cpu = -1;
--
--		refcount_set(&cpus->refcnt, 1);
-+			RC_CHK_ACCESS(cpus)->map[i].cpu = -1;
- 	}
- 
- 	return cpus;
-@@ -239,7 +236,7 @@ struct cpu_aggr_map *cpu_aggr_map__new(const struct perf_cpu_map *cpus,
- {
- 	int idx;
- 	struct perf_cpu cpu;
--	struct cpu_aggr_map *c = cpu_aggr_map__empty_new(cpus->nr);
-+	struct cpu_aggr_map *c = cpu_aggr_map__empty_new(perf_cpu_map__nr(cpus));
- 
- 	if (!c)
- 		return NULL;
-@@ -263,7 +260,7 @@ struct cpu_aggr_map *cpu_aggr_map__new(const struct perf_cpu_map *cpus,
- 		}
- 	}
- 	/* Trim. */
--	if (c->nr != cpus->nr) {
-+	if (c->nr != perf_cpu_map__nr(cpus)) {
- 		struct cpu_aggr_map *trimmed_c =
- 			realloc(c,
- 				sizeof(struct cpu_aggr_map) + sizeof(struct aggr_cpu_id) * c->nr);
-@@ -582,31 +579,32 @@ size_t cpu_map__snprint(struct perf_cpu_map *map, char *buf, size_t size)
- 
- #define COMMA first ? "" : ","
- 
--	for (i = 0; i < map->nr + 1; i++) {
-+	for (i = 0; i < perf_cpu_map__nr(map) + 1; i++) {
- 		struct perf_cpu cpu = { .cpu = INT_MAX };
--		bool last = i == map->nr;
-+		bool last = i == perf_cpu_map__nr(map);
- 
- 		if (!last)
--			cpu = map->map[i];
-+			cpu = perf_cpu_map__cpu(map, i);
- 
- 		if (start == -1) {
- 			start = i;
- 			if (last) {
- 				ret += snprintf(buf + ret, size - ret,
- 						"%s%d", COMMA,
--						map->map[i].cpu);
-+						perf_cpu_map__cpu(map, i).cpu);
- 			}
--		} else if (((i - start) != (cpu.cpu - map->map[start].cpu)) || last) {
-+		} else if (((i - start) != (cpu.cpu - perf_cpu_map__cpu(map, start).cpu)) || last) {
- 			int end = i - 1;
- 
- 			if (start == end) {
- 				ret += snprintf(buf + ret, size - ret,
- 						"%s%d", COMMA,
--						map->map[start].cpu);
-+						perf_cpu_map__cpu(map, start).cpu);
- 			} else {
- 				ret += snprintf(buf + ret, size - ret,
- 						"%s%d-%d", COMMA,
--						map->map[start].cpu, map->map[end].cpu);
-+						perf_cpu_map__cpu(map, start).cpu,
-+						perf_cpu_map__cpu(map, end).cpu);
- 			}
- 			first = false;
- 			start = i;
-@@ -633,7 +631,7 @@ size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size)
- 	int i, cpu;
- 	char *ptr = buf;
- 	unsigned char *bitmap;
--	struct perf_cpu last_cpu = perf_cpu_map__cpu(map, map->nr - 1);
-+	struct perf_cpu last_cpu = perf_cpu_map__cpu(map, perf_cpu_map__nr(map) - 1);
- 
- 	if (buf == NULL)
- 		return 0;
-@@ -644,7 +642,7 @@ size_t cpu_map__snprint_mask(struct perf_cpu_map *map, char *buf, size_t size)
- 		return 0;
- 	}
- 
--	for (i = 0; i < map->nr; i++) {
-+	for (i = 0; i < perf_cpu_map__nr(map); i++) {
- 		cpu = perf_cpu_map__cpu(map, i).cpu;
- 		bitmap[cpu / 8] |= 1 << (cpu % 8);
- 	}
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 91cccfb3c515..a9109605425c 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -2016,13 +2016,13 @@ int perf_pmu__cpus_match(struct perf_pmu *pmu, struct perf_cpu_map *cpus,
- 
- 	perf_cpu_map__for_each_cpu(cpu, i, cpus) {
- 		if (!perf_cpu_map__has(pmu_cpus, cpu))
--			unmatched_cpus->map[unmatched_nr++] = cpu;
-+			RC_CHK_ACCESS(unmatched_cpus)->map[unmatched_nr++] = cpu;
- 		else
--			matched_cpus->map[matched_nr++] = cpu;
-+			RC_CHK_ACCESS(matched_cpus)->map[matched_nr++] = cpu;
- 	}
- 
--	unmatched_cpus->nr = unmatched_nr;
--	matched_cpus->nr = matched_nr;
-+	RC_CHK_ACCESS(unmatched_cpus)->nr = unmatched_nr;
-+	RC_CHK_ACCESS(matched_cpus)->nr = matched_nr;
- 	*mcpus_ptr = matched_cpus;
- 	*ucpus_ptr = unmatched_cpus;
- 	return 0;
+ 		is_reg = is_regular_file(name);
+ 		if (!is_reg && errno == ENOENT && dso->nsinfo) {
+-			char *new_name = filename_with_chroot(dso->nsinfo->pid,
++			char *new_name = filename_with_chroot(RC_CHK_ACCESS(dso->nsinfo)->pid,
+ 							      name);
+ 			if (new_name) {
+ 				is_reg = is_regular_file(new_name);
 -- 
 2.40.0.577.gac1e443424-goog
 
