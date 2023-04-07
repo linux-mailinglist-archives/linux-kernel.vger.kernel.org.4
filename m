@@ -2,141 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDAD6DAE80
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB076DAE82
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbjDGN6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S229441AbjDGOAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 10:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239506AbjDGN62 (ORCPT
+        with ESMTP id S230082AbjDGOAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:58:28 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2037.outbound.protection.outlook.com [40.92.98.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8C8E60;
-        Fri,  7 Apr 2023 06:58:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ms09a2RE6+ACR+d6cvcJqY95K+FR+uEwMv4khoRx5WJVevBvRBLyNboGB2vKSS8icjaaPg857eL//PeEq2sqDvucIrtOxwUbCcQDxU8gTKKSZ3Ggojti7a6eWaqw4+BO88+6kGXftCz6a+YQJ5VaYET0vZZExL5CtM8tBho98bhwVHBWLOtdI0DvlTyRniuSlZHtBHy0bQekGNoNVXGVlfNTCVgcx86w93gAd/K9gX9ZTCzPN+Ku0NWHcYKfWN6cNpMQ7Sh+K8zwYoKNJm5GC4XRlV93GEmFuoRqA3fkD2JSi2CKQmmDjQTPU8bBCpAr7f8MFXooV9yJwG5MW0w+5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oY4jFFNw0M7yIh4a0N5pllOYfkbx7ClJRAnYHXblrLw=;
- b=mFWCgLkVjwr9Ocsz1at5g0w7efdTls7pY53iLoG2219DyZLNUjOZx2oX/RNnpI4dapdwOHFw7EFm1CxBwlixKjvA45Ltv9DbKEUDmHuzzEGuvpJrUb4VWv1SBxCI7DEj7PWHXX3m4g9+ZMK5FmUKLP1ZB237H32mpIXoD+EG/x7bIBtEgAGCfB7/gbw6YDIst8sTY4tFQw1xY+APaIwPjw83j2Iygc/F9lW8Z6sF/XW8va9JoSbo9cDtlvn+KChnrbWY/NKqE9zHKd/5db3mIU1H5KfZoWHa8yMLabVXrSjcdpNbdtofDeHvK/QMhZlJDKcpzm4rsrcuLwcfh2GSQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oY4jFFNw0M7yIh4a0N5pllOYfkbx7ClJRAnYHXblrLw=;
- b=Tb9CxNE/MHc+d9k9mzh7dgUlUAqW4b1DNdMwOYQR2UVkrFy6F+1/I8PBFyue1npJdP8RKwAgt2fWUusGz0mXKUEWJzCs7jZew5pdb03Mr27beuov54xqugj6QYyARVemquhM7BvUO0Smx+7jMWVXphf4txAnJHY4M+3dwgqN7oS4X8oYLdYKO7Nksi5gjJl6GlZ/v/L53wWuLZe98rPPSQ4Sxjeh/6cTMStcfH7VcISxL5W7Q4FKP7bLtvaWJwdq6i+Iqe/di7aKiL3JvRGgw9l7K2Zyccl65Omeds91RL6bz6Vmh4pj+F0b3a23SMrWbkL9pDzDQAvv89WJo2Nfrg==
-Received: from TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:252::12)
- by OSZP286MB2208.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:18d::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Fri, 7 Apr
- 2023 13:58:23 +0000
-Received: from TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
- ([fe80::d190:6e4d:5a1e:59a]) by TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
- ([fe80::d190:6e4d:5a1e:59a%3]) with mapi id 15.20.6277.033; Fri, 7 Apr 2023
- 13:58:23 +0000
-From:   Shengyu Qu <wiagn233@outlook.com>
-To:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        lgirdwood@gmail.com, broonie@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shengyu Qu <wiagn233@outlook.com>
-Subject: [PATCH v1 4/4] regulator: axp20x: Set DCDC frequency only when property exists
-Date:   Fri,  7 Apr 2023 21:57:17 +0800
-Message-ID: <TY3P286MB261130B4C62D76DB6703D3AC98969@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230407135717.17381-1-wiagn233@outlook.com>
-References: <20230407135717.17381-1-wiagn233@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [5ASSQoryS6FYig2XikeZf+LtwxXlTot1]
-X-ClientProxiedBy: SJ0PR05CA0050.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::25) To TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:252::12)
-X-Microsoft-Original-Message-ID: <20230407135717.17381-5-wiagn233@outlook.com>
+        Fri, 7 Apr 2023 10:00:10 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4F9B754
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:59:30 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso43343158pjb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680875959; x=1683467959;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qkjTQZiyEp69i+khEDoVUoiu0TmVX77vcchEWSjOYWg=;
+        b=FoQxGWAUjclaByPY+kYrY3hbxycz/zKItxZK7DPfuOIJH2tKvJ8aJAFPVagTl+B4gU
+         d14837vt8dBdaANuZQibVh+yrKkVUB+1RVLyqIdSHNc3mzbY2sds8smt+ThW4XUrdtxn
+         XAQciFK0+4q/Z7cFcIQPaUDONOl/47RK9IUDRYlwnrJIjcBunEEbv5PmHj0c9B4GCplX
+         29yLXanuEM6tL39FauwZ1GfQzSDSUN08O7elbqPAxaQTbnGpipIKAB1cWHV/4SArfTfW
+         xwUWe81YpddUw3BqicW+CwqgX+52As8Hugh1sHtN6w+MJicBkR5UwXu6gtlkNN53L5nt
+         v4Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680875959; x=1683467959;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qkjTQZiyEp69i+khEDoVUoiu0TmVX77vcchEWSjOYWg=;
+        b=M8kf6/oEdc7daHL6XSZZRol3YHIKsLpi8m5V8lF3WF9H/k96714OpujzVwlPusL1PF
+         Q2f7DJG1900X6mZRUBMMSY7V6OK8oLq1hdcV3RRS8FKr9ZFmHBmlUe/jACV3+yBqetsi
+         B2s7kzjDI5ixIn+a3xgCbP6qfhVmZ2/rYPbdh1nMThHd4Znamj4XJtMYaHtHAiv4UBJz
+         4+6+yakdlhnuz+ZGcbC4hkX+Ng3fTHYAf+7avMKv8r53+3ij+R44zIEqsgnKxKxBwg0z
+         TPNsWvKNU38eIwfzhvx29/WDFcZuRFKwkUNNB6++DjPOI3PinfON3kbVDAnS+z/jWgeJ
+         rcug==
+X-Gm-Message-State: AAQBX9eaPVBcUIp30jgfeDiywau/VtdYYK+GqCkEGf9U+KJpd7FWdyMw
+        Ts8rQFGPpVqUmj4I5GbpH9NAsGdtpioCn1gA
+X-Google-Smtp-Source: AKy350byoOGS6k4sI/rjUWAXzIng4LuwCeSCK0lFf/Rq896ENqH2rndFss02mAhVRxRrHMbj3ejhZA==
+X-Received: by 2002:a17:903:1c7:b0:1a1:956e:5417 with SMTP id e7-20020a17090301c700b001a1956e5417mr3201444plh.22.1680875959382;
+        Fri, 07 Apr 2023 06:59:19 -0700 (PDT)
+Received: from yoga ([2409:40e6:29:c6fc:20c6:5e49:603c:d6fa])
+        by smtp.gmail.com with ESMTPSA id j8-20020a654d48000000b0050f6530959bsm2612702pgt.64.2023.04.07.06.59.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 06:59:18 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 19:29:09 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     shaggy@kernel.org, r33s3n6@gmail.com, mudongliangabcd@gmail.com,
+        liushixin2@huawei.com, wuhoipok@gmail.com
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org, shuah@kernel.org,
+        syzbot+d2cd27dcf8e04b232eb2@syzkaller.appspotmail.com,
+        anupnewsmail@gmail.com
+Subject: [PATCH] fs: jfs: fixed UBSAN: shift-out-of-bounds in dbFree
+Message-ID: <ZDAhrYVHTVEYIGUM@yoga>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY3P286MB2611:EE_|OSZP286MB2208:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c052bec-f708-4899-5961-08db3770269f
-X-MS-Exchange-SLBlob-MailProps: AZnQBsB9Xmovywdyt6JbrF6Sw9xOtJaeu8ZRRwqj0GRz5gUysH2WYhzzjKQ5md5abvB2PUv/ROwRO2RXuix4ilWx9K2hwmd58vFtPYtzciewEPFndLjvEpkfqB7HbxgyjZTunatWUdtDt9NoMtrSFmcWOrvLjuOb88AEUhYHhIyPtwXm+0wakOL1YvGb1Cq90WB/xr9pTpSuGk9K0ieQsFf8q0b13LNCaMtCswVkcCXQvHjm93gfjupF8bX+SkkARiOZonTOpSo3DQ/GRL3kMrlNiadUMiNMyDwb+QLTpqw2ZUMiLxToBFqcwo38y1qTXlMEJIpYbJvyEjeIeIGn8MTBj70ajT1IG6RaVg3iv09ASLz9WEVzKOJxRkdKb4GnBETXieD3aIkMahR0NBCRyyugUkXvrnDiUeHc1FBMQcwvP2OKx5Gjqo8o4l9ojXnOKWPA0Ewprc1bh9zkAZ5j0pACUnJk41ITEyVW72exk09zEb/20ToJZc3VEKMMIGxpqo0raoYX/d23UGScVL/lmLOUEG83mP5qlDdhqp8rB286u5Xcj6QPa7O2XURu2W4U/GSvl0iCMDHNp+Md/vWBcrshuL2t4PGkRvYlM+E5HffIztO34Za5MzFpLk3at/xqtqhxherl/NP3nM6GnST2ApS9eS1dF9wCYuGrFQ9Z91ZqIGhaQOvbXjOF4rpwSYNWBha3eZ1fDE4s+893GJKlWbAHAhAfnEjeCJi4JTT0thPGWcaX4gl+2hcSd1+YPe6Cl69OXObQWOw=
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AJW9XaiiG30syuJEmfFu9bnhwSXy6xIFM0hqYYsBy5c5Uld3PmKyFSam/cE0FBQBURgOlc7IrKxR79jmwcKU/fisyt1x+UiCr2Eh8Lv9i/cPeI2OYoTtoRAFFi2D8d8OykE/dR/8L3Eh8Z4YBBKYOIWv/wMHa1lpqyjdgfwA0O1Yg8/G7u8gSBw5tQD/lTpupoNqfifmd05Iws9fCwxDT/8m3DgSekPk4rZklDgXimT01l9Kgrs3MOtzwsTcGMjTbdF9v4kdIbxpob8ZvCJrsqXS8ifzWgQ3bwoMM1rzYC8mMHdXqYfG8lfynrvksHIxgoepWac+/2azBXiS1RHMW5TfMFfZg1rd6EyRaX87rMbY4a2+efSoG2jlYwlT4PI/vsIh8LIa0oTq9AAr4+yi9MeAYFG5EZSMgN2RwXz+Ss8oPhkkj3OwkA8XiRuEVG7WMwfVoTvUfEPHeN5MUVx87HUh1dq9ajSrFNB6fjr3Nnbsqcj1PDgy2i3eKb1FmT01Ws8djVtPI1P5o5Gt9sZbpgJNC6KdOIFbBW0P0jQaWTiZPnowpZz7vdG0z0bB7uSJ7JZcr9dsH5en38uZheHAGjq9QwNmaK5vfqvo/LN84BfJf6XYpegVe8XM/j8gMfEg
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lW3bJUWDHXoZzjK24Dg8iCelSU2DT9Q42Wo3pHOGoLYpcfkzoF8xyS3SUiTH?=
- =?us-ascii?Q?cWRmz9lX+wrYiik05+F1fTBNbWmfqIFYUVj+vZmBTkV6dFiwM7oY2BGqSGh0?=
- =?us-ascii?Q?uG3o+7owNXd4pEAKfyamjlzAcnbxcZYRlPL07Y0ijNqOenQrduJzdZQ2E0JU?=
- =?us-ascii?Q?68QOo1IvTD/GSKrrIiUSvNzkF/vAdbKjNlLQf1A+HPsWqcCk4YS/4KS8seSW?=
- =?us-ascii?Q?1UNyw0lFg24sj2ZOL5rdttgt2cxbrWcygBVOW1+kUnc3DCuaKdhExPGtG5vV?=
- =?us-ascii?Q?N2hLJCj5fS8uRgWNvON8/6sMPxdDolQN36Q4+9GecCdjhlzISNl8KF0FNrKA?=
- =?us-ascii?Q?QUH5bZGt7njLW8rgsJflcKVhulqCPo1Rp3mTn2qQlvScYg539ytYK4ip6BJh?=
- =?us-ascii?Q?nYiQ5UrcfvHKzJrmDrMPltjud2io6VqYedHlJ9rVGLr3dzwgoS6AuppAU39b?=
- =?us-ascii?Q?yexBE3O5NJHsMYiJFHyyxsHdxB0tDsPssM5wDaZZf33es5Xp8KCAImhVG5nm?=
- =?us-ascii?Q?6pVJ+hA2wMwCEUhl4DxmcJJDejGUib2fRaAJa3GUjYd3oMVkm3XNzU6/pfCy?=
- =?us-ascii?Q?Y7IlhqP6a1fvR+lXZUqyJO/LIffl1auZMcCgPm0mEfsiVblDu6Sd2RntrYeI?=
- =?us-ascii?Q?StK9JTlvWYU0+R1KPyLWmScEygtQb8NRW9oLUBYO7naj1Uh4afxHnPXgefDf?=
- =?us-ascii?Q?C7zpfctqQAhNtoW1FOCAaUtDECu9dTJx+r/08NP/STL3CKlOOKlLdcpRHU3U?=
- =?us-ascii?Q?Boa5qrHkl0wh+KY9mJMIyCnmfMpAAt3XN/pPHWp2OZ90HmFpqm/8zH0a2ZfJ?=
- =?us-ascii?Q?TH5toehVx+fU6ha49lkt6r0ef/ixK5J7HEvL5T3At0vjZ8YaOpHM4XKdDszn?=
- =?us-ascii?Q?T9hyZJy2k+XunPobIltBA7ufXnBv/urRJR5lrbfHaKfQcjwETI+Xe9O+VoG/?=
- =?us-ascii?Q?cRpReCCSfQNNiLRHLkxMyEwcwYhjERgNYJmuOC1eEZ1PZ6eR+5btwOtODljm?=
- =?us-ascii?Q?ImBWiAD2ig7aQzizID73XO4k+XUNN5f4V0dHkHoEGNCCCOppq5Qj/2N/eVJB?=
- =?us-ascii?Q?56x6knXuq3Oytkn+dPL+yBAzWlnCsi0X2GRfoAtdqby7PZoMTVziolMp0wez?=
- =?us-ascii?Q?MK1S1bfx0950g+5r8xaB46TVv11gGd9e5Vz0hK+d4kr/tQ0vM26jUPHSaFca?=
- =?us-ascii?Q?DkmB4qpQfxpQVoW9Vzt0nRv2OFiIshCUH3GdRg=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c052bec-f708-4899-5961-08db3770269f
-X-MS-Exchange-CrossTenant-AuthSource: TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2023 13:58:23.0016
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB2208
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current axp20x regulator driver would always set DCDC frequency even if
-there is no x-powers,dcdc-freq in device tree data. Causing meaningless
-warning info output on variants that do not support DCDC frequency
-modification. So only try to set DCDC frequency when there is frequency
-property.
+Syzkaller reported the following issue:
+         option from the mount to silence this warning.
+=======================================================
+find_entry called with index = 0
+read_mapping_page failed!
+ERROR: (device loop0): txCommit: 
+ERROR: (device loop0): remounting filesystem as read-only
+================================================================================
+UBSAN: shift-out-of-bounds in fs/jfs/jfs_dmap.c:381:12
+shift exponent 134217736 is too large for 64-bit type 'long long'
+CPU: 1 PID: 5068 Comm: syz-executor350 Not tainted 6.3.0-rc2-syzkaller-00069-g0ddc84d2dd43 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3c3/0x420 lib/ubsan.c:387
+ dbFree+0x46e/0x650 fs/jfs/jfs_dmap.c:381
+ txFreeMap+0x96a/0xd50 fs/jfs/jfs_txnmgr.c:2510
+ xtTruncate+0xe5c/0x3260 fs/jfs/jfs_xtree.c:2467
+ jfs_free_zero_link+0x46e/0x6e0 fs/jfs/namei.c:758
+ jfs_evict_inode+0x35f/0x440 fs/jfs/inode.c:153
+ evict+0x2a4/0x620 fs/inode.c:665
+ __dentry_kill+0x436/0x650 fs/dcache.c:607
+ shrink_dentry_list+0x39c/0x6a0 fs/dcache.c:1201
+ shrink_dcache_parent+0xcd/0x480
+ do_one_tree+0x23/0xe0 fs/dcache.c:1682
+ shrink_dcache_for_umount+0x7d/0x120 fs/dcache.c:1699
+ generic_shutdown_super+0x67/0x340 fs/super.c:472
+ kill_block_super+0x7e/0xe0 fs/super.c:1398
+ deactivate_locked_super+0xa4/0x110 fs/super.c:331
+ cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x68f/0x2290 kernel/exit.c:869
+ do_group_exit+0x206/0x2c0 kernel/exit.c:1019
+ __do_sys_exit_group kernel/exit.c:1030 [inline]
+ __se_sys_exit_group kernel/exit.c:1028 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa87e2289b9
+Code: Unable to access opcode bytes at 0x7fa87e22898f.
+RSP: 002b:00007fff4bfe3938 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fa87e2a3330 RCX: 00007fa87e2289b9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+RBP: 0000000000000001 R08: ffffffffffffffc0 R09: 00007fa87e29de40
+R10: 00007fff4bfe3850 R11: 0000000000000246 R12: 00007fa87e2a3330
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+================================================================================
 
-Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+The current size of dn_l2nbperpage was insufficient for larger values,
+leading to unexpected behavior. This patch increases the size of dn_l2nbperpage 
+to ensure that larger values can be accommodated without issue.
+
+Tested via syzbot.
+
+Reported-by: syzbot+d2cd27dcf8e04b232eb2@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=2a70a453331db32ed491f5cbb07e81bf2d225715
+
+Signed-off-by: anupsharma <anupnewsmail@gmail.com>
+
 ---
- drivers/regulator/axp20x-regulator.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/jfs/jfs_dmap.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/regulator/axp20x-regulator.c b/drivers/regulator/axp20x-regulator.c
-index ece4af93df7b..12a12923bc7b 100644
---- a/drivers/regulator/axp20x-regulator.c
-+++ b/drivers/regulator/axp20x-regulator.c
-@@ -1247,10 +1247,10 @@ static int axp20x_regulator_parse_dt(struct platform_device *pdev)
- 	if (!regulators) {
- 		dev_warn(&pdev->dev, "regulators node not found\n");
- 	} else {
--		of_property_read_u32(regulators, "x-powers,dcdc-freq", &dcdcfreq);
--		ret = axp20x_set_dcdc_freq(pdev, dcdcfreq);
--		if (ret < 0) {
--			dev_err(&pdev->dev, "Error setting dcdc frequency: %d\n", ret);
-+		if (of_property_read_u32(regulators, "x-powers,dcdc-freq", &dcdcfreq) != -EINVAL) {
-+			ret = axp20x_set_dcdc_freq(pdev, dcdcfreq);
-+			if (ret < 0)
-+				dev_err(&pdev->dev, "Error setting dcdc frequency: %d\n", ret);
- 		}
- 		of_node_put(regulators);
- 	}
+diff --git a/fs/jfs/jfs_dmap.h b/fs/jfs/jfs_dmap.h
+index aa03a904d5ab..e852b3cb6b61 100644
+--- a/fs/jfs/jfs_dmap.h
++++ b/fs/jfs/jfs_dmap.h
+@@ -191,7 +191,7 @@ typedef union dmtree {
+ struct dbmap_disk {
+ 	__le64 dn_mapsize;	/* 8: number of blocks in aggregate	*/
+ 	__le64 dn_nfree;	/* 8: num free blks in aggregate map	*/
+-	__le32 dn_l2nbperpage;	/* 4: number of blks per page		*/
++	__le64 dn_l2nbperpage;	/* 4: number of blks per page		*/
+ 	__le32 dn_numag;	/* 4: total number of ags		*/
+ 	__le32 dn_maxlevel;	/* 4: number of active ags		*/
+ 	__le32 dn_maxag;	/* 4: max active alloc group number	*/
 -- 
-2.25.1
+2.34.1
 
