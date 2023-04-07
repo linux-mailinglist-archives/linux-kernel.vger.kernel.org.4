@@ -2,172 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B4E6DB6E5
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739CA6DB6E4
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjDGXJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S229747AbjDGXJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjDGXJA (ORCPT
+        with ESMTP id S229730AbjDGXI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:09:00 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62231E188
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:08:56 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id d22so25065659pgw.2
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:08:56 -0700 (PDT)
+        Fri, 7 Apr 2023 19:08:59 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81746CC15;
+        Fri,  7 Apr 2023 16:08:48 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id f67-20020a9d03c9000000b0069faa923e7eso12933otf.10;
+        Fri, 07 Apr 2023 16:08:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680908936; x=1683500936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U/A9yoOa2sBpUnZIMrQVqmsVGIbqBmbp6pkbYZ4l6UU=;
-        b=AhzIPIoWtUHXfiZAGqj7Rh0bGux7x12APDYsEuR6hOMdIkSo29jtI/VJ/WdcMY6r9u
-         N4rZMnqz+lp6KnK7yOPo2xAhLDgFMWl9isRqcqS2ZoJCGuftfrOehqNHqpok3HslgeIR
-         /4h+nNK/8QEzWQ1QzmGerO22l/rADw49EZtQhWeBI+d+1jcetYxSBT3DjjNEnkkxTU05
-         U+isNCl6gov9gwbOkThLeDfxwkemOFhSEoxF6rmIFY3MdKyo7jygNnFPumxBne9tiTRK
-         Po2nDkrACosdwk/prT78kKxhApms5YMGxsJfZe3pXbXbeJcO9d8RCsmjp5HpDdMcoWTa
-         GiJg==
+        d=gmail.com; s=20210112; t=1680908928; x=1683500928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=84uyga1UcEJzw2o6D1LdCRflqQX8YB1/p6sRRZOfoCQ=;
+        b=opf81paUqQ2D5+9WF8Msy245U/iAG1na/QaHTd8YIg1D7UuEHauGDWpBscRcGNNTXl
+         s3NZ24QHgxrwudqYnm01FKRxLLf9pl5j5Ya9pebl3bd7FPt0+Z9oBYX6Z4j595sbZwHu
+         dJldv/i1GPrlFJ3GTSYNgcp2X2Wv4g9bGyLL+aC+au36AZ6pTHRaOGg2tZsMr31P5q+8
+         mx5MToRMFZmiMpWtVzSWjChzaNBCz132k3grjywy7qTx8clrKwX1M5z2WAidagvOd7NG
+         qWBSNyu8KuEDPQSb5Rj09pS3FNl3s/e70/3Xjuk2rV86VzkGw//uOaiAJAMUzBYdEvyh
+         505w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680908936; x=1683500936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U/A9yoOa2sBpUnZIMrQVqmsVGIbqBmbp6pkbYZ4l6UU=;
-        b=sPG/zSedjbTxDltve1g7eCLhLOZDGqljWrMXZJcTEbKutE0f/Xbs31H5Li41WIIKo6
-         L72IznBsBUaSuBpKzo/uhIQ6RxfeDlaFK1G9xQuxQgv4EYwoMv9oZgH7wdtPni04R3tF
-         luHUTwWGJtyiupAyNq5IUAT2pCEywGi7KhUhUmY+iNQ8834tGS2HoWLfq6uouQFS2Bcu
-         wFz/DenYRD69H8cu1JjpzrZXnvGX9JqaiULFm1vd1iou3894tt2rBMepK/2JjIweMaB2
-         6w8/af25M+TMLVeU00t/KVvZVqkA6BHEjjdSYlhDLPHMNioqsyuXNy1qmNIhSoKEUdDi
-         78YA==
-X-Gm-Message-State: AAQBX9dsLE474mQzatDXda92UyBtsNhcRW2QzRwoheferLGkzMDJRAbp
-        5JQ3JRkNTo0+12Bhq+oeUv/Nl6CLxKSyCbFO+6iCeoR4YvEZIpmhvxChtg==
-X-Google-Smtp-Source: AKy350a96OQojp02wkoJRuAsojor0z+CMD9evmEOlOj7kP5JYN9cUpHiLLD6TzRymSJO3R5M4Z/6MncmZRZ3WPdVAzQ=
-X-Received: by 2002:a65:6201:0:b0:4fc:2058:fa29 with SMTP id
- d1-20020a656201000000b004fc2058fa29mr782408pgv.1.1680908935492; Fri, 07 Apr
- 2023 16:08:55 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680908928; x=1683500928;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=84uyga1UcEJzw2o6D1LdCRflqQX8YB1/p6sRRZOfoCQ=;
+        b=jzrGNljfRq51UFrEC9pXSGfgDawUxgMHPy8QTjN8k8u8jPl+QiQPBQPI1pNi8826u0
+         ZtwPI/u+06IvQ+t7zenhuvcbmHwn3s/aHT+U/Tzoqxgrt2tDnZRkwYR7fkhZ/IkK5dcA
+         hAr/Gw6ozkZ3nCK3ZauXtZqB+TTPNNdXKKeEnhgnQqk1bVYYE1bez8K2kyltJZjUD2CR
+         CG9YzJABFfOd4mTG1cY5qp+H+YFfDAyc0t4bxKrrQALMGPoFUZbzsuGRzc/pSGT9G7Vo
+         VkhrgVN2jNVOpNBO2x1bLrdQgHefll6SFxO3S1INJ9WenmyVxZ2LDBErTt1FcN/GNq+S
+         MfKA==
+X-Gm-Message-State: AAQBX9dZoYPyG3w1QNh2YWDleIviKVE/lGNG0MiDZtmg0vY7X+dp/fhi
+        FlId3QOOLizv9bdFB08TNog=
+X-Google-Smtp-Source: AKy350bMisLqnaf4YRzu0sLHIWpFiEEUXxHRCa1tZel+/05klrHif8HD+uHfp5mj9GWLHBf3bDSilQ==
+X-Received: by 2002:a9d:6c57:0:b0:694:567f:a87b with SMTP id g23-20020a9d6c57000000b00694567fa87bmr1566570otq.10.1680908927830;
+        Fri, 07 Apr 2023 16:08:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t21-20020a0568301e3500b0069f1774cde8sm2030295otr.71.2023.04.07.16.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 16:08:47 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0e41f48f-229d-389f-1dec-7230f13e1600@roeck-us.net>
+Date:   Fri, 7 Apr 2023 16:08:45 -0700
 MIME-Version: 1.0
-References: <202304050954.yskLdczH-lkp@intel.com>
-In-Reply-To: <202304050954.yskLdczH-lkp@intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Apr 2023 16:08:43 -0700
-Message-ID: <CAKwvOdmXTOaK+JALp+fr4Q_MtVgi23Te9RvLPF8-Sisc3qWQ=A@mail.gmail.com>
-Subject: Re: arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning:
- "THREAD_SHIFT" is not defined, evaluates to 0
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] fpga: dfl-fme: constify pointers to hwmon_channel_info
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
+References: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230407150112.79854-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 4, 2023 at 6:29=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> Hi Masahiro,
->
-> FYI, the error/warning still remains.
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   76f598ba7d8e2bfb4855b5298caedd5af0c374a8
-> commit: 80b6093b55e31c2c40ff082fb32523d4e852954f kbuild: add -Wundef to K=
-BUILD_CPPFLAGS for W=3D1 builds
-> date:   4 months ago
-> config: powerpc-buildonly-randconfig-r003-20230405 (https://download.01.o=
-rg/0day-ci/archive/20230405/202304050954.yskLdczH-lkp@intel.com/config)
-> compiler: powerpc-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/commit/?id=3D80b6093b55e31c2c40ff082fb32523d4e852954f
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
-git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 80b6093b55e31c2c40ff082fb32523d4e852954f
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
-ss W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
-ss W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc SHELL=3D/bin/bash arch/powerpc/kernel=
-/ arch/powerpc/kvm/ virt/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304050954.yskLdczH-lkp@i=
-ntel.com/
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from arch/powerpc/kvm/bookehv_interrupts.S:26:
-> >> arch/powerpc/kvm/../kernel/head_booke.h:20:6: warning: "THREAD_SHIFT" =
-is not defined, evaluates to 0 [-Wundef]
->       20 | #if (THREAD_SHIFT < 15)
->          |      ^~~~~~~~~~~~
+On 4/7/23 08:01, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
+> 
+> Therefore I propose this should also go via hwmon tree.
 
-Should arch/powerpc/kernel/head_booke.h be #include'ing
-asm/thread_info.h before using THREAD_SHIFT?
+I am not going to apply patches for 10+ subsystems through the hwmon tree.
+This can only result in chaos. The dependent patch is available at
 
->
->
-> vim +/THREAD_SHIFT +20 arch/powerpc/kvm/../kernel/head_booke.h
->
-> 1a4b739bbb4f88 Christophe Leroy 2019-04-30  10
-> 63dafe5728e735 Becky Bruce      2006-01-14  11  /*
-> 63dafe5728e735 Becky Bruce      2006-01-14  12   * Macros used for common=
- Book-e exception handling
-> 63dafe5728e735 Becky Bruce      2006-01-14  13   */
-> 63dafe5728e735 Becky Bruce      2006-01-14  14
-> 63dafe5728e735 Becky Bruce      2006-01-14  15  #define SET_IVOR(vector_n=
-umber, vector_label)           \
-> 63dafe5728e735 Becky Bruce      2006-01-14  16                  li      r=
-26,vector_label@l;             \
-> 63dafe5728e735 Becky Bruce      2006-01-14  17                  mtspr   S=
-PRN_IVOR##vector_number,r26;   \
-> 63dafe5728e735 Becky Bruce      2006-01-14  18                  sync
-> 63dafe5728e735 Becky Bruce      2006-01-14  19
-> e12401222f749c Yuri Tikhonov    2009-01-29 @20  #if (THREAD_SHIFT < 15)
-> e12401222f749c Yuri Tikhonov    2009-01-29  21  #define ALLOC_STACK_FRAME=
-(reg, val)                     \
-> e12401222f749c Yuri Tikhonov    2009-01-29  22          addi reg,reg,val
-> e12401222f749c Yuri Tikhonov    2009-01-29  23  #else
-> e12401222f749c Yuri Tikhonov    2009-01-29  24  #define ALLOC_STACK_FRAME=
-(reg, val)                     \
-> e12401222f749c Yuri Tikhonov    2009-01-29  25          addis   reg,reg,v=
-al@ha;                         \
-> e12401222f749c Yuri Tikhonov    2009-01-29  26          addi    reg,reg,v=
-al@l
-> e12401222f749c Yuri Tikhonov    2009-01-29  27  #endif
-> e12401222f749c Yuri Tikhonov    2009-01-29  28
->
-> :::::: The code at line 20 was first introduced by commit
-> :::::: e12401222f749c37277a313d631dc024bbfd3b00 powerpc/44x: Support for =
-256KB PAGE_SIZE
->
-> :::::: TO: Yuri Tikhonov <yur@emcraft.com>
-> :::::: CC: Josh Boyer <jwboyer@linux.vnet.ibm.com>
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
 
+or wait until after the next commit window to apply this patch.
 
-
---=20
 Thanks,
-~Nick Desaulniers
+Guenter
+
+> 
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
+>   drivers/fpga/dfl-fme-main.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/fpga/dfl-fme-main.c b/drivers/fpga/dfl-fme-main.c
+> index 77ea04d4edbe..bcb5d34b3b82 100644
+> --- a/drivers/fpga/dfl-fme-main.c
+> +++ b/drivers/fpga/dfl-fme-main.c
+> @@ -265,7 +265,7 @@ static const struct hwmon_ops thermal_hwmon_ops = {
+>   	.read = thermal_hwmon_read,
+>   };
+>   
+> -static const struct hwmon_channel_info *thermal_hwmon_info[] = {
+> +static const struct hwmon_channel_info * const thermal_hwmon_info[] = {
+>   	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_EMERGENCY |
+>   				 HWMON_T_MAX   | HWMON_T_MAX_ALARM |
+>   				 HWMON_T_CRIT  | HWMON_T_CRIT_ALARM),
+> @@ -465,7 +465,7 @@ static const struct hwmon_ops power_hwmon_ops = {
+>   	.write = power_hwmon_write,
+>   };
+>   
+> -static const struct hwmon_channel_info *power_hwmon_info[] = {
+> +static const struct hwmon_channel_info * const power_hwmon_info[] = {
+>   	HWMON_CHANNEL_INFO(power, HWMON_P_INPUT |
+>   				  HWMON_P_MAX   | HWMON_P_MAX_ALARM |
+>   				  HWMON_P_CRIT  | HWMON_P_CRIT_ALARM),
+
