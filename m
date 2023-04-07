@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E426DB5E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0E26DB5E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbjDGVs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S231263AbjDGVuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjDGVs0 (ORCPT
+        with ESMTP id S229915AbjDGVuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:48:26 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48700C65D
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:48:25 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id d7so10898065lfj.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:48:25 -0700 (PDT)
+        Fri, 7 Apr 2023 17:50:18 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD68AC66A
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:50:16 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-930bc91df7bso151193166b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:50:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1680904103;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DllG90e1WWVTHQdAKRkXXv+zJvR74w4Quq11ghlPJtY=;
-        b=OVyB1bAFGN0vaGLmVCCfIH5/O4EAIz104DNP3AiG1HqDZ6ggD45bD6puMR+66SwJSK
-         4ZUAKjMTvJqwjpGxxauYTX3B3Qsy5NOfW3GSp6NCJY1Dbq0SiP8vRE2nv87+iJxdV3Ff
-         b4b2Gr4tI95SF2pvloDwpvasMCAXEcUsELAo8=
+        d=gmail.com; s=20210112; t=1680904215; x=1683496215;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fq8RUQdzJGvVRHtSpwTfubZBnwWXomggCH4yTMLMhUA=;
+        b=YZoa6b1LgZLhTRKbgPtIevcXFYpMcLDHzfzwnFNrW73isDDqzdc5rlJPsYyZX/8Cdp
+         1v4LjfMk6+ssbGWHTOo0SDXN1N3FOLF9f5rmyHmVDKuO6X27N++FQ7BZzuAOFBn/gj+c
+         cuYMaEnjWHWRGBFXWA1NcKPGUdquJA4BCymYefa4NFo6mnDH5JBc0Efi9zziVB3p9npY
+         LBCPNqxcXVdtAg9PPEm0KhFKHO1BbT4fdwnevZibhjkVwxyonTWhdpHxgk7QHDZ15Pfz
+         beZc1hbz5yfen7oOIeq2RqTLUUq0kPyQFOfJNpFX+6Q7z6jaUxOQhCJIyquFj/on/vUb
+         D75Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680904103;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DllG90e1WWVTHQdAKRkXXv+zJvR74w4Quq11ghlPJtY=;
-        b=LXSnJ8MKPqb1EfBIQoC2XFnYUgOdskaYiZQWJ2BmbJPS2g4UERLZ1uGjZd7YzSODV3
-         76Ttd1hnit3N47nWUY+K2Hsibi/6jcpOhuE1pT9UZcKesR2tPKVXzp8vf0O3B5W1G2q5
-         yW5wzXxZn/gmM/0iR3YGroYGmnypAAIDjGW8jHOzXLOUnNH5lm+XfgbD4B3mpiVVYfUn
-         mgP7eJEuOh9lB/ckC8LdZ8rdEvOmdsbhSCKGA8LNNohO+K5rmIHp8Wnc7ZngdjYK7olp
-         f3ynBSxRedOs3joZLjj0nJ4WW4ez4mY1thoaKzVXVFGVGbUzQnDKfbhnNFDRZfnEkYUr
-         0Dog==
-X-Gm-Message-State: AAQBX9f0BNM8u9ntieeWG1tR0QxOJ2rdh5/NiBj7A6JBecCmmXt953me
-        4l3jpRymorvjvTVMWdHI0AwgrvhrrwUge2eZDFOaMQ==
-X-Google-Smtp-Source: AKy350Yu9m9x8GYDbA/5kgPKVUoE6uvF5g/lH6PO8SorwlwARoXyVdIMeX0FCOQzbIDqgqm+YxpKrwGoFLvyzeXjW/I=
-X-Received: by 2002:ac2:4c14:0:b0:4eb:eaf:aa00 with SMTP id
- t20-20020ac24c14000000b004eb0eafaa00mr1109097lfq.4.1680904103550; Fri, 07 Apr
- 2023 14:48:23 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 7 Apr 2023 14:48:23 -0700
+        d=1e100.net; s=20210112; t=1680904215; x=1683496215;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fq8RUQdzJGvVRHtSpwTfubZBnwWXomggCH4yTMLMhUA=;
+        b=V+mAQGrQbtOoNCd2zwtehC5va6jMe3yakqAZIMw2pwNALGm4mdn1XM8s6LTUPZiWar
+         pzxEYPAS6z10/kGuwFojirDh+hwxcXdl3Al3XZWjXzjzUBVslE1wXeP/2YCnSbYqJppt
+         pOYxyk7EP4pEtnHW8y5Sw+n3iim97rA97ryjI9I3alfsB9HfxzrPbu7kpx+XjKmqmvFc
+         jdR9caOAAKXT/pyx66wKKwyOyEncYZ7aOXQGnFkYSrVB8tOhGPqFa7HCeHu5ifLNGi/s
+         XQsrTR8NNPdqiFBS447n4BKRTof9+MdrOkj0qSYnMK5MZJJQZncOY971YRueYFyHqkV6
+         vTRw==
+X-Gm-Message-State: AAQBX9cpLm846dPRJe4RgzDd52kiNeVnIuWnXM419R7nMZBMoGZI2WKL
+        GfbWPJ6k611rNXxAoc3+bjk=
+X-Google-Smtp-Source: AKy350aRz71SCGQ3kQveFF5UROzvL+o0nTf8PrYR8yyMN4DiOl6b3SgDcbkFJvpeCSyh1uM9PqTsPQ==
+X-Received: by 2002:a17:906:19c:b0:947:bff2:1c2d with SMTP id 28-20020a170906019c00b00947bff21c2dmr720729ejb.3.1680904215069;
+        Fri, 07 Apr 2023 14:50:15 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id k16-20020a17090646d000b0094863433fdcsm2452572ejs.51.2023.04.07.14.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 14:50:14 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 23:50:12 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] staging: rtl8192e: Remove unused code for hardware
+ rtl8192se
+Message-ID: <cover.1680902603.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230407092255.119690-4-quic_mohs@quicinc.com>
-References: <20230407092255.119690-1-quic_mohs@quicinc.com> <20230407092255.119690-4-quic_mohs@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Fri, 7 Apr 2023 14:48:23 -0700
-Message-ID: <CAE-0n539B++ynhR04xEDiszz7u718QGLyN4KukrPE3ya6_m9Zg@mail.gmail.com>
-Subject: Re: [PATCH v11 3/3] clk: qcom: lpassaudiocc-sc7280: Add required gdsc
- power domain clks in lpass_cc_sc7280_desc
-To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, broonie@kernel.org,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        quic_visr@quicinc.com, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,13 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Mohammad Rafi Shaik (2023-04-07 02:22:55)
-> Add GDSCs in lpass_cc_sc7280_desc struct.
-> When qcom,adsp-pil-mode is enabled, GDSCs required to solve
-> dependencies in lpass_audiocc probe().
->
-> Fixes: 0cbcfbe50cbf ("clk: qcom: lpass: Handle the regmap overlap of lpasscc and lpass_aon")
-> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-> ---
+Remove unused macro IS_HARDWARE_TYPE_8192SE and unused function
+_rtl92e_dm_init_wa_broadcom_iot. Remove a double check for hardware
+rtl8192se. Remove unused variable.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Tested with rtl8192e
+Transferred this patch over wlan connection of rtl8192e
+---
+v1->v2: Removed patch "staging: rtl8192e: Remove unused local
+        variable irq_line" as it is unclear if the pci_read is needed
+        for a hidden feature.
+        Checked in patch "staging: rtl8192e: Remove one of two checks
+        for hardware RTL8192SE" that the pci_read does not follow a
+        pci_write
+        No changes to other patches.
+
+Philipp Hortmann (4):
+  staging: rtl8192e: Remove macro IS_HARDWARE_TYPE_8192SE
+  staging: rtl8192e: Remove unused function
+    _rtl92e_dm_init_wa_broadcom_iot
+  staging: rtl8192e: Remove one of two checks for hardware RTL8192SE
+  staging: rtl8192e: Remove unused variable RF_Type
+
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c |  6 ------
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h |  3 ---
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c   | 18 +-----------------
+ drivers/staging/rtl8192e/rtl819x_HT.h        |  3 ---
+ drivers/staging/rtl8192e/rtllib.h            |  1 -
+ 5 files changed, 1 insertion(+), 30 deletions(-)
+
+-- 
+2.40.0
+
