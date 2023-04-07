@@ -2,144 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF946DB565
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:37:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DA46DB56C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjDGUhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 16:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
+        id S230248AbjDGUms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 16:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjDGUhj (ORCPT
+        with ESMTP id S229822AbjDGUml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 16:37:39 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4794B7DA9;
-        Fri,  7 Apr 2023 13:37:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CtlA5KLCY7pWJmKBGyM6GRFu7oWEF/z0gcVZspLMIX3iRUSeNBGAKEEkNbPf9KR9md6H9A4LSufX9+ifZ9/mC/BWjfacDXGzAuXbh3Rw56RfET94JG2I/E1MVM5chwrP1JNWABZb0CMMzO2CP5IsokPKGf7hBige23Y2eqiHQiMfst46ZWTdFTJfmXdkhaU8eN1x2ia7FqgMnsn99ZP4Yxa60omDhJ2kMYcHfSyRN+7JTxeuDWpQdHuRl17duuGWwDB6uorrCTEdYe/IFbP0s/nzPlPNUxDZsUBagSDmiJIChN052e5YXSBmPs99yY2UozFv84JLJ4EAzsjilembmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nRh9FAPnPiiNbXwswWSCRvsCSevVqq3LWNbXULXDEhY=;
- b=AVvwqZvp08xegJ4zLdGVIu5uLG6V2xH+iiFurtGIPapyHjQHXBK8NZ5unIe1Hu2uT/f40YvBWavoWLsQWVFxxvNzDqIB8z4/bcd5tuzd1pAl0eFvSRB6yQkSUvT6EM7NlZmInv0F80ydkvGm2o+AswyM/EM/8xxhBKOXw5z71tXw2XVJq3YumJKaPFhxycIdHuPBfdBIDKrVS/cmTeqRhdDTmjhWFuzivyeL/nv+SlwdylA6t0fpqy8dafeGIDKaAyIEBTemmhK9oP4LjVN2domuMSNFxidmSt7RP00ZtEqt2BjrS457FKN4tnCfKbjeexpK22xYDqcnUhESdHBz6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nRh9FAPnPiiNbXwswWSCRvsCSevVqq3LWNbXULXDEhY=;
- b=Y9d7LdHE9dS4FXVYGUatS7ejfcjyhSZqKNIsrv4MO3nZyP62GADWOMizd4K9XLoT81lQZ2+tGx3NhWDgsbmRdQ4oI5SQfDINM9UNRZrZjmsoM9MsLHnWgGXT4dBvUO8mEz3FLxY7Tq6H1jj6veot6eKyrAOKMhOeMdo5cV/R00U=
-Received: from DM6PR02CA0119.namprd02.prod.outlook.com (2603:10b6:5:1b4::21)
- by DM4PR12MB8475.namprd12.prod.outlook.com (2603:10b6:8:190::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.34; Fri, 7 Apr
- 2023 20:37:34 +0000
-Received: from DM6NAM11FT008.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b4:cafe::e4) by DM6PR02CA0119.outlook.office365.com
- (2603:10b6:5:1b4::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.34 via Frontend
- Transport; Fri, 7 Apr 2023 20:37:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT008.mail.protection.outlook.com (10.13.172.85) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6298.21 via Frontend Transport; Fri, 7 Apr 2023 20:37:34 +0000
-Received: from quartz-7b1chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 7 Apr
- 2023 15:37:33 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     <linux-i2c@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jdelvare@suse.com>,
-        <terry.bowman@amd.com>, Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: [PATCH] i2c: piix4: Print FCH::PM::S5_RESET_STATUS
-Date:   Fri, 7 Apr 2023 15:37:20 -0500
-Message-ID: <20230407203720.18184-1-yazen.ghannam@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 7 Apr 2023 16:42:41 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ECAE47
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:42:39 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id h136-20020a6bb78e000000b00758b105cdd3so27104421iof.23
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:42:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680900159; x=1683492159;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gQByD6ZheusKw4EUPL21I5e6W15h+91cn8nxJKCDnUQ=;
+        b=aptXUXwwQNK1zuqigO6o3PEiw4MRw8/xZE2dIHOMXEVqirp3h8TjFkVRsT0/gH4kev
+         o31xabWp5fojHsGUwt7LhkYs8UAHVDE24FzFM3WXGZpSUR8nvK7ZLMU8TlS4kCQznITs
+         OVKQjVcTFqVVoa5TfTJ8GTltSbOnpNOqqkTrS0f8udNlgodbU8NwhmTNxO3CqK8XaAKe
+         18OcTbhOTV+wV2/gDlORgBmOnYEsbHCAjq1CarfJU+MyQKHPXqyfLznMwjoFLkPCqG2k
+         CCM0SQErFIv41SIL5HDE4QnmXwnMMoy95rdNWMP+HQIfeZv7WhR5VebUemr3LQf09YQ8
+         WZVw==
+X-Gm-Message-State: AAQBX9exiJBedfmAzTQ4QJYc5r5YwYfBEOAbVRpcg6I8/zazhPO0V7cM
+        G+JxGDgG1BJwmfy1by6Zc0OaE+hp59N8k4McCt9mc06IdXco
+X-Google-Smtp-Source: AKy350ae+AUWLw4Mw5OZ5Dy4N02Ue1UkxOTTZAl5a+SgyBcLUo5wADk9Sfadd1r+b3mdAKf9kNhV0Mr44Q1jE5AaJugcyS1BFgHA
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT008:EE_|DM4PR12MB8475:EE_
-X-MS-Office365-Filtering-Correlation-Id: bcb6fda8-f769-40ac-e62e-08db37a7ead8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HsbxbwE/1iu6VGuOVzS74qIB5waMkt2SSfPQi6nT2oKuP2gGwz3yQ9WIWOTAXzv5hrLQ0PoioFvKSKfeNzK3m+aTJcawhaZdsbL9c8MOScQGxX4kcW+3sxlKbmUbAgItlTV0VKDYGKuFLcXPt4b7AvvLqXNc2fV8gbejxB5KT816/R5/Ga3Pz/FgPj85OcJQLKUT42wX5TqiTU9e4j/cCUQmRwTHXYe6oY51WY5jGiWpFpn4AUQKzwwRJDyRvlYg/7VQ5YfB78+hKbgZQdx0ElKUBDSdOcSRydA8XiU4DJeOOB0I4TzkVg935zLl4SFObs1K3f7/cUYnuM7DFr+7JBhDjZ5husbe7Q0lpe8igh5DSugeaYHEzJBwx22GHPJLy2vMNTsWLVYw1ij9LKojozKkFesLVHk2DXjGbV5l9s0v2rsiBN1OLdxIx6HABxfAvWrSyMY1IaYmzqKlARaBK+q2zTF6hLedYRuQ1oABKXWkKSoaQ23NQcmtehp6eDjJdN1nzLAp6EDaQ26G9YQZrzI3iMtGatR6PChvcHpS+Bz8Z9vGWOSPkP726dW3BK/agFLjZDPPBVBXoWTX7HAMSbGyd/Fzuh/K5cW1cBY1bDtVuo3ozJTX4xMTvuiUh9D6ZbbtPZlFBuzUwZ077WvZmeHKJGHkokfkaBVljyiC56ut0ldOkAh5OP/1HxtTdrNf1gmaH7sCn0glAh3a7hJ9ddjn5iNPBTDZ9am4mn02s2I=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(316002)(16526019)(47076005)(186003)(1076003)(6666004)(83380400001)(26005)(44832011)(36860700001)(54906003)(82740400003)(5660300002)(356005)(81166007)(40480700001)(336012)(2616005)(2906002)(426003)(8936002)(7696005)(82310400005)(86362001)(41300700001)(36756003)(40460700003)(6916009)(70206006)(4326008)(70586007)(8676002)(478600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2023 20:37:34.1425
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcb6fda8-f769-40ac-e62e-08db37a7ead8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT008.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB8475
-X-Spam-Status: No, score=0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:1808:b0:752:fc52:a200 with SMTP id
+ t8-20020a056602180800b00752fc52a200mr1644029ioh.2.1680900159001; Fri, 07 Apr
+ 2023 13:42:39 -0700 (PDT)
+Date:   Fri, 07 Apr 2023 13:42:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e15c0905f8c5101b@google.com>
+Subject: [syzbot] [ext4?] possible deadlock in ext4_multi_mount_protect
+From:   syzbot <syzbot+6b7df7d5506b32467149@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following register contains bits that indicate the cause for the
-previous reset.
+Hello,
 
-        PMx000000C0 (FCH::PM::S5_RESET_STATUS)
+syzbot found the following issue on:
 
-This is helpful for debug, etc., and it only needs to be read once from
-a single FCH within the system. The register definition is AMD-specific.
+HEAD commit:    f2afccfefe7b Merge tag 'net-6.3-rc6-2' of git://git.kernel..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=10094d79c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d3500b143c204867
+dashboard link: https://syzkaller.appspot.com/bug?extid=6b7df7d5506b32467149
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Print it when the FCH MMIO space is first mapped. This register is not
-related to I2C functionality, but read it here to leverage the existing
-mapping.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Use an "info" log level so that it is printed every boot without requiring
-the user to enable debug messages. This is beneficial when debugging
-issues that cause spontaneous reboots and are hard to reproduce.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a183ba13acb3/disk-f2afccfe.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ffdb9ee4cb62/vmlinux-f2afccfe.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8e8bbb25f0c1/bzImage-f2afccfe.xz
 
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6b7df7d5506b32467149@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc5-syzkaller-00137-gf2afccfefe7b #0 Not tainted
+------------------------------------------------------
+syz-executor.3/27708 is trying to acquire lock:
+ffff888065700460 (sb_writers#4){.+.+}-{0:0}, at: ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:343
+
+but task is already holding lock:
+ffff8880657000e0 (&type->s_umount_key#31){++++}-{3:3}, at: vfs_fsconfig_locked fs/fsopen.c:253 [inline]
+ffff8880657000e0 (&type->s_umount_key#31){++++}-{3:3}, at: __do_sys_fsconfig+0xa30/0xc20 fs/fsopen.c:439
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&type->s_umount_key#31){++++}-{3:3}:
+       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
+       __do_sys_quotactl_fd+0x27e/0x3f0 fs/quota/quota.c:999
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (sb_writers#4){.+.+}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3098 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+       validate_chain kernel/locking/lockdep.c:3832 [inline]
+       __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
+       lock_acquire kernel/locking/lockdep.c:5669 [inline]
+       lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1477 [inline]
+       sb_start_write include/linux/fs.h:1552 [inline]
+       write_mmp_block+0xc4/0x820 fs/ext4/mmp.c:50
+       ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:343
+       __ext4_remount fs/ext4/super.c:6543 [inline]
+       ext4_reconfigure+0x242b/0x2b60 fs/ext4/super.c:6642
+       reconfigure_super+0x40c/0xa30 fs/super.c:956
+       vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+       __do_sys_fsconfig+0xa3a/0xc20 fs/fsopen.c:439
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&type->s_umount_key#31);
+                               lock(sb_writers#4);
+                               lock(&type->s_umount_key#31);
+  lock(sb_writers#4);
+
+ *** DEADLOCK ***
+
+2 locks held by syz-executor.3/27708:
+ #0: ffff888078129070 (&fc->uapi_mutex){+.+.}-{3:3}, at: __do_sys_fsconfig+0x521/0xc20 fs/fsopen.c:437
+ #1: ffff8880657000e0 (&type->s_umount_key#31){++++}-{3:3}, at: vfs_fsconfig_locked fs/fsopen.c:253 [inline]
+ #1: ffff8880657000e0 (&type->s_umount_key#31){++++}-{3:3}, at: __do_sys_fsconfig+0xa30/0xc20 fs/fsopen.c:439
+
+stack backtrace:
+CPU: 0 PID: 27708 Comm: syz-executor.3 Not tainted 6.3.0-rc5-syzkaller-00137-gf2afccfefe7b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/30/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2178
+ check_prev_add kernel/locking/lockdep.c:3098 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+ validate_chain kernel/locking/lockdep.c:3832 [inline]
+ __lock_acquire+0x2ec7/0x5d40 kernel/locking/lockdep.c:5056
+ lock_acquire kernel/locking/lockdep.c:5669 [inline]
+ lock_acquire+0x1af/0x520 kernel/locking/lockdep.c:5634
+ percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+ __sb_start_write include/linux/fs.h:1477 [inline]
+ sb_start_write include/linux/fs.h:1552 [inline]
+ write_mmp_block+0xc4/0x820 fs/ext4/mmp.c:50
+ ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:343
+ __ext4_remount fs/ext4/super.c:6543 [inline]
+ ext4_reconfigure+0x242b/0x2b60 fs/ext4/super.c:6642
+ reconfigure_super+0x40c/0xa30 fs/super.c:956
+ vfs_fsconfig_locked fs/fsopen.c:254 [inline]
+ __do_sys_fsconfig+0xa3a/0xc20 fs/fsopen.c:439
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4a4d08c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4a4dd13168 EFLAGS: 00000246 ORIG_RAX: 00000000000001af
+RAX: ffffffffffffffda RBX: 00007f4a4d1ac050 RCX: 00007f4a4d08c169
+RDX: 0000000000000000 RSI: 0000000000000007 RDI: 0000000000000004
+RBP: 00007f4a4d0e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc3d17db8f R14: 00007f4a4dd13300 R15: 0000000000022000
+ </TASK>
+EXT4-fs (loop3): re-mounted 00000000-0000-0000-0000-000000000000. Quota mode: writeback.
+
+
 ---
- drivers/i2c/busses/i2c-piix4.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/i2c/busses/i2c-piix4.c b/drivers/i2c/busses/i2c-piix4.c
-index 809fbd014cd6..043b29f1e33c 100644
---- a/drivers/i2c/busses/i2c-piix4.c
-+++ b/drivers/i2c/busses/i2c-piix4.c
-@@ -100,6 +100,7 @@
- 
- #define SB800_PIIX4_FCH_PM_ADDR			0xFED80300
- #define SB800_PIIX4_FCH_PM_SIZE			8
-+#define SB800_PIIX4_FCH_PM_S5_RESET_STATUS	0xC0
- 
- /* insmod parameters */
- 
-@@ -200,6 +201,9 @@ static int piix4_sb800_region_request(struct device *dev,
- 
- 		mmio_cfg->addr = addr;
- 
-+		addr += SB800_PIIX4_FCH_PM_S5_RESET_STATUS;
-+		pr_info_once("S5_RESET_STATUS = 0x%08x", ioread32(addr));
-+
- 		return 0;
- 	}
- 
--- 
-2.34.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
