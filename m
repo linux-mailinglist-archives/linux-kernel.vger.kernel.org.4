@@ -2,64 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D22F6DB45E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55FF6DB460
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjDGTpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 15:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S230049AbjDGTqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 15:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjDGTpw (ORCPT
+        with ESMTP id S229469AbjDGTqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 15:45:52 -0400
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875079028;
-        Fri,  7 Apr 2023 12:45:50 -0700 (PDT)
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1a51d304648so498825ad.3;
-        Fri, 07 Apr 2023 12:45:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680896750; x=1683488750;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWghzBfKuQahtLumYRFLf1CL+ff9yd1SjNGPejMxZk8=;
-        b=rkYhPdfx26R6YooQeIUmRf+PnwngkGGje8A2PlgFRnFYtlT8QHJ9SW0bgiaj1wcsCw
-         fRCxCkKkJ1WbmfyibzsUX4DpcrWHwT4SIUlkEfVtOZYTCRbtG9RmIkelN2C+rCHSG5zd
-         qMUhjClmIWzSAslaS8qBR3k8mEw8/m2uX4i6+kLX0z2nWQ7VH3v3l2YEhh5YOJNtY5Cy
-         mUasTz1GLrOvLl83lUpIEZQG7jfuW0KNvKK/i8zDBWqSY9q3J9OlgFaI87tR+7Tc3D4W
-         C0rA/kGZWxEv/pJCZEIvO+hkjQsPGwJqUMV1LkBtS4bpBNmClIfrT6M16N75hv5wvIJM
-         vpOA==
-X-Gm-Message-State: AAQBX9eD9B6IBKsv/sws+/VM2+xsgtO8hUiLAqwiHNyHVcDhgGrVi41+
-        7rPGx3mAZvo1KDFaDKglSL0YjOEvXoQ=
-X-Google-Smtp-Source: AKy350Zvf+ZYs9X20b1qMpn53sbWEJeeG8LMZ6lU+gEvqgWHqGO3zOmD3Xp5o3DiTs1Lha5jhvsRAg==
-X-Received: by 2002:aa7:8bd1:0:b0:62a:9d6f:98dc with SMTP id s17-20020aa78bd1000000b0062a9d6f98dcmr3444446pfd.11.1680896749761;
-        Fri, 07 Apr 2023 12:45:49 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:f2c:4ac2:6000:5900? ([2620:15c:211:201:f2c:4ac2:6000:5900])
-        by smtp.gmail.com with ESMTPSA id f27-20020a631f1b000000b0051322ab5ccdsm3001289pgf.28.2023.04.07.12.45.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 12:45:49 -0700 (PDT)
-Message-ID: <63cf4e4f-764b-8634-b29f-30d45bed1ca5@acm.org>
-Date:   Fri, 7 Apr 2023 12:45:47 -0700
+        Fri, 7 Apr 2023 15:46:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535D97EFD;
+        Fri,  7 Apr 2023 12:46:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D56A065199;
+        Fri,  7 Apr 2023 19:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AE7C433EF;
+        Fri,  7 Apr 2023 19:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680896807;
+        bh=jJZrgaS9x+x1S2R2yg1K1+c5nWNoK5ss3XwLkYAtE8Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=TO469duAJkhpj1So22MlFHRFn5xX24ea33Qa5N8RAp5UJIIKGZZOBX6Hs2rMJ52Ig
+         RpwfFH4aHa7VjgDuSDJpTTjnqOfjYnsa/tGBV93QjZABBO8NYJgZnZ+X8EpcEN0nIk
+         E2oP1kjOx7Zu2S0/t9nYBdInDLCE+uBvUVdVndcyp72HOaATPyxov0cl2HDrAvHx7d
+         t+kv49Qt/c6skSolQc+cw42feY7R8ExgnIaeO5/eeEMS8QDG0EbTOJhO2aCPC00vWu
+         F9IZPC/a1LZehjXz2KicoaZxZlOVth24NTYZ6QPxJFFjousdIZDGbwBFHwtqkLMJKP
+         s3lHDSpINxvew==
+Date:   Fri, 7 Apr 2023 14:46:45 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Grant Grundler <grundler@chromium.org>
+Cc:     Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O 'Halloran <oohall@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCHv2 pci-next 2/2] PCI/AER: Rate limit the reporting of the
+ correctable errors
+Message-ID: <20230407194645.GA3814486@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH v2 0/3] blk-cgroup: some cleanup
-To:     Jens Axboe <axboe@kernel.dk>,
-        Chengming Zhou <zhouchengming@bytedance.com>, tj@kernel.org
-Cc:     paolo.valente@linaro.org, josef@toxicpanda.com,
-        linux-block@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230406145050.49914-1-zhouchengming@bytedance.com>
- <cab869b1-1cba-5698-55eb-a93d0596c869@acm.org>
- <1416b648-188f-873a-08b3-c8e8494ab1a7@kernel.dk>
-Content-Language: en-US
-In-Reply-To: <1416b648-188f-873a-08b3-c8e8494ab1a7@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+In-Reply-To: <CANEJEGvKRVGLYPmD3kujg6veq5KR7J+rAu6ni92wUz72KGtyBA@mail.gmail.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,36 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 11:44, Jens Axboe wrote:
-> On 4/7/23 12:41 PM, Bart Van Assche wrote:
->> On 4/6/23 07:50, Chengming Zhou wrote:
->>> These are some cleanup patches of blk-cgroup. Thanks for review.
->>
->> With these patches applied, my kernel test VM crashes during boot. The following crash disappears if I revert these patches:
->>
->> BUG: KASAN: null-ptr-deref in bio_associate_blkg_from_css+0x83/0x240
+On Fri, Apr 07, 2023 at 11:53:27AM -0700, Grant Grundler wrote:
+> On Thu, Apr 6, 2023 at 12:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Mar 17, 2023 at 10:51:09AM -0700, Grant Grundler wrote:
+> > > From: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+> > >
+> > > There are many instances where correctable errors tend to inundate
+> > > the message buffer. We observe such instances during thunderbolt PCIe
+> > > tunneling.
+> ...
+
+> > >               if (info->severity == AER_CORRECTABLE)
+> > > -                     pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
+> > > -                             info->first_error == i ? " (First)" : "");
+> > > +                     pci_info_ratelimited(dev, "   [%2d] %-22s%s\n", i, errmsg,
+> > > +                                          info->first_error == i ? " (First)" : "");
+> >
+> > I don't think this is going to reliably work the way we want.  We have
+> > a bunch of pci_info_ratelimited() calls, and each caller has its own
+> > ratelimit_state data.  Unless we call pci_info_ratelimited() exactly
+> > the same number of times for each error, the ratelimit counters will
+> > get out of sync and we'll end up printing fragments from error A mixed
+> > with fragments from error B.
 > 
-> Would be useful in the report to know where that is, as it doesn't include
-> the code output.
+> Ok - what I'm reading between the lines here is the output should be
+> emitted in one step, not multiple pci_info_ratelimited() calls. if the
+> code built an output string (using sprintnf()), and then called
+> pci_info_ratelimited() exactly once at the bottom, would that be
+> sufficient?
+>
+> > I think we need to explicitly manage the ratelimiting ourselves,
+> > similar to print_hmi_event_info() or print_extlog_rcd().  Then we can
+> > have a *single* ratelimit_state, and we can check it once to determine
+> > whether to log this correctable error.
+> 
+> Is the rate limiting per call location or per device? From above, I
+> understood rate limiting is "per call location".  If the code only
+> has one call location, it should achieve the same goal, right?
 
-Hi Jens,
+Rate-limiting is per call location, so yes, if we only have one call
+location, that would solve it.  It would also have the nice property
+that all the output would be atomic so it wouldn't get mixed with
+other stuff, and it might encourage us to be a little less wordy in
+the output.
 
-This is what gdb tells me about the crash address:
+But I don't think we need output in a single step; we just need a
+single instance of ratelimit_state (or one for CPER path and another
+for native AER path), and that can control all the output for a single
+error.  E.g., print_hmi_event_info() looks like this:
 
-$ gdb vmlinux
-(gdb) list *(bio_associate_blkg_from_css+0x83)
-0xffffffff81856923 is in bio_associate_blkg_from_css (./include/linux/blkdev.h:865).
-860     int iocb_bio_iopoll(struct kiocb *kiocb, struct io_comp_batch *iob,
-861                             unsigned int flags);
-862
-863     static inline struct request_queue *bdev_get_queue(struct block_device *bdev)
-864     {
-865             return bdev->bd_queue;  /* this is never NULL */
-866     }
-867
-868     /* Helper to convert BLK_ZONE_ZONE_XXX to its string format XXX */
-869     const char *blk_zone_cond_str(enum blk_zone_cond zone_cond);
+  static void print_hmi_event_info(...)
+  {
+    static DEFINE_RATELIMIT_STATE(rs, ...);
 
-Thanks,
+    if (__ratelimit(&rs)) {
+      printk("%s%s Hypervisor Maintenance interrupt ...");
+      printk("%s Error detail: %s\n", ...);
+      printk("%s      HMER: %016llx\n", ...);
+    }
+  }
 
-Bart.
+I think it's nice that the struct ratelimit_state is explicit and
+there's no danger of breaking it when adding another printk later.
+
+It *could* be per pci_dev, too, but I suspect it's not worth spending
+40ish bytes per device for the ratelimit data.
+
+Bjorn
