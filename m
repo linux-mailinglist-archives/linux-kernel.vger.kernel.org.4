@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FA26DB699
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B52BB6DB697
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjDGWkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        id S230255AbjDGWkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 18:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjDGWkq (ORCPT
+        with ESMTP id S230383AbjDGWku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:40:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CFCC2C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 15:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680907225; x=1712443225;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=14cBJo9UK+0qh1NvtGqbCTaR4qD2pZbzWVL8nzWFfhQ=;
-  b=gEGGPoJmvUWn6E9883HQIeGMZknMSM4dneGoLbW523zN5q67+B5CJugL
-   /cdwkOWDwPBQCDg7ZuibbgF00kIcgmeFxPbnlCoPwFsXW0WMlrRG28AWH
-   PZxB5EKcvbVA3JJF/tazFEJRAZ0Tx3oQfSwuRfw6/r4e8W3XZZAE474Vo
-   B4hVdrtZl2EeqVySD4w4JBdDFj0Kf4SiZ8VeP+j5tZSfg56z8FfMwwcqt
-   GDQAeES0EViBSpMrysUCjlM4nUgzGLZXYnbNN7z9x45wdG5E8zPigAYZL
-   A/daoEk71aLibPVx5/8kFP8wQRWHCZ1PQL50Z0IzMSRu6CDMhEGUwTkaL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="405903218"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="405903218"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 15:40:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811534766"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="811534766"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2023 15:40:10 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkukb-000Swm-0i;
-        Fri, 07 Apr 2023 22:40:09 +0000
-Date:   Sat, 8 Apr 2023 06:39:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: xtensa-linux-ld: section .Level2InterruptVector.text VMA
- [0000000000000180,0000000000000193] overlaps section .data VMA
- [0000000000000000,0000000000140ca7]
-Message-ID: <202304080645.S7qi0nDB-lkp@intel.com>
+        Fri, 7 Apr 2023 18:40:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F18D332;
+        Fri,  7 Apr 2023 15:40:45 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337Med0v004586;
+        Fri, 7 Apr 2023 22:40:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=/koRs7Aex0OQKVto47rpNAga0+XbJLWelLS+sFsiZ2s=;
+ b=l8Aeds8xpHOBKFQE7vPl54XGR0FM0/7tS9DPEh7Hs+QiDPQD0tjBgyDZcPpCTWJ1A+Bj
+ CEWrZDgn8exaGGcnvji6TFBfdH/XcideYoranXV86SJ0GFeOHqEOLbrX7mymkTfnetQO
+ XNhNHanRghFhkEyhSA2wlo9pkUgC8WcqSgsYjEMInsXqdla8iPe0fXb43z+BI0Z5n96X
+ 2nJ9DVL9p4IpyowMRKz5eXsgLodfnczlQSj18Jkfhd1P+wYiufc58ROCYAGWqtN1qeDb
+ 6+JGMIYK/u84x59UI5Q7hZyUpJ1jc4YpUKrXISnmRoL5QY2vFZcS/gneljMOvN3QXRkG QA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptcrn20dt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 22:40:38 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337MecBm019237
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 7 Apr 2023 22:40:38 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 7 Apr 2023 15:40:37 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v2 0/3] Avoid having pending end transfers on soft disconnect
+Date:   Fri, 7 Apr 2023 15:40:22 -0700
+Message-ID: <20230407224025.22315-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BjSowptd-l7C-WKGHStm96bf_bkEAGiv
+X-Proofpoint-GUID: BjSowptd-l7C-WKGHStm96bf_bkEAGiv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_14,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 phishscore=0 spamscore=0 mlxlogscore=644 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304070205
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+In case there is a host which takes time to complete a SETUP transaction,
+during the soft disconnect sequence multiple DWC3 EPs will have their
+DWC3_EP_DELAY_STOP flag set w/o issuing the end transfer command.  Once the
+controller halt sequence occurs, the soft disconnect is successful, and
+the subsequent soft connect will attempt to flush the pending end transfers.
 
-FYI, the error/warning still remains.
+Soft disconnect sequence:
+  dwc3_gadget_ep_disable   name=ep8in flags=0x3009  direction=1
+  dwc3_gadget_ep_disable   name=ep4in flags=1  direction=1
+  dwc3_gadget_ep_disable   name=ep3out flags=1  direction=0
+  usb_gadget_disconnect   deactivated=0  connected=0  ret=0
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   f2afccfefe7be1f7346564fe619277110d341f9b
-commit: c20e1117d9aa22c558646a1060ddd1dd042fb107 xtensa: add kernel ABI selection to Kconfig
-date:   1 year, 1 month ago
-config: xtensa-randconfig-r032-20230407 (https://download.01.org/0day-ci/archive/20230408/202304080645.S7qi0nDB-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c20e1117d9aa22c558646a1060ddd1dd042fb107
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c20e1117d9aa22c558646a1060ddd1dd042fb107
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+Soft connect bug:
+  BUG: spinlock already unlocked on CPU
+  spin_bug+0x0
+  dwc3_remove_requests+0x278
+  dwc3_ep0_out_start+0xb0
+  __dwc3_gadget_start+0x25c
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304080645.S7qi0nDB-lkp@intel.com/
+The bug occurs due to the flush of the pending end transfers, as the gadget
+start routine is not held with a spinlock.  However, if the DWC3_EP_DELAY_STOP
+is set, it will call the giveback API, which attempts to unlock the dwc->lock.
+Ideally, the DWC3 gadget should not have pending end transfers on a soft
+connect, so fix this by:
 
-All errors (new ones prefixed by >>):
+ 1. Re-locating the SETUP phase check after stop active transfers, since
+ that is where the DWC3_EP_DELAY_STOP is potentially set.  This also allows
+ for handling of a host that may be unresponsive by using the completion
+ timeout to trigger the stall and restart for EP0.
 
->> xtensa-linux-ld: section .Level2InterruptVector.text VMA [0000000000000180,0000000000000193] overlaps section .data VMA [0000000000000000,0000000000140ca7]
+ 2. Do not call gadget stop until the poll for controller halt is
+ completed.  DEVTEN is cleared as part of gadget stop, so the intention to
+ allow ep0 events to continue while waiting for controller halt is not
+ happening.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Wesley Cheng (3):
+  usb: dwc3: gadget: Refactor EP0 forced stall/restart into a separate
+    API
+  usb: dwc3: gadget: Stall and restart EP0 if host is unresponsive
+  usb: dwc3: gadget: Execute gadget stop after halting the controller
+
+ drivers/usb/dwc3/gadget.c | 101 ++++++++++++++++++++++----------------
+ 1 file changed, 58 insertions(+), 43 deletions(-)
+
