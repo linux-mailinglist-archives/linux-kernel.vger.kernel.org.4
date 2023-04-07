@@ -2,172 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23026DAF9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E716DAF9E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbjDGPWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 11:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S233493AbjDGPYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 11:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjDGPW0 (ORCPT
+        with ESMTP id S230368AbjDGPYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 11:22:26 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020023.outbound.protection.outlook.com [52.101.61.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1494C31;
-        Fri,  7 Apr 2023 08:22:21 -0700 (PDT)
+        Fri, 7 Apr 2023 11:24:12 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2085.outbound.protection.outlook.com [40.107.14.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DEB213B;
+        Fri,  7 Apr 2023 08:24:10 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LbR1xr08jzub4Srgaee6MSd+9vz4yT2iDm03SfXwRPTd6BVDJpQrUgKGi57TAaVr/QifAFlqDV6D2qD6rUquKsCxBQsl6iQuFFGiiQ7eOG4tVDScvz/rlP52jMq4vfK5Jx7tLco9PRN8O8fzm3SvQBYmiGlg7CbyZjsiZX00CRPlzHjcFVIQKZO0VFuPVuRUrZJPzfof2gY+Jxagn+aJBIfGQL9GV4WLWB73G7/d4jVOk6ddI55tzZ01IsNsQu3q2dMJjN+kmWIcSMJ0gU96PyNAvdaSRRBrrmR9CqXb4YYCp4o9qLQpOC9ZKouAar395kHUtxHUpc+07fZicpBRCw==
+ b=QInS3LNJvSpnhLxn/Jxdc79ZFStfIA36XTqBq7lbTrryXOk2bPmQHfnZvnWfv3q086yMCFUx8a0jRc8v07xJH5ilc6FjvrYjdf0cV8iowQTPCUTp1x8//MZgwrAvtxA6ocjF4D11XX67a7UFrTYnOlTYil6dHMAYVIExDYe5z5OWjd78VLySd8Ws73alRbrqcSMfDj0W3WvMwElqCVFDMIwWZB76XZsnBvRuOcUIHoida+w1wG+bWVsdNnMKakQfidTz0xKzeCEAxryiLvOMqxfe5sEh3o5Xu+xCm/lu04V1mw4r93v6jnanoKanRX4z+EheseeVPQnlWdjRmmJiHg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GrA62d9Z6vKvmziFWVP1xUvVvbKnD8/BvKjZPrJHzm4=;
- b=FURdAiZEzlKQ/QFhZt6nkKFwQCPG0GoVZXthtfyAKVxHdqVYb4OLUHN6+4Jj2wu8tr3OYQgVJleT8uSCPEOtYV9jmd/ogHvyp6lq2TiPY4wmjUUO8QHpYPsq7S+n1oenypsvHHUf9RTM49mTbYj0f75PvvEy1LyepPRXoLD5Ki/G2oec5V6oh1B1wSeKUem9e6Cor0g8AE2Zatrf1m9cPtVJIKRrg9vc06UKl21fj7MfhhHe7gujWAVLElgbzisbyBcdldt5ktzQc5QEop2+h+mvBWBmYmIPIXY/Ab3nVdDsi3j+KoRbGv6NWFSAYK0NNJnxV6+a2AVBXcg07+tyVg==
+ bh=jpjbS5ntKmvcjGPYHRMkifxM8WFRnqGYQnzOSDadjoI=;
+ b=lr0sazBS/dYyPHtkr3xz/AKZSAUgfz95WsBsZxW0q4WHYypvs3hzr8MEWiXRsGYD4lvuvDskrknAEdhVP+EtYHuczTUxH+z0Jny55D7O/JMxR37+rLshFlJ0KiIDZM0b8JPdmQKw8Foskv79k/JUzUiqkGw/V3vl1TUsDNPYWo+N9RKhG45ea65wiRHquXofoYHceQgKORtw3H1OIq3jOFZb13i+Pumk+JugXbKSmupRP7PM6s/wIWf5a/o7gWFizzLQ7OzPsDkvJtd6+ZRJ0L+vnldiLeaJHp10Kldq64dg8uo94YvoTgFT+mEEPNp4nepyWR7zXC9BII9lmNDdVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GrA62d9Z6vKvmziFWVP1xUvVvbKnD8/BvKjZPrJHzm4=;
- b=Q1jpaoz4hrRQrfuSGZdy5ugpLlXmt2K7zGmef5FCYY1pSaA75BZcrNDnzuTtXMP1SCGyp31ieoycTbK7wcUYLRa/gUnMZ+5UbWuTz2pUUvG+rjWoJBU9Fo+vQ6Vejjwg01e2osQ1m9qezo4getcavAMoyL6WyVFT0TUUN3LND7M=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by SN7PR21MB3886.namprd21.prod.outlook.com (2603:10b6:806:2e5::12) with
+ bh=jpjbS5ntKmvcjGPYHRMkifxM8WFRnqGYQnzOSDadjoI=;
+ b=EibV/ZGDz1x6Chi0vdFTQz6g1bmja5NOL0FtcUOlbvkC55SHvnckUEA2wBcf8bWIBPsCNYpkSIeZTm6dxgZCo55bGLFxTS4kpyKsayzYwpbZ0q9WrFMmvrM+uQDIupXPX7uOjvUmGBKT4urErhszbcpGlpm1Zu+8LqyhlQ7IUBA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
+ by AM9PR04MB8194.eurprd04.prod.outlook.com (2603:10a6:20b:3e6::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.18; Fri, 7 Apr
- 2023 15:22:17 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6298.018; Fri, 7 Apr 2023
- 15:22:16 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     KY Srinivasan <kys@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>
-Subject: RE: [PATCH] Drivers: hv: Do not free synic pages when they were not
- allocated
-Thread-Topic: [PATCH] Drivers: hv: Do not free synic pages when they were not
- allocated
-Thread-Index: AQHZZoMjvlqzQzftXUea70v33me3o68f+VGQ
-Date:   Fri, 7 Apr 2023 15:22:16 +0000
-Message-ID: <BYAPR21MB1688A4EA2E802B66AADC3324D7969@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1680564122-30819-1-git-send-email-nunodasneves@linux.microsoft.com>
-In-Reply-To: <1680564122-30819-1-git-send-email-nunodasneves@linux.microsoft.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.34; Fri, 7 Apr
+ 2023 15:24:07 +0000
+Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
+ ([fe80::9701:b3b3:e698:e733]) by AM9PR04MB8954.eurprd04.prod.outlook.com
+ ([fe80::9701:b3b3:e698:e733%7]) with mapi id 15.20.6277.034; Fri, 7 Apr 2023
+ 15:24:07 +0000
+Message-ID: <5ec588cf-f4f9-5329-730e-ba5bc6d2bdff@oss.nxp.com>
+Date:   Fri, 7 Apr 2023 18:24:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH net] net: phy: nxp-c45-tja11xx: disable port and global
+ interrupts
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20230406095546.74351-1-radu-nicolae.pirea@oss.nxp.com>
+ <47d0347d-02a1-48a3-8553-d6ab2be731e8@lunn.ch>
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=dbe0378d-a0d8-4cf5-91f3-27bc49513503;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-07T15:11:04Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SN7PR21MB3886:EE_
-x-ms-office365-filtering-correlation-id: a498e60f-54b9-4d75-8217-08db377bded6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sn0NrPmYdHYGdUARkh4yc+QBW+EFmrdz3dxOtOgK1+3Bpwys8T74xwrY7Hltkpk6+/55aC30vwXMRDw1qkR+ur6/effasUMkby9KUdZGuXOg6AFBEY/LD9qDlwtycNoJoGdC22YcS49wHRAoCWO8spUef5+fcXHqOGztdjDtpGJTf0GpPr7btbbrugDQkMDqKtY4HlRcimQ1SygTGYWrwi35LOGi4xcmpPsviX4UozRDVesEQPLeDhEblu5W5WiG45RCjUdU9UtwMnL6/XQxpVPJWO1kW2ZiQV4ioXdwGZ19g02s5X5pub9STk5YE0TiOb3GS7gH6nhuWPAwjYjCgvaIib7x6zFxALFfkyWy1M7r/nug10UNTaVTASeF7XP5Q9DhB6LHHRgMdImyx7OjF89ly5A4z8KNY4hPAt0WN1BbwqXr7UJNoYf2Q+1I7A7g+3gaE1OFOWCGJmob+z6hN1+AAOBkvOQnpLNsbKGBoqse5tsogTRbqn6zxtWGrv+Nrk6hMuJAgThVGigsxI0oes/cmlJxx+BK+CzdFsAZuO0acm1pmbF11sZOWllOgUx9fa44a5QWjtBXvnum861ssC1Gld3bGZuLBjNl+VnYgtaKdc6hinpST25qdryQGIvf6lGfxwicIgYC+Qdht/Q6/cd010qqBcdiqxBJ+iE2AFI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(366004)(376002)(39860400002)(451199021)(71200400001)(9686003)(26005)(186003)(6506007)(7696005)(2906002)(107886003)(5660300002)(41300700001)(64756008)(4326008)(786003)(66946007)(66476007)(66556008)(52536014)(66446008)(8936002)(76116006)(316002)(8676002)(110136005)(54906003)(10290500003)(82960400001)(82950400001)(478600001)(38070700005)(122000001)(38100700002)(86362001)(33656002)(8990500004)(83380400001)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?HfvLClweWxOCv0qGYM39w9LNFCCIySDxRzWrG0ZlNL0z2mGX9kGDDYhPGwxq?=
- =?us-ascii?Q?+M84957afI9XSY9+VhktwSTT4J/xoxUp0k9YApwtleU0mWImKjMveVwvUAx+?=
- =?us-ascii?Q?huAHNh0yzhQnx9RHDRhY3NQmZFXzBNschCwSiO20XJ9AcyFPYoEI5/JGebNL?=
- =?us-ascii?Q?bEJXVph4T80i1Djh6mmaQ4NfU4/KXNntTuk+wrYjywL8QzbElF2IHQcEFZkz?=
- =?us-ascii?Q?7vAHUlQ5ejrT/EbwgK0CM+ncFHQuZRWLnXUFAUXtQfJo5vrDwNqvXPXOXYfC?=
- =?us-ascii?Q?yzkgsClarvKSuvK2w5B4+Wd5eEle7ni6xbP6Y9LVQ2Io0X37vXi6HiBWGpsK?=
- =?us-ascii?Q?nA9CkSM3vC2WmNN+94nX4fiFPJHwKX0PX4bMOA7RZmdkWLReWmnb4Ns0mK5R?=
- =?us-ascii?Q?LapSiLErArO94zWqv8PMTJIBBJYKgwhLrBHMRPurgqpkQJpNMKupznO5Lk35?=
- =?us-ascii?Q?WhW2wpgs8XaU59TZL4L+HCD88WhESG9bZE6hklnAVzDizhhjwyptHv2wcKQ8?=
- =?us-ascii?Q?3W9HY5d/AFJV7o/xGPFf6A7B9dF15BkqO24LJuXllKxO/uqM/NDo3JsshLaX?=
- =?us-ascii?Q?iAGd6IYtYvHl54/XnrvBMWmiXGOdtBSXgX2qev3pxNR8j/rmri+elRq6FrmS?=
- =?us-ascii?Q?HTGYKCAvgIX2M79jk6qo+YiewkhQWcDXNwoJ4ADmnpwYFArAmKHyJe3zF3NS?=
- =?us-ascii?Q?kiNGn1CTiJ/htYmsC56OFXQJNQ2dD/GFPFHc8jU8x3Jq0+1NGlEucQKABPQj?=
- =?us-ascii?Q?hi8mmpE3cGZZh2MqU761juwbTa1/6uB3CpDuGP3JNazqlQhEhj44oVmvE7Gz?=
- =?us-ascii?Q?f+EPjX58Xxuci4VTCdX8TfMyDeTO3/sHiSZEddovLp8HplQoA48lDtBJ56f5?=
- =?us-ascii?Q?bEwn1ti8Gib+OwsvOyQnJLArn+dGbVDtqVlnx/toJfShE465MH8PjgsQ9V/1?=
- =?us-ascii?Q?Lg9VhXWCn9Oq2YrDWpR2ip6E5d0F4Pngwr6pt7/tl64IhW9oLdJrlDFDA/2U?=
- =?us-ascii?Q?Gj/Ki2qQBx4lQAsSQzq0H28v+3/Qj8iFV5Q6nGnkgHEeQP5Ey/ZuqE5bXQAW?=
- =?us-ascii?Q?4ufFb7JcR+Ja9iaM88SMajN+g9E5ReXnFQyjnGNvLAP4c4lFpxVzBwAn9FHt?=
- =?us-ascii?Q?YnYrZNRIjwKdtZ/V1Bj9e3NenQVsOA3CF3rcHBxhL+9cLVcklKiNUUsfmH2p?=
- =?us-ascii?Q?W5l9+TNXAhSdoX839LujBWn5wKzDyVlqmewIZDZ/J8x6TQ68gJ/24jlR0a4K?=
- =?us-ascii?Q?f8ApOml0sQ4VMA1dh4Ul072mczFehP1kn2mRHmm/1uFh2DhWyWbSrq8odfPK?=
- =?us-ascii?Q?zUfN5I6PxKHu2To6K1azXdPxV36BVkOolZyibotiXYRIoPtJbFCpaN8afnul?=
- =?us-ascii?Q?CYROHmZBJVSWqt40FTDIQ2xcZB+gP28FB7dTUPToc5afkHbM+8fEK2mWcWR5?=
- =?us-ascii?Q?2ruzR7VW3qzKrCffdt02YDRPkemtqx5OBu9Ts9VFpmLhStB52dsNNDWQc1yI?=
- =?us-ascii?Q?VgCb6e3VyKV2CU2K8guHraIgh1EhjIlVp6F0fKGkTwFxVT3Rz4ITkkg5xyHk?=
- =?us-ascii?Q?V3JdxNyz5l6SsBpegy70X1WSddPb3Tg4qW39oHuE+QV547na7wKTnjaQNGg7?=
- =?us-ascii?Q?YA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
+In-Reply-To: <47d0347d-02a1-48a3-8553-d6ab2be731e8@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS4P195CA0016.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d6::18) To AM9PR04MB8954.eurprd04.prod.outlook.com
+ (2603:10a6:20b:409::7)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AM9PR04MB8194:EE_
+X-MS-Office365-Filtering-Correlation-Id: a2417179-c736-4c5b-d498-08db377c20f1
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FdveF/0oicmG/8GJbUIsg8nXKBpgTgzHuRi+qtdVMVF5ZKlxe2CU/GNzsbqA/MvCTWtrcnUnBbhCpfzOqivy0UEEaMGPXJDycCAPggSe7LfxQANqdVrRv2qIfEuI75+Mf8UM+9aNMcDN9QmtgKck5B1JepygDDXh/8bqf8rjaadBNTqgu9vrpj+haI6HuBVdWMoOGaKDpMrO2n/OTeCXr6f8VuC3QYWN4md8K0VI7c+y/Q3lswzqHBLgCBotNGiU//18Xxc72ntrhrlvbEqVeVl7EsD6ObSlz498kJ2/C6L18wEefHcSdE3qcu/nkb+jFoz9uNdLzdAz8esm0Sr0cwZR3Mg0zhPvNCmSJQQlZkFv5gFR17SPKAQcqYHcFrLYO1yN5JxMHXQMotuyvk5eUFu7wOdTgy/25Xomozng3iJ5XUKrhpl4JlsY6vkEYAtMFC3T72ELyslz9VCErc4Krc35D3ltVqi/MZUWKIFR0niLYseVeHt7ZDxZZX6jCuuokcLXg5wuIfT6fg/cOgYJXaXQel3SMFo/gdhPRVvNe9HzLeki06GbEmmaOMeDYiOtAlZVHix/huOpH7Yw5KTSPGBS0dgtgcKUTU9bi5wr+YZV3oHcqg6xBEqn7yMkeNMfe5bh7Be20uJNjlCds9Yakg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(376002)(136003)(39860400002)(451199021)(38100700002)(31686004)(2616005)(316002)(31696002)(83380400001)(186003)(478600001)(86362001)(66946007)(66476007)(66556008)(8676002)(6916009)(4326008)(7416002)(26005)(53546011)(6506007)(6512007)(2906002)(6666004)(5660300002)(6486002)(8936002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OXJaeGhCVnNLWFNvN0UySlRWbUdVcTBwYVVXM1VVaW9Fa3NiKzIvUm5wV0tu?=
+ =?utf-8?B?clRjL1Q5Y1MxZWhMOHNPempVTTRnQ2tabE9XMHovNVIvZHBHaVZHUXRmYzZr?=
+ =?utf-8?B?cFR1Lzd0Nmp5UXlGSExYTWVMcWc5OTl6QjBoN0ZoL2dCMTBwcUNYem04R24z?=
+ =?utf-8?B?eG5BZWVrSlpxdkdxb0NzbHZaSnJCR28xbEovS1gvY3RicklnLzIxV1FaZUcr?=
+ =?utf-8?B?ZGxZOUhLYmhMT2NhbXQ0TlVCZUJqeXp3d21zWHFWTjJkWTFlUU1pS0QrbDZQ?=
+ =?utf-8?B?bFUwVFpQMVpqQVVodUd5RVQ2R3Z4SUI3bHJtS1ppS29XNG95elJFZGtXM2wr?=
+ =?utf-8?B?dFo2WXdxcWw1RllQMUYrZjIwTmxRNC9LdXR4bEVwVVZTL1dab3NiVGo0Q0d3?=
+ =?utf-8?B?V2tMU1l2dldFSXduMTJKL0wvaVJUWG5wSDU0dHJUV1ZFaWNadE5vTmpQM0NG?=
+ =?utf-8?B?WnQ5bVlHazVUV2U3NUpuRGwvemlWb3MrL0lsRDNQS25ZMUNtL2JTZDV6ZkpX?=
+ =?utf-8?B?cmY4SlNmdXU3aHQ0VU9sQ3ZZUmdTbXdNcHRKM2hyQlpqc0JEb0dCQ1dKVUVy?=
+ =?utf-8?B?VUdpZDV6ODRXVUZ4QzNtK0NwZjdHUytJZ05scG0wS3V4aHUvL2pqaVB1bXlh?=
+ =?utf-8?B?Skp0NEdpdzhINmh3cnhtT3FndnNsTzNCWTY4MlFPSXU1MWoyeVN5aVBDS04y?=
+ =?utf-8?B?M1JSN3E1NmQ5YXlXUXJKc1djcTkvbC9ORnRJRnVUeDNlSzI2MktXMG9GaTBI?=
+ =?utf-8?B?MndObUlaVWlUbHYybEpydWJDOWR5WUhwV2QyZW1UdlNFbjYwcUhkNmZPM2VT?=
+ =?utf-8?B?UEh1Q3pUNE4zT0plWUZJL2hZbXdqNFp4dTA0Q09naXN3dHNBRlBqMXRuVlJC?=
+ =?utf-8?B?UCs0Y0ZNUE1qVXZqV3FseGc5TFdDREZKckRzYVdtVmcrQUp3TlNzWU9uZWh6?=
+ =?utf-8?B?eXl6Q05nUytMUVJHcjNoM0djb3JUSGR2SEdBOUZ1UUszcXBxRWZCTC91ZGhY?=
+ =?utf-8?B?V1JvYVZ3UVM5YTc1ZzJucnEyc2U0WjIvYlUwOXpaZmczL0paN2dWT2hKSzhG?=
+ =?utf-8?B?azZiOUU5NVltUVFBV2RVVk8vYVQ0Z3ZWcUhSYVBrbkxTQ085RFJobkdaSEc5?=
+ =?utf-8?B?TlJiMG1mVzk5YVlBdTgzYVdDMHlUSXJrbFppWk1kc0tEajZyZFBVaGRNVkFh?=
+ =?utf-8?B?TFZRNGZYcFF4cTRsbUxyMVp5bHMzejFGWVBPdWVvMjVJNW1yNEF0TG13TzQv?=
+ =?utf-8?B?QnZnT0tkMlJoT2JqN21CNFNTNzNHZFlOZGN3bGhCMjRtaWdYWlRJaThTOEky?=
+ =?utf-8?B?QnUxdWVXV05NcysxK1JLalVFZGJ3cWRwRmIyeDl6ZnNrL2d5Y2UrSFZuNHBp?=
+ =?utf-8?B?TWsrSzZFTXJMaEl4T0hhZU9DZ0ZpbktzdFEzOTREaVhuTHFLVWlNK1NQcm5D?=
+ =?utf-8?B?M1R5OWhKSnVrcWM1dEhLYWVMUS9CT25mLzU2RnBtb3hNcU5mVjhqQVNYYnRM?=
+ =?utf-8?B?QUdVRU5Xc0VQZCtTblZudFMzbFppQjFHWmhqdndCWFlyT1pObG1kSG52QXF6?=
+ =?utf-8?B?WVJVNFQzWWV3bzkrcllRaHNnMVpDcitOenpVVTNORXpEOUpMNEE0RGpmbkZr?=
+ =?utf-8?B?OGc0SmY5Vjg3S2xzYU1hbHdnbUNNQW05akpMcVhHaVJhR1FWVGdaOWwzRzMz?=
+ =?utf-8?B?TmhhSzdicGt1RE54akFHVURIdy9ZSEVnaWpNQzJ1NjlIQlRnNXJBUiszRnFD?=
+ =?utf-8?B?YndmTWM3ZWcrS1M3aDZXTGhBL2d4aGcxbkg1V1Q4Wjg4bE5GMEE2VUpyWG1X?=
+ =?utf-8?B?RFpBUmpNNHpqeVRkQjlSdkdaTHZCbGwrRFZiZjBBZ1laY3U3RFJndjF5enZa?=
+ =?utf-8?B?U3RRaXJhT3VrUWJmVUpNR1BTamdYaUpsS2VpcVVRTHcrVWVwZ2cyWmxNeExw?=
+ =?utf-8?B?b3o1dm9DdXZDNndRdmY3Y0hxWVRVd2pwU0dldnJOa2R0dDlnMlFRKzR2N3J4?=
+ =?utf-8?B?VnRMUnFDaXVrM1IwMzRCMlRyd1QyZXEyRU84bzgyRXlxNnlFUnlXNzFnb2ZR?=
+ =?utf-8?B?eEFla2tjSkdsREdxUSt2cUtQWFZ5U0RlR2s5dVZoTmtSM1kxVmU5MW1uNG9i?=
+ =?utf-8?B?cjY5UFg1UDlIdU56Yjd0dEoybDg5NTJxSGJ4YXFIL3lSYnUyMHBtTTZ5Nmhp?=
+ =?utf-8?B?TkE9PQ==?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2417179-c736-4c5b-d498-08db377c20f1
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a498e60f-54b9-4d75-8217-08db377bded6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2023 15:22:16.1924
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2023 15:24:07.3561
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uwjcA86IWeZ8uP9HHJvqtQ+lK2LPNMWToo4QAicaEWzPoc29FbQb24oN0xUQwLRvfNsbCA4Ly6rk4orv9/mgDrSd4rqsiTO1baTeP2S6xF4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR21MB3886
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_NONE,
-        T_SPF_HELO_TEMPERROR autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eExfiPXzXDa4bWlW3mTj3DJhNz16YfJHslHRDsiA3sJL4Q7JgWTt5KsP/llkExp5acJbPHgGQhSmfsgGaFrTWYchneFeUCSabYcvX6LDa/g=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8194
+X-Spam-Status: No, score=-2.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nuno Das Neves <nunodasneves@linux.microsoft.com> Sent: Monday, April=
- 3, 2023 4:22 PM
->=20
-> In case of root partition or snp, the synic pages are allocated by the
-> hypervisor instead of the kernel, so they should not be freed.
 
-This patch doesn't hurt anything, but is it really needed?   In the SNP
-Isolation or root partition case, after hv_synic_alloc() has run, the
-synic_event_page and synic_message_page pointers are NULL.  Then
-when hv_synic_enable_regs() is run by a particular CPU, that CPU
-maps the pages and the pointers are non-NULL.  But the corresponding
-hv_synic_disable_regs() sets the pointers back to NULL, so
-hv_synic_free() will already skip those pages.
 
-Is there ever a case where hv_synic_free() would run after a CPU
-has done hv_synic_enable_regs(), but not hv_synic_disable_regs()?
-If that were the case, it seems like we would have other problems,
-such as missing calls to iounmap().
+On 07.04.2023 17:14, Andrew Lunn wrote:
+> On Thu, Apr 06, 2023 at 12:55:46PM +0300, Radu Pirea (OSS) wrote:
+>> Disabling only the link event irq is not enough to disable the
+>> interrupts. PTP will still be able to generate interrupts.
+>>
+>> The interrupts are organised in a tree on the C45 TJA11XX PHYs. To
+>> completely disable the interrupts, they are disable from the top of the
+>> interrupt tree.
+>>
+>> Fixes: 514def5dd339 ("phy: nxp-c45-tja11xx: add timestamping support")
+>> CC: stable@vger.kernel.org # 5.15+
+>> Signed-off-by: Radu Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
+>> ---
+>>   drivers/net/phy/nxp-c45-tja11xx.c | 22 ++++++++++++++++------
+>>   1 file changed, 16 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/net/phy/nxp-c45-tja11xx.c b/drivers/net/phy/nxp-c45-tja11xx.c
+>> index 029875a59ff8..ce718a5865a4 100644
+>> --- a/drivers/net/phy/nxp-c45-tja11xx.c
+>> +++ b/drivers/net/phy/nxp-c45-tja11xx.c
+>> @@ -31,6 +31,10 @@
+>>   #define DEVICE_CONTROL_CONFIG_GLOBAL_EN	BIT(14)
+>>   #define DEVICE_CONTROL_CONFIG_ALL_EN	BIT(13)
+>>   
+>> +#define VEND1_PORT_IRQ_ENABLES		0x0072
+>> +#define PORT1_IRQ			BIT(1)
+>> +#define GLOBAL_IRQ			BIT(0)
+> 
+> I find the PORT1 confusing there, it suggests there is a port0? What
+> is port0? There is no other reference to numbered ports in the driver.
+Sometimes HW engineers starts to count from 1 :)
+TJA1103 have only one port, but the things becomes complicated if we 
+talk about SJA1110 phys. From the SJA1110 user manual looks like the 
+VEND1_PORT_IRQ_ENABLES register is shared between the phys. I need to 
+clarify this.
 
-Michael
+Maybe is not a good idea to cut the interrupts from the top of the 
+interrupt tree.
+I will send another patch where I will disable the PTP and link event 
+interrupts from nxp_c45_config_intr callback.
+> 
+>> -static bool nxp_c45_poll_txts(struct phy_device *phydev)
+>> +static bool nxp_c45_poll(struct phy_device *phydev)
+>>   {
+>>   	return phydev->irq <= 0;
+>>   }
+> 
+> Maybe as a new patch, but phy_interrupt_is_valid() can be used here.
+> 
+> Maybe also extend the commit message to include a comment that
+> functions names are changed to reflect that all interrupts are now
+> disabled, not just _txts interrupts. Otherwise this rename might be
+> considered an unrelated change.
 
->=20
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  drivers/hv/hv.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index c7f7652932ca..a10cf642c9ad 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -193,8 +193,10 @@ void hv_synic_free(void)
->  		struct hv_per_cpu_context *hv_cpu
->  			=3D per_cpu_ptr(hv_context.cpu_context, cpu);
->=20
-> -		free_page((unsigned long)hv_cpu->synic_event_page);
-> -		free_page((unsigned long)hv_cpu->synic_message_page);
-> +		if (!hv_isolation_type_snp() && !hv_root_partition) {
-> +			free_page((unsigned long)hv_cpu->synic_event_page);
-> +			free_page((unsigned long)hv_cpu->synic_message_page);
-> +		}
->  		free_page((unsigned long)hv_cpu->post_msg_page);
->  	}
->=20
-> --
-> 2.25.1
+> 
+>> @@ -448,7 +452,7 @@ static void nxp_c45_process_txts(struct nxp_c45_phy *priv,
+>>   static long nxp_c45_do_aux_work(struct ptp_clock_info *ptp)
+>>   {
+>>   	struct nxp_c45_phy *priv = container_of(ptp, struct nxp_c45_phy, caps);
+>> -	bool poll_txts = nxp_c45_poll_txts(priv->phydev);
+>> +	bool poll_txts = nxp_c45_poll(priv->phydev);
+>>   	struct skb_shared_hwtstamps *shhwtstamps_rx;
+>>   	struct ptp_clock_event event;
+>>   	struct nxp_c45_hwts hwts;
+>> @@ -699,7 +703,7 @@ static void nxp_c45_txtstamp(struct mii_timestamper *mii_ts,
+>>   		NXP_C45_SKB_CB(skb)->header = ptp_parse_header(skb, type);
+>>   		skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
+>>   		skb_queue_tail(&priv->tx_queue, skb);
+>> -		if (nxp_c45_poll_txts(priv->phydev))
+>> +		if (nxp_c45_poll(priv->phydev))
+>>   			ptp_schedule_worker(priv->ptp_clock, 0);
+>>   		break;
+>>   	case HWTSTAMP_TX_OFF:
+>> @@ -772,7 +776,7 @@ static int nxp_c45_hwtstamp(struct mii_timestamper *mii_ts,
+>>   				 PORT_PTP_CONTROL_BYPASS);
+>>   	}
+>>   
+>> -	if (nxp_c45_poll_txts(priv->phydev))
+>> +	if (nxp_c45_poll(priv->phydev))
+>>   		goto nxp_c45_no_ptp_irq;
+>>   
+>>   	if (priv->hwts_tx)
+>> @@ -892,10 +896,12 @@ static int nxp_c45_config_intr(struct phy_device *phydev)
+>>   {
+>>   	if (phydev->interrupts == PHY_INTERRUPT_ENABLED)
+>>   		return phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+>> -					VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
+>> +					VEND1_PORT_IRQ_ENABLES,
+>> +					PORT1_IRQ | GLOBAL_IRQ);
+>>   	else
+>>   		return phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
+>> -					  VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
+>> +					  VEND1_PORT_IRQ_ENABLES,
+>> +					  PORT1_IRQ | GLOBAL_IRQ);
+>>   }
+>>   
+>>   static irqreturn_t nxp_c45_handle_interrupt(struct phy_device *phydev)
+>> @@ -1290,6 +1296,10 @@ static int nxp_c45_config_init(struct phy_device *phydev)
+>>   	phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_PORT_FUNC_ENABLES,
+>>   			 PTP_ENABLE);
+>>   
+>> +	if (!nxp_c45_poll(phydev))
+>> +		phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
+>> +				 VEND1_PHY_IRQ_EN, PHY_IRQ_LINK_EVENT);
+>> +
+> 
+> It seems odd to be touching interrupt configuration outside of
+> nxp_c45_config_intr(). Is there a reason this cannot be part of
+> phydev->interrupts == PHY_INTERRUPT_ENABLED ?
+Well, these C45 TJA PHYs have the interrupts organized in a tree.
+The idea in this patch was to enable any interrupt(external trigger, 
+PTP, link event, etc) from anywhere, but nxp_c45_config_intr to be able 
+to disable/enable them in one register write.
+> 
+> 	Andrew
 
+Radu P.
