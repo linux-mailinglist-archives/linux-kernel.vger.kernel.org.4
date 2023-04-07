@@ -2,139 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6996DB518
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6BB6DB51B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjDGURh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 16:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
+        id S229808AbjDGUTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 16:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjDGURd (ORCPT
+        with ESMTP id S229848AbjDGUTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 16:17:33 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6300BC66C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:17:22 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id br6so55683883lfb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:17:22 -0700 (PDT)
+        Fri, 7 Apr 2023 16:19:49 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08ADE10F1
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:19:48 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5458201ab8cso437396227b3.23
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:19:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680898640;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t1Dozau9Cfq9VYaMqEkVJAHlGg5EPFMV8ybCE21m3s4=;
-        b=UolUM2z0Wpfky7Un5OucPfkBEOdsVm1Ssn36f5GawY6zPNERQejvKqaz6qgAipqlAa
-         ot0uvIKN+3DbX643XKOk3diLo9BDHlUV8ssCmM8hkWRC3maxIH72tY5T/fdR4ti8We8/
-         +adignQsho73jcfInhXv3Y1XLJS3xyN8pnY2ZEiHuoqqS4cyeHOyj93d7pqVpjdvxyop
-         mI3T0Jt3WCeHTUrO08x7rO2/DFJ6MAPvYNfq5ICcmeHyh8k9EvWLK2tASVjXreNnITHj
-         ZwsQZVxyPwmm34EjJbiiBoJS1aj77pSBSO3ZhkaFkRh+u1AEYQSXMxQ0vG2GBW4LITp2
-         hyfg==
+        d=google.com; s=20210112; t=1680898787; x=1683490787;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GJQMWpvn8MVU8sNDXW5eTLeruYhzG+Ay4iiSsRa6PWQ=;
+        b=jEiQebudI/8hsSRlocLarfn/xkRFCxpYqPvHtoha3Hl+wF+TJpDQ05DC3RXdBygwSp
+         rsryuYUExNymDw1GYNOvnTjR0tFtZE6TJSkkVeej2ZKZkVOdBKwWHBaqUrd5PVyMnDy1
+         i/5C3jCCyg/vNG7LrqWT5naKwBBPljkhlfT6/Uy7dZK2T4LB++JFJxXD3B7i30O0v0rX
+         in/FSgxZfBmtVD7Df8CXP/XI0LW9uFdRx/dmqTKnw8bpW3iyOj4tDobgaUMPbV2zau9p
+         QAmVMue1KLby4Kq40/h8QCBz2N1Apw8C7W97lArdoFwfD76FKE5wWd8S81iV7ZIY47h2
+         nu8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680898640;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t1Dozau9Cfq9VYaMqEkVJAHlGg5EPFMV8ybCE21m3s4=;
-        b=m9+R1+b9xmjgpWMNh4a5vz344Jvnaxy5D3QyRR4pVM/OrBLqCK9iWqLfhEl7pMZ4K/
-         K4dXwEGjNvGtwWUV1fdX1k+rLfRlRaCx/3jQ+SM1P6Nn4eAJ2wPesZDOhop64MIfX4xX
-         TR2iEXFxD44EtjV1Q4h4z52XEpFuXXcDVJKCsOT931sEZ2SbbbyLFIkROjnloRb5OMYe
-         8r5YKhYPK8rUeLQR+htyRz3N3ten6Ihxg+Bz9YwMNssG2pHnWHEmNdebZ0mz1HeJad6S
-         NWlA+WKKEskJlAz+W14pSqOZxKnXEMdG6T+jSs6QfRGkkB5FCyenvLBwriQr1J6V3uMk
-         OyPQ==
-X-Gm-Message-State: AAQBX9fOKQYQU8taX4qjZxH21DDDo75ibNScZFGSxRF/xmDN2YHPDk3r
-        RI0no+Y2s/3oA5BqL2ZVLkMfDA==
-X-Google-Smtp-Source: AKy350Z2JIekhTaqs1ClXrFa4SIlxWK9pWuzvd4Kdy8PeMZb0+IMYtMfKBSGlsY6ENxMpNpmx3raUg==
-X-Received: by 2002:a19:7418:0:b0:4db:3a92:2c85 with SMTP id v24-20020a197418000000b004db3a922c85mr761822lfe.67.1680898640661;
-        Fri, 07 Apr 2023 13:17:20 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id w1-20020ac24421000000b004eb51cf49d0sm854624lfl.306.2023.04.07.13.17.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 13:17:20 -0700 (PDT)
-Message-ID: <422abc8b-5c01-238b-7793-212597dbffc8@linaro.org>
-Date:   Fri, 7 Apr 2023 22:17:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH RFT v2 01/14] dt-bindings: clock: qcom,rpmcc: Add a way to
- enable unused clock cleanup
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org
-References: <20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org>
- <20230303-topic-rpmcc_sleep-v2-1-ae80a325fe94@linaro.org>
- <20230316225803.GA4036689-robh@kernel.org>
- <62533d5a-f39a-0806-b4d9-932e2af6beef@linaro.org>
- <5601e0edc19dc03d0fc516f9ffe4d1aa.sboyd@kernel.org>
- <2a379401-fe87-9e30-5449-513dd23c52f5@linaro.org>
-In-Reply-To: <2a379401-fe87-9e30-5449-513dd23c52f5@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20210112; t=1680898787; x=1683490787;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GJQMWpvn8MVU8sNDXW5eTLeruYhzG+Ay4iiSsRa6PWQ=;
+        b=tmIyttnOWYgQ0ksnhuxSQkrEFuzGpExvVCdlRzlDbBbj1T4s3zHq54ceafSOWG3YfO
+         ud8JhBHXs2G1OZ71ovh4JgOXqSmVMib18IjfLrDhjC6/jRQ0Y74scasV8vT5y3QfyS3M
+         e20rgwW3NPPFkygUR/nUt2DrfKLS/01BJBpgfS4Iy408V407Y/ZzhbnwMEcwAloeRBPL
+         5cv4aUmrDZcF6dGrHEAW1b4pj8nhmY6ArKnEsB+d3Uh2HVlbhvqpSYAcNtiNylhU2TJ9
+         u/U37N/wqEL3KFDMzBZ6ndEXfA5oOEHCjDH/0n59bglUI1SnpWcgvL/u81GLwr9IIpls
+         RQPA==
+X-Gm-Message-State: AAQBX9fUBSeZEEJFBno/etvQ6+aJlIMKFbwCs2CYd9T+KB7EVyEnxBeA
+        ly7rMizUgUUppnqXhD2nchMsxEWe9Q==
+X-Google-Smtp-Source: AKy350YYinBGf1TxiXyHxTA9ZuGbVR3aG35VgJ6mUfyDNtndvmIONMWL9+70TP2pVQ8ccPOCgSTPInSWeQ==
+X-Received: from sagi.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:241b])
+ (user=sagis job=sendgmr) by 2002:a25:d6c8:0:b0:b8b:fd23:5028 with SMTP id
+ n191-20020a25d6c8000000b00b8bfd235028mr2415459ybg.3.1680898787294; Fri, 07
+ Apr 2023 13:19:47 -0700 (PDT)
+Date:   Fri,  7 Apr 2023 20:19:16 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Message-ID: <20230407201921.2703758-1-sagis@google.com>
+Subject: [RFC PATCH 0/5] Add TDX intra host migration support
+From:   Sagi Shahar <sagis@google.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset adds support for TDX intra host migration using the same
+API which was added for SEV intra host migration here:
+https://lore.kernel.org/all/20211021174303.385706-1-pgonda@google.com/
 
+This patchset relies on the latest TDX patches from Intel:
+- fd-based approach for supporing KVM v10 and
+  https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@linux.intel.com/
+- TDX host kernel support v10
+  https://lore.kernel.org/lkml/cover.1678111292.git.kai.huang@intel.com/
+- KVM TDX basic feature support v13
+  https://lore.kernel.org/cover.1678643051.git.isaku.yamahata@intel.com
 
-On 6.04.2023 16:44, Konrad Dybcio wrote:
-> 
-> 
-> On 17.03.2023 19:20, Stephen Boyd wrote:
->> Quoting Konrad Dybcio (2023-03-16 17:31:34)
->>>
->>> On 16.03.2023 23:58, Rob Herring wrote:
->>>> On Wed, Mar 08, 2023 at 10:35:17PM +0100, Konrad Dybcio wrote:
->>>>>  
->>>>> +  qcom,clk-disable-unused:
->>>>> +    type: boolean
->>>>> +    description:
->>>>> +      Indicates whether unused RPM clocks can be shut down with the common
->>>>> +      unused clock cleanup. Requires a functional interconnect driver.
->>>>
->>>> I don't think this should be QCom specific. Come up with something 
->>>> common (which will probably have some debate). 
->>> Generally the opposite (ignoring unused clocks during the cleanup) is
->>> the thing you need to opt into.
->>>
->>> I can however see how (especially with the focus on not breaking things
->>> for older DTs) somebody else may also decide to only allow them to be
->>> cleaned up conditionally (by marking the clocks that were enabled earlier
->>> as enabled in Linux OR not addding clk.flags |= CLK_IGNORE_UNUSED) as we
->>> do here.
->>>
->>> Stephen, Rob, would `clk-disable-unused` be a fitting generic property
->>> name for that? Should we also think about `clk-ignore-unused` as a
->>> clock-controller-specific alternative to the CCF-wide clk_ignore_unused
->>> cmdline?
->>>
->>
->> There are multiple threads on the list about disabling unused clks.
->> Moving the decision to disable unused clks to a DT property is yet
->> another approach. I'd rather not do that, because it really isn't
->> describing the hardware configuration. If anything, I'd expect the
->> property to be describing which clks are enabled by the firmware and
->> then leave the decision to disable them because they're unused up to the
->> software.
-> After some more thinking, I realized that this could be made opt-in
-> simply with driver_data..
-> 
-> WDYT?
-..on a re-evaluation, obviously not a great idea.. Old DTBs will not
-be happy about that.
+The tree can be found at https://github.com/googleprodkernel/linux-cc/tree/copyless
+and is based on Intel's tdx tree at https://github.com/intel/tdx/tree/kvm-upstream
 
-Konrad
-> 
-> Konrad
+In the TDX case, we need to transfer the VM state from multiple sources:
+
+ * HKID and encrypted VM state is transfered between the kvm_tdx
+   objects.
+ * Encrypted and runtime state is transfered between the vcpu_tdx
+   objects.
+ * The EPT table backing TD's private memory is transfered at the
+   kvm-mmu level. This is needed since the secure EPT table managed by
+   the TD module remains the same after the migration so moving the
+   current private EPT table eliminates the need to rebuild the private
+   EPT table to match the secure EPT table on the destination.
+ * Information regarding the current shared/private memory is trasfered
+   using the mem_attr_array stored at the kvm object.
+ * Additional information derived from shared/private memory state is
+   trasfered at the memslot level.
+
+Tested with selftests locally. I will attach the self test in the next
+version after we send the new TDX selftest framework patches based on
+KVM TDX basic feature support v13.
+
+Sagi Shahar (5):
+  KVM: Split tdp_mmu_pages to private and shared lists
+  KVM: SEV: Refactor common code out of sev_vm_move_enc_context_from
+  KVM: TDX: Add base implementation for tdx_vm_move_enc_context_from
+  KVM: TDX: Implement moving private pages between 2 TDs
+  KVM: TDX: Add core logic for TDX intra-host migration
+
+ arch/x86/include/asm/kvm_host.h |   5 +-
+ arch/x86/kvm/mmu.h              |   2 +
+ arch/x86/kvm/mmu/mmu.c          |  60 ++++++++
+ arch/x86/kvm/mmu/tdp_mmu.c      |  88 +++++++++++-
+ arch/x86/kvm/mmu/tdp_mmu.h      |   3 +
+ arch/x86/kvm/svm/sev.c          | 175 +++--------------------
+ arch/x86/kvm/vmx/main.c         |  10 ++
+ arch/x86/kvm/vmx/tdx.c          | 245 ++++++++++++++++++++++++++++++++
+ arch/x86/kvm/vmx/tdx.h          |   2 +
+ arch/x86/kvm/vmx/x86_ops.h      |   5 +
+ arch/x86/kvm/x86.c              | 166 ++++++++++++++++++++++
+ arch/x86/kvm/x86.h              |  16 +++
+ 12 files changed, 613 insertions(+), 164 deletions(-)
+
+-- 
+2.40.0.348.gf938b09366-goog
+
