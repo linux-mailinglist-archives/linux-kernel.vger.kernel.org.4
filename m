@@ -2,84 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFEA6DAB4E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DB76DAB50
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjDGKPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S232660AbjDGKQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjDGKPB (ORCPT
+        with ESMTP id S229609AbjDGKQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:15:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEFA8A5B;
-        Fri,  7 Apr 2023 03:15:00 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [119.155.57.40])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Fri, 7 Apr 2023 06:16:01 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9268F86A6;
+        Fri,  7 Apr 2023 03:15:59 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 637A46603131;
-        Fri,  7 Apr 2023 11:14:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680862498;
-        bh=9WP6pUpBkOjkcvFCjLQ/X0oqCxKf/YO1tbGg0IwaD8g=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=cXZpGyfbBDqWqi9rMvJzyzWzubRZSu9ZlI+W4zmtflNBkvxlViQd2BU5RAr7Rb2Xb
-         zgsym/vALXf5K1nMX2MfNXL6VmHmmDgVMTocbmjp2LTDUH4Xz43C+q5YYfHLYHz7ho
-         9viO3eJkjQUYJvB8MB6IMDAWq0Xqn8UXep3s6yZTtXm1X9FbaJW0B5blLUvnpy6Zge
-         aU5fIqi3eBVWRKrouL0yLn7dgictkTDyK0VYY1yyUVZaH52po+CYg5e0Mgs1M3PWmy
-         wByDH8kZ/Qwiet4sxyGVYesTr62q6iKAr98uEPY6dzO4DUJJrmruewJ9traJ8MEioM
-         X06VRpYxIA9LQ==
-Message-ID: <b3e4d688-b96f-7c44-a6be-375d44263c85@collabora.com>
-Date:   Fri, 7 Apr 2023 15:14:47 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 4239D14B818;
+        Fri,  7 Apr 2023 12:15:56 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1680862556; bh=PaIGonr5JMM+Z9od4ricOA/7Hr3fGMxSQp5ApjSQwqw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DNqwBXXvCxQ8a7C2kJ5An/Ucg5U5OkUQ3Utahbqx2rhCY7B/Gw1j8zQS7oQO2PK4d
+         OEOwIAQ+FoFE86ayjF16PfihXWG0zgOB4Onzs+jpTaLweXTG8jddQXY/W643jq8Ak3
+         I6a/GBljeXX9H4JaINyEH9bxopBJdZZIQIMCSiw6OVk380au26T+8G9Nu4vfvnkCG/
+         mxxDVVk5BljTm5rG82UshnUop9DV1ul8cVmZEDZkHYtvfmAAC93V0v2fRynBvT5HdQ
+         MUCbpjgK/DaCkGrhD0k1y6u2xPBQbtVEZ/U/pRv0lVJLHos/u+rX3rhngO1X99kyVg
+         M/NJ8vibVVIdw==
+Date:   Fri, 7 Apr 2023 12:15:55 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com>
- <CABb0KFFTb3LCbyPWLSodtntw=tizYki-pc4nSHBmQOFhKoNYfA@mail.gmail.com>
- <b737dceb-a228-7ffe-0758-421505f1a61d@collabora.com>
- <CABb0KFF+sKSv7jdxBbXpt5A2WO83tKb9viq-kKurXN_e1VcFhQ@mail.gmail.com>
- <c535ce4a-d7da-1ce2-9883-7cefb6dd88a2@collabora.com>
- <CABb0KFE8pn+VORr8c=HWzKzJ5L5ZBRZMg2Q1dEZGU9gLqGZNLQ@mail.gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFE8pn+VORr8c=HWzKzJ5L5ZBRZMg2Q1dEZGU9gLqGZNLQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux.dev>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Alexander Graf <graf@amazon.com>
+Subject: Re: [RFC v1 3/4] swiotlb: Allow dynamic allocation of bounce
+ buffers
+Message-ID: <20230407121555.4290a011@meshulam.tesarici.cz>
+In-Reply-To: <20230407055704.GD6803@lst.de>
+References: <cover.1679309810.git.petr.tesarik.ext@huawei.com>
+        <0334a54332ab75312c9de825548b616439dcc9f5.1679309810.git.petr.tesarik.ext@huawei.com>
+        <20230328040724.GB25506@lst.de>
+        <4268fa4e-4f0f-a2f6-a2a5-5b78ca4a073d@huaweicloud.com>
+        <8cf7c515-9ce6-a2ed-0643-972aa3eba2fb@huaweicloud.com>
+        <20230407055704.GD6803@lst.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,72 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 3:04 PM, Michał Mirosław wrote:
-> On Fri, 7 Apr 2023 at 11:35, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> On 4/7/23 12:23 PM, Michał Mirosław wrote:
->>> On Thu, 6 Apr 2023 at 23:12, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>> On 4/7/23 1:12 AM, Michał Mirosław wrote:
->>>>> On Thu, 6 Apr 2023 at 09:40, Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
->>>>> [...]
->>>>>> --- a/fs/proc/task_mmu.c
->>>>>> +++ b/fs/proc/task_mmu.c
->>>>> [...]
->>>>>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
->>>>>> +                                 unsigned long end, struct mm_walk *walk)
->>>>>> +{
->>> [...]
->>>>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->>>>>> +       ptl = pmd_trans_huge_lock(pmd, vma);
->>>>>> +       if (ptl) {
->>>>> [...]
->>>>>> +               return ret;
->>>>>> +       }
->>>>>> +process_smaller_pages:
->>>>>> +       if (pmd_trans_unstable(pmd))
->>>>>> +               return 0;
->>>>>
->>>>> Why pmd_trans_unstable() is needed here and not only after split_huge_pmd()?
->>>> I'm not entirely sure. But the idea is if THP is unstable, we should
->>>> return. As it doesn't seem like after splitting THP can be unstable, we
->>>> should not check it. Do you agree with the following?
->>>
->>> The description of pmd_trans_unstable() [1] seems to indicate that it
->>> is needed only after split_huge_pmd().
->>>
->>> [1] https://elixir.bootlin.com/linux/v6.3-rc5/source/include/linux/pgtable.h#L1394
->> Sorry, yeah pmd_trans_unstable() is need after split. But it is also needed
->> in normal case when ptl is NULL to rule out the case if pmd is unstable
->> before performing operation on normal pages:
->>
->> ptl = pmd_trans_huge_lock(pmd, vma);
->> if (ptl) {
->> ...
->> }
->> if (pmd_trans_unstable(pmd))
->>         return 0;
->>
->> This file has usage examples of pmd_trans_unstable():
->>
->> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L634
->> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1195
->> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1543
->> https://elixir.bootlin.com/linux/v6.3-rc5/source/fs/proc/task_mmu.c#L1887
->>
->> So we are good with what we have in this patch.
-> 
-> Shouldn't we signal ACTION_AGAIN then in order to call .pte_hole?
-I'm not sure. I've not done research on it if we need to signal
-ACTION_AGAIN as this function pagemap_scan_pmd_entry() mimics how
-pagemap_pmd_range() handles reads to the pagemap file. pagemap_pmd_range()
-isn't doing anything if pmd is unstable. Hence we also not doing anything.
+On Fri, 7 Apr 2023 07:57:04 +0200
+Christoph Hellwig <hch@lst.de> wrote:
 
+> On Tue, Mar 28, 2023 at 02:43:03PM +0200, Petr Tesarik wrote:
+> > Oh, wait! I can do at least something for devices which do not use
+> > swiotlb at all.
+> > 
+> > If a device does not use bounce buffers, it cannot pass an address
+> > that belongs to the swiotlb. Consequently, the potentially
+> > expensive check can be skipped. This avoids the dynamic lookup
+> > penalty for devices which do not need the swiotlb.
+> > 
+> > Note that the counter always remains zero if dma_io_tlb_mem is
+> > NULL, so the NULL check is not required.  
 > 
-> Best Regards
-> Michał Mirosław
+> Hmm, that's yet another atomic for each map/unmap, and bloats
+> struct device.
 
--- 
-BR,
-Muhammad Usama Anjum
+I'm not sure how bad it is to bloat struct device. It is already quite
+large, e.g. in my x86 build it is 768 bytes (exact size depends on
+config options), and nobody seems to be concerned...
+
+Regarding the atomic operations, I am currently testing a slightly
+different approach, which merely sets a flag if there are any
+dynamically allocated bounce buffers. The atomic check changes to
+smp_load_acquire(), and the atomic inc/dec to smp_store_release()
+only if the flag changes. That said, if I hammer this path with heavy
+parallel I/O, I can still see some performance cost for devices that
+use swiotlb, but at least devices that do not need such bounce buffers
+seem to be unaffected then.
+
+> (Btw, in case anyone is interested, we really need to get started
+> on moving the dma fields out of struct device into a sub-struct
+> only allocated for DMA capable busses)
+
+I like this idea. In fact, my WIP topic branch now moves the swiotlb
+fields into a separate struct, but I can surely go further and move all
+DMA-related fields. I doubt it is worth to allocate it separately,
+though. We are talking about replacing some 100 bytes (in the worst
+case) with a pointer to a dynamically allocated struct, but the
+dynamic allocator adds some overhead. I believe it pays off only if the
+vast majority of struct device instances do not need these DMA fields,
+but is that really the case?
+
+Petr T
