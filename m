@@ -2,58 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7796DB1E2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF386DB1E4
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjDGRjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S230230AbjDGRjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjDGRjA (ORCPT
+        with ESMTP id S230335AbjDGRjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:39:00 -0400
+        Fri, 7 Apr 2023 13:39:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F0DC178;
-        Fri,  7 Apr 2023 10:38:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBB1B47A;
+        Fri,  7 Apr 2023 10:38:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B8BA65330;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AC7965338;
+        Fri,  7 Apr 2023 17:38:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A74C433D2;
         Fri,  7 Apr 2023 17:38:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F34E0C4339C;
-        Fri,  7 Apr 2023 17:38:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680889120;
-        bh=i289+hl/QqcGgL1+leVcwWwADguaW9LS68DYAjdH9Mo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JWLeHXHmokaY2r3rykciN0xUhAeEamO9zMzY4WWx/3SkbcE9EcKR2dSIK/j+iZQ//
-         OvHAPTbx51/BnOxM6YBN0K3t6FzE6S92HmeiRRCtDYU3yNQIJ2d+GOLrgIQIGEEQoy
-         jDdU9P205AqyxhOj15IIIwDbH2hIkjO0V3r8wRk6KFPk4HJQTzffRQmN4UkGRXMGFn
-         f2i2xTzEv7gkPrzhjkpC06Kg7vPh5Lmhf5wLIgQKSlg76JohKSkZFWl00IQ8Zx7U5e
-         lWFk6lmBSJObibkqbm3zj0O/5U86f0D2JmnBZ5S4RtqNij8WPJtBmTBrQWDVfJY222
-         57jr7wThylOpw==
+        s=k20201202; t=1680889121;
+        bh=OQSosJYSuZVbDTMHCZ0H3HYidHURX5xdpy3yEE+Eb9k=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=qY+CAeSJgIHvMupF+KC04cNMhlT6Dj2TYQ6XSPaZu3rXWA0qkLudxoxmsuCeXR4KC
+         hwUOR1pznjXxvPwqVh2izqJAIcL9SUT1a6heLH0YlhYHZyT4M3M+8gh7jSqbp8Agbz
+         dZTigZfJsB38f7MZ+ebSHT0QQwudM+OefzX2yaGVZnEDL5ZEKCYY959JEftGXLtDGv
+         TIhS2pI1sDsDAtuIFj7OfTh0+xaGMTqOBzi7JL5n04bteeMeBtFW+dxow+5UvbIBtw
+         b3A2k335AtIlImv0rxbajLQ1OhZdFnxzhyJtTsbZHsngnCchxq8h89M32wK9jU1YOg
+         nl4XDdcVuRBpQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     mturquette@baylibre.com, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, will@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        linux-clk@vger.kernel.org, agross@kernel.org,
-        linus.walleij@linaro.org, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, linux-kernel@vger.kernel.org,
-        konrad.dybcio@linaro.org, Devi Priya <quic_devipriy@quicinc.com>,
-        broonie@kernel.org, sboyd@kernel.org, marcel.ziswiler@toradex.com,
-        linux-arm-msm@vger.kernel.org
-Cc:     quic_poovendh@quicinc.com, quic_kathirav@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_gokulsri@quicinc.com
-Subject: Re: (subset) [PATCH V9 0/6] Add minimal boot support for IPQ9574
-Date:   Fri,  7 Apr 2023 10:41:16 -0700
-Message-Id: <168088927579.2561591.423595679057929869.b4-ty@kernel.org>
+To:     krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        wim@linux-watchdog.org, robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kathiravan T <quic_kathirav@quicinc.com>,
+        konrad.dybcio@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH V2 0/2] Add few device nodes for IPQ5332 SoC
+Date:   Fri,  7 Apr 2023 10:41:17 -0700
+Message-Id: <168088927578.2561591.12316304033286537024.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230316072940.29137-1-quic_devipriy@quicinc.com>
-References: <20230316072940.29137-1-quic_devipriy@quicinc.com>
+In-Reply-To: <20230320104530.30411-1-quic_kathirav@quicinc.com>
+References: <20230320104530.30411-1-quic_kathirav@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,21 +57,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 12:59:34 +0530, Devi Priya wrote:
-> The IPQ9574 is Qualcomm's 802.11ax SoC for Routers,
-> Gateways and Access Points
+On Mon, 20 Mar 2023 16:15:28 +0530, Kathiravan T wrote:
+> This series adds the support for QUP peripherals, PRNG, WDT for IPQ5332
+> SoC.
 > 
-> This series adds minimal board boot support for ipq9574-al02-c7 board
+> This series depends on the below patch, due to the node ordering
+> https://lore.kernel.org/linux-arm-msm/20230217083308.12017-6-quic_kathirav@quicinc.com/#t
 > 
-> V8 can be found at:
-> https://lore.kernel.org/linux-arm-kernel/20230214163116.9924-1-quic_devipriy@quicinc.com/
+> Kathiravan T (2):
+>   dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-ipq5332 compatible
+>   arm64: dts: qcom: ipq5332: add few device nodes
 > 
 > [...]
 
 Applied, thanks!
 
-[6/6] arm64: defconfig: Enable IPQ9574 SoC base configs
-      commit: 34d1a90bdb8a2759b9646c8596eea495b4cb02ac
+[2/2] arm64: dts: qcom: ipq5332: add few device nodes
+      commit: d0367098dc1e925d22a6706e358636d12371116c
 
 Best regards,
 -- 
