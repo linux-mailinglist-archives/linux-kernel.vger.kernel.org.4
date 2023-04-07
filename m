@@ -2,109 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C4E6DA7A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5FE6DA7A6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240450AbjDGCSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 22:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
+        id S240437AbjDGCUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 22:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240435AbjDGCSn (ORCPT
+        with ESMTP id S240579AbjDGCT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 22:18:43 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC9C19A2
-        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 19:18:41 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e22-20020a25e716000000b00b8c0264c7bdso2478787ybh.20
-        for <linux-kernel@vger.kernel.org>; Thu, 06 Apr 2023 19:18:41 -0700 (PDT)
+        Thu, 6 Apr 2023 22:19:59 -0400
+Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B160BF5;
+        Thu,  6 Apr 2023 19:19:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680833920;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NM3Z7cWxI8VgV2XX878CM3uoNsycYkoMYtaVz8/N1I0=;
-        b=JGWnVDonFr7VmZ2kaJUOTe//CwQ+BYZhctxv/nQh12y8X44DdQq2iVCQBI9tqZxGd/
-         0KquaLo1cvhtPAH0IlRjD8MPKMTxKugwlzhjJP2l1LtcDbDXPBESuAwf1d1+k6MrnOHU
-         D1XiV1c3GqNobn2XqB1fnwGqP+9WYk7lHBPMfRDUR3kfJHOu91BelcC7JfjOFGDm/A3o
-         C9PGz6pf30pvdw5FFLM9QtCO5jfks1FeMiId2MdQjteS3SzYbfqIIgbFPiiX/egFsNX7
-         TuNT7xBKg7Vc99HIbCdDmBVlh/qyL3u20GMRE4UEsQjjDjnc/z1mWtAi+K2eBEF8WjNX
-         Wr9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680833920;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NM3Z7cWxI8VgV2XX878CM3uoNsycYkoMYtaVz8/N1I0=;
-        b=D6ltNKfu1yWCuGKdmmfgkxOsk/q9vNdrhN5PgKorVwr6PmHfwAxjeQAHGNgmLxixUz
-         RZ0U0DZUw7D+W0iHg9EJYxOyOp1BExSz6XpE1VW4exWn9XtWZdV8aDQMq/xOX2/CNmx1
-         zYsiZG2PB8GebkO6K42Jz878UyQaKRG8BpwZlevcr+tZhkXOz2lMwpuPGeVRHggt/JH7
-         +LBrQ/WIVrdlC4kHP9jb2RDTMNTVa5tOzg469EbJwRiID+IJsjHRmESXrJJ7S2J/gKZe
-         ofFfFAg8qXMr8dawHQ4FRWoiA/BujHCKnG7ALuJgRfLAMUpkDqAmtMc+mYMnA2vyCqD1
-         qY4Q==
-X-Gm-Message-State: AAQBX9cru/+nQEE0Hutxxb3JEwtmPu8/uiYne1/Uo3zMl9ADcfGGWHvD
-        g4PrHcK3SNf/m5Hpz6oty8D+X9s6b1w=
-X-Google-Smtp-Source: AKy350a1NCLn+tgVEdl3G2usrimBWUcS0wPCR6h6zv+GoZPIROVYSl/Vegjn8xVBwAMs0hFntEsvbq4xRuw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:909:b0:a27:3ecc:ffe7 with SMTP id
- bu9-20020a056902090900b00a273eccffe7mr3536502ybb.3.1680833920841; Thu, 06 Apr
- 2023 19:18:40 -0700 (PDT)
-Date:   Thu, 6 Apr 2023 19:18:39 -0700
-In-Reply-To: <20230310105346.12302-6-likexu@tencent.com>
-Mime-Version: 1.0
-References: <20230310105346.12302-1-likexu@tencent.com> <20230310105346.12302-6-likexu@tencent.com>
-Message-ID: <ZC99f+AO1tZguu1I@google.com>
-Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
- VMRUN instruction
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1680833998; x=1712369998;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gu18fQBDefHfFBaWLLukFJTFMSx2LdNYMtkpPFB6n0w=;
+  b=EyxQ8ZCm5nocHVeyA2+u2eYm77DZNh1nCbuWNPxBn5fLVHW2oNnEMf5V
+   iSXMx/07gQMEedFhSEiDdqodHyKDo6PK5SjHhRWAVu6RvOiPAYGmFvVuH
+   RyNsaZFNPD4QB96+GnJolT6VyZ5xBJL1UQpPkpmk/7o/fZdFI9R1vGhOu
+   0=;
+X-IronPort-AV: E=Sophos;i="5.98,324,1673913600"; 
+   d="scan'208";a="315762380"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 02:19:54 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com (Postfix) with ESMTPS id 9AC30A0AAC;
+        Fri,  7 Apr 2023 02:19:52 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Fri, 7 Apr 2023 02:19:52 +0000
+Received: from 88665a182662.ant.amazon.com (10.119.181.3) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 7 Apr 2023 02:19:49 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <kuba@kernel.org>
+CC:     <corbet@lwn.net>, <davem@davemloft.net>, <dsahern@kernel.org>,
+        <edumazet@google.com>, <kuniyu@amazon.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <yuehaibing@huawei.com>
+Subject: Re: [PATCH net] tcp: restrict net.ipv4.tcp_app_win
+Date:   Thu, 6 Apr 2023 19:19:41 -0700
+Message-ID: <20230407021941.5401-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230406185926.7da74db2@kernel.org>
+References: <20230406185926.7da74db2@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.119.181.3]
+X-ClientProxiedBy: EX19D039UWB003.ant.amazon.com (10.13.138.93) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+From:   Jakub Kicinski <kuba@kernel.org>
+Date:   Thu, 6 Apr 2023 18:59:26 -0700
+> On Thu, 6 Apr 2023 14:34:50 +0800 YueHaibing wrote:
+> > UBSAN: shift-out-of-bounds in net/ipv4/tcp_input.c:555:23
+> > shift exponent 255 is too large for 32-bit type 'int'
+> > CPU: 1 PID: 7907 Comm: ssh Not tainted 6.3.0-rc4-00161-g62bad54b26db-dirty #206
+> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> > Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x136/0x150
+> >  __ubsan_handle_shift_out_of_bounds+0x21f/0x5a0
+> >  tcp_init_transfer.cold+0x3a/0xb9
+> >  tcp_finish_connect+0x1d0/0x620
+> >  tcp_rcv_state_process+0xd78/0x4d60
+> >  tcp_v4_do_rcv+0x33d/0x9d0
+> >  __release_sock+0x133/0x3b0
+> >  release_sock+0x58/0x1b0
+> > 
+> > 'maxwin' is int, shifting int for 32 or more bits is undefined behaviour.
+> > 
+> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 > 
-> When AMD guest is counting (branch) instructions event, its vPMU should
-> first subtract one for any relevant (branch)-instructions enabled counter
-> (when it precedes VMRUN and cannot be preempted) to offset the inevitable
-> plus-one effect of the VMRUN instruction immediately follows.
-> 
-> Based on a number of micro observations (also the reason why x86_64/
-> pmu_event_filter_test fails on AMD Zen platforms), each VMRUN will
-> increment all hw-(branch)-instructions counters by 1, even if they are
-> only enabled for guest code. This issue seriously affects the performance
-> understanding of guest developers based on (branch) instruction events.
-> 
-> If the current physical register value on the hardware is ~0x0, it triggers
-> an overflow in the guest world right after running VMRUN. Although this
-> cannot be avoided on mainstream released hardware, the resulting PMI
-> (if configured) will not be incorrectly injected into the guest by vPMU,
-> since the delayed injection mechanism for a normal counter overflow
-> depends only on the change of pmc->counter values.
+> Fixes tag?
 
-IIUC, this is saying that KVM may get a spurious PMI, but otherwise nothing bad
-will happen?
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 
-> +static inline bool event_is_branch_instruction(struct kvm_pmc *pmc)
-> +{
-> +	return eventsel_match_perf_hw_id(pmc, PERF_COUNT_HW_INSTRUCTIONS) ||
-> +		eventsel_match_perf_hw_id(pmc,
-> +					  PERF_COUNT_HW_BRANCH_INSTRUCTIONS);
-> +}
-> +
-> +static inline bool quirky_pmc_will_count_vmrun(struct kvm_pmc *pmc)
-> +{
-> +	return event_is_branch_instruction(pmc) && event_is_allowed(pmc) &&
-> +		!static_call(kvm_x86_get_cpl)(pmc->vcpu);
-
-Wait, really?  VMRUN is counted if and only if it enters to a CPL0 guest?  Can
-someone from AMD confirm this?  I was going to say we should just treat this as
-"normal" behavior, but counting CPL0 but not CPL>0 is definitely quirky.
+It's been broken since the beginning.
