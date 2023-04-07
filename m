@@ -2,153 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0B06DA9EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46DA6DA9FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240193AbjDGIRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S239768AbjDGIUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbjDGIRR (ORCPT
+        with ESMTP id S239780AbjDGIUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:17:17 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5789EEA;
-        Fri,  7 Apr 2023 01:16:38 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PtB0T2lfSz17RG4;
-        Fri,  7 Apr 2023 16:11:37 +0800 (CST)
-Received: from [10.40.193.166] (10.40.193.166) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 7 Apr 2023 16:15:04 +0800
-Subject: Re: [PATCH] scsi: hisi_sas: work around build failure in suspend
- function
-To:     Arnd Bergmann <arnd@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Yihang Li <liyihang9@huawei.com>
-References: <20230405083611.3376739-1-arnd@kernel.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, John Garry <john.garry@huawei.com>,
-        Xingui Yang <yangxingui@huawei.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <ef58d36e-9b67-d2b6-5671-be27d739f928@hisilicon.com>
-Date:   Fri, 7 Apr 2023 16:15:03 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        Fri, 7 Apr 2023 04:20:44 -0400
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B26A5CD;
+        Fri,  7 Apr 2023 01:20:36 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-62815785926so391171b3a.0;
+        Fri, 07 Apr 2023 01:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680855334; x=1683447334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cSkbBiuLB6EkGYLfjV6DampPuHrUk13biBZcIGQ2peU=;
+        b=T6/f2eU7wdDY5hzejW0bh8FXBPnQejv4TxIVXCTTBd85t1J86tAPLrQi3knaBpFhHW
+         sUjK2LHxlbiFQRsFlqoRYZsLvJ2kmsMYK6OE6HfbCZKBufTgTcvX5KQ4H6wJk4n6IN8W
+         LPmneryxWoaPe+WwJwrarbHXXFQ5kGHrD84noDFKNucsjcYkqTxck0hBDmc2relix8oG
+         NZiUsUfJ1LhELnUqjEo0W1emBfSWT5CyTHgF6BDAnYRHnbyzagUdt/KBO6vG9RsjUy7u
+         QxB2+lOqATK1znA9j3KTwbdQgzXx8W6geHIsWCLgClpvdKxLbOz2I1qdOuDFGV4YXJnc
+         CuJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680855334; x=1683447334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSkbBiuLB6EkGYLfjV6DampPuHrUk13biBZcIGQ2peU=;
+        b=c/C9ENf3P3mt5jJtxHobzGcCjCoAoiQBjVTgzHpY4lSR9b58ajFrZaqMTz6G+th/A6
+         oWTjSn7G7f9V6hCk5GFqTDlz6+uYwcCsWPCxx8sLDdxWx3wfDuYde0x+/lBetNl18v3+
+         mt5UmoUneBa/7WCm7941JtnM0zH22WnKE3shDYiUMT4VUtrUx49kAq6X+xHX2NRBh3dS
+         ApjAFnMZjFsmHQTcu4rNaWp/Zatmwy75ia1ciROU6GO4GDGX2JwAIpWKeQD6VG/SJ9L5
+         IFUT4BOtFAjkZFQYuiGO1LaFAymroLIm+OMkQ6VFBeYHVhjELEN5NB41QxF7qd9U1vdY
+         xAmw==
+X-Gm-Message-State: AAQBX9d3YLqQ5YPWfCG381ygZ2i2zf8oZjBwRHBoH/xSj7qxFA0/Sa2q
+        qrVeB6iawuPLrmbKFs3a5Rg=
+X-Google-Smtp-Source: AKy350YTeZLtmCKT91uMeI/t7cVLGXJ0tpxcLySX8dJrCVTDyOTE5GoYaGTydXsbOHeIxJlY2uLhEg==
+X-Received: by 2002:a62:84d2:0:b0:622:8a8e:8cf8 with SMTP id k201-20020a6284d2000000b006228a8e8cf8mr1408033pfd.14.1680855334020;
+        Fri, 07 Apr 2023 01:15:34 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id fe12-20020a056a002f0c00b0062d942f0ad3sm2506287pfb.51.2023.04.07.01.15.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 01:15:33 -0700 (PDT)
+Message-ID: <509b697f-4e60-94e5-f785-95f7f0a14006@gmail.com>
+Date:   Fri, 7 Apr 2023 16:15:24 +0800
 MIME-Version: 1.0
-In-Reply-To: <20230405083611.3376739-1-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.40.193.166]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 5/5] KVM: x86/pmu: Hide guest counter updates from the
+ VMRUN instruction
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230310105346.12302-1-likexu@tencent.com>
+ <20230310105346.12302-6-likexu@tencent.com> <ZC99f+AO1tZguu1I@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <ZC99f+AO1tZguu1I@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 7/4/2023 10:18 am, Sean Christopherson wrote:
+> On Fri, Mar 10, 2023, Like Xu wrote:
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> When AMD guest is counting (branch) instructions event, its vPMU should
+>> first subtract one for any relevant (branch)-instructions enabled counter
+>> (when it precedes VMRUN and cannot be preempted) to offset the inevitable
+>> plus-one effect of the VMRUN instruction immediately follows.
+>>
+>> Based on a number of micro observations (also the reason why x86_64/
+>> pmu_event_filter_test fails on AMD Zen platforms), each VMRUN will
+>> increment all hw-(branch)-instructions counters by 1, even if they are
+>> only enabled for guest code. This issue seriously affects the performance
+>> understanding of guest developers based on (branch) instruction events.
+>>
+>> If the current physical register value on the hardware is ~0x0, it triggers
+>> an overflow in the guest world right after running VMRUN. Although this
+>> cannot be avoided on mainstream released hardware, the resulting PMI
+>> (if configured) will not be incorrectly injected into the guest by vPMU,
+>> since the delayed injection mechanism for a normal counter overflow
+>> depends only on the change of pmc->counter values.
+> 
+> IIUC, this is saying that KVM may get a spurious PMI, but otherwise nothing bad
+> will happen?
 
+Guests will have nothing to lose, except gaining vPMI accuracy under this proposal.
 
-在 2023/4/5 16:36, Arnd Bergmann 写道:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The suspend/resume functions in this driver seem to have multiple
-> problems, the latest one just got introduced by a bugfix:
->
-> drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
-> drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
->   5142 |         if (atomic_read(&device->power.usage_count)) {
-> drivers/scsi/hisi_sas/hisi_sas_v3_hw.c: In function '_suspend_v3_hw':
-> drivers/scsi/hisi_sas/hisi_sas_v3_hw.c:5142:39: error: 'struct dev_pm_info' has no member named 'usage_count'
->   5142 |         if (atomic_read(&device->power.usage_count)) {
->
-> As far as I can tell, the 'usage_count' is not meant to be accessed
-> by device drivers at all, though I don't know what the driver is
-> supposed to do instead.
+When a host gets an overflow interrupt caused by a VMRUN, it forwards it to KVM.
+KVM does not inject it into the VM, but discards it. For those using PMU to 
+profiling
+the hypervisor itself, they lose an interrupt or a sample on VMRUN context.
 
-Thank you for reporting the issue.
-There is a extreme situation that hisi_sas driver tries to resume 
-controller when it is in the process of suspend, which will cause a 
-deadlock.
-So we check usage_count of controller, and if usage_count > 0, failed to 
-suspend to avoid the issue. But there is no common function defined
-in pm_runtime.h which check the usage_count of device, so use it 
-directly (i saw the check also be used in other drivers).
-But i didn't realize that member usage_count is defined only under 
-CONFIG_PM=y.
+> 
+>> +static inline bool event_is_branch_instruction(struct kvm_pmc *pmc)
+>> +{
+>> +	return eventsel_match_perf_hw_id(pmc, PERF_COUNT_HW_INSTRUCTIONS) ||
+>> +		eventsel_match_perf_hw_id(pmc,
+>> +					  PERF_COUNT_HW_BRANCH_INSTRUCTIONS);
+>> +}
+>> +
+>> +static inline bool quirky_pmc_will_count_vmrun(struct kvm_pmc *pmc)
+>> +{
+>> +	return event_is_branch_instruction(pmc) && event_is_allowed(pmc) &&
+>> +		!static_call(kvm_x86_get_cpl)(pmc->vcpu);
+> 
+> Wait, really?  VMRUN is counted if and only if it enters to a CPL0 guest?  Can
+> someone from AMD confirm this?  I was going to say we should just treat this as
+> "normal" behavior, but counting CPL0 but not CPL>0 is definitely quirky.
 
+VMRUN is only counted on a CPL0-target (branch) instruction counter. The VMRUN
+is not expected to be counted by the guest counters, regardless of the guest CPL.
 
->
-> Another problem is the use of the deprecated UNIVERSAL_DEV_PM_OPS(),
-> and marking functions as __maybe_unused to avoid warnings about
-> unused functions.  This should probably be changed to using
-> DEFINE_RUNTIME_DEV_PM_OPS().
+This issue makes a guest CPL0-target instruction counter inexplicably increase, 
+as if it
+would have been under-counted before the virtualization instructions were counted.
 
-We use UNIVERSAL_DEV_PM_OPS() just because runtime callbacks 
-runtime_{suspend|resume} and system callbacks {suspend|resume} use the same
-operations in the driver, otherwise, we need to use 
-DEFINE_RUNTIME_DEV_PM_OPS() to define runtime callbacks and use 
-DEFINE_SIMPLE_DEV_PM_OPS()
-to define system callbacks.
-
->
-> Both changes require actually understanding what the driver needs to
-> do, and being able to test this, so instead here is the simplest
-> patch to make it pass the randconfig builds instead.
->
-> Fixes: e368d38cb952 ("scsi: hisi_sas: Exit suspend state when usage count is greater than 0")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> Maintainers: If possible, please revisit this to do a proper fix.
-> If that takes too much time, this patch can be applied as a
-> workaround in the meantime, and might also help in case the
-> e368d38cb952 patch gets backported to stable kernels.
-
-It is ok to apply the patch as a workaround as soon as possible.
-
-Reviewed-by: Xiang Chen <chenxiang66@hisilicon.com>
-
-Thanks!
-
-> ---
->   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> index d160b9b7479b..12d588454f5d 100644
-> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-> @@ -5139,11 +5139,13 @@ static int _suspend_v3_hw(struct device *device)
->   	flush_workqueue(hisi_hba->wq);
->   	interrupt_disable_v3_hw(hisi_hba);
->   
-> +#ifdef CONFIG_PM
->   	if (atomic_read(&device->power.usage_count)) {
->   		dev_err(dev, "PM suspend: host status cannot be suspended\n");
->   		rc = -EBUSY;
->   		goto err_out;
->   	}
-> +#endif
->   
->   	rc = disable_host_v3_hw(hisi_hba);
->   	if (rc) {
-> @@ -5162,7 +5164,9 @@ static int _suspend_v3_hw(struct device *device)
->   
->   err_out_recover_host:
->   	enable_host_v3_hw(hisi_hba);
-> +#ifdef CONFIG_PM
->   err_out:
-> +#endif
->   	interrupt_enable_v3_hw(hisi_hba);
->   	clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
->   	clear_bit(HISI_SAS_RESETTING_BIT, &hisi_hba->flags);
-
+Treating the host hypervisor instructions like VMRUN as guest workload instructions
+is already an error in itself not "normal" behavior that affects guest accuracy.
