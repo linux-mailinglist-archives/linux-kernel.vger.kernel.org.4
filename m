@@ -2,154 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122226DA766
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF406DA785
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjDGCFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 22:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
+        id S240518AbjDGCLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 22:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240256AbjDGCFc (ORCPT
+        with ESMTP id S239785AbjDGCLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 22:05:32 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B4DD324;
-        Thu,  6 Apr 2023 19:03:51 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id dg15so24295925vsb.13;
-        Thu, 06 Apr 2023 19:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680832939; x=1683424939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QNjYz0mwAEnp5iGFtGlkbjUifhzDTS1lkAnmUE+wQDs=;
-        b=k0Rk6Klrd+NMVlkQ0I4To0EBVYkq06tJRKyF9Q+HTZZ0mjPeotBo3paE++cFPYF74I
-         d7YMh7vQCKZi1N9BOffWx91Z9WKlyoiq8QIJe2HB3hbBC/XT6aa52OB/+8fug6vGCi1D
-         Nia+kmPulIYI1u+DRUOoTPbVkxzFpd10SUkVkW00sps43RMJ/0UWdKnXPLRV/OSqjmi8
-         gZl+aiT8xrAeqf1Vpf+QzMN9k0mRMRhaw+u6oqUurjvtM+n18w2/8gxsC1kd+w7FC2nn
-         ZXYQqe0Qqim7CRV9MMMbxO5dOwfeUjdeIE99mgOFkjWw0tD6DM0lBb2rdCFNnUi4vm/M
-         3HbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680832939; x=1683424939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QNjYz0mwAEnp5iGFtGlkbjUifhzDTS1lkAnmUE+wQDs=;
-        b=H9g2dANrHmsqL3PUQcRVszm1lVPbos3LcAiYt23doHI7qvn/L6BORbCk69oxUl+tib
-         w4x7IhUbtve4/dg4bdzQSorQi/QjGKbsgtEACh6zhV+zhbA+xHiqgX5sZuM4hlu0g4+U
-         uv+Jtb8VZuxSTTf8ccDvC15y1fNHLB0wNMi8iaGnj72hQg+YE05IdS5tLdNjKnLUaNBu
-         sndsXD/tic39/ltFo7RXYP4/VN+xDPSnxwyA1D1V5Q6EI44rByfUe3xAj7f9pE8Vsle9
-         XIKXEiS6e4BnjwxrvMUA8sEgNjpTYM8GKqvzXrEvQteeu7UTxp+sV7E1u+czGoJz5SkL
-         gdcg==
-X-Gm-Message-State: AAQBX9dNl0ALa9FBbg5F2tGWFe4+4p7Ec2b3dj1M0xvgo+1wMUwNSGa2
-        ajTtGLgSIq2vL+ZKjTXDHpVJAcp7vUIAzqLvMsI=
-X-Google-Smtp-Source: AKy350bGEsmljBB5v0+qgjtoyZwIZGaewYP8JGjSoxxkH0iyM7Jm0eZvtJ9T10+AG3zRu8TocoTTHS8eeuT3PBMxDmM=
-X-Received: by 2002:a67:c190:0:b0:425:969d:3709 with SMTP id
- h16-20020a67c190000000b00425969d3709mr326145vsj.3.1680832939251; Thu, 06 Apr
- 2023 19:02:19 -0700 (PDT)
+        Thu, 6 Apr 2023 22:11:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9506BDC9
+        for <linux-kernel@vger.kernel.org>; Thu,  6 Apr 2023 19:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680833310;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q9mDbmCDWIZufpdSQOQtCy1IYkjHuQ55FDYgdUqKYCs=;
+        b=ZbZSzu4M7ut8LMmFc1nht6a5VOkS/ZojNFvWgH7LOKgYFK8ENpVILvlQMul0dBjkc/6Byi
+        9FB1ytd+eziW+X7M+eSgIBc6dhtYodzmJyPHLy/pzHTMOMISvs2pYn8XUpiVIlKZLQhUqN
+        APdoF2cjoH1Q/EurRO8VD9Su7Eq0f28=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-195-MnPaK8BFPJW-M_AVEpvykg-1; Thu, 06 Apr 2023 22:02:09 -0400
+X-MC-Unique: MnPaK8BFPJW-M_AVEpvykg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DD8973C20EEC;
+        Fri,  7 Apr 2023 02:02:08 +0000 (UTC)
+Received: from ovpn-8-24.pek2.redhat.com (ovpn-8-24.pek2.redhat.com [10.72.8.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BF41640C6EC4;
+        Fri,  7 Apr 2023 02:02:01 +0000 (UTC)
+Date:   Fri, 7 Apr 2023 10:01:55 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz, hch@infradead.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>, ming.lei@redhat.com
+Subject: Re: [PATCH] block: don't set GD_NEED_PART_SCAN if scan partition
+ failed
+Message-ID: <ZC95kzpiZnD9m7GY@ovpn-8-24.pek2.redhat.com>
+References: <ZBmYcuVzpDDTiaP+@ovpn-8-18.pek2.redhat.com>
+ <20230322035926.1791317-1-yukuai1@huaweicloud.com>
+ <42cfedca-f233-4d7e-f43b-4b5dd0c97e9e@huaweicloud.com>
+ <b3817e92-80ca-8eea-ebdd-f2172f3390c8@kernel.dk>
 MIME-Version: 1.0
-References: <20230406094245.3633290-1-dhowells@redhat.com> <20230406094245.3633290-7-dhowells@redhat.com>
-In-Reply-To: <20230406094245.3633290-7-dhowells@redhat.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 6 Apr 2023 22:01:42 -0400
-Message-ID: <CAF=yD-LAC4QCfoGVKaW-GzU26=xp-6Wuq3jxAhJK1+KV0M+q2A@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 06/19] tcp: Make sendmsg(MSG_SPLICE_PAGES)
- copy unspliceable data
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, David Ahern <dsahern@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b3817e92-80ca-8eea-ebdd-f2172f3390c8@kernel.dk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 5:43=E2=80=AFAM David Howells <dhowells@redhat.com> =
-wrote:
->
-> If sendmsg() with MSG_SPLICE_PAGES encounters a page that shouldn't be
-> spliced - a slab page, for instance, or one with a zero count - make
-> tcp_sendmsg() copy it.
->
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: David Ahern <dsahern@kernel.org>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: netdev@vger.kernel.org
-> ---
->  net/ipv4/tcp.c | 28 +++++++++++++++++++++++++---
->  1 file changed, 25 insertions(+), 3 deletions(-)
->
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 510bacc7ce7b..238a8ad6527c 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -1418,10 +1418,10 @@ int tcp_sendmsg_locked(struct sock *sk, struct ms=
-ghdr *msg, size_t size)
->                                 goto do_error;
->                         copy =3D err;
->                 } else if (zc =3D=3D 2) {
-> -                       /* Splice in data. */
-> +                       /* Splice in data if we can; copy if we can't. */
->                         struct page *page =3D NULL, **pages =3D &page;
->                         size_t off =3D 0, part;
-> -                       bool can_coalesce;
-> +                       bool can_coalesce, put =3D false;
->                         int i =3D skb_shinfo(skb)->nr_frags;
->
->                         copy =3D iov_iter_extract_pages(&msg->msg_iter, &=
-pages,
-> @@ -1448,12 +1448,34 @@ int tcp_sendmsg_locked(struct sock *sk, struct ms=
-ghdr *msg, size_t size)
->                                 goto wait_for_space;
->                         copy =3D part;
->
-> +                       if (!sendpage_ok(page)) {
-> +                               const void *p =3D kmap_local_page(page);
-> +                               void *q;
-> +
-> +                               q =3D page_frag_memdup(NULL, p + off, cop=
-y,
-> +                                                    sk->sk_allocation, U=
-LONG_MAX);
-> +                               kunmap_local(p);
-> +                               if (!q) {
-> +                                       iov_iter_revert(&msg->msg_iter, c=
-opy);
-> +                                       err =3D copy ?: -ENOMEM;
-> +                                       goto do_error;
-> +                               }
-> +                               page =3D virt_to_page(q);
-> +                               off =3D offset_in_page(q);
-> +                               put =3D true;
-> +                               can_coalesce =3D false;
-> +                       }
-> +
+On Thu, Apr 06, 2023 at 04:29:43PM -0600, Jens Axboe wrote:
+> On 4/5/23 9:42 PM, Yu Kuai wrote:
+> > Hi, Jens!
+> > 
+> > 在 2023/03/22 11:59, Yu Kuai 写道:
+> >> From: Yu Kuai <yukuai3@huawei.com>
+> >>
+> >> Currently if disk_scan_partitions() failed, GD_NEED_PART_SCAN will still
+> >> set, and partition scan will be proceed again when blkdev_get_by_dev()
+> >> is called. However, this will cause a problem that re-assemble partitioned
+> >> raid device will creat partition for underlying disk.
+> >>
+> >> Test procedure:
+> >>
+> >> mdadm -CR /dev/md0 -l 1 -n 2 /dev/sda /dev/sdb -e 1.0
+> >> sgdisk -n 0:0:+100MiB /dev/md0
+> >> blockdev --rereadpt /dev/sda
+> >> blockdev --rereadpt /dev/sdb
+> >> mdadm -S /dev/md0
+> >> mdadm -A /dev/md0 /dev/sda /dev/sdb
+> >>
+> >> Test result: underlying disk partition and raid partition can be
+> >> observed at the same time
+> >>
+> >> Note that this can still happen in come corner cases that
+> >> GD_NEED_PART_SCAN can be set for underlying disk while re-assemble raid
+> >> device.
+> >>
+> > 
+> > Can you apply this patch?
+> 
+> None of them apply to my for-6.4/block branch...
 
-This is almost identical in the later udp and unix implementations.
-Could this be a wrapper, something like
+This patch is bug fix, and probably should aim at 6.3.
 
-    page =3D sendpage_copy_if_needed(&page, &off, copy, gfp, &put));
+Thanks,
+Ming
 
-(it seems page is never needed if it would return NULL)
