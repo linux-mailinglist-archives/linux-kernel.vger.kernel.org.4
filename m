@@ -2,130 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504DE6DAC4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5E96DAC4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239768AbjDGLkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S233760AbjDGLmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDGLku (ORCPT
+        with ESMTP id S229437AbjDGLmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:40:50 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F157683
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:40:44 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54c12009c30so78496467b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680867643; x=1683459643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bhp1D4MU620tEuYfWwD9BEmVsWgqQus92qBJwjtxDro=;
-        b=fFvwxikqEAeHJ1MyF6Mjcy5mzl2OJh63dIxaAB2Eh3YcjM/Owu5lHKJFBUE6cx53n5
-         ge0hlhxbz5JCzOGC7sqHExwugQIn4P86tbebsNoAdBAAZk2t+4qGBnT3jA9uveXp3r3L
-         bhnpYubAipVh0F7oIPpqBSXO3s1J/fsCFbJYA3V8qR9HtOW6umbqHOrD/IH0kF9hou+9
-         Rgcn2cuompVeamLBt3NAPLr1/jiDxRJVX8kZyxeZphYp1Dmme4IHcxzSlWV2WvMAVLUm
-         hTBdY3mZ3//C/vmRayZFAwxnXHagHtuuxkHBEuV0mhQCaMg+UxDguJHFP45fw1kaLBiA
-         Ukxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680867643; x=1683459643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bhp1D4MU620tEuYfWwD9BEmVsWgqQus92qBJwjtxDro=;
-        b=ufO2kqAEkxo2tuFVaUM39462GfgWrRsmpXxeoX9jSWeabUoZV9TEiWmRlJkK3nJCee
-         +OMdWZmBWtve2QnZE7wmwSp3nop2+KfQ/1r08Ynfa/wr7lrBA4pqSAcuyRdtKaQqDLYT
-         dGNmq6GPC7bJliDudngO3kfnaDbP/r7c5MKHLbONxxCZE5dU1pTphkvUTVB+ttcxmR8C
-         v192M19DpA2a2g45UmdToyIzaYGAuqQHrJzRzKQdRvvkK2KCics4nznDe9Mfix8fmR2H
-         yrD9MG25WhkHPnspHuq5O/jwXoSlVkHenzgxKUnWUUGCAB8+abuMuXgt9FMlOUgvHc1W
-         NjMw==
-X-Gm-Message-State: AAQBX9cr2kuTuAeMyUjMCMUQ4IOuSZYG2i578+/mwILETchvqgB3vQe9
-        wCQWfMq5UzLsILup8WMUqcxNmD9Wzst05LY2fWD30Q==
-X-Google-Smtp-Source: AKy350YoGyPsHOTAa1wet0tacy28TuEIoDXiA/LQepBDm7Xcz7qo6pPhP3CKaVtCoIyN9Fqb7B2gwVZJiToE8OVA9L8=
-X-Received: by 2002:a81:a783:0:b0:545:7143:2940 with SMTP id
- e125-20020a81a783000000b0054571432940mr1022815ywh.0.1680867643596; Fri, 07
- Apr 2023 04:40:43 -0700 (PDT)
+        Fri, 7 Apr 2023 07:42:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64AF6A47;
+        Fri,  7 Apr 2023 04:42:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54AD86115D;
+        Fri,  7 Apr 2023 11:42:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FAAAC433D2;
+        Fri,  7 Apr 2023 11:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680867756;
+        bh=ffJPEsfz6uevpDp0VZwg1T0jFu3Lsskw+llfUcg9HPE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eJQCpNye+Vu7dxJ7JxMQcNn+eWL7fLWZEoMKiCcXGvNibhVCri3nItu1MumialZ1h
+         ZBxfvxx9nK3BRv1qKHqcljiOms5Uggr2ssrUiE7jGgJXo4jT5eemetRb4lk6jcm4Kl
+         SyTu85V1GFyqCe//1YlkwvTu7WiVhEhEF6/+1ONELL0+lsVgQlpcMyC/+wPPe7DaIY
+         N2+NlDQtflNBhRXykUrxlsuRQkJea1W593tYUXeQvoPtLhUx+NR5xCTTzVFaG1F9aQ
+         SjV0QlUbC0APxsPSbTKoEXV6557lLmsORyLcKE7+HBxeYtEvjOmocw0rzgIaFQ55Rf
+         dZqX93OBLE95g==
+Date:   Fri, 7 Apr 2023 12:42:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        techsupport@winsystems.com, pdemetrotion@winsystems.com,
+        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
+Subject: Re: [PATCH v6 1/3] regmap: Pass irq_drv_data as a parameter for
+ set_type_config()
+Message-ID: <ZDABqiHHfhoP61VL@sirena.org.uk>
+References: <cover.1680708357.git.william.gray@linaro.org>
+ <20e15cd3afae80922b7e0577c7741df86b3390c5.1680708357.git.william.gray@linaro.org>
+ <50d8ee72-9b5c-4abc-a230-2aeb6eddf03e@sirena.org.uk>
+ <CAMRc=Mc0HcMnuBqsN7ReNB5JTWR0C4FbMRRM9S7kqhW5otP5WA@mail.gmail.com>
+ <ZDABDvbflOWAqcs+@fedora>
 MIME-Version: 1.0
-References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com>
- <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com> <CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com>
-In-Reply-To: <CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Fri, 7 Apr 2023 13:40:32 +0200
-Message-ID: <CAFGrd9ox3BftUxPai8WhWgf5UefTwnqnLsdo8kUHMYphB7nOTA@mail.gmail.com>
-Subject: Re: [PATCH v4 02/11] dt-bindings: pinctrl: mediatek,mt8365-pinctrl:
- add drive strength property
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mWcjODE60AASDgeS"
+Content-Disposition: inline
+In-Reply-To: <ZDABDvbflOWAqcs+@fedora>
+X-Cookie: Single tasking: Just Say No.
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mar. 4 avr. 2023 =C3=A0 15:55, Linus Walleij <linus.walleij@linaro.org> =
-a =C3=A9crit :
->
-> On Fri, Mar 31, 2023 at 7:55=E2=80=AFPM Alexandre Mergnat <amergnat@bayli=
-bre.com> wrote:
->
-> > This SoC is able to drive the following output current:
-> > - 2 mA
-> > - 4 mA
-> > - 6 mA
-> > - 8 mA
-> > - 10 mA
-> > - 12 mA
-> > - 14 mA
-> > - 16 mA
-> >
-> > Then drive-strength property is set with enum to reflect its HW capabil=
-ity.
-> >
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
->
-> This patch does not apply to my devel branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/=
-log/?h=3Ddevel
->
-> Can you please rebase and resend?
 
-According to your suggestion on the other serie [1], I rebased this
-patch and added it to the other serie [2] to simplify the process
+--mWcjODE60AASDgeS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Regards,
-Alexandre
+On Fri, Apr 07, 2023 at 07:39:58AM -0400, William Breathitt Gray wrote:
+> On Fri, Apr 07, 2023 at 12:17:31PM +0200, Bartosz Golaszewski wrote:
 
-[1]: https://lore.kernel.org/all/CACRpkdYndXqTXrTakwv1mbvJBs-tG+pjOpLLCgS9c=
-rE0aBj0jA@mail.gmail.com/
-[2]: https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v3-0-6f56=
-d5c7a8de@baylibre.com/
+> Bart, the two remaining patches still depend on the handle_mask_sync
+> change descripted in the cover patch [0].
+
+> Mark, are you able to Ack those patches or alternatively provide an
+> immutable branch with them? We need the handle_mask_sync change as well
+> for the idio-16 migration patchset [1].
+
+I don't have those patches, I presume I was expecting some
+change.  Please resend.
+
+--mWcjODE60AASDgeS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQwAacACgkQJNaLcl1U
+h9Cv6Qf/SzWW0MZ06FbGpomeqGr967VvIVdoq2stvunTx4e3vL3w+YZgjl3qLemQ
+Knp5MmfEn4QtcCVnf/ydyLc14/2XN2foD4n6AYGp/8kF1DDwO2cjoYsd5LoaJB3M
+2kqaEVSKSXrKw1m7A+xRaB04eODvMBeornx8aYPaU96zdIqwRNONmyrtc0qAndqB
+w8XTzOV3ELh6bJ1nhO4bgsQ3Nv1j3GH666uopaRzQe1+fltOVrDmQEQhM5DZhf45
+/xuqnEVlr1RKLudLJ4ve/BzPf1uG0YDNrH9wyScHPP2BBEd922erDp7KBhW84wSH
+N9mgCFonVhltojLFgdNBjjDZ4/b7LA==
+=hir/
+-----END PGP SIGNATURE-----
+
+--mWcjODE60AASDgeS--
