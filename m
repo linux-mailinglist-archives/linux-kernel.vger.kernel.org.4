@@ -2,78 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D796DAAD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5456DAAC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240596AbjDGJYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 05:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
+        id S240170AbjDGJXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240569AbjDGJXz (ORCPT
+        with ESMTP id S230265AbjDGJXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:23:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC8FAF3A;
-        Fri,  7 Apr 2023 02:23:51 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3379DCXV011312;
-        Fri, 7 Apr 2023 09:23:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=RRsxgAHgTlm+iwTceKr7VhVyxrmQp3oO7UsRfGYfjCw=;
- b=c66zUOnFJaPJf+Vj8q+qW9foRAUA8Bo1zzK+hE3xJG4nCCbdpPaEbPUVBFU3RbACb2o3
- ydiApYcCq/BlsBNHnErAA+OmXU09TtaVpTYzq4n+9ys/cTqaLfX6K4cDPOtj1yOJHPr3
- NewVKDsNLYfUlmFPYSQJHmZU6+VcMxp27RBiQm4W4aPSPhcgxm2GtU8MGxBndlXiWQGG
- H7NI1b2dW2bXIvupmhcGZYs/B87LhjUGmOAJMpOcRSGIqoyOzaSnYGq5dA4zFiTfrMX6
- yB/3IZC1M3yxgR5KajlP78yTlBHkOSyEXxCX5YlAlQYSOOfgh3HD0VVRVNHTGH7BpT3w Yg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pt87b8w8g-1
+        Fri, 7 Apr 2023 05:23:35 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81429559F
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:23:34 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3378EYLJ032187;
+        Fri, 7 Apr 2023 09:23:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=J0NLgY2eKMMih3APjlZunVE93FXMckGfYTJYgjYSqqo=;
+ b=KLyNja2ZlPUVljxHJYZyXdPAGPiUf2bmEzqcinI2aRH823qIzki9BoeXXxXYkyTaCowU
+ y55+FjjxRp4xNOrMQKQxcC0hrIiiTSzaGLnQBCRSsV2ekGCSnUK9RAjEmi15GvdC/63n
+ DsJb7DVu5o411Hgf4OtGEbAv4bUEdC7KHKiCvu7ts82Pj3CSS9adxbPO9pyuZRk9+X+w
+ nyS6S9Ow9xKfCI6tZh++SI+Vc0byq4EQ0DebWzgnk5ElaiHiPNvNJSfrXiw7eR4jckhc
+ zq0FKfZhAuHBsitCfhSe7RQ7Ovfz7N0jPrf0nqywdiz0gVs88lxUYOCqE+xyTgBk0kgl mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ptc41dhbr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 09:23:44 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3379NhxH009369
+        Fri, 07 Apr 2023 09:23:29 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3378r2Gl009695;
+        Fri, 7 Apr 2023 09:23:28 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ptc41dhb8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Apr 2023 09:23:43 GMT
-Received: from hu-mohs-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 7 Apr 2023 02:23:38 -0700
-From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-To:     <swboyd@chromium.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <broonie@kernel.org>, <quic_plai@quicinc.com>,
-        <konrad.dybcio@somainline.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <quic_visr@quicinc.com>
-CC:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: [PATCH v11 3/3] clk: qcom: lpassaudiocc-sc7280: Add required gdsc power domain clks in lpass_cc_sc7280_desc
-Date:   Fri, 7 Apr 2023 14:52:55 +0530
-Message-ID: <20230407092255.119690-4-quic_mohs@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230407092255.119690-1-quic_mohs@quicinc.com>
-References: <20230407092255.119690-1-quic_mohs@quicinc.com>
+        Fri, 07 Apr 2023 09:23:28 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 336MP18a000624;
+        Fri, 7 Apr 2023 09:23:26 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3ppbvfup74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:23:26 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3379NNWe19989206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Apr 2023 09:23:24 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DEA0D20049;
+        Fri,  7 Apr 2023 09:23:23 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A5CBE20043;
+        Fri,  7 Apr 2023 09:23:22 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.171.71.120])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  7 Apr 2023 09:23:22 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 12:23:20 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH 06/29] selftests/mm: Link vm_util.c always
+Message-ID: <ZC/hCGCMslZWCjQa@linux.ibm.com>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160700.3106955-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6wnARQ7wKFN-aOt8aQe2gu3hiG4Tkkqq
-X-Proofpoint-GUID: 6wnARQ7wKFN-aOt8aQe2gu3hiG4Tkkqq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330160700.3106955-1-peterx@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DDXyBlwNKZQlGv4wcbp0HrRO1mv885VO
+X-Proofpoint-GUID: MguoooGxFqttbPmVH5r-cmW29DXPbeFD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-07_05,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- mlxlogscore=999 phishscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
- definitions=main-2304070086
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=635
+ impostorscore=0 bulkscore=0 phishscore=0 priorityscore=1501 clxscore=1015
+ adultscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304070084
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,29 +97,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add GDSCs in lpass_cc_sc7280_desc struct.
-When qcom,adsp-pil-mode is enabled, GDSCs required to solve
-dependencies in lpass_audiocc probe().
+On Thu, Mar 30, 2023 at 12:07:00PM -0400, Peter Xu wrote:
+> We do have plenty of files that want to link against vm_util.c.  Just make
+> it simple by linking it always.
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-Fixes: 0cbcfbe50cbf ("clk: qcom: lpass: Handle the regmap overlap of lpasscc and lpass_aon")
-Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
----
- drivers/clk/qcom/lpassaudiocc-sc7280.c | 2 ++
- 1 file changed, 2 insertions(+)
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-index 1339f9211a14..134eb1529ede 100644
---- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
-+++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-@@ -696,6 +696,8 @@ static const struct qcom_cc_desc lpass_cc_sc7280_desc = {
- 	.config = &lpass_audio_cc_sc7280_regmap_config,
- 	.clks = lpass_cc_sc7280_clocks,
- 	.num_clks = ARRAY_SIZE(lpass_cc_sc7280_clocks),
-+	.gdscs = lpass_aon_cc_sc7280_gdscs,
-+	.num_gdscs = ARRAY_SIZE(lpass_aon_cc_sc7280_gdscs),
- };
- 
- static const struct qcom_cc_desc lpass_audio_cc_sc7280_desc = {
+> ---
+>  tools/testing/selftests/mm/Makefile | 12 +-----------
+>  1 file changed, 1 insertion(+), 11 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 47516a78d447..b35f3eafde3c 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -105,17 +105,7 @@ TEST_FILES += va_128TBswitch.sh
+> 
+>  include ../lib.mk
+> 
+> -$(OUTPUT)/cow: vm_util.c
+> -$(OUTPUT)/khugepaged: vm_util.c
+> -$(OUTPUT)/ksm_functional_tests: vm_util.c
+> -$(OUTPUT)/madv_populate: vm_util.c
+> -$(OUTPUT)/soft-dirty: vm_util.c
+> -$(OUTPUT)/split_huge_page_test: vm_util.c
+> -$(OUTPUT)/userfaultfd: vm_util.c
+> -$(OUTPUT)/gup_test: vm_util.c
+> -$(OUTPUT)/mrelease_test: vm_util.c
+> -$(OUTPUT)/transhuge-stress: vm_util.c
+> -$(OUTPUT)/ksm_tests: vm_util.c
+> +$(TEST_GEN_PROGS): vm_util.c
+> 
+>  ifeq ($(MACHINE),x86_64)
+>  BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+> -- 
+> 2.39.1
+> 
+
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
