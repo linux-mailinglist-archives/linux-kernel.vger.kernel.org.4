@@ -2,210 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091256DB1A8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D0E6DB208
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDGReS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S230255AbjDGRt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDGReP (ORCPT
+        with ESMTP id S229569AbjDGRt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:34:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBF4B463;
-        Fri,  7 Apr 2023 10:34:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B21A9652AB;
-        Fri,  7 Apr 2023 17:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0044C433EF;
-        Fri,  7 Apr 2023 17:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680888853;
-        bh=k39ojLugdZzlydji/uAprODGtjuwBnxp5qDd/32ojsM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HOFnsOX28/9Fgo47FkYTcewM/vmizzt11vguHO4KUobFRITA8GIMnl+DofpKHj55y
-         M4ELJNfszyfEB1FSOD6tm+fErdIuVcgjAiog1wJ/JMzjdeVvM6FPFoh7hZfomkWdB0
-         4xgZuzkvtYSe6XlyPPLXdDirYf4gXUVmaWfrORraBfRIRaDfsqa5sbxm/nmDjFLRUU
-         YBkCYAvyqqspcPLPZnEkhSdoeSM6Y6l/PyEM1hsckv0IDZmDiU5LGa1d4dOIwbizbl
-         E5AXs27B3EgQq3zeSKk55A5KyfqvV3vb0m3jFRJ8ADB7auUdQZnfqTUBZlysTYoKTI
-         umpsbjRulrmew==
-Date:   Fri, 7 Apr 2023 18:49:28 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: iio: temperature: ltc2983: Fix child
- node unevaluated properties
-Message-ID: <20230407184928.43f6d730@jic23-huawei>
-In-Reply-To: <20230404205014.644336-1-robh@kernel.org>
-References: <20230404205014.644336-1-robh@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Fri, 7 Apr 2023 13:49:57 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE3F11D
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:49:56 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1a508c1333cso1171465ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:49:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680889796; x=1683481796;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YOYR5yl6ypiXPPEsw9LGpTcARLtmR0joIO+5Gy/Ym7k=;
+        b=gSjbHOfHvFZTwg2Y8sJqAABr4qbOs+k2r0fQ+0VSOZk6KDkWrDRTPyg4C52MCNHNE1
+         mBU7V9D/2Md0WXYZkvllimMI1smpQ1C1kFfkReM4r8ktSoI3kxRfchhJRzDwgRFuoOlt
+         vbOvICGQVOBv1Qn70leZLT6df/AwluazWABijBn2vcVMO1zE/lo9kQiJeI00WteSuQzO
+         4E7JC3dixEOti4CtUDh751L3OUzUjfxsuq57/AW2RnR6Le3p9lCuvLXaMRlsFskWX/9J
+         owh1Fitcsrv4fXxFYKplshFL978dzQ3D+fBn9bMuWz/gIKi76FWckOOCuAdt9sSYV7S2
+         Fb2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680889796; x=1683481796;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YOYR5yl6ypiXPPEsw9LGpTcARLtmR0joIO+5Gy/Ym7k=;
+        b=y8IDf5zo3NQWbCmISgVl3mGvB1IfFapr3YSYYYNcLlGcm5s/NHTTucfk/oRxPzlh4w
+         O/DtlYxz37uLQgsoo6W6xihFqUgFluYO+lD7J6FezDUkdaj9NYou4Z+wTBqmbQVa6K9r
+         oFpPHaoU29Ft3zhZ6LbsioXB0IDp8cLMAaoAUybEYDQ6bs5GUJTKPUzow5+WQCl1KOxr
+         Ak98PaPvw1RjD+RGy/F8nOBPTYKrBkfqgVQFLBLln+Qn3/9Bp5Xv49RiQRn3ZBy7oFOM
+         O3IMiBhxQavC7m9N69C3FSDpQZ7KSoveiyL1afZ50P2VtHUJZd4ox62CNBkH3A4Y53R9
+         lYew==
+X-Gm-Message-State: AAQBX9feH0ROfKZSKOQCr53R7Uzq2UZcSTfa9CwI/XAUT5FR8heRumlI
+        e255mRmRu0ns30vfhxfck8jDIheuSy8WjUVSzfZJsQ==
+X-Google-Smtp-Source: AKy350YcyBmqWjxSDZIDUgohnwuC5OCKa+DcG7pxNN+qXdDBC9rHkNcGfLqqt8MDPERyF6go6jpkdZN6egNSE+y9cQE=
+X-Received: by 2002:a05:6a00:2d88:b0:625:c832:6a10 with SMTP id
+ fb8-20020a056a002d8800b00625c8326a10mr1535733pfb.4.1680889795599; Fri, 07 Apr
+ 2023 10:49:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230324195403.2655148-1-trix@redhat.com>
+In-Reply-To: <20230324195403.2655148-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 10:49:44 -0700
+Message-ID: <CAKwvOdndQiSbMK6a7nU01HiovY-Bdjt4m4gOO5m5A36y8qQ8=A@mail.gmail.com>
+Subject: Re: [PATCH] drm/vmwgfx: remove unused mksstat_init_record function
+To:     Tom Rix <trix@redhat.com>
+Cc:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
+        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  4 Apr 2023 15:50:13 -0500
-Rob Herring <robh@kernel.org> wrote:
-
-> The child node schemas are missing 'unevaluatedProperties' constraints,
-> so any unknown properties are allowed. The current structure with
-> multiple patternProperties schemas doesn't work for
-> unevaluatedProperties as each sub-schema is evaluated independently. To
-> fix this, move the sub-schema for all child nodes to a $defs entry and
-> reference it from each named child node.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-
-Nice. Series applied to the togreg branch of iio.git and pushed out as
-testing so 0-day can poke at it.
-
-Thanks,
-
-Jonathan
-
+On Fri, Mar 24, 2023 at 12:54=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/gpu/drm/vmwgfx/vmwgfx_msg.c:716:21: error: unused function
+>   'mksstat_init_record' [-Werror,-Wunused-function]
+> static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
+>                     ^
+> This function is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  .../bindings/iio/temperature/adi,ltc2983.yaml | 65 +++++++++++--------
->  1 file changed, 38 insertions(+), 27 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-> index f44fc32ce87e..e04f961ab92c 100644
-> --- a/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-> +++ b/Documentation/devicetree/bindings/iio/temperature/adi,ltc2983.yaml
-> @@ -18,6 +18,28 @@ description: |
->    https://www.analog.com/media/en/technical-documentation/data-sheets/29861fa.pdf
->    https://www.analog.com/media/en/technical-documentation/data-sheets/ltm2985.pdf
->  
-> +$defs:
-> +  sensor-node:
-> +    type: object
-> +    description: Sensor node common constraints
-> +
-> +    properties:
-> +      reg:
-> +        description:
-> +          Channel number. Connects the sensor to the channel with this number
-> +          of the device.
-> +        minimum: 1
-> +        maximum: 20
-> +
-> +      adi,sensor-type:
-> +        description: Type of sensor connected to the device.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +    required:
-> +      - reg
-> +      - adi,sensor-type
-> +
-> +
->  properties:
->    compatible:
->      oneOf:
-> @@ -64,28 +86,10 @@ properties:
->      const: 0
->  
->  patternProperties:
-> -  "@([0-9a-f]+)$":
-> -    type: object
-> -    description: Sensor.
+>  drivers/gpu/drm/vmwgfx/vmwgfx_msg.c | 26 --------------------------
+>  1 file changed, 26 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c b/drivers/gpu/drm/vmwgfx=
+/vmwgfx_msg.c
+> index e76976a95a1e..ca1a3fe44fa5 100644
+> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg.c
+> @@ -702,32 +702,6 @@ static inline void hypervisor_ppn_remove(PPN64 pfn)
+>  /* Header to the text description of mksGuestStat instance descriptor */
+>  #define MKSSTAT_KERNEL_DESCRIPTION "vmwgfx"
+>
+> -/**
+> - * mksstat_init_record: Initializes an MKSGuestStatCounter-based record
+> - * for the respective mksGuestStat index.
+> - *
+> - * @stat_idx: Index of the MKSGuestStatCounter-based mksGuestStat record=
+.
+> - * @pstat: Pointer to array of MKSGuestStatCounterTime.
+> - * @pinfo: Pointer to array of MKSGuestStatInfoEntry.
+> - * @pstrs: Pointer to current end of the name/description sequence.
+> - * Return: Pointer to the new end of the names/description sequence.
+> - */
 > -
-> -    properties:
-> -      reg:
-> -        description:
-> -          Channel number. Connects the sensor to the channel with this number
-> -          of the device.
-> -        minimum: 1
-> -        maximum: 20
+> -static inline char *mksstat_init_record(mksstat_kern_stats_t stat_idx,
+> -       MKSGuestStatCounterTime *pstat, MKSGuestStatInfoEntry *pinfo, cha=
+r *pstrs)
+> -{
+> -       char *const pstrd =3D pstrs + strlen(mksstat_kern_name_desc[stat_=
+idx][0]) + 1;
+> -       strcpy(pstrs, mksstat_kern_name_desc[stat_idx][0]);
+> -       strcpy(pstrd, mksstat_kern_name_desc[stat_idx][1]);
 > -
-> -      adi,sensor-type:
-> -        description: Type of sensor connected to the device.
-> -        $ref: /schemas/types.yaml#/definitions/uint32
-> -
-> -    required:
-> -      - reg
-> -      - adi,sensor-type
-> -
->    "^thermocouple@":
-> -    type: object
-> +    $ref: '#/$defs/sensor-node'
-> +    unevaluatedProperties: false
-> +
->      description: Thermocouple sensor.
->  
->      properties:
-> @@ -141,7 +145,9 @@ patternProperties:
->              - adi,custom-thermocouple
->  
->    "^diode@":
-> -    type: object
-> +    $ref: '#/$defs/sensor-node'
-> +    unevaluatedProperties: false
-> +
->      description: Diode sensor.
->  
->      properties:
-> @@ -184,7 +190,8 @@ patternProperties:
->          default: 0
->  
->    "^rtd@":
-> -    type: object
-> +    $ref: '#/$defs/sensor-node'
-> +    unevaluatedProperties: false
->      description: RTD sensor.
->  
->      properties:
-> @@ -282,7 +289,8 @@ patternProperties:
->              - adi,custom-rtd
->  
->    "^thermistor@":
-> -    type: object
-> +    $ref: '#/$defs/sensor-node'
-> +    unevaluatedProperties: false
->      description: Thermistor sensor.
->  
->      properties:
-> @@ -383,7 +391,8 @@ patternProperties:
->              - adi,custom-thermistor
->  
->    "^adc@":
-> -    type: object
-> +    $ref: '#/$defs/sensor-node'
-> +    unevaluatedProperties: false
->      description: Direct ADC sensor.
->  
->      properties:
-> @@ -397,7 +406,8 @@ patternProperties:
->          type: boolean
->  
->    "^temp@":
-> -    type: object
-> +    $ref: '#/$defs/sensor-node'
-> +    unevaluatedProperties: false
->      description: Active analog temperature sensor.
->  
->      properties:
-> @@ -426,7 +436,8 @@ patternProperties:
->        - adi,custom-temp
->  
->    "^rsense@":
-> -    type: object
-> +    $ref: '#/$defs/sensor-node'
-> +    unevaluatedProperties: false
->      description: Sense resistor sensor.
->  
->      properties:
+> -       pinfo[stat_idx].name.s =3D pstrs;
+> -       pinfo[stat_idx].description.s =3D pstrd;
+> -       pinfo[stat_idx].flags =3D MKS_GUEST_STAT_FLAG_NONE;
 
+This was the last user of MKS_GUEST_STAT_FLAG_NONE, is there anything
+else to clean up there?  Otherwise LGTM.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> -       pinfo[stat_idx].stat.counter =3D (MKSGuestStatCounter *)&pstat[st=
+at_idx];
+> -
+> -       return pstrd + strlen(mksstat_kern_name_desc[stat_idx][1]) + 1;
+> -}
+> -
+>  /**
+>   * mksstat_init_record_time: Initializes an MKSGuestStatCounterTime-base=
+d record
+>   * for the respective mksGuestStat index.
+> --
+> 2.27.0
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
