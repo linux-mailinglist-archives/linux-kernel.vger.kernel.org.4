@@ -2,122 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D236DB6A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D757A6DB6C6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjDGWmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S229484AbjDGXEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjDGWmL (ORCPT
+        with ESMTP id S229455AbjDGXEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:42:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77290D30D;
-        Fri,  7 Apr 2023 15:41:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D79716544F;
-        Fri,  7 Apr 2023 22:41:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFACC433D2;
-        Fri,  7 Apr 2023 22:41:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680907304;
-        bh=oU9YWGke34o2CXW/4PVaF6b6aPeOElbQjqDUFQFrfvE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=acEZK0S69gp0XtPgWqLPemetud9eCJPg+TSfmnr1MSU4qTXi/pUD4SwPyZtpb6Erl
-         1dBXqYh8QwIQKbFtSc+/WNjMneaEAOkPIB1axXbaB7+lrHpD9DvEgQE7B5YWEsHM5H
-         sa01jPj7TXUNEPRQx8FtBtwcefZmvrBMp1daJDOjgJ0Ta0couT4LyhuOJIOZAO1Vdh
-         tp6WD2C7pKwyOIOkz+NYVxyshtkZB5V0tmINZ5ikufmfW+DiVELeMelCiApKffyeCA
-         xuFw+/o9Dto4Lw9akYx97/Uol1B3iH5AIZ8WJ77hfaZKw/DoyHeSpBMmZaaYM4iiUc
-         CA8sh2aMn0/2w==
-Date:   Fri, 7 Apr 2023 17:41:42 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     "Natu, Mahesh" <mahesh.natu@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
- error recovery
-Message-ID: <20230407224142.GA3829056@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc7cc268-f614-beaf-da5a-a4db9137c38a@linux.intel.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 7 Apr 2023 19:04:31 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2531ACC08
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:04:30 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id z4-20020a25bb04000000b00b392ae70300so43700581ybg.21
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:04:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680908669;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uTKSSYmniB+LEnhXxM03AxYTLMkdjrfWvT6FhNB+Q7g=;
+        b=nN+dsEwkyiIogTmorI5uSQRsi9cy/FJYwLwU11t1d42HAoqT+L/2mZxubGGkmZS1X1
+         Av+OCpdIUNl0h5XMEKU5Wie0Wn+H4dqiHsrhlPYEBy9Jpf2G9dwxKsGNaa19QIo3QW0s
+         WNUPb+VEX/PFnz75sD/E1MJgpFiUMGAj7cfmaNzITKVwTlv7KocEFMU3vnpYWedtkTjA
+         iSTxh5IaKbAj3Ig1fQoMcxte9DO/9PkN6NYU1FxQ/B0QmeTbQtC1AaE544B5/JAYPTes
+         EjpYd/ooxMLzA9lTG6QljMFqlmmoSEQmHUhQXEq+MbdZvThkRd/OZ1/LgsjiuMiOV5zM
+         OufQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680908669;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uTKSSYmniB+LEnhXxM03AxYTLMkdjrfWvT6FhNB+Q7g=;
+        b=XIT4YH2ksXaISUFlQE1IV8NBSqsxp5pH2FLOCvTMeTQKC87FIzwQMo1Qfugipx8lsq
+         2VcqrU5Rql7ED1Gq2I6T9S6hwT0F1WUYaBhGaBRDQ7Y7mPPSM1s2Z14aqcerzibB1vQv
+         Z5M3jHTbHjI8thvMgf8mhR3nZ/vd2mUEOQekBDh+/HmasWl+1+D9exLVV0jdc0xoJ+pm
+         DquL1OeCZyj2gw8quoulavLYOjx0HtF4SLrCiZnIj2qp7VmIvxE0Z9alpmJdDRDOSQgN
+         Hy5pK9ciN06O04uy+ac31qajfRbX2HAmRq0hfOG3BRGzitu4gwJ6ps6I2CAz33ZshW8M
+         05Lg==
+X-Gm-Message-State: AAQBX9cyecd0J3gyWOFFJO20kdAEPVImZEIBxiIS63RGrPItSAPQExPV
+        bH+PNP1oTc1k5kcd1K7zRg5bERtF2uig
+X-Google-Smtp-Source: AKy350Z0K/5LChd8MuOvH3Yl5jqduZI2YW0nHSl1ZgLzbixzQua92cYH6Wpgv4HMaak6d8T2CY26ma/oDEqx
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b240:9cdf:7861:b23e])
+ (user=irogers job=sendgmr) by 2002:a25:7341:0:b0:acd:7374:f15b with SMTP id
+ o62-20020a257341000000b00acd7374f15bmr2616504ybc.13.1680908669372; Fri, 07
+ Apr 2023 16:04:29 -0700 (PDT)
+Date:   Fri,  7 Apr 2023 16:04:00 -0700
+Message-Id: <20230407230405.2931830-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
+Subject: [PATCH v7 0/5] Reference count checker and related fixes
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        James Clark <james.clark@arm.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Song Liu <song@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>, Hao Luo <haoluo@google.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 03:19:32PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 4/7/23 9:46 AM, Bjorn Helgaas wrote:
-> > On Thu, Apr 06, 2023 at 10:31:20PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> >> On 4/6/23 3:21 PM, Bjorn Helgaas wrote:
-> >>> On Thu, Apr 06, 2023 at 02:52:02PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> >>>> On 4/6/23 2:07 PM, Bjorn Helgaas wrote:
-> >>>>> On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> >>>>>> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
-> >>>>>> OS owns AER") adds support to clear error status in the Device Status
-> >>>>>> Register(DEVSTA) only if OS owns the AER support. But this change
-> >>>>>> breaks the requirement of the EDR feature which requires OS to cleanup
-> >>>>>> the error registers even if firmware owns the control of AER support.
+The perf tool has a class of memory problems where reference counts
+are used incorrectly. Memory/address sanitizers and valgrind don't
+provide useful ways to debug these problems, you see a memory leak
+where the only pertinent information is the original allocation
+site. What would be more useful is knowing where a get fails to have a
+corresponding put, where there are double puts, etc.
 
-> ...
-> > An EDR notification is issued on a bus device that is still present,
-> > i.e., a DPC port or parent, but child devices have been disconnected
-> > (ACPI v6.3, sec 5.6.6).
-> 
-> IMO, instead of bus device, we can call it as root port or down stream
-> port. Please check the PCI firmware specification, r3.3, section 4.3.13.
+This work was motivated by the roll-back of:
+https://lore.kernel.org/linux-perf-users/20211118193714.2293728-1-irogers@google.com/
+where fixing a missed put resulted in a use-after-free in a different
+context. There was a sense in fixing the issue that a game of
+wac-a-mole had been embarked upon in adding missed gets and puts.
 
-Yeah, that makes sense.  I just used the "bus device" language because
-that's what's in the ACPI spec.  But I think the PCI terms would
-probably be more helpful here.  And I'll cite the r6.5 spec instead of
-v6.3.
+The basic approach of the change is to add a level of indirection at
+the get and put calls. Get allocates a level of indirection that, if
+no corresponding put is called, becomes a memory leak (and associated
+stack trace) that leak sanitizer can report. Similarly if two puts are
+called for the same get, then a double free can be detected by address
+sanitizer. This can also detect the use after put, which should also
+yield a segv without a sanitizer.
 
-> Firmware may wish to issue Error Disconnect Recover notification on a port
-> that is parent of the port that experienced the containment event.
-> 
-> So it is either a downstream port or a root port.
+Adding reference count checking to cpu map was done as a proof of
+concept, it yielded little other than a location where the use of get
+could be cleaner by using its result. Reference count checking on
+nsinfo identified a double free of the indirection layer and the
+related threads, thereby identifying a data race as discussed here:
+ https://lore.kernel.org/linux-perf-users/CAP-5=fWZH20L4kv-BwVtGLwR=Em3AOOT+Q4QGivvQuYn5AsPRg@mail.gmail.com/
+Accordingly the dso->lock was extended and use to cover the race.
 
-Right.
+The v3 version addresses problems in v2, in particular using macros to
+avoid #ifdefs. The v3 version applies the reference count checking
+approach to two more data structures, maps and map. While maps was
+straightforward, struct map showed a problem where reference counted
+thing can be on lists and rb-trees that are oblivious to the
+reference count. To sanitize this, struct map is changed so that it is
+referenced by either a list or rb-tree node and not part of it. This
+simplifies the reference count and the patches have caught and fixed a
+number of missed or mismatched reference counts relating to struct
+map.
 
-> > That box *does* suggest clearing the port error status before bringing
-> > the port out of DPC, and we're doing it in the opposite order:
-> > 
-> >   edr_handle_event(pdev)
-> >     edev = acpi_dpc_port_get(pdev)
-> >     # Both pdev and edev are present; pdev is same as edev or a
-> >     # parent of edev; children of edev are disconnected
-> >     dpc_process_error(edev)
-> >     pcie_do_recovery(edev, dpc_reset_link)
-> >       if (state == pci_channel_io_frozen)
-> >         dpc_reset_link                  # (reset_subordinates)
-> >           pci_write_config_word(PCI_EXP_DPC_STATUS_TRIGGER) # exit DPC
-> >       if (AER native)
-> >         pcie_clear_device_status(edev)
-> >           clear PCI_EXP_DEVSTA          # doesn't happen
-> >     if (PCI_ERS_RESULT_RECOVERED)
-> >       pcie_clear_device_status
-> >         clear PCI_EXP_DEVSTA            # added by this patch
-> > 
-> > Does it matter?  I dunno, but I don't *think* so.  We really don't
-> > care about the value of PCI_EXP_DEVSTA anywhere except
-> > pci_wait_for_pending_transaction(), which isn't applicable here.  And
-> > I don't think the fact that it probably has an Error Detected bit set
-> > when exiting DPC is a problem.
-> 
-> Agree that it is not a fatal issue. But leaving the stale error state
-> is something that needs to be fixed.
+A wider discussion of the approach is on the mailing list:
+ https://lore.kernel.org/linux-perf-users/YffqnynWcc5oFkI5@kernel.org/T/#mf25ccd7a2e03de92cec29d36e2999a8ab5ec7f88
+Comparing it to a past approach:
+ https://lore.kernel.org/all/20151209021047.10245.8918.stgit@localhost.localdomain/
+and to ref_tracker:
+ https://lwn.net/Articles/877603/
 
-Definitely agree we should clear the stale state.  I just meant that I
-don't think it matters that we clear the status *after* exiting DPC,
-instead of clearing it before exiting DPC as shown in the flowchart.
+v7. rebase on top of merged and Arnaldo fixed changes. The remaining 5
+    patches no longer refactor APIs but just add the necessary
+    reference count checking macros and usage.
+v6. rebase removing 5 merged changes. Fix missed issues with libunwind.
+v5. rebase removing 5 merged changes. Add map_list_node__new to the
+    1st patch (perf map: Move map list node into symbol) as suggested
+    by Arnaldo. Remove unnecessary map__puts from patch 12 (perf map:
+    Changes to reference counting) as suggested by Adrian.
+v4. rebases on to acme's perf-tools-next, fixes more issues with
+    map/maps and breaks apart the accessor functions to reduce
+    individual patch sizes. The accessor functions are mechanical
+    changes where the single biggest one is refactoring use of
+    map->dso to be map__dso(map).
 
-Bjorn
+Ian Rogers (5):
+  libperf: Add reference count checking macros.
+  perf cpumap: Add reference count checking
+  perf namespaces: Add reference count checking
+  perf maps: Add reference count checking.
+  perf map: Add reference count checking
+
+ tools/lib/perf/Makefile                    |   2 +-
+ tools/lib/perf/cpumap.c                    |  94 ++++++++-------
+ tools/lib/perf/include/internal/cpumap.h   |   4 +-
+ tools/lib/perf/include/internal/rc_check.h |  94 +++++++++++++++
+ tools/perf/builtin-inject.c                |   2 +-
+ tools/perf/builtin-top.c                   |   4 +-
+ tools/perf/tests/cpumap.c                  |   4 +-
+ tools/perf/tests/hists_link.c              |   2 +-
+ tools/perf/tests/maps.c                    |  20 ++--
+ tools/perf/tests/thread-maps-share.c       |  29 ++---
+ tools/perf/tests/vmlinux-kallsyms.c        |   4 +-
+ tools/perf/util/annotate.c                 |   2 +-
+ tools/perf/util/cpumap.c                   |  40 +++----
+ tools/perf/util/dso.c                      |   2 +-
+ tools/perf/util/dsos.c                     |   2 +-
+ tools/perf/util/machine.c                  |  27 +++--
+ tools/perf/util/map.c                      |  69 ++++++-----
+ tools/perf/util/map.h                      |  32 ++---
+ tools/perf/util/maps.c                     |  64 +++++-----
+ tools/perf/util/maps.h                     |  17 +--
+ tools/perf/util/namespaces.c               | 132 ++++++++++++---------
+ tools/perf/util/namespaces.h               |   3 +-
+ tools/perf/util/pmu.c                      |   8 +-
+ tools/perf/util/symbol-elf.c               |  26 ++--
+ tools/perf/util/symbol.c                   |  55 +++++----
+ tools/perf/util/unwind-libdw.c             |   2 +-
+ tools/perf/util/unwind-libunwind-local.c   |   2 +-
+ tools/perf/util/unwind-libunwind.c         |   2 +-
+ 28 files changed, 448 insertions(+), 296 deletions(-)
+ create mode 100644 tools/lib/perf/include/internal/rc_check.h
+
+-- 
+2.40.0.577.gac1e443424-goog
+
