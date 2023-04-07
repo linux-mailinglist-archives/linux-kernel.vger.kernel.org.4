@@ -2,127 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4456DB2C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A78F6DB2C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjDGS2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S230092AbjDGS2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDGS2E (ORCPT
+        with ESMTP id S229482AbjDGS2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:28:04 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312CEA276
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:28:04 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id ja10so40628226plb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 11:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680892083; x=1683484083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=racKSQFJw6htxGvl8wL9wTMwQ/BfxK72fBbPH3jrfzo=;
-        b=q7Wm05yAXnSdYgLlHZrk+vSMJLG7IwbD5WNTN2nFku16vITT4ZPAtf5KS9mPxIa99m
-         KDfOJdihPQ1164fFyY3YqTPPOWuusIcdkUrKaRuyIq7PR0uMFQBh3Y0e82P0CbvR0cNa
-         KsKhHw81I8FMbcib5C6wFXXhdaqoihXftB7DHPg/TV3vKbqI5kNriwt7bhPm2Sj6sIOO
-         j5tKKaoWBl0+mLS5lpixAw92WKEsDItL7rhFvwYIbeFIrG9/qNe2cwuoFq9RyOZJX+MU
-         0N2hu+SHtyJBxahfkPydyCZ1eGhSoRYIct9meRQa2GdsQZ1nwN9pPjlJ+LuXihUPB/Hv
-         aVAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680892083; x=1683484083;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=racKSQFJw6htxGvl8wL9wTMwQ/BfxK72fBbPH3jrfzo=;
-        b=ViomMHclRyhL1ojy4uC1UpAYLQXcXvw1quHgjZj7KCVnUTxUzgrI7Hr44NbXnDv9uH
-         aYhfQDzqm8/hzmbwE9HLodhaiiNlV21fL7YFFVnbVvTAPF5AT438TBoJIY5UzkzVuETn
-         wW+L2IEK8HAAYZXHgqjtBj1GkxNEFMrOZX/whzZVskHgG9CIdKn4J1owN7mep3d/niPS
-         GERG/o04/cBPXhQdF3De81dOLR1/dlojfBdEFF9x9n/ubps7UIrF11kMQ3dn6lmgSFHd
-         CvFuc9AGuceG4PlxIeWE+B/il+/i1Ti11Q9DEWGuwRBkBboL8oveE3PJY2bb54SsmrGc
-         wGbw==
-X-Gm-Message-State: AAQBX9cixwe0Wlextz1VBJtBvS1HCQyhhqAwWpsIJJQNKBCnx1NX+ADN
-        yaZksI9mpc/NpfX2EMUlEGWLkCxhbmP6WtRPJO0lZg==
-X-Google-Smtp-Source: AKy350aRREn50bpQ7xCS9LErMRNVeVNQfFgxRLmHVwVs/Hhc6bXBF8o0SRAxqojHcFOrhX1MsA8ejh9JM3OYefgOccs=
-X-Received: by 2002:a17:902:da85:b0:19f:2aa4:b1e5 with SMTP id
- j5-20020a170902da8500b0019f2aa4b1e5mr1216879plx.2.1680892083395; Fri, 07 Apr
- 2023 11:28:03 -0700 (PDT)
+        Fri, 7 Apr 2023 14:28:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4910F6A53
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:28:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C73FF6531B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 18:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65268C433EF;
+        Fri,  7 Apr 2023 18:27:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680892080;
+        bh=IaqEVSvO4+ec0TMhLkqBwp/Pr6mbvqqD98gAzdvOZHk=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=CB6dOTtScPKXalKF3JrhUEVFMkjNB/W8xrIsDLtw7o/SNFs7/NUayzVsVrI7xZTi6
+         X0uxshqcVt8/ZQ+HQFP/ISqfg2rEQM+1/7fsznDZZ1xVHaYpRO+cGUThOF0czMDS9p
+         aIbj5s+dOxbhvcTm8ox6+jUwTzBb9DhE23Xa4iKQ6aNSlRw76MEzMi6DcfwEitwZ1S
+         QL8as3fZZVBuzbVFXdRwX2oV1qxiRLq6w8L28SKmiDDeM6kLibtgqw7EsOwyKFqNrV
+         ICy1BgUTt1BTI2EFfQ3VSlpquZQgx1VqLOoyChsryqFTYbvOzYJKzS05cDKcik2hg1
+         Yh0tyYdp0SNdw==
+From:   Mark Brown <broonie@kernel.org>
+To:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        colin.i.king@gmail.com, fshao@chromium.org, jiaxin.yu@mediatek.com,
+        allen-kh.cheng@mediatek.com, Tom Rix <trix@redhat.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+In-Reply-To: <20230407115553.1968111-1-trix@redhat.com>
+References: <20230407115553.1968111-1-trix@redhat.com>
+Subject: Re: [PATCH] ASoC: mediatek: mt8186: set variable aud_pinctrl to
+ static
+Message-Id: <168089207711.180511.12653080399028672980.b4-ty@kernel.org>
+Date:   Fri, 07 Apr 2023 19:27:57 +0100
 MIME-Version: 1.0
-References: <20230401010456.1866555-1-trix@redhat.com>
-In-Reply-To: <20230401010456.1866555-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Apr 2023 11:27:52 -0700
-Message-ID: <CAKwvOdkzW41CXskgY8h6V321kQyDv8DjvYC02YdK71QKEB2g=Q@mail.gmail.com>
-Subject: Re: [PATCH] [media] mb86a20s: remove unused active_layers variable
-To:     Tom Rix <trix@redhat.com>
-Cc:     mchehab@kernel.org, nathan@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-2eb1a
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 6:05=E2=80=AFPM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/media/dvb-frontends/mb86a20s.c:1572:6: error: variable
->   'active_layers' set but not used [-Werror,-Wunused-but-set-variable]
->         int active_layers =3D 0, pre_ber_layers =3D 0, post_ber_layers =
-=3D 0;
->             ^
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Fri, 07 Apr 2023 07:55:53 -0400, Tom Rix wrote:
+> smatch reports
+> sound/soc/mediatek/mt8186/mt8186-afe-gpio.c:14:16: warning: symbol
+>   'aud_pinctrl' was not declared. Should it be static?
+> 
+> This variable is only used in one file so should be static.
+> 
+> 
+> [...]
 
-Thanks for the patch!
-Fixes: 149d518ad0fd ("[media] mb86a20s: add BER measurement")
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Applied to
 
-> ---
->  drivers/media/dvb-frontends/mb86a20s.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/media/dvb-frontends/mb86a20s.c b/drivers/media/dvb-f=
-rontends/mb86a20s.c
-> index b74b9afed9a2..125fed4891ba 100644
-> --- a/drivers/media/dvb-frontends/mb86a20s.c
-> +++ b/drivers/media/dvb-frontends/mb86a20s.c
-> @@ -1569,7 +1569,7 @@ static int mb86a20s_get_stats(struct dvb_frontend *=
-fe, int status_nr)
->         u32 t_post_bit_error =3D 0, t_post_bit_count =3D 0;
->         u32 block_error =3D 0, block_count =3D 0;
->         u32 t_block_error =3D 0, t_block_count =3D 0;
-> -       int active_layers =3D 0, pre_ber_layers =3D 0, post_ber_layers =
-=3D 0;
-> +       int pre_ber_layers =3D 0, post_ber_layers =3D 0;
->         int per_layers =3D 0;
->
->         dev_dbg(&state->i2c->dev, "%s called.\n", __func__);
-> @@ -1589,9 +1589,6 @@ static int mb86a20s_get_stats(struct dvb_frontend *=
-fe, int status_nr)
->
->         for (layer =3D 0; layer < NUM_LAYERS; layer++) {
->                 if (c->isdbt_layer_enabled & (1 << layer)) {
-> -                       /* Layer is active and has rc segments */
-> -                       active_layers++;
-> -
->                         /* Handle BER before vterbi */
->                         rc =3D mb86a20s_get_pre_ber(fe, layer,
->                                                   &bit_error, &bit_count)=
-;
-> --
-> 2.27.0
->
+   broonie/sound.git for-next
 
+Thanks!
 
---=20
+[1/1] ASoC: mediatek: mt8186: set variable aud_pinctrl to static
+      commit: 672029caa5708934817a331f3323bbe48d456c5c
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
 Thanks,
-~Nick Desaulniers
+Mark
+
