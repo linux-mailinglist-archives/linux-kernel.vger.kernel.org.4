@@ -2,100 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293A36DB2CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83296DB2E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbjDGScR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S230230AbjDGSfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjDGScN (ORCPT
+        with ESMTP id S229520AbjDGSfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:32:13 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34563BDCF;
-        Fri,  7 Apr 2023 11:32:11 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337CMGfG012601;
-        Fri, 7 Apr 2023 20:32:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=JOLfndtl+mN4Grspt7XxETH+EfXqJCgxlmF6LoEPr64=;
- b=QUJkbBVBc/80GLQHPDlw9MoHOck/v5Lz9zgvKd9UFwseVXW7X7xKLXlPVxx0mWKJaKeP
- my2Ve5QzR3Bb5IQSunWVkSl0ztxmLibyAAXE0zrO1I5dCMEgA1qRuUFJyldCBDeR+lpX
- oLs0d6kbpKiUYLfkLLVDDA8JjhYA03oDPzSYBoGtkPx7J1JuUrJo23ai8Zwd+fzyKZ9d
- aecX873mp2Qqb9k7XC+hJDyq3ETTrduX01lmbCFU8vdI0CWUs3vgG3X3LNktoRL8idW9
- frB20Me4FK3AyvfGx7HxDV+PJBGFkA6+FCtGL9UB3wHBq5FKwqPxAYLUHpgqsryUmpyV QA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pteygu570-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 20:32:00 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CE6DA10002A;
-        Fri,  7 Apr 2023 20:31:59 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C791225223F;
-        Fri,  7 Apr 2023 20:31:59 +0200 (CEST)
-Received: from localhost (10.48.0.157) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 7 Apr
- 2023 20:31:59 +0200
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH] ARM: dts: stm32: add part number for STM32MP15x
-Date:   Fri, 7 Apr 2023 20:31:57 +0200
-Message-ID: <20230407203151.1.Ia16c922b77242e5832106fedc76d27f7ed4dd952@changeid>
-X-Mailer: git-send-email 2.25.1
+        Fri, 7 Apr 2023 14:35:40 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E3ABBBE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:35:36 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso43975817pjb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 11:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680892536; x=1683484536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lkvnHvhSWeo4VxY3cBnY8xmf+ae8qd887dNHfnNtpJc=;
+        b=mPLcikNXDVSJkaTJnrYtE/PrmU4K58uQCaJJj2SEuX7BYjnHdOVPP0uWm7Ys8pkSNN
+         3UQMtDXGdNOq3BbYpGCt3MexDznn6DMUCJKT9u7IkE0p2J6dnIGBsvH1ujAUiYNLbst8
+         tU1admMpaie+k9EVyksjCS2abg71lmso213cBfaG1BJtZHm5zmKwjztqV/PXm5zjzylc
+         M1HnI6njMewLKlZREZos9pPHHhYRnY/X7NUAfs4DubfgANrp4R+ThZI3UlHkrGh2/eZF
+         M1C19kxcJQiD1E1i+oH+dLKCWctUrqBlIFi4eTubWT3bG0FVs8u8wzr6D31eRQRxnhuB
+         L/gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680892536; x=1683484536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lkvnHvhSWeo4VxY3cBnY8xmf+ae8qd887dNHfnNtpJc=;
+        b=6vpoDtcFl4neAAzNmUElhIWU+kWXSOSD/efx2f9GTxbgayG6uUIaEa1Z5bnveK+ztW
+         E02476REniSeh9YEEeMBpRiYWFLMmuGyvIHAj/8fq9mghZeMee1Z7AF5NQ0YEADXjcPf
+         QkVXUP2nL9y8Ly8aKNFNfzBoI8d7pBrCx/5E5rnw9brfTNfwC9YUUyG91KJQgRGxEKuZ
+         wS+UqVBZXgtJTDKDLHC+32fUvNcolrjjltpEoqptuG59rp3cvqQ93OPNPCLp/xxzYAwy
+         396OWpW/hArnJFsxqdelRnEoz0Kte2GiV/6zvID/l45gULADJshb3YSQKorc333BHg4y
+         uGuQ==
+X-Gm-Message-State: AAQBX9fxuqI0x4fhADem4LF27L6zy0DoJRlk+RJMjsOloFoM2yXK0VqK
+        DZCkcKoEjHj+e672TMMkyVjoXuMzZWq4prDtq15bj2lZ/qc5omA+CkCKQA==
+X-Google-Smtp-Source: AKy350aPJLLxT7peXfZnEftBBV8F7gsFTwtE+ixtpx4oUkwKGFydDK+es9dO4+rJzqrDYQ34QWKn2vt6euzihLIOJ4I=
+X-Received: by 2002:a17:90a:f10:b0:23d:535f:59c7 with SMTP id
+ 16-20020a17090a0f1000b0023d535f59c7mr802293pjy.7.1680892535727; Fri, 07 Apr
+ 2023 11:35:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_12,2023-04-06_03,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230324212210.1001990-1-maskray@google.com>
+In-Reply-To: <20230324212210.1001990-1-maskray@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 11:35:24 -0700
+Message-ID: <CAKwvOd=QXGbrxct20cBia92=QonWtfWdC21WK4w2bRBprPXh=w@mail.gmail.com>
+Subject: Re: [PATCH v2] Makefile: use -z pack-relative-relocs
+To:     Fangrui Song <maskray@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Collingbourne <pcc@google.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The STM32MP15x Device Part Number is located in the first 8 bits of OTP4,
-this patch add its description as the NVMEM cell.
+On Fri, Mar 24, 2023 at 2:22=E2=80=AFPM Fangrui Song <maskray@google.com> w=
+rote:
+>
+> Commit 27f2a4db76e8 ("Makefile: fix GDB warning with CONFIG_RELR")
+> added --use-android-relr-tags to fix a GDB warning
+>
+> BFD: /android0/linux-next/vmlinux: unknown type [0x13] section `.relr.dyn=
+'
+>
+> The GDB warning has been fixed in version 11.2.
+>
+> The DT_ANDROID_RELR tag was deprecated since DT_RELR was standardized.
+> Thus, --use-android-relr-tags should be removed. While making the
+> change, try -z pack-relative-relocs, which is supported since LLD 15.
+> Keep supporting --pack-dyn-relocs=3Drelr as well for older LLD versions.
+>
+> As of today, GNU ld supports the latter option for x86 and powerpc64
+> ports and has no intention to support --pack-dyn-relocs=3Drelr. In the
+> absence of the glibc symbol version GLIBC_ABI_DT_RELR,
+> --pack-dyn-relocs=3Drelr and -z pack-relative-relocs are identical in
+> ld.lld.
+>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1057
+> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Da61=
+9b58721f0a03fd91c27670d3e4c2fb0d88f1e
+> Signed-off-by: Fangrui Song <maskray@google.com>
 
-Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
----
+Thanks v2 looks better. IIUC, this will first try to test+use
+`--pack-dyn-relocs=3Drelr` in preference to `-z pack-relative-relocs`.
+Do we want to reorder the preference, for both the test and actual
+flag used?
 
- arch/arm/boot/dts/stm32mp151.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+> ---
+>  Makefile                      | 3 ++-
+>  scripts/tools-support-relr.sh | 8 ++++++--
+>  2 files changed, 8 insertions(+), 3 deletions(-)
+> ---
+> Changes from v1:
+> * Keep supporting --pack-dyn-relocs=3Drelr for older ld.lld versions
+>
+> diff --git a/Makefile b/Makefile
+> index a2c310df2145..e23a85476d5d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1113,7 +1113,8 @@ LDFLAGS_vmlinux   +=3D -X
+>  endif
+>
+>  ifeq ($(CONFIG_RELR),y)
+> -LDFLAGS_vmlinux        +=3D --pack-dyn-relocs=3Drelr --use-android-relr-=
+tags
+> +# ld.lld before 15 did not support -z pack-relative-relocs.
+> +LDFLAGS_vmlinux        +=3D $(call ld-option,--pack-dyn-relocs=3Drelr,-z=
+ pack-relative-relocs)
+>  endif
+>
+>  # We never want expected sections to be placed heuristically by the
+> diff --git a/scripts/tools-support-relr.sh b/scripts/tools-support-relr.s=
+h
+> index cb55878bd5b8..4c121946e517 100755
+> --- a/scripts/tools-support-relr.sh
+> +++ b/scripts/tools-support-relr.sh
+> @@ -7,8 +7,12 @@ trap "rm -f $tmp_file.o $tmp_file $tmp_file.bin" EXIT
+>  cat << "END" | $CC -c -x c - -o $tmp_file.o >/dev/null 2>&1
+>  void *p =3D &p;
+>  END
+> -$LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=3Drelr \
+> -  --use-android-relr-tags -o $tmp_file
+> +
+> +# ld.lld before 15 did not support -z pack-relative-relocs.
+> +if ! $LD $tmp_file.o -shared -Bsymbolic --pack-dyn-relocs=3Drelr -o $tmp=
+_file 2>/dev/null; then
+> +       $LD $tmp_file.o -shared -Bsymbolic -z pack-relative-relocs -o $tm=
+p_file 2>&1 |
+> +               grep -q pack-relative-relocs && exit 1
+> +fi
+>
+>  # Despite printing an error message, GNU nm still exits with exit code 0=
+ if it
+>  # sees a relr section. So we need to check that nothing is printed to st=
+derr.
+> --
+> 2.40.0.348.gf938b09366-goog
+>
 
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 4e437d3f2ed6..3cf78f706400 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1620,6 +1620,9 @@ bsec: efuse@5c005000 {
- 			reg = <0x5c005000 0x400>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+			part_number_otp: part-number-otp@4 {
-+				reg = <0x4 0x1>;
-+			};
- 			ts_cal1: calib@5c {
- 				reg = <0x5c 0x2>;
- 			};
--- 
-2.25.1
 
+--=20
+Thanks,
+~Nick Desaulniers
