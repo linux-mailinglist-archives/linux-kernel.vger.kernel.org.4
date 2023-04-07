@@ -2,96 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367DB6DB5A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31A26DB5AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbjDGVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S231523AbjDGVCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjDGVBu (ORCPT
+        with ESMTP id S231938AbjDGVC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:01:50 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFEA283FB;
-        Fri,  7 Apr 2023 14:01:40 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id B238E92009C; Fri,  7 Apr 2023 23:01:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id AB65592009B;
-        Fri,  7 Apr 2023 22:01:38 +0100 (BST)
-Date:   Fri, 7 Apr 2023 22:01:38 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Sam Ravnborg <sam@ravnborg.org>
-cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-parport@lists.infradead.org
-Subject: Re: [PATCH] parport_pc: don't allow driver for SPARC32
-In-Reply-To: <20230407200313.GA1655046@ravnborg.org>
-Message-ID: <alpine.DEB.2.21.2304072142290.62619@angie.orcam.me.uk>
-References: <20230406160548.25721-1-rdunlap@infradead.org> <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk> <20230406203207.GA1534216@ravnborg.org> <alpine.DEB.2.21.2304062144520.44308@angie.orcam.me.uk> <20230407200313.GA1655046@ravnborg.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 7 Apr 2023 17:02:27 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09541A276
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:02:10 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-947a47eb908so89715166b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680901328; x=1683493328;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YPcKdBRSdTG+FoVQj+kLiPvFB7VrPFru5LsqZmAmx20=;
+        b=l4F/ErgZZ6pMP8I8zZc3yQHipp9CKB7I6l//amZdnTi84bFTdEUpePK+nAZnoJaHto
+         UJhhWFDiuAXIaRrUy/NIlHF5V+JYyNjuRo5irbhxvTIPbo+kJB+5iKce2VKMAhSf/5Ij
+         hKnIdNnBPw6IJU+xwM264fRHWIrOO0KirRGIyvDYyklVvbdVnHM7dVk0KiyHhc/9WRUH
+         sJqoAPmrFe7mFgUMfkEzycqRDfLE/JAijMXKMenueVZ81YCRkL2zwNsdBSE+yB8rM1ga
+         0TerRYP+/lp96gMaFWbz7yT3TGsXmzmz2f/A13SgyNFw1gDZck9Tid7+VeUvRHKRyvgY
+         dlwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680901328; x=1683493328;
+        h=content-transfer-encoding:in-reply-to:references:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YPcKdBRSdTG+FoVQj+kLiPvFB7VrPFru5LsqZmAmx20=;
+        b=0ssf+XgrXF/a/U1gYilCsoLtAc4mGnfSn9ZHrtcPBZPuTevQXxP9sE59JIvs9teOr/
+         kF7zzso4knhdG69RIz2RL0xK54OEY8SJ/ggVDw2/WTk6nXQH9lPAmmvJ08taQ1EEm+AS
+         f8AMAQsgvbvUqT1hvxY1HDQ0Nd/Cbpzdmsk2R9ct5EPzx0UA29+LIy68tkGcvDtMxSDo
+         rjAskmfOq/OIDRrocZhdYOYyoN6KsADLMMm0RriDf0XGkTiw+OhghiI6vnoqlwd1Gu7b
+         ZnKlmNkMStkOl1kkl5vkgd7gjR+B153JeoT2H/8tqXDLjC0sE0BJs+k/YCZi4AP233Hi
+         vGOA==
+X-Gm-Message-State: AAQBX9cmPKp2pOVQJZMQNtH/l6dro9BIF0Urq/f0qWe2cGUsN1HKRcRX
+        k1n8ziP+XDgGjJ3GXKrMdtc=
+X-Google-Smtp-Source: AKy350YrQLmUc4IVssaOzvjGV2ceDC4ifXsiXlT8LRI7cfgURUDQWMNpPVC1cttXrVeZZq5SPi5PRQ==
+X-Received: by 2002:a05:6402:4413:b0:502:465:28d4 with SMTP id y19-20020a056402441300b00502046528d4mr763142eda.1.1680901328081;
+        Fri, 07 Apr 2023 14:02:08 -0700 (PDT)
+Received: from [192.168.0.102] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id ek14-20020a056402370e00b005028e87068fsm2228219edb.73.2023.04.07.14.02.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 14:02:06 -0700 (PDT)
+Message-ID: <248ec330-b4c3-aa7b-61eb-69ce8d333b69@gmail.com>
+Date:   Fri, 7 Apr 2023 23:02:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: [BUG] staging: rtl8192e: W_DISABLE# does not work after stop/start
+Content-Language: en-US
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <39dc735c-fd6d-e405-856c-788a52704d63@gmail.com>
+In-Reply-To: <39dc735c-fd6d-e405-856c-788a52704d63@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 7 Apr 2023, Sam Ravnborg wrote:
+When loading the driver for rtl8192e, the W_DISABLE# switch is working 
+as intended. But when the WLAN is turned off in software and then turned 
+on again the W_DISABLE# does not work anymore.
 
-> > > Randy's suggestion is fine, as we avoid building parport support
-> > > for sparc32. If someone shows up and need parport support
-> > > for sparc32 then we could look into how to enable it.
-> > > Until then, we are better helped avoiding building the driver.
-> > 
-> >  I disagree.  Why artificially prevent perfectly good hardware from 
-> > working with a perfectly good driver especially as the fix is just a 
-> > trivial exercise?  And I offered a solution.
-> 
-> There is no sparc32 with a PC style parallel port, so the parport_pc
-> have no value for a sparc32 machine.
+Reason for this is that in the function _rtl92e_dm_check_rf_ctrl_gpio()
+checking this every two seconds is an conditional return.
 
- There are PC-style PCI (and PCIe) parallel ports in the form of option 
-cards being sold; I have one in my RISC-V machine (and I had to go through 
-the hassle of figuring out why the heck I am not able to select the driver 
-in configuration; a situation analogous to what Randy's change wants to 
-arrange).  You can plug one into any machine that has PCI slots and my 
-understanding from Linux Kconfig files is there are such 32-bit SPARC 
-machines in existence or the dependency on PCI wouldn't offer the driver.  
-Otherwise just don't enable CONFIG_PCI for 32-bit SPARC.
+	if (priv->bfirst_after_down) {
+		priv->bfirst_after_down = true; // PH: useless line
+		return;
+	}
 
- Apologies if I wasn't clear enough with my reasoning, although I think 
-the lone presence of the PCI dependency in Kconfig ought have to make it 
-clear.
+	tmp1byte = rtl92e_readb(dev, GPI); // PH: GPI for W_DISABLE#
 
-> The sparc32 machines have the parport_sunbpp driver for their parallel
-> port.
+bfirst_after_down is set true when switching the WLAN off in software. 
+But it is not set to false again when WLAN is turned on again.
 
- That's an onboard device or an SBus option card though, right?
+Thanks for your support.
 
-> An alternative fix, and better I think, would be to audit all archs
-> and let the relevant ones select ARCH_MIGHT_HAVE_PC_PARPORT, so we
-> avoided the ugly "|| (PCI && !S390 && !SPARC32)" case for PARPORT_PC.
+Bye Philipp
 
- It's only S390 that is special in that it has a limited set of specially 
-crafted PCI options it can ever support (or so I am told; something about 
-the firmware or suchlike).
-
- Any other platform that has PCI slots will handle PC-style PCI parallel 
-port option cards just fine, as long as it supports PCI I/O read/write 
-commands (some systems such as POWER9 machines don't; Niklas Schnelle has 
-been recently working on a generic way to exclude drivers for devices that 
-require PCI port I/O from being offered with systems that have no support 
-for PCI port I/O).
-
- Let me know if you find anything here unclear or have any other questions 
-or comments.
-
-  Maciej
