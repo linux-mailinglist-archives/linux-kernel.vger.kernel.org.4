@@ -2,117 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F656DB11B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2EA6DB11C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjDGRFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S229992AbjDGRFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjDGRE6 (ORCPT
+        with ESMTP id S229935AbjDGRFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:04:58 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB0BBA1
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:04:50 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id r14-20020a056e02108e00b00326334613f0so18263723ilj.20
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:04:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680887089; x=1683479089;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9TnUl47z21Nij35fj9d1jh5EYMecekHF/0+bl/JRlgg=;
-        b=2Od79jrXesDVME1hS/B2RBAhcK5cp6ZRrkQ0q/ja0Z2DRoPjEq/ppUApcpf3rooA/M
-         CKhFpQXkWAlWtRPlmw5jIQ8rzx3aHFhiU1zmmIvepm0jw3Yybymc5jQF7DhJGI48d0lk
-         Y7mkTEYGhqSUTcMA7yIL0QwFo7nBFAXuL899GmJW9MsXl5CNWgHZH3WhIzgeqbnjvazV
-         dX4XwVd99c9tXaKu0HtKI7kf2mKBT2/WawDXVbwqwNcbmMEofeg09m9HriIjba33stNA
-         C/tf/TfFm9u1fYa5R3nydgmT1RyOnD2ViZEni9di/uVRh+hqI5BFn3hsFuP+UN4bW73k
-         cDcA==
-X-Gm-Message-State: AAQBX9dVyvdPisHRlqRwiggoZRtIYbxg1xvWJhNSuplTG3WaNfKeRJeU
-        f6nSAMS/tIqOKuro2zixDFzLZW9ZcjSSmF+kTNYe/qVfLHLt
-X-Google-Smtp-Source: AKy350biinDzzhkhVthNzHEgvyUE51wzgBH//6QJSL+3xEpJXEcKQzJ99r6k94HByXhCpL3u0tpGJC9mbMQJUFPotUKTtGn8XkeH
+        Fri, 7 Apr 2023 13:05:00 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9939D8A42
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:04:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 55AEC21D72;
+        Fri,  7 Apr 2023 17:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1680887095; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OP+WQoqp5N6LD5bTBcxYrhZCAveaV/0KikGNAEyK220=;
+        b=Rl5rPqtWZskhI9Ty3Bk7hN3/0M3GBUF9uKToD4wVcKEd0o0uUr9rnL7alvC7FZoYg3J73r
+        65nuOW38/cVxkB7kI9TsXHA/xAcLQ3cFCd2U4brzPx1P2s/GaxcX/d3s0HT5HjW97LaFIm
+        RJNyNvr0NMtui5s0b4cOHc57dp98NqQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1680887095;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OP+WQoqp5N6LD5bTBcxYrhZCAveaV/0KikGNAEyK220=;
+        b=akaAwtwzT4XP6KUz0DCzUUe08sh+JE8HKAjMiuke0R2hFKA2vmj6S7tj3cWabWyxZ4Uorc
+        wxtiUUhpCbQChBCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B2ED133FE;
+        Fri,  7 Apr 2023 17:04:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hOzGBDdNMGR4PAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 07 Apr 2023 17:04:55 +0000
+Date:   Fri, 7 Apr 2023 19:04:53 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Subject: [PATCH RESEND] mtd: onenand: omap2: Drop obsolete dependency on
+ COMPILE_TEST
+Message-ID: <20230407190453.66efdf9d@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1a61:b0:326:3f06:a0d7 with SMTP id
- w1-20020a056e021a6100b003263f06a0d7mr1616499ilv.0.1680887089848; Fri, 07 Apr
- 2023 10:04:49 -0700 (PDT)
-Date:   Fri, 07 Apr 2023 10:04:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e5f10505f8c205bc@google.com>
-Subject: [syzbot] [xfs?] WARNING in __queue_delayed_work
-From:   syzbot <syzbot+5ed016962f5137a09c7c@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+is possible to test-build any driver which depends on OF on any
+architecture by explicitly selecting OF. Therefore depending on
+COMPILE_TEST as an alternative is no longer needed.
 
-syzbot found the following issue on:
+It is actually better to always build such drivers with OF enabled,
+so that the test builds are closer to how each driver will actually be
+built on its intended target. Building them without OF may not test
+much as the compiler will optimize out potentially large parts of the
+code. In the worst case, this could even pop false positive warnings.
+Dropping COMPILE_TEST here improves the quality of our testing and
+avoids wasting time on non-existent issues.
 
-HEAD commit:    7e364e56293b Linux 6.3-rc5
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13241195c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e3b9dc6616d797bb
-dashboard link: https://syzkaller.appspot.com/bug?extid=5ed016962f5137a09c7c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5ed016962f5137a09c7c@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 102 at kernel/workqueue.c:1445 __queue_work+0xd44/0x1120 kernel/workqueue.c:1444
-Modules linked in:
-CPU: 1 PID: 102 Comm: kswapd0 Not tainted 6.3.0-rc5-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:__queue_work+0xd44/0x1120 kernel/workqueue.c:1444
-Code: e0 07 83 c0 03 38 d0 7c 09 84 d2 74 05 e8 74 0c 81 00 8b 5b 2c 31 ff 83 e3 20 89 de e8 c5 fb 2f 00 85 db 75 42 e8 6c ff 2f 00 <0f> 0b e9 3c f9 ff ff e8 60 ff 2f 00 0f 0b e9 ce f8 ff ff e8 54 ff
-RSP: 0000:ffffc90000ce7638 EFLAGS: 00010093
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888015f73a80 RSI: ffffffff8152d854 RDI: 0000000000000005
-RBP: 0000000000000002 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffffe8ffffb03348
-R13: ffff888078462000 R14: ffffe8ffffb03390 R15: ffff888078462000
-FS:  0000000000000000(0000) GS:ffff88802ca80000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000cfa5bb CR3: 0000000025fde000 CR4: 0000000000150ee0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __queue_delayed_work+0x1c8/0x270 kernel/workqueue.c:1672
- mod_delayed_work_on+0xe1/0x220 kernel/workqueue.c:1746
- xfs_inodegc_shrinker_scan fs/xfs/xfs_icache.c:2212 [inline]
- xfs_inodegc_shrinker_scan+0x250/0x4f0 fs/xfs/xfs_icache.c:2191
- do_shrink_slab+0x428/0xaa0 mm/vmscan.c:853
- shrink_slab+0x175/0x660 mm/vmscan.c:1013
- shrink_one+0x502/0x810 mm/vmscan.c:5343
- shrink_many mm/vmscan.c:5394 [inline]
- lru_gen_shrink_node mm/vmscan.c:5511 [inline]
- shrink_node+0x2064/0x35f0 mm/vmscan.c:6459
- kswapd_shrink_node mm/vmscan.c:7262 [inline]
- balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7452
- kswapd+0x677/0xd60 mm/vmscan.c:7712
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Even though this was supposedly accepted a few months ago already, I
+can't find this commit, neither upstream nor in the nand/next,
+therefore resending.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ drivers/mtd/nand/onenand/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- linux-6.2.orig/drivers/mtd/nand/onenand/Kconfig
++++ linux-6.2/drivers/mtd/nand/onenand/Kconfig
+@@ -25,7 +25,7 @@ config MTD_ONENAND_GENERIC
+ config MTD_ONENAND_OMAP2
+ 	tristate "OneNAND on OMAP2/OMAP3 support"
+ 	depends on ARCH_OMAP2 || ARCH_OMAP3 || (COMPILE_TEST && ARM)
+-	depends on OF || COMPILE_TEST
++	depends on OF
+ 	depends on OMAP_GPMC
+ 	help
+ 	  Support for a OneNAND flash device connected to an OMAP2/OMAP3 SoC
+
+
+-- 
+Jean Delvare
+SUSE L3 Support
