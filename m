@@ -2,84 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDBF6D8CD4
-	for <lists+linux-kernel@lfdr.de>; Thu,  6 Apr 2023 03:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142896DB283
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbjDFBio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 5 Apr 2023 21:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
+        id S229614AbjDGSLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234609AbjDFBil (ORCPT
+        with ESMTP id S229608AbjDGSLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 5 Apr 2023 21:38:41 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3383D6A45
-        for <linux-kernel@vger.kernel.org>; Wed,  5 Apr 2023 18:38:38 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 16A321A00B04;
-        Thu,  6 Apr 2023 09:38:51 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id eVFBE7vZW73S; Thu,  6 Apr 2023 09:38:50 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 083B31A00B02;
-        Thu,  6 Apr 2023 09:38:50 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: [PATCH v2] sched: rt: Simplify pick_next_rt_entity()
-Date:   Sat,  8 Apr 2023 02:09:52 +0800
-Message-Id: <20230407180952.2757-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=2.5 required=5.0 tests=DATE_IN_FUTURE_24_48,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+        Fri, 7 Apr 2023 14:11:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFF4AD02;
+        Fri,  7 Apr 2023 11:11:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C31365055;
+        Fri,  7 Apr 2023 18:11:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A6CC433D2;
+        Fri,  7 Apr 2023 18:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680891067;
+        bh=BWzBViVw+Sgief90El4Js+Vc5AfQh5Kawzk2O+ZsBxc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CTCJ3vFMIo7YXyvsP7o0rn8wFKWxX3/XR0XGX0uR9Ga/OIDh3Yd57UNnkGyqRIciB
+         Ej1rcv+4Ijw4urVEz93S2ZInfaZRRqaqPEQ0hUKIT4vkMZdReUDuTA96ocFWHtq8GC
+         AaMq/J+oafcVulPJR/9cr05+784kNu9BfVXzcMLM3wB1J/DClUzmhzMekNfrW41n53
+         hb0aOLPaCdscGPGD3gvMdGzjygjVL8hlrECkjsFPRlIcqROvlnFAwFk10bPWiSJk7C
+         QhD+j6AmIqM9J4e2j7NooOR6/+UUzCjcEOUE9W4rc1erVwS2I04kqTSOB74Pt2NMt1
+         hy0/qpXyoGvmA==
+Date:   Fri, 7 Apr 2023 11:11:05 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Subject: Re: [PATCH 2/3] kbuild: do not create intermediate *.tar for source
+ tarballs
+Message-ID: <20230407181105.GC1018455@dev-arch.thelio-3990X>
+References: <20230407101629.1298051-1-masahiroy@kernel.org>
+ <20230407101629.1298051-2-masahiroy@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407101629.1298051-2-masahiroy@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove useless intermediate variable "next" and its initialization. 
-Directly return the next RT scheduling entity obtained from
-list_entry().
+On Fri, Apr 07, 2023 at 07:16:28PM +0900, Masahiro Yamada wrote:
+> Since commit 05e96e96a315 ("kbuild: use git-archive for source package
+> creation"), source tarballs are created in two steps; create *.tar file
+> then compress it. I split the compression as a separate rule because I
+> just thought 'git archive' supported only gzip for compression. I admit
+> the unneeded *.tar file is annoying.
+> 
+> For other compression algorithms, I could pipe the two commands:
+> 
+>   $ git archive HEAD | xz > linux.tar.xz
+> 
+> I read git-archive(1) carefully, and I realized GIT had provided a
+> more elegant way:
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
----
- v2: Simplify title and descriptive information.
- 
- kernel/sched/rt.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Hooray for documentation :)
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 0a11f44adee5..e9b1c08c20a7 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1769,7 +1769,6 @@ static inline void set_next_task_rt(struct rq *rq, struct task_struct *p, bool f
- static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
- {
- 	struct rt_prio_array *array = &rt_rq->active;
--	struct sched_rt_entity *next = NULL;
- 	struct list_head *queue;
- 	int idx;
- 
-@@ -1779,9 +1778,8 @@ static struct sched_rt_entity *pick_next_rt_entity(struct rt_rq *rt_rq)
- 	queue = array->queue + idx;
- 	if (SCHED_WARN_ON(list_empty(queue)))
- 		return NULL;
--	next = list_entry(queue->next, struct sched_rt_entity, run_list);
- 
--	return next;
-+	return list_entry(queue->next, struct sched_rt_entity, run_list);
- }
- 
- static struct task_struct *_pick_next_task_rt(struct rq *rq)
--- 
-2.18.2
+>   $ git -c tar.tar.xz.command=xz archive -o linux.tar.xz HEAD
+> 
+> This commit uses 'tar.tar.*.command' configuration to specify the
+> compression backend so we can create a compressed tarball directly.
+> 
+> GIT commit 767cf4579f0e ("archive: implement configurable tar filters")
+> is more than a decade old, so it should be available on almost all build
+> environments.
 
+git 1.7.7 it seems, certainly ancientware in my opinion. If people have
+issues with this, they can just upgrade git; even RHEL7 has git 1.8.x.
+
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+> 
+>  scripts/Makefile.package | 24 +++++++++++++++++-------
+>  1 file changed, 17 insertions(+), 7 deletions(-)
+> 
+> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+> index a205617730c6..7707975f729b 100644
+> --- a/scripts/Makefile.package
+> +++ b/scripts/Makefile.package
+> @@ -57,16 +57,23 @@ check-git:
+>  		false; \
+>  	fi
+>  
+> +archive-config-tar.gz  = -c tar.tar.gz.command="$(KGZIP)"
+> +archive-config-tar.bz2 = -c tar.tar.bz2.command="$(KBZIP2)"
+> +archive-config-tar.xz  = -c tar.tar.xz.command="$(XZ)"
+> +archive-config-tar.zst = -c tar.tar.zst.command="$(ZSTD)"
+> +
+>  quiet_cmd_archive = ARCHIVE $@
+> -      cmd_archive = git -C $(srctree) archive \
+> +      cmd_archive = git -C $(srctree) $(archive-config-tar$(suffix $@)) archive \
+>                      --output=$$(realpath $@) --prefix=$(basename $@)/ $(archive-args)
+>  
+>  # Linux source tarball
+>  # ---------------------------------------------------------------------------
+>  
+> -targets += linux.tar
+> -linux.tar: archive-args = $$(cat $<)
+> -linux.tar: .tmp_HEAD FORCE
+> +linux-tarballs := $(addprefix linux, .tar.gz)
+
+Is there any reason not to allow other compression formats for linux
+like you do for perf?
+
+> +
+> +targets += $(linux-tarballs)
+> +$(linux-tarballs): archive-args = $$(cat $<)
+> +$(linux-tarballs): .tmp_HEAD FORCE
+>  	$(call if_changed,archive)
+>  
+>  # rpm-pkg
+> @@ -185,9 +192,12 @@ perf-archive-args = --add-file=$$(realpath $(word 2, $^)) \
+>  	--add-file=$$(realpath $(word 3, $^)) \
+>  	$$(cat $(word 2, $^))^{tree} $$(cat $<)
+>  
+> -targets += perf-$(KERNELVERSION).tar
+> -perf-$(KERNELVERSION).tar: archive-args = $(perf-archive-args)
+> -perf-$(KERNELVERSION).tar: tools/perf/MANIFEST .tmp_perf/HEAD .tmp_perf/PERF-VERSION-FILE FORCE
+> +
+> +perf-tarballs := $(addprefix perf-$(KERNELVERSION), .tar .tar.gz .tar.bz2 .tar.xz .tar.zst)
+> +
+> +targets += $(perf-tarballs)
+> +$(perf-tarballs): archive-args = $(perf-archive-args)
+> +$(perf-tarballs): tools/perf/MANIFEST .tmp_perf/HEAD .tmp_perf/PERF-VERSION-FILE FORCE
+>  	$(call if_changed,archive)
+>  
+>  PHONY += perf-tar-src-pkg
+> -- 
+> 2.37.2
+> 
