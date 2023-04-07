@@ -2,202 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A556DB20B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2F96DB117
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjDGRuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S229896AbjDGREh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDGRuU (ORCPT
+        with ESMTP id S229523AbjDGREf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:50:20 -0400
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57171E55;
-        Fri,  7 Apr 2023 10:50:18 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id A452D642819;
-        Fri,  7 Apr 2023 17:50:17 +0000 (UTC)
-Received: from pdx1-sub0-mail-a273.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id D0719642887;
-        Fri,  7 Apr 2023 17:50:16 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1680889817; a=rsa-sha256;
-        cv=none;
-        b=TIbVxD5clnbRC5sek/1Y6JVMCwvjldE7zJ5JXvkErmkxZ5spzniOBeaq15Clq/mrQiiyYN
-        n2lqo/kQkSyln3sagMFmv7H1egerBwIll4T7vGyUYZrFy1e6HOoxSwyA7IoAX1oon4aaLb
-        H4lBe8RWXfrLL9/8BvYV+N85B94zycBYg0UnQGaHzOAAMzVhqDimvReWj0eq6wE0ay638z
-        Zcz7OhjkkKTADKq/aT/zBhKy5pRTstItXb4gXEXIWW97lwU+niFyKjXOX9n2Ez0BTzdpg8
-        tET7CkWpgNLz3zFNUzHzvhJ+ZgxqYPezbDg65K5sQhdOBiTVj7f/+2bhCHD+uA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1680889817;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=Mu9kZlt0sY3Iz7fipBM4PsZC6jpgc1lK7rIImuJwcmA=;
-        b=mhIdX9AUWfSxKwf98Zsl6nqV1ckKdof33MJI+HCXdMyP5auJGvrULmvYMq5Cj5OO+iLbKh
-        C9MBKMyS4fU18KQ5zchecX13pttwfNJDk0BV8gTrl41LOHkjne76/qW5PD6EYDdiPRB9qX
-        a8u6TIzDUTGBBQRSYn8HA6DIaoYPUTH1jCfHiGta/RXm9vnXFT2Wte63JAapz+09QyqXKn
-        JeAryPUbNfGe7D3ZUgmtO9EjA7/+S8DakHEbfR3k2WuOmtCFl7BvmNR5dH9WoRU8PhJQ+v
-        gPwKt3RsJYuaHRYqO+7/0TyY/3HSIvsqQNii0+iG2n4HYuUlGMld5gEOYKvqLQ==
-ARC-Authentication-Results: i=1;
-        rspamd-786cb55f77-r5vrk;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Shoe-Cooing: 45257a4105340661_1680889817417_2184140518
-X-MC-Loop-Signature: 1680889817417:4182388007
-X-MC-Ingress-Time: 1680889817416
-Received: from pdx1-sub0-mail-a273.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.114.243.16 (trex/6.7.2);
-        Fri, 07 Apr 2023 17:50:17 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 7 Apr 2023 13:04:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708DEAD1A;
+        Fri,  7 Apr 2023 10:04:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a273.dreamhost.com (Postfix) with ESMTPSA id 4PtQr70tB3zFJ;
-        Fri,  7 Apr 2023 10:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1680889816;
-        bh=Mu9kZlt0sY3Iz7fipBM4PsZC6jpgc1lK7rIImuJwcmA=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=bBcBOgYjS+tWkkrzlBRKxYSONYL0z2wuJaudfaWFf21tnZlCXeIll5w+XrnpG+c50
-         Rt1lU5LGEjvogjGcr3ikPfCub4vJ2/NFH4LoOGzkRcrR9AxAq7a3REsIpmY+YNq/Zi
-         y6j9b+CFHCAtZhUqlaCyrqWkkcJam2kj+E7cHcIu3hPsXCKBDrtqYMHQLbzrFDd+Ns
-         agIRq7fTvZo80pX1fA6NsESIwkpOZbxj5qBXYtVj7q+SbuWI0Rc8ig2lhBfBBbh/rw
-         hBZBl9TpfN0ppuOaEUHfNNwn13IaJjeZ+lJ1ECLNcJHYpYtsQVa9L03DXUU6J+nnvL
-         fNEDL9kWNGqYw==
-Date:   Fri, 7 Apr 2023 10:19:29 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     david@redhat.com, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v2 2/2] modules/kmod: replace implementation with a
- sempahore
-Message-ID: <20230407171929.xlxi7ewxxtrqo6z5@offworld>
-Mail-Followup-To: Luis Chamberlain <mcgrof@kernel.org>, david@redhat.com,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, pmladek@suse.com,
-        petr.pavlu@suse.com, prarit@redhat.com,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
-        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
-        willy@infradead.org, vbabka@suse.cz, mhocko@suse.com,
-        dave.hansen@linux.intel.com, colin.i.king@gmail.com,
-        jim.cromie@gmail.com, catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com
-References: <20230405203505.1343562-1-mcgrof@kernel.org>
- <20230405203505.1343562-3-mcgrof@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C89461284;
+        Fri,  7 Apr 2023 17:04:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19C9C433EF;
+        Fri,  7 Apr 2023 17:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680887072;
+        bh=84GG4GqddxbvAIsmuTYd6nCuYTWPg+lSmfhnPE4ojYk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XemRHQHH5RiDgK2T26wY95xXRCWrJq5xvSG2AvR1R1VCdkSZANtkIHoIihwqfAt3v
+         XIav9VvxZZTls2AfIhpx+tDliAsdn34WtUrTXp3o9t5QNIZl7qq/1ZGDxx/VTvzXv3
+         HD6Ou89Ha/EoFSwbLpO9+vpckiQaDHAtCrIyr8hWky5lbkQW5vDi74P0iL0VP0Vj3N
+         NpASHU/wowBf7RtRrVHs6KDXIiVJfUBRbuZf7rc9rblpUSIX1tDsoUQ1JqS4HRDGEp
+         SELYYG+ylapIpXPxwqC7VTKOZH7GXzAlqjQ9RJaXMUZKR1GzoVd1GcrD69EEYlHPXc
+         BE9TXcm51gwzw==
+Date:   Fri, 7 Apr 2023 18:19:47 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Patrik =?UTF-8?B?RGFobHN0csO2bQ==?= <risca@dalakolonin.se>
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, kernel@pyra-handheld.com,
+        pgoudagunta@nvidia.com, hns@goldelico.com, lars@metafoo.de,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v3 6/7] iio: adc: palmas: add support for iio threshold
+ events
+Message-ID: <20230407181947.667614ed@jic23-huawei>
+In-Reply-To: <20230405212233.4167986-7-risca@dalakolonin.se>
+References: <20230405212233.4167986-1-risca@dalakolonin.se>
+        <20230405212233.4167986-7-risca@dalakolonin.se>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230405203505.1343562-3-mcgrof@kernel.org>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the title: s/sempahore/semaphore
+On Wed,  5 Apr 2023 23:22:32 +0200
+Patrik Dahlstr=C3=B6m <risca@dalakolonin.se> wrote:
 
-On Wed, 05 Apr 2023, Luis Chamberlain wrote:
+> The palmas gpadc block has support for monitoring up to 2 ADC channels
+> and issue an interrupt if they reach past a set threshold. This change
+> hooks into the IIO events system and exposes to userspace the ability to
+> configure these threshold values for each channel, but only allow up to
+> 2 such thresholds to be enabled at any given time. Trying to enable a
+> third channel will result in an error.
+>=20
+> Userspace is expected to input calibrated, as opposed to raw, values as
+> threshold. However, it is not enough to do the opposite of what is done
+> when converting the other way around. To account for tolerances in the
+> ADC, the calculated raw threshold should be adjusted based on the ADC
+> specifications for the device. These specifications include the integral
+> nonlinearity (INL), offset, and gain error. To adjust the high
+> threshold, use the following equation:
+>=20
+>   (calibrated value + INL) * Gain error + offset =3D maximum value  [1]
+>=20
+> Likewise, use the following equation for the low threshold:
+>=20
+>   (calibrated value - INL) * Gain error - offset =3D minimum value
+>=20
+> The gain error is a combination of gain error, as listed in the
+> datasheet, and gain error drift due to temperature and supply. The exact
+> values for these specifications vary between palmas devices. This patch
+> sets the values found in TWL6035, TWL6037 datasheet.
+>=20
+> [1] TI Application Report, SLIA087A, Guide to Using the GPADC in
+>     TPS65903x, TPS65917-Q1, TPS65919-Q1, and TPS65916 Devices.
+>=20
+> Signed-off-by: Patrik Dahlstr=C3=B6m <risca@dalakolonin.se>
+Hi Patrik,
 
->Simplfy the concurrency delimiter we user for kmod with the semaphore.
->I had used the kmod strategy to try to implement a similar concurrency
->delimiter for the kernel_read*() calls from the finit_module() path
->so to reduce vmalloc() memory pressure. That effort didn't provid yet
->conclusive results, but one thing that did became clear is we can use
->the suggested alternative solution with semaphores which Linus hinted
->at instead of using the atomic / wait strategy.
->
->I've stress tested this with kmod test 0008:
->
->time /data/linux-next/tools/testing/selftests/kmod/kmod.sh -t 0008
->
->And I get only a *slight* delay. That delay however is small, a few
->seconds for a full test loop run that runs 150 times, for about ~30-40
->seconds. The small delay is worth the simplfication IMHO.
+A few really trivial formatting things inline. If we don't end up
+with a v4 for other reasons I can tidy this stuff up whilst applying.
 
-Yes, code looks a lot nicer.
+Jonathan
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
 
->Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->---
-> kernel/module/kmod.c | 26 +++++++-------------------
-> 1 file changed, 7 insertions(+), 19 deletions(-)
->
->diff --git a/kernel/module/kmod.c b/kernel/module/kmod.c
->index b717134ebe17..925eb85b8346 100644
->--- a/kernel/module/kmod.c
->+++ b/kernel/module/kmod.c
->@@ -40,8 +40,7 @@
->  * effect. Systems like these are very unlikely if modules are enabled.
->  */
-> #define MAX_KMOD_CONCURRENT 50
->-static atomic_t kmod_concurrent_max = ATOMIC_INIT(MAX_KMOD_CONCURRENT);
->-static DECLARE_WAIT_QUEUE_HEAD(kmod_wq);
->+static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
->
-> /*
->  * This is a restriction on having *all* MAX_KMOD_CONCURRENT threads
->@@ -148,29 +147,18 @@ int __request_module(bool wait, const char *fmt, ...)
->	if (ret)
->		return ret;
->
->-	if (atomic_dec_if_positive(&kmod_concurrent_max) < 0) {
->-		pr_warn_ratelimited("request_module: kmod_concurrent_max (%u) close to 0 (max_modprobes: %u), for module %s, throttling...",
->-				    atomic_read(&kmod_concurrent_max),
->-				    MAX_KMOD_CONCURRENT, module_name);
->-		ret = wait_event_killable_timeout(kmod_wq,
->-						  atomic_dec_if_positive(&kmod_concurrent_max) >= 0,
->-						  MAX_KMOD_ALL_BUSY_TIMEOUT * HZ);
->-		if (!ret) {
->-			pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
->-					    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
->-			return -ETIME;
->-		} else if (ret == -ERESTARTSYS) {
->-			pr_warn_ratelimited("request_module: sigkill sent for modprobe %s, giving up", module_name);
->-			return ret;
->-		}
->+	ret = down_timeout(&kmod_concurrent_max, MAX_KMOD_ALL_BUSY_TIMEOUT);
->+	if (ret) {
->+		pr_warn_ratelimited("request_module: modprobe %s cannot be processed, kmod busy with %d threads for more than %d seconds now",
->+				    module_name, MAX_KMOD_CONCURRENT, MAX_KMOD_ALL_BUSY_TIMEOUT);
->+		return ret;
->	}
->
->	trace_module_request(module_name, wait, _RET_IP_);
->
->	ret = call_modprobe(module_name, wait ? UMH_WAIT_PROC : UMH_WAIT_EXEC);
->
->-	atomic_inc(&kmod_concurrent_max);
->-	wake_up(&kmod_wq);
->+	up(&kmod_concurrent_max);
->
->	return ret;
-> }
->--
->2.39.2
->
+> =20
+> +/**
+
+Not kernel-doc so /* only
+Even if it were the indent for the following should align the * with the fi=
+rst * not
+the second one.
+
+> +  * The high and low threshold values are calculated based on the advice=
+ given
+> +  * in TI Application Report SLIA087A, "Guide to Using the GPADC in PS65=
+903x,
+> +  * TPS65917-Q1, TPS65919-Q1, and TPS65916 Devices". This document recom=
+mend
+> +  * taking ADC tolerances into account and is based on the device integr=
+al non-
+> +  * linearity (INL), offset error and gain error:
+> +  *
+> +  *   raw high threshold =3D (ideal threshold + INL) * gain error + offs=
+et error
+> +  *
+> +  * The gain error include both gain error, as specified in the datashee=
+t, and
+> +  * the gain error drift. These paramenters vary depending on device and=
+ whether
+> +  * the the channel is calibrated (trimmed) or not.
+> +  */
+> +static int palmas_gpadc_threshold_with_tolerance(int val, const int INL,
+> +						 const int gain_error,
+> +						 const int offset_error)
+> +{
+> +	val =3D ((val + INL) * (1000 + gain_error)) / 1000 + offset_error;
+> +
+> +	return clamp(val, 0, 0xFFF);
+> +}
+> +
+> +/**
+
+/*
+
+> +  * The values below are taken from the datasheet of TWL6035, TWL6037.
+> +  * todo: get max INL, gain error, and offset error from OF.
+> +  */
+> +static int palmas_gpadc_get_high_threshold_raw(struct palmas_gpadc *adc,
+> +					       struct palmas_adc_event *ev)
+> +{
+> +	const int adc_chan =3D ev->channel;
+> +	int val =3D adc->thresholds[adc_chan].high;
+> +	/* integral nonlinearity, measured in LSB */
+> +	const int max_INL =3D 2;
+> +	/* measured in LSB */
+> +	int max_offset_error;
+> +	/* 0.2% when calibrated */
+> +	int max_gain_error =3D 2;
+> +
+> +	val =3D (val * 1000) / adc->adc_info[adc_chan].gain;
+> +
+> +	if (adc->adc_info[adc_chan].is_uncalibrated) {
+> +		/* 2% worse */
+> +		max_gain_error +=3D 20;
+> +		max_offset_error =3D 36;
+> +	} else {
+> +		val =3D (val * adc->adc_info[adc_chan].gain_error +
+> +		       adc->adc_info[adc_chan].offset) /
+> +			1000;
+> +		max_offset_error =3D 2;
+> +	}
+> +
+> +	return palmas_gpadc_threshold_with_tolerance(val,
+> +						     max_INL,
+> +						     max_gain_error,
+> +						     max_offset_error);
+> +}
+> +
+> +/**
+
+This isn't kernel-doc so just /*=20
+
+> +  * The values below are taken from the datasheet of TWL6035, TWL6037.
+> +  * todo: get min INL, gain error, and offset error from OF.
+> +  */
+> +static int palmas_gpadc_get_low_threshold_raw(struct palmas_gpadc *adc,
+> +					      struct palmas_adc_event *ev)
+> +{
+> +	const int adc_chan =3D ev->channel;
+> +	int val =3D adc->thresholds[adc_chan].low;
+> +	/* integral nonlinearity, measured in LSB */
+> +	const int min_INL =3D -2;
+> +	/* measured in LSB */
+> +	int min_offset_error;
+> +	/* -0.6% when calibrated */
+> +	int min_gain_error =3D -6;
+> +
+> +	val =3D (val * 1000) / adc->adc_info[adc_chan].gain;
+> +
+> +        if (adc->adc_info[adc_chan].is_uncalibrated) {
+> +		/* 2% worse */
+> +		min_gain_error -=3D 20;
+> +		min_offset_error =3D -36;
+> +        } else {
+> +		val =3D (val * adc->adc_info[adc_chan].gain_error -
+> +		       adc->adc_info[adc_chan].offset) /
+> +			1000;
+> +		min_offset_error =3D -2;
+> +        }
+> +
+> +	return palmas_gpadc_threshold_with_tolerance(val,
+> +						     min_INL,
+> +						     min_gain_error,
+> +						     min_offset_error);
+> +}
+> +
+>  static int palmas_gpadc_read_raw(struct iio_dev *indio_dev,
+>  	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
+>  {
+> @@ -437,8 +586,221 @@ static int palmas_gpadc_read_raw(struct iio_dev *in=
+dio_dev,
+>  	return ret;
+>  }
+> =20
+> +static int palmas_gpadc_read_event_config(struct iio_dev *indio_dev,
+> +					  const struct iio_chan_spec *chan,
+> +					  enum iio_event_type type,
+> +					  enum iio_event_direction dir)
+> +{
+> +	struct palmas_gpadc *adc =3D iio_priv(indio_dev);
+> +	int adc_chan =3D chan->channel;
+> +	int ret =3D 0;
+> +
+> +	if (adc_chan > PALMAS_ADC_CH_MAX || type !=3D IIO_EV_TYPE_THRESH)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&adc->lock);
+> +
+> +	if (palmas_gpadc_get_event(adc, adc_chan, dir)) {
+> +		ret =3D 1;
+
+Trivial: No brackets needed here for kernel style.
+
+> +	}
+> +
+> +	mutex_unlock(&adc->lock);
+> +
+> +	return ret;
+> +}
+...
+
+> +static int palmas_gpadc_write_event_config(struct iio_dev *indio_dev,
+> +					   const struct iio_chan_spec *chan,
+> +					   enum iio_event_type type,
+> +					   enum iio_event_direction dir,
+> +					   int state)
+> +{
+> +	struct palmas_gpadc *adc =3D iio_priv(indio_dev);
+> +	int adc_chan =3D chan->channel;
+> +	int ret =3D 0;
+
+This initial value isn't used so shouldn't be set.
+One of the static analysis tools will spot this so if we don't tidy it up
+now chances of it getting 'fixed' later is high.  Better to avoid the
+overhead of such a patch.
+
+> +
+> +	if (adc_chan > PALMAS_ADC_CH_MAX || type !=3D IIO_EV_TYPE_THRESH)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&adc->lock);
+> +
+> +	if (state)
+> +		ret =3D palmas_gpadc_enable_event_config(adc, chan, dir);
+> +	else
+> +		ret =3D palmas_gpadc_disable_event_config(adc, chan, dir);
+> +
+> +	mutex_unlock(&adc->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int palmas_gpadc_read_event_value(struct iio_dev *indio_dev,
+> +					 const struct iio_chan_spec *chan,
+> +					 enum iio_event_type type,
+> +					 enum iio_event_direction dir,
+> +					 enum iio_event_info info,
+> +					 int *val, int *val2)
+> +{
+> +	struct palmas_gpadc *adc =3D iio_priv(indio_dev);
+> +	int adc_chan =3D chan->channel;
+> +	int ret =3D 0;
+
+Trivial: I can't see a path where this initial value is used so it
+shouldn't be initialized here.
+
+> +
+> +	if (adc_chan > PALMAS_ADC_CH_MAX || type !=3D IIO_EV_TYPE_THRESH)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&adc->lock);
+> +
+> +	switch (info) {
+> +	case IIO_EV_INFO_VALUE:
+> +		*val =3D (dir =3D=3D IIO_EV_DIR_RISING) ?
+> +			adc->thresholds[adc_chan].high :
+> +			adc->thresholds[adc_chan].low;
+> +		ret =3D IIO_VAL_INT;
+> +		break;
+> +	default:
+> +		ret =3D -EINVAL;
+> +		break;
+> +	}
+> +
+> +	mutex_unlock(&adc->lock);
+> +
+> +	return ret;
+> +}
+> +
