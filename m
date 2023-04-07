@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2306DB5E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7126DB5E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjDGVuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S229779AbjDGVut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbjDGVuh (ORCPT
+        with ESMTP id S231303AbjDGVun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:50:37 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D2DC67E
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:50:31 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-930bc91df7bso151195066b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:50:31 -0700 (PDT)
+        Fri, 7 Apr 2023 17:50:43 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEA2CA20
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:50:38 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9333b408ee7so27684266b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 14:50:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680904231; x=1683496231;
+        d=gmail.com; s=20210112; t=1680904236; x=1683496236;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eeN/ZVCekgyzBVdfluaI952fB28+NGzvtQuNBvQl0F4=;
-        b=VY0sJqQ3cZGU0aI6sJKkIl5bCp7lmFG7XDgR9PfRzRPMjFABqmF4tgrEsEBerxguLO
-         2zF0UVOU1FT91rXZ5zSy7Djb6Ml8udNz4CMKsT7r/Y5cYFAR+fV5sLzSIkg2gZx6VEzS
-         BnYH6GfrKPXsY8OxehyIVu8+6cj96oZVchZJ6SAilDQYXDpE7fyUc/RbHvGg4mV0tUDk
-         w0Qt/8AQ3+GL0psU4Dl7ggTRxRtTtqzB5Vnw4+ptmQf+0Oe2MOgmGz2fCSR9fA9eNIZV
-         b1elK/+TEojuUT8C2R+fx1UduVNHNoX60uqTqCHMwQjQ64jveRJQqKLyhyznlM0uGQ3N
-         T7Rw==
+        bh=w24X/TbkOlhe1U7zkhFMh7hB9JLN+Ijqh2VJDsOo0Sg=;
+        b=gDghUNL/fvbVLDFmHvr+OBiPW7ov5lHgqLUfl2QJDbQge/x4RYx83DAuLiDhs2eQQG
+         4bOsNbT7k0UmPCO3+mgz3US5tRO+o/EVC8R3uRQk70trXbMy7//f1KHI0ofgTpjkvIXf
+         Bi5WUl1z9Et19qO3SIBmaRbdKSKSOMrcPZcQ6whaV/7PuZqVv6JdBSF4+pzLEgBMVSud
+         E2DmPxW8vlXneGU7jiEmbgIOfTWio1WegxWNgj6nrVSk8jo7f3gLRExENMaappk2U5aj
+         3qjRxLVDWVkG5p6ghH2g0W6SrpiW9ty6rpXnL9Up54tUIGpAsKQFX6r3gb7fGp1D5LHN
+         H3mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680904231; x=1683496231;
+        d=1e100.net; s=20210112; t=1680904236; x=1683496236;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eeN/ZVCekgyzBVdfluaI952fB28+NGzvtQuNBvQl0F4=;
-        b=nfDLC5/QQhyL3ZMzoXix8DtVL1gZhn2HmruSkUSHyu9xGkXsfvGAIc8EfE5j6lJjR+
-         8ukRDFBxwqlQMWV8jQ25gEF/mFmYBbvfnSOgq/ivkcUfkWOYTB5RPhrmwFFTEDmiBDLZ
-         U7e/3I0g6p4TFcvL3uH6ESu51uR12cfDbOZgJ25L+WwrK1wYmvMvGCP1aeTWgbxg6vFi
-         r0sHhEt/ZEY8+U2XlBHh9Bm9uH6ODYsnOKpVMuVO2jxLP5Fm4r3aMPW8MNBtDV420aJa
-         mk0SNhkaW7Euda8DUpwKBLztc2dg1SxFEUB3AuSSm5rkGlebyfGtKu6SqNYvKR8zySLV
-         2F4g==
-X-Gm-Message-State: AAQBX9eQ4WuKn4H1dJNur11EHtjy/ZEUGQpGPxSpR06y0ta7jSTcNSgo
-        CbVSDoiHcJm/YHKYLaP8P5w=
-X-Google-Smtp-Source: AKy350aNc6Uj35BvHmzd2cTNLkO4RBcFCg5ttxdRc77YF1akvtaEdlLahTqrEGZoWDcANrTpiK8s4w==
-X-Received: by 2002:a17:906:10c7:b0:947:f415:db23 with SMTP id v7-20020a17090610c700b00947f415db23mr690276ejv.1.1680904230791;
-        Fri, 07 Apr 2023 14:50:30 -0700 (PDT)
+        bh=w24X/TbkOlhe1U7zkhFMh7hB9JLN+Ijqh2VJDsOo0Sg=;
+        b=HTOsQsIx+JIIObIcW6pi99QEzn52rbbxm4wr5BlFd9ArMW++1g0QqF5+QrNZxzaKM5
+         JXE+tVvuxqsIMnoZ5f6cFZu7u5gcyY3TgxywVPA63n0iMP/to2TG0KEh5yZxi+MzVpM0
+         TwRCYwivSrP/hreNfPKGUwKyqa75JJEcCSatiWRdSlgnVtphSvqf3ZKzfcA8OiL3vb+1
+         A4eY8CDfhMeg1DuJvUezyuFlj4320HE4MP65p73JQFNSRGhuBBdKVNlI8Zgv/cl76RJ7
+         DybHUdN5vhmt+CYx9SVQeVK2K5vhu76zytSy8BCUYYMfx7TiovT3xnfftTkNtzuEJm34
+         EDCg==
+X-Gm-Message-State: AAQBX9ds+QbGfidkFVi095gldNMoGvn+7Suv9Fgyo9E6SVNp7B8hTHzO
+        mOaSHEPYlxJMb4JQoYmpmi4=
+X-Google-Smtp-Source: AKy350aKOrZvwH0oj4GzRu4RTu18UPqzC7HcJaJLYwNWqqd7ETYy/LmbPmvBVGl0gtAdGxYHZroGBg==
+X-Received: by 2002:a05:6402:2787:b0:501:ea97:519c with SMTP id b7-20020a056402278700b00501ea97519cmr703836ede.4.1680904236475;
+        Fri, 07 Apr 2023 14:50:36 -0700 (PDT)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id r2-20020a17090638c200b0093034e71b94sm2456872ejd.65.2023.04.07.14.50.29
+        by smtp.gmail.com with ESMTPSA id l13-20020a1709060e0d00b0094a2f515111sm88920eji.42.2023.04.07.14.50.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 14:50:30 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 23:50:28 +0200
+        Fri, 07 Apr 2023 14:50:36 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 23:50:34 +0200
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/4] staging: rtl8192e: Remove unused function
- _rtl92e_dm_init_wa_broadcom_iot
-Message-ID: <0e7a2a5b9edc85b7f8e3fc0f9e0e6ab7f2830d02.1680902603.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH v2 3/4] staging: rtl8192e: Remove one of two checks for
+ hardware RTL8192SE
+Message-ID: <4126cca73739c75b1a0379af2ef8b0c63a705639.1680902603.git.philipp.g.hortmann@gmail.com>
 References: <cover.1680902603.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,58 +71,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused function _rtl92e_dm_init_wa_broadcom_iot and the variables
-that are not any longer used.
+Check for hardware RTL8192SE is done in function _rtl92e_pci_probe()
+directly and also two lines later in function rtl92e_check_adapter().
+Remove top level check to increase readability.
+This pci_read does not follow a pci_write to ensure data is written to
+the device.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 11 -----------
- drivers/staging/rtl8192e/rtl819x_HT.h      |  3 ---
- 2 files changed, 14 deletions(-)
+v1->v2: Added check for pci_read does not follow pci_write.
+---
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 50486f2a6f3a..93504d5a8578 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -173,7 +173,6 @@ static void _rtl92e_dm_pd_th(struct net_device *dev);
- static void _rtl92e_dm_cs_ratio(struct net_device *dev);
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+index 7506d7eb7b4c..45989a77a27c 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
+@@ -2130,7 +2130,6 @@ static int _rtl92e_pci_probe(struct pci_dev *pdev,
+ 	struct r8192_priv *priv = NULL;
+ 	unsigned long pmem_start, pmem_len, pmem_flags;
+ 	int err = -ENOMEM;
+-	u8 revision_id;
  
- static	void _rtl92e_dm_init_cts_to_self(struct net_device *dev);
--static void _rtl92e_dm_init_wa_broadcom_iot(struct net_device *dev);
+ 	if (pci_enable_device(pdev)) {
+ 		dev_err(&pdev->dev, "Failed to enable PCI device");
+@@ -2189,11 +2188,6 @@ static int _rtl92e_pci_probe(struct pci_dev *pdev,
+ 	dev->mem_start = ioaddr;
+ 	dev->mem_end = ioaddr + pci_resource_len(pdev, 0);
  
- static void _rtl92e_dm_check_edca_turbo(struct net_device *dev);
- static void _rtl92e_dm_check_rx_path_selection(struct net_device *dev);
-@@ -1531,16 +1530,6 @@ static void _rtl92e_dm_cts_to_self(struct net_device *dev)
- 	}
- }
+-	pci_read_config_byte(pdev, 0x08, &revision_id);
+-	/* If the revisionid is 0x10, the device uses rtl8192se. */
+-	if (pdev->device == 0x8192 && revision_id == 0x10)
+-		goto err_unmap;
+-
+ 	if (!rtl92e_check_adapter(pdev, dev))
+ 		goto err_unmap;
  
--
--static void _rtl92e_dm_init_wa_broadcom_iot(struct net_device *dev)
--{
--	struct r8192_priv *priv = rtllib_priv((struct net_device *)dev);
--	struct rt_hi_throughput *ht_info = priv->rtllib->ht_info;
--
--	ht_info->bWAIotBroadcom = false;
--	ht_info->WAIotTH = WA_IOT_TH_VAL;
--}
--
- static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
- {
- 	struct r8192_priv *priv = container_of_dwork_rsl(data,
-diff --git a/drivers/staging/rtl8192e/rtl819x_HT.h b/drivers/staging/rtl8192e/rtl819x_HT.h
-index 22e4f126ed56..f4e9fa849796 100644
---- a/drivers/staging/rtl8192e/rtl819x_HT.h
-+++ b/drivers/staging/rtl8192e/rtl819x_HT.h
-@@ -162,9 +162,6 @@ struct rt_hi_throughput {
- 	u8				IOTPeer;
- 	u32 iot_action;
- 	u8 iot_ra_func;
--
--	u8	bWAIotBroadcom;
--	u8	WAIotTH;
- } __packed;
- 
- struct bss_ht {
 -- 
 2.40.0
 
