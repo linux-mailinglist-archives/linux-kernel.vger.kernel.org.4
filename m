@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2EA6DB11C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDB16DB121
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDGRFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S229825AbjDGRG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjDGRFA (ORCPT
+        with ESMTP id S229826AbjDGRGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:05:00 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9939D8A42
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:04:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 55AEC21D72;
-        Fri,  7 Apr 2023 17:04:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1680887095; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OP+WQoqp5N6LD5bTBcxYrhZCAveaV/0KikGNAEyK220=;
-        b=Rl5rPqtWZskhI9Ty3Bk7hN3/0M3GBUF9uKToD4wVcKEd0o0uUr9rnL7alvC7FZoYg3J73r
-        65nuOW38/cVxkB7kI9TsXHA/xAcLQ3cFCd2U4brzPx1P2s/GaxcX/d3s0HT5HjW97LaFIm
-        RJNyNvr0NMtui5s0b4cOHc57dp98NqQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1680887095;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OP+WQoqp5N6LD5bTBcxYrhZCAveaV/0KikGNAEyK220=;
-        b=akaAwtwzT4XP6KUz0DCzUUe08sh+JE8HKAjMiuke0R2hFKA2vmj6S7tj3cWabWyxZ4Uorc
-        wxtiUUhpCbQChBCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B2ED133FE;
-        Fri,  7 Apr 2023 17:04:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hOzGBDdNMGR4PAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 07 Apr 2023 17:04:55 +0000
-Date:   Fri, 7 Apr 2023 19:04:53 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: [PATCH RESEND] mtd: onenand: omap2: Drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20230407190453.66efdf9d@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.34; x86_64-suse-linux-gnu)
+        Fri, 7 Apr 2023 13:06:53 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA8BBB9A
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:06:50 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-54c0c86a436so105915627b3.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680887209; x=1683479209;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PknBLQO8vOON8ZMbgv3ZPHDYv/9jVJsUcCHNnbarICw=;
+        b=mhZ41LYuSKatBbr8SfXNoj8r0a12y7d3dnPoFeiq0J/fssIcJ/Ib1G1VlCfnZu6gbI
+         wNedNKIAXDp+0m19pKbwDXAUm3ieSMHqc1S4HzSyj71Q+dJErLS671pxskk8IAnf50q6
+         kfXvlHw9waP9AJdJwLf/9ABY3oydGh8DUH+iw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680887209; x=1683479209;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PknBLQO8vOON8ZMbgv3ZPHDYv/9jVJsUcCHNnbarICw=;
+        b=A/AWD986In3QbYYdguRMu5hb3EUhFJoFG7FMVL71Ry1epfa/NzdKpcCPxOo+wMERWU
+         PMN25ft9hyjOgR98JbfTxz+ztdcj3mK7cwA4pmDzWiZqsAoLe6c7gIBR/rIE/vpLNxFz
+         KUQvB1kDk72Or11dYziD6dtBnCyOgRc1gSTjUWDJZ3T7Mwu/gMq6Z2PZlOjCsORPFHNL
+         RkzOjuQ/85RABoFw23CJBtU7j4sLoGiq1Zdktkk1kP95MOc5zgQiTrNGBb7VbC01nKAc
+         Ox6ymw2yKUgtQL86FgUC8N0m1KTcq6nOg7l3Pt139HeMyc/ZPvwoqq5OrrZjOqV2nTuJ
+         Cn2Q==
+X-Gm-Message-State: AAQBX9cfqw/+hbyl90r7X7qrRCV0V7guRHvEa3embo6LyfxKJM2JjsmK
+        LqVYDB++evLgGdzdMHWYBkzvzQeisoFguRezAuQ=
+X-Google-Smtp-Source: AKy350az6FkgJZhYD/Cs4J++Bzc1Ip+lQwTvQtEkKCdarpnCpun75awbFuxS+rAw/+Zy1kR+dZoMhQ==
+X-Received: by 2002:a81:53d6:0:b0:543:6327:8d63 with SMTP id h205-20020a8153d6000000b0054363278d63mr2348595ywb.2.1680887209450;
+        Fri, 07 Apr 2023 10:06:49 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id x206-20020a0dd5d7000000b00545a08184d6sm1116636ywd.102.2023.04.07.10.06.45
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 10:06:45 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id h198so5832107ybg.12
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:06:45 -0700 (PDT)
+X-Received: by 2002:a25:7416:0:b0:a67:c976:c910 with SMTP id
+ p22-20020a257416000000b00a67c976c910mr1789187ybc.7.1680887204825; Fri, 07 Apr
+ 2023 10:06:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230407151423.59993-1-nikita@trvn.ru> <20230407151423.59993-5-nikita@trvn.ru>
+ <CAD=FV=UCJoz1E4wErJawQjpBRiXw0C0-J4TTWO1+uRiDsdzSUg@mail.gmail.com> <499bbd8cb7783b86108f3e6d9cc07a8a@trvn.ru>
+In-Reply-To: <499bbd8cb7783b86108f3e6d9cc07a8a@trvn.ru>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 7 Apr 2023 10:06:33 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VR7sKsquE25eF7joc7gPApu-vqwduZzjE=wFCoXjMYnQ@mail.gmail.com>
+Message-ID: <CAD=FV=VR7sKsquE25eF7joc7gPApu-vqwduZzjE=wFCoXjMYnQ@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] arm64: dts: qcom: Add Acer Aspire 1
+To:     Nikita Travkin <nikita@trvn.ru>
+Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        quic_srivasam@quicinc.com, judyhsiao@chromium.org,
+        mka@chromium.org, cros-qcom-dts-watchers@chromium.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+Hi,
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+On Fri, Apr 7, 2023 at 9:46=E2=80=AFAM Nikita Travkin <nikita@trvn.ru> wrot=
+e:
+>
+> > HPD might very well be hooked up on your board, but the current Linux
+> > ti-sn65dsi86 driver does not look at its own HPD line because it's
+> > actually slower than just pretending that HPD isn't there. On trogdor
+> > boards we ended up routing HPD to a GPIO.
+> >
+>
+> Oh, this makes so much sense then! The line is hooked up on
+> the board indeed and I remember being confused why trogdor boards
+> don't use it.
+>
+> I will try to add the suggestions (annotating the reason)
+> and verify that it works, would prefer the panel power to be
+> gated when possible. I hope this would also fix the initial
+> EDID reading issues I occasionally have and carry a hack for
+> as of now...
+>
+> Thank you a lot for this insight!
+>
+> Nikita
+>
+> > I guess your other option would be to implement HPD support in
+> > ti-sn65dsi86. That would probably be an overall slower boot for you,
+> > but is technically more correct. In the past people have posted up
+> > patches to get ti-sn65dsi86 working as a full DP port and they added
+> > HPD support for that, but none of those patch series ever go to the
+> > point of landing...
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>
----
-Even though this was supposedly accepted a few months ago already, I
-can't find this commit, neither upstream nor in the nand/next,
-therefore resending.
+Yeah, see the big comment in ti_sn65dsi86_enable_comms().
 
- drivers/mtd/nand/onenand/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Actually, looking at how the code has evolved in the meantime, you
+could probably get away with:
 
---- linux-6.2.orig/drivers/mtd/nand/onenand/Kconfig
-+++ linux-6.2/drivers/mtd/nand/onenand/Kconfig
-@@ -25,7 +25,7 @@ config MTD_ONENAND_GENERIC
- config MTD_ONENAND_OMAP2
- 	tristate "OneNAND on OMAP2/OMAP3 support"
- 	depends on ARCH_OMAP2 || ARCH_OMAP3 || (COMPILE_TEST && ARM)
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	depends on OMAP_GPMC
- 	help
- 	  Support for a OneNAND flash device connected to an OMAP2/OMAP3 SoC
+1. Making sure you have an "hpd-absent-delay-ms" in the device tree
+for the panel.
+
+2. Implement "wait_hpd_asserted" in ti-sn65dsi86 to simply be a msleep
+with the passed in delay.
+
+Then I think you don't need "no-hpd" anywhere which keeps the device
+tree pretty.
 
 
--- 
-Jean Delvare
-SUSE L3 Support
+-Doug
