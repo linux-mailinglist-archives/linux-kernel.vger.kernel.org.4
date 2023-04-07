@@ -2,167 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CE46DAC1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5279A6DAC20
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbjDGLLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S231929AbjDGLL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbjDGLLG (ORCPT
+        with ESMTP id S231797AbjDGLLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:11:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5547ECB;
-        Fri,  7 Apr 2023 04:11:05 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [119.155.57.40])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5F33E66031A4;
-        Fri,  7 Apr 2023 12:10:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1680865863;
-        bh=B0IW8AxLLQ/M9fKJHJt4ViUXFpwbhTGWKP+3cfqzxFg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=Xn0pM5CwwZf3DBlCqByzYb2srNvK6Qsouf17RM6648RFVLhn+gQGdMjOePDCDjphn
-         JcSpxS7uKiK7UvQds03zKV0j9nPHJ/q2OwifkwvL0drbd7AWYKRVODQi5j6WxHH9NT
-         qKANjVs8LTaIHfjbdqqzBN0NAw0yznOUMW7id71VTMOrNTAzYfjjt3w9UNIbi24ECl
-         D1AVay9dwuc9ZO2xLnW8+1AnHVwIaP2ZVB4tJY2L28ImkpMh1/IL0cq1c/jtgCgREi
-         ixdBN9y45uRzNgCEoD8KCBkoqLnb8CX++e4Mhi5im273IpjyPXNNQ7D4+HkW+/0BR4
-         NUsIPoRTYp/bw==
-Message-ID: <05e14540-7092-5dd2-d503-473b673af716@collabora.com>
-Date:   Fri, 7 Apr 2023 16:10:51 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Mike Rapoport <rppt@kernel.org>, Peter Xu <peterx@redhat.com>,
+        Fri, 7 Apr 2023 07:11:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC26819C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:11:52 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337AuQ9L012326;
+        Fri, 7 Apr 2023 11:11:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=jFsxIafe4SrhLNVJz5G3UzqBEY1HVl2a9NJ0y7xCRGA=;
+ b=raDC5vVF+bsoQaUxmT9akvn0Q/ZqAdCS1+RGfE7xY9/lRtsQK4SLGN+nljAn//m/ANA6
+ m2mc5xgsdxQfbIOohHC4hELvpCEzpO0gotFA93gQCZ0BL8xM9v3njeIv9+9pw7bGMNy1
+ uG5Nl3H+BmRIcl97jFhNTzlksQCf9tRhA9P5H84fOQK75u4AJ9g3i5nymHWquVUxpp4D
+ ln7A7MWqQ6Wzf+ImA4FZfJwlw/poV7AMTjaxEZ5mRY5VmDps7DZfTMhXkzDQ92QzW9IR
+ ldGFTdJtq2yJAdgnfBtVgHXHIYNnf+WQ/Rjmer3Hl8OfOYU8fFcYMmpBDeu+uekVnr8w eQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pthutg9t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 11:11:46 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 337Av98m013343;
+        Fri, 7 Apr 2023 11:11:45 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pthutg9s5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 11:11:45 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 337409Wi005457;
+        Fri, 7 Apr 2023 11:11:43 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ppc86up2x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 11:11:42 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 337BBeHY24773182
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Apr 2023 11:11:40 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D1692004E;
+        Fri,  7 Apr 2023 11:11:40 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BDC420043;
+        Fri,  7 Apr 2023 11:11:39 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.171.71.120])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  7 Apr 2023 11:11:39 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 14:11:37 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
         David Hildenbrand <david@redhat.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
         Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230406074005.1784728-1-usama.anjum@collabora.com>
- <20230406074005.1784728-3-usama.anjum@collabora.com>
- <CABb0KFHZpYVML2e+Xg9+kwjyhqQkikPBhymO=EXoQnO2xjfG4g@mail.gmail.com>
- <0351b563-5193-6431-aa9c-c5bf5741b791@collabora.com>
- <CABb0KFE4ruptVXDpCk5MB6nkh9WeKTcKfROnx0ecoy-k1eCKCw@mail.gmail.com>
- <8a837998-604f-a871-729e-aa274a621481@collabora.com>
- <CABb0KFEBqAMWWpAeBfqzA4JrHo3yLyaT0rqKTUn28O0hE+szBA@mail.gmail.com>
- <c5b9201d-141c-10ae-0475-4b230d36508b@collabora.com>
- <CABb0KFH3mj5qt22qDLHRKjh-wB7Jrn6Pz8h-QARaf9oR65U0Qg@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFH3mj5qt22qDLHRKjh-wB7Jrn6Pz8h-QARaf9oR65U0Qg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>
+Subject: Re: [PATCH 15/29] selftests/mm: uffd_open_{dev|sys}()
+Message-ID: <ZC/6aZyR78p/Y5dn@linux.ibm.com>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160749.3107270-1-peterx@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230330160749.3107270-1-peterx@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wTk1no_jW-3CEXevoQocBkGliozOyDFu
+X-Proofpoint-GUID: 1HeE31Xz6eUDavJB3JGhl6Kgynhx2yGl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_06,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=910
+ priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 spamscore=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304070100
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/23 3:14 PM, Michał Mirosław wrote:
-> On Fri, 7 Apr 2023 at 12:04, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->> On 4/7/23 12:34 PM, Michał Mirosław wrote:
->>> On Thu, 6 Apr 2023 at 23:04, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>> On 4/7/23 1:00 AM, Michał Mirosław wrote:
->>>>> On Thu, 6 Apr 2023 at 19:58, Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
-> [...]
->>>>>>>> +       /*
->>>>>>>> +        * Allocate smaller buffer to get output from inside the page walk
->>>>>>>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
->>>>>>>> +        * we want to return output to user in compact form where no two
->>>>>>>> +        * consecutive regions should be continuous and have the same flags.
->>>>>>>> +        * So store the latest element in p.cur between different walks and
->>>>>>>> +        * store the p.cur at the end of the walk to the user buffer.
->>>>>>>> +        */
->>>>>>>> +       p.vec = kmalloc_array(p.vec_len, sizeof(struct page_region),
->>>>>>>> +                             GFP_KERNEL);
->>>>>>>> +       if (!p.vec)
->>>>>>>> +               return -ENOMEM;
->>>>>>>> +
->>>>>>>> +       walk_start = walk_end = start;
->>>>>>>> +       while (walk_end < end && !ret) {
->>>>>>>
->>>>>>> The loop will stop if a previous iteration returned ENOSPC (and the
->>>>>>> error will be lost) - is it intended?
->>>>>> It is intentional. -ENOSPC means that the user buffer is full even though
->>>>>> there was more memory to walk over. We don't treat this error. So when
->>>>>> buffer gets full, we stop walking over further as user buffer has gotten
->>>>>> full and return as success.
->>>>>
->>>>> Thanks. What's the difference between -ENOSPC and
->>>>> PM_SCAN_FOUND_MAX_PAGES? They seem to result in the same effect (code
->>>>> flow).
->>>> -ENOSPC --> user buffer has been filled completely
->>>> PM_SCAN_FOUND_MAX_PAGES --> max_pages have been found, user buffer may
->>>>                             still have more space
->>>
->>> What is the difference in code behaviour when those two cases are
->>> compared? (I'd expect none.)
->> There is difference:
->> We add data to user buffer. If it succeeds with return code 0, we engage
->> the WP. If it succeeds with PM_SCAN_FOUND_MAX_PAGES, we still engage the
->> WP. But if we get -ENOSPC, we don't perform engage as the data wasn't added
->> to the user buffer.
+On Thu, Mar 30, 2023 at 12:07:49PM -0400, Peter Xu wrote:
+> Provide two helpers to open an uffd handle.  Drop the error checks around
+> SKIPs because it's inside an errexit() anyway, which IMHO doesn't really
+> help much if the test will not continue.
 > 
-> Thanks! I see it now. I see a few more corner cases here:
-> 1. If we did engage WP but fail to copy the vector we return -EFAULT
-> but the WP is already engaged. I'm not sure this is something worth
-> guarding against, but documenting that would be helpful I think.
-Sure.
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-> 2. If uffd_wp_range() fails, but we have already processed pages
-> earlier, we should treat the error like ENOSPC and back out the failed
-> range (the earier changes would be lost otherwise).
-Backing out is easier to do for hugepages. But for normal pages, we'll have
-to write some code to find where the current data was added (in cur or in
-vec) and back out from that. I'll have to write some more code to avoid the
-side-effects as well.
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-But aren't we going over-engineering here? Error occurred and we are trying
-to keep the previously generated correct data and returning successfully
-still to the user? I don't think we should do this. An error is error. We
-should return the error simply even if the memory flags would get lost. We
-don't know what caused the error in uffd_wp_range(). Under normal
-situation, we there shouldn't have had error.
-
-
+> ---
+>  tools/testing/selftests/mm/uffd-common.c | 28 +++++-------------------
+>  tools/testing/selftests/mm/vm_util.c     | 24 ++++++++++++++++++++
+>  2 files changed, 29 insertions(+), 23 deletions(-)
 > 
-> Best Regards
-> Michał Mirosław
+> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+> index 17f2bb82c3db..3a9b5c1aca9d 100644
+> --- a/tools/testing/selftests/mm/uffd-common.c
+> +++ b/tools/testing/selftests/mm/uffd-common.c
+> @@ -192,34 +192,16 @@ void uffd_stats_report(struct uffd_stats *stats, int n_cpus)
+>  	printf("\n");
+>  }
+> 
+> -static int __userfaultfd_open_dev(void)
+> -{
+> -	int fd, _uffd;
+> -
+> -	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
+> -	if (fd < 0)
+> -		errexit(KSFT_SKIP, "opening /dev/userfaultfd failed");
+> -
+> -	_uffd = ioctl(fd, USERFAULTFD_IOC_NEW, UFFD_FLAGS);
+> -	if (_uffd < 0)
+> -		errexit(errno == ENOTTY ? KSFT_SKIP : 1,
+> -			"creating userfaultfd failed");
+> -	close(fd);
+> -	return _uffd;
+> -}
+> -
+>  void userfaultfd_open(uint64_t *features)
+>  {
+>  	struct uffdio_api uffdio_api;
+> 
+>  	if (test_dev_userfaultfd)
+> -		uffd = __userfaultfd_open_dev();
+> -	else {
+> -		uffd = syscall(__NR_userfaultfd, UFFD_FLAGS);
+> -		if (uffd < 0)
+> -			errexit(errno == ENOSYS ? KSFT_SKIP : 1,
+> -				"creating userfaultfd failed");
+> -	}
+> +		uffd = uffd_open_dev(UFFD_FLAGS);
+> +	else
+> +		uffd = uffd_open_sys(UFFD_FLAGS);
+> +	if (uffd < 0)
+> +		err("uffd open failed (dev=%d)", test_dev_userfaultfd);
+>  	uffd_flags = fcntl(uffd, F_GETFD, NULL);
+> 
+>  	uffdio_api.api = UFFD_API;
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 10e76400ed70..7c2bf88d6393 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -3,6 +3,8 @@
+>  #include <fcntl.h>
+>  #include <sys/ioctl.h>
+>  #include <linux/userfaultfd.h>
+> +#include <sys/syscall.h>
+> +#include <unistd.h>
+>  #include "../kselftest.h"
+>  #include "vm_util.h"
+> 
+> @@ -230,3 +232,25 @@ int uffd_unregister(int uffd, void *addr, uint64_t len)
+> 
+>  	return ret;
+>  }
+> +
+> +int uffd_open_dev(unsigned int flags)
+> +{
+> +	int fd, uffd;
+> +
+> +	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
+> +	if (fd < 0)
+> +		return fd;
+> +	uffd = ioctl(fd, USERFAULTFD_IOC_NEW, flags);
+> +	close(fd);
+> +
+> +	return uffd;
+> +}
+> +
+> +int uffd_open_sys(unsigned int flags)
+> +{
+> +#ifdef __NR_userfaultfd
+> +	return syscall(__NR_userfaultfd, flags);
+> +#else
+> +	return -1;
+> +#endif
+> +}
+> -- 
+> 2.39.1
+> 
 
 -- 
-BR,
-Muhammad Usama Anjum
+Sincerely yours,
+Mike.
