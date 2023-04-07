@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5FE6DA7A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98236DA7A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbjDGCUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 22:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S240543AbjDGCU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 22:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240579AbjDGCT7 (ORCPT
+        with ESMTP id S240502AbjDGCUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 22:19:59 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B160BF5;
-        Thu,  6 Apr 2023 19:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1680833998; x=1712369998;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gu18fQBDefHfFBaWLLukFJTFMSx2LdNYMtkpPFB6n0w=;
-  b=EyxQ8ZCm5nocHVeyA2+u2eYm77DZNh1nCbuWNPxBn5fLVHW2oNnEMf5V
-   iSXMx/07gQMEedFhSEiDdqodHyKDo6PK5SjHhRWAVu6RvOiPAYGmFvVuH
-   RyNsaZFNPD4QB96+GnJolT6VyZ5xBJL1UQpPkpmk/7o/fZdFI9R1vGhOu
-   0=;
-X-IronPort-AV: E=Sophos;i="5.98,324,1673913600"; 
-   d="scan'208";a="315762380"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 02:19:54 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-0ec33b60.us-west-2.amazon.com (Postfix) with ESMTPS id 9AC30A0AAC;
-        Fri,  7 Apr 2023 02:19:52 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 7 Apr 2023 02:19:52 +0000
-Received: from 88665a182662.ant.amazon.com (10.119.181.3) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 7 Apr 2023 02:19:49 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <kuba@kernel.org>
-CC:     <corbet@lwn.net>, <davem@davemloft.net>, <dsahern@kernel.org>,
-        <edumazet@google.com>, <kuniyu@amazon.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <yuehaibing@huawei.com>
-Subject: Re: [PATCH net] tcp: restrict net.ipv4.tcp_app_win
-Date:   Thu, 6 Apr 2023 19:19:41 -0700
-Message-ID: <20230407021941.5401-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230406185926.7da74db2@kernel.org>
-References: <20230406185926.7da74db2@kernel.org>
+        Thu, 6 Apr 2023 22:20:54 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559A0A9;
+        Thu,  6 Apr 2023 19:20:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VfUplq7_1680834049;
+Received: from 30.221.130.130(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VfUplq7_1680834049)
+          by smtp.aliyun-inc.com;
+          Fri, 07 Apr 2023 10:20:50 +0800
+Message-ID: <97551857-b2fe-eb26-88a0-780951b873d7@linux.alibaba.com>
+Date:   Fri, 7 Apr 2023 10:20:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.119.181.3]
-X-ClientProxiedBy: EX19D039UWB003.ant.amazon.com (10.13.138.93) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH v2] mm/swap: fix swap_info_struct race between swapoff and
+ get_swap_pages()
+Content-Language: en-US
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     akpm@linux-foundation.org, bagasdotme@gmail.com,
+        willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230401221920.57986-1-rongwei.wang@linux.alibaba.com>
+ <20230404154716.23058-1-rongwei.wang@linux.alibaba.com>
+ <20230406140416.GA415291@ziqianlu-desk2>
+ <20230406145754.GA440657@ziqianlu-desk2>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <20230406145754.GA440657@ziqianlu-desk2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From:   Jakub Kicinski <kuba@kernel.org>
-Date:   Thu, 6 Apr 2023 18:59:26 -0700
-> On Thu, 6 Apr 2023 14:34:50 +0800 YueHaibing wrote:
-> > UBSAN: shift-out-of-bounds in net/ipv4/tcp_input.c:555:23
-> > shift exponent 255 is too large for 32-bit type 'int'
-> > CPU: 1 PID: 7907 Comm: ssh Not tainted 6.3.0-rc4-00161-g62bad54b26db-dirty #206
-> > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x136/0x150
-> >  __ubsan_handle_shift_out_of_bounds+0x21f/0x5a0
-> >  tcp_init_transfer.cold+0x3a/0xb9
-> >  tcp_finish_connect+0x1d0/0x620
-> >  tcp_rcv_state_process+0xd78/0x4d60
-> >  tcp_v4_do_rcv+0x33d/0x9d0
-> >  __release_sock+0x133/0x3b0
-> >  release_sock+0x58/0x1b0
-> > 
-> > 'maxwin' is int, shifting int for 32 or more bits is undefined behaviour.
-> > 
-> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> 
-> Fixes tag?
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+On 2023/4/6 22:57, Aaron Lu wrote:
+> On Thu, Apr 06, 2023 at 10:04:16PM +0800, Aaron Lu wrote:
+>> On Tue, Apr 04, 2023 at 11:47:16PM +0800, Rongwei Wang wrote:
+>>> The si->lock must be held when deleting the si from
+>>> the available list.  Otherwise, another thread can
+>>> re-add the si to the available list, which can lead
+>>> to memory corruption. The only place we have found
+>>> where this happens is in the swapoff path. This case
+>>> can be described as below:
+>>>
+>>> core 0                       core 1
+>>> swapoff
+>>>
+>>> del_from_avail_list(si)      waiting
+>>>
+>>> try lock si->lock            acquire swap_avail_lock
+>>>                               and re-add si into
+>>>                               swap_avail_head
+>>                                 confused here.
+>>
+>> If del_from_avail_list(si) finished in swaoff path, then this si should
+>> not exist in any of the per-node avail list and core 1 should not be
+>> able to re-add it.
+> I think a possible sequence could be like this:
+>
+> cpuX                             cpuY
+> swapoff                          put_swap_folio()
+>
+> del_from_avail_list(si)
+>                                   taken si->lock
+> spin_lock(&si->lock);
+>
+> 				 swap_range_free()
+> 				 was_full && SWP_WRITEOK -> re-add!
+> 				 drop si->lock
+>
+> taken si->lock
+> proceed removing si
+>
+> End result: si left on avail_list after being swapped off.
+>
+> The problem is, in add_to_avail_list(), it has no idea this si is being
+> swapped off and taking si->lock then del_from_avail_list() could avoid
+> this problem, so I think this patch did the right thing but the
+> changelog about how this happened needs updating and after that:
 
-It's been broken since the beginning.
+Hi Aaron
+
+That's my fault. Actually, I don't refers specifically to 
+swap_range_free() path in commit, mainly because cpuY can stand all 
+threads which is waiting swap_avail_lock, then to call 
+add_to_avail_list(), not only swap_range_free(), e.g. maybe swapon().
+
+>
+> Reviewed-by: Aaron Lu <aaron.lu@intel.com>
+
+Thanks for your time.
+
+-wrw
+
+>
+> Thanks,
+> Aaron
+>
