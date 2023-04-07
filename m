@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83126DB68B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FA26DB699
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjDGWj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
+        id S229820AbjDGWkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 18:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjDGWjX (ORCPT
+        with ESMTP id S229614AbjDGWkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:39:23 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E50BB8E;
-        Fri,  7 Apr 2023 15:39:22 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337MLQn6012196;
-        Fri, 7 Apr 2023 22:39:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=22zcGHEN9yVoDkpZ+oZ5YzXYhsotUOtbjRPKgFsuwgg=;
- b=i4eAQi5upeFQsiuB/xJIjuLutcgJrqbyWiz2WCxRL8wvQwdHqbv8Kmm/139SywBdi7fA
- 8yo/xMXYfs4YOvucVWVu36Z00TiMKowjM6YHZJCxc6prMD7w4KSRazkrCLO9nFdUUYKN
- zuT0vQy5cAx3ag2wY2nfv4czqu7T0jhwVbSUw8ebVi1/Pd3gwHV5H1oVrDMqnjQHWj15
- aWszqAU7+RfhXjNrkDcLZMN5ahFWB4c4yhhHHr/eVM9tcH8HAAseUZ5Yri3rPs22/6OW
- zui42l1UFTAYMzXRZbujM9ioX9I28QNmwzfRKm95WwtOQ/NkoeA1wOWG7J7pGdw2DPLA EQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptd5ct0rj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 22:39:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337MdFQk003455
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Apr 2023 22:39:15 GMT
-Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 7 Apr 2023 15:39:14 -0700
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-To:     <pavel@ucw.cz>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <andersson@kernel.org>
-CC:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Anjelique Melendez <quic_amelende@quicinc.com>
-Subject: [PATCH v2 3/3] leds: rgb: leds-qcom-lpg: Add support for PMK8550 PWM
-Date:   Fri, 7 Apr 2023 15:38:49 -0700
-Message-ID: <20230407223849.17623-4-quic_amelende@quicinc.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230407223849.17623-1-quic_amelende@quicinc.com>
-References: <20230407223849.17623-1-quic_amelende@quicinc.com>
+        Fri, 7 Apr 2023 18:40:46 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3CFCC2C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 15:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680907225; x=1712443225;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=14cBJo9UK+0qh1NvtGqbCTaR4qD2pZbzWVL8nzWFfhQ=;
+  b=gEGGPoJmvUWn6E9883HQIeGMZknMSM4dneGoLbW523zN5q67+B5CJugL
+   /cdwkOWDwPBQCDg7ZuibbgF00kIcgmeFxPbnlCoPwFsXW0WMlrRG28AWH
+   PZxB5EKcvbVA3JJF/tazFEJRAZ0Tx3oQfSwuRfw6/r4e8W3XZZAE474Vo
+   B4hVdrtZl2EeqVySD4w4JBdDFj0Kf4SiZ8VeP+j5tZSfg56z8FfMwwcqt
+   GDQAeES0EViBSpMrysUCjlM4nUgzGLZXYnbNN7z9x45wdG5E8zPigAYZL
+   A/daoEk71aLibPVx5/8kFP8wQRWHCZ1PQL50Z0IzMSRu6CDMhEGUwTkaL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="405903218"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="405903218"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 15:40:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811534766"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="811534766"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2023 15:40:10 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pkukb-000Swm-0i;
+        Fri, 07 Apr 2023 22:40:09 +0000
+Date:   Sat, 8 Apr 2023 06:39:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: xtensa-linux-ld: section .Level2InterruptVector.text VMA
+ [0000000000000180,0000000000000193] overlaps section .data VMA
+ [0000000000000000,0000000000140ca7]
+Message-ID: <202304080645.S7qi0nDB-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QE3nRtHRTnbtm0a45k4ydKUWkQirBYh5
-X-Proofpoint-ORIG-GUID: QE3nRtHRTnbtm0a45k4ydKUWkQirBYh5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_14,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- adultscore=0 priorityscore=1501 suspectscore=0 lowpriorityscore=0
- impostorscore=0 mlxscore=0 spamscore=0 mlxlogscore=885 phishscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304070204
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for pmk8550 compatible and lpg_data.
+Hi Max,
 
-Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
----
- drivers/leds/rgb/leds-qcom-lpg.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+FYI, the error/warning still remains.
 
-diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
-index 373bcf8ebb52..55a037234df1 100644
---- a/drivers/leds/rgb/leds-qcom-lpg.c
-+++ b/drivers/leds/rgb/leds-qcom-lpg.c
-@@ -1490,6 +1490,14 @@ static const struct lpg_data pm8350c_pwm_data = {
- 	},
- };
- 
-+static const struct lpg_data pmk8550_pwm_data = {
-+	.num_channels = 2,
-+	.channels = (const struct lpg_channel_data[]) {
-+		{ .base = 0xe800 },
-+		{ .base = 0xe900 },
-+	},
-+};
-+
- static const struct of_device_id lpg_of_table[] = {
- 	{ .compatible = "qcom,pm8150b-lpg", .data = &pm8150b_lpg_data },
- 	{ .compatible = "qcom,pm8150l-lpg", .data = &pm8150l_lpg_data },
-@@ -1500,6 +1508,7 @@ static const struct of_device_id lpg_of_table[] = {
- 	{ .compatible = "qcom,pmi8994-lpg", .data = &pmi8994_lpg_data },
- 	{ .compatible = "qcom,pmi8998-lpg", .data = &pmi8998_lpg_data },
- 	{ .compatible = "qcom,pmc8180c-lpg", .data = &pm8150l_lpg_data },
-+	{ .compatible = "qcom,pmk8550-pwm", .data = &pmk8550_pwm_data },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, lpg_of_table);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f2afccfefe7be1f7346564fe619277110d341f9b
+commit: c20e1117d9aa22c558646a1060ddd1dd042fb107 xtensa: add kernel ABI selection to Kconfig
+date:   1 year, 1 month ago
+config: xtensa-randconfig-r032-20230407 (https://download.01.org/0day-ci/archive/20230408/202304080645.S7qi0nDB-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c20e1117d9aa22c558646a1060ddd1dd042fb107
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c20e1117d9aa22c558646a1060ddd1dd042fb107
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080645.S7qi0nDB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> xtensa-linux-ld: section .Level2InterruptVector.text VMA [0000000000000180,0000000000000193] overlaps section .data VMA [0000000000000000,0000000000140ca7]
+
 -- 
-2.40.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
