@@ -2,97 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EB16DB591
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D2C6DB598
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjDGVAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S231196AbjDGVBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:01:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjDGVAh (ORCPT
+        with ESMTP id S231311AbjDGVA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:00:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997D8199B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:00:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34D8E651CA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 21:00:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3986EC433D2;
-        Fri,  7 Apr 2023 21:00:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680901235;
-        bh=NG9cVPo8jYKrgpxNTOWvWnfRF3Zeu8y+oexjDO79R7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ji09rthdzminTO655oWSPyu9AOv9VJGdc9qkH42nxaQU0HHZ4FnknDYVWBG5KsMSm
-         /6002nlAwZ4Ti2BA1BSmAwTJrKfdyAmDiK7dOdKU87ES1THS5kJmWJ+iEsSAglSAhm
-         i9+lVEMJb8z+mxIA47qYODiMVCNBWQhYo+VTQD5w7LHA6DCcctbhjMJ3jW3y0pfoF1
-         F1ER3qEObJUw3lVItGkneltZ160gYEpU8d+ZsajEGenJUvwpNJBBNFtT97GQqbDn29
-         6CNOig7iKa4eNjfTeZeDJckY9ijavFZmSNILXgoxJwfnDOzhbWBI302g5pYgUR9hxi
-         /nCD1fCwOeUOA==
-Date:   Fri, 7 Apr 2023 23:00:32 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Marco Elver <elver@google.com>,
-        syzbot <syzbot+3b14b2ed9b3d06dcaa07@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: WARNING in timer_wait_running
-Message-ID: <ZDCEcNb8KATIjvBv@localhost.localdomain>
-References: <87h6tsred7.ffs@tglx>
- <874jpsqdy1.ffs@tglx>
- <ZDADdMnY0oW2k5BV@lothringen>
- <87lej3twhv.ffs@tglx>
- <ZDBin2ZQwc69hGX4@lothringen>
- <87ile7trv7.ffs@tglx>
+        Fri, 7 Apr 2023 17:00:57 -0400
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBBFBB95
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:00:52 -0700 (PDT)
+Date:   Fri, 07 Apr 2023 21:00:33 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1680901250; x=1681160450;
+        bh=4IoVoYHk/m+r33Ey5oyqbrK9BhCHBjy9lr54Zr+fTow=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=IXMpZwoCjpN56q0H8V5aJJNlFIIONima/PlYClX/FGZGwy/6tUK448uAMF/t9SkWJ
+         ErUVMCKnAhx2VLFz4N1feeMkYu7vtOEGexEK0JrfzA6V9QHT4sx4qBo3lR78V5R8IU
+         J7I5SC3j+9iZV0oTBnfrB1kP0SAGPPYv1TWGzsFLPzekD0JMDGHonBnk8LrZP/A8oa
+         RQE4eo21OOk+LptJ38zz2Auq10KQFwcgL/ATZr5k8z/sgzgxPayU7mH5tCm7PW9EIp
+         nClnf9XCZGw3cJnkv3am/ukoOIqXBB0AM4WK1HNCiebJerdT+ljwuT5v1BgjGXF19g
+         5qLoKi2q0qTiw==
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        rust-for-linux@vger.kernel.org
+From:   Benno Lossin <y86-dev@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kernel@vger.kernel.org,
+        Wedson Almeida Filho <walmeida@microsoft.com>
+Subject: Re: [PATCH v2 13/13] rust: sync: introduce `LockedBy`
+Message-ID: <68b859ca-f67b-07dd-c5c7-7f8884e5b9f1@protonmail.com>
+In-Reply-To: <20230405175111.5974-13-wedsonaf@gmail.com>
+References: <20230405175111.5974-1-wedsonaf@gmail.com> <20230405175111.5974-13-wedsonaf@gmail.com>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87ile7trv7.ffs@tglx>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, Apr 07, 2023 at 09:27:40PM +0200, Thomas Gleixner a écrit :
-> On Fri, Apr 07 2023 at 20:36, Frederic Weisbecker wrote:
-> 
-> > On Fri, Apr 07, 2023 at 07:47:40PM +0200, Thomas Gleixner wrote:
-> >> On Fri, Apr 07 2023 at 13:50, Frederic Weisbecker wrote:
-> >> > On Fri, Apr 07, 2023 at 10:44:22AM +0200, Thomas Gleixner wrote:
-> >> >> Now memory came back. The problem with posix CPU timers is that it is
-> >> >> not really known to the other side which task is actually doing the
-> >> >> expiry. For process wide timers this could be any task in the process.
-> >> >> 
-> >> >> For hrtimers this works because the expiring context is known.
-> >> >
-> >> > So if posix_cpu_timer_del() were to clear ctmr->pid to NULL and then
-> >> > delay put_pid() with RCU, we could retrieve that information without
-> >> > holding the timer lock (with appropriate RCU accesses all around).
-> >> 
-> >> No, you can't. This only gives you the process, but the expiry might run
-> >> on any task of that. To make that work you need a mutex in sighand.
-> >
-> > Duh right missed that. Ok will try.
-> 
-> But that's nasty as well as this can race against exec/exit and you can't
-> hold sighand lock when acquiring the mutex.
-> 
-> The mutex needs to be per task and held by the task which runs the
-> expiry task work.
-> 
-> Something like the completely untested below. You get the idea though.
+On 05.04.23 19:51, Wedson Almeida Filho wrote:
+> From: Wedson Almeida Filho <walmeida@microsoft.com>
+>
+> This allows us to have data protected by a lock despite not being
+> wrapped by it. Access is granted by providing evidence that the lock is
+> held by the caller.
+>
+> Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
+> ---
+> v1 -> v2: Added build_assert to rule out zero-sized types
+>
+>   rust/kernel/sync.rs           |   2 +
+>   rust/kernel/sync/lock.rs      |   2 +-
+>   rust/kernel/sync/locked_by.rs | 128 ++++++++++++++++++++++++++++++++++
+>   3 files changed, 131 insertions(+), 1 deletion(-)
+>   create mode 100644 rust/kernel/sync/locked_by.rs
+>
+> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+> index d6dd0e2c1678..f8edb6d0d794 100644
+> --- a/rust/kernel/sync.rs
+> +++ b/rust/kernel/sync.rs
+> @@ -10,10 +10,12 @@ use crate::types::Opaque;
+>   mod arc;
+>   mod condvar;
+>   pub mod lock;
+> +mod locked_by;
+>
+>   pub use arc::{Arc, ArcBorrow, UniqueArc};
+>   pub use condvar::CondVar;
+>   pub use lock::{mutex::Mutex, spinlock::SpinLock};
+> +pub use locked_by::LockedBy;
+>
+>   /// Represents a lockdep class. It's a wrapper around C's `lock_class_k=
+ey`.
+>   #[repr(transparent)]
+> diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
+> index f52ba9ab1b70..51c996ca2109 100644
+> --- a/rust/kernel/sync/lock.rs
+> +++ b/rust/kernel/sync/lock.rs
+> @@ -111,7 +111,7 @@ pub struct Lock<T: ?Sized, B: Backend> {
+>       _pin: PhantomPinned,
+>
+>       /// The data protected by the lock.
+> -    data: UnsafeCell<T>,
+> +    pub(crate) data: UnsafeCell<T>,
+>   }
+>
+>   // SAFETY: `Lock` can be transferred across thread boundaries iff the d=
+ata it protects can.
+> diff --git a/rust/kernel/sync/locked_by.rs b/rust/kernel/sync/locked_by.r=
+s
+> new file mode 100644
+> index 000000000000..191e37d804e5
+> --- /dev/null
+> +++ b/rust/kernel/sync/locked_by.rs
+> @@ -0,0 +1,128 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! A wrapper for data protected by a lock that does not wrap it.
+> +
+> +use super::{lock::Backend, lock::Lock};
+> +use core::{cell::UnsafeCell, ptr};
+> +
+> +/// Allows access to some data to be serialised by a lock that does not =
+wrap it.
+> +///
+> +/// In most cases, data protected by a lock is wrapped by the appropriat=
+e lock type, e.g.,
+> +/// [`super::Mutex`] or [`super::SpinLock`]. [`LockedBy`] is meant for c=
+ases when this is not
+> +/// possible. For example, if a container has a lock and some data in th=
+e contained elements needs
+> +/// to be protected by the same lock.
+> +///
+> +/// [`LockedBy`] wraps the data in lieu of another locking primitive, an=
+d only allows access to it
+> +/// when the caller shows evidence that the 'external' lock is locked.
+> +///
 
-For something untested, it looks quite right!
+Maybe add that the `access`/`access_mut` functions panic when the supplied
+external value is not the correct one.
 
-Thanks.
+> +/// # Examples
+> +///
+> +/// The following is an example for illustrative purposes: `InnerDirecto=
+ry::bytes_used` is an
+> +/// aggregate of all `InnerFile::bytes_used` and must be kept consistent=
+; so we wrap `InnerFile` in
+> +/// a `LockedBy` so that it shares a lock with `InnerDirectory`. This al=
+lows us to enforce at
+> +/// compile-time that access to `InnerFile` is only granted when an `Inn=
+erDirectory` is also
+> +/// locked; we enforce at run time that the right `InnerDirectory` is lo=
+cked.
+> +///
+> +/// ```
+> +/// use kernel::sync::{LockedBy, Mutex};
+> +///
+> +/// struct InnerFile {
+> +///     bytes_used: u64,
+> +/// }
+> +///
+> +/// struct File {
+> +///     _ino: u32,
+> +///     inner: LockedBy<InnerFile, InnerDirectory>,
+> +/// }
+> +///
+> +/// struct InnerDirectory {
+> +///     /// The sum of the bytes used by all files.
+> +///     bytes_used: u64,
+> +///     _files: Vec<File>,
+> +/// }
+> +///
+> +/// struct Directory {
+> +///     _ino: u32,
+> +///     inner: Mutex<InnerDirectory>,
+> +/// }
+> +///
+> +/// /// Prints `bytes_used` from both the directory and file.
+> +/// fn print_bytes_used(dir: &Directory, file: &File) {
+> +///     let guard =3D dir.inner.lock();
+> +///     let inner_file =3D file.inner.access(&guard);
+> +///     pr_info!("{} {}", guard.bytes_used, inner_file.bytes_used);
+> +/// }
+> +///
+> +/// /// Increments `bytes_used` for both the directory and file.
+> +/// fn inc_bytes_used(dir: &Directory, file: &File) {
+> +///     let mut guard =3D dir.inner.lock();
+> +///     guard.bytes_used +=3D 10;
+> +///
+> +///     let file_inner =3D file.inner.access_mut(&mut guard);
+> +///     file_inner.bytes_used +=3D 10;
+> +/// }
+> +///
+> +/// /// Creates a new file.
+> +/// fn new_file(ino: u32, dir: &Directory) -> File {
+> +///     File {
+> +///         _ino: ino,
+> +///         inner: LockedBy::new(&dir.inner, InnerFile { bytes_used: 0 }=
+),
+> +///     }
+> +/// }
+> +/// ```
+> +pub struct LockedBy<T: ?Sized, U: ?Sized> {
+> +    owner: *const U,
+> +    data: UnsafeCell<T>,
+> +}
+> +
+> +// SAFETY: `LockedBy` can be transferred across thread boundaries iff th=
+e data it protects can.
+> +unsafe impl<T: ?Sized + Send, U: ?Sized> Send for LockedBy<T, U> {}
+> +
+> +// SAFETY: `LockedBy` serialises the interior mutability it provides, so=
+ it is `Sync` as long as the
+> +// data it protects is `Send`.
+> +unsafe impl<T: ?Sized + Send, U: ?Sized> Sync for LockedBy<T, U> {}
+> +
+> +impl<T, U: ?Sized> LockedBy<T, U> {
+> +    /// Constructs a new instance of [`LockedBy`].
+> +    ///
+> +    /// It stores a raw pointer to the owner that is never dereferenced.=
+ It is only used to ensure
+> +    /// that the right owner is being used to access the protected data.=
+ If the owner is freed, the
+> +    /// data becomes inaccessible; if another instance of the owner is a=
+llocated *on the same
+> +    /// memory location*, the data becomes accessible again: none of thi=
+s affects memory safety
+> +    /// because in any case at most one thread (or CPU) can access the p=
+rotected data at a time.
+> +    pub fn new(owner: &Lock<U, impl Backend>, data: T) -> Self {
+
+I think it would be sensible to also do the ZST check here, then it will
+fail immediately on construction (but also keep the other location, as it
+does not add any runtime cost).
+
+Also, I think you should mention in the documentation that ZSTs are not
+supported. And it would be good to have an explaining comment on the
+`build_assert!` why we disallow ZSTs here.
+
+> +        Self {
+> +            owner: owner.data.get(),
+> +            data: UnsafeCell::new(data),
+> +        }
+> +    }
+> +}
+> +
+> +impl<T: ?Sized, U> LockedBy<T, U> {
+> +    /// Returns a reference to the protected data when the caller provid=
+es evidence (via a
+> +    /// reference) that the owner is locked.
+
+Maybe add a `# Panic` section, also for `access_mut`.
+
+--
+Cheers,
+Benno
+
+> +    pub fn access<'a>(&'a self, owner: &'a U) -> &'a T {
+> +        crate::build_assert!(core::mem::size_of::<U>() > 0);
+> +        if !ptr::eq(owner, self.owner) {
+> +            panic!("mismatched owners");
+> +        }
+> +
+> +        // SAFETY: `owner` is evidence that the owner is locked.
+> +        unsafe { &*self.data.get() }
+> +    }
+> +
+> +    /// Returns a mutable reference to the protected data when the calle=
+r provides evidence (via a
+> +    /// mutable owner) that the owner is locked mutably.
+> +    ///
+> +    /// Showing a mutable reference to the owner is sufficient because w=
+e know no other references
+> +    /// can exist to it.
+> +    pub fn access_mut<'a>(&'a self, owner: &'a mut U) -> &'a mut T {
+> +        crate::build_assert!(core::mem::size_of::<U>() > 0);
+> +        if !ptr::eq(owner, self.owner) {
+> +            panic!("mismatched owners");
+> +        }
+> +
+> +        // SAFETY: `owner` is evidence that there is only one reference =
+to the owner.
+> +        unsafe { &mut *self.data.get() }
+> +    }
+> +}
+> --
+> 2.34.1
+>
+
