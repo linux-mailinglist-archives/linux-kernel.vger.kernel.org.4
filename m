@@ -2,138 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A046DAC53
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD446DAC57
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbjDGLqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S232715AbjDGLuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjDGLqw (ORCPT
+        with ESMTP id S230082AbjDGLuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:46:52 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC787EC6
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:46:51 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id i10so36696070vss.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:46:51 -0700 (PDT)
+        Fri, 7 Apr 2023 07:50:13 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622A77AB9
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:50:12 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id r187so48742462ybr.6
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:50:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1680868010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fnmTifiw6y4PL2ZMki5aELLg6CiGyYU6AAKyqZKSDHk=;
-        b=j+Buql+8cz8/30DcNwK6aKGX5E7RY8HVLMISxrJb+fyBiMtLob+6kL9NvDLvdlO53w
-         CSviY0OlLHbOjWqNkEydx8YZEXcO9l4nsgyaJ45dhQbxB/IiX+IcTZ2gltSkaztSRqnr
-         xiQq8nYCGb0NcmKdtDPtPlukzmnU06mePVBbmZCBSi/UZmBQbIBLc60BiVnN43aL4R4F
-         ddQa0pTktntHNl2DpYuWpJyCwwWtIg7Gfo9afJlT7NvrBVuKKaXPuFjlOqnp16vjv3uh
-         OWNc7uPCEz1zBIWpiSakXfm9bV6H07StanfCpcWR6PKUCaAnYFAs6gZyYomumfWyYvga
-         c1rQ==
+        d=linaro.org; s=google; t=1680868211; x=1683460211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qGYxOnCO4fdyW1zjZ7kMdbvesDIV9vyeIW/AoUlrSts=;
+        b=oVLErXRr/Kmx7HufeKwINH6cuaoaPh1yQw7sbQ+xrknhZtIfbsP1ElfPR6Wm1u4zuN
+         gjh3dOb8AKkHOuusNlQ3DPsnJHPZvKyA2z5TzxY1s2C9N2e5mQUt7fDDCc1vOAGEDr47
+         PmdCmdTPhOqKQC/hY+4inGbrrSVHliHvvj6Z8PAPhZ1JXpUx1J7YgUxEOCyM4l3RO7Vx
+         MgkzugthftV/z4u1ZSQPn1KDcoSGevKn3lXED9hoOQW4Fcs1T0sgEwWu9PMPv6ikreEG
+         kUYMT4TLTWfIl3qJ9Qnek21Rzctpdy7OmCVyowJ2ykxd9/so75a/J4dd6NG/bwFQE/RM
+         MbVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680868010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fnmTifiw6y4PL2ZMki5aELLg6CiGyYU6AAKyqZKSDHk=;
-        b=YXKPfRcQ/+WQZLjRyhuQ/c6o2YjahMAjslbPTyESan+K9Uo27/QwmjfnthegZGUdsf
-         m4CbrNrPLyfgxZPqKjZ0JiGBvvT51HF7cA6BvqgFM/6YICGF6zvCuNSfEHxzY5h1Pbp3
-         9A7xjb5d5642aHy45rX37FOZiKmwi4VB8bIfLMtYu9InH0bhbWeKykt4e9MY8IQQP6Ll
-         eNVtCOfcrEVX2YUFtT/XPN55z1bqmRq2YRudYno1HTyY40Dt5rCFXtwmQkWpLTllgGdp
-         ecb/c9OHpKxUG+Yj3AtYrRNGdfFmurZ/ln1YOt/2lZwBSZbu+iCGXQSiL5hJlOkm2NaN
-         Sq/g==
-X-Gm-Message-State: AAQBX9f4Jd9uRVnEbjMg5taxFijTdKxqjeq1VCKXi6ZIypBDKAgFovoJ
-        l6TZ7F2BhQWqPsMbDMnM5/byP1gFjCdYFTKLAzgKkw==
-X-Google-Smtp-Source: AKy350apxvdy+XIxHTwYhZXMmn1N4PujKyCC3w1AnefcYjQ6n/U3snXAgHJSPociYFTCmXW/zXOLWsOD6Wv1ZV5jEeo=
-X-Received: by 2002:a67:d813:0:b0:425:e5e6:d1d9 with SMTP id
- e19-20020a67d813000000b00425e5e6d1d9mr938588vsj.2.1680868010202; Fri, 07 Apr
- 2023 04:46:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1680708357.git.william.gray@linaro.org> <20e15cd3afae80922b7e0577c7741df86b3390c5.1680708357.git.william.gray@linaro.org>
- <50d8ee72-9b5c-4abc-a230-2aeb6eddf03e@sirena.org.uk> <CAMRc=Mc0HcMnuBqsN7ReNB5JTWR0C4FbMRRM9S7kqhW5otP5WA@mail.gmail.com>
- <ZDABDvbflOWAqcs+@fedora>
-In-Reply-To: <ZDABDvbflOWAqcs+@fedora>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 7 Apr 2023 13:46:39 +0200
-Message-ID: <CAMRc=Mcq5__aD-42cL7fh-A-=MwubHoebN7myRkeO7DF++4_EQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/3] regmap: Pass irq_drv_data as a parameter for set_type_config()
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
+        d=1e100.net; s=20210112; t=1680868211; x=1683460211;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qGYxOnCO4fdyW1zjZ7kMdbvesDIV9vyeIW/AoUlrSts=;
+        b=xbH9YiqFGTJtnYlg/cVRqa/MYPEVyPv6Di40b3WXT1SVFjxfn0FnEdAXj27LOR64qT
+         ETOD7h4H1Cl5/Bck4vUmK8HnKoTvSQaYUaT6Uo7EeqhsJpzqmLGM8JNALWjAaWLP6QEp
+         fK+nx7wM3+dNKN42K9LuBIPXSr/f+riEyihAN32hjsJ+V1bo+R72OqilSR9K2iHR0FCN
+         Cd6cAB/OLrBM1KI+R7ftDA1WI8JwbjQcgCM4rVpZ8UrimVS01r63eDPzun5E2b7X5SAv
+         Xp4t5mGlg5t87bCObFjzV9s9l3qiQJFUqf5GQJAz0GCAQ1zQdNq5hC4ORSIh5A3jWq57
+         ADRQ==
+X-Gm-Message-State: AAQBX9dIAtd/WlN0eUsdz3mp22Lx022IwH3nScBbyoiZmD924xjx1bIE
+        qfvMBlQgNGqzRtw/wpOrjF2scA==
+X-Google-Smtp-Source: AKy350bEO9spsM3jAp8N9f++M0C4fgFNwevDSTrl4hVHJunpPYmUoIQM7VSwJ1UresJySHkhewo0JQ==
+X-Received: by 2002:a25:fc1:0:b0:b3b:88e8:4b89 with SMTP id 184-20020a250fc1000000b00b3b88e84b89mr5566464ybp.15.1680868211590;
+        Fri, 07 Apr 2023 04:50:11 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id bw28-20020a05690c079c00b00545a08184bfsm955644ywb.79.2023.04.07.04.50.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 04:50:11 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Mark Brown <broonie@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        techsupport@winsystems.com, pdemetrotion@winsystems.com,
-        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        William Breathitt Gray <william.gray@linaro.org>
+Subject: [RESEND PATCH v3 0/2] Drop map from handle_mask_sync() parameters
+Date:   Fri,  7 Apr 2023 07:47:31 -0400
+Message-Id: <cover.1679323449.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 1:40=E2=80=AFPM William Breathitt Gray
-<william.gray@linaro.org> wrote:
->
-> On Fri, Apr 07, 2023 at 12:17:31PM +0200, Bartosz Golaszewski wrote:
-> > On Thu, Apr 6, 2023 at 7:23=E2=80=AFPM Mark Brown <broonie@kernel.org> =
-wrote:
-> > >
-> > > On Wed, Apr 05, 2023 at 11:45:42AM -0400, William Breathitt Gray wrot=
-e:
-> > > > Allow the struct regmap_irq_chip set_type_config() callback to acce=
-ss
-> > > > irq_drv_data by passing it as a parameter.
-> > >
-> > > The following changes since commit e8d018dd0257f744ca50a729e3d042cf2e=
-c9da65:
-> > >
-> > >   Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-> > >
-> > > are available in the Git repository at:
-> > >
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git =
-tags/regmap-set-type-irq-drv-data
-> > >
-> > > for you to fetch changes up to 7697c64b9e4908196f0ae68aa6d423dd406079=
-73:
-> > >
-> > >   regmap: Pass irq_drv_data as a parameter for set_type_config() (202=
-3-04-05 17:19:24 +0100)
-> > >
-> > > ----------------------------------------------------------------
-> > > regmap: Pass irq_drv_data as a parameter for set_type_config()
-> > >
-> > > Allow callbacks to access irq_drv_data.
-> > >
-> > > ----------------------------------------------------------------
-> > > William Breathitt Gray (1):
-> > >       regmap: Pass irq_drv_data as a parameter for set_type_config()
-> > >
-> > >  drivers/base/regmap/regmap-irq.c | 8 +++++---
-> > >  include/linux/regmap.h           | 6 ++++--
-> > >  2 files changed, 9 insertions(+), 5 deletions(-)
-> >
-> > Pulled Mark's tag and applied the two remaining patches, thanks!
-> >
-> > Bart
->
-> Bart, the two remaining patches still depend on the handle_mask_sync
-> change descripted in the cover patch [0].
->
-> Mark, are you able to Ack those patches or alternatively provide an
-> immutable branch with them? We need the handle_mask_sync change as well
-> for the idio-16 migration patchset [1].
->
-> William Breathitt Gray
->
-> [0] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.=
-org/
-> [1] https://lore.kernel.org/all/cover.1680618405.git.william.gray@linaro.=
-org/
+Changes in v3:
+ - Inline dio48gpio->map usage in dio48e_handle_mask_sync() to avoid
+   redefining map parameter
 
-Ok, I'll back them out.
+Remove the map parameter from the struct regmap_irq_chip callback
+handle_mask_sync() because it can be passed via the irq_drv_data
+parameter instead. The gpio-104-dio-48e driver is the only consumer of
+this callback and is thus updated accordingly.
 
-Bart
+A couple pending patchsets also utilize handle_mask_sync() [0][1], so
+it'll be useful to merge the changes in this series first to avoid
+subsequent noise adjusting the dependent drivers.
+
+[0] https://lore.kernel.org/r/cover.1677515341.git.william.gray@linaro.org/
+[1] https://lore.kernel.org/r/cover.1678106722.git.william.gray@linaro.org/
+
+William Breathitt Gray (2):
+  gpio: 104-dio-48e: Implement struct dio48e_gpio
+  regmap-irq: Drop map from handle_mask_sync() parameters
+
+ drivers/base/regmap/regmap-irq.c |  5 ++---
+ drivers/gpio/gpio-104-dio-48e.c  | 37 +++++++++++++++++++++-----------
+ include/linux/regmap.h           |  3 +--
+ 3 files changed, 28 insertions(+), 17 deletions(-)
+
+
+base-commit: 03810031c91dfe448cd116ee987d5dc4139006f4
+-- 
+2.39.2
+
