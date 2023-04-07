@@ -2,93 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7FE6DB6CB
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7976DB6CC
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjDGXFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
+        id S229680AbjDGXGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjDGXFm (ORCPT
+        with ESMTP id S229451AbjDGXGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:05:42 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1319E066
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:05:15 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id n14-20020a25400e000000b00b6d6655dc35so40800yba.6
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:05:15 -0700 (PDT)
+        Fri, 7 Apr 2023 19:06:01 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F66E07B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:05:32 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id s93-20020a17090a2f6600b0024670ac71caso141403pjd.4
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:05:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680908715;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r8pJnP6RbyFujTICIoNTWoAACWFJ4BwJMUkbZhyU8UE=;
-        b=Nb5rMTaS+Pe7Rosg7zJz5o1TWYbPx6xunaRvt047V3Rn2iHJRY5S258MRC+tcyUH5U
-         ItK2DI8BApAysl5FiZSDpFY8IRCjEjBKSoTHKzK8bIFOnE/uhT7OohA5nNQ+7fjTdCHc
-         NhMvzY+LavItUYd0H9gLA4NIcn7gkO/DgSZ/yfDizvvzRZcQNDcvevu1OFpR1/lUhKf2
-         ulwv7laL/jg9xOSdnQVQJAUIRKs3YXq5SLuSyb/r21HoeR9p33lr/CXeQi57IFXdPj4X
-         blHbkxIFrEI06Dc+BBx9I0EqzQLAIwSVYeBS1XJvRXwXW8cdFsPQJ/LhXdW+ODoCJlLc
-         74HQ==
+        d=google.com; s=20210112; t=1680908732; x=1683500732;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=T+Aq5EGpv0TdcyR3mJ0rG0U8bcZUTZ5BKGaHK0JrYVc=;
+        b=joThEOBHVXoPtxtwqaFrm5dG382oUEuC1Z7udKCQMpKFT/BWvfI6nQPyjLU1LUL3te
+         mBpw/CtuNM6bTwwDxWFVQdel2qstpt+P+m0KSEjKzA9E3PppJLphsjyrfJ5wk4ihmOml
+         TvxpslPz0hEt4peTxtTYvBgcR4ns/Xv53JrIA4P71lrj4d3hUW7HgxVuTeOugl/9aWHw
+         5P4p+m3t/xDpCLHV/HmizJ+/zeD6yq+8GlycZd+pdDDku7Nu7TF3T8m1rGCuzJBXPBvZ
+         TuPavi2Mt4Led/cG7CKvhPJy1AYMopuj+yb4W7zxIq9/TUAKGi5gTCFR02m4UWbKeQ+b
+         KNmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680908715;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r8pJnP6RbyFujTICIoNTWoAACWFJ4BwJMUkbZhyU8UE=;
-        b=KpPaaEmRTEmqD2y9EPt3cPlrCdM/AzQhcTvQCWsk/d2IUgbK91fApd5ONUCbAFtPC+
-         qiYaQFF1SthdNSyACwvmqqZNQt26dS3rzunqurlGNkURL18HOcBQxkFbNFa8iCr0mFJ0
-         frlCHdiSpA/7AZAWsot7gxHrOHIWASBtyhDMmPWhNGanXG3wZOndUW3CGfCgnu3PfhBY
-         YsvUE/RVBslemDVsF0fkKHXILcHGK2mItVnRw+lmOb0bEBPFo9j+k/7Q7mdBRfrtvGJN
-         qgsusj+W41i19ZFZSsrFIO2QWaNwYZVKsr9vIptzXAIx98GTuBTpE0S3oEKcAqVHjzIo
-         rtlQ==
-X-Gm-Message-State: AAQBX9f7SAYcebeEmgPNcmqtOTXOvD2+f04ervef0btP4J56FKivS7kP
-        8bt+GK0GdVdlavn8LEbicr+dgEBi5Hm2
-X-Google-Smtp-Source: AKy350ZYLLhoD03IZPy6IkALBLFhMGg7QdH+v8iXuL5le624IhSzV13BJ45sBRLRHN0zvuAYAixtoLnsvcA6
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b240:9cdf:7861:b23e])
- (user=irogers job=sendgmr) by 2002:a81:ef0c:0:b0:549:2cc8:6e3e with SMTP id
- o12-20020a81ef0c000000b005492cc86e3emr1882170ywm.9.1680908714879; Fri, 07 Apr
- 2023 16:05:14 -0700 (PDT)
-Date:   Fri,  7 Apr 2023 16:04:05 -0700
-In-Reply-To: <20230407230405.2931830-1-irogers@google.com>
-Message-Id: <20230407230405.2931830-6-irogers@google.com>
+        d=1e100.net; s=20210112; t=1680908732; x=1683500732;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T+Aq5EGpv0TdcyR3mJ0rG0U8bcZUTZ5BKGaHK0JrYVc=;
+        b=CRzXcqWfOToiR1iju53KK9GnGckRXyGBdlxi9z3TnIV0rPJnaNPttUlvWqfBqLSLJu
+         ZyKcTh0mUinO8vS6TgKNv/yKfmDfWKVgsReEqbhI/zU6HVZu1D4EWuHdA1Xv0YfeYGyj
+         4jkJaSl+fRmg2+txni+pdkbn+7ZJDvuMQH8UfduBQr/SWTfof+mdUZeUEAxg2PXMl8NU
+         JRKtkqK7pWhlGiFP5VQkitjdDHh1R2P0qC+7f8ltyNn4ffYZKq5K3tt4IlF/ATWpssUq
+         6+V0DfsnJ/ToH0jcAYlCQt7+5qmBoyy2/lxMO1dioAYeSZgQOWr8X3E7/NbyA/1wrZ6X
+         LCqQ==
+X-Gm-Message-State: AAQBX9fkPmmIPDLdjDmHm6SXWMU1TitQWyYqSpT1bMNsvjREMBTQTBh7
+        cloV40ePnmvCI9UEbHXt6ZgDqjKq7rRdbXbeuoqA+2jiukzn/j2H4ywVwglxxEpKg/QtFe9rNT8
+        NgukkxPLa4Ob94oIVEc80roYToLaFRyRBNmTePZ0sWWQZ/vXoL+RsYwJPI0t8yneoZCxSTUk=
+X-Google-Smtp-Source: AKy350Yj18hj/bhFg7Ob768bL9JlrO2l4hoCellvR18Ea82ZFABDTbikdhH6gftC1NNZaAAneg89KZd0wMGH
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a63:58e:0:b0:50b:e80f:caff with SMTP id
+ 136-20020a63058e000000b0050be80fcaffmr3764515pgf.0.1680908731909; Fri, 07 Apr
+ 2023 16:05:31 -0700 (PDT)
+Date:   Fri,  7 Apr 2023 23:05:26 +0000
 Mime-Version: 1.0
-References: <20230407230405.2931830-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Subject: [PATCH v7 5/5] perf map: Add reference count checking
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        James Clark <james.clark@arm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Song Liu <song@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+Message-ID: <20230407230526.1685443-1-jstultz@google.com>
+Subject: [RESEND x4][PATCH v3] trace: Add trace points for tasklet entry/exit
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Lingutla Chandrasekhar <clingutla@codeaurora.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, Hao Luo <haoluo@google.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>, kernel-team@android.com,
+        "J . Avila" <elavila@google.com>, John Stultz <jstultz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -100,714 +71,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's no strict get/put policy with map that leads to leaks or use
-after free. Reference count checking identifies correct pairing of gets
-and puts.
+From: Lingutla Chandrasekhar <clingutla@codeaurora.org>
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+Tasklets are supposed to finish their work quickly and
+should not block the current running process, but it is not
+guaranteed that. Currently softirq_entry/exit can be used to
+know total tasklets execution time, but not helpful to track
+individual tasklet's execution time. With that we can't find
+any culprit tasklet function, which is taking more time.
+
+Add tasklet_entry/exit trace point support to track
+individual tasklet execution.
+
+Trivial usage example:
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_entry/enable
+   # echo 1 > /sys/kernel/debug/tracing/events/irq/tasklet_exit/enable
+   # cat /sys/kernel/debug/tracing/trace
+ # tracer: nop
+ #
+ # entries-in-buffer/entries-written: 4/4   #P:4
+ #
+ #                                _-----=> irqs-off/BH-disabled
+ #                               / _----=> need-resched
+ #                              | / _---=> hardirq/softirq
+ #                              || / _--=> preempt-depth
+ #                              ||| / _-=> migrate-disable
+ #                              |||| /     delay
+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+ #              | |         |   |||||     |         |
+           <idle>-0       [003] ..s1.   314.011428: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.011432: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017369: tasklet_entry: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+           <idle>-0       [003] ..s1.   314.017371: tasklet_exit: tasklet=0xffffa01ef8db2740 function=tcp_tasklet_func
+
+This patch has been carried in the Android tree for awhile
+so I wanted to submit it for review upstream. Feedback would
+be appreciated!
+
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: kernel-team@android.com
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Lingutla Chandrasekhar <clingutla@codeaurora.org>
+[elavila: Port to android-mainline]
+Signed-off-by: J. Avila <elavila@google.com>
+[jstultz: Rebased to upstream, cut unused trace points, added
+ comments for the tracepoints, reworded commit]
+Signed-off-by: John Stultz <jstultz@google.com>
 ---
- tools/perf/builtin-top.c            |  4 +-
- tools/perf/tests/hists_link.c       |  2 +-
- tools/perf/tests/maps.c             | 20 ++++-----
- tools/perf/tests/vmlinux-kallsyms.c |  4 +-
- tools/perf/util/machine.c           | 25 ++++++-----
- tools/perf/util/map.c               | 69 ++++++++++++++++-------------
- tools/perf/util/map.h               | 32 +++++++------
- tools/perf/util/maps.c              | 11 ++---
- tools/perf/util/symbol-elf.c        | 26 ++++++-----
- tools/perf/util/symbol.c            | 40 +++++++++--------
- 10 files changed, 126 insertions(+), 107 deletions(-)
+"Helloooooo..." he yelled into the void.
+v2:
+* Added tasklet pointer to the trace event as suggested by Steven
+v3:
+* Minor tweak to commit to show usage and output example
+---
+ include/trace/events/irq.h | 47 ++++++++++++++++++++++++++++++++++++++
+ kernel/softirq.c           |  9 ++++++--
+ 2 files changed, 54 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 3162bad0d17d..11141a492837 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -191,7 +191,7 @@ static void ui__warn_map_erange(struct map *map, struct symbol *sym, u64 ip)
- 	if (use_browser <= 0)
- 		sleep(5);
+diff --git a/include/trace/events/irq.h b/include/trace/events/irq.h
+index eeceafaaea4c..a07b4607b663 100644
+--- a/include/trace/events/irq.h
++++ b/include/trace/events/irq.h
+@@ -160,6 +160,53 @@ DEFINE_EVENT(softirq, softirq_raise,
+ 	TP_ARGS(vec_nr)
+ );
  
--	map->erange_warned = true;
-+	RC_CHK_ACCESS(map)->erange_warned = true;
- }
- 
- static void perf_top__record_precise_ip(struct perf_top *top,
-@@ -225,7 +225,7 @@ static void perf_top__record_precise_ip(struct perf_top *top,
- 		 */
- 		mutex_unlock(&he->hists->lock);
- 
--		if (err == -ERANGE && !he->ms.map->erange_warned)
-+		if (err == -ERANGE && !RC_CHK_ACCESS(he->ms.map)->erange_warned)
- 			ui__warn_map_erange(he->ms.map, sym, ip);
- 		else if (err == -ENOMEM) {
- 			pr_err("Not enough memory for annotating '%s' symbol!\n",
-diff --git a/tools/perf/tests/hists_link.c b/tools/perf/tests/hists_link.c
-index 64ce8097889c..141e2972e34f 100644
---- a/tools/perf/tests/hists_link.c
-+++ b/tools/perf/tests/hists_link.c
-@@ -145,7 +145,7 @@ static int find_sample(struct sample *samples, size_t nr_samples,
- {
- 	while (nr_samples--) {
- 		if (samples->thread == t &&
--		    samples->map == m &&
-+		    RC_CHK_ACCESS(samples->map) == RC_CHK_ACCESS(m) &&
- 		    samples->sym == s)
- 			return 1;
- 		samples++;
-diff --git a/tools/perf/tests/maps.c b/tools/perf/tests/maps.c
-index 1c7293476aca..b8dab6278bca 100644
---- a/tools/perf/tests/maps.c
-+++ b/tools/perf/tests/maps.c
-@@ -30,7 +30,7 @@ static int check_maps(struct map_def *merged, unsigned int size, struct maps *ma
- 			if (map__start(map) != merged[i].start ||
- 			    map__end(map) != merged[i].end ||
- 			    strcmp(map__dso(map)->name, merged[i].name) ||
--			    refcount_read(&map->refcnt) != 1) {
-+			    refcount_read(&RC_CHK_ACCESS(map)->refcnt) != 1) {
- 				failed = true;
- 			}
- 			i++;
-@@ -50,7 +50,7 @@ static int check_maps(struct map_def *merged, unsigned int size, struct maps *ma
- 				map__start(map),
- 				map__end(map),
- 				map__dso(map)->name,
--				refcount_read(&map->refcnt));
-+				refcount_read(&RC_CHK_ACCESS(map)->refcnt));
- 		}
- 	}
- 	return failed ? TEST_FAIL : TEST_OK;
-@@ -95,8 +95,8 @@ static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest
- 		map = dso__new_map(bpf_progs[i].name);
- 		TEST_ASSERT_VAL("failed to create map", map);
- 
--		map->start = bpf_progs[i].start;
--		map->end   = bpf_progs[i].end;
-+		RC_CHK_ACCESS(map)->start = bpf_progs[i].start;
-+		RC_CHK_ACCESS(map)->end   = bpf_progs[i].end;
- 		TEST_ASSERT_VAL("failed to insert map", maps__insert(maps, map) == 0);
- 		map__put(map);
- 	}
-@@ -111,16 +111,16 @@ static int test__maps__merge_in(struct test_suite *t __maybe_unused, int subtest
- 	TEST_ASSERT_VAL("failed to create map", map_kcore3);
- 
- 	/* kcore1 map overlaps over all bpf maps */
--	map_kcore1->start = 100;
--	map_kcore1->end   = 1000;
-+	RC_CHK_ACCESS(map_kcore1)->start = 100;
-+	RC_CHK_ACCESS(map_kcore1)->end   = 1000;
- 
- 	/* kcore2 map hides behind bpf_prog_2 */
--	map_kcore2->start = 550;
--	map_kcore2->end   = 570;
-+	RC_CHK_ACCESS(map_kcore2)->start = 550;
-+	RC_CHK_ACCESS(map_kcore2)->end   = 570;
- 
- 	/* kcore3 map hides behind bpf_prog_3, kcore1 and adds new map */
--	map_kcore3->start = 880;
--	map_kcore3->end   = 1100;
-+	RC_CHK_ACCESS(map_kcore3)->start = 880;
-+	RC_CHK_ACCESS(map_kcore3)->end   = 1100;
- 
- 	ret = maps__merge_in(maps, map_kcore1);
- 	TEST_ASSERT_VAL("failed to merge map", !ret);
-diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlinux-kallsyms.c
-index af511233c764..a087b24463ff 100644
---- a/tools/perf/tests/vmlinux-kallsyms.c
-+++ b/tools/perf/tests/vmlinux-kallsyms.c
-@@ -304,7 +304,7 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
- 								dso->short_name :
- 								dso->name));
- 		if (pair) {
--			pair->priv = 1;
-+			RC_CHK_ACCESS(pair)->priv = 1;
- 		} else {
- 			if (!header_printed) {
- 				pr_info("WARN: Maps only in vmlinux:\n");
-@@ -340,7 +340,7 @@ static int test__vmlinux_matches_kallsyms(struct test_suite *test __maybe_unused
- 				pr_info(":\nWARN: *%" PRIx64 "-%" PRIx64 " %" PRIx64,
- 					map__start(pair), map__end(pair), map__pgoff(pair));
- 			pr_info(" %s\n", dso->name);
--			pair->priv = 1;
-+			RC_CHK_ACCESS(pair)->priv = 1;
- 		}
- 	}
- 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 2d9ce6966238..9a472ee52129 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -910,8 +910,8 @@ static int machine__process_ksymbol_register(struct machine *machine,
- 			dso__set_loaded(dso);
- 		}
- 
--		map->start = event->ksymbol.addr;
--		map->end = map__start(map) + event->ksymbol.len;
-+		RC_CHK_ACCESS(map)->start = event->ksymbol.addr;
-+		RC_CHK_ACCESS(map)->end = map__start(map) + event->ksymbol.len;
- 		err = maps__insert(machine__kernel_maps(machine), map);
- 		if (err) {
- 			err = -ENOMEM;
-@@ -953,7 +953,7 @@ static int machine__process_ksymbol_unregister(struct machine *machine,
- 	if (!map)
- 		return 0;
- 
--	if (map != machine->vmlinux_map)
-+	if (RC_CHK_ACCESS(map) != RC_CHK_ACCESS(machine->vmlinux_map))
- 		maps__remove(machine__kernel_maps(machine), map);
- 	else {
- 		struct dso *dso = map__dso(map);
-@@ -1218,8 +1218,8 @@ int machine__create_extra_kernel_map(struct machine *machine,
- 	if (!map)
- 		return -ENOMEM;
- 
--	map->end   = xm->end;
--	map->pgoff = xm->pgoff;
-+	RC_CHK_ACCESS(map)->end   = xm->end;
-+	RC_CHK_ACCESS(map)->pgoff = xm->pgoff;
- 
- 	kmap = map__kmap(map);
- 
-@@ -1291,7 +1291,7 @@ int machine__map_x86_64_entry_trampolines(struct machine *machine,
- 
- 		dest_map = maps__find(kmaps, map__pgoff(map));
- 		if (dest_map != map)
--			map->pgoff = map__map_ip(dest_map, map__pgoff(map));
-+			RC_CHK_ACCESS(map)->pgoff = map__map_ip(dest_map, map__pgoff(map));
- 		found = true;
- 	}
- 	if (found || machine->trampolines_mapped)
-@@ -1342,7 +1342,8 @@ __machine__create_kernel_maps(struct machine *machine, struct dso *kernel)
- 	if (machine->vmlinux_map == NULL)
- 		return -ENOMEM;
- 
--	machine->vmlinux_map->map_ip = machine->vmlinux_map->unmap_ip = identity__map_ip;
-+	RC_CHK_ACCESS(machine->vmlinux_map)->map_ip = identity__map_ip;
-+	RC_CHK_ACCESS(machine->vmlinux_map)->unmap_ip = identity__map_ip;
- 	return maps__insert(machine__kernel_maps(machine), machine->vmlinux_map);
- }
- 
-@@ -1623,7 +1624,7 @@ static int machine__create_module(void *arg, const char *name, u64 start,
- 	map = machine__addnew_module_map(machine, start, name);
- 	if (map == NULL)
- 		return -1;
--	map->end = start + size;
-+	RC_CHK_ACCESS(map)->end = start + size;
- 
- 	dso__kernel_module_get_build_id(map__dso(map), machine->root_dir);
- 	map__put(map);
-@@ -1659,14 +1660,14 @@ static int machine__create_modules(struct machine *machine)
- static void machine__set_kernel_mmap(struct machine *machine,
- 				     u64 start, u64 end)
- {
--	machine->vmlinux_map->start = start;
--	machine->vmlinux_map->end   = end;
-+	RC_CHK_ACCESS(machine->vmlinux_map)->start = start;
-+	RC_CHK_ACCESS(machine->vmlinux_map)->end   = end;
- 	/*
- 	 * Be a bit paranoid here, some perf.data file came with
- 	 * a zero sized synthesized MMAP event for the kernel.
- 	 */
- 	if (start == 0 && end == 0)
--		machine->vmlinux_map->end = ~0ULL;
-+		RC_CHK_ACCESS(machine->vmlinux_map)->end = ~0ULL;
- }
- 
- static int machine__update_kernel_mmap(struct machine *machine,
-@@ -1810,7 +1811,7 @@ static int machine__process_kernel_mmap_event(struct machine *machine,
- 		if (map == NULL)
- 			goto out_problem;
- 
--		map->end = map__start(map) + xm->end - xm->start;
-+		RC_CHK_ACCESS(map)->end = map__start(map) + xm->end - xm->start;
- 
- 		if (build_id__is_defined(bid))
- 			dso__set_build_id(map__dso(map), bid);
-diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-index d81b6ca18ee9..d13c787faea9 100644
---- a/tools/perf/util/map.c
-+++ b/tools/perf/util/map.c
-@@ -104,15 +104,15 @@ static inline bool replace_android_lib(const char *filename, char *newfilename)
- 
- void map__init(struct map *map, u64 start, u64 end, u64 pgoff, struct dso *dso)
- {
--	map->start    = start;
--	map->end      = end;
--	map->pgoff    = pgoff;
--	map->reloc    = 0;
--	map->dso      = dso__get(dso);
--	map->map_ip   = map__dso_map_ip;
--	map->unmap_ip = map__dso_unmap_ip;
--	map->erange_warned = false;
--	refcount_set(&map->refcnt, 1);
-+	RC_CHK_ACCESS(map)->start    = start;
-+	RC_CHK_ACCESS(map)->end      = end;
-+	RC_CHK_ACCESS(map)->pgoff    = pgoff;
-+	RC_CHK_ACCESS(map)->reloc    = 0;
-+	RC_CHK_ACCESS(map)->dso      = dso__get(dso);
-+	RC_CHK_ACCESS(map)->map_ip   = map__dso_map_ip;
-+	RC_CHK_ACCESS(map)->unmap_ip = map__dso_unmap_ip;
-+	RC_CHK_ACCESS(map)->erange_warned = false;
-+	refcount_set(&RC_CHK_ACCESS(map)->refcnt, 1);
- }
- 
- struct map *map__new(struct machine *machine, u64 start, u64 len,
-@@ -120,11 +120,13 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
- 		     u32 prot, u32 flags, struct build_id *bid,
- 		     char *filename, struct thread *thread)
- {
--	struct map *map = malloc(sizeof(*map));
-+	struct map *res;
-+	RC_STRUCT(map) *map;
- 	struct nsinfo *nsi = NULL;
- 	struct nsinfo *nnsi;
- 
--	if (map != NULL) {
-+	map = malloc(sizeof(*map));
-+	if (ADD_RC_CHK(res, map)) {
- 		char newfilename[PATH_MAX];
- 		struct dso *dso, *header_bid_dso;
- 		int anon, no_dso, vdso, android;
-@@ -167,7 +169,7 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
- 		if (dso == NULL)
- 			goto out_delete;
- 
--		map__init(map, start, start + len, pgoff, dso);
-+		map__init(res, start, start + len, pgoff, dso);
- 
- 		if (anon || no_dso) {
- 			map->map_ip = map->unmap_ip = identity__map_ip;
-@@ -204,10 +206,10 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
- 		}
- 		dso__put(dso);
- 	}
--	return map;
-+	return res;
- out_delete:
- 	nsinfo__put(nsi);
--	free(map);
-+	RC_CHK_FREE(res);
- 	return NULL;
- }
- 
-@@ -218,16 +220,18 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
-  */
- struct map *map__new2(u64 start, struct dso *dso)
- {
--	struct map *map = calloc(1, (sizeof(*map) +
--				     (dso->kernel ? sizeof(struct kmap) : 0)));
--	if (map != NULL) {
-+	struct map *res;
-+	RC_STRUCT(map) *map;
++DECLARE_EVENT_CLASS(tasklet,
 +
-+	map = calloc(1, sizeof(*map) + (dso->kernel ? sizeof(struct kmap) : 0));
-+	if (ADD_RC_CHK(res, map)) {
- 		/*
- 		 * ->end will be filled after we load all the symbols
- 		 */
--		map__init(map, start, 0, 0, dso);
-+		map__init(res, start, 0, 0, dso);
- 	}
- 
--	return map;
-+	return res;
- }
- 
- bool __map__is_kernel(const struct map *map)
-@@ -292,20 +296,22 @@ bool map__has_symbols(const struct map *map)
- 
- static void map__exit(struct map *map)
- {
--	BUG_ON(refcount_read(&map->refcnt) != 0);
--	dso__zput(map->dso);
-+	BUG_ON(refcount_read(&RC_CHK_ACCESS(map)->refcnt) != 0);
-+	dso__zput(RC_CHK_ACCESS(map)->dso);
- }
- 
- void map__delete(struct map *map)
- {
- 	map__exit(map);
--	free(map);
-+	RC_CHK_FREE(map);
- }
- 
- void map__put(struct map *map)
- {
--	if (map && refcount_dec_and_test(&map->refcnt))
-+	if (map && refcount_dec_and_test(&RC_CHK_ACCESS(map)->refcnt))
- 		map__delete(map);
-+	else
-+		RC_CHK_PUT(map);
- }
- 
- void map__fixup_start(struct map *map)
-@@ -317,7 +323,7 @@ void map__fixup_start(struct map *map)
- 	if (nd != NULL) {
- 		struct symbol *sym = rb_entry(nd, struct symbol, rb_node);
- 
--		map->start = sym->start;
-+		RC_CHK_ACCESS(map)->start = sym->start;
- 	}
- }
- 
-@@ -329,7 +335,7 @@ void map__fixup_end(struct map *map)
- 
- 	if (nd != NULL) {
- 		struct symbol *sym = rb_entry(nd, struct symbol, rb_node);
--		map->end = sym->end;
-+		RC_CHK_ACCESS(map)->end = sym->end;
- 	}
- }
- 
-@@ -400,20 +406,21 @@ struct symbol *map__find_symbol_by_name(struct map *map, const char *name)
- 
- struct map *map__clone(struct map *from)
- {
--	size_t size = sizeof(struct map);
--	struct map *map;
-+	struct map *res;
-+	RC_STRUCT(map) *map;
-+	size_t size = sizeof(RC_STRUCT(map));
- 	struct dso *dso = map__dso(from);
- 
- 	if (dso && dso->kernel)
- 		size += sizeof(struct kmap);
- 
--	map = memdup(from, size);
--	if (map != NULL) {
-+	map = memdup(RC_CHK_ACCESS(from), size);
-+	if (ADD_RC_CHK(res, map)) {
- 		refcount_set(&map->refcnt, 1);
- 		map->dso = dso__get(dso);
- 	}
- 
--	return map;
-+	return res;
- }
- 
- size_t map__fprintf(struct map *map, FILE *fp)
-@@ -567,7 +574,7 @@ struct kmap *__map__kmap(struct map *map)
- 
- 	if (!dso || !dso->kernel)
- 		return NULL;
--	return (struct kmap *)(map + 1);
-+	return (struct kmap *)(&RC_CHK_ACCESS(map)[1]);
- }
- 
- struct kmap *map__kmap(struct map *map)
-diff --git a/tools/perf/util/map.h b/tools/perf/util/map.h
-index 102485699aa8..55d047e818e7 100644
---- a/tools/perf/util/map.h
-+++ b/tools/perf/util/map.h
-@@ -10,12 +10,13 @@
- #include <string.h>
- #include <stdbool.h>
- #include <linux/types.h>
-+#include <internal/rc_check.h>
- 
- struct dso;
- struct maps;
- struct machine;
- 
--struct map {
-+DECLARE_RC_STRUCT(map) {
- 	u64			start;
- 	u64			end;
- 	bool			erange_warned:1;
-@@ -49,52 +50,52 @@ u64 identity__map_ip(const struct map *map __maybe_unused, u64 ip);
- 
- static inline struct dso *map__dso(const struct map *map)
- {
--	return map->dso;
-+	return RC_CHK_ACCESS(map)->dso;
- }
- 
- static inline u64 map__map_ip(const struct map *map, u64 ip)
- {
--	return map->map_ip(map, ip);
-+	return RC_CHK_ACCESS(map)->map_ip(map, ip);
- }
- 
- static inline u64 map__unmap_ip(const struct map *map, u64 ip)
- {
--	return map->unmap_ip(map, ip);
-+	return RC_CHK_ACCESS(map)->unmap_ip(map, ip);
- }
- 
- static inline u64 map__start(const struct map *map)
- {
--	return map->start;
-+	return RC_CHK_ACCESS(map)->start;
- }
- 
- static inline u64 map__end(const struct map *map)
- {
--	return map->end;
-+	return RC_CHK_ACCESS(map)->end;
- }
- 
- static inline u64 map__pgoff(const struct map *map)
- {
--	return map->pgoff;
-+	return RC_CHK_ACCESS(map)->pgoff;
- }
- 
- static inline u64 map__reloc(const struct map *map)
- {
--	return map->reloc;
-+	return RC_CHK_ACCESS(map)->reloc;
- }
- 
- static inline u32 map__flags(const struct map *map)
- {
--	return map->flags;
-+	return RC_CHK_ACCESS(map)->flags;
- }
- 
- static inline u32 map__prot(const struct map *map)
- {
--	return map->prot;
-+	return RC_CHK_ACCESS(map)->prot;
- }
- 
- static inline bool map__priv(const struct map *map)
- {
--	return map->priv;
-+	return RC_CHK_ACCESS(map)->priv;
- }
- 
- static inline size_t map__size(const struct map *map)
-@@ -153,9 +154,12 @@ struct map *map__clone(struct map *map);
- 
- static inline struct map *map__get(struct map *map)
- {
--	if (map)
--		refcount_inc(&map->refcnt);
--	return map;
-+	struct map *result;
++	TP_PROTO(struct tasklet_struct *t, void *func),
 +
-+	if (RC_CHK_GET(result, map))
-+		refcount_inc(&RC_CHK_ACCESS(map)->refcnt);
++	TP_ARGS(t, func),
 +
-+	return result;
- }
++	TP_STRUCT__entry(
++		__field(	void *,	tasklet)
++		__field(	void *,	func)
++	),
++
++	TP_fast_assign(
++		__entry->tasklet = t;
++		__entry->func = func;
++	),
++
++	TP_printk("tasklet=%ps function=%ps", __entry->tasklet, __entry->func)
++);
++
++/**
++ * tasklet_entry - called immediately before the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_entry,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
++/**
++ * tasklet_exit - called immediately after the tasklet is run
++ * @t: tasklet pointer
++ * @func: tasklet callback or function being run
++ *
++ * Used to find individual tasklet execution time
++ */
++DEFINE_EVENT(tasklet, tasklet_exit,
++
++	TP_PROTO(struct tasklet_struct *t, void *func),
++
++	TP_ARGS(t, func)
++);
++
+ #endif /*  _TRACE_IRQ_H */
  
- void map__put(struct map *map);
-diff --git a/tools/perf/util/maps.c b/tools/perf/util/maps.c
-index 567952587247..a33ae321c65a 100644
---- a/tools/perf/util/maps.c
-+++ b/tools/perf/util/maps.c
-@@ -126,7 +126,7 @@ void maps__remove(struct maps *maps, struct map *map)
- 		RC_CHK_ACCESS(maps)->last_search_by_name = NULL;
- 
- 	rb_node = maps__find_node(maps, map);
--	assert(rb_node->map == map);
-+	assert(rb_node->RC_CHK_ACCESS(map) == RC_CHK_ACCESS(map));
- 	__maps__remove(maps, rb_node);
- 	if (maps__maps_by_name(maps))
- 		__maps__free_maps_by_name(maps);
-@@ -339,7 +339,7 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 				goto put_map;
- 			}
- 
--			before->end = map__start(map);
-+			RC_CHK_ACCESS(before)->end = map__start(map);
- 			err = __maps__insert(maps, before);
- 			if (err) {
- 				map__put(before);
-@@ -359,8 +359,9 @@ int maps__fixup_overlappings(struct maps *maps, struct map *map, FILE *fp)
- 				goto put_map;
- 			}
- 
--			after->start = map__end(map);
--			after->pgoff += map__end(map) - map__start(pos->map);
-+			RC_CHK_ACCESS(after)->start = map__end(map);
-+			RC_CHK_ACCESS(after)->pgoff +=
-+				map__end(map) - map__start(pos->map);
- 			assert(map__map_ip(pos->map, map__end(map)) ==
- 				map__map_ip(after, map__end(map)));
- 			err = __maps__insert(maps, after);
-@@ -420,7 +421,7 @@ struct map_rb_node *maps__find_node(struct maps *maps, struct map *map)
- 	struct map_rb_node *rb_node;
- 
- 	maps__for_each_entry(maps, rb_node) {
--		if (rb_node->map == map)
-+		if (rb_node->RC_CHK_ACCESS(map) == RC_CHK_ACCESS(map))
- 			return rb_node;
- 	}
- 	return NULL;
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index c55981116f68..302599073b5d 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -1354,11 +1354,11 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
- 		 */
- 		if (*remap_kernel && dso->kernel && !kmodule) {
- 			*remap_kernel = false;
--			map->start = shdr->sh_addr + ref_reloc(kmap);
--			map->end = map__start(map) + shdr->sh_size;
--			map->pgoff = shdr->sh_offset;
--			map->map_ip = map__dso_map_ip;
--			map->unmap_ip = map__dso_unmap_ip;
-+			RC_CHK_ACCESS(map)->start = shdr->sh_addr + ref_reloc(kmap);
-+			RC_CHK_ACCESS(map)->end = map__start(map) + shdr->sh_size;
-+			RC_CHK_ACCESS(map)->pgoff = shdr->sh_offset;
-+			RC_CHK_ACCESS(map)->map_ip = map__dso_map_ip;
-+			RC_CHK_ACCESS(map)->unmap_ip = map__dso_unmap_ip;
- 			/* Ensure maps are correctly ordered */
- 			if (kmaps) {
- 				int err;
-@@ -1379,7 +1379,7 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
- 		 */
- 		if (*remap_kernel && kmodule) {
- 			*remap_kernel = false;
--			map->pgoff = shdr->sh_offset;
-+			RC_CHK_ACCESS(map)->pgoff = shdr->sh_offset;
- 		}
- 
- 		*curr_mapp = map;
-@@ -1414,11 +1414,13 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
- 			map__kmap(curr_map)->kmaps = kmaps;
- 
- 		if (adjust_kernel_syms) {
--			curr_map->start  = shdr->sh_addr + ref_reloc(kmap);
--			curr_map->end	 = map__start(curr_map) + shdr->sh_size;
--			curr_map->pgoff	 = shdr->sh_offset;
-+			RC_CHK_ACCESS(curr_map)->start  = shdr->sh_addr + ref_reloc(kmap);
-+			RC_CHK_ACCESS(curr_map)->end	= map__start(curr_map) +
-+							  shdr->sh_size;
-+			RC_CHK_ACCESS(curr_map)->pgoff	= shdr->sh_offset;
- 		} else {
--			curr_map->map_ip = curr_map->unmap_ip = identity__map_ip;
-+			RC_CHK_ACCESS(curr_map)->map_ip = identity__map_ip;
-+			RC_CHK_ACCESS(curr_map)->unmap_ip = identity__map_ip;
- 		}
- 		curr_dso->symtab_type = dso->symtab_type;
- 		if (maps__insert(kmaps, curr_map))
-@@ -1525,7 +1527,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
- 			if (strcmp(elf_name, kmap->ref_reloc_sym->name))
- 				continue;
- 			kmap->ref_reloc_sym->unrelocated_addr = sym.st_value;
--			map->reloc = kmap->ref_reloc_sym->addr -
-+			RC_CHK_ACCESS(map)->reloc = kmap->ref_reloc_sym->addr -
- 				     kmap->ref_reloc_sym->unrelocated_addr;
- 			break;
- 		}
-@@ -1536,7 +1538,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
- 	 * attempted to prelink vdso to its virtual address.
- 	 */
- 	if (dso__is_vdso(dso))
--		map->reloc = map__start(map) - dso->text_offset;
-+		RC_CHK_ACCESS(map)->reloc = map__start(map) - dso->text_offset;
- 
- 	dso->adjust_symbols = runtime_ss->adjust_symbols || ref_reloc(kmap);
- 	/*
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 6993b51b9416..42458582621b 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -279,7 +279,7 @@ void maps__fixup_end(struct maps *maps)
- 
- 	maps__for_each_entry(maps, curr) {
- 		if (prev != NULL && !map__end(prev->map))
--			prev->map->end = map__start(curr->map);
-+			RC_CHK_ACCESS(prev->map)->end = map__start(curr->map);
- 
- 		prev = curr;
- 	}
-@@ -289,7 +289,7 @@ void maps__fixup_end(struct maps *maps)
- 	 * last map final address.
- 	 */
- 	if (curr && !map__end(curr->map))
--		curr->map->end = ~0ULL;
-+		RC_CHK_ACCESS(curr->map)->end = ~0ULL;
- 
- 	up_write(maps__lock(maps));
- }
-@@ -865,7 +865,7 @@ static int maps__split_kallsyms(struct maps *kmaps, struct dso *dso, u64 delta,
- 			*module++ = '\0';
- 			curr_map_dso = map__dso(curr_map);
- 			if (strcmp(curr_map_dso->short_name, module)) {
--				if (curr_map != initial_map &&
-+				if (RC_CHK_ACCESS(curr_map) != RC_CHK_ACCESS(initial_map) &&
- 				    dso->kernel == DSO_SPACE__KERNEL_GUEST &&
- 				    machine__is_default_guest(machine)) {
- 					/*
-@@ -944,7 +944,8 @@ static int maps__split_kallsyms(struct maps *kmaps, struct dso *dso, u64 delta,
- 				return -1;
- 			}
- 
--			curr_map->map_ip = curr_map->unmap_ip = identity__map_ip;
-+			RC_CHK_ACCESS(curr_map)->map_ip = identity__map_ip;
-+			RC_CHK_ACCESS(curr_map)->unmap_ip = identity__map_ip;
- 			if (maps__insert(kmaps, curr_map)) {
- 				dso__put(ndso);
- 				return -1;
-@@ -1250,8 +1251,8 @@ static int kcore_mapfn(u64 start, u64 len, u64 pgoff, void *data)
- 		return -ENOMEM;
- 	}
- 
--	list_node->map->end = map__start(list_node->map) + len;
--	list_node->map->pgoff = pgoff;
-+	list_node->RC_CHK_ACCESS(map)->end = map__start(list_node->map) + len;
-+	list_node->RC_CHK_ACCESS(map)->pgoff = pgoff;
- 
- 	list_add(&list_node->node, &md->maps);
- 
-@@ -1286,7 +1287,7 @@ int maps__merge_in(struct maps *kmaps, struct map *new_map)
- 				 * |new......|     -> |new..|
- 				 *       |old....| ->       |old....|
- 				 */
--				new_map->end = map__start(old_map);
-+				RC_CHK_ACCESS(new_map)->end = map__start(old_map);
- 			} else {
- 				/*
- 				 * |new.............| -> |new..|       |new..|
-@@ -1306,10 +1307,12 @@ int maps__merge_in(struct maps *kmaps, struct map *new_map)
- 					goto out;
+ /* This part must be outside protection */
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index c8a6913c067d..1b725510dd0f 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -793,10 +793,15 @@ static void tasklet_action_common(struct softirq_action *a,
+ 		if (tasklet_trylock(t)) {
+ 			if (!atomic_read(&t->count)) {
+ 				if (tasklet_clear_sched(t)) {
+-					if (t->use_callback)
++					if (t->use_callback) {
++						trace_tasklet_entry(t, t->callback);
+ 						t->callback(t);
+-					else
++						trace_tasklet_exit(t, t->callback);
++					} else {
++						trace_tasklet_entry(t, t->func);
+ 						t->func(t->data);
++						trace_tasklet_exit(t, t->func);
++					}
  				}
- 
--				m->map->end = map__start(old_map);
-+
-+				RC_CHK_ACCESS(m->map)->end = map__start(old_map);
- 				list_add_tail(&m->node, &merged);
--				new_map->pgoff += map__end(old_map) - map__start(new_map);
--				new_map->start = map__end(old_map);
-+				RC_CHK_ACCESS(new_map)->pgoff +=
-+					map__end(old_map) - map__start(new_map);
-+				RC_CHK_ACCESS(new_map)->start = map__end(old_map);
- 			}
- 		} else {
- 			/*
-@@ -1329,8 +1332,9 @@ int maps__merge_in(struct maps *kmaps, struct map *new_map)
- 				 *      |new......| ->         |new...|
- 				 * |old....|        -> |old....|
- 				 */
--				new_map->pgoff += map__end(old_map) - map__start(new_map);
--				new_map->start = map__end(old_map);
-+				RC_CHK_ACCESS(new_map)->pgoff +=
-+					map__end(old_map) - map__start(new_map);
-+				RC_CHK_ACCESS(new_map)->start = map__end(old_map);
- 			}
- 		}
- 	}
-@@ -1456,12 +1460,12 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
- 
- 		list_del_init(&new_node->node);
- 
--		if (new_map == replacement_map) {
--			map->start	= map__start(new_map);
--			map->end	= map__end(new_map);
--			map->pgoff	= map__pgoff(new_map);
--			map->map_ip	= new_map->map_ip;
--			map->unmap_ip	= new_map->unmap_ip;
-+		if (RC_CHK_ACCESS(new_map) == RC_CHK_ACCESS(replacement_map)) {
-+			RC_CHK_ACCESS(map)->start	= map__start(new_map);
-+			RC_CHK_ACCESS(map)->end		= map__end(new_map);
-+			RC_CHK_ACCESS(map)->pgoff	= map__pgoff(new_map);
-+			RC_CHK_ACCESS(map)->map_ip	= RC_CHK_ACCESS(new_map)->map_ip;
-+			RC_CHK_ACCESS(map)->unmap_ip	= RC_CHK_ACCESS(new_map)->unmap_ip;
- 			/* Ensure maps are correctly ordered */
- 			map__get(map);
- 			maps__remove(kmaps, map);
+ 				tasklet_unlock(t);
+ 				continue;
 -- 
 2.40.0.577.gac1e443424-goog
 
