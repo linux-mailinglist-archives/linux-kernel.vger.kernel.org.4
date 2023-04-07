@@ -2,351 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5544F6DAFA0
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD796DAFA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 17:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbjDGPYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 11:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S232538AbjDGP0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 11:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjDGPYn (ORCPT
+        with ESMTP id S240488AbjDGP0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 11:24:43 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6AB9EE5;
-        Fri,  7 Apr 2023 08:24:29 -0700 (PDT)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 804F8FF802;
-        Fri,  7 Apr 2023 15:24:27 +0000 (UTC)
+        Fri, 7 Apr 2023 11:26:10 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B19E6A5A;
+        Fri,  7 Apr 2023 08:26:08 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3DB4E20007;
+        Fri,  7 Apr 2023 15:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1680881067;
+        t=1680881167;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rVJevmstjvTLekBw3KmH6h3qZSNHahDWW8/Xhd0wQwM=;
-        b=dCFjQl1q2MvQIxunEVSEb4wDT9vmB74NbrHfNJfzEefkIruTVkl4fOe+dkvwGgazRjNv9W
-        DyOJlsqUNh7Qwu0EtPrtSdj6fMeJA7WYGc6lKSszrhazvZa2fTmhH7KuwqT9I3uO6wCeE/
-        pC0ybnUyJQ0TbaOWX8doG4uMuAl35/aeyaS/dbvvoH8SyxWPKtro8COhSqVL1qiSBmAiyM
-        F5dC7UQkDLgvQdpriz+zLZtW1tvGZ1qDWAkWJfAGo4U1aJ3YRHGrQ1iKz8L4ivqSinfPtW
-        U71UTLhTJfudGwtO4gmJLskfsq/B6E+KJegnrqlsKPyJWxne40VWpxCzPEA7ag==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] arm64: dts: marvell: add DTS for GL.iNet GL-MV1000
-In-Reply-To: <20230203174618.arqh2gqspoh3rlt6@pali>
-References: <20230202093706.30995-1-mrkiko.rs@gmail.com>
- <20230203174618.arqh2gqspoh3rlt6@pali>
-Date:   Fri, 07 Apr 2023 17:24:27 +0200
-Message-ID: <87pm8f3ec4.fsf@BL-laptop>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HT8TguRYNcJrGlkp+Gde7bg2P0wiTXT5jvBMS7phiLk=;
+        b=onP/a0jB9h6Jn9tVcZ6Y6JtdH4YOcwEzUDZTaTh1JRaaajK0lFEiCYkhXY+EtrSMqDK/lP
+        rmuq7EtFqGRymnioIki7fOd2xAQzrk3GgWvP2OcWRRjIiM6dDlnA4AfWd3tvEdw3jQSudo
+        ulJgstOl3wpHHwv/yXUz8YnYCzcu6C8ZTNrM9he/okTWRXuKJuieO3p1flrl1HwDWY4Dzb
+        /dnttsZSq4enJo/B+plRYeexvPhBjGfaoyE3h1EwFrwERTEMfNaw/nNozbmKU6KiF+Zee0
+        /Np6OLpauaMLnuxCjx3MwCekgoLIPURT0hUVWZ1HUzYxCyfS5EjLCY9xrXgefw==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+Subject: [PATCH] regmap: allow upshifting register addresses before performing operations
+Date:   Fri,  7 Apr 2023 17:26:04 +0200
+Message-Id: <20230407152604.105467-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> writes:
+Similar to the existing reg_downshift mechanism, that is used to
+translate register addresses on busses that have a smaller address
+stride, it's also possible to want to upshift register addresses.
 
-> On Thursday 02 February 2023 10:37:06 Enrico Mioso wrote:
->> The GL-MV1000 (Brume) is a small form-factor gateway router.
->> It is based on the Marvell Armada 88F3720 SOC (1GHz), has 3 gigabit ethe=
-rnet ports, 1 GB RAM, 16M SPI flash, 8GB eMMC and an uSD slot, as well as a=
-n USB 2.0 type A and an USB 3.0 type C port.
->>=20
->> Signed-off-by: Enrico Mioso <mrkiko.rs@gmail.com>
->> CC: Pali <pali@kernel.org>
->
-> Looks good,
->
-> Reviewed-by: Pali Roh=C3=A1r <pali@kernel.org>
+Such a case was encountered when network PHYs and PCS that usually sit
+on a MDIO bus (16-bits register with a stride of 1) are integrated
+directly as memory-mapped devices. Here, the same register layout
+defined in 802.3 is used, but the register now have a larger stride.
 
+Introduce a mechanism to also allow upshifting register addresses.
+Re-purpose reg_downshift into a more generic, signed reg_shift, whose
+sign indicates the direction of the shift. To avoid confusion, also
+introduce macros to explicitly indicate if we want to downshift or
+upshift.
 
-Applied on mvebu/dt64
+For bisectability, change any use of reg_downshift to use reg_shift.
 
-Thanks,
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+---
+This is a followup to [1], taking reviews from Andrew and Mark into
+account.
 
-Gregory
+Changes are just about the type of reg_shift, from int to s8.
 
->
->> ---
->>  arch/arm64/boot/dts/marvell/Makefile          |   1 +
->>  .../dts/marvell/armada-3720-gl-mv1000.dts     | 239 ++++++++++++++++++
->>  2 files changed, 240 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-gl-mv1000.dts
->>=20
->> diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/=
-marvell/Makefile
->> index 058237681fe5..79ac09b58a89 100644
->> --- a/arch/arm64/boot/dts/marvell/Makefile
->> +++ b/arch/arm64/boot/dts/marvell/Makefile
->> @@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-3720-espressobin-em=
-mc.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-3720-espressobin-ultra.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-3720-espressobin-v7.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-3720-espressobin-v7-emmc.dtb
->> +dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-3720-gl-mv1000.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-3720-turris-mox.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-3720-uDPU.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) +=3D armada-7040-db.dtb
->> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-gl-mv1000.dts b/arc=
-h/arm64/boot/dts/marvell/armada-3720-gl-mv1000.dts
->> new file mode 100644
->> index 000000000000..b1b45b4fa9d4
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/marvell/armada-3720-gl-mv1000.dts
->> @@ -0,0 +1,239 @@
->> +// SPDX-License-Identifier: (GPL-2.0-or-later OR MIT)
->> +
->> +/dts-v1/;
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/input/input.h>
->> +#include "armada-372x.dtsi"
->> +
->> +/ {
->> +	model =3D "GL.iNet GL-MV1000";
->> +	compatible =3D "glinet,gl-mv1000", "marvell,armada3720";
->> +
->> +	aliases {
->> +		led-boot =3D &led_power;
->> +		led-failsafe =3D &led_power;
->> +		led-running =3D &led_power;
->> +		led-upgrade =3D &led_power;
->> +	};
->> +
->> +	chosen {
->> +		stdout-path =3D "serial0:115200n8";
->> +	};
->> +
->> +	memory@0 {
->> +		device_type =3D "memory";
->> +		reg =3D <0x00000000 0x00000000 0x00000000 0x20000000>;
->> +	};
->> +
->> +	vcc_sd_reg1: regulator {
->> +		compatible =3D "regulator-gpio";
->> +		regulator-name =3D "vcc_sd1";
->> +		regulator-min-microvolt =3D <1800000>;
->> +		regulator-max-microvolt =3D <3300000>;
->> +		regulator-boot-on;
->> +
->> +		gpios-states =3D <0>;
->> +		states =3D <1800000 0x1
->> +			3300000 0x0>;
->> +		enable-active-high;
->> +	};
->> +
->> +	keys {
->> +		compatible =3D "gpio-keys";
->> +
->> +		reset {
->> +			label =3D "reset";
->> +			linux,code =3D <KEY_RESTART>;
->> +			gpios =3D <&gpionb 14 GPIO_ACTIVE_LOW>;
->> +		};
->> +
->> +		switch {
->> +			label =3D "switch";
->> +			linux,code =3D <BTN_0>;
->> +			gpios =3D <&gpiosb 22 GPIO_ACTIVE_LOW>;
->> +		};
->> +	};
->> +
->> +	leds {
->> +		compatible =3D "gpio-leds";
->> +
->> +		vpn {
->> +			label =3D "green:vpn";
->> +			gpios =3D <&gpionb 11 GPIO_ACTIVE_LOW>;
->> +		};
->> +
->> +		wan {
->> +			label =3D "green:wan";
->> +			gpios =3D <&gpionb 12 GPIO_ACTIVE_LOW>;
->> +		};
->> +
->> +		led_power: power {
->> +			label =3D "green:power";
->> +			gpios =3D <&gpionb 13 GPIO_ACTIVE_LOW>;
->> +			default-state =3D "on";
->> +		};
->> +	};
->> +};
->> +
->> +&spi0 {
->> +	status =3D "okay";
->> +
->> +	flash@0 {
->> +		reg =3D <0>;
->> +		compatible =3D "jedec,spi-nor";
->> +		spi-max-frequency =3D <104000000>;
->> +		m25p,fast-read;
->> +		partitions {
->> +			compatible =3D "fixed-partitions";
->> +			#address-cells =3D <1>;
->> +			#size-cells =3D <1>;
->> +
->> +			partition@0 {
->> +				label =3D "firmware";
->> +				reg =3D <0 0xf0000>;
->> +			};
->> +
->> +			partition@f0000 {
->> +				label =3D "u-boot-env";
->> +				reg =3D <0xf0000 0x8000>;
->> +			};
->> +
->> +			factory: partition@f8000 {
->> +				label =3D "factory";
->> +				reg =3D <0xf8000 0x8000>;
->> +				read-only;
->> +			};
->> +
->> +			partition@100000 {
->> +				label =3D "dtb";
->> +				reg =3D <0x100000 0x10000>;
->> +				read-only;
->> +			};
->> +
->> +			partition@110000 {
->> +				label =3D "rescue";
->> +				reg =3D <0x110000 0x1000000>;
->> +			};
->> +		};
->> +	};
->> +};
->> +
->> +&sdhci1 {
->> +	wp-inverted;
->> +	bus-width =3D <4>;
->> +	cd-gpios =3D <&gpionb 17 GPIO_ACTIVE_LOW>;
->> +	marvell,pad-type =3D "sd";
->> +	no-1-8-v;
->> +	vqmmc-supply =3D <&vcc_sd_reg1>;
->> +	status =3D "okay";
->> +};
->> +
->> +&sdhci0 {
->> +	bus-width =3D <8>;
->> +	mmc-ddr-1_8v;
->> +	mmc-hs400-1_8v;
->> +	non-removable;
->> +	no-sd;
->> +	no-sdio;
->> +	marvell,pad-type =3D "fixed-1-8v";
->> +	status =3D "okay";
->> +};
->> +
->> +&usb3 {
->> +	status =3D "okay";
->> +};
->> +
->> +&usb2 {
->> +	status =3D "okay";
->> +};
->> +
->> +&uart0 {
->> +	status =3D "okay";
->> +};
->> +
->> +&mdio {
->> +	switch0: switch0@1 {
->> +		compatible =3D "marvell,mv88e6085";
->> +		#address-cells =3D <1>;
->> +		#size-cells =3D <0>;
->> +		reg =3D <1>;
->> +
->> +		dsa,member =3D <0 0>;
->> +
->> +		ports: ports {
->> +			#address-cells =3D <1>;
->> +			#size-cells =3D <0>;
->> +
->> +			port@0 {
->> +				reg =3D <0>;
->> +				label =3D "cpu";
->> +				ethernet =3D <&eth0>;
->> +			};
->> +
->> +			port@1 {
->> +				reg =3D <1>;
->> +				label =3D "wan";
->> +				phy-handle =3D <&switch0phy0>;
->> +			};
->> +
->> +			port@2 {
->> +				reg =3D <2>;
->> +				label =3D "lan0";
->> +				phy-handle =3D <&switch0phy1>;
->> +
->> +				nvmem-cells =3D <&macaddr_factory_6>;
->> +				nvmem-cell-names =3D "mac-address";
->> +			};
->> +
->> +			port@3 {
->> +				reg =3D <3>;
->> +				label =3D "lan1";
->> +				phy-handle =3D <&switch0phy2>;
->> +
->> +				nvmem-cells =3D <&macaddr_factory_6>;
->> +				nvmem-cell-names =3D "mac-address";
->> +			};
->> +		};
->> +
->> +		mdio {
->> +			#address-cells =3D <1>;
->> +			#size-cells =3D <0>;
->> +
->> +			switch0phy0: switch0phy0@11 {
->> +				reg =3D <0x11>;
->> +			};
->> +			switch0phy1: switch0phy1@12 {
->> +				reg =3D <0x12>;
->> +			};
->> +			switch0phy2: switch0phy2@13 {
->> +				reg =3D <0x13>;
->> +			};
->> +		};
->> +	};
->> +};
->> +
->> +&eth0 {
->> +	nvmem-cells =3D <&macaddr_factory_0>;
->> +	nvmem-cell-names =3D "mac-address";
->> +	phy-mode =3D "rgmii-id";
->> +	status =3D "okay";
->> +
->> +	fixed-link {
->> +		speed =3D <1000>;
->> +		full-duplex;
->> +	};
->> +};
->> +
->> +&factory {
->> +	compatible =3D "nvmem-cells";
->> +	#address-cells =3D <1>;
->> +	#size-cells =3D <1>;
->> +
->> +	macaddr_factory_0: macaddr@0 {
->> +		reg =3D <0x0 0x6>;
->> +	};
->> +
->> +	macaddr_factory_6: macaddr@6 {
->> +		reg =3D <0x6 0x6>;
->> +	};
->> +};
->> --=20
->> 2.39.1
->>=20
+[1] : https://lore.kernel.org/all/20230324093644.464704-1-maxime.chevallier@bootlin.com/
 
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+ drivers/base/regmap/internal.h |  2 +-
+ drivers/base/regmap/regmap.c   | 10 ++++++++--
+ drivers/mfd/ocelot-spi.c       |  2 +-
+ include/linux/regmap.h         | 15 ++++++++++++---
+ 4 files changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/base/regmap/internal.h b/drivers/base/regmap/internal.h
+index da8996e7a1f1..dae76ceab6e8 100644
+--- a/drivers/base/regmap/internal.h
++++ b/drivers/base/regmap/internal.h
+@@ -31,8 +31,8 @@ struct regmap_format {
+ 	size_t buf_size;
+ 	size_t reg_bytes;
+ 	size_t pad_bytes;
+-	size_t reg_downshift;
+ 	size_t val_bytes;
++	s8 reg_shift;
+ 	void (*format_write)(struct regmap *map,
+ 			     unsigned int reg, unsigned int val);
+ 	void (*format_reg)(void *buf, unsigned int reg, unsigned int shift);
+diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
+index 726f59612fd6..c4cde4f45b05 100644
+--- a/drivers/base/regmap/regmap.c
++++ b/drivers/base/regmap/regmap.c
+@@ -814,7 +814,7 @@ struct regmap *__regmap_init(struct device *dev,
+ 
+ 	map->format.reg_bytes = DIV_ROUND_UP(config->reg_bits, 8);
+ 	map->format.pad_bytes = config->pad_bits / 8;
+-	map->format.reg_downshift = config->reg_downshift;
++	map->format.reg_shift = config->reg_shift;
+ 	map->format.val_bytes = DIV_ROUND_UP(config->val_bits, 8);
+ 	map->format.buf_size = DIV_ROUND_UP(config->reg_bits +
+ 			config->val_bits + config->pad_bits, 8);
+@@ -1679,7 +1679,13 @@ static void regmap_set_work_buf_flag_mask(struct regmap *map, int max_bytes,
+ static unsigned int regmap_reg_addr(struct regmap *map, unsigned int reg)
+ {
+ 	reg += map->reg_base;
+-	return reg >> map->format.reg_downshift;
++
++	if (map->format.reg_shift > 0)
++		reg >>= map->format.reg_shift;
++	else if (map->format.reg_shift < 0)
++		reg <<= -(map->format.reg_shift);
++
++	return reg;
+ }
+ 
+ static int _regmap_raw_write_impl(struct regmap *map, unsigned int reg,
+diff --git a/drivers/mfd/ocelot-spi.c b/drivers/mfd/ocelot-spi.c
+index 2ecd271de2fb..2d1349a10ca9 100644
+--- a/drivers/mfd/ocelot-spi.c
++++ b/drivers/mfd/ocelot-spi.c
+@@ -125,7 +125,7 @@ static int ocelot_spi_initialize(struct device *dev)
+ static const struct regmap_config ocelot_spi_regmap_config = {
+ 	.reg_bits = 24,
+ 	.reg_stride = 4,
+-	.reg_downshift = 2,
++	.reg_shift = REGMAP_DOWNSHIFT(2),
+ 	.val_bits = 32,
+ 
+ 	.write_flag_mask = 0x80,
+diff --git a/include/linux/regmap.h b/include/linux/regmap.h
+index 4d10790adeb0..f02c3857b023 100644
+--- a/include/linux/regmap.h
++++ b/include/linux/regmap.h
+@@ -46,6 +46,14 @@ struct sdw_slave;
+ #define REGMAP_MDIO_C45_DEVAD_MASK	GENMASK(20, 16)
+ #define REGMAP_MDIO_C45_REGNUM_MASK	GENMASK(15, 0)
+ 
++/*
++ * regmap.reg_shift indicates by how much we must shift registers prior to
++ * performing any operation. It's a signed value, positive numbers means
++ * downshifting the register's address, while negative numbers means upshifting.
++ */
++#define REGMAP_UPSHIFT(s)	(-(s))
++#define REGMAP_DOWNSHIFT(s)	(s)
++
+ /* An enum of all the supported cache types */
+ enum regcache_type {
+ 	REGCACHE_NONE,
+@@ -246,8 +254,9 @@ typedef void (*regmap_unlock)(void *);
+  * @reg_stride: The register address stride. Valid register addresses are a
+  *              multiple of this value. If set to 0, a value of 1 will be
+  *              used.
+- * @reg_downshift: The number of bits to downshift the register before
+- *		   performing any operations.
++ * @reg_shift: The number of bits to shift the register before performing any
++ *	       operations. Any positive number will be downshifted, and negative
++ *	       values will be upshifted
+  * @reg_base: Value to be added to every register address before performing any
+  *	      operation.
+  * @pad_bits: Number of bits of padding between register and value.
+@@ -381,7 +390,7 @@ struct regmap_config {
+ 
+ 	int reg_bits;
+ 	int reg_stride;
+-	int reg_downshift;
++	int reg_shift;
+ 	unsigned int reg_base;
+ 	int pad_bits;
+ 	int val_bits;
+-- 
+2.39.2
+
