@@ -2,94 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E4C6DB1E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72296DB1EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbjDGRj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S230303AbjDGRmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjDGRjH (ORCPT
+        with ESMTP id S229588AbjDGRmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:39:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90C3C155;
-        Fri,  7 Apr 2023 10:38:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1491E65329;
-        Fri,  7 Apr 2023 17:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B8EC4339E;
-        Fri,  7 Apr 2023 17:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680889123;
-        bh=ShYE/NmpoSW62Nvk+UDzbzXRAyY8hKK3U9ol2L/cDjg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M0dcZC1PwRN2HkRpAf18Y8Sc3xtdV99EC+vxYRCkvNNAP+f919nIOyOf5C1k+lysA
-         DsIPR1Qt8nC4oUYnjInR8TIxqXfTv7etNNAZFIr8N3Z4pgJcnzOnfgGSt+8WWdyUnl
-         AtCK3R+vmetr+XaPeV8TeeBy7ElBS52aIWcd/f+6IC92wBZ6VtySpHzS+akBWGLAPm
-         9FGQ7rTD0MB43HTwT8UqysfMbMPTFlPqN0cgjcBIFUJ0L4OURVzzGJE92PFWqiUUkv
-         QzbufEidnsWI3M3Syk9Vjk2T1AbA0NyhHej5ZBtJs+zEboLXJ09NMin4l6aPtNNsSc
-         ndslYUpGWzB9w==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Luca Weiss <luca@z3ntu.xyz>,
-        Sean Paul <sean@poorly.run>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:DEVICE FREQUENCY DEVFREQ" <linux-pm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>, Daniel Vetter <daniel@ffwll.ch>,
-        freedreno@lists.freedesktop.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 00/23] drm/msm+PM+icc: Make job_run() reclaim-safe
-Date:   Fri,  7 Apr 2023 10:41:19 -0700
-Message-Id: <168088927578.2561591.14585371270684166515.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230320144356.803762-1-robdclark@gmail.com>
-References: <20230320144356.803762-1-robdclark@gmail.com>
+        Fri, 7 Apr 2023 13:42:18 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA253BB96
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:42:04 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a25c4f49b2so1147245ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680889324; x=1683481324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CCJBn+LV6Sw7OAfizOJEGae3D9tERqlvcOUfu0w0v9w=;
+        b=f2Hy+gUmypC61FZjpBgjNc/XgvxTOME7kxHD5CgsiiLONDJ0uGaPOd0VsvyK9IAcKM
+         YCMZlfDwqFaEOSmOdtSE2HeLW/0quTgY7Ny0dhk8px8kavE9LUIYdthXog1GIX+rq2fE
+         g8QS73QBlzrsxk6gaJ+O/XLCA2rqxISinXTYyUthkLmBrbZM7ZIFXt9S38ACofBHt7P+
+         dptOeElYK2OgQ0wNuuT3DfiVwL3MzQyLTRnlUE0+IB/r4ycxDRicgexH0w6MJtyetQ1+
+         IGrOxD8aNU79hee5zjeh76EgzLJ6mJ4Ruz4wxkM/ZC6EOIWhplr5BfzYNq6f2EmnRqac
+         A5zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680889324; x=1683481324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CCJBn+LV6Sw7OAfizOJEGae3D9tERqlvcOUfu0w0v9w=;
+        b=diLIsIbHKPX7NjHgpvqZWmOJE7mTNQT+Xzxi3BgH8yOyFW+vyRO8dpHRO/xOtZ/yDT
+         smLCUjTl+TGi9s1rGjJahf2Pfoe645UL74Y6GF5mQr9f/ndGmKhagdoYNkmuiFwcCCHh
+         l8pMbntl5RXfbpOrE5+KBzNc7iSLWO/TbzFsZN5W5DwYv/+1OpvVAh4haW0AayG1DcmL
+         ZgDqDtK5eNZrrR263vxIB/9VLPNB0EFxuSbHIjVnC/oqb70JBksXrc1CQtlX0eZY2eb4
+         oxEnKKuopF3GTQHUsqjICanDGLI03vvTpgJoLPYvmTz5fYBYZlQAEFlzOFTBpNCyZvSv
+         4eMg==
+X-Gm-Message-State: AAQBX9ekVJcu3Z6RdlLRQE1e2r9F2iw2m1O7U/mpUQYoeBHAtVmd+Ytf
+        +uvEjcs+6gX4ruFBiV1O7bRGbRFy3B2L6DtuputyMA==
+X-Google-Smtp-Source: AKy350aUCyZLaAV21BNIhr8D01YQwfaMcMC3ERAqD6aKrlIBdnYZELskAEaom95VFSvRH3V0KPE/o9w3eCEDFaZkXdI=
+X-Received: by 2002:a05:6a00:2d88:b0:625:c832:6a10 with SMTP id
+ fb8-20020a056a002d8800b00625c8326a10mr1525908pfb.4.1680889324079; Fri, 07 Apr
+ 2023 10:42:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230324132649.2649166-1-trix@redhat.com>
+In-Reply-To: <20230324132649.2649166-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 10:41:52 -0700
+Message-ID: <CAKwvOd=rjd6+Di4GSm2kfKRdBmrMyyL-VdQ+CR28NX_G5p0AGQ@mail.gmail.com>
+Subject: Re: [PATCH] phy: rockchip: remove unused hw_to_inno function
+To:     Tom Rix <trix@redhat.com>
+Cc:     vkoul@kernel.org, kishon@kernel.org, heiko@sntech.de,
+        nathan@kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Mar 2023 07:43:22 -0700, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Inspired by https://lore.kernel.org/dri-devel/20200604081224.863494-10-daniel.vetter@ffwll.ch/
-> it seemed like a good idea to get rid of memory allocation in job_run()
-> fence signaling path, and use lockdep annotations to yell at us about
-> anything that could deadlock against shrinker/reclaim.  Anything that
-> can trigger reclaim, or block on any other thread that has triggered
-> reclaim, can block the GPU shrinker from releasing memory if it is
-> waiting the job to complete, causing deadlock.
-> 
-> [...]
+On Fri, Mar 24, 2023 at 6:27=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c:284:36: error:
+>   unused function 'hw_to_inno' [-Werror,-Wunused-function]
+> static inline struct inno_dsidphy *hw_to_inno(struct clk_hw *hw)
+>                                    ^
+> This function is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Applied, thanks!
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-[20/23] soc: qcom: smd-rpm: Use GFP_ATOMIC in write path
-        commit: 5808c532ca0a983d643319caca44f2bcb148298f
+> ---
+>  drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c b/drivers/p=
+hy/rockchip/phy-rockchip-inno-dsidphy.c
+> index 726928ff1273..401b0aabb159 100644
+> --- a/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> +++ b/drivers/phy/rockchip/phy-rockchip-inno-dsidphy.c
+> @@ -281,11 +281,6 @@ struct inno_mipi_dphy_timing inno_mipi_dphy_timing_t=
+able_max_2_5ghz[] =3D {
+>         {2500000000, 0x15, 0x54, 0x7f, 0x15, 0x6a},
+>  };
+>
+> -static inline struct inno_dsidphy *hw_to_inno(struct clk_hw *hw)
+> -{
+> -       return container_of(hw, struct inno_dsidphy, pll.hw);
+> -}
+> -
+>  static void phy_update_bits(struct inno_dsidphy *inno,
+>                             u8 first, u8 second, u8 mask, u8 val)
+>  {
+> --
+> 2.27.0
+>
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+
+--=20
+Thanks,
+~Nick Desaulniers
