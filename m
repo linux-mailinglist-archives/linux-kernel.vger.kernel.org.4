@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9F96DB03A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E916DB03C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjDGQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S232065AbjDGQJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjDGQI6 (ORCPT
+        with ESMTP id S230245AbjDGQJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:08:58 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E084AD0A
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:08:35 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-54c061acbc9so123441107b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:08:35 -0700 (PDT)
+        Fri, 7 Apr 2023 12:09:43 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CAFBB92
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:09:19 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id f188so30968462ybb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:09:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680883709; x=1683475709;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680883758; x=1683475758;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1LeEZxg1UYS1q1LhPGSoZJZ9gjeZy1fnhbR/cP8HF/o=;
-        b=awIR+OnAfZQHVTuj2yAI08MICVo1FoFyzJbFl5vySdOvF5ihjHNlD2YKPRYCFW9An0
-         pzlMnB1WyHj/c4mgrXyLiZ/INVqmLhjThn9W/IylKKPHde7yDX2Kg4/sOxl9ty4yu9rt
-         JT7WykWXCB5uKyQSCCmi4PIpkiF0SOexiSV2wZxlk1dc2iC+4zzrbWwobYZzhi/9935G
-         UZo/cVqmsBnISOXgQtyIaR8Ge3FWI43oCHh5I++ezP4U89PD5bNTUqfsVaI6cVPF6i9I
-         qo5GZvT6qzBIWX2+wiJEvqJuRX00jhSmn0PCXvo3QnuZHG6eKkrZjWbzXmPiUGt5UyRw
-         6thg==
+        bh=pG4bkww4TTKH5g62+sthOLOmqZqedZWZduXMaCftkq4=;
+        b=wO/b6t0TAhKJ7bG5BAH8ilaCdIekWtZdXo5wLOJrG1RO6kku1Vr/OAiB5x05nSbiI8
+         SkPgZpgZ4/6tGs8Hthod/dDkKpFZFHb8joim2BmuiCYWF3hd61faFClVR65J3+xUgvHc
+         QMbssiyAzV/1FDNc8tpgAgYWN+Rv+4vlQp2g3YFzJJhnw37gziOreeGwHxNTJw21n2Wr
+         0ikt8o8jq84Za+/DrAJj/OHHBqwbNS1pWwaGK5KaQYQC3WAWSBPl7ZERAOWjv0H0o/L1
+         rH7U5HtwbZ2jwD2CBRhOzk0vq8Ow2ShAtcsIgPn57RKCu6W+el9HMkgXz4TYhkK2I3qR
+         VRcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680883709; x=1683475709;
+        d=1e100.net; s=20210112; t=1680883758; x=1683475758;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1LeEZxg1UYS1q1LhPGSoZJZ9gjeZy1fnhbR/cP8HF/o=;
-        b=ru2VBloat48rJtpC4sz0K4gdUzGP6cGi9tC99ON7e452HqfqoSduMuNU0PBE+V2vvd
-         XHQwRLaDG8mINJmKna87cd3u+5tGe/b4afnu8wE6/E8QitnaOGJXl00vIBK9juFehV4W
-         UkribFbz8UoSCohBD5ozr5W26fhs3WP5MpBawNiEH824IrCRz/7KbZBn1zGhLLBB2xKK
-         KAFaai7jWfEAcgC7BaR3nswXhovDo3zTjHYOuKRcEqfHi638sbQwyQOhwvU+gjmiOPBg
-         HlNDCCxuwKUZBhENUS2btOMH5kPYFqB93s03gRtRWxIqsoXMGFjDip0jxXJMFMB/PStT
-         rYwg==
-X-Gm-Message-State: AAQBX9d1Z5+n78SspTHHo505A2kto5hlJiBOSDJ7G3nQT6sYtxELPIce
-        ui8ZQUdHjjAH6PMolqm98STmtFEGqp15UI9eEjMxAw==
-X-Google-Smtp-Source: AKy350Z6KRPSOSZ3YGzOesTXfsNpBulpvf1IoeAVC0oR6d1MsuNmHL1+pezZGj56+nJgd+PtdxptZLMQ1owXUgfOvfk=
-X-Received: by 2002:a81:d304:0:b0:544:b9b2:5c32 with SMTP id
- y4-20020a81d304000000b00544b9b25c32mr1304432ywi.7.1680883709236; Fri, 07 Apr
- 2023 09:08:29 -0700 (PDT)
+        bh=pG4bkww4TTKH5g62+sthOLOmqZqedZWZduXMaCftkq4=;
+        b=EY76NL3jywpkECLYSZBRoUnuWZGvxw3i48zz9CX3FmWJWhFDlSMHYbuAdXGIEwlVLU
+         77XfV5wrutHBpNXnpIGoNpWUWmRLvC0nag02ifyStXHvjKMfgrVDmnv0Xcya1BtY6Z2P
+         WmWbQxt07MMXZZI902kkFN7NuZq/DsqLXLENuQkVn5NvRxpvOefy1uDvfYdONcjhO9Aj
+         zyIlXyjiCOJijs3Hkm8+EgHnU5Vlj2+QWlTBJf+YS9RDZI8ZgT7h3Qzc8B6c2ufV48bk
+         XWv3PhKeovBNM1hk486r8ZUiv3G7oWGgoXVCplAX0ViL76AwSXm5K+jOh/8nrurxB3KP
+         t4Pw==
+X-Gm-Message-State: AAQBX9d69uG9+jaN859pazQs7skhwd9ucVWWqu82WQUaYtGkG0ZZcVIe
+        ene3wqbM+W755ibDNuhG+JHLYbiX9SjAc0DyzJyPlA==
+X-Google-Smtp-Source: AKy350YoEtAJiSIWvIlzd/ZkwZq+Yj/GschfHgVBkfpUuNJ35GSsEj8AzA1+CZ84p3LXxGc5NvSh1Y/+A/AOmcmytDM=
+X-Received: by 2002:a25:7490:0:b0:b78:45fd:5f01 with SMTP id
+ p138-20020a257490000000b00b7845fd5f01mr2072667ybc.7.1680883758618; Fri, 07
+ Apr 2023 09:09:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230403103440.2895683-1-vladimir.oltean@nxp.com> <20230403103440.2895683-5-vladimir.oltean@nxp.com>
-In-Reply-To: <20230403103440.2895683-5-vladimir.oltean@nxp.com>
+References: <20230403103440.2895683-1-vladimir.oltean@nxp.com> <20230403103440.2895683-6-vladimir.oltean@nxp.com>
+In-Reply-To: <20230403103440.2895683-6-vladimir.oltean@nxp.com>
 From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 7 Apr 2023 12:08:18 -0400
-Message-ID: <CAM0EoMmwER5--nkF2r4=qTHsTnCODy5F8VAo0j6HQOgeLLXbrw@mail.gmail.com>
-Subject: Re: [PATCH v4 net-next 4/9] net/sched: mqprio: add an extack message
- to mqprio_parse_opt()
+Date:   Fri, 7 Apr 2023 12:09:07 -0400
+Message-ID: <CAM0EoM=4DOj3Np3a_uYxKp2fD2pUPkaF_QiZjuD57c00pjncuA@mail.gmail.com>
+Subject: Re: [PATCH v4 net-next 5/9] net/sched: pass netlink extack to mqprio
+ and taprio offload
 To:     Vladimir Oltean <vladimir.oltean@nxp.com>
 Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -77,7 +77,7 @@ Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
         Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
         Jacob Keller <jacob.e.keller@intel.com>,
-        linux-kernel@vger.kernel.org, Ferenc Fejes <fejes@inf.elte.hu>,
+        linux-kernel@vger.kernel.org,
         Simon Horman <simon.horman@corigine.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -93,60 +93,130 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Mon, Apr 3, 2023 at 6:35=E2=80=AFAM Vladimir Oltean <vladimir.oltean@nxp=
 .com> wrote:
 >
-> Ferenc reports that a combination of poor iproute2 defaults and obscure
-> cases where the kernel returns -EINVAL make it difficult to understand
-> what is wrong with this command:
+> With the multiplexed ndo_setup_tc() model which lacks a first-class
+> struct netlink_ext_ack * argument, the only way to pass the netlink
+> extended ACK message down to the device driver is to embed it within the
+> offload structure.
 >
-> $ ip link add veth0 numtxqueues 8 numrxqueues 8 type veth peer name veth1
-> $ tc qdisc add dev veth0 root mqprio num_tc 8 map 0 1 2 3 4 5 6 7 \
->         queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7
-> RTNETLINK answers: Invalid argument
+> Do this for struct tc_mqprio_qopt_offload and struct tc_taprio_qopt_offlo=
+ad.
 >
-> Hopefully with this patch, the cause is clearer:
+> Since struct tc_taprio_qopt_offload also contains a tc_mqprio_qopt_offloa=
+d
+> structure, and since device drivers might effectively reuse their mqprio
+> implementation for the mqprio portion of taprio, we make taprio set the
+> extack in both offload structures to point at the same netlink extack
+> message.
 >
-> Error: Device does not support hardware offload.
+> In fact, the taprio handling is a bit more tricky, for 2 reasons.
 >
-> The kernel was (and still is) rejecting this because iproute2 defaults
-> to "hw 1" if this command line option is not specified.
+> First is because the offload structure has a longer lifetime than the
+> extack structure. The driver is supposed to populate the extack
+> synchronously from ndo_setup_tc() and leave it alone afterwards.
+> To not have any use-after-free surprises, we zero out the extack pointer
+> when we leave taprio_enable_offload().
 >
-> Link: https://lore.kernel.org/netdev/ede5e9a2f27bf83bfb86d3e8c4ca7b34093b=
-99e2.camel@inf.elte.hu/
+> The second reason is because taprio does overwrite the extack message on
+> ndo_setup_tc() error. We need to switch to the weak form of setting an
+> extack message, which preserves a potential message set by the driver.
+>
 > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Reviewed-by: Ferenc Fejes <fejes@inf.elte.hu>
 > Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
 Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
 cheers,
 jamal
+
 > ---
 > v3->v4: none
-> v2->v3: change link from patchwork to lore
-> v1->v2: slightly reword last paragraph of commit message
+> v2->v3: patch is new
 >
->  net/sched/sch_mqprio.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  include/net/pkt_sched.h |  2 ++
+>  net/sched/sch_mqprio.c  |  5 ++++-
+>  net/sched/sch_taprio.c  | 12 ++++++++++--
+>  3 files changed, 16 insertions(+), 3 deletions(-)
 >
+> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+> index bb0bd69fb655..b43ed4733455 100644
+> --- a/include/net/pkt_sched.h
+> +++ b/include/net/pkt_sched.h
+> @@ -166,6 +166,7 @@ struct tc_mqprio_caps {
+>  struct tc_mqprio_qopt_offload {
+>         /* struct tc_mqprio_qopt must always be the first element */
+>         struct tc_mqprio_qopt qopt;
+> +       struct netlink_ext_ack *extack;
+>         u16 mode;
+>         u16 shaper;
+>         u32 flags;
+> @@ -193,6 +194,7 @@ struct tc_taprio_sched_entry {
+>
+>  struct tc_taprio_qopt_offload {
+>         struct tc_mqprio_qopt_offload mqprio;
+> +       struct netlink_ext_ack *extack;
+>         u8 enable;
+>         ktime_t base_time;
+>         u64 cycle_time;
 > diff --git a/net/sched/sch_mqprio.c b/net/sched/sch_mqprio.c
-> index 5a9261c38b95..9ee5a9a9b9e9 100644
+> index 9ee5a9a9b9e9..5287ff60b3f9 100644
 > --- a/net/sched/sch_mqprio.c
 > +++ b/net/sched/sch_mqprio.c
-> @@ -133,8 +133,11 @@ static int mqprio_parse_opt(struct net_device *dev, =
-struct tc_mqprio_qopt *qopt,
->         /* If ndo_setup_tc is not present then hardware doesn't support o=
-ffload
->          * and we should return an error.
->          */
-> -       if (qopt->hw && !dev->netdev_ops->ndo_setup_tc)
-> +       if (qopt->hw && !dev->netdev_ops->ndo_setup_tc) {
-> +               NL_SET_ERR_MSG(extack,
-> +                              "Device does not support hardware offload"=
-);
->                 return -EINVAL;
-> +       }
+> @@ -33,9 +33,12 @@ static int mqprio_enable_offload(struct Qdisc *sch,
+>                                  const struct tc_mqprio_qopt *qopt,
+>                                  struct netlink_ext_ack *extack)
+>  {
+> -       struct tc_mqprio_qopt_offload mqprio =3D {.qopt =3D *qopt};
+>         struct mqprio_sched *priv =3D qdisc_priv(sch);
+>         struct net_device *dev =3D qdisc_dev(sch);
+> +       struct tc_mqprio_qopt_offload mqprio =3D {
+> +               .qopt =3D *qopt,
+> +               .extack =3D extack,
+> +       };
+>         int err, i;
 >
->         return 0;
->  }
+>         switch (priv->mode) {
+> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+> index 1f469861eae3..cbad43019172 100644
+> --- a/net/sched/sch_taprio.c
+> +++ b/net/sched/sch_taprio.c
+> @@ -1520,7 +1520,9 @@ static int taprio_enable_offload(struct net_device =
+*dev,
+>                 return -ENOMEM;
+>         }
+>         offload->enable =3D 1;
+> +       offload->extack =3D extack;
+>         mqprio_qopt_reconstruct(dev, &offload->mqprio.qopt);
+> +       offload->mqprio.extack =3D extack;
+>         taprio_sched_to_offload(dev, sched, offload, &caps);
+>
+>         for (tc =3D 0; tc < TC_MAX_QUEUE; tc++)
+> @@ -1528,14 +1530,20 @@ static int taprio_enable_offload(struct net_devic=
+e *dev,
+>
+>         err =3D ops->ndo_setup_tc(dev, TC_SETUP_QDISC_TAPRIO, offload);
+>         if (err < 0) {
+> -               NL_SET_ERR_MSG(extack,
+> -                              "Device failed to setup taprio offload");
+> +               NL_SET_ERR_MSG_WEAK(extack,
+> +                                   "Device failed to setup taprio offloa=
+d");
+>                 goto done;
+>         }
+>
+>         q->offloaded =3D true;
+>
+>  done:
+> +       /* The offload structure may linger around via a reference taken =
+by the
+> +        * device driver, so clear up the netlink extack pointer so that =
+the
+> +        * driver isn't tempted to dereference data which stopped being v=
+alid
+> +        */
+> +       offload->extack =3D NULL;
+> +       offload->mqprio.extack =3D NULL;
+>         taprio_offload_free(offload);
+>
+>         return err;
 > --
 > 2.34.1
 >
