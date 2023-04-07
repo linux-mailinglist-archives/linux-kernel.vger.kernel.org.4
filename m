@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870DA6DAC78
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5A26DAC7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240535AbjDGMCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 08:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S240564AbjDGMDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 08:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjDGMCf (ORCPT
+        with ESMTP id S229666AbjDGMDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 08:02:35 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC0C283F0
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 05:02:32 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxMMxXBjBk894XAA--.37073S3;
-        Fri, 07 Apr 2023 20:02:31 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxC75WBjBk_18YAA--.24086S3;
-        Fri, 07 Apr 2023 20:02:31 +0800 (CST)
-Subject: Re: [RFC PATCH 2/3] LoongArch: Add larch_insn_gen_break() to generate
- break insn
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Youling Tang <tangyouling@loongson.cn>
-References: <1680833701-1727-1-git-send-email-yangtiezhu@loongson.cn>
- <1680833701-1727-3-git-send-email-yangtiezhu@loongson.cn>
- <0d309725-3b91-6902-de67-08bda48ccf57@loongson.cn>
- <ab4f20ff-6aeb-f343-c4dc-24c46919176c@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <9433a12a-b24b-4438-fdc8-0213522c71ba@loongson.cn>
-Date:   Fri, 7 Apr 2023 20:02:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Fri, 7 Apr 2023 08:03:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5370783CD;
+        Fri,  7 Apr 2023 05:03:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9165360F90;
+        Fri,  7 Apr 2023 12:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7BDC4339B;
+        Fri,  7 Apr 2023 12:03:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680869009;
+        bh=MDs+MtGIXGFtAsm2rEE3JPZAgrsutam8x/+OyQ6U/5Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CdUYTX/0/+T9+z9T0OX02fulTzrK0zyn+hY+KU0Ur572LTK2I7rQcUfOgGaBnhPRo
+         ambh4jV0pVIr3U4pU0iogCbVobAeEL28y+0+soqZjQmEOPVMv4bKzjW8TnJbNu6QeG
+         NgTY3NkpLzztvLl5tfUsyR4E6nzurftFip1H4rEaJco8ZhdFUpmEWUK2UmnFg93Z2/
+         TFvhvuZh/EwITPZfg8gYG/JDXQAAbMeABH072LcXVYuv6CfiYDeJr+mJx0BTxcbKOQ
+         yGI7VxGsk78TZkWIkVuFCW40AaU5CLA9eRCADsYEiijPIEQGePzGSqqiv/dksnm2vT
+         BdkpJiCa/Fzpg==
+Date:   Fri, 7 Apr 2023 14:03:23 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Chen Jiahao <chenjiahao16@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, guoren@kernel.org, heiko@sntech.de,
+        bjorn@rivosinc.com, alex@ghiti.fr, akpm@linux-foundation.org,
+        atishp@rivosinc.com, bhe@redhat.com, thunder.leizhen@huawei.com
+Subject: Re: [PATCH -next v3 1/2] riscv: kdump: Implement
+ crashkernel=X,[high,low]
+Message-ID: <ZDAGi2/+1q0oEUZ5@kernel.org>
+References: <20230406220206.3067006-1-chenjiahao16@huawei.com>
+ <20230406220206.3067006-2-chenjiahao16@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <ab4f20ff-6aeb-f343-c4dc-24c46919176c@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxC75WBjBk_18YAA--.24086S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7KF4kWF47WryruFWkuFyUZFb_yoW8Kryfpr
-        1DAF15Zrs8W3yrG34vqw15ZF4Sqw4kWr4qqF4DJ3y3GrW7Xrn8tFn2gryakFyYvw4jgay0
-        q3ZFgFWIva4jyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWxJVW8Jr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFwZ2UUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406220206.3067006-2-chenjiahao16@huawei.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,77 +59,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 07, 2023 at 06:02:05AM +0800, Chen Jiahao wrote:
+> On riscv, the current crash kernel allocation logic is trying to
+> allocate within 32bit addressible memory region by default, if
+> failed, try to allocate without 4G restriction.
+> 
+> In need of saving DMA zone memory while allocating a relatively large
+> crash kernel region, allocating the reserved memory top down in
+> high memory, without overlapping the DMA zone, is a mature solution.
+> Here introduce the parameter option crashkernel=X,[high,low].
+> 
+> One can reserve the crash kernel from high memory above DMA zone range
+> by explicitly passing "crashkernel=X,high"; or reserve a memory range
+> below 4G with "crashkernel=X,low".
+> 
+> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
+
+...
+
+> @@ -1180,14 +1206,37 @@ static void __init reserve_crashkernel(void)
+>  		return;
+>  	}
+>  
+> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+>  				&crash_size, &crash_base);
+> -	if (ret || !crash_size)
+> +	if (ret == -ENOENT) {
+> +		/*
+> +		 * crashkernel=X,[high,low] can be specified or not, but
+> +		 * invalid value is not allowed.
+
+nit: Perhaps something like this would be easier to correlate with the
+     code that follows:
+
+		/* Fallback to crashkernel=X,[high,low] */
 
 
-On 04/07/2023 05:51 PM, WANG Xuerui wrote:
-> On 2023/4/7 10:30, Youling Tang wrote:
->> /* snip */
->>
->>> diff --git a/arch/loongarch/kernel/kprobes.c
->>> b/arch/loongarch/kernel/kprobes.c
->>> index 08c78d2..a5c3712 100644
->>> --- a/arch/loongarch/kernel/kprobes.c
->>> +++ b/arch/loongarch/kernel/kprobes.c
->>> @@ -4,19 +4,8 @@
->>>  #include <linux/preempt.h>
->>>  #include <asm/break.h>
->>>
->>> -static const union loongarch_instruction breakpoint_insn = {
->>> -    .reg0i15_format = {
->>> -        .opcode = break_op,
->>> -        .immediate = BRK_KPROBE_BP,
->>> -    }
->>> -};
->>> -
->>> -static const union loongarch_instruction singlestep_insn = {
->>> -    .reg0i15_format = {
->>> -        .opcode = break_op,
->>> -        .immediate = BRK_KPROBE_SSTEPBP,
->>> -    }
->>> -};
->>> +#define breakpoint_insn larch_insn_gen_break(BRK_KPROBE_BP)
->>> +#define singlestep_insn larch_insn_gen_break(BRK_KPROBE_SSTEPBP)
->>
->> IMO, Defined as KPROBE_BP_INSN, KPROBE_SSTEPBP_INSN may be better.
->
-> Are you suggesting to hardcode the instruction words for those two BREAK
-> flavors?
+> +		 */
+> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+> +		if (ret || !crash_size)
+> +			return;
+> +
+> +		/*
+> +		 * crashkernel=Y,low is valid only when crashkernel=X,high
+> +		 * is passed and high memory is reserved successful.
 
-I think what Youling said is:
+nit: s/successful/successfully/
 
-#define KPROBE_BP_INSN         larch_insn_gen_break(BRK_KPROBE_BP)
-#define KPROBE_SSTEPBP_INSN    larch_insn_gen_break(BRK_KPROBE_SSTEPBP)
+> +		 */
+> +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
+> +		if (ret == -ENOENT)
+> +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+> +		else if (ret)
+> +			return;
+> +
+> +		search_start = search_low_max;
+> +	} else if (ret || !crash_size) {
+> +		/* Invalid argument value specified */
+>  		return;
+> +	}
 
-> I don't think it's better because even more structured info is
-> lost, and the compiler would generate the same code (if not, it's the
-> compiler that's to be fixed).
->
-> Actually, I don't know why this commit was necessary in the first place.
-> For the very least, it consisted of two logical changes (pass around
-> instruction words instead of unions; and change the BREAK insns to make
-> them words) that should get split;
-
-Yes, thanks for your suggestion, I will split it into two patches
-in the next version.
-
-> but again, the generated code should
-> be identical anyway, so it seems a lot of churn for no benefit and
-> reduced readability.
->
-
-Define and use larch_insn_gen_break() is to avoid hardcoding the
-uprobe break instruction in patch #3.
-
-We do not like the following definitions:
-
-#define UPROBE_SWBP_INSN	0x002a000c
-#define UPROBE_XOLBP_INSN	0x002a000d
-
-Using larch_insn_gen_break() seems better:
-
-#define UPROBE_SWBP_INSN	larch_insn_gen_break(BRK_UPROBE_BP)
-#define UPROBE_XOLBP_INSN	larch_insn_gen_break(BRK_UPROBE_XOLBP)
-
-Thanks,
-Tiezhu
-
+...
