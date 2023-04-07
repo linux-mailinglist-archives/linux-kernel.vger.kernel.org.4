@@ -2,94 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED0F6DAA49
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AD76DAA4B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbjDGIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S239686AbjDGIj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbjDGIiI (ORCPT
+        with ESMTP id S230422AbjDGIjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:38:08 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A25746BF;
-        Fri,  7 Apr 2023 01:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bvMeT
-        VYjDyKEP8ZQMTHGrWbs6rZELtxOvEXtr+caOtg=; b=Y48temyT0/21qJteKk2rk
-        s1ByLfixQXhq8XSvWsoiN7b3/nmJdRfFjA2EczXHyZ68Iz1ihOin55DaQWJC+WG4
-        BoMA96tUeD1WHi60zS8ZuBgtBqDLVKw+dpgTJVyy5fbfCDWZzL4r3Hj2+ooM7akC
-        fSEjcmv8P/KyzKvgV24lq0=
-Received: from ubuntu.localdomain (unknown [115.156.140.143])
-        by zwqz-smtp-mta-g1-4 (Coremail) with SMTP id _____wCnrdpS1i9kggMuAw--.20049S4;
-        Fri, 07 Apr 2023 16:37:39 +0800 (CST)
-From:   Xinyi Hou <Y_Ashley@163.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Fri, 7 Apr 2023 04:39:24 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5155D46B0
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:39:22 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id d11-20020a05600c3acb00b003ef6e6754c5so21257619wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 01:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680856760; x=1683448760;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HxTQKNVO9ztRpkc2329fvzZfgl6sigcHzow48LG+lXo=;
+        b=8EVqZbtwbu2U8jJnTEzeZJ6A3/1LVcQdXSOpDE1X2virde+vRsRuh5k4MOeGCVlLSq
+         7bBNCuHF9EILDe1lh1YuPbfZ/Tm49+ELdcYK+otsxjS/ErOP7XQAqZxGGOfNmv+Aid+/
+         iMHsCYIryW4MAc9FV1G21UrlviNwEWrn6/wWNl19K4eVsk4ZWFGL1va1ZSoK9h5gLAKL
+         KhMddTMytwK7+pyXXAD73Ttxv7tF4rHq7Acjy1bbynrCVL90wLvPYIP3PcudbNmRu++Y
+         if6otrvaW8jx5xzowv4trDqD/cZfkyoMg60uMC83769+LT2CWPAQjdq1L7Jk4308EjdW
+         6XmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680856760; x=1683448760;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HxTQKNVO9ztRpkc2329fvzZfgl6sigcHzow48LG+lXo=;
+        b=JLGgVPDoMEYX+QZbqJutPIKmDQFJqjWCk7BUhweXBh+pEEZefI+ke0cPaiq63fKK/I
+         d2pTrEJZKekB8MvnjUVnE7RZQ6CHwhX22bm8FAXnG1Yt86kSeqXss+S/gVaW5BY/rDse
+         9dX1SnpxgCXstVEil0GskLzUt8i3PdULxqJyxgLrDBzaCMqS9uyZT3tLcKFfZOBSOs8F
+         0rC9uAA2FbGMYV/4v/abTlRyhR+dPfKyZVC1+I9Qpk2XuReaJeO/xB27NCtafUhA1RjA
+         i9Mcgt4FZJH0Oc3s9qcfNbDezC3LhL4UfUGlPo8TMXBp1PsXDvj8/UwCzIAS06O0a0gp
+         PSgQ==
+X-Gm-Message-State: AAQBX9ct3B5Slq178onDcMmB0AP/RO58w8HWOHBi6MdHgVTyCjVlq4D6
+        QTXaf9nym3WBKNerXBVdiksfIw==
+X-Google-Smtp-Source: AKy350Y1Ehajm7UApJN7ryVi+4T2kEuIMc+7Kv4o6f6TbSLPCsAdGmenWYJaFR2ifclFI2eQsY9hWA==
+X-Received: by 2002:a7b:c7c6:0:b0:3ef:8b0:dbac with SMTP id z6-20020a7bc7c6000000b003ef08b0dbacmr754509wmk.31.1680856760582;
+        Fri, 07 Apr 2023 01:39:20 -0700 (PDT)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id f5-20020a0560001b0500b002cfe3f842c8sm3960362wrz.56.2023.04.07.01.39.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 01:39:20 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Fri, 07 Apr 2023 10:39:18 +0200
+Subject: [PATCH] memory: mtk-smi: mt8365: Add SMI Support
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230407-smi-driver-v1-1-036d6d8e8993@baylibre.com>
+X-B4-Tracking: v=1; b=H4sIALXWL2QC/x2Oyw6CMBBFf4V07aS1GjH+inHRxwCTwNBMW2JC+
+ HeLy7M4955dZRTCrF7drgQ3yrRyg+ulU2FyPCJQbKyssTdzNz3khSAKbSjQP63tjX9EZ1E1wbu
+ M4MVxmE6lJh1mdFwTJOJQZAZPHIlHXdZEQS91LgQDulKl/XDBUVw5A9pYEhzo+y97f47jByB8S
+ 0WpAAAA
+To:     Yong Wu <yong.wu@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Cc:     Xinyi Hou <Y_Ashley@163.com>, Dongliang Mu <dzm91@hust.edu.cn>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] clk: mediatek: clk-mt7986-infracfg: delete the code related to 'base'
-Date:   Fri,  7 Apr 2023 16:37:28 +0800
-Message-Id: <20230407083729.31498-1-Y_Ashley@163.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCnrdpS1i9kggMuAw--.20049S4
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZF47Wry3uw48Zw48Xr4xWFg_yoWkWFX_Zr
-        s5ur97Zr17KF4kGr47Wwn2vF9rtFs3Zr97Z3WYywn8JFyxKa1rJr1vqa95Aw47Ww4Svry5
-        Jrn7Kry7CF4rZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRLF4EPUUUUU==
-X-Originating-IP: [115.156.140.143]
-X-CM-SenderInfo: p1bd2xxoh1qiywtou0bp/1tbiShRKxGI0XrQwOgAAsm
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        Alexandre Mergnat <amergnat@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1858; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=Oj9DT/lxZQLpb1GTgR0bpejsWFy9jETdEDcuOZxmHV0=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkL9a3x7Lq9N1F0ungt3avZJRtAYDeq+QGgEX5jK3j
+ Pbm4r92JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZC/WtwAKCRArRkmdfjHURVXbEA
+ CEZLQQUxpRnEoF4/T62/ae1W5bCjIO+y/d6AFlnAnp94WB1hMZS5NbG9lSKpAaG0+OYJOtQJ63EiIx
+ tZ4/l0iKwp4h07FUFsHEnmnnE2suaE7/oH+T8JO9zTpsOuf+dq21DvSBFQVXL1VMFRFrEl7HW+AwNb
+ I0FUhB7oUMbg9GCfhAVRNHTt1Kc1X3RjAQYO4h6vDN8zSrIImN8+IgMy8XMTCwdygLlycgEa6erC0y
+ 6qypcFXMrWeSfpX9jx/MTvDGm/8ngNeM7tHqi75D+i3hH7bVhcw7eqhR+Ncq7LKGsF4LhJWvU7pdRc
+ e1SOxnXDhqL9nU0Awb7/WhBEkmPowWYBPd6VbX9G6dPkB2H2JXe1M9PmnZYlK9bnvLHEaRux31ffTZ
+ mtv5sIf+mrt4Okwk+Kt6EhnkCQLJGLdFRMDN9sXb/1Lr6GgOjdRYMmwyaqFBLN7ZbQb/g7jLMqP1K0
+ tAPETkWe921rHHMwxDIooGWZal/2e48AkuoihMykVA28Ej2yr1OgFntFCTMzpy6hhOwwcZ8/NqErR3
+ XF++a0KwYlAWfNwVLzawTrqmdn/89UXCos2Wcmdz6zupWewMS20nJLwa1m1IAuSXfX4rgDeOC8REba
+ wDlcX526m3z/NeRVQ1uVsnuzuM8NwnUg14n8LOI8p+z91YUt9XTjMqsP/9zw==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In clk_mt7986_infracfg_probe(), 'base' is allocated but never used,
-either not released on both success failure path.
+Add MT8365 SMI common support.
 
-Fix this by deleting 'base' and the code related to it.
-
-Signed-off-by: Xinyi Hou <Y_Ashley@163.com>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+Reviewed-by: Yong Wu <yong.wu@mediatek.com>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
+This serie add MT8365 SMI common driver support only because, to be
+bisectable and avoid issue, this driver change and the related change in
+the DTS should be applied in the right order (driver first).
 
- drivers/clk/mediatek/clk-mt7986-infracfg.c | 7 -------
- 1 file changed, 7 deletions(-)
+Here the related DTS change: [1]
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-infracfg.c b/drivers/clk/mediatek/clk-mt7986-infracfg.c
-index e80c92167c8f..76b32f3a16b2 100644
---- a/drivers/clk/mediatek/clk-mt7986-infracfg.c
-+++ b/drivers/clk/mediatek/clk-mt7986-infracfg.c
-@@ -174,16 +174,9 @@ static int clk_mt7986_infracfg_probe(struct platform_device *pdev)
- 	struct clk_hw_onecell_data *clk_data;
- 	struct device_node *node = pdev->dev.of_node;
- 	int r;
--	void __iomem *base;
- 	int nr = ARRAY_SIZE(infra_divs) + ARRAY_SIZE(infra_muxes) +
- 		 ARRAY_SIZE(infra_clks);
+Regards,
+Alexandre
+
+[1]: https://lore.kernel.org/all/20230207-iommu-support-v2-7-60d5fa00e4e5@baylibre.com/
+---
+ drivers/memory/mtk-smi.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
+index 5a9754442bc7..6523cb510518 100644
+--- a/drivers/memory/mtk-smi.c
++++ b/drivers/memory/mtk-smi.c
+@@ -713,6 +713,11 @@ static const struct mtk_smi_common_plat mtk_smi_sub_common_mt8195 = {
+ 	.has_gals = true,
+ };
  
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return -ENOMEM;
--	}
--
- 	clk_data = mtk_alloc_clk_data(nr);
++static const struct mtk_smi_common_plat mtk_smi_common_mt8365 = {
++	.type     = MTK_SMI_GEN2,
++	.bus_sel  = F_MMU1_LARB(2) | F_MMU1_LARB(4),
++};
++
+ static const struct of_device_id mtk_smi_common_of_ids[] = {
+ 	{.compatible = "mediatek,mt2701-smi-common", .data = &mtk_smi_common_gen1},
+ 	{.compatible = "mediatek,mt2712-smi-common", .data = &mtk_smi_common_gen2},
+@@ -728,6 +733,7 @@ static const struct of_device_id mtk_smi_common_of_ids[] = {
+ 	{.compatible = "mediatek,mt8195-smi-common-vdo", .data = &mtk_smi_common_mt8195_vdo},
+ 	{.compatible = "mediatek,mt8195-smi-common-vpp", .data = &mtk_smi_common_mt8195_vpp},
+ 	{.compatible = "mediatek,mt8195-smi-sub-common", .data = &mtk_smi_sub_common_mt8195},
++	{.compatible = "mediatek,mt8365-smi-common", .data = &mtk_smi_common_mt8365},
+ 	{}
+ };
  
- 	if (!clk_data)
+
+---
+base-commit: ea2dcf9394947d5d8e24cb9d52144923f6645632
+change-id: 20230407-smi-driver-782270b6da2e
+
+Best regards,
 -- 
-2.25.1
+Alexandre Mergnat <amergnat@baylibre.com>
 
