@@ -2,118 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A466DAEEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F6B6DAEF0
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 16:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjDGOns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 10:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S230178AbjDGOpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 10:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjDGOnq (ORCPT
+        with ESMTP id S230135AbjDGOpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 10:43:46 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB860FA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 07:43:44 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id t4so37246923wra.7
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 07:43:44 -0700 (PDT)
+        Fri, 7 Apr 2023 10:45:01 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5F2E53
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 07:44:59 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id w14-20020a170902e88e00b001a238a5946cso21864032plg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 07:44:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680878623; x=1683470623;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4y2vTh12wvHzVyTsbfEPBX95l9liSSCPzdmz8EpwIAM=;
-        b=eSTzTJ++Yr5AonzNMm+PKZMNKh16H4wNG7Ja5V0Ey6dXViJfAmNx0uYvLC8A02nU0V
-         IAgy2aaJbf1xHJcAiUwH2CQro/YQ63kjjrtHy99bXymQpSsTnIx85+HBj/vp9SK+eupn
-         AfYunddRcSirOyouplefXDaeIFs5B24J25LmnVp0KaNdMNxjj+qAxxkn5jF/MPcC12w2
-         cwnQC2Kfl3Xfo31oBRuk63pDPyDKSKZvRNREKeI60k2+T7hfm5W8xnOx3K9GRCVzT3Sh
-         H06QWq3pPtYiWZp1gtZGCAOPw98w6xhV6v6Gyp489I+1TxKEUUKrQvH47I80XipQQHLU
-         fhDg==
+        d=google.com; s=20210112; t=1680878699;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gv6eZEPRoHwC1V+eZxjkjvEEaDAR56CuZbvvIwjon/E=;
+        b=c8GStGHENBEjP8bjbhams8fpLgZjY6HZfrxyFX8rt4+dlyOm7p5rb+XBePUnNCEStr
+         w8+WfuSn5dO+NiRbo+ChOabDyviGYrIB5i1ispRBIWO0yNrnrdal5Je2h+cMO++AAqEf
+         EgZITFFY1nHa31im5YEUwTJvnSrsvN0dwuPe6EHBJGzJW69Bnat8FjN9lwwjZG4CAeSp
+         LkVksEgvek5ysiT8+Vcf4VSn5duRN9qbl3UPTbsX9t/35sy4ytjfMtH3aodrpkRFH705
+         Fhp9U6jAWnB7m6FdbuKWZIF9AJRIfvWtw+Z93qCgQfZogC3ZcwO+S6mbzmWdtHT/4xtw
+         6g/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680878623; x=1683470623;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4y2vTh12wvHzVyTsbfEPBX95l9liSSCPzdmz8EpwIAM=;
-        b=BoJh/0QjeInlcc2NDPqcYtDJncsjRN4DmhLmjoKiO9v/oQRGBywyYCRb8dM+XrVO77
-         ug82Mvz8gsYyv/wycTLjBmHSqhm6xAfNnxUy+toRGsS0UhFINa4JBD0xBFlt1Tm+pNsk
-         +Zeq7Kkaq5drEZ6tfJlVc9Hw8bKlrZRPNDDNAO0gdah6zkFB11LEH3zmWKaM2jXUDVxh
-         UAjDSeW/MBksvlMEtznJbGIL7M5Nn6jgsTNGY13XbGePkR7rj7XMX64rX5bgF4Uvkl7j
-         2Zzr3mZNUKQR+Y5/Ub97HRnhj0qn3Gqa8bih0gor8pYUibn3VSO3CEHwunUOq5LxnH2n
-         x7yg==
-X-Gm-Message-State: AAQBX9fL9i3xss8W2BxKL9/d1mvZ0rFSmPHzIqhQHOUWvKGH/6uBGhIA
-        RtxRI1H95PiwtSRLSzjZQEQYbQ==
-X-Google-Smtp-Source: AKy350YbOhKCjXDaonDjuR5CDVgiwS6hEPL+WFj/oy38rfc3QnZkRYr/w/jNMogzEGRVQ7B2fLHzHA==
-X-Received: by 2002:a5d:508a:0:b0:2ef:afd5:5e0f with SMTP id a10-20020a5d508a000000b002efafd55e0fmr1332009wrt.56.1680878623397;
-        Fri, 07 Apr 2023 07:43:43 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id y10-20020adfdf0a000000b002efb121b75fsm1678082wrl.58.2023.04.07.07.43.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 07:43:43 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>
-In-Reply-To: <20230407102704.1055152-1-kelvin.zhang@amlogic.com>
-References: <20230407102704.1055152-1-kelvin.zhang@amlogic.com>
-Subject: Re: [PATCH] dt-bindings: arm: amlogic: add C3 bindings
-Message-Id: <168087862262.952906.1621259082439192676.b4-ty@linaro.org>
-Date:   Fri, 07 Apr 2023 16:43:42 +0200
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1680878699;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gv6eZEPRoHwC1V+eZxjkjvEEaDAR56CuZbvvIwjon/E=;
+        b=r3yosc3KSUa+XZV0+q5m0QWxUvKCYlwiA47ZJRr1WDFZZ9/njDY6ym5Qu82eT1pwjJ
+         KhuQmToLf3Rtgc042TMxd9Wb8Tf2h+ZaV6M06mjSQGJL3X4IFmXJeBFE1JOarDlTpGUU
+         KeTdxE3W552kD9HBuBmG9xuTXmXHArBWKA81swkE7Sjs/mI3X/8WWSSGDRJolTyzSkrR
+         /anWH4FEqznrRl2aatY5WOYNdX5FxZJwQ9Wp6OW6ncrUP9tQ+on2YCo5FLVDFACKN9d2
+         UwKPeQpbX/nbeHexhSelpAe74oe9oG4dZzUI4V2yADjtLVMUX406uh6L6K49lTe1Os2y
+         AibQ==
+X-Gm-Message-State: AAQBX9fT3pc9JdrWpvXQ2tlalaINAVXZCL4IF38IIGdLNljUnuYR/bze
+        3D0jtn667HgwMWeFXu3uuOZnrMJTWZ0=
+X-Google-Smtp-Source: AKy350YSwRq3OADo5G/ym7vokRAHIB96wcOcT3eqFqDZlY6eakqG7MNhVkZRGOQPI2dgFHK63yGf+NomaYs=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:da8a:b0:1a2:8fa0:fbd7 with SMTP id
+ j10-20020a170902da8a00b001a28fa0fbd7mr3954205plx.2.1680878699355; Fri, 07 Apr
+ 2023 07:44:59 -0700 (PDT)
+Date:   Fri, 7 Apr 2023 07:44:57 -0700
+In-Reply-To: <dfc5cba8-5efb-8ad6-01e0-2800290a9ac1@gmail.com>
+Mime-Version: 1.0
+References: <20230214050757.9623-1-likexu@tencent.com> <20230214050757.9623-12-likexu@tencent.com>
+ <ZC9zSjZ7A47v7VCD@google.com> <dfc5cba8-5efb-8ad6-01e0-2800290a9ac1@gmail.com>
+Message-ID: <ZDAsaXvx85x+n71S@google.com>
+Subject: Re: [PATCH v4 11/12] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, 07 Apr 2023 18:27:04 +0800, Kelvin Zhang wrote:
-> Document the new C3 SoC/board device tree bindings.
+On Fri, Apr 07, 2023, Like Xu wrote:
+> On 7/4/2023 9:35 am, Sean Christopherson wrote:
+> > On Tue, Feb 14, 2023, Like Xu wrote:
+> > > +	case MSR_AMD64_PERF_CNTR_GLOBAL_STATUS:
+> > > +		if (!msr_info->host_initiated)
+> > > +			return 0; /* Writes are ignored */
+> > 
+> > Where is the "writes ignored" behavior documented?  I can't find anything in the
+> > APM that defines write behavior.
 > 
-> C3 is an advanced edge AI processor designed for smart IP camera
-> applications, which does not belong to Meson series.
+> KVM would follow the real hardware behavior once specifications stay silent
+> on details or secret.
+
+So is that a "this isn't actually documented anywhere" answer?  It's not your
+responsibility to get AMD to document their CPUs, but I want to clearly document
+when KVM's behavior is based solely off of observed hardware behavior, versus an
+actual specification.
+
+> How about this:
 > 
-> Therefore, modify the title field accordingly.
+> 	/*
+> 	 * Note, AMD ignores writes to reserved bits and read-only PMU MSRs,
+> 	 * whereas Intel generates #GP on attempts to write reserved/RO MSRs.
+> 	 */
+
+Looks good.
+
+> > > +		pmu->nr_arch_gp_counters = min_t(unsigned int,
+> > > +						 ebx.split.num_core_pmc,
+> > > +						 kvm_pmu_cap.num_counters_gp);
+> > > +	} else if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
+> > >   		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS_CORE;
+> > 
+> > This needs to be sanitized, no?  E.g. if KVM only has access to 4 counters, but
+> > userspace sets X86_FEATURE_PERFCTR_CORE anyways.  Hrm, unless I'm missing something,
+> > that's a pre-existing bug.
 > 
-> [...]
+> Now your point is that if a user space more capbility than KVM can support,
+> KVM should constrain it.
+> Your previous preference was that the user space can set capbilities that
+> evene if KVM doesn't support as long as it doesn't break KVM and host and the
+> guest will eat its own.
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.5/arm64-dt)
+Letting userspace define a "bad" configuration is perfectly ok, but KVM needs to
+be careful not to endanger itself by consuming the bad state.  A good example is
+the handling of nested SVM features in svm_vcpu_after_set_cpuid().  KVM lets
+userspace define anything and everything, but KVM only actually tries to utilize
+a feature if the feature is actually supported in hardware.
 
-[1/1] dt-bindings: arm: amlogic: add C3 bindings
-      https://git.kernel.org/amlogic/c/b2255e4195ea509b51c33b7a182e764c37901129
-
-These changes has been applied on the intermediate git tree [1].
-
-The v6.5/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
-
+In this case, it's not clear to me that putting a bogus value into "nr_arch_gp_counters"
+is safe (for KVM).  And AIUI, the guest can't actually use more than
+kvm_pmu_cap.num_counters_gp counters, i.e. KVM isn't arbitrarily restricting the
+setup.
