@@ -2,152 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6796DAC45
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BE26DAC47
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjDGLkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S232399AbjDGLke convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 07:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDGLkE (ORCPT
+        with ESMTP id S229437AbjDGLkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:40:04 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA2D59EA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:40:02 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id cf7so48757228ybb.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680867601; x=1683459601;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6lneTVcuijlE7HcvY6uKhaH5lsN0ygO8XwL5giFM3g=;
-        b=yHyF1j7oNga6zZnes/RZcW1Je3Y3ozAV0ZejW8OROZktQMhLsbOLzCMrdGUNlYVH8o
-         2ONvvRXZd7h1OZSckus4822BOLKupok3l4SvlqA4Glsx5z2nLUu3RrM4JGdChfiFojV3
-         dh99QG/6ocBEbCkYAZaK7xvr8dWHh/G3gWBadMOO4OSmIUkb40rnyGQg4gRMoYnu62Mn
-         +D55kAZI5dGOEo1Z0V9Uhizh62ruEwfZZcqyadONI9CmdR9UoWQGai84QRgKqnjpWP3g
-         YqLtn7xh/RNVupYsw06RO3wQS1ZFvNzqxLdnvFKpdYyXhpcsMLlzswXV+Y4a95mHXvvW
-         xERw==
+        Fri, 7 Apr 2023 07:40:32 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6840959EA;
+        Fri,  7 Apr 2023 04:40:31 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id jw24so7813076ejc.3;
+        Fri, 07 Apr 2023 04:40:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680867601; x=1683459601;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q6lneTVcuijlE7HcvY6uKhaH5lsN0ygO8XwL5giFM3g=;
-        b=QbbHfmp4x7rWPyr/ldThwsAFkl9TdWRdN01vzoTfB6mApJLGMt4LXm2/D28cTmci9I
-         NAYhfe/QQPO8m5PgofJ2deDDPrGUjTICTQ3Vj+iWyet7PqFvlgK3nXPfETLPNI91MWGz
-         njZrHVDXgxsyAE1lpg3gKXtce+2m3Brwp5trgawbA+VQP/87st6q3ZhvhyeC8bPHUCY1
-         bGKfWechK3NzkOWMBHfX5NLggIfzajcaAJU9y3SH2UIFw1cxCqyC/Eb5n2hB+zqbvGnB
-         fvN30BDVUv7CD9zHIceF0JkM3pqWEirDS1hNRWjVi5RB5/g1ZQEjFvmzpFngNA5CS65q
-         zVUA==
-X-Gm-Message-State: AAQBX9c34pd5BvRW3hmFh1h6yfKcyp5FLHSj84w81mx8INeNaXCe9g5q
-        dRuqRkEL9PDUr3V7zOCKnxWySA==
-X-Google-Smtp-Source: AKy350Zm3HrxO9cgSUxyDUth42AjaSTK5FZVplG0vFmtVYB8Wf2YmmfSWtOkT+wAhLmZVgGGtodjsA==
-X-Received: by 2002:a25:378f:0:b0:b40:ceba:f531 with SMTP id e137-20020a25378f000000b00b40cebaf531mr2800270yba.4.1680867601611;
-        Fri, 07 Apr 2023 04:40:01 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id b14-20020a25ae8e000000b00b7767ca7483sm1050222ybj.32.2023.04.07.04.40.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 04:40:00 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 07:39:58 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        techsupport@winsystems.com, pdemetrotion@winsystems.com,
-        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
-Subject: Re: [PATCH v6 1/3] regmap: Pass irq_drv_data as a parameter for
- set_type_config()
-Message-ID: <ZDABDvbflOWAqcs+@fedora>
-References: <cover.1680708357.git.william.gray@linaro.org>
- <20e15cd3afae80922b7e0577c7741df86b3390c5.1680708357.git.william.gray@linaro.org>
- <50d8ee72-9b5c-4abc-a230-2aeb6eddf03e@sirena.org.uk>
- <CAMRc=Mc0HcMnuBqsN7ReNB5JTWR0C4FbMRRM9S7kqhW5otP5WA@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1680867630;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=owpG5rT95/qTePvvHQtyxBU+QgYYNRhwqWGHnVy5pPc=;
+        b=17Q8T0LO/H5LNBLh2tliB5try5iJiVLC4rG/IxVj48Y7mNz+3fdL73lcvJJVb0r58B
+         qhKNRyo6ji1QwI4Z+Cxt5p7/qNdAdvFdXGqViwtyi/M64GdLjONPtLjpk0dRUM9WqiCJ
+         0DBuWb3DvrDtCRVaWSa0fFM7US1Yx4emvMuwCics8ePaaiRLr8w2Tmjtr/uzUQ1oL6g/
+         EIYM0cdmrMxuE1+ntEbkqvJGei7qTFg8g/B+48C+7B9QX23s5LORaGhAOy8+wtmwcVSv
+         8xNOo1+NCQEjn4OYjnce/O6qmrRE3khOdrivMsgcPHCod6zOZC/2oFR6YZrUFQ1KxH0d
+         Zy5g==
+X-Gm-Message-State: AAQBX9eNVUv6bLfHEm6v8TCu9t0k+732HBhRq5jZqU9/jyaHGf9iYl4d
+        ttHn3DwwLFugeZNrfwzR88o0Dd2jAoHXwUnDKDs=
+X-Google-Smtp-Source: AKy350ZjGzOw5+xf8+nFnZEZMnPPhgWN7ACdSS23qJ51hDW1ZPT2ScX8LYt0s1+e43xfImS2ZlnqrkVY8N+Bsfd7ffY=
+X-Received: by 2002:a17:906:802:b0:8b1:3298:c587 with SMTP id
+ e2-20020a170906080200b008b13298c587mr1005588ejd.2.1680867629669; Fri, 07 Apr
+ 2023 04:40:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A9rkc2yXyxiKCahq"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Mc0HcMnuBqsN7ReNB5JTWR0C4FbMRRM9S7kqhW5otP5WA@mail.gmail.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230316153841.3666-1-rui.zhang@intel.com> <20230316153841.3666-8-rui.zhang@intel.com>
+In-Reply-To: <20230316153841.3666-8-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 7 Apr 2023 13:40:18 +0200
+Message-ID: <CAJZ5v0igEHBKkYU3eDfET1giR6xoNsYVxBycuxD_+QZiGW68nA@mail.gmail.com>
+Subject: Re: [PATCH 07/15] powercap/intel_rapl: Change primitive order
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        srinivas.pandruvada@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 4:42 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> Move POWER_LIMIT1/POWER_LIMIT2/POWER_LIMIT4 to the beginning of enum
+> rapl_primitives so that they can be reused to represent different Power
+> Limits.
 
---A9rkc2yXyxiKCahq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The meaning of the above is a bit unclear without reverse engineering
+the rest of the series.
 
-On Fri, Apr 07, 2023 at 12:17:31PM +0200, Bartosz Golaszewski wrote:
-> On Thu, Apr 6, 2023 at 7:23=E2=80=AFPM Mark Brown <broonie@kernel.org> wr=
-ote:
-> >
-> > On Wed, Apr 05, 2023 at 11:45:42AM -0400, William Breathitt Gray wrote:
-> > > Allow the struct regmap_irq_chip set_type_config() callback to access
-> > > irq_drv_data by passing it as a parameter.
-> >
-> > The following changes since commit e8d018dd0257f744ca50a729e3d042cf2ec9=
-da65:
-> >
-> >   Linux 6.3-rc3 (2023-03-19 13:27:55 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git ta=
-gs/regmap-set-type-irq-drv-data
-> >
-> > for you to fetch changes up to 7697c64b9e4908196f0ae68aa6d423dd40607973:
-> >
-> >   regmap: Pass irq_drv_data as a parameter for set_type_config() (2023-=
-04-05 17:19:24 +0100)
-> >
-> > ----------------------------------------------------------------
-> > regmap: Pass irq_drv_data as a parameter for set_type_config()
-> >
-> > Allow callbacks to access irq_drv_data.
-> >
-> > ----------------------------------------------------------------
-> > William Breathitt Gray (1):
-> >       regmap: Pass irq_drv_data as a parameter for set_type_config()
-> >
-> >  drivers/base/regmap/regmap-irq.c | 8 +++++---
-> >  include/linux/regmap.h           | 6 ++++--
-> >  2 files changed, 9 insertions(+), 5 deletions(-)
->=20
-> Pulled Mark's tag and applied the two remaining patches, thanks!
->=20
-> Bart
-
-Bart, the two remaining patches still depend on the handle_mask_sync
-change descripted in the cover patch [0].
-
-Mark, are you able to Ack those patches or alternatively provide an
-immutable branch with them? We need the handle_mask_sync change as well
-for the idio-16 migration patchset [1].
-
-William Breathitt Gray
-
-[0] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.or=
-g/
-[1] https://lore.kernel.org/all/cover.1680618405.git.william.gray@linaro.or=
-g/
-
---A9rkc2yXyxiKCahq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZDABDgAKCRC1SFbKvhIj
-Kzf5AQCZMZDcNNV2CB/Zj1XJS4D1ejrk/Lad9vNKFe0CR//TxQD/arFCfkiUZGOy
-v5OPZrvybdoGrIg2iQxFz5ETJwh15wA=
-=XOZx
------END PGP SIGNATURE-----
-
---A9rkc2yXyxiKCahq--
+> No functional change.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 4 ++--
+>  include/linux/intel_rapl.h           | 5 +++--
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 9e29e56f4900..3a8940d3bec8 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -631,14 +631,14 @@ static u64 rapl_unit_xlate(struct rapl_domain *rd, enum unit_type type,
+>
+>  static struct rapl_primitive_info rpis_default[NR_RAPL_PRIMITIVES] = {
+>         /* name, mask, shift, msr index, unit divisor */
+> -       [ENERGY_COUNTER] = PRIMITIVE_INFO_INIT(ENERGY_COUNTER, ENERGY_STATUS_MASK, 0,
+> -                           RAPL_DOMAIN_REG_STATUS, ENERGY_UNIT, 0),
+>         [POWER_LIMIT1] = PRIMITIVE_INFO_INIT(POWER_LIMIT1, POWER_LIMIT1_MASK, 0,
+>                             RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
+>         [POWER_LIMIT2] = PRIMITIVE_INFO_INIT(POWER_LIMIT2, POWER_LIMIT2_MASK, 32,
+>                             RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
+>         [POWER_LIMIT4] = PRIMITIVE_INFO_INIT(POWER_LIMIT4, POWER_LIMIT4_MASK, 0,
+>                                 RAPL_DOMAIN_REG_PL4, POWER_UNIT, 0),
+> +       [ENERGY_COUNTER] = PRIMITIVE_INFO_INIT(ENERGY_COUNTER, ENERGY_STATUS_MASK, 0,
+> +                           RAPL_DOMAIN_REG_STATUS, ENERGY_UNIT, 0),
+>         [FW_LOCK] = PRIMITIVE_INFO_INIT(FW_LOCK, POWER_LOW_LOCK, 31,
+>                             RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
+>         [PL1_ENABLE] = PRIMITIVE_INFO_INIT(PL1_ENABLE, POWER_LIMIT1_ENABLE, 15,
+> diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
+> index 1648923f694d..856b739fd194 100644
+> --- a/include/linux/intel_rapl.h
+> +++ b/include/linux/intel_rapl.h
+> @@ -37,10 +37,10 @@ enum rapl_domain_reg_id {
+>  struct rapl_domain;
+>
+>  enum rapl_primitives {
+> -       ENERGY_COUNTER,
+>         POWER_LIMIT1,
+>         POWER_LIMIT2,
+>         POWER_LIMIT4,
+> +       ENERGY_COUNTER,
+>         FW_LOCK,
+>
+>         PL1_ENABLE,             /* power limit 1, aka long term */
+> @@ -75,7 +75,8 @@ struct rapl_domain_data {
+>         unsigned long timestamp;
+>  };
+>
+> -#define NR_POWER_LIMITS (3)
+> +#define NR_POWER_LIMITS        (POWER_LIMIT4 + 1)
+> +
+>  struct rapl_power_limit {
+>         struct powercap_zone_constraint *constraint;
+>         int prim_id;            /* primitive ID used to enable */
+> --
+> 2.25.1
+>
