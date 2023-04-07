@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253786DB560
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708E06DB55D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjDGUga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 16:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S230027AbjDGUgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 16:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjDGUgC (ORCPT
+        with ESMTP id S231293AbjDGUgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 16:36:02 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6FCCA08;
-        Fri,  7 Apr 2023 13:35:46 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337KZJv0010775;
+        Fri, 7 Apr 2023 16:36:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3830C666;
+        Fri,  7 Apr 2023 13:35:45 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337KYKON018881;
         Fri, 7 Apr 2023 20:35:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=RnM21H93KsCfKYDZySXqH9aFxlviESAjiVNz4+3cpTA=;
- b=RPrJDtjxRC/di5+kQ5XwCod2NcCWN/veJ0gIV9Pa6mXN0KrTazVM5xvnFLrSPmLHiQ8h
- mh0FhyVvzlRrFU0tJ9yA3TB3Uop2LS5d2p4zKkJ+fW/msiXwLsSRpIfnuxAZ872Nll0s
- CQ54gIHPRZ5phA2+Oh6mnqILEcuZDRahWrK+xZrvWmLRTbgkHnc6oaD2887OUzSlWOeR
- lFTC6qbNTaylR9ov8j2QlV8opRwF8Iibw9uCtd/XzeI57j4QnQync0T7rQmjlImwL0W6
- zld3uYEUnDfUjfZXCVRMV4y/8a4x5/msZOnMFQYLh93TYK4rQ35Wrqrj1ACl5N/M7qbu ow== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psv4dm47x-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=rNxn84SpUiVIdDYWc7+cJmLIaas00Pbdojdj4JB5VyI=;
+ b=XL4Kc9IEhw1ZGXerglNBFfu5d5hmpVJkz8GfCKAyxnUL8R1OeqcXlORmbWt3bbR/U6xv
+ It0nvLZpzEVllnWkdOhFiX5w1QBnTXhtVgv16mzP+4mR39CiimxEcjcxgFQ8UFn46LzC
+ oXu/R6Y09xm3K6eD7BjTzYtZMgXzonpYekK8SObFVMUdQLv6ko3Jn8H+THPZUIQHGiLc
+ IDdx0YS1b8OQlN/VyVtggdDKdivWvrDne/p0QNxnHqq3NZbnbJ777IX/JeCtRhDMf3a/
+ rxKcVunoiljvXnEgXzRQNVh0fa2WmFCjdz/D1YEDS9l5mR1Tw+UUn5wbP8gqwfANPFxv Ow== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptb9why3d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 07 Apr 2023 20:35:19 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337KZI46014700
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337KZIl0016814
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 7 Apr 2023 20:35:18 GMT
 Received: from hu-johmoo-lv.qualcomm.com (10.49.16.6) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 7 Apr 2023 13:35:17 -0700
+ 15.2.986.42; Fri, 7 Apr 2023 13:35:18 -0700
 From:   John Moon <quic_johmoo@quicinc.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -60,10 +61,12 @@ CC:     John Moon <quic_johmoo@quicinc.com>,
         Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
         Elliot Berman <quic_eberman@quicinc.com>,
         "Guru Das Srinagesh" <quic_gurus@quicinc.com>
-Subject: [PATCH v5 0/2] Validating UAPI backwards compatibility
-Date:   Fri, 7 Apr 2023 13:34:54 -0700
-Message-ID: <20230407203456.27141-1-quic_johmoo@quicinc.com>
+Subject: [PATCH v5 1/2] check-uapi: Introduce check-uapi.sh
+Date:   Fri, 7 Apr 2023 13:34:55 -0700
+Message-ID: <20230407203456.27141-2-quic_johmoo@quicinc.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230407203456.27141-1-quic_johmoo@quicinc.com>
+References: <20230407203456.27141-1-quic_johmoo@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.49.16.6]
@@ -71,18 +74,18 @@ X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nmIcOJr4FzDw2GJLhfO-FOoFk4ib5q4w
-X-Proofpoint-ORIG-GUID: nmIcOJr4FzDw2GJLhfO-FOoFk4ib5q4w
+X-Proofpoint-GUID: CGjaaU61AG0c5h-PZSGhBttdzOU6Ru9b
+X-Proofpoint-ORIG-GUID: CGjaaU61AG0c5h-PZSGhBttdzOU6Ru9b
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-07_13,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- malwarescore=0 spamscore=0 mlxlogscore=954 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304070184
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
+ mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304070185
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,79 +93,540 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel community has rigorously enforced a policy of backwards
-compatibility in its UAPI headers for a long time. This has allowed user
-applications to enjoy stability across kernel upgrades without
-recompiling. Our goal is to add tooling and documentation to help kernel
-developers maintain this stability.
+While the kernel community has been good at maintaining backwards
+compatibility with kernel UAPIs, it would be helpful to have a tool
+to check if a commit introduces changes that break backwards
+compatibility.
 
-We see in the kernel documentation:
-"Kernel headers are backwards compatible, but not forwards compatible.
-This means that a program built against a C library using older kernel
-headers should run on a newer kernel (although it may not have access
-to new features), but a program built against newer kernel headers may
-not work on an older kernel."[1]
+To that end, introduce check-uapi.sh: a simple shell script that
+checks for changes to UAPI headers using libabigail.
 
-How does the kernel community enforce this guarantee? As we understand it,
-it's enforced with thorough code review and testing. Is there any tooling
-outside of this being used to help the process?
+libabigail is "a framework which aims at helping developers and
+software distributors to spot some ABI-related issues like interface
+incompatibility in ELF shared libraries by performing a static
+analysis of the ELF binaries at hand."
 
-Also, could documentation on UAPI maintenance (from a developer's point
-of view) be expanded? Internally, we have a set of guidelines for our
-kernel developers regarding UAPI compatibility techniques. If there's
-interest in supplying a document on this topic with the kernel, we'd be
-happy to submit a draft detailing what we have so far as a jumping off
-point.
+The script uses one of libabigail's tools, "abidiff", to compile the
+changed header before and after the commit to detect any changes.
 
-In terms of tooling, I've attached a shell script we've been using
-internally to validate backwards compatibility of our UAPI headers. The
-script uses libabigail's[2] tool abidiff[3] to compare a modified
-header's ABI before and after a patch is applied. If an existing UAPI is
-modified, the script exits non-zero. We use this script in our
-continuous integration system to block changes that fail the check.
+abidiff "compares the ABI of two shared libraries in ELF format. It
+emits a meaningful report describing the differences between the two
+ABIs."
 
-It generates output like this when a backwards-incompatible change is made
-to a UAPI header:
+The script also includes the ability to check the compatibility of
+all UAPI headers across commits. This allows developers to inspect
+the stability of the UAPIs over time.
 
-!!! ABI differences detected in include/uapi/linux/bpf.h from HEAD~1 -> HEAD !!!
+Signed-off-by: John Moon <quic_johmoo@quicinc.com>
+---
+    - Improved git tree restore operation by going back to a user's
+      branch if they were on one. This is better than returning to a
+      detached commit.
+    - Fixed bitwise AND check syntax which failed with earlier versions
+      of Bash.
+    - Removed suppression of "make headers_install" stderr for better
+      user feedback.
+    - Made handling of -q flag more elegant.
 
-    [C] 'struct bpf_insn' changed:
-      type size hasn't changed
-      1 data member change:
-        type of '__s32 imm' changed:
-          typedef name changed from __s32 to __u32 at int-ll64.h:27:1
-          underlying type 'int' changed:
-            type name changed from 'int' to 'unsigned int'
-            type size hasn't changed
-
-We wanted to share this script with the community and hopefully also
-receive general feedback when it comes to tooling/policy surrounding this
-issue. Our hope is that the script will help kernel UAPI authors maintain
-good discipline and avoid breaking userspace.
-
-In v5, we've made a few code quality improvements based on review
-feedback. Thanks!
-
-[1] Documentation/kbuild/headers_install.rst
-[2] https://sourceware.org/libabigail/manual/libabigail-overview.html
-[3] https://sourceware.org/libabigail/manual/abidiff.html
-
-P.S. While at Qualcomm, Jordan Crouse <jorcrous@amazon.com> authored the
-original version of the UAPI checker script. Thanks Jordan!<Paste>
-
-John Moon (2):
-  check-uapi: Introduce check-uapi.sh
-  docs: dev-tools: Add UAPI checker documentation
-
- Documentation/dev-tools/checkuapi.rst | 480 +++++++++++++++++++++++++
- Documentation/dev-tools/index.rst     |   1 +
- scripts/check-uapi.sh                 | 489 ++++++++++++++++++++++++++
- 3 files changed, 970 insertions(+)
- create mode 100644 Documentation/dev-tools/checkuapi.rst
+ scripts/check-uapi.sh | 489 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 489 insertions(+)
  create mode 100755 scripts/check-uapi.sh
 
-
-base-commit: f2afccfefe7be1f7346564fe619277110d341f9b
+diff --git a/scripts/check-uapi.sh b/scripts/check-uapi.sh
+new file mode 100755
+index 000000000000..755187f27be5
+--- /dev/null
++++ b/scripts/check-uapi.sh
+@@ -0,0 +1,489 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++# Script to check commits for UAPI backwards compatibility
++
++set -o errexit
++set -o pipefail
++
++print_usage() {
++	name=$(basename "$0")
++	cat << EOF
++$name - check for UAPI header stability across Git commits
++
++By default, the script will check to make sure the latest commit (or current
++dirty changes) did not introduce ABI changes when compared to HEAD^1. You can
++check against additional commit ranges with the -b and -p options.
++
++The script will not check UAPI headers for architectures other than the one
++defined in ARCH.
++
++Usage: $name [-b BASE_REF] [-p PAST_REF] [-j N] [-l ERROR_LOG] [-q] [-v]
++
++Options:
++    -b BASE_REF    Base git reference to use for comparison. If unspecified or empty,
++                   will use any dirty changes in tree to UAPI files. If there are no
++                   dirty changes, HEAD will be used.
++    -p PAST_REF    Compare BASE_REF to PAST_REF (e.g. -p v6.1). If unspecified or empty,
++                   will use BASE_REF^1. Must be an ancestor of BASE_REF. Only headers
++                   that exist on PAST_REF will be checked for compatibility.
++    -j JOBS        Number of checks to run in parallel (default: number of CPU cores).
++    -l ERROR_LOG   Write error log to file (default: no error log is generated).
++    -q             Quiet operation (suppress all stdout, still print stderr).
++    -v             Verbose operation (print more information about each header being checked).
++
++Environmental args:
++    ABIDIFF  Custom path to abidiff binary
++    CC       C compiler (default is "gcc")
++    ARCH     Target architecture of C compiler (default is host arch)
++
++Exit codes:
++    $SUCCESS) Success
++    $FAIL_ABI) ABI difference detected
++    $FAIL_PREREQ) Prerequisite not met
++    $FAIL_COMPILE) Compilation error
++EOF
++}
++
++readonly SUCCESS=0
++readonly FAIL_ABI=1
++readonly FAIL_PREREQ=2
++readonly FAIL_COMPILE=3
++
++# Print to stderr
++eprintf() {
++	# shellcheck disable=SC2059
++	printf "$@" >&2
++}
++
++# Check if git tree is dirty
++tree_is_dirty() {
++	if git diff --quiet; then
++		return 1
++	else
++		return 0
++	fi
++}
++
++# Get list of files installed in $ref
++get_file_list() {
++	local -r ref="$1"
++	local -r tree="$(get_header_tree "$ref")"
++
++	# Print all installed headers, filtering out ones that can't be compiled
++	find "$tree" -type f -name '*.h' -printf '%P\n' | grep -v -f "$INCOMPAT_LIST"
++}
++
++# Add to the list of incompatible headers
++add_to_incompat_list() {
++	local -r ref="$1"
++
++	# Start with the usr/include/Makefile to get a list of the headers
++	# that don't compile using this method.
++	if [ ! -f usr/include/Makefile ]; then
++		eprintf "error - no usr/include/Makefile present at %s\n" "$ref"
++		eprintf "Note: usr/include/Makefile was added in the v5.3 kernel release\n"
++		exit "$FAIL_PREREQ"
++	fi
++	{
++		# shellcheck disable=SC2016
++		printf 'all: ; @echo $(no-header-test)\n'
++		cat usr/include/Makefile
++	} | SRCARCH="$ARCH" make -f - | tr " " "\n" | grep -v "asm-generic" >> "$INCOMPAT_LIST"
++
++	# The makefile also skips all asm-generic files, but prints "asm-generic/%"
++	# which won't work for our grep match. Instead, print something grep will match.
++	printf "asm-generic/.*\.h\n" >> "$INCOMPAT_LIST"
++
++	sort -u -o "$INCOMPAT_LIST" "$INCOMPAT_LIST"
++}
++
++# Compile the simple test app
++do_compile() {
++	local -r inc_dir="$1"
++	local -r header="$2"
++	local -r out="$3"
++	printf "int main(void) { return 0; }\n" | \
++		"$CC" -c \
++		  -o "$out" \
++		  -x c \
++		  -O0 \
++		  -std=c90 \
++		  -fno-eliminate-unused-debug-types \
++		  -g \
++		  "-I${inc_dir}" \
++		  -include "$header" \
++		  -
++}
++
++# Save the current git tree state, stashing if needed
++save_tree_state() {
++	printf "Saving current tree state... "
++	current_ref="$(git symbolic-ref --short HEAD 2> /dev/null || git rev-parse HEAD)"
++	readonly current_ref
++	if tree_is_dirty; then
++		unstash="true"
++		git stash push --quiet
++	fi
++	printf "OK\n"
++}
++
++# Restore the git tree state, unstashing if needed
++restore_tree_state() {
++	if [ -z "$current_ref" ]; then
++		return 0
++	fi
++
++	printf "Restoring current tree state... "
++	git checkout --quiet "$current_ref"
++	if [ "$unstash" = "true" ]; then
++		git stash pop --quiet
++		unstash="false"
++	fi
++	printf "OK\n"
++}
++
++# Handle exit cleanup
++exit_handler() {
++	if [ "$DEVIATED_FROM_CURRENT_TREE" = "true" ]; then
++		restore_tree_state
++	fi
++
++	rm -rf "$TMP_DIR"
++}
++
++# Install headers for both git refs
++install_headers() {
++	local -r base_ref="$1"
++	local -r past_ref="$2"
++
++	DEVIATED_FROM_CURRENT_TREE="false"
++	for ref in "$base_ref" "$past_ref"; do
++		if [ -n "$ref" ]; then
++			if [ "$DEVIATED_FROM_CURRENT_TREE" = "false" ]; then
++				save_tree_state
++				DEVIATED_FROM_CURRENT_TREE="true"
++			fi
++			# This script ($0) is already loaded into memory at this point,
++			# so this operation is safe
++			git checkout --quiet "$(git rev-parse "$ref")"
++		fi
++
++		printf "Installing sanitized UAPI headers from %s... " "${ref:-dirty tree}"
++		make -j "$MAX_THREADS" ARCH="$ARCH" INSTALL_HDR_PATH="${TMP_DIR}/${ref}/usr" headers_install > /dev/null
++		printf "OK\n"
++
++		# Add to list of incompatible headers while we have $ref checked out
++		add_to_incompat_list "$ref" "$INCOMPAT_LIST"
++	done
++
++	restore_tree_state
++	DEVIATED_FROM_CURRENT_TREE="false"
++}
++
++# Print the path to the headers_install tree for a given ref
++get_header_tree() {
++	local -r ref="$1"
++	printf "%s" "${TMP_DIR}/${ref}/usr"
++}
++
++# Check file list for UAPI compatibility
++check_uapi_files() {
++	local -r base_ref="$1"
++	local -r past_ref="$2"
++
++	local passed=0;
++	local failed=0;
++	local -a threads=()
++
++	printf "Checking changes to UAPI headers between %s and %s\n" "$past_ref" "${base_ref:-dirty tree}"
++	# Loop over all UAPI headers that were installed by $past_ref (if they only exist on $base_ref,
++	# there's no way they're broken and no way to compare anyway)
++	while read -r file; do
++		if [ "${#threads[@]}" -ge "$MAX_THREADS" ]; then
++			if wait "${threads[0]}"; then
++				passed=$((passed + 1))
++			else
++				failed=$((failed + 1))
++			fi
++			threads=("${threads[@]:1}")
++		fi
++
++		check_individual_file "$base_ref" "$past_ref" "$file" &
++		threads+=("$!")
++	done < <(get_file_list "$past_ref")
++
++	for t in "${threads[@]}"; do
++		if wait "$t"; then
++			passed=$((passed + 1))
++		else
++			failed=$((failed + 1))
++		fi
++	done
++
++	total="$((passed + failed))"
++	if [ "$failed" -gt 0 ]; then
++		eprintf "error - %d/%d UAPI headers compatible with %s appear _not_ to be backwards compatible\n" "$failed" "$total" "$ARCH"
++	else
++		printf "All %d UAPI headers compatible with %s appear to be backwards compatible\n" "$total" "$ARCH"
++	fi
++
++	return "$failed"
++}
++
++# Check an individual file for UAPI compatibility
++check_individual_file() {
++	local -r base_ref="$1"
++	local -r past_ref="$2"
++	local -r file="$3"
++
++	local -r base_header="$(get_header_tree "$base_ref")/${file}"
++	local -r past_header="$(get_header_tree "$past_ref")/${file}"
++
++	if [ ! -f "$base_header" ]; then
++		printf "error - UAPI header %s was incorrectly removed\n" "$file" | tee "${base_header}.error" >&2
++		return 1
++	fi
++
++	compare_abi "$file" "$base_header" "$past_header" "$base_ref" "$past_ref"
++}
++
++# Perform the A/B compilation and compare output ABI
++compare_abi() {
++	local -r file="$1"
++	local -r base_header="$2"
++	local -r past_header="$3"
++	local -r base_ref="$4"
++	local -r past_ref="$5"
++	local -r log="${TMP_DIR}/log/${file}.log"
++
++	mkdir -p "$(dirname "$log")"
++
++	if ! do_compile "$(get_header_tree "$base_ref")/include" "$base_header" "${base_header}.bin" 2> "$log"; then
++		eprintf "error - couldn't compile version of UAPI header %s at %s\n" "$file" "$base_ref"
++		cat "$log" >&2
++		exit "$FAIL_COMPILE"
++	fi
++
++	if ! do_compile "$(get_header_tree "$past_ref")/include" "$past_header" "${past_header}.bin" 2> "$log"; then
++		eprintf "error - couldn't compile version of UAPI header %s at %s\n" "$file" "$past_ref"
++		cat "$log" >&2
++		exit "$FAIL_COMPILE"
++	fi
++
++	local ret=0
++	"$ABIDIFF" --non-reachable-types "${past_header}.bin" "${base_header}.bin" > "$log" || ret="$?"
++	if [ "$ret" -eq 0 ]; then
++		if [ "$VERBOSE" = "true" ]; then
++			printf "No ABI differences detected in %s from %s -> %s\n" "$file" "$past_ref" "${base_ref:-dirty tree}"
++		fi
++	else
++		# Bits in abidiff's return code can be used to determine the type of error
++		if [ $((ret & 0x1)) -gt 0 ]; then
++			eprintf "error - abidiff did not run properly\n"
++			exit 1
++		fi
++
++		# If the only changes were additions (not modifications to existing APIs), then
++		# there's no problem. Ignore these diffs.
++		if grep "Unreachable types summary" "$log" | grep -q "0 removed" &&
++		   grep "Unreachable types summary" "$log" | grep -q "0 changed"; then
++			return 0
++		fi
++		{
++			printf "!!! ABI differences detected in %s from %s -> %s !!!\n\n" "$file" "$past_ref" "${base_ref:-dirty tree}"
++			sed  -e '/summary:/d' -e '/changed type/d' -e '/^$/d' -e 's/^/  /g' "$log"
++
++			if ! cmp "$past_header" "$base_header" > /dev/null 2>&1; then
++				printf "\nHeader file diff (after headers_install):\n"
++				diff -Naur "$past_header" "$base_header" \
++					| sed -e "s|${past_header}|${past_ref}/${file}|g" \
++					      -e "s|${base_header}|${base_ref:-dirty}/${file}|g"
++				printf "\n"
++			else
++				printf "\n%s did not change between %s and %s...\n" "$file" "$past_ref" "${base_ref:-dirty tree}"
++				printf "It's possible a change to one of the headers it includes caused this error:\n"
++				grep '^#include' "$base_header"
++				printf "\n"
++			fi
++		} | tee "${base_header}.error" >&2
++		return 1
++	fi
++}
++
++min_version_is_satisfied() {
++	local -r min_version="$1"
++	local -r version_installed="$2"
++
++	printf "%s\n%s\n" "$min_version" "$version_installed" | sort -Vc > /dev/null 2>&1
++}
++
++# Make sure we have the tools we need and the arguments make sense
++check_deps() {
++	ABIDIFF="${ABIDIFF:-abidiff}"
++	CC="${CC:-gcc}"
++	ARCH="${ARCH:-$(uname -m)}"
++	if [ "$ARCH" = "x86_64" ]; then
++		ARCH="x86"
++	fi
++
++	local -r abidiff_min_version="1.7"
++	local -r libdw_min_version_if_clang="0.171"
++
++	if ! command -v "$ABIDIFF" > /dev/null 2>&1; then
++		eprintf "error - abidiff not found!\n"
++		eprintf "Please install abigail-tools version %s or greater\n" "$abidiff_min_version"
++		eprintf "See: https://sourceware.org/libabigail/manual/libabigail-overview.html\n"
++		return 1
++	fi
++
++	local -r abidiff_version="$("$ABIDIFF" --version | cut -d ' ' -f 2)"
++	if ! min_version_is_satisfied "$abidiff_min_version" "$abidiff_version"; then
++		eprintf "error - abidiff version too old: %s\n" "$abidiff_version"
++		eprintf "Please install abigail-tools version %s or greater\n" "$abidiff_min_version"
++		eprintf "See: https://sourceware.org/libabigail/manual/libabigail-overview.html\n"
++		return 1
++	fi
++
++	if ! command -v "$CC" > /dev/null 2>&1; then
++		eprintf 'error - %s not found\n' "$CC"
++		return 1
++	fi
++
++	if "$CC" --version | grep -q clang; then
++		local -r libdw_version="$(ldconfig -v 2>/dev/null | grep -v SKIPPED | grep -m 1 -o 'libdw-[0-9]\+.[0-9]\+' | cut -c 7-)"
++		if ! min_version_is_satisfied "$libdw_min_version_if_clang" "$libdw_version"; then
++			eprintf "error - libdw version too old for use with clang: %s\n" "$libdw_version"
++			eprintf "Please install libdw from elfutils version %s or greater\n" "$libdw_min_version_if_clang"
++			eprintf "See: https://sourceware.org/elfutils/\n"
++			return 1
++		fi
++	fi
++
++	if [ ! -d "arch/${ARCH}" ]; then
++		eprintf 'error - ARCH "%s" is not a subdirectory under arch/\n' "$ARCH"
++		eprintf "Please set ARCH to one of:\n%s\n" "$(find arch -maxdepth 1 -mindepth 1 -type d -printf '%f ' | fmt)"
++		return 1
++	fi
++
++	if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
++		eprintf "error - this script requires the kernel tree to be initialized with Git\n"
++		return 1
++	fi
++
++	if ! git rev-parse --verify "$past_ref" > /dev/null 2>&1; then
++		printf 'error - invalid git reference "%s"\n' "$past_ref"
++		return 1
++	fi
++
++	if [ -n "$base_ref" ]; then
++		if ! git merge-base --is-ancestor "$past_ref" "$base_ref" > /dev/null 2>&1; then
++			printf 'error - "%s" is not an ancestor of base ref "%s"\n' "$past_ref" "$base_ref"
++			return 1
++		fi
++		if [ "$(git rev-parse "$base_ref")" = "$(git rev-parse "$past_ref")" ]; then
++			printf 'error - "%s" and "%s" are the same reference\n' "$past_ref" "$base_ref"
++			return 1
++		fi
++	fi
++}
++
++run() {
++	local base_ref="$1"
++	local past_ref="$2"
++	local abi_error_log="$3"
++	shift 3
++
++	if [ -z "$KERNEL_SRC" ]; then
++		KERNEL_SRC="$(realpath "$(dirname "$0")"/..)"
++	fi
++
++	cd "$KERNEL_SRC"
++
++	if [ -z "$base_ref" ] && ! tree_is_dirty; then
++		base_ref=HEAD
++	fi
++
++	if [ -z "$past_ref" ]; then
++		if [ -n "$base_ref" ]; then
++			past_ref="${base_ref}^1"
++		else
++			past_ref=HEAD
++		fi
++	fi
++
++	if ! check_deps; then
++		exit "$FAIL_PREREQ"
++	fi
++
++	TMP_DIR=$(mktemp -d)
++	readonly TMP_DIR
++	trap 'exit_handler' EXIT
++
++	readonly INCOMPAT_LIST="${TMP_DIR}/incompat_list.txt"
++	touch "$INCOMPAT_LIST"
++
++	# Run make install_headers for both refs
++	install_headers "$base_ref" "$past_ref"
++
++	# Check for any differences in the installed header trees
++	if diff -r -q "$(get_header_tree "$base_ref")" "$(get_header_tree "$past_ref")" > /dev/null 2>&1; then
++		printf "No changes to UAPI headers were applied between %s and %s\n" "$past_ref" "${base_ref:-dirty tree}"
++		exit "$SUCCESS"
++	fi
++
++	if ! check_uapi_files "$base_ref" "$past_ref"; then
++		eprintf "error - UAPI header ABI check failed\n"
++		if [ -n "$abi_error_log" ]; then
++			{
++				printf 'Generated by "%s %s" from git ref %s\n\n' "$0" "$*" "$(git rev-parse HEAD)"
++				find "$TMP_DIR" -type f -name '*.error' -exec cat {} +
++			} > "$abi_error_log"
++			eprintf "Failure summary saved to %s\n" "$abi_error_log"
++		fi
++		exit "$FAIL_ABI"
++	fi
++}
++
++main() {
++	MAX_THREADS=$(nproc)
++	VERBOSE="false"
++	local base_ref=""
++	local quiet="false"
++	while getopts "hb:p:mj:l:qv" opt; do
++		case $opt in
++		h)
++			print_usage
++			exit "$SUCCESS"
++			;;
++		b)
++			base_ref="$OPTARG"
++			;;
++		p)
++			past_ref="$OPTARG"
++			;;
++		j)
++			MAX_THREADS="$OPTARG"
++			;;
++		l)
++			abi_error_log="$OPTARG"
++			;;
++		q)
++			quiet="true"
++			;;
++		v)
++			VERBOSE="true"
++			;;
++		*)
++			exit "$FAIL_PREREQ"
++		esac
++	done
++
++
++	if [ "$quiet" = "true" ]; then
++		exec > /dev/null
++	fi
++
++	run "$base_ref" "$past_ref" "$abi_error_log" "$@"
++}
++
++main "$@"
 --
 2.17.1
 
