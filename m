@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4616DB3D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87E06DB3DA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjDGTBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 15:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S232529AbjDGTBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 15:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbjDGTAt (ORCPT
+        with ESMTP id S232471AbjDGTB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 15:00:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCFDCA22
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:59:22 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id l17so10304540ejp.8
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 11:59:22 -0700 (PDT)
+        Fri, 7 Apr 2023 15:01:26 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D6CE065
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 12:00:01 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 185so13751525pgc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 12:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680893959;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H4gXxWAEpg5Rm1Rq7UASr1bTHF5oTI5KWV+ZISdckLc=;
-        b=oRK9lLC6UbmvHYcXRo+sAjYUYUuyKkcnbOrbut/Q0Snt5P5eCzm7ach3k+or2N8DMt
-         wqYYqGmbYYuZHciMqTw9VehAG2Rme8jw0EGReCe+bJLeNn4mRGRfFU6EWYP5nlUJkk53
-         NJtyiNa/13SsE97ykYwiT5Xh9VwLGpTfqEV98ktoaz4aCJIRSapZgZ4gGsLuEvLRLEWu
-         WiIx8/BA6i1f2IdPYGLVwhIisvU1Vzez/kqWE1IaGEnB3/zqxUq37vLYQPtZzb5JPem2
-         kgaFozT42Bzn0JHFEzvHKU9PEoEGTNFiiJ/u+Xox2dvBnhl3G6tA5RxLEF8lZs6y5Ba6
-         geJQ==
+        d=google.com; s=20210112; t=1680894000; x=1683486000;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bFcmXoEArKnIpZFjV1SO4puRP5dyRPfqwvPXhN+fW1M=;
+        b=ZZVybAP1h6vwnqVEZrbCy23NZz0e3ioWNp+qXWTPru78WengYLey3CzRqZIG6u3Ef2
+         +qyEjYU6yf939X74iLMTzErHSj7t5+K9aMl5Sb7T7NZ8Ovaa/9MgaER6vxQfaw1LWQnI
+         E1jKabrApvsI1DauWXHm+C2iPX1IhGS2q8BGJQsZdXn2a0/nfyhNr2vFuLMrJJIMO2Kj
+         C29tiJsULJdYG8VWPKntHy3wG8ENZW6zGI/oR/Dw/r/YzoyAaTf8DYzxanRXuHSwKY0v
+         8PMnzcgPgi0QUiTzKfNT9rQueLPsbhSk9+qLUc+krmrTDs7VuXNIyVhjbvxqTx3SPkaW
+         pkOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680893959;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H4gXxWAEpg5Rm1Rq7UASr1bTHF5oTI5KWV+ZISdckLc=;
-        b=1dSFZ2mYtCmXCRxKHuOFNazMWauH0l4W5C39jXSgGWoz8PssMVRTZZbxTGth9yezH8
-         jnDuxHN4Sg1T9JxwrdeU69CmeSkAbQ/UmCVAV5+SQLoHp0vk6eQAaRGBfTCcZKpCkxGB
-         3W6p0IGs/6pAl2WB2X2p5jJX61/pBpoj7fN8+LDFNQSkUAZe/xmKhGiVQy9qOGBVZk3G
-         IiWWkx3GbRaBHziL3EzRyQeRObcOwLR1CM3ujmWgIlhIcF5JHSPetRMUIUVheIvGNLsa
-         3FALs8MUWPqeynhFnpK9QNrLPdgFkbskKrI4aLXQBzEMnnDp5KA32sLxETz/AJHMYlt1
-         DtfQ==
-X-Gm-Message-State: AAQBX9fKYBsqNppEqDoDIeyJ6xyPzhE/8WT9IA4AT/K6OKs11can6ShK
-        ZCwq9YFMNwrU+pxkym2cNODA5g==
-X-Google-Smtp-Source: AKy350bn9QHX7GytRyUeXRQIA9pOfMk4oATxEKgAnxVxIoAdHvM+67FAlVkn//GHTP+qA57YsQAKqA==
-X-Received: by 2002:a17:906:2658:b0:878:61d8:d7c2 with SMTP id i24-20020a170906265800b0087861d8d7c2mr404580ejc.39.1680893959662;
-        Fri, 07 Apr 2023 11:59:19 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
-        by smtp.gmail.com with ESMTPSA id v1-20020a1709060b4100b00932ebffdf4esm2313044ejg.214.2023.04.07.11.59.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 11:59:19 -0700 (PDT)
-Message-ID: <94e4ed7e-501d-11fd-ff69-69c81902deb4@linaro.org>
-Date:   Fri, 7 Apr 2023 20:59:17 +0200
+        d=1e100.net; s=20210112; t=1680894000; x=1683486000;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bFcmXoEArKnIpZFjV1SO4puRP5dyRPfqwvPXhN+fW1M=;
+        b=C30oVvoAOqjTKix7KjPVEkuTqhM0lJrDPrp9nCfBIuWq/Wxi2tHbz0Avn0/NHGbOyV
+         XhExVRGvYesc78chf6OaGYgr96lPcVzfRJBnh6q8ZGuSKdEP7ou4q+60+9AOKk/bZwjM
+         PeaLV9ozbpQXRmn0shgmbN5ukaBjsqlOU8YPu/0BoGJHVYyVIcsVQt1SvdJSDJL+Nzev
+         i5RfYnoY4xMPJbBuNln5yHOXxnwijTSyKKBOURcGpRgDRXjo60MIf5nojhVOPgctfzE8
+         oEVsheO7RaRvrfwgjXx4mtOOE3njonKMO48H0fjFQx3N+bIb4GNCNdP7TTXokda0hrUU
+         a5Wg==
+X-Gm-Message-State: AAQBX9dzBsoHkoFwniglPfytSJIZrOF2iT2uP/DVAz3TJ/EtWeDqPYDU
+        m3dKuOe6ivLcOZwbr0oUF2DZHI9ijZLZU0KlrFoGzg==
+X-Google-Smtp-Source: AKy350bdNuzsEESRQVtSjaFJZH3mRqgHoWZsPT0wys9F5lnzPtphBGfJ/BSQRatmqVcz5KRTtIvT/d7BHIuZPxygnuo=
+X-Received: by 2002:a65:5b43:0:b0:50f:5f89:2a9d with SMTP id
+ y3-20020a655b43000000b0050f5f892a9dmr716831pgr.1.1680893999494; Fri, 07 Apr
+ 2023 11:59:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/5] dt-bindings: arm: qcom: Add QRB2210/QCM2290 and
- RB1 board
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>
-Cc:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230403-topic-rb1_qcm-v2-0-dae06f8830dc@linaro.org>
- <20230403-topic-rb1_qcm-v2-2-dae06f8830dc@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230403-topic-rb1_qcm-v2-2-dae06f8830dc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+References: <20230308115243.82592-1-masahiroy@kernel.org> <20230308115243.82592-3-masahiroy@kernel.org>
+In-Reply-To: <20230308115243.82592-3-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 11:59:44 -0700
+Message-ID: <CAKwvOdnmiL_wDgzepYb+ZGgWt2xnsp48-awn0Cd0c4RDR43t_Q@mail.gmail.com>
+Subject: Re: [PATCH 3/8] scripts/mksysmap: use sed with in-line comments
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,44 +73,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2023 17:50, Konrad Dybcio wrote:
-> Document QRB210, a QRB version of QCM2290.
-> 
-> Document QTI Robotics RB1 as a QRB2210 device.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Wed, Mar 8, 2023 at 3:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+>
+> Move comments close to the code.
+
+Consider adding to the commit message why you switch from grep to sed;
+that's currently unclear.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+Orthogonal to this patch, don't .L prefixed local symbols not have
+entries in the symbol table? If they're not printed with nm, why
+filter them out (since they're impossible).
+
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 05badce5fedc..236ea55aee96 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -47,6 +47,8 @@ description: |
->          msm8996
->          msm8998
->          qcs404
-> +        qcm2290
-> +        qrb2210
->          qdu1000
->          qru1000
->          sa8155p
-> @@ -353,6 +355,13 @@ properties:
->            - const: swir,wp8548
->            - const: qcom,mdm9615
->  
-> +      - description: Qualcomm Technologies, Inc. Robotics RB1
+>
+>  scripts/mksysmap | 61 +++++++++++++++++++++++++++++-------------------
+>  1 file changed, 37 insertions(+), 24 deletions(-)
+>
+> diff --git a/scripts/mksysmap b/scripts/mksysmap
+> index 697fc6653953..8ea1955e03c6 100755
+> --- a/scripts/mksysmap
+> +++ b/scripts/mksysmap
+> @@ -10,32 +10,45 @@
+>  #####
+>  # Generate System.map (actual filename passed as second argument)
+>
+> -# For System.map filter away:
+> -#   a - local absolute symbols
+> -#   U - undefined global symbols
+> -#   N - debugging symbols
+> -#   w - local weak symbols
+> -
+>  # readprofile starts reading symbols when _stext is found, and
+>  # continue until it finds a symbol which is not either of 'T', 't',
+>  # 'W' or 'w'.
+>  #
+> -# Ignored prefixes:
+> -#  $                    - local symbols for ARM, MIPS, etc.
+> -#  .L                   - local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LA=
+SANPC, etc.
+> -#  __crc_               - modversions
+> -#  __kstrtab_           - EXPORT_SYMBOL (symbol name)
+> -#  __kstrtabns_         - EXPORT_SYMBOL (namespace)
+> +
+> +${NM} -n ${1} | sed >${2} -e "
+> +# ----------------------------------------------------------------------=
+-----
+> +# Ignored symbol types
+>  #
+> -# Ignored symbols:
+> -#  L0                   - for LoongArch?
+> -
+> -$NM -n $1 | grep -v            \
+> -       -e ' [aNUw] '           \
+> -       -e ' \$'                \
+> -       -e ' \.L'               \
+> -       -e ' __crc_'            \
+> -       -e ' __kstrtab_'        \
+> -       -e ' __kstrtabns_'      \
+> -       -e ' L0$'               \
+> -> $2
+> +
+> +# a: local absolute symbols
+> +# N: debugging symbols
+> +# U: undefined global symbols
+> +# w: local weak symbols
+> +/ [aNUw] /d
+> +
+> +# ----------------------------------------------------------------------=
+-----
+> +# Ignored prefixes
+> +#  (do not forget a space before each pattern)
+> +
+> +# local symbols for ARM, MIPS, etc.
+> +/ \$/d
+> +
+> +# local labels, .LBB, .Ltmpxxx, .L__unnamed_xx, .LASANPC, etc.
+> +/ \.L/d
+> +
+> +# CRC from modversions
+> +/ __crc_/d
+> +
+> +# EXPORT_SYMBOL (symbol name)
+> +/ __kstrtab_/d
+> +
+> +# EXPORT_SYMBOL (namespace)
+> +/ __kstrtabns_/d
+> +
+> +# ----------------------------------------------------------------------=
+-----
+> +# Ignored symbols (exact match)
+> +#  (do not forget a space before and '$' after each pattern)
+> +
+> +# for LoongArch?
+> +/ L0$/d
+> +"
+> --
+> 2.34.1
+>
 
-The title should be now different, e.g.
-	Qualcomm Technologies, Inc. QRB2210-based boards
-or even dropped entirely.
 
-Anyway, this can be fixed when a new entry appears here.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
-
+--=20
+Thanks,
+~Nick Desaulniers
