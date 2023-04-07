@@ -2,121 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D796DB671
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958B96DB674
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjDGWZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S229915AbjDGW2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 18:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjDGWZT (ORCPT
+        with ESMTP id S229614AbjDGW2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:25:19 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D1BAD0A;
-        Fri,  7 Apr 2023 15:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680906318; x=1712442318;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UdvXQ75I/R9Zf31H9+8pVsLjueazsxmKA7kvddj7SM0=;
-  b=f6tZ39V0rQ70454J4ES4X3MPXMjbT+DVyiHyI6/EpHDPosNQkP8tGjOQ
-   YPvPIrMwz0YsKLt88xNPbZjoSowA0x8b1CaIG2j07r+uArAodxZiL78ne
-   rbsRkk2vmRv9KFBgeidzyIXXHOKyLQYsbHqtJ8OyRpUpNjLgl+mA71WVx
-   oxc4PtmCUVC53q9eBdnaJDvRnKxQILIWTdXTGYXc8kDsYYYjOc9RdQHSq
-   stJg47FMgjv33mTAt8LXDMMxEk0osqJ9kpSZTukC2Eawnu8n8D3JlvoQX
-   Fj9Qc1y+0AMXQ/CZbt/8GWlrjxqAzebMLPMv0HMKCNeosRTvIUB5CD9Ka
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="370914187"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="370914187"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 15:25:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="756852854"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="756852854"
-Received: from ssingh6-mobl2.amr.corp.intel.com (HELO [10.212.218.166]) ([10.212.218.166])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 15:25:17 -0700
-Message-ID: <9b8c23fd-f1b0-1687-052a-9c6b7d70f34d@linux.intel.com>
-Date:   Fri, 7 Apr 2023 15:25:17 -0700
+        Fri, 7 Apr 2023 18:28:13 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1E7B740
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 15:28:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R981e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VfY-f.6_1680906488;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VfY-f.6_1680906488)
+          by smtp.aliyun-inc.com;
+          Sat, 08 Apr 2023 06:28:08 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2 7/7] erofs: enable long extended attribute name prefixes
+Date:   Sat,  8 Apr 2023 06:28:08 +0800
+Message-Id: <20230407222808.19670-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
+In-Reply-To: <20230407141710.113882-8-jefflexu@linux.alibaba.com>
+References: <20230407141710.113882-8-jefflexu@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
- error recovery
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "Natu, Mahesh" <mahesh.natu@intel.com>
-References: <20230407215259.GA3825733@bhelgaas>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230407215259.GA3825733@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Let's enable long xattr name prefix feature.  Old kernels will just
+ignore / skip such extended attributes so that in case you don't want
+to mount such images.  Add another incompatible feature as an option
+for this.
 
+Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+v2: fix build error when CONFIG_EROFS_FS_XATTR is not defined
+---
+ fs/erofs/erofs_fs.h | 4 +++-
+ fs/erofs/internal.h | 1 +
+ fs/erofs/super.c    | 7 +++++++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
 
-On 4/7/23 2:52 PM, Bjorn Helgaas wrote:
-> On Fri, Apr 07, 2023 at 04:51:44PM -0500, Bjorn Helgaas wrote:
->> I'll post a follow-up patch to add a couple comments there,
->> too.
-> 
-> Comments I propose:
-> 
-> 
->     PCI/EDR: Add edr_handle_event() comments
->     
->     EDR documentation is a bit sketchy.  Add a couple comments to
->     edr_handle_event() about the devices involved.
->     
->     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
-> index 87734e4c3c20..135ddb53661c 100644
-> --- a/drivers/pci/pcie/edr.c
-> +++ b/drivers/pci/pcie/edr.c
-> @@ -151,9 +151,17 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
->  	if (event != ACPI_NOTIFY_DISCONNECT_RECOVER)
->  		return;
->  
-> +	/*
-> +	 * pdev itself is still present, but one or more of its child
-> +	 * devices have been disconnected (ACPI v6.3, sec 5.6.6).
-> +	 */
-
-Maybe add info that pdev can be a root port or a downstream port?
-
->  	pci_info(pdev, "EDR event received\n");
->  
-> -	/* Locate the port which issued EDR event */
-> +	/*
-> +	 * Locate the port that experienced the containment event.  pdev
-> +	 * may be that port or a parent of it (PCI Firmware r3.3, sec
-> +	 * 4.6.13).
-> +	 */
->  	edev = acpi_dpc_port_get(pdev);
->  	if (!edev) {
->  		pci_err(pdev, "Firmware failed to locate DPC port\n");
-
-
-Otherwise, looks good to me.
-
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
+diff --git a/fs/erofs/erofs_fs.h b/fs/erofs/erofs_fs.h
+index ea62f83dac40..ac42a7255b39 100644
+--- a/fs/erofs/erofs_fs.h
++++ b/fs/erofs/erofs_fs.h
+@@ -27,6 +27,7 @@
+ #define EROFS_FEATURE_INCOMPAT_ZTAILPACKING	0x00000010
+ #define EROFS_FEATURE_INCOMPAT_FRAGMENTS	0x00000020
+ #define EROFS_FEATURE_INCOMPAT_DEDUPE		0x00000020
++#define EROFS_FEATURE_INCOMPAT_XATTR_PREFIXES	0x00000040
+ #define EROFS_ALL_FEATURE_INCOMPAT		\
+ 	(EROFS_FEATURE_INCOMPAT_ZERO_PADDING | \
+ 	 EROFS_FEATURE_INCOMPAT_COMPR_CFGS | \
+@@ -36,7 +37,8 @@
+ 	 EROFS_FEATURE_INCOMPAT_COMPR_HEAD2 | \
+ 	 EROFS_FEATURE_INCOMPAT_ZTAILPACKING | \
+ 	 EROFS_FEATURE_INCOMPAT_FRAGMENTS | \
+-	 EROFS_FEATURE_INCOMPAT_DEDUPE)
++	 EROFS_FEATURE_INCOMPAT_DEDUPE | \
++	 EROFS_FEATURE_INCOMPAT_XATTR_PREFIXES)
+ 
+ #define EROFS_SB_EXTSLOT_SIZE	16
+ 
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 5a9c19654b19..f675050af2bb 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -285,6 +285,7 @@ EROFS_FEATURE_FUNCS(compr_head2, incompat, INCOMPAT_COMPR_HEAD2)
+ EROFS_FEATURE_FUNCS(ztailpacking, incompat, INCOMPAT_ZTAILPACKING)
+ EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
+ EROFS_FEATURE_FUNCS(dedupe, incompat, INCOMPAT_DEDUPE)
++EROFS_FEATURE_FUNCS(xattr_prefixes, incompat, INCOMPAT_XATTR_PREFIXES)
+ EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
+ 
+ /* atomic flag definitions */
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index bf396e0c243a..e44cd69c9d9c 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -385,6 +385,8 @@ static int erofs_read_superblock(struct super_block *sb)
+ 	sbi->meta_blkaddr = le32_to_cpu(dsb->meta_blkaddr);
+ #ifdef CONFIG_EROFS_FS_XATTR
+ 	sbi->xattr_blkaddr = le32_to_cpu(dsb->xattr_blkaddr);
++	sbi->xattr_prefix_start = le32_to_cpu(dsb->xattr_prefix_start);
++	sbi->xattr_prefix_count = dsb->xattr_prefix_count;
+ #endif
+ 	sbi->islotbits = ilog2(sizeof(struct erofs_inode_compact));
+ 	sbi->root_nid = le16_to_cpu(dsb->root_nid);
+@@ -822,6 +824,10 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	if (err)
+ 		return err;
+ 
++	err = erofs_xattr_prefixes_init(sb);
++	if (err)
++		return err;
++
+ 	err = erofs_register_sysfs(sb);
+ 	if (err)
+ 		return err;
+@@ -981,6 +987,7 @@ static void erofs_put_super(struct super_block *sb)
+ 
+ 	erofs_unregister_sysfs(sb);
+ 	erofs_shrinker_unregister(sb);
++	erofs_xattr_prefixes_cleanup(sb);
+ #ifdef CONFIG_EROFS_FS_ZIP
+ 	iput(sbi->managed_cache);
+ 	sbi->managed_cache = NULL;
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.19.1.6.gb485710b
+
