@@ -2,60 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFD56DAC25
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E73C6DAC2B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232932AbjDGLR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S240624AbjDGLXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbjDGLR0 (ORCPT
+        with ESMTP id S240619AbjDGLXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:17:26 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E10F30EF;
-        Fri,  7 Apr 2023 04:17:24 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id F085124E36E;
-        Fri,  7 Apr 2023 19:17:22 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Apr
- 2023 19:17:22 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Apr
- 2023 19:17:22 +0800
-Message-ID: <f56fc309-0397-96ad-7df4-8bc3d9a914cb@starfivetech.com>
-Date:   Fri, 7 Apr 2023 19:17:16 +0800
+        Fri, 7 Apr 2023 07:23:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6F15277
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680866552;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hH4U311j/Jsqa/Lz2ki1vR6iZrMlUESpjPBImXUbiAE=;
+        b=RYL74NdujvmcjyibmRDgZrTVcH0MyuaC2gEz6QFmyOsA3I6r10GRDFyxrLSjmX9WdBG4Ck
+        +w2y9N4JQlrFBexQZnCzqC2oTaN0neTSi2/ggvW4OfnhR4soCnYg1Mz6xGjyPDJ0CECU+2
+        BreuPWXkEKMfOBMyTBm8ngDS57uRZro=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-517-2Zf7pP39O7ehxmlvKZKOAg-1; Fri, 07 Apr 2023 07:22:31 -0400
+X-MC-Unique: 2Zf7pP39O7ehxmlvKZKOAg-1
+Received: by mail-wr1-f71.google.com with SMTP id bn9-20020a056000060900b002cfe8493fe6so5181489wrb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:22:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680866549;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hH4U311j/Jsqa/Lz2ki1vR6iZrMlUESpjPBImXUbiAE=;
+        b=MSXd1ua5++zXzLxrmtdwHi+veovCxs6MZvTIGvCEZUjvcoiP5+W2uSJEdbva/j47fD
+         4hHHWlCSUi9Mz6Lxx5AQl08KQ+BrNoK8Qxm4Jyg+gEyeR7cdjwF7gclShEur+CUk17Vz
+         CE+QAwwre0DIjrlo3FwbH+O3GqVlwNyKUsmclc/aRmu/3MEIkI7+vDy+xEQEz/jBQYZm
+         qiVJc3pH/W4GVo9VpIAMNk9dDZgmm5rMT3dCm02wnLdW6nA6S9OcJuIkT/96ZDfnzMsR
+         dzmTgmvZ5gHJrkCnxhRMsl1MazjzPWsdPHKLCqpXoTgiroO1I/P1cJvlP0ICxKC+wkXR
+         nT5g==
+X-Gm-Message-State: AAQBX9c34LS8hyl1kDsekDSxaVVNuMfNyCEL66Wh3U1c/qvW0AnLA1ak
+        eR9X5WNS0p6nGmMBPHDE6K2O3QTj08/TqB/R+3wunMqq3ySxv8oksIsW1e98ITBG58zGKBiNuTz
+        XIoDdv/DAoLYAR5txOgFh11aeqOd7IjSJFRJOeO/K+dKtkRXBabUaSw+plrCzM3JT6leWQplw2b
+        GzB+WV68I7
+X-Received: by 2002:adf:fb83:0:b0:2c5:5a65:79a0 with SMTP id a3-20020adffb83000000b002c55a6579a0mr1266519wrr.53.1680866549728;
+        Fri, 07 Apr 2023 04:22:29 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZoXdyDFp/08AQ2n3ydTt4/RdllFrwf07aFzR19kGeao0DxT1onEBIG3ePDCokvXC+kvLlMVQ==
+X-Received: by 2002:adf:fb83:0:b0:2c5:5a65:79a0 with SMTP id a3-20020adffb83000000b002c55a6579a0mr1266495wrr.53.1680866549380;
+        Fri, 07 Apr 2023 04:22:29 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id t5-20020a5d6905000000b002efb4f2d240sm258556wru.87.2023.04.07.04.22.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 04:22:29 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mcanal@igalia.com>,
+        Marius Vlad <marius.vlad@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 0/2] drm/vkms: A couple of trivial cleanups
+In-Reply-To: <20230406110235.3092055-1-javierm@redhat.com>
+References: <20230406110235.3092055-1-javierm@redhat.com>
+Date:   Fri, 07 Apr 2023 13:22:28 +0200
+Message-ID: <87wn2o6iob.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v7 1/2] dt-bindings: soc: starfive: Add StarFive syscon
- doc
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>
-References: <20230406103308.1280860-1-william.qiu@starfivetech.com>
- <20230406103308.1280860-2-william.qiu@starfivetech.com>
- <833b68a5-263d-d293-4910-2ca50b43e60d@linaro.org>
- <2ce35d68-ae6c-129f-588e-9b292de3a654@starfivetech.com>
- <20230407-stand-reversion-1db211c03ff4@wendy>
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <20230407-stand-reversion-1db211c03ff4@wendy>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,55 +83,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
+> Hello,
+>
+> This series contains two trivial cleanups for the vkms driver.
+>
+> Patch #1 just gets rid of a wrapper helper that wasn't really adding that
+> much value and patch #2 drops the <drm/drm_simple_kms_helper.h> header
+> that was only used to call the drm_simple_encoder_init() function helper.
+>
+> Best regards,
+> Javier
+>
+>
+> Javier Martinez Canillas (2):
+>   drm/vkms: Drop vkms_connector_destroy() wrapper
+>   drm/vkms: Remove <drm/drm_simple_kms_helper.h> include
+>
 
-On 2023/4/7 18:11, Conor Dooley wrote:
-> On Fri, Apr 07, 2023 at 05:30:31PM +0800, William Qiu wrote:
->> 
->> This would be $ref: /schemas/clock/starfive,jh7110-pll.yaml#, but this file is not
->> available at present,  so I would like to ask if I should submit the documents
->> instead of Xingyu
-> 
-> Or just send the whole lot as one series, and I'll ack the soc bits for
-> Stephen to take the whole lot via clk? I think Xingyu owes a respin
-> anyway cos of the changes to this binding file that Krzysztof requested
-> there.
-> 
-> Plus, the base clock support is now in clk-next, so their stuff is now
-> applicable to the clk tree.
-> 
+Pushed to drm-misc (drm-misc-next). Thanks!
 
-So it is the best choice to give the whole series to Xingyu?
-
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 4c0b39c44957..0b2170e1e4ff 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19911,6 +19911,11 @@ S:	Supported
->>  F:	Documentation/devicetree/bindings/mmc/starfive*
->>  F:	drivers/mmc/host/dw_mmc-starfive.c
->>  
->> +STARFIVE JH7110 SYSCON
->> +M:	William Qiu <william.qiu@starfivetech.com>
->> +S:	Supported
->> +F:	Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-> 
-> Can you squash this in please (whitespace damaged):
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 90abe83c02f3..6fbb486f59ab 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19943,6 +19943,7 @@ STARFIVE SOC DRIVERS
->  M:     Conor Dooley <conor@kernel.org>
->  S:     Maintained
->  T:     git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> +F:     Documentation/devicetree/bindings/soc/starfive/
->  F:     drivers/soc/starfive/
-> 
-
-I would tell Xingyu to do so.
-
+-- 
 Best regards,
-William
-> Cheers,
-> Conor.
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
