@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0E16DB37D
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DB46DB3B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjDGSun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
+        id S229614AbjDGS43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbjDGSuW (ORCPT
+        with ESMTP id S230347AbjDGS4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:50:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D0AE079;
-        Fri,  7 Apr 2023 11:49:03 -0700 (PDT)
+        Fri, 7 Apr 2023 14:56:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749861BD1;
+        Fri,  7 Apr 2023 11:54:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C0E4611AE;
-        Fri,  7 Apr 2023 18:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8559C433EF;
-        Fri,  7 Apr 2023 18:48:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EB9564753;
+        Fri,  7 Apr 2023 18:48:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A3FC433A1;
+        Fri,  7 Apr 2023 18:48:17 +0000 (UTC)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -43,16 +43,16 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 28/40] dt-bindings: pinctrl: qcom,sdm845: simplify with unevaluatedProperties
-Date:   Fri,  7 Apr 2023 20:45:34 +0200
-Message-Id: <20230407184546.161168-28-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 29/40] dt-bindings: pinctrl: qcom,sdx55: simplify with unevaluatedProperties
+Date:   Fri,  7 Apr 2023 20:45:35 +0200
+Message-Id: <20230407184546.161168-29-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
 References: <20230407184546.161168-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,21 +64,16 @@ All Qualcomm SoC Top Level Mode Multiplexer pin controllers have similar
 capabilities regarding pin properties, thus we can just accept entire
 set provided by qcom,tlmm-common.yaml schema.
 
-This also fixes warnings like:
-
-  sdm845-cheza-r1.dtb: pinctrl@3400000: qspi-sleep-state: 'oneOf' conditional failed, one must be fixed:
-    'output-disable' does not match any of the regexes: 'pinctrl-[0-9]+'
-
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/pinctrl/qcom,sdm845-pinctrl.yaml         | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ .../bindings/pinctrl/qcom,sdx55-pinctrl.yaml           | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
-index 23d7c030fec0..d301881ddfa8 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdm845-pinctrl.yaml
-@@ -61,6 +61,7 @@ $defs:
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,sdx55-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,sdx55-pinctrl.yaml
+index a40175258495..67af99dd8f14 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,sdx55-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,sdx55-pinctrl.yaml
+@@ -48,6 +48,7 @@ $defs:
        Pinctrl node's client devices use subnodes for desired pin configuration.
        Client device subnodes use below standard properties.
      $ref: qcom,tlmm-common.yaml#/$defs/qcom-tlmm-state
@@ -86,15 +81,14 @@ index 23d7c030fec0..d301881ddfa8 100644
  
      properties:
        pins:
-@@ -102,19 +103,9 @@ $defs:
-                 uim_batt, usb_phy, vfr_1, vsense_trigger, wlan1_adc0,
-                 wlan1_adc1, wlan2_adc0, wlan2_adc1]
+@@ -91,18 +92,9 @@ $defs:
+                 uim1_present, uim1_reset, uim2_clk, uim2_data, uim2_present,
+                 uim2_reset, usb2phy_ac, vsense_trigger ]
  
--      bias-disable: true
 -      bias-pull-down: true
 -      bias-pull-up: true
+-      bias-disable: true
 -      drive-strength: true
--      input-enable: true
 -      output-high: true
 -      output-low: true
 -
@@ -103,9 +97,9 @@ index 23d7c030fec0..d301881ddfa8 100644
  
 -    additionalProperties: false
 -
- required:
-   - compatible
-   - reg
+ allOf:
+   - $ref: /schemas/pinctrl/qcom,tlmm-common.yaml#
+ 
 -- 
 2.34.1
 
