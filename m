@@ -2,112 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 761986DB40F
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE7C6DB413
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 21:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjDGTSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 15:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
+        id S230518AbjDGTUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 15:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjDGTSm (ORCPT
+        with ESMTP id S230357AbjDGTUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 15:18:42 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176189ECB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 12:18:41 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id sg7so10383905ejc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 12:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680895119;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cVZrkBqgVgcVzeGGGFBhsy4jLsRZIddjwzjEhu3g9lM=;
-        b=ntTn7ynloJD1t1Gl4ChofmVHRUhHROukNNWnB9ljx+J7RETmKFEFQ+KJ5gtfYozxXW
-         Axho8MKxdGYzZHD94OLoGbONIekG1GdcUeeXbml8S10Gs2C9bjsVTb4Mo/3NMiJDPlJz
-         3mLk3P405NWO/vlSub75PYDuBfcnLSugHnpurF1ZWjwnWlrFM9AyHfMJgjHm6gfhufU+
-         smYPokPhd+PSyx7wLigoXXWfgpxFgajrgvko4le4iaj6idEpEdy55L3gtnuYNScoYIpv
-         HDn+maIzr7RmUxuQSrUZuJkUR7tVLOUmgFKIENhh7NzIQCINkwxhv3Jd52UR63vUpadz
-         VNmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680895119;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cVZrkBqgVgcVzeGGGFBhsy4jLsRZIddjwzjEhu3g9lM=;
-        b=TM4WTYkONbQBssrnfYHcw5CUuqsEzfo9cEYZBdSTDfeJZfGfYku6iohrsis45rfEqx
-         0Il75nxdJw4xEv/8yw7/yRKpW8NvA/nEb9nFElH1Z8Fm+70KaOcxKBkQw/33BJyJg5sT
-         IkfKN0AaG1UF0fL30lOutF48AotZj9cLDCBl4L6Zc5BWf3d4+vaqhSj/93EdIVuZ6Mv1
-         2/0yR42rxo3gsTbtPi/ml8y3nTuLeA/Bk87TahVn54w4XQyor2bauvhAQG8vkLogSTKS
-         MO0JmdPqiMX0nlnwdwZ5HvdOqbUwHLaqtBGWy1z/6CMk3ePsGHg9noTwVh90vBBKX/Ko
-         pdCA==
-X-Gm-Message-State: AAQBX9c83RPspOc6xpFGwLsqm8OCTy6f3P4y1r81cfJqxQtgo6elbJMD
-        6tFrSIYOtMpyZcq4e3bjwj5K0w==
-X-Google-Smtp-Source: AKy350ayqtLaBs8rKb/x8oA6mTQe4UuwpmtgcUiP9/ueZGZEGgmoxYXtwqgNZ8xQ0h9e6tayUIDijA==
-X-Received: by 2002:a17:906:fe44:b0:879:ab3:93d1 with SMTP id wz4-20020a170906fe4400b008790ab393d1mr711542ejb.4.1680895119358;
-        Fri, 07 Apr 2023 12:18:39 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
-        by smtp.gmail.com with ESMTPSA id lf27-20020a170906ae5b00b008e68d2c11d8sm2312732ejb.218.2023.04.07.12.18.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 12:18:38 -0700 (PDT)
-Message-ID: <070b55eb-504c-f505-8b13-a903d5ec7564@linaro.org>
-Date:   Fri, 7 Apr 2023 21:18:38 +0200
+        Fri, 7 Apr 2023 15:20:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7765193E3;
+        Fri,  7 Apr 2023 12:20:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0D79651C1;
+        Fri,  7 Apr 2023 19:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F0CC433D2;
+        Fri,  7 Apr 2023 19:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680895225;
+        bh=q5dnVJ5d9oLUI4mT3mEbI6LwM/18Yhn07DiCVUC50cI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CFYzkBIwEkL4zfap7yhKFg0gvJQ3ZEeZy9tJFgoeWvS4XGSb3kO+8rm9wwEkKuLzw
+         6SsBNf0uHYaS943qRPRk75OTYUqQ48EWp8uaIHuTuuIlxeZLxVFnZK2xdJcu4zs2+H
+         3b+iMYPsmeUkzE2bQ0ZagZo3+SHoahVhcp3pxe6DXESq+HxBaGHzlf09lKgdKm394a
+         iwKx0qqyOKr0ice9W/jB2xro86BtK5ilkgJT/Ycmnb2gYTihJ2W8h3zy2mEVO/uZo5
+         8GL9/O2nV6unyoZREFMuze4XMP2DXVjtY+gIEdBG7gsBkidAOtwRZzqUWVcGv8xKQQ
+         ukEyrFFTWV2og==
+Received: by mail-oi1-f169.google.com with SMTP id f14so18131162oiw.10;
+        Fri, 07 Apr 2023 12:20:25 -0700 (PDT)
+X-Gm-Message-State: AAQBX9fPzE0SE+jEY1t7A7tOi4+zAiKZswD/WJhp/Y2VbyOw69Bt1xjZ
+        Qcqz8j0D+9s1Jm8GhW0WdOKIHF+VuSgUAOXw9iI=
+X-Google-Smtp-Source: AKy350ZEO3pO4bGRoMifAXL2M8FXZOyAJAw9LICd53AHUuexmelkA2BtjIM6uvvYTmgSRY8mKWqRasUr2wddeWDeO1A=
+X-Received: by 2002:a05:6808:cd:b0:389:72d5:f173 with SMTP id
+ t13-20020a05680800cd00b0038972d5f173mr843515oic.11.1680895224546; Fri, 07 Apr
+ 2023 12:20:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: sdm630: move DSI opp-table out of
- soc node
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230326091605.18908-1-krzysztof.kozlowski@linaro.org>
- <20230327193938.42rvpttgo5p4kia6@ripper>
- <edb9fc8d-5d64-146f-fb82-6112c1d9455e@linaro.org>
- <20230407163442.ckbd4vxa5b2xu3eu@ripper>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407163442.ckbd4vxa5b2xu3eu@ripper>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230327174140.8169-1-quic_johmoo@quicinc.com> <20230327174140.8169-2-quic_johmoo@quicinc.com>
+In-Reply-To: <20230327174140.8169-2-quic_johmoo@quicinc.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 8 Apr 2023 04:19:48 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ26HVA-oMwOqAg-diZ7dRa_41hjmRb88Vcv-GcQsFfqg@mail.gmail.com>
+Message-ID: <CAK7LNAQ26HVA-oMwOqAg-diZ7dRa_41hjmRb88Vcv-GcQsFfqg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] check-uapi: Introduce check-uapi.sh
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2023 18:34, Bjorn Andersson wrote:
-> On Mon, Mar 27, 2023 at 09:39:00PM +0200, Krzysztof Kozlowski wrote:
->> On 27/03/2023 21:39, Bjorn Andersson wrote:
->>> On Sun, Mar 26, 2023 at 11:16:05AM +0200, Krzysztof Kozlowski wrote:
->>>> The soc node is supposed to have only device nodes with MMIO addresses,
->>>> so move the DSI OPP out of it (it is used also by second DSI1 on
->>>> SDM660):
->>>>
->>>
->>> This node has been moved into the dsi node, so if we still want this,
->>> could you please update the commit message.
->>
->> The OPP table has been moved *out of* DSI node. The v1 was moving
->> inside, but this was not good approach, thus v2 moves it out.
->>
->> I don't understand what shall be updated here.
->>
-> 
-> The commit message doesn't reflect what's in linux-next today and the
-> patch doesn't apply.
-> 
+On Tue, Mar 28, 2023 at 2:42=E2=80=AFAM John Moon <quic_johmoo@quicinc.com>=
+ wrote:
+>
+> While the kernel community has been good at maintaining backwards
+> compatibility with kernel UAPIs, it would be helpful to have a tool
+> to check if a commit introduces changes that break backwards
+> compatibility.
+>
+> To that end, introduce check-uapi.sh: a simple shell script that
+> checks for changes to UAPI headers using libabigail.
+>
+> libabigail is "a framework which aims at helping developers and
+> software distributors to spot some ABI-related issues like interface
+> incompatibility in ELF shared libraries by performing a static
+> analysis of the ELF binaries at hand."
+>
+> The script uses one of libabigail's tools, "abidiff", to compile the
+> changed header before and after the commit to detect any changes.
+>
+> abidiff "compares the ABI of two shared libraries in ELF format. It
+> emits a meaningful report describing the differences between the two
+> ABIs."
+>
+> The script also includes the ability to check the compatibility of
+> all UAPI headers across commits. This allows developers to inspect
+> the stability of the UAPIs over time.
+>
+> Signed-off-by: John Moon <quic_johmoo@quicinc.com>
+> ---
+>     - Refactored to exclusively check headers installed by make
+>       headers_install. This simplified the code dramatically and removed
+>       the need to perform complex git diffs.
+>     - Removed the "-m" flag. Since we're checking all installed headers
+>       every time, a flag to check only modified files didn't make sense.
+>     - Added info message when usr/include/Makefile is not present that
+>       it's likely because that file was only introduced in v5.3.
+>     - Changed default behavior of log file. Now, the script will not
+>       create a log file unless you pass "-l <file>".
+>     - Simplified exit handler.
+>     - Added -j $MAX_THREADS to make headers_install to improve speed.
+>     - Cleaned up variable references.
+>
+>  scripts/check-uapi.sh | 488 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 488 insertions(+)
+>  create mode 100755 scripts/check-uapi.sh
+>
 
-It seems you applied v1. It's okay, yet would be nice to clean up so I
-will send a follow-up patch.
+> +
+> +# Save the current git tree state, stashing if needed
+> +save_tree_state() {
+> +       printf "Saving current tree state... "
+> +       current_ref=3D"$(git rev-parse HEAD)"
+> +       readonly current_ref
+> +       if tree_is_dirty; then
+> +               unstash=3D"true"
+> +               git stash push --quiet
+> +       fi
+> +       printf "OK\n"
+> +}
+> +
+> +# Restore the git tree state, unstashing if needed
+> +restore_tree_state() {
+> +       if [ -z "$current_ref" ]; then
+> +               return 0
+> +       fi
+> +
+> +       printf "Restoring current tree state... "
+> +       git checkout --quiet "$current_ref"
 
-Best regards,
-Krzysztof
 
+This does not restore the original state.
+
+I was on a branch before running this script.
+After everything is finished, I am on a detached commit
+because $current_ref is not a branch.
+
+
+
+
+
+
+> +       if ! do_compile "$(get_header_tree "$past_ref")/include" "$past_h=
+eader" "${past_header}.bin" 2> "$log"; then
+> +               eprintf "error - couldn't compile version of UAPI header =
+%s at %s\n" "$file" "$past_ref"
+> +               cat "$log" >&2
+> +               exit "$FAIL_COMPILE"
+> +       fi
+> +
+> +       "$ABIDIFF" --non-reachable-types "${past_header}.bin" "${base_hea=
+der}.bin" > "$log" && ret=3D"$?" || ret=3D"$?"
+
+
+[bikeshed] I might want to write like this:
+
+   ret=3D0
+   "$ABIDIFF" --non-reachable-types "${past_header}.bin"
+"${base_header}.bin" > "$log" || ret=3D"$?"
+
+
+
+
+
+
+
+> +
+> +
+> +       if [ "$quiet" =3D "true" ]; then
+> +               run "$base_ref" "$past_ref" "$abi_error_log" "$@" > /dev/=
+null
+> +       else
+> +               run "$base_ref" "$past_ref" "$abi_error_log" "$@"
+> +       fi
+
+
+
+    if [ "$quiet" =3D "true" ]; then
+            exec > /dev/null
+    fi
+
+    run "$base_ref" "$past_ref" "$abi_error_log" "$@"
+
+
+
+is more elegant because this is the last line of main()
+and exit_handler() does not print anything.
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
