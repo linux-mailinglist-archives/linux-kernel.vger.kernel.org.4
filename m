@@ -2,113 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024AA6DAD22
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04516DAD27
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbjDGNJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S231683AbjDGNK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbjDGNJ5 (ORCPT
+        with ESMTP id S232428AbjDGNKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:09:57 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BB35590;
-        Fri,  7 Apr 2023 06:09:55 -0700 (PDT)
-Date:   Fri, 07 Apr 2023 13:09:52 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680872993;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JkVxDgCZzaUHhuVaWEGGlfuqQmfyNAV5VnpdsyyVXF4=;
-        b=QhFAC6uWupGXMnLQYOhBBBp30bECDy3o7IgZq7CWdbmrqzkMH3sDcv2eGNNQxUTavq5yFB
-        c/DPc0Ak8enL8w0B6sev8g6kq2r0lxQDlgPFhSkzSe3/gzbQApbqmLuxfZGXOTLF14uELN
-        ArNbRFHjoTAQ3AmyL0/5tEg4dzOzg8TsOVs6+TFWnfVqiJC/dFkVXiPQ2St4BhXduT+285
-        G0XlDtQQUMm/BEmxtZZwarT7/2OUttIARZgKxBsSlqKgCCD3SmJ4Kg6jg3SarLgXiDL+u4
-        S2V/F/Up7vH9g00ONrO6dAuC3/YVhp4ANYe2EIcJbVJlTYvCUceuEtAQsPSa9w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680872993;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JkVxDgCZzaUHhuVaWEGGlfuqQmfyNAV5VnpdsyyVXF4=;
-        b=3iaIQXeoUyME4d97qa1Y6BcsvrFyaBEDU2ElgIBjgap2VjSbY+wY2a8BkSdfiuh4RFDq3c
-        bsvGqFZAN7XIQrBw==
-From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/apic] x86/apic: Fix atomic update of offset in
- reserve_eilvt_offset()
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230227160917.107820-1-ubizjak@gmail.com>
-References: <20230227160917.107820-1-ubizjak@gmail.com>
+        Fri, 7 Apr 2023 09:10:20 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909BC7EEF
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:10:12 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-545cb3c9898so719937777b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680873012; x=1683465012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4B39VyebJYnuGTjHcWDPxYe6oPc5V8Fl1158lshWAUY=;
+        b=f53//PACP7kgOmszXV77uUvDMPT9Y61TmpZjdAW++41qj3A7aw+ir36/BtlIPyO3Kn
+         i2ORUv2zWrELKrrquOBN3xLuhxSv0ET3weEr+ssjZADJk3DWzO02PeSVHsWd1uHeqvjn
+         XBvA73Byqt3wilVvJtGKMV8oxjG8HG1lDrsg2plH/mTAk9d6SrTw4W37bpp14Nmsc/Ty
+         AY0uqFeUWbq2xuTSjphtvf0QwZteTHm8qD46xt2SCYdyoIrVYj3anLDvYSLjj1wC8oTJ
+         54yNVjhD+S7vU0IFIEsc8/G/dJM5otHT285DoNf/nX2R9WkcIyOLxYu4pN+wBsaQ2/Gz
+         sEOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680873012; x=1683465012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4B39VyebJYnuGTjHcWDPxYe6oPc5V8Fl1158lshWAUY=;
+        b=TqEooPdOv4THhGxUu9vfxSjo/6e5n59rCzzxWmzxMmu+EQ7f96gSZ3GQAPhaWZrvxm
+         c2eCRuRDDx75RFFqtSDsOfKA/XXkIcZw9qzWtQVeX6pzwqcBVQ6RUrDccaS4mGcbi+Mb
+         lD/6hTDLHQ/qs6qNPrhmHCbzm4xHTGPovW4WZDdcZvGBSIcN+E2kgpZi3UjFntHOvP0T
+         1vS6DbkRKyh5l4YxsRlzs/2s8/QjWdysaA2FlMJAWU1yJM9a4sjyX2VUqZkjvt8aYHR9
+         SQhwtsHlRp3zHWWRgvTk59Ii/4oDa4rFfgO4QQL/uTcLt+AUl1Y654FBUNp2uk+eofAM
+         9NHg==
+X-Gm-Message-State: AAQBX9eQYWEjVsG32ce6VMZ0JP4GVnjkunHJ20A89d5tQHnSB8TIJ29Z
+        HHoRwzIrOqgceHC7/Qw33+MzVNaUVBus8LgXapVswg==
+X-Google-Smtp-Source: AKy350bJk0AACnynN0kqCLCkF/5dozOA90cXc4Q98GGea0b+hZw74doxVa3aZnouULl/xJ46a66T+ja5Kmji9UF77dY=
+X-Received: by 2002:a81:441e:0:b0:540:e744:13ae with SMTP id
+ r30-20020a81441e000000b00540e74413aemr1092692ywa.3.1680873011652; Fri, 07 Apr
+ 2023 06:10:11 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <168087299261.404.3541260516013039940.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com> <20230203-evk-board-support-v5-1-1883c1b405ad@baylibre.com>
+In-Reply-To: <20230203-evk-board-support-v5-1-1883c1b405ad@baylibre.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Fri, 7 Apr 2023 15:10:00 +0200
+Message-ID: <CAFGrd9p8gR+poX48ubMm9n6Rg1RaGqZR1BG22fJQYcjBzX0wOg@mail.gmail.com>
+Subject: Re: [PATCH v5 01/12] arm64: defconfig: enable MT6357 regulator
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        Will Deacon <will@kernel.org>, catalin.marinas@arm.com
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/apic branch of tip:
++ To: Catalin Marinas <catalin.marinas@arm.com>
++ To: Will Deacon <will@kernel.org>
 
-Commit-ID:     f96fb2df3eb31ede1b34b0521560967310267750
-Gitweb:        https://git.kernel.org/tip/f96fb2df3eb31ede1b34b0521560967310267750
-Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Mon, 27 Feb 2023 17:09:17 +01:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Fri, 07 Apr 2023 14:34:24 +02:00
+Sorry for the noise.
 
-x86/apic: Fix atomic update of offset in reserve_eilvt_offset()
+Regards,
+Alexandre
 
-The detection of atomic update failure in reserve_eilvt_offset() is
-not correct. The value returned by atomic_cmpxchg() should be compared
-to the old value from the location to be updated.
-
-If these two are the same, then atomic update succeeded and
-"eilvt_offsets[offset]" location is updated to "new" in an atomic way.
-
-Otherwise, the atomic update failed and it should be retried with the
-value from "eilvt_offsets[offset]" - exactly what atomic_try_cmpxchg()
-does in a correct and more optimal way.
-
-Fixes: a68c439b1966c ("apic, x86: Check if EILVT APIC registers are available (AMD only)")
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230227160917.107820-1-ubizjak@gmail.com
----
- arch/x86/kernel/apic/apic.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-index 20d9a60..7705571 100644
---- a/arch/x86/kernel/apic/apic.c
-+++ b/arch/x86/kernel/apic/apic.c
-@@ -422,10 +422,9 @@ static unsigned int reserve_eilvt_offset(int offset, unsigned int new)
- 		if (vector && !eilvt_entry_is_changeable(vector, new))
- 			/* may not change if vectors are different */
- 			return rsvd;
--		rsvd = atomic_cmpxchg(&eilvt_offsets[offset], rsvd, new);
--	} while (rsvd != new);
-+	} while (!atomic_try_cmpxchg(&eilvt_offsets[offset], &rsvd, new));
- 
--	rsvd &= ~APIC_EILVT_MASKED;
-+	rsvd = new & ~APIC_EILVT_MASKED;
- 	if (rsvd && rsvd != vector)
- 		pr_info("LVT offset %d assigned for vector 0x%02x\n",
- 			offset, rsvd);
+Le ven. 7 avr. 2023 =C3=A0 14:59, Alexandre Mergnat <amergnat@baylibre.com>=
+ a =C3=A9crit :
+>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  arch/arm64/configs/defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> index 7790ee42c68a..e4cb65889ae6 100644
+> --- a/arch/arm64/configs/defconfig
+> +++ b/arch/arm64/configs/defconfig
+> @@ -685,6 +685,7 @@ CONFIG_REGULATOR_MAX77620=3Dy
+>  CONFIG_REGULATOR_MAX8973=3Dy
+>  CONFIG_REGULATOR_MP8859=3Dy
+>  CONFIG_REGULATOR_MT6315=3Dm
+> +CONFIG_REGULATOR_MT6357=3Dy
+>  CONFIG_REGULATOR_MT6358=3Dy
+>  CONFIG_REGULATOR_MT6359=3Dy
+>  CONFIG_REGULATOR_MT6360=3Dy
+>
+> --
+> 2.25.1
+>
