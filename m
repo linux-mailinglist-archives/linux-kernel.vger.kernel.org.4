@@ -2,187 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBD26DB1EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0778B6DB1ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjDGRlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S230448AbjDGRlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjDGRk4 (ORCPT
+        with ESMTP id S230425AbjDGRlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:40:56 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5198DC67D
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:40:27 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a19cf1b8ddso235675ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:40:27 -0700 (PDT)
+        Fri, 7 Apr 2023 13:41:07 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB60CA1C
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:40:36 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id q191so7575550pgq.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:40:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680889206;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UXdyG/RfpW67IAK948wzPl6enRAxhE2VH4M4A+6dxLY=;
-        b=aJPtgnp01STnN8yZ3rHipVyVyZgjOzxzne2mzs6pTvXzp/G4hooxPtmYVr+/YFfusn
-         xWjS367XvmxI+lSEj9tgNCitl894ECVtxCA0jj93itzczzCRzi6YKbjTzTJQWyp49Uyl
-         7IKE7boHEaHc0DAW+UElwh/r37V6YtW8IJ0m1erKskA5eAMkMuKaQ3DH7ReeKw/Cwwdx
-         Rqu2Vzs8zlizu2r8nyKXY4gh84Y/f85znniWFhZXIABRz1AWuOhqz++n7YQpc5zCeAet
-         OmzM+HyNgXYpFhlnI1VLHeJm+1prkIJsXtkWUkn6F+rdMuJwTqUWaG6jfEZ8w23iTzZK
-         TGTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680889206;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20210112; t=1680889217; x=1683481217;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UXdyG/RfpW67IAK948wzPl6enRAxhE2VH4M4A+6dxLY=;
-        b=li8RSvHC17ziULfVfmOSvOb85QTP2McLJZ8lhxN1U9M5vVK3L3oxY0vCVrvzdNXxsX
-         CqMPmwsCW+trDiMMCfsk5GKukJeav7iXQ8masLfkLQtusME3DN+97sHDQBYiXxqfYHDg
-         HBCFBdMVgYZw3DLZwr86cwpJDf+GRnLLajCprpuHretNllNhCryC23zwQ8KhUUbSvtH5
-         0sdgCr5RnXx1Av/40C5bwPgqrAJxc8KVlUOZnjvNOhV1NmJkOflXlvOYOG2YRYzzYFCR
-         vPFCN7Z9oHvg4a5jiMvB0Sp8FejZVmFM/Mj5BlRLvxyuDgF6eE+ntB6yaNOkFpbemVpz
-         euCQ==
-X-Gm-Message-State: AAQBX9e8TZ0j9fNlCZxWpa0cde/XAQpkM4SroNJn2DnaDLwT8Qsm2GgW
-        Rl2rz6BncYesYmncz9qNy5FMsoRdk0pcI5n0xVdye2hdEfRlONhPXB1z91CpKiDhe65nBsESRuf
-        NM7eX0yK2/StKdS1Ipy4VYVmTUZtstYM=
-X-Google-Smtp-Source: AKy350bCrPv0R25sh0l/+3mMQYp/fTicFhzU87P9GSWAwQ+DB1Rq+J/ESgOu/nn0jChK278GR5ZV4g==
-X-Received: by 2002:a17:902:7b8b:b0:198:af4f:de07 with SMTP id w11-20020a1709027b8b00b00198af4fde07mr227612pll.7.1680889205786;
-        Fri, 07 Apr 2023 10:40:05 -0700 (PDT)
-Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id w20-20020a17090a529400b002367325203fsm1374874pjh.50.2023.04.07.10.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 10:40:05 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 10:40:01 -0700
-From:   William McVicker <willmcvicker@google.com>
-To:     Ajay Agarwal <ajayagarwal@google.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sajid Dalvi <sdalvi@google.com>,
-        Han Jingoo <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>, kernel-team@android.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
-Message-ID: <ZDBVcczqzte/0r4Q@google.com>
-References: <ZC12lN9Cs0QlPhVh@lpieralisi>
- <20230405182753.GA3626483@bhelgaas>
- <ZC3Ev7qnUDdG0cFd@google.com>
- <ZC3Kw4AYiMKY7nCR@google.com>
- <ZC5Bfa2N0aWo0o0l@google.com>
- <ZC6Mov/wX4cbIiNG@google.com>
+        bh=zKb29bg6tx4CJhhRnFeIAgI2BubugDeo6AhQSNXoOjk=;
+        b=ZeOB4N2nMw/T0W+m53HyspppsYTatXHFUsBPQrdircDHtMw9efqiwwPC8ouTXD5mmu
+         GzIE9+OQmYiyOhMOwdkgNlwXMnhivea/lDdwCLnEhl07OIkr/snh4v8BDsU9kj1pW442
+         nnnpcNzvMbXmlSalIpGUu9AETBoPMxQmphh/+OqdyeCfBJcxrC7ktOmrrk6/7/r1m+Es
+         GOkPApNDdYjVeFSF9RDu5xLGpCo5t/z41TOkPkYQO0CezUmwqryKvM+EXpH+WYgIMBzl
+         8bN3+fxTUcGaPyn1TMdNEcmCoXvSL7igHt9YU+N2N+I6CBRUQdqN+oJfYsZBoM3wYp+A
+         LiBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680889217; x=1683481217;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zKb29bg6tx4CJhhRnFeIAgI2BubugDeo6AhQSNXoOjk=;
+        b=TFJDkxFWljh62VeUWg9JMkBKBRciy+pW7kjOtOYlRJs47of22vH4ic2MlzHVU8CFeZ
+         r+kJgWd5H3HSdYIRCTVGKnaNAmDLD27BuGhl++1AJ7Cqh5xfMOadsBEHBRc8OQBMAHuv
+         1GhWMY4jZuL0VagNVsPcs4Hd1Yf693IeDz44vU7noxHDdCGxXfPuPwOoV687sVaqIjPU
+         nNuRWpw6j3Vx5wCxAdtNbIKuEoysmRBQ/Ok2RHdoeZg0JFwGZ8nEB7QwKepTHd8A8+Bn
+         zq/EWZsQ2mX0zr9YGLgkys/hjXQgqgtUjVHY1LnTaDAmkXrBp/GZuojHZX73PgcSnJjS
+         Z9TA==
+X-Gm-Message-State: AAQBX9epNsgaByY6xfo8+Xvly6r845NWIjPu1Lv/Z+eYjR9bL/6BJLpc
+        CE4ZTNM/WUtFdFUZ3Bn+XamS6QGDyN6gl9vdfA1ibg==
+X-Google-Smtp-Source: AKy350YUCzPBLxgYgXKQV3bzEg9zkHgzG9zgtpSVZEJ7BtTpjnG8NvJ6+yrbg54qCj108b33TAynRrQ6bp7uhOQcDco=
+X-Received: by 2002:a65:578e:0:b0:513:a488:f05f with SMTP id
+ b14-20020a65578e000000b00513a488f05fmr622511pgr.1.1680889217290; Fri, 07 Apr
+ 2023 10:40:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZC6Mov/wX4cbIiNG@google.com>
-X-ccpol: medium
-X-Spam-Status: No, score=-14.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+References: <20230321182414.1826372-1-trix@redhat.com>
+In-Reply-To: <20230321182414.1826372-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 10:40:05 -0700
+Message-ID: <CAKwvOdnrKujpv2A6a-6U6pxpd3Z9mKwV3SgD6ZL+ie4-g4n2-g@mail.gmail.com>
+Subject: Re: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
+To:     Tom Rix <trix@redhat.com>
+Cc:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
+        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/06/2023, 'Ajay Agarwal' via kernel-team wrote:
-> Here is my attempt at a patch which can satisfy all the requirements
-> (Ideally, I did not want to use `pci->ops` in the host driver but I
-> could not figure out any other way):
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c
-> b/drivers/pci/controller/dwc/pcie-designware-host.c
-> index 9952057c8819..39c7219ec7c9 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> @@ -485,15 +485,18 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
->  	if (ret)
->  		goto err_remove_edma;
->  
-> -	if (!dw_pcie_link_up(pci)) {
-> -		ret = dw_pcie_start_link(pci);
-> +	ret = dw_pcie_start_link(pci);
-> +	if (ret)
-> +		goto err_remove_edma;
-> +
-> +	if (dw_pcie_link_up(pci)) {
-> +		dw_pcie_print_link_status(pci);
-> +	} else if (pci->ops && pci->ops->start_link) {
-> +		ret = dw_pcie_wait_for_link(pci);
->  		if (ret)
-> -			goto err_remove_edma;
-> +			goto err_stop_link;
->  	}
->  
-> -	/* Ignore errors, the link may come up later */
-> -	dw_pcie_wait_for_link(pci);
-> -
->  	bridge->sysdata = pp;
->  
->  	ret = pci_host_probe(bridge);
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 53a16b8b6ac2..03748a8dffd3 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -644,9 +644,20 @@ void dw_pcie_disable_atu(struct dw_pcie *pci, u32 dir, int index)
->  	dw_pcie_writel_atu(pci, dir, index, PCIE_ATU_REGION_CTRL2, 0);
->  }
->  
-> -int dw_pcie_wait_for_link(struct dw_pcie *pci)
-> +void dw_pcie_print_link_status(struct dw_pcie *pci)
->  {
->  	u32 offset, val;
-> +
-> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> +	val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
-> +
-> +	dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
-> +		 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
-> +		 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
-> +}
-> +
-> +int dw_pcie_wait_for_link(struct dw_pcie *pci)
-> +{
->  	int retries;
->  
->  	/* Check if the link is up or not */
-> @@ -662,12 +673,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
->  		return -ETIMEDOUT;
->  	}
->  
-> -	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> -	val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
-> -
-> -	dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
-> -		 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
-> -		 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
-> +	dw_pcie_print_link_status(pci);
->  
->  	return 0;
->  }
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> index 79713ce075cc..615660640801 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.h
-> +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> @@ -429,6 +429,7 @@ void dw_pcie_setup(struct dw_pcie *pci);
->  void dw_pcie_iatu_detect(struct dw_pcie *pci);
->  int dw_pcie_edma_detect(struct dw_pcie *pci);
->  void dw_pcie_edma_remove(struct dw_pcie *pci);
-> +void dw_pcie_print_link_status(struct dw_pcie *pci);
->  
->  static inline void dw_pcie_writel_dbi(struct dw_pcie *pci, u32 reg, u32 val)
->  {
-> 
-> -- 
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> 
+On Tue, Mar 21, 2023 at 11:24=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c:56:35: error:
+>   unused function 'vmw_overlay' [-Werror,-Wunused-function]
+> static inline struct vmw_overlay *vmw_overlay(struct drm_device *dev)
+>                                   ^
+> This function is not used, so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Thanks Ajay for the follow-up patch! I've tested it out on a Pixel 6 and
-it's working as intended for me. Probing the PCIe RC device now only
-take 0.02s vs ~1.02s. If others don't object, please send it as a v3
-patch.
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
+> ---
+>  drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c | 6 ------
+>  1 file changed, 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c b/drivers/gpu/drm/vm=
+wgfx/vmwgfx_overlay.c
+> index 8d171d71cb8a..7e112319a23c 100644
+> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c
+> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c
+> @@ -53,12 +53,6 @@ struct vmw_overlay {
+>         struct vmw_stream stream[VMW_MAX_NUM_STREAMS];
+>  };
+>
+> -static inline struct vmw_overlay *vmw_overlay(struct drm_device *dev)
+> -{
+> -       struct vmw_private *dev_priv =3D vmw_priv(dev);
+> -       return dev_priv ? dev_priv->overlay_priv : NULL;
+> -}
+> -
+>  struct vmw_escape_header {
+>         uint32_t cmd;
+>         SVGAFifoCmdEscape body;
+> --
+> 2.27.0
+>
+
+
+--=20
 Thanks,
-Will
+~Nick Desaulniers
