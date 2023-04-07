@@ -2,116 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F4F6DB1A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D2C6DB1AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjDGRdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37000 "EHLO
+        id S229842AbjDGRfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjDGRdn (ORCPT
+        with ESMTP id S229611AbjDGRe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:33:43 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9CAB45D;
-        Fri,  7 Apr 2023 10:33:40 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337CUm7Z012340;
-        Fri, 7 Apr 2023 19:33:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=pICdIjFsWv/IjUfnqUMi25ITNSuzVwfvb2LIhpwnTS8=;
- b=Xq9hyKHc9rf3X2LgP3m6CfJov43CuVXbWnjh7yi7JO+SMYcReuaC6DDELENj7R6U5TF7
- tHTV3Uxhue75N1kQ9M1HAfdlxIL4wefJaQjXXNwZajo1hTmuoLc7DxzcdWlyZS8iMb6I
- 7YCxMZRPVXv6MqNcm0dIm2a22v0EGddpkB/0N3C2qkYJqNOOw9sbgRNzqpkBhDc2B9Iy
- H5Cmr+wfqdwCRDUyxraU/cFA7Q5sUUUNdcgfaH28tYeUyHzXytXjqB48oarvOv8qUMnP
- EJQgJ/jZI5N8rTA6p+kAJRGRsmxO6DUTzF4LXga+o6ExIIF6jg4Ollkg4E1JWfOXNl4Z ZA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pteygtyh4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 19:33:18 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5D74D10002A;
-        Fri,  7 Apr 2023 19:33:17 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5741D24553E;
-        Fri,  7 Apr 2023 19:33:17 +0200 (CEST)
-Received: from localhost (10.48.0.157) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Fri, 7 Apr
- 2023 19:33:16 +0200
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH] ARM: dts: stm32: fix typo in stm32mp15xx-dkx.dtsi
-Date:   Fri, 7 Apr 2023 19:33:10 +0200
-Message-ID: <20230407193253.1.If11ffa6edfdfef0869478412ec3cec3169483cb9@changeid>
-X-Mailer: git-send-email 2.25.1
+        Fri, 7 Apr 2023 13:34:58 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBC5B45D
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:34:57 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so43866728pjz.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680888897; x=1683480897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CL8XT2dmegghAeYpKyssd1/mU3F1iBt8lThUBp5c4gY=;
+        b=QWyy+rpanfpbOQipdK4S0IuAPz4YxLzjaGmsTfT+dojd/dx5oCHxpkZmWzrh3J93ZM
+         k896UTgn1JLv25w/ht3L4yDtHyRgX12VNGz2wet1zb1IyjvC48JIpm6YRR5zOHlvYpyp
+         vg/NuD08IwdhtiyPjudoTrzqBmmgyigyV8fDswWrB3eTk4f4yKz5fkjaUV4UlxdQd2z+
+         d4I7MvDi3NTWFDrNqDYA7oEL8CXAv9Lk67oe6OXhYYMzmBXuygmurYSrXIiZHSa/qbad
+         wgsPc6MG4Yg9DQdgn54u6IUkJeGPyHRBJmqz2mQbIV18xthIetTpt81WmwcUEFUMLDhN
+         wHJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680888897; x=1683480897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CL8XT2dmegghAeYpKyssd1/mU3F1iBt8lThUBp5c4gY=;
+        b=2THjs8+cT+eSBhDRgmXa0nfza3LYJBwBgb/0TX6sNr8rTGBnEFEYRksZtoJMbeb+0+
+         gMAvPzXpCAp0AKpYGEeJygOSpJckvG+mGj0WapTYwQogDdwDUehX+3mYr1VdMtWqN4p4
+         B6QfGzVZNS2Bg+qU+d2cfVie4K1YO3VptdJWxeaeWcfAPSdDsj+Mq4RA1UQN1rIAQupz
+         Um1SRdt40I5rkbbTIuVkCzPf8cSBgwWM38HnnzO4im4QC67/7eEXtVJGVx6jxEE1H7dZ
+         Jsm0FxELJZnfeJPEQcOKjE6gkK965vWRNR1EEYVVqsoFLhHKahpEzFmzuoVPSJgt5t/i
+         bnsQ==
+X-Gm-Message-State: AAQBX9ep6fxGZJFmSoak8ydhpy8EcPprnk7lgjyKdey/W2r294Q0NplF
+        KhRN4P4AgQQ2KY9aGtojVW0FxLCk3pSsLDH8YFjNAw==
+X-Google-Smtp-Source: AKy350Y3+tyc2y5AqmX+ezlQ/w8+BR5lVu9JAdgHFRIjCTIVUzXOhXQ3/IkTS6gnhNWCbqRBOnYyquPB8sl9mA83s1Y=
+X-Received: by 2002:a17:902:6b81:b0:1a0:4aa3:3a9a with SMTP id
+ p1-20020a1709026b8100b001a04aa33a9amr1129540plk.2.1680888896519; Fri, 07 Apr
+ 2023 10:34:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.0.157]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_11,2023-04-06_03,2023-02-09_01
-X-Spam-Status: No, score=-0.8 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230307151239.1994179-1-trix@redhat.com>
+In-Reply-To: <20230307151239.1994179-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 10:34:45 -0700
+Message-ID: <CAKwvOdnGnGVk21Yh2GsH-fNx_M48f9CU05nnHSbnJd_Zq3En2A@mail.gmail.com>
+Subject: Re: [PATCH] bpf: extend btf id list
+To:     Tom Rix <trix@redhat.com>
+Cc:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, nathan@kernel.org,
+        joannelkoong@gmail.com, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary space in device tree stm32mp15xx-dkx.dtsi.
+On Tue, Mar 7, 2023 at 7:13=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+>
+> With clang and W=3D1, there is this error
+>
+> kernel/bpf/verifier.c:10298:24: error: array index 16 is past
+>  the end of the array (that has type 'u32[16]'
+>  (aka 'unsigned int[16]')) [-Werror,-Warray-bounds]
+>     meta.func_id =3D=3D special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
+>                     ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared h=
+ere
+> BTF_ID_LIST(special_kfunc_list)
+> ^
+> ./include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
+>  #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
+>
+> When KF_bpf_dynptr_slice_rdwr was added to the enum special_kfunc_type
+> the total exceeded 16.  Increase the array size to 32.
+>
+> Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr=
+")
 
-Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
----
+Looks like Nathan's patch got picked up.
+commit 2d5bcdcda879 ("bpf: Increase size of BTF_ID_LIST without
+CONFIG_DEBUG_INFO_BTF again")
+https://lore.kernel.org/bpf/20230307-bpf-kfuncs-warray-bounds-v1-1-00ad3191=
+f3a6@kernel.org/
 
- arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  include/linux/btf_ids.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> index 3a4f7cd882ca..166c387b48f7 100644
+> --- a/include/linux/btf_ids.h
+> +++ b/include/linux/btf_ids.h
+> @@ -204,7 +204,7 @@ extern struct btf_id_set8 name;
+>
+>  #else
+>
+> -#define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
+> +#define BTF_ID_LIST(name) static u32 __maybe_unused name[32];
+>  #define BTF_ID(prefix, name)
+>  #define BTF_ID_FLAGS(prefix, name, ...)
+>  #define BTF_ID_UNUSED
+> --
+> 2.27.0
+>
+>
 
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-index 11370ae0d868..ccd6c4722bd3 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-@@ -382,21 +382,21 @@ vref_ddr: vref_ddr {
- 				regulator-always-on;
- 			};
- 
--			 bst_out: boost {
-+			bst_out: boost {
- 				regulator-name = "bst_out";
- 				interrupts = <IT_OCP_BOOST 0>;
--			 };
-+			};
- 
- 			vbus_otg: pwr_sw1 {
- 				regulator-name = "vbus_otg";
- 				interrupts = <IT_OCP_OTG 0>;
--			 };
-+			};
- 
--			 vbus_sw: pwr_sw2 {
-+			vbus_sw: pwr_sw2 {
- 				regulator-name = "vbus_sw";
- 				interrupts = <IT_OCP_SWOUT 0>;
- 				regulator-active-discharge = <1>;
--			 };
-+			};
- 		};
- 
- 		onkey {
--- 
-2.25.1
 
+--=20
+Thanks,
+~Nick Desaulniers
