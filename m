@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF526DB5C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A0C6DB5C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjDGVV6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 17:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S229827AbjDGVZE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 17:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjDGVV4 (ORCPT
+        with ESMTP id S229524AbjDGVZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:21:56 -0400
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F148B752;
-        Fri,  7 Apr 2023 14:21:55 -0700 (PDT)
-Received: by mail-ua1-f41.google.com with SMTP id p91so13321206uap.1;
-        Fri, 07 Apr 2023 14:21:55 -0700 (PDT)
+        Fri, 7 Apr 2023 17:25:02 -0400
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C64BB80;
+        Fri,  7 Apr 2023 14:25:00 -0700 (PDT)
+Received: by mail-ua1-f45.google.com with SMTP id bh10so1341626uab.13;
+        Fri, 07 Apr 2023 14:25:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680902514; x=1683494514;
+        d=1e100.net; s=20210112; t=1680902700; x=1683494700;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+chuPFNNrrKiFi5g5/MT+Goo0tel/zcQRxopfzjdJDA=;
-        b=zL4ZSsGGWeOe+fcJKPolHCa8ZVclWa6MbxpIxCKEc7LZZjbHyl2SdiAwzJq/9mEASM
-         i2JRd4wZgD8G3X/rGtBZRcR48GcVynuxaI2hDrRRJlujlcj3P0xl0WU2l0TnF2EkXLRT
-         CgT5VUfdN17pE1DbIYJXC2Xp1Nt330/1Va7izodHgBggW/xA8J3VyAM+PUOODn/NpKbN
-         O2PUqx3YjS65h0tvSHRd5yoGZJch/+3SVdK0wkiwFgl//qU7YPX3STxMwUSYCbDjzDEl
-         AQu9UY4uSFGC3MlPqEyZief63Jxjn2UrmCOMDRQPSwKapsZqlqsF3QFCkQUQDZ+Z64ey
-         xMHQ==
-X-Gm-Message-State: AAQBX9f5bh0/DYfhT4+bW+kPyWnS1i8OFjZlv4GH/dIZrykfRQNmJY4V
-        pVHzrP9WTbBulovz0Ag4xFeqUCbGsEtnOMtKq2g=
-X-Google-Smtp-Source: AKy350Z85M+JNyYExxdEQuOQYgEw6rJYfNjgo/0JNjhyYmukBarkvWbGysp4Aa8xsP4U0w3MkH+mlhrew1Wb8LZDcEo=
-X-Received: by 2002:a1f:28d8:0:b0:43c:5b5a:6c22 with SMTP id
- o207-20020a1f28d8000000b0043c5b5a6c22mr53578vko.13.1680902514324; Fri, 07 Apr
- 2023 14:21:54 -0700 (PDT)
+        bh=k612bZuPeU9BYYEiReSh/KaPrQNbIQVI8+7Ue/dHlFU=;
+        b=ZqCe5YuRynpr+udmNt/axrpRzStIpDI4/vuDE9MZVg5AJGPoe9yTIdqes+Yu2sAOao
+         MW953jGSWaGMyIXVQ/P6j+jg3lSj5Jc2iGAR26ov3ma8Ugu6bLTgzGaO2OIX/bFJ5Il4
+         Vqfqv43Mx9Kf8eeSNTu7ZBPKa8ZrmDng1r/cP3Ng2CoVa/nF0WPrmmK3poKEqj29y71s
+         8NUixi6A0gAuUjhkYnJ86DJzlkxspmcxm1BfI723/ZOqvIopL0+CcJ/9rqYzSSMF6nQg
+         T+lbIGpLfIpiWCN6VYKoFlRIEzxzBMampo+RML7EAvqiKMRMp33e7eoQdurW6TU7gNLD
+         TNow==
+X-Gm-Message-State: AAQBX9feiibzwawY2wf6jB2NhpobTTBh6QO9X0gqi1gflaL4s3G3OOiu
+        YAIse+teZTzmaEZGWnf5bn2CVhIWEwOR/rWZGoU=
+X-Google-Smtp-Source: AKy350Ztw9uDm2glyrJJxBO3yMwYpJO9lysNj8tnHY/ST6zgmXq6QhkOPKrkFUDWOk3/MCDYavbbH5kswQQ6NfBJFuc=
+X-Received: by 2002:a05:6122:a09:b0:431:eb68:41b with SMTP id
+ 9-20020a0561220a0900b00431eb68041bmr1412113vkn.11.1680902699507; Fri, 07 Apr
+ 2023 14:24:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAM9d7cjrkWdg18wTA_tRch8oN0YUEy3ZJ2mhrYtk23iLqd1XPw@mail.gmail.com>
- <20230406025329.1888-1-laihangliang1@huawei.com>
-In-Reply-To: <20230406025329.1888-1-laihangliang1@huawei.com>
+References: <20230407055212.2701635-1-changbin.du@huawei.com> <20230407055212.2701635-3-changbin.du@huawei.com>
+In-Reply-To: <20230407055212.2701635-3-changbin.du@huawei.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 7 Apr 2023 14:21:43 -0700
-Message-ID: <CAM9d7cgK-P5KuDy7hkAR4j7oB4ydE6Mw3KexqgwPPhJF6MKtXQ@mail.gmail.com>
-Subject: Re: [PATCH v2] perf top: expand the range of multithreaded phase
-To:     Hangliang Lai <laihangliang1@huawei.com>
-Cc:     acme@kernel.org, adrian.hunter@intel.com,
-        alexander.shishkin@linux.intel.com, brauner@kernel.org,
-        hewenliang4@huawei.com, irogers@google.com, jolsa@kernel.org,
-        linfeilong@huawei.com, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, liuwenyu7@huawei.com,
-        mark.rutland@arm.com, mingo@redhat.com, yeyunfeng@huawei.com
+Date:   Fri, 7 Apr 2023 14:24:48 -0700
+Message-ID: <CAM9d7cgQF5n1umb6P3-KtYcmzF+gg0SR2JFjGXK3nR=Qr_bJbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] perf: script: add new output field 'dsoff' to
+ print dso offset
+To:     Changbin Du <changbin.du@huawei.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hui Wang <hw.huiwang@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
@@ -62,87 +65,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello Changbin,
 
-On Wed, Apr 5, 2023 at 7:54 PM Hangliang Lai <laihangliang1@huawei.com> wrote:
+On Thu, Apr 6, 2023 at 10:53 PM Changbin Du <changbin.du@huawei.com> wrote:
 >
-> In __cmd_top, perf_set_multithreaded is used to enable pthread_rwlock, thus
-> donw_read and down_write can work to handle concurrency problems. Then top
-> use perf_set_singlethreaded and switch to single threaded phase, assuming
-> that no thread concurrency will happen later.
-> However, a UAF problem could occur in perf top in single threaded phase,
-> The concurrent procedure is like this:
-> display_thread                              process_thread
-> --------------                              --------------
-> thread__comm_len
->   -> thread__comm_str
->     -> __thread__comm_str(thread)
->                                             thread__delete
->                                              -> comm__free
->                                               -> comm_str__put
->                                                -> zfree(&cs->str)
->     -> thread->comm_len = strlen(comm);
-> Since in single thread phase, perf_singlethreaded is true, down_read and
-> down_write can not work to avoid concurrency problems.
-> This patch put perf_set_singlethreaded to the function tail to expand the
-> multithreaded phase range, make display_thread and process_thread run
-> safe.
+> This adds a new 'dsoff' field to print dso offset for resolved symbols,
+> and the offset is appended to dso name.
 >
-> Signed-off-by: Hangliang Lai  <laihangliang1@huawei.com>
-> Reviewed-by: Yunfeng Ye <yeyunfeng@huawei.com>
+> Default output:
+> $ perf script
+>        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so)
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1)
+>
+> Display 'dsoff' field:
+> $ perf script -F +dsoff
+>        ls 2695501 3011030.487017:     500000 cycles:      152cc73ef4b5 get_common_indices.constprop.0+0x155 (/usr/lib/x86_64-linux-gnu/ld-2.31.so+0x1c4b5)
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff99045b3e [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968e107 [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffffc1f54afb [unknown] ([unknown])
+>        ls 2695501 3011030.487018:     500000 cycles:  ffffffff9968382f [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:  ffffffff99e00094 [unknown] ([unknown])
+>        ls 2695501 3011030.487019:     500000 cycles:      152cc718a8d0 __errno_location@plt+0x0 (/usr/lib/x86_64-linux-gnu/libselinux.so.1+0x68d0)
+>        ls 2695501 3011030.487019:     500000 cycles:  ffffffff992a6db0 [unknown] ([unknown])
+>
+> Signed-off-by: Changbin Du <changbin.du@huawei.com>
 > ---
-> v1 -> v2
->  - Since perf top is always multi-threaded, remove top->nr_threads_synthesize judgment.
+>  tools/perf/Documentation/perf-script.txt | 2 +-
+>  tools/perf/builtin-script.c              | 5 +++++
+>  tools/perf/util/evsel_fprintf.c          | 6 ++++++
+>  tools/perf/util/evsel_fprintf.h          | 1 +
+>  4 files changed, 13 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+> index 777a0d8ba7d1..ff9a52e44688 100644
+> --- a/tools/perf/Documentation/perf-script.txt
+> +++ b/tools/perf/Documentation/perf-script.txt
+> @@ -130,7 +130,7 @@ OPTIONS
+>  -F::
+>  --fields::
+>          Comma separated list of fields to print. Options are:
+> -        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, addr, symoff,
+> +        comm, tid, pid, time, cpu, event, trace, ip, sym, dso, dsoff, addr, symoff,
+>          srcline, period, iregs, uregs, brstack, brstacksym, flags, bpf-output,
+>          brstackinsn, brstackinsnlen, brstackoff, callindent, insn, insnlen, synth,
+>          phys_addr, metric, misc, srccode, ipc, data_page_size, code_page_size, ins_lat,
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index a792214d1af8..ccc409893c4b 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -133,6 +133,7 @@ enum perf_output_field {
+>         PERF_OUTPUT_VCPU            = 1ULL << 38,
+>         PERF_OUTPUT_CGROUP          = 1ULL << 39,
+>         PERF_OUTPUT_RETIRE_LAT      = 1ULL << 40,
+> +       PERF_OUTPUT_DSOFF           = 1ULL << 41,
+>  };
+>
+>  struct perf_script {
+> @@ -174,6 +175,7 @@ struct output_option {
+>         {.str = "ip",    .field = PERF_OUTPUT_IP},
+>         {.str = "sym",   .field = PERF_OUTPUT_SYM},
+>         {.str = "dso",   .field = PERF_OUTPUT_DSO},
+> +       {.str = "dsoff", .field = PERF_OUTPUT_DSOFF},
+>         {.str = "addr",  .field = PERF_OUTPUT_ADDR},
+>         {.str = "symoff", .field = PERF_OUTPUT_SYMOFFSET},
+>         {.str = "srcline", .field = PERF_OUTPUT_SRCLINE},
+> @@ -574,6 +576,9 @@ static void set_print_ip_opts(struct perf_event_attr *attr)
+>         if (PRINT_FIELD(DSO))
+>                 output[type].print_ip_opts |= EVSEL__PRINT_DSO;
+>
+> +       if (PRINT_FIELD(DSOFF))
+> +               output[type].print_ip_opts |= EVSEL__PRINT_DSOFF;
 
-Not always, the synthesis can run in a single thread.
-
->
->  tools/perf/builtin-top.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> index d4b5b02bab73..a18db1ee87fa 100644
-> --- a/tools/perf/builtin-top.c
-> +++ b/tools/perf/builtin-top.c
-> @@ -1242,8 +1242,7 @@ static int __cmd_top(struct perf_top *top)
->         if (perf_session__register_idle_thread(top->session) < 0)
->                 return ret;
->
-> -       if (top->nr_threads_synthesize > 1)
-> -               perf_set_multithreaded();
-> +       perf_set_multithreaded();
-
-I think this part should be kept as is.
-
->
->         init_process_thread(top);
->
-> @@ -1273,9 +1272,6 @@ static int __cmd_top(struct perf_top *top)
->                                     top->evlist->core.threads, true, false,
->                                     top->nr_threads_synthesize);
->
-> -       if (top->nr_threads_synthesize > 1)
-> -               perf_set_singlethreaded();
-
-Here you can make it multi-threaded unconditionally.
+What if the user gives 'dsoff' without 'dso'.  Better to set the
+EVSEL__PRINT_DSO as well?
 
 Thanks,
 Namhyung
 
-> -
->         if (perf_hpp_list.socket) {
->                 ret = perf_env__read_cpu_topology_map(&perf_env);
->                 if (ret < 0) {
-> @@ -1352,6 +1348,9 @@ static int __cmd_top(struct perf_top *top)
->  out_join_thread:
->         cond_signal(&top->qe.cond);
->         pthread_join(thread_process, NULL);
 > +
-> +       perf_set_singlethreaded();
-> +
->         return ret;
->  }
+>         if (PRINT_FIELD(SYMOFFSET))
+>                 output[type].print_ip_opts |= EVSEL__PRINT_SYMOFFSET;
 >
+> diff --git a/tools/perf/util/evsel_fprintf.c b/tools/perf/util/evsel_fprintf.c
+> index 1fb8044d402e..ae8333772c76 100644
+> --- a/tools/perf/util/evsel_fprintf.c
+> +++ b/tools/perf/util/evsel_fprintf.c
+> @@ -116,6 +116,7 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>         int print_ip = print_opts & EVSEL__PRINT_IP;
+>         int print_sym = print_opts & EVSEL__PRINT_SYM;
+>         int print_dso = print_opts & EVSEL__PRINT_DSO;
+> +       int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
+>         int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+>         int print_oneline = print_opts & EVSEL__PRINT_ONELINE;
+>         int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+> @@ -174,6 +175,8 @@ int sample__fprintf_callchain(struct perf_sample *sample, int left_alignment,
+>                         if (print_dso && (!sym || !sym->inlined)) {
+>                                 printed += fprintf(fp, " (");
+>                                 printed += map__fprintf_dsoname(map, fp);
+> +                               if (print_dsoff && map && map->dso)
+> +                                       printed += fprintf(fp, "+0x%lx", addr);
+>                                 printed += fprintf(fp, ")");
+>                         }
+>
+> @@ -209,6 +212,7 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+>         int print_ip = print_opts & EVSEL__PRINT_IP;
+>         int print_sym = print_opts & EVSEL__PRINT_SYM;
+>         int print_dso = print_opts & EVSEL__PRINT_DSO;
+> +       int print_dsoff = print_opts & EVSEL__PRINT_DSOFF;
+>         int print_symoffset = print_opts & EVSEL__PRINT_SYMOFFSET;
+>         int print_srcline = print_opts & EVSEL__PRINT_SRCLINE;
+>         int print_unknown_as_addr = print_opts & EVSEL__PRINT_UNKNOWN_AS_ADDR;
+> @@ -237,6 +241,8 @@ int sample__fprintf_sym(struct perf_sample *sample, struct addr_location *al,
+>                 if (print_dso) {
+>                         printed += fprintf(fp, " (");
+>                         printed += map__fprintf_dsoname(al->map, fp);
+> +                       if (print_dsoff && al->map && al->map->dso)
+> +                               printed += fprintf(fp, "+0x%lx", al->addr);
+>                         printed += fprintf(fp, ")");
+>                 }
+>
+> diff --git a/tools/perf/util/evsel_fprintf.h b/tools/perf/util/evsel_fprintf.h
+> index 3093d096c29f..c8a9fac2f2dd 100644
+> --- a/tools/perf/util/evsel_fprintf.h
+> +++ b/tools/perf/util/evsel_fprintf.h
+> @@ -26,6 +26,7 @@ int evsel__fprintf(struct evsel *evsel, struct perf_attr_details *details, FILE
+>  #define EVSEL__PRINT_UNKNOWN_AS_ADDR   (1<<6)
+>  #define EVSEL__PRINT_CALLCHAIN_ARROW   (1<<7)
+>  #define EVSEL__PRINT_SKIP_IGNORED      (1<<8)
+> +#define EVSEL__PRINT_DSOFF             (1<<9)
+>
+>  struct addr_location;
+>  struct perf_event_attr;
 > --
-> 2.33.0
+> 2.25.1
 >
