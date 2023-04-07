@@ -2,131 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB2F6DABE7
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844C56DABE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbjDGLBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S237254AbjDGLBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 07:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235110AbjDGLBB (ORCPT
+        with ESMTP id S240523AbjDGLB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:01:01 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F859D8;
-        Fri,  7 Apr 2023 04:00:55 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so43035742pjz.1;
-        Fri, 07 Apr 2023 04:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680865254;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZzVQzob6w+uGiqMm+prIjkfjAtxo6cGiHRkUXlkvJQE=;
-        b=TX/X/r2mQwqCY10LHjcYSXqp/+x3G7pptxPF/QLR8hauClknYFW0K+kRtmlUVEkDdv
-         MTAkK9WsuKZZGnrU9/P8a3AUyA9LH2nw9RjZ2Dc3mDVMQUVDaXXkppNOI4iL3iGDmhLN
-         JV1nfbFR5RVfGPbUSBvIjJYiXpP9vggrmOnpKwMD9YxKZzQwIP5+NNobcmLgzfvO1TXo
-         94vLS1Ks6kDqqMVEi9UWlfr56I/ERFgYj7egswrd9ffbcttBr3w15jN8tLVBDRVsOUdY
-         XekU2Ow24gw2Vi9gqANXDwCXaeYRBaZZ3Pm7dhLJFBCWRf3cs7qQrU4yNdMuSXuVaH6/
-         iROg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680865254;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZzVQzob6w+uGiqMm+prIjkfjAtxo6cGiHRkUXlkvJQE=;
-        b=1nP1xEPLodUhavr12Kh+/kMNRAjhq+fR63n472aqTOq2BNQukqHx+lrqA0SiNQIwvb
-         Zn6iXsTZ+9w5K3DIzHAre80Yd8ngQfF/qWntVQT9MGdUdeBvQ0UshulRpuBmR1iAqyxW
-         FmzLDteftDOWYJ5JDaFvKf8DEBCbM/glYI6JXXlNRMkVl4m0Qkna6OwtxM7Pv8zJe9M2
-         l08xEJsCPsbEve3LGUNa6UhK10TgluZtujbgaXfsE49g9kn3060KUha+/5LZWRc1lozH
-         3Rx2yT0l3WC0ebCxJBxE9WR9vtmlPWxIFwjJxuHr0MbY7ol4hNlCJ8iLjySTnuyrIcuU
-         hbrQ==
-X-Gm-Message-State: AAQBX9dLzs2W1zx62nedDF2cypyYAUh5PGtrpTOOlT95sZCM0Hsw5l8j
-        BfzLFreJMYitQ0TjO08DyEf6LfBk6q5wCQ==
-X-Google-Smtp-Source: AKy350b/DkHRgvHytEVipvniMLkEFq7pYID8W12uMSjXDNyXHlFxmG/zcmjPkV7my8RwqgGUidkhUg==
-X-Received: by 2002:a17:902:f541:b0:1a1:d366:b085 with SMTP id h1-20020a170902f54100b001a1d366b085mr3069596plf.21.1680865254264;
-        Fri, 07 Apr 2023 04:00:54 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.. ([38.84.161.179])
-        by smtp.gmail.com with ESMTPSA id jw1-20020a170903278100b0019ee042602bsm2732005plb.92.2023.04.07.04.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 04:00:53 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yang Ling <gnaygnil@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
-Date:   Fri,  7 Apr 2023 19:00:25 +0800
-Message-Id: <20230407110025.516405-3-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230407110025.516405-1-keguang.zhang@gmail.com>
-References: <20230407110025.516405-1-keguang.zhang@gmail.com>
+        Fri, 7 Apr 2023 07:01:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15156A5CD;
+        Fri,  7 Apr 2023 04:01:16 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337AuJjE012014;
+        Fri, 7 Apr 2023 11:01:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=sHT4lAySk1ihuBjcDkSnNv9OFUtg3scTS44U/D5mJwA=;
+ b=oRFA7InHEH722uLoUWRVajwD5hX3XF6VBwS0M6kWxlnIrqMDj2Pj2o3WbSAQ+T+JasC+
+ Rs1nFWfO+8yOzo17twn67wRjktXhi2FxzWzNQtHRNjRNnr1Mpfjl6ieNJRNZfQOV5251
+ PX8h9h5E6mUnQRHa0kKftgn0p0shq/+GDVe3nx+fOQPwb5V597k33AnCxQYlsQfZ7wkZ
+ q96hmEWEi1rfRw1rzsu4iCdnzKkfIXCeYRJKhVi3vIB+y8SzgwlQIxbHVaweN2bcMZzu
+ c4KsG/0nTwG+QUaT+rJZUTS7FREQOmDboqcVVyIGngrQ3+yilUtYvF2Efa3PhRQKFK3p 2A== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pthutg27f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 11:01:05 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 337AhkcQ030740;
+        Fri, 7 Apr 2023 11:00:39 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3ppc86unx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 11:00:39 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 337B0Zux31523512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Apr 2023 11:00:37 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D56020043;
+        Fri,  7 Apr 2023 11:00:35 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B9672004E;
+        Fri,  7 Apr 2023 11:00:34 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.66.68])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  7 Apr 2023 11:00:33 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 16:30:31 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] ext4: fix wrong unit use in ext4_mb_normalize_request
+Message-ID: <ZC/3z7wLCDbwtlQG@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230321161220.418652-1-shikemeng@huaweicloud.com>
+ <20230321161220.418652-2-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321161220.418652-2-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: szC-kS_ZSoIGzpRG8iUDhAnjlHTVsN-X
+X-Proofpoint-GUID: szC-kS_ZSoIGzpRG8iUDhAnjlHTVsN-X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_06,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 spamscore=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304070100
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the of_match_table to enable DT support
-of Loongson-1 watchdog driver.
-And modify the parameter of devm_clk_get() accordingly.
+On Wed, Mar 22, 2023 at 12:12:13AM +0800, Kemeng Shi wrote:
+> NRL_CHECK_SIZE will compare input req and size, so req and size should
+> be in same unit. Input req "fe_len" is in cluster unit while input
+> size "(8<<20)>>bsbits" is in block unit. Convert "fe_len" to block
+> unit to fix the mismatch.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 63a68cee36c6..6318c763a239 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -4056,7 +4056,7 @@ ext4_mb_normalize_request(struct ext4_allocation_context *ac,
+>  		start_off = ((loff_t)ac->ac_o_ex.fe_logical >>
+>  							(22 - bsbits)) << 22;
+>  		size = 4 * 1024 * 1024;
+> -	} else if (NRL_CHECK_SIZE(ac->ac_o_ex.fe_len,
+> +	} else if (NRL_CHECK_SIZE(EXT4_C2B(sbi, ac->ac_o_ex.fe_len),
+>  					(8<<20)>>bsbits, max, 8 * 1024)) {
+>  		start_off = ((loff_t)ac->ac_o_ex.fe_logical >>
+>  							(23 - bsbits)) << 23;
+> -- 
+> 2.30.0
+> 
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
- drivers/watchdog/loongson1_wdt.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Hi Kemeng,
 
-diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-index bb3d075c0633..c2694222ea86 100644
---- a/drivers/watchdog/loongson1_wdt.c
-+++ b/drivers/watchdog/loongson1_wdt.c
-@@ -5,6 +5,7 @@
- 
- #include <linux/clk.h>
- #include <linux/module.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/platform_device.h>
- #include <linux/watchdog.h>
- #include <loongson1.h>
-@@ -100,7 +101,7 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(drvdata->base))
- 		return PTR_ERR(drvdata->base);
- 
--	drvdata->clk = devm_clk_get(dev, pdev->name);
-+	drvdata->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(drvdata->clk))
- 		return PTR_ERR(drvdata->clk);
- 
-@@ -142,10 +143,19 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_OF
-+static const struct of_device_id ls1x_wdt_dt_ids[] = {
-+	{ .compatible = "loongson,ls1x-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ls1x_wdt_dt_ids);
-+#endif
-+
- static struct platform_driver ls1x_wdt_driver = {
- 	.probe = ls1x_wdt_probe,
- 	.driver = {
- 		.name = "ls1x-wdt",
-+		.of_match_table = ls1x_wdt_dt_ids,
- 	},
- };
- 
--- 
-2.34.1
+So I ran xfstests with bigalloc on Powerpc (64k pagesize/64k blocksize &
+64k pagesize/4k blocksize) and everything looks good.
+
+Feel free to add:
+
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+
+Regards,
+ojaswin
 
