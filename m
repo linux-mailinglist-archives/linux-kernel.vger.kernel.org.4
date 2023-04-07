@@ -2,117 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0778B6DB1ED
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1A16DB192
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjDGRlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43336 "EHLO
+        id S229664AbjDGRZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbjDGRlH (ORCPT
+        with ESMTP id S229587AbjDGRZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:41:07 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB60CA1C
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 10:40:36 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id q191so7575550pgq.7
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 10:40:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680889217; x=1683481217;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zKb29bg6tx4CJhhRnFeIAgI2BubugDeo6AhQSNXoOjk=;
-        b=ZeOB4N2nMw/T0W+m53HyspppsYTatXHFUsBPQrdircDHtMw9efqiwwPC8ouTXD5mmu
-         GzIE9+OQmYiyOhMOwdkgNlwXMnhivea/lDdwCLnEhl07OIkr/snh4v8BDsU9kj1pW442
-         nnnpcNzvMbXmlSalIpGUu9AETBoPMxQmphh/+OqdyeCfBJcxrC7ktOmrrk6/7/r1m+Es
-         GOkPApNDdYjVeFSF9RDu5xLGpCo5t/z41TOkPkYQO0CezUmwqryKvM+EXpH+WYgIMBzl
-         8bN3+fxTUcGaPyn1TMdNEcmCoXvSL7igHt9YU+N2N+I6CBRUQdqN+oJfYsZBoM3wYp+A
-         LiBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680889217; x=1683481217;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zKb29bg6tx4CJhhRnFeIAgI2BubugDeo6AhQSNXoOjk=;
-        b=TFJDkxFWljh62VeUWg9JMkBKBRciy+pW7kjOtOYlRJs47of22vH4ic2MlzHVU8CFeZ
-         r+kJgWd5H3HSdYIRCTVGKnaNAmDLD27BuGhl++1AJ7Cqh5xfMOadsBEHBRc8OQBMAHuv
-         1GhWMY4jZuL0VagNVsPcs4Hd1Yf693IeDz44vU7noxHDdCGxXfPuPwOoV687sVaqIjPU
-         nNuRWpw6j3Vx5wCxAdtNbIKuEoysmRBQ/Ok2RHdoeZg0JFwGZ8nEB7QwKepTHd8A8+Bn
-         zq/EWZsQ2mX0zr9YGLgkys/hjXQgqgtUjVHY1LnTaDAmkXrBp/GZuojHZX73PgcSnJjS
-         Z9TA==
-X-Gm-Message-State: AAQBX9epNsgaByY6xfo8+Xvly6r845NWIjPu1Lv/Z+eYjR9bL/6BJLpc
-        CE4ZTNM/WUtFdFUZ3Bn+XamS6QGDyN6gl9vdfA1ibg==
-X-Google-Smtp-Source: AKy350YUCzPBLxgYgXKQV3bzEg9zkHgzG9zgtpSVZEJ7BtTpjnG8NvJ6+yrbg54qCj108b33TAynRrQ6bp7uhOQcDco=
-X-Received: by 2002:a65:578e:0:b0:513:a488:f05f with SMTP id
- b14-20020a65578e000000b00513a488f05fmr622511pgr.1.1680889217290; Fri, 07 Apr
- 2023 10:40:17 -0700 (PDT)
+        Fri, 7 Apr 2023 13:25:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF66902D;
+        Fri,  7 Apr 2023 10:25:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 268456113C;
+        Fri,  7 Apr 2023 17:25:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE244C433EF;
+        Fri,  7 Apr 2023 17:25:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680888336;
+        bh=cTTdB6NCLVLo4ZehJfgOciAyyVOrerLqoUBKgwJchI8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NnOrdl4FWC/G0lcBBkLoW5X8TYbsDYQcdN7xVap5xGGTkXsKlF8eV5Q6h448nv3II
+         AGrhBk3fmEacGy3GiXkdaDN9c3SOPQhBDyNRAvXuwyarM+d7LevCM1RZYPsgbMxhHB
+         0vvGY8O/M7w7VOJ2KA4GcPsJyZK8IyxP+CC1YXOcd447Ii7UP8gDqxAhPaJ4xZxsJP
+         Zk1XrfGKUFV7as33DEZU0lz5hyr5jdBQMsdzYs2R2Rin1irexKxYV9k2m2ziQJ7+XR
+         LQWfCmqg34+JI2SHCIdJuUc0HSs9b88vnXLes/livvBFcVI/c/JYMTsdkRbh7bzn1R
+         I+Y4IN4A+miHg==
+Date:   Fri, 7 Apr 2023 18:40:52 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] iio: dac: mcp4922: add support for mcp48xx series
+ chips
+Message-ID: <20230407184052.2315dd57@jic23-huawei>
+In-Reply-To: <20230405140114.99011-5-frattaroli.nicolas@gmail.com>
+References: <20230405140114.99011-1-frattaroli.nicolas@gmail.com>
+        <20230405140114.99011-5-frattaroli.nicolas@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230321182414.1826372-1-trix@redhat.com>
-In-Reply-To: <20230321182414.1826372-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 7 Apr 2023 10:40:05 -0700
-Message-ID: <CAKwvOdnrKujpv2A6a-6U6pxpd3Z9mKwV3SgD6ZL+ie4-g4n2-g@mail.gmail.com>
-Subject: Re: [PATCH] drm/vmwgfx: remove unused vmw_overlay function
-To:     Tom Rix <trix@redhat.com>
-Cc:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
-        airlied@gmail.com, daniel@ffwll.ch, nathan@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 11:24=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> clang with W=3D1 reports
-> drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c:56:35: error:
->   unused function 'vmw_overlay' [-Werror,-Wunused-function]
-> static inline struct vmw_overlay *vmw_overlay(struct drm_device *dev)
->                                   ^
-> This function is not used, so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Wed,  5 Apr 2023 16:01:14 +0200
+Nicolas Frattaroli <frattaroli.nicolas@gmail.com> wrote:
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
+> The MCP4801, MCP4802, MCP4811, MCP4812, MCP4821 and MCP4822
+> DACs are analogous to their MCP49XX counterparts, but contain
+> an internal 2.048V voltage reference. Add support for them by
+> refactoring the driver to allow for chips without a vref supply,
+> and add the necessary device IDs.
+> 
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 > ---
->  drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c | 6 ------
->  1 file changed, 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c b/drivers/gpu/drm/vm=
-wgfx/vmwgfx_overlay.c
-> index 8d171d71cb8a..7e112319a23c 100644
-> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c
-> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_overlay.c
-> @@ -53,12 +53,6 @@ struct vmw_overlay {
->         struct vmw_stream stream[VMW_MAX_NUM_STREAMS];
+>  drivers/iio/dac/mcp4922.c | 112 ++++++++++++++++++++++++++++----------
+>  1 file changed, 84 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/iio/dac/mcp4922.c b/drivers/iio/dac/mcp4922.c
+> index 0b9458cbbcff..56dcb90c8464 100644
+> --- a/drivers/iio/dac/mcp4922.c
+> +++ b/drivers/iio/dac/mcp4922.c
+> @@ -3,7 +3,8 @@
+>   * mcp4922.c
+>   *
+>   * Driver for Microchip Digital to Analog Converters.
+> - * Supports MCP4902, MCP4912, and MCP4922.
+> + * Supports MCP4902, MCP4912, MCP4921, MCP4922, MCP4801, MCP4802, MCP4811,
+> + * MCP4812, MCP4821, and MCP4822.
+>   *
+>   * Copyright (c) 2014 EMAC Inc.
+>   */
+> @@ -16,14 +17,21 @@
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/bitops.h>
+>  
+> -#define MCP4922_NUM_CHANNELS	2
+> -#define MCP4921_NUM_CHANNELS	1
+> +#define MCP4922_NUM_CHANNELS		2
+> +#define MCP4921_NUM_CHANNELS		1
+> +#define MCP48XX_INTERNAL_VREF_MV	2048
+>  
+>  enum mcp4922_supported_device_ids {
+>  	ID_MCP4902,
+>  	ID_MCP4912,
+>  	ID_MCP4921,
+>  	ID_MCP4922,
+> +	ID_MCP4801,
+
+Numeric order preferred.
+
+> +	ID_MCP4802,
+> +	ID_MCP4811,
+> +	ID_MCP4812,
+> +	ID_MCP4821,
+> +	ID_MCP4822,
 >  };
->
-> -static inline struct vmw_overlay *vmw_overlay(struct drm_device *dev)
-> -{
-> -       struct vmw_private *dev_priv =3D vmw_priv(dev);
-> -       return dev_priv ? dev_priv->overlay_priv : NULL;
-> -}
-> -
->  struct vmw_escape_header {
->         uint32_t cmd;
->         SVGAFifoCmdEscape body;
-> --
-> 2.27.0
->
+>  
+>  struct mcp4922_state {
+> @@ -50,6 +58,35 @@ struct mcp4922_state {
+>  	},						\
+>  }
+>  
+> +static bool mcp4922_needs_vref(int device_id)
+> +{
+> +	switch (device_id) {
+> +	case ID_MCP4902:
+> +	case ID_MCP4912:
+> +	case ID_MCP4921:
+> +	case ID_MCP4922:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+> +static int mcp4922_num_channels(int device_id)
+> +{
+> +	switch (device_id) {
+> +	case ID_MCP4902:
+> +	case ID_MCP4912:
+> +	case ID_MCP4922:
+> +	case ID_MCP4802:
+> +	case ID_MCP4812:
+> +	case ID_MCP4822:
+> +		return MCP4922_NUM_CHANNELS;
 
+I'd rather see this as an actual number as the define is just reducing
+readability in this particular case.
 
---=20
-Thanks,
-~Nick Desaulniers
+> +	default:
+> +		return MCP4921_NUM_CHANNELS;
+> +	}
+> +
+> +}
+> +
+>  static int mcp4922_spi_write(struct mcp4922_state *state, u8 addr, u32 val)
+>  {
+>  	state->mosi[1] = val & 0xff;
+> @@ -108,11 +145,17 @@ static int mcp4922_write_raw(struct iio_dev *indio_dev,
+>  	}
+>  }
+>  
+> -static const struct iio_chan_spec mcp4922_channels[4][MCP4922_NUM_CHANNELS] = {
+> +static const struct iio_chan_spec mcp4922_channels[10][MCP4922_NUM_CHANNELS] = {
+>  	[ID_MCP4902] = { MCP4922_CHAN(0, 8),	MCP4922_CHAN(1, 8) },
+>  	[ID_MCP4912] = { MCP4922_CHAN(0, 10),	MCP4922_CHAN(1, 10) },
+>  	[ID_MCP4921] = { MCP4922_CHAN(0, 12),	{} },
+>  	[ID_MCP4922] = { MCP4922_CHAN(0, 12),	MCP4922_CHAN(1, 12) },
+> +	[ID_MCP4801] = { MCP4922_CHAN(0, 8),	{} },
+
+Numeric order preferred. 
+
+> +	[ID_MCP4802] = { MCP4922_CHAN(0, 8),	MCP4922_CHAN(1, 8) },
+> +	[ID_MCP4811] = { MCP4922_CHAN(0, 10),	{} },
+> +	[ID_MCP4812] = { MCP4922_CHAN(0, 10),	MCP4922_CHAN(1, 10) },
+> +	[ID_MCP4821] = { MCP4922_CHAN(0, 12),	{} },
+> +	[ID_MCP4822] = { MCP4922_CHAN(0, 12),	MCP4922_CHAN(1, 12) },
+>  };
+>  
+>  static const struct iio_info mcp4922_info = {
+> @@ -133,25 +176,31 @@ static int mcp4922_probe(struct spi_device *spi)
+>  
+>  	state = iio_priv(indio_dev);
+>  	state->spi = spi;
+> -	state->vref_reg = devm_regulator_get(&spi->dev, "vref");
+> -	if (IS_ERR(state->vref_reg))
+> -		return dev_err_probe(&spi->dev, PTR_ERR(state->vref_reg),
+> -				     "Vref regulator not specified\n");
+> +	id = spi_get_device_id(spi);
+> +	if (mcp4922_needs_vref(id->driver_data)) {
+> +		state->vref_reg = devm_regulator_get(&spi->dev, "vref");
+> +		if (IS_ERR(state->vref_reg))
+> +			return dev_err_probe(&spi->dev, PTR_ERR(state->vref_reg),
+> +					"Vref regulator not specified\n");
+>  
+> -	ret = regulator_enable(state->vref_reg);
+> -	if (ret) {
+> -		dev_err(&spi->dev, "Failed to enable vref regulator: %d\n",
+> -				ret);
+> -		return ret;
+> -	}
+> +		ret = regulator_enable(state->vref_reg);
+> +		if (ret) {
+> +			dev_err(&spi->dev, "Failed to enable vref regulator: %d\n",
+> +					ret);
+> +			return ret;
+> +		}
+
+If you add a devm_add_action_or_reset() and a suitable callback function to
+turn the regulator off again, you can avoid any need for special handing in
+remove path.  The callback will only get called if were in this block of
+code anyway and hence there is something to turn off.
+
+>  
+> -	ret = regulator_get_voltage(state->vref_reg);
+> -	if (ret < 0) {
+> -		dev_err(&spi->dev, "Failed to read vref regulator: %d\n",
+> -				ret);
+> -		goto error_disable_vref_reg;
+> +		ret = regulator_get_voltage(state->vref_reg);
+> +		if (ret < 0) {
+> +			dev_err(&spi->dev, "Failed to read vref regulator: %d\n",
+> +					ret);
+> +			goto error_disable_vref_reg;
+> +		}
+> +		state->vref_mv = ret / 1000;
+> +	} else {
+> +		state->vref_mv = MCP48XX_INTERNAL_VREF_MV;
+>  	}
+> -	state->vref_mv = ret / 1000;
+> +
+
+Avoid unrelated white space changes
+
+>  
+>  	state->vdd_reg = devm_regulator_get(&spi->dev, "vdd");
+
+>  
+>  static const struct spi_device_id mcp4922_id[] = {
+> @@ -209,6 +259,12 @@ static const struct spi_device_id mcp4922_id[] = {
+>  	{"mcp4912", ID_MCP4912},
+>  	{"mcp4921", ID_MCP4921},
+>  	{"mcp4922", ID_MCP4922},
+> +	{"mcp4801", ID_MCP4801},
+
+I'd prefer this table to be in numeric order.
+
+> +	{"mcp4802", ID_MCP4802},
+> +	{"mcp4811", ID_MCP4811},
+> +	{"mcp4812", ID_MCP4812},
+> +	{"mcp4821", ID_MCP4821},
+> +	{"mcp4822", ID_MCP4822},
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(spi, mcp4922_id);
+> @@ -224,5 +280,5 @@ static struct spi_driver mcp4922_driver = {
+>  module_spi_driver(mcp4922_driver);
+>  
+>  MODULE_AUTHOR("Michael Welling <mwelling@ieee.org>");
+> -MODULE_DESCRIPTION("Microchip MCP4902, MCP4912, MCP4922 DAC");
+> +MODULE_DESCRIPTION("Microchip MCP49XX and MCP48XX DAC");
+>  MODULE_LICENSE("GPL v2");
+
