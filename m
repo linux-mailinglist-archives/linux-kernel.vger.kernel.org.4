@@ -2,120 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5022E6DA7F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 05:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCBB6DA7FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 05:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239196AbjDGD1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 23:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
+        id S239320AbjDGDaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 23:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjDGD1o (ORCPT
+        with ESMTP id S231176AbjDGD35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 23:27:44 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2113.outbound.protection.outlook.com [40.107.255.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF4393F4;
-        Thu,  6 Apr 2023 20:26:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BCZ2DiaGPW3nzmlRW15R6pr26Jsq2UIeRG2YuoARp42avLIl9rlyhuALdno8GKt5Y33E661U1i2z7YrjWSLIuEstQ8Ux3y/DxZCfCLA6nIQaWddZKrzd3jl+Wco/VHGr6/5mABooHDYlODKni1ONfpRid73IlwHmBLLCzcd85uJkpfbD7s5ASTfKqBWgoyqcH6ikcvrYQbxhVQSxNcSfa5qbG1HZIP9p2LtBfpJnucZ0fln7DR7tiKj6piNvK+KvXMrcU5eQqRSc1JGk38PX7XxzljUp5Pcjd+iOAak4FO6s+A0x+5uavNNX0ExnA8frkXDyXTikxmVnSDPfMmMR/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u2ehDwo83iYR3pSsuVU9FeoMW3DX8e6frBY8K27pOjQ=;
- b=Z+AERj1qkY8xwuQAw45klAeo2Ve/s6ci6DXUddhe4dHUTTxGA+wBKYJVs/uqoC1BiEK1SA3GTH4QaNgfXFlCfpEoT4q347ckiUOuxL/NFGhIGolFr79E57BAgXLXYDT7Rd+AP6hHb9rp9lwWnLq9+iIBSjZb6WX0drIRIta+ecKwyXF6F/Z7z3Pt+4R2C5qoNWEu9fsdAjAIvkp0sXMymTICQ9vB/3Ns+F+4zEWH89+b2FedsCoq/cdlZIxRNme0EVG79Q+QiwyRRXh+0F+Nv+ooA0WkQLKjBSFb5MzaSYm1qWtDbB4RPfJxlUKfPF/KYCz7rPBlk/vhVvnDuHQAYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from SEZPR03MB7033.apcprd03.prod.outlook.com (2603:1096:101:e2::14)
- by TYZPR03MB6792.apcprd03.prod.outlook.com (2603:1096:400:202::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Fri, 7 Apr
- 2023 03:26:54 +0000
-Received: from SEZPR03MB7033.apcprd03.prod.outlook.com
- ([fe80::9d77:7adc:25da:b086]) by SEZPR03MB7033.apcprd03.prod.outlook.com
- ([fe80::9d77:7adc:25da:b086%3]) with mapi id 15.20.6254.035; Fri, 7 Apr 2023
- 03:26:53 +0000
-Message-ID: <d48aaa51-6a55-c103-c2b4-ec924326a10c@amlogic.com>
-Date:   Fri, 7 Apr 2023 11:26:43 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH] dt-bindings: arm: amlogic: add C3 bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-References: <20230406081627.4083103-1-kelvin.zhang@amlogic.com>
- <284f1538-dfe3-8d54-d20f-b47365283e74@linaro.org>
-From:   Kelvin Zhang <kelvin.zhang@amlogic.com>
-In-Reply-To: <284f1538-dfe3-8d54-d20f-b47365283e74@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2P153CA0040.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::9)
- To SEZPR03MB7033.apcprd03.prod.outlook.com (2603:1096:101:e2::14)
+        Thu, 6 Apr 2023 23:29:57 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2E39ED1;
+        Thu,  6 Apr 2023 20:29:56 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3373Tq2P012834;
+        Fri, 7 Apr 2023 03:29:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=pShFxsaHgaxJRWJq1L+0k2TtAUcBTALkEU6+kdqETok=;
+ b=YbH28t7NQoSE2oj/UFSNeKiJcNRHq1tcydNy7WUTc9vlJRA3njIO8CevzAzJEMliaua2
+ Uon1hfGwT4X5PB0nocmkdL0myU2EBG+j0fbOyJ9U0j5+YtoiriFk/HqJsmOU7llR8YsY
+ F406bF5k0qtOTfU6kRXRV6pMaksZhY7T+LsdqLob+w9LfCccw4t8hM+QaqBZ5V/EgLgM
+ Hen9ZkfyvrA1kR1FeF2iA9YJE71Hp35OWngjBuwWea9HGWGEk6b2Ef2ExB8KGoz/KeF6
+ BuRIXLmJRLVSQoAEiM9nuNse5rs+59lBC50BcPiwQUrOehRP+zYub/7uGu6cWynbJAdc ww== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptb9wg02y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 03:29:52 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3373TpE4028533
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 7 Apr 2023 03:29:51 GMT
+Received: from tjiang-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 6 Apr 2023 20:29:49 -0700
+From:   Tim Jiang <quic_tjiang@quicinc.com>
+To:     <marcel@holtmann.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <quic_tjiang@quicinc.com>,
+        <quic_bgodavar@quicinc.com>, <quic_hbandi@quicinc.com>,
+        <quic_hemantg@quicinc.com>, <mka@chromium.org>
+Subject: [PATCH v1] Bluetooth: btusb: Add WCN6855 devcoredump support
+Date:   Fri, 7 Apr 2023 11:29:36 +0800
+Message-ID: <20230407032936.14799-1-quic_tjiang@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR03MB7033:EE_|TYZPR03MB6792:EE_
-X-MS-Office365-Filtering-Correlation-Id: 962d7f16-759f-449c-5bd0-08db3717eec4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HLSzr7YhVR6qwwj5oHQB21zIOSyt6AdR7sOtCnprGUXxVGutYWN8gKB7rdXCAhERsM4KiHSIaAn5ZuyOsISHxKPSx1rQEvSbetkCRb0m00ihLNIhBIZkXAnyymGC7HWaa8mXWbHoMHxSNQXtv+yPAZkVUXDvzGBDU4cJ5RGYwngk4jpXTzQjeorGJucZKelT5jSFGMO6rlAn0xCoNisV4Bq9dXKqPQB0w5kPZZjICjVdx88CKimgGmJZBrqo34i9B/2juZqPVUTymncrxtx7Jm+zKACzuDExyozk101luSIZcjaLoPy5Yw2TjLLbvQAtE7DUkYYiLMnV46VLMLT7wPeoWaKyY0kSgDBlfb8dwRg6k8BJmQ+pledVlA7tbH3VZOCG4GQtViE+7LOVEWX1L0o+bHBdqk13zQmfFEmll4qknRj6ex7oT4cgt2aKQZECVFzUzn2n4KYThXrEaOsABWm3Ua9JNRFYaZC88x0/ywu4tZt2dhQJTe1UXF8OrP6thrsAcT8cAy7N4pPGFkSiBYNrGebwWDHBfsks2Dofg904RjQl/wMASc8cYRLVxFMIO7OXnukplbRr8ololDBKlJAgU5svOIk9uOJJ+hVpM4kiu7sjQEVv+2osIBqQm7XcumDJtT/jmy5hwFR4R40+Rg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR03MB7033.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(136003)(39850400004)(396003)(451199021)(31686004)(8676002)(316002)(66476007)(54906003)(966005)(66946007)(66556008)(6486002)(36756003)(44832011)(4326008)(6506007)(26005)(83380400001)(2616005)(186003)(6512007)(38100700002)(41300700001)(478600001)(6666004)(5660300002)(53546011)(86362001)(31696002)(2906002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TFduMWVaSk9wc2JmYkl2MmtJQm1VYjdvbElaN09PZTZ3cW5TRGV3SnpQUGYy?=
- =?utf-8?B?c09qWHB2MmRFNG9oUHNSRVUzL1dWM3hqMm1jK2paM3Q1Z0FuVE96YngrUkxn?=
- =?utf-8?B?VTc4UFAwUFN4WWpKU0x3RjNjcWNWNHJuYmVDWGswY0x2ZndRQVM1Nm5mSTRt?=
- =?utf-8?B?cTFmaGkzS2NVeDBVWlcyV3VBN3BUd2hxK0FGUVI2UHUzRVdzS2RWYXF2ZFh4?=
- =?utf-8?B?OHByQ0ozbEdvdlFnK3BKTDlyN0ZpQ1FldFNoaENsWVIvNmlrQUtHejlyT0pu?=
- =?utf-8?B?cktjdi9CNi9CNFdlRjBqUkV2YzN5YTdyTzgwWklwcU96TnlUNDRCTnhLclRO?=
- =?utf-8?B?NXprbkJGMkhwSEtHNnQwZTd5c0NENm40ZzhpSS9ST3R1aUEveU5xMjhXWSsr?=
- =?utf-8?B?TVg2Y2k5VS9EV3RtS0poTi9XWUpvWlh3dVNnQWlTSnBLUUprWGRZem5sUUJP?=
- =?utf-8?B?WW5TMENnNnA3eG9GREh5dEdSR0xNbEs5RTBBQ3oyTmVUU1JUV1dnWnZ5ZEhE?=
- =?utf-8?B?c1lqb0ZaQ25pWXpaTGM1L1JKeGw3QzNVbHk2YzIxMGt3dVBZV2FVQmtCWjVR?=
- =?utf-8?B?aEwzVmJCYTNINTVLVVBmajJ0dHhkQjZPbVRQdzd3NjZsWGM4eitiVzA4VXBt?=
- =?utf-8?B?M3BJa0l4c04zTnFxNWhtZHNoN2JkRUxsL0h3WHFwMkMwck9qd2JXY25jSTV4?=
- =?utf-8?B?Um51b3lkVDBKcUVYLzVOcS9iNlZQSTIxNnBVUkI0RkJBMGxoTjdlVTdWZGVw?=
- =?utf-8?B?YlluTSs0bHVTT0dnbncrVHMreEtSRjJIQjhBVlcya0JBcENGK01tM0hNZk1q?=
- =?utf-8?B?b3kyeXR6MTJGeFZMcWtVdHlHTEQ5NlJrZ0xGVWNSVTc3U08za0w2VWNnMTJS?=
- =?utf-8?B?R0RjQzZRS0ZsMnNWeWhEcm8rcHkvcHAzZ2JGblhSMDBrNHpZTlIrbkZnMjNQ?=
- =?utf-8?B?Yk5rbE5HUG1MZUdJQ0J0ZW1RWWV1Q2ZlOVRxZVJSRzB0c29DSXVQQmFsWnl2?=
- =?utf-8?B?NmNQRXBwUXRPb09Id1dURjIyZGtzSzl1WjgxZ2FQN2dIWndsckdaRHpqeThq?=
- =?utf-8?B?VFBFUTQxcGtkSER6T3ZtREYxM0JrNmpZaU92VmVERk5nSUVFeUxPeHhCNkpS?=
- =?utf-8?B?VW9jMXFITEJKSDJIdy84eXM5MVF5eXlLMEFOY1UzazU1SEdVd3VFWjViWG13?=
- =?utf-8?B?ZGNISFRYUDN0Z1NqQ0tzYWJkZWk3T0dXWUE0Qk1nOE5LejFSZFlRQ3JxWTFF?=
- =?utf-8?B?OWlUclJNQTloYmQ4UzRxazRxU2IxYXBTazBxNXVmcnVlUUZaMXJYRDhKbFhr?=
- =?utf-8?B?UlFwdnJNKzlWZlhaM0FaUjV0VFpUeFIyNHdLY20vMm4wcUFIR3BLZFFhYk1V?=
- =?utf-8?B?VVlOYm56bi8xWmtwSytEQVBiY2RtVVNyTGVEV0R6WHkxNDdMRWp2L3c2QnM4?=
- =?utf-8?B?TExWN1VsT2FBWUUzTlNRVGV5VUdmV3dhZXNuNkdSWFlhQzV5Y3B1YkI5bWd3?=
- =?utf-8?B?UWdxcHBDMFVHWGtWbUF5UWdDZnhKSmRWcndUTXUrZlRkWTgyeFljaEt4UHdG?=
- =?utf-8?B?eVhWdDdiRkhIMDJDVm96SmVhWFNJcGhxd1lBN3N4ZDFuS3lUVC9uSnhqbVY1?=
- =?utf-8?B?SlpDQ21VNFowbUxuUVI0aEtFcnJoSDR4RzNiRDRHUzNsaFQ1b2JvazdnMVAx?=
- =?utf-8?B?a3pKNHphdFNLUmk2eHU5K3NDaUJiQ01zZFpMU0doWjU4ZjdiRWU1d0VGZERN?=
- =?utf-8?B?Ni9USERBM280OW9KWDlkZVpPZnUrTUxrYzk5bGFoY09WR1Avbjh2dGlFNSto?=
- =?utf-8?B?dE1MdFJCa2IrSkNPOVM0SVAzRlVhSTJNYi92Z3RRSHVIRmIreERHYkJLYXVI?=
- =?utf-8?B?aGtuY3diRTlJUHdVUzBLcnR3Rys3TFpGUzBENUZ0OXNhN2pHV001MUtXRmE1?=
- =?utf-8?B?cWlrOGNRRUFucW9hUlFSdnA4NjNUcTRzNFFXUWRrMVd4dlVWeEJIMWlZNGpV?=
- =?utf-8?B?WXRzelROVkJ1ZDgrZWlKeXJXNDdodXhNY1R3ODZmWUxzZ09HQVBkbGNGOXlN?=
- =?utf-8?B?MDhaZy9yQzVuK2NpaUF4VFpEN2ZwTlM5VjFxNjVLZTR0UDQ2V3pBa21BMDd0?=
- =?utf-8?B?NzRkazZoSExkZHE5WWMrOXU0MTIzZEMwM09JcmZROUQvN0QwZ2JLdVpOWHpz?=
- =?utf-8?B?OGc9PQ==?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 962d7f16-759f-449c-5bd0-08db3717eec4
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR03MB7033.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Apr 2023 03:26:53.5689
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H5dEQvGigJFSL2TkRJYblYIUBfzXBD1l9mAO5hTbhfR/zafkczvMY9gtjrcK7ChNfSvzoUYxxJIm97+lxRHcToYeG6zA9yL/WMBu1U6T9V8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB6792
-X-Spam-Status: No, score=-2.2 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: GsySPYrs82FPa3DDfkN1x0Ilen9c021G
+X-Proofpoint-ORIG-GUID: GsySPYrs82FPa3DDfkN1x0Ilen9c021G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-06_14,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
+ mlxlogscore=999 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303200000 definitions=main-2304070032
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -123,48 +74,274 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/7 02:11, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
->
-> On 06/04/2023 10:16, Kelvin Zhang wrote:
->> Document the new C3 SoC/board device tree bindings.
->>
->> C3 is an advanced edge AI processor designed for smart IP camera
->> applications, which does not belong to Meson series.
->>
->> Therefore, modify the title field accordingly.
->>
->> Signed-off-by: Kelvin Zhang <kelvin.zhang@amlogic.com>
->> ---
->>   Documentation/devicetree/bindings/arm/amlogic.yaml | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/amlogic.yaml b/Documentation/devicetree/bindings/arm/amlogic.yaml
->> index 274ee0890312..ade730f35519 100644
->> --- a/Documentation/devicetree/bindings/arm/amlogic.yaml
->> +++ b/Documentation/devicetree/bindings/arm/amlogic.yaml
->> @@ -4,7 +4,7 @@
->>   $id: http://devicetree.org/schemas/arm/amlogic.yaml#
->>   $schema: http://devicetree.org/meta-schemas/core.yaml#
->>   
->> -title: Amlogic MesonX
->> +title: Amlogic SoC based Platforms
->>   
->>   maintainers:
->>     - Kevin Hilman <khilman@baylibre.com>
->> @@ -211,6 +211,13 @@ properties:
->>                 - amlogic,aq222
->>             - const: amlogic,s4
->>   
->> +      - description: Boards with the Amlogic C3 C302X/C308L SoC
->> +        items:
->> +          - enum:
->> +              - amlogic,aw409
->> +              - amlogic,aw419
->> +          - const: amlogic,c3
-> Try to keep some order, e.g. between a and s.
-Sure. Thanks!
->
-> Best regards,
-> Krzysztof
->
+WCN6855 will report memdump via ACL data or HCI event when
+it get crashed, so we collect memdump to debug firmware.
+
+Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
+---
+ drivers/bluetooth/btusb.c | 221 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 221 insertions(+)
+
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 2303b0a66323..ecc346d8b2ea 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -752,6 +752,7 @@ static const struct dmi_system_id btusb_needs_reset_resume_table[] = {
+ #define BTUSB_WAKEUP_AUTOSUSPEND	14
+ #define BTUSB_USE_ALT3_FOR_WBS	15
+ #define BTUSB_ALT6_CONTINUOUS_TX	16
++#define BTUSB_HW_SSR_ACTIVE	17
+ 
+ struct btusb_data {
+ 	struct hci_dev       *hdev;
+@@ -904,6 +905,11 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
+ 	struct btusb_data *data = hci_get_drvdata(hdev);
+ 	struct gpio_desc *reset_gpio = data->reset_gpio;
+ 
++	if (test_bit(BTUSB_HW_SSR_ACTIVE, &data->flags)) {
++		bt_dev_info(hdev, "Defer cmd_timeout due to dump active");
++		return;
++	}
++
+ 	if (++data->cmd_timeout_cnt < 5)
+ 		return;
+ 
+@@ -3294,6 +3300,213 @@ static int btusb_set_bdaddr_wcn6855(struct hci_dev *hdev,
+ 	return 0;
+ }
+ 
++#define QCA_MEMDUMP_ACL_HANDLE 0x2EDD
++#define QCA_MEMDUMP_SIZE_MAX  0x100000
++#define QCA_MEMDUMP_VSE_CLASS 0x01
++#define QCA_MEMDUMP_MSG_TYPE 0x08
++struct qca_dump_hdr {
++	u8 vse_class;
++	u8 msg_type;
++	__le16 seqno;
++	u8 reserved;
++	union {
++		u8 data[0];
++		struct {
++			__le32 ram_dump_size;
++			u8 data0[0];
++		} __packed;
++	};
++} __packed;
++
++struct qca_dump_info {
++	/* fields for dump collection */
++	u16 id_vendor;
++	u16 id_product;
++	u32 fw_version;
++	u32 controller_id;
++	u32 ram_dump_size;
++	u32 ram_dump_offs;
++	u16 ram_dump_seqno;
++};
++
++static struct qca_dump_info qca_dump = {0};
++
++static void btusb_dump_hdr_qca(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	char buf[128];
++
++	snprintf(buf, sizeof(buf), "Controller Name: 0x%x\n",
++			qca_dump.controller_id);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Firmware Version: 0x%x\n",
++			qca_dump.fw_version);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Driver: %s\nVendor: qca\n",
++			btusb_driver.name);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "VID: 0x%x\nPID:0x%x\n",
++			qca_dump.id_vendor, qca_dump.id_product);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Lmp Subversion: 0x%x\n",
++			hdev->lmp_subver);
++	skb_put_data(skb, buf, strlen(buf));
++}
++
++static void btusb_coredump_qca(struct hci_dev *hdev)
++{
++	static const u8 param[] = { 0x26 };
++	struct sk_buff *skb;
++
++	skb = __hci_cmd_sync(hdev, 0xfc0c, 1, param, HCI_CMD_TIMEOUT);
++	if (IS_ERR(skb))
++		bt_dev_err(hdev, "%s: triggle crash failed (%ld)", __func__, PTR_ERR(skb));
++	kfree_skb(skb);
++}
++
++/*
++ * ==0: not a dump pkt.
++ * < 0: fails to handle a dump pkt
++ * > 0: otherwise.
++ */
++static int handle_dump_pkt_qca(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	int ret = 0;
++	u8 pkt_type;
++	u8 *sk_ptr;
++	unsigned int sk_len;
++	u16 seqno;
++	u32 ram_dump_size;
++
++	struct hci_event_hdr *event_hdr;
++	struct hci_acl_hdr *acl_hdr;
++	struct qca_dump_hdr *dump_hdr;
++	struct btusb_data *btdata = hci_get_drvdata(hdev);
++	struct usb_device *udev = btdata->udev;
++
++	pkt_type = hci_skb_pkt_type(skb);
++	sk_ptr = skb->data;
++	sk_len = skb->len;
++
++	if (pkt_type == HCI_ACLDATA_PKT) {
++		acl_hdr = hci_acl_hdr(skb);
++		if (le16_to_cpu(acl_hdr->handle) != QCA_MEMDUMP_ACL_HANDLE)
++			return 0;
++		sk_ptr += HCI_ACL_HDR_SIZE;
++		sk_len -= HCI_ACL_HDR_SIZE;
++		event_hdr = (struct hci_event_hdr *)sk_ptr;
++	} else {
++		event_hdr = hci_event_hdr(skb);
++	}
++
++	if (event_hdr->evt != HCI_VENDOR_PKT)
++		return 0;
++	if (event_hdr->plen != (sk_len - HCI_EVENT_HDR_SIZE))
++		return 0;
++	sk_ptr += HCI_EVENT_HDR_SIZE;
++	sk_len -= HCI_EVENT_HDR_SIZE;
++
++	if (sk_len < offsetof(struct qca_dump_hdr, data))
++		return 0;
++	dump_hdr = (struct qca_dump_hdr *)sk_ptr;
++	if ((dump_hdr->vse_class != QCA_MEMDUMP_VSE_CLASS)
++	    || (dump_hdr->msg_type != QCA_MEMDUMP_MSG_TYPE))
++		return 0;
++
++	/*it is dump pkt now*/
++	ret = 1;
++	seqno = le16_to_cpu(dump_hdr->seqno);
++	if (seqno == 0) {
++		set_bit(BTUSB_HW_SSR_ACTIVE, &btdata->flags);
++		ram_dump_size = le32_to_cpu(dump_hdr->ram_dump_size);
++		if (!ram_dump_size || (ram_dump_size > QCA_MEMDUMP_SIZE_MAX)) {
++			ret = -EILSEQ;
++			bt_dev_err(hdev, "Invalid memdump size(%u)",
++				   ram_dump_size);
++			goto out;
++		}
++
++		ret = hci_devcd_init(hdev, ram_dump_size);
++		if (ret < 0) {
++			bt_dev_err(hdev, "memdump init error(%d)", ret);
++			goto out;
++		}
++		ret = 1;
++
++		qca_dump.ram_dump_size = ram_dump_size;
++		qca_dump.ram_dump_offs = 0;
++		qca_dump.ram_dump_seqno = 0;
++		sk_ptr += offsetof(struct qca_dump_hdr, data0);
++		sk_len -= offsetof(struct qca_dump_hdr, data0);
++
++		usb_disable_autosuspend(udev);
++		bt_dev_info(hdev, "%s memdump size(%u)\n",
++			    (pkt_type == HCI_ACLDATA_PKT) ? "ACL" : "event",
++			    ram_dump_size);
++	} else {
++		sk_ptr += offsetof(struct qca_dump_hdr, data);
++		sk_len -= offsetof(struct qca_dump_hdr, data);
++	}
++
++	if (!qca_dump.ram_dump_size) {
++		ret = -EINVAL;
++		bt_dev_err(hdev, "memdump is not active");
++		goto out;
++	}
++
++	if ((seqno != qca_dump.ram_dump_seqno) && (seqno != 0xFFFF)) {
++		ret = -EILSEQ;
++		bt_dev_err(hdev,
++			   "expected memdump seqno(%u) is not received(%u)\n",
++			   qca_dump.ram_dump_seqno, seqno);
++		hci_devcd_abort(hdev);
++		goto out;
++	}
++
++	skb_pull(skb, skb->len - sk_len);
++	hci_devcd_append(hdev, skb);
++	qca_dump.ram_dump_offs += sk_len;
++	qca_dump.ram_dump_seqno++;
++	if (seqno != 0xFFFF)
++		return ret;
++	hci_devcd_complete(hdev);
++
++out:
++	if (qca_dump.ram_dump_size) {
++		usb_enable_autosuspend(udev);
++		bt_dev_info(hdev,
++				"memdump Done: pkts(%u), dumped(%u)/total(%u)\n",
++				qca_dump.ram_dump_seqno, qca_dump.ram_dump_offs,
++				qca_dump.ram_dump_size);
++	}
++	qca_dump.ram_dump_size = 0;
++	qca_dump.ram_dump_offs = 0;
++	qca_dump.ram_dump_seqno = 0;
++	clear_bit(BTUSB_HW_SSR_ACTIVE, &btdata->flags);
++
++	if (ret < 0)
++		kfree_skb(skb);
++	return ret;
++}
++
++static int btusb_recv_acl_qca(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	if (handle_dump_pkt_qca(hdev, skb))
++		return 0;
++	return hci_recv_frame(hdev, skb);
++}
++
++static int btusb_recv_evt_qca(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	if (handle_dump_pkt_qca(hdev, skb))
++		return 0;
++	return hci_recv_frame(hdev, skb);
++}
++
++
+ #define QCA_DFU_PACKET_LEN	4096
+ 
+ #define QCA_GET_TARGET_VERSION	0x09
+@@ -3628,6 +3841,9 @@ static int btusb_setup_qca(struct hci_dev *hdev)
+ 	if (err < 0)
+ 		return err;
+ 
++	qca_dump.fw_version = le32_to_cpu(ver.patch_version);
++	qca_dump.controller_id = le32_to_cpu(ver.rom_version);
++
+ 	if (!(status & QCA_SYSCFG_UPDATED)) {
+ 		err = btusb_setup_qca_load_nvm(hdev, &ver, info);
+ 		if (err < 0)
+@@ -4117,6 +4333,11 @@ static int btusb_probe(struct usb_interface *intf,
+ 	}
+ 
+ 	if (id->driver_info & BTUSB_QCA_WCN6855) {
++		qca_dump.id_vendor = id->idVendor;
++		qca_dump.id_product = id->idProduct;
++		data->recv_event = btusb_recv_evt_qca;
++		data->recv_acl = btusb_recv_acl_qca;
++		hci_devcd_register(hdev, btusb_coredump_qca, btusb_dump_hdr_qca, NULL);
+ 		data->setup_on_usb = btusb_setup_qca;
+ 		hdev->shutdown = btusb_shutdown_qca;
+ 		hdev->set_bdaddr = btusb_set_bdaddr_wcn6855;
+-- 
+2.17.1
+
