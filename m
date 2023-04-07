@@ -2,78 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ADB96DB652
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC65E6DB655
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjDGWKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
+        id S230377AbjDGWM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 18:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjDGWKx (ORCPT
+        with ESMTP id S229482AbjDGWM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:10:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29487C67E;
-        Fri,  7 Apr 2023 15:10:52 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337LEoTI009823;
-        Fri, 7 Apr 2023 22:10:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=cLrW7EfNX54pesm49DMsh4E0Rg6kSq/wi6Ow3PIrZCY=;
- b=l18zsD0cBVWdOhA9HDOO0bvFjCpbajMXXOrgZ8gpZ+696iWhK5m0XYSg/T9nh41iwo82
- fFjEagNbVU+6rGz2YxbX7kLG9vGSFMxRygLHryUJJVG50vFLx0E2pVshvs2jPlG5dqB8
- g+IQqdBwk9GKmNwphQ5z5uGowHtB71Uj6lu+N0RQ5VesrieTkiPvN8rFB+wQXdJf+nNt
- pmufYpqIrLgUdV+uX+SpmiMwH5B9I1bAd2xx4iIzhzVrVS2qury1T3ttKNvrDKN/P871
- sXHthCh5ru9mHOdD/T+DykktY6W6V1Zy0EzIe/N9E2xQE1nJwqv3MHUnsahsIp3smMEv Vw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3psv4dmapk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 22:10:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337MAlb5027266
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Apr 2023 22:10:47 GMT
-Received: from [10.110.34.31] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 7 Apr 2023
- 15:10:46 -0700
-Message-ID: <e01c0579-5ce2-459b-0306-7351f8aca561@quicinc.com>
-Date:   Fri, 7 Apr 2023 15:10:45 -0700
+        Fri, 7 Apr 2023 18:12:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5C5CA06;
+        Fri,  7 Apr 2023 15:12:54 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 49CC666031D8;
+        Fri,  7 Apr 2023 23:12:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680905573;
+        bh=OPJye7DnMqvYT4X5PPg+ptLV0htYygit7gJuZ9US0xE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QkrJMLXuRtXS5BG0Hg2Htaz9x0Zsc7bFuEPRHS58enkmuEelE7u3Uj2z9HivNcL8h
+         QeH681j3s+oaTH8cAp3T/7r5+AooOT84psdSfBIKFSGFgCjQX3oXRUnj14MCnFGsag
+         QWhXt4VAXuecaSU1mtIAQHPOklGX9umo+qTUku9w/ROrmNG88jHc0eV0cvgzWgh9V6
+         FnoQW10vnXolDfEmeEEGKB8/RykPT3IFFkGFQjMJZtRsbfmp7RHXxYNVw4Zkpn1n+q
+         zg8b8ka0ozdh9qMZL3XzOwveFNLMLv/22ACL20aPL6THLWVujfCuLfbcnRQUBKT1ID
+         xvWRTGCCkDQaA==
+Received: by mercury (Postfix, from userid 1000)
+        id 27EEB1063103; Sat,  8 Apr 2023 00:12:50 +0200 (CEST)
+Date:   Sat, 8 Apr 2023 00:12:50 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] power: supply: hwmon: constify pointers to
+ hwmon_channel_info
+Message-ID: <20230407221250.xt2e7yuj62rlotkd@mercury.elektranox.org>
+References: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] rpmsg: glink: Consolidate TX_DATA and TX_DATA_CONT
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230327144153.3133425-1-quic_bjorande@quicinc.com>
- <20230327144153.3133425-3-quic_bjorande@quicinc.com>
-From:   Chris Lew <quic_clew@quicinc.com>
-In-Reply-To: <20230327144153.3133425-3-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: M6XwqxmFN3Af0Y9mr2DPSwg0kncSZyZc
-X-Proofpoint-ORIG-GUID: M6XwqxmFN3Af0Y9mr2DPSwg0kncSZyZc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_14,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- malwarescore=0 spamscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304070200
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rd7nj3bva35lr4pn"
+Content-Disposition: inline
+In-Reply-To: <20230407150326.80183-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,97 +59,75 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--rd7nj3bva35lr4pn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 3/27/2023 7:41 AM, Bjorn Andersson wrote:
-> Rather than duplicating most of the code for constructing the initial
-> TX_DATA and subsequent TX_DATA_CONT packets, roll them into a single
-> loop.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Hi,
+
+On Fri, Apr 07, 2023 at 05:03:26PM +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be
+> made const for safety.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   drivers/rpmsg/qcom_glink_native.c | 46 +++++++++----------------------
->   1 file changed, 13 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-> index 62634d020d13..082cf7f4888e 100644
-> --- a/drivers/rpmsg/qcom_glink_native.c
-> +++ b/drivers/rpmsg/qcom_glink_native.c
-> @@ -1309,7 +1309,7 @@ static int __qcom_glink_send(struct glink_channel *channel,
->   	int ret;
->   	unsigned long flags;
->   	int chunk_size = len;
-> -	int left_size = 0;
-> +	size_t offset = 0;
->   
->   	if (!glink->intentless) {
->   		while (!intent) {
-> @@ -1343,49 +1343,29 @@ static int __qcom_glink_send(struct glink_channel *channel,
->   		iid = intent->id;
->   	}
->   
-> -	if (wait && chunk_size > SZ_8K) {
-> -		chunk_size = SZ_8K;
-> -		left_size = len - chunk_size;
-> -	}
-> -	req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA);
-> -	req.msg.param1 = cpu_to_le16(channel->lcid);
-> -	req.msg.param2 = cpu_to_le32(iid);
-> -	req.chunk_size = cpu_to_le32(chunk_size);
-> -	req.left_size = cpu_to_le32(left_size);
-> -
-> -	ret = qcom_glink_tx(glink, &req, sizeof(req), data, chunk_size, wait);
-> -
-> -	/* Mark intent available if we failed */
-> -	if (ret) {
-> -		if (intent)
-> -			intent->in_use = false;
-> -		return ret;
-> -	}
-> -
-> -	while (left_size > 0) {
-> -		data = (void *)((char *)data + chunk_size);
-> -		chunk_size = left_size;
-> -		if (chunk_size > SZ_8K)
-> +	while (offset < len) {
-> +		chunk_size = len - offset;
-> +		if (chunk_size > SZ_8K && (wait || offset > 0))
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@=
+linaro.org/
+>=20
+> Therefore I propose this should also go via hwmon tree.
+>=20
+> Cc: Jean Delvare <jdelvare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-hwmon@vger.kernel.org
+> ---
 
-offset > 0 seems to be a new condition compared to the previous logic.
-Are we adding this as a cached check because we know if offset is set 
-then fragmented sends are allowed?
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-I don't think wait would have changed during the loop, so I'm not sure 
-if offset > 0 is adding any extra value to the check.
+-- Sebastian
 
->   			chunk_size = SZ_8K;
-> -		left_size -= chunk_size;
->   
-> -		req.msg.cmd = cpu_to_le16(GLINK_CMD_TX_DATA_CONT);
-> +		req.msg.cmd = cpu_to_le16(offset == 0 ? GLINK_CMD_TX_DATA : GLINK_CMD_TX_DATA_CONT);
->   		req.msg.param1 = cpu_to_le16(channel->lcid);
->   		req.msg.param2 = cpu_to_le32(iid);
->   		req.chunk_size = cpu_to_le32(chunk_size);
-> -		req.left_size = cpu_to_le32(left_size);
-> +		req.left_size = cpu_to_le32(len - offset - chunk_size);
->   
-> -		ret = qcom_glink_tx(glink, &req, sizeof(req), data,
-> -				    chunk_size, wait);
-> -
-> -		/* Mark intent available if we failed */
-> +		ret = qcom_glink_tx(glink, &req, sizeof(req), data + offset, chunk_size, wait);
->   		if (ret) {
-> +			/* Mark intent available if we failed */
->   			if (intent)
->   				intent->in_use = false;
-> -			break;
-> +			return ret;
->   		}
-> +
-> +		offset += chunk_size;
->   	}
-> -	return ret;
-> +
-> +	return 0;
->   }
->   
->   static int qcom_glink_send(struct rpmsg_endpoint *ept, void *data, int len)
+>  drivers/power/supply/power_supply_hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_hwmon.c b/drivers/power/su=
+pply/power_supply_hwmon.c
+> index a48aa4afb828..c97893d4c25e 100644
+> --- a/drivers/power/supply/power_supply_hwmon.c
+> +++ b/drivers/power/supply/power_supply_hwmon.c
+> @@ -293,7 +293,7 @@ static const struct hwmon_ops power_supply_hwmon_ops =
+=3D {
+>  	.read_string	=3D power_supply_hwmon_read_string,
+>  };
+> =20
+> -static const struct hwmon_channel_info *power_supply_hwmon_info[] =3D {
+> +static const struct hwmon_channel_info * const power_supply_hwmon_info[]=
+ =3D {
+>  	HWMON_CHANNEL_INFO(temp,
+>  			   HWMON_T_LABEL     |
+>  			   HWMON_T_INPUT     |
+> --=20
+> 2.34.1
+>=20
+
+--rd7nj3bva35lr4pn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQwlV4ACgkQ2O7X88g7
++pqvBA//RGvJH9yu+zEp0cu+ZHkJQYBy6lNJBVX+33uLpxMpF6RJE3uRaXlayaRm
+fcWRhuP3Xn4MO+Bi467oXg97iIKGk5nRPoFVh4LoYz9fsLuW9L00p5lAkR0Q1jxM
+eoNDfAWlHXpwOw0IF7mVnRlEKuigLwFOciA8XmQxPnfLCQfK0aX4o+arHSYaYU6x
+ixsfyCjcvEpbd/25XuUOxEGuJ2Z5NYEzC5zdnj+aDPiKLY4wRCsBYDr/IsMt0ePH
+0pJMmqFzBUmPRoSIlLFmP2pbroj9TRCsfDyMRD4OltzkWzmmF5729D0MEX6S9MfP
+1H3StzhfPyIzv01clQkzTF+0Qc4LmKsexjU58y4a01H7DHCPUp3X8w3D2z9VbHmE
+q2AvzFPx4xmRpotK8RjZpS0Lx5MawwOeqe4G0iSgX9iIDviZ2ePlZQMJYhDsMgMv
+0ZGi0Ldh7qNhT+O9gmLfqdgH6/btZQtjBbSVOiBnPeH+BdCLcfaNE0PfVptEnkvB
+EwzoSQbrgmm14n/xaMBOV8UmubK55LwYvA7vYK/PxfUcFUdyq8SiE03QMHpTdeb9
+OutuHcbxKV+GU+TcllZREOskC8BwDaoGXHgA62BJ6VeIUWw7FtgGK+52IINQ2Vck
+6IdlN3UyduzvfGVggiAWjHLgdevWb33lle23I6YmXn6W4X67RJw=
+=LYJV
+-----END PGP SIGNATURE-----
+
+--rd7nj3bva35lr4pn--
