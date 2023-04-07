@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83366DB28E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8176DB29E
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjDGSLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S230136AbjDGSOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjDGSLm (ORCPT
+        with ESMTP id S229586AbjDGSOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:11:42 -0400
+        Fri, 7 Apr 2023 14:14:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD59BDE5;
-        Fri,  7 Apr 2023 11:11:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17B5420F;
+        Fri,  7 Apr 2023 11:14:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE2965386;
-        Fri,  7 Apr 2023 18:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60DFDC433EF;
-        Fri,  7 Apr 2023 18:11:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F46765055;
+        Fri,  7 Apr 2023 18:14:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03C0C4339C;
+        Fri,  7 Apr 2023 18:14:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680891097;
-        bh=WwLLENfrYdBbFWd+EgHxlfJk/XjtiV0jp+q/TCwtyH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T+haiMtvF7itCpbERgOl9MqD54p0Jgnb2UHDZG2UaLgEatSPtAKUPrOeDRmxVRR8b
-         ZV6AJAtnvZdfTLvYNBb9GM3b7YFoWtvtN1WKVx1VouamQXOvydsn/jWk2oGupydUmJ
-         zxeH/T0AB/hJ+PaPNyB5635xbD8GoJha+kKaGiPKGa8SyfFdTa9sWO6vI931gGAC8o
-         3LQqa5hqjAMRhxhu1NoUIDLw/w+AUCLit5hOyG+0YCUWNgaC2OnF11xd9V2yRc8/wZ
-         EAkXUuu8XFgbQDi/SOXYc0qk1Vli4wdFSDCAtW7pS+rV6o0rPEkRILPxU+Lr9uX1pc
-         I5uE33XWGCAFw==
-Date:   Fri, 7 Apr 2023 11:14:26 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v6 3/6] soc: qcom: Make the Qualcomm UFS/SDCC ICE a
- dedicated driver
-Message-ID: <20230407181426.22vsuyhkc5tl2zfl@ripper>
-References: <20230407105029.2274111-1-abel.vesa@linaro.org>
- <20230407105029.2274111-4-abel.vesa@linaro.org>
+        s=k20201202; t=1680891276;
+        bh=MJFycUcWL2cO35uDIVWw8uNPJwtHVVwCZayep99bjJQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=WZmHswgqiuJ/KXzwr0H+OGUxdKlv6uJpxFsur3jHySumnOGmsMNk0vVGWZ//rIskU
+         T0bG8DqfhEzAWE3YD8nhhErERz1xp7X0nZwvSl3o/i9tOa7pTtHzAzmYiE68i+0H6f
+         UpbFKcC6pA0v2gB1BjtE3xziJQZoZqbc3Hflldgt2usehDyfy11Zfh8h5kNPFQJlre
+         6WCkTd3vvz2+3v0GqebcGMerF/0QfT3nJ2eXdAE/Fbjy4xRVuBCFV2S1NYy6szz+wO
+         4Koz0z4vKeP4E1NuPT4kHa7ZD8jKj09diMPpJ6fwtszDm9ku4109xMwX5JIjiI5MRK
+         /k1y/BvW1hXYg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com
+In-Reply-To: <20230407152604.105467-1-maxime.chevallier@bootlin.com>
+References: <20230407152604.105467-1-maxime.chevallier@bootlin.com>
+Subject: Re: [PATCH] regmap: allow upshifting register addresses before
+ performing operations
+Message-Id: <168089127328.178922.2584057638774170261.b4-ty@kernel.org>
+Date:   Fri, 07 Apr 2023 19:14:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407105029.2274111-4-abel.vesa@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-2eb1a
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -72,555 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 01:50:26PM +0300, Abel Vesa wrote:
-> This takes the already existing duplicated support in both ufs-qcom
-> and sdhci-msm drivers and makes it a dedicated driver that can be used
-> by both mentioned drivers.
+On Fri, 07 Apr 2023 17:26:04 +0200, Maxime Chevallier wrote:
+> Similar to the existing reg_downshift mechanism, that is used to
+> translate register addresses on busses that have a smaller address
+> stride, it's also possible to want to upshift register addresses.
 > 
-> The reason for this is because, staring with SM8550, the ICE IP block
-> is shared between UFS and SDCC, which means we need to probe a dedicated
-> device and share it between those two consumers.
+> Such a case was encountered when network PHYs and PCS that usually sit
+> on a MDIO bus (16-bits register with a stride of 1) are integrated
+> directly as memory-mapped devices. Here, the same register layout
+> defined in 802.3 is used, but the register now have a larger stride.
 > 
-> So let's add the ICE dedicated driver as a soc driver.
-> 
-> Platforms that already have ICE supported, will use it as a library
-> as the of_qcom_ice_get will return an ICE instance created for the
-> consumer device. This allows the backwards compatibility with old-style
-> devicetree approach.
-> 
-> Also, add support to HW version 4.x since it works out-of-the-box with
-> the current driver. The 4.x HW version is found on SM8550 platform.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> [...]
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Applied to
 
-Regards,
-Bjorn
+   broonie/regmap.git for-next
 
-> ---
-> 
-> The v5 is here:
-> https://lore.kernel.org/all/20230403200530.2103099-4-abel.vesa@linaro.org/
-> 
-> Changes since v5:
->  * Reworded the commit message to split it into several paragraphs
->  * Added missing platform_device_put on device link creation failure
-> 
-> Changes since v4:
->  * mentioned the addition of the 4.x HW version in the commit message
->  * dropped np member from qcom_ice
->  * made the error message from qcom_ice_wait_bist_status a single line
->  * dropped clock enable call from qcom_ice_enable
->  * changed comment in qcom_ice_program_key above the byte swap according
->    to Bjorn's suggestion
->  * made the qcom_ice_create function prototype a two-liner
->  * changed the first argument of qcom_ice_create to simply device
->  * added support for the legacy DT clocks name
->  * changed the dev_info to dev_dbg in qcom_ice_create
->  * added kernel doc above of_qcom_ice_get
->  * made the comments in of_qcom_ice_get more explicit about how the
->    legacy and the qcom,ice approach are handled
->  * changed the error message on getting the ICE instance failure
->  * added devlink between the consumer and the ICE instance in order to
->    make sure the supplier doesn't get unbinded/removed from under the
->    consumer
->  * replace tab with space on the compatible line in the match table
-> 
-> Changes since v3:
->  * dropped the "QCOM ICE v2.X only" comment
->  * dropped question mark after "built-in self-test"
->  * dropped comment above qcom_ice_check_supported implementation
->  * allowed major version 4 as well, found on SM8550
->  * renamed "enable" argument of __qcom_ice_enable to "enable_optimizations"
->  * moved qcom_ice_enable implementation above qcom_ice_resume
->  * initialized dev in qcom_ice_program_key and dropped assignment below
->  * in ice.h, included types.h instead of err.h
->  * in ice.h, dropped the #if IS_ENABLED(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)
->  * in ice.h, moved of_qcom_ice_get below qcom_ice_evict_key
-> 
-> Changes since v2:
->  * reorganized the probe and of_qcom_ice_get to allow support for dts
->    legacy approach
->  * added suspend API to allow disabling the core clock when not in use
->  * reworded the commit message to mention the way the legacy dts approach
->    is supported
->  * made the qcom_ice definition private to the driver
-> 
-> Changes since v1:
->  * renamed filename to simply ice.c
->  * kept all the copyrights from UFS and SDHC drivers
->  * Used GENMASK like Konrad suggested
->  * Fixed the comment about "ICE instance is supported currently",
->    like Konrad suggested
->  * Used FIELD_GET
->  * Dropped extra comment from qcom_ice_low_power_mode_enable
->  * Used lowercase in hex values
->  * Dropped double space from comment above the qcom_ice_program_key
->    function
->  * Changed the dev_info about engine being registered to dev_dbg
->  * Made the compatible entry in the match table a single line
->  * Made the qcom_ice_driver definition consistent with respect to
->    spaces/tabs
->  * Switched QCOM_INLINE_CRYPTO_ENGINE to tristate and made it built-in
->    if any of the UFS or the SDHC drivers are built-in. This is to allow
->    the API to be available even if the built-in driver doesn't have
->    crypto enabled.
->  * Dropped the engine container state. The of_qcom_ice_get will look up
->    the ICE device based on the phandle and get the ICE data from dev
->    data.
->  * Dropped the supported field from qcom_ice definition.
->  * Marked all funtions that are local as static.
->  * Replaced qcom_ice_wait_bist_status function implementation with the
->    one dropped from sdhci-msm.c
->  * Added a separate function for key eviction
-> 
-> 
->  drivers/soc/qcom/Kconfig  |   4 +
->  drivers/soc/qcom/Makefile |   1 +
->  drivers/soc/qcom/ice.c    | 366 ++++++++++++++++++++++++++++++++++++++
->  include/soc/qcom/ice.h    |  37 ++++
->  4 files changed, 408 insertions(+)
->  create mode 100644 drivers/soc/qcom/ice.c
->  create mode 100644 include/soc/qcom/ice.h
-> 
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index a25df9e3c70e..a491718f8064 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -275,4 +275,8 @@ config QCOM_ICC_BWMON
->  	  the fixed bandwidth votes from cpufreq (CPU nodes) thus achieve high
->  	  memory throughput even with lower CPU frequencies.
->  
-> +config QCOM_INLINE_CRYPTO_ENGINE
-> +	tristate
-> +	select QCOM_SCM
-> +
->  endmenu
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 6e88da899f60..0f43a88b4894 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -32,3 +32,4 @@ obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
->  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
->  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
->  obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
-> +obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
-> diff --git a/drivers/soc/qcom/ice.c b/drivers/soc/qcom/ice.c
-> new file mode 100644
-> index 000000000000..a6123ea96272
-> --- /dev/null
-> +++ b/drivers/soc/qcom/ice.c
-> @@ -0,0 +1,366 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Qualcomm ICE (Inline Crypto Engine) support.
-> + *
-> + * Copyright (c) 2013-2019, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2019, Google LLC
-> + * Copyright (c) 2023, Linaro Limited
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/of_platform.h>
-> +
-> +#include <linux/firmware/qcom/qcom_scm.h>
-> +
-> +#include <soc/qcom/ice.h>
-> +
-> +#define AES_256_XTS_KEY_SIZE			64
-> +
-> +/* QCOM ICE registers */
-> +#define QCOM_ICE_REG_VERSION			0x0008
-> +#define QCOM_ICE_REG_FUSE_SETTING		0x0010
-> +#define QCOM_ICE_REG_BIST_STATUS		0x0070
-> +#define QCOM_ICE_REG_ADVANCED_CONTROL		0x1000
-> +
-> +/* BIST ("built-in self-test") status flags */
-> +#define QCOM_ICE_BIST_STATUS_MASK		GENMASK(31, 28)
-> +
-> +#define QCOM_ICE_FUSE_SETTING_MASK		0x1
-> +#define QCOM_ICE_FORCE_HW_KEY0_SETTING_MASK	0x2
-> +#define QCOM_ICE_FORCE_HW_KEY1_SETTING_MASK	0x4
-> +
-> +#define qcom_ice_writel(engine, val, reg)	\
-> +	writel((val), (engine)->base + (reg))
-> +
-> +#define qcom_ice_readl(engine, reg)	\
-> +	readl((engine)->base + (reg))
-> +
-> +struct qcom_ice {
-> +	struct device *dev;
-> +	void __iomem *base;
-> +	struct device_link *link;
-> +
-> +	struct clk *core_clk;
-> +};
-> +
-> +static bool qcom_ice_check_supported(struct qcom_ice *ice)
-> +{
-> +	u32 regval = qcom_ice_readl(ice, QCOM_ICE_REG_VERSION);
-> +	struct device *dev = ice->dev;
-> +	int major = FIELD_GET(GENMASK(31, 24), regval);
-> +	int minor = FIELD_GET(GENMASK(23, 16), regval);
-> +	int step = FIELD_GET(GENMASK(15, 0), regval);
-> +
-> +	/* For now this driver only supports ICE version 3 and 4. */
-> +	if (major != 3 && major != 4) {
-> +		dev_warn(dev, "Unsupported ICE version: v%d.%d.%d\n",
-> +			 major, minor, step);
-> +		return false;
-> +	}
-> +
-> +	dev_info(dev, "Found QC Inline Crypto Engine (ICE) v%d.%d.%d\n",
-> +		 major, minor, step);
-> +
-> +	/* If fuses are blown, ICE might not work in the standard way. */
-> +	regval = qcom_ice_readl(ice, QCOM_ICE_REG_FUSE_SETTING);
-> +	if (regval & (QCOM_ICE_FUSE_SETTING_MASK |
-> +		      QCOM_ICE_FORCE_HW_KEY0_SETTING_MASK |
-> +		      QCOM_ICE_FORCE_HW_KEY1_SETTING_MASK)) {
-> +		dev_warn(dev, "Fuses are blown; ICE is unusable!\n");
-> +		return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +static void qcom_ice_low_power_mode_enable(struct qcom_ice *ice)
-> +{
-> +	u32 regval;
-> +
-> +	regval = qcom_ice_readl(ice, QCOM_ICE_REG_ADVANCED_CONTROL);
-> +
-> +	/* Enable low power mode sequence */
-> +	regval |= 0x7000;
-> +	qcom_ice_writel(ice, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
-> +}
-> +
-> +static void qcom_ice_optimization_enable(struct qcom_ice *ice)
-> +{
-> +	u32 regval;
-> +
-> +	/* ICE Optimizations Enable Sequence */
-> +	regval = qcom_ice_readl(ice, QCOM_ICE_REG_ADVANCED_CONTROL);
-> +	regval |= 0xd807100;
-> +	/* ICE HPG requires delay before writing */
-> +	udelay(5);
-> +	qcom_ice_writel(ice, regval, QCOM_ICE_REG_ADVANCED_CONTROL);
-> +	udelay(5);
-> +}
-> +
-> +/*
-> + * Wait until the ICE BIST (built-in self-test) has completed.
-> + *
-> + * This may be necessary before ICE can be used.
-> + * Note that we don't really care whether the BIST passed or failed;
-> + * we really just want to make sure that it isn't still running. This is
-> + * because (a) the BIST is a FIPS compliance thing that never fails in
-> + * practice, (b) ICE is documented to reject crypto requests if the BIST
-> + * fails, so we needn't do it in software too, and (c) properly testing
-> + * storage encryption requires testing the full storage stack anyway,
-> + * and not relying on hardware-level self-tests.
-> + */
-> +static int qcom_ice_wait_bist_status(struct qcom_ice *ice)
-> +{
-> +	u32 regval;
-> +	int err;
-> +
-> +	err = readl_poll_timeout(ice->base + QCOM_ICE_REG_BIST_STATUS,
-> +				 regval, !(regval & QCOM_ICE_BIST_STATUS_MASK),
-> +				 50, 5000);
-> +	if (err)
-> +		dev_err(ice->dev, "Timed out waiting for ICE self-test to complete\n");
-> +
-> +	return err;
-> +}
-> +
-> +int qcom_ice_enable(struct qcom_ice *ice)
-> +{
-> +	qcom_ice_low_power_mode_enable(ice);
-> +	qcom_ice_optimization_enable(ice);
-> +
-> +	return qcom_ice_wait_bist_status(ice);
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_ice_enable);
-> +
-> +int qcom_ice_resume(struct qcom_ice *ice)
-> +{
-> +	struct device *dev = ice->dev;
-> +	int err;
-> +
-> +	err = clk_prepare_enable(ice->core_clk);
-> +	if (err) {
-> +		dev_err(dev, "failed to enable core clock (%d)\n",
-> +			err);
-> +		return err;
-> +	}
-> +
-> +	return qcom_ice_wait_bist_status(ice);
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_ice_resume);
-> +
-> +int qcom_ice_suspend(struct qcom_ice *ice)
-> +{
-> +	clk_disable_unprepare(ice->core_clk);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_ice_suspend);
-> +
-> +int qcom_ice_program_key(struct qcom_ice *ice,
-> +			 u8 algorithm_id, u8 key_size,
-> +			 const u8 crypto_key[], u8 data_unit_size,
-> +			 int slot)
-> +{
-> +	struct device *dev = ice->dev;
-> +	union {
-> +		u8 bytes[AES_256_XTS_KEY_SIZE];
-> +		u32 words[AES_256_XTS_KEY_SIZE / sizeof(u32)];
-> +	} key;
-> +	int i;
-> +	int err;
-> +
-> +	/* Only AES-256-XTS has been tested so far. */
-> +	if (algorithm_id != QCOM_ICE_CRYPTO_ALG_AES_XTS ||
-> +	    key_size != QCOM_ICE_CRYPTO_KEY_SIZE_256) {
-> +		dev_err_ratelimited(dev,
-> +				    "Unhandled crypto capability; algorithm_id=%d, key_size=%d\n",
-> +				    algorithm_id, key_size);
-> +		return -EINVAL;
-> +	}
-> +
-> +	memcpy(key.bytes, crypto_key, AES_256_XTS_KEY_SIZE);
-> +
-> +	/* The SCM call requires that the key words are encoded in big endian */
-> +	for (i = 0; i < ARRAY_SIZE(key.words); i++)
-> +		__cpu_to_be32s(&key.words[i]);
-> +
-> +	err = qcom_scm_ice_set_key(slot, key.bytes, AES_256_XTS_KEY_SIZE,
-> +				   QCOM_SCM_ICE_CIPHER_AES_256_XTS,
-> +				   data_unit_size);
-> +
-> +	memzero_explicit(&key, sizeof(key));
-> +
-> +	return err;
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_ice_program_key);
-> +
-> +int qcom_ice_evict_key(struct qcom_ice *ice, int slot)
-> +{
-> +	return qcom_scm_ice_invalidate_key(slot);
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_ice_evict_key);
-> +
-> +static struct qcom_ice *qcom_ice_create(struct device *dev,
-> +					void __iomem *base)
-> +{
-> +	struct qcom_ice *engine;
-> +
-> +	if (!qcom_scm_is_available())
-> +		return ERR_PTR(-EPROBE_DEFER);
-> +
-> +	if (!qcom_scm_ice_available()) {
-> +		dev_warn(dev, "ICE SCM interface not found\n");
-> +		return NULL;
-> +	}
-> +
-> +	engine = devm_kzalloc(dev, sizeof(*engine), GFP_KERNEL);
-> +	if (!engine)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	engine->dev = dev;
-> +	engine->base = base;
-> +
-> +	/*
-> +	 * Legacy DT binding uses different clk names for each consumer,
-> +	 * so lets try those first. If none of those are a match, it means
-> +	 * the we only have one clock and it is part of the dedicated DT node.
-> +	 * Also, enable the clock before we check what HW version the driver
-> +	 * supports.
-> +	 */
-> +	engine->core_clk = devm_clk_get_optional_enabled(dev, "ice_core_clk");
-> +	if (!engine->core_clk)
-> +		engine->core_clk = devm_clk_get_optional_enabled(dev, "ice");
-> +	if (!engine->core_clk)
-> +		engine->core_clk = devm_clk_get_enabled(dev, NULL);
-> +	if (IS_ERR(engine->core_clk))
-> +		return ERR_CAST(engine->core_clk);
-> +
-> +	if (!qcom_ice_check_supported(engine))
-> +		return ERR_PTR(-EOPNOTSUPP);
-> +
-> +	dev_dbg(dev, "Registered Qualcomm Inline Crypto Engine\n");
-> +
-> +	return engine;
-> +}
-> +
-> +/**
-> + * of_qcom_ice_get() - get an ICE instance from a DT node
-> + * @dev: device pointer for the consumer device
-> + *
-> + * This function will provide an ICE instance either by creating one for the
-> + * consumer device if its DT node provides the 'ice' reg range and the 'ice'
-> + * clock (for legacy DT style). On the other hand, if consumer provides a
-> + * phandle via 'qcom,ice' property to an ICE DT, the ICE instance will already
-> + * be created and so this function will return that instead.
-> + *
-> + * Return: ICE pointer on success, NULL if there is no ICE data provided by the
-> + * consumer or ERR_PTR() on error.
-> + */
-> +struct qcom_ice *of_qcom_ice_get(struct device *dev)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct qcom_ice *ice;
-> +	struct device_node *node;
-> +	struct resource *res;
-> +	void __iomem *base;
-> +
-> +	if (!dev || !dev->of_node)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	/*
-> +	 * In order to support legacy style devicetree bindings, we need
-> +	 * to create the ICE instance using the consumer device and the reg
-> +	 * range called 'ice' it provides.
-> +	 */
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "ice");
-> +	if (res) {
-> +		base = devm_ioremap_resource(&pdev->dev, res);
-> +		if (IS_ERR(base))
-> +			return ERR_CAST(base);
-> +
-> +		/* create ICE instance using consumer dev */
-> +		return qcom_ice_create(&pdev->dev, base);
-> +	}
-> +
-> +	/*
-> +	 * If the consumer node does not provider an 'ice' reg range
-> +	 * (legacy DT binding), then it must at least provide a phandle
-> +	 * to the ICE devicetree node, otherwise ICE is not supported.
-> +	 */
-> +	node = of_parse_phandle(dev->of_node, "qcom,ice", 0);
-> +	if (!node)
-> +		return NULL;
-> +
-> +	pdev = of_find_device_by_node(node);
-> +	if (!pdev) {
-> +		dev_err(dev, "Cannot find device node %s\n", node->name);
-> +		ice = ERR_PTR(-EPROBE_DEFER);
-> +		goto out;
-> +	}
-> +
-> +	ice = platform_get_drvdata(pdev);
-> +	if (!ice) {
-> +		dev_err(dev, "Cannot get ice instance from %s\n",
-> +			dev_name(&pdev->dev));
-> +		platform_device_put(pdev);
-> +		ice = ERR_PTR(-EPROBE_DEFER);
-> +		goto out;
-> +	}
-> +
-> +	ice->link = device_link_add(dev, &pdev->dev, DL_FLAG_AUTOREMOVE_SUPPLIER);
-> +	if (!ice->link) {
-> +		dev_err(&pdev->dev,
-> +			"Failed to create device link to consumer %s\n",
-> +			dev_name(dev));
-> +		platform_device_put(pdev);
-> +		ice = ERR_PTR(-EINVAL);
-> +	}
-> +
-> +out:
-> +	of_node_put(node);
-> +
-> +	return ice;
-> +}
-> +EXPORT_SYMBOL_GPL(of_qcom_ice_get);
-> +
-> +static int qcom_ice_probe(struct platform_device *pdev)
-> +{
-> +	struct qcom_ice *engine;
-> +	void __iomem *base;
-> +
-> +	base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base)) {
-> +		dev_warn(&pdev->dev, "ICE registers not found\n");
-> +		return PTR_ERR(base);
-> +	}
-> +
-> +	engine = qcom_ice_create(&pdev->dev, base);
-> +	if (IS_ERR(engine))
-> +		return PTR_ERR(engine);
-> +
-> +	platform_set_drvdata(pdev, engine);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id qcom_ice_of_match_table[] = {
-> +	{ .compatible = "qcom,inline-crypto-engine" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, qcom_ice_of_match_table);
-> +
-> +static struct platform_driver qcom_ice_driver = {
-> +	.probe	= qcom_ice_probe,
-> +	.driver = {
-> +		.name = "qcom-ice",
-> +		.of_match_table = qcom_ice_of_match_table,
-> +	},
-> +};
-> +
-> +module_platform_driver(qcom_ice_driver);
-> +
-> +MODULE_DESCRIPTION("Qualcomm Inline Crypto Engine driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/soc/qcom/ice.h b/include/soc/qcom/ice.h
-> new file mode 100644
-> index 000000000000..5870a94599a2
-> --- /dev/null
-> +++ b/include/soc/qcom/ice.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2023, Linaro Limited
-> + */
-> +
-> +#ifndef __QCOM_ICE_H__
-> +#define __QCOM_ICE_H__
-> +
-> +#include <linux/types.h>
-> +
-> +struct qcom_ice;
-> +
-> +enum qcom_ice_crypto_key_size {
-> +	QCOM_ICE_CRYPTO_KEY_SIZE_INVALID	= 0x0,
-> +	QCOM_ICE_CRYPTO_KEY_SIZE_128		= 0x1,
-> +	QCOM_ICE_CRYPTO_KEY_SIZE_192		= 0x2,
-> +	QCOM_ICE_CRYPTO_KEY_SIZE_256		= 0x3,
-> +	QCOM_ICE_CRYPTO_KEY_SIZE_512		= 0x4,
-> +};
-> +
-> +enum qcom_ice_crypto_alg {
-> +	QCOM_ICE_CRYPTO_ALG_AES_XTS		= 0x0,
-> +	QCOM_ICE_CRYPTO_ALG_BITLOCKER_AES_CBC	= 0x1,
-> +	QCOM_ICE_CRYPTO_ALG_AES_ECB		= 0x2,
-> +	QCOM_ICE_CRYPTO_ALG_ESSIV_AES_CBC	= 0x3,
-> +};
-> +
-> +int qcom_ice_enable(struct qcom_ice *ice);
-> +int qcom_ice_resume(struct qcom_ice *ice);
-> +int qcom_ice_suspend(struct qcom_ice *ice);
-> +int qcom_ice_program_key(struct qcom_ice *ice,
-> +			 u8 algorithm_id, u8 key_size,
-> +			 const u8 crypto_key[], u8 data_unit_size,
-> +			 int slot);
-> +int qcom_ice_evict_key(struct qcom_ice *ice, int slot);
-> +struct qcom_ice *of_qcom_ice_get(struct device *dev);
-> +#endif /* __QCOM_ICE_H__ */
-> -- 
-> 2.34.1
-> 
+Thanks!
+
+[1/1] regmap: allow upshifting register addresses before performing operations
+      commit: 4a670ac3e75e517c96cbd01ef870dbd598c3ce71
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
