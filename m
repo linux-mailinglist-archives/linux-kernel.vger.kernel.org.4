@@ -2,95 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B813B6DB4EF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4B46DB4F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbjDGUKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 16:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S229747AbjDGUM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 16:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231728AbjDGUJt (ORCPT
+        with ESMTP id S229721AbjDGUMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 16:09:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66931CA2D;
-        Fri,  7 Apr 2023 13:09:43 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 337Jiwb0029048;
-        Fri, 7 Apr 2023 20:09:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Oue0184In+1WXLod3+6ssUfkgG2cv48XML0xIhs6V1I=;
- b=GWJ2cCaFaVBEXCd7Fnlh7tUpyoI8kHM1n/FJthSrR4usvAaxp2vEe0dLd9BJawMWvuzh
- 3Jatv2t8W34Dy8OXqMeYy4ucfqnFSUAuU0vLs0D7ONtyI0KP6zXIeSfxbO60Zf/3R3JD
- MgzsbA2P9qB/hIgCcFYWHQtjymKVwyY1GTaMMZsuqHdskVLjVroiBVM//yIFIIo82OF1
- 0bv8dWtcvTtm1r//Ku7RyKU9xlzQQm8REy6fNSbeyeQ90vkhGmQdtVRwgE8dsuu0Q0ER
- eekIPUrVRFezRuE/DoUr3eKZWfcf4VYPnt8QV6z/HxRH2AvM8abgvSbACT+Re18GgU5X iA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ptcrn1rbj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Apr 2023 20:09:16 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 337K9FFf029562
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 7 Apr 2023 20:09:15 GMT
-Received: from [10.110.116.85] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 7 Apr 2023
- 13:09:13 -0700
-Message-ID: <9529ba0b-4031-c91c-e231-86ee1c845539@quicinc.com>
-Date:   Fri, 7 Apr 2023 13:09:12 -0700
+        Fri, 7 Apr 2023 16:12:55 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE36CBBBE
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 13:12:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1a1b5ef4dd8so2174485ad.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 13:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680898373; x=1683490373;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c5mYams1Om5vGKqMiylWUp4/KwLeRIpwwY8Rdx8IDJM=;
+        b=FrKxlg6OAQXebFijrGcZUtm+iDlBYVl95CUmNYQuXGR8OrVOWgJ7gaZCA4m0bDzfeV
+         ylq7a7nIgBKdbRw6eB+gjLN/jqoNgL6CUDD+9hPYtbSEmS3ZXvEGJWtlS43bejz17gnP
+         nBrsq6EVy30ZVNbnpuYJIEseQAtOBU5TgoNYcX333ndOgADEYFHKhshlpwD/VnNH2nyI
+         uoQtJlcbLGd5UoYfbo5cZ/yVHHNBNb22HxR3cBkTo8c4lTCKAP7y3TFCo7hosaPp0uM4
+         NBz7bbQAhBwfvGA4wGzjOogXBqTl4PrspwHHxXnBodJ0SV1+blI/H4ykGNUdpKBKRlDV
+         ymYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680898373; x=1683490373;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c5mYams1Om5vGKqMiylWUp4/KwLeRIpwwY8Rdx8IDJM=;
+        b=aTERhLFjUaOAlvOzGCGgQWONeG8lhTVK+f/cXcaRhor2sBCSxrfb71Om7b/qhe5AIV
+         5ggY+ST01LYzyEmDXA06elI4vN4/c3LvFXkzXV8bkfwX4ixFjF9xSr9k8kQRt4iPGPpu
+         FXujlM7HGKMLJfyDckPMjASN+aaDhOUVX6fAUYvaxWLLWrGrWfYwWgLROrP/uccrlbg9
+         k4kK1iiRSvXO4vKHGZ1b7n2lMK/RSygkFWOfIwuX09bJ15oaUBLxJ66wBsKZPH5MSpT/
+         t867F1gWEMerOPmKTr5e9P4b4/7+gdbMgpLvbvBhT4bIu+gRQcihFIdoZQeVI3MjrxP8
+         YZXA==
+X-Gm-Message-State: AAQBX9czB3YYhu9Bnx4Z13hiBWn7/anka5n69LcDfplt1thDngqF11g6
+        Rx9rJcyfsNREgskHZIRB+8dLlT7pR5QhkatZFxIT9Et3e8dXU6Nqk/I=
+X-Google-Smtp-Source: AKy350aN6BrRdc4IJwbEKfxvNrr4JkL+vHVSKoHcPfr1050DMbmBnb2k6qGK0zUzmftpgVE8rmNCVMndQ52SJ+pC9kU=
+X-Received: by 2002:a05:6a00:2e23:b0:62a:d87a:a375 with SMTP id
+ fc35-20020a056a002e2300b0062ad87aa375mr1767877pfb.4.1680898373036; Fri, 07
+ Apr 2023 13:12:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v4 1/2] check-uapi: Introduce check-uapi.sh
-Content-Language: en-US
+References: <20230308115243.82592-1-masahiroy@kernel.org> <20230308115243.82592-4-masahiroy@kernel.org>
+In-Reply-To: <20230308115243.82592-4-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 13:12:41 -0700
+Message-ID: <CAKwvOd=MLHjGPSyVtmtW=1P=n2OLCXEFG+L=wLPVr4Orwuu2Xg@mail.gmail.com>
+Subject: Re: [PATCH 4/8] scripts/kallsyms: exclude symbols generated by itself dynamically
 To:     Masahiro Yamada <masahiroy@kernel.org>
-CC:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        <kernel-team@android.com>, <libabigail@sourceware.org>,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>
-References: <20230327174140.8169-1-quic_johmoo@quicinc.com>
- <20230327174140.8169-2-quic_johmoo@quicinc.com>
- <CAK7LNATFzdb37ZpOkYOP0rGBBjMhad6p76CXJg7kZsNkhpoBXg@mail.gmail.com>
-From:   John Moon <quic_johmoo@quicinc.com>
-In-Reply-To: <CAK7LNATFzdb37ZpOkYOP0rGBBjMhad6p76CXJg7kZsNkhpoBXg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fIdeXfPC_7ksN8uDDFcLhnwfm32E-YFL
-X-Proofpoint-GUID: fIdeXfPC_7ksN8uDDFcLhnwfm32E-YFL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-07_12,2023-04-06_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 phishscore=0 spamscore=0 mlxlogscore=635 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2304070181
-X-Spam-Status: No, score=-2.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,81 +73,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 8, 2023 at 3:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+>
+> Drop the symbols generated by scripts/kallsyms itself automatically
+> instead of maintaining the symbol list manually.
+>
+> Pass the kallsyms object from the previous kallsyms step (if it exists)
+> as the third parameter of scripts/mksysmap, which will weed out the
+> generated symbols from the input to the next kallsyms step.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/kallsyms.c      | 17 -----------------
+>  scripts/link-vmlinux.sh |  6 +++---
+>  scripts/mksysmap        | 11 ++++++++++-
+>  3 files changed, 13 insertions(+), 21 deletions(-)
+>
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 8148e880f78e..e572fda6fe42 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -104,23 +104,6 @@ static bool is_ignored_symbol(const char *name, char=
+ type)
+>  {
+>         /* Symbol names that exactly match to the following are ignored.*=
+/
+>         static const char * const ignored_symbols[] =3D {
+> -               /*
+> -                * Symbols which vary between passes. Passes 1 and 2 must=
+ have
+> -                * identical symbol lists. The kallsyms_* symbols below a=
+re
+> -                * only added after pass 1, they would be included in pas=
+s 2
+> -                * when --all-symbols is specified so exclude them to get=
+ a
+> -                * stable symbol list.
+> -                */
+> -               "kallsyms_addresses",
+> -               "kallsyms_offsets",
+> -               "kallsyms_relative_base",
+> -               "kallsyms_num_syms",
+> -               "kallsyms_names",
+> -               "kallsyms_markers",
+> -               "kallsyms_token_table",
+> -               "kallsyms_token_index",
+> -               "kallsyms_seqs_of_names",
+> -               /* Exclude linker generated symbols which vary between pa=
+sses */
+
+^ Do we want to retain this comment for the below two symbols?
+
+>                 "_SDA_BASE_",           /* ppc */
+>                 "_SDA2_BASE_",          /* ppc */
+>                 NULL
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index 32e573943cf0..679eb4653b16 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -174,7 +174,7 @@ kallsyms_step()
+>         kallsyms_S=3D${kallsyms_vmlinux}.S
+>
+>         vmlinux_link ${kallsyms_vmlinux} "${kallsymso_prev}" ${btf_vmlinu=
+x_bin_o}
+> -       mksysmap ${kallsyms_vmlinux} ${kallsyms_vmlinux}.syms
+> +       mksysmap ${kallsyms_vmlinux} ${kallsyms_vmlinux}.syms ${kallsymso=
+_prev}
+>         kallsyms ${kallsyms_vmlinux}.syms ${kallsyms_S}
+>
+>         info AS ${kallsyms_S}
+> @@ -188,7 +188,7 @@ kallsyms_step()
+>  mksysmap()
+>  {
+>         info NM ${2}
+> -       ${CONFIG_SHELL} "${srctree}/scripts/mksysmap" ${1} ${2}
+> +       ${CONFIG_SHELL} "${srctree}/scripts/mksysmap" ${1} ${2} ${3}
+>  }
+>
+>  sorttable()
+> @@ -277,7 +277,7 @@ if is_enabled CONFIG_DEBUG_INFO_BTF && is_enabled CON=
+FIG_BPF; then
+>         ${RESOLVE_BTFIDS} vmlinux
+>  fi
+>
+> -mksysmap vmlinux System.map
+> +mksysmap vmlinux System.map ${kallsymso}
+>
+>  if is_enabled CONFIG_BUILDTIME_TABLE_SORT; then
+>         info SORTTAB vmlinux
+> diff --git a/scripts/mksysmap b/scripts/mksysmap
+> index 8ea1955e03c6..1efd61ee0bac 100755
+> --- a/scripts/mksysmap
+> +++ b/scripts/mksysmap
+> @@ -4,7 +4,7 @@
+>  # tools to retrieve the actual addresses of symbols in the kernel.
+>  #
+>  # Usage
+> -# mksysmap vmlinux System.map
+> +# mksysmap vmlinux System.map [exclude]
+>
+>
+>  #####
+> @@ -51,4 +51,13 @@ ${NM} -n ${1} | sed >${2} -e "
+>
+>  # for LoongArch?
+>  / L0$/d
+> +
+> +# ----------------------------------------------------------------------=
+-----
+> +# Ignored kallsyms symbols
+> +#
+> +# If the 3rd parameter exists, symbols from it will be omitted from the =
+output.
+> +# This makes kallsyms have the identical symbol lists in the step 1 and =
+2.
+> +# Without this, the step2 would get new symbols generated by scripts/kal=
+lsyms.c
+> +# when CONFIG_KALLSYMS_ALL is enabled. That might require one more pass.
+> +$(if [ $# -ge 3 ]; then ${NM} ${3} | sed -n '/ U /!s:.* \([^ ]*\)$:/ \1$=
+/d:p'; fi)
+>  "
+> --
+> 2.34.1
+>
 
 
-On 4/7/2023 12:27 PM, Masahiro Yamada wrote:
-> On Tue, Mar 28, 2023 at 2:42 AM John Moon <quic_johmoo@quicinc.com> wrote:
->>
->> While the kernel community has been good at maintaining backwards
->> compatibility with kernel UAPIs, it would be helpful to have a tool
->> to check if a commit introduces changes that break backwards
->> compatibility.
->>
->> To that end, introduce check-uapi.sh: a simple shell script that
->> checks for changes to UAPI headers using libabigail.
->>
->> libabigail is "a framework which aims at helping developers and
->> software distributors to spot some ABI-related issues like interface
->> incompatibility in ELF shared libraries by performing a static
->> analysis of the ELF binaries at hand."
->>
->> The script uses one of libabigail's tools, "abidiff", to compile the
->> changed header before and after the commit to detect any changes.
->>
->> abidiff "compares the ABI of two shared libraries in ELF format. It
->> emits a meaningful report describing the differences between the two
->> ABIs."
->>
->> The script also includes the ability to check the compatibility of
->> all UAPI headers across commits. This allows developers to inspect
->> the stability of the UAPIs over time.
->>
->> Signed-off-by: John Moon <quic_johmoo@quicinc.com>
->> ---
->>      - Refactored to exclusively check headers installed by make
->>        headers_install. This simplified the code dramatically and removed
->>        the need to perform complex git diffs.
->>      - Removed the "-m" flag. Since we're checking all installed headers
->>        every time, a flag to check only modified files didn't make sense.
->>      - Added info message when usr/include/Makefile is not present that
->>        it's likely because that file was only introduced in v5.3.
->>      - Changed default behavior of log file. Now, the script will not
->>        create a log file unless you pass "-l <file>".
->>      - Simplified exit handler.
->>      - Added -j $MAX_THREADS to make headers_install to improve speed.
->>      - Cleaned up variable references.
->>
->>   scripts/check-uapi.sh | 488 ++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 488 insertions(+)
->>   create mode 100755 scripts/check-uapi.sh
->>
-> 
->> +
->> +# Install headers for both git refs
->> +install_headers() {
->> +       local -r base_ref="$1"
->> +       local -r past_ref="$2"
->> +
->> +       DEVIATED_FROM_CURRENT_TREE="false"
->> +       for ref in "$base_ref" "$past_ref"; do
->> +               if [ -n "$ref" ]; then
->> +                       if [ "$DEVIATED_FROM_CURRENT_TREE" = "false" ]; then
->> +                               save_tree_state
->> +                               DEVIATED_FROM_CURRENT_TREE="true"
->> +                       fi
->> +                       # This script ($0) is already loaded into memory at this point,
->> +                       # so this operation is safe
->> +                       git checkout --quiet "$(git rev-parse "$ref")"
->> +               fi
->> +
->> +               printf "Installing sanitized UAPI headers from %s... " "${ref:-dirty tree}"
->> +               make -j "$MAX_THREADS" ARCH="$ARCH" INSTALL_HDR_PATH="${TMP_DIR}/${ref}/usr" headers_install > /dev/null 2>&1
-> 
-> 
-> You suppressed stderr.
-> 
-> If 'make headers_install' fails, users see a sudden death
-> with no clue.
-> 
-
-Good point, will remove that suppression.
+--=20
+Thanks,
+~Nick Desaulniers
