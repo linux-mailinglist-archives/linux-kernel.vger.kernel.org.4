@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235EA6DAA42
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCB06DAA46
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbjDGIfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S240006AbjDGIhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239379AbjDGIfP (ORCPT
+        with ESMTP id S239978AbjDGIhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:35:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C162F46B0;
-        Fri,  7 Apr 2023 01:35:10 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.153])
-        by gateway (Coremail) with SMTP id _____8DxEzS91S9kxccXAA--.37008S3;
-        Fri, 07 Apr 2023 16:35:09 +0800 (CST)
-Received: from loongson-pc.loongson.cn (unknown [10.20.42.153])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxGL2t1S9kKRwYAA--.21995S7;
-        Fri, 07 Apr 2023 16:35:08 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, stable@vger.kernel.org
-Subject: [PATCH V3 5/5] irqchip/loongson-pch-pic: Fix pch_pic_acpi_init calling
-Date:   Fri,  7 Apr 2023 16:34:53 +0800
-Message-Id: <20230407083453.6305-6-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230407083453.6305-1-lvjianmin@loongson.cn>
-References: <20230407083453.6305-1-lvjianmin@loongson.cn>
+        Fri, 7 Apr 2023 04:37:08 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1540A6EAB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:36:49 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id 18so6947169ejo.13
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 01:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680856607;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XHSNmp7SMG0lrPLl4FoS04Pn0k06DM3nkel0fhy8S6I=;
+        b=Y+C+ULbsml8lP/9KuITu37jbMIR3cQ3ePn66AI8gqoWVPcWrkiJY0Xa5/L6WGTM/Sw
+         yXWUNAQ1RR40eJBG65Du6qL8Sl1el8LAuiunk02cFC+7mhyFlDTHR3GSL+Z/LJPgV2ZS
+         pI8rL9xJjR7hrI0xMV/sDituxY0hQ59R8wd421XC+jHtMkF3EbJHcV/8HeDTSrDX6YgV
+         JPCXgRhZc6ZKJQO0b+YpGC2fr7zXl49/8H7z8EmbIY1tRSSYhw44yUPeSL/oU7FWgEZA
+         tcXWCx5GLFhLNfn0OssWL9P1OzHYAssG/UznLUw/ZXGozRiBObhWSAzEqDGkNbykfgbx
+         eE9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680856607;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XHSNmp7SMG0lrPLl4FoS04Pn0k06DM3nkel0fhy8S6I=;
+        b=ce9Gm+sRNKefRWqZ4aFM7ihH3SMyRD0DEexRY7KZWJmZdbQFqvlluKX0SzlvCVz/8O
+         RJBtSwYA70j4XzKqBI8HgNzHG+YEf4OFhL0vLffgpakA9JJkM0f0gLxpyMMz79B6+MYW
+         un8bk++oB7X70gasxxwvUfR1WyIYPAEG4UR7j1Pa6BAiXPjnvXq7s4poq5BslWVu4caJ
+         4j0J8fkWKhVgcoO1bTCetFfeQyhxb2HvAq5ynXWIHKZChNO0EfIrECsBWLjnhGY3l/wR
+         +8L2oZyPWljzOaD4NZtZg0SOl2YrZAGjoOEAWdQdPCIExP+PgXQxZIOSQeyLuR7iKGWb
+         sW6w==
+X-Gm-Message-State: AAQBX9fX9ppHVshesuAGq3TKlheNRsAxygPK7iYolGDiX/mhv+jaBzSk
+        mfOrz2O/37lQM48QJqDKRm1nrw==
+X-Google-Smtp-Source: AKy350YppXdVXmmSPqTDg+9apafRJyLRTwt34FsDVmaVa+DPxzzk6jQ+f210ptRaWN1NbFN73cr/8Q==
+X-Received: by 2002:a17:907:8e8d:b0:8f0:143d:ee34 with SMTP id tx13-20020a1709078e8d00b008f0143dee34mr1218902ejc.1.1680856607523;
+        Fri, 07 Apr 2023 01:36:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:14a3:366:3172:3c37? ([2a02:810d:15c0:828:14a3:366:3172:3c37])
+        by smtp.gmail.com with ESMTPSA id k6-20020a17090646c600b00949173bdad1sm1801199ejs.213.2023.04.07.01.36.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 01:36:47 -0700 (PDT)
+Message-ID: <d626f476-3236-676d-b25d-87b71520219b@linaro.org>
+Date:   Fri, 7 Apr 2023 10:36:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxGL2t1S9kKRwYAA--.21995S7
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tw17uw1xJw4DGF1UCFy7Awb_yoW8ur47pF
-        W2q39Iyr48JFyxCFZ2kw45Xry3A3sxC3y2gF4rC3yrZr4qka4kCr1xAa1Uur4kCFsrGF4a
-        vF4FqF1jk3WUAaDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW7
-        JVWDJwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07j6rWOUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] dt-bindings: i2c: i2c-mt65xx: add binding for MT7981
+ SoC
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, linux-i2c@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Qii Wang <qii.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sam Shih <sam.shih@mediatek.com>
+References: <cover.1680817105.git.daniel@makrotopia.org>
+ <31957e15116027afd154f0d91e799028e2400bb2.1680817105.git.daniel@makrotopia.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <31957e15116027afd154f0d91e799028e2400bb2.1680817105.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For dual-bridges scenario, pch_pic_acpi_init() will be called
-in following path:
+On 06/04/2023 23:41, Daniel Golle wrote:
+> Add binding documentation for the I2C controllers found in the
+> MediaTek MT7981 SoC.
 
-cpuintc_acpi_init
-  acpi_cascade_irqdomain_init(in cpuintc driver)
-    acpi_table_parse_madt
-      eiointc_parse_madt
-        eiointc_acpi_init /* this will be called two times
-                             correspondingto parsing two
-                             eiointc entries in MADT under
-                             dual-bridges scenario*/
-          acpi_cascade_irqdomain_init(in eiointc driver)
-            acpi_table_parse_madt
-              pch_pic_parse_madt
-                pch_pic_acpi_init /* this will be called depend
-                                     on valid parent IRQ domain
-                                     handle for one or two times
-                                     corresponding to parsing
-                                     two pchpic entries in MADT
-                                     druring calling
-                                     eiointc_acpi_init() under
-                                     dual-bridges scenario*/
+Subject: drop second/last, redundant "binding". The "dt-bindings" prefix
+is already stating that these are bindings.
 
-During the first eiointc_acpi_init() calling, the
-pch_pic_acpi_init() will be called just one time since only
-one valid parent IRQ domain handle will be found for current
-eiointc IRQ domain.
+Bindings come before patches using them.
 
-During the second eiointc_acpi_init() calling, the
-pch_pic_acpi_init() will be called two times since two valid
-parent IRQ domain handles will be found. So in pch_pic_acpi_init(),
-we must have a reasonable way to prevent from creating second same
-pch_pic IRQ domain.
+BTW, I did not get previous patch at all, but your cover letter suggests
+these are compatible.
 
-The patch matches gsi base information in created pch_pic IRQ
-domains to check if the target domain has been created to avoid the
-bug mentioned above.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
----
- drivers/irqchip/irq-loongson-pch-pic.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-index 64fa67d4ee7a..e5fe4d50be05 100644
---- a/drivers/irqchip/irq-loongson-pch-pic.c
-+++ b/drivers/irqchip/irq-loongson-pch-pic.c
-@@ -404,6 +404,9 @@ int __init pch_pic_acpi_init(struct irq_domain *parent,
- 	int ret, vec_base;
- 	struct fwnode_handle *domain_handle;
- 
-+	if (find_pch_pic(acpi_pchpic->gsi_base) >= 0)
-+		return 0;
-+
- 	vec_base = acpi_pchpic->gsi_base - GSI_MIN_PCH_IRQ;
- 
- 	domain_handle = irq_domain_alloc_fwnode(&acpi_pchpic->address);
--- 
-2.31.1
+Best regards,
+Krzysztof
 
