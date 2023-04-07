@@ -2,187 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0808A6DB02A
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559DD6DB02C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240385AbjDGQFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S240638AbjDGQGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240271AbjDGQFk (ORCPT
+        with ESMTP id S240763AbjDGQF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:05:40 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF56B75D;
-        Fri,  7 Apr 2023 09:05:38 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-502739add9dso2161947a12.0;
-        Fri, 07 Apr 2023 09:05:38 -0700 (PDT)
+        Fri, 7 Apr 2023 12:05:59 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FBDBDCB
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:05:48 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-545cb3c9898so728095307b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:05:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680883537; x=1683475537;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680883547; x=1683475547;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z9YLbdCGW/jX2OamhOktfyVKjMyEWLO0+mLaQ5DYGf0=;
-        b=pDeWUWwhC/Cs6/WTOT5WTu86MIGQWKhyGlLnzVCfGqy7HXuSIDZ+MChdBZqP/cxsXx
-         F3W+6vQOR8/w/CUGhwzPjCne/n2IuAVf0x5dBMOVCB9GPzXOnFIpuHQqLX2AND5Yg0rY
-         5T7I3Xq0wk2ASpmLXCJ3XpNSJGq3bx1anM3qf7baMKH3zPhUneeEzYaw77cyjkSNJsBc
-         fyN5bVI5L9RTJtYqFxg9VclZItxWdM6nLUIsjOahI1+Zmqr/PdXyclQYhjaxBhQJtmeH
-         ZBtQQqcWBukDH68xWBT7hOR7nMTXGlnzcvkyRu/8jYVJyiF96XoOeHH2+5sgxVS0G4pj
-         KeOw==
+        bh=4Ikt4cUnbAD+aNtn12UlFaiBStoPGqSHVX26BE/7WeM=;
+        b=qW65ZX/foFdpDfE3Ib3eFqGMbd36ADAGUHlyKPdtan0k1ZOf6XvSqQddwkzHUBMBak
+         3/9mo9/7/4mVZoZKZOair9LztKforOnN51P1FqfCb4ocR9yDRl/DmT1mKg/eR1Ztf6zK
+         W5SmbB4vywpEhq3qXzWBJlEwbYud17wSwGbkM9B+6KoimE4yzYNkLaqFXbs+jcJiFSes
+         UujHFLDkg1ulIrSdrkPuRFFGnpmYoxrA+/d+m5EzfzUk4rgG0JtNpp0eazFmR6yxCSr6
+         SS/a4+sbUO5YTyGl6/l+4Mfm9aPpZCYzKqzHMXbqgJR1AbkXDU7G6qLfoShp7tukBhV0
+         fFoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680883537; x=1683475537;
+        d=1e100.net; s=20210112; t=1680883547; x=1683475547;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z9YLbdCGW/jX2OamhOktfyVKjMyEWLO0+mLaQ5DYGf0=;
-        b=vSsr4i8zeYyXbK9ZJYF/pntNb66IsPXwsi9mFFG3Pyn1zSOeh83uD5JQqKgxnsYYgi
-         U5kven2vOgpHs1BWn25orPOBD9oYbPWYu8jOhp6yftuJOBbARe59kwyF4BgytbswOnEh
-         hx8oYf1henzAC0kaKS8Ed7MRPX2qXVs5M6c/8cgmtBAGhVZ3KZTWTrGvddH7+oQpyR9g
-         7RrHG5nPppe4XkaGppg0CVdRUckotly+010ec3XHD8lJgxA151tCfure0clrp+gOhZqG
-         +uE9dYldKvzceTLblDTxqMBRx9NoKkJFdCbDeekVuATIWjR6CRB+X5E37uQjz8GieQWA
-         UEsw==
-X-Gm-Message-State: AAQBX9fU3VfX3LYzn5l6rDqgcHYc9JHeqUBJJLaSyaEQGOH2CcWrZwmW
-        wEwlCQkHQGRq84iJ2Skoz+43/gnSjY+9HFxLapk=
-X-Google-Smtp-Source: AKy350aNZXJPRzbYp8b0SVAvLP5TjVfhkoeoKmME3pofk7TOowEqKmPrxEPADDc9YKgpSVBVRIJjQZaWbeknVVfB3Es=
-X-Received: by 2002:a50:d0d9:0:b0:4fb:f19:87f with SMTP id g25-20020a50d0d9000000b004fb0f19087fmr1596876edf.3.1680883537176;
- Fri, 07 Apr 2023 09:05:37 -0700 (PDT)
+        bh=4Ikt4cUnbAD+aNtn12UlFaiBStoPGqSHVX26BE/7WeM=;
+        b=COeJlZD20mohcjJ9Nkqi5q5axGihEmhvRYKE23JHRJbCHgfbog6Ks+VtQt7CsH5YCW
+         45kbSR1d3Sth15pTHqfUprZXoAz5xW+2RTGYrajPlTS6YqIRFTrw9Xz2TdetIyXe8Oy5
+         Cc3xq2k3PvTv3oRNV+PYOnqyhiYSCBwqq69ZpqUc2O43STPE4A37fA20GeHvc3TD9MiF
+         UGyy1/s16Lza5OHttUxuQzBfEsol0AbrcjgNrFsTMq1fmIwNY1b+710cm/qPiRsO+hfl
+         rhspf5mzRJLOumub4zL+jWYOqRbzci4vLutLlr2FM9Pt5Cbg7nlsnq5kXhVQG2C+k5ky
+         W0Nw==
+X-Gm-Message-State: AAQBX9eHh49xZoUCfofuwajj9bsOcNtVm16srC9Uqpx3P7bOUgFlKLvo
+        /oncCHhJy033KhaHMZPJmSZ//KLI9kgPTsF0vqRllA==
+X-Google-Smtp-Source: AKy350YbB1pgB5FsM3mPp7fRcjtnL/fnlVWw/6wN0V6q8XGLC7gFBY6iDdFdqaXh/WNbi7aQD0caxkPakBB5fhVA6Hc=
+X-Received: by 2002:a81:e20a:0:b0:54d:4a49:ba22 with SMTP id
+ p10-20020a81e20a000000b0054d4a49ba22mr1019445ywl.7.1680883547060; Fri, 07 Apr
+ 2023 09:05:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <CALOAHbBj-+xY5jGLynUrg1GfSftZ+LT5DkADKz_+8+tL2kWMSw@mail.gmail.com>
- <20230403225017.onl5pbp7h2ugclbk@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbDQROKrWe732Qv1CsZwr6nMJN-2y77JW3EuT53D8At+Ow@mail.gmail.com>
- <20230406020656.7v5ongxyon5fr4s7@dhcp-172-26-102-232.dhcp.thefacebook.com>
- <CALOAHbCEsucGRB+n5hTnPm-HssmB91HD4PFVRhdO=CZnJXfR6A@mail.gmail.com>
- <CAADnVQ+1VEBHTM5Rm-gx8-bg=tfv=4x+aONhF0bAmBFZG3W8Qg@mail.gmail.com>
- <CALOAHbAorooyteDjgs82TtujP4Fwo5hSkh-Z5QhxhV9p7_2mfw@mail.gmail.com>
- <CAADnVQKr5Y3z9f_Vv49DvRFcN+OF3JaFx_9NgBL58pz+TLq8ig@mail.gmail.com>
- <CALOAHbDdtj1Qd0h1jzXKN4R=_webEVW=sqYfhSFXXsYftyvnKw@mail.gmail.com>
- <CAEf4Bza_vM8HE5g+4ANW3NAAt8=+cn7Lw+DSkH42gimqzYxPdw@mail.gmail.com>
- <20230407014359.m6tff5ffemvrsyt3@dhcp-172-26-102-232.dhcp.thefacebook.com> <CAEf4BzaBd9y1O_u-ixr+OGiKarHfX95iHUSGtpSbGnrayg7=zQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzaBd9y1O_u-ixr+OGiKarHfX95iHUSGtpSbGnrayg7=zQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 7 Apr 2023 09:05:25 -0700
-Message-ID: <CAADnVQJ6LSxZ3=x9AnqiYObYaSnKQj1mWB0CzSn2c4PGRmSUSw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 00/13] bpf: Introduce BPF namespace
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>, Song Liu <song@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20230403103440.2895683-1-vladimir.oltean@nxp.com> <20230403103440.2895683-3-vladimir.oltean@nxp.com>
+In-Reply-To: <20230403103440.2895683-3-vladimir.oltean@nxp.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Fri, 7 Apr 2023 12:05:35 -0400
+Message-ID: <CAM0EoMkvfUOubhgC+PpLi9vKcjsyc+Tp-uOuK60AJhaMaS2ogA@mail.gmail.com>
+Subject: Re: [PATCH v4 net-next 2/9] net/sched: mqprio: simplify handling of
+ nlattr portion of TCA_OPTIONS
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Gerhard Engleder <gerhard@engleder-embedded.com>,
+        Amritha Nambiar <amritha.nambiar@intel.com>,
+        Ferenc Fejes <ferenc.fejes@ericsson.com>,
+        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        Harini Katakam <harini.katakam@amd.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        linux-kernel@vger.kernel.org, Ferenc Fejes <fejes@inf.elte.hu>,
+        Simon Horman <simon.horman@corigine.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 8:59=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Apr 6, 2023 at 6:44=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Thu, Apr 06, 2023 at 01:22:26PM -0700, Andrii Nakryiko wrote:
-> > > On Wed, Apr 5, 2023 at 10:44=E2=80=AFPM Yafang Shao <laoar.shao@gmail=
+On Mon, Apr 3, 2023 at 6:35=E2=80=AFAM Vladimir Oltean <vladimir.oltean@nxp=
 .com> wrote:
-> > > >
-> > > > On Thu, Apr 6, 2023 at 12:24=E2=80=AFPM Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Wed, Apr 5, 2023 at 8:22=E2=80=AFPM Yafang Shao <laoar.shao@gm=
-ail.com> wrote:
-> > > > > >
-> > > > > > On Thu, Apr 6, 2023 at 11:06=E2=80=AFAM Alexei Starovoitov
-> > > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, Apr 5, 2023 at 7:55=E2=80=AFPM Yafang Shao <laoar.sha=
-o@gmail.com> wrote:
-> > > > > > > >
-> > > > > > > > It seems that I didn't describe the issue clearly.
-> > > > > > > > The container doesn't have CAP_SYS_ADMIN, but the CAP_SYS_A=
-DMIN is
-> > > > > > > > required to run bpftool,  so the bpftool running in the con=
-tainer
-> > > > > > > > can't get the ID of bpf objects or convert IDs to FDs.
-> > > > > > > > Is there something that I missed ?
-> > > > > > >
-> > > > > > > Nothing. This is by design. bpftool needs sudo. That's all.
-> > > > > > >
-> > > > > >
-> > > > > > Hmm, what I'm trying to do is make bpftool run without sudo.
-> > > > >
-> > > > > This is not a task that is worth solving.
-> > > > >
-> > > >
-> > > > Then the container with CAP_BPF enabled can't even iterate its bpf =
-progs ...
-> > >
-> > > I'll leave the BPF namespace discussion aside (I agree that it needs
-> > > way more thought).
-> > >
-> > > I am a bit surprised that we require CAP_SYS_ADMIN for GET_NEXT_ID
-> > > operations. GET_FD_BY_ID is definitely CAP_SYS_ADMIN, as they allow
-> > > you to take over someone else's link and stuff like this. But just
-> > > iterating IDs seems like a pretty innocent functionality, so maybe we
-> > > should remove CAP_SYS_ADMIN for GET_NEXT_ID?
-> > >
-> > > By itself GET_NEXT_ID is relatively useless without capabilities, but
-> > > we've been floating the idea of providing GET_INFO_BY_ID (not by FD)
-> > > for a while now, and that seems useful in itself, as it would indeed
-> > > help tools like bpftool to get *some* information even without
-> > > privileges. Whether those GET_INFO_BY_ID operations should return sam=
-e
-> > > full bpf_{prog,map,link,btf}_info or some trimmed down version of the=
-m
-> > > would be up to discussion, but I think getting some info without
-> > > creating an FD seems useful in itself.
-> > >
-> > > Would it be worth discussing and solving this separately from
-> > > namespacing issues?
-> >
-> > Iteration of IDs itself is fine. The set of IDs is not security sensiti=
-ve,
-> > but GET_NEXT_BY_ID has to be carefully restricted.
-> > It returns xlated, jited, BTF, line info, etc
-> > and with all the restrictions it would need something like
-> > CAP_SYS_PTRACE and CAP_PERFMON to be useful.
-> > And with that we're not far from CAP_SYS_ADMIN.
-> > Why bother then?
 >
-> You probably meant that GET_INFO_BY_ID should be carefully restricted?
-
-yes.
-
-> So yeah, that's what I said that this would have to be discussed
-> further. I agree that returning func/line info, program dump, etc is
-> probably a privileged part. But there is plenty of useful info besides
-> that (e.g., prog name, insns cnt, run stats, etc) that would be useful
-> for unpriv applications to monitor their own apps that they opened
-> from BPF FS, or just some observability daemons.
+> In commit 4e8b86c06269 ("mqprio: Introduce new hardware offload mode and
+> shaper in mqprio"), the TCA_OPTIONS format of mqprio was extended to
+> contain a fixed portion (of size NLA_ALIGN(sizeof struct tc_mqprio_qopt))
+> and a variable portion of other nlattrs (in the TCA_MQPRIO_* type space)
+> following immediately afterwards.
 >
-> There is a lot of useful information in bpf_map_info and bpf_link_info
-> that's way less privileged. I think bpf_link_info is good as is. Same
-> for bpf_map_info.
+> In commit feb2cf3dcfb9 ("net/sched: mqprio: refactor nlattr parsing to a
+> separate function"), we've moved the nlattr handling to a smaller
+> function, but yet, a small parse_attr() still remains, and the larger
+> mqprio_parse_nlattr() still does not have access to the beginning, and
+> the length, of the TCA_OPTIONS region containing these other nlattrs.
 >
-> Either way, I'm not insisting, just something that seems pretty simple
-> to add and useful in some scenarios. We can reuse existing code and
-> types for GET_INFO_BY_FD and just zero-out (or prevent filling out)
-> those privileged fields you mentioned. Anyway, something to put on the
-> backburner, perhaps.
+> In a future change, the mqprio qdisc will need to iterate through this
+> nlattr region to discover other attributes, so eliminate parse_attr()
+> and add 2 variables in mqprio_parse_nlattr() which hold the beginning
+> and the length of the nlattr range.
+>
+> We avoid the need to memset when nlattr_opt_len has insufficient length
+> by pre-initializing the table "tb".
+>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Reviewed-by: Ferenc Fejes <fejes@inf.elte.hu>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-Sorry, but I only see negatives. It's an extra code in the kernel
-that has to be carefully reviewed when initially submitted and
-then every patch that touches get_info_by_id would have to go
-through a microscope every time to avoid introducing a security issue.
-And for what? So that CAP_BPF application can read prog name and run stats?
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
+
+cheers,
+jamal
+
+> ---
+> v1->v4: none
+>
+>  net/sched/sch_mqprio.c | 32 +++++++++++++-------------------
+>  1 file changed, 13 insertions(+), 19 deletions(-)
+>
+> diff --git a/net/sched/sch_mqprio.c b/net/sched/sch_mqprio.c
+> index 48ed87b91086..94093971da5e 100644
+> --- a/net/sched/sch_mqprio.c
+> +++ b/net/sched/sch_mqprio.c
+> @@ -146,32 +146,26 @@ static const struct nla_policy mqprio_policy[TCA_MQ=
+PRIO_MAX + 1] =3D {
+>         [TCA_MQPRIO_MAX_RATE64] =3D { .type =3D NLA_NESTED },
+>  };
+>
+> -static int parse_attr(struct nlattr *tb[], int maxtype, struct nlattr *n=
+la,
+> -                     const struct nla_policy *policy, int len)
+> -{
+> -       int nested_len =3D nla_len(nla) - NLA_ALIGN(len);
+> -
+> -       if (nested_len >=3D nla_attr_size(0))
+> -               return nla_parse_deprecated(tb, maxtype,
+> -                                           nla_data(nla) + NLA_ALIGN(len=
+),
+> -                                           nested_len, policy, NULL);
+> -
+> -       memset(tb, 0, sizeof(struct nlattr *) * (maxtype + 1));
+> -       return 0;
+> -}
+> -
+> +/* Parse the other netlink attributes that represent the payload of
+> + * TCA_OPTIONS, which are appended right after struct tc_mqprio_qopt.
+> + */
+>  static int mqprio_parse_nlattr(struct Qdisc *sch, struct tc_mqprio_qopt =
+*qopt,
+>                                struct nlattr *opt)
+>  {
+> +       struct nlattr *nlattr_opt =3D nla_data(opt) + NLA_ALIGN(sizeof(*q=
+opt));
+> +       int nlattr_opt_len =3D nla_len(opt) - NLA_ALIGN(sizeof(*qopt));
+>         struct mqprio_sched *priv =3D qdisc_priv(sch);
+> -       struct nlattr *tb[TCA_MQPRIO_MAX + 1];
+> +       struct nlattr *tb[TCA_MQPRIO_MAX + 1] =3D {};
+>         struct nlattr *attr;
+>         int i, rem, err;
+>
+> -       err =3D parse_attr(tb, TCA_MQPRIO_MAX, opt, mqprio_policy,
+> -                        sizeof(*qopt));
+> -       if (err < 0)
+> -               return err;
+> +       if (nlattr_opt_len >=3D nla_attr_size(0)) {
+> +               err =3D nla_parse_deprecated(tb, TCA_MQPRIO_MAX, nlattr_o=
+pt,
+> +                                          nlattr_opt_len, mqprio_policy,
+> +                                          NULL);
+> +               if (err < 0)
+> +                       return err;
+> +       }
+>
+>         if (!qopt->hw)
+>                 return -EINVAL;
+> --
+> 2.34.1
+>
