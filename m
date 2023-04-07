@@ -2,132 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB3A6DB5B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02146DB5C2
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 23:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjDGVLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 17:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
+        id S229870AbjDGVTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 17:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjDGVLF (ORCPT
+        with ESMTP id S229598AbjDGVTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 17:11:05 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066229EE0;
-        Fri,  7 Apr 2023 14:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=cFXDWcTfTcXM5Yf65+stWvf5R1WyNTnh7fSbYMiLCyM=; b=OS483UuG3RWKtFZ9Cg1ZTlTALc
-        bs16Wo0+sXOUKgLF0VZHfWCcgirjHP9dfgGZ0NueO5HLvwlViyIi26lCM6RPkW0L1aBwdZA9750eu
-        imIo9ocw47NdfMteaGpg5C8iV+Gz7haBmHTCtYz/IZhShlhjTxZhOqZyDoqYBt2qgWVtXar1yCsXq
-        BS8IjzqI0XCK9xZz1dXu93xVEbzGb/NZl0LNlKYGPESFVT2FmiHiHBi+duij6YSpBkkfa/w98yrXO
-        Q9cVCvwRwUWEIGsmRgv4hmS4kQi0h4PE1MuYPI6uNMW1IYm2H3/fXYeKqfkdP3HDP+sdtHA3JhUqU
-        bE6Ul6eQ==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pktMD-00B9SO-35;
-        Fri, 07 Apr 2023 21:10:53 +0000
-Message-ID: <a05558c3-8d5c-c389-ba4c-be134c75ac1c@infradead.org>
-Date:   Fri, 7 Apr 2023 14:10:53 -0700
+        Fri, 7 Apr 2023 17:19:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC09776
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 14:19:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680902349; x=1712438349;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FdIw7BOKsAFqhvkAR/laTcmM9g+qgDHYW9oZNi2xqqg=;
+  b=AIHVdd2eJQLdyvJgffgusmnJpMWrm39kHutn8IMGwC+f6PQRvohx1VYR
+   LoF4ZjD6YpO3L7Dj5/12YnVwYTF7+tom5MkCHfR/cPIZx0lKrLJIxZ78B
+   A4A5IWiVnn4624QQviXocz1TPHNXx9bu8zfxm8K7gtJSjyXlQ0b01UEDf
+   FZyggOdqGIiinqgK+pmDJKP2DBtQcIIZHCAmUHpt4rEV29BVrS1zTcKoF
+   vyn3otfEP85WgDzEmBPSepz3nDoRkE8B4VvFGgolkGLxuGYB36qQy2uaj
+   eVSxVi8+cLINcMPLewv1fnoWqXD4Wsoyu+z9yFvWtG1eQLfNpjcmaRest
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="370905859"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="370905859"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 14:19:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="811516496"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="811516496"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 07 Apr 2023 14:19:06 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pktU9-000Stm-2z;
+        Fri, 07 Apr 2023 21:19:05 +0000
+Date:   Sat, 8 Apr 2023 05:18:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: vmlinux.o: warning: objtool: xen_hypercall_iret+0x0: RET before
+ UNTRAIN
+Message-ID: <202304080538.j5G6h1AB-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] parport_pc: don't allow driver for SPARC32
-Content-Language: en-US
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-parport@lists.infradead.org
-References: <20230406160548.25721-1-rdunlap@infradead.org>
- <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk>
- <20230406203207.GA1534216@ravnborg.org>
- <alpine.DEB.2.21.2304062144520.44308@angie.orcam.me.uk>
- <20230407200313.GA1655046@ravnborg.org>
- <alpine.DEB.2.21.2304072142290.62619@angie.orcam.me.uk>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <alpine.DEB.2.21.2304072142290.62619@angie.orcam.me.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Peter,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f2afccfefe7be1f7346564fe619277110d341f9b
+commit: a09a6e2399ba0595c3042b3164f3ca68a3cff33e objtool: Add entry UNRET validation
+date:   10 months ago
+config: x86_64-randconfig-a012-20221205 (https://download.01.org/0day-ci/archive/20230408/202304080538.j5G6h1AB-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a09a6e2399ba0595c3042b3164f3ca68a3cff33e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a09a6e2399ba0595c3042b3164f3ca68a3cff33e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304080538.j5G6h1AB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   ld: warning: arch/x86/lib/retpoline.o: missing .note.GNU-stack section implies executable stack
+   ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+   vmlinux.o: warning: objtool: cdce925_regmap_i2c_write+0xdb: stack state mismatch: cfa1=4+120 cfa2=5+40
+>> vmlinux.o: warning: objtool: xen_hypercall_iret+0x0: RET before UNTRAIN
 
 
-On 4/7/23 14:01, Maciej W. Rozycki wrote:
-> On Fri, 7 Apr 2023, Sam Ravnborg wrote:
-> 
->>>> Randy's suggestion is fine, as we avoid building parport support
->>>> for sparc32. If someone shows up and need parport support
->>>> for sparc32 then we could look into how to enable it.
->>>> Until then, we are better helped avoiding building the driver.
->>>
->>>  I disagree.  Why artificially prevent perfectly good hardware from 
->>> working with a perfectly good driver especially as the fix is just a 
->>> trivial exercise?  And I offered a solution.
->>
->> There is no sparc32 with a PC style parallel port, so the parport_pc
->> have no value for a sparc32 machine.
-> 
->  There are PC-style PCI (and PCIe) parallel ports in the form of option 
-> cards being sold; I have one in my RISC-V machine (and I had to go through 
-> the hassle of figuring out why the heck I am not able to select the driver 
-> in configuration; a situation analogous to what Randy's change wants to 
-> arrange).  You can plug one into any machine that has PCI slots and my 
-> understanding from Linux Kconfig files is there are such 32-bit SPARC 
-> machines in existence or the dependency on PCI wouldn't offer the driver.  
-> Otherwise just don't enable CONFIG_PCI for 32-bit SPARC.
-> 
-
-If there are 32-bit Sparc machines with PCI slots, we must not have any
-users with parallel ports or we should have heard about it IMO.
-
->  Apologies if I wasn't clear enough with my reasoning, although I think 
-> the lone presence of the PCI dependency in Kconfig ought have to make it 
-> clear.
-> 
->> The sparc32 machines have the parport_sunbpp driver for their parallel
->> port.
-> 
->  That's an onboard device or an SBus option card though, right?
-> 
->> An alternative fix, and better I think, would be to audit all archs
->> and let the relevant ones select ARCH_MIGHT_HAVE_PC_PARPORT, so we
->> avoided the ugly "|| (PCI && !S390 && !SPARC32)" case for PARPORT_PC.
-> 
->  It's only S390 that is special in that it has a limited set of specially 
-> crafted PCI options it can ever support (or so I am told; something about 
-> the firmware or suchlike).
-
-From my reading, if a Sparc32 machine has a PCI port, it might be able to
-have a parallel port. However, even with Maciej's suggested code change
-instead of my patch, the ebus code is not being compiled for Sparc32 -- only
-for Sparc64, so more changes are needed beyond Maciej's suggestion.
-
-But the documentation that I found refers to Ebus on Sparc4 machines.
-
->  Any other platform that has PCI slots will handle PC-style PCI parallel 
-> port option cards just fine, as long as it supports PCI I/O read/write 
-> commands (some systems such as POWER9 machines don't; Niklas Schnelle has 
-> been recently working on a generic way to exclude drivers for devices that 
-> require PCI port I/O from being offered with systems that have no support 
-> for PCI port I/O).
-> 
->  Let me know if you find anything here unclear or have any other questions 
-> or comments.
-
-/me wishes that we had a Sparc maintainer.
+objdump-func vmlinux.o xen_hypercall_iret:
+0000 00000000000002e0 <xen_hypercall_iret>:
+0000      2e0:	c3                   	ret
+0001      2e1:	cc                   	int3
+0002      2e2:	cc                   	int3
+0003      2e3:	cc                   	int3
+0004      2e4:	cc                   	int3
+0005      2e5:	cc                   	int3
+0006      2e6:	cc                   	int3
+0007      2e7:	cc                   	int3
+0008      2e8:	cc                   	int3
+0009      2e9:	cc                   	int3
+000a      2ea:	cc                   	int3
+000b      2eb:	cc                   	int3
+000c      2ec:	cc                   	int3
+000d      2ed:	cc                   	int3
+000e      2ee:	cc                   	int3
+000f      2ef:	cc                   	int3
+0010      2f0:	cc                   	int3
+0011      2f1:	cc                   	int3
+0012      2f2:	cc                   	int3
+0013      2f3:	cc                   	int3
+0014      2f4:	cc                   	int3
+0015      2f5:	cc                   	int3
+0016      2f6:	cc                   	int3
+0017      2f7:	cc                   	int3
+0018      2f8:	cc                   	int3
+0019      2f9:	cc                   	int3
+001a      2fa:	cc                   	int3
+001b      2fb:	cc                   	int3
+001c      2fc:	cc                   	int3
+001d      2fd:	cc                   	int3
+001e      2fe:	cc                   	int3
+001f      2ff:	cc                   	int3
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
