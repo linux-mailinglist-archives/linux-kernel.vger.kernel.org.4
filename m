@@ -2,219 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CA56DAC73
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 13:59:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0CF6DAC76
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240464AbjDGL7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 07:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        id S239298AbjDGMBb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 7 Apr 2023 08:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239298AbjDGL7V (ORCPT
+        with ESMTP id S230211AbjDGMB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 07:59:21 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED8783F2
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 04:59:19 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id z42so43300608ljq.13
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 04:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680868758;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wyNciRuuESIaKZEY8Qa86obLOtLCt19xSQ+LjBWVyjQ=;
-        b=x6t4GkePT4JZJ8ZgtSOSGs26QhXMjRbSyqg/eMVLLWn4zVRxKrxl5K/BgF+DrHZuds
-         s0jW3zyiwUl/LnZAih0GzV/X/1Yps9wU0ws51V8XXiC7LGAh/g4dxNtNwLdb15crQUc0
-         UwR7GcC+qebSayaEPaFwBe8FBh3Jko6hrhaUwDVm2EhKHm5yURJALcbFXl+dAbNGkZDO
-         c+jEhsEZG1Iq/c/pZdsOrQFyym9+iodZUZXLoUP4tecBl+dCpf2kwvZr3saMHm9UgPNV
-         9fBa1sIS11zPyUf5IQC1zSYK/oeWeRX+S/84SWlAYY4BYvnmtQQasWB1j3bKyB6kujM3
-         8JDg==
+        Fri, 7 Apr 2023 08:01:27 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC07983CD;
+        Fri,  7 Apr 2023 05:01:25 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id sg7so7910830ejc.9;
+        Fri, 07 Apr 2023 05:01:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680868758;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyNciRuuESIaKZEY8Qa86obLOtLCt19xSQ+LjBWVyjQ=;
-        b=cWrhB88dNtcTasD+DyFgCnGxwpAuZuwjeLlRcAY9HeM0mSyAN+7Moocmc+SJVBdinY
-         gslAPmCR4Gy0YHbGlGTPQDMSwv6ngDLAzNH5fuwi2V+s+Bj2tGVsgrBv1fYghn8it76j
-         022es8ox4KaL29KTsxSjWZ/6lZFMvCoXH2prLQZW/j+w2l5vI9e442WCVMhSaHvRif27
-         uYejQ2pBKv7TDmIlWkUGIZbrvxS0vV/LWBDJ8Hj1rjmJDYMF7UusiNa2EULg5u3Ot9qY
-         AMdfq/7XNlEMiAw8oHf2Pn7TJAMdJW54omqOANjtGZTDJyYYTdZqr8kr9EW5uFmpy5su
-         i1rQ==
-X-Gm-Message-State: AAQBX9dOuoxyJx2cJcXQfNJflx2bSPTahnN0F/AP72I3ltcpJekUgbZW
-        GVMciWeQIjI4eH1YPx31cXla2g==
-X-Google-Smtp-Source: AKy350Y/DseiDOs/iuLqIXCJWd8Opwq/gvW1OI6u7YlYkagveYzVKg33OhOzFmfNjp8MwWfARVgJ4A==
-X-Received: by 2002:a05:651c:ba5:b0:2a6:13f:5f6c with SMTP id bg37-20020a05651c0ba500b002a6013f5f6cmr419351ljb.5.1680868757969;
-        Fri, 07 Apr 2023 04:59:17 -0700 (PDT)
-Received: from [192.168.1.101] (abxh37.neoplus.adsl.tpnet.pl. [83.9.1.37])
-        by smtp.gmail.com with ESMTPSA id b8-20020a2e9888000000b0029571d505a1sm774904ljj.80.2023.04.07.04.59.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 04:59:17 -0700 (PDT)
-Message-ID: <de8d228f-36b9-e35e-2f08-880c96a39267@linaro.org>
-Date:   Fri, 7 Apr 2023 13:59:15 +0200
+        d=1e100.net; s=20210112; t=1680868884;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iSq+JRKGUnC+XKkeQyBG4G2ng/kjlZpLD0OGhNAvXrQ=;
+        b=KZFMea+jM1vXStSRg0rs6bRqEnxnzP9axBsxM8JugxC9zWrhZcJpBzTG6+91HJLGZf
+         vBdSWVlnvm8M9cagga+wnHJHpBiKj//woz/8Tow9kHdCwgm5KbxpbOq+rAkkPAXh5A6P
+         Q9DG0LupmTR6xLHWSnVCpgUKfO3VexBDPV/AMHqBU/BgMdubfrcZTfkLy1GhL8dmaFJp
+         PCvbhFayIeoeSoQ5aHAyTToH5eLm1LP2y7fjP/C5Rsi+4tU3bboZnhhZugWJx9hjEnqz
+         gGzCocxZ/1/Hkobc2M8wUibybyVlpnvXt8wi3oIHSVJyUlo+kzT/5bpY9UwjDgntXLlT
+         LyLg==
+X-Gm-Message-State: AAQBX9cdPCKJ6Cuq+KcdJmb/Po8zDq6uINF3+5BUwDqKUHcU4uW3vKcF
+        413hAsVHvbbqSIoZcShnsjgFdPeJCcct97A08NCWovsCTUs=
+X-Google-Smtp-Source: AKy350YqpGgACbqjt1YhQZDXjfyiHa2YFXvHZ/FXU2+6gedx1Ipj3vIjJNkGFMAuoyCBdXR9ES149iTccMgm3ZmUoxg=
+X-Received: by 2002:a17:907:20b4:b0:947:c623:2c84 with SMTP id
+ pw20-20020a17090720b400b00947c6232c84mr1094074ejb.2.1680868884220; Fri, 07
+ Apr 2023 05:01:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH V3 5/5] arm64: dts: qcom: ipq9574: Add cpufreq support
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_ipkumar@quicinc.com
-References: <20230406070032.22243-1-quic_devipriy@quicinc.com>
- <20230406070032.22243-6-quic_devipriy@quicinc.com>
- <18eb5708-bf51-26c3-51a0-70a5069ffdbe@linaro.org>
- <c1d916f0-514e-5ad8-d474-4d6fa9842364@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <c1d916f0-514e-5ad8-d474-4d6fa9842364@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230316153841.3666-1-rui.zhang@intel.com> <20230316153841.3666-11-rui.zhang@intel.com>
+In-Reply-To: <20230316153841.3666-11-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 7 Apr 2023 14:01:13 +0200
+Message-ID: <CAJZ5v0gaJzhnF4Kpi+b1iP=Xb5yCeLQsD4idT8T1DKLn7DCU=w@mail.gmail.com>
+Subject: Re: [PATCH 10/15] powercap/intel_rapl: Introduce per Power Limit lock
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        srinivas.pandruvada@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.5 required=5.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 4:43 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> With RAPL MSR/MMIO Interface, each RAPL domain has one Power Limit
+> register. Each Power Limit register has one or two Power Limits and one
+> lock bit.
 
+Which tells the OS that the power limit register cannot be used IIUC.
 
-On 7.04.2023 06:53, Devi Priya wrote:
-> 
-> 
-> On 4/7/2023 1:21 AM, Konrad Dybcio wrote:
->>
->>
->> On 6.04.2023 09:00, Devi Priya wrote:
->>> Add cpu freq nodes in the device tree to bump cpu frequency above 800MHz.
->>>
->>> Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>> ---
->>>   Changes in V3:
->>>     - No change
->>>
->>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 58 +++++++++++++++++++++++++++
->>>   1 file changed, 58 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> index 1f9b7529e7ed..cfef87b5fd22 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> @@ -6,6 +6,7 @@
->>>    * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
->>>    */
->>>   +#include <dt-bindings/clock/qcom,apss-ipq.h>
->>>   #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
->>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>   #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
->>> @@ -37,6 +38,10 @@
->>>               reg = <0x0>;
->>>               enable-method = "psci";
->>>               next-level-cache = <&L2_0>;
->>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->>> +            clock-names = "cpu";
->>> +            operating-points-v2 = <&cpu_opp_table>;
->>> +            cpu-supply = <&ipq9574_s1>;
->>>           };
->>>             CPU1: cpu@1 {
->>> @@ -45,6 +50,10 @@
->>>               reg = <0x1>;
->>>               enable-method = "psci";
->>>               next-level-cache = <&L2_0>;
->>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->>> +            clock-names = "cpu";
->>> +            operating-points-v2 = <&cpu_opp_table>;
->>> +            cpu-supply = <&ipq9574_s1>;
->>>           };
->>>             CPU2: cpu@2 {
->>> @@ -53,6 +62,10 @@
->>>               reg = <0x2>;
->>>               enable-method = "psci";
->>>               next-level-cache = <&L2_0>;
->>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->>> +            clock-names = "cpu";
->>> +            operating-points-v2 = <&cpu_opp_table>;
->>> +            cpu-supply = <&ipq9574_s1>;
->>>           };
->>>             CPU3: cpu@3 {
->>> @@ -61,6 +74,10 @@
->>>               reg = <0x3>;
->>>               enable-method = "psci";
->>>               next-level-cache = <&L2_0>;
->>> +            clocks = <&apcs_glb APCS_ALIAS0_CORE_CLK>;
->>> +            clock-names = "cpu";
->>> +            operating-points-v2 = <&cpu_opp_table>;
->>> +            cpu-supply = <&ipq9574_s1>;
->>>           };
->>>             L2_0: l2-cache {
->>> @@ -75,6 +92,47 @@
->>>           reg = <0x0 0x40000000 0x0 0x0>;
->>>       };
->>>   +    cpu_opp_table: opp-table-cpu {
->> This is not sorted properly. It should probably come
->> after memory alphabetically ('o' > 'm')
->>
-> Yes, But I see that opp-table-cpu node is already placed after
-> memory@40000000
+So the subject should be something like "Add support for lock bit per
+Power Limit" and the changelog should explain the role of the lock
+bits.
 
-Oh you're right, the diff doesn't really show that very
-well and I didn't notice..
+Otherwise it is easily confused with more traditional meaning of "locking".
 
+> The number of Power Limits the lock bit applies to depends on
+> the number of Power Limits supported by the Power Limit register.
+>
+> With RAPL TPMI Interface, each RAPL domain supports multiple Power
+> Limits. And each Power Limit has a register with a lock bit.
+>
+> To handle this, introduce per Power Limit lock support. For existing
+> RAPL MSR/MMIO Interfaces, the lock bit in the Power Limit register
+> applies to all the Power Limits controlled by this register.
+>
+> Remove the per domain DOMAIN_STATE_BIOS_LOCKED flag at the same time
+> because it can be replaced by the per Power Limit lock.
+>
+> No functional change intended.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 40 ++++++++++++++--------------
+>  include/linux/intel_rapl.h           |  2 ++
+>  2 files changed, 22 insertions(+), 20 deletions(-)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 3e9141dedc1d..636e05aa711b 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -94,7 +94,6 @@ enum unit_type {
+>
+>  #define        DOMAIN_STATE_INACTIVE           BIT(0)
+>  #define        DOMAIN_STATE_POWER_LIMIT_SET    BIT(1)
+> -#define DOMAIN_STATE_BIOS_LOCKED        BIT(2)
+>
+>  static const char *pl_names[NR_POWER_LIMITS] = {
+>         [POWER_LIMIT1] = "long_term",
+> @@ -108,6 +107,7 @@ enum pl_prims {
+>         PL_LIMIT,
+>         PL_TIME_WINDOW,
+>         PL_MAX_POWER,
+> +       PL_LOCK,
+>  };
+>
+>  static bool is_pl_valid(struct rapl_domain *rd, int pl)
+> @@ -117,7 +117,7 @@ static bool is_pl_valid(struct rapl_domain *rd, int pl)
+>         return rd->rpl[pl].name ? true : false;
+>  }
+>
+> -static int get_pl_prim(int pl, enum pl_prims prim)
+> +static int get_pl_prim(struct rapl_domain *rd, int pl, enum pl_prims prim)
+>  {
+>         switch (pl) {
+>         case POWER_LIMIT1:
+> @@ -131,6 +131,9 @@ static int get_pl_prim(int pl, enum pl_prims prim)
+>                         return TIME_WINDOW1;
+>                 if (prim == PL_MAX_POWER)
+>                         return THERMAL_SPEC_POWER;
+> +               if (prim == PL_LOCK)
+> +                       return rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2) ?
+> +                              FW_HIGH_LOCK : FW_LOCK;
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+IMO it would be cleaner to write this as
 
-Konrad
->> Konrad
->>> +        compatible = "operating-points-v2";
->>> +        opp-shared;
->>> +
->>> +        opp-936000000 {
->>> +            opp-hz = /bits/ 64 <936000000>;
->>> +            opp-microvolt = <725000>;
->>> +            clock-latency-ns = <200000>;
->>> +        };
->>> +
->>> +        opp-1104000000 {
->>> +            opp-hz = /bits/ 64 <1104000000>;
->>> +            opp-microvolt = <787500>;
->>> +            clock-latency-ns = <200000>;
->>> +        };
->>> +
->>> +        opp-1416000000 {
->>> +            opp-hz = /bits/ 64 <1416000000>;
->>> +            opp-microvolt = <862500>;
->>> +            clock-latency-ns = <200000>;
->>> +        };
->>> +
->>> +        opp-1488000000 {
->>> +            opp-hz = /bits/ 64 <1488000000>;
->>> +            opp-microvolt = <925000>;
->>> +            clock-latency-ns = <200000>;
->>> +        };
->>> +
->>> +        opp-1800000000 {
->>> +            opp-hz = /bits/ 64 <1800000000>;
->>> +            opp-microvolt = <987500>;
->>> +            clock-latency-ns = <200000>;
->>> +        };
->>> +
->>> +        opp-2208000000 {
->>> +            opp-hz = /bits/ 64 <2208000000>;
->>> +            opp-microvolt = <1062500>;
->>> +            clock-latency-ns = <200000>;
->>> +        };
->>> +    };
->>> +
->>>       firmware {
->>>           scm {
->>>               compatible = "qcom,scm-ipq9574", "qcom,scm";
-> Best Regards,
-> Devi Priya
+if (rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2))
+        return FW_HIGH_LOCK;
+
+return FW_LOCK;
+
+And because it is duplicated verbatim below, it would be better to add
+a helper function doing this and add a comment explaining what is
+going on to that function.
+
+>                 return -EINVAL;
+>         case POWER_LIMIT2:
+>                 if (prim == PL_ENABLE)
+> @@ -143,6 +146,9 @@ static int get_pl_prim(int pl, enum pl_prims prim)
+>                         return TIME_WINDOW2;
+>                 if (prim == PL_MAX_POWER)
+>                         return MAX_POWER;
+> +               if (prim == PL_LOCK)
+> +                       return rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2) ?
+> +                              FW_HIGH_LOCK : FW_LOCK;
+>                 return -EINVAL;
+>         case POWER_LIMIT4:
+>                 if (prim == PL_LIMIT)
+> @@ -314,7 +320,7 @@ static int get_domain_enable(struct powercap_zone *power_zone, bool *mode)
+>         u64 val;
+>         int ret;
+>
+> -       if (rd->state & DOMAIN_STATE_BIOS_LOCKED) {
+> +       if (rd->rpl[POWER_LIMIT1].locked) {
+>                 *mode = false;
+>                 return 0;
+>         }
+> @@ -599,6 +605,8 @@ static struct rapl_primitive_info rpis_default[NR_RAPL_PRIMITIVES] = {
+>                             RAPL_DOMAIN_REG_STATUS, ENERGY_UNIT, 0),
+>         [FW_LOCK] = PRIMITIVE_INFO_INIT(FW_LOCK, POWER_LOW_LOCK, 31,
+>                             RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
+> +       [FW_HIGH_LOCK] = PRIMITIVE_INFO_INIT(FW_LOCK, POWER_HIGH_LOCK, 63,
+> +                           RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
+>         [PL1_ENABLE] = PRIMITIVE_INFO_INIT(PL1_ENABLE, POWER_LIMIT1_ENABLE, 15,
+>                             RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
+>         [PL1_CLAMP] = PRIMITIVE_INFO_INIT(PL1_CLAMP, POWER_LIMIT1_CLAMP, 16,
+> @@ -719,11 +727,6 @@ static int rapl_read_data_raw(struct rapl_domain *rd,
+>
+>         cpu = rd->rp->lead_cpu;
+>
+> -       /* domain with 2 limits has different bit */
+> -       if (prim == FW_LOCK && (rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2))) {
+> -               rpi->mask = POWER_HIGH_LOCK;
+> -               rpi->shift = 63;
+> -       }
+>         /* non-hardware data are collected by the polling thread */
+>         if (rpi->flag & RAPL_PRIMITIVE_DERIVED) {
+>                 *data = rd->rdd.primitives[prim];
+> @@ -781,7 +784,7 @@ static int rapl_write_data_raw(struct rapl_domain *rd,
+>  static int rapl_read_pl_data(struct rapl_domain *rd, int pl,
+>                               enum pl_prims pl_prim, bool xlate, u64 *data)
+>  {
+> -       enum rapl_primitives prim = get_pl_prim(pl, pl_prim);
+> +       enum rapl_primitives prim = get_pl_prim(rd, pl, pl_prim);
+>
+>         if (!is_pl_valid(rd, pl))
+>                 return -EINVAL;
+> @@ -793,12 +796,12 @@ static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
+>                                enum pl_prims pl_prim,
+>                                unsigned long long value)
+>  {
+> -       enum rapl_primitives prim = get_pl_prim(pl, pl_prim);
+> +       enum rapl_primitives prim = get_pl_prim(rd, pl, pl_prim);
+>
+>         if (!is_pl_valid(rd, pl))
+>                 return -EINVAL;
+>
+> -       if (rd->state & DOMAIN_STATE_BIOS_LOCKED) {
+> +       if (rd->rpl[pl].locked) {
+>                 pr_warn("%s:%s:%s locked by BIOS\n", rd->rp->name, rd->name, pl_names[pl]);
+>                 return -EACCES;
+>         }
+> @@ -1305,17 +1308,14 @@ static void rapl_detect_powerlimit(struct rapl_domain *rd)
+>         u64 val64;
+>         int i;
+>
+> -       /* check if the domain is locked by BIOS, ignore if MSR doesn't exist */
+> -       if (!rapl_read_data_raw(rd, FW_LOCK, false, &val64)) {
+> -               if (val64) {
+> -                       pr_info("RAPL %s domain %s locked by BIOS\n",
+> -                               rd->rp->name, rd->name);
+> -                       rd->state |= DOMAIN_STATE_BIOS_LOCKED;
+> +       for (i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++) {
+> +               if (!rapl_read_pl_data(rd, i, PL_LOCK, false, &val64)) {
+> +                       rd->rpl[i].locked = val64;
+
+Using !!val64 here would be cleaner.
+
+Or even explicitly assign true to in in the block following the if ()
+statement below.
+
+> +                       if (val64)
+> +                               pr_info("%s:%s:%s locked by BIOS\n",
+> +                                       rd->rp->name, rd->name, pl_names[i]);
+>                 }
+> -       }
+>
+> -       /* check if power limit exists, otherwise domain is monitoring only */
+> -       for (i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++) {
+>                 if (rapl_read_pl_data(rd, i, PL_ENABLE, false, &val64))
+>                         rd->rpl[i].name = NULL;
+>         }
+> diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
+> index 86cd06bbea0c..325ec00be7a7 100644
+> --- a/include/linux/intel_rapl.h
+> +++ b/include/linux/intel_rapl.h
+> @@ -42,6 +42,7 @@ enum rapl_primitives {
+>         POWER_LIMIT4,
+>         ENERGY_COUNTER,
+>         FW_LOCK,
+> +       FW_HIGH_LOCK,
+>
+>         PL1_ENABLE,             /* power limit 1, aka long term */
+>         PL1_CLAMP,              /* allow frequency to go below OS request */
+> @@ -81,6 +82,7 @@ struct rapl_power_limit {
+>         struct powercap_zone_constraint *constraint;
+>         struct rapl_domain *domain;
+>         const char *name;
+> +       bool locked;
+>         u64 last_power_limit;
+>  };
+>
+> --
+> 2.25.1
+>
