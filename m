@@ -2,68 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2516DA92B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02F76DA932
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbjDGHAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 03:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S239421AbjDGHDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 03:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjDGHAW (ORCPT
+        with ESMTP id S239268AbjDGHC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 03:00:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D664C7DBF;
-        Fri,  7 Apr 2023 00:00:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AB7F64EAC;
-        Fri,  7 Apr 2023 07:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E739C433D2;
-        Fri,  7 Apr 2023 07:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680850820;
-        bh=VFA8ITCiqTNajarcKMl+01NeMpRZsva1SwCw5XzW27Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QV9D4GKa0dbJi7sF+WFAxm1nuEYBdZprzvmMfSGvkWzX3/d/xMJYcR2v9kbconuZH
-         n0YzZXhJbYsCDgrwVlpoFyLiCI9h6uM42QsfxYOLRq+9lc6Vyj2wMu6Hljt+o18pIe
-         6ShS0Gj+XIjdLywM8E32XFl+/7MIPzHJB89JKoR1vMuMBKHPIFqVY6JqrQYEmjMYj8
-         0qL1hHEx+i9fP+krOJsQe8waMjxtE2tXausFIZkGOqhMuQT9r7ZlNthPMDkbvhGeSt
-         37KKydxY28DCbOG2SLMvz+zwKt08NFJsDBuwz9E+qy0GD7BriY6JD+RK2/3TQklyFp
-         K36iLTnnWEKyQ==
-Message-ID: <8206b5b2-20bf-1264-7dd8-08f14abd0729@kernel.org>
-Date:   Fri, 7 Apr 2023 09:00:16 +0200
+        Fri, 7 Apr 2023 03:02:57 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3B99743
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 00:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680850967; x=1712386967;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=RpeddnkgOglW0cqyrivk5LaIXkhzsZ2FkrbBBAcTbSg=;
+  b=N3//QhOiE+6D3rYZv/4D21tEvzfBm4NJDQSDT4fpqMgZCLbTVZc//Fla
+   vq1Ti8tEzFrwSeOW13TKVjth9usdABmGK76qVdJhzvrXl7kI1RYzredLs
+   wZb7j+WxunvXIddHOgffA88eG+4pAzCUfW6GtUKrL14uTTbiXR5x9vOFU
+   +6gkHEVvbvhIThwqILnNsdxyRzQoXi0p29LZ3/B0EN7rmh6b/59JPDwfn
+   cNj1kVJ1Lxsq+3yTFdB+pVLS1SnaO+ITFYZWKaElAbwacxqaH+CNFotec
+   3cxBA107qdGIOw/jIDGSpsaX1iLkM+Mq+6ZS3dtP05VjTvMSWKCYwTK9U
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="340429464"
+X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
+   d="scan'208";a="340429464"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 00:02:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="776761559"
+X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
+   d="scan'208";a="776761559"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Apr 2023 00:02:32 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pkg7D-000SDq-2Z;
+        Fri, 07 Apr 2023 07:02:31 +0000
+Date:   Fri, 7 Apr 2023 15:02:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified bound
+ 6 equals destination size
+Message-ID: <202304071552.CeeIBr5P-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: interrupt-controller: mpm: Pass MSG
- RAM slice through phandle
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230328-topic-msgram_mpm-v2-0-e24a48e57f0d@linaro.org>
- <20230328-topic-msgram_mpm-v2-1-e24a48e57f0d@linaro.org>
- <168069726278.2356075.14351594478003012447.robh@kernel.org>
- <20230405134727.GA2461305-robh@kernel.org>
- <1e6e2590-ac78-400b-35ce-321d5e52f385@linaro.org>
- <9df12111-ec84-c4f7-fbcb-bccaef91b048@linaro.org>
- <3ce9b5ec-8b02-537a-c663-c849e80cab66@linaro.org>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <3ce9b5ec-8b02-537a-c663-c849e80cab66@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,68 +63,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 21:55, Konrad Dybcio wrote:
-> 
-> 
-> On 6.04.2023 19:45, Krzysztof Kozlowski wrote:
->> On 05/04/2023 15:49, Konrad Dybcio wrote:
->>>
->>>
->>> On 5.04.2023 15:47, Rob Herring wrote:
->>>> On Wed, Apr 05, 2023 at 07:22:40AM -0500, Rob Herring wrote:
->>>>>
->>>>> On Wed, 05 Apr 2023 12:48:34 +0200, Konrad Dybcio wrote:
->>>>>> Due to the wild nature of the Qualcomm RPM Message RAM, we can't really
->>>>>> use 'reg' to point to the MPM's slice of Message RAM without cutting into
->>>>>> an already-defined RPM MSG RAM node used for GLINK and SMEM.
->>>>>>
->>>>>> Document passing the register space as a slice of SRAM through the
->>>>>> qcom,rpm-msg-ram property. This also makes 'reg' deprecated.
->>>>>>
->>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>> ---
->>>>>>  .../devicetree/bindings/interrupt-controller/qcom,mpm.yaml   | 12 +++++++++---
->>>>>>  1 file changed, 9 insertions(+), 3 deletions(-)
->>>>>>
->>>>>
->>>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>>>
->>>>> yamllint warnings/errors:
->>>>>
->>>>> dtschema/dtc warnings/errors:
->>>>> Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.example.dts:22.35-38.11: Warning (node_name_vs_property_name): /example-0/interrupt-controller: node name and property name conflict
->>>>
->>>> Looks like this is colliding with the example template which has to 
->>>> craft an interrupt provider for 'interrupts' properties. Either adding a 
->>>> parent node or using interrupts-extended instead should work-around it.
->>> Check the devicetree-org issue linked in the cover letter, please!
->>>
->>> I suppose wrapping it in a parent node could work as a temporary
->>> measure, but since it belongs outside /soc, I'd have to make up
->>> a bogus simple-bus, I think.
->>
->> I don't think your issue in dtschema is accurate. As Rob suggested, you
->> need wrapping node.
-> I don't really know what kind.. I can add something like:
-> 
-> rpm {
-> 	compatible = "qcom,rpm", "simple-mfd";
-> 
-> 	mpm: interrupt-controller {
-> 	...
-> };
-> 
-> And then only introduce a very simple YAML for "qcom,rpm"
-> describing what it is and documenting the compatible.
-> 
-> Or I can push it under rpm-requests{}.
+Hi Mark,
 
-It does not matter really what kind of wrapper. Can be:
+FYI, the error/warning still remains.
 
-sram {
-    interrupt-controller {
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f2afccfefe7be1f7346564fe619277110d341f9b
+commit: 8f9e0a52810dd83406c768972d022c37e7a18f1f ACPI: Don't build ACPICA with '-Os'
+date:   2 months ago
+config: x86_64-sof-customedconfig-fuzz-defconfig (https://download.01.org/0day-ci/archive/20230407/202304071552.CeeIBr5P-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f9e0a52810dd83406c768972d022c37e7a18f1f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8f9e0a52810dd83406c768972d022c37e7a18f1f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Best regards,
-Krzysztof
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304071552.CeeIBr5P-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   drivers/acpi/acpica/tbfind.c: In function 'acpi_tb_find_table':
+>> drivers/acpi/acpica/tbfind.c:60:9: error: 'strncpy' specified bound 6 equals destination size [-Werror=stringop-truncation]
+      60 |         strncpy(header.oem_id, oem_id, ACPI_OEM_ID_SIZE);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/acpi/acpica/tbfind.c:61:9: error: 'strncpy' specified bound 8 equals destination size [-Werror=stringop-truncation]
+      61 |         strncpy(header.oem_table_id, oem_table_id, ACPI_OEM_TABLE_ID_SIZE);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/strncpy +60 drivers/acpi/acpica/tbfind.c
+
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  16  
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  17  /*******************************************************************************
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  18   *
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  19   * FUNCTION:    acpi_tb_find_table
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  20   *
+ba494beeaa69bc drivers/acpi/acpica/tbfind.c Bob Moore 2012-07-12  21   * PARAMETERS:  signature           - String with ACPI table signature
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  22   *              oem_id              - String with the table OEM ID
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  23   *              oem_table_id        - String with the OEM Table ID
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  24   *              table_index         - Where the table index is returned
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  25   *
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  26   * RETURN:      Status and table index
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  27   *
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  28   * DESCRIPTION: Find an ACPI table (in the RSDT/XSDT) that matches the
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  29   *              Signature, OEM ID and OEM Table ID. Returns an index that can
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  30   *              be used to get the table header or entire table.
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  31   *
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  32   ******************************************************************************/
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  33  acpi_status
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  34  acpi_tb_find_table(char *signature,
+67a119f990063f drivers/acpi/tables/tbfind.c Bob Moore 2008-06-10  35  		   char *oem_id, char *oem_table_id, u32 *table_index)
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  36  {
+ac0f06ebb815da drivers/acpi/acpica/tbfind.c Lv Zheng  2016-09-07  37  	acpi_status status = AE_OK;
+47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  38  	struct acpi_table_header header;
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  39  	u32 i;
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  40  
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  41  	ACPI_FUNCTION_TRACE(tb_find_table);
+f3d2e7865c8162 drivers/acpi/tables/tbfind.c Bob Moore 2007-02-02  42  
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  43  	/* Validate the input table signature */
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  44  
+6a0df32c22fdfc drivers/acpi/acpica/tbfind.c Bob Moore 2016-05-05  45  	if (!acpi_ut_valid_nameseg(signature)) {
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  46  		return_ACPI_STATUS(AE_BAD_SIGNATURE);
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  47  	}
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  48  
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  49  	/* Don't allow the OEM strings to be too long */
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  50  
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  51  	if ((strlen(oem_id) > ACPI_OEM_ID_SIZE) ||
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  52  	    (strlen(oem_table_id) > ACPI_OEM_TABLE_ID_SIZE)) {
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  53  		return_ACPI_STATUS(AE_AML_STRING_LIMIT);
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  54  	}
+9f41fd8a175ff8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-08-25  55  
+47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  56  	/* Normalize the input strings */
+47c08729bf1c60 drivers/acpi/tables/tbfind.c Lin Ming  2008-04-10  57  
+4fa4616e279df8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-07-01  58  	memset(&header, 0, sizeof(struct acpi_table_header));
+a3ce7a8e0dd9ba drivers/acpi/acpica/tbfind.c Bob Moore 2019-04-08  59  	ACPI_COPY_NAMESEG(header.signature, signature);
+4fa4616e279df8 drivers/acpi/acpica/tbfind.c Bob Moore 2015-07-01 @60  	strncpy(header.oem_id, oem_id, ACPI_OEM_ID_SIZE);
+
+:::::: The code at line 60 was first introduced by commit
+:::::: 4fa4616e279df89baeb36287bbee83ab272edaed ACPICA: De-macroize calls to standard C library functions
+
+:::::: TO: Bob Moore <robert.moore@intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
