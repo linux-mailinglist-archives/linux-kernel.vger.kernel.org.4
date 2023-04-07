@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245696DB128
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A126C6DB18B
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 19:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjDGRIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 13:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S230071AbjDGRT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 13:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjDGRIQ (ORCPT
+        with ESMTP id S230255AbjDGRTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:08:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E5DA5CB;
-        Fri,  7 Apr 2023 10:08:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 7 Apr 2023 13:19:44 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA7DCA03;
+        Fri,  7 Apr 2023 10:19:23 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D20C61128;
-        Fri,  7 Apr 2023 17:08:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2739C433D2;
-        Fri,  7 Apr 2023 17:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680887293;
-        bh=F9eXAOVjjUTkx4GJvdCe60V7AF+Tu5+yzB4QhkxKFzw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kS6Tq8/AdhYkJvytfHyj4T22LnB8x5qWAr3izYZ8j0HPSLGukGTc4IRs9yCSVwrou
-         MfEBswBPApPcffskt2iQwKY/uACFaIjWZUg7sKmcKKOwiX+9/zoF0Wt7GR+09c4ob0
-         VotnV0BFo9CsDi2+kgIXTiv4yYxQ41ZmI6v5UlBim+jwCwKeoiK7AAIS4aGPmj4FCa
-         x3lODavUnCHkfyQSV3/jfQUI8wALlCIbnSizDjy/LA8hIs1K1r+ptaqEOSs/se7eOl
-         6Qoe0GilPN/DfVBFnkAJkaff4kcVtouznnXtBG0c93tWBxNH2fSLA95jbvduQXg5Aa
-         mxRXW/l3sD0jg==
-Date:   Fri, 7 Apr 2023 10:11:03 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Gergo Koteles <soyer@irl.hu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Caleb Connolly <caleb@connolly.tech>
-Subject: Re: [PATCH v4 2/3] Input: add ABS_SND_PROFILE
-Message-ID: <20230407171103.5jf46g4hw3fed7dn@ripper>
-References: <cover.1677022414.git.soyer@irl.hu>
- <1a4752739568afbdbaaff48436d2bb595d2bda0d.1677022414.git.soyer@irl.hu>
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4PtQ8Q1TtMzyR8;
+        Fri,  7 Apr 2023 20:19:17 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1680887960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sx/v6v02tkhyVSJIxoR5pZtA5d+qnL+HKABd0KsDWkk=;
+        b=be7boNoSaCauKSf5nx7KUm+r6UvnLMDwHpf0Qa1a9fuciGNUun+OK1SRSGeD8T5v5fFGw5
+        aTLNE1hacjHpkBakgCN+euY2G497WLc7L7SLEE8F9vDdpu7AwIRmn8RhaFpRcQER5UliSe
+        ijDS2ZLYe2MH/Z+EjJu5J2Du+MqFot8=
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1680887960; a=rsa-sha256; cv=none;
+        b=T/CuPIfgtU/10f0gPBOap2JMhmhN1T1u/2qju0MziBT/3Vr4nrzcG8p2NEmQJXH1mNglmb
+        l+cDsGWgIGEVeXP0xI/hnT/jC/w3SxRxQnjqApJmrXbLr88PHNmlIBa65KfWgIeGVLPvN+
+        YWCR/PhsGIdLlCcIdbUQNUpXog/96QI=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1680887960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sx/v6v02tkhyVSJIxoR5pZtA5d+qnL+HKABd0KsDWkk=;
+        b=TjfAYh/Fj8WFUjFOKnXU8hsAdoOF0mZs31+RQteSR9hvHGQ5zwPGmuZVTNzFsV0e4pmRa8
+        hdxXGyn2O/tXhz6Dt6g9ytC0xBluqypq9KOIOlrlY22uMfRuNhhXonGd5dgkRgqifIKvY0
+        sE0oX5FaJ5LSrXBQlXSjeEGVAkukOnI=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id B46D1634C91;
+        Fri,  7 Apr 2023 20:16:30 +0300 (EEST)
+Date:   Fri, 7 Apr 2023 20:16:30 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Matt Ranostay <matt.ranostay@konsulko.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH] media: i2c: video: constify pointers to
+ hwmon_channel_info
+Message-ID: <ZDBP7vG498h2FQ7N@valkosipuli.retiisi.eu>
+References: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1a4752739568afbdbaaff48436d2bb595d2bda0d.1677022414.git.soyer@irl.hu>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230407150015.79715-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 01:10:33AM +0100, Gergo Koteles wrote:
-> ABS_SND_PROFILE used to describe the state of a multi-value sound profile
-> switch. This will be used for the alert-slider on OnePlus phones or other
-> phones.
+Hi Krzysztof,
+
+On Fri, Apr 07, 2023 at 05:00:15PM +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
 > 
-> Profile values added as SND_PROFLE_(SILENT|VIBRATE|RING) identifiers
-> to input-event-codes.h so they can be used from DTS.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> Signed-off-by: Gergo Koteles <soyer@irl.hu>
 > ---
->  Documentation/input/event-codes.rst    | 6 ++++++
->  drivers/hid/hid-debug.c                | 1 +
->  include/uapi/linux/input-event-codes.h | 9 +++++++++
->  3 files changed, 16 insertions(+)
 > 
-> diff --git a/Documentation/input/event-codes.rst b/Documentation/input/event-codes.rst
-> index b4557462edd7..d43336e64d6a 100644
-> --- a/Documentation/input/event-codes.rst
-> +++ b/Documentation/input/event-codes.rst
-> @@ -241,6 +241,12 @@ A few EV_ABS codes have special meanings:
->      emitted only when the selected profile changes, indicating the newly
->      selected profile value.
->  
-> +* ABS_SND_PROFILE:
-> +
-> +  - Used to describe the state of a multi-value sound profile switch.
-> +    An event is emitted only when the selected profile changes,
-> +    indicating the newly selected profile value.
-> +
->  * ABS_MT_<name>:
->  
->    - Used to describe multitouch input events. Please see
-> diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
-> index e213bdde543a..76fb2ecbbc51 100644
-> --- a/drivers/hid/hid-debug.c
-> +++ b/drivers/hid/hid-debug.c
-> @@ -1018,6 +1018,7 @@ static const char *absolutes[ABS_CNT] = {
->  	[ABS_DISTANCE] = "Distance",	[ABS_TILT_X] = "XTilt",
->  	[ABS_TILT_Y] = "YTilt",		[ABS_TOOL_WIDTH] = "ToolWidth",
->  	[ABS_VOLUME] = "Volume",	[ABS_PROFILE] = "Profile",
-> +	[ABS_SND_PROFILE] = "SoundProfile",
->  	[ABS_MISC] = "Misc",
->  	[ABS_MT_TOUCH_MAJOR] = "MTMajor",
->  	[ABS_MT_TOUCH_MINOR] = "MTMinor",
-> diff --git a/include/uapi/linux/input-event-codes.h b/include/uapi/linux/input-event-codes.h
-> index 022a520e31fc..e8d5ee027b40 100644
-> --- a/include/uapi/linux/input-event-codes.h
-> +++ b/include/uapi/linux/input-event-codes.h
-> @@ -866,6 +866,7 @@
->  
->  #define ABS_VOLUME		0x20
->  #define ABS_PROFILE		0x21
-> +#define ABS_SND_PROFILE		0x22
->  
->  #define ABS_MISC		0x28
->  
-> @@ -974,4 +975,12 @@
->  #define SND_MAX			0x07
->  #define SND_CNT			(SND_MAX+1)
->  
-> +/*
-> + * ABS_SND_PROFILE values
-> + */
-> +
-> +#define SND_PROFILE_SILENT	0x00
-> +#define SND_PROFILE_VIBRATE	0x01
-> +#define SND_PROFILE_RING	0x02
-
-The patch looks good to me, bu I'd need these header file additions in
-order to merge the dts patch. Could I get an ack and take it through the
-Qualocmm tree, or could you pick it up for 6.4, and then I can merge the
-dts change after that?
-
-Regards,
-Bjorn
-
-> +
->  #endif
-> -- 
-> 2.39.2
+> This depends on hwmon core patch:
+> https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
 > 
+> Therefore I propose this should also go via hwmon tree.
+
+Works for me. Please add:
+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+Thanks!
+
+-- 
+Kind regards,
+
+Sakari Ailus
