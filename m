@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BAC6DAA51
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992216DAA53
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240270AbjDGInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S240214AbjDGIo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjDGInO (ORCPT
+        with ESMTP id S240006AbjDGIo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:43:14 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257ED1705
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:43:13 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id qb20so6972945ejc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 01:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680856991;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=adkU32LsCttVRXNpLdmBB653haYtpyR0pGsnlxBxnUU=;
-        b=E5+8ob5dlTczC769PGAH+hjeScmR7sm3H0x17B5f0YjL9yuxMTqfBWfouUFtNfn09k
-         MaOcNMHwm3pKf0lpbnC+rlUhVmDLG7v9nPqG8IwIVAdBQ/gHD0p7fiv7f0GvPZrRYfv4
-         114xuT8pSK6PNPb5QPrS5HOeIefiMyY802APGwoHHP1HXh8w/FEs+Rqw+MjmD6yljGz2
-         qWs8bboBFISJ5xiXdCf3J/YQA6nxtZ6OK6tVfJ8abvT1Y//Oc21OcgDYx2yhZTWWQLhy
-         0gyIRkiyF9lfdQZwXIooAeg83KINemFpaREKt0T0Eaeyz+pYEQRtQkRvS5kuqtd5rFp6
-         9zCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680856991;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=adkU32LsCttVRXNpLdmBB653haYtpyR0pGsnlxBxnUU=;
-        b=bpvjGt8IeEvdyCd0ZH/23CTxbTFwE0HU0ZmmJ6EOXKTg6u6O//I56M9v50bdy8De8F
-         f4HEdKVwqGhSFY/mHJpuGSnFs+YZgONkE6D+U2tgx5PMR41zldevAtSy+ibKFMBaG+ru
-         wKMZEeu2Yo9XJvCcnexZRH+xIOYsBflmQPXcDuptF0fUlmbPJPpSXqOTAJmPqEeKye2s
-         +lessDiY4lin9VDoXsonPMCBEu5+Dc7F/ceSXPNoIN24rglFXno8090ycn7YeCh4fZn8
-         bk/IF9TWM2+QzckMZkjIH1+C8T7udqzktL3kwOSMBZuRHFko0qc/KpFfYlOIDucDKSy6
-         pRrQ==
-X-Gm-Message-State: AAQBX9cUyPf6W+N63shAmWiIsB+ULYIApBekWZBe3HMqrkRwFhknd2y6
-        Hio24bHklNGBJMoR+XbTIkmKHA==
-X-Google-Smtp-Source: AKy350YKKdnjBy0BXE+xCLGnRNN5aa6bX9Vn63qnzwUCqM2PvBFepFb7lyn+md3qnjpO+ScTgh0AbQ==
-X-Received: by 2002:a17:906:66cf:b0:8ab:b03d:a34f with SMTP id k15-20020a17090666cf00b008abb03da34fmr7731487ejp.12.1680856991672;
-        Fri, 07 Apr 2023 01:43:11 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:14a3:366:3172:3c37? ([2a02:810d:15c0:828:14a3:366:3172:3c37])
-        by smtp.gmail.com with ESMTPSA id n5-20020a170906b30500b00930445428acsm1859041ejz.14.2023.04.07.01.43.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 01:43:11 -0700 (PDT)
-Message-ID: <e6aa04b2-d83f-80f6-19f7-0aa18622eb89@linaro.org>
-Date:   Fri, 7 Apr 2023 10:43:10 +0200
+        Fri, 7 Apr 2023 04:44:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C449F4EED
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:44:25 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1680857063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=jHJMUpRuhMUlelEnZK8+DRD6C/ir55kUOiM/K4/4Lfs=;
+        b=H45JRJMAr+ngJ5tF1yNnBK9nsYsNbtp9f8b6VZG2LDI1qbJmwE2M3PEoAHGaOVmemHJp4k
+        Ez/M0x0wkEikw3ef3jU5EgAHQqaOF9tMNnt34D4ZI3nPYEgO8qb7+wi1qp1k36rPPQuvFh
+        c9vXm/KnLQQfhhq6b3ITfXjHHbxhDUWeeSuBduYvDo027GMeAok08+HT0WGrZijA+aii1z
+        mROuo1fUouiwBGuQJds2yRdAvEoDn4vGwe1g/RixOYt9jtL72tzriml6x7jCBmg2sbt1jY
+        2ERJzGd9HQD6RST3PjfvFmNtAl5X5KyvPA5NcuMxqJy3Fk6UzUkYNz87bSnRdw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1680857063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=jHJMUpRuhMUlelEnZK8+DRD6C/ir55kUOiM/K4/4Lfs=;
+        b=lOTj9qBCMSqr7dzpOP1JE0OLf1cyletpr6r9AvWUCQuXJInLPzhjnS9wdpAXCY1eCRteUo
+        ytryji7PqWWQLYAg==
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        Marco Elver <elver@google.com>
+Cc:     syzbot <syzbot+3b14b2ed9b3d06dcaa07@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: WARNING in timer_wait_running
+In-Reply-To: <87h6tsred7.ffs@tglx>
+Date:   Fri, 07 Apr 2023 10:44:22 +0200
+Message-ID: <874jpsqdy1.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/3] dt-bindings: regulator: qcom,rpmh: add compatible for
- pmm8654au RPMH
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230406192811.460888-1-brgl@bgdev.pl>
- <20230406192811.460888-2-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230406192811.460888-2-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/04/2023 21:28, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add the compatible for the pmm8654au RPMH regulators present on the
-> sa8775p-ride development board.
+On Thu, Apr 06 2023 at 21:37, Thomas Gleixner wrote:
+> On Thu, Apr 06 2023 at 00:19, Frederic Weisbecker wrote:
+>> We could arrange for doing the same thing as hrtimer_cancel_wait_running()
+>> but for posix cpu timers, with taking a similar lock within
+>> handle_posix_cpu_timers() that timer_wait_running() could sleep on and
+>> inject its PI into.
+>
+> I have a faint memory that we discussed something like that, but there
+> was an issue which completely escaped my memory.
 
+Now memory came back. The problem with posix CPU timers is that it is
+not really known to the other side which task is actually doing the
+expiry. For process wide timers this could be any task in the process.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+For hrtimers this works because the expiring context is known.
 
-Best regards,
-Krzysztof
+> But yes, something like this could work.
+
+Needs some more thought, but still can be made work.
+
+> Though we should quickly shut this warning up for the !RT case by
+> providing an callback which does
+>
+>   WARN_ON_ONCE(IS_ENABLED(CONFIG_PREEMPT_RT);
+>
+> and let the RT folks deal with it.
+
+OTOH, this is not only a RT issue.
+
+On preemptible kernels the task which collected the expired timers onto
+a local list and set the firing bit, can be preempted after dropping
+sighand lock. So the other side still can busy wait for quite a while.
+Same is obviously true for guests independent of preemption when the
+vCPU gets scheduled out.
+
+Thanks,
+
+        tglx
 
