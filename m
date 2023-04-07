@@ -2,134 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45B86DA76B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122226DA766
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 04:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbjDGCGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 6 Apr 2023 22:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33440 "EHLO
+        id S230243AbjDGCFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 6 Apr 2023 22:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjDGCGQ (ORCPT
+        with ESMTP id S240256AbjDGCFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 6 Apr 2023 22:06:16 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD2AA5F8;
-        Thu,  6 Apr 2023 19:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680833075; x=1712369075;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2Od254oOAWniJ+pr2U34s6T+QW7hHIwDJe++sSvcJfo=;
-  b=Q3y3va4929ulAafMzC358ekFgqIrxM4ckUlaJIFq8jNlG35XGqI2beeH
-   n7+nGHyoCEw75WptnuTCCsJV3WqKQjRRex9gtKpQbAKT+HFbRYrWZMoIV
-   jNBe+2hUkJT7W0YEs3YM+X9G1RbfBFHz4D7ipAHUihK9t8+iRmVLuZwf2
-   LFYxY0+XMdDBIpAM7th5Q9yeALK/s4pdWF7lSwELda8yp602IkqugRVjY
-   IJzOzojFTQ8LJ9rhsj/w2G2cPA/URpKT+zVIlxHT8Os07lQNBxYynAeNX
-   qzmWATOJAo/oBOJgW6dti3yS9C0ruhqgx+oAo2tmXvzNaXXfjPRi5GDKP
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="341646884"
-X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="341646884"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 19:01:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="798555760"
-X-IronPort-AV: E=Sophos;i="5.98,324,1673942400"; 
-   d="scan'208";a="798555760"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.212.181]) ([10.254.212.181])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 19:01:31 -0700
-Message-ID: <a358d966-86f9-93f5-ded9-36a0ad0b538a@intel.com>
-Date:   Fri, 7 Apr 2023 10:01:29 +0800
+        Thu, 6 Apr 2023 22:05:32 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B4DD324;
+        Thu,  6 Apr 2023 19:03:51 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id dg15so24295925vsb.13;
+        Thu, 06 Apr 2023 19:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680832939; x=1683424939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QNjYz0mwAEnp5iGFtGlkbjUifhzDTS1lkAnmUE+wQDs=;
+        b=k0Rk6Klrd+NMVlkQ0I4To0EBVYkq06tJRKyF9Q+HTZZ0mjPeotBo3paE++cFPYF74I
+         d7YMh7vQCKZi1N9BOffWx91Z9WKlyoiq8QIJe2HB3hbBC/XT6aa52OB/+8fug6vGCi1D
+         Nia+kmPulIYI1u+DRUOoTPbVkxzFpd10SUkVkW00sps43RMJ/0UWdKnXPLRV/OSqjmi8
+         gZl+aiT8xrAeqf1Vpf+QzMN9k0mRMRhaw+u6oqUurjvtM+n18w2/8gxsC1kd+w7FC2nn
+         ZXYQqe0Qqim7CRV9MMMbxO5dOwfeUjdeIE99mgOFkjWw0tD6DM0lBb2rdCFNnUi4vm/M
+         3HbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680832939; x=1683424939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QNjYz0mwAEnp5iGFtGlkbjUifhzDTS1lkAnmUE+wQDs=;
+        b=H9g2dANrHmsqL3PUQcRVszm1lVPbos3LcAiYt23doHI7qvn/L6BORbCk69oxUl+tib
+         w4x7IhUbtve4/dg4bdzQSorQi/QjGKbsgtEACh6zhV+zhbA+xHiqgX5sZuM4hlu0g4+U
+         uv+Jtb8VZuxSTTf8ccDvC15y1fNHLB0wNMi8iaGnj72hQg+YE05IdS5tLdNjKnLUaNBu
+         sndsXD/tic39/ltFo7RXYP4/VN+xDPSnxwyA1D1V5Q6EI44rByfUe3xAj7f9pE8Vsle9
+         XIKXEiS6e4BnjwxrvMUA8sEgNjpTYM8GKqvzXrEvQteeu7UTxp+sV7E1u+czGoJz5SkL
+         gdcg==
+X-Gm-Message-State: AAQBX9dNl0ALa9FBbg5F2tGWFe4+4p7Ec2b3dj1M0xvgo+1wMUwNSGa2
+        ajTtGLgSIq2vL+ZKjTXDHpVJAcp7vUIAzqLvMsI=
+X-Google-Smtp-Source: AKy350bGEsmljBB5v0+qgjtoyZwIZGaewYP8JGjSoxxkH0iyM7Jm0eZvtJ9T10+AG3zRu8TocoTTHS8eeuT3PBMxDmM=
+X-Received: by 2002:a67:c190:0:b0:425:969d:3709 with SMTP id
+ h16-20020a67c190000000b00425969d3709mr326145vsj.3.1680832939251; Thu, 06 Apr
+ 2023 19:02:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.1
-Subject: Re: [PATCH 1/3] KVM: x86: Disallow enable KVM_CAP_X86_DISABLE_EXITS
- capability after vCPUs have been created
-Content-Language: en-US
-To:     Hou Wenlong <houwenlong.hwl@antgroup.com>, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <9227068821b275ac547eb2ede09ec65d2281fe07.1680179693.git.houwenlong.hwl@antgroup.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <9227068821b275ac547eb2ede09ec65d2281fe07.1680179693.git.houwenlong.hwl@antgroup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230406094245.3633290-1-dhowells@redhat.com> <20230406094245.3633290-7-dhowells@redhat.com>
+In-Reply-To: <20230406094245.3633290-7-dhowells@redhat.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 6 Apr 2023 22:01:42 -0400
+Message-ID: <CAF=yD-LAC4QCfoGVKaW-GzU26=xp-6Wuq3jxAhJK1+KV0M+q2A@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 06/19] tcp: Make sendmsg(MSG_SPLICE_PAGES)
+ copy unspliceable data
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, David Ahern <dsahern@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/2023 8:35 PM, Hou Wenlong wrote:
-> Disable PAUSE/MWAIT/HLT exits after vCPUs have been created is useless,
-> because PAUSE/MWAIT/HLT intercepts configuration is not changed after
-> vCPU created.  
-
-PAUSE intercepts can be updated via 
-SET_CPUID->vmx_vcpu_after_set_cpuid() after vCPU is created.
-
-Aside it, this patch looks good to me.
-
-> And two vCPUs may have inconsistent configuration if
-> disable PAUSE/MWAIT/HLT exits between those two vCPUs creation. Since
-> it's a per-VM capability, all vCPUs should keep same configuration, so
-> disallow enable KVM_CAP_X86_DISABLE_EXITS capability after vCPUs have
-> been created.
-> 
-> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+On Thu, Apr 6, 2023 at 5:43=E2=80=AFAM David Howells <dhowells@redhat.com> =
+wrote:
+>
+> If sendmsg() with MSG_SPLICE_PAGES encounters a page that shouldn't be
+> spliced - a slab page, for instance, or one with a zero count - make
+> tcp_sendmsg() copy it.
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: David Ahern <dsahern@kernel.org>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: netdev@vger.kernel.org
 > ---
->   Documentation/virt/kvm/api.rst | 3 ++-
->   arch/x86/kvm/x86.c             | 5 +++++
->   2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index a69e91088d76..95a683a27cf2 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7179,7 +7179,8 @@ branch to guests' 0x200 interrupt vector.
->   
->   :Architectures: x86
->   :Parameters: args[0] defines which exits are disabled
-> -:Returns: 0 on success, -EINVAL when args[0] contains invalid exits
-> +:Returns: 0 on success, -EINVAL when args[0] contains invalid exits or
-> +	  any vCPUs have been created.
->   
->   Valid bits in args[0] are::
->   
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 2c0ff40e5345..7e97595465fc 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -6275,6 +6275,9 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->   		if (cap->args[0] & ~KVM_X86_DISABLE_VALID_EXITS)
->   			break;
->   
-> +		mutex_lock(&kvm->lock);
-> +		if (kvm->created_vcpus)
-> +			goto disable_exits_unlock;
->   		if (cap->args[0] & KVM_X86_DISABLE_EXITS_PAUSE)
->   			kvm->arch.pause_in_guest = true;
->   
-> @@ -6296,6 +6299,8 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->   		}
->   
->   		r = 0;
-> +disable_exits_unlock:
-> +		mutex_unlock(&kvm->lock);
->   		break;
->   	case KVM_CAP_MSR_PLATFORM_INFO:
->   		kvm->arch.guest_can_read_msr_platform_info = cap->args[0];
-> 
-> base-commit: 27d6845d258b67f4eb3debe062b7dacc67e0c393
+>  net/ipv4/tcp.c | 28 +++++++++++++++++++++++++---
+>  1 file changed, 25 insertions(+), 3 deletions(-)
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 510bacc7ce7b..238a8ad6527c 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1418,10 +1418,10 @@ int tcp_sendmsg_locked(struct sock *sk, struct ms=
+ghdr *msg, size_t size)
+>                                 goto do_error;
+>                         copy =3D err;
+>                 } else if (zc =3D=3D 2) {
+> -                       /* Splice in data. */
+> +                       /* Splice in data if we can; copy if we can't. */
+>                         struct page *page =3D NULL, **pages =3D &page;
+>                         size_t off =3D 0, part;
+> -                       bool can_coalesce;
+> +                       bool can_coalesce, put =3D false;
+>                         int i =3D skb_shinfo(skb)->nr_frags;
+>
+>                         copy =3D iov_iter_extract_pages(&msg->msg_iter, &=
+pages,
+> @@ -1448,12 +1448,34 @@ int tcp_sendmsg_locked(struct sock *sk, struct ms=
+ghdr *msg, size_t size)
+>                                 goto wait_for_space;
+>                         copy =3D part;
+>
+> +                       if (!sendpage_ok(page)) {
+> +                               const void *p =3D kmap_local_page(page);
+> +                               void *q;
+> +
+> +                               q =3D page_frag_memdup(NULL, p + off, cop=
+y,
+> +                                                    sk->sk_allocation, U=
+LONG_MAX);
+> +                               kunmap_local(p);
+> +                               if (!q) {
+> +                                       iov_iter_revert(&msg->msg_iter, c=
+opy);
+> +                                       err =3D copy ?: -ENOMEM;
+> +                                       goto do_error;
+> +                               }
+> +                               page =3D virt_to_page(q);
+> +                               off =3D offset_in_page(q);
+> +                               put =3D true;
+> +                               can_coalesce =3D false;
+> +                       }
+> +
 
+This is almost identical in the later udp and unix implementations.
+Could this be a wrapper, something like
+
+    page =3D sendpage_copy_if_needed(&page, &off, copy, gfp, &put));
+
+(it seems page is never needed if it would return NULL)
