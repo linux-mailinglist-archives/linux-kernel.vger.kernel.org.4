@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F05B6DAB7E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D4E6DAB8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjDGK1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S231472AbjDGKf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjDGK1W (ORCPT
+        with ESMTP id S231205AbjDGKfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:27:22 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD084C05;
-        Fri,  7 Apr 2023 03:27:20 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id i9so41964924wrp.3;
-        Fri, 07 Apr 2023 03:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680863239; x=1683455239;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=45fvxnSeFr51avGPKhwK3t5ZbAaRZOEhoU45v/9aioU=;
-        b=MKcGhh/vH4fCViGjtz0AXhqBvfvPy7AEoeDFIFVPmcjIHWR1cvgdVq/fJPeQUT70lM
-         oCDAkQFjbGUVAylsz45DVubpYZ/7qcmcFIpP++L5z/D0xcc3zQYZk7YJt4kc6SJw+JUt
-         Naa62qBmlYGFgws9x6k9owJc2zCfZ03ZuZwLN863fhphOWvPeOSbK3A7uwc1cHA98A1c
-         1WrL7Q2r5YyyQwjf+itRmN9Ij78bb+ufTOzayTZNfaHe4nVkl0l11Q1h/ZnHfWWkndAl
-         4xYj0gNqAHKTqoqUuOiHRkbo6eWgtDr3dIwrv8ISoJjWBIntJ4NXX20Gu6C4lzEKd2Yj
-         dL3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680863239; x=1683455239;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=45fvxnSeFr51avGPKhwK3t5ZbAaRZOEhoU45v/9aioU=;
-        b=1LlQrK7HsuqXRzS8RmOiR8zwyKn3YHM0p5IDzpYCZJnLSssFEp8xJLDoHw1NSpqrW1
-         QFZL+SCvKOtYmaDDpuWM3KnanWHafPxFKwFiifGeBKSOtULKkVl8hcgd+N5DU4zD+FgC
-         3/ZopxQ4Cmnry0XR7eDOibY3L+mFT+DRt3l380xfrWV5rbmSkfzSkemRTH5Ur2Pifi2u
-         3iikLfJ39YkqNWriYT4GXyG6xsm6LiQd9S+dzlxyJ03jd1LRikbF5xXomem1Livi3LEj
-         zbwq+WbaEFPhxjaaeMQMY371EYXX7yQiKp4Q1ko65rCV58+m0Ulk5ofxkspMiJ/bNuqX
-         D7fQ==
-X-Gm-Message-State: AAQBX9cp2RaHvVOAQAkRrk+FQ8cNDIZrfxJLZK74vkmKlMUryBAUvO31
-        pgt25wy1W1EMTTgPDyGi+q4=
-X-Google-Smtp-Source: AKy350ZWeNWeTOaqH2zeUNWN2Xpa/uoOpT0bCwwEy7k+6VIJiD7TGUKi7oRxrUlrYcfTRUW26QhYZA==
-X-Received: by 2002:a5d:6607:0:b0:2cd:f2c6:5d37 with SMTP id n7-20020a5d6607000000b002cdf2c65d37mr935048wru.5.1680863238663;
-        Fri, 07 Apr 2023 03:27:18 -0700 (PDT)
-Received: from krava (cpc137424-wilm3-2-0-cust276.1-4.cable.virginm.net. [82.23.5.21])
-        by smtp.gmail.com with ESMTPSA id n5-20020adfe345000000b002efb139ce72sm1149970wrj.36.2023.04.07.03.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 03:27:18 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 7 Apr 2023 11:27:15 +0100
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH bpf-next] tools headers: Remove s390 ptrace.h in
- check-headers.sh
-Message-ID: <ZC/wA2NoO7yI/xNm@krava>
-References: <1680834090-2322-1-git-send-email-yangtiezhu@loongson.cn>
+        Fri, 7 Apr 2023 06:35:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A179768
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:35:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0Dh0X11LhsMIL/llzoSRk+89So8t9R/DJ91aQRLwQ2Q=; b=VZm/PMaLXgstJ4IH5UdXBsgVVr
+        c6OMMQI49QFP+fuRLT/FiVq1ASDppgQMAX6aWDPUPb+1nUfY9MSi2IaiNPre90cTAgfAWYE4HNFzq
+        Ncg1SPTLZjvnyOwvLXlThRLaFBl35D7gIKvQegYq33SvptveYh2nnOIdlCBbgidfr4NTmFFDKwEUX
+        jcSQf7Bop/vJqzTPyD+Exa2c41iPf+H+de8IqiMqA79Y2mvlQJPCXK419lB2etBuX3u0yJ9DCM/at
+        fo3wKpzVOx1gAvRwVfJuiOYUCS2sFsttWo494Xc7+0tJ7uQaAjBy5ZdfQVM88iGPZLIFYFgGZLWed
+        xltQWm9w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pkjQc-000lmj-84; Fri, 07 Apr 2023 10:34:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CC519300070;
+        Fri,  7 Apr 2023 12:34:44 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B0C032625093E; Fri,  7 Apr 2023 12:34:44 +0200 (CEST)
+Date:   Fri, 7 Apr 2023 12:34:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ankur Arora <ankur.a.arora@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
+        willy@infradead.org, mgorman@suse.de, rostedt@goodmis.org,
+        tglx@linutronix.de, vincent.guittot@linaro.org, jon.grimm@amd.com,
+        bharata@amd.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH 5/9] x86/clear_pages: add clear_pages()
+Message-ID: <20230407103444.GB430894@hirez.programming.kicks-ass.net>
+References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
+ <20230403052233.1880567-6-ankur.a.arora@oracle.com>
+ <20230406082304.GE386572@hirez.programming.kicks-ass.net>
+ <878rf4jz1x.fsf@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1680834090-2322-1-git-send-email-yangtiezhu@loongson.cn>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <878rf4jz1x.fsf@oracle.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 10:21:30AM +0800, Tiezhu Yang wrote:
-> After commit 1f265d2aea0d ("selftests/bpf: Remove not used headers"),
-> tools/arch/s390/include/uapi/asm/ptrace.h has been removed, so remove
-> it in check-headers.sh too, otherwise we can see the following build
-> warning:
+On Thu, Apr 06, 2023 at 05:50:18PM -0700, Ankur Arora wrote:
 > 
->   diff: tools/arch/s390/include/uapi/asm/ptrace.h: No such file or directory
+> Peter Zijlstra <peterz@infradead.org> writes:
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202304050029.38NdbQPf-lkp@intel.com/
-> Fixes: 1f265d2aea0d ("selftests/bpf: Remove not used headers")
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > On Sun, Apr 02, 2023 at 10:22:29PM -0700, Ankur Arora wrote:
+> >> Add clear_pages() and define the ancillary clear_user_pages().
+> >>
+> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> >> ---
+> >>  arch/x86/include/asm/page.h    | 6 ++++++
+> >>  arch/x86/include/asm/page_32.h | 6 ++++++
+> >>  arch/x86/include/asm/page_64.h | 9 +++++++--
+> >>  3 files changed, 19 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/arch/x86/include/asm/page.h b/arch/x86/include/asm/page.h
+> >> index d18e5c332cb9..03e3c69fc427 100644
+> >> --- a/arch/x86/include/asm/page.h
+> >> +++ b/arch/x86/include/asm/page.h
+> >> @@ -28,6 +28,12 @@ static inline void clear_user_page(void *page, unsigned long vaddr,
+> >>  	clear_page(page);
+> >>  }
+> >>
+> >> +static inline void clear_user_pages(void *page, unsigned long vaddr,
+> >> +				    struct page *pg, unsigned int nsubpages)
+> >> +{
+> >> +	clear_pages(page, nsubpages);
+> >> +}
+> >
+> > This seems dodgy, clear_user* has slightly different semantics. It needs
+> > the access_ok() and stac/clac thing on at the very least.
+> 
+> That can't be right. On x86, clear_user_page(), copy_user_page() (and
+> now the multi-page versions) only write to kernel maps of user pages.
+> That's why they can skip the access_ok(), stac/clac or uacess
+> exception handling.
 
-not sure this should go through Arnaldo's tree instead,
-either way is fine with me
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
-> ---
-> 
-> commit 1f265d2aea0d ("selftests/bpf: Remove not used headers") is in
-> bpf-next tree, so I prefer this patch can be applied to bpf-next tree.
-> 
->  tools/perf/check-headers.sh | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-> index eacca9a..e4a8b53 100755
-> --- a/tools/perf/check-headers.sh
-> +++ b/tools/perf/check-headers.sh
-> @@ -52,7 +52,6 @@ arch/x86/include/uapi/asm/vmx.h
->  arch/powerpc/include/uapi/asm/kvm.h
->  arch/s390/include/uapi/asm/kvm.h
->  arch/s390/include/uapi/asm/kvm_perf.h
-> -arch/s390/include/uapi/asm/ptrace.h
->  arch/s390/include/uapi/asm/sie.h
->  arch/arm/include/uapi/asm/kvm.h
->  arch/arm64/include/uapi/asm/kvm.h
-> -- 
-> 2.1.0
-> 
+Bah, that namespace is a mess :/
