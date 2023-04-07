@@ -2,76 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DD46DACD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126046DACD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 14:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjDGMzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 08:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
+        id S232561AbjDGM7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 08:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjDGMzu (ORCPT
+        with ESMTP id S231247AbjDGM7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 08:55:50 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C442658B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 05:55:49 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id i10so36826840vss.5
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 05:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680872148; x=1683464148;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vnr/Na0DANOY+4nAFsyUpDcPPIp3/Rne/9y6T2p+nDQ=;
-        b=getku0wFCfhFfXIQsLQ68snTH5Euiw3Thaaqskfyox4pd/Ej/HDOxGjDJNooPx9BNP
-         20VwZdAg5hw8zS3mMGBmNBNWahxbRXNAPg9P7dBz3TAE5I/PCjQT2Z/0xIjTtrkwCSnP
-         2y2IQJJt77FcoLVmz/JYSg5umXLoHwURc5UHX/tp59ysmvjL1MwV5GKEBMBmJd2o0BXQ
-         GLcRt7hn9DGedntPvhTX6535hTIO9MjYTTvdlUweKSSDgNWwpWfmrAoe2+LDawe8CTEd
-         fxiuHsBABsKp57x0r8Oz47GuwMC1fHOecQ/3VKbB37qLXwnrHW8RQNRhEfCugTcswymV
-         A6mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680872148; x=1683464148;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vnr/Na0DANOY+4nAFsyUpDcPPIp3/Rne/9y6T2p+nDQ=;
-        b=B76WyrXRlOZU/DI0eaawIQNvQZ+T3qcohNPLTJUklGwPmj0PJu6fTdotmy+PQuLiYb
-         g7k/jiezQGzIqm+clF/NCrcI2nwLEEzUuHjpcVjaN/n3n8yZIhd1D96Ueb6/wLHtiP66
-         E2nEqs4h3Ky5IrSVIGRa2nhhHMArgRqwq/HOVbHYjOhkZKq9Eo8x2g7eaUB7vTdnvnZv
-         8vBM+6jOZrrJ2a+bAuFKb41N6U4ywrdgn3taYC+q6y1Mk6akPZ2cm4h48ohhneZ8LKf4
-         rBqumUfRlY42WQwIQTDeKvN4DgLtHe8t3tlGPPRQlaPet7gE6+P2l5vZpjts8Qjh7v6i
-         fk2Q==
-X-Gm-Message-State: AAQBX9fwTf6txUmWZXYsqDQKPB7fuCY7VluKVnjKcT7B9JEbZ6Jpd37b
-        snQ/Yw2FWoojYl5VwZlxv9u5vXwDq4jPTGfcQpI=
-X-Google-Smtp-Source: AKy350anEflsHz+e7sHzt4bbstxMJfe3EU8Tj+36JMmWzTQH7p+gp/hRKTCcveDhuvMvZQOf5UAQTJKFhbYaOPWTneo=
-X-Received: by 2002:a05:6102:5705:b0:426:6d5:a55a with SMTP id
- dg5-20020a056102570500b0042606d5a55amr1031771vsb.1.1680872148712; Fri, 07 Apr
- 2023 05:55:48 -0700 (PDT)
+        Fri, 7 Apr 2023 08:59:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795B476BB;
+        Fri,  7 Apr 2023 05:58:58 -0700 (PDT)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PtJHY3gVrzSmPS;
+        Fri,  7 Apr 2023 20:55:05 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 7 Apr 2023 20:58:54 +0800
+Subject: Re: [PATCH -next v3 1/2] riscv: kdump: Implement
+ crashkernel=X,[high,low]
+To:     Simon Horman <horms@kernel.org>,
+        Chen Jiahao <chenjiahao16@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <kexec@lists.infradead.org>, <linux-doc@vger.kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <conor.dooley@microchip.com>, <guoren@kernel.org>,
+        <heiko@sntech.de>, <bjorn@rivosinc.com>, <alex@ghiti.fr>,
+        <akpm@linux-foundation.org>, <atishp@rivosinc.com>,
+        <bhe@redhat.com>
+References: <20230406220206.3067006-1-chenjiahao16@huawei.com>
+ <20230406220206.3067006-2-chenjiahao16@huawei.com>
+ <ZDAGi2/+1q0oEUZ5@kernel.org>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <ee6434f7-8e94-bae5-7d63-4b9bce3aec24@huawei.com>
+Date:   Fri, 7 Apr 2023 20:58:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Received: by 2002:a59:be66:0:b0:3be:8ebd:82f4 with HTTP; Fri, 7 Apr 2023
- 05:55:48 -0700 (PDT)
-Reply-To: thomasjoycetho12@gmail.com
-From:   Joyce Thomas <budejohn2@gmail.com>
-Date:   Fri, 7 Apr 2023 05:55:48 -0700
-Message-ID: <CANhjusd0SZQgcCA3nQ_+Nx7uV-+LJKWcmVg6R9ROLGZfvd_Sqg@mail.gmail.com>
-Subject: Best Regards,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+In-Reply-To: <ZDAGi2/+1q0oEUZ5@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day
-How are you doing you haven=E2=80=99t responded to my mail since two day no=
-w
-please be kindly get back to me.
-Best Regards,
-Ms Joyce
+
+
+On 2023/4/7 20:03, Simon Horman wrote:
+> On Fri, Apr 07, 2023 at 06:02:05AM +0800, Chen Jiahao wrote:
+>> On riscv, the current crash kernel allocation logic is trying to
+>> allocate within 32bit addressible memory region by default, if
+>> failed, try to allocate without 4G restriction.
+>>
+>> In need of saving DMA zone memory while allocating a relatively large
+>> crash kernel region, allocating the reserved memory top down in
+>> high memory, without overlapping the DMA zone, is a mature solution.
+>> Here introduce the parameter option crashkernel=X,[high,low].
+>>
+>> One can reserve the crash kernel from high memory above DMA zone range
+>> by explicitly passing "crashkernel=X,high"; or reserve a memory range
+>> below 4G with "crashkernel=X,low".
+>>
+>> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
+> 
+> ...
+> 
+>> @@ -1180,14 +1206,37 @@ static void __init reserve_crashkernel(void)
+>>  		return;
+>>  	}
+>>  
+>> -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+>> +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+>>  				&crash_size, &crash_base);
+>> -	if (ret || !crash_size)
+>> +	if (ret == -ENOENT) {
+>> +		/*
+>> +		 * crashkernel=X,[high,low] can be specified or not, but
+>> +		 * invalid value is not allowed.
+> 
+> nit: Perhaps something like this would be easier to correlate with the
+>      code that follows:
+> 
+> 		/* Fallback to crashkernel=X,[high,low] */
+
+The description "crashkernel=X,[high,low] can be specified or not" is not
+correct, because crashkernel=X,high must be specified when walking into this
+branch. So use Simon's comments or copy arm64's comments(it's written for
+parse_crashkernel_low()).
+
+> 
+> 
+>> +		 */
+>> +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+>> +		if (ret || !crash_size)
+>> +			return;
+>> +
+>> +		/*
+>> +		 * crashkernel=Y,low is valid only when crashkernel=X,high
+>> +		 * is passed and high memory is reserved successful.
+> 
+> nit: s/successful/successfully/
+
+Seems like the whole "and high memory is reserved successful" needs to be deleted.
+Only the dependency between the two boot options should be described here,
+regardless of whether their memory is successfully allocated.
+
+> 
+>> +		 */
+>> +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
+>> +		if (ret == -ENOENT)
+>> +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+>> +		else if (ret)
+>> +			return;
+>> +
+>> +		search_start = search_low_max;
+>> +	} else if (ret || !crash_size) {
+>> +		/* Invalid argument value specified */
+>>  		return;
+>> +	}
+> 
+> ...
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
