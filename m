@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F766DAE3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B02F6DAE5C
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbjDGNs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S239643AbjDGNvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbjDGNsS (ORCPT
+        with ESMTP id S232268AbjDGNvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:48:18 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0974FBDD8
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:46:42 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2449d3400d6so161211a91.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:46:42 -0700 (PDT)
+        Fri, 7 Apr 2023 09:51:16 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DA4CA03
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:48:37 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id q5so1628131ybk.7
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:48:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680875197;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZL321vaITWn9sq0TM/dZld2xfZM7ieaEWlwJnFULcKo=;
-        b=kX12iSDYPTc/jNWI/Shc8ryP57t5aEJe6dCb/WMczQssEYLicItq9gB9dV7uM6EBZd
-         HvxFSx8v/lDlcZRtF1tzF6whyY+6UrmmJUEzdC9ZLJR+dda2MvA/7oUSxpLgeInB/POm
-         Su74NLfmxkvKDnKgdWXQqhWJqQ17l+u6wV8Q233LYvItrgXBUAjy0prMpNT+xDJgIxZ8
-         HmgQB2Jdp1gSDuO3tpXsmjlL3edgxU6Vqi1mUHX5koE0q0XWVtIAQT8N//rrRnkC+yxv
-         I4IMsbF6r3RAOo3rC5XYdjYa8/s5ShRBVLBmC4KcbEmQsXcigR+3E1wJTOuF1WVTjWak
-         xilA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680875197;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1680875316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZL321vaITWn9sq0TM/dZld2xfZM7ieaEWlwJnFULcKo=;
-        b=pMEvPB+7IJAbyDPZ+tjsuv+UFAwBWT4+VFrmKhUKC/bxUtSU7+PkixqnqUbSmYKgK5
-         louXFDfgnMSxljCGbgkIsc5xPJT8zc6sc0uK0PkRXguatsR8jou+JebX37BId4c/gCnn
-         wKsSuatQztu8uNd5TWn34MGGfRV8id1/8B7laKvhUI1wpoAGK6qWLOzPUMN31Pa3ZRBu
-         vJruJOVKEzScpGUCbi1IQwePFDMf0MJBti0SMMiKmUP8JgrjpanjSQzkNOBAZ5y5h8Gn
-         mH/+EDCYd5ZsLcOkbYm5dmRkWw4QWRd9oY25yBsOhd/qv9tqvgpjGFA8zslNvG0kXlY3
-         Cujw==
-X-Gm-Message-State: AAQBX9eoMn6ASrvEKFSm9dsfSDlbpoA9SKInZED/WJ5M4KXSZ1pSVJ+L
-        n5er6bAMqEd6/XMiQGBYcwM=
-X-Google-Smtp-Source: AKy350YaVuyemhEJIxnNyz0NWio4uKYlJsvlUnwsS6Msz0fskX2OH31jxejr8ZW2tYTR1B7iwI4pdw==
-X-Received: by 2002:a62:1989:0:b0:626:1c2a:2805 with SMTP id 131-20020a621989000000b006261c2a2805mr2273160pfz.25.1680875197221;
-        Fri, 07 Apr 2023 06:46:37 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-76.three.co.id. [180.214.233.76])
-        by smtp.gmail.com with ESMTPSA id b8-20020aa78108000000b0062d7c0dc4f4sm3067550pfi.80.2023.04.07.06.46.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 06:46:36 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id BEB061067F2; Fri,  7 Apr 2023 20:46:32 +0700 (WIB)
-Date:   Fri, 7 Apr 2023 20:46:32 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Kautuk Consul <kconsul@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: PPC: BOOK3S: book3s_hv_nested.c: improve branch
- prediction for k.alloc
-Message-ID: <ZDAeuL2fz1aEW6rz@debian.me>
-References: <20230407093147.3646597-1-kconsul@linux.vnet.ibm.com>
+        bh=aKK09fngq38ILpy1qwOd5H4TNRR3elskTobTEmmbiwE=;
+        b=gecNJ+X1UXFrJOR9jcDYcM6qMfLOurNZETsFwO7h71tAaUNxew8gclFKyL6cXUzze3
+         Aptfhq7i7Hhh0c69UWzoA0lLdtiaXsP+LwYlb7dIGKCsvL2npvyvml+tRD3CpexDD3Am
+         nlK34EUsiaWTGsygZivf6TaFZirXlH7i6YVwfyk64Pwboul69xIWB4A9H447UcHr30vH
+         aq3ec57aimCI3IE40YFoqQXAXVxdsD0CKPQk+/NtO6iFdOV0wUQVqD3NKXIg5L2bKBB4
+         mOa3oSGOUdMRjxVa+WAgNIGnir4KRvZaNTGeSGf5uTx2Gayb+XkwtNlDZN3apq2PH3o7
+         aKOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680875316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aKK09fngq38ILpy1qwOd5H4TNRR3elskTobTEmmbiwE=;
+        b=WsbWunxRnfROQ509Usqcqk0GJT6l7MUpohAQixO8tbQGYEazdRaMTXQBfKiQKKPn2g
+         3YcoAWFcfn/Vtspm9u5SK5s0YdKYFo4YJKTHwmB39ggpPVVdfiGeYlHo5FFRUoWMP21Q
+         c+rg/hoYqFAsDuvMokGHIzTc4CBTfMou96TVCQ0hd+UBW6f6K5ludtlR13qqaOwsiUMe
+         1dutQZVbv3wUguPsECV1DLiFtVUKZKtPcngrn9L6Mv8SCegj0SEENMFXyCj+kQeafq0B
+         spQ7ekWzzHPQHIife+RF8lw4hwWaYPSyi4RvKFzISMtWBowpSUGfBItAP30Yzdxe3e31
+         prqw==
+X-Gm-Message-State: AAQBX9e2FGd5fkirfuWDLk+72sehm1wuWyBu1+ohr8TmNeM79xPDBBvE
+        XzmedYMZioB/WJTp6oeJCwLW3Hbs0EprD3jEhd5ARw==
+X-Google-Smtp-Source: AKy350aaHrMYyuOilTUIt2bIGijezFMGhN+vlFiDrxGpwtyukP/2S2+L+vnBLQ8icbdnzVt0fXeoQ7uKNhgsTqwyKgo=
+X-Received: by 2002:a25:740f:0:b0:b09:6f3d:ea1f with SMTP id
+ p15-20020a25740f000000b00b096f3dea1fmr1907548ybc.4.1680875316286; Fri, 07 Apr
+ 2023 06:48:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6caTa8mxFTuMf/uP"
-Content-Disposition: inline
-In-Reply-To: <20230407093147.3646597-1-kconsul@linux.vnet.ibm.com>
-X-Spam-Status: No, score=1.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20230327130010.8342-1-okan.sahin@analog.com> <20230327130010.8342-3-okan.sahin@analog.com>
+ <CACRpkda5G5b+At5s1WFudpQBQ6LDQxhE3fZj7eBhkZ=thvnQhg@mail.gmail.com>
+ <MN2PR03MB51682210CADA6E33FB99052CE7939@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <CACRpkdZJA0DyzgLxm9HFeHO03rqNUff=avuV=VrGuJkkOg6wNQ@mail.gmail.com> <25e1fda4b6df2d10444d7eca3cd0e387@walle.cc>
+In-Reply-To: <25e1fda4b6df2d10444d7eca3cd0e387@walle.cc>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 7 Apr 2023 15:48:25 +0200
+Message-ID: <CACRpkdYKEid8-0-7sBECNgSyW3kMRCsv3DeBVUzxo4z6p+Grnw@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] gpio: ds4520: Add ADI DS4520 Regulator Support
+To:     Michael Walle <michael@walle.cc>
+Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 5, 2023 at 3:57=E2=80=AFPM Michael Walle <michael@walle.cc> wro=
+te:
 
---6caTa8mxFTuMf/uP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> OTOH I'm not sure the driver is doing it correctly, because it also
+> seems to switch the pullup resisters together with the direction.
+> I'm not sure that is correct. So there might be just one register
+> involved after all and the GPIO_REGMAP should work again.
 
-On Fri, Apr 07, 2023 at 05:31:47AM -0400, Kautuk Consul wrote:
-> I used the unlikely() macro on the return values of the k.alloc
-> calls and found that it changes the code generation a bit.
-> Optimize all return paths of k.alloc calls by improving
-> branch prediction on return value of k.alloc.
+I'm pretty sure that should be in the .set_config() callback.
 
-What about below?
+> Also, according to the datasheet this has some nv memory (to set the
+> initial state of the GPIOs [?]). So it should really be a multi-function
+> device. I'm not sure if this has to be considered right from the
+> beginning or if the device support can start with GPIO only and later
+> be transitioned to a full featured MFD (probably with nvmem support).
 
-"Improve branch prediction on kmalloc() and kzalloc() call by using
-unlikely() macro to optimize their return paths."
+That's a bit of a soft definition.
 
-That is, try to avoid first-person construct (I).
+If the chip is *only* doing GPIO and nvram it can be a GPIO-only
+device I think.
 
-Thanks.
+The precedent is a ton of ethernet drivers with nvram for storing
+e.g. the MAC address. We don't make all of those into MFDs,
+as the nvram is closely tied to the one and only function of the
+block.
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---6caTa8mxFTuMf/uP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZDAetAAKCRD2uYlJVVFO
-o8WRAQDI+qrr3elgQo4FKB1f8DWaii9J1c8omUyFNKUt/TOr0AEAvj3x7tljbC01
-Cs/ZW4kFNxjJHwgIY5bhRfZr28QfbA4=
-=4KC8
------END PGP SIGNATURE-----
-
---6caTa8mxFTuMf/uP--
+Yours,
+Linus Walleij
