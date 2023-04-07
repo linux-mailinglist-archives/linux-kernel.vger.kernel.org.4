@@ -2,72 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C3E6DA9FF
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A816DAA12
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 10:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjDGIYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 04:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S233227AbjDGI3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 04:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjDGIYe (ORCPT
+        with ESMTP id S232884AbjDGI3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 04:24:34 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031A06EAB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:24:30 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id C107F604F6;
-        Fri,  7 Apr 2023 10:24:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680855867; bh=aSptWe2x+JTH/1bmiifexMg4polrb/x5sg/MEgptsF8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RMXF/8AQXfqhvPMyFaP0XuvjIR8Zrlp5anMq87prqgOf8JQ373DwxW3mOqK0X7rAo
-         yOH0yYTaVDK1Kp4o75ir0li5nSfvUM6FR/846xBZjdrJaF0KgXk9KELrNdLJtBg8w6
-         MpF+Eyyf46kbfV4DgNf9/N7fVf6pDuP2A/bwhoXLDRUeC5tX5FFt7lfQU/j13KRNWf
-         G0vbQ3r8NwgXr2EcelAH2yRbIHKPIOd6NO3iUrtH+oWkUnsKHR/7dSYwP7I2ALLAqO
-         6Z/urqpuOoYmsNAseHbAdaqjCS0FVYG0Yj8VzpXLwN4WCJaWmwvnFCS3yiL1JDTIXL
-         HPXqY19HmjJgQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id d3joQPErXc0a; Fri,  7 Apr 2023 10:24:25 +0200 (CEST)
-Received: from [10.0.1.26] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id C795F604F5;
-        Fri,  7 Apr 2023 10:24:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1680855865; bh=aSptWe2x+JTH/1bmiifexMg4polrb/x5sg/MEgptsF8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=i6WLs71aqn9B3iqJhb2LV1q4tSd4O0UfW89fZ2as+xwy691dHfXqw2SuIGgMsF5kd
-         WAkJUNwRfJUh3G43Fe73yQkrlqZcsuAmb+JDE1kOjApPZge/SQp5/fe75wEdFmVpCG
-         6kxq7W5M/zdbl1MuRhwVilvPwS3oqI9YVdhrUBtaQT3PupB4ZX35lU7ILYLj0Z28WD
-         tlhuzRwmvhRi94GeakgzKj/Fancc6i/Yyb7hIU6SyT7lQfh10HwjynXrWahQijHsKn
-         GkrSiTqsfkwu6HpMLiuv/t5j/NDOqGaWwmlKF2WwwFlmGmmsoW2iwRPhGa7MzZ1JhD
-         SR1XY8PfkIP2Q==
-Message-ID: <1f07fd79-b7db-9bd5-f281-8ba1ca71e195@alu.unizg.hr>
-Date:   Fri, 7 Apr 2023 10:24:24 +0200
+        Fri, 7 Apr 2023 04:29:06 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625D06589
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 01:29:03 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230407082859epoutp042afca75c98af7b4f69cd29a76f1daf2f~TmcDyTsyM1577415774epoutp04j
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 08:28:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230407082859epoutp042afca75c98af7b4f69cd29a76f1daf2f~TmcDyTsyM1577415774epoutp04j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1680856139;
+        bh=uxz7nQG0Usod/LqLFz4nWYoLIIAAWKbo3Z2+zic6Ook=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=p9Dctoqq5/92SPJXpzRR5vL5Gau5QftRUiXCr+46UIl5ih23b15x3wTgdRePN1Awk
+         hIlIRujIJn77HOYNSIOt3Auy7PNOWDBQRlGZl/r4axWaVHlCjRFN+6M2mSHL2XTcqp
+         mTJTuEqlDKpXCBHYcdpTvOCGSx/Mfhr5YzzqFbkM=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230407082859epcas5p152c60b10104257fb2f170a2ce37984aa~TmcDny6bI3162431624epcas5p1d;
+        Fri,  7 Apr 2023 08:28:59 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.174]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4PtBNV3T85z4x9Q2; Fri,  7 Apr
+        2023 08:28:58 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5D.56.10528.944DF246; Fri,  7 Apr 2023 17:28:57 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230407082718epcas5p4f500a6e00dbbd189fbfed87bf47d6ad1~Tmalv7B6f1119611196epcas5p4Y;
+        Fri,  7 Apr 2023 08:27:18 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230407082718epsmtrp22748219895a485c5f9da6f5966fe44bd~Tmalu1F5h1287712877epsmtrp21;
+        Fri,  7 Apr 2023 08:27:18 +0000 (GMT)
+X-AuditID: b6c32a49-e75fa70000012920-41-642fd449a9ac
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        77.7D.18071.6E3DF246; Fri,  7 Apr 2023 17:27:18 +0900 (KST)
+Received: from green5 (unknown [107.110.206.5]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230407082716epsmtip1f21b7f3a7f2d50a7b3f1ab3e1c40c08c~TmajOpZbd1209712097epsmtip1D;
+        Fri,  7 Apr 2023 08:27:15 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 13:56:27 +0530
+From:   Nitesh Shetty <nj.shetty@samsung.com>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fuse: remove unnecessary goto
+Message-ID: <20230407082627.oh2l4lfltmxy52nx@green5>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v3 1/2] test_firmware: Fix some racing conditions in
- test_fw_config locking.
-Content-Language: en-US, hr
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-References: <20230406015315.31505-1-mirsad.todorovac@alu.unizg.hr>
- <eb117a50-79ad-4f5a-8ad9-73247107469e@kili.mountain>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <eb117a50-79ad-4f5a-8ad9-73247107469e@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20230406195615.80078-1-frank.li@vivo.com>
+User-Agent: NeoMutt/20171215
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkk+LIzCtJLcpLzFFi42LZdlhTS9fzin6KwbnN7BYTj8xgstiz9ySL
+        xeVdc9gsnu3eyOzA4rFi2kUmj8+b5Dw2fOpgDmCOyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneO
+        NzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAdqmpFCWmFMKFApILC5W0rezKcovLUlVyMgvLrFV
+        Si1IySkwKdArTswtLs1L18tLLbEyNDAwMgUqTMjO2Ll2HmPBQ86Kvb22DYwLOLoYOTgkBEwk
+        Vk8P7WLk4hAS2M0osW7HbXYI5xOjxO3N59ggnG+MEtt/NrF0MXKCdfyY3sUEkdjLKNH9ZiUz
+        hPOEUeLeyZdMIFUsAioSTyadYwTZwSagLXH6PwdIWERASeL7vpmMIDazQKrEqZa1YOXCAkYS
+        k1e8BbN5gRZcnL6JBcIWlDg58wmYzSlgLvH38h12EFtUQEZixtKvYHslBK6xS7xtWcQEcZ2L
+        xJE1vawQtrDEq+Nb2CFsKYnP7/ayQdjlEiunrGCDaG5hlJh1fRYjRMJeovVUPzPEdRkS2z8v
+        Z4aIy0pMPbWOCSLOJ9H7+wnUMl6JHfNgbGWJNesXQC2QlLj2vZENEsAeEq23ayEB1MUoMeHF
+        CpYJjPKzkDw3C8k6CNtKovNDE+ssoHZmAWmJ5f84IExNifW79Bcwsq5ilEwtKM5NTy02LTDM
+        Sy2Hx3dyfu4mRnBa1PLcwXj3wQe9Q4xMHIyHGCU4mJVEeC/X6aUI8aYkVlalFuXHF5XmpBYf
+        YjQFxtVEZinR5HxgYs4riTc0sTQwMTMzM7E0NjNUEudVtz2ZLCSQnliSmp2aWpBaBNPHxMEp
+        1cAkX92dXHhg5WvV7rhCtrKseVv4LHdElNZ2yM1iWexeck9dQ65NaZbT5E8TLnuJdyxcO/fh
+        geZrXIoumWphyw6XC6kkzVZr4nvjUSkUmdH4MaE2y9ZhWkn2NS4Ow+kCCwuFDbVeLVl8u7nz
+        5vLtgv82P36T/TDPZqnx//+ek0J065+67pvmxvt5s8KPs8ffH/bQ7ZRsETgdxXeu6uBrpqd3
+        t9Uuyth9u+3+N5U7r4r0JzRmmBnxzDtVzP39D5+M98qSWXs6HogFliWH7F+f9HmB2t0V++/v
+        q7kRHMjzPfoU4wHOzc3nJybNWP3ZplVZqnDzBf9nLWfKPnWWrQqX/snyT/hCw7FS8dQPuk+z
+        fOYqsRRnJBpqMRcVJwIAzTn0vBQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMLMWRmVeSWpSXmKPExsWy7bCSnO6zy/opBrOmm1lMPDKDyWLP3pMs
+        Fpd3zWGzeLZ7I7MDi8eKaReZPD5vkvPY8KmDOYA5issmJTUnsyy1SN8ugSvj7YpPrAWT2Ss+
+        zHzF3sD4hrWLkZNDQsBE4sf0LqYuRi4OIYHdjBLnJ0xlgkhISiz7e4QZwhaWWPnvOTtE0SNG
+        idvNR8ESLAIqEk8mnWPsYuTgYBPQljj9nwMkLCKgJPF930xGEJtZIFXiVMtasJnCAkYSk1e8
+        BbN5gRZfnL6JBcQWEjCT+NP+lAUiLihxcuYTFoheM4l5mx8yg4xnFpCWWP4PbDyngLnE38t3
+        2EFsUQEZiRlLvzJPYBSchaR7FpLuWQjdCxiZVzFKphYU56bnFhsWGOallusVJ+YWl+al6yXn
+        525iBIezluYOxu2rPugdYmTiYDzEKMHBrCTCe7lOL0WINyWxsiq1KD++qDQntfgQozQHi5I4
+        74Wuk/FCAumJJanZqakFqUUwWSYOTqkGJpNv4uw9Tszvv/2PU7GSMjV5byX0syPggTmHXsMM
+        Sf7E32sr2hfMWmi/2WXukQnTu442rffo7hETfBXS/uhNgNNNOdV8RaE21vW89S9W8n345fz1
+        Ss2mK23y9/cq7FZUlHBdcNBl5iEW/y3fLZ6kBV7cI/PiT2OvRa3OBAc+c5X1woYMed+nbhDq
+        UN5moZPbcTd8hv7Za1P+u3lx81X0OTLMLbsauUSz9IYfD9PGoJ0J/1/wXatKzDesFk3u9V1R
+        Pd0sNEzb5GC/mnZj8a6GTwxd1csXx2w4f1VAqO+dh43RnhtcXw9c31amK5jpZ6Z96EZAm0Gp
+        NvdRh19P7kyNjTn10ib5aE7WJctbHw4rsRRnJBpqMRcVJwIAcbUM4tYCAAA=
+X-CMS-MailID: 20230407082718epcas5p4f500a6e00dbbd189fbfed87bf47d6ad1
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----Zd.sqB5Rrz_NXAV9fsVjIXI9mlljbjA9yzE-aJOBfPlcmgnB=_21e39_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230407082718epcas5p4f500a6e00dbbd189fbfed87bf47d6ad1
+References: <20230406195615.80078-1-frank.li@vivo.com>
+        <CGME20230407082718epcas5p4f500a6e00dbbd189fbfed87bf47d6ad1@epcas5p4.samsung.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,179 +114,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6.4.2023. 16:04, Dan Carpenter wrote:
-> On Thu, Apr 06, 2023 at 03:53:17AM +0200, Mirsad Goran Todorovac wrote:
->> Some functions were called both from locked and unlocked context, so the lock
->> was dropped prematurely, introducing a race condition when deadlock was avoided.
->>
->> Having two locks wouldn't assure a race-proof mutual exclusion.
->>
->> test_dev_config_update_bool_unlocked(), test_dev_config_update_u8_unlocked()
->> and test_dev_config_update_size_t_unlocked() versions of the functions were
->> introduced to be called from the locked contexts as a workaround without
->> releasing the main driver's lock and causing a race condition, much like putc()
->> and putc_unlocked() in stdio glibc library.
->>
->> This should guarantee mutual exclusion and prevent any race conditions.
->>
-> 
-> Thanks for figuring this out!  It seems like a good approach to me.
-> However, I feel like PATCH 1/1 needs some style changes.
-> 
-> The question you seem to be dealing with is how consistent to be and how
-> much infrastructure to create.  Don't think about that.  Just fix the
-> bug in the most minimal way possible and don't worry about being
-> consistent.
-> 
-> (Probably the best way to make this consistent is to change the
->   test_dev_config_update_XXX functions into a single macro that calls the
->   correct kstroXXX function.  Then create a second macro that takes the
->   lock and calls the first macro.  But that is a clean up patch and
->   unrelated to this bug.)
-> 
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Luis Chamberlain <mcgrof@kernel.org>
->> Cc: Russ Weight <russell.h.weight@intel.com>
->> Cc: Tianfei zhang <tianfei.zhang@intel.com>
->> Cc: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> Cc: Zhengchao Shao <shaozhengchao@huawei.com>
->> Cc: Colin Ian King <colin.i.king@gmail.com>
->> Cc: linux-kernel@vger.kernel.org
->> Cc: Takashi Iwai <tiwai@suse.de>
->> Suggested-by: Dan Carpenter <error27@gmail.com>
->> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> ---
->>   lib/test_firmware.c | 52 +++++++++++++++++++++++++++++++++------------
->>   1 file changed, 38 insertions(+), 14 deletions(-)
->>
->> diff --git a/lib/test_firmware.c b/lib/test_firmware.c
->> index 05ed84c2fc4c..272af8dc54b0 100644
->> --- a/lib/test_firmware.c
->> +++ b/lib/test_firmware.c
->> @@ -353,16 +353,26 @@ static ssize_t config_test_show_str(char *dst,
->>   	return len;
->>   }
->>   
->> -static int test_dev_config_update_bool(const char *buf, size_t size,
->> +static inline int test_dev_config_update_bool_unlocked(const char *buf, size_t size,
->>   				       bool *cfg)
->>   {
->>   	int ret;
->>   
->> -	mutex_lock(&test_fw_mutex);
->>   	if (kstrtobool(buf, cfg) < 0)
->>   		ret = -EINVAL;
->>   	else
->>   		ret = size;
->> +
->> +	return ret;
->> +}
-> 
-> This change can be left out completely.
-> 
->> +
->> +static int test_dev_config_update_bool(const char *buf, size_t size,
->> +				       bool *cfg)
->> +{
->> +	int ret;
->> +
->> +	mutex_lock(&test_fw_mutex);
->> +	ret = test_dev_config_update_bool_unlocked(buf, size, cfg);
->>   	mutex_unlock(&test_fw_mutex);
->>   
->>   	return ret;
->> @@ -373,7 +383,8 @@ static ssize_t test_dev_config_show_bool(char *buf, bool val)
->>   	return snprintf(buf, PAGE_SIZE, "%d\n", val);
->>   }
->>   
->> -static int test_dev_config_update_size_t(const char *buf,
->> +static int test_dev_config_update_size_t_unlocked(
->> +					 const char *buf,
->>   					 size_t size,
->>   					 size_t *cfg)
->>   {
-> 
-> Do not rename this function.  Just add a comment that the mutext must be
-> held.  Or a WARN_ONCE().
-> 
-> 	WARN_ON_ONCE(!mutex_is_locked(&test_fw_mutex));
-> 
-> 
->> @@ -384,9 +395,7 @@ static int test_dev_config_update_size_t(const char *buf,
->>   	if (ret)
->>   		return ret;
->>   
->> -	mutex_lock(&test_fw_mutex);
->>   	*(size_t *)cfg = new;
->> -	mutex_unlock(&test_fw_mutex);
->>   
->>   	/* Always return full write size even if we didn't consume all */
->>   	return size;
->> @@ -402,6 +411,21 @@ static ssize_t test_dev_config_show_int(char *buf, int val)
->>   	return snprintf(buf, PAGE_SIZE, "%d\n", val);
->>   }
->>   
->> +static int test_dev_config_update_u8_unlocked(const char *buf, size_t size, u8 *cfg)
->> +{
->> +	u8 val;
->> +	int ret;
->> +
->> +	ret = kstrtou8(buf, 10, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	*(u8 *)cfg = val;
->> +
->> +	/* Always return full write size even if we didn't consume all */
->> +	return size;
->> +}
->> +
-> 
-> Just change the test_dev_config_update_u8() to not take the lock.
-> Add the comment that the lock must be held.  Change both callers to take
-> the lock.
-> 
-> 
-> Otherwise we end up creating too much duplicate code.
-> 
->>   static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
->>   {
->>   	u8 val;
-> 
-> regards,
-> dan carpenter
+------Zd.sqB5Rrz_NXAV9fsVjIXI9mlljbjA9yzE-aJOBfPlcmgnB=_21e39_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-Hi Mr. Carpenter,
+On 23/04/07 03:56AM, Yangtao Li wrote:
+>In this case, the error code can be returned directly.
+>
+>Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>---
+> fs/fuse/inode.c | 7 ++-----
+> 1 file changed, 2 insertions(+), 5 deletions(-)
+>
+>diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+>index d66070af145d..56efcf160513 100644
+>--- a/fs/fuse/inode.c
+>+++ b/fs/fuse/inode.c
+>@@ -1921,10 +1921,8 @@ static int fuse_sysfs_init(void)
+> 	int err;
+>
+> 	fuse_kobj = kobject_create_and_add("fuse", fs_kobj);
+>-	if (!fuse_kobj) {
+>-		err = -ENOMEM;
+>-		goto out_err;
+>-	}
+>+	if (!fuse_kobj)
+>+		return -ENOMEM;
+>
+> 	err = sysfs_create_mount_point(fuse_kobj, "connections");
+> 	if (err)
+>@@ -1934,7 +1932,6 @@ static int fuse_sysfs_init(void)
+>
+>  out_fuse_unregister:
+> 	kobject_put(fuse_kobj);
+>- out_err:
+> 	return err;
+> }
+>
+>-- 
+>2.35.1
+>
+Reviewed by: Nitesh Shetty <nj.shetty@samsung.com>
 
-Thank you for your review.
+------Zd.sqB5Rrz_NXAV9fsVjIXI9mlljbjA9yzE-aJOBfPlcmgnB=_21e39_
+Content-Type: text/plain; charset="utf-8"
 
-I will proceed according to your guidelines and issue the next version of the
-patch set.
 
-But I cannot promise it will be before the holidays - I do not want to make
-the gods angry either ;-)
-
-I cannot promise to try smart macros or inline functions with smart function
-parameters just yet.
-
-I would consider the real success if I hunt down the remaining leak and races
-in this driver. Despite being considered a less important one.
-
-As you have previously asserted, it is not a real security issue with a CVE,
-however, for completeness sake I would like to see these problems fixed.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
-
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
+------Zd.sqB5Rrz_NXAV9fsVjIXI9mlljbjA9yzE-aJOBfPlcmgnB=_21e39_--
