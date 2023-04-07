@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5142D6DA8CE
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 08:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB93D6DA8F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 08:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbjDGGR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 02:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        id S239410AbjDGGaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 02:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjDGGR5 (ORCPT
+        with ESMTP id S239193AbjDGGaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 02:17:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F458A24F;
-        Thu,  6 Apr 2023 23:17:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA64460F88;
-        Fri,  7 Apr 2023 06:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61BAC433EF;
-        Fri,  7 Apr 2023 06:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680848273;
-        bh=p1VARxwFMANJ/MatMWMTSFRKCzACydohZU2fVqaCbac=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ePtlZrqg5lBcMAItZ3g4R/AusIqU0L+NcIuymuLkapHs27BuVzAuy5wz4yy60nSto
-         rHBf13allNCNLWAvMmHTZuu7GijaaU9Ymqh0ceFxDxWvT5OdOQHJT1SNnklJW8SbCd
-         iScF4Jvfjxteb8BsHjhQDxCR12VxZxk+kkSwYYfih7WfSPHdXvVMHa+U924jRMC8hZ
-         ONGzqQP5IBgvuo9QuQe9yGaBXkjkkhe29GrlwlaG9qdFz66Zw3yung2GLv98zHcDUU
-         XkfH9+X4Xxd3YzMKNLzuuTeOZtp85MFX3xdh3jGQaFTG2WxnGZ21yU9rwi/kvaFWPb
-         35Sw6NGRsgOZg==
-Date:   Fri, 7 Apr 2023 08:17:49 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Held Felix <Felix.Held@amd.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Grzegorz Bernacki <gjb@semihalf.com>
-Subject: Re: [PATCH v8 6/6] i2c: designware: Add doorbell support for
- Mendocino
-Message-ID: <ZC+1jcwDZXd5+2gD@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>, Held Felix <Felix.Held@amd.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Mark Hasemeyer <markhas@chromium.org>,
-        Grzegorz Bernacki <gjb@semihalf.com>
-References: <20230403183216.3493-1-mario.limonciello@amd.com>
- <20230403183216.3493-7-mario.limonciello@amd.com>
+        Fri, 7 Apr 2023 02:30:05 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166C949F1;
+        Thu,  6 Apr 2023 23:30:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680849005; x=1712385005;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=XbIlN7JUWEaT0Orh4Ako5ArMJhLSGp6OwP7MqqoUFBY=;
+  b=BupNbpoBMNh3IUX5zsNxyoi4E+t+5+/6/lozM+baihKJmbB+n7tO6oe1
+   zx2MHdTiU3hGhnbO2NLugkuonSESVPLmCVpxDxdntn4z1qO1uIX/PIaux
+   Tn2xXubajz2Q26xyTrPtfwCVJlXLuq/66T/aBV5vdXtX9UZxMnE6Sk0gc
+   h059XuLe1x+uko3ovZ5i80a4jekKQVOJa8RSE4mOi8mYKVGlR6aVGVsWO
+   pEHvbq3REC+uEi0rQbMNfH1U9hOv6G2IPcZIPC+TuKYyVnwbbLyOSuOMt
+   wu8iXihtUnJMzK1yPBGTYRwUkNcq0p3zGQf11cT/p8ZX4vxd9ERrBKI5T
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="370769607"
+X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
+   d="scan'208";a="370769607"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 23:30:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10672"; a="933501919"
+X-IronPort-AV: E=Sophos;i="5.98,326,1673942400"; 
+   d="scan'208";a="933501919"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga006.fm.intel.com with ESMTP; 06 Apr 2023 23:30:01 -0700
+Date:   Fri, 7 Apr 2023 14:18:20 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, linux-fpga@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org,
+        Russ Weight <russell.h.weight@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
+ handshake registers
+Message-ID: <ZC+1rKoUNsqrjjtw@yilunxu-OptiPlex-7050>
+References: <20230405080152.6732-1-ilpo.jarvinen@linux.intel.com>
+ <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ubg16lMSRvqDL1S7"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230403183216.3493-7-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230405080152.6732-5-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-04-05 at 11:01:52 +0300, Ilpo Järvinen wrote:
+> On some MAX 10 cards, the BMC firmware is not available to service
+> handshake registers during secure update erase and write phases at
+> normal speeds. This problem affects at least hwmon driver. When the MAX
+> 10 hwmon driver tries to read the sensor values during a secure update,
+> the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
+> which is magnitudes worse than the normal <0.02s).
+> 
+> Manage access to the handshake registers using a rw semaphore and a FW
+> state variable to prevent accesses during those secure update phases
+> and return -EBUSY instead.
+> 
+> Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> Co-developed-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
+>  drivers/mfd/intel-m10-bmc-core.c        | 63 ++++++++++++++++++++++++-
+>  drivers/mfd/intel-m10-bmc-pmci.c        |  4 ++
+>  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
+>  include/linux/mfd/intel-m10-bmc.h       | 27 +++++++++++
+>  5 files changed, 120 insertions(+), 5 deletions(-)
+>
 
---Ubg16lMSRvqDL1S7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[...]
+ 
+>  
+> +void m10bmc_fw_state_set(struct intel_m10bmc *m10bmc, enum m10bmc_fw_state new_state)
+> +{
+> +	down_write(&m10bmc->bmcfw_lock);
+> +	m10bmc->bmcfw_state = new_state;
+> +	up_write(&m10bmc->bmcfw_lock);
 
-On Mon, Apr 03, 2023 at 01:32:15PM -0500, Mario Limonciello wrote:
-> Mendocino and later platform don't use the platform feature mailbox for
-> communication for I2C arbitration, they rely upon ringing a doorbell.
->=20
-> Detect the platform by the device ID of the root port and choose the
-> appropriate method.
->=20
-> Link: https://lore.kernel.org/linux-i2c/20220916131854.687371-3-jsd@semih=
-alf.com/
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Reviewed-by: Mark Hasemeyer <markhas@chromium.org>
-> Tested-by: Mark Hasemeyer <markhas@chromium.org>
+Could we also skip this if no handshake is possible like for PMCI?
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
-
-
---Ubg16lMSRvqDL1S7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQvtY0ACgkQFA3kzBSg
-KbZOYA/+Pq4Uhkrds9W8Ehtm/+4wS/PLcjOr4z6GNgiCquzrCjqOJWDdU1gQCJlS
-DP+fMRlki4vlZWrlAYckab+GP9DzvLzY3JjZGL0tDE8MnyW+YKP5lH7GVRnaGcMU
-rvSlAto4eqsxv9RLYwZFYn9IRvqFeY/53YXhzmtF6WD6eCv5gBAPUnwNZdx8cOwV
-YqNQduxOKj8IsgzC9B6WipVHK6veYMWE/6J0WOieSA6cPSqulF4Jk4bbYZ0mTTLE
-l6rFo4yTsjXb9N9DACscwaug20vYPXatkZFcfbzcJgkOe3RKWK0j0GFzUZ8HbQGE
-hhM9NZw8Sr9D60ESpPuU8t80GderzFwh8/HpFRcjy4O038tBbjnvxrwCvUGPZQOd
-y34bgnWA1P02p5llb7nwkvtU8nRjSQ+22j62M6CKXPJ5YM5u2gG+gf6Cg77DSRfG
-MDIi0h1R+avZAiQl2AZjf4Nbos398ULcWCQ0ujSMrX6ASEnkyAOQHua0yX1ctBSD
-MATat0rHFhANYXfmuhsxhRghsjKaZyfnCvydM9aDwVtY4wxfDQYPpwx/GbPis1Pe
-4/T1LeOTHmgzuC1onk8As/YbR2b74Jq5/VzCKAKLDB+4J9PbHC6LMbIq5mjt+O9v
-Za90rajrsvmXyYs82/ng1qfOhu45Fa4YhVAa0u+HXjHls+BflaA=
-=WuL4
------END PGP SIGNATURE-----
-
---Ubg16lMSRvqDL1S7--
+Thanks,
+Yilun
