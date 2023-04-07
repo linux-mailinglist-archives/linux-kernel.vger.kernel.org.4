@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7DC6DADAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C376DADAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjDGNiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44560 "EHLO
+        id S233201AbjDGNiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjDGNh6 (ORCPT
+        with ESMTP id S232908AbjDGNiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:37:58 -0400
+        Fri, 7 Apr 2023 09:38:06 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEF344B9
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:37:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9867ED8
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:37:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680874634;
+        s=mimecast20190719; t=1680874642;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0CvjsPSQL1L1z0z64C2CH04/VWrsTelzBiLbwWcaVEg=;
-        b=T4bfvVrV+8oUqCDjWRQgQ/pmXYzYICfG2OuG2KBkBN9rl8SFPgjBm7x84lVfUZ9ds4vWUP
-        54BBHnojN+gkcYALdXoDRVTlfMBZhabZA9eVTciNPQXS2NlnUQcHOV19tN5fHEQjEbgRlB
-        jPi56elL3qj3zAujSDtzpjdQDMVyACM=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=tpRSctN0jCeuhjjA6kJE7wGPHdDwELgwrk4O7O5qFoQ=;
+        b=hYEIuVD9wS7JpsRAhya585k1Zq7XYZqS0pPSy/dqrnCQPcmSf9t2qnThWqEaa+eO3TSP/L
+        TPwOQ4/NsYHsrpNegGM5kpNYtRm6BNPo/QNK+cMXuuSnLab3jbckL4LZYVr2vNn7NJb1P/
+        LJLm0QLvgV59oQXXkuQbATilT18X2i8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-114-d6_QGmcsPQS7YywqLDGj6A-1; Fri, 07 Apr 2023 09:37:13 -0400
-X-MC-Unique: d6_QGmcsPQS7YywqLDGj6A-1
-Received: by mail-qk1-f199.google.com with SMTP id s190-20020ae9dec7000000b00746b7fae197so7764535qkf.12
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:37:13 -0700 (PDT)
+ us-mta-130-up4zoJgLNkSlo3HmxF0J6A-1; Fri, 07 Apr 2023 09:37:20 -0400
+X-MC-Unique: up4zoJgLNkSlo3HmxF0J6A-1
+Received: by mail-qk1-f200.google.com with SMTP id 66-20020a370345000000b00746886b1593so19038140qkd.14
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:37:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680874633; x=1683466633;
+        d=1e100.net; s=20210112; t=1680874640; x=1683466640;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0CvjsPSQL1L1z0z64C2CH04/VWrsTelzBiLbwWcaVEg=;
-        b=6bxwNuJo0WKSuHyTFoAtsC7BSqK3Xt90AHKfLm9nWHaGZuIdfTO4TuXwM6mMyR1t7H
-         aSm0T8jrGEGnxhu1GSRpY5dOERsY9H6vQV03IyucllcnQwOARAMhgCvhkBSAo+V8gqKn
-         +bBSMMjynCAVQ7SjzShcp0VfaDW8S35XDoBXACtF/iQOCCvL86dPVJAU7/cTPdUtMgOn
-         VPAXqiYEF6Bc6DOFNj1KC2N2TZE7mUOyUshYjMxYkOiheUgV36K3cNGg+UKb1H9wZHNK
-         /YP99YTeu19CIOIr0sz3LM+cKRW1yuUw8rLea2RdjIcsyAo3FnsqFOW0WuRa2De42LUN
-         f2oA==
-X-Gm-Message-State: AAQBX9eMuTxQ4+14zGAuQyxeV6K1R47db3iWQiIadx+Ia3Q53EdfUR/y
-        MH6pJ7PV2i5DMY5LeMgZ935ID7dTm8PUr5leIkIWgf3g9GUkkjlkmo2eZP/K7Ka/e6OGeqCYWZ8
-        lsijJK7/pCzE4NCvVh6MXG3VD
-X-Received: by 2002:ac8:5981:0:b0:3e3:7ce1:e746 with SMTP id e1-20020ac85981000000b003e37ce1e746mr4388227qte.15.1680874632876;
-        Fri, 07 Apr 2023 06:37:12 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Z17fbTn/0ZgVYtRLhjxq5vHbWbH/sjK8zpzOJzIzXryFW2EI4gtQ4Epm8iHl4T+0kX2ItJrA==
-X-Received: by 2002:ac8:5981:0:b0:3e3:7ce1:e746 with SMTP id e1-20020ac85981000000b003e37ce1e746mr4388190qte.15.1680874632601;
-        Fri, 07 Apr 2023 06:37:12 -0700 (PDT)
+        bh=tpRSctN0jCeuhjjA6kJE7wGPHdDwELgwrk4O7O5qFoQ=;
+        b=6DpIJGyf5cm39Y2JAyIxHVkOcIafKwABKZTo+PWeUOkjHZbDTOg+NrAx6bftwVt7fp
+         r1DKqWDbeKvzw9nUp1b2CdTuIgTV1DCXl3IbNhxEyoERJvMFGUmm5SElkE7WyNmiILrX
+         x3TaBbH+8YLI4TCQ/jnswRugJ5cRfoM7qpumT32A+91iuUdA6hkk5C2AawoXE/VVub/X
+         9PXT12YwZA/lMSNWY9VdmLJFwR4FVOjcFXiRyg4AA5G95WoBJ+NKS6fZU+XbCWw3Vdog
+         JegiLuFYDjlAtpNUoT1M+kMXJlvWx28A6bThr5V2pPVNfyYN5zXE6veREuZdaMbNwGMG
+         xFKQ==
+X-Gm-Message-State: AAQBX9cPohUKogxvFTVUgXj8HWRuMarHwVZxMSD033R7kr7Is5QhhWrn
+        RXN7uniJyCY8ok3HDErAqnApu/i/QCcGZm+fKH6cz1A7wQeg0MNafxcimMl/LKmTvvWUJy+jn+L
+        +s2w5FL48dhj0rcHWMYnH5HE+
+X-Received: by 2002:a05:6214:c2f:b0:5a4:548e:4ed6 with SMTP id a15-20020a0562140c2f00b005a4548e4ed6mr4329610qvd.40.1680874640413;
+        Fri, 07 Apr 2023 06:37:20 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bXs4iAie/qz64HuzAtlTPD297dbypTAD80jqfK809WSZrnMp+K5iTEUwMbyItqqdh9DaB+VA==
+X-Received: by 2002:a05:6214:c2f:b0:5a4:548e:4ed6 with SMTP id a15-20020a0562140c2f00b005a4548e4ed6mr4329582qvd.40.1680874640146;
+        Fri, 07 Apr 2023 06:37:20 -0700 (PDT)
 Received: from step1.redhat.com ([5.77.69.107])
-        by smtp.gmail.com with ESMTPSA id j25-20020ac874d9000000b003e394714c07sm1197688qtr.10.2023.04.07.06.37.09
+        by smtp.gmail.com with ESMTPSA id x85-20020a376358000000b0074a28c33df7sm1300194qkb.84.2023.04.07.06.37.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 06:37:11 -0700 (PDT)
+        Fri, 07 Apr 2023 06:37:19 -0700 (PDT)
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     virtualization@lists.linux-foundation.org
 Cc:     Alvaro Karsz <alvaro.karsz@solid-run.com>,
@@ -64,9 +64,9 @@ Cc:     Alvaro Karsz <alvaro.karsz@solid-run.com>,
         Jason Wang <jasowang@redhat.com>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH 1/2] vdpa_sim: move buffer allocation in the devices
-Date:   Fri,  7 Apr 2023 15:36:57 +0200
-Message-Id: <20230407133658.66339-2-sgarzare@redhat.com>
+Subject: [PATCH 2/2] vdpa_sim_blk: support shared backend
+Date:   Fri,  7 Apr 2023 15:36:58 +0200
+Message-Id: <20230407133658.66339-3-sgarzare@redhat.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230407133658.66339-1-sgarzare@redhat.com>
 References: <20230407133658.66339-1-sgarzare@redhat.com>
@@ -83,270 +83,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the vdpa_sim core does not use the buffer, but only
-allocates it.
+The vdpa_sim_blk simulator uses a ramdisk as the backend. To test live
+migration, we need two devices that share the backend to have the data
+synchronized with each other.
 
-The buffer is used by devices differently, and some future devices
-may not use it. So let's move all its management inside the devices.
+Add a new module parameter to make the buffer shared between all devices.
 
-Add a new `free` device callback called to clean up the resources
-allocated by the device.
+The shared_buffer_mutex is used just to ensure that each operation is
+atomic, but it is up to the user to use the devices knowing that the
+underlying ramdisk is shared.
+
+For example, when we do a migration, the VMM (e.g., QEMU) will guarantee
+to write to the destination device, only after completing operations with
+the source device.
 
 Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- drivers/vdpa/vdpa_sim/vdpa_sim.h     |  3 +--
- drivers/vdpa/vdpa_sim/vdpa_sim.c     |  7 ++---
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 40 +++++++++++++++++++++++-----
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c | 28 ++++++++++++++-----
- 4 files changed, 57 insertions(+), 21 deletions(-)
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 57 ++++++++++++++++++++++++----
+ 1 file changed, 50 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 3a42887d05d9..bb137e479763 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -39,7 +39,6 @@ struct vdpasim_dev_attr {
- 	u64 supported_features;
- 	size_t alloc_size;
- 	size_t config_size;
--	size_t buffer_size;
- 	int nvqs;
- 	u32 id;
- 	u32 ngroups;
-@@ -51,6 +50,7 @@ struct vdpasim_dev_attr {
- 	int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
- 			 struct sk_buff *msg,
- 			 struct netlink_ext_ack *extack);
-+	void (*free)(struct vdpasim *vdpasim);
- };
- 
- /* State of each vdpasim device */
-@@ -67,7 +67,6 @@ struct vdpasim {
- 	void *config;
- 	struct vhost_iotlb *iommu;
- 	bool *iommu_pt;
--	void *buffer;
- 	u32 status;
- 	u32 generation;
- 	u64 features;
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 2c706bb18897..d343af4fa60e 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -261,10 +261,6 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_init(&vdpasim->iommu[i], max_iotlb_entries, 0);
- 
--	vdpasim->buffer = kvmalloc(dev_attr->buffer_size, GFP_KERNEL);
--	if (!vdpasim->buffer)
--		goto err_iommu;
--
- 	for (i = 0; i < dev_attr->nvqs; i++)
- 		vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
- 				 &vdpasim->iommu_lock);
-@@ -714,7 +710,8 @@ static void vdpasim_free(struct vdpa_device *vdpa)
- 		vringh_kiov_cleanup(&vdpasim->vqs[i].in_iov);
- 	}
- 
--	kvfree(vdpasim->buffer);
-+	vdpasim->dev_attr.free(vdpasim);
-+
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_reset(&vdpasim->iommu[i]);
- 	kfree(vdpasim->iommu);
 diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 568119e1553f..c996e750dc02 100644
+index c996e750dc02..00d7d72713be 100644
 --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
 +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -43,6 +43,16 @@
- #define VDPASIM_BLK_AS_NUM	1
- #define VDPASIM_BLK_GROUP_NUM	1
+@@ -46,6 +46,7 @@
+ struct vdpasim_blk {
+ 	struct vdpasim vdpasim;
+ 	void *buffer;
++	bool shared_backend;
+ };
  
-+struct vdpasim_blk {
-+	struct vdpasim vdpasim;
-+	void *buffer;
-+};
-+
-+static struct vdpasim_blk *sim_to_blk(struct vdpasim *vdpasim)
-+{
-+	return container_of(vdpasim, struct vdpasim_blk, vdpasim);
-+}
-+
+ static struct vdpasim_blk *sim_to_blk(struct vdpasim *vdpasim)
+@@ -55,6 +56,26 @@ static struct vdpasim_blk *sim_to_blk(struct vdpasim *vdpasim)
+ 
  static char vdpasim_blk_id[VIRTIO_BLK_ID_BYTES] = "vdpa_blk_sim";
  
++static bool shared_backend;
++module_param(shared_backend, bool, 0444);
++MODULE_PARM_DESC(shared_backend, "Enable the shared backend between virtio-blk devices");
++
++static void *shared_buffer;
++/* mutex to synchronize shared_buffer access */
++static DEFINE_MUTEX(shared_buffer_mutex);
++
++static void vdpasim_blk_buffer_lock(struct vdpasim_blk *blk)
++{
++	if (blk->shared_backend)
++		mutex_lock(&shared_buffer_mutex);
++}
++
++static void vdpasim_blk_buffer_unlock(struct vdpasim_blk *blk)
++{
++	if (blk->shared_backend)
++		mutex_unlock(&shared_buffer_mutex);
++}
++
  static bool vdpasim_blk_check_range(struct vdpasim *vdpasim, u64 start_sector,
-@@ -78,6 +88,7 @@ static bool vdpasim_blk_check_range(struct vdpasim *vdpasim, u64 start_sector,
- static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
- 				   struct vdpasim_virtqueue *vq)
+ 				    u64 num_sectors, u64 max_sectors)
  {
-+	struct vdpasim_blk *blk = sim_to_blk(vdpasim);
- 	size_t pushed = 0, to_pull, to_push;
- 	struct virtio_blk_outhdr hdr;
- 	bool handled = false;
-@@ -144,8 +155,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+@@ -154,8 +175,10 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+ 			break;
  		}
  
++		vdpasim_blk_buffer_lock(blk);
  		bytes = vringh_iov_push_iotlb(&vq->vring, &vq->in_iov,
--					      vdpasim->buffer + offset,
--					      to_push);
-+					      blk->buffer + offset, to_push);
+ 					      blk->buffer + offset, to_push);
++		vdpasim_blk_buffer_unlock(blk);
  		if (bytes < 0) {
  			dev_dbg(&vdpasim->vdpa.dev,
  				"vringh_iov_push_iotlb() error: %zd offset: 0x%llx len: 0x%zx\n",
-@@ -166,8 +176,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+@@ -175,8 +198,10 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+ 			break;
  		}
  
++		vdpasim_blk_buffer_lock(blk);
  		bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov,
--					      vdpasim->buffer + offset,
--					      to_pull);
-+					      blk->buffer + offset, to_pull);
+ 					      blk->buffer + offset, to_pull);
++		vdpasim_blk_buffer_unlock(blk);
  		if (bytes < 0) {
  			dev_dbg(&vdpasim->vdpa.dev,
  				"vringh_iov_pull_iotlb() error: %zd offset: 0x%llx len: 0x%zx\n",
-@@ -247,7 +256,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+@@ -256,8 +281,10 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
  		}
  
  		if (type == VIRTIO_BLK_T_WRITE_ZEROES) {
--			memset(vdpasim->buffer + offset, 0,
-+			memset(blk->buffer + offset, 0,
++			vdpasim_blk_buffer_lock(blk);
+ 			memset(blk->buffer + offset, 0,
  			       num_sectors << SECTOR_SHIFT);
++			vdpasim_blk_buffer_unlock(blk);
  		}
  
-@@ -353,6 +362,13 @@ static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
+ 		break;
+@@ -366,7 +393,8 @@ static void vdpasim_blk_free(struct vdpasim *vdpasim)
+ {
+ 	struct vdpasim_blk *blk = sim_to_blk(vdpasim);
  
+-	kvfree(blk->buffer);
++	if (!blk->shared_backend)
++		kvfree(blk->buffer);
  }
  
-+static void vdpasim_blk_free(struct vdpasim *vdpasim)
-+{
-+	struct vdpasim_blk *blk = sim_to_blk(vdpasim);
-+
-+	kvfree(blk->buffer);
-+}
-+
  static void vdpasim_blk_mgmtdev_release(struct device *dev)
- {
- }
-@@ -366,6 +382,7 @@ static int vdpasim_blk_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 			       const struct vdpa_dev_set_config *config)
- {
- 	struct vdpasim_dev_attr dev_attr = {};
-+	struct vdpasim_blk *blk;
- 	struct vdpasim *simdev;
- 	int ret;
- 
-@@ -376,16 +393,25 @@ static int vdpasim_blk_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 	dev_attr.nvqs = VDPASIM_BLK_VQ_NUM;
- 	dev_attr.ngroups = VDPASIM_BLK_GROUP_NUM;
- 	dev_attr.nas = VDPASIM_BLK_AS_NUM;
--	dev_attr.alloc_size = sizeof(struct vdpasim);
-+	dev_attr.alloc_size = sizeof(struct vdpasim_blk);
- 	dev_attr.config_size = sizeof(struct virtio_blk_config);
- 	dev_attr.get_config = vdpasim_blk_get_config;
- 	dev_attr.work_fn = vdpasim_blk_work;
--	dev_attr.buffer_size = VDPASIM_BLK_CAPACITY << SECTOR_SHIFT;
-+	dev_attr.free = vdpasim_blk_free;
- 
- 	simdev = vdpasim_create(&dev_attr, config);
- 	if (IS_ERR(simdev))
+@@ -404,12 +432,17 @@ static int vdpasim_blk_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
  		return PTR_ERR(simdev);
  
-+	blk = sim_to_blk(simdev);
+ 	blk = sim_to_blk(simdev);
+-
+-	blk->buffer = kvmalloc(VDPASIM_BLK_CAPACITY << SECTOR_SHIFT,
+-			       GFP_KERNEL);
+-	if (!blk->buffer) {
+-		ret = -ENOMEM;
+-		goto put_dev;
++	blk->shared_backend = shared_backend;
 +
-+	blk->buffer = kvmalloc(VDPASIM_BLK_CAPACITY << SECTOR_SHIFT,
-+			       GFP_KERNEL);
-+	if (!blk->buffer) {
-+		ret = -ENOMEM;
-+		goto put_dev;
-+	}
-+
++	if (blk->shared_backend) {
++		blk->buffer = shared_buffer;
++	} else {
++		blk->buffer = kvmalloc(VDPASIM_BLK_CAPACITY << SECTOR_SHIFT,
++				       GFP_KERNEL);
++		if (!blk->buffer) {
++			ret = -ENOMEM;
++			goto put_dev;
++		}
+ 	}
+ 
  	ret = _vdpa_register_device(&simdev->vdpa, VDPASIM_BLK_VQ_NUM);
+@@ -461,6 +494,15 @@ static int __init vdpasim_blk_init(void)
  	if (ret)
- 		goto put_dev;
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 55920502f76b..cfe962911804 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -58,6 +58,7 @@ struct vdpasim_net{
- 	struct vdpasim_dataq_stats tx_stats;
- 	struct vdpasim_dataq_stats rx_stats;
- 	struct vdpasim_cq_stats cq_stats;
-+	void *buffer;
- };
+ 		goto parent_err;
  
- static struct vdpasim_net *sim_to_net(struct vdpasim *vdpasim)
-@@ -87,14 +88,15 @@ static bool receive_filter(struct vdpasim *vdpasim, size_t len)
- 	size_t hdr_len = modern ? sizeof(struct virtio_net_hdr_v1) :
- 				  sizeof(struct virtio_net_hdr);
- 	struct virtio_net_config *vio_config = vdpasim->config;
-+	struct vdpasim_net *net = sim_to_net(vdpasim);
- 
- 	if (len < ETH_ALEN + hdr_len)
- 		return false;
- 
--	if (is_broadcast_ether_addr(vdpasim->buffer + hdr_len) ||
--	    is_multicast_ether_addr(vdpasim->buffer + hdr_len))
-+	if (is_broadcast_ether_addr(net->buffer + hdr_len) ||
-+	    is_multicast_ether_addr(net->buffer + hdr_len))
- 		return true;
--	if (!strncmp(vdpasim->buffer + hdr_len, vio_config->mac, ETH_ALEN))
-+	if (!strncmp(net->buffer + hdr_len, vio_config->mac, ETH_ALEN))
- 		return true;
- 
- 	return false;
-@@ -225,8 +227,7 @@ static void vdpasim_net_work(struct vdpasim *vdpasim)
- 
- 		++tx_pkts;
- 		read = vringh_iov_pull_iotlb(&txq->vring, &txq->out_iov,
--					     vdpasim->buffer,
--					     PAGE_SIZE);
-+					     net->buffer, PAGE_SIZE);
- 
- 		tx_bytes += read;
- 
-@@ -245,7 +246,7 @@ static void vdpasim_net_work(struct vdpasim *vdpasim)
- 		}
- 
- 		write = vringh_iov_push_iotlb(&rxq->vring, &rxq->in_iov,
--					      vdpasim->buffer, read);
-+					      net->buffer, read);
- 		if (write <= 0) {
- 			++rx_errors;
- 			break;
-@@ -427,6 +428,13 @@ static void vdpasim_net_setup_config(struct vdpasim *vdpasim,
- 		vio_config->mtu = cpu_to_vdpasim16(vdpasim, 1500);
- }
- 
-+static void vdpasim_net_free(struct vdpasim *vdpasim)
-+{
-+	struct vdpasim_net *net = sim_to_net(vdpasim);
-+
-+	kvfree(net->buffer);
-+}
-+
- static void vdpasim_net_mgmtdev_release(struct device *dev)
- {
- }
-@@ -456,7 +464,7 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 	dev_attr.get_config = vdpasim_net_get_config;
- 	dev_attr.work_fn = vdpasim_net_work;
- 	dev_attr.get_stats = vdpasim_net_get_stats;
--	dev_attr.buffer_size = PAGE_SIZE;
-+	dev_attr.free = vdpasim_net_free;
- 
- 	simdev = vdpasim_create(&dev_attr, config);
- 	if (IS_ERR(simdev))
-@@ -470,6 +478,12 @@ static int vdpasim_net_dev_add(struct vdpa_mgmt_dev *mdev, const char *name,
- 	u64_stats_init(&net->rx_stats.syncp);
- 	u64_stats_init(&net->cq_stats.syncp);
- 
-+	net->buffer = kvmalloc(PAGE_SIZE, GFP_KERNEL);
-+	if (!net->buffer) {
-+		ret = -ENOMEM;
-+		goto reg_err;
++	if (shared_backend) {
++		shared_buffer = kvmalloc(VDPASIM_BLK_CAPACITY << SECTOR_SHIFT,
++					 GFP_KERNEL);
++		if (!shared_buffer) {
++			ret = -ENOMEM;
++			goto parent_err;
++		}
 +	}
 +
- 	/*
- 	 * Initialization must be completed before this call, since it can
- 	 * connect the device to the vDPA bus, so requests can arrive after
+ 	return 0;
+ 
+ parent_err:
+@@ -470,6 +512,7 @@ static int __init vdpasim_blk_init(void)
+ 
+ static void __exit vdpasim_blk_exit(void)
+ {
++	kvfree(shared_buffer);
+ 	vdpa_mgmtdev_unregister(&mgmt_dev);
+ 	device_unregister(&vdpasim_blk_mgmtdev);
+ }
 -- 
 2.39.2
 
