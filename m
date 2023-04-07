@@ -2,155 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169946DA952
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30126DA955
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 09:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239474AbjDGHUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 03:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S239613AbjDGHU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 03:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjDGHUF (ORCPT
+        with ESMTP id S239486AbjDGHUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 03:20:05 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0533F86B9;
-        Fri,  7 Apr 2023 00:20:03 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id kq3so39374333plb.13;
-        Fri, 07 Apr 2023 00:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680852002; x=1683444002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQCxXkjhqcsEriZgDn924CV/TbxySojYMlEtAcBKotM=;
-        b=U5IQDL32H9aWjn2GvTKfEkl95f8E/YOKbD9JEtXvZ0KQOtZhLpNyIC37wt0X7S8Tex
-         ioEMH1kXtXqn1k6DNnGEZqryn50gQIGm/omxfH/7XUqNt48m2ya8slTbtCQj0f8lq4X+
-         ex6RypUZntIg7HcpIcnDNK0JDnHn9YSR/Oo7NnjZDKlK6Le4UrKo3vOv4VorgBesicVP
-         VRu1DXd4APhJP8AMZSn8XNIx/KNP6ORVzFYk53jYRYWa3gbI42iBFO5kIhmbxTLcMXg6
-         Xcm5VS2iS5ng0U4yk/hQKjw0YWivfl32df03PPVgcVtrMokNLJKz3XLfpztWtUZwOYlG
-         UYuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680852002; x=1683444002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQCxXkjhqcsEriZgDn924CV/TbxySojYMlEtAcBKotM=;
-        b=D+EIVJvtagYHw8+CdYH5Ytnp1johTBjSIrNao8ykPhkGXsJx3tJJmEHW9Za4+MUOkd
-         2GUTr9IhPYgX7oJnbEFmFmuxP750PJMcr3/uKQnLdRjAUnuVeg3fjBt/bGolL2P5as7Y
-         Y41joK92ajmJ4hO+oBxjibaw65ebkMMKmajyg3Hz/2qhLcyR3tTjFcnDiX3LMWrk8ypU
-         VSUcSE1zryyYIY0ntw+v5Mva61koS5Y0ksApaH8p7E+IdqJFZiZNn97sLfXIqQOSrPQ6
-         SCL5llHRQ1XLqEANFE6BJUEr1PaQFQg+rTcwWxJ+yzK4x/P0K17VVZ7q1DQBBH43IjSI
-         4afQ==
-X-Gm-Message-State: AAQBX9eE0ZvdDBWhr7uk6Jn3ec24n2Y5wMtFbUicaN+EyOT0+SyOktaY
-        DGfvNfhdu9Nc0nNNs9KGZ1w=
-X-Google-Smtp-Source: AKy350ZSPDn0tC3XJHBhxHhTzMIX5h74FdJ0knLumNp6nvtcQiqcg7yLW6XSwJQ4O9KUnQOeF0q75g==
-X-Received: by 2002:a17:903:1211:b0:1a2:9ce6:648b with SMTP id l17-20020a170903121100b001a29ce6648bmr2101728plh.12.1680852002346;
-        Fri, 07 Apr 2023 00:20:02 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id w12-20020a170902a70c00b0019abb539cddsm2391817plq.10.2023.04.07.00.19.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 00:20:02 -0700 (PDT)
-Message-ID: <23262f06-44d1-1b3d-6d2d-c0c418e564f6@gmail.com>
-Date:   Fri, 7 Apr 2023 15:19:53 +0800
+        Fri, 7 Apr 2023 03:20:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93134A5F6;
+        Fri,  7 Apr 2023 00:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 074FD60F7E;
+        Fri,  7 Apr 2023 07:20:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55ADEC4339B;
+        Fri,  7 Apr 2023 07:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680852018;
+        bh=QnexnQFeAk6yLJjTDwsZq8ocAO5HizU4Vb2V68oXIEM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tK6qO2MiUHjjKaPBRgbZtdMEG3laO2l+TpF9hiP9L224zCtfX2Q9Hr3v3MbgO60v9
+         O7jSygudJGCW+MsEM38UB29dKzFVDLOk6dFB3/pd3oGzyUBqV9RPcueIOIJq9Z3rWW
+         a7xvkvC00yPvCV8x11VGGYXwtk4sHqNcpE6HJy11YH3bRyx4rUyFW0CJoocEMLYf7V
+         giFwFy3oHFNzhIfhS64dalBTNDdMOJstTbVRojrLVde1f05X2CmTX/DtOekFEa3vRX
+         LbOUWP4tQjBpXR+iGYcXupx1XCo4JttbVltdJ/Siu7lmV8N+q9NIj0mahvmsAh7EMy
+         hgWzhW1/V442Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 39754E4F14C;
+        Fri,  7 Apr 2023 07:20:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [PATCH v4 12/12] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg
- leaf 0x80000022
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sandipan Das <sandipan.das@amd.com>
-References: <20230214050757.9623-1-likexu@tencent.com>
- <20230214050757.9623-13-likexu@tencent.com> <ZC92/WkJf9/AnABP@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <ZC92/WkJf9/AnABP@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] niu: Fix missing unwind goto in niu_alloc_channels()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168085201823.13885.16010992572875922038.git-patchwork-notify@kernel.org>
+Date:   Fri, 07 Apr 2023 07:20:18 +0000
+References: <20230406063120.3626731-1-harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <20230406063120.3626731-1-harshit.m.mogalapalli@oracle.com>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     error27@gmail.com, kernel-janitors@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mkl@pengutronix.de, leon@kernel.org,
+        keescook@chromium.org, robh@kernel.org,
+        wsa+renesas@sang-engineering.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/4/2023 9:50 am, Sean Christopherson wrote:
-> On Tue, Feb 14, 2023, Like Xu wrote:
->> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
->> index f4a4691b4f4e..2472fa8746c2 100644
->> --- a/arch/x86/kvm/svm/svm.c
->> +++ b/arch/x86/kvm/svm/svm.c
->> @@ -4916,6 +4916,12 @@ static __init void svm_set_cpu_caps(void)
->>   		} else {
->>   			/* AMD PMU PERFCTR_CORE CPUID */
->>   			kvm_cpu_cap_check_and_set(X86_FEATURE_PERFCTR_CORE);
->> +			/*
->> +			 * KVM only supports AMD PerfMon V2, even if it supports V3+.
-> 
-> Ha!  A perfect example of why I strongly prefer that changelogs and comments avoid
-> pronouns.  The above "it" reads as:
-> 
-> 			 * KVM only supports AMD PerfMon V2, even if KVM supports V3+.
-> 
-> which is clearly nonsensical.
+Hello:
 
-I get your point. Thanks.
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
+On Wed,  5 Apr 2023 23:31:18 -0700 you wrote:
+> Smatch reports: drivers/net/ethernet/sun/niu.c:4525
+> 	niu_alloc_channels() warn: missing unwind goto?
 > 
+> If niu_rbr_fill() fails, then we are directly returning 'err' without
+> freeing the channels.
 > 
->> +			 * For PerfMon V3+, it's unsafe to expect V2 bit is set or cleared.
+> Fix this by changing direct return to a goto 'out_err'.
 > 
-> If it's unsafe to assume anything v3+ implying v2 support, then it's definitely
-> not safe to assume that KVM can blindly set v2 without future changes.  I don't
-> see any reason not to do
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index bd324962bb7e..1192f605ad47 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -756,6 +756,10 @@ void kvm_set_cpu_caps(void)
->                  F(NULL_SEL_CLR_BASE) | F(AUTOIBRS) | 0 /* PrefetchCtlMsr */
->          );
->   
-> +       kvm_cpu_cap_mask(CPUID_8000_0022_EAX,
-> +               F(PERFMON_V2)
-> +       );
-> +
->          /*
->           * Synthesize "LFENCE is serializing" into the AMD-defined entry in
->           * KVM's supported CPUID if the feature is reported as supported by the
-> 
-> 
-> and then this code can be:
-> 
-> 			if (kvm_pmu_cap.version != 2)
-> 				kvm_cpu_cap_clear(X86_FEATURE_PERFMON_V2);
-> 
-> Ah, but presumably the
-> 
-> 		if (kvm_pmu_cap.num_counters_gp < AMD64_NUM_COUNTERS_CORE)
-> 
-> path also needs to clear PERFMON_V2.  I think I'd still vote to grab host CPUID
-> and clear here (instead of setting).
+> [...]
 
-Looks good to me.
+Here is the summary with links:
+  - niu: Fix missing unwind goto in niu_alloc_channels()
+    https://git.kernel.org/netdev/net/c/8ce07be70345
 
-> 
-> What is the relationship between PERFCTR_CORE and PERFMON_V2?  E.g. if v2 depends
-> on having PERFCTR_CORE, then we can do:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Yes, the PERFCTR_CORE bit will always be set if the v2 bit is set.
 
-> 
-> 	if (enable_pmu) {
-> 		if (kvm_pmu_cap.num_counters_gp < AMD64_NUM_COUNTERS_CORE)
-> 			kvm_pmu_cap.num_counters_gp = AMD64_NUM_COUNTERS;
-> 		else
-> 			kvm_cpu_cap_check_and_set(X86_FEATURE_PERFCTR_CORE);
-> 
-> 		if (kvm_pmu_cap.version != 2 ||
-> 		    !kvm_cpu_cap_has(X86_FEATURE_PERFCTR_CORE))
-> 			kvm_cpu_cap_clear(X86_FEATURE_PERFMON_V2);
