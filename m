@@ -2,66 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECC36DAB05
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C3B6DAB09
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 11:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239768AbjDGJjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 05:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S232884AbjDGJmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 05:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjDGJjI (ORCPT
+        with ESMTP id S229437AbjDGJmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 05:39:08 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D45C54C32
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:39:01 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.110.113])
-        by gateway (Coremail) with SMTP id _____8BxONmv5C9kxM8XAA--.36887S3;
-        Fri, 07 Apr 2023 17:38:56 +0800 (CST)
-Received: from chenhuacai$loongson.cn ( [112.20.110.113] ) by
- ajax-webmail-localhost.localdomain (Coremail) ; Fri, 7 Apr 2023 17:38:51
- +0800 (GMT+08:00)
-X-Originating-IP: [112.20.110.113]
-Date:   Fri, 7 Apr 2023 17:38:51 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
-To:     "kernel test robot" <lkp@intel.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "WANG Xuerui" <git@xen0n.name>,
-        "Jianmin Lv" <lvjianmin@loongson.cn>
-Subject: Re: drivers/ata/pata_serverworks.c:443 serverworks_init_one() warn:
- inconsistent indenting
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220411(feba7c69)
- Copyright (c) 2002-2023 www.mailtech.cn .loongson.cn
-In-Reply-To: <202304062027.6Epjw4qc-lkp@intel.com>
-References: <202304062027.6Epjw4qc-lkp@intel.com>
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: 2vVStGZvb3Rlcl90eHQ9NzUwNjo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        Fri, 7 Apr 2023 05:42:45 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FFF469B
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 02:42:43 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3377cQKX021429;
+        Fri, 7 Apr 2023 09:42:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=qQyhNJNdHFXjk30Z2Yy0V7Voo81BtWkh809AYuBFthk=;
+ b=jp+hLqpGwvaIg5fjfaWo0Eo+oAvWMEbjv/KRhUxwdrvAPQaDlUZkk169x0SZSy9LuzwQ
+ XaT1hm6+vX2jwYctEbS5TNU/Amc9Y2Ob7lAawybVNK2kQ2XBHUWpctNjSyEC5/c48jtk
+ pTKWSwrQk9XSq8Ddg73NE2ilVThqUPTCUpMza3pPox1KIT/3/tGjllgPUja267YXVKXR
+ X+xDLfJN2JnCqwMF2RBfQTpbWxSrPyU8aRCaWQXXPKxxieHDAAXZy23/oryjHK5UEzcY
+ P7xlBswF7NH8jg/Un0thCTGzT9MaVaOaOVaAURDZPEpWbYRYnXULoXX77f1FcL6g5LM7 iA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pt9bb0drk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:42:37 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3379ga8q004752;
+        Fri, 7 Apr 2023 09:42:37 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pt9bb0dqx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:42:36 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 336JjpJm026329;
+        Fri, 7 Apr 2023 09:42:34 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3ppc874vq4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 07 Apr 2023 09:42:34 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3379gWQ744040558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 7 Apr 2023 09:42:32 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2B47E2004B;
+        Fri,  7 Apr 2023 09:42:32 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F15C120043;
+        Fri,  7 Apr 2023 09:42:30 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.171.71.120])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  7 Apr 2023 09:42:30 +0000 (GMT)
+Date:   Fri, 7 Apr 2023 12:42:29 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Leonardo Bras Soares Passos <lsoaresp@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH 10/29] selftests/mm: Test UFFDIO_ZEROPAGE only when
+ !hugetlb
+Message-ID: <ZC/lhZlcDaDCErsz@linux.ibm.com>
+References: <20230330155707.3106228-1-peterx@redhat.com>
+ <20230330160714.3106999-1-peterx@redhat.com>
+ <20230331183726.GD12460@monkey>
+ <CAJHvVcjOqShPeu3mYk2Xu1ZyMfFLuPCUp8+8nQ+CUyCj4nZVqA@mail.gmail.com>
+ <cfc0d7c8-edb5-ae5d-8edf-d4f7ee18b877@redhat.com>
+ <ZCr6g3RDwt1pWTkx@x1n>
 MIME-Version: 1.0
-Message-ID: <563ade95.30c85.1875b153f85.Coremail.chenhuacai@loongson.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAf8Bxrr6s5C9kgzQYAA--.4163W
-X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/1tbiAQAOBmQutngZSQAAsd
-X-Coremail-Antispam: 1Uk129KBjvJXoW3JFWftw4DurWUurWrGFW8Xrb_yoWxZF1fpr
-        W5uaykJFykJr1rAasFyayxG3sFq3sxKa42vrs5Aw1jqry7uFsYkFn3trW5Kr17Jr12ya45
-        J3Z3tw1fKw1Ik3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm
-        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFcxC0VAYjxAxZF0Ew4CEw7xC0w
-        ACY4xI67k04243AVC20s07MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JwCE64xvF2IEb7IF0Fy7
-        YxBIdaVFxhVjvjDU0xZFpf9x07j8EfrUUUUU=
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZCr6g3RDwt1pWTkx@x1n>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: BCe5lz7u0fyPfJFkX7eMe75r4mOsQX7C
+X-Proofpoint-ORIG-GUID: JnxH7-LKgQJS7qckHiZO_RSmFi6K-Wma
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-07_04,2023-04-06_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 clxscore=1015 impostorscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304070084
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,152 +104,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKPiAtLS0tLeWOn+Wni+mCruS7ti0tLS0tCj4g5Y+R5Lu25Lq6OiAia2VybmVsIHRlc3Qgcm9i
-b3QiIDxsa3BAaW50ZWwuY29tPgo+IOWPkemAgeaXtumXtDoyMDIzLTA0LTA2IDIwOjQxOjU0ICjm
-mJ/mnJ/lm5spCj4g5pS25Lu25Lq6OiAiSHVhY2FpIENoZW4iIDxjaGVuaHVhY2FpQGxvb25nc29u
-LmNuPgo+IOaKhOmAgTogb2Uta2J1aWxkLWFsbEBsaXN0cy5saW51eC5kZXYsIGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmcsICJXQU5HIFh1ZXJ1aSIgPGdpdEB4ZW4wbi5uYW1lPiwgIkppYW5t
-aW4gTHYiIDxsdmppYW5taW5AbG9vbmdzb24uY24+Cj4g5Li76aKYOiBkcml2ZXJzL2F0YS9wYXRh
-X3NlcnZlcndvcmtzLmM6NDQzIHNlcnZlcndvcmtzX2luaXRfb25lKCkgd2FybjogaW5jb25zaXN0
-ZW50IGluZGVudGluZwo+IAo+IEhpIEh1YWNhaSwKPiAKPiBGaXJzdCBiYWQgY29tbWl0IChtYXli
-ZSAhPSByb290IGNhdXNlKToKRW1tLCB0aGlzIHNlZW1zIG5vdCB0aGUgcm9vdCBjYXVzZSwganVz
-dCBiZWNhdXNlIHRoYXQgY29tbWl0IGVuYWJsZSB0aGUgYnVpbGQgb2YgdGhlc2UgZmlsZXMuCgpI
-dWFjYWkKCj4gCj4gdHJlZTogICBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgv
-a2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQgbWFzdGVyCj4gaGVhZDogICA5OWRkZjIyNTRm
-ZWJhZTllYWI3ZmIwYmNjMDJjNTMyMjI0M2Y1YzQ5Cj4gY29tbWl0OiA1N2ZjNzMyM2E4ZTdjMmU3
-YzFkNTc5NWFiNjNjYjNmZmVhM2NmZGZiIExvb25nQXJjaDogQWRkIFBDSSBjb250cm9sbGVyIHN1
-cHBvcnQKPiBkYXRlOiAgIDggbW9udGhzIGFnbwo+IGNvbmZpZzogbG9vbmdhcmNoLXJhbmRjb25m
-aWctbTA0MS0yMDIzMDQwNiAoaHR0cHM6Ly9kb3dubG9hZC4wMS5vcmcvMGRheS1jaS9hcmNoaXZl
-LzIwMjMwNDA2LzIwMjMwNDA2MjAyNy42RXBqdzRxYy1sa3BAaW50ZWwuY29tL2NvbmZpZykKPiBj
-b21waWxlcjogbG9vbmdhcmNoNjQtbGludXgtZ2NjIChHQ0MpIDEyLjEuMAo+IAo+IElmIHlvdSBm
-aXggdGhlIGlzc3VlLCBraW5kbHkgYWRkIGZvbGxvd2luZyB0YWcgd2hlcmUgYXBwbGljYWJsZQo+
-IHwgUmVwb3J0ZWQtYnk6IGtlcm5lbCB0ZXN0IHJvYm90IDxsa3BAaW50ZWwuY29tPgo+IHwgTGlu
-azogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvb2Uta2J1aWxkLWFsbC8yMDIzMDQwNjIwMjcuNkVw
-anc0cWMtbGtwQGludGVsLmNvbS8KPiAKPiBzbWF0Y2ggd2FybmluZ3M6Cj4gZHJpdmVycy9hdGEv
-cGF0YV9zZXJ2ZXJ3b3Jrcy5jOjQ0MyBzZXJ2ZXJ3b3Jrc19pbml0X29uZSgpIHdhcm46IGluY29u
-c2lzdGVudCBpbmRlbnRpbmcKPiBkcml2ZXJzL2F0YS9hdGFfcGlpeC5jOjEzODIgcGlpeF9pbml0
-X3NhdGFfbWFwKCkgZXJyb3I6IGJ1ZmZlciBvdmVyZmxvdyAnbWFwJyA0IDw9IDQKPiAKPiB2aW0g
-KzQ0MyBkcml2ZXJzL2F0YS9wYXRhX3NlcnZlcndvcmtzLmMKPiAKPiA2NjlhNWRiNDExZDg1YSBK
-ZWZmIEdhcnppayAgICAgICAgICAgICAgIDIwMDYtMDgtMjkgIDM4NSAgCj4gNjY5YTVkYjQxMWQ4
-NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICAzODYgIHN0YXRpYyBpbnQg
-c2VydmVyd29ya3NfaW5pdF9vbmUoc3RydWN0IHBjaV9kZXYgKnBkZXYsIGNvbnN0IHN0cnVjdCBw
-Y2lfZGV2aWNlX2lkICppZCkKPiA2NjlhNWRiNDExZDg1YSBKZWZmIEdhcnppayAgICAgICAgICAg
-ICAgIDIwMDYtMDgtMjkgIDM4NyAgewo+IDE2MjZhZWI4ODEyMzZjIFRlanVuIEhlbyAgICAgICAg
-ICAgICAgICAgMjAwNy0wNS0wNCAgMzg4ICAJc3RhdGljIGNvbnN0IHN0cnVjdCBhdGFfcG9ydF9p
-bmZvIGluZm9bNF0gPSB7Cj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAg
-ICAyMDA2LTA4LTI5ICAzODkgIAkJeyAvKiBPU0I0ICovCj4gMWQyODA4ZmQzZDJkNWQgSmVmZiBH
-YXJ6aWsgICAgICAgICAgICAgICAyMDA3LTA1LTI4ICAzOTAgIAkJCS5mbGFncyA9IEFUQV9GTEFH
-X1NMQVZFX1BPU1MsCj4gMTRiZGVmOTgyY2FlZGEgRXJpayBJbmdlIEJvbHPDuCAgICAgICAgICAg
-MjAwOS0wMy0xNCAgMzkxICAJCQkucGlvX21hc2sgPSBBVEFfUElPNCwKPiAxNGJkZWY5ODJjYWVk
-YSBFcmlrIEluZ2UgQm9sc8O4ICAgICAgICAgICAyMDA5LTAzLTE0ICAzOTIgIAkJCS5td2RtYV9t
-YXNrID0gQVRBX01XRE1BMiwKPiAxNGJkZWY5ODJjYWVkYSBFcmlrIEluZ2UgQm9sc8O4ICAgICAg
-ICAgICAyMDA5LTAzLTE0ICAzOTMgIAkJCS51ZG1hX21hc2sgPSBBVEFfVURNQTIsCj4gNjY5YTVk
-YjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICAzOTQgIAkJCS5w
-b3J0X29wcyA9ICZzZXJ2ZXJ3b3Jrc19vc2I0X3BvcnRfb3BzCj4gNjY5YTVkYjQxMWQ4NWEgSmVm
-ZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICAzOTUgIAkJfSwgeyAvKiBPU0I0IG5v
-IFVETUEgKi8KPiAxZDI4MDhmZDNkMmQ1ZCBKZWZmIEdhcnppayAgICAgICAgICAgICAgIDIwMDct
-MDUtMjggIDM5NiAgCQkJLmZsYWdzID0gQVRBX0ZMQUdfU0xBVkVfUE9TUywKPiAxNGJkZWY5ODJj
-YWVkYSBFcmlrIEluZ2UgQm9sc8O4ICAgICAgICAgICAyMDA5LTAzLTE0ICAzOTcgIAkJCS5waW9f
-bWFzayA9IEFUQV9QSU80LAo+IDE0YmRlZjk4MmNhZWRhIEVyaWsgSW5nZSBCb2xzw7ggICAgICAg
-ICAgIDIwMDktMDMtMTQgIDM5OCAgCQkJLm13ZG1hX21hc2sgPSBBVEFfTVdETUEyLAo+IDE0YmRl
-Zjk4MmNhZWRhIEVyaWsgSW5nZSBCb2xzw7ggICAgICAgICAgIDIwMDktMDMtMTQgIDM5OSAgCQkJ
-LyogTm8gVURNQSAqLwo+IDY2OWE1ZGI0MTFkODVhIEplZmYgR2FyemlrICAgICAgICAgICAgICAg
-MjAwNi0wOC0yOSAgNDAwICAJCQkucG9ydF9vcHMgPSAmc2VydmVyd29ya3Nfb3NiNF9wb3J0X29w
-cwo+IDY2OWE1ZGI0MTFkODVhIEplZmYgR2FyemlrICAgICAgICAgICAgICAgMjAwNi0wOC0yOSAg
-NDAxICAJCX0sIHsgLyogQ1NCNSAqLwo+IDFkMjgwOGZkM2QyZDVkIEplZmYgR2FyemlrICAgICAg
-ICAgICAgICAgMjAwNy0wNS0yOCAgNDAyICAJCQkuZmxhZ3MgPSBBVEFfRkxBR19TTEFWRV9QT1NT
-LAo+IDE0YmRlZjk4MmNhZWRhIEVyaWsgSW5nZSBCb2xzw7ggICAgICAgICAgIDIwMDktMDMtMTQg
-IDQwMyAgCQkJLnBpb19tYXNrID0gQVRBX1BJTzQsCj4gMTRiZGVmOTgyY2FlZGEgRXJpayBJbmdl
-IEJvbHPDuCAgICAgICAgICAgMjAwOS0wMy0xNCAgNDA0ICAJCQkubXdkbWFfbWFzayA9IEFUQV9N
-V0RNQTIsCj4gYmY2MjYzYTg1M2M5YzEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA3LTA3
-LTA5ICA0MDUgIAkJCS51ZG1hX21hc2sgPSBBVEFfVURNQTQsCj4gNjY5YTVkYjQxMWQ4NWEgSmVm
-ZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICA0MDYgIAkJCS5wb3J0X29wcyA9ICZz
-ZXJ2ZXJ3b3Jrc19jc2JfcG9ydF9vcHMKPiA2NjlhNWRiNDExZDg1YSBKZWZmIEdhcnppayAgICAg
-ICAgICAgICAgIDIwMDYtMDgtMjkgIDQwNyAgCQl9LCB7IC8qIENTQjUgLSBsYXRlciByZXZpc2lv
-bnMqLwo+IDFkMjgwOGZkM2QyZDVkIEplZmYgR2FyemlrICAgICAgICAgICAgICAgMjAwNy0wNS0y
-OCAgNDA4ICAJCQkuZmxhZ3MgPSBBVEFfRkxBR19TTEFWRV9QT1NTLAo+IDE0YmRlZjk4MmNhZWRh
-IEVyaWsgSW5nZSBCb2xzw7ggICAgICAgICAgIDIwMDktMDMtMTQgIDQwOSAgCQkJLnBpb19tYXNr
-ID0gQVRBX1BJTzQsCj4gMTRiZGVmOTgyY2FlZGEgRXJpayBJbmdlIEJvbHPDuCAgICAgICAgICAg
-MjAwOS0wMy0xNCAgNDEwICAJCQkubXdkbWFfbWFzayA9IEFUQV9NV0RNQTIsCj4gYmY2MjYzYTg1
-M2M5YzEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA3LTA3LTA5ICA0MTEgIAkJCS51ZG1h
-X21hc2sgPSBBVEFfVURNQTUsCj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAg
-ICAgICAyMDA2LTA4LTI5ICA0MTIgIAkJCS5wb3J0X29wcyA9ICZzZXJ2ZXJ3b3Jrc19jc2JfcG9y
-dF9vcHMKPiA2NjlhNWRiNDExZDg1YSBKZWZmIEdhcnppayAgICAgICAgICAgICAgIDIwMDYtMDgt
-MjkgIDQxMyAgCQl9Cj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAy
-MDA2LTA4LTI5ICA0MTQgIAl9Owo+IDE2MjZhZWI4ODEyMzZjIFRlanVuIEhlbyAgICAgICAgICAg
-ICAgICAgMjAwNy0wNS0wNCAgNDE1ICAJY29uc3Qgc3RydWN0IGF0YV9wb3J0X2luZm8gKnBwaVtd
-ID0geyAmaW5mb1tpZC0+ZHJpdmVyX2RhdGFdLCBOVUxMIH07Cj4gMzcwMTdhYzY4NDllNzcgU2Nv
-dHQgQ2FydGVyICAgICAgICAgICAgICAyMDE0LTA5LTI0ICA0MTYgIAlzdHJ1Y3Qgc2NzaV9ob3N0
-X3RlbXBsYXRlICpzaHQgPSAmc2VydmVyd29ya3NfY3NiX3NodDsKPiBmMDgwNDhlOTQ1NjRkMCBU
-ZWp1biBIZW8gICAgICAgICAgICAgICAgIDIwMDgtMDMtMjUgIDQxNyAgCWludCByYzsKPiBmMDgw
-NDhlOTQ1NjRkMCBUZWp1biBIZW8gICAgICAgICAgICAgICAgIDIwMDgtMDMtMjUgIDQxOCAgCj4g
-ZjA4MDQ4ZTk0NTY0ZDAgVGVqdW4gSGVvICAgICAgICAgICAgICAgICAyMDA4LTAzLTI1ICA0MTkg
-IAlyYyA9IHBjaW1fZW5hYmxlX2RldmljZShwZGV2KTsKPiBmMDgwNDhlOTQ1NjRkMCBUZWp1biBI
-ZW8gICAgICAgICAgICAgICAgIDIwMDgtMDMtMjUgIDQyMCAgCWlmIChyYykKPiBmMDgwNDhlOTQ1
-NjRkMCBUZWp1biBIZW8gICAgICAgICAgICAgICAgIDIwMDgtMDMtMjUgIDQyMSAgCQlyZXR1cm4g
-cmM7Cj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5
-ICA0MjIgIAo+IGQ5MTJiZTJmM2IzMzUzIEJhcnRsb21pZWogWm9sbmllcmtpZXdpY3ogMjAxMS0x
-MC0xMSAgNDIzICAJcmMgPSBzZXJ2ZXJ3b3Jrc19maXh1cChwZGV2KTsKPiA2NjlhNWRiNDExZDg1
-YSBKZWZmIEdhcnppayAgICAgICAgICAgICAgIDIwMDYtMDgtMjkgIDQyNCAgCj4gNjY5YTVkYjQx
-MWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICA0MjUgIAkvKiBPU0I0
-IDogU291dGggQnJpZGdlIGFuZCBJREUgKi8KPiA2NjlhNWRiNDExZDg1YSBKZWZmIEdhcnppayAg
-ICAgICAgICAgICAgIDIwMDYtMDgtMjkgIDQyNiAgCWlmIChwZGV2LT5kZXZpY2UgPT0gUENJX0RF
-VklDRV9JRF9TRVJWRVJXT1JLU19PU0I0SURFKSB7Cj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6
-aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICA0MjcgIAkJLyogU2VsZWN0IG5vbiBVRE1BIGNh
-cGFibGUgT1NCNCBpZiB3ZSBjYW4ndCBkbyBmaXh1cHMgKi8KPiBkOTEyYmUyZjNiMzM1MyBCYXJ0
-bG9taWVqIFpvbG5pZXJraWV3aWN6IDIwMTEtMTAtMTEgIDQyOCAgCQlpZiAocmMgPCAwKQo+IDE2
-MjZhZWI4ODEyMzZjIFRlanVuIEhlbyAgICAgICAgICAgICAgICAgMjAwNy0wNS0wNCAgNDI5ICAJ
-CQlwcGlbMF0gPSAmaW5mb1sxXTsKPiAzNzAxN2FjNjg0OWU3NyBTY290dCBDYXJ0ZXIgICAgICAg
-ICAgICAgIDIwMTQtMDktMjQgIDQzMCAgCQlzaHQgPSAmc2VydmVyd29ya3Nfb3NiNF9zaHQ7Cj4g
-NjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICA0MzEg
-IAl9Cj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5
-ICA0MzIgIAkvKiBzZXR1cCBDU0I1L0NTQjYgOiBTb3V0aCBCcmlkZ2UgYW5kIElERSBvcHRpb24g
-UkFJRCAqLwo+IDY2OWE1ZGI0MTFkODVhIEplZmYgR2FyemlrICAgICAgICAgICAgICAgMjAwNi0w
-OC0yOSAgNDMzICAJZWxzZSBpZiAoKHBkZXYtPmRldmljZSA9PSBQQ0lfREVWSUNFX0lEX1NFUlZF
-UldPUktTX0NTQjVJREUpIHx8Cj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAg
-ICAgICAyMDA2LTA4LTI5ICA0MzQgIAkJIChwZGV2LT5kZXZpY2UgPT0gUENJX0RFVklDRV9JRF9T
-RVJWRVJXT1JLU19DU0I2SURFKSB8fAo+IDY2OWE1ZGI0MTFkODVhIEplZmYgR2FyemlrICAgICAg
-ICAgICAgICAgMjAwNi0wOC0yOSAgNDM1ICAJCSAocGRldi0+ZGV2aWNlID09IFBDSV9ERVZJQ0Vf
-SURfU0VSVkVSV09SS1NfQ1NCNklERTIpKSB7Cj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsg
-ICAgICAgICAgICAgICAyMDA2LTA4LTI5ICA0MzYgIAo+IDY2OWE1ZGI0MTFkODVhIEplZmYgR2Fy
-emlrICAgICAgICAgICAgICAgMjAwNi0wOC0yOSAgNDM3ICAJCSAvKiBJZiB0aGUgcmV0dXJuZWQg
-YnRyIGlzIHRoZSBuZXdlciByZXZpc2lvbiB0aGVuCj4gNjY5YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6
-aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICA0MzggIAkJICAgIHNlbGVjdCB0aGUgcmlnaHQg
-aW5mbyBibG9jayAqLwo+IGQ5MTJiZTJmM2IzMzUzIEJhcnRsb21pZWogWm9sbmllcmtpZXdpY3og
-MjAxMS0xMC0xMSAgNDM5ICAJCSBpZiAocmMgPT0gMykKPiAxNjI2YWViODgxMjM2YyBUZWp1biBI
-ZW8gICAgICAgICAgICAgICAgIDIwMDctMDUtMDQgIDQ0MCAgCQkgCXBwaVswXSA9ICZpbmZvWzNd
-Owo+IDY2OWE1ZGI0MTFkODVhIEplZmYgR2FyemlrICAgICAgICAgICAgICAgMjAwNi0wOC0yOSAg
-NDQxICAKPiA2NjlhNWRiNDExZDg1YSBKZWZmIEdhcnppayAgICAgICAgICAgICAgIDIwMDYtMDgt
-MjkgIDQ0MiAgCQkvKiBJcyB0aGlzIHRoZSAzcmQgY2hhbm5lbCBDU0I2IElERSA/ICovCj4gNjY5
-YTVkYjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5IEA0NDMgIAkJ
-aWYgKHBkZXYtPmRldmljZSA9PSBQQ0lfREVWSUNFX0lEX1NFUlZFUldPUktTX0NTQjZJREUyKQo+
-IDE2MjZhZWI4ODEyMzZjIFRlanVuIEhlbyAgICAgICAgICAgICAgICAgMjAwNy0wNS0wNCAgNDQ0
-ICAJCQlwcGlbMV0gPSAmYXRhX2R1bW15X3BvcnRfaW5mbzsKPiA2NjlhNWRiNDExZDg1YSBKZWZm
-IEdhcnppayAgICAgICAgICAgICAgIDIwMDYtMDgtMjkgIDQ0NSAgCX0KPiA2NjlhNWRiNDExZDg1
-YSBKZWZmIEdhcnppayAgICAgICAgICAgICAgIDIwMDYtMDgtMjkgIDQ0NiAgCj4gMzcwMTdhYzY4
-NDllNzcgU2NvdHQgQ2FydGVyICAgICAgICAgICAgICAyMDE0LTA5LTI0ICA0NDcgIAlyZXR1cm4g
-YXRhX3BjaV9ibWRtYV9pbml0X29uZShwZGV2LCBwcGksIHNodCwgTlVMTCwgMCk7Cj4gNjY5YTVk
-YjQxMWQ4NWEgSmVmZiBHYXJ6aWsgICAgICAgICAgICAgICAyMDA2LTA4LTI5ICA0NDggIH0KPiA2
-NjlhNWRiNDExZDg1YSBKZWZmIEdhcnppayAgICAgICAgICAgICAgIDIwMDYtMDgtMjkgIDQ0OSAg
-Cj4gCj4gOjo6Ojo6IFRoZSBjb2RlIGF0IGxpbmUgNDQzIHdhcyBmaXJzdCBpbnRyb2R1Y2VkIGJ5
-IGNvbW1pdAo+IDo6Ojo6OiA2NjlhNWRiNDExZDg1YTE0Zjg2Y2Q5MmJjMTZiZjdhYjViOGFhMjM1
-IFtsaWJhdGFdIEFkZCBhIGJ1bmNoIG9mIFBBVEEgZHJpdmVycy4KPiAKPiA6Ojo6OjogVE86IEpl
-ZmYgR2FyemlrIDxqZWZmQGdhcnppay5vcmc+Cj4gOjo6Ojo6IENDOiBKZWZmIEdhcnppayA8amVm
-ZkBnYXJ6aWsub3JnPgo+IAo+IC0tIAo+IDAtREFZIENJIEtlcm5lbCBUZXN0IFNlcnZpY2UKPiBo
-dHRwczovL2dpdGh1Yi5jb20vaW50ZWwvbGtwLXRlc3RzCg0KDQrmnKzpgq7ku7blj4rlhbbpmYTk
-u7blkKvmnInpvpnoiq/kuK3np5HnmoTllYbkuJrnp5jlr4bkv6Hmga/vvIzku4XpmZDkuo7lj5Hp
-gIHnu5nkuIrpnaLlnLDlnYDkuK3liJflh7rnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vk
-vZXlhbbku5bkurrku6Xku7vkvZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajp
-g6jmiJbpg6jliIblnLDms4TpnLLjgIHlpI3liLbmiJbmlaPlj5HvvInmnKzpgq7ku7blj4rlhbbp
-mYTku7bkuK3nmoTkv6Hmga/jgILlpoLmnpzmgqjplJnmlLbmnKzpgq7ku7bvvIzor7fmgqjnq4vl
-jbPnlLXor53miJbpgq7ku7bpgJrnn6Xlj5Hku7bkurrlubbliKDpmaTmnKzpgq7ku7bjgIIgDQpU
-aGlzIGVtYWlsIGFuZCBpdHMgYXR0YWNobWVudHMgY29udGFpbiBjb25maWRlbnRpYWwgaW5mb3Jt
-YXRpb24gZnJvbSBMb29uZ3NvbiBUZWNobm9sb2d5ICwgd2hpY2ggaXMgaW50ZW5kZWQgb25seSBm
-b3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVzcyBpcyBsaXN0ZWQgYWJvdmUuIEFu
-eSB1c2Ugb2YgdGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBoZXJlaW4gaW4gYW55IHdheSAoaW5j
-bHVkaW5nLCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9yIHBhcnRpYWwgZGlzY2xvc3VyZSwg
-cmVwcm9kdWN0aW9uIG9yIGRpc3NlbWluYXRpb24pIGJ5IHBlcnNvbnMgb3RoZXIgdGhhbiB0aGUg
-aW50ZW5kZWQgcmVjaXBpZW50KHMpIGlzIHByb2hpYml0ZWQuIElmIHlvdSByZWNlaXZlIHRoaXMg
-ZW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBieSBwaG9uZSBvciBlbWFp
-bCBpbW1lZGlhdGVseSBhbmQgZGVsZXRlIGl0LiA=
+On Mon, Apr 03, 2023 at 12:10:43PM -0400, Peter Xu wrote:
+> On Mon, Apr 03, 2023 at 09:55:41AM +0200, David Hildenbrand wrote:
+> > On 01.04.23 03:57, Axel Rasmussen wrote:
+> > > On Fri, Mar 31, 2023 at 11:37 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> > > > 
+> > > > On 03/30/23 12:07, Peter Xu wrote:
+> > > > > Make the check as simple as "test_type == TEST_HUGETLB" because that's the
+> > > > > only mem that doesn't support ZEROPAGE.
+> > > > > 
+> > > > > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > > > > ---
+> > > > >   tools/testing/selftests/mm/userfaultfd.c | 2 +-
+> > > > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
+> > > > > index 795fbc4d84f8..d724f1c78847 100644
+> > > > > --- a/tools/testing/selftests/mm/userfaultfd.c
+> > > > > +++ b/tools/testing/selftests/mm/userfaultfd.c
+> > > > > @@ -1118,7 +1118,7 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
+> > > > >   {
+> > > > >        struct uffdio_zeropage uffdio_zeropage;
+> > > > >        int ret;
+> > > > > -     bool has_zeropage = get_expected_ioctls(0) & (1 << _UFFDIO_ZEROPAGE);
+> > > > > +     bool has_zeropage = !(test_type == TEST_HUGETLB);
+> > > > 
+> > > > It is true that hugetlb is the only mem type that does not support zeropage.
+> > > > So, the change is correct.
+> > > > 
+> > > > However, I actually prefer the explicit check that is there today.  It seems
+> > > > more like a test of the API.  And, is more future proof is code changes.
+> > > > 
+> > > > Just my opinion/thoughts, not a strong objection.
+> > > 
+> > > I agree. The existing code is more robust to future changes where we
+> > > might support or stop supporting this ioctl in some cases. It also
+> > > proves that the ioctl works, any time the API reports that it is
+> > > supported / ought to work, independent of when the *test* thinks it
+> > > should be supported.
+> > > 
+> > > Then again, I think this is unlikely to change in the future, so I
+> > > also agree with Mike that it's not the biggest deal.
+> > 
+> > As there were already discussions on eventually supporting UFFDIO_ZEROPAGE
+> > that doesn't place the shared zeropage but ... a fresh zeropage, it might
+> > make sense to keep it as is.
+> 
+> Thanks everyone.
+> 
+> So here the major goal is to drop get_expected_ioctls(), and I think it's
+> really unwanted here.  Besides it's a blocker for split the test in a clean
+> way, a major reason is get_expected_ioctls() fetches "wheter we support
+> zeropage for this mem" from UFFD_API_RANGE_IOCTLS, rather than from the
+> UFFDIO_REGISTER anyway:
+> 
+> uint64_t get_expected_ioctls(uint64_t mode)
+> {
+>        uint64_t ioctls = UFFD_API_RANGE_IOCTLS;
+> 
+>        if (test_type == TEST_HUGETLB)
+>                ioctls &= ~(1 << _UFFDIO_ZEROPAGE);
+> 
+>        if (!((mode & UFFDIO_REGISTER_MODE_WP) && test_uffdio_wp))
+>                ioctls &= ~(1 << _UFFDIO_WRITEPROTECT);
+> 
+>        if (!((mode & UFFDIO_REGISTER_MODE_MINOR) && test_uffdio_minor))
+>                ioctls &= ~(1 << _UFFDIO_CONTINUE);
+> 
+>        return ioctls;
+> }
+> 
+> It means it'll succeed or fail depending on what kernel we run this test
+> on, and also on what headers we compile the test against.
+> 
+> I actually mentioned some of the reasoning in a follow up patch (sorry
+> maybe the split here caused some confusion):
+> 
+>     selftests/mm: uffd_[un]register()
+>     
+>     Add two helpers to register/unregister to an uffd.  Use them to drop
+>     duplicate codes.
+>     
+>     This patch also drops assert_expected_ioctls_present() and
+>     get_expected_ioctls().  Reasons:
+>     
+>       - It'll need a lot of effort to pass test_type==HUGETLB into it from the
+>       upper, so it's the simplest way to get rid of another global var
+>     
+>       - The ioctls returned in UFFDIO_REGISTER is hardly useful at all, because
+>       any app can already detect kernel support on any ioctl via its
+>       corresponding UFFD_FEATURE_*.  The check here is for sanity mostly but
+>       it's probably destined no user app will even use it.
+>     
+>       - It's not friendly to one future goal of uffd to run on old kernels, the
+>       problem is get_expected_ioctls() compiles against UFFD_API_RANGE_IOCTLS,
+>       which is a value that can change depending on where the test is compiled,
+>       rather than reflecting what the kernel underneath has.  It means it'll
+>       report false negatives on old kernels so it's against our will.
+>     
+>     So let's make our live easier.
+> 
+> But I do agree that it's helpful to keep a test against
+> uffdio_register.ioctls in this case against _UFFDIO_ZEROPAGE, so it can be
+> detected dynamically.  IOW, even if we would like to avoid "test !=
+> HUGETLB" here, at least we should like to fix that with the UFFDIO_REGISTER
+> results.
+> 
+> Here's my offer below. :)
+> 
+> Could I keep this patch as-is (as part of getting rid of
+> get_expected_ioctls() effort; I can squash this one into "selftests/mm:
+> uffd_[un]register()" if any of you think proper), meanwhile I'll squash a
+> fixup to the "move zeropage test into uffd-unit-tests" explicitly check
+> uffdio_register.ioctls in the same patchset?  IOW, we'll have a few test
+> commits missing this specific ioctl test, but then we'll have a better one
+> dynamically detected from the kernel.
+> 
+> The fixup patch attached.  I think it'll automatically work when someone
+> would like to introduce UFFDIO_ZEROPAGE to hugetlb too, another side
+> benefit is I merged the zeropage test into one, which does look better too.
 
+I agree that it makes sense. A nit below :)
+ 
+> Thanks,
+> 
+> -- 
+> Peter Xu
+
+> From 5b06f921cf8420600c697a3072a1459a5cb4956b Mon Sep 17 00:00:00 2001
+> From: Peter Xu <peterx@redhat.com>
+> Date: Mon, 3 Apr 2023 11:57:07 -0400
+> Subject: [PATCH] fixup! selftests/mm: Move zeropage test into uffd unit tests
+> 
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  tools/testing/selftests/mm/uffd-unit-tests.c | 62 +++++++++++---------
+>  1 file changed, 33 insertions(+), 29 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+> index 793931da5056..247700bb4dd0 100644
+> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> @@ -711,54 +711,58 @@ static bool do_uffdio_zeropage(int ufd, bool has_zeropage)
+>  	return false;
+>  }
+> 
+> +/*
+> + * Registers a range with MISSING mode only for zeropage test.  Return true
+> + * if UFFDIO_ZEROPAGE supported, false otherwise. Can't use uffd_register()
+> + * because we want to detect .ioctls along the way.
+> + */
+> +static bool
+> +uffd_register_detect_zp(int uffd, void *addr, uint64_t len)
+
+Let's spell out 'zp' as zeropage, what do you say?
+
+> +{
+> +	struct uffdio_register uffdio_register = { 0 };
+> +	uint64_t mode = UFFDIO_REGISTER_MODE_MISSING;
+> +
+> +	uffdio_register.range.start = (unsigned long)addr;
+> +	uffdio_register.range.len = len;
+> +	uffdio_register.mode = mode;
+> +
+> +	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
+> +		err("zeropage test register fail");
+> +
+> +	return uffdio_register.ioctls & (1 << _UFFDIO_ZEROPAGE);
+> +}
+> +
+> +
+>  /* exercise UFFDIO_ZEROPAGE */
+> -static void uffd_zeropage_test_common(bool has_zeropage)
+> +static void uffd_zeropage_test(void)
+>  {
+> -	if (uffd_register(uffd, area_dst, page_size,
+> -			  true, false, false))
+> -		err("register");
+> +	bool has_zeropage;
+> +	int i;
+> 
+> +	has_zeropage = uffd_register_detect_zp(uffd, area_dst, page_size);
+>  	if (area_dst_alias)
+> -		if (uffd_register(uffd, area_dst_alias, page_size,
+> -				  true, false, false))
+> -			err("register");
+> -
+> -	if (do_uffdio_zeropage(uffd, has_zeropage)) {
+> -		int i;
+> +		/* Ignore the retval; we already have it */
+> +		uffd_register_detect_zp(uffd, area_dst_alias, page_size);
+> 
+> +	if (do_uffdio_zeropage(uffd, has_zeropage))
+>  		for (i = 0; i < page_size; i++)
+>  			if (area_dst[i] != 0)
+>  				err("data non-zero at offset %d\n", i);
+> -	}
+> 
+> +	if (uffd_unregister(uffd, area_dst, page_size))
+> +		err("unregister");
+> 
+> -	if (uffd_unregister(uffd, area_dst, page_size * nr_pages))
+> +	if (area_dst_alias && uffd_unregister(uffd, area_dst_alias, page_size))
+>  		err("unregister");
+> 
+>  	uffd_test_pass();
+>  }
+> 
+> -static void uffd_zeropage_test(void)
+> -{
+> -	uffd_zeropage_test_common(true);
+> -}
+> -
+> -static void uffd_zeropage_hugetlb_test(void)
+> -{
+> -	uffd_zeropage_test_common(false);
+> -}
+> -
+>  uffd_test_case_t uffd_tests[] = {
+>  	{
+>  		.name = "zeropage",
+>  		.uffd_fn = uffd_zeropage_test,
+> -		.mem_targets = MEM_ANON | MEM_SHMEM | MEM_SHMEM_PRIVATE,
+> -		.uffd_feature_required = 0,
+> -	},
+> -	{
+> -		.name = "zeropage-hugetlb",
+> -		.uffd_fn = uffd_zeropage_hugetlb_test,
+> -		.mem_targets = MEM_HUGETLB | MEM_HUGETLB_PRIVATE,
+> +		.mem_targets = MEM_ALL,
+>  		.uffd_feature_required = 0,
+>  	},
+>  	{
+> -- 
+> 2.39.1
+> 
+
+
+-- 
+Sincerely yours,
+Mike.
