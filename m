@@ -2,400 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364D76DB269
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2506DB2B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjDGSFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S229875AbjDGSVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjDGSFB (ORCPT
+        with ESMTP id S229454AbjDGSVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:05:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE97C199;
-        Fri,  7 Apr 2023 11:04:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56A0464D51;
-        Fri,  7 Apr 2023 18:04:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468ABC433EF;
-        Fri,  7 Apr 2023 18:04:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680890698;
-        bh=oqvtN/eGmNQwx1wX8oYy6ARjV3ot4hAZ1vSYDWdUhW0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=piiokn2OqzK+Hnc7/0VdzvybXsIBYlm8Q2g+w1KkMX5mdbVFI1BY1zt6aVQXPwFxD
-         /xhmJ3mSrmT5Iu/INHnOrmkTcZZJcb/3808c/sWmChXHkqc+nx8mL1i7a1NB/x2gaJ
-         YnssfUTj+lGSj9aVE3bvPjpiR3TpXzRbKH/z18Zt1TgGg2YTfTmnVeSrTkwMMxWXnG
-         uWsxejs93mSLaFwYTk17PaokVATqXPnY4JrV9pmIyrS7OUz16XWvElYPa96MUHwKsw
-         tf+/NFonvZuj/aP6BURymVeObs9tcp5513jdJS6ACaRuxnd9UPxbvFqWAWB9tV/mHa
-         eYz6vQUr7UDuQ==
-Date:   Fri, 7 Apr 2023 19:20:14 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
-Subject: Re: [PATCH 2/2] iio: light: Add support for TI OPT4001 light sensor
-Message-ID: <20230407192014.5d7d167c@jic23-huawei>
-In-Reply-To: <20230323-add-opt4001-driver-v1-2-1451dcc1bc8a@axis.com>
-References: <20230323-add-opt4001-driver-v1-0-1451dcc1bc8a@axis.com>
-        <20230323-add-opt4001-driver-v1-2-1451dcc1bc8a@axis.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Fri, 7 Apr 2023 14:21:44 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F4FBC
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:21:43 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id ja10so40616406plb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 11:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680891703; x=1683483703;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6ZdRaKow9MiJw77AIs6HNE5L6Bt+Axun0Z6165dll/w=;
+        b=o3WtKycKtV542XSaicFZz0CZ/dev938aAn+qeeNOY8WRyHVIze4YnJcFgiiCsWaJxV
+         Ajd71OA0ng3Iisqa/ZJw1jna4z9PJi5fh7kAxvyGHi1kAoeLTxecd7HJsNnkjtM/ct+x
+         emcM3MoywW3r3eCx1wcYy4wWI2bv+DS9v1sL47O7H1elmMk597W7oAgHNauc5/iOBFpH
+         6Wnov6/4+cfjUr6gNj+wyBLCt4+2Xk9D7yEQQESblpkSTIwBCJElhNz6OS5Rj33wpnKO
+         cnOUzmdDfEz++ahqDKTY62TN4cPZL+eaoeUJJFSxTblMU2G2LmxcljBt5McsPw1BoSWu
+         m72g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680891703; x=1683483703;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6ZdRaKow9MiJw77AIs6HNE5L6Bt+Axun0Z6165dll/w=;
+        b=s7U1wdip+8YJZG6u/THnoW1PkTA/Wr4qWOyCm4VzruFHN9bUqo6sviMovqe645+scL
+         M2N92ZVrB4Ui+ErNSNI1cDlCfTrBxTCslCDhr+Gimu5To8bSBgRdFl1+w3YQ6nTe3RIQ
+         Rxa9aZnwOmpo1x+v5rXpnI9GxjZQpY+kOfsFVvdZ9hZsXEWb1xZuJwH3B/t/ScNZBmbZ
+         eXS/+8Z9GRtEQrNs9e6k/8Yw8mQBnR/w1YQkFevA84FKvk60GFbj6WYCURrfkL/aI4U9
+         ImbKIVLzhLAq3nW0AbggeMFpElrrCpEExADdTjeRZrceOuRDhX1jaS64egeMENZL7E2E
+         0RCA==
+X-Gm-Message-State: AAQBX9d8N4++KB8CYyO6RvTkO71G3HRd8yYqx2o4C8GzEiDdVo7Tmx9U
+        NuqOsVT25uOcUM989UZPutWm7Zn2aBmL/5MoJKHie6DKb7gun3KZQn7Opg==
+X-Google-Smtp-Source: AKy350bi6/Eqyz2r683FnPvRwH6NTPyo8wV2nEG2rf8+C/NqkAczhLhuqlNMO7AwVBgrZzZVxiS/kkIt6VR0vqaeXZs=
+X-Received: by 2002:a17:902:da85:b0:19f:2aa4:b1e5 with SMTP id
+ j5-20020a170902da8500b0019f2aa4b1e5mr1212280plx.2.1680891702918; Fri, 07 Apr
+ 2023 11:21:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230331172423.1860083-1-trix@redhat.com>
+In-Reply-To: <20230331172423.1860083-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 11:21:31 -0700
+Message-ID: <CAKwvOdkoYTVYeN9G-YB5ADq1Lt35d265pJHCOcy-Ro-22PFM4Q@mail.gmail.com>
+Subject: Re: [PATCH] drm/qxl: remove unused num_relocs variable
+To:     Tom Rix <trix@redhat.com>
+Cc:     airlied@redhat.com, kraxel@redhat.com, airlied@gmail.com,
+        daniel@ffwll.ch, nathan@kernel.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        fziglio@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 4 Apr 2023 11:07:43 +0200
-Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com> wrote:
+On Fri, Mar 31, 2023 at 10:24=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+>
+> clang with W=3D1 reports
+> drivers/gpu/drm/qxl/qxl_ioctl.c:149:14: error: variable
+>   'num_relocs' set but not used [-Werror,-Wunused-but-set-variable]
+>         int i, ret, num_relocs;
+>                     ^
+> This variable is not used so remove it.
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-> This driver uses the continuous mode of the chip and integration
-> time can be configured through sysfs.
-> The constants for calculating lux value differs between packaging
-> so it uses different compatible string for the two versions
-> "ti,opt4001-picostar" and "ti,opt4001-sot-5x3" since the device id
-> is the same.
-> 
-> Datasheet: https://www.ti.com/lit/gpn/opt4001
-> Signed-off-by: Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>
+Thanks for the patch!
+Fixes: 74d9a6335dce ("drm/qxl: Simplify cleaning qxl processing command")
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+That commit should also have removed the label out_free_bos IMO since
+having two labels for the same statement is a code smell.  Tom, do you
+mind sending a v2 with that folded in?
+
 > ---
-Hi Stefan,
+>  drivers/gpu/drm/qxl/qxl_ioctl.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/qxl/qxl_ioctl.c b/drivers/gpu/drm/qxl/qxl_io=
+ctl.c
+> index 30f58b21372a..3422206d59d4 100644
+> --- a/drivers/gpu/drm/qxl/qxl_ioctl.c
+> +++ b/drivers/gpu/drm/qxl/qxl_ioctl.c
+> @@ -146,7 +146,7 @@ static int qxl_process_single_command(struct qxl_devi=
+ce *qdev,
+>         struct qxl_release *release;
+>         struct qxl_bo *cmd_bo;
+>         void *fb_cmd;
+> -       int i, ret, num_relocs;
+> +       int i, ret;
+>         int unwritten;
+>
+>         switch (cmd->type) {
+> @@ -201,7 +201,6 @@ static int qxl_process_single_command(struct qxl_devi=
+ce *qdev,
+>         }
+>
+>         /* fill out reloc info structs */
+> -       num_relocs =3D 0;
+>         for (i =3D 0; i < cmd->relocs_num; ++i) {
+>                 struct drm_qxl_reloc reloc;
+>                 struct drm_qxl_reloc __user *u =3D u64_to_user_ptr(cmd->r=
+elocs);
+> @@ -231,7 +230,6 @@ static int qxl_process_single_command(struct qxl_devi=
+ce *qdev,
+>                         reloc_info[i].dst_bo =3D cmd_bo;
+>                         reloc_info[i].dst_offset =3D reloc.dst_offset + r=
+elease->release_offset;
+>                 }
+> -               num_relocs++;
+>
+>                 /* reserve and validate the reloc dst bo */
+>                 if (reloc.reloc_type =3D=3D QXL_RELOC_TYPE_BO || reloc.sr=
+c_handle) {
+> --
+> 2.27.0
+>
 
-Various comments inline.
 
+--=20
 Thanks,
-
-Jonathan
-
-> diff --git a/drivers/iio/light/opt4001.c b/drivers/iio/light/opt4001.c
-> new file mode 100644
-> index 000000000000..1ddcb10e997b
-> --- /dev/null
-> +++ b/drivers/iio/light/opt4001.c
-> @@ -0,0 +1,487 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Axis Communications AB
-> + *
-> + * Datasheet: https://www.ti.com/lit/gpn/opt4001
-> + *
-> + * Device driver for the Texas Instruments OPT4001.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/i2c.h>
-> +#include <linux/iio/iio.h>
-> +#include <linux/math64.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of_device.h>
-
-As below, use property.h functions instead that work for lots of types of
-firmware including OF.
-
-> +#include <linux/regmap.h>
-
-..
-
-> +/* OPT4001 constants */
-> +#define OPT4001_DEVICE_ID_VAL            0x121
-> +/* OPT4001 needs different constants to calculate lux for different packaging */
-> +#define OPT4001_PICOSTAR_MUL_CONST       3125
-> +#define OPT4001_SOT_5x3_MUL_CONST        4375
-> +#define OPT4001_PACKAGE_DIV_CONST        10000000
-> +
-
-...
-
-
-> +
-> +/* OPT4001 default values */
-> +#define OPT4001_DEFAULT_CONVERSION_TIME OPT4001_CTRL_CONVERSION_800MS
-> +
-> +struct opt4001_package_const {
-I would would include other things about the device variants in here.
-If you want the naming to reflect which one of these you have then
-a const char *name would make that easy to do.
-
-> +	int mul;
-> +	int div;
-> +};
-> +
-> +struct opt4001_settings {
-> +	/* Index of the chosen integration time */
-> +	u8 int_time;
-> +	u8 chip_type;
-> +};
-> +
-> +struct opt4001_chip {
-> +	struct opt4001_settings light_settings;
-> +	struct regmap *regmap;
-> +	struct i2c_client *client;
-> +	const struct opt4001_package_const *package_constants;
-> +	/*
-> +	 * Keep light_settings in sync with hardware state
-> +	 * and ensure multiple readers are serialized.
-Multiple readers will be serialized with the underlying bus lock.
-If you need to handle multiple part accesses together that's
-what you should highlight here.
-
-> +	 */
-> +	struct mutex als_mutex;
-> +};
-> +
-> +static const struct opt4001_package_const opt4001_sot_5x3_const = {
-> +	.mul = OPT4001_SOT_5x3_MUL_CONST,
-> +	.div = OPT4001_PACKAGE_DIV_CONST,
-> +};
-> +
-> +static const struct opt4001_package_const opt4001_picostar_const = {
-> +	.mul = OPT4001_PICOSTAR_MUL_CONST,
-
-Unless used in multiple places, just having numbers here will be more readable
-than giving them names.
-
-> +	.div = OPT4001_PACKAGE_DIV_CONST,
-> +};
-
-> +static int opt4001_read_lux_value(struct iio_dev *indio_dev,
-> +				  int *val, int *val2)
-> +{
-> +	struct opt4001_chip *chip = iio_priv(indio_dev);
-> +	struct device *dev = &chip->client->dev;
-> +	uint light1;
-> +	uint light2;
-> +	uint msb;
-> +	uint lsb;
-> +	uint exp;
-> +	uint count;
-> +	uint crc;
-> +	uint calc_crc;
-
-Would prefer fixed width types or unsigned int
-
-> +	unsigned long long lux_raw;
-
-u64 
-
-> +	int ret;
-> +
-> +	ret = regmap_read(chip->regmap, OPT4001_LIGHT1_MSB, &light1);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to read data bytes");
-> +		return ret;
-> +	}
-> +
-> +	ret = regmap_read(chip->regmap, OPT4001_LIGHT1_LSB, &light2);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to read data bytes");
-> +		return ret;
-> +	}
-> +
-> +	count = (OPT4001_COUNTER_MASK & light2) >> 4;
-> +	exp = (OPT4001_EXPONENT_MASK & light1) >> 12;
-> +	crc = (OPT4001_CRC_MASK & light2);
-
-FIELD_GET() for all these so no need to go look to see
-if the field is aligned to LSB.
-
-> +	msb = (OPT4001_MSB_MASK & light1);
-> +	lsb = (OPT4001_LSB_MASK & light2) >> 8;
-> +	lux_raw = (msb << 8) + lsb;
-> +	calc_crc = opt4001_calculate_crc(exp, lux_raw, count);
-> +	if (calc_crc != crc)
-> +		return -EIO;
-> +
-> +	lux_raw = lux_raw << exp;
-> +	lux_raw = lux_raw * chip->package_constants->mul;
-> +	*val = div_u64_rem(lux_raw, chip->package_constants->div, val2);
-> +	*val2 = *val2 * 100;
-> +
-> +	return IIO_VAL_INT_PLUS_NANO;
-> +}
-
-
-...
-
-
-> +
-> +static int opt4001_write_raw(struct iio_dev *indio_dev,
-> +			     struct iio_chan_spec const *chan,
-> +			     int val, int val2, long mask)
-> +{
-> +	struct opt4001_chip *chip = iio_priv(indio_dev);
-> +	int int_time;
-> +	int ret = 0;
-
-Set in all paths that I can see so don't set it here.
-
-
-> +
-> +	mutex_lock(&chip->als_mutex);
-
-Might as well move the mutex into the case statement and simplify things
-a little.
-
-> +
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_INT_TIME:
-> +		int_time = opt4001_als_time_to_index(val2);
-> +		if (int_time < 0) {
-> +			ret = int_time;
-> +		} else {
-> +			chip->light_settings.int_time = int_time;
-> +			ret = opt4001_set_conf(chip);
-> +		}
-> +
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +	}
-> +
-> +
-> +	mutex_unlock(&chip->als_mutex);
-> +	return ret;
-> +}
-...
-
- +/*
-> + * The compatible string determines which constants to use depending on
-> + * opt4001 packaging
-> + */
-> +static const struct of_device_id opt4001_of_match[] = {
-> +	{ .compatible = "ti,opt4001-sot-5x3", .data = &opt4001_sot_5x3_const},
-> +	{ .compatible = "ti,opt4001-picostar", .data = &opt4001_picostar_const},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, opt4001_of_match);
-> +
-> +static int opt4001_probe(struct i2c_client *client)
-> +{
-> +	struct opt4001_chip *chip;
-> +	struct iio_dev *indio_dev;
-> +	const struct of_device_id *of_id;
-> +	int ret;
-> +	uint dev_id;
-> +
-> +	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*chip));
-> +	if (!indio_dev)
-> +		return -ENOMEM;
-> +
-> +	chip = iio_priv(indio_dev);
-> +
-> +	chip->regmap = devm_regmap_init_i2c(client, &opt4001_regmap_config);
-> +	if (IS_ERR(chip->regmap))
-> +		return dev_err_probe(&client->dev, PTR_ERR(chip->regmap),
-> +				     "regmap initialization failed\n");
-> +
-> +	i2c_set_clientdata(client, indio_dev);
-
-Don't think you'll need this after taking the remainder of remove over to
-devm_ automatic unwinding.
-
-> +	chip->client = client;
-> +
-> +	indio_dev->info = &opt4001_info_no_irq;
-> +
-> +	mutex_init(&chip->als_mutex);
-> +
-> +	ret = regmap_reinit_cache(chip->regmap, &opt4001_regmap_config);
-> +	if (ret)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "failed to reinit regmap cache\n");
-> +
-> +	ret = regmap_read(chip->regmap, OPT4001_DEVICE_ID, &dev_id);
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
-> +			"Failed to read the device ID register\n");
-> +
-> +	dev_id = FIELD_GET(OPT4001_DEVICE_ID_MASK, dev_id);
-> +	if (dev_id != OPT4001_DEVICE_ID_VAL) {
-> +		dev_err(&client->dev, "Device ID: %#04x unknown\n", dev_id);
-> +		return -EINVAL;
-> +	}
-> +
-> +	indio_dev->channels = opt4001_channels;
-> +	indio_dev->num_channels = ARRAY_SIZE(opt4001_channels);
-> +	indio_dev->modes = INDIO_DIRECT_MODE;
-> +	indio_dev->name = chip->client->name;
-
-I'd prefer to see the string obtained from the 'package constants' (renamed
-to reflect it covers other details of the chip. That tends to remove any
-risk of things getting out of sync.
-
-
-> +
-> +	of_id = of_match_device(of_match_ptr(opt4001_of_match), &client->dev);
-
-device_get_match_data() from property.h
-
-
-> +	chip->package_constants = of_id->data;
-> +
-> +	ret = opt4001_load_defaults(chip);
-> +	if (ret < 0)
-> +		return dev_err_probe(&client->dev, ret,
-> +				     "Failed to set sensor defaults\n");
-
-I assume load defaults powers up the chip. If so, you should
-register a callback to power it down here (see below)
-
-> +
-> +	return devm_iio_device_register(&client->dev, indio_dev);
-> +}
-> +
-> +static void opt4001_remove(struct i2c_client *client)
-> +{
-> +	struct iio_dev *indio_dev = i2c_get_clientdata(client);
-> +	struct opt4001_chip *chip = iio_priv(indio_dev);
-> +
-> +	opt4001_power_down(chip);
-
-If that's all that needs doing, can we use a devm_add_action_or_reset()
-registered custom handler to power this off.
-
-Note that currently you turn the chip off before the userspace interfaces
-are removed which is a race we should close. Take things fully devm
-managed and that should be automatic.
-
-> +}
-> +
-> +static struct i2c_driver opt4001_driver = {
-> +	.driver = {
-> +		.name = "opt4001",
-> +		.of_match_table = of_match_ptr(opt4001_of_match),
-
-Don't use of_match_ptr().
-
-Multiple reasons.
-1) Will result in unused variable warnings if DT support not built.
-2) Prevents other firmware registration paths (in particular ACPI PRP0001
-   which uses this from non OF firmware).
-
-> +	},
-> +	.probe_new = opt4001_probe,
-> +	.remove = opt4001_remove
-
-Add an i2c_device_id table as well as the of one and MODULE_DEVICE_TABLE
-for that. I think some auto probing of the driver still needs that.
-
-> +};
-> +module_i2c_driver(opt4001_driver);
-> +
-> +MODULE_AUTHOR("Stefan Windfeldt-Prytz <stefan.windfeldt-prytz@axis.com>");
-> +MODULE_DESCRIPTION("Texas Instruments opt4001 ambient light sensor driver");
-> +MODULE_LICENSE("GPL");
-> 
-
+~Nick Desaulniers
