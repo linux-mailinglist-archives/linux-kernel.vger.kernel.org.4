@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C569E6DB586
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CAC6DB589
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 22:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjDGU5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 16:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46172 "EHLO
+        id S230242AbjDGU52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 16:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjDGU5L (ORCPT
+        with ESMTP id S230413AbjDGU5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 16:57:11 -0400
+        Fri, 7 Apr 2023 16:57:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722B3CC2F;
-        Fri,  7 Apr 2023 13:56:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABA2A24C;
+        Fri,  7 Apr 2023 13:57:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6531665489;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87E5A65487;
         Fri,  7 Apr 2023 20:56:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CC9DFC4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EBC00C4339E;
         Fri,  7 Apr 2023 20:56:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680901012;
-        bh=dU79tieKM4VC67oKiVBYZQaEtEoiZte3V/l8FFakNJs=;
+        s=k20201202; t=1680901013;
+        bh=+JqAifahXe7aXE0II9YKApovywYHoT3Yp0/zB3cmf+o=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=VHzRtc2eZ648VeR4nFIhGpDRwTw6ORDq48ds/nutZleCX/V3uS7AqlZAuzb0c3S0c
-         jTn79T51Ul5p/Ltfi5H5awE02UABb/jOMtQbyZr7cG6URZSeBqBREPC+aP+szbieNy
-         QDnvSQ4YWdwyKETyUWjcwHWlmfvXPAtANZAQPeIPDOlpeo/R1rIjtUFB/+x8vRqBJF
-         nboDE6znj/6EhIizqV3sJEVVKNCVqv3td8uiYuaEf3LadLqOCeWcN1e7Bk8va1wLSU
-         f8OC7lcoV3NgVWY9i9Z9j0OCLP/G7CfiIvtWjk7eq3yQ6DOQlNPFoF9I71dNps1A7f
-         0Z57SmnjArkUg==
+        b=Sh1dj3XZxNDgQPv0MwfX5Twi4ZPuan6SKROetjlzrPVETUJ4vThngENU5rnqyur3j
+         S0X/qVd42vSLO7IlvI5lMhu9Dm0Bxj1cRRfQQQQL/95nQp7g9kJ0CRlCj3qyHNnTGi
+         s+VwmV5l2ozXhc/4qHC2XqtjcmZZqEQvAEx/g1tNSfw9UKRWRDgZwT69vHzM7GzvSX
+         pajqwNS7+D8n1NKmKBCSdi9YKDpTO0bKq7nq93cR/MZBjAnlAIxiuS+hL1wLy5w0Nc
+         Ws7fQx+75DbP/XR0AXG10HgDhWOJAMGU5+5FT48+hQ8FJbYOgDb0etewDyZT9MtQBz
+         BrAwO+3PkTT4Q==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7E3DE4D029;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D72E7C4167B;
         Fri,  7 Apr 2023 20:56:52 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fixes for v6.3-rc6
+Subject: Re: [GIT PULL] gpio: fixes for v6.3-rc6
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hE_eVO0S_MSfB=X287XZR+Cisa1f5nKU5VAEwTtxdnOA@mail.gmail.com>
-References: <CAJZ5v0hE_eVO0S_MSfB=X287XZR+Cisa1f5nKU5VAEwTtxdnOA@mail.gmail.com>
+In-Reply-To: <20230407114530.75942-1-brgl@bgdev.pl>
+References: <20230407114530.75942-1-brgl@bgdev.pl>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hE_eVO0S_MSfB=X287XZR+Cisa1f5nKU5VAEwTtxdnOA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.3-rc6
-X-PR-Tracked-Commit-Id: a5b2781dcab2c77979a4b8adda781d2543580901
+X-PR-Tracked-Message-Id: <20230407114530.75942-1-brgl@bgdev.pl>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.3-rc6
+X-PR-Tracked-Commit-Id: 7b75c4703609a3ebaf67271813521bc0281e1ec1
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c9797dba13141de7d7211aacfadb4cdba67a4716
-Message-Id: <168090101274.23908.6826872717398010960.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: aa318c48808c0aa73216bd94c54c4553d3663add
+Message-Id: <168090101287.23908.9699179400700750265.pr-tracker-bot@kernel.org>
 Date:   Fri, 07 Apr 2023 20:56:52 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -61,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 7 Apr 2023 13:32:28 +0200:
+The pull request you sent on Fri,  7 Apr 2023 13:45:30 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.3-rc6
+> git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.3-rc6
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c9797dba13141de7d7211aacfadb4cdba67a4716
+https://git.kernel.org/torvalds/c/aa318c48808c0aa73216bd94c54c4553d3663add
 
 Thank you!
 
