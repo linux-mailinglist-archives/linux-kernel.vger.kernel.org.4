@@ -2,167 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1B26DAB7B
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7A06DAB7A
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 12:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240591AbjDGKZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 06:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
+        id S240617AbjDGKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 06:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240632AbjDGKYm (ORCPT
+        with ESMTP id S240560AbjDGKXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 06:24:42 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DB3BDCB
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ugJQ22P2VM2xtxPkMIbImarOlCvwMytzlwoGMDfly34=; b=Dq04D9zzLKR5wp+izPIbSqfWCk
-        JAAhGmLVvloKx2ozZj7RJhMd07cDz4txUxVYEkzAXEuhNf1AUqnO5dmLiYcXBnRMssPmqc4bwhmVt
-        w77odgN7jSLHMOKgWUpkEqEiEHH5NiFtgYP/kmU5G+LUDZvvvUUzFYBDdWbQFJHcghWhQceDHzQZz
-        5PglCFe0ALwx0AYdsU6/aE+WHomHgBfTRKQapZDSd5LunGJcJjO85XsjsgFK/LTPHeTAV+gBge++T
-        fExC6DFfYRJbh9o8qZ85DRxdVszqecBdf7iJDFAA1z/VRZq9qVRVcdsjD1sZ0JHAM6iCXVYWQMtXI
-        Xw+ru7qQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pkjFi-00AzzU-1W;
-        Fri, 07 Apr 2023 10:23:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 42B36300070;
-        Fri,  7 Apr 2023 12:23:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2A1342625093E; Fri,  7 Apr 2023 12:23:23 +0200 (CEST)
-Date:   Fri, 7 Apr 2023 12:23:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ankur Arora <ankur.a.arora@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        luto@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, mingo@redhat.com, juri.lelli@redhat.com,
-        willy@infradead.org, mgorman@suse.de, rostedt@goodmis.org,
-        tglx@linutronix.de, vincent.guittot@linaro.org, jon.grimm@amd.com,
-        bharata@amd.com, boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH 8/9] irqentry: define irqentry_exit_allow_resched()
-Message-ID: <20230407102323.GA430894@hirez.programming.kicks-ass.net>
-References: <20230403052233.1880567-1-ankur.a.arora@oracle.com>
- <20230403052233.1880567-9-ankur.a.arora@oracle.com>
- <20230405202240.GE365912@hirez.programming.kicks-ass.net>
- <87o7o1lzko.fsf@oracle.com>
- <20230406201359.GC405948@hirez.programming.kicks-ass.net>
- <87lej4ifvc.fsf@oracle.com>
+        Fri, 7 Apr 2023 06:23:38 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E74C05
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 03:23:36 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id l17so7445012ejp.8
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 03:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mind.be; s=google; t=1680863015;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l0j80qcSlu23/jmLhtBdxoy8KmFI9uUDrbf0yBZqqYw=;
+        b=NcN9T7rKJnBfDCrFXM0/XyvJzBNjm6BecGFBGfw4nhb6Te9Wd4bt79bWvlYZEPhpfY
+         HqczKjYYDVL9PayzVHgQCZpttGly0tPo6PWoVjPw+FWeeBXkESf7Kxt/HBxAzawE5FPU
+         whSZ2kWs5eRKONsiLRdZ2JLZJDL6Z80dKbhtpRvkAdpb7z4OR0fWnipvHjanE++R//+S
+         5IgXIzMhP59dNWL+KHzbv17M22g0vCvLlYP0suwwtNeWvFCESS82qElqfmzVlSseGpM4
+         RcUTtUlr9Dp7/yDuqFWOKvbMZ87DxxJ0GVWoEhbiGAkelLt4DBP0zg/dTj62VoaX7OrN
+         W3Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680863015;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l0j80qcSlu23/jmLhtBdxoy8KmFI9uUDrbf0yBZqqYw=;
+        b=Jjl+1XcL7jSYS9NHavg9T5yxzB4861ODbjFHPITyg498+rDll5aaHX52J2hWO371/Y
+         w60ED5PpkTB5y9MelbAy9mhAjOp8kX1kgSs+TGAGPk8CYviBpAS/oQTaSjUJJLnR2loA
+         XuJ6nlzKOj0XPJ5z1TaoaGmKVS7uUYLaj1GVsoGklkCmQ6PSy1m3QsNxSp1RenS0yFOB
+         eU+KWaB/WVJobvLNtvpDxdNQrTy5bPS2vtgrYP1IQ555ri+YTJO++S6pM+skkL7L27uc
+         9ZuL8YioOB79rmnWZEXGPNFYyx2XCTyUTu7uhzEChahVVyGEeWnrdtqevnt5PlsizUjv
+         bzWg==
+X-Gm-Message-State: AAQBX9cUC/uuw2J0JPzK+XAqEmZNiUWpSbjeUSAtdjo17TY9V6hyT3Ok
+        V6ZHQfuenHHRGLCEvaXIouol4Q==
+X-Google-Smtp-Source: AKy350bD7xRZ7tOmDmx5AT3Roe79GPkbIalCOholjjnRGGWBECojGvM7tsQgmYWlSF/DaXaiUdEP8A==
+X-Received: by 2002:a17:906:1957:b0:878:7a0e:5730 with SMTP id b23-20020a170906195700b008787a0e5730mr1946570eje.56.1680863014924;
+        Fri, 07 Apr 2023 03:23:34 -0700 (PDT)
+Received: from dtpc.zanders.be (78-22-137-109.access.telenet.be. [78.22.137.109])
+        by smtp.gmail.com with ESMTPSA id 7-20020a170906014700b00932fa67b48fsm1892612ejh.183.2023.04.07.03.23.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 03:23:34 -0700 (PDT)
+From:   Maarten Zanders <maarten.zanders@mind.be>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     Maarten Zanders <maarten.zanders@mind.be>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v7 2/2] leds: lp55xx: configure internal charge pump
+Date:   Fri,  7 Apr 2023 12:23:24 +0200
+Message-Id: <20230407102324.42604-3-maarten.zanders@mind.be>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20230407102324.42604-1-maarten.zanders@mind.be>
+References: <20230407102324.42604-1-maarten.zanders@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87lej4ifvc.fsf@oracle.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 07:29:59PM -0700, Ankur Arora wrote:
-> Peter Zijlstra <peterz@infradead.org> writes:
+The LP55xx range of devices have an internal charge pump which
+can (automatically) increase the output voltage towards the
+LED's, boosting the output voltage to 4.5V.
 
-> > Something like the below perhaps?
-> >
-> > ---
-> >  include/linux/entry-common.h |  6 ++++++
-> >  kernel/entry/common.c        | 23 +++++++++++++++++++++--
-> >  2 files changed, 27 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> > index d95ab85f96ba..0c365dc1f1c2 100644
-> > --- a/include/linux/entry-common.h
-> > +++ b/include/linux/entry-common.h
-> > @@ -415,10 +415,16 @@ irqentry_state_t noinstr irqentry_enter(struct pt_regs *regs);
-> >   * Conditional reschedule with additional sanity checks.
-> >   */
-> >  void raw_irqentry_exit_cond_resched(void);
-> > +void irqentry_exit_cond_resched_tif(void);
-> > +
-> >  #ifdef CONFIG_PREEMPT_DYNAMIC
-> >  #if defined(CONFIG_HAVE_PREEMPT_DYNAMIC_CALL)
-> >  #define irqentry_exit_cond_resched_dynamic_enabled	raw_irqentry_exit_cond_resched
-> > +#ifdef TIF_RESCHED_ALLOW
-> > +#define irqentry_exit_cond_resched_dynamic_disabled	irqentry_exit_cond_resched_tif
-> > +#else
-> >  #define irqentry_exit_cond_resched_dynamic_disabled	NULL
-> > +#endif
-> 
-> So this is clever. Essentially this would toggle between the two kinds
-> for the preempt_model_preemptible()/!preempt_model_preemptible() dynamic
-> case. Do I have that right?
+Implement this option from the devicetree. When the setting
+is not present it will operate in automatic mode as before.
 
-Exactly!
+Tested on LP55231. Datasheet analysis shows that LP5521, LP5523
+and LP8501 are identical in topology and are modified in the
+same way.
 
-> >  DECLARE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
-> >  #define irqentry_exit_cond_resched()	static_call(irqentry_exit_cond_resched)()
-> >  #elif defined(CONFIG_HAVE_PREEMPT_DYNAMIC_KEY)
-> > diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> > index be61332c66b5..211d118aa672 100644
-> > --- a/kernel/entry/common.c
-> > +++ b/kernel/entry/common.c
-> > @@ -390,6 +390,21 @@ void raw_irqentry_exit_cond_resched(void)
-> >  			preempt_schedule_irq();
-> >  	}
-> >  }
-> > +
-> > +void irqentry_exit_cond_resched_tif(void)
-> > +{
-> > +#ifdef TIF_RESCHED_ALLOW
-> > +	if (resched_allowed()) {
-> > +		/* Sanity check RCU and thread stack */
-> > +		rcu_irq_exit_check_preempt();
-> > +		if (IS_ENABLED(CONFIG_DEBUG_ENTRY))
-> > +			WARN_ON_ONCE(!on_thread_stack());
-> > +		if (need_resched())
-> > +			preempt_schedule_irq();
-> > +	}
-> > +#endif
-> > +}
-> > +
-> >  #ifdef CONFIG_PREEMPT_DYNAMIC
-> >  #if defined(CONFIG_HAVE_PREEMPT_DYNAMIC_CALL)
-> >  DEFINE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
-> > @@ -397,8 +412,10 @@ DEFINE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);
-> >  DEFINE_STATIC_KEY_TRUE(sk_dynamic_irqentry_exit_cond_resched);
-> >  void dynamic_irqentry_exit_cond_resched(void)
-> >  {
-> > -	if (!static_branch_unlikely(&sk_dynamic_irqentry_exit_cond_resched))
-> > -		return;
-> > +	if (!static_branch_unlikely(&sk_dynamic_irqentry_exit_cond_resched)) {
-> > +		irqentry_exit_cond_resched_tif();
-> > +		return
-> > +	}
-> >  	raw_irqentry_exit_cond_resched();
-> >  }
-> >  #endif
-> > @@ -431,6 +448,8 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
-> >  		instrumentation_begin();
-> >  		if (IS_ENABLED(CONFIG_PREEMPTION))
-> >  			irqentry_exit_cond_resched();
-> > +		else
-> > +			irqentry_exit_cond_resched_tif();
-> 
-> And, if we choose between the two resched modes at compile time then this
-> would work.
+Signed-off-by: Maarten Zanders <maarten.zanders@mind.be>
+---
 
-Just so.
+Notes:
+    v1: implement as bool to disable charge pump
+    v2: rewrite to use string configuration, supporting all modes
+    v3: simplification by replacing string from DTS by constant
+    v4: added notes
+    v5: property type to u32
+    v6: cleanup parsing of DT paramter
+    v7: formatting
 
-> Might massage the names a little but this should work as is.
+ drivers/leds/leds-lp5521.c                | 11 +++++------
+ drivers/leds/leds-lp5523.c                | 14 +++++++++-----
+ drivers/leds/leds-lp55xx-common.c         |  9 +++++++++
+ drivers/leds/leds-lp8501.c                |  8 +++++---
+ include/linux/platform_data/leds-lp55xx.h |  3 +++
+ 5 files changed, 31 insertions(+), 14 deletions(-)
 
-Yeah, I'm not liking the naming either, perhaps your
-irqentry_exit_allow_resched() would've been better, dunno, see what
-works.
+diff --git a/drivers/leds/leds-lp5521.c b/drivers/leds/leds-lp5521.c
+index a004af8e22c7..acd37d0f0e26 100644
+--- a/drivers/leds/leds-lp5521.c
++++ b/drivers/leds/leds-lp5521.c
+@@ -58,14 +58,11 @@
+ /* CONFIG register */
+ #define LP5521_PWM_HF			0x40	/* PWM: 0 = 256Hz, 1 = 558Hz */
+ #define LP5521_PWRSAVE_EN		0x20	/* 1 = Power save mode */
+-#define LP5521_CP_MODE_OFF		0	/* Charge pump (CP) off */
+-#define LP5521_CP_MODE_BYPASS		8	/* CP forced to bypass mode */
+-#define LP5521_CP_MODE_1X5		0x10	/* CP forced to 1.5x mode */
+-#define LP5521_CP_MODE_AUTO		0x18	/* Automatic mode selection */
++#define LP5521_CP_MODE_MASK		0x18	/* Charge pump mode */
++#define LP5521_CP_MODE_SHIFT		3
+ #define LP5521_R_TO_BATT		0x04	/* R out: 0 = CP, 1 = Vbat */
+ #define LP5521_CLK_INT			0x01	/* Internal clock */
+-#define LP5521_DEFAULT_CFG		\
+-	(LP5521_PWM_HF | LP5521_PWRSAVE_EN | LP5521_CP_MODE_AUTO)
++#define LP5521_DEFAULT_CFG		(LP5521_PWM_HF | LP5521_PWRSAVE_EN)
+ 
+ /* Status */
+ #define LP5521_EXT_CLK_USED		0x08
+@@ -310,6 +307,8 @@ static int lp5521_post_init_device(struct lp55xx_chip *chip)
+ 	if (!lp55xx_is_extclk_used(chip))
+ 		val |= LP5521_CLK_INT;
+ 
++	val |= (chip->pdata->charge_pump_mode << LP5521_CP_MODE_SHIFT) & LP5521_CP_MODE_MASK;
++
+ 	ret = lp55xx_write(chip, LP5521_REG_CONFIG, val);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/leds/leds-lp5523.c b/drivers/leds/leds-lp5523.c
+index 55da914b8e5c..a8df22938bdb 100644
+--- a/drivers/leds/leds-lp5523.c
++++ b/drivers/leds/leds-lp5523.c
+@@ -57,8 +57,11 @@
+ #define LP5523_AUTO_INC			0x40
+ #define LP5523_PWR_SAVE			0x20
+ #define LP5523_PWM_PWR_SAVE		0x04
+-#define LP5523_CP_AUTO			0x18
++#define LP5523_CP_MODE_MASK		0x18
++#define LP5523_CP_MODE_SHIFT		3
+ #define LP5523_AUTO_CLK			0x02
++#define LP5523_DEFAULT_CONFIG \
++	(LP5523_AUTO_INC | LP5523_PWR_SAVE | LP5523_AUTO_CLK | LP5523_PWM_PWR_SAVE)
+ 
+ #define LP5523_EN_LEDTEST		0x80
+ #define LP5523_LEDTEST_DONE		0x80
+@@ -125,6 +128,7 @@ static void lp5523_set_led_current(struct lp55xx_led *led, u8 led_current)
+ static int lp5523_post_init_device(struct lp55xx_chip *chip)
+ {
+ 	int ret;
++	int val;
+ 
+ 	ret = lp55xx_write(chip, LP5523_REG_ENABLE, LP5523_ENABLE);
+ 	if (ret)
+@@ -133,10 +137,10 @@ static int lp5523_post_init_device(struct lp55xx_chip *chip)
+ 	/* Chip startup time is 500 us, 1 - 2 ms gives some margin */
+ 	usleep_range(1000, 2000);
+ 
+-	ret = lp55xx_write(chip, LP5523_REG_CONFIG,
+-			    LP5523_AUTO_INC | LP5523_PWR_SAVE |
+-			    LP5523_CP_AUTO | LP5523_AUTO_CLK |
+-			    LP5523_PWM_PWR_SAVE);
++	val = LP5523_DEFAULT_CONFIG;
++	val |= (chip->pdata->charge_pump_mode << LP5523_CP_MODE_SHIFT) & LP5523_CP_MODE_MASK;
++
++	ret = lp55xx_write(chip, LP5523_REG_CONFIG, val);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/leds/leds-lp55xx-common.c b/drivers/leds/leds-lp55xx-common.c
+index c1940964067a..77bb26906ea6 100644
+--- a/drivers/leds/leds-lp55xx-common.c
++++ b/drivers/leds/leds-lp55xx-common.c
+@@ -18,6 +18,7 @@
+ #include <linux/platform_data/leds-lp55xx.h>
+ #include <linux/slab.h>
+ #include <linux/gpio/consumer.h>
++#include <dt-bindings/leds/leds-lp55xx.h>
+ 
+ #include "leds-lp55xx-common.h"
+ 
+@@ -691,6 +692,14 @@ struct lp55xx_platform_data *lp55xx_of_populate_pdata(struct device *dev,
+ 		i++;
+ 	}
+ 
++	if (of_property_read_u32(np, "ti,charge-pump-mode", &pdata->charge_pump_mode))
++		pdata->charge_pump_mode = LP55XX_CP_AUTO;
++
++	if (pdata->charge_pump_mode > LP55XX_CP_AUTO) {
++		dev_err(dev, "invalid charge pump mode %d\n", pdata->charge_pump_mode);
++		return ERR_PTR(-EINVAL);
++	}
++
+ 	of_property_read_string(np, "label", &pdata->label);
+ 	of_property_read_u8(np, "clock-mode", &pdata->clock_mode);
+ 
+diff --git a/drivers/leds/leds-lp8501.c b/drivers/leds/leds-lp8501.c
+index 165d6423a928..878d81dace8a 100644
+--- a/drivers/leds/leds-lp8501.c
++++ b/drivers/leds/leds-lp8501.c
+@@ -53,10 +53,10 @@
+ #define LP8501_PWM_PSAVE		BIT(7)
+ #define LP8501_AUTO_INC			BIT(6)
+ #define LP8501_PWR_SAVE			BIT(5)
+-#define LP8501_CP_AUTO			0x18
++#define LP8501_CP_MODE_MASK		0x18
++#define LP8501_CP_MODE_SHIFT		3
+ #define LP8501_INT_CLK			BIT(0)
+-#define LP8501_DEFAULT_CFG	\
+-	(LP8501_PWM_PSAVE | LP8501_AUTO_INC | LP8501_PWR_SAVE | LP8501_CP_AUTO)
++#define LP8501_DEFAULT_CFG (LP8501_PWM_PSAVE | LP8501_AUTO_INC | LP8501_PWR_SAVE)
+ 
+ #define LP8501_REG_RESET		0x3D
+ #define LP8501_RESET			0xFF
+@@ -102,6 +102,8 @@ static int lp8501_post_init_device(struct lp55xx_chip *chip)
+ 	if (chip->pdata->clock_mode != LP55XX_CLOCK_EXT)
+ 		val |= LP8501_INT_CLK;
+ 
++	val |= (chip->pdata->charge_pump_mode << LP8501_CP_MODE_SHIFT) & LP8501_CP_MODE_MASK;
++
+ 	ret = lp55xx_write(chip, LP8501_REG_CONFIG, val);
+ 	if (ret)
+ 		return ret;
+diff --git a/include/linux/platform_data/leds-lp55xx.h b/include/linux/platform_data/leds-lp55xx.h
+index 3441064713a3..3cc8db0b12b5 100644
+--- a/include/linux/platform_data/leds-lp55xx.h
++++ b/include/linux/platform_data/leds-lp55xx.h
+@@ -73,6 +73,9 @@ struct lp55xx_platform_data {
+ 	/* Clock configuration */
+ 	u8 clock_mode;
+ 
++	/* Charge pump mode */
++	u32 charge_pump_mode;
++
+ 	/* optional enable GPIO */
+ 	struct gpio_desc *enable_gpiod;
+ 
+-- 
+2.37.3
 
-> Okay if I use your Codeveloped-by/Suggested-by on this patch?
-
-Yep.
