@@ -2,211 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFC56DB738
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96ECB6DB73B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 01:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjDGXdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 19:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
+        id S229720AbjDGXex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 19:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjDGXdK (ORCPT
+        with ESMTP id S229483AbjDGXev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:33:10 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E1CE181
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:33:09 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c08e501d2so71530887b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:33:09 -0700 (PDT)
+        Fri, 7 Apr 2023 19:34:51 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA77AFF04
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 16:34:26 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id ce4so14051718pfb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 16:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680910388;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=LjYQi0+v1Gz3bnNu0ej5VXIh69X5CJjJWC5nav17cUU=;
-        b=tLWkBtqU7eXFk3IWVSj+vF5W2EMxUvN0O93ECEFffu0DjOJq8QI03R1Djfx5xUtiBs
-         6eR8jx3EpY9ditBySK/apDVrJ4rxBBFZDOfGqCijsurno0CzuK4JBQ1aNPWuXTLuGHnG
-         nmxmKtSoKXMmz9pFXxSIu4N6Y06A/8GqIzjeo19AOEkhukjkt9MRVh8Islta60ImPhUE
-         f/cPq8FKg1ki91AXJ6JQw/y2qVVo3jinOrLXZi3/Ai4ghEkaMy/1a9YE2K5ZNoBQkb/b
-         2niLpe7IvL/laZMt1SNE1l0hc3jggzp+LMevymcgugam8b3aHEo5sRU1P+nnDEYR6J+t
-         YOzQ==
+        d=google.com; s=20210112; t=1680910435; x=1683502435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=06aeoqWpNiijpeI6eB3KfJuOvE83nAPBY5T1nVItygw=;
+        b=eEqX5GQsSIT1ib03PuaWvCog9rPYAClxGQ6SYoayXujdj9Vwh3oFSXC/1mJtPeqxFh
+         ZpSum1yFKCynUjMpq9rU2BWz7PYUDEcs2ifNSLaZslGJ1GwvqLnc+Onoky1nHCF2+yVS
+         zrE/P2hNSmY6bElfXjJ9M9zMYtBXZd8K+Ote/FNSwc0PbnukyY2EdaUjW3dzN5edyorL
+         tzpgmZHKeNU6PEYre0EU+f2cdqwdDpZOlj4uDszICEHHyU1TRMnS3u6R8nMUromyocrP
+         yItCom/VSudEr1pZCo8WBYeEjue3dFpDeQmoKwAYacXjS9q+gC6DDLydCm6CbXBXi/LS
+         254Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680910388;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LjYQi0+v1Gz3bnNu0ej5VXIh69X5CJjJWC5nav17cUU=;
-        b=lTeLBPxu/qSJUdAVNWCjtYkfqrPudG+pSu7O9S1tRAdb145ai2WTyYAN7eQUN0Ph79
-         V0gEGG/qQKXOajVRly8ip6GuyPufaksrGq4lLMmegD1CutSzmXv6khqaFD9i5uMKjmrZ
-         zHL9+UL7BDAdmPOZY1U3kHKFc8x+zYYluTv56zpBL+fCVFJ9jcWEgqDj5m4RXBxiBfec
-         gRADagVLD5nCI7pVY8zQy7L22hOJCgZpGXSEsxaYUDn8lpPkhr5x7zgO1NL7N4gUHTto
-         Vfzf/giuDrXsRZEU9/9FJNS5Zg+CR0tW+dllPP6/kx1FXRrBn0ziB4zd/gIOsJAHotF3
-         tXcw==
-X-Gm-Message-State: AAQBX9f4Uu4vlPW68PvBBwWLwzDnAxU2n/ozX9SSKgsUuOxrI1Pv0Vd5
-        JY9LdcQ/hOiS5znKqjQimuCf6Bk8ot8=
-X-Google-Smtp-Source: AKy350ZGIgvvzPtmg5NGdNmrgppTBIcVWejRFYC/Vp/S+jdoW6dCFo3d557DTiyaJ6BwtZEEUMFAvk3oBNs=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:cf49:0:b0:b8b:fca4:7454 with SMTP id
- f70-20020a25cf49000000b00b8bfca47454mr2051230ybg.4.1680910388316; Fri, 07 Apr
- 2023 16:33:08 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri,  7 Apr 2023 16:32:54 -0700
-In-Reply-To: <20230407233254.957013-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230407233254.957013-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
-Message-ID: <20230407233254.957013-7-seanjc@google.com>
-Subject: [PATCH v4 6/6] KVM: selftests: Test the PMU event "Instructions retired"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Aaron Lewis <aaronlewis@google.com>,
-        Sean Christopherson <seanjc@google.com>
+        d=1e100.net; s=20210112; t=1680910435; x=1683502435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=06aeoqWpNiijpeI6eB3KfJuOvE83nAPBY5T1nVItygw=;
+        b=HmSmrHFo/umXbHUP/1WkyMNEIjrr9ZPK3a2Abtjvjz3lMNRNaBA9IMT9GRdFtMyA5z
+         FJ4iufLJlwrzE+hyAufeOBcGk/Blxq1i8EGA1r9DrRqB4zVglvEqZTELg3NDY8MW00pY
+         +QaiT65FLHaOP5u4EAvFcwZ13urthR7TVBDFxrETap4OijNzPn6P3Ts2DbFhxdFJH/0B
+         uswF2tKIhepjFrAFBX41KYQIfsYo4PJoSV3dDS93YiT0kX5lHb5u1Je6dgBGVkJAmF8a
+         PzUZKhV9bCLp8ltPdTM2WP6NlvNMin5co08WTXJ2kRmg6U83huQXAoNHzSujuFOF0yDG
+         Px6Q==
+X-Gm-Message-State: AAQBX9cApQ7xbNuiNYhzQzJlJ5ino4EM22lFvtDgPJxQSaQiFK6Bi2Ez
+        OLyj/WJgpCxcyaoS3UGQr3L82Ol6pCnBtqpxkxz1CQ==
+X-Google-Smtp-Source: AKy350Y80laGeXozMwqopyOyp6O/Wc6NHSiXHA+TBD0qwgUXtD1pcGPHuzmDzQtW+NGkzGW9E4jcDIPqOEDpn/KvRag=
+X-Received: by 2002:a65:6201:0:b0:4fc:2058:fa29 with SMTP id
+ d1-20020a656201000000b004fc2058fa29mr792545pgv.1.1680910434569; Fri, 07 Apr
+ 2023 16:33:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230407191904.gonna.522-kees@kernel.org> <20230407192717.636137-1-keescook@chromium.org>
+In-Reply-To: <20230407192717.636137-1-keescook@chromium.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 16:33:43 -0700
+Message-ID: <CAKwvOdk5JjB21FU85Zxubs+LV8bTY-az598V1hvewndAfhohQA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/10] kunit: tool: Enable CONFIG_FORTIFY_SOURCE under UML
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Puyou Lu <puyou.lu@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Eric Biggers <ebiggers@google.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aaron Lewis <aaronlewis@google.com>
+On Fri, Apr 7, 2023 at 12:27=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> Since commit ba38961a069b ("um: Enable FORTIFY_SOURCE"), it's possible
+> to run the FORTIFY tests under UML. Enable CONFIG_FORTIFY_SOURCE when
+> running with --altests to gain additional coverage, and by default under
 
-Add testing for the event "Instructions retired" (0xc0) in the PMU
-event filter on both Intel and AMD to ensure that the event doesn't
-count when it is disallowed.  Unlike most of the other events, the
-event "Instructions retired" will be incremented by KVM when an
-instruction is emulated.  Test that this case is being properly handled
-and that KVM doesn't increment the counter when that event is
-disallowed.
+two L's in alltest?
 
-Signed-off-by: Aaron Lewis <aaronlewis@google.com>
-Link: https://lore.kernel.org/r/20230307141400.1486314-6-aaronlewis@google.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- .../kvm/x86_64/pmu_event_filter_test.c        | 34 +++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+> UML.
+>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  tools/testing/kunit/configs/all_tests.config | 2 ++
+>  tools/testing/kunit/configs/arch_uml.config  | 3 +++
+>  2 files changed, 5 insertions(+)
+>
+> diff --git a/tools/testing/kunit/configs/all_tests.config b/tools/testing=
+/kunit/configs/all_tests.config
+> index f990cbb73250..0393940c706a 100644
+> --- a/tools/testing/kunit/configs/all_tests.config
+> +++ b/tools/testing/kunit/configs/all_tests.config
+> @@ -9,6 +9,8 @@ CONFIG_KUNIT=3Dy
+>  CONFIG_KUNIT_EXAMPLE_TEST=3Dy
+>  CONFIG_KUNIT_ALL_TESTS=3Dy
+>
+> +CONFIG_FORTIFY_SOURCE=3Dy
+> +
+>  CONFIG_IIO=3Dy
+>
+>  CONFIG_EXT4_FS=3Dy
+> diff --git a/tools/testing/kunit/configs/arch_uml.config b/tools/testing/=
+kunit/configs/arch_uml.config
+> index e824ce43b05a..54ad8972681a 100644
+> --- a/tools/testing/kunit/configs/arch_uml.config
+> +++ b/tools/testing/kunit/configs/arch_uml.config
+> @@ -3,3 +3,6 @@
+>  # Enable virtio/pci, as a lot of tests require it.
+>  CONFIG_VIRTIO_UML=3Dy
+>  CONFIG_UML_PCI_OVER_VIRTIO=3Dy
+> +
+> +# Enable FORTIFY_SOURCE for wider checking.
+> +CONFIG_FORTIFY_SOURCE=3Dy
+> --
+> 2.34.1
+>
 
-diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-index 5112aece3f95..40507ed9fe8a 100644
---- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-@@ -54,6 +54,21 @@
- 
- #define AMD_ZEN_BR_RETIRED EVENT(0xc2, 0)
- 
-+
-+/*
-+ * "Retired instructions", from Processor Programming Reference
-+ * (PPR) for AMD Family 17h Model 01h, Revision B1 Processors,
-+ * Preliminary Processor Programming Reference (PPR) for AMD Family
-+ * 17h Model 31h, Revision B0 Processors, and Preliminary Processor
-+ * Programming Reference (PPR) for AMD Family 19h Model 01h, Revision
-+ * B1 Processors Volume 1 of 2.
-+ *                      --- and ---
-+ * "Instructions retired", from the Intel SDM, volume 3,
-+ * "Pre-defined Architectural Performance Events."
-+ */
-+
-+#define INST_RETIRED EVENT(0xc0, 0)
-+
- /*
-  * This event list comprises Intel's eight architectural events plus
-  * AMD's "retired branch instructions" for Zen[123] (and possibly
-@@ -61,7 +76,7 @@
-  */
- static const uint64_t event_list[] = {
- 	EVENT(0x3c, 0),
--	EVENT(0xc0, 0),
-+	INST_RETIRED,
- 	EVENT(0x3c, 1),
- 	EVENT(0x2e, 0x4f),
- 	EVENT(0x2e, 0x41),
-@@ -76,6 +91,7 @@ struct {
- 	uint64_t stores;
- 	uint64_t loads_stores;
- 	uint64_t branches_retired;
-+	uint64_t instructions_retired;
- } pmc_results;
- 
- /*
-@@ -110,10 +126,12 @@ static void check_msr(uint32_t msr, uint64_t bits_to_flip)
- static void run_and_measure_loop(uint32_t msr_base)
- {
- 	const uint64_t branches_retired = rdmsr(msr_base + 0);
-+	const uint64_t insn_retired = rdmsr(msr_base + 1);
- 
- 	__asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES}));
- 
- 	pmc_results.branches_retired = rdmsr(msr_base + 0) - branches_retired;
-+	pmc_results.instructions_retired = rdmsr(msr_base + 1) - insn_retired;
- }
- 
- static void intel_guest_code(void)
-@@ -127,7 +145,9 @@ static void intel_guest_code(void)
- 		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0);
- 		wrmsr(MSR_P6_EVNTSEL0, ARCH_PERFMON_EVENTSEL_ENABLE |
- 		      ARCH_PERFMON_EVENTSEL_OS | INTEL_BR_RETIRED);
--		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0x1);
-+		wrmsr(MSR_P6_EVNTSEL1, ARCH_PERFMON_EVENTSEL_ENABLE |
-+		      ARCH_PERFMON_EVENTSEL_OS | INST_RETIRED);
-+		wrmsr(MSR_CORE_PERF_GLOBAL_CTRL, 0x3);
- 
- 		run_and_measure_loop(MSR_IA32_PMC0);
- 		GUEST_SYNC(0);
-@@ -149,6 +169,8 @@ static void amd_guest_code(void)
- 		wrmsr(MSR_K7_EVNTSEL0, 0);
- 		wrmsr(MSR_K7_EVNTSEL0, ARCH_PERFMON_EVENTSEL_ENABLE |
- 		      ARCH_PERFMON_EVENTSEL_OS | AMD_ZEN_BR_RETIRED);
-+		wrmsr(MSR_K7_EVNTSEL1, ARCH_PERFMON_EVENTSEL_ENABLE |
-+		      ARCH_PERFMON_EVENTSEL_OS | INST_RETIRED);
- 
- 		run_and_measure_loop(MSR_K7_PERFCTR0);
- 		GUEST_SYNC(0);
-@@ -263,20 +285,26 @@ static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_filter *f,
- #define ASSERT_PMC_COUNTING_INSTRUCTIONS()						\
- do {											\
- 	uint64_t br = pmc_results.branches_retired;					\
-+	uint64_t ir = pmc_results.instructions_retired;					\
- 											\
- 	if (br && br != NUM_BRANCHES)							\
- 		pr_info("%s: Branch instructions retired = %lu (expected %u)\n",	\
- 			__func__, br, NUM_BRANCHES);					\
- 	TEST_ASSERT(br, "%s: Branch instructions retired = %lu (expected > 0)",		\
- 		    __func__, br);							\
-+	TEST_ASSERT(ir,	"%s: Instructions retired = %lu (expected > 0)",		\
-+		    __func__, ir);							\
- } while (0)
- 
- #define ASSERT_PMC_NOT_COUNTING_INSTRUCTIONS()						\
- do {											\
- 	uint64_t br = pmc_results.branches_retired;					\
-+	uint64_t ir = pmc_results.instructions_retired;					\
- 											\
- 	TEST_ASSERT(!br, "%s: Branch instructions retired = %lu (expected 0)",		\
- 		    __func__, br);							\
-+	TEST_ASSERT(!ir, "%s: Instructions retired = %lu (expected 0)",			\
-+		    __func__, ir);							\
- } while (0)
- 
- static void test_without_filter(struct kvm_vcpu *vcpu)
-@@ -329,6 +357,7 @@ static void test_not_member_deny_list(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_pmu_event_filter *f = event_filter(KVM_PMU_EVENT_DENY);
- 
-+	remove_event(f, INST_RETIRED);
- 	remove_event(f, INTEL_BR_RETIRED);
- 	remove_event(f, AMD_ZEN_BR_RETIRED);
- 	test_with_filter(vcpu, f);
-@@ -341,6 +370,7 @@ static void test_not_member_allow_list(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_pmu_event_filter *f = event_filter(KVM_PMU_EVENT_ALLOW);
- 
-+	remove_event(f, INST_RETIRED);
- 	remove_event(f, INTEL_BR_RETIRED);
- 	remove_event(f, AMD_ZEN_BR_RETIRED);
- 	test_with_filter(vcpu, f);
--- 
-2.40.0.577.gac1e443424-goog
 
+--=20
+Thanks,
+~Nick Desaulniers
