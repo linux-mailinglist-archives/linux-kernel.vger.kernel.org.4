@@ -2,221 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E916DB03C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B808A6DB042
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 18:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjDGQJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 12:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
+        id S229704AbjDGQKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 12:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbjDGQJn (ORCPT
+        with ESMTP id S231971AbjDGQKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 12:09:43 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CAFBB92
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 09:09:19 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id f188so30968462ybb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 09:09:19 -0700 (PDT)
+        Fri, 7 Apr 2023 12:10:21 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C36BB8F;
+        Fri,  7 Apr 2023 09:10:17 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-18412684c50so1974761fac.5;
+        Fri, 07 Apr 2023 09:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112; t=1680883758; x=1683475758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pG4bkww4TTKH5g62+sthOLOmqZqedZWZduXMaCftkq4=;
-        b=wO/b6t0TAhKJ7bG5BAH8ilaCdIekWtZdXo5wLOJrG1RO6kku1Vr/OAiB5x05nSbiI8
-         SkPgZpgZ4/6tGs8Hthod/dDkKpFZFHb8joim2BmuiCYWF3hd61faFClVR65J3+xUgvHc
-         QMbssiyAzV/1FDNc8tpgAgYWN+Rv+4vlQp2g3YFzJJhnw37gziOreeGwHxNTJw21n2Wr
-         0ikt8o8jq84Za+/DrAJj/OHHBqwbNS1pWwaGK5KaQYQC3WAWSBPl7ZERAOWjv0H0o/L1
-         rH7U5HtwbZ2jwD2CBRhOzk0vq8Ow2ShAtcsIgPn57RKCu6W+el9HMkgXz4TYhkK2I3qR
-         VRcA==
+        d=gmail.com; s=20210112; t=1680883817; x=1683475817;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DsLvnZPjZzg0dHWcEvsz63QWITXOPT4dhDFyS/J5cWc=;
+        b=gl+icpuxByBdWPer9h/dOry8KXl32HRBQLE40aGJLLqi+44Q+hVcSJ+hlnToLJMmbu
+         vLbST1fNCMZd9SfOVKRN6pDhJ72ae7qaQ31CT8tIVih8H1bGXxRQu0EOBbW2AUTNHIle
+         SVFiUevgUGxYLKOChPpyBtgsJ7kqT9c7r00yLqbj1YD9EJ5b26UaAQcP5iZEZTlwf6zO
+         dFM6NxXZ/FviheJR1x/hx/FpnABo/LYWFJHhhFPFIoB9x5H2A/NKgb2kRF+QAiczGPbP
+         FvXTeePNqzKsO81MgYiW6kcBe7z0fpUAfkXUf6+mQXXm3pY1ayEqwWQ1dsqwTcCfse5y
+         /ZGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680883758; x=1683475758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1680883817; x=1683475817;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pG4bkww4TTKH5g62+sthOLOmqZqedZWZduXMaCftkq4=;
-        b=EY76NL3jywpkECLYSZBRoUnuWZGvxw3i48zz9CX3FmWJWhFDlSMHYbuAdXGIEwlVLU
-         77XfV5wrutHBpNXnpIGoNpWUWmRLvC0nag02ifyStXHvjKMfgrVDmnv0Xcya1BtY6Z2P
-         WmWbQxt07MMXZZI902kkFN7NuZq/DsqLXLENuQkVn5NvRxpvOefy1uDvfYdONcjhO9Aj
-         zyIlXyjiCOJijs3Hkm8+EgHnU5Vlj2+QWlTBJf+YS9RDZI8ZgT7h3Qzc8B6c2ufV48bk
-         XWv3PhKeovBNM1hk486r8ZUiv3G7oWGgoXVCplAX0ViL76AwSXm5K+jOh/8nrurxB3KP
-         t4Pw==
-X-Gm-Message-State: AAQBX9d69uG9+jaN859pazQs7skhwd9ucVWWqu82WQUaYtGkG0ZZcVIe
-        ene3wqbM+W755ibDNuhG+JHLYbiX9SjAc0DyzJyPlA==
-X-Google-Smtp-Source: AKy350YoEtAJiSIWvIlzd/ZkwZq+Yj/GschfHgVBkfpUuNJ35GSsEj8AzA1+CZ84p3LXxGc5NvSh1Y/+A/AOmcmytDM=
-X-Received: by 2002:a25:7490:0:b0:b78:45fd:5f01 with SMTP id
- p138-20020a257490000000b00b7845fd5f01mr2072667ybc.7.1680883758618; Fri, 07
- Apr 2023 09:09:18 -0700 (PDT)
+        bh=DsLvnZPjZzg0dHWcEvsz63QWITXOPT4dhDFyS/J5cWc=;
+        b=2bpUuMl9IKnaqAv94cYHjomupp1A0Gha3FmR9zRUFhOoBSo97VsSgiuB6HvFa4/Fz/
+         ec7WsLy39Yuj5IHr0oQzljHg2SOFSLmpoC1MavtSsMaVfF4UE7YlueuAAtx09aCyy/r7
+         clcKsMtsvEVLTZbe/UYNEj4DoH7W9GWGD0ZD9GQRazRkOo8y4Se4BA+1aDCL560UPI7p
+         i3CnENN/DPIgRQnU2W28BJFWx31Bo713EH7QltiF9ZM+5wueUDZzR8thOFPOgDcKpUL2
+         yKXRtTW0dY20en1CJNHGDyQQqnvhSaMb/psEeUddvRXVfwjRlo6S6srtSxQOJk9KJHhM
+         M5zA==
+X-Gm-Message-State: AAQBX9e/XYjqeaXk0PHkt9m71Xpgq/75S6q7W4H0bP1EGY+IozfHQ0qn
+        9ZYTli0wR87otmkh92RmL9eeUQP7NPg=
+X-Google-Smtp-Source: AKy350aQmpkzuIJCBwpF9hC39OKaMl5RRnovDFu3wk8lFMdFEt5mr/xYfzxksZ89wKZQ1TCIRktEUQ==
+X-Received: by 2002:a05:6870:304d:b0:177:824d:e944 with SMTP id u13-20020a056870304d00b00177824de944mr1634507oau.51.1680883816908;
+        Fri, 07 Apr 2023 09:10:16 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j16-20020a9d7690000000b006a2ce5f3641sm1834758otl.8.2023.04.07.09.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 09:10:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 7 Apr 2023 09:10:15 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jdelvare@suse.com
+Subject: Re: [PATCH 2/2] hwmon: (pmbus/ibm-cffps) Use default debugfs
+ attributes and lock function
+Message-ID: <9c3d277f-a23b-447f-8850-354f54deb07b@roeck-us.net>
+References: <20230405145230.68631-1-eajames@linux.ibm.com>
+ <20230405145230.68631-3-eajames@linux.ibm.com>
 MIME-Version: 1.0
-References: <20230403103440.2895683-1-vladimir.oltean@nxp.com> <20230403103440.2895683-6-vladimir.oltean@nxp.com>
-In-Reply-To: <20230403103440.2895683-6-vladimir.oltean@nxp.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 7 Apr 2023 12:09:07 -0400
-Message-ID: <CAM0EoM=4DOj3Np3a_uYxKp2fD2pUPkaF_QiZjuD57c00pjncuA@mail.gmail.com>
-Subject: Re: [PATCH v4 net-next 5/9] net/sched: pass netlink extack to mqprio
- and taprio offload
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        Amritha Nambiar <amritha.nambiar@intel.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Pranavi Somisetty <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405145230.68631-3-eajames@linux.ibm.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 3, 2023 at 6:35=E2=80=AFAM Vladimir Oltean <vladimir.oltean@nxp=
-.com> wrote:
->
-> With the multiplexed ndo_setup_tc() model which lacks a first-class
-> struct netlink_ext_ack * argument, the only way to pass the netlink
-> extended ACK message down to the device driver is to embed it within the
-> offload structure.
->
-> Do this for struct tc_mqprio_qopt_offload and struct tc_taprio_qopt_offlo=
-ad.
->
-> Since struct tc_taprio_qopt_offload also contains a tc_mqprio_qopt_offloa=
-d
-> structure, and since device drivers might effectively reuse their mqprio
-> implementation for the mqprio portion of taprio, we make taprio set the
-> extack in both offload structures to point at the same netlink extack
-> message.
->
-> In fact, the taprio handling is a bit more tricky, for 2 reasons.
->
-> First is because the offload structure has a longer lifetime than the
-> extack structure. The driver is supposed to populate the extack
-> synchronously from ndo_setup_tc() and leave it alone afterwards.
-> To not have any use-after-free surprises, we zero out the extack pointer
-> when we leave taprio_enable_offload().
->
-> The second reason is because taprio does overwrite the extack message on
-> ndo_setup_tc() error. We need to switch to the weak form of setting an
-> extack message, which preserves a potential message set by the driver.
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-
-cheers,
-jamal
-
+On Wed, Apr 05, 2023 at 09:52:30AM -0500, Eddie James wrote:
+> Switch the driver to use the default debugfs attributes instead of
+> ones that provide the same data under different names. Use the lock
+> functions for the debugfs and led attributes, and simplify the input
+> history operation by dropping the timer and lock.
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
-> v3->v4: none
-> v2->v3: patch is new
->
->  include/net/pkt_sched.h |  2 ++
->  net/sched/sch_mqprio.c  |  5 ++++-
->  net/sched/sch_taprio.c  | 12 ++++++++++--
->  3 files changed, 16 insertions(+), 3 deletions(-)
->
-> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
-> index bb0bd69fb655..b43ed4733455 100644
-> --- a/include/net/pkt_sched.h
-> +++ b/include/net/pkt_sched.h
-> @@ -166,6 +166,7 @@ struct tc_mqprio_caps {
->  struct tc_mqprio_qopt_offload {
->         /* struct tc_mqprio_qopt must always be the first element */
->         struct tc_mqprio_qopt qopt;
-> +       struct netlink_ext_ack *extack;
->         u16 mode;
->         u16 shaper;
->         u32 flags;
-> @@ -193,6 +194,7 @@ struct tc_taprio_sched_entry {
->
->  struct tc_taprio_qopt_offload {
->         struct tc_mqprio_qopt_offload mqprio;
-> +       struct netlink_ext_ack *extack;
->         u8 enable;
->         ktime_t base_time;
->         u64 cycle_time;
-> diff --git a/net/sched/sch_mqprio.c b/net/sched/sch_mqprio.c
-> index 9ee5a9a9b9e9..5287ff60b3f9 100644
-> --- a/net/sched/sch_mqprio.c
-> +++ b/net/sched/sch_mqprio.c
-> @@ -33,9 +33,12 @@ static int mqprio_enable_offload(struct Qdisc *sch,
->                                  const struct tc_mqprio_qopt *qopt,
->                                  struct netlink_ext_ack *extack)
->  {
-> -       struct tc_mqprio_qopt_offload mqprio =3D {.qopt =3D *qopt};
->         struct mqprio_sched *priv =3D qdisc_priv(sch);
->         struct net_device *dev =3D qdisc_dev(sch);
-> +       struct tc_mqprio_qopt_offload mqprio =3D {
-> +               .qopt =3D *qopt,
-> +               .extack =3D extack,
-> +       };
->         int err, i;
->
->         switch (priv->mode) {
-> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-> index 1f469861eae3..cbad43019172 100644
-> --- a/net/sched/sch_taprio.c
-> +++ b/net/sched/sch_taprio.c
-> @@ -1520,7 +1520,9 @@ static int taprio_enable_offload(struct net_device =
-*dev,
->                 return -ENOMEM;
->         }
->         offload->enable =3D 1;
-> +       offload->extack =3D extack;
->         mqprio_qopt_reconstruct(dev, &offload->mqprio.qopt);
-> +       offload->mqprio.extack =3D extack;
->         taprio_sched_to_offload(dev, sched, offload, &caps);
->
->         for (tc =3D 0; tc < TC_MAX_QUEUE; tc++)
-> @@ -1528,14 +1530,20 @@ static int taprio_enable_offload(struct net_devic=
-e *dev,
->
->         err =3D ops->ndo_setup_tc(dev, TC_SETUP_QDISC_TAPRIO, offload);
->         if (err < 0) {
-> -               NL_SET_ERR_MSG(extack,
-> -                              "Device failed to setup taprio offload");
-> +               NL_SET_ERR_MSG_WEAK(extack,
-> +                                   "Device failed to setup taprio offloa=
-d");
->                 goto done;
->         }
->
->         q->offloaded =3D true;
->
->  done:
-> +       /* The offload structure may linger around via a reference taken =
-by the
-> +        * device driver, so clear up the netlink extack pointer so that =
-the
-> +        * driver isn't tempted to dereference data which stopped being v=
-alid
-> +        */
-> +       offload->extack =3D NULL;
-> +       offload->mqprio.extack =3D NULL;
->         taprio_offload_free(offload);
->
->         return err;
-> --
-> 2.34.1
->
+>  drivers/hwmon/pmbus/ibm-cffps.c | 273 ++++++++++++++------------------
+>  1 file changed, 118 insertions(+), 155 deletions(-)
+> 
+> diff --git a/drivers/hwmon/pmbus/ibm-cffps.c b/drivers/hwmon/pmbus/ibm-cffps.c
+> index e3294a1a54bb..2d7ec00e047b 100644
+> --- a/drivers/hwmon/pmbus/ibm-cffps.c
+> +++ b/drivers/hwmon/pmbus/ibm-cffps.c
+> @@ -18,12 +18,6 @@
+>  
+[ ... ]
+>  			}
+> @@ -225,29 +183,27 @@ static ssize_t ibm_cffps_debugfs_read(struct file *file, char __user *buf,
+>  			rc = i * 4;
+>  			break;
+>  		default:
+> -			return -EOPNOTSUPP;
+> +			rc = -EOPNOTSUPP;
+> +			break;
+>  		}
+> -		goto done;
+> +		break;
+>  	case CFFPS_DEBUGFS_ON_OFF_CONFIG:
+> -		rc = i2c_smbus_read_byte_data(psu->client,
+> -					      PMBUS_ON_OFF_CONFIG);
+> -		if (rc < 0)
+> -			return rc;
+> -
+> -		rc = snprintf(data, 3, "%02x", rc);
+> -		goto done;
+> +		rc = i2c_smbus_read_byte_data(psu->client, PMBUS_ON_OFF_CONFIG);
+> +		if (rc >= 0)
+> +			rc = snprintf(data, 3, "%02x", rc);
+> +		break;
+>  	default:
+> -		return -EINVAL;
+> +		rc = -EINVAL;
+> +		break;
+>  	}
+>  
+> -	rc = i2c_smbus_read_block_data(psu->client, cmd, data);
+> +unlock:
+> +	pmbus_unlock(psu->client);
+>  	if (rc < 0)
+>  		return rc;
+>  
+> -done:
+>  	data[rc] = '\n';
+>  	rc += 2;
+> -
+
+I hate to say (repeat) that, but please refrain from whitespace changes.
+
+Guenter
+
+>  	return simple_read_from_buffer(buf, count, ppos, data, rc);
+>  }
