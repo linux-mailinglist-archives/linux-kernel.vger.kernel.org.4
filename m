@@ -2,98 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A78F6DB2C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C656DB2C5
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjDGS2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S231316AbjDGSaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjDGS2C (ORCPT
+        with ESMTP id S231302AbjDGSaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:28:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4910F6A53
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:28:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C73FF6531B
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 18:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65268C433EF;
-        Fri,  7 Apr 2023 18:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680892080;
-        bh=IaqEVSvO4+ec0TMhLkqBwp/Pr6mbvqqD98gAzdvOZHk=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=CB6dOTtScPKXalKF3JrhUEVFMkjNB/W8xrIsDLtw7o/SNFs7/NUayzVsVrI7xZTi6
-         X0uxshqcVt8/ZQ+HQFP/ISqfg2rEQM+1/7fsznDZZ1xVHaYpRO+cGUThOF0czMDS9p
-         aIbj5s+dOxbhvcTm8ox6+jUwTzBb9DhE23Xa4iKQ6aNSlRw76MEzMi6DcfwEitwZ1S
-         QL8as3fZZVBuzbVFXdRwX2oV1qxiRLq6w8L28SKmiDDeM6kLibtgqw7EsOwyKFqNrV
-         ICy1BgUTt1BTI2EFfQ3VSlpquZQgx1VqLOoyChsryqFTYbvOzYJKzS05cDKcik2hg1
-         Yh0tyYdp0SNdw==
-From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        colin.i.king@gmail.com, fshao@chromium.org, jiaxin.yu@mediatek.com,
-        allen-kh.cheng@mediatek.com, Tom Rix <trix@redhat.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-In-Reply-To: <20230407115553.1968111-1-trix@redhat.com>
-References: <20230407115553.1968111-1-trix@redhat.com>
-Subject: Re: [PATCH] ASoC: mediatek: mt8186: set variable aud_pinctrl to
- static
-Message-Id: <168089207711.180511.12653080399028672980.b4-ty@kernel.org>
-Date:   Fri, 07 Apr 2023 19:27:57 +0100
+        Fri, 7 Apr 2023 14:30:08 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37595AD38
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 11:30:07 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-62b0a03138fso250997b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 11:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1680892206; x=1683484206;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6HFtEQBBSrqrPLBtxkiSj0n1tTAIZHxJ4QeL5qxREtA=;
+        b=O1wwHa9VLQNTHqqJ/D+SH5M1jhXYC4VHWJ3i1l2T8RfxHmu1tlSsZjw6xpCFpC/sE5
+         2OmAe9WoxEaCC9T6IXmDpBliDHN2t0iizQAbdFWvizz9Rnw2XjrlljslXIkmXDCSXTcG
+         Q+ZW0ZQnNgmHUpUmt3jpBZnoLqKfKzfmwiccwXsFzQaS2tuROvBmdFXhUCHdAr6HqQTE
+         7Yd/82l3J9kPU8xJQp0EYOi94CrJH1itSa+lU8FuIIfjTU7db4H63Wmr4QTCtAKOhviu
+         xt7UCiyU7+nzOuYmgLyqJApOlL3e7l+3d5zqjwteUcj0RsrVKH7GJOp3gBJmrf1EOkJ/
+         kqNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680892207; x=1683484207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6HFtEQBBSrqrPLBtxkiSj0n1tTAIZHxJ4QeL5qxREtA=;
+        b=6VOVMpuoUPSY5SvVomwcaNGDpglJ6tKP//I9dA8cwYBShCVhjzs3mINjvjE9MvaBgk
+         JCzyCzRdmgUXckM3LBZNuPiAp8OnuyI15IYzeOXJgCThWlQk2E5c/4zlXVXEpls5GK7K
+         gu1C2bFQtdsWWWBBiap6Let80Tk2bPlqnq137UVOcv0oDgZ6m7ZNueYYTpArt2Tsg7wF
+         zV387iVn5iUE19Wwf5huLmB6fGXdzrbUgAfHiZd7UHz7AQYiOMwxWUjKmjmS8nC+zQUk
+         yE37+8mBURzB3riBH9CHn8U1Q74fb4hs2m8UcKSoHYi8GKM6RpEk5+bKMCTtKSnL04W7
+         uLlg==
+X-Gm-Message-State: AAQBX9ca4RvQKPpbu51kxZVSP9ffADxH+CrVIaWQQET1oxLRC4eiqdIa
+        XXXV043+2jQMF150z/GbOmhlbe5sATlmHOQtHxDvYw==
+X-Google-Smtp-Source: AKy350Zn9nhE87iZkJPFl7414s8bVyJul5VukIyzyCsiFEtRHapVK5V9N1ZeYdKb2AlkJUj1xE94rcNxMRPPdz4DjIU=
+X-Received: by 2002:a05:6a00:2e23:b0:62a:d87a:a375 with SMTP id
+ fc35-20020a056a002e2300b0062ad87aa375mr1663621pfb.4.1680892206429; Fri, 07
+ Apr 2023 11:30:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230325134503.1335510-1-trix@redhat.com> <CAKwvOdng_wH8qKnnGN=VpUhLK9q6wyc7sZKO7ORt-3QOKVP_nw@mail.gmail.com>
+In-Reply-To: <CAKwvOdng_wH8qKnnGN=VpUhLK9q6wyc7sZKO7ORt-3QOKVP_nw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 7 Apr 2023 11:29:55 -0700
+Message-ID: <CAKwvOd=CVq3DTPwUgDgghJBKsUKgL69K7Hne5=gY9V7vwshfAg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: remove unused matching_stream_ptrs variable
+To:     Tom Rix <trix@redhat.com>
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, nathan@kernel.org, Jun.Lei@amd.com,
+        wenjing.liu@amd.com, Jimmy.Kizito@amd.com, Cruise.Hung@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-15.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 07 Apr 2023 07:55:53 -0400, Tom Rix wrote:
-> smatch reports
-> sound/soc/mediatek/mt8186/mt8186-afe-gpio.c:14:16: warning: symbol
->   'aud_pinctrl' was not declared. Should it be static?
-> 
-> This variable is only used in one file so should be static.
-> 
-> 
-> [...]
+On Fri, Apr 7, 2023 at 10:52=E2=80=AFAM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Jimmy, can you review?
+>
+> The change LGTM; but I'm not sure if there was something else intended he=
+re.
 
-Applied to
+Nevermind, Jimmy's email address bounced.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-   broonie/sound.git for-next
+>
+> On Sat, Mar 25, 2023 at 6:45=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
+> >
+> > clang with W=3D1 reports
+> > drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_enc_cfg.c:625:6: =
+error:
+> >   variable 'matching_stream_ptrs' set but not used [-Werror,-Wunused-bu=
+t-set-variable]
+> >         int matching_stream_ptrs =3D 0;
+> >             ^
+> > This variable is not used so remove it.
+> >
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> > ---
+> >  drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c b/dr=
+ivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
+> > index 41198c729d90..30c0644d4418 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
+> > +++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_enc_cfg.c
+> > @@ -622,7 +622,6 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc=
+_state *state)
+> >         int i, j;
+> >         uint8_t valid_count =3D 0;
+> >         uint8_t dig_stream_count =3D 0;
+> > -       int matching_stream_ptrs =3D 0;
+> >         int eng_ids_per_ep_id[MAX_PIPES] =3D {0};
+> >         int ep_ids_per_eng_id[MAX_PIPES] =3D {0};
+> >         int valid_bitmap =3D 0;
+> > @@ -645,9 +644,7 @@ bool link_enc_cfg_validate(struct dc *dc, struct dc=
+_state *state)
+> >                 struct link_enc_assignment assignment =3D state->res_ct=
+x.link_enc_cfg_ctx.link_enc_assignments[i];
+> >
+> >                 if (assignment.valid) {
+> > -                       if (assignment.stream =3D=3D state->streams[i])
+> > -                               matching_stream_ptrs++;
+> > -                       else
+> > +                       if (assignment.stream !=3D state->streams[i])
+> >                                 valid_stream_ptrs =3D false;
+> >                 }
+> >         }
+> > --
+> > 2.27.0
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-Thanks!
 
-[1/1] ASoC: mediatek: mt8186: set variable aud_pinctrl to static
-      commit: 672029caa5708934817a331f3323bbe48d456c5c
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
+--=20
 Thanks,
-Mark
-
+~Nick Desaulniers
