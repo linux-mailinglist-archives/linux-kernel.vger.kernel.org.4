@@ -2,73 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E4F6DAE2E
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBCB6DAE37
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 15:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjDGNqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 09:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S230412AbjDGNsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 09:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjDGNqe (ORCPT
+        with ESMTP id S230429AbjDGNrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 09:46:34 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0908BDEF
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:44:25 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id j22so8517176ejv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:44:25 -0700 (PDT)
+        Fri, 7 Apr 2023 09:47:48 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D05BD31D
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 06:46:11 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-948a1aec279so166760866b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 06:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680875007;
+        d=linaro.org; s=google; t=1680875150;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=R2b3h4GiPHDFhw2slcKiiNf9Ehmkr7A8bDAPf1Quqak=;
-        b=gHx8tEAgNzcEH5lNC9SdGsw9rCqIGRoZS1TPWEWA7vYZM41vQ7ArtIqqakPTeTcZdC
-         NzFroiqxc3o5HHK4gKOFsx1XmpbulLx/cXgRQCMM5FPMSTvXJvcOPqdbC4ajC48YQx9M
-         B4ThjNoeMMuSuio8YFTLGVBqpjNM0ia92Ob8N6yWXlgnEhfvfQDpTYA6MXfkN+6OWSnM
-         fS6dA/BewUrgkGtpe9QfiGZAVFVoQCP/vqvZZ+lwrdv6pWH2Qmc/pSfSG4VC5F8nzyN1
-         aisq3Qklgg76QzY3VXJh1mdMXac8gUBM4a98FSlslLvC5flvUa4LKdKEGvo/3YmffcQ5
-         vt9Q==
+        bh=yp5m0Gs2+7L1T7k0BOgEaesPaUmP03C3lD6UUC3EEfI=;
+        b=Q8cKW1Y9yPr2fpOL+h62V4+4LKKzKurXsFkFP8HTS2ZsTk9QbnScMQLueaGMd7uxZX
+         YyGeO6gYuhxM6rR/qSd0ky8WzO4rKTu9/9GfMP+ymDyx4DYYHEsSR7+F6n0q1DbLETJQ
+         Jt2ABT8Dw/7A33eJt7UZSOdw35bxMH1hYkzCVFewZ53L5myO44Ju9OrNH6hfYM9UUF+T
+         9m+/zQXxoXAPESyq24BEBOh2tjmnLglWDM1YkGWRwmpjFRRYMMY1GV28mQHARPO8UTTw
+         bVg9Pf+cquhScTcOKyWUSiuTVy1i16oake/nYxX+a2qGw7/ytbvucNpn0uvrZMJT6jat
+         xczw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680875007;
+        d=1e100.net; s=20210112; t=1680875150;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R2b3h4GiPHDFhw2slcKiiNf9Ehmkr7A8bDAPf1Quqak=;
-        b=CmUwkGvAjiDJnACuhgHefUx/D5jFaRwLZnyHmiXlCrnk8qI31upOMi6TsMk01Bb1xh
-         XbtBFLrkrGrHgk+Uh8Ues3fPTRLS8ZR0/qFPBt7zv0ykZ1EBLEnRnmeuarp1tAZrohjc
-         RZcWXgar1rhKKf+EjNJxt86JYrCPSeQeFLDC/C5jgGwIQekSPK73wCcLP2mg/78k/rBU
-         tF/GjZUiMg9IJWgm6hattRNPZoQVfesmvPaqhl7EPBHrwxkk8ZE4Bl+AclJ1MnVT3mKj
-         Z5/hYEZU/t5PrXutkk84Edd+8FO3e8UeZRQRmIr1aneWZVgGeRPmdtHI2VIRwWK6Az1D
-         PavA==
-X-Gm-Message-State: AAQBX9cRPqwVD+EZh5w92ZFrs0gHn8poDrh0c5OvThNB04NB95FmYoDk
-        gMBzzfdaWZI7XvG7WPn7xLPnTg==
-X-Google-Smtp-Source: AKy350bWQEqYGFFfA/jzXWxmC5cbQRNxpFrFa3AuODJ5taegClCN1OLv9gf9TXTklAnhGglePwMqWg==
-X-Received: by 2002:a17:907:20af:b0:925:5eb8:92fd with SMTP id pw15-20020a17090720af00b009255eb892fdmr2470952ejb.14.1680875006723;
-        Fri, 07 Apr 2023 06:43:26 -0700 (PDT)
+        bh=yp5m0Gs2+7L1T7k0BOgEaesPaUmP03C3lD6UUC3EEfI=;
+        b=iHuwCbKzpPS3IwLjFpEPL8VRe11sg765ODeOhD1qbCh4uXDhdzroH/CinbGmxKzVCc
+         /b6kDDC/F8PIF+gnKzCjBTxlXvElQlXeobu3fJ9CUGiFLQOeeSxE2mPtGj6O62+DImSX
+         cf0aN6hoYNVNiagKpl4Sc5gB7k9l9vVkM7YkVRC/Cn4XUk1iC0FbgUXQztCzx9kW7KED
+         wuA1YmZNUpP3mqyDytGE3OBXBimdo3hFQkOMdWNeXSY6nfAuF4qZlg565oFVfiR3sl9G
+         BCnHldCYkV98OMw+Konbn/zJfLksSLtEXnRn+FTFDEjniJ3Yz5Mt+NoQxbNh8Jx1Gjew
+         6I9Q==
+X-Gm-Message-State: AAQBX9dlTrWcW+DvYkKYO9EqkwlXs3hQGxiS7FBXnAl6ORK+X5G9iRzm
+        GXAD747hT7hE4U2TYtZ++Gu6XQ==
+X-Google-Smtp-Source: AKy350YfI24zrr3k/owoorldtK4j2Zc1yFlw5O+l6gy+yzp0dsAPQIPRc+pCkj0U+Y3iqphLdUBj2g==
+X-Received: by 2002:a50:fb85:0:b0:502:3376:786d with SMTP id e5-20020a50fb85000000b005023376786dmr1810673edq.6.1680875150253;
+        Fri, 07 Apr 2023 06:45:50 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:b20f:8824:c926:8299? ([2a02:810d:15c0:828:b20f:8824:c926:8299])
-        by smtp.gmail.com with ESMTPSA id 24-20020a170906319800b008e9c79ff14csm2072502ejy.96.2023.04.07.06.43.25
+        by smtp.gmail.com with ESMTPSA id v7-20020a50a447000000b00504832f2489sm47159edb.78.2023.04.07.06.45.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 06:43:26 -0700 (PDT)
-Message-ID: <d1f0205b-f144-88aa-60f6-b14c8290fbab@linaro.org>
-Date:   Fri, 7 Apr 2023 15:43:25 +0200
+        Fri, 07 Apr 2023 06:45:48 -0700 (PDT)
+Message-ID: <9a4aa196-3110-9c62-6e30-a8bfa2a9327c@linaro.org>
+Date:   Fri, 7 Apr 2023 15:45:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Loongson-1 watchdog
+Subject: Re: [PATCH v6 2/6] dt-bindings: ufs: qcom: Add ICE phandle
 Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yang Ling <gnaygnil@gmail.com>
-References: <20230407110025.516405-1-keguang.zhang@gmail.com>
- <20230407110025.516405-2-keguang.zhang@gmail.com>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20230407105029.2274111-1-abel.vesa@linaro.org>
+ <20230407105029.2274111-3-abel.vesa@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407110025.516405-2-keguang.zhang@gmail.com>
+In-Reply-To: <20230407105029.2274111-3-abel.vesa@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -81,58 +94,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2023 13:00, Keguang Zhang wrote:
-> Add devicetree binding document for Loongson-1 watchdog.
+On 07/04/2023 12:50, Abel Vesa wrote:
+> Starting with SM8550, the ICE will have its own devicetree node
+> so add the qcom,ice property to reference it.
 > 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  .../bindings/watchdog/loongson,ls1x-wdt.yaml  | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml b/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
-> new file mode 100644
-> index 000000000000..203726da14ff
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
-> @@ -0,0 +1,40 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/loongson,ls1x-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> The v5 is here:
+> https://lore.kernel.org/all/20230403200530.2103099-3-abel.vesa@linaro.org/
+> 
+> Changes since v5:
+>  * dropped the sm8550 specific subschema and replaced it with one that
+>    mutually excludes the qcom,ice vs both the ICE specific reg range
+>    and the ICE clock
+> 
+> Changes since v4:
+>  * Added check for sm8550 compatible w.r.t. qcom,ice in order to enforce
+>    it while making sure none of the other platforms are allowed to use it
+> 
+> Changes since v3:
+>  * dropped the "and drop core clock" part from subject line
+> 
+> Changes since v2:
+>  * dropped all changes except the qcom,ice property
+> 
+> 
+>  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> index c5a06c048389..71aa79eac6b4 100644
+> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+> @@ -70,6 +70,10 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  qcom,ice:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the Inline Crypto Engine node
 > +
-> +title: Loongson-1 Watchdog Timer
-> +
-> +maintainers:
-> +  - Keguang Zhang <keguang.zhang@gmail.com>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls1x-wdt
+>    reg:
+>      minItems: 1
+>      maxItems: 2
+> @@ -187,6 +191,28 @@ allOf:
+>  
+>      # TODO: define clock bindings for qcom,msm8994-ufshc
+>  
+> +  - if:
+> +      properties:
+> +        qcom,ice:
+> +          minItems: 1
 
-No wildcards in compatibles. What does "x" stand for?
+Drop minItems
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
+> +          maxItems: 1
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 1
 
-Instead:
-unevaluatedProperties: false
+Drop minItems
 
+> +          maxItems: 1
+> +        clocks:
+> +          minItems: 8
+> +          maxItems: 8
 Best regards,
 Krzysztof
 
