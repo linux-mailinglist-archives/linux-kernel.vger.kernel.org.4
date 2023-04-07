@@ -2,108 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9266DB26C
-	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1DB6DB259
+	for <lists+linux-kernel@lfdr.de>; Fri,  7 Apr 2023 20:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjDGSFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 14:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S231434AbjDGSB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 14:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjDGSFP (ORCPT
+        with ESMTP id S231210AbjDGSBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 14:05:15 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4209C646;
-        Fri,  7 Apr 2023 11:05:09 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id bx42so16033355oib.6;
-        Fri, 07 Apr 2023 11:05:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680890709; x=1683482709;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
-        b=pFSH4am2cfu0NpsQdFED1amUu7I+RuyiHsbwrU+dPzLVXwtV9eJjTOTNA8rB+tvZI5
-         6yQHEe/c7Zzm+G/C4TuH/sTU4qAG74F/+xMq+qsj+Zr6t5ndmOBPab+1itwy13NA9DAb
-         FykOKF7xIBqBc8mKZ4mXesIVc5L49vcvbXj5rmRayQD80K+pc+tkHHvzbQYyrouyUz3E
-         LBPoLVoL0Hmb3ErTKlQ/JDnpl0b2H4LT+Kdlr+Zq50Aj7iLFVSFy1PQYccnnrD6xCPhF
-         +mFYc6dhjKLpKL1JwMNwA17PX9Exv1rgUohrM3T8keLOwm2RXgKvwCQatBLYTjHxmJ3I
-         vi9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680890709; x=1683482709;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pVWWNnevGYcIX44/9Rtg07AkMRMvtlyvu+P6BaPgs4U=;
-        b=xx8/04IVuwEMkQRq+N8gJ4VI7V5SBJN9eZqffcY1NuedDZp0w7hRP43WcPf/jd1FVI
-         PYNZM/RiHXgVyAb81/T9bOqjw+R7EQfi/41StH+Uvt88d4+B6vbn/M/8VwBeRCXzxXU2
-         96XTzqwYRxTwFtmN2n/b7BdXoiMNlXAaoNYcaX8Entk05vqngZtaEAwcoz/ZhpI/Jtpx
-         e9WhA7Q/aZpI5B26cF3ObYkYdZ0HUBuUnnXbkzJqRH5WJuMVZFWBp/cyTRcxJTIDlyBq
-         FAsokthjnKvLAegfZb1nPv9sxN/KzU0OeDmAmU3+zGxyrGKT67Jv3QMCSH77oH9H74IF
-         jchA==
-X-Gm-Message-State: AAQBX9f6DpqJnLDHc+3Cm6HI2YftChwUZs74BE5jhx8RheG5xLVL0Rev
-        64eBdEfs5opuq+KMyxi/bgg=
-X-Google-Smtp-Source: AKy350avvLjqWh3OYQY55XilU6JN/EcZ//jxqILAkddASItdct3Il6r91YjXbWqCZs0vshJmWWX86g==
-X-Received: by 2002:aca:1e1a:0:b0:386:e3f8:2c6b with SMTP id m26-20020aca1e1a000000b00386e3f82c6bmr1152904oic.11.1680890708884;
-        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056808120600b003874631e249sm1899179oil.36.2023.04.07.11.05.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 11:05:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 7 Apr 2023 11:05:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Igor Russkikh <irusskikh@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Xu Liang <lxu@maxlinear.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/8] net: netronome: constify pointers to
- hwmon_channel_info
-Message-ID: <3a0391e7-21f6-432a-9872-329e298e1582@roeck-us.net>
-References: <20230407145911.79642-1-krzysztof.kozlowski@linaro.org>
- <20230407084745.3aebbc9d@kernel.org>
+        Fri, 7 Apr 2023 14:01:53 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB75FBB97;
+        Fri,  7 Apr 2023 11:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680890512; x=1712426512;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XPLAtKzAfcKSPyY+GyxcvvkfUGKFQVLUMA8YHZypMgs=;
+  b=lXuOFUgbM2AUFGXLSQgySz+hODXKXaPtPmLzR4zX3cEmKlrb2BEcK8rA
+   YR1Bgm71+b1wTdC4UUQmlq+aySMtbit5LGsgEMrp/dd/0UoEVUXNfY1SC
+   Ia4G9Hqbe2MDTFVNS6UIwIu+HvVKUGnYSUJw5QICFToNsjabHJUfS3xHx
+   BIv6YKQlh2KMaQaKo1TDn+mCkk3CaEd+GhBnUw7UdWTcV7w+344amId0H
+   qZ8mn3hS/2oJC0eT1y3v7ODRIS8lDPbnOy99pNzuvpC9kBbW+dWj0VO3Q
+   MtGhC52mUKaAZDM8BMYJWCOCtCRS7i33Q8iNtUAFVA/Xkj9RNA5dyu9Ma
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="343046465"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="343046465"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 11:01:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="776910032"
+X-IronPort-AV: E=Sophos;i="5.98,327,1673942400"; 
+   d="scan'208";a="776910032"
+Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Apr 2023 11:01:48 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org
+Cc:     "Will Deacon" <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: [PATCH v4 0/7] Re-enable IDXD kernel workqueue under DMA API
+Date:   Fri,  7 Apr 2023 11:05:47 -0700
+Message-Id: <20230407180554.2784285-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230407084745.3aebbc9d@kernel.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=AC_FROM_MANY_DOTS,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 08:47:45AM -0700, Jakub Kicinski wrote:
-> On Fri,  7 Apr 2023 16:59:04 +0200 Krzysztof Kozlowski wrote:
-> > This depends on hwmon core patch:
-> > https://lore.kernel.org/all/20230406203103.3011503-2-krzysztof.kozlowski@linaro.org/
-> 
-> That patch should have been put on a stable branch we can pull
-> and avoid any conflict risks... Next time?
+Hi all,
 
-Yes, and I don't feel comfortable applying all those patches through
-the hwmon tree since I have zero means to test them.
+IDXD kernel work queues were disabled due to the flawed use of kernel VA
+and SVA API.
+Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
 
-I created a stable branch at
+The solution is to enable it under DMA API where IDXD shared workqueue users
+can use ENQCMDS to submit work on buffers mapped by DMA API.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-const
+This patchset adds support for attaching PASID to the device's default
+domain and the ability to reserve global PASIDs from SVA APIs. We can then
+re-enable the kernel work queues and use them under DMA API.
 
-Feel free to use it.
+This depends on the IOASID removal series.
+https://lore.kernel.org/all/ZCaUBJvUMsJyD7EW@8bytes.org/
 
-Guenter
+
+Thanks,
+
+Jacob
+
+---
+Changelog:
+v4:
+	- move dummy functions outside ifdef CONFIG_IOMMU_SVA (Baolu)
+	- dropped domain type check while disabling idxd system PASID (Baolu)
+
+v3:
+	- moved global PASID allocation API from SVA to IOMMU (Kevin)
+	- remove #ifdef around global PASID reservation during boot (Baolu)
+	- remove restriction on PASID 0 allocation (Baolu)
+	- fix a bug in sysfs domain change when attaching devices
+	- clear idxd user interrupt enable bit after disabling device( Fenghua)
+v2:
+	- refactored device PASID attach domain ops based on Baolu's early patch
+	- addressed TLB flush gap
+	- explicitly reserve RID_PASID from SVA PASID number space
+	- get dma domain directly, avoid checking domain types
+
+
+
+Jacob Pan (7):
+  iommu/vt-d: Use non-privileged mode for all PASIDs
+  iommu/vt-d: Remove PASID supervisor request support
+  iommu: Support allocation of global PASIDs outside SVA
+  iommu/vt-d: Reserve RID_PASID from global PASID space
+  iommu/vt-d: Make device pasid attachment explicit
+  iommu/vt-d: Implement set_dev_pasid domain op
+  dmaengine/idxd: Re-enable kernel workqueue under DMA API
+
+ drivers/dma/idxd/device.c   |  30 +-----
+ drivers/dma/idxd/init.c     |  60 +++++++++++-
+ drivers/dma/idxd/sysfs.c    |   7 --
+ drivers/iommu/intel/iommu.c | 180 +++++++++++++++++++++++++++++-------
+ drivers/iommu/intel/iommu.h |   8 ++
+ drivers/iommu/intel/pasid.c |  43 ---------
+ drivers/iommu/intel/pasid.h |   7 --
+ drivers/iommu/iommu-sva.c   |  10 +-
+ drivers/iommu/iommu.c       |  33 +++++++
+ include/linux/iommu.h       |  11 +++
+ 10 files changed, 262 insertions(+), 127 deletions(-)
+
+-- 
+2.25.1
+
