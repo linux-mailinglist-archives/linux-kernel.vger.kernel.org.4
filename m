@@ -2,569 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8926DB66E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A04FF6DB667
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 00:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjDGWXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 18:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36894 "EHLO
+        id S230318AbjDGWVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 18:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjDGWXL (ORCPT
+        with ESMTP id S230285AbjDGWVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 18:23:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EACCD31D
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 15:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680906129;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LG5Nmdy6XcajSK/col6unkyOVMaFNHAIH5A5kWAD+3g=;
-        b=XcBpt6hERCgvLR0LMe6bNnTRlPAwcerbde+FrstVH5nAxSy68IYpegLVlycs9xa7ox1ljK
-        LxYTrWJBXMuZEsT/F5VhtwqkNW2mH0y4QETupkpCXIlWJZ9oxhiypbZntK6yRP53b58r38
-        SzWXwsisHVEY5lCWmu36RU5EW6F0Gw8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-249-MgzOH8_kNC-mYygbkJB5FA-1; Fri, 07 Apr 2023 18:22:08 -0400
-X-MC-Unique: MgzOH8_kNC-mYygbkJB5FA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B257F811E7C;
-        Fri,  7 Apr 2023 22:22:07 +0000 (UTC)
-Received: from emerald.redhat.com (unknown [10.22.8.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 425DF440BC;
-        Fri,  7 Apr 2023 22:22:07 +0000 (UTC)
-From:   Lyude Paul <lyude@redhat.com>
-To:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
-Cc:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 2/2] drm/nouveau/kms: Add INHERIT ioctl to nvkm/nvif for reading IOR state
-Date:   Fri,  7 Apr 2023 18:21:32 -0400
-Message-Id: <20230407222133.1425969-2-lyude@redhat.com>
-In-Reply-To: <20230407222133.1425969-1-lyude@redhat.com>
-References: <20230407222133.1425969-1-lyude@redhat.com>
+        Fri, 7 Apr 2023 18:21:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8080ECA1C;
+        Fri,  7 Apr 2023 15:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680906102; x=1712442102;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5duwrcqSC7rCUO0BOmDoKW2vwKV3sKWMn9Hvx1yaVkM=;
+  b=Jv2+iGIHuFmslrtMdB/AmKqETXio7rfRJNDfLy4X1CKDAQmOVgiCX6H9
+   GBxBBuIM/UpKqIesPaYYD8o7bWuAycqndzGfw5asliHmuN0Jv3+asWk6O
+   c73TwLb+3NF2QArX+E6wJsYeSu0v0FtaibkT6HwXdcShx7g59LIHhDYJb
+   kxbkLD8hwMMC+MWCfSYdmqv6HQ6OgE6rR/1h1GoLdESzSIARSjx/4+2Hx
+   q7Up0GsY5RiAyJRZMOf4hZvZFdK51HgBwfVM7tR8rrGm4goKUL9cN1lpE
+   ND/zcTfZLsGder91n5Bz32tO+zp4bLGkFKfvDmTEbW1RCH7wa3LZJOX+R
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="322715135"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="322715135"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 15:21:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="933721155"
+X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
+   d="scan'208";a="933721155"
+Received: from ssingh6-mobl2.amr.corp.intel.com (HELO [10.212.218.166]) ([10.212.218.166])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 15:21:41 -0700
+Message-ID: <6010286e-c7b4-34d1-94d1-46b7f152c942@linux.intel.com>
+Date:   Fri, 7 Apr 2023 15:21:41 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [PATCH v2] PCI/EDR: Clear PCIe Device Status errors after EDR
+ error recovery
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        "Natu, Mahesh" <mahesh.natu@intel.com>
+References: <20230407215142.GA3825302@bhelgaas>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230407215142.GA3825302@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we're supporting things like Ada and the GSP, there's situations
-where we really need to actually know the display state that we're starting
-with when loading the driver in order to prevent breaking GSP expectations.
-The first step in doing this is making it so that we can read the current
-state of IORs from nvkm in DRM, so that we can fill in said into into the
-atomic state.
+Hi Bjorn,
 
-We do this by introducing an INHERIT ioctl to nvkm/nvif. This is basically
-another form of ACQUIRE, except that it will only acquire the given output
-path for userspace if it's already set up in hardware. This way, we can go
-through and probe each outp object we have in DRM in order to figure out
-the current hardware state of each one. If the outp isn't in use, it simply
-returns -ENODEV.
+On 4/7/23 2:51 PM, Bjorn Helgaas wrote:
+> [+cc Jonathan, Mahesh]
+> 
+> On Wed, Mar 15, 2023 at 04:54:49PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>> Commit 068c29a248b6 ("PCI/ERR: Clear PCIe Device Status errors only if
+>> OS owns AER") adds support to clear error status in the Device Status
+>> Register(DEVSTA) only if OS owns the AER support. But this change
+>> breaks the requirement of the EDR feature which requires OS to cleanup
+>> the error registers even if firmware owns the control of AER support.
+>>
+>> More details about this requirement can be found in PCIe Firmware
+>> specification v3.3, Table 4-6 Interpretation of the _OSC Control Field.
+>> If the OS supports the Error Disconnect Recover (EDR) feature and
+>> firmware sends the EDR event, then during the EDR recovery window, OS
+>> is responsible for the device error recovery and holds the ownership of
+>> the following error registers.
+>>
+>> • Device Status Register
+>> • Uncorrectable Error Status Register
+>> • Correctable Error Status Register
+>> • Root Error Status Register
+>> • RP PIO Status Register
+>>
+>> So call pcie_clear_device_status() in edr_handle_event() if the error
+>> recovery is successful.
+>>
+>> Reported-by: Tsaur Erwin <erwin.tsaur@intel.com>
+>> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> 
+> Sorry I spent so much time on this, but I finally applied it to
+> pci/aer for v6.4.
+> 
+> I added the "Fixes: 068c29a248b6" line.  It's not that 068c29a248b6 is
+> a bug, just that EDR relied on behavior that 068c29a248b6 legitimately
+> removed, so this patch should go where 068c29a248b6 goes.
+> 
 
-This is also part of the work that will be required for implementing GSP
-support for display. While the GSP should mostly work without this commit,
-this commit should fix some edge case bugs that can occur on initial driver
-load. This also paves the way for some of the initial groundwork for
-fastboot support.
+Agree
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
----
- drivers/gpu/drm/nouveau/dispnv50/disp.c       | 103 +++++++++++++++++-
- drivers/gpu/drm/nouveau/include/nvif/if0012.h |  18 +++
- drivers/gpu/drm/nouveau/include/nvif/outp.h   |   5 +
- drivers/gpu/drm/nouveau/nvif/outp.c           |  68 ++++++++++++
- .../gpu/drm/nouveau/nvkm/engine/disp/outp.c   |  40 +++++--
- .../gpu/drm/nouveau/nvkm/engine/disp/outp.h   |   3 +
- .../gpu/drm/nouveau/nvkm/engine/disp/uoutp.c  |  64 +++++++++++
- 7 files changed, 288 insertions(+), 13 deletions(-)
+> I wordsmithed the commit log to add hints about things I stumbled
+> over.  I'll post a follow-up patch to add a couple comments there,
+> too.
+> 
+> Thanks for your patience in educating me through all this.
 
-diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.c b/drivers/gpu/drm/nouveau/dispnv50/disp.c
-index ed9d374147b8..1c2dfae75c76 100644
---- a/drivers/gpu/drm/nouveau/dispnv50/disp.c
-+++ b/drivers/gpu/drm/nouveau/dispnv50/disp.c
-@@ -1711,7 +1711,8 @@ nv50_sor_create(struct drm_connector *connector, struct dcb_output *dcbe)
- 
- 	drm_connector_attach_encoder(connector, encoder);
- 
--	disp->core->func->sor->get_caps(disp, nv_encoder, ffs(dcbe->or) - 1);
-+	nv_encoder->or = ffs(dcbe->or) - 1;
-+	disp->core->func->sor->get_caps(disp, nv_encoder, nv_encoder->or);
- 	nv50_outp_dump_caps(drm, nv_encoder);
- 
- 	if (dcbe->type == DCB_OUTPUT_DP) {
-@@ -2473,6 +2474,103 @@ nv50_display_fini(struct drm_device *dev, bool runtime, bool suspend)
- 		cancel_work_sync(&drm->hpd_work);
- }
- 
-+static inline void
-+nv50_display_read_hw_or_state(struct drm_device *dev, struct nv50_disp *disp,
-+			      struct nouveau_encoder *outp)
-+{
-+	struct drm_crtc *crtc;
-+	struct drm_connector_list_iter conn_iter;
-+	struct drm_connector *conn;
-+	struct nv50_head_atom *armh;
-+	const u32 encoder_mask = drm_encoder_mask(&outp->base.base);
-+	bool found_conn = false, found_head = false;
-+	u8 proto;
-+	int head_idx;
-+	int ret;
-+
-+	switch (outp->dcb->type) {
-+	case DCB_OUTPUT_TMDS:
-+		ret = nvif_outp_inherit_tmds(&outp->outp, &proto);
-+		break;
-+	case DCB_OUTPUT_DP:
-+		ret = nvif_outp_inherit_dp(&outp->outp, &proto);
-+		break;
-+	case DCB_OUTPUT_LVDS:
-+		ret = nvif_outp_inherit_lvds(&outp->outp, &proto);
-+		break;
-+	case DCB_OUTPUT_ANALOG:
-+		ret = nvif_outp_inherit_rgb_crt(&outp->outp, &proto);
-+		break;
-+	default:
-+		drm_dbg_kms(dev, "Readback for %s not implemented yet, skipping\n",
-+			    outp->base.base.name);
-+		drm_WARN_ON(dev, true);
-+		return;
-+	}
-+	if (ret >= 0) {
-+		head_idx = ret;
-+		ret = 0;
-+	} else if (ret == -ENODEV) {
-+		return;
-+	}
-+
-+	drm_for_each_crtc(crtc, dev) {
-+		if (crtc->index != head_idx)
-+			continue;
-+
-+		armh = nv50_head_atom(crtc->state);
-+		found_head = true;
-+		break;
-+	}
-+	if (drm_WARN_ON(dev, !found_head))
-+		return;
-+
-+	/* Figure out which connector is being used by this encoder */
-+	drm_connector_list_iter_begin(dev, &conn_iter);
-+	nouveau_for_each_non_mst_connector_iter(conn, &conn_iter) {
-+		if (nouveau_connector(conn)->index == outp->dcb->connector) {
-+			found_conn = true;
-+			break;
-+		}
-+	}
-+	drm_connector_list_iter_end(&conn_iter);
-+	if (drm_WARN_ON(dev, !found_conn))
-+		return;
-+
-+	armh->state.encoder_mask = encoder_mask;
-+	armh->state.connector_mask = drm_connector_mask(conn);
-+	armh->state.active = true;
-+	armh->state.enable = true;
-+
-+	outp->crtc = crtc;
-+	outp->ctrl = NVVAL(NV507D, SOR_SET_CONTROL, PROTOCOL, proto) | BIT(crtc->index);
-+
-+	conn->state->crtc = crtc;
-+	conn->state->best_encoder = &outp->base.base;
-+}
-+
-+/* Read back the currently programmed display state */
-+void
-+nv50_display_read_hw_state(struct nouveau_drm *drm)
-+{
-+	struct drm_device *dev = drm->dev;
-+	struct drm_encoder *encoder;
-+	struct drm_modeset_acquire_ctx ctx;
-+	struct nv50_disp *disp = nv50_disp(dev);
-+	int ret;
-+
-+	DRM_MODESET_LOCK_ALL_BEGIN(dev, ctx, 0, ret);
-+
-+	drm_for_each_encoder(encoder, dev) {
-+		if (encoder->encoder_type == DRM_MODE_ENCODER_DPMST)
-+			continue;
-+
-+		nv50_display_read_hw_or_state(dev, disp, nouveau_encoder(encoder));
-+	}
-+
-+	DRM_MODESET_LOCK_ALL_END(dev, ctx, ret);
-+}
-+
- static int
- nv50_display_init(struct drm_device *dev, bool resume, bool runtime)
- {
-@@ -2490,6 +2588,9 @@ nv50_display_init(struct drm_device *dev, bool resume, bool runtime)
- 		}
- 	}
- 
-+	if (!runtime)
-+		nv50_display_read_hw_state(nouveau_drm(dev));
-+
- 	return 0;
- }
- 
-diff --git a/drivers/gpu/drm/nouveau/include/nvif/if0012.h b/drivers/gpu/drm/nouveau/include/nvif/if0012.h
-index eb99d84eb844..6a2dd58e711e 100644
---- a/drivers/gpu/drm/nouveau/include/nvif/if0012.h
-+++ b/drivers/gpu/drm/nouveau/include/nvif/if0012.h
-@@ -18,6 +18,7 @@ union nvif_outp_args {
- #define NVIF_OUTP_V0_DP_AUX_PWR  0x05
- #define NVIF_OUTP_V0_DP_RETRAIN  0x06
- #define NVIF_OUTP_V0_DP_MST_VCPI 0x07
-+#define NVIF_OUTP_V0_INHERIT     0x08
- 
- union nvif_outp_load_detect_args {
- 	struct nvif_outp_load_detect_v0 {
-@@ -69,6 +70,23 @@ union nvif_outp_acquire_args {
- 	} v0;
- };
- 
-+union nvif_outp_inherit_args {
-+	struct nvif_outp_inherit_v0 {
-+		__u8 version;
-+#define NVIF_OUTP_INHERIT_V0_RGB_CRT 0x00
-+#define NVIF_OUTP_INHERIT_V0_TV      0x01
-+#define NVIF_OUTP_INHERIT_V0_TMDS    0x02
-+#define NVIF_OUTP_INHERIT_V0_LVDS    0x03
-+#define NVIF_OUTP_INHERIT_V0_DP      0x04
-+		// In/out. Input is one of the above values, output is the actual hw protocol
-+		__u8 proto;
-+		__u8 or;
-+		__u8 link;
-+		__u8 head;
-+		__u8 pad[3];
-+	} v0;
-+};
-+
- union nvif_outp_release_args {
- 	struct nvif_outp_release_vn {
- 	} vn;
-diff --git a/drivers/gpu/drm/nouveau/include/nvif/outp.h b/drivers/gpu/drm/nouveau/include/nvif/outp.h
-index fa76a7b5e4b3..00d7ffb2d295 100644
---- a/drivers/gpu/drm/nouveau/include/nvif/outp.h
-+++ b/drivers/gpu/drm/nouveau/include/nvif/outp.h
-@@ -24,6 +24,11 @@ int nvif_outp_acquire_tmds(struct nvif_outp *, int head,
- int nvif_outp_acquire_lvds(struct nvif_outp *, bool dual, bool bpc8);
- int nvif_outp_acquire_dp(struct nvif_outp *outp, u8 dpcd[DP_RECEIVER_CAP_SIZE],
- 			 int link_nr, int link_bw, bool hda, bool mst);
-+int nvif_outp_inherit_rgb_crt(struct nvif_outp *outp, u8 *proto_out);
-+int nvif_outp_inherit_lvds(struct nvif_outp *outp, u8 *proto_out);
-+int nvif_outp_inherit_tmds(struct nvif_outp *outp, u8 *proto_out);
-+int nvif_outp_inherit_dp(struct nvif_outp *outp, u8 *proto_out);
-+
- void nvif_outp_release(struct nvif_outp *);
- int nvif_outp_infoframe(struct nvif_outp *, u8 type, struct nvif_outp_infoframe_v0 *, u32 size);
- int nvif_outp_hda_eld(struct nvif_outp *, int head, void *data, u32 size);
-diff --git a/drivers/gpu/drm/nouveau/nvif/outp.c b/drivers/gpu/drm/nouveau/nvif/outp.c
-index c24bc5eae3ec..02d7253f2299 100644
---- a/drivers/gpu/drm/nouveau/nvif/outp.c
-+++ b/drivers/gpu/drm/nouveau/nvif/outp.c
-@@ -196,6 +196,74 @@ nvif_outp_acquire_rgb_crt(struct nvif_outp *outp)
- 	return ret;
- }
- 
-+static int
-+nvif_outp_inherit(struct nvif_outp *outp,
-+		  u8 proto,
-+		  struct nvif_outp_inherit_v0 *args,
-+		  u8 *proto_out)
-+{
-+	int ret;
-+
-+	args->version = 0;
-+	args->proto = proto;
-+
-+	ret = nvif_mthd(&outp->object, NVIF_OUTP_V0_INHERIT, args, sizeof(*args));
-+	if (ret)
-+		return ret;
-+
-+	outp->or.id = args->or;
-+	outp->or.link = args->link;
-+	*proto_out = args->proto;
-+	return 0;
-+}
-+
-+int
-+nvif_outp_inherit_lvds(struct nvif_outp *outp, u8 *proto_out)
-+{
-+	struct nvif_outp_inherit_v0 args;
-+	int ret;
-+
-+	ret = nvif_outp_inherit(outp, NVIF_OUTP_INHERIT_V0_LVDS, &args, proto_out);
-+	NVIF_ERRON(ret && ret != -ENODEV, &outp->object, "[INHERIT proto:LVDS] ret:%d", ret);
-+	return ret ?: args.head;
-+}
-+
-+int
-+nvif_outp_inherit_tmds(struct nvif_outp *outp, u8 *proto_out)
-+{
-+	struct nvif_outp_inherit_v0 args;
-+	int ret;
-+
-+	ret = nvif_outp_inherit(outp, NVIF_OUTP_INHERIT_V0_TMDS, &args, proto_out);
-+	NVIF_ERRON(ret && ret != -ENODEV, &outp->object, "[INHERIT proto:TMDS] ret:%d", ret);
-+	return ret ?: args.head;
-+}
-+
-+int
-+nvif_outp_inherit_dp(struct nvif_outp *outp, u8 *proto_out)
-+{
-+	struct nvif_outp_inherit_v0 args;
-+	int ret;
-+
-+	ret = nvif_outp_inherit(outp, NVIF_OUTP_INHERIT_V0_DP, &args, proto_out);
-+	NVIF_ERRON(ret && ret != -ENODEV, &outp->object, "[INHERIT proto:DP] ret:%d", ret);
-+
-+	// TODO: Get current link info
-+
-+	return ret ?: args.head;
-+}
-+
-+int
-+nvif_outp_inherit_rgb_crt(struct nvif_outp *outp, u8 *proto_out)
-+{
-+	struct nvif_outp_inherit_v0 args;
-+	int ret;
-+
-+	ret = nvif_outp_inherit(outp, NVIF_OUTP_INHERIT_V0_RGB_CRT, &args, proto_out);
-+	NVIF_ERRON(ret && ret != -ENODEV, &outp->object, "[INHERIT proto:RGB_CRT] ret:%d", ret);
-+	return ret ?: args.head;
-+}
-+
- int
- nvif_outp_load_detect(struct nvif_outp *outp, u32 loadval)
- {
-diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.c b/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.c
-index 06b19883a06b..b6efb7e1ab47 100644
---- a/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.c
-@@ -102,8 +102,8 @@ nvkm_outp_release(struct nvkm_outp *outp, u8 user)
- 	}
- }
- 
--static inline int
--nvkm_outp_acquire_ior(struct nvkm_outp *outp, u8 user, struct nvkm_ior *ior)
-+int
-+_nvkm_outp_acquire_ior(struct nvkm_outp *outp, u8 user, struct nvkm_ior *ior)
- {
- 	outp->ior = ior;
- 	outp->ior->asy.outp = outp;
-@@ -123,7 +123,7 @@ nvkm_outp_acquire_hda(struct nvkm_outp *outp, enum nvkm_ior_type type,
- 		if (!ior->identity && ior->hda == hda &&
- 		    !ior->asy.outp && ior->type == type && !ior->arm.outp &&
- 		    (ior->func->route.set || ior->id == __ffs(outp->info.or)))
--			return nvkm_outp_acquire_ior(outp, user, ior);
-+			return _nvkm_outp_acquire_ior(outp, user, ior);
- 	}
- 
- 	/* Last resort is to assign an OR that's already active on HW,
-@@ -133,7 +133,7 @@ nvkm_outp_acquire_hda(struct nvkm_outp *outp, enum nvkm_ior_type type,
- 		if (!ior->identity && ior->hda == hda &&
- 		    !ior->asy.outp && ior->type == type &&
- 		    (ior->func->route.set || ior->id == __ffs(outp->info.or)))
--			return nvkm_outp_acquire_ior(outp, user, ior);
-+			return _nvkm_outp_acquire_ior(outp, user, ior);
- 	}
- 
- 	return -ENOSPC;
-@@ -162,7 +162,7 @@ nvkm_outp_acquire(struct nvkm_outp *outp, u8 user, bool hda)
- 		ior = nvkm_ior_find(outp->disp, SOR, ffs(outp->info.or) - 1);
- 		if (WARN_ON(!ior))
- 			return -ENOSPC;
--		return nvkm_outp_acquire_ior(outp, user, ior);
-+		return _nvkm_outp_acquire_ior(outp, user, ior);
- 	}
- 
- 	/* First preference is to reuse the OR that is currently armed
-@@ -182,7 +182,7 @@ nvkm_outp_acquire(struct nvkm_outp *outp, u8 user, bool hda)
- 			 *     This warning is to make it obvious if that proves wrong.
- 			 */
- 			WARN_ON(hda && !ior->hda);
--			return nvkm_outp_acquire_ior(outp, user, ior);
-+			return _nvkm_outp_acquire_ior(outp, user, ior);
- 		}
- 	}
- 
-@@ -214,30 +214,30 @@ nvkm_outp_fini(struct nvkm_outp *outp)
- 		outp->func->fini(outp);
- }
- 
--static void
--nvkm_outp_init_route(struct nvkm_outp *outp)
-+struct nvkm_ior *
-+nvkm_outp_get_current_ior(struct nvkm_outp *outp)
- {
- 	struct nvkm_disp *disp = outp->disp;
-+	struct nvkm_ior *ior;
- 	enum nvkm_ior_proto proto;
- 	enum nvkm_ior_type type;
--	struct nvkm_ior *ior;
- 	int id, link;
- 
- 	/* Find any OR from the class that is able to support this device. */
- 	proto = nvkm_outp_xlat(outp, &type);
- 	if (proto == UNKNOWN)
--		return;
-+		return NULL;
- 
- 	ior = nvkm_ior_find(disp, type, -1);
- 	if (WARN_ON(!ior))
--		return;
-+		return NULL;
- 
- 	/* Determine the specific OR, if any, this device is attached to. */
- 	if (ior->func->route.get) {
- 		id = ior->func->route.get(outp, &link);
- 		if (id < 0) {
- 			OUTP_DBG(outp, "no route");
--			return;
-+			return NULL;
- 		}
- 	} else {
- 		/* Prior to DCB 4.1, this is hardwired like so. */
-@@ -247,6 +247,22 @@ nvkm_outp_init_route(struct nvkm_outp *outp)
- 
- 	ior = nvkm_ior_find(disp, type, id);
- 	if (WARN_ON(!ior))
-+		return NULL;
-+
-+	return ior;
-+}
-+
-+static void
-+nvkm_outp_init_route(struct nvkm_outp *outp)
-+{
-+	enum nvkm_ior_proto proto;
-+	enum nvkm_ior_type type;
-+	struct nvkm_ior *ior;
-+
-+	/* Find any OR from the class that is able to support this device. */
-+	proto = nvkm_outp_xlat(outp, &type);
-+	ior = nvkm_outp_get_current_ior(outp);
-+	if (!ior)
- 		return;
- 
- 	/* Determine if the OR is already configured for this device. */
-diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.h b/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.h
-index b7631c1ab242..00d56274a565 100644
---- a/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.h
-+++ b/drivers/gpu/drm/nouveau/nvkm/engine/disp/outp.h
-@@ -74,8 +74,11 @@ void nvkm_outp_del(struct nvkm_outp **);
- void nvkm_outp_init(struct nvkm_outp *);
- void nvkm_outp_fini(struct nvkm_outp *);
- int nvkm_outp_acquire(struct nvkm_outp *, u8 user, bool hda);
-+int _nvkm_outp_acquire_ior(struct nvkm_outp *outp, u8 user, struct nvkm_ior *ior);
-+
- void nvkm_outp_release(struct nvkm_outp *, u8 user);
- void nvkm_outp_route(struct nvkm_disp *);
-+struct nvkm_ior *nvkm_outp_get_current_ior(struct nvkm_outp *outp);
- 
- struct nvkm_outp_func {
- 	void *(*dtor)(struct nvkm_outp *);
-diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/disp/uoutp.c b/drivers/gpu/drm/nouveau/nvkm/engine/disp/uoutp.c
-index 4f0ca709c85a..1d758e8b7486 100644
---- a/drivers/gpu/drm/nouveau/nvkm/engine/disp/uoutp.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/engine/disp/uoutp.c
-@@ -252,6 +252,69 @@ nvkm_uoutp_mthd_acquire(struct nvkm_outp *outp, void *argv, u32 argc)
- 	return 0;
- }
- 
-+static int
-+nvkm_uoutp_mthd_inherit(struct nvkm_outp *outp, void *argv, u32 argc)
-+{
-+	union nvif_outp_inherit_args *args = argv;
-+	struct nvkm_ior *ior;
-+	int ret = 0;
-+
-+	if (argc != sizeof(args->v0) || args->v0.version != 0)
-+		return -ENOSYS;
-+
-+	/* Ensure an ior is hooked up to this outp already */
-+	ior = nvkm_outp_get_current_ior(outp);
-+	if (!ior)
-+		return -ENODEV;
-+
-+	/* With iors, there will be a separate output path for each type of connector - and all of
-+	 * them will appear to be hooked up. Figure out which one is actually the one we're using
-+	 * based on the protocol we were given over nvif
-+	 */
-+	switch (args->v0.proto) {
-+	case NVIF_OUTP_INHERIT_V0_TMDS:
-+		if (ior->arm.proto != TMDS)
-+			return -ENODEV;
-+		break;
-+	case NVIF_OUTP_INHERIT_V0_DP:
-+		if (ior->arm.proto != DP)
-+			return -ENODEV;
-+		break;
-+	case NVIF_OUTP_INHERIT_V0_LVDS:
-+		if (ior->arm.proto != LVDS)
-+			return -ENODEV;
-+		break;
-+	case NVIF_OUTP_INHERIT_V0_TV:
-+		if (ior->arm.proto != TV)
-+			return -ENODEV;
-+		break;
-+	case NVIF_OUTP_INHERIT_V0_RGB_CRT:
-+		if (ior->arm.proto != CRT)
-+			return -ENODEV;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+
-+	/* Make sure that userspace hasn't already acquired this */
-+	if (outp->acquired) {
-+		OUTP_ERR(outp, "cannot inherit an already acquired (%02x) outp", outp->acquired);
-+		return -EBUSY;
-+	}
-+
-+	/* Mark the outp acquired by userspace now that we've confirmed it's already active */
-+	OUTP_TRACE(outp, "inherit %02x |= %02x %p", outp->acquired, NVKM_OUTP_USER, ior);
-+	_nvkm_outp_acquire_ior(outp, NVKM_OUTP_USER, ior);
-+
-+	args->v0.or = ior->id;
-+	args->v0.link = ior->arm.link;
-+	args->v0.head = ffs(ior->arm.head) - 1;
-+	args->v0.proto = ior->arm.proto_evo;
-+
-+	return ret;
-+}
-+
- static int
- nvkm_uoutp_mthd_load_detect(struct nvkm_outp *outp, void *argv, u32 argc)
- {
-@@ -297,6 +360,7 @@ nvkm_uoutp_mthd_noacquire(struct nvkm_outp *outp, u32 mthd, void *argv, u32 argc
- 	switch (mthd) {
- 	case NVIF_OUTP_V0_LOAD_DETECT: return nvkm_uoutp_mthd_load_detect(outp, argv, argc);
- 	case NVIF_OUTP_V0_ACQUIRE    : return nvkm_uoutp_mthd_acquire    (outp, argv, argc);
-+	case NVIF_OUTP_V0_INHERIT    : return nvkm_uoutp_mthd_inherit    (outp, argv, argc);
- 	case NVIF_OUTP_V0_DP_AUX_PWR : return nvkm_uoutp_mthd_dp_aux_pwr (outp, argv, argc);
- 	default:
- 		break;
+Thanks for working on it. I really appreciate your help.
+
+> 
+>> ---
+>>
+>> Changes since v1:
+>>  * Rebased on top of v6.3-rc1.
+>>  * Fixed a typo in pcie_clear_device_status().
+>>
+>>  drivers/pci/pcie/edr.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
+>> index a6b9b479b97a..87734e4c3c20 100644
+>> --- a/drivers/pci/pcie/edr.c
+>> +++ b/drivers/pci/pcie/edr.c
+>> @@ -193,6 +193,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
+>>  	 */
+>>  	if (estate == PCI_ERS_RESULT_RECOVERED) {
+>>  		pci_dbg(edev, "DPC port successfully recovered\n");
+>> +		pcie_clear_device_status(edev);
+>>  		acpi_send_edr_status(pdev, edev, EDR_OST_SUCCESS);
+>>  	} else {
+>>  		pci_dbg(edev, "DPC port recovery failed\n");
+>> -- 
+>> 2.34.1
+>>
+
 -- 
-2.39.2
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
