@@ -2,97 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC306DB998
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 10:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52A36DB996
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 10:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjDHIUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 04:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
+        id S229510AbjDHIUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 04:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbjDHIUr (ORCPT
+        with ESMTP id S229457AbjDHIUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 04:20:47 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9105ED530;
-        Sat,  8 Apr 2023 01:20:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=q88BU
-        pvmZ6iY8iv/Jnzwzgvp9hI37+33vq+2lKikbco=; b=dAVf0/BULyVNAFIhUE7HC
-        di4oMruLhZzo1nqJ3A+RfsZthCYWrZBSY4GNYRt8iTbEXusMBH0un0/Q3IIrIH4L
-        pJv3uCJPc2v8q6Ucgz7/W5dOJYtId50W0zPdAa0ugRBV7oCDBey81qxEDVQREg+X
-        QoAPTCq57un0Gdq2IM1v90=
-Received: from localhost.localdomain (unknown [106.39.149.90])
-        by zwqz-smtp-mta-g2-4 (Coremail) with SMTP id _____wDHhM2iIzFkqZh8Aw--.62148S2;
-        Sat, 08 Apr 2023 16:19:47 +0800 (CST)
-From:   Chen Aotian <chenaotian2@163.com>
-To:     alex.aring@gmail.com
-Cc:     stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Chen Aotian <chenaotian2@163.com>
-Subject: [PATH wpan v2] ieee802154: hwsim: Fix possible memory leaks
-Date:   Sat,  8 Apr 2023 16:19:34 +0800
-Message-Id: <20230408081934.54002-1-chenaotian2@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 8 Apr 2023 04:20:39 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70523C148
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 01:20:38 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 4E41A403B9;
+        Sat,  8 Apr 2023 13:20:22 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1680942024; bh=Y181UBUuQt0Yz6wrLdhP3fSIP/gjJyv15QxkjEagobQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=3vKEgYBGornwzWMelWt7EtctVaQhOrdarn9z1whe/u/khh7eTECg5YFqUmEcdP3gM
+         Mp52s7Co+rpXFfU+/nsApePsmXMAVAK1wlriErVpMYeXdOf1STHQDdtmazfRpxFfg+
+         /fd1KYDqR4YavhwXU6JyPNXcQ+KKVECUbj1LYzY2RK0+JUdwnVjasHGP6Q5tUk78bA
+         nZkczZqyqtWtJVrpPFbs4AeEaiV9v/h0JlysiMecVCVESrEWEpxloaTT/J55Lva8NF
+         buvbimuxWHRZ3gHEzZWysYCp9c1AIdqXrMbCcVfwk9Zc+FTL8lntcX3Pcx7HovGhAI
+         hLUJ6jeKkFWDA==
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org
+Cc:     airlied@gmail.com, daniel@ffwll.ch, dianders@chromium.org,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH] drm/bridge: ti-sn65dsi86: Implement wait_hpd_asserted
+Date:   Sat,  8 Apr 2023 13:20:14 +0500
+Message-Id: <20230408082014.235425-1-nikita@trvn.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDHhM2iIzFkqZh8Aw--.62148S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zw4DAF1UJw4UuF48XF17trb_yoW8Wr1fpF
-        Wj9asIyr48tF1xW3yDCw4kAa4Sqayru348urWfKa9xZ3W2qr409r17GF1Svr45JrZ7C3WS
-        yF4qqrnIvw1DArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j1eHgUUUUU=
-X-Originating-IP: [106.39.149.90]
-X-CM-SenderInfo: xfkh0tprwlt0qs6rljoofrz/xtbBEQZLwFaENWcJDwAAsa
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After replacing e->info, it is necessary to free the old einfo.
+This bridge doesn't actually implement HPD due to it being way too slow
+but instead expects the panel driver to wait enough to assume HPD is
+asserted. However some panels (such as the generic 'edp-panel') expect
+the bridge to deal with the delay and pass maximum delay to the aux
+instead.
 
-Fixes: f25da51fdc38 ("ieee802154: hwsim: add replacement for fakelb")
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Signed-off-by: Chen Aotian <chenaotian2@163.com>
+In order to support such panels, add a dummy implementation of wait
+that would just sleep the maximum delay and assume no failure has
+happened.
+
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 ---
+This was suggested in [1] to make sure DT users can be semantically
+correct (not adding no-hpd when the line is actually there) while
+still using a hard delay to be faster than waiting the long debounce
+time.
 
-V1 -> V2:
-* Using rcu_replace_pointer() is better then rcu_dereference()
-  and rcu_assign_pointer().
+[1] - https://lore.kernel.org/all/CAD=FV=VR7sKsquE25eF7joc7gPApu-vqwduZzjE=wFCoXjMYnQ@mail.gmail.com/
+---
+ drivers/gpu/drm/bridge/ti-sn65dsi86.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
- drivers/net/ieee802154/mac802154_hwsim.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ieee802154/mac802154_hwsim.c b/drivers/net/ieee802154/mac802154_hwsim.c
-index 8445c2189..6ffcadb9d 100644
---- a/drivers/net/ieee802154/mac802154_hwsim.c
-+++ b/drivers/net/ieee802154/mac802154_hwsim.c
-@@ -685,7 +685,7 @@ static int hwsim_del_edge_nl(struct sk_buff *msg, struct genl_info *info)
- static int hwsim_set_edge_lqi(struct sk_buff *msg, struct genl_info *info)
+diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+index 7a748785c545..260cad1fd1da 100644
+--- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
++++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+@@ -618,6 +618,24 @@ static ssize_t ti_sn_aux_transfer(struct drm_dp_aux *aux,
+ 	return len;
+ }
+ 
++static int ti_sn_aux_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us)
++{
++	/*
++	 * The HPD in this chip is a bit useless (See comment in
++	 * ti_sn65dsi86_enable_comms) so if our driver is expected to wait
++	 * for HPD, we just assume it's asserted after the wait_us delay.
++	 *
++	 * In case we are asked to wait forever (wait_us=0) take conservative
++	 * 500ms delay.
++	 */
++	if (wait_us == 0)
++		wait_us = 500000;
++
++	usleep_range(wait_us, wait_us + 1000);
++
++	return 0;
++}
++
+ static int ti_sn_aux_probe(struct auxiliary_device *adev,
+ 			   const struct auxiliary_device_id *id)
  {
- 	struct nlattr *edge_attrs[MAC802154_HWSIM_EDGE_ATTR_MAX + 1];
--	struct hwsim_edge_info *einfo;
-+	struct hwsim_edge_info *einfo, *einfo_old;
- 	struct hwsim_phy *phy_v0;
- 	struct hwsim_edge *e;
- 	u32 v0, v1;
-@@ -723,8 +723,10 @@ static int hwsim_set_edge_lqi(struct sk_buff *msg, struct genl_info *info)
- 	list_for_each_entry_rcu(e, &phy_v0->edges, list) {
- 		if (e->endpoint->idx == v1) {
- 			einfo->lqi = lqi;
--			rcu_assign_pointer(e->info, einfo);
-+			einfo_old = rcu_replace_pointer(e->info, einfo,
-+							lock_is_held(&hwsim_phys_lock));
- 			rcu_read_unlock();
-+			kfree_rcu(einfo_old, rcu);
- 			mutex_unlock(&hwsim_phys_lock);
- 			return 0;
- 		}
+@@ -627,6 +645,7 @@ static int ti_sn_aux_probe(struct auxiliary_device *adev,
+ 	pdata->aux.name = "ti-sn65dsi86-aux";
+ 	pdata->aux.dev = &adev->dev;
+ 	pdata->aux.transfer = ti_sn_aux_transfer;
++	pdata->aux.wait_hpd_asserted = ti_sn_aux_wait_hpd_asserted;
+ 	drm_dp_aux_init(&pdata->aux);
+ 
+ 	ret = devm_of_dp_aux_populate_ep_devices(&pdata->aux);
 -- 
-2.25.1
+2.39.2
 
