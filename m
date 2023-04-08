@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB99F6DBAD9
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485206DBADA
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjDHM0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 08:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32790 "EHLO
+        id S230331AbjDHM0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 08:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjDHM0A (ORCPT
+        with ESMTP id S230255AbjDHM0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 08:26:00 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750A9EF92
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 05:25:43 -0700 (PDT)
-Date:   Sat, 08 Apr 2023 12:25:34 +0000
+        Sat, 8 Apr 2023 08:26:38 -0400
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0A3113C0
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 05:26:14 -0700 (PDT)
+Date:   Sat, 08 Apr 2023 12:25:39 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680956741; x=1681215941;
-        bh=35ec0Ze6x4vGPDCyxTq1eqzjMeEQtTPCRJPMgIkdSpQ=;
+        s=protonmail3; t=1680956752; x=1681215952;
+        bh=7rH6H6G+ATzJ5NdhnHFFoHIa5Qvd43Dus1uGWQ71zqY=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=FYV5X6kKzH5aJLDgjemr4GztE2oe4Czvvz/JEScQv86bVFwyj0bZQ1YRQ1hXChD9m
-         3TfJzwTozZAHgbsWWOZFmPzRq+oxCGxUubp6HDE1DA/kfD2Jl3me0k1jwGXVMFL7z1
-         G3PtJmyAHAvFh4bu8fmOqU6fUhvBZ4zTl2OnBlgsn5wTU0dbtv4rMv8j6Hgx+MG3iv
-         /jmRBJoVztPeM8++iv/hgDoghU2IlJTC/z5XU/5+0xPRd8G9p/+5WdM5jBE9tJkzxm
-         bWSk1b7oP1fY8hLYYx7rVrfQl3Efnj57NMVrR1orrmdGJfkmE2/0WKmBJ1K/XEuJWK
-         usrgK6JiuE8fg==
+        b=wYbDYJmraPxCNtugfl+8EK4ojUD3Ko0hK6aHHcOlLx0R9+315OfBsZnO80StwEO6Z
+         e+z7tdr+IvLyy2OkDHyMY7VLCRqEbPJ2YbCWtRnKhwvEAgPuxl6gK8O6H5p3PwuBg9
+         EcSz2h+L4QvVhF3wI7W28D2bNfDzrPi/B/kVMHjEksLKrpwmCkiOc1JJV0ZGs9GJpe
+         MeYi2OeYZyw2OqmwL7jIJJ7jZwmCQTjsJs+cXVAPaN0Dt4UUiTnzV13VPhWLY1Tpct
+         VZ2A97rSNk2LxUJ2S+YQaqJAPj5oxBNgTYC3miw+8jf9UmXRHijjf5QQ03P3JckqvD
+         97JWFxJ34j1NQ==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -37,11 +37,10 @@ To:     Miguel Ojeda <ojeda@kernel.org>,
 From:   Benno Lossin <y86-dev@protonmail.com>
 Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
-        Wedson Almeida Filho <walmeida@microsoft.com>,
         Andreas Hindborg <a.hindborg@samsung.com>,
         Alice Ryhl <aliceryhl@google.com>
-Subject: [PATCH v7 04/15] rust: sync: add `assume_init` to `UniqueArc`
-Message-ID: <20230408122429.1103522-5-y86-dev@protonmail.com>
+Subject: [PATCH v7 05/15] rust: types: add `Opaque::raw_get`
+Message-ID: <20230408122429.1103522-6-y86-dev@protonmail.com>
 In-Reply-To: <20230408122429.1103522-1-y86-dev@protonmail.com>
 References: <20230408122429.1103522-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -58,44 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds the `assume_init` function to `UniqueArc<MaybeUninit<T>>` that
-unsafely assumes the value to be initialized and yields a value of type
-`UniqueArc<T>`. This function is used when manually initializing the
-pointee of an `UniqueArc`.
+This function mirrors `UnsafeCell::raw_get`. It avoids creating a
+reference and allows solely using raw pointers.
+The `pin-init` API will be using this, since uninitialized memory
+requires raw pointers.
 
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
-Reviewed-by: Wedson Almeida Filho <walmeida@microsoft.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
 Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 ---
- rust/kernel/sync/arc.rs | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ rust/kernel/types.rs | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
-index aa7135f0f238..eee7008e5e3e 100644
---- a/rust/kernel/sync/arc.rs
-+++ b/rust/kernel/sync/arc.rs
-@@ -489,6 +489,17 @@ impl<T> UniqueArc<MaybeUninit<T>> {
-     /// Converts a `UniqueArc<MaybeUninit<T>>` into a `UniqueArc<T>` by wr=
-iting a value into it.
-     pub fn write(mut self, value: T) -> UniqueArc<T> {
-         self.deref_mut().write(value);
-+        // SAFETY: We just wrote the value to be initialized.
-+        unsafe { self.assume_init() }
-+    }
+diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+index 9d0fdbc55843..ff2b2fac951d 100644
+--- a/rust/kernel/types.rs
++++ b/rust/kernel/types.rs
+@@ -238,6 +238,14 @@ impl<T> Opaque<T> {
+     pub fn get(&self) -> *mut T {
+         UnsafeCell::raw_get(self.0.as_ptr())
+     }
 +
-+    /// Unsafely assume that `self` is initialized.
++    /// Gets the value behind `this`.
 +    ///
-+    /// # Safety
-+    ///
-+    /// The caller guarantees that the value behind this pointer has been =
-initialized. It is
-+    /// *immediate* UB to call this when the value is not initialized.
-+    pub unsafe fn assume_init(self) -> UniqueArc<T> {
-         let inner =3D ManuallyDrop::new(self).inner.ptr;
-         UniqueArc {
-             // SAFETY: The new `Arc` is taking over `ptr` from `self.inner=
-` (which won't be
++    /// This function is useful to get access to the value without creatin=
+g intermediate
++    /// references.
++    pub const fn raw_get(this: *const Self) -> *mut T {
++        UnsafeCell::raw_get(this.cast::<UnsafeCell<T>>())
++    }
+ }
+
+ /// A sum type that always holds either a value of type `L` or `R`.
 --
 2.39.2
 
