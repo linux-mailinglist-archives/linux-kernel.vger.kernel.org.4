@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076EC6DB778
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 02:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A419C6DB786
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 02:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjDHAAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 20:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        id S229720AbjDHAKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 20:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjDGX76 (ORCPT
+        with ESMTP id S229454AbjDHAKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 19:59:58 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F8FBB96;
-        Fri,  7 Apr 2023 16:59:57 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id z9so94624ybs.9;
-        Fri, 07 Apr 2023 16:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680911997; x=1683503997;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mGZafIXu1oZoLrFZaJuaTlQovGr7le+3cdq/cC4fsMs=;
-        b=mVY1J6nlfbu/iYNUUB1czpzlhOwb6wotQJWPnqexv2JfgOnhKeRX/F+x4jXLi4KF4T
-         u5xIxlRTrqStnOiox2EguzbvIiDwEd8bQ8owcaDQeXZd9bVw7BgD4FlfQmdQvaR8lTQ0
-         mtjFdli66KAO9crZx1LlPIcO+bVH4674rJE6gG+7Pg9ZI84IdnHA8Sk8foPtKdqgZiCn
-         Wk7LMnTUMXIcM0dj+S40slHKAXaq/vP0jokBTgo/7dLNggylJuApVWHPCxgRIWshDvXm
-         n7lpCF9BHx+UCQnJC64VpxS2/y8hIdOpyiByxo4jj46wiSmlm2HaG7HAG0PxzUdBSEX+
-         pFCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680911997; x=1683503997;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mGZafIXu1oZoLrFZaJuaTlQovGr7le+3cdq/cC4fsMs=;
-        b=dS+2UYZxyzZKEEnlO1npA9Lsr4Zu3NRindkPxHPkvW9EWZzpQBtEkM60QML7NT811I
-         GrQuZQ0cdmGmDHCG1bMX8TH3zmXbYDnqvkwlVICC0jyDlAxIK43tvJmKy3b7KKawkbKO
-         LkoSo0uT8GmOM39hz3sCn4qomXIBeVQrcuBgMStKE8F/c5Tt+Fvkjm6BPIko90MmdEd9
-         dPGXZ98D4fKiLNww4vMVFaXVh81mEmCFGKnWnKaGchupRnAa2VQjBfEbuBBszeNHyA53
-         +dKhVQEPJauYoEuOAt9LjxI5K0hMVlz0FOL3arfHGeIVSKCJaIwSoGthZqqq2DtkM0Aj
-         B+VQ==
-X-Gm-Message-State: AAQBX9eucAJ3hEzQifXPc6dFerZXuWkyYlEMdIr7eqMK/81jY8B60GDm
-        7RJNXR5OlYvBCcAqMg11PNdJwrEh1F1GhsrbF0o=
-X-Google-Smtp-Source: AKy350ZpczCV/ZtLHhbbuXp2lBGHxIpWYiQmG6s+QUOx8PqHwoFw68K8f5Hrb4p88m8kd/Us5psKv5+ktMAeBr1z4Tg=
-X-Received: by 2002:a25:df47:0:b0:b8e:ce2d:290a with SMTP id
- w68-20020a25df47000000b00b8ece2d290amr337491ybg.11.1680911996813; Fri, 07 Apr
- 2023 16:59:56 -0700 (PDT)
+        Fri, 7 Apr 2023 20:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B97A1206D;
+        Fri,  7 Apr 2023 17:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F50965470;
+        Sat,  8 Apr 2023 00:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33220C433EF;
+        Sat,  8 Apr 2023 00:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680912617;
+        bh=okAm7dvPQI8Xmx3ABwPMyvuvipeW06J4NsWZJZRNLAU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BRBTZBtUo5UTZ02rCI45m2XEEEwvBingYjZrSIRu/KUIvqAhwbdZRTg2iKRa3aF7e
+         yv1cLpzMY1bDnV7E5jPaYhI/BHJE1RtMWX8Znm3bLI68x14HfmYizxFg7tsekWWoYL
+         oCg2QD6GuS2L5O3X2zyiAkrkBzCuFrHIXPdPoBwRMA7nsmZhOaL5vpfjPHIGNwLSsS
+         0ip1OzD6MnRNyK8bXZiqQkCHGB0h2q5jJddi1ZTyHFo88laV/rZt5ELMV4iVlSq+US
+         2GaI/jhstL12ha7ecAULffpAUtI6WVGtBz5mw9YsLDASmOhackAmmVqJ9dsExT/XJX
+         fTf7BZYZVH+Ew==
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-btrfs@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-scsi@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH 00/12] Sprinkle more __noreturn
+Date:   Fri,  7 Apr 2023 17:09:53 -0700
+Message-Id: <cover.1680912057.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <CANiq72k4cOEOykgUhgqaXPC7xhX2EoC8c4sr1oFEhKMfEdi=wA@mail.gmail.com>
- <20230121052507.885734-1-varmavinaym@gmail.com> <CAK7LNAT1p=ykc1yruvzRiYthCAuXNcLq9461Mdgz95Z39_MYxQ@mail.gmail.com>
- <ZAdYIMYAwsOwErIl@nvrarch> <CANiq72=mg3LEdqaiy+4VDn67-C++Fyz21gefns_EvgUwGfPCTQ@mail.gmail.com>
-In-Reply-To: <CANiq72=mg3LEdqaiy+4VDn67-C++Fyz21gefns_EvgUwGfPCTQ@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Sat, 8 Apr 2023 01:59:45 +0200
-Message-ID: <CANiq72kD_ESDSh-gVmUS18HtVmkY=bgxkR7Wo=OiwfMyyD8EFw@mail.gmail.com>
-Subject: Re: [PATCH v2] scripts: `make rust-analyzer` for out-of-tree modules
-To:     Vinay Varma <varmavinaym@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>, alicef@alicef.me,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 8:55=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> No problem -- thanks!
->
-> Note that we may need a rebase after
-> https://lore.kernel.org/rust-for-linux/20230307120736.75492-1-nmi@metaspa=
-ce.dk/
-> (or equivalent) lands in `rust-fixes`. So perhaps wait for that, then
-> rebase (especially if we go with the EAFP style), and then others may
-> want to give it a spin for a re-test.
->
-> When you rebase, please consider putting `f"{name}.o"` inside the
-> function to avoid repetition, and perhaps consider inverting the
-> condition to avoid indenting the file further (and reducing the diff).
-> It makes the "Skip ..." comment more understandable (otherwise, you
-> may want to change the comment to "Only process ..." or similar
-> instead of using "Skip ...").
+Add some more __noreturn annotations.
 
-The EAFP style change landed in `rust-fixes` at
-https://github.com/Rust-for-Linux/linux/commit/5c7548d5a25306dcdb97689479be=
-81cacc8ce596.
+Many of these have been flushed out by kernel IBT support which made
+objtool vmlinux validation much more common.
 
-Cheers,
-Miguel
+These annotations are generally a good thing as they improve readability
+and code generation.
+
+
+Guilherme G. Piccoli (1):
+  x86/hyperv: Mark hv_ghcb_terminate() as noreturn
+
+Josh Poimboeuf (10):
+  init: Mark [arch_call_]rest_init() __noreturn
+  init: Mark start_kernel() __noreturn
+  x86/head: Mark *_start_kernel() __noreturn
+  btrfs: Mark btrfs_assertfail() __noreturn
+  arm64/cpu: Mark cpu_park_loop() and friends __noreturn
+  cpu: Mark panic_smp_self_stop() __noreturn
+  cpu: Mark nmi_panic_self_stop() __noreturn
+  x86/cpu: Mark {hlt,resume}_play_dead() __noreturn
+  objtool: Include weak functions in global_noreturns check
+  scsi: message: fusion: Mark mpt_halt_firmware() __noreturn
+
+ arch/arm/kernel/smp.c              |  2 +-
+ arch/arm64/include/asm/exception.h |  2 +-
+ arch/arm64/include/asm/smp.h       |  7 +++----
+ arch/arm64/kernel/entry-common.c   |  2 +-
+ arch/arm64/kernel/smp.c            | 10 ++++++----
+ arch/arm64/kernel/traps.c          |  3 +--
+ arch/powerpc/kernel/setup_64.c     |  2 +-
+ arch/s390/kernel/setup.c           |  2 +-
+ arch/x86/hyperv/ivm.c              |  2 +-
+ arch/x86/include/asm/mshyperv.h    |  2 +-
+ arch/x86/include/asm/reboot.h      |  1 -
+ arch/x86/include/asm/setup.h       |  6 +++---
+ arch/x86/include/asm/smp.h         |  2 +-
+ arch/x86/kernel/head32.c           |  2 +-
+ arch/x86/kernel/head64.c           |  4 ++--
+ arch/x86/kernel/reboot.c           |  2 +-
+ arch/x86/kernel/smpboot.c          |  2 +-
+ arch/x86/power/cpu.c               |  2 +-
+ drivers/message/fusion/mptbase.c   |  2 +-
+ drivers/message/fusion/mptbase.h   |  2 +-
+ fs/btrfs/messages.c                |  2 +-
+ fs/btrfs/messages.h                |  2 +-
+ include/linux/smp.h                |  4 ++--
+ include/linux/start_kernel.h       |  6 +++---
+ init/main.c                        |  6 +++---
+ kernel/panic.c                     |  4 ++--
+ tools/objtool/check.c              | 20 ++++++++++++++++----
+ 27 files changed, 57 insertions(+), 46 deletions(-)
+
+-- 
+2.39.2
+
