@@ -2,142 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14646DB90D
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 07:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984CD6DB90F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 07:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjDHFWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 01:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        id S229852AbjDHF1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 01:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjDHFWs (ORCPT
+        with ESMTP id S229457AbjDHF07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 01:22:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9837BBDD2;
-        Fri,  7 Apr 2023 22:22:42 -0700 (PDT)
-X-UUID: 5ecb7e56d5cd11edb6b9f13eb10bd0fe-20230408
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Wdlz1937eg98NYAB81abic14zLCB/RzHOwbInQ9humY=;
-        b=hvQJikB/1Nc8NvLlEUZJGrU4Wf/bXW/yOpA9LCkozheJr5PaNqhiMq/T/s33dgCivmbmoIyZTGk+s5dWU7lF8nzqJ4tDfHPS8Y+R+rjF6mzywjk1UdjRY2Nw6H6x1xQEV5mF3yqywN9y1A+mDN+xSydamZGgxv0sJbJ4KJTfFFA=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:42bf6f06-109c-45ce-a628-11ce0c3c0bc7,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACT
-        ION:release,TS:75
-X-CID-INFO: VERSION:1.1.22,REQID:42bf6f06-109c-45ce-a628-11ce0c3c0bc7,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:75
-X-CID-META: VersionHash:120426c,CLOUDID:ad781ff8-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:230408132236CR9EZPQB,BulkQuantity:0,Recheck:0,SF:29|28|17|19|48|38,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 5ecb7e56d5cd11edb6b9f13eb10bd0fe-20230408
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <tze-nan.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 84322464; Sat, 08 Apr 2023 13:22:35 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Sat, 8 Apr 2023 13:22:34 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Sat, 8 Apr 2023 13:22:34 +0800
-From:   Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>
-CC:     <bobule.chang@mediatek.com>, <wsd_upstream@mediatek.com>,
-        <Tze-nan.Wu@mediatek.com>, <stable@vger.kernel.org>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH] ring-buffer: Prevent inconsistent operation on cpu_buffer->resize_disabled
-Date:   Sat, 8 Apr 2023 13:22:26 +0800
-Message-ID: <20230408052226.25268-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Sat, 8 Apr 2023 01:26:59 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC994C31
+        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 22:26:33 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a4f8e5d190so1905445ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 22:26:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1680931593;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l9Ug1/tPy8825Ij6g3Q1xr/XLB0Q00SXY0Q+3fkJ87I=;
+        b=Yb3hSRf2FsUFXMLYYdY9LMwFMyWb8qrW/uxnioGRwu+ZnGIYTc8KU1p8nH4W5OTqbM
+         BOJf2IueXnELAbFsVGUxTJ2nvJLbionN6t0/S6kDlLw1tsaAcpSY4nTeHwXcYwF2Xqa4
+         A4oeAHjLyOD5q7faetdPAjnXuqoiriwCFIDv0skoViXZCv4coseA4zh4D4yN8+EEMBrq
+         CNJMgm4SPaKqQT1eY18lt8w8Y15kjsW88cClXT23pEgzGgJlcFecZ2JT4tizdxTAArpl
+         mCHHViiS3ujfnW19hJ5p1wlTtNHRjEaNmXjJPulxvPHjTnKc2ZpvjABhG/nsST6E7/R/
+         3Kow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680931593;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l9Ug1/tPy8825Ij6g3Q1xr/XLB0Q00SXY0Q+3fkJ87I=;
+        b=XvesW8pSKeO2okyn8w8mu3IF+9S2Nu/j+JPyAV1BwVv/iDY6wDuTixDsTaIjIHVc1c
+         bXrKbnxXLIHiU+9jN8sPxUxb1QrozdC5TngoB2EI7jotlHEYwlAR2kPNcw1WnYMlP8XF
+         F7j23h8FeVFezhcwGifY41Stc92QzIULXneNbNlPdv1Oe2SfMbmQBSMkmjorzneWOUdA
+         qp+F96LbVcCZMz1OpELbESSQYqSd/R6roGeB0tio8xOUgZgIgQh9TYlAulHS3O0nWQwh
+         MCAJPLno0tdhVtiueCUylQrSIRHnivJ2YM+ATWcb3oOht/0hO95WKpLkp/a6dQsHwM9t
+         GG8A==
+X-Gm-Message-State: AAQBX9fUyUWGrQ6JaUyfaGDFu+CNFIg37iQ0ROiPk6ybAHf8+N8kLjUE
+        hcJnSMIy/0c5D2Xo2YTupuFp+A==
+X-Google-Smtp-Source: AKy350b6rxsMthHttFIFvHXUtFDFD45Cs8NNVldbiRe3+CV6zEPtKKyeg6QyZduXHD/Sk8B/19VOZQ==
+X-Received: by 2002:a17:90a:2c0c:b0:244:a41a:f658 with SMTP id m12-20020a17090a2c0c00b00244a41af658mr1430858pjd.4.1680931592790;
+        Fri, 07 Apr 2023 22:26:32 -0700 (PDT)
+Received: from [10.200.9.10] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id cm24-20020a17090afa1800b0023af4eb597csm5459137pjb.52.2023.04.07.22.26.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Apr 2023 22:26:32 -0700 (PDT)
+Message-ID: <9bd50ce2-0ac8-a5dc-a584-0610891c7805@bytedance.com>
+Date:   Sat, 8 Apr 2023 13:26:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [PATCH 1/2] x86: make profile_pc() use arch_stack_walk()
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     peterz@infradead.org, keescook@chromium.org,
+        dave.hansen@linux.intel.com, bp@alien8.de, mingo@redhat.com,
+        tglx@linutronix.de, rostedt@goodmis.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Andi Kleen <ak@linux.intel.com>
+References: <20230330081552.54178-1-zhengqi.arch@bytedance.com>
+ <20230330081552.54178-2-zhengqi.arch@bytedance.com>
+ <20230408045619.m5zfbispodf4zjvz@treble>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20230408045619.m5zfbispodf4zjvz@treble>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sometimes, write to buffer_size_kb can be permanently failure if we change
-the cpu_online_mask between two for_each_online_buffer_cpu loops in
-function ring_buffer_reset_online_cpus.
 
-The number of increasing and decreasing on cpu_buffer->resize_disable
-may be inconsistent, leading the resize_disabled in some CPUs becoming
-none zero after ring_buffer_reset_online_cpus return.
 
-This issue can be reproduced by "echo 0 > trace" and hotplug cpu at the
-same time. After reproducing succeess, we can find out the attempt to
-write to buffer_size_kb node failure every time.
+On 2023/4/8 12:56, Josh Poimboeuf wrote:
+> On Thu, Mar 30, 2023 at 04:15:51PM +0800, Qi Zheng wrote:
+>> The profile_pc() try to get pc by doing a trick to read
+>> the contents of the stack. This may cause false positives
+>> for KASAN, like the following:
+>>
+>>   BUG: KASAN: stack-out-of-bounds in profile_pc+0x5b/0x90
+>>   Read of size 8 at addr ffff8881062a7a00 by task id/130040
+> 
+> I don't think this was actually a false positive.  The !FRAME_POINTER
+> code in profile_pc() has been badly broken for many years.
+> 
+> BTW, there was a similar patch here:
+> 
+>    https://lore.kernel.org/lkml/20230224021858.120078-1-chenzhongjin@huawei.com/
 
-This patch prevent the inconsistent increasing and decreasing on
-cpu_buffer->resize_disabled by copying the cpu_online_mask at the
-beginning of the function.
+Ah.
 
-But I wonder if there's any side-effect of this patch,
-since the behavior changed, if we turn on a cpu between the two loops,
-reset_disabled_cpu_buffer() of that cpu won't be run as before,
-meaning the cpu_buffer on that cpu just awake will not be cleaned up.
+> 
+> I thought CONFIG_PROFILING was obsolete but Andi said previously he
+> wants to keep it for at least boot-time profiling.
+> 
+> Andi did suggest removing the lock profiling hacks, which means all the
+> profile_pc() implementations can just be removed in favor of the generic
+> instruction_pointer().
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
----
- kernel/trace/ring_buffer.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+That's great, and I see Chen Zhongjin will send a new patch for this,
+let him continue this work. :)
 
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 76a2d91eecad..468f46bba71e 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -288,9 +288,6 @@ EXPORT_SYMBOL_GPL(ring_buffer_event_data);
- #define for_each_buffer_cpu(buffer, cpu)		\
- 	for_each_cpu(cpu, buffer->cpumask)
- 
--#define for_each_online_buffer_cpu(buffer, cpu)		\
--	for_each_cpu_and(cpu, buffer->cpumask, cpu_online_mask)
--
- #define TS_SHIFT	27
- #define TS_MASK		((1ULL << TS_SHIFT) - 1)
- #define TS_DELTA_TEST	(~TS_MASK)
-@@ -5353,12 +5350,15 @@ EXPORT_SYMBOL_GPL(ring_buffer_reset_cpu);
- void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
- {
- 	struct ring_buffer_per_cpu *cpu_buffer;
-+	cpumask_var_t reset_online_mask;
- 	int cpu;
- 
- 	/* prevent another thread from changing buffer sizes */
- 	mutex_lock(&buffer->mutex);
- 
--	for_each_online_buffer_cpu(buffer, cpu) {
-+	cpumask_copy(reset_online_mask, cpu_online_mask);
-+
-+	for_each_cpu_and(cpu, buffer->cpumask, reset_online_mask) {
- 		cpu_buffer = buffer->buffers[cpu];
- 
- 		atomic_inc(&cpu_buffer->resize_disabled);
-@@ -5368,7 +5368,7 @@ void ring_buffer_reset_online_cpus(struct trace_buffer *buffer)
- 	/* Make sure all commits have finished */
- 	synchronize_rcu();
- 
--	for_each_online_buffer_cpu(buffer, cpu) {
-+	for_each_cpu_and(cpu, buffer->cpumask, reset_online_mask) {
- 		cpu_buffer = buffer->buffers[cpu];
- 
- 		reset_disabled_cpu_buffer(cpu_buffer);
+> 
+
 -- 
-2.18.0
-
+Thanks,
+Qi
