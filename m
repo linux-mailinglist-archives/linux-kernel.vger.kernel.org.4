@@ -2,176 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594356DB9F4
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 11:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E881B6DB9E2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 11:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjDHJrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 05:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S229886AbjDHJeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 05:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjDHJru (ORCPT
+        with ESMTP id S230030AbjDHJed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 05:47:50 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F4CCC2C;
-        Sat,  8 Apr 2023 02:47:49 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id qb20so1509861ejc.6;
-        Sat, 08 Apr 2023 02:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680947267; x=1683539267;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a7JcVwqthdcJ8hCQRH20mpyswxWH0pIeDYiRTxlRyzE=;
-        b=GrOTY5DqaxGZuDFLw9SJTkHvxA73yO/zPw/FZKG55r+tjyVbuOG+a2XAJUlYkxu+ku
-         1pwXUF0J7QenhGNPYk2ljI8NhvtWOFetj+golw0VWH+Y4Nw4CpMaYl0a6zIFMJbMnysc
-         WDNkab6lVRbLfP1a+o0Ef8S4x9x65IQ23WZZY4mqpCY8uBwLUXQys/oAMCF/Q7ExVfmH
-         1bL0xYnF9N/Y1B+4kkcqMY1KHCvEwW6U4dZUj0crpahel0qCBNO7pQDEiHlFSU8dDGB6
-         OLS3BtHd1OQQ39TRP73/Sm/eGJo+oGGJLfswJ+UMOjl4FJ/i6CcEbUKl7/yEGZxl0HEe
-         S3gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680947267; x=1683539267;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a7JcVwqthdcJ8hCQRH20mpyswxWH0pIeDYiRTxlRyzE=;
-        b=CZcZW7ABmax0TNnhDfE188Zy1ZwhHbj8HxCH8p6yO/fom4NCXNplQrYHKQuVCM/9L+
-         VZDtAQWYygwynfgqPp69v9pD60OJvcPavjZmWc4Y9kXjAnaAwBCE2m5x9070U3W5zjfJ
-         auhbghSWeVVUU9EKmT2JTTIQEJxItY7C1g/+8+i3JvjoBopB+C3gKP1qzqUBK+TgGQyA
-         Z2sh2F5EXZjwVD9cz+bguvH+U1beImLaQDa3uAowKiKSzBMFQfng1Dqia5Qtje+tPneq
-         PRgxi7mhkGJw2lpBVVhOhojhg3fouRds5rjlsV4lmO1Pme+bYxvskZE4wg28Z/U3ffX3
-         EN8A==
-X-Gm-Message-State: AAQBX9e5uHXr+8NxM6Sa0t3nYJKQCW5aMrumCG7esc5njmPMicaCg8d8
-        3Of4FRLDdpCJCXniLN9/weU=
-X-Google-Smtp-Source: AKy350b6o8A/fVh/YL6rI4iMR4TK2MLQhaSPsZkerv2yJgeK2/onG9QYyVuPaJ/tfM+ENyVqTAXrLQ==
-X-Received: by 2002:a17:907:a08:b0:93b:b8f3:225d with SMTP id bb8-20020a1709070a0800b0093bb8f3225dmr1490869ejc.15.1680947267449;
-        Sat, 08 Apr 2023 02:47:47 -0700 (PDT)
-Received: from xeon.. ([188.163.112.79])
-        by smtp.gmail.com with ESMTPSA id a21-20020a50c315000000b0050481736f0csm982297edb.12.2023.04.08.02.47.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 02:47:47 -0700 (PDT)
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v1 2/2] ARM: tegra: transformers: add connector node
-Date:   Sat,  8 Apr 2023 12:47:23 +0300
-Message-Id: <20230408094723.12733-3-clamor95@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230408094723.12733-1-clamor95@gmail.com>
-References: <20230408094723.12733-1-clamor95@gmail.com>
+        Sat, 8 Apr 2023 05:34:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0EBD307;
+        Sat,  8 Apr 2023 02:34:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C254F612BC;
+        Sat,  8 Apr 2023 09:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2FEC433EF;
+        Sat,  8 Apr 2023 09:34:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680946463;
+        bh=mgnnpPs+zBxUnMqnn4j6QunZO36sjCNHfxBatEKORik=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TL8lbZPLxcsSYRxXuunkUy1S823biVJdrjBRStPe4fpRxkIbBQ9QO1PSp37Ul7zqi
+         nCJi1w/6dUBUa3d6fkCaUHO7AkRHrZ1kYChL1psm0nyG9f8sqTsXjLu3j4NUIlG+bX
+         jyuoD3Lod9Tf+yXgICKEGQYczQiihU31YCmZFeGb6nnIJEf1wQEnfVO0DAS6vbLVgi
+         gWDp/Yjcwlmvrm0qvBhOoYa1AIHYYs0YLtksPZhY3nKdHBLMUi3PkUVD2JpduT4PT+
+         oZ6wpP3qEitcqwxiWzsqd6t4oInbBucJSFznMBlV/oV2xDBZ/pO1tF/k80R8JNrhKg
+         JcurP2XQJkueg==
+Date:   Sat, 8 Apr 2023 10:49:38 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andrea Merello <andrea.merello@iit.it>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jagath Jog J <jagathjog1996@gmail.com>
+Subject: Re: [RESEND PATCH v2 0/3] Improve kernel docs
+Message-ID: <20230408104938.74a36f7a@jic23-huawei>
+In-Reply-To: <cover.1680610554.git.mazziesaccount@gmail.com>
+References: <cover.1680610554.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All ASUS Transformers have micro-HDMI connector directly available.
-After Tegra HDMI got bridge/connector support, we should use connector
-framework for proper HW description.
+On Tue, 4 Apr 2023 15:24:15 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-Tested-by: Andreas Westman Dorcsak <hedmoo@yahoo.com> # ASUS TF T30
-Tested-by: Robert Eckelmann <longnoserob@gmail.com> # ASUS TF101 T20
-Tested-by: Svyatoslav Ryhel <clamor95@gmail.com> # ASUS TF201 T30
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- arch/arm/boot/dts/tegra20-asus-tf101.dts      | 22 ++++++++++++++++---
- .../dts/tegra30-asus-transformer-common.dtsi  | 21 ++++++++++++++++--
- 2 files changed, 38 insertions(+), 5 deletions(-)
+> IIO has very nice facilities for efficiently providing data from a
+> device to user (and probably also vice-versa - but I've not used that
+> direction). Getting started with IIO may not be so simple though - some
+> of the concepts like triggers and buffers are quite unique.
+> 
+> This series tries to make it easier for a newcomer to write his/her first
+> IIO driver by adding some documentation to used enums. Series does not
+> provide extensive documentation but just documents those few entries I
+> have become familiar with - but it still aims to be a starting point for
+> others to add missing bits and pieces.
+> 
+> This series is marked as v2 because the patch 1 was previously sent as a
+> stan-alone RFC to collect the missing channel units. RFC can be seen
+> here:
+> https://lore.kernel.org/all/10a855f9adc1d710150b7f647500c3c6a769f9ca.1677243698.git.mazziesaccount@gmail.com/
+> 
+> Patches 2 and 3 were added as a result of discussion followed by the
+> RFC.
 
-diff --git a/arch/arm/boot/dts/tegra20-asus-tf101.dts b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-index 7b2969656ec9..d8d14aa145e5 100644
---- a/arch/arm/boot/dts/tegra20-asus-tf101.dts
-+++ b/arch/arm/boot/dts/tegra20-asus-tf101.dts
-@@ -82,9 +82,11 @@ hdmi@54280000 {
- 			pll-supply = <&hdmi_pll_reg>;
- 			hdmi-supply = <&vdd_hdmi_en>;
- 
--			nvidia,ddc-i2c-bus = <&hdmi_ddc>;
--			nvidia,hpd-gpio = <&gpio TEGRA_GPIO(N, 7)
--				GPIO_ACTIVE_HIGH>;
-+			port@0 {
-+				hdmi_out: endpoint {
-+					remote-endpoint = <&connector_in>;
-+				};
-+			};
- 		};
- 	};
- 
-@@ -963,6 +965,20 @@ clk32k_in: clock-32k-in {
- 		#clock-cells = <0>;
- 	};
- 
-+	connector {
-+		compatible = "hdmi-connector";
-+		type = "d";
-+
-+		hpd-gpios = <&gpio TEGRA_GPIO(N, 7) GPIO_ACTIVE_HIGH>;
-+		ddc-i2c-bus = <&hdmi_ddc>;
-+
-+		port {
-+			connector_in: endpoint {
-+				remote-endpoint = <&hdmi_out>;
-+			};
-+		};
-+	};
-+
- 	cpus {
- 		cpu0: cpu@0 {
- 			cpu-supply = <&vdd_cpu>;
-diff --git a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-index 1861b2de2dc3..b0d041a5b20f 100644
---- a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-@@ -80,8 +80,11 @@ hdmi: hdmi@54280000 {
- 			pll-supply = <&vdd_1v8_vio>;
- 			vdd-supply = <&vdd_3v3_sys>;
- 
--			nvidia,hpd-gpio = <&gpio TEGRA_GPIO(N, 7) GPIO_ACTIVE_HIGH>;
--			nvidia,ddc-i2c-bus = <&hdmi_ddc>;
-+			port@0 {
-+				hdmi_out: endpoint {
-+					remote-endpoint = <&connector_in>;
-+				};
-+			};
- 		};
- 	};
- 
-@@ -1492,6 +1495,20 @@ clk32k_in: clock-32k {
- 		clock-output-names = "pmic-oscillator";
- 	};
- 
-+	connector {
-+		compatible = "hdmi-connector";
-+		type = "d";
-+
-+		hpd-gpios = <&gpio TEGRA_GPIO(N, 7) GPIO_ACTIVE_HIGH>;
-+		ddc-i2c-bus = <&hdmi_ddc>;
-+
-+		port {
-+			connector_in: endpoint {
-+				remote-endpoint = <&hdmi_out>;
-+			};
-+		};
-+	};
-+
- 	cpus {
- 		cpu0: cpu@0 {
- 			cpu-supply = <&vdd_cpu>;
--- 
-2.37.2
+Something odd happened on this resend. Patch 1 didn't make it to me
+or patchwork.  I'll reply to previous posting instead.
+
+Jonathan
+
+> 
+> Revision history:
+> v2 resend:
+>     - rebased on v6.3-rc2
+> RFCv1 => v2:
+>     - added patches 2 and 3
+>     - added missing channel type docs provided by Jonathan
+>     - added @in front of member names and fix typos pointed by Andy
+>     - dropped TODOs as Jonathan clarified the units
+> 
+> ---
+> 
+> Matti Vaittinen (3):
+>   iio: Add some kerneldoc for channel types
+>   iio: add documentation for iio_chan_info_enum
+>   doc: Make sysfs-bus-iio doc more exact
+> 
+>  Documentation/ABI/testing/sysfs-bus-iio |  11 +-
+>  include/linux/iio/types.h               |  46 +++++++-
+>  include/uapi/linux/iio/types.h          | 134 ++++++++++++++++++++++++
+>  3 files changed, 185 insertions(+), 6 deletions(-)
+> 
+> 
+> base-commit: eeac8ede17557680855031c6f305ece2378af326
 
