@@ -2,124 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724466DBA09
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743A16DBA18
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjDHKSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 06:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S229825AbjDHKfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 06:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjDHKSQ (ORCPT
+        with ESMTP id S229760AbjDHKfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 06:18:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE689FF37;
-        Sat,  8 Apr 2023 03:17:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6666D60B2C;
-        Sat,  8 Apr 2023 10:17:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5091C433EF;
-        Sat,  8 Apr 2023 10:17:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680949062;
-        bh=OS7M6JsgPcLSen82d+Ovfck6eKq2zAt8J1ftQXEqbWg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FkGEXPTV+Rr6JPZUGqxWFt4BBeJfZjs3X1y0XKPFtqvJxhwtwi8lL4AoIs+BNfP6O
-         2tqWiclqYrdZaN5y0or8mPVxoIdqRmus7zk8xchyi0mTCQCGk1rRrb8C+L6ZCvB+Qt
-         ai51HNu5RTcK4xr6v/2KawCx7PkB1sMYnolnv8rM9LNLYUV97vNIGGG6OWaFbYWoJ+
-         wnnWfCl3ByueNfZsA+OPNE6kOOtomRtcrMEV8wNNES4e0PjS+80MYGsRuRlFiYRnwx
-         pTxicKU9FDINBQWuZykzIcPFLfzcfIlXPEEkaFdlyaPLhdtfdwf5ttv5lN1poK0hzI
-         ZmxDk07C4kKtA==
-Date:   Sat, 8 Apr 2023 11:32:58 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andrea Merello <andrea.merello@iit.it>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] doc: Make sysfs-bus-iio doc more exact
-Message-ID: <20230408113258.15a39576@jic23-huawei>
-In-Reply-To: <41eafb0caa510cddf650cf5ff940639a184f3005.1677331779.git.mazziesaccount@gmail.com>
-References: <cover.1677331779.git.mazziesaccount@gmail.com>
-        <41eafb0caa510cddf650cf5ff940639a184f3005.1677331779.git.mazziesaccount@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 8 Apr 2023 06:35:08 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A84E41
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:34:26 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id r17-20020a05683002f100b006a131458abfso20468691ote.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 03:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protocubo.io; s=google; t=1680950013; x=1683542013;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=atnnfYB8H/1cRTIRhOKd2CzwH9WdqCAcJhjKRDN3luY=;
+        b=f36p8T3+z/J6u/o8geXfldjzGTUKvuBwnCOq8aVhPB5Yq0scv4lu22t0IvydiWVBM7
+         CU08wz3QuGcIPb3yAdVhAgW3usOu6fLAX0B9dTUyF+DdJBVTJT8oOMZeeGHVuzEsk8U/
+         ACJmBPiPbyDgvFE4BNoYWI2q2/7yDxQ5j48C6PILBZX/SdxNHL3oqGlqu/dDTMUrJmJs
+         0bwnWui1/dIDcDI/PfO4ScpNdmG7VY3T6R/tIZlS7SRCQlputLk0u0J6wwKpSjlPmnKv
+         U/RapLU0djwI0HQLlzVT8qQP9mV23Tbd/Y8AXD8hueIbuxcQessr9EfpsfZaTW/UQGCf
+         bfxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680950013; x=1683542013;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=atnnfYB8H/1cRTIRhOKd2CzwH9WdqCAcJhjKRDN3luY=;
+        b=cQJ5fHXqpLALtl8Rn3MZXxr7iY9650Eig+BjKKazd6ofL7YEeVRn0pVoeKWR5Mc9DT
+         oK7mmz2bZcmkF5rb3aRu9+7Rim189iXPPyPa77e1K4FjrdXyw53tk5A4uXZAXo7R7zFH
+         EnsaDbCR7/WOQRiXsEt6KpDb//QGuEPVitZa/KRb0sc1vIxGXho+ErqxfIQMU5Djl18J
+         yE3k6Gr9tFNOyr1IdNIPdg//+H6zOJxmXLngt5rjAWZhzRZLmAkx2gG+eZLgXmWW57/Q
+         HpWwk6uPQ/h+gZvCGpzVHoV/RM5XV4h8YBDkx1tueveo9mmqiIbR4AkRYvevQsZL4hwB
+         f44Q==
+X-Gm-Message-State: AAQBX9chJr6wAoawXDtUaAATfA+MHkDvnPmiMQjpG/v4Ri4HwYrh+3s3
+        83LJrPHsPU08EafDiQKmZqPSQA==
+X-Google-Smtp-Source: AKy350absmUQ6HrjCN8ybKL7JT651jVYn5RTh9izjX/ysr91076zOIBiNMnDzdw113Fn8tlB/GuQ7Q==
+X-Received: by 2002:a05:6830:101:b0:6a1:7f69:ffbf with SMTP id i1-20020a056830010100b006a17f69ffbfmr2146604otp.36.1680950013453;
+        Sat, 08 Apr 2023 03:33:33 -0700 (PDT)
+Received: from calvin.localdomain ([2804:14d:5c5e:5d5b::1000])
+        by smtp.gmail.com with ESMTPSA id m14-20020a9d6ace000000b0068bcf7995aesm2442533otq.64.2023.04.08.03.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 03:33:32 -0700 (PDT)
+Date:   Sat, 8 Apr 2023 07:33:20 -0300
+From:   Jonas Malaco <jonas@protocubo.io>
+To:     Aleksandr Mezin <mezin.alexander@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Aleksa Savic <savicaleksa83@gmail.com>,
+        Jack Doan <me@jackdoan.com>,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Marius Zachmann <mail@mariuszachmann.de>,
+        Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Rudolf Marek <r.marek@assembler.cz>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Derek John Clark <derekjohn.clark@gmail.com>,
+        =?utf-8?Q?Joaqu=C3=ADn_Ignacio_Aramend=C3=ADa?= 
+        <samsagax@gmail.com>, Iwona Winiarska <iwona.winiarska@intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Michael Walle <michael@walle.cc>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Agathe Porte <agathe.porte@nokia.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        patches@opensource.cirrus.com, openbmc@lists.ozlabs.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 48/68] hwmon: nzxt: constify pointers to
+ hwmon_channel_info
+Message-ID: <jkptl4g7jwhz3mij5wffbw2qlwvxsmnwpqhyalq2ayd76pde2h@jfdw7jisg4at>
+References: <20230406203103.3011503-1-krzysztof.kozlowski@linaro.org>
+ <20230406203530.3012191-7-krzysztof.kozlowski@linaro.org>
+ <CADnvcfKwHJ=dOFH1+DsDfn6Y5k6xdzA7QR1uVDv1afwCsiso3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADnvcfKwHJ=dOFH1+DsDfn6Y5k6xdzA7QR1uVDv1afwCsiso3w@mail.gmail.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Feb 2023 15:56:16 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-
-> A few IIC channel descriptions explained used units as:
-IIO?
-> data is in foo "that can be processed into an" [unit] value. The "can be
-> processed into" is quite broad statement as it does not really explain
-> what this processing means. This makes units pretty much useless.
+On Sat, Apr 08, 2023 at 06:14:19AM +0300, Aleksandr Mezin wrote:
+> On Thu, Apr 6, 2023 at 11:37 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> > -static const struct hwmon_channel_info *nzxt_smart2_channel_info[] = {
+> > +static const struct hwmon_channel_info * const nzxt_smart2_channel_info[] = {
 > 
-> After discussion with Jonathan, it seems the units for these channels
-> should also be well-defined as for all other channels. The processing
-> means the standard scale and offset application that is used throughout
-> the IIO. Let's make it more obvious by stating that the units are [unit]
-> after scale ane offset are applied.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Excellent. Thanks for doing this. I'll pick this patch up now.
+> In the rest of nzxt-smart2.c there are spaces only before "*", not on
+> both sides (and there are a few "*const" already). Would be nice to
+> keep it consistent. The same seems to be true for nzxt-kraken2.c
+> (although I'm not a maintainer)
 
-Applied to the togreg branch of iio.git and pushed out as testing
-(in this case to be mostly ignored by 0-day ;)
+While I don't have a strong preference for either `* const` or `*const`,
+it would be prefereable to use a single style in any given file.
 
-Jonathan
+As the kernel seems to favor the former style:
 
-> ---
->  Documentation/ABI/testing/sysfs-bus-iio | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
-> index 6ba34c0d9789..b435c6f065ae 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-iio
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio
-> @@ -1807,8 +1807,8 @@ What:		/sys/bus/iio/devices/iio:deviceX/out_resistanceX_raw
->  KernelVersion:	4.3
->  Contact:	linux-iio@vger.kernel.org
->  Description:
-> -		Raw (unscaled no offset etc.) resistance reading that can be processed
-> -		into an ohm value.
-> +		Raw (unscaled no offset etc.) resistance reading.
-> +		Units after application of scale and offset are ohms.
->  
->  What:		/sys/bus/iio/devices/iio:deviceX/heater_enable
->  KernelVersion:	4.1.0
-> @@ -1894,8 +1894,9 @@ What:		/sys/bus/iio/devices/iio:deviceX/in_electricalconductivity_raw
->  KernelVersion:	4.8
->  Contact:	linux-iio@vger.kernel.org
->  Description:
-> -		Raw (unscaled no offset etc.) electric conductivity reading that
-> -		can be processed to siemens per meter.
-> +		Raw (unscaled no offset etc.) electric conductivity reading.
-> +		Units after application of scale and offset are siemens per
-> +		meter.
->  
->  What:		/sys/bus/iio/devices/iio:deviceX/in_countY_raw
->  KernelVersion:	4.10
-> @@ -1952,7 +1953,7 @@ KernelVersion:	4.18
->  Contact:	linux-iio@vger.kernel.org
->  Description:
->  		Raw (unscaled) phase difference reading from channel Y
-> -		that can be processed to radians.
-> +		Units after application of scale and offset are radians.
->  
->  What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentration_pm1_input
->  What:		/sys/bus/iio/devices/iio:deviceX/in_massconcentrationY_pm1_input
+$ rg -F '*const ' | wc -l
+2593
+$ rg -F '* const ' | wc -l
+15359
 
+it would be better to change the other two locations in nzxt-kraken2.c
+to also use `* const`.
