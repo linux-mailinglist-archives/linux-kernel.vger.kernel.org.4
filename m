@@ -2,123 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9266DBA8C
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FC56DBA8F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjDHLs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 07:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        id S230428AbjDHLtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 07:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbjDHLsW (ORCPT
+        with ESMTP id S229708AbjDHLtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 07:48:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C2EEFBE;
-        Sat,  8 Apr 2023 04:48:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADADC60A65;
-        Sat,  8 Apr 2023 11:48:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBECC433D2;
-        Sat,  8 Apr 2023 11:48:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680954496;
-        bh=MLN/PCCSpkG/BMKWkQyFJn5UPwX5b12Nbnmnj5iUpuY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jjVxx+92c5LLdlEboHrzvEl/9AsKiJ3XoYgC5igM0WhzdAscA4tG0J5QWzuxwqeDW
-         FjwjhPhEwpw3bCqitYKO9yAQ0qtkmitH3lViVpvW7u4y0OxtIIqJjXRc9EmnklB3ns
-         EJ7QIObyRc/ietuyTLqFYBjHIeTg1kC/svjNj9hA=
-Date:   Sat, 8 Apr 2023 13:48:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB / Thunderbolt driver fixes for 6.3-rc6
-Message-ID: <ZDFUfXFg3s03QbsL@kroah.com>
+        Sat, 8 Apr 2023 07:49:07 -0400
+Received: from ste-pvt-msa1.bahnhof.se (ste-pvt-msa1.bahnhof.se [213.80.101.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37819E04A;
+        Sat,  8 Apr 2023 04:48:59 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 039A93FB25;
+        Sat,  8 Apr 2023 13:48:58 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Score: -2.1
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Authentication-Results: ste-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (2048-bit key) header.d=dalakolonin.se
+Received: from ste-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (ste-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZL6G4xavLotB; Sat,  8 Apr 2023 13:48:56 +0200 (CEST)
+Received: by ste-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id A7F7F3F303;
+        Sat,  8 Apr 2023 13:48:56 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id 80E5D95F96;
+        Sat,  8 Apr 2023 11:48:56 +0000 (UTC)
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id QbP9npGt_QIF; Sat,  8 Apr 2023 11:48:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id 8EE9C95F92;
+        Sat,  8 Apr 2023 11:48:54 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.dalakolonin.se 8EE9C95F92
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dalakolonin.se;
+        s=D374B428-D0A7-11ED-A657-75977B426508; t=1680954534;
+        bh=WvTeccIHvOWSU0nrd5eJOb8g88ka9+Tj40GkwzFrkTk=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=Nef9P7qZwki5JyRB5lj3kf3Rx1g7V9lGIrBFHnQUEh4o1tXQYPleajRgu+c/KrB4m
+         lVYpOmpecDOKEOxBVch4QpbP4MvyhMzqjpMgdFI02tHfZ+6v9jI/6CZ+u2rk1gU13N
+         j9CFCI/Kl/mkCfkOoq+DFefPG/o6wk0M2zWovoiuhfwmOnR7a2hjRU1BHwpklRo3Cs
+         cVklM8jG4ZtCXDpau+hnvzSV/wLER+c8ACHojY3AhMlnHC9R0rb0VvMMiCVmkoVrcC
+         KnWyFoaqF9SxmsbWLN7swIQK6BaW+WXfoKq4tckFjKF0ukfi1kc9kQw/MAzcbhz5Ry
+         4fSrixHxCIPfQ==
+X-Virus-Scanned: amavisd-new at dalakolonin.se
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id NHaeZjFvjMA2; Sat,  8 Apr 2023 11:48:54 +0000 (UTC)
+Received: from rack-server-1.dalakolonin.se (unknown [172.17.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTPSA id E7D2F95F8F;
+        Sat,  8 Apr 2023 11:48:53 +0000 (UTC)
+From:   =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>
+To:     linux-iio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, pgoudagunta@nvidia.com,
+        hns@goldelico.com, jic23@kernel.org, lars@metafoo.de,
+        linux-omap@vger.kernel.org,
+        =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>
+Subject: [PATCH v4 0/9] iio: adc: palmas_gpadc: add iio events
+Date:   Sat,  8 Apr 2023 13:48:16 +0200
+Message-Id: <20230408114825.824505-1-risca@dalakolonin.se>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 197b6b60ae7bc51dd0814953c562833143b292aa:
+This series is based on iio/togreg [1] and includes one patch ("fix NULL
+dereference on rmmod") which is already in linux-next and another patch
+from Jonathan Cameron ("Take probe fully device managed") to make the
+rest of the patches apply cleanly to iio/togreg.
 
-  Linux 6.3-rc4 (2023-03-26 14:40:20 -0700)
+The palmas gpadc block has support for monitoring up to 2 ADC channels
+and issue an interrupt if they reach past a set threshold. This can be
+configured statically with device tree today, but it only gets enabled
+when reaching sleep mode. Also, it doesn't look like anyone is using it.
 
-are available in the Git repository at:
+Instead of this one special case, change the code so userspace can
+configure the ADC channels to their own needs through the iio events
+subsystem. The high and low threshold values can be set for every
+channel, but only 2 thresholds can be enabled at a time. Trying to
+enable more than 2 thresholds will result in an error.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.3-rc6
+The configured thresholds will wake up the system from sleep mode if
+wakeup is enabled in /sys/devices/.../power/wakeup.
 
-for you to fetch changes up to 1edf48991a783d00a3a18dc0d27c88139e4030a2:
+The old platform data was removed.
 
-  usb: cdnsp: Fixes error: uninitialized symbol 'len' (2023-04-05 19:55:04 +0200)
+Thresholds, events, and wakeup were tested on omap5-uevm board. It wakes
+up from sleep mode when wakeup is enabled and a threshold is passed. A
+userspace tool for monitoring events and adjusting thresholds can be
+found at [2].
 
-----------------------------------------------------------------
-USB bugfixes for 6.3-rc6
+For more background and the use case for these patches, see [3].
 
-Here are some small USB bugfixes for 6.3-rc6 that have been in my tree,
-and in linux-next, for a while.  Included in here are:
-  - new usb-serial driver device ids
-  - xhci bugfixes for reported problems
-  - gadget driver bugfixes for reported problems
-  - dwc3 new device id
+V3 -> V4:
+* Reabased to iio/togreg and included required patches.
+* Avoid initializing variables unnecessarily.
+* Minor cosmetic fixes to comments.
+V2 -> V3:
+* Rebased to linux-next.
+* Avoid reconfiguring events on error and when old =3D=3D new value.
+V1 -> V2:
+* Begin by removing adc_wakeupX_data instead of doing it last.
+* Split changes in smaller patches
 
-All have been in linux-next with no reported problems.
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+[2] https://github.com/Risca/pyra_vol_mon
+[3] https://pyra-handheld.com/boards/threads/improve-volume-wheel-daemon-=
+bounty.99430/post-1711410
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Jonathan Cameron (1):
+  iio: adc: palmas: Take probe fully device managed.
 
-----------------------------------------------------------------
-Bjørn Mork (1):
-      USB: serial: option: add Quectel RM500U-CN modem
+Patrik Dahlstr=C3=B6m (8):
+  iio: adc: palmas_gpadc: fix NULL dereference on rmmod
+  iio: adc: palmas: remove adc_wakeupX_data
+  iio: adc: palmas: replace "wakeup" with "event"
+  iio: adc: palmas: use iio_event_direction for threshold polarity
+  iio: adc: palmas: move eventX_enable into palmas_adc_event
+  iio: adc: palmas: always reset events on unload
+  iio: adc: palmas: add support for iio threshold events
+  iio: adc: palmas: don't alter event config on suspend/resume
 
-D Scott Phillips (1):
-      xhci: also avoid the XHCI_ZERO_64B_REGS quirk with a passthrough iommu
+ drivers/iio/adc/palmas_gpadc.c | 616 +++++++++++++++++++++++++--------
+ include/linux/mfd/palmas.h     |   8 -
+ 2 files changed, 478 insertions(+), 146 deletions(-)
 
-Enrico Sau (1):
-      USB: serial: option: add Telit FE990 compositions
 
-Greg Kroah-Hartman (1):
-      Merge tag 'usb-serial-6.3-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+base-commit: f73df43e957a6fc705a9bd6d143585bdf1b13365
+--=20
+2.25.1
 
-Heikki Krogerus (1):
-      usb: dwc3: pci: add support for the Intel Meteor Lake-S
-
-Kees Jan Koster (1):
-      USB: serial: cp210x: add Silicon Labs IFS-USB-DATACABLE IDs
-
-Mathias Nyman (2):
-      Revert "usb: xhci-pci: Set PROBE_PREFER_ASYNCHRONOUS"
-      xhci: Free the command allocated for setting LPM if we return early
-
-Pawel Laszczak (1):
-      usb: cdnsp: Fixes error: uninitialized symbol 'len'
-
-RD Babiera (1):
-      usb: typec: altmodes/displayport: Fix configure initial pin assignment
-
-Sandeep Dhavale (2):
-      usb: gadget: f_fs: Fix ffs_epfile_read_iter to handle ITER_UBUF
-      usb: gadgetfs: Fix ep_read_iter to handle ITER_UBUF
-
-Wayne Chang (1):
-      usb: xhci: tegra: fix sleep in atomic call
-
- drivers/usb/cdns3/cdnsp-ep0.c            |  3 +--
- drivers/usb/dwc3/dwc3-pci.c              |  4 ++++
- drivers/usb/gadget/function/f_fs.c       |  2 +-
- drivers/usb/gadget/legacy/inode.c        |  2 +-
- drivers/usb/host/xhci-pci.c              |  7 +++----
- drivers/usb/host/xhci-tegra.c            |  6 +++---
- drivers/usb/host/xhci.c                  |  7 ++++++-
- drivers/usb/serial/cp210x.c              |  1 +
- drivers/usb/serial/option.c              | 10 ++++++++++
- drivers/usb/typec/altmodes/displayport.c |  6 +++++-
- 10 files changed, 35 insertions(+), 13 deletions(-)
