@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379546DBA74
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB276DBA7D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjDHLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 07:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S230249AbjDHLqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 07:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjDHLgq (ORCPT
+        with ESMTP id S230237AbjDHLqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 07:36:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08472C650
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 04:36:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A8761015
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 11:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE407C433D2;
-        Sat,  8 Apr 2023 11:36:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680953801;
-        bh=4sWQWQ7rAvQiBV0KZjcJLfMpSVh8t/1nW509H8PVZ8U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=q5eCVM4YdR4u9Zd9ZN/81iyIWgsj7OFYpAZcpUKATtBUEHcDLJMYsnWFNySFnybOk
-         nirTCXwyHtEioB5I4NfT6KlzlDtuqihqkDNIiqhqGnY91jItMCo1cbQ8R9DEutwu9x
-         /SEBE/JmAwOLZqDiSXIktNwygWiXzpiQ7gYd3NZIuQBYTTZTzn/4ZO5OepOrwff1+x
-         HOjx3m/9p/JgmBiYsRdw0Jx8hAT9ZcjycMUkWnXsuqXCkpvv7eN/S5f1oPa2QX/18q
-         EbA4e/IMFcpiFS2RQaj6gBQLXVrkT7EWe4aXJsdjqVcSZ9O5g30+ZufJ1bM9Cc2den
-         8haKM88E6MgNw==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pl6s2-006uXl-JP;
-        Sat, 08 Apr 2023 12:36:38 +0100
+        Sat, 8 Apr 2023 07:46:40 -0400
+Received: from pio-pvt-msa1.bahnhof.se (pio-pvt-msa1.bahnhof.se [79.136.2.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A737BE1A3;
+        Sat,  8 Apr 2023 04:46:38 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTP id 20A6F3F5C5;
+        Sat,  8 Apr 2023 13:46:37 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at bahnhof.se
+X-Spam-Score: -2.1
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+Authentication-Results: pio-pvt-msa1.bahnhof.se (amavisd-new);
+        dkim=pass (2048-bit key) header.d=dalakolonin.se
+Received: from pio-pvt-msa1.bahnhof.se ([127.0.0.1])
+        by localhost (pio-pvt-msa1.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xjSKraQ4BQ5q; Sat,  8 Apr 2023 13:46:36 +0200 (CEST)
+Received: by pio-pvt-msa1.bahnhof.se (Postfix) with ESMTPA id D42DF3F586;
+        Sat,  8 Apr 2023 13:46:35 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id 96BC595F12;
+        Sat,  8 Apr 2023 11:46:35 +0000 (UTC)
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id fu62W0fH1-mH; Sat,  8 Apr 2023 11:46:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTP id 75C3095F0E;
+        Sat,  8 Apr 2023 11:46:34 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra.dalakolonin.se 75C3095F0E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dalakolonin.se;
+        s=D374B428-D0A7-11ED-A657-75977B426508; t=1680954394;
+        bh=aj7BJRGxp0A9WS53Fydt2hDFp/YXbSvFyWVqf4RUrfw=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=gRLb/0FOvThhlpUVXTa7QLKES++feoRYjrWJuQiSTfUngVlEKn1wrqx1TyIseDDiv
+         pVeR3gaspICQAfTfMLa7sEUSa57QTurjz/K6z5beiQK/iE3YsoXTyN7Nq0Ye+oHgA3
+         nczqxoJ15HWo61qgelwKAshHab6zM25mlxfJIFr0E9ns3NtJgfY/RQSyPCkjkg0mYD
+         AgjkUiH2XCFt7x5Vkp5r7MEYXwAHPIO9L7UZ5OqEFROyn1Vkr/6p/fFsGETU7EGOg7
+         friF20P3JAnVviGfx9fuZz6PO1ulNFRl9M/GKxzdK5HiuJfRVKq6qjFbrmbiFv/FqJ
+         pVbYKOnktZlSg==
+X-Virus-Scanned: amavisd-new at dalakolonin.se
+Received: from zimbra.dalakolonin.se ([127.0.0.1])
+        by localhost (zimbra.dalakolonin.se [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id N_4mZzM6CVu9; Sat,  8 Apr 2023 11:46:34 +0000 (UTC)
+Received: from rack-server-1.dalakolonin.se (unknown [172.17.0.1])
+        by zimbra.dalakolonin.se (Postfix) with ESMTPSA id 1DE5C95F0B;
+        Sat,  8 Apr 2023 11:46:34 +0000 (UTC)
+From:   =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>
+To:     linux-iio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
+        kernel@pyra-handheld.com, pgoudagunta@nvidia.com,
+        hns@goldelico.com, jic23@kernel.org, lars@metafoo.de,
+        linux-omap@vger.kernel.org,
+        =?UTF-8?q?Patrik=20Dahlstr=C3=B6m?= <risca@dalakolonin.se>
+Subject: [PATCH v3 0/7] iio: adc: palmas_gpadc: add iio events
+Date:   Sat,  8 Apr 2023 13:46:17 +0200
+Message-Id: <20230408114624.824144-1-risca@dalakolonin.se>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Sat, 08 Apr 2023 12:36:38 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     "Raghavendra, Vignesh" <vigneshr@ti.com>
-Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 2/2] irqchip: irq-ti-sci-inta: Add direct mapped
- interrupts
-In-Reply-To: <d9d6dc1b-cc1d-d823-8777-3a8d6d2328f7@ti.com>
-References: <20230327-irq-affinity-upstream-v2-0-1474e518f1cb@ti.com>
- <20230327-irq-affinity-upstream-v2-2-1474e518f1cb@ti.com>
- <87ile664i1.wl-maz@kernel.org> <d9d6dc1b-cc1d-d823-8777-3a8d6d2328f7@ti.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <c42185ee1b224fd7814b6e336a3fc3f5@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: vigneshr@ti.com, nm@ti.com, kristo@kernel.org, ssantosh@kernel.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-08 12:27, Raghavendra, Vignesh wrote:
-> Hi,
-> 
-> On 4/8/2023 4:10 PM, Marc Zyngier wrote:
->>> +static unsigned int ti_sci_inta_direct_events_am62x[] = {
->>> +	/* CPSW etherenti DMA events */
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4627),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4635),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4643),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4651),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4659),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4667),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4675),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4683),
->>> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 5651),
->>> +};
->>> +
->>> +static struct ti_sci_inta_soc_data soc_data_am62x = {
->>> +	.events_list = ti_sci_inta_direct_events_am62x,
->>> +	.events_list_size = ARRAY_SIZE(ti_sci_inta_direct_events_am62x),
->>> +};
->> I don't think these tables belong in a driver, and they are bound to
->> grow without any obvious limits.
-> 
-> Fair point.
-> 
->> You have firmware tables that can express these things. Surely they 
->> can be put to a good use.
-> 
-> By firmware tables you mean device tree?
+This series is based on linux-next/master [1] and [2].
 
-That, or any other machine-specific mean. From what I get of these
-systems, they already make heavy use of some runtime firmware to get
-things configured. That side could also provide setup information.
+The palmas gpadc block has support for monitoring up to 2 ADC channels
+and issue an interrupt if they reach past a set threshold. This can be
+configured statically with device tree today, but it only gets enabled
+when reaching sleep mode. Also, it doesn't look like anyone is using it.
 
-I don't mind either way, as long as we don't end-up with forever
-growing in-kernel tables that are just board files in disguise.
+Instead of this one special case, change the code so userspace can
+configure the ADC channels to their own needs through the iio events
+subsystem. The high and low threshold values can be set for every
+channel, but only 2 thresholds can be enabled at a time. Trying to
+enable more than 2 thresholds will result in an error.
 
-           M.
--- 
-Jazz is not dead. It just smells funny...
+The configured thresholds will wake up the system from sleep mode if
+wakeup is enabled in /sys/devices/.../power/wakeup.
+
+The old platform data was removed.
+
+Thresholds, events, and wakeup were tested on omap5-uevm board. It wakes
+up from sleep mode when wakeup is enabled and a threshold is passed. A
+userspace tool for monitoring events and adjusting thresholds can be
+found at [3].
+
+V2 -> V3:
+* Rebased to linux-next.
+* Avoid reconfiguring events on error and when old =3D=3D new value.
+V1 -> V2:
+* Begin by removing adc_wakeupX_data instead of doing it last.
+* Split changes in smaller patches
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+[2] https://lore.kernel.org/linux-iio/20230318163039.56115-1-jic23@kernel=
+.org/
+[3] https://github.com/Risca/pyra_vol_mon
+
+Patrik Dahlstr=C3=B6m (7):
+  iio: adc: palmas: remove adc_wakeupX_data
+  iio: adc: palmas: replace "wakeup" with "event"
+  iio: adc: palmas: use iio_event_direction for threshold polarity
+  iio: adc: palmas: move eventX_enable into palmas_adc_event
+  iio: adc: palmas: always reset events on unload
+  iio: adc: palmas: add support for iio threshold events
+  iio: adc: palmas: don't alter event config on suspend/resume
+
+ drivers/iio/adc/palmas_gpadc.c | 559 +++++++++++++++++++++++++++------
+ include/linux/mfd/palmas.h     |   8 -
+ 2 files changed, 464 insertions(+), 103 deletions(-)
+
+
+base-commit: 8417c8f5007bf4567ccffda850a3157c7d905f67
+prerequisite-patch-id: b0418c707db13f514400956596e9ebe91c25bba0
+--=20
+2.25.1
+
