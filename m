@@ -2,125 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DCB6DB89E
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 05:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CAE6DB8A0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 05:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjDHDhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 23:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S230040AbjDHDkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 23:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjDHDhe (ORCPT
+        with ESMTP id S230027AbjDHDkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 23:37:34 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50266BDCA
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 20:37:07 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id h24so567045plr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 07 Apr 2023 20:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1680925027;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DUr3g5RxycMk/Z/8YgiC7z+3mZOPJTD8hF1viU2CvKI=;
-        b=KO8Wo1RKtPs8FCd9uOQ3HSdEJLz0AeQpyuNJxk84XNXR4ysAn/Bs9fJdt4MrRZhglH
-         xjYswepMFWJpcmsHzhYT7bjyF+/uEeRQucCHnXpxjyBr6Y498Z1EAasLmsU0pk24vg4B
-         fUL0gfqQ7uwj0YzmkdgGFEu/FsQxlIl0ofKAIS0OqC8ksAtLQaBc3EP1li/iZKYX1zew
-         VSOMZPf39/iQErDAMEAkDkoZkQ+jBRC0PEIRb3LDNSUjZ9GtJsfFhGCYodFBf2zBHq2F
-         bJ3HlyoXaSunpaD1VhRQ6YdOS541gmDTNPjm14KqtWwEoBupNgtzpUhcVWd0lO6xTYsU
-         w3dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680925027;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DUr3g5RxycMk/Z/8YgiC7z+3mZOPJTD8hF1viU2CvKI=;
-        b=H4lS1IHfK7AD/YfuRlGztbtGCsPsmUGmADg5rZlMi0o1gBkD803+vncsIKXFIfQLol
-         ju8P7z0/9qaTqkdsQ6ZbV5fQw7flQDIcaYAnzeMFArquOSV+aug1Lg4cnKhb/kIfZQm3
-         GS4lKiVTFSXBVr8WfT88x74BFNy5WvVSAjCOqX9z0ttRP288rN4lzRTJhTM08m/ATsmB
-         5qiXDpGaM6EyEPkiAJtMp9kjmYE7DPP8rPVT5sGKi3rbrpT1M0AXkKn10jxjN1i1a+JQ
-         1KerWZSI3+D/gKi+ewWdAzOeuC3rd44o9IGG3EqKe5HaI7QX8+p8aRNts0DW0NRRbiXN
-         xy1A==
-X-Gm-Message-State: AAQBX9cPxk0+J516lYXgPQm1retl34m4DLsI4JdIpAARBgcFKLk/mSBa
-        XuZEhY/J43sHnSUPCAxpxrgcNQ==
-X-Google-Smtp-Source: AKy350bSPo5n2xg9Si8L2oY2DOc4s1aEPsRBL5HoP0vlxwjKQCnthKr7tydpTL3bOEWzpUeS8k2eMw==
-X-Received: by 2002:a17:90a:ba8c:b0:233:d12f:f43a with SMTP id t12-20020a17090aba8c00b00233d12ff43amr5104759pjr.1.1680925026743;
-        Fri, 07 Apr 2023 20:37:06 -0700 (PDT)
-Received: from ?IPV6:2409:8a28:e6a:3a30:91c6:a74e:1ca9:6039? ([2409:8a28:e6a:3a30:91c6:a74e:1ca9:6039])
-        by smtp.gmail.com with ESMTPSA id z13-20020a17090a1fcd00b00240d4521958sm3441636pjz.18.2023.04.07.20.37.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 20:37:06 -0700 (PDT)
-Message-ID: <1a64eaea-50ea-f273-b0a1-a6eb8483beac@bytedance.com>
-Date:   Sat, 8 Apr 2023 11:37:00 +0800
+        Fri, 7 Apr 2023 23:40:12 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BEC193C1;
+        Fri,  7 Apr 2023 20:40:10 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.246.67])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AEE80213B635;
+        Fri,  7 Apr 2023 20:40:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AEE80213B635
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680925209;
+        bh=yu4L/pgWX5pNzUR0FHcUhBCU2kj8zE6++8P99CHGKEY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aEFJhjE9CShP4mJEQMoazLtG0imOXB9kWveQoMXnUD0NSAhBwXNpcGeomZjc+iF9n
+         tyiIpCWB0gIRxiIYq6YdfHvvVyDSgJEx2aU+HoId+7FqtbM9cYUQcUkLlE7udR6OMV
+         7mqYxOOe+221I0eNe9XjAw2GFjpuP/OjJbONdUNM=
+Message-ID: <054ce0d6-70f0-b834-d4e5-1049c8df7492@linux.microsoft.com>
+Date:   Fri, 7 Apr 2023 22:40:07 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.9.1
-Subject: Re: [External] Re: [PATCH v2 0/3] blk-cgroup: some cleanup
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFC PATCH v3 00/22] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        broonie@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
+ <20230202074036.507249-1-madvenka@linux.microsoft.com>
+ <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
 Content-Language: en-US
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     axboe@kernel.dk, tj@kernel.org, paolo.valente@linaro.org,
-        josef@toxicpanda.com, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230406145050.49914-1-zhouchengming@bytedance.com>
- <cab869b1-1cba-5698-55eb-a93d0596c869@acm.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <cab869b1-1cba-5698-55eb-a93d0596c869@acm.org>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <ZByJmnc/XDcqQwoZ@FVFF77S0Q05N.cambridge.arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/4/8 02:41, Bart Van Assche wrote:
-> On 4/6/23 07:50, Chengming Zhou wrote:
->> These are some cleanup patches of blk-cgroup. Thanks for review.
-> 
-> With these patches applied, my kernel test VM crashes during boot. The following crash disappears if I revert these patches:
+Hi Mark,
 
-Thanks for the report.
-I will try to reproduce it first and look into this today.
+Sorry for the long delay in responding. Was caught up in many things.
+My responses inline..
 
+On 3/23/23 12:17, Mark Rutland wrote:
+> Hi Madhavan,
 > 
-> BUG: KASAN: null-ptr-deref in bio_associate_blkg_from_css+0x83/0x240
-> Read of size 8 at addr 0000000000000518 by task blkid/5885
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-> Call Trace:
->  dump_stack_lvl+0x4a/0x80
->  print_report+0x21e/0x260
->  kasan_report+0xc2/0xf0
->  __asan_load8+0x69/0x90
->  bio_associate_blkg_from_css+0x83/0x240
->  bfq_bio_bfqg+0xce/0x120 [bfq]
->  bfq_bic_update_cgroup+0x2f/0x3c0 [bfq]
->  bfq_init_rq+0x1e8/0xb10 [bfq]
->  bfq_insert_request.isra.0+0xa3/0x420 [bfq]
->  bfq_insert_requests+0xca/0xf0 [bfq]
->  blk_mq_dispatch_rq_list+0x4c0/0xb00
->  __blk_mq_sched_dispatch_requests+0x15e/0x200
->  blk_mq_sched_dispatch_requests+0x8b/0xc0
->  __blk_mq_run_hw_queue+0x3ff/0x500
->  __blk_mq_delay_run_hw_queue+0x23a/0x300
->  blk_mq_run_hw_queue+0x14e/0x350
->  blk_mq_sched_insert_request+0x181/0x1f0
->  blk_execute_rq+0xf4/0x300
->  scsi_execute_cmd+0x23e/0x350
->  sr_do_ioctl+0x173/0x3d0 [sr_mod]
->  sr_packet+0x60/0x90 [sr_mod]
->  cdrom_get_track_info.constprop.0+0x125/0x170 [cdrom]
->  cdrom_get_last_written+0x1d4/0x2d0 [cdrom]
->  mmc_ioctl_cdrom_last_written+0x85/0x120 [cdrom]
->  mmc_ioctl+0x10b/0x1d0 [cdrom]
->  cdrom_ioctl+0xa66/0x1270 [cdrom]
->  sr_block_ioctl+0xee/0x130 [sr_mod]
->  blkdev_ioctl+0x1bb/0x3f0
->  __x64_sys_ioctl+0xc7/0xe0
->  do_syscall_64+0x34/0x80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> At a high-level, I think this still falls afoul of our desire to not reverse
+> engineer control flow from the binary, and so I do not think this is the right
+> approach. I've expanded a bit on that below.
 > 
-> Bart.
+> I do think it would be nice to have *some* of the objtool changes, as I do
+> think we will want to use objtool for some things in future (e.g. some
+> build-time binary patching such as table sorting).
+> 
+
+OK. I have been under the impression that the arm64 folks are basically OK with
+Objtool's approach of reverse engineering from the binary. I did not see
+any specific objections to previously submitted patches based on this approach
+including mine.
+
+So, if the community is not in agreement with this approach, I will go back to the
+drawing board for this one.
+
+Are there any other opinions on this subject from others?
+
+> On Thu, Feb 02, 2023 at 01:40:14AM -0600, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> Introduction
+>> ============
+>>
+>> The livepatch feature requires an unwinder that can provide a reliable stack
+>> trace. General requirements for a reliable unwinder are described in this
+>> document from Mark Rutland:
+>>
+>> 	Documentation/livepatch/reliable-stacktrace.rst
+>>
+>> The requirements have two parts:
+>>
+>> 1. The unwinder must be enhanced with certain features. E.g.,
+>>
+>> 	- Identifying successful termination of stack trace
+>> 	- Identifying unwindable and non-unwindable code
+>> 	- Identifying interrupts and exceptions occurring in the frame pointer
+>> 	  prolog and epilog
+>> 	- Identifying features such as kretprobe and ftrace graph tracing
+>> 	  that can modify the return address stored on the stack
+>> 	- Identifying corrupted/unreliable stack contents
+>> 	- Architecture-specific items that can render a stack trace unreliable
+>> 	  at certain points in code
+>>
+>> 2. Validation of the frame pointer
+>>
+>> 	This assumes that the unwinder is based on the frame pointer (FP).
+>> 	The actual frame pointer that the unwinder uses cannot just be
+>> 	assumed to be correct. It needs to be validated somehow.
+>>
+>> This patch series is to address the following:
+>>
+>> 	- Identifying unwindable and non-unwindable code
+>> 	- Identifying interrupts and exceptions occurring in the frame pointer
+>> 	  prolog and epilog
+>> 	- Validation of the frame pointer
+>>
+>> The rest are already in place AFAICT.
+> 
+> Just as a note: there are a few issues remaining (e.g. the kretprobe and fgraph
+> PC recovery both have windows where they lose the original return address), and
+> there are a few compiler-generated trampoline functions with non-AAPCS calling
+> conventions that will need special care.
+> 
+
+OK.
+
+>> Validation of the FP (aka FRAME_POINTER_VALIDATION)
+>> ====================
+>>
+>> The current approach in Linux is to use objtool, a build time tool, for this
+>> purpose. When configured, objtool is invoked on every relocatable object file
+>> during kernel build. It performs static analysis of the code in each file. It
+>> walks the instructions in every function and notes the changes to the stack
+>> pointer (SP) and the frame pointer (FP). It makes sure that the changes are in
+>> accordance with the ABI rules. There are also a lot of other checks that
+>> Objtool performs. Once objtool completes successfully, the kernel can then be
+>> used for livepatch purposes.
+>>
+>> Objtool can have uses other than just FP validation. For instance, it can check
+>> control flow integrity during its analysis.
+>>
+>> Problem
+>> =======
+>>
+>> Objtool is complex and highly architecture-dependent. There are a lot of
+>> different checks in objtool that all of the code in the kernel must pass
+>> before livepatch can be enabled. If a check fails, it must be corrected
+>> before we can proceed. Sometimes, the kernel code needs to be fixed.
+>> Sometimes, it is a compiler bug that needs to be fixed. The challenge is
+>> also to prove that all the work is complete for an architecture.
+>>
+>> As such, it presents a great challenge to enable livepatch for an
+>> architecture.
+> 
+> There's a more fundamental issue here in that objtool has to reverse-engineer
+> control flow, and so even if the kernel code and compiled code generation is
+> *perfect*, it's possible that objtool won't recognise the structure of the
+> generated code, and won't be able to reverse-engineer the correct control flow.
+> 
+> We've seen issues where objtool didn't understand jump tables, so support for
+> that got disabled on x86. A key objection from the arm64 side is that we don't
+> want to disable compile code generation strategies like this. Further, as
+> compiles evolve, their code generation strategies will change, and it's likely
+> there will be other cases that crop up. This is inherently fragile.
+> 
+> The key objections from the arm64 side is that we don't want to
+> reverse-engineer details from the binary, as this is complex, fragile, and
+> unstable. This is why we've previously suggested that we should work with
+> compiler folk to get what we need.
+> 
+
+So, what exactly do you have in mind? What help can the compiler folk provide?
+By your own argument, we cannot rely on the compiler as compiler implementations,
+optimization strategies, etc can change in ways that are incompatible with any
+livepatch implementation. Also, there can always be bugs in the compiler
+implementations.
+
+Can you please elaborate? Are we looking for a way for the compiler folks to
+provide us with something that we can use to implement reliable stack trace?
+
+> I'll note that at the last Linux Plumbers Conference, there was a discussion
+> about what is now called SFrame, which *might* give us sufficient information,
+> but I have not had the time to dig into that as I have been chasing other
+> problems and trying to get other infrastructure in place.
+> 
+
+I will try to locate the link. If you can provide me a link, that would be greatly
+appreciated. I will study their SFrame proposal.
+
+>> A different approach
+>> ====================
+>>
+>> I would like to propose a different approach for FP validation. I would
+>> like to be able to enable livepatch for an architecture as is. That is,
+>> without "fixing" the kernel or the compiler for it:
+>>
+>> There are three steps in this:
+>>
+>> 1. Objtool walks all the functions as usual. It computes the stack and
+>>    frame pointer offsets at each instruction as usual. It generates ORC
+>>    records and stores them in special sections as usual. This is simple
+>>    enough to do.
+> 
+> This still requires reverse-engineering the forward-edge control flow in order
+> to compute those offets, so the same objections apply with this approach. I do
+> not think this is the right approach.
+> 
+> I would *strongly* prefer that we work with compiler folk to get the
+> information that we need.
+> 
+
+I am willing to do this. But I am not clear on the kind of features we want
+from the compiler. Are you suggesting something for getting a reliable
+stack trace? Is there any kind of proposal out there that I need to study?
+
+> [...]
+> 
+>> 		FWIW, I have also compared the CFI I am generating with DWARF
+>> 		information that the compiler generates. The CFIs match a
+>> 		100% for Clang. In the case of gcc, the comparison fails
+>> 		in 1.7% of the cases. I have analyzed those cases and found
+>> 		the DWARF information generated by gcc is incorrect. The
+>> 		ORC generated by my Objtool is correct.
+> 
+> 
+> Have you reported this to the GCC folk, and can you give any examples?
+> I'm sure they would be interested in fixing this, regardless of whether we end
+> up using it.
+> 
+
+I will try to get the data again and put something together and send it to the
+gcc folks.
+
+Thanks for the suggestions.
+
+Madhavan
