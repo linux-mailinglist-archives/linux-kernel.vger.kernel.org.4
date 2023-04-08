@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A786DBC69
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 20:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B01F6DBC71
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 20:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjDHR5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 13:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S229910AbjDHSZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 14:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjDHR5i (ORCPT
+        with ESMTP id S229454AbjDHSZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 13:57:38 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B3826AF;
-        Sat,  8 Apr 2023 10:57:37 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id q2so6303590pll.7;
-        Sat, 08 Apr 2023 10:57:37 -0700 (PDT)
+        Sat, 8 Apr 2023 14:25:01 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CEF8689;
+        Sat,  8 Apr 2023 11:25:00 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id 6-20020a9d0106000000b006a177038dfeso14205778otu.7;
+        Sat, 08 Apr 2023 11:25:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680976657;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jvEbHjnUF838lN07cBQDokhrXS5LHQhlJGEDy+0X8dg=;
-        b=pKaCg9NvbIVEK6K78TRDwr7ES8jioxY4sJm/msDIOVRDyJt+iA1bmB53dmkiZOVL1d
-         fOC6DNKI9nUj/jCL38UkC+xWXTwKXzQLBRExgCZ6RQ+2xWDncceniZG9LaIhYY4HzVy3
-         L/pamZjnVlGcZ1+N54NEaX5YpYVNnAoRTUFWd5JE5nGQ27nKn3uBuIimLSuuPMjqZ5J6
-         CSrcKn5tbqQqQlYEyJfUeFgmJ97xtzDsNwV7w90ErX3Lz/aPgbJ8cka8fImuXYX0AhCW
-         5T19DZ53L/uH3KR5juYWxPBzLZCtR86SxXIwqWMCiJgcMgfIe1KZtXAeFgnPdqNzVE4f
-         yIXA==
+        d=gmail.com; s=20210112; t=1680978300;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Pwc/3AWMfEaAIvYsDnkVg0ci20u8p4CqXhM8i5egr5o=;
+        b=gzDts5q0CNK6aNvIaGy8bjFLBbnMG9p8cNk01Z5ybEt1Ac2fqxvhsL+ev7UKPbPgsQ
+         Ud6jJtmqURe2yNpIlyx5i7ytzeLnjRsRxAoogNyFZN5Rk7Mp/nO1uEB0tNS1wVlzX0qO
+         MSAPPQU2ywrrAxsUHgt0NzOG+8kN+U7NXJ1LhSPcEUk2z4ZiIIx4vyhmd9ZN0B/HOdKc
+         Dv+vfXs/joypJUkSpYTXTS4n4lm/YLiQY6OwIR1C6djuVRH9V6y9zoN1rQAQF8UqsF8i
+         j5gk6NCXXV4C0BI885dIhpKri6y36zMVWlaoR8H5D0QdYORnDnANC1oaRmGPxIxK96UQ
+         9o/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680976657;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jvEbHjnUF838lN07cBQDokhrXS5LHQhlJGEDy+0X8dg=;
-        b=ZcYxqPlxbxJ6Z8TE4w/nQ9B03Ct71MGN6/eH1cjsEcPPMAhekZC4MJ46kW7CBvYuHR
-         w0JRtnGgL9VRYK6Tti09SYE2DsIrB1s6zfbhSXTH+YprsFlJvVp2lnVi4BLJzuOoi1jf
-         zEU1OmjyO0voIODhgYrrUgHUk2IWW/etfZ4vImyk7jXcbesi+ffrZ1dUzkp/dv+2Ui+i
-         oGigUrTGWcrtlcJ8BEpAd1+9vV2g7Lf7wNZitJ2lwS8aO707PhCbmsI2Agq/+aIFjPQ/
-         t9r4bJzKSkSjyapGyUBz6hmlB0tj1jZxVusKH3fCM1ghcnsssq51i9k33W9EIN605Eiv
-         Ysbg==
-X-Gm-Message-State: AAQBX9dpTAkkXZSNxcxQPdPcHYyFTNbJ5YmT9Xs5Lv5Zftds0O1BNxLB
-        S0z7cJ9bbzOYLxJVbibiWY8S1M462V5drkf8
-X-Google-Smtp-Source: AKy350Z1B6z5jcbAMhr2nmOFpTuBNq3vRV61NMkFifG3bVxk0EXXWJZFza2ZQhnwbrNXiJbTG/UP2g==
-X-Received: by 2002:a05:6a20:6014:b0:db:f682:65ed with SMTP id r20-20020a056a20601400b000dbf68265edmr6704234pza.61.1680976657232;
-        Sat, 08 Apr 2023 10:57:37 -0700 (PDT)
-Received: from sumitra.com ([117.207.136.97])
-        by smtp.gmail.com with ESMTPSA id y15-20020aa7804f000000b00590ede84b1csm5178202pfm.147.2023.04.08.10.57.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 10:57:36 -0700 (PDT)
-Date:   Sat, 8 Apr 2023 10:57:29 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Simon Horman <simon.horman@corigine.com>,
-        Manish Chopra <manishc@marvell.com>,
-        GR-Linux-NIC-Dev@marvell.com, Coiby Xu <coiby.xu@gmail.com>,
-        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: qlge: Remove macro FILL_SEG
-Message-ID: <20230408175729.GA263118@sumitra.com>
-References: <20230405150627.GA227254@sumitra.com>
- <ZC2gJdUA6zGOjX4P@corigine.com>
- <20230406144644.GB231658@sumitra.com>
- <2023040648-zeppelin-escapist-86d1@gregkh>
- <20230406152855.GC231658@sumitra.com>
- <2023040618-dedicate-rebalance-90c6@gregkh>
+        d=1e100.net; s=20210112; t=1680978300;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pwc/3AWMfEaAIvYsDnkVg0ci20u8p4CqXhM8i5egr5o=;
+        b=fO67P5NcQ9AKo2VyNSvXZ6gf8sbnKwF0lORvASERWaSV6NTQm35mOXk18j1Au6HMLT
+         hBB4rDfjgjX08ng2lA+0LsrrTEBhWtTPDgqqM1BFS3GXsx9UuH7QhaV22p+gQhaIJAGh
+         dSTi8TgQ3HnpsZBY1scCsQFRUWyNU6aEK3Lz0goRWXtyVy+XEjYxB2oDV/Am59LZ1uMg
+         NiFg82yfNCk8z825V66PD1emmi4Blag2B8kf2g2O0hrhq/OZEqphSpNWYMP4D8sZz2v2
+         F6uUJRXhFnrqNMYGNjhVUYtFWA67KfkURJzgxsOFMmBVUffEQiNOcBEFRzQwa+yvETcl
+         DP5Q==
+X-Gm-Message-State: AAQBX9fcqKot+vluElhTf1ft0q/dCqf5uMgUaBh0IOJOM/qNpOs1N4I0
+        Xcwlyc17BPAQ41sgqS5kCpk=
+X-Google-Smtp-Source: AKy350YVWWK5LVrcIXkGkfiCOeOtBJu5JBLuctbC9AAS/sN/aoOr5liabuPstmjtoZ5nP3Uz6zCHZg==
+X-Received: by 2002:a9d:7443:0:b0:6a1:21fc:653b with SMTP id p3-20020a9d7443000000b006a121fc653bmr2280347otk.14.1680978299895;
+        Sat, 08 Apr 2023 11:24:59 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id b17-20020a9d7551000000b006a3bc285eeesm2670716otl.68.2023.04.08.11.24.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Apr 2023 11:24:59 -0700 (PDT)
+Message-ID: <c0f47367-6352-e55d-1a87-fe2960a84838@gmail.com>
+Date:   Sat, 8 Apr 2023 15:24:53 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023040618-dedicate-rebalance-90c6@gregkh>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+Content-Language: en-US
+To:     Andrea Righi <andrea.righi@canonical.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Eric Curtin <ecurtin@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Neal Gompa <neal@gompa.dev>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 06:33:31PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Apr 06, 2023 at 08:28:55AM -0700, Sumitra Sharma wrote:
-> > On Thu, Apr 06, 2023 at 04:57:44PM +0200, Greg Kroah-Hartman wrote:
-> > > On Thu, Apr 06, 2023 at 07:46:44AM -0700, Sumitra Sharma wrote:
-> > > > On Wed, Apr 05, 2023 at 06:21:57PM +0200, Simon Horman wrote:
-> > > > > On Wed, Apr 05, 2023 at 08:06:27AM -0700, Sumitra Sharma wrote:
-> > > > > > Remove macro FILL_SEG to fix the checkpatch warning:
-> > > > > > 
-> > > > > > WARNING: Macros with flow control statements should be avoided
-> > > > > > 
-> > > > > > Macros with flow control statements must be avoided as they
-> > > > > > break the flow of the calling function and make it harder to
-> > > > > > test the code.
-> > > > > > 
-> > > > > > Replace all FILL_SEG() macro calls with:
-> > > > > > 
-> > > > > > err = err || qlge_fill_seg_(...);
-> > > > > 
-> > > > > Perhaps I'm missing the point here.
-> > > > > But won't this lead to err always either being true or false (1 or 0).
-> > > > > Rather than the current arrangement where err can be
-> > > > > either 0 or a negative error value, such as -EINVAL.
-> > > > >
-> > > > 
-> > > > Hi Simon
-> > > > 
-> > > > 
-> > > > Thank you for the point you mentioned which I missed while working on this
-> > > > patch. 
-> > > > 
-> > > > However, after thinking on it, I am still not able to get any fix to this
-> > > > except that we can possibly implement the Ira's solution here which is:
-> > > > 
-> > > > https://lore.kernel.org/outreachy/64154d438f0c8_28ae5229421@iweiny-mobl.notmuch/
-> > > > 
-> > > > Although we have to then deal with 40 lines of ifs.
-> > > 
-> > > Which implies that the current solution is the best one, so I would
-> > > recommend just leaving it as-is.
-> > >
-> > 
-> > Hi greg
-> > 
-> > Before leaving it I would like to know your opinion on the solution Dan is offering.
+On 4/7/23 04:05, Andrea Righi wrote:
+> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> to enable RUST.
 > 
-> I still think you should leave it as-is.
->
-
-Okay, Thank you.
-
-
-Regards
-
-Sumitra Sharma
-> thanks,
+> With this constraint we don't need is_rust_module.sh anymore, because
+> 'pahole --lang_exclude=rust' already has the capability to exclude Rust
+> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> isn't used as well.
 > 
-> greg k-h
+> In any case is_rust_module.sh is obsolete and we can just drop it.
+> 
+> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> ---
+>  [...]
+
+Go on
+
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
