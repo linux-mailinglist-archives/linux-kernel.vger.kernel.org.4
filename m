@@ -2,83 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0196DB9A3
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 10:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30276DB9A6
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 10:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjDHIWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 04:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S229562AbjDHIXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 04:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjDHIWj (ORCPT
+        with ESMTP id S230115AbjDHIWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 04:22:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AE6C148;
-        Sat,  8 Apr 2023 01:22:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87A8E604EF;
-        Sat,  8 Apr 2023 08:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9908EC433EF;
-        Sat,  8 Apr 2023 08:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1680942158;
-        bh=cXMKqHwqy1azEvJGrcgTgrzawxthoP+aOHgL4NnX4zw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A1bnkTfopSpWCvF9LWS+1I6fUOzCoCAC9grNMLiUxSsmNGM5z+a9SIMzFJ2depn3h
-         SaMzO4gSuaHxG83AmviwxG1ur9C8l935m4I+SDqI0AeXJLhv4hV7zXUn3h0/4o+Cbx
-         WCIg//NJVoAWybARQfuvuC8Na7MGwggYqrLkZtG0=
-Date:   Sat, 8 Apr 2023 10:22:35 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Deepanshu Kartikey <kartikey406@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Staging: fbtft: fbtft-bus: fixed extra space and
- parenthesis issue
-Message-ID: <2023040814-unfixable-recognize-73d0@gregkh>
-References: <20230408050323.70919-1-kartikey406@gmail.com>
+        Sat, 8 Apr 2023 04:22:54 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925AEFF00
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 01:22:49 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id la3so531980plb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 01:22:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1680942169; x=1683534169;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GltkJScZYSX+gCVv8fDFnm+4Lcp2TEGrI4CsgsLokKY=;
+        b=hBybsKOi8iTMHwZ9Ikc0Cmt6Xe3w4OGcCWqYQIE2fC+MbNbxTarOitAGi2P0ZWwSeh
+         iKPtVkSsN3nS0z43OhQRzLzc3JbxJdoNpZOSnkAe3eIiszDGzlx6bdrj8uK5D/3K86IA
+         C43fnJLHf24T36c7gg8tfpMjvXDJMaohzqUhw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680942169; x=1683534169;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GltkJScZYSX+gCVv8fDFnm+4Lcp2TEGrI4CsgsLokKY=;
+        b=AtZaDC7WahHWw+TuzqDvfenQBMqWXpP8Fa7pKLdFJxTBpfWJXNWuBspBvE2DXAO0/m
+         SzXONLmOO0s60TNz6rILzd5uA8HkoXejIdMh5oY3/ad7NGN5MygpCCupT7MhMXru/aXI
+         XhQNRVm/g5zC4EWQ/+WqH4uO82nK7hgQ8O8H1Evukhp1LTYyRpfb7sdN0f+Ri4hUKsxP
+         IW7nSReC3uJn6AYSfR8fx6flj0SMKZZohg7zB9FnCGTYS/AH4czXJ2viGadZFRQ/J5Hw
+         1t/4oL1mZzVFDRVQQe+Zy79wg10pcovBVBKH7UhNK5gaYp6UR8YOPPpoe4KrPrglkIsj
+         /M+g==
+X-Gm-Message-State: AAQBX9dAo6yC4WOu5VsrId6pKs5ojYCyn+fsazH+L+cLg2w3NZSYM8oe
+        b7gq4MWvr8IPGBFzS3qN0rlJTg==
+X-Google-Smtp-Source: AKy350YUW70L/4lbimyDIKZoumBSIx5N8MLRIqbM+/F7jMO+dCl4QxdIyqtRfp3NsLC5KYpYQe4X4w==
+X-Received: by 2002:a17:90a:4f01:b0:23d:1a5c:ff3d with SMTP id p1-20020a17090a4f0100b0023d1a5cff3dmr5920279pjh.37.1680942168989;
+        Sat, 08 Apr 2023 01:22:48 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170902868500b001a0667822c8sm4041197plo.94.2023.04.08.01.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 01:22:48 -0700 (PDT)
+Date:   Sat, 8 Apr 2023 17:22:41 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     david@redhat.com, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        petr.pavlu@suse.com, prarit@redhat.com,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        rafael@kernel.org, christophe.leroy@csgroup.eu, tglx@linutronix.de,
+        peterz@infradead.org, song@kernel.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com
+Subject: Re: [PATCH v2 1/2] Change DEFINE_SEMAPHORE() to take a number
+ argument
+Message-ID: <20230408082241.GA12866@google.com>
+References: <20230405203505.1343562-1-mcgrof@kernel.org>
+ <20230405203505.1343562-2-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230408050323.70919-1-kartikey406@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230405203505.1343562-2-mcgrof@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 08, 2023 at 10:33:23AM +0530, Deepanshu Kartikey wrote:
-> Fixed a coding styling issue
-> 
-> Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
-> ---
->  drivers/staging/fbtft/fbtft-bus.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/fbtft/fbtft-bus.c b/drivers/staging/fbtft/fbtft-bus.c
-> index 3d422bc11641..02a16671f2a1 100644
-> --- a/drivers/staging/fbtft/fbtft-bus.c
-> +++ b/drivers/staging/fbtft/fbtft-bus.c
-> @@ -62,9 +62,9 @@ out:									      \
->  }                                                                             \
->  EXPORT_SYMBOL(func);
->  
-> -define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8, )
-> +define_fbtft_write_reg(fbtft_write_reg8_bus8, u8, u8)
->  define_fbtft_write_reg(fbtft_write_reg16_bus8, __be16, u16, cpu_to_be16)
-> -define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16, )
-> +define_fbtft_write_reg(fbtft_write_reg16_bus16, u16, u16)
->  
->  void fbtft_write_reg8_bus9(struct fbtft_par *par, int len, ...)
->  {
-> -- 
-> 2.25.1
-> 
-> 
+On (23/04/05 13:35), Luis Chamberlain wrote:
+> +++ b/kernel/printk/printk.c
+> @@ -89,7 +89,7 @@ static DEFINE_MUTEX(console_mutex);
+>   * console_sem protects updates to console->seq and console_suspended,
+>   * and also provides serialization for console printing.
+>   */
+> -static DEFINE_SEMAPHORE(console_sem);
+> +static DEFINE_SEMAPHORE(console_sem, 1);
 
-Any specific reason why you did not test-build your patch before sending
-it?
+FWIW,
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org> # printk
