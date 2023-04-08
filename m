@@ -2,468 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C416DBC1F
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 18:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA926DBC1D
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 18:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjDHQWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 12:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        id S230140AbjDHQWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 12:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjDHQWt (ORCPT
+        with ESMTP id S229581AbjDHQWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 12:22:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332AACA15;
-        Sat,  8 Apr 2023 09:22:47 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dm2so3445269ejc.8;
-        Sat, 08 Apr 2023 09:22:47 -0700 (PDT)
+        Sat, 8 Apr 2023 12:22:43 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26326592;
+        Sat,  8 Apr 2023 09:22:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aXLJyCsxVd5GCdTi3SBTP71N+BgoWZSpkYr290zIzfvEj6/K7C2j2gsJCtWOuNDnY8tt6XxZsBkDDbOKrrtozQ6uRIzDKBeFAttrxT3PGtj0LgsONgMygX7fYKB28rtyK7uH10jDi6DqutVQ9LD7tVKi6fLJQYFWSOTX2nW98DC9CZ7o7Im+4zkuslmnitC5raal2jOa+Wy+hvn+DeVYaWf9JpO3tU7rOhlmEy94sLDEeOreJIXArZYo9/Xr3IgEnnUT4fzyM4BItkE7QHA6k+O2w8qTLur2S6oysoGCupOafbNt7+4xKbJz6X0Vo9mYVA30H9eNZEQE6NPgnyKVXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3d16567EM0NEhDIw02/vb3I6RYsCW2ccMPv19W6+wjw=;
+ b=l2Zy8uKMZwVaf0/4m3f4NsO9LROfiTZ8Wj9swi2dkQC8B87gVU2ph/CsiKsRXt6smgYQu2zQ5G9qUyWgGQZBZAiEO4ADDxLO/ALeuyFeaMr3rIwxECs5T3NlO8New5zhfIKhKJ3UVlxGiN398gxep1wo/G5tuP+m616pxyczNu+GoWZ6lRdUSZG0O2cE52aGfXlO+eZ0Ch1P1o09GXACl41aCEy/ytudHai/fL7yP6jTbvBql1FImNKHOJjXZZ0lI+NQvCUSDORaMaZDv/SOEXsmlzTbh1cBSxlEyCB7hPMG/KSOLQ4sAdf48e03Sf2DvfJsIsv8X+xG1xU4cQtZ1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680970965; x=1683562965;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AgVuZxzjQ9fJT1qGKbFhaLXLTOGYhUVcvP9PPg+lXXI=;
-        b=Vnv37sC8HbDcRvtSvPJPrmV/BuwG7/X51G18bQqm0zQJY+SZMPuOYRSaE11B4Xf3dy
-         ScsztWxx0tvlSiVYQwvDE2ZwsPZ/g3zo3SVgxb+os2DzvLdsrlogEwSEBTrdF9Ap5pP3
-         +F6xRS0MmKeqOH/NPb4yu96C29IeQFa3mDdprMOHp+T3asC4jthhu3c+1Qgu9KdMPh0K
-         Hb2YMcdCk3LqF5pRE6Ea5KfYojAHHNnbCGw1Iy2Nx0OZOL+HONokyvv/n4Sh8ANh+j8j
-         znl+UKbTjGTweAkmZqsBem3OtKH2c9nSrNoJsk2NExNpMOC6qaRZHU76gA8mF2xcM75g
-         i/Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680970965; x=1683562965;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AgVuZxzjQ9fJT1qGKbFhaLXLTOGYhUVcvP9PPg+lXXI=;
-        b=YiZ5eDjUdNaozoXLHzpHPjHWeEL2YOj+G0i8EuAIOV2f0TPko2l3KvD8usn1/vJVM/
-         Lrkce731UrnYorhG1bxj+XQYkkiFqrrxA+JHBVxtmYQGEwQ73A2WtCC3bmm2+mKz9mEs
-         UpmJShI4PLfFAFW3kDwV6VsREKkPTEa1HNxvRQ6PC+dXQQ3apFFj1IcUPH60807raJw9
-         nUAtoz/2stbm9Csyj8VcxrcYD69+tIXi2ib3sHjU6AQs2ec0s/q2o5s1BdWNu5dxLBzp
-         3KYWbt27O0pRDLgOadPxQfG/oe1KZzMU5Exnk4f8HFL64O6MSKXUejxyT+kWteLgcida
-         yYcA==
-X-Gm-Message-State: AAQBX9eBgWCjMlsZVATVZtVYlq3q/QPBHg7OhwJIniC29iTTLIZdpdPF
-        so1JHyUlitwB+FscReOKHqQ=
-X-Google-Smtp-Source: AKy350YimKjOpROwJM4ECX71ealaqFVG3ydRHR/gwip5OdDXFmFbOC5rpKE87ufpsMwP3rphAI/OVw==
-X-Received: by 2002:a17:906:e082:b0:92a:8067:7637 with SMTP id gh2-20020a170906e08200b0092a80677637mr2752555ejb.61.1680970965383;
-        Sat, 08 Apr 2023 09:22:45 -0700 (PDT)
-Received: from localhost.localdomain ([46.211.233.49])
-        by smtp.googlemail.com with ESMTPSA id gg20-20020a170906e29400b008f767c69421sm3273764ejb.44.2023.04.08.09.22.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 09:22:44 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pauk.denis@gmail.com
-Subject: [PATCH] hwmon: (nct6775) update ASUS WMI monitoring list A620/B760/W790
-Date:   Sat,  8 Apr 2023 19:22:28 +0300
-Message-Id: <20230408162228.4291-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.2
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3d16567EM0NEhDIw02/vb3I6RYsCW2ccMPv19W6+wjw=;
+ b=PZAW72xzRs1E31iMhcZYKJS9di+fOgFuy2DqqcMSUoyxBuXWmxUnPTNuz4fPKxu6L+kD2PKk9yD0jHQ9niw8+oIbDPP5AnN8EYxkL27wPVR+2ioMRoFf4DVHGjwsCh6tWdgC5zbjQ2coM2brb4VvANwpSB7f9Jux766MKyq8k1g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA0PR13MB4014.namprd13.prod.outlook.com (2603:10b6:806:73::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.36; Sat, 8 Apr
+ 2023 16:22:38 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::89d1:63f2:2ed4:9169]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::89d1:63f2:2ed4:9169%5]) with mapi id 15.20.6277.036; Sat, 8 Apr 2023
+ 16:22:38 +0000
+Date:   Sat, 8 Apr 2023 18:22:31 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Hariprasad Kelam <hkelam@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kuba@kernel.org, davem@davemloft.net,
+        willemdebruijn.kernel@gmail.com, andrew@lunn.ch,
+        sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+        jerinj@marvell.com, sbhatta@marvell.com, naveenm@marvell.com,
+        edumazet@google.com, pabeni@redhat.com, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, maxtram95@gmail.com
+Subject: Re: [net-next Patch v6 1/6] sch_htb: Allow HTB priority parameter in
+ offload mode
+Message-ID: <ZDGUx586cnbyPa4M@corigine.com>
+References: <20230406102103.19910-1-hkelam@marvell.com>
+ <20230406102103.19910-2-hkelam@marvell.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406102103.19910-2-hkelam@marvell.com>
+X-ClientProxiedBy: AM8P190CA0011.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:219::16) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA0PR13MB4014:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0d2427a8-b6e6-43c1-f090-08db384d7839
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VU2zuacTaCYX5ZAn0oLIYzhiGj2syhOXPtuTDXyp/IHE2dMXnPCjbgTHgmRZL7jW+pBsVJt6UbxxJK1ZvD/sJTxDU3baXdvq0jAAGFgYoM736ShGo8k/zgAIppvmqziGFPlYx5J4rAFnULBNKenw3SsYkuEbct2ZR/WL1FBubQzuen9zwdUk8A1w0pGeYjWgg1u+nLKq1AD5+jOTLJKuSm8Z28sdpsYELaEQGP8ZmmFjpLUnu8K7E/KMkt3gh61IGjVBx1nPjVOVuM9QViRCmblejpL6BGNOTQrl8hzCn4easQyKvhNjRWJmSLPmBzTjB4SrrSsJd8z89dCwwIqbZgg4emmzCN5Ka/tzi3NagLSqDtqEs+G775/48rrmYqyC0IK9dB0mS2yde9N0AcQqhSPdwnMwfNfI0w603tL1vPK1o9MWqaWh7A+4EaIOfaIho43TgKKw4gwdjC9yxql2LvUfajKQ+lno5eJAvZSjqKjf0YyZcTqQH3omKwZ1n1okhcQ4gX2iVLf3fWW3WAXs5lXOdmKlhEP5dvBbK9GosSe0gUDCjQtpjreSSuZxjBzax9ihvasB3jNk21qDM5J8y7b6EVhpn8QoPIIoaHWzd1w=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39840400004)(366004)(376002)(396003)(451199021)(86362001)(36756003)(316002)(41300700001)(66946007)(66556008)(66476007)(8676002)(6916009)(4326008)(6486002)(478600001)(5660300002)(7416002)(8936002)(2906002)(4744005)(44832011)(38100700002)(186003)(6666004)(6512007)(6506007)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ajXRuyB/Q4Ff1k3iV1jy8qpPYHZrqrYPD3+sJjO40nvA1A5xp4xntibmZ5Hg?=
+ =?us-ascii?Q?JifDPyhVLZHtxCAuxXJRFeTpcMcIYJ4I2cUd+uobBPhD7WiCc9gbhqG64jfM?=
+ =?us-ascii?Q?LDKKvCgxKTXJyfNswNQbHNSCuGibT4J/CSlcWfb/h0xhMVWQzMFEk0GUfzoS?=
+ =?us-ascii?Q?3hYrAGzmLVfJP7OnGBC2D+Al5wepwddbOeFfDbF9LU/YPonlrdZ9mzV0gD0Y?=
+ =?us-ascii?Q?GFhsdIYLt/o7rfYNzKT9bWrjpj7QX6aqDJA0d8+eqRetd8KKgF9j/AdlQISH?=
+ =?us-ascii?Q?fjYg+GVwNoY4UhqU7BwDzKIc2VkyCEQNHNlaQ+L1ppfAk8S0D0EYFCRmDpvk?=
+ =?us-ascii?Q?LUiIFsjdjsPd/wHSzc0nzBblUnJfWd19lGpddiLV4VKo+5aJI0znXvWk3QA0?=
+ =?us-ascii?Q?8cyD64Fy+FstSJ0d+iyOzVByKeXzoRXDORyEzXVMaUqrmxjJUWgIUFhUj1S3?=
+ =?us-ascii?Q?VbjDIhPh0dpUQWPRaGdXe7q8qAR3FP6qTgsram7XwPo7RZpg4rFCXshvtxMZ?=
+ =?us-ascii?Q?w/pgxAZBgHpS4GkyhAjHMf5bfQSdGwtaXL8ICNVJEOz8v7hxtoxS9KEbmODs?=
+ =?us-ascii?Q?xHQ1lSSMKAjz0pW7xXbEc1sLphzkUcWwa2wqPvEA5SrWKaaJ1mQWQhm1pEPn?=
+ =?us-ascii?Q?3X5VRDG6wFGfzygSyKJqLSveIIno7LpFWj5SjaknqLflOlAjk/nA/ZUxfJoT?=
+ =?us-ascii?Q?2MurlTjV5CSG99fkxIbriKri2sctAfFuv6ftIsmdqItmMwcLBfwpwfb0TXLx?=
+ =?us-ascii?Q?R4vkTk4NFwKLZu/NLRCFkrxiMCnSbkT/whp9/+oZfV82febcF7whjKYj9WXf?=
+ =?us-ascii?Q?6OPZtxNLjpKBYZ8/XtSS4oE/flkPmeAGkp9cEfkcIV1ILDL67ZooO3mm6Jv8?=
+ =?us-ascii?Q?SM3I0NAhyQOJvgmi2Q9UP/cz7UyHf1xLCwRHHQZQykaIVL5wkSfYF/Z9oV75?=
+ =?us-ascii?Q?SsErrpTKBkil3VdvRqZYogGL1Ib206ONHW8mhXV4CjOhYylKwmxG/RvhL2Sx?=
+ =?us-ascii?Q?hCz51MK9Pz/WXQBLGfkeMOm0PcN29WPfv9Kg2vmorH/hrZIv8GbPW3j45WLW?=
+ =?us-ascii?Q?43LIGvDZCfANowNqE3FLHPO1jDC1oWDLmsnaZAGuwbeHdzsUdH1v5J8spoVV?=
+ =?us-ascii?Q?zLPX0yWFmVNTZ5RfNyNe2cpl/g1T4latVWMFfTyBZcwpvbuxHVHJQHDvF8w7?=
+ =?us-ascii?Q?cgxrcsgCzrkwV7sTmhw9kDv1QbYzDnaQkbg9+rkfGPrv4oSiT3Zvbm2bbZhG?=
+ =?us-ascii?Q?rCtn2PhuxfAYLXmVEzSCvxGmBy/V2LUZseWoYzSEEPn5/p8ipLvFotXXtIaX?=
+ =?us-ascii?Q?2H5CNwcXcBV/oK/ulggOuE5fqPon0UM/jXnmNdtvD9fGkQ9qk8C4L6h861a1?=
+ =?us-ascii?Q?ppF/52DD6sHglvS6dmCvLhV7yT4PSTjmNnNnlh1w83OpPg+BIyfXV7Itcp93?=
+ =?us-ascii?Q?oYgrtdvbnRcJ4k5Mxgh7CIoiCLSK1IswNZU36FwLPoCENPaSGqOE8hZHAiZX?=
+ =?us-ascii?Q?BEIXklSlIvSpsAsmQ6iDWRRC5EUDCpF4cGS1BtJYElBVdmP7jW9IB6yZt6hn?=
+ =?us-ascii?Q?StH0+ls7pGBOAaPYC6x54ZfaTyHC/7upbZGNI9EDmcNWp3yIXmXLqhkNlPU5?=
+ =?us-ascii?Q?eWJNZiFb0HG2nrI3rkcrjks9/KpXTcqq3Cr9Ytxy+6aa/anH895clEyUJu1R?=
+ =?us-ascii?Q?EDCbOQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d2427a8-b6e6-43c1-f090-08db384d7839
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2023 16:22:38.6243
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aQJT/gnVMcwE4pDifc3T8dc/EZLEhS3pgJXQxjSdtIje8ZtU5tVvjSLIQJhK6BH1gYioXzngh8XofaJnphb0tBFC5w/7GidG3rvkhWzjXIk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR13MB4014
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boards such as
-* B360M-BASALT,
-* B360M-D3H,
-* EX-B360M-V,
-* EX-B360M-V3,
-* EX-B360M-V5,
-* EX-B760M-V5 D4,
-* PRIME A620M-A,
-* PRIME B460I-PLUS,
-* PRIME B460M-A,
-* PRIME B460M-K,
-* PRIME B550-PLUS AC-HES,
-* PRIME B660M-A AC D4,
-* PRIME B760M-A,
-* PRIME B760M-A AX D4,
-* PRIME B760M-A D4,
-* PRIME B760M-AJ D4,
-* PRIME B760M-A WIFI,
-* PRIME B760M-A WIFI D4,
-* PRIME B760M-K D4,
-* PRIME B760-PLUS,
-* PRIME B760-PLUS D4,
-* PRIME H310I-PLUS,
-* PRIME H310M-A,
-* PRIME H310M-C,
-* PRIME H310M-D,
-* PRIME H310M-DASH,
-* PRIME H310M-E,
-* PRIME H310M-E/BR,
-* PRIME H310M-F,
-* PRIME H310M-K,
-* PRIME H310-PLUS,
-* PRIME H310T,
-* PRIME H370-A,
-* PRIME H370M-PLUS,
-* PRIME H370-PLUS,
-* PRIME H410I-PLUS,
-* PRIME H470M-PLUS,
-* PRIME H470-PLUS,
-* PRIME H510M-R,
-* PRIME H510T2/CSM,
-* PRIME H570M-PLUS,
-* PRIME H570-PLUS,
-* PRIME H610M-R D4,
-* PRIME H670-PLUS D4,
-* PRIME H770-PLUS D4,
-* PRIME Q370M-C,
-* ProArt B760-CREATOR D4,
-* Pro B760M-C,
-* Pro B760M-CT,
-* PRO Q470M-C,
-* Pro Q670M-C,
-* Pro WS W790-ACE,
-* Pro WS W790E-SAGE SE,
-* ROG MAXIMUS Z690 FORMULA,
-* ROG MAXIMUS Z690 HERO,
-* ROG STRIX B360-F GAMING,
-* ROG STRIX B360-G GAMING,
-* ROG STRIX B360-H GAMING,
-* ROG STRIX B360-H GAMING/OPTANE,
-* ROG STRIX B360-I GAMING,
-* ROG STRIX B760-A GAMING WIFI,
-* ROG STRIX B760-A GAMING WIFI D4,
-* ROG STRIX B760-F GAMING WIFI,
-* ROG STRIX B760-G GAMING WIFI,
-* ROG STRIX B760-G GAMING WIFI D4,
-* ROG STRIX B760-I GAMING WIFI,
-* ROG STRIX H370-F GAMING,
-* ROG STRIX H370-I GAMING,
-* ROG STRIX H470-I GAMING,
-* ROG STRIX Z690-E GAMING WIFI,
-* ROG STRIX Z690-F GAMING WIFI,
-* ROG STRIX Z690-G GAMING WIFI,
-* TUF B360M-E GAMING,
-* TUF B360M-PLUS GAMING,
-* TUF B360M-PLUS GAMING/BR,
-* TUF B360M-PLUS GAMING S,
-* TUF B360-PLUS GAMING,
-* TUF B360-PRO GAMING,
-* TUF B360-PRO GAMING (WI-FI),
-* TUF GAMING A620M-PLUS,
-* TUF GAMING A620M-PLUS WIFI,
-* TUF GAMING B660M-PLUS D4,
-* TUF GAMING B660M-PLUS WIFI D4,
-* TUF GAMING B760M-BTF WIFI D4,
-* TUF GAMING B760M-E D4,
-* TUF GAMING B760M-PLUS,
-* TUF GAMING B760M-PLUS D4,
-* TUF GAMING B760M-PLUS WIFI,
-* TUF GAMING B760M-PLUS WIFI D4,
-* TUF GAMING B760-PLUS WIFI,
-* TUF GAMING B760-PLUS WIFI D4,
-* TUF GAMING H470-PRO,
-* TUF GAMING H470-PRO (WI-FI),
-* TUF GAMING H570-PRO,
-* TUF GAMING H570-PRO WIFI,
-* TUF GAMING H670-PRO WIFI D4,
-* TUF GAMING H770-PRO WIFI,
-* TUF GAMING X570-PRO WIFI II,
-* TUF H310M-PLUS GAMING,
-* TUF H310M-PLUS GAMING/BR,
-* TUF H310-PLUS GAMING,
-* TUF H370-PRO GAMING,
-* TUF H370-PRO GAMING (WI-FI),
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+On Thu, Apr 06, 2023 at 03:50:58PM +0530, Hariprasad Kelam wrote:
+> From: Naveen Mamindlapalli <naveenm@marvell.com>
+> 
+> The current implementation of HTB offload returns the EINVAL error
+> for unsupported parameters like prio and quantum. This patch removes
+> the error returning checks for 'prio' parameter and populates its
+> value to tc_htb_qopt_offload structure such that driver can use the
+> same.
+> 
+> Add prio parameter check in mlx5 driver, as mlx5 devices are not capable
+> of supporting the prio parameter when htb offload is used. Report error
+> if prio parameter is set to a non-default value.
+> 
+> Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
+> Co-developed-by: Rahul Rameshbabu <rrameshbabu@nvidia.com>
+> Signed-off-by: Rahul Rameshbabu <rrameshbabu@nvidia.com>
+> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
 
-This commit adds such boards to the WMI monitoring list.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-
----
-I have checked all boards that ASUS support site has UEFI capsule dumps[1],
-such list should cover full list of boards that have nct67xx and support
-WMI method for access to the sensor.
-
-List of boards with sensor are based on images on ASUS site (e.g: AMD A620) and
-DMI decode results from LinuxHW database.
-
-I suppose that after apply commit, all next changes will be only for new
-unreleased series or board name typo's fixes.
-
-Some boards could require nct6799 patch[3], e.g: A620/X670.
-Full list of cheked boards on [4].
-
-[1]: https://www.asus.com/motherboards-components/motherboards/all-series
-[2]: https://github.com/linuxhw/DMI/tree/master/Desktop/ASUSTek%20Computer
-[3]: https://patchwork.kernel.org/project/linux-hwmon/patch/20221228135744.281752-1-linux@roeck-us.net/
-[4]: https://github.com/asus-wmi-boards-sensors/asus-board-dsdt#supported-boards
----
- drivers/hwmon/nct6775-platform.c | 103 +++++++++++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
-
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 680fa0ecd6c31..5782acfb4ee1b 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1052,6 +1052,11 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- static struct platform_device *pdev[2];
- 
- static const char * const asus_wmi_boards[] = {
-+	"B360M-BASALT",
-+	"B360M-D3H",
-+	"EX-B360M-V",
-+	"EX-B360M-V3",
-+	"EX-B360M-V5",
- 	"EX-B460M-V5",
- 	"EX-H410M-V3",
- 	"PRIME A520M-A",
-@@ -1064,13 +1069,32 @@ static const char * const asus_wmi_boards[] = {
- 	"PRIME B360M-D",
- 	"PRIME B360M-K",
- 	"PRIME B460-PLUS",
-+	"PRIME B460I-PLUS",
-+	"PRIME B460M-A",
- 	"PRIME B460M-A R2.0",
-+	"PRIME B460M-K",
- 	"PRIME B550-PLUS",
-+	"PRIME B550-PLUS AC-HES",
- 	"PRIME B550M-A",
- 	"PRIME B550M-A (WI-FI)",
- 	"PRIME B550M-A AC",
- 	"PRIME B550M-A WIFI II",
- 	"PRIME B550M-K",
-+	"PRIME H310-PLUS",
-+	"PRIME H310I-PLUS",
-+	"PRIME H310M-A",
-+	"PRIME H310M-C",
-+	"PRIME H310M-D",
-+	"PRIME H310M-DASH",
-+	"PRIME H310M-E",
-+	"PRIME H310M-E/BR",
-+	"PRIME H310M-F",
-+	"PRIME H310M-K",
-+	"PRIME H310T",
-+	"PRIME H370-A",
-+	"PRIME H370-PLUS",
-+	"PRIME H370M-PLUS",
-+	"PRIME H410I-PLUS",
- 	"PRIME H410M-A",
- 	"PRIME H410M-D",
- 	"PRIME H410M-E",
-@@ -1078,7 +1102,10 @@ static const char * const asus_wmi_boards[] = {
- 	"PRIME H410M-K",
- 	"PRIME H410M-K R2.0",
- 	"PRIME H410M-R",
-+	"PRIME H470-PLUS",
-+	"PRIME H470M-PLUS",
- 	"PRIME H510M-K R2.0",
-+	"PRIME Q370M-C",
- 	"PRIME X570-P",
- 	"PRIME X570-PRO",
- 	"PRIME Z390-A",
-@@ -1092,6 +1119,7 @@ static const char * const asus_wmi_boards[] = {
- 	"PRO B460M-C",
- 	"PRO H410M-C",
- 	"PRO H410T",
-+	"PRO Q470M-C",
- 	"Pro A520M-C",
- 	"Pro A520M-C II",
- 	"Pro B550M-C",
-@@ -1116,6 +1144,11 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG MAXIMUS XII EXTREME",
- 	"ROG MAXIMUS XII FORMULA",
- 	"ROG MAXIMUS XII HERO (WI-FI)",
-+	"ROG STRIX B360-F GAMING",
-+	"ROG STRIX B360-G GAMING",
-+	"ROG STRIX B360-H GAMING",
-+	"ROG STRIX B360-H GAMING/OPTANE",
-+	"ROG STRIX B360-I GAMING",
- 	"ROG STRIX B460-F GAMING",
- 	"ROG STRIX B460-G GAMING",
- 	"ROG STRIX B460-H GAMING",
-@@ -1127,6 +1160,9 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG STRIX B550-F GAMING WIFI II",
- 	"ROG STRIX B550-I GAMING",
- 	"ROG STRIX B550-XE GAMING WIFI",
-+	"ROG STRIX H370-F GAMING",
-+	"ROG STRIX H370-I GAMING",
-+	"ROG STRIX H470-I GAMING",
- 	"ROG STRIX X570-E GAMING",
- 	"ROG STRIX X570-E GAMING WIFI II",
- 	"ROG STRIX X570-F GAMING",
-@@ -1142,6 +1178,13 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG STRIX Z490-G GAMING (WI-FI)",
- 	"ROG STRIX Z490-H GAMING",
- 	"ROG STRIX Z490-I GAMING",
-+	"TUF B360-PLUS GAMING",
-+	"TUF B360-PRO GAMING",
-+	"TUF B360-PRO GAMING (WI-FI)",
-+	"TUF B360M-E GAMING",
-+	"TUF B360M-PLUS GAMING",
-+	"TUF B360M-PLUS GAMING S",
-+	"TUF B360M-PLUS GAMING/BR",
- 	"TUF GAMING A520M-PLUS",
- 	"TUF GAMING A520M-PLUS II",
- 	"TUF GAMING A520M-PLUS WIFI",
-@@ -1160,12 +1203,20 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF GAMING B550M-PLUS",
- 	"TUF GAMING B550M-PLUS (WI-FI)",
- 	"TUF GAMING B550M-PLUS WIFI II",
-+	"TUF GAMING H470-PRO",
-+	"TUF GAMING H470-PRO (WI-FI)",
- 	"TUF GAMING X570-PLUS",
- 	"TUF GAMING X570-PLUS (WI-FI)",
- 	"TUF GAMING X570-PLUS_BR",
- 	"TUF GAMING X570-PRO (WI-FI)",
-+	"TUF GAMING X570-PRO WIFI II",
- 	"TUF GAMING Z490-PLUS",
- 	"TUF GAMING Z490-PLUS (WI-FI)",
-+	"TUF H310-PLUS GAMING",
-+	"TUF H310M-PLUS GAMING",
-+	"TUF H310M-PLUS GAMING/BR",
-+	"TUF H370-PRO GAMING",
-+	"TUF H370-PRO GAMING (WI-FI)",
- 	"TUF Z390-PLUS GAMING",
- 	"TUF Z390-PLUS GAMING (WI-FI)",
- 	"TUF Z390-PRO GAMING",
-@@ -1180,8 +1231,10 @@ static const char * const asus_msi_boards[] = {
- 	"EX-B560M-V5",
- 	"EX-B660M-V5 D4",
- 	"EX-B660M-V5 PRO D4",
-+	"EX-B760M-V5 D4",
- 	"EX-H510M-V3",
- 	"EX-H610M-V3 D4",
-+	"PRIME A620M-A",
- 	"PRIME B560-PLUS",
- 	"PRIME B560-PLUS AC-HES",
- 	"PRIME B560M-A",
-@@ -1195,14 +1248,28 @@ static const char * const asus_msi_boards[] = {
- 	"PRIME B650M-A WIFI",
- 	"PRIME B650M-A WIFI II",
- 	"PRIME B660-PLUS D4",
-+	"PRIME B660M-A AC D4",
- 	"PRIME B660M-A D4",
- 	"PRIME B660M-A WIFI D4",
-+	"PRIME B760-PLUS",
-+	"PRIME B760-PLUS D4",
-+	"PRIME B760M-A",
-+	"PRIME B760M-A AX D4",
-+	"PRIME B760M-A D4",
-+	"PRIME B760M-A WIFI",
-+	"PRIME B760M-A WIFI D4",
-+	"PRIME B760M-AJ D4",
-+	"PRIME B760M-K D4",
- 	"PRIME H510M-A",
- 	"PRIME H510M-A WIFI",
- 	"PRIME H510M-D",
- 	"PRIME H510M-E",
- 	"PRIME H510M-F",
- 	"PRIME H510M-K",
-+	"PRIME H510M-R",
-+	"PRIME H510T2/CSM",
-+	"PRIME H570-PLUS",
-+	"PRIME H570M-PLUS",
- 	"PRIME H610I-PLUS D4",
- 	"PRIME H610M-A D4",
- 	"PRIME H610M-A WIFI D4",
-@@ -1210,6 +1277,9 @@ static const char * const asus_msi_boards[] = {
- 	"PRIME H610M-E D4",
- 	"PRIME H610M-F D4",
- 	"PRIME H610M-K D4",
-+	"PRIME H610M-R D4",
-+	"PRIME H670-PLUS D4",
-+	"PRIME H770-PLUS D4",
- 	"PRIME X670-P",
- 	"PRIME X670-P WIFI",
- 	"PRIME X670E-PRO WIFI",
-@@ -1235,16 +1305,22 @@ static const char * const asus_msi_boards[] = {
- 	"Pro B560M-CT",
- 	"Pro B660M-C",
- 	"Pro B660M-C D4",
-+	"Pro B760M-C",
-+	"Pro B760M-CT",
- 	"Pro H510M-C",
- 	"Pro H510M-CT",
- 	"Pro H610M-C",
- 	"Pro H610M-C D4",
- 	"Pro H610M-CT D4",
- 	"Pro H610T D4",
-+	"Pro Q670M-C",
- 	"Pro WS W680-ACE",
- 	"Pro WS W680-ACE IPMI",
-+	"Pro WS W790-ACE",
-+	"Pro WS W790E-SAGE SE",
- 	"ProArt B650-CREATOR",
- 	"ProArt B660-CREATOR D4",
-+	"ProArt B760-CREATOR D4",
- 	"ProArt X670E-CREATOR WIFI",
- 	"ProArt Z690-CREATOR WIFI",
- 	"ProArt Z790-CREATOR WIFI",
-@@ -1258,6 +1334,8 @@ static const char * const asus_msi_boards[] = {
- 	"ROG MAXIMUS Z690 APEX",
- 	"ROG MAXIMUS Z690 EXTREME",
- 	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-+	"ROG MAXIMUS Z690 FORMULA",
-+	"ROG MAXIMUS Z690 HERO",
- 	"ROG MAXIMUS Z690 HERO EVA",
- 	"ROG MAXIMUS Z790 APEX",
- 	"ROG MAXIMUS Z790 EXTREME",
-@@ -1276,6 +1354,12 @@ static const char * const asus_msi_boards[] = {
- 	"ROG STRIX B660-F GAMING WIFI",
- 	"ROG STRIX B660-G GAMING WIFI",
- 	"ROG STRIX B660-I GAMING WIFI",
-+	"ROG STRIX B760-A GAMING WIFI",
-+	"ROG STRIX B760-A GAMING WIFI D4",
-+	"ROG STRIX B760-F GAMING WIFI",
-+	"ROG STRIX B760-G GAMING WIFI",
-+	"ROG STRIX B760-G GAMING WIFI D4",
-+	"ROG STRIX B760-I GAMING WIFI",
- 	"ROG STRIX X670E-A GAMING WIFI",
- 	"ROG STRIX X670E-E GAMING WIFI",
- 	"ROG STRIX X670E-F GAMING WIFI",
-@@ -1287,6 +1371,9 @@ static const char * const asus_msi_boards[] = {
- 	"ROG STRIX Z590-I GAMING WIFI",
- 	"ROG STRIX Z690-A GAMING WIFI",
- 	"ROG STRIX Z690-A GAMING WIFI D4",
-+	"ROG STRIX Z690-E GAMING WIFI",
-+	"ROG STRIX Z690-F GAMING WIFI",
-+	"ROG STRIX Z690-G GAMING WIFI",
- 	"ROG STRIX Z690-I GAMING WIFI",
- 	"ROG STRIX Z790-A GAMING WIFI",
- 	"ROG STRIX Z790-A GAMING WIFI D4",
-@@ -1294,6 +1381,8 @@ static const char * const asus_msi_boards[] = {
- 	"ROG STRIX Z790-F GAMING WIFI",
- 	"ROG STRIX Z790-H GAMING WIFI",
- 	"ROG STRIX Z790-I GAMING WIFI",
-+	"TUF GAMING A620M-PLUS",
-+	"TUF GAMING A620M-PLUS WIFI",
- 	"TUF GAMING B560-PLUS WIFI",
- 	"TUF GAMING B560M-E",
- 	"TUF GAMING B560M-PLUS",
-@@ -1304,7 +1393,21 @@ static const char * const asus_msi_boards[] = {
- 	"TUF GAMING B650M-PLUS WIFI",
- 	"TUF GAMING B660-PLUS WIFI D4",
- 	"TUF GAMING B660M-E D4",
-+	"TUF GAMING B660M-PLUS D4",
- 	"TUF GAMING B660M-PLUS WIFI",
-+	"TUF GAMING B660M-PLUS WIFI D4",
-+	"TUF GAMING B760-PLUS WIFI",
-+	"TUF GAMING B760-PLUS WIFI D4",
-+	"TUF GAMING B760M-BTF WIFI D4",
-+	"TUF GAMING B760M-E D4",
-+	"TUF GAMING B760M-PLUS",
-+	"TUF GAMING B760M-PLUS D4",
-+	"TUF GAMING B760M-PLUS WIFI",
-+	"TUF GAMING B760M-PLUS WIFI D4",
-+	"TUF GAMING H570-PRO",
-+	"TUF GAMING H570-PRO WIFI",
-+	"TUF GAMING H670-PRO WIFI D4",
-+	"TUF GAMING H770-PRO WIFI",
- 	"TUF GAMING X670E-PLUS",
- 	"TUF GAMING X670E-PLUS WIFI",
- 	"TUF GAMING Z590-PLUS",
--- 
-2.39.2
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
