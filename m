@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2A46DB9D9
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 11:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2541B6DB9ED
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 11:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjDHJbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 05:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S229776AbjDHJru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 05:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDHJbu (ORCPT
+        with ESMTP id S229481AbjDHJrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 05:31:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FADFC140;
-        Sat,  8 Apr 2023 02:31:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E437A611AE;
-        Sat,  8 Apr 2023 09:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF76C433EF;
-        Sat,  8 Apr 2023 09:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680946308;
-        bh=StJNO4de7jBrcTpA+nFUKFtj9EXHG30Gz3JlLFkKPyI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PvBUwzjtr76bPsYzGahl89tM4xiOgWiJXfh9UzZ+4N7PztOaqcneGsB3hIiXXjYuY
-         ztxTG3rnLZ0czLhLHpRRWp5d6Ft6rmCMChvY1BFlmdAy8vNH+4HlsRW4lhzohKuGnX
-         6R8tUUv7xoU7ZoqJkFY9jD+yKzmqZLE9wX8p6pX4ah4F0pq+O4rYev5ljECAO2Ow5j
-         +bO2tTbUhnWMG5SON7cqNixhaCI4g+Ms467R1HsMWRVwb9Oey8t/4hKhLWc/TmUgiF
-         LgHR+f73Ka7wblqquHjE8jO0QuadqCzycqlpGVJeVRSfFSg8YEok3SE488hW6rrWmg
-         UgDbFK0tf3egA==
-Date:   Sat, 8 Apr 2023 10:47:03 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     andriy.shevchenko@linux.intel.com, trix@redhat.com,
-        lars@metafoo.de, nathan@kernel.org, ndesaulniers@google.com,
-        u.kleine-koenig@pengutronix.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hslester96@gmail.com
-Subject: Re: [PATCH] iio: light: tsl2772: fix reading proximity-diodes from
- device tree
-Message-ID: <20230408104703.758cb5c0@jic23-huawei>
-In-Reply-To: <20230404011455.339454-1-bmasney@redhat.com>
-References: <20230404011455.339454-1-bmasney@redhat.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 8 Apr 2023 05:47:48 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9ACCC2C;
+        Sat,  8 Apr 2023 02:47:47 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50489a2bc4dso208389a12.0;
+        Sat, 08 Apr 2023 02:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680947265; x=1683539265;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0V+79f1G4EAx5wqA50mN9ZgwAmoB9D1BTsUKh1syJbQ=;
+        b=Lg5qgz6geHqN2+2ckjZRVy55WQ+OScakxL3RdFKWObkihkC1OoB7qyJsweOcRsXKXm
+         J7J30IGbxio4s0O2uc2DnoB3QsIFfcafpI0IaQnYHl2DwVBVKHlmiCWM/OsMkHDHzvTZ
+         bgvgik6N/BR7PMYmTcd/yT5Qimb92ppB97DN3+Zcu3KlzKAKDDGSsO0ecBIw589+wA2u
+         LuNCyfVtljT5VFWcLhnTqv0cXR63Y3lZpTuYL/x0B1Q1h42c3B+TZCrKAIe9Yx0rNIxp
+         4nOU8OQVOy1j1PqJAwyDyHSf0Boj4f565P5H+SCYJ+lb+Adh7eBmhCwdRnAQH+GStS9S
+         IG4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680947265; x=1683539265;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0V+79f1G4EAx5wqA50mN9ZgwAmoB9D1BTsUKh1syJbQ=;
+        b=KnU9pDFF2fzsxfSRPMaYtmR5h2fC+Rkyelc85SKQSJnRZF/draeaDlGzW+wWIV6OoI
+         tk96YUoiLngYk76F450TC7ZvwxqIRgP2rX6USyVuEbxms94+JtqcHVOHeQWk5FurHiIz
+         96kcdIlA35PFn1YLSFaUMNpaatZLLUBtpXA2d0f1ty9FDlwDLIQYn7srijTYMxfqFpiR
+         H6PeRKYBR+mxbpBQ6gCnhVpXfP5GAu9vGj59pVrnkR3FK6oNHyolYlNgd8utfKzzC82x
+         Vi0ahTvEcD9BN6caS6Y8TdD4tXdPV4nVM0p11qKoEuRPs7Gme3jD7SinfdrHNMoLwXqa
+         Tk9Q==
+X-Gm-Message-State: AAQBX9cB7fYFERvDc9h7v8QvCT9cPPAAS9YwxIPXPzW4foPDjOyIdIgT
+        NxcNUAEIUPphel34ErfGQc0=
+X-Google-Smtp-Source: AKy350aO6nEUzOn+aw43GnZc6FMfCEr85RtCi/zar/Ozjicrn6tG3oe1Vw38FFJncCsIk7dgVE1utA==
+X-Received: by 2002:a05:6402:32c:b0:501:d43e:d1e3 with SMTP id q12-20020a056402032c00b00501d43ed1e3mr4418282edw.8.1680947265509;
+        Sat, 08 Apr 2023 02:47:45 -0700 (PDT)
+Received: from xeon.. ([188.163.112.79])
+        by smtp.gmail.com with ESMTPSA id a21-20020a50c315000000b0050481736f0csm982297edb.12.2023.04.08.02.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 02:47:45 -0700 (PDT)
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Svyatoslav Ryhel <clamor95@gmail.com>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v1 0/2] Support bridge/connector by Tegra HDMI
+Date:   Sat,  8 Apr 2023 12:47:21 +0300
+Message-Id: <20230408094723.12733-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  3 Apr 2023 21:14:55 -0400
-Brian Masney <bmasney@redhat.com> wrote:
+This patch adds support for the bridge/connector attached to the
+HDMI output, allowing to model the hardware properly. It keeps
+backwards compatibility with existing bindings and is required
+by devices which have a simple or MHL bridge connected to HDMI
+output like ASUS P1801-T or LG P880/P895 or HTC One X.
 
-> tsl2772_read_prox_diodes() will correctly parse the properties from
-> device tree to determine which proximity diode(s) to read from, however
-> it didn't actually set this value on the struct tsl2772_settings. Let's
-> go ahead and fix that.
-> 
-> Reported-by: Tom Rix <trix@redhat.com>
-> Link: https://lore.kernel.org/lkml/20230327120823.1369700-1-trix@redhat.com/
-> Fixes: 94cd1113aaa0 ("iio: tsl2772: add support for reading proximity led settings from device tree")
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
+Tested on ASUS Transformers which have no dedicated bridge but
+have type d HDMI connector directly available. Tests went smoothly.
 
-Applied to the fixes-togreg branch of iio.git and marked for stable.
+Maxim Schwalm (1):
+  drm/tegra: output: hdmi: Support bridge/connector
 
-thanks,
+Svyatoslav Ryhel (1):
+  ARM: tegra: transformers: add connector node
 
-Jonathan
+ arch/arm/boot/dts/tegra20-asus-tf101.dts      | 22 ++++++++--
+ .../dts/tegra30-asus-transformer-common.dtsi  | 21 ++++++++-
+ drivers/gpu/drm/tegra/hdmi.c                  | 44 ++++++++++++++-----
+ 3 files changed, 71 insertions(+), 16 deletions(-)
 
-> ---
->  drivers/iio/light/tsl2772.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/iio/light/tsl2772.c b/drivers/iio/light/tsl2772.c
-> index ad50baa0202c..e823c145f679 100644
-> --- a/drivers/iio/light/tsl2772.c
-> +++ b/drivers/iio/light/tsl2772.c
-> @@ -601,6 +601,7 @@ static int tsl2772_read_prox_diodes(struct tsl2772_chip *chip)
->  			return -EINVAL;
->  		}
->  	}
-> +	chip->settings.prox_diode = prox_diode_mask;
->  
->  	return 0;
->  }
+-- 
+2.37.2
 
