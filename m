@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB41E6DB96B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F223C6DB96F
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 10:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjDHHzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 03:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
+        id S229832AbjDHIA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 04:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjDHHzE (ORCPT
+        with ESMTP id S229516AbjDHIA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 03:55:04 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76321FF19;
-        Sat,  8 Apr 2023 00:54:40 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id f7-20020a4ab647000000b0054101f316c7so3442260ooo.13;
-        Sat, 08 Apr 2023 00:54:40 -0700 (PDT)
+        Sat, 8 Apr 2023 04:00:26 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BF5359D;
+        Sat,  8 Apr 2023 01:00:24 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id xi5so1618817ejb.13;
+        Sat, 08 Apr 2023 01:00:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680940472;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w7f1ZJtQ7GVMBkDWdLfo+KU/tSEuvyaRTAOcNqcasmo=;
-        b=AHns2xsd72x2hzUF8tVoMr+YvL6brrpf82BA2x+ZNUu1iZKDGBC/cON1n5EL89JQBX
-         ojJ1NLxsgtjEUMkWUOGJh4Tmfi7MjSbOzSdRjoX+cFe5LGz2qNRBdcAvNyYAwr5MICTI
-         Ll0PKzZO6ioZcpDFvqwV6mQSGT2KbN+N6r3VW6HFbDvFZYfF3VQyMvRRtTazxbTCGKd1
-         XnbKY4yqbEhcP8Wzp9wojyyVPt228OVOEgWptOrBZ5hfrbyJKonDaiARRcTt1mHobiFi
-         l/TOojBi0NHOLARSdWm7xC9xkbn2LN1wgKqj3hHnyQrKQdCIS7a5gbLPAESw7+NYoSLy
-         j+TA==
+        d=gmail.com; s=20210112; t=1680940823; x=1683532823;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bi7JvPElT3hg9CbjcEBIDpY1q4eP6kscnFBEUMqhqWo=;
+        b=Ey95lsZW/q3t/v3cDSZpSCnqf7fGu21eyqnQYme+DfPxkX92GvxuUwEX5aC+wxQKfu
+         IexoDmOogRWK//rYDxO5e9NQ3aHsz6HzM7r0Ok/Qqg/WJ00k3W5NTjuzcht4TSTnkwlB
+         VxafJrEI0kg5+TgbgxLUHvjvaXHLz+t9S70AydeXAYUu+3OkclZmlfrsvfSceG8ZsckP
+         xqplc0WvgNJ1VcwTNM9qx3J6jogdB6t67Zfd2MYNVRVXeQqSGkHIUD986BnY9p9YgNzt
+         40g6uc8xFcm70StKiAnLl/pHD84Y/Eukf2gqg3mEHVBnU3jV7OBq7g6piMT5alAfZloE
+         fI6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680940472;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w7f1ZJtQ7GVMBkDWdLfo+KU/tSEuvyaRTAOcNqcasmo=;
-        b=egaUS/r+zvSrd3GgecHPNUgYezkHRafbLCmDO/YWaW6H/amZJuUspS1T4ZkeRYbGG7
-         vF5dhPK0uNmZmY5h5aNhCCeNQzSSmBmXx99Pk+pMQcG7BH7P7NEIyELAQbCzwkU+uKbH
-         NyolvoTNk7zHyjfLqlaEQW+cfSRX97qta48A3NdUhLm2sHxXZomIvJW4j8pOMscqEs8U
-         /LntpEbrtXzSd6IaGrGPeHtHijI+AL+02d4xqqaHIXrK5jmRJTxzDOvJO2RmMwEWQXzG
-         utleblJx5xZmb2aECdHcnohEeKq86SZk2i0kOSBpM0Bp0W8bHWBnFePlWmYy0vEccvro
-         syxw==
-X-Gm-Message-State: AAQBX9fku461Fz5sF17/45c5D7+n5DZx3ys+EHZm4mlQda57XCBL0Ktz
-        N5WhHlqcEo3gmLNgV6UYQ+5FfShSowY=
-X-Google-Smtp-Source: AKy350a2hKfgP+151U0qph5fxpj4WNaTaRL2dIcaSsdHCeqEiUCC5GdlsDnv9Ire6LCobwhhBg21eg==
-X-Received: by 2002:a4a:8963:0:b0:537:f9d4:a44c with SMTP id g32-20020a4a8963000000b00537f9d4a44cmr508363ooi.5.1680940472423;
-        Sat, 08 Apr 2023 00:54:32 -0700 (PDT)
-Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.29
+        d=1e100.net; s=20210112; t=1680940823; x=1683532823;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bi7JvPElT3hg9CbjcEBIDpY1q4eP6kscnFBEUMqhqWo=;
+        b=S6gmK8KIASBuCgVdf9gLOBgVbWgBEOIfoyE/k/JHVeBEFLhNFZGpRh7m0IbrcJRnGi
+         Oletrviw08fDzNG1gPCvwStP2AQ6t7l98ADN0mX3A2Ox31zdoRB9pvUDxjz021SSVDUU
+         U2MSxT4C5DdlkMMHVkDCfS02gxlNr8xRgvt1zVda8RArDmK0whhqmTZgKKirHgCnnot6
+         LtEs99I0vRYnmh6c4qw1/SfnOuRtUf26b9nED5sLXjNkttVuhGXbVX/LOMAeMD/Ga35b
+         4+YI21DafBvbGRTZvv8+xCYJlJG5vOWfRP+bgegRW+qSAMEnE05t5+cQp+ZZRcZcbkRM
+         1Fow==
+X-Gm-Message-State: AAQBX9dNXmZh6Emcicf2eyPRAk+TqAAjf5Qc26z1YY2D0FR0ywXbcSvP
+        quG8HM8WSevruDdP6KJSBfU=
+X-Google-Smtp-Source: AKy350b7h4Z7OyhtVjpWtztw0oz7BMrwqtwwgUHF+jh6UyREppQQ/YfTztchVbAHg5xnTDbWPn3eJQ==
+X-Received: by 2002:a17:906:b042:b0:930:8714:6739 with SMTP id bj2-20020a170906b04200b0093087146739mr1993555ejb.30.1680940823182;
+        Sat, 08 Apr 2023 01:00:23 -0700 (PDT)
+Received: from pc636 (49-224-201-31.ftth.glasoperator.nl. [31.201.224.49])
+        by smtp.gmail.com with ESMTPSA id kf25-20020a17090776d900b0093b8c0952e4sm2865365ejc.219.2023.04.08.01.00.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 00:54:32 -0700 (PDT)
-From:   Wedson Almeida Filho <wedsonaf@gmail.com>
-To:     rust-for-linux@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: [PATCH v3 13/13] rust: sync: introduce `LockedBy`
-Date:   Sat,  8 Apr 2023 04:53:40 -0300
-Message-Id: <20230408075340.25237-13-wedsonaf@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230408075340.25237-1-wedsonaf@gmail.com>
-References: <20230408075340.25237-1-wedsonaf@gmail.com>
+        Sat, 08 Apr 2023 01:00:22 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Sat, 8 Apr 2023 10:00:21 +0200
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] rcu/kvfree: Prevents cache growing when the
+ backoff_page_cache_fill is set
+Message-ID: <ZDEfFcEhirm443xE@pc636>
+References: <20230406001238.647536-1-qiang1.zhang@intel.com>
+ <ZC5MoREk30MIt79u@pc636>
+ <8da4b48a-820c-461f-9dc0-a5afaf335177@paulmck-laptop>
+ <PH0PR11MB58809B44F396B7C074BDC704DA919@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <9427c261-0395-4e03-8f93-2e0588fadd1f@paulmck-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9427c261-0395-4e03-8f93-2e0588fadd1f@paulmck-laptop>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -76,206 +82,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wedson Almeida Filho <walmeida@microsoft.com>
+On Thu, Apr 06, 2023 at 05:04:03PM -0700, Paul E. McKenney wrote:
+> On Thu, Apr 06, 2023 at 11:11:37PM +0000, Zhang, Qiang1 wrote:
+> > >>On Thu, Apr 06, 2023 at 06:37:53AM +0200, Uladzislau Rezki wrote:
+> > > On Thu, Apr 06, 2023 at 08:12:38AM +0800, Zqiang wrote:
+> > > > Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
+> > > > executed before kfree_rcu_monitor() to drain page cache, if the bnode
+> > > > structure's->gp_snap has done, the kvfree_rcu_bulk() will fill the
+> > > > page cache again in kfree_rcu_monitor(), this commit add a check
+> > > > for krcp structure's->backoff_page_cache_fill in put_cached_bnode(),
+> > > > if the krcp structure's->backoff_page_cache_fill is set, prevent page
+> > > > cache growing.
+> > > > 
+> > > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > > > ---
+> > > >  kernel/rcu/tree.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > index 9cc0a7766fd2..f25430ae1936 100644
+> > > > --- a/kernel/rcu/tree.c
+> > > > +++ b/kernel/rcu/tree.c
+> > > > @@ -2907,6 +2907,8 @@ static inline bool
+> > > >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
+> > > >  	struct kvfree_rcu_bulk_data *bnode)
+> > > >  {
+> > > > +	if (atomic_read(&krcp->backoff_page_cache_fill))
+> > > > +		return false;
+> > > >  	// Check the limit.
+> > > >  	if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
+> > > >  		return false;
+> > > > -- 
+> > > > 2.32.0
+> > > >
+> > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > >
+> > >Thank you both!
+> > >
+> > >One question, though.  Might it be better to instead modify the "for"
+> > >loop in fill_page_cache_func() to start at krcp->nr_bkv_objs instead
+> > >of starting at zero?  That way, we still provide a single page under
+> > >low-memory conditions, but provide rcu_min_cached_objs of them if memory
+> > >is plentiful.
+> > >
+> > >Alternatively, if we really don't want to allow any pages at all under
+> > >low-memory conditions, shouldn't the fill_page_cache_func() set nr_pages
+> > >to zero (instead of the current 1) when the krcp->backoff_page_cache_fill
+> > >flag is set?  
+> > 
+> > Hi, Paul
+> > 
+> > If the krcp->backoff_page_cache_fill is true, the put_cached_bnode () return false,
+> > the allocated single page will also be freed in fill_page_cache_func().
+> > 
+> > or it would be better not to allocate under memory pressure.
+> 
+> That was my thought.  ;-)
+> 
+> > How about like this?
+> > 
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index 9cc0a7766fd2..94aedbc3da36 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -2907,6 +2907,8 @@ static inline bool
+> >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
+> >         struct kvfree_rcu_bulk_data *bnode)
+> >  {
+> > +       if (atomic_read(&krcp->backoff_page_cache_fill))
+> > +               return false;
+> >         // Check the limit.
+> >         if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
+> >                 return false;
+> > @@ -3220,7 +3222,7 @@ static void fill_page_cache_func(struct work_struct *work)
+> >         int i;
+> > 
+> >         nr_pages = atomic_read(&krcp->backoff_page_cache_fill) ?
+> > -               1 : rcu_min_cached_objs;
+> > +               0 : rcu_min_cached_objs;
+> > 
+> >         for (i = 0; i < nr_pages; i++) {
+> 
+> The other question is why this loop does not allow for any pages
+> that might already be allocated, thus perhaps looking like this:
+> 
+> 		for (i = krcp->nr_bkv_objs; i < nr_pages; i++) {
+> 
+> Or do we somehow know that krcp->nr_bkv_objs is equal to zero?  (I am not
+> seeing this, but I do feel the need to ask.)
+> 
+Usually we start from zero, this is when a ptr. was not added into
+a bulk array, due to no memory reason for a single argument and no
+cache pages anymore for double argument.
 
-This allows us to have data protected by a lock despite not being
-wrapped by it. Access is granted by providing evidence that the lock is
-held by the caller.
+In the fill page function, the limit is checked by the put_cached_bnode() itself
+so it stops prefetch once nr_bkv_objs contains desired value.
 
-Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
----
-v1 -> v2: Added build_assert to rule out zero-sized types
-v2 -> v3: Improve comments around panics and support for ZSTs
-
- rust/kernel/sync.rs           |   2 +
- rust/kernel/sync/lock.rs      |   2 +-
- rust/kernel/sync/locked_by.rs | 147 ++++++++++++++++++++++++++++++++++
- 3 files changed, 150 insertions(+), 1 deletion(-)
- create mode 100644 rust/kernel/sync/locked_by.rs
-
-diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index 431402180aa8..d219ee518eff 100644
---- a/rust/kernel/sync.rs
-+++ b/rust/kernel/sync.rs
-@@ -10,10 +10,12 @@ use crate::types::Opaque;
- mod arc;
- mod condvar;
- pub mod lock;
-+mod locked_by;
- 
- pub use arc::{Arc, ArcBorrow, UniqueArc};
- pub use condvar::CondVar;
- pub use lock::{mutex::Mutex, spinlock::SpinLock};
-+pub use locked_by::LockedBy;
- 
- /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
- #[repr(transparent)]
-diff --git a/rust/kernel/sync/lock.rs b/rust/kernel/sync/lock.rs
-index c365bc909dff..84d8d7d01aaa 100644
---- a/rust/kernel/sync/lock.rs
-+++ b/rust/kernel/sync/lock.rs
-@@ -111,7 +111,7 @@ pub struct Lock<T: ?Sized, B: Backend> {
-     _pin: PhantomPinned,
- 
-     /// The data protected by the lock.
--    data: UnsafeCell<T>,
-+    pub(crate) data: UnsafeCell<T>,
- }
- 
- // SAFETY: `Lock` can be transferred across thread boundaries iff the data it protects can.
-diff --git a/rust/kernel/sync/locked_by.rs b/rust/kernel/sync/locked_by.rs
-new file mode 100644
-index 000000000000..ab0ecb013f54
---- /dev/null
-+++ b/rust/kernel/sync/locked_by.rs
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! A wrapper for data protected by a lock that does not wrap it.
-+
-+use super::{lock::Backend, lock::Lock};
-+use core::{cell::UnsafeCell, ptr};
-+
-+/// Allows access to some data to be serialised by a lock that does not wrap it.
-+///
-+/// In most cases, data protected by a lock is wrapped by the appropriate lock type, e.g.,
-+/// [`super::Mutex`] or [`super::SpinLock`]. [`LockedBy`] is meant for cases when this is not
-+/// possible. For example, if a container has a lock and some data in the contained elements needs
-+/// to be protected by the same lock.
-+///
-+/// [`LockedBy`] wraps the data in lieu of another locking primitive, and only allows access to it
-+/// when the caller shows evidence that the 'external' lock is locked. It panics if the evidence
-+/// refers to the wrong instance of the lock.
-+///
-+/// # Examples
-+///
-+/// The following is an example for illustrative purposes: `InnerDirectory::bytes_used` is an
-+/// aggregate of all `InnerFile::bytes_used` and must be kept consistent; so we wrap `InnerFile` in
-+/// a `LockedBy` so that it shares a lock with `InnerDirectory`. This allows us to enforce at
-+/// compile-time that access to `InnerFile` is only granted when an `InnerDirectory` is also
-+/// locked; we enforce at run time that the right `InnerDirectory` is locked.
-+///
-+/// ```
-+/// use kernel::sync::{LockedBy, Mutex};
-+///
-+/// struct InnerFile {
-+///     bytes_used: u64,
-+/// }
-+///
-+/// struct File {
-+///     _ino: u32,
-+///     inner: LockedBy<InnerFile, InnerDirectory>,
-+/// }
-+///
-+/// struct InnerDirectory {
-+///     /// The sum of the bytes used by all files.
-+///     bytes_used: u64,
-+///     _files: Vec<File>,
-+/// }
-+///
-+/// struct Directory {
-+///     _ino: u32,
-+///     inner: Mutex<InnerDirectory>,
-+/// }
-+///
-+/// /// Prints `bytes_used` from both the directory and file.
-+/// fn print_bytes_used(dir: &Directory, file: &File) {
-+///     let guard = dir.inner.lock();
-+///     let inner_file = file.inner.access(&guard);
-+///     pr_info!("{} {}", guard.bytes_used, inner_file.bytes_used);
-+/// }
-+///
-+/// /// Increments `bytes_used` for both the directory and file.
-+/// fn inc_bytes_used(dir: &Directory, file: &File) {
-+///     let mut guard = dir.inner.lock();
-+///     guard.bytes_used += 10;
-+///
-+///     let file_inner = file.inner.access_mut(&mut guard);
-+///     file_inner.bytes_used += 10;
-+/// }
-+///
-+/// /// Creates a new file.
-+/// fn new_file(ino: u32, dir: &Directory) -> File {
-+///     File {
-+///         _ino: ino,
-+///         inner: LockedBy::new(&dir.inner, InnerFile { bytes_used: 0 }),
-+///     }
-+/// }
-+/// ```
-+pub struct LockedBy<T: ?Sized, U: ?Sized> {
-+    owner: *const U,
-+    data: UnsafeCell<T>,
-+}
-+
-+// SAFETY: `LockedBy` can be transferred across thread boundaries iff the data it protects can.
-+unsafe impl<T: ?Sized + Send, U: ?Sized> Send for LockedBy<T, U> {}
-+
-+// SAFETY: `LockedBy` serialises the interior mutability it provides, so it is `Sync` as long as the
-+// data it protects is `Send`.
-+unsafe impl<T: ?Sized + Send, U: ?Sized> Sync for LockedBy<T, U> {}
-+
-+impl<T, U: ?Sized> LockedBy<T, U> {
-+    /// Constructs a new instance of [`LockedBy`].
-+    ///
-+    /// It stores a raw pointer to the owner that is never dereferenced. It is only used to ensure
-+    /// that the right owner is being used to access the protected data. If the owner is freed, the
-+    /// data becomes inaccessible; if another instance of the owner is allocated *on the same
-+    /// memory location*, the data becomes accessible again: none of this affects memory safety
-+    /// because in any case at most one thread (or CPU) can access the protected data at a time.
-+    pub fn new(owner: &Lock<U, impl Backend>, data: T) -> Self {
-+        Self {
-+            owner: owner.data.get(),
-+            data: UnsafeCell::new(data),
-+        }
-+    }
-+}
-+
-+impl<T: ?Sized, U> LockedBy<T, U> {
-+    /// Returns a reference to the protected data when the caller provides evidence (via a
-+    /// reference) that the owner is locked.
-+    ///
-+    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&U` that matches
-+    /// the data protected by the lock without actually holding it.
-+    ///
-+    /// # Panics
-+    ///
-+    /// Panics if `owner` is different from the data protected by the lock used in
-+    /// [`new`](LockedBy::new).
-+    pub fn access<'a>(&'a self, owner: &'a U) -> &'a T {
-+        // Detect the usage of SZTs, which are supported, at compile time.
-+        crate::build_assert!(core::mem::size_of::<U>() > 0);
-+        if !ptr::eq(owner, self.owner) {
-+            panic!("mismatched owners");
-+        }
-+
-+        // SAFETY: `owner` is evidence that the owner is locked.
-+        unsafe { &*self.data.get() }
-+    }
-+
-+    /// Returns a mutable reference to the protected data when the caller provides evidence (via a
-+    /// mutable owner) that the owner is locked mutably.
-+    ///
-+    /// `U` cannot be a zero-sized type (ZST) because there are ways to get an `&mut U` that
-+    /// matches the data protected by the lock without actually holding it.
-+    ///
-+    /// Showing a mutable reference to the owner is sufficient because we know no other references
-+    /// can exist to it.
-+    ///
-+    /// # Panics
-+    ///
-+    /// Panics if `owner` is different from the data protected by the lock used in
-+    /// [`new`](LockedBy::new).
-+    pub fn access_mut<'a>(&'a self, owner: &'a mut U) -> &'a mut T {
-+        // Detect the usage of SZTs, which are supported, at compile time.
-+        crate::build_assert!(core::mem::size_of::<U>() > 0);
-+        if !ptr::eq(owner, self.owner) {
-+            panic!("mismatched owners");
-+        }
-+
-+        // SAFETY: `owner` is evidence that there is only one reference to the owner.
-+        unsafe { &mut *self.data.get() }
-+    }
-+}
--- 
-2.34.1
-
+--
+Uladzislau Rezki
