@@ -2,81 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBCE6DBAC6
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFC46DBAD1
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjDHMNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 08:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S230077AbjDHMUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 08:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjDHMNV (ORCPT
+        with ESMTP id S229756AbjDHMUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 08:13:21 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79794EFAD;
-        Sat,  8 Apr 2023 05:13:18 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id qa44so2130388ejc.4;
-        Sat, 08 Apr 2023 05:13:18 -0700 (PDT)
+        Sat, 8 Apr 2023 08:20:16 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2926F5B9B;
+        Sat,  8 Apr 2023 05:20:15 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id h198so7325972ybg.12;
+        Sat, 08 Apr 2023 05:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680955997;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xJmx+f31axUvoi/dHkgurPuWKlYeJjKe0B/02y5c1hI=;
-        b=a+IjEn62kIWwcZ1L/0L2xqhD74h6hRmUfo3qpuksXoLGNeOb3o0LNm5Rkuhy1ceoZj
-         G2FqB3KjrcvLilfhlREqtlyPFpLTyIcWqGv3DbCi7nMiZzC0yAyQvD4eFDsMp2pGJCDd
-         Iw3QZkste1SEC1xUqFgC+mySd6T8WPFhNtNzcqOKWigvWcWPFju0Rs+rnn1Ij3oP70v+
-         UC5hlnB3eI+HSAYZYtkG2LFxQnrUbMox7Q4THkgLdbqrIVYTgbW7nzskqqQA0HQH7OOr
-         fXmaenBIXmo4jZke7XPI9VH2iY63pKwDMnufg4g8yUbERhcUXDNbmnbzI8IApZ0NxGw6
-         LYOQ==
+        d=gmail.com; s=20210112; t=1680956414; x=1683548414;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qhbv7Y5Jgs9ftPKleaknEhF4CyhB+GwqEo6U+Rr9mIc=;
+        b=kewdyz87bq2iHid5EObeNKszKFtBaD+7IqwhaAlfkh4BXU43XHG0n2XFhE+8I64XoZ
+         5vf/WXHewQ2r1JosqkV7cmmaF7Xo3YvF0R2w4N6H6HLcWl1GoA2FLD4ofgwx0JxaTTrq
+         CSipUN6RQEUZwSJzL3lwv1Zny4ZWY4oDtBZPqBNHgqwrrBaVhKwRgM/zpeASYlW2SZhI
+         71EqJEbs7Yhe+LjUaohEKTrE1vaWHdE4ojLs8Vewlr/uKsjzGq2f9FzNuRbS0G7zV1WF
+         3SXZPxBoJCq5Ci9ZklpxYDXRQs/JwtNjqxDNdLTG9w7dTOcoV2GFEBeH5krYm5I5IZ02
+         8ApA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680955997;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xJmx+f31axUvoi/dHkgurPuWKlYeJjKe0B/02y5c1hI=;
-        b=cTtkdZnc3Ko13DcPgAmsdmpJaBCnI4Q/S8m5rlaBZmtkrC0e6JTyZHp8t2wdFqDwZG
-         wjw66M/mniQRQuRoxocnd8zdTENqZsE0bzn+2pbQ0vLGhRGeWz5EpXDW/V6RBGI7rmuP
-         S+HcNF4mcsFG2JuT3EicagdxZlPkNSEjSA2wJMiac1KdxNz51MQY9om1TzVM855/+N1U
-         ivFU4qEpU09mIt8qj6eF2YyQZ0iLPQLz4BSWeDGB4gAsMJC29IUgsBlI3BZRiSQXMQfC
-         +CSNQTtb2/Aiio82tT1xrNAPue6dBTZXJXaXfiGPkc9mYqKz5+uxUI/H6Ofb3nAHfrvQ
-         IOjg==
-X-Gm-Message-State: AAQBX9db6p+3Q4PE8yc0q2bf9ePJKptXcbxMy8ilgIwTgxLqM7Ss3sv6
-        mqrVqEkZc7E7oaAcL8vcpFI=
-X-Google-Smtp-Source: AKy350b94j/ZxQUi+lYQF+Fq1CVL4fCn0M+Vx7zcnJOgNusGmaSl0GNLXQqXyciV5Dpd1F/TZOyYoA==
-X-Received: by 2002:a17:907:6d90:b0:8aa:c090:a9ef with SMTP id sb16-20020a1709076d9000b008aac090a9efmr2550022ejc.55.1680955996826;
-        Sat, 08 Apr 2023 05:13:16 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090617c100b00930b13f6abdsm3108700eje.98.2023.04.08.05.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 05:13:16 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 05/10] ARM: dts: sunxi: h3/h5: Switch dma-names order for
- snps,dw-apb-uart nodes
-Date:   Sat, 08 Apr 2023 14:13:14 +0200
-Message-ID: <1754521.VLH7GnMWUR@jernej-laptop>
-In-Reply-To: <20230321215624.78383-6-cristian.ciocaltea@collabora.com>
-References: <20230321215624.78383-1-cristian.ciocaltea@collabora.com>
- <20230321215624.78383-6-cristian.ciocaltea@collabora.com>
+        d=1e100.net; s=20210112; t=1680956414; x=1683548414;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qhbv7Y5Jgs9ftPKleaknEhF4CyhB+GwqEo6U+Rr9mIc=;
+        b=pumuHHWSGmqMJKFRATlfHF/uMsquMuoGpGwUW0vTbwRJAWkBY/QIienUhMI9SPpRDh
+         74sBcE+MsGXV7Bncwdfia8gsUQ7PTzG9fzXG55ZxwYVFQUFdd1EepmihLu3yjpFBO9ts
+         J/au2EmGKo3lc5RB5mQFWtFdyOJJHbiMDV0zfPupkEqs6iE5FEISmhTOLvy6n30bTuq2
+         QsqI4FNOQ/IGt0YxCuHHfsi8o7kFvTg41FeoFVbjADeaIi0UdT+xOJB0j6O8m1L+Kifb
+         HKFPVkZ6FuagEKDNAgYJ1qg2rB12xt141O17lNpvFk34rg7rGXlQdZKMfUWrBbE8RMPz
+         VuOg==
+X-Gm-Message-State: AAQBX9e2Hw99HCQMPZb9YYPN00EfRbTaBATVkl/uk/TfPg7NqGFibxHe
+        TbF3bdbJShH3IkYxEGtccWDFThNPuJTAW6hdhJI=
+X-Google-Smtp-Source: AKy350byafsIIuMRDAbzbtG99qHBwJjc6HbvgeYdBJg3DC7Y1cC2snm+nm7ja1eD+czjeKKSwOkkAYx2grZ+GMjtYY4=
+X-Received: by 2002:a25:be11:0:b0:b7d:4c96:de0 with SMTP id
+ h17-20020a25be11000000b00b7d4c960de0mr993477ybk.5.1680956414354; Sat, 08 Apr
+ 2023 05:20:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20230406215917.1475704-1-robdclark@gmail.com> <20230406215917.1475704-2-robdclark@gmail.com>
+In-Reply-To: <20230406215917.1475704-2-robdclark@gmail.com>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Sat, 8 Apr 2023 13:20:03 +0100
+Message-ID: <CACvgo50nOw-82pc2mEbydWH3=RDXuOKwnBnjmOhV-UYcbjRKQA@mail.gmail.com>
+Subject: Re: [RFC 1/2] drm: Add fdinfo memory stats
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arm-msm@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Christopher Healy <healych@amazon.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -87,74 +76,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne torek, 21. marec 2023 ob 22:56:19 CEST je Cristian Ciocaltea napisal(a):
-> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
-> dma-names properties") documented dma-names property to handle Allwinner
-> D1 dtbs_check warnings, but relies on the rx->tx ordering, which is the
-> reverse of what a bunch of different boards expect.
-> 
-> The initial proposed solution was to allow a flexible dma-names order in
-> the binding, due to potential ABI breakage concerns after fixing the DTS
-> files. But luckily the Allwinner boards are not affected, since they are
-> using a shared DMA channel for rx and tx.
-> 
-> Hence, the first step in fixing the inconsistency was to change
-> dma-names order in the binding to tx->rx.
-> 
-> Do the same for the snps,dw-apb-uart nodes in the DTS file.
-> 
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Hey Rob,
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+On Thu, 6 Apr 2023 at 22:59, Rob Clark <robdclark@gmail.com> wrote:
 
-Best regards,
-Jernej
+> +- drm-purgeable-memory: <uint> [KiB|MiB]
+> +
+> +The total size of buffers that are purgable.
 
-> ---
->  arch/arm/boot/dts/sunxi-h3-h5.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-> b/arch/arm/boot/dts/sunxi-h3-h5.dtsi index 686193bd6bd9..ade1cd50e445
-> 100644
-> --- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-> +++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-> @@ -710,7 +710,7 @@ uart0: serial@1c28000 {
->  			clocks = <&ccu CLK_BUS_UART0>;
->  			resets = <&ccu RST_BUS_UART0>;
->  			dmas = <&dma 6>, <&dma 6>;
-> -			dma-names = "rx", "tx";
-> +			dma-names = "tx", "rx";
->  			status = "disabled";
->  		};
-> 
-> @@ -723,7 +723,7 @@ uart1: serial@1c28400 {
->  			clocks = <&ccu CLK_BUS_UART1>;
->  			resets = <&ccu RST_BUS_UART1>;
->  			dmas = <&dma 7>, <&dma 7>;
-> -			dma-names = "rx", "tx";
-> +			dma-names = "tx", "rx";
->  			status = "disabled";
->  		};
-> 
-> @@ -736,7 +736,7 @@ uart2: serial@1c28800 {
->  			clocks = <&ccu CLK_BUS_UART2>;
->  			resets = <&ccu RST_BUS_UART2>;
->  			dmas = <&dma 8>, <&dma 8>;
-> -			dma-names = "rx", "tx";
-> +			dma-names = "tx", "rx";
->  			status = "disabled";
->  		};
-> 
-> @@ -749,7 +749,7 @@ uart3: serial@1c28c00 {
->  			clocks = <&ccu CLK_BUS_UART3>;
->  			resets = <&ccu RST_BUS_UART3>;
->  			dmas = <&dma 9>, <&dma 9>;
-> -			dma-names = "rx", "tx";
-> +			dma-names = "tx", "rx";
->  			status = "disabled";
->  		};
+s/purgable/purgeable/
 
 
+> +static void print_size(struct drm_printer *p, const char *stat, size_t sz)
+> +{
+> +       const char *units[] = {"B", "KiB", "MiB", "GiB"};
 
+The documentation says:
 
+> Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+> indicating kibi- or mebi-bytes.
+
+So I would drop the B and/or update the documentation to mention B && GiB.
+
+> +       unsigned u;
+> +
+> +       for (u = 0; u < ARRAY_SIZE(units) - 1; u++) {
+> +               if (sz < SZ_1K)
+> +                       break;
+> +               sz /= SZ_1K;
+
+IIRC size_t can be 64bit, so we should probably use do_div() here.
+
+> +       }
+> +
+> +       drm_printf(p, "%s:\t%lu %s\n", stat, sz, units[u]);
+> +}
+> +
+> +/**
+> + * drm_print_memory_stats - Helper to print standard fdinfo memory stats
+> + * @file: the DRM file
+> + * @p: the printer to print output to
+> + * @status: callback to get driver tracked object status
+> + *
+> + * Helper to iterate over GEM objects with a handle allocated in the specified
+> + * file.  The optional status callback can return additional object state which
+
+s/return additional/return an additional/
+
+> + * determines which stats the object is counted against.  The callback is called
+> + * under table_lock.  Racing against object status change is "harmless", and the
+> + * callback can expect to not race against object destroy.
+
+s/destroy/destruction/
+
+> + */
+> +void drm_print_memory_stats(struct drm_file *file, struct drm_printer *p,
+> +                           enum drm_gem_object_status (*status)(struct drm_gem_object *))
+> +{
+
+> +               if (s & DRM_GEM_OBJECT_RESIDENT) {
+> +                       size.resident += obj->size;
+> +                       s &= ~DRM_GEM_OBJECT_PURGEABLE;
+
+Is MSM capable of marking the object as both purgeable and resident or
+is this to catch other drivers? Should we add a note to the
+documentation above - resident memory cannot be purgeable
+
+> +               }
+> +
+> +               if (s & DRM_GEM_OBJECT_ACTIVE) {
+> +                       size.active += obj->size;
+> +                       s &= ~DRM_GEM_OBJECT_PURGEABLE;
+
+Ditto.
+
+With the above nits, the patch is:
+Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+
+HTH
+Emil
