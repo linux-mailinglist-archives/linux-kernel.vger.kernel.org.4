@@ -2,72 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B6C6DB927
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 08:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F596DB92B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 08:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjDHGGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 02:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S230014AbjDHGNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 02:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjDHGGC (ORCPT
+        with ESMTP id S229652AbjDHGNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 02:06:02 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A78DC66A
-        for <linux-kernel@vger.kernel.org>; Fri,  7 Apr 2023 23:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=FSAuJyqLlRwLojcGY0uJ8g8ZAyrKXEp/l8FpS90Rmtg=; b=hU0+Q7xC4qo6vMPcF8mrLKUPxZ
-        ilXBjTbB/ObSoD+Qy8a7vC+EWpKNal6d9ELdL8heFFs5Ua8nxmMpelA4BFBjpRxE9smGptudDfFEm
-        KlMCPY05zj9+gcFWRbARYwgJ5He2Wm113gok5v/wB3AhILSjVPkPOGRtzdiljB0MSbYVkoGiQDYqh
-        odxfMxsSZvGFaEcOvZ/CDpmJWEUOXZkukHG9b/Y7y6wIaG+Hd7RtkaZo+j4k6lKKgfGjtRpahpYnx
-        kYpmg2hokhu6pYYfgC32t9XtUqcgfW8PWKEuijXFf6mt46ijGvB8tZWPRept2Bpkty7jbNRoZwZ2G
-        y22tOgPg==;
-Received: from 213-225-8-166.nat.highway.a1.net ([213.225.8.166] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pl1i3-00Bo2E-2k;
-        Sat, 08 Apr 2023 06:06:00 +0000
-Date:   Sat, 8 Apr 2023 08:05:56 +0200
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
-Subject: [GIT PULL] dma-mapping fixes for Linux 6.3
-Message-ID: <ZDEERJRl1jrw2kQn@infradead.org>
+        Sat, 8 Apr 2023 02:13:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDD4D301;
+        Fri,  7 Apr 2023 23:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680934418; x=1712470418;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3pSwex2GTRoIwzE9M/rgXMQbLMvVYq457TO/GzodD5c=;
+  b=dQMdUbUfNiQeM9FSn1M5uF4RUwI7Ao1sDincxhmrhUOwY+YVqEInD2aI
+   GQXNBY/ms530RiwRobh6ZCRjXsGHl0kA4yOAkhiiI7yybVzwr0nttg+FR
+   WhcVW35jyTn7h5QVC65uc1wWbptoKtOJPHFJ8AWp2KCniJsE8Jnd0pLTi
+   U96yuVJ2EKDS1rd3Nu5aNc9Sy3CLU1eYgl/wN1c3GpInY5jn+n5huBf2g
+   /SuIXQmYZBOef0v9LyoHVn77XNxP9tUKxxea82sc/G6Yamj71geJ+no+l
+   zn8l+DC4EiI5+8an5v0GXQC5x6E15Q7tcZ3HX5fJg2/UDMt+x3TqtMONO
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="341867454"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="341867454"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 23:13:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="861970833"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="861970833"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Apr 2023 23:13:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pl1pN-000TPJ-2u;
+        Sat, 08 Apr 2023 06:13:33 +0000
+Date:   Sat, 8 Apr 2023 14:12:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+Message-ID: <202304081301.6Ukja1z0-lkp@intel.com>
+References: <20230407110025.516405-3-keguang.zhang@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230407110025.516405-3-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 0eee5ae1025699ea93d44fdb6ef2365505082103:
+Hi Keguang,
 
-  swiotlb: fix slot alignment checks (2023-03-22 09:03:17 +0100)
+kernel test robot noticed the following build errors:
 
-are available in the Git repository at:
+[auto build test ERROR on cf3be7e82b129ed34f811f116f2b113f6299d449]
 
-  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-6.3-2023-04-08
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang/dt-bindings-watchdog-Add-Loongson-1-watchdog/20230407-190222
+base:   cf3be7e82b129ed34f811f116f2b113f6299d449
+patch link:    https://lore.kernel.org/r/20230407110025.516405-3-keguang.zhang%40gmail.com
+patch subject: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20230408/202304081301.6Ukja1z0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/26b8fbfd577b41f39d6af516ef7c49cbffa05117
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Keguang-Zhang/dt-bindings-watchdog-Add-Loongson-1-watchdog/20230407-190222
+        git checkout 26b8fbfd577b41f39d6af516ef7c49cbffa05117
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
 
-for you to fetch changes up to bbb73a103fbbed6f63cb738d3783261c4241b4b2:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081301.6Ukja1z0-lkp@intel.com/
 
-  swiotlb: fix a braino in the alignment check fix (2023-04-06 16:45:12 +0200)
+All errors (new ones prefixed by >>):
 
-----------------------------------------------------------------
-dma-mapping fix for Linux 6.3
+>> drivers/watchdog/loongson1_wdt.c:158:21: error: use of undeclared identifier 'ls1x_wdt_dt_ids'
+                   .of_match_table = ls1x_wdt_dt_ids,
+                                     ^
+   1 error generated.
 
- - fix a braino in the swiotlb alignment check fix (Petr Tesarik)
 
-----------------------------------------------------------------
-Petr Tesarik (1):
-      swiotlb: fix a braino in the alignment check fix
+vim +/ls1x_wdt_dt_ids +158 drivers/watchdog/loongson1_wdt.c
 
- kernel/dma/swiotlb.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+   153	
+   154	static struct platform_driver ls1x_wdt_driver = {
+   155		.probe = ls1x_wdt_probe,
+   156		.driver = {
+   157			.name = "ls1x-wdt",
+ > 158			.of_match_table = ls1x_wdt_dt_ids,
+   159		},
+   160	};
+   161	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
