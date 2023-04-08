@@ -2,122 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8CE6DBC01
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8EAC6DBC04
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjDHPvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 11:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S230137AbjDHPvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 11:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjDHPvO (ORCPT
+        with ESMTP id S229748AbjDHPvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 11:51:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C40AE11657
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 08:50:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EB4260A76
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 15:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB87C433D2;
-        Sat,  8 Apr 2023 15:50:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680969040;
-        bh=Y7aLsdu9wZV8LzZW/CITM6rQS9K9lgkKwj5eYz4H5w4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f+cEIvG4AOjoZSAndl42B/X0PojYAsoJ4h3OLkr6fdIgkYjZyMKzAOoFYYpNFUSfg
-         XGyX7mR9VHaIkIZgv6Tb5yf6GXY/vO6Mu+fefd7MgcvfI/wEPx3iH4aNjI6t0vO4it
-         vjPLkXs/XUFIhuS4x35FHcn8fR6evQnPZzHf6x9yfsmwjouJ3J1R4FIEU4nBF6XpA0
-         fKGT7y3BEAKL9LuAZLW8Kgoaxk1Rnb2A7i3ljcsxAwN2syYO8PdoDOUeAIqutjJOoe
-         zKlo9NGlE3Uf8MXYhE+rR4ViN8oBGklitBKL5++uInRxmZfoeV9b0BSyq2E57/i1E2
-         riQP9xxOOUPmA==
-Received: by pali.im (Postfix)
-        id 7255D7B7; Sat,  8 Apr 2023 17:50:37 +0200 (CEST)
-Date:   Sat, 8 Apr 2023 17:50:37 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] powerpc/fsl_uli1575: Misc cleanup
-Message-ID: <20230408155037.hxcxanfetm7mzcik@pali>
-References: <20230408132151.8902-2-pali@kernel.org>
- <202304082352.xhNWS4WV-lkp@intel.com>
+        Sat, 8 Apr 2023 11:51:44 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8110FEFB9
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 08:51:37 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1842f69fe1fso1365339fac.11
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 08:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680969097;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xbMqxWkswZ+j8vnTKs/LDwFFKDpT5yB5iqVFJaXrdK0=;
+        b=f47is1vb+JbkCQQfIXJ2m/c93n99bT/X424DtFyIruIHTQ6UWgZpe2Viw/V4xL2pLT
+         gOIi7DNETja0ezD/QuncBUzcOum0e4Pb/g6Lkewu6wb0UdDlJzpWuIRCmOeuYtGE0EJK
+         5pkSmr0Y7HXrWawBdYBZZ8SHURQMA9w88I7UbDbUT9YCfFPSEl81eU6jkCh+ge06inVv
+         P3jkP3n22C9zEmL6z3NzsfyYyGoMDv6e3LeHnDm73MVI25MmB+x92HuypFZQlricaw2x
+         rn3Qo1qtu/5/94Xt2XEasV2gWuDj3BEpokdA5OtJfXV6FTOEmjCabGcAXmSbFfvt2Wpb
+         kTfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680969097;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xbMqxWkswZ+j8vnTKs/LDwFFKDpT5yB5iqVFJaXrdK0=;
+        b=eRevl3o6K/v7ZzZyTA25GG/hUoNIMJiH8gkpkpqIFDLrHkF5cVszt1MeRKszvTqiHr
+         G7qOOXDwL9m6Kow2sAbYwsARd/VwxtWMEYIcn3j5eQJG916y5N6rBOVW5VSvFNz7r5OX
+         UZybG1VRJpsXcDhclqeM5NS194wrkbV0GISIMRd9d0KnGvwcBI9mF8lWaxJOoOGH5clY
+         r1UcKw+ImUacPmKrbB52JjXRg5o1GwcUEbCdh/4UUbnBieEoZ3VS9y/v/SIwq1e8k7/J
+         rbnyV1sy9UUhbtclzuMJN7OvIkVRaEIdqMQAg4tbiCiUzKHu/5zto7IhHkMS3mRLEru1
+         XlZA==
+X-Gm-Message-State: AAQBX9e2x94pYPxRgz93pbpnEa1zDFHzkg8pvZKi62ZDfeEcUPOV73ND
+        h0Z+ZZhyr8q2s1d9N5QdbqO1bE0RZG0SrEB6Stw=
+X-Google-Smtp-Source: AKy350baogKz7qZ8DoqJQN/5M78y5On02n0InjTOAKSGKWAb3fNiOkPdlXCbi9UZCyTTVpjaYDSiWJOCsgNgFn6RMbQ=
+X-Received: by 2002:a05:6870:4184:b0:184:1a2c:83df with SMTP id
+ y4-20020a056870418400b001841a2c83dfmr2001463oac.4.1680969096727; Sat, 08 Apr
+ 2023 08:51:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202304082352.xhNWS4WV-lkp@intel.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Dipanjan Das <mail.dipanjan.das@gmail.com>
+Date:   Sat, 8 Apr 2023 08:51:26 -0700
+Message-ID: <CANX2M5ZRrRA64k0hOif02TjmY9kbbO2aCBPyq79es34RXZ=cAw@mail.gmail.com>
+Subject: Possible incorrect handling of fault injection inside KMSAN instrumentation
+To:     Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Marius Fleischer <fleischermarius@googlemail.com>,
+        Priyanka Bose <its.priyanka.bose@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday 08 April 2023 23:24:07 kernel test robot wrote:
-> Hi Pali,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on powerpc/next]
-> [also build test ERROR on powerpc/fixes linus/master v6.3-rc5 next-20230406]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Pali-Roh-r/powerpc-fsl_uli1575-Misc-cleanup/20230408-212610
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-> patch link:    https://lore.kernel.org/r/20230408132151.8902-2-pali%40kernel.org
-> patch subject: [PATCH 1/8] powerpc/fsl_uli1575: Misc cleanup
-> config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230408/202304082352.xhNWS4WV-lkp@intel.com/config)
-> compiler: powerpc-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/4d3f86e2ae53d180d2cbbe556355ff5b03d4251b
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Pali-Roh-r/powerpc-fsl_uli1575-Misc-cleanup/20230408-212610
->         git checkout 4d3f86e2ae53d180d2cbbe556355ff5b03d4251b
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202304082352.xhNWS4WV-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from arch/powerpc/kernel/sys_ppc32.c:56:
->    arch/powerpc/include/asm/ppc-pci.h:71:45: error: 'struct pci_controller' declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
->       71 | static inline int uli_exclude_device(struct pci_controller *hose, u_char bus, u_char devfn) { return PCIBIOS_SUCCESSFUL; }
->          |                                             ^~~~~~~~~~~~~~
->    arch/powerpc/include/asm/ppc-pci.h: In function 'uli_exclude_device':
-> >> arch/powerpc/include/asm/ppc-pci.h:71:102: error: 'PCIBIOS_SUCCESSFUL' undeclared (first use in this function)
->       71 | static inline int uli_exclude_device(struct pci_controller *hose, u_char bus, u_char devfn) { return PCIBIOS_SUCCESSFUL; }
->          |                                                                                                      ^~~~~~~~~~~~~~~~~~
->    arch/powerpc/include/asm/ppc-pci.h:71:102: note: each undeclared identifier is reported only once for each function it appears in
->    cc1: all warnings being treated as errors
-> 
-> 
-> vim +/PCIBIOS_SUCCESSFUL +71 arch/powerpc/include/asm/ppc-pci.h
-> 
->     69	
->     70	#if !defined(CONFIG_PCI) || !defined(CONFIG_FSL_ULI1575)
->   > 71	static inline int uli_exclude_device(struct pci_controller *hose, u_char bus, u_char devfn) { return PCIBIOS_SUCCESSFUL; }
->     72	#endif /* !defined(CONFIG_PCI) || !defined(CONFIG_FSL_ULI1575) */
->     73	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
+Hi,
 
-Fixed in V2:
-https://lore.kernel.org/linuxppc-dev/20230408154814.10400-1-pali@kernel.org/T/#t
+We would like to report a =E2=80=9Cpotential=E2=80=9D bug in the KMSAN inst=
+rumentation
+which has been found during the root-cause analysis of another bug
+discovered by our modified version of syzkaller.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+description: Possible incorrect handling of fault injection inside
+KMSAN instrumentation
+affected file: mm/kmsan/shadow.c
+kernel version: 6.2.0-rc5
+kernel commit: 41c66f47061608dc1fd493eebce198f0e74cc2d7
+git tree: kmsan
+kernel config: https://syzkaller.appspot.com/text?tag=3DKernelConfig&x=3Da9=
+a22da1efde3af6.
+The config has Fault Injection (FI) turned on, which is important in
+this case.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+We reported the =E2=80=9Csupposed=E2=80=9D bug discovered by our fuzzer her=
+e:
+https://groups.google.com/u/1/g/syzkaller/c/_83qwErVKlA. Initially, we
+presumed that the vzalloc() call (refer to Jiri Slaby=E2=80=99s comment on
+that thread) fails due to fault injection (refer to the reproducer
+attached). However, we were confused to see that the allocation
+failure triggers a crash, though clearly the driver code checks for
+allocation failures. Nonetheless, we reported the crash to the
+developers. Following Jiri=E2=80=99s comments, who evidently had the same
+impression as ours, we started investigating. Below is our
+observation.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+TL;DR:
+
+kmsan's allocation of shadow or origin memory in
+kmsan_vmap_pages_range_noflush() fails silently due to fault injection
+(FI). KMSAN sort of =E2=80=9Cswallows=E2=80=9D the allocation failure, and =
+moves on.
+When either of them is later accessed while updating the metadata,
+there are no checks to test the validity of the respective pointers,
+which results in a page fault.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+Detail explanation:
+
+- In drivers/tty/n_tty.c:1879 (n_tty_open) , the driver calls vzalloc
+to allocate memory for ldata.
+
+- This triggers the KMSAN instrumentation to allocate the
+corresponding shadow and origin memory in mm/kmsan/shadow.c:236
+(kmsan_vmap_pages_range_noflush) .
+
+- This allocation of the shadow memory fails (through fault
+injection). KMSAN checks for failure, frees the allocated memory and
+returns. Note: There is no return value signaling the error.
+Additionally, the pages for shadow and origin memory are not mapped at
+the addresses where KMSAN expects them to be (in fact, there are no
+pages that could be mapped at all since the allocation failed).
+
+- The allocation of the actual memory for the driver is successful.
+Therefore, vzalloc (from 1.) returns a valid pointer (not NULL).
+
+- After checking that the allocation succeeded
+(drivers/tty/n_tty.c:1880), the driver tries to dereference ldata and
+write to one of the fields at drivers/tty/n_tty.c:1883 (n_tty_open).
+
+- This triggers the KMSAN instrumentation to update the shadow/origin
+memory according to the write by calling
+__msan_metadata_ptr_for_store_8  which subsequently calls
+mm/kmsan/shadow.c:81 (kmsan_get_shadow_origin_ptr).
+
+- Since the address that the driver is trying to access is with the
+vmalloc range, this function will only calculate the offset of this
+pointer from the base of the vmalloc range and add this to the base of
+the shadow/origin memory range to retrieve the pointer for the
+corresponding shadow/origin memory. Note: there are no checks ensuring
+that this memory is actually mapped.
+
+- Next, after the return of __msan_metadata_ptr_for_store_8 , the
+instrumentation will try to update the shadow memory (or origin, we
+are not entirely confident which of the two. We think it is the
+shadow, but it also does not really change anything). Since this
+memory is not mapped, it leads to the crash.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+Our conclusions/Questions:
+
+- Should KMSAN fail silently? Probably not. Otherwise, the
+instrumentation always needs to check whether shadow/origin memory
+exists.
+
+- Should KMSAN even be tested using fault injection? We are not sure.
+On one hand, the primary purpose of FI should be testing the
+application code. But also, inducing faults inside instrumentation
+clearly helps to find mistakes in that, too.
+
+- What is a fix for this? Should a failure in the KMSAN
+instrumentation be propagated up so that the kernel allocator
+(vzalloc() in this case) can =E2=80=9Cpretend=E2=80=9D to fail, too?
+
+--=20
+Thanks and Regards,
+
+Dipanjan
