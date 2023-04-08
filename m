@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569636DBB16
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 15:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4459E6DBB1B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 15:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjDHNIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 09:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S230081AbjDHNYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 09:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjDHNIU (ORCPT
+        with ESMTP id S229732AbjDHNYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 09:08:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B71C640;
-        Sat,  8 Apr 2023 06:08:19 -0700 (PDT)
+        Sat, 8 Apr 2023 09:24:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A0BD520
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 06:24:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D8F2612FB;
-        Sat,  8 Apr 2023 13:08:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A758C4339B;
-        Sat,  8 Apr 2023 13:08:15 +0000 (UTC)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianhua Lu <lujianhua000@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8250-xiaomi-elish-csot: fix panel compatible
-Date:   Sat,  8 Apr 2023 15:08:09 +0200
-Message-Id: <20230408130809.52319-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230408130809.52319-1-krzysztof.kozlowski@linaro.org>
-References: <20230408130809.52319-1-krzysztof.kozlowski@linaro.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C67D460C8F
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 13:24:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AD5C4339C;
+        Sat,  8 Apr 2023 13:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680960248;
+        bh=EvyNCaXVQHGWXs9rYUpC1SM3FYnQ6ejFf2xaT5h8af0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=A+Vg5mDBVXJtMmaN03L8GHLaaIyf9y45qHnPHGx+nAozIi3K6Nr91K76kUzAMwQiC
+         AVjwiuBywWyd5nQyu4pI7bWUtucvo+Ajnqf3HvXn2Y2oyASukG+ZIMZO3Ssor2GvwP
+         rUN1zDmTB2GJT4RbdUExVRX/KhDMU1zUIfisGXeo/oNfjzxggS1giHqTGittwuC4yK
+         3tQ6SC9of2j8a7cifzHRPqbLEkg2mRNNBrelCeKNg2XMqbyzFAzlyEECDlmRW+N76v
+         V5HEYUOVhfJcvGQKrhyxQa+I1T2KA7p1ZUU+h5mD94PVlKt5ZdLqXLtDQCBqlSDY0N
+         Wl31TeVKsp9kg==
+Received: by pali.im (Postfix)
+        id 117B77B7; Sat,  8 Apr 2023 15:24:05 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/8] powerpc/fsl_uli1575: Cleanups
+Date:   Sat,  8 Apr 2023 15:21:43 +0200
+Message-Id: <20230408132151.8902-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bindings expect "novatek,nt36523" fallback in the panel compatible:
+This patch series contains cleanups for fsl_uli1575 driver.
 
-  sm8250-xiaomi-elish-csot.dtb: panel@0: compatible: ['xiaomi,elish-csot-nt36523'] is too short
+This patch series is prerequisity for another patch series:
+"powerpc/85xx: p2020: Create one unified machine description"
 
-Fixes: 8a786036c7b6 ("arm64: dts: qcom: sm8250-xiaomi-elish-csot: Add Xiaomi Mi Pad 5 Pro CSOT variant")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Christophe Leroy (1):
+  powerpc/fsl_uli1575: Misc cleanup
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
-index a4d5341495cf..4cffe9c703df 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-xiaomi-elish-csot.dts
-@@ -13,6 +13,6 @@ / {
- };
- 
- &display_panel {
--	compatible = "xiaomi,elish-csot-nt36523";
-+	compatible = "xiaomi,elish-csot-nt36523", "novatek,nt36523";
- 	status = "okay";
- };
+Pali Rohár (7):
+  powerpc/85xx: mpc85xx_ds: Simplify mpc85xx_exclude_device() function
+  powerpc/fsl_uli1575: Simplify uli_exclude_device() usage
+  powerpc/85xx: mpc85xx_ds: Move uli_init() code into its own driver
+    file
+  powerpc/mpc85xx: mpc85xx_rdb: Do not automatically select FSL_ULI1575
+  powerpc/fsl_uli1575: Allow to disable FSL_ULI1575 support
+  powerpc/mpc86xx: mpc86xx_hpcn: Call uli_init() instead of explicit
+    ppc_md assignment
+  powerpc/fsl_uli1575: Mark uli_exclude_device() as static
+
+ arch/powerpc/include/asm/ppc-pci.h         |  8 +++++
+ arch/powerpc/platforms/85xx/Kconfig        |  1 -
+ arch/powerpc/platforms/85xx/mpc85xx_ds.c   | 39 ++--------------------
+ arch/powerpc/platforms/86xx/mpc86xx_hpcn.c | 20 ++---------
+ arch/powerpc/platforms/Kconfig             |  2 +-
+ arch/powerpc/platforms/fsl_uli1575.c       | 29 +++++++++++++---
+ 6 files changed, 38 insertions(+), 61 deletions(-)
+
 -- 
-2.34.1
+2.20.1
 
