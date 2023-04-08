@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62826DBBB2
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 16:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ABB6DBBB4
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjDHO57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 10:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
+        id S229881AbjDHPCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 11:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjDHO55 (ORCPT
+        with ESMTP id S229572AbjDHPCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 10:57:57 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB4F93C8
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 07:57:55 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id qb20so2584668ejc.6
-        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 07:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680965874;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r2/qlTZK3oc+3BcIiO+i7wsdJpDN0YCENNW/riWaWBw=;
-        b=hEiQFv4Ri1VXTALwil3u0QmuzXY0NHaOpRgLjpVfPDSS3CDBk/tqGai+aC2FpNSmSC
-         WdE0SI1vxEIPPW4zKU67JMvoFtxvR3KkYlkXTyw/wR+Fi6IwLsqQL/DKFLzNqc77L+Dx
-         y4aca0jvgoH1AvWAyWcEkvKN8oe/WP6bwIdYOaQU+vOFvKIxhIalNIt4GERDacNG2dvX
-         e51p/jb08wUSRuPTKASgPD++ZBUFmHy6dhhZZOmBUVL7MJW9MQr3JFgETcb+2ZWICzKW
-         ovr5iEDN1OoKDBozgKXEoESyxAU4fcC4hbFs1xUYEBIunL48uwU6VwVJbexyrmyc3LJq
-         IS2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680965874;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r2/qlTZK3oc+3BcIiO+i7wsdJpDN0YCENNW/riWaWBw=;
-        b=hHszTjUOwKto01ETTH9hc0xmj6AvEy3vw30U2xK2am75RCpdJKcYcaPx6O8dEdT93h
-         K9K9sl3W5L+5M3uXfz6vXskWztqqQMyGgoEIiX0L0H7b2tiFOzc/3Xe0aZpBq/DVJt/o
-         Z9qfhsiu2umUUMc9RtEJxyeYbsDEwjkOxUC3vsExcg5Y23JpMG2tZ6jZZR9QIh3j4DV1
-         9+uYOjkFVJfKIEhWPmKHhpZsvGxqRTYGokgwpoY5KOE6RezOg2s+ZjZQBJBxYi4q0Zhs
-         tSiJGWLwxLG1FTIw+u7Mo+CXOxfGC7+IpD42xdc2ppYqOvkRChMhQCEAEWZp0L5x5cjN
-         Snnw==
-X-Gm-Message-State: AAQBX9cIBXWoFegmMXJPNhKa+HSNcsSgQEbuCmFen8mOuBmGSoCKyLfa
-        f2bVRGrVHDTiQDs2b55JhfFTAg==
-X-Google-Smtp-Source: AKy350adYYuy2WWnFavedFp4QpR1b9dBllUR2MoosuAuU4Q4DaBN8J38njDCEHhG4EuXGlh6kHrcZg==
-X-Received: by 2002:a17:906:784:b0:949:c05d:73b6 with SMTP id l4-20020a170906078400b00949c05d73b6mr1966937ejc.17.1680965873987;
-        Sat, 08 Apr 2023 07:57:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:e293:da16:7aac:96e6? ([2a02:810d:15c0:828:e293:da16:7aac:96e6])
-        by smtp.gmail.com with ESMTPSA id f7-20020a1709064dc700b0093f83562f09sm3191976ejw.87.2023.04.08.07.57.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Apr 2023 07:57:53 -0700 (PDT)
-Message-ID: <0205fab6-3665-f985-41a5-3fed24644665@linaro.org>
-Date:   Sat, 8 Apr 2023 16:57:52 +0200
+        Sat, 8 Apr 2023 11:02:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C8259DA;
+        Sat,  8 Apr 2023 08:02:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA79160A73;
+        Sat,  8 Apr 2023 15:02:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4684FC4339B;
+        Sat,  8 Apr 2023 15:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680966127;
+        bh=KCF/0Tibfx4I4RExzaZxaJFHJNBnZehCKc6tyP06KRw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=M6THKPfqVZDC9QpvRC8LqgxR8nzLRHRO4WttJRKgM/0HUvFX2vJyHP5i25iuLcnNh
+         NPrYZ44btLmOCf0pZDE3WGNjUo8iuX8PfvWu1QMg3ygAVx/J8ZeGj5BDr8plUo3uoT
+         XLPhHre2Q3boRklRsQ7zRgtNeeJNPyKT8kg4q3EWHRxM+0zYci4RxRB9BPeAMOEcGL
+         lWgGKAuO0w6++/8oIJAqSLDuPludUB7cN4iH2hm16tEJS2gOnqDcxqEqMOSolFHuf/
+         ePW7PaIGQzBKZ+cB8+xzqgliLsyRT2h/foAOF3Cc4F6Ikk65sQpkVwbe6NUIbDhcnm
+         W7VKAoKEdPgPw==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1842df7cb53so1433157fac.10;
+        Sat, 08 Apr 2023 08:02:07 -0700 (PDT)
+X-Gm-Message-State: AAQBX9cygfb5L0yk6ezyETlMjsAnXUH/hzoiEPSDcUcdiI3+qNqoTFuQ
+        xUebFaZQz6hOU81F+G25vHOhkrpo8IDzXXTDR4Y=
+X-Google-Smtp-Source: AKy350ZAHzHq5Rd7ipsVmZUlTezDkSzOxsC2jCPqr4vxSd7oKwjEHB2UQk6O7FuJQ0ugd/jCEJD1g9DlVIYd3jcqQzM=
+X-Received: by 2002:a05:6870:1119:b0:17e:9b69:3ee5 with SMTP id
+ 25-20020a056870111900b0017e9b693ee5mr2445651oaf.11.1680966126561; Sat, 08 Apr
+ 2023 08:02:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] ARM: dts: stm32: fix typo in stm32mp15xx-dkx.dtsi
-Content-Language: en-US
-To:     Patrick Delaunay <patrick.delaunay@foss.st.com>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20230407193253.1.If11ffa6edfdfef0869478412ec3cec3169483cb9@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230407193253.1.If11ffa6edfdfef0869478412ec3cec3169483cb9@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230308115243.82592-1-masahiroy@kernel.org> <20230308115243.82592-3-masahiroy@kernel.org>
+ <CAKwvOdnmiL_wDgzepYb+ZGgWt2xnsp48-awn0Cd0c4RDR43t_Q@mail.gmail.com> <CAKwvOdn1Sjj=t1XJ3K-etFnemMs7UkbyGmbHC4c2H4O=77sjHg@mail.gmail.com>
+In-Reply-To: <CAKwvOdn1Sjj=t1XJ3K-etFnemMs7UkbyGmbHC4c2H4O=77sjHg@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 9 Apr 2023 00:01:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARar5i7FxEHPH9M3OaU6wKxpXhc0Tj0iT32VPw0TNLR2g@mail.gmail.com>
+Message-ID: <CAK7LNARar5i7FxEHPH9M3OaU6wKxpXhc0Tj0iT32VPw0TNLR2g@mail.gmail.com>
+Subject: Re: [PATCH 3/8] scripts/mksysmap: use sed with in-line comments
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2023 19:33, Patrick Delaunay wrote:
-> Remove unnecessary space in device tree stm32mp15xx-dkx.dtsi.
+On Sat, Apr 8, 2023 at 4:01=E2=80=AFAM Nick Desaulniers <ndesaulniers@googl=
+e.com> wrote:
+>
+> On Fri, Apr 7, 2023 at 11:59=E2=80=AFAM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Wed, Mar 8, 2023 at 3:53=E2=80=AFAM Masahiro Yamada <masahiroy@kerne=
+l.org> wrote:
+> > >
+> > > Move comments close to the code.
+> >
+> > Consider adding to the commit message why you switch from grep to sed;
+> > that's currently unclear.
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> Also, perhaps scripts/mksysmap could just be replaced with a sed
+> input-file? Then
+> scripts/link-vmlinux.sh would invoke nm and pipe it into that sed script?
 
-Your commit subject says typo. Where is it?
 
-> 
-> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
-> ---
-> 
->  arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-> index 11370ae0d868..ccd6c4722bd3 100644
-> --- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-> @@ -382,21 +382,21 @@ vref_ddr: vref_ddr {
->  				regulator-always-on;
->  			};
->  
-> -			 bst_out: boost {
-> +			bst_out: boost {
->  				regulator-name = "bst_out";
->  				interrupts = <IT_OCP_BOOST 0>;
-> -			 };
-> +			};
->  
->  			vbus_otg: pwr_sw1 {
->  				regulator-name = "vbus_otg";
->  				interrupts = <IT_OCP_OTG 0>;
-> -			 };
-> +			};
->  
-> -			 vbus_sw: pwr_sw2 {
-> +			vbus_sw: pwr_sw2 {
->  				regulator-name = "vbus_sw";
->  				interrupts = <IT_OCP_SWOUT 0>;
->  				regulator-active-discharge = <1>;
-> -			 };
-> +			};
->  		};
->  
->  		onkey {
 
-Best regards,
-Krzysztof
+I still need shell.
 
+
+The last line of the next commit 4/8 uses
+shell code.
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
