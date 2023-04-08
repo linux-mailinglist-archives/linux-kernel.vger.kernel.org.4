@@ -2,128 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C756DBB94
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 16:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA7D6DBB95
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 16:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjDHOaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 10:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S230133AbjDHOba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 10:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjDHOaW (ORCPT
+        with ESMTP id S229756AbjDHOb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 10:30:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1FCD331;
-        Sat,  8 Apr 2023 07:30:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87BC160F11;
-        Sat,  8 Apr 2023 14:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75D1C433D2;
-        Sat,  8 Apr 2023 14:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680964211;
-        bh=dWco55L+uZvkyNv3mbeG7fRYJrJTAfpWmDPlkv7JF4A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kMXzmvuREPFtwCfQQIiHV2JCleJgH717G4Oskj5YVtgGFhLAx6ApwcwBEUEc466xK
-         gc862YNfOcDY9UI9ZdzFc6lbMTmOh2NhQeoT+LaUBLfcElldA4b7YT9PG/oR2VxXO6
-         D+mK4PMWGxYcnz/Awv+168HGrYhv1MttxkMw3ZrlkvsLFi/V6F4g2fH6QqsEk5Wf7Q
-         UaZPabrViSOr+uNPb35rHkBPOPc5oRnrzAfM4P+btwhR75tI55e4BFzo4IXdXBxPKg
-         XoxazSzh9B5klWGRIVcMr+0gzS/pu50tutbI2oGCNlIHy0F4s7Grt9nqjUlkXDkTCt
-         /R3Dak+MaO8eg==
-Received: by mail-ot1-f53.google.com with SMTP id cp25-20020a056830661900b00693ce5a2f3eso576075otb.8;
-        Sat, 08 Apr 2023 07:30:11 -0700 (PDT)
-X-Gm-Message-State: AAQBX9dcvudhYXbLk4hrVfQKrYzykSqIJ3F6+OZpcl6XkC2ns9vrLs4K
-        AiEIxmS87J46Fxsz0l4BHwsaZbkI7eTgYcsicVg=
-X-Google-Smtp-Source: AKy350Zk5Dy4/NNeR3Nk3LnYN87WPq1SZJ63SxnCe9maa96G0oOC11qkkyIXdppEkTKARrPfWTVy5Z/hlx06H5XgoIo=
-X-Received: by 2002:a05:6830:1641:b0:69a:2eb2:e11b with SMTP id
- h1-20020a056830164100b0069a2eb2e11bmr490529otr.1.1680964211202; Sat, 08 Apr
- 2023 07:30:11 -0700 (PDT)
+        Sat, 8 Apr 2023 10:31:29 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03523C660
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 07:31:28 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id q2so5990853pll.7
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 07:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1680964287;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S/+TATq1pEgWC5XiTeJPsNxYfIUZee5yuk6ERjQ9uh0=;
+        b=RV/DzU4v1M18hV8JoR6WqBlV7Q/Qe3lm4A+EgpOUtUNKLAQ5BSmMwR9vNVk8jGPw8m
+         Vvax3yNYv+SOYHZV85aabqs42NfBonLDMgxPdXwliVL6x8Q7wp/r8ZBHgbhBJ++grwKN
+         ZIXrTMPyXBVW5b5a48s9bQGKwjF+iUYqXjygvgkkWDWw5c1ocDnzg6ohHXRecHSynC1O
+         wdvdQ1sN42QJZxCoj+pYG+AI3eJO2ui7CbsUby50Til5swcoNTB2mbya/R6/VFyvdS0w
+         nrPHkx4ajNhPmFDTHpAz0FRmJuAvLOx45u1qtIm48jUJ8JLx4aquOzNPaSTXNk5Ucu8Q
+         U5hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680964287;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S/+TATq1pEgWC5XiTeJPsNxYfIUZee5yuk6ERjQ9uh0=;
+        b=i6ZqBwhNRv984dor4AcA5ZOzeJt3961hDJIKB6vPQJkt7c4ndHEnEBvq2gqrXJ2FqU
+         mfcaYhrgPYXaW11BNsCJ/b2b50ZmrG9pEir2zTZst/VQ0bRiGS65bKGaQ9YfpeuH4P/U
+         knnKaGEFRvyf5mdhJXsVkgnk7K2ME2YFkMOZPOyjQJtyfcfxTeml6OJUY8MwARtXDS8k
+         5O/q6jPQg6GEXE8tuWWWyjJUCiPRNHKxgFb9Yg5tXXp34CNPVZdGzm6efaO1OybwNVwF
+         69jDSybqUp73SVeGBWSbBgSle9wDRTXT3x+wX+JZeYAon7faU5u7M+CjFqcxL6fNfGMw
+         ihrw==
+X-Gm-Message-State: AAQBX9cAd9THDz21kPbkOnlaAAvrQ5PQ+NZBHG4KRfIaBGh8hWkJh+WR
+        KPB5F6Vr/6OMc1pzlRRrEjPHzA==
+X-Google-Smtp-Source: AKy350Z5Ovd9YpO7hBiWyPk8grNE78yZiblQcVneQgnQznPMP2YnOlM9voUCI8ZM5KxqVH1OehgsUg==
+X-Received: by 2002:a17:903:248:b0:1a2:8924:2230 with SMTP id j8-20020a170903024800b001a289242230mr13092003plh.27.1680964287371;
+        Sat, 08 Apr 2023 07:31:27 -0700 (PDT)
+Received: from ?IPV6:2409:8a28:e6a:3a30:b527:61f8:941a:f49e? ([2409:8a28:e6a:3a30:b527:61f8:941a:f49e])
+        by smtp.gmail.com with ESMTPSA id e34-20020a630f22000000b00507249cde91sm4074198pgl.91.2023.04.08.07.31.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Apr 2023 07:31:27 -0700 (PDT)
+Message-ID: <c36f5f02-90e1-fef0-481e-828ced303a8a@bytedance.com>
+Date:   Sat, 8 Apr 2023 22:31:20 +0800
 MIME-Version: 1.0
-References: <20230308115243.82592-1-masahiroy@kernel.org> <20230308115243.82592-3-masahiroy@kernel.org>
- <CAKwvOdnmiL_wDgzepYb+ZGgWt2xnsp48-awn0Cd0c4RDR43t_Q@mail.gmail.com>
-In-Reply-To: <CAKwvOdnmiL_wDgzepYb+ZGgWt2xnsp48-awn0Cd0c4RDR43t_Q@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 8 Apr 2023 23:29:35 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQr+y2y5vCKSpA0THyakRUcRcS9X+X9i3mbhTYvnh1wHg@mail.gmail.com>
-Message-ID: <CAK7LNAQr+y2y5vCKSpA0THyakRUcRcS9X+X9i3mbhTYvnh1wHg@mail.gmail.com>
-Subject: Re: [PATCH 3/8] scripts/mksysmap: use sed with in-line comments
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.9.1
+Subject: Re: [External] Re: [PATCH v2 0/3] blk-cgroup: some cleanup
+Content-Language: en-US
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     axboe@kernel.dk, tj@kernel.org, paolo.valente@linaro.org,
+        josef@toxicpanda.com, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230406145050.49914-1-zhouchengming@bytedance.com>
+ <cab869b1-1cba-5698-55eb-a93d0596c869@acm.org>
+ <1a64eaea-50ea-f273-b0a1-a6eb8483beac@bytedance.com>
+In-Reply-To: <1a64eaea-50ea-f273-b0a1-a6eb8483beac@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 8, 2023 at 4:00=E2=80=AFAM Nick Desaulniers <ndesaulniers@googl=
-e.com> wrote:
->
-> On Wed, Mar 8, 2023 at 3:53=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
-org> wrote:
-> >
-> > Move comments close to the code.
->
-> Consider adding to the commit message why you switch from grep to sed;
-> that's currently unclear.
+On 2023/4/8 11:37, Chengming Zhou wrote:
+> On 2023/4/8 02:41, Bart Van Assche wrote:
+>> On 4/6/23 07:50, Chengming Zhou wrote:
+>>> These are some cleanup patches of blk-cgroup. Thanks for review.
+>>
+>> With these patches applied, my kernel test VM crashes during boot. The following crash disappears if I revert these patches:
+> 
+> Thanks for the report.
+> I will try to reproduce it first and look into this today.
 
+Hi Bart,
 
+I tried a few times to reproduce it, but still can't for now. Do you mind to share more details?
 
-I just thought "Move comments close to the code"
-explained my motivation.,
+I don't know how to specify bfq as the default scheduler for the device, since "elevator="
+is not working anymore. Do you use something like sysfsutils to set sysfs config during boot?
 
+So I just boot the qemu VM, set bfq as the scheduler for the root device, run "blkid", but no bug shows.
 
-I want to insert in-line comments.
-Something like the following.
-Apparently, it does not work.
+Then I use sysfsutils to set bfq as the default scheduler during reboot, the VM still no bug shows.
 
+I will continue to look into this issue and review related code.
 
-$NM -n $1 | grep -v             \
-         # comment1
-        -e ' [aNUw] '           \
-         # comment2
-        -e ' \$'                \
-         # comment3
-        -e ' \.L'               \
-         # comment4
-        -e ' __crc_'            \
-         # comment5
-        -e ' __kstrtab_'        \
-         # comment6
-        -e ' __kstrtabns_'      \
-         # comment7
-        -e ' L0$'               \
-> $2
+BTW, my codebase is e134c93f788f ("Add linux-next specific files for 20230406") with these three patches applied.
 
+Thanks.
 
-
-
-
-
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> Orthogonal to this patch, don't .L prefixed local symbols not have
-> entries in the symbol table? If they're not printed with nm, why
-> filter them out (since they're impossible).
-
-
-Sorry, I could not understand your question, but
-you may get something from d4c858643263cfde13f7d937eaff95c2ed87cdf1
-(you reviewed it)
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+> 
+>>
+>> BUG: KASAN: null-ptr-deref in bio_associate_blkg_from_css+0x83/0x240
+>> Read of size 8 at addr 0000000000000518 by task blkid/5885
+>> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+>> Call Trace:
+>>  dump_stack_lvl+0x4a/0x80
+>>  print_report+0x21e/0x260
+>>  kasan_report+0xc2/0xf0
+>>  __asan_load8+0x69/0x90
+>>  bio_associate_blkg_from_css+0x83/0x240
+>>  bfq_bio_bfqg+0xce/0x120 [bfq]
+>>  bfq_bic_update_cgroup+0x2f/0x3c0 [bfq]
+>>  bfq_init_rq+0x1e8/0xb10 [bfq]
+>>  bfq_insert_request.isra.0+0xa3/0x420 [bfq]
+>>  bfq_insert_requests+0xca/0xf0 [bfq]
+>>  blk_mq_dispatch_rq_list+0x4c0/0xb00
+>>  __blk_mq_sched_dispatch_requests+0x15e/0x200
+>>  blk_mq_sched_dispatch_requests+0x8b/0xc0
+>>  __blk_mq_run_hw_queue+0x3ff/0x500
+>>  __blk_mq_delay_run_hw_queue+0x23a/0x300
+>>  blk_mq_run_hw_queue+0x14e/0x350
+>>  blk_mq_sched_insert_request+0x181/0x1f0
+>>  blk_execute_rq+0xf4/0x300
+>>  scsi_execute_cmd+0x23e/0x350
+>>  sr_do_ioctl+0x173/0x3d0 [sr_mod]
+>>  sr_packet+0x60/0x90 [sr_mod]
+>>  cdrom_get_track_info.constprop.0+0x125/0x170 [cdrom]
+>>  cdrom_get_last_written+0x1d4/0x2d0 [cdrom]
+>>  mmc_ioctl_cdrom_last_written+0x85/0x120 [cdrom]
+>>  mmc_ioctl+0x10b/0x1d0 [cdrom]
+>>  cdrom_ioctl+0xa66/0x1270 [cdrom]
+>>  sr_block_ioctl+0xee/0x130 [sr_mod]
+>>  blkdev_ioctl+0x1bb/0x3f0
+>>  __x64_sys_ioctl+0xc7/0xe0
+>>  do_syscall_64+0x34/0x80
+>>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>>
+>> Bart.
