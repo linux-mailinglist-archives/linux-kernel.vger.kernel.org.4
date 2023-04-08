@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFDA6DBA3A
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C256DBA3B
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbjDHKuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 06:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S230351AbjDHKvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 06:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjDHKtl (ORCPT
+        with ESMTP id S229924AbjDHKue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 06:49:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F4F113D7
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:48:58 -0700 (PDT)
-Date:   Sat, 08 Apr 2023 10:45:20 -0000
+        Sat, 8 Apr 2023 06:50:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AFA11EA0
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:49:38 -0700 (PDT)
+Date:   Sat, 08 Apr 2023 10:45:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680950721;
+        s=2020; t=1680950722;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YFX2XZ6rPTkBPgbt+bmfi2tBwL0d+qePMLiRgHvH19w=;
-        b=35T6t51qir9bQL0EbZWK4k7+FDn+qICCRNJtT/asL9KudsbMZkA16ZROaojmbgOG9AUCqn
-        1g6+w8g4LP79kfgFqWjVbBcJ4SIg+rZHWY31+ngygHtPgJZmtv7S6l0c9+g8sk4OcE87aF
-        +9Y44UW+HJBWtcyS8vGGlByJ4oZ4WNhrT4jRfETI8VXg+U/HP10zlrZKcCc2W6lAwyT/eT
-        o4CHWuOK6uuVvN8keOV/tsfxrDEn7R5PJRV8A4WJ2UUz6WbDpk/Hymn4zdIiukpWVAJ2ID
-        i+B03blEL5bIc/PkELm04gq38hoqlFJh23JGFjGKd4ubpWn2o1rP4bzsfhEvaA==
+        bh=6kgWak1i0mIV7qLJxTAwEXpDoMYPgTeJAnVbzOuIMqg=;
+        b=XwgMiTJHJlKOScPsgdnjyM5plyhNorCxjDMeCLQK61zlBTK2i8pMofZSTL3Umrz15GtgZs
+        Y/CflIDm833JxfcOUEBMAjaiXmuPa6CiaCitPWpniNeP3WD+6QEurlSOMScly+tx7EK/zx
+        4ZTtiYthwRRF6/sIZJGYxDGLFsbvbzW8NkfmjocVMvA3x4iLK794zONbm773vFRFwsRWYT
+        WK1liCeDJTg7k/XFP80Lyae0cLPp9Xmwh7CpWSDZNI1wuK0JviT0FY1Ic/4ZqQTH65hy5n
+        OoVNLB2JvhW6wXrOm2QLuvUy4y2oIqv/cgtJX81qJylCXs3C7e4bsZgCvNvl7g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680950721;
+        s=2020e; t=1680950722;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YFX2XZ6rPTkBPgbt+bmfi2tBwL0d+qePMLiRgHvH19w=;
-        b=V4tFp6o6gJbkrfq0Z3t7S3ocgUPxhkE9dkI1PxAoRuyreh/THK9IICjJeA6AMaiyMkY0Ay
-        eWKuXKyhHh0AjyBg==
-From:   irqchip-bot for =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez?= Rojas 
-        <tip-bot2@linutronix.de>
+        bh=6kgWak1i0mIV7qLJxTAwEXpDoMYPgTeJAnVbzOuIMqg=;
+        b=qbdG7j/rBIqgtWpeFcD5AgcPXC5qJ2FCEGKSWBc56nnLGFX+sCNDdvJ9DPrtuU4nieKph4
+        N3AX24Sd/x1NwWDA==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] irqchip/bcm-6345-l1: Request memory region
-Cc:     noltari@gmail.com, Florian Fainelli <f.fainelli@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20230316192833.1603149-1-noltari@gmail.com>
-References: <20230316192833.1603149-1-noltari@gmail.com>
+Subject: [irqchip: irq/irqchip-next] irqchip/gic: Drop support for board files
+Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20230315130218.3212033-1-maz@kernel.org>
+References: <20230315130218.3212033-1-maz@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168095072076.404.2128594434310940615.tip-bot2@tip-bot2>
+Message-ID: <168095072174.404.8151744605918524188.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -64,54 +62,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-next branch of irqc=
-hip:
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     23c7ff129cf33dee5f1f4fd9fa729ab440e8f1c5
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platfo=
-rms/23c7ff129cf33dee5f1f4fd9fa729ab440e8f1c5
-Author:        =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-AuthorDate:    Thu, 16 Mar 2023 20:28:33 +01:00
+Commit-ID:     dee234032e767b3d6823fe122517770757306f04
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/dee234032e767b3d6823fe122517770757306f04
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Wed, 15 Mar 2023 13:02:18 
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 08 Apr 2023 11:07:43 +01:00
+CommitterDate: Sat, 08 Apr 2023 10:50:04 +01:00
 
-irqchip/bcm-6345-l1: Request memory region
+irqchip/gic: Drop support for board files
 
-Request memory region in order to display it in /proc/iomem.
-Also stop printing the MMIO address since it just displays (ptrval).
+With the last non-OF, non-ACPI user of the GIC being removed in
+e73307b9ebc4 ("ARM: cns3xxx: remove entire platform"), we can finally
+drop the entry point and do some minor cleanup.
 
-Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+We also make the driver depend on CONFIG_OF, which is required
+even when CONFIG_ACPI is selected.
+
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20230316192833.1603149-1-noltari@gmail.com
+Link: https://lore.kernel.org/r/20230315130218.3212033-1-maz@kernel.org
 ---
- drivers/irqchip/irq-bcm6345-l1.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/irqchip/Kconfig         |  1 +-
+ drivers/irqchip/irq-gic.c       | 60 +-------------------------------
+ include/linux/irqchip/arm-gic.h |  6 +---
+ 3 files changed, 4 insertions(+), 63 deletions(-)
 
-diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l=
-1.c
-index 6899e37..fa113cb 100644
---- a/drivers/irqchip/irq-bcm6345-l1.c
-+++ b/drivers/irqchip/irq-bcm6345-l1.c
-@@ -257,6 +257,9 @@ static int __init bcm6345_l1_init_one(struct device_node =
-*dn,
- 	if (!cpu->map_base)
- 		return -ENOMEM;
-=20
-+	if (!request_mem_region(res.start, sz, res.name))
-+		pr_err("failed to request intc memory");
-+
- 	for (i =3D 0; i < n_words; i++) {
- 		cpu->enable_cache[i] =3D 0;
- 		__raw_writel(0, cpu->map_base + reg_enable(intc, i));
-@@ -335,8 +338,7 @@ static int __init bcm6345_l1_of_init(struct device_node *=
-dn,
- 	for_each_cpu(idx, &intc->cpumask) {
- 		struct bcm6345_l1_cpu *cpu =3D intc->cpus[idx];
-=20
--		pr_info("  CPU%u at MMIO 0x%p (irq =3D %d)\n", idx,
--				cpu->map_base, cpu->parent_irq);
-+		pr_info("  CPU%u (irq =3D %d)\n", idx, cpu->parent_irq);
- 	}
-=20
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 7dc990e..b744fd9 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -7,6 +7,7 @@ config IRQCHIP
+ 
+ config ARM_GIC
+ 	bool
++	depends on OF
+ 	select IRQ_DOMAIN_HIERARCHY
+ 	select GENERIC_IRQ_EFFECTIVE_AFF_MASK if SMP
+ 
+diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
+index 95e3d2a..412196a 100644
+--- a/drivers/irqchip/irq-gic.c
++++ b/drivers/irqchip/irq-gic.c
+@@ -1081,10 +1081,6 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int irq,
  	return 0;
+ }
+ 
+-static void gic_irq_domain_unmap(struct irq_domain *d, unsigned int irq)
+-{
+-}
+-
+ static int gic_irq_domain_translate(struct irq_domain *d,
+ 				    struct irq_fwspec *fwspec,
+ 				    unsigned long *hwirq,
+@@ -1167,11 +1163,6 @@ static const struct irq_domain_ops gic_irq_domain_hierarchy_ops = {
+ 	.free = irq_domain_free_irqs_top,
+ };
+ 
+-static const struct irq_domain_ops gic_irq_domain_ops = {
+-	.map = gic_irq_domain_map,
+-	.unmap = gic_irq_domain_unmap,
+-};
+-
+ static int gic_init_bases(struct gic_chip_data *gic,
+ 			  struct fwnode_handle *handle)
+ {
+@@ -1219,30 +1210,9 @@ static int gic_init_bases(struct gic_chip_data *gic,
+ 		gic_irqs = 1020;
+ 	gic->gic_irqs = gic_irqs;
+ 
+-	if (handle) {		/* DT/ACPI */
+-		gic->domain = irq_domain_create_linear(handle, gic_irqs,
+-						       &gic_irq_domain_hierarchy_ops,
+-						       gic);
+-	} else {		/* Legacy support */
+-		/*
+-		 * For primary GICs, skip over SGIs.
+-		 * No secondary GIC support whatsoever.
+-		 */
+-		int irq_base;
+-
+-		gic_irqs -= 16; /* calculate # of irqs to allocate */
+-
+-		irq_base = irq_alloc_descs(16, 16, gic_irqs,
+-					   numa_node_id());
+-		if (irq_base < 0) {
+-			WARN(1, "Cannot allocate irq_descs @ IRQ16, assuming pre-allocated\n");
+-			irq_base = 16;
+-		}
+-
+-		gic->domain = irq_domain_add_legacy(NULL, gic_irqs, irq_base,
+-						    16, &gic_irq_domain_ops, gic);
+-	}
+-
++	gic->domain = irq_domain_create_linear(handle, gic_irqs,
++					       &gic_irq_domain_hierarchy_ops,
++					       gic);
+ 	if (WARN_ON(!gic->domain)) {
+ 		ret = -ENODEV;
+ 		goto error;
+@@ -1297,23 +1267,6 @@ static int __init __gic_init_bases(struct gic_chip_data *gic,
+ 	return ret;
+ }
+ 
+-void __init gic_init(void __iomem *dist_base, void __iomem *cpu_base)
+-{
+-	struct gic_chip_data *gic;
+-
+-	/*
+-	 * Non-DT/ACPI systems won't run a hypervisor, so let's not
+-	 * bother with these...
+-	 */
+-	static_branch_disable(&supports_deactivate_key);
+-
+-	gic = &gic_data[0];
+-	gic->raw_dist_base = dist_base;
+-	gic->raw_cpu_base = cpu_base;
+-
+-	__gic_init_bases(gic, NULL);
+-}
+-
+ static void gic_teardown(struct gic_chip_data *gic)
+ {
+ 	if (WARN_ON(!gic))
+@@ -1325,7 +1278,6 @@ static void gic_teardown(struct gic_chip_data *gic)
+ 		iounmap(gic->raw_cpu_base);
+ }
+ 
+-#ifdef CONFIG_OF
+ static int gic_cnt __initdata;
+ static bool gicv2_force_probe;
+ 
+@@ -1570,12 +1522,6 @@ IRQCHIP_DECLARE(cortex_a7_gic, "arm,cortex-a7-gic", gic_of_init);
+ IRQCHIP_DECLARE(msm_8660_qgic, "qcom,msm-8660-qgic", gic_of_init);
+ IRQCHIP_DECLARE(msm_qgic2, "qcom,msm-qgic2", gic_of_init);
+ IRQCHIP_DECLARE(pl390, "arm,pl390", gic_of_init);
+-#else
+-int gic_of_init_child(struct device *dev, struct gic_chip_data **gic, int irq)
+-{
+-	return -ENOTSUPP;
+-}
+-#endif
+ 
+ #ifdef CONFIG_ACPI
+ static struct
+diff --git a/include/linux/irqchip/arm-gic.h b/include/linux/irqchip/arm-gic.h
+index 5686711..2223f95 100644
+--- a/include/linux/irqchip/arm-gic.h
++++ b/include/linux/irqchip/arm-gic.h
+@@ -151,12 +151,6 @@ int gic_of_init(struct device_node *node, struct device_node *parent);
+  */
+ int gic_of_init_child(struct device *dev, struct gic_chip_data **gic, int irq);
+ 
+-/*
+- * Legacy platforms not converted to DT yet must use this to init
+- * their GIC
+- */
+-void gic_init(void __iomem *dist , void __iomem *cpu);
+-
+ void gic_send_sgi(unsigned int cpu_id, unsigned int irq);
+ int gic_get_cpu_id(unsigned int cpu);
+ void gic_migrate_target(unsigned int new_cpu_id);
