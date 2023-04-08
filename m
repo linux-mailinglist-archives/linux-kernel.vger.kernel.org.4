@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584B56DB968
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352CC6DB969
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjDHHzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 03:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S230164AbjDHHzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 03:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjDHHym (ORCPT
+        with ESMTP id S230131AbjDHHzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 03:54:42 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A8DFF1F;
-        Sat,  8 Apr 2023 00:54:20 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id g26-20020a4adc9a000000b0053b9059edd5so101149oou.3;
-        Sat, 08 Apr 2023 00:54:20 -0700 (PDT)
+        Sat, 8 Apr 2023 03:55:00 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D916BFF0E;
+        Sat,  8 Apr 2023 00:54:37 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id w13so21006233oik.2;
+        Sat, 08 Apr 2023 00:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680940460;
+        d=gmail.com; s=20210112; t=1680940463;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lpFbdZW6Pxs9oGadShmf3bb76khn+lS3nRvJuJ63DD0=;
-        b=dIU1A+nMC99Mw/TCI+3ztwstU57Nl2JuzV3JEDMAiZU0C2mRTMt1HryblDXwlVIueV
-         Qofw33OMnSkvEB7CS+UoM1o9a2uQN7Ajp4/8Cghfxe5/c41+dpsRgWuHJWwcbEUrmX0b
-         FcOIEUpowOsDXTOFDiK+gbbkNhe6fUsokP9LjDi1VhXeq11SqSgcZv0LiMmGaDPIbrIq
-         oDJMWoQof0Om8rrG/sAGQO6FvSjfZZqUFxw78zNEV1jGlpHz1oCWG+tw0r6NTkkWytTU
-         1J7bdoyO5xZcPY95KhWSLogDNXd2FsD7e4841nkxDx6LwYtOjpTCoKV2w8kOHIhQ80AO
-         N1Rg==
+        bh=KRp/Oi/twJtl9aBTzuC+WObtxL9OqDuPbUJ1RtXTIfI=;
+        b=R0+rGcdc6V1X+oez522zCJPvrVawIDxgxs86xe/wj1vfkFDC7N1DW0NXAtwgMp3+Vf
+         RVoANubvriftXet27shk9KqP91cndUhCZpnsjDM/c33w5pemyGG8Tbwf+amF7KOlG7r0
+         AefeM63JNjreEDh/teGas2knHKSup6KUnX9XkRxwJTKMjvIuZkq0cp9XqvuwwpT6j6bd
+         A1kKj7KumT8XVxZ9IyqX328eKB1PGCL9ct9317CwvwXveaCXgSP50MHirVijn4j0zDQB
+         l4qFUmPcmViLJHRoLpZBfiIT8LXHRAk2KUzqNcgDtHIE72esLNq3zPxKfUd9h77cyFJX
+         NPTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680940460;
+        d=1e100.net; s=20210112; t=1680940463;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lpFbdZW6Pxs9oGadShmf3bb76khn+lS3nRvJuJ63DD0=;
-        b=RnSIAhyyl9K1xOBufXiu/c2FKP0CAU+0dLxDBTSTBRC66d71ReS3S55dl5Xx+tuNTA
-         ihsu2iGGyIU8Ir8a0/D/O5FbHELEpCmDhnqRz6xDHvr+8Oco2q5f1e4mfTXjchMsNp+G
-         5DczyCmEv+aA2Fx9lXDcDoYzm5XNNVte3vKuocUWi2cmB+j6jFpc13hpLtg2PG0moXdX
-         nnyPeRygkmzoBcv0b0z+9DCpVAxcVAQPMVTAjf/rUUfb1zNzH5K5mKb4B1rnd+gJJ6mg
-         S+bYhIDW5qy2WYAEBTwghZPo3bVCOAjjRuT9CPI6uCPPIIg6gtoLp1Zc6mG5iZoTxXDT
-         EoCA==
-X-Gm-Message-State: AAQBX9fN8FEmiR7qr6ujWjs26arCcLWl0GmptdrsJuxZAzk5ozU0GuC0
-        1yE3q421nsY+5KoOWO5fVtjZ4M39yrc=
-X-Google-Smtp-Source: AKy350Zw6rXRMrO3wk5tXcrveCg8embkQDmrGpkMiemd4wOUNoEkRL9aBmSolGay0fgtfD/RoUJauA==
-X-Received: by 2002:a4a:d62e:0:b0:538:57d4:2d62 with SMTP id n14-20020a4ad62e000000b0053857d42d62mr2164321oon.2.1680940460231;
-        Sat, 08 Apr 2023 00:54:20 -0700 (PDT)
+        bh=KRp/Oi/twJtl9aBTzuC+WObtxL9OqDuPbUJ1RtXTIfI=;
+        b=wLG3wiogwoMTq9syr66w+S/yC+3lL7epmS9oNT3md2viZmv9/Ric4Zmwsqz6mLrORO
+         HFN9cz2nftrfWdvBUysG0dZBr/hcxBAwpgoSm0nvMB7axR+UxcH5DtAOYn9V8B12eGXz
+         AhMUQ2JVzqlZ6s1L3ynCIokBKG3JXr1l6goUHSbTURV5IdW/XK4OGL/PqxeMEAzO7Wmi
+         JZEXGFEzNr6HFcb10zs9vRXKqK5HFNZcdN3ciFJ+6GtebCDA0TBPLrx/kAYrDCCKRr/J
+         jwEq4nvycI32p91AMves0JUuwaIW6Z51ab+NRJFDkcehsCiExIQ1kRAkHT6DcB9+WWgi
+         rEgQ==
+X-Gm-Message-State: AAQBX9fzhgaMQRv5KFmkU4WDBtqqSsayu9UJcK8+eGNhs2fZ5mdgjNX9
+        BwrYcG8eEvA/Tj9Q9mWzongyxIeThsw=
+X-Google-Smtp-Source: AKy350buTh+bhmz+hvu0w5SxbhLyyETFn1ixkdjrYZvxz2w1i0UCeDVJhgYrLQF2lRoJLzE0Rpxv3A==
+X-Received: by 2002:a54:4402:0:b0:387:87cd:11c6 with SMTP id k2-20020a544402000000b0038787cd11c6mr526748oiw.59.1680940463390;
+        Sat, 08 Apr 2023 00:54:23 -0700 (PDT)
 Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.17
+        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 00:54:20 -0700 (PDT)
+        Sat, 08 Apr 2023 00:54:23 -0700 (PDT)
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Wedson Almeida Filho <walmeida@microsoft.com>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v3 09/13] rust: add basic `Task`
-Date:   Sat,  8 Apr 2023 04:53:36 -0300
-Message-Id: <20230408075340.25237-9-wedsonaf@gmail.com>
+Subject: [PATCH v3 10/13] rust: introduce `current`
+Date:   Sat,  8 Apr 2023 04:53:37 -0300
+Message-Id: <20230408075340.25237-10-wedsonaf@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230408075340.25237-1-wedsonaf@gmail.com>
 References: <20230408075340.25237-1-wedsonaf@gmail.com>
@@ -80,173 +80,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wedson Almeida Filho <walmeida@microsoft.com>
 
-It is an abstraction for C's `struct task_struct`. It implements
-`AlwaysRefCounted`, so the refcount of the wrapped object is managed
-safely on the Rust side.
+This allows Rust code to get a reference to the current task without
+having to increment the refcount, but still guaranteeing memory safety.
 
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 ---
-v1 -> v2: No changes
-v2 -> v3: Wrap task_struct with `Opaque` instead of `UnsafeCell`
+v1 -> v2: Make `current` a macro to prevent it from escaping the caller
+v2 -> v3:
+- Mention `current` macro in `Task::current`
+- Hide implementation of `TaskRef` inside `Task::current`
 
- rust/bindings/bindings_helper.h |  1 +
- rust/helpers.c                  | 19 +++++++++
- rust/kernel/lib.rs              |  1 +
- rust/kernel/task.rs             | 75 +++++++++++++++++++++++++++++++++
- 4 files changed, 96 insertions(+)
- create mode 100644 rust/kernel/task.rs
+ rust/helpers.c         |  6 +++
+ rust/kernel/prelude.rs |  2 +
+ rust/kernel/task.rs    | 88 +++++++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 95 insertions(+), 1 deletion(-)
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 75d85bd6c592..03656a44a83f 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -8,6 +8,7 @@
- 
- #include <linux/slab.h>
- #include <linux/refcount.h>
-+#include <linux/sched.h>
- 
- /* `bindgen` gets confused at certain things. */
- const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
 diff --git a/rust/helpers.c b/rust/helpers.c
-index e42f5b446f92..58a194042c86 100644
+index 58a194042c86..96441744030e 100644
 --- a/rust/helpers.c
 +++ b/rust/helpers.c
-@@ -23,6 +23,7 @@
- #include <linux/refcount.h>
- #include <linux/mutex.h>
- #include <linux/spinlock.h>
-+#include <linux/sched/signal.h>
- 
- __noreturn void rust_helper_BUG(void)
- {
-@@ -75,6 +76,12 @@ void rust_helper_spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
- }
- EXPORT_SYMBOL_GPL(rust_helper_spin_unlock_irqrestore);
- 
-+int rust_helper_signal_pending(struct task_struct *t)
-+{
-+	return signal_pending(t);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_signal_pending);
-+
- refcount_t rust_helper_REFCOUNT_INIT(int n)
- {
- 	return (refcount_t)REFCOUNT_INIT(n);
-@@ -93,6 +100,18 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
+@@ -100,6 +100,12 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
  }
  EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
  
-+void rust_helper_get_task_struct(struct task_struct *t)
++struct task_struct *rust_helper_get_current(void)
 +{
-+	get_task_struct(t);
++	return current;
 +}
-+EXPORT_SYMBOL_GPL(rust_helper_get_task_struct);
++EXPORT_SYMBOL_GPL(rust_helper_get_current);
 +
-+void rust_helper_put_task_struct(struct task_struct *t)
-+{
-+	put_task_struct(t);
-+}
-+EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
-+
- /*
-  * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
-  * as the Rust `usize` type, so we can use it in contexts where Rust
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 2d7606135ef6..ee27e10da479 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -44,6 +44,7 @@ mod static_assert;
- pub mod std_vendor;
- pub mod str;
- pub mod sync;
-+pub mod task;
- pub mod types;
+ void rust_helper_get_task_struct(struct task_struct *t)
+ {
+ 	get_task_struct(t);
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index fcdc511d2ce8..c28587d68ebc 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -36,3 +36,5 @@ pub use super::error::{code::*, Error, Result};
+ pub use super::{str::CStr, ThisModule};
  
- #[doc(hidden)]
+ pub use super::init::{InPlaceInit, Init, PinInit};
++
++pub use super::current;
 diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
-new file mode 100644
-index 000000000000..d70cad131956
---- /dev/null
+index d70cad131956..5269a562cb1b 100644
+--- a/rust/kernel/task.rs
 +++ b/rust/kernel/task.rs
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -5,7 +5,17 @@
+ //! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
+ 
+ use crate::{bindings, types::Opaque};
+-use core::ptr;
++use core::{marker::PhantomData, ops::Deref, ptr};
 +
-+//! Tasks (threads and processes).
-+//!
-+//! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
-+
-+use crate::{bindings, types::Opaque};
-+use core::ptr;
-+
-+/// Wraps the kernel's `struct task_struct`.
-+///
-+/// # Invariants
-+///
-+/// All instances are valid tasks created by the C portion of the kernel.
-+///
-+/// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
-+/// that the allocation remains valid at least until the matching call to `put_task_struct`.
-+#[repr(transparent)]
-+pub struct Task(pub(crate) Opaque<bindings::task_struct>);
-+
-+// SAFETY: It's OK to access `Task` through references from other threads because we're either
-+// accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
-+// synchronised by C code (e.g., `signal_pending`).
-+unsafe impl Sync for Task {}
-+
-+/// The type of process identifiers (PIDs).
-+type Pid = bindings::pid_t;
-+
-+impl Task {
-+    /// Returns the group leader of the given task.
-+    pub fn group_leader(&self) -> &Task {
-+        // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
-+        // have a valid group_leader.
-+        let ptr = unsafe { *ptr::addr_of!((*self.0.get()).group_leader) };
-+
-+        // SAFETY: The lifetime of the returned task reference is tied to the lifetime of `self`,
-+        // and given that a task has a reference to its group leader, we know it must be valid for
-+        // the lifetime of the returned task reference.
-+        unsafe { &*ptr.cast() }
-+    }
-+
-+    /// Returns the PID of the given task.
-+    pub fn pid(&self) -> Pid {
-+        // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
-+        // have a valid pid.
-+        unsafe { *ptr::addr_of!((*self.0.get()).pid) }
-+    }
-+
-+    /// Determines whether the given task has pending signals.
-+    pub fn signal_pending(&self) -> bool {
-+        // SAFETY: By the type invariant, we know that `self.0` is valid.
-+        unsafe { bindings::signal_pending(self.0.get()) != 0 }
-+    }
-+
-+    /// Wakes up the task.
-+    pub fn wake_up(&self) {
-+        // SAFETY: By the type invariant, we know that `self.0.get()` is non-null and valid.
-+        // And `wake_up_process` is safe to be called for any valid task, even if the task is
-+        // running.
-+        unsafe { bindings::wake_up_process(self.0.get()) };
-+    }
++/// Returns the currently running task.
++#[macro_export]
++macro_rules! current {
++    () => {
++        // SAFETY: Deref + addr-of below create a temporary `TaskRef` that cannot outlive the
++        // caller.
++        unsafe { &*$crate::task::Task::current() }
++    };
 +}
+ 
+ /// Wraps the kernel's `struct task_struct`.
+ ///
+@@ -15,6 +25,42 @@ use core::ptr;
+ ///
+ /// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
+ /// that the allocation remains valid at least until the matching call to `put_task_struct`.
++///
++/// # Examples
++///
++/// The following is an example of getting the PID of the current thread with zero additional cost
++/// when compared to the C version:
++///
++/// ```
++/// let pid = current!().pid();
++/// ```
++///
++/// Getting the PID of the current process, also zero additional cost:
++///
++/// ```
++/// let pid = current!().group_leader().pid();
++/// ```
++///
++/// Getting the current task and storing it in some struct. The reference count is automatically
++/// incremented when creating `State` and decremented when it is dropped:
++///
++/// ```
++/// use kernel::{task::Task, types::ARef};
++///
++/// struct State {
++///     creator: ARef<Task>,
++///     index: u32,
++/// }
++///
++/// impl State {
++///     fn new() -> Self {
++///         Self {
++///             creator: current!().into(),
++///             index: 0,
++///         }
++///     }
++/// }
++/// ```
+ #[repr(transparent)]
+ pub struct Task(pub(crate) Opaque<bindings::task_struct>);
+ 
+@@ -27,6 +73,46 @@ unsafe impl Sync for Task {}
+ type Pid = bindings::pid_t;
+ 
+ impl Task {
++    /// Returns a task reference for the currently executing task/thread.
++    ///
++    /// The recommended way to get the current task/thread is to use the
++    /// [`current`](crate::current) macro because it is safe.
++    ///
++    /// # Safety
++    ///
++    /// Callers must ensure that the returned object doesn't outlive the current task/thread.
++    pub unsafe fn current() -> impl Deref<Target = Task> {
++        pub struct TaskRef<'a> {
++            task: &'a Task,
++            _not_send: PhantomData<*mut ()>,
++        }
 +
-+// SAFETY: The type invariants guarantee that `Task` is always ref-counted.
-+unsafe impl crate::types::AlwaysRefCounted for Task {
-+    fn inc_ref(&self) {
-+        // SAFETY: The existence of a shared reference means that the refcount is nonzero.
-+        unsafe { bindings::get_task_struct(self.0.get()) };
++        impl Deref for TaskRef<'_> {
++            type Target = Task;
++
++            fn deref(&self) -> &Self::Target {
++                self.task
++            }
++        }
++
++        impl From<TaskRef<'_>> for crate::types::ARef<Task> {
++            fn from(t: TaskRef<'_>) -> Self {
++                t.deref().into()
++            }
++        }
++
++        // SAFETY: Just an FFI call with no additional safety requirements.
++        let ptr = unsafe { bindings::get_current() };
++
++        TaskRef {
++            // SAFETY: If the current thread is still running, the current task is valid. Given
++            // that `TaskRef` is not `Send`, we know it cannot be transferred to another thread
++            // (where it could potentially outlive the caller).
++            task: unsafe { &*ptr.cast() },
++            _not_send: PhantomData,
++        }
 +    }
 +
-+    unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
-+        // SAFETY: The safety requirements guarantee that the refcount is nonzero.
-+        unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
-+    }
-+}
+     /// Returns the group leader of the given task.
+     pub fn group_leader(&self) -> &Task {
+         // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
 -- 
 2.34.1
 
