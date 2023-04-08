@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7766DBAD8
+	by mail.lfdr.de (Postfix) with ESMTP id 210076DBAD7
 	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjDHMZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 08:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
+        id S230188AbjDHMZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 08:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjDHMZg (ORCPT
+        with ESMTP id S230170AbjDHMZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 08:25:36 -0400
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B49FF0E
+        Sat, 8 Apr 2023 08:25:37 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184BCFF2B
         for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 05:25:35 -0700 (PDT)
-Date:   Sat, 08 Apr 2023 12:25:23 +0000
+Date:   Sat, 08 Apr 2023 12:25:29 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1680956733; x=1681215933;
-        bh=K9JbIFZF8PegFhJuUFtlmmuNCJL0YgKAbcJnn1iYflI=;
+        s=protonmail3; t=1680956734; x=1681215934;
+        bh=/3m6gBMij6Ax7PcQaOILDRRx86A/6McrrYe3eb+j60U=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=xyxNIwI5rbLIDZRXv6V8QWw/emXcOZO2V0U++S4GLVil8TNtAseaDnoeznUnGmurX
-         RQHjT5gNMUSagRlWnmJWeoyIfxzaSHrhbSph+8Sh5rCoF2GWB69LDHqOdzq4PKpd//
-         MX4dRnj23UDTjI7PsNOf2PPnvq08qepMmmiuQU3fX0E/6oGVIalymfvUrE44V47P6G
-         bDgG3c7e7djLmNm+qypzrWcxlvi7+B7NI8jH4bDMuuqxLi3El19b4wYGqLO/OsGMyF
-         pV9ms3oQnFKdXNVlrychje6q0MaT6hMBnfuRA912x3lFBCX2zdC+z0CYodga3UA/qG
-         WAE8i05K/bp5g==
+        b=gmiZT8rEZ4T5b4rbZc4Llt40scAmwCy+zVC8Goi1+xfTTA9TQHB1/7NRbEODLxbNA
+         ElegjFBERD91wYJVeZDAb4KnE58lNeyBvLG/lQ4Xs+7hMcKoUxbkz+CPDc/3LtBPhV
+         DPRIA1MjRFy2kbfL+ISWZ0IKcBdFkoYMAA4lMiAl6pk0PagRKCCOX4P+0xCZG8rPqI
+         /A9OKveMcD3pSPSNPv0rilXwCGcpG9Pr0wjs5rgu7Hvh0jY/trkFRh/FI8mM90jErr
+         Uipnf+KhJnLI9hiVsHxtaq2Ky+ECE8HjwlaBxhWTF/VGA4tg5kEzsuoJ0vKnN/OyUx
+         lTyx1YV3J2Idw==
 To:     Miguel Ojeda <ojeda@kernel.org>,
         Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -39,8 +39,8 @@ Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Benno Lossin <y86-dev@protonmail.com>,
         Andreas Hindborg <a.hindborg@samsung.com>,
         Alice Ryhl <aliceryhl@google.com>
-Subject: [PATCH v7 02/15] rust: macros: add `quote!` macro
-Message-ID: <20230408122429.1103522-3-y86-dev@protonmail.com>
+Subject: [PATCH v7 03/15] rust: sync: change error type of constructor functions
+Message-ID: <20230408122429.1103522-4-y86-dev@protonmail.com>
 In-Reply-To: <20230408122429.1103522-1-y86-dev@protonmail.com>
 References: <20230408122429.1103522-1-y86-dev@protonmail.com>
 Feedback-ID: 40624463:user:proton
@@ -57,201 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gary Guo <gary@garyguo.net>
+Change the error type of the constructors of `Arc` and `UniqueArc` to be
+`AllocError` instead of `Error`. This makes the API more clear as to
+what can go wrong when calling `try_new` or its variants.
 
-Add the `quote!` macro for creating `TokenStream`s directly via the
-given Rust tokens. It also supports repetitions using iterators.
-
-It will be used by the pin-init API proc-macros to generate code.
-
-Signed-off-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
 Reviewed-by: Andreas Hindborg <a.hindborg@samsung.com>
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
 ---
- rust/macros/lib.rs   |   2 +
- rust/macros/quote.rs | 145 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 147 insertions(+)
- create mode 100644 rust/macros/quote.rs
+ rust/kernel/sync/arc.rs | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index c1d385e345b9..82b520f024dd 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -2,6 +2,8 @@
+diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+index f2f1c83d72ba..aa7135f0f238 100644
+--- a/rust/kernel/sync/arc.rs
++++ b/rust/kernel/sync/arc.rs
+@@ -17,11 +17,11 @@
 
- //! Crate for all kernel procedural macros.
+ use crate::{
+     bindings,
+-    error::Result,
+     types::{ForeignOwnable, Opaque},
+ };
+ use alloc::boxed::Box;
+ use core::{
++    alloc::AllocError,
+     marker::{PhantomData, Unsize},
+     mem::{ManuallyDrop, MaybeUninit},
+     ops::{Deref, DerefMut},
+@@ -149,7 +149,7 @@ unsafe impl<T: ?Sized + Sync + Send> Sync for Arc<T> {}
 
-+#[macro_use]
-+mod quote;
- mod concat_idents;
- mod helpers;
- mod module;
-diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
-new file mode 100644
-index 000000000000..94a6277182ee
---- /dev/null
-+++ b/rust/macros/quote.rs
-@@ -0,0 +1,145 @@
-+// SPDX-License-Identifier: Apache-2.0 OR MIT
-+
-+use proc_macro::{TokenStream, TokenTree};
-+
-+pub(crate) trait ToTokens {
-+    fn to_tokens(&self, tokens: &mut TokenStream);
-+}
-+
-+impl<T: ToTokens> ToTokens for Option<T> {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        if let Some(v) =3D self {
-+            v.to_tokens(tokens);
-+        }
-+    }
-+}
-+
-+impl ToTokens for proc_macro::Group {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        tokens.extend([TokenTree::from(self.clone())]);
-+    }
-+}
-+
-+impl ToTokens for TokenTree {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        tokens.extend([self.clone()]);
-+    }
-+}
-+
-+impl ToTokens for TokenStream {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        tokens.extend(self.clone());
-+    }
-+}
-+
-+/// Converts tokens into [`proc_macro::TokenStream`] and performs variable=
- interpolations with
-+/// the given span.
-+///
-+/// This is a similar to the
-+/// [`quote_spanned!`](https://docs.rs/quote/latest/quote/macro.quote_span=
-ned.html) macro from the
-+/// `quote` crate but provides only just enough functionality needed by th=
-e current `macros` crate.
-+#[allow(unused_macros)]
-+macro_rules! quote_spanned {
-+    ($span:expr =3D> $($tt:tt)*) =3D> {
-+    #[allow(clippy::vec_init_then_push)]
-+    {
-+        let mut tokens =3D ::std::vec::Vec::new();
-+        let span =3D $span;
-+        quote_spanned!(@proc tokens span $($tt)*);
-+        ::proc_macro::TokenStream::from_iter(tokens)
-+    }};
-+    (@proc $v:ident $span:ident) =3D> {};
-+    (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) =3D> {
-+        let mut ts =3D ::proc_macro::TokenStream::new();
-+        $crate::quote::ToTokens::to_tokens(&$id, &mut ts);
-+        $v.extend(ts);
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) =3D> {
-+        for token in $id {
-+            let mut ts =3D ::proc_macro::TokenStream::new();
-+            $crate::quote::ToTokens::to_tokens(&token, &mut ts);
-+            $v.extend(ts);
-+        }
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) =3D> {
-+        let mut tokens =3D ::std::vec::Vec::new();
-+        quote_spanned!(@proc tokens $span $($inner)*);
-+        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-+            ::proc_macro::Delimiter::Parenthesis,
-+            ::proc_macro::TokenStream::from_iter(tokens)
-+        )));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) =3D> {
-+        let mut tokens =3D ::std::vec::Vec::new();
-+        quote_spanned!(@proc tokens $span $($inner)*);
-+        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-+            ::proc_macro::Delimiter::Bracket,
-+            ::proc_macro::TokenStream::from_iter(tokens)
-+        )));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) =3D> {
-+        let mut tokens =3D ::std::vec::Vec::new();
-+        quote_spanned!(@proc tokens $span $($inner)*);
-+        $v.push(::proc_macro::TokenTree::Group(::proc_macro::Group::new(
-+            ::proc_macro::Delimiter::Brace,
-+            ::proc_macro::TokenStream::from_iter(tokens)
-+        )));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident :: $($tt:tt)*) =3D> {
-+        $v.push(::proc_macro::TokenTree::Punct(
-+                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Joint=
-)
-+        ));
-+        $v.push(::proc_macro::TokenTree::Punct(
-+                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone=
-)
-+        ));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident : $($tt:tt)*) =3D> {
-+        $v.push(::proc_macro::TokenTree::Punct(
-+                ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone=
-)
-+        ));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident , $($tt:tt)*) =3D> {
-+        $v.push(::proc_macro::TokenTree::Punct(
-+                ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone=
-)
-+        ));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident @ $($tt:tt)*) =3D> {
-+        $v.push(::proc_macro::TokenTree::Punct(
-+                ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone=
-)
-+        ));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident ! $($tt:tt)*) =3D> {
-+        $v.push(::proc_macro::TokenTree::Punct(
-+                ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone=
-)
-+        ));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident $id:ident $($tt:tt)*) =3D> {
-+        $v.push(::proc_macro::TokenTree::Ident(::proc_macro::Ident::new(st=
-ringify!($id), $span)));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+}
-+
-+/// Converts tokens into [`proc_macro::TokenStream`] and performs variable=
- interpolations with
-+/// mixed site span ([`Span::mixed_site()`]).
-+///
-+/// This is a similar to the [`quote!`](https://docs.rs/quote/latest/quote=
-/macro.quote.html) macro
-+/// from the `quote` crate but provides only just enough functionality nee=
-ded by the current
-+/// `macros` crate.
-+///
-+/// [`Span::mixed_site()`]: https://doc.rust-lang.org/proc_macro/struct.Sp=
-an.html#method.mixed_site
-+#[allow(unused_macros)]
-+macro_rules! quote {
-+    ($($tt:tt)*) =3D> {
-+        quote_spanned!(::proc_macro::Span::mixed_site() =3D> $($tt)*)
-+    }
-+}
+ impl<T> Arc<T> {
+     /// Constructs a new reference counted instance of `T`.
+-    pub fn try_new(contents: T) -> Result<Self> {
++    pub fn try_new(contents: T) -> Result<Self, AllocError> {
+         // INVARIANT: The refcount is initialised to a non-zero value.
+         let value =3D ArcInner {
+             // SAFETY: There are no safety requirements for this FFI call.
+@@ -469,7 +469,7 @@ pub struct UniqueArc<T: ?Sized> {
+
+ impl<T> UniqueArc<T> {
+     /// Tries to allocate a new [`UniqueArc`] instance.
+-    pub fn try_new(value: T) -> Result<Self> {
++    pub fn try_new(value: T) -> Result<Self, AllocError> {
+         Ok(Self {
+             // INVARIANT: The newly-created object has a ref-count of 1.
+             inner: Arc::try_new(value)?,
+@@ -477,7 +477,7 @@ impl<T> UniqueArc<T> {
+     }
+
+     /// Tries to allocate a new [`UniqueArc`] instance whose contents are =
+not initialised yet.
+-    pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>> {
++    pub fn try_new_uninit() -> Result<UniqueArc<MaybeUninit<T>>, AllocErro=
+r> {
+         Ok(UniqueArc::<MaybeUninit<T>> {
+             // INVARIANT: The newly-created object has a ref-count of 1.
+             inner: Arc::try_new(MaybeUninit::uninit())?,
 --
 2.39.2
 
