@@ -2,313 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49306DBA01
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADBF16DBA11
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjDHKDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 06:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
+        id S229822AbjDHK0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 06:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjDHKDw (ORCPT
+        with ESMTP id S229558AbjDHK0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 06:03:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83722EA;
-        Sat,  8 Apr 2023 03:03:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C1116069C;
-        Sat,  8 Apr 2023 10:03:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD4EC4339B;
-        Sat,  8 Apr 2023 10:03:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680948230;
-        bh=V4a+tdNZ5VyCXSK9xKm7scGsOqxXzP9qP6i9zQ4cOl0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B/6vUlFX2NoPdRGrpBBksMGsrKewmDauqJSV5PQ2QuXxL1BCywys0Tf6ftnhWOO2z
-         LDXhCpIeLPZl1+Q3mpVF7OK0yh3BKxeb92C5dxoBajIxJ4/JF56RvqmmMX+KMvieaZ
-         FMyIlP6wm53vo+1W9fxEt1vThW+uDpRQ/Yvy7eunFiI33Hnk63WD1utkdy4kYBhM7F
-         4jEs1rtQslv+1SZvVsnb4FgY62DHEh6/iEzqGdwyLQh3Ki9ZfUZzjZFqzeNbmvSqzO
-         s6YTWxEdp7l+DG6xL7fAoYjtZ26zIxwAU3cWinwfC9pEtETIfPM8rrI7eGE7TB26Jp
-         djxqlP/mfF1MA==
-Date:   Sat, 8 Apr 2023 11:18:49 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andrea Merello <andrea.merello@iit.it>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] iio: Add some kerneldoc for channel types
-Message-ID: <20230408111849.77af363e@jic23-huawei>
-In-Reply-To: <987b37ea10ace60f0e67a19f76c4b84dea3050c8.1677331779.git.mazziesaccount@gmail.com>
-References: <cover.1677331779.git.mazziesaccount@gmail.com>
-        <987b37ea10ace60f0e67a19f76c4b84dea3050c8.1677331779.git.mazziesaccount@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 8 Apr 2023 06:26:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD430B452
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680949499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=b+B9to8j2Lzj7TcvjD6Ev0dSy316NI/IHJxCACF6SvY=;
+        b=fu/Ej+v+WRhPR9Yc92tRKm96J5z19InT4pqW0pIVds5Vxh00Gm4zT+VISpa2ra7ybO2XY+
+        Erz4LzapiwbM1t6ZL5Cuoqncre7Qik7453keWbe+QaA2ptfGXBhn1Nh+RsLQGLD8Qe74aS
+        5rQMSBo4nZlrhD/1STWZSEZHGP0UOSg=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-581-HN334CBEN728pp76CDUKIg-1; Sat, 08 Apr 2023 06:24:58 -0400
+X-MC-Unique: HN334CBEN728pp76CDUKIg-1
+Received: by mail-ua1-f72.google.com with SMTP id l4-20020ab053c4000000b0076cb64e1ed6so4433257uaa.2
+        for <linux-kernel@vger.kernel.org>; Sat, 08 Apr 2023 03:24:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680949497;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b+B9to8j2Lzj7TcvjD6Ev0dSy316NI/IHJxCACF6SvY=;
+        b=gzs0sVvBLIwPc/57cg7/DXYYcZ6X1i53EaGOg4GRf4BOngCU3uKfMt3Uf5bPLB9BrF
+         vs2X7aFK4hpGK96gLoGkom34wLamOfCwOE0HsjXALPmqeUQkkymJbTsu7+EXzaTSg/+E
+         cnzxs0cAsxLRpFFZi/dxWeJ/51VMK2L4DHNjMFCW22Rocod4OphiwQvXhJkgkZTJLMYJ
+         hdA7sO/qW+tje5BgmQKHnE1QQTxsMqHUbFhZpL7ufEQ/Wwc65QtouECZdtwAVKaEsAFP
+         /ScIccDd8TbIdmEAT3KVfQvO85JIW2On9f72bAgWPGh/tlY5F7xL9o7m1cmwPSJHYyDR
+         uenA==
+X-Gm-Message-State: AAQBX9fCExItmJokcAFnwnX68ASKiNWy8oi3usmb0xlGwC5w5O30WX4X
+        Zwrx5ud0ziTKYMd1rcJC5bnyJPSJyovhod+hV/90t1tmEP50lVoNEDRaIZOmWaoXHwQWLqOJMLV
+        oqvL982OT6uLENnMtFP23EzZMgtCuKyw0dji3bro3
+X-Received: by 2002:a1f:2a4b:0:b0:43c:2acb:9a60 with SMTP id q72-20020a1f2a4b000000b0043c2acb9a60mr2566282vkq.3.1680949497398;
+        Sat, 08 Apr 2023 03:24:57 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bcRbIrqbYLXQvhgU1yB25jrUYi60umTA4Aj4dtEtmHkg2stdHgIeAeLt4yqtCa6AkG6OTgIuIzrtdJ+KnT83g=
+X-Received: by 2002:a1f:2a4b:0:b0:43c:2acb:9a60 with SMTP id
+ q72-20020a1f2a4b000000b0043c2acb9a60mr2566263vkq.3.1680949497089; Sat, 08 Apr
+ 2023 03:24:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230407070517.204676-1-andrea.righi@canonical.com>
+In-Reply-To: <20230407070517.204676-1-andrea.righi@canonical.com>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Sat, 8 Apr 2023 11:24:41 +0100
+Message-ID: <CAOgh=FxE_Y3Chr3wCG5QkoPZW5-BjrVCM9moEZGy=xMkv2fKOA@mail.gmail.com>
+Subject: Re: [PATCH] scripts: rust: drop is_rust_module.sh
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Neal Gompa <neal@gompa.dev>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 25 Feb 2023 15:54:30 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Fri, 7 Apr 2023 at 08:05, Andrea Righi <andrea.righi@canonical.com> wrote:
+>
+> Commit c1177979af9c ("btf, scripts: Exclude Rust CUs with pahole")
+> introduced the constraint "!DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE"
+> to enable RUST.
+>
+> With this constraint we don't need is_rust_module.sh anymore, because
+> 'pahole --lang_exclude=rust' already has the capability to exclude Rust
+> CUs. If pahole isn't recent enough (< 1.24) to support --lang_exclude,
+> then DEBUG_INFO_BTF can't be enabled with RUST and is_rust_module.sh
+> isn't used as well.
+>
+> In any case is_rust_module.sh is obsolete and we can just drop it.
+>
+> Link: https://lore.kernel.org/lkml/Y+p2xKIN6TJnQinK@righiandr-XPS-13-7390/
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 
-> For occasional contributor like me navigating the IIO channel types and
-> modifiers may be a daunting task. One may have hard time finding out
-> what type of channel should be used for device data and what units the
-> data should be converted.
-> 
-> There is a great documentation for the sysfs interfaces though. What is
-> missing is mapping of the channel types and modifiers to the sysfs
-> documentation (and entries in documentation).
-> 
-> Give a hand to a driver writer by providing some documentation and by
-> pointing to the sysfs document from the kernel doc of respective enums.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Ran this in an Asahi Fedora build to be sure.
 
-If following seems a little over 'picky' I blame the bit of my day
-job that involves reviewing far to many specifications...
+Tested-by: Eric Curtin <ecurtin@redhat.com>
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-Some of what follows probably applies to the ABI docs as well.
+Is mise le meas/Regards,
 
+Eric Curtin
 
 > ---
-> Changelog RFCv1 => v2:
-> - add missing channel type docs provided by Jonathan
-> - add @in front of member names and fix typos pointed by Andy
-> - drop TODOs as Jonathan clarified the units
-> 
-> Initial discussion about these docs can be found from:
-> https://lore.kernel.org/all/0e0d45b7-e582-82b2-9bac-1f70f9dad9f7@gmail.com/
-> ---
->  include/uapi/linux/iio/types.h | 134 +++++++++++++++++++++++++++++++++
->  1 file changed, 134 insertions(+)
-> 
-> diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
-> index c79f2f046a0b..78f4cfdc5e45 100644
-> --- a/include/uapi/linux/iio/types.h
-> +++ b/include/uapi/linux/iio/types.h
-> @@ -11,6 +11,124 @@
->  #ifndef _UAPI_IIO_TYPES_H_
->  #define _UAPI_IIO_TYPES_H_
->  
-> +/**
-> + * iio_chan_type - Type of data transferred via IIO channel.
-I worry 'Type of data' could end up with people thinking '16 bit 2's complment'
-
-Perhaps something more general would work?
-
-- What is being measured / output by the channel.
-
-> + *
-> + * The 'main' type of data transferred via channel. Please note that most
-
-type is fine here because it's more broken down than the short description.
-
-most -> many
-
-I can't be bothered to count actual devices and we have a lot of ADCs
-and DACs that don't.  Just relaxing that to "many" avoids this being
-or becoming inaccurate.
-
-> + * devices also need to specify a more accurate 'sub category'. See the
-> + * enum iio_modifier for this. (For example, IIO_ACCEL channel often needs to
-> + * specify the direction. IIO_CONCENTRATION specifies the type of substance
-> + * it measures etc).
-> + *
-> + * These reflect the units of the measurement via processed or unit after
-> + * application of scale and offset. See the enum iio_chan_info_enum for
-> + * scale and offset.
-> + *
-> + * Please find the detailed documentation for reported values from the
-
-in Documentation/...
-
-> + * Documentation/ABI/testing/sysfs-bus-iio.
-
-Unusual to document an enum in a different order to the enum.
-I'm in two minds on whether this is a good idea here.
-
-> + *
-> + * @IIO_ACCEL:		Acceleration, m/s^2
-> + *			Doc keyword: in_accel_x_raw
-> + *
-> + * @IIO_ACTIVITY:	Activity state. For example a pedometer signaling
-> + *			jogging, walking or staying still.
-> + *			Doc keyword: in_activity_still_thresh_rising_en
-
-Use in_activity_still_input
-rather than the event control related to that here.
-
-> + *
-> + * @IIO_ALTVOLTAGE:	Peak to peak voltage, millivolts
-
-Reference out_altvoltageY_raw
-
-(the fun and complex game of DDS devices)
-
-> + *
-> + * @IIO_ANGL:		Angle of rotation, radians.
-> + *			Doc keyword: in_angl_raw
-> + *
-> + * @IIO_ANGL_VEL:	Angular velocity, rad/s
-> + *			Doc keyword: in_anglvel_x_raw
-> + *
-> + * @IIO_CAPACITANCE:	Capacitance, nanofarads.
-> + *			Doc keyword: in_capacitanceY_raw
-> + *
-> + * @IIO_CCT:		Correlated color temperature, Kelvins
-> + *
-> + * @IIO_CURRENT:	Current, milliamps
-> + *			Doc keyword: in_currentY_raw
-> + *
-> + * @IIO_CONCENTRATION:	Reading of a substance, percents. Used for example by
-
-percentage
-
-> + *			devices measuring amount of CO2, O2, ethanol...
-concentration of CO2 ...
-
-> + *			Doc keyword: in_concentration_raw
-> + *
-> + * @IIO_COUNT:		Deprecated, please use counter subsystem.
-> + *
-> + * @IIO_DISTANCE:	Distance in meters. Typically used to report measured
-> + *			distance to an object or the distance covered by the
-> + *			user
-> + *			Doc keyword: in_distance_input
-> + *
-> + * @IIO_ELECTRICALCONDUCTIVITY: electric conductivity, siemens per meter
-> + *			Doc keyword: in_electricalconductivity_raw
-> + *
-> + * @IIO_ENERGY:		Energy in Joules. Typically reported by a device
-> + *			measuring energy burnt by the user.
-> + *			Doc keyword: in_energy_input
-> + *
-> + * @IIO_GRAVITY:	Gravity, m/s^2
-This needs more to differentiate from IIO_ACCEL.  Hmm. Something like
-Acceleration due to gravity alone, independent of other accelerations due
-to device movement.  (Which way is down!)
-
-I'd forgotten this one even existed ;)
-
-> + *			Doc keyword: in_gravity_x_raw
-> + *
-> + * @IIO_HUMIDITYRELATIVE: Relative humidity, percents
-> + *			Doc keyword: in_humidityrelative_raw
-> + *
-> + * @IIO_INCLI:		Inclination, degrees
-> + *			Doc keyword: in_incli_x_raw
-
-(nothing to change here, but gah - an oddity in the ABI as all other angles
-are radians)...
-
-> + *
-> + * @IIO_INDEX:		Deprecated, please use Counter subsystem
-> + *
-> + * @IIO_INTENSITY:	Unitless intensity.
-
-This could do with an example.  "Used for measurements of light where
-the exact meaning is dependent on the sensitivity curve."
-
-> + *			Doc keyword: in_intensityY_raw
-> + *
-> + * @IIO_LIGHT:		Visible light intensity, lux
-
-Not an intensity as depends on approx human eye sensitivity.
-Raiding wikipedia - perhaps something like:
-
-"Wave length weighted measure of light correlated with human
-brightness perception." 
-
-> + *			Doc keyword: in_illuminance_raw
-> + *
-> + * @IIO_MAGN:		Magnetic field, Gauss.
-> + *			Doc keyword: in_magn_x_raw
-> + *
-> + * @IIO_MASSCONCENTRATION: Mass concentration, ug / m3
-> + *			Doc keyword: in_massconcentration_pm1_input
-> + *
-> + * @IIO_PH:		pH reading, negative base-10 logarithm of hydrodium
-> + *			ions in a litre of water
-> + *			Doc keyword: in_ph_raw
-> + *
-> + * @IIO_PHASE:		Phase difference, radians
-> + *			Doc keyword: in_phaseY_raw
-> + *
-> + * @IIO_POSITIONRELATIVE: Relative position.
-Hohum. Another odd unit (however careful we are with this, some oddities
-have made it in) Milipercent of 'pad' size.
-
-> + *			Doc keyword: in_positionrelative_x_raw
-> + *
-> + * @IIO_POWER:		Power, milliwatts
-> + *			Doc keyword: in_powerY_raw
-> + *
-> + * @IIO_PRESSURE:	Pressure, kilopascal
-> + *			Doc keyword: in_pressureY_raw
-> + *
-> + * @IIO_RESISTANCE:	Resistance, ohms
-> + *			Doc keyword: in_resistance_raw
-> + *
-> + * @IIO_ROT:		Euler angles, deg
-> + *			Doc keyword: in_rot_yaw_raw
-> + *
-> + * @IIO_STEPS:		Steps taken by the user
-> + *			Doc keyword: in_steps_input
-> + *
-> + * @IIO_TEMP:		Temperature, milli degrees Celsius
-> + *			Doc keyword: in_temp_raw
-> + *
-> + * @IIO_UVINDEX:	UV light intensity index
-> + *			Doc keyword: in_uvindex_input
-> + *
-> + * @IIO_VELOCITY:	Current speed (norm or magnitude of the velocity
-> + *			vector), m/s
-> + *			Doc keyword: in_velocity_sqrt(x^2+y^2+z^2)_input
-> + *
-> + * @IIO_VOLTAGE:	Voltage, millivolts
-> + *			Doc keyword: in_voltageY_raw
-> + */
->  enum iio_chan_type {
->  	IIO_VOLTAGE,
->  	IIO_CURRENT,
-> @@ -49,6 +167,22 @@ enum iio_chan_type {
->  	IIO_MASSCONCENTRATION,
->  };
->  
-> +/**
-> + * iio_modifier - accurate class for channel data
-accurate class -> sub class or direction for channel data
-> + *
-> + * @IIO_MOD_<X,Y,Z>:	Value represents <X,Y,Z>-axis data.
-> + *			Typically used by channels of type:
-> + *			IIO_ACCEL, IIO_TEMP, IIO_GRAVITY, IIO_POSITIONRELATIVE,
-> + *			IIO_ANGL_VEL, IIO_INCLI, IIO_MAGN
-> + * @IIO_MOD_LIGHT_BOTH:	Value contains visible and infrared light components
-> + * @IIO_MOD_LIGHT_IR:	Value represents infrared radiation
-> + * @IIO_MOD_LIGHT_<RED, GREEN, BLUE>:
-> + *			Value represents visible <red, green, blue>  light
-> + * @IIO_MOD_LIGHT_CLEAR:	Value represents all visible light frequencies
-
-I guess a partial list is better than nothing here.  We can try and fill many
-of the others in a future patch set.
-
-> + *
-> + * Please find the detailed documentation for reported values from the
-> + * Documentation/ABI/testing/sysfs-bus-iio.
-> + */
->  enum iio_modifier {
->  	IIO_NO_MOD,
->  	IIO_MOD_X,
+>  rust/macros/module.rs     |  2 +-
+>  scripts/Makefile.modfinal |  2 --
+>  scripts/is_rust_module.sh | 16 ----------------
+>  3 files changed, 1 insertion(+), 19 deletions(-)
+>  delete mode 100755 scripts/is_rust_module.sh
+>
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index a7e363c2b044..608406f33a70 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -179,7 +179,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+>              /// Used by the printing macros, e.g. [`info!`].
+>              const __LOG_PREFIX: &[u8] = b\"{name}\\0\";
+>
+> -            /// The \"Rust loadable module\" mark, for `scripts/is_rust_module.sh`.
+> +            /// The \"Rust loadable module\" mark.
+>              //
+>              // This may be best done another way later on, e.g. as a new modinfo
+>              // key or a new section. For the moment, keep it simple.
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 4703f652c009..e6f8fa3c9b8d 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -41,8 +41,6 @@ quiet_cmd_btf_ko = BTF [M] $@
+>        cmd_btf_ko =                                                     \
+>         if [ ! -f vmlinux ]; then                                       \
+>                 printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+> -       elif [ -n "$(CONFIG_RUST)" ] && $(srctree)/scripts/is_rust_module.sh $@; then           \
+> -               printf "Skipping BTF generation for %s because it's a Rust module\n" $@ 1>&2; \
+>         else                                                            \
+>                 LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+>                 $(RESOLVE_BTFIDS) -b vmlinux $@;                        \
+> diff --git a/scripts/is_rust_module.sh b/scripts/is_rust_module.sh
+> deleted file mode 100755
+> index 28b3831a7593..000000000000
+> --- a/scripts/is_rust_module.sh
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -#
+> -# is_rust_module.sh module.ko
+> -#
+> -# Returns `0` if `module.ko` is a Rust module, `1` otherwise.
+> -
+> -set -e
+> -
+> -# Using the `16_` prefix ensures other symbols with the same substring
+> -# are not picked up (even if it would be unlikely). The last part is
+> -# used just in case LLVM decides to use the `.` suffix.
+> -#
+> -# In the future, checking for the `.comment` section may be another
+> -# option, see https://github.com/rust-lang/rust/pull/97550.
+> -${NM} "$*" | grep -qE '^[0-9a-fA-F]+ r _R[^[:space:]]+16___IS_RUST_MODULE[^[:space:]]*$'
+> --
+> 2.39.2
+>
 
