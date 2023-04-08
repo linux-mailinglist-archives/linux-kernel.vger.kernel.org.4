@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F036DBA38
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679136DBA34
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 12:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjDHKtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 06:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S230173AbjDHKtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 06:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjDHKs4 (ORCPT
+        with ESMTP id S230014AbjDHKsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 06:48:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C9EFF34
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:48:21 -0700 (PDT)
+        Sat, 8 Apr 2023 06:48:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405B8D332
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 03:48:08 -0700 (PDT)
 Date:   Sat, 08 Apr 2023 10:45:19 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1680950719;
+        s=2020; t=1680950720;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=quFPX/rVGWadDGn8c22WUUmTmkWHBFHDS5dCLSIQ61g=;
-        b=KVhVLpuGyp7laOosowVNxibq3z6Lzb1YNnV8iz6amu5Irt/L/4D2K736fJkR/mCCodGHMF
-        z3sBUC/3PuambOItNmpbGKjvY4YnFYBawz5YJWUqC7Uyf5xmPmjUbFFjSYraJI/cp2/sOA
-        JwvCh7Pnq7jIE9IFTmwu2cilvDtaP5/N/SzMwIHSRMU65MXo58T0vGmr6Vns93Nnyj357n
-        +M9ofoY3jRWglBiHT8SAkK35YVQeaorsBYJ6a3aKZBpg2OLEAy4/V2fa0Kw3hFZJ4HeHrs
-        UAK76hv80y6lsyjEB3Vunjxa610lhbN4SvFibK6gAdVjyyMHzhiyNh6Wxhs3Bw==
+        bh=1b4tArNpnduSvij7iHX/ZEqCzrHyk8foDaMdaE1D5Gw=;
+        b=Oj9WZaV2vBC5K984Evy2qeeqXtIM7XBj1r9lNMtKD628/+ygyCm4wKYCMKbNIFXzY2lx98
+        Xi0agtHmRqmDmbeFUehYBBCF6V+QGsx16yqC33GJFJRNNvv9H5eGtlJ32evu+qlXM5VdHX
+        YkpZ+UIjV4NTuPbjuVfZ1fgp3hztC5u5Qj5EAKt1ZYBMiM1ghIo7rdenpuzoXpiJPZWK6D
+        TYi6mV8jycqXSa70HDX+WPjZ8kyHMjXGbabo/01rXblXnYzyejTAVll7Dm0zlSYzt1A5yH
+        QGgtMOlj5AjeF1DDQ5KcK51fWS+PYU5gStBIjobLMFuHBs3CA0yRYQFs8t3AMQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1680950719;
+        s=2020e; t=1680950720;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=quFPX/rVGWadDGn8c22WUUmTmkWHBFHDS5dCLSIQ61g=;
-        b=U41w3+v7VotmFJsi46xLt0swi1D3vzUc/1l01x+StydjxjXmPrpKNuoyHjHxZ/38A7uLgg
-        VjcueGGtOTpLyHAw==
-From:   "irqchip-bot for Anup Patel" <tip-bot2@linutronix.de>
+        bh=1b4tArNpnduSvij7iHX/ZEqCzrHyk8foDaMdaE1D5Gw=;
+        b=G5Bg2XSHmFS0qhup46QOmSLrRYhZwGEFGZBSBG09//bp1eZxsfFHn4whTMPGgv1z0WB3DI
+        69BTlEMGxMeK4FDg==
+From:   "irqchip-bot for Mason Huo" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-next] RISC-V: Clear SIP bit only when using SBI
- IPI operations
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+Subject: [irqchip: irq/irqchip-next] irqchip/irq-sifive-plic: Add syscore
+ callbacks for hibernation
+Cc:     Mason Huo <mason.huo@starfivetech.com>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
+        Dan Carpenter <error27@gmail.com>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20230328035223.1480939-2-apatel@ventanamicro.com>
-References: <20230328035223.1480939-2-apatel@ventanamicro.com>
+In-Reply-To: <20230404032908.89638-1-mason.huo@starfivetech.com>
+References: <20230404032908.89638-1-mason.huo@starfivetech.com>
 MIME-Version: 1.0
-Message-ID: <168095071929.404.14218576691551578438.tip-bot2@tip-bot2>
+Message-ID: <168095071981.404.6341575327386569051.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,60 +69,192 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-Commit-ID:     3ee92565b83ecc08e5b0c878dd87a2973eaca2ea
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/3ee92565b83ecc08e5b0c878dd87a2973eaca2ea
-Author:        Anup Patel <apatel@ventanamicro.com>
-AuthorDate:    Tue, 28 Mar 2023 09:22:17 +05:30
+Commit-ID:     e80f0b6a2cf302b56b7d6d7ad3797aebc97fccb9
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/e80f0b6a2cf302b56b7d6d7ad3797aebc97fccb9
+Author:        Mason Huo <mason.huo@starfivetech.com>
+AuthorDate:    Tue, 04 Apr 2023 11:29:08 +08:00
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Sat, 08 Apr 2023 11:26:23 +01:00
+CommitterDate: Sat, 08 Apr 2023 11:19:47 +01:00
 
-RISC-V: Clear SIP bit only when using SBI IPI operations
+irqchip/irq-sifive-plic: Add syscore callbacks for hibernation
 
-The software interrupt pending (i.e. [M|S]SIP) bit is writeable for
-S-mode but read-only for M-mode so we clear this bit only when using
-SBI IPI operations.
+The priority and enable registers of plic will be reset
+during hibernation power cycle in poweroff mode,
+add the syscore callbacks to save/restore those registers.
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Bin Meng <bmeng.cn@gmail.com>
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
+Reviewed-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+Reviewed-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202302140709.CdkxgtPi-lkp@intel.com/
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20230328035223.1480939-2-apatel@ventanamicro.com
+Link: https://lore.kernel.org/r/20230404032908.89638-1-mason.huo@starfivetech.com
 ---
- arch/riscv/kernel/sbi.c | 8 +++++++-
- arch/riscv/kernel/smp.c | 2 --
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-sifive-plic.c | 93 +++++++++++++++++++++++++++++-
+ 1 file changed, 91 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-index 5c87db8..ac99a70 100644
---- a/arch/riscv/kernel/sbi.c
-+++ b/arch/riscv/kernel/sbi.c
-@@ -646,8 +646,14 @@ static void sbi_send_cpumask_ipi(const struct cpumask *target)
- 	sbi_send_ipi(target);
- }
+diff --git a/drivers/irqchip/irq-sifive-plic.c b/drivers/irqchip/irq-sifive-plic.c
+index ff47bd0..e148490 100644
+--- a/drivers/irqchip/irq-sifive-plic.c
++++ b/drivers/irqchip/irq-sifive-plic.c
+@@ -17,6 +17,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
+ #include <linux/spinlock.h>
++#include <linux/syscore_ops.h>
+ #include <asm/smp.h>
  
-+static void sbi_ipi_clear(void)
-+{
-+	csr_clear(CSR_IP, IE_SIE);
-+}
-+
- static const struct riscv_ipi_ops sbi_ipi_ops = {
--	.ipi_inject = sbi_send_cpumask_ipi
-+	.ipi_inject = sbi_send_cpumask_ipi,
-+	.ipi_clear = sbi_ipi_clear
+ /*
+@@ -67,6 +68,8 @@ struct plic_priv {
+ 	struct irq_domain *irqdomain;
+ 	void __iomem *regs;
+ 	unsigned long plic_quirks;
++	unsigned int nr_irqs;
++	unsigned long *prio_save;
  };
  
- void __init sbi_init(void)
-diff --git a/arch/riscv/kernel/smp.c b/arch/riscv/kernel/smp.c
-index 8c3b59f..8a12768 100644
---- a/arch/riscv/kernel/smp.c
-+++ b/arch/riscv/kernel/smp.c
-@@ -112,8 +112,6 @@ void riscv_clear_ipi(void)
- {
- 	if (ipi_ops && ipi_ops->ipi_clear)
- 		ipi_ops->ipi_clear();
--
--	csr_clear(CSR_IP, IE_SIE);
+ struct plic_handler {
+@@ -78,6 +81,7 @@ struct plic_handler {
+ 	 */
+ 	raw_spinlock_t		enable_lock;
+ 	void __iomem		*enable_base;
++	u32			*enable_save;
+ 	struct plic_priv	*priv;
+ };
+ static int plic_parent_irq __ro_after_init;
+@@ -229,6 +233,71 @@ static int plic_irq_set_type(struct irq_data *d, unsigned int type)
+ 	return IRQ_SET_MASK_OK;
  }
- EXPORT_SYMBOL_GPL(riscv_clear_ipi);
  
++static int plic_irq_suspend(void)
++{
++	unsigned int i, cpu;
++	u32 __iomem *reg;
++	struct plic_priv *priv;
++
++	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
++
++	for (i = 0; i < priv->nr_irqs; i++)
++		if (readl(priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID))
++			__set_bit(i, priv->prio_save);
++		else
++			__clear_bit(i, priv->prio_save);
++
++	for_each_cpu(cpu, cpu_present_mask) {
++		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
++
++		if (!handler->present)
++			continue;
++
++		raw_spin_lock(&handler->enable_lock);
++		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
++			reg = handler->enable_base + i * sizeof(u32);
++			handler->enable_save[i] = readl(reg);
++		}
++		raw_spin_unlock(&handler->enable_lock);
++	}
++
++	return 0;
++}
++
++static void plic_irq_resume(void)
++{
++	unsigned int i, index, cpu;
++	u32 __iomem *reg;
++	struct plic_priv *priv;
++
++	priv = per_cpu_ptr(&plic_handlers, smp_processor_id())->priv;
++
++	for (i = 0; i < priv->nr_irqs; i++) {
++		index = BIT_WORD(i);
++		writel((priv->prio_save[index] & BIT_MASK(i)) ? 1 : 0,
++		       priv->regs + PRIORITY_BASE + i * PRIORITY_PER_ID);
++	}
++
++	for_each_cpu(cpu, cpu_present_mask) {
++		struct plic_handler *handler = per_cpu_ptr(&plic_handlers, cpu);
++
++		if (!handler->present)
++			continue;
++
++		raw_spin_lock(&handler->enable_lock);
++		for (i = 0; i < DIV_ROUND_UP(priv->nr_irqs, 32); i++) {
++			reg = handler->enable_base + i * sizeof(u32);
++			writel(handler->enable_save[i], reg);
++		}
++		raw_spin_unlock(&handler->enable_lock);
++	}
++}
++
++static struct syscore_ops plic_irq_syscore_ops = {
++	.suspend	= plic_irq_suspend,
++	.resume		= plic_irq_resume,
++};
++
+ static int plic_irqdomain_map(struct irq_domain *d, unsigned int irq,
+ 			      irq_hw_number_t hwirq)
+ {
+@@ -345,6 +414,7 @@ static int __init __plic_init(struct device_node *node,
+ 	u32 nr_irqs;
+ 	struct plic_priv *priv;
+ 	struct plic_handler *handler;
++	unsigned int cpu;
+ 
+ 	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -363,15 +433,21 @@ static int __init __plic_init(struct device_node *node,
+ 	if (WARN_ON(!nr_irqs))
+ 		goto out_iounmap;
+ 
++	priv->nr_irqs = nr_irqs;
++
++	priv->prio_save = bitmap_alloc(nr_irqs, GFP_KERNEL);
++	if (!priv->prio_save)
++		goto out_free_priority_reg;
++
+ 	nr_contexts = of_irq_count(node);
+ 	if (WARN_ON(!nr_contexts))
+-		goto out_iounmap;
++		goto out_free_priority_reg;
+ 
+ 	error = -ENOMEM;
+ 	priv->irqdomain = irq_domain_add_linear(node, nr_irqs + 1,
+ 			&plic_irqdomain_ops, priv);
+ 	if (WARN_ON(!priv->irqdomain))
+-		goto out_iounmap;
++		goto out_free_priority_reg;
+ 
+ 	for (i = 0; i < nr_contexts; i++) {
+ 		struct of_phandle_args parent;
+@@ -441,6 +517,11 @@ static int __init __plic_init(struct device_node *node,
+ 		handler->enable_base = priv->regs + CONTEXT_ENABLE_BASE +
+ 			i * CONTEXT_ENABLE_SIZE;
+ 		handler->priv = priv;
++
++		handler->enable_save =  kcalloc(DIV_ROUND_UP(nr_irqs, 32),
++						sizeof(*handler->enable_save), GFP_KERNEL);
++		if (!handler->enable_save)
++			goto out_free_enable_reg;
+ done:
+ 		for (hwirq = 1; hwirq <= nr_irqs; hwirq++) {
+ 			plic_toggle(handler, hwirq, 0);
+@@ -461,11 +542,19 @@ done:
+ 				  plic_starting_cpu, plic_dying_cpu);
+ 		plic_cpuhp_setup_done = true;
+ 	}
++	register_syscore_ops(&plic_irq_syscore_ops);
+ 
+ 	pr_info("%pOFP: mapped %d interrupts with %d handlers for"
+ 		" %d contexts.\n", node, nr_irqs, nr_handlers, nr_contexts);
+ 	return 0;
+ 
++out_free_enable_reg:
++	for_each_cpu(cpu, cpu_present_mask) {
++		handler = per_cpu_ptr(&plic_handlers, cpu);
++		kfree(handler->enable_save);
++	}
++out_free_priority_reg:
++	kfree(priv->prio_save);
+ out_iounmap:
+ 	iounmap(priv->regs);
+ out_free_priv:
