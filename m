@@ -2,291 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DF16DBBEC
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A153B6DBBF0
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 17:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjDHPa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 11:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S229486AbjDHPdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 11:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjDHPaY (ORCPT
+        with ESMTP id S229944AbjDHPdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 11:30:24 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE31707;
-        Sat,  8 Apr 2023 08:30:21 -0700 (PDT)
-Received: from [192.168.1.190] (ip5b426bea.dynamic.kabel-deutschland.de [91.66.107.234])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: buczek)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 14E8E60027FE8;
-        Sat,  8 Apr 2023 17:30:20 +0200 (CEST)
-Message-ID: <793db44e-9e6d-d118-3f88-cdbffc9ad018@molgen.mpg.de>
-Date:   Sat, 8 Apr 2023 17:30:19 +0200
+        Sat, 8 Apr 2023 11:33:03 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2097.outbound.protection.outlook.com [40.107.95.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD7CAF38;
+        Sat,  8 Apr 2023 08:33:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KwrhbHlZPazQ/LrjUTr+44NnVFd/LKe2hICPGeJEkXZvuylDXMb39ERsIPoR87iDdhE74sELRCrUPXYir/EK+K0vnQ8MjTRNPA9xC7CBPcx7z7IppC7EomnrQfZ9ENtmF55vqZBBq+t2anOzw4LTD/u3ArUtkQSlBJch09yidKt9q50EgPpRS7OSz7/mplldjLS0sDxybNXD1G2xMNzEe+lq0JgHynBiFWL5JtAUVSB/Dspw/HwGITBTB0PLvN89eakRGiqybVHsqHdeF+yz+2ZmJYZoSZDkCb1csMcvC99dRDQ6BPzsLg1MMHf04dLe1qwUx/htOsSQz5B5ZFBxnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L6PREcIi3qWQyeAU7KUGTBxrNTEKkCkFGjHSr7W5pVE=;
+ b=UPmd5gZBsZDRYXmYGcSzF1bhPiPAg9/rTQElF5tjPqA27lNROrcUWOiEE3dK8RL1xHeNM35CnYfiCjF7tYsHeMEyKBAGjCmhjUU2CAMNZghKIRWI3qwz9V/Etrqyn/alwqlIBBFQUpjl+TeiBg0vlw7S50Qvb9MqL3LTZ05q+6Hgk7MLp3UB+XPOW5HAb76xJIxTBlP2rRkZeRV6XBItYX188X47NvUAJ3CLwfJ2iMdvTLUYQE7O5IX8UFJl/A5R8z04j5jM9ZvMn8knf7mbxC3BlwBNTEKonGpnilIWWqfT3OmBqIk0XfSyLZtrNuSsRb9u+nMZVIWauBQB8YthVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L6PREcIi3qWQyeAU7KUGTBxrNTEKkCkFGjHSr7W5pVE=;
+ b=J16X4/WMN+3wBlYzoGwtwBvGTaXOGyWEpF197a6tnepGel/KZO790+WxjgazF3D0hSm/n7p05HAdYOE3zTEyCXHLeDzZW6BFBH7hG3BBqWIpEQBdjJqiRRmZGzW+tXpoO0pUG9M98J9CFl9w79fGaGuMHmehFfGHi3Mgq0KBQ+M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB5422.namprd13.prod.outlook.com (2603:10b6:510:128::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Sat, 8 Apr
+ 2023 15:32:59 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::89d1:63f2:2ed4:9169]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::89d1:63f2:2ed4:9169%5]) with mapi id 15.20.6277.036; Sat, 8 Apr 2023
+ 15:32:59 +0000
+Date:   Sat, 8 Apr 2023 17:32:51 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     m.chetan.kumar@intel.com, linuxwwan@intel.com,
+        loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+        johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        error27@gmail.com, kernel-janitors@vger.kernel.org,
+        vegard.nossum@oracle.com
+Subject: Re: [PATCH net] net: wwan: iosm: Fix error handling path in
+ ipc_pcie_probe()
+Message-ID: <ZDGJI8Q6lWCJdEMR@corigine.com>
+References: <20230408065607.1633970-1-harshit.m.mogalapalli@oracle.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230408065607.1633970-1-harshit.m.mogalapalli@oracle.com>
+X-ClientProxiedBy: AS4P190CA0047.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:656::11) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 02/11] block: Block Device Filtering Mechanism
-Content-Language: en-US
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
-        hch@infradead.org, corbet@lwn.net, snitzer@kernel.org
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, willy@infradead.org,
-        kch@nvidia.com, martin.petersen@oracle.com, vkoul@kernel.org,
-        ming.lei@redhat.com, gregkh@linuxfoundation.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20230404140835.25166-1-sergei.shtepa@veeam.com>
- <20230404140835.25166-3-sergei.shtepa@veeam.com>
-From:   Donald Buczek <buczek@molgen.mpg.de>
-In-Reply-To: <20230404140835.25166-3-sergei.shtepa@veeam.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5422:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49681a8c-4688-48bd-3523-08db38468830
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2y0mO4GuYO7ofzJh2SggNYfNb1wMhAVxRvDyh0ulI6fPZrUzLzy06ePsUd8+JafRKjqB9F/raKxG0t4/WJMoB8dA4fomf8Jk5KN5ZfaEdyPz7Oe5GbAqu/bYzU4MMK9758QxfNxR9aVSjJS3VRg5FKAw8iNBiNpHb0JzO6+PtTEpvMXHq+TG9Nz5fvPDbHeD9jd9QI+owWvElGjKGcvKNHeE4B4fOFo9lSDC4TzUr+sXM8Yf6slOIzJBQBc3NYa1VEW1yfkqllk5hLIOcM4NIpH+UxjXmFBtjhCMFEPs72xFZi7PMLrzLVjLvZ2vUU7XF70GDvO0o9O+ktnJmKod/uaViku+S0SQI3axkJNfVeDGH+pUpdNc6VwMt3QtYlbUHNKnIjOIWT61SmCH61rVDbDOsDvg3gBKEsxkrDopjn7ScRRpx+hSHJZ00Wt63QgCsmBsFJiIaSgPMSfOeSJHjcXVr1caIohfi0o+4rQ6UZ8yVWDouC8A9vQP5PPCNLrp5Dpln482ORs8Lx1dB8WJH4W9d4Rl6bibMSn4SVUR5n5JylENuB+Balbx87GQZI5z
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(366004)(136003)(39840400004)(396003)(451199021)(478600001)(2616005)(186003)(83380400001)(36756003)(38100700002)(86362001)(6506007)(6512007)(6486002)(6666004)(4326008)(6916009)(66476007)(8676002)(66946007)(66556008)(7416002)(8936002)(2906002)(4744005)(41300700001)(5660300002)(44832011)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?N7YkBL/03Oi8r9X1GLtPMO4DpvrlW4cbjCu9zxOfZZBCqp0zTLduKntD5Tbj?=
+ =?us-ascii?Q?2iCvD9yRLPxEiuifQb8fkKVSIbCoZ4+pshDzXmzXFhyV8/VPmj2hui5D6WQV?=
+ =?us-ascii?Q?DU56wkg6e0+Y2JMDQfPGDjySI3Lw7DQrZwJv2uajsxsTiAcUeRYulectFYqc?=
+ =?us-ascii?Q?ezmsg/k1Olv08AZptqqP3fCwZvoK1GM+oVLbjnbgvDg3jvBxg5j6T62Gz0fY?=
+ =?us-ascii?Q?bk4w3OqmgKeaQi0assr7GWGYZcqbGHN1PkDHJy2R69+H+Ga5+J3xZMHkrkCT?=
+ =?us-ascii?Q?Ib8mKZKdbbP9TWP40RJJqGpTu8CJy+48CRrTCENL+T75D9p9AQg6ADfFvX8a?=
+ =?us-ascii?Q?JshLla6DIMvK2eOX1EZ6jgm2TRfdsbSptyIKSuyg91rkgrB82afWmDpBW18K?=
+ =?us-ascii?Q?4UDc30IK2wix+LXPOzzh61v0mCtG8PT8tkm44VQSEp904Je2QtUHx2fdGlyM?=
+ =?us-ascii?Q?Oqj4abjkwomQ0pDl+8E1cqT3IMG1sUUGo4DXA0CVD18y5KkwrBIduq5dTKli?=
+ =?us-ascii?Q?F7gQZs01dIKoxJyNmDCbhEjBDZPhtmyIWemdOMQEzI1EK6VE5YznaXsbZQLV?=
+ =?us-ascii?Q?PBX7luDXMtm8L7baQHKfdmcU79yss0K41kjJoFhW4SanuNE8WEPsWY2jc4xS?=
+ =?us-ascii?Q?UDx0Oz6rpRzksoxyqvS0BhjMPQa+ldPQztyqkkimut12J43orYLTM0yC2kxQ?=
+ =?us-ascii?Q?rBthBZkcvGeZdZ/P2dBb2VzuwDIo4M/Py7NYGnn05WJBBMNDM7j3n9IfqXHg?=
+ =?us-ascii?Q?F8KIYYcu0A9ZEnFm9iydL0qf7vMZBmgMhipJ8loOd/2JiDAJeDN6p8hmKnT9?=
+ =?us-ascii?Q?o08bKCu/FZbSaLfFg2R+12dLkIH8JB6x+szkQ8ADmTA9wtTy+1Y9KK3tMZHv?=
+ =?us-ascii?Q?54A6rAvjIL8De5PL5DF1dKjZN/e7zIMOwXjYY9G8KWSnoOShrtpEBW9woB/R?=
+ =?us-ascii?Q?RrlvcfoyVkOearfd1/M8t4Zv4Gj0ARnGHvMbeIk1oVVfF1lIa5QlAqi3mWU+?=
+ =?us-ascii?Q?yAO70TSjTSn2BEoo3fl2WGg3OxzUfo/GEczz6z7hCh57ZcVCtQd+OCurWlNi?=
+ =?us-ascii?Q?5lWoePjhBPcCkgEEyiK/jWmf938GLYpP5vTU6dATLI5fflMfaZ8NVxUsjIN9?=
+ =?us-ascii?Q?ZdNyiCDEV0iZqBCHEOtDKPDOqWb+9mYJWRd1rf0cKduhpI+sgDl/7daGcB45?=
+ =?us-ascii?Q?FDcHHJRayQsIszJmZ1H09QzbvxOz/a4r3Ob8Tv8AE4+ra68Yd4YYUiAAdNMu?=
+ =?us-ascii?Q?LXwOdNXqr9wVHZJ4Cxby1c3XbOMKoYbqy74Y2qSyq3zbklXIRol5Q6JXvpdu?=
+ =?us-ascii?Q?H0iVudlz67n4HAXOCAsxf4wtzN/CxExI9auYGumRoYLV9mksBNUe77/hqz08?=
+ =?us-ascii?Q?6FQjeZYI2hGbBPN7kpjMGGGicjg+peVU/j3q0ZzF6fcXXhLb30MFjm4AI96y?=
+ =?us-ascii?Q?sUyfztKq3HjviLEMT5BNLl7bTRcvdL60rnu8T04XeWEIbskVy7Y5SGxmxMVw?=
+ =?us-ascii?Q?9fyKbNQRlU2WO3fJ/znJxqyKPRNEQPPYHLfqtZEbAht4MG8rrV5Hm+M5mxTm?=
+ =?us-ascii?Q?sNW6oUCqxskDNA5WdUYWQa9thBdJWeIxc4S8sHqoJ0gUjx4qyhGhaBwnQuz1?=
+ =?us-ascii?Q?pO0GV0Cp0A71SikNXXt3wkxY/RZiCJymbNXszCU+mcH9LfUMMZbMiuVo4Map?=
+ =?us-ascii?Q?Wn9ukQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49681a8c-4688-48bd-3523-08db38468830
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2023 15:32:58.9088
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7HnkH5mZ22HWb9XY5ab4s0lLyMc+bNmXgObbXjpmPmn4MxdihoVmNeKTeByHdiUhcC3sJBgxg2d23dGpLhp91nQaL9rZJynShqH2j1HzJrE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5422
+X-Spam-Status: No, score=-0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sergei,
+On Fri, Apr 07, 2023 at 11:56:07PM -0700, Harshit Mogalapalli wrote:
+> Smatch reports:
+> 	drivers/net/wwan/iosm/iosm_ipc_pcie.c:298 ipc_pcie_probe()
+> 	warn: missing unwind goto?
+> 
+> When dma_set_mask fails it directly returns without disabling pci
+> device and freeing ipc_pcie. Fix this my calling a correct goto label
+> 
+> As dma_set_mask returns either 0 or -EIO, we can use a goto label, as
+> it finally returns -EIO.
+> 
+> Renamed the goto label as name of the label before this patch is not
+> relevant after this patch.
 
-On 4/4/23 16:08, Sergei Shtepa wrote:
-> The block device filtering mechanism is an API that allows to attach
-> block device filters. Block device filters allow perform additional
-> processing for I/O units.
+nit: I agree that it's nice to name the labels after what they unwind,
+rather than where they are called from. But now both schemes
+are used in this function.
 > 
-> The idea of handling I/O units on block devices is not new. Back in the
-> 2.6 kernel, there was an undocumented possibility of handling I/O units
-> by substituting the make_request_fn() function, which belonged to the
-> request_queue structure. But none of the in-tree kernel modules used
-> this feature, and it was eliminated in the 5.10 kernel.
-> 
-> The block device filtering mechanism returns the ability to handle I/O
-> units. It is possible to safely attach filter to a block device "on the
-> fly" without changing the structure of block devices stack.
-> 
-> Co-developed-by: Christoph Hellwig <hch@infradead.org>
-> Signed-off-by: Christoph Hellwig <hch@infradead.org>
-> Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
+> Fixes: 035e3befc191 ("net: wwan: iosm: fix driver not working with INTEL_IOMMU disabled")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 > ---
->   MAINTAINERS                     |   3 +
->   block/Makefile                  |   2 +-
->   block/bdev.c                    |   1 +
->   block/blk-core.c                |  40 ++++++-
->   block/blk-filter.c              | 199 ++++++++++++++++++++++++++++++++
->   block/blk.h                     |  10 ++
->   block/genhd.c                   |   2 +
->   block/ioctl.c                   |   7 ++
->   block/partitions/core.c         |   2 +
->   include/linux/blk-filter.h      |  51 ++++++++
->   include/linux/blk_types.h       |   2 +
->   include/linux/blkdev.h          |   1 +
->   include/uapi/linux/blk-filter.h |  35 ++++++
->   include/uapi/linux/fs.h         |   5 +
->   14 files changed, 357 insertions(+), 3 deletions(-)
->   create mode 100644 block/blk-filter.c
->   create mode 100644 include/linux/blk-filter.h
->   create mode 100644 include/uapi/linux/blk-filter.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2cbe4331ac97..fb6b7abe83e1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3576,6 +3576,9 @@ M:	Sergei Shtepa <sergei.shtepa@veeam.com>
->   L:	linux-block@vger.kernel.org
->   S:	Supported
->   F:	Documentation/block/blkfilter.rst
-> +F:	block/blk-filter.c
-> +F:	include/linux/blk-filter.h
-> +F:	include/uapi/linux/blk-filter.h
->   
->   BLOCK LAYER
->   M:	Jens Axboe <axboe@kernel.dk>
-> diff --git a/block/Makefile b/block/Makefile
-> index 4e01bb71ad6e..d4671c7e499c 100644
-> --- a/block/Makefile
-> +++ b/block/Makefile
-> @@ -9,7 +9,7 @@ obj-y		:= bdev.o fops.o bio.o elevator.o blk-core.o blk-sysfs.o \
->   			blk-lib.o blk-mq.o blk-mq-tag.o blk-stat.o \
->   			blk-mq-sysfs.o blk-mq-cpumap.o blk-mq-sched.o ioctl.o \
->   			genhd.o ioprio.o badblocks.o partitions/ blk-rq-qos.o \
-> -			disk-events.o blk-ia-ranges.o
-> +			disk-events.o blk-ia-ranges.o blk-filter.o
->   
->   obj-$(CONFIG_BOUNCE)		+= bounce.o
->   obj-$(CONFIG_BLK_DEV_BSG_COMMON) += bsg.o
-> diff --git a/block/bdev.c b/block/bdev.c
-> index 1795c7d4b99e..e290020810dd 100644
-> --- a/block/bdev.c
-> +++ b/block/bdev.c
-> @@ -424,6 +424,7 @@ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
->   		return NULL;
->   	}
->   	bdev->bd_disk = disk;
-> +	bdev->bd_filter = NULL;
->   	return bdev;
->   }
->   
-> diff --git a/block/blk-core.c b/block/blk-core.c
-> index 42926e6cb83c..179a1c9ecc90 100644
-> --- a/block/blk-core.c
-> +++ b/block/blk-core.c
-> @@ -18,6 +18,7 @@
->   #include <linux/blkdev.h>
->   #include <linux/blk-pm.h>
->   #include <linux/blk-integrity.h>
-> +#include <linux/blk-filter.h>
->   #include <linux/highmem.h>
->   #include <linux/mm.h>
->   #include <linux/pagemap.h>
-> @@ -591,10 +592,32 @@ static inline blk_status_t blk_check_zone_append(struct request_queue *q,
->   	return BLK_STS_OK;
->   }
->   
-> +static bool submit_bio_filter(struct bio *bio)
-> +{
-> +	/*
-> +	 * If this bio came from the filter driver, send it straight down to the
-> +	 * actual device and clear the filtered flag, as the bio could be passed
-> +	 * on to another device that might have a filter attached again.
-> +	 */
-> +	if (bio_flagged(bio, BIO_FILTERED)) {
-> +		bio_clear_flag(bio, BIO_FILTERED);
-> +		return false;
-> +	}
-> +	bio_set_flag(bio, BIO_FILTERED);
-> +	return bio->bi_bdev->bd_filter->ops->submit_bio(bio);
-> +}
-> +
->   static void __submit_bio(struct bio *bio)
->   {
->   	struct gendisk *disk = bio->bi_bdev->bd_disk;
->   
-> +	/*
-> +	 * If there is a filter driver attached, check if the BIO needs to go to
-> +	 * the filter driver first, which can then pass on the bio or consume it.
-> +	 */
-> +	if (bio->bi_bdev->bd_filter && submit_bio_filter(bio))
-> +		return;
-> +
->   	if (unlikely(!blk_crypto_bio_prep(&bio)))
->   		return;
->   
-> @@ -682,6 +705,15 @@ static void __submit_bio_noacct_mq(struct bio *bio)
->   	current->bio_list = NULL;
->   }
->   
-> +/**
-> + * submit_bio_noacct_nocheck - re-submit a bio to the block device layer for I/O
-> + *	from block device filter.
-> + * @bio:  The bio describing the location in memory and on the device.
-> + *
-> + * This is a version of submit_bio() that shall only be used for I/O that is
-> + * resubmitted to lower level by block device filters.  All file  systems and
-> + * other upper level users of the block layer should use submit_bio() instead.
-> + */
->   void submit_bio_noacct_nocheck(struct bio *bio)
->   {
->   	blk_cgroup_bio_start(bio);
-> @@ -702,13 +734,17 @@ void submit_bio_noacct_nocheck(struct bio *bio)
->   	 * to collect a list of requests submited by a ->submit_bio method while
->   	 * it is active, and then process them after it returned.
->   	 */
-> -	if (current->bio_list)
-> +	if (current->bio_list) {
->   		bio_list_add(&current->bio_list[0], bio);
-> -	else if (!bio->bi_bdev->bd_disk->fops->submit_bio)
-> +		return;
-> +	}
-> +
-> +	if (!bio->bi_bdev->bd_disk->fops->submit_bio)
->   		__submit_bio_noacct_mq(bio);
->   	else
->   		__submit_bio_noacct(bio);
->   }
-> +EXPORT_SYMBOL_GPL(submit_bio_noacct_nocheck);
->   
->   /**
->    * submit_bio_noacct - re-submit a bio to the block device layer for I/O
-> diff --git a/block/blk-filter.c b/block/blk-filter.c
-> new file mode 100644
-> index 000000000000..5e9d884fad4d
-> --- /dev/null
-> +++ b/block/blk-filter.c
-> @@ -0,0 +1,199 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (C) 2023 Veeam Software Group GmbH */
-> +#include <linux/blk-filter.h>
-> +#include <linux/blk-mq.h>
-> +#include <linux/module.h>
-> +
-> +#include "blk.h"
-> +
-> +static LIST_HEAD(blkfilters);
-> +static DEFINE_SPINLOCK(blkfilters_lock);
-> +
-> +static inline struct blkfilter_operations *__blkfilter_find(const char *name)
-> +{
-> +	struct blkfilter_operations *ops;
-> +
-> +	list_for_each_entry(ops, &blkfilters, link)
-> +		if (strncmp(ops->name, name, BLKFILTER_NAME_LENGTH) == 0)
-> +			return ops;
-> +
-> +	return NULL;
-> +}
-> +
-> +static inline struct blkfilter_operations *blkfilter_find_get(const char *name)
-> +{
-> +	struct blkfilter_operations *ops;
-> +
-> +	spin_lock(&blkfilters_lock);
-> +	ops = __blkfilter_find(name);
-> +	if (ops && !try_module_get(ops->owner))
-> +		ops = NULL;
-> +	spin_unlock(&blkfilters_lock);
-> +
-> +	return ops;
-> +}
-> +
-> +int blkfilter_ioctl_attach(struct block_device *bdev,
-> +		    struct blkfilter_name __user *argp)
-> +{
-> +	struct blkfilter_name name;
-> +	struct blkfilter_operations *ops;
-> +	struct blkfilter *flt;
-> +	int ret;
-> +
-> +	if (copy_from_user(&name, argp, sizeof(name)))
-> +		return -EFAULT;
-> +
-> +	ops = blkfilter_find_get(name.name);
-> +	if (!ops)
-> +		return -ENOENT;
-> +
-> +	ret = freeze_bdev(bdev);
-> +	if (ret)
-> +		goto out_put_module;
-> +	blk_mq_freeze_queue(bdev->bd_queue);
-> +
-> +	if (bdev->bd_filter) {
-> +		if (bdev->bd_filter->ops == ops)
-> +			ret = -EALREADY;
-> +		else
-> +			ret = -EBUSY;
-> +		goto out_unfreeze;
-> +	}
+> This is based on static analysis, only compile tested.
 
-Maybe detach the old filter and attach the new one instead? An atomic replace might be usefull and it wouldn't complicate the code to do that instead. If its the same filter, maybe just return success and don't go through ops->detach and ops->attach?
+I agree with your analysis.
 
-D.
-
-> [...]
-
--- 
-Donald Buczek
-buczek@molgen.mpg.de
-Tel: +49 30 8413 1433
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
