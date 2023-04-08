@@ -2,187 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABE26DB88B
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 05:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D216DB890
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 05:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjDHDTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 23:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S229896AbjDHDUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 23:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjDHDTb (ORCPT
+        with ESMTP id S229469AbjDHDUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 23:19:31 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315D91BEA;
-        Fri,  7 Apr 2023 20:19:29 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PtgS72TFQzKrP7;
-        Sat,  8 Apr 2023 11:18:47 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sat, 8 Apr 2023 11:19:26 +0800
-Message-ID: <50878e07-3b16-18e5-b4d9-da1cb7a05139@huawei.com>
-Date:   Sat, 8 Apr 2023 11:19:25 +0800
+        Fri, 7 Apr 2023 23:20:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E0D1BEA;
+        Fri,  7 Apr 2023 20:20:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D83064D4B;
+        Sat,  8 Apr 2023 03:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 90B9FC433D2;
+        Sat,  8 Apr 2023 03:20:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680924017;
+        bh=s6+/BzltS4eg674aI8cdbmK7B09+uVXtkxWgUQ7ZBtM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YF6+I70trLdvxzvom3TPyCSs86ZMZ0JBbdm74+c14OXiQT6cKmq6vA/+HOKgwH6n1
+         K6xPH7XoLIv7yRjaktHTwlvJDCQON/+UawNFmeKiOWchdFUoKxtuQWELj92LIb/4Wl
+         iu+q2fNIHQL8OC2/xtVULLg7UiJxdwbjE6sBK0aUE6/9/LULbNMnb3ozxfPNYCwKfa
+         3XzGhlMLgfZOzxMqAe0D4KpQh2Lf0MMnu3+o/gQqni7d5J2TOpGJlOdRkkUF/Ro2xs
+         3u4ul6kV1ZbBxAPaTZIhObldjpesZ2pNBhwycP0b3STf18J7FnTkhq4hWOvcTCvypf
+         aRVB4hh+Wmigw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7203DE21EF2;
+        Sat,  8 Apr 2023 03:20:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH] writeback, cgroup: fix null-ptr-deref write in
- bdi_split_work_to_wbs
-Content-Language: en-US
-To:     <linux-fsdevel@vger.kernel.org>
-CC:     <viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <tj@kernel.org>,
-        <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <ritesh.list@gmail.com>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <yukuai3@huawei.com>,
-        <stable@vger.kernel.org>, Baokun Li <libaokun1@huawei.com>
-References: <20230406140247.1936541-1-libaokun1@huawei.com>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230406140247.1936541-1-libaokun1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] r8152: Add __GFP_NOWARN to big allocations
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168092401746.26294.3498569400410508226.git-patchwork-notify@kernel.org>
+Date:   Sat, 08 Apr 2023 03:20:17 +0000
+References: <20230406171411.1.I84dbef45786af440fd269b71e9436a96a8e7a152@changeid>
+In-Reply-To: <20230406171411.1.I84dbef45786af440fd269b71e9436a96a8e7a152@changeid>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, git@apitzsch.eu, bjorn@mork.no,
+        dober6023@gmail.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
+        svenva@chromium.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the noise, my understanding of this issue is wrong.
+Hello:
 
-Please ignore this patch.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-I will send a v2 patch.
-
-
-On 2023/4/6 22:02, Baokun Li wrote:
-> KASAN report null-ptr-deref:
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in bdi_split_work_to_wbs+0x6ce/0x6e0
-> Write of size 8 at addr 0000000000000000 by task syz-executor.3/3514
->
-> CPU: 3 PID: 3514 Comm: syz-executor.3 Not tainted 5.10.0-dirty #1
-> Call Trace:
->   dump_stack+0xbe/0xfd
->   __kasan_report.cold+0x34/0x84
->   kasan_report+0x3a/0x50
->   check_memory_region+0xfd/0x1f0
->   bdi_split_work_to_wbs+0x6ce/0x6e0
->   __writeback_inodes_sb_nr+0x184/0x1f0
->   try_to_writeback_inodes_sb+0x7f/0xa0
->   ext4_nonda_switch+0x125/0x130
->   ext4_da_write_begin+0x126/0x6e0
->   generic_perform_write+0x199/0x3a0
->   ext4_buffered_write_iter+0x16d/0x2b0
->   ext4_file_write_iter+0xea/0x140
->   new_sync_write+0x2fa/0x430
->   vfs_write+0x4a1/0x570
->   ksys_write+0xf6/0x1f0
->   do_syscall_64+0x30/0x40
->   entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> RIP: 0033:0x45513d
+On Thu,  6 Apr 2023 17:14:26 -0700 you wrote:
+> When memory is a little tight on my system, it's pretty easy to see
+> warnings that look like this.
+> 
+>   ksoftirqd/0: page allocation failure: order:3, mode:0x40a20(GFP_ATOMIC|__GFP_COMP), nodemask=(null),cpuset=/,mems_allowed=0
+>   ...
+>   Call trace:
+>    dump_backtrace+0x0/0x1e8
+>    show_stack+0x20/0x2c
+>    dump_stack_lvl+0x60/0x78
+>    dump_stack+0x18/0x38
+>    warn_alloc+0x104/0x174
+>    __alloc_pages+0x588/0x67c
+>    alloc_rx_agg+0xa0/0x190 [r8152 ...]
+>    r8152_poll+0x270/0x760 [r8152 ...]
+>    __napi_poll+0x44/0x1ec
+>    net_rx_action+0x100/0x300
+>    __do_softirq+0xec/0x38c
+>    run_ksoftirqd+0x38/0xec
+>    smpboot_thread_fn+0xb8/0x248
+>    kthread+0x134/0x154
+>    ret_from_fork+0x10/0x20
+> 
 > [...]
-> ==================================================================
->
-> Above issue may happen as follows:
->
->              cpu1                        cpu2
-> ----------------------------|----------------------------
-> ext4_nonda_switch
->   try_to_writeback_inodes_sb
->    __writeback_inodes_sb_nr
->     bdi_split_work_to_wbs
->      kmalloc(sizeof(*work), GFP_ATOMIC)  ---> alloc mem failed
->                                  inode_switch_wbs
->                                   inode_switch_wbs_work_fn
->                                    wb_put_many
->                                     percpu_ref_put_many
->                                      ref->data->release(ref)
->                                       cgwb_release
->                                        &wb->release_work
->                                         cgwb_release_workfn
->                                          percpu_ref_exit
->                                           ref->data = NULL
->                                           kfree(data)
->      wb_get(wb)
->       percpu_ref_get(&wb->refcnt)
->        percpu_ref_get_many(ref, 1)
->         atomic_long_add(nr, &ref->data->count) ---> ref->data = NULL
->          atomic64_add(i, v) ---> trigger null-ptr-deref
->
-> bdi_split_work_to_wbs() traverses &bdi->wb_list to split work into all wbs.
-> If the allocation of new work fails, the on-stack fallback will be used and
-> the reference count of the current wb is increased afterwards. If cgroup
-> writeback membership switches occur before getting the reference count and
-> the current wb is released as old_wd, then calling wb_get() or wb_put()
-> will trigger the null pointer dereference above.
->
-> A similar problem is fixed in commit 7fc5854f8c6e ("writeback: synchronize
-> sync(2) against cgroup writeback membership switches"), but the patch only
-> adds locks to sync_inodes_sb() and not to the __writeback_inodes_sb_nr()
-> function that also calls bdi_split_work_to_wbs() function. So avoid the
-> above race by adding the same lock to __writeback_inodes_sb_nr() and
-> expanding the range of wb_switch_rwsem held in inode_switch_wbs_work_fn().
->
-> Fixes: b817525a4a80 ("writeback: bdi_writeback iteration must not skip dying ones")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
->   fs/fs-writeback.c | 12 ++++++++++--
->   1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 195dc23e0d83..52825aaf549b 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -506,13 +506,13 @@ static void inode_switch_wbs_work_fn(struct work_struct *work)
->   	spin_unlock(&new_wb->list_lock);
->   	spin_unlock(&old_wb->list_lock);
->   
-> -	up_read(&bdi->wb_switch_rwsem);
-> -
->   	if (nr_switched) {
->   		wb_wakeup(new_wb);
->   		wb_put_many(old_wb, nr_switched);
->   	}
->   
-> +	up_read(&bdi->wb_switch_rwsem);
-> +
->   	for (inodep = isw->inodes; *inodep; inodep++)
->   		iput(*inodep);
->   	wb_put(new_wb);
-> @@ -936,6 +936,11 @@ static long wb_split_bdi_pages(struct bdi_writeback *wb, long nr_pages)
->    * have dirty inodes.  If @base_work->nr_page isn't %LONG_MAX, it's
->    * distributed to the busy wbs according to each wb's proportion in the
->    * total active write bandwidth of @bdi.
-> + *
-> + * Called under &bdi->wb_switch_rwsem, otherwise bdi_split_work_to_wbs()
-> + * may race against cgwb (cgroup writeback) membership switches, which may
-> + * cause some inodes to fail to write back, or even trigger a null pointer
-> + * dereference using a freed wb.
->    */
->   static void bdi_split_work_to_wbs(struct backing_dev_info *bdi,
->   				  struct wb_writeback_work *base_work,
-> @@ -2637,8 +2642,11 @@ static void __writeback_inodes_sb_nr(struct super_block *sb, unsigned long nr,
->   		return;
->   	WARN_ON(!rwsem_is_locked(&sb->s_umount));
->   
-> +	/* protect against inode wb switch, see inode_switch_wbs_work_fn() */
-> +	bdi_down_write_wb_switch_rwsem(bdi);
->   	bdi_split_work_to_wbs(sb->s_bdi, &work, skip_if_busy);
->   	wb_wait_for_completion(&done);
-> +	bdi_up_write_wb_switch_rwsem(bdi);
->   }
->   
->   /**
+
+Here is the summary with links:
+  - r8152: Add __GFP_NOWARN to big allocations
+    https://git.kernel.org/netdev/net/c/5cc33f139e11
+
+You are awesome, thank you!
 -- 
-With Best Regards,
-Baokun Li
-.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
