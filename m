@@ -2,210 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2724F6DB9C1
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 11:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A3B6DB9C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 11:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjDHJEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 05:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S229669AbjDHJGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 05:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjDHJEo (ORCPT
+        with ESMTP id S229456AbjDHJGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 05:04:44 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5D8D31B;
-        Sat,  8 Apr 2023 02:04:42 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id qa44so1522312ejc.4;
-        Sat, 08 Apr 2023 02:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680944681; x=1683536681;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cdYqCPIoUBwqMVtJ32v9H7IHcMMjCChlDRtGHdvM84=;
-        b=H1hS+9lMNiwLD/7qZjyewtlANwmbelhVraRQffgchW9ExWCI9Oo90AiltydgPp5GnB
-         Es9GEFClUakcbwYH5PxHQf5t9hPTzTZxAPxw6zRdRl75tox/DngieYwIjkELN8WcIBKQ
-         CfgcukZIf96748//lt+KLIpm+5exDKMuSXUOwvjsGYPr4CKhb9DF/TBABagzLPS5C5Bo
-         uiMnSkSJ453fhG2cNKVYySEyR/0oPmt2VaSSHI/rz6+ZIk9sfrFwglybtn7QU3LZ9J1x
-         ptbZUUDswyeLoyvT4uNYPz8lWYlL5VC/9KDf7hEZOND83AaKVO4EKyvfRlMzIeY+JdqI
-         OIFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680944681; x=1683536681;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4cdYqCPIoUBwqMVtJ32v9H7IHcMMjCChlDRtGHdvM84=;
-        b=aSMhBsVb3iAHZmpss1FU71XFukV+uw/HibGZx8goH9YozPqFI0dEvoqoRHoAtVvCTt
-         6mcwcwdovtvnEMSSNJENkcUMDSo8vJKEFfJbOkVxmKGty0MCAeuXpRP34yvT6GZtjygm
-         9fvDQn7AKh7jBErn9cUTOE2u0j4zQhvGORKfCWRoP/QYVb65nzPuVAUj1Z97BbG375yP
-         Wiqt+59i5e9prdpKTNBtZRuYXbtrQaemnGODp7l2SwHDZ3Afw/mEnH45phiGyT2N7xEu
-         6yXpwA4t2CA+vz9+s0xXaD9S2ONGZuv7ox0yWXv2WbOxmuSJlPSmXgnouwae9a/Z+RuN
-         bOVw==
-X-Gm-Message-State: AAQBX9cz4LiIIYkDysdQfU4Q4ON0ztam/vea+Kav+o/KPnpY4gdvvxoY
-        ZKmuBCmWBzQJPThjsZkZjBY=
-X-Google-Smtp-Source: AKy350bvgfOMkvLG8lzYW9wWHZzd8o+/9WSLzBssMxgJwrDLvcPmebKbhOH43UoAdZ0p18POFbt5sA==
-X-Received: by 2002:a17:907:3207:b0:906:4739:d73e with SMTP id xg7-20020a170907320700b009064739d73emr1152144ejb.2.1680944680602;
-        Sat, 08 Apr 2023 02:04:40 -0700 (PDT)
-Received: from pc636 (49-224-201-31.ftth.glasoperator.nl. [31.201.224.49])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170906344800b009334edaed98sm2950076ejb.50.2023.04.08.02.04.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 02:04:40 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Sat, 8 Apr 2023 11:04:39 +0200
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "frederic@kernel.org" <frederic@kernel.org>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "qiang.zhang1211@gmail.com" <qiang.zhang1211@gmail.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] rcu/kvfree: Prevents cache growing when the
- backoff_page_cache_fill is set
-Message-ID: <ZDEuJwnkpkr717Fr@pc636>
-References: <20230406001238.647536-1-qiang1.zhang@intel.com>
- <ZC5MoREk30MIt79u@pc636>
- <8da4b48a-820c-461f-9dc0-a5afaf335177@paulmck-laptop>
- <PH0PR11MB58809B44F396B7C074BDC704DA919@PH0PR11MB5880.namprd11.prod.outlook.com>
- <9427c261-0395-4e03-8f93-2e0588fadd1f@paulmck-laptop>
- <MW5PR11MB5858999E104C21754DEB40F3DA969@MW5PR11MB5858.namprd11.prod.outlook.com>
- <c0fed568-db45-4302-b204-b4f707bba140@paulmck-laptop>
- <PH0PR11MB5880D0D946C20C4DEE3AEF99DA979@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Sat, 8 Apr 2023 05:06:46 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1C0D31B
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 02:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680944805; x=1712480805;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Hpnpvx6xos6iUlaCPN6kP4RigNaZ4dPMBCtAmVawsAM=;
+  b=Gt5SHoKiQ9r5WHoykxi5GCJizfp0zsHwDJmyegzHIunFtXYTXkaqngMW
+   CYysAKK0m4tNf1JBCMmOLCgCVyLSKehqMT9tgTddLdBhNiDzTCA6JmLQT
+   z0X4xJfydsZsdW2ugpHtPYPO/YCF9vNyaDCU7bRtFK1GFfkTOjC75qGFU
+   RYkeAf7gMuQaJHRCo/IvJC+Xpo2tCyDRySpLtS/nzTRwwDO+QJO9CzgmL
+   +ylIPuwC9PgTdI3jovP6tz/2lLv74EyKDfjjVXLed64ihWjH7UURWQwAK
+   hLGWfqo2iXdNC7xvFF6UYI8ncfBT4gWuOgBRxptjCNEvLE0BRB5gKDjl8
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="408263407"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="408263407"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2023 02:06:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="681244371"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="681244371"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 08 Apr 2023 02:06:42 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pl4Wv-000TZt-25;
+        Sat, 08 Apr 2023 09:06:41 +0000
+Date:   Sat, 8 Apr 2023 17:06:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to
+ undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202304081740.35UVR4Ai-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5880D0D946C20C4DEE3AEF99DA979@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 08, 2023 at 01:56:40AM +0000, Zhang, Qiang1 wrote:
-> On Fri, Apr 07, 2023 at 01:26:39AM +0000, Zhang, Qiang1 wrote:
-> > > >>On Thu, Apr 06, 2023 at 06:37:53AM +0200, Uladzislau Rezki wrote:
-> > > > On Thu, Apr 06, 2023 at 08:12:38AM +0800, Zqiang wrote:
-> > > > > Currently, in kfree_rcu_shrink_scan(), the drain_page_cache() is
-> > > > > executed before kfree_rcu_monitor() to drain page cache, if the bnode
-> > > > > structure's->gp_snap has done, the kvfree_rcu_bulk() will fill the
-> > > > > page cache again in kfree_rcu_monitor(), this commit add a check
-> > > > > for krcp structure's->backoff_page_cache_fill in put_cached_bnode(),
-> > > > > if the krcp structure's->backoff_page_cache_fill is set, prevent page
-> > > > > cache growing.
-> > > > > 
-> > > > > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-> > > > > ---
-> > > > >  kernel/rcu/tree.c | 2 ++
-> > > > >  1 file changed, 2 insertions(+)
-> > > > > 
-> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > > index 9cc0a7766fd2..f25430ae1936 100644
-> > > > > --- a/kernel/rcu/tree.c
-> > > > > +++ b/kernel/rcu/tree.c
-> > > > > @@ -2907,6 +2907,8 @@ static inline bool
-> > > > >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
-> > > > >  	struct kvfree_rcu_bulk_data *bnode)
-> > > > >  {
-> > > > > +	if (atomic_read(&krcp->backoff_page_cache_fill))
-> > > > > +		return false;
-> > > > >  	// Check the limit.
-> > > > >  	if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
-> > > > >  		return false;
-> > > > > -- 
-> > > > > 2.32.0
-> > > > >
-> > > > Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > >
-> > > >Thank you both!
-> > > >
-> > > >One question, though.  Might it be better to instead modify the "for"
-> > > >loop in fill_page_cache_func() to start at krcp->nr_bkv_objs instead
-> > > >of starting at zero?  That way, we still provide a single page under
-> > > >low-memory conditions, but provide rcu_min_cached_objs of them if memory
-> > > >is plentiful.
-> > > >
-> > > >Alternatively, if we really don't want to allow any pages at all under
-> > > >low-memory conditions, shouldn't the fill_page_cache_func() set nr_pages
-> > > >to zero (instead of the current 1) when the krcp->backoff_page_cache_fill
-> > > >flag is set?  
-> > > 
-> > > Hi, Paul
-> > > 
-> > > If the krcp->backoff_page_cache_fill is true, the put_cached_bnode () return false,
-> > > the allocated single page will also be freed in fill_page_cache_func().
-> > > 
-> > > or it would be better not to allocate under memory pressure.
-> > >
-> > >That was my thought.  ;-)
-> > >
-> > > How about like this?
-> > > 
-> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > index 9cc0a7766fd2..94aedbc3da36 100644
-> > > --- a/kernel/rcu/tree.c
-> > > +++ b/kernel/rcu/tree.c
-> > > @@ -2907,6 +2907,8 @@ static inline bool
-> > >  put_cached_bnode(struct kfree_rcu_cpu *krcp,
-> > >         struct kvfree_rcu_bulk_data *bnode)
-> > >  {
-> > > +       if (atomic_read(&krcp->backoff_page_cache_fill))
-> > > +               return false;
-> > >         // Check the limit.
-> > >         if (krcp->nr_bkv_objs >= rcu_min_cached_objs)
-> > >                 return false;
-> > > @@ -3220,7 +3222,7 @@ static void fill_page_cache_func(struct work_struct *work)
-> > >         int i;
-> > > 
-> > >         nr_pages = atomic_read(&krcp->backoff_page_cache_fill) ?
-> > > -               1 : rcu_min_cached_objs;
-> > > +               0 : rcu_min_cached_objs;
-> > > 
-> > >         for (i = 0; i < nr_pages; i++) {
-> > >
-> > >The other question is why this loop does not allow for any pages
-> > >that might already be allocated, thus perhaps looking like this:
-> > >
-> > >		for (i = krcp->nr_bkv_objs; i < nr_pages; i++) {
-> > >
-> > >Or do we somehow know that krcp->nr_bkv_objs is equal to zero?  (I am not
-> > >seeing this, but I do feel the need to ask.)
-> > 
-> > 
-> > The fill_page_cache_func() is triggered when we invoke get_cached_bnode() return NULL,
-> > this also means that krcp->nr_bkv_objs is equal to zero. 
-> > But if can_alloc is set,  we will unlock krcp0->lock and allocated single page,  after that
-> > we will reacquire krcp1 and lock,  but the krcp1 at this time may be different from the
-> > previous krcp0,  if !bnode is true, also trigger work to invoke fill_page_cache_func(),  but
-> > maybe the krcp1-> nr_bkv_objs is not equal to zero.
-> >
-> >OK.  Given all of these good points, what would be a good patch for
-> >this issue?  ;-)
-> 
-> Is it possible to keep the filling of the page always on the correct krcp?
-> 
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3303,7 +3303,7 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
->                         // scenarios.
->                         bnode = (struct kvfree_rcu_bulk_data *)
->                                 __get_free_page(GFP_KERNEL | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN);
-> -                       *krcp = krc_this_cpu_lock(flags);
-> +                       raw_spin_lock_irqsave(&(*krcp)->lock, *flags);
->                 }
-> 
-I do not expect any contention if this is applied. From the other
-hand it might be that it was done deliberately for some reason or
-because we most likely anyway stay on the same CPU.
+Hi Arnd,
 
-I did some test to see how many times a migration occurs during this
-small window and according to my data it was negligible.
+FYI, the error/warning still remains.
 
-Anyway i do not have any objections as of now against this change
-and it looks correct to me.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aa318c48808c0aa73216bd94c54c4553d3663add
+commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+date:   1 year, 1 month ago
+config: mips-randconfig-r001-20230408 (https://download.01.org/0day-ci/archive/20230408/202304081740.35UVR4Ai-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/pinctrl/cirrus/
 
---
-Uladzislau Rezki
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081740.35UVR4Ai-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
+   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                                        ^
+>> drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: call to undeclared function 'LOCHNAGAR1_'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^
+   <scratch space>:139:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:200:1: error: initializer element is not a compile-time constant
+   LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:139:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: pasting formed 'LOCHNAGAR1_(', an invalid preprocessing token
+   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+   ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:63: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                                        ^
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:201:1: error: initializer element is not a compile-time constant
+   LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:67:2: note: expanded from macro 'LN1_PIN_GPIO'
+           LN_PIN_GPIO(1, ID, NAME, REG, SHIFT, INVERT)
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/pinctrl/cirrus/pinctrl-lochnagar.c:52:46: note: expanded from macro 'LN_PIN_GPIO'
+           .name = NAME, .type = LN_PTYPE_GPIO, .reg = LOCHNAGAR##REV##_##REG, \
+                                                       ^~~~~~~~~~~~~~~~~~~~~~
+   <scratch space>:150:1: note: expanded from here
+   LOCHNAGAR1_
+   ^
+   5 errors generated.
+
+
+vim +/LOCHNAGAR1_ +200 drivers/pinctrl/cirrus/pinctrl-lochnagar.c
+
+0548448b719ac7 Charles Keepax 2019-03-19  199  
+0548448b719ac7 Charles Keepax 2019-03-19 @200  LN1_PIN_GPIO(CDC_RESET,    "codec-reset",    RST,      CDC_RESET,    1);
+0548448b719ac7 Charles Keepax 2019-03-19  201  LN1_PIN_GPIO(DSP_RESET,    "dsp-reset",      RST,      DSP_RESET,    1);
+0548448b719ac7 Charles Keepax 2019-03-19  202  LN1_PIN_GPIO(CDC_CIF1MODE, "codec-cif1mode", I2C_CTRL, CDC_CIF_MODE, 0);
+0548448b719ac7 Charles Keepax 2019-03-19  203  LN1_PIN_MUX(GF_GPIO2,      "gf-gpio2");
+0548448b719ac7 Charles Keepax 2019-03-19  204  LN1_PIN_MUX(GF_GPIO3,      "gf-gpio3");
+0548448b719ac7 Charles Keepax 2019-03-19  205  LN1_PIN_MUX(GF_GPIO7,      "gf-gpio7");
+0548448b719ac7 Charles Keepax 2019-03-19  206  LN1_PIN_MUX(LED1,          "led1");
+0548448b719ac7 Charles Keepax 2019-03-19  207  LN1_PIN_MUX(LED2,          "led2");
+0548448b719ac7 Charles Keepax 2019-03-19  208  LN1_PIN_AIF(CDC_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  209  LN1_PIN_AIF(CDC_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  210  LN1_PIN_AIF(CDC_AIF3);
+0548448b719ac7 Charles Keepax 2019-03-19  211  LN1_PIN_AIF(DSP_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  212  LN1_PIN_AIF(DSP_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  213  LN1_PIN_AIF(PSIA1);
+0548448b719ac7 Charles Keepax 2019-03-19  214  LN1_PIN_AIF(PSIA2);
+0548448b719ac7 Charles Keepax 2019-03-19  215  LN1_PIN_AIF(SPDIF_AIF);
+0548448b719ac7 Charles Keepax 2019-03-19  216  LN1_PIN_AIF(GF_AIF1);
+0548448b719ac7 Charles Keepax 2019-03-19  217  LN1_PIN_AIF(GF_AIF2);
+0548448b719ac7 Charles Keepax 2019-03-19  218  LN1_PIN_AIF(GF_AIF3);
+0548448b719ac7 Charles Keepax 2019-03-19  219  LN1_PIN_AIF(GF_AIF4);
+0548448b719ac7 Charles Keepax 2019-03-19  220  
+
+:::::: The code at line 200 was first introduced by commit
+:::::: 0548448b719ac78fa18fdbcd03856952ba6cc7dc pinctrl: lochnagar: Add support for the Cirrus Logic Lochnagar
+
+:::::: TO: Charles Keepax <ckeepax@opensource.cirrus.com>
+:::::: CC: Linus Walleij <linus.walleij@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
