@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3496DB967
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584B56DB968
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjDHHy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 03:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S230091AbjDHHzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 03:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjDHHyf (ORCPT
+        with ESMTP id S230056AbjDHHym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 03:54:35 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7842810271;
-        Sat,  8 Apr 2023 00:54:17 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id f14so18831052oiw.10;
-        Sat, 08 Apr 2023 00:54:17 -0700 (PDT)
+        Sat, 8 Apr 2023 03:54:42 -0400
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A8DFF1F;
+        Sat,  8 Apr 2023 00:54:20 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id g26-20020a4adc9a000000b0053b9059edd5so101149oou.3;
+        Sat, 08 Apr 2023 00:54:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680940457;
+        d=gmail.com; s=20210112; t=1680940460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S9xdueeJy7MgLea0ONmd9MZ1VHllI6hHaQJbmcDSqvw=;
-        b=gJPOyjdIa5tq77ALNTMPC2MFBLNhcROzoktPdDzydEf5g6t1f171CYPi/W6bF+1MJA
-         a7NXuCM6eOUDRd0+M6o9IbTb5d1+Ssh0ZyPyZOhZTATdSu0gI96WjxXek3wDqz426r0N
-         BEVi2tBlRqofAlJGtL2hom7owEyLzCBRWf9nXyjfmnNZggAFYy1B5ON4uCvSkTV4QcnX
-         WiweHjRDLZsMoexiXJ0Wu81iJvxLmeSud9t01K9xmEllmRb7Z69Rfl/cDqpmlDM6L+8W
-         +nwO42Zzn23IcAXkzJKO87F4ge9Vi62WpmBykdaxoF3gnyFjTQ9aHrxOvPWhls9kQY+7
-         q6kw==
+        bh=lpFbdZW6Pxs9oGadShmf3bb76khn+lS3nRvJuJ63DD0=;
+        b=dIU1A+nMC99Mw/TCI+3ztwstU57Nl2JuzV3JEDMAiZU0C2mRTMt1HryblDXwlVIueV
+         Qofw33OMnSkvEB7CS+UoM1o9a2uQN7Ajp4/8Cghfxe5/c41+dpsRgWuHJWwcbEUrmX0b
+         FcOIEUpowOsDXTOFDiK+gbbkNhe6fUsokP9LjDi1VhXeq11SqSgcZv0LiMmGaDPIbrIq
+         oDJMWoQof0Om8rrG/sAGQO6FvSjfZZqUFxw78zNEV1jGlpHz1oCWG+tw0r6NTkkWytTU
+         1J7bdoyO5xZcPY95KhWSLogDNXd2FsD7e4841nkxDx6LwYtOjpTCoKV2w8kOHIhQ80AO
+         N1Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680940457;
+        d=1e100.net; s=20210112; t=1680940460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S9xdueeJy7MgLea0ONmd9MZ1VHllI6hHaQJbmcDSqvw=;
-        b=j/fOvvVHSxF8HFbZ3Rd04MOq3ocrXJceYPLzy+gJ3k3h1MyAfRh5VWKjsY+q7i0AFk
-         4xJERmHnZ5Wl02gZBkTyLVq5kuXwyewDYNpQHyr3N9vPjmhkOccs4qaYzs+y+FG+LgG4
-         O6siY+XQJZV1YOytY9Pr8raDi5o1S+5w8Dz5oyGuq+B+jh2pB2yY0ViN9a2jmtNUOfDB
-         +VRc7B8khbbB3qQnnnWNEUcbWdJuiLPpbVoGkCMufCT8PIT+w1cocvy0H2maj0aCR/Xj
-         sytq7pQNJolomk5xwpkrsuz/M1395mVFpOkR2DIPovtD7tSPVcBRePZT6eptXS/f3/0U
-         V2SQ==
-X-Gm-Message-State: AAQBX9dI68dO8vTUccKuxKKeYpblF/N94Necvm9AD6V1Wn0/Pzb0ePcP
-        I5YCFJPCQ3V6VllaiS56xL+a9fJ3l8o=
-X-Google-Smtp-Source: AKy350aByny0Ua7+HLInjCklu0BXubtnbbdwM9B/AA9HVLWv2BDeGGNMGXCSAcgEacOQdoUCAP1nZQ==
-X-Received: by 2002:a05:6808:16a7:b0:386:9af9:96db with SMTP id bb39-20020a05680816a700b003869af996dbmr2027862oib.38.1680940457034;
-        Sat, 08 Apr 2023 00:54:17 -0700 (PDT)
+        bh=lpFbdZW6Pxs9oGadShmf3bb76khn+lS3nRvJuJ63DD0=;
+        b=RnSIAhyyl9K1xOBufXiu/c2FKP0CAU+0dLxDBTSTBRC66d71ReS3S55dl5Xx+tuNTA
+         ihsu2iGGyIU8Ir8a0/D/O5FbHELEpCmDhnqRz6xDHvr+8Oco2q5f1e4mfTXjchMsNp+G
+         5DczyCmEv+aA2Fx9lXDcDoYzm5XNNVte3vKuocUWi2cmB+j6jFpc13hpLtg2PG0moXdX
+         nnyPeRygkmzoBcv0b0z+9DCpVAxcVAQPMVTAjf/rUUfb1zNzH5K5mKb4B1rnd+gJJ6mg
+         S+bYhIDW5qy2WYAEBTwghZPo3bVCOAjjRuT9CPI6uCPPIIg6gtoLp1Zc6mG5iZoTxXDT
+         EoCA==
+X-Gm-Message-State: AAQBX9fN8FEmiR7qr6ujWjs26arCcLWl0GmptdrsJuxZAzk5ozU0GuC0
+        1yE3q421nsY+5KoOWO5fVtjZ4M39yrc=
+X-Google-Smtp-Source: AKy350Zw6rXRMrO3wk5tXcrveCg8embkQDmrGpkMiemd4wOUNoEkRL9aBmSolGay0fgtfD/RoUJauA==
+X-Received: by 2002:a4a:d62e:0:b0:538:57d4:2d62 with SMTP id n14-20020a4ad62e000000b0053857d42d62mr2164321oon.2.1680940460231;
+        Sat, 08 Apr 2023 00:54:20 -0700 (PDT)
 Received: from wedsonaf-dev.home.lan ([189.124.190.154])
-        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.14
+        by smtp.googlemail.com with ESMTPSA id o6-20020a4a9586000000b0051ffe0fe11bsm2435175ooi.6.2023.04.08.00.54.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 00:54:16 -0700 (PDT)
+        Sat, 08 Apr 2023 00:54:20 -0700 (PDT)
 From:   Wedson Almeida Filho <wedsonaf@gmail.com>
 To:     rust-for-linux@vger.kernel.org
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
@@ -57,10 +57,12 @@ Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: [PATCH v3 08/13] rust: introduce `ARef`
-Date:   Sat,  8 Apr 2023 04:53:35 -0300
-Message-Id: <20230408075340.25237-8-wedsonaf@gmail.com>
+        Wedson Almeida Filho <walmeida@microsoft.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v3 09/13] rust: add basic `Task`
+Date:   Sat,  8 Apr 2023 04:53:36 -0300
+Message-Id: <20230408075340.25237-9-wedsonaf@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230408075340.25237-1-wedsonaf@gmail.com>
 References: <20230408075340.25237-1-wedsonaf@gmail.com>
@@ -78,145 +80,173 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wedson Almeida Filho <walmeida@microsoft.com>
 
-This is an owned reference to an object that is always ref-counted. This
-is meant to be used in wrappers for C types that have their own ref
-counting functions, for example, tasks, files, inodes, dentries, etc.
+It is an abstraction for C's `struct task_struct`. It implements
+`AlwaysRefCounted`, so the refcount of the wrapped object is managed
+safely on the Rust side.
 
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 ---
 v1 -> v2: No changes
-v2 -> v3: No changes
+v2 -> v3: Wrap task_struct with `Opaque` instead of `UnsafeCell`
 
- rust/kernel/types.rs | 107 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 107 insertions(+)
+ rust/bindings/bindings_helper.h |  1 +
+ rust/helpers.c                  | 19 +++++++++
+ rust/kernel/lib.rs              |  1 +
+ rust/kernel/task.rs             | 75 +++++++++++++++++++++++++++++++++
+ 4 files changed, 96 insertions(+)
+ create mode 100644 rust/kernel/task.rs
 
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index 3a46ec1a00cd..73709ce1f0a1 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -6,8 +6,10 @@ use crate::init::{self, PinInit};
- use alloc::boxed::Box;
- use core::{
-     cell::UnsafeCell,
-+    marker::PhantomData,
-     mem::MaybeUninit,
-     ops::{Deref, DerefMut},
-+    ptr::NonNull,
- };
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 75d85bd6c592..03656a44a83f 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -8,6 +8,7 @@
  
- /// Used to transfer ownership to and from foreign (non-Rust) languages.
-@@ -268,6 +270,111 @@ impl<T> Opaque<T> {
-     }
+ #include <linux/slab.h>
+ #include <linux/refcount.h>
++#include <linux/sched.h>
+ 
+ /* `bindgen` gets confused at certain things. */
+ const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
+diff --git a/rust/helpers.c b/rust/helpers.c
+index e42f5b446f92..58a194042c86 100644
+--- a/rust/helpers.c
++++ b/rust/helpers.c
+@@ -23,6 +23,7 @@
+ #include <linux/refcount.h>
+ #include <linux/mutex.h>
+ #include <linux/spinlock.h>
++#include <linux/sched/signal.h>
+ 
+ __noreturn void rust_helper_BUG(void)
+ {
+@@ -75,6 +76,12 @@ void rust_helper_spin_unlock_irqrestore(spinlock_t *lock, unsigned long flags)
  }
+ EXPORT_SYMBOL_GPL(rust_helper_spin_unlock_irqrestore);
  
-+/// Types that are _always_ reference counted.
-+///
-+/// It allows such types to define their own custom ref increment and decrement functions.
-+/// Additionally, it allows users to convert from a shared reference `&T` to an owned reference
-+/// [`ARef<T>`].
-+///
-+/// This is usually implemented by wrappers to existing structures on the C side of the code. For
-+/// Rust code, the recommendation is to use [`Arc`](crate::sync::Arc) to create reference-counted
-+/// instances of a type.
-+///
-+/// # Safety
-+///
-+/// Implementers must ensure that increments to the reference count keep the object alive in memory
-+/// at least until matching decrements are performed.
-+///
-+/// Implementers must also ensure that all instances are reference-counted. (Otherwise they
-+/// won't be able to honour the requirement that [`AlwaysRefCounted::inc_ref`] keep the object
-+/// alive.)
-+pub unsafe trait AlwaysRefCounted {
-+    /// Increments the reference count on the object.
-+    fn inc_ref(&self);
-+
-+    /// Decrements the reference count on the object.
-+    ///
-+    /// Frees the object when the count reaches zero.
-+    ///
-+    /// # Safety
-+    ///
-+    /// Callers must ensure that there was a previous matching increment to the reference count,
-+    /// and that the object is no longer used after its reference count is decremented (as it may
-+    /// result in the object being freed), unless the caller owns another increment on the refcount
-+    /// (e.g., it calls [`AlwaysRefCounted::inc_ref`] twice, then calls
-+    /// [`AlwaysRefCounted::dec_ref`] once).
-+    unsafe fn dec_ref(obj: NonNull<Self>);
++int rust_helper_signal_pending(struct task_struct *t)
++{
++	return signal_pending(t);
 +}
++EXPORT_SYMBOL_GPL(rust_helper_signal_pending);
 +
-+/// An owned reference to an always-reference-counted object.
-+///
-+/// The object's reference count is automatically decremented when an instance of [`ARef`] is
-+/// dropped. It is also automatically incremented when a new instance is created via
-+/// [`ARef::clone`].
+ refcount_t rust_helper_REFCOUNT_INIT(int n)
+ {
+ 	return (refcount_t)REFCOUNT_INIT(n);
+@@ -93,6 +100,18 @@ bool rust_helper_refcount_dec_and_test(refcount_t *r)
+ }
+ EXPORT_SYMBOL_GPL(rust_helper_refcount_dec_and_test);
+ 
++void rust_helper_get_task_struct(struct task_struct *t)
++{
++	get_task_struct(t);
++}
++EXPORT_SYMBOL_GPL(rust_helper_get_task_struct);
++
++void rust_helper_put_task_struct(struct task_struct *t)
++{
++	put_task_struct(t);
++}
++EXPORT_SYMBOL_GPL(rust_helper_put_task_struct);
++
+ /*
+  * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
+  * as the Rust `usize` type, so we can use it in contexts where Rust
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 2d7606135ef6..ee27e10da479 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -44,6 +44,7 @@ mod static_assert;
+ pub mod std_vendor;
+ pub mod str;
+ pub mod sync;
++pub mod task;
+ pub mod types;
+ 
+ #[doc(hidden)]
+diff --git a/rust/kernel/task.rs b/rust/kernel/task.rs
+new file mode 100644
+index 000000000000..d70cad131956
+--- /dev/null
++++ b/rust/kernel/task.rs
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++
++//! Tasks (threads and processes).
++//!
++//! C header: [`include/linux/sched.h`](../../../../include/linux/sched.h).
++
++use crate::{bindings, types::Opaque};
++use core::ptr;
++
++/// Wraps the kernel's `struct task_struct`.
 +///
 +/// # Invariants
 +///
-+/// The pointer stored in `ptr` is non-null and valid for the lifetime of the [`ARef`] instance. In
-+/// particular, the [`ARef`] instance owns an increment on the underlying object's reference count.
-+pub struct ARef<T: AlwaysRefCounted> {
-+    ptr: NonNull<T>,
-+    _p: PhantomData<T>,
-+}
++/// All instances are valid tasks created by the C portion of the kernel.
++///
++/// Instances of this type are always ref-counted, that is, a call to `get_task_struct` ensures
++/// that the allocation remains valid at least until the matching call to `put_task_struct`.
++#[repr(transparent)]
++pub struct Task(pub(crate) Opaque<bindings::task_struct>);
 +
-+impl<T: AlwaysRefCounted> ARef<T> {
-+    /// Creates a new instance of [`ARef`].
-+    ///
-+    /// It takes over an increment of the reference count on the underlying object.
-+    ///
-+    /// # Safety
-+    ///
-+    /// Callers must ensure that the reference count was incremented at least once, and that they
-+    /// are properly relinquishing one increment. That is, if there is only one increment, callers
-+    /// must not use the underlying object anymore -- it is only safe to do so via the newly
-+    /// created [`ARef`].
-+    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
-+        // INVARIANT: The safety requirements guarantee that the new instance now owns the
-+        // increment on the refcount.
-+        Self {
-+            ptr,
-+            _p: PhantomData,
-+        }
++// SAFETY: It's OK to access `Task` through references from other threads because we're either
++// accessing properties that don't change (e.g., `pid`, `group_leader`) or that are properly
++// synchronised by C code (e.g., `signal_pending`).
++unsafe impl Sync for Task {}
++
++/// The type of process identifiers (PIDs).
++type Pid = bindings::pid_t;
++
++impl Task {
++    /// Returns the group leader of the given task.
++    pub fn group_leader(&self) -> &Task {
++        // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
++        // have a valid group_leader.
++        let ptr = unsafe { *ptr::addr_of!((*self.0.get()).group_leader) };
++
++        // SAFETY: The lifetime of the returned task reference is tied to the lifetime of `self`,
++        // and given that a task has a reference to its group leader, we know it must be valid for
++        // the lifetime of the returned task reference.
++        unsafe { &*ptr.cast() }
++    }
++
++    /// Returns the PID of the given task.
++    pub fn pid(&self) -> Pid {
++        // SAFETY: By the type invariant, we know that `self.0` is a valid task. Valid tasks always
++        // have a valid pid.
++        unsafe { *ptr::addr_of!((*self.0.get()).pid) }
++    }
++
++    /// Determines whether the given task has pending signals.
++    pub fn signal_pending(&self) -> bool {
++        // SAFETY: By the type invariant, we know that `self.0` is valid.
++        unsafe { bindings::signal_pending(self.0.get()) != 0 }
++    }
++
++    /// Wakes up the task.
++    pub fn wake_up(&self) {
++        // SAFETY: By the type invariant, we know that `self.0.get()` is non-null and valid.
++        // And `wake_up_process` is safe to be called for any valid task, even if the task is
++        // running.
++        unsafe { bindings::wake_up_process(self.0.get()) };
 +    }
 +}
 +
-+impl<T: AlwaysRefCounted> Clone for ARef<T> {
-+    fn clone(&self) -> Self {
-+        self.inc_ref();
-+        // SAFETY: We just incremented the refcount above.
-+        unsafe { Self::from_raw(self.ptr) }
++// SAFETY: The type invariants guarantee that `Task` is always ref-counted.
++unsafe impl crate::types::AlwaysRefCounted for Task {
++    fn inc_ref(&self) {
++        // SAFETY: The existence of a shared reference means that the refcount is nonzero.
++        unsafe { bindings::get_task_struct(self.0.get()) };
++    }
++
++    unsafe fn dec_ref(obj: ptr::NonNull<Self>) {
++        // SAFETY: The safety requirements guarantee that the refcount is nonzero.
++        unsafe { bindings::put_task_struct(obj.cast().as_ptr()) }
 +    }
 +}
-+
-+impl<T: AlwaysRefCounted> Deref for ARef<T> {
-+    type Target = T;
-+
-+    fn deref(&self) -> &Self::Target {
-+        // SAFETY: The type invariants guarantee that the object is valid.
-+        unsafe { self.ptr.as_ref() }
-+    }
-+}
-+
-+impl<T: AlwaysRefCounted> From<&T> for ARef<T> {
-+    fn from(b: &T) -> Self {
-+        b.inc_ref();
-+        // SAFETY: We just incremented the refcount above.
-+        unsafe { Self::from_raw(NonNull::from(b)) }
-+    }
-+}
-+
-+impl<T: AlwaysRefCounted> Drop for ARef<T> {
-+    fn drop(&mut self) {
-+        // SAFETY: The type invariants guarantee that the `ARef` owns the reference we're about to
-+        // decrement.
-+        unsafe { T::dec_ref(self.ptr) };
-+    }
-+}
-+
- /// A sum type that always holds either a value of type `L` or `R`.
- pub enum Either<L, R> {
-     /// Constructs an instance of [`Either`] containing a value of type `L`.
 -- 
 2.34.1
 
