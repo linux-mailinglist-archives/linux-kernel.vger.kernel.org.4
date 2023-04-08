@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3601B6DBB03
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883216DBB00
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 14:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbjDHMm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 08:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S230178AbjDHMms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 08:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjDHMmr (ORCPT
+        with ESMTP id S229981AbjDHMmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 8 Apr 2023 08:42:47 -0400
 Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFA9AD3D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E1AAF12;
         Sat,  8 Apr 2023 05:42:44 -0700 (PDT)
 Received: from ubuntu.localdomain (unknown [121.32.254.147])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 049785802B3;
-        Sat,  8 Apr 2023 20:42:29 +0800 (CST)
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id B85045802A0;
+        Sat,  8 Apr 2023 20:42:31 +0800 (CST)
 From:   Donglin Peng <pengdonglin@sangfor.com.cn>
 To:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
         mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
@@ -32,21 +32,21 @@ Cc:     linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         linux-riscv@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: [PATCH v11 2/8] tracing: Add documentation for funcgraph-retval and funcgraph-retval-hex
-Date:   Sat,  8 Apr 2023 05:42:16 -0700
-Message-Id: <2b5635f05146161b54c9ea6307e25efe5ccebdad.1680954589.git.pengdonglin@sangfor.com.cn>
+Subject: [PATCH v11 3/8] ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+Date:   Sat,  8 Apr 2023 05:42:17 -0700
+Message-Id: <c61eb9290c3e817d4d70c429c0e987e3ec51a3c4.1680954589.git.pengdonglin@sangfor.com.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
 References: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaHR5IVkhISh9KQ0saQhpCS1UTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpJSlVISVVJTk9VSk9MWVdZFhoPEhUdFFlBWU9LSFVKSEpCSE9VSktLVUtZBg++
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NE06Djo*Cj0PGjcOMxwBVg4p
-        Q0oKC05VSlVKTUNLQk5MTE5KTUxJVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSklKVUhJVUlOT1VKT0xZV1kIAVlBQkpLSTcG
-X-HM-Tid: 0a8760e3bf4c2eb7kusn049785802b3
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCGUMeVh0fGh0fTBpOHk1CGlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpJSlVISVVJTk9VSk9MWVdZFhoPEhUdFFlBWU9LSFVKSktPSEhVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OEk6Mhw5GD0SMDcyShNOVhQe
+        Pi8aCRZVSlVKTUNLQk5MTE5ISUJKVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSklKVUhJVUlOT1VKT0xZV1kIAVlBTUhOTDcG
+X-HM-Tid: 0a8760e3c6062eb7kusnb85045802a0
 X-HM-MType: 1
 X-Spam-Status: No, score=-0.0 required=5.0 tests=RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
@@ -57,179 +57,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation for the two newly introduced options for the
-function_graph tracer. The funcgraph-retval option is used to
-control whether or not to display the return value, while the
-funcgraph-retval-hex option is used to control the display
-format of the return value.
+The previous patch ("function_graph: Support recording and printing
+the return value of function") has laid the groundwork for the for
+the funcgraph-retval, and this modification makes it available on
+the ARM platform.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+We introduce a new structure called fgraph_ret_regs for the ARM platform
+to hold return registers and the frame pointer. We then fill its content
+in the return_to_handler and pass its address to the function
+ftrace_return_to_handler to record the return value.
+
 Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
 ---
-v11:
- - Add a limitation discovered by Mark.
+v10:
+ - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
 
 v9:
- - Update limitation description
+ - Fix stack pointer align issues
+ - Update the commit message
 
-v7:
- - Rename trace option 'graph_retval_hex' to 'funcgraph-retval-hex'
- - Update documentation description
-
-v6:
- - Modify the limitations for funcgraph-retval
- - Optimize the English expression
-
-v5:
- - Describe the limitations of funcgraph-retval
+v8:
+ - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
 ---
- Documentation/trace/ftrace.rst | 126 +++++++++++++++++++++++++++++++++
- 1 file changed, 126 insertions(+)
+ arch/arm/Kconfig               |  1 +
+ arch/arm/include/asm/ftrace.h  | 22 ++++++++++++++++++++++
+ arch/arm/kernel/asm-offsets.c  |  8 +++++++-
+ arch/arm/kernel/entry-ftrace.S | 10 ++++++----
+ 4 files changed, 36 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
-index b927fb2b94dc..bd3e2b96f3f3 100644
---- a/Documentation/trace/ftrace.rst
-+++ b/Documentation/trace/ftrace.rst
-@@ -1328,6 +1328,19 @@ Options for function_graph tracer:
- 	only a closing curly bracket "}" is displayed for
- 	the return of a function.
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index e24a9820e12f..73061379855a 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -98,6 +98,7 @@ config ARM
+ 	select HAVE_FAST_GUP if ARM_LPAE
+ 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+ 	select HAVE_FUNCTION_ERROR_INJECTION
++	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_GRAPH_TRACER
+ 	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+ 	select HAVE_GCC_PLUGINS
+diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
+index 7e9251ca29fe..3c457902b355 100644
+--- a/arch/arm/include/asm/ftrace.h
++++ b/arch/arm/include/asm/ftrace.h
+@@ -77,4 +77,26 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
  
-+  funcgraph-retval
-+	When set, the return value of each traced function
-+	will be printed after an equal sign "=". By default
-+	this is off.
-+
-+  funcgraph-retval-hex
-+	When set, the return value will always be printed
-+	in hexadecimal format. If the option is not set and
-+	the return value is an error code, it will be printed
-+	in signed decimal format; otherwise it will also be
-+	printed in hexadecimal format. By default, this option
-+	is off.
-+
-   sleep-time
- 	When running function graph tracer, to include
- 	the time a task schedules out in its function.
-@@ -2673,6 +2686,119 @@ It is default disabled.
-     0)   1.757 us    |        } /* kmem_cache_free() */
-     0)   2.861 us    |      } /* putname() */
+ #endif /* ifndef __ASSEMBLY__ */
  
-+The return value of each traced function can be displayed after
-+an equal sign "=". When encountering system call failures, it
-+can be verfy helpful to quickly locate the function that first
-+returns an error code.
++#ifndef __ASSEMBLY__
++#ifdef CONFIG_FUNCTION_GRAPH_TRACER
++struct fgraph_ret_regs {
++	/* r0 - r3 */
++	unsigned long regs[4];
 +
-+	- hide: echo nofuncgraph-retval > trace_options
-+	- show: echo funcgraph-retval > trace_options
++	unsigned long fp;
++	unsigned long __unused;
++};
 +
-+  Example with funcgraph-retval::
++static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
++{
++	return ret_regs->regs[0];
++}
 +
-+    1)               |    cgroup_migrate() {
-+    1)   0.651 us    |      cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-+    1)               |      cgroup_migrate_execute() {
-+    1)               |        cpu_cgroup_can_attach() {
-+    1)               |          cgroup_taskset_first() {
-+    1)   0.732 us    |            cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-+    1)   1.232 us    |          } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-+    1)   0.380 us    |          sched_rt_can_attach(); /* = 0x0 */
-+    1)   2.335 us    |        } /* cpu_cgroup_can_attach = -22 */
-+    1)   4.369 us    |      } /* cgroup_migrate_execute = -22 */
-+    1)   7.143 us    |    } /* cgroup_migrate = -22 */
++static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
++{
++	return ret_regs->fp;
++}
++#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
++#endif
 +
-+The above example shows that the function cpu_cgroup_can_attach
-+returned the error code -22 firstly, then we can read the code
-+of this function to get the root cause.
-+
-+When the option funcgraph-retval-hex is not set, the return value can
-+be displayed in a smart way. Specifically, if it is an error code,
-+it will be printed in signed decimal format, otherwise it will
-+printed in hexadecimal format.
-+
-+	- smart: echo nofuncgraph-retval-hex > trace_options
-+	- hexadecimal: echo funcgraph-retval-hex > trace_options
-+
-+  Example with funcgraph-retval-hex::
-+
-+    1)               |      cgroup_migrate() {
-+    1)   0.651 us    |        cgroup_migrate_add_task(); /* = 0xffff93fcfd346c00 */
-+    1)               |        cgroup_migrate_execute() {
-+    1)               |          cpu_cgroup_can_attach() {
-+    1)               |            cgroup_taskset_first() {
-+    1)   0.732 us    |              cgroup_taskset_next(); /* = 0xffff93fc8fb20000 */
-+    1)   1.232 us    |            } /* cgroup_taskset_first = 0xffff93fc8fb20000 */
-+    1)   0.380 us    |            sched_rt_can_attach(); /* = 0x0 */
-+    1)   2.335 us    |          } /* cpu_cgroup_can_attach = 0xffffffea */
-+    1)   4.369 us    |        } /* cgroup_migrate_execute = 0xffffffea */
-+    1)   7.143 us    |      } /* cgroup_migrate = 0xffffffea */
-+
-+At present, there are some limitations when using the funcgraph-retval
-+option, and these limitations will be eliminated in the future:
-+
-+- Even if the function return type is void, a return value will still
-+  be printed, and you can just ignore it.
-+
-+- Even if return values are stored in multiple registers, only the
-+  value contained in the first register will be recorded and printed.
-+  To illustrate, in the x86 architecture, eax and edx are used to store
-+  a 64-bit return value, with the lower 32 bits saved in eax and the
-+  upper 32 bits saved in edx. However, only the value stored in eax
-+  will be recorded and printed.
-+
-+- In certain procedure call standards, such as arm64's AAPCS64, when a
-+  type is smaller than a GPR, it is the responsibility of the consumer
-+  to perform the narrowing, and the upper bits may contain UNKNOWN values.
-+  Therefore, it is advisable to check the code for such cases. For instance,
-+  when using a u8 in a 64-bit GPR, bits [63:8] may contain arbitrary values,
-+  especially when larger types are truncated, whether explicitly or implicitly.
-+  Here are some specific cases to illustrate this point:
-+
-+  **Case One**::
-+
-+  The function narrow_to_u8 is defined as follows::
-+
-+	u8 narrow_to_u8(u64 val)
-+	{
-+		// implicitly truncated
-+		return val;
-+	}
-+
-+  It may be compiled to::
-+
-+	narrow_to_u8:
-+		< ... ftrace instrumentation ... >
-+		RET
-+
-+  If you pass 0x123456789abcdef to this function and want to narrow it,
-+  it may be recorded as 0x123456789abcdef instead of 0xef.
-+
-+  **Case Two**::
-+
-+  The function error_if_not_4g_aligned is defined as follows::
-+
-+	int error_if_not_4g_aligned(u64 val)
-+	{
-+		if (val & GENMASK(31, 0))
-+			return -EINVAL;
-+
-+		return 0;
-+	}
-+
-+  It could be compiled to::
-+
-+	error_if_not_4g_aligned:
-+		CBNZ    w0, .Lnot_aligned
-+		RET			// bits [31:0] are zero, bits
-+					// [63:32] are UNKNOWN
-+	.Lnot_aligned:
-+		MOV    x0, #-EINVAL
-+		RET
-+
-+  When passing 0x2_0000_0000 to it, the return value may be recorded as
-+  0x2_0000_0000 instead of 0.
-+
- You can put some comments on specific functions by using
- trace_printk() For example, if you want to put a comment inside
- the __might_sleep() function, you just have to include
+ #endif /* _ASM_ARM_FTRACE */
+diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
+index 38121c59cbc2..18bb85115b21 100644
+--- a/arch/arm/kernel/asm-offsets.c
++++ b/arch/arm/kernel/asm-offsets.c
+@@ -23,6 +23,7 @@
+ #include <asm/suspend.h>
+ #include <asm/vdso_datapage.h>
+ #include <asm/hardware/cache-l2x0.h>
++#include <asm/ftrace.h>
+ #include <linux/kbuild.h>
+ #include <linux/arm-smccc.h>
+ #include "signal.h"
+@@ -170,5 +171,10 @@ int main(void)
+   DEFINE(KEXEC_INDIR_PAGE,	offsetof(struct kexec_relocate_data, kexec_indirection_page));
+   DEFINE(KEXEC_MACH_TYPE,	offsetof(struct kexec_relocate_data, kexec_mach_type));
+   DEFINE(KEXEC_R2,		offsetof(struct kexec_relocate_data, kexec_r2));
+-  return 0; 
++#ifdef CONFIG_FUNCTION_GRAPH_TRACER
++  BLANK();
++  DEFINE(FGRET_REGS_SIZE,	sizeof(struct fgraph_ret_regs));
++  BLANK();
++#endif
++  return 0;
+ }
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index 3e7bcaca5e07..d41a1676608c 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -257,11 +257,13 @@ ENDPROC(ftrace_graph_regs_caller)
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ ENTRY(return_to_handler)
+-	stmdb	sp!, {r0-r3}
+-	add	r0, sp, #16		@ sp at exit of instrumented routine
++	mov	ip, sp				@ sp at exit of instrumented routine
++	stmdb	sp!, {r0-r3, ip, lr}		@ fill fgraph_ret_regs
++	mov	r0, sp
+ 	bl	ftrace_return_to_handler
+-	mov	lr, r0			@ r0 has real ret addr
+-	ldmia	sp!, {r0-r3}
++	mov	lr, r0				@ r0 has real ret addr
++	ldmia	sp, {r0-r3}
++	add	sp, sp, #FGRET_REGS_SIZE	@ restore stack pointer
+ 	ret	lr
+ ENDPROC(return_to_handler)
+ #endif
 -- 
 2.25.1
 
