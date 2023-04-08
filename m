@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569FE6DBA66
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796526DBA6A
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 13:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjDHL2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 07:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
+        id S230130AbjDHL32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 07:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjDHL2c (ORCPT
+        with ESMTP id S230109AbjDHL3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 07:28:32 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CDB198B
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 04:28:31 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 338BRt4Y060710;
-        Sat, 8 Apr 2023 06:27:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1680953275;
-        bh=7AStEtIeqWWtf5cdIY0biXRgvMPW0zVk22A12h8jBUg=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=F+kj6y2oVJAWPoqmJOa3Se0LJ1gcG7DhC1y/hzPaLoXU6T99R+kcFkkToDbJb83zD
-         vmigjwJC6jE4F+U17Emnxd94ENoWrvs29459yrxfs+9AOKDM7ff15fTj86tS027QSG
-         nNpKdoBVRlUwwLZiiqfd1Pp9lxx4mYzb0I51POTQ=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 338BRs3c048119
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 8 Apr 2023 06:27:55 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sat, 8
- Apr 2023 06:27:54 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sat, 8 Apr 2023 06:27:54 -0500
-Received: from [10.249.133.214] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 338BRpo3028985;
-        Sat, 8 Apr 2023 06:27:52 -0500
-Message-ID: <d9d6dc1b-cc1d-d823-8777-3a8d6d2328f7@ti.com>
-Date:   Sat, 8 Apr 2023 16:57:51 +0530
+        Sat, 8 Apr 2023 07:29:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA73AF3E
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 04:29:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A56860F30
+        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 11:29:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456E3C433D2;
+        Sat,  8 Apr 2023 11:29:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1680953363;
+        bh=3hCUEw4+sq86IrKsrawaMlZ/p+hC7wvYN9WX4oBCENs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zty+tYDanBiDXGRzHxC0jelAYSRHyLIyaHWQs6SIIuIhblUf6u24ZpRowl/HM4CN9
+         xURvUPcdeJeCgE+iNpxnlJqwU2Uj/vYbLtDG7ot0IL+OIEqjkfv25nd3NwQY/i1gzH
+         SHG8lao4dg5ZakDy2EGpCPQhI3024xorut+dd744=
+Date:   Sat, 8 Apr 2023 13:29:20 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: octeon: remove typedef declaration for enums
+Message-ID: <2023040806-revise-tiptoeing-81a3@gregkh>
+References: <20230407130543.GA32964@koolguy>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH RFC v2 2/2] irqchip: irq-ti-sci-inta: Add direct mapped
- interrupts
-Content-Language: en-US
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230327-irq-affinity-upstream-v2-0-1474e518f1cb@ti.com>
- <20230327-irq-affinity-upstream-v2-2-1474e518f1cb@ti.com>
- <87ile664i1.wl-maz@kernel.org>
-From:   "Raghavendra, Vignesh" <vigneshr@ti.com>
-In-Reply-To: <87ile664i1.wl-maz@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407130543.GA32964@koolguy>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 07, 2023 at 03:05:43PM +0200, Dalvin-Ehinoma Noah Aiguobas wrote:
+> Fix checkpatch.pl warning for enums in drivers/staging/octeon/octeon-stubs.h:
+> cvmx_helper_interface_mode_t,
+> cvmx_spi_mode_t,
+> cvmx_pow_wait_t,
+> cvmx_pko_lock_t,
+> cvmx_pko_status_t
+> 
+> Change typedef cvmx_helper_interface_mode_t to
+> enum cvmx_helper_interface_mode in ethernet.c
+> 
+> Signed-off-by: Dalvin-Ehinoma Noah Aiguobas <pharcodra@gmail.com>
+> ---
+>  drivers/staging/octeon/ethernet.c     |  2 +-
+>  drivers/staging/octeon/octeon-stubs.h | 50 +++++++++++++++------------
+>  2 files changed, 29 insertions(+), 23 deletions(-)
+> 
+
 Hi,
 
-On 4/8/2023 4:10 PM, Marc Zyngier wrote:
->> +static unsigned int ti_sci_inta_direct_events_am62x[] = {
->> +	/* CPSW etherenti DMA events */
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4627),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4635),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4643),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4651),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4659),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4667),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4675),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 4683),
->> +	TO_HWIRQ(DEV_DMASS0_PKTDMA_0, 5651),
->> +};
->> +
->> +static struct ti_sci_inta_soc_data soc_data_am62x = {
->> +	.events_list = ti_sci_inta_direct_events_am62x,
->> +	.events_list_size = ARRAY_SIZE(ti_sci_inta_direct_events_am62x),
->> +};
-> I don't think these tables belong in a driver, and they are bound to
-> grow without any obvious limits. 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Fair point.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-> You have firmware tables that can express these things. Surely they can be put to a good use.
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
-By firmware tables you mean device tree?
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-Regards
-Vignesh
+thanks,
+
+greg k-h's patch email bot
