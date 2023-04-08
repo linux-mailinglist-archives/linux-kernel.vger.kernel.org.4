@@ -2,128 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A75966DB824
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 04:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1A66DB85C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 04:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjDHC0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 7 Apr 2023 22:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
+        id S229717AbjDHCuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 7 Apr 2023 22:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDHC0b (ORCPT
+        with ESMTP id S229448AbjDHCuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 7 Apr 2023 22:26:31 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6831BCC1F;
-        Fri,  7 Apr 2023 19:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680920790; x=1712456790;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DP/6n7B8aOJPPw9H6I1+IBM8O6GwGkK+AtSPpjSso4s=;
-  b=L36bI+GQrna0oArrKWZy9MMhpQ2pNqNP+vQ0p056EGw9qll7YvgSXYqn
-   693uKt2/5Sr3/g0ejEzewKlbht8t7AWS67+9sjlv+9BN0AqwngAtzMV7x
-   MxVpFQl9chy63druYDPqPaJDYmyRJnMLKH2h88lDl4srWs16wWSPRFpH5
-   GapQ+1w1uYkDXxAuHSdPKJUbbfF1rayiB7SgRk3SCYiXqHX5h2bfuTq0h
-   fftAPqagFZIcYoMTKoW07F0YBjxjAXClF4zq378RQbDMJ83lnrWp1Jgxp
-   44LKRiTy+ZV5QDA2Cmq+mDRh1SSdm1oAU4CJHvoEituQGp+zVaxqVhuam
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="323473923"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="323473923"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 19:26:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="690214902"
-X-IronPort-AV: E=Sophos;i="5.98,328,1673942400"; 
-   d="scan'208";a="690214902"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Apr 2023 19:26:29 -0700
-Received: from debox1-desk4.lan (unknown [10.251.23.166])
-        by linux.intel.com (Postfix) with ESMTP id A8F9558047E;
-        Fri,  7 Apr 2023 19:26:29 -0700 (PDT)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     srinivas.pandruvada@linux.intel.com, irenic.rajneesh@gmail.com,
-        david.e.box@intel.com, hdegoede@redhat.com, markgross@kernel.org,
-        rjw@rjwysocki.net
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3
-Date:   Fri,  7 Apr 2023 19:26:29 -0700
-Message-Id: <20230408022629.727721-1-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 7 Apr 2023 22:50:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F1ACC15;
+        Fri,  7 Apr 2023 19:50:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 496E26547A;
+        Sat,  8 Apr 2023 02:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 61363C433AA;
+        Sat,  8 Apr 2023 02:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680922218;
+        bh=9Zf7vpnaTfpnr9O36+SChFzROoUJBxTzwsqg70avb8A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=q3icXknEI2nbJFdYZt/ZRHqOS4niE+kwbrK20vvXCccBGEsYMvGJySdFAY7lzQt6s
+         gcMPLcDJkh0YPXzfqI7C/0JoKOAKO4c+SBKL2o7qPH0MzwnzJf8jIhxlBKpsHqSfH8
+         HlbJ7WxPBJxqOPwmI4ghPIzr8CRw/gOQ/vxUtSPmkcygX19licIJ0o5o02EudcMPzK
+         xwuKHFJFQNXjpDguxKBdEop2vDBX0TzasQm91Y41n9lk5z64kcaKxb4LgaApoa9/cG
+         rR/5CjvFbJriP9ufi7LuCpAJuDne8MU7exYJl/ZYSDbPn7T2onp03kx5EZnqapQltP
+         HsDXZtCDkyqEQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42BCAE4F0D0;
+        Sat,  8 Apr 2023 02:50:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net] net: phy: nxp-c45-tja11xx: fix unsigned long
+ multiplication overflow
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168092221827.13259.13795368691080730995.git-patchwork-notify@kernel.org>
+Date:   Sat, 08 Apr 2023 02:50:18 +0000
+References: <20230406095953.75622-1-radu-nicolae.pirea@oss.nxp.com>
+In-Reply-To: <20230406095953.75622-1-radu-nicolae.pirea@oss.nxp.com>
+To:     Radu Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Meteor Lake, the GNA, IPU, and VPU devices are booted in D0 power state
-and will block the SoC from going into the deepest Package C-state if a
-driver is not present. Put each device in D3hot if no driver is found.
+Hello:
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/mtl.c | 31 ++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
-index eeb3bd8c2502..33aa98b54049 100644
---- a/drivers/platform/x86/intel/pmc/mtl.c
-+++ b/drivers/platform/x86/intel/pmc/mtl.c
-@@ -8,6 +8,7 @@
-  *
-  */
- 
-+#include <linux/pci.h>
- #include "core.h"
- 
- const struct pmc_reg_map mtl_reg_map = {
-@@ -45,8 +46,38 @@ void mtl_core_configure(struct pmc_dev *pmcdev)
- 	pmc_core_send_ltr_ignore(pmcdev, 3);
- }
- 
-+#define MTL_GNA_PCI_DEV	0x7e4c
-+#define MTL_IPU_PCI_DEV	0x7d19
-+#define MTL_VPU_PCI_DEV	0x7d1d
-+void mtl_set_device_d3(unsigned int device)
-+{
-+	struct pci_dev *pcidev;
-+
-+	pcidev = pci_get_device(PCI_VENDOR_ID_INTEL, device, NULL);
-+	if (pcidev) {
-+		if (!device_trylock(&pcidev->dev)) {
-+			pci_dev_put(pcidev);
-+			return;
-+		}
-+		if (!pcidev->dev.driver) {
-+			dev_info(&pcidev->dev, "Setting to D3hot\n");
-+			pci_set_power_state(pcidev, PCI_D3hot);
-+		}
-+		device_unlock(&pcidev->dev);
-+		pci_dev_put(pcidev);
-+	}
-+}
-+
- void mtl_core_init(struct pmc_dev *pmcdev)
- {
- 	pmcdev->map = &mtl_reg_map;
- 	pmcdev->core_configure = mtl_core_configure;
-+
-+	/*
-+	 * Set power state of select devices that do not have drivers to D3
-+	 * so that they do not block Package C entry.
-+	 */
-+	mtl_set_device_d3(MTL_GNA_PCI_DEV);
-+	mtl_set_device_d3(MTL_IPU_PCI_DEV);
-+	mtl_set_device_d3(MTL_VPU_PCI_DEV);
- }
+On Thu,  6 Apr 2023 12:59:53 +0300 you wrote:
+> Any multiplication between GENMASK(31, 0) and a number bigger than 1
+> will be truncated because of the overflow, if the size of unsigned long
+> is 32 bits.
+> 
+> Replaced GENMASK with GENMASK_ULL to make sure that multiplication will
+> be between 64 bits values.
+> 
+> [...]
 
-base-commit: 4f59630a5ed0a4e7d275bd7e5d253a8f5a425c5a
+Here is the summary with links:
+  - [net] net: phy: nxp-c45-tja11xx: fix unsigned long multiplication overflow
+    https://git.kernel.org/netdev/net/c/bdaaecc127d4
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
