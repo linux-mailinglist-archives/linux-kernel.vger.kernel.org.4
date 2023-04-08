@@ -2,223 +2,444 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8CF6DB951
-	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AFC6DB95C
+	for <lists+linux-kernel@lfdr.de>; Sat,  8 Apr 2023 09:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjDHHo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 8 Apr 2023 03:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S229901AbjDHHsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 8 Apr 2023 03:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbjDHHou (ORCPT
+        with ESMTP id S229689AbjDHHsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 8 Apr 2023 03:44:50 -0400
-Received: from mail1.bemta31.messagelabs.com (mail1.bemta31.messagelabs.com [67.219.246.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424CC902C
-        for <linux-kernel@vger.kernel.org>; Sat,  8 Apr 2023 00:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenovo.com;
-        s=Selector; t=1680939888; i=@lenovo.com;
-        bh=0V927EjiE5BPdaium3RYPi5hqbw2Q/YeBl7H7smblGc=;
-        h=From:To:CC:Subject:Date:Message-ID:Content-Type:
-         Content-Transfer-Encoding:MIME-Version;
-        b=C4weojcpZcPZFyK7OTIKqRsqmonYTU+hEB54N14pLbPmox8saNiWo9OEbOtWqJz6G
-         h84oVN0BaOEFaM2ZNZvUicZmc9sqFnePbHdOStCzJIvo4w0SQKP+ixwNDdvqBPA3Q9
-         xYGY0LDuhrnKWpHPC6TPbpl+TLWcQlKjGY1uD14LoDOBncX+4Wa5bpJKBgrg/KixE8
-         RIKQUMbi4gk+VmkSzdMNBds5jQpTyrmU4cViqD1ZFnWxcmhGXw+Mw5d0wKgIqzPtdP
-         exV0zDbm8c2OReaPlKl/xE8siicQ1BpqzHLWrsZzLXWSMzeX7kEg1CLRGubxeLH+aL
-         wZCWg3eXCon6A==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHJsWRWlGSWpSXmKPExsWSoS+Vp5snbZh
-  iMOsVh8X/PcfYLD50rmG0WLn6KJPFpEPXGC0u75rDZjF/2VN2i3Wv37M4sHtMbH7H7rGg5zyz
-  x/l7G1k8Nq3qZPPYvKTeY/fNBjaPz5vkAtijWDPzkvIrElgzznWtZC14J1px4k43SwPjNOEuR
-  k4ORoGlzBJzH+R1MXIB2YtYJeY272eHcDYwSnT/+swI4ggJzGWSWHhuEwuEc49RYvGsDUwg/W
-  wC6hKLZp1mAkmICHQwSvQ8msAM4jALbGWUOHlhIjNIlbBAmsSlY41gtohAtsTZqTPZIWw9ie7
-  +w4wgNouAisSs3htgU3kFYiW6/vYzQVwoKzHt0X0wm1lAXGLutFmsILaEgIDEkj3nmSFsUYmX
-  j/+xQtSXSNx6uZ4NIi4rcWl+NyOEbS+x4M4KdgjbV+LikV4oW05iVe9DFghbXmLaovdQcRmJB
-  ze2s4E8IyGwhFXi/9KXUM4xFomOBweYIKoMJOZ9OwKVmCcgMf/UVkaIU3UkFuz+xAZha0ssW/
-  iaGeI1QYmTM59ArZOWmDB/FcsERs1ZSL6bhaR9FpL2WUjaFzCyrGI0LU4tKkst0jXVSyrKTM8
-  oyU3MzNFLrNJN1Cst1k1NLC7RNdRLLC/WSy0u1iuuzE3OSdHLSy3ZxAhMailF7D47GPv6/uod
-  YpTkYFIS5X0nqp8ixJeUn1KZkVicEV9UmpNafIhRhoNDSYJXUcowRUiwKDU9tSItMweYYGHSE
-  hw8SiK8AX8MUoR4iwsSc4sz0yFSpxh1Oa5s27uXWYglLz8vVUqctwRkhgBIUUZpHtwIWLK/xC
-  grJczLyMDAIMRTkFqUm1mCKv+KUZyDUUmYt10CaApPZl4J3KZXQEcwAR3B5QJ2REkiQkqqgWn
-  6zMcKKtvzC43X6insN/l/WFHSfdWLhTdmTZ52f5LjrE9y2Rc2SHZ9b/w6m+HAfvnWZQ2Cy/x5
-  JrnOm5HNubqCOUB1zZqq536zc0pYwk/tlv23SqHj+LItErLx15uWH27VkNq4TclCX7BtLavv1
-  39LkvtjAuuYDlSJl+moh6bHK+xWecDJsf6JR2gG26wtvNFlimdXKIS9S93BuFFvvnFuFZfor+
-  exHac3Wtmc75u+MuiQ+bOb0sl8Dn1G/zW22GkVXb74YY/H7if+y+ychC48lTcKPp580KOV+Y3
-  TnAcT9rCHn1h7s5P9b+r5pH+v+c9URd2b/0ddVrLNR6jVMtbNXrkrvLjUyfLJhTpjQSWW4oxE
-  Qy3mouJEAHqYqS9xBAAA
-X-Env-Sender: yinlei2@lenovo.com
-X-Msg-Ref: server-5.tower-706.messagelabs.com!1680939884!27913!1
-X-Originating-IP: [104.47.26.110]
-X-SYMC-ESS-Client-Auth: mailfrom-relay-check=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.104.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 2997 invoked from network); 8 Apr 2023 07:44:45 -0000
-Received: from mail-sgaapc01lp2110.outbound.protection.outlook.com (HELO APC01-SG2-obe.outbound.protection.outlook.com) (104.47.26.110)
-  by server-5.tower-706.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 8 Apr 2023 07:44:45 -0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n7N7a+t8XGjKDP6MLYUBmfaaKKx+0t8ZTu1MHXtmr6EKD9peTXMphskUd1kLdd+urz3eODyDUGz8+iwo9M3QSi6+qCgtiD9eh7Pe1Wk9ilCBY5ghlNLPPIlhuCdSm7dubvd/67WQrz/dMSHhwt9duJO4p/4juZRZRBUYweq4bBs6ykJDjYbIc2qQtzbI8DZnKdLVQCae/a72R+R7VtCPIMTdxNNegDWMD5+siWO/R3VbhDKFQiH1OYOwSZpQ0LCWSWpIOA2aSVkXOJRyZC4IWv6dzz/NpUXa2K8idlTHuFb0fNo/5ACnkIDdg4JZbqL5Bt44/mT8vNydKRGiJNv0CA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0V927EjiE5BPdaium3RYPi5hqbw2Q/YeBl7H7smblGc=;
- b=NFxMf8I1STvXY1QaKsx6/u0EZVejHo8mBG2IRpnG9Hc3gGwhAd0IMvVwBTthOS5kmDSSjVgGpX4sVlRbS5+Y3Z0wgzSa0O+C65+ipQPzXPAY+zibLIK5fJlo1vQBhDj+rcUq4NTquVLIZN3ra/nOBlcfIQ/JW/Pnv2dNKWfaZfEZfiyIAszBhPP7wD3RfhsvZVhjWFLu2j+VhTiAIyHgNFB1wgUe4kjl2zfvd7p5C/SxWnEhopBcTEXaJk+blJQRQj4clPWPfKLguEDzc9rjLy1yub0ePqwddYZNX84MFKKBtAwfzxy8/7SZkZVSkBaFlDP7NwcCwz0zzrBHTLVkfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=lenovo.com; dmarc=pass action=none header.from=lenovo.com;
- dkim=pass header.d=lenovo.com; arc=none
-Received: from PS1PR03MB4939.apcprd03.prod.outlook.com (2603:1096:300:84::21)
- by SEZPR03MB6644.apcprd03.prod.outlook.com (2603:1096:101:7c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.35; Sat, 8 Apr
- 2023 07:44:42 +0000
-Received: from PS1PR03MB4939.apcprd03.prod.outlook.com
- ([fe80::d2df:bfd7:dd18:5e56]) by PS1PR03MB4939.apcprd03.prod.outlook.com
- ([fe80::d2df:bfd7:dd18:5e56%3]) with mapi id 15.20.6277.034; Sat, 8 Apr 2023
- 07:44:42 +0000
-From:   Lei Lei2 Yin <yinlei2@lenovo.com>
-To:     "kbusch@kernel.org" <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-CC:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "cybeyond@foxmail.com" <cybeyond@foxmail.com>
-Subject: [PATCH v2] nvme: fix double blk_mq_complete_request for timeout
- request with low probability
-Thread-Topic: [PATCH v2] nvme: fix double blk_mq_complete_request for timeout
- request with low probability
-Thread-Index: Adlp7D0a6eHDJ2XCQ12f5YXOFDMnBA==
-Date:   Sat, 8 Apr 2023 07:44:41 +0000
-Message-ID: <PS1PR03MB49397BF066FA9BC5BC5EE72488979@PS1PR03MB4939.apcprd03.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PS1PR03MB4939:EE_|SEZPR03MB6644:EE_
-x-ms-office365-filtering-correlation-id: 8e1cd836-8595-43bd-6887-08db38051d35
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 64VDMmFVoPhG0xSs7+obtrlStawIbt8enectVvAqzqF814ZE86M4mnkS2LyhL+Nv0raoxnSSSEaLg9CwJfapLKdt1zCgux5LqvYh/6k5nniYKhq6musUsmPgMF3a4xNnbvFXc/t8yWxdHdNXrAbauduIsD8aF/vBcsOt6sQujxyP2TeTjy+Xr8cxqRRQrAEJYSdZyI4Zh77VbWdTfjeIDYAuBP46zgyEd+3OTsoLQgmc3rpXi28NLgPVkKfmUmOt00IMg3oUHsE87UjvUcgBflMm04SQgl+1tU1di0TsZb2U7BG/HIVfgMSnSCz1Pl207k2ek8d3TeAxzGYt7hczGxHtBEd3I3DrZmw6C8DsNRYTB0/lWANYlFVWS4UrHcqPvTGPVCf2MddSwAyqh0VELwbEOnWtE+IUxVxmYzE81aNqCokLCEDPFbO6Dj6U8VVodbR6L2tBaP7VzcWTjpgUT4uGXbh8ZPYeMTIBCclNnJ+2/mETpwALHvy4LtuqAB8mq4+CnNdqs5+1e702VGSykv5JUBFKvJtcGjYF4DDV5wq9eUeYaOencFCvFmftquj8HsGUAFyaFmIBm8Pq5XUEx349gUTLc1JflqJQcfkXR8R3fBfZuV5HTiuyY4BtFXpN
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PS1PR03MB4939.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(451199021)(478600001)(71200400001)(2906002)(7696005)(38070700005)(55016003)(6506007)(186003)(26005)(110136005)(316002)(83380400001)(53546011)(54906003)(9686003)(66946007)(8676002)(5660300002)(122000001)(82960400001)(66556008)(66476007)(41300700001)(52536014)(4326008)(8936002)(76116006)(38100700002)(64756008)(66446008)(86362001)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6D9a/o8v2jaFyYMGBcG0wQbi43aX1cMCMTFkhxV2ogUoIMdh9Qwyg8szAey4?=
- =?us-ascii?Q?ZzXYIHCFXp9XjWLTCYafEUkC4byGBwjiA0/+Y+wJQZhMLJBxCDC1PT4zmWnP?=
- =?us-ascii?Q?dHWzvH3yiYMU4trgCZESsBeKqMbODibwD1kqpo/tCPu6kiEd8YFOj+idX+lf?=
- =?us-ascii?Q?dEhbWf+8lk9tlWDTudmSzN7A9fQUKCJE/G6KAgxanXkrpzEPFb1KaU9cc3Dg?=
- =?us-ascii?Q?Tg9rT4w1QZ4R5/eIhRGZ1V+RkNvqcetRwoeAMwtyyPxN9O0AhSYOrRd6al9r?=
- =?us-ascii?Q?563++dpjaXW1DyDD0PIuIdR4K5915xMrmbsdi6xhPzmsgP31mvOSQ5Fyz4Ps?=
- =?us-ascii?Q?hXtdgFZNPVmA1iIaEO8SpfvOSZ48XPNCZjOGSsf6G6LHZvz08Apw3kDxmB2y?=
- =?us-ascii?Q?j/h+foitG4m/uP1xvBT+smQ3X/d+A/D7rTBru+8RfRQKplHuo10OkWKoYxob?=
- =?us-ascii?Q?oGTPGGgnkztkI9bRh1U6OprFnCBg06i+BY7tbbpNdT4cl0h7r1OTZtCGokNZ?=
- =?us-ascii?Q?48WRuXJTSd9+wbLfVY8Aww/bAl27eI6OtdF8HPyy53RELgJH1ZfS9NgGIDIj?=
- =?us-ascii?Q?/E+gISpalgkz2V28mtLhvJO/Y35TcXHfgO/MjT8SiQmutAQf+yJtndYZX8mY?=
- =?us-ascii?Q?PJwIkTtrgC8NcXqUdQigAdNCWzFGp4teQljYOlYBwv7FWL58ngqBOm/SNtgO?=
- =?us-ascii?Q?qZE5bCtWpIMsgx4s79yqYzbvtoyIRpClvEBxW8PuuFmzLfioXf8DwsXMMzHS?=
- =?us-ascii?Q?Uboy2m6O3VYDkjJ2rGwIuH9cQ5GGnPnpDpoA22GEX2fz6T9QY3QNHcI+60oJ?=
- =?us-ascii?Q?5mqpvgrYRh4+kh7WkO+/m9p8b0R1wWVUa7WI1yF17Pp7e4uC+G13WFyzO1Uz?=
- =?us-ascii?Q?4RxtXZ+qVu42m7jLC6CBhrmdfBOl09Co/SSmOSKt43JVjq1QLm94+3ujTH3t?=
- =?us-ascii?Q?Ocdrw8Vkrs9g479OofCmqUTkuHyC/7OLjxXOfF0KeI/1WMVNtxz742yv4O5+?=
- =?us-ascii?Q?zG200gSNJa/xKH6CwZc/lzJLEJXCsYozMtVIqwghnpbiSfYSIWdXYlQUPYvV?=
- =?us-ascii?Q?SwYfArZQ3HmgJRHyDyBwA0BYd3VZd9AZUAbac5aWCrJE9FtP8BUVWOhnkuVN?=
- =?us-ascii?Q?ifLFnzyAxBLtGy5Ilhdbf8hEhKFeAaJ0t/I99OCbKAncXoVH3zVw5ARb6M/D?=
- =?us-ascii?Q?R9PsGTm0VL4cdfTYXGszO2f/4qY3/AE8VzEHoxsvdvR3MKjiAaT0Nduccv9M?=
- =?us-ascii?Q?2J107nFXFkUrEd3DcsC757UoOzvKsqUw7ACn3LVf59G7TLBNStRvNG3pcOQA?=
- =?us-ascii?Q?t8ie1PEfpfBd7TxQXX8JewrqzkQ9ZYL6Mt0brXFnfvJ5g8z715TVnFWKv84A?=
- =?us-ascii?Q?ejS1+BI18t6tqWYu7NkuM1BlL+o1MSLLBDhhl3XaBas0ry1QBQNZIkoF6O0b?=
- =?us-ascii?Q?5Z2YnyRhJFZ7WmrBPDcYAeEFO6TNZdFCPnlfg7CfORKjGZanLXsjF1mpQVbt?=
- =?us-ascii?Q?AeLw0yHkhiA2bX02f2maD+xilQugc19+DKWeUYTMaPksn1UcKzwMHX/4KIz8?=
- =?us-ascii?Q?JD+O1CNRVsB/XzEBsrg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 8 Apr 2023 03:48:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04D4C142;
+        Sat,  8 Apr 2023 00:48:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34E0361553;
+        Sat,  8 Apr 2023 07:48:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C50C433EF;
+        Sat,  8 Apr 2023 07:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680940090;
+        bh=nIDE6RX21S3EEOZ0jrHUDGmLR/xP5Tfb5AJsxpdaElQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=EDtewjBBvsgrjClMxwYeQPkqWuAWxDKBbUhDpyvd2oC08fIFTn0RpRICp4wSovK+f
+         I6mcC/Kk/LqgO9uBSjWzFubZUWtwfPsElgTFTd+rQzwwPdnsl5f2mUq+3k/0cm1gwB
+         fTIUkDGPfiANhHHRcb6fP0IW8VtaPxXUvIKUdgvvG+Zsj6Q4cc+bGB05nBzXP64DWR
+         cYHcWIW3KJrUaLMcUNwa2Qbq6qyY4aNehKg1Zc82XOuIBSrBHOkKmfaV3H44PUXY+R
+         tTsvsczjcBG8uHDBmNnQOrCaDbXTG6ht2uCjhC5LTIeey1qXGTlocXeU9989CIFoFx
+         RuaaeaOCCNoxg==
+From:   Simon Horman <horms@kernel.org>
+Date:   Sat, 08 Apr 2023 09:47:54 +0200
+Subject: [PATCH net-next v2] ksz884x: Remove unused functions
 MIME-Version: 1.0
-X-OriginatorOrg: lenovo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PS1PR03MB4939.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e1cd836-8595-43bd-6887-08db38051d35
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2023 07:44:41.8535
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5c7d0b28-bdf8-410c-aa93-4df372b16203
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3ba1tb6XLRVBuRmkBxd0IBkwTqt743LO0OKgLvCzQtGKKTVyaNUjgc6ZHO39T3Hzb/61sK/5UsYWynF6RWVtJQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB6644
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230405-ksz884x-unused-code-v2-1-23eb8f7002c4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACkcMWQC/32OTQ6CMBCFr2Jm7Zj+QKiuvIdhUegUGshgWiAo4
+ e42HMDl915evrdDohgoweOyQ6Q1pDBxBnW9QNtb7giDywxKKC0KUeKQvsYUGy68JHLYTo7QC1t
+ pJ7yRlYK8bGwibKLlts9bXsYxh+9IPmyn6gVMMzJtM9S56UOap/g5P6zy7P/qVokCrdbF3UjpS
+ vLPgSLTeJtiB/VxHD+Pi4DS1gAAAA==
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 5148d52554d6bcf6134786d40f1c6f9f22e18978 Mon Sep 17 00:00:00 2001
-From: Lei Yin <yinlei2@lenovo.com>
-Date: Thu, 6 Apr 2023 23:39:11 +0800
-Subject: [PATCH v2] nvme: fix double blk_mq_complete_request for timeout
- request with low probability
+Remove unused functions.
 
-When nvme_cancel_tagset traverses all tagsets and executes
-nvme_cancel_request, this request may be executing blk_mq_free_request
-that is called by nvme_rdma_complete_timed_out/nvme_tcp_complete_timed_out.
-When blk_mq_free_request executes to WRITE_ONCE(rq->state, MQ_RQ_IDLE) and
-__blk_mq_free_request(rq), it will cause double blk_mq_complete_request for
-this request, and it will cause a null pointer error in the second
-execution of this function because rq->mq_hctx has set to NULL in first
-execution.
+These functions may have some value in documenting the
+hardware. But that information may be accessed via SCM history.
 
-With multipath, by injecting a large number of requests timed out, I have
-reproduced the issue that caused kernel crashes in three versions of the
-kernel(include 5.10.167, 6.2.10 and upstream version which compiled by
-myself). The error stack is as follows:
+Flagged by clang-16 with W=1.
+No functional change intended.
+Compile tested only.
 
-[ 2777.253091]  <TASK>
-[ 2777.253102]  nvme_failover_req+0x10a/0x120 [nvme_core]
-[ 2777.255302]  blk_complete_reqs+0x3e/0x60
-[ 2777.255726]  __do_softirq+0xb6/0x2ad
-[ 2777.256139]  ? __pfx_smpboot_thread_fn+0x10/0x10
-[ 2777.256556]  run_ksoftirqd+0x28/0x40
-[ 2777.256978]  smpboot_thread_fn+0xdb/0x1d0
-[ 2777.257399]  kthread+0xd7/0x100
-[ 2777.257827]  ? __pfx_kthread+0x10/0x10
-[ 2777.258253]  ret_from_fork+0x29/0x50
-[ 2777.258695]  </TASK>
-
-Signed-off-by: Lei Yin <yinlei2@lenovo.com>
+Signed-off-by: Simon Horman <horms@kernel.org>
 ---
- drivers/nvme/host/core.c    | 4 ++--
- drivers/nvme/host/fabrics.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes in v2:
+- Don't remove unused #defines, there was no consensus on the value of
+  doing so.
+- Link to v1: https://lore.kernel.org/r/20230405-ksz884x-unused-code-v1-0-a3349811d5ef@kernel.org
+---
+ drivers/net/ethernet/micrel/ksz884x.c | 294 ----------------------------------
+ 1 file changed, 294 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 53ef028596c6..c1cc384f4f3e 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -450,8 +450,8 @@ bool nvme_cancel_request(struct request *req, void *dat=
-a)
- 	dev_dbg_ratelimited(((struct nvme_ctrl *) data)->device,
- 				"Cancelling I/O %d", req->tag);
-=20
--	/* don't abort one completed request */
--	if (blk_mq_request_completed(req))
-+	/* don't abort one completed or idle request */
-+	if (blk_mq_rq_state(req) !=3D MQ_RQ_IN_FLIGHT)
- 		return true;
-=20
- 	nvme_req(req)->status =3D NVME_SC_HOST_ABORTED_CMD;
-diff --git a/drivers/nvme/host/fabrics.h b/drivers/nvme/host/fabrics.h
-index dcac3df8a5f7..a25a0118b722 100644
---- a/drivers/nvme/host/fabrics.h
-+++ b/drivers/nvme/host/fabrics.h
-@@ -197,7 +197,7 @@ static inline char *nvmf_ctrl_subsysnqn(struct nvme_ctr=
-l *ctrl)
-=20
- static inline void nvmf_complete_timed_out_request(struct request *rq)
+diff --git a/drivers/net/ethernet/micrel/ksz884x.c b/drivers/net/ethernet/micrel/ksz884x.c
+index f78e8ead8c36..c5aeeb964c17 100644
+--- a/drivers/net/ethernet/micrel/ksz884x.c
++++ b/drivers/net/ethernet/micrel/ksz884x.c
+@@ -1476,15 +1476,6 @@ static void hw_turn_on_intr(struct ksz_hw *hw, u32 bit)
+ 		hw_set_intr(hw, hw->intr_mask);
+ }
+ 
+-static inline void hw_ena_intr_bit(struct ksz_hw *hw, uint interrupt)
+-{
+-	u32 read_intr;
+-
+-	read_intr = readl(hw->io + KS884X_INTERRUPTS_ENABLE);
+-	hw->intr_set = read_intr | interrupt;
+-	writel(hw->intr_set, hw->io + KS884X_INTERRUPTS_ENABLE);
+-}
+-
+ static inline void hw_read_intr(struct ksz_hw *hw, uint *status)
  {
--	if (blk_mq_request_started(rq) && !blk_mq_request_completed(rq)) {
-+	if (blk_mq_rq_state(rq) =3D=3D MQ_RQ_IN_FLIGHT) {
- 		nvme_req(rq)->status =3D NVME_SC_HOST_ABORTED_CMD;
- 		blk_mq_complete_request(rq);
- 	}
---=20
-2.39.1
+ 	*status = readl(hw->io + KS884X_INTERRUPTS_STATUS);
+@@ -1853,29 +1844,6 @@ static void port_init_cnt(struct ksz_hw *hw, int port)
+  * Port functions
+  */
+ 
+-/**
+- * port_chk - check port register bits
+- * @hw: 	The hardware instance.
+- * @port:	The port index.
+- * @offset:	The offset of the port register.
+- * @bits:	The data bits to check.
+- *
+- * This function checks whether the specified bits of the port register are set
+- * or not.
+- *
+- * Return 0 if the bits are not set.
+- */
+-static int port_chk(struct ksz_hw *hw, int port, int offset, u16 bits)
+-{
+-	u32 addr;
+-	u16 data;
+-
+-	PORT_CTRL_ADDR(port, addr);
+-	addr += offset;
+-	data = readw(hw->io + addr);
+-	return (data & bits) == bits;
+-}
+-
+ /**
+  * port_cfg - set port register bits
+  * @hw: 	The hardware instance.
+@@ -1902,53 +1870,6 @@ static void port_cfg(struct ksz_hw *hw, int port, int offset, u16 bits,
+ 	writew(data, hw->io + addr);
+ }
+ 
+-/**
+- * port_chk_shift - check port bit
+- * @hw: 	The hardware instance.
+- * @port:	The port index.
+- * @addr:	The offset of the register.
+- * @shift:	Number of bits to shift.
+- *
+- * This function checks whether the specified port is set in the register or
+- * not.
+- *
+- * Return 0 if the port is not set.
+- */
+-static int port_chk_shift(struct ksz_hw *hw, int port, u32 addr, int shift)
+-{
+-	u16 data;
+-	u16 bit = 1 << port;
+-
+-	data = readw(hw->io + addr);
+-	data >>= shift;
+-	return (data & bit) == bit;
+-}
+-
+-/**
+- * port_cfg_shift - set port bit
+- * @hw: 	The hardware instance.
+- * @port:	The port index.
+- * @addr:	The offset of the register.
+- * @shift:	Number of bits to shift.
+- * @set:	The flag indicating whether the port is to be set or not.
+- *
+- * This routine sets or resets the specified port in the register.
+- */
+-static void port_cfg_shift(struct ksz_hw *hw, int port, u32 addr, int shift,
+-	int set)
+-{
+-	u16 data;
+-	u16 bits = 1 << port;
+-
+-	data = readw(hw->io + addr);
+-	bits <<= shift;
+-	if (set)
+-		data |= bits;
+-	else
+-		data &= ~bits;
+-	writew(data, hw->io + addr);
+-}
+-
+ /**
+  * port_r8 - read byte from port register
+  * @hw: 	The hardware instance.
+@@ -2051,12 +1972,6 @@ static inline void port_cfg_broad_storm(struct ksz_hw *hw, int p, int set)
+ 		KS8842_PORT_CTRL_1_OFFSET, PORT_BROADCAST_STORM, set);
+ }
+ 
+-static inline int port_chk_broad_storm(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_BROADCAST_STORM);
+-}
+-
+ /* Driver set switch broadcast storm protection at 10% rate. */
+ #define BROADCAST_STORM_PROTECTION_RATE	10
+ 
+@@ -2209,102 +2124,6 @@ static inline void port_cfg_back_pressure(struct ksz_hw *hw, int p, int set)
+ 		KS8842_PORT_CTRL_2_OFFSET, PORT_BACK_PRESSURE, set);
+ }
+ 
+-static inline void port_cfg_force_flow_ctrl(struct ksz_hw *hw, int p, int set)
+-{
+-	port_cfg(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_FORCE_FLOW_CTRL, set);
+-}
+-
+-static inline int port_chk_back_pressure(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_BACK_PRESSURE);
+-}
+-
+-static inline int port_chk_force_flow_ctrl(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_FORCE_FLOW_CTRL);
+-}
+-
+-/* Spanning Tree */
+-
+-static inline void port_cfg_rx(struct ksz_hw *hw, int p, int set)
+-{
+-	port_cfg(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_RX_ENABLE, set);
+-}
+-
+-static inline void port_cfg_tx(struct ksz_hw *hw, int p, int set)
+-{
+-	port_cfg(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_TX_ENABLE, set);
+-}
+-
+-static inline void sw_cfg_fast_aging(struct ksz_hw *hw, int set)
+-{
+-	sw_cfg(hw, KS8842_SWITCH_CTRL_1_OFFSET, SWITCH_FAST_AGING, set);
+-}
+-
+-static inline void sw_flush_dyn_mac_table(struct ksz_hw *hw)
+-{
+-	if (!(hw->overrides & FAST_AGING)) {
+-		sw_cfg_fast_aging(hw, 1);
+-		mdelay(1);
+-		sw_cfg_fast_aging(hw, 0);
+-	}
+-}
+-
+-/* VLAN */
+-
+-static inline void port_cfg_ins_tag(struct ksz_hw *hw, int p, int insert)
+-{
+-	port_cfg(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_INSERT_TAG, insert);
+-}
+-
+-static inline void port_cfg_rmv_tag(struct ksz_hw *hw, int p, int remove)
+-{
+-	port_cfg(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_REMOVE_TAG, remove);
+-}
+-
+-static inline int port_chk_ins_tag(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_INSERT_TAG);
+-}
+-
+-static inline int port_chk_rmv_tag(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_REMOVE_TAG);
+-}
+-
+-static inline void port_cfg_dis_non_vid(struct ksz_hw *hw, int p, int set)
+-{
+-	port_cfg(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_DISCARD_NON_VID, set);
+-}
+-
+-static inline void port_cfg_in_filter(struct ksz_hw *hw, int p, int set)
+-{
+-	port_cfg(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_INGRESS_VLAN_FILTER, set);
+-}
+-
+-static inline int port_chk_dis_non_vid(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_DISCARD_NON_VID);
+-}
+-
+-static inline int port_chk_in_filter(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_INGRESS_VLAN_FILTER);
+-}
+-
+ /* Mirroring */
+ 
+ static inline void port_cfg_mirror_sniffer(struct ksz_hw *hw, int p, int set)
+@@ -2342,28 +2161,6 @@ static void sw_init_mirror(struct ksz_hw *hw)
+ 	sw_cfg_mirror_rx_tx(hw, 0);
+ }
+ 
+-static inline void sw_cfg_unk_def_deliver(struct ksz_hw *hw, int set)
+-{
+-	sw_cfg(hw, KS8842_SWITCH_CTRL_7_OFFSET,
+-		SWITCH_UNK_DEF_PORT_ENABLE, set);
+-}
+-
+-static inline int sw_cfg_chk_unk_def_deliver(struct ksz_hw *hw)
+-{
+-	return sw_chk(hw, KS8842_SWITCH_CTRL_7_OFFSET,
+-		SWITCH_UNK_DEF_PORT_ENABLE);
+-}
+-
+-static inline void sw_cfg_unk_def_port(struct ksz_hw *hw, int port, int set)
+-{
+-	port_cfg_shift(hw, port, KS8842_SWITCH_CTRL_7_OFFSET, 0, set);
+-}
+-
+-static inline int sw_chk_unk_def_port(struct ksz_hw *hw, int port)
+-{
+-	return port_chk_shift(hw, port, KS8842_SWITCH_CTRL_7_OFFSET, 0);
+-}
+-
+ /* Priority */
+ 
+ static inline void port_cfg_diffserv(struct ksz_hw *hw, int p, int set)
+@@ -2390,30 +2187,6 @@ static inline void port_cfg_prio(struct ksz_hw *hw, int p, int set)
+ 		KS8842_PORT_CTRL_1_OFFSET, PORT_PRIO_QUEUE_ENABLE, set);
+ }
+ 
+-static inline int port_chk_diffserv(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_DIFFSERV_ENABLE);
+-}
+-
+-static inline int port_chk_802_1p(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_802_1P_ENABLE);
+-}
+-
+-static inline int port_chk_replace_vid(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_2_OFFSET, PORT_USER_PRIORITY_CEILING);
+-}
+-
+-static inline int port_chk_prio(struct ksz_hw *hw, int p)
+-{
+-	return port_chk(hw, p,
+-		KS8842_PORT_CTRL_1_OFFSET, PORT_PRIO_QUEUE_ENABLE);
+-}
+-
+ /**
+  * sw_dis_diffserv - disable switch DiffServ priority
+  * @hw: 	The hardware instance.
+@@ -2613,23 +2386,6 @@ static void sw_cfg_port_base_vlan(struct ksz_hw *hw, int port, u8 member)
+ 	hw->ksz_switch->port_cfg[port].member = member;
+ }
+ 
+-/**
+- * sw_get_addr - get the switch MAC address.
+- * @hw: 	The hardware instance.
+- * @mac_addr:	Buffer to store the MAC address.
+- *
+- * This function retrieves the MAC address of the switch.
+- */
+-static inline void sw_get_addr(struct ksz_hw *hw, u8 *mac_addr)
+-{
+-	int i;
+-
+-	for (i = 0; i < 6; i += 2) {
+-		mac_addr[i] = readb(hw->io + KS8842_MAC_ADDR_0_OFFSET + i);
+-		mac_addr[1 + i] = readb(hw->io + KS8842_MAC_ADDR_1_OFFSET + i);
+-	}
+-}
+-
+ /**
+  * sw_set_addr - configure switch MAC address
+  * @hw: 	The hardware instance.
+@@ -2828,56 +2584,6 @@ static inline void hw_w_phy_ctrl(struct ksz_hw *hw, int phy, u16 data)
+ 	writew(data, hw->io + phy + KS884X_PHY_CTRL_OFFSET);
+ }
+ 
+-static inline void hw_r_phy_link_stat(struct ksz_hw *hw, int phy, u16 *data)
+-{
+-	*data = readw(hw->io + phy + KS884X_PHY_STATUS_OFFSET);
+-}
+-
+-static inline void hw_r_phy_auto_neg(struct ksz_hw *hw, int phy, u16 *data)
+-{
+-	*data = readw(hw->io + phy + KS884X_PHY_AUTO_NEG_OFFSET);
+-}
+-
+-static inline void hw_w_phy_auto_neg(struct ksz_hw *hw, int phy, u16 data)
+-{
+-	writew(data, hw->io + phy + KS884X_PHY_AUTO_NEG_OFFSET);
+-}
+-
+-static inline void hw_r_phy_rem_cap(struct ksz_hw *hw, int phy, u16 *data)
+-{
+-	*data = readw(hw->io + phy + KS884X_PHY_REMOTE_CAP_OFFSET);
+-}
+-
+-static inline void hw_r_phy_crossover(struct ksz_hw *hw, int phy, u16 *data)
+-{
+-	*data = readw(hw->io + phy + KS884X_PHY_CTRL_OFFSET);
+-}
+-
+-static inline void hw_w_phy_crossover(struct ksz_hw *hw, int phy, u16 data)
+-{
+-	writew(data, hw->io + phy + KS884X_PHY_CTRL_OFFSET);
+-}
+-
+-static inline void hw_r_phy_polarity(struct ksz_hw *hw, int phy, u16 *data)
+-{
+-	*data = readw(hw->io + phy + KS884X_PHY_PHY_CTRL_OFFSET);
+-}
+-
+-static inline void hw_w_phy_polarity(struct ksz_hw *hw, int phy, u16 data)
+-{
+-	writew(data, hw->io + phy + KS884X_PHY_PHY_CTRL_OFFSET);
+-}
+-
+-static inline void hw_r_phy_link_md(struct ksz_hw *hw, int phy, u16 *data)
+-{
+-	*data = readw(hw->io + phy + KS884X_PHY_LINK_MD_OFFSET);
+-}
+-
+-static inline void hw_w_phy_link_md(struct ksz_hw *hw, int phy, u16 data)
+-{
+-	writew(data, hw->io + phy + KS884X_PHY_LINK_MD_OFFSET);
+-}
+-
+ /**
+  * hw_r_phy - read data from PHY register
+  * @hw: 	The hardware instance.
+
